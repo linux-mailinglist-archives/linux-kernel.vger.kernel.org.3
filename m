@@ -2,360 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E40555E913
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 470A555E6BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345730AbiF1Nrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
+        id S1346897AbiF1NsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346934AbiF1Nrh (ORCPT
+        with ESMTP id S1346884AbiF1NsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:47:37 -0400
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959512B19C;
-        Tue, 28 Jun 2022 06:47:32 -0700 (PDT)
-Received: by mail-il1-f180.google.com with SMTP id w10so8190721ilj.4;
-        Tue, 28 Jun 2022 06:47:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Mdgh0FPprIeUOtyoTIWGoo3tBFW6HponToZBl2Ks+E0=;
-        b=CTGjnmXFi7rts7tjh7EY++EReSVsJ39YmGyhzCh1XthI94AqK6+y4fxrLYVetBQ9Hx
-         74WCDBoaDq7q5hsO+T8m5Ig6Xr21/SuvQ/kI4lHloPWuDYq0zcoYPmq3nDQETwMkqAkV
-         V4HX/SB1PUyJ03RSirpZcM7WPnpl3rXLAslpT58OOMZtmFJfB9JDmVdOObxNxhzdFAFO
-         df82BQg+3buV28tra7q6B0ZEMClfBcsUJE89GiMxqfr47Vmmbb0kYvfB+K9SX/A9p0ei
-         7NKWoXN6bJIfCwNz0L9R2kM+4Amke6CiVEn+dkLhwbrmM5RbNVMG8yyc3yEr+xPL4Skw
-         qQOg==
-X-Gm-Message-State: AJIora/+M1KXdDZONWnhvemGs64bHkYki+DJ7xRNSJug3t3YxvGYQx55
-        nwBsQ4ii9lpJPFi7JPCIdw==
-X-Google-Smtp-Source: AGRyM1u/CZtvwnAAV6atCWMAqxyoLlQtGmnMKkJs2jsP03c6Zbrl75e3i+mDqWJX/yWP0L1PbJ3Rpg==
-X-Received: by 2002:a05:6e02:1d15:b0:2da:8628:fcc8 with SMTP id i21-20020a056e021d1500b002da8628fcc8mr8214290ila.49.1656424051706;
-        Tue, 28 Jun 2022 06:47:31 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id s10-20020a5ec64a000000b0067520155dedsm4736815ioo.15.2022.06.28.06.47.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 06:47:31 -0700 (PDT)
-Received: (nullmailer pid 357097 invoked by uid 1000);
-        Tue, 28 Jun 2022 13:47:28 -0000
-Date:   Tue, 28 Jun 2022 07:47:28 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-iio@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: Re: [PATCH v5 1/2] dt-bindings: iio: adc: add AD4130
-Message-ID: <20220628134728.GA349256-robh@kernel.org>
-References: <20220620162059.1097264-1-cosmin.tanislav@analog.com>
- <20220620162059.1097264-2-cosmin.tanislav@analog.com>
+        Tue, 28 Jun 2022 09:48:03 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F6B2A966;
+        Tue, 28 Jun 2022 06:48:02 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id E1B4522246;
+        Tue, 28 Jun 2022 15:47:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1656424080;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mvU588fHhLDk/FSFjMsTn0jfhxkTBTaysnF8j0/C2xI=;
+        b=A84TCTJU719Ug8WU3XD4Yne89LJC6YZr+gkybgqwpjDiSB4njGiAzm5Qm8v1UEZjCwc8Ok
+        NP2ljMffsEG5fWv6cDo7kDQxFWqcpsZKO28C4vhMLVip9NHmN19hc/WSp96p6ORgo5i+ho
+        PCcWo1sCd52JVsCXwFtS9tUqH97nvf0=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220620162059.1097264-2-cosmin.tanislav@analog.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 28 Jun 2022 15:47:59 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: Re: fwnode_for_each_child_node() and OF backend discrepancy
+In-Reply-To: <CAHp75VcANMjxgS6S24Zh+mz66usb6LBnQk-ENvU9JHSXXsG1DA@mail.gmail.com>
+References: <4e1d5db9dea68d82c94336a1d6aac404@walle.cc>
+ <Yrrhs3D++V79/4Jk@smile.fi.intel.com>
+ <f17d3ecfecf4491dd15b1fa092205f3f@walle.cc>
+ <CAHp75Vd6e3WwHPfyL=GP=vsoWhwGXadwQziiRRwfHPfjkX2eFg@mail.gmail.com>
+ <2f2d7685e0e43194270a310034004970@walle.cc>
+ <CAHp75VcANMjxgS6S24Zh+mz66usb6LBnQk-ENvU9JHSXXsG1DA@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <9e58f421c27121977d11381530757a6e@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 07:20:58PM +0300, Cosmin Tanislav wrote:
-> AD4130-8 is an ultra-low power, high precision, measurement solution for
-> low bandwidth battery operated applications.
-> 
-> The fully integrated AFE (Analog Front-End) includes a multiplexer for up
-> to 16 single-ended or 8 differential inputs, PGA (Programmable Gain
-> Amplifier), 24-bit Sigma-Delta ADC, on-chip reference and oscillator,
-> selectable filter options, smart sequencer, sensor biasing and excitation
-> options, diagnostics, and a FIFO buffer.
-> 
-> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> ---
->  .../bindings/iio/adc/adi,ad4130.yaml          | 259 ++++++++++++++++++
->  1 file changed, 259 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
-> new file mode 100644
-> index 000000000000..b72f3da07309
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
-> @@ -0,0 +1,259 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright 2022 Analog Devices Inc.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/adc/adi,ad4130.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices AD4130 ADC device driver
-> +
-> +maintainers:
-> +  - Cosmin Tanislav <cosmin.tanislav@analog.com>
-> +
-> +description: |
-> +  Bindings for the Analog Devices AD4130 ADC. Datasheet can be found here:
-> +    https://www.analog.com/media/en/technical-documentation/data-sheets/AD4130-8.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,ad4130
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +    description: phandle to the master clock (mclk)
-> +
-> +  clock-names:
-> +    items:
-> +      - const: mclk
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  interrupt-names:
-> +    description: |
-> +      Specify which interrupt pin should be configured as Data Ready / FIFO
-> +      interrupt.
-> +      Default if not supplied is int.
-> +    enum:
-> +      - int
-> +      - clk
-> +      - p2
-> +      - dout
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +  refin1-supply:
-> +    description: refin1 supply. Can be used as reference for conversion.
-> +
-> +  refin2-supply:
-> +    description: refin2 supply. Can be used as reference for conversion.
-> +
-> +  avdd-supply:
-> +    description: AVDD voltage supply. Can be used as reference for conversion.
-> +
-> +  iovdd-supply:
-> +    description: IOVDD voltage supply. Used for the chip interface.
-> +
-> +  spi-max-frequency:
-> +    maximum: 5000000
-> +
-> +  adi,int-clk-out:
-> +    description: Specify if the internal clock should be exposed on the CLK pin.
-> +    type: boolean
-> +
-> +  adi,ext-clk-freq-hz:
-> +    description: Specify the frequency of the external clock.
-> +    enum: [76800, 153600]
-> +    default: 76800
-> +
-> +  adi,bipolar:
-> +    description: Specify if the device should be used in bipolar mode.
-> +    type: boolean
-> +
-> +  adi,vbias-pins:
-> +    description: Analog inputs to apply a voltage bias of (AVDD − AVSS) / 2 to.
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    maxItems: 16
-> +    items:
-> +      minimum: 0
-> +      maximum: 15
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +patternProperties:
-> +  "^channel@([0-9]|1[0-5])$":
+[adding Horatiu Vultur, because we now digress to the bug
+in the switch, rather than that odd OF behavior]
 
-Normally, unit-addresses are in hex.
-
-> +    type: object
-> +    $ref: adc.yaml
-> +    unevaluatedProperties: false
-> +
-> +    properties:
-> +      reg:
-> +        description: The channel number.
-> +        minimum: 0
-> +        maximum: 15
-> +
-> +      diff-channels:
-> +        description: |
-> +          Besides the analog inputs available, internal inputs can be used.
-> +          16: Internal temperature sensor.
-> +          17: AVSS
-> +          18: Internal reference
-> +          19: DGND
-> +          20: (AVDD − AVSS)/6+
-> +          21: (AVDD − AVSS)/6-
-> +          22: (IOVDD − DGND)/6+
-> +          23: (IOVDD − DGND)/6-
-> +          24: (ALDO − AVSS)/6+
-> +          25: (ALDO − AVSS)/6-
-> +          26: (DLDO − DGND)/6+
-> +          27: (DLDO − DGND)/6-
-> +          28: V_MV_P
-> +          29: V_MV_M
-> +        items:
-> +          minimum: 0
-> +          maximum: 29
-> +
-> +      adi,reference-select:
-> +        description: |
-> +          Select the reference source to use when converting on the
-> +          specific channel. Valid values are:
-> +          0: REFIN1(+)/REFIN1(−)
-> +          1: REFIN2(+)/REFIN2(−)
-> +          2: REFOUT/AVSS (Internal reference)
-> +          3: AVDD/AVSS
-> +          If not specified, REFIN1 is used.
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [0, 1, 2, 3]
-> +        default: 0
-> +
-> +      adi,excitation-pin-0:
-> +        description: |
-> +          Analog input to apply excitation current to while the channel
-> +          is active.
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        minimum: 0
-> +        maximum: 15
-> +        default: 0
-> +
-> +      adi,excitation-pin-1:
-> +        description: |
-> +          Analog input to apply excitation current to while this channel
-> +          is active.
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        minimum: 0
-> +        maximum: 15
-> +        default: 0
-> +
-> +      adi,excitation-current-0-nanoamp:
-
-This needs a new unit suffix added to dtschema.
-
-> +        description: |
-> +          Excitation current in nanoamps to be applied to pin specified in
-> +          adi,excitation-pin-0 while this channel is active.
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [0, 100, 10000, 20000, 50000, 100000, 150000, 200000]
-> +        default: 0
-> +
-> +      adi,excitation-current-1-nanoamp:
-> +        description: |
-> +          Excitation current in nanoamps to be applied to pin specified in
-> +          adi,excitation-pin-1 while this channel is active.
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [0, 100, 10000, 20000, 50000, 100000, 150000, 200000]
-> +        default: 0
-> +
-> +      adi,burnout-current-nanoamp:
-> +        description: |
-> +          Burnout current in nanoamps to be applied for this channel.
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [0, 500, 2000, 4000]
-> +        default: 0
-> +
-> +      adi,buffered-positive:
-> +        description: Enable buffered mode for positive input.
-> +        type: boolean
-> +
-> +      adi,buffered-negative:
-> +        description: Enable buffered mode for negative input.
-> +        type: boolean
-> +
-> +    required:
-> +      - reg
-> +      - diff-channels
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    spi {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      adc@0 {
-> +        compatible = "adi,ad4130";
-> +        reg = <0>;
-> +
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        spi-max-frequency = <5000000>;
-> +        interrupts = <27 IRQ_TYPE_EDGE_FALLING>;
-> +        interrupt-parent = <&gpio>;
-> +
-> +        channel@0 {
-> +          reg = <0>;
-> +
-> +          adi,reference-select = <2>;
-> +
-> +          /* AIN8, AIN9 */
-> +          diff-channels = <8 9>;
-> +        };
-> +
-> +        channel@1 {
-> +          reg = <1>;
-> +
-> +          adi,reference-select = <2>;
-> +
-> +          /* AIN10, AIN11 */
-> +          diff-channels = <10 11>;
-> +        };
-> +
-> +        channel@2 {
-> +          reg = <2>;
-> +
-> +          adi,reference-select = <2>;
-> +
-> +          /* Temperature Sensor, DGND */
-> +          diff-channels = <16 19>;
-> +        };
-> +
-> +        channel@3 {
-> +          reg = <3>;
-> +
-> +          adi,reference-select = <2>;
-> +
-> +          /* Internal reference, DGND */
-> +          diff-channels = <18 19>;
-> +        };
-> +
-> +        channel@4 {
-> +          reg = <4>;
-> +
-> +          adi,reference-select = <2>;
-> +
-> +          /* DGND, DGND */
-> +          diff-channels = <19 19>;
-> +        };
-> +      };
-> +    };
-> -- 
-> 2.36.1
+Am 2022-06-28 15:29, schrieb Andy Shevchenko:
+> On Tue, Jun 28, 2022 at 3:23 PM Michael Walle <michael@walle.cc> wrote:
+>> 
+>> >> I was trying to fix the lan966x driver [1] which doesn't work if there
+>> >> are disabled nodes in between.
+>> >
+>> > Can you elaborate what's wrong now in the behaviour of the driver? In
+>> > the code it uses twice the _available variant.
+>> 
+>> Imagine the following device tree snippet:
+>>   port0 {
+>>     reg = <0>;
+>>     status = "okay";
+>>   }
+>>   port1 {
+>>     reg = <1>;
+>>     status = "disabled";
+>>   }
+>>   port@2 {
+>>     reg = <2>;
+>>     status = "okay";
+>>   }
+>> 
+>> The driver will set num_phys_ports to 2. When port@2 is probed, it
+>> will have the (correct!) physical port number 2. That will then
+>> trigger various EINVAL checks with "port_num >= num_phys_ports" or
+>> WARN()s.
 > 
+> It means the above mentioned condition is wrong: it should be
 > 
+> "port_idx >= num_phys_ports" (if the port_idx doesn't exists, that's
+> the bug in the first place)
+
+I can't follow you here. Please note, that you need the actual
+physical port number. It's not a made up number, but corresponds
+to a physical port on that ethernet switch. So you can't just skip
+the disabled ones. port@2 must have port number 2.
+
+>> So the easiest fix would be to actual count all the child nodes
+>> (regardless if they are available or not), assuming there are as
+>> many nodes as physical ports.
+>> 
+>> But num_phys_ports being a property of the hardware
+> 
+> So, name is wrong, that's how I read it, it should be
+> num_of_acrive_phys_ports (or alike).
+
+See above, it is not just an iterator but corresponds to
+a hardware property.
+
+>> I don't
+>> think it's good to deduce it by counting the child nodes anyway,
+> 
+> Right.
+> 
+>> but it should rather be a (hardcoded) property of the driver.
+> 
+> Also good to update.
+
+Horatiu, can we determine the actual number of ports (or maybe
+determine if its a LAN9668 or a LAN9662) from the hardware itself
+in an easy way? That way we wouldn't need a new compatible string,
+but could use the generic "lan966x" one.
+
+-michael
+
+[1] 
+https://elixir.bootlin.com/linux/v5.19-rc4/source/drivers/net/ethernet/microchip/lan966x/lan966x_main.c

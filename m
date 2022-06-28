@@ -2,105 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7672055E429
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3631855E42B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346200AbiF1NOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
+        id S1346000AbiF1NPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344658AbiF1NOg (ORCPT
+        with ESMTP id S240713AbiF1NPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:14:36 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C0DFD21
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:14:36 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id o4so8109501ilm.9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:14:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DsbdvFQeUqASiOkCBKpg+u5M35Pu57mB+0bBgUEwlQ0=;
-        b=e3IN4akWLzaub9ywIDYCYrfEyGuFBmMblSI41OFofhQ4XvQEGGqcB/NQAP1fb6z2FH
-         1d94xUlOJ6n7jq3jhTc3C0CGfSjMuQXczYG9alx8yvCp++pzOQidiV3DMyN6MpjiCY0d
-         akT4G0JYvOCKNsQG7ifLR7msuI1KDvYNs8pM5qnDqageC+k4nwa9SCbZEjlk4dc8Egbk
-         vVym9uL5msvGncCMZWfqYwOopOTYjHZvoj91GGuFWNrJ3h02UkrLIRTLj5ziGF/gjtJD
-         AxmLiKNyx+ozU5LircPBJ8VtDgNHK+whPKrC6v6+GLd3oN3rIVbgEPz9s8DiOrPtMhsy
-         Cytg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DsbdvFQeUqASiOkCBKpg+u5M35Pu57mB+0bBgUEwlQ0=;
-        b=XLWL36GD8xcoPX2531nIRvUAXCV4gJMDLg81ceJ1yVyB5wqpqUhtChd+MhQlXSLAQ6
-         mKEHzwCep428+spGuRGdbrfBWzyi+ytztkbqjvAjg+gOIUFC2WRq6SfVhMxnr5lLdG34
-         SGC7RKJ9uClzkzuNswQiGEnOzYyyq+rrQSTpKDi7fPkt0Co78qrzDFzQptH5s/Dy9LRy
-         S0RZ29MeT6sdI1b9WJwhJuKE1iU5GmFIUyBKao4Lan8fC9qsaRqVZZYvSGL06MTuVp4+
-         iF6gZ5BOyF15E65Rhjz/chWoTLRExsWBvPIYBuLL+04sk/IfwpbmcMMI+vCpIHGK30hO
-         QJ8Q==
-X-Gm-Message-State: AJIora8s0NOsiecIR99bzQC4RuXsZszu8hGFYfh5n4o7jzUxxpJ56S51
-        JCpS4xAGgtepgejZc7XeEPq9lclqk/UX+wVj+xoORMHL
-X-Google-Smtp-Source: AGRyM1sOpei4NsJ6JnrkAst+YjmOz4L2eLYJccjSpETHJn4R/guuke1HkZCCXUymIogME5FE2tvh3HHL7fVBc2rZZbs=
-X-Received: by 2002:a92:b10e:0:b0:2d8:d8a7:8b29 with SMTP id
- t14-20020a92b10e000000b002d8d8a78b29mr10510693ilh.233.1656422075643; Tue, 28
- Jun 2022 06:14:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <c4c944a2a905e949760fbeb29258185087171708.1653317461.git.andreyknvl@google.com>
- <165599625020.2988777.9370908523559678089.b4-ty@kernel.org>
-In-Reply-To: <165599625020.2988777.9370908523559678089.b4-ty@kernel.org>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 28 Jun 2022 15:14:24 +0200
-Message-ID: <CA+fCnZcLsGVpP_bJ=OLkPe=DXwAzyzv2eS2jsMv9RZV58sjGZA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] arm64: kasan: do not instrument stacktrace.c
-To:     Will Deacon <will@kernel.org>
-Cc:     andrey.konovalov@linux.dev,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        kernel-team@android.com, Alexander Potapenko <glider@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Marco Elver <elver@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
+        Tue, 28 Jun 2022 09:15:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DAE62C12F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:15:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656422103;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/ZOCb43a6XtspipSZyH021F8n9v8AZtTda7ttlCF3gs=;
+        b=SNUMSmmc36xOfaswi4u3sXJLQxCxQIXimiZsbcXd2N+0UnKfXEHSINwSeOoNFZmyQ4Js0J
+        N0NYu2ZqSmUVXirYj3yqEFz0cdE/CGkIPi/f+YDH/pDrJwfnlCOJ922G2fgOnxFAUgJnzy
+        Jyx7CA5jCHkNmKpupc6xeFdZdGLMq/A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-550-nlKef17tMHuexN_WhN-YCg-1; Tue, 28 Jun 2022 09:15:02 -0400
+X-MC-Unique: nlKef17tMHuexN_WhN-YCg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5F9CD811E7A;
+        Tue, 28 Jun 2022 13:15:01 +0000 (UTC)
+Received: from starship (unknown [10.40.194.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 45BEB492C3B;
+        Tue, 28 Jun 2022 13:14:59 +0000 (UTC)
+Message-ID: <c0051d4701ddcf00a1357f5a108acf655f813b37.camel@redhat.com>
+Subject: Re: [PATCH v6 15/17] KVM: SVM: Use target APIC ID to complete
+ x2AVIC IRQs when possible
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     seanjc@google.com, joro@8bytes.org, jon.grimm@amd.com,
+        wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Tue, 28 Jun 2022 16:14:58 +0300
+In-Reply-To: <cc77d885-fdf2-bac8-65d4-ab0994272548@amd.com>
+References: <20220519102709.24125-1-suravee.suthikulpanit@amd.com>
+         <20220519102709.24125-16-suravee.suthikulpanit@amd.com>
+         <b8610296-6fb7-e110-900f-4616e1e39bb4@redhat.com>
+         <d761ef283bc91002322f3cd66c124d329c25f04f.camel@redhat.com>
+         <9f3ffe16-2516-d4ec-528e-6347ef884ad5@amd.com>
+         <df464fd9b3c66059d7065acc52594d27dfe52448.camel@redhat.com>
+         <cc77d885-fdf2-bac8-65d4-ab0994272548@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 9:31 PM Will Deacon <will@kernel.org> wrote:
->
-> On Mon, 23 May 2022 16:51:51 +0200, andrey.konovalov@linux.dev wrote:
-> > From: Andrey Konovalov <andreyknvl@google.com>
-> >
-> > Disable KASAN instrumentation of arch/arm64/kernel/stacktrace.c.
-> >
-> > This speeds up Generic KASAN by 5-20%.
-> >
-> > As a side-effect, KASAN is now unable to detect bugs in the stack trace
-> > collection code. This is taken as an acceptable downside.
-> >
-> > [...]
->
-> Applied to arm64 (for-next/stacktrace), thanks! I had to fix conflicts
-> in both of the patches, so please can you take a quick look at the result?
->
-> [1/2] arm64: kasan: do not instrument stacktrace.c
->       https://git.kernel.org/arm64/c/802b91118d11
-> [2/2] arm64: stacktrace: use non-atomic __set_bit
->       https://git.kernel.org/arm64/c/446297b28a21
+On Tue, 2022-06-28 at 19:36 +0700, Suthikulpanit, Suravee wrote:
+> Paolo / Maxim
+> 
+> On 6/28/2022 3:59 PM, Maxim Levitsky wrote:
+> > > > Hi Paolo and Suravee Suthikulpanit!
+> > > > 
+> > > > Note that this patch is not needed anymore, I fixed the avic_kick_target_vcpus_fast function,
+> > > > and added the support for x2apic because it was very easy to do
+> > > > (I already needed to parse logical id for flat and cluser modes)
+> > > > 
+> > > > Best regards,
+> > > > 	Maxim Levitsky
+> > > > 
+> > > Understood. I was about to send v7 to remove this patch from the series, but too late. I'll test the current queue branch and provide update.
+> > Also this really needs a KVM unit test, to avoid breaking corner cases like
+> > sending IPI to 0xFF address, which was the reason I had to fix the
+> > avic_kick_target_vcpus_fast.
+> > 
+> > We do have 'apic' test in kvm unit tests,
+> > and I was already looking to extend it to cover more cases and to run it with AVIC's
+> > compatible settings. I hope I will be able to do this this week.
+> 
+> Thanks. Would you please CC me as well once ready?
 
-Hi Will,
+Of course!
+> 
+> > Best regards,
+> > 	Maxim Levitsky
+> 
+> I have also submitted a patch to fix the 603ccef42ce9 ("KVM: x86: SVM: fix avic_kick_target_vcpus_fast"),
+> which was queued previously.
 
-The updated patches look good.
+Thank you very much!
 
-Thanks!
+Best regards,
+	Maxim Levitsky
+
+
+> 
+> Best Regards,
+> Suravee Suthikulpanit
+> 
+
+

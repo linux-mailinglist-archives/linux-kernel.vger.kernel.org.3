@@ -2,67 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E110455E8E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CAFD55E97F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348072AbiF1PO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48064 "EHLO
+        id S1347998AbiF1POp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347435AbiF1POi (ORCPT
+        with ESMTP id S1347959AbiF1POd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:14:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7493B2DD4B;
-        Tue, 28 Jun 2022 08:14:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D3C6B81E39;
-        Tue, 28 Jun 2022 15:14:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8FA6C341CA;
-        Tue, 28 Jun 2022 15:14:33 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="oLBJ0YWa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656429272;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CFZhZs8TzfzhOTKeWs1ZB/BO0Gr0GcTW1JXaKhw0cNw=;
-        b=oLBJ0YWausVKY98yJMGJi14g8DZQmo795ECFKy0bXdC3gn8kE7fPyn2iZBLY5T8kXFAtOQ
-        TfSMcFphCQX1ayLkldM2Hn5jja6e/tV69p70/MKVvjR0vmyB/QWVDzaZiF6OIA7RPKKw8K
-        ehIu96WEX6EQY/m5z+GtZhmKI/ZqseA=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5481adc8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 28 Jun 2022 15:14:31 +0000 (UTC)
-Date:   Tue, 28 Jun 2022 17:14:27 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Gregory Erwin <gregerwin256@gmail.com>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        Rui Salvaterra <rsalvaterra@gmail.com>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH v6] ath9k: sleep for less time when unregistering hwrng
-Message-ID: <Yrsa09vW8AfpJNda@zx2c4.com>
-References: <20220627113749.564132-1-Jason@zx2c4.com>
- <20220627120735.611821-1-Jason@zx2c4.com>
- <87y1xib8pv.fsf@toke.dk>
- <CAO+Okf5r-rVVqwYiCHXEt_jh0StmVoUikqYfSn7y3QpGZMR3Vg@mail.gmail.com>
- <CAHmME9o4m5MNvDtQUc3OiYLVzNgk3u2i0EF4NhNV4uifZZLJ3g@mail.gmail.com>
- <CAHmME9prgW60P+CO1JSdf5o1hBh8JtciBxcYm25ZO6oTCkwkxg@mail.gmail.com>
- <YrrdTcRCKBt15HLz@gondor.apana.org.au>
- <CAHmME9qm49R6i8Y9LpQXPuxEoTZx2nFSizxX-VEH6UDfLEji1g@mail.gmail.com>
- <YrrujrAlLwhzbn0m@zx2c4.com>
+        Tue, 28 Jun 2022 11:14:33 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984152DD47
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:14:32 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-fe023ab520so17429441fac.10
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:14:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=j8onA5YycLKvgtR2+Db5ek4DglhDGyf/OLtfUjKRawU=;
+        b=u6WOgNzk0OTDG+9CtSE/K6ru5P4/825Mxogdf7Dswt+4t/A0V9RTEQu1NpcqxbuOa3
+         B4hqvjDfLFtBTP9KYVkOi3g7QlsZKUQzgD92kVESgJJxK+jXkXcvybUWXvwj/VmqoDIl
+         5xxDbbSUpmnkaQOKd5z4WWRNePbFeh98woYL4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=j8onA5YycLKvgtR2+Db5ek4DglhDGyf/OLtfUjKRawU=;
+        b=6JZmDFXSrNA4QPVL4yaRfWOpC4l0vOHbzchv4WXqSwE43xtHvM82RUGFi1GcCHmjtp
+         g/qSnTtcPE8bFF+yIwo1Ih+iMEX51gBP3W6diuf5TZXzqP0CfZw8j8v+TvE7v3GNCIOe
+         O0fhoPn3wrwTfb6wNjJHnS/YN30I4oo5MLJ+GFH1XgpzPV5LEkEMD99I9bxVpnWDDQyl
+         YdU/4XWfKQ2tOnwRbA6pGRHvKlD33MbkWpan8fUyjlVVfqp2d0kIQHgLhi1Xp4aCqyVI
+         8XEmaWlI8O9Sr1qTZI94igs8ca2Rq0eFVb561iXzSPZTDAus88P1lQKd4M6hAfFcI47m
+         it6A==
+X-Gm-Message-State: AJIora/a+B0oR2MpS04T3FG6MgyiZJ/EDvuLqEShIfhZ4XokAk8UYUo3
+        fpneZZw/zat/N6OtkvRcGV7uSQ==
+X-Google-Smtp-Source: AGRyM1uLW59VDfTdcT1rmoKGVRJWZs1FpMlfYJhdMO+WliY5H3oO1o0ddfaCifkp3pHZhBu467hUdQ==
+X-Received: by 2002:a05:6870:8195:b0:101:9342:bf1a with SMTP id k21-20020a056870819500b001019342bf1amr37752oae.149.1656429271809;
+        Tue, 28 Jun 2022 08:14:31 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id x18-20020a056830409200b0060aeccf6b44sm8167298ott.41.2022.06.28.08.14.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 08:14:31 -0700 (PDT)
+Message-ID: <9ae473c4-cd42-bb45-bce2-8aa2e4784a43@cloudflare.com>
+Date:   Tue, 28 Jun 2022 10:14:29 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YrrujrAlLwhzbn0m@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 0/2] Introduce security_create_user_ns()
+Content-Language: en-US
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Christian Brauner <brauner@kernel.org>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@cloudflare.com
+References: <20220621233939.993579-1-fred@cloudflare.com>
+ <ce1653b1-feb0-1a99-0e97-8dfb289eeb79@schaufler-ca.com>
+ <b72c889a-4a50-3330-baae-3bbf065e7187@cloudflare.com>
+ <CAHC9VhSTkEMT90Tk+=iTyp3npWEm+3imrkFVX2qb=XsOPp9F=A@mail.gmail.com>
+ <20220627121137.cnmctlxxtcgzwrws@wittgenstein>
+ <CAHC9VhSQH9tE-NgU6Q-GLqSy7R6FVjSbp4Tc4gVTbjZCqAWy5Q@mail.gmail.com>
+ <6a8fba0a-c9c9-61ba-793a-c2e0c2924f88@iogearbox.net>
+ <CAHC9VhQQJH95jTWMOGDB4deS=whSfnaF_e73zoabOOeHJMv+0Q@mail.gmail.com>
+ <685096bb-af0a-08c0-491a-e176ac009e85@schaufler-ca.com>
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <685096bb-af0a-08c0-491a-e176ac009e85@schaufler-ca.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,22 +86,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
-
-On Tue, Jun 28, 2022 at 02:05:34PM +0200, Jason A. Donenfeld wrote:
-> Hi again,
+On 6/27/22 6:18 PM, Casey Schaufler wrote:
+> On 6/27/2022 3:27 PM, Paul Moore wrote:
+>> On Mon, Jun 27, 2022 at 6:15 PM Daniel Borkmann <daniel@iogearbox.net> 
+>> wrote:
+>>> On 6/27/22 11:56 PM, Paul Moore wrote:
+>>>> On Mon, Jun 27, 2022 at 8:11 AM Christian Brauner 
+>>>> <brauner@kernel.org> wrote:
+>>>>> On Thu, Jun 23, 2022 at 11:21:37PM -0400, Paul Moore wrote:
+>>>> ...
+>>>>
+>>>>>> This is one of the reasons why I usually like to see at least one LSM
+>>>>>> implementation to go along with every new/modified hook.  The
+>>>>>> implementation forces you to think about what information is 
+>>>>>> necessary
+>>>>>> to perform a basic access control decision; sometimes it isn't always
+>>>>>> obvious until you have to write the access control :)
+>>>>> I spoke to Frederick at length during LSS and as I've been given to
+>>>>> understand there's a eBPF program that would immediately use this new
+>>>>> hook. Now I don't want to get into the whole "Is the eBPF LSM hook
+>>>>> infrastructure an LSM" but I think we can let this count as a 
+>>>>> legitimate
+>>>>> first user of this hook/code.
+>>>> Yes, for the most part I don't really worry about the "is a BPF LSM a
+>>>> LSM?" question, it's generally not important for most discussions.
+>>>> However, there is an issue unique to the BPF LSMs which I think is
+>>>> relevant here: there is no hook implementation code living under
+>>>> security/.  While I talked about a hook implementation being helpful
+>>>> to verify the hook prototype, it is also helpful in providing an
+>>>> in-tree example for other LSMs; unfortunately we don't get that same
+>>>> example value when the initial hook implementation is a BPF LSM.
+>>> I would argue that such a patch series must come together with a BPF
+>>> selftest which then i) contains an in-tree usage example, ii) adds BPF
+>>> CI test coverage. Shipping with a BPF selftest at least would be the
+>>> usual expectation.
+>> I'm not going to disagree with that, I generally require matching
+>> tests for new SELinux kernel code, but I was careful to mention code
+>> under 'security/' and not necessarily just a test implementation :)  I
+>> don't want to get into a big discussion about it, but I think having a
+>> working implementation somewhere under 'security/' is more
+>> discoverable for most LSM folks.
 > 
-> On Tue, Jun 28, 2022 at 12:55:57PM +0200, Jason A. Donenfeld wrote:
-> > > Oh wait you're checking kthread_should_stop before the schedule
-> > > call instead of afterwards, that would do it.
-> > 
-> > Oh, that's a really good observation, thank you! 
+> I agree. It would be unfortunate if we added a hook explicitly for eBPF
+> only to discover that the proposed user needs something different. The
+> LSM community should have a chance to review the code before committing
+> to all the maintenance required in supporting it.
 > 
-> Wait, no. I already am kthread_should_stop() it afterwards. That
-> "continue" goes to the top of the loop, which checks it in the while()
-> statement. So something else is amiss. I guess I'll investigate.
+> Is there a reference on how to write an eBPF security module?
 
-I worked out a solution for the "larger problem" now. It's a bit
-involved, but not too bad. I'll post a patch shortly.
+There's a documentation page that briefly touches on a BPF LSM 
+implementation [1].
 
-Jason
+> There should be something out there warning the eBPF programmer of the
+> implications of providing a secid_to_secctx hook for starters.
+> 
+
+Links:
+1. https://docs.kernel.org/bpf/prog_lsm.html?highlight=bpf+lsm#
+

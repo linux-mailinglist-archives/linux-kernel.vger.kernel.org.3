@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B284155E4BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7044355E4BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346585AbiF1NdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
+        id S1345577AbiF1NdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346606AbiF1Nca (ORCPT
+        with ESMTP id S1346624AbiF1Nce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:32:30 -0400
+        Tue, 28 Jun 2022 09:32:34 -0400
 Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581B69B;
-        Tue, 28 Jun 2022 06:32:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4F2225;
+        Tue, 28 Jun 2022 06:32:32 -0700 (PDT)
 Received: (Authenticated sender: ash@heyquark.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DA81920000A;
-        Tue, 28 Jun 2022 13:32:18 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id BBED820000E;
+        Tue, 28 Jun 2022 13:32:25 +0000 (UTC)
 From:   Ash Logan <ash@heyquark.com>
 To:     krzysztof.kozlowski+dt@linaro.org, paulus@samba.org,
         mpe@ellerman.id.au, christophe.leroy@csgroup.eu,
@@ -26,9 +26,9 @@ Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         j.ne@posteo.net, linkmauve@linkmauve.fr,
         rw-r-r-0644@protonmail.com, devicetree@vger.kernel.org,
         joel@jms.id.au
-Subject: [PATCH v3 04/12] powerpc: wiiu: introduce wiiu platform
-Date:   Tue, 28 Jun 2022 23:31:36 +1000
-Message-Id: <20220628133144.142185-5-ash@heyquark.com>
+Subject: [PATCH v3 05/12] powerpc: wiiu: declare as non-coherent
+Date:   Tue, 28 Jun 2022 23:31:37 +1000
+Message-Id: <20220628133144.142185-6-ash@heyquark.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220628133144.142185-1-ash@heyquark.com>
 References: <20220622131037.57604-1-ash@heyquark.com>
@@ -44,62 +44,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds empty platforms/wiiu for Nintendo Wii U console
+The Nintendo Wii U requires explicit cache handling when interfacing
+with DMA devices.
 
 Signed-off-by: Ash Logan <ash@heyquark.com>
 ---
-v2->v3: Add help text for CONFIG_WIIU.
+ arch/powerpc/platforms/Kconfig.cputype | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- arch/powerpc/platforms/Kconfig       | 1 +
- arch/powerpc/platforms/Makefile      | 1 +
- arch/powerpc/platforms/wiiu/Kconfig  | 8 ++++++++
- arch/powerpc/platforms/wiiu/Makefile | 1 +
- 4 files changed, 11 insertions(+)
- create mode 100644 arch/powerpc/platforms/wiiu/Kconfig
- create mode 100644 arch/powerpc/platforms/wiiu/Makefile
-
-diff --git a/arch/powerpc/platforms/Kconfig b/arch/powerpc/platforms/Kconfig
-index d41dad227de8..c4a9c3c0b409 100644
---- a/arch/powerpc/platforms/Kconfig
-+++ b/arch/powerpc/platforms/Kconfig
-@@ -22,6 +22,7 @@ source "arch/powerpc/platforms/40x/Kconfig"
- source "arch/powerpc/platforms/amigaone/Kconfig"
- source "arch/powerpc/platforms/book3s/Kconfig"
- source "arch/powerpc/platforms/microwatt/Kconfig"
-+source "arch/powerpc/platforms/wiiu/Kconfig"
- 
- config KVM_GUEST
- 	bool "KVM Guest support"
-diff --git a/arch/powerpc/platforms/Makefile b/arch/powerpc/platforms/Makefile
-index 94470fb27c99..944ddd938711 100644
---- a/arch/powerpc/platforms/Makefile
-+++ b/arch/powerpc/platforms/Makefile
-@@ -24,3 +24,4 @@ obj-$(CONFIG_EMBEDDED6xx)	+= embedded6xx/
- obj-$(CONFIG_AMIGAONE)		+= amigaone/
- obj-$(CONFIG_PPC_BOOK3S)	+= book3s/
- obj-$(CONFIG_PPC_MICROWATT)	+= microwatt/
-+obj-$(CONFIG_WIIU)		+= wiiu/
-diff --git a/arch/powerpc/platforms/wiiu/Kconfig b/arch/powerpc/platforms/wiiu/Kconfig
-new file mode 100644
-index 000000000000..3834834c6bd7
---- /dev/null
-+++ b/arch/powerpc/platforms/wiiu/Kconfig
-@@ -0,0 +1,8 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+config WIIU
-+	bool "Nintendo Wii U"
-+	depends on PPC_BOOK3S_32
-+	help
-+	  Select WIIU if configuring for the Nintendo Wii U.
-+	  More information at: <https://linux-wiiu.org/>
-diff --git a/arch/powerpc/platforms/wiiu/Makefile b/arch/powerpc/platforms/wiiu/Makefile
-new file mode 100644
-index 000000000000..f66554cd5c45
---- /dev/null
-+++ b/arch/powerpc/platforms/wiiu/Makefile
-@@ -0,0 +1 @@
-+# SPDX-License-Identifier: GPL-2.0
+diff --git a/arch/powerpc/platforms/Kconfig.cputype b/arch/powerpc/platforms/Kconfig.cputype
+index 9e2df4b66478..20eef6595a60 100644
+--- a/arch/powerpc/platforms/Kconfig.cputype
++++ b/arch/powerpc/platforms/Kconfig.cputype
+@@ -501,7 +501,7 @@ config NR_CPUS
+ config NOT_COHERENT_CACHE
+ 	bool
+ 	depends on 4xx || PPC_8xx || PPC_MPC512x || \
+-		GAMECUBE_COMMON || AMIGAONE
++		GAMECUBE_COMMON || AMIGAONE || WIIU
+ 	select ARCH_HAS_DMA_PREP_COHERENT
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+ 	select ARCH_HAS_SYNC_DMA_FOR_CPU
 -- 
 2.36.1
 

@@ -2,56 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8DB55C37B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE2355E084
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244121AbiF1Jqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
+        id S1344338AbiF1Jqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239715AbiF1Jqd (ORCPT
+        with ESMTP id S1344303AbiF1Jqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:46:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E64625C40;
-        Tue, 28 Jun 2022 02:46:31 -0700 (PDT)
+        Tue, 28 Jun 2022 05:46:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF79625C55;
+        Tue, 28 Jun 2022 02:46:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8573617B2;
-        Tue, 28 Jun 2022 09:46:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28169C341CD;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64596B81D79;
+        Tue, 28 Jun 2022 09:46:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EE31C341CA;
         Tue, 28 Jun 2022 09:46:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1656409590;
-        bh=Dobj9yjTJrK/J/vsMeQNCoBHeBjpfx+RuR+DAv7rT1o=;
+        bh=qHIYwC0MUE7l/qkHy6SpVtjLMVFmnu5rrRpz/lQTjrM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o7beWfPaBf1rEDF4k2UDO6dCfuzGVu1HCxgPmE3qcE2bkfMHR28T1TkkbSZNXqdUh
-         udQdVnK26VXUdQC/K6QAQmUDVQlxqjMpX5Scj9HJxICuPaH8SCluoqD3FPek/H93Dp
-         rvItpW/a91giX5JJPfYhD2s8/7wjAp5JPyyU0p0xwPpwC0FzqyKJnkkdRWWJ9VXtLw
-         X+8RpZgk4mrpsiUXmLwUXzO3ItM/7tEtp1MGAqc2+XpE9z2QdPC661aNPIhOoqHktZ
-         6u8It/mxBmrNnr9PH3sbyyyWJRe9nY8hURf1gfne11k3884iRqKdFSFrR3SZHs+YME
-         PRECThEbNa/hg==
+        b=JCcb/wcS2buWfSiU6z7jcNlYGTLIogyO4E35JoCwqlOwgd2m9sbjwul9VIqMhghh2
+         oKhfXGAq5Do+8VZMHRnVtb2rR2kfNO42LpLTlBry1atuNqYvqkEe8goxMZbIkU0qci
+         8fAMAh9GxD+xMT1ra421ngp4O2ib4wph58kyGL3EjfubQy9DMScoFNFi4oTlnQ28xX
+         x1uiSFler+c7b842gN2r7lTVnYSJwMMrnUWbGTxq+dNAPFmlgqa+sL5ptfHAtEEKx+
+         Pm1qZNaSOXQWT6Ug7VD1JbWtrtpM7oX4G1KDDSPI29sYQSfmj/p4Pbml4Q1QfDftUS
+         uAEXAWxMge7Yw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.95)
         (envelope-from <mchehab@kernel.org>)
-        id 1o67nf-005HEv-Me;
+        id 1o67nf-005HEy-NJ;
         Tue, 28 Jun 2022 10:46:27 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
         "Jonathan Corbet" <corbet@lwn.net>,
         "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        x86@kernel.org
-Subject: [PATCH 04/22] x86/sgx: fix kernel-doc markups
-Date:   Tue, 28 Jun 2022 10:46:08 +0100
-Message-Id: <49f0900ca467867917182a4428b731e55608ca67.1656409369.git.mchehab@kernel.org>
+        David Howells <dhowells@redhat.com>, linux-cachefs@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 05/22] fscache: fix kernel-doc documentation
+Date:   Tue, 28 Jun 2022 10:46:09 +0100
+Message-Id: <9fb5c8a99752e1f01adfa32ed7ddeda2a9f75d71.1656409369.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1656409369.git.mchehab@kernel.org>
 References: <cover.1656409369.git.mchehab@kernel.org>
@@ -67,21 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are a couple typos there, violating kernel-doc syntax.
+The prototype of two functions use "cookie" for the object
+parameter.
 
-Also, on a function typedef, the register snapshots aren't
-documented.
+Update kernel-doc tags accordingly, fixing those warnings:
 
-This should fix those warnings:
-
-	arch/x86/include/uapi/asm/sgx.h:19: warning: Enum value 'SGX_PAGE_MEASURE' not described in enum 'sgx_page_flags'
-	arch/x86/include/uapi/asm/sgx.h:97: warning: Function parameter or member 'rdi' not described in 'sgx_enclave_user_handler_t'
-	arch/x86/include/uapi/asm/sgx.h:97: warning: Function parameter or member 'rsi' not described in 'sgx_enclave_user_handler_t'
-	arch/x86/include/uapi/asm/sgx.h:97: warning: Function parameter or member 'rdx' not described in 'sgx_enclave_user_handler_t'
-	arch/x86/include/uapi/asm/sgx.h:97: warning: Function parameter or member 'rsp' not described in 'sgx_enclave_user_handler_t'
-	arch/x86/include/uapi/asm/sgx.h:97: warning: Function parameter or member 'r8' not described in 'sgx_enclave_user_handler_t'
-	arch/x86/include/uapi/asm/sgx.h:97: warning: Function parameter or member 'r9' not described in 'sgx_enclave_user_handler_t'
-	arch/x86/include/uapi/asm/sgx.h:124: warning: Function parameter or member 'reserved' not described in 'sgx_enclave_run'
+	include/linux/fscache.h:270: warning: Function parameter or member 'cookie' not described in 'fscache_use_cookie'
+	include/linux/fscache.h:270: warning: Excess function parameter 'object' description in 'fscache_use_cookie'
+	include/linux/fscache.h:287: warning: Function parameter or member 'cookie' not described in 'fscache_unuse_cookie'
+	include/linux/fscache.h:287: warning: Excess function parameter 'object' description in 'fscache_unuse_cookie'
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -89,44 +77,31 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/22] at: https://lore.kernel.org/all/cover.1656409369.git.mchehab@kernel.org/
 
- arch/x86/include/uapi/asm/sgx.h | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ include/linux/fscache.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/uapi/asm/sgx.h b/arch/x86/include/uapi/asm/sgx.h
-index f4b81587e90b..e0e6a3ebc941 100644
---- a/arch/x86/include/uapi/asm/sgx.h
-+++ b/arch/x86/include/uapi/asm/sgx.h
-@@ -10,7 +10,7 @@
+diff --git a/include/linux/fscache.h b/include/linux/fscache.h
+index 2f82ea31d4c1..e13184c4b198 100644
+--- a/include/linux/fscache.h
++++ b/include/linux/fscache.h
+@@ -257,7 +257,7 @@ struct fscache_cookie *fscache_acquire_cookie(struct fscache_volume *volume,
  
  /**
-  * enum sgx_page_flags - page control flags
-- * %SGX_PAGE_MEASURE:	Measure the page contents with a sequence of
-+ * @SGX_PAGE_MEASURE:	Measure the page contents with a sequence of
-  *			ENCLS[EEXTEND] operations.
-  */
- enum sgx_page_flags {
-@@ -81,6 +81,12 @@ struct sgx_enclave_run;
+  * fscache_use_cookie - Request usage of cookie attached to an object
+- * @object: Object description
++ * @cookie: Object description
+  * @will_modify: If cache is expected to be modified locally
+  *
+  * Request usage of the cookie attached to an object.  The caller should tell
+@@ -273,7 +273,7 @@ static inline void fscache_use_cookie(struct fscache_cookie *cookie,
+ 
  /**
-  * typedef sgx_enclave_user_handler_t - Exit handler function accepted by
-  *					__vdso_sgx_enter_enclave()
-+ * @rdi:	snapshot of DI register at enclave exit
-+ * @rsi:	snapshot of SI register at enclave exit
-+ * @rdx:	snapshot of DX register at enclave exit
-+ * @rsp:	snapshot of SP register at enclave exit
-+ * @r8:		snapshot of R8 register at enclave exit
-+ * @r9:		snapshot of R9 register at enclave exit
-  * @run:	The run instance given by the caller
+  * fscache_unuse_cookie - Cease usage of cookie attached to an object
+- * @object: Object description
++ * @cookie: Object description
+  * @aux_data: Updated auxiliary data (or NULL)
+  * @object_size: Revised size of the object (or NULL)
   *
-  * The register parameters contain the snapshot of their values at enclave
-@@ -104,7 +110,7 @@ typedef int (*sgx_enclave_user_handler_t)(long rdi, long rsi, long rdx,
-  * @exception_addr:		The address that triggered the exception
-  * @user_handler:		User provided callback run on exception
-  * @user_data:			Data passed to the user handler
-- * @reserved			Reserved for future extensions
-+ * @reserved:			Reserved for future extensions
-  *
-  * If @user_handler is provided, the handler will be invoked on all return paths
-  * of the normal flow.  The user handler may transfer control, e.g. via a
 -- 
 2.36.1
 

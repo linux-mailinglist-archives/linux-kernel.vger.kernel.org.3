@@ -2,46 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7617455E71A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BA155E6D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346387AbiF1OYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 10:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
+        id S1346516AbiF1OZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 10:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346232AbiF1OYa (ORCPT
+        with ESMTP id S1346496AbiF1OZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 10:24:30 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433582CCB4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 07:24:28 -0700 (PDT)
-Received: from localhost.localdomain (abxi223.neoplus.adsl.tpnet.pl [83.9.2.223])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id F1DB53F713;
-        Tue, 28 Jun 2022 16:24:24 +0200 (CEST)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/3] thermal: qcom: tsens-v1: Add support for MSM8992/4 TSENS
-Date:   Tue, 28 Jun 2022 16:23:59 +0200
-Message-Id: <20220628142359.93100-3-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220628142359.93100-1-konrad.dybcio@somainline.org>
-References: <20220628142359.93100-1-konrad.dybcio@somainline.org>
+        Tue, 28 Jun 2022 10:25:53 -0400
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FC02F661
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 07:25:51 -0700 (PDT)
+Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SCZ1BX012398;
+        Tue, 28 Jun 2022 07:25:10 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=date : from : to :
+ cc : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=PPS06212021;
+ bh=6rt1kwIueabe2dNIkyAL0qdhEseL0IqKsqzu1HxyZCY=;
+ b=Yp27X+nuFd6TPIAW2JTT2qiyEkdOAtTwzQIDNfJo9ANZonUSX5dDNCrO6jGgGZYu2LQ+
+ 363U0oyunZWoWWSN+0kDGOX+7mg8V8r8KXNdm50LyHJHM/5xAtLVpSUSDfNbLsSAUyXL
+ 93cRS01UuN9F74ohQ5q+DFaIlpfSQW8ZXWAzz6OYd4wSKDtw5ktg1nvpEOMObxj84nuF
+ 4qcbDQnWpTkmlqIPWQ11kUUVuvqFKFIisYETHgvheAd54Qs++4MEilTEne1IgvH2XsKf
+ fLkCUytsbIVyeeBvMwzszlCQCPqNgsRPy/TCoxrK+4LNi01Y3gCp8RlGxX5N1pE7pxvm tA== 
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2041.outbound.protection.outlook.com [104.47.57.41])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3gx1vka5wh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 07:25:10 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TJk/yT/fz2BIK+w1EaxvG8Tt3YST7f70RT5PF6qhCg8rJZIySnXOaYjJVu5LBuzMyPp8KV9S1xVxrMrqOEfj1P1jWUkE18irqHCqzDC8/OnR3/gMVt3/mZ3hoAN+v/MhFSP07pRsU6iX0RWCWhdIrdfDblSyCzGC2mRTIGOSuHtWm8c11UWLgfcazP2UIlNfSgSQ8lreWwD4iPtdLpERsdLHaZE0w7IaamsFhv2+lx/uAf1q0neybPzIrZWoljgzg84/4INCl+OKpDilGECQSy+6V0bZswMb0xEphwNoiCKEliXWO2Dx+5uKrPFVJPNiEpMFg0MlPLr3fNpuvNsCIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6rt1kwIueabe2dNIkyAL0qdhEseL0IqKsqzu1HxyZCY=;
+ b=dMVlrAU+CQeHQ8SMvBRQihIE8bwW/soE0/dnPzVXDjbwNec2vGCrlz9pPJFzsLeIstPP4Ti0uE7vcW5qKJa1N4XQSWY+OyN+bQ/4oiS6kS+PUzTBtwphPIzCu4zdhqbXXsK0/kgm+i4JtUwobSmHtuAi34YfLzxzzHPAqs6+MGEph/33m+nA4hiFI2VYIenjinnk4ObTHPhgF56EXUia0aNYQY0i2vJAgIldnBiiyK59HyGp+2MLdrMfzvtt0RQuHwST0OSrr2DgWTlmAL63pVuobx/zdzVC/sRDiJCDCgqxWDz0/LqWaI+hkrfnVdUBzIjx5FGNwFFdtUNFFbw9GQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from DM6PR11MB4545.namprd11.prod.outlook.com (2603:10b6:5:2ae::14)
+ by BN6PR11MB1633.namprd11.prod.outlook.com (2603:10b6:405:e::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Tue, 28 Jun
+ 2022 14:25:06 +0000
+Received: from DM6PR11MB4545.namprd11.prod.outlook.com
+ ([fe80::45e5:975f:214a:f0d6]) by DM6PR11MB4545.namprd11.prod.outlook.com
+ ([fe80::45e5:975f:214a:f0d6%4]) with mapi id 15.20.5373.018; Tue, 28 Jun 2022
+ 14:25:06 +0000
+Date:   Tue, 28 Jun 2022 10:24:59 -0400
+From:   Paul Gortmaker <paul.gortmaker@windriver.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Masahiro Yamada <masahiroy@kernel.org>, mmarek@suse.cz,
+        Mike Rapoport <rppt@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC][PATCH] kconfig: Add implicit CONFIG_ prefix to
+ IS_ENABLED() and co
+Message-ID: <20220628142459.GB1723@windriver.com>
+References: <YrrQOifFIiISf/3g@hirez.programming.kicks-ass.net>
+ <CAK8P3a2XfzQo6emT4pXXxAjWewdP2LiAe2fOskFf-0suSmBJQQ@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a2XfzQo6emT4pXXxAjWewdP2LiAe2fOskFf-0suSmBJQQ@mail.gmail.com>
+X-ClientProxiedBy: BYAPR05CA0013.namprd05.prod.outlook.com
+ (2603:10b6:a03:c0::26) To DM6PR11MB4545.namprd11.prod.outlook.com
+ (2603:10b6:5:2ae::14)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a623e0e0-7b33-4147-7521-08da5911ffb4
+X-MS-TrafficTypeDiagnostic: BN6PR11MB1633:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EXNd49nt4TFECCmM5GPOOAW3udqrQpHV+ELChfOUOJ+i+pZyD6WeOy6atJ96qMyXgIiqwkV+fwQtaq34/9WX188aN3ptXQDvHFRgZUj3Uj1OeDuxHFia/PI3dQuxFodaoeRGMRDDGTwfkOqvFDe4TEhKg9z4THLdvUc4sKHV7cT29vtY1wQPLkew8VH30GZJIk9kFxqyT3rtaMJIi0ZCEVYC4fU08XSjQeeEs1ZpRYxhwTI3NTMaMN1BDO5vxJ3EK+vHsZ9jkvtbBSAQZPS6NWJ+bWib/sUwZ8O98kCjEuQ8cSsef+eN8G0U1kGLHsn55Pg9zGy/k9SR9vTyxS6KZT7Q1kynf0VZGtR5SDrNnX1B49RpmY4P42CXejzYv70lMG2ZPqjjUA6ebPkAjMDXlwzIWk5i69vKsFKBERhXrSofz8Dhp/703JkuPnYNI4lvNcFis6OY1g0qRxXo0F9VMiP9VlhFPlI1oKGAEGl37hUs8XyCJEyzsPEvEtQMtPUIWuLmkxrWq0GKeU59o045l8rfRRQObtlMaFgN7fllcVx6srppCbeWDDT9UWRCJRTKvNEoKJWd1FuiyPISBF1HKHXD1hNFvr92t7/DWXFR1noxVnu5ORUjQ6bM3YfEroK1I76cp02KuxjSd/0EUXr4K9O1EheZOs1JSOrhAmKVTsFxpERHRh/K8kGptcKXhwcEgNMgaaeD9TAq//iH6279RicDE9NoRc/lBb4gd/RYu9ULudY6GiXGcU06URG4VmL2uI3r+Obl/z2TlKWU/V6DgvqmJSUBhEZElI4JYu9XNqw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4545.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(396003)(39850400004)(376002)(366004)(478600001)(44832011)(6486002)(26005)(33656002)(5660300002)(52116002)(53546011)(6666004)(6506007)(41300700001)(6512007)(8936002)(86362001)(2906002)(36756003)(38100700002)(2616005)(1076003)(186003)(83380400001)(6916009)(8676002)(66556008)(66476007)(4326008)(38350700002)(66946007)(54906003)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6CEtXPS94DajXgkpjyu2m+3RksRTvYz9po7PyyWfoSJRW+saL8V9B6rvtLMF?=
+ =?us-ascii?Q?YDSZd0N0v6UiJMmoxw8xXLxvfdACSzsBOHmiOmSHF9n3DtXbxy3hyYT0J1LJ?=
+ =?us-ascii?Q?kT60zIvIMFAOzGDhUrkOX8cHHbSWfrO9d6XfulCJgxcj/HBtBrmx7cM2qVNo?=
+ =?us-ascii?Q?CEMQ2yI8nmzWpzdIyG0SEAewjDYLcS8nutog+Mwzq5M4d5Swdox/HcAg4sLR?=
+ =?us-ascii?Q?V2IF+7IsTpCTzdZw7f5Jix2HeQ8EsDHo5TJkq2lNAL23i0G6YaFU6La3nKuS?=
+ =?us-ascii?Q?3EL5rGKYqiIfZsxQS1E0l2TYiULH+NrJQpBIWHssDFerLdP8YAWZw/pe/hDf?=
+ =?us-ascii?Q?FYTuXjgK/DfLfj5ZyQjOgBhmZWE3PLrTW8lCfbxVQhnJBBdB6LqxXLcTCcuP?=
+ =?us-ascii?Q?/NsqYBmUn0Uah/VOiU8wT+M26cw89cfjQuLHqBa5jl15L6Eh4i0/pPTcggCY?=
+ =?us-ascii?Q?151ON1Qc4m12Wv5z4VL+YT0wGfocBuhEt2hOC46Ddozewyoogi+sCKFp3u1r?=
+ =?us-ascii?Q?+ACP6Hu9MKw+VwfXaRAhkDHIf82Kw8YLp9k7tgPtaDut2l0+kz76tdwYQLiN?=
+ =?us-ascii?Q?bbyry6h8WD8rX5X73duk6wmmORhXEfcB2qL9k/iMc0Tzn8rrxPC1YtfHaxP8?=
+ =?us-ascii?Q?6FNsOfys3vlcy0Xuxkdm/xdE6FplGzpSoL8Si+c4F4kX3z6GmMm+PhenYUY0?=
+ =?us-ascii?Q?jZsN9Yjz/EiW7LV7yXb3rLb6vbjRhHLgU6TkOAvnkzFHjlvj7H9ikSOFfVBD?=
+ =?us-ascii?Q?WQSJ8K7+jyeS8glQ1DWZ/nL7Ig3ROjvObT4fdA8oYDbzcCkmD9BsXtQr3lsE?=
+ =?us-ascii?Q?tfi9WR61vdDv6Ay6l5Bs6gHCRxL5ODGfdwjFk9Yg/9L5e3276eKWf0QvfZP7?=
+ =?us-ascii?Q?AwDUzGYoSVaAGyFBi21SVyYcufvLIYUAIR/9kJsJXA23d4Bl58BAaeFpX0NE?=
+ =?us-ascii?Q?2xIZmJ+c2x/MVCLDqjF/eiVx14k+0WfsLEWD899KozWxlCMMP0JxnUEfZwty?=
+ =?us-ascii?Q?uvsd7iMcv+QKsgMkdGwrq7DnVYAsvt5pgMfMuCyla7AQs2o6JL0XNTsWUC2n?=
+ =?us-ascii?Q?MF+7GAjZKAqV0sCNyaNV1vn6f4pTklkCnarVH/LTLJc+KYpNBjC9DZw71AvG?=
+ =?us-ascii?Q?V9XYK3Z4gbFDpLQvTuWnQU/YB3pEnUxpnSBO2WtQ9MPVGxP+70TDskpJq7LI?=
+ =?us-ascii?Q?1Vj0nQEBbCH2XW4xqCY9aOFfRxvl9x6NTJAMVW5CCPhuxoDDlX19JaVu6zSP?=
+ =?us-ascii?Q?peOqmyH2HGRxm10tSxD7tZZ/pKerMJrTqaKKhGooHb4RxeROQI8IR+ZhoJQw?=
+ =?us-ascii?Q?Bcf51HbNBxECQ4Hw6vusMItQBu770ejTiK3sjAqdXq2ucXJZNotXuR6uvhej?=
+ =?us-ascii?Q?cn0tFLGEK1/uirY2OdI5GzlUp+UyqIX3LJZPwdOb8RDMUGAmVRXDRgF1TI6G?=
+ =?us-ascii?Q?G9mYdvj3UnmJy87w0+5p6NJjq4Wfca1zyVhybPSR5o1xS0Lm0m0O0ftWg2aJ?=
+ =?us-ascii?Q?/PKH9NqJsQpoEHGJlsqZym5qRF/2rVbeqzz04AAkTfjq3zhJ7Jnlz2d1yRyk?=
+ =?us-ascii?Q?VHqaMA0d85+9uRdUjWyk1sIKyTVUIGDG57mB77jvL+mXsmOB8B+8uJpRU7ny?=
+ =?us-ascii?Q?rg=3D=3D?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a623e0e0-7b33-4147-7521-08da5911ffb4
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4545.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 14:25:06.7085
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: K4NOC3FZ5RhaBMHBQAM9Xo9LB+uL5kjyKHG9x/a0fbZwLekEVRvB1fTUUfo5OnobtOuwrHVYTUia2/aFTZ4cZydEwDE9Z7FhO5a132RGKZk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1633
+X-Proofpoint-ORIG-GUID: Bjj88NWAf_LU7g0wdJTF6DR7oPGxtVmd
+X-Proofpoint-GUID: Bjj88NWAf_LU7g0wdJTF6DR7oPGxtVmd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-28_07,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 phishscore=0 adultscore=0 mlxscore=0 impostorscore=0
+ malwarescore=0 bulkscore=0 suspectscore=0 clxscore=1011 mlxlogscore=999
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206280060
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,408 +138,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MSM8994, despite being heavily based on MSM8974, uses the
-1.2 version of TSENS. Also, 8994 being 8994, it has a custom
-way of calculating the slope.
+[Re: [RFC][PATCH] kconfig: Add implicit CONFIG_ prefix to IS_ENABLED() and co] On 28/06/2022 (Tue 13:19) Arnd Bergmann wrote:
 
-MSM8992 in turn is a cut-down version of MSM8994 and uses
-the same TSENS hardware, albeit with a different set of sensors.
+> On Tue, Jun 28, 2022 at 11:56 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > Since IS_ENABLED() (and friends) are clearly meant to be used on
+> > CONFIG_foo symbols and IS_ENABLED(CONFIG_ is so long and almost an
+> > tautology, allow the more compact usage of: IS_ENABLED(foo).
+> >
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> 
+> I'd prefer to keep the more verbose usage, mainly because it makes it easier
+> to grep for a symbol. If today you do 'git grep CONFIG_PM_SLEEP', you find
+> all instances in Makefile, in #ifdef and in IS_ENABLED(), though not the
+> references in Kconfig language, which leave out the prefix.
 
-Also tested on 8976 (by a person who didn't want to be named)
-to make sure the 11->16 max_sensors changes didn't break anything.
+TL;DR - me too.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
-Changes since v3:
-* Use GENMASK
+I confess that I do the same thing - I grep for CONFIG_FOO to find the
+consumers, and "config FOO" to find the provider.
 
- drivers/thermal/qcom/tsens-v1.c | 299 ++++++++++++++++++++++++++++++--
- drivers/thermal/qcom/tsens.c    |   6 +
- drivers/thermal/qcom/tsens.h    |   2 +-
- 3 files changed, 294 insertions(+), 13 deletions(-)
+So while I can appreciate the value of removing verbosity, this will
+impact workflows of average people out there.
 
-diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
-index d6f0dec4bfa1..00b5428b4bca 100644
---- a/drivers/thermal/qcom/tsens-v1.c
-+++ b/drivers/thermal/qcom/tsens-v1.c
-@@ -143,6 +143,99 @@
- #define CAL_SEL_MASK	GENMASK(2, 0)
- #define CAL_SEL_SHIFT	0
- 
-+/* eeprom layout data for 8994 */
-+#define MSM8994_BASE0_MASK	GENMASK(9, 0)
-+#define MSM8994_BASE1_MASK	GENMASK(19, 10)
-+#define MSM8994_BASE0_SHIFT	0
-+#define MSM8994_BASE1_SHIFT	10
-+
-+#define MSM8994_S0_MASK	GENMASK(23, 20)
-+#define MSM8994_S1_MASK	GENMASK(27, 24)
-+#define MSM8994_S2_MASK	GENMASK(31, 28)
-+#define MSM8994_S3_MASK	GENMASK(3, 0)
-+#define MSM8994_S4_MASK	GENMASK(7, 4)
-+#define MSM8994_S5_MASK	GENMASK(11, 8)
-+#define MSM8994_S6_MASK	GENMASK(15, 12)
-+#define MSM8994_S7_MASK	GENMASK(19, 16)
-+#define MSM8994_S8_MASK	GENMASK(23, 20)
-+#define MSM8994_S9_MASK	GENMASK(27, 24)
-+#define MSM8994_S10_MASK	GENMASK(31, 28)
-+#define MSM8994_S11_MASK	GENMASK(3, 0)
-+#define MSM8994_S12_MASK	GENMASK(7, 4)
-+#define MSM8994_S13_MASK	GENMASK(11, 8)
-+#define MSM8994_S14_MASK	GENMASK(15, 12)
-+#define MSM8994_S15_MASK	GENMASK(19, 16)
-+
-+#define MSM8994_S0_SHIFT	20
-+#define MSM8994_S1_SHIFT	24
-+#define MSM8994_S2_SHIFT	28
-+#define MSM8994_S3_SHIFT	0
-+#define MSM8994_S4_SHIFT	4
-+#define MSM8994_S5_SHIFT	8
-+#define MSM8994_S6_SHIFT	12
-+#define MSM8994_S7_SHIFT	16
-+#define MSM8994_S8_SHIFT	20
-+#define MSM8994_S9_SHIFT	24
-+#define MSM8994_S10_SHIFT	28
-+#define MSM8994_S11_SHIFT	0
-+#define MSM8994_S12_SHIFT	4
-+#define MSM8994_S13_SHIFT	8
-+#define MSM8994_S14_SHIFT	12
-+#define MSM8994_S15_SHIFT	16
-+
-+#define MSM8994_CAL_SEL_MASK	GENMASK(22, 20)
-+#define MSM8994_CAL_SEL_SHIFT	20
-+
-+#define MSM8994_BASE0_REDUN_MASK	GENMASK(30, 21)
-+#define MSM8994_BASE1_BIT0_REDUN_MASK	GENMASK(31, 31)
-+#define MSM8994_BASE1_BIT1_9_REDUN_MASK	GENMASK(8, 0)
-+#define MSM8994_BASE0_REDUN_SHIFT	21
-+#define MSM8994_BASE1_BIT0_REDUN_SHIFT_COMPUTE	31
-+
-+#define MSM8994_S0_REDUN_MASK	GENMASK(12, 9)
-+#define MSM8994_S1_REDUN_MASK	GENMASK(16, 13)
-+#define MSM8994_S2_REDUN_MASK	GENMASK(20, 17)
-+#define MSM8994_S3_REDUN_MASK	GENMASK(24, 21)
-+#define MSM8994_S4_REDUN_MASK	GENMASK(28, 25)
-+#define MSM8994_S5_REDUN_MASK_BIT0_2	GENMASK(31, 29)
-+#define MSM8994_S5_REDUN_MASK_BIT3	GENMASK(23, 23)
-+#define MSM8994_S6_REDUN_MASK	GENMASK(27, 24)
-+#define MSM8994_S7_REDUN_MASK	GENMASK(31, 28)
-+#define MSM8994_S8_REDUN_MASK	GENMASK(3, 0)
-+#define MSM8994_S9_REDUN_MASK	GENMASK(7, 4)
-+#define MSM8994_S10_REDUN_MASK	GENMASK(11, 8)
-+#define MSM8994_S11_REDUN_MASK	GENMASK(15, 12)
-+#define MSM8994_S12_REDUN_MASK	GENMASK(19, 16)
-+#define MSM8994_S13_REDUN_MASK	GENMASK(23, 20)
-+#define MSM8994_S14_REDUN_MASK	GENMASK(27, 24)
-+#define MSM8994_S15_REDUN_MASK	GENMASK(31, 28)
-+
-+#define MSM8994_S0_REDUN_SHIFT	9
-+#define MSM8994_S1_REDUN_SHIFT	13
-+#define MSM8994_S2_REDUN_SHIFT	17
-+#define MSM8994_S3_REDUN_SHIFT	21
-+#define MSM8994_S4_REDUN_SHIFT	25
-+#define MSM8994_S5_REDUN_SHIFT_BIT0_2	29
-+#define MSM8994_S5_REDUN_SHIFT_BIT3	23
-+#define MSM8994_S6_REDUN_SHIFT	24
-+#define MSM8994_S7_REDUN_SHIFT	28
-+#define MSM8994_S8_REDUN_SHIFT	0
-+#define MSM8994_S9_REDUN_SHIFT	4
-+#define MSM8994_S10_REDUN_SHIFT	8
-+#define MSM8994_S11_REDUN_SHIFT	12
-+#define MSM8994_S12_REDUN_SHIFT	16
-+#define MSM8994_S13_REDUN_SHIFT	20
-+#define MSM8994_S14_REDUN_SHIFT	24
-+#define MSM8994_S15_REDUN_SHIFT	28
-+
-+#define MSM8994_REDUN_SEL_MASK		GENMASK(2, 0)
-+#define MSM8994_CAL_SEL_REDUN_MASK	GENMASK(31, 29)
-+#define MSM8994_CAL_SEL_REDUN_SHIFT	29
-+
-+#define BKP_SEL			0x3
-+#define BKP_REDUN_SEL		0xe0000000
-+#define BKP_REDUN_SHIFT		29
-+
- static void compute_intercept_slope_8976(struct tsens_priv *priv,
- 			      u32 *p1, u32 *p2, u32 mode)
- {
-@@ -167,6 +260,29 @@ static void compute_intercept_slope_8976(struct tsens_priv *priv,
- 	}
- }
- 
-+/* HW-specific calculations forwardported from msm-3.10 kernel */
-+static void compute_intercept_slope_8994(struct tsens_priv *priv,
-+			      u32 base0, u32 base1, u32 *p, u32 mode)
-+{
-+	int adc_code_of_tempx, i, num, den, slope;
-+
-+	/* slope (m, dy/dx) = SLOPE_FACTOR * (adc_code2 - adc_code1)/(temp_120_degc - temp_30_degc) */
-+	num = base1 - base0;
-+	num *= SLOPE_FACTOR;
-+	den = CAL_DEGC_PT2 - CAL_DEGC_PT1;
-+	slope = num / den;
-+
-+	for (i = 0; i < priv->num_sensors; i++) {
-+		adc_code_of_tempx = base0 + p[i];
-+		priv->sensor[i].offset = (adc_code_of_tempx * SLOPE_FACTOR) -
-+				(CAL_DEGC_PT1 *	priv->sensor[i].slope);
-+		priv->sensor[i].slope = (mode == TWO_PT_CALIB) ? slope : SLOPE_DEFAULT;
-+
-+		dev_dbg(priv->dev, "%s: offset:%d, slope:%d\n", __func__,
-+			priv->sensor[i].offset, priv->sensor[i].slope);
-+	}
-+}
-+
- static int calibrate_v1(struct tsens_priv *priv)
- {
- 	u32 base0 = 0, base1 = 0;
-@@ -298,14 +414,145 @@ static int calibrate_8976(struct tsens_priv *priv)
- 	return 0;
- }
- 
--/* v1.x: msm8956,8976,qcs404,405 */
-+static int calibrate_8994(struct tsens_priv *priv)
-+{
-+	int base0 = 0, base1 = 0, i;
-+	u32 p[16] = { [0 ... 15] = 532 }; /* HW-specific, undocumented magic value */
-+	int mode = 0;
-+	u32 *calib0, *calib1, *calib2, *calib_mode, *calib_rsel;
-+	u32 calib_redun_sel;
-+
-+	/* 0x40d0-0x40dc */
-+	calib0 = (u32 *)qfprom_read(priv->dev, "calib");
-+	if (IS_ERR(calib0))
-+		return PTR_ERR(calib0);
-+
-+	dev_dbg(priv->dev, "%s: calib0: [0] = %u, [1] = %u, [2] = %u\n",
-+		__func__, calib0[0], calib0[1], calib0[2]);
-+
-+	/* 0x41c0-0x41c8 */
-+	calib1 = (u32 *)qfprom_read(priv->dev, "calib_redun1_2");
-+	if (IS_ERR(calib1))
-+		return PTR_ERR(calib1);
-+
-+	dev_dbg(priv->dev, "%s: calib1: [0] = %u, [1] = %u\n",
-+		__func__, calib1[0], calib1[1]);
-+
-+	/* 0x41cc-0x41d0 */
-+	calib2 = (u32 *)qfprom_read(priv->dev, "calib_redun3");
-+	if (IS_ERR(calib2))
-+		return PTR_ERR(calib2);
-+
-+	dev_dbg(priv->dev, "%s: calib2: [0] = %u\n", __func__, calib2[0]);
-+
-+	/* 0x4440-0x4448 */
-+	calib_mode = (u32 *)qfprom_read(priv->dev, "calib_redun4_5");
-+	if (IS_ERR(calib_mode))
-+		return PTR_ERR(calib_mode);
-+
-+	dev_dbg(priv->dev, "%s: calib_mode: [0] = %u, [1] = %u\n",
-+		__func__, calib1[0], calib1[1]);
-+
-+	/* 0x4464-0x4468 */
-+	calib_rsel = (u32 *)qfprom_read(priv->dev, "calib_rsel");
-+	if (IS_ERR(calib_mode))
-+		return PTR_ERR(calib_mode);
-+
-+	dev_dbg(priv->dev, "%s: calib_rsel: [0] = %u\n", __func__, calib_rsel[0]);
-+
-+	calib_redun_sel =  calib_rsel[0] & MSM8994_CAL_SEL_REDUN_MASK;
-+	calib_redun_sel >>= MSM8994_CAL_SEL_REDUN_SHIFT;
-+
-+	if (calib_redun_sel == BKP_SEL) {
-+		dev_dbg(priv->dev, "%s: Calibrating in REDUN mode, calib_redun_sel = %u",
-+			__func__, calib_redun_sel);
-+		mode = calib_mode[1] & MSM8994_REDUN_SEL_MASK;
-+
-+		if (mode == TWO_PT_CALIB) {
-+			dev_dbg(priv->dev, "%s: REDUN TWO_PT mode, mode = %u", __func__, mode);
-+			base0 = (calib1[0] & MSM8994_BASE0_REDUN_MASK) >> MSM8994_BASE0_REDUN_SHIFT;
-+			base1 = (calib1[0] & MSM8994_BASE1_BIT0_REDUN_MASK) >> MSM8994_BASE1_BIT0_REDUN_SHIFT_COMPUTE;
-+			base1 |= calib1[1] & MSM8994_BASE1_BIT1_9_REDUN_MASK;
-+			p[0] = (calib1[1] & MSM8994_S0_REDUN_MASK) >> MSM8994_S0_REDUN_SHIFT;
-+			p[1] = (calib1[1] & MSM8994_S1_REDUN_MASK) >> MSM8994_S1_REDUN_SHIFT;
-+			p[2] = (calib1[1] & MSM8994_S2_REDUN_MASK) >> MSM8994_S2_REDUN_SHIFT;
-+			p[3] = (calib1[1] & MSM8994_S3_REDUN_MASK) >> MSM8994_S3_REDUN_SHIFT;
-+			p[4] = (calib1[1] & MSM8994_S4_REDUN_MASK) >> MSM8994_S4_REDUN_SHIFT;
-+			p[5] = (calib1[1] & MSM8994_S5_REDUN_MASK_BIT0_2) >> MSM8994_S5_REDUN_SHIFT_BIT0_2;
-+			p[5] |= (calib2[0] & MSM8994_S5_REDUN_MASK_BIT3) >> MSM8994_S5_REDUN_SHIFT_BIT3;
-+			p[6] = (calib2[0] & MSM8994_S6_REDUN_MASK) >> MSM8994_S6_REDUN_SHIFT;
-+			p[7] = (calib2[0] & MSM8994_S7_REDUN_MASK) >> MSM8994_S7_REDUN_SHIFT;
-+			p[8] = (calib2[0] & MSM8994_S8_REDUN_MASK) >> MSM8994_S8_REDUN_SHIFT;
-+			p[9] = (calib2[0] & MSM8994_S9_REDUN_MASK) >> MSM8994_S9_REDUN_SHIFT;
-+			p[10] = (calib2[0] & MSM8994_S10_REDUN_MASK) >> MSM8994_S10_REDUN_SHIFT;
-+			p[11] = (calib2[0] & MSM8994_S11_REDUN_MASK) >> MSM8994_S11_REDUN_SHIFT;
-+			p[12] = (calib2[0] & MSM8994_S12_REDUN_MASK) >> MSM8994_S12_REDUN_SHIFT;
-+			p[13] = (calib2[0] & MSM8994_S13_REDUN_MASK) >> MSM8994_S13_REDUN_SHIFT;
-+			p[14] = (calib2[0] & MSM8994_S14_REDUN_MASK) >> MSM8994_S14_REDUN_SHIFT;
-+			p[15] = (calib2[0] & MSM8994_S15_REDUN_MASK) >> MSM8994_S15_REDUN_SHIFT;
-+		} else {
-+			dev_dbg(priv->dev, "%s: REDUN NON-TWO_PT mode, mode = %u", __func__, mode);
-+		}
-+	} else {
-+		dev_dbg(priv->dev, "%s: Calibrating in NOT-REDUN mode, calib_redun_sel = %u",
-+			__func__, calib_redun_sel);
-+		mode = (calib0[2] & MSM8994_CAL_SEL_MASK) >> MSM8994_CAL_SEL_SHIFT;
-+
-+		if (mode == TWO_PT_CALIB) {
-+			dev_dbg(priv->dev, "%s: NOT-REDUN TWO_PT mode, mode = %u", __func__, mode);
-+			base0 = (calib0[0] & MSM8994_BASE0_MASK) >> MSM8994_BASE0_SHIFT;
-+			base1 = (calib0[0] & MSM8994_BASE1_MASK) >> MSM8994_BASE1_SHIFT;
-+			p[0] = (calib0[0] & MSM8994_S0_MASK) >> MSM8994_S0_SHIFT;
-+			p[1] = (calib0[0] & MSM8994_S1_MASK) >> MSM8994_S1_SHIFT;
-+			p[2] = (calib0[1] & MSM8994_S2_MASK) >> MSM8994_S2_SHIFT;
-+			p[3] = (calib0[1] & MSM8994_S3_MASK) >> MSM8994_S3_SHIFT;
-+			p[4] = (calib0[1] & MSM8994_S4_MASK) >> MSM8994_S4_SHIFT;
-+			p[5] = (calib0[1] & MSM8994_S5_MASK) >> MSM8994_S5_SHIFT;
-+			p[6] = (calib0[1] & MSM8994_S6_MASK) >> MSM8994_S6_SHIFT;
-+			p[7] = (calib0[1] & MSM8994_S7_MASK) >> MSM8994_S7_SHIFT;
-+			p[8] = (calib0[1] & MSM8994_S8_MASK) >> MSM8994_S8_SHIFT;
-+			p[9] = (calib0[1] & MSM8994_S9_MASK) >> MSM8994_S9_SHIFT;
-+			p[10] = (calib0[1] & MSM8994_S10_MASK) >> MSM8994_S10_SHIFT;
-+			p[11] = (calib0[2] & MSM8994_S11_MASK) >> MSM8994_S11_SHIFT;
-+			p[12] = (calib0[2] & MSM8994_S12_MASK) >> MSM8994_S12_SHIFT;
-+			p[13] = (calib0[2] & MSM8994_S13_MASK) >> MSM8994_S13_SHIFT;
-+			p[14] = (calib0[2] & MSM8994_S14_MASK) >> MSM8994_S14_SHIFT;
-+			p[15] = (calib0[2] & MSM8994_S15_MASK) >> MSM8994_S15_SHIFT;
-+		} else {
-+			dev_dbg(priv->dev, "%s: NOT-REDUN NON-TWO_PT mode, mode = %u", __func__, mode);
-+			for (i = 0; i < 16; i++)
-+				p[i] = 532;
-+		}
-+	}
-+
-+	/* 8992 features less sensors and remaps some */
-+	if (priv->num_sensors == 13) {
-+		p[6] = p[7];
-+		p[7] = p[9];
-+		p[8] = p[10];
-+		p[9] = p[11];
-+		p[10] = p[12];
-+		p[11] = p[13];
-+		p[12] = p[14];
-+	}
-+
-+	compute_intercept_slope_8994(priv, base0, base1, p, mode);
-+	kfree(calib0);
-+	kfree(calib1);
-+	kfree(calib2);
-+	kfree(calib_mode);
-+
-+	return 0;
-+}
-+
-+/* v1.x: msm8956/8976, msm8994 (v1.2), qcs404/qcs405 */
- 
- static struct tsens_features tsens_v1_feat = {
- 	.ver_major	= VER_1_X,
- 	.crit_int	= 0,
- 	.adc		= 1,
- 	.srot_split	= 1,
--	.max_sensors	= 11,
-+	.max_sensors	= 16,
- };
- 
- static const struct reg_field tsens_v1_regfields[MAX_REGFIELDS] = {
-@@ -324,12 +571,12 @@ static const struct reg_field tsens_v1_regfields[MAX_REGFIELDS] = {
- 	[INT_EN]     = REG_FIELD(TM_INT_EN_OFF, 0, 0),
- 
- 	/* UPPER/LOWER TEMPERATURE THRESHOLDS */
--	REG_FIELD_FOR_EACH_SENSOR11(LOW_THRESH,    TM_Sn_UPPER_LOWER_STATUS_CTRL_OFF,  0,  9),
--	REG_FIELD_FOR_EACH_SENSOR11(UP_THRESH,     TM_Sn_UPPER_LOWER_STATUS_CTRL_OFF, 10, 19),
-+	REG_FIELD_FOR_EACH_SENSOR16(LOW_THRESH,    TM_Sn_UPPER_LOWER_STATUS_CTRL_OFF,  0,  9),
-+	REG_FIELD_FOR_EACH_SENSOR16(UP_THRESH,     TM_Sn_UPPER_LOWER_STATUS_CTRL_OFF, 10, 19),
- 
- 	/* UPPER/LOWER INTERRUPTS [CLEAR/STATUS] */
--	REG_FIELD_FOR_EACH_SENSOR11(LOW_INT_CLEAR, TM_Sn_UPPER_LOWER_STATUS_CTRL_OFF, 20, 20),
--	REG_FIELD_FOR_EACH_SENSOR11(UP_INT_CLEAR,  TM_Sn_UPPER_LOWER_STATUS_CTRL_OFF, 21, 21),
-+	REG_FIELD_FOR_EACH_SENSOR16(LOW_INT_CLEAR, TM_Sn_UPPER_LOWER_STATUS_CTRL_OFF, 20, 20),
-+	REG_FIELD_FOR_EACH_SENSOR16(UP_INT_CLEAR,  TM_Sn_UPPER_LOWER_STATUS_CTRL_OFF, 21, 21),
- 	[LOW_INT_STATUS_0] = REG_FIELD(TM_HIGH_LOW_INT_STATUS_OFF,  0,  0),
- 	[LOW_INT_STATUS_1] = REG_FIELD(TM_HIGH_LOW_INT_STATUS_OFF,  1,  1),
- 	[LOW_INT_STATUS_2] = REG_FIELD(TM_HIGH_LOW_INT_STATUS_OFF,  2,  2),
-@@ -350,14 +597,14 @@ static const struct reg_field tsens_v1_regfields[MAX_REGFIELDS] = {
- 	/* NO CRITICAL INTERRUPT SUPPORT on v1 */
- 
- 	/* Sn_STATUS */
--	REG_FIELD_FOR_EACH_SENSOR11(LAST_TEMP,    TM_Sn_STATUS_OFF,  0,  9),
--	REG_FIELD_FOR_EACH_SENSOR11(VALID,        TM_Sn_STATUS_OFF, 14, 14),
-+	REG_FIELD_FOR_EACH_SENSOR16(LAST_TEMP,    TM_Sn_STATUS_OFF,  0,  9),
-+	REG_FIELD_FOR_EACH_SENSOR16(VALID,        TM_Sn_STATUS_OFF, 14, 14),
- 	/* xxx_STATUS bits: 1 == threshold violated */
--	REG_FIELD_FOR_EACH_SENSOR11(MIN_STATUS,   TM_Sn_STATUS_OFF, 10, 10),
--	REG_FIELD_FOR_EACH_SENSOR11(LOWER_STATUS, TM_Sn_STATUS_OFF, 11, 11),
--	REG_FIELD_FOR_EACH_SENSOR11(UPPER_STATUS, TM_Sn_STATUS_OFF, 12, 12),
-+	REG_FIELD_FOR_EACH_SENSOR16(MIN_STATUS,   TM_Sn_STATUS_OFF, 10, 10),
-+	REG_FIELD_FOR_EACH_SENSOR16(LOWER_STATUS, TM_Sn_STATUS_OFF, 11, 11),
-+	REG_FIELD_FOR_EACH_SENSOR16(UPPER_STATUS, TM_Sn_STATUS_OFF, 12, 12),
- 	/* No CRITICAL field on v1.x */
--	REG_FIELD_FOR_EACH_SENSOR11(MAX_STATUS,   TM_Sn_STATUS_OFF, 13, 13),
-+	REG_FIELD_FOR_EACH_SENSOR16(MAX_STATUS,   TM_Sn_STATUS_OFF, 13, 13),
- 
- 	/* TRDY: 1=ready, 0=in progress */
- 	[TRDY] = REG_FIELD(TM_TRDY_OFF, 0, 0),
-@@ -389,3 +636,31 @@ struct tsens_plat_data data_8976 = {
- 	.feat		= &tsens_v1_feat,
- 	.fields		= tsens_v1_regfields,
- };
-+
-+static const struct tsens_ops ops_8992 = {
-+	.init		= init_common,
-+	.calibrate	= calibrate_8994,
-+	.get_temp	= get_temp_tsens_valid,
-+};
-+
-+struct tsens_plat_data data_8992 = {
-+	.num_sensors	= 13,
-+	.ops		= &ops_8992,
-+	.hw_ids		= (unsigned int []){ 0, 1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14 },
-+	.feat		= &tsens_v1_feat,
-+	.fields	= tsens_v1_regfields,
-+};
-+
-+static const struct tsens_ops ops_8994 = {
-+	.init		= init_common,
-+	.calibrate	= calibrate_8994,
-+	.get_temp	= get_temp_tsens_valid,
-+};
-+
-+struct tsens_plat_data data_8994 = {
-+	.num_sensors	= 16,
-+	.ops		= &ops_8994,
-+	.hw_ids		= (unsigned int []){ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 },
-+	.feat		= &tsens_v1_feat,
-+	.fields	= tsens_v1_regfields,
-+};
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 7963ee33bf75..7f1411e7b114 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -985,6 +985,12 @@ static const struct of_device_id tsens_table[] = {
- 	}, {
- 		.compatible = "qcom,msm8974-tsens",
- 		.data = &data_8974,
-+	}, {
-+		.compatible = "qcom,msm8992-tsens",
-+		.data = &data_8992,
-+	}, {
-+		.compatible = "qcom,msm8994-tsens",
-+		.data = &data_8994,
- 	}, {
- 		.compatible = "qcom,msm8976-tsens",
- 		.data = &data_8976,
-diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-index 1471a2c00f15..ca2b0ac914c1 100644
---- a/drivers/thermal/qcom/tsens.h
-+++ b/drivers/thermal/qcom/tsens.h
-@@ -590,7 +590,7 @@ extern struct tsens_plat_data data_8960;
- extern struct tsens_plat_data data_8916, data_8939, data_8974, data_9607;
- 
- /* TSENS v1 targets */
--extern struct tsens_plat_data data_tsens_v1, data_8976;
-+extern struct tsens_plat_data data_tsens_v1, data_8976, data_8992, data_8994;
- 
- /* TSENS v2 targets */
- extern struct tsens_plat_data data_8996, data_tsens_v2;
--- 
-2.36.1
+Doing a grep for "PCI" is practically worthless.  Having to grep for
+both CONFIG_PCI and IS_ENABLED\(PCI will inevitably annoy people when
+they realize they missed a code path needing an update because they only
+searched for the former.
 
+Paul.
+--
+
+> 
+> If we remove the prefix for IS_ENABLED(), the same grep fails to get
+> all the results, while searching for the substring without the CONFIG_
+> prefix can end up finding false-positives by finding longer strings (e.g.
+> CONFIG_DEBUG_STACKOVERFLOW vs
+> CONFIG_HAVE_DEBUG_STACKOVERFLOW).
+> 
+>        Arnd

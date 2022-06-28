@@ -2,74 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8A955EF21
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DD855EF28
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232145AbiF1USx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 16:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54284 "EHLO
+        id S230417AbiF1UTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 16:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232181AbiF1USV (ORCPT
+        with ESMTP id S229944AbiF1UTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 16:18:21 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1A23ED14
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:14:04 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id a13so24234873lfr.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:14:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:user-agent:in-reply-to:references
-         :message-id:mime-version:content-transfer-encoding;
-        bh=I2/+5dhRyxuL3Gg1aHlNPvG7vh2LZmL80DGuAx1dO9M=;
-        b=v3/T1HH6xPCsUlhJlqTNwOl2XQgII4I7NrSNEm49EGWF7H8o48QfRduFpQHTuyrvYB
-         L+eYialYzpCRveZPv0LJjUlUsxFY+7/aiuTfmBCaU2a4Q873qI+HQ+va/lF/9f30KV8l
-         mmr3lb0W0+vlo9X5zk7RGZuDTb7Moy+8oPaOhVI7PIvbB1oo9ajzQQIBnxKcbD9BVwYi
-         OMU3PZEmtEtWQMMWYTLjJYgsfhd879dmueMMW2+6JYH/GL/WShJO5AQmVAcvKZquP4i3
-         drc8JzRa1TDSf/+8sWC3nbT072L6DGSsDWrHiO9Fc8W6FOYZbxhkF3rYDTArdJ5oeNn4
-         9sqQ==
+        Tue, 28 Jun 2022 16:19:19 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267AB2734;
+        Tue, 28 Jun 2022 13:14:41 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id m13so14071705ioj.0;
+        Tue, 28 Jun 2022 13:14:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
-         :references:message-id:mime-version:content-transfer-encoding;
-        bh=I2/+5dhRyxuL3Gg1aHlNPvG7vh2LZmL80DGuAx1dO9M=;
-        b=L3KTEhPXCnhK39FSLSbE0uqTxiROm7MQoym7jCvbTiQbkX38pbg0H2SlDdAAObID5p
-         McMjBJn9ASnxLxGU3B2JpmdGLgEGblaftfsDmTJCf2FQyP76ZVJF+nNh5YrkQfF5tMKY
-         Av5DVmOu4T5gbHj/IgdW7a1axVzbbdEx8PxRUCw/U/OA3aALfk/WBwQbZANMvhjogB9D
-         XFwa2W/AkimEZaZf8hfWHvYjS7gW97X6UEmwiHaAgpLyHqfEVi+coz6hZDulJ+jV8vSS
-         +Mw1TbJGlwG9wNE8iiOrBAuUvx/sRciPHhw3JF9+xseWEPJCDAX0PFyQ1SE/gmU7uIqU
-         WPSQ==
-X-Gm-Message-State: AJIora/fsOomzAZPfoEtVA1Y/jmTWBzlH0LnKjxsYrpHsjm8ArwBBEmS
-        o9G6vFspknvnyYysDFpb3bjGoA==
-X-Google-Smtp-Source: AGRyM1uCBKBW3awWOv+JynlB8eHhjWlAkHdDt0Ja1lpBzywpjcpIvfZ1hMjxuqk+Ua0Nz1wdceJyqA==
-X-Received: by 2002:a05:6512:3f84:b0:47f:673c:31b7 with SMTP id x4-20020a0565123f8400b0047f673c31b7mr13979453lfa.473.1656447242387;
-        Tue, 28 Jun 2022 13:14:02 -0700 (PDT)
-Received: from [127.0.0.1] ([188.162.64.167])
-        by smtp.gmail.com with ESMTPSA id a15-20020a056512200f00b004811bf4999csm901113lfb.290.2022.06.28.13.14.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 Jun 2022 13:14:01 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 23:13:56 +0300
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        agross@kernel.org, bjorn.andersson@linaro.org
-CC:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
-        quic_khsieh@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_drm/msm/dp=3A_make_eDP_pa?= =?US-ASCII?Q?nel_as_the_first_connected_connector?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <1656429606-2765-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1656429606-2765-1-git-send-email-quic_khsieh@quicinc.com>
-Message-ID: <F35C87BF-46A5-41D3-B8A5-B2AB4A24252D@linaro.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jAL0QILA2tAkx38BgMHOGJB4MN9lHb5Y2jmfZHJxycI=;
+        b=vNzCz97SR5FWfkTcvREIpcjaRLFgQIZPiRTtaF4TrornsuQw6mybRGqVmcps2F+GoE
+         M74Pvpyg90jqaCK6FAuy9u3AuAzxgoeCR3rNa7JhL4Fw5ckGwJ6pBHzN49RwOmFWoX5B
+         mtdsl0o2/NFMuYC2q1xZzYnUqcy6qlRDvbGfg8roacqluEtwR6lnOh3etx4kVTpUrIJc
+         wygK59NdIRll5KnuIDF+tiV/Unqi8RW58jZMm4lr0ep6t3fQzO7SFL7EGYpTyhiPh7wy
+         Wzb35VCoG0SLCp7vel07k0oq9LMpxjvmo7s1I2yQrxY5DizTToWUApllLnjGWjlOqVRK
+         l8mA==
+X-Gm-Message-State: AJIora+C/Fsn2IMucoWhQgbHooQyMPz//KjK616lXLYzgi5rodgP3GS8
+        oxFxq4dT0DU+GaTRSxH0TA==
+X-Google-Smtp-Source: AGRyM1sryxduiTNQfUHxFS9uPh5IoPlLVa1PLmyUZozgPSpPRW3vdX65d02yyFgdV5ZccJtewsxl7Q==
+X-Received: by 2002:a05:6638:dc3:b0:333:ef3c:ba02 with SMTP id m3-20020a0566380dc300b00333ef3cba02mr12315679jaj.245.1656447280311;
+        Tue, 28 Jun 2022 13:14:40 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id v17-20020a92c6d1000000b002d52f2f5a97sm6197525ilm.35.2022.06.28.13.14.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 13:14:40 -0700 (PDT)
+Received: (nullmailer pid 905362 invoked by uid 1000);
+        Tue, 28 Jun 2022 20:14:38 -0000
+Date:   Tue, 28 Jun 2022 14:14:38 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: arm/juno: Drop erroneous 'mbox-name' property
+Message-ID: <20220628201438.GC694214-robh@kernel.org>
+References: <20220610213308.2288094-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610213308.2288094-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,43 +65,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 10, 2022 at 03:33:07PM -0600, Rob Herring wrote:
+> The 'mbox-name' property in the Juno mailbox node is undocumented and
+> unused. It's the consumer side of the mailbox binding that have
+> 'mbox-names' properties.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  arch/arm64/boot/dts/arm/juno-scmi.dtsi | 1 -
+>  1 file changed, 1 deletion(-)
 
+Ping!
 
-On 28 June 2022 18:20:06 GMT+03:00, Kuogee Hsieh <quic_khsieh@quicinc=2Eco=
-m> wrote:
->Some userspace presumes that the first connected connector is the main
->display, where it's supposed to display e=2Eg=2E the login screen=2E For
->laptops, this should be the main panel=2E
->
->This patch call drm_helper_move_panel_connectors_to_head() after
->drm_bridge_connector_init() to make sure eDP stay at head of
->connected connector list=2E This fixes unexpected corruption happen
->at eDP panel if eDP is not placed at head of connected connector
->list=2E
-
-The change itself is a good fix anyway=2E (And I'd ack it=2E) However I wo=
-uld like to understand why does it fix the corruption issue=2E What is we h=
-ave eDP and DSI, with DSI ending up before the eDP? Would we see the issue?
-Also could you please describe the mind of corruption you are observing?
-
-
->
->Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc=2Ecom>
->---
-> drivers/gpu/drm/msm/dp/dp_drm=2Ec | 2 ++
-> 1 file changed, 2 insertions(+)
->
->diff --git a/drivers/gpu/drm/msm/dp/dp_drm=2Ec b/drivers/gpu/drm/msm/dp/d=
-p_drm=2Ec
->index ce0ec3a=2E=2E2d18884 100644
->--- a/drivers/gpu/drm/msm/dp/dp_drm=2Ec
->+++ b/drivers/gpu/drm/msm/dp/dp_drm=2Ec
->@@ -136,5 +136,7 @@ struct drm_connector *dp_drm_connector_init(struct ms=
-m_dp *dp_display)
->=20
-> 	drm_connector_attach_encoder(connector, dp_display->encoder);
->=20
->+	drm_helper_move_panel_connectors_to_head(dp_display->drm_dev);
->+
-> 	return connector;
-> }
+> 
+> diff --git a/arch/arm64/boot/dts/arm/juno-scmi.dtsi b/arch/arm64/boot/dts/arm/juno-scmi.dtsi
+> index 4135d62e44a2..ec85cd2c733c 100644
+> --- a/arch/arm64/boot/dts/arm/juno-scmi.dtsi
+> +++ b/arch/arm64/boot/dts/arm/juno-scmi.dtsi
+> @@ -187,7 +187,6 @@ &gpu {
+>  &mailbox {
+>  	compatible = "arm,mhu-doorbell", "arm,primecell";
+>  	#mbox-cells = <2>;
+> -	mbox-name = "ARM-MHU";
+>  };
+>  
+>  &smmu_etr {
+> -- 
+> 2.34.1
+> 

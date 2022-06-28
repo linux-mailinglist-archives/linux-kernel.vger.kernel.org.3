@@ -2,98 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39AD555EF04
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3A755EEFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbiF1UOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 16:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
+        id S230228AbiF1UOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 16:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbiF1UNr (ORCPT
+        with ESMTP id S231776AbiF1UNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 16:13:47 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D56E05;
-        Tue, 28 Jun 2022 13:07:30 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-31bf3656517so37739377b3.12;
-        Tue, 28 Jun 2022 13:07:30 -0700 (PDT)
+        Tue, 28 Jun 2022 16:13:48 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C366251
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:07:37 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id i194so13936920ioa.12
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:07:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=c/GQKZklxrXc730nl15odaZvAaabHINb7nSrrPIVO+k=;
-        b=AI2hQEQM8pBIbh1DBPtlWS456KJnPdsTnxh2BT06H8P+y8cRZTDiW9Oj9Qrdw5ffdm
-         KZZY0sd2SnmAhf/rql19DBCfzIugecKy+bLE85GpXDHyDbL8Zi6CYnSKof8VIRw6lWWr
-         aQLo9uSz88FKbf94Wa1kWFk0DfhBa7q0KwWhCwVLypSIwb0e3yjqUhoGAJgMt2ontDcQ
-         FKyXhe3dro+NS/zQ3CMX72hDQqeqs7gSvyJpzRaVMk/M+PpMo8atbBAVk6wklgSi9CvZ
-         V14EiHwArHWq3nXZ66BzHbPVh7JLzJSQaSP7Zq8o1VnVoP3b/sb36sTTIUfRnUdKgm1a
-         Dn7w==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FirkMQlU16ww9d8QYtTZzYI9G8XOC3cBBLG3qPWT9SM=;
+        b=NXQqbWdAG0cVqj1DgUmEfns18Gpsgf3sg7QR6IdprmL/oVpPpfCBXATjIfZd0uCQvH
+         vWu5mS8R3Gf1cyKRVuNSWFpAA5NVGSxjnsGqcRXlHeQwqdauN1r7TD90glSIzTvQYXeN
+         TRfLk7tzj1mVVU20YAE55y/PFIuiFPSUtvR+Fq4coa+IzhItx1gaOp1n+EOqrW836P1S
+         hpYmNqGKez0q5iAIzcIL79FBpjToT2BmQeyKggVYc9EXg/3q/E6TWSQ834adALNQfTrb
+         +4idenH0NMJBlHt5pNz+D8pA6aFVTj+zSGZYZLeYhRxLLPoHu+02WrhPoDcoFBLYaHAl
+         w2Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=c/GQKZklxrXc730nl15odaZvAaabHINb7nSrrPIVO+k=;
-        b=MPeZ6LoNcpS4TjhYMjPtvohPGB7gdjQcyaT3nB4VNFlryqDIh63/Hmb5ZnW5oETs6T
-         2t1Oj1VArfTCQ6Y96NGyxb2q1zjjwQbQC6t/+I7ay0Ggi/6VD759IITCoiAVmWtzeSww
-         lT8EY98jEUsdSBmlm4l/+8F7niLKKo5Hef7l4dy1DwEAwA8j9em9UbELBli3aCsrk4YL
-         15T3sphumey6SHQ+OggI8MExw2/VpQoZpsZiPPn/hDylj36B8J5j3wQs6SGF1WwEm2kp
-         CZu/Z9didzkzXAiFDtie+VqczMfEq8r+Xv0yCXPSpeVC4oJ46pQmOcbJ1u7TuXb9lhWU
-         AifA==
-X-Gm-Message-State: AJIora83orRJJh2V2VYJ2XBppLpJ1PjVkv0IsEPnbY/U54EnHVOSIsFO
-        LkbNC4uKmRUsNy2osX7ZNODCq3WIUpJHBXRHi/9lzxOIAhcr6w==
-X-Google-Smtp-Source: AGRyM1tzA+2TWuABI4p6MQVqros66rG+v5Kn9AEUCQ8B1eukViAKPfD+ubCCxkikqLSDAvsulAIZfUXBAXC1zhbNcVw=
-X-Received: by 2002:a81:6f02:0:b0:31b:dd95:1ccf with SMTP id
- k2-20020a816f02000000b0031bdd951ccfmr10498299ywc.520.1656446850149; Tue, 28
- Jun 2022 13:07:30 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=FirkMQlU16ww9d8QYtTZzYI9G8XOC3cBBLG3qPWT9SM=;
+        b=et/hV+3qgJpb73sMSXD6/31WqJFTgYA4z0CLe5mMOQq3cqjjy3ddAXXuWiABIZAdKZ
+         VKUyWrai/0ei0ADqrq6C/zhNqQlya1gbTEh30vz7Pso7aPdNMoJIAE1TuuQ2D0uDbMxy
+         tO9uywZ00kHQ4+7ByNFS5/JavMT60Sgt1bBlwvAreObXpHHZMEjKTuTRTN7YNRLdN5ei
+         nQFrgwd0VQm89Y7qR/Cf2es03WcjJceZ6QRVDkTadzHyRBpUrAbMQTz2Q+1tCKq4SuCa
+         KgJvI+fhS/VDXZufNyWrPeVz69UDpGKMOOFe/20L98ETPCz5+YFKETpoFhsQ6ptPIn3D
+         fQGQ==
+X-Gm-Message-State: AJIora8JF/CZZ5PW+7aCtTsNEPmZ9eosyWSKdqw50UvdNnn72/yUSHhD
+        9ao2zXjO3KXWmBvQmeetaHzlnk0WDe8=
+X-Google-Smtp-Source: AGRyM1u23Wgi31gt74vfkBDWMlvLHSnnLRjUKZ+GLx/xUlBuiyhbNqOwBvl1ax1kCawjHG9fBkryzQ==
+X-Received: by 2002:a6b:794d:0:b0:66c:ec39:7d83 with SMTP id j13-20020a6b794d000000b0066cec397d83mr10694476iop.199.1656446856717;
+        Tue, 28 Jun 2022 13:07:36 -0700 (PDT)
+Received: from localhost ([2605:a601:ac0f:820:53c6:a969:5c7a:edc0])
+        by smtp.gmail.com with ESMTPSA id c18-20020a92c8d2000000b002d8f62d2e3bsm5943793ilq.86.2022.06.28.13.07.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 13:07:35 -0700 (PDT)
+Sender: Seth Forshee <seth.forshee@gmail.com>
+From:   Seth Forshee <seth@forshee.me>
+X-Google-Original-From: Seth Forshee <sforshee@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] mailmap: update Seth Forshee's email address
+Date:   Tue, 28 Jun 2022 15:07:34 -0500
+Message-Id: <20220628200734.424495-1-sforshee@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220628134234.53771-1-ilpo.jarvinen@linux.intel.com> <20220628134234.53771-4-ilpo.jarvinen@linux.intel.com>
-In-Reply-To: <20220628134234.53771-4-ilpo.jarvinen@linux.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 28 Jun 2022 22:06:51 +0200
-Message-ID: <CAHp75VdfEwvhm_KR5Nq+XMqY8k5q5orBoMggNR=f=WAi6Lfqsw@mail.gmail.com>
-Subject: Re: [PATCH 3/4] serial: 8250_dw: Move 16550 compatible & LCR checks
- to dw8250_verify_write()
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 3:43 PM Ilpo J=C3=A4rvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
->
-> Rename dw8250_check_lcr() -> dw8250_verify_write() and add comment.
-> Move LCR and 16550_compatible checks there. As offset is now passed and
-> dw8250_verify_write() ensures it's UART_LCR, offset can use used
-> instead of explicit UART_LCR.
+seth.forshee@canonical.com is no longer valid, use sforshee@kernel.org
+instead.
 
-...
+Signed-off-by: Seth Forshee <sforshee@kernel.org>
+---
+ .mailmap | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +/*
-> + * DW UART can be configured to indicate BUSY in USR (with
-> + * UART_16550_COMPATIBLE=3DNO or version prior to introducing that optio=
-n).
-> + * If BUSY is set while writing to LCR register, the write is ignored an=
-d
-> + * needs to be retries.
+diff --git a/.mailmap b/.mailmap
+index 2ed1cf869175..56ce99212f33 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -368,6 +368,7 @@ Sean Nyekjaer <sean@geanix.com> <sean.nyekjaer@prevas.dk>
+ Sebastian Reichel <sre@kernel.org> <sebastian.reichel@collabora.co.uk>
+ Sebastian Reichel <sre@kernel.org> <sre@debian.org>
+ Sedat Dilek <sedat.dilek@gmail.com> <sedat.dilek@credativ.de>
++Seth Forshee <sforshee@kernel.org> <seth.forshee@canonical.com>
+ Shiraz Hashim <shiraz.linux.kernel@gmail.com> <shiraz.hashim@st.com>
+ Shuah Khan <shuah@kernel.org> <shuahkhan@gmail.com>
+ Shuah Khan <shuah@kernel.org> <shuah.khan@hp.com>
+-- 
+2.34.1
 
-retried
-
-> + */
-
-
---=20
-With Best Regards,
-Andy Shevchenko

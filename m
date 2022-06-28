@@ -2,111 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E028155C64B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2A655D9C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243336AbiF1Dia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 23:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
+        id S243383AbiF1Djv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 23:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243270AbiF1Di1 (ORCPT
+        with ESMTP id S243270AbiF1Djp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 23:38:27 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD72910BC;
-        Mon, 27 Jun 2022 20:38:25 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id a11-20020a17090acb8b00b001eca0041455so11222002pju.1;
-        Mon, 27 Jun 2022 20:38:25 -0700 (PDT)
+        Mon, 27 Jun 2022 23:39:45 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6309B27A
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:39:45 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id k9so1602733pfg.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:39:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6LMGa772Cpd0fqJMV5Tx0e6cc7BPyO68l6tpza+MHVo=;
-        b=htVqiZjV5qqLRbXWpBXmAO1ENps0ZLH4I+BQJbGKDEqqW8QfHbsfyc5LqHoC6osMZg
-         EGF/SpS7djBz/a2VPXsH+vjyySXP+rKr+nadJUKyoW5KeOilyJm2IBd2wO+vo9w61vJ4
-         n3yAD1UFe6HnC0OJ13unnCKPf/7B+hxWPCWIMKsL5ASLZwD5nAIeKsugl6YA0Q4GVNbn
-         gN4gCs9w3iXW6hBkRAPfROxDnVit9Amg4SQ5jSQO/ZCJfIFcdC6p2V9KyDaoBtb3lh5t
-         6JaA44IrM8MGWJCg7F3MsieNyzQzcuwXBsiyS1wqX8pHza4gAEsOjDVszMfZ3ZC3Qm2l
-         2AbQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qjjJpI+R2iNDFP0VUY4y25yOQG9qRilkPuIZPI5DsnA=;
+        b=0tZDL06mUGj/lQPCGfLa5cBOJG/grVT+ds5Ao6RilY0f9aFWb0B6nJX85RSwqSFRnk
+         PScJlpEFfexbX/D5JO9rA4GCyL2F574ul0XC3T7mVuve/vXzC6XzZ4uTdqcjFcW+wESP
+         p4/liCBclr4KxYg+SjbRsY9ZkfvkMokWmJKRZNICkW6gPAW+1l1lKGiUp+W2wNKT3OyF
+         hILDMaUfe5LAalPxIwEmQfxq4xeCiT8VARIScfcwC7enpK7lqEEkvHRcqaTqqw2xAjfA
+         ip1xKYMXTPB/YdD10mhVRjHM0lKidQmhsrOkdsmGf6ifnMRrEOLdEFYv+wpNSh/s7jIc
+         q7zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6LMGa772Cpd0fqJMV5Tx0e6cc7BPyO68l6tpza+MHVo=;
-        b=OPkmZ6WeK4uoM4SzFvBQicltZc2IW/taugM1x4N7525SNsFmzf9xVoM1Wt6DHFQU1C
-         fzL9JAe8Z4uvkFMQiPzqCpRcReopZgJhc7sod0sk+mPLjZQP0xpHHXpfrq87lVrsz4Cv
-         ZlL51WidteZXgrcrRjb4M4ytkJpQSs2RioPncXegBf7OVaAGRHg/siaUV5IyE81K4jl6
-         TlU9hNrAfzCj7erYF68V45I50AGfBaOyvZZw0Wbyf7iiqDN5uPiwP8kESunofcV+3XAm
-         9VW0pI863ibKIgRG39A3xmGBHaxsH5O/YMarrPJa8sf1I6vIxzVJBlT3iba6z6+X1Voy
-         AdBg==
-X-Gm-Message-State: AJIora96Q24cTT+4bp/uCrlQ8XE9cS1FVF3/6jl3fQpQSkdJfoeVmz3P
-        zdLaQUzLaafzVKdra/7TBY4=
-X-Google-Smtp-Source: AGRyM1sHwuvpJO6RjuZx3nVYz/CeSLidfhL7YlhXXD+pDd7J4W2/ukr2qRt5eWiCNxXbOwCwRlQxkg==
-X-Received: by 2002:a17:90a:1c09:b0:1ea:91d4:5a7f with SMTP id s9-20020a17090a1c0900b001ea91d45a7fmr25203743pjs.232.1656387505374;
-        Mon, 27 Jun 2022 20:38:25 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-91.three.co.id. [180.214.232.91])
-        by smtp.gmail.com with ESMTPSA id d1-20020a170902e14100b0015ea95948ebsm7971740pla.134.2022.06.27.20.38.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 20:38:24 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 725F61037D8; Tue, 28 Jun 2022 10:38:20 +0700 (WIB)
-Date:   Tue, 28 Jun 2022 10:38:19 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH 5.15 000/135] 5.15.51-rc1 review
-Message-ID: <Yrp3q1gpvfUm8QIP@debian.me>
-References: <20220627111938.151743692@linuxfoundation.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qjjJpI+R2iNDFP0VUY4y25yOQG9qRilkPuIZPI5DsnA=;
+        b=aJSFjAfIGxK11BFuthZxrFWU/i/T7LNM256qL8yxG90w+eaGl0Vv1gUh7oWtGQ0AK1
+         TVh/S9AM/+NDZKhzty7e9uMIwtSchBKF3x1ySAVxjOaQInpkkeOtuKxbHAdRvVwKl8To
+         828UENfrTFvrNcmJRY3VcqVSXeYZxdlQPr7TQZl65hJyzr7ITb33IsPTueIawQfCvG0F
+         tWjMqDqmz+KdQNxRvqoUrvGq3MxxpE0tusT/A6Nupki5Si6Pd6f2feZUnapsx2FtjXu8
+         Oy4FkCDYWBeVAD5NenaxxdBT0I9qckAbpJCRoJ6qCqQOopPFgR1HNbXmpHzn0H0MbhL/
+         fMdQ==
+X-Gm-Message-State: AJIora9xuFhxRyN6paL4YEGcdNG2PNa05EeFmVDjRmS9kwpPOmkDgNUs
+        Vbo6TyLvjx6Mru6MpD6nJbgqqA==
+X-Google-Smtp-Source: AGRyM1us4e3KtmyvXAPHVS+j/aqInBb/uGkGK8JRwfFX9bP/ocaKTvD4+KgM48SVd1Q6R0/+3uOIIw==
+X-Received: by 2002:a65:6a05:0:b0:3db:27cb:9123 with SMTP id m5-20020a656a05000000b003db27cb9123mr15908679pgu.497.1656387584907;
+        Mon, 27 Jun 2022 20:39:44 -0700 (PDT)
+Received: from [10.4.116.59] ([139.177.225.251])
+        by smtp.gmail.com with ESMTPSA id g26-20020aa7819a000000b0052548b87bd1sm8085043pfi.46.2022.06.27.20.39.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 20:39:44 -0700 (PDT)
+Message-ID: <e72d9b4a-a986-3b73-d4e5-63df40a0bee1@bytedance.com>
+Date:   Tue, 28 Jun 2022 11:39:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH v4 1/7] sched/fair: default to false in test_idle_cores
+Content-Language: en-US
+To:     Josh Don <joshdon@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Chen Yu <yu.c.chen@intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220619120451.95251-1-wuyun.abel@bytedance.com>
+ <20220619120451.95251-2-wuyun.abel@bytedance.com>
+ <CABk29NtfVjXQZORGB1owmBS6C9LZJn8ci15gv4nQm+2DNLEPBA@mail.gmail.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <CABk29NtfVjXQZORGB1owmBS6C9LZJn8ci15gv4nQm+2DNLEPBA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 01:20:07PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.51 release.
-> There are 135 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Hi Josh, thanks for your comments!
+
+On 6/28/22 6:53 AM, Josh Don Wrote:
+> On Sun, Jun 19, 2022 at 5:05 AM Abel Wu <wuyun.abel@bytedance.com> wrote:
+>>
+>> It's uncertain whether idle cores exist or not if shared sched-domains
+>> are not ready, so returning "no idle cores" usually makes sense.
+>>
+>> While __update_idle_core() is an exception, it checks status of this
+>> core and set to shared sched-domain if necessary. So the whole logic
+>> depends on the existence of shared domain, and can bail out early if
+>> it isn't available. Modern compilers seems capable of handling such
+>> cases, so remove the tricky self-defined default return value.
 > 
+> I don't think the compiler will be able to bail out of the smt
+> iteration early, since it'll have to do another rcu dereference for
+> the sd_llc in set(). But I also don't think this case needs
+> optimization, since it should be transient while the domain isn't
+> ready.
+> 
+> Reviewed-by: Josh Don <joshdon@google.com>
 
-Successfully cross-compiled for arm (multi_v7_defconfig, GCC 12.1.0,
-armv7 with neon FPU) and arm64 (bcm2711_defconfig, GCC 12.1.0).
+Obviously I failed to comprehend the difference between the changed
+assembly code, my bad..
 
-But I see a warning on arm64 build:
-
-  CC [M]  drivers/staging/r8188eu/core/rtw_br_ext.o
-  CC [M]  net/batman-adv/tvlv.o
-In function '__nat25_add_pppoe_tag',
-    inlined from 'nat25_db_handle' at drivers/staging/r8188eu/core/rtw_br_ext.c:520:11:
-drivers/staging/r8188eu/core/rtw_br_ext.c:83:9: warning: 'memcpy' reading between 2052 and 9220 bytes from a region of size 40 [-Wstringop-overread]
-   83 |         memcpy((unsigned char *)ph->tag, tag, data_len);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/staging/r8188eu/core/rtw_br_ext.c: In function 'nat25_db_handle':
-drivers/staging/r8188eu/core/rtw_br_ext.c:489:63: note: source object 'tag_buf' of size 40
-  489 |                                                 unsigned char tag_buf[40];
-      |                                                               ^~~~~~~
-
-Introduced by commit 15865124feed88 ("staging: r8188eu: introduce new core dir
-for RTL8188eu driver").
-
-Anyway,
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
--- 
-An old man doll... just what I always wanted! - Clara
+Thanks,
+Abel

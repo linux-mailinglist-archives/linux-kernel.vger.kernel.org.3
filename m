@@ -2,165 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EFAF55EA2C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9783455EA42
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230497AbiF1QuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 12:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
+        id S231741AbiF1Qu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 12:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237642AbiF1Qrq (ORCPT
+        with ESMTP id S1347322AbiF1Qtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:47:46 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4561C286D7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:44:50 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1048b8a38bbso17748819fac.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:44:50 -0700 (PDT)
+        Tue, 28 Jun 2022 12:49:49 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E5F237CC;
+        Tue, 28 Jun 2022 09:47:57 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id q9so18554206wrd.8;
+        Tue, 28 Jun 2022 09:47:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:reply-to:from:in-reply-to:content-transfer-encoding;
-        bh=vJfBn+f7lVK7AifdRhZ14mIHvBk5ROqtbtEkpEUekVI=;
-        b=PStwN8J9WglnPwSrV0dM3AVahzXE6kSqMbbkzaOjiLnRigpJdtZbsznzA6h0ZHFxCl
-         VCc2EwXkgQTpc2I8msSXawKjWhovEq4qPlEq9FHqwcAnhsRf38LfjGSr2OksXXnBDVe5
-         D2AXYVst8rALAmrORJawmosR19EMmGOJojF8g=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=n3HZDcdfLwNiQ/tf7zCGAV+A8ooVMIqgPIQ28MjTeog=;
+        b=e3zeLjiXoUYC1IVaQKWrsc2qKrKVYQG+FiwqsRzNz/YxbDT0nHSgZ8eR2tVfrLi0Hs
+         5GLXKpxS/5dpbABkwwBi+kl4n0khKod1v0GPWJ89X1h3TNUjfC7RS4740ITfxK5/nbrh
+         SHkGrTqHNILhXqHROw320nvIeM2Nre2164Aj2miAgQcaKDnte8RFr2pkEHfcg3h7Vbln
+         87QzWotvsNkfT2Db3zhU9670nwzLrALbqwb/9ZXx2DFpvoAA8Xva7TAYCeAEhYv0BfZt
+         Gn6YjailqEcJJ+mqGAUnmO0/+pJ+0fHuqqBi12yhe5oQnxR7ZUa+HprAzGiPrKPmAQgn
+         fCdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:reply-to:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vJfBn+f7lVK7AifdRhZ14mIHvBk5ROqtbtEkpEUekVI=;
-        b=gNlNLLu2Hdn7x2O+oc2n+O/NmCIpI7jcdrwOjoCaL0zFkAjZU+cLtoZGNqtP1u/nwd
-         D3GbFuL8R/DZbidMDGwzmE6GVdIbNihvpGUEZKfeiK0ZaR4ObAUA+ZZNM5wr6/u6p3Gn
-         4ORQ+X0AtcOzOR4E9ab/BiUDmBv+hTp8/rQOtX2R/WMZuGqdhgiHeteawD5IgkYZTjVI
-         r2bjzgiupzvRPMcRGz7UF4oTnzlq95TF/dJZNwitrVuP6yQy9GRcLu1tPTXqA8vCYcyL
-         nO/LqJAYCVU31ZO1RANFhwB05/rSZ+J5iH/kKwob+/MrSsZNKREx2FYweUd4mTZn8rn1
-         eOAQ==
-X-Gm-Message-State: AJIora/lNErg0pX952n1jGwyihCbc8Hd54vOm+V431WNlaOlRG1skC6l
-        19EiJd7+UzEsrb2MoHfkTFWn9A==
-X-Google-Smtp-Source: AGRyM1uH8/M2iGX2n2wOrXwL+tXc5HmSsj392p52tR/beA2RwQ1QmjHwdDlm5rbSnYFM5umdpppZNA==
-X-Received: by 2002:a05:6870:649e:b0:ed:a1c0:f810 with SMTP id cz30-20020a056870649e00b000eda1c0f810mr285467oab.289.1656434689573;
-        Tue, 28 Jun 2022 09:44:49 -0700 (PDT)
-Received: from [192.168.0.41] ([184.4.90.121])
-        by smtp.gmail.com with ESMTPSA id y27-20020a544d9b000000b0032b99637366sm4400950oix.25.2022.06.28.09.44.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 09:44:49 -0700 (PDT)
-Message-ID: <83b9774f-5cda-d05f-e62d-7bf7547ae7ba@cloudflare.com>
-Date:   Tue, 28 Jun 2022 11:44:47 -0500
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n3HZDcdfLwNiQ/tf7zCGAV+A8ooVMIqgPIQ28MjTeog=;
+        b=bvqv6H4UXkBG0ohPNWLl+sDnnFgqSW/Zgm2n6Vok9vlBA7elpiKyHgNQanm9WJaPdT
+         fcCpN+FOoxBApgJCiXwIVrhyOy/UTvfstXHkc2gL5gxKegiUzRQqI+4QsWJp1KCUK7nj
+         x6w8howNQW7n5QHU8+W/Mehwd29Y8zYb0TjhJkKpH8UI1AoqUI90ZD4fHACiQLAelqsz
+         b9j3Dvu2/oTUvnNhvqe3PHmvvNuZHoYUv6Oc0u/vSMXHVLaZc1eTgrcWpH22x5ZEvk3i
+         OAaiXTR8mwIxJG3dQGO70Y2HSLA2AElxb7b6EwMxLOjbTMhoWlta4CPib6vkz1cAymFN
+         ORDw==
+X-Gm-Message-State: AJIora/mdY2TxcSWGf/QFntd4VdLghBcpDHeymTzub8EloMoZtlYdxHS
+        buUNrovENftHdUiY2HFJhmPU5XwgmFtzkBxo5QI=
+X-Google-Smtp-Source: AGRyM1shfbz2wZj9C+y4AJcD4Xp16+D3E3FTqL5mLWkwiHI8GjKt117H2EdLaDQl5pCDFAKa86OSOaxFM0gmoOv0egA=
+X-Received: by 2002:a5d:6d8b:0:b0:21b:9814:793d with SMTP id
+ l11-20020a5d6d8b000000b0021b9814793dmr18409107wrs.344.1656434876256; Tue, 28
+ Jun 2022 09:47:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 0/2] Introduce security_create_user_ns()
-Content-Language: en-US
-To:     KP Singh <kpsingh@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Christian Brauner <brauner@kernel.org>, revest@chromium.org,
-        jackmanb@chromium.org, ast@kernel.org, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@cloudflare.com
-References: <20220621233939.993579-1-fred@cloudflare.com>
- <ce1653b1-feb0-1a99-0e97-8dfb289eeb79@schaufler-ca.com>
- <b72c889a-4a50-3330-baae-3bbf065e7187@cloudflare.com>
- <CAHC9VhSTkEMT90Tk+=iTyp3npWEm+3imrkFVX2qb=XsOPp9F=A@mail.gmail.com>
- <20220627121137.cnmctlxxtcgzwrws@wittgenstein>
- <CAHC9VhSQH9tE-NgU6Q-GLqSy7R6FVjSbp4Tc4gVTbjZCqAWy5Q@mail.gmail.com>
- <6a8fba0a-c9c9-61ba-793a-c2e0c2924f88@iogearbox.net>
- <CAHC9VhQQJH95jTWMOGDB4deS=whSfnaF_e73zoabOOeHJMv+0Q@mail.gmail.com>
- <685096bb-af0a-08c0-491a-e176ac009e85@schaufler-ca.com>
- <9ae473c4-cd42-bb45-bce2-8aa2e4784a43@cloudflare.com>
- <d70d3b2d-6c3f-b1fc-f40c-f5ec01a627c0@schaufler-ca.com>
- <CACYkzJ6GmotfhBk1+9BjGC6Ct7bGxQGVTZTX2iQcrhjfV7VHwQ@mail.gmail.com>
-Reply-To: CACYkzJ6GmotfhBk1+9BjGC6Ct7bGxQGVTZTX2iQcrhjfV7VHwQ@mail.gmail.com
-From:   Frederick Lawler <fred@cloudflare.com>
-In-Reply-To: <CACYkzJ6GmotfhBk1+9BjGC6Ct7bGxQGVTZTX2iQcrhjfV7VHwQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220526235040.678984-1-dmitry.osipenko@collabora.com>
+ <49cc6f0c-e90e-8edd-52e7-4188620e2c28@arm.com> <f77c1c2d-d9f9-db00-906a-ec10b535621d@collabora.com>
+In-Reply-To: <f77c1c2d-d9f9-db00-906a-ec10b535621d@collabora.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 28 Jun 2022 09:48:09 -0700
+Message-ID: <CAF6AEGsQBcHbU6Ps5fp5v6ANaZwMAtig-3i-ekQzwG=7BBDNwA@mail.gmail.com>
+Subject: Re: [PATCH v6 00/22] Add generic memory shrinker to VirtIO-GPU and
+ Panfrost DRM drivers
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-tegra@vger.kernel.org,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/22 11:12 AM, KP Singh wrote:
-> On Tue, Jun 28, 2022 at 6:02 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->>
->> On 6/28/2022 8:14 AM, Frederick Lawler wrote:
->>> On 6/27/22 6:18 PM, Casey Schaufler wrote:
->>>> On 6/27/2022 3:27 PM, Paul Moore wrote:
->>>>> On Mon, Jun 27, 2022 at 6:15 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->>>>>> On 6/27/22 11:56 PM, Paul Moore wrote:
->>>>>>> On Mon, Jun 27, 2022 at 8:11 AM Christian Brauner <brauner@kernel.org> wrote:
->>>>>>>> On Thu, Jun 23, 2022 at 11:21:37PM -0400, Paul Moore wrote:
->>>>>>> ...
->>>>>>>
->>>>>>>>> This is one of the reasons why I usually like to see at least one LSM
->>>>>>>>> implementation to go along with every new/modified hook.  The
->>>>>>>>> implementation forces you to think about what information is necessary
->>>>>>>>> to perform a basic access control decision; sometimes it isn't always
->>>>>>>>> obvious until you have to write the access control :)
->>>>>>>> I spoke to Frederick at length during LSS and as I've been given to
->>>>>>>> understand there's a eBPF program that would immediately use this new
->>>>>>>> hook. Now I don't want to get into the whole "Is the eBPF LSM hook
->>>>>>>> infrastructure an LSM" but I think we can let this count as a legitimate
->>>>>>>> first user of this hook/code.
->>>>>>> Yes, for the most part I don't really worry about the "is a BPF LSM a
->>>>>>> LSM?" question, it's generally not important for most discussions.
->>>>>>> However, there is an issue unique to the BPF LSMs which I think is
->>>>>>> relevant here: there is no hook implementation code living under
->>>>>>> security/.  While I talked about a hook implementation being helpful
->>>>>>> to verify the hook prototype, it is also helpful in providing an
->>>>>>> in-tree example for other LSMs; unfortunately we don't get that same
->>>>>>> example value when the initial hook implementation is a BPF LSM.
->>>>>> I would argue that such a patch series must come together with a BPF
->>>>>> selftest which then i) contains an in-tree usage example, ii) adds BPF
->>>>>> CI test coverage. Shipping with a BPF selftest at least would be the
->>>>>> usual expectation.
->>>>> I'm not going to disagree with that, I generally require matching
->>>>> tests for new SELinux kernel code, but I was careful to mention code
->>>>> under 'security/' and not necessarily just a test implementation :)  I
->>>>> don't want to get into a big discussion about it, but I think having a
->>>>> working implementation somewhere under 'security/' is more
->>>>> discoverable for most LSM folks.
->>>>
->>>> I agree. It would be unfortunate if we added a hook explicitly for eBPF
->>>> only to discover that the proposed user needs something different. The
->>>> LSM community should have a chance to review the code before committing
->>>> to all the maintenance required in supporting it.
->>>>
->>>> Is there a reference on how to write an eBPF security module?
->>>
->>> There's a documentation page that briefly touches on a BPF LSM implementation [1].
->>
->> That's a brief touch, alright. I'll grant that the LSM interface isn't
->> especially well documented for C developers, but we have done tutorials
->> and have multiple examples. I worry that without an in-tree example for
->> eBPF we might well be setting developers up for spectacular failure.
->>
-> 
-> Casey, Daniel and I are recommending an in-tree example, it will be
-> in BPF selftests and we will CC you on the reviews.
-> 
-> Frederick, is that okay with you?
+On Tue, Jun 28, 2022 at 5:51 AM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
+>
+> On 6/28/22 15:31, Robin Murphy wrote:
+> > ----->8-----
+> > [   68.295951] ======================================================
+> > [   68.295956] WARNING: possible circular locking dependency detected
+> > [   68.295963] 5.19.0-rc3+ #400 Not tainted
+> > [   68.295972] ------------------------------------------------------
+> > [   68.295977] cc1/295 is trying to acquire lock:
+> > [   68.295986] ffff000008d7f1a0
+> > (reservation_ww_class_mutex){+.+.}-{3:3}, at: drm_gem_shmem_free+0x7c/0x198
+> > [   68.296036]
+> > [   68.296036] but task is already holding lock:
+> > [   68.296041] ffff80000c14b820 (fs_reclaim){+.+.}-{0:0}, at:
+> > __alloc_pages_slowpath.constprop.0+0x4d8/0x1470
+> > [   68.296080]
+> > [   68.296080] which lock already depends on the new lock.
+> > [   68.296080]
+> > [   68.296085]
+> > [   68.296085] the existing dependency chain (in reverse order) is:
+> > [   68.296090]
+> > [   68.296090] -> #1 (fs_reclaim){+.+.}-{0:0}:
+> > [   68.296111]        fs_reclaim_acquire+0xb8/0x150
+> > [   68.296130]        dma_resv_lockdep+0x298/0x3fc
+> > [   68.296148]        do_one_initcall+0xe4/0x5f8
+> > [   68.296163]        kernel_init_freeable+0x414/0x49c
+> > [   68.296180]        kernel_init+0x2c/0x148
+> > [   68.296195]        ret_from_fork+0x10/0x20
+> > [   68.296207]
+> > [   68.296207] -> #0 (reservation_ww_class_mutex){+.+.}-{3:3}:
+> > [   68.296229]        __lock_acquire+0x1724/0x2398
+> > [   68.296246]        lock_acquire+0x218/0x5b0
+> > [   68.296260]        __ww_mutex_lock.constprop.0+0x158/0x2378
+> > [   68.296277]        ww_mutex_lock+0x7c/0x4d8
+> > [   68.296291]        drm_gem_shmem_free+0x7c/0x198
+> > [   68.296304]        panfrost_gem_free_object+0x118/0x138
+> > [   68.296318]        drm_gem_object_free+0x40/0x68
+> > [   68.296334]        drm_gem_shmem_shrinker_run_objects_scan+0x42c/0x5b8
+> > [   68.296352]        drm_gem_shmem_shrinker_scan_objects+0xa4/0x170
+> > [   68.296368]        do_shrink_slab+0x220/0x808
+> > [   68.296381]        shrink_slab+0x11c/0x408
+> > [   68.296392]        shrink_node+0x6ac/0xb90
+> > [   68.296403]        do_try_to_free_pages+0x1dc/0x8d0
+> > [   68.296416]        try_to_free_pages+0x1ec/0x5b0
+> > [   68.296429]        __alloc_pages_slowpath.constprop.0+0x528/0x1470
+> > [   68.296444]        __alloc_pages+0x4e0/0x5b8
+> > [   68.296455]        __folio_alloc+0x24/0x60
+> > [   68.296467]        vma_alloc_folio+0xb8/0x2f8
+> > [   68.296483]        alloc_zeroed_user_highpage_movable+0x58/0x68
+> > [   68.296498]        __handle_mm_fault+0x918/0x12a8
+> > [   68.296513]        handle_mm_fault+0x130/0x300
+> > [   68.296527]        do_page_fault+0x1d0/0x568
+> > [   68.296539]        do_translation_fault+0xa0/0xb8
+> > [   68.296551]        do_mem_abort+0x68/0xf8
+> > [   68.296562]        el0_da+0x74/0x100
+> > [   68.296572]        el0t_64_sync_handler+0x68/0xc0
+> > [   68.296585]        el0t_64_sync+0x18c/0x190
+> > [   68.296596]
+> > [   68.296596] other info that might help us debug this:
+> > [   68.296596]
+> > [   68.296601]  Possible unsafe locking scenario:
+> > [   68.296601]
+> > [   68.296604]        CPU0                    CPU1
+> > [   68.296608]        ----                    ----
+> > [   68.296612]   lock(fs_reclaim);
+> > [   68.296622] lock(reservation_ww_class_mutex);
+> > [   68.296633]                                lock(fs_reclaim);
+> > [   68.296644]   lock(reservation_ww_class_mutex);
+> > [   68.296654]
+> > [   68.296654]  *** DEADLOCK ***
+>
+> This splat could be ignored for now. I'm aware about it, although
+> haven't looked closely at how to fix it since it's a kind of a lockdep
+> misreporting.
 
-Yep.
+The lockdep splat could be fixed with something similar to what I've
+done in msm, ie. basically just not acquire the lock in the finalizer:
 
-> 
->>>
->>>> There should be something out there warning the eBPF programmer of the
->>>> implications of providing a secid_to_secctx hook for starters.
->>>>
->>>
->>> Links:
->>> 1. https://docs.kernel.org/bpf/prog_lsm.html?highlight=bpf+lsm#
->>>
+https://patchwork.freedesktop.org/patch/489364/
 
+There is one gotcha to watch for, as danvet pointed out
+(scan_objects() could still see the obj in the LRU before the
+finalizer removes it), but if scan_objects() does the
+kref_get_unless_zero() trick, it is safe.
+
+BR,
+-R

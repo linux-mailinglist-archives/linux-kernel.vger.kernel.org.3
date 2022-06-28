@@ -2,891 +2,413 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D350F55C5AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C7555D2B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239345AbiF1HPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 03:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
+        id S238241AbiF1HPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 03:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiF1HPO (ORCPT
+        with ESMTP id S229566AbiF1HPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 03:15:14 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08DA2C136
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 00:15:11 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id d17so10616187wrc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 00:15:11 -0700 (PDT)
+        Tue, 28 Jun 2022 03:15:00 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56382C12A;
+        Tue, 28 Jun 2022 00:14:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i+Lb07nAOniw4SU/QHy3UQmxVIlKr3186wntT05CTeY=;
-        b=Y8xvbEXvbzQ6mbLwel2ze+Vlx3M58ABTKMpNzWbZ5eI/BALTW9FswkAMJLM2qlT6af
-         LJ8vnM521DgHvXp7MYgRcddEzYscDH9u2qsi1W8mtqWQJFeLsMv/FNETBr92vRVlBc0d
-         n/uf66dsmhTnyEhtLtiWzcpQLwGJFCCsSqFh2zPHoLrBuRTDZfsD60iHLwnYN+HWqcJb
-         jtmIu+vZm4IPQcXGxgiMHPbt8CUAHCa2clsHluoeT7zJncDNSOeGJaQBUrEdg65L2BUH
-         q5nO5gohmSgZ8jPkymhv3JLz8CTEgftB7cfuMewp/THe3xUdZ1p9qIufHTnYIMehEZrt
-         /eaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i+Lb07nAOniw4SU/QHy3UQmxVIlKr3186wntT05CTeY=;
-        b=BcN+qsjMBAcr6adUwYzi2804W1AzONh75v6pDodvGZin0teqySu44oOoMs+ECKhwWH
-         CuZPEnlrSR2+JahW3G+6i70l0n6b66aXNNpuhMsEuhMgImNKSQX9yjwdFLJwqpRJm8Ka
-         Uy+r05SkhcRX8K+bHhC57p1ysMj3I1BF5puJ9hqtr2CwEWJEybIlvY3+cyKXwtYaGVNp
-         vx+wj1ABgh0WmhZLUwmfwLRuKMbRvTDz7kNBAfnEG/E3pYtyjdV9z7GnEo9igC1ZjX1X
-         e12dsWX8k0+Xki+LrXfFhvvYXQzC8mkxel0Z38nVp2S92O2zSsk+BdSPDjFuE2Z8mtM9
-         WDIg==
-X-Gm-Message-State: AJIora8sO+KFjp3TtCnWMIJyE5DcSLbHVnOUqSHIAXzRgUcr+4GHOwLp
-        /XjLv+3uaV14t1Z+ZzItGkLLZScJlRMlOow1FGibfA==
-X-Google-Smtp-Source: AGRyM1teHVmBxgkWP/tGJMiPHmjD9t1iW8Xq2PXcjmXgB5zKeO0ndwqRGsWJngA8jImV9XcVKf5HmAs9m22mJAzC/eE=
-X-Received: by 2002:a5d:4308:0:b0:219:e5a4:5729 with SMTP id
- h8-20020a5d4308000000b00219e5a45729mr16965489wrq.210.1656400510159; Tue, 28
- Jun 2022 00:15:10 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656400499; x=1687936499;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=lwXZcqdSLbWOAYvNr7FmnphJ8eGlnyLRMExAFU84AxA=;
+  b=ltyox8WnviG2e+S+kpvGUU5F/F05ebqqTKJt65x+AdKX/AnKKUrgfBbq
+   715SK6pUm6NxUD+v9vLeWRFxl5MqGdEADWDaD7B5VKe/88pRzyYo51SMP
+   C7K9wfG+lDIYMcWqkNYL8DKAW3A7coz5NbVH7lJFMbGH7H5MVe+4gQiIp
+   E=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 28 Jun 2022 00:14:58 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 00:14:58 -0700
+Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 28 Jun 2022 00:14:57 -0700
+Received: from [10.216.11.205] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 28 Jun
+ 2022 00:14:51 -0700
+Message-ID: <2a16703b-5b1e-5ce9-0af0-2e08da49d8ed@quicinc.com>
+Date:   Tue, 28 Jun 2022 12:44:48 +0530
 MIME-Version: 1.0
-References: <20220610194435.2268290-1-yosryahmed@google.com>
- <20220610194435.2268290-9-yosryahmed@google.com> <00df1932-38fe-c6f8-49d0-3a44affb1268@fb.com>
- <CAJD7tkaNnx6ebFrMxWgkJbtx=Qoe+cEwnjtWeY5=EAaVktrenw@mail.gmail.com>
-In-Reply-To: <CAJD7tkaNnx6ebFrMxWgkJbtx=Qoe+cEwnjtWeY5=EAaVktrenw@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 28 Jun 2022 00:14:33 -0700
-Message-ID: <CAJD7tkZ3AEPEUD9V-5nxUgmS5SLc6qp50ZyrRoAQgdzPM=a-Hg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 8/8] bpf: add a selftest for cgroup
- hierarchical stats collection
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="0000000000000459be05e27cccdd"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH V2 7/8] arm64: dts: Add ipq5018 SoC and MP03 board support
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
+        <catalin.marinas@arm.com>, <p.zabel@pengutronix.de>,
+        <quic_varada@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220621161126.15883-1-quic_srichara@quicinc.com>
+ <20220621161126.15883-8-quic_srichara@quicinc.com>
+ <f8aa5f81-e77c-db28-519d-7d9ee119dcf3@somainline.org>
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+In-Reply-To: <f8aa5f81-e77c-db28-519d-7d9ee119dcf3@somainline.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000000459be05e27cccdd
-Content-Type: text/plain; charset="UTF-8"
+Thanks Konrad for the review.
 
-On Mon, Jun 27, 2022 at 11:47 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+On 6/27/2022 12:02 AM, Konrad Dybcio wrote:
 >
-> On Mon, Jun 27, 2022 at 11:14 PM Yonghong Song <yhs@fb.com> wrote:
-> >
-> >
-> >
-> > On 6/10/22 12:44 PM, Yosry Ahmed wrote:
-> > > Add a selftest that tests the whole workflow for collecting,
-> > > aggregating (flushing), and displaying cgroup hierarchical stats.
-> > >
-> > > TL;DR:
-> > > - Whenever reclaim happens, vmscan_start and vmscan_end update
-> > >    per-cgroup percpu readings, and tell rstat which (cgroup, cpu) pairs
-> > >    have updates.
-> > > - When userspace tries to read the stats, vmscan_dump calls rstat to flush
-> > >    the stats, and outputs the stats in text format to userspace (similar
-> > >    to cgroupfs stats).
-> > > - rstat calls vmscan_flush once for every (cgroup, cpu) pair that has
-> > >    updates, vmscan_flush aggregates cpu readings and propagates updates
-> > >    to parents.
-> > >
-> > > Detailed explanation:
-> > > - The test loads tracing bpf programs, vmscan_start and vmscan_end, to
-> > >    measure the latency of cgroup reclaim. Per-cgroup ratings are stored in
-> > >    percpu maps for efficiency. When a cgroup reading is updated on a cpu,
-> > >    cgroup_rstat_updated(cgroup, cpu) is called to add the cgroup to the
-> > >    rstat updated tree on that cpu.
-> > >
-> > > - A cgroup_iter program, vmscan_dump, is loaded and pinned to a file, for
-> > >    each cgroup. Reading this file invokes the program, which calls
-> > >    cgroup_rstat_flush(cgroup) to ask rstat to propagate the updates for all
-> > >    cpus and cgroups that have updates in this cgroup's subtree. Afterwards,
-> > >    the stats are exposed to the user. vmscan_dump returns 1 to terminate
-> > >    iteration early, so that we only expose stats for one cgroup per read.
-> > >
-> > > - An ftrace program, vmscan_flush, is also loaded and attached to
-> > >    bpf_rstat_flush. When rstat flushing is ongoing, vmscan_flush is invoked
-> > >    once for each (cgroup, cpu) pair that has updates. cgroups are popped
-> > >    from the rstat tree in a bottom-up fashion, so calls will always be
-> > >    made for cgroups that have updates before their parents. The program
-> > >    aggregates percpu readings to a total per-cgroup reading, and also
-> > >    propagates them to the parent cgroup. After rstat flushing is over, all
-> > >    cgroups will have correct updated hierarchical readings (including all
-> > >    cpus and all their descendants).
-> > >
-> > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> >
-> > There are a selftest failure with test:
-> >
-> > get_cgroup_vmscan_delay:PASS:output format 0 nsec
-> > get_cgroup_vmscan_delay:PASS:cgroup_id 0 nsec
-> > get_cgroup_vmscan_delay:PASS:vmscan_reading 0 nsec
-> > get_cgroup_vmscan_delay:PASS:read cgroup_iter 0 nsec
-> > get_cgroup_vmscan_delay:PASS:output format 0 nsec
-> > get_cgroup_vmscan_delay:PASS:cgroup_id 0 nsec
-> > get_cgroup_vmscan_delay:FAIL:vmscan_reading unexpected vmscan_reading:
-> > actual 0 <= expected 0
-> > check_vmscan_stats:FAIL:child1_vmscan unexpected child1_vmscan: actual
-> > 781874 != expected 382092
-> > check_vmscan_stats:FAIL:child2_vmscan unexpected child2_vmscan: actual
-> > -1 != expected -2
-> > check_vmscan_stats:FAIL:test_vmscan unexpected test_vmscan: actual
-> > 781874 != expected 781873
-> > check_vmscan_stats:FAIL:root_vmscan unexpected root_vmscan: actual 0 <
-> > expected 781874
-> > destroy_progs:PASS:remove cgroup_iter pin 0 nsec
-> > destroy_progs:PASS:remove cgroup_iter pin 0 nsec
-> > destroy_progs:PASS:remove cgroup_iter pin 0 nsec
-> > destroy_progs:PASS:remove cgroup_iter pin 0 nsec
-> > destroy_progs:PASS:remove cgroup_iter pin 0 nsec
-> > destroy_progs:PASS:remove cgroup_iter pin 0 nsec
-> > destroy_progs:PASS:remove cgroup_iter pin 0 nsec
-> > destroy_progs:PASS:remove cgroup_iter root pin 0 nsec
-> > cleanup_bpffs:PASS:rmdir /sys/fs/bpf/vmscan/ 0 nsec
-> > #33      cgroup_hierarchical_stats:FAIL
-> >
+> On 21.06.2022 18:11, Sricharan R wrote:
+>> From: Varadarajan Narayanan <quic_varada@quicinc.com>
+>>
+>> Add initial device tree support for the Qualcomm IPQ5018 SoC and
+>> MP03.1-C2 board.
+>>
+>> Co-developed-by: Sricharan R <quic_srichara@quicinc.com>
+>> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
+>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>>   .../arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts |  29 +++
+>>   arch/arm64/boot/dts/qcom/ipq5018.dtsi         | 221 ++++++++++++++++++
+>>   3 files changed, 251 insertions(+)
+>>   create mode 100644 arch/arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts
+>>   create mode 100644 arch/arm64/boot/dts/qcom/ipq5018.dtsi
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+>> index f9e6343acd03..c44e701f093c 100644
+>> --- a/arch/arm64/boot/dts/qcom/Makefile
+>> +++ b/arch/arm64/boot/dts/qcom/Makefile
+>> @@ -10,6 +10,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c2.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-alcatel-idol347.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-asus-z00l.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-huawei-g7.dtb
+>> +dtb-$(CONFIG_ARCH_QCOM)	+= ipq5018-mp03.1-c2.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-longcheer-l8150.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-longcheer-l8910.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-mtp.dtb
+>> diff --git a/arch/arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts b/arch/arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts
+>> new file mode 100644
+>> index 000000000000..d1cd080ec3db
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts
+>> @@ -0,0 +1,29 @@
+>> +// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
+>> +/*
+>> + * IPQ5018 CP01 board device tree source
+>> + *
+>> + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
+>> + */
+>> +
+>> +/dts-v1/;
+>> +
+>> +#include "ipq5018.dtsi"
+>> +
+>> +/ {
+>> +	model = "Qualcomm Technologies, Inc. IPQ5018/AP-MP03-C2";
+>> +	compatible = "qcom,ipq5018-mp03", "qcom,ipq5018";
+>> +
+>> +	aliases {
+>> +		serial0 = &blsp1_uart1;
+>> +	};
+>> +
+>> +	chosen {
+>> +		stdout-path = "serial0:115200n8";
+>> +	};
+>> +};
+>> +
+>> +&blsp1_uart1 {
+>> +	pinctrl-0 = <&serial_1_pins>;
+>> +	pinctrl-names = "default";
+>> +	status = "ok";
+>> +};
+>> diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+>> new file mode 100644
+>> index 000000000000..084fb7b30dfd
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+>> @@ -0,0 +1,221 @@
+>> +// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
+>> +/*
+>> + * Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
+>> + */
+>> +/*
+>> + * IPQ5018 SoC device tree source
+>> + *
+>> + * Copyright (c) 2019, The Linux Foundation. All rights reserved.
+>> + */
+>> +
+>> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +#include <dt-bindings/clock/qcom,gcc-ipq5018.h>
+>> +#include <dt-bindings/reset/qcom,gcc-ipq5018.h>
+>> +
+>> +/ {
+>> +	#address-cells = <2>;
+>> +	#size-cells = <2>;
+>> +	interrupt-parent = <&intc>;
+> Hi!
 >
-> The test is passing on my setup. I am trying to figure out if there is
-> something outside the setup done by the test that can cause the test
-> to fail.
+> interrupt-parent could go first.
+
+  ok.
+
+
+>> +
+>> +	sleep_clk: sleep-clk {
+>> +		compatible = "fixed-clock";
+>> +		clock-frequency = <32000>;
+>> +		#clock-cells = <0>;
+>> +	};
+>> +
+>> +	xo: xo {
+>> +		compatible = "fixed-clock";
+>> +		clock-frequency = <24000000>;
+>> +		#clock-cells = <0>;
+>> +	};
+>> +
+>> +	gen2clk0: gen2clk0 {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <125000000>;
+>> +		clock-output-names = "pcie20_phy0_pipe_clk";
+>> +	};
+>> +
+>> +	gen2clk1: gen2clk1 {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <125000000>;
+>> +		clock-output-names = "pcie20_phy1_pipe_clk";
+>> +	};
+> I am not sure what's the current stance on this, but previously clock nodes
+> used to be wrapped in a clocks {} node, as currently they are not sorted
+> properly.
 >
-
-I can't reproduce the failure on my machine. It seems like for some
-reason reclaim is not invoked in one of the test cgroups which results
-in the expected stats not being there. I have a few suspicions as to
-what might cause this but I am not sure.
-
-If you have the capacity, do you mind re-running the test with the
-attached diff1.patch? (and maybe diff2.patch if that fails, this will
-cause OOMs in the test cgroup, you might see some process killed
-warnings).
-Thanks!
+  hmm ok, yeah, see the clocks { node in some recent dts as well, will 
+add the wrapper.
 
 
-> >
-> > Also an existing test also failed.
-> >
-> > btf_dump_data:PASS:find type id 0 nsec
-> >
-> >
-> > btf_dump_data:PASS:failed/unexpected type_sz 0 nsec
-> >
-> >
-> > btf_dump_data:FAIL:ensure expected/actual match unexpected ensure
-> > expected/actual match: actual '(union bpf_iter_link_info){.map =
-> > (struct){.map_fd = (__u32)1,},.cgroup '
-> > test_btf_dump_struct_data:PASS:find struct sk_buff 0 nsec
-> >
+>> +
+>> +	cpus: cpus {
+> Is this label going to be used?
+   hmm, not used, will remove.
+>> +		#address-cells = <1>;
+>> +		#size-cells = <0>;
+>> +
+>> +		CPU0: cpu@0 {
+>> +			device_type = "cpu";
+>> +			compatible = "arm,cortex-a53";
+>> +			reg = <0x0>;
+>> +			enable-method = "psci";
+>> +			next-level-cache = <&L2_0>;
+>> +		};
+>> +
+>> +		CPU1: cpu@1 {
+>> +			device_type = "cpu";
+>> +			compatible = "arm,cortex-a53";
+>> +			enable-method = "psci";
+>> +			reg = <0x1>;
+>> +			next-level-cache = <&L2_0>;
+>> +		};
+>> +
+>> +		L2_0: l2-cache {
+>> +			compatible = "cache";
+>> +			cache-level = <0x2>;
+> This should probably be dec, as it's not a register.
+
+    'dec' ? Sorry, i did not get that.
+
+
+>> +		};
+>> +	};
+>> +
+>> +	pmuv8: pmu {
+> Are there any other PMUs? And is this label going to be used?
+
+   ok, will remove the label.
+
+
+>> +		compatible = "arm,cortex-a53-pmu";
+>> +		interrupts = <GIC_PPI 7 (GIC_CPU_MASK_SIMPLE(4) |
+>> +					 IRQ_TYPE_LEVEL_HIGH)>;
+> I think this can fit in a single 100-char line.
 >
-> Yeah I see what happened there. bpf_iter_link_info was changed by the
-> patch that introduced cgroup_iter, and this specific union is used by
-> the test to test the "union with nested struct" btf dumping. I will
-> add a patch in the next version that updates the btf_dump_data test
-> accordingly. Thanks.
+   ok.
+
+
+>> +	};
+>> +
+>> +	psci: psci {
+>> +		compatible = "arm,psci-1.0";
+>> +		method = "smc";
+>> +	};
+>> +
+>> +	memory@40000000 {
+> This node is not sorted properly.
+
+   ok, will sort for all nodes.
+
+
+>> +		device_type = "memory";
+>> +		/* We expect the bootloader to fill in the size */
+>> +		reg = <0x0 0x40000000 0x0 0x0>;
+>> +	};
+>> +
+>> +	reserved-memory {
+>> +		#address-cells = <2>;
+>> +		#size-cells = <2>;
+>> +		ranges;
+>> +
+>> +		tz: tz@4ac00000 {
+> Please rename it to tz_memory or tz_region or something more
+> descriptive. Also, memory@
+
+  ok.
+
+
+>> +			reg = <0x0 0x4ac00000 0x0 0x00400000>;
+> I don't think we tend to pad size to 8 hex digits.
+
+  ok.
+
+
+>> +			no-map;
+>> +		};
+>> +	};
+>> +
+>> +	timer {
+> This is not sorted properly.
+
+  ok.
+
+
+>> +		compatible = "arm,armv8-timer";
+>> +		interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+>> +			     <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+>> +			     <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+>> +			     <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+>> +	};
+>> +
+>> +	soc: soc@0 {
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +		ranges = <0 0 0 0xffffffff>;
+> Isn't that the default value?
+
+   ok, if omitting this would be retain the default, then will do it.
+
+
+>> +		compatible = "simple-bus";
+> Please sort the properties.
+
+   ok.
+
+
+>> +
+>> +		tlmm: pinctrl@1000000 {
+>> +			compatible = "qcom,ipq5018-pinctrl";
+>> +			reg = <0x01000000 0x300000>;
+>> +			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+>> +			gpio-controller;
+>> +			#gpio-cells = <2>;
+>> +			gpio-ranges = <&tlmm 0 80>;
+>> +			interrupt-controller;
+>> +			#interrupt-cells = <2>;
+>> +
+>> +			serial_1_pins: serial1-pinmux {
+> Other DTs call it uart pins, also this is the default/poweron
+> state but the hardware provides support for sleep/poweroff.
+> Please rename this accordingly.
+
+   ok.
+
+
+>> +				pins = "gpio31", "gpio32", "gpio33", "gpio34";
+>> +				function = "blsp1_uart1";
+>> +				drive-strength = <8>;
+>> +				bias-pull-down;
+>> +			};
+>> +		};
+>> +
+>> +		gcc: clock-controller@1800000 {
+>> +			compatible = "qcom,gcc-ipq5018";
+>> +			reg = <0x01800000 0x80000>;
+>> +			clocks = <&xo>, <&sleep_clk>;
+>> +			clock-names = "xo", "sleep_clk";
+>> +			#clock-cells = <1>;
+>> +			#reset-cells = <1>;
+>> +		};
+>> +
+>> +		blsp1_uart1: serial@78af000 {
+>> +			compatible = "qcom,msm-uartdm-v1.4", "qcom,msm-uartdm";
+>> +			reg = <0x078af000 0x200>;
+>> +			interrupts = <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>;
+>> +			clocks = <&gcc GCC_BLSP1_UART1_APPS_CLK>,
+>> +				<&gcc GCC_BLSP1_AHB_CLK>;
+> Not sure whether thunderbird is dumb again, or the indentation
+> is off by 1 space.
+   indentation issue, will fix.
+>> +			clock-names = "core", "iface";
+>> +			status = "disabled";
+>> +		};
+>> +
+>> +		intc: interrupt-controller@b000000 {
+>> +			compatible = "qcom,msm-qgic2";
+> Please sort the properties (compatible and reg gotta go first, etc.).
+
+  ok.
+
+
+>> +			interrupt-controller;
+>> +			#interrupt-cells = <0x3>;
+> *-cells should be decimal.
 >
-> >
-> > test_btf_dump_struct_data:PASS:unexpected return value dumping sk_buff 0
-> > nsec
-> >
-> > btf_dump_data:PASS:verify prefix match 0 nsec
-> >
-> >
-> > btf_dump_data:PASS:find type id 0 nsec
-> >
-> >
-> > btf_dump_data:PASS:failed to return -E2BIG 0 nsec
-> >
-> >
-> > btf_dump_data:PASS:ensure expected/actual match 0 nsec
-> >
-> >
-> > btf_dump_data:PASS:verify prefix match 0 nsec
-> >
-> >
-> > btf_dump_data:PASS:find type id 0 nsec
-> >
-> >
-> > btf_dump_data:PASS:failed to return -E2BIG 0 nsec
-> >
-> >
-> > btf_dump_data:PASS:ensure expected/actual match 0 nsec
-> >
-> >
-> > #21/14   btf_dump/btf_dump: struct_data:FAIL
-> >
-> > please take a look.
-> >
-> > > ---
-> > >   .../prog_tests/cgroup_hierarchical_stats.c    | 351 ++++++++++++++++++
-> > >   .../bpf/progs/cgroup_hierarchical_stats.c     | 234 ++++++++++++
-> > >   2 files changed, 585 insertions(+)
-> > >   create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
-> > >   create mode 100644 tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
-> > >
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c b/tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
-> > > new file mode 100644
-> > > index 0000000000000..b78a4043da49a
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
-> > > @@ -0,0 +1,351 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * Functions to manage eBPF programs attached to cgroup subsystems
-> > > + *
-> > > + * Copyright 2022 Google LLC.
-> > > + */
-> > > +#include <errno.h>
-> > > +#include <sys/types.h>
-> > > +#include <sys/mount.h>
-> > > +#include <sys/stat.h>
-> > > +#include <unistd.h>
-> > > +
-> > > +#include <test_progs.h>
-> > > +#include <bpf/libbpf.h>
-> > > +#include <bpf/bpf.h>
-> > > +
-> > > +#include "cgroup_helpers.h"
-> > > +#include "cgroup_hierarchical_stats.skel.h"
-> > > +
-> > > +#define PAGE_SIZE 4096
-> > > +#define MB(x) (x << 20)
-> > > +
-> > > +#define BPFFS_ROOT "/sys/fs/bpf/"
-> > > +#define BPFFS_VMSCAN BPFFS_ROOT"vmscan/"
-> > > +
-> > > +#define CG_ROOT_NAME "root"
-> > > +#define CG_ROOT_ID 1
-> > > +
-> > > +#define CGROUP_PATH(p, n) {.path = #p"/"#n, .name = #n}
-> > > +
-> > > +static struct {
-> > > +     const char *path, *name;
-> > > +     unsigned long long id;
-> > > +     int fd;
-> > > +} cgroups[] = {
-> > > +     CGROUP_PATH(/, test),
-> > > +     CGROUP_PATH(/test, child1),
-> > > +     CGROUP_PATH(/test, child2),
-> > > +     CGROUP_PATH(/test/child1, child1_1),
-> > > +     CGROUP_PATH(/test/child1, child1_2),
-> > > +     CGROUP_PATH(/test/child2, child2_1),
-> > > +     CGROUP_PATH(/test/child2, child2_2),
-> > > +};
-> > > +
-> > > +#define N_CGROUPS ARRAY_SIZE(cgroups)
-> > > +#define N_NON_LEAF_CGROUPS 3
-> > > +
-> > > +int root_cgroup_fd;
-> > > +bool mounted_bpffs;
-> > > +
-> > > +static int read_from_file(const char *path, char *buf, size_t size)
-> > > +{
-> > > +     int fd, len;
-> > > +
-> > > +     fd = open(path, O_RDONLY);
-> > > +     if (fd < 0) {
-> > > +             log_err("Open %s", path);
-> > > +             return -errno;
-> > > +     }
-> > > +     len = read(fd, buf, size);
-> > > +     if (len < 0)
-> > > +             log_err("Read %s", path);
-> > > +     else
-> > > +             buf[len] = 0;
-> > > +     close(fd);
-> > > +     return len < 0 ? -errno : 0;
-> > > +}
-> > > +
-> > > +static int setup_bpffs(void)
-> > > +{
-> > > +     int err;
-> > > +
-> > > +     /* Mount bpffs */
-> > > +     err = mount("bpf", BPFFS_ROOT, "bpf", 0, NULL);
-> > > +     mounted_bpffs = !err;
-> > > +     if (!ASSERT_OK(err && errno != EBUSY, "mount bpffs"))
-> > > +             return err;
-> > > +
-> > > +     /* Create a directory to contain stat files in bpffs */
-> > > +     err = mkdir(BPFFS_VMSCAN, 0755);
-> > > +     ASSERT_OK(err, "mkdir bpffs");
-> > > +     return err;
-> > > +}
-> > > +
-> > > +static void cleanup_bpffs(void)
-> > > +{
-> > > +     /* Remove created directory in bpffs */
-> > > +     ASSERT_OK(rmdir(BPFFS_VMSCAN), "rmdir "BPFFS_VMSCAN);
-> > > +
-> > > +     /* Unmount bpffs, if it wasn't already mounted when we started */
-> > > +     if (mounted_bpffs)
-> > > +             return;
-> > > +     ASSERT_OK(umount(BPFFS_ROOT), "unmount bpffs");
-> > > +}
-> > > +
-> > > +static int setup_cgroups(void)
-> > > +{
-> > > +     int i, fd, err;
-> > > +
-> > > +     err = setup_cgroup_environment();
-> > > +     if (!ASSERT_OK(err, "setup_cgroup_environment"))
-> > > +             return err;
-> > > +
-> > > +     root_cgroup_fd = get_root_cgroup();
-> > > +     if (!ASSERT_GE(root_cgroup_fd, 0, "get_root_cgroup"))
-> > > +             return root_cgroup_fd;
-> > > +
-> > > +     for (i = 0; i < N_CGROUPS; i++) {
-> > > +             fd = create_and_get_cgroup(cgroups[i].path);
-> > > +             if (!ASSERT_GE(fd, 0, "create_and_get_cgroup"))
-> > > +                     return fd;
-> > > +
-> > > +             cgroups[i].fd = fd;
-> > > +             cgroups[i].id = get_cgroup_id(cgroups[i].path);
-> > > +
-> > > +             /*
-> > > +              * Enable memcg controller for the entire hierarchy.
-> > > +              * Note that stats are collected for all cgroups in a hierarchy
-> > > +              * with memcg enabled anyway, but are only exposed for cgroups
-> > > +              * that have memcg enabled.
-> > > +              */
-> > > +             if (i < N_NON_LEAF_CGROUPS) {
-> > > +                     err = enable_controllers(cgroups[i].path, "memory");
-> > > +                     if (!ASSERT_OK(err, "enable_controllers"))
-> > > +                             return err;
-> > > +             }
-> > > +     }
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static void cleanup_cgroups(void)
-> > > +{
-> > > +     close(root_cgroup_fd);
-> > > +     for (int i = 0; i < N_CGROUPS; i++)
-> > > +             close(cgroups[i].fd);
-> > > +     cleanup_cgroup_environment();
-> > > +}
-> > > +
-> > > +
-> > > +static int setup_hierarchy(void)
-> > > +{
-> > > +     return setup_bpffs() || setup_cgroups();
-> > > +}
-> > > +
-> > > +static void destroy_hierarchy(void)
-> > > +{
-> > > +     cleanup_cgroups();
-> > > +     cleanup_bpffs();
-> > > +}
-> > > +
-> > > +static void alloc_anon(size_t size)
-> > > +{
-> > > +     char *buf, *ptr;
-> > > +
-> > > +     buf = malloc(size);
-> > > +     for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
-> > > +             *ptr = 0;
-> > > +     free(buf);
-> > > +}
-> > > +
-> > > +static int induce_vmscan(void)
-> > > +{
-> > > +     char size[128];
-> > > +     int i, err;
-> > > +
-> > > +     /*
-> > > +      * Set memory.high for test parent cgroup to 1 MB to throttle
-> > > +      * allocations and invoke reclaim in children.
-> > > +      */
-> > > +     snprintf(size, 128, "%d", MB(1));
-> > > +     err = write_cgroup_file(cgroups[0].path, "memory.high", size);
-> > > +     if (!ASSERT_OK(err, "write memory.high"))
-> > > +             return err;
-> > > +     /*
-> > > +      * In every leaf cgroup, run a memory hog for a few seconds to induce
-> > > +      * reclaim then kill it.
-> > > +      */
-> > > +     for (i = N_NON_LEAF_CGROUPS; i < N_CGROUPS; i++) {
-> > > +             pid_t pid = fork();
-> > > +
-> > > +             if (pid == 0) {
-> > > +                     /* Join cgroup in the parent process workdir */
-> > > +                     join_parent_cgroup(cgroups[i].path);
-> > > +
-> > > +                     /* Allocate more memory than memory.high */
-> > > +                     alloc_anon(MB(2));
-> > > +                     exit(0);
-> > > +             } else {
-> > > +                     /* Wait for child to cause reclaim then kill it */
-> > > +                     if (!ASSERT_GT(pid, 0, "fork"))
-> > > +                             return pid;
-> > > +                     sleep(2);
-> > > +                     kill(pid, SIGKILL);
-> > > +                     waitpid(pid, NULL, 0);
-> > > +             }
-> > > +     }
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static unsigned long long get_cgroup_vmscan_delay(unsigned long long cgroup_id,
-> > > +                                               const char *file_name)
-> > > +{
-> > > +     char buf[128], path[128];
-> > > +     unsigned long long vmscan = 0, id = 0;
-> > > +     int err;
-> > > +
-> > > +     /* For every cgroup, read the file generated by cgroup_iter */
-> > > +     snprintf(path, 128, "%s%s", BPFFS_VMSCAN, file_name);
-> > > +     err = read_from_file(path, buf, 128);
-> > > +     if (!ASSERT_OK(err, "read cgroup_iter"))
-> > > +             return 0;
-> > > +
-> > > +     /* Check the output file formatting */
-> > > +     ASSERT_EQ(sscanf(buf, "cg_id: %llu, total_vmscan_delay: %llu\n",
-> > > +                      &id, &vmscan), 2, "output format");
-> > > +
-> > > +     /* Check that the cgroup_id is displayed correctly */
-> > > +     ASSERT_EQ(id, cgroup_id, "cgroup_id");
-> > > +     /* Check that the vmscan reading is non-zero */
-> > > +     ASSERT_GT(vmscan, 0, "vmscan_reading");
-> > > +     return vmscan;
-> > > +}
-> > > +
-> > > +static void check_vmscan_stats(void)
-> > > +{
-> > > +     int i;
-> > > +     unsigned long long vmscan_readings[N_CGROUPS], vmscan_root;
-> > > +
-> > > +     for (i = 0; i < N_CGROUPS; i++)
-> > > +             vmscan_readings[i] = get_cgroup_vmscan_delay(cgroups[i].id,
-> > > +                                                          cgroups[i].name);
-> > > +
-> > > +     /* Read stats for root too */
-> > > +     vmscan_root = get_cgroup_vmscan_delay(CG_ROOT_ID, CG_ROOT_NAME);
-> > > +
-> > > +     /* Check that child1 == child1_1 + child1_2 */
-> > > +     ASSERT_EQ(vmscan_readings[1], vmscan_readings[3] + vmscan_readings[4],
-> > > +               "child1_vmscan");
-> > > +     /* Check that child2 == child2_1 + child2_2 */
-> > > +     ASSERT_EQ(vmscan_readings[2], vmscan_readings[5] + vmscan_readings[6],
-> > > +               "child2_vmscan");
-> > > +     /* Check that test == child1 + child2 */
-> > > +     ASSERT_EQ(vmscan_readings[0], vmscan_readings[1] + vmscan_readings[2],
-> > > +               "test_vmscan");
-> > > +     /* Check that root >= test */
-> > > +     ASSERT_GE(vmscan_root, vmscan_readings[1], "root_vmscan");
-> > > +}
-> > > +
-> > > +static int setup_cgroup_iter(struct cgroup_hierarchical_stats *obj, int cgroup_fd,
-> > > +                          const char *file_name)
-> > > +{
-> > > +     DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-> > > +     union bpf_iter_link_info linfo = {};
-> > > +     struct bpf_link *link;
-> > > +     char path[128];
-> > > +     int err;
-> > > +
-> > > +     /*
-> > > +      * Create an iter link, parameterized by cgroup_fd.
-> > > +      * We only want to traverse one cgroup, so set the traversal order to
-> > > +      * "pre", and return 1 from dump_vmscan to stop iteration after the
-> > > +      * first cgroup.
-> > > +      */
-> > > +     linfo.cgroup.cgroup_fd = cgroup_fd;
-> > > +     linfo.cgroup.traversal_order = BPF_ITER_CGROUP_PRE;
-> > > +     opts.link_info = &linfo;
-> > > +     opts.link_info_len = sizeof(linfo);
-> > > +     link = bpf_program__attach_iter(obj->progs.dump_vmscan, &opts);
-> > > +     if (!ASSERT_OK_PTR(link, "attach iter"))
-> > > +             return libbpf_get_error(link);
-> > > +
-> > > +     /* Pin the link to a bpffs file */
-> > > +     snprintf(path, 128, "%s%s", BPFFS_VMSCAN, file_name);
-> > > +     err = bpf_link__pin(link, path);
-> > > +     ASSERT_OK(err, "pin cgroup_iter");
-> > > +     return err;
-> > > +}
-> > > +
-> > > +static int setup_progs(struct cgroup_hierarchical_stats **skel)
-> > > +{
-> > > +     int i, err;
-> > > +     struct bpf_link *link;
-> > > +     struct cgroup_hierarchical_stats *obj;
-> > > +
-> > > +     obj = cgroup_hierarchical_stats__open_and_load();
-> > > +     if (!ASSERT_OK_PTR(obj, "open_and_load"))
-> > > +             return libbpf_get_error(obj);
-> > > +
-> > > +     /* Attach cgroup_iter program that will dump the stats to cgroups */
-> > > +     for (i = 0; i < N_CGROUPS; i++) {
-> > > +             err = setup_cgroup_iter(obj, cgroups[i].fd, cgroups[i].name);
-> > > +             if (!ASSERT_OK(err, "setup_cgroup_iter"))
-> > > +                     return err;
-> > > +     }
-> > > +     /* Also dump stats for root */
-> > > +     err = setup_cgroup_iter(obj, root_cgroup_fd, CG_ROOT_NAME);
-> > > +     if (!ASSERT_OK(err, "setup_cgroup_iter"))
-> > > +             return err;
-> > > +
-> > > +     /* Attach rstat flusher */
-> > > +     link = bpf_program__attach(obj->progs.vmscan_flush);
-> > > +     if (!ASSERT_OK_PTR(link, "attach rstat"))
-> > > +             return libbpf_get_error(link);
-> > > +
-> > > +     /* Attach tracing programs that will calculate vmscan delays */
-> > > +     link = bpf_program__attach(obj->progs.vmscan_start);
-> > > +     if (!ASSERT_OK_PTR(obj, "attach raw_tracepoint"))
-> > > +             return libbpf_get_error(obj);
-> > > +
-> > > +     link = bpf_program__attach(obj->progs.vmscan_end);
-> > > +     if (!ASSERT_OK_PTR(obj, "attach raw_tracepoint"))
-> > > +             return libbpf_get_error(obj);
-> > > +
-> > > +     *skel = obj;
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +void destroy_progs(struct cgroup_hierarchical_stats *skel)
-> > > +{
-> > > +     char path[128];
-> > > +     int i;
-> > > +
-> > > +     for (i = 0; i < N_CGROUPS; i++) {
-> > > +             /* Delete files in bpffs that cgroup_iters are pinned in */
-> > > +             snprintf(path, 128, "%s%s", BPFFS_VMSCAN,
-> > > +                      cgroups[i].name);
-> > > +             ASSERT_OK(remove(path), "remove cgroup_iter pin");
-> > > +     }
-> > > +
-> > > +     /* Delete root file in bpffs */
-> > > +     snprintf(path, 128, "%s%s", BPFFS_VMSCAN, CG_ROOT_NAME);
-> > > +     ASSERT_OK(remove(path), "remove cgroup_iter root pin");
-> > > +     cgroup_hierarchical_stats__destroy(skel);
-> > > +}
-> > > +
-> > > +void test_cgroup_hierarchical_stats(void)
-> > > +{
-> > > +     struct cgroup_hierarchical_stats *skel = NULL;
-> > > +
-> > > +     if (setup_hierarchy())
-> > > +             goto hierarchy_cleanup;
-> > > +     if (setup_progs(&skel))
-> > > +             goto cleanup;
-> > > +     if (induce_vmscan())
-> > > +             goto cleanup;
-> > > +     check_vmscan_stats();
-> > > +cleanup:
-> > > +     destroy_progs(skel);
-> > > +hierarchy_cleanup:
-> > > +     destroy_hierarchy();
-> > > +}
-> > > diff --git a/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c b/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
-> > > new file mode 100644
-> > > index 0000000000000..fd2028f1ed70b
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
-> > > @@ -0,0 +1,234 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * Functions to manage eBPF programs attached to cgroup subsystems
-> > > + *
-> > > + * Copyright 2022 Google LLC.
-> > > + */
-> > > +#include "vmlinux.h"
-> > > +#include <bpf/bpf_helpers.h>
-> > > +#include <bpf/bpf_tracing.h>
-> > > +
-> > > +char _license[] SEC("license") = "GPL";
-> > > +
-> > > +/*
-> > > + * Start times are stored per-task, not per-cgroup, as multiple tasks in one
-> > > + * cgroup can perform reclain concurrently.
-> > > + */
-> > > +struct {
-> > > +     __uint(type, BPF_MAP_TYPE_TASK_STORAGE);
-> > > +     __uint(map_flags, BPF_F_NO_PREALLOC);
-> > > +     __type(key, int);
-> > > +     __type(value, __u64);
-> > > +} vmscan_start_time SEC(".maps");
-> > > +
-> > > +struct vmscan_percpu {
-> > > +     /* Previous percpu state, to figure out if we have new updates */
-> > > +     __u64 prev;
-> > > +     /* Current percpu state */
-> > > +     __u64 state;
-> > > +};
-> > > +
-> > > +struct vmscan {
-> > > +     /* State propagated through children, pending aggregation */
-> > > +     __u64 pending;
-> > > +     /* Total state, including all cpus and all children */
-> > > +     __u64 state;
-> > > +};
-> > > +
-> > > +struct {
-> > > +     __uint(type, BPF_MAP_TYPE_PERCPU_HASH);
-> > > +     __uint(max_entries, 10);
-> > > +     __type(key, __u64);
-> > > +     __type(value, struct vmscan_percpu);
-> > > +} pcpu_cgroup_vmscan_elapsed SEC(".maps");
-> > > +
-> > > +struct {
-> > > +     __uint(type, BPF_MAP_TYPE_HASH);
-> > > +     __uint(max_entries, 10);
-> > > +     __type(key, __u64);
-> > > +     __type(value, struct vmscan);
-> > > +} cgroup_vmscan_elapsed SEC(".maps");
-> > > +
-> > > +extern void cgroup_rstat_updated(struct cgroup *cgrp, int cpu) __ksym;
-> > > +extern void cgroup_rstat_flush(struct cgroup *cgrp) __ksym;
-> > > +
-> > > +static inline struct cgroup *task_memcg(struct task_struct *task)
-> > > +{
-> > > +     return task->cgroups->subsys[memory_cgrp_id]->cgroup;
-> > > +}
-> > > +
-> > > +static inline uint64_t cgroup_id(struct cgroup *cgrp)
-> > > +{
-> > > +     return cgrp->kn->id;
-> > > +}
-> > > +
-> > > +static inline int create_vmscan_percpu_elem(__u64 cg_id, __u64 state)
-> > > +{
-> > > +     struct vmscan_percpu pcpu_init = {.state = state, .prev = 0};
-> > > +
-> > > +     if (bpf_map_update_elem(&pcpu_cgroup_vmscan_elapsed, &cg_id,
-> > > +                             &pcpu_init, BPF_NOEXIST)) {
-> > > +             bpf_printk("failed to create pcpu entry for cgroup %llu\n"
-> > > +                        , cg_id);
-> > > +             return 1;
-> > > +     }
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static inline int create_vmscan_elem(__u64 cg_id, __u64 state, __u64 pending)
-> > > +{
-> > > +     struct vmscan init = {.state = state, .pending = pending};
-> > > +
-> > > +     if (bpf_map_update_elem(&cgroup_vmscan_elapsed, &cg_id,
-> > > +                             &init, BPF_NOEXIST)) {
-> > > +             bpf_printk("failed to create entry for cgroup %llu\n"
-> > > +                        , cg_id);
-> > > +             return 1;
-> > > +     }
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +SEC("tp_btf/mm_vmscan_memcg_reclaim_begin")
-> > > +int BPF_PROG(vmscan_start, struct lruvec *lruvec, struct scan_control *sc)
-> > > +{
-> > > +     struct task_struct *task = bpf_get_current_task_btf();
-> > > +     __u64 *start_time_ptr;
-> > > +
-> > > +     start_time_ptr = bpf_task_storage_get(&vmscan_start_time, task, 0,
-> > > +                                       BPF_LOCAL_STORAGE_GET_F_CREATE);
-> > > +     if (!start_time_ptr) {
-> > > +             bpf_printk("error retrieving storage\n");
-> > > +             return 0;
-> > > +     }
-> > > +
-> > > +     *start_time_ptr = bpf_ktime_get_ns();
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +SEC("tp_btf/mm_vmscan_memcg_reclaim_end")
-> > > +int BPF_PROG(vmscan_end, struct lruvec *lruvec, struct scan_control *sc)
-> > > +{
-> > > +     struct vmscan_percpu *pcpu_stat;
-> > > +     struct task_struct *current = bpf_get_current_task_btf();
-> > > +     struct cgroup *cgrp;
-> > > +     __u64 *start_time_ptr;
-> > > +     __u64 current_elapsed, cg_id;
-> > > +     __u64 end_time = bpf_ktime_get_ns();
-> > > +
-> > > +     /*
-> > > +      * cgrp is the first parent cgroup of current that has memcg enabled in
-> > > +      * its subtree_control, or NULL if memcg is disabled in the entire tree.
-> > > +      * In a cgroup hierarchy like this:
-> > > +      *                               a
-> > > +      *                              / \
-> > > +      *                             b   c
-> > > +      *  If "a" has memcg enabled, while "b" doesn't, then processes in "b"
-> > > +      *  will accumulate their stats directly to "a". This makes sure that no
-> > > +      *  stats are lost from processes in leaf cgroups that don't have memcg
-> > > +      *  enabled, but only exposes stats for cgroups that have memcg enabled.
-> > > +      */
-> > > +     cgrp = task_memcg(current);
-> > > +     if (!cgrp)
-> > > +             return 0;
-> > > +
-> > > +     cg_id = cgroup_id(cgrp);
-> > > +     start_time_ptr = bpf_task_storage_get(&vmscan_start_time, current, 0,
-> > > +                                           BPF_LOCAL_STORAGE_GET_F_CREATE);
-> > > +     if (!start_time_ptr) {
-> > > +             bpf_printk("error retrieving storage local storage\n");
-> > > +             return 0;
-> > > +     }
-> > > +
-> > > +     current_elapsed = end_time - *start_time_ptr;
-> > > +     pcpu_stat = bpf_map_lookup_elem(&pcpu_cgroup_vmscan_elapsed,
-> > > +                                     &cg_id);
-> > > +     if (pcpu_stat)
-> > > +             __sync_fetch_and_add(&pcpu_stat->state, current_elapsed);
-> > > +     else
-> > > +             create_vmscan_percpu_elem(cg_id, current_elapsed);
-> > > +
-> > > +     cgroup_rstat_updated(cgrp, bpf_get_smp_processor_id());
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +SEC("fentry/bpf_rstat_flush")
-> > > +int BPF_PROG(vmscan_flush, struct cgroup *cgrp, struct cgroup *parent, int cpu)
-> > > +{
-> > > +     struct vmscan_percpu *pcpu_stat;
-> > > +     struct vmscan *total_stat, *parent_stat;
-> > > +     __u64 cg_id = cgroup_id(cgrp);
-> > > +     __u64 parent_cg_id = parent ? cgroup_id(parent) : 0;
-> > > +     __u64 *pcpu_vmscan;
-> > > +     __u64 state;
-> > > +     __u64 delta = 0;
-> > > +
-> > > +     /* Add CPU changes on this level since the last flush */
-> > > +     pcpu_stat = bpf_map_lookup_percpu_elem(&pcpu_cgroup_vmscan_elapsed,
-> > > +                                            &cg_id, cpu);
-> > > +     if (pcpu_stat) {
-> > > +             state = pcpu_stat->state;
-> > > +             delta += state - pcpu_stat->prev;
-> > > +             pcpu_stat->prev = state;
-> > > +     }
-> > > +
-> > > +     total_stat = bpf_map_lookup_elem(&cgroup_vmscan_elapsed, &cg_id);
-> > > +     if (!total_stat) {
-> > > +             create_vmscan_elem(cg_id, delta, 0);
-> > > +             goto update_parent;
-> > > +     }
-> > > +
-> > > +     /* Collect pending stats from subtree */
-> > > +     if (total_stat->pending) {
-> > > +             delta += total_stat->pending;
-> > > +             total_stat->pending = 0;
-> > > +     }
-> > > +
-> > > +     /* Propagate changes to this cgroup's total */
-> > > +     total_stat->state += delta;
-> > > +
-> > > +update_parent:
-> > > +     /* Skip if there are no changes to propagate, or no parent */
-> > > +     if (!delta || !parent_cg_id)
-> > > +             return 0;
-> > > +
-> > > +     /* Propagate changes to cgroup's parent */
-> > > +     parent_stat = bpf_map_lookup_elem(&cgroup_vmscan_elapsed,
-> > > +                                       &parent_cg_id);
-> > > +     if (parent_stat)
-> > > +             parent_stat->pending += delta;
-> > > +     else
-> > > +             create_vmscan_elem(parent_cg_id, 0, delta);
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +SEC("iter.s/cgroup")
-> > > +int BPF_PROG(dump_vmscan, struct bpf_iter_meta *meta, struct cgroup *cgrp)
-> > > +{
-> > > +     struct seq_file *seq = meta->seq;
-> > > +     struct vmscan *total_stat;
-> > > +     __u64 cg_id = cgroup_id(cgrp);
-> > > +
-> > > +     /* Do nothing for the terminal call */
-> > > +     if (!cgrp)
-> > > +             return 1;
-> > > +
-> > > +     /* Flush the stats to make sure we get the most updated numbers */
-> > > +     cgroup_rstat_flush(cgrp);
-> > > +
-> > > +     total_stat = bpf_map_lookup_elem(&cgroup_vmscan_elapsed, &cg_id);
-> > > +     if (!total_stat) {
-> > > +             bpf_printk("error finding stats for cgroup %llu\n", cg_id);
-> > > +             BPF_SEQ_PRINTF(seq, "cg_id: %llu, total_vmscan_delay: -1\n",
-> > > +                            cg_id);
-> > > +             return 1;
-> > > +     }
-> > > +     BPF_SEQ_PRINTF(seq, "cg_id: %llu, total_vmscan_delay: %llu\n",
-> > > +                    cg_id, total_stat->state);
-> > > +
-> > > +     /*
-> > > +      * We only dump stats for one cgroup here, so return 1 to stop
-> > > +      * iteration after the first cgroup.
-> > > +      */
-> > > +     return 1;
-> > > +}
+   ok.
 
---0000000000000459be05e27cccdd
-Content-Type: application/octet-stream; name="diff1.patch"
-Content-Disposition: attachment; filename="diff1.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l4xu2lc50>
-X-Attachment-Id: f_l4xu2lc50
 
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL2Nncm91
-cF9oaWVyYXJjaGljYWxfc3RhdHMuYyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9n
-X3Rlc3RzL2Nncm91cF9oaWVyYXJjaGljYWxfc3RhdHMuYwppbmRleCBiNzhhNDA0M2RhNDlhLi5i
-YzA5OThmZTI1NWYwIDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJv
-Z190ZXN0cy9jZ3JvdXBfaGllcmFyY2hpY2FsX3N0YXRzLmMKKysrIGIvdG9vbHMvdGVzdGluZy9z
-ZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvY2dyb3VwX2hpZXJhcmNoaWNhbF9zdGF0cy5jCkBAIC0x
-ODQsNyArMTg0LDYgQEAgc3RhdGljIGludCBpbmR1Y2Vfdm1zY2FuKHZvaWQpCiAKIAkJCS8qIEFs
-bG9jYXRlIG1vcmUgbWVtb3J5IHRoYW4gbWVtb3J5LmhpZ2ggKi8KIAkJCWFsbG9jX2Fub24oTUIo
-MikpOwotCQkJZXhpdCgwKTsKIAkJfSBlbHNlIHsKIAkJCS8qIFdhaXQgZm9yIGNoaWxkIHRvIGNh
-dXNlIHJlY2xhaW0gdGhlbiBraWxsIGl0ICovCiAJCQlpZiAoIUFTU0VSVF9HVChwaWQsIDAsICJm
-b3JrIikpCg==
---0000000000000459be05e27cccdd
-Content-Type: application/octet-stream; name="diff2.patch"
-Content-Disposition: attachment; filename="diff2.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l4xu2lcc1>
-X-Attachment-Id: f_l4xu2lcc1
+>> +			reg =   <0x0b000000 0x1000>,  /*GICD*/
+> /* GICD */, please (and the next ones too)
 
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL2Nncm91
-cF9oaWVyYXJjaGljYWxfc3RhdHMuYyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9n
-X3Rlc3RzL2Nncm91cF9oaWVyYXJjaGljYWxfc3RhdHMuYwppbmRleCBiNzhhNDA0M2RhNDlhLi5h
-YzIzOTBmOGY0MGIwIDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJv
-Z190ZXN0cy9jZ3JvdXBfaGllcmFyY2hpY2FsX3N0YXRzLmMKKysrIGIvdG9vbHMvdGVzdGluZy9z
-ZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvY2dyb3VwX2hpZXJhcmNoaWNhbF9zdGF0cy5jCkBAIC0x
-NjQsMTIgKzE2NCwxMiBAQCBzdGF0aWMgaW50IGluZHVjZV92bXNjYW4odm9pZCkKIAlpbnQgaSwg
-ZXJyOwogCiAJLyoKLQkgKiBTZXQgbWVtb3J5LmhpZ2ggZm9yIHRlc3QgcGFyZW50IGNncm91cCB0
-byAxIE1CIHRvIHRocm90dGxlCisJICogU2V0IG1lbW9yeS5tYXggZm9yIHRlc3QgcGFyZW50IGNn
-cm91cCB0byAxIE1CIHRvIHRocm90dGxlCiAJICogYWxsb2NhdGlvbnMgYW5kIGludm9rZSByZWNs
-YWltIGluIGNoaWxkcmVuLgogCSAqLwogCXNucHJpbnRmKHNpemUsIDEyOCwgIiVkIiwgTUIoMSkp
-OwotCWVyciA9IHdyaXRlX2Nncm91cF9maWxlKGNncm91cHNbMF0ucGF0aCwgIm1lbW9yeS5oaWdo
-IiwJc2l6ZSk7Ci0JaWYgKCFBU1NFUlRfT0soZXJyLCAid3JpdGUgbWVtb3J5LmhpZ2giKSkKKwll
-cnIgPSB3cml0ZV9jZ3JvdXBfZmlsZShjZ3JvdXBzWzBdLnBhdGgsICJtZW1vcnkubWF4IiwJc2l6
-ZSk7CisJaWYgKCFBU1NFUlRfT0soZXJyLCAid3JpdGUgbWVtb3J5Lm1heCIpKQogCQlyZXR1cm4g
-ZXJyOwogCS8qCiAJICogSW4gZXZlcnkgbGVhZiBjZ3JvdXAsIHJ1biBhIG1lbW9yeSBob2cgZm9y
-IGEgZmV3IHNlY29uZHMgdG8gaW5kdWNlCkBAIC0xODIsNyArMTgyLDcgQEAgc3RhdGljIGludCBp
-bmR1Y2Vfdm1zY2FuKHZvaWQpCiAJCQkvKiBKb2luIGNncm91cCBpbiB0aGUgcGFyZW50IHByb2Nl
-c3Mgd29ya2RpciAqLwogCQkJam9pbl9wYXJlbnRfY2dyb3VwKGNncm91cHNbaV0ucGF0aCk7CiAK
-LQkJCS8qIEFsbG9jYXRlIG1vcmUgbWVtb3J5IHRoYW4gbWVtb3J5LmhpZ2ggKi8KKwkJCS8qIEFs
-bG9jYXRlIG1vcmUgbWVtb3J5IHRoYW4gbWVtb3J5Lm1heCAqLwogCQkJYWxsb2NfYW5vbihNQigy
-KSk7CiAJCQlleGl0KDApOwogCQl9IGVsc2Ugewo=
---0000000000000459be05e27cccdd--
+  ok.
+
+
+>> +				<0x0b002000 0x1000>,  /*GICC*/
+>> +				<0x0b001000 0x1000>,  /*GICH*/
+>> +				<0x0b004000 0x1000>;  /*GICV*/
+>> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> +		};
+>> +
+>> +		timer@b120000 {
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			ranges;
+>> +			compatible = "arm,armv7-timer-mem";
+>> +			reg = <0x0b120000 0x1000>;
+>> +			clock-frequency = <19200000>;
+> Please sort the properties, also in subnodes.
+
+   ok, will do.
+
+Regards,
+   Sricharan
+
+

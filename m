@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F2855ECAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE0F55ECB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233167AbiF1Sfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 14:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        id S233630AbiF1ShG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 14:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232449AbiF1Sfq (ORCPT
+        with ESMTP id S230119AbiF1ShE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:35:46 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C0E1F63D
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 11:35:44 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id by38so15945270ljb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 11:35:44 -0700 (PDT)
+        Tue, 28 Jun 2022 14:37:04 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F311F63D;
+        Tue, 28 Jun 2022 11:37:03 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id s10so15957652ljh.12;
+        Tue, 28 Jun 2022 11:37:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=YV/ic2nJK86HnUIOMUgVla8Xt0B3UgI9C6gRscyJXgQ=;
-        b=TfgzWfMWdQkzi71AmCMMQY4Hx0x50KxfNaYawdd+TrXKaMVm6bKgF/JHHjNF4kQmgH
-         HVzC35MaljuGQC64pYn3EBiqFPnAodrVXJ5dHvf7zSVi05t2DyWke0fi5V4/YF2kx8Go
-         e5o3quAXLrKt+By0EW6ATIDMamXytd+yGFlMy2euaMQ5gHLp4MmsI6VkMxdv0pgfhfFp
-         n/Uwr/unhvIV9MCEr3uTixDkUxDXRH15i8rck+Nn3GTT6YgaUcjzlc6fXHUDr+nRtjgY
-         MDMLE4W1rdWegt6wdapm+3Jd3ERV1e7bw6Z/k4JKIxEU0A5DubFnfIdtyC1rCRcshaA7
-         ty5Q==
+        bh=qmtALMBV8oKPsUWGA9d8G3m+JN8wDVjpMtZP/2CMexk=;
+        b=mXvcWImJeqI7I6p0PsY2Z31tNmBazyow3GpDPQOBIYNxN9eranN7oT5jkFUQY2k1hF
+         SQgUMvZnzISSKV39/dbz2j0Erift8LiMYmY+Har+N5GGjfK4iD+FhresyrWOzkBBA/VN
+         KwSU/aEO1wNRAOZGp3wZTmvSjXzrYbAhfBc1DYCdueXn09AeKTK1Jt0N6gqMN3CkwT6b
+         t/j/52As9ya9iibMsCgLHPwq/R8U8pZG3Gigtps4AaIPeSRMiE9UoZx4RNGkzDaahmeO
+         jrwfYA2eJXNkS0V8MuepmuFZUjL+tPMwkH4aJc6PDk9UxsMT01JWNRlN4bSVCvyp1OP+
+         JVzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YV/ic2nJK86HnUIOMUgVla8Xt0B3UgI9C6gRscyJXgQ=;
-        b=uUeouvqGZcNd4rTgcZkqCHvwrlYvOBBCcOzsclTmCrSWim4nsfutjdhF+w3OSazTvr
-         cBkHwByGSQj9yfQ7+H4/xQPfu3PYRehmDgojEGfN/twOoa45IR86GJqB9HtzxzoNep4l
-         in4AYrZ6zoeIDu4Jo/4JCOcpKqEu2zlpXBhJsMinxDpFZCRPX585bjjrOXA/amaI+EGC
-         /fBAEYndlIGZDLwuqwSPrYlGYJ2L9/zQGUMSS7YmSZCrzv9SmMUj6jmUWqgd/Q/YC683
-         sdsFpWfvRXAh7DkHoQv7oagYvJ1ybGrjmEeSez8Rw6ETLw4y3NrTKpMOvvj7AD5D+5T/
-         KgJA==
-X-Gm-Message-State: AJIora8tiYaaxPYEagNH3z9wwaQg6yIozfxnTWumUXfST4QwyB39S1zg
-        I3O40caylwlwBgeNWiX/yvpHRmzNGEN5xPRB2dvVUA==
-X-Google-Smtp-Source: AGRyM1vrzSAkbrd6jdTE3ltMBBV/0dCh+11hEYGtlcNSC+F3qguOSt5a59CiQfEPPDvHkPSa3S3pXjfeVRYpy+1+J70=
-X-Received: by 2002:a2e:8e94:0:b0:25a:83fd:eeec with SMTP id
- z20-20020a2e8e94000000b0025a83fdeeecmr10456342ljk.493.1656441342586; Tue, 28
- Jun 2022 11:35:42 -0700 (PDT)
+        bh=qmtALMBV8oKPsUWGA9d8G3m+JN8wDVjpMtZP/2CMexk=;
+        b=7sh8+WKMqxixkPP3gldEctQWXQhsvk1bZ/ipTgeK4SK11T3WBdjOBB9NATbetHBlPN
+         QurNBEGonNdzGk6+ES5ljA584+C3fSsRfaQYmxyHKifK2TJW5RVE0dHAuGiIEY2KjjRJ
+         1or73yBMwuxu2ornRnSxffb73l4ouQ+P711cznAWVjPHVMqoCu2ORv/aH/7yniWwLk3D
+         lwv332VDE7vC1cYVs8VQMS7sjFeu44lIG927K96UVhtZQ9indoxP51d5YLotKUAUKLhn
+         xPZmjcim7Gvn6AcL/2cP6+htpjEC3tJ6JZUWV6mElp9uDCG556Ybeo+rh+9coG632yDo
+         uHYw==
+X-Gm-Message-State: AJIora/xCqbCtnSKupxocUSiFIBggZHyg0eI6HDggqkNyfvLFi2+QmG6
+        bIOq/RY8Tn3fitcGFwCfQtET/FtYy0l/Va6GsRw=
+X-Google-Smtp-Source: AGRyM1s0X0SKC2Qq28bFSVPJF1Bs8iY9aLIh70OLxo+WYU4Cq8oiv96xJYYyW5Z/0aTVTuuM29JjWgTjeIt5Ax6EBPE=
+X-Received: by 2002:a2e:a78a:0:b0:25b:c51a:2c0a with SMTP id
+ c10-20020a2ea78a000000b0025bc51a2c0amr5987839ljf.432.1656441421692; Tue, 28
+ Jun 2022 11:37:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220628122741.93641-1-daniel.thompson@linaro.org> <20220628122741.93641-2-daniel.thompson@linaro.org>
-In-Reply-To: <20220628122741.93641-2-daniel.thompson@linaro.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 28 Jun 2022 11:35:30 -0700
-Message-ID: <CAKwvOdnUdCq4AUJQEsPkkBXfG-BN7ZJHOJ5KHh43SsfogeOeqQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] clang-tools: Generate clang compatible output even
- with gcc builds
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
+References: <20220622082716.478486-1-lee.jones@linaro.org> <CANn89iK-uFP6Swgc0ZeEC38UsuywJ3wbybSNouH202Wa7X7Tzg@mail.gmail.com>
+ <CABBYNZ+C=MQ7577Fr5_W8tQ4iWRSDBSiC4fkRBY3x=9ph+YAzA@mail.gmail.com>
+In-Reply-To: <CABBYNZ+C=MQ7577Fr5_W8tQ4iWRSDBSiC4fkRBY3x=9ph+YAzA@mail.gmail.com>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Tue, 28 Jun 2022 11:36:50 -0700
+Message-ID: <CABBYNZLysdh3NFK+G8=NUQ=G=hvS8X0PdMp=bVqiwPDPCAokmg@mail.gmail.com>
+Subject: Re: [RESEND 1/1] Bluetooth: Use chan_list_lock to protect the whole
+ put/destroy invokation
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>, stable@kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,207 +75,289 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 5:27 AM Daniel Thompson
-<daniel.thompson@linaro.org> wrote:
->
-> Currently `make compile_commands.json` cannot produce useful output for
-> kernels built with gcc. That is because kbuild will opportunistically
+Hi Eric, Lee,
 
-Right, compile_commands.json should reflect reality, as in what flags
-were actually used for the build.
+On Mon, Jun 27, 2022 at 4:39 PM Luiz Augusto von Dentz
+<luiz.dentz@gmail.com> wrote:
+>
+> Hi Eric, Lee,
+>
+> On Mon, Jun 27, 2022 at 7:41 AM Eric Dumazet <edumazet@google.com> wrote:
+> >
+> > On Wed, Jun 22, 2022 at 10:27 AM Lee Jones <lee.jones@linaro.org> wrote:
+> > >
+> > > This change prevents a use-after-free caused by one of the worker
+> > > threads starting up (see below) *after* the final channel reference
+> > > has been put() during sock_close() but *before* the references to the
+> > > channel have been destroyed.
+> > >
+> > >   refcount_t: increment on 0; use-after-free.
+> > >   BUG: KASAN: use-after-free in refcount_dec_and_test+0x20/0xd0
+> > >   Read of size 4 at addr ffffffc114f5bf18 by task kworker/u17:14/705
+> > >
+> > >   CPU: 4 PID: 705 Comm: kworker/u17:14 Tainted: G S      W       4.14.234-00003-g1fb6d0bd49a4-dirty #28
+> > >   Hardware name: Qualcomm Technologies, Inc. SM8150 V2 PM8150 Google Inc. MSM sm8150 Flame DVT (DT)
+> > >   Workqueue: hci0 hci_rx_work
+> > >   Call trace:
+> > >    dump_backtrace+0x0/0x378
+> > >    show_stack+0x20/0x2c
+> > >    dump_stack+0x124/0x148
+> > >    print_address_description+0x80/0x2e8
+> > >    __kasan_report+0x168/0x188
+> > >    kasan_report+0x10/0x18
+> > >    __asan_load4+0x84/0x8c
+> > >    refcount_dec_and_test+0x20/0xd0
+> > >    l2cap_chan_put+0x48/0x12c
+> > >    l2cap_recv_frame+0x4770/0x6550
+> > >    l2cap_recv_acldata+0x44c/0x7a4
+> > >    hci_acldata_packet+0x100/0x188
+> > >    hci_rx_work+0x178/0x23c
+> > >    process_one_work+0x35c/0x95c
+> > >    worker_thread+0x4cc/0x960
+> > >    kthread+0x1a8/0x1c4
+> > >    ret_from_fork+0x10/0x18
+> > >
+> > > Cc: stable@kernel.org
+> >
+> > When was the bug added ? (Fixes: tag please)
+> >
+> > > Cc: Marcel Holtmann <marcel@holtmann.org>
+> > > Cc: Johan Hedberg <johan.hedberg@gmail.com>
+> > > Cc: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+> > > Cc: "David S. Miller" <davem@davemloft.net>
+> > > Cc: Eric Dumazet <edumazet@google.com>
+> > > Cc: Jakub Kicinski <kuba@kernel.org>
+> > > Cc: Paolo Abeni <pabeni@redhat.com>
+> > > Cc: linux-bluetooth@vger.kernel.org
+> > > Cc: netdev@vger.kernel.org
+> > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > > ---
+> > >  net/bluetooth/l2cap_core.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+> > > index ae78490ecd3d4..82279c5919fd8 100644
+> > > --- a/net/bluetooth/l2cap_core.c
+> > > +++ b/net/bluetooth/l2cap_core.c
+> > > @@ -483,9 +483,7 @@ static void l2cap_chan_destroy(struct kref *kref)
+> > >
+> > >         BT_DBG("chan %p", chan);
+> > >
+> > > -       write_lock(&chan_list_lock);
+> > >         list_del(&chan->global_l);
+> > > -       write_unlock(&chan_list_lock);
+> > >
+> > >         kfree(chan);
+> > >  }
+> > > @@ -501,7 +499,9 @@ void l2cap_chan_put(struct l2cap_chan *c)
+> > >  {
+> > >         BT_DBG("chan %p orig refcnt %u", c, kref_read(&c->kref));
+> > >
+> > > +       write_lock(&chan_list_lock);
+> > >         kref_put(&c->kref, l2cap_chan_destroy);
+> > > +       write_unlock(&chan_list_lock);
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(l2cap_chan_put);
+> > >
+> > > --
+> > > 2.36.1.255.ge46751e96f-goog
+> > >
+> >
+> > I do not think this patch is correct.
+> >
+> > a kref does not need to be protected by a write lock.
+> >
+> > This might shuffle things enough to work around a particular repro you have.
+> >
+> > If the patch was correct why not protect kref_get() sides ?
+> >
+> > Before the &hdev->rx_work is scheduled (queue_work(hdev->workqueue,
+> > &hdev->rx_work),
+> > a reference must be taken.
+> >
+> > Then this reference must be released at the end of hci_rx_work() or
+> > when hdev->workqueue
+> > is canceled.
+> >
+> > This refcount is not needed _if_ the workqueue is properly canceled at
+> > device dismantle,
+> > in a synchronous way.
+> >
+> > I do not see this hdev->rx_work being canceled, maybe this is the real issue.
+> >
+> > There is a call to drain_workqueue() but this is not enough I think,
+> > because hci_recv_frame()
+> > can re-arm
+> >    queue_work(hdev->workqueue, &hdev->rx_work);
+>
+> I suspect this likely a refcount problem, we do l2cap_get_chan_by_scid:
+>
+> /* Find channel with given SCID.
+>  * Returns locked channel. */
+> static struct l2cap_chan *l2cap_get_chan_by_scid(struct l2cap_conn
+> *conn, u16 cid)
+>
+> So we return a locked channel but that doesn't prevent another thread
+> to call l2cap_chan_put which doesn't care about l2cap_chan_lock so
+> perhaps we actually need to host a reference while we have the lock,
+> at least we do something like that on l2cap_sock.c:
+>
+> l2cap_chan_hold(chan);
+> l2cap_chan_lock(chan);
+>
+> __clear_chan_timer(chan);
+> l2cap_chan_close(chan, ECONNRESET);
+> l2cap_sock_kill(sk);
+>
+> l2cap_chan_unlock(chan);
+> l2cap_chan_put(chan);
 
-> enable gcc-specific command line options from recent versions of gcc.
-> Options that are not compatible with clang cause trouble because most of
-> the tools that consume compile_commands.json only understand the clang
-> argument set. This is to be expected since it was the clang folks wrote
-> the spec to help make those tools come alive (and AFAIK all the tools
-> that consume the compilation database are closely linked to the clang
-> tools):
-> https://clang.llvm.org/docs/JSONCompilationDatabase.html
+Perhaps something like this:
 
-It sounds like the raison d'etre for this patch is to support
-clang-tidy and clang-scan kernel Makefile targets when CC=gcc?
+diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+index 09ecaf556de5..9050b6af3577 100644
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -111,7 +111,7 @@ static struct l2cap_chan
+*__l2cap_get_chan_by_scid(struct l2cap_conn *conn,
+ }
 
-In that case, it sounds like compile_commands.json should be post
-processed only when using those Makefile targets with CC=gcc.
+ /* Find channel with given SCID.
+- * Returns locked channel. */
++ * Returns a reference locked channel. */
+ static struct l2cap_chan *l2cap_get_chan_by_scid(struct l2cap_conn *conn,
+                                                 u16 cid)
+ {
+@@ -119,15 +119,17 @@ static struct l2cap_chan
+*l2cap_get_chan_by_scid(struct l2cap_conn *conn,
 
-As in:
+        mutex_lock(&conn->chan_lock);
+        c = __l2cap_get_chan_by_scid(conn, cid);
+-       if (c)
++       if (c) {
++               l2cap_chan_hold(c);
+                l2cap_chan_lock(c);
++       }
+        mutex_unlock(&conn->chan_lock);
 
-$ make compile_commands.json
+        return c;
+ }
 
-Should continue to produce a pristine/unmodified for this purpose
-compile_commands.json.  Only when:
+ /* Find channel with given DCID.
+- * Returns locked channel.
++ * Returns a reference locked channel.
+  */
+ static struct l2cap_chan *l2cap_get_chan_by_dcid(struct l2cap_conn *conn,
+                                                 u16 cid)
+@@ -136,8 +138,10 @@ static struct l2cap_chan
+*l2cap_get_chan_by_dcid(struct l2cap_conn *conn,
 
-$ make clang-analyzer
-or
-$ make clang-tidy
+        mutex_lock(&conn->chan_lock);
+        c = __l2cap_get_chan_by_dcid(conn, cid);
+-       if (c)
++       if (c) {
++               l2cap_chan_hold(c);
+                l2cap_chan_lock(c);
++       }
+        mutex_unlock(&conn->chan_lock);
 
-are run should we:
-1. produce a second compilation database in which we filter out
-command line flags clang cannot consume.
-2. pass that explicitly to clang-tidy via -p.
+        return c;
+@@ -4464,6 +4468,7 @@ static inline int l2cap_config_req(struct
+l2cap_conn *conn,
 
-I suspect that second compile_commands.json will have to be placed in
-a new dir as well.
+ unlock:
+        l2cap_chan_unlock(chan);
++       l2cap_chan_put(chan);
+        return err;
+ }
 
+@@ -4578,6 +4583,7 @@ static inline int l2cap_config_rsp(struct
+l2cap_conn *conn,
 
-I'm sympathetic to the intent of the series, but I think it corrupts
-the compilation_commands.json for gcc builds in order to support one
-new use case, at the cost of harming existing and future potential use
-cases by stripping out information that is precise. Such loss of
-fidelity makes me uncomfortable accepting this change as is.
+ done:
+        l2cap_chan_unlock(chan);
++       l2cap_chan_put(chan);
+        return err;
+ }
+
+@@ -5305,6 +5311,7 @@ static inline int l2cap_move_channel_req(struct
+l2cap_conn *conn,
+        l2cap_send_move_chan_rsp(chan, result);
+
+        l2cap_chan_unlock(chan);
++       l2cap_chan_put(chan);
+
+        return 0;
+ }
+@@ -5397,6 +5404,7 @@ static void l2cap_move_continue(struct
+l2cap_conn *conn, u16 icid, u16 result)
+        }
+
+        l2cap_chan_unlock(chan);
++       l2cap_chan_put(chan);
+ }
+
+ static void l2cap_move_fail(struct l2cap_conn *conn, u8 ident, u16 icid,
+@@ -5489,6 +5497,7 @@ static int l2cap_move_channel_confirm(struct
+l2cap_conn *conn,
+        l2cap_send_move_chan_cfm_rsp(conn, cmd->ident, icid);
+
+        l2cap_chan_unlock(chan);
++       l2cap_chan_put(chan);
+
+        return 0;
+ }
+@@ -5524,6 +5533,7 @@ static inline int
+l2cap_move_channel_confirm_rsp(struct l2cap_conn *conn,
+        }
+
+        l2cap_chan_unlock(chan);
++       l2cap_chan_put(chan);
+
+        return 0;
+ }
+@@ -5896,12 +5906,11 @@ static inline int l2cap_le_credits(struct
+l2cap_conn *conn,
+        if (credits > max_credits) {
+                BT_ERR("LE credits overflow");
+                l2cap_send_disconn_req(chan, ECONNRESET);
+-               l2cap_chan_unlock(chan);
+
+                /* Return 0 so that we don't trigger an unnecessary
+                 * command reject packet.
+                 */
+-               return 0;
++               goto unlock;
+        }
+
+        chan->tx_credits += credits;
+@@ -5912,7 +5921,9 @@ static inline int l2cap_le_credits(struct
+l2cap_conn *conn,
+        if (chan->tx_credits)
+                chan->ops->resume(chan);
+
++unlock:
+        l2cap_chan_unlock(chan);
++       l2cap_chan_put(chan);
+
+        return 0;
+ }
+@@ -7598,6 +7609,7 @@ static void l2cap_data_channel(struct l2cap_conn
+*conn, u16 cid,
+
+ done:
+        l2cap_chan_unlock(chan);
++       l2cap_chan_put(chan);
+ }
+
+ static void l2cap_conless_channel(struct l2cap_conn *conn, __le16 psm,
+
 
 >
-> Let's fix this by adding code to gen_compile_commands.py that will
-> automatically strip not-supported-by-clang command line options from
-> the compilation database. This allows the common consumers of the
-> compilation database (clang-tidy, clangd code completion engine,
-> CodeChecker, etc) to work without requiring the developer to build the
-> kernel using a different C compiler.
->
-> In theory this could cause problems if/when a not-based-on-clang tool
-> emerges that reuses the clang compilation database format. This is not
-> expected to be a problem in practice since the heuristics added to
-> gen_compile_commands.py are pretty conservative. The should only ever
-> disable some rather esoteric compiler options ("they must be esoteric
-> otherwise clang would have implemented them..."). It is hard to reason
-> about what will/won't break tools that are not yet written but we can
-> hope the removing esoteric options will be benign!
->
-> Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
-> ---
->  Makefile                                    |  5 +-
->  scripts/clang-tools/gen_compile_commands.py | 71 ++++++++++++++++++++-
->  2 files changed, 74 insertions(+), 2 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 513c1fbf7888..9ea6867aaf9c 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1886,8 +1886,11 @@ nsdeps: modules
->  # Clang Tooling
->  # ---------------------------------------------------------------------------
->
-> +ifdef CONFIG_CC_IS_GCC
-> +gen_compile_commands-flags += --gcc
-> +endif
->  quiet_cmd_gen_compile_commands = GEN     $@
-> -      cmd_gen_compile_commands = $(PYTHON3) $< -a $(AR) -o $@ $(filter-out $<, $(real-prereqs))
-> +      cmd_gen_compile_commands = $(PYTHON3) $< $(gen_compile_commands-flags) -a $(AR) -o $@ $(filter-out $<, $(real-prereqs))
->
->  $(extmod_prefix)compile_commands.json: scripts/clang-tools/gen_compile_commands.py \
->         $(if $(KBUILD_EXTMOD),,$(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS)) \
-> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-> index 1d1bde1fd45e..02f6a1408968 100755
-> --- a/scripts/clang-tools/gen_compile_commands.py
-> +++ b/scripts/clang-tools/gen_compile_commands.py
-> @@ -56,6 +56,9 @@ def parse_arguments():
->      ar_help = 'command used for parsing .a archives'
->      parser.add_argument('-a', '--ar', type=str, default='llvm-ar', help=ar_help)
->
-> +    gcc_help = 'tidy up gcc invocations to work with clang'
-> +    parser.add_argument('-g', '--gcc', action='store_true', help=gcc_help)
-> +
->      paths_help = ('directories to search or files to parse '
->                    '(files should be *.o, *.a, or modules.order). '
->                    'If nothing is specified, the current directory is searched')
-> @@ -67,6 +70,7 @@ def parse_arguments():
->              os.path.abspath(args.directory),
->              args.output,
->              args.ar,
-> +            args.gcc,
->              args.paths if len(args.paths) > 0 else [args.directory])
->
->
-> @@ -196,10 +200,73 @@ def process_line(root_directory, command_prefix, file_path):
->          'command': prefix + file_path,
->      }
->
-> +clang_options = {}
-> +
-> +def check_clang_compatibility(target, flag):
-> +    """Check that the supplied flag does not cause clang to return an error.
-> +
-> +    The results of the check, which is expensive if repeated many times, is
-> +    cached in the clang_options variable and reused in subsequent calls.
-> +    """
-> +    global clang_options
-> +    if flag in clang_options:
-> +        return clang_options[flag]
-> +
-> +    c = 'echo "int f;"| clang {} {} - -E > /dev/null 2>&1'.format(target, flag)
-> +    rc = os.system(c)
-> +    compatible = rc == 0
-> +    clang_options[flag] = compatible
-> +    if not compatible:
-> +        logging.info('Not supported by clang: %s', flag)
-> +
-> +    return compatible
-> +
-> +def make_clang_compatible(entry):
-> +    """Scans and transforms the command line options to make the invocation
-> +    compatible with clang.
-> +
-> +    There are two main heuristics:
-> +
-> +    1. Use the gcc compiler prefix to populate the clang --target variable
-> +       (which is needed for cross-compiles to work correctly)
-> +
-> +    2. Scan for any -f or -m options that are not supported by clang and
-> +       discard them.
-> +
-> +    This allows us to use clang tools on our kernel builds even if we built the
-> +    kernel using gcc.
-> +    """
-> +    newcmd = []
-> +    target = ''
-> +
-> +    # Splitting the command line like this isn't going to handle quoted
-> +    # strings transparently. However assuming the quoted string does not
-> +    # contain tabs, double spaces or words commencing with '-f' or '-c'
-> +    # (which is fairly reasonable) then this simple approach will be
-> +    # sufficient.
-> +    atoms = entry['command'].split()
-> +
-> +    # Use the compiler prefix as the clang --target variable
-> +    if atoms[0].endswith('-gcc'):
-> +        target = '--target=' + os.path.basename(atoms[0][:-4])
-> +        newcmd.append(atoms[0])
-> +        newcmd.append(target)
-> +        del atoms[0]
-> +
-> +    # Drop incompatible flags that provoke fatal errors for clang. Note that
-> +    # unsupported -Wenable-warning flags are not fatal so we don't have to
-> +    # worry about those.
-> +    for atom in atoms:
-> +        if atom.startswith('-f') or atom.startswith('-m'):
-> +            if not check_clang_compatibility(target, atom):
-> +                continue
-> +        newcmd.append(atom)
-> +
-> +    entry['command'] = ' '.join(newcmd)
->
->  def main():
->      """Walks through the directory and finds and parses .cmd files."""
-> -    log_level, directory, output, ar, paths = parse_arguments()
-> +    log_level, directory, output, ar, gcc, paths = parse_arguments()
->
->      level = getattr(logging, log_level)
->      logging.basicConfig(format='%(levelname)s: %(message)s', level=level)
-> @@ -232,6 +299,8 @@ def main():
->                      try:
->                          entry = process_line(directory, result.group(1),
->                                               result.group(2))
-> +                        if gcc:
-> +                            make_clang_compatible(entry)
->                          compile_commands.append(entry)
->                      except ValueError as err:
->                          logging.info('Could not add line from %s: %s',
 > --
-> 2.35.1
->
+> Luiz Augusto von Dentz
+
 
 
 -- 
-Thanks,
-~Nick Desaulniers
+Luiz Augusto von Dentz

@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFA255D7EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE5955DC2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242795AbiF1Btz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 21:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
+        id S242763AbiF1Bvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 21:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240857AbiF1Btw (ORCPT
+        with ESMTP id S231941AbiF1Bvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 21:49:52 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0A4B12;
-        Mon, 27 Jun 2022 18:49:50 -0700 (PDT)
-X-UUID: 8b1f629551ae440989a800a6c41902d9-20220628
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:f4d558a4-8fa9-494d-9c42-0fce62b98fea,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:87442a2,CLOUDID:b2edcb62-0b3f-4b2c-b3a6-ed5c044366a0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 8b1f629551ae440989a800a6c41902d9-20220628
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <peter.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 444901962; Tue, 28 Jun 2022 09:49:48 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 28 Jun 2022 09:49:47 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 28 Jun 2022 09:49:46 +0800
-Subject: Re: [PATCH v1] PM-runtime: Check supplier_preactivated before release
- supplier
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <matthias.bgg@gmail.com>, <len.brown@intel.com>, <pavel@ucw.cz>,
-        <rafael@kernel.org>, <stanley.chu@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
-        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
-        <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
-        <chun-hung.wu@mediatek.com>, <alice.chao@mediatek.com>,
-        <cc.chou@mediatek.com>, <chaotian.jing@mediatek.com>,
-        <jiajie.hao@mediatek.com>, <powen.kao@mediatek.com>,
-        <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
-        <tun-yu.yu@mediatek.com>
-References: <20220613120755.14306-1-peter.wang@mediatek.com>
- <Yrm7QSRXKZg4/q7s@kroah.com>
-From:   Peter Wang <peter.wang@mediatek.com>
-Message-ID: <9946359f-8ceb-2bad-9a4e-1e8a1dfd24c6@mediatek.com>
-Date:   Tue, 28 Jun 2022 09:49:46 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 27 Jun 2022 21:51:42 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74363BCA;
+        Mon, 27 Jun 2022 18:51:41 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id g26so22701005ejb.5;
+        Mon, 27 Jun 2022 18:51:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MhFY3rtD/q7Wr+T8t3g4+nPTox6Sro+VzMF9uZtA8u8=;
+        b=i0BZLfnwJi1O9knf5euVJp2mlPjEaMiCI5S2XfK+mLGp8LqTLC+E6JySPg82hQxXIM
+         eJmwFkt5yvo+Og6wd2+Qr87/oc2o9L72zknGMCa5xgyUGk8hhyLCaIUaYnnekpLRioCi
+         hxVKM2k+7hTRsLSKZHyX4rPIm6+XSR8cBZYt85fflMiXXCU7UE5uMYwK1fLwndfaKwei
+         212g1zmz4OR5ylMPwsLp9q3tJj4zkZuMuf5sH+JDhHMgCfrbNsKmfnkMJGo8qadH+TLE
+         baUz5h1XXvgI9vmlVbO4tQWZXvh8SnTmbQnycHPsZQRZWDEM28IzCybtpZ5qQxdEiwLh
+         Q2CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MhFY3rtD/q7Wr+T8t3g4+nPTox6Sro+VzMF9uZtA8u8=;
+        b=Jv8w5mcfoeSCcV9gDkdMAj8Xrmv0+ADI2WMjVKKjHg53grZtg+ze494sL9o17PyHMY
+         6ysu8gD4X4JEynk5z7K9NZgVjUmRy8gFLESZmTkkfLjbHa+Pun+QS/SSbdrVezmrowDp
+         62PciMP+00xZNvAZOMd55cHufYZ1WAyDJOeVxj5saHlAuCzi5UL0vd6KbqffhfNFCMSZ
+         S1Sq9CRa4IdNWUQGdnknCPpZpDVt1LzW+Q7cgfzXZ3CZgL0cQBeZ/W71eo2ASCuqe5Zt
+         uOtMm1TPnS/qDplcq/+TvfsxwVesboxFC6eJ7/tjYWnHneGiuLF3HXWmepmrJdi1kF+N
+         vwSw==
+X-Gm-Message-State: AJIora/Y2uz+1wU8WTA/kY9+eIb1uV0L7D6dRaZuSgqehgMVVjSwlwd6
+        P2fj9u63K9SPUzyISkZyteD+tCC0v/rj5ouhldA=
+X-Google-Smtp-Source: AGRyM1vQ2Bdgdo2pPyQJ1+rY4Q94dbyrrntHYe0A7MBoP8z3ESjVHhfvMbtTUXqcFJcKL7eWZCpgh9aYlLOeCsQg/sw=
+X-Received: by 2002:a17:906:3404:b0:726:3afc:fe28 with SMTP id
+ c4-20020a170906340400b007263afcfe28mr15560606ejb.340.1656381099869; Mon, 27
+ Jun 2022 18:51:39 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <Yrm7QSRXKZg4/q7s@kroah.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+References: <20220626031301.60390-1-nashuiliang@gmail.com> <CAEf4BzbnEFqdEZTNRWf8vJ8hExpKkg_rwgoQE-cyyU7fDafxZw@mail.gmail.com>
+In-Reply-To: <CAEf4BzbnEFqdEZTNRWf8vJ8hExpKkg_rwgoQE-cyyU7fDafxZw@mail.gmail.com>
+From:   Chuang W <nashuiliang@gmail.com>
+Date:   Tue, 28 Jun 2022 09:51:28 +0800
+Message-ID: <CACueBy5zdsVz-CVhtY0ekKDbrmF3ra6YSBuPWQK_qxSb6dXsxA@mail.gmail.com>
+Subject: Re: [PATCH v3] libbpf: Cleanup the legacy kprobe_event on failed add/attach_event()
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jingren Zhou <zhoujingren@didiglobal.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,67 +75,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andrii,
 
-On 6/27/22 10:14 PM, Greg KH wrote:
-> On Mon, Jun 13, 2022 at 08:07:55PM +0800, peter.wang@mediatek.com wrote:
->> From: Peter Wang <peter.wang@mediatek.com>
->>
->> With divice link of DL_FLAG_PM_RUNTIME, if consumer call pm_runtime_get_suppliers
->> to prevent supplier enter suspend, pm_runtime_release_supplier should
->> check supplier_preactivated before let supplier enter suspend.
->>
->> If the link is drop or release, bypass check supplier_preactivated.
->>
->> Signed-off-by: Peter Wang <peter.wang@mediatek.com>
->> ---
->>   drivers/base/core.c          |  2 +-
->>   drivers/base/power/runtime.c | 15 ++++++++++++---
->>   include/linux/pm_runtime.h   |  5 +++--
->>   3 files changed, 16 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/base/core.c b/drivers/base/core.c
->> index 7cd789c4985d..3b9cc559928f 100644
->> --- a/drivers/base/core.c
->> +++ b/drivers/base/core.c
->> @@ -486,7 +486,7 @@ static void device_link_release_fn(struct work_struct *work)
->>   	/* Ensure that all references to the link object have been dropped. */
->>   	device_link_synchronize_removal();
->>   
->> -	pm_runtime_release_supplier(link, true);
->> +	pm_runtime_release_supplier(link, true, true);
->>   
->>   	put_device(link->consumer);
->>   	put_device(link->supplier);
->> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
->> index 676dc72d912d..3c4f425937a1 100644
->> --- a/drivers/base/power/runtime.c
->> +++ b/drivers/base/power/runtime.c
->> @@ -314,10 +314,19 @@ static int rpm_get_suppliers(struct device *dev)
->>    * and if @check_idle is set, check if that device is idle (and so it can be
->>    * suspended).
->>    */
->> -void pm_runtime_release_supplier(struct device_link *link, bool check_idle)
->> +void pm_runtime_release_supplier(struct device_link *link, bool check_idle,
->> +	bool drop)
-> This is just making this horrible api even worse.  Now there are 2
-> boolean flags required, 2 more than really should even be here at all.
-> Every time you see this function being used, you will now have to look
-> up the definition  to see what it really does.
+On Tue, Jun 28, 2022 at 5:27 AM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> Please make a new function that calls the internal function with the
-> flag set properly, so that it is obvious what is happening when the call
-> is made.
+> On Sat, Jun 25, 2022 at 8:13 PM Chuang W <nashuiliang@gmail.com> wrote:
+> >
+> > Before the 0bc11ed5ab60 commit ("kprobes: Allow kprobes coexist with
+> > livepatch"), in a scenario where livepatch and kprobe coexist on the
+> > same function entry, the creation of kprobe_event using
+> > add_kprobe_event_legacy() will be successful, at the same time as a
+> > trace event (e.g. /debugfs/tracing/events/kprobe/XXX) will exist, but
+> > perf_event_open() will return an error because both livepatch and kprobe
+> > use FTRACE_OPS_FL_IPMODIFY. As follows:
+> >
+> > 1) add a livepatch
+> >
+> > $ insmod livepatch-XXX.ko
+> >
+> > 2) add a kprobe using tracefs API (i.e. add_kprobe_event_legacy)
+> >
+> > $ echo 'p:mykprobe XXX' > /sys/kernel/debug/tracing/kprobe_events
+> >
+> > 3) enable this kprobe (i.e. sys_perf_event_open)
+> >
+> > This will return an error, -EBUSY.
+> >
+> > On Andrii Nakryiko's comment, few error paths in
+> > bpf_program__attach_kprobe_opts() which should need to call
+> > remove_kprobe_event_legacy().
+> >
+> > With this patch, whenever an error is returned after
+> > add_kprobe_event_legacy() or bpf_program__attach_perf_event_opts(), this
+> > ensures that the created kprobe_event is cleaned.
+> >
+> > Signed-off-by: Chuang W <nashuiliang@gmail.com>
 >
-> and really, the same thing should be done for the check_idle flag,
-> that's not good either.
+> Is this your full name? Signed-off-by is required to have a full name
+> of a person, please update if it's not
 >
-> thanks,
+> > Signed-off-by: Jingren Zhou <zhoujingren@didiglobal.com>
+> > ---
+> > V2->v3:
+> > - add detail commits
+> > - call remove_kprobe_event_legacy() on failed bpf_program__attach_perf_event_opts()
+> >
+> >  tools/lib/bpf/libbpf.c | 15 ++++++++++++---
+> >  1 file changed, 12 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index 49e359cd34df..038b0cb3313f 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -10811,10 +10811,11 @@ static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
+> >         }
+> >         type = determine_kprobe_perf_type_legacy(probe_name, retprobe);
+> >         if (type < 0) {
+> > +               err = type;
+> >                 pr_warn("failed to determine legacy kprobe event id for '%s+0x%zx': %s\n",
+> >                         kfunc_name, offset,
+> > -                       libbpf_strerror_r(type, errmsg, sizeof(errmsg)));
+> > -               return type;
+> > +                       libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
+> > +               goto clear_kprobe_event;
+> >         }
+> >         attr.size = sizeof(attr);
+> >         attr.config = type;
+> > @@ -10828,9 +10829,14 @@ static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
+> >                 err = -errno;
+> >                 pr_warn("legacy kprobe perf_event_open() failed: %s\n",
+> >                         libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
+> > -               return err;
+> > +               goto clear_kprobe_event;
+> >         }
+> >         return pfd;
+> > +
+> > +clear_kprobe_event:
+> > +       /* Clear the newly added legacy kprobe_event */
+> > +       remove_kprobe_event_legacy(probe_name, retprobe);
+> > +       return err;
+> >  }
+> >
+>
+> this part looks good
+>
+>
+> >  struct bpf_link *
+> > @@ -10899,6 +10905,9 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
+> >
+> >         return link;
+> >  err_out:
+> > +       /* Clear the newly added legacy kprobe_event */
+> > +       if (legacy)
+> > +               remove_kprobe_event_legacy(legacy_probe, retprobe);
+>
+> this one will call remove_kprobe_event_legacy() even if we failed to
+> create that kprobe_event in the first place. So let's maybe add
+>
+> err_clean_legacy:
+>     if (legacy)
+>          remove_kprobe_event_legacy(legacy_probe, retprobe);
+>
+> before err_out: and goto there if we fail to attach (but not if we
+> fail to create pfd)?
+>
 
-Hi Gerg,
+Nice, I will modify it.
 
-Good point! you are right, I wont change api next version
+>
+> Also, looking through libbpf code, I realized that we have exactly the
+> same problem for uprobes, so please add same fixed to
+> perf_event_uprobe_open_legacy and attach_uprobe_opts. Thanks!
+>
 
-Thank you for review
+Oh, yes. I also noticed this problem for uprobes, I was planning to
+submit a patch for uprobes.
+Do you think I should submit another patch for uprobes or combine
+kprobes and uprobes into one?
 
-
-> greg k-h
+Thanks,
+>
+>
+> >         free(legacy_probe);
+> >         return libbpf_err_ptr(err);
+> >  }
+> > --
+> > 2.34.1
+> >

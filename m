@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F41C55C718
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD1055C129
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238778AbiF1FjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 01:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51908 "EHLO
+        id S244908AbiF1Fk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 01:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233378AbiF1FjJ (ORCPT
+        with ESMTP id S244340AbiF1FkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 01:39:09 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E652513E25
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 22:39:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656394748; x=1687930748;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ir8lmK7C7d8cLKlhbPdCb+2NADN21Wc5Vd2lMQ7GZVE=;
-  b=Ntd5w1A7AJ5RZjW5tE+m8nlPY7kcp8sHkoZh2Ceup/ZvkrrD2uDYtjoD
-   0mvWQWltp420TC1p8zc6M/6KGYrufiYB0wbwJBbB9eDevK17x4ttJeJUd
-   DXD6S+V5msK8N/+Kd3x/xwXi/1CWCzS+0gwVVJPnUl85L3rgQeIFKqmxO
-   Sdz8FXbT2BTJE/sFZ61iPZInXtcDY5kJLmjJ2GuohmxhP691E0/izguc3
-   67KoVzDYunWniuiVqHLKUzrehtM7tD9/6L0AC8ez7SJZ7oCEWwUTuAir9
-   MXdgC8+4pQ8Tos0LATwDsNkDB7gYWT5v7uL/hQmpvpjdiQFwKvQnuNU4v
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="343328114"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="343328114"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 22:39:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="587737228"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 27 Jun 2022 22:39:07 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o63wI-0009Yh-Gx;
-        Tue, 28 Jun 2022 05:39:06 +0000
-Date:   Tue, 28 Jun 2022 13:38:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: arch/arm/mach-pxa/corgi_pm.c:137:15: warning: no previous prototype
- for function 'corgipm_read_devdata'
-Message-ID: <202206281334.Hj0eme5G-lkp@intel.com>
+        Tue, 28 Jun 2022 01:40:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E73313E8B;
+        Mon, 27 Jun 2022 22:40:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C24EB81C55;
+        Tue, 28 Jun 2022 05:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 12192C3411D;
+        Tue, 28 Jun 2022 05:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656394815;
+        bh=Iu6dQkyIEKcoDAXZCseTzJDUCVtlpQuhsunv1Q5yZ44=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Gr1kdIRdMHYnMXLoSWSPl9JuYV1wyjd945xJRFhoyve58wEypaDN9SVWlxytyA4Pj
+         Mw8WbY6VKI0u71jeQM4xtrWgdMudo4kbaH3FiRbMYe5MHbJ9YngLkhMqrmZjJyPKRk
+         ZLTwW1qAckmwEj1yetJOMnxi1DdFbKQsEQJm6AhQmQKkUYUy9FjIj8GQ7pGylqckSB
+         LsD6QjPb+E6OD77t7T8WMpXlEuDddgz3seH5jnnRZWtvSxg1fitJMeVaeB923zqZja
+         HnfR/RKL9Y4+fW1feDYU5UnVatawVotyWfRAWguS8udNcSwlRZF7tu1DW0IgvxDbRJ
+         6JaTRHsNxeh3A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F0B52E49FA1;
+        Tue, 28 Jun 2022 05:40:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: axienet: Modify function description
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165639481498.10558.13866676954785753975.git-patchwork-notify@kernel.org>
+Date:   Tue, 28 Jun 2022 05:40:14 +0000
+References: <20220624013114.1913-1-wangdeming@inspur.com>
+In-Reply-To: <20220624013114.1913-1-wangdeming@inspur.com>
+To:     Deming Wang <wangdeming@inspur.com>
+Cc:     radhey.shyam.pandey@xilinx.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        michal.simek@xilinx.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,71 +59,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   941e3e7912696b9fbe3586083a7c2e102cee7a87
-commit: 8c1fb11b8a77dc489a8ef6d96c38c1297b629d06 ARM: s3c: enable s3c24xx multiplatform support
-date:   3 months ago
-config: arm-buildonly-randconfig-r001-20220627 (https://download.01.org/0day-ci/archive/20220628/202206281334.Hj0eme5G-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 016342e319fd31e41cf5ed16a6140a8ea2de74dd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8c1fb11b8a77dc489a8ef6d96c38c1297b629d06
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 8c1fb11b8a77dc489a8ef6d96c38c1297b629d06
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Hello:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-All warnings (new ones prefixed by >>):
+On Thu, 23 Jun 2022 21:31:14 -0400 you wrote:
+> Delete duplicate words of "the".
+> 
+> Signed-off-by: Deming Wang <wangdeming@inspur.com>
+> ---
+>  drivers/net/ethernet/xilinx/xilinx_axienet_mdio.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
->> arch/arm/mach-pxa/corgi_pm.c:137:15: warning: no previous prototype for function 'corgipm_read_devdata' [-Wmissing-prototypes]
-   unsigned long corgipm_read_devdata(int type)
-                 ^
-   arch/arm/mach-pxa/corgi_pm.c:137:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long corgipm_read_devdata(int type)
-   ^
-   static 
-   1 warning generated.
+Here is the summary with links:
+  - net: axienet: Modify function description
+    https://git.kernel.org/netdev/net-next/c/e3b64a7a5af3
 
-
-vim +/corgipm_read_devdata +137 arch/arm/mach-pxa/corgi_pm.c
-
-d72f25b0dfb080 Richard Purdie 2005-11-13  136  
-b7557de41a0434 Richard Purdie 2006-01-05 @137  unsigned long corgipm_read_devdata(int type)
-d72f25b0dfb080 Richard Purdie 2005-11-13  138  {
-b7557de41a0434 Richard Purdie 2006-01-05  139  	switch(type) {
-b7557de41a0434 Richard Purdie 2006-01-05  140  	case SHARPSL_STATUS_ACIN:
-9bf448c66d4b4c Haojian Zhuang 2011-10-17  141  		return !gpio_get_value(CORGI_GPIO_AC_IN);
-b7557de41a0434 Richard Purdie 2006-01-05  142  	case SHARPSL_STATUS_LOCK:
-05732d7eb0d7f7 Eric Miao      2010-07-04  143  		return gpio_get_value(sharpsl_pm.machinfo->gpio_batlock);
-b7557de41a0434 Richard Purdie 2006-01-05  144  	case SHARPSL_STATUS_CHRGFULL:
-05732d7eb0d7f7 Eric Miao      2010-07-04  145  		return gpio_get_value(sharpsl_pm.machinfo->gpio_batfull);
-b7557de41a0434 Richard Purdie 2006-01-05  146  	case SHARPSL_STATUS_FATAL:
-05732d7eb0d7f7 Eric Miao      2010-07-04  147  		return gpio_get_value(sharpsl_pm.machinfo->gpio_fatal);
-b7557de41a0434 Richard Purdie 2006-01-05  148  	case SHARPSL_ACIN_VOLT:
-b7557de41a0434 Richard Purdie 2006-01-05  149  		return sharpsl_pm_pxa_read_max1111(MAX1111_ACIN_VOLT);
-b7557de41a0434 Richard Purdie 2006-01-05  150  	case SHARPSL_BATT_TEMP:
-b7557de41a0434 Richard Purdie 2006-01-05  151  		return sharpsl_pm_pxa_read_max1111(MAX1111_BATT_TEMP);
-b7557de41a0434 Richard Purdie 2006-01-05  152  	case SHARPSL_BATT_VOLT:
-b7557de41a0434 Richard Purdie 2006-01-05  153  	default:
-b7557de41a0434 Richard Purdie 2006-01-05  154  		return sharpsl_pm_pxa_read_max1111(MAX1111_BATT_VOLT);
-b7557de41a0434 Richard Purdie 2006-01-05  155  	}
-d72f25b0dfb080 Richard Purdie 2005-11-13  156  }
-d72f25b0dfb080 Richard Purdie 2005-11-13  157  
-
-:::::: The code at line 137 was first introduced by commit
-:::::: b7557de41a04346cb545d4dda7088760cb96e713 [ARM] 3228/1: SharpSL: Move PM code to arch/arm/common
-
-:::::: TO: Richard Purdie <rpurdie@rpsys.net>
-:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

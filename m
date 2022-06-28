@@ -2,39 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A594F55EDEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B79FB55EDF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbiF1TnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 15:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
+        id S230499AbiF1TnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 15:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiF1TmS (ORCPT
+        with ESMTP id S231928AbiF1TmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 15:42:18 -0400
+        Tue, 28 Jun 2022 15:42:24 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71713ED0F;
-        Tue, 28 Jun 2022 12:35:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597753EF05;
+        Tue, 28 Jun 2022 12:35:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1656444898; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1656444899; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/DqLSN0ZI1L80hbW843b3AJqZYt53pWxvMiWlFEeDak=;
-        b=BRBskgCyDHG62SuLqRDS2oJaecw+kB49eeORqmyKT9AlR9A+2AgnI/h9+63fmXIzZwgePy
-        2XfylxKSAwXSp5/9qD09QddzpxmeOjPFSS+8W6+l1EYg05nMsHKKpzwTLJBwAkgIbYrJ9x
-        UTykPEXqNmEKQxowVK4wyS7jlOYcL40=
+        bh=yujh1grN3o7CefTxugVeGaE4Abhbtk5+SE7AhEnZWWQ=;
+        b=kWcsUfWDTKRWDnabuPUWr73Dthy6mrja1T6Pkvhn47DyiA8e/Fgd6+Qja8PdcsBPQlMhxP
+        lObAd72hMk82QpUkH9fpq1hbmWaJNSqTmyLdauLmxHcq+vpGmh1Dj32xoHDCHAJJ2tVs7c
+        bsRw2V0GDdBdw/0PE5sni/58G3IdK7U=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>
-Subject: [PATCH 1/8] watchdog: bcm7038_wdt: Remove #ifdef guards for PM related functions
-Date:   Tue, 28 Jun 2022 20:34:42 +0100
-Message-Id: <20220628193449.160585-2-paul@crapouillou.net>
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 2/8] watchdog: dw_wdt: Remove #ifdef guards for PM related functions
+Date:   Tue, 28 Jun 2022 20:34:43 +0100
+Message-Id: <20220628193449.160585-3-paul@crapouillou.net>
 In-Reply-To: <20220628193449.160585-1-paul@crapouillou.net>
 References: <20220628193449.160585-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -58,46 +55,42 @@ always compiled independently of any Kconfig option, and thanks to that
 bugs and regressions are easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
 ---
- drivers/watchdog/bcm7038_wdt.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/watchdog/dw_wdt.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/watchdog/bcm7038_wdt.c b/drivers/watchdog/bcm7038_wdt.c
-index 1ffcf6aca6ae..9388838899ac 100644
---- a/drivers/watchdog/bcm7038_wdt.c
-+++ b/drivers/watchdog/bcm7038_wdt.c
-@@ -192,7 +192,6 @@ static int bcm7038_wdt_probe(struct platform_device *pdev)
- 	return 0;
+diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
+index cd578843277e..060dae67d852 100644
+--- a/drivers/watchdog/dw_wdt.c
++++ b/drivers/watchdog/dw_wdt.c
+@@ -375,7 +375,6 @@ static irqreturn_t dw_wdt_irq(int irq, void *devid)
+ 	return IRQ_HANDLED;
  }
  
 -#ifdef CONFIG_PM_SLEEP
- static int bcm7038_wdt_suspend(struct device *dev)
+ static int dw_wdt_suspend(struct device *dev)
  {
- 	struct bcm7038_watchdog *wdt = dev_get_drvdata(dev);
-@@ -212,10 +211,9 @@ static int bcm7038_wdt_resume(struct device *dev)
+ 	struct dw_wdt *dw_wdt = dev_get_drvdata(dev);
+@@ -410,9 +409,8 @@ static int dw_wdt_resume(struct device *dev)
  
  	return 0;
  }
--#endif
+-#endif /* CONFIG_PM_SLEEP */
  
--static SIMPLE_DEV_PM_OPS(bcm7038_wdt_pm_ops, bcm7038_wdt_suspend,
--			 bcm7038_wdt_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(bcm7038_wdt_pm_ops,
-+				bcm7038_wdt_suspend, bcm7038_wdt_resume);
+-static SIMPLE_DEV_PM_OPS(dw_wdt_pm_ops, dw_wdt_suspend, dw_wdt_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(dw_wdt_pm_ops, dw_wdt_suspend, dw_wdt_resume);
  
- static const struct of_device_id bcm7038_wdt_match[] = {
- 	{ .compatible = "brcm,bcm6345-wdt" },
-@@ -236,7 +234,7 @@ static struct platform_driver bcm7038_wdt_driver = {
+ /*
+  * In case if DW WDT IP core is synthesized with fixed TOP feature disabled the
+@@ -710,7 +708,7 @@ static struct platform_driver dw_wdt_driver = {
  	.driver		= {
- 		.name		= "bcm7038-wdt",
- 		.of_match_table	= bcm7038_wdt_match,
--		.pm		= &bcm7038_wdt_pm_ops,
-+		.pm		= pm_sleep_ptr(&bcm7038_wdt_pm_ops),
- 	}
+ 		.name	= "dw_wdt",
+ 		.of_match_table = of_match_ptr(dw_wdt_of_match),
+-		.pm	= &dw_wdt_pm_ops,
++		.pm	= pm_sleep_ptr(&dw_wdt_pm_ops),
+ 	},
  };
- module_platform_driver(bcm7038_wdt_driver);
+ 
 -- 
 2.35.1
 

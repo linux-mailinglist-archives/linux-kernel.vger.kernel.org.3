@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7076055E2C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4603355DBAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343776AbiF1Ctm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 22:49:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
+        id S1343835AbiF1Ct4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 22:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245557AbiF1Ctj (ORCPT
+        with ESMTP id S1343779AbiF1Ctn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 22:49:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30490F29
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 19:49:38 -0700 (PDT)
+        Mon, 27 Jun 2022 22:49:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA68110BC
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 19:49:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C2ED5612C8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:49:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B7D9C341CC;
-        Tue, 28 Jun 2022 02:49:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A462DB819BA
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:49:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89F4BC341CB;
+        Tue, 28 Jun 2022 02:49:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656384577;
-        bh=/mCONiNi6+rv5jRQfmF6KXwkU9b+H5v0JzqV3x5Sslg=;
+        s=k20201202; t=1656384578;
+        bh=FHaTmUgiAOBou3jTjjclaGK3VUK22B3XVtClzeJg9Fc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jo4S5RZzxr1vph9vG7CefP5Cj1E24kKfkP/fvyN6K6toynuuXtPCubkrkEwjNmuDu
-         rhZgGvxnTL0E7TFOkF9DfB/bB/ZyBEfmBN20JuoPy3p2YUr/JtCSLvBoiWG7lYNxU5
-         CSGSck6NVcCODFpp5XIUeTVuqWdwsdE4EzY/R99j0D7r2oQg3pRj6UytmMWHh2RNST
-         Vwdui8G14JWJgpfAEtr6THk13InceS5ikD85SEDHZM++NeBIniU8LFylfDcwDPNa0T
-         UQqeiLfZovKKWpiqGmLx59i0mg9H0pWx2spe0ariAWEPEL2kiMHHsB9C8QLuDhnhHj
-         BNoUPWAOaqs/A==
+        b=gQxhQAG2zoXESXXAZf8lmkIYik3geUk7Eho3n/9JA1rZAGcOd2w4JIekhfKP7wlnT
+         ZHn5LiEq2lxMQ/ZsFlWOyolx9UsQ336GHsMsVIXDG6RN6LhzDj3x1ftz7zLVQhh6Ei
+         AS6McjGEkOPAcZ4J28f4gK0weU4RM/U1NZw6dY3nLyveBkj7I49lVA4r+aO6XSXkX8
+         Farv6DgXisjjiXJr3ZcDTQ/ouviidENW0S6UlFpYJvIkHXMqAWeYrowBSCQgxKcWrM
+         AhVq/lbzvfCzabrj423SqQbhbCUcA9jWlRiHMotu8XcCCH8u4aivG9C+O2hj82Z1tP
+         DuU51SM5bqrPw==
 From:   Tzung-Bi Shih <tzungbi@kernel.org>
 To:     bleung@chromium.org, groeck@chromium.org
 Cc:     chrome-platform@lists.linux.dev, tzungbi@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH 04/11] platform/chrome: cros_ec_proto: separate cros_ec_xfer_command()
-Date:   Tue, 28 Jun 2022 02:49:06 +0000
-Message-Id: <20220628024913.1755292-5-tzungbi@kernel.org>
+Subject: [RESEND PATCH 05/11] platform/chrome: cros_ec_proto: separate cros_ec_wait_until_complete()
+Date:   Tue, 28 Jun 2022 02:49:07 +0000
+Message-Id: <20220628024913.1755292-6-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
 In-Reply-To: <20220628024913.1755292-1-tzungbi@kernel.org>
 References: <20220628024913.1755292-1-tzungbi@kernel.org>
@@ -54,43 +54,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cros_ec_send_command() has extra logic to handle EC_RES_IN_PROGRESS.
-Separate the command transfer part into cros_ec_xfer_command() so
-that other functions can re-use it.
+EC returns EC_RES_IN_PROGRESS if the host command needs more time to
+complete.  Whenever receives the return code, cros_ec_send_command()
+sends EC_CMD_GET_COMMS_STATUS to query the command status.
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Separate cros_ec_wait_until_complete() from cros_ec_send_command().
+It sends EC_CMD_GET_COMMS_STATUS and waits until the previous command
+was completed, or encountered error, or timed out.
+
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
- drivers/platform/chrome/cros_ec_proto.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ drivers/platform/chrome/cros_ec_proto.c | 75 ++++++++++++-------------
+ 1 file changed, 36 insertions(+), 39 deletions(-)
 
 diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-index b02fd1414e52..0cec013be3d3 100644
+index 0cec013be3d3..466ecb063bd6 100644
 --- a/drivers/platform/chrome/cros_ec_proto.c
 +++ b/drivers/platform/chrome/cros_ec_proto.c
-@@ -107,7 +107,7 @@ static int prepare_tx_legacy(struct cros_ec_device *ec_dev,
- 	return EC_MSG_TX_PROTO_BYTES + msg->outsize;
+@@ -134,53 +134,50 @@ static int cros_ec_xfer_command(struct cros_ec_device *ec_dev, struct cros_ec_co
+ 	return ret;
  }
  
 -static int cros_ec_send_command(struct cros_ec_device *ec_dev, struct cros_ec_command *msg)
-+static int cros_ec_xfer_command(struct cros_ec_device *ec_dev, struct cros_ec_command *msg)
++static int cros_ec_wait_until_complete(struct cros_ec_device *ec_dev, uint32_t *result)
  {
- 	int ret;
- 	int (*xfer_fxn)(struct cros_ec_device *ec, struct cros_ec_command *msg);
-@@ -123,14 +123,21 @@ static int cros_ec_send_command(struct cros_ec_device *ec_dev, struct cros_ec_co
- 		 * the EC is trying to use protocol v2, on an underlying
- 		 * communication mechanism that does not support v2.
- 		 */
--		dev_err_once(ec_dev->dev,
--			     "missing EC transfer API, cannot send command\n");
-+		dev_err_once(ec_dev->dev, "missing EC transfer API, cannot send command\n");
- 		return -EIO;
+-	int ret = cros_ec_xfer_command(ec_dev, msg);
++	struct cros_ec_command *msg;
++	struct ec_response_get_comms_status *status;
++	int ret = 0, i;
++
++	msg = kzalloc(sizeof(*msg) + sizeof(*status), GFP_KERNEL);
++	if (!msg)
++		return -ENOMEM;
+ 
+-	if (msg->result == EC_RES_IN_PROGRESS) {
+-		int i;
+-		struct cros_ec_command *status_msg;
+-		struct ec_response_get_comms_status *status;
++	msg->command = EC_CMD_GET_COMMS_STATUS;
++	msg->insize = sizeof(*status);
+ 
+-		status_msg = kmalloc(sizeof(*status_msg) + sizeof(*status),
+-				     GFP_KERNEL);
+-		if (!status_msg)
+-			return -ENOMEM;
++	status = (struct ec_response_get_comms_status *)msg->data;
+ 
+-		status_msg->version = 0;
+-		status_msg->command = EC_CMD_GET_COMMS_STATUS;
+-		status_msg->insize = sizeof(*status);
+-		status_msg->outsize = 0;
++	/* Query the EC's status until it's no longer busy or we encounter an error. */
++	for (i = 0; i < EC_COMMAND_RETRIES; ++i) {
++		usleep_range(10000, 11000);
+ 
+-		/*
+-		 * Query the EC's status until it's no longer busy or
+-		 * we encounter an error.
+-		 */
+-		for (i = 0; i < EC_COMMAND_RETRIES; i++) {
+-			usleep_range(10000, 11000);
+-
+-			trace_cros_ec_request_start(status_msg);
+-			ret = (*xfer_fxn)(ec_dev, status_msg);
+-			trace_cros_ec_request_done(status_msg, ret);
+-			if (ret == -EAGAIN)
+-				continue;
+-			if (ret < 0)
+-				break;
+-
+-			msg->result = status_msg->result;
+-			if (status_msg->result != EC_RES_SUCCESS)
+-				break;
+-
+-			status = (struct ec_response_get_comms_status *)
+-				 status_msg->data;
+-			if (!(status->flags & EC_COMMS_STATUS_PROCESSING))
+-				break;
+-		}
++		ret = cros_ec_xfer_command(ec_dev, msg);
++		if (ret == -EAGAIN)
++			continue;
++		if (ret < 0)
++			break;
++
++		*result = msg->result;
++		if (msg->result != EC_RES_SUCCESS)
++			break;
+ 
+-		kfree(status_msg);
++		if (!(status->flags & EC_COMMS_STATUS_PROCESSING))
++			break;
  	}
  
- 	trace_cros_ec_request_start(msg);
- 	ret = (*xfer_fxn)(ec_dev, msg);
- 	trace_cros_ec_request_done(msg, ret);
-+
++	kfree(msg);
 +	return ret;
 +}
 +
@@ -98,9 +155,12 @@ index b02fd1414e52..0cec013be3d3 100644
 +{
 +	int ret = cros_ec_xfer_command(ec_dev, msg);
 +
- 	if (msg->result == EC_RES_IN_PROGRESS) {
- 		int i;
- 		struct cros_ec_command *status_msg;
++	if (msg->result == EC_RES_IN_PROGRESS)
++		ret = cros_ec_wait_until_complete(ec_dev, &msg->result);
++
+ 	return ret;
+ }
+ 
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

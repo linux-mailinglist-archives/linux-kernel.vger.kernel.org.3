@@ -2,125 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2BD55F21C
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 01:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BD455F219
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 01:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbiF1XuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 19:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
+        id S231441AbiF1XvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 19:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbiF1XuR (ORCPT
+        with ESMTP id S229450AbiF1XvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 19:50:17 -0400
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496503917E;
-        Tue, 28 Jun 2022 16:50:15 -0700 (PDT)
-Received: by mail-pj1-f51.google.com with SMTP id dw10-20020a17090b094a00b001ed00a16eb4so14300314pjb.2;
-        Tue, 28 Jun 2022 16:50:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SkmGWod1utKevQCGJfPo61gCs9z/vOcHKNlbLZdqJ/g=;
-        b=EJF6TCv+QdstsKjx9+Ll8rT4I6VWrHZYep+wOwkBBsFSeb+amOrTW3NOT8BhW4wqLP
-         7cSVavxsDll6Uwo4NYGjljVXHi1V6tQDTDrfJfLT/eL/P9aIUs8yEcIntYP6lGdv7Mr+
-         /X9wAwva55pxgYE2OP//TnhvIdpsBsShY+JFCz+O7rrgmrYuFfjAjckVHyj+OZZeerzw
-         RB4zIe5n3FjcZrUEim692E+sbgmQs+7LRgeOGZpBKIGzNplYTcfA2ic5EhH2WET824d6
-         kNsht2MEPw5/Ka8eK/0q1EiUwcsNcAFtDHDcZsZzbrZto1WZwx99Cn1jPjCgJ1R2pyS5
-         DH+g==
-X-Gm-Message-State: AJIora9Mu1rfq1bUY1HAr3jSQ8g4kSZySnMESMNgqLO8e3Cpy5Qg4G+7
-        laDnT5mynD00DGdfQ+iHaG4=
-X-Google-Smtp-Source: AGRyM1tnnxYUcJUuaxfKTDWykUv9yEoY4oVypBD4NkfNBc/cSEjrtWY1RB48/mXAX8MoxReO3fVA2g==
-X-Received: by 2002:a17:90b:4c0d:b0:1ed:2466:c0d3 with SMTP id na13-20020a17090b4c0d00b001ed2466c0d3mr2517451pjb.6.1656460214627;
-        Tue, 28 Jun 2022 16:50:14 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id cr9-20020a056a000f0900b0052594a3ba89sm6923182pfb.65.2022.06.28.16.50.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 16:50:13 -0700 (PDT)
-Message-ID: <fc47e8da-81d3-e563-0a17-4eb23db015cc@acm.org>
-Date:   Tue, 28 Jun 2022 16:50:09 -0700
+        Tue, 28 Jun 2022 19:51:08 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7580F39167;
+        Tue, 28 Jun 2022 16:51:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656460267; x=1687996267;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dI3HshvmacGZNIxLwiGqhbPCAPM3w/IVmJ97bcAXWCk=;
+  b=hhjVFAynyHs9OpKy+aVFKi2I3K3ni/ar5bQhJP9UuCcz9l3J3BfpElNz
+   lKv1EKUX2x+/a73+6gZAC+a6AsIgwTR3maTO/oCPvud7nwsQSX6pyqgxA
+   IlBUfZvu65JCSb5iGnqQhefc04RI1zVc77FMXljvPhk1tZYuDsEXltKbY
+   S8VZQLARDcJzDjHvDSf+NMbFdumF2xxymFcrvsJrtIjYrqzfPNOFv8bYJ
+   uo6+58jdxFaO5mJV7BcogMDLAo/YHi2iswD2T74tyaKNJAhddoHCb8f0P
+   FQd4EbRvpnggXvGoJ5kN5CopNQqbZ+dXkzKROcMjVgRk03BsJnAx/Q/3a
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="262285954"
+X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
+   d="scan'208";a="262285954"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 16:51:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
+   d="scan'208";a="617363723"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 28 Jun 2022 16:50:59 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 95514CE; Wed, 29 Jun 2022 02:51:05 +0300 (EEST)
+Date:   Wed, 29 Jun 2022 02:51:05 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kexec@lists.infradead.org
+Subject: Re: [PATCHv7 11/14] x86: Disable kexec if system has unaccepted
+ memory
+Message-ID: <20220628235105.z6ytdzxofrdkjti4@black.fi.intel.com>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-12-kirill.shutemov@linux.intel.com>
+ <6be29d38-5c93-7cc9-0de7-235d3f83773c@intel.com>
+ <87a6a3aw50.fsf@email.froward.int.ebiederm.org>
+ <20220624020005.txpxlsbjbebf6oq4@black.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 3/3] arch/*/: remove CONFIG_VIRT_TO_BUS
-Content-Language: en-US
-To:     Michael Schmitz <schmitzmic@gmail.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        scsi <linux-scsi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        Khalid Aziz <khalid@gonehiking.org>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Matt Wang <wwentao@vmware.com>,
-        Miquel van Smoorenburg <mikevs@xs4all.net>,
-        Mark Salyzyn <salyzyn@android.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Denis Efremov <efremov@linux.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-References: <20220617125750.728590-1-arnd@kernel.org>
- <20220617125750.728590-4-arnd@kernel.org>
- <6ba86afe-bf9f-1aca-7af1-d0d348d75ffc@gmail.com>
- <CAMuHMdVewn0OYA9oJfStk0-+vCKAUou+4Mvd5H2kmrSks1p5jg@mail.gmail.com>
- <b4e5a1c9-e375-63fb-ec7c-abb7384a6d59@gmail.com>
- <9289fd82-285c-035f-5355-4d70ce4f87b0@gmail.com>
- <CAMuHMdXUihTPD9A9hs__Xr2ErfOqkZ5KgCHqm+9HvRf39uS5kA@mail.gmail.com>
- <c30bc9b6-6ccd-8856-dc6b-4e16450dad6f@gmail.com>
- <CAK8P3a1rxEVwVF5U-PO6pQkfURU5Tro1Qp8SPUfHEV9jjWOmCQ@mail.gmail.com>
- <9f812d3d-0fcd-46e6-6d7e-6d4bf66f24ab@gmail.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <9f812d3d-0fcd-46e6-6d7e-6d4bf66f24ab@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220624020005.txpxlsbjbebf6oq4@black.fi.intel.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/22 16:09, Michael Schmitz wrote:
-> On 29/06/22 09:50, Arnd Bergmann wrote:
->> On Tue, Jun 28, 2022 at 11:03 PM Michael Schmitz 
->> <schmitzmic@gmail.com> wrote:
->>> On 28/06/22 19:03, Geert Uytterhoeven wrote:
->>>>> The driver allocates bounce buffers using kmalloc if it hits an
->>>>> unaligned data buffer - can such buffers still even happen these days?
->>>> No idea.
->>> Hmmm - I think I'll stick a WARN_ONCE() in there so we know whether this
->>> code path is still being used.
->> kmalloc() guarantees alignment to the next power-of-two size or
->> KMALLOC_MIN_ALIGN, whichever is bigger. On m68k this means it
->> is cacheline aligned.
+On Fri, Jun 24, 2022 at 05:00:05AM +0300, Kirill A. Shutemov wrote:
+> > If there is some deep and fundamental why this can not be supported
+> > then it probably makes sense to put some code in the arch_kexec_load
+> > hook that verifies that deep and fundamental reason is present.
 > 
-> And all SCSI buffers are allocated using kmalloc? No way at all for user 
-> space to pass unaligned data?
-> 
-> (SCSI is a weird beast - I have used a SCSI DAT tape driver many many 
-> years ago, which broke all sorts of assumptions about transfer block 
-> sizes ... but that might actually have been in the v0.99 days, many 
-> rewrites of SCSI midlevel ago).
-> 
-> Just being cautious, as getting any of this tested will be a stretch.
+> Sounds straight-forward. I can do this.
 
-An example of a user space application that passes an SG I/O data buffer 
-to the kernel that is aligned to a four byte boundary but not to an 
-eight byte boundary if the -s (scattered) command line option is used: 
-https://github.com/osandov/blktests/blob/master/src/discontiguous-io.cpp
+What about the patch below?
 
-Bart.
+From 0b758600e1eef5525f2a46630ab3559f118a272a Mon Sep 17 00:00:00 2001
+From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Date: Tue, 10 May 2022 19:02:18 +0300
+Subject: [PATCH] x86: Disable kexec if system has unaccepted memory
+
+On kexec, the target kernel has to know what memory has been accepted.
+Information in EFI map is out of date and cannot be used.
+
+boot_params.unaccepted_memory can be used to pass the bitmap between two
+kernels on kexec, but the use-case is not yet implemented.
+
+Disable kexec on machines with unaccepted memory for now.
+
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+---
+ arch/x86/mm/unaccepted_memory.c | 16 ++++++++++++++++
+ include/linux/kexec.h           |  2 ++
+ kernel/kexec.c                  |  4 ++++
+ kernel/kexec_core.c             |  5 +++++
+ kernel/kexec_file.c             |  4 ++++
+ 5 files changed, 31 insertions(+)
+
+diff --git a/arch/x86/mm/unaccepted_memory.c b/arch/x86/mm/unaccepted_memory.c
+index 566c3a72aee8..529c3fd1dab3 100644
+--- a/arch/x86/mm/unaccepted_memory.c
++++ b/arch/x86/mm/unaccepted_memory.c
+@@ -1,4 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0-only
++#include <linux/kexec.h>
+ #include <linux/memblock.h>
+ #include <linux/mm.h>
+ #include <linux/pfn.h>
+@@ -98,3 +99,18 @@ bool range_contains_unaccepted_memory(phys_addr_t start, phys_addr_t end)
+ 
+ 	return ret;
+ }
++
++#ifdef CONFIG_KEXEC_CORE
++int arch_kexec_load(void)
++{
++	if (!boot_params.unaccepted_memory)
++		return 0;
++
++	/*
++	 * TODO: Information on memory acceptance status has to be communicated
++	 * between kernel.
++	 */
++	pr_warn_once("Disable kexec: not yet supported on systems with unaccepted memory\n");
++	return -EOPNOTSUPP;
++}
++#endif
+diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+index ce6536f1d269..dfd9493d0b4b 100644
+--- a/include/linux/kexec.h
++++ b/include/linux/kexec.h
+@@ -396,6 +396,8 @@ void crash_free_reserved_phys_range(unsigned long begin, unsigned long end);
+ void arch_kexec_protect_crashkres(void);
+ void arch_kexec_unprotect_crashkres(void);
+ 
++int arch_kexec_load(void);
++
+ #ifndef page_to_boot_pfn
+ static inline unsigned long page_to_boot_pfn(struct page *page)
+ {
+diff --git a/kernel/kexec.c b/kernel/kexec.c
+index b5e40f069768..352b3742f07a 100644
+--- a/kernel/kexec.c
++++ b/kernel/kexec.c
+@@ -195,6 +195,10 @@ static inline int kexec_load_check(unsigned long nr_segments,
+ {
+ 	int result;
+ 
++	result = arch_kexec_load();
++	if (result)
++		return result;
++
+ 	/* We only trust the superuser with rebooting the system. */
+ 	if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)
+ 		return -EPERM;
+diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+index 4d34c78334ce..4d51b9271f6b 100644
+--- a/kernel/kexec_core.c
++++ b/kernel/kexec_core.c
+@@ -1238,3 +1238,8 @@ void __weak arch_kexec_protect_crashkres(void)
+ 
+ void __weak arch_kexec_unprotect_crashkres(void)
+ {}
++
++int __weak arch_kexec_load(void)
++{
++	return 0;
++}
+diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+index 145321a5e798..d531df94ffbb 100644
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@ -324,6 +324,10 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
+ 	int ret = 0, i;
+ 	struct kimage **dest_image, *image;
+ 
++	ret = arch_kexec_load();
++	if (ret)
++		return ret;
++
+ 	/* We only trust the superuser with rebooting the system. */
+ 	if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)
+ 		return -EPERM;
+-- 
+ Kirill A. Shutemov

@@ -2,57 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FAD455CF19
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 344AF55D2E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244206AbiF1FDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 01:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
+        id S244702AbiF1FD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 01:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244616AbiF1FCi (ORCPT
+        with ESMTP id S244642AbiF1FDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 01:02:38 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39AF2613F;
-        Mon, 27 Jun 2022 22:02:37 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25S52YCh027533;
-        Tue, 28 Jun 2022 00:02:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1656392554;
-        bh=rRr91cbrwvFz6l2mbIAWuAo3eEpVAxQU6875Im+lL54=;
-        h=From:To:CC:Subject:Date;
-        b=jUqJtlK81bHwjyc67afIcHEmgFN6/ebMRgw/Ej2Frcyj7lg5JkpJa7vcqTYFtZlLS
-         OUQtKGknbYoaWrfw2ceMBdmwUCRC2tgDqFbIQCh5cnrxLC20fSjkTBz6OURctSnY+L
-         GVtBw0cUDKZZncWiBKSgpaAPlKqzDEr0Jb1D2n5s=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25S52YsB017644
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 28 Jun 2022 00:02:34 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 28
- Jun 2022 00:02:33 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 28 Jun 2022 00:02:33 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25S52XWM114443;
-        Tue, 28 Jun 2022 00:02:33 -0500
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-To:     <dmaengine@vger.kernel.org>
-CC:     <peter.ujfalusi@gmail.com>, <vkoul@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <j-choudhary@ti.com>
-Subject: [PATCH] dmaengine: ti: k3-psil-j721s2: Add psil threads for sa2ul
-Date:   Tue, 28 Jun 2022 10:32:32 +0530
-Message-ID: <20220628050232.331956-1-j-choudhary@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 28 Jun 2022 01:03:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8122658;
+        Mon, 27 Jun 2022 22:03:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEAE261780;
+        Tue, 28 Jun 2022 05:03:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 063E4C3411D;
+        Tue, 28 Jun 2022 05:03:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656392602;
+        bh=s/7UWRYpLNUITYD4Wah1llQ/DrnlsZ0gFSv13KA7h6M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=W4rXtpZHkv38bXRfm/+E02LvOynFeIny21L3ij7CYmF5SWwGyosG5jhvShp4G2GCu
+         evXFmVMlFkEnnG/FDzOGI+rB9pukBEXli4LLapSxuEATLZL9Zl7ywX4atOvGQJHVQk
+         GxYEYCOAASu2+/GYJSD/5Mjhg8DwwyV3sksfc+ADVtKNO4A5SYxSGL/C8ne89noPtT
+         n8tUQJ5PhNupwxjWME/lfXlJ8ctVfnDGWTjhHY1+2uO1+W5JUjQztDUPIny2+bHmAz
+         QnGFymwIg273ShSsvy0BhKWYAr28DBV6e3+HPBz6TDp9K2BIek+IfgIHL14Z6wuAEc
+         afa1RHIwC/2iw==
+Date:   Mon, 27 Jun 2022 22:03:20 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Charles Gorand <charles.gorand@effinnov.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        =?UTF-8?B?Q2zDqW1lbnQ=?= Perrochaud <clement.perrochaud@nxp.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] NFC: nxp-nci: Don't issue a zero length
+ i2c_master_read()
+Message-ID: <20220627220320.29ca05ec@kernel.org>
+In-Reply-To: <20220626194243.4059870-2-michael@walle.cc>
+References: <20220626194243.4059870-1-michael@walle.cc>
+        <20220626194243.4059870-2-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,40 +58,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add endpoint configuration for the four ingress and two egress
-threads for main domain crypto accelerator.
+On Sun, 26 Jun 2022 21:42:43 +0200 Michael Walle wrote:
+> There are packets which doesn't have a payload. In that case, the second
+> i2c_master_read() will have a zero length. But because the NFC
+> controller doesn't have any data left, it will NACK the I2C read and
+> -ENXIO will be returned. In case there is no payload, just skip the
+> second i2c master read.
 
-Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
----
- drivers/dma/ti/k3-psil-j721s2.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/dma/ti/k3-psil-j721s2.c b/drivers/dma/ti/k3-psil-j721s2.c
-index 4c4172a4d271..a488c2250623 100644
---- a/drivers/dma/ti/k3-psil-j721s2.c
-+++ b/drivers/dma/ti/k3-psil-j721s2.c
-@@ -112,6 +112,11 @@ static struct psil_ep j721s2_src_ep_map[] = {
- 	PSIL_PDMA_XY_PKT(0x4707),
- 	PSIL_PDMA_XY_PKT(0x4708),
- 	PSIL_PDMA_XY_PKT(0x4709),
-+	/* MAIN SA2UL */
-+	PSIL_SA2UL(0x4a40, 0),
-+	PSIL_SA2UL(0x4a41, 0),
-+	PSIL_SA2UL(0x4a42, 0),
-+	PSIL_SA2UL(0x4a43, 0),
- 	/* CPSW0 */
- 	PSIL_ETHERNET(0x7000),
- 	/* MCU_PDMA0 (MCU_PDMA_MISC_G0) - SPI0 */
-@@ -144,6 +149,9 @@ static struct psil_ep j721s2_src_ep_map[] = {
- 
- /* PSI-L destination thread IDs, used for TX (DMA_MEM_TO_DEV) */
- static struct psil_ep j721s2_dst_ep_map[] = {
-+	/* MAIN SA2UL */
-+	PSIL_SA2UL(0xca40, 1),
-+	PSIL_SA2UL(0xca41, 1),
- 	/* CPSW0 */
- 	PSIL_ETHERNET(0xf000),
- 	PSIL_ETHERNET(0xf001),
--- 
-2.17.1
-
+Whoa, are you using this code or just found the problem thru code
+inspection? NFC is notorious for having no known users.

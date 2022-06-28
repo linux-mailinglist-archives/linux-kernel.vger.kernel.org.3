@@ -2,154 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE11C55E500
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B691D55E8E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbiF1NiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40344 "EHLO
+        id S1346791AbiF1NoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346736AbiF1NhU (ORCPT
+        with ESMTP id S1346734AbiF1Nnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:37:20 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28AB31372;
-        Tue, 28 Jun 2022 06:37:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1656423437; x=1687959437;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=Sdk85jPEbentvOxPmfD/Er5LSNx4fSvC9fXjKd0J4xc=;
-  b=t5KdSoHbCtKdwZOgw4xQ65unmbtCoNkuynOsji5M6vxvOVFFx7Nwuu0u
-   aVsOYCwvzSynIMEaSnarLw8GKcWAwQ7ewBriowWjcceoDFblZZxTBVm08
-   HFpfUWw4Aj+aQlPsciPvVX0X7rIngDSWqs1/M0xcQ7IkFN36KOSaTPO2H
-   kOkcV21+v8Qd0NCgR3uw3S5BklYVUw7mEC8wi/vnThoNpbpUyc0AMPG4x
-   awihSxRfCh4sGtf0mBXRkoBwxAT3lanSC5CIb9pUAJa8fuoqONP+EZBo0
-   FNxN2QjRwKpx3YDBzN7Dl6SdRGjgpqkOfBwkLlKj9BKSv9n2+dWoXIDu5
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="169927739"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jun 2022 06:37:17 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+        Tue, 28 Jun 2022 09:43:53 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58C91E3DF;
+        Tue, 28 Jun 2022 06:43:47 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LXQjj5pRbzdZt9;
+        Tue, 28 Jun 2022 21:41:29 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 28 Jun 2022 06:37:15 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Tue, 28 Jun 2022 06:37:15 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BgsbD/KtTcek75G8/gGn+GA+nRAva/SlZlZGNYpyj6NUCUtRwI8dv3Ta1zSzTAERRmquSk5odTIQAuDgv3HZm9J1H515PINI44uCaqYBWShMQ+d4cnSaNB+3pQ2FPikXydwBTOV6Q8hH4cEsS3Pb5vFX3kG19WkM61NVY//lXObdq0it5Ux5flfDs2uy8bg93OT4rRU2Pxw9ToUoTvbAlT5DcIlDFQQGBxlUcg1wYRdynwtvZKEf9YHCLYwoIOvBLBjqMqaVLAsThmKWtRP8+uTCY3C+tHlhrNRCEtz8vt3vpRyToKQ6KjcofhlM8KY7Y5xRAi7cDqR8F/fWSWiFSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Sdk85jPEbentvOxPmfD/Er5LSNx4fSvC9fXjKd0J4xc=;
- b=T3iRwTBO4WloBfoIr4vwTzOzvv8/9FT1qAinFE2/55zg/2ilJ3n3PUbIifb+ChiLhqqJwOG9xex02Y0z/j7ayUbADSxjGTrGrcpcw2ofKPGzJp0eWWcmfYSC7Zk2yQt/7NqcuwMOIZ58EF1fV7WO2qrY3gUcLph3YpeYyTWAJCudcTq5kfpnI15GpAOe2Fafu+ruMN5zEIB2mOw2mcckC1SOVy2T4gRYGi882LiJZA+S2GZbXLuXF0/5Fgsi3Ta+nSjZkRP1sS7/re+yd/6B/0v4QLwRx42fQ81GkcV6R+FBwlAv/xxObOYOvtlR3IzS5Gk3gy4EjLjkxcojKwYgVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Sdk85jPEbentvOxPmfD/Er5LSNx4fSvC9fXjKd0J4xc=;
- b=WsJdnNbe/NJHux6pUESPzROzOocac7I1slSvvkwqS33cnr2c26UsIHXeTq6jx3bkGe0sb0lzpWXhPDlhm+k+VjBktLhk95CIHJWmiUTRMP4hkR8l3Go4vKa76Kg7iZD8u6j0H3tcpEDQlh/uuhZDODxbjx+xGcKgJiCk5AFzyZo=
-Received: from CY4PR11MB1960.namprd11.prod.outlook.com (2603:10b6:903:11d::21)
- by DM4PR11MB5391.namprd11.prod.outlook.com (2603:10b6:5:396::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15; Tue, 28 Jun
- 2022 13:37:13 +0000
-Received: from CY4PR11MB1960.namprd11.prod.outlook.com
- ([fe80::80c4:1a95:649d:2ee0]) by CY4PR11MB1960.namprd11.prod.outlook.com
- ([fe80::80c4:1a95:649d:2ee0%10]) with mapi id 15.20.5373.018; Tue, 28 Jun
- 2022 13:37:13 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <Eugen.Hristev@microchip.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <linux-kernel@vger.kernel.org>, <Nicolas.Ferre@microchip.com>
-Subject: Re: [PATCH 1/2] ARM: dts: at91: sam9x60ek: fix eeprom compatible and
- size
-Thread-Topic: [PATCH 1/2] ARM: dts: at91: sam9x60ek: fix eeprom compatible and
- size
-Thread-Index: AQHYivQrMKJc0FEEP0q4tQ39Fj/gyQ==
-Date:   Tue, 28 Jun 2022 13:37:13 +0000
-Message-ID: <2b092bc6-5abc-d5db-8135-6a03bafa848c@microchip.com>
-References: <20220607090455.80433-1-eugen.hristev@microchip.com>
-In-Reply-To: <20220607090455.80433-1-eugen.hristev@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c04ca891-8a67-4ed6-70e4-08da590b4f05
-x-ms-traffictypediagnostic: DM4PR11MB5391:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zZJlMwttw76O9+LVEfE3xE36jM1Mlgt/XmGR5D/65GLvb6K2Mwz1BPUcF797MoZXpMwTZuP+dIY2HlLfLYYRElMJZyOoPgx2N6QlOEwzrW/jizuT54hJ6SFdg2+5mk88JgJKybG8QhJWpDtyc7JftmoU5uBxKpfXRPSAUSYgT419jj4TRcEcwufhWOgRVhIxKAtWHRV71jChY4PKEJDTiykj4E3ieV2I+nGE5SXf4Ns5pXAie+gl2HWDSKBpSnyqbCe7gMmyRZFFA3Q0LFruu5s/boyZFdHI3aSiQK4c/GYxkCvTrT3JyadcYuKX+FIQ9SUpYwFYObFFUX/rRZ7bOVOAMxqBzqJyo4Pg4/D8b/E33CVt5NHhHZ8qwsPwnpCgiZjoYbBKoMe4tXcfkQD8Fk77FESXCaps3NbMs6pQHd/LAT8V42h1fH90okqPzMxqhdv4Y573o6bZJuaV1XrsSCDGrvWz1OjBvmcn3NIAsU4EJxZGL8q+EqBAv40debARwz6erOpwmHa6wgN8VeLGJqsBPwI1IZkxZzJmWhyz5jsJiVJxsuQpVzH1YQUqkxTyyG3Ez4ZcOp16xM+za9WuFZrnD7UFAFhSk/bAo36p91CVPE7peNl27nMdPXKX3d+zFV1Hh/stF7Rz6lX7vHkoq9X6x1PRJpDxkY4gzX+iRNQm8xhjkiFoK/azqmHRfzN/+RQmoQTec0oA0MSnbQsjKT6zR930gBl7yZIh6VSggXsBeYWFwColUTRXOtTHZFkBdVB8Oc5JNVo57DrgmPx3t43/sJI6KezUrV5tNoZ6Sv+2sY3oeS4pYlNnZdF5lWqeW2p4xSzTSjdOv1V0UR0zRasCxnJ2zjPq+iuFuVrnXxQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1960.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(136003)(346002)(376002)(366004)(396003)(6506007)(41300700001)(4744005)(36756003)(122000001)(186003)(38070700005)(478600001)(26005)(86362001)(6512007)(5660300002)(31696002)(316002)(4326008)(8936002)(107886003)(54906003)(64756008)(2616005)(66556008)(83380400001)(71200400001)(2906002)(66476007)(66946007)(38100700002)(8676002)(76116006)(31686004)(110136005)(53546011)(91956017)(6486002)(66446008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?N2ZVYjFpQnQySkE2RmJhZWpoVjNQWVZ3Wnc4U1lZTnhlOXo4ZktQcWlBVE41?=
- =?utf-8?B?MTB4OGZMK0dlbmNCSmg0ZVJjMVNJNExLc1FWcUN2M1BDd1p4bWp5ZnFRNEhT?=
- =?utf-8?B?ekZUOTkxUVpocHZ3WmpWQ0lRQzFmd0MwQ1NEZ2l2a2RNeUc5bXEyUkhMY3FX?=
- =?utf-8?B?V24wQnRZNm5hSFArak80WXFWNFVhZVNGbktTMnZsa3BoU0ViaVZQcmkyWkNi?=
- =?utf-8?B?ZmtJREl2aThud2N1dzJOaTdYZXR2SEhwaUJwTHRIZHhCVVdYdk02cUZhOGJr?=
- =?utf-8?B?b1F5bmFaNGZleDVxaW1MZEl2K2xLbU5tenIxMXFLQUZsWVVoNi9wbkRPdmZQ?=
- =?utf-8?B?d1BLUE15dmYwTDBidEwvelMwNXpidnNURDJQK2RYNGRYcDJjSWtlMmVOdE5L?=
- =?utf-8?B?NmVXNWJWMDhjREVpelJOamZsQUJuZDAyRUJxQi9VSUlYdFV6VlpYWFRmdmp5?=
- =?utf-8?B?c1VRbkNpSVhLWDRuYmE4ZC84WXRrQXhDUHdrQkdjRGhxbFRiQXB5bDFHenhU?=
- =?utf-8?B?bnY0cGlyamJPVGx1YU9kU3VWTCtYWG5uL3hXNGNKY3VXMmQzOHVyd0ZkaXB1?=
- =?utf-8?B?Ti8yazJsVHl4eEpLTWdBeEUvT2VUZFJrVk1SY2orS1d4b1FPaWVSTnhTY21T?=
- =?utf-8?B?aUc3ZnJKZGsyNGZnWEJCa2p3a2RzblJQdTkzZjNRQ2FVUEFubkVmU0dmbUVv?=
- =?utf-8?B?S0lhVzFRMCtGSmI0bW1nYTVCV080eVVQR1JHNzgyc1pMbmhsMUk0Q3IwS3dU?=
- =?utf-8?B?UzcwZ1ZscjQxVVVWZ21QZXVSaVNBanpTRjBXV2VtWHhHZ2lMYkNoVFVhY2JC?=
- =?utf-8?B?R1pTUXVnWVR4R0NwTXJ6Rmt3TkczcytlbXN0MWVPQmpSRXFOMWpsRFIwZXk1?=
- =?utf-8?B?NFZ5TytoVG5mbitlTEVoMlVjODlaZmNaNTNSRzdSMXl6Znl5dWRSM1JMeXox?=
- =?utf-8?B?djRvR09DOXEzeFlpZ2dNdkZDUng5QzJXbUZSeVV2bTM5YnJuMm0vdjNkWGNI?=
- =?utf-8?B?ZTBBM2F1V2lVZ2pNd0lCQW9yWW1FYTFuTmtoU1BKcW1Eb3F6MVRITEtlQTVW?=
- =?utf-8?B?NU9iTFIrOFlhU25NZGlDNmkxMEs5Z0k3ZHZESmVVd2RkV3pWenZzcFRjT3Bn?=
- =?utf-8?B?L045ZUtGdzAvYzEwUGdwQnEyelUzMnIyTmdTVCtHSnRHZ3oyajhnM1AyWHEz?=
- =?utf-8?B?WCtpMkxwOFVNeXplalJvOEloYXM3QmdUekYxbE8vNVMvZjN4eWhvWkd4RVRL?=
- =?utf-8?B?ZVZJQVBBSjl3NStkRE9mb0dia2Yyei9UM1lCN2t1bkZWZjlxSndoaTU1aHl4?=
- =?utf-8?B?eFFQb1REUG1TdHRxRmxVMjNGMkVhU1BFOWltdksyUGRIV0VKQmF5ckhTaHJr?=
- =?utf-8?B?L1o5QW9Zam9uaE43c1FqYmRuZk85QVI2K283Q1pWODlsL1BJcEM4WVBvckdW?=
- =?utf-8?B?MzVqUUNxOHdleGhQN2ZGbHQ2UFV6c1NqZTQrRDFoQTZleUZHRzN5aVJVVVdY?=
- =?utf-8?B?KzJLNDFISmxhRWpGekxGYm9FMklTNEhTNUtmSS8vUExQUUhKT1hGK2s3MEpz?=
- =?utf-8?B?dnRkMWtmU0FISUsyZG5tQ3dSbG1xcGhTT1NUeTA4SitNS3Rxc3AybWJPM1ZO?=
- =?utf-8?B?YUlXTlQrOGQ3a2NFQzBVdXBjbWZnc2NETk82UTdGSVNpcXdPRVJ4L29nTHpT?=
- =?utf-8?B?Z0FZWmpVTU9mbUFBN2NvdE5vd3l3U29HcU5FRGMzUis4a201ZXV5ZC9nWEVM?=
- =?utf-8?B?aCsvckdhbUI5blVBaXhEZTh0RSs3TmlKTlZLV252S09QTmpIV2FFUXNpM0NB?=
- =?utf-8?B?QTJ0c2FzNFZ2cm13bTZBUFVOZ2JRUEwvR0xUQTFWU1pweGRvNy9ncDBmcFd2?=
- =?utf-8?B?N0JZMlRkWjkxTzBZVWJSdGxpdEFwSzM4Vll1OUZtK0hST29ZZFFTeEFPR1RS?=
- =?utf-8?B?aTRnUHhKNDhYVFM5eS9MS3ZSUjNrZDFvRDNnN3pac09kMWttZStFblhmUjJC?=
- =?utf-8?B?cWVQSGQzWmJxdURMaWtqRkVrMmpHdDFMUWNrU0tWcHhZMXlWNEZMTDFUakti?=
- =?utf-8?B?Yk5JOC9NQVoveThDN2w2SG03bzFPOUdmRFJjNkVPdFcrdWFkOW16N2JkZHJH?=
- =?utf-8?B?MGduSVYwazNwbUZ6V3dleCtmaklGeElzQ3NTS1prdXBTNE5xUGh1azFrdi9E?=
- =?utf-8?B?eGc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6C88FB9D394CCD47BD8205F7279F3AF4@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ 15.1.2375.24; Tue, 28 Jun 2022 21:43:45 +0800
+Received: from huawei.com (10.175.112.208) by kwepemm600013.china.huawei.com
+ (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 28 Jun
+ 2022 21:43:44 +0800
+From:   Guo Mengqi <guomengqi3@huawei.com>
+To:     <alexs@kernel.org>, <siyanteng@loongson.cn>, <corbet@lwn.net>,
+        <bobwxc@email.cn>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <xuqiang36@huawei.com>, <guomengqi3@huawei.com>
+Subject: [PATCH -next] docs/zh_CN: add vm transhuge translation
+Date:   Tue, 28 Jun 2022 21:37:42 +0800
+Message-ID: <20220628133742.91966-1-guomengqi3@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1960.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c04ca891-8a67-4ed6-70e4-08da590b4f05
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2022 13:37:13.1146
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: TwXmhhRgkAmEtl556zcSV/Y+KKey+GF+B46P5MNvtyO1AHvHNg6uWgEi/BKHUN5733ATQcDEp/vxYIhJryAHDSVtkqeiMGX2G6QleJr0xvk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5391
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_20,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -157,22 +51,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMDcuMDYuMjAyMiAxMjowNCwgRXVnZW4gSHJpc3RldiB3cm90ZToNCj4gVGhlIGJvYXJkIGhh
-cyBhIG1pY3JvY2hpcCAyNGFhMDI1ZTQ4IGVlcHJvbSwgd2hpY2ggaXMgYSAyIEtiaXRzIG1lbW9y
-eSwNCj4gc28gaXQncyBjb21wYXRpYmxlIHdpdGggYXQyNGMwMiBub3QgYXQyNGMzMi4NCj4gQWxz
-byB0aGUgc2l6ZSBwcm9wZXJ0eSBpcyB3cm9uZywgaXQncyBub3QgMTI4IGJ5dGVzLCBidXQgMjU2
-IGJ5dGVzLg0KPiBUaHVzIHJlbW92aW5nIGFuZCBsZWF2aW5nIGl0IHRvIHRoZSBkZWZhdWx0ICgy
-NTYpLg0KPiANCj4gRml4ZXM6IDFlNWY1MzJjMjczNzEgKCJBUk06IGR0czogYXQ5MTogc2FtOXg2
-MDogYWRkIGRldmljZSB0cmVlIGZvciBzb2MgYW5kIGJvYXJkIikNCj4gU2lnbmVkLW9mZi1ieTog
-RXVnZW4gSHJpc3RldiA8ZXVnZW4uaHJpc3RldkBtaWNyb2NoaXAuY29tPg0KQXBwbGllZCB0byBh
-dDkxLWZpeGVzLiBUaGFua3MhDQoNCj4gLS0tDQo+ICBhcmNoL2FybS9ib290L2R0cy9hdDkxLXNh
-bTl4NjBlay5kdHMgfCAzICstLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAy
-IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL2F0OTEt
-c2FtOXg2MGVrLmR0cyBiL2FyY2gvYXJtL2Jvb3QvZHRzL2F0OTEtc2FtOXg2MGVrLmR0cw0KPiBp
-bmRleCA3NzE5ZWEzZDQ5MzNjLi44MWNjYjA2MzZhMDA5IDEwMDY0NA0KPiAtLS0gYS9hcmNoL2Fy
-bS9ib290L2R0cy9hdDkxLXNhbTl4NjBlay5kdHMNCj4gKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMv
-YXQ5MS1zYW05eDYwZWsuZHRzDQo+IEBAIC0yMzMsMTAgKzIzMyw5IEBAIGkyYzA6IGkyY0A2MDAg
-ew0KPiAgCQlzdGF0dXMgPSAib2theSI7DQo+ICANCj4gIAkJZWVwcm9tQDUzIHsNCj4gLQkJCWNv
-bXBhdGlibGUgPSAiYXRtZWwsMjRjMzIiOw0KPiArCQkJY29tcGF0aWJsZSA9ICJhdG1lbCwyNGMw
-MiI7DQo+ICAJCQlyZWcgPSA8MHg1Mz47DQo+ICAJCQlwYWdlc2l6ZSA9IDwxNj47DQo+IC0JCQlz
-aXplID0gPDEyOD47DQo+ICAJCQlzdGF0dXMgPSAib2theSI7DQo+ICAJCX07DQo+ICAJfTsNCg0K
+Translate .../vm/transhuge.rst into Chinese.
+
+Signed-off-by: Guo Mengqi <guomengqi3@huawei.com>
+---
+ Documentation/translations/zh_CN/vm/index.rst |   2 +-
+ .../translations/zh_CN/vm/transhuge.rst       | 151 ++++++++++++++++++
+ 2 files changed, 152 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/translations/zh_CN/vm/transhuge.rst
+
+diff --git a/Documentation/translations/zh_CN/vm/index.rst b/Documentation/translations/zh_CN/vm/index.rst
+index c77a56553845..2d82b15b272b 100644
+--- a/Documentation/translations/zh_CN/vm/index.rst
++++ b/Documentation/translations/zh_CN/vm/index.rst
+@@ -59,11 +59,11 @@ Linux内存管理文档
+    vmalloced-kernel-stacks
+    z3fold
+    zsmalloc
++   transhuge
+ 
+ TODOLIST:
+ * arch_pgtable_helpers
+ * free_page_reporting
+ * hugetlbfs_reserv
+ * slub
+-* transhuge
+ * unevictable-lru
+diff --git a/Documentation/translations/zh_CN/vm/transhuge.rst b/Documentation/translations/zh_CN/vm/transhuge.rst
+new file mode 100644
+index 000000000000..a7bed8b13a47
+--- /dev/null
++++ b/Documentation/translations/zh_CN/vm/transhuge.rst
+@@ -0,0 +1,151 @@
++.. SPDX-License-Identifier: GPL-2.0
++.. include:: ../disclaimer-zh_CN.rst
++
++:Original: Documentation/vm/transhuge.rst
++
++:翻译:
++
++ 郭梦琪 Guo Mengqi <guomengqi3@huawei.com>
++
++:校译:
++
++==============
++透明大页机制
++==============
++
++本文档描述透明大页（THP）的设计理念，以及它是如何与内存管理系统其他部分交互的。
++
++设计原则
++========
++
++- “优雅fallback”：有些mm组件不了解透明大页的存在，它们的回退方法是将PMD页表项
++  拆分成PTE页表项。必要时还需要拆分透明大页。这样就可以在常规大小的页或页表项上
++  继续工作。
++
++- 如果内存碎片化导致大页分配失败，则分配常规页作为替代放入原vma中，此期间不应
++  产生任何失败或明显延迟，不要引起用户态的注意。
++
++- 如果一些进程退出后释放了空余的大页（不论在伙伴系统还是在VM），由常规页支持的
++  guest物理内存应该自动重新申请为大页。(通过khugepaged进程)
++
++- 透明大页不需要预留内存，而是尽可能使用已经存在的大页。（唯为避免不可移动的页
++  将整个内存碎片化，唯一可能的预留是在kernelcore=的设置中。不过这个调整并不仅
++  针对透明大页，而对内核中所有动态的多级页面申请都通用。）
++
++get_user_pages和follow_page
++===========================
++
++不论对单个大页还是hugetlbfs，使用get_user_pages和follow_page时，返回的会是首页或
++尾页。大多数情况下调用get_user_page功能的人不关心页的大小，只关心页的真实物理
++地址以及暂时的pin页，好在I/O结束后将页释放。但在驱动中，在某些情况下有可能访问
++尾页的page_struct（如检查page->mapping字段），这时应该转而检查首页。一旦首页或者
++尾页被引用，大页就不能再被拆分了。
++
++.. note::
++   以上限制不是针对GUP API新增，而是为了与在hugetlbfs中保持一致。这样如果驱动
++   能在hugetlbfs中使用GUP，就能够切换到透明大页机制支持的GUP。
++
++优雅fallback
++============
++
++为查页表流程增加大页支持只需添加split_huge_pmd(vma, pmd,
++addr)即可。其中pmd为pmd_offset返回值。要为代码添加透明大页支持很简单，搜索
++"pmd_offset"并将split_huge_pmd添加到所有返回的pmd后面。这短短一行的fallback函数
++很巧妙，为我们省去了额外的适配代码（通常会很长或者很复杂）。
++
++如果你需要在没有页表的情况下处理一个大页，可以使用split_huge_page(page)把它拆分
++成小页。linux VM就是通过这种方式将大页换出。如果页面被pin住了，split_huge_page
++就会失败。
++
++例子：添加一行代码使mremap.c支持透明大页::
++
++        diff --git a/mm/mremap.c b/mm/mremap.c
++        --- a/mm/mremap.c
++        +++ b/mm/mremap.c
++        @@ -41,6 +41,7 @@ static pmd_t *get_old_pmd(struct mm_stru
++                return NULL;
++
++                pmd = pmd_offset(pud, addr);
++        +       split_huge_pmd(vma, pmd, addr);
++                if (pmd_none_or_clear_bad(pmd))
++                    return NULL;
++
++大页支持中的锁使用
++==================
++
++我们希望尽可能多的代码能原生支持透明大页，因为调用split_huge_page()和
++split_huge_pmd()还是有开销的。
++
++要让查页表操作变得能处理huge pmd，只需对pmd_offset返回的pmd调用
++pmd_trans_huge()。一定要持有mmap_lock读锁，以避免khugepaged在此期间申请新的
++大页pmd（khugepaged collapse_huge_page会持有mmap_lock写锁而非anon_vma lock）。
++如果pmd_trans_huge返回false，那就回到原来的流程。如果pmd_trans_huge返回true，
++就需要先持有页表锁(pmd_lock())，然后再调一次pmd_trans_huge. 持页表锁是为了防止
++大页pmd被转换成小页（split_huge_pmd可以跟查页表操作同时进行）。如果第二次
++pmd_trans_huge返回false,那就释放页表锁，依然回到原有流程。如果返回true，就可以
++继续处理huge pmd和hugepage了。处理完毕，再释放页表锁。
++
++引用计数和透明大页
++==================
++
++THP的计数跟其他复合页的计数大致相同：
++
++ - get_page()/put_page()和GUP都在首页上进行计数（修改head page->_refcount）
++
++ - 尾页的_refcount永远是0. get_page_unless_zero()永远无法get到尾页。
++
++ - map/unmap特定PTE entry时，增减的是复合页中相应子页的_mapcount.
++
++ - map/unmap整个复合页时，增减的是compound_mapcount属性。该属性保存在第一个
++   尾页中。对于文件中的大页，还要增加所有子页中的_mapcount，这样是为了在检测
++   子页的解映射时不需考虑竞争问题。
++
++PageDoubleMap() 表明大页 *可能* 被映射为了PTE.
++
++对匿名页，PageDoubleMap()也表示所有子页的_mapcount都偏移了1.
++在页被同时映射为了PMD和PTE的情况下，这个额外的引用可以避免子页解映射时的竞争。
++
++这个优化也可以追踪每个子页mapcount所带来的性能开销。另一种解决方法是在每次
++map/unmap整个复合页时更改所有子页的_mapcount.
++
++对于匿名页，如果页面的PMD在首次被拆分时同时还具有PMD映射，则设置PG_double_map;
++当compound_mapcount值降为0时，取消设置。
++
++对于映射到文件的页，在其首次映射PTE时，设置PG_double_map; 在页面从页缓存
++page cache中移除时，取消设置。
++
++split_huge_page中，在清除page struct中所有PG_head/tail位之前，需要先将首页中的
++引用计数refcount分发到所有其他尾页中。页表项PTE占用的引用计数很好处理，但剩下的
++引用计数来源难以确定（如通过get_user_pages的pin页）。如果大页被pin住，
++split_huge_page()会失败。页的引用计数必须等于所有子页mapcount之和再加一（因为
++split_huge_page的调用者也必须对首页持有一个引用）。
++
++对匿名页，split_huge_page用页表项迁移（migration
++entries）保持来page->_refcount和page->_mapcount稳定。对文件页，直接解映射就好。
++
++这套机制对物理内存扫描（physical memory scanners）也安全，scanner唯一合法引用页
++的途径就是get_page_unless_zero().
++
++没调atomic_add()时，所有尾页的_refcount都为0. 这时scanner无法获取尾页的引用。
++调了atomic_add()后，我们也不在乎页的_refcount是多少了。只要知道应该从首页的引用
++计数减去多少即可。
++
++对首页进行get_page_unless_zero()是可以成功的。此时引用计数的再分配非常明了：
++引用计数将会留在首页中。
++
++split_huge_pmd()对引用计数没有任何限制，在任何时候都可以拆分PMD，而且永远不会
++失败。
++
++局部unmap和deferred_split_huge_page()函数
++==========================================
++
++透明大页通过munmap()或其他方式解映射时，并不会立即释放内存。在page_remove_rmap()
++中检查透明大页的某个子页是否已经还在使用，并将透明大页加入一个预备队列，当内存
++使用需求变大时，把透明大页拆分，释放已经不用的子页。
++
++如果检测到局部unmap，由于处在锁中，无法拆页。而且在很多情况下，透明大页会跨VMA,
++这时会在exit(2)中进行局部unmap，这时拆页效果适得其反。
++
++deferred_split_huge_page函数就是用来进行上文所说的将页排队以预备后续的拆分。真正
++的拆页操作是通过内存压力导致的shrinker函数来触发。
++
+-- 
+2.17.1
+

@@ -2,151 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF57955DD9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5805655C3ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345213AbiF1LNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 07:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40492 "EHLO
+        id S230527AbiF1LPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 07:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiF1LNm (ORCPT
+        with ESMTP id S229846AbiF1LPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 07:13:42 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8052CDFC;
-        Tue, 28 Jun 2022 04:13:41 -0700 (PDT)
+        Tue, 28 Jun 2022 07:15:06 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7D52D1CE
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:15:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656414821; x=1687950821;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=w2smDjFDSnaWaF8DZXAccU3orfE582qzoDzr3rq7nFo=;
-  b=CwaEV0TNKZ5KumfWffqVpg0qgRICVLhkfTRKSFvtkKfPWy58J//hY9Yl
-   AZU+zoZolFNebmOi7qVCzrhRvLehRskDvRtfBX3VQfWywJFirKf/xphwh
-   HZxuEn3U9jbdzL+1kfGTY1YRWhULacu8MD4xFUWiOXQXgExjD/b2AOKdq
-   uMQDOSf91vTc0aaSUBs914eq/bfSPkt6IThgofMwvO0ry6I/Mg5gZTc33
-   oWM5mWsiCa6UcjIv3i1PhRzXQGEWGVU6Y4F6u50GngpefgyLUyZCtulmz
-   OFmUI/qeMiB28CtyoOXUNDvo070GQaVjnbbMSnZmuFntzFptMwcs5NTlc
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="368025223"
+  t=1656414905; x=1687950905;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1VzVOkwWtWO/RfrVesmDoo26OPyw3HnDy+zwq71hTHA=;
+  b=d+9xXpNdGBZQ4tN7zgL7SJzIgAPUstcsXMoX9ZWKj0n1mUEq/IGoI4cx
+   oA0chrd9+vM9Q5P3Nco8wNW4LfD/iKShKUFvegcDFdKQ1z9ez6xXVdA6M
+   jw1v7kPdcM5iJyYCXAGF7F4rwwAyZGP4fNl5A8hw31moOqnsxCgD/Ufp5
+   Tmg6Ho5Au6muzypdcImVV20+wihMLn5YYsgTMRYeUPF1iFKwYCv2eIQt6
+   GXAyrRkfrm4bTFRQUyS8A0tOcsiv+9lcLM6XXndBjscdulqldQf/+u7kj
+   rA7ABa50xFqOhnH9BOJGEOXrBf78584ELX+SH3uv/c5Y0T3n9S6hDpFyZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="345708833"
 X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="368025223"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 04:13:41 -0700
+   d="scan'208";a="345708833"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 04:15:04 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="646871058"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.62.204])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 04:13:39 -0700
-Message-ID: <e7ebb779-9938-d5f7-d900-dbea55b4ac72@intel.com>
-Date:   Tue, 28 Jun 2022 14:13:36 +0300
+   d="scan'208";a="732712836"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 28 Jun 2022 04:15:02 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o69BO-0009xE-3y;
+        Tue, 28 Jun 2022 11:15:02 +0000
+Date:   Tue, 28 Jun 2022 19:14:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Leon Romanovsky <leonro@nvidia.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Raed Salem <raeds@nvidia.com>
+Subject: [ammarfaizi2-block:mellanox/linux/queue-next 2/14]
+ net/xfrm/xfrm_device.c:280:3: error: call to undeclared function
+ 'dev_put_track'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202206281926.yJ1l888L-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCHv2] mmc: block: Add single read for 4k sector cards
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_L=c3=b6hle?= <CLoehle@hyperstone.com>,
-        Avri Altman <Avri.Altman@wdc.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <e0cce326393645d3b4a163ce65c89fb9@hyperstone.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <e0cce326393645d3b4a163ce65c89fb9@hyperstone.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/06/22 12:08, Christian Löhle wrote:
->> Cards with 4k native sector size may only be read 4k-aligned,
->>> accommodate for this in the single read recovery and use it.
->>
->> Thanks for the patch.
->>
->>>
->>> Fixes: 81196976ed946 (mmc: block: Add blk-mq support)
->>> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
->>
->> FYI checkpatch says:
->>
->> WARNING: From:/Signed-off-by: email name mismatch: 'From: "Christian Löhle" <CLoehle@hyperstone.com>' != 'Signed-off-by: Christian Loehle <cloehle@hyperstone.com>'
-> 
-> Will be fixed in my future patches, thanks for the hint.
-> 
->>
->>> ---
->>>  drivers/mmc/core/block.c | 25 ++++++++++++-------------
->>>  1 file changed, 12 insertions(+), 13 deletions(-)
->>>
->>> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
->>> index f4a1281658db..a75a208ce203 100644
->>> --- a/drivers/mmc/core/block.c
->>> +++ b/drivers/mmc/core/block.c
->>> @@ -176,7 +176,7 @@ static inline int mmc_blk_part_switch(struct mmc_card *card,
->>>  				      unsigned int part_type);
->>>  static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
->>>  			       struct mmc_card *card,
->>> -			       int disable_multi,
->>> +			       int recovery_mode,
->>>  			       struct mmc_queue *mq);
->>>  static void mmc_blk_hsq_req_done(struct mmc_request *mrq);
->>>  
->>> @@ -1302,7 +1302,7 @@ static void mmc_blk_eval_resp_error(struct mmc_blk_request *brq)
->>>  }
->>>  
->>>  static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_req *mqrq,
->>> -			      int disable_multi, bool *do_rel_wr_p,
->>> +			      int recovery_mode, bool *do_rel_wr_p,
->>>  			      bool *do_data_tag_p)
->>>  {
->>>  	struct mmc_blk_data *md = mq->blkdata;
->>> @@ -1372,8 +1372,8 @@ static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_req *mqrq,
->>>  		 * at a time in order to accurately determine which
->>>  		 * sectors can be read successfully.
->>>  		 */
->>> -		if (disable_multi)
->>> -			brq->data.blocks = 1;
->>> +		if (recovery_mode)
->>> +			brq->data.blocks = mmc_large_sector(card) ? 8 : 1;
->>
->> I suggest changing to use queue_physical_block_size() here and further below
-> 
-> This part I'm impartial about, not sure if it makes it more readable, hopefully we never have to support another "native sector size" apart from the two.
-> Anyway I will send the next patch with queue_physical_block_size()
-> 
->>
->> 			brq->data.blocks = queue_physical_block_size(req->q) >> SECTOR_SHIFT;
-> 
-> Do we want to switch to SECTOR_SHIFT instead of 9? So far SECTOR_SHIFT is not used at all in mmc core.
+tree:   https://github.com/ammarfaizi2/linux-block mellanox/linux/queue-next
+head:   62681695cd9969a82026b2b93d0c4ca1a8500eee
+commit: 0a1347c1f766cddc63032227434bc7b581904dc2 [2/14] xfrm: add new full offload flag
+config: i386-randconfig-a004-20220627 (https://download.01.org/0day-ci/archive/20220628/202206281926.yJ1l888L-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project df18167ac56d05f2ab55f9d874aee7ab6d5bc9a2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/0a1347c1f766cddc63032227434bc7b581904dc2
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block mellanox/linux/queue-next
+        git checkout 0a1347c1f766cddc63032227434bc7b581904dc2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/
 
-I guess '9' is more consistent
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> If so I would go ahead and change all the others in another patch:
-> queue.c:187:	q->limits.discard_granularity = card->pref_erase << 9;
-> core.c:103:	data->bytes_xfered = (prandom_u32() % (data->bytes_xfered >> 9)) << 9;
-> mmc.c:792:MMC_DEV_ATTR(erase_size, "%u\n", card->erase_size << 9);
-> mmc.c:793:MMC_DEV_ATTR(preferred_erase_size, "%u\n", card->pref_erase << 9);
-> mmc_test.c:1557:	sz = (unsigned long)test->card->pref_erase << 9;
-> mmc_test.c:1570:		t->max_tfr = test->card->host->max_blk_count << 9;
-> mmc_test.c:2461:	if (repeat_cmd && (t->blocks + 1) << 9 > t->max_tfr)
-> sd.c:707:MMC_DEV_ATTR(erase_size, "%u\n", card->erase_size << 9);
-> sd.c:708:MMC_DEV_ATTR(preferred_erase_size, "%u\n", card->pref_erase << 9);
-> block.c:1417:		int i, data_size = brq->data.blocks << 9;
-> block.c:1851:			brq->data.bytes_xfered = blocks << 9;
-> 
-> 
-> 
-> 
-> Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-> Managing Director: Dr. Jan Peter Berns.
-> Commercial register of local courts: Freiburg HRB381782
+All errors (new ones prefixed by >>):
 
+>> net/xfrm/xfrm_device.c:280:3: error: call to undeclared function 'dev_put_track'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   dev_put_track(dev, &xso->dev_tracker);
+                   ^
+   net/xfrm/xfrm_device.c:280:3: note: did you mean 'get_net_track'?
+   include/net/net_namespace.h:331:27: note: 'get_net_track' declared here
+   static inline struct net *get_net_track(struct net *net,
+                             ^
+   1 error generated.
+
+
+vim +/dev_put_track +280 net/xfrm/xfrm_device.c
+
+   208	
+   209	int xfrm_dev_state_add(struct net *net, struct xfrm_state *x,
+   210			       struct xfrm_user_offload *xuo)
+   211	{
+   212		int err;
+   213		struct dst_entry *dst;
+   214		struct net_device *dev;
+   215		struct xfrm_dev_offload *xso = &x->xso;
+   216		xfrm_address_t *saddr;
+   217		xfrm_address_t *daddr;
+   218	
+   219		if (!x->type_offload)
+   220			return -EINVAL;
+   221	
+   222		/* We don't yet support UDP encapsulation and TFC padding. */
+   223		if (x->encap || x->tfcpad)
+   224			return -EINVAL;
+   225	
+   226		if (xuo->flags & ~(XFRM_OFFLOAD_IPV6 | XFRM_OFFLOAD_INBOUND))
+   227			return -EINVAL;
+   228	
+   229		dev = dev_get_by_index(net, xuo->ifindex);
+   230		if (!dev) {
+   231			if (!(xuo->flags & XFRM_OFFLOAD_INBOUND)) {
+   232				saddr = &x->props.saddr;
+   233				daddr = &x->id.daddr;
+   234			} else {
+   235				saddr = &x->id.daddr;
+   236				daddr = &x->props.saddr;
+   237			}
+   238	
+   239			dst = __xfrm_dst_lookup(net, 0, 0, saddr, daddr,
+   240						x->props.family,
+   241						xfrm_smark_get(0, x));
+   242			if (IS_ERR(dst))
+   243				return 0;
+   244	
+   245			dev = dst->dev;
+   246	
+   247			dev_hold(dev);
+   248			dst_release(dst);
+   249		}
+   250	
+   251		if (!dev->xfrmdev_ops || !dev->xfrmdev_ops->xdo_dev_state_add) {
+   252			xso->dev = NULL;
+   253			dev_put(dev);
+   254			return 0;
+   255		}
+   256	
+   257		if (x->props.flags & XFRM_STATE_ESN &&
+   258		    !dev->xfrmdev_ops->xdo_dev_state_advance_esn) {
+   259			xso->dev = NULL;
+   260			dev_put(dev);
+   261			return -EINVAL;
+   262		}
+   263	
+   264		xso->dev = dev;
+   265		netdev_tracker_alloc(dev, &xso->dev_tracker, GFP_ATOMIC);
+   266		xso->real_dev = dev;
+   267	
+   268		if (xuo->flags & XFRM_OFFLOAD_INBOUND)
+   269			xso->dir = XFRM_DEV_OFFLOAD_IN;
+   270		else
+   271			xso->dir = XFRM_DEV_OFFLOAD_OUT;
+   272	
+   273		xso->type = XFRM_DEV_OFFLOAD_CRYPTO;
+   274	
+   275		err = dev->xfrmdev_ops->xdo_dev_state_add(x);
+   276		if (err) {
+   277			xso->dev = NULL;
+   278			xso->dir = 0;
+   279			xso->real_dev = NULL;
+ > 280			dev_put_track(dev, &xso->dev_tracker);
+   281			xso->type = XFRM_DEV_OFFLOAD_UNSPECIFIED;
+   282	
+   283			if (err != -EOPNOTSUPP)
+   284				return err;
+   285		}
+   286	
+   287		return 0;
+   288	}
+   289	EXPORT_SYMBOL_GPL(xfrm_dev_state_add);
+   290	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

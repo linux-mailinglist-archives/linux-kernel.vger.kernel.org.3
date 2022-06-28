@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC6355CA50
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F38155E377
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234309AbiF1IbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 04:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53580 "EHLO
+        id S245475AbiF1IbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 04:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245435AbiF1IbK (ORCPT
+        with ESMTP id S245396AbiF1IbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Jun 2022 04:31:10 -0400
 Received: from relay.uni-heidelberg.de (relay.uni-heidelberg.de [129.206.100.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FE926AE4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:31:07 -0700 (PDT)
-X-IPAS-Result: =?us-ascii?q?A2BxBQCEu7piffxkzoFagliDJYFXlBABAQEGjHGHH4ong?=
- =?us-ascii?q?gcBAQEBAQEBAQEJLxMEAQE9AQKKDyc1CA4BAgQBAQEBAwIDAQEBAQEBAwEBB?=
- =?us-ascii?q?gEBAQEBBwQUAQEjPCeFaA2GQwYyAUYQUVcZgngCAQECgmQBAzCuYIEBhloBg?=
- =?us-ascii?q?T+BZYE9iVmFH4FAgRCBSIEJgiyFEYVuBJcogl4KAwkEBwVGFxJOMSECRQscA?=
- =?us-ascii?q?QgGBgcBCAEFCCgEAgEBAQYFGBQBAwEBExIFEwwHKAoSAhIMChsHBwMLBTINA?=
- =?us-ascii?q?g4HAQEMDwECDwMBAhEBBwIJEggGDysIAwEBAwEHAQICAyALAgMWCQcIAgECB?=
- =?us-ascii?q?QICAQMPAQgKHBIQFAIEDQQeCQIIAQIZHiwHAgIEDgMjHwgLCgMOAwQDARACG?=
- =?us-ascii?q?AcCARUBBQIECAQBAwYDCBUZAQ0nBAcDEgINAQYBAgYBAQUFAQMYCAMUAwUBA?=
- =?us-ascii?q?ggDFgcBAiEFCiYJBA0DASIbAgMDAQQbCgIBAgIFFgUCAQECAwIGFQYCAj8vE?=
- =?us-ascii?q?R0NCAQIBAkSHCMBAgwBBAECBy8FBC0CAQEeBAUBBQ8CCAEBFgIGBAMCAgMBA?=
- =?us-ascii?q?QIBFgIQCAIIJxcHEzMZAQU3FA4PAQMGCBkcIgcJBwUGFgMMFSkeKQUHERIbD?=
- =?us-ascii?q?wQNDQo0IBYkAQEOBQMBEhkRDgcUClMmIRUQBgErFgMEAQMDAgYaAQIDIgISC?=
- =?us-ascii?q?wkVAgQtBQEiHRmaV3MBgQ1Ml32rYQeDURABixCVJoN1gVCKc4YqApIAlnCic?=
- =?us-ascii?q?YRPNYEtAUeBTE0jgzgJSBkPl1SFHnM7AgYLAQEDCY8BAQE?=
-IronPort-Data: A9a23:cWh0oqOUwmaUAsfvrR0/l8FynXyQoLVcMsEvi/4bfWQNrUoi1zUGy
- mFLXG7UaP7eNzf3L91zbNu+pEgHsZSHxt5mT3M5pCpnJ55ogZOYWo7JcBuY0wB+jCHnZBg6h
- ynLQoCYdKjYdleF+lH1dOKJQUBUjclkfJKkYAL/En03FFUMpBsJ00o5wbZn2N4w2LBVPivU0
- T/Mi5yHULOa82MsWo4kw/rrRMRH5amaVJsw5zTSVNgT1LPsvyB94KE3fcldG0DFrrx8RYZWc
- QpjIIaRpQs19z91Yj+sfy2SnkciGtY+NiDW4pZatjTLbhVq/kQPPqgH2PU0R2JbsW+OmstIl
- cgS75m5ai4WMKHGsbFIO/VYO3kW0axu/bbGJSDm99GVzgjGfnrgzvFkAVs5e4EVkgp1KTgUp
- LpCcG5LN0jbwbjrmtpXScE17ignBNLgPIcSomlt1xnCEesqB43FQuDK6N5U0TM6i9pBW/rTD
- yYcQWMxMUmZP0QTZT/7Drodhrn1vHr9egFWqVeb/+0J5GyIkFdYhe2F3N39IYDUGZ8Mxi50v
- Fnu4GbiBQ0THNOawDuBtHmrg4fnkjn2V4ESPLm58ON6jlqOwGAaFBwRUx28u/bRokq/Xc9Pb
- lcI8yUvq6ca8E2wUsK7Wxy+vW7CshMCM/JeSPYx6EeCy7b85BuFAm8DTXhKb9lOnMs3QyE6k
- 1yEhdXkARRxv7CPD3GQ7LGZqXW1Iyd9EIMZTSoNTA9dup/+poB2jh/OQttnGqOvgZv5FFkc3
- gxmsgAQorkp18kOzJzm4A+dhjuPj6fHQgQcs1C/sn2e0it1Y4usZoqN4Ffd7OpdIIvxcrVnl
- CZd8yR5xL1eZaxhhBBhU81RTe3wv6nt3Cn00QA/R8BJGyGFpib7Fb289g2SM29FH67okxfJb
- U7ftAdb6YVcVJdBRfEmOtjpYyjG5YLpGdnjE89/usBSfpV0fgKd80lTiaO42mnslBB117w5O
- NKbfMegAHIQBL5oija7Lwv87VPJ7n5urY8wbcmlp/hC7VZ4TCLKIVviGADfBt3VFIve/G3oH
- y93bqNmMSl3XuzkeTXw+oUON10MJnVTLcmo9pIMK7LdeFQ4QzhJ5xrtLVUJJd0Nc0N9yLugw
- 51BchEJoLYCrSefeFjUMy4LhE3HDc0v/RrXwhDAzX7zhyZ/O9/3hEvuX5E6eaY6+aR+y/9qQ
- uMeetmRSvJCVivA4Td1UHUOhNMKSfhfvirQZHDNSGZkIPZdq/nhoIKMkv3HqHJTVEJadKIW/
- 9Wd6+8sacBTG1k9VJeGM6nHIpHYlSF1pd+elnDgerF7EHgAOqAwQ8Atppfb+/0xFCg=
-IronPort-HdrOrdr: A9a23:gpTfQ6xlvZv3K9yAflrvKrPwFr1zdoMgy1knxilNoHtuA6ulfq
- GV7ZAmPHrP41wssR4b9OxpJMG7MBHhHOFOkO8s1NuZMDUO21HYSb2Kj7GD/9SIIUSXygc678
- ldmodFZ+EYZmIK7voSjjPYLz8o+qj/zJyV
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CE926540
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:31:08 -0700 (PDT)
+X-IPAS-Result: =?us-ascii?q?A2DBBQCEu7piffxkzoFagliDJYFXlBABAQEGjHGHH4ong?=
+ =?us-ascii?q?gcBAQEBAQEBAQEJLxMEAQFAig8nNgcOAQIEAQEBAQMCAwEBAQEBAQMBAQYBA?=
+ =?us-ascii?q?QEBAQcEFAEBIzwnhWgNhkMGJwsBRhBRVxmCeAIBAQKCZAEDMK4uMoEBhloBg?=
+ =?us-ascii?q?T+BZYE9iVmFH4FAgRCBSIM1hAuBBoVuBJoGCgMJBAcFRhcSTjEhAkULHAEIB?=
+ =?us-ascii?q?gYHAQgBBQgoBAIBAQEGBRgUAQMBARMSBRMMBygKEgISDAobBwcDCwUyDQIOB?=
+ =?us-ascii?q?wEBDA8BAg8DAQIRAQcCCRIIBg8rCAMBAQMBBwECAgMgCwIDFgkHCAIBAgUCA?=
+ =?us-ascii?q?gEDDwEIChwSEBQCBA0EHgkCCAECGR4sBwICBA4DIx8ICwoDDgMEAwEQAhgHA?=
+ =?us-ascii?q?gEVAQUCBAgEAQMGAwgVGQENJwQHAxICDQEGAQIGAQEFBQEDGAgDFAMFAQIIA?=
+ =?us-ascii?q?xYHAQIhBQomCQQNAwEiGwIDAwEEGwoCAQICBRYFAgEBAgMCBhUGAgI/LxEdD?=
+ =?us-ascii?q?QgECAQJEhwjAQIMAQQBAgcvBQQtAgEBHgQFAQUPAggBARYCBgQDAgIDAQECA?=
+ =?us-ascii?q?RYCEAgCCCcXBxMzGQEFNxQODwEDBggZHCIHCQcFBhYDDBUpHikFBxESGw8ED?=
+ =?us-ascii?q?Q0KNCAWJAEBDgUDARIZEQ4HFApTJiEVEAYBKxYDBAEDAwIGGgECAyICEgsJF?=
+ =?us-ascii?q?QIELQUBIh0Zm0oBgQ1Ol3uLDqBTB4NREAGLEJUmhUWRHQKSAJZwonGETzWBM?=
+ =?us-ascii?q?wJAgUxNI4M4CUgZD5dUhR5zOwIGCwEBAwmMOYJIAQE?=
+IronPort-Data: A9a23:Q+yrlaxjgot6gQYK1mh6t+etxirEfRIJ4+MujC+fZmUNrF6WrkVTz
+ GYfCmmFb//fZjahf493O4mw80lUupTWzIM3SgBrqlhgHilAwSbnLY3EcR2gYX/6wu4v7q5Dx
+ 59DAjUVBJlsFhcwnj/0bv656yMUOZigHtIQMsacUsxKbVIiGX1JZS5LwbZj2NY224jhWmthh
+ PuryyHhEA79s9JLGj9Mg06zgEsHUCPa4W5wUvQWPJinjXeG/5UnJMt3yZKZdxMUdrJp8tuSH
+ I4v+l0ZElTxpH/BAvv9+lryn9ZjrrT6ZWBigVIOM0Sub4QrSiEais4G2PQghUh/qjzKh/NLj
+ 993jZmzThYVE5TctdpDTEwNe81+FfUuFL7vJHG+tZTKiVDAcj7szvRiAUU8MJcXvOp6aY1M3
+ aVCeXZXNk7F3rruhujmEIGAhex6RCXvFJgUunVt1SnUF949XY3PBbjM5JpY0TY8i8REEOzRI
+ cYUAdZqRE2ePkAWZg5KU/rSms+jl1TjTAF6kmu/rKMG+XX09B12jODUZY+9ltuiHpkLwhzB/
+ goq5V/RHRMBM8CW4TWA+3OowOTImEvTV5gfG7643vprhkCDyGsODhEfSVq8p7++kEHWc9ZeL
+ VEEvzEypKcz8kODStjmQwb+pH+Cow5aV9dOe8U0sxqGyuzb4hqxAXUYSjlGa5ots8pebTgr0
+ EKZ2tDkHzpitJWLRn+HsLSZtzW/PW4SN2BqWMMfZQ4M4t27+ccuiBOKTttiHKOxhNDvFnf8z
+ lhmsRTSmZ0yhI0T9J/892r/hjGrt6Tkdx4Y2FvICzfNAhxCWKapYImh6F7+5PlGLZqEQlTpg
+ JTis5bHhAzpJczd/BFhUNnhD5n1tqrcaGK0bUpHT8dxr23FF2uLINgIiAySMnuFJe4oVFcFi
+ mfztAJd6ZtZMWGlBUOcS9zgUp5ypUQMPf7sWv3SK+XltoJtaAKC9ix0aiatM43FlUEtlflmf
+ 4qdcIOsAHcWBKBtwSC5AesQuVPK+szc7T2DLXwY5035uVZ7WJJzYetaWLdpRrtohJ5oWC2Pr
+ 75i2zKikn2zqtHWbCjN6pI0JlsXN3U9Dp2eg5UJK7DYf1Y4Qj9/UKa5LVYdl2pNwfU9egDgo
+ C3VZ6Ok4ASu7ZE6AV/SOy09Me2HsWhX/SlrbUTAwmpEK1B4Pdjztv5HH3fGVbMq8PN+wLZpS
+ fgbdt+bA+heAjLK5ysad5qVkWCRXEvDuO56BAL7O2JXV8A7GGT0FirMJFaHGN8mUnHq76PTY
+ tSIimvmfHb0b14yUJuJMKP/lAjZULp0sLsaYnYk6+J7IC3EmLWG4QSr5hPrC6ng8Sn++wY=
+IronPort-HdrOrdr: A9a23:z/KNfq8m18YpnA8M7zVuk+DPI+orL9Y04lQ7vn2ZLiY0TiX4ra
+ GTdZEgvnXJYVkqKRMdcK+7Scy9qB/nmKKdgrN+AV7BZniEhILAFugL0WKI+VLd8kPFmtK13J
+ 0QF5RDNA==
 X-IronPort-Anti-Spam-Filtered: true
 Received: from mail01.uni-heidelberg.de ([129.206.100.252])
-  by relay.uni-heidelberg.de with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Jun 2022 10:31:06 +0200
+  by relay.uni-heidelberg.de with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Jun 2022 10:31:08 +0200
 Received: from localhost (ip-037-209-006-204.um11.pools.vodafone-ip.de [37.209.6.204])
         (Authenticated sender: ln194)
-        by mail01.uni-heidelberg.de (Postfix) with ESMTPSA id 3C76330011A5C;
-        Tue, 28 Jun 2022 10:31:05 +0200 (CEST)
+        by mail01.uni-heidelberg.de (Postfix) with ESMTPSA id D7C19300084F1;
+        Tue, 28 Jun 2022 10:31:06 +0200 (CEST)
 From:   Felix Schlepper <f3sch.git@outlook.com>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         wjsota@gmail.com, Felix Schlepper <f3sch.git@outlook.com>
-Subject: [PATCH 1/7] Staging: rtl8192e: Added blank lines before/after struct
-Date:   Tue, 28 Jun 2022 10:30:50 +0200
-Message-Id: <f23e5ad2839c238665956f0d552cacd9944b724d.1656402464.git.f3sch.git@outlook.com>
+Subject: [PATCH 2/7] Staging: rtl8192e: Added spaces around binary operators
+Date:   Tue, 28 Jun 2022 10:30:51 +0200
+Message-Id: <627de456888fe0b665a04078081abc0418f4aba0.1656402464.git.f3sch.git@outlook.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1656402464.git.f3sch.git@outlook.com>
 References: <cover.1656402464.git.f3sch.git@outlook.com>
@@ -81,37 +81,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This addresses an issue raised by checkpatch.pl:
+This addresses two issues raised by checkpatch.pl:
 
      $ ./scripts/checkpatch.pl --terse -f drivers/staging/rtl8192e/rtllib_wx.c
-     CHECK: Please use a blank line after function/struct/union/enum
-     declarations
-
-The additional blank line above the struct/before the headers is
-just cleaner.
+     CHECK: spaces preferred around that '&' (ctx:VxV)
+     CHECK: spaces preferred around that '<<' (ctx:VxV)
 
 Signed-off-by: Felix Schlepper <f3sch.git@outlook.com>
 ---
- drivers/staging/rtl8192e/rtllib_wx.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/staging/rtl8192e/rtllib_wx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/staging/rtl8192e/rtllib_wx.c b/drivers/staging/rtl8192e/rtllib_wx.c
-index cf9a240924f2..3b81a3395527 100644
+index 3b81a3395527..7bd1e829ff7e 100644
 --- a/drivers/staging/rtl8192e/rtllib_wx.c
 +++ b/drivers/staging/rtl8192e/rtllib_wx.c
-@@ -17,10 +17,12 @@
- #include <linux/module.h>
- #include <linux/etherdevice.h>
- #include "rtllib.h"
-+
- struct modes_unit {
- 	char *mode_string;
- 	int mode_size;
- };
-+
- static struct modes_unit rtllib_modes[] = {
- 	{"a", 1},
- 	{"b", 1},
+@@ -74,7 +74,7 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
+ 	/* Add the protocol name */
+ 	iwe.cmd = SIOCGIWNAME;
+ 	for (i = 0; i < ARRAY_SIZE(rtllib_modes); i++) {
+-		if (network->mode&(1<<i)) {
++		if (network->mode & (1 << i)) {
+ 			sprintf(pname, rtllib_modes[i].mode_string,
+ 				rtllib_modes[i].mode_size);
+ 			pname += rtllib_modes[i].mode_size;
 -- 
 2.36.1
 

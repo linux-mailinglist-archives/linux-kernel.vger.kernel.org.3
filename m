@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C23A55E4B7
+	by mail.lfdr.de (Postfix) with ESMTP id A386A55E4B8
 	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346489AbiF1Nc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58072 "EHLO
+        id S1346547AbiF1NdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346575AbiF1Nc0 (ORCPT
+        with ESMTP id S1346583AbiF1Nc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:32:26 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3722731236;
-        Tue, 28 Jun 2022 06:31:58 -0700 (PDT)
+        Tue, 28 Jun 2022 09:32:27 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EF43135D;
+        Tue, 28 Jun 2022 06:32:06 -0700 (PDT)
 Received: (Authenticated sender: ash@heyquark.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2AAE5200010;
-        Tue, 28 Jun 2022 13:31:48 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id AD13020000A;
+        Tue, 28 Jun 2022 13:31:57 +0000 (UTC)
 From:   Ash Logan <ash@heyquark.com>
 To:     krzysztof.kozlowski+dt@linaro.org, paulus@samba.org,
         mpe@ellerman.id.au, christophe.leroy@csgroup.eu,
@@ -26,12 +26,13 @@ Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         j.ne@posteo.net, linkmauve@linkmauve.fr,
         rw-r-r-0644@protonmail.com, devicetree@vger.kernel.org,
         joel@jms.id.au
-Subject: [PATCH v3 00/12] powerpc: Nintendo Wii U support
-Date:   Tue, 28 Jun 2022 23:31:32 +1000
-Message-Id: <20220628133144.142185-1-ash@heyquark.com>
+Subject: [PATCH v3 01/12] dt-bindings: wiiu: Document the Nintendo Wii U devicetree
+Date:   Tue, 28 Jun 2022 23:31:33 +1000
+Message-Id: <20220628133144.142185-2-ash@heyquark.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220622131037.57604-1-ash@heyquark.com>
+In-Reply-To: <20220628133144.142185-1-ash@heyquark.com>
 References: <20220622131037.57604-1-ash@heyquark.com>
+ <20220628133144.142185-1-ash@heyquark.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
@@ -43,93 +44,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following patches add basic support for the Nintendo Wii U video
-game console, a PowerPC system somewhat similar to the GameCube and
-Wii.
+Adds schema for the various Wii U devicetree nodes used.
 
-This includes:
-- devicetree source
-- bootwrapper support
-- udbg console to bootloader
-- early udbg console
-- interrupt controllers
-- platform support
-- recognition of the Espresso processor
-- workaround for the discontiguous RAM blocks
-
-This is enough to boot on hardware. dmesg pics (with a small hack to
-udbg-immortal, not included):
-Link: https://wiki.linux-wiiu.org/images/7/7e/Mainline-initial-dmesg1.png
-Link: https://wiki.linux-wiiu.org/images/9/91/Mainline-initial-dmesg2.png
-
-For those who have hardware and would like to try these patches, some
-modification is required to the stock OS to allow Linux. For info:
-https://wiki.linux-wiiu.org/wiki/AdvancedSetup
-
-Some of the design choices (new platform > embedded6xx) were discussed
-previously:
-Link: https://lore.kernel.org/lkml/0020d47c-0e23-822c-33f5-ccb7ea4c1072@heyquark.com/T/
-
-Turns out even less changes were needed than previously anticipated for
-discontiguous memory, and KUAP is yet to give trouble. Thanks to those
-who helped and discussed this.
-
-Changes since v2:
- - Fixed some overzealous deleting in the devicetree, oops.
- - Fixed missing declarations for some functions (thanks robots)
- - Fixed some checkpatch warnings.
- - Mark latte as a simple-bus and use of_platform_default_populate.
-Changes since v1:
- - Style and formatting tweaks to the devicetree, thanks Rob Herring for
-   the review.
-
-Ash Logan (12):
-  dt-bindings: wiiu: Document the Nintendo Wii U devicetree
-  powerpc: wiiu: device tree
-  powerpc: wiiu: bootwrapper support
-  powerpc: wiiu: introduce wiiu platform
-  powerpc: wiiu: declare as non-coherent
-  powerpc: wiiu: udbg support for latteipc
-  powerpc: wiiu: espresso interrupt controller support
-  powerpc: wiiu: latte interrupt controller support
-  powerpc: espresso processor support
-  powerpc: wiiu: platform support
-  powerpc: wiiu: don't enforce flat memory
-  powerpc: wiiu: add minimal default config
-
- .../bindings/powerpc/nintendo/wiiu.yaml       |  28 ++
- .../powerpc/nintendo/wiiu/espresso-pic.yaml   |  42 +++
- .../bindings/powerpc/nintendo/wiiu/gpu7.yaml  |  41 +++
- .../powerpc/nintendo/wiiu/latte-ahci.yaml     |  43 +++
- .../powerpc/nintendo/wiiu/latte-dsp.yaml      |  35 ++
- .../powerpc/nintendo/wiiu/latte-pic.yaml      |  46 +++
- .../powerpc/nintendo/wiiu/latte-sdhci.yaml    |  40 +++
- .../bindings/powerpc/nintendo/wiiu/latte.yaml |  25 ++
- arch/powerpc/Kconfig.debug                    |   9 +
- arch/powerpc/boot/Makefile                    |   4 +
- arch/powerpc/boot/dts/wiiu.dts                | 326 ++++++++++++++++++
- arch/powerpc/boot/wiiu-head.S                 | 103 ++++++
- arch/powerpc/boot/wiiu.c                      |  73 ++++
- arch/powerpc/boot/wrapper                     |   4 +
- arch/powerpc/configs/wiiu_defconfig           |   7 +
- arch/powerpc/include/asm/udbg.h               |   1 +
- arch/powerpc/kernel/cputable.c                |  16 +
- arch/powerpc/kernel/head_book3s_32.S          |  20 ++
- arch/powerpc/kernel/udbg.c                    |   3 +
- arch/powerpc/mm/init_32.c                     |   4 +-
- arch/powerpc/platforms/Kconfig                |   1 +
- arch/powerpc/platforms/Kconfig.cputype        |   2 +-
- arch/powerpc/platforms/Makefile               |   1 +
- arch/powerpc/platforms/wiiu/Kconfig           |  22 ++
- arch/powerpc/platforms/wiiu/Makefile          |   4 +
- arch/powerpc/platforms/wiiu/espresso-pic.c    | 183 ++++++++++
- arch/powerpc/platforms/wiiu/espresso-pic.h    |  59 ++++
- arch/powerpc/platforms/wiiu/latte-pic.c       | 259 ++++++++++++++
- arch/powerpc/platforms/wiiu/latte-pic.h       |  23 ++
- arch/powerpc/platforms/wiiu/setup.c           |  60 ++++
- arch/powerpc/platforms/wiiu/udbg_latteipc.c   | 124 +++++++
- arch/powerpc/platforms/wiiu/udbg_latteipc.h   |  27 ++
- 32 files changed, 1632 insertions(+), 3 deletions(-)
+Signed-off-by: Ash Logan <ash@heyquark.com>
+---
+ .../bindings/powerpc/nintendo/wiiu.yaml       | 28 +++++++++++
+ .../powerpc/nintendo/wiiu/espresso-pic.yaml   | 42 +++++++++++++++++
+ .../bindings/powerpc/nintendo/wiiu/gpu7.yaml  | 41 +++++++++++++++++
+ .../powerpc/nintendo/wiiu/latte-ahci.yaml     | 43 +++++++++++++++++
+ .../powerpc/nintendo/wiiu/latte-dsp.yaml      | 35 ++++++++++++++
+ .../powerpc/nintendo/wiiu/latte-pic.yaml      | 46 +++++++++++++++++++
+ .../powerpc/nintendo/wiiu/latte-sdhci.yaml    | 40 ++++++++++++++++
+ .../bindings/powerpc/nintendo/wiiu/latte.yaml | 25 ++++++++++
+ 8 files changed, 300 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/powerpc/nintendo/wiiu.yaml
  create mode 100644 Documentation/devicetree/bindings/powerpc/nintendo/wiiu/espresso-pic.yaml
  create mode 100644 Documentation/devicetree/bindings/powerpc/nintendo/wiiu/gpu7.yaml
@@ -138,22 +65,355 @@ Ash Logan (12):
  create mode 100644 Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-pic.yaml
  create mode 100644 Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-sdhci.yaml
  create mode 100644 Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte.yaml
- create mode 100644 arch/powerpc/boot/dts/wiiu.dts
- create mode 100644 arch/powerpc/boot/wiiu-head.S
- create mode 100644 arch/powerpc/boot/wiiu.c
- create mode 100644 arch/powerpc/configs/wiiu_defconfig
- create mode 100644 arch/powerpc/platforms/wiiu/Kconfig
- create mode 100644 arch/powerpc/platforms/wiiu/Makefile
- create mode 100644 arch/powerpc/platforms/wiiu/espresso-pic.c
- create mode 100644 arch/powerpc/platforms/wiiu/espresso-pic.h
- create mode 100644 arch/powerpc/platforms/wiiu/latte-pic.c
- create mode 100644 arch/powerpc/platforms/wiiu/latte-pic.h
- create mode 100644 arch/powerpc/platforms/wiiu/setup.c
- create mode 100644 arch/powerpc/platforms/wiiu/udbg_latteipc.c
- create mode 100644 arch/powerpc/platforms/wiiu/udbg_latteipc.h
 
-
-base-commit: 03c765b0e3b4cb5063276b086c76f7a612856a9a
+diff --git a/Documentation/devicetree/bindings/powerpc/nintendo/wiiu.yaml b/Documentation/devicetree/bindings/powerpc/nintendo/wiiu.yaml
+new file mode 100644
+index 000000000000..5824b07928f5
+--- /dev/null
++++ b/Documentation/devicetree/bindings/powerpc/nintendo/wiiu.yaml
+@@ -0,0 +1,28 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++
++$id: http://devicetree.org/schemas/powerpc/nintendo/wiiu.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nintendo Wii U bindings
++
++maintainers:
++  - Ash Logan <ash@heyquark.com>
++  - Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
++
++description: |
++  Nintendo Wii U video game console binding.
++
++properties:
++  $nodename:
++    const: "/"
++  compatible:
++    oneOf:
++      - description: Nintendo Wii U video game console
++        items:
++          - const: nintendo,wiiu
++
++additionalProperties: true
++
++...
+diff --git a/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/espresso-pic.yaml b/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/espresso-pic.yaml
+new file mode 100644
+index 000000000000..878a81595f5f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/espresso-pic.yaml
+@@ -0,0 +1,42 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/powerpc/nintendo/wiiu/espresso-pic.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nintendo Wii U "Espresso" interrupt controller
++
++maintainers:
++  - Ash Logan <ash@heyquark.com>
++  - Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
++
++description: |
++  Interrupt controller found on the Nintendo Wii U for the "Espresso" processor.
++
++properties:
++  compatible:
++    oneOf:
++      - description: Nintendo Wii U "Espresso" interrupt controller
++        items:
++          - const: nintendo,espresso-pic
++  '#interrupt-cells':
++    # Interrupt numbers 0-32 in one cell
++    const: 1
++  interrupt-controller: true
++  reg:
++    items:
++      - description: Core registers
++
++additionalProperties: false
++
++examples:
++  - |
++    espresso_pic: pic@c000078 {
++            #interrupt-cells = <1>;
++            interrupt-controller;
++
++            compatible = "nintendo,espresso-pic";
++            reg = <0x0c000078 0x18>;
++    };
++
++...
+diff --git a/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/gpu7.yaml b/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/gpu7.yaml
+new file mode 100644
+index 000000000000..e54d49015f36
+--- /dev/null
++++ b/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/gpu7.yaml
+@@ -0,0 +1,41 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/powerpc/nintendo/wiiu/gpu7.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nintendo Wii U Latte "GPU7" graphics processor
++
++maintainers:
++  - Ash Logan <ash@heyquark.com>
++  - Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
++
++description: |
++  GPU7 graphics processor, also known as "GX2", found in the Latte multifunction chip of the
++  Nintendo Wii U.
++
++properties:
++  compatible:
++    oneOf:
++      - description: Nintendo Wii U Latte "GPU7" graphics processor
++        items:
++          - const: nintendo,latte-gpu7
++  reg:
++    items:
++      - description: GpuF0MMReg registers
++  interrupts:
++    items:
++      - description: Main interrupt, connected via Espresso PIC
++
++# This will likely get bound to the Radeon driver one day, which will neccesitate extra properties
++additionalProperties: true
++
++examples:
++  - |
++    gpu7@c200000 {
++            compatible = "nintendo,latte-gpu7";
++            reg = <0x0c200000 0x80000>;
++            interrupts = <2>;
++            interrupt-parent = <&espresso_pic>;
++    };
++...
+diff --git a/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-ahci.yaml b/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-ahci.yaml
+new file mode 100644
+index 000000000000..7b9de4effcb0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-ahci.yaml
+@@ -0,0 +1,43 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/powerpc/nintendo/wiiu/latte-ahci.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nintendo Wii U Latte AHCI controller
++
++maintainers:
++  - Ash Logan <ash@heyquark.com>
++  - Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
++
++description: |
++  Nintendo Wii U AHCI SATA controller, as found in the Latte chip.
++
++properties:
++  compatible:
++    oneOf:
++      - description: Nintendo Wii U Latte AHCI controller
++        items:
++          - const: nintendo,latte-ahci
++  reg:
++    items:
++      - description: |
++          HBA memory registers. Note that unlike the spec, space for only 6 ports exist, with 2 vendor
++          registers afterwards, thus register space should be 0x408 long (0x100+0x80*6+0x8).
++  interrupts:
++    items:
++      - description: Main HBA interrupt
++      - description: Vendor debugging interrupt
++
++additionalProperties: false
++
++examples:
++  - |
++    sata: ahci@d160400 {
++          compatible = "nintendo,latte-ahci";
++          reg = <0x0d160400 0x408>;
++
++          interrupt-parent = <&latte_pic>;
++          interrupts = <38>, <28>;
++    };
++...
+diff --git a/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-dsp.yaml b/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-dsp.yaml
+new file mode 100644
+index 000000000000..ed0b4c28ce48
+--- /dev/null
++++ b/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-dsp.yaml
+@@ -0,0 +1,35 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/powerpc/nintendo/wiiu/latte-dsp.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nintendo Wii U Latte DSP
++
++maintainers:
++  - Ash Logan <ash@heyquark.com>
++  - Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
++
++description: |
++  Nintendo Wii U digital signal processor, as found in the Latte chip.
++
++properties:
++  compatible:
++    oneOf:
++      - description: Nintendo Wii U Latte DSP
++        items:
++          - const: nintendo,latte-dsp
++  reg:
++    items:
++      - description: DSP registers
++
++# Once more is known about this device more properties will likely be added
++additionalProperties: true
++
++examples:
++  - |
++    latte_dsp: dsp@c005000 {
++         compatible = "nintendo,latte-dsp";
++         reg = <0x0c005000 0x200>;
++    };
++...
+diff --git a/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-pic.yaml b/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-pic.yaml
+new file mode 100644
+index 000000000000..a2df71fb9964
+--- /dev/null
++++ b/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-pic.yaml
+@@ -0,0 +1,46 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/powerpc/nintendo/wiiu/latte-pic.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nintendo Wii U Latte interrupt controller
++
++maintainers:
++  - Ash Logan <ash@heyquark.com>
++  - Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
++
++description: |
++  Interrupt controller found on the Nintendo Wii U for the "Latte" devices.
++
++properties:
++  compatible:
++    oneOf:
++      - description: Nintendo Wii U Latte interrupt controller
++        items:
++          - const: nintendo,latte-pic
++  '#interrupt-cells':
++    # Interrupt numbers 0-64 in one cell.
++    const: 1
++  interrupt-controller: true
++  reg:
++    items:
++      - description: Core registers
++  interrupts:
++    items:
++      - description: Cascade interrupt for Espresso PIC
++
++additionalProperties: false
++
++examples:
++  - |
++    latte_pic: pic@d800440 {
++         #interrupt-cells = <1>;
++         interrupt-controller;
++
++         compatible = "nintendo,latte-pic";
++         reg = <0x0d800440 0x30>;
++         interrupt-parent = <&espresso_pic>;
++         interrupts = <24>;
++    };
++...
+diff --git a/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-sdhci.yaml b/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-sdhci.yaml
+new file mode 100644
+index 000000000000..4b9b0820edc1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-sdhci.yaml
+@@ -0,0 +1,40 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/powerpc/nintendo/wiiu/latte-sdhci.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nintendo Wii U Latte SD Host controller
++
++maintainers:
++  - Ash Logan <ash@heyquark.com>
++  - Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
++
++description: |
++  SDHCI hosts found on the Nintendo Wii U's Latte SoC for SD cards and SDIO devices.
++
++properties:
++  compatible:
++    oneOf:
++      - description: Nintendo Wii U Latte SDHCI
++        items:
++          - const: nintendo,latte-sdhci
++          - const: sdhci
++  reg:
++    items:
++      - description: Core registers
++  interrupts:
++    items:
++      - description: SDHCI interrupt
++
++additionalProperties: false
++
++examples:
++  - |
++    sdcard_0: sdhci@d070000 {
++          compatible = "nintendo,latte-sdhci","sdhci";
++          reg = <0x0d070000 0x200>;
++          interrupts = <7>;
++          interrupt-parent = <&latte_pic>;
++    };
++...
+diff --git a/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte.yaml b/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte.yaml
+new file mode 100644
+index 000000000000..6ae86d198fa3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte.yaml
+@@ -0,0 +1,25 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/powerpc/nintendo/wiiu/latte.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Latte system bus
++
++maintainers:
++  - Ash Logan <ash@heyquark.com>
++  - Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
++
++description: |
++  Latte multi-function SoC, containing many of the devices found on the Nintendo Wii U.
++
++properties:
++  compatible:
++    oneOf:
++      - description: Nintendo Wii U "Latte" SoC
++        items:
++          - const: nintendo,latte
++
++additionalProperties: true
++
++...
 -- 
 2.36.1
 

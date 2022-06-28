@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54D755CABC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABAA155C9E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244180AbiF1CXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 22:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S244236AbiF1CYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 22:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243909AbiF1CWb (ORCPT
+        with ESMTP id S243955AbiF1CWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 22:22:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D1D24F32;
-        Mon, 27 Jun 2022 19:21:59 -0700 (PDT)
+        Mon, 27 Jun 2022 22:22:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132C025285;
+        Mon, 27 Jun 2022 19:22:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69EE0B81C12;
-        Tue, 28 Jun 2022 02:21:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57DF8C341CC;
-        Tue, 28 Jun 2022 02:21:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 430E2B81C12;
+        Tue, 28 Jun 2022 02:22:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0556CC341CD;
+        Tue, 28 Jun 2022 02:21:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656382917;
-        bh=aryDqvuv3cG6khhXyW+8VRoUdPuZ96pqZ7EV4Ei5FfU=;
+        s=k20201202; t=1656382921;
+        bh=rOos/ArnyqrU9+/UDMZ/R2BUkprdvSdRzCRG/yD/lQ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RcEkbxZpE47Wi8AM8KJqpMdYG2TZyat8qd43DQhXvwpPpKV+rerpgZS1N/ra+fslc
-         tEqGTDlgiUJ++2Lg5UTjlWZLbts5Th/vuK7T2009WoKHRKTaNsP0EiyRUKsly3l7Tc
-         WJvKatNcnDMggHKJBZ97Cc9NKeubBSCgXXca1fguyZ3XFvmRi96iT2HCzBQk4J1TEV
-         jpkUhlSGF4o9wX3C/qE7GgBLHf978Gq5Jb6sXBg+i98MQC06h8zjb6gI7Rdm2Kc5ya
-         jGxiEMzfF59l6HOq/Ie6jVoFrgfqZJhsahAtpzvD3xYHnBqCC2YMuCaftVUaOBUUg8
-         HGpwclozM9xoA==
+        b=bBczAIs825MzX6CRYQGzoLE37ery5+KW1kpHUG2AvwvjsVa0jAjW0TGjMYExCzSfd
+         2d/iuwTnordUhtmK6SrgvB6/Jgj23EvvJTsfjtxWz/ASsX0DLNqh/O/Vg0PpIyqiyG
+         ltbRdOL06T8QnbZXmvhV5nlOdPuZooi8bv/UBaoKObPXM0GZ2jMMHr40g2mv/nvEfa
+         G6c1ErlVMeGGpXLxg2wB3KfE7fRSFwnzuF9t09CHuEgIJ1DNxLAhFCt8SWGhoPadsj
+         P0hW8TrOgBQod6zb2XOo/sDK/sG58IfUuFsQd9lCsvG/yys1F9gG9tiDugIxudXAI2
+         +8OvTtxO3+kig==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Petr Cvek <petrcvekcz@gmail.com>, Helge Deller <deller@gmx.de>,
-        Sasha Levin <sashal@kernel.org>, mbroemme@libmpq.org,
+Cc:     Hyunwoo Kim <imv4bel@gmail.com>, Helge Deller <deller@gmx.de>,
+        Sasha Levin <sashal@kernel.org>, yang.lee@linux.alibaba.com,
+        yangyingliang@huawei.com, cai.huoqing@linux.dev,
         linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 5.15 21/41] video: fbdev: intelfb: Use aperture size from pci_resource_len
-Date:   Mon, 27 Jun 2022 22:20:40 -0400
-Message-Id: <20220628022100.595243-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 22/41] video: fbdev: pxa3xx-gcu: Fix integer overflow in pxa3xx_gcu_write
+Date:   Mon, 27 Jun 2022 22:20:41 -0400
+Message-Id: <20220628022100.595243-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220628022100.595243-1-sashal@kernel.org>
 References: <20220628022100.595243-1-sashal@kernel.org>
@@ -57,54 +58,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Petr Cvek <petrcvekcz@gmail.com>
+From: Hyunwoo Kim <imv4bel@gmail.com>
 
-[ Upstream commit 25c9a15fb7bbfafb94dd3b4e3165c18b8e1bd039 ]
+[ Upstream commit a09d2d00af53b43c6f11e6ab3cb58443c2cac8a7 ]
 
-Aperture size for i9x5 variants is determined from PCI base address.
+In pxa3xx_gcu_write, a count parameter of type size_t is passed to words of
+type int.  Then, copy_from_user() may cause a heap overflow because it is used
+as the third argument of copy_from_user().
 
-	if (pci_resource_start(pdev, 2) & 0x08000000)
-		*aperture_size = MB(128);
-	...
-
-This condition is incorrect as 128 MiB address can have the address
-set as 0x?8000000 or 0x?0000000. Also the code can be simplified to just
-use pci_resource_len().
-
-The true settings of the aperture size is in the MSAC register, which
-could be used instead. However the value is used only as an info message,
-so it doesn't matter.
-
-Signed-off-by: Petr Cvek <petrcvekcz@gmail.com>
+Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
 Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/intelfb/intelfbhw.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ drivers/video/fbdev/pxa3xx-gcu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/video/fbdev/intelfb/intelfbhw.c b/drivers/video/fbdev/intelfb/intelfbhw.c
-index 57aff7450bce..2086e06532ee 100644
---- a/drivers/video/fbdev/intelfb/intelfbhw.c
-+++ b/drivers/video/fbdev/intelfb/intelfbhw.c
-@@ -201,13 +201,11 @@ int intelfbhw_get_memory(struct pci_dev *pdev, int *aperture_size,
- 	case PCI_DEVICE_ID_INTEL_945GME:
- 	case PCI_DEVICE_ID_INTEL_965G:
- 	case PCI_DEVICE_ID_INTEL_965GM:
--		/* 915, 945 and 965 chipsets support a 256MB aperture.
--		   Aperture size is determined by inspected the
--		   base address of the aperture. */
--		if (pci_resource_start(pdev, 2) & 0x08000000)
--			*aperture_size = MB(128);
--		else
--			*aperture_size = MB(256);
-+		/*
-+		 * 915, 945 and 965 chipsets support 64MB, 128MB or 256MB
-+		 * aperture. Determine size from PCI resource length.
-+		 */
-+		*aperture_size = pci_resource_len(pdev, 2);
- 		break;
- 	default:
- 		if ((tmp & INTEL_GMCH_MEM_MASK) == INTEL_GMCH_MEM_64M)
+diff --git a/drivers/video/fbdev/pxa3xx-gcu.c b/drivers/video/fbdev/pxa3xx-gcu.c
+index 9421d14d0eb0..9e9888e40c57 100644
+--- a/drivers/video/fbdev/pxa3xx-gcu.c
++++ b/drivers/video/fbdev/pxa3xx-gcu.c
+@@ -381,7 +381,7 @@ pxa3xx_gcu_write(struct file *file, const char *buff,
+ 	struct pxa3xx_gcu_batch	*buffer;
+ 	struct pxa3xx_gcu_priv *priv = to_pxa3xx_gcu_priv(file);
+ 
+-	int words = count / 4;
++	size_t words = count / 4;
+ 
+ 	/* Does not need to be atomic. There's a lock in user space,
+ 	 * but anyhow, this is just for statistics. */
 -- 
 2.35.1
 

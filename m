@@ -2,121 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B182855C752
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D88455D648
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344902AbiF1LSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 07:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
+        id S234490AbiF1LW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 07:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345454AbiF1LSJ (ORCPT
+        with ESMTP id S231190AbiF1LWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 07:18:09 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E0CCFA;
-        Tue, 28 Jun 2022 04:18:08 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SBENMi030294;
-        Tue, 28 Jun 2022 11:18:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=s2tecT5NkWFR+AMcnuSlYE3BxfjRsEHcAzcdT3QzzNM=;
- b=FeM0WobmYtaJyjr3LVJxjXVGgsJxFC6iFORNiujKvBAOh3V+3/uLD3ga/NPgREJkYzVv
- ImbgFVmGzhhqQlXGk09PQvyIevIWGy48N1Lp649yBh8A9H57g1OYLBbthjeeaQ6riHx1
- FY+Ou4apVFhkNqw1YnzvepDycEAVZL28d/5Qo2ayxsY2ZzD8PIPnPIEmNKHf2VRZgGfl
- 8RjKyuX6qMNiCBie9lln5h6Ngguga1Y10vOgdjXVVaQJPEM0pGN7jlyg1r6qx94s1NOH
- BPGlLdtHobmADOumCP6oAYuM59vEsNmyrGRFIZiZdmT7+dB1X6wQ3Dj83LmzmTdcbuYX Bw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h00kb832u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 11:18:05 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25SBGLrW006925;
-        Tue, 28 Jun 2022 11:18:05 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h00kb8329-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 11:18:05 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25SB54EX005702;
-        Tue, 28 Jun 2022 11:18:03 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3gwt08vqn5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 11:18:03 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25SBI0lC22348222
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Jun 2022 11:18:00 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 46E7FAE045;
-        Tue, 28 Jun 2022 11:18:00 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A5B2DAE051;
-        Tue, 28 Jun 2022 11:17:58 +0000 (GMT)
-Received: from [9.171.41.104] (unknown [9.171.41.104])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 28 Jun 2022 11:17:58 +0000 (GMT)
-Message-ID: <3bde716c-0432-cf2d-6057-2d60fb86c3e8@linux.ibm.com>
-Date:   Tue, 28 Jun 2022 13:22:26 +0200
+        Tue, 28 Jun 2022 07:22:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2D352E08C
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:22:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656415373;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=acdCF6iYkZn7d+1bviTwCpM+1enwsilN4jZ+ihkP0yc=;
+        b=B/rL+RL2xjfHzkCJTrsiawsJWkWGGCi+hfIVKA3DmXpGfzSk/ekFQI3P+njVL8HmJlGjI7
+        OrH1QGA9533SfsMaJQDIQ55gEbGJFF8EyvfHnx4oS9WaHCWO7GImxjXakiNG5U+s1Gv5Qy
+        RJU+gXomAwZJi9rwhPY7OHu3pmRssok=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-623-R-RIGHFSNKCw5M_sTu74JA-1; Tue, 28 Jun 2022 07:22:52 -0400
+X-MC-Unique: R-RIGHFSNKCw5M_sTu74JA-1
+Received: by mail-wm1-f71.google.com with SMTP id 10-20020a1c020a000000b003a03f8cc1acso5424242wmc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:22:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=acdCF6iYkZn7d+1bviTwCpM+1enwsilN4jZ+ihkP0yc=;
+        b=jv1QxRdsv/EqVwf1WUPW/IVEifHQ+/3wz5ebiPbeiSgzGysHO2xWVr08DGqFd3EeS3
+         yqrPmL+AjVjPGJUq2a2TcDpo9Hbx/IAIEkav/VfTcTHIinR/2rUQoSAvFLpAfU6+6VPr
+         G4E3BOrT2FToXf3/ex76PYNQnfdmoV9Xq6xmktzCkn4a0FxDmOkuTJ9sAfVWBQnCVNDx
+         Z+6Yv+54ZExLLV6MGAJxu3kEyDsYXvv4sC59pt835UleoP59LsY15p+wddUC74iP2o3c
+         ywkRkfr0Z+aPEti4/TRDTqNcNfB3cM7xbgFVus0EewVFA0qtnQWJ+b0SJdq98SR7SYUj
+         vPUA==
+X-Gm-Message-State: AJIora/E9Acu0pyz/zVwJXNYCXSDPmX/nPybOO5MZYLBg0coQr1cStyk
+        EZIu/vHnpHkKheEhFKahg3d/C6xqdVx3wm39wy2U2c3LbUhIG1q3H9Kbd4mo1S0YzhFzDawEbcb
+        1PxlKfuULFfEEJ/stpdQ+NwbG
+X-Received: by 2002:a5d:4443:0:b0:21b:9339:d820 with SMTP id x3-20020a5d4443000000b0021b9339d820mr17123670wrr.324.1656415371226;
+        Tue, 28 Jun 2022 04:22:51 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vdgcLyjT9qmhEx5D0Y1yDfrMocphAVk8/DmCE3HP5ONI93eSJZWA+a3iENjFzGOSqU5wYEWQ==
+X-Received: by 2002:a5d:4443:0:b0:21b:9339:d820 with SMTP id x3-20020a5d4443000000b0021b9339d820mr17123650wrr.324.1656415371028;
+        Tue, 28 Jun 2022 04:22:51 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-115-110.dyn.eolo.it. [146.241.115.110])
+        by smtp.gmail.com with ESMTPSA id k22-20020a05600c0b5600b003a02cbf862esm16623467wmr.13.2022.06.28.04.22.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 04:22:50 -0700 (PDT)
+Message-ID: <6644160a045fad4d12c76c462ebde935bf644af4.camel@redhat.com>
+Subject: Re: [PATCH net-next v2 1/1] net: phy: ax88772a: fix lost pause
+ advertisement configuration
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>
+Date:   Tue, 28 Jun 2022 13:22:49 +0200
+In-Reply-To: <20220628064355.GD13092@pengutronix.de>
+References: <20220626152703.18157-1-o.rempel@pengutronix.de>
+         <20220627221705.0a49f3c9@kernel.org>
+         <20220628064355.GD13092@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v9 17/21] vfio-pci/zdev: add open/close device hooks
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
-        jgg@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220606203325.110625-1-mjrosato@linux.ibm.com>
- <20220606203325.110625-18-mjrosato@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <20220606203325.110625-18-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 8XOJy1_v7XTjGRREvuJ48lgxv2DAmHpF
-X-Proofpoint-GUID: 8qh8hc_BBG9W-qQwYiAmmiYNSVUfNtXd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-28_06,2022-06-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0
- phishscore=0 clxscore=1015 priorityscore=1501 impostorscore=0 spamscore=0
- mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206280046
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/6/22 22:33, Matthew Rosato wrote:
-> During vfio-pci open_device, pass the KVM associated with the vfio group
-> (if one exists).  This is needed in order to pass a special indicator
-> (GISA) to firmware to allow zPCI interpretation facilities to be used
-> for only the specific KVM associated with the vfio-pci device.  During
-> vfio-pci close_device, unregister the notifier.
+On Tue, 2022-06-28 at 08:43 +0200, Oleksij Rempel wrote:
+> On Mon, Jun 27, 2022 at 10:17:05PM -0700, Jakub Kicinski wrote:
+> > On Sun, 26 Jun 2022 17:27:03 +0200 Oleksij Rempel wrote:
+> > > Subject: [PATCH net-next v2 1/1] net: phy: ax88772a: fix lost pause advertisement configuration
+> > > 
+> > > In case of asix_ax88772a_link_change_notify() workaround, we run soft
+> > > reset which will automatically clear MII_ADVERTISE configuration. The
+> > > PHYlib framework do not know about changed configuration state of the
+> > > PHY, so we need use phy_init_hw() to reinit PHY configuration.
+> > > 
+> > > Fixes: dde258469257 ("net: usb/phy: asix: add support for ax88772A/C PHYs")
+> > 
+> > Why net-next?
 > 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> It is old bug but it will be notable only after this patch:
+> https://lore.kernel.org/all/20220624080208.3143093-1-o.rempel@pengutronix.de/
+> 
+> Should I resend it to net?
 
+It depends ;) is the fix functionally depending on the above patch? If
+yes, please update the commit message including such info (and the fix
+will go via net-next).
 
-Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
+If instead this patch is correct even regarless of
+89183b6ea8dd39771d92e99723f6cf60b5670dad, I *think* it should go via -
+net.
 
--- 
-Pierre Morel
-IBM Lab Boeblingen
+Thanks!
+
+Paolo
+

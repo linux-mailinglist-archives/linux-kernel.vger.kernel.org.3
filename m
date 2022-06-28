@@ -2,144 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F5455D9B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA16F55D53B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243432AbiF1Deo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 23:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
+        id S243181AbiF1DbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 23:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243262AbiF1Dej (ORCPT
+        with ESMTP id S243033AbiF1Dar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 23:34:39 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5825E2315F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:34:38 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d5so9871693plo.12
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:34:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=pZ+/evlGnsJ8jD6C9tMwnqlQXDJt8JhJGnpn4OPCdjs=;
-        b=ZKbAeK5dLgm2DXSIg5wecdROkd4oaR5bX00Hgrpx3CycC+gycPH90r8HsP89MIggwQ
-         Tgue21oNaVdD1QixnmeuatxNcsmJG4xKnv5Gp+DxvrMF89AnWKUGEelvc0PlxtyZQ98G
-         gRIANjbvmLyMraCLSQKxlpOsnPK+SulUvHUW7egM/R2LRJjKiT5EpDedRPJxzTVsmiol
-         iQyxuXdUdrSqbd4vg9WhMKMZGwzXpEjFJdSGjQZIDiX08h4PJTmF0avQSLtwZfOnSyX8
-         OcFZz2Kc/mQjCSMoB6dKyXJXSiNEZOxcLLNhniWqQszFiShJRUMnJs8r8vqXCcFFYZFe
-         CJ2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pZ+/evlGnsJ8jD6C9tMwnqlQXDJt8JhJGnpn4OPCdjs=;
-        b=EN5GGiQajD+yLmrdCnxpAKL8V9wL30DLqEqmrjCsNWKNYR9yG0rS8wBEEWqoX4IK54
-         P+qR3R+UOablLWSxhQ3A7gbLozJy5PdTh+CR/npjOu38m8Ym30ogpIZIwIoih9Ly/2cL
-         /lS8loO3uaPTK/wJXSCso7NugmBb3PY7wW4M911XwvWs3J1ANU49U1DQL3R/AxVUHa+9
-         GkvDRowyH70VOYSJm1+bMKMln/Mutx3plHpzSZ+Sbytug41vgVhwWgiSfg22bjkw2f4D
-         lh2Q5OhYbZjIyKN2hAGsZRYA/APU9HvARjCT2slwO+nq5BMuqH1zFbCKIxcN5Y4rt01C
-         kNTQ==
-X-Gm-Message-State: AJIora/aMx13cFr4bbnxap9reQYtR1V2LqbfhZBJ/zsL9K4J6iqsJ7ft
-        DSndBhn+7hpSR9vLzHdjkp2/Wg==
-X-Google-Smtp-Source: AGRyM1uTk/gqugCXTP+8MBHLnYa3VLEn9+TuUj54C7lV4fs/Sl3H+2Kf2QtAKD6V0UZkAx7Wg9hRgg==
-X-Received: by 2002:a17:90b:3ece:b0:1ed:13a9:8531 with SMTP id rm14-20020a17090b3ece00b001ed13a98531mr24513558pjb.183.1656387277925;
-        Mon, 27 Jun 2022 20:34:37 -0700 (PDT)
-Received: from [10.4.214.173] ([139.177.225.253])
-        by smtp.gmail.com with ESMTPSA id j10-20020aa78d0a000000b00522c3f34362sm8036655pfe.215.2022.06.27.20.34.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 20:34:37 -0700 (PDT)
-Message-ID: <f3d8aabe-3d02-8851-b5e9-b0dcdb7c0b6e@bytedance.com>
-Date:   Tue, 28 Jun 2022 11:34:29 +0800
+        Mon, 27 Jun 2022 23:30:47 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5697FCC;
+        Mon, 27 Jun 2022 20:30:41 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LX96H2g0lzhYwX;
+        Tue, 28 Jun 2022 11:28:23 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 28 Jun
+ 2022 11:30:37 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yekai13@huawei.com>, <liulongfang@huawei.com>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>
+CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <shaozhengchao@huawei.com>
+Subject: [PATCH] crypto: hisilicon/sec - don't sleep when in softirq
+Date:   Tue, 28 Jun 2022 11:35:52 +0800
+Message-ID: <20220628033552.135202-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH] mm: hugetlb: kill set_huge_swap_pte_at()
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     mike.kravetz@oracle.com, songmuchun@bytedance.com,
-        akpm@linux-foundation.org, catalin.marinas@arm.com,
-        will@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20220626145717.53572-1-zhengqi.arch@bytedance.com>
- <YrnBm9FGizF1iLsW@casper.infradead.org>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <YrnBm9FGizF1iLsW@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When kunpeng920 encryption driver is used to deencrypt and decrypt
+packets during the softirq, it is not allowed to use mutex lock. The
+kernel will report the following error:
 
+BUG: scheduling while atomic: swapper/57/0/0x00000300
+Call trace:
+dump_backtrace+0x0/0x1e4
+show_stack+0x20/0x2c
+dump_stack+0xd8/0x140
+__schedule_bug+0x68/0x80
+__schedule+0x728/0x840
+schedule+0x50/0xe0
+schedule_preempt_disabled+0x18/0x24
+__mutex_lock.constprop.0+0x594/0x5dc
+__mutex_lock_slowpath+0x1c/0x30
+mutex_lock+0x50/0x60
+sec_request_init+0x8c/0x1a0 [hisi_sec2]
+sec_process+0x28/0x1ac [hisi_sec2]
+sec_skcipher_crypto+0xf4/0x1d4 [hisi_sec2]
+sec_skcipher_encrypt+0x1c/0x30 [hisi_sec2]
+crypto_skcipher_encrypt+0x2c/0x40
+crypto_authenc_encrypt+0xc8/0xfc [authenc]
+crypto_aead_encrypt+0x2c/0x40
+echainiv_encrypt+0x144/0x1a0 [echainiv]
+crypto_aead_encrypt+0x2c/0x40
+esp_output_tail+0x348/0x5c0 [esp4]
+esp_output+0x120/0x19c [esp4]
+xfrm_output_one+0x25c/0x4d4
+xfrm_output_resume+0x6c/0x1fc
+xfrm_output+0xac/0x3c0
+xfrm4_output+0x64/0x130
+ip_build_and_send_pkt+0x158/0x20c
+tcp_v4_send_synack+0xdc/0x1f0
+tcp_conn_request+0x7d0/0x994
+tcp_v4_conn_request+0x58/0x6c
+tcp_v6_conn_request+0xf0/0x100
+tcp_rcv_state_process+0x1cc/0xd60
+tcp_v4_do_rcv+0x10c/0x250
+tcp_v4_rcv+0xfc4/0x10a4
+ip_protocol_deliver_rcu+0xf4/0x200
+ip_local_deliver_finish+0x58/0x70
+ip_local_deliver+0x68/0x120
+ip_sublist_rcv_finish+0x70/0x94
+ip_list_rcv_finish.constprop.0+0x17c/0x1d0
+ip_sublist_rcv+0x40/0xb0
+ip_list_rcv+0x140/0x1dc
+__netif_receive_skb_list_core+0x154/0x28c
+__netif_receive_skb_list+0x120/0x1a0
+netif_receive_skb_list_internal+0xe4/0x1f0
+napi_complete_done+0x70/0x1f0
+gro_cell_poll+0x9c/0xb0
+napi_poll+0xcc/0x264
+net_rx_action+0xd4/0x21c
+__do_softirq+0x130/0x358
+irq_exit+0x11c/0x13c
+__handle_domain_irq+0x88/0xf0
+gic_handle_irq+0x78/0x2c0
+el1_irq+0xb8/0x140
+arch_cpu_idle+0x18/0x40
+default_idle_call+0x5c/0x1c0
+cpuidle_idle_call+0x174/0x1b0
+do_idle+0xc8/0x160
+cpu_startup_entry+0x30/0x11c
+secondary_start_kernel+0x158/0x1e4
+softirq: huh, entered softirq 3 NET_RX 0000000093774ee4 with
+preempt_count 00000100, exited with fffffe00?
 
-On 2022/6/27 22:41, Matthew Wilcox wrote:
-> On Sun, Jun 26, 2022 at 10:57:17PM +0800, Qi Zheng wrote:
->> The commit e5251fd43007 ("mm/hugetlb: introduce set_huge_swap_pte_at()
->> helper") add set_huge_swap_pte_at() to handle swap entries on
->> architectures that support hugepages consisting of contiguous ptes.
->> And currently the set_huge_swap_pte_at() is only overridden by arm64.
-> 
-> Bleh.  I hate the way we handle these currently.
-> 
->> +static inline struct folio *hugetlb_swap_entry_to_folio(swp_entry_t entry)
->> +{
->> +	VM_BUG_ON(!is_migration_entry(entry) && !is_hwpoison_entry(entry));
->> +
->> +	return page_folio(pfn_to_page(swp_offset(entry)));
->> +}
-> 
-> We haven't needed a pfn_to_folio() yet, but perhaps we should have one?
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+ drivers/crypto/hisilicon/sec2/sec.h        |  2 +-
+ drivers/crypto/hisilicon/sec2/sec_crypto.c | 20 ++++++++++----------
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-Hi,
-
-IMO, it would be better to have a pfn_to_folio(), which can save the
-redundant page_folio() call in the current case.
-
-But this is not related to the current patch, maybe it can be a
-separate optimization patch.
-
-> 
-> Related, how should we store migration entries for multi-order folios
-> in the page tables?  We can either encode the individual page in
-> question, or we can encode the folio.  Do we need to support folios
-> being mapped askew (ie unaligned), or will folios always be mapped
-> aligned?
-
-Do we currently have a scenario where we need to use skew mapped folios?
-Maybe it can be used in pte-mapped THP? Hmm, I have no idea.
-
-> 
->> +	if (!pte_present(pte)) {
->> +		struct folio *folio;
->> +
->> +		folio = hugetlb_swap_entry_to_folio(pte_to_swp_entry(pte));
->> +		ncontig = num_contig_ptes(folio_size(folio), &pgsize);
->> +
->> +		for (i = 0; i < ncontig; i++, ptep++)
->> +			set_pte_at(mm, addr, ptep, pte);
->> +		return;
->> +	}
-> 
-> It seems like a shame to calculate folio_size() only to turn it into a
-> number of pages.  Don't you want to just use:
-> 
-> 		ncontig = folio_nr_pages(folio);
-
-We can't use folio_nr_pages() here, because for PMD_SIZE we only need
-one entry instead of the PTRS_PER_PTE entries returned by
-folio_nr_pages().
-
-Thanks,
-Qi
-
-> 
-
+diff --git a/drivers/crypto/hisilicon/sec2/sec.h b/drivers/crypto/hisilicon/sec2/sec.h
+index 42bb486f3b6d..d2a0bc93e752 100644
+--- a/drivers/crypto/hisilicon/sec2/sec.h
++++ b/drivers/crypto/hisilicon/sec2/sec.h
+@@ -119,7 +119,7 @@ struct sec_qp_ctx {
+ 	struct idr req_idr;
+ 	struct sec_alg_res res[QM_Q_DEPTH];
+ 	struct sec_ctx *ctx;
+-	struct mutex req_lock;
++	spinlock_t req_lock;
+ 	struct list_head backlog;
+ 	struct hisi_acc_sgl_pool *c_in_pool;
+ 	struct hisi_acc_sgl_pool *c_out_pool;
+diff --git a/drivers/crypto/hisilicon/sec2/sec_crypto.c b/drivers/crypto/hisilicon/sec2/sec_crypto.c
+index 6eebe739893c..64be111d58ae 100644
+--- a/drivers/crypto/hisilicon/sec2/sec_crypto.c
++++ b/drivers/crypto/hisilicon/sec2/sec_crypto.c
+@@ -127,11 +127,11 @@ static int sec_alloc_req_id(struct sec_req *req, struct sec_qp_ctx *qp_ctx)
+ {
+ 	int req_id;
+ 
+-	mutex_lock(&qp_ctx->req_lock);
++	spin_lock(&qp_ctx->req_lock);
+ 
+ 	req_id = idr_alloc_cyclic(&qp_ctx->req_idr, NULL,
+ 				  0, QM_Q_DEPTH, GFP_ATOMIC);
+-	mutex_unlock(&qp_ctx->req_lock);
++	spin_unlock(&qp_ctx->req_lock);
+ 	if (unlikely(req_id < 0)) {
+ 		dev_err(req->ctx->dev, "alloc req id fail!\n");
+ 		return req_id;
+@@ -156,9 +156,9 @@ static void sec_free_req_id(struct sec_req *req)
+ 	qp_ctx->req_list[req_id] = NULL;
+ 	req->qp_ctx = NULL;
+ 
+-	mutex_lock(&qp_ctx->req_lock);
++	spin_lock(&qp_ctx->req_lock);
+ 	idr_remove(&qp_ctx->req_idr, req_id);
+-	mutex_unlock(&qp_ctx->req_lock);
++	spin_unlock(&qp_ctx->req_lock);
+ }
+ 
+ static u8 pre_parse_finished_bd(struct bd_status *status, void *resp)
+@@ -273,7 +273,7 @@ static int sec_bd_send(struct sec_ctx *ctx, struct sec_req *req)
+ 	    !(req->flag & CRYPTO_TFM_REQ_MAY_BACKLOG))
+ 		return -EBUSY;
+ 
+-	mutex_lock(&qp_ctx->req_lock);
++	spin_lock(&qp_ctx->req_lock);
+ 	ret = hisi_qp_send(qp_ctx->qp, &req->sec_sqe);
+ 
+ 	if (ctx->fake_req_limit <=
+@@ -281,10 +281,10 @@ static int sec_bd_send(struct sec_ctx *ctx, struct sec_req *req)
+ 		list_add_tail(&req->backlog_head, &qp_ctx->backlog);
+ 		atomic64_inc(&ctx->sec->debug.dfx.send_cnt);
+ 		atomic64_inc(&ctx->sec->debug.dfx.send_busy_cnt);
+-		mutex_unlock(&qp_ctx->req_lock);
++		spin_unlock(&qp_ctx->req_lock);
+ 		return -EBUSY;
+ 	}
+-	mutex_unlock(&qp_ctx->req_lock);
++	spin_unlock(&qp_ctx->req_lock);
+ 
+ 	if (unlikely(ret == -EBUSY))
+ 		return -ENOBUFS;
+@@ -487,7 +487,7 @@ static int sec_create_qp_ctx(struct hisi_qm *qm, struct sec_ctx *ctx,
+ 
+ 	qp->req_cb = sec_req_cb;
+ 
+-	mutex_init(&qp_ctx->req_lock);
++	spin_lock_init(&qp_ctx->req_lock);
+ 	idr_init(&qp_ctx->req_idr);
+ 	INIT_LIST_HEAD(&qp_ctx->backlog);
+ 
+@@ -1382,7 +1382,7 @@ static struct sec_req *sec_back_req_clear(struct sec_ctx *ctx,
+ {
+ 	struct sec_req *backlog_req = NULL;
+ 
+-	mutex_lock(&qp_ctx->req_lock);
++	spin_lock(&qp_ctx->req_lock);
+ 	if (ctx->fake_req_limit >=
+ 	    atomic_read(&qp_ctx->qp->qp_status.used) &&
+ 	    !list_empty(&qp_ctx->backlog)) {
+@@ -1390,7 +1390,7 @@ static struct sec_req *sec_back_req_clear(struct sec_ctx *ctx,
+ 				typeof(*backlog_req), backlog_head);
+ 		list_del(&backlog_req->backlog_head);
+ 	}
+-	mutex_unlock(&qp_ctx->req_lock);
++	spin_unlock(&qp_ctx->req_lock);
+ 
+ 	return backlog_req;
+ }
 -- 
-Thanks,
-Qi
+2.17.1
+

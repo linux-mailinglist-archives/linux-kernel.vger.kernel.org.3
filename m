@@ -2,214 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B17255D2DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3743455CF78
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245009AbiF1FeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 01:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
+        id S243780AbiF1FfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 01:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244979AbiF1FeG (ORCPT
+        with ESMTP id S245043AbiF1FfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 01:34:06 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80E113E1F;
-        Mon, 27 Jun 2022 22:34:04 -0700 (PDT)
+        Tue, 28 Jun 2022 01:35:12 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5A627179;
+        Mon, 27 Jun 2022 22:35:08 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id i1so11465616wrb.11;
+        Mon, 27 Jun 2022 22:35:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656394445; x=1687930445;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=DHSwKRgJsyYqRpbIo7MscdGTpcs4Eo8hYcQLX/hkNxY=;
-  b=GvTBwlRMAxhShZ8gM2J/EAvfExAZEPuAkPx5ouU5ov5Hu3pwblbfZJN9
-   +t3oZ83iYYqFCXEuBfRhCKr4qCw3hn56R1c1HH4z40rVgEv8Qft9YraqT
-   YToiuXw1xttNWckKvvqaByEAl+7LfOKKg+g8mKESuWh9B7wJ//viVtvuG
-   M=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 Jun 2022 22:34:04 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 22:34:03 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 27 Jun 2022 22:34:03 -0700
-Received: from [10.79.142.210] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 27 Jun
- 2022 22:33:59 -0700
-Message-ID: <034165f2-d8c3-3ba4-c6d2-7112e47f333e@quicinc.com>
-Date:   Tue, 28 Jun 2022 11:03:49 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V8 0/7] Add driver support for Data Capture and Compare
- Engine(DCC) for SM8150,SC7280,SC7180,SDM845
-Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1653475467.git.quic_schowdhu@quicinc.com>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <cover.1653475467.git.quic_schowdhu@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=dTA90lOxgIQa7DSNgHRMqmr5kjIWrAUMbJ6Fyb/GRMc=;
+        b=bY5f5tFedfpsQKz1aQmaceJv6zFDOLQqCGAazVWhHE8Xn5Lll0Gc/8UIjvRUTJtwCY
+         QL2cX0G2hIpoz4mIRi7CLMBoqxXzr9oknenx16HBcihBdJWOQzak6zt6vRPj0WvRo6U0
+         LaejvQNs2AhEmMIb7YU+977cOzzwm5zrzb2TGtPr0DvoT1qQV34NsYJ9iKhVITO5x+LT
+         nZouZzinwoUqYQ8D3PlXeeayF3hGIhmQanrxScuUfJo4xcqU8jL91IBVbNHb4D9J6Hat
+         eAtc75xaKJm3kNxe1WfZLh0iJRFaZzF34Dvgr8cfr6rC503ZUkFz3NqvWMudTXd+SsYp
+         RHpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=dTA90lOxgIQa7DSNgHRMqmr5kjIWrAUMbJ6Fyb/GRMc=;
+        b=wPOOd9FcAkrGd/Aa5peXilvQ7Bi55xwsn+p7dllVzr3QoP80yNOlFRvxlHGUZIgW/B
+         XgBVA9OFxMyp/T8bVnb3LfkIvDNkPz1EihEfLWMYR241tYxx7ilQMPtbxurWmvN59MgX
+         ZYvdk3j3957abgiNLd1nRBrsz8Nnv8F4yl6AVCWJO8dgBg/ZGyZsUxASG2iGTVj0vKbT
+         ig6FA5A6NX9l7CABVBToDIhV0KortsZCRXwe90iPz3D85pIYsIaCDI1N6GltV8gOMoN1
+         h7IJvavxv5Y7BrBetYt4VAKRBf85x1o0/Sa2llaaAhlki+3NfrCZjozdwRu3K6z9vqmo
+         EDyg==
+X-Gm-Message-State: AJIora/MhCmRuIp8I70zwaTpzGoiS7XqodRYraSsdf9t6fjtvJqWRaGQ
+        zw+S3x2HJR3w20fS8FixvHlW2KvUxG8=
+X-Google-Smtp-Source: AGRyM1vLAMJ+61yUhFEg9AbQGG5npHVsKB5g4gkTqpyARgo8j4Sx5eAmyy4kf0WSC/KsZsOZioG+qQ==
+X-Received: by 2002:a5d:5581:0:b0:20f:fc51:7754 with SMTP id i1-20020a5d5581000000b0020ffc517754mr16224632wrv.413.1656394506441;
+        Mon, 27 Jun 2022 22:35:06 -0700 (PDT)
+Received: from felia.fritz.box (200116b8267a9e00e50a985511ee89f7.dip.versatel-1u1.de. [2001:16b8:267a:9e00:e50a:9855:11ee:89f7])
+        by smtp.gmail.com with ESMTPSA id u16-20020a05600c441000b0039c4d022a44sm16293928wmn.1.2022.06.27.22.35.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 22:35:06 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] PM / devfreq: passive: revert an editing accident in SPDX-License line
+Date:   Tue, 28 Jun 2022 07:34:11 +0200
+Message-Id: <20220628053411.22438-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 26984d9d581e ("PM / devfreq: passive: Keep cpufreq_policy for
+possible cpus") reworked governor_passive.c, and accidently added a
+tab in the first line, i.e., the SPDX-License-Identifier line.
 
-On 5/25/2022 4:43 PM, Souradeep Chowdhury wrote:
-> DCC(Data Capture and Compare) is a DMA engine designed for debugging purposes.
-> In case of a system crash or manual software triggers by the user the DCC hardware
-> stores the value at the register addresses which can be used for debugging purposes.
-> The DCC driver provides the user with debugfs interface to configure the register
-> addresses. The options that the DCC hardware provides include reading from registers,
-> writing to registers, first reading and then writing to registers and looping
-> through the values of the same register.
->
-> In certain cases a register write needs to be executed for accessing the rest of the
-> registers, also the user might want to record the changing values of a register with
-> time for which he has the option to use the loop feature.
->
-> The options mentioned above are exposed to the user by debugfs files once the driver
-> is probed. The details and usage of this debugfs files are documented in
-> Documentation/ABI/testing/debugfs-driver-dcc.
->
-> As an example let us consider a couple of debug scenarios where DCC has been proved to be
-> effective for debugging purposes:-
->
-> i)TimeStamp Related Issue
->
-> On SC7180, there was a coresight timestamp issue where it would occasionally be all 0
-> instead of proper timestamp values.
->
-> Proper timestamp:
-> Idx:3373; ID:10; I_TIMESTAMP : Timestamp.; Updated val = 0x13004d8f5b7aa; CC=0x9e
->
-> Zero timestamp:
-> Idx:3387; ID:10; I_TIMESTAMP : Timestamp.; Updated val = 0x0; CC=0xa2
->
-> Now this is a non-fatal issue and doesn't need a system reset, but still needs
-> to be rootcaused and fixed for those who do care about coresight etm traces.
-> Since this is a timestamp issue, we would be looking for any timestamp related
-> clocks and such.
->
-> We get all the clk register details from IP documentation and configure it
-> via DCC config_read debugfs node. Before that we set the current linked list.
->
-> /* Program the linked list with the addresses */
-> echo R 0x10c004 > /sys/kernel/debug/dcc/../3/config
-> echo R 0x10c008 > /sys/kernel/debug/dcc/../3/config
-> echo R 0x10c00c > /sys/kernel/debug/dcc/../3/config
-> echo R 0x10c010 > /sys/kernel/debug/dcc/../3/config
-> ..... and so on for other timestamp related clk registers
->
-> /* Other way of specifying is in "addr len" pair, in below case it
-> specifies to capture 4 words starting 0x10C004 */
->
-> echo R 0x10C004 4 > /sys/kernel/debug/dcc/../3/config_read
->
-> /* Enable DCC */
-> echo 1 > /sys/kernel/debug/dcc/../3/enable
->
-> /* Run the timestamp test for working case */
->
-> /* Send SW trigger */
-> echo 1 > /sys/kernel/debug/dcc/../trigger
->
-> /* Read SRAM */
-> cat /dev/dcc_sram > dcc_sram1.bin
->
-> /* Run the timestamp test for non-working case */
->
-> /* Send SW trigger */
-> echo 1 > /sys/kernel/debug/dcc/../trigger
->
-> /* Read SRAM */
-> cat /dev/dcc_sram > dcc_sram2.bin
->
-> Get the parser from [1] and checkout the latest branch.
->
-> /* Parse the SRAM bin */
-> python dcc_parser.py -s dcc_sram1.bin --v2 -o output/
-> python dcc_parser.py -s dcc_sram2.bin --v2 -o output/
->
-> Sample parsed output of dcc_sram1.bin:
->
-> <hwioDump version="1">
->          <timestamp>03/14/21</timestamp>
->              <generator>Linux DCC Parser</generator>
->                  <chip name="None" version="None">
->                  <register address="0x0010c004" value="0x80000000" />
->                  <register address="0x0010c008" value="0x00000008" />
->                  <register address="0x0010c00c" value="0x80004220" />
->                  <register address="0x0010c010" value="0x80000000" />
->              </chip>
->      <next_ll_offset>next_ll_offset : 0x1c </next_ll_offset>
-> </hwioDump>
->
-> ii)NOC register errors
->
-> A particular class of registers called NOC which are functional registers was reporting
-> errors while logging the values.To trace these errors the DCC has been used effectively.
-> The steps followed were similar to the ones mentioned above.
-> In addition to NOC registers a few other dependent registers were configured in DCC to
-> monitor it's values during a crash. A look at the dependent register values revealed that
-> the crash was happening due to a secured access to one of these dependent registers.
-> All these debugging activity and finding the root cause was achieved using DCC.
->
-> DCC parser is available at the following open source location
->
-> https://source.codeaurora.org/quic/la/platform/vendor/qcom-opensource/tools/tree/dcc_parser
->
-> Changes in V8
->
-> *The DCC interface for debugfs has been changed as per comments on v7.
->   The new interface details are documented in Documentation/ABI/testing/debugfs-driver-dcc.
->
-> Souradeep Chowdhury (7):
->    dt-bindings: Added the yaml bindings for DCC
->    soc: qcom: dcc:Add driver support for Data Capture and Compare
->      unit(DCC)
->    MAINTAINERS: Add the entry for DCC(Data Capture and Compare) driver
->      support
->    arm64: dts: qcom: sm8150: Add Data Capture and Compare(DCC) support
->      node
->    arm64: dts: qcom: sc7280: Add Data Capture and Compare(DCC) support
->      node
->    arm64: dts: qcom: sc7180: Add Data Capture and Compare(DCC) support
->      node
->    arm64: dts: qcom: sdm845: Add Data Capture and Compare(DCC) support
->      node
->
->   Documentation/ABI/testing/debugfs-driver-dcc       |   95 ++
->   .../devicetree/bindings/arm/msm/qcom,dcc.yaml      |   43 +
->   MAINTAINERS                                        |    8 +
->   arch/arm64/boot/dts/qcom/sc7180.dtsi               |    6 +
->   arch/arm64/boot/dts/qcom/sc7280.dtsi               |    6 +
->   arch/arm64/boot/dts/qcom/sdm845.dtsi               |    6 +
->   arch/arm64/boot/dts/qcom/sm8150.dtsi               |    6 +
->   drivers/soc/qcom/Kconfig                           |    8 +
->   drivers/soc/qcom/Makefile                          |    1 +
->   drivers/soc/qcom/dcc.c                             | 1359 ++++++++++++++++++++
->   10 files changed, 1538 insertions(+)
->   create mode 100644 Documentation/ABI/testing/debugfs-driver-dcc
->   create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,dcc.yaml
->   create mode 100644 drivers/soc/qcom/dcc.c
-Gentle Ping.
+The checkpatch script warns with the SPDX_LICENSE_TAG warning, and hence
+pointed this issue out while investigating checkpatch warnings.
+
+Revert this editing accident. No functional change.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Chanwoo, please pick this minor non-urgent fix to your latest change above.
+
+ drivers/devfreq/governor_passive.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+index 72c67979ebe1..326482a68986 100644
+--- a/drivers/devfreq/governor_passive.c
++++ b/drivers/devfreq/governor_passive.c
+@@ -1,4 +1,4 @@
+-	// SPDX-License-Identifier: GPL-2.0-only
++// SPDX-License-Identifier: GPL-2.0-only
+ /*
+  * linux/drivers/devfreq/governor_passive.c
+  *
+-- 
+2.17.1
+

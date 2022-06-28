@@ -2,71 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B0C55E056
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D68E55C1E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245141AbiF1Foz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 01:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
+        id S245083AbiF1Fpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 01:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245128AbiF1For (ORCPT
+        with ESMTP id S245043AbiF1Fpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 01:44:47 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B8C1CFEA;
-        Mon, 27 Jun 2022 22:44:38 -0700 (PDT)
-X-UUID: 2f6f6cecdcca40c5a588f0ae662acb32-20220628
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:472ae498-e919-464c-98ec-16bcb49ca63d,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:87442a2,CLOUDID:afcdf485-57f0-47ca-ba27-fe8c57fbf305,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 2f6f6cecdcca40c5a588f0ae662acb32-20220628
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 100667279; Tue, 28 Jun 2022 13:44:34 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 28 Jun 2022 13:44:32 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 28 Jun 2022 13:44:31 +0800
-Message-ID: <3f42845aafce14dcd96a83690fe296eb9eb6b50d.camel@mediatek.com>
-Subject: Re: [PATCH net-next v3 09/10] net: ethernet: mtk-star-emac:
- separate tx/rx handling with two NAPIs
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Fabien Parent <fparent@baylibre.com>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Yinghua Pan <ot_yinghua.pan@mediatek.com>,
-        <srv_heupstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>
-Date:   Tue, 28 Jun 2022 13:44:31 +0800
-In-Reply-To: <20220623213431.23528544@kernel.org>
-References: <20220622090545.23612-1-biao.huang@mediatek.com>
-         <20220622090545.23612-10-biao.huang@mediatek.com>
-         <20220623213431.23528544@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 28 Jun 2022 01:45:32 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF34B1CFEA;
+        Mon, 27 Jun 2022 22:45:30 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25S5jK6L068682;
+        Tue, 28 Jun 2022 00:45:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1656395120;
+        bh=ZOFIzzxgdd4Ofgh8k/nCeoLR+zNbypkEb0hbyzA2ft0=;
+        h=From:To:CC:Subject:Date;
+        b=EMWHXWA5ZXZ+cRcTmpjImd4FLaLRVdAKlQV64aMGKI617GJfoQ2N+jADltGrdYMqH
+         twwbEZnXNQRantzdZAGDtXiX170/C7Uz0WHnlpT2IWKjUKEiYmsFIN5ExonaajRclQ
+         50pt+IOKmr5tEs7okRLO4OQ5Fke30tI6bH+sRoSo=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25S5jKKf014983
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 28 Jun 2022 00:45:20 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 28
+ Jun 2022 00:45:19 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 28 Jun 2022 00:45:19 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25S5jJTJ030296;
+        Tue, 28 Jun 2022 00:45:19 -0500
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+To:     <devicetree@vger.kernel.org>
+CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <j-choudhary@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] arm64: dts: ti: k3-j721s2-main: Enable crypto accelerator
+Date:   Tue, 28 Jun 2022 11:15:18 +0530
+Message-ID: <20220628054518.350717-1-j-choudhary@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,110 +63,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Jakub,
-	Thanks for your comments~
+Add the node for SA2UL for supporting hardware crypto algorithms,
+including SHA1, SHA256, SHA512, AES, 3DES and AEAD suites.
 
-On Thu, 2022-06-23 at 21:34 -0700, Jakub Kicinski wrote:
-> On Wed, 22 Jun 2022 17:05:44 +0800 Biao Huang wrote:
-> > +	if (rx || tx) {
-> > +		spin_lock_irqsave(&priv->lock, flags);
-> > +		/* mask Rx and TX Complete interrupt */
-> > +		mtk_star_disable_dma_irq(priv, rx, tx);
-> > +		spin_unlock_irqrestore(&priv->lock, flags);
-> 
-> You do _irqsave / _irqrestore here
-We should invoke spin_lock, no need save/store irq here.
-> 
-> > +		if (rx)
-> > +			__napi_schedule_irqoff(&priv->rx_napi);
-> > +		if (tx)
-> > +			__napi_schedule_irqoff(&priv->tx_napi);
-> 
-> Yet assume _irqoff here.
-> 
-> So can this be run from non-IRQ context or not?
-seems __napi_schedule is more proper for our case, we'll modify it in
-next send.
-> 
-> > -	if (mtk_star_ring_full(ring))
-> > +	if (unlikely(mtk_star_tx_ring_avail(ring) < MAX_SKB_FRAGS + 1))
-> >  		netif_stop_queue(ndev);
-> 
-> Please look around other drivers (like ixgbe) and copy the way they
-> handle safe stopping of the queues. You need to add some barriers and
-> re-check after disabling.
-Yes, we look drivers from other vendors, and will do similar thing in
-next send.
-> 
-> > -	spin_unlock_bh(&priv->lock);
-> > -
-> >  	mtk_star_dma_resume_tx(priv);
-> >  
-> >  	return NETDEV_TX_OK;
-> 
-> 
-> > +	while ((entry != head) && (count < MTK_STAR_RING_NUM_DESCS -
-> > 1)) {
-> >  
-> 
-> Parenthesis unnecessary, so is the empty line after the while ().
-Yes, the empty line will be removed in next send.
-> 
-> >  		ret = mtk_star_tx_complete_one(priv);
-> >  		if (ret < 0)
-> >  			break;
-> > +
-> > +		count++;
-> > +		pkts_compl++;
-> > +		bytes_compl += ret;
-> > +		entry = ring->tail;
-> >  	}
-> >  
-> > +	__netif_tx_lock_bh(netdev_get_tx_queue(priv->ndev, 0));
-> >  	netdev_completed_queue(ndev, pkts_compl, bytes_compl);
-> > +	__netif_tx_unlock_bh(netdev_get_tx_queue(priv->ndev, 0));
-> 
-> what are you taking this lock for?
-In this version, we encounter some issue related to
-__QUEUE_STATE_STACK_OFF, 
-and if we add __netif_tx_lock_bh here, it disappears.
+Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+---
 
-When recieve your comments, we survey netdev_completed_queue handles in
-drivers from other vendors, we beleive the __QUEUE_STATE_STACK_OFF
-issue may caused by unproper usage of __napi_schedule_irqoff in
-previous lines, and we'll remove __netif_tx_lock_bh, and have another
-try.
+There is a dependency of this patch on a dmaengine patch:
+<https://lore.kernel.org/all/20220628050232.331956-1-j-choudhary@ti.com/>
+This patch adds the PSIL threads for main domain SA2UL.
 
-If our local stress test pass, corresponding modification will be added
-in next send.
-> 
-> > -	if (wake && netif_queue_stopped(ndev))
-> > +	if (unlikely(netif_queue_stopped(ndev)) &&
-> > +	    (mtk_star_tx_ring_avail(ring) > MTK_STAR_TX_THRESH))
-> >  		netif_wake_queue(ndev);
-> >  
-> > -	spin_unlock(&priv->lock);
-> > +	if (napi_complete(napi)) {
-> > +		spin_lock_irqsave(&priv->lock, flags);
-> > +		mtk_star_enable_dma_irq(priv, false, true);
-> > +		spin_unlock_irqrestore(&priv->lock, flags);
-> > +	}
-> > +
-> > +	return 0;
-> >  }
-> > @@ -1475,6 +1514,7 @@ static int mtk_star_set_timing(struct
-> > mtk_star_priv *priv)
-> >  
-> >  	return regmap_write(priv->regs, MTK_STAR_REG_TEST0, delay_val);
-> >  }
-> > +
-> >  static int mtk_star_probe(struct platform_device *pdev)
-> >  {
-> >  	struct device_node *of_node;
-> 
-> spurious whitespace change
-Yes, will fix it in next send.
+Without the above patch, dma-controller fails to get the channel
+and tcrypt module does software crypto. But it does not break boot
+since its runtime and not compile-time.
 
-Best Regards!
-Biao
+Testing log: <https://gist.github.com/Jayesh2000/e429c78a545809602e6473886a2a6ae4>
+
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+index 34e7d577ae13..79ca34a7e34f 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+@@ -72,6 +72,20 @@
+ 		pinctrl-single,function-mask = <0xffffffff>;
+ 	};
+ 
++	main_crypto: crypto@4e00000 {
++		compatible = "ti,j721e-sa2ul";
++		reg = <0x00 0x4e00000 0x00 0x1200>;
++		power-domains = <&k3_pds 297 TI_SCI_PD_SHARED>;
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges = <0x00 0x04e00000 0x00 0x04e00000 0x00 0x30000>;
++
++		dmas = <&main_udmap 0xca40>, <&main_udmap 0x4a40>,
++				<&main_udmap 0x4a41>;
++		dma-names = "tx", "rx1", "rx2";
++		dma-coherent;
++	};
++
+ 	main_uart0: serial@2800000 {
+ 		compatible = "ti,j721e-uart", "ti,am654-uart";
+ 		reg = <0x00 0x02800000 0x00 0x200>;
+-- 
+2.17.1
 

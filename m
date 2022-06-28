@@ -2,111 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 741C755ECB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F34F155ECFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbiF1SjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 14:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40884 "EHLO
+        id S233635AbiF1Sto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 14:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbiF1SjS (ORCPT
+        with ESMTP id S232025AbiF1Stm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:39:18 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEE222B10;
-        Tue, 28 Jun 2022 11:39:15 -0700 (PDT)
-Received: from [192.168.1.103] (178.176.79.109) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 28 Jun
- 2022 21:39:06 +0300
-Subject: Re: [PATCH] ata: pata_cs5535: Fix W=1 warnings
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        John Garry <john.garry@huawei.com>
-CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1656335540-50293-1-git-send-email-john.garry@huawei.com>
- <16f727b8-c3b0-c828-0c5b-6728a6e7934f@opensource.wdc.com>
- <9044b81f-76db-75de-db74-f45d6e5ea71e@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <d26b8345-02e9-e461-c506-b429c44f74df@omp.ru>
-Date:   Tue, 28 Jun 2022 21:39:04 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 28 Jun 2022 14:49:42 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA941248FD;
+        Tue, 28 Jun 2022 11:49:41 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id cw10so27669631ejb.3;
+        Tue, 28 Jun 2022 11:49:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5ObwhxGoXe2ARX6DreYdA3iy7rl42wiy5qX/jBWrSpM=;
+        b=nVGPtX9pniV/ybRejCUwJ7N9XYru7cWW5qzGh+AqY8r9tZZsUf9eDP8ACkL7Ylnh77
+         qcP5ANLB+fYXAwnzbpLalaxIvQnz7SxhfXFsejmUIoQXWDj6jFPgVuLl9lNEu5SJp8k7
+         CAVYc+5O2CVvaEArqAd7yDh3LTLBhT5pMEsxPWvmMPn2z18Z+0jlIKBzF4TgUXlYPlDk
+         91YUJBZE+1Ilhqp5SWx9guw20ewvZel8IbfMQiMy57BUisnkMCx8Z1y78YJSq5hrQlpJ
+         C1obfYnCvy38qBBu1Lrcr0EDDVUifm0pl5Toywvj0pEyxgEdtKfRHjwXnxmhP/Hhod3W
+         moRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5ObwhxGoXe2ARX6DreYdA3iy7rl42wiy5qX/jBWrSpM=;
+        b=xioUlA1D32acYj61dQMPZP16O2ADYCqBfudPL+c0zBc2k4CDtC80TxPl4gW3GCWsZB
+         YMOnfKZPgilF4TUMZQn17L9z+46gXJQaTVXuy3vqLqWM2GdSdH4W1KK+O4B2MX9VG6HO
+         bUX+4t6InNtxnYQ7DlajzErClWWaFOxi0PtJvWfx8LOEpZCMYqcT2KYrTCQRDGNpEdOe
+         ehoIy6tZv5CRN0L5bJe9NKyoFLwJi/+YEhCBL/7mYZLMgaYRO8zWllHKPjP2ZKkEueUD
+         oEQm0NfSMk/xhqpoCCA8X0MEdM57ObzTipkbONyjzhl/JvR/UmdwQ8lSVV25SANs77eD
+         xTAA==
+X-Gm-Message-State: AJIora+TbjQklnbnk9WbiAfqtOAAKjQ5AywJ4yfCdAiECU2fCQk9wTK1
+        tAp6AP1j8Nb3JLqrK4oTQQw=
+X-Google-Smtp-Source: AGRyM1t+WIYcP7ofsz0WZlACCfJz8MlGeYIB1VazUOXiK1PyGbMd+9sYo6v4vwUtXqoYKfii2vXGmQ==
+X-Received: by 2002:a17:906:2bc2:b0:726:d02f:dea with SMTP id n2-20020a1709062bc200b00726d02f0deamr4392270ejg.60.1656442180000;
+        Tue, 28 Jun 2022 11:49:40 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id t21-20020a05640203d500b0043573c59ea0sm9747593edw.90.2022.06.28.11.49.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 11:49:39 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH v3 0/4] Krait Documentation conversion
+Date:   Tue, 28 Jun 2022 20:41:33 +0200
+Message-Id: <20220628184137.21678-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-In-Reply-To: <9044b81f-76db-75de-db74-f45d6e5ea71e@omp.ru>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [178.176.79.109]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 06/28/2022 18:16:56
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 171420 [Jun 28 2022]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 491 491 a718ef6dc942138335b0bcd7ab07f27b5c06005e
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_arrow_text}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.79.109 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;178.176.79.109:7.4.1,7.1.2;127.0.0.199:7.1.2;omp.ru:7.1.1
-X-KSE-AntiSpam-Info: {iprep_blacklist}
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.79.109
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 06/28/2022 18:19:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 6/28/2022 2:57:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/22 1:05 PM, Sergey Shtylyov wrote:
-[...]
->>> x86_64 allmodconfig build with W=1 gives these warnings:
->>>
->>> drivers/ata/pata_cs5535.c: In function ‘cs5535_set_piomode’:
->>> drivers/ata/pata_cs5535.c:93:11: error: variable ‘dummy’ set but not used [-Werror=unused-but-set-variable]
->>>   u32 reg, dummy;
->>>            ^~~~~
->>> drivers/ata/pata_cs5535.c: In function ‘cs5535_set_dmamode’:
->>> drivers/ata/pata_cs5535.c:132:11: error: variable ‘dummy’ set but not used [-Werror=unused-but-set-variable]
->>>   u32 reg, dummy;
->>>            ^~~~~
->>> cc1: all warnings being treated as errors
->>>
->>> Mark variables 'dummy' as "maybe unused" to satisfy when rdmsr() is
->>> stubbed, which is the same as what we already do in pata_cs5536.c .
+This series convert the krait-cc and the kpps-acc/gcc Documentation to
+yaml.
 
-   Wait, what do you mean by "stubbed", the version in <asm/paravirt.h>?
+This series comes form a split of a bigger series that got too big and
+now hard to review.
 
->>>
->>> Signed-off-by: John Garry <john.garry@huawei.com>
-> 
-> Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+While they are still more or less wrong and doesn't really reflect real
+driver implementation, they are converted to prepare for a fixup later
+when dts and driver are finally fixed.
 
-[...]
+Minor changes are done to the kpss-gcc driver and minor fixes are done to
+the various affected dts to fix dtbs_check warning with the new introduced
+schema.
 
-MBR, Sergey
+v3:
+- Update all Sob
+- Rework kpss-gcc Documentation with the new finding
+- Fix dtbs_check warning
+v2:
+- Fix bot error by adding missing #clock-cells
+
+Changelog for previous series "Modernize rest of the krait drivers"
+that was split to smaller series (only Documentation changes):
+v7:
+- Rework kpss-gcc Documentation (split patch for pure conversion and
+  tweaks)
+v6:
+- Address comments from Rob
+- Fix warning from make dtbs_check
+v5:
+- Address comments from Krzysztof
+v4:
+- Fix more dt-bindings bug errors
+v3:
+- Split Documentation files for kpss and krait-cc
+v2:
+- fix missing new line on patch 16 (krait-cc patch)
+
+Christian Marangi (4):
+  dt-bindings: clock: Convert qcom,krait-cc to yaml
+  dt-bindings: arm: msm: Convert kpss-acc driver Documentation to yaml
+  dt-bindings: arm: msm: Rework kpss-gcc driver Documentation to yaml
+  ARM: dts: qcom: fix various wrong definition for kpss-gcc node
+
+ .../bindings/arm/msm/qcom,kpss-acc.txt        | 49 ----------
+ .../bindings/arm/msm/qcom,kpss-acc.yaml       | 94 +++++++++++++++++++
+ .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ---------
+ .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 89 ++++++++++++++++++
+ .../bindings/clock/qcom,krait-cc.txt          | 34 -------
+ .../bindings/clock/qcom,krait-cc.yaml         | 59 ++++++++++++
+ arch/arm/boot/dts/qcom-apq8064.dtsi           |  2 +-
+ arch/arm/boot/dts/qcom-ipq8064.dtsi           |  4 +-
+ arch/arm/boot/dts/qcom-mdm9615.dtsi           |  2 +-
+ arch/arm/boot/dts/qcom-msm8660.dtsi           |  2 +-
+ arch/arm/boot/dts/qcom-msm8960.dtsi           |  7 +-
+ 11 files changed, 252 insertions(+), 134 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/qcom,krait-cc.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml
+
+-- 
+2.36.1
+

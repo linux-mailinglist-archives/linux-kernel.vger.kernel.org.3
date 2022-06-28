@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E0755E891
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1122955E862
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347164AbiF1P17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
+        id S1347825AbiF1P2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346637AbiF1P1z (ORCPT
+        with ESMTP id S1347466AbiF1P2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:27:55 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9562DAAE
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:27:50 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id y32so22910341lfa.6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:27:50 -0700 (PDT)
+        Tue, 28 Jun 2022 11:28:15 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F29B220
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:28:14 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id u9so17603233oiv.12
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:28:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=JcrXyHrbwCCKxz8IEipVzSt2camDv5QxjxkeQewO/T0=;
-        b=OwQ4ahQWbrsPbES0ZStgp4gfOkrVfPAcdoH5+qPB9pW79khO5R7mCpTc3wOXx+zzsX
-         0zcdK55j/MaLvUaYAgls1Q3b+VYvR34VfQktWHj6RA84M7kWBdR0TAMldDPnZ9ItE4Xz
-         YBUvPTRXYN4eO8GLWrf28lsaLT1tqrWT5e/XZg4T5GolUMherk27yEnBWxoorGAuXvGu
-         pSWNPHlVS9f2YEE3m7F+Zu1g3XjKvHdyYLYk033NvwX0Slt3xjdVn+hxrBJicYwHfRBR
-         iNaQAD6Cda/3fzyfZal8fs5HglZRCCHhZ2lsbjw0a56fBAUHaxRdjBYDoywsdYSxCIJX
-         AcCA==
+        bh=VcRyPc8yqfBxbqxUzat8njTxsc7Bb/ts4TuWMruxwXc=;
+        b=qk/4IDec+8fxrqULQrpZO7A+IWJXUJpEiB5Ohkg+/CQhlzu0O0WgEpbiGmUM5FmEq/
+         RpC3JfEieF+a7vYutAGb4X2QB6YnZddV3GSi0w2AcY4/1nm54BZ5Bjy2BiXeNYvjscQv
+         WnTICfihQqVLUe+okt4h6XX9qsyKCqdYPAeA7oboAum1CHfo/15nmR7R6EZIFzVNxlPc
+         0sJcbeIUzVlK3l1I6tIeQ8ulpcZCnjjh6O3PFvLiDNXPaQgkx7Aj1qm8mzAXSj7JtlmZ
+         NbdREPs4SYGKMzuG4LpLjtxUyQqlv8GYjlVlJo4OyG3RBk+MaqMSZJZfwEAip8PUan+x
+         koDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JcrXyHrbwCCKxz8IEipVzSt2camDv5QxjxkeQewO/T0=;
-        b=ZpYFwp9VcS1zuItpUX7rzP8WXWyfIoZqWlXgKQnUFrm90A8n5dBqtdmfkIgQKVyKfG
-         ThyGS/CDEdQeRrCtxe+7aRk5pFNVJ9marDdqppVY76qTgggWcQ5rrXcR7iIqK10rvrXY
-         rYE524lQWvZRlbeFq0migjs0HEfkwynUGDJAap6VMFmkMKm6hdnvpciOnG7qXRYZq/n4
-         qp6lVALC5Q2wOxT35CqWp96Y3CKncEaFaw3AeMzZtDearn7pQ+U1U8uzy620UzDUxMi5
-         gwjK+dgNFlqA39jUsjvLOmg3oJPWc/rxFL3oJjaam/wLT44IxRHE98MgrH48IHJX5sXS
-         UGSw==
-X-Gm-Message-State: AJIora/zPwFOczLMywrpJhn1IhtRIrmb701VX5OBWYp6bWa0pVJzizFR
-        GOtPNtV9FsUn/XVCThGWiE7Cwp9SKVQps3NkzYRKYA==
-X-Google-Smtp-Source: AGRyM1s+cQkS5m43fYkZyD/0llt7eZYGp+yHbsTW1rNivIM7Wj819yMVtuHuRVRa1u+aUwcoEhamNdNjw/giES0oDvA=
-X-Received: by 2002:a05:6512:2520:b0:47f:8512:19c1 with SMTP id
- be32-20020a056512252000b0047f851219c1mr12110789lfb.540.1656430068858; Tue, 28
- Jun 2022 08:27:48 -0700 (PDT)
+        bh=VcRyPc8yqfBxbqxUzat8njTxsc7Bb/ts4TuWMruxwXc=;
+        b=xLNE0g7DI7pAC9YEu/8yeuJrh2qCVbUjKhFsuH4bb7WxKfQ/q3fESR3ctIR0YOU+b6
+         /q0WJgeiK5ycGe64N1KZCak6Xc28tLc/ly4wB7RCJNl9ZVPUxQDqMSjJeebaQ4Z8vdrS
+         ncTmffHgQ90VRl6YAC8iR3vk72Fpae/G1d9q0AiLcaD5xcvaWCh7Id75WxHiik5JMVle
+         1DW8ajQw81DzSQtcsVuNAUQwwtiwkpNlse74sm2tNtnp3krLw5XeAmNcOh6AHOqJK7YU
+         Ty5OwE2Xv8M/iauMxQ0wBeEKXeLRzzPc9ZsaviyBe6dVdsTJVVogx0YXdDf90VgcVd0D
+         e0gg==
+X-Gm-Message-State: AJIora9dbbSfOD/m0Ba2bDBMHRLa9m4L+Kha/BgcdoXHnOMawEX1eVKu
+        2f9ojo5dSiUUF2FAu4oM9889kPdH+25tjrYLjeJ3WQ==
+X-Google-Smtp-Source: AGRyM1tXngT9JL9wLeQfuXpG9o8+IuZ1kJ+YSWsVi8szy046wDER0SHngLlWaqB2LZAeuTSoZmOQDF7S2pRCt0uG0KE=
+X-Received: by 2002:a05:6808:2124:b0:335:7483:f62d with SMTP id
+ r36-20020a056808212400b003357483f62dmr128877oiw.112.1656430093380; Tue, 28
+ Jun 2022 08:28:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220628095833.2579903-1-elver@google.com> <20220628095833.2579903-4-elver@google.com>
- <CACT4Y+bh06ZF5s4Mfq+CJ8RJ+Fm41NeXt=C8Kkx11t9hgABpYQ@mail.gmail.com> <CANpmjNOT=npm9Bu9QGNO=SgCJVB2fr8ojO4-u-Ffgw4gmRuSfw@mail.gmail.com>
-In-Reply-To: <CANpmjNOT=npm9Bu9QGNO=SgCJVB2fr8ojO4-u-Ffgw4gmRuSfw@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 28 Jun 2022 17:27:37 +0200
-Message-ID: <CACT4Y+YQibtAk0y=SVTSp27Ythjk4c1jCV2_BNAL5Uiw-fMo_w@mail.gmail.com>
-Subject: Re: [PATCH v2 03/13] perf/hw_breakpoint: Optimize list of per-task breakpoints
-To:     Marco Elver <elver@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, linux-sh@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+References: <20220627160440.31857-1-vkuznets@redhat.com> <CALMp9eQL2a+mStk-cLwVX6NVqwAso2UYxAO7UD=Xi2TSGwUM2A@mail.gmail.com>
+ <87y1xgubot.fsf@redhat.com>
+In-Reply-To: <87y1xgubot.fsf@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Tue, 28 Jun 2022 08:28:02 -0700
+Message-ID: <CALMp9eSBLcvuNDquvSfUnaF3S3f4ZkzqDRSsz-v93ZeX=xnssg@mail.gmail.com>
+Subject: Re: [PATCH 00/14] KVM: nVMX: Use vmcs_config for setting up nested
+ VMX MSRs
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -79,244 +73,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Jun 2022 at 16:54, Marco Elver <elver@google.com> wrote:
-> > > On a machine with 256 CPUs, running the recently added perf breakpoint
-> > > benchmark results in:
-> > >
-> > >  | $> perf bench -r 30 breakpoint thread -b 4 -p 64 -t 64
-> > >  | # Running 'breakpoint/thread' benchmark:
-> > >  | # Created/joined 30 threads with 4 breakpoints and 64 parallelism
-> > >  |      Total time: 236.418 [sec]
-> > >  |
-> > >  |   123134.794271 usecs/op
-> > >  |  7880626.833333 usecs/op/cpu
-> > >
-> > > The benchmark tests inherited breakpoint perf events across many
-> > > threads.
-> > >
-> > > Looking at a perf profile, we can see that the majority of the time is
-> > > spent in various hw_breakpoint.c functions, which execute within the
-> > > 'nr_bp_mutex' critical sections which then results in contention on that
-> > > mutex as well:
-> > >
-> > >     37.27%  [kernel]       [k] osq_lock
-> > >     34.92%  [kernel]       [k] mutex_spin_on_owner
-> > >     12.15%  [kernel]       [k] toggle_bp_slot
-> > >     11.90%  [kernel]       [k] __reserve_bp_slot
-> > >
-> > > The culprit here is task_bp_pinned(), which has a runtime complexity of
-> > > O(#tasks) due to storing all task breakpoints in the same list and
-> > > iterating through that list looking for a matching task. Clearly, this
-> > > does not scale to thousands of tasks.
-> > >
-> > > Instead, make use of the "rhashtable" variant "rhltable" which stores
-> > > multiple items with the same key in a list. This results in average
-> > > runtime complexity of O(1) for task_bp_pinned().
-> > >
-> > > With the optimization, the benchmark shows:
-> > >
-> > >  | $> perf bench -r 30 breakpoint thread -b 4 -p 64 -t 64
-> > >  | # Running 'breakpoint/thread' benchmark:
-> > >  | # Created/joined 30 threads with 4 breakpoints and 64 parallelism
-> > >  |      Total time: 0.208 [sec]
-> > >  |
-> > >  |      108.422396 usecs/op
-> > >  |     6939.033333 usecs/op/cpu
-> > >
-> > > On this particular setup that's a speedup of ~1135x.
-> > >
-> > > While one option would be to make task_struct a breakpoint list node,
-> > > this would only further bloat task_struct for infrequently used data.
-> > > Furthermore, after all optimizations in this series, there's no evidence
-> > > it would result in better performance: later optimizations make the time
-> > > spent looking up entries in the hash table negligible (we'll reach the
-> > > theoretical ideal performance i.e. no constraints).
-> > >
-> > > Signed-off-by: Marco Elver <elver@google.com>
-> > > ---
-> > > v2:
-> > > * Commit message tweaks.
-> > > ---
-> > >  include/linux/perf_event.h    |  3 +-
-> > >  kernel/events/hw_breakpoint.c | 56 ++++++++++++++++++++++-------------
-> > >  2 files changed, 37 insertions(+), 22 deletions(-)
-> > >
-> > > diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> > > index 01231f1d976c..e27360436dc6 100644
-> > > --- a/include/linux/perf_event.h
-> > > +++ b/include/linux/perf_event.h
-> > > @@ -36,6 +36,7 @@ struct perf_guest_info_callbacks {
-> > >  };
-> > >
-> > >  #ifdef CONFIG_HAVE_HW_BREAKPOINT
-> > > +#include <linux/rhashtable-types.h>
-> > >  #include <asm/hw_breakpoint.h>
-> > >  #endif
-> > >
-> > > @@ -178,7 +179,7 @@ struct hw_perf_event {
-> > >                          * creation and event initalization.
-> > >                          */
-> > >                         struct arch_hw_breakpoint       info;
-> > > -                       struct list_head                bp_list;
-> > > +                       struct rhlist_head              bp_list;
-> > >                 };
-> > >  #endif
-> > >                 struct { /* amd_iommu */
-> > > diff --git a/kernel/events/hw_breakpoint.c b/kernel/events/hw_breakpoint.c
-> > > index 1b013968b395..add1b9c59631 100644
-> > > --- a/kernel/events/hw_breakpoint.c
-> > > +++ b/kernel/events/hw_breakpoint.c
-> > > @@ -26,10 +26,10 @@
-> > >  #include <linux/irqflags.h>
-> > >  #include <linux/kdebug.h>
-> > >  #include <linux/kernel.h>
-> > > -#include <linux/list.h>
-> > >  #include <linux/mutex.h>
-> > >  #include <linux/notifier.h>
-> > >  #include <linux/percpu.h>
-> > > +#include <linux/rhashtable.h>
-> > >  #include <linux/sched.h>
-> > >  #include <linux/slab.h>
-> > >
-> > > @@ -54,7 +54,13 @@ static struct bp_cpuinfo *get_bp_info(int cpu, enum bp_type_idx type)
-> > >  }
-> > >
-> > >  /* Keep track of the breakpoints attached to tasks */
-> > > -static LIST_HEAD(bp_task_head);
-> > > +static struct rhltable task_bps_ht;
-> > > +static const struct rhashtable_params task_bps_ht_params = {
-> > > +       .head_offset = offsetof(struct hw_perf_event, bp_list),
-> > > +       .key_offset = offsetof(struct hw_perf_event, target),
-> > > +       .key_len = sizeof_field(struct hw_perf_event, target),
-> > > +       .automatic_shrinking = true,
-> > > +};
-> > >
-> > >  static int constraints_initialized;
-> > >
-> > > @@ -103,17 +109,23 @@ static unsigned int max_task_bp_pinned(int cpu, enum bp_type_idx type)
-> > >   */
-> > >  static int task_bp_pinned(int cpu, struct perf_event *bp, enum bp_type_idx type)
-> > >  {
-> > > -       struct task_struct *tsk = bp->hw.target;
-> > > +       struct rhlist_head *head, *pos;
-> > >         struct perf_event *iter;
-> > >         int count = 0;
-> > >
-> > > -       list_for_each_entry(iter, &bp_task_head, hw.bp_list) {
-> > > -               if (iter->hw.target == tsk &&
-> > > -                   find_slot_idx(iter->attr.bp_type) == type &&
-> > > +       rcu_read_lock();
-> > > +       head = rhltable_lookup(&task_bps_ht, &bp->hw.target, task_bps_ht_params);
-> > > +       if (!head)
-> > > +               goto out;
-> > > +
-> > > +       rhl_for_each_entry_rcu(iter, pos, head, hw.bp_list) {
-> > > +               if (find_slot_idx(iter->attr.bp_type) == type &&
-> > >                     (iter->cpu < 0 || cpu == iter->cpu))
-> > >                         count += hw_breakpoint_weight(iter);
-> > >         }
-> > >
-> > > +out:
-> > > +       rcu_read_unlock();
-> > >         return count;
-> > >  }
-> > >
-> > > @@ -186,7 +198,7 @@ static void toggle_bp_task_slot(struct perf_event *bp, int cpu,
-> > >  /*
-> > >   * Add/remove the given breakpoint in our constraint table
-> > >   */
-> > > -static void
-> > > +static int
-> > >  toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
-> > >                int weight)
-> > >  {
-> > > @@ -199,7 +211,7 @@ toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
-> > >         /* Pinned counter cpu profiling */
-> > >         if (!bp->hw.target) {
-> > >                 get_bp_info(bp->cpu, type)->cpu_pinned += weight;
-> > > -               return;
-> > > +               return 0;
-> > >         }
-> > >
-> > >         /* Pinned counter task profiling */
-> > > @@ -207,9 +219,9 @@ toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
-> > >                 toggle_bp_task_slot(bp, cpu, type, weight);
-> > >
-> > >         if (enable)
-> > > -               list_add_tail(&bp->hw.bp_list, &bp_task_head);
-> > > +               return rhltable_insert(&task_bps_ht, &bp->hw.bp_list, task_bps_ht_params);
-> > >         else
-> > > -               list_del(&bp->hw.bp_list);
-> > > +               return rhltable_remove(&task_bps_ht, &bp->hw.bp_list, task_bps_ht_params);
-> > >  }
-> > >
-> > >  __weak int arch_reserve_bp_slot(struct perf_event *bp)
-> > > @@ -307,9 +319,7 @@ static int __reserve_bp_slot(struct perf_event *bp, u64 bp_type)
-> > >         if (ret)
-> > >                 return ret;
-> > >
-> > > -       toggle_bp_slot(bp, true, type, weight);
-> > > -
-> > > -       return 0;
-> > > +       return toggle_bp_slot(bp, true, type, weight);
-> > >  }
-> > >
-> > >  int reserve_bp_slot(struct perf_event *bp)
-> > > @@ -334,7 +344,7 @@ static void __release_bp_slot(struct perf_event *bp, u64 bp_type)
-> > >
-> > >         type = find_slot_idx(bp_type);
-> > >         weight = hw_breakpoint_weight(bp);
-> > > -       toggle_bp_slot(bp, false, type, weight);
-> > > +       WARN_ON(toggle_bp_slot(bp, false, type, weight));
-> > >  }
-> > >
-> > >  void release_bp_slot(struct perf_event *bp)
-> > > @@ -678,7 +688,7 @@ static struct pmu perf_breakpoint = {
-> > >  int __init init_hw_breakpoint(void)
-> > >  {
-> > >         int cpu, err_cpu;
-> > > -       int i;
-> > > +       int i, ret;
-> > >
-> > >         for (i = 0; i < TYPE_MAX; i++)
-> > >                 nr_slots[i] = hw_breakpoint_slots(i);
-> > > @@ -689,18 +699,24 @@ int __init init_hw_breakpoint(void)
-> > >
-> > >                         info->tsk_pinned = kcalloc(nr_slots[i], sizeof(int),
-> > >                                                         GFP_KERNEL);
-> > > -                       if (!info->tsk_pinned)
-> > > -                               goto err_alloc;
-> > > +                       if (!info->tsk_pinned) {
-> > > +                               ret = -ENOMEM;
-> > > +                               goto err;
-> > > +                       }
-> > >                 }
-> > >         }
-> > >
-> > > +       ret = rhltable_init(&task_bps_ht, &task_bps_ht_params);
-> > > +       if (ret)
-> > > +               goto err;
-> > > +
-> > >         constraints_initialized = 1;
-> > >
-> > >         perf_pmu_register(&perf_breakpoint, "breakpoint", PERF_TYPE_BREAKPOINT);
-> > >
-> > >         return register_die_notifier(&hw_breakpoint_exceptions_nb);
-> >
-> > It seems there is a latent bug here:
-> > if register_die_notifier() fails we also need to execute the err: label code.
+On Tue, Jun 28, 2022 at 7:04 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
 >
-> I think we should ignore it, because it's just a notifier when the
-> kernel dies. I'd rather have working breakpoints (which we have if we
-> made it to this point) when the kernel is live, and sacrifice some bad
-> behaviour when the kernel dies.
-
-I don't have a strong opinion either way. If ignoring such functions
-is acceptable practice, it sounds fine.
-
-> > Otherwise the patch looks good.
-> >
-> > Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+> Jim Mattson <jmattson@google.com> writes:
 >
-> Thanks,
-> -- Marco
+> > On Mon, Jun 27, 2022 at 9:04 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+> >>
+> >> Changes since RFC:
+> >> - "KVM: VMX: Extend VMX controls macro shenanigans" PATCH added and the
+> >>   infrastructure is later used in other patches [Sean] PATCHes 1-3 added
+> >>   to support the change.
+> >> - "KVM: VMX: Clear controls obsoleted by EPT at runtime, not setup" PATCH
+> >>   added [Sean].
+> >> - Commit messages added.
+> >>
+> >> vmcs_config is a sanitized version of host VMX MSRs where some controls are
+> >> filtered out (e.g. when Enlightened VMCS is enabled, some know bugs are
+> >> discovered, some inconsistencies in controls are detected,...) but
+> >> nested_vmx_setup_ctls_msrs() uses raw host MSRs instead. This may end up
+> >> in exposing undesired controls to L1. Switch to using vmcs_config instead.
+> >>
+> >> Sean Christopherson (1):
+> >>   KVM: VMX: Clear controls obsoleted by EPT at runtime, not setup
+> >>
+> >> Vitaly Kuznetsov (13):
+> >>   KVM: VMX: Check VM_ENTRY_IA32E_MODE in setup_vmcs_config()
+> >>   KVM: VMX: Check CPU_BASED_{INTR,NMI}_WINDOW_EXITING in
+> >>     setup_vmcs_config()
+> >>   KVM: VMX: Tweak the special handling of SECONDARY_EXEC_ENCLS_EXITING
+> >>     in setup_vmcs_config()
+> >>   KVM: VMX: Extend VMX controls macro shenanigans
+> >>   KVM: VMX: Move CPU_BASED_CR8_{LOAD,STORE}_EXITING filtering out of
+> >>     setup_vmcs_config()
+> >>   KVM: VMX: Add missing VMEXIT controls to vmcs_config
+> >>   KVM: VMX: Add missing VMENTRY controls to vmcs_config
+> >>   KVM: VMX: Add missing CPU based VM execution controls to vmcs_config
+> >>   KVM: nVMX: Use sanitized allowed-1 bits for VMX control MSRs
+> >>   KVM: VMX: Store required-1 VMX controls in vmcs_config
+> >>   KVM: nVMX: Use sanitized required-1 bits for VMX control MSRs
+> >>   KVM: VMX: Cache MSR_IA32_VMX_MISC in vmcs_config
+> >>   KVM: nVMX: Use cached host MSR_IA32_VMX_MISC value for setting up
+> >>     nested MSR
+> >>
+> >>  arch/x86/kvm/vmx/capabilities.h |  16 +--
+> >>  arch/x86/kvm/vmx/nested.c       |  37 +++---
+> >>  arch/x86/kvm/vmx/nested.h       |   2 +-
+> >>  arch/x86/kvm/vmx/vmx.c          | 198 ++++++++++++++------------------
+> >>  arch/x86/kvm/vmx/vmx.h          | 118 +++++++++++++++++++
+> >>  5 files changed, 229 insertions(+), 142 deletions(-)
+> >>
+> >> --
+> >> 2.35.3
+> >>
+> >
+> > Just checking that this doesn't introduce any backwards-compatibility
+> > issues. That is, all features that were reported as being available in
+> > the past should still be available moving forward.
+> >
+>
+> All the controls nested_vmx_setup_ctls_msrs() set are in the newly
+> introduced KVM_REQ_VMX_*/KVM_OPT_VMX_* sets so we should be good here
+> (unless I screwed up, of course).
+>
+> There's going to be some changes though. E.g this series was started by
+> Anirudh's report when KVM was exposing SECONDARY_EXEC_TSC_SCALING while
+> running on KVM and using eVMCS which doesn't support the control. This
+> is a bug and I don't think we need and 'bug compatibility' here.
+
+You cannot force VM termination on a kernel upgrade. On live migration
+from an older kernel, the new kernel must be willing to accept the
+suspended state of a VM that was running under the older kernel. In
+particular, the new KVM_SET_MSRS must accept the values of the VMX
+capability MSRS that userspace obtains from the older KVM_GET_MSRS. I
+don't know if this is what you are referring to as "bug
+compatibility," but if it is, then we absolutely do need it.
+
+> Another change is that VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL/
+> VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL will now be filtered out on the
+> "broken" CPUs (the list is in setup_vmcs_config()). I *think* this is
+> also OK but if not, we can move the filtering to vmx_vmentry_ctrl()/
+> vmx_vmexit_ctrl().
+>
+> --
+> Vitaly
+>

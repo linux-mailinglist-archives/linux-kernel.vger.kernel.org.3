@@ -2,285 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC64655EB4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D491D55EB52
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232758AbiF1Rq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 13:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
+        id S233300AbiF1RtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 13:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232437AbiF1Rqv (ORCPT
+        with ESMTP id S233356AbiF1Rsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 13:46:51 -0400
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C141F65F4;
-        Tue, 28 Jun 2022 10:46:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
-        t=1656438399; bh=EPRbWh0tzKYymsptHWHi5nsOsq0gpHqDa+CF9plfPgs=;
-        h=X-EA-Auth:From:To:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
-         References:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        b=imUyTVqYGKnUVJQKMNJ1bG/g8428+f9XBNmOpXqoTHMJ3R+uFWyB9VRSNb8W5j3qt
-         0WC9MZjTWxanQ6MC5DQ0H7WKb9Uvu+NcST4u7d7tTepnc0cVrVFwe7mAIZH6+M+zPB
-         mEcubgfOO3AJvDTvxTGH5fUPSFk1jlzOXtT2ZotE=
-Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
-        via [213.182.55.207]
-        Tue, 28 Jun 2022 19:46:39 +0200 (CEST)
-X-EA-Auth: sh9W1sAdXwfmnTdT9wndjcgl5+W4R8IT0um8lrr+Y9VsELb9bOxQIfY98mqsTnh/uKudJUsISKhGcMrsKyNesEoJmA6j9XMtUKhDVxdiDQI=
-From:   Vincent Knecht <vincent.knecht@mailoo.org>
-To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 7/7] leds: is31fl319x: Add support for is31fl319{0,1,3} chips
-Date:   Tue, 28 Jun 2022 19:46:24 +0200
-Message-Id: <20220628174627.2821722-3-vincent.knecht@mailoo.org>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220628174627.2821722-1-vincent.knecht@mailoo.org>
-References: <20220628174124.2819238-1-vincent.knecht@mailoo.org>
- <20220628174627.2821722-1-vincent.knecht@mailoo.org>
+        Tue, 28 Jun 2022 13:48:47 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CD9647C
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:48:32 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id p9so8372929ilj.7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:48:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=csp-edu.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3LBlOsHDDvMdp4y73P1jZxUXSiowmAwvg2Xs0aTbdiQ=;
+        b=WNWZQLxtnV+XDSNndK3uTuvHqQcoFqbdsbXNLG3WG/5u7zQsy836LJBWNMrB6jkmtP
+         2nUd/0YOGpoFgmxeHRthpfuaLm7Il7xiS+GtRH6Dh0N/MgVRiegDY9Lv/TM2RTA389XR
+         VZtT2RpsfggYMFOAjrXxL75Y5AW/5diMbm6NLevXIGyaoBvpjo6TPEY4XSZAom6Ol2zG
+         6aX5ZuBR48nkQpgXM1b9bT59GhBr3jwzWphxSDZOrpCk7uHoFE5fQv9gxrCbK9pBa4xY
+         GPzEykKXAQ06WWCf2vvn0tIJLHQr2eEtwWa+z/2zMt0mHZEPgzj5T36n2CjnJ7L8DpT7
+         P1lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3LBlOsHDDvMdp4y73P1jZxUXSiowmAwvg2Xs0aTbdiQ=;
+        b=7Bxt9B/l2sU+yoaDEbq7IhjnmdISvbQI172xR573uPzCufLAZkJ2RWgvCzydfrMgb9
+         hq+SHZ/AR7V4XedlaR6TeEIxZSaJlJ4QmOoYlsFvS0RDJLoGr8ej9oOHaJ8+lrT87OIA
+         FLJ56DatbxVofGNOa7PhQVxtmpbPDxs+4hO6Zzxz9atdXt2JB3nypy8F/Kde67/eCK6b
+         9j3Q7uwcovMq7ykDid9+W6QePG4p9cxCRDiPq8Q7kSfTW3g5PyWvUj0CC9wf1bTgGKHy
+         ta3n8utq8eDn/albI0YnAfsimtN11oRpx32ckV1aq8fI2erCvLiMJbjGzc6RSdOlm95H
+         uXRg==
+X-Gm-Message-State: AJIora/qefzoPs/16hHRzcbpdpof2/MB2SL/fNjOJaATexh+vTmvgqNl
+        AYFRMPoySYl6ZvrDJvY4aJ0MjQ==
+X-Google-Smtp-Source: AGRyM1sgcFYWfJ9UEVGyZgKpCri6wKICjkhE65hbuPqiGbd6RUWnd42zOoe4rRwk3R043c4MnVYl/g==
+X-Received: by 2002:a92:d94f:0:b0:2d9:3ebe:7252 with SMTP id l15-20020a92d94f000000b002d93ebe7252mr10884416ilq.279.1656438511968;
+        Tue, 28 Jun 2022 10:48:31 -0700 (PDT)
+Received: from kernel-dev-1 (75-168-90-187.mpls.qwest.net. [75.168.90.187])
+        by smtp.gmail.com with ESMTPSA id p3-20020a92da43000000b002daa3e1fe85sm1703442ilq.58.2022.06.28.10.48.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 10:48:31 -0700 (PDT)
+From:   Coleman Dietsch <dietschc@csp.edu>
+To:     linux-kselftest@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Coleman Dietsch <dietschc@csp.edu>
+Subject: [PATCH] selftests net: fix kselftest net fatal error
+Date:   Tue, 28 Jun 2022 12:47:44 -0500
+Message-Id: <20220628174744.7908-1-dietschc@csp.edu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set specific chipset structs values for is31fl319{0,1,3}
-so that those chips can actually work.
-Datasheets:
-https://lumissil.com/assets/pdf/core/IS31FL3190_DS.pdf
-https://lumissil.com/assets/pdf/core/IS31FL3191_DS.pdf
-https://lumissil.com/assets/pdf/core/IS31FL3193_DS.pdf
-https://lumissil.com/assets/pdf/core/IS31FL3196_DS.pdf
-https://lumissil.com/assets/pdf/core/IS31FL3199_DS.pdf
+The incorrect path is causing the following error when trying to run net
+kselftests:
 
-Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
+In file included from bpf/nat6to4.c:43:
+../../../lib/bpf/bpf_helpers.h:11:10: fatal error: 'bpf_helper_defs.h' file not found
+         ^~~~~~~~~~~~~~~~~~~
+1 error generated.
+
+Signed-off-by: Coleman Dietsch <dietschc@csp.edu>
 ---
- drivers/leds/leds-is31fl319x.c | 164 ++++++++++++++++++++++++++++++---
- 1 file changed, 150 insertions(+), 14 deletions(-)
+ tools/testing/selftests/net/bpf/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/leds/leds-is31fl319x.c b/drivers/leds/leds-is31fl319x.c
-index eb8601a203a8..0260c28de96a 100644
---- a/drivers/leds/leds-is31fl319x.c
-+++ b/drivers/leds/leds-is31fl319x.c
-@@ -21,6 +21,31 @@
+diff --git a/tools/testing/selftests/net/bpf/Makefile b/tools/testing/selftests/net/bpf/Makefile
+index 8a69c91fcca0..8ccaf8732eb2 100644
+--- a/tools/testing/selftests/net/bpf/Makefile
++++ b/tools/testing/selftests/net/bpf/Makefile
+@@ -2,7 +2,7 @@
  
- /* register numbers */
- #define IS31FL319X_SHUTDOWN		0x00
-+
-+/* registers for 3190, 3191 and 3193 */
-+#define IS31FL3190_BREATHING		0x01
-+#define IS31FL3190_LEDMODE		0x02
-+#define IS31FL3190_CURRENT		0x03
-+#define IS31FL3190_PWM(channel)		(0x04 + channel)
-+#define IS31FL3190_DATA_UPDATE		0x07
-+#define IS31FL3190_T0(channel)		(0x0a + channel)
-+#define IS31FL3190_T1T2(channel)	(0x10 + channel)
-+#define IS31FL3190_T3T4(channel)	(0x16 + channel)
-+#define IS31FL3190_TIME_UPDATE		0x1c
-+#define IS31FL3190_LEDCONTROL		0x1d
-+#define IS31FL3190_RESET		0x2f
-+
-+#define IS31FL3190_CURRENT_MIN		((u32)5000)
-+#define IS31FL3190_CURRENT_DEFAULT	((u32)42000)
-+#define IS31FL3190_CURRENT_MAX		((u32)42000)
-+#define IS31FL3190_CURRENT_MASK		GENMASK(4, 2)
-+#define IS31FL3190_CURRENT_5_mA		0x02
-+#define IS31FL3190_CURRENT_10_mA	0x01
-+#define IS31FL3190_CURRENT_17dot5_mA	0x04
-+#define IS31FL3190_CURRENT_30_mA	0x03
-+#define IS31FL3190_CURRENT_42_mA	0x00
-+
-+/* registers for 3196 and 3199 */
- #define IS31FL3196_CTRL1		0x01
- #define IS31FL3196_CTRL2		0x02
- #define IS31FL3196_CONFIG1		0x03
-@@ -92,6 +117,37 @@ static bool is31fl319x_readable_reg(struct device *dev, unsigned int reg)
- 	return false;
- }
+ CLANG ?= clang
+ CCINCLUDE += -I../../bpf
+-CCINCLUDE += -I../../../lib
++CCINCLUDE += -I../../../../lib
+ CCINCLUDE += -I../../../../../usr/include/
  
-+static bool is31fl3190_volatile_reg(struct device *dev, unsigned int reg)
-+{ /* volatile registers are not cached */
-+	switch (reg) {
-+	case IS31FL3190_DATA_UPDATE:
-+	case IS31FL3190_TIME_UPDATE:
-+	case IS31FL3190_RESET:
-+		return true; /* always write-through */
-+	default:
-+		return false;
-+	}
-+}
-+
-+static const struct reg_default is31fl3190_reg_defaults[] = {
-+	{ IS31FL3190_LEDMODE, 0x00},
-+	{ IS31FL3190_CURRENT, 0x00},
-+	{ IS31FL3190_PWM(0), 0x00},
-+	{ IS31FL3190_PWM(1), 0x00},
-+	{ IS31FL3190_PWM(2), 0x00},
-+};
-+
-+static struct regmap_config is31fl3190_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = IS31FL3190_RESET,
-+	.cache_type = REGCACHE_FLAT,
-+	.readable_reg = is31fl319x_readable_reg,
-+	.volatile_reg = is31fl3190_volatile_reg,
-+	.reg_defaults = is31fl3190_reg_defaults,
-+	.num_reg_defaults = ARRAY_SIZE(is31fl3190_reg_defaults),
-+};
-+
- static bool is31fl3196_volatile_reg(struct device *dev, unsigned int reg)
- { /* volatile registers are not cached */
- 	switch (reg) {
-@@ -129,6 +185,63 @@ static struct regmap_config is31fl3196_regmap_config = {
- 	.num_reg_defaults = ARRAY_SIZE(is31fl3196_reg_defaults),
- };
- 
-+static int is31fl3190_brightness_set(struct led_classdev *cdev,
-+				     enum led_brightness brightness)
-+{
-+	struct is31fl319x_led *led = container_of(cdev, struct is31fl319x_led,
-+						  cdev);
-+	struct is31fl319x_chip *is31 = led->chip;
-+	int chan = led - is31->leds;
-+	int ret;
-+	int i;
-+	u8 ctrl = 0;
-+
-+	dev_dbg(&is31->client->dev, "%s %d: %d\n", __func__, chan, brightness);
-+
-+	mutex_lock(&is31->lock);
-+
-+	/* update PWM register */
-+	ret = regmap_write(is31->regmap, IS31FL3190_PWM(chan), brightness);
-+	if (ret < 0)
-+		goto out;
-+
-+	/* read current brightness of all PWM channels */
-+	for (i = 0; i < is31->cdef->num_leds; i++) {
-+		unsigned int pwm_value;
-+		bool on;
-+
-+		/*
-+		 * since neither cdev nor the chip can provide
-+		 * the current setting, we read from the regmap cache
-+		 */
-+
-+		ret = regmap_read(is31->regmap, IS31FL3190_PWM(i), &pwm_value);
-+		dev_dbg(&is31->client->dev, "%s read %d: ret=%d: %d\n",
-+			__func__, i, ret, pwm_value);
-+		on = ret >= 0 && pwm_value > LED_OFF;
-+
-+		ctrl |= on << i;
-+	}
-+
-+	if (ctrl > 0) {
-+		dev_dbg(&is31->client->dev, "power up %02x\n", ctrl);
-+		regmap_write(is31->regmap, IS31FL3190_LEDCONTROL, ctrl);
-+		/* update PWMs */
-+		regmap_write(is31->regmap, IS31FL3190_DATA_UPDATE, 0x00);
-+		/* enable chip from shut down and enable all channels */
-+		ret = regmap_write(is31->regmap, IS31FL319X_SHUTDOWN, 0x20);
-+	} else {
-+		dev_dbg(&is31->client->dev, "power down\n");
-+		/* shut down (no need to clear LEDCONTROL) */
-+		ret = regmap_write(is31->regmap, IS31FL319X_SHUTDOWN, 0x01);
-+	}
-+
-+out:
-+	mutex_unlock(&is31->lock);
-+
-+	return ret;
-+}
-+
- static int is31fl3196_brightness_set(struct led_classdev *cdev,
- 				     enum led_brightness brightness)
- {
-@@ -195,24 +308,24 @@ static int is31fl3196_brightness_set(struct led_classdev *cdev,
- 
- static const struct is31fl319x_chipdef is31fl3190_cdef = {
- 	.num_leds = 1,
--	.reset_reg = IS31FL3196_RESET,
--	.is31fl319x_regmap_config = &is31fl3196_regmap_config,
--	.brightness_set = is31fl3196_brightness_set,
--	.current_default = IS31FL3196_CURRENT_DEFAULT,
--	.current_min = IS31FL3196_CURRENT_MIN,
--	.current_max = IS31FL3196_CURRENT_MAX,
--	.is_3196or3199 = true,
-+	.reset_reg = IS31FL3190_RESET,
-+	.is31fl319x_regmap_config = &is31fl3190_regmap_config,
-+	.brightness_set = is31fl3190_brightness_set,
-+	.current_default = IS31FL3190_CURRENT_DEFAULT,
-+	.current_min = IS31FL3190_CURRENT_MIN,
-+	.current_max = IS31FL3190_CURRENT_MAX,
-+	.is_3196or3199 = false,
- };
- 
- static const struct is31fl319x_chipdef is31fl3193_cdef = {
- 	.num_leds = 3,
--	.reset_reg = IS31FL3196_RESET,
--	.is31fl319x_regmap_config = &is31fl3196_regmap_config,
--	.brightness_set = is31fl3196_brightness_set,
--	.current_default = IS31FL3196_CURRENT_DEFAULT,
--	.current_min = IS31FL3196_CURRENT_MIN,
--	.current_max = IS31FL3196_CURRENT_MAX,
--	.is_3196or3199 = true,
-+	.reset_reg = IS31FL3190_RESET,
-+	.is31fl319x_regmap_config = &is31fl3190_regmap_config,
-+	.brightness_set = is31fl3190_brightness_set,
-+	.current_default = IS31FL3190_CURRENT_DEFAULT,
-+	.current_min = IS31FL3190_CURRENT_MIN,
-+	.current_max = IS31FL3190_CURRENT_MAX,
-+	.is_3196or3199 = false,
- };
- 
- static const struct is31fl319x_chipdef is31fl3196_cdef = {
-@@ -360,6 +473,26 @@ static int is31fl319x_parse_dt(struct device *dev,
- 	return ret;
- }
- 
-+static inline int is31fl3190_microamp_to_cs(struct device *dev, u32 microamp)
-+{
-+	switch (microamp) {
-+	case 5000:
-+		return IS31FL3190_CURRENT_5_mA;
-+	case 10000:
-+		return IS31FL3190_CURRENT_10_mA;
-+	case 17500:
-+		return IS31FL3190_CURRENT_17dot5_mA;
-+	case 30000:
-+		return IS31FL3190_CURRENT_30_mA;
-+	case 42000:
-+		return IS31FL3190_CURRENT_42_mA;
-+	default:
-+		dev_warn(dev, "Unsupported current value: %d, using 5000 µA!\n", microamp);
-+	}
-+
-+	return IS31FL3190_CURRENT_5_mA;
-+}
-+
- static inline int is31fl3196_microamp_to_cs(struct device *dev, u32 microamp)
- { /* round down to nearest supported value (range check done by caller) */
- 	u32 step = microamp / IS31FL3196_CURRENT_STEP;
-@@ -436,6 +569,9 @@ static int is31fl319x_probe(struct i2c_client *client,
- 		regmap_write(is31->regmap, IS31FL3196_CONFIG2,
- 			     is31fl3196_microamp_to_cs(dev, aggregated_led_microamp) |
- 			     is31fl3196_db_to_gain(is31->audio_gain_db));
-+	else
-+		regmap_update_bits(is31->regmap, IS31FL3190_CURRENT, IS31FL3190_CURRENT_MASK,
-+				   is31fl3190_microamp_to_cs(dev, aggregated_led_microamp));
- 
- 	for (i = 0; i < is31->cdef->num_leds; i++) {
- 		struct is31fl319x_led *led = &is31->leds[i];
+ TEST_CUSTOM_PROGS = $(OUTPUT)/bpf/nat6to4.o
 -- 
-2.35.3
-
-
+2.34.1
 

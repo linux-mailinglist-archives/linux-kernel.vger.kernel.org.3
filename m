@@ -2,94 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0361755EE06
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E911155EE0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbiF1Tpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 15:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
+        id S230211AbiF1Tpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 15:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbiF1TpV (ORCPT
+        with ESMTP id S231454AbiF1Tp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 15:45:21 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC273CA6F
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 12:38:48 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id k9so3687891pfg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 12:38:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=R/m0Mpk7pVuJiIWprQOno/Hpe4AFomZAEcga9jL9YLA=;
-        b=bhe/sbwpuGVDQTIiuE1vanGErx/2iYmd4JWtUJ9ONgGYg9xWkpKeD/AFx7lxB4Z/1q
-         3/JOWQm0J40kHqjM7KmdJ7b0ORREudvPV3vR2QpJIMz4VsRhAFBhYmfbwJIClZhJFkcB
-         ZTkxA1+uiy/3uB2TDvG90iKHTkB6UafPQXBXntJbSIBHIzWKiZbV96ZGLiEqTn3M1u9H
-         A9dSVBsWM5F5qxyN8i2cxi6OmDkJEYnkrbAmHAf943MJEU9kNJq9XPps/0BsMk85UpMA
-         +YwkTcMRPEYFzgrThZMpITDuq/jmD8Egxrgf6mJiQ3seAVjN7Wa23b/CUgZB14j4tN9v
-         XawQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=R/m0Mpk7pVuJiIWprQOno/Hpe4AFomZAEcga9jL9YLA=;
-        b=dpZMzfV7Y0krO68LEQNIj9S+pPS9aAqQVloortPcy9jkTuDueO43KeF7SKQ7Tmd08E
-         I6Rd9rIWGBRMIqnjO4O0ytzWS719tg1cmfNoSI9/QXh1MsQ1hylALvA6/ctOMrFoJe6b
-         4wgJC0GjnmyDnDM8sDLcLyScNGTUKRtReoozEoo4u0TYAhUU21eXLbii16Qu46v3uwnW
-         k5hCVDztP2x1jQKEyCr4Zv9aC1WAdTgP0GcyezBITyLykc/Bo+gJDWPtg3nUaypObq3u
-         Vwii1/MPy98SLu8YVfhdBefzt8VTfKEu0NklvQ4FlsSNa5nEDz+C9oXXtaH+DAfnPE3E
-         SvxQ==
-X-Gm-Message-State: AJIora8nhQVSK29vKlqOhkW5EGgpX7ebyEHeFMsB1hZIsSBXP76vZXn1
-        NIBFs0zH6NxDaiDlWsDs94hC5gMXZrmWPA==
-X-Google-Smtp-Source: AGRyM1seN+3lufLgwt0RnuEk9fybZPgxUv9NUsBwylD1Xh4AvsqeKC6WmitZPWs5OCP9YsaX9dJAfg==
-X-Received: by 2002:aa7:96dd:0:b0:525:8869:df13 with SMTP id h29-20020aa796dd000000b005258869df13mr6354581pfq.14.1656445127638;
-        Tue, 28 Jun 2022 12:38:47 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c085:21e1::165b? ([2620:10d:c090:400::5:f46f])
-        by smtp.gmail.com with ESMTPSA id g4-20020a655944000000b003fe4da67980sm9595041pgu.68.2022.06.28.12.38.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 12:38:47 -0700 (PDT)
-Message-ID: <37147b0c-4b11-37df-6c4a-ee2dfeb9cbb7@kernel.dk>
-Date:   Tue, 28 Jun 2022 13:38:44 -0600
+        Tue, 28 Jun 2022 15:45:29 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA003BF8E;
+        Tue, 28 Jun 2022 12:39:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656445144; x=1687981144;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WFRvrLrs78r9lnnA1EVYp7hsPys2q5PlSUAARxpTtuQ=;
+  b=QDIZ0azXgtPNSaFEzJiZnzabbHkVymkcQjtcwMR8lJRE5+SHi51WkqYU
+   v2DLRRMYEwQ8OrZ0fimOLCmH7Di8omel6gavWYDbdrXCXnVL3Zf/sfOLe
+   lroNofva8glxIwG5lW2WVocbW17p9sPlw7TyhqdApHzyh8cs17/RtjZzC
+   RvUyJEDyA/NdvgZATVqcHP5xokINscbXA10RiTgo3+OcXuVi6z+ufEczx
+   K6/F/qbYqQp16wfofWYZmiZWvUkOqG9/2IbLQtJre9H9Ybhvd3YdPferz
+   rre5Mxg1cxiXGAfSP231DIZxEBQEFrBgG3piGEOsL0XMktfOkUJELjaTb
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="262241171"
+X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
+   d="scan'208";a="262241171"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:39:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
+   d="scan'208";a="540596666"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 28 Jun 2022 12:39:02 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 37383F1; Tue, 28 Jun 2022 22:39:08 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Michael Hennerich <michael.hennerich@analog.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH v1 1/3] gpio: adp5588: Switch from of headers to mod_devicetable.h
+Date:   Tue, 28 Jun 2022 22:39:03 +0300
+Message-Id: <20220628193906.36350-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH][next] io_uring: replace zero-length array with
- flexible-array member
-Content-Language: en-US
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20220628193320.GA52629@embeddedor>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220628193320.GA52629@embeddedor>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/22 1:33 PM, Gustavo A. R. Silva wrote:
-> There is a regular need in the kernel to provide a way to declare
-> having a dynamically sized set of trailing elements in a structure.
-> Kernel code should always use ?flexible array members?[1] for these
-> cases. The older style of one-element or zero-length arrays should
-> no longer be used[2].
-> 
-> [1] https://en.wikipedia.org/wiki/Flexible_array_member
-> [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
+There is nothing directly using of specific interfaces in this driver,
+so lets not include the headers.
 
-Thanks for sending this separately. As mentioned out-of-band, we already
-have it like this in the io_uring.h header in liburing.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/gpio/gpio-adp5588.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-Applied for 5.20.
-
+diff --git a/drivers/gpio/gpio-adp5588.c b/drivers/gpio/gpio-adp5588.c
+index e388e75103f4..51ed23ba4645 100644
+--- a/drivers/gpio/gpio-adp5588.c
++++ b/drivers/gpio/gpio-adp5588.c
+@@ -6,7 +6,6 @@
+  * Copyright 2009-2010 Analog Devices Inc.
+  */
+ 
+-#include <linux/module.h>
+ #include <linux/kernel.h>
+ #include <linux/slab.h>
+ #include <linux/init.h>
+@@ -14,7 +13,8 @@
+ #include <linux/gpio/driver.h>
+ #include <linux/interrupt.h>
+ #include <linux/irq.h>
+-#include <linux/of_device.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
+ 
+ #include <linux/platform_data/adp5588.h>
+ 
+@@ -427,18 +427,16 @@ static const struct i2c_device_id adp5588_gpio_id[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, adp5588_gpio_id);
+ 
+-#ifdef CONFIG_OF
+ static const struct of_device_id adp5588_gpio_of_id[] = {
+ 	{ .compatible = "adi," DRV_NAME, },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, adp5588_gpio_of_id);
+-#endif
+ 
+ static struct i2c_driver adp5588_gpio_driver = {
+ 	.driver = {
+ 		.name = DRV_NAME,
+-		.of_match_table = of_match_ptr(adp5588_gpio_of_id),
++		.of_match_table = adp5588_gpio_of_id,
+ 	},
+ 	.probe_new = adp5588_gpio_probe,
+ 	.remove = adp5588_gpio_remove,
 -- 
-Jens Axboe
+2.35.1
 

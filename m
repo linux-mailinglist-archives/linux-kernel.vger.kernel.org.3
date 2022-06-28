@@ -2,132 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 355EA55EDD6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F1455EDD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiF1Tal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 15:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
+        id S230305AbiF1TfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 15:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbiF1TaF (ORCPT
+        with ESMTP id S231830AbiF1TcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 15:30:05 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9B8A2CC8F;
-        Tue, 28 Jun 2022 12:26:37 -0700 (PDT)
-Received: from pwmachine.localnet (lfbn-lyo-1-1062-211.w86-248.abo.wanadoo.fr [86.248.131.211])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 28D8620CDF22;
-        Tue, 28 Jun 2022 12:26:35 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 28D8620CDF22
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1656444397;
-        bh=yr6ynDdw6pyVh9Iwg4x+jvCjxckbKOv/2p2g1OJXeOk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mduRND+hdKqkoVwX7rwN2WOfSSmhv5moEqFiXNXdSoyWo8lF1IcJzK1POPG9dc71u
-         hcOxNdCTFYo+kw2fDyx1WE3cXbj585ZTHmUK0vNTkkbW4ypZwnGgBHwP3coyHuMO0y
-         mxSyI6BDmOlJM5RsyUO0sm4gNpKKdVXnW3+CPANQ=
-From:   Francis Laniel <flaniel@linux.microsoft.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-trace-devel@vger.kernel.org,
-        James Morse <james.morse@arm.com>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] arm64: Do not forget syscall when starting a new thread.
-Date:   Tue, 28 Jun 2022 21:26:32 +0200
-Message-ID: <3439466.iIbC2pHGDl@pwmachine>
-Organization: Microsoft
-In-Reply-To: <20220628135834.GA24116@willie-the-truck>
-References: <20220608162447.666494-1-flaniel@linux.microsoft.com> <20220608162447.666494-2-flaniel@linux.microsoft.com> <20220628135834.GA24116@willie-the-truck>
+        Tue, 28 Jun 2022 15:32:00 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E343AA45
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 12:27:19 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id r3so23948517ybr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 12:27:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=walg9+X25Qf0Q2kOl7EPuRRmD7l8R+TPYwiRkuq/taA=;
+        b=r5dhjikOjoOSTxH7twYmSKEfHqErqjhxkSM9McqWoCouOgLOQB7kvkMdEEzxx/BDX6
+         TQrjLVB6hMIfuOa9g8Jq2JmzE97r9+o77os7tKeNZgQG+gQR3fBWEr5T9i+X01s9wRKF
+         poqPtQCKU93338RDg9n0sUG/ZEqcMMUZPZnDwkORaC63HcYlFTRnittAcohjRCM8pOOF
+         g/UPD7ABIbEWrLq01pVgh4ii12ETWhUPrCA8/9LHWHuLKXXESxjWthvXPWzyjMNL6Oot
+         Hlc8iuNIiurItn418+oTScTJhM5C5ncPhx/nMRn5oHIDm7HNscLwCkwchgANUMMiViBr
+         lmvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=walg9+X25Qf0Q2kOl7EPuRRmD7l8R+TPYwiRkuq/taA=;
+        b=dYTP6WkaaPDmGZf9gTMQvCdGFfQ7cRdzfDdpDOF7PMIaSy8y6pH1Kozdjrp06zlOzf
+         foY3DE3E9nJDKorOBlG9WltSTaZ0yWm/SqFQiweaoZGevOmNg1gQoE0g05FjJjOHbzaA
+         4YD12SOH8MsYIxqWoPhfd36Pl5u4FTY9xzXJIT00nSJFt3z5E3FSb/m23cVkAR1LdaE5
+         SUbssEbo6msOu7gHCNLJP0PprLF15vmxwTWY+IIpeWcXYHwZUEg6JWX7dFzBM500Ozsa
+         ikO7RzNrzvcIK3HHp3Dr3jP6J2XDBLlMWl6OUyOnuOwRhJekfMyD0YxDwKJdj7rnJpZL
+         VmYw==
+X-Gm-Message-State: AJIora9K6p447G3A9CAiSJBjG8YOP848Va8eSHuEWRKgO3m26tuZycNV
+        eaIWXCzeDzTRVBDQXpj6no1I0B4CRvZIB6K/hjMgxQ==
+X-Google-Smtp-Source: AGRyM1tix/MDbYpAocLhXqNa2cuD1sSvJJYVbcVLzqD1nAvkTSC00uKkSWSEB65C4UY4pgJ8yatan7ZYC8uyX2aYtAw=
+X-Received: by 2002:a25:e7d4:0:b0:66c:899b:49c6 with SMTP id
+ e203-20020a25e7d4000000b0066c899b49c6mr21915704ybh.291.1656444414438; Tue, 28
+ Jun 2022 12:26:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org> <20220616005333.18491-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220616005333.18491-4-krzysztof.kozlowski@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 28 Jun 2022 21:26:43 +0200
+Message-ID: <CACRpkdawFWN_3EYV0p2AAgu54Lu1s0YgqiSiV3136wOSfSGhrg@mail.gmail.com>
+Subject: Re: [PATCH v3 04/40] dt-bindings: pinctrl: nuvoton,wpcm450-pinctrl:
+ align key node name
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     arm@kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi.
+On Thu, Jun 16, 2022 at 2:54 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
-Le mardi 28 juin 2022, 15:58:35 CEST Will Deacon a =E9crit :
-> On Wed, Jun 08, 2022 at 05:24:46PM +0100, Francis Laniel wrote:
-> > This patch enables exeve*() to be traced with syscalls:sys_exit_execve
-> > tracepoint.
-> > Previous to it, by calling forget_syscall(), this tracepoint would not
-> > print its information as syscall is -1.
-> > So, this patch removes call to forget_syscall() and set regs->syscallno
-> > to its previous value.
-> >=20
-> > Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-> > ---
-> >=20
-> >  arch/arm64/include/asm/processor.h | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/arch/arm64/include/asm/processor.h
-> > b/arch/arm64/include/asm/processor.h index 9e58749db21d..86eb0bfe3b38
-> > 100644
-> > --- a/arch/arm64/include/asm/processor.h
-> > +++ b/arch/arm64/include/asm/processor.h
-> > @@ -272,8 +272,9 @@ void tls_preserve_current_state(void);
-> >=20
-> >  static inline void start_thread_common(struct pt_regs *regs, unsigned
-> >  long pc) {
-> >=20
-> > +	s32 previous_syscall =3D regs->syscallno;
-> >=20
-> >  	memset(regs, 0, sizeof(*regs));
-> >=20
-> > -	forget_syscall(regs);
-> > +	regs->syscallno =3D previous_syscall;
->=20
-> I'm still unsure about this. Even if we preserve the syscall number here,
-> won't all the arguments be reported as 0?
+> gpio-keys schema requires keys to have more generic name.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I am not really sure what you meant about arguments, can you please precise=
-=20
-between command line arguments (ls -al) and syscall arguments (argp, envp,=
-=20
-etc.)?
-Indeed, if my understanding is correct syscall arguments are showed by=20
-sys_enter_* while sys_exit_* only reports the syscall return code.
+Patch applied!
 
-Regarding the return code I think the value is correct as it is used in=20
-syscall_trace_exit() but set in invoke_syscall() after the syscall finishes=
- [1,=20
-2].
-The comparison of arm64 and amd64 output also shows no difference:
-# amd64
-ls 435739 [002] 24689.292479:  syscalls:sys_exit_execve: 0x0
-            7fc43732e100 _start+0x0 (/usr/lib/x86_64-linux-gnu/ld-2.31.so)
-# arm64
-ls   266 [000]    34.708444:  syscalls:sys_exit_execve: 0x0
-                    1140 [unknown] (/usr/lib/aarch64-linux-gnu/ld-2.31.so)
-=20
-> I also looked quickly at the 32-bit arch/arm/ code and it looks like the
-> same behaviour exists there (module CONFIG_BINFMT_ELF_FDPIC).
-
-I can try to fix it for this architecture too.
-Can you please point me the part of the code which shows the same behavior?
-=20
-> Will
-
-
-Best regards.
-=2D--
-[1] https://elixir.bootlin.com/linux/v5.18/source/arch/arm64/kernel/
-ptrace.c#L1868
-[2] https://elixir.bootlin.com/linux/v5.18/source/arch/arm64/kernel/
-syscall.c#L57
-
-
+Yours,
+Linus Walleij

@@ -2,304 +2,407 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 360AD55D7CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC7155CF84
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233262AbiF1D0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 23:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
+        id S231652AbiF1DYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 23:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232080AbiF1DZ3 (ORCPT
+        with ESMTP id S231592AbiF1DYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 23:25:29 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD462558C;
-        Mon, 27 Jun 2022 20:25:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656386711; x=1687922711;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=Qq5NLYpNb7o2kgayMbV8N6bi1ZScr8LqQCODWFG/rNs=;
-  b=bh9pycfUHaWYaopRa5jSwXpGv+iKqflxOkF3qovtlmUnkcZ0oiRPwQue
-   J9Xk1lxVNjVCPKamt9LDL3OGfnL99uX+ZNWVeeiWiMo8+z2fS5hJhx5gd
-   1dp1qj8dU4G6F7GHQFNtwVCdyw7Ek1o3HGN3+vVEQ5h2mjos3MuYVGc0t
-   YFMSbrIxue8nJuodJ7GMp7iI91SrD8YtxaluVnckTuPvVbKkTc9qX+WgR
-   2xIMAISvQrpMfm/9GTDx4k1dZa7hWAqM+A8NjIrpxA6HutNWuWC+rd97C
-   HI5N9Fb/2pn9sMD28G99EMlxQcVlkmgwtvJm4R3lJtOto+5uomDEoaQV9
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="264663334"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="264663334"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 20:25:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="540341999"
-Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
-  by orsmga003.jf.intel.com with ESMTP; 27 Jun 2022 20:25:00 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Mon, 27 Jun 2022 20:24:59 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Mon, 27 Jun 2022 20:24:59 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Mon, 27 Jun 2022 20:24:59 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.48) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Mon, 27 Jun 2022 20:24:59 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WriTXRv2fQ64P3B4fKrzBQKifhZnvQdbSl4OwStAQRejLJ2j86nvcFWGu3AdZ7d3TX7sFlBAWvTBcCRIR68uFSKFKNVxVZgdoxuZdJYabAAiQoPcrNGtyvKImiOpDqWk1LSX5+CFWMd0QIXB7W8e2UpTn8I/GKAIuojFS4RrnkCCNFBDsdf3ExP/0RAsS9Bl2eXv1TFXmuXIZAaLPHRgFnnYbUip7QtRMQg+xTDhaD58JH1bbhOxTZ8Ups498uyhCVMDSiZgsTy9QWd9wtoPZSHOa1acMBbvmJ/HP2Xg82MOwkmNDWikIu6DgfRyVWMXAIWbSqeENXXaS5Fw4oXgAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AAU3SiX99KIwfn/iG4RHnvqYgTR0XU9xIyTAELOKD60=;
- b=Yg1oWviBYUymYM3Al+Auadi7Jt58AUiT+Nb0pF2BwbyVvg0xq1PqIT+oaZYJeiulwMrVSadriRg/+rV0MrI54xVX5ny27bTffty2Eh/joUApR1UtUVGUypdy9CrU0XDariHb8IZIaUPcvKRYIICWdwWIhVm1DHLDTp7ko+GDB6snqdELdRPfhpHKDy9O0L9OKqgtclpkdr99Cq0yTarOPPsBo78J/T6qFyzb9Q2KoBqG8bLBnAEQxllDkfMbgdXaBXV+wgegDlXczdeOk0mqCdQm+KaA9Ias6OrUqsIKIHCr0zpJ57prOwXtGkFSVF4Bvc1qtfn6sUBqmkTm9z+eeA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6311.namprd11.prod.outlook.com (2603:10b6:8:a6::21) by
- CO1PR11MB4818.namprd11.prod.outlook.com (2603:10b6:303:93::24) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5373.16; Tue, 28 Jun 2022 03:24:58 +0000
-Received: from DM4PR11MB6311.namprd11.prod.outlook.com
- ([fe80::e912:6a38:4502:f207]) by DM4PR11MB6311.namprd11.prod.outlook.com
- ([fe80::e912:6a38:4502:f207%5]) with mapi id 15.20.5373.017; Tue, 28 Jun 2022
- 03:24:58 +0000
-Date:   Mon, 27 Jun 2022 20:24:35 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-CC:     Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V11 5/8] cxl/port: Read CDAT table
-Message-ID: <Yrp0c2wD/L0HHvgG@iweiny-desk3>
-References: <20220610202259.3544623-1-ira.weiny@intel.com>
- <20220610202259.3544623-6-ira.weiny@intel.com>
- <62ad1fb69d742_8920729490@dwillia2-xfh.notmuch>
- <YrI0qQrvM7MzKeLy@iweiny-desk3>
- <62b23c9b3726e_892072944d@dwillia2-xfh.notmuch>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <62b23c9b3726e_892072944d@dwillia2-xfh.notmuch>
-X-ClientProxiedBy: BYAPR05CA0012.namprd05.prod.outlook.com
- (2603:10b6:a03:c0::25) To DM4PR11MB6311.namprd11.prod.outlook.com
- (2603:10b6:8:a6::21)
+        Mon, 27 Jun 2022 23:24:44 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FC824F33
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:24:42 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id b125so8707220qkg.11
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:24:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mG7oGR8KRwS4y6ugg6bXZPvFt3SHfXT7rSf99ndA23o=;
+        b=crGhpCK37dISSE50mg2tnh3PefYTv0fPz6hp5MCpJUtgDsZb+SOCM8G5eRXQjacQNz
+         5rd7LnntQPMB4JWQUgmAPQNZKbyYMi3xLMLUlzG2fag7rF9/ZktsrzDmsWlX+FE56tcY
+         jq97nwKazGjcPXT6uCvArvB0tldkFACCmm7USapuKKmZ0d4tfUD9lZ7ez3s9cXtKQUKs
+         WxegbGgOOj44Oyo5fNil82BaQky5QrWgJtMxmK6bpz8JZUXiyTiH1xJsnj+brK5lhwrF
+         6fJZ0DJoFygSCCysLp62dpl/IRw8yE3NTlGQqKq5gPbIXqNqZGcnmsJtISn6MiqS6MYC
+         +3Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mG7oGR8KRwS4y6ugg6bXZPvFt3SHfXT7rSf99ndA23o=;
+        b=mbe2mGB78cCWIBh0u5wEaTjGKm0zswJ9yGPTEH0s1T3o78PebxiZeMqCXqZeeWo6uP
+         5sjXmNpCQVDoOT0f4Cq0eHLIpYusVMUPgt5Ctev2BXOyV8vzxxltOvej6Pj+EcmchKre
+         2D6eDL4nq2G8WWvo/c4yTKYGYWtwR3rA9ZzOjnbNXuDIhqnWn6BIoq3JEJfMc66eDTP+
+         G8IbGUco6XraoK3veMzM+QPzFLoY9erNUtN0iaPc+mrG3MyxH4uVKHWGojT2WpNmLRz5
+         cO1ZazYGebuBQjVe+7bs8F3VTAFYz4J/5YNAvZuKPKhsdg0fokzJw6DXd4Xtt9FalfXK
+         1kjg==
+X-Gm-Message-State: AJIora9kbbYvutEZyiWubGVFSUqHCE4hdKasvZgquWFNBk94h2ux8c3t
+        acIrD4MDYnL19AupV7fjVw==
+X-Google-Smtp-Source: AGRyM1tTcNS0IqH4b47RR/hvWQA+AKAYOQND6OBw9vWzE3TxQKTJflWjcpBIkdFxFLvCrWTxL7QdOQ==
+X-Received: by 2002:a37:a08e:0:b0:6ae:f3d0:ab41 with SMTP id j136-20020a37a08e000000b006aef3d0ab41mr10076933qke.274.1656386681978;
+        Mon, 27 Jun 2022 20:24:41 -0700 (PDT)
+Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id bi13-20020a05620a318d00b006a6c552736asm9831991qkb.119.2022.06.27.20.24.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 20:24:41 -0700 (PDT)
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Petr Mladek <pmladek@suse.com>
+Subject: [PATCH v5whatever, now with typechecking] vsprintf: %pf(%p)
+Date:   Mon, 27 Jun 2022 23:24:39 -0400
+Message-Id: <20220628032439.3314451-1-kent.overstreet@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2e594c04-8dec-4486-5f40-08da58b5c740
-X-MS-TrafficTypeDiagnostic: CO1PR11MB4818:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: flTl8t7u8INpXZjMguGAm57tGBSO/kVjDm1GSguuw1ZjMJXTfGJFOrZsyL85SdVz42PlFI1paZKpP7ld2NWMw0c2Ha46A9I+iunjQUMu2eqw7LFWYfMaqRCdeA9loOnPG8OYAs7sm2771+i4i5sF6wX7PO8kGUSL6s/Y1lcIisSdNDpD6r9h2oRiR3l3U1qKwkTwZG9OrSFRAv9Uf4WU/DgrHWdbkfR7BNeeJWnrfbWaBeZliccjz644Am7Tl7IwU+ZiQDwO3XYcIOOwtcTs8N8/tguKPnTzJMIElABPxH0OyQrk1kjgUi5HcuTqK5w3InZAlR+RxjHoK5ZD1XtpsE0rQoqijE+UrDVAXLeSbLbzUgbhkisHOl2ommPth0wuwkAHvlpJyommXT/jL7+Y3U5z2aLPhbjxXkog2kHpj6wiTTuPnqy2zmrcGDkfmGiE+cm1csOSpf2TlShCb4Xjc8hzTyjpyOeEI7IBbFrK+CMxmsPVb59SQ7+8/xWrUDYIZuamzwWDz+couimKXf0wnn92ZUed0osMONXfwR26KzlQZCQkEoJarFbxta+4c2DyShbYlf4PDwOCZ6ElTaPZvarGPZ8TIBErvLHebOQfHck8D4kybADEFw8djwWpfqG6LZI90OT2SInfDeLzi1okDbIQl0wr+6tGo5AUR0nm3GlxQ9+p+Nwju2apHe8a32FmvWCifPrsVLrWvom72O7Vluxx2Wt44VYIA/gpoREM9eo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6311.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(346002)(136003)(376002)(39860400002)(366004)(396003)(44832011)(478600001)(6486002)(66946007)(5660300002)(316002)(4326008)(9686003)(6506007)(8936002)(8676002)(41300700001)(86362001)(2906002)(66556008)(6512007)(33716001)(82960400001)(6636002)(6862004)(6666004)(54906003)(83380400001)(186003)(38100700002)(66476007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eg3+qacv+YBfxgxWO214IUAOs7BPFawuKzX+b9ZL6n9ewVCXQmM8tV3EVEkj?=
- =?us-ascii?Q?SScwdgV08mx+EEUVHGj3I4oCzkmPi/OZgxFe3rYvtGDYyTrQUcEOlaO8uKt2?=
- =?us-ascii?Q?bzpXUd2myweKRG5jD5RNxGizzerZAgh55XCQVQ3tUwDUspaFo8bh8EEMwabW?=
- =?us-ascii?Q?5T2Sc267Xocn4eY6SdhUaZq0qkcBhXKeU4tiYLeRebpQUXMfg6JvIlkMdDuo?=
- =?us-ascii?Q?7ghjMXGlHLEfMjYqka6mjT6UKw+NPF0+tBJq0oSPJsa8Fxn6Sb94jbVR8CtA?=
- =?us-ascii?Q?5T6ytiOvPMKuJUeIKAw38Nn8DLIJk+Wy/88AjorCu8stWeF9iWjiK+s1UaXm?=
- =?us-ascii?Q?aqSrWBIRcLbTM7Xovfnf0vDN6Drxxr08SG7XXsI7xaOXCT8RcEpG6Cp2E+PY?=
- =?us-ascii?Q?7V+dDwES+XXcnyKdJtV6brWEWrFhR45iiZ2mu40IO6bAt4Zfqdz10nzF7clX?=
- =?us-ascii?Q?FETnM2RMEDRsOWSfBI+nQcix1/xnublFIVbOzwuIfyrdhWdFwm4zieCv61Bo?=
- =?us-ascii?Q?q34njc3BFOBw92EF7xEhx0MXpDt/aKr7f3gAsguSbEVTW/KsQYJ6oUAjBX+w?=
- =?us-ascii?Q?z9c/BLweNBf91RlqJklE71n67YbmP6Ummk7PLWE/X/cQjkHlmVo+99UBhble?=
- =?us-ascii?Q?uxVMnA5qXzbLnvgdODiFIwa9khBlzBWVocU/rAUVRWtIkLRkYCfyz9StXZHh?=
- =?us-ascii?Q?j3WZLhrzrICOn8GtgGgHhOd2B2ukvfGq6bIvXj7lh4VgEBZL1/ua9TiDsXZ8?=
- =?us-ascii?Q?+AvsS7B7uiCKm6tJPTtNwSSXxmhKCjr/8nfrGDZbvr4J2WOreBKvoxwMAw0D?=
- =?us-ascii?Q?mYWlZ97PPROQHrrDCh66ZOL2KqCSfBWFgIDSMwT3uPxWD6OvAzlL2SdQRG4D?=
- =?us-ascii?Q?w03a0/usNm3iprSpLDFeL62tWRE0Fktp4lZvQkwF524g+TDLiDRLusH/rPrc?=
- =?us-ascii?Q?CZVkFl1BHJYXbv10pdjvfw7ne/NifbNkrnTvLr1Y95xO5oU1zdmJPPO60+jX?=
- =?us-ascii?Q?4NFuWHpypAeFc7iijMx7B2rvp99/B1v9YtUSMSeoow0A6kmf/ITA7G0peIzS?=
- =?us-ascii?Q?ayMgpp+jVcWqTj79TGIToKte/vaW/I2gL6aRrnH9jw0v4whlb6GFo3XWPnor?=
- =?us-ascii?Q?Jh7BUyxG4RInCTBDicvAEghIT9ntzOXmJ/n2smXSzgndI+kcKM7l/oBKnlJP?=
- =?us-ascii?Q?wHjBTEogItpLsKdYxtbjadf7gqJ9QghMyLP7aKL5c9fyep3NS0wWfmcTuXV2?=
- =?us-ascii?Q?vGUDDTNh9LOdwIjnXX0VZW80RM82wgLMbpePdzUjU/2euaPnSzfL/zM5mY3v?=
- =?us-ascii?Q?juQJTNpbsMzYVdhJzcdpDjLT5gJDekPiOo+XX8aSkXWdulnmdQ+LsmV15cEO?=
- =?us-ascii?Q?RRav78AYXRyCQHubLRu+Mxr1bbyjSlzwha7biWtKWHiEgU2DqfWNXy05Fj0+?=
- =?us-ascii?Q?Kkfd1iF2ZqkB+2/mDI2RNRcXMVUWbyCUIjmJHIHBW/o8Ehut+YX1NjYAT/WB?=
- =?us-ascii?Q?jC+ac0p7n6RBDBnVrkpnhudhxvbNINuybg0A0FpNlYOw7Vn+lEgQM7UW3PpP?=
- =?us-ascii?Q?8UU3roxCvDAV3oJpv4SGr3QYdj0U7yUwDvnZqJIjAyNb7BGjgg/yUMN59LgW?=
- =?us-ascii?Q?SA6O2HoyDgyUsfzDDL7LzriQKqYVqqAXsj6wOVm9iCiQ?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e594c04-8dec-4486-5f40-08da58b5c740
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6311.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 03:24:58.2649
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: v9RyfNyCyl6Jq+QYTILGEPkqmny7pNX+TtWmrFbrIKUgm9AhrCEukSG4eKx4DSdHjQbzTD26r4KpVsQXu8j6Rw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4818
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 02:48:11PM -0700, Dan Williams wrote:
-> Ira Weiny wrote:
-> > On Fri, Jun 17, 2022 at 05:43:34PM -0700, Dan Williams wrote:
-> > > ira.weiny@ wrote:
-> > > > From: Ira Weiny <ira.weiny@intel.com>
-> > > > 
-> > > 
+Linus, here's an updated version of the patch implementing %pf(%p) that
+implements your typechecking macro and cookie idea we discussed. I haven't done
+any additional checking like the whitelist I was talking about - this feels
+sufficient to me for now, but I'm happy to revisit it if it comes up.
 
-[snip]
+It's been tested lightly.
 
-> > > Rather than a chatty / ephemeral error message I think this wants some
-> > > indication in userspace, likely the 0-length CDAT binary attribute, so
-> > > that userspace can debug why the kernel is picking sub-optimal QTG ids
-> > > for newly provisioned CXL regions.
-> > 
-> > I thought we agreed that 0-length or CDAT query failure would result in no
-> > sysfs entry?
-> 
-> Oh, I forgot about that, but some new rationale below...
-> 
-> > 
-> > This message was to alert that a CDAT query was attempted but the read failed
-> > vs finding no mailbox with CDAT capabilities for example.
-> 
-> ...right, but that's an error message buried in the kernel log. I was
-> hoping for something where tooling can query and say "oh, by the way,
-> the driver tried and failed to get CDAT from this device that claimed to
-> support CDAT, remedy that situation if you are seeing unexpected
-> performance / behavior".
-> 
+I would _really_ like to be able to pass integer arguments as well - if we want
+to go ahead with converting existing %p extensions to this it would be really
+helpful, and I was wondering if you had any thoughts on that.
 
-Ok I've added a flag which indicates if the device supported CDAT or not.  If
-so the sysfs will be visible but the data may be 0 length.  Which means there
-was some error in reading it.
+I'm not sure if we can depend on integers and pointers being passed the same way
+at the ABI level - I got some screaming when I floated the idea, but after
+looking at actual ABI docs I couldn't find any archs that were _that_ crazy. The
+right way to do this would seem to be with libffi - it supports all Linux
+architectures and is designed exactly for this, and compiles down to practically
+nothing (under a kilobyte) with the features we don't need turned off. If
+pulling that into the kernel is something you'd be ok with, I can look more at
+it.
 
-> > 
-> > [snip]
-> > 
-> > > >  
-> > > > +static ssize_t cdat_read(struct file *filp, struct kobject *kobj,
-> > > > +			 struct bin_attribute *bin_attr, char *buf,
-> > > > +			 loff_t offset, size_t count)
-> > > > +{
-> > > > +	struct device *dev = kobj_to_dev(kobj);
-> > > > +	struct cxl_port *port = to_cxl_port(dev);
-> > > > +
-> > > > +	if (!port->cdat.table)
-> > > > +		return 0;
-> > > > +
-> > > > +	return memory_read_from_buffer(buf, count, &offset,
-> > > > +				       port->cdat.table,
-> > > > +				       port->cdat.length);
-> > > > +}
-> > > > +
-> > > > +static BIN_ATTR_RO(cdat, 0);
-> > > 
-> > > This should be BIN_ATTR_ADMIN_RO(), see:
-> > > 
-> > > 3022c6a1b4b7 driver-core: Introduce DEVICE_ATTR_ADMIN_{RO,RW}
-> > 
-> > Are you suggesting I add BIN_ATTR_ADMIN_* macros?
-> 
-> Yes.
+It'll be a bit before I'm ready to mail out the next version of the full
+printbuf patch series. I decided to go ahead with converting all our existing
+pretty-printers in lib/vsprintf.c to printbuf style:
 
-Done.
+ - it makes the code _vastly_ easier to read and understand by separating out
+   format string parsing from the pretty-printers, and giving actual named
+   arguments to the pretty-printers
 
-> 
-> > 
-> > > 
-> > > > +
-> > > > +static umode_t cxl_port_bin_attr_is_visible(struct kobject *kobj,
-> > > > +					      struct bin_attribute *attr, int i)
-> > > > +{
-> > > > +	struct device *dev = kobj_to_dev(kobj);
-> > > > +	struct cxl_port *port = to_cxl_port(dev);
-> > > > +
-> > > > +	if ((attr == &bin_attr_cdat) && port->cdat.table)
-> > > > +		return 0400;
-> > > 
-> > > Per above change you only need to manage visibility and not permissions,
-> > 
-> > But the permissions indicate visibility (In the kdoc for struct
-> > attribute_group).
-> > 
-> > 
-> >  *              ...  Must
-> >  *              return 0 if a binary attribute is not visible. The returned
-> >  *              value will replace static permissions defined in
-> >  *              struct bin_attribute.
-> > 
-> > And the value returned overrides the mode.
-> > 
-> > fs/sysfs/group.c:
-> > 
-> > create_files()
-> > 
-> >  82                         if (grp->is_bin_visible) {
-> >  83                                 mode = grp->is_bin_visible(kobj, *bin_attr, i);
-> >  84                                 if (!mode)
-> >  85                                         continue;
-> >  86                         }
-> >  87 
-> >  88                         WARN(mode & ~(SYSFS_PREALLOC | 0664),
-> >  89                              "Attribute %s: Invalid permissions 0%o\n",
-> >  90                              (*bin_attr)->attr.name, mode);
-> >  91 
-> >  92                         mode &= SYSFS_PREALLOC | 0664;
-> > 
-> > 
-> > So I'm willing to add the macro but I'm not sure it is going to change anything
-> > in this case.
-> 
-> The change I was expecting is that with BIN_ATTR_ADMIN_RO() this
-> implementation changes from:
-> 
-> 	if ((attr == &bin_attr_cdat) && port->cdat.table)
-> 	         return 0400;
-> 
-> ...to:
-> 
-> 	if ((attr == &bin_attr_cdat) && port->cdat.table)
-> 	         return attr->mode;
-> 
-> ...i.e. this routine only modifies visibility, you do not also need it
-> to enforce the root-read-only permission change since that's already
-> statically defined at attribute creation time.
+ - if we _do_ decide to go ahead with the treewide conversion (and I think we
+   should, since it'll give us typechecking that we don't have currently), we'll
+   want to do them all at once.
 
-Ok.
+-- >8 -
+This implements a new %p format string extensions for passing a pretty
+printer and its arguments to printk, which will then be inserted into
+the formatted output.
 
-> 
-> > I think to make those _ADMIN_ macros work with is_visible()
-> > create_files() needs to be changed.  :-/  I'm not sure if the addition of
-> > DEVICE_ATTR_ADMIN_{RO,RW} intended for is_visible() to be able to override the
-> > mode?
-> 
-> The intent was that one only needs to look in one place to read the
-> permission, and is_visible() is (mostly*) only left to change the mode to
-> 0.
-> 
-> * changes from read-only to/from writable would still need is_visble()
-> to manipulate permissions, but you get the idea.
+A pretty-printer is a function that takes as its first argument a
+pointer to a struct printbuf, and then zero or more additional pointer
+arguments - these being the objects to format and print.
 
-Yep, done.
-Ira
+The arguments to the pretty-printer function are denoted in the format
+string by %p, i.e
+  %pf()		foo0_to_text(struct printbuf *out)
+  %pf(%p)	foo1_to_text(struct printbuf *out, struct foo *)
+  %pf(%p,%p)	foo2_to_text(struct printbuf *out, struct foo *)
+
+We'd also like to eventually support non pointer arguments - in
+particular, integers - but this will probably require libffi.
+
+Typechecking is accomplished with the CALL_PP macro, which verifies that
+the arguments passed to sprintf match the types of the pp-function
+arguments, and passes a struct with a cookie to sprintf so that sprintf
+can verify that the CALL_PP() macro was used.
+
+Full example:
+
+static void foo_to_text(struct printbuf *out, struct foo *foo)
+{
+	prt_printf(out, "bar=%u baz=%u", foo->bar, foo->baz);
+}
+
+printf("%pf(%p)", CALL_PP(foo_to_text, foo));
+
+The goal is to replace most of our %p format extensions with this
+interface, and to move pretty-printers out of the core vsprintf.c code -
+this will get us better organization and better discoverability (you'll
+be able to cscope to pretty printer calls!), as well as eliminate a lot
+of dispatch code in vsprintf.c.
+
+Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
+Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Petr Mladek <pmladek@suse.com>
+---
+ Documentation/core-api/printk-formats.rst |  22 +++++
+ include/linux/printbuf.h                  |  26 ++++++
+ lib/test_printf.c                         |  27 ++++++
+ lib/vsprintf.c                            | 100 +++++++++++++++++++++-
+ 4 files changed, 172 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/core-api/printk-formats.rst b/Documentation/core-api/printk-formats.rst
+index 5e89497ba3..4f4a35b3aa 100644
+--- a/Documentation/core-api/printk-formats.rst
++++ b/Documentation/core-api/printk-formats.rst
+@@ -625,6 +625,28 @@ Examples::
+ 	%p4cc	Y10  little-endian (0x20303159)
+ 	%p4cc	NV12 big-endian (0xb231564e)
+ 
++Calling a pretty printer function
++---------------------------------
++
++::
++
++        %pf(%p)     pretty printer function taking one argument
++        %pf(%p,%p)  pretty printer function taking two arguments
++
++For calling generic pretty printers. A pretty printer is a function that takes
++as its first argument a pointer to a printbuf, and then zero or more additional
++pointer arguments. For example:
++
++        void foo_to_text(struct printbuf *out, struct foo *foo)
++        {
++                pr_buf(out, "bar=%u baz=%u", foo->bar, foo->baz);
++        }
++
++        printf("%pf(%p)", CALL_PP(foo_to_text, foo));
++
++Note that a pretty-printer may not sleep if called from printk(). If called from
++prt_printf() or sprintf() there are no such restrictions.
++
+ Thanks
+ ======
+ 
+diff --git a/include/linux/printbuf.h b/include/linux/printbuf.h
+index 8186c447ca..189828d48d 100644
+--- a/include/linux/printbuf.h
++++ b/include/linux/printbuf.h
+@@ -119,4 +119,30 @@ static inline void prt_hex_byte_upper(struct printbuf *out, u8 byte)
+ 	.size	= _size,				\
+ })
+ 
++/*
++ * This is used for the %pf(%p) sprintf format extension, where we pass a pretty
++ * printer and arguments to the pretty-printer to sprintf
++ *
++ * Instead of passing a pretty-printer function to sprintf directly, we pass it
++ * a pointer to a struct call_pp, so that sprintf can check that the magic
++ * number is present, which in turn ensures that the CALL_PP() macro has been
++ * used in order to typecheck the arguments to the pretty printer function
++ *
++ * Example usage:
++ *   sprintf("%pf(%p)", CALL_PP(prt_bdev, bdev));
++ */
++struct call_pp {
++	unsigned long	magic;
++	void		*fn;
++};
++
++#define PP_TYPECHECK(fn, ...)					\
++	({ while (0) fn((struct printbuf *) NULL, ##__VA_ARGS__); })
++
++#define CALL_PP_MAGIC		(unsigned long) 0xce0b92d22f6b6be4
++
++#define CALL_PP(fn, ...)					\
++	(PP_TYPECHECK(fn, ##__VA_ARGS__),			\
++	 &((struct call_pp) { CALL_PP_MAGIC, fn })), ##__VA_ARGS__
++
+ #endif /* _LINUX_PRINTBUF_H */
+diff --git a/lib/test_printf.c b/lib/test_printf.c
+index 07309c45f3..af0c1c2d2d 100644
+--- a/lib/test_printf.c
++++ b/lib/test_printf.c
+@@ -9,6 +9,7 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/printk.h>
++#include <linux/printbuf.h>
+ #include <linux/random.h>
+ #include <linux/rtc.h>
+ #include <linux/slab.h>
+@@ -783,6 +784,31 @@ test_pointer(void)
+ 	fourcc_pointer();
+ }
+ 
++static void printf_test_fn_0(struct printbuf *out)
++{
++	prt_str(out, "0");
++}
++
++static void printf_test_fn_1(struct printbuf *out, void *p)
++{
++	int *i = p;
++
++	prt_printf(out, "%i", *i);
++}
++
++static void __init
++test_fn(void)
++{
++	int i = 1;
++
++	test("0", "%pf()",   CALL_PP(printf_test_fn_0));
++	test("1", "%pf(%p)", CALL_PP(printf_test_fn_1, &i));
++	/*
++	 * Not tested, so we don't fail the build with -Werror:
++	 */
++	//test("1", "%(%p)", printf_test_fn, &i);
++}
++
+ static void __init selftest(void)
+ {
+ 	alloced_buffer = kmalloc(BUF_SIZE + 2*PAD_SIZE, GFP_KERNEL);
+@@ -794,6 +820,7 @@ static void __init selftest(void)
+ 	test_number();
+ 	test_string();
+ 	test_pointer();
++	test_fn();
+ 
+ 	kfree(alloced_buffer);
+ }
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index 7b24714674..eb57524c5d 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -436,7 +436,8 @@ enum format_type {
+ 	FORMAT_TYPE_UINT,
+ 	FORMAT_TYPE_INT,
+ 	FORMAT_TYPE_SIZE_T,
+-	FORMAT_TYPE_PTRDIFF
++	FORMAT_TYPE_PTRDIFF,
++	FORMAT_TYPE_FN,
+ };
+ 
+ struct printf_spec {
+@@ -2520,8 +2521,14 @@ int format_decode(const char *fmt, struct printf_spec *spec)
+ 		return ++fmt - start;
+ 
+ 	case 'p':
+-		spec->type = FORMAT_TYPE_PTR;
+-		return ++fmt - start;
++		fmt++;
++		if (fmt[0] == 'f' &&
++		    fmt[1] == '(') {
++			fmt += 2;
++			spec->type = FORMAT_TYPE_FN;
++		} else
++			spec->type = FORMAT_TYPE_PTR;
++		return fmt - start;
+ 
+ 	case '%':
+ 		spec->type = FORMAT_TYPE_PERCENT_CHAR;
+@@ -2602,6 +2609,67 @@ set_precision(struct printf_spec *spec, int prec)
+ 	}
+ }
+ 
++static void call_prt_fn(struct printbuf *out, struct call_pp *call_pp, void **fn_args, unsigned nr_args)
++{
++	typedef void (*printf_fn_0)(struct printbuf *);
++	typedef void (*printf_fn_1)(struct printbuf *, void *);
++	typedef void (*printf_fn_2)(struct printbuf *, void *, void *);
++	typedef void (*printf_fn_3)(struct printbuf *, void *, void *, void *);
++	typedef void (*printf_fn_4)(struct printbuf *, void *, void *, void *, void *);
++	typedef void (*printf_fn_5)(struct printbuf *, void *, void *, void *, void *, void *);
++	typedef void (*printf_fn_6)(struct printbuf *, void *, void *, void *, void *, void *, void *);
++	typedef void (*printf_fn_7)(struct printbuf *, void *, void *, void *, void *, void *, void *, void *);
++	typedef void (*printf_fn_8)(struct printbuf *, void *, void *, void *, void *, void *, void *, void *, void *);
++	void *fn;
++	unsigned i;
++
++	if (check_pointer(out, call_pp))
++		return;
++
++	if (call_pp->magic != CALL_PP_MAGIC) {
++		error_string(out, "bad pretty-printer magic");
++		return;
++	}
++
++	fn = call_pp->fn;
++	if (check_pointer(out, fn))
++		return;
++
++	for (i = 0; i < nr_args; i++)
++		if (check_pointer(out, fn_args[i]))
++			return;
++
++	switch (nr_args) {
++	case 0:
++		((printf_fn_0)fn)(out);
++		break;
++	case 1:
++		((printf_fn_1)fn)(out, fn_args[0]);
++		break;
++	case 2:
++		((printf_fn_2)fn)(out, fn_args[0], fn_args[1]);
++		break;
++	case 3:
++		((printf_fn_3)fn)(out, fn_args[0], fn_args[1], fn_args[2]);
++		break;
++	case 4:
++		((printf_fn_4)fn)(out, fn_args[0], fn_args[1], fn_args[2], fn_args[3]);
++		break;
++	case 5:
++		((printf_fn_5)fn)(out, fn_args[0], fn_args[1], fn_args[2], fn_args[3], fn_args[4]);
++		break;
++	case 6:
++		((printf_fn_6)fn)(out, fn_args[0], fn_args[1], fn_args[2], fn_args[3], fn_args[4], fn_args[5]);
++		break;
++	case 7:
++		((printf_fn_7)fn)(out, fn_args[0], fn_args[1], fn_args[2], fn_args[3], fn_args[4], fn_args[5], fn_args[6]);
++		break;
++	case 8:
++		((printf_fn_8)fn)(out, fn_args[0], fn_args[1], fn_args[2], fn_args[3], fn_args[4], fn_args[5], fn_args[6], fn_args[7]);
++		break;
++	}
++}
++
+ /**
+  * prt_vprintf - Format a string, outputting to a printbuf
+  * @out: The printbuf to output to
+@@ -2665,6 +2733,32 @@ void prt_vprintf(struct printbuf *out, const char *fmt, va_list args)
+ 				fmt++;
+ 			break;
+ 
++		case FORMAT_TYPE_FN: {
++			unsigned nr_args = 0;
++			void *fn_args[8];
++			void *fn = va_arg(args, void *);
++
++			while (*fmt != ')') {
++				if (nr_args) {
++					if (fmt[0] != ',')
++						goto out;
++					fmt++;
++				}
++
++				if (fmt[0] != '%' || fmt[1] != 'p')
++					goto out;
++				fmt += 2;
++
++				if (WARN_ON_ONCE(nr_args == ARRAY_SIZE(fn_args)))
++					goto out;
++				fn_args[nr_args++] = va_arg(args, void *);
++			}
++
++			call_prt_fn(out, fn, fn_args, nr_args);
++			fmt++; /* past trailing ) */
++			break;
++		}
++
+ 		case FORMAT_TYPE_PERCENT_CHAR:
+ 			__prt_char(out, '%');
+ 			break;
+-- 
+2.36.1
 

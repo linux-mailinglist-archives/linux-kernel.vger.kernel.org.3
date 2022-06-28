@@ -2,91 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3A855E3EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D634655E3F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231710AbiF1M5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 08:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
+        id S1346022AbiF1M7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 08:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiF1M5F (ORCPT
+        with ESMTP id S231840AbiF1M7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 08:57:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45732FE6F;
-        Tue, 28 Jun 2022 05:57:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8097F60F43;
-        Tue, 28 Jun 2022 12:57:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B3BCC3411D;
-        Tue, 28 Jun 2022 12:57:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656421023;
-        bh=NV1nc+PhAL8+uxW888wxL8Bu7nqpR4cXRNoKsXAqrj4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O3Wlfm471hyojpg/8aHEVI1XlA6decDKQZp+bF99F3RVMeGKT8uTbRJLCJtiE+h3l
-         uKMNsP25iTuA5ruLdPK46Xd65f5Irakde6nuLk3v03PG9IpvhesSdhiiQJ4DY1ga5R
-         uiDQfDNEtl9ciQZb8meWZTa67xG3lu0ml/ZyH4hwCTllkAcPSM1ANOKiujK7VZYvs9
-         zIescM5OSt8kkCDjrhJYGk9iTMM5XkaE9BaUnpOZ8n1TMjOGHx2VBBJ0aC/CdWQgK2
-         TeJBNjgC/Ri4bmzhoHXPA3PqpLuUtMTNDlqp+NvsvjfQ4dGndj3SedF025e6etE8uF
-         6T1gHEkwYHPQw==
-Date:   Tue, 28 Jun 2022 14:56:59 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Christian =?utf-8?B?R8O2dHRzY2hl?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
-        Serge Hallyn <serge@hallyn.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v3 5/8] fs: use new capable_any functionality
-Message-ID: <20220628125659.l6irgn6ryoseojv3@wittgenstein>
-References: <20220502160030.131168-8-cgzones@googlemail.com>
- <20220615152623.311223-1-cgzones@googlemail.com>
- <20220615152623.311223-4-cgzones@googlemail.com>
+        Tue, 28 Jun 2022 08:59:17 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D0E2F67E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:59:15 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LXPkK2Xv6zdZrk;
+        Tue, 28 Jun 2022 20:56:57 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 28 Jun 2022 20:59:12 +0800
+Received: from [10.67.111.195] (10.67.111.195) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 28 Jun 2022 20:59:12 +0800
+Subject: Re: [PATCH -next] riscv: lib: uaccess: fix CSR_STATUS SR_SUM bit
+To:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <akira.tsukamoto@gmail.com>,
+        <jszhang@kernel.org>, <wangkefeng.wang@huawei.com>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <alankao@andestech.com>
+References: <20220615014714.1650349-1-chenlifu@huawei.com>
+From:   chenlifu <chenlifu@huawei.com>
+Message-ID: <11a0698c-5726-15e8-2448-3529d2d0b098@huawei.com>
+Date:   Tue, 28 Jun 2022 20:58:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220615152623.311223-4-cgzones@googlemail.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220615014714.1650349-1-chenlifu@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.195]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 05:26:19PM +0200, Christian Göttsche wrote:
-> Use the new added capable_any function in appropriate cases, where a
-> task is required to have any of two capabilities.
+> Since commit 5d8544e2d007 ("RISC-V: Generic library routines and assembly")
+> and commit ebcbd75e3962 ("riscv: Fix the bug in memory access fixup code"),
+> if __clear_user and __copy_user return from an fixup branch,
+> CSR_STATUS SR_SUM bit will be set, it is a vulnerability, so that
+> S-mode memory accesses to pages that are accessible by U-mode will success.
+> Disable S-mode access to U-mode memory should clear SR_SUM bit.
 > 
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+> Fixes: 5d8544e2d007 ("RISC-V: Generic library routines and assembly")
+> Fixes: ebcbd75e3962 ("riscv: Fix the bug in memory access fixup code")
+> 
+> Signed-off-by: Chen Lifu <chenlifu@huawei.com>
 > ---
-
-Not seeing the whole patch series so it's a bit difficult to judge but
-in general we've needed something like this for quite some time.
-
-> v3:
->    rename to capable_any()
-> ---
->  fs/pipe.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>   arch/riscv/lib/uaccess.S | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/fs/pipe.c b/fs/pipe.c
-> index 74ae9fafd25a..18ab3baeec44 100644
-> --- a/fs/pipe.c
-> +++ b/fs/pipe.c
-> @@ -776,7 +776,7 @@ bool too_many_pipe_buffers_hard(unsigned long user_bufs)
->  
->  bool pipe_is_unprivileged_user(void)
->  {
-> -	return !capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN);
-> +	return !capable_any(CAP_SYS_RESOURCE, CAP_SYS_ADMIN);
->  }
->  
->  struct pipe_inode_info *alloc_pipe_info(void)
-> -- 
-> 2.36.1
+> diff --git a/arch/riscv/lib/uaccess.S b/arch/riscv/lib/uaccess.S
+> index 8c475f4da308..ec486e5369d9 100644
+> --- a/arch/riscv/lib/uaccess.S
+> +++ b/arch/riscv/lib/uaccess.S
+> @@ -173,11 +173,11 @@ ENTRY(__asm_copy_from_user)
+>   	ret
+>   
+>   	/* Exception fixup code */
+>   10:
+>   	/* Disable access to user memory */
+> -	csrs CSR_STATUS, t6
+> +	csrc CSR_STATUS, t6
+>   	mv a0, t5
+>   	ret
+>   ENDPROC(__asm_copy_to_user)
+>   ENDPROC(__asm_copy_from_user)
+>   EXPORT_SYMBOL(__asm_copy_to_user)
+> @@ -225,10 +225,10 @@ ENTRY(__clear_user)
+>   	j 3b
+>   
+>   	/* Exception fixup code */
+>   11:
+>   	/* Disable access to user memory */
+> -	csrs CSR_STATUS, t6
+> +	csrc CSR_STATUS, t6
+>   	mv a0, a1
+>   	ret
+>   ENDPROC(__clear_user)
+>   EXPORT_SYMBOL(__clear_user)
 > 
+
+friendly ping ...

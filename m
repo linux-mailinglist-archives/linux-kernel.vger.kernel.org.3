@@ -2,155 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EEE855E6A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE16155E8B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347118AbiF1N7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
+        id S1347126AbiF1OAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 10:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347059AbiF1N7d (ORCPT
+        with ESMTP id S1346506AbiF1OAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:59:33 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978603616A
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:59:32 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id o17-20020a056e02115100b002d95d6881e4so7343890ill.19
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:59:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=E2+U8OF/pog3csJphrWthsovGMahCgllDrlHPc5pF+w=;
-        b=gx+WVK8kn78r9JixX/VvEcp1d0lLbhg6tZ6rnublpaqHHmiTncnI0hHSr++Md6Uzbw
-         9jSTfRzoj9wook6GPxOKbgI5Exg+rIrmMo4MVM9JJzbXwCx6I7A7dRCVu1Cvimxcpv4K
-         4kQ1YrYp+7zcUs0y/yEJv03K8UzC7/P3FyL4M5NQwj+v4xuw1LWWeykgtF5GVNz1EbPn
-         UTpk4TP4srwC+Vs4y6pYpJwrU0C2V+FaA0Z0QQ8yQRYS25SSkjtUl4IKab4v+7u0Q9XB
-         ea8vFu/sH6vOvaFgjnpxGxRwsodLwDO/vQ21gqp5i2kdkuz2ysAAPLVs91tEYzs6aHEO
-         ZR/A==
-X-Gm-Message-State: AJIora8tJRzHJ5fSM/OCzPE7BkOPGm4AUVt3wHmOvKoJwu6b2vdHmEHb
-        DWh4iBwqHlBXTwuB9JCN4asdqmIrDEFLnbz2OESRHWLZYXiJ
-X-Google-Smtp-Source: AGRyM1usDYMoOgbHdXwfX/aASldGIsoLJZUtyK0Cn/IpSgEyJQ1sw6h4/0c+yih+RoA+BVib0DQ3a34wcC3aTwsn9wbbIagTSib5
+        Tue, 28 Jun 2022 10:00:32 -0400
+Received: from sym2.noone.org (sym.noone.org [178.63.92.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54ABE369D4;
+        Tue, 28 Jun 2022 07:00:30 -0700 (PDT)
+Received: by sym2.noone.org (Postfix, from userid 1002)
+        id 4LXR7Z2Gb9zvjfm; Tue, 28 Jun 2022 16:00:26 +0200 (CEST)
+Date:   Tue, 28 Jun 2022 16:00:26 +0200
+From:   Tobias Klauser <tklauser@distanz.ch>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Pali Rohar <pali@kernel.org>,
+        Andreas Farber <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Rob Herring <robh@kernel.org>,
+        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-actions@lists.infradead.org,
+        linux-unisoc@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        sparclinux@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: Re: [PATCH v1 2/2] serial: Set probe_no_timeout for all DT based
+ drivers
+Message-ID: <20220628140025.qpom64ptru4ub6fu@distanz.ch>
+References: <20220628020110.1601693-1-saravanak@google.com>
+ <20220628020110.1601693-3-saravanak@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1483:b0:33c:b70d:49ce with SMTP id
- j3-20020a056638148300b0033cb70d49cemr2477588jak.274.1656424771885; Tue, 28
- Jun 2022 06:59:31 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 06:59:31 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000201fb205e2827215@google.com>
-Subject: [syzbot] BUG: unable to handle kernel paging request in writeback_single_inode
-From:   syzbot <syzbot+0b42ea2ab0439e55e88a@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220628020110.1601693-3-saravanak@google.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 2022-06-28 at 04:01:03 +0200, Saravana Kannan <saravanak@google.com> wrote:
+> diff --git a/drivers/tty/serial/8250/8250_acorn.c b/drivers/tty/serial/8250/8250_acorn.c
+> index 758c4aa203ab..5a6f2f67de4f 100644
+> --- a/drivers/tty/serial/8250/8250_acorn.c
+> +++ b/drivers/tty/serial/8250/8250_acorn.c
+> @@ -114,7 +114,6 @@ static const struct ecard_id serial_cids[] = {
+>  static struct ecard_driver serial_card_driver = {
+>  	.probe		= serial_card_probe,
+>  	.remove		= serial_card_remove,
+> -	.id_table	= serial_cids,
 
-syzbot found the following issue on:
-
-HEAD commit:    08897940f458 Add linux-next specific files for 20220623
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=14e5f0d4080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fb185a52c6ad0a8e
-dashboard link: https://syzkaller.appspot.com/bug?extid=0b42ea2ab0439e55e88a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0b42ea2ab0439e55e88a@syzkaller.appspotmail.com
-
-ntfs3: loop3: RAW NTFS volume: Filesystem size 0.00 Gb > volume size 0.00 Gb. Mount in read-only
-ntfs3: loop3: failed to read volume at offset 0x101000
-ntfs3: loop3: failed to read volume at offset 0x101000
-ntfs3: loop3: failed to read volume at offset 0x101000
-ntfs3: loop3: failed to read volume at offset 0x101000
-ntfs3: loop3: failed to read volume at offset 0x102000
-ntfs3: loop3: failed to read volume at offset 0x103000
-ntfs3: loop3: failed to read volume at offset 0x105000
-ntfs3: loop3: failed to read volume at offset 0x109000
-BUG: unable to handle page fault for address: ffffffffffffff89
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD ba8f067 P4D ba8f067 PUD ba91067 PMD 0 
-Oops: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 20039 Comm: syz-executor.3 Not tainted 5.19.0-rc3-next-20220623-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
-RIP: 0010:_raw_spin_lock+0x29/0x40 kernel/locking/spinlock.c:154
-Code: cc 55 48 89 fd bf 01 00 00 00 e8 a2 10 d3 f7 45 31 c9 41 b8 01 00 00 00 31 c9 ff 74 24 08 48 8d 7d 18 31 d2 31 f6 e8 76 61 df <f7> 48 89 ef 58 5d e9 dc d6 df f7 66 66 2e 0f 1f 84 00 00 00 00 00
-RSP: 0018:ffffc900122879e8 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 1ffff92002450f49 RCX: ffffffff815e31ae
-RDX: 1ffff11009570c41 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: ffff88807259e2b8 R08: 0000000000000000 R09: ffffffff906a9a8f
-R10: fffffbfff20d5351 R11: 0000000000000001 R12: ffffc90012287a78
-R13: ffff88807259e438 R14: ffff88807259e2b8 R15: ffff88807259e308
-FS:  00007fc865f22700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffff89 CR3: 000000001f931000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- spin_lock include/linux/spinlock.h:360 [inline]
- writeback_single_inode+0x2f/0x4c0 fs/fs-writeback.c:1677
- write_inode_now+0x16a/0x1e0 fs/fs-writeback.c:2724
- iput_final fs/inode.c:1735 [inline]
- iput.part.0+0x460/0x820 fs/inode.c:1774
- iput+0x58/0x70 fs/inode.c:1764
- ntfs_fill_super+0x2284/0x3730 fs/ntfs3/super.c:1271
- get_tree_bdev+0x4a2/0x7e0 fs/super.c:1294
- vfs_get_tree+0x89/0x2f0 fs/super.c:1501
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1320/0x1fa0 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7fc864e8a63a
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fc865f21f88 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007fc864e8a63a
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007fc865f21fe0
-RBP: 00007fc865f22020 R08: 00007fc865f22020 R09: 0000000020000000
-R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000
-R13: 0000000020000100 R14: 00007fc865f21fe0 R15: 000000002007a980
- </TASK>
-Modules linked in:
-CR2: ffffffffffffff89
----[ end trace 0000000000000000 ]---
-RIP: 0010:__raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
-RIP: 0010:_raw_spin_lock+0x29/0x40 kernel/locking/spinlock.c:154
-Code: cc 55 48 89 fd bf 01 00 00 00 e8 a2 10 d3 f7 45 31 c9 41 b8 01 00 00 00 31 c9 ff 74 24 08 48 8d 7d 18 31 d2 31 f6 e8 76 61 df <f7> 48 89 ef 58 5d e9 dc d6 df f7 66 66 2e 0f 1f 84 00 00 00 00 00
-RSP: 0018:ffffc900122879e8 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 1ffff92002450f49 RCX: ffffffff815e31ae
-RDX: 1ffff11009570c41 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: ffff88807259e2b8 R08: 0000000000000000 R09: ffffffff906a9a8f
-R10: fffffbfff20d5351 R11: 0000000000000001 R12: ffffc90012287a78
-R13: ffff88807259e438 R14: ffff88807259e2b8 R15: ffff88807259e308
-FS:  00007fc865f22700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffff89 CR3: 000000001f931000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Is this change intentional? All other drivers are only changed to set
+.probe_no_time and I don't see anything mentioned in the commit message
+re. this driver's change.

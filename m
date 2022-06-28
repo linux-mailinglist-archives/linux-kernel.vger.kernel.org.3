@@ -2,103 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6592755C8B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B90C455D55E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244625AbiF1FHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 01:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
+        id S244263AbiF1FLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 01:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244452AbiF1FHW (ORCPT
+        with ESMTP id S244420AbiF1FLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 01:07:22 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272C126557;
-        Mon, 27 Jun 2022 22:07:21 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id u14so15848322qvv.2;
-        Mon, 27 Jun 2022 22:07:21 -0700 (PDT)
+        Tue, 28 Jun 2022 01:11:23 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3728A1B4;
+        Mon, 27 Jun 2022 22:11:21 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id w24so11438146pjg.5;
+        Mon, 27 Jun 2022 22:11:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6LGq2IOtr3wrbTYQOuYFuy95/cBwscd+ZPy+Qt3fU+g=;
-        b=KoyMtUNL/7s8XblbT4O7Cbs5pUTeIj0oXFDDUDfq5ZwVb6A5759hHSfc0Y9NYdhqKx
-         EF8QY4OjKom1+oyiFhVOPDU1JGULRCgED91rLfaCaxLhJ5sXyEqN5yj6iIf36azEsYqd
-         O6Z0DM7uoFVIUQHpoekdCwVhNTdN+oyLWc0/fKPSCVEbNv4LPSpAT5HQ4zCJqcNB1O4D
-         HNZH4NEb31TM58OTwnY6X/7tXTZ1Gnpz8BuhIATs+Ge5cTKuaOQBA0PIwU5SPwsBNhpq
-         aeCV8LLdajh++6cju+wUTziwyg9EMhds8nOlscH22UOJTixCzBGJzI5GTp47WukUCfm5
-         zstg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=vnGv6vDn6qnrKuuz+/Sh2Rg6no8kgH/1Xp8PSIsPGhg=;
+        b=am8dQ7vXTYHhEFPkccT6o/AlWUm5T1XoBhfUVhVjo0xjrvv+Ja72tXivfz8P8XrL2i
+         iuypwtFq9gAiCocYQHgKZsjCOJX3ojIy906qjVFUEpHI1FepxH5NyyeEjIpTbIY1IHdk
+         pHgzaf9h6OyP/0voGgf6hNv9zZHOCvRdzRwxQddaY1SP8X6GzPbCuWO38I0wrUIqC88L
+         eUr64MOInloAxqHhZUhSg+dPMYeMfSozWVh70aBX4VB67yYzCMag9Jt7YCfTrG4lWKv+
+         rLRoJMw5FlnWoIIvCVARN+hME7afseplwuKnMVsb+p/u3+hs/qU/sOXfAs2pZNAmAs0C
+         sVMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6LGq2IOtr3wrbTYQOuYFuy95/cBwscd+ZPy+Qt3fU+g=;
-        b=kD5H+Kv7k7bAiTXmsbkiiZU97zZ7NLx9HlIaZHt8MYYTAXmWi5iB7cIW8TNxRm6Yi3
-         sPAdo/GbJl/RQxcGdbDXgTcE/MYkhba0F+fdjE7JGdi8gecE+W5EvIgHsHKCrTGLXv+0
-         nvdZm0TBPkDYM0sM9rEJ0Rszne58eT6eUWggtDA0lwlynsZqRnquvmBG3lAmefRXhtc7
-         yC5icp+VzX8hX5ZOYx/LyvuO7Ynw+zim5BL7GUynX/YL2CRTqcZ3Hf9BMMe/J4Ruyhnw
-         W23p8zuiwISQIcvzc/H5rBepz3eKhM/qqB1PXa9BMHeBoiozU9vmueMLpVWrfzfq33ar
-         xpGQ==
-X-Gm-Message-State: AJIora8A/tOfa1qThwC9roi5qYMgfaRnNKhBf/+8NpXiaOPCR+mS/x5B
-        fe6LtcPSb7YtzxMPxrg3mHsU5DJaRhNjBw==
-X-Google-Smtp-Source: AGRyM1vPeAIlmEq/cTeJIB8FK8mvxHIQogf7q8nuoRdm61kg419fcGv5xhQOjseURic1kAu43x4YQw==
-X-Received: by 2002:a05:6214:19ec:b0:470:90a2:26ab with SMTP id q12-20020a05621419ec00b0047090a226abmr2293813qvc.2.1656392840232;
-        Mon, 27 Jun 2022 22:07:20 -0700 (PDT)
-Received: from MBP.hobot.cc (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with ESMTPSA id b20-20020ae9eb14000000b006aee8580a37sm9948348qkg.10.2022.06.27.22.07.17
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=vnGv6vDn6qnrKuuz+/Sh2Rg6no8kgH/1Xp8PSIsPGhg=;
+        b=1VQhuwDY5JxsC77jYyycRmXLqHu4rvkkTxseG3kRdlIhCLu5Is8Mlpm5wt2g62ZJw7
+         OYa1upOfx6RbPMpe/HevlGAoVqHhSl7fmBBlEenzVnEh0/OtkYymSwkFaPiEhtFtuHGQ
+         q3dyo/SdeYE0n2ajOYTJsuvpmrUMmKQSdJmXNzslWl9zXwsfsoc6Jg5/wdceaBDb/zAK
+         I8eDCH07PDPcTzJakwZjpQW5+KQD45oK1IEOh1AheuR+4Uzq3uw3QmXjHiMwm60QcZ04
+         eg21FR5CzRvphL7k0zMAIBMixboVM/wYVO8zanAebMKSZKP86CK4eszZST1Oo+na8RLE
+         zIjA==
+X-Gm-Message-State: AJIora/6SVWOJG3yM40FYsUC1ig4hnjB7GPTV8TNDAQ+oDn1U+ybO1+L
+        5366ocTXLDRidB8XJOgFwXA=
+X-Google-Smtp-Source: AGRyM1thi22W1H9JgV0MovDTCGGD2x9ERpjK0ECtuGEiLxeaGI13bl+mLS+wUQMsuNmqoC6zeKQH5w==
+X-Received: by 2002:a17:90b:4b8c:b0:1ec:c7b8:7cb9 with SMTP id lr12-20020a17090b4b8c00b001ecc7b87cb9mr24863418pjb.86.1656393081076;
+        Mon, 27 Jun 2022 22:11:21 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1f29:4aa9:50e7:2716:415:b90c])
+        by smtp.googlemail.com with ESMTPSA id n17-20020a170903405100b0016a25ba1f46sm8051002pla.256.2022.06.27.22.11.18
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 27 Jun 2022 22:07:19 -0700 (PDT)
-From:   Schspa Shi <schspa@gmail.com>
-To:     alex.williamson@redhat.com, cohuck@redhat.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhaohui.shi@horizon.ai, Schspa Shi <schspa@gmail.com>
-Subject: [PATCH] vfio: Fix double free for caps->buf
-Date:   Tue, 28 Jun 2022 13:07:11 +0800
-Message-Id: <20220628050711.74945-1-schspa@gmail.com>
-X-Mailer: git-send-email 2.29.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 27 Jun 2022 22:11:20 -0700 (PDT)
+From:   Vishal Badole <badolevishal1116@gmail.com>
+To:     sboyd@kernel.org
+Cc:     mturquette@baylibre.com, inux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chinmoyghosh2001@gmail.com,
+        mintupatel89@gmail.com, vimal.kumar32@gmail.com,
+        Vishal Badole <badolevishal1116@gmail.com>
+Subject: [PATCH v3] Common clock: To list active consumers of clocks
+Date:   Tue, 28 Jun 2022 10:38:42 +0530
+Message-Id: <1656392922-11428-1-git-send-email-badolevishal1116@gmail.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <20220624010550.582BBC341C7@smtp.kernel.org>
+References: <20220624010550.582BBC341C7@smtp.kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a double free, if vfio_iommu_dma_avail_build_caps
-calls failed.
+This feature lists the clock consumer's name and per-user enable count
+in clock summary. Using this feature user can easily check which device
+has acquired a perticular clock and it is enabled by respective device
+or not.
+for example:
+debian@beaglebone:~$ cat /sys/kernel/debug/clk/clk_summary
+                      enable  prepare  protect                           duty  hardware                            per-user
+   clock               count    count    count    rate   accuracy phase cycle    enable   consumer                    count
+----------------------------------------------------------------------------------------------------------------------------
+ clk_mcasp0_fixed         0        0        0    24576000      0     0  50000     Y      deviceless                      0
+                                                                                         deviceless                      0
+    clk_mcasp0            0        0        0    24576000      0     0  50000     N          simple-audio-card,cpu           0
+                                                                                             deviceless                      0
 
-The following call path will call vfio_info_cap_add multiple times
-
-vfio_iommu_type1_get_info
-	if (!ret)
-		ret = vfio_iommu_dma_avail_build_caps(iommu, &caps);
-
-	if (!ret)
-		ret = vfio_iommu_iova_build_caps(iommu, &caps);
-
-If krealloc failed on vfio_info_cap_add, there will be a double free.
-
-Signed-off-by: Schspa Shi <schspa@gmail.com>
+Co-developed-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
+Signed-off-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
+Co-developed-by: Mintu Patel <mintupatel89@gmail.com>
+Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
+Co-developed-by: Vimal Kumar <vimal.kumar32@gmail.com>
+Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
+Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
 ---
- drivers/vfio/vfio.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/clk/clk.c | 46 +++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 35 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
-index 61e71c1154be..a0fb93866f61 100644
---- a/drivers/vfio/vfio.c
-+++ b/drivers/vfio/vfio.c
-@@ -1812,6 +1812,7 @@ struct vfio_info_cap_header *vfio_info_cap_add(struct vfio_info_cap *caps,
- 	buf = krealloc(caps->buf, caps->size + size, GFP_KERNEL);
- 	if (!buf) {
- 		kfree(caps->buf);
-+		caps->buf = NULL;
- 		caps->size = 0;
- 		return ERR_PTR(-ENOMEM);
- 	}
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index ed11918..6c4249e 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -102,6 +102,7 @@ struct clk {
+ 	unsigned long min_rate;
+ 	unsigned long max_rate;
+ 	unsigned int exclusive_count;
++	unsigned int enable_count;
+ 	struct hlist_node clks_node;
+ };
+ 
+@@ -1015,6 +1016,10 @@ void clk_disable(struct clk *clk)
+ 		return;
+ 
+ 	clk_core_disable_lock(clk->core);
++
++	if (clk->enable_count > 0)
++		clk->enable_count--;
++
+ }
+ EXPORT_SYMBOL_GPL(clk_disable);
+ 
+@@ -1176,10 +1181,16 @@ EXPORT_SYMBOL_GPL(clk_restore_context);
+  */
+ int clk_enable(struct clk *clk)
+ {
++	int ret;
++
+ 	if (!clk)
+ 		return 0;
+ 
+-	return clk_core_enable_lock(clk->core);
++	ret = clk_core_enable_lock(clk->core);
++	if (!ret)
++		clk->enable_count++;
++
++	return ret;
+ }
+ EXPORT_SYMBOL_GPL(clk_enable);
+ 
+@@ -2960,28 +2971,41 @@ static void clk_summary_show_one(struct seq_file *s, struct clk_core *c,
+ 				 int level)
+ {
+ 	int phase;
++	struct clk *clk_user;
++	int multi_node = 0;
+ 
+-	seq_printf(s, "%*s%-*s %7d %8d %8d %11lu %10lu ",
++	seq_printf(s, "%*s%-*s %-7d %-8d %-8d %-11lu %-10lu ",
+ 		   level * 3 + 1, "",
+-		   30 - level * 3, c->name,
++		   35 - level * 3, c->name,
+ 		   c->enable_count, c->prepare_count, c->protect_count,
+ 		   clk_core_get_rate_recalc(c),
+ 		   clk_core_get_accuracy_recalc(c));
+ 
+ 	phase = clk_core_get_phase(c);
+ 	if (phase >= 0)
+-		seq_printf(s, "%5d", phase);
++		seq_printf(s, "%-5d", phase);
+ 	else
+ 		seq_puts(s, "-----");
+ 
+-	seq_printf(s, " %6d", clk_core_get_scaled_duty_cycle(c, 100000));
++	seq_printf(s, " %-6d", clk_core_get_scaled_duty_cycle(c, 100000));
+ 
+ 	if (c->ops->is_enabled)
+-		seq_printf(s, " %9c\n", clk_core_is_enabled(c) ? 'Y' : 'N');
++		seq_printf(s, " %5c ", clk_core_is_enabled(c) ? 'Y' : 'N');
+ 	else if (!c->ops->enable)
+-		seq_printf(s, " %9c\n", 'Y');
++		seq_printf(s, " %5c ", 'Y');
+ 	else
+-		seq_printf(s, " %9c\n", '?');
++		seq_printf(s, " %5c ", '?');
++
++	hlist_for_each_entry(clk_user, &c->clks, clks_node) {
++		seq_printf(s, "%*s%-*s  %-4d\n",
++			   level * 3 + 2 + 105 * multi_node, "",
++			   30,
++			   clk_user->dev_id ? clk_user->dev_id : "deviceless",
++			   clk_user->enable_count);
++
++		multi_node = 1;
++	}
++
+ }
+ 
+ static void clk_summary_show_subtree(struct seq_file *s, struct clk_core *c,
+@@ -3002,9 +3026,9 @@ static int clk_summary_show(struct seq_file *s, void *data)
+ 	struct clk_core *c;
+ 	struct hlist_head **lists = (struct hlist_head **)s->private;
+ 
+-	seq_puts(s, "                                 enable  prepare  protect                                duty  hardware\n");
+-	seq_puts(s, "   clock                          count    count    count        rate   accuracy phase  cycle    enable\n");
+-	seq_puts(s, "-------------------------------------------------------------------------------------------------------\n");
++	seq_puts(s, "                                 enable  prepare  protect                                duty  hardware                            per-user\n");
++	seq_puts(s, "   clock                          count    count    count        rate   accuracy phase  cycle    enable   consumer                    count\n");
++	seq_puts(s, "-------------------------------------------------------------------------------------------------------------------------------------------\n");
+ 
+ 	clk_prepare_lock();
+ 
 -- 
-2.29.0
+2.7.4
 

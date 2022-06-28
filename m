@@ -2,160 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 412BE55E6BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD6555E601
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347821AbiF1PV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
+        id S1347865AbiF1PYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344555AbiF1PV0 (ORCPT
+        with ESMTP id S1348061AbiF1PXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:21:26 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A014132EE0;
-        Tue, 28 Jun 2022 08:21:25 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso13062514pjk.0;
-        Tue, 28 Jun 2022 08:21:25 -0700 (PDT)
+        Tue, 28 Jun 2022 11:23:12 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C800F11813;
+        Tue, 28 Jun 2022 08:23:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zDPpePt6CeKE4jRJhPC/US5+QOggpwLxdGTuenyEguM=;
-        b=qKiq7D8HvPbea819MTA57dhnc7TaWUbn0cxkogrbuDdJT0ITkJcBAO4ojiijS9CPpu
-         HA6VbP8zuKTQAHXjrvY1vPf569vhOKa0N5dN891YQ+D2v0jW6mf8eBurobPsOuptRAIo
-         mj5kW67WN0LAj/wPlm8UNf8z8gRRqfOBEL1MOQ8wCraZNd/Ny7hIcshH2aliGCFcC4kB
-         SVQuDgrJdHJlEfAVtZsm7AnqQpFSwltF5cwr/qHvnIh6tbPkSGwrC4ytOL8eGzKfQnzo
-         aeDODXQTgdfVGZ+3RiztIhI40QADRN0LBQpIys1vNCd/7nRYra5LFgKRjc70TDbWR1tm
-         xFJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zDPpePt6CeKE4jRJhPC/US5+QOggpwLxdGTuenyEguM=;
-        b=hMi5tHn9jV2918F7+uvoYFXKyG4idzYKkuLBua9kmJdIhKmDF089v1CcMtHTezMX9V
-         WIf8DvjUFqCrKymCoV8lyxhmPdqfgAMTGawvKWqIhG3Qlp1m9O3WcFZ69RKtifg2JIIN
-         lQEEm+0mLWB60hfj8oLMOg5UML72X0SxWQktDe40u4X6K3WztbzGIZZeEAKv91rmNZs3
-         Qhf79P0escuHEmrH1LJblDyxzgAxHJdQ+psQm6H+D0rsl6kv+EoDNzEDto8yiTN0eY7h
-         vfj1pF+cLP3UUdwrDWTVbjBsyetNFTEDw+rrSc6bqJ6P1xiv1+DdrLSOUWdKkIP9YjQd
-         9U6Q==
-X-Gm-Message-State: AJIora/Hwv/7tQ20aGigoYchKTwmlTyU+7LQCzxWaOV+/Os1rkhoAVzj
-        mgsJ+EFpHGal8rJzwmNgN22Y7CUPAEc=
-X-Google-Smtp-Source: AGRyM1sQbPe5xKOzDFAPg+mYwOyvB61ITglWnHqLG1kExdO/SOcjVZZkr68emVbP11LnQttklJ8qTg==
-X-Received: by 2002:a17:90a:410a:b0:1ec:7fc8:6d15 with SMTP id u10-20020a17090a410a00b001ec7fc86d15mr139705pjf.236.1656429684953;
-        Tue, 28 Jun 2022 08:21:24 -0700 (PDT)
-Received: from [192.168.66.3] (p912131-ipoe.ipoe.ocn.ne.jp. [153.243.13.130])
-        by smtp.gmail.com with ESMTPSA id l14-20020a170903244e00b001674f2e1c3asm9586152pls.74.2022.06.28.08.21.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 08:21:24 -0700 (PDT)
-Message-ID: <d0559a60-a4c1-19a9-39c5-18a5e2e460ca@gmail.com>
-Date:   Wed, 29 Jun 2022 00:21:21 +0900
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656429792; x=1687965792;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RvWriGxvnrfUaWIbEbAZdoDVUWgEkiJx6GnkqCbaZDY=;
+  b=QBjdLJo+7UZRf03Otov9uV/sTTmY7x7QdIef/CY3FIGDn5ioht6ui3n0
+   DqTN693nXz0GAODn73KuIoX7pLGlD6+9ZTC/lHQOwJIf7dE0fagCuah33
+   PHTgKv1H7BufZsD8oVF9+azv6WVSRn2GP/ul2ACjZDnMOFjmlsuvodr65
+   I=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 28 Jun 2022 08:23:11 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 08:23:10 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 28 Jun 2022 08:22:50 -0700
+Received: from [10.110.113.167] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 28 Jun
+ 2022 08:22:48 -0700
+Message-ID: <ba89c17a-bf8d-0eda-d975-26e88d43e0aa@quicinc.com>
+Date:   Tue, 28 Jun 2022 08:22:47 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH] HID: amd_sfh: Ignore uninitialized device
+Subject: Re: [PATCH v1 2/3] drm/msm/dp: decoupling dp->id out of dp
+ controller_id at scxxxx_dp_cfg table
 Content-Language: en-US
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Basavaraj Natikar <basavaraj.natikar@amd.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220626081339.7243-1-akihiko.odaki@gmail.com>
- <b17f4e85-8a35-65ab-34de-0978bdc4cfea@amd.com>
- <8c95e3d7-cff6-c56e-e197-fdd0911d81aa@gmail.com>
- <3ff059d8-2d89-6ea1-209b-3c8855561acb@amd.com>
-From:   Akihiko Odaki <akihiko.odaki@gmail.com>
-In-Reply-To: <3ff059d8-2d89-6ea1-209b-3c8855561acb@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Doug Anderson <dianders@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "Rob Clark" <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Vinod Koul <vkoul@kernel.org>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <1656090912-18074-1-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n52RW+UFJ=hqMWjwR8qvEbww7QjzPW1nhL3Atd97QXAnYw@mail.gmail.com>
+ <007ea4c9-9701-f4ab-3278-5d36bf2018c4@quicinc.com>
+ <CAE-0n53kNCK0ajHfY2WQr5HEQZtZSBLnhfbTuZwaUNEOZhsKPg@mail.gmail.com>
+ <fa7f8bf1-33cd-5515-0143-6596df2bd740@quicinc.com>
+ <CAE-0n51g-EVsC-i9=sJV-ySa8VnE+yT7cg=b-TNMi9+3uBiOVA@mail.gmail.com>
+ <326912ff-9771-0711-366d-79acd436908b@quicinc.com>
+ <CAE-0n51qrdrFtSr0vRwgYkMgSZfnzQuinaUROQsp30QoDchWQA@mail.gmail.com>
+ <0ff3d6a3-dc5c-7c77-f8a1-6c4f6c1a3215@quicinc.com>
+ <CAE-0n515hMKqQ+Vj1Sg54PpwkbWMYJ77QN+y+KZNBWymjhpWKw@mail.gmail.com>
+ <66ff4642-f268-f5b0-7e28-b196368c508a@quicinc.com>
+ <5cf094cf-343a-82d7-91c4-1284683f9748@quicinc.com>
+ <CAA8EJprqq=vxXT2DmEWii_Ajx2UbkHRexPTT58xFcWkBa_D5hA@mail.gmail.com>
+ <6523e533-960b-d148-0f87-2ad327a3ac3b@quicinc.com>
+ <CAA8EJprQBnZAc-2AxXD8cV_qMoKrusNa+VSHW9Kw-xKS_ZWAkg@mail.gmail.com>
+ <CAD=FV=WvNrfYaUgbDayxU0wJUbZbgwVMWjeyTjtd+Sqcvj=e2A@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAD=FV=WvNrfYaUgbDayxU0wJUbZbgwVMWjeyTjtd+Sqcvj=e2A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/06/29 0:14, Limonciello, Mario wrote:
-> On 6/28/2022 10:11, Akihiko Odaki wrote:
->> On 2022/06/28 23:42, Limonciello, Mario wrote:
->>> On 6/26/2022 03:13, Akihiko Odaki wrote:
->>>> Lenovo ThinkPad C13 Yoga has AMD Sensor Fusion Hub, but it is not used
->>>> because Chrome OS EC Sensor Hub is used instead. The system therefore
->>>> never loads the firmware for MP2 and MP2 does not work. It results in
->>>> AMD_P2C_MSG3 register to have -1 as its value.
->>>>
->>>> Without this change, the driver interprets the value as it supports all
->>>> sensor types and exposes them, which confuses a userspace program,
->>>> iio-sensor-proxy, and makes it to use the non-functioning sensors
->>>> instead of functioning sensors exposed via Chrome OS EC Sensor Hub.
->>>>
->>>> Check the version bits included in AMD_P2C_MSG3 register and ignore the
->>>> device if all of the bits are set.
->>>>
+
+On 6/27/2022 4:20 PM, Doug Anderson wrote:
+> Hi,
+>
+> On Sat, Jun 25, 2022 at 1:48 AM Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+>> On Sat, 25 Jun 2022 at 04:23, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+>>> On 6/24/2022 5:11 PM, Dmitry Baryshkov wrote:
+>>>> On Sat, 25 Jun 2022 at 03:03, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+>>>>> On 6/24/2022 4:56 PM, Kuogee Hsieh wrote:
+>>>>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c
+>>>>> b/drivers/gpu/drm/msm/dp/dp_display.c
+>>>>> index dcd80c8a794c..7816e82452ca 100644
+>>>>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>>>>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>>>>> @@ -140,8 +140,8 @@ static const struct msm_dp_config sc7180_dp_cfg = {
+>>>>>
+>>>>>     static const struct msm_dp_config sc7280_dp_cfg = {
+>>>>>            .descs = (const struct msm_dp_desc[]) {
+>>>>> -               [MSM_DP_CONTROLLER_0] = { .io_start = 0x0ae90000,
+>>>>> .connector_type = DRM_MODE_CONNECTOR_DisplayPort, .wide_bus_en = true },
+>>>>>                    [MSM_DP_CONTROLLER_1] = { .io_start = 0x0aea0000,
+>>>>> .connector_type = DRM_MODE_CONNECTOR_eDP, .wide_bus_en = true },
+>>>>> +               [MSM_DP_CONTROLLER_0] = { .io_start = 0x0ae90000,
+>>>>> .connector_type = DRM_MODE_CONNECTOR_DisplayPort, .wide_bus_en = true },
+>>>>>            },
+>>>>>            .num_descs = 2,
+>>>>>     };
+>>>>>
+>>>>>
+>>>>> The reason order is important is because  in this function below, even
+>>>>> though it matches the address to find which one to use it loops through
+>>>>> the array and so the value of *id will change depending on which one is
+>>>>> located where.
+>>>>>
+>>>>> static const struct msm_dp_desc *dp_display_get_desc(struct
+>>>>> platform_device *pdev,
+>>>>>                                 unsigned int *id)
+>>>>> {
+>>>>>        const struct msm_dp_config *cfg = of_device_get_match_data(&pdev->dev);
+>>>>>        struct resource *res;
+>>>>>        int i;
+>>>>>
+>>>>>        res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>>>>>        if (!res)
+>>>>>            return NULL;
+>>>>>
+>>>>>        for (i = 0; i < cfg->num_descs; i++) {
+>>>>>            if (cfg->descs[i].io_start == res->start) {
+>>>>>                *id = i;
+>>>> The id is set to the index of the corresponding DP instance in the
+>>>> descs array, which is MSM_DP_CONTROLLER_n. Correct up to now.
+>>> Right, this is where I misunderstood his explanation.
 >>>
->>> Have you already confirmed this failure happens in 5.19-rc1 or later 
->>> as well?  I would think that b5d7f43e97dabfa04a4be5ff027ce7da119332be 
->>> should have fixed it.
->>
->> Yes. I confirmed it with 78ca55889a549a9a194c6ec666836329b774ab6d.
->>
-> 
-> Thanks for confirming.
-> 
->> b5d7f43e97dabfa04a4be5ff027ce7da119332be deals with the case where it 
->> advertises v2 but it doesn't in my case.
-> 
-> In your case it actually goes down the v1 ops path then right?
-
-Yes, but I doubt even that is correct in this case. I guess the v1 
-protocol would have a value 1 for acs in mp2_select_ops(), but it is 15 
-in this case. It would be nice if you confirm that hypothesis.
-
-Regards,
-Akihiko Odaki
-
-> 
-> Basavaraj - is discovery unique to v2?  Or does it also exist for v1?
-> If it also exists for v1 I think that's a cleaner solution.
-> 
->>
->> Regards,
->> Akihiko Odaki
->>
+>>> Even if we swap the order, but retain the index correctly it will still
+>>> work today.
 >>>
->>>> Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
->>>> ---
->>>>   drivers/hid/amd-sfh-hid/amd_sfh_pcie.c | 4 ++++
->>>>   1 file changed, 4 insertions(+)
->>>>
->>>> diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c 
->>>> b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
->>>> index dadc491bbf6b..4137e5da77ad 100644
->>>> --- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
->>>> +++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
->>>> @@ -271,6 +271,8 @@ static void mp2_select_ops(struct amd_mp2_dev 
->>>> *privdata)
->>>>       case V2_STATUS:
->>>>           privdata->mp2_ops = &amd_sfh_ops_v2;
->>>>           break;
->>>> +    case 15:
->>>> +        break;
->>>>       default:
->>>>           privdata->mp2_ops = &amd_sfh_ops;
->>>>           break;
->>>> @@ -317,6 +319,8 @@ static int amd_mp2_pci_probe(struct pci_dev 
->>>> *pdev, const struct pci_device_id *i
->>>>           return -ENOMEM;
->>>>       mp2_select_ops(privdata);
->>>> +    if (!privdata->mp2_ops)
->>>> +        return -ENODEV;
->>>>       rc = amd_sfh_irq_init(privdata);
->>>>       if (rc) {
+>>> Hes not sure of the root-cause of why turning on the primary display
+>>> first fixes the issue.
 >>>
->>
-> 
+>>> I think till we root-cause that, lets put this on hold.
+>> Agreed. Let's find the root cause.
+> FWIW, I was poking a little bit about the glitch that Kuogee was
+> trying to fix here. Through a bunch of hacky heuristics I think the
+> dpu_hw_ctl_trigger_flush_v1() is the function that "causes" the
+> corruption. Specifically I managed to do something like:
+>
+> if (hacky_heuristic)
+>    pr_info("About to call flush\n);
+>    mdelay(2000);
+> }
+> ctl->ops.trigger_flush(ctl)
+> if (hacky_heuristic)
+>    pr_info("Finished calling flush\n);
+>    mdelay(2000);
+>    pr_info("Finished calling flush delay done\n);
+> }
 
+flush bit need to up update at real time.
+
+otherwise unexpected side effects will happen.
+
+i try same thing, but I got fence timeout error.
+
+Anyway, I had submit new patch to fix corruption issue.
+
+Thanks for your efforts and helps.
+
+> I then watched my display and reproduced the problem. When I saw the
+> problem I looked over at the console and saw "Finished calling flush"
+> was the last thing printed.
+>
+> I don't know if this helps much. Presumably we're flushing a bunch of
+> previous operations so whatever we had queued up probably matters
+> more, but maybe it'll give a clue?
+>
+>
+> Other notes FWIW:
+>
+> * If you increase the amount of time of the glitching, you can
+> actually see that we are glitching both the internal and external
+> displays.
+>
+> * You can actually make the glitch stay on the screen "permanently" by
+> unplugging the external display while the internal screen is off. I
+> don't know why it doesn't always happen, but it seems to happen often
+> enough. Presumably if someone knew the display controller well they
+> could try to figure out what state it was in and debug the problem.
+>
+>
+> -Doug

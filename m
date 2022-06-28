@@ -2,66 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727F455E6A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD3055E7E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346707AbiF1NlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
+        id S1346417AbiF1Nls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346654AbiF1NlV (ORCPT
+        with ESMTP id S231733AbiF1Nlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:41:21 -0400
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E68325E9B;
-        Tue, 28 Jun 2022 06:41:19 -0700 (PDT)
-Received: by mail-io1-f47.google.com with SMTP id y18so12856950iof.2;
-        Tue, 28 Jun 2022 06:41:19 -0700 (PDT)
+        Tue, 28 Jun 2022 09:41:45 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AD32A738
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:41:43 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id r3so22290121ybr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:41:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l0lBZBoRWVZwKeLsg5bhh62sfkY43Fuz7vbWyvz07jo=;
+        b=hGw9T6CarZQ/NMBim5LFKd5YTY/o2ySRURtSkju9ltnp+I2dfsm1E743dkEP7vIdI2
+         EF0DRNKbp1NoePxE8d03JMmSXIQyxTYmcA6StyWwY4r+YQPVJD8cCVXjq4KFryi4BOBX
+         R1mZO/ER1L2SAM2BBGv6AMAXI5Jfk4vSpWXci5dnkjMyWFiBRxV+lukWKp040ydV0UYw
+         pi8tg+vw420tIDHBWpl4HD2i87IuVJPBeZxJfEHlBvY0Am4KybIx85T311V7Sc3PDZDd
+         4o1lrjtE8IrlXi97SmhrBQzUpnLpRq4Op7bcrYUqg0s8X0We4xxPIjbi6qZfZCCR6FAX
+         0Wjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mwOBShGTICMgOdqz3MT5Sv+scZgbcai7ONXkEa1E170=;
-        b=svx3We+T9dCliv7EEPUxeFnewO6crVYP9ncfoMOFoUn9xQtPbwRvePw939bGy4di4g
-         lTl+KjySkmT3GJW3V5Qxl3aBt9ytWNS9etCbzQb9DbpkKGw3O9+6Tx5lBM5KXIx/R/QY
-         ImW+R9cMAWOyZnRr7YRlKO4/UUGUrl7Wf+7oAcoMt4CRNVuZXJdY2SV6IBhpS+etBbVf
-         L2FAlZlOzXx/WyMYETgIYGMXLxdStkOXAuliBXbR99Qub6Sgn6bHEB3UB8yG9zxGWONA
-         FoouAFHr+XWuBCxP4tvk5WYsdgrQ9q+18/GuW7lDe9B4jr5q6P2URQqPy9fMjSUMeBhi
-         tiPA==
-X-Gm-Message-State: AJIora+fhvGhVjewFFzvlUNzINpp9jAlzYV5PU8Hd+DX8dvW8y/9CeX9
-        rlVtLCLhmrKuBbZG4c2fJQ==
-X-Google-Smtp-Source: AGRyM1vezFgpYiRSAOEMIGspLW0FyDakiQT+VyWz3hQV83fc87ID8ATA7tp7O9Lc6ulOVPgPAdG4Sg==
-X-Received: by 2002:a05:6638:2481:b0:331:e12a:5e32 with SMTP id x1-20020a056638248100b00331e12a5e32mr11010467jat.90.1656423678724;
-        Tue, 28 Jun 2022 06:41:18 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id c13-20020a02330d000000b00334748f85easm6124556jae.106.2022.06.28.06.41.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 06:41:18 -0700 (PDT)
-Received: (nullmailer pid 348635 invoked by uid 1000);
-        Tue, 28 Jun 2022 13:41:15 -0000
-Date:   Tue, 28 Jun 2022 07:41:15 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Alain Volmat <alain.volmat@foss.st.com>
-Cc:     wsa@kernel.org, mark.rutland@arm.com,
-        pierre-yves.mordret@foss.st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-Subject: Re: [PATCH 1/4] dt-bindings: i2c: st,stm32-i2c: don't mandate a
- reset line
-Message-ID: <20220628134115.GA345270-robh@kernel.org>
-References: <20220620105405.145959-1-alain.volmat@foss.st.com>
- <20220620105405.145959-2-alain.volmat@foss.st.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l0lBZBoRWVZwKeLsg5bhh62sfkY43Fuz7vbWyvz07jo=;
+        b=1fP5YgppQexJAucuHsWF5bctCltfSgCYyOLpUuj21p9oHQSVddYvfa1Z+XuRKhP8Fx
+         mdUvqy8PHKYJyozNTBIzuvoSXgqA95wDOyY3MCn6sur+oyIJ0PcCtTYvPCUd32GRO52B
+         Q+CD6GuOrOX7gYSWagkHjWACxPivIjGCkoZbcat6ApudseVYNOITx9WquqOWCpGqPPNr
+         bCmxFoNJXYsh+qAiUgVhpGliZVOMADJc21dNNpbtsTKA2n8jSuhEJ8tltqwKWAgK3Y9e
+         nY1vEt2n0d7HOQCD8GG0Dp94Yea7oijMS5mJv1/5h/e96PgxkXSzTMM1PyDmlceuYJNN
+         bXyw==
+X-Gm-Message-State: AJIora/m7mr12mfn0L1WzWK31flLnpSueLwiSeoHWDqEHlf1tFDCFqXW
+        O3S5gS1WggODNKkJzGOpzZ1MQYO4A7+mA0DCJn3mdQ==
+X-Google-Smtp-Source: AGRyM1vMJc6mshbdVpv82z3JrgHLSlBVD5A4IKCtkqq06YBNSTzatN88O/XMo49PG0TuIqgDUg33Srr26PKhV2f0pQk=
+X-Received: by 2002:a25:1f57:0:b0:669:b6fa:167e with SMTP id
+ f84-20020a251f57000000b00669b6fa167emr20917137ybf.295.1656423702377; Tue, 28
+ Jun 2022 06:41:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220620105405.145959-2-alain.volmat@foss.st.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220623080344.783549-1-saravanak@google.com> <20220623080344.783549-3-saravanak@google.com>
+ <20220623100421.GY1615@pengutronix.de>
+In-Reply-To: <20220623100421.GY1615@pengutronix.de>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 28 Jun 2022 15:41:30 +0200
+Message-ID: <CACRpkdY+MfDHGw4QrFy=A64y7dSrno26vuKbt_AnFbVm9y_hoQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] of: base: Avoid console probe delay when fw_devlink.strict=1
+To:     sascha hauer <sha@pengutronix.de>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        russell king <linux@armlinux.org.uk>,
+        "david s. miller" <davem@davemloft.net>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, kernel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,33 +92,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 12:54:02PM +0200, Alain Volmat wrote:
-> Update the dt-bindings of the i2c-stm32 drivers to avoid the
-> needs for a reset property in the device-tree.
+On Thu, Jun 23, 2022 at 12:05 PM sascha hauer <sha@pengutronix.de> wrote:
 
-That is clear from the diff, but why. Some chips don't have a reset? 
-If so, this should be combined with patch 2 as part of changes needed 
-for a new version.
+> Also consider SoCs in early upstreaming phases
+> when the device tree is merged with "dmas" or "hwlock" properties,
+> but the corresponding drivers are not yet upstreamed. It's not nice
+> to defer probing of all these devices for a long time.
 
-> 
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-> ---
->  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-> index dccbb18b6dc0..8879144fbbfb 100644
-> --- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-> @@ -94,7 +94,6 @@ required:
->    - compatible
->    - reg
->    - interrupts
-> -  - resets
->    - clocks
->  
->  unevaluatedProperties: false
-> -- 
-> 2.25.1
-> 
-> 
+Actually this drives a truck through the entire approach in a way.
+
+It is perfectly legal to have a device tree with dmas specified
+but leave them unused in the operating system. DT just describes
+what hardware is there, it does not mandate that the OS
+implement drivers for all of it.
+
+This approach really needs that the resolution mechanism
+is aware of whether:
+
+1. a driver exist for the resource at all so it will eventually resolve
+
+2. if that driver is compiled in or module at all (IS_ENABLED())
+
+3. If the resource should be grabbed early or optionally later
+    such as dmas for console UART
+
+Only then can the mechanism work in the generic case.
+
+Yours,
+Linus Walleij

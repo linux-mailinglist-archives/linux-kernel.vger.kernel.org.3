@@ -2,131 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B4E55E759
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF63555E90A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346187AbiF1OLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 10:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
+        id S1345682AbiF1OIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 10:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345924AbiF1OLn (ORCPT
+        with ESMTP id S230216AbiF1OIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 10:11:43 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E91736150
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 07:11:40 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id l68so2402848wml.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 07:11:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=z6rZSThE7hjHMykxwD6G3CLunLDgT8dkRZWO7hFrMlc=;
-        b=E14bCHFAJHEKjAz3a2lSSKKAKgMH8nSUaKpBBhdBtLPYkBu0W31aQtkY03sC1zEkVc
-         FiDofXOMIBM6p89lrcTgMas9mDeuNZ2IdHzWfFBULzcC45sbYJVkKgvhrufDwGDkwSby
-         mbNRGEjJ2jkCWZBxE+1M5f+xMG1cZFeiJeiWGhuCZcZedEV9Yee4Kij8RkBC9PhrLfj0
-         jzR8t7i4zLmaqwwRlVbW5uh5yAr+iVTRaNP2FGEOa72yoXEOY1DDzcVlb03F08k3F7C/
-         MaAJ3rAMWURmtIcyWHe+yyTuzKWiOEq6IjUKpQCN+SFhgMUN4uNUHhdkVX6DFfwXzc+c
-         Wp2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=z6rZSThE7hjHMykxwD6G3CLunLDgT8dkRZWO7hFrMlc=;
-        b=S+giV4jLBtywBX9e3iNYh5cojcAOGE5f3/gOoBdPFNDERPm7gD0VvVahNS8ks7yX+r
-         kSaiy6xMN45Yl8LMr2n9YlNp1QH0IaML6f4PeALXgOMMO7N2sr7KSC5clMnv9DihET8I
-         9RC5pxljv1n0VKqrlE6aSjycMNeEliEPFbGu+jLIad3DV3E4IX+r9vU0lBt/FCWSWUp4
-         U+1hKS/rzAPZ+RKBBH9EtF5Nd/FjaJC6NWBwYsi41Ly9d9vC39vwcqWw56OGqYHk3hOQ
-         UDZxzXfDITMdGrn9AFTyCStnRv8wVcEAUkpq6+pjesASdUblYB+bd9Rbn1uat6ay6VzB
-         5PAw==
-X-Gm-Message-State: AJIora8qqQjpXizd7KfpzDziYGOCvo6UJb9pEjsmmFr+h1ED7q1sivY0
-        UHdlJlskuHcSTtYiP4gQGUnW5w==
-X-Google-Smtp-Source: AGRyM1sYVVXgAazao0K/lpqse9gQZXQrTog4KvhzBzsiHswnBk9UIffH0I3WCPb3MN3iprzQZzmnFQ==
-X-Received: by 2002:a05:600c:34d0:b0:3a0:2c07:73ac with SMTP id d16-20020a05600c34d000b003a02c0773acmr27247171wmq.85.1656425498512;
-        Tue, 28 Jun 2022 07:11:38 -0700 (PDT)
-Received: from google.com (44.232.78.34.bc.googleusercontent.com. [34.78.232.44])
-        by smtp.gmail.com with ESMTPSA id ay5-20020a05600c1e0500b003a04e900552sm3796880wmb.1.2022.06.28.07.11.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 07:11:38 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 14:11:36 +0000
-From:   Sebastian Ene <sebastianene@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>, qperret@google.com,
-        maz@kernel.org, linux-watchdog@vger.kernel.org, will@kernel.org,
-        vdonnefort@google.com
-Subject: Re: [PATCH v8 2/2] misc: Add a mechanism to detect stalls on guest
- vCPUs
-Message-ID: <YrsMGAVljIcypDl4@google.com>
-References: <20220627102810.1811311-1-sebastianene@google.com>
- <20220627102810.1811311-3-sebastianene@google.com>
- <b87a4407-29fd-4715-1394-ae6afaf4a192@roeck-us.net>
- <YrrP3NvAuxso0rzO@google.com>
- <194f5edc-5877-af3f-9aa1-be1e275ea304@roeck-us.net>
+        Tue, 28 Jun 2022 10:08:43 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F5A344F9;
+        Tue, 28 Jun 2022 07:08:39 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SDl5OR024488;
+        Tue, 28 Jun 2022 14:08:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=7riHetwsZja9iqIaIFin/9/Q1Fkp3NdrY6lmORCAiBk=;
+ b=esjeHXRhmXA9PFPyZ9S/v1xcJpb1Yp+v5aJ2X24IUo1tckg5heXxWSIro2FRYgM9WBFA
+ 0CwbIR4TYtQ16sp4hVBoPu+xSnRmPsme5qQOAGkviuEVVacnvuXIPUQHlxvR5G/5/9Vj
+ fBWn4y8OGAaly5HctxUIpebT96CItecIL7R34J4UAmMIBfHxsKE0mHU3XaN2PvRbvBfJ
+ i1+CsO18Oi1XjuSu60AAxGusqvsYKpY4N6CYP8zwnOSMZx4femy6ZZ2rCLZ7+78hStso
+ V4q6BrX5XLdrMUW+NZAm5L1gyRGDBS2fXsbXXW9+r3yrorcnf63UQD8utXWujkNYLexs 7A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h02u2rnxa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 14:08:39 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25SDmqA4005477;
+        Tue, 28 Jun 2022 14:08:38 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h02u2rnvu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 14:08:38 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25SE6cWG021572;
+        Tue, 28 Jun 2022 14:08:36 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3gwt08vyk4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 14:08:36 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25SE7XIq18547074
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Jun 2022 14:07:33 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F0839AE051;
+        Tue, 28 Jun 2022 14:08:32 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 364E7AE04D;
+        Tue, 28 Jun 2022 14:08:32 +0000 (GMT)
+Received: from [9.171.41.104] (unknown [9.171.41.104])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 28 Jun 2022 14:08:32 +0000 (GMT)
+Message-ID: <7924cf38-83cb-5d5c-9ad9-a4faaa89f9d5@linux.ibm.com>
+Date:   Tue, 28 Jun 2022 16:13:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <194f5edc-5877-af3f-9aa1-be1e275ea304@roeck-us.net>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v10 2/3] KVM: s390: guest support for topology function
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
+        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, wintera@linux.ibm.com,
+        seiden@linux.ibm.com, nrb@linux.ibm.com
+References: <20220620125437.37122-1-pmorel@linux.ibm.com>
+ <20220620125437.37122-3-pmorel@linux.ibm.com>
+ <207a01aa-d92c-4a17-7b2f-aed59da4ce09@linux.ibm.com>
+ <28c52d15-aa80-09a8-297c-f5ae2b798998@linux.ibm.com>
+ <851dd253-8412-ed5f-3a97-980b3a3850cc@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <851dd253-8412-ed5f-3a97-980b3a3850cc@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: I4Xd5lH4qaYJa8t5wLiP3Xh6h--bEVb5
+X-Proofpoint-GUID: bSvTFrU8ngXwtBFHTa3WajqUdXkf5Pee
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-28_07,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 mlxscore=0 bulkscore=0 phishscore=0 mlxlogscore=999
+ malwarescore=0 impostorscore=0 priorityscore=1501 clxscore=1015
+ adultscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2204290000 definitions=main-2206280059
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 07:00:05AM -0700, Guenter Roeck wrote:
-> On 6/28/22 02:54, Sebastian Ene wrote:
-> [ ... ]
-> > > > +static struct platform_device *virt_dev;
-> > > > +
 
-Hi,
 
-> > > 
-> > > virt_dev is only used to call platform_set_drvdata() and platform_get_drvdata()
-> > > on it. Why not just have a static variable named vm_stall_detect ?
-> > > 
-> > 
-> > I think this should also work. I wanted to make use of the provided APIs
-> > like platform_set/platform_get.
-> > 
+On 6/28/22 14:18, Janis Schoetterl-Glausch wrote:
+> On 6/28/22 12:58, Pierre Morel wrote:
+>>
+>>
+>> On 6/28/22 10:59, Janis Schoetterl-Glausch wrote:
+>>> On 6/20/22 14:54, Pierre Morel wrote:
+>>>> We report a topology change to the guest for any CPU hotplug.
+>>>>
+>>>> The reporting to the guest is done using the Multiprocessor
+>>>> Topology-Change-Report (MTCR) bit of the utility entry in the guest's
+>>>> SCA which will be cleared during the interpretation of PTF.
+>>>>
+>>>> On every vCPU creation we set the MCTR bit to let the guest know the
+>>>> next time he uses the PTF with command 2 instruction that the
+>>>> topology changed and that he should use the STSI(15.1.x) instruction
+>>>> to get the topology details.
+>>>>
+>>>> STSI(15.1.x) gives information on the CPU configuration topology.
+>>>> Let's accept the interception of STSI with the function code 15 and
+>>>> let the userland part of the hypervisor handle it when userland
+>>>> support the CPU Topology facility.
+>>>>
+>>>> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
+>>>> ---
+>>>>    arch/s390/include/asm/kvm_host.h | 11 ++++++++---
+>>>>    arch/s390/kvm/kvm-s390.c         | 27 ++++++++++++++++++++++++++-
+>>>>    arch/s390/kvm/priv.c             | 15 +++++++++++----
+>>>>    arch/s390/kvm/vsie.c             |  3 +++
+>>>>    4 files changed, 48 insertions(+), 8 deletions(-)
+>>>>
+>>> [...]
+>>>
+>>>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+>>>> index 8fcb56141689..95b96019ca8e 100644
+>>>> --- a/arch/s390/kvm/kvm-s390.c
+>>>> +++ b/arch/s390/kvm/kvm-s390.c
+>>>> @@ -1691,6 +1691,25 @@ static int kvm_s390_get_cpu_model(struct kvm *kvm, struct kvm_device_attr *attr)
+>>>>        return ret;
+>>>>    }
+>>>>
+>>>> +/**
+>>>> + * kvm_s390_sca_set_mtcr
+>>>
+>>> I wonder if there is a better name, kvm_s390_report_topology_change maybe?
+>>>
+>>>> + * @kvm: guest KVM description
+>>>> + *
+>>>> + * Is only relevant if the topology facility is present,
+>>>> + * the caller should check KVM facility 11
+>>>> + *
+>>>> + * Updates the Multiprocessor Topology-Change-Report to signal
+>>>> + * the guest with a topology change.
+>>>> + */
+>>>> +static void kvm_s390_sca_set_mtcr(struct kvm *kvm)
+>>>> +{
+>>>
+>>> Do we need a sca_lock read_section here? If we don't why not?
+>>> Did not see one up the stack, but I might have overlooked something.
+>>
+>> Yes we do.
+>> As I said about your well justified comment in a previous mail, ipte_lock is not the right thing to use here and I will replace with an inter locked update.
 > 
-> That doesn't mean such APIs should be used just to get used, though.
+> Not sure I'm understanding you right, you're saying we need both? i.e.:
+> 
+> struct bsca_block *sca;
+> 
+> read_lock(&vcpu->kvm->arch.sca_lock);
+> sca = kvm->arch.sca;
+> atomic_or(SCA_UTILITY_MTCR, &sca->utility);
+> read_unlock(&vcpu->kvm->arch.sca_lock);
+> 
+> Obviously you would need to change the definition of the utility field and could not use a bit field like Janosch
+> suggested, unless you want to use a cmpxchg loop.
+> It's a bit ugly that utility is a two byte value.
+> Maybe there is a nicer way to set that bit, OR (OI, OIY) seem appropriate, but I don't know if they have a nice
+> abstraction in Linux or if you'd need inline asm.
+
+I was think to something like this because it is what is used most of 
+the time when a bit is to be change concurrently with firmware.
+
+
++union sca_utility {
++       __u16 val;
++       struct {
++               __u16 mtcr : 1;
++               __u16 reserved : 15;
++       };
++};
++
+  struct bsca_block {
+         union ipte_control ipte_control;
+         __u64   reserved[5];
+         __u64   mcn;
+-       __u64   reserved2;
++       union sca_utility utility;
++       __u8    reserved2[6];
+         struct bsca_entry cpu[KVM_S390_BSCA_CPU_SLOTS];
+  }
+
+....
+
+static void kvm_s390_sca_set_mtcr(struct kvm *kvm, int val)
+{
+         struct bsca_block *sca = kvm->arch.sca;
+         union sca_utility new, old;
+
+         read_lock(&kvm->arch.sca_lock);
+         do {
+                 old = READ_ONCE(sca->utility);
+                 new = old;
+                 new.mtcr = val ? 1 : 0;
+         } while (cmpxchg(&sca->utility.val, old.val, new.val) != old.val);
+         read_lock(&kvm->arch.sca_lock);
+}
+
+>>
+>>>
+>>>> +    struct bsca_block *sca = kvm->arch.sca; /* SCA version doesn't matter */
+>>>> +
+>>>> +    ipte_lock(kvm);
+>>>> +    sca->utility |= SCA_UTILITY_MTCR;
+>>>> +    ipte_unlock(kvm);
+>>>> +}
+>>>> +
+>>>
+>>> [...]
+>>>
+>>
 > 
 
-I will remove these calls and keep it static.
-
-> > > > +
-> > > > +	vm_stall_detect = (struct vm_stall_detect_s __percpu *)
-> > > > +		platform_get_drvdata(virt_dev);
-> > > 
-> > > platform_get_drvdata() returns void *; typecast to it is unnecessary.
-> > > 
-> > > 
-> > 
-> > I needed this typecast because the variable is per-cpu and some
-> > compilers(eg. gcc for ARCH=h8300) complain if we don't specify this
-> > hint.
-> > 
-> Hmm, interesting. I didn't know that. We live and learn.
-> Though h8300 is gone now :-)
-
-I had some Intel robot complaining about this in my previous series(v5) and
-I fixed the warnings by adding these compiler hints.
-
-> 
-> Did you reply in private on purpose ?
-> 
-
-I misused my CC list but I will fix this in my reply. 
-
-> Thanks,
-> Guenter
-
-Thanks for the response,
-Seb
+-- 
+Pierre Morel
+IBM Lab Boeblingen

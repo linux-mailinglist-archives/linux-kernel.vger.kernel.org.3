@@ -2,85 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C383F55CA14
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DCBB55E216
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344508AbiF1Jt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
+        id S1344527AbiF1Jtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344506AbiF1Jsl (ORCPT
+        with ESMTP id S1344511AbiF1JtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:48:41 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228852873B
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:48:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656409720; x=1687945720;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FRBxCbYiUWrteKcBH2DUqIllhNNpMr6+IwG37LU4VDk=;
-  b=TVJcUUXAqelcUYJ1pzaW/9D6C3Ap/l0EPQ242bVqlfFfH1JIPmAcKRUa
-   TrTOBHUMGV+WqSRfplPju9wc58oSmRiyuNEzAGPmTIcNXztaSYTwYNxH7
-   vbpZAseF56C78YtVkCuvTtnAXGdMoLNnrTCk6DpCdx3oSYVU/RrfVoAss
-   YKZVdvbPiO8PxAmQ/S9L/fK/4XtS2HVw0Y9dN3OWw9MFyVG4PptEcMa27
-   BBLBFY0InjPaGMgA8zMLTqqxlcmYcJ2v14MRJAQ32XJhwRPF0pm8GGccC
-   erXNyyr9A/ddqOD1yW4hRiXJZQFTwYpx3k31CQT+LdA9vSAPz08RdQ4AI
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="282430314"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="282430314"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 02:48:39 -0700
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="679976651"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 02:48:37 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o67pi-000wfm-Tb;
-        Tue, 28 Jun 2022 12:48:34 +0300
-Date:   Tue, 28 Jun 2022 12:48:34 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>
-Subject: Re: [PATCH v1 9/9] mfd: intel_soc_pmic_crc: Update the copyright year
-Message-ID: <YrrOcptvDNE3L5g6@smile.fi.intel.com>
-References: <20220616182524.7956-1-andriy.shevchenko@linux.intel.com>
- <20220616182524.7956-9-andriy.shevchenko@linux.intel.com>
- <Yrm0rXd2ok8bJkTm@google.com>
+        Tue, 28 Jun 2022 05:49:00 -0400
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A9E2CDF0;
+        Tue, 28 Jun 2022 02:48:55 -0700 (PDT)
+Received: by mail-qv1-f46.google.com with SMTP id cs6so19172817qvb.6;
+        Tue, 28 Jun 2022 02:48:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qmsHjaT7nLNEUigJCn2XHg2FRw3Jceu7QHHPyWgnjqo=;
+        b=g5JAVx8ZIm1q8Y7AknFfm7h6VYFxH09KkZoOBIfWOZKJTFYcos7Mj/2Ot0ksGUnq3J
+         63pqG2OSuCnag4pUCj66FmuW+WlTlfH40MoBmmZ0v8Cb0uCp0k9dw/BNkFexGkAeU0jr
+         k9G7IJ5+3bPd5nMDYnQFxJ7RKW97kvvLfZjfcFmY/2c3c3evUBNSJxxE6xk84NBdPpoy
+         ZENdiMLHTK0i/R1L+TTaS9iekN6T5Jb+XZbLPKP4Vr4dPsdvOEZQDLtmNqg39uDthWhA
+         JEf23U9Aoucfr0dA2S9L8VRWbD75K/2IIJV5fKLMBvcVf+UuVA4YMjnSCxB1y+n1MEb3
+         cqpQ==
+X-Gm-Message-State: AJIora8m/03PPZOzQvuyJL1als/Wtbq1uHJf5SWj82h/6vWAqcJZHwv0
+        xKl9IHFqvCUf77vMg7ho/XFBV9QQRpM5Ew==
+X-Google-Smtp-Source: AGRyM1vv8FMtgbhpCc3DfK5B3yHX8YT5E/HLbE1yPAxs+AAoNh0T3/m3lJxflo9ovLN6I7FlIC0sLA==
+X-Received: by 2002:a05:622a:54a:b0:318:444c:d9cf with SMTP id m10-20020a05622a054a00b00318444cd9cfmr11919011qtx.646.1656409734082;
+        Tue, 28 Jun 2022 02:48:54 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id s9-20020ac85289000000b00304efba3d84sm8748589qtn.25.2022.06.28.02.48.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 02:48:53 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id v185so11759474ybe.8;
+        Tue, 28 Jun 2022 02:48:53 -0700 (PDT)
+X-Received: by 2002:a05:6902:a:b0:65c:b38e:6d9f with SMTP id
+ l10-20020a056902000a00b0065cb38e6d9fmr19354286ybh.36.1656409733344; Tue, 28
+ Jun 2022 02:48:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yrm0rXd2ok8bJkTm@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220622181723.13033-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220622181723.13033-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220622181723.13033-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 28 Jun 2022 11:48:41 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX-yE3MAR8ugEj6CZ5u-Bfv81pvs0FC0gZ4WrXOt0DHzg@mail.gmail.com>
+Message-ID: <CAMuHMdX-yE3MAR8ugEj6CZ5u-Bfv81pvs0FC0gZ4WrXOt0DHzg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: clock: r9a07g043-cpg: Add Renesas
+ RZ/Five CPG Clock and Reset Definitions
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 02:46:21PM +0100, Lee Jones wrote:
-> On Thu, 16 Jun 2022, Andy Shevchenko wrote:
+On Wed, Jun 22, 2022 at 8:17 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Renesas RZ/Five SoC has almost the same clock structure compared to the
+> Renesas RZ/G2UL SoC, re-use the r9a07g043-cpg.h header file and just
+> amend the RZ/Five CPG clock and reset definitions.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-> > - * Copyright (C) 2012-2014 Intel Corporation. All rights reserved.
-> > + * Copyright (C) 2012-2014, 2022 Intel Corporation. All rights reserved.
-> 
-> Same question as before.
-> 
-> What happens between these dates?
+Will queue in renesas-clk-for-v5.20.
 
-Same answer as before. I believe nothing (which may justify Copyright update)
-happened.
+Gr{oetje,eeting}s,
 
--- 
-With Best Regards,
-Andy Shevchenko
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

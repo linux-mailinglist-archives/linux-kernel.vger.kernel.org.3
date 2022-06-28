@@ -2,362 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE0F55ECB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD6F55ECB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233630AbiF1ShG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 14:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39172 "EHLO
+        id S233019AbiF1Sh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 14:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbiF1ShE (ORCPT
+        with ESMTP id S230350AbiF1Sh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:37:04 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F311F63D;
-        Tue, 28 Jun 2022 11:37:03 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id s10so15957652ljh.12;
-        Tue, 28 Jun 2022 11:37:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qmtALMBV8oKPsUWGA9d8G3m+JN8wDVjpMtZP/2CMexk=;
-        b=mXvcWImJeqI7I6p0PsY2Z31tNmBazyow3GpDPQOBIYNxN9eranN7oT5jkFUQY2k1hF
-         SQgUMvZnzISSKV39/dbz2j0Erift8LiMYmY+Har+N5GGjfK4iD+FhresyrWOzkBBA/VN
-         KwSU/aEO1wNRAOZGp3wZTmvSjXzrYbAhfBc1DYCdueXn09AeKTK1Jt0N6gqMN3CkwT6b
-         t/j/52As9ya9iibMsCgLHPwq/R8U8pZG3Gigtps4AaIPeSRMiE9UoZx4RNGkzDaahmeO
-         jrwfYA2eJXNkS0V8MuepmuFZUjL+tPMwkH4aJc6PDk9UxsMT01JWNRlN4bSVCvyp1OP+
-         JVzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qmtALMBV8oKPsUWGA9d8G3m+JN8wDVjpMtZP/2CMexk=;
-        b=7sh8+WKMqxixkPP3gldEctQWXQhsvk1bZ/ipTgeK4SK11T3WBdjOBB9NATbetHBlPN
-         QurNBEGonNdzGk6+ES5ljA584+C3fSsRfaQYmxyHKifK2TJW5RVE0dHAuGiIEY2KjjRJ
-         1or73yBMwuxu2ornRnSxffb73l4ouQ+P711cznAWVjPHVMqoCu2ORv/aH/7yniWwLk3D
-         lwv332VDE7vC1cYVs8VQMS7sjFeu44lIG927K96UVhtZQ9indoxP51d5YLotKUAUKLhn
-         xPZmjcim7Gvn6AcL/2cP6+htpjEC3tJ6JZUWV6mElp9uDCG556Ybeo+rh+9coG632yDo
-         uHYw==
-X-Gm-Message-State: AJIora/xCqbCtnSKupxocUSiFIBggZHyg0eI6HDggqkNyfvLFi2+QmG6
-        bIOq/RY8Tn3fitcGFwCfQtET/FtYy0l/Va6GsRw=
-X-Google-Smtp-Source: AGRyM1s0X0SKC2Qq28bFSVPJF1Bs8iY9aLIh70OLxo+WYU4Cq8oiv96xJYYyW5Z/0aTVTuuM29JjWgTjeIt5Ax6EBPE=
-X-Received: by 2002:a2e:a78a:0:b0:25b:c51a:2c0a with SMTP id
- c10-20020a2ea78a000000b0025bc51a2c0amr5987839ljf.432.1656441421692; Tue, 28
- Jun 2022 11:37:01 -0700 (PDT)
+        Tue, 28 Jun 2022 14:37:56 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B450420F5F;
+        Tue, 28 Jun 2022 11:37:55 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SHgO3i002705;
+        Tue, 28 Jun 2022 18:37:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=Kr5eKPrGqH/iNt4EQ0PmPKbTFY3yJ6iKC1kNfLg+lcI=;
+ b=EfR84tCSRMY9D4gP0GALzXA9TYqEFiimlq+a9HZ+wfgu5kAop0DsGCCmocjxhBIhBMhF
+ CUjSFnMHRw/e92Vcj1SW268sDgW0Y2I2ZIurTKScJNqkEs9tlWBlUBNmcWUy4yHPFJKL
+ lMRrtL26w2XXeDxA3BYGt3wsgE6oODlxy5HK0PQ8/kibjRuvDXTzpj6+xkQNsOVejwmx
+ /AFST05sKWtZ4zx4TeoQ9kmw0SIxaAr/l4P3BQscv23JK0RWa72VECTiAbIS3pXLWec9
+ vyJxVePP5ciHa1/IWVui9cunXighug4rA9LIC4wahB2ckeUBg3hakrXGM3WNZsPBRCYI oQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h06989ptj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 18:37:01 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25SHidEN010965;
+        Tue, 28 Jun 2022 18:37:00 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h06989pry-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 18:37:00 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25SIZBGw006547;
+        Tue, 28 Jun 2022 18:36:57 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3gwsmj5a0j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 18:36:57 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25SIatuf21823956
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Jun 2022 18:36:55 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3A7384C044;
+        Tue, 28 Jun 2022 18:36:55 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8A1464C040;
+        Tue, 28 Jun 2022 18:36:54 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 28 Jun 2022 18:36:54 +0000 (GMT)
+Date:   Tue, 28 Jun 2022 20:36:53 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
+        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+Subject: Re: [PATCH v4 12/12] sched,signal,ptrace: Rework TASK_TRACED,
+ TASK_STOPPED state
+Message-ID: <YrtKReO2vIiX8VVU@tuxmaker.boeblingen.de.ibm.com>
+References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+ <20220505182645.497868-12-ebiederm@xmission.com>
+ <YrHA5UkJLornOdCz@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <877d5ajesi.fsf@email.froward.int.ebiederm.org>
+ <YrHgo8GKFPWwoBoJ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <87y1xk8zx5.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-References: <20220622082716.478486-1-lee.jones@linaro.org> <CANn89iK-uFP6Swgc0ZeEC38UsuywJ3wbybSNouH202Wa7X7Tzg@mail.gmail.com>
- <CABBYNZ+C=MQ7577Fr5_W8tQ4iWRSDBSiC4fkRBY3x=9ph+YAzA@mail.gmail.com>
-In-Reply-To: <CABBYNZ+C=MQ7577Fr5_W8tQ4iWRSDBSiC4fkRBY3x=9ph+YAzA@mail.gmail.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Tue, 28 Jun 2022 11:36:50 -0700
-Message-ID: <CABBYNZLysdh3NFK+G8=NUQ=G=hvS8X0PdMp=bVqiwPDPCAokmg@mail.gmail.com>
-Subject: Re: [RESEND 1/1] Bluetooth: Use chan_list_lock to protect the whole
- put/destroy invokation
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>, stable@kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87y1xk8zx5.fsf@email.froward.int.ebiederm.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: JKZNRj7mPThveR49Jq1cKgSMT_MSny1l
+X-Proofpoint-ORIG-GUID: clmplF6XXiQeVpQGsOzYn3NLFuBGpIX_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-28_11,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 phishscore=0 spamscore=0 clxscore=1015 mlxlogscore=999
+ malwarescore=0 impostorscore=0 bulkscore=0 priorityscore=1501 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206280074
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric, Lee,
+On Sat, Jun 25, 2022 at 11:34:46AM -0500, Eric W. Biederman wrote:
+> I haven't gotten as far as reproducing this but I have started giving
+> this issue some thought.
+> 
+> This entire thing smells like a memory barrier is missing somewhere.
+> However by definition the lock implementations in linux provide all the
+> needed memory barriers, and in the ptrace_stop and ptrace_check_attach
+> path I don't see cases where these values are sampled outside of a lock
+> except in wait_task_inactive.  Does doing that perhaps require a
+> barrier? 
+> 
+> The two things I can think of that could shed light on what is going on
+> is enabling lockdep, to enable the debug check in signal_wake_up_state
+> and verifying bits of state that should be constant while the task
+> is frozen for ptrace are indeed constant when task is frozen for ptrace.
+> Something like my patch below.
+> 
+> If you could test that when you have a chance that would help narrow
+> down what is going on.
+> 
+> Thank you,
+> Eric
+> 
+> diff --git a/kernel/ptrace.c b/kernel/ptrace.c
+> index 156a99283b11..6467a2b1c3bc 100644
+> --- a/kernel/ptrace.c
+> +++ b/kernel/ptrace.c
+> @@ -268,9 +268,13 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
+>  	}
+>  	read_unlock(&tasklist_lock);
+>  
+> -	if (!ret && !ignore_state &&
+> -	    WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED)))
+> +	if (!ret && !ignore_state) {
+> +		WARN_ON_ONCE(!(child->jobctl & JOBCTL_PTRACE_FROZEN));
+> +		WARN_ON_ONCE(!(child->joctctl & JOBCTL_TRACED));
+> +		WARN_ON_ONCE(READ_ONCE(child->__state) != __TASK_TRACED);
+> +		WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED));
+>  		ret = -ESRCH;
+> +	}
+>  
+>  	return ret;
+>  }
 
-On Mon, Jun 27, 2022 at 4:39 PM Luiz Augusto von Dentz
-<luiz.dentz@gmail.com> wrote:
->
-> Hi Eric, Lee,
->
-> On Mon, Jun 27, 2022 at 7:41 AM Eric Dumazet <edumazet@google.com> wrote:
-> >
-> > On Wed, Jun 22, 2022 at 10:27 AM Lee Jones <lee.jones@linaro.org> wrote:
-> > >
-> > > This change prevents a use-after-free caused by one of the worker
-> > > threads starting up (see below) *after* the final channel reference
-> > > has been put() during sock_close() but *before* the references to the
-> > > channel have been destroyed.
-> > >
-> > >   refcount_t: increment on 0; use-after-free.
-> > >   BUG: KASAN: use-after-free in refcount_dec_and_test+0x20/0xd0
-> > >   Read of size 4 at addr ffffffc114f5bf18 by task kworker/u17:14/705
-> > >
-> > >   CPU: 4 PID: 705 Comm: kworker/u17:14 Tainted: G S      W       4.14.234-00003-g1fb6d0bd49a4-dirty #28
-> > >   Hardware name: Qualcomm Technologies, Inc. SM8150 V2 PM8150 Google Inc. MSM sm8150 Flame DVT (DT)
-> > >   Workqueue: hci0 hci_rx_work
-> > >   Call trace:
-> > >    dump_backtrace+0x0/0x378
-> > >    show_stack+0x20/0x2c
-> > >    dump_stack+0x124/0x148
-> > >    print_address_description+0x80/0x2e8
-> > >    __kasan_report+0x168/0x188
-> > >    kasan_report+0x10/0x18
-> > >    __asan_load4+0x84/0x8c
-> > >    refcount_dec_and_test+0x20/0xd0
-> > >    l2cap_chan_put+0x48/0x12c
-> > >    l2cap_recv_frame+0x4770/0x6550
-> > >    l2cap_recv_acldata+0x44c/0x7a4
-> > >    hci_acldata_packet+0x100/0x188
-> > >    hci_rx_work+0x178/0x23c
-> > >    process_one_work+0x35c/0x95c
-> > >    worker_thread+0x4cc/0x960
-> > >    kthread+0x1a8/0x1c4
-> > >    ret_from_fork+0x10/0x18
-> > >
-> > > Cc: stable@kernel.org
-> >
-> > When was the bug added ? (Fixes: tag please)
-> >
-> > > Cc: Marcel Holtmann <marcel@holtmann.org>
-> > > Cc: Johan Hedberg <johan.hedberg@gmail.com>
-> > > Cc: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-> > > Cc: "David S. Miller" <davem@davemloft.net>
-> > > Cc: Eric Dumazet <edumazet@google.com>
-> > > Cc: Jakub Kicinski <kuba@kernel.org>
-> > > Cc: Paolo Abeni <pabeni@redhat.com>
-> > > Cc: linux-bluetooth@vger.kernel.org
-> > > Cc: netdev@vger.kernel.org
-> > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > > ---
-> > >  net/bluetooth/l2cap_core.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-> > > index ae78490ecd3d4..82279c5919fd8 100644
-> > > --- a/net/bluetooth/l2cap_core.c
-> > > +++ b/net/bluetooth/l2cap_core.c
-> > > @@ -483,9 +483,7 @@ static void l2cap_chan_destroy(struct kref *kref)
-> > >
-> > >         BT_DBG("chan %p", chan);
-> > >
-> > > -       write_lock(&chan_list_lock);
-> > >         list_del(&chan->global_l);
-> > > -       write_unlock(&chan_list_lock);
-> > >
-> > >         kfree(chan);
-> > >  }
-> > > @@ -501,7 +499,9 @@ void l2cap_chan_put(struct l2cap_chan *c)
-> > >  {
-> > >         BT_DBG("chan %p orig refcnt %u", c, kref_read(&c->kref));
-> > >
-> > > +       write_lock(&chan_list_lock);
-> > >         kref_put(&c->kref, l2cap_chan_destroy);
-> > > +       write_unlock(&chan_list_lock);
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(l2cap_chan_put);
-> > >
-> > > --
-> > > 2.36.1.255.ge46751e96f-goog
-> > >
-> >
-> > I do not think this patch is correct.
-> >
-> > a kref does not need to be protected by a write lock.
-> >
-> > This might shuffle things enough to work around a particular repro you have.
-> >
-> > If the patch was correct why not protect kref_get() sides ?
-> >
-> > Before the &hdev->rx_work is scheduled (queue_work(hdev->workqueue,
-> > &hdev->rx_work),
-> > a reference must be taken.
-> >
-> > Then this reference must be released at the end of hci_rx_work() or
-> > when hdev->workqueue
-> > is canceled.
-> >
-> > This refcount is not needed _if_ the workqueue is properly canceled at
-> > device dismantle,
-> > in a synchronous way.
-> >
-> > I do not see this hdev->rx_work being canceled, maybe this is the real issue.
-> >
-> > There is a call to drain_workqueue() but this is not enough I think,
-> > because hci_recv_frame()
-> > can re-arm
-> >    queue_work(hdev->workqueue, &hdev->rx_work);
->
-> I suspect this likely a refcount problem, we do l2cap_get_chan_by_scid:
->
-> /* Find channel with given SCID.
->  * Returns locked channel. */
-> static struct l2cap_chan *l2cap_get_chan_by_scid(struct l2cap_conn
-> *conn, u16 cid)
->
-> So we return a locked channel but that doesn't prevent another thread
-> to call l2cap_chan_put which doesn't care about l2cap_chan_lock so
-> perhaps we actually need to host a reference while we have the lock,
-> at least we do something like that on l2cap_sock.c:
->
-> l2cap_chan_hold(chan);
-> l2cap_chan_lock(chan);
->
-> __clear_chan_timer(chan);
-> l2cap_chan_close(chan, ECONNRESET);
-> l2cap_sock_kill(sk);
->
-> l2cap_chan_unlock(chan);
-> l2cap_chan_put(chan);
+I modified your chunk a bit - hope that is what you had in mind:
 
-Perhaps something like this:
-
-diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-index 09ecaf556de5..9050b6af3577 100644
---- a/net/bluetooth/l2cap_core.c
-+++ b/net/bluetooth/l2cap_core.c
-@@ -111,7 +111,7 @@ static struct l2cap_chan
-*__l2cap_get_chan_by_scid(struct l2cap_conn *conn,
+diff --git a/kernel/ptrace.c b/kernel/ptrace.c
+index 156a99283b11..f0e9a9a4d63c 100644
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -268,9 +268,19 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
+ 	}
+ 	read_unlock(&tasklist_lock);
+ 
+-	if (!ret && !ignore_state &&
+-	    WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED)))
+-		ret = -ESRCH;
++	if (!ret && !ignore_state) {
++		unsigned int __state;
++
++		WARN_ON_ONCE(!(child->jobctl & JOBCTL_PTRACE_FROZEN));
++		WARN_ON_ONCE(!(child->jobctl & JOBCTL_TRACED));
++		__state = READ_ONCE(child->__state);
++		if (__state != __TASK_TRACED) {
++			pr_err("%s(%d) __state %x", __FUNCTION__, __LINE__, __state);
++			WARN_ON_ONCE(1);
++		}
++		if (WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED)))
++			ret = -ESRCH;
++	}
+ 
+ 	return ret;
  }
 
- /* Find channel with given SCID.
-- * Returns locked channel. */
-+ * Returns a reference locked channel. */
- static struct l2cap_chan *l2cap_get_chan_by_scid(struct l2cap_conn *conn,
-                                                 u16 cid)
- {
-@@ -119,15 +119,17 @@ static struct l2cap_chan
-*l2cap_get_chan_by_scid(struct l2cap_conn *conn,
 
-        mutex_lock(&conn->chan_lock);
-        c = __l2cap_get_chan_by_scid(conn, cid);
--       if (c)
-+       if (c) {
-+               l2cap_chan_hold(c);
-                l2cap_chan_lock(c);
-+       }
-        mutex_unlock(&conn->chan_lock);
+When WARN_ON_ONCE(1) hits the child __state is always zero/TASK_RUNNING,
+as reported by the preceding pr_err(). Yet, in the resulting core dump
+it is always __TASK_TRACED.
 
-        return c;
- }
+Removing WARN_ON_ONCE(1) while looping until (__state != __TASK_TRACED)
+confirms the unexpected __state is always TASK_RUNNING. It never observed
+more than one iteration and gets printed once in 30-60 mins.
 
- /* Find channel with given DCID.
-- * Returns locked channel.
-+ * Returns a reference locked channel.
-  */
- static struct l2cap_chan *l2cap_get_chan_by_dcid(struct l2cap_conn *conn,
-                                                 u16 cid)
-@@ -136,8 +138,10 @@ static struct l2cap_chan
-*l2cap_get_chan_by_dcid(struct l2cap_conn *conn,
+So probably when the condition is entered __state is TASK_RUNNING more
+often, but gets overwritten with __TASK_TRACED pretty quickly. Which kind
+of consistent with my previous observation that kernel/sched/core.c:3305
+is where return 0 makes wait_task_inactive() fail.
 
-        mutex_lock(&conn->chan_lock);
-        c = __l2cap_get_chan_by_dcid(conn, cid);
--       if (c)
-+       if (c) {
-+               l2cap_chan_hold(c);
-                l2cap_chan_lock(c);
-+       }
-        mutex_unlock(&conn->chan_lock);
-
-        return c;
-@@ -4464,6 +4468,7 @@ static inline int l2cap_config_req(struct
-l2cap_conn *conn,
-
- unlock:
-        l2cap_chan_unlock(chan);
-+       l2cap_chan_put(chan);
-        return err;
- }
-
-@@ -4578,6 +4583,7 @@ static inline int l2cap_config_rsp(struct
-l2cap_conn *conn,
-
- done:
-        l2cap_chan_unlock(chan);
-+       l2cap_chan_put(chan);
-        return err;
- }
-
-@@ -5305,6 +5311,7 @@ static inline int l2cap_move_channel_req(struct
-l2cap_conn *conn,
-        l2cap_send_move_chan_rsp(chan, result);
-
-        l2cap_chan_unlock(chan);
-+       l2cap_chan_put(chan);
-
-        return 0;
- }
-@@ -5397,6 +5404,7 @@ static void l2cap_move_continue(struct
-l2cap_conn *conn, u16 icid, u16 result)
-        }
-
-        l2cap_chan_unlock(chan);
-+       l2cap_chan_put(chan);
- }
-
- static void l2cap_move_fail(struct l2cap_conn *conn, u8 ident, u16 icid,
-@@ -5489,6 +5497,7 @@ static int l2cap_move_channel_confirm(struct
-l2cap_conn *conn,
-        l2cap_send_move_chan_cfm_rsp(conn, cmd->ident, icid);
-
-        l2cap_chan_unlock(chan);
-+       l2cap_chan_put(chan);
-
-        return 0;
- }
-@@ -5524,6 +5533,7 @@ static inline int
-l2cap_move_channel_confirm_rsp(struct l2cap_conn *conn,
-        }
-
-        l2cap_chan_unlock(chan);
-+       l2cap_chan_put(chan);
-
-        return 0;
- }
-@@ -5896,12 +5906,11 @@ static inline int l2cap_le_credits(struct
-l2cap_conn *conn,
-        if (credits > max_credits) {
-                BT_ERR("LE credits overflow");
-                l2cap_send_disconn_req(chan, ECONNRESET);
--               l2cap_chan_unlock(chan);
-
-                /* Return 0 so that we don't trigger an unnecessary
-                 * command reject packet.
-                 */
--               return 0;
-+               goto unlock;
-        }
-
-        chan->tx_credits += credits;
-@@ -5912,7 +5921,9 @@ static inline int l2cap_le_credits(struct
-l2cap_conn *conn,
-        if (chan->tx_credits)
-                chan->ops->resume(chan);
-
-+unlock:
-        l2cap_chan_unlock(chan);
-+       l2cap_chan_put(chan);
-
-        return 0;
- }
-@@ -7598,6 +7609,7 @@ static void l2cap_data_channel(struct l2cap_conn
-*conn, u16 cid,
-
- done:
-        l2cap_chan_unlock(chan);
-+       l2cap_chan_put(chan);
- }
-
- static void l2cap_conless_channel(struct l2cap_conn *conn, __le16 psm,
-
-
->
-> --
-> Luiz Augusto von Dentz
-
-
-
--- 
-Luiz Augusto von Dentz
+No other WARN_ON_ONCE() hit ever.

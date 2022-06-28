@@ -2,191 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE1355E214
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 805D455CC50
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345253AbiF1LGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 07:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
+        id S1345300AbiF1LG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 07:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiF1LGN (ORCPT
+        with ESMTP id S229730AbiF1LGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 07:06:13 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9384231933;
-        Tue, 28 Jun 2022 04:06:11 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id b19so1704289ljf.6;
-        Tue, 28 Jun 2022 04:06:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=74ZknYvbAERmU3fgiRR2mY3FgoTL84vsypu6NISs3NA=;
-        b=dDWLan8xSf2psi8Ku75yN5OgwcTLoIo4QLRQchGf/tnOHIEErsIqClR6R6jj0hHnE1
-         glxdqv+Q+oNFas8s3KUFWDNz6pCfCPGtgu3GDRYlMy8tJSqLISPSkAXtSSB18Fc1cBl9
-         K3i6ywdqZ7ooQdcDjGUO7jYYHtuMLkvdmJ0B7dpE8NaXa1Etww0PTwkNOS43/A+TUy5U
-         fbSKJaRnMnBzQpBS8IlH8etIJaUkiMjzJuedU3YNzOd/a7muD3ZZ5O3Ejx5xtKj1NDNE
-         X0K/TmyZEHl6Tx4YK+iB9mRmODqCTxt7r/nNT2QWhS3fceeeluPSUjYTDUwqbKQzyWX0
-         vMoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=74ZknYvbAERmU3fgiRR2mY3FgoTL84vsypu6NISs3NA=;
-        b=gNZM+u0meoetZWsJHDwXsjTX3v5M9Dzb3b9NI6A8g89MHlTJbbFPvQi/MDcXR1jsAn
-         kUv8mpLQE+A7u5mHflL+lMMyMcsDhJjMheOnwX4ySBTrDAhl6/YzqSM2hf3w63xh72/r
-         fUq/aoRkf5nXfjeIexo5l/NyGwgo4Y+HheLyZfZmoerDZCgUA0lu0PxQ7hXyNY61nyc9
-         llmAbKwbnPZWdvvwRfdEpm0aH7yXt/C2uaNAPXFw0R6sbM++uBSg2EOeIJNnlJ7/FXxJ
-         kkx/I1uBeP+8/cvtg9+LgYIfkZIdVdyf68J1hrm3/VaAW91vQsfS7nPQyqA8ngkzcNAp
-         cSww==
-X-Gm-Message-State: AJIora9Zu0/pgia4zjzt3KeJA0h0/7Q7zmNxUavwtiAo9oAjV4O3D8wb
-        fnoH8iki9JqD6/bj/8qxxKE=
-X-Google-Smtp-Source: AGRyM1uuwEf2Hbf380gJgJC1h2WOLcL2fEEXBsO7Ix96Zj9MMadTRjHIHgo7LzQz1OVzJUoUH5Gl+w==
-X-Received: by 2002:a2e:b88a:0:b0:25b:c698:eede with SMTP id r10-20020a2eb88a000000b0025bc698eedemr4258515ljp.205.1656414369905;
-        Tue, 28 Jun 2022 04:06:09 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id z20-20020a056512371400b0047f9f075e04sm2156981lfr.296.2022.06.28.04.06.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 04:06:09 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 14:06:06 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Conor Dooley <mail@conchuod.ie>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        Heng Sia <jee.heng.sia@intel.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 05/14] dt-bindings: timer: add Canaan k210 to Synopsys
- DesignWare timer
-Message-ID: <20220628110606.5xdzqxwrrqwymgvn@mobilestation>
-References: <20220618123035.563070-1-mail@conchuod.ie>
- <20220618123035.563070-6-mail@conchuod.ie>
- <20220627233025.GA3167724-robh@kernel.org>
+        Tue, 28 Jun 2022 07:06:54 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0FC431230
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:06:51 -0700 (PDT)
+Received: by ajax-webmail-mail-app2 (Coremail) ; Tue, 28 Jun 2022 19:06:39
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.190.65.172]
+Date:   Tue, 28 Jun 2022 19:06:39 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Greg KH" <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org,
+        johannes@sipsolutions.net
+Subject: Re: [PATCH v7] devcoredump: change gfp_t parameter of kzalloc to
+ GFP_KERNEL
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <YrqbAgM6aR8OKpZj@kroah.com>
+References: <20220628034458.17384-1-duoming@zju.edu.cn>
+ <YrqbAgM6aR8OKpZj@kroah.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627233025.GA3167724-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <5a9830c1.18fd7.181a9fded00.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: by_KCgCHOAi_4LpiEEbDAg--.62789W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgsPAVZdtacQswAAs9
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-
-On Mon, Jun 27, 2022 at 05:30:25PM -0600, Rob Herring wrote:
-> On Sat, Jun 18, 2022 at 01:30:27PM +0100, Conor Dooley wrote:
-> > From: Conor Dooley <conor.dooley@microchip.com>
-> > 
-> > The Canaan k210 apparently has a Sysnopsys Designware timer but
-> > according to the documentation & devicetree it has 2 interrupts rather
-> > than the standard one. Add a custom compatible that supports the 2
-> > interrupt configuration and falls back to the standard binding (which
-> > is currently the one in use in the devicetree entry).
-> > 
-> > Link: https://canaan-creative.com/wp-content/uploads/2020/03/kendryte_standalone_programming_guide_20190311144158_en.pdf #Page 58
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> >  .../bindings/timer/snps,dw-apb-timer.yaml     | 28 +++++++++++++++----
-> >  1 file changed, 22 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml b/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
-> > index d33c9205a909..9a76acc7a66f 100644
-> > --- a/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
-> > +++ b/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
-> > @@ -12,6 +12,9 @@ maintainers:
-> >  properties:
-> >    compatible:
-> >      oneOf:
-> > +      - items:
-> > +          - const: canaan,k210-apb-timer
-> > +          - const: snps,dw-apb-timer
-> >        - const: snps,dw-apb-timer
-> >        - enum:
-> >            - snps,dw-apb-timer-sp
-> > @@ -21,9 +24,6 @@ properties:
-> >    reg:
-> >      maxItems: 1
-> >  
-> > -  interrupts:
-> > -    maxItems: 1
-> > -
-> >    resets:
-> >      maxItems: 1
-> >  
-> > @@ -41,7 +41,23 @@ properties:
-> >  
-> >    clock-frequency: true
-> >  
-> > -additionalProperties: false
-> > +unevaluatedProperties: false
-> > +
-> > +if:
-> > +  properties:
-> > +    compatible:
-> > +      contains:
-> > +        const: canaan,k210-apb-timer
-> > +
-> > +then:
-> > +  properties:
-> > +    interrupts:
-> > +      maxItems: 2
-> 
-
-> When more than 1, you need to define what they are and the order.
-
-Please see my note to v2 of this patch:
-Link: https://lore.kernel.org/lkml/20220627211314.dc2hempelyl5ayjg@mobilestation/
-
--Sergey
-
-> 
-> > +
-> > +else:
-> > +  properties:
-> > +    interrupts:
-> > +      maxItems: 1
-> >  
-> >  required:
-> >    - compatible
-> > @@ -60,8 +76,8 @@ oneOf:
-> >  examples:
-> >    - |
-> >      timer@ffe00000 {
-> > -      compatible = "snps,dw-apb-timer";
-> > -      interrupts = <0 170 4>;
-> > +      compatible = "canaan,k210-apb-timer", "snps,dw-apb-timer";
-> > +      interrupts = <0 170 4>, <0 170 4>;
-> >        reg = <0xffe00000 0x1000>;
-> >        clocks = <&timer_clk>, <&timer_pclk>;
-> >        clock-names = "timer", "pclk";
-> > -- 
-> > 2.36.1
-> > 
-> > 
+aGVsbG8sCgpPbiBUdWUsIDI4IEp1biAyMDIyIDA4OjA5OjA2ICswMjAwIGdyZWcgS0ggd3JvdGU6
+Cgo+IE9uIFR1ZSwgSnVuIDI4LCAyMDIyIGF0IDExOjQ0OjU4QU0gKzA4MDAsIER1b21pbmcgWmhv
+dSB3cm90ZToKPiA+IFRoZSBkZXZfY29yZWR1bXB2KCkgYW5kIGRldl9jb3JlZHVtcG0oKSBjb3Vs
+ZCBub3QgYmUgdXNlZCBpbiBhdG9taWMKPiA+IGNvbnRleHQsIGJlY2F1c2UgdGhleSBjYWxsIGt2
+YXNwcmludGZfY29uc3QoKSBhbmQga3N0cmR1cCgpIHdpdGgKPiA+IEdGUF9LRVJORUwgcGFyYW1l
+dGVyLiBUaGUgcHJvY2VzcyBpcyBzaG93biBiZWxvdzoKPiA+IAo+ID4gZGV2X2NvcmVkdW1wdigu
+LiwgZ2ZwX3QgZ2ZwKQo+ID4gICBkZXZfY29yZWR1bXBtKC4uLCBnZnBfdCBnZnApCj4gPiAgICAg
+a3phbGxvYyguLiwgZ2ZwKTsKPiA+ICAgICBkZXZfc2V0X25hbWUKPiA+ICAgICAgIGtvYmplY3Rf
+c2V0X25hbWVfdmFyZ3MKPiA+ICAgICAgICAga3Zhc3ByaW50Zl9jb25zdChHRlBfS0VSTkVMLCAu
+Li4pOyAvL21heSBzbGVlcAo+ID4gICAgICAgICAgIGtzdHJkdXAocywgR0ZQX0tFUk5FTCk7IC8v
+bWF5IHNsZWVwCj4gPiAKPiA+IFRoaXMgcGF0Y2ggY2hhbmdlcyB0aGUgZ2ZwX3QgcGFyYW1ldGVy
+IG9mIGt6YWxsb2MoKSBpbiBkZXZfY29yZWR1bXBtKCkgdG8KPiA+IEdGUF9LRVJORUwgaW4gb3Jk
+ZXIgdG8gc2hvdyB0aGV5IGNvdWxkIG5vdCBiZSB1c2VkIGluIGF0b21pYyBjb250ZXh0Lgo+ID4g
+Cj4gPiBXaGF0J3MgbW9yZSwgdGhpcyBwYXRjaCBkb2VzIG5vdCByZW1vdmUgdGhlIGdmcF90IHBh
+cmFtZXRlciBpbgo+ID4gZGV2X2NvcmVkdW1wdigpIGFuZCBkZXZfY29yZWR1bXBtKCkgaW4gb3Jk
+ZXIgdGhhdCBpdCB3aWxsIG5vdCBpbmZsdWVuY2UKPiA+IG90aGVyIG5ldyB1c2VycyB0aGF0IGFy
+ZSBhZGRlZCBpbiBvdGhlciB0cmVlcy4KPiA+IAo+ID4gRml4ZXM6IDgzM2M5NTQ1NmE3MCAoImRl
+dmljZSBjb3JlZHVtcDogYWRkIG5ldyBkZXZpY2UgY29yZWR1bXAgY2xhc3MiKQo+ID4gU2lnbmVk
+LW9mZi1ieTogRHVvbWluZyBaaG91IDxkdW9taW5nQHpqdS5lZHUuY24+Cj4gPiAtLS0KPiA+IENo
+YW5nZXMgaW4gdjc6Cj4gPiAgIC0gY2hhbmdlIGdmcF90IHBhcmFtZXRlciBvZiBremFsbG9jIGlu
+IGRldl9jb3JlZHVtcG0oKSB0byBHRlBfS0VSTkVMLgo+ID4gCj4gPiAgZHJpdmVycy9iYXNlL2Rl
+dmNvcmVkdW1wLmMgfCAyICstCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAx
+IGRlbGV0aW9uKC0pCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2Jhc2UvZGV2Y29yZWR1
+bXAuYyBiL2RyaXZlcnMvYmFzZS9kZXZjb3JlZHVtcC5jCj4gPiBpbmRleCBmNGQ3OTRkNmJiOC4u
+Y2Y2MGFhY2Y4YTggMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL2Jhc2UvZGV2Y29yZWR1bXAuYwo+
+ID4gKysrIGIvZHJpdmVycy9iYXNlL2RldmNvcmVkdW1wLmMKPiA+IEBAIC0yNjgsNyArMjY4LDcg
+QEAgdm9pZCBkZXZfY29yZWR1bXBtKHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0IG1vZHVsZSAq
+b3duZXIsCj4gPiAgCWlmICghdHJ5X21vZHVsZV9nZXQob3duZXIpKQo+ID4gIAkJZ290byBmcmVl
+Owo+ID4gIAo+ID4gLQlkZXZjZCA9IGt6YWxsb2Moc2l6ZW9mKCpkZXZjZCksIGdmcCk7Cj4gPiAr
+CWRldmNkID0ga3phbGxvYyhzaXplb2YoKmRldmNkKSwgR0ZQX0tFUk5FTCk7Cj4gCj4gTm8sIHlv
+dSBjYW4ndCBqdXN0IGlnbm9yZSB0aGUgZmxhZyBlbnRpcmVseSwgdGhhdCBkb2Vzbid0IGhlbHAg
+YW55b25lCj4gb3V0IHdobyB0cmllcyB0byBzZXQgaXQgYW5kIGlzIHRvdGFsbHkgY29uZnVzZWQg
+YXMgdG8gd2h5IHRoZSBmaWVsZCBpcwo+IGlnbm9yZWQuCj4gCj4gWW91IG5lZWQgdG8gZXZvbHZl
+IHRoZSBmdW5jdGlvbiBvdmVyIHRpbWUgdG8gbm90IG5lZWQgdGhlIHBhcmFtZXRlciBhdAo+IGFs
+bCwgdGhpcyBqdXN0IHBhcGVycyBvdmVyIHRoZSBlbnRpcmUgaXNzdWUsIHdoaWNoIG1ha2VzIHRo
+ZSBhcGkgbGllIHRvCj4gdGhlIGNhbGxlciwgbm90IHNvbWV0aGluZyB5b3UgZXZlciB3YW50IHRv
+IGRvLgoKVGhhbmsgeW91IGZvciB5b3VyIHRpbWUgYW5kIHJlcGx5LgoKQnV0IGlmIHRoZXJlIGFy
+ZSBuZXcgZGV2aWNlcyBjb21lIGludG8ga2VybmVsLCBpdCBtYXkgdXNlIGRldmNvcmVkdW1wIGFw
+aS4KV2hhdCBpcyB0aGUgcHJvcGVyIHRpbWUgdG8gcmVtb3ZlIHRoZSBnZnBfdCBwYXJhbWV0ZXIg
+b2YgZGV2X2NvcmVkdW1wdigpCmFuZCBkZXZfY29yZWR1bXBtKCk/CgpCZXN0IHJlZ2FyZHMsCkR1
+b21pbmcgWmhvdQ==

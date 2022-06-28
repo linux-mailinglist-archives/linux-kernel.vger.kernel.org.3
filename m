@@ -2,88 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0853B55D523
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B250A55DB50
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344068AbiF1KLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 06:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
+        id S1344776AbiF1KLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 06:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343551AbiF1KLk (ORCPT
+        with ESMTP id S1344766AbiF1KLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:11:40 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD342FE45;
-        Tue, 28 Jun 2022 03:11:39 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id e40so16865108eda.2;
-        Tue, 28 Jun 2022 03:11:39 -0700 (PDT)
+        Tue, 28 Jun 2022 06:11:43 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC20C2FE44
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:11:41 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id a15so11543258pfv.13
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:11:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=pbt4Qf81oMk2R1epA5k8cX/w9gLKTqsUsrSKOnxNwoc=;
-        b=i5Rtg7TJktu/2++nlbQkEV0IGG7QKd4ZytwnUAaDeFqwtZekkC9mH/uu1d/zNW2Dsg
-         89GJI7ik3O++gxUKbK7PHDveaagiNOd003dZtrM5+3LDyUcVLxj4bwchbemzhvi1KiXh
-         LchTNCztEwEPn6dmS7dBNlE7C3Di9o8eghYhJ6s5eHPmPuK/psFp9zmu20zaVAlL3uSZ
-         4Kn9ep7X7ACYaBxY4jYacnVd5TXMtwxSWASp70LSUxFNfy7mmMPYRlgragm6bPbR/29E
-         9raFnqW5gelA204vUtLPC7kdBZnTp9cy45XKnEO6PzvOqPt8lmr6SQrqslM2pGmmAAuy
-         PCsg==
+        bh=tbey03ru2tYxblJ016YqjV2Da/CXTfP99CuHPvnI5hI=;
+        b=bMFVF7a7mfXa02kwrInM5CuyTCpxlEtJm9MfoR/7bVBeCDo1Bjc/oxVup9khM+tDtd
+         6WLfZ60J9q1Uvn+6DWeV0Y8Vm2JsWqJGjOygA+VbqzlcvziW3+Xa7rFwsYXjYnl4YiE2
+         H2mXNAmb+CJfugOu1ayaJhp4NHLEitxK6CI59M5aN6NIZZ6NmPGkEsOZfacF4P2jrS9Z
+         RznjS9oS6Y1XQix99tNeL/2jhv/4QgyXDUGj6p2WX9d3XpGW7szVh41DWZz8EDBdyQiH
+         oywangJelRKLooUq/D4PuwoZn9BGn0pl5Mq/XqFWYpJB1tTYoJqbbIDw90lJ9EZk8LiX
+         Lcng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=pbt4Qf81oMk2R1epA5k8cX/w9gLKTqsUsrSKOnxNwoc=;
-        b=wgh9Soey0OR9x+QCzZ0oPABF3Zmqw+Oo9IjCDx5MuErBdkIduhUJM3dVdAOxoVo3cm
-         Xly/dOThHK2JGckSKI46MUl538LBnDNdVRH0KkCR/srw7tMr99kdVHLg5b5p+uGWgQT3
-         B6XSDR0XqqB4PEWOgvPcD/uleM3Liptxcg1aA0KYOCp+0Q5ARugx7E7s5oGAezBJwYyH
-         rj1fbdf5O4eqGJtoh+8qw1ZbFD0anKAIPO/C04y1p6hh1pWcja4bqJFSe9dHVh0XITFy
-         l4rM7JgC0bE46IaLFAVXbU1xtg2ti350w2zSdKBtxHizhMj/1njuKoCY2h6eOcByGKka
-         NHVQ==
-X-Gm-Message-State: AJIora9v3XSX3XW/40wUo7smfl1E9+tl14N5FZCqGoK/IqQX19HYw98o
-        KVUh8GtbcwU+R3zrc+ppSF0=
-X-Google-Smtp-Source: AGRyM1uhu+dIwDjFl1zyx0UnzJ2W0SVL6rC2GFjQIXz3LejV5w1t4Sib81Yw4NmtbO73eJBfCRB7gQ==
-X-Received: by 2002:aa7:c952:0:b0:434:edcc:f247 with SMTP id h18-20020aa7c952000000b00434edccf247mr22051774edt.412.1656411098343;
-        Tue, 28 Jun 2022 03:11:38 -0700 (PDT)
-Received: from skbuf ([188.25.231.135])
-        by smtp.gmail.com with ESMTPSA id op23-20020a170906bcf700b0070aaad0a173sm6206628ejb.192.2022.06.28.03.11.36
+        bh=tbey03ru2tYxblJ016YqjV2Da/CXTfP99CuHPvnI5hI=;
+        b=Lm9VxE4mkvhD0TxdNMl5sWbSeGh02Yc6q3rDPJStuGG/bW4haaEYbg1y7u74ZDvPmM
+         06nrqIGyz18+uNa/nJlJ3hJHtJUs1uq4XXyc9XluvenOfETPPXptUc7Ip4ZnLiQLcLAb
+         JK/71wIvVzM0Onhvtk6SK+qIxEaT561IDcfiC6s0sruyz+6vet4Bstbm7Mmi4sfI9jiB
+         kThhBBPheVxo3HAcdX/7kESWo3Cs3cURHRW8g/BK+iz0Yospskw7ZFkKDNcED6nMbBDY
+         9Io+W5JMiA/5QbKjh6RtMi81nXziYERk0bMe6W5wi7SmcvRAezPSIQt3njEoRwjX0vi4
+         fDww==
+X-Gm-Message-State: AJIora/x2Ag4seZKBqPFqN9WBc3UcZC6Mr2b3HLRNnZPSqMKw6kNblyU
+        UcnNUhyx9wozTEespssb/3aqTQ==
+X-Google-Smtp-Source: AGRyM1sXb4XOUh03tYJk3Xrv7BW0Vthk9Lt8zrGSlDbcRtKX8L4DZdYoNiXFstwB368JKU9MskJOHA==
+X-Received: by 2002:a63:7204:0:b0:40c:9dc6:57f1 with SMTP id n4-20020a637204000000b0040c9dc657f1mr16985974pgc.153.1656411101412;
+        Tue, 28 Jun 2022 03:11:41 -0700 (PDT)
+Received: from localhost ([122.172.201.58])
+        by smtp.gmail.com with ESMTPSA id f15-20020a170902684f00b0015e8d4eb2ddsm3313623pln.295.2022.06.28.03.11.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 03:11:37 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 13:11:35 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next v2 2/4] net: dsa: ar9331: add support for pause
- stats
-Message-ID: <20220628101135.fysq7hn64unbwdxp@skbuf>
-References: <20220628085155.2591201-1-o.rempel@pengutronix.de>
- <20220628085155.2591201-3-o.rempel@pengutronix.de>
+        Tue, 28 Jun 2022 03:11:41 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 15:41:39 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 22/31] soc/tegra: Migrate to dev_pm_opp_set_config()
+Message-ID: <20220628101139.jdpsplkqbbh6qpse@vireshk-i7>
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <449b344f037c7ef1970bc84d31e0d4c4cb4d2951.1653564321.git.viresh.kumar@linaro.org>
+ <20220624004831.po35sowzfo4c47b3@vireshk-i7>
+ <20220624005700.oj4etaajbutvsym7@vireshk-i7>
+ <73d39022-c6fc-0c21-cb68-9714846f02bf@gmail.com>
+ <20220627064526.2nkezq4nufpkl4y2@vireshk-i7>
+ <ecc72279-0892-d5ab-689d-87b8fba5147e@gmail.com>
+ <20220627072104.ir7kujhezxhzl6a7@vireshk-i7>
+ <20220628070943.5tfyad63rh6niq6x@vireshk-i7>
+ <a0155aeb-b209-07e1-747a-594a755f54fc@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220628085155.2591201-3-o.rempel@pengutronix.de>
+In-Reply-To: <a0155aeb-b209-07e1-747a-594a755f54fc@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 10:51:53AM +0200, Oleksij Rempel wrote:
-> Add support for pause stats.
+On 28-06-22, 13:08, Dmitry Osipenko wrote:
+> The opp/linux-next works fine, thank you.
 > 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
+> Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Thanks. I should add this to all the core + tegra -patches in that
+branch, right ?
+
+> BTW, the idr_alloc() is obsoleted by xa_alloc().
+
+The earlier interface isn't deprecated, right ? I really don't want to
+go change it again :)
+
+-- 
+viresh

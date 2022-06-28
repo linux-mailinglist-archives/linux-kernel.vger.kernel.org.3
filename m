@@ -2,92 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D89055F205
+	by mail.lfdr.de (Postfix) with ESMTP id D6C9A55F206
 	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 01:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbiF1Xkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 19:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
+        id S230149AbiF1Xld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 19:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiF1Xkv (ORCPT
+        with ESMTP id S229450AbiF1Xlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 19:40:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E877B33A0C
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 16:40:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7736461B76
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 23:40:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28B65C341C8;
-        Tue, 28 Jun 2022 23:40:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656459649;
-        bh=7nIWwuteCtLL/7qZso59iVjJhUGGVyjf9VgBjFYUDkI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Psow3Oswi0EHugLEe52mJmeGzxbU7wKaNhIE/6NdJpD0FUh7Exs465CiQSgU3daYV
-         REznHzpYhzehwyHMeQdqzVROVOKrRCqAZIJqVLhZziCCteHo7ZjmyVOakNa8EuC8Gk
-         NamG9aqmvRYk+Qm5YBNgPBP6slb2rLniG2I3O1JPxXgsnzDvPid8Z4Yzs4t9j8ArFT
-         dRur1a7xhVR5KYMfbfsWK9GC0sGagaLLqeigIHP3hB7qo1sBn6Fx/MxghBnJH++XI7
-         cXUrxKu0ZIR+Dbi685UnKUmLI7GNngfzbrnL0utdC5Y7L7ZXhhU8js8+WzwW/WCev1
-         kxqa1LfzWFw7w==
-Message-ID: <53d41f54-28ad-023c-537f-281cc2c40ae9@kernel.org>
-Date:   Tue, 28 Jun 2022 16:40:48 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCHv3 5/8] x86/uaccess: Provide untagged_addr() and remove
- tags before address check
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
+        Tue, 28 Jun 2022 19:41:31 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCDA33A0C;
+        Tue, 28 Jun 2022 16:41:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656459691; x=1687995691;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=7b5j1MEXlH7DEeLwlQG8w1yR1W0RygEbHO/Yh+JB6uY=;
+  b=SNSbXqNCojdPqF85vurSZGZ0CAVuoteP7I9x5cdfUq1huUxlnBrlFfWA
+   7sNhjhVv9REreO3gYNhOxy0uNNMK38wxVtyvHdRg0CDj+Hi6Pr/pMgRQO
+   5OaMIOXpIx2DacxYoJOlNuuWYX3IbqRINchvqh0w0pN7g5hHkjTdlqpyf
+   aTKKIQSaICuM5r1K9zNSgSB3qHNxEz/IreMdGXx1NZ3OFoL4QY3QbFXyn
+   VTb5FFVvSev9tyfVDmLoIy23E+6+3Ggxu8oLp94YzZWID7zQhnkhVgycR
+   l94TKpg0EjeoSTnufCgwT899uf1xrC7yr265reuFtzE+x2XLpMkvccdqa
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="368189569"
+X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
+   d="scan'208";a="368189569"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 16:41:30 -0700
+X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
+   d="scan'208";a="588047790"
+Received: from gregantx-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.119.76])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 16:41:24 -0700
+Message-ID: <f769e68306947461b4ca3540bc18567182166d5a.camel@intel.com>
+Subject: Re: [PATCH v5 02/22] cc_platform: Add new attribute to prevent ACPI
+ CPU hotplug
+From:   Kai Huang <kai.huang@intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Igor Mammedov <imammedo@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kvm-devel <kvm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Len Brown <len.brown@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
- <20220610143527.22974-6-kirill.shutemov@linux.intel.com>
-From:   Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <20220610143527.22974-6-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        isaku.yamahata@intel.com, Tom Lendacky <thomas.lendacky@amd.com>,
+        Tianyu.Lan@microsoft.com, Randy Dunlap <rdunlap@infradead.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Yue Haibing <yuehaibing@huawei.com>, dongli.zhang@oracle.com
+Date:   Wed, 29 Jun 2022 11:41:22 +1200
+In-Reply-To: <CAJZ5v0gtinPZnVKvZzJDc1Ph+DPdNWxVdwwqr32z1Tecx+Qm7Q@mail.gmail.com>
+References: <cover.1655894131.git.kai.huang@intel.com>
+         <f4bff93d83814ea1f54494f51ce3e5d954cf0f5b.1655894131.git.kai.huang@intel.com>
+         <CAJZ5v0jV8ODcxuLL+iSpYbW7w=GFtUSakN-n8CO5Zmun3K-Erg@mail.gmail.com>
+         <d3ba563f3f4e7aaf90fb99d20c651b5751972f7b.camel@intel.com>
+         <20220627100155.71a7b34c@redhat.com>
+         <2b676b19db423b995a21c7f215ed117c345c60d9.camel@intel.com>
+         <CAJZ5v0gtinPZnVKvZzJDc1Ph+DPdNWxVdwwqr32z1Tecx+Qm7Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/10/22 07:35, Kirill A. Shutemov wrote:
-> untagged_addr() is a helper used by the core-mm to strip tag bits and
-> get the address to the canonical shape. In only handles userspace
-> addresses. The untagging mask is stored in mmu_context and will be set
-> on enabling LAM for the process.
-> 
-> The tags must not be included into check whether it's okay to access the
-> userspace address.
-> 
-> Strip tags in access_ok().
+On Tue, 2022-06-28 at 19:33 +0200, Rafael J. Wysocki wrote:
+> > Hi Rafael,
+> >=20
+> > I am not sure I got what you mean by "This will affect initialization, =
+not
+> > just
+> > hotplug AFAICS", could you elaborate a little bit?=C2=A0 Thanks.
+>=20
+> So acpi_processor_add() is called for CPUs that are already present at
+> init time, not just for the hot-added ones.
+>=20
+> One of the things it does is to associate an ACPI companion with the give=
+n
+> CPU.
+>=20
+> Don't you need that to happen?
 
-What is the intended behavior for an access that spans a tag boundary?
+You are right.  I did test again and yes it was also called after boot-time
+present cpus are up (after smp_init()).  I didn't check this carefully at m=
+y
+previous test.  Thanks for catching.
 
-Also, at the risk of a potentially silly question, why do we need to 
-strip the tag before access_ok()?  With LAM, every valid tagged user 
-address is also a valid untagged address, right?  (There is no 
-particular need to enforce the actual value of TASK_SIZE_MAX on 
-*access*, just on mmap.)
+--=20
+Thanks,
+-Kai
 
-IOW, wouldn't it be sufficient, and probably better than what we have 
-now, to just check that the entire range has the high bit clear?
 
---Andy

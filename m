@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEBE355EC7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC0755EC83
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234776AbiF1SWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 14:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
+        id S234874AbiF1SXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 14:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbiF1SWO (ORCPT
+        with ESMTP id S234396AbiF1SWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:22:14 -0400
+        Tue, 28 Jun 2022 14:22:19 -0400
 Received: from msg-4.mailo.com (ip-15.mailobj.net [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE76420BE0;
-        Tue, 28 Jun 2022 11:22:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96C520BF3;
+        Tue, 28 Jun 2022 11:22:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
-        t=1656440523; bh=lMwpSrGfCnnfOa6lUw0QItM5hphcTF1x/DI+L0WGC7k=;
+        t=1656440526; bh=jaifRDKARn26CuG6wwtkAbXozOoc3KYqDojL1g2HFjc=;
         h=X-EA-Auth:From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
          References:MIME-Version:Content-Transfer-Encoding;
-        b=R8c66a8irKzJckJJFjcaOmvxJ+MwMGiBcvEnGx3hASR0LcKr1+vJOWKIssQrNO5GQ
-         esRrh4vsZV+3KdULveGw+Z6IBaV+qR2XOnqJ+LMTyhHKxgWyf0bgL6Z9nukheUX6CK
-         yEsNcs3j90K9cPBJEpouy25ZhRKcVN/yKKTO4vvg=
-Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
+        b=ehfPiGPdynGkKM38AjP6cia4Qi8RLNoFpDztKPZ8qWDDWmPXo7Kvb2kUW4OuKY60A
+         5q3e5vu4Fh3UIpfvoX8CeoyUtDLgub82N2dupLhSUvQn5Pz02nJc73TmI1i+lkmnR5
+         M98tqIK5Vb8wP+qEWnc80B7gpjxk2SmiVxKoSmBg=
+Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
         via [213.182.55.207]
-        Tue, 28 Jun 2022 20:22:03 +0200 (CEST)
-X-EA-Auth: ftK1yHwyaTDgCNjIesKP72Xw9Euc28QTyTzLAFHx55IiRY2zzsNLJ6lfPbf3oFlm1gAfgcoKiSdPMRkyFDurer/ID1UUS1mwyKDKjlUf6xs=
+        Tue, 28 Jun 2022 20:22:06 +0200 (CEST)
+X-EA-Auth: HLZRajJ+p/oYIIOWy+ea444+nx7YYACz9Q4Pzfwyp0eOafvGzZDAmxk+bpZtAX4HQLL/1KwPc44i5rHvpCY8nKIto9pbBlIao1gL1r4U3pg=
 From:   Vincent Knecht <vincent.knecht@mailoo.org>
 To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -33,9 +33,9 @@ To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
         linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v1 RESEND 4/7] dt-bindings: leds: is31fl319x: Document variants specificities
-Date:   Tue, 28 Jun 2022 20:21:42 +0200
-Message-Id: <20220628182147.2837180-5-vincent.knecht@mailoo.org>
+Subject: [PATCH v1 RESEND 5/7] leds: is31fl319x: Use non-wildcard names for vars, structs and defines
+Date:   Tue, 28 Jun 2022 20:21:43 +0200
+Message-Id: <20220628182147.2837180-6-vincent.knecht@mailoo.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220628182147.2837180-1-vincent.knecht@mailoo.org>
 References: <20220628182147.2837180-1-vincent.knecht@mailoo.org>
@@ -50,115 +50,299 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add conditionals depending on compatibles to document variants specs:
-- possible reg addresses
-- whether audio-gain-db is supported or not
-- maximum number of leds
-- led-max-microamp values
+In order to add real support for is31fl3190, is31fl3191 and is31fl3193,
+rename variant-dependent elements to not use 319X where needed.
+
+3190 suffix is used for is31fl3190, is31fl3191 and is31fl3193 circuits.
+3196 suffix is used for is31fl3196 and is31fl3199.
+
+Those two groups have different register maps, current settings and even
+a different interpretation of the software shutdown bit:
+https://lumissil.com/assets/pdf/core/IS31FL3190_DS.pdf
+https://lumissil.com/assets/pdf/core/IS31FL3191_DS.pdf
+https://lumissil.com/assets/pdf/core/IS31FL3193_DS.pdf
+https://lumissil.com/assets/pdf/core/IS31FL3196_DS.pdf
+https://lumissil.com/assets/pdf/core/IS31FL3199_DS.pdf
+
+Rename variables, stuctures and defines in preparation of the splitting.
+No functional nor behaviour change.
 
 Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
 ---
- .../bindings/leds/issi,is31fl319x.yaml        | 80 ++++++++++++++++++-
- 1 file changed, 78 insertions(+), 2 deletions(-)
+ drivers/leds/leds-is31fl319x.c | 142 ++++++++++++++++-----------------
+ 1 file changed, 71 insertions(+), 71 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml b/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
-index 155df2e5cbd5..940333f2d69c 100644
---- a/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
-+++ b/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
-@@ -65,8 +65,6 @@ patternProperties:
-         maximum: 9
+diff --git a/drivers/leds/leds-is31fl319x.c b/drivers/leds/leds-is31fl319x.c
+index 0db5d4988131..1dd5c3d4ad74 100644
+--- a/drivers/leds/leds-is31fl319x.c
++++ b/drivers/leds/leds-is31fl319x.c
+@@ -21,39 +21,39 @@
  
-       led-max-microamp:
--        default: 20000
--        enum: [5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000]
-         description:
-           Note that a driver will take the lowest of all LED limits
-           since the chip has a single global setting. The lowest value
-@@ -75,6 +73,84 @@ patternProperties:
-           and not the current, which will always have its peak value
-           equal to led-max-microamp.
+ /* register numbers */
+ #define IS31FL319X_SHUTDOWN		0x00
+-#define IS31FL319X_CTRL1		0x01
+-#define IS31FL319X_CTRL2		0x02
+-#define IS31FL319X_CONFIG1		0x03
+-#define IS31FL319X_CONFIG2		0x04
+-#define IS31FL319X_RAMP_MODE		0x05
+-#define IS31FL319X_BREATH_MASK		0x06
+-#define IS31FL319X_PWM(channel)		(0x07 + channel)
+-#define IS31FL319X_DATA_UPDATE		0x10
+-#define IS31FL319X_T0(channel)		(0x11 + channel)
+-#define IS31FL319X_T123_1		0x1a
+-#define IS31FL319X_T123_2		0x1b
+-#define IS31FL319X_T123_3		0x1c
+-#define IS31FL319X_T4(channel)		(0x1d + channel)
+-#define IS31FL319X_TIME_UPDATE		0x26
+-#define IS31FL319X_RESET		0xff
+-
+-#define IS31FL319X_REG_CNT		(IS31FL319X_RESET + 1)
++#define IS31FL3196_CTRL1		0x01
++#define IS31FL3196_CTRL2		0x02
++#define IS31FL3196_CONFIG1		0x03
++#define IS31FL3196_CONFIG2		0x04
++#define IS31FL3196_RAMP_MODE		0x05
++#define IS31FL3196_BREATH_MASK		0x06
++#define IS31FL3196_PWM(channel)		(0x07 + channel)
++#define IS31FL3196_DATA_UPDATE		0x10
++#define IS31FL3196_T0(channel)		(0x11 + channel)
++#define IS31FL3196_T123_1		0x1a
++#define IS31FL3196_T123_2		0x1b
++#define IS31FL3196_T123_3		0x1c
++#define IS31FL3196_T4(channel)		(0x1d + channel)
++#define IS31FL3196_TIME_UPDATE		0x26
++#define IS31FL3196_RESET		0xff
++
++#define IS31FL3196_REG_CNT		(IS31FL3196_RESET + 1)
  
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - issi,is31fl3190
-+              - issi,is31fl3191
-+              - issi,is31fl3193
-+              - si-en,sn3190
-+              - si-en,sn3191
-+              - si-en,sn3193
-+    then:
-+      properties:
-+        reg:
-+          enum: [0x68, 0x69, 0x6a, 0x6b]
-+
-+        audio-gain-db: false
-+
-+      patternProperties:
-+        "^led@[1-9]$":
-+          properties:
-+            led-max-microamp:
-+              default: 42000
-+              enum: [5000, 10000, 17500, 30000, 42000]
-+    else:
-+      properties:
-+        reg:
-+          enum: [0x64, 0x65, 0x66, 0x67]
-+
-+      patternProperties:
-+        "^led@[1-9]$":
-+          properties:
-+            led-max-microamp:
-+              default: 20000
-+              enum: [5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000]
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - issi,is31fl3190
-+              - issi,is31fl3191
-+              - si-en,sn3190
-+              - si-en,sn3191
-+    then:
-+      patternProperties:
-+        "^led@[1-9]$":
-+          properties:
-+            reg:
-+              maximum: 1
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - issi,is31fl3193
-+              - si-en,sn3193
-+    then:
-+      patternProperties:
-+        "^led@[1-9]$":
-+          properties:
-+            reg:
-+              maximum: 3
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - issi,is31fl3196
-+              - si-en,sn3196
-+    then:
-+      patternProperties:
-+        "^led@[1-9]$":
-+          properties:
-+            reg:
-+              maximum: 6
-+
- required:
-   - compatible
-   - reg
+ #define IS31FL319X_MAX_LEDS		9
+ 
+ /* CS (Current Setting) in CONFIG2 register */
+-#define IS31FL319X_CONFIG2_CS_SHIFT	4
+-#define IS31FL319X_CONFIG2_CS_MASK	0x7
+-#define IS31FL319X_CONFIG2_CS_STEP_REF	12
++#define IS31FL3196_CONFIG2_CS_SHIFT	4
++#define IS31FL3196_CONFIG2_CS_MASK	0x7
++#define IS31FL3196_CONFIG2_CS_STEP_REF	12
+ 
+-#define IS31FL319X_CURRENT_MIN		((u32)5000)
+-#define IS31FL319X_CURRENT_MAX		((u32)40000)
+-#define IS31FL319X_CURRENT_STEP		((u32)5000)
+-#define IS31FL319X_CURRENT_DEFAULT	((u32)20000)
++#define IS31FL3196_CURRENT_MIN		((u32)5000)
++#define IS31FL3196_CURRENT_MAX		((u32)40000)
++#define IS31FL3196_CURRENT_STEP		((u32)5000)
++#define IS31FL3196_CURRENT_DEFAULT	((u32)20000)
+ 
+ /* Audio gain in CONFIG2 register */
+-#define IS31FL319X_AUDIO_GAIN_DB_MAX	((u32)21)
+-#define IS31FL319X_AUDIO_GAIN_DB_STEP	((u32)3)
++#define IS31FL3196_AUDIO_GAIN_DB_MAX	((u32)21)
++#define IS31FL3196_AUDIO_GAIN_DB_STEP	((u32)3)
+ 
+ /*
+  * regmap is used as a cache of chip's register space,
+@@ -111,7 +111,7 @@ static const struct of_device_id of_is31fl319x_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, of_is31fl319x_match);
+ 
+-static int is31fl319x_brightness_set(struct led_classdev *cdev,
++static int is31fl3196_brightness_set(struct led_classdev *cdev,
+ 				     enum led_brightness brightness)
+ {
+ 	struct is31fl319x_led *led = container_of(cdev, struct is31fl319x_led,
+@@ -127,7 +127,7 @@ static int is31fl319x_brightness_set(struct led_classdev *cdev,
+ 	mutex_lock(&is31->lock);
+ 
+ 	/* update PWM register */
+-	ret = regmap_write(is31->regmap, IS31FL319X_PWM(chan), brightness);
++	ret = regmap_write(is31->regmap, IS31FL3196_PWM(chan), brightness);
+ 	if (ret < 0)
+ 		goto out;
+ 
+@@ -141,7 +141,7 @@ static int is31fl319x_brightness_set(struct led_classdev *cdev,
+ 		 * the current setting, we read from the regmap cache
+ 		 */
+ 
+-		ret = regmap_read(is31->regmap, IS31FL319X_PWM(i), &pwm_value);
++		ret = regmap_read(is31->regmap, IS31FL3196_PWM(i), &pwm_value);
+ 		dev_dbg(&is31->client->dev, "%s read %d: ret=%d: %d\n",
+ 			__func__, i, ret, pwm_value);
+ 		on = ret >= 0 && pwm_value > LED_OFF;
+@@ -157,10 +157,10 @@ static int is31fl319x_brightness_set(struct led_classdev *cdev,
+ 	if (ctrl1 > 0 || ctrl2 > 0) {
+ 		dev_dbg(&is31->client->dev, "power up %02x %02x\n",
+ 			ctrl1, ctrl2);
+-		regmap_write(is31->regmap, IS31FL319X_CTRL1, ctrl1);
+-		regmap_write(is31->regmap, IS31FL319X_CTRL2, ctrl2);
++		regmap_write(is31->regmap, IS31FL3196_CTRL1, ctrl1);
++		regmap_write(is31->regmap, IS31FL3196_CTRL2, ctrl2);
+ 		/* update PWMs */
+-		regmap_write(is31->regmap, IS31FL319X_DATA_UPDATE, 0x00);
++		regmap_write(is31->regmap, IS31FL3196_DATA_UPDATE, 0x00);
+ 		/* enable chip from shut down */
+ 		ret = regmap_write(is31->regmap, IS31FL319X_SHUTDOWN, 0x01);
+ 	} else {
+@@ -190,14 +190,14 @@ static int is31fl319x_parse_child_dt(const struct device *dev,
+ 	if (ret < 0 && ret != -EINVAL) /* is optional */
+ 		return ret;
+ 
+-	led->max_microamp = IS31FL319X_CURRENT_DEFAULT;
++	led->max_microamp = IS31FL3196_CURRENT_DEFAULT;
+ 	ret = of_property_read_u32(child, "led-max-microamp",
+ 				   &led->max_microamp);
+ 	if (!ret) {
+-		if (led->max_microamp < IS31FL319X_CURRENT_MIN)
++		if (led->max_microamp < IS31FL3196_CURRENT_MIN)
+ 			return -EINVAL;	/* not supported */
+ 		led->max_microamp = min(led->max_microamp,
+-					  IS31FL319X_CURRENT_MAX);
++					  IS31FL3196_CURRENT_MAX);
+ 	}
+ 
+ 	return 0;
+@@ -271,7 +271,7 @@ static int is31fl319x_parse_dt(struct device *dev,
+ 	ret = of_property_read_u32(np, "audio-gain-db", &is31->audio_gain_db);
+ 	if (!ret)
+ 		is31->audio_gain_db = min(is31->audio_gain_db,
+-					  IS31FL319X_AUDIO_GAIN_DB_MAX);
++					  IS31FL3196_AUDIO_GAIN_DB_MAX);
+ 
+ 	return 0;
+ 
+@@ -285,55 +285,55 @@ static bool is31fl319x_readable_reg(struct device *dev, unsigned int reg)
+ 	return false;
+ }
+ 
+-static bool is31fl319x_volatile_reg(struct device *dev, unsigned int reg)
++static bool is31fl3196_volatile_reg(struct device *dev, unsigned int reg)
+ { /* volatile registers are not cached */
+ 	switch (reg) {
+-	case IS31FL319X_DATA_UPDATE:
+-	case IS31FL319X_TIME_UPDATE:
+-	case IS31FL319X_RESET:
++	case IS31FL3196_DATA_UPDATE:
++	case IS31FL3196_TIME_UPDATE:
++	case IS31FL3196_RESET:
+ 		return true; /* always write-through */
+ 	default:
+ 		return false;
+ 	}
+ }
+ 
+-static const struct reg_default is31fl319x_reg_defaults[] = {
+-	{ IS31FL319X_CONFIG1, 0x00},
+-	{ IS31FL319X_CONFIG2, 0x00},
+-	{ IS31FL319X_PWM(0), 0x00},
+-	{ IS31FL319X_PWM(1), 0x00},
+-	{ IS31FL319X_PWM(2), 0x00},
+-	{ IS31FL319X_PWM(3), 0x00},
+-	{ IS31FL319X_PWM(4), 0x00},
+-	{ IS31FL319X_PWM(5), 0x00},
+-	{ IS31FL319X_PWM(6), 0x00},
+-	{ IS31FL319X_PWM(7), 0x00},
+-	{ IS31FL319X_PWM(8), 0x00},
++static const struct reg_default is31fl3196_reg_defaults[] = {
++	{ IS31FL3196_CONFIG1, 0x00},
++	{ IS31FL3196_CONFIG2, 0x00},
++	{ IS31FL3196_PWM(0), 0x00},
++	{ IS31FL3196_PWM(1), 0x00},
++	{ IS31FL3196_PWM(2), 0x00},
++	{ IS31FL3196_PWM(3), 0x00},
++	{ IS31FL3196_PWM(4), 0x00},
++	{ IS31FL3196_PWM(5), 0x00},
++	{ IS31FL3196_PWM(6), 0x00},
++	{ IS31FL3196_PWM(7), 0x00},
++	{ IS31FL3196_PWM(8), 0x00},
+ };
+ 
+-static struct regmap_config regmap_config = {
++static struct regmap_config is31fl3196_regmap_config = {
+ 	.reg_bits = 8,
+ 	.val_bits = 8,
+-	.max_register = IS31FL319X_REG_CNT,
++	.max_register = IS31FL3196_REG_CNT,
+ 	.cache_type = REGCACHE_FLAT,
+ 	.readable_reg = is31fl319x_readable_reg,
+-	.volatile_reg = is31fl319x_volatile_reg,
+-	.reg_defaults = is31fl319x_reg_defaults,
+-	.num_reg_defaults = ARRAY_SIZE(is31fl319x_reg_defaults),
++	.volatile_reg = is31fl3196_volatile_reg,
++	.reg_defaults = is31fl3196_reg_defaults,
++	.num_reg_defaults = ARRAY_SIZE(is31fl3196_reg_defaults),
+ };
+ 
+-static inline int is31fl319x_microamp_to_cs(struct device *dev, u32 microamp)
++static inline int is31fl3196_microamp_to_cs(struct device *dev, u32 microamp)
+ { /* round down to nearest supported value (range check done by caller) */
+-	u32 step = microamp / IS31FL319X_CURRENT_STEP;
++	u32 step = microamp / IS31FL3196_CURRENT_STEP;
+ 
+-	return ((IS31FL319X_CONFIG2_CS_STEP_REF - step) &
+-		IS31FL319X_CONFIG2_CS_MASK) <<
+-		IS31FL319X_CONFIG2_CS_SHIFT; /* CS encoding */
++	return ((IS31FL3196_CONFIG2_CS_STEP_REF - step) &
++		IS31FL3196_CONFIG2_CS_MASK) <<
++		IS31FL3196_CONFIG2_CS_SHIFT; /* CS encoding */
+ }
+ 
+-static inline int is31fl319x_db_to_gain(u32 dezibel)
++static inline int is31fl3196_db_to_gain(u32 dezibel)
+ { /* round down to nearest supported value (range check done by caller) */
+-	return dezibel / IS31FL319X_AUDIO_GAIN_DB_STEP;
++	return dezibel / IS31FL3196_AUDIO_GAIN_DB_STEP;
+ }
+ 
+ static int is31fl319x_probe(struct i2c_client *client,
+@@ -343,7 +343,7 @@ static int is31fl319x_probe(struct i2c_client *client,
+ 	struct device *dev = &client->dev;
+ 	int err;
+ 	int i = 0;
+-	u32 aggregated_led_microamp = IS31FL319X_CURRENT_MAX;
++	u32 aggregated_led_microamp = IS31FL3196_CURRENT_MAX;
+ 
+ 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+ 		return -EIO;
+@@ -365,7 +365,7 @@ static int is31fl319x_probe(struct i2c_client *client,
+ 	}
+ 
+ 	is31->client = client;
+-	is31->regmap = devm_regmap_init_i2c(client, &regmap_config);
++	is31->regmap = devm_regmap_init_i2c(client, &is31fl3196_regmap_config);
+ 	if (IS_ERR(is31->regmap)) {
+ 		dev_err(&client->dev, "failed to allocate register map\n");
+ 		err = PTR_ERR(is31->regmap);
+@@ -375,7 +375,7 @@ static int is31fl319x_probe(struct i2c_client *client,
+ 	i2c_set_clientdata(client, is31);
+ 
+ 	/* check for write-reply from chip (we can't read any registers) */
+-	err = regmap_write(is31->regmap, IS31FL319X_RESET, 0x00);
++	err = regmap_write(is31->regmap, IS31FL3196_RESET, 0x00);
+ 	if (err < 0) {
+ 		dev_err(&client->dev, "no response from chip write: err = %d\n",
+ 			err);
+@@ -393,9 +393,9 @@ static int is31fl319x_probe(struct i2c_client *client,
+ 		    is31->leds[i].max_microamp < aggregated_led_microamp)
+ 			aggregated_led_microamp = is31->leds[i].max_microamp;
+ 
+-	regmap_write(is31->regmap, IS31FL319X_CONFIG2,
+-		     is31fl319x_microamp_to_cs(dev, aggregated_led_microamp) |
+-		     is31fl319x_db_to_gain(is31->audio_gain_db));
++	regmap_write(is31->regmap, IS31FL3196_CONFIG2,
++		     is31fl3196_microamp_to_cs(dev, aggregated_led_microamp) |
++		     is31fl3196_db_to_gain(is31->audio_gain_db));
+ 
+ 	for (i = 0; i < is31->cdef->num_leds; i++) {
+ 		struct is31fl319x_led *led = &is31->leds[i];
+@@ -404,7 +404,7 @@ static int is31fl319x_probe(struct i2c_client *client,
+ 			continue;
+ 
+ 		led->chip = is31;
+-		led->cdev.brightness_set_blocking = is31fl319x_brightness_set;
++		led->cdev.brightness_set_blocking = is31fl3196_brightness_set;
+ 
+ 		err = devm_led_classdev_register(&client->dev, &led->cdev);
+ 		if (err < 0)
 -- 
 2.35.3
 

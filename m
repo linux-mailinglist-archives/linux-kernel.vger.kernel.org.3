@@ -2,292 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5563E55EAF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BB555EB09
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233278AbiF1RXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 13:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
+        id S233206AbiF1R2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 13:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233231AbiF1RXh (ORCPT
+        with ESMTP id S232209AbiF1R2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 13:23:37 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5500C2DA8C;
-        Tue, 28 Jun 2022 10:23:36 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SHGokm023387;
-        Tue, 28 Jun 2022 17:23:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=USbFFO10uk2ZizlRZ9dGQG8VXNHtbAJ18ezn20c7b5Y=;
- b=FKW4yluAfI3wGxcGgjG+HAiSDKhtHjVaRhpeCzcImfr1Y+Wvrk8gEPd575zq1UgOUZzk
- GAbnOJXuO0igo60XvyWiuDnAS0pbX1FRCPveyxOF93AJHWPjynDfNugoecOYBEtfrl3G
- eHW187gLEz+b1T5m0CvSPhnDVouMngodyYKBxFkXP0P0oHBY67DFwEAN59m7HCaLq66b
- 9e89S6iRorLN4LF25RyULCcyU8SYzDuKI9ttK/fn3CRAcPyHSC8500WxLZ84ZBFK8oyp
- I2q7KTtpIBWNIj7bCORbGLau+HvB/SnWWmT8Mc82OszVCwdM5ljNalzUfQI0R4sL5dlt +A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h05rv0bd8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 17:23:35 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25SHMNY1026177;
-        Tue, 28 Jun 2022 17:23:34 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h05rv0bcm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 17:23:34 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25SHKbI2019188;
-        Tue, 28 Jun 2022 17:23:32 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3gwt08uvu0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 17:23:32 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25SHNaRB32309512
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Jun 2022 17:23:36 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6A4E9AE053;
-        Tue, 28 Jun 2022 17:23:29 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9C6F0AE045;
-        Tue, 28 Jun 2022 17:23:28 +0000 (GMT)
-Received: from [9.171.41.104] (unknown [9.171.41.104])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 28 Jun 2022 17:23:28 +0000 (GMT)
-Message-ID: <13c7d30e-e5e1-2b73-2305-8e82465df9ed@linux.ibm.com>
-Date:   Tue, 28 Jun 2022 19:27:56 +0200
+        Tue, 28 Jun 2022 13:28:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75FA537A1F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:28:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656437308;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BxBrwqAstyFfAs6v5/7UNTyZeq12M0ezD0pRqc5c/pY=;
+        b=bGPBRtMVOFWzx4deh0xIhyL87jpvnj5gGJy+c2ysa9frm1QpFUOdcYLrYqjU1dxSAg4YpV
+        7WHpAG9uDhSlmFlv4XQswAvfQ2sdwxbI3L0yyPsZ3a6bp9n5OKP1ioALLykdNBsJJ83q2n
+        JK680OIqlKhTSOXHEH2cMOcwtFvl00o=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-197-ZhCWIlzqNg2J2U3oJdHLiw-1; Tue, 28 Jun 2022 13:28:27 -0400
+X-MC-Unique: ZhCWIlzqNg2J2U3oJdHLiw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 590FC1035340;
+        Tue, 28 Jun 2022 17:28:26 +0000 (UTC)
+Received: from [10.22.34.187] (unknown [10.22.34.187])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 74CA42166B26;
+        Tue, 28 Jun 2022 17:28:25 +0000 (UTC)
+Message-ID: <b2d958e0-e500-fb5c-676c-00fe542ff56c@redhat.com>
+Date:   Tue, 28 Jun 2022 13:28:25 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v10 3/3] KVM: s390: resetting the Topology-Change-Report
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v7] x86/paravirt: useless assignment instructions cause
+ Unixbench full core performance degradation
 Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, wintera@linux.ibm.com,
-        seiden@linux.ibm.com, nrb@linux.ibm.com
-References: <20220620125437.37122-1-pmorel@linux.ibm.com>
- <20220620125437.37122-4-pmorel@linux.ibm.com>
- <03c79e51-7a0b-f406-d4d2-b10f43b6a7a1@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <03c79e51-7a0b-f406-d4d2-b10f43b6a7a1@linux.ibm.com>
+To:     Guo Hui <guohui@uniontech.com>, peterz@infradead.org
+Cc:     jgross@suse.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, will@kernel.org, boqun.feng@gmail.com,
+        virtualization@lists.linux-foundation.org,
+        wangxiaohua@uniontech.com, linux-kernel@vger.kernel.org
+References: <588a3276-5481-0a9f-9eac-fed09eede4f2@redhat.com>
+ <20220628161251.21950-1-guohui@uniontech.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220628161251.21950-1-guohui@uniontech.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 8GrcA_fKmoyP24pui1Gwfcbb63SFzkwM
-X-Proofpoint-ORIG-GUID: fTVj-4qGhpVQrIwYjw4QYUWWjAKrORO4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-28_10,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 adultscore=0 bulkscore=0 priorityscore=1501 phishscore=0
- clxscore=1015 malwarescore=0 impostorscore=0 mlxlogscore=999
- suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206280068
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/28/22 12:12, Guo Hui wrote:
+> The instructions assigned to the vcpu_is_preempted function parameter
+> in the X86 architecture physical machine are redundant instructions,
+> causing the multi-core performance of Unixbench to drop by about 4% to 5%.
+> The C function is as follows:
+> static bool vcpu_is_preempted(long vcpu);
+>
+> The parameter 'vcpu' in the function osq_lock
+> that calls the function vcpu_is_preempted is assigned as follows:
+>
+> The C code is in the function node_cpu:
+> cpu = node->cpu - 1;
+>
+> The instructions corresponding to the C code are:
+> mov 0x14(%rax),%edi
+> sub $0x1,%edi
+>
+> The above instructions are unnecessary
+> in the X86 Native operating environment,
+> causing high cache-misses and degrading performance.
+>
+> This patch uses static_key to not execute this instruction
+> in the Native runtime environment.
+>
+> The patch effect is as follows two machines,
+> Unixbench runs with full core score:
+>
+> 1. Machine configuration:
+> Intel(R) Xeon(R) Silver 4210 CPU @ 2.20GHz
+> CPU core: 40
+> Memory: 256G
+> OS Kernel: 5.19-rc3
+>
+> Before using the patch:
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0  948326591.2  81261.9
+> Double-Precision Whetstone                       55.0     211986.3  38543.0
+> Execl Throughput                                 43.0      43453.2  10105.4
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     438936.2   1108.4
+> File Copy 256 bufsize 500 maxblocks            1655.0     118197.4    714.2
+> File Copy 4096 bufsize 8000 maxblocks          5800.0    1534674.7   2646.0
+> Pipe Throughput                               12440.0   46482107.6  37365.0
+> Pipe-based Context Switching                   4000.0    1915094.2   4787.7
+> Process Creation                                126.0      85442.2   6781.1
+> Shell Scripts (1 concurrent)                     42.4      69400.7  16368.1
+> Shell Scripts (8 concurrent)                      6.0       8877.2  14795.3
+> System Call Overhead                          15000.0    4714906.1   3143.3
+>                                                                     ========
+> System Benchmarks Index Score                                        7923.3
+>
+> After using the patch:
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0  947032915.5  81151.1
+> Double-Precision Whetstone                       55.0     211971.2  38540.2
+> Execl Throughput                                 43.0      45054.8  10477.9
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     515024.9   1300.6
+> File Copy 256 bufsize 500 maxblocks            1655.0     146354.6    884.3
+> File Copy 4096 bufsize 8000 maxblocks          5800.0    1679995.9   2896.5
+> Pipe Throughput                               12440.0   46466394.2  37352.4
+> Pipe-based Context Switching                   4000.0    1898221.4   4745.6
+> Process Creation                                126.0      85653.1   6797.9
+> Shell Scripts (1 concurrent)                     42.4      69437.3  16376.7
+> Shell Scripts (8 concurrent)                      6.0       8898.9  14831.4
+> System Call Overhead                          15000.0    4658746.7   3105.8
+>                                                                     ========
+> System Benchmarks Index Score                                        8248.8
+>
+> 2. Machine configuration:
+> Hygon C86 7185 32-core Processor
+> CPU core: 128
+> Memory: 256G
+> OS Kernel: 5.19-rc3
+>
+> Before using the patch:
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0 2256644068.3 193371.4
+> Double-Precision Whetstone                       55.0     438969.9  79812.7
+> Execl Throughput                                 43.0      10108.6   2350.8
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     275892.8    696.7
+> File Copy 256 bufsize 500 maxblocks            1655.0      72082.7    435.5
+> File Copy 4096 bufsize 8000 maxblocks          5800.0     925043.4   1594.9
+> Pipe Throughput                               12440.0  118905512.5  95583.2
+> Pipe-based Context Switching                   4000.0    7820945.7  19552.4
+> Process Creation                                126.0      31233.3   2478.8
+> Shell Scripts (1 concurrent)                     42.4      49042.8  11566.7
+> Shell Scripts (8 concurrent)                      6.0       6656.0  11093.3
+> System Call Overhead                          15000.0    6816047.5   4544.0
+>                                                                     ========
+> System Benchmarks Index Score                                        7756.6
+>
+> After using the patch:
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0 2252272929.4 192996.8
+> Double-Precision Whetstone                       55.0     451847.2  82154.0
+> Execl Throughput                                 43.0      10595.1   2464.0
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     301279.3    760.8
+> File Copy 256 bufsize 500 maxblocks            1655.0      79291.3    479.1
+> File Copy 4096 bufsize 8000 maxblocks          5800.0    1039755.2   1792.7
+> Pipe Throughput                               12440.0  118701468.1  95419.2
+> Pipe-based Context Switching                   4000.0    8073453.3  20183.6
+> Process Creation                                126.0      33440.9   2654.0
+> Shell Scripts (1 concurrent)                     42.4      52722.6  12434.6
+> Shell Scripts (8 concurrent)                      6.0       7050.4  11750.6
+> System Call Overhead                          15000.0    6834371.5   4556.2
+>                                                                     ========
+> System Benchmarks Index Score                                        8157.8
+>
+> Signed-off-by: Guo Hui <guohui@uniontech.com>
+> ---
+>   arch/x86/kernel/paravirt-spinlocks.c |  4 ++++
+>   kernel/locking/osq_lock.c            | 19 ++++++++++++++++++-
+>   2 files changed, 22 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/kernel/paravirt-spinlocks.c b/arch/x86/kernel/paravirt-spinlocks.c
+> index 9e1ea99ad..a2eb375e2 100644
+> --- a/arch/x86/kernel/paravirt-spinlocks.c
+> +++ b/arch/x86/kernel/paravirt-spinlocks.c
+> @@ -33,6 +33,8 @@ bool pv_is_native_vcpu_is_preempted(void)
+>   		__raw_callee_save___native_vcpu_is_preempted;
+>   }
+>   
+> +DECLARE_STATIC_KEY_TRUE(vcpu_has_preemption);
+> +
+>   void __init paravirt_set_cap(void)
+>   {
+>   	if (!pv_is_native_spin_unlock())
+> @@ -40,4 +42,6 @@ void __init paravirt_set_cap(void)
+>   
+>   	if (!pv_is_native_vcpu_is_preempted())
+>   		setup_force_cpu_cap(X86_FEATURE_VCPUPREEMPT);
+> +	else
+> +		static_branch_disable(&vcpu_has_preemption);
+>   }
+> diff --git a/kernel/locking/osq_lock.c b/kernel/locking/osq_lock.c
+> index d5610ad52..f521b0f6d 100644
+> --- a/kernel/locking/osq_lock.c
+> +++ b/kernel/locking/osq_lock.c
+> @@ -27,6 +27,23 @@ static inline int node_cpu(struct optimistic_spin_node *node)
+>   	return node->cpu - 1;
+>   }
+>   
+> +#ifdef vcpu_is_preempted
+> +DEFINE_STATIC_KEY_TRUE(vcpu_has_preemption);
+> +
+> +static inline bool vcpu_is_preempted_node(struct optimistic_spin_node *node)
+> +{
+> +	if (static_branch_likely(&vcpu_has_preemption))
+> +		return vcpu_is_preempted(node_cpu(node->prev));
+> +
+> +	return false;
+> +}
+> +#else
+> +static inline bool vcpu_is_preempted_node(struct optimistic_spin_node *node)
+> +{
+> +	return false;
+> +}
+> +#endif
+> +
+>   static inline struct optimistic_spin_node *decode_cpu(int encoded_cpu_val)
+>   {
+>   	int cpu_nr = encoded_cpu_val - 1;
+> @@ -141,7 +158,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
+>   	 * polling, be careful.
+>   	 */
+>   	if (smp_cond_load_relaxed(&node->locked, VAL || need_resched() ||
+> -				  vcpu_is_preempted(node_cpu(node->prev))))
+> +						vcpu_is_preempted_node(node)))
+>   		return true;
+>   
+>   	/* unqueue */
+Reviewed-by: Waiman Long <longman@redhat.com>
 
-
-On 6/28/22 18:41, Janis Schoetterl-Glausch wrote:
-> On 6/20/22 14:54, Pierre Morel wrote:
->> During a subsystem reset the Topology-Change-Report is cleared.
->> Let's give userland the possibility to clear the MTCR in the case
->> of a subsystem reset.
->>
->> To migrate the MTCR, we give userland the possibility to
->> query the MTCR state.
->>
->> We indicate KVM support for the CPU topology facility with a new
->> KVM capability: KVM_CAP_S390_CPU_TOPOLOGY.
->>
->> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
->> ---
->>   Documentation/virt/kvm/api.rst   | 31 +++++++++++
->>   arch/s390/include/uapi/asm/kvm.h | 10 ++++
->>   arch/s390/kvm/kvm-s390.c         | 96 ++++++++++++++++++++++++++++++++
->>   include/uapi/linux/kvm.h         |  1 +
->>   4 files changed, 138 insertions(+)
->>
->> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
->> index 11e00a46c610..326f8b7e7671 100644
->> --- a/Documentation/virt/kvm/api.rst
->> +++ b/Documentation/virt/kvm/api.rst
->> @@ -7956,6 +7956,37 @@ should adjust CPUID leaf 0xA to reflect that the PMU is disabled.
->>   When enabled, KVM will exit to userspace with KVM_EXIT_SYSTEM_EVENT of
->>   type KVM_SYSTEM_EVENT_SUSPEND to process the guest suspend request.
->>
->> +8.37 KVM_CAP_S390_CPU_TOPOLOGY
->> +------------------------------
->> +
->> +:Capability: KVM_CAP_S390_CPU_TOPOLOGY
->> +:Architectures: s390
->> +:Type: vm
->> +
->> +This capability indicates that KVM will provide the S390 CPU Topology
->> +facility which consist of the interpretation of the PTF instruction for
->> +the Function Code 2 along with interception and forwarding of both the
->> +PTF instruction with Function Codes 0 or 1 and the STSI(15,1,x)
->> +instruction to the userland hypervisor.
-> 
-> The way the code is written, STSI 15.x.x is forwarded to user space,
-> might actually make sense to future proof the code by restricting that
-> to 15.1.2-6 in priv.c.
->> +
->> +The stfle facility 11, CPU Topology facility, should not be provided
->> +to the guest without this capability.
->> +
->> +When this capability is present, KVM provides a new attribute group
->> +on vm fd, KVM_S390_VM_CPU_TOPOLOGY.
->> +This new attribute allows to get, set or clear the Modified Change
->> +Topology Report (MTCR) bit of the SCA through the kvm_device_attr
->> +structure.
->> +
->> +Getting the MTCR bit is realized by using a kvm_device_attr attr
->> +entry value of KVM_GET_DEVICE_ATTR and with kvm_device_attr addr
->> +entry pointing to the address of a struct kvm_cpu_topology.
->> +The value of the MTCR is return by the bit mtcr of the structure.
->> +
->> +When using KVM_SET_DEVICE_ATTR the MTCR is set by using the
->> +attr->attr value KVM_S390_VM_CPU_TOPO_MTCR_SET and cleared by
->> +using KVM_S390_VM_CPU_TOPO_MTCR_CLEAR.
->> +
->>   9. Known KVM API problems
->>   =========================
->>
->> diff --git a/arch/s390/include/uapi/asm/kvm.h b/arch/s390/include/uapi/asm/kvm.h
->> index 7a6b14874d65..df5e8279ffd0 100644
->> --- a/arch/s390/include/uapi/asm/kvm.h
->> +++ b/arch/s390/include/uapi/asm/kvm.h
->> @@ -74,6 +74,7 @@ struct kvm_s390_io_adapter_req {
->>   #define KVM_S390_VM_CRYPTO		2
->>   #define KVM_S390_VM_CPU_MODEL		3
->>   #define KVM_S390_VM_MIGRATION		4
->> +#define KVM_S390_VM_CPU_TOPOLOGY	5
->>
->>   /* kvm attributes for mem_ctrl */
->>   #define KVM_S390_VM_MEM_ENABLE_CMMA	0
->> @@ -171,6 +172,15 @@ struct kvm_s390_vm_cpu_subfunc {
->>   #define KVM_S390_VM_MIGRATION_START	1
->>   #define KVM_S390_VM_MIGRATION_STATUS	2
->>
->> +/* kvm attributes for cpu topology */
->> +#define KVM_S390_VM_CPU_TOPO_MTCR_CLEAR	0
->> +#define KVM_S390_VM_CPU_TOPO_MTCR_SET	1
-> 
-> Are you going to transition to a set-value-provided-by-user API with the next series?
-> I don't particularly like that MTCR is user visible, it's kind of an implementation detail.
-
-It is not the same structure as the hardware structure.
-Even it looks like it.
-
-I am OK to use something else, like a u8
-in that case I need to say userland that the size of the data returned 
-by get KVM_S390_VM_CPU_TOPOLOGY is u8.
-
-I find this is a lack in the definition of the kvm_device_attr, it 
-should have a size entry.
-
-All other user of kvm_device_attr have structures and it is easy to the 
-userland to get the size using the sizeof(struct...) one can say that 
-userland knows that the parameter for topology is a u8 but that hurt me 
-somehow.
-May be it is stupid, for the other calls the user has to know the name 
-of the structure anyway.
-
-Then we can say the value of u8 bit 1 is the value of the mtcr.
-OK for me.
-
-What do you think?
-
-> 
->> +
->> +struct kvm_cpu_topology {
->> +	__u16 mtcr : 1;
-> 
-> So I'd give this a more descriptive name, report_topology_change/topo_change_report_pending ?
-> 
->> +	__u16 reserved : 15;
-> 
-> Are these bits for future proofing? If so a few more would do no harm IMO.
->> +};
-> 
-> The use of a bit field in uapi surprised my, but I guess it's fine and kvm_sync_regs has them too.
->> +
->>   /* for KVM_GET_REGS and KVM_SET_REGS */
->>   struct kvm_regs {
->>   	/* general purpose regs for s390 */
->> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->> index 95b96019ca8e..ae39041bb149 100644
->> --- a/arch/s390/kvm/kvm-s390.c
->> +++ b/arch/s390/kvm/kvm-s390.c
->> @@ -606,6 +606,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->>   	case KVM_CAP_S390_PROTECTED:
->>   		r = is_prot_virt_host();
->>   		break;
->> +	case KVM_CAP_S390_CPU_TOPOLOGY:
->> +		r = test_facility(11);
->> +		break;
->>   	default:
->>   		r = 0;
->>   	}
->> @@ -817,6 +820,20 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm, struct kvm_enable_cap *cap)
->>   		icpt_operexc_on_all_vcpus(kvm);
->>   		r = 0;
->>   		break;
->> +	case KVM_CAP_S390_CPU_TOPOLOGY:
->> +		r = -EINVAL;
->> +		mutex_lock(&kvm->lock);
->> +		if (kvm->created_vcpus) {
->> +			r = -EBUSY;
->> +		} else if (test_facility(11)) {
->> +			set_kvm_facility(kvm->arch.model.fac_mask, 11);
->> +			set_kvm_facility(kvm->arch.model.fac_list, 11);
->> +			r = 0;
->> +		}
->> +		mutex_unlock(&kvm->lock);
->> +		VM_EVENT(kvm, 3, "ENABLE: CPU TOPOLOGY %s",
-> 
-> Most of the other cases spell out the cap, so it'd be "ENABLE: CAP_S390_CPU_TOPOLOGY %s".
-
-OK
-
-> 
->> +			 r ? "(not available)" : "(success)");
->> +		break;
->>   	default:
->>   		r = -EINVAL;
->>   		break;
->> @@ -1710,6 +1727,76 @@ static void kvm_s390_sca_set_mtcr(struct kvm *kvm)
->>   	ipte_unlock(kvm);
->>   }
->>
-> 
-> Some brainstorming function names:
-> 
-> kvm_s390_get_topo_change_report
-> kvm_s390_(un|re)set_topo_change_report
-> kvm_s390_(publish|revoke|unpublish)_topo_change_report
-> kvm_s390_(report|signal|revoke)_topology_change
-
-kvm_s390_update_topology_change_report ?
-
-> 
-> [...]
-> 
-
--- 
-Pierre Morel
-IBM Lab Boeblingen

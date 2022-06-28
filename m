@@ -2,262 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B0D55DFA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E67C955CB19
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345292AbiF1MCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 08:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S1345295AbiF1MCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 08:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344905AbiF1MCY (ORCPT
+        with ESMTP id S1345165AbiF1MCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 08:02:24 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804802EA24;
-        Tue, 28 Jun 2022 05:02:23 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id w20so21849030lfa.11;
-        Tue, 28 Jun 2022 05:02:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TMuGk1es9aDtElr4R65C4neMVsgnLo+5NBlfgPrnIbU=;
-        b=mRFPQMwpL5ltqSoXjj/bje2ZgWWJTo0Kgqg890BQ6sFF7zp5C4Niy0Terkl6CE+v+S
-         AZfwCWK+O8Tgntg8/2HxlXdSQjt4LE8LE9kFo22Y/oi5whgvt0nu7L5xS5C6M+NcAehF
-         KNcpy2K1swo3OpdOOmwXs4vGJQkJQmC15q377KaD9Mz73kJtrk20q5uBua+NcSQzZAgC
-         01D6qcPyi6ulMkpTQ7/mNR+ORx1nB5kj8YWD8EIes3tYva3quuEV2i8X8lO4gs3joRMK
-         uqdtbiqcA5awYxIOJp/b4ZcMx+wbOKk4Jxr4XzdaxIOUG34cOZCXQriwM/G8C2gwhpbM
-         AsfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TMuGk1es9aDtElr4R65C4neMVsgnLo+5NBlfgPrnIbU=;
-        b=m0AN5PJ4U+vQ9enDfFvgbgBqNLGY9+bSyHG5Emi78xMrhiKFT/6ZFiErQUlueW0+HO
-         R4BmTYYU1vwR2ahaCcMlK57cPxZehfQuwfPe6pCdmjVmeiWXBAadJkYpJl4pig/VI03n
-         yZo61Pjl+haqccEPXahVPM6KvOSr/eGlxsfMg+G20MiRaU+wyXGftjTFl0qPJVeBaYx9
-         mQxJ1pi9MqCnBZ71jpbXOMzyp1HfsSm03n5XGl+YKpiYyAZj5D/Foq6f6raE1j+1lsDJ
-         V3IQFr069lRBAZl1W3dQNotapyrm5PV4hES3UerHJoahhC8cjeJMPFu7iSR1YnkE4a7i
-         HDNg==
-X-Gm-Message-State: AJIora/XC8P0JKIDJMxsUaxEhrff+nXue7F5QF8Ys84p2DzWDHeuuhzC
-        hrS34P83X6EvYJF6NRMmsL8=
-X-Google-Smtp-Source: AGRyM1sYrJ2HnkSUvlNpkAzyPptV/sKxqezcLv03QpWtvnOBK2w0n8IESL7CKdPq67FB0OYLx2lwWg==
-X-Received: by 2002:a05:6512:3e0e:b0:47f:6a95:9b98 with SMTP id i14-20020a0565123e0e00b0047f6a959b98mr11622598lfv.177.1656417741662;
-        Tue, 28 Jun 2022 05:02:21 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id c7-20020a19e347000000b004791fc12f6asm2186681lfk.46.2022.06.28.05.02.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 05:02:20 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Tue, 28 Jun 2022 14:02:18 +0200
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH v2 1/1] rcu/kvfree: Update KFREE_DRAIN_JIFFIES interval
-Message-ID: <YrrtyuMQX/ormVyO@pc638.lan>
-References: <20220627195353.1575285-1-urezki@gmail.com>
- <20220627213126.GO1790663@paulmck-ThinkPad-P17-Gen-1>
- <Yrrp2044RY6amuLo@pc638.lan>
+        Tue, 28 Jun 2022 08:02:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7712EA24
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:02:31 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C3B38660184F;
+        Tue, 28 Jun 2022 13:02:29 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656417750;
+        bh=zNEAitTxqpTa6w1mAZhs+XcqE/Shqwgw6vOI8uxrafY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kA6HW3K5Wu3J9ADp6WCzs2EnF5F4f/tqvBaICY/tgpwiun0P/CBIWppSwUkhcZ0Jv
+         3dgAA1fU1L/pEpU5dDEm/X8gGkrOBpaQH3EQPHFMDj0+ymhUBwRtm7/y7YjFRcJmuf
+         1iTEQfNIAtlWoXI8HUT1HdOtNDPx8SWIywOTuDQPe9gPIZLuK+SQ7clDutRuQRkXy4
+         gpyqS/YzTy/eVclmc9hjLcCmXI1Vlsw6AthxAygBIuSowJ3e9dBN+HrO7VTr/iCY1t
+         gIRQxt/Ri1oCYtbf0Xt050TwXFfGICStjPtbv5maYcLdzXSXTmgYmN/jmS0tuqIzQt
+         TL639fgBibysg==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     matthias.bgg@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, wenst@chromium.org,
+        alyssa.rosenzweig@collabora.com, nfraprado@collabora.com,
+        dmitry.osipenko@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3] soc: mediatek: Introduce mediatek-regulator-coupler driver
+Date:   Tue, 28 Jun 2022 14:02:24 +0200
+Message-Id: <20220628120224.81180-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yrrp2044RY6amuLo@pc638.lan>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 01:45:31PM +0200, Uladzislau Rezki wrote:
-> > On Mon, Jun 27, 2022 at 09:53:53PM +0200, Uladzislau Rezki (Sony) wrote:
-> > > Currently the monitor work is scheduled with a fixed interval that
-> > > is HZ/20 or each 50 milliseconds. The drawback of such approach is
-> > > a low utilization of page slot in some scenarios. The page can store
-> > > up to 512 records. For example on Android system it can look like:
-> > 
-> > I was looking at queuing this one, but we need a bit more data.  In
-> > the meantime, here is my wordsmithing of the above paragraph:
-> > 
-> > Currently the monitor work is scheduled with a fixed interval of HZ/20,
-> > which is roughly 50 milliseconds. The drawback of this approach is
-> > low utilization of the 512 page slots in scenarios with infrequence
-> > kvfree_rcu() calls.  For example on an Android system:
-> > 
-> Good i will update with your changes :)
-> 
-> > > <snip>
-> > >   kworker/3:0-13872   [003] .... 11286.007048: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=1
-> > >   kworker/3:0-13872   [003] .... 11286.015638: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=2
-> > >   kworker/1:2-20434   [001] .... 11286.051230: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=1
-> > >   kworker/1:2-20434   [001] .... 11286.059322: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=2
-> > >   kworker/0:1-20052   [000] .... 11286.095295: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=2
-> > >   kworker/0:1-20052   [000] .... 11286.103418: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=1
-> > >   kworker/2:3-14372   [002] .... 11286.135155: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=2
-> > >   kworker/2:3-14372   [002] .... 11286.135198: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=1
-> > >   kworker/1:2-20434   [001] .... 11286.155377: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=5
-> > >   kworker/2:3-14372   [002] .... 11286.167181: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=5
-> > >   kworker/1:2-20434   [001] .... 11286.179202: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000008ef95e14 nr_records=1
-> > >   kworker/2:3-14372   [002] .... 11286.187398: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000c597d297 nr_records=6
-> > >   kworker/3:0-13872   [003] .... 11286.187445: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000050bf92e2 nr_records=3
-> > >   kworker/1:2-20434   [001] .... 11286.198975: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=4
-> > >   kworker/1:2-20434   [001] .... 11286.207203: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=4
-> > > <snip>
-> > > 
-> > > where a page only carries few records to reclaim a memory. In order
-> > > to improve batching and make utilization more efficient the patch sets
-> > > a drain interval to 1 second as default one. When a flood is detected
-> > > an interval is adjusted in a way that a reclaim work is re-scheduled
-> > > on a next timer jiffy.
-> > 
-> > And of the above paragraph:
-> > 
-> > Out of 512 slots, in all cases, fewer than 10 were actually used.
-> > In order to improve batching and make utilization more efficient this
-> > commit sets a drain interval to a fixed 1-second interval. Floods are
-> > detected when a page fills quickly, and in that case, the reclaim work
-> > is re-scheduled for the next scheduling-clock tick (jiffy).
-> > 
-> Same here, will apply this.
-> 
-> > ---
-> > 
-> > But what we need now is a trace like the one above showing higher utilization
-> > of the pages.  Could you please supply this?
-> > 
-> Yep, i will add traces to show that utilization becomes better what is
-> actually expectable.
-> 
-> --
-> Uladzislau Rezki
-Paul, see below the v3:
+This driver currently deals with GPU-SRAM regulator coupling, ensuring
+that the SRAM voltage is always between a specific range of distance to
+the GPU voltage, depending on the SoC, necessary in order to achieve
+system stability across the full range of supported GPU frequencies.
 
-From ff2a402a59442ba575f13f660ee1b140d44483b4 Mon Sep 17 00:00:00 2001
-From: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Date: Wed, 1 Jun 2022 11:28:53 +0200
-Subject: [PATCH v3 1/1] rcu/kvfree: Update KFREE_DRAIN_JIFFIES interval
-
-Currently the monitor work is scheduled with a fixed interval of HZ/20,
-which is roughly 50 milliseconds. The drawback of this approach is
-low utilization of the 512 page slots in scenarios with infrequence
-kvfree_rcu() calls.  For example on an Android system:
-
-<snip>
-  kworker/3:3-507     [003] ....   470.286305: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000d0f0dde5 nr_records=6
-  kworker/6:1-76      [006] ....   470.416613: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000ea0d6556 nr_records=1
-  kworker/6:1-76      [006] ....   470.416625: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000003e025849 nr_records=9
-  kworker/1:1-73      [001] ....   470.438895: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000091a38dc1 nr_records=1
-  kworker/3:3-507     [003] ....   471.390000: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000815a8713 nr_records=48
-  kworker/1:1-73      [001] ....   471.725785: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000fda9bf20 nr_records=3
-  kworker/1:1-73      [001] ....   471.725833: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000a425b67b nr_records=76
-  kworker/3:3-507     [003] ....   471.958960: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000dce5bdbd nr_records=78
-  kworker/0:4-1411    [000] ....   472.085673: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000007996be9d nr_records=1
-  kworker/0:4-1411    [000] ....   472.085728: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000d0f0dde5 nr_records=5
-  kworker/6:1-76      [006] ....   472.260340: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000065630ee4 nr_records=102
-  kworker/2:1-78      [002] ....   472.527362: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000815a8713 nr_records=1
-<snip>
-
-Out of 512 slots, in all cases, fewer than 10 were actually used.
-In order to improve batching and make utilization more efficient this
-commit sets a drain interval to a fixed 1-second interval. Floods are
-detected when a page fills quickly, and in that case, the reclaim work
-is re-scheduled for the next scheduling-clock tick (jiffy).
-
-After this change:
-
-<snip>
-  kworker/0:5-1415    [000] ....   239.852727: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000005d2561ea nr_records=178
-  kworker/3:0-38      [003] ....   239.855113: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000039c44d27 nr_records=93
-  kworker/1:4-1747    [001] ....   239.872647: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000004abb2f7e nr_records=109
-  kworker/4:59-288    [004] ....   239.884829: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000049e7a308 nr_records=182
-  kworker/0:5-1415    [000] ....   240.028762: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000037eae6d6 nr_records=86
-  kworker/3:0-38      [003] ....   240.040769: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000003be0ae55 nr_records=244
-  kworker/3:0-38      [003] ....   240.068639: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000021905efe nr_records=45
-        <...>-1415    [000] ....   240.868830: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000007c97e065 nr_records=461
-        <...>-1415    [000] ....   241.068646: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000000725886e nr_records=25
-  kworker/0:5-1415    [000] ....   241.100931: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000021905efe nr_records=300
-  worker/4:59-2880    [004] ....   241.801181: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000004abb2f7e nr_records=180
-  worker/6:60-2554    [006] ....   242.000565: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000006d3084af nr_records=40
-<snip>
-
-Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- kernel/rcu/tree.c | 27 +++++++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index fd16c0b46d9e..37f89bedf45e 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -3249,7 +3249,7 @@ EXPORT_SYMBOL_GPL(call_rcu);
+Changes in v3:
+ - Added braces to else-if branch
+
+Changes in v2:
+ - Added check for n_coupled
+ - Added check for vgpu to enforce attaching to vgpu<->sram coupling only
+
+Context:
+This driver is one of the pieces of a bigger puzzle, aiming to finally
+enable Dynamic Voltage/Frequency Scaling for Mali GPUs found on MediaTek
+SoCs on the fully open source graphics stack (Panfrost driver).
+
+No devicetree bindings are provided because this does not require any
+driver-specific binding at all.
+
+Last but not least: it was chosen to have this driver enabled for
+( ARCH_MEDIATEK && REGULATOR ) without really giving a free configuration
+choice because, once the DVFS mechanism will be fully working, using one
+of the listed MediaTek SoCs *without* this coupling mechanism *will* lead
+to unstabilities and system crashes.
+For COMPILE_TEST, choice is given for obvious reasons.
+
+ drivers/soc/mediatek/Kconfig                 |   5 +
+ drivers/soc/mediatek/Makefile                |   1 +
+ drivers/soc/mediatek/mtk-regulator-coupler.c | 159 +++++++++++++++++++
+ 3 files changed, 165 insertions(+)
+ create mode 100644 drivers/soc/mediatek/mtk-regulator-coupler.c
+
+diff --git a/drivers/soc/mediatek/Kconfig b/drivers/soc/mediatek/Kconfig
+index 3c3eedea35f7..cfa24fc6287b 100644
+--- a/drivers/soc/mediatek/Kconfig
++++ b/drivers/soc/mediatek/Kconfig
+@@ -43,6 +43,11 @@ config MTK_PMIC_WRAP
+ 	  on different MediaTek SoCs. The PMIC wrapper is a proprietary
+ 	  hardware to connect the PMIC.
  
- 
- /* Maximum number of jiffies to wait before draining a batch. */
--#define KFREE_DRAIN_JIFFIES (HZ / 50)
-+#define KFREE_DRAIN_JIFFIES (HZ)
- #define KFREE_N_BATCHES 2
- #define FREE_N_CHANNELS 2
- 
-@@ -3510,6 +3510,25 @@ need_offload_krc(struct kfree_rcu_cpu *krcp)
- 	return !!krcp->head;
- }
- 
-+static void
-+schedule_delayed_monitor_work(struct kfree_rcu_cpu *krcp)
++config MTK_REGULATOR_COUPLER
++	bool "MediaTek SoC Regulator Coupler" if COMPILE_TEST
++	default ARCH_MEDIATEK
++	depends on REGULATOR
++
+ config MTK_SCPSYS
+ 	bool "MediaTek SCPSYS Support"
+ 	default ARCH_MEDIATEK
+diff --git a/drivers/soc/mediatek/Makefile b/drivers/soc/mediatek/Makefile
+index 0e9e703c931a..8c0ddacbcde8 100644
+--- a/drivers/soc/mediatek/Makefile
++++ b/drivers/soc/mediatek/Makefile
+@@ -3,6 +3,7 @@ obj-$(CONFIG_MTK_CMDQ) += mtk-cmdq-helper.o
+ obj-$(CONFIG_MTK_DEVAPC) += mtk-devapc.o
+ obj-$(CONFIG_MTK_INFRACFG) += mtk-infracfg.o
+ obj-$(CONFIG_MTK_PMIC_WRAP) += mtk-pmic-wrap.o
++obj-$(CONFIG_MTK_REGULATOR_COUPLER) += mtk-regulator-coupler.o
+ obj-$(CONFIG_MTK_SCPSYS) += mtk-scpsys.o
+ obj-$(CONFIG_MTK_SCPSYS_PM_DOMAINS) += mtk-pm-domains.o
+ obj-$(CONFIG_MTK_MMSYS) += mtk-mmsys.o
+diff --git a/drivers/soc/mediatek/mtk-regulator-coupler.c b/drivers/soc/mediatek/mtk-regulator-coupler.c
+new file mode 100644
+index 000000000000..ad2ed42aa697
+--- /dev/null
++++ b/drivers/soc/mediatek/mtk-regulator-coupler.c
+@@ -0,0 +1,159 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Voltage regulators coupler for MediaTek SoCs
++ *
++ * Copyright (C) 2022 Collabora, Ltd.
++ * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
++ */
++
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/of.h>
++#include <linux/regulator/coupler.h>
++#include <linux/regulator/driver.h>
++#include <linux/regulator/machine.h>
++#include <linux/suspend.h>
++
++#define to_mediatek_coupler(x)	container_of(x, struct mediatek_regulator_coupler, coupler)
++
++struct mediatek_regulator_coupler {
++	struct regulator_coupler coupler;
++	struct regulator_dev *vsram_rdev;
++};
++
++/*
++ * We currently support only couples of not more than two vregs and
++ * modify the vsram voltage only when changing voltage of vgpu.
++ *
++ * This function is limited to the GPU<->SRAM voltages relationships.
++ */
++static int mediatek_regulator_balance_voltage(struct regulator_coupler *coupler,
++					      struct regulator_dev *rdev,
++					      suspend_state_t state)
 +{
-+	long delay, delay_left;
++	struct mediatek_regulator_coupler *mrc = to_mediatek_coupler(coupler);
++	int max_spread = rdev->constraints->max_spread[0];
++	int vsram_min_uV = mrc->vsram_rdev->constraints->min_uV;
++	int vsram_max_uV = mrc->vsram_rdev->constraints->max_uV;
++	int vsram_target_min_uV, vsram_target_max_uV;
++	int min_uV = 0;
++	int max_uV = INT_MAX;
++	int ret;
 +
-+	delay = READ_ONCE(krcp->count) >= KVFREE_BULK_MAX_ENTR ? 1:KFREE_DRAIN_JIFFIES;
++	/*
++	 * If the target device is on, setting the SRAM voltage directly
++	 * is not supported as it scales through its coupled supply voltage.
++	 *
++	 * An exception is made in case the use_count is zero: this means
++	 * that this is the first time we power up the SRAM regulator, which
++	 * implies that the target device has yet to perform initialization
++	 * and setting a voltage at that time is harmless.
++	 */
++	if (rdev == mrc->vsram_rdev) {
++		if (rdev->use_count == 0)
++			return regulator_do_balance_voltage(rdev, state, true);
 +
-+	if (delayed_work_pending(&krcp->monitor_work)) {
-+		delay_left = krcp->monitor_work.timer.expires - jiffies;
-+
-+		if (delay < delay_left)
-+			mod_delayed_work(system_wq, &krcp->monitor_work, delay);
-+
-+		return;
++		return -EPERM;
 +	}
 +
-+	queue_delayed_work(system_wq, &krcp->monitor_work, delay);
++	ret = regulator_check_consumers(rdev, &min_uV, &max_uV, state);
++	if (ret < 0)
++		return ret;
++
++	if (min_uV == 0) {
++		ret = regulator_get_voltage_rdev(rdev);
++		if (ret < 0)
++			return ret;
++		min_uV = ret;
++	}
++
++	ret = regulator_check_voltage(rdev, &min_uV, &max_uV);
++	if (ret < 0)
++		return ret;
++
++	/*
++	 * If we're asked to set a voltage less than VSRAM min_uV, set
++	 * the minimum allowed voltage on VSRAM, as in this case it is
++	 * safe to ignore the max_spread parameter.
++	 */
++	vsram_target_min_uV = max(vsram_min_uV, min_uV + max_spread);
++	vsram_target_max_uV = min(vsram_max_uV, vsram_target_min_uV + max_spread);
++
++	/* Make sure we're not out of range */
++	vsram_target_min_uV = min(vsram_target_min_uV, vsram_max_uV);
++
++	pr_debug("Setting voltage %d-%duV on %s (minuV %d)\n",
++		 vsram_target_min_uV, vsram_target_max_uV,
++		 rdev_get_name(mrc->vsram_rdev), min_uV);
++
++	ret = regulator_set_voltage_rdev(mrc->vsram_rdev, vsram_target_min_uV,
++					 vsram_target_max_uV, state);
++	if (ret)
++		return ret;
++
++	/* The sram voltage is now balanced: update the target vreg voltage */
++	return regulator_do_balance_voltage(rdev, state, true);
 +}
 +
- /*
-  * This function is invoked after the KFREE_DRAIN_JIFFIES timeout.
-  */
-@@ -3567,7 +3586,7 @@ static void kfree_rcu_monitor(struct work_struct *work)
- 	// work to repeat an attempt. Because previous batches are
- 	// still in progress.
- 	if (need_offload_krc(krcp))
--		schedule_delayed_work(&krcp->monitor_work, KFREE_DRAIN_JIFFIES);
-+		schedule_delayed_monitor_work(krcp);
- 
- 	raw_spin_unlock_irqrestore(&krcp->lock, flags);
- }
-@@ -3755,7 +3774,7 @@ void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
- 
- 	// Set timer to drain after KFREE_DRAIN_JIFFIES.
- 	if (rcu_scheduler_active == RCU_SCHEDULER_RUNNING)
--		schedule_delayed_work(&krcp->monitor_work, KFREE_DRAIN_JIFFIES);
-+		schedule_delayed_monitor_work(krcp);
- 
- unlock_return:
- 	krc_this_cpu_unlock(krcp, flags);
-@@ -3831,7 +3850,7 @@ void __init kfree_rcu_scheduler_running(void)
- 
- 		raw_spin_lock_irqsave(&krcp->lock, flags);
- 		if (need_offload_krc(krcp))
--			schedule_delayed_work_on(cpu, &krcp->monitor_work, KFREE_DRAIN_JIFFIES);
-+			schedule_delayed_monitor_work(krcp);
- 		raw_spin_unlock_irqrestore(&krcp->lock, flags);
- 	}
- }
++static int mediatek_regulator_attach(struct regulator_coupler *coupler,
++				     struct regulator_dev *rdev)
++{
++	struct mediatek_regulator_coupler *mrc = to_mediatek_coupler(coupler);
++	const char *rdev_name = rdev_get_name(rdev);
++
++	/*
++	 * If we're getting a coupling of more than two regulators here and
++	 * this means that this is surely not a GPU<->SRAM couple: in that
++	 * case, we may want to use another coupler implementation, if any,
++	 * or the generic one: the regulator core will keep walking through
++	 * the list of couplers when any .attach_regulator() cb returns 1.
++	 */
++	if (rdev->coupling_desc.n_coupled > 2)
++		return 1;
++
++	if (strstr(rdev_name, "sram")) {
++		if (mrc->vsram_rdev)
++			return -EINVAL;
++		mrc->vsram_rdev = rdev;
++	} else if (!strstr(rdev_name, "vgpu") && !strstr(rdev_name, "Vgpu")) {
++		return 1;
++	}
++
++	return 0;
++}
++
++static int mediatek_regulator_detach(struct regulator_coupler *coupler,
++				     struct regulator_dev *rdev)
++{
++	struct mediatek_regulator_coupler *mrc = to_mediatek_coupler(coupler);
++
++	if (rdev == mrc->vsram_rdev)
++		mrc->vsram_rdev = NULL;
++
++	return 0;
++}
++
++static struct mediatek_regulator_coupler mediatek_coupler = {
++	.coupler = {
++		.attach_regulator = mediatek_regulator_attach,
++		.detach_regulator = mediatek_regulator_detach,
++		.balance_voltage = mediatek_regulator_balance_voltage,
++	},
++};
++
++static int mediatek_regulator_coupler_init(void)
++{
++	if (!of_machine_is_compatible("mediatek,mt8183") &&
++	    !of_machine_is_compatible("mediatek,mt8186") &&
++	    !of_machine_is_compatible("mediatek,mt8192"))
++		return 0;
++
++	return regulator_coupler_register(&mediatek_coupler.coupler);
++}
++arch_initcall(mediatek_regulator_coupler_init);
++
++MODULE_AUTHOR("AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>");
++MODULE_DESCRIPTION("MediaTek Regulator Coupler driver");
++MODULE_LICENSE("GPL");
 -- 
-2.30.2
+2.35.1
+

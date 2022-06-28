@@ -2,90 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39CD55EDCB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D6755EDD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232268AbiF1TUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 15:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
+        id S230016AbiF1T2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 15:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234596AbiF1TUC (ORCPT
+        with ESMTP id S231252AbiF1T1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 15:20:02 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D130BBC86;
-        Tue, 28 Jun 2022 12:18:07 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id p136so17686293ybg.4;
-        Tue, 28 Jun 2022 12:18:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7IQwRMlSVPcn362SikaZ4Eq9k/hWCiY8rzFaOjEbtVk=;
-        b=FDC3RGbxTQoQ3NUFARlxPcbwIJjMYPT8NIwvk/GEaHDvjtRsjy+RXmcQWcVcgaxgJM
-         l+YOMG3B2k8BQEXgG8Wru35PZ2bNtS+0dUVORxiuuIOx/dNMSPrE9EbITOtdCyYqsbfc
-         gMyVl0BBr8Lzw12Mbh57nI0zo3jbOLaEWbIiG8eU+SjZwCiBjMYscHxFVnBxY0n//Pgl
-         a/fyHEhJpOTcHMLm+v6QM13GdSstxmyqj442wNBqZADuvM/d7RhpqbOrlD//26JNBATL
-         XVieOKjstLHTfS5B8Zr189JAIdLhB6/Qdsx7H5XY8IV1i7Wif08fkK5AnXZRuQzZsPtU
-         XzOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7IQwRMlSVPcn362SikaZ4Eq9k/hWCiY8rzFaOjEbtVk=;
-        b=TF/7IyEqN/AX/kZ9FRT58IcQKcDqUM4CXoZUWQ+8PCwOt1cuf+k897wFTd9r+uTPAr
-         gl4S9/I6vMjLZuWYvwQD5TA5EVEXu7QSRKPEzGT8627EkN43QSDYja4GxoVSp1VAfsj8
-         LPs5yXX1AGYmvKjg0/E1scS+XcSwNNn+cWwoCUCMMHoGoePzT779zz7gWe9BzungUylQ
-         mrsPKK9R3WI9GM7XaoFfpIZ4QmLPnNfrWh25mFIdKK0cGx8R28MWAJvKeuSzFoMypxk8
-         iIfGZk2KhFmWlTVogYpi+283ZTqOTzGzlXgWXD0tbR1Jc5vyom74NMiXSugtwKmdEErz
-         k2Tw==
-X-Gm-Message-State: AJIora9+i/VcIyrozVZ/4LUWXTmjYuC8V2hXsXP8WMiR4PW01CKzEMd1
-        JNy1RykRlrt5B5hD+3YZwfUSucL5QXrtjShPGq8=
-X-Google-Smtp-Source: AGRyM1uEN3nkmCVzMO/TlzxvXoovFrW87cughMH1YvZoZFaHztTpeANNEUP+JoPbzffhkdou55ZdBuW2i4y9gUZzIYU=
-X-Received: by 2002:a25:dd83:0:b0:66c:8d8d:4f5f with SMTP id
- u125-20020a25dd83000000b0066c8d8d4f5fmr19189893ybg.79.1656443886524; Tue, 28
- Jun 2022 12:18:06 -0700 (PDT)
+        Tue, 28 Jun 2022 15:27:06 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E4C2F6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 12:25:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656444331; x=1687980331;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XKO1O2JaQBQyKUjcq5oTvNhtKJLLW78qPNkpHlDvDZk=;
+  b=XOCuWyXR8ffRFovyr2wvY3bbv831vE2pO3e1nX4k+/yqVe/hlunnOVae
+   IE23NwwMOdfcTgU8OoF5QEFxviv/bOLWc0sHh7Ne1HX2KG8m6M393q29N
+   PA2uAg2VuhW8jI7gDld3rJ0hDKxy+O9JlKn+lSNKrf9+UlnqKOaPeFRLO
+   6VVqWgj8XXa0uy3P1/wsNZBEAqXVGYeAm4bT7PsZy2Sf1qATvF1vIIKDj
+   eec5syC3ujFSK3ChRSShaC4JZvBr64jv9iUKT7a+9ISz6UtEj1WfdWHMh
+   vx1FppywOFfCdIUxMLHQJrQEgsxBJ4xU8n4pjnIv1RrEumy4gXyNaeL3u
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="279374736"
+X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
+   d="scan'208";a="279374736"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:25:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
+   d="scan'208";a="647050362"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Jun 2022 12:25:30 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o6Gq1-000AYQ-Ik;
+        Tue, 28 Jun 2022 19:25:29 +0000
+Date:   Wed, 29 Jun 2022 03:25:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:perf/core] BUILD SUCCESS
+ 119a784c81270eb88e573174ed2209225d646656
+Message-ID: <62bb558f.QXeNTUpZkct/xmcN%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220628144649.3957286-1-cosmin.tanislav@analog.com> <20220628144649.3957286-3-cosmin.tanislav@analog.com>
-In-Reply-To: <20220628144649.3957286-3-cosmin.tanislav@analog.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 28 Jun 2022 21:17:29 +0200
-Message-ID: <CAHp75Ve6f0dfMmctAwZ3UTA98MDs_injKik2C=wXpJ1zJyiPxA@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] iio: adc: ad4130: add AD4130 driver
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 4:49 PM Cosmin Tanislav <demonsingur@gmail.com> wrote:
->
-> AD4130-8 is an ultra-low power, high precision, measurement solution for
-> low bandwidth battery operated applications.
->
-> The fully integrated AFE (Analog Front-End) includes a multiplexer for up
-> to 16 single-ended or 8 differential inputs, PGA (Programmable Gain
-> Amplifier), 24-bit Sigma-Delta ADC, on-chip reference and oscillator,
-> selectable filter options, smart sequencer, sensor biasing and excitation
-> options, diagnostics, and a FIFO buffer.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/core
+branch HEAD: 119a784c81270eb88e573174ed2209225d646656  perf/core: Add a new read format to get a number of lost samples
 
-It would be respectful, if you include given tags. Why didn't you do
-that? Any significant change that has to be re-reviewed?
+i386-tinyconfig vmlinux size:
+
+===========================================================================================================================================
+ TOTAL  TEXT  __perf_read_group_add()  perf_output_read_group()                                                                            
+===========================================================================================================================================
+  +310  +309                      +98                       +78  119a784c8127 perf/core: Add a new read format to get a number of lost sam 
+  +310  +309                      +98                       +78  b13baccc3850..119a784c8127 (ALL COMMITS)                                  
+===========================================================================================================================================
+
+elapsed time: 722m
+
+configs tested: 84
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+i386                 randconfig-c001-20220627
+arm                          pxa910_defconfig
+mips                      maltasmvp_defconfig
+mips                           ip32_defconfig
+arm                         vf610m4_defconfig
+mips                        vocore2_defconfig
+sh                           se7750_defconfig
+sh                         ap325rxa_defconfig
+openrisc                 simple_smp_defconfig
+sh                          rsk7201_defconfig
+sh                          sdk7780_defconfig
+sh                 kfr2r09-romimage_defconfig
+mips                         tb0226_defconfig
+m68k                       bvme6000_defconfig
+arm                        mini2440_defconfig
+arm                      integrator_defconfig
+arm                          simpad_defconfig
+sh                         apsh4a3a_defconfig
+arm                          exynos_defconfig
+ia64                             allmodconfig
+x86_64               randconfig-k001-20220627
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+i386                                defconfig
+i386                             allyesconfig
+x86_64               randconfig-a013-20220627
+x86_64               randconfig-a012-20220627
+x86_64               randconfig-a016-20220627
+x86_64               randconfig-a015-20220627
+x86_64               randconfig-a011-20220627
+x86_64               randconfig-a014-20220627
+i386                 randconfig-a012-20220627
+i386                 randconfig-a011-20220627
+i386                 randconfig-a013-20220627
+i386                 randconfig-a014-20220627
+i386                 randconfig-a015-20220627
+i386                 randconfig-a016-20220627
+s390                 randconfig-r044-20220627
+riscv                randconfig-r042-20220627
+arc                  randconfig-r043-20220627
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+arm                        multi_v5_defconfig
+powerpc                     skiroot_defconfig
+powerpc                     ppa8548_defconfig
+mips                           rs90_defconfig
+arm                           spitz_defconfig
+powerpc                     tqm5200_defconfig
+mips                        bcm63xx_defconfig
+arm                     am200epdkit_defconfig
+powerpc                      acadia_defconfig
+mips                           ip27_defconfig
+arm                        neponset_defconfig
+powerpc                     ksi8560_defconfig
+i386                 randconfig-a002-20220627
+i386                 randconfig-a004-20220627
+i386                 randconfig-a003-20220627
+i386                 randconfig-a001-20220627
+i386                 randconfig-a005-20220627
+i386                 randconfig-a006-20220627
+x86_64               randconfig-a002-20220627
+x86_64               randconfig-a003-20220627
+x86_64               randconfig-a001-20220627
+x86_64               randconfig-a005-20220627
+x86_64               randconfig-a004-20220627
+x86_64               randconfig-a006-20220627
+hexagon              randconfig-r041-20220627
+hexagon              randconfig-r045-20220627
 
 -- 
-With Best Regards,
-Andy Shevchenko
+0-DAY CI Kernel Test Service
+https://01.org/lkp

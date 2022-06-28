@@ -2,125 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899D455E419
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A162055E3FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346067AbiF1NML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
+        id S1346073AbiF1NDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239676AbiF1NME (ORCPT
+        with ESMTP id S1346375AbiF1NDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:12:04 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090AD2C64F
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:12:03 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id c205so11963809pfc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:12:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=XoYbPu8ODNB+aCWUy44nZWPrpPoZ1GysfeORk/lUgLM=;
-        b=XHLhZaEaqR9QT3n72jGC4B9CTYQLGgvSgK5FeBhATU//AaDLwb/uPmare7UUzHCmyF
-         8ZxmzjQIv1VJYF3kxIJep8D0Wy/rX0Hfu83UHtsKjrWxH+xmjazgwoZPmqITisW1cvy9
-         10gJwkCBPRYXhEK6qhlHZ9IbtS69KMgFFx8HOg9mjACyNRf/BheHQuwwsckrz3gdq9qY
-         WL6HAvO2pym4fY1/bGmqCNe9LLscw6dtJsZUcVJz9dmRGm42zTVZBz429hn66jOMcMzY
-         0cEFS13T5IEjTOkOwH/jOXyhEGOwVm0+m7UAOSsjV4QUZONQ1N6gWLTU7S12gm5E5lHC
-         UbqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=XoYbPu8ODNB+aCWUy44nZWPrpPoZ1GysfeORk/lUgLM=;
-        b=NBIM3Q8HSEnEAuLsgoV0TnwmDPkakMm5pUdLjv/kcZXamlQOwmghcicDbmnYTdITNO
-         fEc9tuuencD+imMJJKl/56wh1t2kwGNkvaz8BgWHySfk/nIMew29HjxQJiAl1PolcFjp
-         /eZhUmjdR54YC1nTJPfoN0WZIRgp59GFzBbtYLvOdvBVPiel6bKFDYaGyNnOKuXYNiLJ
-         /tPKHz/jCgFjUDuKy5MLmJH3CS3USC05xdoabWPFi/JeNZhlEh7S3OydxhLHzs/2DpEb
-         OZH6jIsZA3vvSjJt8kYA0UDs976q2lSpjkVprn0A8Av8n39hyNBvgu24djXw8Xqq6sV3
-         ZG9g==
-X-Gm-Message-State: AJIora9PvoKTjCs1zXqlW6Jby0UhuK3bZFvl3CyIWAXOKxFoByQ4Bp3O
-        olPvIl52A9QkrALWb/WVB3q4sA==
-X-Google-Smtp-Source: AGRyM1v+C2N+0M6g5SN7PpJOGUDCyzzebuVob89bSW99C05vbsm8/cBqbUwRKRC138wRQjE3ZfHSvQ==
-X-Received: by 2002:a63:4d5:0:b0:40d:77fd:cff8 with SMTP id 204-20020a6304d5000000b0040d77fdcff8mr17449254pge.361.1656421922420;
-        Tue, 28 Jun 2022 06:12:02 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id d9-20020a170902654900b0016357fd0fd1sm9354401pln.69.2022.06.28.06.12.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 06:12:02 -0700 (PDT)
-Message-ID: <7dc3a545-8fa5-e540-7c64-00b61c4bef13@kernel.dk>
-Date:   Tue, 28 Jun 2022 07:12:01 -0600
+        Tue, 28 Jun 2022 09:03:12 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74C21EECA;
+        Tue, 28 Jun 2022 06:03:11 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LXPrj4yQWz9snC;
+        Tue, 28 Jun 2022 21:02:29 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 28 Jun 2022 21:03:09 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 28 Jun
+ 2022 21:03:08 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>
+CC:     <clement.leger@bootlin.com>, <olteanv@gmail.com>,
+        <f.fainelli@gmail.com>, <davem@davemloft.net>
+Subject: [PATCH -next v2] net: pcs-rzn1-miic: fix return value check in miic_probe()
+Date:   Tue, 28 Jun 2022 21:12:59 +0800
+Message-ID: <20220628131259.3109124-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-From:   Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH AUTOSEL 5.18 37/53] io_uring: fix merge error in checking
- send/recv addr2 flags
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>, Sasha Levin <sashal@kernel.org>,
-        io-uring <io-uring@vger.kernel.org>
-References: <20220628021839.594423-1-sashal@kernel.org>
- <20220628021839.594423-37-sashal@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20220628021839.594423-37-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 8:20 PM Sasha Levin <sashal@kernel.org> wrote:
->
-> From: Jens Axboe <axboe@kernel.dk>
->
-> [ Upstream commit b60cac14bb3c88cff2a7088d9095b01a80938c41 ]
->
-> With the dropping of the IOPOLL checking in the per-opcode handlers,
-> we inadvertently left two checks in the recv/recvmsg and send/sendmsg
-> prep handlers for the same thing, and one of them includes addr2 which
-> holds the flags for these opcodes.
->
-> Fix it up and kill the redundant checks.
->
-> Signed-off-by: Jens Axboe <axboe@kernel.dk>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  fs/io_uring.c | 4 ----
->  1 file changed, 4 deletions(-)
->
-> diff --git a/fs/io_uring.c b/fs/io_uring.c
-> index 725c59c734f1..9eb20f8865ac 100644
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@ -5252,8 +5252,6 @@ static int io_sendmsg_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
->
->         if (unlikely(req->ctx->flags & IORING_SETUP_IOPOLL))
->                 return -EINVAL;
-> -       if (unlikely(sqe->addr2 || sqe->file_index))
-> -               return -EINVAL;
->
->         sr->umsg = u64_to_user_ptr(READ_ONCE(sqe->addr));
->         sr->len = READ_ONCE(sqe->len);
-> @@ -5465,8 +5463,6 @@ static int io_recvmsg_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
->
->         if (unlikely(req->ctx->flags & IORING_SETUP_IOPOLL))
->                 return -EINVAL;
-> -       if (unlikely(sqe->addr2 || sqe->file_index))
-> -               return -EINVAL;
->
->         sr->umsg = u64_to_user_ptr(READ_ONCE(sqe->addr));
->         sr->len = READ_ONCE(sqe->len);
+On failure, devm_platform_ioremap_resource() returns a ERR_PTR() value
+and not NULL. Fix return value checking by using IS_ERR() and return
+PTR_ERR() as error value.
 
-This doesn't look right, and cannot be as the problem was added with a
-5.19 merge issue. Please drop this patch from 5.18-stable, thanks.
+Fixes: 7dc54d3b8d91 ("net: pcs: add Renesas MII converter driver")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+v2:
+  change commit message as Clément suggested.
+---
+ drivers/net/pcs/pcs-rzn1-miic.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/net/pcs/pcs-rzn1-miic.c b/drivers/net/pcs/pcs-rzn1-miic.c
+index 8f5e910f443d..d896961e48cc 100644
+--- a/drivers/net/pcs/pcs-rzn1-miic.c
++++ b/drivers/net/pcs/pcs-rzn1-miic.c
+@@ -461,8 +461,8 @@ static int miic_probe(struct platform_device *pdev)
+ 	spin_lock_init(&miic->lock);
+ 	miic->dev = dev;
+ 	miic->base = devm_platform_ioremap_resource(pdev, 0);
+-	if (!miic->base)
+-		return -EINVAL;
++	if (IS_ERR(miic->base))
++		return PTR_ERR(miic->base);
+ 
+ 	ret = devm_pm_runtime_enable(dev);
+ 	if (ret < 0)
 -- 
-Jens Axboe
+2.25.1
 

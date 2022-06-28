@@ -2,183 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CE155E66B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 289A355E5FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347759AbiF1Pkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
+        id S1347929AbiF1Plo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbiF1Pkk (ORCPT
+        with ESMTP id S1347478AbiF1Plm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:40:40 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EC3D0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:40:39 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id m14-20020a17090a668e00b001ee6ece8368so7051811pjj.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:40:39 -0700 (PDT)
+        Tue, 28 Jun 2022 11:41:42 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0945E6324
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:41:41 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id n15so15382852ljg.8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:41:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=/O/fAu/z5wIR2Tt1wRNpx7oM/8IQ7c97KuaGl+RDxRY=;
-        b=Ndrf/nwkzP0xlXdJtQEGsYom6o6YovaBRoZs6vYCFyq3Ac+qNpargywQRgKpKFGxFu
-         fIBmevJ8iBzkjswx3ZxH34Thn8KeQ8JFz1xiXFDw3a0XKjiSuJ+RX5ihlKiR1QWFXlBP
-         yQIUUA+W/ITcCAwPLE6G9sO00m4z/AZh+IPTEW9JRPHmHjofioriP8BSGBVwfZKtf+e+
-         LJYVNzzlEm9/wqstxgDVKZDJGWGHFVX1tNJOOgrcla5vCOoA8gOAqr7S1RfRyBa1eUZ1
-         D7kXIRU0+FSxhpVjDqmrf92neQt6NJ8CXjMBHWBdrai7RC7fQgGK5sN8V3QUFyrqJBt7
-         2bAA==
+        bh=45OuMvop0l12Xy16UbND2bLY50+0LD4yzVw7v19VYg8=;
+        b=tixw4tZb7j9f6SMyAeckCFJC+hYJd8xNh7Rx6rUbM/t0yc2+e7419dt2uO+oMHq+zO
+         40DQhCgjRzBC8jIJwc5wNZx9n+3dWDxXOv6J405pFrtubNVZkW8D05c4a+3QB2iU1cKU
+         PaVPtDne0KNJrhAdHohNCk8fWX5rX9alPL+j7ZBAp1p52k5MI//Ox0NugOMeBvPEqgcJ
+         HLIqAy91EnzZgcBxfKGKD9e47TCc4mOEgCkI2sb4rxFOermX2xYbCZXKe9g+ZsvmQVFX
+         00l/SHC+TEHX9UHONQpmON3QI6MWzbaUxPMzJN/IMUE/oQY9kXWVIvrpK2EK+4V7H6H1
+         xpTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/O/fAu/z5wIR2Tt1wRNpx7oM/8IQ7c97KuaGl+RDxRY=;
-        b=11ze3e/C3VdwBk+F/w1R1FmTgUB9ieJl+VqHKtg3uKW+X/EIYAM85r4zr8FlOdY/xp
-         kMDo8F/GADE0hvy/GgbM+Knt8B2RfFKky+pn1zm++Laal9iU9ffO/KDp/7lvswXcZhHH
-         VnRBSVgKXdNXC93zPomQIwNtWXcsfLivv/z9lEg0hrkkr+6+yF6Bug49ih3zlt0aZdcd
-         huEKEEH9tJ60nXnkK2PdPtzSl7r5vliwjemV+V3Iq8CJXk+ObxIVf657BpwFhcHwt8MY
-         cID10mbAPCwargqrVJNM7pulDNduXjPJ94BQbxcx6hTBmdFmw9IDl8F2rBOsulqbaD0g
-         fcXg==
-X-Gm-Message-State: AJIora9AZ2MC1fHxAsdKCI/3QrDpQDyj+4/zjpt/ooUsowZQs9h7BZd8
-        xAeXmQePmczI62OR0sieW/zZz9eZwaBNfn9um2traawl1It9ww==
-X-Google-Smtp-Source: AGRyM1semGJYll4lUVae+1xmL2gICM7y3fVFTLJibtYnVeZ/R+FRel/MPkikBBdLknAzVCIGhZeDMT7n134aR5jp+24=
-X-Received: by 2002:a17:902:e94f:b0:16a:214e:46c1 with SMTP id
- b15-20020a170902e94f00b0016a214e46c1mr4278522pll.89.1656430838615; Tue, 28
- Jun 2022 08:40:38 -0700 (PDT)
+        bh=45OuMvop0l12Xy16UbND2bLY50+0LD4yzVw7v19VYg8=;
+        b=NC3wLTFIefnfnsltWnwPxH5j5Sy6A3EATuW5t6Sm43/MI1QV3umME3AZnln3qMLjQv
+         xEUD0lksb4mFomyWKGhTVRdyM1BakjLrz1lW+ZyagCy4neOO4SEohARws9kOksqtyLd6
+         NvUtoFHDX1tH/9Pjaq6AnG+KHKe4S3WKu9B3NpXCrdksK6xeHkYdSK6QhrvsoiXvTkLA
+         0QThsIsBUGK+mZi3k2xcYXJqqy2NuVbUmRj8VLQJ3qZl4rys379FeDoaKcE+uN5nlDyT
+         gSe7VK8B1jaEt24DKMH4N4sxo0oavGi3BdcKPQLRsECwjjTP60uR7N/kXE7fCbCNzqSk
+         kFeA==
+X-Gm-Message-State: AJIora8K2nuvuxxxVAp/mxUHSeMX94SN/YI1viIfx4uoI4xzWrV3aHbt
+        HrfK+A0XBHl1dkS71Es0BpIk3/sOuIBU2XNZM1smvw==
+X-Google-Smtp-Source: AGRyM1t8CoDJ/rKg0rWWuralRxMR0DkCBugAQ7kbwNId8MGTrF8HS9iDshsoR/7Luv6iaWw7wW9bZcNDAn9f5DsvrJE=
+X-Received: by 2002:a2e:998c:0:b0:25b:b2ae:b2 with SMTP id w12-20020a2e998c000000b0025bb2ae00b2mr8470900lji.92.1656430899134;
+ Tue, 28 Jun 2022 08:41:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220624173656.2033256-1-jthoughton@google.com>
- <20220624173656.2033256-3-jthoughton@google.com> <Yrn6DfTINknKNS04@monkey>
-In-Reply-To: <Yrn6DfTINknKNS04@monkey>
-From:   James Houghton <jthoughton@google.com>
-Date:   Tue, 28 Jun 2022 08:40:27 -0700
-Message-ID: <CADrL8HUD14o6XybhYDdozAUkJ4Zt6nE8=dm-_osKg2CmvOFzHg@mail.gmail.com>
-Subject: Re: [RFC PATCH 02/26] hugetlb: sort hstates in hugetlb_init_hstates
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Jue Wang <juew@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220628095833.2579903-1-elver@google.com> <20220628095833.2579903-13-elver@google.com>
+In-Reply-To: <20220628095833.2579903-13-elver@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 28 Jun 2022 17:41:27 +0200
+Message-ID: <CACT4Y+ZAjQa4rh-kq8h+wOmfaURvz+cV2LeU5SHj34OMtMMfow@mail.gmail.com>
+Subject: Re: [PATCH v2 12/13] perf/hw_breakpoint: Optimize max_bp_pinned_slots()
+ for CPU-independent task targets
+To:     Marco Elver <elver@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, linux-sh@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 11:42 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+On Tue, 28 Jun 2022 at 11:59, Marco Elver <elver@google.com> wrote:
 >
-> On 06/24/22 17:36, James Houghton wrote:
-> > When using HugeTLB high-granularity mapping, we need to go through the
-> > supported hugepage sizes in decreasing order so that we pick the largest
-> > size that works. Consider the case where we're faulting in a 1G hugepage
-> > for the first time: we want hugetlb_fault/hugetlb_no_page to map it with
-> > a PUD. By going through the sizes in decreasing order, we will find that
-> > PUD_SIZE works before finding out that PMD_SIZE or PAGE_SIZE work too.
-> >
-> > Signed-off-by: James Houghton <jthoughton@google.com>
-> > ---
-> >  mm/hugetlb.c | 40 +++++++++++++++++++++++++++++++++++++---
-> >  1 file changed, 37 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > index a57e1be41401..5df838d86f32 100644
-> > --- a/mm/hugetlb.c
-> > +++ b/mm/hugetlb.c
-> > @@ -33,6 +33,7 @@
-> >  #include <linux/migrate.h>
-> >  #include <linux/nospec.h>
-> >  #include <linux/delayacct.h>
-> > +#include <linux/sort.h>
-> >
-> >  #include <asm/page.h>
-> >  #include <asm/pgalloc.h>
-> > @@ -48,6 +49,10 @@
-> >
-> >  int hugetlb_max_hstate __read_mostly;
-> >  unsigned int default_hstate_idx;
-> > +/*
-> > + * After hugetlb_init_hstates is called, hstates will be sorted from largest
-> > + * to smallest.
-> > + */
-> >  struct hstate hstates[HUGE_MAX_HSTATE];
-> >
-> >  #ifdef CONFIG_CMA
-> > @@ -3144,14 +3149,43 @@ static void __init hugetlb_hstate_alloc_pages(struct hstate *h)
-> >       kfree(node_alloc_noretry);
-> >  }
-> >
-> > +static int compare_hstates_decreasing(const void *a, const void *b)
-> > +{
-> > +     const int shift_a = huge_page_shift((const struct hstate *)a);
-> > +     const int shift_b = huge_page_shift((const struct hstate *)b);
-> > +
-> > +     if (shift_a < shift_b)
-> > +             return 1;
-> > +     if (shift_a > shift_b)
-> > +             return -1;
-> > +     return 0;
-> > +}
-> > +
-> > +static void sort_hstates(void)
-> > +{
-> > +     unsigned long default_hstate_sz = huge_page_size(&default_hstate);
-> > +
-> > +     /* Sort from largest to smallest. */
-> > +     sort(hstates, hugetlb_max_hstate, sizeof(*hstates),
-> > +          compare_hstates_decreasing, NULL);
-> > +
-> > +     /*
-> > +      * We may have changed the location of the default hstate, so we need to
-> > +      * update it.
-> > +      */
-> > +     default_hstate_idx = hstate_index(size_to_hstate(default_hstate_sz));
-> > +}
-> > +
-> >  static void __init hugetlb_init_hstates(void)
-> >  {
-> >       struct hstate *h, *h2;
-> >
-> > -     for_each_hstate(h) {
-> > -             if (minimum_order > huge_page_order(h))
-> > -                     minimum_order = huge_page_order(h);
-> > +     sort_hstates();
-> >
-> > +     /* The last hstate is now the smallest. */
-> > +     minimum_order = huge_page_order(&hstates[hugetlb_max_hstate - 1]);
-> > +
-> > +     for_each_hstate(h) {
-> >               /* oversize hugepages were init'ed in early boot */
-> >               if (!hstate_is_gigantic(h))
-> >                       hugetlb_hstate_alloc_pages(h);
+> Running the perf benchmark with (note: more aggressive parameters vs.
+> preceding changes, but same 256 CPUs host):
 >
-> This may/will cause problems for gigantic hugetlb pages allocated at boot
-> time.  See alloc_bootmem_huge_page() where a pointer to the associated hstate
-> is encoded within the allocated hugetlb page.  These pages are added to
-> hugetlb pools by the routine gather_bootmem_prealloc() which uses the saved
-> hstate to add prep the gigantic page and add to the correct pool.  Currently,
-> gather_bootmem_prealloc is called after hugetlb_init_hstates.  So, changing
-> hstate order will cause errors.
+>  | $> perf bench -r 100 breakpoint thread -b 4 -p 128 -t 512
+>  | # Running 'breakpoint/thread' benchmark:
+>  | # Created/joined 100 threads with 4 breakpoints and 128 parallelism
+>  |      Total time: 1.989 [sec]
+>  |
+>  |       38.854160 usecs/op
+>  |     4973.332500 usecs/op/cpu
 >
-> I do not see any reason why we could not call gather_bootmem_prealloc before
-> hugetlb_init_hstates to avoid this issue.
+>     20.43%  [kernel]       [k] queued_spin_lock_slowpath
+>     18.75%  [kernel]       [k] osq_lock
+>     16.98%  [kernel]       [k] rhashtable_jhash2
+>      8.34%  [kernel]       [k] task_bp_pinned
+>      4.23%  [kernel]       [k] smp_cfm_core_cond
+>      3.65%  [kernel]       [k] bcmp
+>      2.83%  [kernel]       [k] toggle_bp_slot
+>      1.87%  [kernel]       [k] find_next_bit
+>      1.49%  [kernel]       [k] __reserve_bp_slot
+>
+> We can see that a majority of the time is now spent hashing task
+> pointers to index into task_bps_ht in task_bp_pinned().
+>
+> Obtaining the max_bp_pinned_slots() for CPU-independent task targets
+> currently is O(#cpus), and calls task_bp_pinned() for each CPU, even if
+> the result of task_bp_pinned() is CPU-independent.
+>
+> The loop in max_bp_pinned_slots() wants to compute the maximum slots
+> across all CPUs. If task_bp_pinned() is CPU-independent, we can do so by
+> obtaining the max slots across all CPUs and adding task_bp_pinned().
+>
+> To do so in O(1), use a bp_slots_histogram for CPU-pinned slots.
+>
+> After this optimization:
+>
+>  | $> perf bench -r 100 breakpoint thread -b 4 -p 128 -t 512
+>  | # Running 'breakpoint/thread' benchmark:
+>  | # Created/joined 100 threads with 4 breakpoints and 128 parallelism
+>  |      Total time: 1.930 [sec]
+>  |
+>  |       37.697832 usecs/op
+>  |     4825.322500 usecs/op/cpu
+>
+>     19.13%  [kernel]       [k] queued_spin_lock_slowpath
+>     18.21%  [kernel]       [k] rhashtable_jhash2
+>     15.46%  [kernel]       [k] osq_lock
+>      6.27%  [kernel]       [k] toggle_bp_slot
+>      5.91%  [kernel]       [k] task_bp_pinned
+>      5.05%  [kernel]       [k] smp_cfm_core_cond
+>      1.78%  [kernel]       [k] update_sg_lb_stats
+>      1.36%  [kernel]       [k] llist_reverse_order
+>      1.34%  [kernel]       [k] find_next_bit
+>      1.19%  [kernel]       [k] bcmp
+>
+> Suggesting that time spent in task_bp_pinned() has been reduced.
+> However, we're still hashing too much, which will be addressed in the
+> subsequent change.
+>
+> Signed-off-by: Marco Elver <elver@google.com>
 
-Thanks for catching this, Mike. Your suggestion certainly seems to
-work, but it also seems kind of error prone. I'll have to look at the
-code more closely, but maybe it would be better if I just maintained a
-separate `struct hstate *sorted_hstate_ptrs[]`, where the original
-locations of the hstates remain unchanged, as to not break
-gather_bootmem_prealloc/other things.
+Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
 
+> ---
+> v2:
+> * New patch.
+> ---
+>  kernel/events/hw_breakpoint.c | 45 +++++++++++++++++++++++++++++++----
+>  1 file changed, 41 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/events/hw_breakpoint.c b/kernel/events/hw_breakpoint.c
+> index 18886f115abc..b5180a2ccfbf 100644
+> --- a/kernel/events/hw_breakpoint.c
+> +++ b/kernel/events/hw_breakpoint.c
+> @@ -64,6 +64,9 @@ static struct bp_cpuinfo *get_bp_info(int cpu, enum bp_type_idx type)
+>         return per_cpu_ptr(bp_cpuinfo + type, cpu);
+>  }
+>
+> +/* Number of pinned CPU breakpoints globally. */
+> +static struct bp_slots_histogram cpu_pinned[TYPE_MAX];
+> +
+>  /* Keep track of the breakpoints attached to tasks */
+>  static struct rhltable task_bps_ht;
+>  static const struct rhashtable_params task_bps_ht_params = {
+> @@ -194,6 +197,10 @@ static __init int init_breakpoint_slots(void)
+>                                 goto err;
+>                 }
+>         }
+> +       for (i = 0; i < TYPE_MAX; i++) {
+> +               if (!bp_slots_histogram_alloc(&cpu_pinned[i], i))
+> +                       goto err;
+> +       }
+>
+>         return 0;
+>  err:
+> @@ -203,6 +210,8 @@ static __init int init_breakpoint_slots(void)
+>                 if (err_cpu == cpu)
+>                         break;
+>         }
+> +       for (i = 0; i < TYPE_MAX; i++)
+> +               bp_slots_histogram_free(&cpu_pinned[i]);
+>
+>         return -ENOMEM;
+>  }
+> @@ -270,6 +279,9 @@ static unsigned int max_task_bp_pinned(int cpu, enum bp_type_idx type)
+>  /*
+>   * Count the number of breakpoints of the same type and same task.
+>   * The given event must be not on the list.
+> + *
+> + * If @cpu is -1, but the result of task_bp_pinned() is not CPU-independent,
+> + * returns a negative value.
+>   */
+>  static int task_bp_pinned(int cpu, struct perf_event *bp, enum bp_type_idx type)
+>  {
+> @@ -288,9 +300,18 @@ static int task_bp_pinned(int cpu, struct perf_event *bp, enum bp_type_idx type)
+>                 goto out;
+>
+>         rhl_for_each_entry_rcu(iter, pos, head, hw.bp_list) {
+> -               if (find_slot_idx(iter->attr.bp_type) == type &&
+> -                   (iter->cpu < 0 || cpu == iter->cpu))
+> -                       count += hw_breakpoint_weight(iter);
+> +               if (find_slot_idx(iter->attr.bp_type) != type)
+> +                       continue;
+> +
+> +               if (iter->cpu >= 0) {
+> +                       if (cpu == -1) {
+> +                               count = -1;
+> +                               goto out;
+> +                       } else if (cpu != iter->cpu)
+> +                               continue;
+> +               }
+> +
+> +               count += hw_breakpoint_weight(iter);
+>         }
+>
+>  out:
+> @@ -316,6 +337,19 @@ max_bp_pinned_slots(struct perf_event *bp, enum bp_type_idx type)
+>         int pinned_slots = 0;
+>         int cpu;
+>
+> +       if (bp->hw.target && bp->cpu < 0) {
+> +               int max_pinned = task_bp_pinned(-1, bp, type);
+> +
+> +               if (max_pinned >= 0) {
+> +                       /*
+> +                        * Fast path: task_bp_pinned() is CPU-independent and
+> +                        * returns the same value for any CPU.
+> +                        */
+> +                       max_pinned += bp_slots_histogram_max(&cpu_pinned[type], type);
+> +                       return max_pinned;
+> +               }
+> +       }
+> +
+>         for_each_cpu(cpu, cpumask) {
+>                 struct bp_cpuinfo *info = get_bp_info(cpu, type);
+>                 int nr;
+> @@ -366,8 +400,11 @@ toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
+>
+>         /* Pinned counter cpu profiling */
+>         if (!bp->hw.target) {
+> +               struct bp_cpuinfo *info = get_bp_info(bp->cpu, type);
+> +
+>                 lockdep_assert_held_write(&bp_cpuinfo_sem);
+> -               get_bp_info(bp->cpu, type)->cpu_pinned += weight;
+> +               bp_slots_histogram_add(&cpu_pinned[type], info->cpu_pinned, weight);
+> +               info->cpu_pinned += weight;
+>                 return 0;
+>         }
+>
 > --
-> Mike Kravetz
+> 2.37.0.rc0.161.g10f37bed90-goog
+>

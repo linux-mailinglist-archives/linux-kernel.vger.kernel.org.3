@@ -2,156 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D342955E3AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBB555E38A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345849AbiF1Mpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 08:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42256 "EHLO
+        id S1344539AbiF1Mox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 08:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345476AbiF1Mp0 (ORCPT
+        with ESMTP id S240118AbiF1Mov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 08:45:26 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16BB205DE;
-        Tue, 28 Jun 2022 05:45:24 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id ay16so25533193ejb.6;
-        Tue, 28 Jun 2022 05:45:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=X+4C91pBPuruAy2SRc0UhNyMy5LTHEOk4TXkwRVqGsA=;
-        b=DSh1qQ0rIGt4CcyCfN6ZANz2B9InOMMi8Y8ooiZhU/J2JSd6dMIR4sTY2nB1Z83mDM
-         21c2NAjI9GWt5JSsAxSVz6lHVn7s1LX9G9byRpY03+c/i7jyxysdlN3QmkLwUe3CIsmY
-         CRVpalQd5kQUqUp+/w/o1svh2ZcshK7VEC77pWrApzObYapwgR7nxJTEc6s1p8jsIgRl
-         qgHk8TPwFpTGUt6ynhNvD5AZ1cfUS4AQRgIKIDe0VtHBy8cn4XLr5Mq59SQJML3tFWny
-         howy9kNXIDizrIwmYrQNqtBXM8OMfEFCv7sGq4gCfUbH+ufj/7vjhC2ScSnZlxWZJD12
-         ztQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=X+4C91pBPuruAy2SRc0UhNyMy5LTHEOk4TXkwRVqGsA=;
-        b=A6pXQdV/M9QB0m34tHVS/5glTBWEo0l0q9+FcqX7ZJ7Wv5rzHxjVpo6h5ggJbqhJiE
-         +3twkOQdtn41HVIPMI/4X2Z8pH3aqUSeu5CcRgCYSa9N/3zH6LsDi/avhlJzum8JEZPJ
-         T4w/NmdRTW6AZhMDKe2Mhqv8cjfj26ZoFM2IUGmtX35ZenjqSys6lydCbKg9xbzSI83G
-         P73GdGIYrJUfma4hSdOCDmECgMWN0p1hKTavJkxZKxvvLtZ/ISBLr8HkY7HnwfvZLMSC
-         uabZVfI+T7/OeUmXZj1NRVLE+2CX3b93bNMTfDULdh3bZ8xGxzIg/V8dYa2yoFDUdo3e
-         J5+Q==
-X-Gm-Message-State: AJIora/QgXN4iS1J5d3bOiGYzVb2Wue64MUNmiTa+ZF5n7+/wdeTbfjR
-        DT8i+Bl30jtdPZ1dikQXjKA=
-X-Google-Smtp-Source: AGRyM1tqzBvDQCUi6RRScG2xpFlt5U6tlV23lkx33B4FpNGHMgJQZEy49e5pO+76w3Lr/SNE+MEY6w==
-X-Received: by 2002:a17:906:9b93:b0:722:f3e8:3f5e with SMTP id dd19-20020a1709069b9300b00722f3e83f5emr17953859ejc.65.1656420323128;
-        Tue, 28 Jun 2022 05:45:23 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-095-114-061-215.95.114.pool.telefonica.de. [95.114.61.215])
-        by smtp.googlemail.com with ESMTPSA id f13-20020a170906824d00b00726e108b566sm622871ejx.173.2022.06.28.05.45.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 05:45:22 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        p.zabel@pengutronix.de
-Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        vkoul@kernel.org, kishon@ti.com, rtanwar@maxlinear.com,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v1 7/9] reset: intel: Use syscon_node_to_regmap on legacy SoCs
-Date:   Tue, 28 Jun 2022 14:44:39 +0200
-Message-Id: <20220628124441.2385023-8-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220628124441.2385023-1-martin.blumenstingl@googlemail.com>
-References: <20220628124441.2385023-1-martin.blumenstingl@googlemail.com>
+        Tue, 28 Jun 2022 08:44:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477B419C17;
+        Tue, 28 Jun 2022 05:44:51 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SCOqbr017601;
+        Tue, 28 Jun 2022 12:44:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=P3twaWHhDTd77mVpF/4CwpTAPR0IiybHjJNeSDkRcL0=;
+ b=YwrWAEqSsTmlqynz7lKcfShqsKBIFgU9CMueffzw0g3d3QFZbrujWziXJwmMcte0tS3s
+ PomybUJhf2QQKm9wsQQKOSu13v/4Fik9EiUbSv90l6Q+YIRiINfn/iEzkjfEIz3Xs22Z
+ yOg83164CET4v2Ary85VNBelO6NSMqcrXslYCVGINCpZGLJ3/dOELlavoZzAx7cR9SUy
+ 664wqGPZIoQjgFPFbIygtKsHYudwhnfRwpQQ4rsbx67zJCI6qyfZl9mjD3YSN+uRbb9Y
+ sXJP1lHQN5bldDX18PznxAH5Kj+2q7x58i9NLF66hfLvuPDBXEv5YwhVWix+EMkLtbrK Jw== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h00j82jgq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 12:44:47 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25SCavjf020511;
+        Tue, 28 Jun 2022 12:44:45 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3gwt08vuhw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 12:44:45 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25SCiggb13042154
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Jun 2022 12:44:42 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2BFE35204F;
+        Tue, 28 Jun 2022 12:44:42 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.7.238])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 8D4B05204E;
+        Tue, 28 Jun 2022 12:44:41 +0000 (GMT)
+Date:   Tue, 28 Jun 2022 14:44:40 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Zhang Jiaming <jiaming@nfschina.com>
+Cc:     hca@linux.ibm.com, gor@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, jwi@linux.ibm.com, bblock@linux.ibm.com,
+        davem@davemloft.net, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
+        renyu@nfschina.com
+Subject: Re: [PATCH] s390/qdio: Fix spelling mistake
+Message-ID: <Yrr3uGLBIm8KLiLN@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <20220623060543.12870-1-jiaming@nfschina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220623060543.12870-1-jiaming@nfschina.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: p5I7pTmnw_MLQL_-Hj5SgjsTUXCH1NHu
+X-Proofpoint-ORIG-GUID: p5I7pTmnw_MLQL_-Hj5SgjsTUXCH1NHu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-28_07,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 impostorscore=0 suspectscore=0 mlxlogscore=871
+ clxscore=1011 phishscore=0 bulkscore=0 spamscore=0 priorityscore=1501
+ mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206280052
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Older Lantiq (called "legacy") SoCs the RCU registers have more than
-just the reset controller registers. It additionally contains boot
-media selection information, up to two USB2 PHYs and configuration for
-various other peripherals (such as the PCIe PHY). use
-syscon_node_to_regmap() to obtain the regmap on these SoCs.
+On Thu, Jun 23, 2022 at 02:05:43PM +0800, Zhang Jiaming wrote:
+> Change 'defineable' to 'definable'.
+> Change 'paramater' to 'parameter'.
+> 
+> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+> ---
+>  arch/s390/include/asm/qdio.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/qdio.h b/arch/s390/include/asm/qdio.h
+> index 54ae2dc65e3b..2f983e0b95e0 100644
+> --- a/arch/s390/include/asm/qdio.h
+> +++ b/arch/s390/include/asm/qdio.h
+> @@ -133,9 +133,9 @@ struct slibe {
+>   * @sb_count: number of storage blocks
+>   * @sba: storage block element addresses
+>   * @dcount: size of storage block elements
+> - * @user0: user defineable value
+> - * @res4: reserved paramater
+> - * @user1: user defineable value
+> + * @user0: user definable value
+> + * @res4: reserved parameter
+> + * @user1: user definable value
+>   */
+>  struct qaob {
+>  	u64 res0[6];
 
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
- drivers/reset/Kconfig          |  3 ++-
- drivers/reset/reset-intel-gw.c | 29 +++++++++++++++++++----------
- 2 files changed, 21 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-index 68a5ea44612e..fb49c465078f 100644
---- a/drivers/reset/Kconfig
-+++ b/drivers/reset/Kconfig
-@@ -86,7 +86,8 @@ config RESET_INTEL_GW
- 	bool "Intel Reset Controller Driver"
- 	depends on X86 || LANTIQ || COMPILE_TEST
- 	depends on OF && HAS_IOMEM
--	select REGMAP_MMIO
-+	select REGMAP_MMIO if X86
-+	select MFD_SYSCON if LANTIQ
- 	help
- 	  This enables the reset controller driver for Intel Gateway SoCs.
- 	  Say Y to control the reset signals provided by reset controller.
-diff --git a/drivers/reset/reset-intel-gw.c b/drivers/reset/reset-intel-gw.c
-index 46ed7a693666..0bf7fe4e77ae 100644
---- a/drivers/reset/reset-intel-gw.c
-+++ b/drivers/reset/reset-intel-gw.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <linux/bitfield.h>
-+#include <linux/mfd/syscon.h>
- #include <linux/init.h>
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
-@@ -170,7 +171,6 @@ static int intel_reset_probe(struct platform_device *pdev)
- 	struct device_node *np = pdev->dev.of_node;
- 	struct device *dev = &pdev->dev;
- 	struct intel_reset_data *data;
--	void __iomem *base;
- 	u32 rb_id[3];
- 	int ret;
- 
-@@ -182,15 +182,24 @@ static int intel_reset_probe(struct platform_device *pdev)
- 	if (!data->soc_data)
- 		return -ENODEV;
- 
--	base = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(base))
--		return PTR_ERR(base);
--
--	data->regmap = devm_regmap_init_mmio(dev, base,
--					     &intel_rcu_regmap_config);
--	if (IS_ERR(data->regmap)) {
--		dev_err(dev, "regmap initialization failed\n");
--		return PTR_ERR(data->regmap);
-+	if (data->soc_data->legacy) {
-+		data->regmap = syscon_node_to_regmap(dev->of_node);
-+		if (IS_ERR(data->regmap))
-+			return dev_err_probe(dev, PTR_ERR(data->regmap),
-+					     "Failed to get regmap from syscon node\n");
-+	} else {
-+		void __iomem *base;
-+
-+		base = devm_platform_ioremap_resource(pdev, 0);
-+		if (IS_ERR(base))
-+			return PTR_ERR(base);
-+
-+		data->regmap = devm_regmap_init_mmio(dev, base,
-+						     &intel_rcu_regmap_config);
-+		if (IS_ERR(data->regmap)) {
-+			dev_err(dev, "regmap initialization failed\n");
-+			return PTR_ERR(data->regmap);
-+		}
- 	}
- 
- 	ret = device_property_read_u32_array(dev, "intel,global-reset", rb_id,
--- 
-2.36.1
-
+Applied, thanks!

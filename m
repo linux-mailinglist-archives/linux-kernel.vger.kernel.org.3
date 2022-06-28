@@ -2,128 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07EAD55F1B0
+	by mail.lfdr.de (Postfix) with ESMTP id 500B855F1B1
 	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 01:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231913AbiF1W7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 18:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
+        id S231480AbiF1W7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 18:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbiF1W7L (ORCPT
+        with ESMTP id S230184AbiF1W71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 18:59:11 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3348A1EC56
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 15:59:10 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1656457147;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=E5qCdzZKSngq9kBKyQeHMungQUBGO3EPdUEJsmBI+6g=;
-        b=gneh9/4iQUO2UFoB8fpJKaKULN5nl7l2bMQYdk0tTJlvtWKGElhYU0HyKX4ZXO20UUIo+y
-        sx/aVU3Ma3mv3ZcK7MxV+YH1x43fzapgci1yrYaUs21rVQY9YhiwfqsyQBehtIn5dgelAi
-        9QIoHYhnXItaEH2zXEVTXlCTrzUaIpUtLNH72m3w2ZaD31or0CEiokHWdVvaYvbFHROHi6
-        XlTYgHU7vZ1SVFPLLdUnB1cU+RJDesTrEMAijtouX192rAhAPG476mnTxp5m1RLPFATAW5
-        BFLnP2naHrmVSEb8s/4flSHhv/ifRA4EnAqm8sIVB8gM2gvAyIbcrLW72x7qEw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1656457147;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=E5qCdzZKSngq9kBKyQeHMungQUBGO3EPdUEJsmBI+6g=;
-        b=NCgW31YDjuoPFvKkXlmFw5OMELNJaffqXGnQQyHkBRAk3T6ZgQuEie9LPbDlW1/1PpMDva
-        F9Sd5GUoDPPJADDw==
-To:     Alexandre Messier <alex@me.ssier.org>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, Andrew.Cooper3@citrix.com,
-        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        regressions@lists.linux.dev
-Subject: Re: [REGRESSION] Unable to unlock encrypted disk starting with
- kernel 5.19-rc1+
-In-Reply-To: <19f8897b-c445-4e66-49b2-9ceca738a263@me.ssier.org>
-References: <6025678c-e94a-6966-e298-82fad658a889@me.ssier.org>
- <YrrHwxtD2dpts7PF@zn.tnic>
- <19f8897b-c445-4e66-49b2-9ceca738a263@me.ssier.org>
-Date:   Wed, 29 Jun 2022 00:59:07 +0200
-Message-ID: <874k04e6o4.ffs@tglx>
+        Tue, 28 Jun 2022 18:59:27 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D448931397
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 15:59:26 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id n14-20020a056e021bae00b002d92c91da8aso8132948ili.15
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 15:59:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=rzdTqI/xXB1Renj0b/qWiIJWiHq9oMlR5fhU+0ALxts=;
+        b=4KSGmvg9HxU5eGjWDN7QO7TlPkt9s+NksBSTALp82v2dKVuhunQQ9H6fvIe6a2nbrN
+         tYdC2E1ZfKE2yd82xtYu9F/fIVEseN4iHoNTXc+toVOkuamCzk5yRGyMsVUnn/FWGiOR
+         JDp11ifS1vIvKusNFvCx5jF0zjue19RrkGCp0BqgObanKE/o5Cw5GfygU96JUozQQq4u
+         cxyOwPLMN5e58MDLPVAgpxEmnAQoOkb4hhusKQVMKWkz+Oa5GARoq4YuNyYUA5P1fMLO
+         EqUmDd7ySLJBcFsvpWDVk7RMUhxRsetf91RVPdUKlRFSK7rUSj3f/lcxDNLKGeSUZLJN
+         Wxwg==
+X-Gm-Message-State: AJIora/2v1BrdAXI2H2XJgor/17UbJ9XG6ce0PnnIQtj6PipQ7L5E/yB
+        sSxD8gOBwD813T/1Zewr0ypd440uj3p6Hn2pJYJNtZxkaUE6
+X-Google-Smtp-Source: AGRyM1vU9YUt/wPxpu6ITCx4zJxRL00VP5btHOhzsm6VfD7PQXPmQAOgnNPJc0H3r191rJNHtKF6pO+6q5akz1BqZ+Sg4pnPMUBr
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6638:4813:b0:33c:8b87:3175 with SMTP id
+ cp19-20020a056638481300b0033c8b873175mr285374jab.182.1656457166145; Tue, 28
+ Jun 2022 15:59:26 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 15:59:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f94c4805e289fc47@google.com>
+Subject: [syzbot] BUG: unable to handle kernel paging request in truncate_inode_partial_folio
+From:   syzbot <syzbot+9bd2b7adbd34b30b87e4@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alexandre,
+Hello,
 
-On Tue, Jun 28 2022 at 17:31, Alexandre Messier wrote:
-> flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov
->                   pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext
->                   fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl
->                   nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq
->                   monitor ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave
->                   avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm
->                   sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce
->                   topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb
->                   cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall
->                   fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed
->                   adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1
->                   xsaves cqm_llc cqm_occup_llc cqm_mbm_total
->                   cqm_mbm_local
+syzbot found the following issue on:
 
-So this CPU supports XSAVEC and XSAVES which means the kernel uses
-XSAVES as the kernel before that.
+HEAD commit:    941e3e791269 Merge tag 'for_linus' of git://git.kernel.org..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1670ded4080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=833001d0819ddbc9
+dashboard link: https://syzkaller.appspot.com/bug?extid=9bd2b7adbd34b30b87e4
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=140f9ba8080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15495188080000
 
-> And here is the dmesg output of 5.19-rc4 without the revert (taken from the
-> initramfs). I put it on a paste service since it is too big for email:
->
->   https://paste.debian.net/1245491/
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9bd2b7adbd34b30b87e4@syzkaller.appspotmail.com
 
-[    0.000000] x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
-[    0.000000] x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
-[    0.000000] x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
-[    0.000000] x86/fpu: Supporting XSAVE feature 0x200: 'Protection Keys User registers'
-[    0.000000] x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
-[    0.000000] x86/fpu: xstate_offset[9]:  832, xstate_sizes[9]:    8
-[    0.000000] x86/fpu: Enabled xstate features 0x207, context size is 840 bytes, using 'compacted' format.
+BUG: unable to handle page fault for address: ffff888021f7e005
+#PF: supervisor write access in kernel mode
+#PF: error_code(0x0002) - not-present page
+PGD 11401067 P4D 11401067 PUD 11402067 PMD 21f7d063 PTE 800fffffde081060
+Oops: 0002 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 3761 Comm: syz-executor281 Not tainted 5.19.0-rc4-syzkaller-00014-g941e3e791269 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:memset_erms+0x9/0x10 arch/x86/lib/memset_64.S:64
+Code: c1 e9 03 40 0f b6 f6 48 b8 01 01 01 01 01 01 01 01 48 0f af c6 f3 48 ab 89 d1 f3 aa 4c 89 c8 c3 90 49 89 f9 40 88 f0 48 89 d1 <f3> aa 4c 89 c8 c3 90 49 89 fa 40 0f b6 ce 48 b8 01 01 01 01 01 01
+RSP: 0018:ffffc9000329fa90 EFLAGS: 00010202
+RAX: 0000000000000000 RBX: 0000000000001000 RCX: 0000000000000ffb
+RDX: 0000000000000ffb RSI: 0000000000000000 RDI: ffff888021f7e005
+RBP: ffffea000087df80 R08: 0000000000000001 R09: ffff888021f7e005
+R10: ffffed10043efdff R11: 0000000000000000 R12: 0000000000000005
+R13: 0000000000000000 R14: 0000000000001000 R15: 0000000000000ffb
+FS:  00007fb29d8b2700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff888021f7e005 CR3: 0000000026e7b000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ zero_user_segments include/linux/highmem.h:272 [inline]
+ folio_zero_range include/linux/highmem.h:428 [inline]
+ truncate_inode_partial_folio+0x76a/0xdf0 mm/truncate.c:237
+ truncate_inode_pages_range+0x83b/0x1530 mm/truncate.c:381
+ truncate_inode_pages mm/truncate.c:452 [inline]
+ truncate_pagecache+0x63/0x90 mm/truncate.c:753
+ simple_setattr+0xed/0x110 fs/libfs.c:535
+ secretmem_setattr+0xae/0xf0 mm/secretmem.c:170
+ notify_change+0xb8c/0x12b0 fs/attr.c:424
+ do_truncate+0x13c/0x200 fs/open.c:65
+ do_sys_ftruncate+0x536/0x730 fs/open.c:193
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7fb29d900899
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fb29d8b2318 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
+RAX: ffffffffffffffda RBX: 00007fb29d988408 RCX: 00007fb29d900899
+RDX: 00007fb29d900899 RSI: 0000000000000005 RDI: 0000000000000003
+RBP: 00007fb29d988400 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb29d98840c
+R13: 00007ffca01a23bf R14: 00007fb29d8b2400 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+CR2: ffff888021f7e005
+---[ end trace 0000000000000000 ]---
+RIP: 0010:memset_erms+0x9/0x10 arch/x86/lib/memset_64.S:64
+Code: c1 e9 03 40 0f b6 f6 48 b8 01 01 01 01 01 01 01 01 48 0f af c6 f3 48 ab 89 d1 f3 aa 4c 89 c8 c3 90 49 89 f9 40 88 f0 48 89 d1 <f3> aa 4c 89 c8 c3 90 49 89 fa 40 0f b6 ce 48 b8 01 01 01 01 01 01
+RSP: 0018:ffffc9000329fa90 EFLAGS: 00010202
+RAX: 0000000000000000 RBX: 0000000000001000 RCX: 0000000000000ffb
+RDX: 0000000000000ffb RSI: 0000000000000000 RDI: ffff888021f7e005
+RBP: ffffea000087df80 R08: 0000000000000001 R09: ffff888021f7e005
+R10: ffffed10043efdff R11: 0000000000000000 R12: 0000000000000005
+R13: 0000000000000000 R14: 0000000000001000 R15: 0000000000000ffb
+FS:  00007fb29d8b2700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff888021f7e005 CR3: 0000000026e7b000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	c1 e9 03             	shr    $0x3,%ecx
+   3:	40 0f b6 f6          	movzbl %sil,%esi
+   7:	48 b8 01 01 01 01 01 	movabs $0x101010101010101,%rax
+   e:	01 01 01
+  11:	48 0f af c6          	imul   %rsi,%rax
+  15:	f3 48 ab             	rep stos %rax,%es:(%rdi)
+  18:	89 d1                	mov    %edx,%ecx
+  1a:	f3 aa                	rep stos %al,%es:(%rdi)
+  1c:	4c 89 c8             	mov    %r9,%rax
+  1f:	c3                   	retq
+  20:	90                   	nop
+  21:	49 89 f9             	mov    %rdi,%r9
+  24:	40 88 f0             	mov    %sil,%al
+  27:	48 89 d1             	mov    %rdx,%rcx
+* 2a:	f3 aa                	rep stos %al,%es:(%rdi) <-- trapping instruction
+  2c:	4c 89 c8             	mov    %r9,%rax
+  2f:	c3                   	retq
+  30:	90                   	nop
+  31:	49 89 fa             	mov    %rdi,%r10
+  34:	40 0f b6 ce          	movzbl %sil,%ecx
+  38:	48                   	rex.W
+  39:	b8 01 01 01 01       	mov    $0x1010101,%eax
+  3e:	01 01                	add    %eax,(%rcx)
 
-This is correct. Is there any difference on a 5.18 kernel or on 5.19-rc
-with the commit reverted? I doubt that.
 
-I'm completely puzzled and stared at the commit in question on and off,
-but I can't spot the fail.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> I setup an unencrypted Debian installation on another drive to be able to run
-> cryptsetup commands in userspace while using rc4, and was able to see the
-> issue. In a up-to-date Debian Sid installation (important, more on this below),
-> running these commands makes it possible to reproduce the issue:
->
->   dd if=/dev/zero bs=1M count=20 of=./test.img
->   sudo cryptsetup luksFormat ./test.img
->   sudo cryptsetup luksOpen ./test.img test_crypt
->
-> The "luksOpen" will fail with the same error message I get on my main system.
->
-> It seems using the latest Debian Sid is important. At first, I was trying with
-> Debian Bullseye, but everything was working, even unlocking my main drive.
->
-> Could it be a difference due to the cryptsetup version? Sid is using 2.4.3,
-> while Bullseye is based on 2.3.7. I will try to compile cryptsetup 2.4.3 and
-> use it in a Bullseye system with kernel 5.19-rc4, to see if the issue occurs
-> in that setup.
-
-It might use a different crypto algorithm.
-
-Still confused....
-
-I'll have another look tomorrow morning with brain awake.
-
-Thanks,
-
-        tglx
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,92 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659D655C6C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DFFF55CDCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343586AbiF1Gox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 02:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
+        id S244452AbiF1GpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 02:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244229AbiF1Gou (ORCPT
+        with ESMTP id S244229AbiF1Go4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 02:44:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3315913DD7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:44:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656398688;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hKKhmAVY6ZLU32yFo246MjjcA6QB3q+Asrc/tb9AagA=;
-        b=FWCGJqg5msDnwZD0HXb37xFn4rZJnRa1NBrjulXChbQpXZ0+RvnfXDUaROncqdfjI8bReT
-        8ePxKVow7na5aCdCDIWjgSqN/n6Gs4um23RAjAjYlztefRXrvcc5k+EE1UQMvfUPuaG4t9
-        +SnZukzymjNxBQirLKq8bwd38Ecq2K4=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-569-ldUPbCPaPCaoXFv45YVfig-1; Tue, 28 Jun 2022 02:44:46 -0400
-X-MC-Unique: ldUPbCPaPCaoXFv45YVfig-1
-Received: by mail-wr1-f71.google.com with SMTP id az28-20020adfe19c000000b0021bc8df3721so825707wrb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:44:46 -0700 (PDT)
+        Tue, 28 Jun 2022 02:44:56 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5619826AD3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:44:55 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d17so11118459pfq.9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:44:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=qf6qUx9i2mMoyuEym+mMwKkMP4eflkWgpvGzK5dl09M=;
+        b=gtclWZyXKS4kE4MxEpynTyqmgOBp4JudcPhAbhPJUSaI1IHABSTivbKQBDJy2ekRFp
+         xmsdXUlwZ7M2n2FXkEHu4kApXG7cs/2gE4COVy2l+Fuzwmx4/7+NWLUssPjgEejabF3s
+         u6ao704ztMN3tCzzzAKV6AbCotL3PCpALMkzq6aY2qDLTvNSCj4zlzXWl6vezcVAK/8f
+         Day5HLazkk7aaf2fU/42C/gzoQqCSAaesZhal+upRFDfJtpEGj17yH5s5JweNkmP5XBL
+         WKgP5ljLnV+YSCt2ejsgJMo4Rs2nt6BlimTQjaRAQqnl3k2NVTw6meLDl0dXRJ8CIE5Q
+         JETg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hKKhmAVY6ZLU32yFo246MjjcA6QB3q+Asrc/tb9AagA=;
-        b=RUJGrmIfx/BuOwVwmAX7+PEGPk7WGJgmzRLg9DGtLPhe33pYfsu6vTQcMbsMHLQAgq
-         OE+sLD83W+MkPs2snO1HL1dxtONUXERmSxQbjKy4QYGLSHvq1ZZaVKVsaksgxXID9ZQF
-         QuKkYoaUgppOheISG3PtJo/aLv/ahGc3ledfJg43zZMpVbWj5oqZsYxXOfUw826DvvZa
-         711hZWBLFjbrk0xNdfeg8M8WKYXl4o+Kt2QeXhmYgxVWlMUb13WaS/oDeYrDOR9i3Vte
-         zayJnQoiZBZc4KruRQawU7/lfsoHT8c+6JXUOddCZAiuA9bT1hihN/+oBK9oW6Sb1ECA
-         ghTg==
-X-Gm-Message-State: AJIora/xEGGvoZ+JX1YQUpWHSA6AgqL4MS76Yq4w3qee3qIl/L/G/zMi
-        kAHAKFFy/lIvJJWrGZu+HlUhUvWD0cAdJ0mcPoTgMK9dvPc1mOYhyawZDZ5QVN9Fh1VHy9DNCvr
-        EVZ3dW5BBAPMPqGdJ9fAdBzk8
-X-Received: by 2002:a05:600c:4e90:b0:39c:7ec6:c7d2 with SMTP id f16-20020a05600c4e9000b0039c7ec6c7d2mr19756873wmq.140.1656398685546;
-        Mon, 27 Jun 2022 23:44:45 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uIze8DJsIvzB3CNFTFD7nxCkijrxeoiA7/FaJ3ir6OLO+Z+2vAtNLsCgnTCLoOO1PL/wj22A==
-X-Received: by 2002:a05:600c:4e90:b0:39c:7ec6:c7d2 with SMTP id f16-20020a05600c4e9000b0039c7ec6c7d2mr19756849wmq.140.1656398685292;
-        Mon, 27 Jun 2022 23:44:45 -0700 (PDT)
-Received: from redhat.com ([2.52.23.204])
-        by smtp.gmail.com with ESMTPSA id l15-20020a05600c1d0f00b003a04962ad3esm9243219wms.31.2022.06.27.23.44.42
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=qf6qUx9i2mMoyuEym+mMwKkMP4eflkWgpvGzK5dl09M=;
+        b=z97Ygiov1jqfMZDuVpfxqmySQcuWFLbPMhU15wZ98cMGEfB5u1hnu/89Lea8LzMLXe
+         XJLBs5f8xlLY9Am08roRLo6eZV+EKLbIok04cxGM2v/YCy1+9PnVPNznV6LJP2BYJqRn
+         b2ytmWJCIKeQa7tTuBCN+BVsxsEEgKpK7f9375LrkCTkWjQ4MIDsb9zw1mlqqSdu2oqZ
+         urxvXSxy0i8U/osuN0+PJTJzRzqGMd9mm2oefvgKRWQmL2y3XJk+dLGYAbGmHeL6qN/l
+         v3UBoRKTMKvSsP/f9eJAL9Yn7k6cxiwHv67zP4e4jsXA2Hm8sohQHf3Yt5a1XUEXC2ra
+         fbHQ==
+X-Gm-Message-State: AJIora+i+2BwMxq1fZv7LiFFKDIij14x4ohK0qOUd70IPN0aHg/hwtzq
+        0GX6ubLaG7+K9XOFIO6xUYiZ
+X-Google-Smtp-Source: AGRyM1s98lIR0fSjqWqr20SjFAeV5AaV941twUSQ7ZnwoYcmYnwCVpT4B5m3ZMtUVFuZL0RXjmRQsA==
+X-Received: by 2002:a63:115b:0:b0:40d:e7a0:37f9 with SMTP id 27-20020a63115b000000b0040de7a037f9mr9615060pgr.78.1656398694789;
+        Mon, 27 Jun 2022 23:44:54 -0700 (PDT)
+Received: from thinkpad ([27.111.75.159])
+        by smtp.gmail.com with ESMTPSA id d85-20020a621d58000000b0052549cc3416sm8738710pfd.175.2022.06.27.23.44.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 23:44:44 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 02:44:40 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        kvm <kvm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Ben Hutchings <ben@decadent.org.uk>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH V3] virtio: disable notification hardening by default
-Message-ID: <20220628023832-mutt-send-email-mst@kernel.org>
-References: <20220624022622-mutt-send-email-mst@kernel.org>
- <CACGkMEuurobpUWmDL8zmZ6T6Ygc0OEMx6vx2EDCSoGNnZQ0r-w@mail.gmail.com>
- <20220627024049-mutt-send-email-mst@kernel.org>
- <CACGkMEvrDXDN7FH1vKoYCob2rkxUsctE_=g61kzHSZ8tNNr6vA@mail.gmail.com>
- <20220627053820-mutt-send-email-mst@kernel.org>
- <CACGkMEvcs+9_SHmO1s3nyzgU7oq7jhU2gircVVR3KDsGDikh5Q@mail.gmail.com>
- <20220628004614-mutt-send-email-mst@kernel.org>
- <CACGkMEsC4A+3WejLSOZoH3enXtai=+JyRNbxcpzK4vODYzhaFw@mail.gmail.com>
- <20220628022035-mutt-send-email-mst@kernel.org>
- <CACGkMEt=go5qAH+P0to6yyE2dPhyfFmOQP0jfuj=57PmD7Y3zg@mail.gmail.com>
+        Mon, 27 Jun 2022 23:44:54 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 12:14:49 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v5 14/18] PCI: dwc: Move io_cfg_atu_shared to the
+ Root Port descriptor
+Message-ID: <20220628064449.GG23601@thinkpad>
+References: <20220624143428.8334-1-Sergey.Semin@baikalelectronics.ru>
+ <20220624143428.8334-15-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CACGkMEt=go5qAH+P0to6yyE2dPhyfFmOQP0jfuj=57PmD7Y3zg@mail.gmail.com>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220624143428.8334-15-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,19 +83,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 02:32:19PM +0800, Jason Wang wrote:
-> > Question is are there drivers which kick before they are ready
-> > to handle callbacks?
+On Fri, Jun 24, 2022 at 05:34:24PM +0300, Serge Semin wrote:
+> That flag is set if there is an outbound iATU window used for both PCIe
+> peripheral config-space accesses and IO ports transfers. Since the flag
+> semantic is purely Root Port specific, it's unused in neither the DW PCIe
+> common code nor in the DW PCIe Endpoint driver, we can freely move it to
+> the DW PCIe Root Port descriptor. Thus the pcie_port structure will be
+> more coherent.
 > 
-> Let me try to have a look at all the drivers to answer this.
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-One thing to note is that I consider hardening probe and
-hardening remove separate features. I think that at this point
-for secured guests it is prudent to outright block device
-removal - we have been finding races in removal for years.
-Note sure there's a flag for that but it's probably not too hard to add
-e.g. to pci core.
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+Thanks,
+Mani
+
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> 
+> ---
+> 
+> Changelog v4:
+> - This is a new patch created on the v4 lap of the series.
+> ---
+>  drivers/pci/controller/dwc/pcie-designware-host.c | 6 +++---
+>  drivers/pci/controller/dwc/pcie-designware.h      | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> index c49a3bde7a2a..7ff2b7555b91 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> @@ -492,7 +492,7 @@ static int dw_pcie_rd_other_conf(struct pci_bus *bus, unsigned int devfn,
+>  
+>  	ret = pci_generic_config_read(bus, devfn, where, size, val);
+>  
+> -	if (!ret && pci->io_cfg_atu_shared)
+> +	if (!ret && pp->cfg0_io_shared)
+>  		dw_pcie_prog_outbound_atu(pci, 0, PCIE_ATU_TYPE_IO, pp->io_base,
+>  					  pp->io_bus_addr, pp->io_size);
+>  
+> @@ -508,7 +508,7 @@ static int dw_pcie_wr_other_conf(struct pci_bus *bus, unsigned int devfn,
+>  
+>  	ret = pci_generic_config_write(bus, devfn, where, size, val);
+>  
+> -	if (!ret && pci->io_cfg_atu_shared)
+> +	if (!ret && pp->cfg0_io_shared)
+>  		dw_pcie_prog_outbound_atu(pci, 0, PCIE_ATU_TYPE_IO, pp->io_base,
+>  					  pp->io_bus_addr, pp->io_size);
+>  
+> @@ -627,7 +627,7 @@ void dw_pcie_setup_rc(struct pcie_port *pp)
+>  							  PCIE_ATU_TYPE_IO, pp->io_base,
+>  							  pp->io_bus_addr, pp->io_size);
+>  			else
+> -				pci->io_cfg_atu_shared = true;
+> +				pp->cfg0_io_shared = true;
+>  		}
+>  
+>  		if (pci->num_ob_windows <= atu_idx)
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
+> index 8ba239292634..13bffa3eaed6 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.h
+> +++ b/drivers/pci/controller/dwc/pcie-designware.h
+> @@ -179,6 +179,7 @@ struct dw_pcie_host_ops {
+>  
+>  struct pcie_port {
+>  	bool			has_msi_ctrl:1;
+> +	bool			cfg0_io_shared:1;
+>  	u64			cfg0_base;
+>  	void __iomem		*va_cfg0_base;
+>  	u32			cfg0_size;
+> @@ -274,7 +275,6 @@ struct dw_pcie {
+>  	int			link_gen;
+>  	u8			n_fts[2];
+>  	bool			iatu_unroll_enabled: 1;
+> -	bool			io_cfg_atu_shared: 1;
+>  };
+>  
+>  #define to_dw_pcie_from_pp(port) container_of((port), struct dw_pcie, pp)
+> -- 
+> 2.35.1
+> 
 
 -- 
-MST
-
+மணிவண்ணன் சதாசிவம்

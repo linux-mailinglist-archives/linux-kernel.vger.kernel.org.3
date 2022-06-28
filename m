@@ -2,184 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E090455CBA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4BF955E22B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344585AbiF1LqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 07:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38112 "EHLO
+        id S1344712AbiF1LsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 07:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344512AbiF1LqH (ORCPT
+        with ESMTP id S1345170AbiF1LrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 07:46:07 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657CF340D3;
-        Tue, 28 Jun 2022 04:44:36 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CFC37660184F;
-        Tue, 28 Jun 2022 12:44:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656416674;
-        bh=Vq5C4bT0TiadIpd2tEqU0JzUXydBEhR40E+ZcKSOCUo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RKEY5opDUA/HZSdk6HwnKhzBmq6nRVCS3v/NWKqMu1PMIeBdeXeSWbRS4Xn5uUMk1
-         k/xdYJxpKVUEGLs5pqjQwwATIdGwwAZYKzKrmACKz1LePsPHNyftCwaSj1tZBGF6uq
-         0eS3Zp8Ck+LQx5u+5fPlF8RoBwLxpl3/z4+POjHgUIJ8GABDDGrOuwCHXtXMcb/axL
-         IdvCkh81M1oPN4HTUGDdeXZuVBNxs33s4pLAE3b7x8TmO2CJRVOsqvgVm1LucQwFCj
-         JqDFHKPaE7R7E9tJRvZamO3oo4wU5QH+0yUjttlJX1njblanMhjZBrrhgqBbYovpx7
-         LJq1Ml1P1vqyg==
-Message-ID: <d186bb7d-cbe6-8ec4-82a1-8323b3901ac2@collabora.com>
-Date:   Tue, 28 Jun 2022 14:44:31 +0300
+        Tue, 28 Jun 2022 07:47:20 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFBD2F671;
+        Tue, 28 Jun 2022 04:45:35 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id j21so21839488lfe.1;
+        Tue, 28 Jun 2022 04:45:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=X0xzQqH5KpRMLY9+PVHhyVujx5g/6WCMMJw5Qqi65jI=;
+        b=jnUdvSPOBJDAxP48Ljv06+Y4FUAIZkOkrCXTaSImmvJPsVoCitqk5nFbdXtgIq3M3R
+         VjFQU6sZcciMIQQVEAu10glcOPPmsj5/wyMjNeH2EBqrWKf/A7znwAzQ6eYUOpFFegAP
+         ++U/w9iDQu/vkSWCjwLQglsCuLfZpRheX9NIRY6JbrhBemsoEJe4bOPSrff4GH6ZHJEg
+         AoGVaDnufkKYVoPwmGbZfQ91c4eVW1ITqXJxjF1pjqB28TQKFZBXNSEJNkC5IA5BPIWX
+         2S9GJ7toPEKNRC5fiBJni5fJXoo6cdor3quwS62vP6tuZzH9FrApvwljwOQJ0q05LZ/r
+         hgFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=X0xzQqH5KpRMLY9+PVHhyVujx5g/6WCMMJw5Qqi65jI=;
+        b=lGIbvuzpp49hFTHn8Tc2e+9YpIWoxDFVOKlE421EA9+RQL8YBn0PJsi/v13qq5uQ2t
+         tKVyn71cnKwEYLoh29V1Vaj/8TAoNuphMsopz4mpDAaTt3CiOS8G5tf+s1wcCPkbZ1wD
+         yVhtXEBDukI/sSK7x9avQ0LJIvIEbYlFoyZ/j8CXhj0ix+dFU2rzpEnir8+faM15SNxV
+         3JovM7HKlgb+x76zh19EKeqJiKjqln9+k6sLKPCh7YwtEp/Tpt6pv3ToX7SAm0tmKegJ
+         RFVt6obWXL6X9DjF8SaBVe/EzESF47sLOYbI5yNie2gM7Bgr5Fb+FAR+MmeV14W3KwnC
+         27wg==
+X-Gm-Message-State: AJIora+46X9uTTD5jKAGyV7KGIEYK8lPWQMgw0dQih2yMZydIXFQLX34
+        niVWGY0/lXQ7T01geMnbAlY=
+X-Google-Smtp-Source: AGRyM1spQ+83X4VvzEzhO/24k4ObYmu1Fz0thJaux2DJZYh2Ch0uRYrTaVTArCzlAn0D6n+92ksugQ==
+X-Received: by 2002:a05:6512:3b2c:b0:47f:6fc2:a9de with SMTP id f44-20020a0565123b2c00b0047f6fc2a9demr12523314lfv.352.1656416733846;
+        Tue, 28 Jun 2022 04:45:33 -0700 (PDT)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id k20-20020a2ea274000000b0025a8c1b5fe2sm1787142ljm.17.2022.06.28.04.45.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 04:45:33 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
+Date:   Tue, 28 Jun 2022 13:45:31 +0200
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH v2 1/1] rcu/kvfree: Update KFREE_DRAIN_JIFFIES interval
+Message-ID: <Yrrp2044RY6amuLo@pc638.lan>
+References: <20220627195353.1575285-1-urezki@gmail.com>
+ <20220627213126.GO1790663@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/3] thermal/drivers/tegra: Remove get_trend function
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        Hardware Monitoring <linux-hwmon@vger.kernel.org>,
-        rafael@kernel.org
-References: <20220616202537.303655-1-daniel.lezcano@linaro.org>
- <20220616202537.303655-2-daniel.lezcano@linaro.org>
- <7841a809-e180-70d2-df9b-b30b411647ce@linaro.org>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <7841a809-e180-70d2-df9b-b30b411647ce@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220627213126.GO1790663@paulmck-ThinkPad-P17-Gen-1>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/22 11:41, Daniel Lezcano wrote:
+> On Mon, Jun 27, 2022 at 09:53:53PM +0200, Uladzislau Rezki (Sony) wrote:
+> > Currently the monitor work is scheduled with a fixed interval that
+> > is HZ/20 or each 50 milliseconds. The drawback of such approach is
+> > a low utilization of page slot in some scenarios. The page can store
+> > up to 512 records. For example on Android system it can look like:
 > 
-> Thierry, Dmitry,
+> I was looking at queuing this one, but we need a bit more data.  In
+> the meantime, here is my wordsmithing of the above paragraph:
 > 
-> are fine with this patch?
-
-Seems should be good. I couldn't test it using recent the linux-next
-because of a lockup in LM90 driver. There were quite a lot of changes in
-LM90 recently, adding Guenter.
-
-INFO: task kworker/3:1:44 blocked for more than 61 seconds.
-      Not tainted 5.19.0-rc4-next-20220627-00012-g08b697b94b8a #2
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/3:1     state:D stack:    0 pid:   44 ppid:     2
-flags:0x00000000
-Workqueue: events_freezable_power_ thermal_zone_device_check
-Backtrace:
- __schedule from schedule+0x60/0xcc
- r10:c0fead70 r9:c2854c94 r8:df9a1dac r7:c2814b40 r6:00000002 r5:c1883020
- r4:c2814b40
- schedule from schedule_preempt_disabled+0x28/0x38
- r5:c1883020 r4:c2814b40
- schedule_preempt_disabled from __mutex_lock.constprop.0+0x1e0/0x9ac
- r5:c1883020 r4:c2854c90
- __mutex_lock.constprop.0 from __mutex_lock_slowpath+0x1c/0x20
- r10:00000000 r9:c1882ae0 r8:c2854c90 r7:c2854c40 r6:00000001 r5:00000001
- r4:c2854c90
- __mutex_lock_slowpath from mutex_lock+0x60/0x64
- mutex_lock from lm90_read+0x40/0x3d4
- r5:00000001 r4:c2854e08
- lm90_read from hwmon_thermal_get_temp+0x58/0x8c
- r9:c1882ae0 r8:c2814b40 r7:de6aee00 r6:c1db1660 r5:c0af7940 r4:df9a1eb8
- hwmon_thermal_get_temp from of_thermal_get_temp+0x38/0x44
- r5:df9a1eb8 r4:c1db1400
- of_thermal_get_temp from thermal_zone_get_temp+0x58/0x78
- thermal_zone_get_temp from thermal_zone_device_update.part.0+0x4c/0x450
- r7:de6aee00 r6:c1db1400 r5:00000000 r4:c1db1400
- thermal_zone_device_update.part.0 from thermal_zone_device_check+0x58/0x5c
- r10:00000000 r9:c1882ae0 r8:c2814b40 r7:de6aee00 r6:c1db1400 r5:c1db1660
- r4:00000001
- thermal_zone_device_check from process_one_work+0x21c/0x530
- r7:de6aee00 r6:de6ab600 r5:c2802c00 r4:c1db167c
- process_one_work from worker_thread+0x19c/0x5cc
- r10:00000008 r9:c2814b40 r8:c1703d40 r7:de6ab61c r6:c2802c18 r5:de6ab600
- r4:c2802c00
- worker_thread from kthread+0x100/0x120
- r10:00000000 r9:df895e80 r8:c285e3c0 r7:c2802c00 r6:c014cf84 r5:c285e300
- r4:c2814b40
- kthread from ret_from_fork+0x14/0x2c
-Exception stack(0xdf9a1fb0 to 0xdf9a1ff8)
-
-> On 16/06/2022 22:25, Daniel Lezcano wrote:
->> The get_trend function does already what the generic framework does.
->>
->> Remove it.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
->>   drivers/thermal/tegra/soctherm.c | 32 --------------------------------
->>   1 file changed, 32 deletions(-)
->>
->> diff --git a/drivers/thermal/tegra/soctherm.c
->> b/drivers/thermal/tegra/soctherm.c
->> index 210325f92559..825eab526619 100644
->> --- a/drivers/thermal/tegra/soctherm.c
->> +++ b/drivers/thermal/tegra/soctherm.c
->> @@ -633,37 +633,6 @@ static int tegra_thermctl_set_trip_temp(void
->> *data, int trip, int temp)
->>       return 0;
->>   }
->>   -static int tegra_thermctl_get_trend(void *data, int trip,
->> -                    enum thermal_trend *trend)
->> -{
->> -    struct tegra_thermctl_zone *zone = data;
->> -    struct thermal_zone_device *tz = zone->tz;
->> -    int trip_temp, temp, last_temp, ret;
->> -
->> -    if (!tz)
->> -        return -EINVAL;
->> -
->> -    ret = tz->ops->get_trip_temp(zone->tz, trip, &trip_temp);
->> -    if (ret)
->> -        return ret;
->> -
->> -    temp = READ_ONCE(tz->temperature);
->> -    last_temp = READ_ONCE(tz->last_temperature);
->> -
->> -    if (temp > trip_temp) {
->> -        if (temp >= last_temp)
->> -            *trend = THERMAL_TREND_RAISING;
->> -        else
->> -            *trend = THERMAL_TREND_STABLE;
->> -    } else if (temp < trip_temp) {
->> -        *trend = THERMAL_TREND_DROPPING;
->> -    } else {
->> -        *trend = THERMAL_TREND_STABLE;
->> -    }
->> -
->> -    return 0;
->> -}
->> -
->>   static void thermal_irq_enable(struct tegra_thermctl_zone *zn)
->>   {
->>       u32 r;
->> @@ -716,7 +685,6 @@ static int tegra_thermctl_set_trips(void *data,
->> int lo, int hi)
->>   static const struct thermal_zone_of_device_ops tegra_of_thermal_ops = {
->>       .get_temp = tegra_thermctl_get_temp,
->>       .set_trip_temp = tegra_thermctl_set_trip_temp,
->> -    .get_trend = tegra_thermctl_get_trend,
->>       .set_trips = tegra_thermctl_set_trips,
->>   };
->>   
+> Currently the monitor work is scheduled with a fixed interval of HZ/20,
+> which is roughly 50 milliseconds. The drawback of this approach is
+> low utilization of the 512 page slots in scenarios with infrequence
+> kvfree_rcu() calls.  For example on an Android system:
 > 
-> 
+Good i will update with your changes :)
 
+> > <snip>
+> >   kworker/3:0-13872   [003] .... 11286.007048: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=1
+> >   kworker/3:0-13872   [003] .... 11286.015638: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=2
+> >   kworker/1:2-20434   [001] .... 11286.051230: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=1
+> >   kworker/1:2-20434   [001] .... 11286.059322: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=2
+> >   kworker/0:1-20052   [000] .... 11286.095295: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=2
+> >   kworker/0:1-20052   [000] .... 11286.103418: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=1
+> >   kworker/2:3-14372   [002] .... 11286.135155: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=2
+> >   kworker/2:3-14372   [002] .... 11286.135198: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=1
+> >   kworker/1:2-20434   [001] .... 11286.155377: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=5
+> >   kworker/2:3-14372   [002] .... 11286.167181: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=5
+> >   kworker/1:2-20434   [001] .... 11286.179202: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000008ef95e14 nr_records=1
+> >   kworker/2:3-14372   [002] .... 11286.187398: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000c597d297 nr_records=6
+> >   kworker/3:0-13872   [003] .... 11286.187445: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000050bf92e2 nr_records=3
+> >   kworker/1:2-20434   [001] .... 11286.198975: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=4
+> >   kworker/1:2-20434   [001] .... 11286.207203: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=4
+> > <snip>
+> > 
+> > where a page only carries few records to reclaim a memory. In order
+> > to improve batching and make utilization more efficient the patch sets
+> > a drain interval to 1 second as default one. When a flood is detected
+> > an interval is adjusted in a way that a reclaim work is re-scheduled
+> > on a next timer jiffy.
+> 
+> And of the above paragraph:
+> 
+> Out of 512 slots, in all cases, fewer than 10 were actually used.
+> In order to improve batching and make utilization more efficient this
+> commit sets a drain interval to a fixed 1-second interval. Floods are
+> detected when a page fills quickly, and in that case, the reclaim work
+> is re-scheduled for the next scheduling-clock tick (jiffy).
+> 
+Same here, will apply this.
+
+> ---
+> 
+> But what we need now is a trace like the one above showing higher utilization
+> of the pages.  Could you please supply this?
+> 
+Yep, i will add traces to show that utilization becomes better what is
+actually expectable.
+
+--
+Uladzislau Rezki

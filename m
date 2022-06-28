@@ -2,162 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0685E55EC9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F2855ECAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232233AbiF1Sb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 14:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
+        id S233167AbiF1Sfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 14:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiF1SbW (ORCPT
+        with ESMTP id S232449AbiF1Sfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:31:22 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2106.outbound.protection.outlook.com [40.107.220.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181DA21E0F;
-        Tue, 28 Jun 2022 11:31:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iYm5vHU4i8U8pjKizrY6aCnQLXdbe7o49adYV/6vcHKt+q0aqPn2xytL8p3JEQb538EYEXIHEUmGAZQcG+h5HUaEwCv2E8hJ+UGVnqVmvsK+DB/zgKQ7Omv6wyu87P3VAbarHwQF03TUBRp2TM1a6dZZjIsZAwfz1740VWZQ1nR0d7+8npBHaPuxQK9c5CEznWwEsKlABglzriOuICuW0rPCrRAnn6k3tmk4aCg4ds86zPJUJXG1ItXMr0tRP6EBv6ePBqNPS3yyUyrPpA6k4puiVRC4H27Bi136xwH4s6j7sQD3ClIBQjDmZDzU1bPQl7U5HnAdrCvamw3G9B2yeg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f8a5bKnIySPOJ/yHZgI8Fiq/jUqfp1Jl2TSEJAfCM4o=;
- b=NJ5AJX2XjCa8NZ08nL+gaAYa3zhlwObGT8HwW0jI6ALhmT+BtQi3BHbUglqVqfkr4xzWLe/BE2cdb4IWpamDp62cEwbj7TMLY4O0FvTlq8WsIYVf8N/oX3EZr7TIFnOwQ6LQZjNXfH43wjsdEhIqV36BZ4VaK5cek9F7ZUl0zq5N7JIdArEsklGE+f4ghw4d4uiXNoTp8mLNiBpzrFSTzgNMhJtXYAO1jcX5mBISKKyiJKB2CNx6LXOEdpAIstZow3J6A0niNaGy6NVz9llx/ryVy9zPiM0Hzl0cYv79fIk42GJ4XMJYh89pPmB1O+tPd6qveLrdEf1GBPe9Nl1w7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+        Tue, 28 Jun 2022 14:35:46 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C0E1F63D
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 11:35:44 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id by38so15945270ljb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 11:35:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f8a5bKnIySPOJ/yHZgI8Fiq/jUqfp1Jl2TSEJAfCM4o=;
- b=GgPjBZnIDPWItESzs6vd0H3En3+zC+7/WtuB9t0D10GM+9sU5eVcXF6AxEX4RNtADfPUCOzj0OVy/coHMvahoMgsR0bYmC5ZkbukXddBWMP6lNZtsnSqmB3eeUiTVwgUlLiJuuQOxh5485ccHohEPVi7HD8cQ8o6Tnt+jHLOnb0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by CY4PR10MB1685.namprd10.prod.outlook.com
- (2603:10b6:910:9::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Tue, 28 Jun
- 2022 18:31:19 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::712f:6916:3431:e74e]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::712f:6916:3431:e74e%6]) with mapi id 15.20.5373.018; Tue, 28 Jun 2022
- 18:31:19 +0000
-Date:   Tue, 28 Jun 2022 11:31:16 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v11 net-next 2/9] net: mdio: mscc-miim: add ability to be
- used in a non-mmio configuration
-Message-ID: <20220628183116.GD855398@euler>
-References: <20220628081709.829811-1-colin.foster@in-advantage.com>
- <20220628081709.829811-3-colin.foster@in-advantage.com>
- <20220628162604.fxhbcaimv2ioovrk@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628162604.fxhbcaimv2ioovrk@skbuf>
-X-ClientProxiedBy: CO1PR15CA0061.namprd15.prod.outlook.com
- (2603:10b6:101:1f::29) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YV/ic2nJK86HnUIOMUgVla8Xt0B3UgI9C6gRscyJXgQ=;
+        b=TfgzWfMWdQkzi71AmCMMQY4Hx0x50KxfNaYawdd+TrXKaMVm6bKgF/JHHjNF4kQmgH
+         HVzC35MaljuGQC64pYn3EBiqFPnAodrVXJ5dHvf7zSVi05t2DyWke0fi5V4/YF2kx8Go
+         e5o3quAXLrKt+By0EW6ATIDMamXytd+yGFlMy2euaMQ5gHLp4MmsI6VkMxdv0pgfhfFp
+         n/Uwr/unhvIV9MCEr3uTixDkUxDXRH15i8rck+Nn3GTT6YgaUcjzlc6fXHUDr+nRtjgY
+         MDMLE4W1rdWegt6wdapm+3Jd3ERV1e7bw6Z/k4JKIxEU0A5DubFnfIdtyC1rCRcshaA7
+         ty5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YV/ic2nJK86HnUIOMUgVla8Xt0B3UgI9C6gRscyJXgQ=;
+        b=uUeouvqGZcNd4rTgcZkqCHvwrlYvOBBCcOzsclTmCrSWim4nsfutjdhF+w3OSazTvr
+         cBkHwByGSQj9yfQ7+H4/xQPfu3PYRehmDgojEGfN/twOoa45IR86GJqB9HtzxzoNep4l
+         in4AYrZ6zoeIDu4Jo/4JCOcpKqEu2zlpXBhJsMinxDpFZCRPX585bjjrOXA/amaI+EGC
+         /fBAEYndlIGZDLwuqwSPrYlGYJ2L9/zQGUMSS7YmSZCrzv9SmMUj6jmUWqgd/Q/YC683
+         sdsFpWfvRXAh7DkHoQv7oagYvJ1ybGrjmEeSez8Rw6ETLw4y3NrTKpMOvvj7AD5D+5T/
+         KgJA==
+X-Gm-Message-State: AJIora8tiYaaxPYEagNH3z9wwaQg6yIozfxnTWumUXfST4QwyB39S1zg
+        I3O40caylwlwBgeNWiX/yvpHRmzNGEN5xPRB2dvVUA==
+X-Google-Smtp-Source: AGRyM1vrzSAkbrd6jdTE3ltMBBV/0dCh+11hEYGtlcNSC+F3qguOSt5a59CiQfEPPDvHkPSa3S3pXjfeVRYpy+1+J70=
+X-Received: by 2002:a2e:8e94:0:b0:25a:83fd:eeec with SMTP id
+ z20-20020a2e8e94000000b0025a83fdeeecmr10456342ljk.493.1656441342586; Tue, 28
+ Jun 2022 11:35:42 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f1a71c19-58c9-4561-dd38-08da593464fb
-X-MS-TrafficTypeDiagnostic: CY4PR10MB1685:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TwQ7Xp3jt7zDSqwIFPFQQQCFGtAjSj1zh75zyYUIoe9sX+T5bsTgLef7ACnW5WIbE4opdPZE9ZLuFgABd1j/UyNd9LFk3yRXhFXQUnroGEQeIgCYB/Xmlus0JmAHOH0ffhFKogZ13fbLYN2f4moUeY1sOEBCNFW2AYWGMurGgaygHULlSdfhWohS8bTbBWsIC5hHlqlWXowuhfYSfWVIJMVyu/QkMQilVw3vxUhLwxD5Q8WJV3Auxy6kzhcbgHazFW5Os1xihTxXsJmtx117p9vIXSlNJ8S9TNnNHrTrjVuk3MQNI4EdMRP8/OhRARhJ+8vw6DrYuhUXaU5Dskx7e8MWWyj4jNBUqDZssdGqsUiivwp0216+HOjcY54xP1Ua0weX8rRDW17KZKpSfRkrGFhs+aCZDBRI+vCs+nT+CUu6Cv3VzrD+qjQgLH4oLYSop3O21V4z7UvZ6W7U94wV17otQ7cKC1ZCNlqzE1MU9S5JOFx+M1OVg8KhNsHQNjpMDTz/PxiLiJa+GcdRZX+xGJMw7d+aCmi6NzlVVaU67zmr/+PNKL0H54+jCjE2QL1fynSxoDvtKNhG96f8MTS43CAwkdoJiQDucUsAsR2azXEyN8HqWhrzP+0E/vYvWBDw2KioOpsK0gcfJM0S4k3Eaep6vNBklr+DqRyoC3ayy2V4dFp4I+VZcGPk3tGsbgwnZefqAuYTpZRtv2H/OLNwudHKTeCUKU5xyyvEqEynatwulFPvULPgTcZRyMQroukUseVG44O028C1eh1f1aMEMh4fQMwGqOWvxd0ZdA/qrqY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(39830400003)(396003)(346002)(136003)(376002)(186003)(33716001)(44832011)(2906002)(38100700002)(4326008)(66476007)(7416002)(8936002)(83380400001)(6486002)(4744005)(33656002)(5660300002)(6666004)(478600001)(1076003)(52116002)(316002)(6916009)(54906003)(9686003)(38350700002)(26005)(8676002)(41300700001)(6506007)(86362001)(66556008)(66946007)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SkKrOuOxorsSRFvrce8ZeGkeu67mjg0WGHrVVUq7NuKyiH9plq0T9+GyY/DM?=
- =?us-ascii?Q?TNSCN0a+agoH1TkivVkj3fkZuYaI13SaLREV0XCnGt8Jgdb2g+UgKNrqBJqk?=
- =?us-ascii?Q?mZohtZ/93sLQQNsYnLxM5ICykLYhx/wXbZ14Hm3sTbjhJW6hE58NENFFhwEQ?=
- =?us-ascii?Q?WcrQEhdTKXbWrcBmRanYQJrwjAKulQkrwpYxU7WTaxmI3a9ggEuXqYMvsK97?=
- =?us-ascii?Q?x+UO1lBj8YwrncqocJ0+ulF4WFe1fHkWovKs0gQYBexGX3A9QipwQaqWj0iZ?=
- =?us-ascii?Q?rTvxj+sfMX7YzWwXl1K0yBbjEILlSCpVXxksyLvhcvagIG1YHckJGcSlRNPy?=
- =?us-ascii?Q?8TSYeUjyRazatQNYRV8a1++TnlximkJuU+xm1pruykWJSgj1MUiMr88zLXUL?=
- =?us-ascii?Q?5FAGSCSH8kV5zAPW2na3qiyXw0kVWuUJIlN39XVxNhg9BVupU1d9ogkNgdl+?=
- =?us-ascii?Q?zqwuRDfLdjk2c07OEww7n019w+VA7uwhlb815jVbts5sB3pCaH9RwoAxIHa4?=
- =?us-ascii?Q?acGkU29GxWysqjgVel5Ebilttdk4NrBSU2wv1VxfA8jlrROgF3CsZvNy1z5x?=
- =?us-ascii?Q?LXBnReCV2j/bEsHOkH9yFl40cFL2EH3YKOeXAQQjspxNT56Os3nbx8yiAxnh?=
- =?us-ascii?Q?hXPOGhM4Mh7DbUYu9Lanv4R1KMDyzx+DjHQzXQe3ZMto08sYqxXU9BnbZvN2?=
- =?us-ascii?Q?06qKegjlADNBBet2PafiSltB1jvQdRyWTV19K2+NL62TBLyrcRAtEF0HasPs?=
- =?us-ascii?Q?n+/Sk/D8fX+XXxa5OqmP8a9Yq1Y6HOVmN1dQ6omf3WQWBtijHCpwHtKi5weN?=
- =?us-ascii?Q?uNz5xZo3srEOYX96V9eshAfe67HgQvqIiG2rD4OA5eXKgN4wK4RqwP4Husb4?=
- =?us-ascii?Q?c3PaXL90NuSxPGUta8yunQ1W24S94mT/HhDosuk5rJnRcH7/4u/0vwYEm5CY?=
- =?us-ascii?Q?izhgI6QWeLd6dwPvs6ocE0rIxDQ8yrRynE0jAEb1H2HrUiEX5GVyworjucs1?=
- =?us-ascii?Q?QRQLA/YJ8HyMwpIv0SHMQKYEFBUJtHpohYnhv19iH/pwOdUM/0HPzi78pRaa?=
- =?us-ascii?Q?379KcohqW55pdt6y63Iuj3NIcHQ96rguqSCe4dDw745l0bJ5Egl6nhNAd8UN?=
- =?us-ascii?Q?O4QilAsHYbN4n8JiLhmJ3g96dt4mT+WSlI3brPGfxda2xHmoQBsC67lGMah4?=
- =?us-ascii?Q?tAHQINcRgfs2A5/nu9JgzldGAFIVpbtJPf8HxXcXr8RxOpqc0wyV920wo9U2?=
- =?us-ascii?Q?AfkVVjVFec0uwFaZAbWL87otaoICCUsRm8VU/7kxHjgXoB5+R4PIwOU6ktPN?=
- =?us-ascii?Q?pFb5N4NZeZ98+Ry79IgZEQ/2vBJrp0tNpycevTBzo0MvKrCXllPLOX5PW+UC?=
- =?us-ascii?Q?hON7IMXh4eWegnH2l3ZYVnudXTbVj643UfjwiStWBF7HlPIMCY9oskEedWyN?=
- =?us-ascii?Q?OYbjbLbIIG/aeiirCsp97kTQ2NoQF/hASeDEqKCdRARVUgH3PmDh25prV2F9?=
- =?us-ascii?Q?DLiGxa04aycKNMxW06/fCSoDEvzKKhsLTdbFP4q8ogfEArvIOEmMIOoz0x4r?=
- =?us-ascii?Q?gxdhUirkCwkZTAL35ipsV0yT677sST+/1OfZW9gdUiWMiRloqpKhP4HijQ/y?=
- =?us-ascii?Q?hRlpAF3e8cLOHvK9xji5BFg=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1a71c19-58c9-4561-dd38-08da593464fb
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 18:31:19.5620
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KB9OnIr+cFS7ya8ovB+hlYVRD8mT+bAlSjwF9gwz4JRRW3+rgWUSEcAL7T0t4+MorKAvOo6aP9NxKvzqYO0IiNtW/GY8UJTbWyynxmYz6CI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1685
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220628122741.93641-1-daniel.thompson@linaro.org> <20220628122741.93641-2-daniel.thompson@linaro.org>
+In-Reply-To: <20220628122741.93641-2-daniel.thompson@linaro.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 28 Jun 2022 11:35:30 -0700
+Message-ID: <CAKwvOdnUdCq4AUJQEsPkkBXfG-BN7ZJHOJ5KHh43SsfogeOeqQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] clang-tools: Generate clang compatible output even
+ with gcc builds
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vladimir,
+On Tue, Jun 28, 2022 at 5:27 AM Daniel Thompson
+<daniel.thompson@linaro.org> wrote:
+>
+> Currently `make compile_commands.json` cannot produce useful output for
+> kernels built with gcc. That is because kbuild will opportunistically
 
-On Tue, Jun 28, 2022 at 04:26:05PM +0000, Vladimir Oltean wrote:
-> On Tue, Jun 28, 2022 at 01:17:02AM -0700, Colin Foster wrote:
-> > There are a few Ocelot chips that contain the logic for this bus, but are
-> > controlled externally. Specifically the VSC7511, 7512, 7513, and 7514. In
-> > the externally controlled configurations these registers are not
-> > memory-mapped.
-> > 
-> > Add support for these non-memory-mapped configurations.
-> > 
-> > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> > ---
-> 
-> These "add ability to be used in a non-MMIO configuration" commit
-> messages are very confusing when you are only adding support for
-> non-MMIO in ocelot_platform_init_regmap_from_resource() in patch 9/9.
-> May I suggest a reorder?
+Right, compile_commands.json should reflect reality, as in what flags
+were actually used for the build.
 
-Initially my plan was to get the MFD base functionality (SPI protocol,
-chip reset, etc.) in and roll in each peripheral one at a time. That was
-changed in v6 I believe...
+> enable gcc-specific command line options from recent versions of gcc.
+> Options that are not compatible with clang cause trouble because most of
+> the tools that consume compile_commands.json only understand the clang
+> argument set. This is to be expected since it was the clang folks wrote
+> the spec to help make those tools come alive (and AFAIK all the tools
+> that consume the compilation database are closely linked to the clang
+> tools):
+> https://clang.llvm.org/docs/JSONCompilationDatabase.html
 
-Maybe a commit reword to suggest "utilize a helper function"?
+It sounds like the raison d'etre for this patch is to support
+clang-tidy and clang-scan kernel Makefile targets when CC=gcc?
+
+In that case, it sounds like compile_commands.json should be post
+processed only when using those Makefile targets with CC=gcc.
+
+As in:
+
+$ make compile_commands.json
+
+Should continue to produce a pristine/unmodified for this purpose
+compile_commands.json.  Only when:
+
+$ make clang-analyzer
+or
+$ make clang-tidy
+
+are run should we:
+1. produce a second compilation database in which we filter out
+command line flags clang cannot consume.
+2. pass that explicitly to clang-tidy via -p.
+
+I suspect that second compile_commands.json will have to be placed in
+a new dir as well.
+
+
+I'm sympathetic to the intent of the series, but I think it corrupts
+the compilation_commands.json for gcc builds in order to support one
+new use case, at the cost of harming existing and future potential use
+cases by stripping out information that is precise. Such loss of
+fidelity makes me uncomfortable accepting this change as is.
+
+>
+> Let's fix this by adding code to gen_compile_commands.py that will
+> automatically strip not-supported-by-clang command line options from
+> the compilation database. This allows the common consumers of the
+> compilation database (clang-tidy, clangd code completion engine,
+> CodeChecker, etc) to work without requiring the developer to build the
+> kernel using a different C compiler.
+>
+> In theory this could cause problems if/when a not-based-on-clang tool
+> emerges that reuses the clang compilation database format. This is not
+> expected to be a problem in practice since the heuristics added to
+> gen_compile_commands.py are pretty conservative. The should only ever
+> disable some rather esoteric compiler options ("they must be esoteric
+> otherwise clang would have implemented them..."). It is hard to reason
+> about what will/won't break tools that are not yet written but we can
+> hope the removing esoteric options will be benign!
+>
+> Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
+> ---
+>  Makefile                                    |  5 +-
+>  scripts/clang-tools/gen_compile_commands.py | 71 ++++++++++++++++++++-
+>  2 files changed, 74 insertions(+), 2 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 513c1fbf7888..9ea6867aaf9c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1886,8 +1886,11 @@ nsdeps: modules
+>  # Clang Tooling
+>  # ---------------------------------------------------------------------------
+>
+> +ifdef CONFIG_CC_IS_GCC
+> +gen_compile_commands-flags += --gcc
+> +endif
+>  quiet_cmd_gen_compile_commands = GEN     $@
+> -      cmd_gen_compile_commands = $(PYTHON3) $< -a $(AR) -o $@ $(filter-out $<, $(real-prereqs))
+> +      cmd_gen_compile_commands = $(PYTHON3) $< $(gen_compile_commands-flags) -a $(AR) -o $@ $(filter-out $<, $(real-prereqs))
+>
+>  $(extmod_prefix)compile_commands.json: scripts/clang-tools/gen_compile_commands.py \
+>         $(if $(KBUILD_EXTMOD),,$(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS)) \
+> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
+> index 1d1bde1fd45e..02f6a1408968 100755
+> --- a/scripts/clang-tools/gen_compile_commands.py
+> +++ b/scripts/clang-tools/gen_compile_commands.py
+> @@ -56,6 +56,9 @@ def parse_arguments():
+>      ar_help = 'command used for parsing .a archives'
+>      parser.add_argument('-a', '--ar', type=str, default='llvm-ar', help=ar_help)
+>
+> +    gcc_help = 'tidy up gcc invocations to work with clang'
+> +    parser.add_argument('-g', '--gcc', action='store_true', help=gcc_help)
+> +
+>      paths_help = ('directories to search or files to parse '
+>                    '(files should be *.o, *.a, or modules.order). '
+>                    'If nothing is specified, the current directory is searched')
+> @@ -67,6 +70,7 @@ def parse_arguments():
+>              os.path.abspath(args.directory),
+>              args.output,
+>              args.ar,
+> +            args.gcc,
+>              args.paths if len(args.paths) > 0 else [args.directory])
+>
+>
+> @@ -196,10 +200,73 @@ def process_line(root_directory, command_prefix, file_path):
+>          'command': prefix + file_path,
+>      }
+>
+> +clang_options = {}
+> +
+> +def check_clang_compatibility(target, flag):
+> +    """Check that the supplied flag does not cause clang to return an error.
+> +
+> +    The results of the check, which is expensive if repeated many times, is
+> +    cached in the clang_options variable and reused in subsequent calls.
+> +    """
+> +    global clang_options
+> +    if flag in clang_options:
+> +        return clang_options[flag]
+> +
+> +    c = 'echo "int f;"| clang {} {} - -E > /dev/null 2>&1'.format(target, flag)
+> +    rc = os.system(c)
+> +    compatible = rc == 0
+> +    clang_options[flag] = compatible
+> +    if not compatible:
+> +        logging.info('Not supported by clang: %s', flag)
+> +
+> +    return compatible
+> +
+> +def make_clang_compatible(entry):
+> +    """Scans and transforms the command line options to make the invocation
+> +    compatible with clang.
+> +
+> +    There are two main heuristics:
+> +
+> +    1. Use the gcc compiler prefix to populate the clang --target variable
+> +       (which is needed for cross-compiles to work correctly)
+> +
+> +    2. Scan for any -f or -m options that are not supported by clang and
+> +       discard them.
+> +
+> +    This allows us to use clang tools on our kernel builds even if we built the
+> +    kernel using gcc.
+> +    """
+> +    newcmd = []
+> +    target = ''
+> +
+> +    # Splitting the command line like this isn't going to handle quoted
+> +    # strings transparently. However assuming the quoted string does not
+> +    # contain tabs, double spaces or words commencing with '-f' or '-c'
+> +    # (which is fairly reasonable) then this simple approach will be
+> +    # sufficient.
+> +    atoms = entry['command'].split()
+> +
+> +    # Use the compiler prefix as the clang --target variable
+> +    if atoms[0].endswith('-gcc'):
+> +        target = '--target=' + os.path.basename(atoms[0][:-4])
+> +        newcmd.append(atoms[0])
+> +        newcmd.append(target)
+> +        del atoms[0]
+> +
+> +    # Drop incompatible flags that provoke fatal errors for clang. Note that
+> +    # unsupported -Wenable-warning flags are not fatal so we don't have to
+> +    # worry about those.
+> +    for atom in atoms:
+> +        if atom.startswith('-f') or atom.startswith('-m'):
+> +            if not check_clang_compatibility(target, atom):
+> +                continue
+> +        newcmd.append(atom)
+> +
+> +    entry['command'] = ' '.join(newcmd)
+>
+>  def main():
+>      """Walks through the directory and finds and parses .cmd files."""
+> -    log_level, directory, output, ar, paths = parse_arguments()
+> +    log_level, directory, output, ar, gcc, paths = parse_arguments()
+>
+>      level = getattr(logging, log_level)
+>      logging.basicConfig(format='%(levelname)s: %(message)s', level=level)
+> @@ -232,6 +299,8 @@ def main():
+>                      try:
+>                          entry = process_line(directory, result.group(1),
+>                                               result.group(2))
+> +                        if gcc:
+> +                            make_clang_compatible(entry)
+>                          compile_commands.append(entry)
+>                      except ValueError as err:
+>                          logging.info('Could not add line from %s: %s',
+> --
+> 2.35.1
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers

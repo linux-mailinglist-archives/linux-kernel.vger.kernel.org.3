@@ -2,86 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C490755E968
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A98B55E61A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347869AbiF1Pfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
+        id S1347898AbiF1Pfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347854AbiF1Pf3 (ORCPT
+        with ESMTP id S1347874AbiF1Pfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:35:29 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F04833E89;
-        Tue, 28 Jun 2022 08:35:28 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id mf9so26692549ejb.0;
-        Tue, 28 Jun 2022 08:35:28 -0700 (PDT)
+        Tue, 28 Jun 2022 11:35:46 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AEE3389F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:35:46 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id q140so12553677pgq.6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:35:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DL43punzQ+qzj6hSdoTRg0mAdzG3rAXkxtHbjtjcKDk=;
-        b=J/pl124QRt2Wk2blBedwyS9d7/NqidqGNjmcJKmMTwWV1k2PN4bCCL1XaJI2c4NegV
-         Tv7PPzrhPRaTW/hgrurPvvbIIjcf2579WfQqhCfIu8GwswFzunf+HuxpWGSQFGwOFG/P
-         yKppR+dssvXShdpG2cskbpM2bfmSZNYTFgfDukzoWZasp0UcuvUGbKo0qZJjfEn3t1H8
-         cdMKbenRdJgMdGiaOHLS7i/Ic/HqygfFKoJYVNQsZCruUioBSMdg5q0UE714pBAWOkNk
-         XY3ulXdyYYl4yKo9JPcylZrcfs5CCZ9h/yqD/4NYcjrjJAmcyO77F2grc2SyfMXit+qx
-         BUbg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7Xad2VrzPahx1am7D0ZL0QWhiKM+P04nXRGOHvrlZTs=;
+        b=ESV4BnBikZg2lkGcaWdqk40NhArW+jR+mYCCYt3K+v6vJP69keqdbBzxxEfTLf68Cs
+         Yib2eKchFlE+NP1dCZ30NPzNDUYfzIWaSe8PbFY5RdcjjHqgTEMuCey6K9G4swBTc6oH
+         43m2LBDrH1ghc0qoIMZJO0iAv4f0ZAlsyIxWKxJ+qjCsTgnljlU4MZfCnn6VGcRFf4vs
+         9evXz+LBdiFYR7sYI3mtH41QGLJpNK/7hX3CW9/Ktd56RIA/+n6aV5bplA+fcQW/N73y
+         /f0jhbmHq3LEspQBSCfR3LMpDYsT2ZkdT1gboeoS9Tpp+jj4dS9mxKOncJPTUAApYJMD
+         B97Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DL43punzQ+qzj6hSdoTRg0mAdzG3rAXkxtHbjtjcKDk=;
-        b=pzT17uwl6Fba0V2ZPkqe4zMZFBuLECzCZbShEO2QFYosiO68qy3aDx+96iwhHlEIb7
-         GAsmJNR3UEfV6vlJ687RXGQkh6dYBgEugJfjt3keLmjrKl7qvsP8hjc52k8Bdfsb7m+Q
-         YO+m8t5tmvdTlujwPmbRsG8+200ijNBcFhosH69IveNG0ZGcnFn8yrorzlUrSXqbzeuj
-         fmkfBLty3agHu3jsYT9mpJPJcwuuqGZDvbkmmFbbtShBqUFTFFmLCchDNMO9rd28qzlL
-         AeaDiA9isidd11CojjJwrC/P1l0yX+52R8yqgeiVnOVog4lL9mLKEUJ1w4+B7AqClAcd
-         xYgw==
-X-Gm-Message-State: AJIora8h23NQt640u/jGZqDTlpmH485ZsQXaH4lhIinwcBxb2qul6jKz
-        xwFiXHW2op1kY2e5KXo0ILk=
-X-Google-Smtp-Source: AGRyM1uPRSomYbKmcMmXmhjerNWDelmBl5PQl5c4/qUVsG9o1Ty4qLP7QnFBMkjQwr2Ou31X8L2+FQ==
-X-Received: by 2002:a17:906:4794:b0:722:f10e:6240 with SMTP id cw20-20020a170906479400b00722f10e6240mr19530893ejc.704.1656430526484;
-        Tue, 28 Jun 2022 08:35:26 -0700 (PDT)
-Received: from krava (net-109-116-206-47.cust.vodafonedsl.it. [109.116.206.47])
-        by smtp.gmail.com with ESMTPSA id by27-20020a0564021b1b00b004356112a8a2sm9698253edb.15.2022.06.28.08.35.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 08:35:25 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 28 Jun 2022 17:35:21 +0200
-To:     Ian Rogers <irogers@google.com>
-Cc:     olsajiri@gmail.com, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH] perf bpf: 8 byte align bpil data
-Message-ID: <YrsfueiaxKmpf0Ng@krava>
-References: <20220614014714.1407239-1-irogers@google.com>
- <Yrq5Bun3Nmb1vrW3@krava>
- <CAP-5=fXNJjRxGCE=mH22bLg1mNXMRgL_px4=-=8Zq-DLUXbxTg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7Xad2VrzPahx1am7D0ZL0QWhiKM+P04nXRGOHvrlZTs=;
+        b=3S5I47yjyi4xHgj9XnsA82i+gdpZ5e6PhTCxga3HO3T9oB9SaxksN8DY758hr/VwSw
+         hIT9x/HueuVpLPjH3k0xfHKdklvxnKF0XxvMLwJSB+SPgONfsy//3jDSfTLOgTTkFfOl
+         rRAP9L/AFmLFg+WmybOWA8ghVKE/7P+Ua1UI/dsInWO7LAApRSeXsmX2dDvhGJyQ3aBZ
+         K6gdYrrhB9Kkl+h2BOBY+136GDlkZ+mWSxR+W/7BixGrIhdTimfBYxd8ObqdPhAYS7xW
+         8AQXoXg+ug16WApG7PBPb4clpz992+VPNM+eath4St7e1YUZPyItxIWYCQLY7c0NfQ5l
+         CcEw==
+X-Gm-Message-State: AJIora+0dMuC2l3TI3hNI9Glg7HRSrUXxUY9tzpzdY5251GF/b/X4Kt6
+        TmN7BuZUQraUh34RcEMk+NnssPyGb4Ft4C7+q9X/7g==
+X-Google-Smtp-Source: AGRyM1tr/ZpJ7CYBKDkl50lshphA+SoJZVQyFmUIYyu6EGLo9+k3wvJQanXwT3aXGp3nVQCsHNE4PEWljlWoB3gA9dE=
+X-Received: by 2002:a05:6a00:2402:b0:4e1:46ca:68bd with SMTP id
+ z2-20020a056a00240200b004e146ca68bdmr5300320pfh.70.1656430545342; Tue, 28 Jun
+ 2022 08:35:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fXNJjRxGCE=mH22bLg1mNXMRgL_px4=-=8Zq-DLUXbxTg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220624173656.2033256-1-jthoughton@google.com>
+ <20220624173656.2033256-3-jthoughton@google.com> <7ec9cbbe-742a-4629-8764-90213e85ac58@nutanix.com>
+In-Reply-To: <7ec9cbbe-742a-4629-8764-90213e85ac58@nutanix.com>
+From:   James Houghton <jthoughton@google.com>
+Date:   Tue, 28 Jun 2022 08:35:34 -0700
+Message-ID: <CADrL8HXd_NSki5GWM-KO9rLKfWwnW-wCnxK0RSgPDWB4QOj4uQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 02/26] hugetlb: sort hstates in hugetlb_init_hstates
+To:     "manish.mishra" <manish.mishra@nutanix.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Jue Wang <juew@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,78 +76,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 08:15:04AM -0700, Ian Rogers wrote:
-> On Tue, Jun 28, 2022 at 1:41 AM <olsajiri@gmail.com> wrote:
+On Mon, Jun 27, 2022 at 5:09 AM manish.mishra <manish.mishra@nutanix.com> wrote:
+>
+>
+> On 24/06/22 11:06 pm, James Houghton wrote:
+> > When using HugeTLB high-granularity mapping, we need to go through the
+> > supported hugepage sizes in decreasing order so that we pick the largest
+> > size that works. Consider the case where we're faulting in a 1G hugepage
+> > for the first time: we want hugetlb_fault/hugetlb_no_page to map it with
+> > a PUD. By going through the sizes in decreasing order, we will find that
+> > PUD_SIZE works before finding out that PMD_SIZE or PAGE_SIZE work too.
 > >
-> > On Mon, Jun 13, 2022 at 06:47:14PM -0700, Ian Rogers wrote:
-> > > bpil data is accessed assuming 64-bit alignment resulting in undefined
-> > > behavior as the data is just byte aligned. With an -fsanitize=undefined
-> > > build the following errors are observed:
+> > Signed-off-by: James Houghton <jthoughton@google.com>
+> > ---
+> >   mm/hugetlb.c | 40 +++++++++++++++++++++++++++++++++++++---
+> >   1 file changed, 37 insertions(+), 3 deletions(-)
 > >
-> > I need to add -w to get the clean build with that, do you see that as well?
+> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > index a57e1be41401..5df838d86f32 100644
+> > --- a/mm/hugetlb.c
+> > +++ b/mm/hugetlb.c
+> > @@ -33,6 +33,7 @@
+> >   #include <linux/migrate.h>
+> >   #include <linux/nospec.h>
+> >   #include <linux/delayacct.h>
+> > +#include <linux/sort.h>
 > >
-> >   $ make EXTRA_CFLAGS='-fsanitize=undefined -w'
-> 
-> I don't recall needing this, but I was stacking fixes which may explain it.
-> 
-> > >
-> > > $ sudo perf record -a sleep 1
-> > > util/bpf-event.c:310:22: runtime error: load of misaligned address 0x55f61084520f for type '__u64', which requires 8 byte alignment
-> > > 0x55f61084520f: note: pointer points here
-> > >  a8 fe ff ff 3c  51 d3 c0 ff ff ff ff 04  84 d3 c0 ff ff ff ff d8  aa d3 c0 ff ff ff ff a4  c0 d3 c0
-> > >              ^
-> > > util/bpf-event.c:311:20: runtime error: load of misaligned address 0x55f61084522f for type '__u32', which requires 4 byte alignment
-> > > 0x55f61084522f: note: pointer points here
-> > >  ff ff ff ff c7  17 00 00 f1 02 00 00 1f  04 00 00 58 04 00 00 00  00 00 00 0f 00 00 00 63  02 00 00
-> > >              ^
-> > > util/bpf-event.c:198:33: runtime error: member access within misaligned address 0x55f61084523f for type 'const struct bpf_func_info', which requires 4 byte alignment
-> > > 0x55f61084523f: note: pointer points here
-> > >  58 04 00 00 00  00 00 00 0f 00 00 00 63  02 00 00 3b 00 00 00 ab  02 00 00 44 00 00 00 14  03 00 00
+> >   #include <asm/page.h>
+> >   #include <asm/pgalloc.h>
+> > @@ -48,6 +49,10 @@
 > >
+> >   int hugetlb_max_hstate __read_mostly;
+> >   unsigned int default_hstate_idx;
+> > +/*
+> > + * After hugetlb_init_hstates is called, hstates will be sorted from largest
+> > + * to smallest.
+> > + */
+> >   struct hstate hstates[HUGE_MAX_HSTATE];
 > >
-> > and I'm also getting another error in:
+> >   #ifdef CONFIG_CMA
+> > @@ -3144,14 +3149,43 @@ static void __init hugetlb_hstate_alloc_pages(struct hstate *h)
+> >       kfree(node_alloc_noretry);
+> >   }
 > >
-> > [root@krava perf]# ./perf record -a sleep 1
-> > util/synthetic-events.c:1202:11: runtime error: member access within misaligned address 0x00000286f7ea for type 'struct perf_record_record_cpu_map', which requires 8 byte alignment
-> > 0x00000286f7ea: note: pointer points here
-> >  20 00  01 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00
-> >               ^
-> > util/synthetic-events.c:1203:18: runtime error: member access within misaligned address 0x00000286f7ea for type 'struct perf_record_record_cpu_map', which requires 8 byte alignment
-> > 0x00000286f7ea: note: pointer points here
-> >  20 00  01 00 01 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00
-> >               ^
-> > util/synthetic-events.c:1206:46: runtime error: member access within misaligned address 0x00000286f7ea for type 'struct perf_record_record_cpu_map', which requires 8 byte alignment
-> > 0x00000286f7ea: note: pointer points here
-> >  20 00  01 00 01 00 08 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00
-> >               ^
-> > /home/jolsa/kernel/linux-perf/tools/include/asm-generic/bitops/atomic.h:10:29: runtime error: load of misaligned address 0x00000286f7f2 for type 'long unsigned int', which requires 8 byte alignment
-> > 0x00000286f7f2: note: pointer points here
-> >  00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  51 00 00 00 00 00
-> >               ^
+> > +static int compare_hstates_decreasing(const void *a, const void *b)
+> > +{
+> > +     const int shift_a = huge_page_shift((const struct hstate *)a);
+> > +     const int shift_b = huge_page_shift((const struct hstate *)b);
+> > +
+> > +     if (shift_a < shift_b)
+> > +             return 1;
+> > +     if (shift_a > shift_b)
+> > +             return -1;
+> > +     return 0;
+> > +}
+> > +
+> > +static void sort_hstates(void)
+> > +{
+> > +     unsigned long default_hstate_sz = huge_page_size(&default_hstate);
+> > +
+> > +     /* Sort from largest to smallest. */
+> > +     sort(hstates, hugetlb_max_hstate, sizeof(*hstates),
+> > +          compare_hstates_decreasing, NULL);
+> > +
+> > +     /*
+> > +      * We may have changed the location of the default hstate, so we need to
+> > +      * update it.
+> > +      */
+> > +     default_hstate_idx = hstate_index(size_to_hstate(default_hstate_sz));
+> > +}
+> > +
+> >   static void __init hugetlb_init_hstates(void)
+> >   {
+> >       struct hstate *h, *h2;
 > >
-> > are you going to address this one as well?
+> > -     for_each_hstate(h) {
+> > -             if (minimum_order > huge_page_order(h))
+> > -                     minimum_order = huge_page_order(h);
+> > +     sort_hstates();
 > >
-> >
-> > the reason for this one is that 'data' in struct perf_record_cpu_map_data
-> > is not alligned(8), so that's why I raised the question in my other reply ;-)
-> >
-> > I wonder we should mark all tools/lib/perf/include/perf/event.h types
-> > as packed to prevent any compiler padding
-> 
-> I already sent out a fix and some improvements related to this:
-> https://lore.kernel.org/lkml/20220614143353.1559597-1-irogers@google.com/
-> Could you take a look?
+> > +     /* The last hstate is now the smallest. */
+> > +     minimum_order = huge_page_order(&hstates[hugetlb_max_hstate - 1]);
+> > +
+> > +     for_each_hstate(h) {
+> >               /* oversize hugepages were init'ed in early boot */
+> >               if (!hstate_is_gigantic(h))
+> >                       hugetlb_hstate_alloc_pages(h);
+>
+> As now hstates are ordered can code which does calculation of demot_order
+>
+> can too be optimised, i mean it can be value of order of hstate at next index?
+>
 
-ok, I overlooked that one
+Indeed -- thanks for catching that. I'll make this optimization for
+the next version of this series.
 
-> 
-> I'm not sure about aligned and packed. I tried to minimize it in the
-> change above. The issue is that taking the address of a variable in a
-> packed struct results in an unaligned pointer. To address this in the
-> fix above I changed the functions to pass pointers to the whole
-> struct.
-
-ok, will check,
-
-thanks,
-jirka
+>

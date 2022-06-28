@@ -2,237 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E8B55D8FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE84D55CE5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbiF1LwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 07:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51672 "EHLO
+        id S1345267AbiF1LxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 07:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344052AbiF1LwM (ORCPT
+        with ESMTP id S236568AbiF1LxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 07:52:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D7D81B7B4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656417126;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j/tExLCcuaEdSq/9II+CzXZ/hLnhseJLrJyprOKPr8M=;
-        b=Q2HC02HE1Ds/kolgWUoPKLAr7Rl5t6fKvznEW/PzyxrNuzgaXyzrUQuyhbIq6YYWtl4Y6+
-        2IViTMGfOjdjYdARjQ9l4JZGMEGLX50/KvdmTR9jIGknOeULr3089HAQzcN8xi3YXpTTvG
-        afhgcZhIiMi13zcyWqiFbvLazkv04+0=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-343-2CtMEO98NpqzN0WLG8leZQ-1; Tue, 28 Jun 2022 07:52:05 -0400
-X-MC-Unique: 2CtMEO98NpqzN0WLG8leZQ-1
-Received: by mail-wm1-f71.google.com with SMTP id r4-20020a1c4404000000b003a02fa133ceso926960wma.2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:52:05 -0700 (PDT)
+        Tue, 28 Jun 2022 07:53:12 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88C130F79;
+        Tue, 28 Jun 2022 04:53:11 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2ef5380669cso114055487b3.9;
+        Tue, 28 Jun 2022 04:53:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=XNYX9WokN0679cD0D/hGygcBjjhtjrHu3X0w/VyXDQg=;
+        b=p+9m14+6QsTCZ3pdtSfJn+WEHQmDbBfmFgyzcxQlQAFSE6IZY+I2k0I60ILS1T6sE6
+         5tfPY5UZgBU3FRb4NSW//C4Rx1Ok8ZtMgaPCeNnseoVwEVJEBVFNSrjEMdO0/aE06dMF
+         bO4JyL56j2waskXr5NRKktwhHstWwfoOWUIKXEVeyeHLnlyJ69uPTTPHfcyFtQdII3ir
+         DcrqRmp4yuJtYhQikKQO4K74tylJuh4wPkW3XPaMf8NJTGy1r4c5kq60uETiZZASMznb
+         ZWFQkb1edLWF2vaOXd4DP8s5wnw2b9QM2i0kdqnmPmBiANAXfuc6nrwo6+J80NhmvMlD
+         X06w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=j/tExLCcuaEdSq/9II+CzXZ/hLnhseJLrJyprOKPr8M=;
-        b=2aJmSKqp7E3LtIYGLjVS/njaQ9NMviWGMardcu5LMSwretALWyNfAIYMTDEseLe/eL
-         UBTApBWKC4NAd+LDOQ7oaWgGknNNiXWcot8EqaVLxocESwbA9f8lQ327ZCKvqDdXyuHQ
-         2pM+CWZZH9tZxJMIC7DSzK8ablXKAFdVqUG7TMH+kxhV5lky4JoG7D2rrnLJczExywEW
-         x9ekrZFpSDGH/m3nal7Pn2hbaNk1ch6187JKlk74XNrxM9nkyrDpxLkgPObPnbY27vPd
-         kr/uMXFjIIqPFNW055hNhf/uaFtmcQJ8qjQYe2oFkMkdeW/QjrHv5Jw8gCYQu4GlIrP+
-         NuDw==
-X-Gm-Message-State: AJIora+O4CjA7dIVT5+YxChmZzUK0onjpbBlH7qaCvlidN7rO9uVyQSL
-        6RrPvmHLp2mBl0AdYOOJpP2+x5duRfcNbKdm89pmtWDaUOupHEIS5nJtzgSPCNE6Sy0Wgc1LMlx
-        Hoz4MPlXAqaG4jxKHaldO7GrT
-X-Received: by 2002:a05:6000:703:b0:21b:9274:6b67 with SMTP id bs3-20020a056000070300b0021b92746b67mr18086145wrb.377.1656417123813;
-        Tue, 28 Jun 2022 04:52:03 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uCu4GCzcrPh5RsBK6mfFRrbGHD7B6cejPvSxFZf9VeWkHaPtaXxcEf7abH2qB66w2FLxoAwA==
-X-Received: by 2002:a05:6000:703:b0:21b:9274:6b67 with SMTP id bs3-20020a056000070300b0021b92746b67mr18086106wrb.377.1656417123545;
-        Tue, 28 Jun 2022 04:52:03 -0700 (PDT)
-Received: from localhost (nat-pool-brq-t.redhat.com. [213.175.37.10])
-        by smtp.gmail.com with ESMTPSA id j6-20020adff546000000b0021b862ad439sm16178457wrp.9.2022.06.28.04.52.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 04:52:02 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 13:52:00 +0200
-From:   Igor Mammedov <imammedo@redhat.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kvm-devel <kvm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        isaku.yamahata@intel.com, Tom Lendacky <thomas.lendacky@amd.com>,
-        Tianyu.Lan@microsoft.com, Randy Dunlap <rdunlap@infradead.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Yue Haibing <yuehaibing@huawei.com>, dongli.zhang@oracle.com
-Subject: Re: [PATCH v5 02/22] cc_platform: Add new attribute to prevent ACPI
- CPU hotplug
-Message-ID: <20220628135200.6e9be32d@redhat.com>
-In-Reply-To: <2b676b19db423b995a21c7f215ed117c345c60d9.camel@intel.com>
-References: <cover.1655894131.git.kai.huang@intel.com>
-        <f4bff93d83814ea1f54494f51ce3e5d954cf0f5b.1655894131.git.kai.huang@intel.com>
-        <CAJZ5v0jV8ODcxuLL+iSpYbW7w=GFtUSakN-n8CO5Zmun3K-Erg@mail.gmail.com>
-        <d3ba563f3f4e7aaf90fb99d20c651b5751972f7b.camel@intel.com>
-        <20220627100155.71a7b34c@redhat.com>
-        <2b676b19db423b995a21c7f215ed117c345c60d9.camel@intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-redhat-linux-gnu)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XNYX9WokN0679cD0D/hGygcBjjhtjrHu3X0w/VyXDQg=;
+        b=gMCi5KiuOCUMC69Re5b0/9L++ghu2RXNDuEI5AwSOua/EJIY3+TPmS8Geaghgr2X+5
+         2tnT0p302GOuGVVkMHcPnvsmGS2Oc5+5V63/h5rVD/3dPlY5gi43bmlER5lskl+SPxP0
+         ZpObq//ZGJ+K795oHNO1YimTRkK9Q48v1pN7FJbw8Gc3RxjIC4HoSTiXzur0EHYYZNz1
+         QcDKyFGzG3BLAS//yZWdqK9jeJ903xsuFm11t7srKE0MWnmKidMKWyi1EgpUWzp3KGKM
+         44rGhD6SUFF+uX3XfqfqBj6tXQtgDneJl3t5uiC3RKhi5qCuXfG/ax7o+5QSRF1buL4S
+         7yaA==
+X-Gm-Message-State: AJIora9B+i+3eFd33AR/+SmeQRIniyyJPgSc+Ykf0r4TtY/hRkwT0ISv
+        8vyjcfuX2IhMGwHEJS5RcGnD8hhUTQbRGXTf0+E=
+X-Google-Smtp-Source: AGRyM1t1yvSVmh1UzQdiLz0fOsWVO4xcBW2SRjndRAGwREFZZ1pQOPCCdyP/RInbExx8gXe7S6V6QoaMvGta8vqrn/0=
+X-Received: by 2002:a81:2386:0:b0:317:6586:8901 with SMTP id
+ j128-20020a812386000000b0031765868901mr20865815ywj.195.1656417190958; Tue, 28
+ Jun 2022 04:53:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220623115631.22209-1-peterwu.pub@gmail.com> <20220623115631.22209-8-peterwu.pub@gmail.com>
+ <CAHp75Vd95sEQz8y4ZcviUKaC9ic27yitR+VCwkfb38MTTe0mkg@mail.gmail.com> <CABtFH5K_vB5Rmo+2zAJ8PuMeMvC9x-yhDL93ByOLD+gc2maQYg@mail.gmail.com>
+In-Reply-To: <CABtFH5K_vB5Rmo+2zAJ8PuMeMvC9x-yhDL93ByOLD+gc2maQYg@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 28 Jun 2022 13:52:34 +0200
+Message-ID: <CAHp75Vc0t+3p2TGs9kZ-6JP8y-+cmSF++9uCfbWAgFhapteh-A@mail.gmail.com>
+Subject: Re: [PATCH v3 07/14] mfd: mt6370: Add Mediatek MT6370 support
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Jun 2022 22:04:43 +1200
-Kai Huang <kai.huang@intel.com> wrote:
+On Fri, Jun 24, 2022 at 12:19 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+> Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B46=E6=
+=9C=8824=E6=97=A5 =E9=80=B1=E4=BA=94 =E5=87=8C=E6=99=A82:01=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+> > On Thu, Jun 23, 2022 at 1:59 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote=
+:
 
-> On Mon, 2022-06-27 at 10:01 +0200, Igor Mammedov wrote:
-> > On Thu, 23 Jun 2022 12:01:48 +1200
-> > Kai Huang <kai.huang@intel.com> wrote:
-> >   
-> > > On Wed, 2022-06-22 at 13:42 +0200, Rafael J. Wysocki wrote:  
-> > > > On Wed, Jun 22, 2022 at 1:16 PM Kai Huang <kai.huang@intel.com> wrote:    
-> > > > > 
-> > > > > Platforms with confidential computing technology may not support ACPI
-> > > > > CPU hotplug when such technology is enabled by the BIOS.  Examples
-> > > > > include Intel platforms which support Intel Trust Domain Extensions
-> > > > > (TDX).
-> > > > > 
-> > > > > If the kernel ever receives ACPI CPU hotplug event, it is likely a BIOS
-> > > > > bug.  For ACPI CPU hot-add, the kernel should speak out this is a BIOS
-> > > > > bug and reject the new CPU.  For hot-removal, for simplicity just assume
-> > > > > the kernel cannot continue to work normally, and BUG().
-> > > > > 
-> > > > > Add a new attribute CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED to indicate the
-> > > > > platform doesn't support ACPI CPU hotplug, so that kernel can handle
-> > > > > ACPI CPU hotplug events for such platform.  The existing attribute
-> > > > > CC_ATTR_HOTPLUG_DISABLED is for software CPU hotplug thus doesn't fit.
-> > > > > 
-> > > > > In acpi_processor_{add|remove}(), add early check against this attribute
-> > > > > and handle accordingly if it is set.
-> > > > > 
-> > > > > Also take this chance to rename existing CC_ATTR_HOTPLUG_DISABLED to
-> > > > > CC_ATTR_CPU_HOTPLUG_DISABLED as it is for software CPU hotplug.
-> > > > > 
-> > > > > Signed-off-by: Kai Huang <kai.huang@intel.com>
-> > > > > ---
-> > > > >  arch/x86/coco/core.c          |  2 +-
-> > > > >  drivers/acpi/acpi_processor.c | 23 +++++++++++++++++++++++
-> > > > >  include/linux/cc_platform.h   | 15 +++++++++++++--
-> > > > >  kernel/cpu.c                  |  2 +-
-> > > > >  4 files changed, 38 insertions(+), 4 deletions(-)
-> > > > > 
-> > > > > diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-> > > > > index 4320fadae716..1bde1af75296 100644
-> > > > > --- a/arch/x86/coco/core.c
-> > > > > +++ b/arch/x86/coco/core.c
-> > > > > @@ -20,7 +20,7 @@ static bool intel_cc_platform_has(enum cc_attr attr)
-> > > > >  {
-> > > > >         switch (attr) {
-> > > > >         case CC_ATTR_GUEST_UNROLL_STRING_IO:
-> > > > > -       case CC_ATTR_HOTPLUG_DISABLED:
-> > > > > +       case CC_ATTR_CPU_HOTPLUG_DISABLED:
-> > > > >         case CC_ATTR_GUEST_MEM_ENCRYPT:
-> > > > >         case CC_ATTR_MEM_ENCRYPT:
-> > > > >                 return true;
-> > > > > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> > > > > index 6737b1cbf6d6..b960db864cd4 100644
-> > > > > --- a/drivers/acpi/acpi_processor.c
-> > > > > +++ b/drivers/acpi/acpi_processor.c
-> > > > > @@ -15,6 +15,7 @@
-> > > > >  #include <linux/kernel.h>
-> > > > >  #include <linux/module.h>
-> > > > >  #include <linux/pci.h>
-> > > > > +#include <linux/cc_platform.h>
-> > > > > 
-> > > > >  #include <acpi/processor.h>
-> > > > > 
-> > > > > @@ -357,6 +358,17 @@ static int acpi_processor_add(struct acpi_device *device,
-> > > > >         struct device *dev;
-> > > > >         int result = 0;
-> > > > > 
-> > > > > +       /*
-> > > > > +        * If the confidential computing platform doesn't support ACPI
-> > > > > +        * memory hotplug, the BIOS should never deliver such event to
-> > > > > +        * the kernel.  Report ACPI CPU hot-add as a BIOS bug and ignore
-> > > > > +        * the new CPU.
-> > > > > +        */
-> > > > > +       if (cc_platform_has(CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED)) {    
-> > > > 
-> > > > This will affect initialization, not just hotplug AFAICS.
-> > > > 
-> > > > You should reset the .hotplug.enabled flag in processor_handler to
-> > > > false instead.    
-> > > 
-> > > Hi Rafael,
-> > > 
-> > > Thanks for the review.  By "affect initialization" did you mean this
-> > > acpi_processor_add() is also called during kernel boot when any logical cpu is
-> > > brought up?  Or do you mean ACPI CPU hotplug can also happen during kernel boot
-> > > (after acpi_processor_init())?
-> > > 
-> > > I see acpi_processor_init() calls acpi_processor_check_duplicates() which calls
-> > > acpi_evaluate_object() but I don't know details of ACPI so I don't know whether
-> > > this would trigger acpi_processor_add().
-> > > 
-> > > One thing is TDX doesn't support ACPI CPU hotplug is an architectural thing, so
-> > > it is illegal even if it happens during kernel boot.  Dave's idea is the kernel
-> > > should  speak out loudly if physical CPU hotplug indeed happened on (BIOS) TDX-
-> > > enabled platforms.  Otherwise perhaps we can just give up initializing the ACPI
-> > > CPU hotplug in acpi_processor_init(), something like below?  
-> > 
-> > The thing is that by the time ACPI machinery kicks in, physical hotplug
-> > has already happened and in case of (kvm+qemu+ovmf hypervisor combo)
-> > firmware has already handled it somehow and handed it over to ACPI.
-> > If you say it's architectural thing then cpu hotplug is platform/firmware
-> > bug and should be disabled there instead of working around it in the kernel.
-> > 
-> > Perhaps instead of 'preventing' hotplug, complain/panic and be done with it.  
-> 
-> Hi Igor,
-> 
-> Thanks for feedback.  Yes the current implementation actually reports CPU hot-
-> add as BIOS bug.  I think I can report BIOS bug for hot-removal too.  And
-> currently I actually used BUG() for the hot-removal case.  For hot-add I didn't
-> use BUG() but rejected the new CPU as the latter is more conservative. 
+...
 
-Is it safe to ignore not properly initialized for TDX CPU,
-sitting there (it may wake up to IRQs (as minimum SMI, but
-maybe to IPIs as well (depending in what state FW left it))?
+> > >  obj-$(CONFIG_INTEL_SOC_PMIC_BXTWC)  +=3D intel_soc_pmic_bxtwc.o
+> > >  obj-$(CONFIG_INTEL_SOC_PMIC_CHTWC)     +=3D intel_soc_pmic_chtwc.o
+> > >  obj-$(CONFIG_INTEL_SOC_PMIC_CHTDC_TI)  +=3D intel_soc_pmic_chtdc_ti.=
+o
+> > >  obj-$(CONFIG_MFD_MT6360)       +=3D mt6360-core.o
+> > > +obj-$(CONFIG_MFD_MT6370)       +=3D mt6370.o
+> > >  mt6397-objs                    :=3D mt6397-core.o mt6397-irq.o mt635=
+8-irq.o
+> > >  obj-$(CONFIG_MFD_MT6397)       +=3D mt6397.o
+> > >  obj-$(CONFIG_INTEL_SOC_PMIC_MRFLD)     +=3D intel_soc_pmic_mrfld.o
+> >
+> > This whole bunch of drivers is in the wrong place in Makefile.
+> >
+> > https://lore.kernel.org/all/20220616182524.7956-2-andriy.shevchenko@lin=
+ux.intel.com/
+>
+> hmm... So shall we need to cherry-pick your this patch first,
+> then modify the Makefile before the next submission??
 
-for hypervisors, one should disable cpu hotplug there
-(ex: in QEMU, you can try to disable cpu hotplug completely
-if TDX is enabled so it won't ever come to 'physical' cpu
-being added to guest and no CPU hotplug related ACPI AML
-code generated)
+I don't know what Lee's preferences are, but at least I have these
+options in mind:
+1) wait until Lee applies my series;
+2) take that single patch to your tree as a precursor.
 
-> Hi Rafael,
-> 
-> I am not sure I got what you mean by "This will affect initialization, not just
-> hotplug AFAICS", could you elaborate a little bit?  Thanks.
-> 
-> 
+In the second case you will need to send the series with that patch as well=
+.
 
+...
+
+> > > +#define MT6370_REG_MAXADDR     0x1FF
+> >
+> > Wondering if (BIT(10) - 1) gives a better hint on how hardware limits
+> > this (so it will be clear it's 10-bit address).
+>
+> well... This "0x1FF" is just a virtual mapping value to map the max
+> address of the PMU bank(0x1XX).
+> So, I feel its means is different from using (BIT(10) - 1) here.
+
+Perhaps a comment then?
+
+...
+
+> > > +       if (ret < 0)
+> > > +               return ret;
+> > > +       else if (ret !=3D val_size)
+> >
+> > Redundant 'else'.
+>
+> I'm not quite sure what you mean, so I made the following changes first.
+> ------------------------------------
+>        if (ret < 0)
+>               return ret;
+>        if (ret !=3D val_size)
+>               return -EIO;
+> ------------------------------------
+> I don't know if it meets your expectations??
+
+Yes.
+
+> > > +               return -EIO;
+
+--=20
+With Best Regards,
+Andy Shevchenko

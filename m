@@ -2,174 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 917F155CEEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6608F55C545
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241841AbiF1HJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 03:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
+        id S237756AbiF1HJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 03:09:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241578AbiF1HJS (ORCPT
+        with ESMTP id S229796AbiF1HJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 03:09:18 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD289FDD;
-        Tue, 28 Jun 2022 00:09:17 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 07:09:14 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1656400155;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qgpa+GS2NOqfAar7IJ31QaA1euzHBhmjkKYbQS/Wltw=;
-        b=cTEkBDdFrYiOpqdGHRKw1gFXpRLQMfHoBKo9Yf9u6uWG/ZshndbhyPRN2zHAnHhKFJZPev
-        EScp08s0pdB/fGWxcfMUlY5tBU8b/oLRaiKkn7arEvsEksnDo6B0AudsTwUXau5YNJq6Vw
-        9VCUwQRzLW85xdgkEKxrb8BbZdTIqoN/Pyq1QpHLcG642VJf7nKNeZ8c9VRmPkqbskUUpo
-        QhE3Iuxl57jvDqSe7JXWXdJV1p+5rXJ2fxf7r0GQNKofJm46baaJfmepAKrYo8H65fNvMe
-        B/cFu68yTj1nakjSgr2X7A3FG/Cdy6ex5F6QqL5qEHBOzJ9ubpcS2IKy24H/2w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1656400155;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qgpa+GS2NOqfAar7IJ31QaA1euzHBhmjkKYbQS/Wltw=;
-        b=fFPYbQPHfSZdQUiDl7kwfkMNMZgp3tml4dtwRfw1rkUkmKXSbtdE4d/kvQ4D7pBHktFDGz
-        RQq1NyElQkIfbUBA==
-From:   "tip-bot2 for Ard Biesheuvel" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] jump_label: s390: avoid pointless initial NOP patching
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220615154142.1574619-2-ardb@kernel.org>
-References: <20220615154142.1574619-2-ardb@kernel.org>
+        Tue, 28 Jun 2022 03:09:47 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B59B1C924
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 00:09:46 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id h192so11354003pgc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 00:09:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=3XMK98yTF7rwQ7mnNqiKavXCsADLxJEzVfR+4Zz4WF0=;
+        b=zWSmtNZ9qNY6UVxItaNgbAeLqd5873FBJyKmcWEeCrm6xpPi5/FSSNwO6dcTsTDqfq
+         DnvwpQ+94ZnXYb9D20ym7ZWBx0eCNxk/GVk4kGINYnhQ6dIHCycrjeCQIXhpuEVsqluI
+         dlRx0guc1WFWLchA1qpzXHQgZQtlCyzEiIqx9gj+s8BK4k9XIWukz3FVBH26XcA4foHq
+         0uBmm0VTpl7A6iKt2KatPhABuvIFNhG8I7DdXPeF9Lx3l1a80XnHWwJyJkFsGw9kqwwO
+         Qtosfyt9lwP9C2O/chNro/bxsb/hU3c1CdLJwWDdcJhGFVdPiv82JjvnKi+g3moOwG7T
+         sESQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=3XMK98yTF7rwQ7mnNqiKavXCsADLxJEzVfR+4Zz4WF0=;
+        b=FRT+/ou5aqWSj79bPGYfz1uQHemR9CSRtgK+r+a0i9qYxo5UzIPjLeIKOWyO2/gxk1
+         Qp/FEC7E6UfO80Ht0iUKMikteAIxX/LbRtaYmxogtBRGpM4OEEPtQClWyhq/dzlzVywk
+         B8AOoWGyWe3cQevn9gN7vYQkjBvPW2V3rhGItDeYDG2JJVNx+OO89b0LwdU4woutKtI1
+         m2lnjeDL8U3ONXxHOOnd6ISHViey8XmeL67TFBZCtBtyfiisMk9oIPhzVjt+yovK3Pdr
+         T0YsN8B7urpYQyFsa63DOGwdrvWlu1RrzXdPrhhiK35YNIT+oLk/jzq9AEtPmXSpzFzA
+         aHSQ==
+X-Gm-Message-State: AJIora+qNXMCb89ZkAQuGdnvTH7hW5qQxN9jii5MMxk/R8FlRfFtuPiZ
+        5aWGWosQnltb/Y+T2KEmjRH1rA==
+X-Google-Smtp-Source: AGRyM1uEl0n+zjcKdvvyyLVPuhE9wU3a13Tz8GsNbCb4aCUjWCDeNHLF2ac7/nnQGXUqy1ODqa1Hyg==
+X-Received: by 2002:a63:3713:0:b0:40c:b98c:5e4b with SMTP id e19-20020a633713000000b0040cb98c5e4bmr16156287pga.8.1656400185761;
+        Tue, 28 Jun 2022 00:09:45 -0700 (PDT)
+Received: from localhost ([122.172.201.58])
+        by smtp.gmail.com with ESMTPSA id l11-20020a170902d34b00b0015e8d4eb1dbsm8412488plk.37.2022.06.28.00.09.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 00:09:45 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 12:39:43 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 22/31] soc/tegra: Migrate to dev_pm_opp_set_config()
+Message-ID: <20220628070943.5tfyad63rh6niq6x@vireshk-i7>
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <449b344f037c7ef1970bc84d31e0d4c4cb4d2951.1653564321.git.viresh.kumar@linaro.org>
+ <20220624004831.po35sowzfo4c47b3@vireshk-i7>
+ <20220624005700.oj4etaajbutvsym7@vireshk-i7>
+ <73d39022-c6fc-0c21-cb68-9714846f02bf@gmail.com>
+ <20220627064526.2nkezq4nufpkl4y2@vireshk-i7>
+ <ecc72279-0892-d5ab-689d-87b8fba5147e@gmail.com>
+ <20220627072104.ir7kujhezxhzl6a7@vireshk-i7>
 MIME-Version: 1.0
-Message-ID: <165640015422.4207.10034265393643139435.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220627072104.ir7kujhezxhzl6a7@vireshk-i7>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/core branch of tip:
+On 27-06-22, 12:51, Viresh Kumar wrote:
+> On 27-06-22, 10:14, Dmitry Osipenko wrote:
+> > 27.06.2022 09:45, Viresh Kumar пишет:
+> > >> Looks okay. If you'll solve the cpufreq problem where OPP config is set
+> > >> by two drivers for the same cpu device
+> > > This is supported, there is some early freeing of resources on the
+> > > removal path though, the reasoning for which I already gave in another
+> > > email. Though, I am open to sorting that out as well, but nothing
+> > > breaks the code for now AFAICT.
+> > > 
+> > 
+> > In case of Tegra, we use tegra-cpufreq driver that sets supported_hw and
+> > registers cpufreq-dt. If cpufreq-dt driver defers the probe, then the
+> > supported_hw will be lost on the re-probe. I haven't checked yet, but I
+> > suppose that cpufreq-dt driver defers on Tegra30 because of the CPU
+> > regulator and that's why we get the "OPP table is missing" error.
+> 
+> Aha, I get it now. I see, this is a real problem. Will fix it. Give me
+> some time to think. Thanks.
 
-Commit-ID:     0c3b61e00a0d0872c521586494ec23f6016c317a
-Gitweb:        https://git.kernel.org/tip/0c3b61e00a0d0872c521586494ec23f6016c317a
-Author:        Ard Biesheuvel <ardb@kernel.org>
-AuthorDate:    Wed, 15 Jun 2022 17:41:40 +02:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 24 Jun 2022 09:48:54 +02:00
+Okay, I fixed this in opp/linux-next, can you or Jon please give it a
+go on tegra30 to see if the issue is fixed ?
 
-jump_label: s390: avoid pointless initial NOP patching
+FWIW, I have fixed this with the IDR API and the OPP core will only
+free the resources in clear-config, that the corresponding set-config
+has configured. I have tested it with the clk API only though.
 
-Patching NOPs into other NOPs at boot time serves no purpose, so let's
-use the same NOP encodings at compile time and runtime.
+Once you confirm, I will resend all the patches and hope no issues are
+left here.
 
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220615154142.1574619-2-ardb@kernel.org
----
- arch/s390/include/asm/jump_label.h |  5 ++---
- arch/s390/kernel/jump_label.c      | 23 +++++------------------
- 2 files changed, 7 insertions(+), 21 deletions(-)
+Thanks for helping out guys. Really appreciate it.
 
-diff --git a/arch/s390/include/asm/jump_label.h b/arch/s390/include/asm/jump_label.h
-index 916cfcb..895f774 100644
---- a/arch/s390/include/asm/jump_label.h
-+++ b/arch/s390/include/asm/jump_label.h
-@@ -10,7 +10,6 @@
- #include <linux/stringify.h>
- 
- #define JUMP_LABEL_NOP_SIZE 6
--#define JUMP_LABEL_NOP_OFFSET 2
- 
- #ifdef CONFIG_CC_IS_CLANG
- #define JUMP_LABEL_STATIC_KEY_CONSTRAINT "i"
-@@ -21,12 +20,12 @@
- #endif
- 
- /*
-- * We use a brcl 0,2 instruction for jump labels at compile time so it
-+ * We use a brcl 0,<offset> instruction for jump labels so it
-  * can be easily distinguished from a hotpatch generated instruction.
-  */
- static __always_inline bool arch_static_branch(struct static_key *key, bool branch)
- {
--	asm_volatile_goto("0:	brcl	0,"__stringify(JUMP_LABEL_NOP_OFFSET)"\n"
-+	asm_volatile_goto("0:	brcl 0,%l[label]\n"
- 			  ".pushsection __jump_table,\"aw\"\n"
- 			  ".balign	8\n"
- 			  ".long	0b-.,%l[label]-.\n"
-diff --git a/arch/s390/kernel/jump_label.c b/arch/s390/kernel/jump_label.c
-index 6bec000..d764f0d 100644
---- a/arch/s390/kernel/jump_label.c
-+++ b/arch/s390/kernel/jump_label.c
-@@ -44,14 +44,8 @@ static void jump_label_bug(struct jump_entry *entry, struct insn *expected,
- 	panic("Corrupted kernel text");
- }
- 
--static struct insn orignop = {
--	.opcode = 0xc004,
--	.offset = JUMP_LABEL_NOP_OFFSET >> 1,
--};
--
- static void jump_label_transform(struct jump_entry *entry,
--				 enum jump_label_type type,
--				 int init)
-+				 enum jump_label_type type)
- {
- 	void *code = (void *)jump_entry_code(entry);
- 	struct insn old, new;
-@@ -63,27 +57,22 @@ static void jump_label_transform(struct jump_entry *entry,
- 		jump_label_make_branch(entry, &old);
- 		jump_label_make_nop(entry, &new);
- 	}
--	if (init) {
--		if (memcmp(code, &orignop, sizeof(orignop)))
--			jump_label_bug(entry, &orignop, &new);
--	} else {
--		if (memcmp(code, &old, sizeof(old)))
--			jump_label_bug(entry, &old, &new);
--	}
-+	if (memcmp(code, &old, sizeof(old)))
-+		jump_label_bug(entry, &old, &new);
- 	s390_kernel_write(code, &new, sizeof(new));
- }
- 
- void arch_jump_label_transform(struct jump_entry *entry,
- 			       enum jump_label_type type)
- {
--	jump_label_transform(entry, type, 0);
-+	jump_label_transform(entry, type);
- 	text_poke_sync();
- }
- 
- bool arch_jump_label_transform_queue(struct jump_entry *entry,
- 				     enum jump_label_type type)
- {
--	jump_label_transform(entry, type, 0);
-+	jump_label_transform(entry, type);
- 	return true;
- }
- 
-@@ -95,6 +84,4 @@ void arch_jump_label_transform_apply(void)
- void __init_or_module arch_jump_label_transform_static(struct jump_entry *entry,
- 						       enum jump_label_type type)
- {
--	jump_label_transform(entry, type, 1);
--	text_poke_sync();
- }
+-- 
+viresh

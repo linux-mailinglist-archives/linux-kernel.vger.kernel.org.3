@@ -2,57 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CAA55E4AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C23A55E4B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346557AbiF1NcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
+        id S1346489AbiF1Nc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237387AbiF1Nbf (ORCPT
+        with ESMTP id S1346575AbiF1Nc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:31:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B507A2A71F
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:31:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656423064;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=u55Q3Jca+qOXXIBqB4TXnLGHs1HcaTUob8yIUpePALU=;
-        b=Oo5Q5GO05igY7JAInvgV1GFWRYtG1zmsJEq1IqSdfaGJPvCCn4zqjTTeosmBWLPMrhL7sB
-        o90BcRVm0ieMgzxV6zfJG59lRm9SQd6JDebJhsHCCM2Od+UInqSh2oRI79DfSr1u1diWf5
-        Shoh0PPis6rNnbLRfNrXPAObpUqpfA0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-325-i5Y-yA-hNpycuk-FDu2J_Q-1; Tue, 28 Jun 2022 09:31:00 -0400
-X-MC-Unique: i5Y-yA-hNpycuk-FDu2J_Q-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A4D5811E80;
-        Tue, 28 Jun 2022 13:31:00 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.192.126])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1503E2026D07;
-        Tue, 28 Jun 2022 13:30:57 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86: Fully initialize 'struct kvm_lapic_irq' in kvm_pv_kick_cpu_op()
-Date:   Tue, 28 Jun 2022 15:30:57 +0200
-Message-Id: <20220628133057.107344-1-vkuznets@redhat.com>
+        Tue, 28 Jun 2022 09:32:26 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3722731236;
+        Tue, 28 Jun 2022 06:31:58 -0700 (PDT)
+Received: (Authenticated sender: ash@heyquark.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2AAE5200010;
+        Tue, 28 Jun 2022 13:31:48 +0000 (UTC)
+From:   Ash Logan <ash@heyquark.com>
+To:     krzysztof.kozlowski+dt@linaro.org, paulus@samba.org,
+        mpe@ellerman.id.au, christophe.leroy@csgroup.eu,
+        robh+dt@kernel.org, benh@kernel.crashing.org
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        j.ne@posteo.net, linkmauve@linkmauve.fr,
+        rw-r-r-0644@protonmail.com, devicetree@vger.kernel.org,
+        joel@jms.id.au
+Subject: [PATCH v3 00/12] powerpc: Nintendo Wii U support
+Date:   Tue, 28 Jun 2022 23:31:32 +1000
+Message-Id: <20220628133144.142185-1-ash@heyquark.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220622131037.57604-1-ash@heyquark.com>
+References: <20220622131037.57604-1-ash@heyquark.com>
 MIME-Version: 1.0
-Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,49 +43,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'vector' and 'trig_mode' fields of 'struct kvm_lapic_irq' are left
-uninitialized in kvm_pv_kick_cpu_op(). While these fields are normally
-not needed for APIC_DM_REMRD, they're still referenced by
-__apic_accept_irq() for trace_kvm_apic_accept_irq(). Fully initialize
-the structure to avoid consuming random stack memory.
+The following patches add basic support for the Nintendo Wii U video
+game console, a PowerPC system somewhat similar to the GameCube and
+Wii.
 
-Fixes: a183b638b61c ("KVM: x86: make apic_accept_irq tracepoint more generic")
-Reported-by: syzbot+d6caa905917d353f0d07@syzkaller.appspotmail.com
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- arch/x86/kvm/x86.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+This includes:
+- devicetree source
+- bootwrapper support
+- udbg console to bootloader
+- early udbg console
+- interrupt controllers
+- platform support
+- recognition of the Espresso processor
+- workaround for the discontiguous RAM blocks
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 567d13405445..8a98608dad4f 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -9340,15 +9340,17 @@ static int kvm_pv_clock_pairing(struct kvm_vcpu *vcpu, gpa_t paddr,
-  */
- static void kvm_pv_kick_cpu_op(struct kvm *kvm, int apicid)
- {
--	struct kvm_lapic_irq lapic_irq;
--
--	lapic_irq.shorthand = APIC_DEST_NOSHORT;
--	lapic_irq.dest_mode = APIC_DEST_PHYSICAL;
--	lapic_irq.level = 0;
--	lapic_irq.dest_id = apicid;
--	lapic_irq.msi_redir_hint = false;
-+	struct kvm_lapic_irq lapic_irq = {
-+		.vector = 0,
-+		.delivery_mode = APIC_DM_REMRD,
-+		.dest_mode = APIC_DEST_PHYSICAL,
-+		.level = false,
-+		.trig_mode = 0,
-+		.shorthand = APIC_DEST_NOSHORT,
-+		.dest_id = apicid,
-+		.msi_redir_hint = false
-+	};
- 
--	lapic_irq.delivery_mode = APIC_DM_REMRD;
- 	kvm_irq_delivery_to_apic(kvm, NULL, &lapic_irq, NULL);
- }
- 
+This is enough to boot on hardware. dmesg pics (with a small hack to
+udbg-immortal, not included):
+Link: https://wiki.linux-wiiu.org/images/7/7e/Mainline-initial-dmesg1.png
+Link: https://wiki.linux-wiiu.org/images/9/91/Mainline-initial-dmesg2.png
+
+For those who have hardware and would like to try these patches, some
+modification is required to the stock OS to allow Linux. For info:
+https://wiki.linux-wiiu.org/wiki/AdvancedSetup
+
+Some of the design choices (new platform > embedded6xx) were discussed
+previously:
+Link: https://lore.kernel.org/lkml/0020d47c-0e23-822c-33f5-ccb7ea4c1072@heyquark.com/T/
+
+Turns out even less changes were needed than previously anticipated for
+discontiguous memory, and KUAP is yet to give trouble. Thanks to those
+who helped and discussed this.
+
+Changes since v2:
+ - Fixed some overzealous deleting in the devicetree, oops.
+ - Fixed missing declarations for some functions (thanks robots)
+ - Fixed some checkpatch warnings.
+ - Mark latte as a simple-bus and use of_platform_default_populate.
+Changes since v1:
+ - Style and formatting tweaks to the devicetree, thanks Rob Herring for
+   the review.
+
+Ash Logan (12):
+  dt-bindings: wiiu: Document the Nintendo Wii U devicetree
+  powerpc: wiiu: device tree
+  powerpc: wiiu: bootwrapper support
+  powerpc: wiiu: introduce wiiu platform
+  powerpc: wiiu: declare as non-coherent
+  powerpc: wiiu: udbg support for latteipc
+  powerpc: wiiu: espresso interrupt controller support
+  powerpc: wiiu: latte interrupt controller support
+  powerpc: espresso processor support
+  powerpc: wiiu: platform support
+  powerpc: wiiu: don't enforce flat memory
+  powerpc: wiiu: add minimal default config
+
+ .../bindings/powerpc/nintendo/wiiu.yaml       |  28 ++
+ .../powerpc/nintendo/wiiu/espresso-pic.yaml   |  42 +++
+ .../bindings/powerpc/nintendo/wiiu/gpu7.yaml  |  41 +++
+ .../powerpc/nintendo/wiiu/latte-ahci.yaml     |  43 +++
+ .../powerpc/nintendo/wiiu/latte-dsp.yaml      |  35 ++
+ .../powerpc/nintendo/wiiu/latte-pic.yaml      |  46 +++
+ .../powerpc/nintendo/wiiu/latte-sdhci.yaml    |  40 +++
+ .../bindings/powerpc/nintendo/wiiu/latte.yaml |  25 ++
+ arch/powerpc/Kconfig.debug                    |   9 +
+ arch/powerpc/boot/Makefile                    |   4 +
+ arch/powerpc/boot/dts/wiiu.dts                | 326 ++++++++++++++++++
+ arch/powerpc/boot/wiiu-head.S                 | 103 ++++++
+ arch/powerpc/boot/wiiu.c                      |  73 ++++
+ arch/powerpc/boot/wrapper                     |   4 +
+ arch/powerpc/configs/wiiu_defconfig           |   7 +
+ arch/powerpc/include/asm/udbg.h               |   1 +
+ arch/powerpc/kernel/cputable.c                |  16 +
+ arch/powerpc/kernel/head_book3s_32.S          |  20 ++
+ arch/powerpc/kernel/udbg.c                    |   3 +
+ arch/powerpc/mm/init_32.c                     |   4 +-
+ arch/powerpc/platforms/Kconfig                |   1 +
+ arch/powerpc/platforms/Kconfig.cputype        |   2 +-
+ arch/powerpc/platforms/Makefile               |   1 +
+ arch/powerpc/platforms/wiiu/Kconfig           |  22 ++
+ arch/powerpc/platforms/wiiu/Makefile          |   4 +
+ arch/powerpc/platforms/wiiu/espresso-pic.c    | 183 ++++++++++
+ arch/powerpc/platforms/wiiu/espresso-pic.h    |  59 ++++
+ arch/powerpc/platforms/wiiu/latte-pic.c       | 259 ++++++++++++++
+ arch/powerpc/platforms/wiiu/latte-pic.h       |  23 ++
+ arch/powerpc/platforms/wiiu/setup.c           |  60 ++++
+ arch/powerpc/platforms/wiiu/udbg_latteipc.c   | 124 +++++++
+ arch/powerpc/platforms/wiiu/udbg_latteipc.h   |  27 ++
+ 32 files changed, 1632 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/powerpc/nintendo/wiiu.yaml
+ create mode 100644 Documentation/devicetree/bindings/powerpc/nintendo/wiiu/espresso-pic.yaml
+ create mode 100644 Documentation/devicetree/bindings/powerpc/nintendo/wiiu/gpu7.yaml
+ create mode 100644 Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-ahci.yaml
+ create mode 100644 Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-dsp.yaml
+ create mode 100644 Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-pic.yaml
+ create mode 100644 Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte-sdhci.yaml
+ create mode 100644 Documentation/devicetree/bindings/powerpc/nintendo/wiiu/latte.yaml
+ create mode 100644 arch/powerpc/boot/dts/wiiu.dts
+ create mode 100644 arch/powerpc/boot/wiiu-head.S
+ create mode 100644 arch/powerpc/boot/wiiu.c
+ create mode 100644 arch/powerpc/configs/wiiu_defconfig
+ create mode 100644 arch/powerpc/platforms/wiiu/Kconfig
+ create mode 100644 arch/powerpc/platforms/wiiu/Makefile
+ create mode 100644 arch/powerpc/platforms/wiiu/espresso-pic.c
+ create mode 100644 arch/powerpc/platforms/wiiu/espresso-pic.h
+ create mode 100644 arch/powerpc/platforms/wiiu/latte-pic.c
+ create mode 100644 arch/powerpc/platforms/wiiu/latte-pic.h
+ create mode 100644 arch/powerpc/platforms/wiiu/setup.c
+ create mode 100644 arch/powerpc/platforms/wiiu/udbg_latteipc.c
+ create mode 100644 arch/powerpc/platforms/wiiu/udbg_latteipc.h
+
+
+base-commit: 03c765b0e3b4cb5063276b086c76f7a612856a9a
 -- 
-2.35.3
+2.36.1
 

@@ -2,301 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7512A55CDE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8F755C9F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234496AbiF1EOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 00:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
+        id S243077AbiF1EPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 00:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbiF1EOl (ORCPT
+        with ESMTP id S243426AbiF1EPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 00:14:41 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B3827FD9;
-        Mon, 27 Jun 2022 21:14:40 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RJ1R1I004975;
-        Mon, 27 Jun 2022 21:14:24 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=VoaGov6hKjpcuuyFinFnNspQtMbN34D3FaR0W1CPW7c=;
- b=YEPesEry/ll09FQiLJN1Da8Pwg7kuWBA6Jdc675jfhCAWiZ+UqqGTSN9n422clgSyM9K
- hq9HZZMqXddjA0Z6Tq/PxlYLqb1qd7ODORWTgBgFOypcZ8APEBYxXLwU3EsM2UyGP8Sx
- suEZpRgnFS+cFXLRGncsuw+Q1Apvs2sZqJk= 
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2105.outbound.protection.outlook.com [104.47.70.105])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gx03yy6ds-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jun 2022 21:14:23 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nUxxDzkr6OfXEc3coIV0nm64Cus73q/zFZTw9Jtjm2qTn752CSp4RnsPX4x7+96+F/ZUH5BykB0xIeKq4d5mQRyGCbfCyUtlZSnDN2F6DqGqdyqi7yeOn/tnOh865k5XK0Btb8/wO3cINftzWp916lCCnHmFPwdz8xaZNoU46fwZAApWYD5chNc9As2jsf4o583T02C8IWbSoWkBw8UA7rZjsKbhhZlCV+XEXEaDeqSNLA4Eq/kXp0HtmdJnlpzVjf/klCdD/Q25hoK7Vn/vtu/obpUUPfIs8J+poiQyHDJJZXb5peORKqaEiibLTl1/M5+MU4BVg5NDbcliKihqmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VoaGov6hKjpcuuyFinFnNspQtMbN34D3FaR0W1CPW7c=;
- b=Urxroj/HR4qMjb48dZSsPZXBzN4MdkfVGsIh8mVG9G4FXFyYYltYF3vr8EXL2xojVOrecVHnzygmk1952TYn5VJzWHx99XeJLWRfVymdGAGF0HhVKFFxxtZxP8YP2COQrWFli4lCtt6BJynPSZUK60I9RNo4uDsCFH8WJWxoc63TnUyGXKfY3DUcZ2vjm0q77y3wX6rW30TbFeNf+iH6G7zDg+ZY0I4ieGDcxN1vmFshqbqjMu4DRqUBQFxwb8cB9vb6aWq97K6AZNVmLD++G/WWrkr7VVfxhmaKErAbBddphvAsJHCtmBFsmfowQYqXAIJf5nWLI6dSiG5/sDQLOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by BN7PR15MB2195.namprd15.prod.outlook.com (2603:10b6:406:88::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Tue, 28 Jun
- 2022 04:14:21 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::9568:e5d9:b8ab:bb23]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::9568:e5d9:b8ab:bb23%6]) with mapi id 15.20.5373.018; Tue, 28 Jun 2022
- 04:14:21 +0000
-Message-ID: <40114462-d5e2-ab07-7af9-5e60180027f9@fb.com>
-Date:   Mon, 27 Jun 2022 21:14:18 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH bpf-next v2 4/8] bpf: Introduce cgroup iter
-Content-Language: en-US
-To:     Yosry Ahmed <yosryahmed@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, Michal Hocko <mhocko@kernel.org>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org
-References: <20220610194435.2268290-1-yosryahmed@google.com>
- <20220610194435.2268290-5-yosryahmed@google.com>
-From:   Yonghong Song <yhs@fb.com>
-In-Reply-To: <20220610194435.2268290-5-yosryahmed@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR11CA0064.namprd11.prod.outlook.com
- (2603:10b6:a03:80::41) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        Tue, 28 Jun 2022 00:15:37 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A035C286DE;
+        Mon, 27 Jun 2022 21:15:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656389735; x=1687925735;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nUdvLjSvvq3d9ypjGx2+R+9aKmtVxibInZ+b+ZCqPHc=;
+  b=Brzcoq5xM0D+Csqyo5Ob8IkLIRW6tuGpXRCIigLLoDiUt9ZEbGNLoTfA
+   Ml5/H52C07Ub730C71YiSpCv7pbx9puZ2lafbPAjFS/Uc5y9BaLoDiOO5
+   o75tMsBdQkdfgCV7L5tuCDV9KA29wwNcU1arj9I5jnRcBEVh9eemqOBW0
+   uKIOIwelAkyJRVTm1MOuHgjZR23BMCDKc8tdt3PAwuFHW0I/Jp5VGl1Zs
+   Niw2F3L3KPB6M+P3iPFM1sBuxXKaiwCnznUcQg82lRtCCY5gMm1ib07UQ
+   +JpfoBi85chv0w5Zjfj73DUvTLQF3Cq+1hPHrhtv2s1X/EGvleq6AwlKv
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="279174172"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="279174172"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 21:15:35 -0700
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="679865074"
+Received: from nakedgex-mobl.amr.corp.intel.com (HELO localhost) ([10.255.3.161])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 21:15:32 -0700
+From:   ira.weiny@intel.com
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>, Lukas Wunner <lukas@wunner.de>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: [PATCH V12 0/9] CXL: Read CDAT and DSMAS data
+Date:   Mon, 27 Jun 2022 21:15:18 -0700
+Message-Id: <20220628041527.742333-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 83ff6cb3-e32f-4ed7-3434-08da58bcad85
-X-MS-TrafficTypeDiagnostic: BN7PR15MB2195:EE_
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Fa3wa9/4MGKkTCXDvUTcyEjKz68JiYLbTV7IC14hhu60Xt+301xt2KwTsopfBDq+PAWKcw16D7fDfQdOJ8nQPBU5KB75fEmeoDJy5ZkSEzzDT5p7/iJ7+W0alqLv4OBaJJmsQ9U27N2bbABq7ecj0HaSP/QZK+FIqSnDiDH03mmuv//7Nvw96zw9e3U+PuhMLgYDT7gKuD8zsAuvt44xzSrBkyI7JbyqqdoNGHET3rgQV16KzrNSZdpSBFivwDF4IHZWt7E81UNtxxTZ084wijBzk2ZBpdJRhrfCDuuy928weeWVRuacC3YokIV7Yfbbvo2bja8gxBBlCqZYJAioHlaZjPJfZfnlFUNRanhH2NAUFRwkxG887CnqDWltbIv0b9CUO6ANfyICSKfSRVUTNI/9rnl0nRHMPaNMnI54L2P64NNF8JuBiU6IG3OsNAVpuR/wbcy/e0XquzEBiGXYXLjbjaK98CdQTSrI4pkFEeqFcpLNjKyoZhAW4MIfS/hJn4gRLesUvzdpJ9e3zwJy2dXlGfaSb7LBX3lSf3lc13ZFsNklo6JnbAxiiPqCZTQ1hNEvURWwEmdxOcxRN12x1taSLaijnxj/C1cNwgUg/iwcPzQVJJT5i3WNhG/HXyajmssoh+d+O/MPh/BbDbxk4Kzoy2BLD0oYG6x1FoDiRmLYk8lV1MtNCbXZVE7adA0sH2z67eJnoH+1+1cbc6D5yylrC1J3QJIn3RvH/lBCiVmTzc+LCwgUp+kuQExg63dih2jCSVMYe3VcWEbrq7BiK8dJ0/kpvDeMr1glAvcLd2ISs8E2cICatJ9GceRgt+xNWRgGTOlf6W844fq0CeTz+Xm8sBrnmUHKKJYpPODs1yQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(346002)(366004)(396003)(39860400002)(31696002)(110136005)(6512007)(5660300002)(54906003)(83380400001)(53546011)(921005)(7416002)(186003)(38100700002)(2906002)(316002)(6666004)(31686004)(36756003)(6486002)(66476007)(66556008)(478600001)(41300700001)(4326008)(6506007)(8676002)(8936002)(86362001)(66946007)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L0U1TXliRGJiVkFkS29TaE5YY3pmS1Bya0tYU2M2VlJSVTJVMnhZNHdpNDht?=
- =?utf-8?B?dVFXa2t5cmM3U25WVGx4VVVDZHdFYkJQMVlIcVRBYVdEQVlDR3NiMVdWWWcy?=
- =?utf-8?B?QzZkZzVzWUV6Zi9wQ0lHZ2laWWhNakpkbFlxT28yNlVlQ3NFMDd2bGpOZi9N?=
- =?utf-8?B?bldoZjFtTEpFaWVBODZMREEzMFNneS83QjZpTzVQaUtscEVVem5QRkxTT2ph?=
- =?utf-8?B?ZmVScFpTNXRYWXdFUXNhVWlvbkhRMCsxMEpSWmZlTTlGMm1EN3p2TzhWbDJu?=
- =?utf-8?B?TzhNNE1iRVZZRzg4OVRzUkhRcVcxWVVJSFQwRnQ1aDZHL0FxVFlhb0NrSExu?=
- =?utf-8?B?cmVpM3BNUXM1eWZUUFhrcnR2a250SVVtQlpid2swQ2lxWjVwenhQaWR5d3l1?=
- =?utf-8?B?b1ZvS2wyR1YxVTdBMkNWNUdveXU2M2pCSVF1Z0VuVjJtSHJNeGl0d2dYZXpl?=
- =?utf-8?B?T3VwV2VnVE41TkptaGxLbW81VVRZaDkvWkJYd0NwMDh0VVJRN0xJSjBHSTRa?=
- =?utf-8?B?TVloMGo3OGJtNFRDTVRJaUxpcThIVGpaN3p5ZkpqSWdRWHo2ei9LZ1R6eFZG?=
- =?utf-8?B?N3FFb01OVU1jWWJRMGJaZExLOWtYWXdZMXFicU9xcXpqc3FwK0RWUWFLNlkz?=
- =?utf-8?B?Q1ZPcmZTd1J3a0lNVXA2S2Jzb1JjQ1Q2WWNTRjZWL3JvWnUvUVhLbXlWTWRQ?=
- =?utf-8?B?WE1udFZhT2FDRmVSempWVnRuUHlWSjhZcUhNaW5PMXNKSTFFNStYb2xFNXhh?=
- =?utf-8?B?V2tsMU9PdVZMZCtaMUVqYXBRd3RPMy82WExTSVZFMTBPVmtROUExV3ZqTDFM?=
- =?utf-8?B?SzNDaUo2SVlPUWNOSkZFL1R3UzUrUG5CU2JuUG9XK1ZMQ3hQcEpJZUQyQkU0?=
- =?utf-8?B?Szltb2l0TXpoWHV3c3RTZVByRXlOeW5vZTduRDAxL1lNUXhweEkxbUFYVFhq?=
- =?utf-8?B?M29UUGs1YUg1Z2toQzdSMjg0L044NXZyNHFiWE5DQkhDWk9ObE0yRzErcnkr?=
- =?utf-8?B?aG8xWDgwenRkUWdhejhDWHVFaXhhRzIrcDhya3J1WlMrb09nY0ZZWU9FTzM4?=
- =?utf-8?B?OGZnZFowd1NUSWpxM2hmSmZhYWduWG5kRHZWVTBPYTRQQU5tYmNiRDNySjV3?=
- =?utf-8?B?bWpML2hzYW5BeHFCV2hQdi9DQ2N0cTZsOW5nOVhkYm5aRGQ4NkNEblc2bnpz?=
- =?utf-8?B?OGFMbHIwY2ZEWHRrVERsZ08wTjRmd0FLMHBXT1ZOcWhyd3E3T2xLR1dWUTc0?=
- =?utf-8?B?MzRuMkZJQU1MdjZPTy9CbUlYUkdvNzEzWUthT3N2WjhHUGtMQStnVFpnL2Iy?=
- =?utf-8?B?L2UvTnNvcXdDcWNhVzBmbEhaUUk4ZUdGUVZiOHFxQzhGOE9neGdvKy9pdmg3?=
- =?utf-8?B?U3Z3SWtLWGd2THhWV1VhY3hxMGJMSXZMeXFCT2tYUEsyMEFlcHA3eU1qWjk0?=
- =?utf-8?B?UEcwTDdtV3M5RkZlRk8zN0pSbSs1RUd4SkhjSnFXK2paOG9uazQ4YUxXWlMr?=
- =?utf-8?B?d0kwTVpGTERDdkJjd1MzZnEwd3kxa1REaG11dXhwR3lOY1l5Mk9XODMyQmVJ?=
- =?utf-8?B?c0NDeHRIOWJPeWh3Y1RNdUtHQzlHZWN6UDhZV0p4a3RmYWVtY0locnIvNU1X?=
- =?utf-8?B?RWVSZm5UM1dyRWRwR1RuUktJYnNLR0paRWdaVzZId0JsREErRVJMMXRoaDI1?=
- =?utf-8?B?ZTJzNnVNNkh2NnE5c09RQ1psSlFRMkZadGNDMXptKytMMUgvU3lZdFpESUhR?=
- =?utf-8?B?a3NNZkFRWGVqUERWOFJ3TGhOWTI2d29BTXdvM1RpakJzRUZvSm83c09DVzV5?=
- =?utf-8?B?QllQRTk5cVVLT1JJY00rNlVPZlZ1dVR1MU5jWFoyUkhBQ2VBUkw3MEprNE0v?=
- =?utf-8?B?TSswUHQwTUVrek1VdmpMaWdBZURrcVphanlOVnI1RGZoZkdKTGNWb01YRXd1?=
- =?utf-8?B?WTNHSVVIa2poRzhNdzVqS2JYTVFLcElQTFhYb2l4UTg5QklVRE9HbHFKd1ha?=
- =?utf-8?B?eGRPOHp2ZjNnNFJJUkRGVG5JUnJsTytkb0RUOGZQajQwdUgvVnFDYnNqdnIr?=
- =?utf-8?B?bGNNckdId3hPeC85b1BlekQ3Z0N5L2RIZE0yN1MvMERLandhKzVJWFAyZFRi?=
- =?utf-8?B?OFFJbkxoa3JXOC8wZElENHdZTnFtWjluRUdoeFkrd1VyU3p5ckpacFpvdU5U?=
- =?utf-8?B?Nnc9PQ==?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 83ff6cb3-e32f-4ed7-3434-08da58bcad85
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 04:14:21.5880
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iWUwBjhCnte4mQ17akhWuJfDYRuUccZGNcVB9ofBoGyXtDonQk51mJ5mimhbu5uD
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR15MB2195
-X-Proofpoint-GUID: FTqIqcpyJQzdWsCdJV-UaZ2exnxm-WZZ
-X-Proofpoint-ORIG-GUID: FTqIqcpyJQzdWsCdJV-UaZ2exnxm-WZZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-27_09,2022-06-24_01,2022-06-22_01
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Ira Weiny <ira.weiny@intel.com>
 
 
-On 6/10/22 12:44 PM, Yosry Ahmed wrote:
-> From: Hao Luo <haoluo@google.com>
-> 
-> Cgroup_iter is a type of bpf_iter. It walks over cgroups in two modes:
-> 
->   - walking a cgroup's descendants.
->   - walking a cgroup's ancestors.
-> 
-> When attaching cgroup_iter, one can set a cgroup to the iter_link
-> created from attaching. This cgroup is passed as a file descriptor and
-> serves as the starting point of the walk. If no cgroup is specified,
-> the starting point will be the root cgroup.
-> 
-> For walking descendants, one can specify the order: either pre-order or
-> post-order. For walking ancestors, the walk starts at the specified
-> cgroup and ends at the root.
-> 
-> One can also terminate the walk early by returning 1 from the iter
-> program.
-> 
-> Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
-> program is called with cgroup_mutex held.
-> 
-> Signed-off-by: Hao Luo <haoluo@google.com>
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> ---
->   include/linux/bpf.h            |   8 ++
->   include/uapi/linux/bpf.h       |  21 +++
->   kernel/bpf/Makefile            |   2 +-
->   kernel/bpf/cgroup_iter.c       | 235 +++++++++++++++++++++++++++++++++
->   tools/include/uapi/linux/bpf.h |  21 +++
->   5 files changed, 286 insertions(+), 1 deletion(-)
->   create mode 100644 kernel/bpf/cgroup_iter.c
-> 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 8e6092d0ea956..48d8e836b9748 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -44,6 +44,7 @@ struct kobject;
->   struct mem_cgroup;
->   struct module;
->   struct bpf_func_state;
-> +struct cgroup;
->   
->   extern struct idr btf_idr;
->   extern spinlock_t btf_idr_lock;
-> @@ -1590,7 +1591,14 @@ int bpf_obj_get_user(const char __user *pathname, int flags);
->   	int __init bpf_iter_ ## target(args) { return 0; }
->   
->   struct bpf_iter_aux_info {
-> +	/* for map_elem iter */
->   	struct bpf_map *map;
-> +
-> +	/* for cgroup iter */
-> +	struct {
-> +		struct cgroup *start; /* starting cgroup */
-> +		int order;
-> +	} cgroup;
->   };
->   
-[...]
-> +
-> +static void *cgroup_iter_seq_start(struct seq_file *seq, loff_t *pos)
-> +{
-> +	struct cgroup_iter_priv *p = seq->private;
-> +
-> +	mutex_lock(&cgroup_mutex);
-> +
-> +	/* support only one session */
-> +	if (*pos > 0)
-> +		return NULL;
-> +
-> +	++*pos;
-> +	p->terminate = false;
-> +	if (p->order == BPF_ITER_CGROUP_PRE)
-> +		return css_next_descendant_pre(NULL, p->start_css);
-> +	else if (p->order == BPF_ITER_CGROUP_POST)
-> +		return css_next_descendant_post(NULL, p->start_css);
-> +	else /* BPF_ITER_CGROUP_PARENT_UP */
-> +		return p->start_css;
-> +}
-> +
-> +static int __cgroup_iter_seq_show(struct seq_file *seq,
-> +				  struct cgroup_subsys_state *css, int in_stop);
-> +
-> +static void cgroup_iter_seq_stop(struct seq_file *seq, void *v)
-> +{
-> +	/* pass NULL to the prog for post-processing */
-> +	if (!v)
-> +		__cgroup_iter_seq_show(seq, NULL, true);
-> +	mutex_unlock(&cgroup_mutex);
-> +}
-> +
-> +static void *cgroup_iter_seq_next(struct seq_file *seq, void *v, loff_t *pos)
-> +{
-> +	struct cgroup_subsys_state *curr = (struct cgroup_subsys_state *)v;
-> +	struct cgroup_iter_priv *p = seq->private;
-> +
-> +	++*pos;
-> +	if (p->terminate)
-> +		return NULL;
-> +
-> +	if (p->order == BPF_ITER_CGROUP_PRE)
-> +		return css_next_descendant_pre(curr, p->start_css);
-> +	else if (p->order == BPF_ITER_CGROUP_POST)
-> +		return css_next_descendant_post(curr, p->start_css);
-> +	else
-> +		return curr->parent;
-> +}
-> +
-> +static int __cgroup_iter_seq_show(struct seq_file *seq,
-> +				  struct cgroup_subsys_state *css, int in_stop)
-> +{
-> +	struct cgroup_iter_priv *p = seq->private;
-> +	struct bpf_iter__cgroup ctx;
-> +	struct bpf_iter_meta meta;
-> +	struct bpf_prog *prog;
-> +	int ret = 0;
-> +
-> +	/* cgroup is dead, skip this element */
-> +	if (css && cgroup_is_dead(css->cgroup))
-> +		return 0;
-> +
-> +	ctx.meta = &meta;
-> +	ctx.cgroup = css ? css->cgroup : NULL;
-> +	meta.seq = seq;
-> +	prog = bpf_iter_get_info(&meta, in_stop);
-> +	if (prog)
-> +		ret = bpf_iter_run_prog(prog, &ctx);
+Changes from V11:[8]
+	The major change in this version is to remove the workqueue from the
+	internal implementation of the state machine.  A single ordered
+	workqueue within each mailbox processes tasks submitted.  This
+	workqueue takes care of all locking and guarantees that tasks are
+	completed in the order submitted.  Any synchronization which is
+	required between tasks will need to be handled by the user of the
+	mailbox.  However, the user can depend on work items being completed in
+	the order they are submitted.  So a single thread submitter is
+	guaranteed to get all work items completed in order.  This also aids in
+	the support of a single mailbox supporting multiple protocols.  Each
+	protocol could have a separate thread submitting tasks for that
+	protocol.  The mailbox object will ensure that each protocol task is
+	complete before another task starts.  But multiple user threads can be
+	submitting tasks for different protocols all at the same time without
+	regard to other protocols being used.
 
-Do we need to do anything special to ensure bpf program gets
-up-to-date stat from ctx.cgroup?
+	XArrays are used throughout the series.
 
-> +
-> +	/* if prog returns > 0, terminate after this element. */
-> +	if (ret != 0)
-> +		p->terminate = true;
-> +
-> +	return 0;
-> +}
-> +
-[...]
+	Other minor changes are noted in the individual patches.
+
+CXL drivers need various data which are provided through generic DOE mailboxes
+as defined in the PCIe 6.0 spec.[1]
+
+One such data is the Coherent Device Atribute Table (CDAT).  CDAT data provides
+coherent information about the various devices in the system.  It was developed
+because systems no longer have a priori knowledge of all coherent devices
+within a system.  CDAT describes the coherent characteristics of the
+components on the CXL bus separate from system configurations.  The OS can
+then, for example, use this information to form correct interleave sets.
+
+To begin reading the CDAT the OS must have support to access the DOE mailboxes
+provided by the CXL devices.
+
+Because DOE is not specific to DOE but is provided within the PCI spec, the
+series adds PCI DOE capability library functions.  These functions allow for
+the iteration of the DOE capabilities on a device as well as creating
+pci_doe_mb structures which can control the operation of the DOE state machine.
+
+For now the iteration of and storage of the DOE mailboxes is done on memdev
+objects within the CXL stack.  When this is needed in more generic code this
+can be lifted later.
+
+This work was tested using qemu.
+
+[0] https://lore.kernel.org/linux-cxl/20211105235056.3711389-1-ira.weiny@intel.com/
+[1] https://pcisig.com/specifications
+[2] https://lore.kernel.org/qemu-devel/20210202005948.241655-1-ben.widawsky@intel.com/
+[3] https://lore.kernel.org/linux-cxl/20220201071952.900068-1-ira.weiny@intel.com/
+[4] https://lore.kernel.org/linux-cxl/20220330235920.2800929-1-ira.weiny@intel.com/
+[5] https://lore.kernel.org/linux-cxl/20220414203237.2198665-1-ira.weiny@intel.com/
+[6] https://lore.kernel.org/linux-cxl/20220531152632.1397976-1-ira.weiny@intel.com/
+[7] https://lore.kernel.org/linux-cxl/20220605005049.2155874-1-ira.weiny@intel.com/
+[8] https://lore.kernel.org/linux-cxl/20220610202259.3544623-1-ira.weiny@intel.com/
+
+
+Previous changes
+================
+
+Changes from V10:[7]
+	Address Ben Widawsky's comments
+		Protect against potentially malicious devices.
+		Fix ownership issue of cdat_mb
+
+Changes from V9:[6]
+	Address feedback from
+		Lukas Wunner, Davidlohr Bueso, Jonathan Cameron,
+		Alison Schofield, and Ben Widawsky
+		Details in each individual patch.
+
+Changes from V8:[5]
+	For this version I've punted a bit to get it out and drop the auxiliary
+	bus functionality.  I like where Jonathan is going with the port driver
+	idea.  I think eventually the irq/mailbox creation will need to be more
+	generic in a PCI port driver.  I've modeled this version on such an
+	architecture but used the CXL port for the time being.
+
+	From Dan
+		Drop the auxiliary bus/device
+	From Jonathan
+		Cleanups
+	From Bjorn
+		Clean up commit messages
+		move pci-doe.c to doe.c
+		Clean up PCI spec references
+		Ensure all messages use pci_*()
+		Add offset to error messages to distinguish mailboxes
+			use hex for DOE offsets
+		Print 4 nibbles for Vendor ID and 2 for type.
+		s/irq/IRQ in comments
+		Fix long lines
+		Fix typos
+
+
+Changes from V7:[4]
+	Avoid code bloat by making pci-doe.c conditional on CONFIG_PCI_DOE
+		which is auto selected by the CXL_PCI config option.
+	Minor code clean ups
+	Fix bug in pci_doe_supports_prot()
+	Rebase to cxl-pending
+
+Changes from V6:[3]
+	The big change is the removal of the auxiliary bus code from the PCI
+	layer.  The auxiliary bus usage is now in the CXL layer.  The PCI layer
+	provides helpers for subsystems to utilize DOE mailboxes by creating a
+	pci_doe_mb object which controls a state machine for that mailbox
+	capability.  The CXL layer wraps this object in an auxiliary device and
+	driver which can then be used to determine if the kernel is controlling
+	the capability or it is available to be used by user space.  Reads from
+	user space via lspci are allowed.  Writes are allowed but flagged via a
+	tainting the kernel.
+
+	Feedback from Bjorn, Jonathan, and Dan
+		Details in each patch
+
+Changes from V5:[0]
+
+	Rework the patch set to split PCI vs CXL changes
+		Also make each change a bit more stand alone for easier review
+	Add cxl_cdat structure
+	Put CDAT related data structures in cdat.h
+	Clarify some device lifetimes with comments
+	Incorporate feedback from Jonathan, Bjorn and Dan
+		The bigest change is placing the DOE scanning code into the
+			pci_doe driver (part of the PCI codre).
+		Validate the CDAT when it is read rather than before DSMAS
+			parsing
+		Do not report DSMAS failure as an error, report a warning and
+			keep going.
+		Retry reading the table 1 time.
+	Update commit messages and this cover letter
+
+
+
+Ira Weiny (7):
+  PCI: Replace magic constant for PCI Sig Vendor ID
+  cxl/pci: Create PCI DOE mailbox's for memory devices
+  driver-core: Introduce BIN_ATTR_ADMIN_{RO,RW}
+  cxl/port: Read CDAT table
+  cxl/port: Introduce cxl_cdat_valid()
+  cxl/port: Retry reading CDAT on failure
+  cxl/port: Parse out DSMAS data from CDAT table
+
+Jonathan Cameron (2):
+  PCI: Add vendor ID for the PCI SIG
+  PCI: Create PCIe library functions in support of DOE mailboxes.
+
+ .clang-format                 |   1 +
+ drivers/cxl/Kconfig           |   1 +
+ drivers/cxl/cdat.h            | 125 ++++++
+ drivers/cxl/core/pci.c        | 293 +++++++++++++++
+ drivers/cxl/cxl.h             |   7 +
+ drivers/cxl/cxlmem.h          |   7 +
+ drivers/cxl/cxlpci.h          |   2 +
+ drivers/cxl/mem.c             |   1 +
+ drivers/cxl/pci.c             |  37 ++
+ drivers/cxl/port.c            |  51 +++
+ drivers/pci/Kconfig           |   3 +
+ drivers/pci/Makefile          |   1 +
+ drivers/pci/doe.c             | 689 ++++++++++++++++++++++++++++++++++
+ drivers/pci/probe.c           |   2 +-
+ include/linux/pci-doe.h       |  81 ++++
+ include/linux/pci_ids.h       |   1 +
+ include/linux/sysfs.h         |  16 +
+ include/uapi/linux/pci_regs.h |  29 +-
+ 18 files changed, 1345 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/cxl/cdat.h
+ create mode 100644 drivers/pci/doe.c
+ create mode 100644 include/linux/pci-doe.h
+
+
+base-commit: 34e37b4c432cd0f1842b352fde4b8878b4166888
+-- 
+2.35.3
+

@@ -2,322 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3969E55D3E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E2655D5FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244054AbiF1DBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 23:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48844 "EHLO
+        id S243278AbiF1DDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 23:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiF1DBy (ORCPT
+        with ESMTP id S231207AbiF1DDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 23:01:54 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A05F7D;
-        Mon, 27 Jun 2022 20:01:44 -0700 (PDT)
-X-UUID: 5688a09374f044aa835eded943486335-20220628
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:99efdc5b-b5e7-472f-ac3d-d7e5812244ce,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:87442a2,CLOUDID:aaccf085-57f0-47ca-ba27-fe8c57fbf305,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 5688a09374f044aa835eded943486335-20220628
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1330623918; Tue, 28 Jun 2022 11:01:34 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 28 Jun 2022 11:01:33 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 28 Jun 2022 11:01:33 +0800
-Message-ID: <4bc40d79d6f6d3b2bf470a7c09375859a31b5e40.camel@mediatek.com>
-Subject: Re: [PATCH v14 12/15] drm/mediatek: dpi: Add YUV422 output support
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 28 Jun 2022 11:01:33 +0800
-In-Reply-To: <c3a2feae4295f3300f723a9bfd8cdf0b1c938c81.camel@mediatek.com>
-References: <20220624030946.14961-1-rex-bc.chen@mediatek.com>
-         <20220624030946.14961-13-rex-bc.chen@mediatek.com>
-         <a59a61a81e45fd361774a28a66ffd3d673cb3148.camel@mediatek.com>
-         <5b0613b9cc983e24a997c122b2892b35cf8346d3.camel@mediatek.com>
-         <c3a2feae4295f3300f723a9bfd8cdf0b1c938c81.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 27 Jun 2022 23:03:32 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4EFBF66;
+        Mon, 27 Jun 2022 20:03:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CuGJhLbS9IkE7VTbFjMhJYW2Xfxy5se8WnpHZFVzwbM=; b=iJ0t/LUzaOKaiqLAkTpQkf4M8d
+        MdeoKwSr+5w6YVsKXop+K+FrAfjK7qmhiCVhVt8rHUFO9zVEVSTzWGC5uxA+5ZCNO4Hxz/KAtajRn
+        SGndeL42gx0z4CxihZmkJUQKSfZbDqlePhHdAJ3/lqQVZuFpI5OrGPnAtmxnQzkW8GeXmVmE0r1uF
+        kjwMTkkhLJ++4r/tHq4WG7pErEVklcDYnzr+mimN1rVKxINqQkatTbDj2n2U9nnXM6s6T5UTnzc29
+        aJELZ4oRb/5UAW3HeWh5jV9LQDXRJh9X7ZsKhMxVJsHsJ/qJmA63a62RfecrGuS2pVjYNmK3twAkJ
+        e883mXLw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o61Vb-00Bv39-7y; Tue, 28 Jun 2022 03:03:23 +0000
+Date:   Tue, 28 Jun 2022 04:03:23 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] filemap: minor cleanup for filemap_write_and_wait_range
+Message-ID: <Yrpve403Pz2MmwM+@casper.infradead.org>
+References: <20220627132351.55680-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220627132351.55680-1-linmiaohe@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-28 at 10:38 +0800, CK Hu wrote:
-> On Tue, 2022-06-28 at 10:28 +0800, Rex-BC Chen wrote:
-> > On Tue, 2022-06-28 at 10:15 +0800, CK Hu wrote:
-> > > Hi, Bo-Chen:
-> > > 
-> > > On Fri, 2022-06-24 at 11:09 +0800, Bo-Chen Chen wrote:
-> > > > Dp_intf supports YUV422 as output format. In MT8195 Chrome
-> > > > project,
-> > > > YUV422 output format is used for 4K resolution.
-> > > > 
-> > > > To support this, it is also needed to support color format
-> > > > transfer.
-> > > > Color format transfer is a new feature for both dpi and dpintf
-> > > > of
-> > > > MT8195.
-> > > > 
-> > > > The input format could be RGB888 and output format for dp_intf
-> > > > should
-> > > > be
-> > > > YUV422. Therefore, we add a mtk_dpi_matrix_sel() helper to
-> > > > update
-> > > > the
-> > > > DPI_MATRIX_SET register depending on the color format.
-> > > > 
-> > > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > > > Reviewed-by: AngeloGioacchino Del Regno <
-> > > > angelogioacchino.delregno@collabora.com>
-> > > > ---
-> > > >  drivers/gpu/drm/mediatek/mtk_dpi.c      | 34
-> > > > ++++++++++++++++++++++++-
-> > > >  drivers/gpu/drm/mediatek/mtk_dpi_regs.h |  3 +++
-> > > >  2 files changed, 36 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > > > b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > > > index 9e4250356342..438bf3bc5e4a 100644
-> > > > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > > > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > > > @@ -128,6 +128,7 @@ struct mtk_dpi_yc_limit {
-> > > >   * @num_output_fmts: Quantity of supported output formats.
-> > > >   * @is_ck_de_pol: Support CK/DE polarity.
-> > > >   * @swap_input_support: Support input swap function.
-> > > > + * @color_fmt_trans_support: Enable color format transfer.
-> > > >   * @dimension_mask: Mask used for HWIDTH, HPORCH, VSYNC_WIDTH
-> > > > and
-> > > > VSYNC_PORCH
-> > > >   *		    (no shift).
-> > > >   * @hvsize_mask: Mask of HSIZE and VSIZE mask (no shift).
-> > > > @@ -144,6 +145,7 @@ struct mtk_dpi_conf {
-> > > >  	u32 num_output_fmts;
-> > > >  	bool is_ck_de_pol;
-> > > >  	bool swap_input_support;
-> > > > +	bool color_fmt_trans_support;
-> > > >  	u32 dimension_mask;
-> > > >  	u32 hvsize_mask;
-> > > >  	u32 channel_swap_shift;
-> > > > @@ -412,6 +414,31 @@ static void
-> > > > mtk_dpi_config_disable_edge(struct
-> > > > mtk_dpi *dpi)
-> > > >  		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0,
-> > > > EDGE_SEL_EN);
-> > > >  }
-> > > >  
-> > > > +static void mtk_dpi_matrix_sel(struct mtk_dpi *dpi,
-> > > > +			       enum mtk_dpi_out_color_format
-> > > > format)
-> > > > +{
-> > > > +	u32 matrix_sel = 0;
-> > > > +
-> > > > +	if (!dpi->conf->color_fmt_trans_support) {
-> > > > +		dev_info(dpi->dev, "matrix_sel is not
-> > > > supported.\n");
-> > > > +		return;
-> > > > +	}
-> > > > +
-> > > > +	switch (format) {
-> > > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_422:
-> > > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL:
-> > > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_444:
-> > > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL:
-> > > 
-> > > I think the transform formula are different for full range and
-> > > non-
-> > > full 
-> > > range. Please make sure '0x2' is for full range or non-full
-> > > range.
-> > > If
-> > > you are not sure, you could provide the transform matrix of '0x2'
-> > > so
-> > > we
-> > > could find out it's full or non-full.
-> > > 
-> > > > +	case MTK_DPI_COLOR_FORMAT_XV_YCC:
-> > > > +		if (dpi->mode.hdisplay <= 720)
-> > > > +			matrix_sel = 0x2;
-> > > 
-> > > Symbolize '0x2'.
-> > > 
-> > > > +		break;
-> > > > +	default:
-> > > > +		break;
-> > > > +	}
-> > > > +	mtk_dpi_mask(dpi, DPI_MATRIX_SET, matrix_sel,
-> > > > INT_MATRIX_SEL_MASK);
-> > > > +}
-> > > > +
-> > > >  static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
-> > > >  					enum
-> > > > mtk_dpi_out_color_format
-> > > > format)
-> > > >  {
-> > > > @@ -419,6 +446,7 @@ static void
-> > > > mtk_dpi_config_color_format(struct
-> > > > mtk_dpi *dpi,
-> > > >  	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
-> > > >  		mtk_dpi_config_yuv422_enable(dpi, false);
-> > > >  		mtk_dpi_config_csc_enable(dpi, true);
-> > > > +		mtk_dpi_matrix_sel(dpi, format);
-> > > 
-> > > Why mt8173 support MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL but it
-> > > does
-> > > not
-> > > call mtk_dpi_matrix_sel()? It seems that mt8173 also need to call
-> > > mtk_dpi_matrix_sel() but lost and this patch looks like a bug fix
-> > > for
-> > > all SoC DPI driver.
-> > > 
-> > > Regards,
-> > > CK
-> > > 
-> > 
-> > Hello CK,
-> > 
-> > MT8173 does not support MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL as
-> > output
-> > format, the output format is:
-> > 
-> > static const u32 mt8173_output_fmts[] = {
-> > 	MEDIA_BUS_FMT_RGB888_1X24,
-> > };
-> > 
-> > or do I misunderstand?
+On Mon, Jun 27, 2022 at 09:23:51PM +0800, Miaohe Lin wrote:
+> Restructure the logic in filemap_write_and_wait_range to simplify the code
+> and make it more consistent with file_write_and_wait_range. No functional
+> change intended.
 > 
-> In the first patch [1], it define
-> 
-> +enum mtk_dpi_out_color_format {
-> +	MTK_DPI_COLOR_FORMAT_RGB,
-> +	MTK_DPI_COLOR_FORMAT_RGB_FULL,
-> +	MTK_DPI_COLOR_FORMAT_YCBCR_444,
-> +	MTK_DPI_COLOR_FORMAT_YCBCR_422,
-> +	MTK_DPI_COLOR_FORMAT_XV_YCC,
-> +	MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL,
-> +	MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL
-> +};
-> 
-> and this function also process MTK_DPI_COLOR_FORMAT_YCBCR_444,
-> MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL, MTK_DPI_COLOR_FORMAT_YCBCR_422,
-> and MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL. So I think it want to
-> process
-> output YUV but the caller of mtk_dpi_config_color_format() just pass
-> RGB into this function. If mt8173 does not support YUV output, I
-> think
-> you should remove YUV processing in this function first, and then add
-> back YUV processing in this function.
-> 
-> [1] 
-> 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/gpu/drm/mediatek/mtk_dpi.c?h=v5.19-rc4&id=9e629c17aa8d7a75b8c1d99ed42892cd8ba7cdc4
-> 
-> Regards,
-> CK
-> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Hello CK,
-
-I don't think it should be remove. After all, it is accepted and from
-[1], we can see it assgin output format always as RGB.
-+	dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
-
-After that, it also added patch of supporting changing output
-format[2].
-
-We have support output as YUV422 now. I think it's ok to just add this.
-If we remove them and add them back, I think it is a little bit
-redundant. And I also can add a commit message like "output format
-YUV422 is not support for previous MediaTek SoCs. MT8195 supports
-output format as YUV422.."
-
-What do you think?
-
-[2]: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/gpu/drm/mediatek/mtk_dpi.c?h=v5.19-rc4&id=be63f6e8601ff21139da93623754717e92cbd8db
-
-BRs,
-Bo-Chen
-> > 
-> > BRs,
-> > Bo-Chen
-> > 
-> > > >  		if (dpi->conf->swap_input_support)
-> > > >  			mtk_dpi_config_swap_input(dpi, false);
-> > > >  		mtk_dpi_config_channel_swap(dpi,
-> > > > MTK_DPI_OUT_CHANNEL_SWAP_BGR);
-> > > > @@ -426,6 +454,7 @@ static void
-> > > > mtk_dpi_config_color_format(struct
-> > > > mtk_dpi *dpi,
-> > > >  		   (format ==
-> > > > MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
-> > > >  		mtk_dpi_config_yuv422_enable(dpi, true);
-> > > >  		mtk_dpi_config_csc_enable(dpi, true);
-> > > > +		mtk_dpi_matrix_sel(dpi, format);
-> > > >  		if (dpi->conf->swap_input_support)
-> > > >  			mtk_dpi_config_swap_input(dpi, true);
-> > > >  		else
-> > > > @@ -673,7 +702,10 @@ static int
-> > > > mtk_dpi_bridge_atomic_check(struct
-> > > > drm_bridge *bridge,
-> > > >  	dpi->bit_num = MTK_DPI_OUT_BIT_NUM_8BITS;
-> > > >  	dpi->channel_swap = MTK_DPI_OUT_CHANNEL_SWAP_RGB;
-> > > >  	dpi->yc_map = MTK_DPI_OUT_YC_MAP_RGB;
-> > > > -	dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
-> > > > +	if (out_bus_format == MEDIA_BUS_FMT_YUYV8_1X16)
-> > > > +		dpi->color_format =
-> > > > MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL;
-> > > > +	else
-> > > > +		dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
-> > > >  
-> > > >  	return 0;
-> > > >  }
-> > > > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> > > > b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> > > > index 3a02fabe1662..cca0dccb84a2 100644
-> > > > --- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> > > > +++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> > > > @@ -217,4 +217,7 @@
-> > > >  
-> > > >  #define EDGE_SEL_EN			BIT(5)
-> > > >  #define H_FRE_2N			BIT(25)
-> > > > +
-> > > > +#define DPI_MATRIX_SET		0xB4
-> > > > +#define INT_MATRIX_SEL_MASK		GENMASK(4, 0)
-> > > >  #endif /* __MTK_DPI_REGS_H */
-> > > 
-> > > 
-> > 
-> > 
-> 
-> 
-
+Looks OK to me at a quick glance.  I'll look at it more closely next
+week when I'm back from holiday.

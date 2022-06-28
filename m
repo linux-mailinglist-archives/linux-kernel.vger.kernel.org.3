@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A83355DF9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B9455D917
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240779AbiF1HRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 03:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
+        id S241814AbiF1HRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 03:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241050AbiF1HQt (ORCPT
+        with ESMTP id S241113AbiF1HQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 03:16:49 -0400
+        Tue, 28 Jun 2022 03:16:50 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F852C66F;
-        Tue, 28 Jun 2022 00:16:48 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 07:16:46 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA572C677;
+        Tue, 28 Jun 2022 00:16:49 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 07:16:47 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1656400607;
+        s=2020; t=1656400608;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wsXosqEsWRtYNA85DJ622epYp+sxCEszKTOajyHzupI=;
-        b=VPjQEkNxIWobyvYPYht59xYs4pYDfmSgDa3lE3ZBHYNnXC1C+d1wU/45CVuKDpCyIU4TLG
-        AJhT/nQHOLIaV39ewiUJZDvTTJUllPXDOmrpYJHzo5pG9XocpZnGCwgRHijCfpFua9mbd5
-        mIBMT36jKPqk4c50hJeFNC7LenUmGnusBubXE0S7ciNZGDtmgGxsPi6jVuzWyTNIRwKhQ0
-        MVNmtXd+KVRN4VZ6fG9EA1VIZcPbJcGIxzSto5lJcWXbSGRcI0awczkgmP0eKfyMxp7rRe
-        84JaGfCNr+MK4+C+/9vv6tP6Cy5mgnLGE4tuNZQUEzbGtSzsa8ToutkyQ/d+tw==
+        bh=7X5Kec0L7pw8Q4seMcLd4oIQMAdicOFNGv0zfK6xBxE=;
+        b=4A5YDh62RdZD92JrcUQWiVNDKGvSkD8byYWnxHE1BFdXNd5R1brxEts/3KklONpCQm/8dC
+        q6263uhvJPopwmJYwUUyGEilMX55iqjyINF0An+EkuvuLtwuBeX/EJNdtLQowTZC5Jr1MH
+        epjSQ7I1VrsrBt/5/UkDE2C5xJBGT8nxL2TglgX+ZrrTrjPCv4cC/9XCq9kT8Wj0X3yQbp
+        lo9eyzy5EPCg9S1++aY6WQovivi223DoIa4zrsqaylwVYVG355TcvBEThZ7f3PJMFdH91+
+        MKd6IIwnhmXs44F4Nde3lqD3q4dHyXYEBdNVNInjmlRR6B0od9mrgV6Br2/Vmw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1656400607;
+        s=2020e; t=1656400608;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wsXosqEsWRtYNA85DJ622epYp+sxCEszKTOajyHzupI=;
-        b=34LiCadMpeuaZ3rS8x5nvmwkgUCnkkYGwm50i13mttdJRelFZABYqHlhcdsxip5K9B/HZL
-        57+2iTBNBrjxo7Cw==
+        bh=7X5Kec0L7pw8Q4seMcLd4oIQMAdicOFNGv0zfK6xBxE=;
+        b=g6MRNazjY361KnyJC1Mhmdt0eEpFe0l53yOtLIx8avY/fOXAYhJFixtVASKy7MT3TTE+L4
+        KME9yYbCqd3JcQBw==
 From:   "tip-bot2 for Michael Jeanson" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] selftests/rseq: riscv: fix 'literal-suffix' warning
+Subject: [tip: sched/core] selftests/rseq: riscv: use rseq_get_abi() helper
 Cc:     Michael Jeanson <mjeanson@efficios.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220614154830.1367382-3-mjeanson@efficios.com>
-References: <20220614154830.1367382-3-mjeanson@efficios.com>
+In-Reply-To: <20220614154830.1367382-2-mjeanson@efficios.com>
+References: <20220614154830.1367382-2-mjeanson@efficios.com>
 MIME-Version: 1.0
-Message-ID: <165640060612.4207.6044570687728760265.tip-bot2@tip-bot2>
+Message-ID: <165640060703.4207.13582940534637128711.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,73 +68,126 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     d47c0cc94a86b9098930523a9e68180bef6b26cf
-Gitweb:        https://git.kernel.org/tip/d47c0cc94a86b9098930523a9e68180bef6b26cf
+Commit-ID:     4f3394924358fe04ced0411c72fc7eeb0d3be652
+Gitweb:        https://git.kernel.org/tip/4f3394924358fe04ced0411c72fc7eeb0d3be652
 Author:        Michael Jeanson <mjeanson@efficios.com>
-AuthorDate:    Tue, 14 Jun 2022 11:48:29 -04:00
+AuthorDate:    Tue, 14 Jun 2022 11:48:28 -04:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 28 Jun 2022 09:08:28 +02:00
 
-selftests/rseq: riscv: fix 'literal-suffix' warning
+selftests/rseq: riscv: use rseq_get_abi() helper
 
-This header is also used in librseq where it can be included in C++
-code, add a space between literals and string macros.
+Make the RISC-V rseq selftests compatible with glibc-2.35 by using the
+rseq_get_abi() helper.
 
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Link: https://lore.kernel.org/r/20220614154830.1367382-3-mjeanson@efficios.com
+Link: https://lore.kernel.org/r/20220614154830.1367382-2-mjeanson@efficios.com
 ---
- tools/testing/selftests/rseq/rseq-riscv.h | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ tools/testing/selftests/rseq/rseq-riscv.h | 36 +++++++++++-----------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
 
 diff --git a/tools/testing/selftests/rseq/rseq-riscv.h b/tools/testing/selftests/rseq/rseq-riscv.h
-index 6f8a605..3a391c9 100644
+index b86642f..6f8a605 100644
 --- a/tools/testing/selftests/rseq/rseq-riscv.h
 +++ b/tools/testing/selftests/rseq/rseq-riscv.h
-@@ -86,7 +86,7 @@ do {									\
- 
- #define RSEQ_ASM_STORE_RSEQ_CS(label, cs_label, rseq_cs)		\
- 	RSEQ_INJECT_ASM(1)						\
--	"la	"RSEQ_ASM_TMP_REG_1 ", " __rseq_str(cs_label) "\n"	\
-+	"la	" RSEQ_ASM_TMP_REG_1 ", " __rseq_str(cs_label) "\n"	\
- 	REG_S	RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(rseq_cs) "]\n"	\
- 	__rseq_str(label) ":\n"
- 
-@@ -103,17 +103,17 @@ do {									\
- 
- #define RSEQ_ASM_OP_CMPEQ(var, expect, label)				\
- 	REG_L	RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(var) "]\n"		\
--	"bne	"RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(expect) "] ,"	\
-+	"bne	" RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(expect) "] ,"	\
- 		  __rseq_str(label) "\n"
- 
- #define RSEQ_ASM_OP_CMPEQ32(var, expect, label)				\
--	"lw	"RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(var) "]\n"	\
--	"bne	"RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(expect) "] ,"	\
-+	"lw	" RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(var) "]\n"	\
-+	"bne	" RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(expect) "] ,"	\
- 		  __rseq_str(label) "\n"
- 
- #define RSEQ_ASM_OP_CMPNE(var, expect, label)				\
- 	REG_L	RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(var) "]\n"		\
--	"beq	"RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(expect) "] ,"	\
-+	"beq	" RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(expect) "] ,"	\
- 		  __rseq_str(label) "\n"
- 
- #define RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, label)		\
-@@ -127,12 +127,12 @@ do {									\
- 	REG_S	RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(var) "]\n"
- 
- #define RSEQ_ASM_OP_R_LOAD_OFF(offset)					\
--	"add	"RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(offset) "], "	\
-+	"add	" RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(offset) "], "	\
- 		 RSEQ_ASM_TMP_REG_1 "\n"				\
- 	REG_L	RSEQ_ASM_TMP_REG_1 ", (" RSEQ_ASM_TMP_REG_1 ")\n"
- 
- #define RSEQ_ASM_OP_R_ADD(count)					\
--	"add	"RSEQ_ASM_TMP_REG_1 ", " RSEQ_ASM_TMP_REG_1		\
-+	"add	" RSEQ_ASM_TMP_REG_1 ", " RSEQ_ASM_TMP_REG_1		\
- 		", %[" __rseq_str(count) "]\n"
- 
- #define RSEQ_ASM_OP_FINAL_STORE(value, var, post_commit_label)		\
+@@ -194,8 +194,8 @@ int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
+ 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
+ 				  : /* gcc asm goto does not allow outputs */
+ 				  : [cpu_id]		"r" (cpu),
+-				    [current_cpu_id]	"m" (__rseq_abi.cpu_id),
+-				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++				    [current_cpu_id]	"m" (rseq_get_abi()->cpu_id),
++				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
+ 				    [v]			"m" (*v),
+ 				    [expect]		"r" (expect),
+ 				    [newv]		"r" (newv)
+@@ -251,8 +251,8 @@ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
+ 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
+ 				  : /* gcc asm goto does not allow outputs */
+ 				  : [cpu_id]		"r" (cpu),
+-				    [current_cpu_id]	"m" (__rseq_abi.cpu_id),
+-				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++				    [current_cpu_id]	"m" (rseq_get_abi()->cpu_id),
++				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
+ 				    [v]			"m" (*v),
+ 				    [expectnot]		"r" (expectnot),
+ 				    [load]		"m" (*load),
+@@ -301,8 +301,8 @@ int rseq_addv(intptr_t *v, intptr_t count, int cpu)
+ 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
+ 				  : /* gcc asm goto does not allow outputs */
+ 				  : [cpu_id]		"r" (cpu),
+-				    [current_cpu_id]	"m" (__rseq_abi.cpu_id),
+-				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++				    [current_cpu_id]	"m" (rseq_get_abi()->cpu_id),
++				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
+ 				    [v]			"m" (*v),
+ 				    [count]		"r" (count)
+ 				    RSEQ_INJECT_INPUT
+@@ -352,8 +352,8 @@ int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
+ 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
+ 				  : /* gcc asm goto does not allow outputs */
+ 				  : [cpu_id]		"r" (cpu),
+-				    [current_cpu_id]	"m" (__rseq_abi.cpu_id),
+-				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++				    [current_cpu_id]	"m" (rseq_get_abi()->cpu_id),
++				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
+ 				    [expect]		"r" (expect),
+ 				    [v]			"m" (*v),
+ 				    [newv]		"r" (newv),
+@@ -411,8 +411,8 @@ int rseq_cmpeqv_trystorev_storev_release(intptr_t *v, intptr_t expect,
+ 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
+ 				  : /* gcc asm goto does not allow outputs */
+ 				  : [cpu_id]		"r" (cpu),
+-				    [current_cpu_id]	"m" (__rseq_abi.cpu_id),
+-				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++				    [current_cpu_id]	"m" (rseq_get_abi()->cpu_id),
++				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
+ 				    [expect]		"r" (expect),
+ 				    [v]			"m" (*v),
+ 				    [newv]		"r" (newv),
+@@ -472,8 +472,8 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
+ 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
+ 				  : /* gcc asm goto does not allow outputs */
+ 				  : [cpu_id]		"r" (cpu),
+-				    [current_cpu_id]	"m" (__rseq_abi.cpu_id),
+-				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++				    [current_cpu_id]	"m" (rseq_get_abi()->cpu_id),
++				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
+ 				    [v]			"m" (*v),
+ 				    [expect]		"r" (expect),
+ 				    [v2]			"m" (*v2),
+@@ -532,8 +532,8 @@ int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
+ 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
+ 				  : /* gcc asm goto does not allow outputs */
+ 				  : [cpu_id]		"r" (cpu),
+-				    [current_cpu_id]	"m" (__rseq_abi.cpu_id),
+-				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++				    [current_cpu_id]	"m" (rseq_get_abi()->cpu_id),
++				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
+ 				    [expect]		"r" (expect),
+ 				    [v]			"m" (*v),
+ 				    [newv]		"r" (newv),
+@@ -593,8 +593,8 @@ int rseq_cmpeqv_trymemcpy_storev_release(intptr_t *v, intptr_t expect,
+ 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
+ 				  : /* gcc asm goto does not allow outputs */
+ 				  : [cpu_id]		"r" (cpu),
+-				    [current_cpu_id]	"m" (__rseq_abi.cpu_id),
+-				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++				    [current_cpu_id]	"m" (rseq_get_abi()->cpu_id),
++				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
+ 				    [expect]		"r" (expect),
+ 				    [v]			"m" (*v),
+ 				    [newv]		"r" (newv),
+@@ -651,8 +651,8 @@ int rseq_offset_deref_addv(intptr_t *ptr, off_t off, intptr_t inc, int cpu)
+ 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
+ 				  : /* gcc asm goto does not allow outputs */
+ 				  : [cpu_id]		"r" (cpu),
+-				    [current_cpu_id]      "m" (__rseq_abi.cpu_id),
+-				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
++				    [current_cpu_id]      "m" (rseq_get_abi()->cpu_id),
++				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
+ 				    [ptr]			"r" (ptr),
+ 				    [off]			"er" (off),
+ 				    [inc]			"er" (inc)

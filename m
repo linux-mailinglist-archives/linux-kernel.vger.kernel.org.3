@@ -2,179 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E86DB55E312
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6C355D33F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345200AbiF1LfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 07:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
+        id S1345221AbiF1Lfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 07:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236261AbiF1LfB (ORCPT
+        with ESMTP id S230061AbiF1Lfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 07:35:01 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DF32FFE8;
-        Tue, 28 Jun 2022 04:34:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656416099; x=1687952099;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=SeZjE9dIzHv7ak+kD31OSIPBtrgZc4gdk0+yPRC0Dmw=;
-  b=aVmPdVZ0U7rOMKOnO4RH8tSKt3bbJ7zuTqa3TXZFl2xWtXbR6EARU3H2
-   u5wVk8CHpJ8Uom3ACfBjKJJUYK0EMoKj36JnSzE6AeW6Nbna+J70ujkPk
-   DKeM0j1TQWUt9oSjnmb9J80o2DCnvWm3HiyMFn1D68Oy0PTSVpu65FE0b
-   WJNI/kq+Ywhs9denZYwfFvAFhPwc11A4xci/8Je3A5gbwOrouf+sM+Hi1
-   FqtkJ+J0ACRQmrTRIum/4JAWFQS4aV8KPpEHPh7k8Hj/9ypdA5npXSQe3
-   WltpAkA5euINWTLuaZNxfN3h7fywBDYWY2oHgxpPjXVrQG6ff8BiUl1PS
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="270465555"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="270465555"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 04:34:59 -0700
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="680009884"
-Received: from nherzalx-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.96.221])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 04:34:57 -0700
-Message-ID: <2ecd255ac85fac7ffa1b90975c9e08f11ddee149.camel@intel.com>
-Subject: Re: [PATCH v7 029/102] KVM: TDX: allocate/free TDX vcpu structure
-From:   Kai Huang <kai.huang@intel.com>
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>
-Date:   Tue, 28 Jun 2022 23:34:55 +1200
-In-Reply-To: <dad0333516bcdb0fdeccc9d1483299aeae8d80fd.1656366338.git.isaku.yamahata@intel.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
-         <dad0333516bcdb0fdeccc9d1483299aeae8d80fd.1656366338.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Tue, 28 Jun 2022 07:35:45 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AF632050;
+        Tue, 28 Jun 2022 04:35:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1656416144;
+  x=1687952144;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=a2olrKI9dv74tiDxlIp0R9yvFP+Oc1Key6NJAoQ/KUY=;
+  b=BTZIdJfQ0HVm/G3oxUsem30HH0di9jR67bceuMKKEB8F9kB8h2W9ZujE
+   3SPzb1X6UB/0RFsQ1KX2R3Q2VHFsx0YFUcU7tdCHKtPpnc1cTE8QQWuSo
+   H0lDJEkwJsLPmUwsN5mdbZ9Yn6M49r8JZsVBDdcDAB45Sy+K3r/Eh+XIh
+   BXqMnyhbE6aKSIZ24l25nV8s1F4ANf7jVFaAjFd+mi2YG8T4JlCGMBujK
+   gASeXevZx1RIvZ9PyDcBiNgXfytqyl8PhCpwLOCsEZeR5hi9XfXh7BhgT
+   KLNtxCUNsv3tTwJaHx8kupukrXodAyv9xvg+xpnXrvMr0IbinK3j5HLQc
+   w==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+CC:     <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] of: reserved-memory: Print allocation/reservation failures as error
+Date:   Tue, 28 Jun 2022 13:35:40 +0200
+Message-ID: <20220628113540.2790835-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-27 at 14:53 -0700, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
->=20
-> The next step of TDX guest creation is to create vcpu.  Allocate TDX vcpu
-> structures, initialize it.  Allocate pages of TDX vcpu for the TDX module=
-.
->=20
-> In the case of the conventional case, cpuid is empty at the initializatio=
-n.
-> and cpuid is configured after the vcpu initialization.  Because TDX
-> supports only X2APIC mode, cpuid is forcibly initialized to support X2API=
-C
-> on the vcpu initialization.
+If the allocation/reservation of reserved-memory fails, it is normally
+an error, so print it as an error so that it doesn't get hidden from the
+console due to the loglevel.  Also make the allocation failure include
+the size just like the reservation failure.
 
-The patch title and commit message of this patch are identical to the previ=
-ous
-patch.
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+ drivers/of/fdt.c             | 4 ++--
+ drivers/of/of_reserved_mem.c | 3 ++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-What happened? Did you forget to squash two patches together?
-=20
->=20
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/kvm/vmx/main.c    | 40 ++++++++++++++++++++++++++++++++++----
->  arch/x86/kvm/vmx/x86_ops.h |  8 ++++++++
->  2 files changed, 44 insertions(+), 4 deletions(-)
->=20
-> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> index 067f5de56c53..4f4ed4ad65a7 100644
-> --- a/arch/x86/kvm/vmx/main.c
-> +++ b/arch/x86/kvm/vmx/main.c
-> @@ -73,6 +73,38 @@ static void vt_vm_free(struct kvm *kvm)
->  		return tdx_vm_free(kvm);
->  }
-> =20
-> +static int vt_vcpu_precreate(struct kvm *kvm)
-> +{
-> +	if (is_td(kvm))
-> +		return 0;
-> +
-> +	return vmx_vcpu_precreate(kvm);
-> +}
-> +
-> +static int vt_vcpu_create(struct kvm_vcpu *vcpu)
-> +{
-> +	if (is_td_vcpu(vcpu))
-> +		return tdx_vcpu_create(vcpu);
-> +
-> +	return vmx_vcpu_create(vcpu);
-> +}
-> +
-> +static void vt_vcpu_free(struct kvm_vcpu *vcpu)
-> +{
-> +	if (is_td_vcpu(vcpu))
-> +		return tdx_vcpu_free(vcpu);
-> +
-> +	return vmx_vcpu_free(vcpu);
-> +}
-> +
-> +static void vt_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
-> +{
-> +	if (is_td_vcpu(vcpu))
-> +		return tdx_vcpu_reset(vcpu, init_event);
-> +
-> +	return vmx_vcpu_reset(vcpu, init_event);
-> +}
-> +
->  static int vt_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
->  {
->  	if (!is_td(kvm))
-> @@ -98,10 +130,10 @@ struct kvm_x86_ops vt_x86_ops __initdata =3D {
->  	.vm_destroy =3D vt_vm_destroy,
->  	.vm_free =3D vt_vm_free,
-> =20
-> -	.vcpu_precreate =3D vmx_vcpu_precreate,
-> -	.vcpu_create =3D vmx_vcpu_create,
-> -	.vcpu_free =3D vmx_vcpu_free,
-> -	.vcpu_reset =3D vmx_vcpu_reset,
-> +	.vcpu_precreate =3D vt_vcpu_precreate,
-> +	.vcpu_create =3D vt_vcpu_create,
-> +	.vcpu_free =3D vt_vcpu_free,
-> +	.vcpu_reset =3D vt_vcpu_reset,
-> =20
->  	.prepare_switch_to_guest =3D vmx_prepare_switch_to_guest,
->  	.vcpu_load =3D vmx_vcpu_load,
-> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-> index ef6115ae0e88..42b634971544 100644
-> --- a/arch/x86/kvm/vmx/x86_ops.h
-> +++ b/arch/x86/kvm/vmx/x86_ops.h
-> @@ -138,6 +138,10 @@ int tdx_vm_init(struct kvm *kvm);
->  void tdx_mmu_release_hkid(struct kvm *kvm);
->  void tdx_vm_free(struct kvm *kvm);
-> =20
-> +int tdx_vcpu_create(struct kvm_vcpu *vcpu);
-> +void tdx_vcpu_free(struct kvm_vcpu *vcpu);
-> +void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event);
-> +
->  int tdx_vm_ioctl(struct kvm *kvm, void __user *argp);
->  #else
->  static inline int tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { retu=
-rn 0; }
-> @@ -150,6 +154,10 @@ static inline void tdx_mmu_release_hkid(struct kvm *=
-kvm) {}
->  static inline void tdx_flush_shadow_all_private(struct kvm *kvm) {}
->  static inline void tdx_vm_free(struct kvm *kvm) {}
-> =20
-> +static inline int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNO=
-TSUPP; }
-> +static inline void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
-> +static inline void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event=
-) {}
-> +
->  static inline int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { ret=
-urn -EOPNOTSUPP; }
->  #endif
-> =20
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index a8f5b6532165..4610729d2297 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -532,8 +532,8 @@ static int __init __reserved_mem_reserve_reg(unsigned long node,
+ 				kmemleak_alloc_phys(base, size, 0, 0);
+ 		}
+ 		else
+-			pr_info("Reserved memory: failed to reserve memory for node '%s': base %pa, size %lu MiB\n",
+-				uname, &base, (unsigned long)(size / SZ_1M));
++			pr_err("Reserved memory: failed to reserve memory for node '%s': base %pa, size %lu MiB\n",
++			       uname, &base, (unsigned long)(size / SZ_1M));
+ 
+ 		len -= t_len;
+ 		if (first) {
+diff --git a/drivers/of/of_reserved_mem.c b/drivers/of/of_reserved_mem.c
+index 75caa6f5d36f..65f3b02a0e4e 100644
+--- a/drivers/of/of_reserved_mem.c
++++ b/drivers/of/of_reserved_mem.c
+@@ -156,7 +156,8 @@ static int __init __reserved_mem_alloc_size(unsigned long node,
+ 	}
+ 
+ 	if (base == 0) {
+-		pr_info("failed to allocate memory for node '%s'\n", uname);
++		pr_err("failed to allocate memory for node '%s': size %lu MiB\n",
++		       uname, (unsigned long)(size / SZ_1M));
+ 		return -ENOMEM;
+ 	}
+ 
+
+base-commit: a111daf0c53ae91e71fd2bfe7497862d14132e3e
+-- 
+2.34.1
 

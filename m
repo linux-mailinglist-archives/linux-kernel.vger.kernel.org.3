@@ -2,287 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395C355EB91
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 151B155EB93
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbiF1R6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 13:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44172 "EHLO
+        id S233677AbiF1R6d convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Jun 2022 13:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233595AbiF1R5q (ORCPT
+        with ESMTP id S233257AbiF1R63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 13:57:46 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2043.outbound.protection.outlook.com [40.107.95.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B140B64FC;
-        Tue, 28 Jun 2022 10:57:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ep5l1oq1yhBb+WU7NDLuGlv4aCwUVX/ODIGkv6/CDDqUq/mVOaddDrhfDGnhazuVoEIc9r6iD48Uru0Z6s4A4n8URC4n9GBxqKzAYMU+7jskxIAp2AzvrXWMV/uyyjzp96tRx9SulceWlgw2hvgoxi4PRAdGt5k157LaP0Gl1/xFX7yF4vnvYUHimmppVcUcnjkFfdI8/A01VHnGym82XFTQBSnLLszPLJyxGj2oCDcaC0uzhIF6ST7Ir7wx8eX3jT5vKbSWWuaC75ocbR60crkc80u/7R/IBJcsmsO7jorDtbEbz5rzlbXBL05SRIhb9emgfQkZ3rrSbsu7O6+u5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hfjK6teZjOc6AUQwfjsBUHZ+3rTSF4jj8qciTFjfqjk=;
- b=kax9MbYMjvDWHoVUdirxhkoSOoKK/kXlf0r6nRutD0LHcn3/rboyI5gqCEhwU6sg0C7unrmPWqEU8svcf+y+nnTQdM/rE2u5+pSqYb1F5qemk474hujUaEbcJiPkU0fVBXiHEvJMIA52cbU92RubEfYR9K4u+ukdDaJlI8mjY7rILWbMaSZsStySTpi6awfQu1ppbdHV6qRnZt+CgfApoe+IHelzB1n9bqfHtmIUCwLXjlzjneCgi2Tl991lKd3zJvTCPPkEEEAYNrdDSrbrNye+J2qN2pFCKdKwX+DPkIUZNLoqq+dEx9klRROzMrcm67xR96RGkKKHA//A27U8SA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hfjK6teZjOc6AUQwfjsBUHZ+3rTSF4jj8qciTFjfqjk=;
- b=V6Zxhd6Zvh4fbEytDmBMP15JolIO2tfnMVzzr54o6ciC9w5LskIYgC1W203zU7PfI26cLVxIuMDz/a68hsMy5SeQxApafQw+2cvRsWIBF4P05qkI9wlayQoalWLiQuxjuYrQlJtKTreOLMOmGuSJbIzw2f9lwprj+HaBdT8pml0=
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
- by BYAPR12MB4792.namprd12.prod.outlook.com (2603:10b6:a03:108::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Tue, 28 Jun
- 2022 17:57:42 +0000
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::8953:6baa:97bb:a15d]) by SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::8953:6baa:97bb:a15d%7]) with mapi id 15.20.5373.022; Tue, 28 Jun 2022
- 17:57:41 +0000
-From:   "Kalra, Ashish" <Ashish.Kalra@amd.com>
-To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "jroedel@suse.de" <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "slp@redhat.com" <slp@redhat.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "tobin@ibm.com" <tobin@ibm.com>, "bp@alien8.de" <bp@alien8.de>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "marcorr@google.com" <marcorr@google.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alpergun@google.com" <alpergun@google.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: RE: [PATCH Part2 v6 06/49] x86/sev: Add helper functions for
- RMPUPDATE and PSMASH instruction
-Thread-Topic: [PATCH Part2 v6 06/49] x86/sev: Add helper functions for
- RMPUPDATE and PSMASH instruction
-Thread-Index: AQHYhY2kulHh/HmbIUq97K70l/FApa1aH19QgAGdtQCACPGfgIAAdLzQ
-Date:   Tue, 28 Jun 2022 17:57:41 +0000
-Message-ID: <SN6PR12MB27677062FBBF9D62C7BF41D88EB89@SN6PR12MB2767.namprd12.prod.outlook.com>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <e4643e9d37fcb025d0aec9080feefaae5e9245d5.1655761627.git.ashish.kalra@amd.com>
- <YrH0ca3Sam7Ru11c@work-vm>
- <SN6PR12MB2767FBF0848B906B9F0284D28EB39@SN6PR12MB2767.namprd12.prod.outlook.com>
- <BYAPR12MB2759910E715C69D1027CCE678EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
- <Yrrc/6x70wa14c5t@work-vm>
-In-Reply-To: <Yrrc/6x70wa14c5t@work-vm>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-06-28T17:48:27Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=46f29bd8-1585-495e-83b5-e58dfb002f98;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-06-28T17:57:39Z
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: e25f21d7-47a8-4fea-8c79-95c19848ca4a
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e7b99f7f-9c92-46f3-92d3-08da592fb27f
-x-ms-traffictypediagnostic: BYAPR12MB4792:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: peOWbw5o7QIaJ10c592rrpvQ82aInVzTe63b42ELDVlb4isRlARpTXvTVmq8q7PQpSvLDVXfTID4utTcaDblqjFdnk1PPBb5fC/FMfr6JXBvZvcMtxSD3tioEd/MTTMnGKIZ0RbLYJe6gLXgsXq+ztVZy6b+GhCRO/UyMJjqJfrvZUkO1ZoTNxdGHMV3gK6Kl9UjXzZlAi2dwPmoF1T4/hnvhpkBVBIWaacrmmBcJ2u8MkKzoa36Zcq1KDCabPNZ4a8EldrTlYoRyf8+m5Rq4lAR7fLX3zRT3KR9ztNI6jeLhq/NzmQ8OB7P3LgV4x/Sg7MPKx6QTaA8obd6Cu77MArZSjgFJqca/81W7cqYMsmj/B/TDI7RpcOAl9L+84v1T+duVRXeOr6rNkPdG343v9n3pODH+a3Q2V1T9BOkgAB7MhD4kxAxFPD0G+O99V5lJeg2RAsTrsl8p4GF/JJf+T80w45ArPXdsOxyvk8I6bH5lc0V59oKFIZdEseon3LTM+Fo5/pvI4OFkcAfcWqkSyiz3xLbKeRdzDsNTPPl1XPVi5MG0VLzapEyRSltdo5twtHAWSp/spid7oS+fqqMQ3gQeVL1UEpyGHxfvTVuVj9HKxm0lvcoXchAncnnMqBtMYVvOw5RsOSy3y0mfbF9HxOwiPrUpmQR42FzZBKC58tlVsqKe+vd2OADLFtSUtS3NmzjdWuXG1zDcpg5DUuAGXUCHw9Kcshbr0MUS9T2al7yRnn0kGZbXZ0N9eAaRdmBRW5Hm8oBgaJ3Crwuvbs9/9eJboaNJoz/c2cQOPwpsbQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(396003)(376002)(39860400002)(366004)(53546011)(186003)(7696005)(41300700001)(6506007)(26005)(9686003)(66556008)(66476007)(38100700002)(83380400001)(38070700005)(55016003)(122000001)(8936002)(5660300002)(7406005)(7416002)(316002)(52536014)(33656002)(2906002)(54906003)(64756008)(6916009)(4326008)(86362001)(478600001)(71200400001)(66446008)(8676002)(76116006)(66946007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?J3AW/VS9SEHMjjFv5TD9Z+yY27VxOlbv/BXnvDwAC75saj/TALj/DCK9/ljl?=
- =?us-ascii?Q?PDjvxBnJvunExv9/WfMwdn0LDVfAnljValAKEIsQ12rtkxHyUkvQsCh8UWTY?=
- =?us-ascii?Q?h2NpiQvQRz3NkCtD8TcDl6Fj0CeDq4PK7RPnQDefxP65sXddFOGvTUrbHyK3?=
- =?us-ascii?Q?dAkAr2ISD0iRIwnN5HGcTCJnvbWj2NBjoRBMNFElOMDoyVHJk2RIb87UXURx?=
- =?us-ascii?Q?bvofu5KR2HLzTs1do/CEaxRL5A7CDNzbgqlalCGfDcMteD+QGQsS/wky2Rsl?=
- =?us-ascii?Q?RImUfB3eap7Ncjmlg+mZs+K903/8oX2x2nbbmjUTuuDoXnaiSvFZst0P9Clm?=
- =?us-ascii?Q?oEvWnxag35wStoAnhnGm21ZBodrKfxO9dBJUVNKdo3gaSFtqrgWNb4oj+7pu?=
- =?us-ascii?Q?dGedvisbRyoQhuM8B4pn2cuVtvM+RF1/C/qO68tQVOp4WHvuW8jqyMGVYa7J?=
- =?us-ascii?Q?gNOcjZopB+hD/oEkK+9IPf36Mcw8LbHWN07hlvW6gaTqkzn9xP+6uwH/CPrL?=
- =?us-ascii?Q?D5G6UW7BQUDGcPvV8lVwi0qLS4tsso4wMdjF0nvrwGgMAX62uJipxeq0aSTy?=
- =?us-ascii?Q?OO4O+8HyNZjajlRB0/boFVhRwoXm8SMPyghwEqtsm3Mm35EvRwx+P9hPB4EH?=
- =?us-ascii?Q?YMTMRqCPMFcc9lqOdcxNuJm0XgEewLdw28vlQztRssm9mlMO9MOZ75Nn2Inl?=
- =?us-ascii?Q?OFpm0+y/YhGkSIv2OnWN6ob4/kVEqnF2buavPK1r1Am5xboTHOQQU2aVcizX?=
- =?us-ascii?Q?egQ+7lO5Nzqjix2De0xcQb5nrTWeeIeLVf+FtOgV6wH7922Y4ZrCmB+w2KQ3?=
- =?us-ascii?Q?DWawUqHsUlVqfy02KtzbiBU7E6Ow8x1HSPCLf0A+o2E9Bu8S0XS7c2woJGCX?=
- =?us-ascii?Q?23pg4r4mwq0tg3Ztq0Rtc7fOV68nCqnsC3XvjCyoatnmPwUh+BJsjQ7vgAJY?=
- =?us-ascii?Q?JLg+Bir+fHDk2Gx0Yab2yDnZ2U36K5wPNgEFm1zsAi0xeLdh3EKEnyrVqesL?=
- =?us-ascii?Q?1GaasSpwwuQqEFF2xisu0IHe3klgPKunngF4hgJ5uZaJEG0Z/vNfmMMaxTWN?=
- =?us-ascii?Q?gogZwQOVI4ksY7GuEWkdNNIN3QFWVvTYY8lMztI0kZ+4VVO/6XQVk5/mCSBh?=
- =?us-ascii?Q?x5R6kxc5hNFY7tJvZaS2KRCTHmgH3F1bd5LAg8B2xilM6dkumf2mt7zFIHn/?=
- =?us-ascii?Q?5qJZ1/1OIbiRd7vIgICrD1WzS2X8B4+rWRSIb5ZPQ5KUXWOv88MWtk5Ie5vH?=
- =?us-ascii?Q?oNbEMCZtBbnNIkHO6Gz9G/tZlWoX5zcWPl1ilMNWsnAlw8DQzSD6awe+NWqU?=
- =?us-ascii?Q?2y6ciC6pFaa5D/8/YtOMGncae/kdyleuTd36AaX11dCqrkMDAKkZXFFmcPr0?=
- =?us-ascii?Q?p0xpgTQCJ9h+uPLSucfufVJkTzKOBsgFBWXNhXp/W/1bDU/LxkuVbw2H205w?=
- =?us-ascii?Q?PiN1N3gneg+Ph6ulqIPlmEBVAsBEnI90pE+VbCCFwsVUpBCLvnjoDsWvU9DS?=
- =?us-ascii?Q?cPFT94PlDHDDdCiZbwDVXTL7O+QpFFeOs/0XufiEqbVig/FwDQcepOe5dE0r?=
- =?us-ascii?Q?Z1ZTQvIIE20xd4zmBhs=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 28 Jun 2022 13:58:29 -0400
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B0F1147E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:58:26 -0700 (PDT)
+Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id C783121AFA;
+        Tue, 28 Jun 2022 17:58:25 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf02.hostedemail.com (Postfix) with ESMTPA id C189680011;
+        Tue, 28 Jun 2022 17:58:24 +0000 (UTC)
+Message-ID: <f110442f5cceb0161f32c2b942ef7be6f5c5a63c.camel@perches.com>
+Subject: Re: [PATCH 1/7] Staging: rtl8192e: Added blank lines before/after
+ struct
+From:   Joe Perches <joe@perches.com>
+To:     Felix Schlepper <f3sch.git@outlook.com>, gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        wjsota@gmail.com
+Date:   Tue, 28 Jun 2022 10:58:23 -0700
+In-Reply-To: <f23e5ad2839c238665956f0d552cacd9944b724d.1656402464.git.f3sch.git@outlook.com>
+References: <cover.1656402464.git.f3sch.git@outlook.com>
+         <f23e5ad2839c238665956f0d552cacd9944b724d.1656402464.git.f3sch.git@outlook.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e7b99f7f-9c92-46f3-92d3-08da592fb27f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2022 17:57:41.8761
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: K3hJI7dQImR0CTHDiN2DG976gCqjqZcBgsjF8V8LV2PhjoEDPF/nSDJGQKV6ElA5GoOJTmE2ERXXegqf2UwgMQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB4792
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Stat-Signature: pr77bb1dwbaocb93x6q3az6gbmmig8zi
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: C189680011
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+s5myQFNi+LRNm/xWGBzVuaZ9sIaeEOP0=
+X-HE-Tag: 1656439104-638637
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+On Tue, 2022-06-28 at 10:30 +0200, Felix Schlepper wrote:
+> This addresses an issue raised by checkpatch.pl:
+> 
+>      $ ./scripts/checkpatch.pl --terse -f drivers/staging/rtl8192e/rtllib_wx.c
+>      CHECK: Please use a blank line after function/struct/union/enum
+>      declarations
+> 
+> The additional blank line above the struct/before the headers is
+> just cleaner.
+[]
+> diff --git a/drivers/staging/rtl8192e/rtllib_wx.c b/drivers/staging/rtl8192e/rtllib_wx.c
+[]
+> @@ -17,10 +17,12 @@
+>  #include <linux/module.h>
+>  #include <linux/etherdevice.h>
+>  #include "rtllib.h"
+> +
+>  struct modes_unit {
+>  	char *mode_string;
+>  	int mode_size;
+>  };
+> +
+>  static struct modes_unit rtllib_modes[] = {
+>  	{"a", 1},
+>  	{"b", 1},
 
-Hello Dave,
+Please always look deeper at the code and do not simply take
+any checkpatch suggestion as the "best" fix.
 
------Original Message-----
-From: Dr. David Alan Gilbert <dgilbert@redhat.com>=20
-Sent: Tuesday, June 28, 2022 5:51 AM
-To: Kalra, Ashish <Ashish.Kalra@amd.com>
-Cc: x86@kernel.org; linux-kernel@vger.kernel.org; kvm@vger.kernel.org; linu=
-x-coco@lists.linux.dev; linux-mm@kvack.org; linux-crypto@vger.kernel.org; t=
-glx@linutronix.de; mingo@redhat.com; jroedel@suse.de; Lendacky, Thomas <Tho=
-mas.Lendacky@amd.com>; hpa@zytor.com; ardb@kernel.org; pbonzini@redhat.com;=
- seanjc@google.com; vkuznets@redhat.com; jmattson@google.com; luto@kernel.o=
-rg; dave.hansen@linux.intel.com; slp@redhat.com; pgonda@google.com; peterz@=
-infradead.org; srinivas.pandruvada@linux.intel.com; rientjes@google.com; do=
-vmurik@linux.ibm.com; tobin@ibm.com; bp@alien8.de; Roth, Michael <Michael.R=
-oth@amd.com>; vbabka@suse.cz; kirill@shutemov.name; ak@linux.intel.com; ton=
-y.luck@intel.com; marcorr@google.com; sathyanarayanan.kuppuswamy@linux.inte=
-l.com; alpergun@google.com; jarkko@kernel.org
-Subject: Re: [PATCH Part2 v6 06/49] x86/sev: Add helper functions for RMPUP=
-DATE and PSMASH instruction
+Using this struct style with an embedded length is error prone
+and would likely be better as a simple char * array.
 
-* Kalra, Ashish (Ashish.Kalra@amd.com) wrote:
-> [AMD Official Use Only - General]
->=20
-> >>>  /*
-> >>>   * The RMP entry format is not architectural. The format is=20
-> >>> defined in PPR @@ -126,6 +128,15 @@ struct snp_guest_platform_data {
-> >>>  	u64 secrets_gpa;
-> >>>  };
-> >>> =20
-> >>> +struct rmpupdate {
-> >>> +	u64 gpa;
-> >>> +	u8 assigned;
-> >>> +	u8 pagesize;
-> >>> +	u8 immutable;
-> >>> +	u8 rsvd;
-> >>> +	u32 asid;
-> >>> +} __packed;
->=20
-> >>I see above it says the RMP entry format isn't architectural; is this '=
-rmpupdate' structure? If not how is this going to get handled when we have =
-a couple >of SNP capable CPUs with different layouts?
->=20
-> >Architectural implies that it is defined in the APM and shouldn't change=
- in such a way as to not be backward compatible.=20
-> >I probably think the wording here should be architecture independent or =
-more precisely platform independent.
->=20
-> Some more clarity on this:=20
->=20
-> Actually, the PPR for family 19h Model 01h, Rev B1 defines the RMP entry =
-format as below:
->=20
-> 2.1.4.2 RMP Entry Format
-> Architecturally the format of RMP entries are not specified in APM. In or=
-der to assist software, the following table specifies select portions of th=
-e RMP entry format for this specific product. Each RMP entry is 16B in size=
- and is formatted as follows. Software should not rely on any field definit=
-ions not specified in this table and the format of an RMP entry may change =
-in future processors.=20
->=20
-> Architectural implies that it is defined in the APM and shouldn't change =
-in such a way as to not be backward compatible. So non-architectural in thi=
-s context means that it is only defined in our PPR.
->=20
-> So actually this RPM entry definition is platform dependent and will need=
- to be changed for different AMD processors and that change has to be handl=
-ed correspondingly in the dump_rmpentry() code.=20
+Also, the existing sprintf use of mode_string and mode_size is
+nonsensical.  There is nothing to format in any of the mode_size.
+so the use of mode_size as an argument is silly.
 
-> You'll need a way to make that fail cleanly when run on a newer CPU with =
-different layout, and a way to build kernels that can handle more than one =
-layout.
+Perhaps something like this would be better:
+---
+ drivers/staging/rtl8192e/rtllib_wx.c | 21 +++++----------------
+ 1 file changed, 5 insertions(+), 16 deletions(-)
 
-Yes, I will be adding a check for CPU family/model as following :
-
-static int __init snp_rmptable_init(void)
-{
-+       int family, model;
-
-      if (!boot_cpu_has(X86_FEATURE_SEV_SNP))
-               return 0;
-
-+       family =3D boot_cpu_data.x86;
-+       model  =3D boot_cpu_data.x86_model;
-
-+       /*
-+        * RMP table entry format is not architectural and it can vary by p=
-rocessor and
-+        * is defined by the per-processor PPR. Restrict SNP support on the=
- known CPU
-+        * model and family for which the RMP table entry format is current=
-ly defined for.
-+        */
-+       if (family !=3D 0x19 || model > 0xaf)
-+               goto nosnp;
+diff --git a/drivers/staging/rtl8192e/rtllib_wx.c b/drivers/staging/rtl8192e/rtllib_wx.c
+index cf9a240924f20..90dcce152d80c 100644
+--- a/drivers/staging/rtl8192e/rtllib_wx.c
++++ b/drivers/staging/rtl8192e/rtllib_wx.c
+@@ -17,17 +17,9 @@
+ #include <linux/module.h>
+ #include <linux/etherdevice.h>
+ #include "rtllib.h"
+-struct modes_unit {
+-	char *mode_string;
+-	int mode_size;
+-};
+-static struct modes_unit rtllib_modes[] = {
+-	{"a", 1},
+-	{"b", 1},
+-	{"g", 1},
+-	{"?", 1},
+-	{"N-24G", 5},
+-	{"N-5G", 4},
 +
++static const char *rtllib_modes[] = {
++	"a", "b", "g", "?", "N-24G", "N-5G",
+ };
+ 
+ #define MAX_CUSTOM_LEN 64
+@@ -72,11 +64,8 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
+ 	/* Add the protocol name */
+ 	iwe.cmd = SIOCGIWNAME;
+ 	for (i = 0; i < ARRAY_SIZE(rtllib_modes); i++) {
+-		if (network->mode&(1<<i)) {
+-			sprintf(pname, rtllib_modes[i].mode_string,
+-				rtllib_modes[i].mode_size);
+-			pname += rtllib_modes[i].mode_size;
+-		}
++		if (network->mode & BIT(i))
++			pname = stpcpy(pname, rtllib_modes[i]);
+ 	}
+ 	*pname = '\0';
+ 	snprintf(iwe.u.name, IFNAMSIZ, "IEEE802.11%s", proto_name);
 
-This way SNP will only be enabled specifically on the platforms for which t=
-his RMP entry
-format is defined in those processor's PPR. This will work for Milan and Ge=
-noa as of now.
-
-Additionally as per Sean's suggestion, I will be moving the RMP structure d=
-efinition to sev.c,
-which will make it a private structure and not exposed to other parts of th=
-e kernel.
-
-Also in the future we will have an architectural interface to read the RMP =
-table entry,
-we will first check for it's availability and if not available fall back to=
- the RMP table
-entry structure definition.
-
- Thanks,
- Ashish

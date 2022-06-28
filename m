@@ -2,74 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D49D855C625
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 153A655E31F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245237AbiF1FxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 01:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34988 "EHLO
+        id S244493AbiF1F47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 01:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234982AbiF1FxH (ORCPT
+        with ESMTP id S229495AbiF1F4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 01:53:07 -0400
-Received: from m1550.mail.126.com (m1550.mail.126.com [220.181.15.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A6EEFF3;
-        Mon, 27 Jun 2022 22:53:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=BzQjt
-        GGE+XK5zIt6YFBt3VAbazb6iNZuycDB1eB0QlA=; b=nL7+0nLCjn4wIkPBWQtoE
-        Nce376O50kX3NojsxsH8/H3YrzfOpUon5NrISdApic45n7LO9xeYGNqhn13KTB6m
-        q+bZIVl9wz1fK8SWQ99fQ86WM4Se+toMXbJBrq8dw/YzjqAJEg5SqXv+E9aH48zC
-        mqGNPPysCMZ+ro8WBcqTQM=
-Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr50
- (Coremail) ; Tue, 28 Jun 2022 13:52:53 +0800 (CST)
-X-Originating-IP: [124.16.139.61]
-Date:   Tue, 28 Jun 2022 13:52:53 +0800 (CST)
-From:   "Liang He" <windhl@126.com>
-To:     "Tony Lindgren" <tony@atomide.com>
-Cc:     linux@armlinux.org.uk, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH] arm: mach-omap2: omap4-common: Fix refcount leak bug
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <YrqF2bXbxcYFsUy6@atomide.com>
-References: <20220617035548.4003393-1-windhl@126.com>
- <YrqF2bXbxcYFsUy6@atomide.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Tue, 28 Jun 2022 01:56:53 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F812872D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 22:56:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656395812; x=1687931812;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jkkFnV1SzLceUSN26FhY9YeMuVcIqRLbH9OTJaJLTP8=;
+  b=FmBSpysHTDqBKTfU5nGFU5R3kuqZMFBqgO/xt2EIH7BBuQyHMDv87m/e
+   /iMYyKAMs0jbVoS0K6q66s+V53CCgZlALiHp3EJOMKYv0MTNGERHKSp72
+   CAzXSASl6KtVj6wqk2oYt4TQgDwlt3kgd8apDY+ddVAH7c4ijIZ27RkVB
+   z4nkrXLrmCL0TF/EFV1L3Ct5gDfuv8MK8vGk4nD0kj3sNUm1sgCTLKoVC
+   Nrd7AsRkUuG+Y4CacpeH0vOD3bbhjr7fTJ3IlJg2jnHom53W+ki7NwYh9
+   UXt3s4gjcc19SY77R+6ZVtxILnmAZGwc9ZmBfe1SLO55QVPK7EA2afs5R
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="307121855"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="307121855"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 22:53:46 -0700
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="646762122"
+Received: from ltang11-mobl1.ccr.corp.intel.com (HELO [10.249.169.64]) ([10.249.169.64])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 22:53:37 -0700
+Message-ID: <543603e3-9d08-59ee-01f2-8dd6e7c73a15@linux.intel.com>
+Date:   Tue, 28 Jun 2022 13:53:35 +0800
 MIME-Version: 1.0
-Message-ID: <39ad3f64.3de2.181a8dea7a0.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: MsqowADHHPE1l7piefI+AA--.21879W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi3BIuF1pED0WRtAAEsC
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v9 07/11] iommu/sva: Refactoring
+ iommu_sva_bind/unbind_device()
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>, Vinod Koul <vkoul@kernel.org>
+References: <20220621144353.17547-1-baolu.lu@linux.intel.com>
+ <20220621144353.17547-8-baolu.lu@linux.intel.com>
+ <BN9PR11MB5276297FAEB8C9774AABAD208CB99@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB5276297FAEB8C9774AABAD208CB99@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKQXQgMjAyMi0wNi0yOCAxMjozODo0OSwgIlRvbnkgTGluZGdyZW4iIDx0b255QGF0b21pZGUu
-Y29tPiB3cm90ZToKPiogTGlhbmcgSGUgPHdpbmRobEAxMjYuY29tPiBbMjIwNjE3IDA2OjUxXToK
-Pj4gSW4gb21hcDRfc3JhbV9pbml0KCksIG9mX2ZpbmRfY29tcGF0aWJsZV9ub2RlKCkgd2lsbCBy
-ZXR1cm4gYSBub2RlCj4+IHBvaW50ZXIgd2l0aCByZWZjb3VudCBpbmNyZW1lbnRlZC4gV2Ugc2hv
-dWxkIHVzZSBvZl9ub2RlX3B1dCgpIHdoZW4KPj4gaXQgaXMgbm90IHVzZWQgYW55bW9yZS4KPj4g
-Cj4+IFNpZ25lZC1vZmYtYnk6IExpYW5nIEhlIDx3aW5kaGxAMTI2LmNvbT4KPj4gLS0tCj4+ICBh
-cmNoL2FybS9tYWNoLW9tYXAyL29tYXA0LWNvbW1vbi5jIHwgMSArCj4+ICAxIGZpbGUgY2hhbmdl
-ZCwgMSBpbnNlcnRpb24oKykKPj4gCj4+IGRpZmYgLS1naXQgYS9hcmNoL2FybS9tYWNoLW9tYXAy
-L29tYXA0LWNvbW1vbi5jIGIvYXJjaC9hcm0vbWFjaC1vbWFwMi9vbWFwNC1jb21tb24uYwo+PiBp
-bmRleCA2ZDFlYjRlZWZlZmUuLmU5ODFiZjU3ZTY0ZiAxMDA2NDQKPj4gLS0tIGEvYXJjaC9hcm0v
-bWFjaC1vbWFwMi9vbWFwNC1jb21tb24uYwo+PiArKysgYi9hcmNoL2FybS9tYWNoLW9tYXAyL29t
-YXA0LWNvbW1vbi5jCj4+IEBAIC0xMzUsNiArMTM1LDcgQEAgc3RhdGljIGludCBfX2luaXQgb21h
-cDRfc3JhbV9pbml0KHZvaWQpCj4+ICAJCXByX3dhcm4oIiVzOlVuYWJsZSB0byBhbGxvY2F0ZSBz
-cmFtIG5lZWRlZCB0byBoYW5kbGUgZXJyYXRhIEk2ODhcbiIsCj4+ICAJCQlfX2Z1bmNfXyk7Cj4+
-ICAJc3JhbV9wb29sID0gb2ZfZ2VuX3Bvb2xfZ2V0KG5wLCAic3JhbSIsIDApOwo+PiArCW9mX25v
-ZGVfcHV0KG5wKTsKPj4gIAlpZiAoIXNyYW1fcG9vbCkKPj4gIAkJcHJfd2FybigiJXM6VW5hYmxl
-IHRvIGdldCBzcmFtIHBvb2wgbmVlZGVkIHRvIGhhbmRsZSBlcnJhdGEgSTY4OFxuIiwKPj4gIAkJ
-CV9fZnVuY19fKTsKPgo+SGVyZSB0b28gc3JhbV9wb29sIGlzIHVzZWQgYWZ0Z2VyIG9mX25vZGVf
-cHV0KCkuCj4KPlJlZ2FyZHMsCj4KPlRvbnkKClRoYW5rcywgVG9ueS4KCkkgd2lsbCBzZW5kIGEg
-bmV3IHBhdGNoIHRvIGZpeCB0aGUgb3JkZXIgcHJvYmxlbS4KCkxpYW5nCgo=
+On 2022/6/27 18:14, Tian, Kevin wrote:
+>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>> Sent: Tuesday, June 21, 2022 10:44 PM
+>> +struct iommu_sva *iommu_sva_bind_device(struct device *dev, struct
+>> mm_struct *mm)
+>> +{
+>> +	struct iommu_domain *domain;
+>> +	ioasid_t max_pasids;
+>> +	int ret = -EINVAL;
+>> +
+>> +	/* Allocate mm->pasid if necessary. */
+> 
+> this comment is for iommu_sva_alloc_pasid()
+
+Updated.
+
+> 
+>> +	max_pasids = dev->iommu->max_pasids;
+>> +	if (!max_pasids)
+>> +		return ERR_PTR(-EOPNOTSUPP);
+>> +
+>> +	ret = iommu_sva_alloc_pasid(mm, 1, max_pasids - 1);
+>> +	if (ret)
+>> +		return ERR_PTR(ret);
+>> +
+> 
+> 
+> ...
+>> +void iommu_sva_unbind_device(struct iommu_sva *handle)
+>> +{
+>> +	struct device *dev = handle->dev;
+>> +	struct iommu_domain *domain =
+>> +			container_of(handle, struct iommu_domain, bond);
+>> +	ioasid_t pasid = iommu_sva_get_pasid(handle);
+>> +
+>> +	mutex_lock(&iommu_sva_lock);
+>> +	if (refcount_dec_and_test(&domain->bond.users)) {
+>> +		iommu_detach_device_pasid(domain, dev, pasid);
+>> +		iommu_domain_free(domain);
+>> +	}
+>> +	mutex_unlock(&iommu_sva_lock);
+>> +}
+>> +EXPORT_SYMBOL_GPL(iommu_sva_unbind_device);
+>> +
+>> +u32 iommu_sva_get_pasid(struct iommu_sva *handle)
+>> +{
+>> +	struct iommu_domain *domain =
+>> +			container_of(handle, struct iommu_domain, bond);
+>> +
+>> +	return domain->mm->pasid;
+>> +}
+>> +EXPORT_SYMBOL_GPL(iommu_sva_get_pasid);
+> 
+> Looks this is only used by unbind_device. Just open code it.
+
+It's part of current IOMMU/SVA interfaces for the device drivers, and
+has been used in various drivers.
+
+$ git grep iommu_sva_get_pasid
+drivers/dma/idxd/cdev.c:                pasid = iommu_sva_get_pasid(sva);
+drivers/iommu/iommu-sva-lib.c:  ioasid_t pasid = 
+iommu_sva_get_pasid(handle);
+drivers/iommu/iommu-sva-lib.c:u32 iommu_sva_get_pasid(struct iommu_sva 
+*handle)
+drivers/iommu/iommu-sva-lib.c:EXPORT_SYMBOL_GPL(iommu_sva_get_pasid);
+drivers/misc/uacce/uacce.c:     pasid = iommu_sva_get_pasid(handle);
+include/linux/iommu.h:u32 iommu_sva_get_pasid(struct iommu_sva *handle);
+include/linux/iommu.h:static inline u32 iommu_sva_get_pasid(struct 
+iommu_sva *handle)
+
+Or, I missed anything?
+
+Best regards,
+baolu

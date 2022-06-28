@@ -2,111 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B58E55E6E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3058F55E915
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346416AbiF1P26 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Jun 2022 11:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
+        id S1346902AbiF1P3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345696AbiF1P2z (ORCPT
+        with ESMTP id S1346936AbiF1P3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:28:55 -0400
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4FBBF9;
-        Tue, 28 Jun 2022 08:28:54 -0700 (PDT)
-Received: by mail-qv1-f47.google.com with SMTP id q4so20506459qvq.8;
-        Tue, 28 Jun 2022 08:28:54 -0700 (PDT)
+        Tue, 28 Jun 2022 11:29:38 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CFB21E0A
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:29:37 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id b12-20020a17090a6acc00b001ec2b181c98so16287917pjm.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:29:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GbW4NuEgaNk8iXnqeHVDmPcJNFTOfGhN7YoLZsDvjjU=;
+        b=SYGhAs9kNTsqIjUiYzrGMrV724WHEeSKEt2JDTF3kV1rovW4Dh9JUi1asrwCOE5tY8
+         dAXvt341ActjSq4Mre0xDy3f72LqABXcnID/vtUlIUSLJCBz7VN9IvVIj6jAl0FNZbAX
+         7uxslHHE9evmGBv+JKpuVR30CQT+HvH29y4cxmfiXhTP89UsprA398fCd0SN44BYjIQk
+         BtGUGY1IBoVJhX/D8Bn1UbdFG0MG5DEoiaYCRa6mRyPPl5uxThBT95CLthM7a/NraUvT
+         DtPQ3+TBlrcj/ptoTx9vClcyCp4tPX93X5H+KsgbgAdKA7m1/z1JTkfd+9nwEMVhhkCB
+         IyxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rWGuKnx4Ujs9MkjGuIowwwhdvBAe4X1vSQOEKzeoNPs=;
-        b=4DCbD1rF0scov5Ko7iDju9vfgg7rLsjW7qsJGtC8D6jre+pPsBC78/VT9hv3JGZOAt
-         34wSXyjcaeQwKqfBk81e8P4l+7PQ2q8QUxmcrBBn4gXrpgESafmFXlySYvuULJf0mxF1
-         tsVkNNxN8S7PMOo/6TULTnOHdDKxF/bF65JXC7e1g558pzmNdw5uQZCJh6KT+pwfLeCR
-         zh+vFHzhZFjVBzBbUetd+BxoFLq5qk2Q6N9j0/IpU4ulKe+UmChiU+bKe8tZNkje2yPw
-         ocje7m++kHyNCGrWFr8gJknXDGZbgEIzd+ueJgZltbtQ0BCpXAHZjHQqgw5Bi88Foqdw
-         JvQA==
-X-Gm-Message-State: AJIora+Ia7iN9nC1l+uansP/0g+kOmd8RmPF2bhIwI1n2XulP1/PrTEB
-        az5bSLIuee1Yj/XMQBoConNUcMxllDfxRQ==
-X-Google-Smtp-Source: AGRyM1tqwjvQCLtYoNT4ij+Qnjr0uI8ehRX4sKRW0KViu46Vu9lNJtAIA8G+uJH5CjOBrnraFMRByw==
-X-Received: by 2002:a05:622a:1108:b0:305:3092:b831 with SMTP id e8-20020a05622a110800b003053092b831mr13808695qty.624.1656430133241;
-        Tue, 28 Jun 2022 08:28:53 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id m14-20020a05620a290e00b006a6b498e23esm12226163qkp.81.2022.06.28.08.28.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 08:28:52 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id r3so22838484ybr.6;
-        Tue, 28 Jun 2022 08:28:52 -0700 (PDT)
-X-Received: by 2002:a05:6902:1141:b0:669:3f2a:c6bb with SMTP id
- p1-20020a056902114100b006693f2ac6bbmr18971911ybu.365.1656430131905; Tue, 28
- Jun 2022 08:28:51 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=GbW4NuEgaNk8iXnqeHVDmPcJNFTOfGhN7YoLZsDvjjU=;
+        b=JFPGMjtBSZbQiohwHoN+yrK4oNqMZEpgKPjN16QHA8WBriNeuwEtfBpi/w9r03UKG5
+         i8zvgSj3GwIXevEfQASQE+HEsXq+4CG1+MS/vAiY2wkVmWtZts0yp+qVr1/OsVPF+6mA
+         jpbGmTEgCoN6ET8PUl13MWDfFdPx1EtkXhFFwTGZPApwgbzZwwUnc6r3LZc1SGO+3cLR
+         KJU+iXT2f9d4bxr/sSeFowAwJl3cVfL+EqIQU9C1MSTj4ZJ9ERltEJtJMq06/Ly8jIHs
+         VuNvjOfVAQn63+CQRN624MGhhRUB9N3MSPM/t4J0Zlk2tOkny92JQNWCMouElisEGpdv
+         XVSg==
+X-Gm-Message-State: AJIora8IvfFMxN5Fxaj46bwaTQb1GIYxYrKzG3yk4ple8KPlA0vXCOB2
+        EHmJQEPt1DAq4fde49hI/ewwAYgkZw1ZG+RLV4gTIw==
+X-Google-Smtp-Source: AGRyM1teM52cYsj/ucnvyw+ULXM5H94YrpROT8deeiSMkpmkqiym/VDJdhQgGKnECo8ufyec3yr45JS6y5Ceof0oeoM=
+X-Received: by 2002:a17:903:2490:b0:168:d4d0:54da with SMTP id
+ p16-20020a170903249000b00168d4d054damr5626146plw.42.1656430176681; Tue, 28
+ Jun 2022 08:29:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220624144001.95518-1-clement.leger@bootlin.com> <20220624144001.95518-13-clement.leger@bootlin.com>
-In-Reply-To: <20220624144001.95518-13-clement.leger@bootlin.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 28 Jun 2022 17:28:39 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWDL7k9m_ephLsFtsfceKPkO5WF=bbp6iQMaU+608H-Ew@mail.gmail.com>
-Message-ID: <CAMuHMdWDL7k9m_ephLsFtsfceKPkO5WF=bbp6iQMaU+608H-Ew@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 12/16] ARM: dts: r9a06g032: describe MII converter
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
+References: <20220624173656.2033256-1-jthoughton@google.com>
+ <20220624173656.2033256-5-jthoughton@google.com> <YroYaWVvNZJvtqsH@monkey>
+In-Reply-To: <YroYaWVvNZJvtqsH@monkey>
+From:   James Houghton <jthoughton@google.com>
+Date:   Tue, 28 Jun 2022 08:29:25 -0700
+Message-ID: <CADrL8HXoKUP3Fjb-R1-YL0JWohG23BtgiBTFdijK_LYPA8-0-g@mail.gmail.com>
+Subject: Re: [RFC PATCH 04/26] hugetlb: make huge_pte_lockptr take an explicit
+ shift argument.
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Jue Wang <juew@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 4:41 PM Clément Léger <clement.leger@bootlin.com> wrote:
-> Add the MII converter node which describes the MII converter that is
-> present on the RZ/N1 SoC.
+On Mon, Jun 27, 2022 at 1:52 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
 >
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> On 06/24/22 17:36, James Houghton wrote:
+> > This is needed to handle PTL locking with high-granularity mapping. We
+> > won't always be using the PMD-level PTL even if we're using the 2M
+> > hugepage hstate. It's possible that we're dealing with 4K PTEs, in which
+> > case, we need to lock the PTL for the 4K PTE.
+>
+> I'm not really sure why this would be required.
+> Why not use the PMD level lock for 4K PTEs?  Seems that would scale better
+> with less contention than using the more coarse mm lock.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.20.
+I should be using the PMD level lock for 4K PTEs, yeah. I'll work this
+into the next version of the series. Thanks both.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>
+> --
+> Mike Kravetz

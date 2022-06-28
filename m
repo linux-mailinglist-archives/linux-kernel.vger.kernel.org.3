@@ -2,70 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C8055D8BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A868A55DDA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344525AbiF1KRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 06:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
+        id S1344841AbiF1KRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 06:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344788AbiF1KQ7 (ORCPT
+        with ESMTP id S1344873AbiF1KRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:16:59 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7672FE76;
-        Tue, 28 Jun 2022 03:16:54 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0743E66015C6;
-        Tue, 28 Jun 2022 11:16:51 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656411412;
-        bh=1tqlWAxPmJlNCdOk5uOFfVSOEf7qfVbTP0IA7EU/8zw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TkpMzbKCu0LchDuRwPJ+t8ON7otup+mIijJ2VrV9eByciW5GXXr0zIaDw4YlzyPj/
-         deUCZv+VKquqT9EFxdT1p0qPnDAv4Lei3peIFI9JGyDAC7lvDY+9t1aWs7emcYMIDy
-         ck2pJgoFq/Sx3ZmbPjJBCkuwVivsZO4rqdLmb2NhvZPzsd48inkYAKTutX+wQQos+7
-         CUM21fxNr6L11CEOcWx0kf70LOzrIYDy5oyxeYq4c30mtMt7nFLOIYWA+TURyRh8L9
-         MbqD6b4ODAkfashBMrB4DxnH5i4Pb+QAqvWqKLJFHHPSOx1AVxhS27LUyVGVmA1cGs
-         7746SqpG3zIog==
-Message-ID: <49ffbe2d-73ac-ee2e-e3d1-c31a88e40dd4@collabora.com>
-Date:   Tue, 28 Jun 2022 13:16:49 +0300
+        Tue, 28 Jun 2022 06:17:39 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072B42FFE0;
+        Tue, 28 Jun 2022 03:17:36 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 10:17:33 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1656411454;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KgrkKeUjyDISUVGC+ZEkzm6tVoShgne3hdtLt66d7Fw=;
+        b=zK+TDvxno6Y+H1puM5A5Qqi9Q0cUNNdkkV8knkYiHnWM+EcfPTQYwPsJQR2XVuw1KKEG4z
+        HH6ShsEv1+eZ6bQvIrKE3JcthztIp4uI3ZiQ3VAHRw3jmxF/x7gDo9Uzdky57SiYtBjYml
+        FYY54aopDHxiU3MjsgccKMf5lBGdQ7Cu5cTDDf0PDdRGu2ltvywuJRjj5bc4swbf7KLFl3
+        kd/3d3ROmLFanFmDRXrRqr5ZGdiHqNQWugguEtgBsYmNzUloMhp5ezY1WosU6H1yZ7VFtq
+        5tKp5vZjd4G19hfn3GY1PlYlOJ3vvuzMLYHsoKjx8mnr33fVJ9hLwWfg5eC5ow==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1656411454;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KgrkKeUjyDISUVGC+ZEkzm6tVoShgne3hdtLt66d7Fw=;
+        b=yS9khQ7rkAxaSmcE6PmWZ6eqIiZPVYoTqRtQfJHybNYAj6ZWJqBBJfiEaHTsG9xzPwEueT
+        MoTEkA7oEHc/09CQ==
+From:   "tip-bot2 for Smita Koralahalli" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: ras/core] x86/mce: Check whether writes to MCA_STATUS are
+ getting ignored
+Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220214233640.70510-2-Smita.KoralahalliChannabasappa@amd.com>
+References: <20220214233640.70510-2-Smita.KoralahalliChannabasappa@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 22/31] soc/tegra: Migrate to dev_pm_opp_set_config()
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1653564321.git.viresh.kumar@linaro.org>
- <449b344f037c7ef1970bc84d31e0d4c4cb4d2951.1653564321.git.viresh.kumar@linaro.org>
- <20220624004831.po35sowzfo4c47b3@vireshk-i7>
- <20220624005700.oj4etaajbutvsym7@vireshk-i7>
- <73d39022-c6fc-0c21-cb68-9714846f02bf@gmail.com>
- <20220627064526.2nkezq4nufpkl4y2@vireshk-i7>
- <ecc72279-0892-d5ab-689d-87b8fba5147e@gmail.com>
- <20220627072104.ir7kujhezxhzl6a7@vireshk-i7>
- <20220628070943.5tfyad63rh6niq6x@vireshk-i7>
- <a0155aeb-b209-07e1-747a-594a755f54fc@collabora.com>
- <20220628101139.jdpsplkqbbh6qpse@vireshk-i7>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220628101139.jdpsplkqbbh6qpse@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <165641145330.4207.4653680813553128202.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,27 +66,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/22 13:11, Viresh Kumar wrote:
-> On 28-06-22, 13:08, Dmitry Osipenko wrote:
->> The opp/linux-next works fine, thank you.
->>
->> Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> 
-> Thanks. I should add this to all the core + tegra -patches in that
-> branch, right ?
+The following commit has been merged into the ras/core branch of tip:
 
-Yes, please.
+Commit-ID:     891e465a1bd8798d5f97c3afb99393f123817fef
+Gitweb:        https://git.kernel.org/tip/891e465a1bd8798d5f97c3afb99393f123817fef
+Author:        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+AuthorDate:    Mon, 27 Jun 2022 20:56:46 
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Tue, 28 Jun 2022 12:08:10 +02:00
 
->> BTW, the idr_alloc() is obsoleted by xa_alloc().
-> 
-> The earlier interface isn't deprecated, right ? I really don't want to
-> go change it again :)
-> 
+x86/mce: Check whether writes to MCA_STATUS are getting ignored
 
-It has been in a process of deprecation for a couple years now. All IDR
-instances are slowly converting to XA. You won't need to take mutex with
-xa_alloc().
+The platform can sometimes - depending on its settings - cause writes
+to MCA_STATUS MSRs to get ignored, regardless of HWCR[McStatusWrEn]'s
+value.
 
--- 
-Best regards,
-Dmitry
+For further info see
+
+  PPR for AMD Family 19h, Model 01h, Revision B1 Processors, doc ID 55898
+
+at https://bugzilla.kernel.org/show_bug.cgi?id=206537.
+
+Therefore, probe for ignored writes to MCA_STATUS to determine if hardware
+error injection is at all possible.
+
+  [ bp: Heavily massage commit message and patch. ]
+
+Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220214233640.70510-2-Smita.KoralahalliChannabasappa@amd.com
+---
+ arch/x86/kernel/cpu/mce/inject.c   | 47 +++++++++++++++++++++++++++++-
+ arch/x86/kernel/cpu/mce/internal.h |  2 +-
+ 2 files changed, 48 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
+index 5fbd7ff..12cf2e7 100644
+--- a/arch/x86/kernel/cpu/mce/inject.c
++++ b/arch/x86/kernel/cpu/mce/inject.c
+@@ -33,6 +33,8 @@
+ 
+ #include "internal.h"
+ 
++static bool hw_injection_possible = true;
++
+ /*
+  * Collect all the MCi_XXX settings
+  */
+@@ -339,6 +341,8 @@ static int __set_inj(const char *buf)
+ 
+ 	for (i = 0; i < N_INJ_TYPES; i++) {
+ 		if (!strncmp(flags_options[i], buf, strlen(flags_options[i]))) {
++			if (i > SW_INJ && !hw_injection_possible)
++				continue;
+ 			inj_type = i;
+ 			return 0;
+ 		}
+@@ -717,11 +721,54 @@ static void __init debugfs_init(void)
+ 				    &i_mce, dfs_fls[i].fops);
+ }
+ 
++static void check_hw_inj_possible(void)
++{
++	int cpu;
++	u8 bank;
++
++	/*
++	 * This behavior exists only on SMCA systems though its not directly
++	 * related to SMCA.
++	 */
++	if (!cpu_feature_enabled(X86_FEATURE_SMCA))
++		return;
++
++	cpu = get_cpu();
++
++	for (bank = 0; bank < MAX_NR_BANKS; ++bank) {
++		u64 status = MCI_STATUS_VAL, ipid;
++
++		/* Check whether bank is populated */
++		rdmsrl(MSR_AMD64_SMCA_MCx_IPID(bank), ipid);
++		if (!ipid)
++			continue;
++
++		toggle_hw_mce_inject(cpu, true);
++
++		wrmsrl_safe(mca_msr_reg(bank, MCA_STATUS), status);
++		rdmsrl_safe(mca_msr_reg(bank, MCA_STATUS), &status);
++
++		if (!status) {
++			hw_injection_possible = false;
++			pr_warn("Platform does not allow *hardware* error injection."
++				"Try using APEI EINJ instead.\n");
++		}
++
++		toggle_hw_mce_inject(cpu, false);
++
++		break;
++	}
++
++	put_cpu();
++}
++
+ static int __init inject_init(void)
+ {
+ 	if (!alloc_cpumask_var(&mce_inject_cpumask, GFP_KERNEL))
+ 		return -ENOMEM;
+ 
++	check_hw_inj_possible();
++
+ 	debugfs_init();
+ 
+ 	register_nmi_handler(NMI_LOCAL, mce_raise_notify, 0, "mce_notify");
+diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
+index 4ae0e60..7e03f5b 100644
+--- a/arch/x86/kernel/cpu/mce/internal.h
++++ b/arch/x86/kernel/cpu/mce/internal.h
+@@ -211,7 +211,7 @@ noinstr u64 mce_rdmsrl(u32 msr);
+ 
+ static __always_inline u32 mca_msr_reg(int bank, enum mca_msr reg)
+ {
+-	if (mce_flags.smca) {
++	if (cpu_feature_enabled(X86_FEATURE_SMCA)) {
+ 		switch (reg) {
+ 		case MCA_CTL:	 return MSR_AMD64_SMCA_MCx_CTL(bank);
+ 		case MCA_ADDR:	 return MSR_AMD64_SMCA_MCx_ADDR(bank);

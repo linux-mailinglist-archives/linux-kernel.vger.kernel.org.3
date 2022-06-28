@@ -2,83 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1814A55F195
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 00:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED1455F19D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 00:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbiF1WuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 18:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
+        id S231547AbiF1Wvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 18:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiF1WuK (ORCPT
+        with ESMTP id S229483AbiF1Wvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 18:50:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DE3139833
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 15:50:09 -0700 (PDT)
+        Tue, 28 Jun 2022 18:51:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F309F3A735
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 15:51:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656456608;
+        s=mimecast20190719; t=1656456701;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=W3kLhAZGK2ncHck2YD7sSY1Nrpc3ON/goS7rYhosu+8=;
-        b=UL1SNrMwUdd20s0cmAaG3JJ2iRMZW4q3oCJwymQxqFI0j5fBBS9VBlwy78BQ0Sl0fXBv5n
-        cA/n+wWOjakgC2kc/8BYvqqbR+y/laS/f1SiVFMj3EEDybVJ/4Yy1OuUPGusRjxT471g8R
-        iG/pqxJAawUAz7fOzaIw3qzBVz9LqmY=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=oyl/HZb3SI8HFuQLBD60pevZNI/Uhf0WHtxfzC/4dus=;
+        b=RW/8D/AwKM6KpiCwyg2vht2Gu+z7nuH4XybF53RZ4fuOSo5I+ejlPyNvQnl9O5XHFJ/G2W
+        vq/Za6WF1KiScqfqYHyQ/jA5i1qK2VqnjgmSx6SjgOHXV0rm7v2zhLmDVU8i4P4zxXhmR0
+        PpXCD4NdXPIwOANXJ1nHAqTtWr5MvSo=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-384-T_bPul65N5WCITLsYaO6xg-1; Tue, 28 Jun 2022 18:50:07 -0400
-X-MC-Unique: T_bPul65N5WCITLsYaO6xg-1
-Received: by mail-io1-f72.google.com with SMTP id x4-20020a6bd004000000b00675354ad495so4047011ioa.20
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 15:50:06 -0700 (PDT)
+ us-mta-111-ZeFsa-KzO_S2iYVdnEkkDA-1; Tue, 28 Jun 2022 18:51:39 -0400
+X-MC-Unique: ZeFsa-KzO_S2iYVdnEkkDA-1
+Received: by mail-qv1-f71.google.com with SMTP id mz4-20020a0562142d0400b004726d99aa49so6445097qvb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 15:51:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=W3kLhAZGK2ncHck2YD7sSY1Nrpc3ON/goS7rYhosu+8=;
-        b=ltXI0tGmjPjFvbVR8axGPBkbYF394vc+wFf2XO3zkD8SRkUaMN8FB4v5W9/U2OQujC
-         xONkvcHL7sPn1DZuc3BruZQs3kcqBpun1VfpBuqLeXxlN5T4lVLwue5mCZb5RpLw57H0
-         LY8AmLJV/FVtYZi+mQRh63/CE8R/Jtz1F7wzTLCIQzdcOT0qve/2vKsHzCVByxiXTr9I
-         2kHgF/DAWPihO087NM7vBg0E/OPaD4dHaCYHAmoBgXyqhI967q3lfw1ex8TDgIwZcrLa
-         mGdkmDGcPmqWcedqWMbHJrDIc+qlHB+bijr/TKj7rvdqKbxRUH5dwyXg37TVkSeXHCtM
-         Z0hA==
-X-Gm-Message-State: AJIora/ir4eykBSE2P7LQJRyIZongawkmitLBhaNg3tz5fZvd/K4TDL3
-        2Lx9HehKQGqgN+4ZVpbmZvD/sYAWRc7kGsTD0MXP42zNThc6SQJc/Xhf3kbytffsgaYvQidbccq
-        pthWFC0nnGX5pvOALNtVzX58J
-X-Received: by 2002:a05:6e02:15c9:b0:2da:c33e:49c7 with SMTP id q9-20020a056e0215c900b002dac33e49c7mr18965ilu.26.1656456606271;
-        Tue, 28 Jun 2022 15:50:06 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uvOepd4UW7ERHSNp4aEwCJ76y/hhPsMiiTQrUS6nrxdaYCpU21kA6tkiY9yBbjfWLSCFQliA==
-X-Received: by 2002:a05:6e02:15c9:b0:2da:c33e:49c7 with SMTP id q9-20020a056e0215c900b002dac33e49c7mr18948ilu.26.1656456606042;
-        Tue, 28 Jun 2022 15:50:06 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id j25-20020a02a699000000b00339c33df66bsm6537922jam.118.2022.06.28.15.50.03
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=oyl/HZb3SI8HFuQLBD60pevZNI/Uhf0WHtxfzC/4dus=;
+        b=hz/cOVSBd3aHOgXISzjToZBmo1RGUweNvbvpoqbk7SP0TG+g29nZY32GV741suzCdk
+         mHOBtdb01Hf+0AJtnSg56hJ5jHqgDMzmiCeuw6p0AJJzN/w4PzjU46u5G3/NZh0hHAAY
+         mXHXLYaiRd3EHZzIA1EF+jtZCImBEj3OCd2Bcz01JL64dqI5emD5q7lgJlNMY277Mi2i
+         NlAzLtQW8JpSOqd7lqRPsG8s1wiNNreVDJ77q2qczm3oRR6SyfpmCeASisBjObmKLmlk
+         pAMvuviKSeVxjfO4hs4h9jQ6Sm52lybRs8BogcC8xffUPR9JQdMlDcQ7LK4ianvwBNnV
+         761g==
+X-Gm-Message-State: AJIora80tuyzJ0tUxObWeUr8wBhC0Ma05VQ0toW922ImFWwgdCMmdB4A
+        slEdpIe9u6Vq8rj3DpDoW8d4YYPkKFafLLT8k+bW0p648+zLOjPK/cnBbgxZQXQkQQIXTfe8kH9
+        9MaPFYOhu1qTFkamJcTjelC5A
+X-Received: by 2002:a05:6214:1c83:b0:46b:a79a:2f0b with SMTP id ib3-20020a0562141c8300b0046ba79a2f0bmr5547800qvb.103.1656456699044;
+        Tue, 28 Jun 2022 15:51:39 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1udyDEQwXavpJIYVRyrsdyEvotjuTUkOt6UvxlkbJ5gGTgtNxqyAFCyPEfK8HrsRHYsZtNJUg==
+X-Received: by 2002:a05:6214:1c83:b0:46b:a79a:2f0b with SMTP id ib3-20020a0562141c8300b0046ba79a2f0bmr5547782qvb.103.1656456698661;
+        Tue, 28 Jun 2022 15:51:38 -0700 (PDT)
+Received: from [192.168.8.138] ([141.154.49.182])
+        by smtp.gmail.com with ESMTPSA id y18-20020a05622a121200b002f90a33c78csm10673903qtx.67.2022.06.28.15.51.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 15:50:05 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 18:50:03 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Linux MM Mailing List <linux-mm@kvack.org>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH 2/4] kvm: Merge "atomic" and "write" in
- __gfn_to_pfn_memslot()
-Message-ID: <YruFm8vJMPxVUJTO@xz-m1.local>
-References: <20220622213656.81546-1-peterx@redhat.com>
- <20220622213656.81546-3-peterx@redhat.com>
- <c047c213-252b-4a0b-9720-070307962d23@nvidia.com>
- <Yrtar+i2X0YjmD/F@xz-m1.local>
- <02831f10-3077-8836-34d0-bb853516099f@nvidia.com>
+        Tue, 28 Jun 2022 15:51:38 -0700 (PDT)
+Message-ID: <a9b1cc1bdc9830a6fd368c87fd514c7e560139f0.camel@redhat.com>
+Subject: Re: [PATCH] gpu: drm: selftests: drop unexpected word 'for' in
+ comments
+From:   Lyude Paul <lyude@redhat.com>
+To:     Jiang Jian <jiangjian@cdjrlc.com>, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     javierm@redhat.com, alexander.deucher@amd.com,
+        jose.exposito89@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 28 Jun 2022 18:51:36 -0400
+In-Reply-To: <1bce93a46a6ff3ec5b228ea390ba7257f4512480.camel@redhat.com>
+References: <20220623100632.27056-1-jiangjian@cdjrlc.com>
+         <1f196235b92e4123ce171980dd7bdbfe9bb0e055.camel@redhat.com>
+         <1bce93a46a6ff3ec5b228ea390ba7257f4512480.camel@redhat.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <02831f10-3077-8836-34d0-bb853516099f@nvidia.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,53 +85,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 02:52:04PM -0700, John Hubbard wrote:
-> On 6/28/22 12:46, Peter Xu wrote:
-> > I'd try to argu with "I prefixed it with kvm_", but oh well.. yes they're a
-> > bit close :)
+Oh-it's back up now! will push now :)
+
+On Tue, 2022-06-28 at 17:35 -0400, Lyude Paul wrote:
+> …ah, I totally forgot that gitlab happens to be down right now which part of
+> the DRM maintainer scripts rely on - so I can't actually push this patch
+> upstream right away. I will set this email as unread so hopefully I don't
+> lose
+> track of this, but please feel free to ping me if I do end up forgetting.
+> 
+> On Tue, 2022-06-28 at 17:32 -0400, Lyude Paul wrote:
+> > Reviewed-by: Lyude Paul <lyude@redhat.com>
 > > 
+> > Going to change the name of the patch slightly so it's more obvious this
+> > is
+> > just about the MST selftests
+> > 
+> > On Thu, 2022-06-23 at 18:06 +0800, Jiang Jian wrote:
+> > > there is an unexpected word 'for' in the comments that need to be
+> > > dropped
 > > > 
-> > > Yes, "read the code", but if you can come up with a better TLA than GTP
-> > > here, let's consider using it.
+> > > file - ./drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
+> > > line - 3
+> > > 
+> > > * Test cases for for the DRM DP MST helpers
+> > > 
+> > > changed to:
+> > > 
+> > > * Test cases for the DRM DP MST helpers
+> > > 
+> > > Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+> > > ---
+> > >  drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
+> > > b/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
+> > > index 967c52150b67..4caa9be900ac 100644
+> > > --- a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
+> > > +++ b/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
+> > > @@ -1,6 +1,6 @@
+> > >  // SPDX-License-Identifier: GPL-2.0-only
+> > >  /*
+> > > - * Test cases for for the DRM DP MST helpers
+> > > + * Test cases for the DRM DP MST helpers
+> > >   */
+> > >  
+> > >  #define PREFIX_STR "[drm_dp_mst_helper]"
 > > 
-> > Could I ask what's TLA?  Any suggestions on the abbrev, btw?
 > 
-> "Three-Letter Acronym". I love "TLA" because the very fact that one has
-> to ask what it means, shows why using them makes it harder to communicate. :)
-
-Ha!
-
-> 
-> As for alternatives, here I'll demonstrate that "GTP" actually is probably
-> better than anything else I can come up with, heh. Brainstorming:
-> 
->     * GPN ("Guest pfn to pfn")
->     * GTPN (similar, but with a "T" for "to")
->     * GFNC ("guest frame number conversion")
-
-Always a challenge on the naming kongfu. :-D
-
-One good thing on using TLA in macros, flags and codes (rather than simply
-mention some three letters): we can easily jump to the label of any of the
-flags when we want to figure out what it means, and logically there'll (and
-should) be explanations of the abbrev in the headers if it's a good header.
-
-Example: it's even not easy to figure out what GFP is in GFP_KERNEL flag
-for someone not familiar with mm (when I wrote this line, I got lost!), but
-when that happens we do jump label and at the entry of gfp.h we'll see:
-
- * ...  The GFP acronym stands for get_free_pages(),
-
-And if you see the patch I actually did something similar (in kvm_host.h):
-
- /* gfn_to_pfn (gtp) flags */
- ...
-
-I'd still go for GTP, but let me know if you think any of the above is
-better, I can switch.
-
-Thanks,
 
 -- 
-Peter Xu
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 

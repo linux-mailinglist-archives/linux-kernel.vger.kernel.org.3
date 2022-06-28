@@ -2,173 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB65955EF97
+	by mail.lfdr.de (Postfix) with ESMTP id A2D9555EF96
 	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232655AbiF1U1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 16:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
+        id S232577AbiF1U2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 16:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbiF1U1L (ORCPT
+        with ESMTP id S233912AbiF1U2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 16:27:11 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2130.outbound.protection.outlook.com [40.107.93.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09D63EABF;
-        Tue, 28 Jun 2022 13:24:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XnO57DEwj35vub4VodnFZrr5FiSDqVLyrDXyJfPKWG2fy7VWQQkC8tSHFHvVT6x7kRxLhcTedCa3Uis11Nkh4FFrXOfQ1babWfmJD3l997r2cpLLaEqf09b+Wajvaazjm5qYPTDAKt4M1t2CSOw9U0fb75gphcvVxci4pf7Dr0XMTR1o87tlTCccbtBFgnoIrQMpkNEEyRXS8QXRyLkxSNjXzLcQWfj9mdOrvcKcXPSs+ZlGCXE0SMyA/FjbFT0aRIFvxkEscKI/gayAizAjkp34ziu3UFDhnF39tk82G9eQrQL8UTDxzHSL0dY813ygmQI0/nhSmSDwk3lLpcvHow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hhxSz/WXvqXBlexHjsl4bwD90IyLpxEGog6zAE6q94I=;
- b=m33UyivZpXCKoT1ZMoIpxMgPcVc3N3kOKtGMqNnxYwIK2eYRyt/bJYWldGGhkZ36KOn4l8+8/tGn4h8QPjn2cUcw1aKzs2tpuZRn4XQCxxXnNmjcGE59jYyhcAn4Ib8qpw+DcyBShchEn5Ocbe9ZdGtVgtHFYIYtbTHHa6XpfsY7afswA1aLNNwyHHYhVvrXnMfRgKZAW5juB8EYFeOO/RRni+wz72HW/KYpfDx1qyKeh3zypN203qT10DV3hs2gErTOHldIJzQHK0If4ShccsJ0CuY6pyEujY14GRh9n4kOxLspdwugSWUd237aVgNemIt5/QhH+JRErCyHamZpgg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+        Tue, 28 Jun 2022 16:28:18 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5D91C937
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:25:38 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id z66so13143979vsb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:25:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hhxSz/WXvqXBlexHjsl4bwD90IyLpxEGog6zAE6q94I=;
- b=IDj4KoSB88qmk7P56M05i5CriEtI+ow/aCy4T8jyM0Wn9SiYO5GTe5O+27XNrBpBNyxGPbDbuvs2rpiMm+1e/wmBVe0zHnVreWqQ3TIvTLkYZW8nYBk3VhXvIMmzhf5MnO2h2i/+h71R1PklwbGhQ5WGg1ANB7bR9RoK9LwWKcs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by CY4PR10MB1544.namprd10.prod.outlook.com
- (2603:10b6:903:2b::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Tue, 28 Jun
- 2022 20:24:25 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::712f:6916:3431:e74e]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::712f:6916:3431:e74e%6]) with mapi id 15.20.5373.018; Tue, 28 Jun 2022
- 20:24:25 +0000
-Date:   Tue, 28 Jun 2022 13:24:22 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v11 net-next 9/9] mfd: ocelot: add support for the
- vsc7512 chip via spi
-Message-ID: <20220628202422.GF855398@euler>
-References: <20220628081709.829811-1-colin.foster@in-advantage.com>
- <20220628081709.829811-10-colin.foster@in-advantage.com>
- <ddb01b36-1369-f0e3-49ab-3c0a571fe708@infradead.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ddb01b36-1369-f0e3-49ab-3c0a571fe708@infradead.org>
-X-ClientProxiedBy: MWHPR21CA0056.namprd21.prod.outlook.com
- (2603:10b6:300:db::18) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Enhe/nonN+cjOXq0VkfmEAmv3jt9mvt8AKrDL/yyTa4=;
+        b=Rx5Sf1FiofQmqFlsHUKetNpDiqLe6X3tIU4aiSmJvBRAYqoE9sL+qBVERKwWnwMfbx
+         I3T5xfw85xlU+iQZvHg7QGgJTVPand15b7S3gi8JQu+bZLutZokdnkvKhRd1XxhASkYL
+         4k4P4r012MlC/z4Mp/mwZFm4pIqsvPQF/oNQHsI5xhcJhw6KKsOLEwgzXhXrsMW7Ip5e
+         15oSy2weWA5aVhX0PBO0xv1S9Rw+NF7vPODlhu2oWBrTK457zvxzlehOW8tr50P0g5Rl
+         zE3cZ8Y/4hwS7mUAyetOFxPq0PwO1r5FETxIAUhQY5LtVkYx0xQMaRv/z5ov1cwqbv17
+         ep2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Enhe/nonN+cjOXq0VkfmEAmv3jt9mvt8AKrDL/yyTa4=;
+        b=r45JprW8DalRaCgDLRs8PW+waSpV3R1emKS7IK/vIhEmyYsM18z8eJVdPfYWnj8enn
+         kvLEkEoWt2fCWywS8CMRsmEGrtv9i4CZwKdT9LNAmAVwnfMnmMdqt7BKu7wmj38B+lDg
+         EXtE9rMIQ1Qg2SWtR5q36QXB4u0xy59qyV8V7tC2qMvv16bX0w5VbBHlPAFWAJD/hvQ6
+         txf2tY0NoRzQR+cgpR0q5ywxMp4baTaoh2v4sgTwyEC61Brd1I02w++7hWk7ZUtX7S06
+         QpktiKU4vREqgAw59MG/F/LyEHIkJ6qmSQdVBOpBCE8t9K8qd+IkqSDMoElMK5mvamQs
+         Wsuw==
+X-Gm-Message-State: AJIora/7I+IRSc+Ss6fGr2dEenwbW84U8uEc7doGdDe8B82AmwNzdcze
+        OLajhdNYmIUoCQwICb+Yimv3LLKkooiabbbs8pgwAw==
+X-Google-Smtp-Source: AGRyM1t0zvxZV+6K5EnJlEG+JRDrvBQyifa/s+ZMlTRWe7hYhBOlX03K5Qu9qT+JlLR85kbBFRgfWQiHtCZKYj80XRI=
+X-Received: by 2002:a05:6102:f81:b0:354:3967:118a with SMTP id
+ e1-20020a0561020f8100b003543967118amr2538942vsv.67.1656447937672; Tue, 28 Jun
+ 2022 13:25:37 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 301a6289-5e84-43fe-063a-08da594431b8
-X-MS-TrafficTypeDiagnostic: CY4PR10MB1544:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I64Zfutwp0eG8T55h5DQ62Y1FrMKsp+V6db6PuqgsGrZiKq3lt/tyNvDX1V3p+xI8SOtGSPnG5dlB5Wf9e91zhaPw15BPGddYG5vgkeLPKBgNIZ8wYNHHPsHDDJZDuCGvE0TBhmV0oSgYmzkUBGWFnszrbYskbQQf/tgOIoWvEZFCOZQ31mfQ5a5bSZ8RFME5thRjQ68OL21xqQXh2+KEZkWVdLqzrykCDCTFBZTBgXrj9DFC8KILxoh+tef3ndojHZWr6gQ+OhGj2C7RTkUYzac0YQRUBCDIgrspmBl6YSbKSKcEp8sPCf6bEgZqVVEsKH7pBHG+4rEGO3HBU93GIIIfPed7V2+fuckQIuozKX55Pr42L+W6YfHipLlBBOLXOoOWJR/gGBdBfb7+fOZZJZNzGZKEYB2aFp/qkM1m/+L8Oyp6XykpbvUHquR9BYi+ac61oCz/Xax/xQl4qhPrXmZTzDefZyaUOBbfrp7nfKH3JxkQgHGHT92UwpbKM+vyJ/9kQE7pwA93JY5gGV+gjbJH9XmjKK/4YYsfHUveZjg7/FEqgExOk/wXMh07+SADKFkI069vZsYCDMBp+HjYhoypydGuXZkPEpiHSdYH5fWS0bI1Ldyspy532sqKqu6QdFJ5L/aVuu0U3TrH/eHE/R2CGbzC60oA8kJm4PncpNPthjlHnJlvQQT4eQMmT4z19JqasDlczkHPP0Bdvd5LyGeYqQ+QtFChmLtZWVC9Im4gr9J21yQGEuMIBQCMsMlhWG/PcpknDcHp7PRgxr5/lx+2RlsFP7TajzNxXEo1FA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(39840400004)(346002)(366004)(396003)(136003)(376002)(38350700002)(6916009)(44832011)(2906002)(54906003)(6666004)(6486002)(1076003)(38100700002)(316002)(186003)(7416002)(478600001)(6506007)(8936002)(86362001)(33716001)(5660300002)(53546011)(52116002)(4326008)(33656002)(66476007)(26005)(8676002)(41300700001)(9686003)(66946007)(66556008)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?65ZqCL/i7gj/yfAdP58el4rKTuMIM2wI0g5EL9O4Y5LeUIXFHBuTWYwT+jQv?=
- =?us-ascii?Q?ee024mhApTZElF5f7XENDSM6FFVGwNvvLp9lz2ZD35IKMKTW6ppEX1jerYPX?=
- =?us-ascii?Q?SeNE3mrRS36OjmeF39S0qB4aOEwav3sd2pCAmpjahjlYLPqMX7YdVtSANUyz?=
- =?us-ascii?Q?1/3TylEJvso5a5knxOfrY2AXY1bMd3COJuZJGzqVD2KvVNCo5Z9L9+vmVVKj?=
- =?us-ascii?Q?SgK3A8qhp4PfmUAenwqWFv5asAnZ+/ftp20NTJIY0Eht8FxypKJ/FQQtgwIE?=
- =?us-ascii?Q?SCJcsOayYKKuJY6XENUXmY4a8cRycDeVjpR5m0oeoGYL1BlGJX3eXWWLJHY9?=
- =?us-ascii?Q?OWj2LudFy8bscqFv+icMtr0r3jaqPzLf7ezRYhpxSRCLxxh+khQ9bernE3GD?=
- =?us-ascii?Q?XfTJmRiykG3HpQCRxPkfFyjXcD/YzNik1A0MgSF/IL/czt1+aMqBQsO5YwQU?=
- =?us-ascii?Q?31tApU26va2VG4J18qIoXZvIBhwNDf4hsw58ZD1x33Enan3TmJ0lN3hPKXN6?=
- =?us-ascii?Q?cay8BF6O/iHFCVc9iQYFuczvR9IttsGy98nqO7q31MQVSz+ls4nj0GNXRW1+?=
- =?us-ascii?Q?L6cCzV81mtj+8mv2nJOiYzaK54Rvwfw5BONpTb0/dERkII8LgmQjgYTiL6Ya?=
- =?us-ascii?Q?vaIAu9wjqMtGHJn4ri5AONkBv1NHS2eAxOkW5CBeP8x3ZeZfx4c50reGIRvT?=
- =?us-ascii?Q?eFwoXBuiCOwwLZ/2uAXqNDFJGt6CzYRUr4Vrajqt8vDVziHG3INE2e7fZL1h?=
- =?us-ascii?Q?IhMrbdLH9Bc1A/fbfzMZeJVWdNUIQhwKEbgsoAQG4IHFkT8YPa2Q2Te6kegh?=
- =?us-ascii?Q?tvd3igMpZl0v+nUI1W6dDT0eVED4DLbyZFuuU59pHWm1NPQF6nYoggkSurFe?=
- =?us-ascii?Q?9Bca6zIOQMXJl4mKceJtJ+kFXkLnwq62IaSWhTpcC29XWL5HX+UitCriaOyD?=
- =?us-ascii?Q?7ZvFOVKekhJiqIBusSdZ3I+99w24AMoXkTsoZs58+XGZJw2Y2AwPpiXNhXgM?=
- =?us-ascii?Q?x95zUsCBE8AA47DRncTReC3+FiK5U/dYmlk/SM1SR25H652N1yhuE/1Wkthx?=
- =?us-ascii?Q?83AmY8cx1b+Ev467+Zu2iXPPP2aSPh3zCpiXfD0KT+R9KDXNYA8IIeQ0GWHM?=
- =?us-ascii?Q?hiK+FnQJcCpgSimGTQNpC3++8aUNGZl062VPg2oRlkysgV4+kUCgrX8IQvSx?=
- =?us-ascii?Q?KqdQgAxAymUKaotLAc3LzGBz39kQfZQ169RoSRZ2i29S2TmSYGYS0LxzUqZs?=
- =?us-ascii?Q?+a8wwSVVXQ9ikKfjBD/TyIANhO4R9HRK4isB+wwJEB0DCb9PfaFj/FR9AIN5?=
- =?us-ascii?Q?L/mbaPG6FPTDz/Mg9rIWuJ7ycNK8AhLvaqE11v72IzABzGnqhAUckGKvd0rV?=
- =?us-ascii?Q?cGSLRv/dSyD633d9m+Jjxle6oxMgT5RbPTzzM0Hkeq7WbdHwWDQmIU9SYRtM?=
- =?us-ascii?Q?obsb7GYAvxnNfVPr4+wuXZyUYxr3INZV4eF9dRzUdC6k0mYgxPp4D51wFwCi?=
- =?us-ascii?Q?P5u4V2ytdx+CgVCnwNHuBhlfu4zsmzS67h029veMxkCeQykPVcr2zV4JiGwi?=
- =?us-ascii?Q?PKJ46kdm/7RA4L22Z50nhyRc6YWK6/7wEN+gN9qPfBJvwozStAQJn0VJp6lI?=
- =?us-ascii?Q?NHGXglyjUU/P1QPq1yBUH20=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 301a6289-5e84-43fe-063a-08da594431b8
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 20:24:25.5325
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lK+IidhfyQPlFflwvUaOjeitFbCmBQznb3Q7PnId/ke7pR4bOLf+e9jg5E4vM3fW+8fv8z95I1XL2NNmTvNmgVhZqZUT9oWZ9Ma5F3Y3PcI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1544
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220624173656.2033256-1-jthoughton@google.com> <20220624173656.2033256-8-jthoughton@google.com>
+In-Reply-To: <20220624173656.2033256-8-jthoughton@google.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Tue, 28 Jun 2022 13:25:26 -0700
+Message-ID: <CAHS8izM-xWCA6EuZP4=n3sg4OSVuD_NMJS6gCZHbLs7YN8Z+cg@mail.gmail.com>
+Subject: Re: [RFC PATCH 07/26] hugetlb: add hugetlb_pte to track HugeTLB page
+ table entries
+To:     James Houghton <jthoughton@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Jue Wang <juew@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 01:07:51PM -0700, Randy Dunlap wrote:
-> 
-> 
-> On 6/28/22 01:17, Colin Foster wrote:
-> > --- a/drivers/mfd/Kconfig
-> > +++ b/drivers/mfd/Kconfig
-> > @@ -962,6 +962,24 @@ config MFD_MENF21BMC
-> >  	  This driver can also be built as a module. If so the module
-> >  	  will be called menf21bmc.
-> >  
-> > +config MFD_OCELOT
-> > +	bool "Microsemi Ocelot External Control Support"
-> > +	depends on SPI_MASTER
-> > +	select MFD_CORE
-> > +	select REGMAP_SPI
-> > +	help
-> > +	  Ocelot is a family of networking chips that support multiple ethernet
-> > +	  and fibre interfaces. In addition to networking, they contain several
-> > +	  other functions, including pictrl, MDIO, and communication with
-> 
-> 	Is that                      pinctrl,
-> ?
+On Fri, Jun 24, 2022 at 10:37 AM James Houghton <jthoughton@google.com> wrote:
+>
+> After high-granularity mapping, page table entries for HugeTLB pages can
+> be of any size/type. (For example, we can have a 1G page mapped with a
+> mix of PMDs and PTEs.) This struct is to help keep track of a HugeTLB
+> PTE after we have done a page table walk.
+>
+> Without this, we'd have to pass around the "size" of the PTE everywhere.
+> We effectively did this before; it could be fetched from the hstate,
+> which we pass around pretty much everywhere.
+>
+> This commit includes definitions for some basic helper functions that
+> are used later. These helper functions wrap existing PTE
+> inspection/modification functions, where the correct version is picked
+> depending on if the HugeTLB PTE is actually "huge" or not. (Previously,
+> all HugeTLB PTEs were "huge").
+>
+> For example, hugetlb_ptep_get wraps huge_ptep_get and ptep_get, where
+> ptep_get is used when the HugeTLB PTE is PAGE_SIZE, and huge_ptep_get is
+> used in all other cases.
+>
+> Signed-off-by: James Houghton <jthoughton@google.com>
+> ---
+>  include/linux/hugetlb.h | 84 +++++++++++++++++++++++++++++++++++++++++
+>  mm/hugetlb.c            | 57 ++++++++++++++++++++++++++++
+>  2 files changed, 141 insertions(+)
+>
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index 5fe1db46d8c9..1d4ec9dfdebf 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -46,6 +46,68 @@ enum {
+>         __NR_USED_SUBPAGE,
+>  };
+>
+> +struct hugetlb_pte {
+> +       pte_t *ptep;
+> +       unsigned int shift;
+> +};
+> +
+> +static inline
+> +void hugetlb_pte_init(struct hugetlb_pte *hpte)
+> +{
+> +       hpte->ptep = NULL;
 
-Yep. Good catch. Thanks!
+shift = 0; ?
 
-> 
-> > +	  external chips. While some chips have an internal processor capable of
-> > +	  running an OS, others don't. All chips can be controlled externally
-> > +	  through different interfaces, including SPI, I2C, and PCIe.
-> > +
-> > +	  Say yes here to add support for Ocelot chips (VSC7511, VSC7512,
-> > +	  VSC7513, VSC7514) controlled externally.
-> > +
-> > +	  If unsure, say N.
-> 
-> -- 
-> ~Randy
+> +}
+> +
+> +static inline
+> +void hugetlb_pte_populate(struct hugetlb_pte *hpte, pte_t *ptep,
+> +                         unsigned int shift)
+> +{
+> +       BUG_ON(!ptep);
+> +       hpte->ptep = ptep;
+> +       hpte->shift = shift;
+> +}
+> +
+> +static inline
+> +unsigned long hugetlb_pte_size(const struct hugetlb_pte *hpte)
+> +{
+> +       BUG_ON(!hpte->ptep);
+> +       return 1UL << hpte->shift;
+> +}
+> +
+
+This helper is quite redundant in my opinion.
+
+> +static inline
+> +unsigned long hugetlb_pte_mask(const struct hugetlb_pte *hpte)
+> +{
+> +       BUG_ON(!hpte->ptep);
+> +       return ~(hugetlb_pte_size(hpte) - 1);
+> +}
+> +
+> +static inline
+> +unsigned int hugetlb_pte_shift(const struct hugetlb_pte *hpte)
+> +{
+> +       BUG_ON(!hpte->ptep);
+> +       return hpte->shift;
+> +}
+> +
+
+This one jumps as quite redundant too.
+
+> +static inline
+> +bool hugetlb_pte_huge(const struct hugetlb_pte *hpte)
+> +{
+> +       return !IS_ENABLED(CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING) ||
+> +               hugetlb_pte_shift(hpte) > PAGE_SHIFT;
+> +}
+> +
+
+I'm guessing the !IS_ENABLED() check is because only the HGM code
+would store a non-huge pte in a hugetlb_pte struct. I think it's a bit
+fragile because anyone can add code in the future that uses
+hugetlb_pte in unexpected ways, but I will concede that it is correct
+as written.
+
+> +static inline
+> +void hugetlb_pte_copy(struct hugetlb_pte *dest, const struct hugetlb_pte *src)
+> +{
+> +       dest->ptep = src->ptep;
+> +       dest->shift = src->shift;
+> +}
+> +
+> +bool hugetlb_pte_present_leaf(const struct hugetlb_pte *hpte);
+> +bool hugetlb_pte_none(const struct hugetlb_pte *hpte);
+> +bool hugetlb_pte_none_mostly(const struct hugetlb_pte *hpte);
+> +pte_t hugetlb_ptep_get(const struct hugetlb_pte *hpte);
+> +void hugetlb_pte_clear(struct mm_struct *mm, const struct hugetlb_pte *hpte,
+> +                      unsigned long address);
+> +
+>  struct hugepage_subpool {
+>         spinlock_t lock;
+>         long count;
+> @@ -1130,6 +1192,28 @@ static inline spinlock_t *huge_pte_lock_shift(unsigned int shift,
+>         return ptl;
+>  }
+>
+> +static inline
+
+Maybe for organization, move all the static functions you're adding
+above the hugetlb_pte_* declarations you're adding?
+
+> +spinlock_t *hugetlb_pte_lockptr(struct mm_struct *mm, struct hugetlb_pte *hpte)
+> +{
+> +
+> +       BUG_ON(!hpte->ptep);
+> +       // Only use huge_pte_lockptr if we are at leaf-level. Otherwise use
+> +       // the regular page table lock.
+
+Does checkpatch.pl not complain about // style comments? I think those
+are not allowed, no?
+
+> +       if (hugetlb_pte_none(hpte) || hugetlb_pte_present_leaf(hpte))
+> +               return huge_pte_lockptr(hugetlb_pte_shift(hpte),
+> +                               mm, hpte->ptep);
+> +       return &mm->page_table_lock;
+> +}
+> +
+> +static inline
+> +spinlock_t *hugetlb_pte_lock(struct mm_struct *mm, struct hugetlb_pte *hpte)
+> +{
+> +       spinlock_t *ptl = hugetlb_pte_lockptr(mm, hpte);
+> +
+> +       spin_lock(ptl);
+> +       return ptl;
+> +}
+> +
+>  #if defined(CONFIG_HUGETLB_PAGE) && defined(CONFIG_CMA)
+>  extern void __init hugetlb_cma_reserve(int order);
+>  extern void __init hugetlb_cma_check(void);
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index d6d0d4c03def..1a1434e29740 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -1120,6 +1120,63 @@ static bool vma_has_reserves(struct vm_area_struct *vma, long chg)
+>         return false;
+>  }
+>
+> +bool hugetlb_pte_present_leaf(const struct hugetlb_pte *hpte)
+> +{
+> +       pgd_t pgd;
+> +       p4d_t p4d;
+> +       pud_t pud;
+> +       pmd_t pmd;
+> +
+> +       BUG_ON(!hpte->ptep);
+> +       if (hugetlb_pte_size(hpte) >= PGDIR_SIZE) {
+> +               pgd = *(pgd_t *)hpte->ptep;
+> +               return pgd_present(pgd) && pgd_leaf(pgd);
+> +       } else if (hugetlb_pte_size(hpte) >= P4D_SIZE) {
+> +               p4d = *(p4d_t *)hpte->ptep;
+> +               return p4d_present(p4d) && p4d_leaf(p4d);
+> +       } else if (hugetlb_pte_size(hpte) >= PUD_SIZE) {
+> +               pud = *(pud_t *)hpte->ptep;
+> +               return pud_present(pud) && pud_leaf(pud);
+> +       } else if (hugetlb_pte_size(hpte) >= PMD_SIZE) {
+> +               pmd = *(pmd_t *)hpte->ptep;
+> +               return pmd_present(pmd) && pmd_leaf(pmd);
+> +       } else if (hugetlb_pte_size(hpte) >= PAGE_SIZE)
+> +               return pte_present(*hpte->ptep);
+
+The use of >= is a bit curious to me. Shouldn't these be ==?
+
+Also probably doesn't matter but I was thinking to use *_SHIFTs
+instead of *_SIZE so you don't have to calculate the size 5 times in
+this routine, or calculate hugetlb_pte_size() once for some less code
+duplication and re-use?
+
+> +       BUG();
+> +}
+> +
+> +bool hugetlb_pte_none(const struct hugetlb_pte *hpte)
+> +{
+> +       if (hugetlb_pte_huge(hpte))
+> +               return huge_pte_none(huge_ptep_get(hpte->ptep));
+> +       return pte_none(ptep_get(hpte->ptep));
+> +}
+> +
+> +bool hugetlb_pte_none_mostly(const struct hugetlb_pte *hpte)
+> +{
+> +       if (hugetlb_pte_huge(hpte))
+> +               return huge_pte_none_mostly(huge_ptep_get(hpte->ptep));
+> +       return pte_none_mostly(ptep_get(hpte->ptep));
+> +}
+> +
+> +pte_t hugetlb_ptep_get(const struct hugetlb_pte *hpte)
+> +{
+> +       if (hugetlb_pte_huge(hpte))
+> +               return huge_ptep_get(hpte->ptep);
+> +       return ptep_get(hpte->ptep);
+> +}
+> +
+> +void hugetlb_pte_clear(struct mm_struct *mm, const struct hugetlb_pte *hpte,
+> +                      unsigned long address)
+> +{
+> +       BUG_ON(!hpte->ptep);
+> +       unsigned long sz = hugetlb_pte_size(hpte);
+> +
+> +       if (sz > PAGE_SIZE)
+> +               return huge_pte_clear(mm, address, hpte->ptep, sz);
+> +       return pte_clear(mm, address, hpte->ptep);
+> +}
+> +
+>  static void enqueue_huge_page(struct hstate *h, struct page *page)
+>  {
+>         int nid = page_to_nid(page);
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
+>

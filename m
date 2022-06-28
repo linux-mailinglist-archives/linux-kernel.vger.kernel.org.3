@@ -2,96 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14BB955E4B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3CAA55E4AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346231AbiF1Ncz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
+        id S1346557AbiF1NcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345929AbiF1NcS (ORCPT
+        with ESMTP id S237387AbiF1Nbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:32:18 -0400
-Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBDC2D1C2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:31:29 -0700 (PDT)
-X-QQ-mid: bizesmtp78t1656423065tqijenko
-Received: from localhost.localdomain ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 28 Jun 2022 21:31:03 +0800 (CST)
-X-QQ-SSF: 01400000002000G0S000B00A0000000
-X-QQ-FEAT: 4LFlwc+MlXnChWxg3oOtFJfgLn7urosoV/9rl2dk+8gxm5PSaDOW+ATgGdXwo
-        1IlJfMixzWnih6orY1V4z0UOzxhXvTCzfAUZ5HQKKsWoXzXWLJSV6hj82Ewlhe6nXlzbhE/
-        gmpovedVoA+2a1DSkKh0O1gF2SOzV9Bbj74Y9i0f2ZnNJePqj8IfLgYGM6/seRHjhJ00lfz
-        X2U54K7QgtGv1OrM2Kfs/myObSwpHy/KPU2kERdkMEvEpvmdNRIoKl8XUXdRBPZCGnSTuVr
-        aqeBsfjzn2NUxh7ntPzdsf+2fFv7n5Pmp7HeVJ4ICGvnZlqQUwT2UohDM5ZEByThQqk+oh1
-        /OYA+IUyCrJjYMUYAOx6G2/0Rc9grKYQUg/fXrsG2ZMY4zZg4eLpiy3C1tZEXaH32erz1D8
-X-QQ-GoodBg: 2
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     stable@vger.kernel.org, tony0620emma@gmail.com,
-        kvalo@codeaurora.org, davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Meng Tang <tangmeng@uniontech.com>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        masterzorag <masterzorag@gmail.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 5.10 3/3] commit e109e3617e5d ("rtw88: rtw8821c: enable rfe 6 devices")
-Date:   Tue, 28 Jun 2022 21:30:46 +0800
-Message-Id: <20220628133046.2474-3-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220628133046.2474-1-tangmeng@uniontech.com>
-References: <20220628133046.2474-1-tangmeng@uniontech.com>
+        Tue, 28 Jun 2022 09:31:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B507A2A71F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:31:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656423064;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=u55Q3Jca+qOXXIBqB4TXnLGHs1HcaTUob8yIUpePALU=;
+        b=Oo5Q5GO05igY7JAInvgV1GFWRYtG1zmsJEq1IqSdfaGJPvCCn4zqjTTeosmBWLPMrhL7sB
+        o90BcRVm0ieMgzxV6zfJG59lRm9SQd6JDebJhsHCCM2Od+UInqSh2oRI79DfSr1u1diWf5
+        Shoh0PPis6rNnbLRfNrXPAObpUqpfA0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-325-i5Y-yA-hNpycuk-FDu2J_Q-1; Tue, 28 Jun 2022 09:31:00 -0400
+X-MC-Unique: i5Y-yA-hNpycuk-FDu2J_Q-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A4D5811E80;
+        Tue, 28 Jun 2022 13:31:00 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.192.126])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1503E2026D07;
+        Tue, 28 Jun 2022 13:30:57 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86: Fully initialize 'struct kvm_lapic_irq' in kvm_pv_kick_cpu_op()
+Date:   Tue, 28 Jun 2022 15:30:57 +0200
+Message-Id: <20220628133057.107344-1-vkuznets@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign10
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,PDS_BTC_ID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These commits can fix the problem of wifi not loading properly, so I think
-that 5.10 need to merge these commits.
+'vector' and 'trig_mode' fields of 'struct kvm_lapic_irq' are left
+uninitialized in kvm_pv_kick_cpu_op(). While these fields are normally
+not needed for APIC_DM_REMRD, they're still referenced by
+__apic_accept_irq() for trace_kvm_apic_accept_irq(). Fully initialize
+the structure to avoid consuming random stack memory.
 
-Ping-Ke Shih answered[1] a question for a user about an rtl8821ce device that
-reported RFE 6, which the driver did not support. Ping-Ke suggested a possible
-fix, but the user never reported back.
-
-A second user discovered the above thread and tested the proposed fix.
-Accordingly, I am pushing this change, even though I am not the author.
-
-[1] https://lore.kernel.org/linux-wireless/3f5e2f6eac344316b5dd518ebfea2f95@realtek.com/
-
-Signed-off-by: Ping-Ke Shih <pkshih@realtek.com>
-Reported-and-tested-by: masterzorag <masterzorag@gmail.com>
-Signed-off-by: Larry Finger <Larry.Finger@lwfinger.net>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220107024739.20967-1-Larry.Finger@lwfinger.net
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+Fixes: a183b638b61c ("KVM: x86: make apic_accept_irq tracepoint more generic")
+Reported-by: syzbot+d6caa905917d353f0d07@syzkaller.appspotmail.com
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 ---
- drivers/net/wireless/realtek/rtw88/rtw8821c.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/kvm/x86.c | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/wireless/realtek/rtw88/rtw8821c.c b/drivers/net/wireless/realtek/rtw88/rtw8821c.c
-index 9c8fbc96f536..cbb4c761c5cb 100644
---- a/drivers/net/wireless/realtek/rtw88/rtw8821c.c
-+++ b/drivers/net/wireless/realtek/rtw88/rtw8821c.c
-@@ -1468,6 +1468,7 @@ static const struct rtw_rfe_def rtw8821c_rfe_defs[] = {
- 	[0] = RTW_DEF_RFE(8821c, 0, 0),
- 	[2] = RTW_DEF_RFE_EXT(8821c, 0, 0, 2),
- 	[4] = RTW_DEF_RFE_EXT(8821c, 0, 0, 2),
-+	[6] = RTW_DEF_RFE(8821c, 0, 0),
- };
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 567d13405445..8a98608dad4f 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -9340,15 +9340,17 @@ static int kvm_pv_clock_pairing(struct kvm_vcpu *vcpu, gpa_t paddr,
+  */
+ static void kvm_pv_kick_cpu_op(struct kvm *kvm, int apicid)
+ {
+-	struct kvm_lapic_irq lapic_irq;
+-
+-	lapic_irq.shorthand = APIC_DEST_NOSHORT;
+-	lapic_irq.dest_mode = APIC_DEST_PHYSICAL;
+-	lapic_irq.level = 0;
+-	lapic_irq.dest_id = apicid;
+-	lapic_irq.msi_redir_hint = false;
++	struct kvm_lapic_irq lapic_irq = {
++		.vector = 0,
++		.delivery_mode = APIC_DM_REMRD,
++		.dest_mode = APIC_DEST_PHYSICAL,
++		.level = false,
++		.trig_mode = 0,
++		.shorthand = APIC_DEST_NOSHORT,
++		.dest_id = apicid,
++		.msi_redir_hint = false
++	};
  
- static struct rtw_hw_reg rtw8821c_dig[] = {
+-	lapic_irq.delivery_mode = APIC_DM_REMRD;
+ 	kvm_irq_delivery_to_apic(kvm, NULL, &lapic_irq, NULL);
+ }
+ 
 -- 
-2.20.1
-
-
+2.35.3
 

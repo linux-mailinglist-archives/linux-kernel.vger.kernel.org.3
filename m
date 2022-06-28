@@ -2,174 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 847EB55CB4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F8D55D3AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343904AbiF1KqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 06:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
+        id S1344598AbiF1Kq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 06:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234570AbiF1Kp7 (ORCPT
+        with ESMTP id S245128AbiF1KqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:45:59 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E2331371;
-        Tue, 28 Jun 2022 03:45:56 -0700 (PDT)
-Received: from [192.168.100.1] ([82.142.8.70]) by mrelayeu.kundenserver.de
- (mreue109 [213.165.67.119]) with ESMTPSA (Nemesis) id
- 1MxUfn-1nhyxm1aHp-00xq4l; Tue, 28 Jun 2022 12:45:47 +0200
-Message-ID: <0be5b3e4-8aed-8f38-e7bd-f00c2323f78d@vivier.eu>
-Date:   Tue, 28 Jun 2022 12:45:46 +0200
+        Tue, 28 Jun 2022 06:46:25 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D8831508
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:46:24 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id r133so12426615iod.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:46:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zHrjPVariWqGD9Q0+OudpM/sw+FFCFuadlVMWQsqTbE=;
+        b=7uLWxfmogEqEQs6CDYy12pFrIckdQswPGQ/PmdtKohFpd5A4vAymdPp4tPXRXao1Hb
+         M78IM9YF3ARRDFOuC4xdfDLndyiRNLWnMtI/kUdIvKQ5Suqx9PuUyG0xlKwM7cETqBe5
+         KKUpVaTCLIhrT+s/91NdvoOvAv2czxoTZivfvjW9GkXdVJyjC+iTdvqzasSho6tuX6H2
+         dJ99OflOb7uWY9QDNSMfdmhHrCj2RypclJnpcZ7R/Ik/XJT/aSu1O1+vZwJCL2ZmWTrS
+         dO22wdvWZVzN5pt34S6In2Tc40YxODjfO6jeQtGd+Nct+MUoFvfRuj0YNwcjTIy+cuiF
+         ImUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zHrjPVariWqGD9Q0+OudpM/sw+FFCFuadlVMWQsqTbE=;
+        b=rfjhwSXa66VcbS3P5WMvwjtpG7e5/FZmu5yZAu+F3WJS6DtyTDAH+/g5w6BEEKkvkq
+         /wC1Orp61DuuyUmPgzEy5GeFJmgyrTHGoFVGh37xK3G6HWMVMBO63LCYnEXJniGXm3Vj
+         SCGIjjHzRRdd9cV9q3fRf9DOBdtdmyfHzTT6D+CXT0Q0OAoM4C4niP+wcbHZ5yWWa4OJ
+         akPG+8ZVLwUKbGR1SQUQsDagK8NYUEoZ/bqjhEVG3Kd5sQLkYm/R6CYlOPdQFDESRoK4
+         gx7LItbvD8VemjOVqsb2AkXpTliKl5xDXs/wGlKRq71lD4S/L563DELnWdx+yHzmJbJj
+         +TEA==
+X-Gm-Message-State: AJIora9i+/8JTdZx4Tq5kC7dc1dSMcCzN8fUoi0q3ECb23Z3THtu/NX6
+        vbLDlJ+wWdmuPTttBJNDAH20iMfryK/wnURpyfvlct1DDA0=
+X-Google-Smtp-Source: AGRyM1tdmH03y5YWN/0dZSJ4H3bchhmJ3afr1wcau9WHd3Gr1ga1Vm7UvafXQuKO3BTFEOpnfyWMFGbXfjxxsHyqvnU=
+X-Received: by 2002:a05:6602:2c13:b0:669:7f63:a2d7 with SMTP id
+ w19-20020a0566022c1300b006697f63a2d7mr9022096iov.169.1656413183662; Tue, 28
+ Jun 2022 03:46:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH -next v2] m68k: virt: platform: fix missing
- platform_device_unregister() on error in virt_platform_init()
-Content-Language: fr
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org
-Cc:     geert@linux-m68k.org
-References: <20220628084903.3147123-1-yangyingliang@huawei.com>
-From:   Laurent Vivier <laurent@vivier.eu>
-In-Reply-To: <20220628084903.3147123-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:16N2p5BCoxXRnFIMT7blwU+msYe1BcV2uxPrkDvlCebuKsW1MvV
- HNYGK5RNBu00qBWVb8qLoAn/1MSQdek8bj4EIRigOZmBpakGpnP485vqySgU/hWGUzVjE1u
- 9l0I7tZ9POk1ieUBEygXa619y3FVnq0ISCuH95j3pvX66WcA464HSra6kxf+8eFidh0Hpx4
- D+yrrej5eDWTl5d3mzMSA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gL+oB0fIR4U=:QkeiBnIANig+DmoEvh6AIn
- R2fzBDd/8lFA0v6J98USj+bkLl4sI3UOh1kbal76H/BjXO1qTr7rrqdbRSCNi9WfQt7/7d476
- eBtRcV5HiF/0j7A459K8nRClyfL6VaxePKJSwQI68b4mGYwfEAt9xPx60DTD794208WTP7Ul2
- ozDq5eH5BZ7KpQFKnuewyrKaDmBzjdC1aharX5C6OGFXcdzXBXJAnrEEtmzz4nozCYUvBvKiy
- Q2b947A+iBP60q++vcSszM5W0TFN/6I9U84SvnulNSIRNqawu+MAGPEimExxZ153+2heaYYJ6
- Jj/+dVbKtj8UdARIg9JnUoqCLa8nr2HCoUkuWRRa/tyU1fwh3WRs5yDM71PzdMwfZ3wH9wKKO
- bylakCM0mFPVrz7nEhExDFo9D4vh1b5o2zgCyOjs6gXQ9SytgFNk6XVkEHTSeLZHobesspLn7
- jSxxcI9jj2+Bn33WoMZ6gfHpvlKgxcSa4tKnFjsVPo7TKXAgbGHpKhvesvLrY+xRFJ8t7yTvX
- shVpZ/ScU8/Org+XD5BYqpXMYevIv4B84U8v6wIDyEcKaN3iiBASgV7SZ1HJFsuhZtOu7ODjK
- 6n+1V/K+lMK5oZyYA/wNl94er9a9LjoaqUwLhYmlHk9AdwRWyuKxWqpA7dvnKe1PpKYKi0S34
- Ft0slWTfmaMqKl4r5HRUNf8ecmuf4KxfhOaiL2dnBfz9SEO1hSeExVgq9C7VD0oLlJC7ybRfp
- elNrTplExWNVKhB4uQCcqO/LE4+ZjnZid2JyuQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220325132126.61949-1-zhangjiachen.jaycee@bytedance.com>
+ <CAJfpeguESQm1KsQLyoMRTevLttV8N8NTGsb2tRbNS1AQ_pNAww@mail.gmail.com>
+ <CAFQAk7ibzCn8OD84-nfg6_AePsKFTu9m7pXuQwcQP5OBp7ZCag@mail.gmail.com>
+ <CAJfpegsbaz+RRcukJEOw+H=G3ft43vjDMnJ8A24JiuZFQ24eHA@mail.gmail.com>
+ <CAFQAk7hakYNfBaOeMKRmMPTyxFb2xcyUTdugQG1D6uZB_U1zBg@mail.gmail.com>
+ <Ymfu8fGbfYi4FxQ4@miu.piliscsaba.redhat.com> <YrnCfISl7Nl8Wk52@redhat.com>
+In-Reply-To: <YrnCfISl7Nl8Wk52@redhat.com>
+From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Date:   Tue, 28 Jun 2022 18:46:12 +0800
+Message-ID: <CAFQAk7iVKxXGyybJ8OB0sUL1zq=aXSO32OEv3te-80sFNgbRMw@mail.gmail.com>
+Subject: Re: Re: Re: Re: [RFC PATCH] fuse: support cache revalidation in
+ writeback_cache mode
+To:     Vivek Goyal <vgoyal@redhat.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xie Yongji <xieyongji@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 28/06/2022 à 10:49, Yang Yingliang a écrit :
-> Add the missing platform_device_unregister() before return
-> from virt_platform_init() in the error handling case.
-> 
-> Fixes: 05d51e42df06 ("m68k: Introduce a virtual m68k machine")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
-> v2:
->    change for loop to while at lable err_unregister_rtc_virtio.
-> ---
->   arch/m68k/virt/platform.c | 58 ++++++++++++++++++++++-----------------
->   1 file changed, 33 insertions(+), 25 deletions(-)
-> 
-> diff --git a/arch/m68k/virt/platform.c b/arch/m68k/virt/platform.c
-> index cb820f19a221..1560c4140ab9 100644
-> --- a/arch/m68k/virt/platform.c
-> +++ b/arch/m68k/virt/platform.c
-> @@ -8,20 +8,15 @@
->   
->   #define VIRTIO_BUS_NB	128
->   
-> -static int __init virt_virtio_init(unsigned int id)
-> +static struct platform_device * __init virt_virtio_init(unsigned int id)
->   {
->   	const struct resource res[] = {
->   		DEFINE_RES_MEM(virt_bi_data.virtio.mmio + id * 0x200, 0x200),
->   		DEFINE_RES_IRQ(virt_bi_data.virtio.irq + id),
->   	};
-> -	struct platform_device *pdev;
->   
-> -	pdev = platform_device_register_simple("virtio-mmio", id,
-> +	return platform_device_register_simple("virtio-mmio", id,
->   					       res, ARRAY_SIZE(res));
-> -	if (IS_ERR(pdev))
-> -		return PTR_ERR(pdev);
-> -
-> -	return 0;
->   }
->   
->   static int __init virt_platform_init(void)
-> @@ -35,8 +30,10 @@ static int __init virt_platform_init(void)
->   		DEFINE_RES_MEM(virt_bi_data.rtc.mmio + 0x1000, 0x1000),
->   		DEFINE_RES_IRQ(virt_bi_data.rtc.irq + 1),
->   	};
-> -	struct platform_device *pdev;
-> +	struct platform_device *pdev1, *pdev2;
-> +	struct platform_device *pdevs[VIRTIO_BUS_NB];
->   	unsigned int i;
-> +	int ret = 0;
->   
->   	if (!MACH_IS_VIRT)
->   		return -ENODEV;
-> @@ -44,29 +41,40 @@ static int __init virt_platform_init(void)
->   	/* We need this to have DMA'able memory provided to goldfish-tty */
->   	min_low_pfn = 0;
->   
-> -	pdev = platform_device_register_simple("goldfish_tty",
-> -					       PLATFORM_DEVID_NONE,
-> -					       goldfish_tty_res,
-> -					       ARRAY_SIZE(goldfish_tty_res));
-> -	if (IS_ERR(pdev))
-> -		return PTR_ERR(pdev);
-> +	pdev1 = platform_device_register_simple("goldfish_tty",
-> +						PLATFORM_DEVID_NONE,
-> +						goldfish_tty_res,
-> +						ARRAY_SIZE(goldfish_tty_res));
-> +	if (IS_ERR(pdev1))
-> +		return PTR_ERR(pdev1);
->   
-> -	pdev = platform_device_register_simple("goldfish_rtc",
-> -					       PLATFORM_DEVID_NONE,
-> -					       goldfish_rtc_res,
-> -					       ARRAY_SIZE(goldfish_rtc_res));
-> -	if (IS_ERR(pdev))
-> -		return PTR_ERR(pdev);
-> +	pdev2 = platform_device_register_simple("goldfish_rtc",
-> +						PLATFORM_DEVID_NONE,
-> +						goldfish_rtc_res,
-> +						ARRAY_SIZE(goldfish_rtc_res));
-> +	if (IS_ERR(pdev2)) {
-> +		ret = PTR_ERR(pdev2);
-> +		goto err_unregister_tty;
-> +	}
->   
->   	for (i = 0; i < VIRTIO_BUS_NB; i++) {
-> -		int err;
-> -
-> -		err = virt_virtio_init(i);
-> -		if (err)
-> -			return err;
-> +		pdevs[i] = virt_virtio_init(i);
-> +		if (IS_ERR(pdevs[i])) {
-> +			ret = PTR_ERR(pdevs[i]);
-> +			goto err_unregister_rtc_virtio;
-> +		}
->   	}
->   
->   	return 0;
-> +
-> +err_unregister_rtc_virtio:
-> +	while (i > 0)
-> +		platform_device_unregister(pdevs[--i]);
-> +	platform_device_unregister(pdev2);
-> +err_unregister_tty:
-> +	platform_device_unregister(pdev1);
-> +
-> +	return ret;
->   }
->   
->   arch_initcall(virt_platform_init);
+On Mon, Jun 27, 2022 at 10:45 PM Vivek Goyal <vgoyal@redhat.com> wrote:
+>
+> On Tue, Apr 26, 2022 at 03:09:05PM +0200, Miklos Szeredi wrote:
+> > On Mon, Apr 25, 2022 at 09:52:44PM +0800, Jiachen Zhang wrote:
+> >
+> > > Some users may want both the high performance of writeback mode and a
+> > > little bit more consistency among FUSE mounts. In the current
+> > > writeback mode implementation, users of one FUSE mount can never see
+> > > the file expansion done by other FUSE mounts.
+> >
+> > Okay.
+> >
+> > Here's a preliminary patch that you could try.
+> >
+> > Thanks,
+> > Miklos
+> >
+> > ---
+> >  fs/fuse/dir.c             |   35 ++++++++++++++++++++++-------------
+> >  fs/fuse/file.c            |   17 +++++++++++++++--
+> >  fs/fuse/fuse_i.h          |   14 +++++++++++++-
+> >  fs/fuse/inode.c           |   32 +++++++++++++++++++++++++++-----
+> >  include/uapi/linux/fuse.h |    5 +++++
+> >  5 files changed, 82 insertions(+), 21 deletions(-)
+> >
+> > --- a/include/uapi/linux/fuse.h
+> > +++ b/include/uapi/linux/fuse.h
+> > @@ -194,6 +194,7 @@
+> >   *  - add FUSE_SECURITY_CTX init flag
+> >   *  - add security context to create, mkdir, symlink, and mknod requests
+> >   *  - add FUSE_HAS_INODE_DAX, FUSE_ATTR_DAX
+> > + *  - add FUSE_WRITEBACK_CACHE_V2 init flag
+> >   */
+> >
+> >  #ifndef _LINUX_FUSE_H
+> > @@ -353,6 +354,9 @@ struct fuse_file_lock {
+> >   * FUSE_SECURITY_CTX:        add security context to create, mkdir, symlink, and
+> >   *                   mknod
+> >   * FUSE_HAS_INODE_DAX:  use per inode DAX
+> > + * FUSE_WRITEBACK_CACHE_V2:
+> > + *                   - allow time/size to be refreshed if no pending write
+> > + *                   - time/size not cached for falocate/copy_file_range
+> >   */
+> >  #define FUSE_ASYNC_READ              (1 << 0)
+> >  #define FUSE_POSIX_LOCKS     (1 << 1)
+> > @@ -389,6 +393,7 @@ struct fuse_file_lock {
+> >  /* bits 32..63 get shifted down 32 bits into the flags2 field */
+> >  #define FUSE_SECURITY_CTX    (1ULL << 32)
+> >  #define FUSE_HAS_INODE_DAX   (1ULL << 33)
+> > +#define FUSE_WRITEBACK_CACHE_V2      (1ULL << 34)
+> >
+> >  /**
+> >   * CUSE INIT request/reply flags
+> > --- a/fs/fuse/inode.c
+> > +++ b/fs/fuse/inode.c
+> > @@ -222,19 +222,37 @@ void fuse_change_attributes_common(struc
+> >  u32 fuse_get_cache_mask(struct inode *inode)
+> >  {
+> >       struct fuse_conn *fc = get_fuse_conn(inode);
+> > +     struct fuse_inode *fi = get_fuse_inode(inode);
+> >
+> >       if (!fc->writeback_cache || !S_ISREG(inode->i_mode))
+> >               return 0;
+> >
+> > +     /*
+> > +      * In writeback_cache_v2 mode if all the following conditions are met,
+> > +      * then allow the attributes to be refreshed:
+> > +      *
+> > +      * - inode is not dirty (I_DIRTY_INODE)
+> > +      * - inode is not in the process of being written (I_SYNC)
+> > +      * - inode has no dirty pages (I_DIRTY_PAGES)
+> > +      * - inode does not have any page writeback in progress
+> > +      *
+> > +      * Note: checking PAGECACHE_TAG_WRITEBACK is not sufficient in fuse,
+> > +      * since inode can appear to have no PageWriteback pages, yet still have
+> > +      * outstanding write request.
+> > +      */
+>
+> Hi,
+>
+> I started following this thread just now after Jiachen pointed me to
+> previous conversations. Without going into too much details.
+>
+> Based on above description, so we will update mtime/ctime/i_size only
+> if inode does not have dirty pages or nothing is in progress. So that
+> means sometime we will update it and other times we will ignore it.
+>
+> Do I understand it correctly. I am wondering how that is useful to
+> applications.
+>
+> I thought that other remote filesystems might have leasing for this so
+> that one client can acquire the lease and cache changes and when lease
+> is broken, this client pushes out all the changes and other client gets
+> the lease.
+>
+> Given we don't have any lease mechanism, we probably need to define the
+> semantics more clearly and we should probably document it as well.
+>
 
-Reviewed-by: Laurent Vivier <laurent@vivier.eu>
+Hi Vivek,
 
+I agree we should define or document the semantics properly. For now,
+it seems that Miklos' writeback_mode_v2 is making best-effort updating
+when pages are not dirty and a set of new attributes are returned from
+FUSE server.
+
+Thanks,
+Jiachen
+
+> Thanks
+> Vivek
+>

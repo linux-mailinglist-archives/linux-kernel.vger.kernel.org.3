@@ -2,216 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA16F55D53B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64F755D8B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243181AbiF1DbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 23:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50344 "EHLO
+        id S243421AbiF1Dh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 23:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243033AbiF1Dar (ORCPT
+        with ESMTP id S243263AbiF1DhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 23:30:47 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5697FCC;
-        Mon, 27 Jun 2022 20:30:41 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LX96H2g0lzhYwX;
-        Tue, 28 Jun 2022 11:28:23 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 28 Jun
- 2022 11:30:37 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yekai13@huawei.com>, <liulongfang@huawei.com>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>
-CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
-        <shaozhengchao@huawei.com>
-Subject: [PATCH] crypto: hisilicon/sec - don't sleep when in softirq
-Date:   Tue, 28 Jun 2022 11:35:52 +0800
-Message-ID: <20220628033552.135202-1-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 27 Jun 2022 23:37:19 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E38824F0B;
+        Mon, 27 Jun 2022 20:37:18 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id x1-20020a17090abc8100b001ec7f8a51f5so14545730pjr.0;
+        Mon, 27 Jun 2022 20:37:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=G2ZI6aMz7mjHuacv2TpkSw0NDmBUe+64bYW0SIydJ1c=;
+        b=qWSblFa8OsXeRRuOE0A/MhNHBxZKjTtnAjA3B92NuHrFB/xQ73Fq7JAKZUSMerimfT
+         lBSSFX/cc7HP+4o4G7SOWtrqiLpi4rHj+7ziQmJ35u3jjOOm2e9ac+evtsQMtVrwuZ1h
+         a9SX3SXZu+eo1UC2XDtg2s/Pu83GBvFAdf4C/tWCKkcVqS6taZRukb8hRGey3TmfV0HB
+         FcJRkmGlhU9w+CtES91WezFc/koimMNnM+sIWw0Uv8lVDjCBwiKzsnwM45X25OQhTS9/
+         2ZwjgfwJMOEVBvLs5Xii9V84Y6XJDH2AP4+l1Va9ssEOCMJ7YbT6u9tnFbHhGz7+/q+a
+         CCyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=G2ZI6aMz7mjHuacv2TpkSw0NDmBUe+64bYW0SIydJ1c=;
+        b=1XfD09bXED5IvhCs0K8qkQNjYUR79k1eMB4BPXi1b0CCI5GTPnw1dEu8qsKqUk4vA+
+         Nj+215lWmHtkn+ipP5udkK3PW5s1iQl/JOOquaVtKlixfYzR/uR1oT84kdLk7mrALZDO
+         K2cbmGHK9BzTyo8+xGt/XbZABJlN3DsFa8XY/J/rTpp3PvqiZYYIcrQoOofeioLAZhE4
+         2hHdH3xsgPSVVGNKNPcJvJk+CBcV2IdkjMIs6Kvw14rgGWRMal19EcivyTM8nTzWGvbM
+         R8Imjh53GW/LJsdGDo3Bk6rSsSr/VY8OjtBNYK4ELv2r+B+0qplm11PmU1Y+pjqnVANo
+         mPNQ==
+X-Gm-Message-State: AJIora+hxluwgSu3RiYe1R3Y8LDuK6xX/ztrYfvsTcVybCS8jln8OuGT
+        twfdlhoiaYymHII3Lp6OMrQ=
+X-Google-Smtp-Source: AGRyM1v/JF9sZ/ij650I5WlKuyttuPJ8uAaz2+f1pjdmNhjhPRS105MXj2fjZLNNlVjiJJn/+TK2KA==
+X-Received: by 2002:a17:90a:aa96:b0:1ea:3780:c3dc with SMTP id l22-20020a17090aaa9600b001ea3780c3dcmr25121973pjq.241.1656387437966;
+        Mon, 27 Jun 2022 20:37:17 -0700 (PDT)
+Received: from fedora ([103.230.148.187])
+        by smtp.gmail.com with ESMTPSA id im22-20020a170902bb1600b0016a3f9e528asm2912212plb.57.2022.06.27.20.37.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 20:37:16 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 09:07:11 +0530
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     sj@kernel.org
+Cc:     skhan@linuxfoundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] kselftests/damon: add support for cases where debugfs
+ cannot be read
+Message-ID: <Yrp3ZwF4Q/xPDrwG@fedora>
+References: <20220625200334.83818-1-sj@kernel.org>
+ <7d6b7de6-4609-e6ca-0a88-1f9799c70769@linuxfoundation.org>
+ <Yrn6BxU298rzjiak@fedora>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yrn6BxU298rzjiak@fedora>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When kunpeng920 encryption driver is used to deencrypt and decrypt
-packets during the softirq, it is not allowed to use mutex lock. The
-kernel will report the following error:
-
-BUG: scheduling while atomic: swapper/57/0/0x00000300
-Call trace:
-dump_backtrace+0x0/0x1e4
-show_stack+0x20/0x2c
-dump_stack+0xd8/0x140
-__schedule_bug+0x68/0x80
-__schedule+0x728/0x840
-schedule+0x50/0xe0
-schedule_preempt_disabled+0x18/0x24
-__mutex_lock.constprop.0+0x594/0x5dc
-__mutex_lock_slowpath+0x1c/0x30
-mutex_lock+0x50/0x60
-sec_request_init+0x8c/0x1a0 [hisi_sec2]
-sec_process+0x28/0x1ac [hisi_sec2]
-sec_skcipher_crypto+0xf4/0x1d4 [hisi_sec2]
-sec_skcipher_encrypt+0x1c/0x30 [hisi_sec2]
-crypto_skcipher_encrypt+0x2c/0x40
-crypto_authenc_encrypt+0xc8/0xfc [authenc]
-crypto_aead_encrypt+0x2c/0x40
-echainiv_encrypt+0x144/0x1a0 [echainiv]
-crypto_aead_encrypt+0x2c/0x40
-esp_output_tail+0x348/0x5c0 [esp4]
-esp_output+0x120/0x19c [esp4]
-xfrm_output_one+0x25c/0x4d4
-xfrm_output_resume+0x6c/0x1fc
-xfrm_output+0xac/0x3c0
-xfrm4_output+0x64/0x130
-ip_build_and_send_pkt+0x158/0x20c
-tcp_v4_send_synack+0xdc/0x1f0
-tcp_conn_request+0x7d0/0x994
-tcp_v4_conn_request+0x58/0x6c
-tcp_v6_conn_request+0xf0/0x100
-tcp_rcv_state_process+0x1cc/0xd60
-tcp_v4_do_rcv+0x10c/0x250
-tcp_v4_rcv+0xfc4/0x10a4
-ip_protocol_deliver_rcu+0xf4/0x200
-ip_local_deliver_finish+0x58/0x70
-ip_local_deliver+0x68/0x120
-ip_sublist_rcv_finish+0x70/0x94
-ip_list_rcv_finish.constprop.0+0x17c/0x1d0
-ip_sublist_rcv+0x40/0xb0
-ip_list_rcv+0x140/0x1dc
-__netif_receive_skb_list_core+0x154/0x28c
-__netif_receive_skb_list+0x120/0x1a0
-netif_receive_skb_list_internal+0xe4/0x1f0
-napi_complete_done+0x70/0x1f0
-gro_cell_poll+0x9c/0xb0
-napi_poll+0xcc/0x264
-net_rx_action+0xd4/0x21c
-__do_softirq+0x130/0x358
-irq_exit+0x11c/0x13c
-__handle_domain_irq+0x88/0xf0
-gic_handle_irq+0x78/0x2c0
-el1_irq+0xb8/0x140
-arch_cpu_idle+0x18/0x40
-default_idle_call+0x5c/0x1c0
-cpuidle_idle_call+0x174/0x1b0
-do_idle+0xc8/0x160
-cpu_startup_entry+0x30/0x11c
-secondary_start_kernel+0x158/0x1e4
-softirq: huh, entered softirq 3 NET_RX 0000000093774ee4 with
-preempt_count 00000100, exited with fffffe00?
-
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
----
- drivers/crypto/hisilicon/sec2/sec.h        |  2 +-
- drivers/crypto/hisilicon/sec2/sec_crypto.c | 20 ++++++++++----------
- 2 files changed, 11 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/crypto/hisilicon/sec2/sec.h b/drivers/crypto/hisilicon/sec2/sec.h
-index 42bb486f3b6d..d2a0bc93e752 100644
---- a/drivers/crypto/hisilicon/sec2/sec.h
-+++ b/drivers/crypto/hisilicon/sec2/sec.h
-@@ -119,7 +119,7 @@ struct sec_qp_ctx {
- 	struct idr req_idr;
- 	struct sec_alg_res res[QM_Q_DEPTH];
- 	struct sec_ctx *ctx;
--	struct mutex req_lock;
-+	spinlock_t req_lock;
- 	struct list_head backlog;
- 	struct hisi_acc_sgl_pool *c_in_pool;
- 	struct hisi_acc_sgl_pool *c_out_pool;
-diff --git a/drivers/crypto/hisilicon/sec2/sec_crypto.c b/drivers/crypto/hisilicon/sec2/sec_crypto.c
-index 6eebe739893c..64be111d58ae 100644
---- a/drivers/crypto/hisilicon/sec2/sec_crypto.c
-+++ b/drivers/crypto/hisilicon/sec2/sec_crypto.c
-@@ -127,11 +127,11 @@ static int sec_alloc_req_id(struct sec_req *req, struct sec_qp_ctx *qp_ctx)
- {
- 	int req_id;
- 
--	mutex_lock(&qp_ctx->req_lock);
-+	spin_lock(&qp_ctx->req_lock);
- 
- 	req_id = idr_alloc_cyclic(&qp_ctx->req_idr, NULL,
- 				  0, QM_Q_DEPTH, GFP_ATOMIC);
--	mutex_unlock(&qp_ctx->req_lock);
-+	spin_unlock(&qp_ctx->req_lock);
- 	if (unlikely(req_id < 0)) {
- 		dev_err(req->ctx->dev, "alloc req id fail!\n");
- 		return req_id;
-@@ -156,9 +156,9 @@ static void sec_free_req_id(struct sec_req *req)
- 	qp_ctx->req_list[req_id] = NULL;
- 	req->qp_ctx = NULL;
- 
--	mutex_lock(&qp_ctx->req_lock);
-+	spin_lock(&qp_ctx->req_lock);
- 	idr_remove(&qp_ctx->req_idr, req_id);
--	mutex_unlock(&qp_ctx->req_lock);
-+	spin_unlock(&qp_ctx->req_lock);
- }
- 
- static u8 pre_parse_finished_bd(struct bd_status *status, void *resp)
-@@ -273,7 +273,7 @@ static int sec_bd_send(struct sec_ctx *ctx, struct sec_req *req)
- 	    !(req->flag & CRYPTO_TFM_REQ_MAY_BACKLOG))
- 		return -EBUSY;
- 
--	mutex_lock(&qp_ctx->req_lock);
-+	spin_lock(&qp_ctx->req_lock);
- 	ret = hisi_qp_send(qp_ctx->qp, &req->sec_sqe);
- 
- 	if (ctx->fake_req_limit <=
-@@ -281,10 +281,10 @@ static int sec_bd_send(struct sec_ctx *ctx, struct sec_req *req)
- 		list_add_tail(&req->backlog_head, &qp_ctx->backlog);
- 		atomic64_inc(&ctx->sec->debug.dfx.send_cnt);
- 		atomic64_inc(&ctx->sec->debug.dfx.send_busy_cnt);
--		mutex_unlock(&qp_ctx->req_lock);
-+		spin_unlock(&qp_ctx->req_lock);
- 		return -EBUSY;
- 	}
--	mutex_unlock(&qp_ctx->req_lock);
-+	spin_unlock(&qp_ctx->req_lock);
- 
- 	if (unlikely(ret == -EBUSY))
- 		return -ENOBUFS;
-@@ -487,7 +487,7 @@ static int sec_create_qp_ctx(struct hisi_qm *qm, struct sec_ctx *ctx,
- 
- 	qp->req_cb = sec_req_cb;
- 
--	mutex_init(&qp_ctx->req_lock);
-+	spin_lock_init(&qp_ctx->req_lock);
- 	idr_init(&qp_ctx->req_idr);
- 	INIT_LIST_HEAD(&qp_ctx->backlog);
- 
-@@ -1382,7 +1382,7 @@ static struct sec_req *sec_back_req_clear(struct sec_ctx *ctx,
- {
- 	struct sec_req *backlog_req = NULL;
- 
--	mutex_lock(&qp_ctx->req_lock);
-+	spin_lock(&qp_ctx->req_lock);
- 	if (ctx->fake_req_limit >=
- 	    atomic_read(&qp_ctx->qp->qp_status.used) &&
- 	    !list_empty(&qp_ctx->backlog)) {
-@@ -1390,7 +1390,7 @@ static struct sec_req *sec_back_req_clear(struct sec_ctx *ctx,
- 				typeof(*backlog_req), backlog_head);
- 		list_del(&backlog_req->backlog_head);
- 	}
--	mutex_unlock(&qp_ctx->req_lock);
-+	spin_unlock(&qp_ctx->req_lock);
- 
- 	return backlog_req;
- }
--- 
-2.17.1
-
+Cc'ing everyone as I forgot to group reply before. Also, I have included the 
+example outputs in this reply.
+On Tue, Jun 28, 2022 at 12:12:15AM +0530, Gautam Menghani wrote:
+> On Mon, Jun 27, 2022 at 11:00:18AM -0600, Shuah Khan wrote:
+> > On 6/25/22 2:03 PM, SeongJae Park wrote:
+> > > Hi Gautam,
+> > > 
+> > > On Sun, 26 Jun 2022 01:22:45 +0530 Gautam <gautammenghani201@gmail.com> wrote:
+> > > 
+> > > > The kernel is in lockdown mode when secureboot is enabled and hence
+> > > > debugfs cannot be used. Add support for this and other general cases
+> > > > where debugfs cannot be read and communicate the same to the user before
+> > > > running tests.
+> > > > 
+> > > > Signed-off-by: Gautam <gautammenghani201@gmail.com>
+> > > 
+> > > Reviewed-by: SeongJae Park <sj@kernel.org>
+> > > 
+> > > 
+> > > Thanks,
+> > > SJ
+> > > 
+> > > > ---
+> > > > Changes in v2:
+> > > > 1. Modify the error message to account for general cases.
+> > > > 2. Change the return code so that the test is skipped.
+> > > > 
+> > > > Changes in v3:
+> > > > 1. Change the name of variable holding the error message.
+> > > > 
+> > > > Changes in v4:
+> > > > 1. Correct the mode of the source file.
+> > > > 
+> > > >   tools/testing/selftests/damon/_chk_dependency.sh | 10 ++++++++++
+> > > >   1 file changed, 10 insertions(+)
+> > > > 
+> > > > diff --git a/tools/testing/selftests/damon/_chk_dependency.sh b/tools/testing/selftests/damon/_chk_dependency.sh
+> > > > index 0189db81550b..0328ac0b5a5e 100644
+> > > > --- a/tools/testing/selftests/damon/_chk_dependency.sh
+> > > > +++ b/tools/testing/selftests/damon/_chk_dependency.sh
+> > > > @@ -26,3 +26,13 @@ do
+> > > >   		exit 1
+> > > >   	fi
+> > > >   done
+> > > > +
+> > > > +permission_error="Operation not permitted"
+> > > > +for f in attrs target_ids monitor_on
+> > > > +do
+> > > > +	status=$( cat "$DBGFS/$f" 2>&1 )
+> > > > +	if [ "${status#*$permission_error}" != "$status" ]; then
+> > > > +		echo "Permission for reading $DBGFS/$f denied; maybe secureboot enabled?"
+> > 
+> > btw - does this run as a regular user or does it need root privilege?
+> > If so add a test for that and skip with a message.
+> 
+> Yes this condition is reachable only with root user. If damon tests are run
+> as regular user, the root check condition already skips the tests.
+> 
+> Tests output as regular user:
+> +TAP version 13
+> +1..6
+> +# selftests: damon: debugfs_attrs.sh
+> +# Run as root
+> +ok 1 selftests: damon: debugfs_attrs.sh # SKIP
+> +# selftests: damon: debugfs_schemes.sh
+> +# Run as root
+> 
+> Tests output as root user:
+> +TAP version 13
+> +1..6
+> +# selftests: damon: debugfs_attrs.sh
+> +# Permission for reading /sys/kernel/debug/damon/attrs denied; maybe secureboot enabled?
+> +ok 1 selftests: damon: debugfs_attrs.sh # SKIP
+> +# selftests: damon: debugfs_schemes.sh
+> +# Permission for reading /sys/kernel/debug/damon/attrs denied; maybe secureboot enabled?
+> 
+> Is any change needed in this patch?
+> 
+> > > > +		exit $ksft_skip
+> > > > +	fi
+> > > > +done
+> > > > -- 
+> > > > 2.36.1
+> > > 
+> > thanks,
+> > -- Shuah

@@ -2,115 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CDD855F045
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 23:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E430255F047
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 23:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbiF1VUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 17:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34014 "EHLO
+        id S230302AbiF1VZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 17:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiF1VUh (ORCPT
+        with ESMTP id S229814AbiF1VZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 17:20:37 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB4233360;
-        Tue, 28 Jun 2022 14:20:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656451231;
-        bh=2COHy7/Y0JvOG8VhPu09qwrobpJDf/F8NdpGhDlbaKs=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=MF6gFXSTbegGDe3Ot/SZwzcS9wYPMKH1Q0I7ncTWccszkkQrTg/jU1AAX0FkJEJQG
-         NR4dlYs4J8ADpcRhNjrbUeovbsRJ6N4QH/OWKZ3x5suLd5pDv2dMFQFePiKn9O3cHJ
-         /v06LKlRAKyp3vRdgZCR6kR9vh7X7OWXzxyPfCSY=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.100.20] ([46.142.33.115]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1McYCb-1nVsTy12lh-00d2eO; Tue, 28
- Jun 2022 23:20:31 +0200
-Message-ID: <d54fe0fa-fa02-cc27-d523-938f8c5edd9c@gmx.de>
-Date:   Tue, 28 Jun 2022 23:20:30 +0200
+        Tue, 28 Jun 2022 17:25:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA6B73A732
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 14:25:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656451502;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xl/Fq3aI5MxcGRQwvCytnZREphBAGecmNnGHoTX9/fA=;
+        b=JuxHhOB8awj8/4UMn5F1wuCLDgq0CwzbW9qVc6YQQIFzSbTDxozrbxjUgeCus45yqK5soC
+        afovVWdJReh75+q9s2w2QEtgx2Gr30bM3mW6aEG2Y/tRWwc6KGqAUKU2XSCo59lq5ydgo3
+        AXVC/7sPSEw40xSFR1P1/JtAAqxAw9A=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-222-k1rtwRVRMCmwtu4AwMsc-g-1; Tue, 28 Jun 2022 17:25:01 -0400
+X-MC-Unique: k1rtwRVRMCmwtu4AwMsc-g-1
+Received: by mail-ej1-f69.google.com with SMTP id qa41-20020a17090786a900b00722f313a60eso4134433ejc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 14:25:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Xl/Fq3aI5MxcGRQwvCytnZREphBAGecmNnGHoTX9/fA=;
+        b=WXwML76N+PrY73oPLwi8Tr/uTcI/7oYuKkNbkYpbqXOQIn7Q357YMlwr95/SP2955r
+         jkbmLiSVMxFotIskgPCis8i/OvAGH1rvkzr9WHMt6AKYx1I7lyZ87ZBSKSSkuU01/maP
+         l5qrLyzx0NXU574R59QM+kH1GPquDy7YoA78YSdhgwhGZtzRt71evgj/7xRiG9YCm6y+
+         xTOTay/uJ7YFcpXWpAxx01xfeTApE13wvWoLMfMNXO7oG8MNln5qntltwOO6/nebx2Ie
+         PXww4iq5aS5b6NGjXZMwpBfiwQu8yR5yqdtYQtugpsblur7/1LBbzg3r8ugicmhMJ/A0
+         7C8Q==
+X-Gm-Message-State: AJIora/aCss4y4lo2JVZ0qhkiHeAYIHoWlotlmwiuVZeNAufnQ8kz+BR
+        EZHmDmjGx/uW0Ee/H9EhvpJk+08WCuZc8UnyoskAX6TKhb26CAJCWgjr43iry0K1v6yHCAXrytY
+        RkHowoQPn8jsspLEXi+wPj3Qf
+X-Received: by 2002:a17:906:7386:b0:715:7024:3df7 with SMTP id f6-20020a170906738600b0071570243df7mr81249ejl.543.1656451500399;
+        Tue, 28 Jun 2022 14:25:00 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uTnum0GpPfJsvt8qSMvEwb2tgAmQ9Hwn/c5JV4Hh36sXQRXdGRQoAnRgz6pVG6ofW5EaK6Ww==
+X-Received: by 2002:a17:906:7386:b0:715:7024:3df7 with SMTP id f6-20020a170906738600b0071570243df7mr81238ejl.543.1656451500206;
+        Tue, 28 Jun 2022 14:25:00 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id s10-20020a1709060c0a00b0070beb9401d9sm6966520ejf.171.2022.06.28.14.24.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 14:24:59 -0700 (PDT)
+Message-ID: <b11094eb-fd3c-06d9-adca-7d56f40e7f4f@redhat.com>
+Date:   Tue, 28 Jun 2022 23:24:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 5.18 000/181] 5.18.8-rc1 review
-Content-Language: de-DE
-To:     Thomas Backlund <tmb@tmb.nu>, linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-References: <f0cdac2a-79f3-af1c-eac9-698b0c8196a3@tmb.nu>
-From:   Ronald Warsow <rwarsow@gmx.de>
-In-Reply-To: <f0cdac2a-79f3-af1c-eac9-698b0c8196a3@tmb.nu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:UmCBgeXxFhHYLU6f1F7rf8WJu+FfcqHbRXLJ+iuGNv+YLBiWo/q
- z2d6HCOfgJMcX69+gQ6zCuQibJ5oR+JrmZBrtV2bukLQlAmbEthZTq/jd9gg/37kqql48rL
- vNewKF0Pfx6YftLu2AytSHhjPD8nxnONmh244nWHAgD5c85q4gl6+2ze4/QiirIdU361Fe3
- VgJEOwVtpFYnHb4RNk0Eg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:XyQuI1/X5KY=:FsveJ85JWVh8ni6TWcA+y8
- 4rL+yD1+7FNa1x8b9p7F+Wq1xqaWKpUIIbibZT8ONwC89y9G7QkvAYssb5hhpZ44mO1576dE9
- MpwIFZs6L3CX71P5FJIta9Mv37hl76/aWLwzqyBkYMfz/25fzxL2kL2kBOpjXSDzALcloqEGv
- yKZpF41EqcA4TzjyfMoeJwiu+LN6Dfoy6GjZ+rm7zjZwskClV66iu5k7Ne4rFpRD5LiUA+8Bh
- uv+jGPd5hKXRSAIsYomA0cTawgtV5wxCgefshwVx17mzyjj8K62X4XhpkQCyoe6Yl+u+SU6s3
- 6X6+a+G/B5oUG2k35AM7VhBk76ajAGuIFDdLKBtv903PkZqd1nDAewpSqfv6FdWxK7s2zx9Mj
- 1q7avLmjsQbDSM7dtcppziaqrfH9cFO5P8AYG10cqxLBBTEHdquT4aT7XLSlL34PZwtbhhRjL
- HC+DQB6p9K+7kg3uVxTl2wnriN46Q9IFGJpJo5MN2+wozIWuHnl7kyWioAVAkijfEbltrOPSN
- z7Qy3ElmLMQHM7t2JN3ssh0nMmX4iYGeF+okrfb1XWkXIMXhs6ggWTamfcO+N2GpcBJxzKEOP
- ACNrtxfoCaqmX1ynTvx65X7BxE5PT74j/mqYB8h8oJt8ntRXK9mYvUP7S22e/xeX4n1bYlNG3
- GUY1w85eSxhlx2/r3wQMv7W7e8JOlixujKRja860eDFI836d1CsQ97SiNYwtuh50L1N/Iw/uB
- FpEb8ZTEuSwXn7jLDVHENfxgKpsFv0BDbbUjAh6CP5jWATcBqiCUmRzdgy1fvp7kGzsqAOtcp
- z+O7Fhq1e6fA+kT4OK4mosjqNvSB+wrRY7PwssFWuuqEfGlHmV3VhQ5ByLZHSRcLf9mOVgvkX
- HY3EC2uZBq+UFxBR22m+eLt1cf6J8D4IHEWA3QXaeHGhE5c0shP4Wr9L5CFk9LK2iSFPG9tjL
- oSKc7d1B8KrmPZFnCanmla52VtlzC1+FS2S6Rus+Nk89xa6xwdYqMeP1K6JMQ2yNvHpqEuP9u
- cO4aaoOHmYK2EXVDtWEGqmdMx+EP+s0njn6KBu2jBbeR7L84vV74VFziB9FXHBLLbWi8f15Sq
- p403AzW6K9CaJYU1UzKoh1fjr3/gzY7c4b8FUKN01pxVRb81mVFnV1y33mnrvY6rWZu/0AMfY
- eG8jQyvpmMz0NX5GgyK6ujrd1yrZkh997CtE1PNr/GY77+mMmOXQA7quoLe9POME5g9Oc=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] platform/x86: hp-wmi: Ignore Sanitization Mode event
+Content-Language: en-US
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, markgross@kernel.org
+Cc:     Jorge Lopez <jorge.lopez2@hp.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220628123726.250062-1-kai.heng.feng@canonical.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220628123726.250062-1-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.06.22 22:18, Thomas Backlund wrote:
-> Den 2022-06-27 kl. 19:38, skrev Ronald Warsow:
->> hallo Greg
->>
->> 5.18.8-rc1
->>
->> compiles (see [1]), boots and runs here on x86_64
->> (Intel i5-11400, Fedora 36)
->>
->> [1]
->> a regression against 5.18.7:
->>
->> ...
->>
->> LD=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vmlinux.o
->>   =C2=A0 MODPOST vmlinux.symvers
->> WARNING: modpost: vmlinux.o(___ksymtab_gpl+tick_nohz_full_setup+0x0):
->> Section mismatch in reference from the variable
->> __ksymtab_tick_nohz_full_setup to the function
->> .init.text:tick_nohz_full_setup()
->> The symbol tick_nohz_full_setup is exported and annotated __init
->> Fix this by removing the __init annotation of tick_nohz_full_setup or
->> drop the export.
->
->
-> Should be fixed by:
->
->
->   From 2390095113e98fc52fffe35c5206d30d9efe3f78 Mon Sep 17 00:00:00 2001
-> From: Masahiro Yamada <masahiroy@kernel.org>
-> Date: Mon, 27 Jun 2022 12:22:09 +0900
-> Subject: [PATCH] tick/nohz: unexport __init-annotated tick_nohz_full_set=
-up()
->
-> --
-> Thomas
->
+Hi,
 
-Thanks Thomas
-=2D-
-Ronald
+On 6/28/22 14:37, Kai-Heng Feng wrote:
+> After system resume the hp-wmi driver may complain:
+> [ 702.620180] hp_wmi: Unknown event_id - 23 - 0x0
+> 
+> According to HP it means 'Sanitization Mode' and it's harmless to just
+> ignore the event.
+> 
+> Cc: Jorge Lopez <jorge.lopez2@hp.com>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+
+> ---
+>  drivers/platform/x86/hp-wmi.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
+> index 0d8cb22e30df9..bc7020e9df9e8 100644
+> --- a/drivers/platform/x86/hp-wmi.c
+> +++ b/drivers/platform/x86/hp-wmi.c
+> @@ -89,6 +89,7 @@ enum hp_wmi_event_ids {
+>  	HPWMI_BACKLIT_KB_BRIGHTNESS	= 0x0D,
+>  	HPWMI_PEAKSHIFT_PERIOD		= 0x0F,
+>  	HPWMI_BATTERY_CHARGE_PERIOD	= 0x10,
+> +	HPWMI_SANITIZATION_MODE		= 0x17,
+>  };
+>  
+>  /*
+> @@ -853,6 +854,8 @@ static void hp_wmi_notify(u32 value, void *context)
+>  		break;
+>  	case HPWMI_BATTERY_CHARGE_PERIOD:
+>  		break;
+> +	case HPWMI_SANITIZATION_MODE:
+> +		break;
+>  	default:
+>  		pr_info("Unknown event_id - %d - 0x%x\n", event_id, event_data);
+>  		break;
 

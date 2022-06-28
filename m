@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6699C55E4CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D0355E4CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346630AbiF1Ndu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
+        id S1346667AbiF1NeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346604AbiF1NdQ (ORCPT
+        with ESMTP id S1346664AbiF1NdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:33:16 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665C813E20;
-        Tue, 28 Jun 2022 06:33:15 -0700 (PDT)
+        Tue, 28 Jun 2022 09:33:23 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E13D1055A;
+        Tue, 28 Jun 2022 06:33:22 -0700 (PDT)
 Received: (Authenticated sender: ash@heyquark.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 27199200014;
-        Tue, 28 Jun 2022 13:33:07 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id E4D5C20000E;
+        Tue, 28 Jun 2022 13:33:14 +0000 (UTC)
 From:   Ash Logan <ash@heyquark.com>
 To:     krzysztof.kozlowski+dt@linaro.org, paulus@samba.org,
         mpe@ellerman.id.au, christophe.leroy@csgroup.eu,
@@ -26,9 +26,9 @@ Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         j.ne@posteo.net, linkmauve@linkmauve.fr,
         rw-r-r-0644@protonmail.com, devicetree@vger.kernel.org,
         joel@jms.id.au
-Subject: [PATCH v3 11/12] powerpc: wiiu: don't enforce flat memory
-Date:   Tue, 28 Jun 2022 23:31:43 +1000
-Message-Id: <20220628133144.142185-12-ash@heyquark.com>
+Subject: [PATCH v3 12/12] powerpc: wiiu: add minimal default config
+Date:   Tue, 28 Jun 2022 23:31:44 +1000
+Message-Id: <20220628133144.142185-13-ash@heyquark.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220628133144.142185-1-ash@heyquark.com>
 References: <20220622131037.57604-1-ash@heyquark.com>
@@ -44,31 +44,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pgtable_32.c:mapin_ram loops over each valid memory range, which means
-non-contiguous memory just works.
+Adds a bare-minimum config to get a kernel compiled. Will need some more
+interesting options once a storage device to boot from is added.
 
 Signed-off-by: Ash Logan <ash@heyquark.com>
 ---
- arch/powerpc/mm/init_32.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/powerpc/configs/wiiu_defconfig | 7 +++++++
+ 1 file changed, 7 insertions(+)
+ create mode 100644 arch/powerpc/configs/wiiu_defconfig
 
-diff --git a/arch/powerpc/mm/init_32.c b/arch/powerpc/mm/init_32.c
-index 693a3a7a9463..6cdb561c05c5 100644
---- a/arch/powerpc/mm/init_32.c
-+++ b/arch/powerpc/mm/init_32.c
-@@ -124,10 +124,10 @@ void __init MMU_init(void)
- 	 * lowmem_end_addr is initialized below.
- 	 */
- 	if (memblock.memory.cnt > 1) {
--#ifndef CONFIG_WII
-+#if !defined(CONFIG_WII) && !defined(CONFIG_WIIU)
- 		memblock_enforce_memory_limit(memblock.memory.regions[0].size);
- 		pr_warn("Only using first contiguous memory region\n");
--#else
-+#elif defined(CONFIG_WII)
- 		wii_memory_fixups();
- #endif
- 	}
+diff --git a/arch/powerpc/configs/wiiu_defconfig b/arch/powerpc/configs/wiiu_defconfig
+new file mode 100644
+index 000000000000..a761ebcdd9f2
+--- /dev/null
++++ b/arch/powerpc/configs/wiiu_defconfig
+@@ -0,0 +1,7 @@
++# CONFIG_PPC_CHRP is not set
++# CONFIG_PPC_PMAC is not set
++CONFIG_WIIU=y
++# CONFIG_PPC_OF_BOOT_TRAMPOLINE is not set
++CONFIG_HIGHMEM=y
++CONFIG_STRICT_KERNEL_RWX=y
++CONFIG_PPC_EARLY_DEBUG=y
 -- 
 2.36.1
 

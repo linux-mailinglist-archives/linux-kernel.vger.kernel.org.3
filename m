@@ -2,196 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD6F55ECB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741C755ECB8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233019AbiF1Sh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 14:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
+        id S233150AbiF1SjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 14:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbiF1Sh4 (ORCPT
+        with ESMTP id S230350AbiF1SjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:37:56 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B450420F5F;
-        Tue, 28 Jun 2022 11:37:55 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SHgO3i002705;
-        Tue, 28 Jun 2022 18:37:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=Kr5eKPrGqH/iNt4EQ0PmPKbTFY3yJ6iKC1kNfLg+lcI=;
- b=EfR84tCSRMY9D4gP0GALzXA9TYqEFiimlq+a9HZ+wfgu5kAop0DsGCCmocjxhBIhBMhF
- CUjSFnMHRw/e92Vcj1SW268sDgW0Y2I2ZIurTKScJNqkEs9tlWBlUBNmcWUy4yHPFJKL
- lMRrtL26w2XXeDxA3BYGt3wsgE6oODlxy5HK0PQ8/kibjRuvDXTzpj6+xkQNsOVejwmx
- /AFST05sKWtZ4zx4TeoQ9kmw0SIxaAr/l4P3BQscv23JK0RWa72VECTiAbIS3pXLWec9
- vyJxVePP5ciHa1/IWVui9cunXighug4rA9LIC4wahB2ckeUBg3hakrXGM3WNZsPBRCYI oQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h06989ptj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 18:37:01 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25SHidEN010965;
-        Tue, 28 Jun 2022 18:37:00 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h06989pry-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 18:37:00 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25SIZBGw006547;
-        Tue, 28 Jun 2022 18:36:57 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3gwsmj5a0j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 18:36:57 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25SIatuf21823956
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Jun 2022 18:36:55 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3A7384C044;
-        Tue, 28 Jun 2022 18:36:55 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8A1464C040;
-        Tue, 28 Jun 2022 18:36:54 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 28 Jun 2022 18:36:54 +0000 (GMT)
-Date:   Tue, 28 Jun 2022 20:36:53 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v4 12/12] sched,signal,ptrace: Rework TASK_TRACED,
- TASK_STOPPED state
-Message-ID: <YrtKReO2vIiX8VVU@tuxmaker.boeblingen.de.ibm.com>
-References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
- <20220505182645.497868-12-ebiederm@xmission.com>
- <YrHA5UkJLornOdCz@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <877d5ajesi.fsf@email.froward.int.ebiederm.org>
- <YrHgo8GKFPWwoBoJ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <87y1xk8zx5.fsf@email.froward.int.ebiederm.org>
+        Tue, 28 Jun 2022 14:39:18 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEE222B10;
+        Tue, 28 Jun 2022 11:39:15 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.79.109) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 28 Jun
+ 2022 21:39:06 +0300
+Subject: Re: [PATCH] ata: pata_cs5535: Fix W=1 warnings
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        John Garry <john.garry@huawei.com>
+CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1656335540-50293-1-git-send-email-john.garry@huawei.com>
+ <16f727b8-c3b0-c828-0c5b-6728a6e7934f@opensource.wdc.com>
+ <9044b81f-76db-75de-db74-f45d6e5ea71e@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <d26b8345-02e9-e461-c506-b429c44f74df@omp.ru>
+Date:   Tue, 28 Jun 2022 21:39:04 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87y1xk8zx5.fsf@email.froward.int.ebiederm.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: JKZNRj7mPThveR49Jq1cKgSMT_MSny1l
-X-Proofpoint-ORIG-GUID: clmplF6XXiQeVpQGsOzYn3NLFuBGpIX_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-28_11,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 phishscore=0 spamscore=0 clxscore=1015 mlxlogscore=999
- malwarescore=0 impostorscore=0 bulkscore=0 priorityscore=1501 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206280074
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <9044b81f-76db-75de-db74-f45d6e5ea71e@omp.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [178.176.79.109]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 06/28/2022 18:16:56
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 171420 [Jun 28 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 491 491 a718ef6dc942138335b0bcd7ab07f27b5c06005e
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_arrow_text}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.79.109 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;178.176.79.109:7.4.1,7.1.2;127.0.0.199:7.1.2;omp.ru:7.1.1
+X-KSE-AntiSpam-Info: {iprep_blacklist}
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.79.109
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 06/28/2022 18:19:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 6/28/2022 2:57:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 11:34:46AM -0500, Eric W. Biederman wrote:
-> I haven't gotten as far as reproducing this but I have started giving
-> this issue some thought.
+On 6/28/22 1:05 PM, Sergey Shtylyov wrote:
+[...]
+>>> x86_64 allmodconfig build with W=1 gives these warnings:
+>>>
+>>> drivers/ata/pata_cs5535.c: In function ‘cs5535_set_piomode’:
+>>> drivers/ata/pata_cs5535.c:93:11: error: variable ‘dummy’ set but not used [-Werror=unused-but-set-variable]
+>>>   u32 reg, dummy;
+>>>            ^~~~~
+>>> drivers/ata/pata_cs5535.c: In function ‘cs5535_set_dmamode’:
+>>> drivers/ata/pata_cs5535.c:132:11: error: variable ‘dummy’ set but not used [-Werror=unused-but-set-variable]
+>>>   u32 reg, dummy;
+>>>            ^~~~~
+>>> cc1: all warnings being treated as errors
+>>>
+>>> Mark variables 'dummy' as "maybe unused" to satisfy when rdmsr() is
+>>> stubbed, which is the same as what we already do in pata_cs5536.c .
+
+   Wait, what do you mean by "stubbed", the version in <asm/paravirt.h>?
+
+>>>
+>>> Signed-off-by: John Garry <john.garry@huawei.com>
 > 
-> This entire thing smells like a memory barrier is missing somewhere.
-> However by definition the lock implementations in linux provide all the
-> needed memory barriers, and in the ptrace_stop and ptrace_check_attach
-> path I don't see cases where these values are sampled outside of a lock
-> except in wait_task_inactive.  Does doing that perhaps require a
-> barrier? 
-> 
-> The two things I can think of that could shed light on what is going on
-> is enabling lockdep, to enable the debug check in signal_wake_up_state
-> and verifying bits of state that should be constant while the task
-> is frozen for ptrace are indeed constant when task is frozen for ptrace.
-> Something like my patch below.
-> 
-> If you could test that when you have a chance that would help narrow
-> down what is going on.
-> 
-> Thank you,
-> Eric
-> 
-> diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-> index 156a99283b11..6467a2b1c3bc 100644
-> --- a/kernel/ptrace.c
-> +++ b/kernel/ptrace.c
-> @@ -268,9 +268,13 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
->  	}
->  	read_unlock(&tasklist_lock);
->  
-> -	if (!ret && !ignore_state &&
-> -	    WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED)))
-> +	if (!ret && !ignore_state) {
-> +		WARN_ON_ONCE(!(child->jobctl & JOBCTL_PTRACE_FROZEN));
-> +		WARN_ON_ONCE(!(child->joctctl & JOBCTL_TRACED));
-> +		WARN_ON_ONCE(READ_ONCE(child->__state) != __TASK_TRACED);
-> +		WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED));
->  		ret = -ESRCH;
-> +	}
->  
->  	return ret;
->  }
+> Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-I modified your chunk a bit - hope that is what you had in mind:
+[...]
 
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 156a99283b11..f0e9a9a4d63c 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -268,9 +268,19 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
- 	}
- 	read_unlock(&tasklist_lock);
- 
--	if (!ret && !ignore_state &&
--	    WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED)))
--		ret = -ESRCH;
-+	if (!ret && !ignore_state) {
-+		unsigned int __state;
-+
-+		WARN_ON_ONCE(!(child->jobctl & JOBCTL_PTRACE_FROZEN));
-+		WARN_ON_ONCE(!(child->jobctl & JOBCTL_TRACED));
-+		__state = READ_ONCE(child->__state);
-+		if (__state != __TASK_TRACED) {
-+			pr_err("%s(%d) __state %x", __FUNCTION__, __LINE__, __state);
-+			WARN_ON_ONCE(1);
-+		}
-+		if (WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED)))
-+			ret = -ESRCH;
-+	}
- 
- 	return ret;
- }
-
-
-When WARN_ON_ONCE(1) hits the child __state is always zero/TASK_RUNNING,
-as reported by the preceding pr_err(). Yet, in the resulting core dump
-it is always __TASK_TRACED.
-
-Removing WARN_ON_ONCE(1) while looping until (__state != __TASK_TRACED)
-confirms the unexpected __state is always TASK_RUNNING. It never observed
-more than one iteration and gets printed once in 30-60 mins.
-
-So probably when the condition is entered __state is TASK_RUNNING more
-often, but gets overwritten with __TASK_TRACED pretty quickly. Which kind
-of consistent with my previous observation that kernel/sched/core.c:3305
-is where return 0 makes wait_task_inactive() fail.
-
-No other WARN_ON_ONCE() hit ever.
+MBR, Sergey

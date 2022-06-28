@@ -2,116 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A8B55EC44
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9633E55EC46
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233671AbiF1SKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 14:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54344 "EHLO
+        id S234749AbiF1SK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 14:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbiF1SK2 (ORCPT
+        with ESMTP id S230126AbiF1SKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:10:28 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCDF17E2E;
-        Tue, 28 Jun 2022 11:10:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=N5V6yhQZocPY9lrZhJiakOTZAyixUEqJkpQve70yjSk=; b=IgLPxRhsTgZvDEAJyg4Wb6LG7n
-        Ufwno2GsVrmZzvT12hAjSGiT7G2nZ66BmBmLaZ1mKGSbytWgN1Hc3ewF38M3/eZVCRzMQLDSq3O6s
-        PcvoX8BOkFmZA3lcbN3ss3f8ECBkITScAfe30tjLtAVp3Lnh9jkUk/hVmtB0a9HMirgmrZJ5EljNL
-        1KQLcUk7F6PuI+N9kBsqU/EnoDAJmi6YS6q4uN6go7IiCWqFzX+vpKIEBvCQOldaFW5y3uvO8kdJ8
-        EgcvPdpcKulgbLSFgQ4Pemx1we/b+V5c9mR5n3w4DGHXVmISREpyD2y6vXbd30aVg4EU0n8V0Tt1/
-        rx0YQSFg==;
-Received: from [84.78.148.123] (helo=[192.168.1.105])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1o6FfI-00CFAj-EV; Tue, 28 Jun 2022 20:10:20 +0200
-Message-ID: <b11ff46a-2e20-01b6-cbd9-2038b7bf4bc9@igalia.com>
-Date:   Tue, 28 Jun 2022 20:10:09 +0200
+        Tue, 28 Jun 2022 14:10:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF3017E2E;
+        Tue, 28 Jun 2022 11:10:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E21761ADB;
+        Tue, 28 Jun 2022 18:10:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18346C3411D;
+        Tue, 28 Jun 2022 18:10:51 +0000 (UTC)
+Date:   Tue, 28 Jun 2022 14:10:50 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+Subject: Re: [PATCH V4 06/20] tools/rv: Add dot2c
+Message-ID: <20220628141050.6d4ff81b@gandalf.local.home>
+In-Reply-To: <5b1e664b0c33f4da0430922718adc71a5d58d86c.1655368610.git.bristot@kernel.org>
+References: <cover.1655368610.git.bristot@kernel.org>
+        <5b1e664b0c33f4da0430922718adc71a5d58d86c.1655368610.git.bristot@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 0/2] UEFI panic notification mechanism
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-dev@igalia.com, kernel@gpiccoli.net,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Kees Cook <keescook@chromium.org>,
-        Matt Fleming <matt@codeblueprint.co.uk>,
-        Matthew Garrett <matthew.garrett@nebula.com>,
-        Tony Luck <tony.luck@intel.com>,
-        linux-efi <linux-efi@vger.kernel.org>
-References: <20220520195028.1347426-1-gpiccoli@igalia.com>
- <d3dd4f45-1d50-2164-447b-d4f27ac6e133@igalia.com>
- <CAMj1kXFDqhvE3R4ckD32ftkb66CjHZcGPCF0OsX6bev2MmnorA@mail.gmail.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <CAMj1kXFDqhvE3R4ckD32ftkb66CjHZcGPCF0OsX6bev2MmnorA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/06/2022 09:49, Ard Biesheuvel wrote:
-> On Thu, 2 Jun 2022 at 19:40, Guilherme G. Piccoli <gpiccoli@igalia.com> wrote:
->>
->> Hi Ard, apologies for annoying!
->>
-> 
-> No worries, just very busy :-)
-> 
->> Just a friendly ping asking if you have any opinions about these patches.
->>
-> 
-> Honestly, I'm not sure I see the value of this. You want to 'notify
-> the UEFI firmware' but the firmware doesn't really care about these
-> variables, only your bespoke tooling does. EFI pstore captures far
-> more data, so if you just wipe /sys/fs/pstore after each clean boot,
-> you already have all the data you need, no?
-> 
-> Also, I'm in the process of removing the public efivar_entry_xxx() API
-> - please look at the efi/next tree for a peek. This is related to your
-> point 3), i.e., the efivar layer is a disaster in terms of consistency
-> between different observers of the EFI variable store. Switching to
-> efivar_set_variable() [the new API] should fix that.
+On Thu, 16 Jun 2022 10:44:48 +0200
+Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
 
-Hi Ard, thanks a lot for your review! Lemme split my points in some
-bullets below:
+> +    def __create_matrix(self):
+> +        # transform the array into a dictionary
+> +        events = self.events
+> +        states = self.states
+> +        events_dict = {}
+> +        states_dict = {}
+> +        nr_event = 0
+> +        for event in events:
+> +            events_dict[event] = nr_event
+> +            nr_event += 1
+> +
+> +        nr_state = 0
+> +        for state in states:
+> +            states_dict[state] = nr_state
+> +            nr_state = nr_state + 1
+> +
 
-a) What about patch 1, is it good as-is?
+Hmm, do you just like inconsistency?
 
+		nr_event += 1
 
-b) Cool about efivar_set_variable(), could fix that in V2.
+		nr_state = nr_state + 1
 
+??
 
-c) Now, to the most relevant thing, the value of this. I might be
-mistaken, but is there any known way to let UEFI know a panic happened?
-For now, maybe only my UEFI fw might use that (and the usage is very
-nice, showing a panic logo), but this opens a myriad of potential uses.
-We can think in RAM preserving mechanism conditional to panic scenarios,
-special resets for panic vs. cold boot, and even maybe a firmware vmcore
-capturing.
-
-If there is any other way to let UEFI know about a panic, let me know
-and that will likely be more than enough for me. Otherwise, do you think
-such small code would be a big burden to carry, considering the
-cost/benefit for my use case?
-
-Thanks in advance for your analysis.
-Cheers,
-
-
-Guilherme
+-- Steve

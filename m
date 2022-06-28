@@ -2,548 +2,348 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01CA55CAA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8479155C850
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbiF1DXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 23:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
+        id S231576AbiF1DX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 23:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbiF1DW5 (ORCPT
+        with ESMTP id S231373AbiF1DX0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 23:22:57 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E58624BF7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:22:54 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VHfBZbm_1656386569;
-Received: from 30.225.28.186(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VHfBZbm_1656386569)
-          by smtp.aliyun-inc.com;
-          Tue, 28 Jun 2022 11:22:50 +0800
-Message-ID: <05412d21-1553-d871-f293-6575c923c491@linux.alibaba.com>
-Date:   Tue, 28 Jun 2022 11:22:48 +0800
+        Mon, 27 Jun 2022 23:23:26 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391BD11472;
+        Mon, 27 Jun 2022 20:23:15 -0700 (PDT)
+X-UUID: 1c3e937913cb4a7cbb08ed2e2e96b013-20220628
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:b607dd63-0220-4983-ad5c-67f95f3e394a,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:87442a2,CLOUDID:1e84f185-57f0-47ca-ba27-fe8c57fbf305,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 1c3e937913cb4a7cbb08ed2e2e96b013-20220628
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 233349912; Tue, 28 Jun 2022 11:23:09 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 28 Jun 2022 11:23:08 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 28 Jun 2022 11:23:08 +0800
+Message-ID: <7713b73db7d0f2763661a7e328f4313bd72d497d.camel@mediatek.com>
+Subject: Re: [PATCH v14 12/15] drm/mediatek: dpi: Add YUV422 output support
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 28 Jun 2022 11:23:08 +0800
+In-Reply-To: <4bc40d79d6f6d3b2bf470a7c09375859a31b5e40.camel@mediatek.com>
+References: <20220624030946.14961-1-rex-bc.chen@mediatek.com>
+         <20220624030946.14961-13-rex-bc.chen@mediatek.com>
+         <a59a61a81e45fd361774a28a66ffd3d673cb3148.camel@mediatek.com>
+         <5b0613b9cc983e24a997c122b2892b35cf8346d3.camel@mediatek.com>
+         <c3a2feae4295f3300f723a9bfd8cdf0b1c938c81.camel@mediatek.com>
+         <4bc40d79d6f6d3b2bf470a7c09375859a31b5e40.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] arm64: mm: fix linear mapping mem access performace
- degradation
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Mike Rapoport <rppt@kernel.org>
-Cc:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
-        will@kernel.org, akpm@linux-foundation.org, david@redhat.com,
-        jianyong.wu@arm.com, james.morse@arm.com, quic_qiancai@quicinc.com,
-        christophe.leroy@csgroup.eu, jonathan@marek.ca,
-        mark.rutland@arm.com, thunder.leizhen@huawei.com,
-        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, geert+renesas@glider.be,
-        ardb@kernel.org, linux-mm@kvack.org,
-        Yao Hongbo <yaohongbo@linux.alibaba.com>
-References: <1656241815-28494-1-git-send-email-guanghuifeng@linux.alibaba.com>
- <YrlPfjv2Wf/C77DI@kernel.org>
- <4d18d303-aeed-0beb-a8a4-32893f2d438d@linux.alibaba.com>
- <Yrl9FcVv1wZ5MnRp@kernel.org>
- <ae5c6c07-1d49-ffd2-6f62-69df4308d0bb@linux.alibaba.com>
- <YrnfmpcSzb3rztnK@kernel.org>
- <1778c851-c274-063e-db0f-005981aaf0d3@huawei.com>
-From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
-In-Reply-To: <1778c851-c274-063e-db0f-005981aaf0d3@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks.
+On Tue, 2022-06-28 at 11:01 +0800, Rex-BC Chen wrote:
+> On Tue, 2022-06-28 at 10:38 +0800, CK Hu wrote:
+> > On Tue, 2022-06-28 at 10:28 +0800, Rex-BC Chen wrote:
+> > > On Tue, 2022-06-28 at 10:15 +0800, CK Hu wrote:
+> > > > Hi, Bo-Chen:
+> > > > 
+> > > > On Fri, 2022-06-24 at 11:09 +0800, Bo-Chen Chen wrote:
+> > > > > Dp_intf supports YUV422 as output format. In MT8195 Chrome
+> > > > > project,
+> > > > > YUV422 output format is used for 4K resolution.
+> > > > > 
+> > > > > To support this, it is also needed to support color format
+> > > > > transfer.
+> > > > > Color format transfer is a new feature for both dpi and
+> > > > > dpintf
+> > > > > of
+> > > > > MT8195.
+> > > > > 
+> > > > > The input format could be RGB888 and output format for
+> > > > > dp_intf
+> > > > > should
+> > > > > be
+> > > > > YUV422. Therefore, we add a mtk_dpi_matrix_sel() helper to
+> > > > > update
+> > > > > the
+> > > > > DPI_MATRIX_SET register depending on the color format.
+> > > > > 
+> > > > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > > > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > > > > Reviewed-by: AngeloGioacchino Del Regno <
+> > > > > angelogioacchino.delregno@collabora.com>
+> > > > > ---
+> > > > >  drivers/gpu/drm/mediatek/mtk_dpi.c      | 34
+> > > > > ++++++++++++++++++++++++-
+> > > > >  drivers/gpu/drm/mediatek/mtk_dpi_regs.h |  3 +++
+> > > > >  2 files changed, 36 insertions(+), 1 deletion(-)
+> > > > > 
+> > > > > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > > > > b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > > > > index 9e4250356342..438bf3bc5e4a 100644
+> > > > > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > > > > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > > > > @@ -128,6 +128,7 @@ struct mtk_dpi_yc_limit {
+> > > > >   * @num_output_fmts: Quantity of supported output formats.
+> > > > >   * @is_ck_de_pol: Support CK/DE polarity.
+> > > > >   * @swap_input_support: Support input swap function.
+> > > > > + * @color_fmt_trans_support: Enable color format transfer.
+> > > > >   * @dimension_mask: Mask used for HWIDTH, HPORCH,
+> > > > > VSYNC_WIDTH
+> > > > > and
+> > > > > VSYNC_PORCH
+> > > > >   *		    (no shift).
+> > > > >   * @hvsize_mask: Mask of HSIZE and VSIZE mask (no shift).
+> > > > > @@ -144,6 +145,7 @@ struct mtk_dpi_conf {
+> > > > >  	u32 num_output_fmts;
+> > > > >  	bool is_ck_de_pol;
+> > > > >  	bool swap_input_support;
+> > > > > +	bool color_fmt_trans_support;
+> > > > >  	u32 dimension_mask;
+> > > > >  	u32 hvsize_mask;
+> > > > >  	u32 channel_swap_shift;
+> > > > > @@ -412,6 +414,31 @@ static void
+> > > > > mtk_dpi_config_disable_edge(struct
+> > > > > mtk_dpi *dpi)
+> > > > >  		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0,
+> > > > > EDGE_SEL_EN);
+> > > > >  }
+> > > > >  
+> > > > > +static void mtk_dpi_matrix_sel(struct mtk_dpi *dpi,
+> > > > > +			       enum mtk_dpi_out_color_format
+> > > > > format)
+> > > > > +{
+> > > > > +	u32 matrix_sel = 0;
+> > > > > +
+> > > > > +	if (!dpi->conf->color_fmt_trans_support) {
+> > > > > +		dev_info(dpi->dev, "matrix_sel is not
+> > > > > supported.\n");
+> > > > > +		return;
+> > > > > +	}
+> > > > > +
+> > > > > +	switch (format) {
+> > > > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_422:
+> > > > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL:
+> > > > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_444:
+> > > > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL:
+> > > > 
+> > > > I think the transform formula are different for full range and
+> > > > non-
+> > > > full 
+> > > > range. Please make sure '0x2' is for full range or non-full
+> > > > range.
+> > > > If
+> > > > you are not sure, you could provide the transform matrix of
+> > > > '0x2'
+> > > > so
+> > > > we
+> > > > could find out it's full or non-full.
+> > > > 
+> > > > > +	case MTK_DPI_COLOR_FORMAT_XV_YCC:
+> > > > > +		if (dpi->mode.hdisplay <= 720)
+> > > > > +			matrix_sel = 0x2;
+> > > > 
+> > > > Symbolize '0x2'.
+> > > > 
+> > > > > +		break;
+> > > > > +	default:
+> > > > > +		break;
+> > > > > +	}
+> > > > > +	mtk_dpi_mask(dpi, DPI_MATRIX_SET, matrix_sel,
+> > > > > INT_MATRIX_SEL_MASK);
+> > > > > +}
+> > > > > +
+> > > > >  static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
+> > > > >  					enum
+> > > > > mtk_dpi_out_color_format
+> > > > > format)
+> > > > >  {
+> > > > > @@ -419,6 +446,7 @@ static void
+> > > > > mtk_dpi_config_color_format(struct
+> > > > > mtk_dpi *dpi,
+> > > > >  	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
+> > > > >  		mtk_dpi_config_yuv422_enable(dpi, false);
+> > > > >  		mtk_dpi_config_csc_enable(dpi, true);
+> > > > > +		mtk_dpi_matrix_sel(dpi, format);
+> > > > 
+> > > > Why mt8173 support MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL but it
+> > > > does
+> > > > not
+> > > > call mtk_dpi_matrix_sel()? It seems that mt8173 also need to
+> > > > call
+> > > > mtk_dpi_matrix_sel() but lost and this patch looks like a bug
+> > > > fix
+> > > > for
+> > > > all SoC DPI driver.
+> > > > 
+> > > > Regards,
+> > > > CK
+> > > > 
+> > > 
+> > > Hello CK,
+> > > 
+> > > MT8173 does not support MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL as
+> > > output
+> > > format, the output format is:
+> > > 
+> > > static const u32 mt8173_output_fmts[] = {
+> > > 	MEDIA_BUS_FMT_RGB888_1X24,
+> > > };
+> > > 
+> > > or do I misunderstand?
+> > 
+> > In the first patch [1], it define
+> > 
+> > +enum mtk_dpi_out_color_format {
+> > +	MTK_DPI_COLOR_FORMAT_RGB,
+> > +	MTK_DPI_COLOR_FORMAT_RGB_FULL,
+> > +	MTK_DPI_COLOR_FORMAT_YCBCR_444,
+> > +	MTK_DPI_COLOR_FORMAT_YCBCR_422,
+> > +	MTK_DPI_COLOR_FORMAT_XV_YCC,
+> > +	MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL,
+> > +	MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL
+> > +};
+> > 
+> > and this function also process MTK_DPI_COLOR_FORMAT_YCBCR_444,
+> > MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL,
+> > MTK_DPI_COLOR_FORMAT_YCBCR_422,
+> > and MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL. So I think it want to
+> > process
+> > output YUV but the caller of mtk_dpi_config_color_format() just
+> > pass
+> > RGB into this function. If mt8173 does not support YUV output, I
+> > think
+> > you should remove YUV processing in this function first, and then
+> > add
+> > back YUV processing in this function.
+> > 
+> > [1] 
+> > 
+> 
+> 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/gpu/drm/mediatek/mtk_dpi.c?h=v5.19-rc4&id=9e629c17aa8d7a75b8c1d99ed42892cd8ba7cdc4
+> > 
+> > Regards,
+> > CK
+> > 
+> 
+> Hello CK,
+> 
+> I don't think it should be remove. After all, it is accepted and from
+> [1], we can see it assgin output format always as RGB.
+> +	dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
+> 
+> After that, it also added patch of supporting changing output
+> format[2].
+> 
+> We have support output as YUV422 now. I think it's ok to just add
+> this.
+> If we remove them and add them back, I think it is a little bit
+> redundant. And I also can add a commit message like "output format
+> YUV422 is not support for previous MediaTek SoCs. MT8195 supports
+> output format as YUV422.."
+> 
+> What do you think?
 
-在 2022/6/28 9:50, Kefeng Wang 写道:
-> 
-> On 2022/6/28 0:49, Mike Rapoport wrote:
->> On Mon, Jun 27, 2022 at 06:46:50PM +0800, guanghui.fgh wrote:
->>> 在 2022/6/27 17:49, Mike Rapoport 写道:
->>>> On Mon, Jun 27, 2022 at 05:24:10PM +0800, guanghui.fgh wrote:
->>>>> 在 2022/6/27 14:34, Mike Rapoport 写道:
->>>>>
->>>>>       On Sun, Jun 26, 2022 at 07:10:15PM +0800, Guanghui Feng wrote:
->>>>>
->>>>>           The arm64 can build 2M/1G block/sectiion mapping. When 
->>>>> using DMA/DMA32 zone
->>>>>           (enable crashkernel, disable rodata full, disable 
->>>>> kfence), the mem_map will
->>>>>           use non block/section mapping(for crashkernel requires to 
->>>>> shrink the region
->>>>>           in page granularity). But it will degrade performance 
->>>>> when doing larging
->>>>>           continuous mem access in kernel(memcpy/memmove, etc).
->>>>>
->>>>>           There are many changes and discussions:
->>>>>           commit 031495635b46
->>>>>           commit 1a8e1cef7603
->>>>>           commit 8424ecdde7df
->>>>>           commit 0a30c53573b0
->>>>>           commit 2687275a5843
->>>>>
->>>>>       Please include oneline summary of the commit. (See section 
->>>>> "Describe your
->>>>>       changes" in Documentation/process/submitting-patches.rst)
->>>>>
->>>>> OK, I will add oneline summary in the git commit messages.
->>>>>
->>>>>           This patch changes mem_map to use block/section mapping 
->>>>> with crashkernel.
->>>>>           Firstly, do block/section mapping(normally 2M or 1G) for 
->>>>> all avail mem at
->>>>>           mem_map, reserve crashkernel memory. And then walking 
->>>>> pagetable to split
->>>>>           block/section mapping to non block/section 
->>>>> mapping(normally 4K) [[[only]]]
->>>>>           for crashkernel mem.
->>>>>
->>>>>       This already happens when ZONE_DMA/ZONE_DMA32 are disabled. 
->>>>> Please explain
->>>>>       why is it Ok to change the way the memory is mapped with
->>>>>       ZONE_DMA/ZONE_DMA32 enabled.
->>>>>
->>>>> In short:
->>>>>
->>>>> 1.building all avail mem with block/section mapping（normally 
->>>>> 1G/2M） without
->>>>> inspecting crashkernel
->>>>> 2. Reserve crashkernel mem as same as previous doing
->>>>> 3. only change the crashkernle mem mapping to normal 
->>>>> mapping(normally 4k).
->>>>> With this method, there are block/section mapping as more as possible.
->>>> This does not answer the question why changing the way the memory is 
->>>> mapped
->>>> when there is ZONE_DMA/DMA32 and crashkernel won't cause a regression.
->>>>
->>> 1.Quoted messages from arch/arm64/mm/init.c
->>>
->>> "Memory reservation for crash kernel either done early or deferred
->>> depending on DMA memory zones configs (ZONE_DMA) --
->>>
->>> In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
->>> here instead of max_zone_phys().  This lets early reservation of
->>> crash kernel memory which has a dependency on arm64_dma_phys_limit.
->>> Reserving memory early for crash kernel allows linear creation of block
->>> mappings (greater than page-granularity) for all the memory bank rangs.
->>> In this scheme a comparatively quicker boot is observed.
->>>
->>> If ZONE_DMA configs are defined, crash kernel memory reservation
->>> is delayed until DMA zone memory range size initialization performed in
->>> zone_sizes_init().  The defer is necessary to steer clear of DMA zone
->>> memory range to avoid overlap allocation.  So crash kernel memory 
->>> boundaries
->>> are not known when mapping all bank memory ranges, which otherwise 
->>> means not
->>> possible to exclude crash kernel range from creating block mappings so
->>> page-granularity mappings are created for the entire memory range."
->>>
->>> Namely, the init order: memblock init--->linear mem mapping(4k 
->>> mapping for
->>> crashkernel, requirinig page-granularity changing))--->zone dma
->>> limit--->reserve crashkernel.
->>> So when enable ZONE DMA and using crashkernel, the mem mapping using 4k
->>> mapping.
->>>
->>> 2.As mentioned above, when linear mem use 4k mapping simply, there is 
->>> high
->>> dtlb miss(degrade performance).
->>> This patch use block/section mapping as far as possible with performance
->>> improvement.
->>>
->>> 3.This patch reserve crashkernel as same as the history(ZONE DMA &
->>> crashkernel reserving order), and only change the linear mem mapping to
->>> block/section mapping.
->> Thank you for the explanation.
->>
->> So if I understand correctly, you suggest to reserve the crash kernel
->> memory late regardless of ZONE_DMA/32 configuration and then map that 
->> memory
->> using page level mappings after the memory is reserved.
->>
->> This makes sense, but I think the patch has a few shortcomings than 
->> need to
->> be addressed.
->>
->>> Signed-off-by: Guanghui Feng <guanghuifeng@linux.alibaba.com>
->>> ---
->>>   arch/arm64/include/asm/mmu.h |   1 +
->>>   arch/arm64/mm/init.c         |   8 +-
->>>   arch/arm64/mm/mmu.c          | 274 
->>> +++++++++++++++++++++++++++++++++++++++----
->>>   3 files changed, 253 insertions(+), 30 deletions(-)
->>>
->>> diff --git a/arch/arm64/include/asm/mmu.h b/arch/arm64/include/asm/mmu.h
->>> index 48f8466..df113cc 100644
->>> --- a/arch/arm64/include/asm/mmu.h
->>> +++ b/arch/arm64/include/asm/mmu.h
->>> @@ -63,6 +63,7 @@ static inline bool arm64_kernel_unmapped_at_el0(void)
->>>   extern void arm64_memblock_init(void);
->>>   extern void paging_init(void);
->>>   extern void bootmem_init(void);
->>> +extern void mapping_crashkernel(void);
->> I think map_crashkernel() would be a better name.
-> 
-> Or a more generic naming (and for other helpers),  it's used in 
-> crashkernel for now,
-> 
-> but maybe more cases.
-> 
-> 
->>
->>>   extern void __iomem *early_io_map(phys_addr_t phys, unsigned long 
->>> virt);
->>>   extern void init_mem_pgprot(void);
->>>   extern void create_pgd_mapping(struct mm_struct *mm, phys_addr_t phys,
->>> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
->>> index 339ee84..0e7540b 100644
->>> --- a/arch/arm64/mm/init.c
->>> +++ b/arch/arm64/mm/init.c
->>> @@ -388,10 +388,6 @@ void __init arm64_memblock_init(void)
->>>       }
->>>       early_init_fdt_scan_reserved_mem();
->>> -
->>> -    if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
->>> -        reserve_crashkernel();
->>> -
->>>       high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
->>>   }
->>> @@ -438,8 +434,8 @@ void __init bootmem_init(void)
->>>        * request_standard_resources() depends on crashkernel's memory 
->>> being
->>>        * reserved, so do it here.
->>>        */
->>> -    if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
->>> -        reserve_crashkernel();
->>> +    reserve_crashkernel();
->>> +    mapping_crashkernel();
->> This can be called from reserve_crashkernel() directly.
->>>       memblock_dump_all();
->>>   }
->>> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
->>> index 626ec32..0672afd 100644
->>> --- a/arch/arm64/mm/mmu.c
->>> +++ b/arch/arm64/mm/mmu.c
->>> @@ -498,6 +498,256 @@ static int __init enable_crash_mem_map(char *arg)
->>>   }
->>>   early_param("crashkernel", enable_crash_mem_map);
->>> +#ifdef CONFIG_KEXEC_CORE
->>> +static phys_addr_t __init early_crashkernel_pgtable_alloc(int shift)
->>> +{
->>> +    phys_addr_t phys;
->>> +    void *ptr;
->>> +
->>> +    phys = memblock_phys_alloc_range(PAGE_SIZE, PAGE_SIZE, 0,
->>> +                     MEMBLOCK_ALLOC_NOLEAKTRACE);
->>> +    if (!phys)
->>> +        panic("Failed to allocate page table page\n");
->>> +
->>> +    ptr = (void *)__phys_to_virt(phys);
->>> +    memset(ptr, 0, PAGE_SIZE);
-> add dsb() to ensure page is visible to page table walk?
-I had consulted from alloc_init_cont_pte. There maybe no need dsb actually.
->>> +    return phys;
->>> +}
->>> +
->>> +static void init_crashkernel_pte(pmd_t *pmdp, unsigned long addr,
->>> +                 unsigned long end,
->>> +                 phys_addr_t phys, pgprot_t prot)
->>> +{
->>> +    pte_t *ptep;
->>> +    ptep = pte_offset_kernel(pmdp, addr);
->>> +    do {
->>> +        set_pte(ptep, pfn_pte(__phys_to_pfn(phys), prot));
->>> +        phys += PAGE_SIZE;
->>> +    } while (ptep++, addr += PAGE_SIZE, addr != end);
->>> +}
->>> +
->>> +static void alloc_crashkernel_cont_pte(pmd_t *pmdp, unsigned long addr,
->>> +                       unsigned long end, phys_addr_t phys,
->>> +                       pgprot_t prot,
->>> +                       phys_addr_t (*pgtable_alloc)(int),
->>> +                       int flags)
->>> +{
->>> +    unsigned long next;
->>> +    pmd_t pmd = READ_ONCE(*pmdp);
->>> +
->>> +    BUG_ON(pmd_sect(pmd));
->>> +    if (pmd_none(pmd)) {
->>> +        pmdval_t pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
->>> +        phys_addr_t pte_phys;
->>> +
->>> +        if (flags & NO_EXEC_MAPPINGS)
->>> +            pmdval |= PMD_TABLE_PXN;
->>> +        BUG_ON(!pgtable_alloc);
->>> +        pte_phys = pgtable_alloc(PAGE_SHIFT);
->>> +        __pmd_populate(pmdp, pte_phys, pmdval);
->>> +        pmd = READ_ONCE(*pmdp);
->>> +    }
->>> +    BUG_ON(pmd_bad(pmd));
->>> +
->>> +    do {
->>> +        pgprot_t __prot = prot;
->>> +        next = pte_cont_addr_end(addr, end);
->>> +        init_crashkernel_pte(pmdp, addr, next, phys, __prot);
->>> +        phys += next - addr;
->>> +    } while (addr = next, addr != end);
->>> +}
->>> +
->>> +static void init_crashkernel_pmd(pud_t *pudp, unsigned long addr,
->>> +                 unsigned long end, phys_addr_t phys,
->>> +                 pgprot_t prot,
->>> +                 phys_addr_t (*pgtable_alloc)(int), int flags)
->>> +{
->>> +    phys_addr_t map_offset;
->>> +    unsigned long next;
->>> +    pmd_t *pmdp;
->>> +    pmdval_t pmdval;
->>> +
->>> +    pmdp = pmd_offset(pudp, addr);
->>> +    do {
->>> +        next = pmd_addr_end(addr, end);
->>> +        if (!pmd_none(*pmdp) && pmd_sect(*pmdp)) {
->>> +            phys_addr_t pte_phys = pgtable_alloc(PAGE_SHIFT);
->>> +            pmd_clear(pmdp);
->>> +            pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
->>> +            if (flags & NO_EXEC_MAPPINGS)
->>> +                pmdval |= PMD_TABLE_PXN;
->>> +            __pmd_populate(pmdp, pte_phys, pmdval);
->>> +            flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
->>> +
->>> +            map_offset = addr - (addr & PMD_MASK);
->>> +            if (map_offset)
->>> +                alloc_init_cont_pte(pmdp, addr & PMD_MASK, addr,
->>> +                        phys - map_offset, prot,
->>> +                        pgtable_alloc, flags);
->>> +
->>> +            if (next < (addr & PMD_MASK) + PMD_SIZE)
->>> +                alloc_init_cont_pte(pmdp, next, (addr & PUD_MASK) +
->>> +                        PUD_SIZE, next - addr + phys,
->>> +                        prot, pgtable_alloc, flags);
->>> +        }
->>> +        alloc_crashkernel_cont_pte(pmdp, addr, next, phys, prot,
->>> +                       pgtable_alloc, flags);
->>> +        phys += next - addr;
->>> +    } while (pmdp++, addr = next, addr != end);
->>> +}
->>> +
->>> +static void alloc_crashkernel_cont_pmd(pud_t *pudp, unsigned long addr,
->>> +                       unsigned long end, phys_addr_t phys,
->>> +                       pgprot_t prot,
->>> +                       phys_addr_t (*pgtable_alloc)(int),
->>> +                       int flags)
->>> +{
->>> +    unsigned long next;
->>> +    pud_t pud = READ_ONCE(*pudp);
->>> +
->>> +    /*
->>> +     * Check for initial section mappings in the pgd/pud.
->>> +     */
->>> +    BUG_ON(pud_sect(pud));
->>> +    if (pud_none(pud)) {
->>> +        pudval_t pudval = PUD_TYPE_TABLE | PUD_TABLE_UXN;
->>> +        phys_addr_t pmd_phys;
->>> +
->>> +        if (flags & NO_EXEC_MAPPINGS)
->>> +            pudval |= PUD_TABLE_PXN;
->>> +        BUG_ON(!pgtable_alloc);
->>> +        pmd_phys = pgtable_alloc(PMD_SHIFT);
->>> +        __pud_populate(pudp, pmd_phys, pudval);
->>> +        pud = READ_ONCE(*pudp);
->>> +    }
->>> +    BUG_ON(pud_bad(pud));
->>> +
->>> +    do {
->>> +        pgprot_t __prot = prot;
->>> +        next = pmd_cont_addr_end(addr, end);
->>> +        init_crashkernel_pmd(pudp, addr, next, phys, __prot,
->>> +                     pgtable_alloc, flags);
->>> +        phys += next - addr;
->>> +    } while (addr = next, addr != end);
->>> +}
->>> +
->>> +static void alloc_crashkernel_pud(pgd_t *pgdp, unsigned long addr,
->>> +                  unsigned long end, phys_addr_t phys,
->>> +                  pgprot_t prot,
->>> +                  phys_addr_t (*pgtable_alloc)(int),
->>> +                  int flags)
->>> +{
->>> +    phys_addr_t map_offset;
->>> +    unsigned long next;
->>> +    pud_t *pudp;
->>> +    p4d_t *p4dp = p4d_offset(pgdp, addr);
->>> +    p4d_t p4d = READ_ONCE(*p4dp);
->>> +    pudval_t pudval;
->>> +
->>> +    if (p4d_none(p4d)) {
->>> +        p4dval_t p4dval = P4D_TYPE_TABLE | P4D_TABLE_UXN;
->>> +        phys_addr_t pud_phys;
->>> +
->>> +        if (flags & NO_EXEC_MAPPINGS)
->>> +            p4dval |= P4D_TABLE_PXN;
->>> +        BUG_ON(!pgtable_alloc);
->>> +        pud_phys = pgtable_alloc(PUD_SHIFT);
->>> +        __p4d_populate(p4dp, pud_phys, p4dval);
->>> +        p4d = READ_ONCE(*p4dp);
->>> +    }
->>> +    BUG_ON(p4d_bad(p4d));
->>> +
->>> +    /*
->>> +     * No need for locking during early boot. And it doesn't work as
->>> +     * expected with KASLR enabled.
->>> +     */
->>> +    if (system_state != SYSTEM_BOOTING)
->>> +        mutex_lock(&fixmap_lock);
-> It seems that no need to use fixmap_lock.
-Yes, it's that.
->>> +    pudp = pud_offset(p4dp, addr);
->>> +    do {
->>> +        next = pud_addr_end(addr, end);
->>> +        if (!pud_none(*pudp) && pud_sect(*pudp)) {
->>> +            phys_addr_t pmd_phys = pgtable_alloc(PMD_SHIFT);
->>> +            pud_clear(pudp);
->>> +
->>> +            pudval = PUD_TYPE_TABLE | PUD_TABLE_UXN;
->>> +            if (flags & NO_EXEC_MAPPINGS)
->>> +                pudval |= PUD_TABLE_PXN;
->>> +            __pud_populate(pudp, pmd_phys, pudval);
->>> +            flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
->>> +
->>> +            map_offset = addr - (addr & PUD_MASK);
->>> +            if (map_offset)
->>> +                alloc_init_cont_pmd(pudp, addr & PUD_MASK, addr,
->>> +                        phys - map_offset, prot,
->>> +                        pgtable_alloc, flags);
->>> +
->>> +            if (next < (addr & PUD_MASK) + PUD_SIZE)
->>> +                alloc_init_cont_pmd(pudp, next, (addr & PUD_MASK) +
->>> +                        PUD_SIZE, next - addr + phys,
->>> +                        prot, pgtable_alloc, flags);
->>> +        }
->>> +        alloc_crashkernel_cont_pmd(pudp, addr, next, phys, prot,
->>> +                       pgtable_alloc, flags);
->>> +        phys += next - addr;
->>> +    } while (pudp++, addr = next, addr != end);
->>> +
->>> +    if (system_state != SYSTEM_BOOTING)
->>> +        mutex_unlock(&fixmap_lock);
->>> +}
->>> +
->>> +static void __create_crashkernel_mapping(pgd_t *pgdir, phys_addr_t 
->>> phys,
->>> +                     unsigned long virt, phys_addr_t size,
->>> +                     pgprot_t prot,
->>> +                     phys_addr_t (*pgtable_alloc)(int),
->>> +                     int flags)
->>> +{
->>> +    unsigned long addr, end, next;
->>> +    pgd_t *pgdp = pgd_offset_pgd(pgdir, virt);
->>> +
->>> +    /*
->>> +     * If the virtual and physical address don't have the same offset
->>> +     * within a page, we cannot map the region as the caller expects.
->>> +     */
->>> +    if (WARN_ON((phys ^ virt) & ~PAGE_MASK))
->>> +        return;
->>> +
->>> +    phys &= PAGE_MASK;
->>> +    addr = virt & PAGE_MASK;
->>> +    end = PAGE_ALIGN(virt + size);
->>> +
->>> +    do {
->>> +        next = pgd_addr_end(addr, end);
->>> +        alloc_crashkernel_pud(pgdp, addr, next, phys, prot,
->>> +                      pgtable_alloc, flags);
->>> +        phys += next - addr;
->>> +    } while (pgdp++, addr = next, addr != end);
->>> +}
->> __create_crashkernel_mapping() and the helpers it uses resemble very much
->> __create_pgd_mapping() and it's helpers. I think a cleaner way would 
->> be to
->> clear section mappings and than call __create_pgd_mapping() for crash
->> kernel memory with block/section mappings disabled.
-> Yes, there are too much duplicated codes, if the handling of crash 
-> reserve memory
-> is acceptable, we could find a better way(as Mike said) to deal with the 
-> repeat.
-> Actually, we try something like this before, but I am not sure it is 
-> right way,
-> and we saw TLB conflict,  I will test this patch.
-OK, I had test this patch and worked well.
+If we have no information about mt8173 support YUV or not, we could
+just treat it as not support YUV. I like to make things clean before
+apply new feature. If you do not want to remove it, I would send a
+patch to remove it.
 
->>> +static void __init map_crashkernel(pgd_t *pgdp, phys_addr_t start,
->>> +                   phys_addr_t end, pgprot_t prot, int flags)
->>> +{
->>> +    __create_crashkernel_mapping(pgdp, start, __phys_to_virt(start),
->>> +                     end - start, prot,
->>> +                     early_crashkernel_pgtable_alloc, flags);
->>> +}
->> No need for this, you can call __create_crashkernel_mapping() directly 
->> from
->> mapping_crashkernel().
->>
->>> +
->>> +void __init mapping_crashkernel(void)
->>> +{
->>> +    if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
->>> +        return;
->>> +
->>> +    if (!crash_mem_map || !crashk_res.end)
->>> +        return;
->>> +
->>> +    map_crashkernel(swapper_pg_dir, crashk_res.start,
->>> +            crashk_res.end + 1, PAGE_KERNEL,
->>> +            NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
->>> +}
->>> +#else
->>> +void __init mapping_crashkernel(void) {}
->>> +#endif
->>> +
->>>   static void __init map_mem(pgd_t *pgdp)
->>>   {
->>>       static const u64 direct_map_end = _PAGE_END(VA_BITS_MIN);
->>> @@ -527,17 +777,6 @@ static void __init map_mem(pgd_t *pgdp)
->>>        */
->>>       memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
->>> -#ifdef CONFIG_KEXEC_CORE
->>> -    if (crash_mem_map) {
->>> -        if (IS_ENABLED(CONFIG_ZONE_DMA) ||
->>> -            IS_ENABLED(CONFIG_ZONE_DMA32))
->>> -            flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
->>> -        else if (crashk_res.end)
->>> -            memblock_mark_nomap(crashk_res.start,
->>> -                resource_size(&crashk_res));
->>> -    }
->>> -#endif
->>> -
->>>       /* map all the memory banks */
->>>       for_each_mem_range(i, &start, &end) {
->>>           if (start >= end)
->>> @@ -570,19 +809,6 @@ static void __init map_mem(pgd_t *pgdp)
->>>        * in page granularity and put back unused memory to buddy system
->>>        * through /sys/kernel/kexec_crash_size interface.
->>>        */
->>> -#ifdef CONFIG_KEXEC_CORE
->>> -    if (crash_mem_map &&
->>> -        !IS_ENABLED(CONFIG_ZONE_DMA) && 
->>> !IS_ENABLED(CONFIG_ZONE_DMA32)) {
->>> -        if (crashk_res.end) {
->>> -            __map_memblock(pgdp, crashk_res.start,
->>> -                       crashk_res.end + 1,
->>> -                       PAGE_KERNEL,
->>> -                       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
->>> -            memblock_clear_nomap(crashk_res.start,
->>> -                         resource_size(&crashk_res));
->>> -        }
->>> -    }
->>> -#endif
->>>   }
->>>   void mark_rodata_ro(void)
->>> -- 
->>> 1.8.3.1
->>
+Regards,
+CK
+
+> 
+> [2]: 
+> 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/gpu/drm/mediatek/mtk_dpi.c?h=v5.19-rc4&id=be63f6e8601ff21139da93623754717e92cbd8db
+> 
+> BRs,
+> Bo-Chen
+> > > 
+> > > BRs,
+> > > Bo-Chen
+> > > 
+> > > > >  		if (dpi->conf->swap_input_support)
+> > > > >  			mtk_dpi_config_swap_input(dpi, false);
+> > > > >  		mtk_dpi_config_channel_swap(dpi,
+> > > > > MTK_DPI_OUT_CHANNEL_SWAP_BGR);
+> > > > > @@ -426,6 +454,7 @@ static void
+> > > > > mtk_dpi_config_color_format(struct
+> > > > > mtk_dpi *dpi,
+> > > > >  		   (format ==
+> > > > > MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
+> > > > >  		mtk_dpi_config_yuv422_enable(dpi, true);
+> > > > >  		mtk_dpi_config_csc_enable(dpi, true);
+> > > > > +		mtk_dpi_matrix_sel(dpi, format);
+> > > > >  		if (dpi->conf->swap_input_support)
+> > > > >  			mtk_dpi_config_swap_input(dpi, true);
+> > > > >  		else
+> > > > > @@ -673,7 +702,10 @@ static int
+> > > > > mtk_dpi_bridge_atomic_check(struct
+> > > > > drm_bridge *bridge,
+> > > > >  	dpi->bit_num = MTK_DPI_OUT_BIT_NUM_8BITS;
+> > > > >  	dpi->channel_swap = MTK_DPI_OUT_CHANNEL_SWAP_RGB;
+> > > > >  	dpi->yc_map = MTK_DPI_OUT_YC_MAP_RGB;
+> > > > > -	dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
+> > > > > +	if (out_bus_format == MEDIA_BUS_FMT_YUYV8_1X16)
+> > > > > +		dpi->color_format =
+> > > > > MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL;
+> > > > > +	else
+> > > > > +		dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
+> > > > >  
+> > > > >  	return 0;
+> > > > >  }
+> > > > > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > > > > b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > > > > index 3a02fabe1662..cca0dccb84a2 100644
+> > > > > --- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > > > > +++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > > > > @@ -217,4 +217,7 @@
+> > > > >  
+> > > > >  #define EDGE_SEL_EN			BIT(5)
+> > > > >  #define H_FRE_2N			BIT(25)
+> > > > > +
+> > > > > +#define DPI_MATRIX_SET		0xB4
+> > > > > +#define INT_MATRIX_SEL_MASK		GENMASK(4, 0)
+> > > > >  #endif /* __MTK_DPI_REGS_H */
+> > > > 
+> > > > 
+> > > 
+> > > 
+> > 
+> > 
+> 
+> 
+

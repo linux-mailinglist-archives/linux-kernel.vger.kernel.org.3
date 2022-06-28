@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F4455CE17
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B499155C2F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345787AbiF1M3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 08:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
+        id S1345809AbiF1Mad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 08:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345652AbiF1M3W (ORCPT
+        with ESMTP id S1345700AbiF1Mac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 08:29:22 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798862BB01;
-        Tue, 28 Jun 2022 05:29:21 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id e7so11803515vsp.13;
-        Tue, 28 Jun 2022 05:29:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wimQzapjci/tNxsMqKMeMRkF2V9K297VGlo0W1Odw0s=;
-        b=oe7PRKI+nQfRiq+ebO3duN2nfZrftuLlTCjr6lgBSjNSQaS8h/+cHLJc+TejnTrwsq
-         8+IuZ2Kq8RHtyxHK11Ti1kCjFw5ZIsZMpHLZeZpCuUggAoRe99pLnYVlOp1wkEkttjMD
-         xUSsugX5IfO55tkNgQKz+/fio58csK+A9FjJBTDJvgKeoLGtiRyXzcuc0oTfQsFty1C4
-         FzwGK12J1XoZfww3GjIYaMqNral9EsLeVXzCIRmD22ck5nwYKQSz/7kfx5/SpYEj99V8
-         r+lwb5fR2ikDxoAG4j1u2nvLU7WySbqqjIei+FoYDev3tImvStK4/QJPiAWy2BdcFMPJ
-         opFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wimQzapjci/tNxsMqKMeMRkF2V9K297VGlo0W1Odw0s=;
-        b=p9igo+rW+6nPCa9F/XS8CRJB/eZuBjgQyYR2K3cka13qOidQohwUWFPt6QkHf3gU0o
-         PZM9dxpJT8aUY5ZKEuM7wHFMI7UdrsrvsmI3BGo1U6pBELlE3ftFSnCnapkFuA2x0eNa
-         QSy2ozgEm8ScKhXOWlfQmDd43bjWcMoJ68uRYafgvw0CYPsjcO2KTIbNqbQvgm6PeKZ/
-         hql7rLQcFSMgFA9xeQgyrsiQZm3cLb+08RSyTOXhEnWVeDrgwwXUCAmu0Bc4JHDPx6eW
-         6DjRBc3H2B+WVZh540aQvWx3QehZfX1SxB8fefqAnd1PTtv4kHg+KHvb/puadErLI8CU
-         NKPw==
-X-Gm-Message-State: AJIora8VDxfGEsbLX5XaEAXGFcPSVMLN2CEarshv1vaTCZJr6pWDiXKT
-        Xz59vU+bi/A5hvo4I+hzc0SMZYf7bHcloHToWe8=
-X-Google-Smtp-Source: AGRyM1vB3d3ZrWgSprpNG3I5cuSOeNUxmBxLHGr/5XtKkN9fVaBUCWi4tJp+VHZMvI6FTS++Pq+lvWHba4Lsjm/u63E=
-X-Received: by 2002:a05:6102:38c7:b0:356:4e2f:ae5b with SMTP id
- k7-20020a05610238c700b003564e2fae5bmr1622701vst.71.1656419360645; Tue, 28 Jun
- 2022 05:29:20 -0700 (PDT)
+        Tue, 28 Jun 2022 08:30:32 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B53C03
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:30:30 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LXP6F2lBTzkWx6;
+        Tue, 28 Jun 2022 20:29:09 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 28 Jun 2022 20:30:28 +0800
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 28 Jun 2022 20:30:26 +0800
+Message-ID: <6a8249ae-07a1-908b-8e5c-8459ed0b5a80@huawei.com>
+Date:   Tue, 28 Jun 2022 20:30:25 +0800
 MIME-Version: 1.0
-References: <20220628101413.10432-1-duguoweisz@gmail.com> <20220628104528.no4jarh2ihm5gxau@quack3>
- <20220628104853.c3gcsvabqv2zzckd@wittgenstein> <CAC+1NxtAfbKOcW1hykyygScJgN7DsPKxLeuqNNZXLqekHgsG=Q@mail.gmail.com>
-In-Reply-To: <CAC+1NxtAfbKOcW1hykyygScJgN7DsPKxLeuqNNZXLqekHgsG=Q@mail.gmail.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Tue, 28 Jun 2022 15:29:08 +0300
-Message-ID: <CAOQ4uxgtZDihnydqZ04wjm2XCYjui0nnkO0VGzyq-+ERW20pJw@mail.gmail.com>
-Subject: Re: [PATCH 6/6] fanotify: add current_user_instances node
-To:     guowei du <duguoweisz@gmail.com>
-Cc:     Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-        Matthew Bobrowski <repnop@google.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        duguowei <duguowei@xiaomi.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH -next v6 00/10]arm64: add machine check safe support
+To:     Mark Rutland <mark.rutland@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>
+CC:     <linuxppc-dev@lists.ozlabs.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Xie XiuQi <xiexiuqi@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+References: <20220621072638.1273594-1-tongtiangen@huawei.com>
+From:   Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <20220621072638.1273594-1-tongtiangen@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,49 +70,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 2:50 PM guowei du <duguoweisz@gmail.com> wrote:
->
-> hi, Mr Kara, Mr Brauner,
->
-> I want to know how many fanotify readers are monitoring the fs event.
-> If userspace daemons monitoring all file system events are too many, maybe there will be an impact on performance.
->
-
-I want something else which is more than just the number of groups.
-
-I want to provide the admin the option to enumerate over all groups and
-list their marks and blocked events.
-
-This would be similar to listing all the fdinfo of anon_inode:[fanotify] fds
-of processes that initialised fanotify groups.
-
-This enumeration could be done for example in /sys/fs/fanotify/groups/
-
-My main incentive is not only the enumeration.
-My main incentive is to provide an administrative interface to
-check for any fs operations that are currently blocked by a rogue
-fanotify permission events reader and an easy way for administrators
-to kill those rogue processes (i.e. buggy anti-malware).
-
-This interface is inspired by the ability to enumerate and abort
-fuse connections for rogue fuse servers.
-
-I want to do that for the existing permission events as a prerequisite
-to adding new blocking events to be used for implementation of
-hierarchical storage managers, similar the Windows ProjFs [1].
-This was allegedly the intended use case for group class
-FAN_CLASS_PRE_CONTENT (see man page).
-
-Do you want to implement the first step of enumerating fdinfo
-of all groups via /sys/fs/fanotify/groups/?
-
-Jan,
-
-If you have objections to any of the ideas above please shout.
-I was going to prepare a roadmap for blocking events and post it
-for comments, but this patch triggered a heads up.
+Hi,Mark, kindly ping...
 
 Thanks,
-Amir.
+Tong.
 
-[1] https://docs.microsoft.com/en-us/windows/win32/projfs/projected-file-system
+在 2022/6/21 15:26, Tong Tiangen 写道:
+> With the increase of memory capacity and density, the probability of
+> memory error increases. The increasing size and density of server RAM
+> in the data center and cloud have shown increased uncorrectable memory
+> errors.
+> 
+> Currently, the kernel has a mechanism to recover from hardware memory
+> errors. This patchset provides an new recovery mechanism.
+> 
+> For arm64, the hardware memory error handling is do_sea() which divided
+> into two cases:
+>   1. The user state consumed the memory errors, the solution is kill the
+>      user process and isolate the error page.
+>   2. The kernel state consumed the memory errors, the solution is panic.
+> 
+> For case 2, Undifferentiated panic maybe not the optimal choice, it can be
+> handled better, in some scenarios, we can avoid panic, such as uaccess, if the
+> uaccess fails due to memory error, only the user process will be affected,
+> kill the user process and isolate the user page with hardware memory errors
+> is a better choice.
+> 
+> This patchset can be divided into two parts:
+>   1. Patch 1~6    - do some restructuring to arm64 extable.
+>   2. Patch 7~10   - arm64 add support for machine check safe framework,
+>   then ,add two specific scenarios(uaccess/cow) to machine check safe.
+> 
+> Since V5:
+>   1. Add patch2/3 to add uaccess assembly helpers.
+>   2. Optimize the implementation logic of arm64_do_kernel_sea() in patch8.
+>   3. Remove kernel access fixup in patch9.
+>   All suggestion are from Mark.
+> 
+> Since V4:
+>   1. According Michael's suggestion, add patch5.
+>   2. According Mark's suggestiog, do some restructuring to arm64
+>   extable, then a new adaptation of machine check safe support is made based
+>   on this.
+>   3. According Mark's suggestion, support machine check safe in do_mte() in
+>   cow scene.
+>   4. In V4, two patches have been merged into -next, so V5 not send these
+>   two patches.
+> 
+> Since V3:
+>   1. According to Robin's suggestion, direct modify user_ldst and
+>   user_ldp in asm-uaccess.h and modify mte.S.
+>   2. Add new macro USER_MC in asm-uaccess.h, used in copy_from_user.S
+>   and copy_to_user.S.
+>   3. According to Robin's suggestion, using micro in copy_page_mc.S to
+>   simplify code.
+>   4. According to KeFeng's suggestion, modify powerpc code in patch1.
+>   5. According to KeFeng's suggestion, modify mm/extable.c and some code
+>   optimization.
+> 
+> Since V2:
+>   1. According to Mark's suggestion, all uaccess can be recovered due to
+>      memory error.
+>   2. Scenario pagecache reading is also supported as part of uaccess
+>      (copy_to_user()) and duplication code problem is also solved.
+>      Thanks for Robin's suggestion.
+>   3. According Mark's suggestion, update commit message of patch 2/5.
+>   4. According Borisllav's suggestion, update commit message of patch 1/5.
+> 
+> Since V1:
+>   1.Consistent with PPC/x86, Using CONFIG_ARCH_HAS_COPY_MC instead of
+>     ARM64_UCE_KERNEL_RECOVERY.
+>   2.Add two new scenes, cow and pagecache reading.
+>   3.Fix two small bug(the first two patch).
+> 
+> V1 in here:
+> https://lore.kernel.org/lkml/20220323033705.3966643-1-tongtiangen@huawei.com/
+> 
+> Tong Tiangen (10):
+>    arm64: extable: add new extable type EX_TYPE_KACCESS_ERR_ZERO support
+>    arm64: asm-extable: move data fields
+>    arm64: asm-extable: add asm uacess helpers
+>    arm64: extable: make uaaccess helper use extable type
+>      EX_TYPE_UACCESS_ERR_ZERO
+>    arm64: extable: move _cond_extable to _cond_uaccess_extable
+>    arm64: extable: cleanup redundant extable type EX_TYPE_FIXUP
+>    Add generic fallback version of copy_mc_to_user()
+>    arm64: add support for machine check error safe
+>    arm64: add uaccess to machine check safe
+>    arm64: add cow to machine check safe
+> 
+>   arch/arm64/Kconfig                   |  1 +
+>   arch/arm64/include/asm/asm-extable.h | 84 ++++++++++++++++++-------
+>   arch/arm64/include/asm/asm-uaccess.h | 12 ++--
+>   arch/arm64/include/asm/assembler.h   |  8 ++-
+>   arch/arm64/include/asm/extable.h     |  1 +
+>   arch/arm64/include/asm/mte.h         |  4 ++
+>   arch/arm64/include/asm/page.h        | 10 +++
+>   arch/arm64/include/asm/uaccess.h     | 94 ++++++++++++++--------------
+>   arch/arm64/lib/Makefile              |  2 +
+>   arch/arm64/lib/copy_page_mc.S        | 82 ++++++++++++++++++++++++
+>   arch/arm64/lib/mte.S                 | 19 ++++++
+>   arch/arm64/mm/copypage.c             | 41 +++++++++---
+>   arch/arm64/mm/extable.c              | 21 ++++++-
+>   arch/arm64/mm/fault.c                | 29 ++++++++-
+>   arch/powerpc/include/asm/uaccess.h   |  1 +
+>   arch/x86/include/asm/uaccess.h       |  1 +
+>   include/linux/highmem.h              |  8 +++
+>   include/linux/uaccess.h              |  9 +++
+>   mm/memory.c                          |  2 +-
+>   19 files changed, 339 insertions(+), 90 deletions(-)
+>   create mode 100644 arch/arm64/lib/copy_page_mc.S
+> 

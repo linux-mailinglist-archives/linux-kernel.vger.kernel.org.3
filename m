@@ -2,179 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A11555E656
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4859155E744
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347175AbiF1OrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 10:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
+        id S1347185AbiF1OrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 10:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347163AbiF1Oq6 (ORCPT
+        with ESMTP id S1347166AbiF1OrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 10:46:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263022ED55;
-        Tue, 28 Jun 2022 07:46:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C65CCB81EA2;
-        Tue, 28 Jun 2022 14:46:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CDB3C3411D;
-        Tue, 28 Jun 2022 14:46:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656427614;
-        bh=TvTe4Qb0dtjUwWQirqmAkZHbbIfz5YO7qMPwTZqUeSs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UV3InFSBhPO4SzgB4K8MD6zPRFYHx6vL0yiV+Gn9hOrBuceOdCSe/cnz+i+Ny9AGR
-         nfjXbcyjtfnv82PQxBCQrDJHCZxssfsfaN/ftuk9r4c08Lc5SnAuj7dEcTQ7VRDODW
-         H7ayiKcgmY0vVKKWYOdzBUtD/zrAUoBAAe94pO/i3SHtWyzlBxcIKteS0Q165lvtLt
-         h44/1QwNxd7k0pF7vhJHYPCP3tiyyDmVKNQT+f1AmrmKVNe8TqjpK1PI0DHe/3uWD6
-         LnAufJus7qjt9dAD3X7ESidKcleMREsPG5xxJmrZxYOaZ+lp5mItAA8RH9WhKi5UyR
-         PYZVRLwTxWGqw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 166494096F; Tue, 28 Jun 2022 11:46:52 -0300 (-03)
-Date:   Tue, 28 Jun 2022 11:46:52 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        Hao Luo <haoluo@google.com>,
-        Milian Wolff <milian.wolff@kdab.com>, bpf@vger.kernel.org,
-        Blake Jones <blakejones@google.com>
-Subject: Re: [PATCH 2/6] perf offcpu: Accept allowed sample types only
-Message-ID: <YrsUXCRBNSV4ILoK@kernel.org>
-References: <20220624231313.367909-1-namhyung@kernel.org>
- <20220624231313.367909-3-namhyung@kernel.org>
+        Tue, 28 Jun 2022 10:47:01 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6432FFE1;
+        Tue, 28 Jun 2022 07:47:00 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id w24so12794551pjg.5;
+        Tue, 28 Jun 2022 07:47:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=RcJ0LvnXsRYCpaaWQCJPfDAyqL/8a86kBAToJ7vwdJU=;
+        b=WQAlYrUhBD//WlreKty7MqmQg8VtvPzCPIotzVpSdo27Bvd4F/sWU6Mp1c/Vz71v8c
+         wy4cBV2FBJjEk/soJ/56x041FP7KiUsR9CDJYPGAQpj7CtK++8rsq4P1P2gw1wpV6Vmb
+         bhhC1BwlJos/dej4vNxEiPW8WpRl+Dm01KHRx/RNbzkcd/QE39v/U1KQZGWB46y6BzH6
+         Bfp/7FbmbLLWhhAgXvZEiGM1RoxGVWVr/rVMm1oNaRcK8DinLgrrJRXphr7Z0zqMJF67
+         KqXIHeSjT5yEojGDQ+PFLfqiuRfB9Zu9hM42LZmjQqSmqnFpmGW9Yys3ralF0QNrN5ry
+         lLSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RcJ0LvnXsRYCpaaWQCJPfDAyqL/8a86kBAToJ7vwdJU=;
+        b=18tUUAkCIyx4Ba1dJ93rLKmjEa6eYUrov3XUyOgb3tGC3vcoY68iSJpLwU5gjBHqPv
+         6Y1kz8sOBO31aTFWe+xw3K7skinduG7NzWQeakJpvbFss8FB9tKY/iRyW5vjYN8trtrT
+         sEfcHryllZCJqrMCC/peYrAb8pqtXeVQXd7VoAGVUaEATPqtcBVrbg3cBiNbu5msFOib
+         qmtfARKV0vWr0D9DDppXly72SQqUjI++/UFgrMeMaO/U/+62rmCPvgmeE20KxH0t9j0p
+         VOhdDWm+YrzvggvQP6ouN/Zj9cHPvbmhHnSClsQEsaYddEfwsQrZSlrRJ/wkN3yBuPM+
+         IObQ==
+X-Gm-Message-State: AJIora++U1JmAPhqdf8rk3f6zFqn0TDOI8MNX/J2aHDCMOQbzteLONkf
+        5xSTg8K9K5Cgk3n0jBFMHj0=
+X-Google-Smtp-Source: AGRyM1sPvQOJ0/OkTI/VuSSST+v3e7vJbLGipF63DNlCkewwutffIXDn1cfb8jo9EHcwl3AuMECgVw==
+X-Received: by 2002:a17:90b:1986:b0:1ec:71f6:5fd9 with SMTP id mv6-20020a17090b198600b001ec71f65fd9mr27054263pjb.188.1656427619514;
+        Tue, 28 Jun 2022 07:46:59 -0700 (PDT)
+Received: from ?IPV6:2600:8802:b00:4a48:c569:fa46:5b43:1b1e? ([2600:8802:b00:4a48:c569:fa46:5b43:1b1e])
+        by smtp.gmail.com with ESMTPSA id ms3-20020a17090b234300b001ead46e77e2sm9635024pjb.13.2022.06.28.07.46.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 07:46:59 -0700 (PDT)
+Message-ID: <93f6d122-3b0e-5706-4c9e-b0cdc3479455@gmail.com>
+Date:   Tue, 28 Jun 2022 07:46:58 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220624231313.367909-3-namhyung@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH net-next v2 3/4] net: dsa: microchip: add pause stats
+ support
+Content-Language: en-US
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+        UNGLinuxDriver@microchip.com
+References: <20220628085155.2591201-1-o.rempel@pengutronix.de>
+ <20220628085155.2591201-4-o.rempel@pengutronix.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220628085155.2591201-4-o.rempel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Jun 24, 2022 at 04:13:09PM -0700, Namhyung Kim escreveu:
-> As offcpu-time event is synthesized at the end, it could not get the
-> all the sample info.  Define OFFCPU_SAMPLE_TYPES for allowed ones and
-> mask out others in evsel__config() to prevent parse errors.
+
+
+On 6/28/2022 1:51 AM, Oleksij Rempel wrote:
+> Add support for pause specific stats.
 > 
-> Because perf sample parsing assumes a specific ordering with the
-> sample types, setting unsupported one would make it fail to read
-> data like perf record -d/--data.
-
-> Fixes: edc41a1099c2 ("perf record: Enable off-cpu analysis with BPF")
-
-Thanks, applied.
-
-- Arnaldo
-
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/util/bpf_off_cpu.c | 7 ++++++-
->  tools/perf/util/evsel.c       | 9 +++++++++
->  tools/perf/util/off_cpu.h     | 9 +++++++++
->  3 files changed, 24 insertions(+), 1 deletion(-)
+> Tested on ksz9477.
 > 
-> diff --git a/tools/perf/util/bpf_off_cpu.c b/tools/perf/util/bpf_off_cpu.c
-> index b73e84a02264..f289b7713598 100644
-> --- a/tools/perf/util/bpf_off_cpu.c
-> +++ b/tools/perf/util/bpf_off_cpu.c
-> @@ -265,6 +265,12 @@ int off_cpu_write(struct perf_session *session)
->  
->  	sample_type = evsel->core.attr.sample_type;
->  
-> +	if (sample_type & ~OFFCPU_SAMPLE_TYPES) {
-> +		pr_err("not supported sample type: %llx\n",
-> +		       (unsigned long long)sample_type);
-> +		return -1;
-> +	}
-> +
->  	if (sample_type & (PERF_SAMPLE_ID | PERF_SAMPLE_IDENTIFIER)) {
->  		if (evsel->core.id)
->  			sid = evsel->core.id[0];
-> @@ -319,7 +325,6 @@ int off_cpu_write(struct perf_session *session)
->  		}
->  		if (sample_type & PERF_SAMPLE_CGROUP)
->  			data.array[n++] = key.cgroup_id;
-> -		/* TODO: handle more sample types */
->  
->  		size = n * sizeof(u64);
->  		data.hdr.size = size;
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> index ce499c5da8d7..094b0a9c0bc0 100644
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-> @@ -48,6 +48,7 @@
->  #include "util.h"
->  #include "hashmap.h"
->  #include "pmu-hybrid.h"
-> +#include "off_cpu.h"
->  #include "../perf-sys.h"
->  #include "util/parse-branch-options.h"
->  #include <internal/xyarray.h>
-> @@ -1102,6 +1103,11 @@ static void evsel__set_default_freq_period(struct record_opts *opts,
->  	}
->  }
->  
-> +static bool evsel__is_offcpu_event(struct evsel *evsel)
-> +{
-> +	return evsel__is_bpf_output(evsel) && !strcmp(evsel->name, OFFCPU_EVENT);
-> +}
-> +
->  /*
->   * The enable_on_exec/disabled value strategy:
->   *
-> @@ -1366,6 +1372,9 @@ void evsel__config(struct evsel *evsel, struct record_opts *opts,
->  	 */
->  	if (evsel__is_dummy_event(evsel))
->  		evsel__reset_sample_bit(evsel, BRANCH_STACK);
-> +
-> +	if (evsel__is_offcpu_event(evsel))
-> +		evsel->core.attr.sample_type &= OFFCPU_SAMPLE_TYPES;
->  }
->  
->  int evsel__set_filter(struct evsel *evsel, const char *filter)
-> diff --git a/tools/perf/util/off_cpu.h b/tools/perf/util/off_cpu.h
-> index 548008f74d42..2dd67c60f211 100644
-> --- a/tools/perf/util/off_cpu.h
-> +++ b/tools/perf/util/off_cpu.h
-> @@ -1,6 +1,8 @@
->  #ifndef PERF_UTIL_OFF_CPU_H
->  #define PERF_UTIL_OFF_CPU_H
->  
-> +#include <linux/perf_event.h>
-> +
->  struct evlist;
->  struct target;
->  struct perf_session;
-> @@ -8,6 +10,13 @@ struct record_opts;
->  
->  #define OFFCPU_EVENT  "offcpu-time"
->  
-> +#define OFFCPU_SAMPLE_TYPES  (PERF_SAMPLE_IDENTIFIER | PERF_SAMPLE_IP | \
-> +			      PERF_SAMPLE_TID | PERF_SAMPLE_TIME | \
-> +			      PERF_SAMPLE_ID | PERF_SAMPLE_CPU | \
-> +			      PERF_SAMPLE_PERIOD | PERF_SAMPLE_CALLCHAIN | \
-> +			      PERF_SAMPLE_CGROUP)
-> +
-> +
->  #ifdef HAVE_BPF_SKEL
->  int off_cpu_prepare(struct evlist *evlist, struct target *target,
->  		    struct record_opts *opts);
-> -- 
-> 2.37.0.rc0.161.g10f37bed90-goog
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-
-- Arnaldo
+Florian

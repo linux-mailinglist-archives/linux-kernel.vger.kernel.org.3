@@ -2,196 +2,674 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5237B55E4A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C12F055E4B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346497AbiF1Nb4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Jun 2022 09:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56760 "EHLO
+        id S1346124AbiF1Ncv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346488AbiF1Nak (ORCPT
+        with ESMTP id S1345691AbiF1NcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:30:40 -0400
-Received: from mail4.swissbit.com (mail4.swissbit.com [176.95.1.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A0E1014;
-        Tue, 28 Jun 2022 06:30:04 -0700 (PDT)
-Received: from mail4.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 57164122EC5;
-        Tue, 28 Jun 2022 15:30:03 +0200 (CEST)
-Received: from mail4.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 3B739122EB2;
-        Tue, 28 Jun 2022 15:30:03 +0200 (CEST)
-X-TM-AS-ERS: 10.149.2.84-127.5.254.253
-X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
-X-DDEI-TLS-USAGE: Used
-Received: from ex.swissbit.com (SBDEEX02.sbitdom.lan [10.149.2.84])
-        by mail4.swissbit.com (Postfix) with ESMTPS;
-        Tue, 28 Jun 2022 15:30:03 +0200 (CEST)
-Received: from sbdeex04.sbitdom.lan (10.149.2.42) by sbdeex02.sbitdom.lan
- (10.149.2.84) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Tue, 28 Jun
- 2022 15:30:02 +0200
-Received: from sbdeex02.sbitdom.lan (10.149.2.84) by sbdeex04.sbitdom.lan
- (10.149.2.42) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Tue, 28 Jun
- 2022 15:30:02 +0200
-Received: from sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74]) by
- sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74%8]) with mapi id
- 15.02.1118.009; Tue, 28 Jun 2022 15:30:02 +0200
-From:   Christian Loehle <CLoehle@hyperstone.com>
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Avri Altman <Avri.Altman@wdc.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCHv3] mmc: block: Add single read for 4k sector cards
-Thread-Topic: [PATCHv3] mmc: block: Add single read for 4k sector cards
-Thread-Index: AdiK8uOh9sQudDNBTZK/b3j4jg18Iw==
-Date:   Tue, 28 Jun 2022 13:30:02 +0000
-Message-ID: <ac3d763c9eff4c81aab9eb1245065685@hyperstone.com>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.153.3.44]
-Content-Type: text/plain;
-        charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        Tue, 28 Jun 2022 09:32:16 -0400
+Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ED22C679
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:31:24 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1656423055tww0fqdd
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 28 Jun 2022 21:30:48 +0800 (CST)
+X-QQ-SSF: 01400000002000G0S000B00A0000000
+X-QQ-FEAT: F3yR32iATbibfrhkst/w58YCgQF3PfWX+3LmRSwascU4NiIahpTd4joakFXOO
+        NhdCvU4aQVZdF9zitGKKvoLbudOpfCHOTfeXrpT4K1r/4kVatRBe1M9sabYDgsCHuUw/HZ6
+        QXLC01niHGBedZuNUijIxd6e6Dhq6Ml18zStrIx5pkkcvQsXb76W6Tjbc0djiJs9BsoXP0F
+        +pPUhp74kqoCl72dptpHxj/yvkDEaXLPvdbfoVnl3Zxu/Ta9smBPwAE2uFX9YFs7xo/ZwDd
+        N0xCzy0MEqnThQ5t7gEFiwY+482owpFeosuFiNk71dcle4rbd8puevV8w0bJ8QeALMRxhif
+        fayAFT4tkI7SYjI5rW/aY4mhKiZEJnSVK2pprMY0VZAlxwGXmc=
+X-QQ-GoodBg: 2
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     stable@vger.kernel.org, tony0620emma@gmail.com,
+        kvalo@codeaurora.org, davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guo-Feng Fan <vincent_fann@realtek.com>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Meng Tang <tangmeng@uniontech.com>
+Subject: [PATCH 5.10 1/3] commit 5d6651fe8583 ("rtw88: 8821c: support RFE type2 wifi NIC")
+Date:   Tue, 28 Jun 2022 21:30:44 +0800
+Message-Id: <20220628133046.2474-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-9.0.1002-26984.000
-X-TMASE-Result: 10-0.824300-10.000000
-X-TMASE-MatchedRID: /+von0vPuFHzXojwcywrzPCW/PNRRp/ZG24YVeuZGmPozDhGeQC9Er8F
-        Hrw7frluf146W0iUu2tacZzTSiX0+bWfqrMzDJSXzYK5U+QI3O5Hyz3bB5kG52fIvzHS0qU71Ie
-        ckOrbKExvzxvIxmtIpxi87IOQ/i43K6km+od/UDyF0P4btTlf9CiBpCFE00S+myiLZetSf8lRfL
-        aSAVDtyiq2rl3dzGQ1ztE+5yrjfKvqmukZ9YtcgwaHSJ3fNGcaiUKfPOUK6NexdCJcd3nhqlXK9
-        tOD+u6c
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: 609bbf6a-c05e-4d54-926e-c74465300547-0-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign8
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cards with 4k native sector size may only be read 4k-aligned,
-accommodate for this in the single read recovery and use it.
+From: Guo-Feng Fan <vincent_fann@realtek.com>
 
-Fixes: 81196976ed946 (mmc: block: Add blk-mq support)
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+RFE type2 is a new NIC which has one RF antenna shares with BT.
+Update phy parameter to verstion V57 to allow initial procedure
+to load extra AGC table for sharing antenna NIC.
+
+Signed-off-by: Guo-Feng Fan <vincent_fann@realtek.com>
+Signed-off-by: Ping-Ke Shih <pkshih@realtek.com>
+Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+Link: https://lore.kernel.org/r/20210202055012.8296-4-pkshih@realtek.com
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
 ---
- drivers/mmc/core/block.c | 27 +++++++++++++--------------
- 1 file changed, 13 insertions(+), 14 deletions(-)
+ drivers/net/wireless/realtek/rtw88/main.c     |   2 +
+ drivers/net/wireless/realtek/rtw88/main.h     |   7 +
+ drivers/net/wireless/realtek/rtw88/rtw8821c.c |  47 +++
+ drivers/net/wireless/realtek/rtw88/rtw8821c.h |  14 +
+ .../wireless/realtek/rtw88/rtw8821c_table.c   | 397 ++++++++++++++++++
+ .../wireless/realtek/rtw88/rtw8821c_table.h   |   1 +
+ 6 files changed, 468 insertions(+)
 
-diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index f4a1281658db..7b73d77687b1 100644
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -176,7 +176,7 @@ static inline int mmc_blk_part_switch(struct mmc_card *card,
- 				      unsigned int part_type);
- static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
- 			       struct mmc_card *card,
--			       int disable_multi,
-+			       int recovery_mode,
- 			       struct mmc_queue *mq);
- static void mmc_blk_hsq_req_done(struct mmc_request *mrq);
+diff --git a/drivers/net/wireless/realtek/rtw88/main.c b/drivers/net/wireless/realtek/rtw88/main.c
+index 2ef1416899f0..c09d2a8b51dd 100644
+--- a/drivers/net/wireless/realtek/rtw88/main.c
++++ b/drivers/net/wireless/realtek/rtw88/main.c
+@@ -1551,6 +1551,8 @@ static int rtw_chip_board_info_setup(struct rtw_dev *rtwdev)
+ 	rtw_phy_setup_phy_cond(rtwdev, 0);
  
-@@ -1302,7 +1302,7 @@ static void mmc_blk_eval_resp_error(struct mmc_blk_request *brq)
+ 	rtw_phy_init_tx_power(rtwdev);
++	if (rfe_def->agc_btg_tbl)
++		rtw_load_table(rtwdev, rfe_def->agc_btg_tbl);
+ 	rtw_load_table(rtwdev, rfe_def->phy_pg_tbl);
+ 	rtw_load_table(rtwdev, rfe_def->txpwr_lmt_tbl);
+ 	rtw_phy_tx_power_by_rate_config(hal);
+diff --git a/drivers/net/wireless/realtek/rtw88/main.h b/drivers/net/wireless/realtek/rtw88/main.h
+index 8ba0b0824ae9..7769cad3f731 100644
+--- a/drivers/net/wireless/realtek/rtw88/main.h
++++ b/drivers/net/wireless/realtek/rtw88/main.h
+@@ -1041,6 +1041,7 @@ enum rtw_rfe_fem {
+ struct rtw_rfe_def {
+ 	const struct rtw_table *phy_pg_tbl;
+ 	const struct rtw_table *txpwr_lmt_tbl;
++	const struct rtw_table *agc_btg_tbl;
+ };
+ 
+ #define RTW_DEF_RFE(chip, bb_pg, pwrlmt) {				  \
+@@ -1048,6 +1049,12 @@ struct rtw_rfe_def {
+ 	.txpwr_lmt_tbl = &rtw ## chip ## _txpwr_lmt_type ## pwrlmt ## _tbl, \
+ 	}
+ 
++#define RTW_DEF_RFE_EXT(chip, bb_pg, pwrlmt, btg) {			  \
++	.phy_pg_tbl = &rtw ## chip ## _bb_pg_type ## bb_pg ## _tbl,	  \
++	.txpwr_lmt_tbl = &rtw ## chip ## _txpwr_lmt_type ## pwrlmt ## _tbl, \
++	.agc_btg_tbl = &rtw ## chip ## _agc_btg_type ## btg ## _tbl, \
++	}
++
+ #define RTW_PWR_TRK_5G_1		0
+ #define RTW_PWR_TRK_5G_2		1
+ #define RTW_PWR_TRK_5G_3		2
+diff --git a/drivers/net/wireless/realtek/rtw88/rtw8821c.c b/drivers/net/wireless/realtek/rtw88/rtw8821c.c
+index f9615f76f173..4514c4e8ee58 100644
+--- a/drivers/net/wireless/realtek/rtw88/rtw8821c.c
++++ b/drivers/net/wireless/realtek/rtw88/rtw8821c.c
+@@ -21,6 +21,13 @@ static void rtw8821ce_efuse_parsing(struct rtw_efuse *efuse,
+ 	ether_addr_copy(efuse->addr, map->e.mac_addr);
  }
  
- static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_req *mqrq,
--			      int disable_multi, bool *do_rel_wr_p,
-+			      int recovery_mode, bool *do_rel_wr_p,
- 			      bool *do_data_tag_p)
++enum rtw8821ce_rf_set {
++	SWITCH_TO_BTG,
++	SWITCH_TO_WLG,
++	SWITCH_TO_WLA,
++	SWITCH_TO_BT,
++};
++
+ static int rtw8821c_read_efuse(struct rtw_dev *rtwdev, u8 *log_map)
  {
- 	struct mmc_blk_data *md = mq->blkdata;
-@@ -1368,12 +1368,12 @@ static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_req *mqrq,
- 			brq->data.blocks--;
+ 	struct rtw_efuse *efuse = &rtwdev->efuse;
+@@ -224,6 +231,40 @@ static void rtw8821c_cfg_ldo25(struct rtw_dev *rtwdev, bool enable)
+ 	rtw_write8(rtwdev, REG_LDO_EFUSE_CTRL + 3, ldo_pwr);
+ }
  
- 		/*
--		 * After a read error, we redo the request one sector
-+		 * After a read error, we redo the request one (native) sector
- 		 * at a time in order to accurately determine which
- 		 * sectors can be read successfully.
- 		 */
--		if (disable_multi)
--			brq->data.blocks = 1;
-+		if (recovery_mode)
-+			brq->data.blocks = queue_physical_block_size(mq->queue) >> 9;
- 
- 		/*
- 		 * Some controllers have HW issues while operating
-@@ -1590,7 +1590,7 @@ static int mmc_blk_cqe_issue_rw_rq(struct mmc_queue *mq, struct request *req)
- 
- static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
- 			       struct mmc_card *card,
--			       int disable_multi,
-+			       int recovery_mode,
- 			       struct mmc_queue *mq)
++static void rtw8821c_switch_rf_set(struct rtw_dev *rtwdev, u8 rf_set)
++{
++	u32 reg;
++
++	rtw_write32_set(rtwdev, REG_DMEM_CTRL, BIT_WL_RST);
++	rtw_write32_set(rtwdev, REG_SYS_CTRL, BIT_FEN_EN);
++
++	reg = rtw_read32(rtwdev, REG_RFECTL);
++	switch (rf_set) {
++	case SWITCH_TO_BTG:
++		reg |= B_BTG_SWITCH;
++		reg &= ~(B_CTRL_SWITCH | B_WL_SWITCH | B_WLG_SWITCH |
++			 B_WLA_SWITCH);
++		rtw_write32_mask(rtwdev, REG_ENRXCCA, MASKBYTE2, BTG_CCA);
++		rtw_write32_mask(rtwdev, REG_ENTXCCK, MASKLWORD, BTG_LNA);
++		break;
++	case SWITCH_TO_WLG:
++		reg |= B_WL_SWITCH | B_WLG_SWITCH;
++		reg &= ~(B_BTG_SWITCH | B_CTRL_SWITCH | B_WLA_SWITCH);
++		rtw_write32_mask(rtwdev, REG_ENRXCCA, MASKBYTE2, WLG_CCA);
++		rtw_write32_mask(rtwdev, REG_ENTXCCK, MASKLWORD, WLG_LNA);
++		break;
++	case SWITCH_TO_WLA:
++		reg |= B_WL_SWITCH | B_WLA_SWITCH;
++		reg &= ~(B_BTG_SWITCH | B_CTRL_SWITCH | B_WLG_SWITCH);
++		break;
++	case SWITCH_TO_BT:
++	default:
++		break;
++	}
++
++	rtw_write32(rtwdev, REG_RFECTL, reg);
++}
++
+ static void rtw8821c_set_channel_rf(struct rtw_dev *rtwdev, u8 channel, u8 bw)
  {
- 	u32 readcmd, writecmd;
-@@ -1599,7 +1599,7 @@ static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
- 	struct mmc_blk_data *md = mq->blkdata;
- 	bool do_rel_wr, do_data_tag;
- 
--	mmc_blk_data_prep(mq, mqrq, disable_multi, &do_rel_wr, &do_data_tag);
-+	mmc_blk_data_prep(mq, mqrq, recovery_mode, &do_rel_wr, &do_data_tag);
- 
- 	brq->mrq.cmd = &brq->cmd;
- 
-@@ -1690,7 +1690,7 @@ static int mmc_blk_fix_state(struct mmc_card *card, struct request *req)
- 
- #define MMC_READ_SINGLE_RETRIES	2
- 
--/* Single sector read during recovery */
-+/* Single (native) sector read during recovery */
- static void mmc_blk_read_single(struct mmc_queue *mq, struct request *req)
- {
- 	struct mmc_queue_req *mqrq = req_to_mmc_queue_req(req);
-@@ -1698,6 +1698,7 @@ static void mmc_blk_read_single(struct mmc_queue *mq, struct request *req)
- 	struct mmc_card *card = mq->card;
- 	struct mmc_host *host = card->host;
- 	blk_status_t error = BLK_STS_OK;
-+	size_t bytes_per_read = queue_physical_block_size(mq->queue);
- 
- 	do {
- 		u32 status;
-@@ -1732,13 +1733,13 @@ static void mmc_blk_read_single(struct mmc_queue *mq, struct request *req)
- 		else
- 			error = BLK_STS_OK;
- 
--	} while (blk_update_request(req, error, 512));
-+	} while (blk_update_request(req, error, bytes_per_read));
- 
- 	return;
- 
- error_exit:
- 	mrq->data->bytes_xfered = 0;
--	blk_update_request(req, BLK_STS_IOERR, 512);
-+	blk_update_request(req, BLK_STS_IOERR, bytes_per_read);
- 	/* Let it try the remaining request again */
- 	if (mqrq->retries > MMC_MAX_RETRIES - 1)
- 		mqrq->retries = MMC_MAX_RETRIES - 1;
-@@ -1879,10 +1880,8 @@ static void mmc_blk_mq_rw_recovery(struct mmc_queue *mq, struct request *req)
- 		return;
+ 	u32 rf_reg18;
+@@ -257,9 +298,14 @@ static void rtw8821c_set_channel_rf(struct rtw_dev *rtwdev, u8 channel, u8 bw)
  	}
  
--	/* FIXME: Missing single sector read for large sector size */
--	if (!mmc_large_sector(card) && rq_data_dir(req) == READ &&
--	    brq->data.blocks > 1) {
--		/* Read one sector at a time */
-+	if (rq_data_dir(req) == READ && brq->data.blocks > 1) {
-+		/* Read one (native) sector at a time */
- 		mmc_blk_read_single(mq, req);
- 		return;
+ 	if (channel <= 14) {
++		if (rtwdev->efuse.rfe_option == 0)
++			rtw8821c_switch_rf_set(rtwdev, SWITCH_TO_WLG);
++		else if (rtwdev->efuse.rfe_option == 2)
++			rtw8821c_switch_rf_set(rtwdev, SWITCH_TO_BTG);
+ 		rtw_write_rf(rtwdev, RF_PATH_A, RF_LUTDBG, BIT(6), 0x1);
+ 		rtw_write_rf(rtwdev, RF_PATH_A, 0x64, 0xf, 0xf);
+ 	} else {
++		rtw8821c_switch_rf_set(rtwdev, SWITCH_TO_WLA);
+ 		rtw_write_rf(rtwdev, RF_PATH_A, RF_LUTDBG, BIT(6), 0x0);
  	}
+ 
+@@ -1410,6 +1456,7 @@ static const struct rtw_intf_phy_para_table phy_para_table_8821c = {
+ 
+ static const struct rtw_rfe_def rtw8821c_rfe_defs[] = {
+ 	[0] = RTW_DEF_RFE(8821c, 0, 0),
++	[2] = RTW_DEF_RFE_EXT(8821c, 0, 0, 2),
+ };
+ 
+ static struct rtw_hw_reg rtw8821c_dig[] = {
+diff --git a/drivers/net/wireless/realtek/rtw88/rtw8821c.h b/drivers/net/wireless/realtek/rtw88/rtw8821c.h
+index 8d1e8ff71d7e..b8d6b1b29387 100644
+--- a/drivers/net/wireless/realtek/rtw88/rtw8821c.h
++++ b/drivers/net/wireless/realtek/rtw88/rtw8821c.h
+@@ -173,6 +173,8 @@ _rtw_write32s_mask(struct rtw_dev *rtwdev, u32 addr, u32 mask, u32 data)
+ #define GET_PHY_STAT_P1_RXSNR_B(phy_stat)                                      \
+ 	le32_get_bits(*((__le32 *)(phy_stat) + 0x06), GENMASK(15, 8))
+ 
++#define REG_SYS_CTRL	0x000
++#define BIT_FEN_EN	BIT(26)
+ #define REG_INIRTS_RATE_SEL 0x0480
+ #define REG_HTSTFWT	0x800
+ #define REG_RXPSEL	0x808
+@@ -204,6 +206,11 @@ _rtw_write32s_mask(struct rtw_dev *rtwdev, u32 addr, u32 mask, u32 data)
+ #define REG_FA_CCK	0xa5c
+ #define REG_RXDESC	0xa2c
+ #define REG_ENTXCCK	0xa80
++#define BTG_LNA		0xfc84
++#define WLG_LNA		0x7532
++#define REG_ENRXCCA	0xa84
++#define BTG_CCA		0x0e
++#define WLG_CCA		0x12
+ #define REG_PWRTH2	0xaa8
+ #define REG_CSRATIO	0xaaa
+ #define REG_TXFILTER	0xaac
+@@ -217,6 +224,11 @@ _rtw_write32s_mask(struct rtw_dev *rtwdev, u32 addr, u32 mask, u32 data)
+ #define REG_RFESEL0	0xcb0
+ #define REG_RFESEL8	0xcb4
+ #define REG_RFECTL	0xcb8
++#define B_BTG_SWITCH	BIT(16)
++#define B_CTRL_SWITCH	BIT(18)
++#define B_WL_SWITCH	(BIT(20) | BIT(22))
++#define B_WLG_SWITCH	BIT(21)
++#define B_WLA_SWITCH	BIT(23)
+ #define REG_RFEINV	0xcbc
+ #define REG_AGCTR_B	0xe08
+ #define REG_RXIGI_B	0xe50
+@@ -227,6 +239,8 @@ _rtw_write32s_mask(struct rtw_dev *rtwdev, u32 addr, u32 mask, u32 data)
+ #define REG_CCA_OFDM	0xf08
+ #define REG_FA_OFDM	0xf48
+ #define REG_CCA_CCK	0xfcc
++#define REG_DMEM_CTRL	0x1080
++#define BIT_WL_RST	BIT(16)
+ #define REG_ANTWT	0x1904
+ #define REG_IQKFAILMSK	0x1bf0
+ #define BIT_MASK_R_RFE_SEL_15	GENMASK(31, 28)
+diff --git a/drivers/net/wireless/realtek/rtw88/rtw8821c_table.c b/drivers/net/wireless/realtek/rtw88/rtw8821c_table.c
+index 970f903f7dc7..8e8915c5c498 100644
+--- a/drivers/net/wireless/realtek/rtw88/rtw8821c_table.c
++++ b/drivers/net/wireless/realtek/rtw88/rtw8821c_table.c
+@@ -1342,6 +1342,399 @@ static const u32 rtw8821c_agc[] = {
+ 
+ RTW_DECL_TABLE_PHY_COND(rtw8821c_agc, rtw_phy_cfg_agc);
+ 
++static const u32 rtw8821c_agc_btg_type2[] = {
++	0x80001004,	0x00000000,	0x40000000,	0x00000000,
++	0x81C, 0xFF000013,
++	0x81C, 0xFE020013,
++	0x81C, 0xFD040013,
++	0x81C, 0xFC060013,
++	0x81C, 0xFB080013,
++	0x81C, 0xFA0A0013,
++	0x81C, 0xF90C0013,
++	0x81C, 0xF80E0013,
++	0x81C, 0xF7100013,
++	0x81C, 0xF6120013,
++	0x81C, 0xF5140013,
++	0x81C, 0xF4160013,
++	0x81C, 0xF3180013,
++	0x81C, 0xF21A0013,
++	0x81C, 0xF11C0013,
++	0x81C, 0xF01E0013,
++	0x81C, 0xEF200013,
++	0x81C, 0xEE220013,
++	0x81C, 0xED240013,
++	0x81C, 0xEC260013,
++	0x81C, 0xEB280013,
++	0x81C, 0xEA2A0013,
++	0x81C, 0xE92C0013,
++	0x81C, 0xE82E0013,
++	0x81C, 0xE7300013,
++	0x81C, 0x8B320013,
++	0x81C, 0x8A340013,
++	0x81C, 0x89360013,
++	0x81C, 0x88380013,
++	0x81C, 0x873A0013,
++	0x81C, 0x863C0013,
++	0x81C, 0x853E0013,
++	0x81C, 0x84400013,
++	0x81C, 0x83420013,
++	0x81C, 0x82440013,
++	0x81C, 0x81460013,
++	0x81C, 0x08480013,
++	0x81C, 0x074A0013,
++	0x81C, 0x064C0013,
++	0x81C, 0x054E0013,
++	0x81C, 0x04500013,
++	0x81C, 0x03520013,
++	0x81C, 0x88540003,
++	0x81C, 0x87560003,
++	0x81C, 0x86580003,
++	0x81C, 0x855A0003,
++	0x81C, 0x845C0003,
++	0x81C, 0x835E0003,
++	0x81C, 0x82600003,
++	0x81C, 0x81620003,
++	0x81C, 0x07640003,
++	0x81C, 0x06660003,
++	0x81C, 0x05680003,
++	0x81C, 0x046A0003,
++	0x81C, 0x036C0003,
++	0x81C, 0x026E0003,
++	0x81C, 0x01700003,
++	0x81C, 0x01720003,
++	0x81C, 0x01740003,
++	0x81C, 0x01760003,
++	0x81C, 0x01780003,
++	0x81C, 0x017A0003,
++	0x81C, 0x017C0003,
++	0x81C, 0x017E0003,
++	0x81C, 0xFF000813,
++	0x81C, 0xFE020813,
++	0x81C, 0xFD040813,
++	0x81C, 0xFC060813,
++	0x81C, 0xFB080813,
++	0x81C, 0xFA0A0813,
++	0x81C, 0xF90C0813,
++	0x81C, 0xF80E0813,
++	0x81C, 0xF7100813,
++	0x81C, 0xF6120813,
++	0x81C, 0xF5140813,
++	0x81C, 0xF4160813,
++	0x81C, 0xF3180813,
++	0x81C, 0xF21A0813,
++	0x81C, 0xF11C0813,
++	0x81C, 0x941E0813,
++	0x81C, 0x93200813,
++	0x81C, 0x92220813,
++	0x81C, 0x91240813,
++	0x81C, 0x90260813,
++	0x81C, 0x8F280813,
++	0x81C, 0x8E2A0813,
++	0x81C, 0x8D2C0813,
++	0x81C, 0x8C2E0813,
++	0x81C, 0x8B300813,
++	0x81C, 0x8A320813,
++	0x81C, 0x89340813,
++	0x81C, 0x88360813,
++	0x81C, 0x87380813,
++	0x81C, 0x863A0813,
++	0x81C, 0x853C0813,
++	0x81C, 0x843E0813,
++	0x81C, 0x83400813,
++	0x81C, 0x82420813,
++	0x81C, 0x81440813,
++	0x81C, 0x07460813,
++	0x81C, 0x06480813,
++	0x81C, 0x054A0813,
++	0x81C, 0x044C0813,
++	0x81C, 0x034E0813,
++	0x81C, 0x02500813,
++	0x81C, 0x01520813,
++	0x81C, 0x88540803,
++	0x81C, 0x87560803,
++	0x81C, 0x86580803,
++	0x81C, 0x855A0803,
++	0x81C, 0x845C0803,
++	0x81C, 0x835E0803,
++	0x81C, 0x82600803,
++	0x81C, 0x81620803,
++	0x81C, 0x07640803,
++	0x81C, 0x06660803,
++	0x81C, 0x05680803,
++	0x81C, 0x046A0803,
++	0x81C, 0x036C0803,
++	0x81C, 0x026E0803,
++	0x81C, 0x01700803,
++	0x81C, 0x01720803,
++	0x81C, 0x01740803,
++	0x81C, 0x01760803,
++	0x81C, 0x01780803,
++	0x81C, 0x017A0803,
++	0x81C, 0x017C0803,
++	0x81C, 0x017E0803,
++	0x90001005,	0x00000000,	0x40000000,	0x00000000,
++	0x81C, 0xFF000013,
++	0x81C, 0xFE020013,
++	0x81C, 0xFD040013,
++	0x81C, 0xFC060013,
++	0x81C, 0xFB080013,
++	0x81C, 0xFA0A0013,
++	0x81C, 0xF90C0013,
++	0x81C, 0xF80E0013,
++	0x81C, 0xF7100013,
++	0x81C, 0xF6120013,
++	0x81C, 0xF5140013,
++	0x81C, 0xF4160013,
++	0x81C, 0xF3180013,
++	0x81C, 0xF21A0013,
++	0x81C, 0xF11C0013,
++	0x81C, 0xF01E0013,
++	0x81C, 0xEF200013,
++	0x81C, 0xEE220013,
++	0x81C, 0xED240013,
++	0x81C, 0xEC260013,
++	0x81C, 0xEB280013,
++	0x81C, 0xEA2A0013,
++	0x81C, 0xE92C0013,
++	0x81C, 0xE82E0013,
++	0x81C, 0xE7300013,
++	0x81C, 0x8B320013,
++	0x81C, 0x8A340013,
++	0x81C, 0x89360013,
++	0x81C, 0x88380013,
++	0x81C, 0x873A0013,
++	0x81C, 0x863C0013,
++	0x81C, 0x853E0013,
++	0x81C, 0x84400013,
++	0x81C, 0x83420013,
++	0x81C, 0x82440013,
++	0x81C, 0x81460013,
++	0x81C, 0x08480013,
++	0x81C, 0x074A0013,
++	0x81C, 0x064C0013,
++	0x81C, 0x054E0013,
++	0x81C, 0x04500013,
++	0x81C, 0x03520013,
++	0x81C, 0x88540003,
++	0x81C, 0x87560003,
++	0x81C, 0x86580003,
++	0x81C, 0x855A0003,
++	0x81C, 0x845C0003,
++	0x81C, 0x835E0003,
++	0x81C, 0x82600003,
++	0x81C, 0x81620003,
++	0x81C, 0x07640003,
++	0x81C, 0x06660003,
++	0x81C, 0x05680003,
++	0x81C, 0x046A0003,
++	0x81C, 0x036C0003,
++	0x81C, 0x026E0003,
++	0x81C, 0x01700003,
++	0x81C, 0x01720003,
++	0x81C, 0x01740003,
++	0x81C, 0x01760003,
++	0x81C, 0x01780003,
++	0x81C, 0x017A0003,
++	0x81C, 0x017C0003,
++	0x81C, 0x017E0003,
++	0x81C, 0xFF000813,
++	0x81C, 0xFE020813,
++	0x81C, 0xFD040813,
++	0x81C, 0xFC060813,
++	0x81C, 0xFB080813,
++	0x81C, 0xFA0A0813,
++	0x81C, 0xF90C0813,
++	0x81C, 0xF80E0813,
++	0x81C, 0xF7100813,
++	0x81C, 0xF6120813,
++	0x81C, 0xF5140813,
++	0x81C, 0xF4160813,
++	0x81C, 0xF3180813,
++	0x81C, 0xF21A0813,
++	0x81C, 0xF11C0813,
++	0x81C, 0x941E0813,
++	0x81C, 0x93200813,
++	0x81C, 0x92220813,
++	0x81C, 0x91240813,
++	0x81C, 0x90260813,
++	0x81C, 0x8F280813,
++	0x81C, 0x8E2A0813,
++	0x81C, 0x8D2C0813,
++	0x81C, 0x8C2E0813,
++	0x81C, 0x8B300813,
++	0x81C, 0x8A320813,
++	0x81C, 0x89340813,
++	0x81C, 0x88360813,
++	0x81C, 0x87380813,
++	0x81C, 0x863A0813,
++	0x81C, 0x853C0813,
++	0x81C, 0x843E0813,
++	0x81C, 0x83400813,
++	0x81C, 0x82420813,
++	0x81C, 0x81440813,
++	0x81C, 0x07460813,
++	0x81C, 0x06480813,
++	0x81C, 0x054A0813,
++	0x81C, 0x044C0813,
++	0x81C, 0x034E0813,
++	0x81C, 0x02500813,
++	0x81C, 0x01520813,
++	0x81C, 0x88540803,
++	0x81C, 0x87560803,
++	0x81C, 0x86580803,
++	0x81C, 0x855A0803,
++	0x81C, 0x845C0803,
++	0x81C, 0x835E0803,
++	0x81C, 0x82600803,
++	0x81C, 0x81620803,
++	0x81C, 0x07640803,
++	0x81C, 0x06660803,
++	0x81C, 0x05680803,
++	0x81C, 0x046A0803,
++	0x81C, 0x036C0803,
++	0x81C, 0x026E0803,
++	0x81C, 0x01700803,
++	0x81C, 0x01720803,
++	0x81C, 0x01740803,
++	0x81C, 0x01760803,
++	0x81C, 0x01780803,
++	0x81C, 0x017A0803,
++	0x81C, 0x017C0803,
++	0x81C, 0x017E0803,
++	0xA0000000,	0x00000000,
++	0x81C, 0xFF000013,
++	0x81C, 0xFE020013,
++	0x81C, 0xFD040013,
++	0x81C, 0xFC060013,
++	0x81C, 0xFB080013,
++	0x81C, 0xFA0A0013,
++	0x81C, 0xF90C0013,
++	0x81C, 0xF80E0013,
++	0x81C, 0xF7100013,
++	0x81C, 0xF6120013,
++	0x81C, 0xF5140013,
++	0x81C, 0xF4160013,
++	0x81C, 0xF3180013,
++	0x81C, 0xF21A0013,
++	0x81C, 0xF11C0013,
++	0x81C, 0xF01E0013,
++	0x81C, 0xEF200013,
++	0x81C, 0xEE220013,
++	0x81C, 0xED240013,
++	0x81C, 0xEC260013,
++	0x81C, 0xEB280013,
++	0x81C, 0xEA2A0013,
++	0x81C, 0xE92C0013,
++	0x81C, 0xE82E0013,
++	0x81C, 0xE7300013,
++	0x81C, 0x8A320013,
++	0x81C, 0x89340013,
++	0x81C, 0x88360013,
++	0x81C, 0x87380013,
++	0x81C, 0x863A0013,
++	0x81C, 0x853C0013,
++	0x81C, 0x843E0013,
++	0x81C, 0x83400013,
++	0x81C, 0x82420013,
++	0x81C, 0x81440013,
++	0x81C, 0x07460013,
++	0x81C, 0x06480013,
++	0x81C, 0x054A0013,
++	0x81C, 0x044C0013,
++	0x81C, 0x034E0013,
++	0x81C, 0x02500013,
++	0x81C, 0x01520013,
++	0x81C, 0x88540003,
++	0x81C, 0x87560003,
++	0x81C, 0x86580003,
++	0x81C, 0x855A0003,
++	0x81C, 0x845C0003,
++	0x81C, 0x835E0003,
++	0x81C, 0x82600003,
++	0x81C, 0x81620003,
++	0x81C, 0x07640003,
++	0x81C, 0x06660003,
++	0x81C, 0x05680003,
++	0x81C, 0x046A0003,
++	0x81C, 0x036C0003,
++	0x81C, 0x026E0003,
++	0x81C, 0x01700003,
++	0x81C, 0x01720003,
++	0x81C, 0x01740003,
++	0x81C, 0x01760003,
++	0x81C, 0x01780003,
++	0x81C, 0x017A0003,
++	0x81C, 0x017C0003,
++	0x81C, 0x017E0003,
++	0x81C, 0xFF000813,
++	0x81C, 0xFE020813,
++	0x81C, 0xFD040813,
++	0x81C, 0xFC060813,
++	0x81C, 0xFB080813,
++	0x81C, 0xFA0A0813,
++	0x81C, 0xF90C0813,
++	0x81C, 0xF80E0813,
++	0x81C, 0xF7100813,
++	0x81C, 0xF6120813,
++	0x81C, 0xF5140813,
++	0x81C, 0xF4160813,
++	0x81C, 0xF3180813,
++	0x81C, 0xF21A0813,
++	0x81C, 0xF11C0813,
++	0x81C, 0x961E0813,
++	0x81C, 0x95200813,
++	0x81C, 0x94220813,
++	0x81C, 0x93240813,
++	0x81C, 0x92260813,
++	0x81C, 0x91280813,
++	0x81C, 0x8F2A0813,
++	0x81C, 0x8E2C0813,
++	0x81C, 0x8D2E0813,
++	0x81C, 0x8C300813,
++	0x81C, 0x8B320813,
++	0x81C, 0x8A340813,
++	0x81C, 0x89360813,
++	0x81C, 0x88380813,
++	0x81C, 0x873A0813,
++	0x81C, 0x863C0813,
++	0x81C, 0x853E0813,
++	0x81C, 0x84400813,
++	0x81C, 0x83420813,
++	0x81C, 0x82440813,
++	0x81C, 0x08460813,
++	0x81C, 0x07480813,
++	0x81C, 0x064A0813,
++	0x81C, 0x054C0813,
++	0x81C, 0x044E0813,
++	0x81C, 0x03500813,
++	0x81C, 0x02520813,
++	0x81C, 0x89540803,
++	0x81C, 0x88560803,
++	0x81C, 0x87580803,
++	0x81C, 0x865A0803,
++	0x81C, 0x855C0803,
++	0x81C, 0x845E0803,
++	0x81C, 0x83600803,
++	0x81C, 0x82620803,
++	0x81C, 0x07640803,
++	0x81C, 0x06660803,
++	0x81C, 0x05680803,
++	0x81C, 0x046A0803,
++	0x81C, 0x036C0803,
++	0x81C, 0x026E0803,
++	0x81C, 0x01700803,
++	0x81C, 0x01720803,
++	0x81C, 0x01740803,
++	0x81C, 0x01760803,
++	0x81C, 0x01780803,
++	0x81C, 0x017A0803,
++	0x81C, 0x017C0803,
++	0x81C, 0x017E0803,
++	0xB0000000,	0x00000000,
++};
++
++RTW_DECL_TABLE_PHY_COND(rtw8821c_agc_btg_type2, rtw_phy_cfg_agc);
++
+ static const u32 rtw8821c_bb[] = {
+ 	0x800, 0x9020D010,
+ 	0x804, 0x80018180,
+@@ -1394,7 +1787,11 @@ static const u32 rtw8821c_bb[] = {
+ 	0x8C0, 0xFFE04020,
+ 	0x8C4, 0x47C00000,
+ 	0x8C8, 0x00025165,
++	0x82000400,	0x00000000,	0x40000000,	0x00000000,
++	0x8CC, 0x08190492,
++	0xA0000000,	0x00000000,
+ 	0x8CC, 0x08188492,
++	0xB0000000,	0x00000000,
+ 	0x8D0, 0x0000B800,
+ 	0x8D4, 0x860308A0,
+ 	0x8D8, 0x290B5612,
+diff --git a/drivers/net/wireless/realtek/rtw88/rtw8821c_table.h b/drivers/net/wireless/realtek/rtw88/rtw8821c_table.h
+index 5ea8b4fc7fba..cda98f5c4a01 100644
+--- a/drivers/net/wireless/realtek/rtw88/rtw8821c_table.h
++++ b/drivers/net/wireless/realtek/rtw88/rtw8821c_table.h
+@@ -7,6 +7,7 @@
+ 
+ extern const struct rtw_table rtw8821c_mac_tbl;
+ extern const struct rtw_table rtw8821c_agc_tbl;
++extern const struct rtw_table rtw8821c_agc_btg_type2_tbl;
+ extern const struct rtw_table rtw8821c_bb_tbl;
+ extern const struct rtw_table rtw8821c_bb_pg_type0_tbl;
+ extern const struct rtw_table rtw8821c_rf_a_tbl;
 -- 
-2.36.1
+2.20.1
 
-Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-Managing Director: Dr. Jan Peter Berns.
-Commercial register of local courts: Freiburg HRB381782
+
 

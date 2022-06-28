@@ -2,70 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B8255EE16
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BDB355EE20
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiF1Tt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 15:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45624 "EHLO
+        id S232228AbiF1TuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 15:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiF1TtO (ORCPT
+        with ESMTP id S229907AbiF1TuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 15:49:14 -0400
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B3A3C710;
-        Tue, 28 Jun 2022 12:44:58 -0700 (PDT)
-Received: by mail-il1-f181.google.com with SMTP id w10so8873320ilj.4;
-        Tue, 28 Jun 2022 12:44:58 -0700 (PDT)
+        Tue, 28 Jun 2022 15:50:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93FB93983A
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 12:47:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656445620;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qQJqzWxMD2wYGMO4NMh8exaYIYOycnFf9yiMWqcQgzM=;
+        b=Mr3jUlP046l0dtKzQ0pjf3rsT8HF5g6YVmtLqkKQrLb1QgBvqOoVfzmwHwlfXkP5u4Oxl2
+        JLGrSeeh/wYapRTCzo2+KlT3Mt4SjmOvWTabmsNXuHaJKUhJS1iTsp1hew35/OF3RC8ZOF
+        nElS00BQT0T9NrQyI2z09wptDtlVJhw=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-554-C6pFdYvaNIai7lW7jwQTjQ-1; Tue, 28 Jun 2022 15:46:59 -0400
+X-MC-Unique: C6pFdYvaNIai7lW7jwQTjQ-1
+Received: by mail-io1-f69.google.com with SMTP id u25-20020a6b4919000000b006729aaa1b68so7768219iob.21
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 12:46:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=I8oqYF8CYF/NfPnLUHRXbuyYwNz4NY7b0UEaAoOBFKI=;
-        b=uvbEVOgThCS2LX4CvbsxW7UoLegrobiXrMOQfyiqf/sRDCgAR77mXAomzO8QUhhoSq
-         Y+MnUVmqw5Nvxf+YQNYXDeKoyLdgeJ3lgzbCciAopFSLZuP5fxeryHWpdsXdBLXecocv
-         NaWe5rPhuYClrPO0hNBUJpUZ/u5QjDEU3JhkkIxTN1qosrVmsqQewuY9yjndZu08dbjD
-         vyLRlrljX67o4AZz9Ua4ZSGpGuoN45d4hzlUMxP2FB4kjMLZG6PtyXCkoi0fNKJjs/8O
-         nnAcR0nz8E5ssNC8xqE84TUM6nEOYBp8GRpgzUV9iu7CiE+/j3xH3j5IzgGF6SpMcQHp
-         7CVg==
-X-Gm-Message-State: AJIora9k1C5b1XM1calVKY/xar/scnT+Tn3YFkm5mmJr9zTrwHp+kE7o
-        VYmDVLINdPg8YWZTWyAMYQ==
-X-Google-Smtp-Source: AGRyM1txmib4nODs+eTLxrl5HRxMhZB1byUNtBdxp/31Zmns7iKmug7AOiZqEys9+SGEZanmP8UxbQ==
-X-Received: by 2002:a92:6603:0:b0:2da:82b6:34a3 with SMTP id a3-20020a926603000000b002da82b634a3mr9166995ilc.250.1656445498116;
-        Tue, 28 Jun 2022 12:44:58 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id k15-20020a02a70f000000b00331b9a3c5adsm6357712jam.170.2022.06.28.12.44.56
+        bh=qQJqzWxMD2wYGMO4NMh8exaYIYOycnFf9yiMWqcQgzM=;
+        b=pc5ruWO41WFbSmarPHodXTmL6Lx/+SOcdUq7jV3HJjt8Xuai7qyVSJPfDRBXyBnWmI
+         kXVSmyY4N0GNv8CoiYuEYwe42M8rQHmjELkFGEPfcvHwWrJ6W4roYZu30thohJ8dTHUU
+         zH3WrJR8M7tYDDm1G7bV0Z80jY0DTyitSmh0mLI35IPaCPwtGD3U0BzgwzXi19AFD6t0
+         XVkTVFQII3oUj3vX/osmAIY/RrP21321VR2R3kIK9Vpq8Xe0wStbBYibNv7X/vE0idJk
+         lRkDvhYt8/fdvM0NZGIAV/tdQe44rZpw054Bzz/gkNmctSpc+fEzR+j2Wr4aNnMKIeUN
+         a5Yw==
+X-Gm-Message-State: AJIora8Gni58nX3QPQHQEj67YGmAe7IitQFUSpS0kZJjC4w71ovSKj8+
+        Dwha6MaF4BLMpvP3zBxiGkGVBiIcnjo0t42HJVxylA2d1xqZMpqXVkoBlVQxfxQuCQOk6SLCuV7
+        SQ7CHeDvN4ih4vmcFpPVDIVOt
+X-Received: by 2002:a05:6e02:1749:b0:2da:9a89:3961 with SMTP id y9-20020a056e02174900b002da9a893961mr5843178ill.258.1656445618259;
+        Tue, 28 Jun 2022 12:46:58 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1v2hBFdLGw2ehMsPWTL/s3RLgYsTwLehZi2x21Zstq8Dxrz20PQ+CSwQBynhMOdy324UJkxFQ==
+X-Received: by 2002:a05:6e02:1749:b0:2da:9a89:3961 with SMTP id y9-20020a056e02174900b002da9a893961mr5843158ill.258.1656445617974;
+        Tue, 28 Jun 2022 12:46:57 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id s9-20020a92cc09000000b002d1c94b7143sm5993039ilp.39.2022.06.28.12.46.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 12:44:57 -0700 (PDT)
-Received: (nullmailer pid 863361 invoked by uid 1000);
-        Tue, 28 Jun 2022 19:44:55 -0000
-Date:   Tue, 28 Jun 2022 13:44:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     =?utf-8?B?77+9ZWNraQ==?= <rafal@milecki.pl>,
-        Richard Weinberger <richard@nod.at>,
-        linux-mtd@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        devicetree@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Subject: Re: [PATCH v6 1/3] dt-bindings: mtd: partitions: support label/name
- only partition
-Message-ID: <20220628194455.GA863329-robh@kernel.org>
-References: <20220622010628.30414-1-ansuelsmth@gmail.com>
- <20220622010628.30414-2-ansuelsmth@gmail.com>
+        Tue, 28 Jun 2022 12:46:57 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 15:46:55 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH 2/4] kvm: Merge "atomic" and "write" in
+ __gfn_to_pfn_memslot()
+Message-ID: <Yrtar+i2X0YjmD/F@xz-m1.local>
+References: <20220622213656.81546-1-peterx@redhat.com>
+ <20220622213656.81546-3-peterx@redhat.com>
+ <c047c213-252b-4a0b-9720-070307962d23@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220622010628.30414-2-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <c047c213-252b-4a0b-9720-070307962d23@nvidia.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,28 +85,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Jun 2022 03:06:26 +0200, Christian Marangi wrote:
-> Document new partition nodes that declare only the label/name instead
-> of the reg used to provide an OF node for partition registred at runtime
-> by parsers. This is required for nvmem system to declare and detect
-> nvmem-cells.
+On Mon, Jun 27, 2022 at 07:17:09PM -0700, John Hubbard wrote:
+> On 6/22/22 14:36, Peter Xu wrote:
+> > Merge two boolean parameters into a bitmask flag called kvm_gtp_flag_t for
+> > __gfn_to_pfn_memslot().  This cleans the parameter lists, and also prepare
+> > for new boolean to be added to __gfn_to_pfn_memslot().
+> > 
+> > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > ---
+> >   arch/arm64/kvm/mmu.c                   |  5 ++--
+> >   arch/powerpc/kvm/book3s_64_mmu_hv.c    |  5 ++--
+> >   arch/powerpc/kvm/book3s_64_mmu_radix.c |  5 ++--
+> >   arch/x86/kvm/mmu/mmu.c                 | 10 +++----
+> >   include/linux/kvm_host.h               |  9 ++++++-
+> >   virt/kvm/kvm_main.c                    | 37 +++++++++++++++-----------
+> >   virt/kvm/kvm_mm.h                      |  6 +++--
+> >   virt/kvm/pfncache.c                    |  2 +-
+> >   8 files changed, 49 insertions(+), 30 deletions(-)
+> > 
+> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> > index f5651a05b6a8..ce1edb512b4e 100644
+> > --- a/arch/arm64/kvm/mmu.c
+> > +++ b/arch/arm64/kvm/mmu.c
+> > @@ -1204,8 +1204,9 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
+> >   	 */
+> >   	smp_rmb();
+> > -	pfn = __gfn_to_pfn_memslot(memslot, gfn, false, NULL,
+> > -				   write_fault, &writable, NULL);
+> > +	pfn = __gfn_to_pfn_memslot(memslot, gfn,
+> > +				   write_fault ? KVM_GTP_WRITE : 0,
+> > +				   NULL, &writable, NULL);
+> >   	if (pfn == KVM_PFN_ERR_HWPOISON) {
+> >   		kvm_send_hwpoison_signal(hva, vma_shift);
+> >   		return 0;
+> > diff --git a/arch/powerpc/kvm/book3s_64_mmu_hv.c b/arch/powerpc/kvm/book3s_64_mmu_hv.c
+> > index 514fd45c1994..e2769d58dd87 100644
+> > --- a/arch/powerpc/kvm/book3s_64_mmu_hv.c
+> > +++ b/arch/powerpc/kvm/book3s_64_mmu_hv.c
+> > @@ -598,8 +598,9 @@ int kvmppc_book3s_hv_page_fault(struct kvm_vcpu *vcpu,
+> >   		write_ok = true;
+> >   	} else {
+> >   		/* Call KVM generic code to do the slow-path check */
+> > -		pfn = __gfn_to_pfn_memslot(memslot, gfn, false, NULL,
+> > -					   writing, &write_ok, NULL);
+> > +		pfn = __gfn_to_pfn_memslot(memslot, gfn,
+> > +					   writing ? KVM_GTP_WRITE : 0,
+> > +					   NULL, &write_ok, NULL);
+> >   		if (is_error_noslot_pfn(pfn))
+> >   			return -EFAULT;
+> >   		page = NULL;
+> > diff --git a/arch/powerpc/kvm/book3s_64_mmu_radix.c b/arch/powerpc/kvm/book3s_64_mmu_radix.c
+> > index 42851c32ff3b..232b17c75b83 100644
+> > --- a/arch/powerpc/kvm/book3s_64_mmu_radix.c
+> > +++ b/arch/powerpc/kvm/book3s_64_mmu_radix.c
+> > @@ -845,8 +845,9 @@ int kvmppc_book3s_instantiate_page(struct kvm_vcpu *vcpu,
+> >   		unsigned long pfn;
+> >   		/* Call KVM generic code to do the slow-path check */
+> > -		pfn = __gfn_to_pfn_memslot(memslot, gfn, false, NULL,
+> > -					   writing, upgrade_p, NULL);
+> > +		pfn = __gfn_to_pfn_memslot(memslot, gfn,
+> > +					   writing ? KVM_GTP_WRITE : 0,
+> > +					   NULL, upgrade_p, NULL);
+> >   		if (is_error_noslot_pfn(pfn))
+> >   			return -EFAULT;
+> >   		page = NULL;
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index f4653688fa6d..e92f1ab63d6a 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -3968,6 +3968,7 @@ void kvm_arch_async_page_ready(struct kvm_vcpu *vcpu, struct kvm_async_pf *work)
+> >   static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> >   {
+> > +	kvm_gtp_flag_t flags = fault->write ? KVM_GTP_WRITE : 0;
+> >   	struct kvm_memory_slot *slot = fault->slot;
+> >   	bool async;
+> > @@ -3999,8 +4000,8 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> >   	}
+> >   	async = false;
+> > -	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, &async,
+> > -					  fault->write, &fault->map_writable,
+> > +	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, flags,
+> > +					  &async, &fault->map_writable,
+> >   					  &fault->hva);
+> >   	if (!async)
+> >   		return RET_PF_CONTINUE; /* *pfn has correct page already */
+> > @@ -4016,9 +4017,8 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> >   		}
+> >   	}
+> > -	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, NULL,
+> > -					  fault->write, &fault->map_writable,
+> > -					  &fault->hva);
+> > +	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, flags, NULL,
+> > +					  &fault->map_writable, &fault->hva);
 > 
-> With these special partitions, the reg / offset is not required and a
-> 'partition-' prefix is needed.
-> The node name with the 'partition-' prefix stripped, is used to match
-> the partition allocated by the parser at runtime and the parser will
-> provide reg and offset of the mtd.
-> If the partition to match contains invalid char for a node name, the
-> label binding can be used to declare the partition name.
-> 
-> NVMEM will use the data from the parser and provide the NVMEM cells
-> declared in the DTS, "connecting" the dynamic partition with a
-> static declaration of cells in them.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->  .../bindings/mtd/partitions/partition.yaml    | 20 +++++++++++++++++--
->  1 file changed, 18 insertions(+), 2 deletions(-)
-> 
+> The flags arg does improve the situation, yes.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thanks for supporting a flag's existance. :)
+
+I'd say ultimately it could be a personal preference thing when the struct
+comes.
+
+> 
+> >   	return RET_PF_CONTINUE;
+> >   }
+> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > index c20f2d55840c..b646b6fcaec6 100644
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -1146,8 +1146,15 @@ kvm_pfn_t gfn_to_pfn_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
+> >   		      bool *writable);
+> >   kvm_pfn_t gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn);
+> >   kvm_pfn_t gfn_to_pfn_memslot_atomic(const struct kvm_memory_slot *slot, gfn_t gfn);
+> > +
+> > +/* gfn_to_pfn (gtp) flags */
+> > +typedef unsigned int __bitwise kvm_gtp_flag_t;
+> 
+> A minor naming problem: GTP and especially gtp_flags is way too close
+> to gfp_flags. It will make people either wonder if it's a typo, or
+> worse, *assume* that it's a typo. :)
+
+I'd try to argu with "I prefixed it with kvm_", but oh well.. yes they're a
+bit close :)
+
+> 
+> Yes, "read the code", but if you can come up with a better TLA than GTP
+> here, let's consider using it.
+
+Could I ask what's TLA?  Any suggestions on the abbrev, btw?
+
+> 
+> Overall, the change looks like an improvement, even though
+> 
+>     write_fault ? KVM_GTP_WRITE : 0
+> 
+> is not wonderful. But improving *that* leads to a a big pile of diffs
+> that are rather beyond the scope here.
+
+Thanks,
+
+-- 
+Peter Xu
+

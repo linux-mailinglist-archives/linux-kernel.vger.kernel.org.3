@@ -2,109 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0AB55F081
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 23:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A832455F08B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 23:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiF1VpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 17:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50214 "EHLO
+        id S230052AbiF1Vu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 17:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiF1VpK (ORCPT
+        with ESMTP id S229610AbiF1Vu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 17:45:10 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974861F2C7;
-        Tue, 28 Jun 2022 14:45:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656452709; x=1687988709;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oci42jBjowKb2PtIPS0q3kH3KK7UDnCP2KqGOPaNJL0=;
-  b=fVMjOSgXeO8tQIOaJ9t8WGIXjeaq8XwCAKv33athvDOgYP8flgpA26X9
-   rARveAt8oEkKoZR7Q5ioyCqICPbLC4HrFoh5kZbFK3skSFr58qlSorZfW
-   6BpiRtDCKhIf4juIG5n3/x656L6dT5AluLmc6NtkjPgSagfIoFINCDUHz
-   SjgzZWjYzTP2o/kxlP8s7X2JUYiOvDYaw2CGf8A7KtMlHil36xqU+shrI
-   VmKadoPWHK5z024Rlky7fLGrzoc/y4bZK9Rbag1pYVe80Y2RuMsZRLJoX
-   FAz9vaeagGCGSiMFC5fNTyGrNu3KofRRhJ5+88mAkci/BJsuNaJQctCMt
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="345849910"
-X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="345849910"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 14:45:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="732914865"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 28 Jun 2022 14:45:07 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 589A6CE; Wed, 29 Jun 2022 00:45:13 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jiri Slaby <jirislaby@kernel.org>
-Subject: [PATCH v1 1/1] serial: 8250_dw: Drop PM ifdeffery
-Date:   Wed, 29 Jun 2022 00:45:11 +0300
-Message-Id: <20220628214511.37373-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 28 Jun 2022 17:50:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D812E686;
+        Tue, 28 Jun 2022 14:50:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE6D7618B3;
+        Tue, 28 Jun 2022 21:50:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E3A5C341C8;
+        Tue, 28 Jun 2022 21:50:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656453055;
+        bh=Eulr4Y0cWb7qjc6CpxCm3Vct1+OoFSfv0gPahuMP8H0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=elEeeKUDea9hk5aQmAteuIyRdHZZsKhLl3Vgkrf0ebuHMVDyxzs1owwkAc5icxtXR
+         Tv3y3Ypg5BZfSAA4fm/1du/h9YT9oUMVvzdwBxhJY45v0cynFE7MH/FGecsgnZV2dk
+         iPm6ogOEDIT42r9PUlRQz9dQNjh6tOzSwvfw+orYrQP8DJdAcBTb8Txl9TLsSqkRI5
+         7J7GSf1511sS2KBwajo4lNLtrnzx6YNYJIcRb3aJarxomVr3XyXRVQbc5LQe6sATzH
+         Szilv/6OGgYptkfbHHlymMEVoWlRUtOrH4DB1kh3spBftyplxnSoqxW2EfM72iufIW
+         dnOIf5/XmvBRg==
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-3178acf2a92so130916397b3.6;
+        Tue, 28 Jun 2022 14:50:55 -0700 (PDT)
+X-Gm-Message-State: AJIora8t+Tbp0ONZp1rsopAHnWHF4ZtgcARhu00sjUOo9OWfh5FHrdMN
+        iOowDmIdqZf0/seXxsuCn+4f1ZlUFPeUG2TB790=
+X-Google-Smtp-Source: AGRyM1uiK3Jm9EI3ugNHld4Mw8359HNpN0AV60gdNeVzfnYPf20oZVN1walPYmvUh7o4VEBL7hhWBeeKgOlyyZ+Nc1k=
+X-Received: by 2002:a0d:df0f:0:b0:31b:e000:7942 with SMTP id
+ i15-20020a0ddf0f000000b0031be0007942mr283034ywe.320.1656453054172; Tue, 28
+ Jun 2022 14:50:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220617125750.728590-1-arnd@kernel.org> <20220617125750.728590-4-arnd@kernel.org>
+ <6ba86afe-bf9f-1aca-7af1-d0d348d75ffc@gmail.com> <CAMuHMdVewn0OYA9oJfStk0-+vCKAUou+4Mvd5H2kmrSks1p5jg@mail.gmail.com>
+ <b4e5a1c9-e375-63fb-ec7c-abb7384a6d59@gmail.com> <9289fd82-285c-035f-5355-4d70ce4f87b0@gmail.com>
+ <CAMuHMdXUihTPD9A9hs__Xr2ErfOqkZ5KgCHqm+9HvRf39uS5kA@mail.gmail.com> <c30bc9b6-6ccd-8856-dc6b-4e16450dad6f@gmail.com>
+In-Reply-To: <c30bc9b6-6ccd-8856-dc6b-4e16450dad6f@gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 28 Jun 2022 23:50:37 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1rxEVwVF5U-PO6pQkfURU5Tro1Qp8SPUfHEV9jjWOmCQ@mail.gmail.com>
+Message-ID: <CAK8P3a1rxEVwVF5U-PO6pQkfURU5Tro1Qp8SPUfHEV9jjWOmCQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] arch/*/: remove CONFIG_VIRT_TO_BUS
+To:     Michael Schmitz <schmitzmic@gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        Khalid Aziz <khalid@gonehiking.org>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Matt Wang <wwentao@vmware.com>,
+        Miquel van Smoorenburg <mikevs@xs4all.net>,
+        Mark Salyzyn <salyzyn@android.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Denis Efremov <efremov@linux.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop CONFIG_PM and CONFIG_PM_SLEEP ifdeffery while converting dw8250_pm_ops
-to use new PM macros.
+On Tue, Jun 28, 2022 at 11:03 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
+> On 28/06/22 19:03, Geert Uytterhoeven wrote:
+> >> The driver allocates bounce buffers using kmalloc if it hits an
+> >> unaligned data buffer - can such buffers still even happen these days?
+> > No idea.
+> Hmmm - I think I'll stick a WARN_ONCE() in there so we know whether this
+> code path is still being used.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/tty/serial/8250/8250_dw.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+kmalloc() guarantees alignment to the next power-of-two size or
+KMALLOC_MIN_ALIGN, whichever is bigger. On m68k this means it
+is cacheline aligned.
 
-diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
-index f71428c85562..adcc869352b1 100644
---- a/drivers/tty/serial/8250/8250_dw.c
-+++ b/drivers/tty/serial/8250/8250_dw.c
-@@ -691,7 +691,6 @@ static int dw8250_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--#ifdef CONFIG_PM_SLEEP
- static int dw8250_suspend(struct device *dev)
- {
- 	struct dw8250_data *data = dev_get_drvdata(dev);
-@@ -709,9 +708,7 @@ static int dw8250_resume(struct device *dev)
- 
- 	return 0;
- }
--#endif /* CONFIG_PM_SLEEP */
- 
--#ifdef CONFIG_PM
- static int dw8250_runtime_suspend(struct device *dev)
- {
- 	struct dw8250_data *data = dev_get_drvdata(dev);
-@@ -733,11 +730,10 @@ static int dw8250_runtime_resume(struct device *dev)
- 
- 	return 0;
- }
--#endif
- 
- static const struct dev_pm_ops dw8250_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(dw8250_suspend, dw8250_resume)
--	SET_RUNTIME_PM_OPS(dw8250_runtime_suspend, dw8250_runtime_resume, NULL)
-+	SYSTEM_SLEEP_PM_OPS(dw8250_suspend, dw8250_resume)
-+	RUNTIME_PM_OPS(dw8250_runtime_suspend, dw8250_runtime_resume, NULL)
- };
- 
- static const struct dw8250_platform_data dw8250_dw_apb = {
--- 
-2.35.1
-
+      Arnd

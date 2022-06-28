@@ -2,185 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F8D55D3AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD06555D900
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344598AbiF1Kq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 06:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
+        id S1344648AbiF1KrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 06:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245128AbiF1KqZ (ORCPT
+        with ESMTP id S231682AbiF1Kq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:46:25 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D8831508
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:46:24 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id r133so12426615iod.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:46:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zHrjPVariWqGD9Q0+OudpM/sw+FFCFuadlVMWQsqTbE=;
-        b=7uLWxfmogEqEQs6CDYy12pFrIckdQswPGQ/PmdtKohFpd5A4vAymdPp4tPXRXao1Hb
-         M78IM9YF3ARRDFOuC4xdfDLndyiRNLWnMtI/kUdIvKQ5Suqx9PuUyG0xlKwM7cETqBe5
-         KKUpVaTCLIhrT+s/91NdvoOvAv2czxoTZivfvjW9GkXdVJyjC+iTdvqzasSho6tuX6H2
-         dJ99OflOb7uWY9QDNSMfdmhHrCj2RypclJnpcZ7R/Ik/XJT/aSu1O1+vZwJCL2ZmWTrS
-         dO22wdvWZVzN5pt34S6In2Tc40YxODjfO6jeQtGd+Nct+MUoFvfRuj0YNwcjTIy+cuiF
-         ImUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zHrjPVariWqGD9Q0+OudpM/sw+FFCFuadlVMWQsqTbE=;
-        b=rfjhwSXa66VcbS3P5WMvwjtpG7e5/FZmu5yZAu+F3WJS6DtyTDAH+/g5w6BEEKkvkq
-         /wC1Orp61DuuyUmPgzEy5GeFJmgyrTHGoFVGh37xK3G6HWMVMBO63LCYnEXJniGXm3Vj
-         SCGIjjHzRRdd9cV9q3fRf9DOBdtdmyfHzTT6D+CXT0Q0OAoM4C4niP+wcbHZ5yWWa4OJ
-         akPG+8ZVLwUKbGR1SQUQsDagK8NYUEoZ/bqjhEVG3Kd5sQLkYm/R6CYlOPdQFDESRoK4
-         gx7LItbvD8VemjOVqsb2AkXpTliKl5xDXs/wGlKRq71lD4S/L563DELnWdx+yHzmJbJj
-         +TEA==
-X-Gm-Message-State: AJIora9i+/8JTdZx4Tq5kC7dc1dSMcCzN8fUoi0q3ECb23Z3THtu/NX6
-        vbLDlJ+wWdmuPTttBJNDAH20iMfryK/wnURpyfvlct1DDA0=
-X-Google-Smtp-Source: AGRyM1tdmH03y5YWN/0dZSJ4H3bchhmJ3afr1wcau9WHd3Gr1ga1Vm7UvafXQuKO3BTFEOpnfyWMFGbXfjxxsHyqvnU=
-X-Received: by 2002:a05:6602:2c13:b0:669:7f63:a2d7 with SMTP id
- w19-20020a0566022c1300b006697f63a2d7mr9022096iov.169.1656413183662; Tue, 28
- Jun 2022 03:46:23 -0700 (PDT)
+        Tue, 28 Jun 2022 06:46:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0326D31387;
+        Tue, 28 Jun 2022 03:46:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 938EC61952;
+        Tue, 28 Jun 2022 10:46:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6092CC3411D;
+        Tue, 28 Jun 2022 10:46:55 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="a9feM0oh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1656413213;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=D1+XQe9PqcwgQsDSvyoCmP1LY8+BTuhpoUQPoquwuoI=;
+        b=a9feM0ohd6QI8kuAMcG7qcWI25IdpdFm1QC1D9Oy8jiMeMwQ2vpFv4Bd2sGx3iGEgwPJRl
+        5PIgXjojR1EQS4K/RQCRyxfQCzmy9wDfLqDr0skeeltDL/z6e+fI8aSFUBy/4NLUvvwoL3
+        34ihvBoSC8Ub2ZTMq1uPTFGaVX7wzbM=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f01c9ff3 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 28 Jun 2022 10:46:53 +0000 (UTC)
+Received: by mail-io1-f54.google.com with SMTP id p69so12389637iod.10;
+        Tue, 28 Jun 2022 03:46:52 -0700 (PDT)
+X-Gm-Message-State: AJIora/t8xFC8m1R4FLUZysfPfy+17EjNumSo1QwpkQz3Z2yrT1gM+af
+        EdW5SDie1wGgbHJXDd/r9QMOkmJOtdlKIhi5WcI=
+X-Google-Smtp-Source: AGRyM1sZkA27UHQAkQ/MTTEnFeDep7LXqdjn21vxh3zhfJKtqyL6QvQR//J+QtkLmTcISaslz3AHEoOzUa5vALZiYrQ=
+X-Received: by 2002:a6b:fe16:0:b0:675:4768:67be with SMTP id
+ x22-20020a6bfe16000000b00675476867bemr3669363ioh.24.1656413211694; Tue, 28
+ Jun 2022 03:46:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220325132126.61949-1-zhangjiachen.jaycee@bytedance.com>
- <CAJfpeguESQm1KsQLyoMRTevLttV8N8NTGsb2tRbNS1AQ_pNAww@mail.gmail.com>
- <CAFQAk7ibzCn8OD84-nfg6_AePsKFTu9m7pXuQwcQP5OBp7ZCag@mail.gmail.com>
- <CAJfpegsbaz+RRcukJEOw+H=G3ft43vjDMnJ8A24JiuZFQ24eHA@mail.gmail.com>
- <CAFQAk7hakYNfBaOeMKRmMPTyxFb2xcyUTdugQG1D6uZB_U1zBg@mail.gmail.com>
- <Ymfu8fGbfYi4FxQ4@miu.piliscsaba.redhat.com> <YrnCfISl7Nl8Wk52@redhat.com>
-In-Reply-To: <YrnCfISl7Nl8Wk52@redhat.com>
-From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Date:   Tue, 28 Jun 2022 18:46:12 +0800
-Message-ID: <CAFQAk7iVKxXGyybJ8OB0sUL1zq=aXSO32OEv3te-80sFNgbRMw@mail.gmail.com>
-Subject: Re: Re: Re: Re: [RFC PATCH] fuse: support cache revalidation in
- writeback_cache mode
-To:     Vivek Goyal <vgoyal@redhat.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xie Yongji <xieyongji@bytedance.com>
+References: <20220627113749.564132-1-Jason@zx2c4.com> <20220627120735.611821-1-Jason@zx2c4.com>
+ <87y1xib8pv.fsf@toke.dk> <CAO+Okf5r-rVVqwYiCHXEt_jh0StmVoUikqYfSn7y3QpGZMR3Vg@mail.gmail.com>
+In-Reply-To: <CAO+Okf5r-rVVqwYiCHXEt_jh0StmVoUikqYfSn7y3QpGZMR3Vg@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 28 Jun 2022 12:46:40 +0200
+X-Gmail-Original-Message-ID: <CAHmME9o4m5MNvDtQUc3OiYLVzNgk3u2i0EF4NhNV4uifZZLJ3g@mail.gmail.com>
+Message-ID: <CAHmME9o4m5MNvDtQUc3OiYLVzNgk3u2i0EF4NhNV4uifZZLJ3g@mail.gmail.com>
+Subject: Re: [PATCH v6] ath9k: sleep for less time when unregistering hwrng
+To:     Gregory Erwin <gregerwin256@gmail.com>
+Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        Rui Salvaterra <rsalvaterra@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 10:45 PM Vivek Goyal <vgoyal@redhat.com> wrote:
->
-> On Tue, Apr 26, 2022 at 03:09:05PM +0200, Miklos Szeredi wrote:
-> > On Mon, Apr 25, 2022 at 09:52:44PM +0800, Jiachen Zhang wrote:
-> >
-> > > Some users may want both the high performance of writeback mode and a
-> > > little bit more consistency among FUSE mounts. In the current
-> > > writeback mode implementation, users of one FUSE mount can never see
-> > > the file expansion done by other FUSE mounts.
-> >
-> > Okay.
-> >
-> > Here's a preliminary patch that you could try.
-> >
-> > Thanks,
-> > Miklos
-> >
-> > ---
-> >  fs/fuse/dir.c             |   35 ++++++++++++++++++++++-------------
-> >  fs/fuse/file.c            |   17 +++++++++++++++--
-> >  fs/fuse/fuse_i.h          |   14 +++++++++++++-
-> >  fs/fuse/inode.c           |   32 +++++++++++++++++++++++++++-----
-> >  include/uapi/linux/fuse.h |    5 +++++
-> >  5 files changed, 82 insertions(+), 21 deletions(-)
-> >
-> > --- a/include/uapi/linux/fuse.h
-> > +++ b/include/uapi/linux/fuse.h
-> > @@ -194,6 +194,7 @@
-> >   *  - add FUSE_SECURITY_CTX init flag
-> >   *  - add security context to create, mkdir, symlink, and mknod requests
-> >   *  - add FUSE_HAS_INODE_DAX, FUSE_ATTR_DAX
-> > + *  - add FUSE_WRITEBACK_CACHE_V2 init flag
-> >   */
-> >
-> >  #ifndef _LINUX_FUSE_H
-> > @@ -353,6 +354,9 @@ struct fuse_file_lock {
-> >   * FUSE_SECURITY_CTX:        add security context to create, mkdir, symlink, and
-> >   *                   mknod
-> >   * FUSE_HAS_INODE_DAX:  use per inode DAX
-> > + * FUSE_WRITEBACK_CACHE_V2:
-> > + *                   - allow time/size to be refreshed if no pending write
-> > + *                   - time/size not cached for falocate/copy_file_range
-> >   */
-> >  #define FUSE_ASYNC_READ              (1 << 0)
-> >  #define FUSE_POSIX_LOCKS     (1 << 1)
-> > @@ -389,6 +393,7 @@ struct fuse_file_lock {
-> >  /* bits 32..63 get shifted down 32 bits into the flags2 field */
-> >  #define FUSE_SECURITY_CTX    (1ULL << 32)
-> >  #define FUSE_HAS_INODE_DAX   (1ULL << 33)
-> > +#define FUSE_WRITEBACK_CACHE_V2      (1ULL << 34)
-> >
-> >  /**
-> >   * CUSE INIT request/reply flags
-> > --- a/fs/fuse/inode.c
-> > +++ b/fs/fuse/inode.c
-> > @@ -222,19 +222,37 @@ void fuse_change_attributes_common(struc
-> >  u32 fuse_get_cache_mask(struct inode *inode)
-> >  {
-> >       struct fuse_conn *fc = get_fuse_conn(inode);
-> > +     struct fuse_inode *fi = get_fuse_inode(inode);
-> >
-> >       if (!fc->writeback_cache || !S_ISREG(inode->i_mode))
-> >               return 0;
-> >
-> > +     /*
-> > +      * In writeback_cache_v2 mode if all the following conditions are met,
-> > +      * then allow the attributes to be refreshed:
-> > +      *
-> > +      * - inode is not dirty (I_DIRTY_INODE)
-> > +      * - inode is not in the process of being written (I_SYNC)
-> > +      * - inode has no dirty pages (I_DIRTY_PAGES)
-> > +      * - inode does not have any page writeback in progress
-> > +      *
-> > +      * Note: checking PAGECACHE_TAG_WRITEBACK is not sufficient in fuse,
-> > +      * since inode can appear to have no PageWriteback pages, yet still have
-> > +      * outstanding write request.
-> > +      */
->
-> Hi,
->
-> I started following this thread just now after Jiachen pointed me to
-> previous conversations. Without going into too much details.
->
-> Based on above description, so we will update mtime/ctime/i_size only
-> if inode does not have dirty pages or nothing is in progress. So that
-> means sometime we will update it and other times we will ignore it.
->
-> Do I understand it correctly. I am wondering how that is useful to
-> applications.
->
-> I thought that other remote filesystems might have leasing for this so
-> that one client can acquire the lease and cache changes and when lease
-> is broken, this client pushes out all the changes and other client gets
-> the lease.
->
-> Given we don't have any lease mechanism, we probably need to define the
-> semantics more clearly and we should probably document it as well.
->
+Hi Gregory,
 
-Hi Vivek,
-
-I agree we should define or document the semantics properly. For now,
-it seems that Miklos' writeback_mode_v2 is making best-effort updating
-when pages are not dirty and a set of new attributes are returned from
-FUSE server.
-
-Thanks,
-Jiachen
-
-> Thanks
-> Vivek
+On Tue, Jun 28, 2022 at 3:39 AM Gregory Erwin <gregerwin256@gmail.com> wrot=
+e:
 >
+> On Mon, Jun 27, 2022 at 5:18 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
+dhat.com> wrote:
+> >
+> > "Jason A. Donenfeld" <Jason@zx2c4.com> writes:
+> >
+> > > Even though hwrng provides a `wait` parameter, it doesn't work very w=
+ell
+> > > when waiting for a long time. There are numerous deadlocks that emerg=
+e
+> > > related to shutdown. Work around this API limitation by waiting for a
+> > > shorter amount of time and erroring more frequently. This commit also
+> > > prevents hwrng from splatting messages to dmesg when there's a timeou=
+t
+> > > and switches to using schedule_timeout_interruptible(), so that the
+> > > kthread can be stopped.
+> > >
+> > > Reported-by: Gregory Erwin <gregerwin256@gmail.com>
+> > > Tested-by: Gregory Erwin <gregerwin256@gmail.com>
+> > > Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> > > Cc: Kalle Valo <kvalo@kernel.org>
+> > > Cc: Rui Salvaterra <rsalvaterra@gmail.com>
+> > > Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> > > Cc: stable@vger.kernel.org
+> > > Fixes: fcd09c90c3c5 ("ath9k: use hw_random API instead of directly du=
+mping into random.c")
+> > > Link: https://lore.kernel.org/all/CAO+Okf6ZJC5-nTE_EJUGQtd8JiCkiEHytG=
+gDsFGTEjs0c00giw@mail.gmail.com/
+> > > Link: https://lore.kernel.org/lkml/CAO+Okf5k+C+SE6pMVfPf-d8MfVPVq4PO7=
+EY8Hys_DVXtent3HA@mail.gmail.com/
+> > > Link: https://bugs.archlinux.org/task/75138
+> > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> >
+> > Gregory, care to take this version for a spin as well to double-check
+> > that it still resolves the issue? :)
+> >
+> > -Toke
+> >
+>
+> With patch v6, reads from /dev/hwrng block for 5-6s, during which 'ip lin=
+k set
+> wlan0 down' will also block. Otherwise, 'ip link set wlan0 down' returns
+> immediately. Similarly, wiphy_suspend() consistently returns in under 10m=
+s.
+>
+> Tested-by: Gregory Erwin <gregerwin256@gmail.com>
+
+Oh 5-6s... so it's actually worse. Yikes. Sounds like v4 might have
+been the better patch, then?
+
+Jason

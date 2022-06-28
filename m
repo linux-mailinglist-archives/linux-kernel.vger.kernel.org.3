@@ -2,69 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3575255E662
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFBF55E6CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347364AbiF1PBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
+        id S1347697AbiF1PC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346312AbiF1PBl (ORCPT
+        with ESMTP id S1347675AbiF1PCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:01:41 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0CA3337A
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:01:40 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id n12so12321338pfq.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:01:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=anQ27xOQvEX+Td238fWqiSq/k4JFfrd9qwDUWfXBswY=;
-        b=pN+cBhSszTlUkwollR+maUGR17eDKbdWuZXiPaxMadT+7domXFQ/U9qvjmFHV2KcJR
-         2mlQ9X/e5RizmM56f2d1J0SyAF+sZMdlj9vrp38VZf/un9gw9w9TdlJJ+eyGozM55kjX
-         Ni+dMtXxkjP7LKNhQ/VPXHGOUjrnOEnAR9lVPvPuKMZKjeYx8Z5rN3b4ltUuSf5tYwaP
-         szqudDmvN59Z52cIAVu2JaH25aVltFy+OTp9yl20Zkv9zJTVr0y0BeE1HeKk2B0u04cr
-         FoNjpcASq8t3PvOdKq+pcaSRtqHW9thomXiTHVyo4Hv3I1ghFtyEGBuBYTv6VRlcIZgI
-         F5pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=anQ27xOQvEX+Td238fWqiSq/k4JFfrd9qwDUWfXBswY=;
-        b=brsLx9vhzkOidu4wp3OmKQ0luecxH1C1SXjo4ALl+77GcKEFlvMIZjY3YuGKX0YyQv
-         mOTHh98xoRZPh5NE7K5ji/SSIWvdFxEj6Jn7ySv9BBazbS9/1NGE0H9BzVzjaEFJViqx
-         HC8R7MvL98em6zyYQye2y7+feTUQ0X1b2vQwui+8Z5aieXrTFGykGm35e1YBMHan2rsw
-         Vd5/j7BM36JmhvAhR2P+Fx4Gr4DCz+7DjlX3JMjJTR8ntX6GuNqtW/niCYeUv+i+MOnN
-         sja+bT88fjTMaXeI6TeMliQiMTWvU+GdT2NNtpek80PPDCLslH48fwqbMMaxhaO9LcvJ
-         uj4w==
-X-Gm-Message-State: AJIora+6hwMgNNY9u2bvRjFomfrdT3vE7crsCwGJiYJGxM8xROim4K/y
-        ZVbE8eRCLUiODoj2n9jbxr2qBQ==
-X-Google-Smtp-Source: AGRyM1uw8AEKAAkQ7VZZ0u/DQBpg8EZi4a78W86U5RZMo9OdkrA7cftvvhfepOTV1K7E40Vyk8a0Qg==
-X-Received: by 2002:a63:145e:0:b0:405:70e2:1d04 with SMTP id 30-20020a63145e000000b0040570e21d04mr17313720pgu.487.1656428499924;
-        Tue, 28 Jun 2022 08:01:39 -0700 (PDT)
-Received: from localhost ([2408:8207:18da:2310:e153:cfbc:e790:5935])
-        by smtp.gmail.com with ESMTPSA id jh5-20020a170903328500b0015e8d4eb2b4sm9402296plb.254.2022.06.28.08.01.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 08:01:39 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 23:01:30 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, shy828301@gmail.com,
-        willy@infradead.org, zokeefe@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 05/16] mm/huge_memory: use helper touch_pmd in
- huge_pmd_set_accessed
-Message-ID: <YrsXygOe4dLaVn2t@FVFYT0MHHV2J.googleapis.com>
-References: <20220628132835.8925-1-linmiaohe@huawei.com>
- <20220628132835.8925-6-linmiaohe@huawei.com>
+        Tue, 28 Jun 2022 11:02:49 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A3D33E3B
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:02:47 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SABx6x014952
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:02:46 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=facebook; bh=pyAltF8DYKNcGBUwgWnhf6MefK8rwWmpC3KIBrdgbWM=;
+ b=gIsKjSgVCHFLr+AU4YJ/Sfi1sw97O2hx1MsCJkcvTAQewoP7DzFpIS+vDKamWQOfSBVK
+ NfSPs1iEeWLT5klSTzLAX5ViE20bNK3U9jz2isB08FG9SFH4ZojiBok/iqdM20ffaLPA
+ 91nHSxjWeOmPbUrjZ/BdNwOy3ewHEYyyVaE= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gyp234bp8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:02:46 -0700
+Received: from twshared25478.08.ash9.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Tue, 28 Jun 2022 08:02:45 -0700
+Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
+        id 7377F244BBC2; Tue, 28 Jun 2022 08:02:37 -0700 (PDT)
+From:   Dylan Yudaken <dylany@fb.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        <io-uring@vger.kernel.org>
+CC:     <Kernel-team@fb.com>, <linux-kernel@vger.kernel.org>,
+        Dylan Yudaken <dylany@fb.com>
+Subject: [PATCH for-next 0/8] io_uring: multishot recv
+Date:   Tue, 28 Jun 2022 08:02:20 -0700
+Message-ID: <20220628150228.1379645-1-dylany@fb.com>
+X-Mailer: git-send-email 2.30.2
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 1aLYv5mj_slGG3qwzRlOfk1oeZ1l7DMk
+X-Proofpoint-GUID: 1aLYv5mj_slGG3qwzRlOfk1oeZ1l7DMk
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628132835.8925-6-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-28_08,2022-06-28_01,2022-06-22_01
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,69 +64,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 09:28:24PM +0800, Miaohe Lin wrote:
-> Use helper touch_pmd to set pmd accessed to simplify the code and improve
-> the readability. No functional change intended.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  mm/huge_memory.c | 18 +++++-------------
->  1 file changed, 5 insertions(+), 13 deletions(-)
-> 
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index d55d5efa06c8..d9fe9b034783 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -1120,15 +1120,15 @@ EXPORT_SYMBOL_GPL(vmf_insert_pfn_pud_prot);
->  #endif /* CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD */
->  
->  static void touch_pmd(struct vm_area_struct *vma, unsigned long addr,
-> -		pmd_t *pmd, int flags)
-> +		      pmd_t *pmd, bool write)
+This series adds support for multishot recv/recvmsg to io_uring.
 
-The same as comments as mentioned in previous thread. E.g. follow_devmap_pmd()
-and follow_trans_huge_pmd().
+The idea is that generally socket applications will be continually
+enqueuing a new recv() when the previous one completes. This can be
+improved on by allowing the application to queue a multishot receive,
+which will post completions as and when data is available. It uses the
+provided buffers feature to receive new data into a pool provided by
+the application.
 
-Thanks.
+This is more performant in a few ways:
+* Subsequent receives are queued up straight away without requiring the
+  application to finish a processing loop.
+* If there are more data in the socket (sat the provided buffer
+  size is smaller than the socket buffer) then the data is immediately
+  returned, improving batching.
+*  Poll is only armed once and reused, saving CPU cycles
 
->  {
->  	pmd_t _pmd;
->  
->  	_pmd = pmd_mkyoung(*pmd);
-> -	if (flags & FOLL_WRITE)
-> +	if (write)
->  		_pmd = pmd_mkdirty(_pmd);
->  	if (pmdp_set_access_flags(vma, addr & HPAGE_PMD_MASK,
-> -				pmd, _pmd, flags & FOLL_WRITE))
-> +				  pmd, _pmd, write))
->  		update_mmu_cache_pmd(vma, addr, pmd);
->  }
->  
-> @@ -1398,21 +1398,13 @@ void huge_pud_set_accessed(struct vm_fault *vmf, pud_t orig_pud)
->  
->  void huge_pmd_set_accessed(struct vm_fault *vmf)
->  {
-> -	pmd_t entry;
-> -	unsigned long haddr;
->  	bool write = vmf->flags & FAULT_FLAG_WRITE;
-> -	pmd_t orig_pmd = vmf->orig_pmd;
->  
->  	vmf->ptl = pmd_lock(vmf->vma->vm_mm, vmf->pmd);
-> -	if (unlikely(!pmd_same(*vmf->pmd, orig_pmd)))
-> +	if (unlikely(!pmd_same(*vmf->pmd, vmf->orig_pmd)))
->  		goto unlock;
->  
-> -	entry = pmd_mkyoung(orig_pmd);
-> -	if (write)
-> -		entry = pmd_mkdirty(entry);
-> -	haddr = vmf->address & HPAGE_PMD_MASK;
-> -	if (pmdp_set_access_flags(vmf->vma, haddr, vmf->pmd, entry, write))
-> -		update_mmu_cache_pmd(vmf->vma, vmf->address, vmf->pmd);
-> +	touch_pmd(vmf->vma, vmf->address, vmf->pmd, write);
->  
->  unlock:
->  	spin_unlock(vmf->ptl);
-> -- 
-> 2.23.0
-> 
-> 
+Running a small network benchmark [1] shows improved QPS of ~6-8% over a ra=
+nge of loads.
+
+[1]: https://github.com/DylanZA/netbench/tree/multishot_recv
+
+Dylan Yudaken (8):
+  io_uring: allow 0 length for buffer select
+  io_uring: restore bgid in io_put_kbuf
+  io_uring: allow iov_len =3D 0 for recvmsg and buffer select
+  io_uring: recycle buffers on error
+  io_uring: clean up io_poll_check_events return values
+  io_uring: add IOU_STOP_MULTISHOT return code
+  io_uring: add IORING_RECV_MULTISHOT flag
+  io_uring: multishot recv
+
+ include/uapi/linux/io_uring.h |   5 ++
+ io_uring/io_uring.h           |   7 ++
+ io_uring/kbuf.c               |   4 +-
+ io_uring/kbuf.h               |   8 ++-
+ io_uring/net.c                | 119 ++++++++++++++++++++++++++++------
+ io_uring/poll.c               |  30 ++++++---
+ 6 files changed, 140 insertions(+), 33 deletions(-)
+
+
+base-commit: 755441b9029317d981269da0256e0a7e5a7fe2cc
+--=20
+2.30.2
+

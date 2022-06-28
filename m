@@ -2,70 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44A755E9DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC27B55E9E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233604AbiF1QfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 12:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
+        id S238045AbiF1Qfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 12:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbiF1QeU (ORCPT
+        with ESMTP id S235537AbiF1Qen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:34:20 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DD32AC75
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:31:11 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id c4so11531101plc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:31:11 -0700 (PDT)
+        Tue, 28 Jun 2022 12:34:43 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5C731DD1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:31:49 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id u12so26847421eja.8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:31:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cF+v3xaxVEy+SunxyV5FbyGgHqR8srXqFsaqFoR1tTU=;
-        b=Tb/AbhsmkTF7L1MJTGV0JTBgTb/yNK3WWoLZ7cxqxeX0H40RWvO2doFYqpmty5HW4c
-         ahFhGrzB5cEduL5dW4ye6mnhLsns5ytFNgb5mJTII1gAaHg/bUzoYdiw1q/f2/stV8DS
-         AnA2CQaXiTGHZoZ91WwVazQfM95SbI0OsdBROcUoo14G3RU4bMRLKbm8WGm7pVYS5y4a
-         09vrVF3mPTahGEch3yZc4GmUV9uUdlcMzms0cFgRGPmDRvfXvXwf2yym96KH10VNb7NY
-         Dto0Z66BEsEsaRc6+vT+XP+yNbN0QUD5yNkMC6ft09AL7sc+M5BEhoDa8em5isayK9GU
-         0jpQ==
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bul38R93x//KNOyQi8klG2NZQTS/GpM9te9tWvCtSxw=;
+        b=aZfzn3sb8w/YS2hcLL2B4c0d715KalCFCH+F93LNVlFdmDLTNzG+PshqN6U+C9fMmY
+         XGRmmbuBnh2cl2ZFTI1l6ZyXZbnAdDwCi0gKOr3MZAd/gdZYyB5eDmWj0YgvJXJ7aUY3
+         wsYAr0TZDzid3K3wzsibEtXlJRNIM7rRs5nF0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cF+v3xaxVEy+SunxyV5FbyGgHqR8srXqFsaqFoR1tTU=;
-        b=7X+Jde15OHpFwvyc/X0y8rJoGSrokMI5HvTAAEBq9++pC8x1gWNSwyWmZqoX+0eOSC
-         2UxMiVBKx3qg0uh+Y8HA/Bih32fAp5hE/moC8A+v5OxDJAW82rJN8zYSePgHaxx+K5J1
-         avn/qnApir0jj5XY22yKCG8y6IbQW0pKtzAp5tWWim1oCUkc2UXEM+80xyfD7+D4eOjM
-         kXLo6BnYTl8mTYSjqUOvbnwyA0uJnCJkleO2rfEYBs6LZd4pX0f+m5ReUXf5nIZ6to6P
-         3SLyXdi43Jjo9QwJ5vegIsYQenl6s7B75RRSYMRlX+pfSeolr4aORYN+FRpjVIf5aEul
-         QFmQ==
-X-Gm-Message-State: AJIora/FtXRMFBKC4gZSP+myApBvmyfLuP3Xtnt3QU88j49NmlAHmrDg
-        glhq1DtVox780BSzmeuzn8AhjBwd0HBkaQ==
-X-Google-Smtp-Source: AGRyM1vjZ+5N/f77O5qPXoiVUX4pJGxwAQyaaZJRH8JaYvnupRlQYS0vdL1n6f3pazJlx6c2NeH+PA==
-X-Received: by 2002:a17:903:1c4:b0:16b:7928:95ce with SMTP id e4-20020a17090301c400b0016b792895cemr4459758plh.158.1656433870761;
-        Tue, 28 Jun 2022 09:31:10 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id i3-20020a170902cf0300b0016a0ac06424sm9576140plg.51.2022.06.28.09.31.08
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bul38R93x//KNOyQi8klG2NZQTS/GpM9te9tWvCtSxw=;
+        b=cVqpryshoS/tMfCi5s+6le5SAeHjzXEEQGDdaIgpoZLlodjxq1PRsh8u6bIJCzLI0m
+         E/sCOrfiOlE+N3EkwuihjsVc4wg16OsO/1B3NJmEEAgbwMGQQrETTKaZS9jmLrdS3dVM
+         SiZe0OmiOt+7AIyEWJ94kv1Zm+3UJrwhsVi4KNcTHU5Y2FKxM+P5vMrEpW5rHiF5rXJ9
+         BaTwHDbKQYPwU5B3C6lIokNv6YPXq74M5BZeHLwr0IGwLmk4Do6zRVG1LfrgHgqVHwJ4
+         DSM+B+dWGmlBHrREenMo5mbko5B4i5hf45sTBedFAQz0MlO+2hRNcLpdrIKukHeImKvK
+         r+7g==
+X-Gm-Message-State: AJIora8G1b/U3UfKF5MnDkHMsFiM/Vp0Fa7rEIOcwZQtDvbYTLXT5Ad+
+        t1WKnD9zGmAAVveqYpgNde+xnGWnzALHDQ==
+X-Google-Smtp-Source: AGRyM1tHcXAjOHTgxJOkl0owaZUTlp2VvNesYHKFklptO0nkOnfG3bhhYHq3odMXDMlZjPpW2psiXg==
+X-Received: by 2002:a17:907:1b14:b0:6ef:a5c8:afbd with SMTP id mp20-20020a1709071b1400b006efa5c8afbdmr18523050ejc.151.1656433907916;
+        Tue, 28 Jun 2022 09:31:47 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-80-116-90-174.pool80116.interbusiness.it. [80.116.90.174])
+        by smtp.gmail.com with ESMTPSA id b20-20020a0564021f1400b0042e15364d14sm9916952edb.8.2022.06.28.09.31.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 09:31:09 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 10:31:07 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Hangyu Hua <hbh25y@gmail.com>, bjorn.andersson@linaro.org,
-        gregkh@linuxfoundation.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] rpmsg: fix possible refcount leak in
- rpmsg_register_device_override()
-Message-ID: <20220628163107.GA1942439@p14s>
-References: <20220624024120.11576-1-hbh25y@gmail.com>
- <20220624173621.GC1736477@p14s>
- <47db0cd8-c940-6e74-f8dc-8e3931e13d80@linaro.org>
- <CANLsYkzT5ZROReZNQ_eYL-r49ijaZYZ5TzdMpqy1RK0_hvW3_Q@mail.gmail.com>
- <0bbee169-6fdc-b50e-87f7-1551dac821e2@linaro.org>
+        Tue, 28 Jun 2022 09:31:47 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v5 00/12] can: slcan: extend supported features
+Date:   Tue, 28 Jun 2022 18:31:24 +0200
+Message-Id: <20220628163137.413025-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0bbee169-6fdc-b50e-87f7-1551dac821e2@linaro.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -76,45 +78,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 09:40:36PM +0200, Krzysztof Kozlowski wrote:
-> On 24/06/2022 20:43, Mathieu Poirier wrote:
-> > On Fri, 24 Jun 2022 at 11:45, Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 24/06/2022 19:36, Mathieu Poirier wrote:
-> >>> On Fri, Jun 24, 2022 at 10:41:20AM +0800, Hangyu Hua wrote:
-> >>>> rpmsg_register_device_override need to call put_device to free vch when
-> >>>> driver_set_override fails.
-> >>>>
-> >>>> Fix this by adding a put_device() to the error path.
-> >>>>
-> >>>> Fixes: bb17d110cbf2 ("rpmsg: Fix calling device_lock() on non-initialized device")
-> >>>
-> >>> This is funny... Neither Bjorn nor I have reviewed this patch...
-> >>
-> >> It was a fix for commit in Greg's tree and Greg's pick it up after a
-> >> week or something. I am not sure if that's actually funny that Greg has
-> >> to pick it up without review :(
-> >>
-> > 
-> > The patch was sent out on April 19th and committed 3 days later on
-> > April 22nd.  Is 3 days the new patch review time standard?
-> 
-> Neither 19th, nor 22nd are correct. The patch which you set you never
-> reviewed, so commit bb17d110cbf2 was sent on 29th of April:
-> https://lore.kernel.org/all/20220429195946.1061725-1-krzysztof.kozlowski@linaro.org/
->
+This series originated as a result of CAN communication tests for an
+application using the USBtin adapter (https://www.fischl.de/usbtin/).
+The tests showed some errors but for the driver everything was ok.
+Also, being the first time I used the slcan driver, I was amazed that
+it was not possible to configure the bitrate via the ip tool.
+For these two reasons, I started looking at the driver code and realized
+that it didn't use the CAN network device driver interface.
 
-Twitchy fingers... Those dates are for commit 42cd402b8fd4, which is referenced
-by bb17d110cbf2.
+Starting from these assumptions, I tried to:
+- Use the CAN network device driver interface.
+- Set the bitrate via the ip tool.
+- Send the open/close command to the adapter from the driver.
+- Add ethtool support to reset the adapter errors.
+- Extend the protocol to forward the adapter CAN communication
+  errors and the CAN state changes to the netdev upper layers.
 
-The end result is the same, that is patches related to the remoteproc/rpmsg
-subsystems (or any subsystem) should not be committed before their maintainers
-have the opportunity to review them.
+Except for the protocol extension patches (i. e. forward the adapter CAN
+communication errors and the CAN state changes to the netdev upper
+layers), the whole series has been tested under QEMU with Linux 4.19.208
+using the USBtin adapter.
+Testing the extension protocol patches requires updating the adapter
+firmware. Before modifying the firmware I think it makes sense to know if
+these extensions can be considered useful.
 
-> And committed on 6 of May, which gives some time for review. Where did
-> you see the other dates?
-> 
-> 
-> Best regards,
-> Krzysztof
+Before applying the series I used these commands:
+
+slcan_attach -f -s6 -o /dev/ttyACM0
+slcand ttyACM0 can0
+ip link set can0 up
+
+After applying the series I am using these commands:
+
+slcan_attach /dev/ttyACM0
+slcand ttyACM0 can0
+ip link set dev can0 down
+ip link set can0 type can bitrate 500000
+ethtool --set-priv-flags can0 err-rst-on-open on
+ip link set dev can0 up
+
+Now there is a clearer separation between serial line and CAN,
+but above all, it is possible to use the ip and ethtool commands
+as it happens for any CAN device driver. The changes are backward
+compatible, you can continue to use the slcand and slcan_attach
+command options.
+
+
+Changes in v5:
+- Update the commit message.
+- Restore the use of rtnl_lock() and rtnl_unlock().
+
+Changes in v4:
+- Move the patch in front of the patch "[v3,04/13] can: slcan: use CAN network device driver API".
+- Add the CAN_BITRATE_UNSET (0) and CAN_BITRATE_UNKNOWN (-1U) macros.
+- Simplify the bitrate check to dump it.
+- Update the commit description.
+- Update the commit description.
+- Use the CAN_BITRATE_UNKNOWN macro.
+- Use kfree_skb() instead of can_put_echo_skb() in the slc_xmit().
+- Remove the `if (slcan_devs)' check in the slc_dealloc().
+- Replace `sl->tty == NULL' with `!sl->tty'.
+- Use CAN_BITRATE_UNSET (0) and CAN_BITRATE_UNKNOWN (-1U) macros.
+- Don't reset the bitrate in ndo_stop() if it has been configured.
+- Squashed to the patch [v3,09/13] can: slcan: send the close command to the adapter.
+- Use the CAN_BITRATE_UNKNOWN macro.
+- Add description of slc_bump_err() function.
+- Remove check for the 'e' character at the beggining of the function.
+  It was already checked by the caller function.
+- Protect decoding against the case the len value is longer than the
+  received data.
+- Some small changes to make the decoding more readable.
+- Increment all the error counters at the end of the function.
+- Add description of slc_bump_state() function.
+- Remove check for the 's' character at the beggining of the function.
+  It was already checked by the caller function.
+- Protect decoding against the case the frame len is longer than the
+  received data (add SLC_STATE_FRAME_LEN macro).
+- Set cf to NULL in case of alloc_can_err_skb() failure.
+- Some small changes to make the decoding more readable.
+- Use the character 'b' instead of 'f' for bus-off state.
+
+Changes in v3:
+- Increment the error counter in case of decoding failure.
+- Replace (-1) with (-1U) in the commit description.
+- Update the commit description.
+- Remove the slc_do_set_bittiming().
+- Set the bitrate in the ndo_open().
+- Replace -1UL with -1U in setting a fake value for the bitrate.
+- Drop the patch "can: slcan: simplify the device de-allocation".
+- Add the patch "can: netlink: dump bitrate 0 if can_priv::bittiming.bitrate is -1U".
+
+Changes in v2:
+- Put the data into the allocated skb directly instead of first
+  filling the "cf" on the stack and then doing a memcpy().
+- Move CAN_SLCAN Kconfig option inside CAN_DEV scope.
+- Improve the commit message.
+- Use the CAN framework support for setting fixed bit rates.
+- Improve the commit message.
+- Protect decoding against the case the len value is longer than the
+  received data.
+- Continue error handling even if no skb can be allocated.
+- Continue error handling even if no skb can be allocated.
+
+Dario Binacchi (12):
+  can: slcan: use the BIT() helper
+  can: slcan: use netdev helpers to print out messages
+  can: slcan: use the alloc_can_skb() helper
+  can: netlink: dump bitrate 0 if can_priv::bittiming.bitrate is -1U
+  can: slcan: use CAN network device driver API
+  can: slcan: allow to send commands to the adapter
+  can: slcan: set bitrate by CAN device driver API
+  can: slcan: send the open/close commands to the adapter
+  can: slcan: move driver into separate sub directory
+  can: slcan: add ethtool support to reset adapter errors
+  can: slcan: extend the protocol with error info
+  can: slcan: extend the protocol with CAN state info
+
+ drivers/net/can/Kconfig                       |  40 +-
+ drivers/net/can/Makefile                      |   2 +-
+ drivers/net/can/dev/netlink.c                 |   3 +-
+ drivers/net/can/slcan/Makefile                |   7 +
+ .../net/can/{slcan.c => slcan/slcan-core.c}   | 504 +++++++++++++++---
+ drivers/net/can/slcan/slcan-ethtool.c         |  65 +++
+ drivers/net/can/slcan/slcan.h                 |  18 +
+ include/linux/can/bittiming.h                 |   2 +
+ 8 files changed, 536 insertions(+), 105 deletions(-)
+ create mode 100644 drivers/net/can/slcan/Makefile
+ rename drivers/net/can/{slcan.c => slcan/slcan-core.c} (65%)
+ create mode 100644 drivers/net/can/slcan/slcan-ethtool.c
+ create mode 100644 drivers/net/can/slcan/slcan.h
+
+-- 
+2.32.0
+

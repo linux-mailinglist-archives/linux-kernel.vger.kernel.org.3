@@ -2,133 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6DC55EDF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC3055EE03
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbiF1Tna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 15:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
+        id S229945AbiF1Tox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 15:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233077AbiF1Tmx (ORCPT
+        with ESMTP id S232315AbiF1Toe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 15:42:53 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C460A3F329
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 12:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656444932; x=1687980932;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2oUw14+QB/xaskcnfyCWcya1uXzyvTLVtoyz0zSKhs8=;
-  b=UQeniPKvHPGJyonpeT7vLZc4aWUdXKNTXfelygJ7NVsER6bdCQvOfSMu
-   uzC3v+4lGVDZGIRH6a2zxPN4V3bT4njiKonhVNjSBEgEcNyD6w2sD2Uda
-   oRZsKYBbLcobJowwSs2uV0UEAg1VB4Yuc2rXll/NwlTyGMeqCU9SEAnrg
-   9AKuaL7DjEloOmV//j16Z+kowAIIu3PxImZVe5mEuNHcanRU45lOt4YIh
-   YmKU+evgbzMV0j8EIishUs8Y/+tTmc+FkVTQACqxDzmsxFhSG/udhUYDI
-   m18NkE+A/JQuCzRAozDA2GLnVsEVyBvd+tAhe3JWveNaXQ84LVpO6biZz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="264871805"
-X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="264871805"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:35:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="658253835"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Jun 2022 12:35:30 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o6Gzi-000AZA-2Y;
-        Tue, 28 Jun 2022 19:35:30 +0000
-Date:   Wed, 29 Jun 2022 03:35:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Jeff Layton <jlayton@kernel.org>
-Subject: [jlayton:netfs-linked-list 26/54] include/linux/page-flags.h:788:20:
- error: passing 'const struct page *' to parameter of type 'struct page *'
- discards qualifiers
-Message-ID: <202206290318.tpiiSqSW-lkp@intel.com>
+        Tue, 28 Jun 2022 15:44:34 -0400
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A206F3C71F;
+        Tue, 28 Jun 2022 12:37:21 -0700 (PDT)
+Received: by mail-il1-f178.google.com with SMTP id a7so3764855ilj.2;
+        Tue, 28 Jun 2022 12:37:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cO3ERK4XtbJUrNznv3o2iz6iblK9YD2fF9VbD6eP290=;
+        b=bRBf8yD3xU6YnLnP3cf5rKY9/QNBioiHm/blJBqW+hjTgO33PjDqsCGSHfnRyKNgOM
+         cXwor9UjBBfc4HCkHj6Ah1T8c2I3yJcMSsQtUGdovNk8W+bg0AaevPV/QdUT6/cIt8M6
+         fSq8p7qiPFv1Zm1J1lSoVxwLT46Tqbf9bodeEG1wbAyUp/mB5pnwTatUGJLkIRHacE85
+         Gn/X2IUHmHM7ZMYLwWvMAswFzkS0ybnC53KvPTkxDvJkhhlnIZodANy7i3MJTd+Y/V1M
+         +XMCIpLA17ZI1I61obPRLgFxVKe5IfkYPePNC+qVOKg9z62atPacuMqf+LFT+faUQxvW
+         11aA==
+X-Gm-Message-State: AJIora9SRQItduYXhc/D7LS4lfdFtM0UB4a3lP5d54ZZFW7BHgWnBrSl
+        RcKEaZ6k/m+emNdUBjfDfA==
+X-Google-Smtp-Source: AGRyM1tWmrYkETu7J79v1CMzaMfG8jQE/J3ICVZ7PYuE+lwFA6fFbPDw1GpXcmEA8PpxTOE+0bCtFQ==
+X-Received: by 2002:a05:6e02:190c:b0:2d6:5c98:d0e5 with SMTP id w12-20020a056e02190c00b002d65c98d0e5mr11018037ilu.193.1656445040891;
+        Tue, 28 Jun 2022 12:37:20 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id v17-20020a056e020f9100b002d6d8398e88sm6166005ilo.70.2022.06.28.12.37.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 12:37:20 -0700 (PDT)
+Received: (nullmailer pid 852286 invoked by uid 1000);
+        Tue, 28 Jun 2022 19:37:19 -0000
+Date:   Tue, 28 Jun 2022 13:37:19 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, michals@xilinx.com,
+        bhelgaas@google.com, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, lorenzo.pieralisi@arm.com
+Subject: Re: [PATCH v5 1/2] dt-bindings: PCI: xilinx-cpm: Add Versal CPM5
+ Root Port
+Message-ID: <20220628193719.GA852253-robh@kernel.org>
+References: <20220621113653.2354462-1-bharat.kumar.gogada@xilinx.com>
+ <20220621113653.2354462-2-bharat.kumar.gogada@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220621113653.2354462-2-bharat.kumar.gogada@xilinx.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git netfs-linked-list
-head:   d35a2461e039c9131e97bb125eac59a0f04e9161
-commit: 06b03c53376206f3b98cc4dbb1f061a10085309b [26/54] mm: Make some folio function arguments const
-config: x86_64-randconfig-a003-20220627 (https://download.01.org/0day-ci/archive/20220629/202206290318.tpiiSqSW-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project df18167ac56d05f2ab55f9d874aee7ab6d5bc9a2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=06b03c53376206f3b98cc4dbb1f061a10085309b
-        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
-        git fetch --no-tags jlayton netfs-linked-list
-        git checkout 06b03c53376206f3b98cc4dbb1f061a10085309b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
+On Tue, 21 Jun 2022 17:06:52 +0530, Bharat Kumar Gogada wrote:
+> Xilinx Versal Premium series has CPM5 block which supports Root Port
+> functionality at Gen5 speed.
+> 
+> Add support for YAML schemas documentation for Versal CPM5 Root Port driver.
+> 
+> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+> ---
+>  .../bindings/pci/xilinx-versal-cpm.yaml       | 38 ++++++++++++++++++-
+>  1 file changed, 37 insertions(+), 1 deletion(-)
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:20:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:22:
->> include/linux/page-flags.h:788:20: error: passing 'const struct page *' to parameter of type 'struct page *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           PF_POISONED_CHECK(page);
-                             ^~~~
-   include/linux/page-flags.h:370:41: note: expanded from macro 'PF_POISONED_CHECK'
-                   VM_BUG_ON_PGFLAGS(PagePoisoned(page), page);            \
-                                                         ^~~~
-   include/linux/mmdebug.h:94:60: note: expanded from macro 'VM_BUG_ON_PGFLAGS'
-   #define VM_BUG_ON_PGFLAGS(cond, page) VM_BUG_ON_PAGE(cond, page)
-                                                              ^~~~
-   include/linux/mmdebug.h:21:14: note: expanded from macro 'VM_BUG_ON_PAGE'
-                           dump_page(page, "VM_BUG_ON_PAGE(" __stringify(cond)")");\
-                                     ^~~~
-   include/linux/mmdebug.h:12:29: note: passing argument to parameter 'page' here
-   void dump_page(struct page *page, const char *reason);
-                               ^
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:117: arch/x86/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1200: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +788 include/linux/page-flags.h
-
-e7d324850bfcb30 Muchun Song   2022-03-22  785  
-06b03c53376206f David Howells 2022-06-08  786  static __always_inline int PageHead(const struct page *page)
-e7d324850bfcb30 Muchun Song   2022-03-22  787  {
-e7d324850bfcb30 Muchun Song   2022-03-22 @788  	PF_POISONED_CHECK(page);
-e7d324850bfcb30 Muchun Song   2022-03-22  789  	return test_bit(PG_head, &page->flags) && !page_is_fake_head(page);
-e7d324850bfcb30 Muchun Song   2022-03-22  790  }
-e7d324850bfcb30 Muchun Song   2022-03-22  791  
-
-:::::: The code at line 788 was first introduced by commit
-:::::: e7d324850bfcb30df563d144c0363cc44595277d mm: hugetlb: free the 2nd vmemmap page associated with each HugeTLB page
-
-:::::: TO: Muchun Song <songmuchun@bytedance.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: Rob Herring <robh@kernel.org>

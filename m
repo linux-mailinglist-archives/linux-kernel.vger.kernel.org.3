@@ -2,307 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0663E55D267
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7DC55DF01
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245410AbiF1GK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 02:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47728 "EHLO
+        id S245434AbiF1GLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 02:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245403AbiF1GK4 (ORCPT
+        with ESMTP id S245403AbiF1GLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 02:10:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7DE091AF38
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:10:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656396654;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jt23nPSjh5xBDAVuJ7M57pWNhCQFynVLmVpwMdP8mbY=;
-        b=gB8anIziZDBELZzqfYu7GTQVYy+5ml87ZYqouw7uDxE4LUZjQbohJir0UpHteE5GprqeNv
-        iwpRw0WOp0KzN1Im1K8svpD/OwUXh7gu49tomYM8k8EPEA/sv7tnShDIWgMJd03iLmu6mK
-        mpBQ0EDisIrqFDZlMEXEBSRnPbWgtSI=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-614-EvldNOozOcqTssVJo9y3LQ-1; Tue, 28 Jun 2022 02:10:52 -0400
-X-MC-Unique: EvldNOozOcqTssVJo9y3LQ-1
-Received: by mail-lf1-f72.google.com with SMTP id q22-20020a0565123a9600b0047f6b8e1babso5826064lfu.21
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:10:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Jt23nPSjh5xBDAVuJ7M57pWNhCQFynVLmVpwMdP8mbY=;
-        b=s8lTvnU95Mkhwf+++kve/xkQ7+2pBxSnQY4m3yPt5i8By4I/qY5NgHQd9UPhjXiw0B
-         2hFtalByct6/olmSeUYl/u6oqKhjAFvY4SKkqOkwlN5381kYzZKLrpYJzWHGOkvPRNSy
-         QuyNn5TEga/wDDeQFrl2Mf8fQ1FFiX9JCrQoZn7X1szKFUZwiW3JH4a8GihQW+SXKGc/
-         WgQ2/LQZmYDOT5pVbU/8q7PkH55ppdobdraR9pWb9WtCHak/Ig6P06sxBaUOzgUszdCW
-         wXzYL+mF0FZn6j94wG+bpdGWCYYGTCR9XYMRjdGSfLXDahUEEuEqxIIuw6qHK/HqjPrb
-         jfTA==
-X-Gm-Message-State: AJIora/JMMDqtKnAmdzGu0JizaEqgpEJeVxljJVUPZuOTPn82kL16pCC
-        lZ1K9cV5+TPKvN8y/7lSe36yX656NJvIkSWtYHrcXwbHtQyDnJjpdXJG1GKN+DVs1VJ3ejIXIf7
-        1wjPuSGpxacllKgS6xRwSHxkat2yBRU0FqMlsZMuL
-X-Received: by 2002:a2e:aaa5:0:b0:25b:ae57:4ad7 with SMTP id bj37-20020a2eaaa5000000b0025bae574ad7mr8747814ljb.323.1656396650759;
-        Mon, 27 Jun 2022 23:10:50 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1u7k8nM0ZPHkOelFGVVpl+dlmKx1x0NPzMduN3hOvUcxgRwK0awopEAbDjirrba73GUp+ks965gAPHPVLkREXY=
-X-Received: by 2002:a2e:aaa5:0:b0:25b:ae57:4ad7 with SMTP id
- bj37-20020a2eaaa5000000b0025bae574ad7mr8747799ljb.323.1656396650500; Mon, 27
- Jun 2022 23:10:50 -0700 (PDT)
+        Tue, 28 Jun 2022 02:11:41 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E991AF38;
+        Mon, 27 Jun 2022 23:11:41 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RKtdCt031559;
+        Mon, 27 Jun 2022 23:11:20 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=C9yRgUCUTP0ZkKNKC5p1wjiKYW6UECYUdIOfJIE464s=;
+ b=ni9Sc4t5uUsaZgPAK16lfeCzia9VWURl92DYzl4pDmcAUzLvKJaaDXrIHcokBjPB2njR
+ lvrHpAThdLrzywu+JQ79LXBdMibB7ak1XcbWP2XsP8/fSpuD+u8juzWBRMBuVbid1bTa
+ tjfJQUIj9vcn6VdQu8Zi/0P37scwfrhiDWY= 
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2100.outbound.protection.outlook.com [104.47.58.100])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gym12ab13-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 23:11:20 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jYyiZcuGu6mNHHu1MgfYST36q4P35rNQ9tQxxbPB1p7QXmCtfYiudWG4xTeVlexJATm+np2EhkBQNCkzYpICfzexYKtfiEZ7u6wqGO1De79R6Ve1/gqgjdpzo9TWy+SZmj+yLq2bIcfB+GV9Hvl1tEpJVaXr/aKHa0xJ5RoTplcQtito/zJLn5IshjgeWB48dNxbuI+gTM2sivWG/bwnWdRCrcMnid/XYLPHrI175Kk6sPwhJ91onrB2uglHbUN3jW6+1WsVZ0Thv+xAWhxFRdoaZ3XqLpCGyQZQ1s2uD7XIFXcd665heY4bF12a9fdKO08rkNnEZV1aV/raNJPImA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=C9yRgUCUTP0ZkKNKC5p1wjiKYW6UECYUdIOfJIE464s=;
+ b=LGnOvH6PfKDLOUfnbiYEad2clVEDDyU60aqe+yXh/XMORG0lnmVmI0q5gOqTqILziXJARjLPl0Xi3qklPHBuzqo8Vc6kXZoxaqgnf8bTXktCib+RTboxHU22n5b5xhnFYG9XSUPwv2UABBehlm/AOqxUr2zhPU/fbJ+GVNnAjNP+IixDj7KI5iaraaQs6jbVuPjkWfbCUxCZIp3BwoFI5bOKINYnz2xQo/ppXYnB1Z5VBZIHbNoFY+eAZmfGHmzKvm3q59EKsitgF+alO4uKWa9ReNqOYwwXRl184ThnLn3KQoaFPNoNwH9llqt/cGcoYbrPGhXx9WIHnSJMcrUykQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by BYAPR15MB2534.namprd15.prod.outlook.com (2603:10b6:a03:152::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Tue, 28 Jun
+ 2022 06:11:17 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::9568:e5d9:b8ab:bb23]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::9568:e5d9:b8ab:bb23%6]) with mapi id 15.20.5373.018; Tue, 28 Jun 2022
+ 06:11:17 +0000
+Message-ID: <60365571-bcf0-d096-d023-c9a8bc9a40a7@fb.com>
+Date:   Mon, 27 Jun 2022 23:11:13 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH bpf-next v2 5/8] selftests/bpf: Test cgroup_iter.
+Content-Language: en-US
+To:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>, Michal Hocko <mhocko@kernel.org>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org
+References: <20220610194435.2268290-1-yosryahmed@google.com>
+ <20220610194435.2268290-6-yosryahmed@google.com>
+From:   Yonghong Song <yhs@fb.com>
+In-Reply-To: <20220610194435.2268290-6-yosryahmed@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0184.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c3::9) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-References: <20220626090409.1011144-1-lulu@redhat.com> <20220626055420-mutt-send-email-mst@kernel.org>
- <CACLfguVMfqAiCVoNVr7J8ooQa35tNJOSK-XHqsdE3hdXsfOZ+A@mail.gmail.com>
- <20220627055826-mutt-send-email-mst@kernel.org> <CACGkMEugJQY-QsnekKHWSdaG0H03qFxdmu+O1tQKMge65bFmHw@mail.gmail.com>
- <20220628014642-mutt-send-email-mst@kernel.org> <CACGkMEvt9QVvZb+gEuynazGmEM-j22QdiEH_V-oWD1=NZQS+5g@mail.gmail.com>
- <20220628020622-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220628020622-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 28 Jun 2022 14:10:38 +0800
-Message-ID: <CACGkMEvAnmaS11JYXwsMmk9GaE_Q+Egz9nzk3H-rZF+DCs8Mow@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] vhost: Add rbtree vdpa_mem_tree to saved the
- counted mem
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Cindy Lu <lulu@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6a309d7d-c553-4569-d7c3-08da58cd02f5
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2534:EE_
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WhpFhVSMz62C5sEA1hQqfUQW5PJm8Sg8C7/yDyOEoUsm507OyoHxEGuXSuLTAX00tHFdXHjdRoZsviK6NyKe4TOaKT1muibJI/1KwDAp1qZ01j79o+uyms+yCR9ApKBSHXoi/lcCqgddM/tOtzcirsGxYJc7WRq3iZnlQPhUGugk8T+XKi76jeXLLgElY9KxMaNfGpLOBdgWxqLlEasxpz60Wt5yLUy+TPoaDpn7MXCSt6U0Uxr4efPyXWi/mSZ2Kd+KN5GCnVMH+UMEn3zKEQSz6P5mMw9TM7oQogkljSybJOL/BA7h0YoXMwByjWnbfOyTUVQOydz7ciXpFtf6SolVBc06vBYfZZV90Kaj1wWuGFnddVtgOKtDqaR0tbwYl3TLnGXNuNVWnPAnt2xWu1TeTzH1qu3k1EkP0/VT9ELm+bCEacyJoVdwAA+M2SeZiLla7HoVNUSp2AUE34liqjHzw973FS+6pYl4j7Vw8OMwzwbSAnEUTZtQzIpQZrneWYJLpFGfQcdWZ9j6M0LwXG1Hj38tYxwFTOINkBy44ITag2U94mgg2NvM3+dV0SPwKixRhYLv/Nf9Do8SY0Q/ZEsW9PWJbu6Gi58FOGjGGoewoPL+qW2zbYH7irM8vOND5IxLBL9tzYRsKkjjZhwro3WuScnVBXnSN4Gg7UFeyMwhYQj3gaNXc6/z+py8p+64Rjn57enpJJKsR/y6u8CVfmGvYpzWWlhNbWf6jSaPwEBQfJKjHDaHmYTiCYEUwxgumh3Bq/hhg/65T7dxLFSPAbo9cN4EhHYXxdfdBtG8iGi/sczXMKMvlOLjRVT9bTuRxza1U3zi376n6Ir4DOwxtmejuJGpRlMUNR9YNvN58K0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(376002)(346002)(136003)(39860400002)(110136005)(66476007)(6666004)(38100700002)(36756003)(6486002)(8676002)(8936002)(66556008)(316002)(4326008)(66946007)(31686004)(186003)(54906003)(5660300002)(2616005)(7416002)(41300700001)(2906002)(83380400001)(478600001)(6506007)(921005)(6512007)(4744005)(31696002)(86362001)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Tk5QTkRFRW5zakcra0E0ekZxSlp0bWZzRnJBWFBzQWNwaGZtakkwYlJvZit6?=
+ =?utf-8?B?SWNKeGQ1enJXc3NaWGZuRFh1RWxlNVlSWFlEcmFsZ0k1cFdMOGRiU0taRndi?=
+ =?utf-8?B?S0NJNHp6QnRIVytWZzlHaEFpZ0tqUzR0MmtFSkhMVUw1NWhKV092dmRzaUJO?=
+ =?utf-8?B?dVZwVGk1KzdUby91QlI2Qk5zd0ttKytMM29GZ2hPMkpadGg2TmRYTGZFMURJ?=
+ =?utf-8?B?S2hleTdxMlQvbncwcnpWQTh0Nm4rN0hTT3dzayt3b2tYZis5SWVtRUtPQ2Nv?=
+ =?utf-8?B?dVVaU2dwdFFPUE1MVjJRR1Bwa3pHdWJQZmVyZHo2YVVlY2ZiVno0UlBqQis0?=
+ =?utf-8?B?ZDdTL1BmRGRmejVicTQvWk9NTzVhTWlaTmlFS1ZKcWhhM0w2NjlDYUxZUGpu?=
+ =?utf-8?B?Q0tyNm5SQ0EwOGh6bjVmczM0SDBjcW0rWmRkSE9zV1h0eTdyNTBIaDJCemdt?=
+ =?utf-8?B?Uy9YYXVKYk9Vd0lMNU9BTkpLQ1dDclJzekFDcWpjVm5FUkx1Yzk2dHRrSlhv?=
+ =?utf-8?B?VmsvU1lESjVIZU1RYUMrd0RDVVJTM1FFMWRwOWU5cEw1ZkJ0cXBtdEdqemt3?=
+ =?utf-8?B?OElDM1JreDQzczNFY3FNWVBpb3gvL1lmNlZMWlMvMmNzd1V5MlVEd3g5TjlG?=
+ =?utf-8?B?RkYrZ1pKdEFMYmRPZHBIdXFRV0ZvVGh5anhFUERqR05SdzFXS0l3OXNuTU5K?=
+ =?utf-8?B?REZKdGxDc0dCY01lVUs1S2JUNjk5L2J0VGwrWEUzQlJaQ0ZmazlmYklYQjVF?=
+ =?utf-8?B?K2RkSEVEc2lOUHBVRHorbGY2SXd3SFM4TkRVWGNDaFhKQlE0c2lVQng3elNh?=
+ =?utf-8?B?bENTNXQvL1poVGZzT1J6NmpNU2JZUkxDMWFtRXkwZ1ZnZVV2VTZ6NmJQeHht?=
+ =?utf-8?B?dDZ1RDhsRXdZTDJXSldGcjZCajBSd2Q5cGxXREFTMDEzQVR4SjBaRk5rbVh0?=
+ =?utf-8?B?SzFTaGwvZXNJdWlSUUZ2QThoSjNvTDh6bzNlbEhvcWxreSsvanh3VmIrQzZw?=
+ =?utf-8?B?MUlOSnlQZUExYkE1ME1SYW4vTmEyRFBkWXpKV2pPWVNsbGNJZUlTUFoxVDVU?=
+ =?utf-8?B?aTBENG1rNXNNWGlWTXpwM3BocU5IMnh6alRNb2RLWTJBcDlmbHdUYUhGeTQ4?=
+ =?utf-8?B?L0hqQS9ocHVsam8xNXVWMEhYUnpTMjQzTnZDQ2tFWVZXUTlXVmlGaFArYnY1?=
+ =?utf-8?B?aTMyanNHVDUyUEdWSHg0NlRjNDR0RExZbnY0bzRQS2srdlUxcEM3blJzdzN5?=
+ =?utf-8?B?QS9QMy9sVUVXRk05SkRDbVBQajkweVhtdFBYNWtydEh2S3ZHREVpYjVIMTFo?=
+ =?utf-8?B?M0VXUDYyK2NSVTNUMWROZC84Rk1sMVZqY0hINWlzNHcrZ2luajhDTE11ckg5?=
+ =?utf-8?B?d2F3WEUyc0RHYm52L09ZNU91MVFRM2w4RWhMWGNkZFhocUxqUVROUDdGQkNH?=
+ =?utf-8?B?eXYrRmRVaWhvM3YrRGpxVUc5NEo2SjNIOFkxTFN3VXM0TlJFZ2Z1bnYwWWZQ?=
+ =?utf-8?B?RHRMRk5kSmtlMmpjdkN2aXFHZThrWGY0UzFHME1mSzN3YmNGY3VsVHdoZE5V?=
+ =?utf-8?B?Q3dzZFcySTM3QXdjaUhZTmZSeFFxdmQ1MFVySFNtOW5DaXNXZmN5N294UFRN?=
+ =?utf-8?B?Y0lyR2V3dldFU0ZTdGlGeFFHcXF2VTVSQ2RJY2tzMnJmaUNhMVArdSsrbkdJ?=
+ =?utf-8?B?TzhGdGtvQjdicWhEc2dEWlJEd1hkZ2ozQW5RMG9WSHRjQjRncUdob0toOFJR?=
+ =?utf-8?B?MFpsdUZ3SFNCSk5HWWhsY2RwSEFQcVhUcS9Jdk9vdlZkVUQrYXd6U21EVnM5?=
+ =?utf-8?B?UWJlSXluNmRFUGtxZlZkc0YrRkErWHp1bHdZeDZNemFZbWppbHl2THZMZFgr?=
+ =?utf-8?B?ZmM5Qjk2OEkvTmdldkQrUXlRc1NndFR6TGp6dXpzY05ocjJnY09TNlNSTVdJ?=
+ =?utf-8?B?aXI4RzlaaEV6THpOekFlajRxUjVPUkZoVGxrSjZGcVZjTTBsYU9DNWRSSysz?=
+ =?utf-8?B?c3RtcWlIM1BwaW1TM1NuN1ZHR1IzWlZCK3dmdlpFcldFL0J5ek5zZ1k3MHM4?=
+ =?utf-8?B?WXpNb1NrSWY3NExhd1dKZkxYTEs0Q2NaOUh3TXBsUWw0QWlJY0U1RElvRVVB?=
+ =?utf-8?Q?Ye4bBz0zDoRkWn8fiyTUFx4GA?=
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a309d7d-c553-4569-d7c3-08da58cd02f5
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 06:11:16.9114
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: F1gBjwWygf08dCGqL1iQg9oh6B9fZSfnmO2YlO9jN14imssNjTnZ+3/eKEFj7evX
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2534
+X-Proofpoint-ORIG-GUID: hk4_i9Trha6Jaz6GPVqN3qzzgecEAfpF
+X-Proofpoint-GUID: hk4_i9Trha6Jaz6GPVqN3qzzgecEAfpF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-27_09,2022-06-24_01,2022-06-22_01
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 2:07 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Tue, Jun 28, 2022 at 02:03:38PM +0800, Jason Wang wrote:
-> > On Tue, Jun 28, 2022 at 1:58 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > >
-> > > On Tue, Jun 28, 2022 at 11:54:27AM +0800, Jason Wang wrote:
-> > > > On Mon, Jun 27, 2022 at 6:01 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > >
-> > > > > On Mon, Jun 27, 2022 at 04:12:57PM +0800, Cindy Lu wrote:
-> > > > > > On Sun, Jun 26, 2022 at 6:01 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > > >
-> > > > > > > On Sun, Jun 26, 2022 at 05:04:08PM +0800, Cindy Lu wrote:
-> > > > > > > > We count pinned_vm as follow in vhost-vDPA
-> > > > > > > >
-> > > > > > > > lock_limit = rlimit(RLIMIT_MEMLOCK) >> PAGE_SHIFT;
-> > > > > > > > if (npages + atomic64_read(&dev->mm->pinned_vm) > lock_limit) {
-> > > > > > > >          ret = -ENOMEM;
-> > > > > > > >          goto unlock;
-> > > > > > > > }
-> > > > > > > > This means if we have two vDPA devices for the same VM the pages
-> > > > > > > > would be counted twice. So we add a tree to save the page that
-> > > > > > > > counted and we will not count it again.
-> > > > > > > >
-> > > > > > > > Add vdpa_mem_tree to saved the mem that already counted.
-> > > > > > > > use a hlist to saved the root for vdpa_mem_tree.
-> > > > > > > >
-> > > > > > > > Signed-off-by: Cindy Lu <lulu@redhat.com>
-> > > > > > > > ---
-> > > > > > > >  drivers/vhost/vhost.c | 63 +++++++++++++++++++++++++++++++++++++++++++
-> > > > > > > >  drivers/vhost/vhost.h |  1 +
-> > > > > > > >  2 files changed, 64 insertions(+)
-> > > > > > > >
-> > > > > > > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> > > > > > > > index 40097826cff0..4ca8b1ed944b 100644
-> > > > > > > > --- a/drivers/vhost/vhost.c
-> > > > > > > > +++ b/drivers/vhost/vhost.c
-> > > > > > > > @@ -32,6 +32,8 @@
-> > > > > > > >  #include <linux/kcov.h>
-> > > > > > > >
-> > > > > > > >  #include "vhost.h"
-> > > > > > > > +#include <linux/hashtable.h>
-> > > > > > > > +#include <linux/jhash.h>
-> > > > > > > >
-> > > > > > > >  static ushort max_mem_regions = 64;
-> > > > > > > >  module_param(max_mem_regions, ushort, 0444);
-> > > > > > > > @@ -49,6 +51,14 @@ enum {
-> > > > > > > >  #define vhost_used_event(vq) ((__virtio16 __user *)&vq->avail->ring[vq->num])
-> > > > > > > >  #define vhost_avail_event(vq) ((__virtio16 __user *)&vq->used->ring[vq->num])
-> > > > > > > >
-> > > > > > > > +struct vhost_vdpa_rbtree_node {
-> > > > > > > > +     struct hlist_node node;
-> > > > > > > > +     struct rb_root_cached vdpa_mem_tree;
-> > > > > > > > +     struct mm_struct *mm_using;
-> > > > > > > > +};
-> > > > > > > > +static DECLARE_HASHTABLE(vhost_vdpa_rbtree_hlist, 8);
-> > > > > > > > +int vhost_vdpa_rbtree_hlist_status;
-> > > > > > > > +
-> > > > > > > >  #ifdef CONFIG_VHOST_CROSS_ENDIAN_LEGACY
-> > > > > > > >  static void vhost_disable_cross_endian(struct vhost_virtqueue *vq)
-> > > > > > > >  {
-> > > > > > >
-> > > > > > > Are you trying to save some per-mm information here?
-> > > > > > > Can't we just add it to mm_struct?
-> > > > > > >
-> > > > > > yes, this is a per-mm information, but I have checked with jason before,
-> > > > > > seems it maybe difficult to change the mm_struct in upstream
-> > > > > > so I add an to add a hlist  instead
-> > > > > > Thanks
-> > > > > > Cindy
-> > > > >
-> > > > > Difficult how?
-> > > >
-> > > > It is only useful for vDPA probably. Though it could be used by VFIO
-> > > > as well, VFIO does pinning/accounting at the container level and it
-> > > > has been there for years.
-> > >
-> > > Yes it's been there, I'm not sure this means it's perfect.
-> > > Also, rdma guys might be interested too I guess?
-> >
-> > It looks to me they plan to go to iommufd as well.
-> >
-> > >
-> > > > vDPA have an implicit "container" the
-> > > > mm_struct, but the accounting is done per device right now.
-> > > >
-> > > > In the future, when vDPA switches to iommufd, it can be then solved at
-> > > > iommufd level.
-> > >
-> > > So is it even worth fixing now?
-> >
-> > Not sure, but I guess it's better. (Or we need to teach the libvirt to
-> > have special care on this).
->
-> It already has to for existing kernels.  Let's just move to iommufd
-> faster then?
 
-This is fine, Cindy, any idea on this?
 
->
-> > >
-> > > > And if we do this in mm, it will bring extra overheads.
-> > > >
-> > > > Thanks
-> > >
-> > > Pointer per mm, not too bad ...
-> >
-> > Unless we enable it unconditionally, it requires a lot of tree
-> > operations at least.
-> >
-> > Thanks
->
-> Not sure I understand.
+On 6/10/22 12:44 PM, Yosry Ahmed wrote:
+> From: Hao Luo <haoluo@google.com>
+> 
+> Add a selftest for cgroup_iter. The selftest creates a mini cgroup tree
+> of the following structure:
+> 
+>      ROOT (working cgroup)
+>       |
+>     PARENT
+>    /      \
+> CHILD1  CHILD2
+> 
+> and tests the following scenarios:
+> 
+>   - invalid cgroup fd.
+>   - pre-order walk over descendants from PARENT.
+>   - post-order walk over descendants from PARENT.
+>   - walk of ancestors from PARENT.
+>   - early termination.
+> 
+> Signed-off-by: Hao Luo <haoluo@google.com>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 
-I mean in order to not count pinned pages multiple times we need to
-keep track of the pages that are already pinned in an rbtree with
-refcounts. This means we need to populate the tree when userspace
-pin/unpin pages.
-
-Thanks
-
->
-> > >
-> > > > > You get more scrutiny if you try, for sure,
-> > > > > and you need to need to generalize it enough that it looks
-> > > > > useful outside the driver. But I guess that's good?
-> > > > >
-> > > > > > >
-> > > > > > >
-> > > > > > > > @@ -571,6 +581,51 @@ static void vhost_detach_mm(struct vhost_dev *dev)
-> > > > > > > >       dev->mm = NULL;
-> > > > > > > >  }
-> > > > > > > >
-> > > > > > > > +struct rb_root_cached *vhost_vdpa_get_mem_tree(struct mm_struct *mm)
-> > > > > > > > +{
-> > > > > > > > +     struct vhost_vdpa_rbtree_node *rbtree_root = NULL;
-> > > > > > > > +     struct rb_root_cached *vdpa_tree;
-> > > > > > > > +     u32 key;
-> > > > > > > > +
-> > > > > > > > +     /* No hased table, init one */
-> > > > > > > > +     if (vhost_vdpa_rbtree_hlist_status == 0) {
-> > > > > > > > +             hash_init(vhost_vdpa_rbtree_hlist);
-> > > > > > > > +             vhost_vdpa_rbtree_hlist_status = 1;
-> > > > > > > > +     }
-> > > > > > > > +
-> > > > > > > > +     key = jhash_1word((u64)mm, JHASH_INITVAL);
-> > > > > > > > +     hash_for_each_possible(vhost_vdpa_rbtree_hlist, rbtree_root, node,
-> > > > > > > > +                            key) {
-> > > > > > > > +             if (rbtree_root->mm_using == mm)
-> > > > > > > > +                     return &(rbtree_root->vdpa_mem_tree);
-> > > > > > > > +     }
-> > > > > > > > +     rbtree_root = kmalloc(sizeof(*rbtree_root), GFP_KERNEL);
-> > > > > > > > +     if (!rbtree_root)
-> > > > > > > > +             return NULL;
-> > > > > > > > +     rbtree_root->mm_using = mm;
-> > > > > > > > +     rbtree_root->vdpa_mem_tree = RB_ROOT_CACHED;
-> > > > > > > > +     hash_add(vhost_vdpa_rbtree_hlist, &rbtree_root->node, key);
-> > > > > > > > +     vdpa_tree = &(rbtree_root->vdpa_mem_tree);
-> > > > > > > > +     return vdpa_tree;
-> > > > > > > > +}
-> > > > > > > > +
-> > > > > > > > +void vhost_vdpa_relase_mem_tree(struct mm_struct *mm)
-> > > > > > > > +{
-> > > > > > > > +     struct vhost_vdpa_rbtree_node *rbtree_root = NULL;
-> > > > > > > > +     u32 key;
-> > > > > > > > +
-> > > > > > > > +     key = jhash_1word((u64)mm, JHASH_INITVAL);
-> > > > > > > > +
-> > > > > > > > +     /* No hased table, init one */
-> > > > > > > > +     hash_for_each_possible(vhost_vdpa_rbtree_hlist, rbtree_root, node,
-> > > > > > > > +                            key) {
-> > > > > > > > +             if (rbtree_root->mm_using == mm) {
-> > > > > > > > +                     hash_del(&rbtree_root->node);
-> > > > > > > > +                     kfree(rbtree_root);
-> > > > > > > > +             }
-> > > > > > > > +     }
-> > > > > > > > +}
-> > > > > > > > +
-> > > > > > > >  /* Caller should have device mutex */
-> > > > > > > >  long vhost_dev_set_owner(struct vhost_dev *dev)
-> > > > > > > >  {
-> > > > > > > > @@ -605,6 +660,11 @@ long vhost_dev_set_owner(struct vhost_dev *dev)
-> > > > > > > >       err = vhost_dev_alloc_iovecs(dev);
-> > > > > > > >       if (err)
-> > > > > > > >               goto err_cgroup;
-> > > > > > > > +     dev->vdpa_mem_tree = vhost_vdpa_get_mem_tree(dev->mm);
-> > > > > > > > +     if (dev->vdpa_mem_tree == NULL) {
-> > > > > > > > +             err = -ENOMEM;
-> > > > > > > > +             goto err_cgroup;
-> > > > > > > > +     }
-> > > > > > > >
-> > > > > > > >       return 0;
-> > > > > > > >  err_cgroup:
-> > > > > > > > @@ -613,6 +673,7 @@ long vhost_dev_set_owner(struct vhost_dev *dev)
-> > > > > > > >               dev->worker = NULL;
-> > > > > > > >       }
-> > > > > > > >  err_worker:
-> > > > > > > > +     vhost_vdpa_relase_mem_tree(dev->mm);
-> > > > > > > >       vhost_detach_mm(dev);
-> > > > > > > >       dev->kcov_handle = 0;
-> > > > > > > >  err_mm:
-> > > > > > > > @@ -710,6 +771,8 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
-> > > > > > > >               dev->worker = NULL;
-> > > > > > > >               dev->kcov_handle = 0;
-> > > > > > > >       }
-> > > > > > > > +
-> > > > > > > > +     vhost_vdpa_relase_mem_tree(dev->mm);
-> > > > > > > >       vhost_detach_mm(dev);
-> > > > > > > >  }
-> > > > > > > >  EXPORT_SYMBOL_GPL(vhost_dev_cleanup);
-> > > > > > > > diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
-> > > > > > > > index d9109107af08..84de33de3abf 100644
-> > > > > > > > --- a/drivers/vhost/vhost.h
-> > > > > > > > +++ b/drivers/vhost/vhost.h
-> > > > > > > > @@ -160,6 +160,7 @@ struct vhost_dev {
-> > > > > > > >       int byte_weight;
-> > > > > > > >       u64 kcov_handle;
-> > > > > > > >       bool use_worker;
-> > > > > > > > +     struct rb_root_cached *vdpa_mem_tree;
-> > > > > > > >       int (*msg_handler)(struct vhost_dev *dev, u32 asid,
-> > > > > > > >                          struct vhost_iotlb_msg *msg);
-> > > > > > > >  };
-> > > > > > > > --
-> > > > > > > > 2.34.3
-> > > > > > >
-> > > > >
-> > >
->
-
+Acked-by: Yonghong Song <yhs@fb.com>

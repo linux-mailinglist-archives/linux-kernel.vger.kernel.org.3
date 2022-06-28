@@ -2,63 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 121F655DC13
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E294E55CED3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiF1EQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 00:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35914 "EHLO
+        id S244319AbiF1EUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 00:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244077AbiF1EQZ (ORCPT
+        with ESMTP id S231199AbiF1EU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 00:16:25 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9304027FFB;
-        Mon, 27 Jun 2022 21:16:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656389784; x=1687925784;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=tpA5FJsBtzTqQaXxHQ1/5jItTcIF44B1UOgIkA2TMBw=;
-  b=Phe/4bb+/aai01FecZA5h7NBKIbO2ay0+cTMERLpNGkszn1/ivIShddA
-   mLNhZJ4KBKbFuiUXNcFXrVmhZWjzdVgUOEjsNs+ai/NGK6nKBV21L22Ln
-   HA4mcrnLviZHezD0bPpwfuCyVzLosBRffgI+v9zDEYhhHsJtqL3bqYbjo
-   b0JtdbOHa4fzYldXnj79VCJHLSAZyMiQ2xgURFF8Y2vV27RHL/zQPcnAZ
-   a6k2Gwiu7gq1jRtyBTEFcXaKdWgYK76ZRICHsm/hpEwE6GxLRu+XiXwU6
-   e8PqoTl3JHFaQeAj3RS14u4AC1ZzC5YkJMTar9kfCMPvZsQfln1ABIYWc
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="345627107"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="345627107"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 21:16:20 -0700
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="590164502"
-Received: from nakedgex-mobl.amr.corp.intel.com (HELO localhost) ([10.255.3.161])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 21:16:16 -0700
-From:   ira.weiny@intel.com
-To:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>, Lukas Wunner <lukas@wunner.de>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: [PATCH V12 9/9] cxl/port: Parse out DSMAS data from CDAT table
-Date:   Mon, 27 Jun 2022 21:15:27 -0700
-Message-Id: <20220628041527.742333-10-ira.weiny@intel.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220628041527.742333-1-ira.weiny@intel.com>
-References: <20220628041527.742333-1-ira.weiny@intel.com>
-MIME-Version: 1.0
+        Tue, 28 Jun 2022 00:20:29 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2096.outbound.protection.outlook.com [40.107.117.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF03629CAA;
+        Mon, 27 Jun 2022 21:20:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Zt8Qks7WrvYm3I4WiTD4PFvM14T7XNfr73ZNRgII4cNPijkKOErqqPOhikFP/CL5mcbofJLUlZYuXjOKG5WVbEy5ZeusynZkx2+qTQVPfsnrDYJOd2VWxbYJDhXdJt+khts21V+LWH4Z/g9NG2kmXH7VW3Vaps78nw+/ltw8gCPSdvMJP8i49kjrIBo4e+3l5inGWmKUqDUJtBamhjU87cm5aF6tuz19F2gBTqmDWsq9ZKVM6V7KC9hODcsf+05jhjgKZ1ielcjgT0oEpvvFOZo0Dsjtha0C7WBPn6NFq7eugRf4zwf6AlVhscePzWWd1gu0VBOqdhY+Z1M9gaEWXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4m+r9yhtgekX8HmGotgPDslPE5ORoyfLDF9hFNavtrs=;
+ b=cUQqpyb5F+dsVP/GKGQ8hcKR6wkd/IfloEVwe2jlmLIjRSBVFobMl9muO/7sW2yOQcqocu7V3WdBWfOKL3bwyOE2FbP7T2rtZWsIeJfuZbuNGbj8H73icraxzosa4aUue4EiZNVQF73nQKPbWk3MSeXoSxdoiC82J3QwQS4m4b06lC7WYxfymviu7Znkvsu0UXqFxEdCMJ0Jtg3rlhUgnjp/zh/em7/dwEXJIIaeAwZwMtPrqivlPbi6DCfCsWAl6RbOqKnlR4iPOWd7UoQwb3wN3EKJ0YEimycBJ+RWX3a5dfvDywjiMNgpCSVavUD/kTXMsF0AHOotIAFbYM7u4Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4m+r9yhtgekX8HmGotgPDslPE5ORoyfLDF9hFNavtrs=;
+ b=DujZfhxdakBjUGIaLIo11RDHhxyRCwSO1ny28TKkBj6fWIJY3GRuz84C6erGFopLF2Esu/S/EW5Udg9dhZNUC0a99EKcEg5NaHA0sfSLlIMcl7/Pm7z9mJIfdXIQKqqGDuBgephydL74cZKOAFVodBG5GIBNQiMFxt507f9LLeY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SL2PR06MB3017.apcprd06.prod.outlook.com (2603:1096:100:3a::16)
+ by SG2PR06MB3259.apcprd06.prod.outlook.com (2603:1096:4:99::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Tue, 28 Jun
+ 2022 04:20:20 +0000
+Received: from SL2PR06MB3017.apcprd06.prod.outlook.com
+ ([fe80::9c97:b22a:d5d5:d670]) by SL2PR06MB3017.apcprd06.prod.outlook.com
+ ([fe80::9c97:b22a:d5d5:d670%5]) with mapi id 15.20.5373.015; Tue, 28 Jun 2022
+ 04:20:20 +0000
+From:   Wu Bo <bo.wu@vivo.com>
+To:     zhangjiachen.jaycee@bytedance.com, vgoyal@redhat.com
+Cc:     miklos@szeredi.hu, bo.wu@vivo.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fuse: force sync attr when inode is invalidated
+Date:   Tue, 28 Jun 2022 12:20:12 +0800
+Message-Id: <20220628042012.60675-1-bo.wu@vivo.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <CAFQAk7gLTYCmX3-4ABkc4Kg-BhO9YvEmZCg8aogkNsEHjkK35g@mail.gmail.com>
+References: <CAFQAk7gLTYCmX3-4ABkc4Kg-BhO9YvEmZCg8aogkNsEHjkK35g@mail.gmail.com>
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-ClientProxiedBy: SG3P274CA0018.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::30)
+ To SL2PR06MB3017.apcprd06.prod.outlook.com (2603:1096:100:3a::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 29340b11-6a0e-4778-54e1-08da58bd834e
+X-MS-TrafficTypeDiagnostic: SG2PR06MB3259:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VWQBmDcL6YVZH/O7zfME+lFPT6T78OhThvDwXBRdq+EV6dFgEYlyEREFTypULveFmNQZeXTAoq2AzcERfYwCsKZAgkxn+AJnV99A0rCKqTCYoZchgnnonC0wsQqvp7ux9TM9bUCGKFZh1VvVv1puJIkFdgaXKEoO/T0nZHr1EfKGUngvD8PG2xaahTj/ZuxhsR4Vfiwonb1PVXfS0j4eDPS7JI3TjMkVCzpGFj5yI6K7DGfwRSBPid/vtFMqJhu/TGHcR4eJV/ebwp/oRQ1YRZihxQ2GoDUF4hewtH0BzVW6paJNbYq434urWpiBGnhIkCvXeFOw1cqGrxz8HO7Kx/XP1GHJh3ns6CTkuZ2q74fIOYsS5+13PGfPSBDxmKuUMiqAFUMq3M7NzZJqG5l99dZo6PGVxiS6FVOQybVyvPHfVRiD3oWiCA0cAfN5GL5b80KMilsQkiC1DNZbVfk9YSr2ixZvaZHjgoL4eF2Jhlo9HTQ70FuWy821X8VIBI+XRajYiEN+/L6Hyna1QeiPGlIcLdGgDu9zhU0vrS2mMP49tsOrmyshnk84xh8VWoEcevaA747Jxplc5PeAGIzEYUktZ75IzXi+vcJ8S1cW+x1ABDGVgGs2KMu79rz+G1iFrDWf+ArPQ85PugS/XefQnS4Vloa2lz/epXgmRob1AfnS1fS/VRUTZjcSG3luT+quYw0sSZ2rynP2+E9EsL+ettKi8kxS1V4sXV8E8XWvqiaENwTB6FtLLDFDeBbjRtwp9LULYooQ8ZmvECCa033GXak7a3yZyX3GZyX69yYzogsD3NWIDvz3EQYUJOFIEyl1gXMPhCb3U2nXpPqGZ5+k0Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3017.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(366004)(136003)(346002)(376002)(86362001)(4326008)(478600001)(6506007)(186003)(6512007)(2906002)(26005)(6486002)(8936002)(53546011)(66476007)(2616005)(66946007)(1076003)(52116002)(41300700001)(66556008)(966005)(316002)(83380400001)(5660300002)(38350700002)(38100700002)(8676002)(36756003)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eGEr6RIB6DeZCgwbAZe8xEyaVZKqRFN29VM9juBuF5T80GLzwl8yFK8ediKI?=
+ =?us-ascii?Q?iHXNtiVyhfrTOvk990BuYAVRYMCdu3GxD9NKGsQ31hrf0793pi3zrEbiWd1y?=
+ =?us-ascii?Q?WLEyPMLnatOEugfWC0b4jqNw/OCI0y13SgWLzPlvZKZIxRPsJGJ6iEL2fhDB?=
+ =?us-ascii?Q?PBPAAdntuxq+veYgyw2G69FszhC+P83dQZXUNR1uAzu7HUhq0GwL9NlDF7Lv?=
+ =?us-ascii?Q?xToPCd7JmWWyqPYFkqyvFRSq4z3TSuX+lv2QK2xzcGbnKlDB7wEZSewSaDsq?=
+ =?us-ascii?Q?xL1g9wdnvwhHqw+KVCkoHKL+U0Qx3WUoRIwqO1QVf++T1IBrjfEgLxxzaB6B?=
+ =?us-ascii?Q?ILJPGERN6SrkFcyFxeGkxBDIIdGJTqF262TaSjesmE/7LCoRJU0Vtx2FQV3/?=
+ =?us-ascii?Q?O2cltBydKDOR3HgJxzKHOL+Lx3db5CMOdbnkKV85GaDno/S4iSsZsUYDhJm5?=
+ =?us-ascii?Q?7irjqVk4AXTJUaYpKUdLP20/hPNTtOR1+vvJbyl2N2ZUAtnkxYVvn730bzcy?=
+ =?us-ascii?Q?OVZ/UMAZUyAqROW8XDh+P++L7hYyg4/xVRfmxGljhiX4YJCqc8GXH9+xB6lV?=
+ =?us-ascii?Q?X88TPTTBAoF2k61kuBqBehb5of1+0jyctvE6nrA1w9NfhUi97fdVIkhK2ZGt?=
+ =?us-ascii?Q?SlRtLg/LzE9/qNhi/MyRzE07Lc6YV5PtxCkN8EnjNsNsE7WGSgEqmV3M4JqB?=
+ =?us-ascii?Q?JTBiF1IDJOSJQTAcmWNi8Z8GY+sJBtCWYmOeZACqoaxcd2NIwAv3tNRxExHB?=
+ =?us-ascii?Q?Wq/4qkZgY+CK15mzuud2H3JKMNtVFJtxR+o8XQUUcBdzneTH/eOR2dGmlBHn?=
+ =?us-ascii?Q?w1sUVs7XxVzIKEqpzc838GaQ9jbvKQFF326Sem2KzyODG7dWEPkIUazSdWCo?=
+ =?us-ascii?Q?Rwa33RolJjPyRPNFoToB9tnaPBdDn1HixDlSsWFwnX4f2FFGklJ5ZCbPKev/?=
+ =?us-ascii?Q?gmrlm40aL6Evk0QEbGwcnr6elFPLw6/FVImCDMFu2/1nfNhgAfOEaRl6GCp6?=
+ =?us-ascii?Q?fxVkP188o37i1MVptWgekeAF3AGb3s7q3Nsh3Ht9QOWGXsAXkLMJ9OoehwPP?=
+ =?us-ascii?Q?cL748S1iadralmb95XwK7bPmN+XNyoMpNtMUrepUrQ4z/qD6BEj7tIlNpCLb?=
+ =?us-ascii?Q?+VGXX/3FR3FTn6Rz4p6nz09tkX3IRao0miDUYFekOAnws2fIP00ZtUWR8RDZ?=
+ =?us-ascii?Q?5C04Ls0Nw6eQtJK+WE1lTH+HZN56pRgUDVO2LcTrfaEgbnJGBjZEZGwrfF/c?=
+ =?us-ascii?Q?DUfoqP55NUHpIUPcQclNyZ1wz7jwGU4e7sDP88+VLfdGvFqT4Ff7ei4moqMK?=
+ =?us-ascii?Q?xUQOA7d+o2UaEDvllhzGYfr3NgGzYPvMSEh3fIZ8+EXGgxC9Nrk9SKGOL00x?=
+ =?us-ascii?Q?6SH3E1IXH5S/qBBrdE+yZNvIFGROFRbU3xQXjGPPpFbRIkDl/L2ywgQt0tL+?=
+ =?us-ascii?Q?K1x/ndb0ddifhZlk082ciOILQBeRaq9LB8Vvuwys0x7qyvFDjh/N9ugdP39S?=
+ =?us-ascii?Q?TJKcerA7vn3ICFVIIewzUQh3HEW3LsE/z4vdeWdQd7+ZDYK3/qEiSIRHp/7+?=
+ =?us-ascii?Q?AfdgpOzZqAgiSCfNJK34adwKymjHFoh8Wg4t4dl6?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29340b11-6a0e-4778-54e1-08da58bd834e
+X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3017.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 04:20:20.3389
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: irwgyfvZktG47U4QWI668zUyH1GxDtPH8vbRHD+uglA0POI/tZ4/v7EeLYKHlkXtGQejkXQDwWlBybpTAZ1lgg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB3259
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,258 +113,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ira Weiny <ira.weiny@intel.com>
+Hi Vivek and Jiachen,
 
-CXL Ports with memory devices attached need the information from the
-Device Scoped Memory Affinity Structure (DSMAS).  This information is
-contained within the CDAT table buffer which is cached in the port
-device.
+Sorry for late reply. It took time to build open email infrastructure in office.
 
-If CDAT data is available, parse and cache DSMAS data from the table.
-Store this data in unmarshaled struct dsmas data structures for ease of
-use later.  Ensure DSMAS headers are not malicious or ill formed so as
-to cause buffer overflow errors.
+> On Fri, Jun 24, 2022 at 10:27 AM Jiachen Zhang
+> <zhangjiachen.jaycee@bytedance.com> wrote:
+>>
+>> On Fri, Jun 24, 2022 at 3:26 AM Vivek Goyal <vgoyal@redhat.com> wrote:
+>>>
+>>> On Tue, Jun 21, 2022 at 08:56:51PM +0800, wubo wrote:
+>>>> From: Wu Bo <bo.wu@vivo.com>
+>>>>
+>>>> Now the fuse driver only trust it's local inode size when
+>>>> writeback_cache is enabled. Even the userspace server tell the driver
+>>>> the inode cache is invalidated, the size attrabute will not update. And
+>>>> will keep it's out-of-date size till the inode cache is dropped. This is
+>>>> not reasonable.
+>>>
+>>> BTW, can you give more details about what's the use case. With
+>>> writeback_cache, writes can be cached in fuse and not sent to
+>>> file server immediately. And I think that's why fuse trusts
+>>> local i_size.
+>>>
 
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+Let me introduce this use case. It's widely used in Android11 now.
+Android11 use fuse for APP to access the public files in order to support the
+dynamic permission. To increase the performance at the same time, Android11
+allow APPs to write big size files(e.g. jpg or mp4) directly to the lower fs
+bypass fuse. So this issue come out:
 
----
-Changes from V10
-	From Ben Widawsky
-		Check data lengths to protect against malicious devices
+       APP-a                              APP-b
+  Write a jpg file through lowfs
+                                     Read the jpg file, size is 1M
+  Fish write
+  Update the size 2M in DB
+  Invalidate the fuse entry
+                                     Size keep to be 1M
 
-Changes from V8
-	Adjust to the cdat data being in cxl_port
+             [ Drop the inode cache manually ]
 
-Changes from V7
-	Rebased on cxl-pending
+	                             Size be update to 2M
 
-Changes from V6
-	Move to port.c
-	It is not an error if no DSMAS data is found
+If the inode cache keep in kernel, the size will not update forever because of
+the writeback mode.
 
-Changes from V5
-	Fix up sparse warnings
-	Split out cdat_hdr_valid()
-	Update cdat_hdr_valid()
-		Remove revision and cs field parsing
-			There is no point in these
-		Add seq check and debug print.
-	From Jonathan
-		Add spaces around '+' and '/'
-		use devm_krealloc() for dmas_ary
----
- drivers/cxl/cdat.h     | 23 ++++++++++++++
- drivers/cxl/core/pci.c | 72 ++++++++++++++++++++++++++++++++++++++++++
- drivers/cxl/cxl.h      |  2 ++
- drivers/cxl/cxlmem.h   |  4 +++
- drivers/cxl/cxlpci.h   |  1 +
- drivers/cxl/mem.c      |  1 +
- 6 files changed, 103 insertions(+)
+>>> With writeback_cache enabled, I don't think file should be modified
+>>> externally (outside the fuse client).
+>>>
+>>> So what's that use case where file size cached in fuse is out of
+>>> date. You probably should not use writeback_cache if you are
+>>> modifying files outside the fuse client.
 
-diff --git a/drivers/cxl/cdat.h b/drivers/cxl/cdat.h
-index 39eb561081f2..ca1f55762416 100644
---- a/drivers/cxl/cdat.h
-+++ b/drivers/cxl/cdat.h
-@@ -51,6 +51,7 @@
- #define CDAT_DSMAS_DPA_OFFSET(entry) ((u64)((entry)[3]) << 32 | (entry)[2])
- #define CDAT_DSMAS_DPA_LEN(entry) ((u64)((entry)[5]) << 32 | (entry)[4])
- #define CDAT_DSMAS_NON_VOLATILE(flags)  ((flags & 0x04) >> 2)
-+#define CDAT_DSMAS_ENTRY_SIZE		(6 * sizeof(u32))
- 
- /* Device Scoped Latency and Bandwidth Information Structure */
- #define CDAT_DSLBIS_DW1_HANDLE		0x000000ff
-@@ -60,22 +61,26 @@
- #define CDAT_DSLBIS_DW4_ENTRY_0		0x0000ffff
- #define CDAT_DSLBIS_DW4_ENTRY_1		0xffff0000
- #define CDAT_DSLBIS_DW5_ENTRY_2		0x0000ffff
-+#define CDAT_DSLBIS_ENTRY_SIZE		(6 * sizeof(u32))
- 
- /* Device Scoped Memory Side Cache Information Structure */
- #define CDAT_DSMSCIS_DW1_HANDLE		0x000000ff
- #define CDAT_DSMSCIS_MEMORY_SIDE_CACHE_SIZE(entry) \
- 	((u64)((entry)[3]) << 32 | (entry)[2])
- #define CDAT_DSMSCIS_DW4_MEMORY_SIDE_CACHE_ATTRS 0xffffffff
-+#define CDAT_DSMSCIS_ENTRY_SIZE		(5 * sizeof(u32))
- 
- /* Device Scoped Initiator Structure */
- #define CDAT_DSIS_DW1_FLAGS		0x000000ff
- #define CDAT_DSIS_DW1_HANDLE		0x0000ff00
-+#define CDAT_DSIS_ENTRY_SIZE		(2 * sizeof(u32))
- 
- /* Device Scoped EFI Memory Type Structure */
- #define CDAT_DSEMTS_DW1_HANDLE		0x000000ff
- #define CDAT_DSEMTS_DW1_EFI_MEMORY_TYPE_ATTR	0x0000ff00
- #define CDAT_DSEMTS_DPA_OFFSET(entry)	((u64)((entry)[3]) << 32 | (entry)[2])
- #define CDAT_DSEMTS_DPA_LENGTH(entry)	((u64)((entry)[5]) << 32 | (entry)[4])
-+#define CDAT_DSEMTS_ENTRY_SIZE		(6 * sizeof(u32))
- 
- /* Switch Scoped Latency and Bandwidth Information Structure */
- #define CDAT_SSLBIS_DW1_DATA_TYPE	0x000000ff
-@@ -83,9 +88,27 @@
- #define CDAT_SSLBIS_ENTRY_PORT_X(entry, i) ((entry)[4 + (i) * 2] & 0x0000ffff)
- #define CDAT_SSLBIS_ENTRY_PORT_Y(entry, i) (((entry)[4 + (i) * 2] & 0xffff0000) >> 16)
- #define CDAT_SSLBIS_ENTRY_LAT_OR_BW(entry, i) ((entry)[4 + (i) * 2 + 1] & 0x0000ffff)
-+#define CDAT_SSLBIS_HEADER_SIZE		(6 * sizeof(u32))
- 
- #define CXL_DOE_PROTOCOL_TABLE_ACCESS 2
- 
-+/**
-+ * struct cxl_dsmas - host unmarshaled version of DSMAS data
-+ *
-+ * As defined in the Coherent Device Attribute Table (CDAT) specification this
-+ * represents a single DSMAS entry in that table.
-+ *
-+ * @dpa_base: The lowest Device Physical Address associated with this DSMAD
-+ * @length: Length in bytes of this DSMAD
-+ * @non_volatile: If set, the memory region represents Non-Volatile memory
-+ */
-+struct cxl_dsmas {
-+	u64 dpa_base;
-+	u64 length;
-+	/* Flags */
-+	u8 non_volatile:1;
-+};
-+
- /**
-  * struct cxl_cdat - CXL CDAT data
-  *
-diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
-index d7c2a415cc5f..6d58fb1e46b0 100644
---- a/drivers/cxl/core/pci.c
-+++ b/drivers/cxl/core/pci.c
-@@ -679,3 +679,75 @@ void read_cdat_data(struct cxl_port *port)
- 		retries);
- }
- EXPORT_SYMBOL_NS_GPL(read_cdat_data, CXL);
-+
-+void parse_dsmas(struct cxl_memdev *cxlmd, struct cxl_port *port)
-+{
-+	struct device *dev = &port->dev;
-+	struct cxl_dsmas *dsmas_ary = NULL;
-+	u32 *data = port->cdat.table;
-+	int bytes_left = port->cdat.length;
-+	int nr_dsmas = 0;
-+
-+	if (!data) {
-+		dev_info(dev, "No CDAT data available for DSMAS\n");
-+		return;
-+	}
-+
-+	/* Skip header */
-+	data += CDAT_HEADER_LENGTH_DW;
-+	bytes_left -= CDAT_HEADER_LENGTH_BYTES;
-+
-+	while (bytes_left > 0) {
-+		u32 *cur_rec = data;
-+		u8 type = FIELD_GET(CDAT_STRUCTURE_DW0_TYPE, cur_rec[0]);
-+		u16 length = FIELD_GET(CDAT_STRUCTURE_DW0_LENGTH, cur_rec[0]);
-+
-+		if (type == CDAT_STRUCTURE_DW0_TYPE_DSMAS) {
-+			struct cxl_dsmas *new_ary;
-+			u8 flags;
-+
-+			/* Protect against malicious devices */
-+			if (bytes_left < CDAT_DSMAS_ENTRY_SIZE ||
-+			    length != CDAT_DSMAS_ENTRY_SIZE) {
-+				dev_err(dev, "Invalid DSMAS data detected\n");
-+				return;
-+			}
-+
-+			new_ary = devm_krealloc(dev, dsmas_ary,
-+					   sizeof(*dsmas_ary) * (nr_dsmas + 1),
-+					   GFP_KERNEL);
-+			if (!new_ary) {
-+				dev_err(dev,
-+					"Failed to allocate memory for DSMAS data (nr_dsmas %d)\n",
-+					nr_dsmas);
-+				return;
-+			}
-+			dsmas_ary = new_ary;
-+
-+			flags = FIELD_GET(CDAT_DSMAS_DW1_FLAGS, cur_rec[1]);
-+
-+			dsmas_ary[nr_dsmas].dpa_base = CDAT_DSMAS_DPA_OFFSET(cur_rec);
-+			dsmas_ary[nr_dsmas].length = CDAT_DSMAS_DPA_LEN(cur_rec);
-+			dsmas_ary[nr_dsmas].non_volatile = CDAT_DSMAS_NON_VOLATILE(flags);
-+
-+			dev_dbg(dev, "DSMAS %d: %llx:%llx %s\n",
-+				nr_dsmas,
-+				dsmas_ary[nr_dsmas].dpa_base,
-+				dsmas_ary[nr_dsmas].dpa_base +
-+					dsmas_ary[nr_dsmas].length,
-+				(dsmas_ary[nr_dsmas].non_volatile ?
-+					"Persistent" : "Volatile")
-+				);
-+
-+			nr_dsmas++;
-+		}
-+
-+		data += (length / sizeof(u32));
-+		bytes_left -= length;
-+	}
-+
-+	dev_dbg(dev, "Found %d DSMAS entries\n", nr_dsmas);
-+	cxlmd->dsmas_ary = dsmas_ary;
-+	cxlmd->nr_dsmas = nr_dsmas;
-+}
-+EXPORT_SYMBOL_NS_GPL(parse_dsmas, CXL);
-diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-index 9a08379000a0..5332b4d52d55 100644
---- a/drivers/cxl/cxl.h
-+++ b/drivers/cxl/cxl.h
-@@ -10,6 +10,8 @@
- #include <linux/io.h>
- #include "cdat.h"
- 
-+#include "cdat.h"
-+
- /**
-  * DOC: cxl objects
-  *
-diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-index 360f282ef80c..54231c26470c 100644
---- a/drivers/cxl/cxlmem.h
-+++ b/drivers/cxl/cxlmem.h
-@@ -36,6 +36,8 @@
-  * @cxlds: The device state backing this device
-  * @detach_work: active memdev lost a port in its ancestry
-  * @id: id number of this memdev instance.
-+ * @dsmas_ary: Array of DSMAS entries as parsed from the CDAT table
-+ * @nr_dsmas: Number of entries in dsmas_ary
-  */
- struct cxl_memdev {
- 	struct device dev;
-@@ -43,6 +45,8 @@ struct cxl_memdev {
- 	struct cxl_dev_state *cxlds;
- 	struct work_struct detach_work;
- 	int id;
-+	struct cxl_dsmas *dsmas_ary;
-+	int nr_dsmas;
- };
- 
- static inline struct cxl_memdev *to_cxl_memdev(struct device *dev)
-diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
-index eec597dbe763..3e68804d8935 100644
---- a/drivers/cxl/cxlpci.h
-+++ b/drivers/cxl/cxlpci.h
-@@ -75,4 +75,5 @@ int devm_cxl_port_enumerate_dports(struct cxl_port *port);
- struct cxl_dev_state;
- int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm);
- void read_cdat_data(struct cxl_port *port);
-+void parse_dsmas(struct cxl_memdev *cxlmd, struct cxl_port *port);
- #endif /* __CXL_PCI_H__ */
-diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
-index c310f1fd3db0..a8768df4ae38 100644
---- a/drivers/cxl/mem.c
-+++ b/drivers/cxl/mem.c
-@@ -35,6 +35,7 @@ static int create_endpoint(struct cxl_memdev *cxlmd,
- 	if (IS_ERR(endpoint))
- 		return PTR_ERR(endpoint);
- 
-+	parse_dsmas(cxlmd, endpoint);
- 	dev_dbg(&cxlmd->dev, "add: %s\n", dev_name(&endpoint->dev));
- 
- 	if (!endpoint->dev.driver) {
--- 
-2.35.3
+As we all know enable writeback mode can improve the performance. So this
+feature can't be disabled in Android. And the key cause of this issue is that
+writeback mode in fuse is not so reasonable now. And there are many methods to
+fix this issue.
 
+>>>
+>>> Having said that I am not sure why FUSE_NOTIFY_INVAL_INODE was added to
+>>> begin with. If files are not supposed to be modifed outside the fuse
+>>> client, why are we dropping acls and invalidating attrs. If intent is
+>>> just to drop page cache, then it should have been just that nothing
+>>> else.
+>>>
+
+I proposal force attr invalidation. Because I think if user call the
+FUSE_NOTIFY_INVAL_INODE as Android11 do it, they definately know what they are
+doing. And the fuse driver should do the expected response.
+
+>>> So up to some extent, FUSE_NOTIFY_INVAL_INODE is somewhat confusing. Would
+>>> have been good if there was some documentation for it.
+>>>
+>>> Thanks
+>>> Vivek
+>>>
+>>
+>> Hi Wu and Vivek,
+>>
+>> Recently, we have had some discussions about the writeback_cache
+>> revalidation on the mailing list [1][2]. Miklos gave his initial
+>> patchset about writeback_cache v2, which supports c/mtime and size
+>> updates [1]. However, those methods do not make use of reverse
+>> messages, as virtio-fs does not support reverse notification yet. I'm
+>> going to send out a new version of that patch based on the discussion
+>> and with more considerations.
+>
+> The new patch:
+> https://lore.kernel.org/linux-fsdevel/20220624055825.29183-1-zhangjiachen.jaycee@bytedance.com/
+>
+> Thanks,
+> Jiachen
+>
+>>
+>> I also agree that, semantically, FUSE_NOTIFY_INVAL_INODE should
+>> invalidate i_size as well. So I think this patch is a good supplement
+>> for FUSE_NOTIFY_INVAL_INODE. But we need to be more careful as the
+>> size can be updated from server to kernel, and from kernel to server.
+>> I will leave some comments about such issues in the following code.
+>>
+>> For the use case, writeback_cache is superb over write-through mode in
+>> write-intensive scenarios, but its consistency among multiple clients
+>> is too bad (almost no consistency). I think it's good to give a little
+>> more consistency to writeback_cache.
+>>
+>> [1] https://lore.kernel.org/linux-fsdevel/20220325132126.61949-1-zhangjiachen.jaycee@bytedance.com/
+>> [2] https://lore.kernel.org/linux-fsdevel/20220608104202.19461-1-zhangjiachen.jaycee@bytedance.com/
+
+This is a good solution to this issue. But I think we don't need another
+writeback_cache mode, it's time to do the cache consistency under
+writeback_cache mode.
+
+>>
+>>>>
+>>>> Signed-off-by: Wu Bo <bo.wu@vivo.com>
+>>>> ---
+>>>>  fs/fuse/inode.c | 10 +++++++++-
+>>>>  1 file changed, 9 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
+>>>> index 8c0665c5dff8..a4e62c7f2b83 100644
+>>>> --- a/fs/fuse/inode.c
+>>>> +++ b/fs/fuse/inode.c
+>>>> @@ -162,6 +162,11 @@ static ino_t fuse_squash_ino(u64 ino64)
+>>>>       return ino;
+>>>>  }
+>>>>
+>>>> +static bool fuse_force_sync(struct fuse_inode *fi)
+>>>> +{
+>>>> +     return fi->i_time == 0;
+>>>> +}
+>>>> +
+>>>>  void fuse_change_attributes_common(struct inode *inode, struct fuse_attr *attr,
+>>>>                                  u64 attr_valid, u32 cache_mask)
+>>>>  {
+>>>> @@ -222,8 +227,10 @@ void fuse_change_attributes_common(struct inode *inode, struct fuse_attr *attr,
+>>>>  u32 fuse_get_cache_mask(struct inode *inode)
+>>>>  {
+>>>>       struct fuse_conn *fc = get_fuse_conn(inode);
+>>>> +     struct fuse_inode *fi = get_fuse_inode(inode);
+>>>> +     bool is_force_sync = fuse_force_sync(fi);
+>>>>
+>>>> -     if (!fc->writeback_cache || !S_ISREG(inode->i_mode))
+>>>> +     if (!fc->writeback_cache || !S_ISREG(inode->i_mode) || is_force_sync)
+>>>>               return 0;
+>>>>
+>>>>       return STATX_MTIME | STATX_CTIME | STATX_SIZE;
+>>>> @@ -437,6 +444,7 @@ int fuse_reverse_inval_inode(struct fuse_conn *fc, u64 nodeid,
+>>>>       fi = get_fuse_inode(inode);
+>>>>       spin_lock(&fi->lock);
+>>>>       fi->attr_version = atomic64_inc_return(&fc->attr_version);
+>>>> +     fi->i_time = 0;
+>>>>       spin_unlock(&fi->lock);
+>>
+>> Seems fuse_reverse_inval_inode() only drops page cache from offset to
+>> offset+len, should we only invalidate i_time on a full cache drop?
+>> Otherwise, as the server size is stale, the users may see a file is
+>> truncated.
+>>
+>> Also, what if a FUSE_GETATTR request gets the attr_version after
+>> fuse_reverse_inval_inode() increases it, but tries to update i_size
+>> after the invalidate_inode_pages2_range() in
+>> fuse_reverse_inval_inode()? In this case, server_size can be updated
+>> by invalidate_inode_pages2_range(), and FUSE_GETATTR might gets a
+>> stale server_size. Meanwhile, as FUSE_GETATTR has got the newest
+>> attr_version, the kernel_size will still be updated. This can cause
+>> false truncation even for a single FUSE client. So we may need to do
+>> more about the attr_version in writeback mode.
+>>
+>> Thanks,
+>> Jiachen
+>>
+>>>>
+>>>>       fuse_invalidate_attr(inode);
+>>>> --
+>>>> 2.35.1
+>>>>
+>>>
+>

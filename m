@@ -2,182 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA55655CA9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EAB255D780
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344175AbiF1JX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48198 "EHLO
+        id S1344178AbiF1JYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344152AbiF1JXS (ORCPT
+        with ESMTP id S1344218AbiF1JYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:23:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4667E1EECA
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656408193;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ZQ8PbVRfKtLH2BnQKm5WBZD6aRMJWU7raZsWJy2qDfc=;
-        b=bxyIDItE7zdLWCgiVdyKIgEs5TAypVyRHXkS3w0XY00SNXVaEsAvh21z11s9Oml8J6aFsw
-        zIdG+XmE6sp7VzvpDyQsDndrRC6JAUKnBTisSQouBv/nvxSX3Rmt/sDTU+Ddz/oMvE4upC
-        s5nsZYmoUCw0opBjXuzgNrvkMaOGGVs=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-319-9p2IRh4zPbCDIYpVyLlwWQ-1; Tue, 28 Jun 2022 05:23:10 -0400
-X-MC-Unique: 9p2IRh4zPbCDIYpVyLlwWQ-1
-Received: by mail-wm1-f72.google.com with SMTP id v125-20020a1cac83000000b0039c832fbd02so8602976wme.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:23:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZQ8PbVRfKtLH2BnQKm5WBZD6aRMJWU7raZsWJy2qDfc=;
-        b=64NMiqqXfVorAWYXDI6gEbY8DUZG+1UMsYXXtj3ccXQLqRF5IkAO4Xb8NIdWhZAe2q
-         4guUuKAe/NkPv5KExWksPXNa9vIJ4n3UMdJw3+d689ft00DOuuoxtKLzu3lDQUAN+YZL
-         XW/Vv8soj6/kWrAA2SksDwpbW3O+aShiNXCjPS1+hrWRlj1VQVDl3ZBTlYtlF+y/b5B+
-         zTNfIb5DJaMH1w+bk1gNi/eUg6Zo5BlpGhWi6ZLu9IknddAIBSQsrqb3aGyWCjNNZ6yz
-         zFIS25WMwjUp7ipLMoehGPmoPoBfk/W02n1AK+LjeI3MUWYDhIEaSYyHwZ/00kOk6lxG
-         7ogw==
-X-Gm-Message-State: AJIora+QAWLGw0dja2NNrBKnTYGg72VmjwP4gYG5U9RsaY7XpsoAwXIe
-        oZUdM5LIaz160y9+E7qArHurHPoTrMZasTNnRutQBg8C7uNbegNcoV8QCaYn4F5Ms5hGggDHv96
-        SARd/F6eZAw6adrFxIrGys3Or4SNG9Jmp8qpbDeyS9R8oBAD137cgaMKyLL2CdQv99Z9oGwHHDh
-        UJ
-X-Received: by 2002:adf:e68b:0:b0:21d:1c8d:9891 with SMTP id r11-20020adfe68b000000b0021d1c8d9891mr2922152wrm.37.1656408189370;
-        Tue, 28 Jun 2022 02:23:09 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1srDW/+3lydTME/MMivmI4UhbCnrKvSp+Uias0Oz8IX8uy8HiHJgBlQ1o4KdvkvMPijOCyTHA==
-X-Received: by 2002:adf:e68b:0:b0:21d:1c8d:9891 with SMTP id r11-20020adfe68b000000b0021d1c8d9891mr2922119wrm.37.1656408189104;
-        Tue, 28 Jun 2022 02:23:09 -0700 (PDT)
-Received: from vian.redhat.com ([2a0c:5a80:1b12:b300:47b0:25ba:1a2e:72ac])
-        by smtp.gmail.com with ESMTPSA id v14-20020a05600c214e00b0039c96b97359sm10021630wml.37.2022.06.28.02.23.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 02:23:08 -0700 (PDT)
-From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
-To:     linux-kernel@vger.kernel.org, fweisbec@gmail.com
-Cc:     bristot@redhat.com, vschneid@redhat.com, cmetcalf@ezchip.com,
-        mgorman@suse.de, bsegall@google.com, rostedt@goodmis.org,
-        dietmar.eggemann@arm.com, vincent.guittot@linaro.org,
-        juri.lelli@redhat.com, peterz@infradead.org, mingo@redhat.com,
-        mtosatti@redhat.com, Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Subject: [PATCH] nohz/full, sched/rt: Fix missed tick-reenabling bug in dequeue_task_rt
-Date:   Tue, 28 Jun 2022 11:22:59 +0200
-Message-Id: <20220628092259.330171-1-nsaenzju@redhat.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 28 Jun 2022 05:24:15 -0400
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607F42496A
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=virtuozzo.com; s=relay; h=MIME-Version:Message-Id:Date:Subject:From:
+        Content-Type; bh=K9eCtLlHPuGIMT0syoANbcmOKfOt8OVhC2sSkmVBNcI=; b=Ua4dWG2+2mbF
+        VXiI4O8z2Flh0/lj3cU08yH2KqYV7FJDKRi7kYOPqKWEYRtYAlarQ09JuNDRUG15CELEEvP0qekjF
+        td+6FKWPVkJmyRmU2LAQO/ptL6GUCc44lLTe8D5m4wxBBxoa2CPrP3fmDY0mbraNKjnsdiY81ROq6
+        m7aAQ=;
+Received: from [192.168.16.236] (helo=vzdev.sw.ru)
+        by relay.virtuozzo.com with esmtp (Exim 4.94.2)
+        (envelope-from <alexander.atanasov@virtuozzo.com>)
+        id 1o67Qu-007YQ1-9B; Tue, 28 Jun 2022 11:22:56 +0200
+From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+Cc:     kernel@openvz.org,
+        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/1] Create debugfs file with virtio balloon usage information
+Date:   Tue, 28 Jun 2022 09:23:24 +0000
+Message-Id: <20220628092324.23656-1-alexander.atanasov@virtuozzo.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220627163714-mutt-send-email-mst@kernel.org>
+References: <20220627163714-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dequeue_task_rt() only decrements 'rt_rq->rt_nr_running' after having
-called sched_update_tick_dependency() preventing it from re-enabling the
-tick on systems that no longer have pending SCHED_RT tasks but have
-multiple runnable SCHED_OTHER tasks:
+Allow the guest to know how much it is ballooned by the host.
+It is useful when debugging out of memory conditions.
 
-  dequeue_task_rt()
-    dequeue_rt_entity()
-      dequeue_rt_stack()
-        dequeue_top_rt_rq()
-	  sub_nr_running()	// decrements rq->nr_running
-	    sched_update_tick_dependency()
-	      sched_can_stop_tick()	// checks rq->rt.rt_nr_running,
-	      ...
-        __dequeue_rt_entity()
-          dec_rt_tasks()	// decrements rq->rt.rt_nr_running
-	  ...
+When host gets back memory from the guest it is accounted
+as used memory in the guest but the guest have no way to know
+how much it is actually ballooned.
 
-Every other scheduler class performs the operation in the opposite
-order, and sched_update_tick_dependency() expects the values to be
-updated as such. So avoid the misbehaviour by inverting the order in
-which the above operations are performed in the RT scheduler.
-
-Fixes: 76d92ac305f2 ("sched: Migrate sched to use new tick dependency mask model")
-Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
 ---
- kernel/sched/rt.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ drivers/virtio/virtio_balloon.c | 78 +++++++++++++++++++++++++++++++++
+ 1 file changed, 78 insertions(+)
 
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 8c9ed96648409..55f39c8f42032 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -480,7 +480,7 @@ static inline void rt_queue_push_tasks(struct rq *rq)
- #endif /* CONFIG_SMP */
- 
- static void enqueue_top_rt_rq(struct rt_rq *rt_rq);
--static void dequeue_top_rt_rq(struct rt_rq *rt_rq);
-+static void dequeue_top_rt_rq(struct rt_rq *rt_rq, unsigned int count);
- 
- static inline int on_rt_rq(struct sched_rt_entity *rt_se)
- {
-@@ -601,7 +601,7 @@ static void sched_rt_rq_dequeue(struct rt_rq *rt_rq)
- 	rt_se = rt_rq->tg->rt_se[cpu];
- 
- 	if (!rt_se) {
--		dequeue_top_rt_rq(rt_rq);
-+		dequeue_top_rt_rq(rt_rq, rt_rq->rt_nr_running);
- 		/* Kick cpufreq (see the comment in kernel/sched/sched.h). */
- 		cpufreq_update_util(rq_of_rt_rq(rt_rq), 0);
+V2:
+ - fixed coding style
+ - removed pretty print
+V3:
+ - removed dublicate of features
+ - comment about balooned_pages more clear
+ - convert host pages to balloon pages
+
+diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloon.c
+index b9737da6c4dd..65964afd4f13 100644
+--- a/drivers/virtio/virtio_balloon.c
++++ b/drivers/virtio/virtio_balloon.c
+@@ -10,6 +10,7 @@
+ #include <linux/virtio_balloon.h>
+ #include <linux/swap.h>
+ #include <linux/workqueue.h>
++#include <linux/debugfs.h>
+ #include <linux/delay.h>
+ #include <linux/slab.h>
+ #include <linux/module.h>
+@@ -731,6 +732,78 @@ static void report_free_page_func(struct work_struct *work)
  	}
-@@ -687,7 +687,7 @@ static inline void sched_rt_rq_enqueue(struct rt_rq *rt_rq)
- 
- static inline void sched_rt_rq_dequeue(struct rt_rq *rt_rq)
- {
--	dequeue_top_rt_rq(rt_rq);
-+	dequeue_top_rt_rq(rt_rq, rt_rq->rt_nr_running);
  }
  
- static inline int rt_rq_throttled(struct rt_rq *rt_rq)
-@@ -1089,7 +1089,7 @@ static void update_curr_rt(struct rq *rq)
- }
- 
- static void
--dequeue_top_rt_rq(struct rt_rq *rt_rq)
-+dequeue_top_rt_rq(struct rt_rq *rt_rq, unsigned int count)
- {
- 	struct rq *rq = rq_of_rt_rq(rt_rq);
- 
-@@ -1100,7 +1100,7 @@ dequeue_top_rt_rq(struct rt_rq *rt_rq)
- 
- 	BUG_ON(!rq->nr_running);
- 
--	sub_nr_running(rq, rt_rq->rt_nr_running);
-+	sub_nr_running(rq, count);
- 	rt_rq->rt_queued = 0;
- 
- }
-@@ -1486,18 +1486,21 @@ static void __dequeue_rt_entity(struct sched_rt_entity *rt_se, unsigned int flag
- static void dequeue_rt_stack(struct sched_rt_entity *rt_se, unsigned int flags)
- {
- 	struct sched_rt_entity *back = NULL;
-+	unsigned int rt_nr_running;
- 
- 	for_each_sched_rt_entity(rt_se) {
- 		rt_se->back = back;
- 		back = rt_se;
- 	}
- 
--	dequeue_top_rt_rq(rt_rq_of_se(back));
-+	rt_nr_running = rt_rq_of_se(back)->rt_nr_running;
- 
- 	for (rt_se = back; rt_se; rt_se = rt_se->back) {
- 		if (on_rt_rq(rt_se))
- 			__dequeue_rt_entity(rt_se, flags);
- 	}
++/*
++ * DEBUGFS Interface
++ */
++#ifdef CONFIG_DEBUG_FS
 +
-+	dequeue_top_rt_rq(rt_rq_of_se(back), rt_nr_running);
- }
++#define guest_to_balloon_pages(i) ((i)*VIRTIO_BALLOON_PAGES_PER_PAGE)
++
++/**
++ * virtio_balloon_debug_show - shows statistics of balloon operations.
++ * @f: pointer to the &struct seq_file.
++ * @offset: ignored.
++ *
++ * Provides the statistics that can be accessed in virtio-balloon in the debugfs.
++ *
++ * Return: zero on success or an error code.
++ */
++
++static int virtio_balloon_debug_show(struct seq_file *f, void *offset)
++{
++	struct virtio_balloon *b = f->private;
++	u32 num_pages;
++	struct sysinfo i;
++
++	si_meminfo(&i);
++
++	seq_printf(f, "%-22s: %d\n", "page_size", 4096);
++
++	virtio_cread_le(b->vdev, struct virtio_balloon_config, actual,
++			&num_pages);
++	/*
++	 * Pages allocated by host from the guest memory.
++	 * Host inflates the balloon to get more memory.
++	 * Guest needs to deflate the balloon to get more memory.
++	 */
++	seq_printf(f, "%-22s: %u\n", "ballooned_pages", num_pages);
++
++	/* Total Memory for the guest from host */
++	seq_printf(f, "%-22s: %lu\n", "total_pages",
++			guest_to_balloon_pages(i.totalram));
++
++	/* Current memory for the guest */
++	seq_printf(f, "%-22s: %lu\n", "current_pages",
++			guest_to_balloon_pages(i.totalram) - num_pages);
++
++	return 0;
++}
++
++DEFINE_SHOW_ATTRIBUTE(virtio_balloon_debug);
++
++static void  virtio_balloon_debugfs_init(struct virtio_balloon *b)
++{
++	debugfs_create_file("virtio-balloon", 0444, NULL, b,
++			    &virtio_balloon_debug_fops);
++}
++
++static void  virtio_balloon_debugfs_exit(struct virtio_balloon *b)
++{
++	debugfs_remove(debugfs_lookup("virtio-balloon", NULL));
++}
++
++#else
++
++static inline void virtio_balloon_debugfs_init(struct virtio_balloon *b)
++{
++}
++
++static inline void virtio_balloon_debugfs_exit(struct virtio_balloon *b)
++{
++}
++
++#endif	/* CONFIG_DEBUG_FS */
++
+ #ifdef CONFIG_BALLOON_COMPACTION
+ /*
+  * virtballoon_migratepage - perform the balloon page migration on behalf of
+@@ -1019,6 +1092,9 @@ static int virtballoon_probe(struct virtio_device *vdev)
  
- static void enqueue_rt_entity(struct sched_rt_entity *rt_se, unsigned int flags)
+ 	if (towards_target(vb))
+ 		virtballoon_changed(vdev);
++
++	virtio_balloon_debugfs_init(vb);
++
+ 	return 0;
+ 
+ out_unregister_oom:
+@@ -1065,6 +1141,8 @@ static void virtballoon_remove(struct virtio_device *vdev)
+ {
+ 	struct virtio_balloon *vb = vdev->priv;
+ 
++	virtio_balloon_debugfs_exit(vb);
++
+ 	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_REPORTING))
+ 		page_reporting_unregister(&vb->pr_dev_info);
+ 	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
 -- 
-2.36.1
+2.25.1
 

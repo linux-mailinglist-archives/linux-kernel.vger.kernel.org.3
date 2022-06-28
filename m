@@ -2,71 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2C955EBD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1662155EBF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234163AbiF1SDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 14:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
+        id S233857AbiF1SGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 14:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234054AbiF1SDG (ORCPT
+        with ESMTP id S233855AbiF1SGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:03:06 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638AB13CCD
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 11:03:01 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so16722847pjl.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 11:03:01 -0700 (PDT)
+        Tue, 28 Jun 2022 14:06:00 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456A61EAD6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 11:05:55 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id p14so12713217pfh.6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 11:05:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FEIGoq/0A/uJII60z+SnyujUiEDbTX6Par33hXQlLZw=;
-        b=UWK2A29VLIlv8+6eVr7iaft60FNUEMTkSYhhGhxQmOi2LUvhIlIQFc9Jmof6g1G8/H
-         KnbGMGQ123M+2kwyTX582uyJSjVFALI7M96BGZBoB+99ED5xV0SZEFqTXB/xkZgfEJk6
-         f+hh2RgfCw3ffDVQSn8xEyl9mOWj7ZvSRishSnLJ+id/uliTP4V3rPQ+tLJqVjeaPH44
-         SeyWjSPPdw385wwy1nQpkwtlfDNebAy9KnGlo7jOkpDcnvAlW4Ao2/Ophw/ZtyBQCv9s
-         WTTdw9rOmrnz2aj01S7GHl9zTwuddBAQlk/gWJribcf/TkMvkbGv+Plk8iZsa1sAQ502
-         yTWw==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=pTcGgtfSu6n7KkCWKQ4ciWe5XeKK5S4riO8KfNVW7Ig=;
+        b=F/CZTCTDOlhkWqZ+vOzW0DaoZ/EZ1dOhoCSSJ2RrwBNwuY7CCyvEtaLLk8DO+FYVI8
+         oY1bh2Rw2NH/e7uwuajkABgxQQynq/vb9wDrQT1ziurYSmeBDoqa9s9XGmGLyXXXVu1m
+         Ptj/OKkdrLcBprdD9gQ9RffSNU26yKh9HCJiI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FEIGoq/0A/uJII60z+SnyujUiEDbTX6Par33hXQlLZw=;
-        b=sBqjDlIvJrcnlGJDgi+NK71KWhrVm0TkuoodaBEipiYc+oJVD3hhW7nu0/BnTC8fiF
-         pLnGVY20enYqmqIpSfqb89g4SfUizBMlmTf27VYM79gYQ59v0ZwPFBzN+onia7Fxn4iN
-         QNuqJ0npv8fbJuTdKLF28cTkmjrEtVzxhUkhobeCm7Ga+MwB4LnuE2iwGQ0WIO7sSk6O
-         iIdSHoCWwOGaiiuAKrggSVNvq5YhRmo5wwdWkptrHfoJVDn1D+FccPh71Dc2Wyiqxc0e
-         vVXpUVMdKzA2bivEy+pjA4kTvpkblVz/bTcUr62wSXw49fJ7nCV/mmLjTL9hnlKgSDzA
-         Xfqw==
-X-Gm-Message-State: AJIora/WeaT2KbeonGNwpkQ9o8c6UQnm9d85IfXcGcEL+EwE4z5vfPOv
-        RHPc/3i8tO4UMM6pvz7/wBQoQA==
-X-Google-Smtp-Source: AGRyM1v2mLeRbPTqnEMWprebvSTGDOJvCRi7MJqhHzOVSY8TkZZ6dHq1/au0ZEz8SPaBw2K7pfsNeA==
-X-Received: by 2002:a17:90b:1d04:b0:1ec:f898:d863 with SMTP id on4-20020a17090b1d0400b001ecf898d863mr914455pjb.79.1656439380846;
-        Tue, 28 Jun 2022 11:03:00 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id u1-20020a17090a1d4100b001ecb5602944sm143529pju.28.2022.06.28.11.02.58
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=pTcGgtfSu6n7KkCWKQ4ciWe5XeKK5S4riO8KfNVW7Ig=;
+        b=yVKFab56u1lvloYqgLebNHTkaUcU9+BuvuPUBkEb5GFMjp1pv3RSRzI65DiOB+dw9N
+         Q7cBOwXvoe56f6X9F/VvDbxlJgTBjV+voS3J/EUr83qCg+8bMcBZHd9+CWEUkZvq4X2E
+         ZE4QSjddA+zuKLYHgTkaYeEvPiaskgTOyZEP9tN7AOWnghZ0xDdpJUVD0xhEg8IpdpgP
+         cLKWnb+6zJsPXCRN3YHsWHxaFGi+YT83Io6ft9s+cvSiqfulLRZyEEjKGqreXHC0jMm7
+         ZKNpmczblox8UIcJW8X6tD5FNPNKmpRhZXjhPHR2noqY7lxNfuoPBpES8AyZG1K2jT5i
+         P3Bw==
+X-Gm-Message-State: AJIora99J154rw3K9j4zhqSriRIlsPlz/06JCHKwgxJAqY4xhsZTMiy5
+        y9H3tKrrhfQLwC/0Tn6uIpJ0lA==
+X-Google-Smtp-Source: AGRyM1v6cdnwBfGpeB2JnkCbahQ14YUYaqjRd3VUKbR8YPBigZjfWVkzlvmFIFzfbBj+r2XqbA+86w==
+X-Received: by 2002:a63:7412:0:b0:40c:fa27:9d07 with SMTP id p18-20020a637412000000b0040cfa279d07mr18441815pgc.27.1656439554674;
+        Tue, 28 Jun 2022 11:05:54 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i3-20020a170902cf0300b0016a0ac06424sm9669985plg.51.2022.06.28.11.05.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 11:02:59 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 12:02:57 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     bjorn.andersson@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V3 5/6] remoteproc: imx_rproc: support i.MX8QM
-Message-ID: <20220628180257.GD1942439@p14s>
-References: <20220517064937.4033441-1-peng.fan@oss.nxp.com>
- <20220517064937.4033441-6-peng.fan@oss.nxp.com>
+        Tue, 28 Jun 2022 11:05:54 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 11:05:53 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        dm-devel@redhat.com, linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-btrfs <linux-btrfs@vger.kernel.org>,
+        linux-can@vger.kernel.org,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux1394-devel@lists.sourceforge.net, io-uring@vger.kernel.org,
+        lvs-devel@vger.kernel.org,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        nvdimm@lists.linux.dev,
+        NetFilter <netfilter-devel@vger.kernel.org>,
+        coreteam@netfilter.org, linux-perf-users@vger.kernel.org,
+        linux-raid@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        target-devel <target-devel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        V9FS Developers <v9fs-developer@lists.sourceforge.net>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] treewide: uapi: Replace zero-length arrays with
+ flexible-array members
+Message-ID: <202206281104.7CC3935@keescook>
+References: <20220627180432.GA136081@embeddedor>
+ <CAMuHMdU27TG_rpd=WTRPRcY22A4j4aN-6d_8OmK2aNpX06G3ig@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220517064937.4033441-6-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdU27TG_rpd=WTRPRcY22A4j4aN-6d_8OmK2aNpX06G3ig@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,131 +101,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 02:49:36PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Tue, Jun 28, 2022 at 09:27:21AM +0200, Geert Uytterhoeven wrote:
+> Hi Gustavo,
 > 
-> Most logic are same as i.MX8QXP, but i.MX8QM has two general purpose
-> M4 cores, the two cores runs independently and they has different resource
-> id, different start address from SCFW view.
+> Thanks for your patch!
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/remoteproc/imx_rproc.c | 41 +++++++++++++++++++++++++++++++---
->  1 file changed, 38 insertions(+), 3 deletions(-)
+> On Mon, Jun 27, 2022 at 8:04 PM Gustavo A. R. Silva
+> <gustavoars@kernel.org> wrote:
+> > There is a regular need in the kernel to provide a way to declare
+> > having a dynamically sized set of trailing elements in a structure.
+> > Kernel code should always use “flexible array members”[1] for these
+> > cases. The older style of one-element or zero-length arrays should
+> > no longer be used[2].
 > 
-> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-> index 49cce9dd55c7..8326193c13d6 100644
-> --- a/drivers/remoteproc/imx_rproc.c
-> +++ b/drivers/remoteproc/imx_rproc.c
-> @@ -3,6 +3,7 @@
->   * Copyright (c) 2017 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
->   */
->  
-> +#include <dt-bindings/firmware/imx/rsrc.h>
->  #include <linux/arm-smccc.h>
->  #include <linux/clk.h>
->  #include <linux/err.h>
-> @@ -75,10 +76,13 @@ struct imx_rproc_mem {
->  	size_t size;
->  };
->  
-> -/* att flags */
-> +/* att flags: lower 16 bits specifying core, higher 16 bits for flags  */
->  /* M4 own area. Can be mapped at probe */
-> -#define ATT_OWN		BIT(1)
-> -#define ATT_IOMEM	BIT(2)
-> +#define ATT_OWN         BIT(31)
-> +#define ATT_IOMEM       BIT(30)
-> +
-> +#define ATT_CORE_MASK   0xffff
-> +#define ATT_CORE(I)     BIT((I))
->  
->  struct imx_rproc {
->  	struct device			*dev;
-> @@ -99,6 +103,7 @@ struct imx_rproc {
->  	u32				rsrc_id;	/* resource id */
->  	u32				entry;		/* cpu start address */
->  	int                             num_pd;
-> +	u32				core_index;
->  	struct device                   **pd_dev;
->  	struct device_link              **pd_dev_link;
->  };
-> @@ -129,6 +134,19 @@ static const struct imx_rproc_att imx_rproc_att_imx93[] = {
->  	{ 0xD0000000, 0xa0000000, 0x10000000, 0 },
->  };
->  
-> +static const struct imx_rproc_att imx_rproc_att_imx8qm[] = {
-> +	/* dev addr , sys addr  , size      , flags */
-> +	{ 0x08000000, 0x08000000, 0x10000000, 0},
-> +	/* TCML */
-> +	{ 0x1FFE0000, 0x34FE0000, 0x00020000, ATT_OWN | ATT_IOMEM | ATT_CORE(0)},
-> +	{ 0x1FFE0000, 0x38FE0000, 0x00020000, ATT_OWN | ATT_IOMEM | ATT_CORE(1)},
-> +	/* TCMU */
-> +	{ 0x20000000, 0x35000000, 0x00020000, ATT_OWN | ATT_IOMEM | ATT_CORE(0)},
-> +	{ 0x20000000, 0x39000000, 0x00020000, ATT_OWN | ATT_IOMEM | ATT_CORE(1)},
-> +	/* DDR (Data) */
-> +	{ 0x80000000, 0x80000000, 0x60000000, 0 },
-> +};
-> +
->  static const struct imx_rproc_att imx_rproc_att_imx8qxp[] = {
->  	{ 0x08000000, 0x08000000, 0x10000000, 0 },
->  	/* TCML/U */
-> @@ -279,6 +297,12 @@ static const struct imx_rproc_dcfg imx_rproc_cfg_imx8mq = {
->  	.method		= IMX_RPROC_MMIO,
->  };
->  
-> +static const struct imx_rproc_dcfg imx_rproc_cfg_imx8qm = {
-> +	.att            = imx_rproc_att_imx8qm,
-> +	.att_size       = ARRAY_SIZE(imx_rproc_att_imx8qm),
-> +	.method         = IMX_RPROC_SCU_API,
-> +};
-> +
->  static const struct imx_rproc_dcfg imx_rproc_cfg_imx8qxp = {
->  	.att		= imx_rproc_att_imx8qxp,
->  	.att_size	= ARRAY_SIZE(imx_rproc_att_imx8qxp),
-> @@ -395,6 +419,11 @@ static int imx_rproc_da_to_sys(struct imx_rproc *priv, u64 da,
->  	for (i = 0; i < dcfg->att_size; i++) {
->  		const struct imx_rproc_att *att = &dcfg->att[i];
->  
-> +		if (att->flags & ATT_CORE_MASK) {
-> +			if (!((BIT(priv->core_index)) & (att->flags & ATT_CORE_MASK)))
-> +				continue;
-> +		}
+> These rules apply to the kernel, but uapi is not considered part of the
+> kernel, so different rules apply.  Uapi header files should work with
+> whatever compiler that can be used for compiling userspace.
 
-This is very cryptic - I just spent 20 minutes looking at it and I'm still not
-sure I got the full meaning.  Please add enough comments to make things obvious
-on first read.
+Right, userspace isn't bound by these rules, but the kernel ends up
+consuming these structures, so we need to fix them. The [0] -> []
+changes (when they are not erroneously being used within other
+structures) is valid for all compilers. Flexible arrays are C99; it's
+been 23 years. :)
 
-I am done reviewing this patchset.
+But, yes, where we DO break stuff we need to workaround it, etc.
 
-Thanks,
-Mathieu
-
-
-> +
->  		if (da >= att->da && da + len < att->da + att->size) {
->  			unsigned int offset = da - att->da;
->  
-> @@ -815,6 +844,11 @@ static int imx_rproc_detect_mode(struct imx_rproc *priv)
->  			return ret;
->  		}
->  
-> +		if (priv->rsrc_id == IMX_SC_R_M4_1_PID0)
-> +			priv->core_index = 1;
-> +		else
-> +			priv->core_index = 0;
-> +
->  		/*
->  		 * If Mcore resource is not owned by Acore partition, It is kicked by ROM,
->  		 * and Linux could only do IPC with Mcore and nothing else.
-> @@ -1008,6 +1042,7 @@ static const struct of_device_id imx_rproc_of_match[] = {
->  	{ .compatible = "fsl,imx8mn-cm7", .data = &imx_rproc_cfg_imx8mn },
->  	{ .compatible = "fsl,imx8mp-cm7", .data = &imx_rproc_cfg_imx8mn },
->  	{ .compatible = "fsl,imx8qxp-cm4", .data = &imx_rproc_cfg_imx8qxp },
-> +	{ .compatible = "fsl,imx8qm-cm4", .data = &imx_rproc_cfg_imx8qm },
->  	{ .compatible = "fsl,imx8ulp-cm33", .data = &imx_rproc_cfg_imx8ulp },
->  	{ .compatible = "fsl,imx93-cm33", .data = &imx_rproc_cfg_imx93 },
->  	{},
-> -- 
-> 2.25.1
-> 
+-- 
+Kees Cook

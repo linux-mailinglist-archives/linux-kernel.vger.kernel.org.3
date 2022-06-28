@@ -2,136 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCAA955E671
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 901A155E897
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345550AbiF1QCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 12:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
+        id S1348207AbiF1QCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 12:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348235AbiF1QBw (ORCPT
+        with ESMTP id S1348263AbiF1QCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:01:52 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACAA937A8F;
-        Tue, 28 Jun 2022 09:01:21 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id w24so13002233pjg.5;
-        Tue, 28 Jun 2022 09:01:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tPyidp/Hbkt+IJjfFTUdDt2y5LsToJzbXu5kGwBQPk8=;
-        b=GoqPIJDP3JwcgU1hQWu9Ia7nr5/MstYHT9QXBez7nQMnd2oNUS9PL8MChFcGnnkM2M
-         pn1z7Lu4kPF5/CHFNaJa+tVtP5VszAGgkcE6qbE/8nHwKUtuaAWrR6UmJzC78OjPSo9W
-         aw5iXG2v9Lz+bqqRbYRDJcDU/rEBxUBWj8373kSkqHpn8PfrEN0YijJMq5A8ynjzQnwF
-         LtSR3+X8YSbWzScDJ/1+EEqlb+Av5D620JhI6BhxDuWEHyDVYGumT64fTmg3CkiGjtgo
-         WvXHJwI3hytT5Okmed4NYa0aSCJD7KWj/2t//tXISQ5ZflLaP07e+sdLYdeFPikPPqGi
-         Zn/w==
+        Tue, 28 Jun 2022 12:02:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACBD135DE0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:01:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656432099;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JGJSJfbr5IZYXtadU3vbyg4xqHn1JyJrxNS5REcEGD0=;
+        b=OTrdEIsnwmsyrkBLMzblvVxGjX9l3mAE/cSuO7NbTRzEzSipgYoobboTF4qjDYUYnTACYw
+        ZXnZzgDsgcYSa4BCR2d+8Goa3om+nMya1jEyUB/txj1+yvb7T5whe6jjg72e5A2rNyOuJL
+        +b9BhukeLalOJmkTKnXj4LHte0wcJg0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-618-z42dDYIBPnKnOz3u_SHQFA-1; Tue, 28 Jun 2022 12:01:38 -0400
+X-MC-Unique: z42dDYIBPnKnOz3u_SHQFA-1
+Received: by mail-wm1-f72.google.com with SMTP id l17-20020a05600c4f1100b0039c860db521so7289167wmq.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:01:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tPyidp/Hbkt+IJjfFTUdDt2y5LsToJzbXu5kGwBQPk8=;
-        b=BELnHEGC2s4HLVSjIDLV8ZbUPjdp/6YBmBmhX/HDwdpj5H905Gql+ddIVUUnU94del
-         NVJ8shj+7w+uO19BGApsWBTfV0FXWrPojr1vkYTR2bxnGGTEJ6tvSeR6BsQjLzhUtIWz
-         q0A0j6sHBoMRWSIOiLdGU1ixiU/PHzbwrVrWmRNQuXlDKwP+bVqaaA5fbKnzzlFqnRR/
-         77Yvq4x9t3oX05t85sjTi7rS6StVo0CBXZejYHEhrPsmsP98SsKnzEgOLznnEWO+P+vL
-         gP+Bq7Kd/SF5etvQEdiQFc26CLL3ApviYMt/NgF5FZPW2rTQxzGaSB34UZsRtjabvzl+
-         23Rw==
-X-Gm-Message-State: AJIora/l7feqZGYfFM+KmfWA0K5i6znEz/0jknq36+HRSHX9PHY2HzML
-        uQXDyWIXxnNal04sN+Kcd1a3ltwFU5M=
-X-Google-Smtp-Source: AGRyM1v7KuEphQefjfEn/Hzgy26MwtZ7a3Gh/HlT4a418YYHoCyRJts31SCzRGuAsjEAyRphzChN9w==
-X-Received: by 2002:a17:902:f543:b0:16a:54c6:78d0 with SMTP id h3-20020a170902f54300b0016a54c678d0mr4384140plf.28.1656432080829;
-        Tue, 28 Jun 2022 09:01:20 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id t5-20020a17090a4e4500b001ef12855acdsm7885pjl.19.2022.06.28.09.01.19
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=JGJSJfbr5IZYXtadU3vbyg4xqHn1JyJrxNS5REcEGD0=;
+        b=OH6GgnFGGCLsfuQ7M7BJDJ3zScebBW+S5uOz0vhB0JyQNgT95jF6ZB0xWDWpnrP/Vi
+         UrpU9UC/GuWAR8U95poA06Y7szBJikN1+BnCzrj3cituzvsd7LvP6sozGj67SX3Zqrlg
+         X05sMWyl9qUVeH2LLXcb6BvHMKvQvm5usKoKEEmgngjx6FIAHRIeMqhGl2OY6j1NLIW9
+         uHOaVodOotI9Yt+0A/gIAsAiMhhyocrpiLIxk2jzDfixerPAwwJTHuBZYuuzjdIc7I7b
+         z3OcIAzFJdUq0Rg17oGiS+1IwToK2fbdtPu+ul2PcBDkj/r9i5/r2VSpSF0NM2IZPMR4
+         Z+XQ==
+X-Gm-Message-State: AJIora+hKBLokVVwG16hBIeyd1D0xeTrnQp+4FK+41NRBcgdUUMbCa4B
+        MWm2y4r6+VGvHeasCLH/ROejkOOQexCgAidUG4UtJpKTzUCNhGHivhCkB+iDe6erkMUuYLihg9q
+        5/pbsOxSMoAuJtjKrm8HtOjkejuUPjgh1Y5Qrchzyxrpu+noq8a14vEkWxXPvIEhHgsXmQIe/Op
+        XH
+X-Received: by 2002:a05:6000:1f81:b0:21b:a1b5:776 with SMTP id bw1-20020a0560001f8100b0021ba1b50776mr17518006wrb.201.1656432096941;
+        Tue, 28 Jun 2022 09:01:36 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sA2iKj4+d2oyW9nuIAY6VibtPWKOXWK1EHitza3iry3e5bn2dFQxdxpa4VzAIODzGDvB5VAQ==
+X-Received: by 2002:a05:6000:1f81:b0:21b:a1b5:776 with SMTP id bw1-20020a0560001f8100b0021ba1b50776mr17517967wrb.201.1656432096618;
+        Tue, 28 Jun 2022 09:01:36 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id i8-20020a5d5588000000b002102f2fac37sm14097073wrv.51.2022.06.28.09.01.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 09:01:20 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     stable@vger.kernel.org
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Will Deacon <will@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH stable 4.19] fdt: Update CRC check for rng-seed
-Date:   Tue, 28 Jun 2022 09:01:11 -0700
-Message-Id: <20220628160111.2237376-3-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220628160111.2237376-1-f.fainelli@gmail.com>
-References: <20220628160111.2237376-1-f.fainelli@gmail.com>
+        Tue, 28 Jun 2022 09:01:35 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/14] KVM: nVMX: Use vmcs_config for setting up nested
+ VMX MSRs
+In-Reply-To: <CALMp9eSBLcvuNDquvSfUnaF3S3f4ZkzqDRSsz-v93ZeX=xnssg@mail.gmail.com>
+References: <20220627160440.31857-1-vkuznets@redhat.com>
+ <CALMp9eQL2a+mStk-cLwVX6NVqwAso2UYxAO7UD=Xi2TSGwUM2A@mail.gmail.com>
+ <87y1xgubot.fsf@redhat.com>
+ <CALMp9eSBLcvuNDquvSfUnaF3S3f4ZkzqDRSsz-v93ZeX=xnssg@mail.gmail.com>
+Date:   Tue, 28 Jun 2022 18:01:34 +0200
+Message-ID: <87letgu68x.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hsin-Yi Wang <hsinyi@chromium.org>
+Jim Mattson <jmattson@google.com> writes:
 
-commit dd753d961c4844a39f947be115b3d81e10376ee5 upstream
+> On Tue, Jun 28, 2022 at 7:04 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+>>
 
-Commit 428826f5358c ("fdt: add support for rng-seed") moves of_fdt_crc32
-from early_init_dt_verify() to early_init_dt_scan() since
-early_init_dt_scan_chosen() may modify fdt to erase rng-seed.
+...
 
-However, arm and some other arch won't call early_init_dt_scan(), they
-call early_init_dt_verify() then early_init_dt_scan_nodes().
+>> Jim Mattson <jmattson@google.com> writes:
+>>
+>> > Just checking that this doesn't introduce any backwards-compatibility
+>> > issues. That is, all features that were reported as being available in
+>> > the past should still be available moving forward.
+>> >
+>>
+>> All the controls nested_vmx_setup_ctls_msrs() set are in the newly
+>> introduced KVM_REQ_VMX_*/KVM_OPT_VMX_* sets so we should be good here
+>> (unless I screwed up, of course).
+>>
+>> There's going to be some changes though. E.g this series was started by
+>> Anirudh's report when KVM was exposing SECONDARY_EXEC_TSC_SCALING while
+>> running on KVM and using eVMCS which doesn't support the control. This
+>> is a bug and I don't think we need and 'bug compatibility' here.
+>
+> You cannot force VM termination on a kernel upgrade. On live migration
+> from an older kernel, the new kernel must be willing to accept the
+> suspended state of a VM that was running under the older kernel. In
+> particular, the new KVM_SET_MSRS must accept the values of the VMX
+> capability MSRS that userspace obtains from the older KVM_GET_MSRS. I
+> don't know if this is what you are referring to as "bug
+> compatibility," but if it is, then we absolutely do need it.
+>
 
-Restore of_fdt_crc32 to early_init_dt_verify() then update it in
-early_init_dt_scan_chosen() if fdt if updated.
+Oh, right you are, we do seem to have a problem. Even for eVMCS case,
+the fact that we expose a feature which can't be used in VMX control
+MSRs doesn't mean that the VM is broken. In particular, the VM may not
+be using VMX features at all. Same goes to PERF_GLOBAL_CTRL errata.
 
-Fixes: 428826f5358c ("fdt: add support for rng-seed")
-Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/of/fdt.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+vmx_restore_control_msr() currenly does strict checking of the supplied
+data against what was initially set by nested_vmx_setup_ctls_msrs(),
+this basically means we cannot drop feature bits, just add them. Out of
+top of my head I don't see a solution other than relaxing the check by
+introducing a "revoke list"... Another questions is whether we want
+guest visible MSR value to remain like it was before migration or we can
+be brave and clear 'broken' feature bits there (the features are
+'broken' so they couldn't be in use, right?). I'm not sure.
 
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index 2e9ea7f1e719..9fecac72c358 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -1119,6 +1119,10 @@ int __init early_init_dt_scan_chosen(unsigned long node, const char *uname,
- 
- 		/* try to clear seed so it won't be found. */
- 		fdt_nop_property(initial_boot_params, node, "rng-seed");
-+
-+		/* update CRC check value */
-+		of_fdt_crc32 = crc32_be(~0, initial_boot_params,
-+				fdt_totalsize(initial_boot_params));
- 	}
- 
- 	/* break now */
-@@ -1223,6 +1227,8 @@ bool __init early_init_dt_verify(void *params)
- 
- 	/* Setup flat device-tree pointer */
- 	initial_boot_params = params;
-+	of_fdt_crc32 = crc32_be(~0, initial_boot_params,
-+				fdt_totalsize(initial_boot_params));
- 	return true;
- }
- 
-@@ -1248,8 +1254,6 @@ bool __init early_init_dt_scan(void *params)
- 		return false;
- 
- 	early_init_dt_scan_nodes();
--	of_fdt_crc32 = crc32_be(~0, initial_boot_params,
--				fdt_totalsize(initial_boot_params));
- 	return true;
- }
- 
+Anirudh, the same concern applies to your 'intermediate' patch too.
+
+Smart ideas on what can be done are more than welcome)
+
 -- 
-2.25.1
+Vitaly
 

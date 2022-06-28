@@ -2,89 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE5955F18E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 00:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A1055F190
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 00:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbiF1WsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 18:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
+        id S230021AbiF1Ws7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 18:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbiF1WsL (ORCPT
+        with ESMTP id S229460AbiF1Ws4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 18:48:11 -0400
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56747B49B;
-        Tue, 28 Jun 2022 15:48:10 -0700 (PDT)
-Received: by mail-io1-f42.google.com with SMTP id u20so14330724iob.8;
-        Tue, 28 Jun 2022 15:48:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ufBPgGQwDJaGgA8RtBM50f69synxCdmQIvVZ/6riFl0=;
-        b=P0smpRxacksOlrYoTvVU59TI0OOOcFNuVwI1T5xGHy+5matO50EAT1baUxrnDQMfBT
-         Qn2rZXkB94O9viqlU5psrw4QVoAav5AjlhHFXrhXtPfDDsg0/POOg8e6WzVWf7I0Jpw3
-         UtOX0vGudP6a+MNEIAz+qvIlWvbU/KvMfmtcL9l8EEnJULy03B51Jhlbo0tiA30IgMK+
-         Cmq/YBqFxyvPf/lFLkg/5uNV7HspNSfH88jkFSCL4LMarimFIyaHHi/G8Fg0ijJ78kuD
-         qyCQtljCRmU7U/NkcVfguAWTQojYyWvCCWyLhCoa4YMCrdjsIuWRsxqZHO54S4dQhW2j
-         iccA==
-X-Gm-Message-State: AJIora/nTvlCeA8zaPXnPjzu+3Flpnr9FJDRjxdOXYL6ydKur9N0+vRK
-        2ZuEQnL9TQOSW7124QcCkw==
-X-Google-Smtp-Source: AGRyM1tE0nv/i8Pu8TcYrZ29WqQfYJN8oMTA/D2QESGtqHghxVnLHjqVBQUUO6QJS/+4zgOgE7CRgg==
-X-Received: by 2002:a05:6638:2507:b0:33c:cced:93b3 with SMTP id v7-20020a056638250700b0033ccced93b3mr264098jat.310.1656456489566;
-        Tue, 28 Jun 2022 15:48:09 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id 13-20020a920d0d000000b002d1ed1f6082sm6223491iln.44.2022.06.28.15.48.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 15:48:09 -0700 (PDT)
-Received: (nullmailer pid 1114458 invoked by uid 1000);
-        Tue, 28 Jun 2022 22:48:07 -0000
-Date:   Tue, 28 Jun 2022 16:48:07 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] dt-bindings: nfc: nxp,nci: drop Charles Gorand's mail
-Message-ID: <20220628224807.GE963202-robh@kernel.org>
-References: <20220628070959.187734-1-michael@walle.cc>
- <20220628182635.GA748152-robh@kernel.org>
- <20220628120901.693b1470@kernel.org>
+        Tue, 28 Jun 2022 18:48:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3113A709;
+        Tue, 28 Jun 2022 15:48:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20E6761AC0;
+        Tue, 28 Jun 2022 22:48:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAE46C341C8;
+        Tue, 28 Jun 2022 22:48:51 +0000 (UTC)
+Date:   Tue, 28 Jun 2022 18:48:50 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
+        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+Subject: Re: [PATCH v4 12/12] sched,signal,ptrace: Rework TASK_TRACED,
+ TASK_STOPPED state
+Message-ID: <20220628184850.05f60d1e@gandalf.local.home>
+In-Reply-To: <87czess94h.fsf@email.froward.int.ebiederm.org>
+References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+        <20220505182645.497868-12-ebiederm@xmission.com>
+        <YrHA5UkJLornOdCz@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+        <877d5ajesi.fsf@email.froward.int.ebiederm.org>
+        <YrHgo8GKFPWwoBoJ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+        <87y1xk8zx5.fsf@email.froward.int.ebiederm.org>
+        <YrtKReO2vIiX8VVU@tuxmaker.boeblingen.de.ibm.com>
+        <87czess94h.fsf@email.froward.int.ebiederm.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628120901.693b1470@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 12:09:01PM -0700, Jakub Kicinski wrote:
-> On Tue, 28 Jun 2022 12:26:35 -0600 Rob Herring wrote:
-> > On Tue, 28 Jun 2022 09:09:59 +0200, Michael Walle wrote:
-> > > Mails to Charles get an auto reply, that he is no longer working at
-> > > Eff'Innov technologies. Remove the entry.
-> > > 
-> > > Signed-off-by: Michael Walle <michael@walle.cc>
-> > > ---
-> > >  Documentation/devicetree/bindings/net/nfc/nxp,nci.yaml | 1 -
-> > >  1 file changed, 1 deletion(-)
-> > >   
-> > 
-> > Applied, thanks!
-> 
-> I thought you said you prefer binding changes to go thru relevant
-> trees. Not that I care which way the default is but let's stick 
-> to one.
+On Tue, 28 Jun 2022 17:42:22 -0500
+"Eric W. Biederman" <ebiederm@xmission.com> wrote:
 
-I did, but wasn't sure on the NFC stuff and this one was trivial.
+> diff --git a/kernel/ptrace.c b/kernel/ptrace.c
+> index 156a99283b11..cb85bcf84640 100644
+> --- a/kernel/ptrace.c
+> +++ b/kernel/ptrace.c
+> @@ -202,6 +202,7 @@ static bool ptrace_freeze_traced(struct task_struct *task)
+>  	spin_lock_irq(&task->sighand->siglock);
+>  	if (task_is_traced(task) && !looks_like_a_spurious_pid(task) &&
+>  	    !__fatal_signal_pending(task)) {
+> +		smp_rmb();
+>  		task->jobctl |= JOBCTL_PTRACE_FROZEN;
+>  		ret = true;
+>  	}
+> diff --git a/kernel/signal.c b/kernel/signal.c
+> index edb1dc9b00dc..bcd576e9de66 100644
+> --- a/kernel/signal.c
+> +++ b/kernel/signal.c
+> @@ -2233,6 +2233,7 @@ static int ptrace_stop(int exit_code, int why, unsigned long message,
+>  		return exit_code;
+>  
+>  	set_special_state(TASK_TRACED);
+> +	smp_wmb();
+>  	current->jobctl |= JOBCTL_TRACED;
+>  
 
-Rob
+Are not these both done under the sighand->siglock spinlock?
+
+That is, the two paths should already be synchronized, and the memory
+barriers will not help anything inside the locks. The locking should (and
+must) handle all that.
+
+-- Steve
+

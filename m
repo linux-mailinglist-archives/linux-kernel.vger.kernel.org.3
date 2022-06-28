@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF81955DD4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C4555D88F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbiF1MUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 08:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
+        id S1345590AbiF1MXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 08:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345577AbiF1MUK (ORCPT
+        with ESMTP id S1345664AbiF1MXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 08:20:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36322AC53
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:20:09 -0700 (PDT)
+        Tue, 28 Jun 2022 08:23:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2390F120AE;
+        Tue, 28 Jun 2022 05:23:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E10FB81DF3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 12:20:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEA15C341CA;
-        Tue, 28 Jun 2022 12:20:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656418807;
-        bh=LybbThQzxWLhYysMYiiW1Rvr4yWJp9Yvdf9kzM0kFKw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iq3VlpjyZHuGz1eeKec39S453iHKXRbCUiatP1MJXtfAfG39NXwi1TbJ23tNQbWs+
-         sET63SaMTt6G4gVJbHVpRSWvrggT1mHNhEYzF+jw0GBLMPuLrGw5B8M+wg8hB3a5W6
-         3oZ/vfZlpgGS0tIHlpqykVLQv6xaen3/coEpei8o=
-Date:   Tue, 28 Jun 2022 14:20:04 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Oded Gabbay <ogabbay@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/12] Adding Gaudi2 ASIC support to habanalabs driver
-Message-ID: <Yrrx9NBjVxmv3IFD@kroah.com>
-References: <20220628105958.1254875-1-ogabbay@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628105958.1254875-1-ogabbay@kernel.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8356B81E03;
+        Tue, 28 Jun 2022 12:23:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25DFEC3411D;
+        Tue, 28 Jun 2022 12:23:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656418990;
+        bh=rEXIp99qfQP4RlG//sn4CD2PHI+woj98TshooNb5NZQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=muvApXaNZ5aCqcwN6Nuwpr6dc1BUN1WCsu4N+QxeVkNWY7ucg7YLJrawG5aNQ+MY+
+         SPRaVVaPnC1680P47Y64jMPzvA61172b/aYSuHiyGgpxE47aOm3/V5rcsV2eWZ/lNZ
+         naeZTVE9U6dLTxhMa/jy3oIl4DTlCt5lo6VSvokWlG1pyVALNMEVT5oyH1gneP+6Tx
+         dK1cBuSx5dkRnOBdZx2KPBKD6u3bDPqgweevzGrtLKFjnBQ84s8gpxFj2z5S1G4sw3
+         H/69+tG54Y0bm4l/lAcDnx+0M5nMyPpbD/REnKTqxVEIx6T6wkoEMZrP9PH+3addGq
+         Cp4WnAt1HwkGg==
+From:   Roger Quadros <rogerq@kernel.org>
+To:     kishon@ti.com, vkoul@kernel.org
+Cc:     vigneshr@ti.com, t-patil@ti.com, sjakhade@cadence.com,
+        s-vadapalli@ti.com, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Roger Quadros <rogerq@kernel.org>
+Subject: [PATCH 0/7] phy: ti: phy-j721e-wiz: Add support for j7200-wiz-10g
+Date:   Tue, 28 Jun 2022 15:22:48 +0300
+Message-Id: <20220628122255.24265-1-rogerq@kernel.org>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -50,55 +52,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 01:59:46PM +0300, Oded Gabbay wrote:
-> I'm sending the v2 of this patch-set after fixing some comments from Greg.
-> 
-> Changes to each patch are detailed in the relevant patches.
-> 
-> Patch 6 was added to remove obsolete elements from the device structure.
-> 
-> Patch 11 in the 1st patch-set, the TPM patch, was removed due to some points
-> that Greg raised and I need to investigate and come back with answers.
-> 
-> Original cover-letter:
-> 
-> This patch-set adds support for initializing and sending workloads to
-> habanalabs next-gen deep-learning training accelerator ASIC, called Gaudi2.
-> 
-> The Gaudi2 ASIC is based on the same architecture as the Gaudi ASIC and
-> therefore, the driver's common code is applicable to it with only a few
-> changes. Almost all of the code included in this patch-set is the
-> ASIC-depedent code which is different per ASIC.
-> 
-> The patches details are as follows:
-> 
-> - Patch 1 adds the necessary registers header files. I took great care of
->   reducing this amount to minimum.
-> 
-> - Patch 2 adds the Gaudi2 definitions to the uapi file.
-> 
-> - Patch 3 adds the bulk of the Gaudi2 asic-specific code.
-> 
-> - Patches 4-6 modify the existing code to initialize the new asic-specific
->   functions and properties and to remove unused elements.
-> 
-> - Patch 7 adds a generic security module that will be used by Gaudi2, and
->   future ASICs, to initialize the security mechanisms of the device in a
->   common way.
-> 
-> - Patches 8-11 add various features of Gaudi2 in asic-specific and common code.
-> 
-> - Patch 12 enables the Gaudi2 code in the driver.
-> 
-> More details on Gaudi2 Hardware can be found here:
-> https://habana.ai/wp-content/uploads/pdf/2022/gaudi2-whitepaper.pdf
-> 
-> We have already uploaded the updated LLVM compiler for our TPC engine to:
-> https://github.com/HabanaAI/tpc_llvm/tree/v1.1.0
-> 
-> And we are currently working on updating the open-source SynapseAI Core to
-> submit workloads to Gaudi2 via the driver.
+Hi,
 
-Look good to me, thanks for the changes!
+The SERDES in J7200 SR2.0 supports 2 reference clocks.
+The second reference clock (core_ref1_clk) is hardwired to
+MAIN_PLL3_HSDIV4_CLKOUT (100/125/156.25 MHz).
 
-greg k-h
+Add a new compatible "j7200-wiz-10g" for this device.
+
+The external clocks to SERDES PLL refclock mapping is now
+controlled by a special register in System Control Module
+(SCM) space. Add a property "ti,scm" to reference it and
+configure it in the driver.
+
+cheers,
+-roger
+
+Roger Quadros (4):
+  dt-bindings: phy: ti,phy-j721e-wiz: deprecate clock MUX nodes
+  dt-bindings: phy: ti,phy-j721e-wiz: Add support for ti,j7200-wiz-10g
+  phy: ti: phy-j721e-wiz: add support for j7200-wiz-10g
+  phy: ti: phy-j721e-wiz: set PMA_CMN_REFCLK_DIG_DIV based on reflk rate
+
+Siddharth Vadapalli (1):
+  phy: ti: phy-j721e-wiz: Add SGMII support in wiz driver for J7200
+
+Swapnil Jakhade (1):
+  dt-bindings: phy: Add PHY_TYPE_USXGMII definition
+
+Tanmay Patil (1):
+  phy: ti: phy-j721e-wiz.c: Add usxgmii support in wiz driver
+
+ .../bindings/phy/ti,phy-j721e-wiz.yaml        |  24 +-
+ drivers/phy/ti/phy-j721e-wiz.c                | 230 ++++++++++++++++--
+ include/dt-bindings/phy/phy.h                 |   1 +
+ 3 files changed, 239 insertions(+), 16 deletions(-)
+
+-- 
+2.17.1
+

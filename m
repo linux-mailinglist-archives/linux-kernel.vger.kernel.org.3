@@ -2,157 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9EF155E9D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 489F155EA59
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237894AbiF1QeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 12:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50786 "EHLO
+        id S232932AbiF1QyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 12:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbiF1QdU (ORCPT
+        with ESMTP id S236564AbiF1Qwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:33:20 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70049.outbound.protection.outlook.com [40.107.7.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282A732EF4;
-        Tue, 28 Jun 2022 09:26:08 -0700 (PDT)
+        Tue, 28 Jun 2022 12:52:45 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2049.outbound.protection.outlook.com [40.107.244.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE59821E18;
+        Tue, 28 Jun 2022 09:51:24 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OdjwN7C6552Fyxi6Cudhf4DCKwacU4j/CgrlPsOdqrxfG186ZyyKMJwHQPmBi5+LRVL+/gjEv5OXaae33Xy2jDPJDKrLgO6HF2RdHLUHY5zCUnZtMZH3hzJsZdJTI9qsHUqlfImS5eYjaipjY+ifGwsBoZ+HnKgmcyjENWYoDVka4eIZYjuzrHiKlCBw7XomFUBHAHwtEFg4wZlNuqGmZ0hIV6ueWAO301FDsl49GvyEZAUCKAUR/RLEnET94BBMzI85Z2oapcm5TV2/f2k4RhAapA7borpvsAKazq0+XRVGfrnSbUxisf+iPDJCatFGg6hZrKE/wAkoNxL72gP9VA==
+ b=n+8PYzusqxYvR4l29TFgunYYIiB/h+i2+brkMiSmw+p+k2+uf8YEKTgaQp4bUqacK5WXfO6P1J6ivTYdnvlf5OOhynxHRGHX665atgukWFuE0UGaUwdfgMVd7/TLYb4VLbQEfzmW6LV4vNNmLww6zi1G3B8XqsZ3UzELgeTnWPg/EAdP6QNIFsdNnq0/lkkhU0xm57P3vIHvBF+xnZbf9WXDDYHK7lsBHTexAVSLV7wxZRzXU2b2VyLbfvBVaqRsI3RWQGS2Ok6o2rI/LXD7aJqNQ5VZuja6P2xXS34ghRwpWjhPbA1pau3ruYNKWwRq3Yv83iN8FmStIjzvHMBwCQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YjsoKb4xNdz7SEsp5DrK7/0xuSh+X5ymvZ62id+fOGg=;
- b=d1vDKhgn/enHpZxtresOq8Mq85MOm1gsIEe5wdTg1tuevacg+cDsD/wN8gP6bUA3UtyKINDWeezRTewAKk0+Tal005WlIEhKu7t4QCAzaFsy6cL/W7pvPADVU5/VwXVf3mO/Z5tguLxFPonOEPUFumMamUPKyvPyiIsHn5ULk2/sqVMR1XyOEDe7YCYE5AN/LPN/Xj83P0KRS5U3Z+rsTVKZGb8qtgIVL4WjhhOrRmpNF5jPXZsYGOuHRCuhTe1P4hoDOep0IHBrpyifmwnftU2u+8hP20sOSNZDu1D8ODLwWlZNQZa+ZWQnRxzEXZU0+8P9u0hFoGmK7PxAP3t1bw==
+ bh=QJ72MQ+1Ex+mmjjxNHxLHh+EokjldREt+Y+HQIcwi9k=;
+ b=QMEKqIE+aGnlz9POr/9CElfH1LJBIdypXrZY6ivGlQuN4DYCTo63sibzvXVvlSL88RZG20XGf4+SxEYaBrPrlTSfYCGZEKgzQzN9qeoDR2UspoU04sBjNNBZGrjjDozXjGfWKPw73N34dT+f1G3JYhWVqwSqErabY4cdNXGjeswa/PBr9/NfddkUuEL9hC7ztAYjD2LESLByoWMvITCwm+UziUTrAuOuMRm1GMXxS4B9T/IF5SWZ35DpWcayQeHGogDKH9mDbIDO1buz3xainGINfF9acQtwP4krckMqSwUNIvoMLYQpsRrHexK77KYllIYpPlNaLiM+Qxx4wQosDw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YjsoKb4xNdz7SEsp5DrK7/0xuSh+X5ymvZ62id+fOGg=;
- b=PRoXTkz7lDDAH4d5p0qZVMdfTIu9ofoUfw5dvcyrsOCr5yV5lZxszqRvqty5hczPTGAHsDWZ5WVQjf/BZqgPiaW+42RZ1L5kLNPqwNYlhtJjCLVdpBAXeQYyQu3X27VDbPH28OzpBH6sBnfor3wW3QqY5zuLGrtAFLtoiMe0mOA=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by VI1PR0401MB2367.eurprd04.prod.outlook.com (2603:10a6:800:24::8) with
+ bh=QJ72MQ+1Ex+mmjjxNHxLHh+EokjldREt+Y+HQIcwi9k=;
+ b=IV+Jj9yNinJKCcF4SWoCyynK1iOwlJQxW02139ZTxwFE9f9h+4Gc2B0AHKKnyTAfErNtB1uOGM9BN+VtLzkdjxcTIc1S+6PwYU92eQT/C9YlQVDlZQaEjzIfYsKjVk8zs/CdxHvvNNgv/uF7niififJ0J3y66pyebEI5K/xFiOo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+Received: from PH0PR05MB8703.namprd05.prod.outlook.com (2603:10b6:510:bd::5)
+ by SJ0PR05MB7675.namprd05.prod.outlook.com (2603:10b6:a03:2ca::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Tue, 28 Jun
- 2022 16:26:05 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::94fe:9cbe:247b:47ea]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::94fe:9cbe:247b:47ea%7]) with mapi id 15.20.5373.018; Tue, 28 Jun 2022
- 16:26:05 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v11 net-next 2/9] net: mdio: mscc-miim: add ability to be
- used in a non-mmio configuration
-Thread-Topic: [PATCH v11 net-next 2/9] net: mdio: mscc-miim: add ability to be
- used in a non-mmio configuration
-Thread-Index: AQHYiseFWqiBct4k00WOzITu2aZtrK1lAfYA
-Date:   Tue, 28 Jun 2022 16:26:05 +0000
-Message-ID: <20220628162604.fxhbcaimv2ioovrk@skbuf>
-References: <20220628081709.829811-1-colin.foster@in-advantage.com>
- <20220628081709.829811-3-colin.foster@in-advantage.com>
-In-Reply-To: <20220628081709.829811-3-colin.foster@in-advantage.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 69cb9347-e168-4b3a-bbdf-08da5922e651
-x-ms-traffictypediagnostic: VI1PR0401MB2367:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dF3G/JbTcQa5VDWDVoR8Y/7FyEJcEmi8cBJjPYHuo7CDj2wHEyrg3dzLxPJHLhYYU7ldqMC8txGv2Y8yN5mtswaBzukrZH/9rKM0oJccCyLZ3/lvqsXa3CNZKJZEsZBsLSXbl4cQaO7GPQAcEUZIaMDI475lBUkRIAPb23PzYSoRYPPkDBcVsKVER0DTPCAEMO6VQTtaIKTJJlwGdQGypNOsNpPwokCuY+aMvkg1xf+uyVJhM30naFJ6F7OhkEWrh65CYQ9P3OqgJjTr1iZz0YS5g9jSETZ3k0aDsxLAcBBHCscSyv8N/x2I0oW62977wyH/FU+LQcUQ+RloZs0mdYEEiEmMrM6k890ACePyEaVn1fPEOZLYw53nDLaXQOLcSwYtfDDlrxTX5PY6G1XudYBvvI/UGFShDo327cF0uM5h+px+4htgEE2EtszvlJyR1NZynDRx2Fk3WDfrbpUR0TMUuyFYXU0FaQQZwgrqp47lrBmh37UWMjIsn7P6ubp0v6xHD51N2OUhO/a5iK9wjtGvXVcpJZBr7OZqT2gP77FlGsEIJ/hQkdgwE7dMSRgliTGLROIzupZS7dd+qm4XUig0CSNVFDSuBZ9pyE2JaFwW0SPGJoIbD49LijQlBlUj1YzE1vHFQlBQQCAgV2sRCZZNUBRhjeSKwMDQ7ZztqC3eI6jmZlhmrBTDrA21DGPa3oel7cF5eAm1+Iezy2CkfSb1nmpJ/l+FeOvvNvyts2gFhsbh8GOmm0KbkU7TtoaWIGaJ+LY2iBES3vFOrvfcPNCfYwW5JK+ASJ0tYgURmQw=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(39860400002)(396003)(136003)(376002)(366004)(346002)(41300700001)(6512007)(6506007)(66946007)(8676002)(26005)(83380400001)(478600001)(66556008)(86362001)(76116006)(66476007)(38070700005)(316002)(54906003)(38100700002)(64756008)(66446008)(4326008)(71200400001)(2906002)(33716001)(6916009)(1076003)(44832011)(7416002)(186003)(6486002)(4744005)(9686003)(122000001)(5660300002)(8936002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?PXcbKzKBL72uAqOjIIjpY+U9NsR4+xgZz/xLYHTF91S+ryU3SBOSPfT2edmf?=
- =?us-ascii?Q?xTPX7mAq7WYoTYn+/s1XIurYProf87Gl1iEuMzO9qGV4unV5jNHutQ5DmPMf?=
- =?us-ascii?Q?KOJiZzYw7Q6aMuE6gkyNvAxXvGDQ8PSS43NCHuJBWL0+OZZ4xrhWUlOecZQB?=
- =?us-ascii?Q?Zsn6x7Jq1XnZXh5LjRhLt/LFS2C/SBpDTF/fYClZ00vqLBJZXWypu9y5G014?=
- =?us-ascii?Q?GiOb0aBAWkbsk+/MbhbnloWAwnJKvuQ0SgjFj2/PGBBkWBczScwcqxCimF70?=
- =?us-ascii?Q?K1tiYQNel7Q82Sc/v9/BTDANFUnut3r2UUKGDRBl6IfUOOBVHYiN2qWvJBDu?=
- =?us-ascii?Q?68vXVT6nYx+PI3kBp/dUBo94u269XFLANMdJ1hfEcVwTTHr99ys68zy4rCt6?=
- =?us-ascii?Q?BDpi/zRkyNEsHI9cFXcRWX8IySlIi+BEn0xRnVGcbGYzRi6wdU+DSDEI7x2I?=
- =?us-ascii?Q?LzORFCZuS0Mnwh9mE3U3oHFG5OrYlrxgT3lxYtY2PXHA06SAObFUulJOA+0G?=
- =?us-ascii?Q?k5wrHPAeIqKMaNosGlT5QwZfij9mBC7nIbUwWHpKmOo6jYO6UWyhB/BL6uLJ?=
- =?us-ascii?Q?nWs/22UrEffNFMiineq8WXscNj9HbFsYHXQuuxXRzKRHGfL2iH3EO110bxY4?=
- =?us-ascii?Q?ck2rpCdfYbADp8binFWTFIcpm6xjvPt0z4w9OOxMIxXYTLlaual7hKPJtznz?=
- =?us-ascii?Q?k+FDd9eHvvuLsZPc+7e1pcqfNqIn2Kmb40lPKuRoB0y9CkTF/u/ixj2Ni3cP?=
- =?us-ascii?Q?BksF+DPoUfz/pI4m8mt+WNZAmwE/H/VZN4t/EoCfs0VHpe/T4K0Bsjb+x0yG?=
- =?us-ascii?Q?+X75ZvdKO0AtGdd3HRltjYjUpdWXk2Kwsb9HPZcm4nzjET6qIQgckiGrXwOX?=
- =?us-ascii?Q?xhCJL56ekRURRb24GQFQV9GEAB9cc4Q6hXDWys1/FBGMxpDdAIvgqNwqhGem?=
- =?us-ascii?Q?7HKsAVkfToZ+hf9XUowtHxBP4wDCORNI3ktyoKIZvs5uPjh/XNHOVkO0WCet?=
- =?us-ascii?Q?jJe9IXTWlEH1Qxnj7h2DnZZS1zp9u9oxtkwK/usvkT/0uFD7eHdRkjP9eLnn?=
- =?us-ascii?Q?fc34UecWps6IaDy8Idvx3OetkpIIY87exXx/3S034Wm2zgl1QJ7PIPKxik3J?=
- =?us-ascii?Q?YxFGjQ+Py9neBLS6ftVH1rx2XJctuYOEp5rY40AFSN6H2OK5SKgkOwKzqH+X?=
- =?us-ascii?Q?KvM2xy65uypzny5Pd1pk+M297znhUKqj/XyN4zWQb8es31/IU+gAcdl7bi88?=
- =?us-ascii?Q?6BY62vaB9bU8k1WAwB5ZJa2DftbdbK/zGay7Oh+wB+lVuTe+knOZzzraurNC?=
- =?us-ascii?Q?f5qEE+zeA7g3/VVMJYZWQYy6P57M9kKXFSmMLCqoBDA5p+z6niHgPUtBS3T6?=
- =?us-ascii?Q?A8gGZujGp1fe+vozUYETZtMehsdEUeUQ2acULBH3k9QBFasrjUpQ4mqRsuel?=
- =?us-ascii?Q?Ihnu0+PXI1sznKF0VJkqlvyLqc2IC1hcrIqa8kBBH2pJgAaIB5mhaPxmTIVe?=
- =?us-ascii?Q?B/pmwzg27sQmDIBkFUkkdChDtFL1HyF2+s2MxCQ/iAa+VFKEiEtQ9kJONUB3?=
- =?us-ascii?Q?Kjm8b+MNItJS+XnjEq8W5CXxmYcBXSqBbI40d8qzaUONiQTcAOrS3ed+fZaG?=
- =?us-ascii?Q?DA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <DEA2719DD20A2B47B79AC3DFE36E58F1@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.13; Tue, 28 Jun
+ 2022 16:51:23 +0000
+Received: from PH0PR05MB8703.namprd05.prod.outlook.com
+ ([fe80::dc16:cc4c:985a:89ec]) by PH0PR05MB8703.namprd05.prod.outlook.com
+ ([fe80::dc16:cc4c:985a:89ec%9]) with mapi id 15.20.5395.014; Tue, 28 Jun 2022
+ 16:51:23 +0000
+From:   Ajay Kaher <akaher@vmware.com>
+To:     bhelgaas@google.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com
+Cc:     x86@kernel.org, hpa@zytor.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        rostedt@goodmis.org, namit@vmware.com, srivatsab@vmware.com,
+        srivatsa@csail.mit.edu, amakhalov@vmware.com, anishs@vmware.com,
+        vsirnapalli@vmware.com, akaher@vmware.com, er.ajay.kaher@gmail.com
+Subject: [PATCH] MMIO should have more priority then IO 
+Date:   Tue, 28 Jun 2022 21:59:21 +0530
+Message-Id: <1656433761-9163-1-git-send-email-akaher@vmware.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: BY5PR13CA0014.namprd13.prod.outlook.com
+ (2603:10b6:a03:180::27) To PH0PR05MB8703.namprd05.prod.outlook.com
+ (2603:10b6:510:bd::5)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c0dd696f-0059-4f86-956d-08da59266ee8
+X-MS-TrafficTypeDiagnostic: SJ0PR05MB7675:EE_
+X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cUx4N0SH5CyOsbvvz3MR4Fuxk2yUVwsy2mBIsJcRjA9f+n7ceNhRNsMY54tSv5jVzv8Gwk24oS/HIxr8BJe081GEjJ73VHm92/f+OMSqL1sidIT0mJadHJJ1Bp0pkxr7Q30lVUJ0+jvE6dwF4I4TNVIM0zJ3pFV5P1XwrJfDuxit7WIKYJ2f2rYt7JeZRp+2WMaH8T7VoXjMewaemcHOY9AlfF2yGCsqp/3deGkw0LK077E4Ks+XfIWgEVZaUbc4fxB1ymwEaaKCzM3ABa++vdi4KqHVYNRRiB/xzcXGqMRuqVZ0mr5rZg6753xsa0/T6O7avPPl6ETRC7Q20YJFz+IPlKIQGPWeZW8rFSAgkoVijNVuLKHeZhIh3dL8pCTld7NCdhUBFgzPDgRuPq0ib5P/rTpC6ulpHetd++CibnoOM+/Jo3BBXE8XsStycUEivf6lWnmoRR8gbOt+LyVuVeZCiawYEtzJjL5NdQWkf08IpJQc0I4zGetG1LLhKERZwO3B6MWV9LZ/jU36kuL5BrvzT0cfKeCPoUY/Ss6SWX9u19Td1v1phQDwHise5WLsGIcJbr/HvcnXyn0En1AZmCHx8evuFpgIOXupBQYdqDRzTThZqQ7Jbumu7yWQCQzUiA4m/gVS5Kwda4fNT2nRxRKal4/NvDd4Lnwt/9HkXYzdBXrF6r8AnJaObOBHnGh/n8jBD3mFE81JG4fOsloqk8GeJKwxkxsPU+6mm0x7SSyk7iwH4lOmJW5VNLctbBjSE57IQwcA9kz1FTLe+3YJxCmkai9YN/AninRBW9kslNE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR05MB8703.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(396003)(39860400002)(136003)(376002)(7416002)(6506007)(2906002)(66946007)(8676002)(66476007)(52116002)(4326008)(41300700001)(8936002)(26005)(478600001)(66556008)(38100700002)(38350700002)(86362001)(2616005)(5660300002)(6512007)(4743002)(186003)(36756003)(6486002)(316002)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cTZgb+36/LVmqUmGQpt4heDtxZm4u7XPJNiHoGt8Wa+jTLAnsoWyq0r7Gmer?=
+ =?us-ascii?Q?kTyBqO/mzTzAvmlKRuylGuMwPnZyeFJ19Nklwpq4CI9TvLsrQUVb5tS5hFs5?=
+ =?us-ascii?Q?pjR+BUxG6nKaiw8tg4rQ1kWdbLyYr6VoR4fpCU15PqDabfxVKKomMfjwBBnC?=
+ =?us-ascii?Q?zP/hgVAdGEQcWb5B0YmzAZBH3gDZ6nzbkJuzP/GzV+MHLVBpr7b6k9A5OadV?=
+ =?us-ascii?Q?gzQsubkuvvykydsqOpodM8sDGVafsDoegErolTvMYgFeRcaGfCJWvHogQ3Kw?=
+ =?us-ascii?Q?RTo3DvGxnV7g59z46Nn7XaAuzseKQSMjfWxyv1+k7KTTSpLVFtXxuOE3U3Wm?=
+ =?us-ascii?Q?wlthN7fcbrkW+e5zF5mr7oCfkHwuyrOmpFA3D9O9aQWXU8PTXKGyYkfPdckR?=
+ =?us-ascii?Q?vqsFw4KNKJ5YGF9x2VNZsQyg0NYvD9Qj/O0bKkgUXo/dZEuffjt9vIWTA9D+?=
+ =?us-ascii?Q?QWmyi/Ly7lmELmPAiJAZG57AZjylkRf55v3WvLCAr7dSof66EFRemSb9LCEK?=
+ =?us-ascii?Q?9UhMtv3jR6zR7ev3D2l3t+g39+VUhAkei3NEMhEbg2a4pVJfO/Tn4lvD/put?=
+ =?us-ascii?Q?Jxc5+qN5g1t2nkkhCHZaxube5ScU0/Wto7yGNCeSqQJM/oXh2TqqsJ0aJ2Om?=
+ =?us-ascii?Q?jwZfeA4xsloWBH8i7Fhhly033Dc85qco67KTotX+3CsQAszCWKVL1GCLZeG5?=
+ =?us-ascii?Q?kJisPiTNgalpJ4XYrse5u0fBJVSpsCZFY+hVQtP1H0eCuBWXRLKhOUaFey2m?=
+ =?us-ascii?Q?yuGfDfF4Lx7se3mwXDDaFV8+BRSJf0t6dTKE16/fOPujo1mHdu2CtjLdNToI?=
+ =?us-ascii?Q?PhJlu0LrOyzZ6IydHCBShMeIyq5+ID6o6FivV8n+YgVaCIKBMEAmoDhpxxia?=
+ =?us-ascii?Q?iCsaQPnkRmGz8Mp8UJJUDnXGW8Z/hv2Mqpdo1nZZt0PUNynfsRzHjQrrlFD9?=
+ =?us-ascii?Q?0Nsn0SdRoJdMcAKILPnmJMpOQO7r1rFN0VhjEbyKRueWhg0FSPsCJxfeokeQ?=
+ =?us-ascii?Q?GdKAHBA1yq9T4021QC5TqSbkpSBDg7t0h9rk9OzWiEUkHKHizk3Ksjs49z4w?=
+ =?us-ascii?Q?cNbD8s70QCrtg8bMD9dYC1/qP/cJWEVdy1JOw0US41Vp7UnSWH/pGEsfUcoj?=
+ =?us-ascii?Q?6LSr6tIwZbFRe8P0Ba1YmD3V2fGq/VgAe/NbqOk6Qx/VZzhjQlL2nBtRnheI?=
+ =?us-ascii?Q?FSiYhSQnL9dTdcwnxpLn0QC5Np6Oge3BcJmlDxhmva4OkwzQaSCxMDXvaHMS?=
+ =?us-ascii?Q?aR0PpT7gIg3F2XBCMVusy2ywkyn/yvbO0IJSbPuKix2WvctCOLKGo4ffup+K?=
+ =?us-ascii?Q?Km4QvR/Ougyrz3HagQeh7wwzW4oeuQxc8/dWsV+u/4fSahVuOytD+F1duunZ?=
+ =?us-ascii?Q?9nvyN8Uad5Zc33pxYtCh86CXuFgpvTGpBFUC6JpDhLgBQIhJExns/eVx+6le?=
+ =?us-ascii?Q?7X5KXdqaCmEGYRZ/S6DVwRIyj1vwX/+HLaZYCbs7NGlNdFiRO0TWB7UZ4/G8?=
+ =?us-ascii?Q?FmLR7H+3zYl6IEtNfivtDxVvdTSTjDbxeaY2mcymAZgNmy3C1/I8CTqIjO2r?=
+ =?us-ascii?Q?E/AQSXC8OuPS8g8WU7v9Y7T+NL7bIB6fsbJivEdR?=
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c0dd696f-0059-4f86-956d-08da59266ee8
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR05MB8703.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69cb9347-e168-4b3a-bbdf-08da5922e651
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2022 16:26:05.4066
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 16:51:23.2274
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: W1H54u0klSJghA+k5ITglc5heLoR9c1aPtEZT5xlJU841Stngl287/ugwUB9cX05DEsSqhO3n8tNFagkZsrZkA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0401MB2367
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RxEHav1X3wJHjgFkfaK5V5CXAFBzgWiwags7j5CMvXd1AgEMZJf4CuIqdzceMQdyFmbStOpDs2jj2zjIV3h25g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR05MB7675
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 01:17:02AM -0700, Colin Foster wrote:
-> There are a few Ocelot chips that contain the logic for this bus, but are
-> controlled externally. Specifically the VSC7511, 7512, 7513, and 7514. In
-> the externally controlled configurations these registers are not
-> memory-mapped.
->=20
-> Add support for these non-memory-mapped configurations.
->=20
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> ---
+Port IO instructions (PIO) are less efficient than MMIO (memory
+mapped I/O). They require twice as many PCI accesses and PIO
+instructions are serializing. As a result, MMIO should be preferred
+when possible over PIO.
 
-These "add ability to be used in a non-MMIO configuration" commit
-messages are very confusing when you are only adding support for
-non-MMIO in ocelot_platform_init_regmap_from_resource() in patch 9/9.
-May I suggest a reorder?=
+Bare metal test result
+1 million reads using raw_pci_read() took:
+PIO: 0.433153 Sec.
+MMIO: 0.268792 Sec.
+
+Virtual Machine test result
+1 hundred thousand reads using raw_pci_read() took:
+PIO: 12.809 Sec.
+MMIO: took 8.517 Sec.
+
+Signed-off-by: Ajay Kaher <akaher@vmware.com>
+---
+ arch/x86/pci/common.c          |  8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/x86/pci/common.c b/arch/x86/pci/common.c
+index 3507f456f..0b3383d9c 100644
+--- a/arch/x86/pci/common.c
++++ b/arch/x86/pci/common.c
+@@ -40,20 +40,20 @@ const struct pci_raw_ops *__read_mostly raw_pci_ext_ops;
+ int raw_pci_read(unsigned int domain, unsigned int bus, unsigned int devfn,
+ 						int reg, int len, u32 *val)
+ {
++	if (raw_pci_ext_ops)
++		return raw_pci_ext_ops->read(domain, bus, devfn, reg, len, val);
+ 	if (domain == 0 && reg < 256 && raw_pci_ops)
+ 		return raw_pci_ops->read(domain, bus, devfn, reg, len, val);
+-	if (raw_pci_ext_ops)
+-		return raw_pci_ext_ops->read(domain, bus, devfn, reg, len, val);
+ 	return -EINVAL;
+ }
+ 
+ int raw_pci_write(unsigned int domain, unsigned int bus, unsigned int devfn,
+ 						int reg, int len, u32 val)
+ {
++	if (raw_pci_ext_ops)
++		return raw_pci_ext_ops->write(domain, bus, devfn, reg, len, val);
+ 	if (domain == 0 && reg < 256 && raw_pci_ops)
+ 		return raw_pci_ops->write(domain, bus, devfn, reg, len, val);
+-	if (raw_pci_ext_ops)
+-		return raw_pci_ext_ops->write(domain, bus, devfn, reg, len, val);
+ 	return -EINVAL;
+ }
+ 
+-- 
+2.30.0
+

@@ -2,237 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1287755D4AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF57955DD9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345179AbiF1LMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 07:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        id S1345213AbiF1LNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 07:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiF1LMr (ORCPT
+        with ESMTP id S229846AbiF1LNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 07:12:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA6142C103
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:12:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656414764;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VGi3GZ3X67AUti4hXwNYjl450hU4o5zBUg9z/I0jCK0=;
-        b=OAEcAiNl+wm2Uo705sZIwbr72l+hm87mC+owfu2bNGh+2VF3qZ49UGfol7qx+WhzD15Tk8
-        U7jTMhsgUeyurjDtymGFa9z6WvEJhlXV877EPGWnhgH12ZKYT+fxOxDg8tKVLHCopsuUOI
-        onzEcoHDtgZmRPOoJKFSFXBQvSaKhDg=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-627-AnVsfCphMWCzJFnY6YMc9g-1; Tue, 28 Jun 2022 07:12:43 -0400
-X-MC-Unique: AnVsfCphMWCzJFnY6YMc9g-1
-Received: by mail-wm1-f72.google.com with SMTP id v184-20020a1cacc1000000b0039c7efa3e95so4957814wme.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:12:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=VGi3GZ3X67AUti4hXwNYjl450hU4o5zBUg9z/I0jCK0=;
-        b=LIzqhMoaJOBsNNkZV2IC81/c3+AddXkd9WvcCRSFuU08gs7zhYLQ+ezc3MKcZBVkLJ
-         sIXz+gUhW9Sbe8ULDJstQKBH5ID8nm2DuBui9m9IL23f/+zxnsd8YQuS3I733A0WIZZl
-         MBCyNkZ3NfNT9ll/s4E4KBdMYK6PrjEuj5+UHzucsPh/VvwmT0i75V/OVt6hX2SuyLR/
-         rDrzkEyr3seiXIGVnQjaQhzqCAuxeBvteKH2ohI5ulCJjcPkVBsQ9eKN4+3qse3p4Qrq
-         +6fUm2p7swDzaSFq+BoH/U/IRVi7S5oOAqtV+5BwoxJWK1DWqIgnzQgeBqXek9Agi+A7
-         Igbw==
-X-Gm-Message-State: AJIora+PiSfaxY77JoqZFhScoeVMrkdHQTYfmSe8VE2/615YWS75DiYo
-        +Ex6Z7JKcSfrkC1hlnvNKHeCVL+CyYCH4Y05peIlILmKPSKQdcGswLPH9WRlDlloHmi4lBZbHJX
-        YCccf9r/CscaldNQCraEX+2Hb
-X-Received: by 2002:a5d:6d45:0:b0:21a:2f43:cb76 with SMTP id k5-20020a5d6d45000000b0021a2f43cb76mr17332898wri.254.1656414762631;
-        Tue, 28 Jun 2022 04:12:42 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sbZ+MbBvL42Q4aR4eqg/x2m/iw0R3mnBXZESBiXIzSjoltOKUdfJU6wJqFE6fhym3e5C8VMA==
-X-Received: by 2002:a5d:6d45:0:b0:21a:2f43:cb76 with SMTP id k5-20020a5d6d45000000b0021a2f43cb76mr17332882wri.254.1656414762381;
-        Tue, 28 Jun 2022 04:12:42 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-115-110.dyn.eolo.it. [146.241.115.110])
-        by smtp.gmail.com with ESMTPSA id a19-20020a05600c349300b0039db500714fsm17448747wmq.6.2022.06.28.04.12.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 04:12:41 -0700 (PDT)
-Message-ID: <ecac788497ea0e4e5b725226ad8b1209dc62fa0e.camel@redhat.com>
-Subject: Re: [PATCH net v3 2/2] net: rose: fix null-ptr-deref caused by
- rose_kill_by_neigh
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Duoming Zhou <duoming@zju.edu.cn>, linux-hams@vger.kernel.org
-Cc:     ralf@linux-mips.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 28 Jun 2022 13:12:40 +0200
-In-Reply-To: <c31f454f74833b2003713fffa881aabb190b8290.1656031586.git.duoming@zju.edu.cn>
-References: <cover.1656031586.git.duoming@zju.edu.cn>
-         <c31f454f74833b2003713fffa881aabb190b8290.1656031586.git.duoming@zju.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 28 Jun 2022 07:13:42 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8052CDFC;
+        Tue, 28 Jun 2022 04:13:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656414821; x=1687950821;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=w2smDjFDSnaWaF8DZXAccU3orfE582qzoDzr3rq7nFo=;
+  b=CwaEV0TNKZ5KumfWffqVpg0qgRICVLhkfTRKSFvtkKfPWy58J//hY9Yl
+   AZU+zoZolFNebmOi7qVCzrhRvLehRskDvRtfBX3VQfWywJFirKf/xphwh
+   HZxuEn3U9jbdzL+1kfGTY1YRWhULacu8MD4xFUWiOXQXgExjD/b2AOKdq
+   uMQDOSf91vTc0aaSUBs914eq/bfSPkt6IThgofMwvO0ry6I/Mg5gZTc33
+   oWM5mWsiCa6UcjIv3i1PhRzXQGEWGVU6Y4F6u50GngpefgyLUyZCtulmz
+   OFmUI/qeMiB28CtyoOXUNDvo070GQaVjnbbMSnZmuFntzFptMwcs5NTlc
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="368025223"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="368025223"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 04:13:41 -0700
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="646871058"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.62.204])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 04:13:39 -0700
+Message-ID: <e7ebb779-9938-d5f7-d900-dbea55b4ac72@intel.com>
+Date:   Tue, 28 Jun 2022 14:13:36 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCHv2] mmc: block: Add single read for 4k sector cards
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_L=c3=b6hle?= <CLoehle@hyperstone.com>,
+        Avri Altman <Avri.Altman@wdc.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <e0cce326393645d3b4a163ce65c89fb9@hyperstone.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <e0cce326393645d3b4a163ce65c89fb9@hyperstone.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-06-24 at 09:05 +0800, Duoming Zhou wrote:
-> When the link layer connection is broken, the rose->neighbour is
-> set to null. But rose->neighbour could be used by rose_connection()
-> and rose_release() later, because there is no synchronization among
-> them. As a result, the null-ptr-deref bugs will happen.
+On 28/06/22 12:08, Christian Löhle wrote:
+>> Cards with 4k native sector size may only be read 4k-aligned,
+>>> accommodate for this in the single read recovery and use it.
+>>
+>> Thanks for the patch.
+>>
+>>>
+>>> Fixes: 81196976ed946 (mmc: block: Add blk-mq support)
+>>> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+>>
+>> FYI checkpatch says:
+>>
+>> WARNING: From:/Signed-off-by: email name mismatch: 'From: "Christian Löhle" <CLoehle@hyperstone.com>' != 'Signed-off-by: Christian Loehle <cloehle@hyperstone.com>'
 > 
-> One of the null-ptr-deref bugs is shown below:
+> Will be fixed in my future patches, thanks for the hint.
 > 
->     (thread 1)                  |        (thread 2)
->                                 |  rose_connect
-> rose_kill_by_neigh              |    lock_sock(sk)
->   spin_lock_bh(&rose_list_lock) |    if (!rose->neighbour)
->   rose->neighbour = NULL;//(1)  |
->                                 |    rose->neighbour->use++;//(2)
+>>
+>>> ---
+>>>  drivers/mmc/core/block.c | 25 ++++++++++++-------------
+>>>  1 file changed, 12 insertions(+), 13 deletions(-)
+>>>
+>>> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+>>> index f4a1281658db..a75a208ce203 100644
+>>> --- a/drivers/mmc/core/block.c
+>>> +++ b/drivers/mmc/core/block.c
+>>> @@ -176,7 +176,7 @@ static inline int mmc_blk_part_switch(struct mmc_card *card,
+>>>  				      unsigned int part_type);
+>>>  static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
+>>>  			       struct mmc_card *card,
+>>> -			       int disable_multi,
+>>> +			       int recovery_mode,
+>>>  			       struct mmc_queue *mq);
+>>>  static void mmc_blk_hsq_req_done(struct mmc_request *mrq);
+>>>  
+>>> @@ -1302,7 +1302,7 @@ static void mmc_blk_eval_resp_error(struct mmc_blk_request *brq)
+>>>  }
+>>>  
+>>>  static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_req *mqrq,
+>>> -			      int disable_multi, bool *do_rel_wr_p,
+>>> +			      int recovery_mode, bool *do_rel_wr_p,
+>>>  			      bool *do_data_tag_p)
+>>>  {
+>>>  	struct mmc_blk_data *md = mq->blkdata;
+>>> @@ -1372,8 +1372,8 @@ static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_req *mqrq,
+>>>  		 * at a time in order to accurately determine which
+>>>  		 * sectors can be read successfully.
+>>>  		 */
+>>> -		if (disable_multi)
+>>> -			brq->data.blocks = 1;
+>>> +		if (recovery_mode)
+>>> +			brq->data.blocks = mmc_large_sector(card) ? 8 : 1;
+>>
+>> I suggest changing to use queue_physical_block_size() here and further below
 > 
-> The rose->neighbour is set to null in position (1) and dereferenced
-> in position (2).
+> This part I'm impartial about, not sure if it makes it more readable, hopefully we never have to support another "native sector size" apart from the two.
+> Anyway I will send the next patch with queue_physical_block_size()
 > 
-> The KASAN report triggered by POC is shown below:
+>>
+>> 			brq->data.blocks = queue_physical_block_size(req->q) >> SECTOR_SHIFT;
 > 
-> KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
-> ...
-> RIP: 0010:rose_connect+0x6c2/0xf30
-> RSP: 0018:ffff88800ab47d60 EFLAGS: 00000206
-> RAX: 0000000000000005 RBX: 000000000000002a RCX: 0000000000000000
-> RDX: ffff88800ab38000 RSI: ffff88800ab47e48 RDI: ffff88800ab38309
-> RBP: dffffc0000000000 R08: 0000000000000000 R09: ffffed1001567062
-> R10: dfffe91001567063 R11: 1ffff11001567061 R12: 1ffff11000d17cd0
-> R13: ffff8880068be680 R14: 0000000000000002 R15: 1ffff11000d17cd0
-> ...
-> Call Trace:
->   <TASK>
->   ? __local_bh_enable_ip+0x54/0x80
->   ? selinux_netlbl_socket_connect+0x26/0x30
->   ? rose_bind+0x5b0/0x5b0
->   __sys_connect+0x216/0x280
->   __x64_sys_connect+0x71/0x80
->   do_syscall_64+0x43/0x90
->   entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> 
-> This patch adds lock_sock() in rose_kill_by_neigh() in order to
-> synchronize with rose_connect() and rose_release().
-> 
-> Meanwhile, this patch adds sock_hold() protected by rose_list_lock
-> that could synchronize with rose_remove_socket() in order to mitigate
-> UAF bug caused by lock_sock() we add.
-> 
-> What's more, there is no need using rose_neigh_list_lock to protect
-> rose_kill_by_neigh(). Because we have already used rose_neigh_list_lock
-> to protect the state change of rose_neigh in rose_link_failed(), which
-> is well synchronized.
-> 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-> ---
-> Changes since v2:
->   - v2: Fix refcount leak of sock.
-> 
->  net/rose/af_rose.c    | 6 ++++++
->  net/rose/rose_route.c | 2 ++
->  2 files changed, 8 insertions(+)
-> 
-> diff --git a/net/rose/af_rose.c b/net/rose/af_rose.c
-> index bf2d986a6bc..5caa222c490 100644
-> --- a/net/rose/af_rose.c
-> +++ b/net/rose/af_rose.c
-> @@ -169,9 +169,15 @@ void rose_kill_by_neigh(struct rose_neigh *neigh)
->  		struct rose_sock *rose = rose_sk(s);
->  
->  		if (rose->neighbour == neigh) {
-> +			sock_hold(s);
->  			rose_disconnect(s, ENETUNREACH, ROSE_OUT_OF_ORDER, 0);
->  			rose->neighbour->use--;
-> +			spin_unlock_bh(&rose_list_lock);
-> +			lock_sock(s);
->  			rose->neighbour = NULL;
-> +			release_sock(s);
-> +			spin_lock_bh(&rose_list_lock);
+> Do we want to switch to SECTOR_SHIFT instead of 9? So far SECTOR_SHIFT is not used at all in mmc core.
 
-I'm sorry, I likely was not clear enough in my previous reply. This is
-broken. If a list is [spin_]lock protected, you can't release the lock,
-reacquire it and continue traversing the list from the [now invalid]
-same iterator.
+I guess '9' is more consistent
 
-e.g. if s is removed from the list, even if the sock is not de-
-allocated due to the addtional refcount, the traversing will errnously
-stop after this sock, instead of continuing processing the remaining
-socks in the list.
-
-A possible alternative, not even build-tested would be:
----
-diff --git a/include/net/rose.h b/include/net/rose.h
-index 0f0a4ce0fee7..090db11d528f 100644
---- a/include/net/rose.h
-+++ b/include/net/rose.h
-@@ -145,6 +145,7 @@ struct rose_sock {
- 	struct rose_facilities_struct facilities;
- 	struct timer_list	timer;
- 	struct timer_list	idletimer;
-+	struct rose_sock	*dl_next;
- };
- 
- #define rose_sk(sk) ((struct rose_sock *)(sk))
-diff --git a/net/rose/af_rose.c b/net/rose/af_rose.c
-index 5caa222c490e..01f3c50f0921 100644
---- a/net/rose/af_rose.c
-+++ b/net/rose/af_rose.c
-@@ -162,25 +162,32 @@ static void rose_remove_socket(struct sock *sk)
-  */
- void rose_kill_by_neigh(struct rose_neigh *neigh)
- {
--	struct sock *s;
-+	struct rose_sock *del_list = NULL;
-+	struct sock *s, *tmp;
- 
- 	spin_lock_bh(&rose_list_lock);
--	sk_for_each(s, &rose_list) {
-+	sk_for_each_safe(s, tmp, &rose_list) {
- 		struct rose_sock *rose = rose_sk(s);
- 
- 		if (rose->neighbour == neigh) {
--			sock_hold(s);
--			rose_disconnect(s, ENETUNREACH, ROSE_OUT_OF_ORDER, 0);
--			rose->neighbour->use--;
--			spin_unlock_bh(&rose_list_lock);
--			lock_sock(s);
--			rose->neighbour = NULL;
--			release_sock(s);
--			spin_lock_bh(&rose_list_lock);
--			sock_put(s);
-+			__sk_del_node(s);
-+			s->dl_next = del_list;
-+			del_list = s;
- 		}
- 	}
- 	spin_unlock_bh(&rose_list_lock);
-+
-+	while (del_list) {
-+		s = del_list;
-+		del_list = s->dl_next;
-+
-+		lock_sock(s);
-+		rose_disconnect(s, ENETUNREACH, ROSE_OUT_OF_ORDER, 0);
-+		rose->neighbour->use--;
-+		rose->neighbour = NULL;
-+		release_sock(s);
-+		sock_put(s);
-+	}
- }
- 
- /*
----
-
-Paolo
+> If so I would go ahead and change all the others in another patch:
+> queue.c:187:	q->limits.discard_granularity = card->pref_erase << 9;
+> core.c:103:	data->bytes_xfered = (prandom_u32() % (data->bytes_xfered >> 9)) << 9;
+> mmc.c:792:MMC_DEV_ATTR(erase_size, "%u\n", card->erase_size << 9);
+> mmc.c:793:MMC_DEV_ATTR(preferred_erase_size, "%u\n", card->pref_erase << 9);
+> mmc_test.c:1557:	sz = (unsigned long)test->card->pref_erase << 9;
+> mmc_test.c:1570:		t->max_tfr = test->card->host->max_blk_count << 9;
+> mmc_test.c:2461:	if (repeat_cmd && (t->blocks + 1) << 9 > t->max_tfr)
+> sd.c:707:MMC_DEV_ATTR(erase_size, "%u\n", card->erase_size << 9);
+> sd.c:708:MMC_DEV_ATTR(preferred_erase_size, "%u\n", card->pref_erase << 9);
+> block.c:1417:		int i, data_size = brq->data.blocks << 9;
+> block.c:1851:			brq->data.bytes_xfered = blocks << 9;
+> 
+> 
+> 
+> 
+> Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+> Managing Director: Dr. Jan Peter Berns.
+> Commercial register of local courts: Freiburg HRB381782
 

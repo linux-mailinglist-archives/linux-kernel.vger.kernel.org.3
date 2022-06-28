@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5AF55E48E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2808955E497
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346449AbiF1Nan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57122 "EHLO
+        id S1346524AbiF1NbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346392AbiF1N3y (ORCPT
+        with ESMTP id S1346426AbiF1N35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:29:54 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CBA2981B
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:28:41 -0700 (PDT)
+        Tue, 28 Jun 2022 09:29:57 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8210F2AC4C
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:28:44 -0700 (PDT)
 Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LXQPN4Jq8zkX1b;
-        Tue, 28 Jun 2022 21:27:20 +0800 (CST)
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LXQQ8311tz9sqr;
+        Tue, 28 Jun 2022 21:28:00 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 28 Jun
@@ -27,9 +27,9 @@ To:     <akpm@linux-foundation.org>
 CC:     <shy828301@gmail.com>, <willy@infradead.org>, <zokeefe@google.com>,
         <songmuchun@bytedance.com>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH v2 03/16] mm/huge_memory: fix comment of __pud_trans_huge_lock
-Date:   Tue, 28 Jun 2022 21:28:22 +0800
-Message-ID: <20220628132835.8925-4-linmiaohe@huawei.com>
+Subject: [PATCH v2 04/16] mm/huge_memory: use helper touch_pud in huge_pud_set_accessed
+Date:   Tue, 28 Jun 2022 21:28:23 +0800
+Message-ID: <20220628132835.8925-5-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220628132835.8925-1-linmiaohe@huawei.com>
 References: <20220628132835.8925-1-linmiaohe@huawei.com>
@@ -49,33 +49,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__pud_trans_huge_lock returns page table lock pointer if a given pud maps
-a thp instead of 'true' since introduced. Fix corresponding comments.
+Use helper touch_pud to set pud accessed to simplify the code and improve
+the readability. No functional change intended.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-Acked-by: Muchun Song <songmuchun@bytedance.com>
 ---
- mm/huge_memory.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ mm/huge_memory.c | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
 
 diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 76dc6d003245..f7164ef8b6e3 100644
+index f7164ef8b6e3..d55d5efa06c8 100644
 --- a/mm/huge_memory.c
 +++ b/mm/huge_memory.c
-@@ -2006,10 +2006,10 @@ spinlock_t *__pmd_trans_huge_lock(pmd_t *pmd, struct vm_area_struct *vma)
+@@ -1284,15 +1284,15 @@ int copy_huge_pmd(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+ 
+ #ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
+ static void touch_pud(struct vm_area_struct *vma, unsigned long addr,
+-		pud_t *pud, int flags)
++		      pud_t *pud, bool write)
+ {
+ 	pud_t _pud;
+ 
+ 	_pud = pud_mkyoung(*pud);
+-	if (flags & FOLL_WRITE)
++	if (write)
+ 		_pud = pud_mkdirty(_pud);
+ 	if (pudp_set_access_flags(vma, addr & HPAGE_PUD_MASK,
+-				pud, _pud, flags & FOLL_WRITE))
++				  pud, _pud, write))
+ 		update_mmu_cache_pud(vma, addr, pud);
  }
  
- /*
-- * Returns true if a given pud maps a thp, false otherwise.
-+ * Returns page table lock pointer if a given pud maps a thp, NULL otherwise.
-  *
-- * Note that if it returns true, this routine returns without unlocking page
-- * table lock. So callers must unlock it.
-+ * Note that if it returns page table lock pointer, this routine returns without
-+ * unlocking page table lock. So callers must unlock it.
-  */
- spinlock_t *__pud_trans_huge_lock(pud_t *pud, struct vm_area_struct *vma)
+@@ -1384,21 +1384,13 @@ int copy_huge_pud(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+ 
+ void huge_pud_set_accessed(struct vm_fault *vmf, pud_t orig_pud)
  {
+-	pud_t entry;
+-	unsigned long haddr;
+ 	bool write = vmf->flags & FAULT_FLAG_WRITE;
+ 
+ 	vmf->ptl = pud_lock(vmf->vma->vm_mm, vmf->pud);
+ 	if (unlikely(!pud_same(*vmf->pud, orig_pud)))
+ 		goto unlock;
+ 
+-	entry = pud_mkyoung(orig_pud);
+-	if (write)
+-		entry = pud_mkdirty(entry);
+-	haddr = vmf->address & HPAGE_PUD_MASK;
+-	if (pudp_set_access_flags(vmf->vma, haddr, vmf->pud, entry, write))
+-		update_mmu_cache_pud(vmf->vma, vmf->address, vmf->pud);
+-
++	touch_pud(vmf->vma, vmf->address, vmf->pud, write);
+ unlock:
+ 	spin_unlock(vmf->ptl);
+ }
 -- 
 2.23.0
 

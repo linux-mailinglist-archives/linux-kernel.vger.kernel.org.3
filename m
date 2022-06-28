@@ -2,122 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAAE55D9E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BFE055D34E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245498AbiF1Hsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 03:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44160 "EHLO
+        id S245558AbiF1HuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 03:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243058AbiF1HrY (ORCPT
+        with ESMTP id S245504AbiF1HuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 03:47:24 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB2A393;
-        Tue, 28 Jun 2022 00:47:23 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id g20-20020a17090a579400b001ed52939d72so6357013pji.4;
-        Tue, 28 Jun 2022 00:47:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2ksIIskBw2Ba8fG6PLP066/IQFUnSATGlOiAhq4Wz6g=;
-        b=ihFYpfFS8d6iJ2BV7LsKrSmaDFX/g69vCGo1x2oSR8/wmtfo6fxfMMYR0bxhc6fIw0
-         WGA/putgNHdRpGSTxz7GdsuNVs7Rf7KLBFPGCUVbIv1xXoE0H6pjOpxtLnx5QvRF1UvH
-         gI/S2VkUVzaCahnqFLm39oicCvBQckGeaspWAF5wqIwvYnA2WzRfVAL3Rtr8EmSSqCXS
-         jHbOR/6aBc08MLxm5/thxsWstzTfGddSseEn0MehzdeW8eM3Mk95xW8mm2upYycqfFgT
-         8ts+t7H/OwnPWudq52iwoMTuGo3yRuv+idiBn8/aIVqu0BkG55SW+ar2q1lHdv+JNiwj
-         /bjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2ksIIskBw2Ba8fG6PLP066/IQFUnSATGlOiAhq4Wz6g=;
-        b=LB8Us1SW+jkb2yobdESqPpYXh6WeeCX6ejbToPozC4U7kiYN0hcUvcyG/MwbnsBFf7
-         nqfD3JnIDkhQ3lLlqWwyStUnmfvOy7RC3I3Qw3NgapeR8qbaHu8OpqPOb+49Qf1/EMoS
-         e53uEqfun/hVQDBaL8jEqmrSLDAapFtv42GGskWtHuLI3e8RafPhoFz5xxBy1rML6+ql
-         GHfhtYqHMSchpix5ETilR1tnurl923OGgbmPeeY37yCsONd7hEfKe/ZjdZI4/+/pr7XO
-         GVSeb8wWHc+Mom9cAd5SYkhUAjt3vZU6ksaCQyFwR3zkYkFENf17I1Yvzdwd0rjIG4Tl
-         KB6g==
-X-Gm-Message-State: AJIora+iiXope+pwGnDuLEz+Wf0o3Yehv5KmZL9BhNfNbko1SA9HBRQO
-        w0+1oeh1tJeK46I3xRWfWC3QauTnftnlr0bWSY30Y5RlEX8Zsb0x
-X-Google-Smtp-Source: AGRyM1tfbhrWRuWpNYKQ03g2t4onqMKMSYhyD8nIEgluUdUVAr0LVkkndOKQCV2/HktBaPmG0Za5N+AEfqrhU7SgQGA=
-X-Received: by 2002:a17:902:d701:b0:16a:2206:9ba8 with SMTP id
- w1-20020a170902d70100b0016a22069ba8mr2377741ply.168.1656402442810; Tue, 28
- Jun 2022 00:47:22 -0700 (PDT)
+        Tue, 28 Jun 2022 03:50:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D8010E9;
+        Tue, 28 Jun 2022 00:50:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63ABEB81D1A;
+        Tue, 28 Jun 2022 07:50:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ADAFC341CB;
+        Tue, 28 Jun 2022 07:50:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656402610;
+        bh=aiD3eMLrH2Ct0Gn+1sj9Q8L9OK8u7ri0bzVNBJui2/g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=K2YlmC8OHj3tZ17D96mYJnkccAezcnkshoerIQn1fiR0c78PH5mvlCTiEtc37AcIp
+         LOoJ1sqeGgNecsBAvuV64L4FNuIh8ZhVeAFYYRFc3crhP8EWgbBfw88Rgr6x4K1PIL
+         ZTReQbxfNkplNYqBkYgYdTGWSuFgdmQA0HMAnDo88Eln82O0N5jAAXMK15jgeIRLZe
+         GGVEM0i24SwkkyjO4EW6T3f6cV7LzTiYuC2PNDA+l0UdHEiW7IArtdH/hf6Kmnx7Am
+         MAGrb9lMEHzAb6UqBNGDqAODw6jXIDrCVw3WpK+7cLGq63iZWhotGVibhjOyKIqDWp
+         35IfsH4mrbEMQ==
+Received: by mail-lf1-f49.google.com with SMTP id z13so20722462lfj.13;
+        Tue, 28 Jun 2022 00:50:10 -0700 (PDT)
+X-Gm-Message-State: AJIora9Uxot0yiNZOu7wXUhBQGKlfk93/ufH7s/tiB39SIwZK5bImJk1
+        pkIG5um0bcwtr63TUBD0mKQdSSex6WSsOU/xgJA=
+X-Google-Smtp-Source: AGRyM1sS/4PxpYsRaP0D/aDfyv/NiyzYYJeulsRgvdP/7s7GSqjC8O+SpUPkZf1xLvQHfA5qDk0npmnH9xOLnp2nN8Y=
+X-Received: by 2002:a05:6512:e83:b0:47f:635c:3369 with SMTP id
+ bi3-20020a0565120e8300b0047f635c3369mr10406750lfb.659.1656402608055; Tue, 28
+ Jun 2022 00:50:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220627190120.176470-1-ivan.malov@oktetlabs.ru> <20220628001752.17586-1-ivan.malov@oktetlabs.ru>
-In-Reply-To: <20220628001752.17586-1-ivan.malov@oktetlabs.ru>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Tue, 28 Jun 2022 09:47:11 +0200
-Message-ID: <CAJ8uoz2Gcs+oYorgHofz=0ZOznNoKS8hdyOK=rWwhRtYXO=RHw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] xsk: clear page contiguity bit when unmapping pool
-To:     Ivan Malov <ivan.malov@oktetlabs.ru>
-Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Network Development <netdev@vger.kernel.org>,
-        Andrew Rybchenko <andrew.rybchenko@oktetlabs.ru>,
-        bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Maxim Mikityanskiy <maximmi@mellanox.com>
+References: <20220520195028.1347426-1-gpiccoli@igalia.com> <d3dd4f45-1d50-2164-447b-d4f27ac6e133@igalia.com>
+In-Reply-To: <d3dd4f45-1d50-2164-447b-d4f27ac6e133@igalia.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 28 Jun 2022 09:49:56 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFDqhvE3R4ckD32ftkb66CjHZcGPCF0OsX6bev2MmnorA@mail.gmail.com>
+Message-ID: <CAMj1kXFDqhvE3R4ckD32ftkb66CjHZcGPCF0OsX6bev2MmnorA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] UEFI panic notification mechanism
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-dev@igalia.com, kernel@gpiccoli.net,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Kees Cook <keescook@chromium.org>,
+        Matt Fleming <matt@codeblueprint.co.uk>,
+        Matthew Garrett <matthew.garrett@nebula.com>,
+        Tony Luck <tony.luck@intel.com>,
+        linux-efi <linux-efi@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 2:18 AM Ivan Malov <ivan.malov@oktetlabs.ru> wrote:
+On Thu, 2 Jun 2022 at 19:40, Guilherme G. Piccoli <gpiccoli@igalia.com> wrote:
 >
-> When a XSK pool gets mapped, xp_check_dma_contiguity() adds bit 0x1
-> to pages' DMA addresses that go in ascending order and at 4K stride.
-> The problem is that the bit does not get cleared before doing unmap.
-> As a result, a lot of warnings from iommu_dma_unmap_page() are seen
-> suggesting mapping lookup failures at drivers/iommu/dma-iommu.c:848.
+> Hi Ard, apologies for annoying!
+>
 
-Thanks Ivan for spotting this. Please add if this patch is for bpf or
-net in your subject line. E.g., [PATCH net].
+No worries, just very busy :-)
 
-Also, I cannot find a warning at drivers/iommu/dma-iommu.c:848. For
-net and bpf I have a WARN() at line 679 in __iommu_dma_unmap(). Maybe
-it would be better to just refer to __iommu_dma_unmap() and the
-warning in that function. Line numbers tend to change.
+> Just a friendly ping asking if you have any opinions about these patches.
+>
 
-> Fixes: 2b43470add8c ("xsk: Introduce AF_XDP buffer allocation API")
-> Signed-off-by: Ivan Malov <ivan.malov@oktetlabs.ru>
-> ---
->  v1 -> v2: minor adjustments to dispose of the "Fixes:" tag warning
->
->  net/xdp/xsk_buff_pool.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-> index 87bdd71c7bb6..f70112176b7c 100644
-> --- a/net/xdp/xsk_buff_pool.c
-> +++ b/net/xdp/xsk_buff_pool.c
-> @@ -332,6 +332,7 @@ static void __xp_dma_unmap(struct xsk_dma_map *dma_map, unsigned long attrs)
->         for (i = 0; i < dma_map->dma_pages_cnt; i++) {
->                 dma = &dma_map->dma_pages[i];
->                 if (*dma) {
-> +                       *dma &= ~XSK_NEXT_PG_CONTIG_MASK;
->                         dma_unmap_page_attrs(dma_map->dev, *dma, PAGE_SIZE,
->                                              DMA_BIDIRECTIONAL, attrs);
->                         *dma = 0;
-> --
-> 2.30.2
->
+Honestly, I'm not sure I see the value of this. You want to 'notify
+the UEFI firmware' but the firmware doesn't really care about these
+variables, only your bespoke tooling does. EFI pstore captures far
+more data, so if you just wipe /sys/fs/pstore after each clean boot,
+you already have all the data you need, no?
+
+Also, I'm in the process of removing the public efivar_entry_xxx() API
+- please look at the efi/next tree for a peek. This is related to your
+point 3), i.e., the efivar layer is a disaster in terms of consistency
+between different observers of the EFI variable store. Switching to
+efivar_set_variable() [the new API] should fix that.

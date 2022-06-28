@@ -2,164 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC69455CFE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6D255C7EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344266AbiF1JaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53756 "EHLO
+        id S1344280AbiF1JcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiF1JaA (ORCPT
+        with ESMTP id S229747AbiF1JcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:30:00 -0400
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B0F1D327;
-        Tue, 28 Jun 2022 02:29:58 -0700 (PDT)
-Received: by mail-qv1-f45.google.com with SMTP id q4so19106283qvq.8;
-        Tue, 28 Jun 2022 02:29:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8nl+YSQWi5co5//msD4X8kc4HSNtS5aQKM6ed50ckE0=;
-        b=EG9UGNgZEr8oLHOzQnIYIHMJL42S4cenMv1+1hLf82UhcMK8VCuTiyiVQI/vX/N8vt
-         WQhaHhiUEQiO97KojsxnrmiGaZRMDks22+/9fM4DIDyKd6trwNmZP4ldWYpqVxMLrJlC
-         lkvkjPX343SqX68qcV7v6MtrJtZErh0tEu/QoYEaTUpSTc3LuiXeIYAU46djC/kzHhip
-         cGoIdkFKPIh5r8A7g3iGjzWC9XBLhHRAfs1zO+f3t6GJV7gAa6vxXTYJ4M1vTCA+PXQ6
-         OjEPQE4dj4ulr0NcIihy+JY5Ug1VP+KwyyMJ4P+Ou//kXbak+lHnAqdSee2/xr7y57n7
-         xDXg==
-X-Gm-Message-State: AJIora8yXaa+ldWibxFWZYvIvj8cc7gko8AP2UZQkwE0CBst+rJ+Lfju
-        b4XGu9pMBcftQNsBULbV5ixeQaKXQS8p4w==
-X-Google-Smtp-Source: AGRyM1t17bZZUtAr7/2L7IAyQRDQwiw/bhYfIO4KAWnapufGYvpqrK86QPT6elN37HIgnOU3qXRdQw==
-X-Received: by 2002:ac8:5bca:0:b0:31b:eb73:7ec with SMTP id b10-20020ac85bca000000b0031beb7307ecmr3120412qtb.272.1656408597806;
-        Tue, 28 Jun 2022 02:29:57 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id b20-20020ae9eb14000000b006aee8580a37sm10349035qkg.10.2022.06.28.02.29.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 02:29:57 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-317741c86fdso110575987b3.2;
-        Tue, 28 Jun 2022 02:29:57 -0700 (PDT)
-X-Received: by 2002:a81:3a81:0:b0:317:7dcf:81d4 with SMTP id
- h123-20020a813a81000000b003177dcf81d4mr19723908ywa.47.1656408597026; Tue, 28
- Jun 2022 02:29:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220615101227.13463-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220615101227.13463-1-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 28 Jun 2022 11:29:44 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVX9_qO2Ydi=_57NC2fFRy=YAzuSV7xH=huAamXKOKwCA@mail.gmail.com>
-Message-ID: <CAMuHMdVX9_qO2Ydi=_57NC2fFRy=YAzuSV7xH=huAamXKOKwCA@mail.gmail.com>
-Subject: Re: [PATCH] clk: renesas: rcar-gen4: implement SDSRC properly
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Tue, 28 Jun 2022 05:32:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953DC1EAC1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:31:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58485B81D35
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:31:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15567C3411D;
+        Tue, 28 Jun 2022 09:31:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656408717;
+        bh=vd7MwdbmIjU8f/cbr5SMG+Q8UGlRYGSlJ51RV5CWtCU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tmnbHMMplWuux8JNaKMiJifbjulg1W/UuZVxNHWVUXgWyV/YT7P/YF840BGwcESJI
+         jN2F9mEK7yN+4GgbMWZmfQYndCuTWx2Tffb9BEyiFUvdWq7Q5kK4YyxfUBW9CIV7SA
+         ui85gb4dhokWMszhivfLr9Cpd37ZNHx7pn9oumQcvuREgQXAPcVsgn2UTNgDGlvK4H
+         NJZ9cLp1Zx1QfdUKaFwY2KRfhSrlznR31CwLNN9aWELABiWwV5Is4P75IgHauvz0m3
+         EW3ndCdyLjMvpTU8p7r3CYCLSACgW9UlIlW19+L4jMLGMecesYYxRMucJlyPQXG7bB
+         PUJB8Afg8Pj9w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o67Za-003j7c-OP;
+        Tue, 28 Jun 2022 10:31:54 +0100
+Date:   Tue, 28 Jun 2022 10:31:54 +0100
+Message-ID: <874k052kxh.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc:     <paulmck@kernel.org>, <frederic@kernel.org>,
+        <josh@joshtriplett.org>, <rostedt@goodmis.org>,
+        <mathieu.desnoyers@efficios.com>, <jiangshanlai@gmail.com>,
+        <joel@joelfernandes.org>, <linux-kernel@vger.kernel.org>,
+        <zhangfei.gao@foxmail.com>, <boqun.feng@gmail.com>,
+        <urezki@gmail.com>, <shameerali.kolothum.thodi@huawei.com>,
+        <pbonzini@redhat.com>, <mtosatti@redhat.com>,
+        <eric.auger@redhat.com>, <chenxiang66@hisilicon.com>
+Subject: Re: [PATCH] srcu: Reduce blocking agressiveness of expedited grace periods further
+In-Reply-To: <dc24db89-05ae-c113-6728-de797e041123@quicinc.com>
+References: <20220627123706.20187-1-quic_neeraju@quicinc.com>
+        <875ykl2mb2.wl-maz@kernel.org>
+        <dc24db89-05ae-c113-6728-de797e041123@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: quic_neeraju@quicinc.com, paulmck@kernel.org, frederic@kernel.org, josh@joshtriplett.org, rostedt@goodmis.org, mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com, joel@joelfernandes.org, linux-kernel@vger.kernel.org, zhangfei.gao@foxmail.com, boqun.feng@gmail.com, urezki@gmail.com, shameerali.kolothum.thodi@huawei.com, pbonzini@redhat.com, mtosatti@redhat.com, eric.auger@redhat.com, chenxiang66@hisilicon.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
+On Tue, 28 Jun 2022 10:17:24 +0100,
+Neeraj Upadhyay <quic_neeraju@quicinc.com> wrote:
+>=20
+>=20
+>=20
+> On 6/28/2022 2:32 PM, Marc Zyngier wrote:
+> > On Mon, 27 Jun 2022 13:37:06 +0100,
+> > Neeraj Upadhyay <quic_neeraju@quicinc.com> wrote:
+> >>=20
+> >> Commit 640a7d37c3f4 ("srcu: Block less aggressively for expedited
+> >> grace periods") highlights a problem where aggressively blocking
+> >> SRCU expedited grace periods, as was introduced in commit
+> >> 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
+> >> from consuming CPU"), introduces ~2 minutes delay to the overall
+> >> ~3.5 minutes boot time, when starting VMs with "-bios QEMU_EFI.fd"
+> >> cmdline on qemu, which results in very high rate of memslots
+> >> add/remove, which causes > ~6000 synchronize_srcu() calls for
+> >> kvm->srcu SRCU instance.
+> >>=20
+> >> Below table captures the experiments done by Zhangfei Gao, Shameer,
+> >> to measure the boottime impact with various values of non-sleeping
+> >> per phase counts, with HZ_250 and preemption enabled:
+> >>=20
+> >> +=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80+
+> >> | SRCU_MAX_NODELAY_PHASE   | Boot time (s)  |
+> >> +=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80+
+> >> | 100                      | 30.053         |
+> >> | 150                      | 25.151         |
+> >> | 200                      | 20.704         |
+> >> | 250                      | 15.748         |
+> >> | 500                      | 11.401         |
+> >> | 1000                     | 11.443         |
+> >> | 10000                    | 11.258         |
+> >> | 1000000                  | 11.154         |
+> >> +=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80+
+> >>=20
+> >> Analysis on the experiment results showed improved boot time
+> >> with non blocking delays close to one jiffy duration. This
+> >> was also seen when number of per-phase iterations were scaled
+> >> to one jiffy.
+> >>=20
+> >> So, this change scales per-grace-period phase number of non-sleeping
+> >> polls, soiuch that, non-sleeping polls are done for one jiffy. In addi=
+tion
+> >> to this, srcu_get_delay() call in srcu_gp_end(), which is used to calc=
+ulate
+> >> the delay used for scheduling callbacks, is replaced with the check for
+> >> expedited grace period. This is done, to schedule cbs for completed ex=
+pedited
+> >> grace periods immediately, which results in improved boot time seen in
+> >> experiments.
+> >>=20
+> >> In addition to the changes to default per phase delays, this change
+> >> adds 3 new kernel parameters - srcutree.srcu_max_nodelay,
+> >> srcutree.srcu_max_nodelay_phase, srcutree.srcu_retry_check_delay.
+> >> This allows users to configure the srcu grace period scanning delays,
+> >> depending on their system configuration requirements.
+> >>=20
+> >> Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> >=20
+> > I've given this a go on one of my test platforms (the one I noticed
+> > the issue on the first place), and found that the initial part of the
+> > EFI boot under KVM (pointlessly wiping the emulated flash) went down
+> > to 1m7s from 3m50s (HZ=3D250).
+> >=20
+> > Clearly a massive improvement, but still a far cry from the original
+> > ~40s (yes, this box is utter crap -- which is why I use it).
+>=20
+> Do you see any improvement by using "srcutree.srcu_max_nodelay=3D1000"
+> bootarg, on top of this patch?
 
-On Wed, Jun 15, 2022 at 12:12 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> Depending on the divider setting, SDSRC can have a different parent.
-> Implement this when reading the divider, to get a correct clock tree.
-> Setting the divider is left to the bootloader for now.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Yup, this brings it back to 43s on a quick test run, which is close
+enough to what I had before.
 
-Thanks for your patch!
+How does a random user come up with such a value though?
 
-> Tested on my Spider board (r8a779f0). Only build tested for r8a779g0 but
-> the docs for the registers are the same.
+Thanks,
 
-While the SDSRCSEL bits are the same, the register at offset 0x8a4 is
-called SD0CKCR1 on R-Car S4-8, and CKSRCSELCR on R-Car V4H.
-I guess that is why you removed the definition of SD0CKCR1, and stored
-the register offset in DEF_GEN4_SDSRC(), despite both being the same?
+	M.
 
-> --- a/drivers/clk/renesas/r8a779f0-cpg-mssr.c
-> +++ b/drivers/clk/renesas/r8a779f0-cpg-mssr.c
-> @@ -71,7 +71,7 @@ static const struct cpg_core_clk r8a779f0_core_clks[] __initconst = {
->         DEF_FIXED(".pll6_div2", CLK_PLL6_DIV2,  CLK_PLL6,       2, 1),
->         DEF_FIXED(".s0",        CLK_S0,         CLK_PLL1_DIV2,  2, 1),
->
-> -       DEF_BASE(".sdsrc",      CLK_SDSRC,      CLK_TYPE_GEN4_SDSRC, CLK_PLL5),
-> +       DEF_GEN4_SDSRC(".sdsrc", CLK_SDSRC,     CLK_PLL5_DIV2,  CLK_PLL5, 0x08a4),
->         DEF_RATE(".oco",        CLK_OCO,        32768),
->
->         DEF_BASE(".rpcsrc",     CLK_RPCSRC,     CLK_TYPE_GEN4_RPCSRC, CLK_PLL5),
-> diff --git a/drivers/clk/renesas/r8a779g0-cpg-mssr.c b/drivers/clk/renesas/r8a779g0-cpg-mssr.c
-> index 3fc4233b1ead..c8cd32cf4606 100644
-> --- a/drivers/clk/renesas/r8a779g0-cpg-mssr.c
-> +++ b/drivers/clk/renesas/r8a779g0-cpg-mssr.c
-> @@ -86,7 +86,7 @@ static const struct cpg_core_clk r8a779g0_core_clks[] __initconst = {
->         DEF_FIXED(".s0_hsc",    CLK_S0_HSC,     CLK_PLL1_DIV2,  2, 1),
->         DEF_FIXED(".sv_vip",    CLK_SV_VIP,     CLK_PLL1,       5, 1),
->         DEF_FIXED(".sv_ir",     CLK_SV_IR,      CLK_PLL1,       5, 1),
-> -       DEF_BASE(".sdsrc",      CLK_SDSRC,      CLK_TYPE_GEN4_SDSRC, CLK_PLL5),
-> +       DEF_GEN4_SDSRC(".sdsrc", CLK_SDSRC,     CLK_PLL5_DIV2,  CLK_PLL5, 0x08a4),
->         DEF_RATE(".oco",        CLK_OCO,        32768),
->
->         DEF_BASE(".rpcsrc",     CLK_RPCSRC,             CLK_TYPE_GEN4_RPCSRC, CLK_PLL5),
-> diff --git a/drivers/clk/renesas/rcar-gen4-cpg.c b/drivers/clk/renesas/rcar-gen4-cpg.c
-> index c7ed43d6aa67..c6662ec10292 100644
-> --- a/drivers/clk/renesas/rcar-gen4-cpg.c
-> +++ b/drivers/clk/renesas/rcar-gen4-cpg.c
-> @@ -240,7 +240,15 @@ struct clk * __init rcar_gen4_cpg_clk_register(struct device *dev,
->                                           base, core->div, core->offset);
->
->         case CLK_TYPE_GEN4_SDSRC:
-> -               div = ((readl(base + SD0CKCR1) >> 29) & 0x03) + 4;
-> +               value = (readl(base + core->offset) >> 29) & 3;
-> +               if (value) {
-> +                       div = value + 4;
-> +               } else {
-> +                       parent = clks[core->parent >> 16];
-> +                       if (IS_ERR(parent))
-> +                               return ERR_CAST(parent);
-> +                       div = 2;
-> +               }
-
-So this gives the exact same divider of PLL5 before.
-
-The clock diagram indeed shows different paths for value 0
-(PLL5 -> 1/2 -> 1/2) and values 1 and 2 (PLL5 -> {1/5 or 1/6}).
-But the textual description for SDSRC says "The SDSRC divider divides
-PLL5 output clock", matching the original code.
-
-Do we have to complicate the code? ;-)
-I guess the clock diagram was based on the diagram for R-Car H3
-(which has two daisy-chained fixed 1/2 dividers), with the new 1/5
-and 1/6 dividers added.
-
-> --- a/drivers/clk/renesas/rcar-gen4-cpg.h
-> +++ b/drivers/clk/renesas/rcar-gen4-cpg.h
-> @@ -67,7 +71,6 @@ struct rcar_gen4_cpg_pll_config {
->  };
->
->  #define CPG_RPCCKCR    0x874
-> -#define SD0CKCR1       0x8a4
->
->  struct clk *rcar_gen4_cpg_clk_register(struct device *dev,
->         const struct cpg_core_clk *core, const struct cpg_mssr_info *info,
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--=20
+Without deviation from the norm, progress is not possible.

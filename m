@@ -2,110 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406E855F1CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 01:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6EB055F1CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 01:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbiF1XJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 19:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
+        id S231975AbiF1XKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 19:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiF1XJZ (ORCPT
+        with ESMTP id S231949AbiF1XJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 19:09:25 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E716620F69
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 16:09:24 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id n185so8240479wmn.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 16:09:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=8L3u9yLimYhqEYiPckuKAsVAuSvOnpygme4DEwcN/0I=;
-        b=bG/G7jA9Y2U3qi6yyck8cysBllHFyXYKlkCWnhclAWbfPdEuOFgCGGDqxH/WgMWVaT
-         3mGKqcKFEClHKqfu6vKxyqXWoqLzVcUJHzm46IJHtvbDOw2gVLQvQA/zJYocdPOzJQLB
-         oP1FrB1pRRwFsVCW319cBYCD6QwwDjE/nPhmsQ68YCFau2Rm4SIH6c2FxB0Bg9ZhBOWe
-         1Mb7tAiz7grGF5/yb+6ExitRzqf5ETriZ7bwXgBfHBFOv8+TQvKMZNJg6DZGTXwhE8SH
-         toz7vA+WIp8ZWAsDIhdiXKjjNXvEk/fwIoKVlgXclt1X1CwIv9P5ckuVvp2Id1dEMXAs
-         E1Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=8L3u9yLimYhqEYiPckuKAsVAuSvOnpygme4DEwcN/0I=;
-        b=33l8iukUzLTJKBOb0HpxO4IEeRRndr6pbv8uqOnVKCoRODb6sU7STEo2pzrGk2Sj8h
-         J9xgOPnaBSXXxN4DY3XFO7/S9V9S24C40yZoqN9hEhIVW9RTcK9UJ7uqh4WDCCEnNuTm
-         vz1HeIbhUg8RvefHQ2WqkVcAvKSlMjrvs7wEn8xs/62gtEBvYIYfAWk4/73JMozN5FA4
-         uG8qEuuVDEWOOsQkmEbxJsyZqM6OlOV7bmKcAAWeXn2CzPgvgwOu0gGaCxmLh2U5z9jv
-         VUrf6/UgB77qPAA/yTAIt4isdNRgKzNnN3XDJ9eNnlKJaiAR2ruwhZ2mNX+Yq5lzfT2Q
-         PBHw==
-X-Gm-Message-State: AJIora+adk1rQA4i9dfkEXFMyZcRsRc8Fir76JqU0u54R4RmzlJ7VEg8
-        IfwImvcSzqe9tcyu9vYAlPBbHBaWl4XXmonA3zA=
-X-Google-Smtp-Source: AGRyM1u0Qjvj6JUKUYk1Hbnsfzfu5MSBUpQPgt3zMbfPudhmluUkcEGGpiLH1N/B5nqAA7Bgs2mJ14mZhDP1VFDjCLg=
-X-Received: by 2002:a1c:6a04:0:b0:3a0:4ddc:9a4b with SMTP id
- f4-20020a1c6a04000000b003a04ddc9a4bmr279169wmc.78.1656457763183; Tue, 28 Jun
- 2022 16:09:23 -0700 (PDT)
+        Tue, 28 Jun 2022 19:09:58 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F432CC89;
+        Tue, 28 Jun 2022 16:09:57 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0E8151FD8B;
+        Tue, 28 Jun 2022 23:09:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1656457796; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z3EDuY+Ya/PyFfjJ28NCPihRwor6RW8Z8zdG/gLgK3Q=;
+        b=Sv4Z/Ucqnzxl9V2xY3v4TjVTDL8wkk7iSPL5afSMenPwWpDR7POZyGarhs2fXPNhsQeqpm
+        zDkbN8MGW5V5Di8+n+a064ETw+AytqpYlziiNOz7eSFn2y0AqN28Hw5eP26y0fn6JkFSyj
+        jJzG0KCLtjt+aG8F/C/TZIWrVaLMUAw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1656457796;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z3EDuY+Ya/PyFfjJ28NCPihRwor6RW8Z8zdG/gLgK3Q=;
+        b=GO9X1yOdSv5OwL9cdYiokZIrPweeF5p+CR/f+Pb49OnwqA0q5O/dAcmfxYsoJCnkjt9YdZ
+        WHVQvfSTvSDl0YDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CC530139E9;
+        Tue, 28 Jun 2022 23:09:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id PYCQIUGKu2KUJAAAMHmgww
+        (envelope-from <neilb@suse.de>); Tue, 28 Jun 2022 23:09:53 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Reply-To: mayumisakimoto7@gmail.com
-Sender: richardbirdwell2014@gmail.com
-Received: by 2002:a05:600c:4f94:0:0:0:0 with HTTP; Tue, 28 Jun 2022 16:09:22
- -0700 (PDT)
-From:   mayumi sakimoto <mayumisakimoto07@gmail.com>
-Date:   Wed, 29 Jun 2022 02:09:22 +0300
-X-Google-Sender-Auth: r3hcUEa00cVTCr_aoZvVSl1oImo
-Message-ID: <CABHb6oZZDTx_Fg9cWztHqoH2F+Gz60M4F2OKC6EFfvSSF4cjOg@mail.gmail.com>
-Subject: Urgent Reply
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Chuck Lever III" <chuck.lever@oracle.com>
+Cc:     "Al Viro" <viro@zeniv.linux.org.uk>,
+        "Daire Byrne" <daire@dneg.com>,
+        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
+        "Linux NFS Mailing List" <linux-nfs@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "LKML" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 08/12] nfsd: allow parallel creates from nfsd
+In-reply-to: <CF45DA56-C7C7-434C-A985-A0FE08703F8D@oracle.com>
+References: <165516173293.21248.14587048046993234326.stgit@noble.brown>,
+ <165516230200.21248.15108802355330895562.stgit@noble.brown>,
+ <CF45DA56-C7C7-434C-A985-A0FE08703F8D@oracle.com>
+Date:   Wed, 29 Jun 2022 09:09:50 +1000
+Message-id: <165645779028.15378.2009203210771986783@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:343 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mayumisakimoto7[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [richardbirdwell2014[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [richardbirdwell2014[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.6 URG_BIZ Contains urgent matter
-        *  2.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
+On Wed, 29 Jun 2022, Chuck Lever III wrote:
+>=20
+> > On Jun 13, 2022, at 7:18 PM, NeilBrown <neilb@suse.de> wrote:
+> > diff --git a/fs/nfsd/nfsfh.c b/fs/nfsd/nfsfh.c
+> > index c29baa03dfaf..a50db688c60d 100644
+> > --- a/fs/nfsd/nfsfh.c
+> > +++ b/fs/nfsd/nfsfh.c
+> > @@ -616,7 +616,7 @@ fh_update(struct svc_fh *fhp)
+> >  * @fhp: file handle to be updated
+> >  *
+> >  */
+> > -void fh_fill_pre_attrs(struct svc_fh *fhp)
+> > +void fh_fill_pre_attrs(struct svc_fh *fhp, bool atomic)
+>=20
+> Hi Neil, just noticed this:
+>=20
+>   CC [M]  fs/nfsd/nfsfh.o
+>   CHECK   /home/cel/src/linux/linux/fs/nfsd/nfsfh.c
+> /home/cel/src/linux/linux/fs/nfsd/nfsfh.c:621: warning: Function parameter =
+or member 'atomic' not described in 'fh_fill_pre_attrs'
 
- I hope this email finds you well, Please accept my sincere apologies if
-my email does not meet your business or personal ethics. Please I have something
-very important to discuss with you.I need to entrust you with a
-humanitarian project, Please reply to me as soon as possible.
+Thanks.  I"ll address that, and also the other issues that you raised in
+your patch-by-patch review.  Thanks for those.
 
+>=20
+> And... do you intend to repost this series with the supplemental
+> fixes applied?
 
-Kind Regards,
-mayumi sakimoto
+I've been a bit distracted this week, but my current plan is to
+reorganise the patches to put as many of the NFS and NFSD patches as
+possible before the VFS patches.  There should then just be one each for
+NFS and NFSD after the VFS changes.  I hope to post that series early
+next week.
+
+>=20
+> Should we come up with a plan to merge these during the next
+> window, or do you feel more work is needed?
+
+I think it would be reasonable to merge the preliminary NFS and NFSD
+patches in the next window.  I'd really like to hear from Al before
+pushing the rest too hard.  Probably after rc1 I'll post the remainder
+of the series and include Linus if we haven't heard from Al.  I'd be
+perfectly happy if the main content of the series landed in the
+subsequent merge window.
+
+Thanks,
+NeilBrown

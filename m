@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422FE55EDF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A75B55EDF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232233AbiF1Tnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 15:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38134 "EHLO
+        id S232482AbiF1Tnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 15:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiF1Tm7 (ORCPT
+        with ESMTP id S231698AbiF1TnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 15:42:59 -0400
+        Tue, 28 Jun 2022 15:43:25 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9743F895;
-        Tue, 28 Jun 2022 12:35:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442FD3BBFC;
+        Tue, 28 Jun 2022 12:35:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1656444901; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1656444902; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XGopMg7rrQDjhUvGbHD50XRWYmeZSip2Vhlfrfv9/RM=;
-        b=XeE2AuIr+XIVkVMs8Gpx0JQCB1N3qu6Wm83uBYXDAj0lChptVLvJPQ1kJWOEpuDuPigYH9
-        GFzCpmX6Sp7pREsl4WFwjmzSEOhaVIFd41/HX8cz4mci6R4m3jENeSr8sLxR4DSDXFHtLw
-        pdYKQTXEBgA1HqE1Xxc4a2WVjRU3nOM=
+        bh=veWSQADcvvHs7afr292zkvMDz4ajqpLReEoGQPfwNuE=;
+        b=KzxMMmbDk94vl5TAQSLOUWkw191JtSMKgM0Z7ipsRLoyR/smPoWt8fC+9j0Uan012ufu/Y
+        30pAU8MOHyWV4HNv3rLr0Q7Q1PexfKLGfpOJ5+KK39L08ass6OQtU/HxkJp0lXODI9NUqn
+        q3+DyB0FdVBU1xbjqFSuVFWZbS7qakI=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 4/8] watchdog: s3c2410_wdt: Remove #ifdef guards for PM related functions
-Date:   Tue, 28 Jun 2022 20:34:45 +0100
-Message-Id: <20220628193449.160585-5-paul@crapouillou.net>
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 5/8] watchdog: sama5d4_wdt: Remove #ifdef guards for PM related functions
+Date:   Tue, 28 Jun 2022 20:34:46 +0100
+Message-Id: <20220628193449.160585-6-paul@crapouillou.net>
 In-Reply-To: <20220628193449.160585-1-paul@crapouillou.net>
 References: <20220628193449.160585-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -50,7 +50,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the new DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros to
+Use the new LATE_SYSTEM_SLEEP_PM_OPS() and pm_sleep_ptr() macros to
 handle the .suspend/.resume callbacks.
 
 These macros allow the suspend and resume functions to be automatically
@@ -60,48 +60,47 @@ always compiled independently of any Kconfig option, and thanks to that
 bugs and regressions are easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
 Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-samsung-soc@vger.kernel.org
 ---
- drivers/watchdog/s3c2410_wdt.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/watchdog/sama5d4_wdt.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-index 6db22f2e3a4f..95919392927f 100644
---- a/drivers/watchdog/s3c2410_wdt.c
-+++ b/drivers/watchdog/s3c2410_wdt.c
-@@ -845,8 +845,6 @@ static void s3c2410wdt_shutdown(struct platform_device *dev)
- 	s3c2410wdt_stop(&wdt->wdt_device);
- }
+diff --git a/drivers/watchdog/sama5d4_wdt.c b/drivers/watchdog/sama5d4_wdt.c
+index ec20ad4e534f..aeee934ca51b 100644
+--- a/drivers/watchdog/sama5d4_wdt.c
++++ b/drivers/watchdog/sama5d4_wdt.c
+@@ -339,7 +339,6 @@ static const struct of_device_id sama5d4_wdt_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, sama5d4_wdt_of_match);
  
 -#ifdef CONFIG_PM_SLEEP
--
- static int s3c2410wdt_suspend(struct device *dev)
+ static int sama5d4_wdt_suspend_late(struct device *dev)
  {
- 	int ret;
-@@ -885,10 +883,9 @@ static int s3c2410wdt_resume(struct device *dev)
+ 	struct sama5d4_wdt *wdt = dev_get_drvdata(dev);
+@@ -366,18 +365,17 @@ static int sama5d4_wdt_resume_early(struct device *dev)
  
  	return 0;
  }
 -#endif
  
--static SIMPLE_DEV_PM_OPS(s3c2410wdt_pm_ops, s3c2410wdt_suspend,
--			s3c2410wdt_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(s3c2410wdt_pm_ops,
-+				s3c2410wdt_suspend, s3c2410wdt_resume);
+ static const struct dev_pm_ops sama5d4_wdt_pm_ops = {
+-	SET_LATE_SYSTEM_SLEEP_PM_OPS(sama5d4_wdt_suspend_late,
+-			sama5d4_wdt_resume_early)
++	LATE_SYSTEM_SLEEP_PM_OPS(sama5d4_wdt_suspend_late,
++				 sama5d4_wdt_resume_early)
+ };
  
- static struct platform_driver s3c2410wdt_driver = {
- 	.probe		= s3c2410wdt_probe,
-@@ -897,7 +894,7 @@ static struct platform_driver s3c2410wdt_driver = {
- 	.id_table	= s3c2410_wdt_ids,
+ static struct platform_driver sama5d4_wdt_driver = {
+ 	.probe		= sama5d4_wdt_probe,
  	.driver		= {
- 		.name	= "s3c2410-wdt",
--		.pm	= &s3c2410wdt_pm_ops,
-+		.pm	= pm_sleep_ptr(&s3c2410wdt_pm_ops),
- 		.of_match_table	= of_match_ptr(s3c2410_wdt_match),
- 	},
+ 		.name	= "sama5d4_wdt",
+-		.pm	= &sama5d4_wdt_pm_ops,
++		.pm	= pm_sleep_ptr(&sama5d4_wdt_pm_ops),
+ 		.of_match_table = sama5d4_wdt_of_match,
+ 	}
  };
 -- 
 2.35.1

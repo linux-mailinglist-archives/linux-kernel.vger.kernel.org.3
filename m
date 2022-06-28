@@ -2,177 +2,506 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7369B55D487
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DE855CCBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345026AbiF1Kxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 06:53:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
+        id S1343573AbiF1LAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 07:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245010AbiF1Kxq (ORCPT
+        with ESMTP id S231682AbiF1LAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:53:46 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769A425590;
-        Tue, 28 Jun 2022 03:53:45 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25S9hrox005781;
-        Tue, 28 Jun 2022 10:53:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Aeh6l4YqBLGFO2ASix/BXdnIcbkH5O76sYCmb9XaEF8=;
- b=c6KzwzdBHwOHWiv3DnChkO3j4YOOPuLsgUjLm/dd/+6Lr4ql27wWSkrwNlA4stqfPArT
- VRetT4h0HmHx/A2BCOq0+3KlaNjRrqo2kNM+hR7EGc/kMQ8i6537acLc1u5VvwusqteV
- QCKyWgPUJMzrq0uBa2UNeAjSw/aUwNCXPsECYYiTdwc/1XJRdRCl9uDuFMDRLe3JupyP
- FIN+bwWf9hMWx3OFDLNH7nvFba9d6ePCt6LWWanssE8K1MgXQz3cH19ZJSGU570EWq48
- qpz8mmYMUt43ScAWb8qNu2nyRC9JFIB5q6h2rdMsY3Si6tkehIUvAxvsOb4s+/+TkQgC dA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gyy909w3s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 10:53:44 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25S9rWs6012874;
-        Tue, 28 Jun 2022 10:53:44 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gyy909w3a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 10:53:43 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25SAqnhb031514;
-        Tue, 28 Jun 2022 10:53:42 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04fra.de.ibm.com with ESMTP id 3gwt093g5q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 10:53:41 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25SArcmP14680460
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Jun 2022 10:53:38 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9DB22AE045;
-        Tue, 28 Jun 2022 10:53:38 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ED4EDAE04D;
-        Tue, 28 Jun 2022 10:53:37 +0000 (GMT)
-Received: from [9.171.41.104] (unknown [9.171.41.104])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 28 Jun 2022 10:53:37 +0000 (GMT)
-Message-ID: <28c52d15-aa80-09a8-297c-f5ae2b798998@linux.ibm.com>
-Date:   Tue, 28 Jun 2022 12:58:06 +0200
+        Tue, 28 Jun 2022 07:00:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF5C1F63E
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:00:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB162B81DBA
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 11:00:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B3C7C3411D;
+        Tue, 28 Jun 2022 11:00:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656414003;
+        bh=9d4xyAa6YD4y5IMEAUFSYY776V/1c1wZm9maJCdy3d0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=P/BFOrRjJ1acWzudoyeb58nh1hxyKh3TQ1tN3dfRuqaGiahqDVNjs31P9WWc3EBgs
+         7ZaVjls65cdSq3z5uLP/jUy4kAy31fSi0h369GhBKhKh7/ucd2S8163IO6gw4Rc8Gu
+         nE3ksYtjfnm3GF8WJkEgXIyfSGeIkeOBKs+tOoK68rDGeBFmiQBgv2l4aPjLmuOneH
+         6E1DCK2EanbqWUrigzh7eKBTFVy7+frL7SATZq0u7kjcpy0zfknKxx6Vzb2+fvqxKX
+         HDSc0PJFr9AMF0oy/xwu0dzB6+geBjBZ7EXEKZ20MmDGWZ3X4LUCqXSeXztM5soEHb
+         CIkYI+eliNTLQ==
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org
+Subject: [PATCH v2 00/12] Adding Gaudi2 ASIC support to habanalabs driver
+Date:   Tue, 28 Jun 2022 13:59:46 +0300
+Message-Id: <20220628105958.1254875-1-ogabbay@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v10 2/3] KVM: s390: guest support for topology function
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, wintera@linux.ibm.com,
-        seiden@linux.ibm.com, nrb@linux.ibm.com
-References: <20220620125437.37122-1-pmorel@linux.ibm.com>
- <20220620125437.37122-3-pmorel@linux.ibm.com>
- <207a01aa-d92c-4a17-7b2f-aed59da4ce09@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <207a01aa-d92c-4a17-7b2f-aed59da4ce09@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4oicraf6BxcnkywgBa7jo-qgBB94X-kd
-X-Proofpoint-ORIG-GUID: 4frg73M86r-rr_xlpvsEnw8EX7f4TdJb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-28_05,2022-06-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- phishscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
- malwarescore=0 spamscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206280044
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I'm sending the v2 of this patch-set after fixing some comments from Greg.
 
+Changes to each patch are detailed in the relevant patches.
 
-On 6/28/22 10:59, Janis Schoetterl-Glausch wrote:
-> On 6/20/22 14:54, Pierre Morel wrote:
->> We report a topology change to the guest for any CPU hotplug.
->>
->> The reporting to the guest is done using the Multiprocessor
->> Topology-Change-Report (MTCR) bit of the utility entry in the guest's
->> SCA which will be cleared during the interpretation of PTF.
->>
->> On every vCPU creation we set the MCTR bit to let the guest know the
->> next time he uses the PTF with command 2 instruction that the
->> topology changed and that he should use the STSI(15.1.x) instruction
->> to get the topology details.
->>
->> STSI(15.1.x) gives information on the CPU configuration topology.
->> Let's accept the interception of STSI with the function code 15 and
->> let the userland part of the hypervisor handle it when userland
->> support the CPU Topology facility.
->>
->> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
->> ---
->>   arch/s390/include/asm/kvm_host.h | 11 ++++++++---
->>   arch/s390/kvm/kvm-s390.c         | 27 ++++++++++++++++++++++++++-
->>   arch/s390/kvm/priv.c             | 15 +++++++++++----
->>   arch/s390/kvm/vsie.c             |  3 +++
->>   4 files changed, 48 insertions(+), 8 deletions(-)
->>
-> [...]
-> 
->> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->> index 8fcb56141689..95b96019ca8e 100644
->> --- a/arch/s390/kvm/kvm-s390.c
->> +++ b/arch/s390/kvm/kvm-s390.c
->> @@ -1691,6 +1691,25 @@ static int kvm_s390_get_cpu_model(struct kvm *kvm, struct kvm_device_attr *attr)
->>   	return ret;
->>   }
->>
->> +/**
->> + * kvm_s390_sca_set_mtcr
-> 
-> I wonder if there is a better name, kvm_s390_report_topology_change maybe?
-> 
->> + * @kvm: guest KVM description
->> + *
->> + * Is only relevant if the topology facility is present,
->> + * the caller should check KVM facility 11
->> + *
->> + * Updates the Multiprocessor Topology-Change-Report to signal
->> + * the guest with a topology change.
->> + */
->> +static void kvm_s390_sca_set_mtcr(struct kvm *kvm)
->> +{
-> 
-> Do we need a sca_lock read_section here? If we don't why not?
-> Did not see one up the stack, but I might have overlooked something.
+Patch 6 was added to remove obsolete elements from the device structure.
 
-Yes we do.
-As I said about your well justified comment in a previous mail, 
-ipte_lock is not the right thing to use here and I will replace with an 
-inter locked update.
+Patch 11 in the 1st patch-set, the TPM patch, was removed due to some points
+that Greg raised and I need to investigate and come back with answers.
 
-> 
->> +	struct bsca_block *sca = kvm->arch.sca; /* SCA version doesn't matter */
->> +
->> +	ipte_lock(kvm);
->> +	sca->utility |= SCA_UTILITY_MTCR;
->> +	ipte_unlock(kvm);
->> +}
->> +
-> 
-> [...]
-> 
+Original cover-letter:
+
+This patch-set adds support for initializing and sending workloads to
+habanalabs next-gen deep-learning training accelerator ASIC, called Gaudi2.
+
+The Gaudi2 ASIC is based on the same architecture as the Gaudi ASIC and
+therefore, the driver's common code is applicable to it with only a few
+changes. Almost all of the code included in this patch-set is the
+ASIC-depedent code which is different per ASIC.
+
+The patches details are as follows:
+
+- Patch 1 adds the necessary registers header files. I took great care of
+  reducing this amount to minimum.
+
+- Patch 2 adds the Gaudi2 definitions to the uapi file.
+
+- Patch 3 adds the bulk of the Gaudi2 asic-specific code.
+
+- Patches 4-6 modify the existing code to initialize the new asic-specific
+  functions and properties and to remove unused elements.
+
+- Patch 7 adds a generic security module that will be used by Gaudi2, and
+  future ASICs, to initialize the security mechanisms of the device in a
+  common way.
+
+- Patches 8-11 add various features of Gaudi2 in asic-specific and common code.
+
+- Patch 12 enables the Gaudi2 code in the driver.
+
+More details on Gaudi2 Hardware can be found here:
+https://habana.ai/wp-content/uploads/pdf/2022/gaudi2-whitepaper.pdf
+
+We have already uploaded the updated LLVM compiler for our TPC engine to:
+https://github.com/HabanaAI/tpc_llvm/tree/v1.1.0
+
+And we are currently working on updating the open-source SynapseAI Core to
+submit workloads to Gaudi2 via the driver.
+
+Thanks,
+Oded
+
+Benjamin Dotan (1):
+  habanalabs/gaudi2: add gaudi2 profiler module
+
+Moti Haimovski (1):
+  habanalabs: add gaudi2 MMU support
+
+Oded Gabbay (8):
+  habanalabs/gaudi2: add asic registers header files
+  uapi: habanalabs: add gaudi2 defines
+  habanalabs: add gaudi2 asic-specific code
+  habanalabs: add unsupported functions
+  habanalabs: initialize new asic properties
+  habanalabs: remove obsolete device variables used for testing
+  habanalabs: add gaudi2 wait-for-CS support
+  habanalabs: enable gaudi2 code in driver
+
+Ofir Bitton (2):
+  habanalabs: add generic security module
+  habanalabs/gaudi2: add gaudi2 security module
+
+ .../ABI/testing/debugfs-driver-habanalabs     |    11 +-
+ drivers/misc/habanalabs/Makefile              |     3 +
+ drivers/misc/habanalabs/common/Makefile       |     3 +-
+ .../habanalabs/common/command_submission.c    |   123 +-
+ drivers/misc/habanalabs/common/context.c      |     3 +
+ drivers/misc/habanalabs/common/debugfs.c      |   120 +-
+ drivers/misc/habanalabs/common/decoder.c      |   133 +
+ drivers/misc/habanalabs/common/device.c       |    69 +-
+ drivers/misc/habanalabs/common/firmware_if.c  |    26 +
+ drivers/misc/habanalabs/common/habanalabs.h   |   446 +-
+ .../misc/habanalabs/common/habanalabs_drv.c   |    69 +-
+ .../misc/habanalabs/common/habanalabs_ioctl.c |    25 +-
+ drivers/misc/habanalabs/common/hw_queue.c     |    10 +
+ drivers/misc/habanalabs/common/irq.c          |   139 +-
+ drivers/misc/habanalabs/common/memory.c       |    21 +-
+ drivers/misc/habanalabs/common/mmu/Makefile   |     3 +-
+ drivers/misc/habanalabs/common/mmu/mmu.c      |   496 +-
+ .../misc/habanalabs/common/mmu/mmu_v2_hr.c    |   399 +
+ drivers/misc/habanalabs/common/pci/pci.c      |    38 +-
+ drivers/misc/habanalabs/common/security.c     |   600 +
+ drivers/misc/habanalabs/common/sysfs.c        |     6 +
+ drivers/misc/habanalabs/gaudi/gaudi.c         |   172 +-
+ drivers/misc/habanalabs/gaudi2/Makefile       |     4 +
+ drivers/misc/habanalabs/gaudi2/gaudi2.c       |  9775 ++++
+ drivers/misc/habanalabs/gaudi2/gaudi2P.h      |   536 +
+ .../misc/habanalabs/gaudi2/gaudi2_coresight.c |  2722 +
+ .../habanalabs/gaudi2/gaudi2_coresight_regs.h |  1063 +
+ drivers/misc/habanalabs/gaudi2/gaudi2_masks.h |   135 +
+ .../misc/habanalabs/gaudi2/gaudi2_security.c  |  3849 ++
+ drivers/misc/habanalabs/goya/goya.c           |    26 +-
+ .../misc/habanalabs/include/common/cpucp_if.h |   294 +-
+ .../habanalabs/include/common/hl_boot_if.h    |     7 +
+ .../gaudi2/arc/gaudi2_arc_common_packets.h    |   213 +
+ .../asic_reg/arc_farm_arc0_acp_eng_regs.h     |   567 +
+ .../gaudi2/asic_reg/arc_farm_arc0_aux_masks.h |   819 +
+ .../gaudi2/asic_reg/arc_farm_arc0_aux_regs.h  |   591 +
+ .../arc_farm_arc0_dup_eng_axuser_regs.h       |    61 +
+ .../asic_reg/arc_farm_arc0_dup_eng_regs.h     |   575 +
+ .../asic_reg/arc_farm_kdma_ctx_axuser_masks.h |   135 +
+ .../asic_reg/arc_farm_kdma_ctx_axuser_regs.h  |    61 +
+ .../gaudi2/asic_reg/arc_farm_kdma_ctx_masks.h |   221 +
+ .../gaudi2/asic_reg/arc_farm_kdma_ctx_regs.h  |    95 +
+ .../asic_reg/arc_farm_kdma_kdma_cgm_regs.h    |    29 +
+ .../gaudi2/asic_reg/arc_farm_kdma_masks.h     |   415 +
+ .../gaudi2/asic_reg/arc_farm_kdma_regs.h      |   157 +
+ .../include/gaudi2/asic_reg/cpu_if_regs.h     |   777 +
+ .../gaudi2/asic_reg/dcore0_dec0_cmd_masks.h   |   229 +
+ .../gaudi2/asic_reg/dcore0_dec0_cmd_regs.h    |    85 +
+ .../dcore0_edma0_core_ctx_axuser_regs.h       |    61 +
+ .../asic_reg/dcore0_edma0_core_ctx_regs.h     |    95 +
+ .../gaudi2/asic_reg/dcore0_edma0_core_masks.h |   415 +
+ .../gaudi2/asic_reg/dcore0_edma0_core_regs.h  |   157 +
+ .../asic_reg/dcore0_edma0_qm_arc_aux_regs.h   |   591 +
+ .../dcore0_edma0_qm_axuser_nonsecured_regs.h  |    61 +
+ .../asic_reg/dcore0_edma0_qm_cgm_regs.h       |    29 +
+ .../gaudi2/asic_reg/dcore0_edma0_qm_masks.h   |  1165 +
+ .../gaudi2/asic_reg/dcore0_edma0_qm_regs.h    |  1057 +
+ .../dcore0_edma1_core_ctx_axuser_regs.h       |    61 +
+ .../dcore0_edma1_qm_axuser_nonsecured_regs.h  |    61 +
+ .../gaudi2/asic_reg/dcore0_hmmu0_mmu_masks.h  |   294 +
+ .../gaudi2/asic_reg/dcore0_hmmu0_mmu_regs.h   |   237 +
+ .../gaudi2/asic_reg/dcore0_hmmu0_stlb_masks.h |   348 +
+ .../gaudi2/asic_reg/dcore0_hmmu0_stlb_regs.h  |   141 +
+ .../gaudi2/asic_reg/dcore0_mme_acc_regs.h     |    73 +
+ ...0_mme_ctrl_lo_arch_agu_cout0_master_regs.h |    33 +
+ ...e0_mme_ctrl_lo_arch_agu_cout0_slave_regs.h |    33 +
+ ...0_mme_ctrl_lo_arch_agu_cout1_master_regs.h |    33 +
+ ...e0_mme_ctrl_lo_arch_agu_cout1_slave_regs.h |    33 +
+ ...re0_mme_ctrl_lo_arch_agu_in0_master_regs.h |    33 +
+ ...ore0_mme_ctrl_lo_arch_agu_in0_slave_regs.h |    33 +
+ ...re0_mme_ctrl_lo_arch_agu_in1_master_regs.h |    33 +
+ ...ore0_mme_ctrl_lo_arch_agu_in1_slave_regs.h |    33 +
+ ...re0_mme_ctrl_lo_arch_agu_in2_master_regs.h |    33 +
+ ...ore0_mme_ctrl_lo_arch_agu_in2_slave_regs.h |    33 +
+ ...re0_mme_ctrl_lo_arch_agu_in3_master_regs.h |    33 +
+ ...ore0_mme_ctrl_lo_arch_agu_in3_slave_regs.h |    33 +
+ ...re0_mme_ctrl_lo_arch_agu_in4_master_regs.h |    33 +
+ ...ore0_mme_ctrl_lo_arch_agu_in4_slave_regs.h |    33 +
+ .../dcore0_mme_ctrl_lo_arch_base_addr_regs.h  |    39 +
+ ...re0_mme_ctrl_lo_arch_non_tensor_end_regs.h |    73 +
+ ...0_mme_ctrl_lo_arch_non_tensor_start_regs.h |    35 +
+ .../dcore0_mme_ctrl_lo_arch_tensor_a_regs.h   |    67 +
+ .../dcore0_mme_ctrl_lo_arch_tensor_b_regs.h   |    67 +
+ ...dcore0_mme_ctrl_lo_arch_tensor_cout_regs.h |    67 +
+ .../asic_reg/dcore0_mme_ctrl_lo_masks.h       |   468 +
+ .../dcore0_mme_ctrl_lo_mme_axuser_regs.h      |    61 +
+ .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_regs.h |   163 +
+ .../asic_reg/dcore0_mme_qm_arc_acp_eng_regs.h |   567 +
+ .../asic_reg/dcore0_mme_qm_arc_aux_regs.h     |   591 +
+ .../dcore0_mme_qm_arc_dup_eng_axuser_regs.h   |    61 +
+ .../asic_reg/dcore0_mme_qm_arc_dup_eng_regs.h |   575 +
+ .../dcore0_mme_qm_axuser_nonsecured_regs.h    |    61 +
+ .../dcore0_mme_qm_axuser_secured_regs.h       |    61 +
+ .../gaudi2/asic_reg/dcore0_mme_qm_cgm_regs.h  |    29 +
+ .../gaudi2/asic_reg/dcore0_mme_qm_regs.h      |  1057 +
+ .../gaudi2/asic_reg/dcore0_mme_sbte0_masks.h  |   107 +
+ .../dcore0_mme_sbte0_mstr_if_axuser_regs.h    |    61 +
+ .../dcore0_mme_wb0_mstr_if_axuser_regs.h      |    61 +
+ .../gaudi2/asic_reg/dcore0_rtr0_ctrl_regs.h   |   291 +
+ .../dcore0_rtr0_mstr_if_rr_prvt_hbw_regs.h    |   213 +
+ .../dcore0_rtr0_mstr_if_rr_prvt_lbw_regs.h    |   189 +
+ .../dcore0_rtr0_mstr_if_rr_shrd_hbw_regs.h    |   213 +
+ .../dcore0_rtr0_mstr_if_rr_shrd_lbw_regs.h    |   189 +
+ .../asic_reg/dcore0_sync_mngr_glbl_masks.h    |   135 +
+ .../asic_reg/dcore0_sync_mngr_glbl_regs.h     |  1203 +
+ .../dcore0_sync_mngr_mstr_if_axuser_masks.h   |   135 +
+ .../dcore0_sync_mngr_mstr_if_axuser_regs.h    |    61 +
+ .../asic_reg/dcore0_sync_mngr_objs_masks.h    |    87 +
+ .../asic_reg/dcore0_sync_mngr_objs_regs.h     | 43543 +++++++++++++++
+ .../asic_reg/dcore0_tpc0_cfg_axuser_regs.h    |    61 +
+ .../asic_reg/dcore0_tpc0_cfg_kernel_regs.h    |   129 +
+ .../dcore0_tpc0_cfg_kernel_tensor_0_regs.h    |    63 +
+ .../gaudi2/asic_reg/dcore0_tpc0_cfg_masks.h   |   509 +
+ .../gaudi2/asic_reg/dcore0_tpc0_cfg_qm_regs.h |   129 +
+ .../dcore0_tpc0_cfg_qm_sync_object_regs.h     |    27 +
+ .../dcore0_tpc0_cfg_qm_tensor_0_regs.h        |    63 +
+ .../gaudi2/asic_reg/dcore0_tpc0_cfg_regs.h    |   229 +
+ .../asic_reg/dcore0_tpc0_cfg_special_regs.h   |   185 +
+ .../asic_reg/dcore0_tpc0_eml_busmon_0_regs.h  |   163 +
+ .../asic_reg/dcore0_tpc0_eml_etf_regs.h       |   113 +
+ .../asic_reg/dcore0_tpc0_eml_funnel_regs.h    |    75 +
+ .../asic_reg/dcore0_tpc0_eml_spmu_regs.h      |   151 +
+ .../asic_reg/dcore0_tpc0_eml_stm_regs.h       |   131 +
+ .../asic_reg/dcore0_tpc0_qm_arc_aux_regs.h    |   591 +
+ .../dcore0_tpc0_qm_axuser_nonsecured_regs.h   |    61 +
+ .../gaudi2/asic_reg/dcore0_tpc0_qm_cgm_regs.h |    29 +
+ .../gaudi2/asic_reg/dcore0_tpc0_qm_regs.h     |  1057 +
+ .../dcore0_vdec0_brdg_ctrl_axuser_dec_regs.h  |    61 +
+ ...0_vdec0_brdg_ctrl_axuser_msix_abnrm_regs.h |    61 +
+ ...re0_vdec0_brdg_ctrl_axuser_msix_l2c_regs.h |    61 +
+ ...re0_vdec0_brdg_ctrl_axuser_msix_nrm_regs.h |    61 +
+ ...re0_vdec0_brdg_ctrl_axuser_msix_vcd_regs.h |    61 +
+ .../asic_reg/dcore0_vdec0_brdg_ctrl_masks.h   |   581 +
+ .../asic_reg/dcore0_vdec0_brdg_ctrl_regs.h    |   245 +
+ .../asic_reg/dcore0_vdec0_ctrl_special_regs.h |   185 +
+ .../gaudi2/asic_reg/dcore1_mme_ctrl_lo_regs.h |   163 +
+ .../gaudi2/asic_reg/dcore3_mme_ctrl_lo_regs.h |   163 +
+ .../asic_reg/gaudi2_blocks_linux_driver.h     | 45067 ++++++++++++++++
+ .../include/gaudi2/asic_reg/gaudi2_regs.h     |   544 +
+ .../gaudi2/asic_reg/nic0_qm0_cgm_regs.h       |    29 +
+ .../include/gaudi2/asic_reg/nic0_qm0_regs.h   |  1057 +
+ .../gaudi2/asic_reg/nic0_qm_arc_aux0_regs.h   |   591 +
+ .../include/gaudi2/asic_reg/nic0_qpc0_regs.h  |   905 +
+ .../nic0_umr0_0_completion_queue_ci_1_regs.h  |    27 +
+ .../nic0_umr0_0_unsecure_doorbell0_regs.h     |    31 +
+ .../include/gaudi2/asic_reg/pcie_aux_regs.h   |   293 +
+ .../include/gaudi2/asic_reg/pcie_dbi_regs.h   |   422 +
+ .../gaudi2/asic_reg/pcie_dec0_cmd_masks.h     |   229 +
+ .../gaudi2/asic_reg/pcie_dec0_cmd_regs.h      |    85 +
+ .../pcie_vdec0_brdg_ctrl_axuser_dec_regs.h    |    61 +
+ ...e_vdec0_brdg_ctrl_axuser_msix_abnrm_regs.h |    61 +
+ ...cie_vdec0_brdg_ctrl_axuser_msix_l2c_regs.h |    61 +
+ ...cie_vdec0_brdg_ctrl_axuser_msix_nrm_regs.h |    61 +
+ ...cie_vdec0_brdg_ctrl_axuser_msix_vcd_regs.h |    61 +
+ .../asic_reg/pcie_vdec0_brdg_ctrl_masks.h     |   580 +
+ .../asic_reg/pcie_vdec0_brdg_ctrl_regs.h      |   245 +
+ .../asic_reg/pcie_vdec0_ctrl_special_regs.h   |   185 +
+ .../include/gaudi2/asic_reg/pcie_wrap_regs.h  |   601 +
+ .../asic_reg/pdma0_core_ctx_axuser_regs.h     |    61 +
+ .../gaudi2/asic_reg/pdma0_core_ctx_regs.h     |    95 +
+ .../gaudi2/asic_reg/pdma0_core_masks.h        |   415 +
+ .../include/gaudi2/asic_reg/pdma0_core_regs.h |   157 +
+ .../asic_reg/pdma0_core_special_masks.h       |   135 +
+ .../gaudi2/asic_reg/pdma0_qm_arc_aux_regs.h   |   591 +
+ .../pdma0_qm_axuser_nonsecured_regs.h         |    61 +
+ .../asic_reg/pdma0_qm_axuser_secured_regs.h   |    61 +
+ .../gaudi2/asic_reg/pdma0_qm_cgm_regs.h       |    29 +
+ .../include/gaudi2/asic_reg/pdma0_qm_masks.h  |  1165 +
+ .../include/gaudi2/asic_reg/pdma0_qm_regs.h   |  1057 +
+ .../asic_reg/pdma1_core_ctx_axuser_regs.h     |    61 +
+ .../pdma1_qm_axuser_nonsecured_regs.h         |    61 +
+ .../gaudi2/asic_reg/pmmu_hbw_stlb_masks.h     |   334 +
+ .../gaudi2/asic_reg/pmmu_hbw_stlb_regs.h      |   141 +
+ .../include/gaudi2/asic_reg/pmmu_pif_regs.h   |   135 +
+ .../include/gaudi2/asic_reg/psoc_etr_masks.h  |   311 +
+ .../include/gaudi2/asic_reg/psoc_etr_regs.h   |   115 +
+ .../gaudi2/asic_reg/psoc_global_conf_masks.h  |  1406 +
+ .../gaudi2/asic_reg/psoc_global_conf_regs.h   |  1337 +
+ .../gaudi2/asic_reg/psoc_reset_conf_masks.h   |  2321 +
+ .../gaudi2/asic_reg/psoc_reset_conf_regs.h    |   989 +
+ .../gaudi2/asic_reg/psoc_timestamp_regs.h     |    57 +
+ .../include/gaudi2/asic_reg/rot0_desc_regs.h  |   155 +
+ .../include/gaudi2/asic_reg/rot0_masks.h      |   313 +
+ .../gaudi2/asic_reg/rot0_qm_arc_aux_regs.h    |   591 +
+ .../asic_reg/rot0_qm_axuser_nonsecured_regs.h |    61 +
+ .../gaudi2/asic_reg/rot0_qm_cgm_regs.h        |    29 +
+ .../include/gaudi2/asic_reg/rot0_qm_regs.h    |  1057 +
+ .../include/gaudi2/asic_reg/rot0_regs.h       |   111 +
+ .../gaudi2/asic_reg/xbar_edge_0_regs.h        |   199 +
+ .../include/gaudi2/asic_reg/xbar_mid_0_regs.h |   199 +
+ .../misc/habanalabs/include/gaudi2/gaudi2.h   |   120 +
+ .../include/gaudi2/gaudi2_async_events.h      |   963 +
+ .../gaudi2/gaudi2_async_ids_map_extended.h    |  2668 +
+ .../include/gaudi2/gaudi2_async_virt_events.h |    57 +
+ .../include/gaudi2/gaudi2_coresight.h         |   984 +
+ .../habanalabs/include/gaudi2/gaudi2_fw_if.h  |    99 +
+ .../include/gaudi2/gaudi2_packets.h           |   197 +
+ .../include/gaudi2/gaudi2_reg_map.h           |    59 +
+ .../include/hw_ip/mmu/mmu_general.h           |    14 +-
+ .../habanalabs/include/hw_ip/mmu/mmu_v2_0.h   |    51 +
+ include/uapi/misc/habanalabs.h                |   455 +-
+ 201 files changed, 157843 insertions(+), 432 deletions(-)
+ create mode 100644 drivers/misc/habanalabs/common/decoder.c
+ create mode 100644 drivers/misc/habanalabs/common/mmu/mmu_v2_hr.c
+ create mode 100644 drivers/misc/habanalabs/common/security.c
+ create mode 100644 drivers/misc/habanalabs/gaudi2/Makefile
+ create mode 100644 drivers/misc/habanalabs/gaudi2/gaudi2.c
+ create mode 100644 drivers/misc/habanalabs/gaudi2/gaudi2P.h
+ create mode 100644 drivers/misc/habanalabs/gaudi2/gaudi2_coresight.c
+ create mode 100644 drivers/misc/habanalabs/gaudi2/gaudi2_coresight_regs.h
+ create mode 100644 drivers/misc/habanalabs/gaudi2/gaudi2_masks.h
+ create mode 100644 drivers/misc/habanalabs/gaudi2/gaudi2_security.c
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/arc/gaudi2_arc_common_packets.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/arc_farm_arc0_acp_eng_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/arc_farm_arc0_aux_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/arc_farm_arc0_aux_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/arc_farm_arc0_dup_eng_axuser_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/arc_farm_arc0_dup_eng_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/arc_farm_kdma_ctx_axuser_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/arc_farm_kdma_ctx_axuser_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/arc_farm_kdma_ctx_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/arc_farm_kdma_ctx_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/arc_farm_kdma_kdma_cgm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/arc_farm_kdma_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/arc_farm_kdma_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/cpu_if_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_dec0_cmd_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_dec0_cmd_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_edma0_core_ctx_axuser_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_edma0_core_ctx_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_edma0_core_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_edma0_core_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_edma0_qm_arc_aux_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_edma0_qm_axuser_nonsecured_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_edma0_qm_cgm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_edma0_qm_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_edma0_qm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_edma1_core_ctx_axuser_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_edma1_qm_axuser_nonsecured_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_hmmu0_mmu_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_hmmu0_mmu_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_hmmu0_stlb_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_hmmu0_stlb_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_acc_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_cout0_master_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_cout0_slave_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_cout1_master_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_cout1_slave_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in0_master_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in0_slave_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in1_master_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in1_slave_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in2_master_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in2_slave_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in3_master_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in3_slave_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in4_master_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in4_slave_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_base_addr_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_non_tensor_end_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_non_tensor_start_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_tensor_a_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_tensor_b_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_tensor_cout_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_mme_axuser_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_qm_arc_acp_eng_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_qm_arc_aux_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_qm_arc_dup_eng_axuser_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_qm_arc_dup_eng_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_qm_axuser_nonsecured_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_qm_axuser_secured_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_qm_cgm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_qm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_sbte0_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_sbte0_mstr_if_axuser_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_mme_wb0_mstr_if_axuser_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_rtr0_ctrl_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_rtr0_mstr_if_rr_prvt_hbw_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_rtr0_mstr_if_rr_prvt_lbw_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_rtr0_mstr_if_rr_shrd_hbw_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_rtr0_mstr_if_rr_shrd_lbw_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_sync_mngr_glbl_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_sync_mngr_glbl_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_sync_mngr_mstr_if_axuser_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_sync_mngr_mstr_if_axuser_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_sync_mngr_objs_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_sync_mngr_objs_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_cfg_axuser_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_cfg_kernel_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_cfg_kernel_tensor_0_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_cfg_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_cfg_qm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_cfg_qm_sync_object_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_cfg_qm_tensor_0_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_cfg_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_cfg_special_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_eml_busmon_0_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_eml_etf_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_eml_funnel_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_eml_spmu_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_eml_stm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_qm_arc_aux_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_qm_axuser_nonsecured_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_qm_cgm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_qm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_axuser_dec_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_axuser_msix_abnrm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_axuser_msix_l2c_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_axuser_msix_nrm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_axuser_msix_vcd_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore0_vdec0_ctrl_special_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore1_mme_ctrl_lo_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/dcore3_mme_ctrl_lo_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/gaudi2_blocks_linux_driver.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/gaudi2_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/nic0_qm0_cgm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/nic0_qm0_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/nic0_qm_arc_aux0_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/nic0_qpc0_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/nic0_umr0_0_completion_queue_ci_1_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/nic0_umr0_0_unsecure_doorbell0_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_aux_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_dbi_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_dec0_cmd_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_dec0_cmd_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_axuser_dec_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_axuser_msix_abnrm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_axuser_msix_l2c_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_axuser_msix_nrm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_axuser_msix_vcd_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_vdec0_ctrl_special_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pcie_wrap_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pdma0_core_ctx_axuser_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pdma0_core_ctx_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pdma0_core_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pdma0_core_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pdma0_core_special_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pdma0_qm_arc_aux_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pdma0_qm_axuser_nonsecured_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pdma0_qm_axuser_secured_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pdma0_qm_cgm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pdma0_qm_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pdma0_qm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pdma1_core_ctx_axuser_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pdma1_qm_axuser_nonsecured_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pmmu_hbw_stlb_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pmmu_hbw_stlb_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/pmmu_pif_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/psoc_etr_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/psoc_etr_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/psoc_global_conf_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/psoc_global_conf_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/psoc_reset_conf_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/psoc_reset_conf_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/psoc_timestamp_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/rot0_desc_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/rot0_masks.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/rot0_qm_arc_aux_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/rot0_qm_axuser_nonsecured_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/rot0_qm_cgm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/rot0_qm_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/rot0_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/xbar_edge_0_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/asic_reg/xbar_mid_0_regs.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/gaudi2.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/gaudi2_async_events.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/gaudi2_async_ids_map_extended.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/gaudi2_async_virt_events.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/gaudi2_coresight.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/gaudi2_fw_if.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/gaudi2_packets.h
+ create mode 100644 drivers/misc/habanalabs/include/gaudi2/gaudi2_reg_map.h
+ create mode 100644 drivers/misc/habanalabs/include/hw_ip/mmu/mmu_v2_0.h
 
 -- 
-Pierre Morel
-IBM Lab Boeblingen
+2.25.1
+

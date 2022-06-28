@@ -2,80 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E64455D635
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 288B555DB7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344851AbiF1KHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 06:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
+        id S1344858AbiF1KIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 06:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344838AbiF1KHi (ORCPT
+        with ESMTP id S245666AbiF1KIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:07:38 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49AA22506
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:07:37 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 68so11716100pgb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:07:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WLmwHIaRbzmI3Ysy3wd3NH/Zd+yQ1mohcjSyjn86r8c=;
-        b=nb2JM0pe7slLxtqpP4AdlYeQlIoORBgwrlFrBJU9QKJC2n82HV06MCGw+mGiIHtpfV
-         YpVJ0pgd66SqDoXXjxsMuh0OyOsrf+W33U97UI/dh3qyNpqnW4YwqZusvBB17DVdkM75
-         OF8c+21AKFvlcmNadjBkZUyngAhGL/HcgkE6n4R/LoUxV1LZUjZGMTB/5pCB6a5igBXU
-         pQNXKFI5x34eDR8BUwFRHi/WhdcU9Jk1uhqBoBoeu+yLcnVMdIyQRRRlH0MCJqZ9mV9R
-         471ABePDLoj2MeYn1f5BpteZwek2Vh46yEnk/b02AyOh+O8b+tcr2jJgGynbdJIHghYc
-         jFNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=WLmwHIaRbzmI3Ysy3wd3NH/Zd+yQ1mohcjSyjn86r8c=;
-        b=3KV8Nh0OXpij5CfVtMCMZTTVonRusZ/A+0QOvMrTTsLkiiTACh1udkqaCZPWLP5Adh
-         ogYhGV6INWfmj6ZRP+j9gaQUziaD9AtwB4QOqwhA57XzNNaSUn6L2eE87An1psxiF74O
-         5OI4VqGQ5aehjMDnzwtYjFTXYRopViuunHTUJovshjyjKWb0E9cmM39xHe783WByRbHu
-         SxnEovTmB2Dgz6/wS3lGRClYeM5Z6ee4XxjMU/55fyyQq6de3K7M2JrTEhQRIYOgjY+t
-         Ts9XTHRQmnEI2VAkPZt/AEnKBWuBsNGyI2Zc9EM6abWzmkWBn2anKJ/5aP3BNFJ/V5aa
-         A5BQ==
-X-Gm-Message-State: AJIora/C4+VZNu/tbgWDGQuZVJTAkTUTscgVj2owlFyaZWajCeUAuuJB
-        4rpumFjK9miUo1qdWaZ+gAY=
-X-Google-Smtp-Source: AGRyM1tavDJ/u4qKa0WrSDoZv4J/LE/iIK6Gb5GwDizQyErAP7Fu7d6cDWGqvrB2tiuG6yPreNTnOQ==
-X-Received: by 2002:a65:49cd:0:b0:40d:7553:e3be with SMTP id t13-20020a6549cd000000b0040d7553e3bemr17285003pgs.370.1656410857024;
-        Tue, 28 Jun 2022 03:07:37 -0700 (PDT)
-Received: from localhost ([121.167.227.144])
-        by smtp.gmail.com with ESMTPSA id y3-20020a17090ad70300b001ecdd9507b9sm9003892pju.26.2022.06.28.03.07.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 03:07:36 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 28 Jun 2022 19:07:34 +0900
-From:   Tejun Heo <tj@kernel.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: Re: re. Spurious wakeup on a newly created kthread
-Message-ID: <YrrS5qhUxfBvbiR4@mtj.duckdns.org>
-References: <20220622140853.31383-1-pmladek@suse.com>
- <YraWWl+Go17uPOgR@mtj.duckdns.org>
- <CAHk-=wiC7rj1o7vTnYUPfD7YxAu09MZiZbahHqvLm9+Cgg1dFw@mail.gmail.com>
- <YrrPKU2y4liY91u9@alley>
+        Tue, 28 Jun 2022 06:08:44 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9A22F393;
+        Tue, 28 Jun 2022 03:08:43 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0C21966015BF;
+        Tue, 28 Jun 2022 11:08:40 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656410921;
+        bh=4SmhwJ59cYNwGa9/uAOmjkCzl5Kwd4RkrU6slG6AY6c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gBcsZ9sToRUM8cKdvaAO72/zDI2G3Kl2iaVhdyvOxLtKDzWiVt3MBPV9oeKUhssOi
+         62COElRol0rewHQCq5aLavu4HrwWozFJA0T6/XTjCyKEGJI+BZDli/VzJ/hui00gjE
+         i/FI7Yx7Y+jHenRhurJ+RtU/QFwGVq7wnYmgmjSHrqM5yN1k4fsTdwktEDjORqgoab
+         +Ss7jDoo002EMMU0Nt/ZG8an7mVtncv4k0kIoBCjzpIcOpEqKrpMUPJTi8Ro6t7fV0
+         TCU3XOjLd6zZ66MOZUsfG9URyZSk/aebQQvUblK2QjoPpJH5CojSW3mctDn264kGhp
+         uiYWKUDHGukNw==
+Message-ID: <a0155aeb-b209-07e1-747a-594a755f54fc@collabora.com>
+Date:   Tue, 28 Jun 2022 13:08:38 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrrPKU2y4liY91u9@alley>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 22/31] soc/tegra: Migrate to dev_pm_opp_set_config()
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <449b344f037c7ef1970bc84d31e0d4c4cb4d2951.1653564321.git.viresh.kumar@linaro.org>
+ <20220624004831.po35sowzfo4c47b3@vireshk-i7>
+ <20220624005700.oj4etaajbutvsym7@vireshk-i7>
+ <73d39022-c6fc-0c21-cb68-9714846f02bf@gmail.com>
+ <20220627064526.2nkezq4nufpkl4y2@vireshk-i7>
+ <ecc72279-0892-d5ab-689d-87b8fba5147e@gmail.com>
+ <20220627072104.ir7kujhezxhzl6a7@vireshk-i7>
+ <20220628070943.5tfyad63rh6niq6x@vireshk-i7>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20220628070943.5tfyad63rh6niq6x@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,12 +72,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 11:51:37AM +0200, Petr Mladek wrote:
-> I quess that I felt overloaded and wished a calm day
-> or something like this. I agree that it does not make
-> much sense.
+On 6/28/22 10:09, Viresh Kumar wrote:
+> On 27-06-22, 12:51, Viresh Kumar wrote:
+>> On 27-06-22, 10:14, Dmitry Osipenko wrote:
+>>> 27.06.2022 09:45, Viresh Kumar пишет:
+>>>>> Looks okay. If you'll solve the cpufreq problem where OPP config is set
+>>>>> by two drivers for the same cpu device
+>>>> This is supported, there is some early freeing of resources on the
+>>>> removal path though, the reasoning for which I already gave in another
+>>>> email. Though, I am open to sorting that out as well, but nothing
+>>>> breaks the code for now AFAICT.
+>>>>
+>>>
+>>> In case of Tegra, we use tegra-cpufreq driver that sets supported_hw and
+>>> registers cpufreq-dt. If cpufreq-dt driver defers the probe, then the
+>>> supported_hw will be lost on the re-probe. I haven't checked yet, but I
+>>> suppose that cpufreq-dt driver defers on Tegra30 because of the CPU
+>>> regulator and that's why we get the "OPP table is missing" error.
+>>
+>> Aha, I get it now. I see, this is a real problem. Will fix it. Give me
+>> some time to think. Thanks.
+> 
+> Okay, I fixed this in opp/linux-next, can you or Jon please give it a
+> go on tegra30 to see if the issue is fixed ?
+> 
+> FWIW, I have fixed this with the IDR API and the OPP core will only
+> free the resources in clear-config, that the corresponding set-config
+> has configured. I have tested it with the clk API only though.
+> 
+> Once you confirm, I will resend all the patches and hope no issues are
+> left here.
+> 
+> Thanks for helping out guys. Really appreciate it.
+> 
 
-Hey, we all get overwhelmed sometimes. I wish you a calm day!
+The opp/linux-next works fine, thank you.
+
+Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+
+BTW, the idr_alloc() is obsoleted by xa_alloc().
 
 -- 
-tejun
+Best regards,
+Dmitry

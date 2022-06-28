@@ -2,123 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5436655D570
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5FD55E00C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345112AbiF1K45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 06:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
+        id S1345119AbiF1K5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 06:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231682AbiF1K4z (ORCPT
+        with ESMTP id S231682AbiF1K5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:56:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DE2D31DC0;
-        Tue, 28 Jun 2022 03:56:54 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D139F152B;
-        Tue, 28 Jun 2022 03:56:53 -0700 (PDT)
-Received: from [10.57.85.130] (unknown [10.57.85.130])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 48C603F5A1;
-        Tue, 28 Jun 2022 03:56:51 -0700 (PDT)
-Message-ID: <06ece223-c71e-baf8-e35e-dbc22a9cf9da@arm.com>
-Date:   Tue, 28 Jun 2022 11:56:46 +0100
+        Tue, 28 Jun 2022 06:57:05 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF67331DC0;
+        Tue, 28 Jun 2022 03:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656413824; x=1687949824;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=WKpsfZrkq24GzM+XFoOF1PmMcAsmja+uPPVG+NvAxaw=;
+  b=Imkz2nsV9eKCI7BX1unDdSq/k13hlBrHNaxOpbgUp1fCjbvMPkpm0fW0
+   erXzMZ3NggB79LHC/+5O33QNGxEGUDxiB6W6uotCmoiD51tuWxViX3E4l
+   Ew72HIF599e2nmf+vYFU+YyPeXg4YOyeoIAzu91echoQjlJQEYjUbG+Ah
+   Jb4Svfiu8NLy50l6l8q4vjgCFa79WsrHzMnlg2FL42IHBuI7c1Jh/Pt8m
+   OFZJuArSN0gA5RuuoDPP757YCc2e54WvJ3LTg4HPv+EOs5zQkePvJVtzJ
+   95dm/gDVLwQVGFSbfANmV1ztGzMuRfdz+GUCFM6JQDBF8DvMVbxfIhEtv
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="261511873"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="261511873"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 03:57:04 -0700
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="587829952"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 03:57:02 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o68tv-000wkA-R2;
+        Tue, 28 Jun 2022 13:56:59 +0300
+Date:   Tue, 28 Jun 2022 13:56:59 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RESEND tty-next] serial: 8250_dw: Take port lock while
+ accessing LSR
+Message-ID: <Yrree8HOrk3D2TzX@smile.fi.intel.com>
+References: <c5879db7-bee9-93f-526e-872a292442@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 2/5] dma-iommu: Add iommu_dma_opt_mapping_size()
-Content-Language: en-GB
-To:     John Garry <john.garry@huawei.com>,
-        damien.lemoal@opensource.wdc.com, joro@8bytes.org, will@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, hch@lst.de,
-        m.szyprowski@samsung.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, iommu@lists.linux-foundation.org,
-        iommu@lists.linux.dev, linux-scsi@vger.kernel.org,
-        linuxarm@huawei.com
-References: <1656343521-62897-1-git-send-email-john.garry@huawei.com>
- <1656343521-62897-3-git-send-email-john.garry@huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <1656343521-62897-3-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c5879db7-bee9-93f-526e-872a292442@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-27 16:25, John Garry wrote:
-> Add the IOMMU callback for DMA mapping API dma_opt_mapping_size(), which
-> allows the drivers to know the optimal mapping limit and thus limit the
-> requested IOVA lengths.
+On Tue, Jun 28, 2022 at 12:01:28PM +0300, Ilpo Järvinen wrote:
+> Accessing LSR requires port lock because it mutates lsr_saved_flags
+> in serial_lsr_in().
+
+Don't remember if I given or not (and why if not) the tag, so here it is:
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Fixes: 197eb5c416ff ("serial: 8250_dw: Use serial_lsr_in() in dw8250_handle_irq()")
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > 
-> This value is based on the IOVA rcache range limit, as IOVAs allocated
-> above this limit must always be newly allocated, which may be quite slow.
-
-Acked-by: Robin Murphy <robin.murphy@arm.com>
-
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 > ---
->   drivers/iommu/dma-iommu.c | 6 ++++++
->   drivers/iommu/iova.c      | 5 +++++
->   include/linux/iova.h      | 2 ++
->   3 files changed, 13 insertions(+)
+> I'll resend the third patch later.
 > 
-> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-> index f90251572a5d..9e1586447ee8 100644
-> --- a/drivers/iommu/dma-iommu.c
-> +++ b/drivers/iommu/dma-iommu.c
-> @@ -1459,6 +1459,11 @@ static unsigned long iommu_dma_get_merge_boundary(struct device *dev)
->   	return (1UL << __ffs(domain->pgsize_bitmap)) - 1;
->   }
->   
-> +static size_t iommu_dma_opt_mapping_size(void)
-> +{
-> +	return iova_rcache_range();
-> +}
+>  drivers/tty/serial/8250/8250_dw.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
+> index 167a691c7b19..f78b13db1b1e 100644
+> --- a/drivers/tty/serial/8250/8250_dw.c
+> +++ b/drivers/tty/serial/8250/8250_dw.c
+> @@ -266,7 +266,10 @@ static int dw8250_handle_irq(struct uart_port *p)
+>  
+>  	/* Manually stop the Rx DMA transfer when acting as flow controller */
+>  	if (quirks & DW_UART_QUIRK_IS_DMA_FC && up->dma && up->dma->rx_running && rx_timeout) {
+> +		spin_lock_irqsave(&p->lock, flags);
+>  		status = serial_lsr_in(up);
+> +		spin_unlock_irqrestore(&p->lock, flags);
 > +
->   static const struct dma_map_ops iommu_dma_ops = {
->   	.alloc			= iommu_dma_alloc,
->   	.free			= iommu_dma_free,
-> @@ -1479,6 +1484,7 @@ static const struct dma_map_ops iommu_dma_ops = {
->   	.map_resource		= iommu_dma_map_resource,
->   	.unmap_resource		= iommu_dma_unmap_resource,
->   	.get_merge_boundary	= iommu_dma_get_merge_boundary,
-> +	.opt_mapping_size	= iommu_dma_opt_mapping_size,
->   };
->   
->   /*
-> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-> index db77aa675145..9f00b58d546e 100644
-> --- a/drivers/iommu/iova.c
-> +++ b/drivers/iommu/iova.c
-> @@ -26,6 +26,11 @@ static unsigned long iova_rcache_get(struct iova_domain *iovad,
->   static void free_cpu_cached_iovas(unsigned int cpu, struct iova_domain *iovad);
->   static void free_iova_rcaches(struct iova_domain *iovad);
->   
-> +unsigned long iova_rcache_range(void)
-> +{
-> +	return PAGE_SIZE << (IOVA_RANGE_CACHE_MAX_SIZE - 1);
-> +}
-> +
->   static int iova_cpuhp_dead(unsigned int cpu, struct hlist_node *node)
->   {
->   	struct iova_domain *iovad;
-> diff --git a/include/linux/iova.h b/include/linux/iova.h
-> index 320a70e40233..c6ba6d95d79c 100644
-> --- a/include/linux/iova.h
-> +++ b/include/linux/iova.h
-> @@ -79,6 +79,8 @@ static inline unsigned long iova_pfn(struct iova_domain *iovad, dma_addr_t iova)
->   int iova_cache_get(void);
->   void iova_cache_put(void);
->   
-> +unsigned long iova_rcache_range(void);
-> +
->   void free_iova(struct iova_domain *iovad, unsigned long pfn);
->   void __free_iova(struct iova_domain *iovad, struct iova *iova);
->   struct iova *alloc_iova(struct iova_domain *iovad, unsigned long size,
+>  		if (status & (UART_LSR_DR | UART_LSR_BI)) {
+>  			dw8250_writel_ext(p, RZN1_UART_RDMACR, 0);
+>  			dw8250_writel_ext(p, DW_UART_DMASA, 1);
+> 
+> -- 
+> tg: (f55d2e4b0a47..) dw/use-spinlock (depends on: 8250/fix-stop_tx-race)
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

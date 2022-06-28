@@ -2,61 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880B955EB96
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30AAB55EB9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbiF1R6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 13:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
+        id S233045AbiF1SBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 14:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233682AbiF1R6e (ORCPT
+        with ESMTP id S232040AbiF1SBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 13:58:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9299DB80;
-        Tue, 28 Jun 2022 10:58:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 28 Jun 2022 14:01:12 -0400
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DBF12AF1;
+        Tue, 28 Jun 2022 11:01:11 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30FB1619FD;
-        Tue, 28 Jun 2022 17:58:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E458C341C6;
-        Tue, 28 Jun 2022 17:58:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656439111;
-        bh=MSx95T8wk6hIGQguOGzuWr3N8RUGtzUumdkk9KklXOY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RuKDnC/INZxED7Zwh8uh6bH5n5RUyeqluFiJFqUETDvSiQ17xNAA0RSCDdM6XeTyh
-         Lbd2NnCLLlYkQ4Umxwn/rkCSihbbKNv6Z2zZ10qESul2JXlp19JeB0UDR/4in6bBR0
-         jRTKr5VFHqYsz2AoBKN3JjLXZ8Ho0fC6mN+lLyof5wm5fbcNhcCvLZZbqsA60Yj+X7
-         EOLtYKZ+dZdRCvVABVmpt/1mYgA6fZXESTeIPjRPCDB064Jbz3GMDyxSj7v31/ID+x
-         nxjceBZKCSeDT/e00yLVZH4IQARqJXePYkT8f51NqI0JVKBxG9s/k5wbZ4zxAoas78
-         OtPdzFKnPmSNg==
-Message-ID: <685adda2-e76f-e2c4-2f58-04fb4b06c8cf@kernel.org>
-Date:   Tue, 28 Jun 2022 20:58:24 +0300
+        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id 8F9685200D6;
+        Tue, 28 Jun 2022 20:01:09 +0200 (CEST)
+Received: from vmlxhi-182.adit-jv.com (10.72.92.119) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Tue, 28 Jun
+ 2022 20:01:09 +0200
+From:   Michael Rodin <mrodin@de.adit-jv.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>
+CC:     Michael Rodin <mrodin@de.adit-jv.com>, <michael@rodin.online>,
+        <erosca@de.adit-jv.com>
+Subject: [PATCH v2 0/3] Improve error handling in the rcar-vin driver
+Date:   Tue, 28 Jun 2022 20:00:19 +0200
+Message-ID: <20220628180024.451258-1-mrodin@de.adit-jv.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <YqEO3/KekkZhVjW+@oden.dyn.berto.se>
+References: <YqEO3/KekkZhVjW+@oden.dyn.berto.se>
 MIME-Version: 1.0
-Subject: Re: [PATCH V2 9/9] interconnect: imx: Add platform driver for imx8mp
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, abel.vesa@nxp.com,
-        abailon@baylibre.com, l.stach@pengutronix.de,
-        laurent.pinchart@ideasonboard.com, marex@denx.de,
-        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
-        aford173@gmail.com
-Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        abelvesa@kernel.org, Peng Fan <peng.fan@nxp.com>
-References: <20220616073320.2203000-1-peng.fan@oss.nxp.com>
- <20220616073320.2203000-10-peng.fan@oss.nxp.com>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20220616073320.2203000-10-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.72.92.119]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,47 +52,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On 16.06.22 10:33, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Add a platform driver for the i.MX8MP SoC describing bus topology, based
-> on internal documentation.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->   drivers/interconnect/imx/Kconfig  |   4 +
->   drivers/interconnect/imx/Makefile |   2 +
->   drivers/interconnect/imx/imx8mp.c | 259 ++++++++++++++++++++++++++++++
->   3 files changed, 265 insertions(+)
->   create mode 100644 drivers/interconnect/imx/imx8mp.c
-> 
-[..]
-> +static int imx8mp_icc_probe(struct platform_device *pdev)
-> +{
-> +	return imx_icc_register(pdev, nodes, ARRAY_SIZE(nodes), noc_setting_nodes);
-> +}
-> +
-> +static int imx8mp_icc_remove(struct platform_device *pdev)
-> +{
-> +	return imx_icc_unregister(pdev);
-> +}
-> +
-> +static struct platform_driver imx8mp_icc_driver = {
-> +	.probe = imx8mp_icc_probe,
-> +	.remove = imx8mp_icc_remove,
-> +	.driver = {
-> +		.name = "imx8mp-interconnect",
-> +	},
-> +};
-> +
-> +module_platform_driver(imx8mp_icc_driver);
-> +MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
-> +MODULE_LICENSE("GPL v2");
+this series is a followup to the other series [1] started by Niklas Söderlund
+where only the first patch has been merged. The overall idea is to be more
+compliant with the Renesas hardware manual which requires a reset or stop
+of capture in the VIN module before reset of CSI2. Another goal is to be
+more resilient with respect to non-critical CSI2 errors so the driver does
+not end in an endless restart loop. Compared to the previous version [2] of
+this series the patch 3 is replaced based on the conclusion in [3] so now
+userspace has to take care of figuring out if a transfer error was harmless
+or unrecoverable. Other patches are adapted accordingly so no assumptions
+about criticality of transfer errors are made in the kernel and the
+decision is left up to userspace.
 
-Nit: According to Documentation/process/license-rules.rst this should be just "GPL".
+[1] https://lore.kernel.org/linux-renesas-soc/20211108160220.767586-1-niklas.soderlund+renesas@ragnatech.se/
+[2] https://lore.kernel.org/all/1652983210-1194-1-git-send-email-mrodin@de.adit-jv.com/
+[3] https://lore.kernel.org/all/YqEO3%2FKekkZhVjW+@oden.dyn.berto.se/
 
-> +MODULE_ALIAS("platform:imx8mp-interconnect");
-
-Thanks,
-Georgi

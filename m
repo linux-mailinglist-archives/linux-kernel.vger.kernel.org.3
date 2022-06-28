@@ -2,137 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C1955E8F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF95A55E731
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347592AbiF1PLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
+        id S1347603AbiF1PLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344795AbiF1PLv (ORCPT
+        with ESMTP id S1346886AbiF1PLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:11:51 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1A22B1B8;
-        Tue, 28 Jun 2022 08:11:50 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 9so12489999pgd.7;
-        Tue, 28 Jun 2022 08:11:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KUFnNCP2qlNjHtD4AiTI9saDwprZ4IAPldwxrtQI5Ew=;
-        b=It7JvXcb+DrS9llz4xotMV3doV+AzSNat0zMprM/cgaDS5YS39EMWcgek8CKNaUgbJ
-         Vf2D48ZuGOVHEvx5KLPYfKcLOndMZ6UMyfMD2r2hBYYVJxZmL/YtgQRsezQm2832tpyp
-         kzD3Eu+UvPhUQu6MCj0LskRO91azPB1X78UEBUnczmlf466ID3JFngK+S/ifEvnx14eh
-         OERxk5Brus6sui4rjfUs1oRvGl7b68CcOHnsntDbbqwWCYNkV8rPTLUTvdOEiVDG8zAg
-         QqithnhpNRJcLqZ3xq/h79cTrgB7lSJaovQlyot0RTwt1eixRN/ZDSZ2nk7UG77pB2DM
-         u8Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KUFnNCP2qlNjHtD4AiTI9saDwprZ4IAPldwxrtQI5Ew=;
-        b=54OMFam0myD/ymO/vWBFzy1IaeQA6rR0AOFT+orse+cwcrjZ3sy/7lGnlnuZ8tf2Gh
-         EdDwnStNjGDgrNY5xe3PDXYK4OZU4ka1EA+KKB/Il8moPacgjk4qCK2IOIw31/8ini2k
-         mGXIbj0E4hg8cID82n81QhDCGPCmoHgWI+uPZDo/D4jqzOBwH9Zvm34rV19TYFIJsqyf
-         oA9oGObgCp9eWtGL0Xqq0QBxKu+VFJO4BuA8q5SelrRibinI6uA7KSjen/tH4jkarS+N
-         BhBGQTyFLUqG+FCKvoud36A/XAHzn0naNDlj3FWPQq8dSnmZg+QqimDfY/DYaG8rLEZL
-         ByPA==
-X-Gm-Message-State: AJIora8dhaeT6Pdx7OSEoqMnO3v0JCuKmZhRW8zGGs7uevD4S8t1Inrt
-        NkltMA1zsh/sdZaDnAT6YT8=
-X-Google-Smtp-Source: AGRyM1smO8kllyhLtsXgJ6ED7TiXmy5EdOy18QGZDkgS+8mUElWHTLXhuzZqN7NZD4cbRG8NjGkRlA==
-X-Received: by 2002:aa7:9814:0:b0:527:da1e:a0d6 with SMTP id e20-20020aa79814000000b00527da1ea0d6mr976356pfl.71.1656429109954;
-        Tue, 28 Jun 2022 08:11:49 -0700 (PDT)
-Received: from [192.168.66.3] (p912131-ipoe.ipoe.ocn.ne.jp. [153.243.13.130])
-        by smtp.gmail.com with ESMTPSA id cj15-20020a056a00298f00b0052559bd12aasm9540308pfb.61.2022.06.28.08.11.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 08:11:49 -0700 (PDT)
-Message-ID: <8c95e3d7-cff6-c56e-e197-fdd0911d81aa@gmail.com>
-Date:   Wed, 29 Jun 2022 00:11:46 +0900
+        Tue, 28 Jun 2022 11:11:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5188E2AC6D;
+        Tue, 28 Jun 2022 08:11:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E125760EAE;
+        Tue, 28 Jun 2022 15:11:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED921C3411D;
+        Tue, 28 Jun 2022 15:11:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656429110;
+        bh=6CRrz5GE3sbPpBNvpOE8bS4r8rF34+JaaCSHcXzLz7U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FgGFKKvuIrmCI31odpnLzLZxivYQQycW+SNotiBpZhqhEy592cZmU5RPF8+Cu3/Vg
+         qADsWEpad00yrFTBKMUKFU6MfFf7XZErZkBgHBKYlEccfAam9HgzjizQiiO20aTu0Z
+         rBy3Wvfv/rz3gkJpniPu55HK43Qraxym3Jo2lOr7I5BrCPlPRR1816zUAB6mVbmKKb
+         vjs7FTztRASVm+SJi7LYR0P6EeRHt/5ENUVgrU8NN8xIt+w08l4H2JLnkgum9fUQ4I
+         Q2j3vkWTOQCoUZmZEf4bV4sUD1oENLFAypIfj51+DyRqden0TlkTNJYQlDuptQgWb4
+         +XGbWFt3Rtr0Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 675E24096F; Tue, 28 Jun 2022 12:11:47 -0300 (-03)
+Date:   Tue, 28 Jun 2022 12:11:47 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH] perf bpf: 8 byte align bpil data
+Message-ID: <YrsaM7q1KDKwfeLp@kernel.org>
+References: <20220614014714.1407239-1-irogers@google.com>
+ <Yrq4fFtgcpwa2JUu@krava>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] HID: amd_sfh: Ignore uninitialized device
-Content-Language: en-US
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Basavaraj Natikar <basavaraj.natikar@amd.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220626081339.7243-1-akihiko.odaki@gmail.com>
- <b17f4e85-8a35-65ab-34de-0978bdc4cfea@amd.com>
-From:   Akihiko Odaki <akihiko.odaki@gmail.com>
-In-Reply-To: <b17f4e85-8a35-65ab-34de-0978bdc4cfea@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yrq4fFtgcpwa2JUu@krava>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/06/28 23:42, Limonciello, Mario wrote:
-> On 6/26/2022 03:13, Akihiko Odaki wrote:
->> Lenovo ThinkPad C13 Yoga has AMD Sensor Fusion Hub, but it is not used
->> because Chrome OS EC Sensor Hub is used instead. The system therefore
->> never loads the firmware for MP2 and MP2 does not work. It results in
->> AMD_P2C_MSG3 register to have -1 as its value.
->>
->> Without this change, the driver interprets the value as it supports all
->> sensor types and exposes them, which confuses a userspace program,
->> iio-sensor-proxy, and makes it to use the non-functioning sensors
->> instead of functioning sensors exposed via Chrome OS EC Sensor Hub.
->>
->> Check the version bits included in AMD_P2C_MSG3 register and ignore the
->> device if all of the bits are set.
->>
+Em Tue, Jun 28, 2022 at 10:14:52AM +0200, Jiri Olsa escreveu:
+> On Mon, Jun 13, 2022 at 06:47:14PM -0700, Ian Rogers wrote:
+> > bpil data is accessed assuming 64-bit alignment resulting in undefined
+> > behavior as the data is just byte aligned. With an -fsanitize=undefined
+> > build the following errors are observed:
+> > 
+> > $ sudo perf record -a sleep 1
+> > util/bpf-event.c:310:22: runtime error: load of misaligned address 0x55f61084520f for type '__u64', which requires 8 byte alignment
+> > 0x55f61084520f: note: pointer points here
+> >  a8 fe ff ff 3c  51 d3 c0 ff ff ff ff 04  84 d3 c0 ff ff ff ff d8  aa d3 c0 ff ff ff ff a4  c0 d3 c0
+> >              ^
+> > util/bpf-event.c:311:20: runtime error: load of misaligned address 0x55f61084522f for type '__u32', which requires 4 byte alignment
+> > 0x55f61084522f: note: pointer points here
+> >  ff ff ff ff c7  17 00 00 f1 02 00 00 1f  04 00 00 58 04 00 00 00  00 00 00 0f 00 00 00 63  02 00 00
+> >              ^
+> > util/bpf-event.c:198:33: runtime error: member access within misaligned address 0x55f61084523f for type 'const struct bpf_func_info', which requires 4 byte alignment
+> > 0x55f61084523f: note: pointer points here
+> >  58 04 00 00 00  00 00 00 0f 00 00 00 63  02 00 00 3b 00 00 00 ab  02 00 00 44 00 00 00 14  03 00 00
+> > 
+> > Correct this by rouding up the data sizes and aligning the pointers.
+> > 
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/util/bpf-utils.c | 5 ++---
+> >  1 file changed, 2 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/tools/perf/util/bpf-utils.c b/tools/perf/util/bpf-utils.c
+> > index e271e05e51bc..80b1d2b3729b 100644
+> > --- a/tools/perf/util/bpf-utils.c
+> > +++ b/tools/perf/util/bpf-utils.c
+> > @@ -149,11 +149,10 @@ get_bpf_prog_info_linear(int fd, __u64 arrays)
+> >  		count = bpf_prog_info_read_offset_u32(&info, desc->count_offset);
+> >  		size  = bpf_prog_info_read_offset_u32(&info, desc->size_offset);
+> >  
+> > -		data_len += count * size;
+> > +		data_len += roundup(count * size, sizeof(__u64));
+> >  	}
+> >  
+> >  	/* step 3: allocate continuous memory */
+> > -	data_len = roundup(data_len, sizeof(__u64));
+> >  	info_linear = malloc(sizeof(struct perf_bpil) + data_len);
+> >  	if (!info_linear)
+> >  		return ERR_PTR(-ENOMEM);
+> > @@ -180,7 +179,7 @@ get_bpf_prog_info_linear(int fd, __u64 arrays)
+> >  		bpf_prog_info_set_offset_u64(&info_linear->info,
+> >  					     desc->array_offset,
+> >  					     ptr_to_u64(ptr));
+> > -		ptr += count * size;
+> > +		ptr += roundup(count * size, sizeof(__u64));
 > 
-> Have you already confirmed this failure happens in 5.19-rc1 or later as 
-> well?  I would think that b5d7f43e97dabfa04a4be5ff027ce7da119332be 
-> should have fixed it.
-
-Yes. I confirmed it with 78ca55889a549a9a194c6ec666836329b774ab6d.
-
-b5d7f43e97dabfa04a4be5ff027ce7da119332be deals with the case where it 
-advertises v2 but it doesn't in my case.
-
-Regards,
-Akihiko Odaki
-
+> this one depends on info_linear->data being alligned(8), right?
 > 
->> Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
->> ---
->>   drivers/hid/amd-sfh-hid/amd_sfh_pcie.c | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c 
->> b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
->> index dadc491bbf6b..4137e5da77ad 100644
->> --- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
->> +++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
->> @@ -271,6 +271,8 @@ static void mp2_select_ops(struct amd_mp2_dev 
->> *privdata)
->>       case V2_STATUS:
->>           privdata->mp2_ops = &amd_sfh_ops_v2;
->>           break;
->> +    case 15:
->> +        break;
->>       default:
->>           privdata->mp2_ops = &amd_sfh_ops;
->>           break;
->> @@ -317,6 +319,8 @@ static int amd_mp2_pci_probe(struct pci_dev *pdev, 
->> const struct pci_device_id *i
->>           return -ENOMEM;
->>       mp2_select_ops(privdata);
->> +    if (!privdata->mp2_ops)
->> +        return -ENODEV;
->>       rc = amd_sfh_irq_init(privdata);
->>       if (rc) {
+> should we make sure it's allways the case like in the patch
+> below, or it's superfluous?
 > 
+> thanks,
+> jirka
+> 
+> 
+> ---
+> diff --git a/tools/perf/util/bpf-utils.h b/tools/perf/util/bpf-utils.h
+> index 86a5055cdfad..1aba76c44116 100644
+> --- a/tools/perf/util/bpf-utils.h
+> +++ b/tools/perf/util/bpf-utils.h
+> @@ -60,7 +60,7 @@ struct perf_bpil {
+>  	/* which arrays are included in data */
+>  	__u64			arrays;
+>  	struct bpf_prog_info	info;
+> -	__u8			data[];
+> +	__u8			data[] __attribute__((aligned(8)));
+>  };
+>  
+>  struct perf_bpil *
 
+⬢[acme@toolbox perf-urgent]$ pahole -C perf_bpil ~/bin/perf
+struct perf_bpil {
+	__u32                      info_len;             /*     0     4 */
+	__u32                      data_len;             /*     4     4 */
+	__u64                      arrays;               /*     8     8 */
+	struct bpf_prog_info       info __attribute__((__aligned__(8))); /*    16   224 */
+
+	/* XXX last struct has 4 bytes of padding */
+
+	/* --- cacheline 3 boundary (192 bytes) was 48 bytes ago --- */
+	__u8                       data[];               /*   240     0 */
+
+	/* size: 240, cachelines: 4, members: 5 */
+	/* paddings: 1, sum paddings: 4 */
+	/* forced alignments: 1 */
+	/* last cacheline: 48 bytes */
+} __attribute__((__aligned__(8)));
+⬢[acme@toolbox perf-urgent]$
+
+
+Humm, lotsa explicit alignments already?
+
+Looking at the sources:
+
+struct perf_bpil {
+        /* size of struct bpf_prog_info, when the tool is compiled */
+        __u32                   info_len;
+        /* total bytes allocated for data, round up to 8 bytes */
+        __u32                   data_len;
+        /* which arrays are included in data */
+        __u64                   arrays;
+        struct bpf_prog_info    info;
+        __u8                    data[];
+};
+
+Interesting, where is pahole finding those aligned attributes? Ok
+'struct bpf_prog_info' in tools/include/uapi/linux/bpf.h has aligned(8)
+for the whole struct, so perf_bpil's info gets that.
+
+sp that data right after 'info' is 8 byte alignedas
+sizeof(bpf_prog_info) is a multiple of 8 bytes.
+
+So I think I can apply the patch as-is and leave making sure data is
+8-byte aligned for later.
+
+Doing that now.
+
+- Arnaldo

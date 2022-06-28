@@ -2,223 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A4455EFA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B90A855EFA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiF1Uau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 16:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48270 "EHLO
+        id S232173AbiF1UdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 16:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiF1Uas (ORCPT
+        with ESMTP id S229679AbiF1UdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 16:30:48 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE00564FB;
-        Tue, 28 Jun 2022 13:30:46 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SKRU1P021107;
-        Tue, 28 Jun 2022 20:30:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=B7ZsdCmzeX1AEGJ4+n9A1QiMbSEWdy0D1odXDHOtNDw=;
- b=YvYq7/pk6SYlCUiCCAhmJ9bNBUYt3KdSffmZBZ/IL603kpj5zdkA7em3m+daE1s9qtvp
- goauyOCqyKmy4jNXB/CaILIcS1HN+nN3gOLLl3BrIuf2sRjYXbVMwP+LUHqL4IgrAV5U
- RxOIYlElzH4UkLwZIHR6dpLdDr5xcBTZ0Yu36QQYiFYI5eVGgAnOp0Cefm+mnyKA7pNi
- f+12LLWZd+JT29beFTj8fSFJPcvtivrjDHazEavAZK0qY3aj6436SIlz2wW7s6x1V2LK
- zqUQ/B8jvxfozOB/F6kRi7R0j3IyILruWLROBU7Uf/czMxonYY/9iURLPajjRbftw9+g Jw== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h08pv01fa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 20:30:32 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25SKKiXc030459;
-        Tue, 28 Jun 2022 20:30:31 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma02wdc.us.ibm.com with ESMTP id 3gwt09rvc8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 20:30:31 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25SKUVT428705192
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Jun 2022 20:30:31 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5AFA5AC059;
-        Tue, 28 Jun 2022 20:30:31 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E0EE1AC05B;
-        Tue, 28 Jun 2022 20:30:30 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.160.43.21])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 28 Jun 2022 20:30:30 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jdelvare@suse.com,
-        linux@roeck-us.net, Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH] hwmon: (occ) Prevent power cap command overwriting poll response
-Date:   Tue, 28 Jun 2022 15:30:29 -0500
-Message-Id: <20220628203029.51747-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 28 Jun 2022 16:33:00 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC618BF7F;
+        Tue, 28 Jun 2022 13:32:59 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id x138so10352445pfc.3;
+        Tue, 28 Jun 2022 13:32:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=wg8+F4TuFkG1xW6NWKjkWvVt/UeHSlIng0uV9LgXC0s=;
+        b=dqVD2Rci/rbAyFFszQrdO48V3S3apzN/yRFMOMcr7JtbtriXkLnLJitsUgfjpKK7Z+
+         y3wyvHK8B+WaonGnTc3snZIYrvkvrsgye37c3cz/Nv3PqEHIVjHKpCAxIUZpDcYWB1Pa
+         W28xlLtVHPr0jPhsgbGyLDnnMxbmJtr6HZc2hIf4sJchxwIx8Trtr/D3vqK2l+XR8mcG
+         tiRixn1dYXmdcwA1bWJVXJLvjExYl+8rbKfSTzRIlgZUBy9o5lK7liort9h1mXq8IwCQ
+         MNSskNRcEG8URFcpPrhzcZE1KQSIfSI5e/S110Bpk2XOPXqdwAb5Kx9aH+u6bmpOrZQg
+         xMZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wg8+F4TuFkG1xW6NWKjkWvVt/UeHSlIng0uV9LgXC0s=;
+        b=FwTpOluSW+cHmSkkBetOPbGEZRnajbNYrlquCEKgNK5MdPR3P+qObuDg4VHpgbH6ck
+         mXq5GbMcjlnINpSqATrp4ZZGbmdYFDfsqdqh5Ty8SeZ92JMy1ToQAJcAZHpz1o12482t
+         YfoKgF1FtufvcupDOAlsQF6b4UGZgemZQ5ihEwRJCGGqvRwFt1Q2rbMPCz0HdGxwGU/k
+         /1j3TQ0chd+RCzAIhPSIbUx1I/2Na2GeGbJv0bl4gbAg9KQluTmW0VDHdPRq9xxSw3ht
+         JQ/Z9wAzb8Kz0UOuvReKl+IXGmciTSpLtLISGdNvtYWELwkHPU46KogQTAdKQeEFoZko
+         wbHg==
+X-Gm-Message-State: AJIora9fNhxJiRsVrQHZBNLfNMXEQn56K1yLDsiUI+r25z0MH3MGi5VR
+        CQXiIBXa3B0BdJMCzlC9WyU=
+X-Google-Smtp-Source: AGRyM1udAr2RA5pfWkYa0XVxSNy7W5KHGCo6ZXIjn694WLrbM6NtFsMcKbOusvCcRMF0+doZu0RiGw==
+X-Received: by 2002:a63:88c3:0:b0:40d:5f26:bfa8 with SMTP id l186-20020a6388c3000000b0040d5f26bfa8mr19136588pgd.608.1656448379122;
+        Tue, 28 Jun 2022 13:32:59 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id x10-20020a1709027c0a00b0016a6caacaefsm9272820pll.103.2022.06.28.13.32.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 13:32:58 -0700 (PDT)
+Message-ID: <ef48302b-3421-ebbe-7135-1297cffba7ed@gmail.com>
+Date:   Tue, 28 Jun 2022 13:32:56 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: RelTZ5-5zkQYxJC3a6jTVhEC1etL7LA7
-X-Proofpoint-ORIG-GUID: RelTZ5-5zkQYxJC3a6jTVhEC1etL7LA7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-28_11,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 mlxlogscore=999 impostorscore=0 lowpriorityscore=0
- suspectscore=0 bulkscore=0 mlxscore=0 malwarescore=0 clxscore=1011
- phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206280080
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 5.4 57/60] modpost: fix section mismatch check for
+ exported init/exit sections
+Content-Language: en-US
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jessica Yu <jeyu@kernel.org>
+References: <20220627111927.641837068@linuxfoundation.org>
+ <20220627111929.368555413@linuxfoundation.org>
+ <6cd16364-f0cd-b3f3-248f-4b6d585d05ef@gmail.com>
+ <CAKwvOdm8UiY8CsqNgyoq4MdC2TbBj-1+cRE+fWZ9+vVBxNZz_Q@mail.gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <CAKwvOdm8UiY8CsqNgyoq4MdC2TbBj-1+cRE+fWZ9+vVBxNZz_Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the response to the power cap command overwrites the
-first eight bytes of the poll response, since the commands use
-the same buffer. This means that user's get the wrong data between
-the time of sending the power cap and the next poll response update.
-Fix this by specifying a different buffer for the power cap command
-response.
+On 6/28/22 12:11, Nick Desaulniers wrote:
+> On Mon, Jun 27, 2022 at 10:03 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>
+>> On 6/27/22 04:22, Greg Kroah-Hartman wrote:
+>>> From: Masahiro Yamada <masahiroy@kernel.org>
+>>>
+>>> commit 28438794aba47a27e922857d27b31b74e8559143 upstream.
+>>>
+>>> Since commit f02e8a6596b7 ("module: Sort exported symbols"),
+>>> EXPORT_SYMBOL* is placed in the individual section ___ksymtab(_gpl)+<sym>
+>>> (3 leading underscores instead of 2).
+>>>
+>>> Since then, modpost cannot detect the bad combination of EXPORT_SYMBOL
+>>> and __init/__exit.
+>>>
+>>> Fix the .fromsec field.
+>>>
+>>> Fixes: f02e8a6596b7 ("module: Sort exported symbols")
+>>> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>>> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>
+>> This commit causes the following warning to show up on my kernel builds
+>> used for testing 5.4 stable candidates:
+>>
+>> WARNING: vmlinux.o(___ksymtab+drm_fb_helper_modinit+0x0): Section
+>> mismatch in reference from the variable __ksymtab_drm_fb_helper_modinit
+>> to the function .init.text:drm_fb_helper_modinit()
+>> The symbol drm_fb_helper_modinit is exported and annotated __init
+>> Fix this by removing the __init annotation of drm_fb_helper_modinit or
+>> drop the export.
+> 
+> Thanks for the report. Looks like the patch is "working as intended."
+> 
+> It looks like drm_fb_helper_modinit was deleted outright in
+> commit bf22c9ec39da ("drm: remove drm_fb_helper_modinit")
+> in v5.12-rc1.
+> 
+> Florian, can you test if that cherry-picks cleanly and resolves the
+> issue for you?
 
-Fixes: 5b5513b88002 ("hwmon: Add On-Chip Controller (OCC) hwmon driver")
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/hwmon/occ/common.c |  5 +++--
- drivers/hwmon/occ/common.h |  3 ++-
- drivers/hwmon/occ/p8_i2c.c | 13 +++++++------
- drivers/hwmon/occ/p9_sbe.c |  7 +++----
- 4 files changed, 15 insertions(+), 13 deletions(-)
+It does and it does, thanks!
 
-diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-index ea070b91e5b9..157b73a3da29 100644
---- a/drivers/hwmon/occ/common.c
-+++ b/drivers/hwmon/occ/common.c
-@@ -145,7 +145,7 @@ static int occ_poll(struct occ *occ)
- 	cmd[6] = 0;			/* checksum lsb */
- 
- 	/* mutex should already be locked if necessary */
--	rc = occ->send_cmd(occ, cmd, sizeof(cmd));
-+	rc = occ->send_cmd(occ, cmd, sizeof(cmd), &occ->resp, sizeof(occ->resp));
- 	if (rc) {
- 		occ->last_error = rc;
- 		if (occ->error_count++ > OCC_ERROR_COUNT_THRESHOLD)
-@@ -182,6 +182,7 @@ static int occ_set_user_power_cap(struct occ *occ, u16 user_power_cap)
- {
- 	int rc;
- 	u8 cmd[8];
-+	u8 resp[8];
- 	__be16 user_power_cap_be = cpu_to_be16(user_power_cap);
- 
- 	cmd[0] = 0;	/* sequence number */
-@@ -198,7 +199,7 @@ static int occ_set_user_power_cap(struct occ *occ, u16 user_power_cap)
- 	if (rc)
- 		return rc;
- 
--	rc = occ->send_cmd(occ, cmd, sizeof(cmd));
-+	rc = occ->send_cmd(occ, cmd, sizeof(cmd), resp, sizeof(resp));
- 
- 	mutex_unlock(&occ->lock);
- 
-diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
-index 64d5ec7e169b..7ac4b2febce6 100644
---- a/drivers/hwmon/occ/common.h
-+++ b/drivers/hwmon/occ/common.h
-@@ -96,7 +96,8 @@ struct occ {
- 
- 	int powr_sample_time_us;	/* average power sample time */
- 	u8 poll_cmd_data;		/* to perform OCC poll command */
--	int (*send_cmd)(struct occ *occ, u8 *cmd, size_t len);
-+	int (*send_cmd)(struct occ *occ, u8 *cmd, size_t len, void *resp,
-+			size_t resp_len);
- 
- 	unsigned long next_update;
- 	struct mutex lock;		/* lock OCC access */
-diff --git a/drivers/hwmon/occ/p8_i2c.c b/drivers/hwmon/occ/p8_i2c.c
-index da39ea28df31..b221be1f35f3 100644
---- a/drivers/hwmon/occ/p8_i2c.c
-+++ b/drivers/hwmon/occ/p8_i2c.c
-@@ -111,7 +111,8 @@ static int p8_i2c_occ_putscom_be(struct i2c_client *client, u32 address,
- 				      be32_to_cpu(data1));
- }
- 
--static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
-+static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len,
-+			       void *resp, size_t resp_len)
- {
- 	int i, rc;
- 	unsigned long start;
-@@ -120,7 +121,7 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
- 	const long wait_time = msecs_to_jiffies(OCC_CMD_IN_PRG_WAIT_MS);
- 	struct p8_i2c_occ *ctx = to_p8_i2c_occ(occ);
- 	struct i2c_client *client = ctx->client;
--	struct occ_response *resp = &occ->resp;
-+	struct occ_response *or = (struct occ_response *)resp;
- 
- 	start = jiffies;
- 
-@@ -151,7 +152,7 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
- 			return rc;
- 
- 		/* wait for OCC */
--		if (resp->return_status == OCC_RESP_CMD_IN_PRG) {
-+		if (or->return_status == OCC_RESP_CMD_IN_PRG) {
- 			rc = -EALREADY;
- 
- 			if (time_after(jiffies, start + timeout))
-@@ -163,7 +164,7 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
- 	} while (rc);
- 
- 	/* check the OCC response */
--	switch (resp->return_status) {
-+	switch (or->return_status) {
- 	case OCC_RESP_CMD_IN_PRG:
- 		rc = -ETIMEDOUT;
- 		break;
-@@ -192,8 +193,8 @@ static int p8_i2c_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
- 	if (rc < 0)
- 		return rc;
- 
--	data_length = get_unaligned_be16(&resp->data_length);
--	if (data_length > OCC_RESP_DATA_BYTES)
-+	data_length = get_unaligned_be16(&or->data_length);
-+	if ((data_length + 7) > resp_len)
- 		return -EMSGSIZE;
- 
- 	/* fetch the rest of the response data */
-diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-index 01405ae2f9bd..c1e0a1d96cd4 100644
---- a/drivers/hwmon/occ/p9_sbe.c
-+++ b/drivers/hwmon/occ/p9_sbe.c
-@@ -77,11 +77,10 @@ static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
- 	return notify;
- }
- 
--static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
-+static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len,
-+			       void *resp, size_t resp_len)
- {
--	struct occ_response *resp = &occ->resp;
- 	struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
--	size_t resp_len = sizeof(*resp);
- 	int rc;
- 
- 	rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
-@@ -95,7 +94,7 @@ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
- 		return rc;
- 	}
- 
--	switch (resp->return_status) {
-+	switch (((struct occ_response *)resp)->return_status) {
- 	case OCC_RESP_CMD_IN_PRG:
- 		rc = -ETIMEDOUT;
- 		break;
+> 
+> Maybe let's check with Christoph if it's ok to backport bf22c9ec39da
+> to stable 5.10 and 5.4?
+> 
+>>
+>> The kernel configuration to reproduce this is located here (this is 5.10
+>> but works in 5.4 as well):
+>>
+>> https://gist.github.com/2c3e8edd5ceb089c8040db724073d941
+>>
+>> Same applies to the 5.10, 5.15 and 5.18 stable queues FWIW.
+>> --
+>> Florian
+> 
+> 
+> 
+
+
 -- 
-2.31.1
-
+Florian

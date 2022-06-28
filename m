@@ -2,202 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A97CF55E87B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DB055E77F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347953AbiF1PJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43422 "EHLO
+        id S1347122AbiF1PKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347141AbiF1PJZ (ORCPT
+        with ESMTP id S1345950AbiF1PKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:09:25 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B1E95A8;
-        Tue, 28 Jun 2022 08:09:24 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 91B6222246;
-        Tue, 28 Jun 2022 17:09:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1656428963;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9kEBJdoPP+ZathQ1a3NWo7Je/syyaPZVyg6lZYXe3rs=;
-        b=Wfq+AR9EfUagI4NWajhsfogZyWQpriwV3UdxYRqiy3HaMH7uABI87ieWD17CuMGzrpn1Gl
-        ahWd2s4pHf8u69MMXw2myhv/sTOOVkxvchTRDpgliweAvW6HsP9nkiVwDguLmQVUqZA3FJ
-        LOz/7fZAKUORwLwBMI7QD0rsYuUHSGw=
+        Tue, 28 Jun 2022 11:10:34 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4771D95A8;
+        Tue, 28 Jun 2022 08:10:33 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id w24so12860046pjg.5;
+        Tue, 28 Jun 2022 08:10:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=PQdhoN5Y92Sffq/hOjS2nUMXws/DtAotkv6AY0an4t4=;
+        b=V6dMZ0z58UrUfatSTJEe0X1KX+7nyCpO3U8PTqJXLtBpT+teARJDVA4MzcJXAP6MD1
+         lOrpaAuItF/+ir7d8LcC3UJD8ygiU1cw2pN+3yDEVyLr1PN2AC5G5GP4Subgk/2NUkBk
+         P42NOacoYZhr2TH2WQAfNIi4PaV4y6x2zBnLP8xu/FYzvRHfvewW6xfZ0rtR9fvzyN5C
+         NmjMdYbx8nvkvaIBhypP3fJmeBRH8sXNDWP79HnCnXJZci6ul5xAaG9+AA0GCupRMIqM
+         5aaiAZPmbL8pa8aFf0xn17XhjCHkdkBfjnqkG742tKGwus7GPiZAXoFaVSpPPSwqau69
+         D3bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=PQdhoN5Y92Sffq/hOjS2nUMXws/DtAotkv6AY0an4t4=;
+        b=RjUMVHKoPODeep3YLr8AgiOsEKgapRLBMp1Urq9BanTb3HNiFqSfGmvNMI5KXiYz90
+         3af2fz/7p+CTfipWQcYcWlCSkToVU43GMndNFGlDC9ycLH86YtO+mk2TkPOfXzkPC811
+         Vc4YI+OxdxJf91DJjjlJ9JCeCUh8UfGzRzCR17KsE8DeP+GoA4HbsluomeSjOQdx7lGi
+         wgBYU1el6BVe8LkQ1lI8fxkw0Pkh2Y+aBa2faZrOo3wmxiAKwEs9Y4iBJosxCDWTER2B
+         byYTIA5p63Hwo+MaN+bL5PtlYsvWx8wZvZ8ClGVIgfUCUlyTO/uwb1DmvXm+ssN0/9yI
+         3p6Q==
+X-Gm-Message-State: AJIora+65/Z0+a15CuXRl7d9FTGfCfEgHtfJRokaMaNEdoDGwMgN6K4z
+        unTxHKk4xQM2+ZOV4MwYlag=
+X-Google-Smtp-Source: AGRyM1tsPj/V6CDv94LXNl91i1dCBmE8JH99oIjI9o2Cw/MrR03bgs+VohPLlMK2LhEtjyDRhNt8+Q==
+X-Received: by 2002:a17:902:ec06:b0:16a:1877:425 with SMTP id l6-20020a170902ec0600b0016a18770425mr4057838pld.131.1656429032710;
+        Tue, 28 Jun 2022 08:10:32 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n24-20020a056a000d5800b00517c84fd24asm9972175pfv.172.2022.06.28.08.10.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 08:10:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 28 Jun 2022 08:10:30 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+        Hardware Monitoring <linux-hwmon@vger.kernel.org>,
+        rafael@kernel.org
+Subject: Re: [PATCH 2/3] thermal/drivers/tegra: Remove get_trend function
+Message-ID: <20220628151030.GA3361452@roeck-us.net>
+References: <20220616202537.303655-1-daniel.lezcano@linaro.org>
+ <20220616202537.303655-2-daniel.lezcano@linaro.org>
+ <7841a809-e180-70d2-df9b-b30b411647ce@linaro.org>
+ <d186bb7d-cbe6-8ec4-82a1-8323b3901ac2@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 28 Jun 2022 17:09:22 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: Re: fwnode_for_each_child_node() and OF backend discrepancy
-In-Reply-To: <daaddbd5-1cd4-d3ce-869a-249bdd8aecb9@linaro.org>
-References: <4e1d5db9dea68d82c94336a1d6aac404@walle.cc>
- <Yrrhs3D++V79/4Jk@smile.fi.intel.com>
- <f17d3ecfecf4491dd15b1fa092205f3f@walle.cc>
- <CAHp75Vd6e3WwHPfyL=GP=vsoWhwGXadwQziiRRwfHPfjkX2eFg@mail.gmail.com>
- <2f2d7685e0e43194270a310034004970@walle.cc>
- <CAHp75VcANMjxgS6S24Zh+mz66usb6LBnQk-ENvU9JHSXXsG1DA@mail.gmail.com>
- <9e58f421c27121977d11381530757a6e@walle.cc>
- <3ab8afab-b6b7-46aa-06d4-6740cee422d7@linaro.org>
- <288f56ba9cfad46354203b7698babe91@walle.cc>
- <daaddbd5-1cd4-d3ce-869a-249bdd8aecb9@linaro.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <96f40ae6abf76af3b643b1e1c60d1d9f@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d186bb7d-cbe6-8ec4-82a1-8323b3901ac2@collabora.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-06-28 16:36, schrieb Krzysztof Kozlowski:
-> On 28/06/2022 16:22, Michael Walle wrote:
->>>> I can't follow you here. Please note, that you need the actual
->>>> physical port number. It's not a made up number, but corresponds
->>>> to a physical port on that ethernet switch. So you can't just skip
->>>> the disabled ones. port@2 must have port number 2.
->>> 
->>> The number "2" you get from the reg property, so where is exactly the
->>> problem?
->> 
->> That you need to get the total number of ports of the hardware (which
->> is also used for things beyond validation, eg. during switch init
->> all ports will are disabled). And right now, that is done by counting
->> all the nodes - which is bad, I guess we agree here.
+On Tue, Jun 28, 2022 at 02:44:31PM +0300, Dmitry Osipenko wrote:
+> On 6/28/22 11:41, Daniel Lezcano wrote:
+> > 
+> > Thierry, Dmitry,
+> > 
+> > are fine with this patch?
 > 
-> It's bad also from another reason - the DT node was explicitly 
-> disabled,
-> but you perform some operation on actual hardware representing this
-> node. I would assume that a disabled DT node means it is not
-> operational, e.g. hardware not present or missing clocks, so you should
-> not treat it as another meaning - power down/unused.
-
-Mh. Assume a SoC with an integrated ethernet switch. Some ports
-are externally connected, some don't. I'd think they should be disabled,
-no? Until now, all bindings I know, treat them as disabled. But OTOH
-you still need to do some configurations on them, like disable port
-forwarding, disable them or whatever. So the hardware is present, but
-it is not connected to anything.
-
->> But it works,
->> as long as no ports are disabled and all ports are described in the
->> device tree. But I have device trees where some are disabled.
+> Seems should be good. I couldn't test it using recent the linux-next
+> because of a lockup in LM90 driver. There were quite a lot of changes in
+> LM90 recently, adding Guenter.
 > 
-> I am not sure if I follow this. You have devices which
-> 1. have unused ports, but all DT nodes are available/okay,
-> 2. have unused ports, which are in DT status=disabled?
+
+Weird, I tested those changes to death with real hardware, and I don't
+see a code path where the mutex can be left in blocked state unless the
+underlying i2c driver locks up for some reason. What is the platform,
+and can you point me to the devicetree file ? Also, is there anything
+else lm90 or i2c related in the kernel log ?
+
+Thanks,
+Guenter
+
+> INFO: task kworker/3:1:44 blocked for more than 61 seconds.
+>       Not tainted 5.19.0-rc4-next-20220627-00012-g08b697b94b8a #2
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:kworker/3:1     state:D stack:    0 pid:   44 ppid:     2
+> flags:0x00000000
+> Workqueue: events_freezable_power_ thermal_zone_device_check
+> Backtrace:
+>  __schedule from schedule+0x60/0xcc
+>  r10:c0fead70 r9:c2854c94 r8:df9a1dac r7:c2814b40 r6:00000002 r5:c1883020
+>  r4:c2814b40
+>  schedule from schedule_preempt_disabled+0x28/0x38
+>  r5:c1883020 r4:c2814b40
+>  schedule_preempt_disabled from __mutex_lock.constprop.0+0x1e0/0x9ac
+>  r5:c1883020 r4:c2854c90
+>  __mutex_lock.constprop.0 from __mutex_lock_slowpath+0x1c/0x20
+>  r10:00000000 r9:c1882ae0 r8:c2854c90 r7:c2854c40 r6:00000001 r5:00000001
+>  r4:c2854c90
+>  __mutex_lock_slowpath from mutex_lock+0x60/0x64
+>  mutex_lock from lm90_read+0x40/0x3d4
+>  r5:00000001 r4:c2854e08
+>  lm90_read from hwmon_thermal_get_temp+0x58/0x8c
+>  r9:c1882ae0 r8:c2814b40 r7:de6aee00 r6:c1db1660 r5:c0af7940 r4:df9a1eb8
+>  hwmon_thermal_get_temp from of_thermal_get_temp+0x38/0x44
+>  r5:df9a1eb8 r4:c1db1400
+>  of_thermal_get_temp from thermal_zone_get_temp+0x58/0x78
+>  thermal_zone_get_temp from thermal_zone_device_update.part.0+0x4c/0x450
+>  r7:de6aee00 r6:c1db1400 r5:00000000 r4:c1db1400
+>  thermal_zone_device_update.part.0 from thermal_zone_device_check+0x58/0x5c
+>  r10:00000000 r9:c1882ae0 r8:c2814b40 r7:de6aee00 r6:c1db1400 r5:c1db1660
+>  r4:00000001
+>  thermal_zone_device_check from process_one_work+0x21c/0x530
+>  r7:de6aee00 r6:de6ab600 r5:c2802c00 r4:c1db167c
+>  process_one_work from worker_thread+0x19c/0x5cc
+>  r10:00000008 r9:c2814b40 r8:c1703d40 r7:de6ab61c r6:c2802c18 r5:de6ab600
+>  r4:c2802c00
+>  worker_thread from kthread+0x100/0x120
+>  r10:00000000 r9:df895e80 r8:c285e3c0 r7:c2802c00 r6:c014cf84 r5:c285e300
+>  r4:c2814b40
+>  kthread from ret_from_fork+0x14/0x2c
+> Exception stack(0xdf9a1fb0 to 0xdf9a1ff8)
 > 
-> Doesn't case 2 break the bindings? If so, we don't care about such
-> out-of-tree users. We cannot support all of possible weird combinations
-> in out-of-tree DTS files...
-
-Case 1 is invalid I think.
-
-How does case 2 break the binding? It breaks the driver, yes. But not
-the binding. I agree on the out-of-tree argument, *but* isn't that
-what the binding is for, that out-of-tree device trees gonna work as
-long as they follow the binding? And I don't see where it dictates that 
-all
-nodes must be enabled; nor that it must either be 2 or 8 children nodes.
-
->> I assume, you cannot read the hardware itself to get the number of
->> physical ports; and we have the compatible "microchip,lan966x-switch",
->> which is the generic one, so it could be the LAN9668 (with 8 ports)
->> or the LAN9662 (with 2 ports).
+> > On 16/06/2022 22:25, Daniel Lezcano wrote:
+> >> The get_trend function does already what the generic framework does.
+> >>
+> >> Remove it.
+> >>
+> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> >> ---
+> >>   drivers/thermal/tegra/soctherm.c | 32 --------------------------------
+> >>   1 file changed, 32 deletions(-)
+> >>
+> >> diff --git a/drivers/thermal/tegra/soctherm.c
+> >> b/drivers/thermal/tegra/soctherm.c
+> >> index 210325f92559..825eab526619 100644
+> >> --- a/drivers/thermal/tegra/soctherm.c
+> >> +++ b/drivers/thermal/tegra/soctherm.c
+> >> @@ -633,37 +633,6 @@ static int tegra_thermctl_set_trip_temp(void
+> >> *data, int trip, int temp)
+> >>       return 0;
+> >>   }
+> >>   -static int tegra_thermctl_get_trend(void *data, int trip,
+> >> -                    enum thermal_trend *trend)
+> >> -{
+> >> -    struct tegra_thermctl_zone *zone = data;
+> >> -    struct thermal_zone_device *tz = zone->tz;
+> >> -    int trip_temp, temp, last_temp, ret;
+> >> -
+> >> -    if (!tz)
+> >> -        return -EINVAL;
+> >> -
+> >> -    ret = tz->ops->get_trip_temp(zone->tz, trip, &trip_temp);
+> >> -    if (ret)
+> >> -        return ret;
+> >> -
+> >> -    temp = READ_ONCE(tz->temperature);
+> >> -    last_temp = READ_ONCE(tz->last_temperature);
+> >> -
+> >> -    if (temp > trip_temp) {
+> >> -        if (temp >= last_temp)
+> >> -            *trend = THERMAL_TREND_RAISING;
+> >> -        else
+> >> -            *trend = THERMAL_TREND_STABLE;
+> >> -    } else if (temp < trip_temp) {
+> >> -        *trend = THERMAL_TREND_DROPPING;
+> >> -    } else {
+> >> -        *trend = THERMAL_TREND_STABLE;
+> >> -    }
+> >> -
+> >> -    return 0;
+> >> -}
+> >> -
+> >>   static void thermal_irq_enable(struct tegra_thermctl_zone *zn)
+> >>   {
+> >>       u32 r;
+> >> @@ -716,7 +685,6 @@ static int tegra_thermctl_set_trips(void *data,
+> >> int lo, int hi)
+> >>   static const struct thermal_zone_of_device_ops tegra_of_thermal_ops = {
+> >>       .get_temp = tegra_thermctl_get_temp,
+> >>       .set_trip_temp = tegra_thermctl_set_trip_temp,
+> >> -    .get_trend = tegra_thermctl_get_trend,
+> >>       .set_trips = tegra_thermctl_set_trips,
+> >>   };
+> >>   
+> > 
+> > 
 > 
-> I'll keep that argument for future when I see again patches adding such
-> wildcard compatible. :) I had to discuss with some folks...
-> 
-> Although the compatible difference does not have to be important here,
-> because one could say the 9662 and 9668 programming model is exaclty 
-> the
-> same and they differ by number of ports. This number of ports can be a
-> dedicated property or counted from the children (if they were all
-> available).
-
-Mh. Rob was always in favor of dedicated compatible strings. And I
-think there are also subtle differences. Eg. the LAN9662 has some kind
-of accelerating engine, if I'm not mistaken.
-
-So what do you prefer:
-
-   compatible = "microchip,lan9668";
-and
-   compatible = "microchip,lan9662";
-
-or
-
-   compatible = "microchip,lan966x";
-   microchip,num-phys-ports = <8>;
-and
-   compatible = "microchip,lan966x";
-   microchip,num-phys-ports = <2>;
-   microchip,accelerating-engine;
-   ..
-
-The argument here was always, we don't want too much properties if
-it can be deduced by the compatible string.
-
->> We somehow have to retain backwards
->> compatibility. Thus my idea was to at least make the handling slightly
->> better and count *any* child nodes. So it doesn't fall apart with
->> disabled
->> nodes. Then introduce proper compatible strings
->> "microchip,lan9668-switch"
->> and use that to hardcode the num_phys_ports to 8. But there will be
->> device trees with microchip,lan966x-switch out there, which we do want
->> to support.
->> 
->> I see the following options:
->>   (1) just don't care and get rid of the "microchip,lan966x-switch"
->>       compatible
->>   (2) quick fix for the older kernels by counting all the nodes and
->>       proper fix for the newer kernels with dedicated compatibles
->>   (3) no fix for older kernels, introduce new compatibles for new
->>       kernels
-> 
-> I propose this one. I would not care about out-of-tree DTSes which
-> decided to disable random stuff and expect things working. :)
-
-I'd argue, that is the usual case for all the switch bindings I
-know of; not some unusual config. E.g. the SoC dtsi disables all
-ports by default and only the ones which are actually connected
-by the board are then enabled in the board dts, see
-arch/arm/boot/dts/lan966x.dtsi
-arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-
-That being said, I don't care too much about the older kernels.
-So I'm fine with (3).
-
--michael
-
-> 
->>   (4) keep generic compatible if the hardware can be read out to get
->>       the number of ports.
->> 
->> I think (1) isn't the way to go. (2) was my try until I noticed
->> that odd fwnode behavior. But judging by this thread, I don't think
->> thats possible. I don't know if (4) is possible at all. If not we'd
->> be left with (3).
-

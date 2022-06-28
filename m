@@ -2,47 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC92155E0A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D0455CFB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343580AbiF1Gfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 02:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
+        id S245641AbiF1Ggu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 02:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245747AbiF1Gf2 (ORCPT
+        with ESMTP id S245717AbiF1Ggd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 02:35:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FBF27CC5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:34:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43C16B81B97
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:34:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEE36C3411D;
-        Tue, 28 Jun 2022 06:34:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656398078;
-        bh=YH4oxZVzU+FrY2eMW2RZbmu5DK/XM5uHJX0XVuT98EA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M4EzBVx6oGk3IYWM0hyDpQmAngtgmZspK9bXIi1OMSMgdq+g1VoR1dH8nDMLPYarW
-         3bPU/0EWMQqKH3ZR/6G7YdkIGB249G6TccQb4TMVpyOZDpBaMyhsVEnLLX8jdalUWf
-         evCIzVe5oUIVdk/4OcC+z7ARd8VjsEBrJMM6nvBM=
-Date:   Tue, 28 Jun 2022 08:34:35 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Oded Gabbay <ogabbay@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/12] habanalabs: add unsupported functions
-Message-ID: <Yrqg+6bBxRMmomrm@kroah.com>
-References: <20220627202620.961350-1-ogabbay@kernel.org>
- <20220627202620.961350-5-ogabbay@kernel.org>
+        Tue, 28 Jun 2022 02:36:33 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA7427162
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:36:00 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id c205so11118017pfc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=jELs+00IN2XRLAhHEpv/uDcKD8BHgm3LO8TAQxr7/S8=;
+        b=gZhInxTYLITVwSA+pCUS67K7KcAlTRUX/PLOhLoFasARmxRHZXkk8HjdXfLHMn4uwv
+         5oOVdI1Ezh1NuLncOJIOYXrYFbnJs6RTu8a1G0+Ss0xUa4W+7NpVf5XsUCZv8LjWoFhp
+         s4l0ixN2amckn054xI+giDCzWvPheAtAjUdK4HmHgz7OQbGsFEi1j+a6qVXuXspGJUxh
+         foRRewHnpEcez9mTk739dtr5xWZvqymVEC8BALmoWnJWlCHlcmzQoV0ZwckL6SdoUkja
+         kVxXSSE4BMCebSIBZUUrJjqbErztCpKudFyjNFAYd7jDhBBZnotscFPfdn9rdg3HgRD9
+         mg/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=jELs+00IN2XRLAhHEpv/uDcKD8BHgm3LO8TAQxr7/S8=;
+        b=YXS6fV9r0wyQmzGHdJhrschRW+7cZt0xt3h4QLHw+plyYosH+CTn1VmKQe0spNnmY0
+         0O0t0JAfDOCiQidec/mVxfdvXUPhd1Md6UJskYf/o+4tfztNg2Xei4PWESyYkEq354OH
+         IIgSmamIzsHZgGyQZNo6mo1TyfXo8e+xTNx3xVEijyFNeZ9BNcZpmd7AgiNxdYJN0VzO
+         toOKjiB67DszYGkjPnFDNmYf46U1nwThxZITGesKJE0Yoxj3Vs5CQdIjng4ouKtXILkk
+         byHZA4zs5u/vhVeRGfDqXzsXtJBiSnv2+wyzximzx9PpBMr8u94N831XSJDpuNUZqZ+x
+         u7Qw==
+X-Gm-Message-State: AJIora893fKzG89TZ9YqphFjefgJ4Nitb6XicVVKqwYgRAZuL0RVdMhW
+        nctAcZNL2vcDTrshdqRv5N2j
+X-Google-Smtp-Source: AGRyM1uz7w+7zzu++7h9WJlZurJnOJ6dc32whckhoJEnkuJib5IJC6PCPJFrAbsAr5JZvxtAbcN2Jw==
+X-Received: by 2002:a63:88c3:0:b0:40d:5f26:bfa8 with SMTP id l186-20020a6388c3000000b0040d5f26bfa8mr16248894pgd.608.1656398160347;
+        Mon, 27 Jun 2022 23:36:00 -0700 (PDT)
+Received: from thinkpad ([27.111.75.159])
+        by smtp.gmail.com with ESMTPSA id i7-20020aa796e7000000b0051bb61c0eacsm8499208pfq.20.2022.06.27.23.35.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 23:35:59 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 12:05:54 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Niklas Cassel <niklas.cassel@axis.com>,
+        Joao Pinto <jpinto@synopsys.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v5 05/18] PCI: dwc: Deallocate EPC memory on EP
+ init error
+Message-ID: <20220628063554.GB23601@thinkpad>
+References: <20220624143428.8334-1-Sergey.Semin@baikalelectronics.ru>
+ <20220624143428.8334-6-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220627202620.961350-5-ogabbay@kernel.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220624143428.8334-6-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,47 +85,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 11:26:12PM +0300, Oded Gabbay wrote:
-> There are a number of new ASIC-specific functions that were added
-> for Gaudi2. To make the common code work, we need to define empty
-> implementations of those functions for Goya and Gaudi.
+On Fri, Jun 24, 2022 at 05:34:15PM +0300, Serge Semin wrote:
+> If the dw_pcie_ep_init() method fails to perform any action after the EPC
+> memory is initialized and the MSI memory region is allocated, the later
+> parts won't be undone thus causing the memory leak.  Let's fix that by
+> introducing the cleanup-on-error path in the dw_pcie_ep_init() method,
+> which will be taken should any consequent erroneous situation happens.
 > 
-> Some functions will return error if called with Goya/Gaudi.
+> Fixes: 2fd0c9d966cc ("PCI: designware-ep: Pre-allocate memory for MSI in dw_pcie_ep_init")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+Thanks,
+Mani
+
+> Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > 
-> Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 > ---
->  drivers/misc/habanalabs/gaudi/gaudi.c | 24 ++++++++++++++++++++++++
->  drivers/misc/habanalabs/goya/goya.c   | 24 ++++++++++++++++++++++++
->  2 files changed, 48 insertions(+)
 > 
-> diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-> index ae894335e9f8..f4581220ecd5 100644
-> --- a/drivers/misc/habanalabs/gaudi/gaudi.c
-> +++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-> @@ -8588,6 +8588,11 @@ static void gaudi_ctx_fini(struct hl_ctx *ctx)
->  	gaudi_internal_cb_pool_fini(ctx->hdev, ctx);
->  }
+> Changelog v2:
+> - This is a new patch create as a result of the discussion in:
+>   Link: https://lore.kernel.org/linux-pci/20220324014836.19149-26-Sergey.Semin@baikalelectronics.ru
+> ---
+>  .../pci/controller/dwc/pcie-designware-ep.c    | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> index 0eda8236c125..13c2e73f0eaf 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> @@ -780,8 +780,9 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>  	ep->msi_mem = pci_epc_mem_alloc_addr(epc, &ep->msi_mem_phys,
+>  					     epc->mem->window.page_size);
+>  	if (!ep->msi_mem) {
+> +		ret = -ENOMEM;
+>  		dev_err(dev, "Failed to reserve memory for MSI/MSI-X\n");
+> -		return -ENOMEM;
+> +		goto err_exit_epc_mem;
+>  	}
 >  
-> +int gaudi_pre_schedule_cs(struct hl_cs *cs)
-> +{
-> +	return 0;
-> +}
+>  	if (ep->ops->get_features) {
+> @@ -790,6 +791,19 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>  			return 0;
+>  	}
+>  
+> -	return dw_pcie_ep_init_complete(ep);
+> +	ret = dw_pcie_ep_init_complete(ep);
+> +	if (ret)
+> +		goto err_free_epc_mem;
 > +
->  static u32 gaudi_get_queue_id_for_cq(struct hl_device *hdev, u32 cq_idx)
->  {
->  	return gaudi_cq_assignment[cq_idx];
-> @@ -8959,6 +8964,14 @@ static void gaudi_enable_events_from_fw(struct hl_device *hdev)
->  		gaudi_irq_map_table[GAUDI_EVENT_INTS_REGISTER].cpu_id);
+> +	return 0;
+> +
+> +err_free_epc_mem:
+> +	pci_epc_mem_free_addr(epc, ep->msi_mem_phys, ep->msi_mem,
+> +			      epc->mem->window.page_size);
+> +
+> +err_exit_epc_mem:
+> +	pci_epc_mem_exit(epc);
+> +
+> +	return ret;
 >  }
->  
-> +int gaudi_ack_mmu_page_fault_or_access_error(struct hl_device *hdev,
-> +							u64 mmu_cap_mask)
-> +{
-> +	dev_err(hdev->dev, "mmu_error function is not supported\n");
+>  EXPORT_SYMBOL_GPL(dw_pcie_ep_init);
+> -- 
+> 2.35.1
+> 
 
-Can userspace trigger this?  if so, make it debug, as you don't want to
-give userspace a way to spam the logs.
-
-thanks,
-
-greg k-h
+-- 
+மணிவண்ணன் சதாசிவம்

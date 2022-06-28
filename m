@@ -2,130 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D026255C65E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C14455D2F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243973AbiF1C7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 22:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46934 "EHLO
+        id S244016AbiF1C77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 22:59:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243163AbiF1C7F (ORCPT
+        with ESMTP id S243980AbiF1C7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 22:59:05 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FA4E57;
-        Mon, 27 Jun 2022 19:59:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656385144; x=1687921144;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=sVoUlH6maLKR/PkF8oqytFzMhM9Ho9rUbcb5QoSP0sk=;
-  b=SJSSmcQNoJraxx5/s4nYo/Vmy1EB/Y9suDIZhTFfbteFp3SmMainxoTG
-   cEfeYefNx+EtMtlIxXS80Urlg1Y9u9v/+rwhoETw52oNBza+rlG0QLpsZ
-   XCsN1lieGpl0p9UcncVRQ9hosBOu3OzRSmmF7sg8k2FdNXRWQYd5wqICw
-   6TNULtTKyTA2pDnBUmRrMyFdORTZ+gQ+94FyUrXzMv7AeT1RZqjlIcYAL
-   34fOjdbpH48LwnRfcmAPyPQrbW8C170C0CMbuUBuQD9K5eP2SEvFbXtXd
-   crfl+2WJPX8JM4m/ee99s+fGmJxEjw+I14Fgxkl8Kn8XvJ9+qM53t7zVI
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="343305994"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="343305994"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 19:59:04 -0700
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="590143490"
-Received: from iiturbeo-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.89.183])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 19:59:02 -0700
-Message-ID: <8dc8bf255982e75c8b9032916903ae3ff3e7a632.camel@intel.com>
-Subject: Re: [PATCH v7 007/102] KVM: Enable hardware before doing arch VM
- initialization
-From:   Kai Huang <kai.huang@intel.com>
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Date:   Tue, 28 Jun 2022 14:59:00 +1200
-In-Reply-To: <e3ccffe3a46f994779037e4965313e7df9980ddc.1656366338.git.isaku.yamahata@intel.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
-         <e3ccffe3a46f994779037e4965313e7df9980ddc.1656366338.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Mon, 27 Jun 2022 22:59:54 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3CD10C2;
+        Mon, 27 Jun 2022 19:59:53 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id x138so8079943pfc.3;
+        Mon, 27 Jun 2022 19:59:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Iy098yhdyb0a5SyXKWlT7u6iJuhvMN00ep0qgOXCHoI=;
+        b=QNi1HHEUK8o83bxfsVWh2Z0OllMq9omDy4K0glAnV1LGSn1WJXd0+NQ3BRRpFmKvA5
+         5/j747pZhTLek5CVOQXiMuEWWxwBhbLbao5Pr5hOj9KusCwA4nBbj7vXgr1Zl9RkE6EA
+         qgaw2bj8pIM4ZZ0Ia8S52x392+ts1SD7cpwoEqJ5KnIqLy0gWV4Q3CFiq3SeFWPUjh2k
+         p/sxlkizJIi9Dv1y57lcHlBCcn4KFG6EiU4h6ygq5x1u8ZSuwAs87Kj3xd8cMAbMG+tn
+         2LxX6ntrg1x1YqjBvAj+iRdKh5D4si73ROhexqPsT087pEtiD3yccUDvnH4FiMLd4+N0
+         53bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Iy098yhdyb0a5SyXKWlT7u6iJuhvMN00ep0qgOXCHoI=;
+        b=I9eb/yPL1baXk6Wj5fTIzH/uEvDz1vJSZromklSWohUOY21g4fdPtRJRU0FObpKvMK
+         lt3i55B9pLWmUeHZTh2qokMjo1+0tAGlTOtNJ86cjFgZW9gSmpzEY1GcDr9nUBbT1nhG
+         OmhXNwhptFbXaAFOsDqQvw9qAIJeFkKaxXl5KTQDZwgD6Ial+eyLqPSbnsjKWkoBYegu
+         43UZwT4jUv5jGbjcpRYVJXyMRYg1dm/cojZpTYeBoT4aM/YyHDX28iPMnmAx5kKcPJGy
+         EWODvvQM33FR0Bc5NZPWL1iOu7Gm+uFMOxHEIjKj++aWDuH+9QjMfFouV+palTiK8KK5
+         7vjg==
+X-Gm-Message-State: AJIora/TCj4gKprZyN0xxLSI/3nbAWMrEkCMaufvWgwtdf3eDXPqp2zz
+        RWv0KKs7DaUVZwdihRFcIiU=
+X-Google-Smtp-Source: AGRyM1vvx3EazGHMG0o771576+yjZRDKDLi71wCcXpaTemWTOq/i4T3QX8lr7Fg/tBCUj4dtvYtX8w==
+X-Received: by 2002:a63:5610:0:b0:3f2:7e19:1697 with SMTP id k16-20020a635610000000b003f27e191697mr15973688pgb.74.1656385193204;
+        Mon, 27 Jun 2022 19:59:53 -0700 (PDT)
+Received: from localhost.localdomain ([103.84.139.165])
+        by smtp.gmail.com with ESMTPSA id 17-20020a17090a199100b001eccaf818c5sm8096334pji.27.2022.06.27.19.59.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 19:59:52 -0700 (PDT)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     jmaloy@redhat.com, ying.xue@windriver.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH] net: tipc: fix possible infoleak in tipc_mon_rcv()
+Date:   Tue, 28 Jun 2022 10:59:21 +0800
+Message-Id: <20220628025921.14767-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-27 at 14:52 -0700, isaku.yamahata@intel.com wrote:
-> From: Sean Christopherson <sean.j.christopherson@intel.com>
->=20
-> Swap the order of hardware_enable_all() and kvm_arch_init_vm() to
-> accommodate Intel's TDX, which needs VMX to be enabled during VM init in
-> order to make SEAMCALLs.
->=20
-> This also provides consistent ordering between kvm_create_vm() and
-> kvm_destroy_vm() with respect to calling kvm_arch_destroy_vm() and
-> hardware_disable_all().
+dom_bef is use to cache current domain record only if current domain
+exists. But when current domain does not exist, dom_bef will still be used
+in mon_identify_lost_members. This may lead to an information leak.
 
-Reviewed-by: Kai Huang <kai.huang@intel.com>
+Fix this by adding a memset before using dom_bef.
 
->=20
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  virt/kvm/kvm_main.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->=20
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index cee799265ce6..0acb0b6d1f82 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -1138,19 +1138,19 @@ static struct kvm *kvm_create_vm(unsigned long ty=
-pe)
->  		rcu_assign_pointer(kvm->buses[i],
->  			kzalloc(sizeof(struct kvm_io_bus), GFP_KERNEL_ACCOUNT));
->  		if (!kvm->buses[i])
-> -			goto out_err_no_arch_destroy_vm;
-> +			goto out_err_no_disable;
->  	}
-> =20
->  	kvm->max_halt_poll_ns =3D halt_poll_ns;
-> =20
-> -	r =3D kvm_arch_init_vm(kvm, type);
-> -	if (r)
-> -		goto out_err_no_arch_destroy_vm;
-> -
->  	r =3D hardware_enable_all();
->  	if (r)
->  		goto out_err_no_disable;
-> =20
-> +	r =3D kvm_arch_init_vm(kvm, type);
-> +	if (r)
-> +		goto out_err_no_arch_destroy_vm;
-> +
->  #ifdef CONFIG_HAVE_KVM_IRQFD
->  	INIT_HLIST_HEAD(&kvm->irq_ack_notifier_list);
->  #endif
-> @@ -1188,10 +1188,10 @@ static struct kvm *kvm_create_vm(unsigned long ty=
-pe)
->  		mmu_notifier_unregister(&kvm->mmu_notifier, current->mm);
->  #endif
->  out_err_no_mmu_notifier:
-> -	hardware_disable_all();
-> -out_err_no_disable:
->  	kvm_arch_destroy_vm(kvm);
->  out_err_no_arch_destroy_vm:
-> +	hardware_disable_all();
-> +out_err_no_disable:
->  	WARN_ON_ONCE(!refcount_dec_and_test(&kvm->users_count));
->  	for (i =3D 0; i < KVM_NR_BUSES; i++)
->  		kfree(kvm_get_bus(kvm, i));
+Fixes: 35c55c9877f8 ("tipc: add neighbor monitoring framework")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
+ net/tipc/monitor.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/net/tipc/monitor.c b/net/tipc/monitor.c
+index 2f4d23238a7e..67084e5aa15c 100644
+--- a/net/tipc/monitor.c
++++ b/net/tipc/monitor.c
+@@ -534,6 +534,7 @@ void tipc_mon_rcv(struct net *net, void *data, u16 dlen, u32 addr,
+ 	state->peer_gen = new_gen;
+ 
+ 	/* Cache current domain record for later use */
++	memset(&dom_bef, 0, sizeof(dom_bef));
+ 	dom_bef.member_cnt = 0;
+ 	dom = peer->domain;
+ 	if (dom)
+-- 
+2.25.1
 

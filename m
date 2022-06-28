@@ -2,214 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833CB55C498
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1414C55DD16
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344967AbiF1Kh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 06:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
+        id S1344984AbiF1Khl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 06:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343572AbiF1KhZ (ORCPT
+        with ESMTP id S1344995AbiF1Khc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:37:25 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5AE31531
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:37:24 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id c205so11617534pfc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:37:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=bA/LvK4VSTipcL5wV6o8JEN/FGRXth+GfF/ix8DPlqk=;
-        b=1nsW17eI0m+TEU/Df0xZQtSTzWNuPJPL+cLBH9mby00SGpNKYQRzuIOAEoEMoc+VKe
-         iCAT0u1uqqmmGT4PwhCCk+O+G7OnqLCTQOTw7/mKjzMdIPZtT7TSe8vLV+dHBc16dL6X
-         C4Pw5FCCR16UdzC0sWtGpp9sE9mn8xU85ECfUiu9azx1vbpEeuGGP5pJeB3i4pGHRxAc
-         r4hcwChYJc+B/j/LDiDB16YmSmGUhWwh2berMI2z/BtIDEyeFfyHsYa8H/sl1mWeI0Re
-         TtGn2m1sQAYM2Dpy7yReXWCYc6jBYjubil8OCQZNk797m47PzWLQqpVtvB6NLN42AsPy
-         zT4g==
+        Tue, 28 Jun 2022 06:37:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C39FA31531
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656412650;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JZ412A6etRNSSmCZ+MdpqmCicNkRtP9zW1av9UbdkXw=;
+        b=IFVdUcCjXkmR+pRqKW3sd3RHyQtBz+UvoGaf+o2ItL/wUQl5b68cRsq7q7SPqthE99MQdq
+        lSoq+fDtT34c/KQBl2PiHE9q8PTxXaw9cxA2hNcgwf+av5Xem/4hcD2RnZNMxBKd6jwK2H
+        S0bPt5Mafq2Lj8BiUrLCj/9tTjVJy4s=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-156-DdCJlHcGMMisGMW0sWZBlg-1; Tue, 28 Jun 2022 06:37:27 -0400
+X-MC-Unique: DdCJlHcGMMisGMW0sWZBlg-1
+Received: by mail-wm1-f69.google.com with SMTP id p6-20020a05600c358600b003a0483b3c2eso3549248wmq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:37:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=bA/LvK4VSTipcL5wV6o8JEN/FGRXth+GfF/ix8DPlqk=;
-        b=wPzMGHL4qumLlB1MQ68ps7w6A8V5JvTt8oj8FD8xYZxz8EuZ8bWl5UfwYU6hYlIWtQ
-         MosqVK3R0pJTFFrXUmM4kFZQb1IG42YYmAx9EoH0mMQ2ZT6MMGbMY/t988ql59EZutgw
-         uHcIKjcMTojub25uOxm0qvZgNdNEj0vEHI85W1GutbbQiQ9KSPB82OoJf7LX0KgrhtnV
-         ptFRyCCaJg6XvpqELfzZd8fiRFEMxohTE+pq7fbzrmbyNbWgDm1DdOdzRoAiM6K2MbsQ
-         ka6i0KnGyl/7XpMDCycwEL+jm34QJwL0CeX+Ybl4hNi28/1KZebQ1ETqHfililWzb4wh
-         nCSg==
-X-Gm-Message-State: AJIora9Tq72pKrTXxHZux6PrmKWgG/zN9W28T3aF0PvDYHqvRXEejTaR
-        /wdYlzRrSxJV4/NyohSyBxhtxg==
-X-Google-Smtp-Source: AGRyM1sgdtMMGgOPriW4iR/+QS0YLrSxxcIGWj1Rf59BTEslFGmjr3RopsGIwcWviAn2MFtjl1Oucg==
-X-Received: by 2002:a63:1259:0:b0:40d:d290:24ef with SMTP id 25-20020a631259000000b0040dd29024efmr13117043pgs.141.1656412643393;
-        Tue, 28 Jun 2022 03:37:23 -0700 (PDT)
-Received: from localhost ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id z9-20020a1709027e8900b0016b865ea2d6sm2670238pla.82.2022.06.28.03.37.21
+         :mime-version:content-disposition:in-reply-to;
+        bh=JZ412A6etRNSSmCZ+MdpqmCicNkRtP9zW1av9UbdkXw=;
+        b=Mq+U7Ox7iBdhYEuNOwB2Wn/+GapaAtT/YU7aag8/BxreJ2AGKQ3STUjR841jDZ4p47
+         Ec7TLggmDfBRalvKJOBMzxZV62Z2rmG8FJ/uzi9sjdTmrVBddIehiqiZIN7oR4FqeaMw
+         HDbYeI2SHmWEhgSoNOjpHx8+ExRYNBhNe5MJaQCp4C3U9quDFkbr5knxtWjipm+BJ8Ps
+         /NnU6znz9nABwW+z0Kjn8vCUcC/Q8wjHQlStsq/KAkElpTiEB1Yfw4M/9xI5VIfx/YlE
+         ETeUQuRRxloE0YvlnmTiAR5Ptz5QTOgMA7V/wQOt9bzqof+rAIe9h6mYHzkUWYWB0lca
+         w3vQ==
+X-Gm-Message-State: AJIora+tVXvVmSZ5dYI9llJeqzcimBUyjY7xiKNUmype76+Qetc9WZ7j
+        YTvBXioPJXBm7mf7QElCqtQH9vkw9knw9fq16GxXzWHgUDIvpZ1mJAiEhrA584cgfoCWIeJfeN3
+        snhzWzFiK8EmPcMQMpQA7hmLy
+X-Received: by 2002:a5d:5f05:0:b0:21b:8ca0:6d3d with SMTP id cl5-20020a5d5f05000000b0021b8ca06d3dmr16999588wrb.382.1656412645825;
+        Tue, 28 Jun 2022 03:37:25 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uXNGFE5xDiJLqCYzHw0b1cPLBkMfKGgL9TiFcXE4v2aSyk0kMGcqQcAG4JMTTFITIUubCZuQ==
+X-Received: by 2002:a5d:5f05:0:b0:21b:8ca0:6d3d with SMTP id cl5-20020a5d5f05000000b0021b8ca06d3dmr16999571wrb.382.1656412645635;
+        Tue, 28 Jun 2022 03:37:25 -0700 (PDT)
+Received: from redhat.com ([2.52.23.204])
+        by smtp.gmail.com with ESMTPSA id v24-20020a5d5918000000b0021b9870049dsm13038675wrd.82.2022.06.28.03.37.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 03:37:22 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 18:37:18 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     HORIGUCHI =?utf-8?B?TkFPWUEo5aCA5Y+j44CA55u05LmfKQ==?= 
-        <naoya.horiguchi@nec.com>
-Cc:     Naoya Horiguchi <nao.horiguchi@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/9] mm, hwpoison, hugetlb: support saving mechanism
- of raw error pages
-Message-ID: <YrrZ3hZlqEb3rlM0@FVFYT0MHHV2J>
-References: <20220623235153.2623702-1-naoya.horiguchi@linux.dev>
- <20220623235153.2623702-5-naoya.horiguchi@linux.dev>
- <Yrl3qT3V6s9pLuvr@FVFYT0MHHV2J.usts.net>
- <20220628024121.GF2159330@hori.linux.bs1.fc.nec.co.jp>
- <YrqfJ5wHXIEdu4BM@FVFYT0MHHV2J.usts.net>
- <20220628081754.GA2206088@hori.linux.bs1.fc.nec.co.jp>
+        Tue, 28 Jun 2022 03:37:25 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 06:37:20 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Xu Qiang <xuqiang36@huawei.com>
+Cc:     jasowang@redhat.com, elic@nvidia.com, si-wei.liu@oracle.com,
+        parav@nvidia.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, rui.xiang@huawei.com
+Subject: Re: [PATCH -next] vdpa/mlx5: Use eth_zero_addr() to assign zero
+ address
+Message-ID: <20220628063703-mutt-send-email-mst@kernel.org>
+References: <20220628094418.27973-1-xuqiang36@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220628081754.GA2206088@hori.linux.bs1.fc.nec.co.jp>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220628094418.27973-1-xuqiang36@huawei.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 08:17:55AM +0000, HORIGUCHI NAOYA(堀口 直也) wrote:
-> On Tue, Jun 28, 2022 at 02:26:47PM +0800, Muchun Song wrote:
-> > On Tue, Jun 28, 2022 at 02:41:22AM +0000, HORIGUCHI NAOYA(堀口 直也) wrote:
-> > > On Mon, Jun 27, 2022 at 05:26:01PM +0800, Muchun Song wrote:
-> > > > On Fri, Jun 24, 2022 at 08:51:48AM +0900, Naoya Horiguchi wrote:
-> > > > > From: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> ...
-> > > > > +	} else {
-> > > > > +		/*
-> > > > > +		 * Failed to save raw error info.  We no longer trace all
-> > > > > +		 * hwpoisoned subpages, and we need refuse to free/dissolve
-> > > > > +		 * this hwpoisoned hugepage.
-> > > > > +		 */
-> > > > > +		set_raw_hwp_unreliable(hpage);
-> > > > > +		return ret;
-> > > > > +	}
-> > > > > +	return ret;
-> > > > > +}
-> > > > > +
-> > > > > +inline int hugetlb_clear_page_hwpoison(struct page *hpage)
-> > > > > +{
-> > > > > +	struct llist_head *head;
-> > > > > +	struct llist_node *t, *tnode;
-> > > > > +
-> > > > > +	if (raw_hwp_unreliable(hpage))
-> > > > > +		return -EBUSY;
-> > > > 
-> > > > IIUC, we use head page's PageHWPoison to synchronize hugetlb_clear_page_hwpoison()
-> > > > and hugetlb_set_page_hwpoison(), right? If so, who can set hwp_unreliable here?
-> > > 
-> > > Sorry if I might miss your point, but raw_hwp_unreliable is set when
-> > > allocating raw_hwp_page failed.  hugetlb_set_page_hwpoison() can be called
-> > 
-> > Sorry. I have missed this. Thanks for your clarification.
-> > 
-> > > multiple times on a hugepage and if one of the calls fails, the hwpoisoned
-> > > hugepage becomes unreliable.
-> > > 
-> > > BTW, as you pointed out above, if we switch to passing GFP_ATOMIC to kmalloc(),
-> > > the kmalloc() never fails, so we no longer have to implement this unreliable
-> > 
-> > No. kmalloc() with GFP_ATOMIC can fail unless I miss something important.
+On Tue, Jun 28, 2022 at 09:44:18AM +0000, Xu Qiang wrote:
+> Using eth_zero_addr() to assign zero address insetad of
+
+typo
+
+> memset().
 > 
-> OK, I've interpretted the comment about GFP_ATOMIC wrongly.
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Xu Qiang <xuqiang36@huawei.com>
+> ---
+>  drivers/vdpa/mlx5/net/mlx5_vnet.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->  * %GFP_ATOMIC users can not sleep and need the allocation to succeed. A lower
->  * watermark is applied to allow access to "atomic reserves".
+> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> index e85c1d71f4ed..f738c78ef446 100644
+> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> @@ -1457,8 +1457,8 @@ static int mlx5_vdpa_add_mac_vlan_rules(struct mlx5_vdpa_net *ndev, u8 *mac,
 >  
-> 
-> > > flag, so things get simpler.
-> > > 
-> > > > 
-> > > > > +	ClearPageHWPoison(hpage);
-> > > > > +	head = raw_hwp_list_head(hpage);
-> > > > > +	llist_for_each_safe(tnode, t, head->first) {
-> > > > 
-> > > > Is it possible that a new item is added hugetlb_set_page_hwpoison()  and we do not
-> > > > traverse it (we have cleared page's PageHWPoison)? Then we ignored a real hwpoison
-> > > > page, right?
-> > > 
-> > > Maybe you are mentioning the race like below. Yes, that's possible.
-> > >
-> > 
-> > Sorry, ignore my previous comments, I'm thinking something wrong.
-> > 
-> > >   CPU 0                            CPU 1
-> > > 
-> > >                                    free_huge_page
-> > >                                      lock hugetlb_lock
-> > >                                      ClearHPageMigratable
-> > 				       remove_hugetlb_page()
-> > 				       // the page is non-HugeTLB now
-> 
-> Oh, I missed that.
-> 
-> > >                                      unlock hugetlb_lock
-> > >   get_huge_page_for_hwpoison
-> > >     lock hugetlb_lock
-> > >     __get_huge_page_for_hwpoison
-> > 
-> > 	// cannot reach here since it is not a HugeTLB page now.
-> > 	// So this race is impossible. Then we fallback to normal
-> > 	// page handling. Seems there is a new issue here.
-> > 	//
-> > 	// memory_failure()
-> > 	//	try_memory_failure_hugetlb()
-> > 	//	if (hugetlb)
-> > 	//		goto unlock_mutex;
-> > 	//	if (TestSetPageHWPoison(p)) {
-> > 	//	// This non-HugeTLB page's vmemmap is still optimized.
-> > 	
-> > Setting COMPOUND_PAGE_DTOR after hugetlb_vmemmap_restore() might fix this
-> > issue, but we will encounter this race as you mentioned below.
-> 
-> I don't have clear ideas about this now (I don't test vmemmap-optimized case
-> yet), so I will think more about this case. Maybe memory_failure() need
-> detect it because memory_failure() heaviliy depends on the status of struct
-> page.
->
+>  	*ucast = rule;
+>  
+> -	memset(dmac_c, 0, ETH_ALEN);
+> -	memset(dmac_v, 0, ETH_ALEN);
+> +	eth_zero_addr(dmac_c);
+> +	eth_zero_addr(dmac_v);
+>  	dmac_c[0] = 1;
+>  	dmac_v[0] = 1;
+>  	rule = mlx5_add_flow_rules(ndev->rxft, spec, &flow_act, &dest, 1);
+> -- 
+> 2.17.1
 
-Because HVO (HugeTLB Vmemmap Optimization) will map all tail vmemmap pages
-with read-only, we cannot write any data to some tail struct pages. It is
-a new issue unrelated to this patch.
-
-Thanks.
- 
-> Thanks,
-> Naoya Horiguchi
-> 
-> > 
-> > Thanks.
-> > 	
-> > >       hugetlb_set_page_hwpoison
-> > >         allocate raw_hwp_page
-> > >         TestSetPageHWPoison
-> > >                                      update_and_free_page
-> > >                                        __update_and_free_page
-> > >                                          if (PageHWPoison)
-> > >                                            hugetlb_clear_page_hwpoison
-> > >                                              TestClearPageHWPoison
-> > >                                              // remove all list items
-> > >         llist_add
-> > >     unlock hugetlb_lock
-> > > 
-> > > 
-> > > The end result seems not critical (leaking raced raw_hwp_page?), but
-> > > we need fix.

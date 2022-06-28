@@ -2,82 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4859155E744
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E04955E8D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347185AbiF1OrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 10:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55068 "EHLO
+        id S1347213AbiF1OsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 10:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347166AbiF1OrB (ORCPT
+        with ESMTP id S1347277AbiF1Ore (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 10:47:01 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6432FFE1;
-        Tue, 28 Jun 2022 07:47:00 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id w24so12794551pjg.5;
-        Tue, 28 Jun 2022 07:47:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=RcJ0LvnXsRYCpaaWQCJPfDAyqL/8a86kBAToJ7vwdJU=;
-        b=WQAlYrUhBD//WlreKty7MqmQg8VtvPzCPIotzVpSdo27Bvd4F/sWU6Mp1c/Vz71v8c
-         wy4cBV2FBJjEk/soJ/56x041FP7KiUsR9CDJYPGAQpj7CtK++8rsq4P1P2gw1wpV6Vmb
-         bhhC1BwlJos/dej4vNxEiPW8WpRl+Dm01KHRx/RNbzkcd/QE39v/U1KQZGWB46y6BzH6
-         Bfp/7FbmbLLWhhAgXvZEiGM1RoxGVWVr/rVMm1oNaRcK8DinLgrrJRXphr7Z0zqMJF67
-         KqXIHeSjT5yEojGDQ+PFLfqiuRfB9Zu9hM42LZmjQqSmqnFpmGW9Yys3ralF0QNrN5ry
-         lLSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RcJ0LvnXsRYCpaaWQCJPfDAyqL/8a86kBAToJ7vwdJU=;
-        b=18tUUAkCIyx4Ba1dJ93rLKmjEa6eYUrov3XUyOgb3tGC3vcoY68iSJpLwU5gjBHqPv
-         6Y1kz8sOBO31aTFWe+xw3K7skinduG7NzWQeakJpvbFss8FB9tKY/iRyW5vjYN8trtrT
-         sEfcHryllZCJqrMCC/peYrAb8pqtXeVQXd7VoAGVUaEATPqtcBVrbg3cBiNbu5msFOib
-         qmtfARKV0vWr0D9DDppXly72SQqUjI++/UFgrMeMaO/U/+62rmCPvgmeE20KxH0t9j0p
-         VOhdDWm+YrzvggvQP6ouN/Zj9cHPvbmhHnSClsQEsaYddEfwsQrZSlrRJ/wkN3yBuPM+
-         IObQ==
-X-Gm-Message-State: AJIora++U1JmAPhqdf8rk3f6zFqn0TDOI8MNX/J2aHDCMOQbzteLONkf
-        5xSTg8K9K5Cgk3n0jBFMHj0=
-X-Google-Smtp-Source: AGRyM1sPvQOJ0/OkTI/VuSSST+v3e7vJbLGipF63DNlCkewwutffIXDn1cfb8jo9EHcwl3AuMECgVw==
-X-Received: by 2002:a17:90b:1986:b0:1ec:71f6:5fd9 with SMTP id mv6-20020a17090b198600b001ec71f65fd9mr27054263pjb.188.1656427619514;
-        Tue, 28 Jun 2022 07:46:59 -0700 (PDT)
-Received: from ?IPV6:2600:8802:b00:4a48:c569:fa46:5b43:1b1e? ([2600:8802:b00:4a48:c569:fa46:5b43:1b1e])
-        by smtp.gmail.com with ESMTPSA id ms3-20020a17090b234300b001ead46e77e2sm9635024pjb.13.2022.06.28.07.46.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 07:46:59 -0700 (PDT)
-Message-ID: <93f6d122-3b0e-5706-4c9e-b0cdc3479455@gmail.com>
-Date:   Tue, 28 Jun 2022 07:46:58 -0700
+        Tue, 28 Jun 2022 10:47:34 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AD72ED55;
+        Tue, 28 Jun 2022 07:47:32 -0700 (PDT)
+Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LXS7D42dFz67tWM;
+        Tue, 28 Jun 2022 22:45:12 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Tue, 28 Jun 2022 16:47:29 +0200
+Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 28 Jun
+ 2022 15:47:29 +0100
+Date:   Tue, 28 Jun 2022 15:47:27 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Dave Jiang" <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH V12 6/9] cxl/port: Read CDAT table
+Message-ID: <20220628154727.0000021c@Huawei.com>
+In-Reply-To: <20220628041527.742333-7-ira.weiny@intel.com>
+References: <20220628041527.742333-1-ira.weiny@intel.com>
+        <20220628041527.742333-7-ira.weiny@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH net-next v2 3/4] net: dsa: microchip: add pause stats
- support
-Content-Language: en-US
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
-        UNGLinuxDriver@microchip.com
-References: <20220628085155.2591201-1-o.rempel@pengutronix.de>
- <20220628085155.2591201-4-o.rempel@pengutronix.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220628085155.2591201-4-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhreml712-chm.china.huawei.com (10.201.108.63) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,15 +61,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 27 Jun 2022 21:15:24 -0700
+ira.weiny@intel.com wrote:
 
-
-On 6/28/2022 1:51 AM, Oleksij Rempel wrote:
-> Add support for pause specific stats.
+> From: Ira Weiny <ira.weiny@intel.com>
 > 
-> Tested on ksz9477.
+> The OS will need CDAT data from CXL devices to properly set up
+> interleave sets.  Currently this is supported through a DOE mailbox
+> which supports CDAT.
 > 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Search the DOE mailboxes available, query CDAT data, and cache the data
+> for later parsing.
+> 
+> Provide a sysfs binary attribute to allow dumping of the CDAT.
+> 
+> Binary dumping is modeled on /sys/firmware/ACPI/tables/
+> 
+> The ability to dump this table will be very useful for emulation of real
+> devices once they become available as QEMU CXL type 3 device emulation will
+> be able to load this file in.
+> 
+> This does not support table updates at runtime. It will always provide
+> whatever was there when first cached. Handling of table updates can be
+> implemented later.
+> 
+> Finally create a complete list of CDAT defines within cdat.h for code
+> wishing to decode the CDAT table.
+> 
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+One query inline, though I'm fine with it either way, just want to
+understand your logic in keeping completion when Dan suggested using
+flush_work() to achieve the same thing.
+
+> 
+> ---
+> Changes from V11:
+> 	Adjust for the use of DOE mailbox xarray
+> 	Dan Williams:
+> 		Remove unnecessary get/put device
+> 		Use new BIN_ATTR_ADMIN_RO macro
+> 		Flag that CDAT was supported
+> 			If there is a read error then the CDAT sysfs
+> 			will return a 0 length entry
+> 
+...
+> diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
+> index c4c99ff7b55e..4bd479ec0253 100644
+> --- a/drivers/cxl/core/pci.c
+> +++ b/drivers/cxl/core/pci.c
+> @@ -4,10 +4,12 @@
+
+> +static int cxl_cdat_get_length(struct device *dev,
+> +			       struct pci_doe_mb *cdat_mb,
+> +			       size_t *length)
+> +{
+> +	u32 cdat_request_pl = CDAT_DOE_REQ(0);
+> +	u32 cdat_response_pl[32];
+> +	DECLARE_COMPLETION_ONSTACK(c);
+> +	struct pci_doe_task task = {
+> +		.prot.vid = PCI_DVSEC_VENDOR_ID_CXL,
+> +		.prot.type = CXL_DOE_PROTOCOL_TABLE_ACCESS,
+> +		.request_pl = &cdat_request_pl,
+> +		.request_pl_sz = sizeof(cdat_request_pl),
+> +		.response_pl = cdat_response_pl,
+> +		.response_pl_sz = sizeof(cdat_response_pl),
+> +		.complete = cxl_doe_task_complete,
+> +		.private = &c,
+> +	};
+> +	int rc = 0;
+> +
+> +	rc = pci_doe_submit_task(cdat_mb, &task);
+> +	if (rc < 0) {
+> +		dev_err(dev, "DOE submit failed: %d", rc);
+> +		return rc;
+> +	}
+> +	wait_for_completion(&c);
+
+Dan mentioned in his review that we could just use
+flush_work() and drop the completion logic and callback.
+Why didn't you go that way?  Would want to wrap it up
+in pci_doe_wait_task() or something like that.
+
+> +
+> +	if (task.rv < 1)
+> +		return -EIO;
+> +
+> +	*length = cdat_response_pl[1];
+> +	dev_dbg(dev, "CDAT length %zu\n", *length);
+> +
+> +	return rc;
+> +}
+> +

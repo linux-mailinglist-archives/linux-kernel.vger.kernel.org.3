@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF7655E425
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F44B55E428
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344832AbiF1NNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
+        id S234530AbiF1NO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346135AbiF1NNQ (ORCPT
+        with ESMTP id S1344658AbiF1NOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:13:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CFF2DE9;
-        Tue, 28 Jun 2022 06:13:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 28 Jun 2022 09:14:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9926F2C647
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:14:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656422060;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=akalRBv8rSXwTfwuxqw08LsnmFGrOfMBind/GarjuNw=;
+        b=J8dhRQwXIphtkJh0uRI/eCEB/nKit7Nrx5Fco1dlCANkE8liG65tTSkKyB97Vu1NyxKNAl
+        Kg7ipxIsDrDTixvrT57PA/rxrPVqHA0BUGEEwUXrC/R+bqP5PbwtCRRuaqCr8KY5QW6U+4
+        r88kfe0W/Fbf4hqSg8z7xLChwKzPBL0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-352-b-YdLMubOnKH5qUii0tOtg-1; Tue, 28 Jun 2022 09:14:17 -0400
+X-MC-Unique: b-YdLMubOnKH5qUii0tOtg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AEFD7B81C17;
-        Tue, 28 Jun 2022 13:13:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C67DC3411D;
-        Tue, 28 Jun 2022 13:13:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656421992;
-        bh=4eKNwqdZK49mQlTSa+RWBkwQceYFaWoD0AZOMcDGfwc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QI5tlgkIbQxYmpWougp5ACh8YyMFUfre5qjg6JwanHdkf+c87sKdm7kaVz4VYofS3
-         r3L/F2LEWZ5oDHUI4588xSUtamLhvwRuk8s4GZbrF3001lg0kRM0pOox4JzgeZ5Wys
-         uxvihfHN5UzdJeYw7Q9UzbT/s9OvrN8dyNzpNigz5rUOm33bBf/bqgteVfG5oBWrEi
-         Oo5NHUDnJbZHq083rdjVGmVT4t7oky0Lz0apuWC+JC9oNsvWsRLgORnDiuZX9wf+fX
-         m52jdnxdL+CoDhVBejevRYm0jYs6TuEYC0JbEsQ+UNBMev1Zfc0euyGqKGCAA7cR0Z
-         1fNAQzgJhSr3A==
-Date:   Tue, 28 Jun 2022 15:13:04 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Ralph Corderoy <ralph@inputplus.co.uk>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Nate Karstens <nate.karstens@garmin.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        David Laight <David.Laight@aculab.com>,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Changli Gao <xiaosuo@gmail.com>
-Subject: Re: [PATCH v2] Implement close-on-fork
-Message-ID: <20220628131304.gbiqqxamg6pmvsxf@wittgenstein>
-References: <20200515152321.9280-1-nate.karstens@garmin.com>
- <20220618114111.61EC71F981@orac.inputplus.co.uk>
- <Yq4qIxh5QnhQZ0SJ@casper.infradead.org>
- <20220619104228.A9789201F7@orac.inputplus.co.uk>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C9AC31C01B43;
+        Tue, 28 Jun 2022 13:14:16 +0000 (UTC)
+Received: from starship (unknown [10.40.194.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 940432166B26;
+        Tue, 28 Jun 2022 13:14:14 +0000 (UTC)
+Message-ID: <3e91bffa4323535349cc003af3ef808653ea4682.camel@redhat.com>
+Subject: Re: [PATCH] KVM: SVM: Fix x2APIC Logical ID calculation for
+ avic_kick_target_vcpus_fast
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Tue, 28 Jun 2022 16:14:13 +0300
+In-Reply-To: <20220628123314.486001-1-suravee.suthikulpanit@amd.com>
+References: <20220628123314.486001-1-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220619104228.A9789201F7@orac.inputplus.co.uk>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,40 +64,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 11:42:28AM +0100, Ralph Corderoy wrote:
-> Hi Matthew, thanks for replying.
+On Tue, 2022-06-28 at 07:33 -0500, Suravee Suthikulpanit wrote:
+> For X2APIC ID in cluster mode, the logical ID is bit [15:0].
 > 
-> > > The need for O_CLOFORK might be made more clear by looking at a
-> > > long-standing Go issue, i.e. unrelated to system(3), which was started
-> > > in 2017 by Russ Cox when he summed up the current race-condition
-> > > behaviour of trying to execve(2) a newly created file:
-> > > https://github.com/golang/go/issues/22315.
-> >
-> > The problem is that people advocating for O_CLOFORK understand its
-> > value, but not its cost.  Other google employees have a system which
-> > has literally millions of file descriptors in a single process.
-> > Having to maintain this extra state per-fd is a cost they don't want
-> > to pay (and have been quite vocal about earlier in this thread).
+> Fixes: 603ccef42ce9 ("KVM: x86: SVM: fix avic_kick_target_vcpus_fast")
+> Cc: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> ---
+>  arch/x86/kvm/svm/avic.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> So do you agree the userspace issue is best solved by *_CLOFORK and the
-> problem is how to implement *_CLOFORK at an acceptable cost?
-> 
-> OTOH David Laight was making suggestions on moving the load to the
-> fork/exec path earlier in the thread, but OTOH Al Viro mentioned a
-> ‘portable solution’, though that could have been to a specific issue
-> rather than the more general case.
-> 
-> How would you recommend approaching an acceptable cost is progressed?
-> Iterate on patch versions?  Open a bugzilla.kernel.org for central
-> tracking and linking from the other projects?  ..?
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index a830468d9cee..29f393251c4c 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -378,7 +378,7 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
+>  
+>  		if (apic_x2apic_mode(source)) {
+>  			/* 16 bit dest mask, 16 bit cluster id */
+> -			bitmap = dest & 0xFFFF0000;
+> +			bitmap = dest & 0xFFFF;
+>  			cluster = (dest >> 16) << 4;
+>  		} else if (kvm_lapic_get_reg(source, APIC_DFR) == APIC_DFR_FLAT) {
+>  			/* 8 bit dest mask*/
 
-Quoting from that go thread
+Ouch, sorry about that :(
 
-"If the OS had a "close all fds above x", we could use that. (I don't know of any that do, but it sure would help.)"
+It just shows how much this code needs a test, I will write one really soon.
 
-So why can't this be solved with:
-close_range(fd_first, fd_last, CLOSE_RANGE_CLOEXEC | CLOSE_RANGE_UNSHARE)?
-e.g.
-close_range(100, ~0U, CLOSE_RANGE_CLOEXEC | CLOSE_RANGE_UNSHARE)?
 
-https://man7.org/linux/man-pages/man2/close_range.2.html
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+
+Best regards,
+	Maxim Levitsky
+

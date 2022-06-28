@@ -2,107 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D9655DAE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E186A55D887
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244811AbiF1FOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 01:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
+        id S237729AbiF1FQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 01:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244680AbiF1FOF (ORCPT
+        with ESMTP id S244838AbiF1FPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 01:14:05 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441D3275C7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 22:13:33 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id 59so18538144qvb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 22:13:33 -0700 (PDT)
+        Tue, 28 Jun 2022 01:15:47 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073BB275CD
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 22:14:34 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id 9so7454595ill.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 22:14:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=me-ssier-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=kF0TVeiT2haFltgoqbJILN1oxVvcGv4SSoCvDNYOas8=;
-        b=wSlIqbm7D6ZerdlLJ7QM4QdLjWQzMufmBqkQfMnYG12junSlU39G1nPk/pkIir30Y1
-         5PL7HAtt/Fp/iOKKKZOXOXy/NVOdA9LXZmfl2dLxwtqfR0B7Z3Pi27Ku3FrM0BvF0Jnw
-         GI/ZADuR91XhP5k3OIcn/2g81tIjlhT6w1E+snEuTCZ2m5vY0xTF5tVUMp7CEaQdcHBF
-         RawtGe4Jh2iqbMhNiVPji4gA8gRzBomGLwKTQEtSqUbfQ7GjV5RwdzG9epw+i1UDMY7L
-         Hu7rKwfaMR7R3vXdSzqEKAEQAKJv95RouSMsvySZ7VfMBh6c/FkTE1t/d9TTt4lQbZOV
-         S22Q==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oG6UmMCeULY14p5Tnuuf681QLknd/2jzZKexPfhwXHo=;
+        b=1W2RaMrqcsbZfT9D9Kb4GB4UobqcaC7M7RaswpgReAuuCtk4JgzRIGdgBJ4g1WM4Fn
+         qru0MTS6IP2RQf6esYtsp9yaH1DLApJzzcfo58uEVpegkBj6EeVjj4f721h2sClNDsqX
+         pSzqRCOetnm4dXRflO8aNfBiBAmAaauNAQcnHDm4efmAMANpumeTKYK3ZpiHfY6BBtkd
+         DIwwQQ+JPDhlOv+KRBVtB4Nus1SC4UydB0PX88t1SSrRfsNJDNHu24zVD758Z0lv/L0n
+         VNvXuyupIqFLISQdJWMUTYPCE4aYf9DdyLUstPm4Pan7PCN7SKQLi3ot7dpsmoluote8
+         AZqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=kF0TVeiT2haFltgoqbJILN1oxVvcGv4SSoCvDNYOas8=;
-        b=SktN2K6dy5o8hNS4tQNyWccGq6Q9o+gMsPsaVrI3jVfNon67AMpNN1EIqQ5uNcn/ZR
-         7OWh7QWxYkQIQNM0xeyqBMcN4YOG1eqzlb+RJTr7v4of/aUMYA0UymH2Gk+ooQgQCmoR
-         WzSD0P7KwjL+9MY6vFSYo3HaY9RXGp/fKmMORO+Grbr8bqeKQIGoeRlFbhvvXwmuiB6H
-         lMup21zXXesOVTyl0I4wnYk+00f7W1kZmpcvpZLDqXvvy14yNSq8zVgAm9m7P/eXF6yS
-         cYNm/XAIwlptSXkBSGTLsg9xD+5aYiZTWQrdfy112yA1v+Q6lqT2/cMoZnnwT02QNDZW
-         g57w==
-X-Gm-Message-State: AJIora/FqGEC7zJx0wC15OnH+ghZhcYhyQEPafFcXtF0zsHSD1qhOQri
-        fv7O4BQ3VA9cW4bEoftgncCAoxlKpx3w4N2/qBQ=
-X-Google-Smtp-Source: AGRyM1tbhNbLSVOTeFsQrWeXL+JQWb00FEOxr1G6HLMQ7x9eqY3vuSw7GeagoX3shKYWmDut4EmlgA==
-X-Received: by 2002:a05:622a:1791:b0:317:76d8:d17f with SMTP id s17-20020a05622a179100b0031776d8d17fmr12128764qtk.82.1656393211680;
-        Mon, 27 Jun 2022 22:13:31 -0700 (PDT)
-Received: from [192.168.2.14] (bras-base-stggpq3702w-grc-11-142-115-210-184.dsl.bell.ca. [142.115.210.184])
-        by smtp.gmail.com with ESMTPSA id 14-20020ac8594e000000b00304fc3d144esm8937106qtz.1.2022.06.27.22.13.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 22:13:31 -0700 (PDT)
-Message-ID: <6025678c-e94a-6966-e298-82fad658a889@me.ssier.org>
-Date:   Tue, 28 Jun 2022 01:13:30 -0400
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oG6UmMCeULY14p5Tnuuf681QLknd/2jzZKexPfhwXHo=;
+        b=eVX5BlXMCcx7jpKg+K9oDdOu8AB0lzfXgjRmN7Wm9qli/CcoosvZm+SV1oWj51qRL+
+         PLao+49H3gHJD00CWJwWoMs4tr9nrhdXzwT4RXezJ4AAkh+vxFfi3pZTrEVDnVKJD8Kz
+         2yFbAtxSOVuy9ATk3N8V8MvpFSPd0cVH4bAg5QuReXKqlc9P0a1U8QWhiPXWKsumvIdl
+         XxyPgHpm7Qzsc36YGRGTa4J9na+j1yLJeln+JqSZV0FjFG2s7s0iNoEYFO33y3IqBjer
+         cvwsi0bA4KporORArlL41CcsfsdhdgOTe7EzcreiiB/hYj4WeH4t3H4fYkyMBoywvt4M
+         D45g==
+X-Gm-Message-State: AJIora9m/JE3M8GpxUbsh/rmkbveOkvuqxZ3GEvJ32BZGVOc7kaC+SL9
+        6TJIAgmGPg1hJWIBMolY0Y/Ye/Vq8bgfvM9SAPAOLg==
+X-Google-Smtp-Source: AGRyM1usCg0sGk1noQH4VFjDiVGy6bpSg35rY0jEoBZXk9gygcdycANNmduNCCY/SZ2apIYZT4vNGm0cs9nYUijW8rc=
+X-Received: by 2002:a05:6e02:1a66:b0:2da:a3c6:d8f1 with SMTP id
+ w6-20020a056e021a6600b002daa3c6d8f1mr2783376ilv.180.1656393272553; Mon, 27
+ Jun 2022 22:14:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     tglx@linutronix.de, Andrew.Cooper3@citrix.com, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        regressions@lists.linux.dev, Alexandre Messier <alex@me.ssier.org>
-From:   Alexandre Messier <alex@me.ssier.org>
-Subject: [REGRESSION] Unable to unlock encrypted disk starting with kernel
- 5.19-rc1+
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NEUTRAL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220608104202.19461-1-zhangjiachen.jaycee@bytedance.com> <YrnHeqckLknFleud@redhat.com>
+In-Reply-To: <YrnHeqckLknFleud@redhat.com>
+From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Date:   Tue, 28 Jun 2022 13:14:21 +0800
+Message-ID: <CAFQAk7jgV1EkLK120tPkcG0MvupRMLQcvLNj8aP-=45nymMnQw@mail.gmail.com>
+Subject: Re: Re: [PATCH] fuse: add FOPEN_INVAL_ATTR
+To:     Vivek Goyal <vgoyal@redhat.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Jun 27, 2022 at 11:06 PM Vivek Goyal <vgoyal@redhat.com> wrote:
+>
+> On Wed, Jun 08, 2022 at 06:42:02PM +0800, Jiachen Zhang wrote:
+> > So that the fuse daemon can ask kernel to invalidate the attr cache on file
+> > open.
+>
+> Will be great if there was a proper context around this. Without any
+> explanation, how one is supposed to understand how this is useful.
+>
+> By going through other email threads, looks like, with writeback
+> cache enabled, you want to invalidate attr cache and data cache
+> when file is opened next time. Right?
 
-I tested 5.19-rc4 on my system that is currently running 5.18.0, and came
-across an issue when unlocking the encrypted rootfs disk at startup. The error
-message is:
 
-device-mapper: reload ioctl on nvme0n1p3_crypt (254:0) failed: No such file or directory
+Hi Vivek,
 
-The kernel log shows:
+Yes, exactly. This patch is supposed to be a supplement to the
+writeback_cache consistency enhancement patch [1]. Sorry for the lack
+of explanation. I think I will send this and the enhancement patch as
+a patchset later after there is more comments and discussions.
 
-device-mapper: table: 254:0: crypt: Error allocating crypto tfm (-ENOENT)
-device-mapper: ioctl: error adding target to table
+>
+> IOW, when file is closed, its changes will be flushed out. And when
+> file is reopened, server somehow is supposed to determine if file
+> has changed (on server by another client) and based on that determine
+> whether to invalidate attr and data cache on next open?
 
-I tested the previous 5.19-rcX, and the issue started happening with 5.19-rc1.
-A bisection between 5.18.0 and 5.19-rc1 identifies the following commit:
+Yes, to achieve this so-called close-to-open consistency, this patch
+gives a knod to FUSE server handler to invalidate attributes cache on
+file open.
 
-8ad7e8f69695 ("x86/fpu/xsave: Support XSAVEC in the kernel")
+>
+> Even without that, on next open, it probably makes sense to being
+> invalidate attr cache. We have notion to invalidate data cache. So
+> it will be kind of odd that we can invalidate data but not attrs
+> on next open. Am I understanding it right?
 
-I reverted that commit on top of 5.19-rc4, and unlocking the encrypted disk
-works again.
+Yes, Exactly. It could also be used for immediate attr invalidation in
+write-through mode.
 
-Some more information about the system:
-- CPU is AMD Ryzen 5700G
-- Userspace is Debian Sid
-- The encrypted disk setup is a default encrypted rootfs, as configured by the
-  standard Debian installer
-
-Please let me know if more information is needed, or if some tests are needed
-to be run.
+[1] https://lore.kernel.org/linux-fsdevel/20220624055825.29183-1-zhangjiachen.jaycee@bytedance.com/
 
 Thanks,
-Alex
+Jiachen
 
-#regzbot introduced 8ad7e8f69695
+>
+> Thanks
+> Vivek
+>
+> >
+> > Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+> > ---
+> >  fs/fuse/file.c            | 4 ++++
+> >  include/uapi/linux/fuse.h | 2 ++
+> >  2 files changed, 6 insertions(+)
+> >
+> > diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+> > index fdcec3aa7830..9609d13ec351 100644
+> > --- a/fs/fuse/file.c
+> > +++ b/fs/fuse/file.c
+> > @@ -213,6 +213,10 @@ void fuse_finish_open(struct inode *inode, struct file *file)
+> >               file_update_time(file);
+> >               fuse_invalidate_attr_mask(inode, FUSE_STATX_MODSIZE);
+> >       }
+> > +
+> > +     if (ff->open_flags & FOPEN_INVAL_ATTR)
+> > +             fuse_invalidate_attr(inode);
+> > +
+> >       if ((file->f_mode & FMODE_WRITE) && fc->writeback_cache)
+> >               fuse_link_write_file(file);
+> >  }
+> > diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
+> > index d6ccee961891..0b0b7d308ddb 100644
+> > --- a/include/uapi/linux/fuse.h
+> > +++ b/include/uapi/linux/fuse.h
+> > @@ -301,6 +301,7 @@ struct fuse_file_lock {
+> >   * FOPEN_CACHE_DIR: allow caching this directory
+> >   * FOPEN_STREAM: the file is stream-like (no file position at all)
+> >   * FOPEN_NOFLUSH: don't flush data cache on close (unless FUSE_WRITEBACK_CACHE)
+> > + * FOPEN_INVAL_ATTR: invalidate the attr cache on open
+> >   */
+> >  #define FOPEN_DIRECT_IO              (1 << 0)
+> >  #define FOPEN_KEEP_CACHE     (1 << 1)
+> > @@ -308,6 +309,7 @@ struct fuse_file_lock {
+> >  #define FOPEN_CACHE_DIR              (1 << 3)
+> >  #define FOPEN_STREAM         (1 << 4)
+> >  #define FOPEN_NOFLUSH                (1 << 5)
+> > +#define FOPEN_INVAL_ATTR     (1 << 6)
+> >
+> >  /**
+> >   * INIT request/reply flags
+> > --
+> > 2.20.1
+> >
+>

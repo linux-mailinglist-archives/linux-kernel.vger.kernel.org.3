@@ -2,171 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA7B55CD65
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBE755CBCA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245064AbiF1FX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 01:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
+        id S244755AbiF1FZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 01:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245164AbiF1FWs (ORCPT
+        with ESMTP id S244711AbiF1FZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 01:22:48 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19948275EB;
-        Mon, 27 Jun 2022 22:22:22 -0700 (PDT)
-X-UUID: 99392c57bce148c8bb8aa6e04e57f8ad-20220628
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:b35630e5-ee8b-4efa-9752-47f1fd2b3dd6,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:87442a2,CLOUDID:02a6d162-0b3f-4b2c-b3a6-ed5c044366a0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 99392c57bce148c8bb8aa6e04e57f8ad-20220628
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 880681751; Tue, 28 Jun 2022 13:22:18 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 28 Jun 2022 13:22:17 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 28 Jun 2022 13:22:16 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 28 Jun 2022 13:22:16 +0800
-Message-ID: <d4b7ec15e66650833e8d5b44510310e7b74773cd.camel@mediatek.com>
-Subject: Re: [PATCH v12 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 28 Jun 2022 13:22:16 +0800
-In-Reply-To: <20220627080341.5087-6-rex-bc.chen@mediatek.com>
-References: <20220627080341.5087-1-rex-bc.chen@mediatek.com>
-         <20220627080341.5087-6-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 28 Jun 2022 01:25:33 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E133B1F;
+        Mon, 27 Jun 2022 22:25:32 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id z14so11173461pgh.0;
+        Mon, 27 Jun 2022 22:25:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:to:cc:references:subject
+         :content-language:from:in-reply-to:content-transfer-encoding;
+        bh=pgonluzyL1h+kykYHqoeMzba6ZA6ttg4BlJry44nex8=;
+        b=Y8M8fifZYgvmkexdtyaLShnQcaD3jHHKHf7dssYushX0hW0f8wBgxiV++I1pxCx4lV
+         83c9fOw5M6Xwmyorz6eoee18QdevPjxGcEjsA81ltXTIYV5ZaRxV4kSIMOSE3qRtnRM8
+         YRMV3TVLvFVDtYimxf9s++pcAwdGKDXoo7jnKVPbc5pztyUdmR5Hy9OyxZtsz0SYQroK
+         5zLo2z2ueUVg7xbY2+ocmiCx7VdiljWbk/f7dUwT3ubL585I/Ca1I+OAeIR7FE7M1C8W
+         94Q5S1K9+0D02ZqUnuipaYFlz4bIeO/uYFoXmHkZvh62f0R5WCRDjar4X49mAjFZgr3R
+         ZkeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
+         :references:subject:content-language:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pgonluzyL1h+kykYHqoeMzba6ZA6ttg4BlJry44nex8=;
+        b=JoG6YGu/E4SdP2IvBUiBS7UiHx3rlcsCLr/ZOKBo8QatsMvFEA4OmTz5n4/Y850x43
+         IvPSvIETku70YoO0+FAozDEGO+cQe3wT1ho6baKEmsoH2+Xx5isBWXb4nPl4vhjFf+KY
+         ePy7DppXncG61Tniqw0rPwa2V1yB80OSCzUrBxu/q0D19B4WdcgzLxGJFwLDAMVoxpfp
+         qCKF8UdH925TpW5Dyh6xrl69D5kK0xqdZMV5JLxAQL8nbBtb4DmChebJfa5NJxwtAwLa
+         IgVpKHs/1NNZX6wX2o3NT/F9+tyGKlbX/zGncvuYQtTvpEkwCD2NZIEDH6Pk2JpJz3jq
+         Q/Sg==
+X-Gm-Message-State: AJIora92hBD4HIil8jsSzDgd3ve2aMYbkSbTZAC2OdNJhERzYSJ42Rcc
+        /qzTxjAdsaJBxdSWAuHQT2k=
+X-Google-Smtp-Source: AGRyM1saugDpzmQnPjMdIM+x5hsbK7gOzY4bjoUJU98ivxmGXPnWENN/xbgWqWBrUPP3CiYfXqo0yA==
+X-Received: by 2002:aa7:9258:0:b0:525:4214:e937 with SMTP id 24-20020aa79258000000b005254214e937mr1680782pfp.15.1656393931921;
+        Mon, 27 Jun 2022 22:25:31 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id q2-20020a170902f34200b0016a2a8c7e8fsm8174595ple.143.2022.06.27.22.25.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 22:25:31 -0700 (PDT)
+Message-ID: <a2be48e5-e559-17d7-5ae7-d1205a737ea4@gmail.com>
+Date:   Tue, 28 Jun 2022 14:25:26 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     alexs@kernel.org, corbet@lwn.net, federico.vaga@vaga.pv.it,
+        jdelvare@suse.com, kernel-janitors@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        siyanteng@loongson.cn, src.res@email.cn,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <20220627151819.22694-9-lukas.bulwahn@gmail.com>
+Subject: Re: [RFC PATCH 08/11] docs: ja_JP: howto: remove reference to removed
+ submitting-drivers
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <20220627151819.22694-9-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
-
-On Mon, 2022-06-27 at 16:03 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This patch adds a embedded displayport driver for the MediaTek mt8195
-> SoC.
-> 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
->  drivers/gpu/drm/mediatek/Kconfig       |   10 +
->  drivers/gpu/drm/mediatek/Makefile      |    1 +
->  drivers/gpu/drm/mediatek/mtk_dp.c      | 2198
-> ++++++++++++++++++++++++
->  drivers/gpu/drm/mediatek/mtk_dp_reg.h  |  543 ++++++
->  drivers/gpu/drm/mediatek/mtk_drm_drv.c |    3 +
->  drivers/gpu/drm/mediatek/mtk_drm_drv.h |    3 +
->  6 files changed, 2758 insertions(+)
->  create mode 100644 drivers/gpu/drm/mediatek/mtk_dp.c
->  create mode 100644 drivers/gpu/drm/mediatek/mtk_dp_reg.h
-> 
-> diff --git a/drivers/gpu/drm/mediatek/Kconfig
-> b/drivers/gpu/drm/mediatek/Kconfig
-> index 2976d21e9a34..6d3af73e7e8c 100644
-> --- a/drivers/gpu/drm/mediatek/Kconfig
-> +++ b/drivers/gpu/drm/mediatek/Kconfig
-> @@ -15,12 +15,22 @@ config DRM_MEDIATEK
->  	select MTK_SMI
->  	select PHY_MTK_MIPI_DSI
->  	select VIDEOMODE_HELPERS
-> +	select DRM_MEDIATEK_DP
-
-Remove this.
-
->  	help
->  	  Choose this option if you have a Mediatek SoCs.
->  	  The module will be called mediatek-drm
->  	  This driver provides kernel mode setting and
->  	  buffer management to userspace.
->  
-> +config DRM_MEDIATEK_DP
-> +	tristate "DRM DPTX Support for MediaTek SoCs"
-> +	depends on DRM_MEDIATEK
-> +	select PHY_MTK_DP
-> +	select DRM_DISPLAY_HELPER
-> +	select DRM_DISPLAY_DP_HELPER
-> +	help
-> +	  DRM/KMS Display Port driver for MediaTek SoCs.
-> +
->  
-
-[snip]
-
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> index 78e79c8449c8..8023f1bd5f7e 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> @@ -1033,6 +1033,9 @@ static struct platform_driver * const
-> mtk_drm_drivers[] = {
->  	&mtk_disp_ovl_driver,
->  	&mtk_disp_rdma_driver,
->  	&mtk_dpi_driver,
-> +#if IS_REACHABLE(CONFIG_DRM_MEDIATEK_DP)
-> +	&mtk_dp_driver,
-> +#endif
-
-Remove this, and treat dp driver like hdmi driver.
-
-Regards,
-CK
-
->  	&mtk_drm_platform_driver,
->  	&mtk_dsi_driver,
->  	&mtk_ethdr_driver,
-> 
-
+SGkgTHVrYXMsDQoNCk9uIE1vbiwgMjcgSnVuIDIwMjIgMTc6MTg6MTYgKzAyMDAsIEx1a2Fz
+IEJ1bHdhaG4gd3JvdGU6DQo+IFRoZSBkb2N1bWVudCBzdWJtaXR0aW5nLWRyaXZlcnMucnN0
+IHdhcyBkZWxldGVkLiBUaGlzIHJlbW92ZXMgdGhlDQo+IGNvcnJlc3BvbmRpbmcgcmVmZXJl
+bmNlIGluIHRoZSBKYXBhbmVzZSB0cmFuc2xhdGlvbiBvZiB0aGUgaG93dG8uDQo+IA0KPiBT
+aWduZWQtb2ZmLWJ5OiBMdWthcyBCdWx3YWhuIDxsdWthcy5idWx3YWhuQGdtYWlsLmNvbT4N
+Cg0KU2VlIGJlbG93IGZvciBzdWdnZXN0aW9uIG9mIHBsdXJhbCB0byBzaW5ndWxhciBjaGFu
+Z2UuDQoNCj4gLS0tDQo+ICBEb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9KUC9ob3d0
+by5yc3QgfCAyICstDQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVs
+ZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9u
+cy9qYV9KUC9ob3d0by5yc3QgYi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9KUC9o
+b3d0by5yc3QNCj4gaW5kZXggMzhmZWQ2ZmU2MmZlLi4wM2IyMDc5ZTRkNWQgMTAwNjQ0DQo+
+IC0tLSBhL0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL2phX0pQL2hvd3RvLnJzdA0KPiAr
+KysgYi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9KUC9ob3d0by5yc3QNCj4gQEAg
+LTEyOSw3ICsxMjksNyBAQCBsaW51eC1hcGlAdmdlci5rZXJuZWwub3JnIOOBq+mAgeOCi+OB
+k+OBqOOCkuWLp+OCgeOBvuOBmeOAgg0KPiAgICAgIOODq+OBq+W+k+OBo+OBpuOBhOOCi+OC
+guOBruOBoOOBkeOCkuWPl+OBkeS7mOOBkeOAgeWkmuOBj+OBruS6uuOBr+ato+OBl+OBhOOC
+ueOCv+OCpOODq+OBruOCs+ODvOODiQ0KPiAgICAgIOOBoOOBkeOCkuODrOODk+ODpeODvOOB
+l+OBvuOBmeOAgg0KPiAgDQo+IC0gIDpyZWY6YERvY3VtZW50YXRpb24vcHJvY2Vzcy9zdWJt
+aXR0aW5nLXBhdGNoZXMucnN0IDxjb2RpbmdzdHlsZT5gIOOBqCA6cmVmOmBEb2N1bWVudGF0
+aW9uL3Byb2Nlc3Mvc3VibWl0dGluZy1kcml2ZXJzLnJzdCA8c3VibWl0dGluZ2RyaXZlcnM+
+YA0KPiArICA6cmVmOmBEb2N1bWVudGF0aW9uL3Byb2Nlc3Mvc3VibWl0dGluZy1wYXRjaGVz
+LnJzdCA8Y29kaW5nc3R5bGU+YA0KPiAgICAgIOOBk+OCjOOCieOBruODleOCoeOCpOODq+OB
+q+OBr+OAgeOBqeOBhuOChOOBo+OBpuOBhuOBvuOBj+ODkeODg+ODgeOCkuS9nOOBo+OBpuaK
+leeov+OBmeOCi+OBi+OBq+OBpA0KDQogICAgICAg44GT44Gu44OV44Kh44Kk44Or44Gr44Gv
+44CB44Gp44GG44KE44Gj44Gm44GG44G+44GP44OR44OD44OB44KS5L2c44Gj44Gm5oqV56i/
+44GZ44KL44GL44Gr44GkDQoNCj4gICAgICDjgYTjgabpnZ7luLjjgavoqbPjgZfjgY/mm7jj
+gYvjgozjgabjgYrjgorjgIHku6XkuIvjgpLlkKvjgb/jgb7jgZkgKOOBk+OCjOOBoOOBkeOB
+q+mZkOOCieOBquOBhA0KPiAgICAgIOOBkeOCjOOBqeOCgikNCj4gLS0gDQo+IDIuMTcuMQ0K
+DQogICAgICAgIFRoYW5rcywgQWtpcmENCg0K

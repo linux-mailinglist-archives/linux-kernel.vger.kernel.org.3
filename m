@@ -2,184 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EAB255D780
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7895555D720
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344178AbiF1JYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49326 "EHLO
+        id S244834AbiF1JZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344218AbiF1JYP (ORCPT
+        with ESMTP id S1344210AbiF1JYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:24:15 -0400
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607F42496A
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:24:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=virtuozzo.com; s=relay; h=MIME-Version:Message-Id:Date:Subject:From:
-        Content-Type; bh=K9eCtLlHPuGIMT0syoANbcmOKfOt8OVhC2sSkmVBNcI=; b=Ua4dWG2+2mbF
-        VXiI4O8z2Flh0/lj3cU08yH2KqYV7FJDKRi7kYOPqKWEYRtYAlarQ09JuNDRUG15CELEEvP0qekjF
-        td+6FKWPVkJmyRmU2LAQO/ptL6GUCc44lLTe8D5m4wxBBxoa2CPrP3fmDY0mbraNKjnsdiY81ROq6
-        m7aAQ=;
-Received: from [192.168.16.236] (helo=vzdev.sw.ru)
-        by relay.virtuozzo.com with esmtp (Exim 4.94.2)
-        (envelope-from <alexander.atanasov@virtuozzo.com>)
-        id 1o67Qu-007YQ1-9B; Tue, 28 Jun 2022 11:22:56 +0200
-From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Cc:     kernel@openvz.org,
-        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/1] Create debugfs file with virtio balloon usage information
-Date:   Tue, 28 Jun 2022 09:23:24 +0000
-Message-Id: <20220628092324.23656-1-alexander.atanasov@virtuozzo.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220627163714-mutt-send-email-mst@kernel.org>
-References: <20220627163714-mutt-send-email-mst@kernel.org>
+        Tue, 28 Jun 2022 05:24:36 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2049.outbound.protection.outlook.com [40.107.223.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63732720;
+        Tue, 28 Jun 2022 02:24:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q1DmFnQtPBZ2FWKlEXOw7FlfkclwTglfw7N5NN8NTO76sR4T3aH3aGGI/JwK4Unr6fPzR+PJEkLVv5fqr1+CgVrMTvQDiaymHtlcZ5vRlEUlImWMmFFgxfoQH5eh7LYjCOOuPw2p5cglkzVtbHYADlzdU1eTxduNF1fYRP/IsnT1S/KgjQ8bKRXWVCIM4Ld+nTOHg8364V50Kx22VfqT1W0JsLzQTqffYg2SxqB4Ju9Po0Eq/zib2bpMdc2NzHVqSsFPjG4hMgeNCxw1+RPTV5gYl60OPbJ2VaiZSrkyWlnHcpPA56V2GhbrlBeQwgQkkzqdB3wzDU7wOqkeyFQk4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6Ij2SnExPyD/dYwS6WJPhp8Z82lioqHAqdcTJyMDSxY=;
+ b=FTEvHwHsNFC2h5ZTc3bTW2A0UUMblcyFaUdpmUt3CCLpPiPpyUkkJHCtM1RsmFvGXRwc5aKIbFxfU5wZgXr7rLbwRqVlH+HXi6uh4R/CpH1lzmscj/ZYbYGhlSJp225daQ9nqM7/3Q/n1Y6UUjnmZJck4vtqS40flKFygDTgzhnlb7Gjh7AZx3Wrak/6FNn7e6LAJKQfFy3DvFKbuzvFHSaFIYKVFgtRtm0Xn1wQvQWbySp2f4zVuiqJ+fbLqTrlHromC+58J9Qp103OLwP18yYLQEAWqUJbWg59M05oCUGJJ9oPpWDLmM+sJYVH/16TY4aV51gxMpL1YcyrSZ88zA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com; dmarc=pass
+ (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6Ij2SnExPyD/dYwS6WJPhp8Z82lioqHAqdcTJyMDSxY=;
+ b=knCvM768Qy0kUBxCJbHR5Be56zskPPxwOxu2UNQHhLw7dw3YTKQAq+D2xGRVSuTwaxJGVs0/yic0bgrxSmPKZhP27AUwR/nS4QOOnv31B7VJNhGfiMKcCPww+2Hotw+QON8fI1Aut6Hz71RgYPDzi81HN3fneZORxiyuCD5X4rx3fLO++TsoBIkihPU1DX1g+99bd8PxhlkHcavYFX2YtSjrGloECGfyRjwEqfVsbzP1HY8K1FbzKGOlKOYl87i9QCIhrqz/LXmh1ERXvvtmFXpXbOwDQTmIGeqQyqvCQVN0C7C+GR82HjQDfsjvlOxoEg0XSbYwswn/lbZYsJZc2g==
+Received: from DM6PR02CA0134.namprd02.prod.outlook.com (2603:10b6:5:1b4::36)
+ by BN8PR12MB3250.namprd12.prod.outlook.com (2603:10b6:408:99::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Tue, 28 Jun
+ 2022 09:24:30 +0000
+Received: from DM6NAM11FT037.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1b4:cafe::1e) by DM6PR02CA0134.outlook.office365.com
+ (2603:10b6:5:1b4::36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.16 via Frontend
+ Transport; Tue, 28 Jun 2022 09:24:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.238) by
+ DM6NAM11FT037.mail.protection.outlook.com (10.13.172.122) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5373.15 via Frontend Transport; Tue, 28 Jun 2022 09:24:29 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 28 Jun
+ 2022 09:24:29 +0000
+Received: from [10.41.21.79] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 28 Jun
+ 2022 02:24:26 -0700
+Message-ID: <07382a5d-24c0-e83d-4de8-309e697cc0e6@nvidia.com>
+Date:   Tue, 28 Jun 2022 14:54:23 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [Patch v6 0/9] CBB driver for Tegra194, Tegra234 & Tegra-Grace
+Content-Language: en-US
+To:     <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
+        <kbuild-all@lists.01.org>
+CC:     <bbasu@nvidia.com>, <vsethi@nvidia.com>, <jsequeira@nvidia.com>,
+        "Sumit Gupta" <sumitg@nvidia.com>
+References: <20220511201651.30695-1-sumitg@nvidia.com>
+ <20220511201651.30695-2-sumitg@nvidia.com>
+From:   Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <20220511201651.30695-2-sumitg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 64e728a9-e154-403d-19e8-08da58e80100
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3250:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: j/dEOLhg+zhsaI+GxTTHqI+6ml6nUfwhHH16JjYlLGm1y9jzE/hoeCvuMMlxv1APlXpTZyonlGBHJqU/2eKBzZUiQ+G089xzj8/AeD/F+yCFjSK4F29CY/6VOoTxulNwQp8L/TX46/I6tjmKfv26Spg1Slai6/H1K3XtDHysZ0lA91wDTZQMqD7FPd1ytWINsYycqJ19lssWuo80h7yfE4IsiOFzfKO54O5CHxAnKR+VTtI4eldoKNxhvkNOTN1eMYgFUDH1KzutjyQ05s4tUVGsBi1S0R/wMBIcE/u8rM83BNVnVVt5p0l+paVtzKGy7vAZ03M6shEQ4dYBWI9XhPPjAJIWrvzse84CHlTqMuyDzAy0BFg7bZJ/+hw8iW0kLbmDivC8kJ9KjYjQZeVe4keAdziSV/+BAGXmgh/GRXbhrMRTsp7EYmp00+wIVSkLnaxlvB7Rmvj8xUaewtJ/cdaRibWZsNbk8cB4s9w/B0/FqXJJUsZdMemkzwLtUjQelY3Qet4/XufCiKa+FFWHy5VpKpFgrFLr4XODWx/m+pZT+AIRXapIP2Ivh+7ObolWktWkSuoFh1siEvvLGN+FpYJiHq99v9cr/fW8C1VfF7ye2WLaA6Dbz1szff5B93QG0GVyA7Vfg5UjnHhw8FvDcblw6hcQwWZ7AZI//0D37enhxOijHX4+SOvwLFqYe/XlLIlOuyxowcSLubJ2lBqcVh/PVGp3PyHQQOqi+JZU1EZWMEYMBS2bKN8ILJwaDpjxdjVMs8W2rc7wUF76OZq4rWTwS7wswnNk4olMrNyezcGNUm8d1+mF49gJVgTtG1EfjUOvwenNXNWzUPb2TluM7z63r1PXomk6mXx1R1QNzwk=
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(376002)(39860400002)(396003)(40470700004)(46966006)(36840700001)(26005)(70206006)(6666004)(316002)(53546011)(70586007)(54906003)(16576012)(4326008)(8676002)(110136005)(82310400005)(478600001)(36860700001)(41300700001)(31696002)(40460700003)(86362001)(2616005)(107886003)(426003)(83380400001)(186003)(16526019)(356005)(81166007)(47076005)(336012)(8936002)(2906002)(5660300002)(31686004)(40480700001)(36756003)(82740400003)(43740500002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 09:24:29.7537
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64e728a9-e154-403d-19e8-08da58e80100
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT037.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3250
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow the guest to know how much it is ballooned by the host.
-It is useful when debugging out of memory conditions.
+Hi Thierry,
 
-When host gets back memory from the guest it is accounted
-as used memory in the guest but the guest have no way to know
-how much it is actually ballooned.
+Gentle Ping.
 
-Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
----
- drivers/virtio/virtio_balloon.c | 78 +++++++++++++++++++++++++++++++++
- 1 file changed, 78 insertions(+)
+As we have ACK from Rob for DT changes, Can we please queue the patch 
+series for 5.20.
 
-V2:
- - fixed coding style
- - removed pretty print
-V3:
- - removed dublicate of features
- - comment about balooned_pages more clear
- - convert host pages to balloon pages
+Best Regards,
+Sumit Gupta
 
-diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloon.c
-index b9737da6c4dd..65964afd4f13 100644
---- a/drivers/virtio/virtio_balloon.c
-+++ b/drivers/virtio/virtio_balloon.c
-@@ -10,6 +10,7 @@
- #include <linux/virtio_balloon.h>
- #include <linux/swap.h>
- #include <linux/workqueue.h>
-+#include <linux/debugfs.h>
- #include <linux/delay.h>
- #include <linux/slab.h>
- #include <linux/module.h>
-@@ -731,6 +732,78 @@ static void report_free_page_func(struct work_struct *work)
- 	}
- }
- 
-+/*
-+ * DEBUGFS Interface
-+ */
-+#ifdef CONFIG_DEBUG_FS
-+
-+#define guest_to_balloon_pages(i) ((i)*VIRTIO_BALLOON_PAGES_PER_PAGE)
-+
-+/**
-+ * virtio_balloon_debug_show - shows statistics of balloon operations.
-+ * @f: pointer to the &struct seq_file.
-+ * @offset: ignored.
-+ *
-+ * Provides the statistics that can be accessed in virtio-balloon in the debugfs.
-+ *
-+ * Return: zero on success or an error code.
-+ */
-+
-+static int virtio_balloon_debug_show(struct seq_file *f, void *offset)
-+{
-+	struct virtio_balloon *b = f->private;
-+	u32 num_pages;
-+	struct sysinfo i;
-+
-+	si_meminfo(&i);
-+
-+	seq_printf(f, "%-22s: %d\n", "page_size", 4096);
-+
-+	virtio_cread_le(b->vdev, struct virtio_balloon_config, actual,
-+			&num_pages);
-+	/*
-+	 * Pages allocated by host from the guest memory.
-+	 * Host inflates the balloon to get more memory.
-+	 * Guest needs to deflate the balloon to get more memory.
-+	 */
-+	seq_printf(f, "%-22s: %u\n", "ballooned_pages", num_pages);
-+
-+	/* Total Memory for the guest from host */
-+	seq_printf(f, "%-22s: %lu\n", "total_pages",
-+			guest_to_balloon_pages(i.totalram));
-+
-+	/* Current memory for the guest */
-+	seq_printf(f, "%-22s: %lu\n", "current_pages",
-+			guest_to_balloon_pages(i.totalram) - num_pages);
-+
-+	return 0;
-+}
-+
-+DEFINE_SHOW_ATTRIBUTE(virtio_balloon_debug);
-+
-+static void  virtio_balloon_debugfs_init(struct virtio_balloon *b)
-+{
-+	debugfs_create_file("virtio-balloon", 0444, NULL, b,
-+			    &virtio_balloon_debug_fops);
-+}
-+
-+static void  virtio_balloon_debugfs_exit(struct virtio_balloon *b)
-+{
-+	debugfs_remove(debugfs_lookup("virtio-balloon", NULL));
-+}
-+
-+#else
-+
-+static inline void virtio_balloon_debugfs_init(struct virtio_balloon *b)
-+{
-+}
-+
-+static inline void virtio_balloon_debugfs_exit(struct virtio_balloon *b)
-+{
-+}
-+
-+#endif	/* CONFIG_DEBUG_FS */
-+
- #ifdef CONFIG_BALLOON_COMPACTION
- /*
-  * virtballoon_migratepage - perform the balloon page migration on behalf of
-@@ -1019,6 +1092,9 @@ static int virtballoon_probe(struct virtio_device *vdev)
- 
- 	if (towards_target(vb))
- 		virtballoon_changed(vdev);
-+
-+	virtio_balloon_debugfs_init(vb);
-+
- 	return 0;
- 
- out_unregister_oom:
-@@ -1065,6 +1141,8 @@ static void virtballoon_remove(struct virtio_device *vdev)
- {
- 	struct virtio_balloon *vb = vdev->priv;
- 
-+	virtio_balloon_debugfs_exit(vb);
-+
- 	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_REPORTING))
- 		page_reporting_unregister(&vb->pr_dev_info);
- 	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
--- 
-2.25.1
 
+On 12/05/22 01:46, Sumit Gupta wrote:
+> The patch series adds Control BackBone(CBB) error handling
+> driver for Tegra194, Tegra234 and Tegra-Grace SOC's.
+> Tegra194 is using CBB version 1.0. Tegra234 and Tegra-Grace
+> are using CBB version 2.0. Both CBB1.0 and CBB2.0 have
+> different internal architecture. So, separate drivers are
+> required.
+> Tegra194 and Tegra234 are using Device Tree. Tegra-Grace is
+> using ACPI.
+> 
+> Request to queue the patch series for 5.19.
+> 
+> ---
+> v5 -> v6:
+> - Minor changes in yaml files in patch number 2 and 6.
+> 
+> v4 -> v5:
+> - fix warnings on diabling CONFIG_ACPI reported by kernel test robot.
+> 
+> v3 -> v4:
+> - rebased patches on 5.18-rc5.
+> 
+> v2 -> v3:
+> - fixed warnings with GCC 11.2 and W=1 reported by kernel test robot.
+> - changed some function names to make consistent with tegra_cbb_*.
+> 
+> v1 -> v2:
+> - moved err-notifier-base and off-mask-erd from DT to driver.
+> - yaml fixes by Thierry.
+> 
+> Sumit Gupta (9):
+>    soc: tegra: set ERD bit to mask inband errors
+>    dt-bindings: arm: tegra: Add NVIDIA Tegra194 CBB1.0 binding
+>    dt-bindings: arm: tegra: Add NVIDIA Tegra194 axi2apb binding
+>    arm64: tegra: Add node for CBB1.0 in Tegra194 SOC
+>    soc: tegra: cbb: Add CBB1.0 driver for Tegra194
+>    dt-bindings: arm: tegra: Add NVIDIA Tegra234 CBB2.0 binding
+>    arm64: tegra: Add node for CBB2.0 in Tegra234 SOC
+>    soc: tegra: cbb: Add driver for Tegra234 CBB2.0
+>    soc: tegra: cbb: Add support for tegra-grace SOC
+> 
+>   .../arm/tegra/nvidia,tegra194-axi2apb.yaml    |   40 +
+>   .../arm/tegra/nvidia,tegra194-cbb.yaml        |   98 +
+>   .../arm/tegra/nvidia,tegra234-cbb.yaml        |   74 +
+>   arch/arm64/boot/dts/nvidia/tegra194.dtsi      |   62 +-
+>   arch/arm64/boot/dts/nvidia/tegra234.dtsi      |   42 +
+>   drivers/soc/tegra/Kconfig                     |    9 +
+>   drivers/soc/tegra/Makefile                    |    1 +
+>   drivers/soc/tegra/cbb/Makefile                |    9 +
+>   drivers/soc/tegra/cbb/tegra-cbb.c             |  198 ++
+>   drivers/soc/tegra/cbb/tegra194-cbb.c          | 2261 +++++++++++++++++
+>   drivers/soc/tegra/cbb/tegra234-cbb.c          |  833 ++++++
+>   drivers/soc/tegra/fuse/tegra-apbmisc.c        |   29 +-
+>   include/soc/tegra/fuse.h                      |    6 +
+>   include/soc/tegra/tegra-cbb.h                 |   43 +
+>   include/soc/tegra/tegra-grace-cbb.h           |  219 ++
+>   include/soc/tegra/tegra194-cbb.h              |  158 ++
+>   include/soc/tegra/tegra234-cbb.h              |  342 +++
+>   17 files changed, 4421 insertions(+), 3 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-axi2apb.yaml
+>   create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml
+>   create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml
+>   create mode 100644 drivers/soc/tegra/cbb/Makefile
+>   create mode 100644 drivers/soc/tegra/cbb/tegra-cbb.c
+>   create mode 100644 drivers/soc/tegra/cbb/tegra194-cbb.c
+>   create mode 100644 drivers/soc/tegra/cbb/tegra234-cbb.c
+>   create mode 100644 include/soc/tegra/tegra-cbb.h
+>   create mode 100644 include/soc/tegra/tegra-grace-cbb.h
+>   create mode 100644 include/soc/tegra/tegra194-cbb.h
+>   create mode 100644 include/soc/tegra/tegra234-cbb.h
+> 

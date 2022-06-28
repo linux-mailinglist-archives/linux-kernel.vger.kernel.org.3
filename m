@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29EB955EB2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D0555EB30
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbiF1RnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 13:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57450 "EHLO
+        id S233018AbiF1RnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 13:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232370AbiF1Rm1 (ORCPT
+        with ESMTP id S232132AbiF1Rm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Jun 2022 13:42:27 -0400
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FFD33EB8
+Received: from msg-4.mailo.com (ip-15.mailobj.net [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90AA2B1BC
         for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:42:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
-        t=1656438119; bh=7FI93fg6UiWf63jthDNwyiZAvWrgrxP6crYj+ERcw3g=;
+        t=1656438121; bh=BwXMWIySOBrUTHj5EzTw/IjmxzQAGV/KhWD2NQgBX8U=;
         h=X-EA-Auth:From:To:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
          References:MIME-Version:Content-Transfer-Encoding;
-        b=AcIDNERXpyIsXus8a9+Hvv5Oh3r1wFtrytPnndf8uer9XvBeAxZY3DEGfRkoZKCd4
-         PLAjhSu6OB1Rs4sXsxUoqe+lZk4Yhz3Z1rEApQGOHUWNnvUqAX/CodOKDbNYE3WFlu
-         RjSLkxNPkJPxkvR5nAHauuxO+UTfkIJAwLzi8WLo=
+        b=QynlLMBjb1qAeVnlLgKgnZUZX6vSceM1hOwWDYsT3cYvkHmI69ibA99WQXEhIyhOA
+         oP4Qa2tUMM2Zt0J8kINgsT8OocvJS/3zPRfkbpeTn0C4ralr3bibe0EUUojykiiHxw
+         4YR9Lr3Zmi/e6W0POEiHedBunzMIHbtzb99jSqTM=
 Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
         via [213.182.55.207]
-        Tue, 28 Jun 2022 19:41:59 +0200 (CEST)
-X-EA-Auth: +pmMuwE+9iUwaKRJHwOJnRN7wG7Hj4QBX2bY0LZJVjkOtyw8HpxcR9eeRYIIVflCwY70kqo9ECWWzkWd04RXGN8jMmTmbgGJKRtrVKQwtrU=
+        Tue, 28 Jun 2022 19:42:01 +0200 (CEST)
+X-EA-Auth: eHiO7pkjdp6iKmf0wfbyHAAfez79KEvdzp+NIk361foUH2t28prp8lfg0M+BeS4IldoZVQVleZ6P0K7Kcat3p3XMaVJjGqosUHYKcLMktzA=
 From:   Vincent Knecht <vincent.knecht@mailoo.org>
 To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Vincent Knecht <vincent.knecht@mailoo.org>,
         linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/7] dt-bindings: leds: Convert is31fl319x to dtschema
-Date:   Tue, 28 Jun 2022 19:41:16 +0200
-Message-Id: <20220628174124.2819238-2-vincent.knecht@mailoo.org>
+Subject: [PATCH v1 2/7] dt-bindings: leds: is31fl319x: Add missing si-en compatibles
+Date:   Tue, 28 Jun 2022 19:41:17 +0200
+Message-Id: <20220628174124.2819238-3-vincent.knecht@mailoo.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220628174124.2819238-1-vincent.knecht@mailoo.org>
 References: <20220628174124.2819238-1-vincent.knecht@mailoo.org>
@@ -49,203 +49,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert leds-is31fl319x.txt to dtschema.
-Set license to the one recommended by DT project.
+Add si-en compatibles for all chip variants.
 
 Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
 ---
- .../bindings/leds/issi,is31fl319x.yaml        | 113 ++++++++++++++++++
- .../bindings/leds/leds-is31fl319x.txt         |  61 ----------
- 2 files changed, 113 insertions(+), 61 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
- delete mode 100644 Documentation/devicetree/bindings/leds/leds-is31fl319x.txt
+ Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml b/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
-new file mode 100644
-index 000000000000..0d684aeeb8cd
---- /dev/null
+index 0d684aeeb8cd..155df2e5cbd5 100644
+--- a/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
 +++ b/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
-@@ -0,0 +1,113 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/leds/issi,is31fl319x.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ISSI LED controllers bindings for IS31FL319{0,1,3,6,9}
-+
-+maintainers:
-+  - Vincent Knecht <vincent.knecht@mailoo.org>
-+
-+description: |
-+  The IS31FL319X are LED controllers with I2C interface.
-+  Previously known as Si-En SN319{0,1,3,6,9}.
-+
-+  For more product information please see the links below:
-+    https://lumissil.com/assets/pdf/core/IS31FL3190_DS.pdf
-+    https://lumissil.com/assets/pdf/core/IS31FL3191_DS.pdf
-+    https://lumissil.com/assets/pdf/core/IS31FL3193_DS.pdf
-+    https://lumissil.com/assets/pdf/core/IS31FL3196_DS.pdf
-+    https://lumissil.com/assets/pdf/core/IS31FL3199_DS.pdf
-+
-+properties:
-+  compatible:
-+    enum:
-+      - issi,is31fl3190
-+      - issi,is31fl3191
-+      - issi,is31fl3193
-+      - issi,is31fl3196
-+      - issi,is31fl3199
-+      - si-en,sn3199
-+
-+  reg:
-+    maxItems: 1
-+
-+  shutdown-gpios:
-+    maxItems: 1
-+    description: GPIO attached to the SDB pin.
-+
-+  audio-gain-db:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 0
-+    description: Audio gain selection for external analog modulation input.
-+    enum: [0, 3, 6, 9, 12, 15, 18, 21]
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 0
-+
-+patternProperties:
-+  "^led@[1-9]$":
-+    type: object
-+    $ref: common.yaml#
-+
-+    properties:
-+      reg:
-+        description: Index of the LED.
-+        minimum: 1
-+        maximum: 9
-+
-+      led-max-microamp:
-+        default: 20000
-+        enum: [5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000]
-+        description:
-+          Note that a driver will take the lowest of all LED limits
-+          since the chip has a single global setting. The lowest value
-+          will be chosen due to the PWM specificity, where lower
-+          brightness is achieved by reducing the duty-cycle of pulses
-+          and not the current, which will always have its peak value
-+          equal to led-max-microamp.
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#address-cells"
-+  - "#size-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/leds/common.h>
-+
-+    i2c0 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        led-controller@65 {
-+            compatible = "issi,is31fl3196";
-+            reg = <0x65>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            shutdown-gpios = <&gpio0 11 GPIO_ACTIVE_HIGH>;
-+
-+            led@1 {
-+                reg = <1>;
-+                label = "red:aux";
-+                led-max-microamp = <10000>;
-+            };
-+
-+            led@5 {
-+                reg = <5>;
-+                label = "green:power";
-+                linux,default-trigger = "default-on";
-+            };
-+        };
-+    };
-+...
-+
-diff --git a/Documentation/devicetree/bindings/leds/leds-is31fl319x.txt b/Documentation/devicetree/bindings/leds/leds-is31fl319x.txt
-deleted file mode 100644
-index 676d43ec8169..000000000000
---- a/Documentation/devicetree/bindings/leds/leds-is31fl319x.txt
-+++ /dev/null
-@@ -1,61 +0,0 @@
--LEDs connected to is31fl319x LED controller chip
--
--Required properties:
--- compatible : Should be any of
--	"issi,is31fl3190"
--	"issi,is31fl3191"
--	"issi,is31fl3193"
--	"issi,is31fl3196"
--	"issi,is31fl3199"
--	"si-en,sn3199".
--- #address-cells: Must be 1.
--- #size-cells: Must be 0.
--- reg: 0x64, 0x65, 0x66, or 0x67.
--
--Optional properties:
--- audio-gain-db : audio gain selection for external analog modulation input.
--	Valid values: 0 - 21, step by 3 (rounded down)
--	Default: 0
--- shutdown-gpios : Specifier of the GPIO connected to SDB pin of the chip.
--
--Each led is represented as a sub-node of the issi,is31fl319x device.
--There can be less leds subnodes than the chip can support but not more.
--
--Required led sub-node properties:
--- reg : number of LED line
--	Valid values: 1 - number of leds supported by the chip variant.
--
--Optional led sub-node properties:
--- label : see Documentation/devicetree/bindings/leds/common.txt.
--- linux,default-trigger :
--	see Documentation/devicetree/bindings/leds/common.txt.
--- led-max-microamp : (optional)
--	Valid values: 5000 - 40000, step by 5000 (rounded down)
--	Default: 20000 (20 mA)
--	Note: a driver will take the lowest of all led limits since the
--	chip has a single global setting. The lowest value will be chosen
--	due to the PWM specificity, where lower brightness is achieved
--	by reducing the dury-cycle of pulses and not the current, which
--	will always have its peak value equal to led-max-microamp.
--
--Examples:
--
--fancy_leds: leds@65 {
--	compatible = "issi,is31fl3196";
--	#address-cells = <1>;
--	#size-cells = <0>;
--	reg = <0x65>;
--	shutdown-gpios = <&gpio0 11 GPIO_ACTIVE_HIGH>;
--
--	red_aux: led@1 {
--		label = "red:aux";
--		reg = <1>;
--		led-max-microamp = <10000>;
--	};
--
--	green_power: led@5 {
--		label = "green:power";
--		reg = <5>;
--		linux,default-trigger = "default-on";
--	};
--};
+@@ -28,6 +28,10 @@ properties:
+       - issi,is31fl3193
+       - issi,is31fl3196
+       - issi,is31fl3199
++      - si-en,sn3190
++      - si-en,sn3191
++      - si-en,sn3193
++      - si-en,sn3196
+       - si-en,sn3199
+ 
+   reg:
 -- 
 2.35.3
 

@@ -2,141 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5375F55E865
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CE155E66B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345648AbiF1Pik convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Jun 2022 11:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
+        id S1347759AbiF1Pkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348043AbiF1PiX (ORCPT
+        with ESMTP id S232038AbiF1Pkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:38:23 -0400
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5E130F70;
-        Tue, 28 Jun 2022 08:38:12 -0700 (PDT)
-Received: by mail-qk1-f169.google.com with SMTP id z7so9963537qko.8;
-        Tue, 28 Jun 2022 08:38:12 -0700 (PDT)
+        Tue, 28 Jun 2022 11:40:40 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EC3D0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:40:39 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id m14-20020a17090a668e00b001ee6ece8368so7051811pjj.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/O/fAu/z5wIR2Tt1wRNpx7oM/8IQ7c97KuaGl+RDxRY=;
+        b=Ndrf/nwkzP0xlXdJtQEGsYom6o6YovaBRoZs6vYCFyq3Ac+qNpargywQRgKpKFGxFu
+         fIBmevJ8iBzkjswx3ZxH34Thn8KeQ8JFz1xiXFDw3a0XKjiSuJ+RX5ihlKiR1QWFXlBP
+         yQIUUA+W/ITcCAwPLE6G9sO00m4z/AZh+IPTEW9JRPHmHjofioriP8BSGBVwfZKtf+e+
+         LJYVNzzlEm9/wqstxgDVKZDJGWGHFVX1tNJOOgrcla5vCOoA8gOAqr7S1RfRyBa1eUZ1
+         D7kXIRU0+FSxhpVjDqmrf92neQt6NJ8CXjMBHWBdrai7RC7fQgGK5sN8V3QUFyrqJBt7
+         2bAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PA6RIN6Q6sRWIrEsm5s1AcE8++ST1RljVs/MQH6vQEQ=;
-        b=ujVxzrKl4GrQu/B10j7Aa3aV8mioizDpfqdGzYwO7CKqe52EWg10h6l9Ua9WjoL5v0
-         03Rzn4Mx+2pr47YCUiULW9DgxAhDBwbDq+l9vLyyKYgqcXqtSi3FUN8VPVbqTIXMT4T8
-         yZu7IHtWmiMbJhw61rEIqMj0elZd1axBttRdQSThIyMfCEHFocj90bA/BNU4sanYoYKI
-         LM0dKpHMoWCAveTsv085fFXq8NtmDY9Ex/dCeSPVHdP8PknYNDjN+gJddPHwu0HhYgLQ
-         CjAT1gjJ7FcUdAg89LbAEf+iqmJJDx/BpPnOg0tjGUPWkdNJZCI64lX5mgLGn/+yg2Yv
-         wnag==
-X-Gm-Message-State: AJIora9br8X3L7dl/YqSbY3QkndrJna4mNPS+MJZu7S4NlvZO4DKxYaI
-        ySNRb70z1b209epYk4Q6y+pNryBBcZ5oWw==
-X-Google-Smtp-Source: AGRyM1sDlf+YctAWsXQiPlnr2kbr5nVCGJs/M38PeqAmBsojGNx0Q42Tr8T2i6GeimJXg9tvWVKO+w==
-X-Received: by 2002:a05:620a:4402:b0:6af:1b92:f064 with SMTP id v2-20020a05620a440200b006af1b92f064mr9556442qkp.410.1656430691586;
-        Tue, 28 Jun 2022 08:38:11 -0700 (PDT)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id z198-20020a3765cf000000b006a736c8ea80sm11285850qkb.48.2022.06.28.08.38.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 08:38:10 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-31bf3656517so30463577b3.12;
-        Tue, 28 Jun 2022 08:38:10 -0700 (PDT)
-X-Received: by 2002:a0d:c787:0:b0:31b:a963:e1de with SMTP id
- j129-20020a0dc787000000b0031ba963e1demr14919177ywd.283.1656430689886; Tue, 28
- Jun 2022 08:38:09 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=/O/fAu/z5wIR2Tt1wRNpx7oM/8IQ7c97KuaGl+RDxRY=;
+        b=11ze3e/C3VdwBk+F/w1R1FmTgUB9ieJl+VqHKtg3uKW+X/EIYAM85r4zr8FlOdY/xp
+         kMDo8F/GADE0hvy/GgbM+Knt8B2RfFKky+pn1zm++Laal9iU9ffO/KDp/7lvswXcZhHH
+         VnRBSVgKXdNXC93zPomQIwNtWXcsfLivv/z9lEg0hrkkr+6+yF6Bug49ih3zlt0aZdcd
+         huEKEEH9tJ60nXnkK2PdPtzSl7r5vliwjemV+V3Iq8CJXk+ObxIVf657BpwFhcHwt8MY
+         cID10mbAPCwargqrVJNM7pulDNduXjPJ94BQbxcx6hTBmdFmw9IDl8F2rBOsulqbaD0g
+         fcXg==
+X-Gm-Message-State: AJIora9AZ2MC1fHxAsdKCI/3QrDpQDyj+4/zjpt/ooUsowZQs9h7BZd8
+        xAeXmQePmczI62OR0sieW/zZz9eZwaBNfn9um2traawl1It9ww==
+X-Google-Smtp-Source: AGRyM1semGJYll4lUVae+1xmL2gICM7y3fVFTLJibtYnVeZ/R+FRel/MPkikBBdLknAzVCIGhZeDMT7n134aR5jp+24=
+X-Received: by 2002:a17:902:e94f:b0:16a:214e:46c1 with SMTP id
+ b15-20020a170902e94f00b0016a214e46c1mr4278522pll.89.1656430838615; Tue, 28
+ Jun 2022 08:40:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220624144001.95518-1-clement.leger@bootlin.com> <20220624144001.95518-7-clement.leger@bootlin.com>
-In-Reply-To: <20220624144001.95518-7-clement.leger@bootlin.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 28 Jun 2022 17:37:57 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU9fpY5b9GGFYQ50KmFNu35J5d129F=9=LYZEN82R=cfw@mail.gmail.com>
-Message-ID: <CAMuHMdU9fpY5b9GGFYQ50KmFNu35J5d129F=9=LYZEN82R=cfw@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 06/16] dt-bindings: net: dsa: add bindings for
- Renesas RZ/N1 Advanced 5 port switch
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, Rob Herring <robh@kernel.org>
+References: <20220624173656.2033256-1-jthoughton@google.com>
+ <20220624173656.2033256-3-jthoughton@google.com> <Yrn6DfTINknKNS04@monkey>
+In-Reply-To: <Yrn6DfTINknKNS04@monkey>
+From:   James Houghton <jthoughton@google.com>
+Date:   Tue, 28 Jun 2022 08:40:27 -0700
+Message-ID: <CADrL8HUD14o6XybhYDdozAUkJ4Zt6nE8=dm-_osKg2CmvOFzHg@mail.gmail.com>
+Subject: Re: [RFC PATCH 02/26] hugetlb: sort hstates in hugetlb_init_hstates
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Jue Wang <juew@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Clément,
-
-On Fri, Jun 24, 2022 at 4:41 PM Clément Léger <clement.leger@bootlin.com> wrote:
-> Add bindings for Renesas RZ/N1 Advanced 5 port switch. This switch is
-> present on Renesas RZ/N1 SoC and was probably provided by MoreThanIP.
-> This company does not exists anymore and has been bought by Synopsys.
-> Since this IP can't be find anymore in the Synospsy portfolio, lets use
-> Renesas as the vendor compatible for this IP.
+On Mon, Jun 27, 2022 at 11:42 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
 >
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> On 06/24/22 17:36, James Houghton wrote:
+> > When using HugeTLB high-granularity mapping, we need to go through the
+> > supported hugepage sizes in decreasing order so that we pick the largest
+> > size that works. Consider the case where we're faulting in a 1G hugepage
+> > for the first time: we want hugetlb_fault/hugetlb_no_page to map it with
+> > a PUD. By going through the sizes in decreasing order, we will find that
+> > PUD_SIZE works before finding out that PMD_SIZE or PAGE_SIZE work too.
+> >
+> > Signed-off-by: James Houghton <jthoughton@google.com>
+> > ---
+> >  mm/hugetlb.c | 40 +++++++++++++++++++++++++++++++++++++---
+> >  1 file changed, 37 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > index a57e1be41401..5df838d86f32 100644
+> > --- a/mm/hugetlb.c
+> > +++ b/mm/hugetlb.c
+> > @@ -33,6 +33,7 @@
+> >  #include <linux/migrate.h>
+> >  #include <linux/nospec.h>
+> >  #include <linux/delayacct.h>
+> > +#include <linux/sort.h>
+> >
+> >  #include <asm/page.h>
+> >  #include <asm/pgalloc.h>
+> > @@ -48,6 +49,10 @@
+> >
+> >  int hugetlb_max_hstate __read_mostly;
+> >  unsigned int default_hstate_idx;
+> > +/*
+> > + * After hugetlb_init_hstates is called, hstates will be sorted from largest
+> > + * to smallest.
+> > + */
+> >  struct hstate hstates[HUGE_MAX_HSTATE];
+> >
+> >  #ifdef CONFIG_CMA
+> > @@ -3144,14 +3149,43 @@ static void __init hugetlb_hstate_alloc_pages(struct hstate *h)
+> >       kfree(node_alloc_noretry);
+> >  }
+> >
+> > +static int compare_hstates_decreasing(const void *a, const void *b)
+> > +{
+> > +     const int shift_a = huge_page_shift((const struct hstate *)a);
+> > +     const int shift_b = huge_page_shift((const struct hstate *)b);
+> > +
+> > +     if (shift_a < shift_b)
+> > +             return 1;
+> > +     if (shift_a > shift_b)
+> > +             return -1;
+> > +     return 0;
+> > +}
+> > +
+> > +static void sort_hstates(void)
+> > +{
+> > +     unsigned long default_hstate_sz = huge_page_size(&default_hstate);
+> > +
+> > +     /* Sort from largest to smallest. */
+> > +     sort(hstates, hugetlb_max_hstate, sizeof(*hstates),
+> > +          compare_hstates_decreasing, NULL);
+> > +
+> > +     /*
+> > +      * We may have changed the location of the default hstate, so we need to
+> > +      * update it.
+> > +      */
+> > +     default_hstate_idx = hstate_index(size_to_hstate(default_hstate_sz));
+> > +}
+> > +
+> >  static void __init hugetlb_init_hstates(void)
+> >  {
+> >       struct hstate *h, *h2;
+> >
+> > -     for_each_hstate(h) {
+> > -             if (minimum_order > huge_page_order(h))
+> > -                     minimum_order = huge_page_order(h);
+> > +     sort_hstates();
+> >
+> > +     /* The last hstate is now the smallest. */
+> > +     minimum_order = huge_page_order(&hstates[hugetlb_max_hstate - 1]);
+> > +
+> > +     for_each_hstate(h) {
+> >               /* oversize hugepages were init'ed in early boot */
+> >               if (!hstate_is_gigantic(h))
+> >                       hugetlb_hstate_alloc_pages(h);
+>
+> This may/will cause problems for gigantic hugetlb pages allocated at boot
+> time.  See alloc_bootmem_huge_page() where a pointer to the associated hstate
+> is encoded within the allocated hugetlb page.  These pages are added to
+> hugetlb pools by the routine gather_bootmem_prealloc() which uses the saved
+> hstate to add prep the gigantic page and add to the correct pool.  Currently,
+> gather_bootmem_prealloc is called after hugetlb_init_hstates.  So, changing
+> hstate order will cause errors.
+>
+> I do not see any reason why we could not call gather_bootmem_prealloc before
+> hugetlb_init_hstates to avoid this issue.
 
-Thanks for your patch!
+Thanks for catching this, Mike. Your suggestion certainly seems to
+work, but it also seems kind of error prone. I'll have to look at the
+code more closely, but maybe it would be better if I just maintained a
+separate `struct hstate *sorted_hstate_ptrs[]`, where the original
+locations of the hstates remain unchanged, as to not break
+gather_bootmem_prealloc/other things.
 
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
-> @@ -0,0 +1,134 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/dsa/renesas,rzn1-a5psw.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas RZ/N1 Advanced 5 ports ethernet switch
-> +
-> +maintainers:
-> +  - Clément Léger <clement.leger@bootlin.com>
-> +
-> +description: |
-> +  The advanced 5 ports switch is present on the Renesas RZ/N1 SoC family and
-> +  handles 4 ports + 1 CPU management port.
-
-While diving deeper into the RZ/N1 documentation, I noticed the switch
-has 4 interrupts, which are currently not described in the bindings.
-Presumably the driver has no need to use them, but as DT describes
-hardware, I think it would be good to submit follow-up patches for
-bindings and DTS to add the interrupts.
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> --
+> Mike Kravetz

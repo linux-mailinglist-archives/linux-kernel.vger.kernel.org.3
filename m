@@ -2,57 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4364E55E0F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2E055E271
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243513AbiF1IAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 04:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
+        id S242406AbiF1IA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 04:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241810AbiF1IAT (ORCPT
+        with ESMTP id S231845AbiF1IAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 04:00:19 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D648B12777
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:00:17 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o668n-0004zr-Hn; Tue, 28 Jun 2022 10:00:09 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o668m-00062t-Ud; Tue, 28 Jun 2022 10:00:08 +0200
-Date:   Tue, 28 Jun 2022 10:00:08 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Lucas Stach <l.stach@pengutronix.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Anton Lundin <glance@acc.umu.se>,
-        Lukas Wunner <lukas@wunner.de>, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, netdev@vger.kernel.org
-Subject: Re: [PATCH net v1 1/2] net: asix: fix "can't send until first packet
- is send" issue
-Message-ID: <20220628080008.GF13092@pengutronix.de>
-References: <20220624075139.3139300-1-o.rempel@pengutronix.de>
- <20220628044913.GB13092@pengutronix.de>
- <897594cde5f294f9d5e96917bce1ac751338d0aa.camel@pengutronix.de>
+        Tue, 28 Jun 2022 04:00:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F53213D5B;
+        Tue, 28 Jun 2022 01:00:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B12496104E;
+        Tue, 28 Jun 2022 08:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17A9EC3411D;
+        Tue, 28 Jun 2022 08:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656403224;
+        bh=aijp6DmSOsxg3ML/b3u+5AynjVUvqqeBYGfLP419iiY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G9hPPftkQRDi9dE8PgfFfmgGI4uMPXNZzI9LIXJm4MIyHQ/gwgVjhbVI2B688IhyL
+         v3qyt6Mzj6i7CXBlnkwDp3t4hyZ37hT0ndseXrxS0ewM2wloO+zasMTkrQOXAArBHT
+         whmR+vvGy0UFnIHU2H/5tetzqn5ovHGOzAtNcyRAABhyLRBzh8DkpQWmDvgoE1vUeL
+         k6OnQzAEljTP9b5fD4o+I4RD2i4bmx5z3F8d2MofYYvxhvqnpOJshicCQc0E4fdw7X
+         GxhlFVb0tFx+c5AhwFRKJvUYwt+/qKQuFmlKV7/XLo9z3gebxkeH4jbdF14by3jDec
+         Qhd/Z5s8kCCQQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o668y-0005xl-Mz; Tue, 28 Jun 2022 10:00:21 +0200
+Date:   Tue, 28 Jun 2022 10:00:20 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] arm64: dts: qcom: sc8280xp: add Lenovo Thinkpad X13s
+ devicetree
+Message-ID: <Yrq1FAscp+jE7GQs@hovoldconsulting.com>
+References: <YrMVqifgV4kZaP7F@hovoldconsulting.com>
+ <20220622132617.24604-1-johan+linaro@kernel.org>
+ <96394aa2-aefc-63c4-d86f-15c06d092d75@somainline.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <897594cde5f294f9d5e96917bce1ac751338d0aa.camel@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <96394aa2-aefc-63c4-d86f-15c06d092d75@somainline.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,66 +67,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 09:50:42AM +0200, Lucas Stach wrote:
-> Hi Oleksij,
-> 
-> subject of this patch looks strange. It should probably read "can't
-> receive until first packet is sent".
-
-rigth. But it is already taken.
-
-
-> Regards,
-> Lucas
-> 
-> Am Dienstag, dem 28.06.2022 um 06:49 +0200 schrieb Oleksij Rempel:
-> > On Fri, Jun 24, 2022 at 09:51:38AM +0200, Oleksij Rempel wrote:
-> > > If cable is attached after probe sequence, the usbnet framework would
-> > > not automatically start processing RX packets except at least one
-> > > packet was transmitted.
-> > > 
-> > > On systems with any kind of address auto configuration this issue was
-> > > not detected, because some packets are send immediately after link state
-> > > is changed to "running".
-> > > 
-> > > With this patch we will notify usbnet about link status change provided by the
-> > > PHYlib.
-> > > 
-> > > Fixes: e532a096be0e ("net: usb: asix: ax88772: add phylib support")
-> > > Reported-by: Anton Lundin <glance@acc.umu.se>
-> > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+On Mon, Jun 27, 2022 at 01:38:47PM +0200, Konrad Dybcio wrote:
+> On 22.06.2022 15:26, Johan Hovold wrote:
+> > Add an initial devicetree for the Lenovo Thinkpad X13s with support for
+> > USB, backlight, keyboard, touchpad, touchscreen (to be verified), PMICs
+> > and remoteprocs.
 > > 
-> > In different mail thread Anton reported as tested.
-> > Tested-by: Anton Lundin <glance@acc.umu.se>
-> > 
-> > > ---
-> > >  drivers/net/usb/asix_common.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-> > > index 632fa6c1d5e3..b4a1b7abcfc9 100644
-> > > --- a/drivers/net/usb/asix_common.c
-> > > +++ b/drivers/net/usb/asix_common.c
-> > > @@ -431,6 +431,7 @@ void asix_adjust_link(struct net_device *netdev)
-> > >  
-> > >  	asix_write_medium_mode(dev, mode, 0);
-> > >  	phy_print_status(phydev);
-> > > +	usbnet_link_change(dev, phydev->link, 0);
-> > >  }
-> > >  
-> > >  int asix_write_gpio(struct usbnet *dev, u16 value, int sleep, int in_pm)
-> > > -- 
-> > > 2.30.2
-> > > 
-> > > 
-> > 
-> 
-> 
-> 
-> 
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Krzysztof's tag wasn't here in the version I posted.
+
+> > +	reserved-memory {
+> > +	};
+> You still haven't explained this weird node (I don't believe
+> the thing doesn't mind you poking at 'secure' regions, and even
+> if otherwise, it is unused for now).
+
+It's just unused for now, so sure, we can remove it until we need it.
+
+Johan

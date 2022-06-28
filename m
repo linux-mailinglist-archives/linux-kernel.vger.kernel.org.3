@@ -2,108 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C6E55EF0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC80255EF11
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231904AbiF1UOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 16:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
+        id S232180AbiF1UPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 16:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231828AbiF1UNu (ORCPT
+        with ESMTP id S229896AbiF1UPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 16:13:50 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7F813D64;
-        Tue, 28 Jun 2022 13:07:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=a6AnJ5JUpgsz1KJ9YhexUeYWOp5iHJCwBQ9saqPDdtA=; b=VnaHISVICqlvsTwkAW4MliAcH+
-        B5kOQBGYkOHR9O/YlEzHCKMUa5OBO76qUrCigMoSp+tNLqYtegiT3LTn6YRmj9cRVlVN83kVdJjaO
-        JKmYquyVSTibvxqOm0Va5VzPlZgaxgf2PzPoEVI1OrzsW1FO2zr+vNTYskV2OGp5lzwDnXmDyjXNj
-        GCf41sQpWwvJwVO+tKlAQYl6Kc3vPBkVCEI3oGkQyHzmudUODto0RUIzFiivhsch/Uf9b+NvNJsCi
-        rSmhPEIGEdA4Ol3SHO6d8+Ie7srm2JixdDNX9emZd7yZ/hICP1AxizvXriC7npaHtK2z5gju0N9F1
-        Elus4IGA==;
-Received: from c-73-157-219-8.hsd1.or.comcast.net ([73.157.219.8] helo=[10.0.0.153])
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o6HV3-007yNs-7R; Tue, 28 Jun 2022 20:07:53 +0000
-Message-ID: <ddb01b36-1369-f0e3-49ab-3c0a571fe708@infradead.org>
-Date:   Tue, 28 Jun 2022 13:07:51 -0700
+        Tue, 28 Jun 2022 16:15:12 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97C83D49C;
+        Tue, 28 Jun 2022 13:09:14 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id m14-20020a17090a668e00b001ee6ece8368so7777352pjj.3;
+        Tue, 28 Jun 2022 13:09:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=18NkAn1GgdBz8r/hLBakt8hEcJdWNO1JjoNeRXLblSI=;
+        b=nQ2a8AVxe9IysiwaafuC3bzQW02iN1FKsDQu7R6CUn2dvYkAkn/EBIu6DzLCdOd9nv
+         NVV8FPJik/bRgTBWrDULepoeh7/AkOERz8MATQvX/TyOy1DQS/i4+e4t73M9huDUfOqO
+         gVGdbcbvHGu6t3JSecsB4guMtJx42TBE23XIDuSvpspObUVZ0bHQUnPooMcgbLdsH1UD
+         +aLqYPlJ88v9OuAAmI/tjpYoP3BLFaKmzP2Ci2jd8y+uc1E2le8mT2PcLmtICpMFyA1F
+         cC54R8b4z0A4U/RHWHv56bJbF5nxa04yLJuDxKM02aI5lH0z8RBLMDWjdcgATiTVsV9a
+         Dkmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=18NkAn1GgdBz8r/hLBakt8hEcJdWNO1JjoNeRXLblSI=;
+        b=Kmw9TOTo3fhYsnHZ/uw1rH62fKLgiwJQ1xKI/bFBafqg14sOvBS5grp4d+yGvl8IJw
+         q5toe+ULNFNgDXwtY/UNP2AOoxRgoUBGmTVbS0nWK89RQPJI/ouJ5FtH17ieEBuPVd7g
+         jCH+uRDXQquaOH1TcSzm38ktLhKMWNP7OpTh/0XM0BTYQBdbQR3AUE4SDKIl5iAXt47R
+         sIBS9B0h2AhT2WHodKSfN/mIelLhCD0R/OthRGso9xNjToqXVmnNnaBYfuBdvzMp917x
+         L1vZt6+lAe1XuAeFUIR5sRAQNU1PFIEXDRDax+TOmaJIm/DIKkSSo2vWHb06QzoyImoC
+         foTQ==
+X-Gm-Message-State: AJIora9xXhgz6OljkVu0Qthl2KBrZI2c6dbKF3qSNF4OVBqHXSb1+nYz
+        2NseeNkdJQXKRlwbebnOm2s=
+X-Google-Smtp-Source: AGRyM1tpdNulnZ1BuFCtbNdRUOeKU2L6GH+7kbydoo7RVgIk5ZG2B9fvYla9X+GhGys3eu35PsJWbA==
+X-Received: by 2002:a17:902:ca83:b0:16a:3317:b5c1 with SMTP id v3-20020a170902ca8300b0016a3317b5c1mr5395117pld.34.1656446954315;
+        Tue, 28 Jun 2022 13:09:14 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id nu4-20020a17090b1b0400b001eaec814132sm3534864pjb.3.2022.06.28.13.09.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 13:09:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 28 Jun 2022 13:09:12 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 8/8] watchdog: wdat_wdt: Remove #ifdef guards for PM
+ related functions
+Message-ID: <20220628200912.GH3633970@roeck-us.net>
+References: <20220628193449.160585-1-paul@crapouillou.net>
+ <20220628193449.160585-9-paul@crapouillou.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v11 net-next 9/9] mfd: ocelot: add support for the vsc7512
- chip via spi
-Content-Language: en-US
-To:     Colin Foster <colin.foster@in-advantage.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <20220628081709.829811-1-colin.foster@in-advantage.com>
- <20220628081709.829811-10-colin.foster@in-advantage.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220628081709.829811-10-colin.foster@in-advantage.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220628193449.160585-9-paul@crapouillou.net>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 28, 2022 at 08:34:49PM +0100, Paul Cercueil wrote:
+> Use the new NOIRQ_SYSTEM_SLEEP_PM_OPS() and pm_sleep_ptr() macros to
+> handle the .suspend/.resume callbacks.
+> 
+> These macros allow the suspend and resume functions to be automatically
+> dropped by the compiler when CONFIG_SUSPEND is disabled, without having
+> to use #ifdef guards. Not using #ifdef guards means that the code is
+> always compiled independently of any Kconfig option, and thanks to that
+> bugs and regressions are easier to catch.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-On 6/28/22 01:17, Colin Foster wrote:
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -962,6 +962,24 @@ config MFD_MENF21BMC
->  	  This driver can also be built as a module. If so the module
->  	  will be called menf21bmc.
+> ---
+>  drivers/watchdog/wdat_wdt.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
+> index e6f95e99156d..aeadaa07c891 100644
+> --- a/drivers/watchdog/wdat_wdt.c
+> +++ b/drivers/watchdog/wdat_wdt.c
+> @@ -467,7 +467,6 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>  	return devm_watchdog_register_device(dev, &wdat->wdd);
+>  }
 >  
-> +config MFD_OCELOT
-> +	bool "Microsemi Ocelot External Control Support"
-> +	depends on SPI_MASTER
-> +	select MFD_CORE
-> +	select REGMAP_SPI
-> +	help
-> +	  Ocelot is a family of networking chips that support multiple ethernet
-> +	  and fibre interfaces. In addition to networking, they contain several
-> +	  other functions, including pictrl, MDIO, and communication with
-
-	Is that                      pinctrl,
-?
-
-> +	  external chips. While some chips have an internal processor capable of
-> +	  running an OS, others don't. All chips can be controlled externally
-> +	  through different interfaces, including SPI, I2C, and PCIe.
-> +
-> +	  Say yes here to add support for Ocelot chips (VSC7511, VSC7512,
-> +	  VSC7513, VSC7514) controlled externally.
-> +
-> +	  If unsure, say N.
-
--- 
-~Randy
+> -#ifdef CONFIG_PM_SLEEP
+>  static int wdat_wdt_suspend_noirq(struct device *dev)
+>  {
+>  	struct wdat_wdt *wdat = dev_get_drvdata(dev);
+> @@ -528,18 +527,16 @@ static int wdat_wdt_resume_noirq(struct device *dev)
+>  
+>  	return wdat_wdt_start(&wdat->wdd);
+>  }
+> -#endif
+>  
+>  static const struct dev_pm_ops wdat_wdt_pm_ops = {
+> -	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(wdat_wdt_suspend_noirq,
+> -				      wdat_wdt_resume_noirq)
+> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(wdat_wdt_suspend_noirq, wdat_wdt_resume_noirq)
+>  };
+>  
+>  static struct platform_driver wdat_wdt_driver = {
+>  	.probe = wdat_wdt_probe,
+>  	.driver = {
+>  		.name = "wdat_wdt",
+> -		.pm = &wdat_wdt_pm_ops,
+> +		.pm = pm_sleep_ptr(&wdat_wdt_pm_ops),
+>  	},
+>  };
+>  
+> -- 
+> 2.35.1
+> 

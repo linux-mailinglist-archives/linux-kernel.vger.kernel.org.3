@@ -2,259 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F63855EB06
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5563E55EAF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233094AbiF1R17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 13:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
+        id S233278AbiF1RXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 13:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233026AbiF1R1v (ORCPT
+        with ESMTP id S233231AbiF1RXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 13:27:51 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA323A1B1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:27:49 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id e63so12838334pgc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:27:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=osgld0pzQy4iTsusCsWDaWoG0N8IqLVBxYU5+GF9/J4=;
-        b=utePYlHH3nRgmww4DbnonjD9OWHAYpU9JCXYlTStomKuNGt03UXXfjWbV/btUimeIl
-         4vXRaoRj5qZEhNWLDBZk1A6RKFYmaiMYLpx8H+FTO+YjxWJ4ZlX+auWvTO0avF+sI3XG
-         a2n3iQsWVarA5wPuoq4V2g2XByCWSFuSCKeIEYhLIjQ5vqjgtU+aPgbMSJgr2x4nuFSi
-         929UEcvtBDNyEF29CAHTwr7OJRWl9QEBbN+intjof9KKw1cwh5PC8FkPYupXrpMf+BAd
-         8cxcwEzFClhA3QQcpl9HBRR1HXafcgAFoo7vwIHvqT8qQ97LFR1RTzdP/TIpq9oHuzvE
-         +IKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=osgld0pzQy4iTsusCsWDaWoG0N8IqLVBxYU5+GF9/J4=;
-        b=qPtrlCdb0Z0WRsdofGu+DKgoWmCjTRqyABGEcVZNhSLIVk/mcsNnIgFTGTg8LpJAPV
-         Hjs0YvEEILAosNnwa4qR7lbeDZZg7ABukgJ/PhKU8jXdFFHSg99K5wwK2iWCaMvIGZl+
-         aSxDV9sFs/YPdeNRJuoNMXlQumEg3yrvvl4Il0QsP7agIWgz5S9z3dsaxKEYIh6Q6PWI
-         dgd94byTor1VhPu2lTWzrha3FbkjhNPm2nUjA05IpIc3IEQ04tSoyz05M43PL93o1fux
-         8fenDsWyURgWHQ1sjtqfR20Ns1dQVzeaShpI9/pCpJyYh7nGNxdCMb1f4fBIiyBmvu9b
-         F2lw==
-X-Gm-Message-State: AJIora/XTQcPJI8LKZe8JQVVlUov3uc84anpB8ceCSWvvlRWT1op/1ap
-        HLjVFxNOrQUxmOXHUrMJmyOikzOQChnR2g==
-X-Google-Smtp-Source: AGRyM1vwRc7KhbpvgRIHUN/TFthYtddimgoYRgo4Bh9++Wof7fy0wsL7BW/PKLLQ2pmhpnQ4b/higg==
-X-Received: by 2002:a63:1360:0:b0:410:702f:d1d4 with SMTP id 32-20020a631360000000b00410702fd1d4mr7989478pgt.625.1656437269373;
-        Tue, 28 Jun 2022 10:27:49 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id r7-20020a17090a690700b001ec9f9fe028sm86860pjj.46.2022.06.28.10.27.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 10:27:48 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 11:27:46 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     bjorn.andersson@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V3 3/6] remoteproc: imx_rproc: support attaching to
- i.MX8QXP M4
-Message-ID: <20220628172746.GB1942439@p14s>
-References: <20220517064937.4033441-1-peng.fan@oss.nxp.com>
- <20220517064937.4033441-4-peng.fan@oss.nxp.com>
+        Tue, 28 Jun 2022 13:23:37 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5500C2DA8C;
+        Tue, 28 Jun 2022 10:23:36 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SHGokm023387;
+        Tue, 28 Jun 2022 17:23:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=USbFFO10uk2ZizlRZ9dGQG8VXNHtbAJ18ezn20c7b5Y=;
+ b=FKW4yluAfI3wGxcGgjG+HAiSDKhtHjVaRhpeCzcImfr1Y+Wvrk8gEPd575zq1UgOUZzk
+ GAbnOJXuO0igo60XvyWiuDnAS0pbX1FRCPveyxOF93AJHWPjynDfNugoecOYBEtfrl3G
+ eHW187gLEz+b1T5m0CvSPhnDVouMngodyYKBxFkXP0P0oHBY67DFwEAN59m7HCaLq66b
+ 9e89S6iRorLN4LF25RyULCcyU8SYzDuKI9ttK/fn3CRAcPyHSC8500WxLZ84ZBFK8oyp
+ I2q7KTtpIBWNIj7bCORbGLau+HvB/SnWWmT8Mc82OszVCwdM5ljNalzUfQI0R4sL5dlt +A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h05rv0bd8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 17:23:35 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25SHMNY1026177;
+        Tue, 28 Jun 2022 17:23:34 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h05rv0bcm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 17:23:34 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25SHKbI2019188;
+        Tue, 28 Jun 2022 17:23:32 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3gwt08uvu0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 17:23:32 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25SHNaRB32309512
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Jun 2022 17:23:36 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6A4E9AE053;
+        Tue, 28 Jun 2022 17:23:29 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9C6F0AE045;
+        Tue, 28 Jun 2022 17:23:28 +0000 (GMT)
+Received: from [9.171.41.104] (unknown [9.171.41.104])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 28 Jun 2022 17:23:28 +0000 (GMT)
+Message-ID: <13c7d30e-e5e1-2b73-2305-8e82465df9ed@linux.ibm.com>
+Date:   Tue, 28 Jun 2022 19:27:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517064937.4033441-4-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v10 3/3] KVM: s390: resetting the Topology-Change-Report
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
+        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, wintera@linux.ibm.com,
+        seiden@linux.ibm.com, nrb@linux.ibm.com
+References: <20220620125437.37122-1-pmorel@linux.ibm.com>
+ <20220620125437.37122-4-pmorel@linux.ibm.com>
+ <03c79e51-7a0b-f406-d4d2-b10f43b6a7a1@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <03c79e51-7a0b-f406-d4d2-b10f43b6a7a1@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 8GrcA_fKmoyP24pui1Gwfcbb63SFzkwM
+X-Proofpoint-ORIG-GUID: fTVj-4qGhpVQrIwYjw4QYUWWjAKrORO4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-28_10,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 adultscore=0 bulkscore=0 priorityscore=1501 phishscore=0
+ clxscore=1015 malwarescore=0 impostorscore=0 mlxlogscore=999
+ suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206280068
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
 
-On Tue, May 17, 2022 at 02:49:34PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> When M4 is kicked by SCFW, M4 runs in its own hardware partition, Linux
-> could only do IPC with M4, it could not start, stop, update image.
-> 
-> We disable recovery reboot when M4 is managed by SCFW, because
-> remoteproc core still not support M4 auto-recovery without loading
-> image.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/remoteproc/imx_rproc.c | 88 ++++++++++++++++++++++++++++++++++
->  1 file changed, 88 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-> index 4a3352821b1d..2e751fc90760 100644
-> --- a/drivers/remoteproc/imx_rproc.c
-> +++ b/drivers/remoteproc/imx_rproc.c
-> @@ -6,6 +6,7 @@
->  #include <linux/arm-smccc.h>
->  #include <linux/clk.h>
->  #include <linux/err.h>
-> +#include <linux/firmware/imx/sci.h>
->  #include <linux/interrupt.h>
->  #include <linux/kernel.h>
->  #include <linux/mailbox_client.h>
-> @@ -59,6 +60,8 @@
->  #define IMX_SIP_RPROC_STARTED		0x01
->  #define IMX_SIP_RPROC_STOP		0x02
->  
-> +#define	IMX_SC_IRQ_GROUP_REBOOTED	5
-> +
->  /**
->   * struct imx_rproc_mem - slim internal memory structure
->   * @cpu_addr: MPU virtual address of the memory region
-> @@ -89,6 +92,10 @@ struct imx_rproc {
->  	struct work_struct		rproc_work;
->  	struct workqueue_struct		*workqueue;
->  	void __iomem			*rsc_table;
-> +	struct imx_sc_ipc		*ipc_handle;
-> +	struct notifier_block		rproc_nb;
-> +	u32				rproc_pt;	/* partition id */
-> +	u32				rsrc_id;	/* resource id */
->  };
->  
->  static const struct imx_rproc_att imx_rproc_att_imx93[] = {
-> @@ -117,6 +124,18 @@ static const struct imx_rproc_att imx_rproc_att_imx93[] = {
->  	{ 0xD0000000, 0xa0000000, 0x10000000, 0 },
->  };
->  
-> +static const struct imx_rproc_att imx_rproc_att_imx8qxp[] = {
-> +	{ 0x08000000, 0x08000000, 0x10000000, 0 },
-> +	/* TCML/U */
-> +	{ 0x1FFE0000, 0x34FE0000, 0x00040000, ATT_OWN | ATT_IOMEM },
-> +	/* OCRAM(Low 96KB) */
-> +	{ 0x21000000, 0x00100000, 0x00018000, 0 },
-> +	/* OCRAM */
-> +	{ 0x21100000, 0x00100000, 0x00040000, 0 },
-> +	/* DDR (Data) */
-> +	{ 0x80000000, 0x80000000, 0x60000000, 0 },
-> +};
-> +
->  static const struct imx_rproc_att imx_rproc_att_imx8mn[] = {
->  	/* dev addr , sys addr  , size	    , flags */
->  	/* ITCM   */
-> @@ -255,6 +274,12 @@ static const struct imx_rproc_dcfg imx_rproc_cfg_imx8mq = {
->  	.method		= IMX_RPROC_MMIO,
->  };
->  
-> +static const struct imx_rproc_dcfg imx_rproc_cfg_imx8qxp = {
-> +	.att		= imx_rproc_att_imx8qxp,
-> +	.att_size	= ARRAY_SIZE(imx_rproc_att_imx8qxp),
-> +	.method		= IMX_RPROC_SCU_API,
-> +};
-> +
->  static const struct imx_rproc_dcfg imx_rproc_cfg_imx8ulp = {
->  	.att		= imx_rproc_att_imx8ulp,
->  	.att_size	= ARRAY_SIZE(imx_rproc_att_imx8ulp),
-> @@ -683,6 +708,22 @@ static void imx_rproc_free_mbox(struct rproc *rproc)
->  	mbox_free_channel(priv->rx_ch);
->  }
->  
-> +static int imx_rproc_partition_notify(struct notifier_block *nb,
-> +				      unsigned long event, void *group)
-> +{
-> +	struct imx_rproc *priv = container_of(nb, struct imx_rproc, rproc_nb);
-> +
-> +	/* Ignore other irqs */
-> +	if (!((event & BIT(priv->rproc_pt)) && (*(u8 *)group == IMX_SC_IRQ_GROUP_REBOOTED)))
-> +		return 0;
-> +
-> +	rproc_report_crash(priv->rproc, RPROC_WATCHDOG);
-> +
-> +	pr_info("Partition%d reset!\n", priv->rproc_pt);
-> +
-> +	return 0;
-> +}
-> +
->  static int imx_rproc_detect_mode(struct imx_rproc *priv)
->  {
->  	struct regmap_config config = { .name = "imx-rproc" };
-> @@ -692,6 +733,7 @@ static int imx_rproc_detect_mode(struct imx_rproc *priv)
->  	struct arm_smccc_res res;
->  	int ret;
->  	u32 val;
-> +	u8 pt;
->  
->  	switch (dcfg->method) {
->  	case IMX_RPROC_NONE:
-> @@ -702,6 +744,51 @@ static int imx_rproc_detect_mode(struct imx_rproc *priv)
->  		if (res.a0)
->  			priv->rproc->state = RPROC_DETACHED;
->  		return 0;
-> +	case IMX_RPROC_SCU_API:
-> +		ret = imx_scu_get_handle(&priv->ipc_handle);
-> +		if (ret)
-> +			return ret;
-> +		ret = of_property_read_u32(dev->of_node, "fsl,resource-id", &priv->rsrc_id);
-> +		if (ret) {
-> +			dev_err(dev, "No fsl,resource-id property\n");
-> +			return ret;
-> +		}
-> +
-> +		/*
-> +		 * If Mcore resource is not owned by Acore partition, It is kicked by ROM,
-> +		 * and Linux could only do IPC with Mcore and nothing else.
-> +		 */
-> +		if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id))
-> +			return 0;
-> +
-> +		priv->rproc->state = RPROC_DETACHED;
-> +		priv->rproc->recovery_disabled = true;
-> +
-> +		/* Get partition id and enable irq in SCFW */
-> +		ret = imx_sc_rm_get_resource_owner(priv->ipc_handle, priv->rsrc_id, &pt);
-> +		if (ret) {
-> +			dev_err(dev, "not able to get resource owner\n");
-> +			return ret;
-> +		}
-> +
-> +		priv->rproc_pt = pt;
-> +		priv->rproc_nb.notifier_call = imx_rproc_partition_notify;
-> +
-> +		ret = imx_scu_irq_register_notifier(&priv->rproc_nb);
-> +		if (ret) {
-> +			dev_warn(dev, "register scu notifier failed.\n");
-> +			return ret;
-> +		}
 
-I woul have expected to see imx_scu_irq_register_notifier() being called when
-the driver is removed and in the probe() error path.  More comments to come.
-
-Thanks,
-Mathieu
-
-> +
-> +		ret = imx_scu_irq_group_enable(IMX_SC_IRQ_GROUP_REBOOTED, BIT(priv->rproc_pt),
-> +					       true);
-> +		if (ret) {
-> +			imx_scu_irq_unregister_notifier(&priv->rproc_nb);
-> +			dev_warn(dev, "Enable irq failed.\n");
-> +			return ret;
-> +		}
-> +
-> +		return 0;
->  	default:
->  		break;
->  	}
-> @@ -855,6 +942,7 @@ static const struct of_device_id imx_rproc_of_match[] = {
->  	{ .compatible = "fsl,imx8mm-cm4", .data = &imx_rproc_cfg_imx8mq },
->  	{ .compatible = "fsl,imx8mn-cm7", .data = &imx_rproc_cfg_imx8mn },
->  	{ .compatible = "fsl,imx8mp-cm7", .data = &imx_rproc_cfg_imx8mn },
-> +	{ .compatible = "fsl,imx8qxp-cm4", .data = &imx_rproc_cfg_imx8qxp },
->  	{ .compatible = "fsl,imx8ulp-cm33", .data = &imx_rproc_cfg_imx8ulp },
->  	{ .compatible = "fsl,imx93-cm33", .data = &imx_rproc_cfg_imx93 },
->  	{},
-> -- 
-> 2.25.1
+On 6/28/22 18:41, Janis Schoetterl-Glausch wrote:
+> On 6/20/22 14:54, Pierre Morel wrote:
+>> During a subsystem reset the Topology-Change-Report is cleared.
+>> Let's give userland the possibility to clear the MTCR in the case
+>> of a subsystem reset.
+>>
+>> To migrate the MTCR, we give userland the possibility to
+>> query the MTCR state.
+>>
+>> We indicate KVM support for the CPU topology facility with a new
+>> KVM capability: KVM_CAP_S390_CPU_TOPOLOGY.
+>>
+>> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
+>> ---
+>>   Documentation/virt/kvm/api.rst   | 31 +++++++++++
+>>   arch/s390/include/uapi/asm/kvm.h | 10 ++++
+>>   arch/s390/kvm/kvm-s390.c         | 96 ++++++++++++++++++++++++++++++++
+>>   include/uapi/linux/kvm.h         |  1 +
+>>   4 files changed, 138 insertions(+)
+>>
+>> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+>> index 11e00a46c610..326f8b7e7671 100644
+>> --- a/Documentation/virt/kvm/api.rst
+>> +++ b/Documentation/virt/kvm/api.rst
+>> @@ -7956,6 +7956,37 @@ should adjust CPUID leaf 0xA to reflect that the PMU is disabled.
+>>   When enabled, KVM will exit to userspace with KVM_EXIT_SYSTEM_EVENT of
+>>   type KVM_SYSTEM_EVENT_SUSPEND to process the guest suspend request.
+>>
+>> +8.37 KVM_CAP_S390_CPU_TOPOLOGY
+>> +------------------------------
+>> +
+>> +:Capability: KVM_CAP_S390_CPU_TOPOLOGY
+>> +:Architectures: s390
+>> +:Type: vm
+>> +
+>> +This capability indicates that KVM will provide the S390 CPU Topology
+>> +facility which consist of the interpretation of the PTF instruction for
+>> +the Function Code 2 along with interception and forwarding of both the
+>> +PTF instruction with Function Codes 0 or 1 and the STSI(15,1,x)
+>> +instruction to the userland hypervisor.
 > 
+> The way the code is written, STSI 15.x.x is forwarded to user space,
+> might actually make sense to future proof the code by restricting that
+> to 15.1.2-6 in priv.c.
+>> +
+>> +The stfle facility 11, CPU Topology facility, should not be provided
+>> +to the guest without this capability.
+>> +
+>> +When this capability is present, KVM provides a new attribute group
+>> +on vm fd, KVM_S390_VM_CPU_TOPOLOGY.
+>> +This new attribute allows to get, set or clear the Modified Change
+>> +Topology Report (MTCR) bit of the SCA through the kvm_device_attr
+>> +structure.
+>> +
+>> +Getting the MTCR bit is realized by using a kvm_device_attr attr
+>> +entry value of KVM_GET_DEVICE_ATTR and with kvm_device_attr addr
+>> +entry pointing to the address of a struct kvm_cpu_topology.
+>> +The value of the MTCR is return by the bit mtcr of the structure.
+>> +
+>> +When using KVM_SET_DEVICE_ATTR the MTCR is set by using the
+>> +attr->attr value KVM_S390_VM_CPU_TOPO_MTCR_SET and cleared by
+>> +using KVM_S390_VM_CPU_TOPO_MTCR_CLEAR.
+>> +
+>>   9. Known KVM API problems
+>>   =========================
+>>
+>> diff --git a/arch/s390/include/uapi/asm/kvm.h b/arch/s390/include/uapi/asm/kvm.h
+>> index 7a6b14874d65..df5e8279ffd0 100644
+>> --- a/arch/s390/include/uapi/asm/kvm.h
+>> +++ b/arch/s390/include/uapi/asm/kvm.h
+>> @@ -74,6 +74,7 @@ struct kvm_s390_io_adapter_req {
+>>   #define KVM_S390_VM_CRYPTO		2
+>>   #define KVM_S390_VM_CPU_MODEL		3
+>>   #define KVM_S390_VM_MIGRATION		4
+>> +#define KVM_S390_VM_CPU_TOPOLOGY	5
+>>
+>>   /* kvm attributes for mem_ctrl */
+>>   #define KVM_S390_VM_MEM_ENABLE_CMMA	0
+>> @@ -171,6 +172,15 @@ struct kvm_s390_vm_cpu_subfunc {
+>>   #define KVM_S390_VM_MIGRATION_START	1
+>>   #define KVM_S390_VM_MIGRATION_STATUS	2
+>>
+>> +/* kvm attributes for cpu topology */
+>> +#define KVM_S390_VM_CPU_TOPO_MTCR_CLEAR	0
+>> +#define KVM_S390_VM_CPU_TOPO_MTCR_SET	1
+> 
+> Are you going to transition to a set-value-provided-by-user API with the next series?
+> I don't particularly like that MTCR is user visible, it's kind of an implementation detail.
+
+It is not the same structure as the hardware structure.
+Even it looks like it.
+
+I am OK to use something else, like a u8
+in that case I need to say userland that the size of the data returned 
+by get KVM_S390_VM_CPU_TOPOLOGY is u8.
+
+I find this is a lack in the definition of the kvm_device_attr, it 
+should have a size entry.
+
+All other user of kvm_device_attr have structures and it is easy to the 
+userland to get the size using the sizeof(struct...) one can say that 
+userland knows that the parameter for topology is a u8 but that hurt me 
+somehow.
+May be it is stupid, for the other calls the user has to know the name 
+of the structure anyway.
+
+Then we can say the value of u8 bit 1 is the value of the mtcr.
+OK for me.
+
+What do you think?
+
+> 
+>> +
+>> +struct kvm_cpu_topology {
+>> +	__u16 mtcr : 1;
+> 
+> So I'd give this a more descriptive name, report_topology_change/topo_change_report_pending ?
+> 
+>> +	__u16 reserved : 15;
+> 
+> Are these bits for future proofing? If so a few more would do no harm IMO.
+>> +};
+> 
+> The use of a bit field in uapi surprised my, but I guess it's fine and kvm_sync_regs has them too.
+>> +
+>>   /* for KVM_GET_REGS and KVM_SET_REGS */
+>>   struct kvm_regs {
+>>   	/* general purpose regs for s390 */
+>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+>> index 95b96019ca8e..ae39041bb149 100644
+>> --- a/arch/s390/kvm/kvm-s390.c
+>> +++ b/arch/s390/kvm/kvm-s390.c
+>> @@ -606,6 +606,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>>   	case KVM_CAP_S390_PROTECTED:
+>>   		r = is_prot_virt_host();
+>>   		break;
+>> +	case KVM_CAP_S390_CPU_TOPOLOGY:
+>> +		r = test_facility(11);
+>> +		break;
+>>   	default:
+>>   		r = 0;
+>>   	}
+>> @@ -817,6 +820,20 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm, struct kvm_enable_cap *cap)
+>>   		icpt_operexc_on_all_vcpus(kvm);
+>>   		r = 0;
+>>   		break;
+>> +	case KVM_CAP_S390_CPU_TOPOLOGY:
+>> +		r = -EINVAL;
+>> +		mutex_lock(&kvm->lock);
+>> +		if (kvm->created_vcpus) {
+>> +			r = -EBUSY;
+>> +		} else if (test_facility(11)) {
+>> +			set_kvm_facility(kvm->arch.model.fac_mask, 11);
+>> +			set_kvm_facility(kvm->arch.model.fac_list, 11);
+>> +			r = 0;
+>> +		}
+>> +		mutex_unlock(&kvm->lock);
+>> +		VM_EVENT(kvm, 3, "ENABLE: CPU TOPOLOGY %s",
+> 
+> Most of the other cases spell out the cap, so it'd be "ENABLE: CAP_S390_CPU_TOPOLOGY %s".
+
+OK
+
+> 
+>> +			 r ? "(not available)" : "(success)");
+>> +		break;
+>>   	default:
+>>   		r = -EINVAL;
+>>   		break;
+>> @@ -1710,6 +1727,76 @@ static void kvm_s390_sca_set_mtcr(struct kvm *kvm)
+>>   	ipte_unlock(kvm);
+>>   }
+>>
+> 
+> Some brainstorming function names:
+> 
+> kvm_s390_get_topo_change_report
+> kvm_s390_(un|re)set_topo_change_report
+> kvm_s390_(publish|revoke|unpublish)_topo_change_report
+> kvm_s390_(report|signal|revoke)_topology_change
+
+kvm_s390_update_topology_change_report ?
+
+> 
+> [...]
+> 
+
+-- 
+Pierre Morel
+IBM Lab Boeblingen

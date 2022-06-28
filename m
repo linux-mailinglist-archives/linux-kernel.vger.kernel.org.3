@@ -2,48 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B691D55E8E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6D555E503
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346791AbiF1NoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
+        id S1346573AbiF1NiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346734AbiF1Nnx (ORCPT
+        with ESMTP id S1346903AbiF1Nh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:43:53 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58C91E3DF;
-        Tue, 28 Jun 2022 06:43:47 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LXQjj5pRbzdZt9;
-        Tue, 28 Jun 2022 21:41:29 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+        Tue, 28 Jun 2022 09:37:58 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451B2B846;
+        Tue, 28 Jun 2022 06:37:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656423477; x=1687959477;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=UZ1inB0vzZWuVNlHFHseDxqNZ4kB+gVp21tbRAvli0k=;
+  b=PfZa9z6fUGk4vmYbM4Qs/oJO/eGvsHUtkABCqlNgWi1T92vk5vmwO+v+
+   xXacePk2T2ek01x/fzeOFGeSz75FJUAPkvDqhot5nuRen293m29jmt3ET
+   ZxHvjBlAspV7TZTpVsGa/mjxe5FvNOzbK+pn+tSEmM9MU7J2IV0N880m3
+   VVBi+/kOCJKzZddN9ihtfgyqxoGLjVJ5JFVa1t205iO+x89h5DP7RpdjZ
+   zVyK/zEuXsevGxzkKGLNu11m1UX/U9FznZ+daF4Mhfurhd4qtiX/qHZz3
+   qVNL58shtt0uO2mIpVNoY60qgzD4CI3NgUH5eSbuStIYZvc2ydPs5ihXQ
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="162402775"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jun 2022 06:37:56 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 28 Jun 2022 21:43:45 +0800
-Received: from huawei.com (10.175.112.208) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 28 Jun
- 2022 21:43:44 +0800
-From:   Guo Mengqi <guomengqi3@huawei.com>
-To:     <alexs@kernel.org>, <siyanteng@loongson.cn>, <corbet@lwn.net>,
-        <bobwxc@email.cn>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <xuqiang36@huawei.com>, <guomengqi3@huawei.com>
-Subject: [PATCH -next] docs/zh_CN: add vm transhuge translation
-Date:   Tue, 28 Jun 2022 21:37:42 +0800
-Message-ID: <20220628133742.91966-1-guomengqi3@huawei.com>
-X-Mailer: git-send-email 2.17.1
+ 15.1.2375.17; Tue, 28 Jun 2022 06:37:52 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Tue, 28 Jun 2022 06:37:52 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oNRKS1nauOu69E/5DNfK1Oey7Jq5ECSOgnm4g2GOT+N83gyNVGne9P46yZ6i5PhHUtZmtxYyqCLTAJUwiq1RuQOEdXaBWscDFBiIlCw+V1/5GGTM1wX8t3PrsAd7ZeF+sPvumjPFsvDiy3LieM/l04f7/obVWSt4a4JB7PUC++RLHcsNIxgb7v42WAjGcnkdIllKVt8AYtaqWJrzyDri0DHXKLvimROMwclAYiTxMOdi3SziV8RwZUITANxUxwSSNjC5JLVZZPQo2vpgl4kffMGyC9ooAWvCAZPR9OUvNrDZz5VjUBKMH94FstYMyjPj7ACzK7tJxwlqawPPDIgF3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UZ1inB0vzZWuVNlHFHseDxqNZ4kB+gVp21tbRAvli0k=;
+ b=je1ZbQum3CtR/XPGBjthMvoH7CDr8ktRngzhtkSf2RdGXnvURX2iwuWw2aBb16Z+dTDs8oQG9oPonu4rX/CAS2RSfzdEt/ExEY8Nig5+UC1iJmugbJwWMIwycsQu/Yt0OSskX2cljfCle7xqebhwm1SoS1uQD6meFKlw2dTyCVDNbdm840I/nhfl8WYPfq1DZ6Vw4kXm1upS7jJPvz1J/X9Ej1fnoHMJQT8I1JTDXfao7iL43hVAo6Wyj5mKqVk4XWH6Kba3akNivPHCBbiXH8sRuGMwR3pNWBYA3KFWlMMzc1BstLkcHa1DqE+wu6yGuwBDVROGQYFuJckU8XG8jw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UZ1inB0vzZWuVNlHFHseDxqNZ4kB+gVp21tbRAvli0k=;
+ b=sN0L350kmupLqDSDSomd3wUpgr0rvLR8ZiUvIVQq8k6ABU9+Wxm27Ri73jzOREIF6a/I2lA3K7PKP/HaqXDVkTxsNRc45haMdoXr66mwAE5R2CY88QTE5Ha8pyTzx/XBMgoW6jUMpM8DwjskGpeSOrKjk42R8JghN/iUzSUKDYM=
+Received: from CY4PR11MB1960.namprd11.prod.outlook.com (2603:10b6:903:11d::21)
+ by DM4PR11MB5391.namprd11.prod.outlook.com (2603:10b6:5:396::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15; Tue, 28 Jun
+ 2022 13:37:45 +0000
+Received: from CY4PR11MB1960.namprd11.prod.outlook.com
+ ([fe80::80c4:1a95:649d:2ee0]) by CY4PR11MB1960.namprd11.prod.outlook.com
+ ([fe80::80c4:1a95:649d:2ee0%10]) with mapi id 15.20.5373.018; Tue, 28 Jun
+ 2022 13:37:45 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <Eugen.Hristev@microchip.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <linux-kernel@vger.kernel.org>, <Nicolas.Ferre@microchip.com>
+Subject: Re: [PATCH 2/2] ARM: dts: at91: sama5d2_icp: fix eeprom compatibles
+Thread-Topic: [PATCH 2/2] ARM: dts: at91: sama5d2_icp: fix eeprom compatibles
+Thread-Index: AQHYivQ/wICcesfza0CkEkcF2D0qvA==
+Date:   Tue, 28 Jun 2022 13:37:45 +0000
+Message-ID: <bb3fcede-de3a-6852-edc7-9c9843754d3b@microchip.com>
+References: <20220607090455.80433-1-eugen.hristev@microchip.com>
+ <20220607090455.80433-2-eugen.hristev@microchip.com>
+In-Reply-To: <20220607090455.80433-2-eugen.hristev@microchip.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fceb32a2-f44f-4dec-6732-08da590b627e
+x-ms-traffictypediagnostic: DM4PR11MB5391:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VyDXXE22UmO1RomoseGhwfE0gm+5oQxFV8nUaB6ZI7ARckuKVCJLS4LgTwBKPCp7Sr+VunIF0c+6r9tlXBJAyZ/o6J/kekjY+t7Uu3LeUs4GLtYfNXwUBZWgVI0yDsmSP1KoUKpWjitoRgJlUFJUlyoMAPXDUVNxrKm4StQfOE0EKpYyZze0BAA1GTNCHIA1wqn/4sUCvRvOkKKmmrnfFOhhxlmKAxhXBv9pFncKEpPVZEV3JiT8vslyLxHqdPHKDCYT9xanWfzF8v3E/txTzbAvP/lPWOMXeQeehMmU1THF4QDuQisPhB0yvgXcIGDlzELkMtiasn8bLaOo6pLK5ksEzFgz8ItLV6vPxi3OmaEprqkaXcogQYwbUc7AOQcENAaNdx8282my263LCmAglEAkCRjoZxRD7slCqN6MlJhE1S8CLm1wvmcNZBgHBUK7Jxdmj2zNNuHQLDeG/Q+MniHHXfy7Af/tXKHpDbCk31n65FtB3Jjxi7PPz8YpHtiHXtt2UZ3qUjH7cWxKYCQQMYx+eyPv8LxWIkGZai42sv1tfEOVpYJcmsP0fSB6GqARcUJI7M8zHwGzLaOx3op5XK9dD+VN1tluRIskN/IrOFVQTjRDAmBId6oPeJh74LOu3226ocLFY7ohdp0w9MWNHReO5SGwCShtot9Iwj+wUuPqVW4ri+fcgvFQ0xjY/HQ2xugq4G+NpfR38t+bJSIYfXjcnURHH/g/zLMVjSMwxMwPEHiRBXNqJVGQlw4v9/4IkiVgte8F/VFjMpN0lH4AJhLRKSaFJrDAQOD/5jpRmlZkUf3pxBdC/dA1P59lMbNvOhFP9F5kGeLYRJf8/zOwratF0H/ws3/Fzz8RbMQ39+s=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1960.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(136003)(346002)(376002)(366004)(396003)(6506007)(41300700001)(36756003)(122000001)(186003)(38070700005)(478600001)(26005)(86362001)(6512007)(5660300002)(31696002)(316002)(4326008)(8936002)(107886003)(54906003)(64756008)(2616005)(66556008)(83380400001)(71200400001)(2906002)(66476007)(66946007)(38100700002)(8676002)(76116006)(31686004)(110136005)(53546011)(91956017)(6486002)(66446008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WkFJZTdHdnA5ZFpZT3lZUmZTc2MwSE9rYjVHNHpzbnYveVl2ZnZFMm1CU0VO?=
+ =?utf-8?B?SWc3cldJbDFpTjh4V2xkUlA1TUVEblhVUkYxYnJWQm5ncmR3aXBMakY5Z1R1?=
+ =?utf-8?B?Znkxbmp0RjRNa0Nrci9JUlhubGJZaXI1YWxkeGdIY2JVUElNN2tOWE93MWEw?=
+ =?utf-8?B?TDRoZ3FLbzJUK2lDWVI3QWFFQTBnd1l3MmtOM0pjWkNicjNUUks3c1FrSTda?=
+ =?utf-8?B?M3ZRb25aSC9JWWY5Q3dza3gxbW56TkdOTTRPN0wyR1RNZ0NQR3ZVcFBIT3dM?=
+ =?utf-8?B?dm9YR2FuMHRlYVYrM3VZRTlpRXAzYXYxL3NhMk1FLzc2bWZWemtnOXUzWi94?=
+ =?utf-8?B?Sjk5QkNQaTBYT1JQT3hYK2pHUkp4ZjArQlpwcjZQWEVrMkVrYmR4UzZBNWcy?=
+ =?utf-8?B?UjBCeXloWUZQSFNiZkVrekJzQVhTTXpwZk8rb3NhVjFQYnpiTGY3TFpGRjU2?=
+ =?utf-8?B?cG8wd1BmODFFM2hXSGdRbW1qRjErZlZJenN1VEREdXFCZHhSWVN1WW1KcWJj?=
+ =?utf-8?B?eVVYYS9KL2xTYkZESVBXNTgyS0lrUHVFTGdiekV5MUgxbjZueVhybTJabnla?=
+ =?utf-8?B?VUVYSlFXY1h2S2dFZmFIc3FsS1BaMzFvZmpma01yL28xMnM4OTcrc1g2LzJ0?=
+ =?utf-8?B?Q3JpNCtFd0thZEpmVFl5YU9wS1AwdkNDMzhQaVJUK2JFMnN0L2l2aHVqUllC?=
+ =?utf-8?B?alJoZGg2bTh6RERZWmx3Wms1MmFJNEdOaGFGMGJCcDVzV0h6TlVqTmtoK29P?=
+ =?utf-8?B?MDUxbnErK3VDTGVZTmozakhQMU9BeWthVlVPeGk2L3haTmtsNjV5Nm1LZDB2?=
+ =?utf-8?B?M1NxMms1akI5Q2M2bkJZYmZpeTU2dm5yTWFHZTk4NUsvaHlGRzZRNzhrRnZz?=
+ =?utf-8?B?NDVDVlNmMlkrek9aMTNYMm1BNnh6L2JDTUF5MTFIMlQyb2pGbFBURFJjMmJL?=
+ =?utf-8?B?Qmc3dmJxdDlVOGt1MFRyWW9XQkkyWXdnczhoRitScWhnTllaRmxsL1Q1U2pE?=
+ =?utf-8?B?dFdPVVpjMG5QcW1MaGlGdFFGZ1FrN1gweGJSQWg2N2x5YjdPVHRZbDFtRldD?=
+ =?utf-8?B?NWduS2pmN3dNaHpWelNCQTJQaE9oQjR6TzBrb0Vyb0RZcFBNYlBpaUw4bzNI?=
+ =?utf-8?B?Tk1paGcvMjNIYmkzTk9OY25wdWFYRWppR1BoTFNWaW5NeVVNRXlyQU1nTThQ?=
+ =?utf-8?B?NHM3Tnh3NEVRR2l2WFlHcSsrQmQ5K1hFam5IVDNiRnh2Z0d0Nm5keG9OVk1T?=
+ =?utf-8?B?VXNNWW9lMkt4bC9EOEErRXV5N0ZsZkZVdXVOd2llNVBnT2kzbFRNVGxKbWRq?=
+ =?utf-8?B?YmNGZ2dVOStKTnFnREl2LytGRTFwNlZIY1BrSVZHT0hJSlJDU09pcDN0cGZM?=
+ =?utf-8?B?TkhXbEpTdnZqMmlxL0Z6eTU1dVBiYUwrZlNzZ1pXRmYrQjc5OHo2OXdEWS9a?=
+ =?utf-8?B?WnQxU25OTzdaT1h5VjdsUXBpUHNETWZLS2xJYkRuUUg3eE1nWXEvQ3NDeVhy?=
+ =?utf-8?B?SVFrWWtpNTJ3Rk9aN1BDbkRYcUd2L3lTcGFpM1pIVDUxcUo0S2tNbkM4ZTdJ?=
+ =?utf-8?B?cFRGTGUyZVdzeFFUMzlOWm1PNDlBSHUyUzhWek5Fd2ltWU1pR0lDUVNEZzRR?=
+ =?utf-8?B?MURjMU81NUd5RWJ6RUdtTWltVENtQjNWUnR6eDFiUkdRTTI5SWJNbEI1WTlT?=
+ =?utf-8?B?dkxMOTllbUtPOWZrbUFYbTRrOHVXZnNRNWF1QklhN2czYlphZEJUd3I0cHB3?=
+ =?utf-8?B?Nm8xK0N6ZnhNMERxWVh4U2tCd0Z0Wkk1T3l3enN5Wm44QnhQd1QxNFZsRnhC?=
+ =?utf-8?B?S1RBVUh3OXZiSlBpTFR3cXFiaDRjeVhYSVlHMGZNdXRmTVlyaUtBSlo2YXZp?=
+ =?utf-8?B?eE55SW9tOEEwUVp2TFZLcWh0LytWMWxUcVR2NE5hYTIvTm01cWduNVhySG9y?=
+ =?utf-8?B?c3lDYXJHaVpGYWhHTExJclZQVm9SbXFsaVZzRXVaN0FYZkRGeThzUEVsNW5D?=
+ =?utf-8?B?RmNITlNkUUloQ0dUbVI5eE9JeGUxZ0o4R1dha3dmM3E2WUtoemx2ZVJnQ202?=
+ =?utf-8?B?V05UWHJETS9yZ25kVnEvU1lHZVFtdXhYd1NBSFJCUUFhTTRFVnZxMzVPK280?=
+ =?utf-8?B?cytWQ0prNm9rZzVKMEVoU0k2SUhxUjFnamlibjRMQ0J2SVRBelhBZkFLMWZs?=
+ =?utf-8?B?S0E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F33FFE9695013945AD04C50064468023@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_20,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1960.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fceb32a2-f44f-4dec-6732-08da590b627e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2022 13:37:45.7997
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cYWJoMJdR0MFa7lAtRqx8mNTyYDao9JFO2FaWL1du3b8YCMZEIooHTF/05dF+QP8UmnFdf+TXkAkvIuTp5IQ0auw2sBqNlUzMzWNXJw/S7c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5391
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,189 +156,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Translate .../vm/transhuge.rst into Chinese.
-
-Signed-off-by: Guo Mengqi <guomengqi3@huawei.com>
----
- Documentation/translations/zh_CN/vm/index.rst |   2 +-
- .../translations/zh_CN/vm/transhuge.rst       | 151 ++++++++++++++++++
- 2 files changed, 152 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/translations/zh_CN/vm/transhuge.rst
-
-diff --git a/Documentation/translations/zh_CN/vm/index.rst b/Documentation/translations/zh_CN/vm/index.rst
-index c77a56553845..2d82b15b272b 100644
---- a/Documentation/translations/zh_CN/vm/index.rst
-+++ b/Documentation/translations/zh_CN/vm/index.rst
-@@ -59,11 +59,11 @@ Linux内存管理文档
-    vmalloced-kernel-stacks
-    z3fold
-    zsmalloc
-+   transhuge
- 
- TODOLIST:
- * arch_pgtable_helpers
- * free_page_reporting
- * hugetlbfs_reserv
- * slub
--* transhuge
- * unevictable-lru
-diff --git a/Documentation/translations/zh_CN/vm/transhuge.rst b/Documentation/translations/zh_CN/vm/transhuge.rst
-new file mode 100644
-index 000000000000..a7bed8b13a47
---- /dev/null
-+++ b/Documentation/translations/zh_CN/vm/transhuge.rst
-@@ -0,0 +1,151 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. include:: ../disclaimer-zh_CN.rst
-+
-+:Original: Documentation/vm/transhuge.rst
-+
-+:翻译:
-+
-+ 郭梦琪 Guo Mengqi <guomengqi3@huawei.com>
-+
-+:校译:
-+
-+==============
-+透明大页机制
-+==============
-+
-+本文档描述透明大页（THP）的设计理念，以及它是如何与内存管理系统其他部分交互的。
-+
-+设计原则
-+========
-+
-+- “优雅fallback”：有些mm组件不了解透明大页的存在，它们的回退方法是将PMD页表项
-+  拆分成PTE页表项。必要时还需要拆分透明大页。这样就可以在常规大小的页或页表项上
-+  继续工作。
-+
-+- 如果内存碎片化导致大页分配失败，则分配常规页作为替代放入原vma中，此期间不应
-+  产生任何失败或明显延迟，不要引起用户态的注意。
-+
-+- 如果一些进程退出后释放了空余的大页（不论在伙伴系统还是在VM），由常规页支持的
-+  guest物理内存应该自动重新申请为大页。(通过khugepaged进程)
-+
-+- 透明大页不需要预留内存，而是尽可能使用已经存在的大页。（唯为避免不可移动的页
-+  将整个内存碎片化，唯一可能的预留是在kernelcore=的设置中。不过这个调整并不仅
-+  针对透明大页，而对内核中所有动态的多级页面申请都通用。）
-+
-+get_user_pages和follow_page
-+===========================
-+
-+不论对单个大页还是hugetlbfs，使用get_user_pages和follow_page时，返回的会是首页或
-+尾页。大多数情况下调用get_user_page功能的人不关心页的大小，只关心页的真实物理
-+地址以及暂时的pin页，好在I/O结束后将页释放。但在驱动中，在某些情况下有可能访问
-+尾页的page_struct（如检查page->mapping字段），这时应该转而检查首页。一旦首页或者
-+尾页被引用，大页就不能再被拆分了。
-+
-+.. note::
-+   以上限制不是针对GUP API新增，而是为了与在hugetlbfs中保持一致。这样如果驱动
-+   能在hugetlbfs中使用GUP，就能够切换到透明大页机制支持的GUP。
-+
-+优雅fallback
-+============
-+
-+为查页表流程增加大页支持只需添加split_huge_pmd(vma, pmd,
-+addr)即可。其中pmd为pmd_offset返回值。要为代码添加透明大页支持很简单，搜索
-+"pmd_offset"并将split_huge_pmd添加到所有返回的pmd后面。这短短一行的fallback函数
-+很巧妙，为我们省去了额外的适配代码（通常会很长或者很复杂）。
-+
-+如果你需要在没有页表的情况下处理一个大页，可以使用split_huge_page(page)把它拆分
-+成小页。linux VM就是通过这种方式将大页换出。如果页面被pin住了，split_huge_page
-+就会失败。
-+
-+例子：添加一行代码使mremap.c支持透明大页::
-+
-+        diff --git a/mm/mremap.c b/mm/mremap.c
-+        --- a/mm/mremap.c
-+        +++ b/mm/mremap.c
-+        @@ -41,6 +41,7 @@ static pmd_t *get_old_pmd(struct mm_stru
-+                return NULL;
-+
-+                pmd = pmd_offset(pud, addr);
-+        +       split_huge_pmd(vma, pmd, addr);
-+                if (pmd_none_or_clear_bad(pmd))
-+                    return NULL;
-+
-+大页支持中的锁使用
-+==================
-+
-+我们希望尽可能多的代码能原生支持透明大页，因为调用split_huge_page()和
-+split_huge_pmd()还是有开销的。
-+
-+要让查页表操作变得能处理huge pmd，只需对pmd_offset返回的pmd调用
-+pmd_trans_huge()。一定要持有mmap_lock读锁，以避免khugepaged在此期间申请新的
-+大页pmd（khugepaged collapse_huge_page会持有mmap_lock写锁而非anon_vma lock）。
-+如果pmd_trans_huge返回false，那就回到原来的流程。如果pmd_trans_huge返回true，
-+就需要先持有页表锁(pmd_lock())，然后再调一次pmd_trans_huge. 持页表锁是为了防止
-+大页pmd被转换成小页（split_huge_pmd可以跟查页表操作同时进行）。如果第二次
-+pmd_trans_huge返回false,那就释放页表锁，依然回到原有流程。如果返回true，就可以
-+继续处理huge pmd和hugepage了。处理完毕，再释放页表锁。
-+
-+引用计数和透明大页
-+==================
-+
-+THP的计数跟其他复合页的计数大致相同：
-+
-+ - get_page()/put_page()和GUP都在首页上进行计数（修改head page->_refcount）
-+
-+ - 尾页的_refcount永远是0. get_page_unless_zero()永远无法get到尾页。
-+
-+ - map/unmap特定PTE entry时，增减的是复合页中相应子页的_mapcount.
-+
-+ - map/unmap整个复合页时，增减的是compound_mapcount属性。该属性保存在第一个
-+   尾页中。对于文件中的大页，还要增加所有子页中的_mapcount，这样是为了在检测
-+   子页的解映射时不需考虑竞争问题。
-+
-+PageDoubleMap() 表明大页 *可能* 被映射为了PTE.
-+
-+对匿名页，PageDoubleMap()也表示所有子页的_mapcount都偏移了1.
-+在页被同时映射为了PMD和PTE的情况下，这个额外的引用可以避免子页解映射时的竞争。
-+
-+这个优化也可以追踪每个子页mapcount所带来的性能开销。另一种解决方法是在每次
-+map/unmap整个复合页时更改所有子页的_mapcount.
-+
-+对于匿名页，如果页面的PMD在首次被拆分时同时还具有PMD映射，则设置PG_double_map;
-+当compound_mapcount值降为0时，取消设置。
-+
-+对于映射到文件的页，在其首次映射PTE时，设置PG_double_map; 在页面从页缓存
-+page cache中移除时，取消设置。
-+
-+split_huge_page中，在清除page struct中所有PG_head/tail位之前，需要先将首页中的
-+引用计数refcount分发到所有其他尾页中。页表项PTE占用的引用计数很好处理，但剩下的
-+引用计数来源难以确定（如通过get_user_pages的pin页）。如果大页被pin住，
-+split_huge_page()会失败。页的引用计数必须等于所有子页mapcount之和再加一（因为
-+split_huge_page的调用者也必须对首页持有一个引用）。
-+
-+对匿名页，split_huge_page用页表项迁移（migration
-+entries）保持来page->_refcount和page->_mapcount稳定。对文件页，直接解映射就好。
-+
-+这套机制对物理内存扫描（physical memory scanners）也安全，scanner唯一合法引用页
-+的途径就是get_page_unless_zero().
-+
-+没调atomic_add()时，所有尾页的_refcount都为0. 这时scanner无法获取尾页的引用。
-+调了atomic_add()后，我们也不在乎页的_refcount是多少了。只要知道应该从首页的引用
-+计数减去多少即可。
-+
-+对首页进行get_page_unless_zero()是可以成功的。此时引用计数的再分配非常明了：
-+引用计数将会留在首页中。
-+
-+split_huge_pmd()对引用计数没有任何限制，在任何时候都可以拆分PMD，而且永远不会
-+失败。
-+
-+局部unmap和deferred_split_huge_page()函数
-+==========================================
-+
-+透明大页通过munmap()或其他方式解映射时，并不会立即释放内存。在page_remove_rmap()
-+中检查透明大页的某个子页是否已经还在使用，并将透明大页加入一个预备队列，当内存
-+使用需求变大时，把透明大页拆分，释放已经不用的子页。
-+
-+如果检测到局部unmap，由于处在锁中，无法拆页。而且在很多情况下，透明大页会跨VMA,
-+这时会在exit(2)中进行局部unmap，这时拆页效果适得其反。
-+
-+deferred_split_huge_page函数就是用来进行上文所说的将页排队以预备后续的拆分。真正
-+的拆页操作是通过内存压力导致的shrinker函数来触发。
-+
--- 
-2.17.1
-
+T24gMDcuMDYuMjAyMiAxMjowNCwgRXVnZW4gSHJpc3RldiB3cm90ZToNCj4gVGhlIGVlcHJvbSBt
+ZW1vcmllcyBvbiB0aGUgYm9hcmQgYXJlIG1pY3JvY2hpcCAyNGFhMDI1ZTQ4LCB3aGljaCBhcmUg
+MiBLYml0cw0KPiBhbmQgYXJlIGNvbXBhdGlibGUgd2l0aCBhdDI0YzAyIG5vdCBhdDI0YzMyLg0K
+PiANCj4gRml4ZXM6IDY4YTk1ZWY3MmNlZmUgKCJBUk06IGR0czogYXQ5MTogc2FtYTVkMi1pY3A6
+IGFkZCBTQU1BNUQyLUlDUCIpDQo+IFNpZ25lZC1vZmYtYnk6IEV1Z2VuIEhyaXN0ZXYgPGV1Z2Vu
+LmhyaXN0ZXZAbWljcm9jaGlwLmNvbT4NCg0KQXBwbGllZCB0byBhdDkxLWZpeGVzLiBUaGFua3Mh
+DQoNCj4gLS0tDQo+ICBhcmNoL2FybS9ib290L2R0cy9hdDkxLXNhbWE1ZDJfaWNwLmR0cyB8IDYg
+KysrLS0tDQo+ICAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygt
+KQ0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL2F0OTEtc2FtYTVkMl9pY3Au
+ZHRzIGIvYXJjaC9hcm0vYm9vdC9kdHMvYXQ5MS1zYW1hNWQyX2ljcC5kdHMNCj4gaW5kZXggODA2
+ZWIxZDkxMWQ3Yy4uMTY0MjAxYThmYmYyZCAxMDA2NDQNCj4gLS0tIGEvYXJjaC9hcm0vYm9vdC9k
+dHMvYXQ5MS1zYW1hNWQyX2ljcC5kdHMNCj4gKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvYXQ5MS1z
+YW1hNWQyX2ljcC5kdHMNCj4gQEAgLTMyOSwyMSArMzI5LDIxIEBAICZpMmMxIHsNCj4gIAlzdGF0
+dXMgPSAib2theSI7DQo+ICANCj4gIAllZXByb21ANTAgew0KPiAtCQljb21wYXRpYmxlID0gImF0
+bWVsLDI0YzMyIjsNCj4gKwkJY29tcGF0aWJsZSA9ICJhdG1lbCwyNGMwMiI7DQo+ICAJCXJlZyA9
+IDwweDUwPjsNCj4gIAkJcGFnZXNpemUgPSA8MTY+Ow0KPiAgCQlzdGF0dXMgPSAib2theSI7DQo+
+ICAJfTsNCj4gIA0KPiAgCWVlcHJvbUA1MiB7DQo+IC0JCWNvbXBhdGlibGUgPSAiYXRtZWwsMjRj
+MzIiOw0KPiArCQljb21wYXRpYmxlID0gImF0bWVsLDI0YzAyIjsNCj4gIAkJcmVnID0gPDB4NTI+
+Ow0KPiAgCQlwYWdlc2l6ZSA9IDwxNj47DQo+ICAJCXN0YXR1cyA9ICJkaXNhYmxlZCI7DQo+ICAJ
+fTsNCj4gIA0KPiAgCWVlcHJvbUA1MyB7DQo+IC0JCWNvbXBhdGlibGUgPSAiYXRtZWwsMjRjMzIi
+Ow0KPiArCQljb21wYXRpYmxlID0gImF0bWVsLDI0YzAyIjsNCj4gIAkJcmVnID0gPDB4NTM+Ow0K
+PiAgCQlwYWdlc2l6ZSA9IDwxNj47DQo+ICAJCXN0YXR1cyA9ICJkaXNhYmxlZCI7DQoNCg==

@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D40455CC4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AEFC55DF77
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345160AbiF1L5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 07:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
+        id S1344893AbiF1MBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 08:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344997AbiF1L5r (ORCPT
+        with ESMTP id S1344633AbiF1MBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 07:57:47 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9A032055
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:57:47 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3176d94c236so114507107b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:57:47 -0700 (PDT)
+        Tue, 28 Jun 2022 08:01:47 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA1B26137;
+        Tue, 28 Jun 2022 05:01:46 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id g4so10266123ybg.9;
+        Tue, 28 Jun 2022 05:01:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uLZdrC+swnkCKR0I6SG4QWd9p3MVQZBE19TS1zpMRXw=;
-        b=b3TStvl9YDWhqzJY2DvGVjkqLn4eFR4cFB5BI+2vlB8L98qodsAogGh9Fy4QfAgudQ
-         aO9vAtg9XFwgWNPZjbf3Y3YewdzERAnmNWa2AibsAMhDnzPssOAh6uqP4VYXdC3NjMsj
-         z6uMvk7gp8QhYiE4HGEgMC4QT/sK7+nuJS3picYKEprfop0deeHezTsyEohj5AQmt8EN
-         xho2UmIZYtqBvOnvJhEv7JbopWimiMNgPRUdKEVdm1CB183nYSPwBdZLzEwzMSdjNo45
-         o3YRY49SW7sqL0+LXSbEsxsevL0D2hX54lPzxYez85wDeXeach0zJr7+SVg9lrvK19Dq
-         hlxA==
+        bh=0pniwHeX6vb5Ys8VLQ575NNjNqJoH9OkhJrizfKPi3c=;
+        b=Tls115h5P1d6CAUhvXtiHLxV/QERJk2gH3l26P7Kg7hw63dHHmMMjRiHaz86jAmRSS
+         +nBuxhzPS5AaUtD9m+OM1V4HzfwtdRhEPivY5DLooleF0N2JrvA5tDtzU92yvYyKgwbp
+         Clbn1EDZH/q4Ew6lqskiUEQUHy8IqWY3JAwPUIRwnQKY56QlBFwUmUJ2H7no7OIdjgyH
+         jWZ/u/GcaW2/0uI0qjwZ1uQkJeykbuLCrADKAVW7KNkrb5GN93y8O0j7HptVtpAfbU/Q
+         4k6pzW11kB+Oa/u07vonquWPoB/MK0GkQdXx/gXZSWCyLY9Bd/WTlM+bDPxDKyvZDfm+
+         NdDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uLZdrC+swnkCKR0I6SG4QWd9p3MVQZBE19TS1zpMRXw=;
-        b=VThJBMRFCy5arGLBEhmnPtPLNQtFtNPSuRmqoOz9k1SSl5pRf6DXN+lfO3SaLGc5yJ
-         Oc7NLAKZz75x77kbl4wcgcqI7GMo2SEMs2pjEX8l8tjSzXGNsLk3I4pj2quC+BekY87z
-         YnAvNDG+vQ3U/+C23DYhwpY8bjZFq7eNLFVXxKtWx04KB/hNMzRQB239Q8C/H2rd9KNb
-         Y6F0C8jv+1PRZMFmXchqnymVI1qEfVRM5lND6Xlgr1BfXa6muc+sqbfc9wpO5jn9XHTi
-         P4+I8Q36GkkRBHhcI3a+6hlS9elyxCOyn7sqebHXMVOgqmKo6xNTZF2y8mSPz1EI8GU7
-         RFKA==
-X-Gm-Message-State: AJIora+eYExh1CaE8dtsQtcO9Q8uMrvtDQvKIHx9kbL51fNlyk6SA4p7
-        guBLy7kj8IiZlosTgRJEESwmzv3c9R+e1lGNitXo+w==
-X-Google-Smtp-Source: AGRyM1tqpFMzemg8g47JeYue9sdLoY13F98Rp4MmgardxNEJXXi1KU8knn77vx906pR3dNjnWzA3JBw9b6tmjutNX9c=
-X-Received: by 2002:a81:e93:0:b0:317:8db7:aa8e with SMTP id
- 141-20020a810e93000000b003178db7aa8emr21314397ywo.55.1656417466312; Tue, 28
- Jun 2022 04:57:46 -0700 (PDT)
+        bh=0pniwHeX6vb5Ys8VLQ575NNjNqJoH9OkhJrizfKPi3c=;
+        b=MuWGe5qXwY33MpB2D8oNF4RKU00Ac0Vktk7yxNgwS+HDW38A7EpINiDtopE7j1Fztc
+         HJbUcObOa9dbWeXzy2w4MEDecj++8mZQDgMgX8EbMvqNAK8FHYYTEe+ldgaUsnbR8FbP
+         ZsdvEdhV/8yRkqtL3Y14QO0hZ67AkscnA8uplck9mqmGajvP9y4pcLmqkmv/kTwfd/ip
+         93yodJPLRHGTPctJOF9aEom2tUCOU+u5xDnWg7TB2PxrmB4PfDLh5N3/f7jH3FlplEwr
+         GmQ1dSqeJOPUlea1u9MBc6KG5lmdxrk6AUTf4y1zdT461XfxX9SZmCs9cayOBc2BZH0P
+         Jd5Q==
+X-Gm-Message-State: AJIora8Ek4Mz/VZvTwKBNvRkcDCc+2VKuqsZCB8fXhKTjEY5mj7qgiXr
+        HqudIyB8wXzFAI9RqcJ8otVxFlDejoTDZD6WFV1XS7ZWML9v6g==
+X-Google-Smtp-Source: AGRyM1tpFFYZ6IOqD7r/Q4SIXcc6hmpB1jS1eyL0YvIHX4qnjN2FurPx5b34iHQgxmyh4RHzzXGN5xkLVRIAOk0J75I=
+X-Received: by 2002:a25:ca0a:0:b0:66b:4e6c:e094 with SMTP id
+ a10-20020a25ca0a000000b0066b4e6ce094mr20644626ybg.296.1656417705669; Tue, 28
+ Jun 2022 05:01:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220628035030.1039171-1-zys.zljxml@gmail.com>
-In-Reply-To: <20220628035030.1039171-1-zys.zljxml@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 28 Jun 2022 13:57:35 +0200
-Message-ID: <CANn89iK=SYDOXcTa=bEwr7-sr63c+zWd-t4FcezU2S9296zkOQ@mail.gmail.com>
-Subject: Re: [PATCH v3] ipv6/sit: fix ipip6_tunnel_get_prl return value
-To:     zys.zljxml@gmail.com
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        katrinzhou <katrinzhou@tencent.com>
+References: <20220623170844.2189814-1-marcus.folkesson@gmail.com>
+ <20220623170844.2189814-2-marcus.folkesson@gmail.com> <CAHp75VcYk9PjQ=3ZPB1f=uQ-1GYKnvV-wsu+-z1z81W_ZHCqrw@mail.gmail.com>
+ <YrVZwAqmE0QmibQY@gmail.com> <20220625122429.14e98106@jic23-huawei>
+In-Reply-To: <20220625122429.14e98106@jic23-huawei>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 28 Jun 2022 14:01:08 +0200
+Message-ID: <CAHp75Vdr87rXRAKHtxftkPEbS+2yAp8a+Cp1Jx0XnozL+WCKVw@mail.gmail.com>
+Subject: Re: [PATCH 02/10] iio: adc: mcp3911: use resource-managed version of iio_device_register
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Kent Gustavsson <kent@minoris.se>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,17 +74,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 5:50 AM <zys.zljxml@gmail.com> wrote:
+On Sat, Jun 25, 2022 at 1:15 PM Jonathan Cameron <jic23@kernel.org> wrote:
 >
-> From: katrinzhou <katrinzhou@tencent.com>
+> On Fri, 24 Jun 2022 08:29:20 +0200
+> Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
 >
-> When kcalloc fails, ipip6_tunnel_get_prl() should return -ENOMEM.
-> Move the position of label "out" to return correctly.
+> > Thank you for your comments (all of them) Andy!
+> >
+> > On Thu, Jun 23, 2022 at 09:01:59PM +0200, Andy Shevchenko wrote:
+> > > On Thu, Jun 23, 2022 at 7:40 PM Marcus Folkesson
+> > > <marcus.folkesson@gmail.com> wrote:
+> > > >
+> > > > Keep using managed resources as much as possible.
+> > >
+> > > You may not mix devm_ and non-devm_ API calls like this.
+> > > So, you rule of thumb that goto is most of the time wrong after devm_ call.
+> >
+> > Can you please confirm that clocks and regulators are disabled when the
+> > resources are handed back?
+> > I cannot see where when I'm trying to follow the code.
+> Andy isn't arguing that the goto is wrong but rather that you cannot
+> in general safely use devm_* calls if their failure leads to having to
+> do any cleanup.  The reason is the ordering is hard to reason about. Sometimes
+> it's safe, but often enough causes problems that we basically refuse to think
+> hard enough to figure out if it is.  Hence basic rule is don't do it.
 >
-> Addresses-Coverity: ("Unused value")
-> Fixes: 300aaeeaab5f ("[IPV6] SIT: Add SIOCGETPRL ioctl to get/dump PRL.")
-> Signed-off-by: katrinzhou <katrinzhou@tencent.com>
-> ---
+> The issue is this.
+> probe() {
 >
+>         non_devm_call_1();
+>         ret = devm_call_2()
+>         if (ret)
+>                 goto err;
+>
+>         return 0;
+> err:
+>         unwind_non_devm_call_1()
+> }
+>
+> remove() {
+>         unwind_non_devm_call_1()
+> }
+>
+> remove or error path should unwind in opposite order of what happens in probe.
+> On the rare occasion where that isn't the right choice, there should be very
+> clear comments to say why.
+>
+> Order is
+>
+> remove() -> unwind_non_devm_call_1()
+> devm_managed_cleanup() -> unwind_devm_call_2()
+>
+> Whereas should be
+>
+> remove()-> unwind_call_2() then unwind_call_1()
+>
+>
+> There are two ways to solve this.  Either only use devm for those
+> elements in probe() that happen before the first thing you need to
+> unwind manually or make everything devm managed (it unwinds in reverse
+> order of setup) devm_add_action_or_reset() allows you to use your
+> own devm_ managed callbacks if there isn't a standard one available.
 
-Reviewed-by: Eric Dumazet<edumazet@google.com>
+Thanks, Jonathan, that's exactly what I meant!
+
+-- 
+With Best Regards,
+Andy Shevchenko

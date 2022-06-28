@@ -2,83 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B060655CD9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B618F55D380
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345372AbiF1MGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 08:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
+        id S1345427AbiF1MHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 08:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242799AbiF1MGn (ORCPT
+        with ESMTP id S238286AbiF1MHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 08:06:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CECD3334A;
-        Tue, 28 Jun 2022 05:06:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1CD060F54;
-        Tue, 28 Jun 2022 12:05:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51B71C3411D;
-        Tue, 28 Jun 2022 12:05:38 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="f87+Ag8P"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656417936;
+        Tue, 28 Jun 2022 08:07:35 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E842B252;
+        Tue, 28 Jun 2022 05:06:52 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 99E5D1C0003;
+        Tue, 28 Jun 2022 12:06:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656418001;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=LOixUzeTmki9ATEVoZe9cxBT2jfJld9EW2WAc0Tq7RM=;
-        b=f87+Ag8PMdM6OshA6cdM+pCANwGl+qs7HJGW1zI88p99tuM1yDfJT97kjLE9zzhIWAeREM
-        ZkRUO1gimoWlk/VJ/62t1csWE9mQcU+hDYNh9r3O7f26yGqOL0Vpi6Au6DSDw4g291PJkN
-        XxxjEYpDQblRONuuQdb4LpRUQN/Rlg4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f0d6a814 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 28 Jun 2022 12:05:36 +0000 (UTC)
-Date:   Tue, 28 Jun 2022 14:05:34 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Gregory Erwin <gregerwin256@gmail.com>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        Rui Salvaterra <rsalvaterra@gmail.com>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH v6] ath9k: sleep for less time when unregistering hwrng
-Message-ID: <YrrujrAlLwhzbn0m@zx2c4.com>
-References: <20220627113749.564132-1-Jason@zx2c4.com>
- <20220627120735.611821-1-Jason@zx2c4.com>
- <87y1xib8pv.fsf@toke.dk>
- <CAO+Okf5r-rVVqwYiCHXEt_jh0StmVoUikqYfSn7y3QpGZMR3Vg@mail.gmail.com>
- <CAHmME9o4m5MNvDtQUc3OiYLVzNgk3u2i0EF4NhNV4uifZZLJ3g@mail.gmail.com>
- <CAHmME9prgW60P+CO1JSdf5o1hBh8JtciBxcYm25ZO6oTCkwkxg@mail.gmail.com>
- <YrrdTcRCKBt15HLz@gondor.apana.org.au>
- <CAHmME9qm49R6i8Y9LpQXPuxEoTZx2nFSizxX-VEH6UDfLEji1g@mail.gmail.com>
+        bh=XlX9ERJmg7cC3AkJQeMdny26Pdns8t34JvkB+XE5gyc=;
+        b=m+1FJ8iO8oFZ5uIfj+dYWDKny3tQZosgAUIQL1F7mZnu9S9bM2V7V3EFx6BQHpWo8JCind
+        YROxNiVVz1Ciq8/mB/AVbcRb6WY5wXhm2+6tvlzzkAGu43GQh+BPqVT5KrIxVzAcYGc1ZM
+        WNBY/lScn+/Jf63NYsenDZU+Kf6lKz81ImGcZtXX7khdGgHBrrI/kwzTDfGKsQYhDnptzr
+        P95MryH/gCbuhS+1r2unZZUAGQSQ0Z5EU3GNruBiPDsnIwGS8uig0zZrl2yldblvjC8/3d
+        Wa4DEay9XdgFyDVwWwPiOJ08u8kpT7aJb7WvVi/cdFVenJ9CDEPUcnPeuzLdEg==
+Date:   Tue, 28 Jun 2022 14:05:53 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>, <olteanv@gmail.com>,
+        <f.fainelli@gmail.com>, <davem@davemloft.net>
+Subject: Re: [PATCH -next] net: pcs-rzn1-miic: fix return value check in
+ miic_probe()
+Message-ID: <20220628140553.5174825b@fixe.home>
+In-Reply-To: <20220628120850.3425568-1-yangyingliang@huawei.com>
+References: <20220628120850.3425568-1-yangyingliang@huawei.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHmME9qm49R6i8Y9LpQXPuxEoTZx2nFSizxX-VEH6UDfLEji1g@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi again,
+Le Tue, 28 Jun 2022 20:08:50 +0800,
+Yang Yingliang <yangyingliang@huawei.com> a =C3=A9crit :
 
-On Tue, Jun 28, 2022 at 12:55:57PM +0200, Jason A. Donenfeld wrote:
-> > Oh wait you're checking kthread_should_stop before the schedule
-> > call instead of afterwards, that would do it.
-> 
-> Oh, that's a really good observation, thank you! 
+> If devm_platform_ioremap_resource() fails, it never return
+> NULL pointer, replace NULL test with IS_ERR().
 
-Wait, no. I already am kthread_should_stop() it afterwards. That
-"continue" goes to the top of the loop, which checks it in the while()
-statement. So something else is amiss. I guess I'll investigate.
+Thanks for your patch, maybe this description would be better:
 
-Jason
+"On failure, devm_platform_ioremap_resource() returns a ERR_PTR() value
+and not NULL. Fix return value checking by using IS_ERR() and
+return PTR_ERR() as error value."
+
+Cl=C3=A9ment
+
+>=20
+> Fixes: 7dc54d3b8d91 ("net: pcs: add Renesas MII converter driver")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/net/pcs/pcs-rzn1-miic.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/net/pcs/pcs-rzn1-miic.c b/drivers/net/pcs/pcs-rzn1-m=
+iic.c
+> index 8f5e910f443d..d896961e48cc 100644
+> --- a/drivers/net/pcs/pcs-rzn1-miic.c
+> +++ b/drivers/net/pcs/pcs-rzn1-miic.c
+> @@ -461,8 +461,8 @@ static int miic_probe(struct platform_device *pdev)
+>  	spin_lock_init(&miic->lock);
+>  	miic->dev =3D dev;
+>  	miic->base =3D devm_platform_ioremap_resource(pdev, 0);
+> -	if (!miic->base)
+> -		return -EINVAL;
+> +	if (IS_ERR(miic->base))
+> +		return PTR_ERR(miic->base);
+> =20
+>  	ret =3D devm_pm_runtime_enable(dev);
+>  	if (ret < 0)
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

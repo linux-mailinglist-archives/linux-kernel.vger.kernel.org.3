@@ -2,253 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9094C55D6E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4539F55DBDB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343755AbiF1IUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 04:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43612 "EHLO
+        id S1343562AbiF1IU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 04:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243944AbiF1IS6 (ORCPT
+        with ESMTP id S243951AbiF1IS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Jun 2022 04:18:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F025329834;
-        Tue, 28 Jun 2022 01:17:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D2FA6119B;
-        Tue, 28 Jun 2022 08:17:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C93ACC341C8;
-        Tue, 28 Jun 2022 08:17:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656404251;
-        bh=Ff1W2padqNEGnlp4EIi4Fy64JmW9kRjF1/cl2+7Ky3s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n8QiMoK8ZdSz+GxqAv8Z2XDdz1Ng3XR3AuUc8N+3nejjToYoMpavzerYLKhO8OoMs
-         LjNNk4X7I13v1BKjESxet2/Gg2ho8FhU2Fh2zxJtLwIEjfhFQMyZMRaPKJfK69lg6P
-         pzAulekaNRGTxQTJ+/a00jw/OW6phjURGxu+l2VrTtvtiNH5dc+oQ771y2LX+zZAr7
-         op3A++IRhO7WlkAVnXHU5nt5drQqTVD8hDjolXbzTNdDrofQHVV0T11vi2JPmiDC8D
-         jOZjWYqwFy4rbaDKuu4nW3F06MA/QcLZ6X12SlON47n9Q82BiLOt2y81Fv8HWqpXWl
-         1WhUg2hhtQgzQ==
-From:   guoren@kernel.org
-To:     palmer@rivosinc.com, arnd@arndb.de, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com
-Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH V7 3/5] asm-generic: ticket-lock: Move into ticket_spinlock.h
-Date:   Tue, 28 Jun 2022 04:17:05 -0400
-Message-Id: <20220628081707.1997728-4-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220628081707.1997728-1-guoren@kernel.org>
-References: <20220628081707.1997728-1-guoren@kernel.org>
-MIME-Version: 1.0
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2095.outbound.protection.outlook.com [40.107.96.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FA42CDE4;
+        Tue, 28 Jun 2022 01:17:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Dp/IBCVsqrBh2FJBfjz96AZoHaxzv3YpTNeCk9B/CLn5F9OryK2yMH/YsI6Fdhf24Lk5jwi0e4GKLtBn6KBidiJOjiu4vP/7mSbYccDVfHAQ2KE3vaS+i+K6t3UHCH8dKe1p2SszWm6xg/eeA+sr6e1ViRVFb79htcN/AOHkq3q2E93NZA1QnJwZb/9Qt/1i5OLml9YE9XC5wZQCHrATPcS1wdh2FHPOwFXGK4pttUOt1YqnAMqhMUM6XeaGpTvOk0Ui/kSFlzhmrCGVjfdcTPUpSetMKY02Dy9OAYjZRB7f88u5Ppa0wZKCSFzcYGMvv2coScVg/5I2k3KVpFz2fw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PwzfY+GguhcR7KO932G+UWCTveIJV9JpkJSHEghuGiY=;
+ b=YSG2uxENF6Zj+XM7Jnt8vODS8saFiTDnpdzqz0/9HWUYhwimMwU7cEGSjlF7DPnQmBRwnpvaAShFlQKLi5hBq//xmb4Wyr0ZxlmASkZXwo5KdO7u0PEErpaNlNu98ii/VOXn/kSHepfTLZflFZhn0WEMvOIz7kZJGPuQWPgRJiK/r+7Ng/D8SWYQPys7A3ECsyl+X/A6GEAAzZCpkoV5V9jYsXqhphi8yCvlbCIJka1gm5d8s9qz2Z6ti7l6hhiankhJFfx4fSN8HgmLEsjbeDcg4XH0FcM46eikegmZM/tSaVGGiRzhMeXbF/IG6VuamuDBERAJL0dkoAmSUoJ5NQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PwzfY+GguhcR7KO932G+UWCTveIJV9JpkJSHEghuGiY=;
+ b=aks+TJaXTF9+F1ISvJfUOBLyl0Cmf5BOMlU1ZUEkO1xY3Tu480BcxsD8dghrJpXcK2A4E6bGRWwv6HMGv7qeMhsgn/sTT2nrlDa1sS6gKmAau/PX/gG7d6k5fvVv8SjGEtT/3z7+imF1swFyG+GZwWTvIDEZeELBfRqt1q37Kik=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by SJ0PR10MB5891.namprd10.prod.outlook.com
+ (2603:10b6:a03:425::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Tue, 28 Jun
+ 2022 08:17:28 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::712f:6916:3431:e74e]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::712f:6916:3431:e74e%6]) with mapi id 15.20.5373.018; Tue, 28 Jun 2022
+ 08:17:28 +0000
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Terry Bowman <terry.bowman@amd.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: [PATCH v11 net-next 5/9] pinctrl: microchip-sgpio: allow sgpio driver to be used as a module
+Date:   Tue, 28 Jun 2022 01:17:05 -0700
+Message-Id: <20220628081709.829811-6-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220628081709.829811-1-colin.foster@in-advantage.com>
+References: <20220628081709.829811-1-colin.foster@in-advantage.com>
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: MW4PR04CA0259.namprd04.prod.outlook.com
+ (2603:10b6:303:88::24) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 64852609-427b-4a23-4875-08da58dea403
+X-MS-TrafficTypeDiagnostic: SJ0PR10MB5891:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eEPaVXuw1vcIYu+ilMwNT2G005dmJgURDrBFm1478H6i1GikYEIAhzoomnwQe3VOzXrCVohP+K0J10w+HxeHcpUqS3UDhDV5MLb0tBUiQ4Nyuz+S05iGe086HTQUpWY7CV6h1HjfLqHjfcjFpfwozqvhDXHE8mupWhFIMUrCGB8CJMmyI5gF/kh1+jK/7HqQ6NhChIGahvdC0VlcXJiKhmx0k+H0xy7UlbhiXSb8iqJ53/8qTOkwOuHBuw4s0neEdNmXiCU6T9Ep99OLOb7+eyap/gj8rVv8jGwndZh3gaUtkzKXsSvx1WO6fcFJutAwYXr7TORJCbrdbwZp9jh6J6cDrQA25PjmlDvmDhpVnTVxemuNLQ1RdbAINueJ6Ga6ty/2EWaPs4AFVYqYH8IcDnua5iAn5x1zh6BAOIcnTIiF/P1RX5qHiWOSCE/2VToRLZxzj8YlzCSBUfjag3UP6CMk4jl7zqRR5mPs7rfTB0ne3lSAC8/gY4s47ISSfGWoCr7x+NN6pZ7gH3Se4vQ2vy8UWMJ9/WY6o6JStnuuXOkO6NNb+inDTsx6DB+pADI+XejR77AJuvL3GbwcsQEughCn1qKulb2FDptsatif00NObt30eWVFT1QxVpWSFtHrhfAc87C17K0gbw27TwRBnhrFq9y/fERqoOubjy1/ISArV8A9whQJMNE7qIjGLZ1vB7kBiicXRzyuxSouVbmsiDmypmhAPbfOBXc6KChcAskk7/Se0MVOFhb5YPeBeDSfySK5vJueyiYvrnKATdjJsQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(366004)(396003)(39840400004)(376002)(136003)(36756003)(38100700002)(6512007)(6666004)(41300700001)(38350700002)(44832011)(478600001)(8676002)(4326008)(2616005)(66946007)(66556008)(66476007)(6506007)(2906002)(54906003)(86362001)(1076003)(6486002)(8936002)(186003)(5660300002)(7416002)(316002)(83380400001)(26005)(52116002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FuI2eLLZePhR3/R2Gr+ShNrIV5rIyZ1qBDtzYzkjUjI3UcPYViDNSTMqRZrr?=
+ =?us-ascii?Q?BPq/pv3SwdNkx6gjTn3MRvOPqbwJyhoIIL+zd9yviQ+dGscAxi6QzQIZNV1y?=
+ =?us-ascii?Q?BEdIu+PkQyAmo73xM4wRPLPCRN8/BB97aHNLborcWF1oB6b40Wnp+lFovzr9?=
+ =?us-ascii?Q?W+QDrjznRM42s1E/PhnUXV98ZM/568aTdlZneRxP4XgPhS0gsWbQxadnK6Vx?=
+ =?us-ascii?Q?b0aN9Yka94l3JtnfWaa9J+nTgy4kW252lpdM/nKVGsTEKknqQNOB8E5Xb9a2?=
+ =?us-ascii?Q?6wLeHG8wF8Q6RR2KwdS12y0JkO+lu7E8BYzjOA4c3Ff+pzfhEEe8miu+chsE?=
+ =?us-ascii?Q?iFoUyPV9ikCxSqTWgBGwlHqid4K2B47S4buVYkK0o8ADi8rps2vlyzl9P3yT?=
+ =?us-ascii?Q?r9BmfhVHYf4TBldMM44M8gbm05UEP4l54owe6pH+wJSfAYWaSBgKEZKsZJ1o?=
+ =?us-ascii?Q?zx7EZhSGSXPSRAWF7vhPkkQYhlrsTxSjymaXO5j22w4f7ocnpzc4DVOGuLUy?=
+ =?us-ascii?Q?pExbb7CbFD/MZrWZPp+76Xev4Oc1Q4FdLdyBxFvdiNAScWPxCIhfD4DZh/wW?=
+ =?us-ascii?Q?soanIePDJxMI4nngL0zHwd1t/idb68z/G4sKHC/oPwh8WrosPO1o6zHstCtq?=
+ =?us-ascii?Q?s11hQYzpO5WualjVT11KZHYAvD0l8Zmv9HmVMXqrp8YZqi+woGao1hS1pS64?=
+ =?us-ascii?Q?liL/8NnVs6qZKWlcX2/J3u4E5MmMhV1IC/FGhs7lFRwcTMDkGM6RUMoa6Nzj?=
+ =?us-ascii?Q?CudWH+Xv+2uulZaQaMJp2bdO1AI6xA+Nal4EetoPKDwqkUKgORQNCkqJV7ym?=
+ =?us-ascii?Q?elSLbAe8DtiL1lYzvCz7NTLMC/LPMHpzr8Bm18UBBssIjBP3/ZDdrZcNL9Oh?=
+ =?us-ascii?Q?u9FjZMwFF1CoNd9S/gYtFWEYyqMvP4Lx1J/eztSfJ0MdD294lYBUA3FJiPlT?=
+ =?us-ascii?Q?ByUygYNv0sVUuDp/QU33ZrHPMx1Ucmz26xCl2cAIMh9e0YQzkXUTeCaE+Rmr?=
+ =?us-ascii?Q?sVm6t0JEpjkSQAElG+yrVoJsQ2L6WckW7r9cnQm7QE4/HJizZsFftHGTJ2Yi?=
+ =?us-ascii?Q?9okpnIkXoPZtFJcZL7k2rJKvTwZUvVouTklstF8crTncxSoU6pM/1mxA6SQ5?=
+ =?us-ascii?Q?D8KGCg2eDM8tOUI7kcIlmoTWuh2JAXfDgRK3kMyLfdNZd8zqSl61zGZPu0Ms?=
+ =?us-ascii?Q?mvaqWF48Yc9PTgdgBc2v7wTV/06XeURD1fcf03N5L8lt0X1cTRMZSNnKdBCy?=
+ =?us-ascii?Q?19JHtk062FVCcHq1hWY8+Id2dCuvCBjYGAXw+K84kCo7t/umGyfDG3BUK8pI?=
+ =?us-ascii?Q?6FcMBxH06YBuuMp3qnys61UQwnF6zGQmZHFWTA4OucyGtsW5xB1lmREkuvHv?=
+ =?us-ascii?Q?23mM3ybkeyAOtTm5HmRMHwf6fHRecFeBHuuDa4tmth5ABJsmSBHAEXXsXp1F?=
+ =?us-ascii?Q?iOwxgAp6dSUD5SeYtTdV8ZvOw91yekEEz6m0zBjwoq70J3kdN4nhDlDbL8Jn?=
+ =?us-ascii?Q?/6x1ORUL7jA2ukCYzpv6PiQpveFgjz7KtV1WLQ/i3Jyn62kjnfbsxshlkm0y?=
+ =?us-ascii?Q?FXns5q14x60fwqP9tdyZ3O3h0T5BPYMr3ZDr2uRKdJqZ5ssyk07Aw3MPNbSS?=
+ =?us-ascii?Q?LQ=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64852609-427b-4a23-4875-08da58dea403
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 08:17:28.5883
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tkuRVM+Zw0N5b0j5eJvER5+7nXkPVcoqoKHsK3rd69W6UUW6sMhaa2hE/NiOo3iB5yLtHS3LPNAFD+3B4+xaez9g5SbXc/DuvAxRfmak5N4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5891
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+As the commit message suggests, this simply adds the ability to select
+SGPIO pinctrl as a module. This becomes more practical when the SGPIO
+hardware exists on an external chip, controlled indirectly by I2C or SPI.
+This commit enables that level of control.
 
-Move ticket-lock definition into an independent file. It's a preparation
-patch for the following combo spinlock.
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
- include/asm-generic/spinlock.h        | 44 ++-----------
- include/asm-generic/ticket_spinlock.h | 92 +++++++++++++++++++++++++++
- 2 files changed, 99 insertions(+), 37 deletions(-)
- create mode 100644 include/asm-generic/ticket_spinlock.h
+ drivers/pinctrl/Kconfig                   | 2 +-
+ drivers/pinctrl/pinctrl-microchip-sgpio.c | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
-index 4caeb8cebe53..f41dc7c2b900 100644
---- a/include/asm-generic/spinlock.h
-+++ b/include/asm-generic/spinlock.h
-@@ -27,66 +27,36 @@
- #ifndef __ASM_GENERIC_SPINLOCK_H
- #define __ASM_GENERIC_SPINLOCK_H
+diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+index 257b06752747..40d243bc91f8 100644
+--- a/drivers/pinctrl/Kconfig
++++ b/drivers/pinctrl/Kconfig
+@@ -292,7 +292,7 @@ config PINCTRL_MCP23S08
+ 	  corresponding interrupt-controller.
  
--#include <linux/atomic.h>
--#include <asm-generic/spinlock_types.h>
-+#include <asm-generic/ticket_spinlock.h>
+ config PINCTRL_MICROCHIP_SGPIO
+-	bool "Pinctrl driver for Microsemi/Microchip Serial GPIO"
++	tristate "Pinctrl driver for Microsemi/Microchip Serial GPIO"
+ 	depends on OF
+ 	depends on HAS_IOMEM
+ 	select GPIOLIB
+diff --git a/drivers/pinctrl/pinctrl-microchip-sgpio.c b/drivers/pinctrl/pinctrl-microchip-sgpio.c
+index 6f55bf7d5e05..47b479c1fb7c 100644
+--- a/drivers/pinctrl/pinctrl-microchip-sgpio.c
++++ b/drivers/pinctrl/pinctrl-microchip-sgpio.c
+@@ -999,6 +999,7 @@ static const struct of_device_id microchip_sgpio_gpio_of_match[] = {
+ 		/* sentinel */
+ 	}
+ };
++MODULE_DEVICE_TABLE(of, microchip_sgpio_gpio_of_match);
  
- static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
- {
--	u32 val = atomic_fetch_add(1<<16, &lock->val);
--	u16 ticket = val >> 16;
--
--	if (ticket == (u16)val)
--		return;
--
--	/*
--	 * atomic_cond_read_acquire() is RCpc, but rather than defining a
--	 * custom cond_read_rcsc() here we just emit a full fence.  We only
--	 * need the prior reads before subsequent writes ordering from
--	 * smb_mb(), but as atomic_cond_read_acquire() just emits reads and we
--	 * have no outstanding writes due to the atomic_fetch_add() the extra
--	 * orderings are free.
--	 */
--	atomic_cond_read_acquire(&lock->val, ticket == (u16)VAL);
--	smp_mb();
-+	ticket_spin_lock(lock);
- }
- 
- static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
- {
--	u32 old = atomic_read(&lock->val);
--
--	if ((old >> 16) != (old & 0xffff))
--		return false;
--
--	return atomic_try_cmpxchg(&lock->val, &old, old + (1<<16)); /* SC, for RCsc */
-+	return ticket_spin_trylock(lock);
- }
- 
- static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
- {
--	u16 *ptr = (u16 *)lock + IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
--	u32 val = atomic_read(&lock->val);
--
--	smp_store_release(ptr, (u16)val + 1);
-+	ticket_spin_unlock(lock);
- }
- 
- static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
- {
--	u32 val = atomic_read(&lock->val);
--
--	return ((val >> 16) != (val & 0xffff));
-+	return ticket_spin_is_locked(lock);
- }
- 
- static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
- {
--	u32 val = atomic_read(&lock->val);
--
--	return (s16)((val >> 16) - (val & 0xffff)) > 1;
-+	return ticket_spin_is_contended(lock);
- }
- 
- static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
- {
--	u32 val = lock.val.counter;
--
--	return ((val >> 16) == (val & 0xffff));
-+	return ticket_spin_value_unlocked(lock);
- }
- 
- #include <asm/qrwlock.h>
-diff --git a/include/asm-generic/ticket_spinlock.h b/include/asm-generic/ticket_spinlock.h
-new file mode 100644
-index 000000000000..83e769398eea
---- /dev/null
-+++ b/include/asm-generic/ticket_spinlock.h
-@@ -0,0 +1,92 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
+ static struct platform_driver microchip_sgpio_pinctrl_driver = {
+ 	.driver = {
+@@ -1009,3 +1010,6 @@ static struct platform_driver microchip_sgpio_pinctrl_driver = {
+ 	.probe = microchip_sgpio_probe,
+ };
+ builtin_platform_driver(microchip_sgpio_pinctrl_driver);
 +
-+/*
-+ * 'Generic' ticket-lock implementation.
-+ *
-+ * It relies on atomic_fetch_add() having well defined forward progress
-+ * guarantees under contention. If your architecture cannot provide this, stick
-+ * to a test-and-set lock.
-+ *
-+ * It also relies on atomic_fetch_add() being safe vs smp_store_release() on a
-+ * sub-word of the value. This is generally true for anything LL/SC although
-+ * you'd be hard pressed to find anything useful in architecture specifications
-+ * about this. If your architecture cannot do this you might be better off with
-+ * a test-and-set.
-+ *
-+ * It further assumes atomic_*_release() + atomic_*_acquire() is RCpc and hence
-+ * uses atomic_fetch_add() which is RCsc to create an RCsc hot path, along with
-+ * a full fence after the spin to upgrade the otherwise-RCpc
-+ * atomic_cond_read_acquire().
-+ *
-+ * The implementation uses smp_cond_load_acquire() to spin, so if the
-+ * architecture has WFE like instructions to sleep instead of poll for word
-+ * modifications be sure to implement that (see ARM64 for example).
-+ *
-+ */
-+
-+#ifndef __ASM_GENERIC_TICKET_SPINLOCK_H
-+#define __ASM_GENERIC_TICKET_SPINLOCK_H
-+
-+#include <linux/atomic.h>
-+#include <asm-generic/spinlock_types.h>
-+
-+static __always_inline void ticket_spin_lock(arch_spinlock_t *lock)
-+{
-+	u32 val = atomic_fetch_add(1<<16, &lock->val);
-+	u16 ticket = val >> 16;
-+
-+	if (ticket == (u16)val)
-+		return;
-+
-+	/*
-+	 * atomic_cond_read_acquire() is RCpc, but rather than defining a
-+	 * custom cond_read_rcsc() here we just emit a full fence.  We only
-+	 * need the prior reads before subsequent writes ordering from
-+	 * smb_mb(), but as atomic_cond_read_acquire() just emits reads and we
-+	 * have no outstanding writes due to the atomic_fetch_add() the extra
-+	 * orderings are free.
-+	 */
-+	atomic_cond_read_acquire(&lock->val, ticket == (u16)VAL);
-+	smp_mb();
-+}
-+
-+static __always_inline bool ticket_spin_trylock(arch_spinlock_t *lock)
-+{
-+	u32 old = atomic_read(&lock->val);
-+
-+	if ((old >> 16) != (old & 0xffff))
-+		return false;
-+
-+	return atomic_try_cmpxchg(&lock->val, &old, old + (1<<16)); /* SC, for RCsc */
-+}
-+
-+static __always_inline void ticket_spin_unlock(arch_spinlock_t *lock)
-+{
-+	u16 *ptr = (u16 *)lock + IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
-+	u32 val = atomic_read(&lock->val);
-+
-+	smp_store_release(ptr, (u16)val + 1);
-+}
-+
-+static __always_inline int ticket_spin_is_locked(arch_spinlock_t *lock)
-+{
-+	u32 val = atomic_read(&lock->val);
-+
-+	return ((val >> 16) != (val & 0xffff));
-+}
-+
-+static __always_inline int ticket_spin_is_contended(arch_spinlock_t *lock)
-+{
-+	u32 val = atomic_read(&lock->val);
-+
-+	return (s16)((val >> 16) - (val & 0xffff)) > 1;
-+}
-+
-+static __always_inline int ticket_spin_value_unlocked(arch_spinlock_t lock)
-+{
-+	u32 val = lock.val.counter;
-+
-+	return ((val >> 16) == (val & 0xffff));
-+}
-+
-+#endif /* __ASM_GENERIC_TICKET_SPINLOCK_H */
++MODULE_DESCRIPTION("Microchip SGPIO Pinctrl Driver");
++MODULE_LICENSE("GPL");
 -- 
-2.36.1
+2.25.1
 

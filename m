@@ -2,231 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E5055E714
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 136AE55E703
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231735AbiF1QWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 12:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
+        id S231496AbiF1QWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 12:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238927AbiF1QVR (ORCPT
+        with ESMTP id S236537AbiF1QWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:21:17 -0400
-Received: from smtpbg154.qq.com (smtpbg154.qq.com [15.184.224.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD955FF1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:13:06 -0700 (PDT)
-X-QQ-mid: bizesmtp77t1656432776t9dhjajh
-Received: from localhost.localdomain ( [113.200.76.118])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 29 Jun 2022 00:12:53 +0800 (CST)
-X-QQ-SSF: 01400000002000D0F000B00A0000000
-X-QQ-FEAT: 4cpXC9Ki5eKF7EOCm2FvOC8HFcB8itLnnlFoLQmuChMLHaacg6tw8SH8bwCCf
-        coT/XPX1IDIdyI9HMQDVIQHWHZXddOMX00+Z1hf65om/1yB7OtwqeOluMRe+tVtBH3ubor4
-        ett4zoLU3YpdfZRvpSjEW0JfO5eKof0IOzyzGk8zGk1XRiK4arsonuDu36j2mWeeKcbUzya
-        ue+rDe6Cn60T+kgTrIAaxhZatY5kiIXEOwRzYeVWj07Bz1Li7y5YBugivEWAI892kzK2Ojk
-        0F8eS3XDobX+ajEm1bahJyGHjOYFjk8/pTUUsoifu+5+2VCipueimMjXTcljx5uSrZh1YX3
-        5pZdDEX
-X-QQ-GoodBg: 2
-From:   Guo Hui <guohui@uniontech.com>
-To:     peterz@infradead.org
-Cc:     longman@redhat.com, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, will@kernel.org,
-        boqun.feng@gmail.com, virtualization@lists.linux-foundation.org,
-        wangxiaohua@uniontech.com, linux-kernel@vger.kernel.org,
-        Guo Hui <guohui@uniontech.com>
-Subject: [PATCH v7] x86/paravirt: useless assignment instructions cause Unixbench full core   performance degradation
-Date:   Wed, 29 Jun 2022 00:12:51 +0800
-Message-Id: <20220628161251.21950-1-guohui@uniontech.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <588a3276-5481-0a9f-9eac-fed09eede4f2@redhat.com>
-References: <588a3276-5481-0a9f-9eac-fed09eede4f2@redhat.com>
+        Tue, 28 Jun 2022 12:22:06 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6629E37AB6;
+        Tue, 28 Jun 2022 09:13:40 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id fi2so26768216ejb.9;
+        Tue, 28 Jun 2022 09:13:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6Lx7tM7FvIRfnZKu78o7ZdG3s890VbwgJIMpBDQ1SB8=;
+        b=VWAFcug2fFdI2e8F8vBX6YDg0MzYOgFQTojwHJWJ8Jr/LwsxBu2ry4BIYLQNn/DbRD
+         IawwZNF/NMwS25ujAFZZbbdtB5MRhCmyJRnrrY7ONIAe9dtloYM4ctvGRv4L80xrj/P9
+         JjvO5VGg8TfMfjl0u69r2fWoT25FadBtqQtwMNZJZmanyDjNQDgZLPoFKFM5nGkeiw4W
+         s/1g+gD7LXQ/5Ut1e0a7dyvUXvz2VbmUXsvSng1J708ae0OEbXLAADwnUCFTUpMHxEZq
+         GYbhu8rC+xSYmRInlEKW7eTekO2xkOHI08O6aO0nPLse2EnNqESI2Buip6b0qEWCsdpK
+         JaoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6Lx7tM7FvIRfnZKu78o7ZdG3s890VbwgJIMpBDQ1SB8=;
+        b=Ei6zdNh4ZAa0aehEELQLV1UZ1Zy+EBEtLOjPTD9V4R/3ji1eAwkWjS7k+LV8QWAksP
+         NP2fpz0VYBbEgUjqTTrXx/pHtGNKIToScZd7MS/CrWyW19qzyNBS/1Cbl+0KQOhUZSEP
+         3XvGtd6jIx2K9MmHTk1Nf7N14cvuWu9FUAeSFfiqpWg5fpHtCcdArAoSYN6IgSpAuZA2
+         dn10WLoG0ovuYAnemwhi54jrricUMMv5IOHqE/91FET3nupx+MVO7RNWkm/g4L+B8KQV
+         UqrjogVzXnYEPIyAGcyUi5Rs9kD9dwO+i1ZEjYKqeWQXHL1U9I/LDkoYuwTxuW7GUMO8
+         DsHQ==
+X-Gm-Message-State: AJIora/1kmkgpI8UoqceJpfPYt5nZJDdT1JDBohYPGx/spHRWgmhvRiG
+        9rHLrIedPdVXFGVam+kMiNs=
+X-Google-Smtp-Source: AGRyM1txh7PKe9jl713q+VzwJ2SumfGwKEpOgKcIAHEzirk7F73v58L8m9Qb7NNtanEUImj71zQq3A==
+X-Received: by 2002:a17:907:7285:b0:722:e371:72d5 with SMTP id dt5-20020a170907728500b00722e37172d5mr18921148ejc.731.1656432818741;
+        Tue, 28 Jun 2022 09:13:38 -0700 (PDT)
+Received: from jernej-laptop.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id ci3-20020a170906c34300b00722ea7a7aeesm6593654ejb.51.2022.06.28.09.13.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 09:13:37 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     p.zabel@pengutronix.de, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl, benjamin.gaignard@collabora.com,
+        nicolas.dufresne@collabora.com, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v2 3/7] media: hantro: postproc: Fix buffer size calculation
+Date:   Tue, 28 Jun 2022 18:13:35 +0200
+Message-ID: <3180111.44csPzL39Z@jernej-laptop>
+In-Reply-To: <YrskKxCDwSulaGJ5@eze-laptop>
+References: <20220616202513.351039-1-jernej.skrabec@gmail.com> <20220616202513.351039-4-jernej.skrabec@gmail.com> <YrskKxCDwSulaGJ5@eze-laptop>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign10
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The instructions assigned to the vcpu_is_preempted function parameter
-in the X86 architecture physical machine are redundant instructions,
-causing the multi-core performance of Unixbench to drop by about 4% to 5%.
-The C function is as follows:
-static bool vcpu_is_preempted(long vcpu);
+Dne torek, 28. junij 2022 ob 17:54:19 CEST je Ezequiel Garcia napisal(a):
+> Hi Jernej,
+> 
+> On Thu, Jun 16, 2022 at 10:25:09PM +0200, Jernej Skrabec wrote:
+> > When allocating aux buffers for postprocessing, it's assumed that base
+> > buffer size is the same as that of output. Coincidentally, that's true
+> > most of the time, but not always. 10-bit source also needs aux buffer
+> > size which is appropriate for 10-bit native format, even if the output
+> > format is 8-bit. Similarly, mv sizes and other extra buffer size also
+> > depends on source width/height, not destination.
+> > 
+> > Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> 
+> I took a new look at this patch.
+> 
+> > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> > ---
+> > 
+> >  .../staging/media/hantro/hantro_postproc.c    | 24 +++++++++++++------
+> >  drivers/staging/media/hantro/hantro_v4l2.c    |  2 +-
+> >  drivers/staging/media/hantro/hantro_v4l2.h    |  2 ++
+> >  3 files changed, 20 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/drivers/staging/media/hantro/hantro_postproc.c
+> > b/drivers/staging/media/hantro/hantro_postproc.c index
+> > ab168c1c0d28..b77cc55e43ea 100644
+> > --- a/drivers/staging/media/hantro/hantro_postproc.c
+> > +++ b/drivers/staging/media/hantro/hantro_postproc.c
+> > @@ -12,6 +12,7 @@
+> > 
+> >  #include "hantro_hw.h"
+> >  #include "hantro_g1_regs.h"
+> >  #include "hantro_g2_regs.h"
+> > 
+> > +#include "hantro_v4l2.h"
+> > 
+> >  #define HANTRO_PP_REG_WRITE(vpu, reg_name, val) \
+> >  { \
+> > 
+> > @@ -174,18 +175,27 @@ int hantro_postproc_alloc(struct hantro_ctx *ctx)
+> > 
+> >  	struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
+> >  	struct vb2_queue *cap_queue = &m2m_ctx->cap_q_ctx.q;
+> >  	unsigned int num_buffers = cap_queue->num_buffers;
+> > 
+> > +	struct v4l2_pix_format_mplane pix_mp;
+> > +	const struct hantro_fmt *fmt;
+> > 
+> >  	unsigned int i, buf_size;
+> > 
+> > -	buf_size = ctx->dst_fmt.plane_fmt[0].sizeimage;
+> > +	/* this should always pick native format */
+> > +	fmt = hantro_get_default_fmt(ctx, false);
+> 
+> Clearly this is correct.
+> 
+> When the driver enables the post-processor it decodes a coded format (H264,
+> etc.) to a native format (NV12_4L4 or P010_4L4) and feeds this into the
+> postprocessor engine to produce some other format (YUYV, NV12, etc.).
+> 
+> The buffers allocated here should be taken from the native format,
+> so it's correct to use hantro_get_default_fmt().
+> 
+> > +	if (!fmt)
+> > +		return -EINVAL;
+> > +	v4l2_fill_pixfmt_mp(&pix_mp, fmt->fourcc, ctx->src_fmt.width,
+> > +			    ctx->src_fmt.height);
+> 
+> The issue comes at this point, where we negotiate the buffer size based on
+> the source size (OUTPUT queue size), instead of negotiating based
+> on the Native size.
+> 
+>   Coded -> [ Decoder ] -> Native -> [ Post-processor ] -> Decoded
 
-The parameter 'vcpu' in the function osq_lock
-that calls the function vcpu_is_preempted is assigned as follows:
+I'm not sure what is the difference between source and native size? You mean 
+one coded in controls and one set via output format? IMO they should always be 
+the same, otherwise it can be considered a bug in userspace application.
 
-The C code is in the function node_cpu:
-cpu = node->cpu - 1;
+Best regards,
+Jernej
 
-The instructions corresponding to the C code are:
-mov 0x14(%rax),%edi
-sub $0x1,%edi
+> 
+> So, while the patch is surely improving things, I wonder if it won't
+> cause other issues.
+> 
+> This reminds me we are still lacking a more complete test-suite for this
+> driver, so that we can validate changes and ensure there are no
+> regressions.
+> 
+> Perhaps we could hack Fluster to not only test the conformance,
+> but also test the post-processor?
+> 
+> Thanks,
+> Ezequiel
+> 
+> > +
+> > +	buf_size = pix_mp.plane_fmt[0].sizeimage;
+> > 
+> >  	if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_H264_SLICE)
+> > 
+> > -		buf_size += hantro_h264_mv_size(ctx->dst_fmt.width,
+> > -						ctx-
+>dst_fmt.height);
+> > +		buf_size += hantro_h264_mv_size(pix_mp.width,
+> > +						
+pix_mp.height);
+> > 
+> >  	else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_VP9_FRAME)
+> > 
+> > -		buf_size += hantro_vp9_mv_size(ctx->dst_fmt.width,
+> > -					       ctx-
+>dst_fmt.height);
+> > +		buf_size += hantro_vp9_mv_size(pix_mp.width,
+> > +					       pix_mp.height);
+> > 
+> >  	else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_HEVC_SLICE)
+> > 
+> > -		buf_size += hantro_hevc_mv_size(ctx->dst_fmt.width,
+> > -						ctx-
+>dst_fmt.height);
+> > +		buf_size += hantro_hevc_mv_size(pix_mp.width,
+> > +						
+pix_mp.height);
+> > 
+> >  	for (i = 0; i < num_buffers; ++i) {
+> >  	
+> >  		struct hantro_aux_buf *priv = &ctx->postproc.dec_q[i];
+> > 
+> > diff --git a/drivers/staging/media/hantro/hantro_v4l2.c
+> > b/drivers/staging/media/hantro/hantro_v4l2.c index
+> > 334f18a4120d..2c7a805289e7 100644
+> > --- a/drivers/staging/media/hantro/hantro_v4l2.c
+> > +++ b/drivers/staging/media/hantro/hantro_v4l2.c
+> > @@ -118,7 +118,7 @@ hantro_find_format(const struct hantro_ctx *ctx, u32
+> > fourcc)> 
+> >  	return NULL;
+> >  
+> >  }
+> > 
+> > -static const struct hantro_fmt *
+> > +const struct hantro_fmt *
+> > 
+> >  hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream)
+> >  {
+> >  
+> >  	const struct hantro_fmt *formats;
+> > 
+> > diff --git a/drivers/staging/media/hantro/hantro_v4l2.h
+> > b/drivers/staging/media/hantro/hantro_v4l2.h index
+> > b17e84c82582..64f6f57e9d7a 100644
+> > --- a/drivers/staging/media/hantro/hantro_v4l2.h
+> > +++ b/drivers/staging/media/hantro/hantro_v4l2.h
+> > @@ -23,5 +23,7 @@ extern const struct vb2_ops hantro_queue_ops;
+> > 
+> >  void hantro_reset_fmts(struct hantro_ctx *ctx);
+> >  int hantro_get_format_depth(u32 fourcc);
+> > 
+> > +const struct hantro_fmt *
+> > +hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream);
+> > 
+> >  #endif /* HANTRO_V4L2_H_ */
 
-The above instructions are unnecessary
-in the X86 Native operating environment,
-causing high cache-misses and degrading performance.
-
-This patch uses static_key to not execute this instruction
-in the Native runtime environment.
-
-The patch effect is as follows two machines,
-Unixbench runs with full core score:
-
-1. Machine configuration:
-Intel(R) Xeon(R) Silver 4210 CPU @ 2.20GHz
-CPU core: 40
-Memory: 256G
-OS Kernel: 5.19-rc3
-
-Before using the patch:
-System Benchmarks Index Values               BASELINE       RESULT    INDEX
-Dhrystone 2 using register variables         116700.0  948326591.2  81261.9
-Double-Precision Whetstone                       55.0     211986.3  38543.0
-Execl Throughput                                 43.0      43453.2  10105.4
-File Copy 1024 bufsize 2000 maxblocks          3960.0     438936.2   1108.4
-File Copy 256 bufsize 500 maxblocks            1655.0     118197.4    714.2
-File Copy 4096 bufsize 8000 maxblocks          5800.0    1534674.7   2646.0
-Pipe Throughput                               12440.0   46482107.6  37365.0
-Pipe-based Context Switching                   4000.0    1915094.2   4787.7
-Process Creation                                126.0      85442.2   6781.1
-Shell Scripts (1 concurrent)                     42.4      69400.7  16368.1
-Shell Scripts (8 concurrent)                      6.0       8877.2  14795.3
-System Call Overhead                          15000.0    4714906.1   3143.3
-                                                                   ========
-System Benchmarks Index Score                                        7923.3
-
-After using the patch:
-System Benchmarks Index Values               BASELINE       RESULT    INDEX
-Dhrystone 2 using register variables         116700.0  947032915.5  81151.1
-Double-Precision Whetstone                       55.0     211971.2  38540.2
-Execl Throughput                                 43.0      45054.8  10477.9
-File Copy 1024 bufsize 2000 maxblocks          3960.0     515024.9   1300.6
-File Copy 256 bufsize 500 maxblocks            1655.0     146354.6    884.3
-File Copy 4096 bufsize 8000 maxblocks          5800.0    1679995.9   2896.5
-Pipe Throughput                               12440.0   46466394.2  37352.4
-Pipe-based Context Switching                   4000.0    1898221.4   4745.6
-Process Creation                                126.0      85653.1   6797.9
-Shell Scripts (1 concurrent)                     42.4      69437.3  16376.7
-Shell Scripts (8 concurrent)                      6.0       8898.9  14831.4
-System Call Overhead                          15000.0    4658746.7   3105.8
-                                                                   ========
-System Benchmarks Index Score                                        8248.8
-
-2. Machine configuration:
-Hygon C86 7185 32-core Processor
-CPU core: 128
-Memory: 256G
-OS Kernel: 5.19-rc3
-
-Before using the patch:
-System Benchmarks Index Values               BASELINE       RESULT    INDEX
-Dhrystone 2 using register variables         116700.0 2256644068.3 193371.4
-Double-Precision Whetstone                       55.0     438969.9  79812.7
-Execl Throughput                                 43.0      10108.6   2350.8
-File Copy 1024 bufsize 2000 maxblocks          3960.0     275892.8    696.7
-File Copy 256 bufsize 500 maxblocks            1655.0      72082.7    435.5
-File Copy 4096 bufsize 8000 maxblocks          5800.0     925043.4   1594.9
-Pipe Throughput                               12440.0  118905512.5  95583.2
-Pipe-based Context Switching                   4000.0    7820945.7  19552.4
-Process Creation                                126.0      31233.3   2478.8
-Shell Scripts (1 concurrent)                     42.4      49042.8  11566.7
-Shell Scripts (8 concurrent)                      6.0       6656.0  11093.3
-System Call Overhead                          15000.0    6816047.5   4544.0
-                                                                   ========
-System Benchmarks Index Score                                        7756.6
-
-After using the patch:
-System Benchmarks Index Values               BASELINE       RESULT    INDEX
-Dhrystone 2 using register variables         116700.0 2252272929.4 192996.8
-Double-Precision Whetstone                       55.0     451847.2  82154.0
-Execl Throughput                                 43.0      10595.1   2464.0
-File Copy 1024 bufsize 2000 maxblocks          3960.0     301279.3    760.8
-File Copy 256 bufsize 500 maxblocks            1655.0      79291.3    479.1
-File Copy 4096 bufsize 8000 maxblocks          5800.0    1039755.2   1792.7
-Pipe Throughput                               12440.0  118701468.1  95419.2
-Pipe-based Context Switching                   4000.0    8073453.3  20183.6
-Process Creation                                126.0      33440.9   2654.0
-Shell Scripts (1 concurrent)                     42.4      52722.6  12434.6
-Shell Scripts (8 concurrent)                      6.0       7050.4  11750.6
-System Call Overhead                          15000.0    6834371.5   4556.2
-                                                                   ========
-System Benchmarks Index Score                                        8157.8
-
-Signed-off-by: Guo Hui <guohui@uniontech.com>
----
- arch/x86/kernel/paravirt-spinlocks.c |  4 ++++
- kernel/locking/osq_lock.c            | 19 ++++++++++++++++++-
- 2 files changed, 22 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/paravirt-spinlocks.c b/arch/x86/kernel/paravirt-spinlocks.c
-index 9e1ea99ad..a2eb375e2 100644
---- a/arch/x86/kernel/paravirt-spinlocks.c
-+++ b/arch/x86/kernel/paravirt-spinlocks.c
-@@ -33,6 +33,8 @@ bool pv_is_native_vcpu_is_preempted(void)
- 		__raw_callee_save___native_vcpu_is_preempted;
- }
- 
-+DECLARE_STATIC_KEY_TRUE(vcpu_has_preemption);
-+
- void __init paravirt_set_cap(void)
- {
- 	if (!pv_is_native_spin_unlock())
-@@ -40,4 +42,6 @@ void __init paravirt_set_cap(void)
- 
- 	if (!pv_is_native_vcpu_is_preempted())
- 		setup_force_cpu_cap(X86_FEATURE_VCPUPREEMPT);
-+	else
-+		static_branch_disable(&vcpu_has_preemption);
- }
-diff --git a/kernel/locking/osq_lock.c b/kernel/locking/osq_lock.c
-index d5610ad52..f521b0f6d 100644
---- a/kernel/locking/osq_lock.c
-+++ b/kernel/locking/osq_lock.c
-@@ -27,6 +27,23 @@ static inline int node_cpu(struct optimistic_spin_node *node)
- 	return node->cpu - 1;
- }
- 
-+#ifdef vcpu_is_preempted
-+DEFINE_STATIC_KEY_TRUE(vcpu_has_preemption);
-+
-+static inline bool vcpu_is_preempted_node(struct optimistic_spin_node *node)
-+{
-+	if (static_branch_likely(&vcpu_has_preemption))
-+		return vcpu_is_preempted(node_cpu(node->prev));
-+
-+	return false;
-+}
-+#else
-+static inline bool vcpu_is_preempted_node(struct optimistic_spin_node *node)
-+{
-+	return false;
-+}
-+#endif
-+
- static inline struct optimistic_spin_node *decode_cpu(int encoded_cpu_val)
- {
- 	int cpu_nr = encoded_cpu_val - 1;
-@@ -141,7 +158,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
- 	 * polling, be careful.
- 	 */
- 	if (smp_cond_load_relaxed(&node->locked, VAL || need_resched() ||
--				  vcpu_is_preempted(node_cpu(node->prev))))
-+						vcpu_is_preempted_node(node)))
- 		return true;
- 
- 	/* unqueue */
--- 
-2.20.1
 
 
 

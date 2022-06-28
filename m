@@ -2,66 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F393955E85E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 767D755E614
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346773AbiF1Nnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
+        id S1346853AbiF1Nng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346861AbiF1Nnj (ORCPT
+        with ESMTP id S1346848AbiF1Nnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:43:39 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DB818B2B
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:43:38 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id c6-20020a17090abf0600b001eee794a478so5268690pjs.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:43:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1981ByijFES4Z51VKfKpaqL9mzBb3Klm3MJNFz1LN/Q=;
-        b=iMtXOFUICTVdHSxy2et3XQLWdCcymKIrE960JXJYygPsX5hsTLgbjSqlUp1MZ0oKJj
-         GZ9FKM1BFHNVuCEzkdqzhTvB3jSr0s7hIYI4u7Bm6ALCT3IoE/xYDEmiTE018aJaWO21
-         N8aEK79WNO3k+e2nm2zmHYMDSdOblAmciiv4c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1981ByijFES4Z51VKfKpaqL9mzBb3Klm3MJNFz1LN/Q=;
-        b=kUmJW2uVyhhVAd6Jabi49q+cSaNFuQy9AbdvV4JUDcZkoDkr7nvOh1mpEgyLYEvnsd
-         qJShqyEdjbsuga2S3uZGho/kHoYKUdSUWdW6aI84XeprrrOfdJuEkRLyHuvmKIWTXeBf
-         mNeE2gBk7GSzr45oC1X3VrYeiysybwiT7Np70WY6b93xjuduatHHH6cUvI45zxy09s6u
-         hY37QkPY/k2RP1mBbEOLBEk3kaqYc1kauxmgRUjRh82J7OTchD4a11bPnfI0VCYwI7xL
-         rmJ37o0tR3XSVBefOEMtPnE6crOZtLFZlZ21fv6469xtc2VYMVuDFXOZ0UXAHJmB0bpa
-         YmDg==
-X-Gm-Message-State: AJIora97PEfs9p1myMXnKuwPYSrekhTlyLRLFE7JO04VycmqBnvzrY+k
-        VMpSWfZwbneBsW3JAEKro04dDg==
-X-Google-Smtp-Source: AGRyM1vROI5ZbSMg9ZLu8nsfvS9fFnxl9Zl5EGmk1xq1YkMOpWjVrGZOnWDOJo4m81UOSjjVVba8XQ==
-X-Received: by 2002:a17:90a:ab16:b0:1ed:2251:a878 with SMTP id m22-20020a17090aab1600b001ed2251a878mr22439498pjq.231.1656423817685;
-        Tue, 28 Jun 2022 06:43:37 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:18c2:6594:17be:c241])
-        by smtp.gmail.com with ESMTPSA id 22-20020aa79116000000b00527af57598fsm3107197pfh.43.2022.06.28.06.43.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 06:43:37 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] soc: qcom: cmd-db: replace strscpy_pad() with strncpy()
-Date:   Tue, 28 Jun 2022 06:43:13 -0700
-Message-Id: <20220628064301.v3.1.Ie7b480cd99e2c13319220cbc108caf2bcd41286b@changeid>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+        Tue, 28 Jun 2022 09:43:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1151CB09;
+        Tue, 28 Jun 2022 06:43:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B55DB81E16;
+        Tue, 28 Jun 2022 13:43:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93634C3411D;
+        Tue, 28 Jun 2022 13:43:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656423806;
+        bh=Mu07+NkAeIWQxqDrSfWHBkagAH3qiS5hRkhUS/KEB+8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J26wAUkMEANntFYIvZPSyjRIRDBcF+0CYhgasflX/sFmF3R2jSZgCYNFz3Ynufqqz
+         nzeG/jqshDGe3knqrMZ6LXcKAICeN8pbhTN0uX0rgz8dRC1YlEMk7ISAYbSEGNsozr
+         vMxbVtI/cVWlsFmtm6PBsVByLIwnivkOj1AJrkxj/wXQRhS/ln9VsFhQnbbn/n2PIn
+         QzAw/V4dQkJ41Sn1oOGwbBEr5dwHr6L6ETynGtdZIr8NvIdrA2IOpy2Ggx+LW85NkG
+         M7m209vEq9dxSuBiAncmEIgn4Mvu51957qmvXRBAQRo+OwPw3t5gNRgFO+Buf2FD6s
+         0aBj8RlvROlWA==
+Date:   Tue, 28 Jun 2022 15:43:17 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     Ralph Corderoy <ralph@inputplus.co.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nate Karstens <nate.karstens@garmin.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Changli Gao <xiaosuo@gmail.com>
+Subject: Re: [PATCH v2] Implement close-on-fork
+Message-ID: <20220628134317.heagqm6dplf5vk7u@wittgenstein>
+References: <20200515152321.9280-1-nate.karstens@garmin.com>
+ <20220618114111.61EC71F981@orac.inputplus.co.uk>
+ <Yq4qIxh5QnhQZ0SJ@casper.infradead.org>
+ <20220619104228.A9789201F7@orac.inputplus.co.uk>
+ <20220628131304.gbiqqxamg6pmvsxf@wittgenstein>
+ <35d0facc934748f995c2e7ab695301f7@AcuMS.aculab.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <35d0facc934748f995c2e7ab695301f7@AcuMS.aculab.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,67 +81,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit ac0126a01735 ("soc: qcom: cmd-db: replace strncpy() with
-strscpy_pad()") breaks booting on my sc7280-herobrine-herobrine
-device. From printouts I see that at bootup the function is called
-with an id of "lnbclka2" which is 8 bytes big.
+On Tue, Jun 28, 2022 at 01:38:07PM +0000, David Laight wrote:
+> From: Christian Brauner
+> > Sent: 28 June 2022 14:13
+> > 
+> > On Sun, Jun 19, 2022 at 11:42:28AM +0100, Ralph Corderoy wrote:
+> > > Hi Matthew, thanks for replying.
+> > >
+> > > > > The need for O_CLOFORK might be made more clear by looking at a
+> > > > > long-standing Go issue, i.e. unrelated to system(3), which was started
+> > > > > in 2017 by Russ Cox when he summed up the current race-condition
+> > > > > behaviour of trying to execve(2) a newly created file:
+> > > > > https://github.com/golang/go/issues/22315.
+> > > >
+> > > > The problem is that people advocating for O_CLOFORK understand its
+> > > > value, but not its cost.  Other google employees have a system which
+> > > > has literally millions of file descriptors in a single process.
+> > > > Having to maintain this extra state per-fd is a cost they don't want
+> > > > to pay (and have been quite vocal about earlier in this thread).
+> > >
+> > > So do you agree the userspace issue is best solved by *_CLOFORK and the
+> > > problem is how to implement *_CLOFORK at an acceptable cost?
+> > >
+> > > OTOH David Laight was making suggestions on moving the load to the
+> > > fork/exec path earlier in the thread, but OTOH Al Viro mentioned a
+> > > ‘portable solution’, though that could have been to a specific issue
+> > > rather than the more general case.
+> > >
+> > > How would you recommend approaching an acceptable cost is progressed?
+> > > Iterate on patch versions?  Open a bugzilla.kernel.org for central
+> > > tracking and linking from the other projects?  ..?
+> > 
+> > Quoting from that go thread
+> > 
+> > "If the OS had a "close all fds above x", we could use that. (I don't know of any that do, but it sure
+> > would help.)"
+> > 
+> > So why can't this be solved with:
+> > close_range(fd_first, fd_last, CLOSE_RANGE_CLOEXEC | CLOSE_RANGE_UNSHARE)?
+> > e.g.
+> > close_range(100, ~0U, CLOSE_RANGE_CLOEXEC | CLOSE_RANGE_UNSHARE)?
+> 
+> That is a relatively recent linux system call.
+> Although it can be (mostly) emulated by reading /proc/fd
+> - but that may not be mounted.
+> 
+> In any case another thread can open an fd between the close_range()
+> and fork() calls.
 
-Previously all 8 bytes of this string were copied to the
-destination. Now only 7 bytes will be copied since strscpy_pad() saves
-a byte for '\0' termination.
+The CLOSE_RANGE_UNSHARE gives the calling thread a private file
+descriptor table before marking fs close-on-exec.
 
-We don't need the '\0' termination in the destination. Let's go back
-to strncpy(). According to the warning:
-  If a caller is using non-NUL-terminated strings, strncpy() can still
-  be used, but destinations should be marked with the __nonstring
-  attribute to avoid future compiler warnings.
-...so we'll do that.
-
-While we're at it, let's change the query array to use
-"sizeof(ent->id)" so it can't possibly go out of sync with our later
-copy.
-
-Fixes: ac0126a01735 ("soc: qcom: cmd-db: replace strncpy() with strscpy_pad()")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-
-Changes in v3:
-- Add comment that query isn't necessarily '\0' terminated.
-
-Changes in v2:
-- Size array with "sizeof(ent->id)"
-
- drivers/soc/qcom/cmd-db.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/soc/qcom/cmd-db.c b/drivers/soc/qcom/cmd-db.c
-index c5137c25d819..629a7188b576 100644
---- a/drivers/soc/qcom/cmd-db.c
-+++ b/drivers/soc/qcom/cmd-db.c
-@@ -141,14 +141,18 @@ static int cmd_db_get_header(const char *id, const struct entry_header **eh,
- 	const struct rsc_hdr *rsc_hdr;
- 	const struct entry_header *ent;
- 	int ret, i, j;
--	u8 query[8];
-+	u8 query[sizeof(ent->id)] __nonstring;
- 
- 	ret = cmd_db_ready();
- 	if (ret)
- 		return ret;
- 
--	/* Pad out query string to same length as in DB */
--	strscpy_pad(query, id, sizeof(query));
-+	/*
-+	 * Pad out query string to same length as in DB. NOTE: the output
-+	 * query string is not necessarily '\0' terminated if it bumps up
-+	 * against the max size. That's OK and expected.
-+	 */
-+	strncpy(query, id, sizeof(query));
- 
- 	for (i = 0; i < MAX_SLV_ID; i++) {
- 		rsc_hdr = &cmd_db_header->header[i];
--- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+close_range(100, ~0U, CLOSE_RANGE_CLOEXEC | CLOSE_RANGE_UNSHARE)?

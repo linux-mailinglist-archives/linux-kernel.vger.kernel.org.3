@@ -2,90 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BB455EB0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ECA955EB14
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233225AbiF1R31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 13:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
+        id S233028AbiF1RdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 13:33:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233210AbiF1R3Z (ORCPT
+        with ESMTP id S231211AbiF1RdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 13:29:25 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D2B37ABF
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:29:24 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id ge10so27219101ejb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:29:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Dx3l2MSmg5XWbOR1OWuFQ03j1hQZ9DqmJP1QmQJJp+4=;
-        b=YXz38QsAHp7j0txc9BEDHmLno0dZnbMbhhPf2IdvRQO8BIOX8HheRNM9YejvnygQsL
-         VH+g/o09U4hbC88JR+4hotOKsgh4zXYEkxaZCR2A9QQNOf2N1MDZccpoQF5bJORYlCTL
-         E12iw170ePfbGmQo4HXtIrUHTjmPL7yCPI2oc=
+        Tue, 28 Jun 2022 13:33:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 516131EEE5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:33:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656437593;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a7VE0tuK7nWwEOYtUcFLI6mabEeaSx3vxPSmkSS0cDM=;
+        b=cH0snIUcPURQ1eGOZtA8e7U5+giPGpTtd4RvkH5Xfks92ZcAnw/0agPayutmT5CzAWoGgG
+        hNtvhW7DTrKzZ2n9W+IUu/REa0hWuCU3tQi+i+Fmtlzvarqn6vOJJLQvg560j2YTx4nuy1
+        E2Ny7q2eyg1P1qZPf7Tf3E278Ammoa0=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-310-werrFefKO1KPF_ttVH9tpw-1; Tue, 28 Jun 2022 13:33:12 -0400
+X-MC-Unique: werrFefKO1KPF_ttVH9tpw-1
+Received: by mail-wm1-f70.google.com with SMTP id v184-20020a1cacc1000000b0039c7efa3e95so5371636wme.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:33:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Dx3l2MSmg5XWbOR1OWuFQ03j1hQZ9DqmJP1QmQJJp+4=;
-        b=Wp+P+E6a5LyNtY41HkGLnQGxJXmVf267k74rAIObjf2JPTrqj6qKC26WDiZCHDAAOm
-         jbms4kdq5VoNuru4tB+wmkhjRffVIwS78NyT4oUkosrMy6M/2IOjULXm1wrFtI9nhQHI
-         h92NBpxMzYQtspiySPlC6ac9vY/g1F+UI4GPL1pW48M7AiQx9FJSF3B4I1y/d2KIMXTV
-         jcHHPzj5YQO+g0MHPM6MqmQYe8n+NIOGS6wEkTbyIhEcbTlSgWQcUMnJWO+zP3THpbL2
-         plsO+lRbSdD4mHY7VkBy3L/55HKPgURiPF1iBYoetgJGdjIJxAd+eP1x8QqMNuMdmbNp
-         7kOA==
-X-Gm-Message-State: AJIora+QhamDsVm9YgbQLglpz7mRnLGC0cwQ3mnaEy+LcUxXok1qipF1
-        XBogMjSQZ3I9V0exnQ1G3hLy7KxBE0D/TLInx2E=
-X-Google-Smtp-Source: AGRyM1vNKOnKcwxC5oxNV2wLuBD+BYrLywzYn7JmTb61SAKPgCPWbCRl7ip1DHS/NMGxTsa5+Dc0aw==
-X-Received: by 2002:a17:907:72d6:b0:722:e59a:72f4 with SMTP id du22-20020a17090772d600b00722e59a72f4mr19097659ejc.158.1656437362590;
-        Tue, 28 Jun 2022 10:29:22 -0700 (PDT)
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
-        by smtp.gmail.com with ESMTPSA id o7-20020a170906860700b00722d5f07864sm6557460ejx.225.2022.06.28.10.29.21
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 10:29:21 -0700 (PDT)
-Received: by mail-wr1-f51.google.com with SMTP id v14so18698096wra.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:29:21 -0700 (PDT)
-X-Received: by 2002:a5d:59a5:0:b0:21d:205b:3c5b with SMTP id
- p5-20020a5d59a5000000b0021d205b3c5bmr3879527wrr.97.1656437361049; Tue, 28 Jun
- 2022 10:29:21 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=a7VE0tuK7nWwEOYtUcFLI6mabEeaSx3vxPSmkSS0cDM=;
+        b=z1xcRjnmzpcyvEZnyxinE8qh0JuDXE0flsyWCUqVINJJdbT3xKnbSs5zI4LRyXMmjx
+         OO7QLOE6CnP/b1k0EmUU3nlZMj/BNHX1VevNaJEPcEzdB5+Vs5FSZoEsxO0umoVC9kFD
+         rJ3/5TDl3XPLe5WKRr9RKadHMwQIFPgVgqqVD90Z8mU1LZwDlnfl8W6JS1XMbys7mgr7
+         8B8KdYR7OYfyWO0N2CAPDDaovtJOMaQCza7ge1osfPVOs4D1YJ30lixiZeEDkAFoNDhl
+         hD31byJHzqrk0/TR1QXY28I6tU2hpMy+U8YKR+zyQjMesSsxqj3DNxQe6ruovLBJCLMb
+         /jvQ==
+X-Gm-Message-State: AJIora+AxY7igLxf1aXpoZOFPMHbDFG5Z0TSU9Elw3dtbymG1ruxejlJ
+        ZPdecoMcpUrnfU0fedf86W+3WrNDcdHzoBmW6XTNvZfzkjwTWQ0d57QlsPN1MDnAfvjgi5d2QSh
+        CSCCobP8NH+UZ6ZP8GiXn6VfV
+X-Received: by 2002:adf:e5cc:0:b0:21b:8bab:8e95 with SMTP id a12-20020adfe5cc000000b0021b8bab8e95mr19211064wrn.454.1656437590821;
+        Tue, 28 Jun 2022 10:33:10 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uNa1HHSsL0XcWy6n2rjIDIIsOFT4WH5URrvmgY8hvsAi2gczAwVJVbvUfAU+CLisMd3Ks0BA==
+X-Received: by 2002:adf:e5cc:0:b0:21b:8bab:8e95 with SMTP id a12-20020adfe5cc000000b0021b8bab8e95mr19211039wrn.454.1656437590549;
+        Tue, 28 Jun 2022 10:33:10 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id u3-20020a05600c210300b003a044fe7fe7sm156300wml.9.2022.06.28.10.33.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 10:33:09 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        linux-rt-users@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Petr Mladek <pmladek@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <jlelli@redhat.com>,
+        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vivek Goyal <vgoyal@redhat.com>
+Subject: Re: [PATCH v2] panic, kexec: Make __crash_kexec() NMI safe
+In-Reply-To: <xhsmhpmiu5lch.mognet@vschneid.remote.csb>
+References: <20220620111520.1039685-1-vschneid@redhat.com>
+ <87r13c7jyp.fsf@email.froward.int.ebiederm.org>
+ <xhsmhpmiu5lch.mognet@vschneid.remote.csb>
+Date:   Tue, 28 Jun 2022 18:33:08 +0100
+Message-ID: <xhsmhmtdw66cr.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-References: <20220628032439.3314451-1-kent.overstreet@gmail.com>
- <CAHk-=wiGMNvKaVuSDD7y2JeK+NsNyXtqZEusOLmEw9uE+0ZySg@mail.gmail.com> <20220628172321.gbgfif7zgz5ny3mo@moria.home.lan>
-In-Reply-To: <20220628172321.gbgfif7zgz5ny3mo@moria.home.lan>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 28 Jun 2022 10:29:05 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whTGmf5=f1JdzK22Jw88veKxB2YHbxL0Sgy9EQzMs_MBA@mail.gmail.com>
-Message-ID: <CAHk-=whTGmf5=f1JdzK22Jw88veKxB2YHbxL0Sgy9EQzMs_MBA@mail.gmail.com>
-Subject: Re: [PATCH v5whatever, now with typechecking] vsprintf: %pf(%p)
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Petr Mladek <pmladek@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 10:23 AM Kent Overstreet
-<kent.overstreet@gmail.com> wrote:
+On 27/06/22 13:42, Valentin Schneider wrote:
+> On 25/06/22 12:04, Eric W. Biederman wrote:
+>> At this point I recommend going back to being ``unconventional'' with
+>> the kexec locking and effectively reverting commit 8c5a1cf0ad3a ("kexec:
+>> use a mutex for locking rather than xchg()").
+>>
+>> That would also mean that we don't have to worry about the lockdep code
+>> doing something weird in the future and breaking kexec.
+>>
+>> Your change starting to is atomic_cmpxchng is most halfway to a revert
+>> of commit 8c5a1cf0ad3a ("kexec: use a mutex for locking rather than
+>> xchg()").  So we might as well go the whole way and just document that
+>> the kexec on panic code can not use conventional kernel locking
+>> primitives and has to dig deep and build it's own.  At which point it
+>> makes no sense for the rest of the kexec code to use anything different.
+>>
 >
->  - We need to be able to specify the pretty-printer function, and not just have
->    one per type
+> Hm, I'm a bit torn about that one, ideally I'd prefer to keep "homegrown"
+> locking primitives to just where they are needed (loading & kexec'ing), but
+> I'm also not immensely fond of the "hybrid" mutex+cmpxchg approach.
+>
 
-I even showed you how toi do that, you just deleted it.
+8c5a1cf0ad3a ("kexec: use a mutex for locking rather than xchg()") was
+straightforward enough because it turned
 
-Anyway, I'm done with this discussion. I think this is all pointless.
-I think you are making things worse, you are making things more
-complex, and I don't think this is a direction we want to take things
-in.
+        if (xchg(&lock, 1))
+                return -EBUSY;
 
-              Linus
+into
+
+        if (!mutex_trylock(&lock))
+                return -EBUSY;
+
+Now, most of the kexec_mutex uses are trylocks, except for:
+- crash_get_memory_size()
+- crash_shrink_memory()
+
+I really don't want to go down the route of turning those into cmpxchg
+try-loops, would it be acceptable to make those use trylocks (i.e. return
+-EBUSY if the cmpxchg fails)?
+
+Otherwise, we keep the mutexes for functions like those which go nowhere
+near an NMI.
+

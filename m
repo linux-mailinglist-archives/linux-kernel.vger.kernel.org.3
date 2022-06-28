@@ -2,150 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F33455F025
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 23:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 294B855F029
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 23:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbiF1VG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 17:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
+        id S231318AbiF1VHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 17:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiF1VGW (ORCPT
+        with ESMTP id S229979AbiF1VHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 17:06:22 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA26C3A707
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 14:06:19 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1048b8a38bbso18673419fac.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 14:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=STiH3iHegpDpulyFQR+v1Cyk/1DLN8ULnvsLF3GIIV0=;
-        b=Y9HzhG4fGXuQ58JNTmAFjTjRBHNGrWPz+HrW0HyptCDkEDLxl24x+Fxg8apWji3mJQ
-         oaHOEEJJMUOnI7cD9j4TldOud0k8owYfERJ6tRP4ajtj6mFEQ1nvagBSs67J2hw4dyGv
-         iuKP5ochqtmRHEtnERn9Nwy2h4aWw9bWAFY6iBMTQ9UCPNhBWZVYpUSAtQRZaEgCMQ8d
-         l6FhdQyib5yidn20uLINQ4wzcgrVXauqZ/ApbSi2FT8AaRwscP4P6gmMuRIV+ErEo/vG
-         axoPhyCHSjyotQ5RNQIh2yMPy6XLbBueSLIvvFeqBZXo+XPrAtIti8vexxRRMx5xFiJT
-         1/iQ==
+        Tue, 28 Jun 2022 17:07:22 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C463A195;
+        Tue, 28 Jun 2022 14:07:20 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id l24so14093253ion.13;
+        Tue, 28 Jun 2022 14:07:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=STiH3iHegpDpulyFQR+v1Cyk/1DLN8ULnvsLF3GIIV0=;
-        b=k4BAk2+pXYAgBQyaFM8Ur5L7J9YjTVncKzK3nd2UJhnn863280R1qmmTyOvtbYVM6G
-         zFjF1WNZ7QjVgX0+iCDpKrVzI3ixaugdIPwKsBv3aVJAzYK9dz6RoOa4Bj3/KUTbXDTT
-         HrKrcNDMI1hgEJelXBUhzn9Q/2Rg1A+vpI5zrdumjn4pfAi5HOuR5UAmmFdr1l10OBRI
-         PkqYZiwhXS6Yo2QyP0L4ISGPJZ0Oqd0+IHHzX6nTKCn1qwT7Ybg8pNuIfIWZKB0AgU7v
-         cdV9gKdtW5vavKgjjYQAFDcAEteBaIhsU+gwnJtJf3CDfsgtPcylXH8makeYkm5nJOqQ
-         nJyQ==
-X-Gm-Message-State: AJIora9ezyISrXWkhoorsaoJyNeYkc7LK/7SARuc05jVtc7oQZPOLONo
-        AvOnZjrlAJfEOiyIARJ+73AaBQ==
-X-Google-Smtp-Source: AGRyM1v2ljwfJu4Ftr09DXtpIBJE4LLFvqlHANGlLO3yn9V0hbctPbQFQ7bioOM1VtDqk+iXViSjkA==
-X-Received: by 2002:a05:6870:2189:b0:101:cdf6:e0bd with SMTP id l9-20020a056870218900b00101cdf6e0bdmr1005126oae.194.1656450378975;
-        Tue, 28 Jun 2022 14:06:18 -0700 (PDT)
-Received: from eze-laptop ([190.190.187.68])
-        by smtp.gmail.com with ESMTPSA id bf9-20020a056808190900b0032f0e611cc0sm7823129oib.19.2022.06.28.14.06.15
+        bh=EdmVCCaapks5mqyJeNP/LvsCykQThbQW4f2v+GKWiVI=;
+        b=luJ0bqm1xTrfmE8BoMNLrxR9JqYYfDFfTLHwVm3QTmMoW5XZ/NJj240R3l8KnBUgwy
+         c32CjerCRsJ0z2eKmRRVH/mQVW3YdeCC0ca9M61HDQO2meRBphhdgYmdZqDuQfscQ4hs
+         uMffIZZlX3QTEsS4/FKy6/31fZN1Vrq7ly1xeZVVobc6w5qHGmHwjyi35pjRp3Yt9vCc
+         du5BTtdbR6kAP3pW4CyLLvJ9NxURzDL+t3A6s0ltBNVLMVVolFASdQEvPg6mBFWsshME
+         Eal7Zte+Le3NMK1J6B+ySXeOGOVhmVzc02T68U8ZhvGgobu6pJ1+qNnXhanJC/mEo/4R
+         rNrg==
+X-Gm-Message-State: AJIora8YHHJc+QcRGxMgt2ScXzCtC97OCHYmEWgjNZLEDy94h24pxOpr
+        PPzHZKKdkIGUiqSFSXKYkg==
+X-Google-Smtp-Source: AGRyM1uc+XPBhifMAguV92DxPvJZX6j7ZucXINm5C5uMzjXPcIlUdRqzojxywk4dF8WrqVqjSlCHzA==
+X-Received: by 2002:a05:6638:2589:b0:333:e976:d0c7 with SMTP id s9-20020a056638258900b00333e976d0c7mr50106jat.16.1656450440054;
+        Tue, 28 Jun 2022 14:07:20 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id b28-20020a026f5c000000b0032e70c4e12fsm6614611jae.28.2022.06.28.14.07.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 14:06:18 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 18:06:12 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     p.zabel@pengutronix.de, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, benjamin.gaignard@collabora.com,
-        nicolas.dufresne@collabora.com, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v2 6/7] media: hantro: Store VP9 bit depth in context
-Message-ID: <YrttRJrgmDji5tVc@eze-laptop>
-References: <20220616202513.351039-1-jernej.skrabec@gmail.com>
- <20220616202513.351039-7-jernej.skrabec@gmail.com>
+        Tue, 28 Jun 2022 14:07:19 -0700 (PDT)
+Received: (nullmailer pid 977856 invoked by uid 1000);
+        Tue, 28 Jun 2022 21:07:16 -0000
+Date:   Tue, 28 Jun 2022 15:07:16 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "kyrie.wu" <kyrie.wu@mediatek.com>
+Cc:     Irui Wang <irui.wang@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        angelogioacchino.delregno@collabora.com,
+        nicolas.dufresne@collabora.com, wenst@chromium.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
+        maoguang.meng@mediatek.com, srv_heupstream@mediatek.com
+Subject: Re: [RESEND V9,1/7] dt-bindings: mediatek: Add mediatek,
+ mt8195-jpgenc compatible
+Message-ID: <20220628210716.GA963202-robh@kernel.org>
+References: <20220614121024.31667-1-irui.wang@mediatek.com>
+ <20220614121024.31667-2-irui.wang@mediatek.com>
+ <20220617231139.GA2610098-robh@kernel.org>
+ <329eb655ddb503e4327cbe3cffef625bb44630b1.camel@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220616202513.351039-7-jernej.skrabec@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <329eb655ddb503e4327cbe3cffef625bb44630b1.camel@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jernej,
+On Mon, Jun 20, 2022 at 02:04:38PM +0800, kyrie.wu wrote:
+> On Fri, 2022-06-17 at 17:11 -0600, Rob Herring wrote:
+> > On Tue, Jun 14, 2022 at 08:10:18PM +0800, Irui Wang wrote:
+> > > From: kyrie wu <kyrie.wu@mediatek.com>
+> > > 
+> > > Add mediatek,mt8195-jpgenc compatible to binding document.
+> > > 
+> > > Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
+> > > ---
+> > >  .../media/mediatek,mt8195-jpegenc.yaml        | 153
+> > > ++++++++++++++++++
+> > >  1 file changed, 153 insertions(+)
+> > >  create mode 100644
+> > > Documentation/devicetree/bindings/media/mediatek,mt8195-
+> > > jpegenc.yaml
+> > > 
+> > > diff --git
+> > > a/Documentation/devicetree/bindings/media/mediatek,mt8195-
+> > > jpegenc.yaml
+> > > b/Documentation/devicetree/bindings/media/mediatek,mt8195-
+> > > jpegenc.yaml
+> > > new file mode 100644
+> > > index 000000000000..a7f9f723d5db
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/media/mediatek,mt8195-
+> > > jpegenc.yaml
+> > > @@ -0,0 +1,153 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: 
+> > > http://devicetree.org/schemas/media/mediatek,mt8195-jpegenc.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: MediaTek JPEG Encoder Device Tree Bindings
+> > > +
+> > > +maintainers:
+> > > +  - kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>
+> > > +
+> > > +description: |-
+> > > +  MediaTek JPEG Encoder is the JPEG encode hardware present in
+> > > MediaTek SoCs
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    items:
+> > > +      - const: mediatek,mt8195-jpgenc
+> > > +
+> > > +  mediatek,jpegenc-multi-core:
+> > > +    type: boolean
+> > > +    description: |
+> > > +      Indicates whether the jpeg encoder has multiple cores or
+> > > not.
+> > > +
+> > > +  power-domains:
+> > > +    maxItems: 1
+> > > +
+> > > +  iommus:
+> > > +    maxItems: 4
+> > > +    description: |
+> > > +      Points to the respective IOMMU block with master port as
+> > > argument, see
+> > > +      Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> > > for details.
+> > > +      Ports are according to the HW.
+> > > +
+> > > +  "#address-cells":
+> > > +    const: 2
+> > > +
+> > > +  "#size-cells":
+> > > +    const: 2
+> > > +
+> > > +  ranges: true
+> > > +
+> > > +# Required child node:
+> > > +patternProperties:
+> > > +  "^jpgenc@[0-9a-f]+$":
+> > > +    type: object
+> > > +    description: |
+> > > +      The jpeg encoder hardware device node which should be added
+> > > as subnodes to
+> > > +      the main jpeg node.
+> > > +
+> > > +    properties:
+> > > +      compatible:
+> > > +        const: mediatek,mt8195-jpgenc-hw
+> > > +
+> > > +      reg:
+> > > +        maxItems: 1
+> > > +
+> > > +      hw_id:
+> > > +        description: |
+> > > +          Current jpegenc hw id.
+> > 
+> > Same question here. Surely, I asked sometime in the last 8 versions,
+> > but 
+> > no explanation here and I'm not going to go look for it.
+> Dear Rob,
+> I'm sorry for not giving an accurate explanation in time.
+> The MT8195 has own two encoding hardwares, we use hw_id to 
+> represent them.
+> hw_id = 0, for hardware 0, and hw_id = 1, repesents another one.
+> I will improve the description in the next version.
 
-On Thu, Jun 16, 2022 at 10:25:12PM +0200, Jernej Skrabec wrote:
-> Now that we have proper infrastructure for postprocessing 10-bit
-> formats, store VP9 bit depth in context.
-> 
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> ---
->  drivers/staging/media/hantro/hantro_drv.c | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
-> 
-> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-> index 01d33dcb0467..afddf7ac0731 100644
-> --- a/drivers/staging/media/hantro/hantro_drv.c
-> +++ b/drivers/staging/media/hantro/hantro_drv.c
-> @@ -324,6 +324,24 @@ static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
->  	return 0;
->  }
->  
-> +static int hantro_vp9_s_ctrl(struct v4l2_ctrl *ctrl)
-> +{
-> +	struct hantro_ctx *ctx;
-> +
-> +	ctx = container_of(ctrl->handler,
-> +			   struct hantro_ctx, ctrl_handler);
-> +
-> +	switch (ctrl->id) {
-> +	case V4L2_CID_STATELESS_VP9_FRAME:
-> +		ctx->bit_depth = ctrl->p_new.p_vp9_frame->bit_depth;
+Why do you care which one is which? 
 
-Since this affects the possible formats, shouldn't it reset
-the decoded format?
+We generally don't do instance indices in DT, so figure out how not to 
+need this.
 
-In other words, it would mean calling hantro_reset_raw_fmt().
-
-Hopefully, that would be OK and not cause any weird issues?
-
-Nicolas, any feedback?
-
-Thanks,
-Ezequiel
-
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
->  	.try_ctrl = hantro_try_ctrl,
->  };
-> @@ -336,6 +354,10 @@ static const struct v4l2_ctrl_ops hantro_hevc_ctrl_ops = {
->  	.s_ctrl = hantro_hevc_s_ctrl,
->  };
->  
-> +static const struct v4l2_ctrl_ops hantro_vp9_ctrl_ops = {
-> +	.s_ctrl = hantro_vp9_s_ctrl,
-> +};
-> +
->  #define HANTRO_JPEG_ACTIVE_MARKERS	(V4L2_JPEG_ACTIVE_MARKER_APP0 | \
->  					 V4L2_JPEG_ACTIVE_MARKER_COM | \
->  					 V4L2_JPEG_ACTIVE_MARKER_DQT | \
-> @@ -503,6 +525,7 @@ static const struct hantro_ctrl controls[] = {
->  		.codec = HANTRO_VP9_DECODER,
->  		.cfg = {
->  			.id = V4L2_CID_STATELESS_VP9_FRAME,
-> +			.ops = &hantro_vp9_ctrl_ops,
->  		},
->  	}, {
->  		.codec = HANTRO_VP9_DECODER,
-> -- 
-> 2.36.1
-> 
+Rob

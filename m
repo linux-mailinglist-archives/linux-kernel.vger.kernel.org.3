@@ -2,50 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E38F55CDD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 743ED55C1EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245276AbiF1IWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 04:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
+        id S245422AbiF1IWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 04:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245192AbiF1IT5 (ORCPT
+        with ESMTP id S231563AbiF1IT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 04:19:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108632DABE;
-        Tue, 28 Jun 2022 01:19:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9D56B81D12;
-        Tue, 28 Jun 2022 08:19:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD599C3411D;
-        Tue, 28 Jun 2022 08:19:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656404393;
-        bh=yGob1Vr8BR4JA5385szP2YP45oWt14YDHpLRa/YTWAo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=qyJX3C1/aIuiM6xAjTcD8eOrtA9FWuC7wRpJC211TfRs8LQ45xJ2HLSdhbIoPDuEP
-         QLTcjQv1WdOC1etdBxsDgsUVmTcHQI2LnJQUkQQhgmpA5D0BJ1yEE4gf8ldMpxDSG8
-         0IoXqWWnLTvZGUaNIyf2n29IZuQOeOWu5YWUX6zhKrxbLgt7RQRczX2RxRr/Qc5ABM
-         NUS5V5dguuWoFT0b+DlLhBuxxk3nKKByZCwlrQMo27MWZ7YfmRbNHlZffmUL7ZBIHB
-         YD+jAC+aqJFxVnUqK3vkLq68ZyZk5YoJTLIGDsaTNUwqadK0c9uJHETEHBcJfpvLWl
-         hPKU+fjDA3DOg==
-From:   guoren@kernel.org
-To:     palmer@rivosinc.com, arnd@arndb.de, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com
-Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V7 0/5] riscv: Add qspinlock support with combo style
-Date:   Tue, 28 Jun 2022 04:19:46 -0400
-Message-Id: <20220628081946.1999419-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        Tue, 28 Jun 2022 04:19:58 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACBC2DD40
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:19:56 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id m184so6849597wme.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:19:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2RluQ/L1sN2XN4qAMgu7HWEvzSUWSILILWR4s/Bogvc=;
+        b=ooqY0pnK8R71VO+7Ww0uB5MQh1agwoZIC8aZTPQKa2MkQc+iFYSAFT+X9Dfz623HUM
+         BHHavib7dxrxW13FwpV0BwL4Rsz7Og1K04cE1HuG3rrytbMcPW23zrn5erjbHCFQONH+
+         jg+fzzg4LGgalcDL6Mx7g3/HYeQn64WSTV5hRh/P7HgkoWhGZw6C4qQHwb+r07daxqJB
+         MTRvqeX5qPKB27BpkB8nskNR7rUuQ+iSMiRouGAqNC6Xm/ECrPx02+Efez4F7sm59JXE
+         amhvq+MUDxs/g/g7UlaB+8uoKmA6AqwlaURewYpkpOkrnBvQxD2Ty+s/ndL8sN6qr0NG
+         AuRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2RluQ/L1sN2XN4qAMgu7HWEvzSUWSILILWR4s/Bogvc=;
+        b=KBZu1UeZAI0lkH7bUDv8EmaCxNbTIcei2MmP14+2qiEzFURR+t0MoO5VZ32ongDVlN
+         AIhPXbv8v/L6C7788COnQ/vtdQtbzWzCJMrFgs/BQv5A/SjcQsMtaU00nB00vv/nPo7a
+         4MIO5lf1nt7BbgMoKrPaIOVQ1k4iEPKvN4ISB+ao9gmH9KrUgD+JdotXAnBvN9Femcnt
+         xZH8PLtuOdz9mON9M2Bt9XWIJR8B1Y0fDhuGrgad1b6gqCf4hw4T6haR6PbFCZIW7M3m
+         MMslTZqXjfhbDeigUoaWxqXGdsg0qiZH+SeewahLrpPUus6yBn5xlxHQfc9ZDGQVu/Ux
+         x8nw==
+X-Gm-Message-State: AJIora9gOTf8mWsGB9xyqvf4/Z9UiBHix7xlYlB4yIsX/jZ3teH7e8r5
+        omiUlAchTG3DFnsATZt1OV06bA==
+X-Google-Smtp-Source: AGRyM1uAuKwujR1uouFcWum/Ytu8Qs/dMIQzH8FZfWG03qE+T2DBwc9Jj2/F5MWtm13KaATykAk/Dw==
+X-Received: by 2002:a05:600c:3493:b0:39c:8731:84c3 with SMTP id a19-20020a05600c349300b0039c873184c3mr25767140wmq.45.1656404395011;
+        Tue, 28 Jun 2022 01:19:55 -0700 (PDT)
+Received: from [192.168.0.252] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z2-20020a5d44c2000000b0021a3d94c7bdsm12917841wrr.28.2022.06.28.01.19.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 01:19:54 -0700 (PDT)
+Message-ID: <30badf7e-6e5c-16f9-9e46-566981a40e22@linaro.org>
+Date:   Tue, 28 Jun 2022 10:19:53 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3] arm64: dts: qcom: sc8280xp: add Lenovo Thinkpad X13s
+ devicetree
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <YrMVqifgV4kZaP7F@hovoldconsulting.com>
+ <20220622132617.24604-1-johan+linaro@kernel.org>
+ <96394aa2-aefc-63c4-d86f-15c06d092d75@somainline.org>
+ <Yrq1FAscp+jE7GQs@hovoldconsulting.com>
+ <00aefa9b-5d91-629b-9fa6-fadd6df5a469@somainline.org>
+ <Yrq4eOWAeKyGrQPo@hovoldconsulting.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Yrq4eOWAeKyGrQPo@hovoldconsulting.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,106 +88,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On 28/06/2022 10:14, Johan Hovold wrote:
+> On Tue, Jun 28, 2022 at 10:09:57AM +0200, Konrad Dybcio wrote:
+>> On 28.06.2022 10:00, Johan Hovold wrote:
+>>> On Mon, Jun 27, 2022 at 01:38:47PM +0200, Konrad Dybcio wrote:
+>>>> On 22.06.2022 15:26, Johan Hovold wrote:
+>>>>> Add an initial devicetree for the Lenovo Thinkpad X13s with support for
+>>>>> USB, backlight, keyboard, touchpad, touchscreen (to be verified), PMICs
+>>>>> and remoteprocs.
+>>>>>
+>>>>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+>>>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>
+>>> Krzysztof's tag wasn't here in the version I posted.
+>> Patchwork recently started pulling them in automatically when
+>> downloading a mbox file.
 
-Enable qspinlock and meet the requirements mentioned in a8ad07e5240c9
-("asm-generic: qspinlock: Indicate the use of mixed-size atomics").
+Uh, this can be a bit confusing. :)
 
-RISC-V LR/SC pairs could provide a strong/weak forward guarantee that
-depends on micro-architecture. And RISC-V ISA spec has given out
-several limitations to let hardware support strict forward guarantee
-(RISC-V User ISA - 8.3 Eventual Success of Store-Conditional
-Instructions):
-We restricted the length of LR/SC loops to fit within 64 contiguous
-instruction bytes in the base ISA to avoid undue restrictions on
-instruction cache and TLB size and associativity. Similarly, we
-disallowed other loads and stores within the loops to avoid restrictions
-on data-cache associativity in simple implementations that track the
-reservation within a private cache. The restrictions on branches and
-jumps limit the time that can be spent in the sequence. Floating-point
-operations and integer multiply/divide were disallowed to simplify the
-operating system’s emulation of these instructions on implementations
-lacking appropriate hardware support.
-Software is not forbidden from using unconstrained LR/SC sequences, but
-portable software must detect the case that the sequence repeatedly
-fails, then fall back to an alternate code sequence that does not rely
-on an unconstrained LR/SC sequence. Implementations are permitted to
-unconditionally fail any unconstrained LR/SC sequence.
+> 
+> Please consider using b4 instead if you need to reply to patches.
 
-eg:
-Some riscv hardware such as BOOMv3 & XiangShan could provide strict &
-strong forward guarantee (The cache line would be kept in an exclusive
-state for Backoff cycles, and only this core's interrupt could break
-the LR/SC pair).
-Qemu riscv give a weak forward guarantee by wrong implementation
-currently [1].
++1
+or find it on lore and save mbox from browser
 
-Add combo spinlock (ticket & queued) support
-Some architecture has a flexible requirement on the type of spinlock.
-Some LL/SC architectures of ISA don't force micro-arch to give a strong
-forward guarantee. Thus different kinds of memory model micro-arch would
-come out in one ISA. The ticket lock is suitable for exclusive monitor
-designed LL/SC micro-arch with limited cores and "!NUMA". The
-queue-spinlock could deal with NUMA/large-scale scenarios with a strong
-forward guarantee designed LL/SC micro-arch.
 
-The first version of patch was made in 2019.1 [2].
-
-[1] https://github.com/qemu/qemu/blob/master/target/riscv/insn_trans/trans_rva.c.inc
-[2] https://lore.kernel.org/linux-riscv/20190211043829.30096-1-michaeljclark@mac.com/#r
-
-Change V7:
- - Add combo spinlock (ticket & queued) support
- - Rename ticket_spinlock.h
- - Remove unnecessary atomic_read in ticket_spin_value_unlocked  
-
-Change V6:
- - Fixup Clang compile problem Reported-by: kernel test robot
-   <lkp@intel.com>
- - Cleanup asm-generic/spinlock.h
- - Remove changelog in patch main comment part, suggested by
-   Conor.Dooley@microchip.com
- - Remove "default y if NUMA" in Kconfig
-
-Change V5:
- - Update comment with RISC-V forward guarantee feature.
- - Back to V3 direction and optimize asm code.
-
-Change V4:
- - Remove custom sub-word xchg implementation
- - Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32 in locking/qspinlock
-
-Change V3:
- - Coding convention by Peter Zijlstra's advices
-
-Change V2:
- - Coding convention in cmpxchg.h
- - Re-implement short xchg
- - Remove char & cmpxchg implementations
-
-Guo Ren (2):
-  asm-generic: spinlock: Move qspinlock & ticket-lock into generic
-    spinlock.h
-  riscv: Add qspinlock support
-
-Guo Ren (5):
-  asm-generic: ticket-lock: Remove unnecessary atomic_read
-  asm-generic: ticket-lock: Use the same struct definitions with qspinlock
-  asm-generic: ticket-lock: Move into ticket_spinlock.h
-  asm-generic: spinlock: Add combo spinlock (ticket & queued)
-  riscv: Add qspinlock support
-
- arch/riscv/Kconfig                    |  9 +++
- arch/riscv/include/asm/Kbuild         |  2 +
- arch/riscv/include/asm/cmpxchg.h      | 17 +++++
- arch/riscv/kernel/setup.c             |  4 ++
- include/asm-generic/spinlock.h        | 81 +++++++++++++----------
- include/asm-generic/spinlock_types.h  | 12 +---
- include/asm-generic/ticket_spinlock.h | 92 +++++++++++++++++++++++++++
- kernel/locking/qspinlock.c            |  2 +
- 8 files changed, 174 insertions(+), 45 deletions(-)
- create mode 100644 include/asm-generic/ticket_spinlock.h
-
--- 
-2.36.1
-
+Best regards,
+Krzysztof

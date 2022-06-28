@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34F155ECFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1BD55ED02
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233635AbiF1Sto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 14:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
+        id S233790AbiF1Str (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 14:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232025AbiF1Stm (ORCPT
+        with ESMTP id S233591AbiF1Stn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:49:42 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA941248FD;
-        Tue, 28 Jun 2022 11:49:41 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id cw10so27669631ejb.3;
-        Tue, 28 Jun 2022 11:49:41 -0700 (PDT)
+        Tue, 28 Jun 2022 14:49:43 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D422F248C0;
+        Tue, 28 Jun 2022 11:49:42 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id e40so18896952eda.2;
+        Tue, 28 Jun 2022 11:49:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5ObwhxGoXe2ARX6DreYdA3iy7rl42wiy5qX/jBWrSpM=;
-        b=nVGPtX9pniV/ybRejCUwJ7N9XYru7cWW5qzGh+AqY8r9tZZsUf9eDP8ACkL7Ylnh77
-         qcP5ANLB+fYXAwnzbpLalaxIvQnz7SxhfXFsejmUIoQXWDj6jFPgVuLl9lNEu5SJp8k7
-         CAVYc+5O2CVvaEArqAd7yDh3LTLBhT5pMEsxPWvmMPn2z18Z+0jlIKBzF4TgUXlYPlDk
-         91YUJBZE+1Ilhqp5SWx9guw20ewvZel8IbfMQiMy57BUisnkMCx8Z1y78YJSq5hrQlpJ
-         C1obfYnCvy38qBBu1Lrcr0EDDVUifm0pl5Toywvj0pEyxgEdtKfRHjwXnxmhP/Hhod3W
-         moRw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qf5xZr94K/ycK+i9/Wok3iiobG+7FvR7R5ERaeixzlU=;
+        b=gvrmMvMmxvE1vomu0BjvPFMa+PaQV5sc7fo9Gh2wDe+P34WIqrV1i3VWPKT1F5h6Ly
+         gAdNdOaYEBNXq5FzYeF3SHvrfCErFCpb+JjDX7bKJpLePIZgiAypn/YUtCK8HlDlKgLA
+         bDNX7LI48ePNjgGcKL5HHRfvfwFqDicVPcIzsaS8opmPH40Dsa85yrynrLuLmaBItx6q
+         XRBL5rCV49ymGZuxuiGCy60X/P0WIvY+1TcrfP2OQ5S3bMkIr6lmxEkTnNA3LvGrafll
+         dPG7Xm30L7SQZImkDg4BDBFXUE/9ewfsA5I0/xL8uKJfEkQrjyrtm9Eye+Nq21fft1fX
+         pdIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5ObwhxGoXe2ARX6DreYdA3iy7rl42wiy5qX/jBWrSpM=;
-        b=xioUlA1D32acYj61dQMPZP16O2ADYCqBfudPL+c0zBc2k4CDtC80TxPl4gW3GCWsZB
-         YMOnfKZPgilF4TUMZQn17L9z+46gXJQaTVXuy3vqLqWM2GdSdH4W1KK+O4B2MX9VG6HO
-         bUX+4t6InNtxnYQ7DlajzErClWWaFOxi0PtJvWfx8LOEpZCMYqcT2KYrTCQRDGNpEdOe
-         ehoIy6tZv5CRN0L5bJe9NKyoFLwJi/+YEhCBL/7mYZLMgaYRO8zWllHKPjP2ZKkEueUD
-         oEQm0NfSMk/xhqpoCCA8X0MEdM57ObzTipkbONyjzhl/JvR/UmdwQ8lSVV25SANs77eD
-         xTAA==
-X-Gm-Message-State: AJIora+TbjQklnbnk9WbiAfqtOAAKjQ5AywJ4yfCdAiECU2fCQk9wTK1
-        tAp6AP1j8Nb3JLqrK4oTQQw=
-X-Google-Smtp-Source: AGRyM1t+WIYcP7ofsz0WZlACCfJz8MlGeYIB1VazUOXiK1PyGbMd+9sYo6v4vwUtXqoYKfii2vXGmQ==
-X-Received: by 2002:a17:906:2bc2:b0:726:d02f:dea with SMTP id n2-20020a1709062bc200b00726d02f0deamr4392270ejg.60.1656442180000;
-        Tue, 28 Jun 2022 11:49:40 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qf5xZr94K/ycK+i9/Wok3iiobG+7FvR7R5ERaeixzlU=;
+        b=riokfBlhHGIOg+bligkHAz7+slPJdbgVd2/T9RBavX2ysZBx93XMTnERlZwLvpGL0a
+         TwHBuri6/gKILar3jtgR/8xny0UvM/GLpJ83ZffYwiwsPRgwVnoAAJ704aEUMQvE1dpA
+         Tb0125V4emuBOUv2H3itPkzb2vx2Cb1shRlWjyqqMYjXnTgHPP1mJ1s4hDWpRDHHuzlV
+         9BsstuPNrvFZhap6E751zzfk11cqgy9DIEUy3xfsXIIVyjAGT7B9kfNSaDYv2kldCS+R
+         THGfcNO0vPX1zvmZ9LeLeTsiA+2B0z4N95eRNCjkO9CmyhLtdPj4Fo8yM5houwVdPT36
+         KWhg==
+X-Gm-Message-State: AJIora/6ZJjnEQVYJGhS9OYicbJ0K5np+l8bFY/qpWA5bV2lpNIwlLqE
+        LfN2v+9xvK0VXFyZ8+JI8W0=
+X-Google-Smtp-Source: AGRyM1uY5hVh5/TJfL3ndbckPvZcwLXff/B94mb+OlrbAWxnlX+1E1g9J9U9KajfwtVi1DDIkAfPqw==
+X-Received: by 2002:a05:6402:e83:b0:435:a9bd:8134 with SMTP id h3-20020a0564020e8300b00435a9bd8134mr24618551eda.243.1656442181318;
+        Tue, 28 Jun 2022 11:49:41 -0700 (PDT)
 Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id t21-20020a05640203d500b0043573c59ea0sm9747593edw.90.2022.06.28.11.49.39
+        by smtp.googlemail.com with ESMTPSA id t21-20020a05640203d500b0043573c59ea0sm9747593edw.90.2022.06.28.11.49.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 11:49:39 -0700 (PDT)
+        Tue, 28 Jun 2022 11:49:40 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -59,10 +59,14 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Christian Marangi <ansuelsmth@gmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v3 0/4] Krait Documentation conversion
-Date:   Tue, 28 Jun 2022 20:41:33 +0200
-Message-Id: <20220628184137.21678-1-ansuelsmth@gmail.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v3 1/4] dt-bindings: clock: Convert qcom,krait-cc to yaml
+Date:   Tue, 28 Jun 2022 20:41:34 +0200
+Message-Id: <20220628184137.21678-2-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220628184137.21678-1-ansuelsmth@gmail.com>
+References: <20220628184137.21678-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,69 +79,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series convert the krait-cc and the kpps-acc/gcc Documentation to
-yaml.
+Convert qcom,krait-cc to yaml Documentation.
 
-This series comes form a split of a bigger series that got too big and
-now hard to review.
-
-While they are still more or less wrong and doesn't really reflect real
-driver implementation, they are converted to prepare for a fixup later
-when dts and driver are finally fixed.
-
-Minor changes are done to the kpss-gcc driver and minor fixes are done to
-the various affected dts to fix dtbs_check warning with the new introduced
-schema.
-
-v3:
-- Update all Sob
-- Rework kpss-gcc Documentation with the new finding
-- Fix dtbs_check warning
-v2:
-- Fix bot error by adding missing #clock-cells
-
-Changelog for previous series "Modernize rest of the krait drivers"
-that was split to smaller series (only Documentation changes):
-v7:
-- Rework kpss-gcc Documentation (split patch for pure conversion and
-  tweaks)
-v6:
-- Address comments from Rob
-- Fix warning from make dtbs_check
-v5:
-- Address comments from Krzysztof
-v4:
-- Fix more dt-bindings bug errors
-v3:
-- Split Documentation files for kpss and krait-cc
-v2:
-- fix missing new line on patch 16 (krait-cc patch)
-
-Christian Marangi (4):
-  dt-bindings: clock: Convert qcom,krait-cc to yaml
-  dt-bindings: arm: msm: Convert kpss-acc driver Documentation to yaml
-  dt-bindings: arm: msm: Rework kpss-gcc driver Documentation to yaml
-  ARM: dts: qcom: fix various wrong definition for kpss-gcc node
-
- .../bindings/arm/msm/qcom,kpss-acc.txt        | 49 ----------
- .../bindings/arm/msm/qcom,kpss-acc.yaml       | 94 +++++++++++++++++++
- .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ---------
- .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 89 ++++++++++++++++++
- .../bindings/clock/qcom,krait-cc.txt          | 34 -------
- .../bindings/clock/qcom,krait-cc.yaml         | 59 ++++++++++++
- arch/arm/boot/dts/qcom-apq8064.dtsi           |  2 +-
- arch/arm/boot/dts/qcom-ipq8064.dtsi           |  4 +-
- arch/arm/boot/dts/qcom-mdm9615.dtsi           |  2 +-
- arch/arm/boot/dts/qcom-msm8660.dtsi           |  2 +-
- arch/arm/boot/dts/qcom-msm8960.dtsi           |  7 +-
- 11 files changed, 252 insertions(+), 134 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
- create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.yaml
- delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
- create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/clock/qcom,krait-cc.txt          | 34 -----------
+ .../bindings/clock/qcom,krait-cc.yaml         | 59 +++++++++++++++++++
+ 2 files changed, 59 insertions(+), 34 deletions(-)
  delete mode 100644 Documentation/devicetree/bindings/clock/qcom,krait-cc.txt
  create mode 100644 Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml
 
+diff --git a/Documentation/devicetree/bindings/clock/qcom,krait-cc.txt b/Documentation/devicetree/bindings/clock/qcom,krait-cc.txt
+deleted file mode 100644
+index 030ba60dab08..000000000000
+--- a/Documentation/devicetree/bindings/clock/qcom,krait-cc.txt
++++ /dev/null
+@@ -1,34 +0,0 @@
+-Krait Clock Controller
+-
+-PROPERTIES
+-
+-- compatible:
+-	Usage: required
+-	Value type: <string>
+-	Definition: must be one of:
+-			"qcom,krait-cc-v1"
+-			"qcom,krait-cc-v2"
+-
+-- #clock-cells:
+-	Usage: required
+-	Value type: <u32>
+-	Definition: must be 1
+-
+-- clocks:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: reference to the clock parents of hfpll, secondary muxes.
+-
+-- clock-names:
+-	Usage: required
+-	Value type: <stringlist>
+-	Definition: must be "hfpll0", "hfpll1", "acpu0_aux", "acpu1_aux", "qsb".
+-
+-Example:
+-
+-	kraitcc: clock-controller {
+-		compatible = "qcom,krait-cc-v1";
+-		clocks = <&hfpll0>, <&hfpll1>, <&acpu0_aux>, <&acpu1_aux>, <qsb>;
+-		clock-names = "hfpll0", "hfpll1", "acpu0_aux", "acpu1_aux", "qsb";
+-		#clock-cells = <1>;
+-	};
+diff --git a/Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml b/Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml
+new file mode 100644
+index 000000000000..8caa5a677394
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml
+@@ -0,0 +1,59 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/qcom,krait-cc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Krait Clock Controller
++
++maintainers:
++  - Christian Marangi <ansuelsmth@gmail.com>
++
++description: |
++  Qualcomm Krait Clock Controller used to correctly scale the CPU and the L2
++  rates.
++
++properties:
++  compatible:
++    enum:
++      - qcom,krait-cc-v1
++      - qcom,krait-cc-v2
++
++  clocks:
++    items:
++      - description: phandle to hfpll for CPU0 mux
++      - description: phandle to hfpll for CPU1 mux
++      - description: phandle to CPU0 aux clock
++      - description: phandle to CPU1 aux clock
++      - description: phandle to QSB fixed clk
++
++  clock-names:
++    items:
++      - const: hfpll0
++      - const: hfpll1
++      - const: acpu0_aux
++      - const: acpu1_aux
++      - const: qsb
++
++  '#clock-cells':
++    const: 1
++
++required:
++  - compatible
++  - clocks
++  - clock-names
++  - '#clock-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    clock-controller {
++      compatible = "qcom,krait-cc-v1";
++      clocks = <&hfpll0>, <&hfpll1>,
++               <&acpu0_aux>, <&acpu1_aux>, <&qsb>;
++      clock-names = "hfpll0", "hfpll1",
++                    "acpu0_aux", "acpu1_aux", "qsb";
++      #clock-cells = <1>;
++    };
++...
 -- 
 2.36.1
 

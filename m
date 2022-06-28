@@ -2,110 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E294E55CED3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E4C55CFCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244319AbiF1EUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 00:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
+        id S244045AbiF1EZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 00:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbiF1EU3 (ORCPT
+        with ESMTP id S229907AbiF1EZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 00:20:29 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2096.outbound.protection.outlook.com [40.107.117.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF03629CAA;
-        Mon, 27 Jun 2022 21:20:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zt8Qks7WrvYm3I4WiTD4PFvM14T7XNfr73ZNRgII4cNPijkKOErqqPOhikFP/CL5mcbofJLUlZYuXjOKG5WVbEy5ZeusynZkx2+qTQVPfsnrDYJOd2VWxbYJDhXdJt+khts21V+LWH4Z/g9NG2kmXH7VW3Vaps78nw+/ltw8gCPSdvMJP8i49kjrIBo4e+3l5inGWmKUqDUJtBamhjU87cm5aF6tuz19F2gBTqmDWsq9ZKVM6V7KC9hODcsf+05jhjgKZ1ielcjgT0oEpvvFOZo0Dsjtha0C7WBPn6NFq7eugRf4zwf6AlVhscePzWWd1gu0VBOqdhY+Z1M9gaEWXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4m+r9yhtgekX8HmGotgPDslPE5ORoyfLDF9hFNavtrs=;
- b=cUQqpyb5F+dsVP/GKGQ8hcKR6wkd/IfloEVwe2jlmLIjRSBVFobMl9muO/7sW2yOQcqocu7V3WdBWfOKL3bwyOE2FbP7T2rtZWsIeJfuZbuNGbj8H73icraxzosa4aUue4EiZNVQF73nQKPbWk3MSeXoSxdoiC82J3QwQS4m4b06lC7WYxfymviu7Znkvsu0UXqFxEdCMJ0Jtg3rlhUgnjp/zh/em7/dwEXJIIaeAwZwMtPrqivlPbi6DCfCsWAl6RbOqKnlR4iPOWd7UoQwb3wN3EKJ0YEimycBJ+RWX3a5dfvDywjiMNgpCSVavUD/kTXMsF0AHOotIAFbYM7u4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4m+r9yhtgekX8HmGotgPDslPE5ORoyfLDF9hFNavtrs=;
- b=DujZfhxdakBjUGIaLIo11RDHhxyRCwSO1ny28TKkBj6fWIJY3GRuz84C6erGFopLF2Esu/S/EW5Udg9dhZNUC0a99EKcEg5NaHA0sfSLlIMcl7/Pm7z9mJIfdXIQKqqGDuBgephydL74cZKOAFVodBG5GIBNQiMFxt507f9LLeY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SL2PR06MB3017.apcprd06.prod.outlook.com (2603:1096:100:3a::16)
- by SG2PR06MB3259.apcprd06.prod.outlook.com (2603:1096:4:99::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Tue, 28 Jun
- 2022 04:20:20 +0000
-Received: from SL2PR06MB3017.apcprd06.prod.outlook.com
- ([fe80::9c97:b22a:d5d5:d670]) by SL2PR06MB3017.apcprd06.prod.outlook.com
- ([fe80::9c97:b22a:d5d5:d670%5]) with mapi id 15.20.5373.015; Tue, 28 Jun 2022
- 04:20:20 +0000
-From:   Wu Bo <bo.wu@vivo.com>
-To:     zhangjiachen.jaycee@bytedance.com, vgoyal@redhat.com
-Cc:     miklos@szeredi.hu, bo.wu@vivo.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fuse: force sync attr when inode is invalidated
-Date:   Tue, 28 Jun 2022 12:20:12 +0800
-Message-Id: <20220628042012.60675-1-bo.wu@vivo.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <CAFQAk7gLTYCmX3-4ABkc4Kg-BhO9YvEmZCg8aogkNsEHjkK35g@mail.gmail.com>
-References: <CAFQAk7gLTYCmX3-4ABkc4Kg-BhO9YvEmZCg8aogkNsEHjkK35g@mail.gmail.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG3P274CA0018.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::30)
- To SL2PR06MB3017.apcprd06.prod.outlook.com (2603:1096:100:3a::16)
+        Tue, 28 Jun 2022 00:25:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CA914039
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 21:25:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07C8C616C3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:25:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53F35C3411D;
+        Tue, 28 Jun 2022 04:25:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656390300;
+        bh=4nF+o7mV4YDBW7h4I4+Eo9903hftcu5Z0ZgQaw4SGvo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=fvNqfai42/k117bjQc4t2nprh2n9hTSxjIgIqfi3msohNTJfGiegEBvMX2ovQfOen
+         GUBhkUd8AUZOC0M9Usu2yvMVm5oZXhs+smOIBHjdtuOEYTKDAsMgSZrigrqwiSUxW3
+         7yuHklEdTdVzd3zVcYBZRqwuCFf7OOFXznz8RS+WsEt8XKRhXgRDrMxBQgnmVq/gx2
+         FTV0C7cyZsp0mkcVXBiHg1GFF0kMcFW6t2xRNLEHy29F02jhKR4JCuPR4nCXpG0C7S
+         2MSveG2cL00DODC4mVVIVbqPQnfnyK2R4KY8lyAP6mYwzRWPinu3XwOXvo8nQY8z9X
+         Lo/kNBm3Wog6g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id D5B345C052F; Mon, 27 Jun 2022 21:24:58 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 21:24:58 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zhangfei Gao <zhangfei.gao@linaro.org>
+Cc:     Neeraj Upadhyay <quic_neeraju@quicinc.com>, frederic@kernel.org,
+        josh@joshtriplett.org, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, linux-kernel@vger.kernel.org,
+        boqun.feng@gmail.com, urezki@gmail.com,
+        shameerali.kolothum.thodi@huawei.com, pbonzini@redhat.com,
+        mtosatti@redhat.com, eric.auger@redhat.com,
+        chenxiang66@hisilicon.com, maz@kernel.org
+Subject: Re: [PATCH] srcu: Reduce blocking agressiveness of expedited grace
+ periods further
+Message-ID: <20220628042458.GW1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220627123706.20187-1-quic_neeraju@quicinc.com>
+ <60336a5f-e7ab-48e6-2076-8db4ceb0561a@linaro.org>
+ <a3603e76-82b5-529d-d1a9-54f7b5214af8@quicinc.com>
+ <584f186a-c2d8-0e47-7e4d-9516822697a8@linaro.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 29340b11-6a0e-4778-54e1-08da58bd834e
-X-MS-TrafficTypeDiagnostic: SG2PR06MB3259:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VWQBmDcL6YVZH/O7zfME+lFPT6T78OhThvDwXBRdq+EV6dFgEYlyEREFTypULveFmNQZeXTAoq2AzcERfYwCsKZAgkxn+AJnV99A0rCKqTCYoZchgnnonC0wsQqvp7ux9TM9bUCGKFZh1VvVv1puJIkFdgaXKEoO/T0nZHr1EfKGUngvD8PG2xaahTj/ZuxhsR4Vfiwonb1PVXfS0j4eDPS7JI3TjMkVCzpGFj5yI6K7DGfwRSBPid/vtFMqJhu/TGHcR4eJV/ebwp/oRQ1YRZihxQ2GoDUF4hewtH0BzVW6paJNbYq434urWpiBGnhIkCvXeFOw1cqGrxz8HO7Kx/XP1GHJh3ns6CTkuZ2q74fIOYsS5+13PGfPSBDxmKuUMiqAFUMq3M7NzZJqG5l99dZo6PGVxiS6FVOQybVyvPHfVRiD3oWiCA0cAfN5GL5b80KMilsQkiC1DNZbVfk9YSr2ixZvaZHjgoL4eF2Jhlo9HTQ70FuWy821X8VIBI+XRajYiEN+/L6Hyna1QeiPGlIcLdGgDu9zhU0vrS2mMP49tsOrmyshnk84xh8VWoEcevaA747Jxplc5PeAGIzEYUktZ75IzXi+vcJ8S1cW+x1ABDGVgGs2KMu79rz+G1iFrDWf+ArPQ85PugS/XefQnS4Vloa2lz/epXgmRob1AfnS1fS/VRUTZjcSG3luT+quYw0sSZ2rynP2+E9EsL+ettKi8kxS1V4sXV8E8XWvqiaENwTB6FtLLDFDeBbjRtwp9LULYooQ8ZmvECCa033GXak7a3yZyX3GZyX69yYzogsD3NWIDvz3EQYUJOFIEyl1gXMPhCb3U2nXpPqGZ5+k0Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3017.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(366004)(136003)(346002)(376002)(86362001)(4326008)(478600001)(6506007)(186003)(6512007)(2906002)(26005)(6486002)(8936002)(53546011)(66476007)(2616005)(66946007)(1076003)(52116002)(41300700001)(66556008)(966005)(316002)(83380400001)(5660300002)(38350700002)(38100700002)(8676002)(36756003)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eGEr6RIB6DeZCgwbAZe8xEyaVZKqRFN29VM9juBuF5T80GLzwl8yFK8ediKI?=
- =?us-ascii?Q?iHXNtiVyhfrTOvk990BuYAVRYMCdu3GxD9NKGsQ31hrf0793pi3zrEbiWd1y?=
- =?us-ascii?Q?WLEyPMLnatOEugfWC0b4jqNw/OCI0y13SgWLzPlvZKZIxRPsJGJ6iEL2fhDB?=
- =?us-ascii?Q?PBPAAdntuxq+veYgyw2G69FszhC+P83dQZXUNR1uAzu7HUhq0GwL9NlDF7Lv?=
- =?us-ascii?Q?xToPCd7JmWWyqPYFkqyvFRSq4z3TSuX+lv2QK2xzcGbnKlDB7wEZSewSaDsq?=
- =?us-ascii?Q?xL1g9wdnvwhHqw+KVCkoHKL+U0Qx3WUoRIwqO1QVf++T1IBrjfEgLxxzaB6B?=
- =?us-ascii?Q?ILJPGERN6SrkFcyFxeGkxBDIIdGJTqF262TaSjesmE/7LCoRJU0Vtx2FQV3/?=
- =?us-ascii?Q?O2cltBydKDOR3HgJxzKHOL+Lx3db5CMOdbnkKV85GaDno/S4iSsZsUYDhJm5?=
- =?us-ascii?Q?7irjqVk4AXTJUaYpKUdLP20/hPNTtOR1+vvJbyl2N2ZUAtnkxYVvn730bzcy?=
- =?us-ascii?Q?OVZ/UMAZUyAqROW8XDh+P++L7hYyg4/xVRfmxGljhiX4YJCqc8GXH9+xB6lV?=
- =?us-ascii?Q?X88TPTTBAoF2k61kuBqBehb5of1+0jyctvE6nrA1w9NfhUi97fdVIkhK2ZGt?=
- =?us-ascii?Q?SlRtLg/LzE9/qNhi/MyRzE07Lc6YV5PtxCkN8EnjNsNsE7WGSgEqmV3M4JqB?=
- =?us-ascii?Q?JTBiF1IDJOSJQTAcmWNi8Z8GY+sJBtCWYmOeZACqoaxcd2NIwAv3tNRxExHB?=
- =?us-ascii?Q?Wq/4qkZgY+CK15mzuud2H3JKMNtVFJtxR+o8XQUUcBdzneTH/eOR2dGmlBHn?=
- =?us-ascii?Q?w1sUVs7XxVzIKEqpzc838GaQ9jbvKQFF326Sem2KzyODG7dWEPkIUazSdWCo?=
- =?us-ascii?Q?Rwa33RolJjPyRPNFoToB9tnaPBdDn1HixDlSsWFwnX4f2FFGklJ5ZCbPKev/?=
- =?us-ascii?Q?gmrlm40aL6Evk0QEbGwcnr6elFPLw6/FVImCDMFu2/1nfNhgAfOEaRl6GCp6?=
- =?us-ascii?Q?fxVkP188o37i1MVptWgekeAF3AGb3s7q3Nsh3Ht9QOWGXsAXkLMJ9OoehwPP?=
- =?us-ascii?Q?cL748S1iadralmb95XwK7bPmN+XNyoMpNtMUrepUrQ4z/qD6BEj7tIlNpCLb?=
- =?us-ascii?Q?+VGXX/3FR3FTn6Rz4p6nz09tkX3IRao0miDUYFekOAnws2fIP00ZtUWR8RDZ?=
- =?us-ascii?Q?5C04Ls0Nw6eQtJK+WE1lTH+HZN56pRgUDVO2LcTrfaEgbnJGBjZEZGwrfF/c?=
- =?us-ascii?Q?DUfoqP55NUHpIUPcQclNyZ1wz7jwGU4e7sDP88+VLfdGvFqT4Ff7ei4moqMK?=
- =?us-ascii?Q?xUQOA7d+o2UaEDvllhzGYfr3NgGzYPvMSEh3fIZ8+EXGgxC9Nrk9SKGOL00x?=
- =?us-ascii?Q?6SH3E1IXH5S/qBBrdE+yZNvIFGROFRbU3xQXjGPPpFbRIkDl/L2ywgQt0tL+?=
- =?us-ascii?Q?K1x/ndb0ddifhZlk082ciOILQBeRaq9LB8Vvuwys0x7qyvFDjh/N9ugdP39S?=
- =?us-ascii?Q?TJKcerA7vn3ICFVIIewzUQh3HEW3LsE/z4vdeWdQd7+ZDYK3/qEiSIRHp/7+?=
- =?us-ascii?Q?AfdgpOzZqAgiSCfNJK34adwKymjHFoh8Wg4t4dl6?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 29340b11-6a0e-4778-54e1-08da58bd834e
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3017.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 04:20:20.3389
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: irwgyfvZktG47U4QWI668zUyH1GxDtPH8vbRHD+uglA0POI/tZ4/v7EeLYKHlkXtGQejkXQDwWlBybpTAZ1lgg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB3259
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <584f186a-c2d8-0e47-7e4d-9516822697a8@linaro.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,181 +68,348 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vivek and Jiachen,
+On Tue, Jun 28, 2022 at 12:03:10PM +0800, Zhangfei Gao wrote:
+> 
+> 
+> On 2022/6/28 上午11:22, Neeraj Upadhyay wrote:
+> > 
+> > 
+> > On 6/28/2022 7:44 AM, Zhangfei Gao wrote:
+> > > 
+> > > 
+> > > On 2022/6/27 下午8:37, Neeraj Upadhyay wrote:
+> > > > Commit 640a7d37c3f4 ("srcu: Block less aggressively for expedited
+> > > > grace periods") highlights a problem where aggressively blocking
+> > > > SRCU expedited grace periods, as was introduced in commit
+> > > > 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
+> > > > from consuming CPU"), introduces ~2 minutes delay to the overall
+> > > > ~3.5 minutes boot time, when starting VMs with "-bios QEMU_EFI.fd"
+> > > > cmdline on qemu, which results in very high rate of memslots
+> > > > add/remove, which causes > ~6000 synchronize_srcu() calls for
+> > > > kvm->srcu SRCU instance.
+> > > > 
+> > > > Below table captures the experiments done by Zhangfei Gao, Shameer,
+> > > > to measure the boottime impact with various values of non-sleeping
+> > > > per phase counts, with HZ_250 and preemption enabled:
+> > > > 
+> > > > +──────────────────────────+────────────────+
+> > > > | SRCU_MAX_NODELAY_PHASE   | Boot time (s)  |
+> > > > +──────────────────────────+────────────────+
+> > > > | 100                      | 30.053         |
+> > > > | 150                      | 25.151         |
+> > > > | 200                      | 20.704         |
+> > > > | 250                      | 15.748         |
+> > > > | 500                      | 11.401         |
+> > > > | 1000                     | 11.443         |
+> > > > | 10000                    | 11.258         |
+> > > > | 1000000                  | 11.154         |
+> > > > +──────────────────────────+────────────────+
+> > > > 
+> > > > Analysis on the experiment results showed improved boot time
+> > > > with non blocking delays close to one jiffy duration. This
+> > > > was also seen when number of per-phase iterations were scaled
+> > > > to one jiffy.
+> > > > 
+> > > > So, this change scales per-grace-period phase number of non-sleeping
+> > > > polls, soiuch that, non-sleeping polls are done for one jiffy.
+> > > > In addition
+> > > > to this, srcu_get_delay() call in srcu_gp_end(), which is used
+> > > > to calculate
+> > > > the delay used for scheduling callbacks, is replaced with the check for
+> > > > expedited grace period. This is done, to schedule cbs for
+> > > > completed expedited
+> > > > grace periods immediately, which results in improved boot time seen in
+> > > > experiments.
+> > > > 
+> > > > In addition to the changes to default per phase delays, this change
+> > > > adds 3 new kernel parameters - srcutree.srcu_max_nodelay,
+> > > > srcutree.srcu_max_nodelay_phase, srcutree.srcu_retry_check_delay.
+> > > > This allows users to configure the srcu grace period scanning delays,
+> > > > depending on their system configuration requirements.
+> > > > 
+> > > > Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> > > 
+> > > Test on arm64
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
+> > > 5.19-rc3
+> > > 
+> > > arch/arm64/configs/defconfig make defconfig CONFIG_PREEMPTION=y
+> > > CONFIG_HZ_250=y
+> > > 
+> > 
+> > If it is possible to try out, do you get similar results with HZ_1000?
+> 
+> CONFIG_HZ_1000=y
+> CONFIG_HZ=1000
+> 
+> with this patch
+> real    0m10.560s
+> user    0m3.230s
+> sys    0m1.024s
+> 
+> Revert this patch
+> real    0m44.014s
+> user    0m3.005s
+> sys     0m1.287s
+> 
+> > 
+> > > real    0m11.498s
+> > > user    0m2.911s
+> > > sys    0m1.171s
+> > > 
+> > > 
+> > > As comparison (Since can not directly revert on linux-rcu.git dev,
+> > > so use rc1 instead)
+> > > 
+> > > 5.19-rc1 + Revert "srcu: Prevent expedited GPs and blocking readers
+> > > from consuming CPU"
+> > > 
+> > > real    0m8.173s
+> > > user    0m3.024s
+> > > sys    0m0.959s
+> > > 
+> > > 5.19-rc1
+> > > real    2m41.433s
+> > >   user    0m3.097s
+> > > sys     0m1.177s
+> > > 
+> > 
+> > Thanks! Can I add your Tested-by in subsequent versions of the patch?
+> 
+> Curiously, is this treated as fixed?
+> 11.498s vs. v5.18 8.173s
 
-Sorry for late reply. It took time to build open email infrastructure in office.
+Please keep in mind that v5.18 was hard-hanging for some people because
+of the original behavior of SRCU.  So if you can make this go faster,
+so much the better, and I would welcome the patches.  But not at the
+expanse of inflicting hard hangs on other people!
 
-> On Fri, Jun 24, 2022 at 10:27 AM Jiachen Zhang
-> <zhangjiachen.jaycee@bytedance.com> wrote:
->>
->> On Fri, Jun 24, 2022 at 3:26 AM Vivek Goyal <vgoyal@redhat.com> wrote:
->>>
->>> On Tue, Jun 21, 2022 at 08:56:51PM +0800, wubo wrote:
->>>> From: Wu Bo <bo.wu@vivo.com>
->>>>
->>>> Now the fuse driver only trust it's local inode size when
->>>> writeback_cache is enabled. Even the userspace server tell the driver
->>>> the inode cache is invalidated, the size attrabute will not update. And
->>>> will keep it's out-of-date size till the inode cache is dropped. This is
->>>> not reasonable.
->>>
->>> BTW, can you give more details about what's the use case. With
->>> writeback_cache, writes can be cached in fuse and not sent to
->>> file server immediately. And I think that's why fuse trusts
->>> local i_size.
->>>
+Just out of curiosity, what is the total boot time for these QEMU "-bios
+QEMU_EFI.fd" runs?
 
-Let me introduce this use case. It's widely used in Android11 now.
-Android11 use fuse for APP to access the public files in order to support the
-dynamic permission. To increase the performance at the same time, Android11
-allow APPs to write big size files(e.g. jpg or mp4) directly to the lower fs
-bypass fuse. So this issue come out:
+							Thanx, Paul
 
-       APP-a                              APP-b
-  Write a jpg file through lowfs
-                                     Read the jpg file, size is 1M
-  Fish write
-  Update the size 2M in DB
-  Invalidate the fuse entry
-                                     Size keep to be 1M
-
-             [ Drop the inode cache manually ]
-
-	                             Size be update to 2M
-
-If the inode cache keep in kernel, the size will not update forever because of
-the writeback mode.
-
->>> With writeback_cache enabled, I don't think file should be modified
->>> externally (outside the fuse client).
->>>
->>> So what's that use case where file size cached in fuse is out of
->>> date. You probably should not use writeback_cache if you are
->>> modifying files outside the fuse client.
-
-As we all know enable writeback mode can improve the performance. So this
-feature can't be disabled in Android. And the key cause of this issue is that
-writeback mode in fuse is not so reasonable now. And there are many methods to
-fix this issue.
-
->>>
->>> Having said that I am not sure why FUSE_NOTIFY_INVAL_INODE was added to
->>> begin with. If files are not supposed to be modifed outside the fuse
->>> client, why are we dropping acls and invalidating attrs. If intent is
->>> just to drop page cache, then it should have been just that nothing
->>> else.
->>>
-
-I proposal force attr invalidation. Because I think if user call the
-FUSE_NOTIFY_INVAL_INODE as Android11 do it, they definately know what they are
-doing. And the fuse driver should do the expected response.
-
->>> So up to some extent, FUSE_NOTIFY_INVAL_INODE is somewhat confusing. Would
->>> have been good if there was some documentation for it.
->>>
->>> Thanks
->>> Vivek
->>>
->>
->> Hi Wu and Vivek,
->>
->> Recently, we have had some discussions about the writeback_cache
->> revalidation on the mailing list [1][2]. Miklos gave his initial
->> patchset about writeback_cache v2, which supports c/mtime and size
->> updates [1]. However, those methods do not make use of reverse
->> messages, as virtio-fs does not support reverse notification yet. I'm
->> going to send out a new version of that patch based on the discussion
->> and with more considerations.
->
-> The new patch:
-> https://lore.kernel.org/linux-fsdevel/20220624055825.29183-1-zhangjiachen.jaycee@bytedance.com/
->
-> Thanks,
-> Jiachen
->
->>
->> I also agree that, semantically, FUSE_NOTIFY_INVAL_INODE should
->> invalidate i_size as well. So I think this patch is a good supplement
->> for FUSE_NOTIFY_INVAL_INODE. But we need to be more careful as the
->> size can be updated from server to kernel, and from kernel to server.
->> I will leave some comments about such issues in the following code.
->>
->> For the use case, writeback_cache is superb over write-through mode in
->> write-intensive scenarios, but its consistency among multiple clients
->> is too bad (almost no consistency). I think it's good to give a little
->> more consistency to writeback_cache.
->>
->> [1] https://lore.kernel.org/linux-fsdevel/20220325132126.61949-1-zhangjiachen.jaycee@bytedance.com/
->> [2] https://lore.kernel.org/linux-fsdevel/20220608104202.19461-1-zhangjiachen.jaycee@bytedance.com/
-
-This is a good solution to this issue. But I think we don't need another
-writeback_cache mode, it's time to do the cache consistency under
-writeback_cache mode.
-
->>
->>>>
->>>> Signed-off-by: Wu Bo <bo.wu@vivo.com>
->>>> ---
->>>>  fs/fuse/inode.c | 10 +++++++++-
->>>>  1 file changed, 9 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
->>>> index 8c0665c5dff8..a4e62c7f2b83 100644
->>>> --- a/fs/fuse/inode.c
->>>> +++ b/fs/fuse/inode.c
->>>> @@ -162,6 +162,11 @@ static ino_t fuse_squash_ino(u64 ino64)
->>>>       return ino;
->>>>  }
->>>>
->>>> +static bool fuse_force_sync(struct fuse_inode *fi)
->>>> +{
->>>> +     return fi->i_time == 0;
->>>> +}
->>>> +
->>>>  void fuse_change_attributes_common(struct inode *inode, struct fuse_attr *attr,
->>>>                                  u64 attr_valid, u32 cache_mask)
->>>>  {
->>>> @@ -222,8 +227,10 @@ void fuse_change_attributes_common(struct inode *inode, struct fuse_attr *attr,
->>>>  u32 fuse_get_cache_mask(struct inode *inode)
->>>>  {
->>>>       struct fuse_conn *fc = get_fuse_conn(inode);
->>>> +     struct fuse_inode *fi = get_fuse_inode(inode);
->>>> +     bool is_force_sync = fuse_force_sync(fi);
->>>>
->>>> -     if (!fc->writeback_cache || !S_ISREG(inode->i_mode))
->>>> +     if (!fc->writeback_cache || !S_ISREG(inode->i_mode) || is_force_sync)
->>>>               return 0;
->>>>
->>>>       return STATX_MTIME | STATX_CTIME | STATX_SIZE;
->>>> @@ -437,6 +444,7 @@ int fuse_reverse_inval_inode(struct fuse_conn *fc, u64 nodeid,
->>>>       fi = get_fuse_inode(inode);
->>>>       spin_lock(&fi->lock);
->>>>       fi->attr_version = atomic64_inc_return(&fc->attr_version);
->>>> +     fi->i_time = 0;
->>>>       spin_unlock(&fi->lock);
->>
->> Seems fuse_reverse_inval_inode() only drops page cache from offset to
->> offset+len, should we only invalidate i_time on a full cache drop?
->> Otherwise, as the server size is stale, the users may see a file is
->> truncated.
->>
->> Also, what if a FUSE_GETATTR request gets the attr_version after
->> fuse_reverse_inval_inode() increases it, but tries to update i_size
->> after the invalidate_inode_pages2_range() in
->> fuse_reverse_inval_inode()? In this case, server_size can be updated
->> by invalidate_inode_pages2_range(), and FUSE_GETATTR might gets a
->> stale server_size. Meanwhile, as FUSE_GETATTR has got the newest
->> attr_version, the kernel_size will still be updated. This can cause
->> false truncation even for a single FUSE client. So we may need to do
->> more about the attr_version in writeback mode.
->>
->> Thanks,
->> Jiachen
->>
->>>>
->>>>       fuse_invalidate_attr(inode);
->>>> --
->>>> 2.35.1
->>>>
->>>
->
+> Thanks
+> 
+> > 
+> > The numbers are aligned to the initial experiments, without using long
+> > retry delays of 100 us. Using long delays might have impact on other
+> > workloads, which could be sensitive to the delay between retries. So,
+> > I didn't include that in the patch.
+> > 
+> > 
+> > Thanks
+> > Neeraj
+> > 
+> > > Thanks
+> > > 
+> > > > ---
+> > > >   .../admin-guide/kernel-parameters.txt         | 18 +++++
+> > > >   kernel/rcu/srcutree.c                         | 79
+> > > > ++++++++++++++-----
+> > > >   2 files changed, 78 insertions(+), 19 deletions(-)
+> > > > 
+> > > > diff --git a/Documentation/admin-guide/kernel-parameters.txt
+> > > > b/Documentation/admin-guide/kernel-parameters.txt
+> > > > index af647714c113..7e34086c64f5 100644
+> > > > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > > > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > > > @@ -5805,6 +5805,24 @@
+> > > >               expediting.  Set to zero to disable automatic
+> > > >               expediting.
+> > > > +    srcutree.srcu_max_nodelay [KNL]
+> > > > +            Specifies the number of no-delay instances
+> > > > +            per jiffy for which the SRCU grace period
+> > > > +            worker thread will be rescheduled with zero
+> > > > +            delay. Beyond this limit, worker thread will
+> > > > +            be rescheduled with a sleep delay of one jiffy.
+> > > > +
+> > > > +    srcutree.srcu_max_nodelay_phase [KNL]
+> > > > +            Specifies the per-grace-period phase, number of
+> > > > +            non-sleeping polls of readers. Beyond this limit,
+> > > > +            grace period worker thread will be rescheduled
+> > > > +            with a sleep delay of one jiffy, between each
+> > > > +            rescan of the readers, for a grace period phase.
+> > > > +
+> > > > +    srcutree.srcu_retry_check_delay [KNL]
+> > > > +            Specifies number of microseconds of non-sleeping
+> > > > +            delay between each non-sleeping poll of readers.
+> > > > +
+> > > >       srcutree.small_contention_lim [KNL]
+> > > >               Specifies the number of update-side contention
+> > > >               events per jiffy will be tolerated before
+> > > > diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> > > > index 0db7873f4e95..006828b9c41a 100644
+> > > > --- a/kernel/rcu/srcutree.c
+> > > > +++ b/kernel/rcu/srcutree.c
+> > > > @@ -511,10 +511,49 @@ static bool srcu_readers_active(struct
+> > > > srcu_struct *ssp)
+> > > >       return sum;
+> > > >   }
+> > > > -#define SRCU_INTERVAL        1    // Base delay if no expedited
+> > > > GPs pending.
+> > > > -#define SRCU_MAX_INTERVAL    10    // Maximum incremental delay
+> > > > from slow readers.
+> > > > -#define SRCU_MAX_NODELAY_PHASE    3    // Maximum per-GP-phase
+> > > > consecutive no-delay instances.
+> > > > -#define SRCU_MAX_NODELAY    100    // Maximum consecutive
+> > > > no-delay instances.
+> > > > +/*
+> > > > + * We use an adaptive strategy for synchronize_srcu() and
+> > > > especially for
+> > > > + * synchronize_srcu_expedited().  We spin for a fixed time period
+> > > > + * (defined below, boot time configurable) to allow SRCU
+> > > > readers to exit
+> > > > + * their read-side critical sections.  If there are still some readers
+> > > > + * after one jiffy, we repeatedly block for one jiffy time periods.
+> > > > + * The blocking time is increased as the grace-period age increases,
+> > > > + * with max blocking time capped at 10 jiffies.
+> > > > + */
+> > > > +#define SRCU_DEFAULT_RETRY_CHECK_DELAY        5
+> > > > +
+> > > > +static ulong srcu_retry_check_delay = SRCU_DEFAULT_RETRY_CHECK_DELAY;
+> > > > +module_param(srcu_retry_check_delay, ulong, 0444);
+> > > > +
+> > > > +#define SRCU_INTERVAL        1        // Base delay if no
+> > > > expedited GPs pending.
+> > > > +#define SRCU_MAX_INTERVAL    10        // Maximum incremental
+> > > > delay from slow readers.
+> > > > +
+> > > > +#define SRCU_DEFAULT_MAX_NODELAY_PHASE_LO    3UL    // Lowmark
+> > > > on default per-GP-phase
+> > > > +                            // no-delay instances.
+> > > > +#define SRCU_DEFAULT_MAX_NODELAY_PHASE_HI    1000UL    //
+> > > > Highmark on default per-GP-phase
+> > > > +                            // no-delay instances.
+> > > > +
+> > > > +#define SRCU_UL_CLAMP_LO(val, low)    ((val) > (low) ? (val) : (low))
+> > > > +#define SRCU_UL_CLAMP_HI(val, high)    ((val) < (high) ? (val)
+> > > > : (high))
+> > > > +// per-GP-phase no-delay instances adjusted to allow
+> > > > non-sleeping poll upto
+> > > > +// one jiffies time duration. Mult by 2 is done to factor in
+> > > > the srcu_get_delay()
+> > > > +// called from process_srcu().
+> > > > +#define SRCU_DEFAULT_MAX_NODELAY_PHASE_ADJUSTED    \
+> > > > +    (2UL * USEC_PER_SEC / HZ / SRCU_DEFAULT_RETRY_CHECK_DELAY)
+> > > > +
+> > > > +// Maximum per-GP-phase consecutive no-delay instances.
+> > > > +#define SRCU_DEFAULT_MAX_NODELAY_PHASE    (    \
+> > > > + SRCU_UL_CLAMP_HI(SRCU_UL_CLAMP_LO(SRCU_DEFAULT_MAX_NODELAY_PHASE_ADJUSTED,
+> > > > \
+> > > > +                      SRCU_DEFAULT_MAX_NODELAY_PHASE_LO), \
+> > > > +             SRCU_DEFAULT_MAX_NODELAY_PHASE_HI))
+> > > > +
+> > > > +static ulong srcu_max_nodelay_phase = SRCU_DEFAULT_MAX_NODELAY_PHASE;
+> > > > +module_param(srcu_max_nodelay_phase, ulong, 0444);
+> > > > +
+> > > > +#define SRCU_DEFAULT_MAX_NODELAY    100    // Maximum
+> > > > consecutive no-delay instances.
+> > > > +
+> > > > +static ulong srcu_max_nodelay = SRCU_DEFAULT_MAX_NODELAY;
+> > > > +module_param(srcu_max_nodelay, ulong, 0444);
+> > > >   /*
+> > > >    * Return grace-period delay, zero if there are expedited grace
+> > > > @@ -535,7 +574,7 @@ static unsigned long srcu_get_delay(struct
+> > > > srcu_struct *ssp)
+> > > >               jbase += j - gpstart;
+> > > >           if (!jbase) {
+> > > >               WRITE_ONCE(ssp->srcu_n_exp_nodelay,
+> > > > READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
+> > > > -            if (READ_ONCE(ssp->srcu_n_exp_nodelay) >
+> > > > SRCU_MAX_NODELAY_PHASE)
+> > > > +            if (READ_ONCE(ssp->srcu_n_exp_nodelay) >
+> > > > srcu_max_nodelay_phase)
+> > > >                   jbase = 1;
+> > > >           }
+> > > >       }
+> > > > @@ -612,15 +651,6 @@ void __srcu_read_unlock(struct srcu_struct
+> > > > *ssp, int idx)
+> > > >   }
+> > > >   EXPORT_SYMBOL_GPL(__srcu_read_unlock);
+> > > > -/*
+> > > > - * We use an adaptive strategy for synchronize_srcu() and
+> > > > especially for
+> > > > - * synchronize_srcu_expedited().  We spin for a fixed time period
+> > > > - * (defined below) to allow SRCU readers to exit their
+> > > > read-side critical
+> > > > - * sections.  If there are still some readers after a few
+> > > > microseconds,
+> > > > - * we repeatedly block for 1-millisecond time periods.
+> > > > - */
+> > > > -#define SRCU_RETRY_CHECK_DELAY        5
+> > > > -
+> > > >   /*
+> > > >    * Start an SRCU grace period.
+> > > >    */
+> > > > @@ -706,7 +736,7 @@ static void srcu_schedule_cbs_snp(struct
+> > > > srcu_struct *ssp, struct srcu_node *snp
+> > > >    */
+> > > >   static void srcu_gp_end(struct srcu_struct *ssp)
+> > > >   {
+> > > > -    unsigned long cbdelay;
+> > > > +    unsigned long cbdelay = 1;
+> > > >       bool cbs;
+> > > >       bool last_lvl;
+> > > >       int cpu;
+> > > > @@ -726,7 +756,9 @@ static void srcu_gp_end(struct srcu_struct *ssp)
+> > > >       spin_lock_irq_rcu_node(ssp);
+> > > >       idx = rcu_seq_state(ssp->srcu_gp_seq);
+> > > >       WARN_ON_ONCE(idx != SRCU_STATE_SCAN2);
+> > > > -    cbdelay = !!srcu_get_delay(ssp);
+> > > > +    if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq),
+> > > > READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
+> > > > +        cbdelay = 0;
+> > > > +
+> > > >       WRITE_ONCE(ssp->srcu_last_gp_end, ktime_get_mono_fast_ns());
+> > > >       rcu_seq_end(&ssp->srcu_gp_seq);
+> > > >       gpseq = rcu_seq_current(&ssp->srcu_gp_seq);
+> > > > @@ -927,12 +959,16 @@ static void srcu_funnel_gp_start(struct
+> > > > srcu_struct *ssp, struct srcu_data *sdp,
+> > > >    */
+> > > >   static bool try_check_zero(struct srcu_struct *ssp, int idx,
+> > > > int trycount)
+> > > >   {
+> > > > +    unsigned long curdelay;
+> > > > +
+> > > > +    curdelay = !srcu_get_delay(ssp);
+> > > > +
+> > > >       for (;;) {
+> > > >           if (srcu_readers_active_idx_check(ssp, idx))
+> > > >               return true;
+> > > > -        if (--trycount + !srcu_get_delay(ssp) <= 0)
+> > > > +        if ((--trycount + curdelay) <= 0)
+> > > >               return false;
+> > > > -        udelay(SRCU_RETRY_CHECK_DELAY);
+> > > > +        udelay(srcu_retry_check_delay);
+> > > >       }
+> > > >   }
+> > > > @@ -1588,7 +1624,7 @@ static void process_srcu(struct
+> > > > work_struct *work)
+> > > >           j = jiffies;
+> > > >           if (READ_ONCE(ssp->reschedule_jiffies) == j) {
+> > > >               WRITE_ONCE(ssp->reschedule_count,
+> > > > READ_ONCE(ssp->reschedule_count) + 1);
+> > > > -            if (READ_ONCE(ssp->reschedule_count) > SRCU_MAX_NODELAY)
+> > > > +            if (READ_ONCE(ssp->reschedule_count) > srcu_max_nodelay)
+> > > >                   curdelay = 1;
+> > > >           } else {
+> > > >               WRITE_ONCE(ssp->reschedule_count, 1);
+> > > > @@ -1680,6 +1716,11 @@ static int __init srcu_bootup_announce(void)
+> > > >       pr_info("Hierarchical SRCU implementation.\n");
+> > > >       if (exp_holdoff != DEFAULT_SRCU_EXP_HOLDOFF)
+> > > >           pr_info("\tNon-default auto-expedite holdoff of %lu
+> > > > ns.\n", exp_holdoff);
+> > > > +    if (srcu_retry_check_delay != SRCU_DEFAULT_RETRY_CHECK_DELAY)
+> > > > +        pr_info("\tNon-default retry check delay of %lu us.\n",
+> > > > srcu_retry_check_delay);
+> > > > +    if (srcu_max_nodelay != SRCU_DEFAULT_MAX_NODELAY)
+> > > > +        pr_info("\tNon-default max no-delay of %lu.\n",
+> > > > srcu_max_nodelay);
+> > > > +    pr_info("\tMax phase no-delay instances is %lu.\n",
+> > > > srcu_max_nodelay_phase);
+> > > >       return 0;
+> > > >   }
+> > > >   early_initcall(srcu_bootup_announce);
+> > > 
+> 

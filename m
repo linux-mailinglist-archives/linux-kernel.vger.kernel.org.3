@@ -2,69 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1935855C217
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFDB55DCA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244207AbiF1E0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 00:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
+        id S243390AbiF1Ebq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 00:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbiF1E0a (ORCPT
+        with ESMTP id S244244AbiF1Ebo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 00:26:30 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0966213F85
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 21:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656390388; x=1687926388;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GyJbloKh3Q/Ic5QqXHPekHDRF8TVNWFJCJIvJThHmVU=;
-  b=TUgVoZT2Ok1nlgDxvllqtPQpqls489SM/edJatg2BsyQbXjJeSUV8XgW
-   SBfruiQBsYs8cfAoYRBL9SWJ5p5gEehYqHcBsj15Sah3ik4RTqafe3lc5
-   o3QCrQ3KK/oaUW4CGXwhhrcewuSLLeBB4l7mFZFdYaL5KauyKCR72nDP1
-   s=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Jun 2022 21:26:28 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 21:26:28 -0700
-Received: from [10.50.26.93] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 27 Jun
- 2022 21:26:23 -0700
-Message-ID: <77537937-6d37-99cf-504e-1361d316eaae@quicinc.com>
-Date:   Tue, 28 Jun 2022 09:56:20 +0530
+        Tue, 28 Jun 2022 00:31:44 -0400
+X-Greylist: delayed 65813 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Jun 2022 21:31:37 PDT
+Received: from smtpbg154.qq.com (smtpbg154.qq.com [15.184.224.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57201BEB5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 21:31:37 -0700 (PDT)
+X-QQ-mid: bizesmtp87t1656390687tqzc94bp
+Received: from localhost.localdomain ( [113.200.76.118])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 28 Jun 2022 12:31:24 +0800 (CST)
+X-QQ-SSF: 01400000002000D0F000B00A0000000
+X-QQ-FEAT: Ut0pB98mtT+cHaowC6E6OgEGnE/EqP/Ij8gFLp/Oa88XcO1BRDHukIBPC+tVI
+        SwEgSil1G95PIZjZg1ugUtxT+f0TacCMygFA3ZDNwgmnm3rEWMht5jPXmFL6xdUU/MDzFVY
+        2SRzlXNKXBEnjhDghuNfpz+hLjS/sEWPsBx126wbYo/mYlGh/OL3gMNxSszvQCwO7EppAVl
+        +jQH9TgqsCkYj5pwi/vLDRb816Hfa13HEIxa150mXH4hUfF1ZzuJXtlrQ/BO/UwSO0iyEYx
+        8HB2y63dFn1J4w8MffVjMopKoRzcSKuuOwJIoSuTEalsowVXcFuFw51YRA1OtfmIV9AOzv1
+        7+joXUXV4J060kHMNXkPBVmUJ7mUjNDGnGp+3I1FO6MpFH9fVw=
+X-QQ-GoodBg: 2
+From:   Guo Hui <guohui@uniontech.com>
+To:     peterz@infradead.org
+Cc:     longman@redhat.com, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, will@kernel.org,
+        boqun.feng@gmail.com, virtualization@lists.linux-foundation.org,
+        wangxiaohua@uniontech.com, linux-kernel@vger.kernel.org,
+        Guo Hui <guohui@uniontech.com>
+Subject: [PATCH v5] x86/paravirt: useless assignment instructions cause Unixbench full core   performance degradation
+Date:   Tue, 28 Jun 2022 12:31:22 +0800
+Message-Id: <20220628043122.22565-1-guohui@uniontech.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <c69f25d2-128d-0ff8-ecba-93c82e1adfde@redhat.com>
+References: <c69f25d2-128d-0ff8-ecba-93c82e1adfde@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] srcu: Reduce blocking agressiveness of expedited grace
- periods further
-Content-Language: en-US
-To:     Zhangfei Gao <zhangfei.gao@linaro.org>, <paulmck@kernel.org>,
-        <frederic@kernel.org>, <josh@joshtriplett.org>,
-        <rostedt@goodmis.org>, <mathieu.desnoyers@efficios.com>,
-        <jiangshanlai@gmail.com>, <joel@joelfernandes.org>
-CC:     <linux-kernel@vger.kernel.org>, <boqun.feng@gmail.com>,
-        <urezki@gmail.com>, <shameerali.kolothum.thodi@huawei.com>,
-        <pbonzini@redhat.com>, <mtosatti@redhat.com>,
-        <eric.auger@redhat.com>, <chenxiang66@hisilicon.com>,
-        <maz@kernel.org>
-References: <20220627123706.20187-1-quic_neeraju@quicinc.com>
- <60336a5f-e7ab-48e6-2076-8db4ceb0561a@linaro.org>
- <a3603e76-82b5-529d-d1a9-54f7b5214af8@quicinc.com>
- <584f186a-c2d8-0e47-7e4d-9516822697a8@linaro.org>
-From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
-In-Reply-To: <584f186a-c2d8-0e47-7e4d-9516822697a8@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign10
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,353 +57,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The instructions assigned to the vcpu_is_preempted function parameter
+in the X86 architecture physical machine are redundant instructions,
+causing the multi-core performance of Unixbench to drop by about 4% to 5%.
+The C function is as follows:
+static bool vcpu_is_preempted(long vcpu);
+
+The parameter 'vcpu' in the function osq_lock
+that calls the function vcpu_is_preempted is assigned as follows:
+
+The C code is in the function node_cpu:
+cpu = node->cpu - 1;
+
+The instructions corresponding to the C code are:
+mov 0x14(%rax),%edi
+sub $0x1,%edi
+
+The above instructions are unnecessary
+in the X86 Native operating environment,
+causing high cache-misses and degrading performance.
+
+This patch uses static_key to not execute this instruction
+in the Native runtime environment.
+
+The patch effect is as follows two machines,
+Unixbench runs with full core score:
+
+1. Machine configuration:
+Intel(R) Xeon(R) Silver 4210 CPU @ 2.20GHz
+CPU core: 40
+Memory: 256G
+OS Kernel: 5.19-rc3
+
+Before using the patch:
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0  948326591.2  81261.9
+Double-Precision Whetstone                       55.0     211986.3  38543.0
+Execl Throughput                                 43.0      43453.2  10105.4
+File Copy 1024 bufsize 2000 maxblocks          3960.0     438936.2   1108.4
+File Copy 256 bufsize 500 maxblocks            1655.0     118197.4    714.2
+File Copy 4096 bufsize 8000 maxblocks          5800.0    1534674.7   2646.0
+Pipe Throughput                               12440.0   46482107.6  37365.0
+Pipe-based Context Switching                   4000.0    1915094.2   4787.7
+Process Creation                                126.0      85442.2   6781.1
+Shell Scripts (1 concurrent)                     42.4      69400.7  16368.1
+Shell Scripts (8 concurrent)                      6.0       8877.2  14795.3
+System Call Overhead                          15000.0    4714906.1   3143.3
+                                                                   ========
+System Benchmarks Index Score                                        7923.3
+
+After using the patch:
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0  947032915.5  81151.1
+Double-Precision Whetstone                       55.0     211971.2  38540.2
+Execl Throughput                                 43.0      45054.8  10477.9
+File Copy 1024 bufsize 2000 maxblocks          3960.0     515024.9   1300.6
+File Copy 256 bufsize 500 maxblocks            1655.0     146354.6    884.3
+File Copy 4096 bufsize 8000 maxblocks          5800.0    1679995.9   2896.5
+Pipe Throughput                               12440.0   46466394.2  37352.4
+Pipe-based Context Switching                   4000.0    1898221.4   4745.6
+Process Creation                                126.0      85653.1   6797.9
+Shell Scripts (1 concurrent)                     42.4      69437.3  16376.7
+Shell Scripts (8 concurrent)                      6.0       8898.9  14831.4
+System Call Overhead                          15000.0    4658746.7   3105.8
+                                                                   ========
+System Benchmarks Index Score                                        8248.8
+
+2. Machine configuration:
+Hygon C86 7185 32-core Processor
+CPU core: 128
+Memory: 256G
+OS Kernel: 5.19-rc3
+
+Before using the patch:
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0 2256644068.3 193371.4
+Double-Precision Whetstone                       55.0     438969.9  79812.7
+Execl Throughput                                 43.0      10108.6   2350.8
+File Copy 1024 bufsize 2000 maxblocks          3960.0     275892.8    696.7
+File Copy 256 bufsize 500 maxblocks            1655.0      72082.7    435.5
+File Copy 4096 bufsize 8000 maxblocks          5800.0     925043.4   1594.9
+Pipe Throughput                               12440.0  118905512.5  95583.2
+Pipe-based Context Switching                   4000.0    7820945.7  19552.4
+Process Creation                                126.0      31233.3   2478.8
+Shell Scripts (1 concurrent)                     42.4      49042.8  11566.7
+Shell Scripts (8 concurrent)                      6.0       6656.0  11093.3
+System Call Overhead                          15000.0    6816047.5   4544.0
+                                                                   ========
+System Benchmarks Index Score                                        7756.6
+
+After using the patch:
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0 2252272929.4 192996.8
+Double-Precision Whetstone                       55.0     451847.2  82154.0
+Execl Throughput                                 43.0      10595.1   2464.0
+File Copy 1024 bufsize 2000 maxblocks          3960.0     301279.3    760.8
+File Copy 256 bufsize 500 maxblocks            1655.0      79291.3    479.1
+File Copy 4096 bufsize 8000 maxblocks          5800.0    1039755.2   1792.7
+Pipe Throughput                               12440.0  118701468.1  95419.2
+Pipe-based Context Switching                   4000.0    8073453.3  20183.6
+Process Creation                                126.0      33440.9   2654.0
+Shell Scripts (1 concurrent)                     42.4      52722.6  12434.6
+Shell Scripts (8 concurrent)                      6.0       7050.4  11750.6
+System Call Overhead                          15000.0    6834371.5   4556.2
+                                                                   ========
+System Benchmarks Index Score                                        8157.8
+
+Signed-off-by: Guo Hui <guohui@uniontech.com>
+---
+ arch/x86/kernel/paravirt-spinlocks.c |  6 +++++-
+ kernel/locking/osq_lock.c            | 12 +++++++++++-
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kernel/paravirt-spinlocks.c b/arch/x86/kernel/paravirt-spinlocks.c
+index 9e1ea99..00f6059 100644
+--- a/arch/x86/kernel/paravirt-spinlocks.c
++++ b/arch/x86/kernel/paravirt-spinlocks.c
+@@ -33,11 +33,15 @@ bool pv_is_native_vcpu_is_preempted(void)
+ 		__raw_callee_save___native_vcpu_is_preempted;
+ }
+ 
++DECLARE_STATIC_KEY_FALSE(vcpu_has_preemption);
++
+ void __init paravirt_set_cap(void)
+ {
+ 	if (!pv_is_native_spin_unlock())
+ 		setup_force_cpu_cap(X86_FEATURE_PVUNLOCK);
+ 
+-	if (!pv_is_native_vcpu_is_preempted())
++	if (!pv_is_native_vcpu_is_preempted()) {
+ 		setup_force_cpu_cap(X86_FEATURE_VCPUPREEMPT);
++		static_branch_enable(&vcpu_has_preemption);
++	}
+ }
+diff --git a/kernel/locking/osq_lock.c b/kernel/locking/osq_lock.c
+index d5610ad..2909fad 100644
+--- a/kernel/locking/osq_lock.c
++++ b/kernel/locking/osq_lock.c
+@@ -27,6 +27,16 @@ static inline int node_cpu(struct optimistic_spin_node *node)
+ 	return node->cpu - 1;
+ }
+ 
++DEFINE_STATIC_KEY_FALSE(vcpu_has_preemption);
++
++static inline bool vcpu_is_preempted_node(struct optimistic_spin_node *node)
++{
++	if (!static_branch_unlikely(&vcpu_has_preemption))
++		return false;
++
++	return vcpu_is_preempted(node_cpu(node->prev));
++}
++
+ static inline struct optimistic_spin_node *decode_cpu(int encoded_cpu_val)
+ {
+ 	int cpu_nr = encoded_cpu_val - 1;
+@@ -141,7 +151,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
+ 	 * polling, be careful.
+ 	 */
+ 	if (smp_cond_load_relaxed(&node->locked, VAL || need_resched() ||
+-				  vcpu_is_preempted(node_cpu(node->prev))))
++						vcpu_is_preempted_node(node)))
+ 		return true;
+ 
+ 	/* unqueue */
+-- 
+2.20.1
 
 
-On 6/28/2022 9:33 AM, Zhangfei Gao wrote:
-> 
-> 
-> On 2022/6/28 上午11:22, Neeraj Upadhyay wrote:
->>
->>
->> On 6/28/2022 7:44 AM, Zhangfei Gao wrote:
->>>
->>>
->>> On 2022/6/27 下午8:37, Neeraj Upadhyay wrote:
->>>> Commit 640a7d37c3f4 ("srcu: Block less aggressively for expedited
->>>> grace periods") highlights a problem where aggressively blocking
->>>> SRCU expedited grace periods, as was introduced in commit
->>>> 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
->>>> from consuming CPU"), introduces ~2 minutes delay to the overall
->>>> ~3.5 minutes boot time, when starting VMs with "-bios QEMU_EFI.fd"
->>>> cmdline on qemu, which results in very high rate of memslots
->>>> add/remove, which causes > ~6000 synchronize_srcu() calls for
->>>> kvm->srcu SRCU instance.
->>>>
->>>> Below table captures the experiments done by Zhangfei Gao, Shameer,
->>>> to measure the boottime impact with various values of non-sleeping
->>>> per phase counts, with HZ_250 and preemption enabled:
->>>>
->>>> +──────────────────────────+────────────────+
->>>> | SRCU_MAX_NODELAY_PHASE   | Boot time (s)  |
->>>> +──────────────────────────+────────────────+
->>>> | 100                      | 30.053         |
->>>> | 150                      | 25.151         |
->>>> | 200                      | 20.704         |
->>>> | 250                      | 15.748         |
->>>> | 500                      | 11.401         |
->>>> | 1000                     | 11.443         |
->>>> | 10000                    | 11.258         |
->>>> | 1000000                  | 11.154         |
->>>> +──────────────────────────+────────────────+
->>>>
->>>> Analysis on the experiment results showed improved boot time
->>>> with non blocking delays close to one jiffy duration. This
->>>> was also seen when number of per-phase iterations were scaled
->>>> to one jiffy.
->>>>
->>>> So, this change scales per-grace-period phase number of non-sleeping
->>>> polls, soiuch that, non-sleeping polls are done for one jiffy. In 
->>>> addition
->>>> to this, srcu_get_delay() call in srcu_gp_end(), which is used to 
->>>> calculate
->>>> the delay used for scheduling callbacks, is replaced with the check for
->>>> expedited grace period. This is done, to schedule cbs for completed 
->>>> expedited
->>>> grace periods immediately, which results in improved boot time seen in
->>>> experiments.
->>>>
->>>> In addition to the changes to default per phase delays, this change
->>>> adds 3 new kernel parameters - srcutree.srcu_max_nodelay,
->>>> srcutree.srcu_max_nodelay_phase, srcutree.srcu_retry_check_delay.
->>>> This allows users to configure the srcu grace period scanning delays,
->>>> depending on their system configuration requirements.
->>>>
->>>> Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
->>>
->>> Test on arm64
->>> git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
->>> 5.19-rc3
->>>
->>> arch/arm64/configs/defconfig make defconfig CONFIG_PREEMPTION=y 
->>> CONFIG_HZ_250=y
->>>
->>
->> If it is possible to try out, do you get similar results with HZ_1000?
-> 
-> CONFIG_HZ_1000=y
-> CONFIG_HZ=1000
-> 
-> with this patch
-> real    0m10.560s
-> user    0m3.230s
-> sys    0m1.024s
-> 
-> Revert this patch
-> real    0m44.014s
-> user    0m3.005s
-> sys     0m1.287s
-> 
-
-Thank you very much for this data!
-
->>
->>> real    0m11.498s
->>> user    0m2.911s
->>> sys    0m1.171s
->>>
->>>
->>> As comparison (Since can not directly revert on linux-rcu.git dev, so 
->>> use rc1 instead)
->>>
->>> 5.19-rc1 + Revert "srcu: Prevent expedited GPs and blocking readers 
->>> from consuming CPU"
->>>
->>> real    0m8.173s
->>> user    0m3.024s
->>> sys    0m0.959s
->>>
->>> 5.19-rc1
->>> real    2m41.433s
->>>   user    0m3.097s
->>> sys     0m1.177s
->>>
->>
->> Thanks! Can I add your Tested-by in subsequent versions of the patch?
-> 
-> Curiously, is this treated as fixed?
-> 11.498s vs. v5.18 8.173s
-> 
-
-I think it fixes the use case at least - deploy qemu VMs with flash 
-emulation; however, I do not have information on, if ~11.5 seconds is 
-acceptable from performance point of view, for this use case?
 
 
-Thanks
-Neeraj
-
-> Thanks
-> 
->>
->> The numbers are aligned to the initial experiments, without using long 
->> retry delays of 100 us. Using long delays might have impact on other
->> workloads, which could be sensitive to the delay between retries. So,
->> I didn't include that in the patch.
->>
->>
->> Thanks
->> Neeraj
->>
->>> Thanks
->>>
->>>> ---
->>>>   .../admin-guide/kernel-parameters.txt         | 18 +++++
->>>>   kernel/rcu/srcutree.c                         | 79 
->>>> ++++++++++++++-----
->>>>   2 files changed, 78 insertions(+), 19 deletions(-)
->>>>
->>>> diff --git a/Documentation/admin-guide/kernel-parameters.txt 
->>>> b/Documentation/admin-guide/kernel-parameters.txt
->>>> index af647714c113..7e34086c64f5 100644
->>>> --- a/Documentation/admin-guide/kernel-parameters.txt
->>>> +++ b/Documentation/admin-guide/kernel-parameters.txt
->>>> @@ -5805,6 +5805,24 @@
->>>>               expediting.  Set to zero to disable automatic
->>>>               expediting.
->>>> +    srcutree.srcu_max_nodelay [KNL]
->>>> +            Specifies the number of no-delay instances
->>>> +            per jiffy for which the SRCU grace period
->>>> +            worker thread will be rescheduled with zero
->>>> +            delay. Beyond this limit, worker thread will
->>>> +            be rescheduled with a sleep delay of one jiffy.
->>>> +
->>>> +    srcutree.srcu_max_nodelay_phase [KNL]
->>>> +            Specifies the per-grace-period phase, number of
->>>> +            non-sleeping polls of readers. Beyond this limit,
->>>> +            grace period worker thread will be rescheduled
->>>> +            with a sleep delay of one jiffy, between each
->>>> +            rescan of the readers, for a grace period phase.
->>>> +
->>>> +    srcutree.srcu_retry_check_delay [KNL]
->>>> +            Specifies number of microseconds of non-sleeping
->>>> +            delay between each non-sleeping poll of readers.
->>>> +
->>>>       srcutree.small_contention_lim [KNL]
->>>>               Specifies the number of update-side contention
->>>>               events per jiffy will be tolerated before
->>>> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
->>>> index 0db7873f4e95..006828b9c41a 100644
->>>> --- a/kernel/rcu/srcutree.c
->>>> +++ b/kernel/rcu/srcutree.c
->>>> @@ -511,10 +511,49 @@ static bool srcu_readers_active(struct 
->>>> srcu_struct *ssp)
->>>>       return sum;
->>>>   }
->>>> -#define SRCU_INTERVAL        1    // Base delay if no expedited GPs 
->>>> pending.
->>>> -#define SRCU_MAX_INTERVAL    10    // Maximum incremental delay 
->>>> from slow readers.
->>>> -#define SRCU_MAX_NODELAY_PHASE    3    // Maximum per-GP-phase 
->>>> consecutive no-delay instances.
->>>> -#define SRCU_MAX_NODELAY    100    // Maximum consecutive no-delay 
->>>> instances.
->>>> +/*
->>>> + * We use an adaptive strategy for synchronize_srcu() and 
->>>> especially for
->>>> + * synchronize_srcu_expedited().  We spin for a fixed time period
->>>> + * (defined below, boot time configurable) to allow SRCU readers to 
->>>> exit
->>>> + * their read-side critical sections.  If there are still some readers
->>>> + * after one jiffy, we repeatedly block for one jiffy time periods.
->>>> + * The blocking time is increased as the grace-period age increases,
->>>> + * with max blocking time capped at 10 jiffies.
->>>> + */
->>>> +#define SRCU_DEFAULT_RETRY_CHECK_DELAY        5
->>>> +
->>>> +static ulong srcu_retry_check_delay = SRCU_DEFAULT_RETRY_CHECK_DELAY;
->>>> +module_param(srcu_retry_check_delay, ulong, 0444);
->>>> +
->>>> +#define SRCU_INTERVAL        1        // Base delay if no expedited 
->>>> GPs pending.
->>>> +#define SRCU_MAX_INTERVAL    10        // Maximum incremental delay 
->>>> from slow readers.
->>>> +
->>>> +#define SRCU_DEFAULT_MAX_NODELAY_PHASE_LO    3UL    // Lowmark on 
->>>> default per-GP-phase
->>>> +                            // no-delay instances.
->>>> +#define SRCU_DEFAULT_MAX_NODELAY_PHASE_HI    1000UL    // Highmark 
->>>> on default per-GP-phase
->>>> +                            // no-delay instances.
->>>> +
->>>> +#define SRCU_UL_CLAMP_LO(val, low)    ((val) > (low) ? (val) : (low))
->>>> +#define SRCU_UL_CLAMP_HI(val, high)    ((val) < (high) ? (val) : 
->>>> (high))
->>>> +// per-GP-phase no-delay instances adjusted to allow non-sleeping 
->>>> poll upto
->>>> +// one jiffies time duration. Mult by 2 is done to factor in the 
->>>> srcu_get_delay()
->>>> +// called from process_srcu().
->>>> +#define SRCU_DEFAULT_MAX_NODELAY_PHASE_ADJUSTED    \
->>>> +    (2UL * USEC_PER_SEC / HZ / SRCU_DEFAULT_RETRY_CHECK_DELAY)
->>>> +
->>>> +// Maximum per-GP-phase consecutive no-delay instances.
->>>> +#define SRCU_DEFAULT_MAX_NODELAY_PHASE    (    \
->>>> + 
->>>> SRCU_UL_CLAMP_HI(SRCU_UL_CLAMP_LO(SRCU_DEFAULT_MAX_NODELAY_PHASE_ADJUSTED, 
->>>> \
->>>> +                      SRCU_DEFAULT_MAX_NODELAY_PHASE_LO), \
->>>> +             SRCU_DEFAULT_MAX_NODELAY_PHASE_HI))
->>>> +
->>>> +static ulong srcu_max_nodelay_phase = SRCU_DEFAULT_MAX_NODELAY_PHASE;
->>>> +module_param(srcu_max_nodelay_phase, ulong, 0444);
->>>> +
->>>> +#define SRCU_DEFAULT_MAX_NODELAY    100    // Maximum consecutive 
->>>> no-delay instances.
->>>> +
->>>> +static ulong srcu_max_nodelay = SRCU_DEFAULT_MAX_NODELAY;
->>>> +module_param(srcu_max_nodelay, ulong, 0444);
->>>>   /*
->>>>    * Return grace-period delay, zero if there are expedited grace
->>>> @@ -535,7 +574,7 @@ static unsigned long srcu_get_delay(struct 
->>>> srcu_struct *ssp)
->>>>               jbase += j - gpstart;
->>>>           if (!jbase) {
->>>>               WRITE_ONCE(ssp->srcu_n_exp_nodelay, 
->>>> READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
->>>> -            if (READ_ONCE(ssp->srcu_n_exp_nodelay) > 
->>>> SRCU_MAX_NODELAY_PHASE)
->>>> +            if (READ_ONCE(ssp->srcu_n_exp_nodelay) > 
->>>> srcu_max_nodelay_phase)
->>>>                   jbase = 1;
->>>>           }
->>>>       }
->>>> @@ -612,15 +651,6 @@ void __srcu_read_unlock(struct srcu_struct 
->>>> *ssp, int idx)
->>>>   }
->>>>   EXPORT_SYMBOL_GPL(__srcu_read_unlock);
->>>> -/*
->>>> - * We use an adaptive strategy for synchronize_srcu() and 
->>>> especially for
->>>> - * synchronize_srcu_expedited().  We spin for a fixed time period
->>>> - * (defined below) to allow SRCU readers to exit their read-side 
->>>> critical
->>>> - * sections.  If there are still some readers after a few 
->>>> microseconds,
->>>> - * we repeatedly block for 1-millisecond time periods.
->>>> - */
->>>> -#define SRCU_RETRY_CHECK_DELAY        5
->>>> -
->>>>   /*
->>>>    * Start an SRCU grace period.
->>>>    */
->>>> @@ -706,7 +736,7 @@ static void srcu_schedule_cbs_snp(struct 
->>>> srcu_struct *ssp, struct srcu_node *snp
->>>>    */
->>>>   static void srcu_gp_end(struct srcu_struct *ssp)
->>>>   {
->>>> -    unsigned long cbdelay;
->>>> +    unsigned long cbdelay = 1;
->>>>       bool cbs;
->>>>       bool last_lvl;
->>>>       int cpu;
->>>> @@ -726,7 +756,9 @@ static void srcu_gp_end(struct srcu_struct *ssp)
->>>>       spin_lock_irq_rcu_node(ssp);
->>>>       idx = rcu_seq_state(ssp->srcu_gp_seq);
->>>>       WARN_ON_ONCE(idx != SRCU_STATE_SCAN2);
->>>> -    cbdelay = !!srcu_get_delay(ssp);
->>>> +    if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq), 
->>>> READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
->>>> +        cbdelay = 0;
->>>> +
->>>>       WRITE_ONCE(ssp->srcu_last_gp_end, ktime_get_mono_fast_ns());
->>>>       rcu_seq_end(&ssp->srcu_gp_seq);
->>>>       gpseq = rcu_seq_current(&ssp->srcu_gp_seq);
->>>> @@ -927,12 +959,16 @@ static void srcu_funnel_gp_start(struct 
->>>> srcu_struct *ssp, struct srcu_data *sdp,
->>>>    */
->>>>   static bool try_check_zero(struct srcu_struct *ssp, int idx, int 
->>>> trycount)
->>>>   {
->>>> +    unsigned long curdelay;
->>>> +
->>>> +    curdelay = !srcu_get_delay(ssp);
->>>> +
->>>>       for (;;) {
->>>>           if (srcu_readers_active_idx_check(ssp, idx))
->>>>               return true;
->>>> -        if (--trycount + !srcu_get_delay(ssp) <= 0)
->>>> +        if ((--trycount + curdelay) <= 0)
->>>>               return false;
->>>> -        udelay(SRCU_RETRY_CHECK_DELAY);
->>>> +        udelay(srcu_retry_check_delay);
->>>>       }
->>>>   }
->>>> @@ -1588,7 +1624,7 @@ static void process_srcu(struct work_struct 
->>>> *work)
->>>>           j = jiffies;
->>>>           if (READ_ONCE(ssp->reschedule_jiffies) == j) {
->>>>               WRITE_ONCE(ssp->reschedule_count, 
->>>> READ_ONCE(ssp->reschedule_count) + 1);
->>>> -            if (READ_ONCE(ssp->reschedule_count) > SRCU_MAX_NODELAY)
->>>> +            if (READ_ONCE(ssp->reschedule_count) > srcu_max_nodelay)
->>>>                   curdelay = 1;
->>>>           } else {
->>>>               WRITE_ONCE(ssp->reschedule_count, 1);
->>>> @@ -1680,6 +1716,11 @@ static int __init srcu_bootup_announce(void)
->>>>       pr_info("Hierarchical SRCU implementation.\n");
->>>>       if (exp_holdoff != DEFAULT_SRCU_EXP_HOLDOFF)
->>>>           pr_info("\tNon-default auto-expedite holdoff of %lu 
->>>> ns.\n", exp_holdoff);
->>>> +    if (srcu_retry_check_delay != SRCU_DEFAULT_RETRY_CHECK_DELAY)
->>>> +        pr_info("\tNon-default retry check delay of %lu us.\n", 
->>>> srcu_retry_check_delay);
->>>> +    if (srcu_max_nodelay != SRCU_DEFAULT_MAX_NODELAY)
->>>> +        pr_info("\tNon-default max no-delay of %lu.\n", 
->>>> srcu_max_nodelay);
->>>> +    pr_info("\tMax phase no-delay instances is %lu.\n", 
->>>> srcu_max_nodelay_phase);
->>>>       return 0;
->>>>   }
->>>>   early_initcall(srcu_bootup_announce);
->>>
-> 

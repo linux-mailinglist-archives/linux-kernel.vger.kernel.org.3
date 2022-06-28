@@ -2,94 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3A755EEFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C6E55EF0A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbiF1UOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 16:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
+        id S231904AbiF1UOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 16:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiF1UNs (ORCPT
+        with ESMTP id S231828AbiF1UNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 16:13:48 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C366251
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:07:37 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id i194so13936920ioa.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:07:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FirkMQlU16ww9d8QYtTZzYI9G8XOC3cBBLG3qPWT9SM=;
-        b=NXQqbWdAG0cVqj1DgUmEfns18Gpsgf3sg7QR6IdprmL/oVpPpfCBXATjIfZd0uCQvH
-         vWu5mS8R3Gf1cyKRVuNSWFpAA5NVGSxjnsGqcRXlHeQwqdauN1r7TD90glSIzTvQYXeN
-         TRfLk7tzj1mVVU20YAE55y/PFIuiFPSUtvR+Fq4coa+IzhItx1gaOp1n+EOqrW836P1S
-         hpYmNqGKez0q5iAIzcIL79FBpjToT2BmQeyKggVYc9EXg/3q/E6TWSQ834adALNQfTrb
-         +4idenH0NMJBlHt5pNz+D8pA6aFVTj+zSGZYZLeYhRxLLPoHu+02WrhPoDcoFBLYaHAl
-         w2Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=FirkMQlU16ww9d8QYtTZzYI9G8XOC3cBBLG3qPWT9SM=;
-        b=et/hV+3qgJpb73sMSXD6/31WqJFTgYA4z0CLe5mMOQq3cqjjy3ddAXXuWiABIZAdKZ
-         VKUyWrai/0ei0ADqrq6C/zhNqQlya1gbTEh30vz7Pso7aPdNMoJIAE1TuuQ2D0uDbMxy
-         tO9uywZ00kHQ4+7ByNFS5/JavMT60Sgt1bBlwvAreObXpHHZMEjKTuTRTN7YNRLdN5ei
-         nQFrgwd0VQm89Y7qR/Cf2es03WcjJceZ6QRVDkTadzHyRBpUrAbMQTz2Q+1tCKq4SuCa
-         KgJvI+fhS/VDXZufNyWrPeVz69UDpGKMOOFe/20L98ETPCz5+YFKETpoFhsQ6ptPIn3D
-         fQGQ==
-X-Gm-Message-State: AJIora8JF/CZZ5PW+7aCtTsNEPmZ9eosyWSKdqw50UvdNnn72/yUSHhD
-        9ao2zXjO3KXWmBvQmeetaHzlnk0WDe8=
-X-Google-Smtp-Source: AGRyM1u23Wgi31gt74vfkBDWMlvLHSnnLRjUKZ+GLx/xUlBuiyhbNqOwBvl1ax1kCawjHG9fBkryzQ==
-X-Received: by 2002:a6b:794d:0:b0:66c:ec39:7d83 with SMTP id j13-20020a6b794d000000b0066cec397d83mr10694476iop.199.1656446856717;
-        Tue, 28 Jun 2022 13:07:36 -0700 (PDT)
-Received: from localhost ([2605:a601:ac0f:820:53c6:a969:5c7a:edc0])
-        by smtp.gmail.com with ESMTPSA id c18-20020a92c8d2000000b002d8f62d2e3bsm5943793ilq.86.2022.06.28.13.07.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 13:07:35 -0700 (PDT)
-Sender: Seth Forshee <seth.forshee@gmail.com>
-From:   Seth Forshee <seth@forshee.me>
-X-Google-Original-From: Seth Forshee <sforshee@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] mailmap: update Seth Forshee's email address
-Date:   Tue, 28 Jun 2022 15:07:34 -0500
-Message-Id: <20220628200734.424495-1-sforshee@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 28 Jun 2022 16:13:50 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7F813D64;
+        Tue, 28 Jun 2022 13:07:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=a6AnJ5JUpgsz1KJ9YhexUeYWOp5iHJCwBQ9saqPDdtA=; b=VnaHISVICqlvsTwkAW4MliAcH+
+        B5kOQBGYkOHR9O/YlEzHCKMUa5OBO76qUrCigMoSp+tNLqYtegiT3LTn6YRmj9cRVlVN83kVdJjaO
+        JKmYquyVSTibvxqOm0Va5VzPlZgaxgf2PzPoEVI1OrzsW1FO2zr+vNTYskV2OGp5lzwDnXmDyjXNj
+        GCf41sQpWwvJwVO+tKlAQYl6Kc3vPBkVCEI3oGkQyHzmudUODto0RUIzFiivhsch/Uf9b+NvNJsCi
+        rSmhPEIGEdA4Ol3SHO6d8+Ie7srm2JixdDNX9emZd7yZ/hICP1AxizvXriC7npaHtK2z5gju0N9F1
+        Elus4IGA==;
+Received: from c-73-157-219-8.hsd1.or.comcast.net ([73.157.219.8] helo=[10.0.0.153])
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o6HV3-007yNs-7R; Tue, 28 Jun 2022 20:07:53 +0000
+Message-ID: <ddb01b36-1369-f0e3-49ab-3c0a571fe708@infradead.org>
+Date:   Tue, 28 Jun 2022 13:07:51 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v11 net-next 9/9] mfd: ocelot: add support for the vsc7512
+ chip via spi
+Content-Language: en-US
+To:     Colin Foster <colin.foster@in-advantage.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Terry Bowman <terry.bowman@amd.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20220628081709.829811-1-colin.foster@in-advantage.com>
+ <20220628081709.829811-10-colin.foster@in-advantage.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220628081709.829811-10-colin.foster@in-advantage.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-seth.forshee@canonical.com is no longer valid, use sforshee@kernel.org
-instead.
 
-Signed-off-by: Seth Forshee <sforshee@kernel.org>
----
- .mailmap | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/.mailmap b/.mailmap
-index 2ed1cf869175..56ce99212f33 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -368,6 +368,7 @@ Sean Nyekjaer <sean@geanix.com> <sean.nyekjaer@prevas.dk>
- Sebastian Reichel <sre@kernel.org> <sebastian.reichel@collabora.co.uk>
- Sebastian Reichel <sre@kernel.org> <sre@debian.org>
- Sedat Dilek <sedat.dilek@gmail.com> <sedat.dilek@credativ.de>
-+Seth Forshee <sforshee@kernel.org> <seth.forshee@canonical.com>
- Shiraz Hashim <shiraz.linux.kernel@gmail.com> <shiraz.hashim@st.com>
- Shuah Khan <shuah@kernel.org> <shuahkhan@gmail.com>
- Shuah Khan <shuah@kernel.org> <shuah.khan@hp.com>
+On 6/28/22 01:17, Colin Foster wrote:
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -962,6 +962,24 @@ config MFD_MENF21BMC
+>  	  This driver can also be built as a module. If so the module
+>  	  will be called menf21bmc.
+>  
+> +config MFD_OCELOT
+> +	bool "Microsemi Ocelot External Control Support"
+> +	depends on SPI_MASTER
+> +	select MFD_CORE
+> +	select REGMAP_SPI
+> +	help
+> +	  Ocelot is a family of networking chips that support multiple ethernet
+> +	  and fibre interfaces. In addition to networking, they contain several
+> +	  other functions, including pictrl, MDIO, and communication with
+
+	Is that                      pinctrl,
+?
+
+> +	  external chips. While some chips have an internal processor capable of
+> +	  running an OS, others don't. All chips can be controlled externally
+> +	  through different interfaces, including SPI, I2C, and PCIe.
+> +
+> +	  Say yes here to add support for Ocelot chips (VSC7511, VSC7512,
+> +	  VSC7513, VSC7514) controlled externally.
+> +
+> +	  If unsure, say N.
+
 -- 
-2.34.1
-
+~Randy

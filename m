@@ -2,109 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2C955D1F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2919855DC99
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344681AbiF1KEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 06:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
+        id S1344737AbiF1KEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 06:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344679AbiF1KEL (ORCPT
+        with ESMTP id S1344682AbiF1KEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:04:11 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AED2B1B8;
-        Tue, 28 Jun 2022 03:04:06 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id ABBF566018AF;
-        Tue, 28 Jun 2022 11:04:04 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656410645;
-        bh=uRRR4e7RSIOXYCVcdSS5IPUDASv9iE0gIMNRnAP/73M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ecZ1sTtwXEpq9nOapEj65/Kxs7CcDEsYhrqGa8qJDOzyTiTWx9fo6OPDJjoMa1kDU
-         N2SW0qA53cTEtUO7lafakDBRzYVtcys7L3hljzcuNr4bkHKxrZEasct8pdf4qk+1pH
-         avLu4TtCZhx+WN6tcS04s+rrioVQIveAR6jUiNllrwPt33fWL1qhSetofwCiPCb1hw
-         suRXkJVP2JceQjjUSUz+fGLwjAskfFabP64MXd2XAptmic/f+sCp65mh/NR1aggLMT
-         64xx0/kNeia5eXFWDrodjIrAGiqaqR7BJfwuNeYS9o6duf09fp+fkJzk8lAZ2jDL4w
-         jhN19++GIUy6A==
-Message-ID: <d2a8c329-4469-f68a-5b4b-789a93725ea4@collabora.com>
-Date:   Tue, 28 Jun 2022 13:04:01 +0300
+        Tue, 28 Jun 2022 06:04:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBD052EA23
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:04:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656410646;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CZkdqF7PxaI/l/1ULWxtUV2SzIUGChDa2pCYGEjPuo0=;
+        b=WURYwZo478/aqHmDbmvt04hlWKX9/CgbKo8fU1CBzmP7mfIzY0cJE2rzFLCWiRifoD9tvK
+        TFGHYoIobN5UZkJ/UQ4z89ktcL4Lrt0BhJIwnJGL1qp5Wr3IgAbPz4jvtB3lAyYZ8aaJjY
+        jBKgrhOr2xtjMqi9E2BsgVpnY25lQ9Q=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-511-i64wuLaJNxuNPUa6rIqqEA-1; Tue, 28 Jun 2022 06:04:05 -0400
+X-MC-Unique: i64wuLaJNxuNPUa6rIqqEA-1
+Received: by mail-wm1-f69.google.com with SMTP id h125-20020a1c2183000000b003a0374f1eb8so7555407wmh.8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:04:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=CZkdqF7PxaI/l/1ULWxtUV2SzIUGChDa2pCYGEjPuo0=;
+        b=gQWMYevXcbQa5igpIvoizyuuGi0MmpFI9ZJCZQyQcA1/m6VCTpqUjBOI8AtS+kCYUa
+         3Qp70CjzTj7qXuthvjeQqRCYeVOi0mf6kwV8vjGxCYXaSO0Pwel/XZ6JXWxaWfPMLE+5
+         0sQFRWFyUwMASYgQI/4VJP55WhDGVI5a4gVjKiIfogan9lAovl5a9Mp0midzjlVRlkTo
+         tHAM1ZYmhMNuPNJ3GfIHUKNMcd0Z/vucotkfyvqFo7ZHHa4TxtedRMlkmZdIc5oJsHIu
+         4aRbyo6xkFNn2fmqPY7ZowWLzsPG7zrFvUhgZEgeYxMYg4IcHlHvaopmGvVMles9IWDG
+         QO2g==
+X-Gm-Message-State: AJIora+fLhgOYUrou1Ns/tg1VARIBZtARw7ZP1jcOFSgOcY7p1n+B5K4
+        fiHOlgQxKW0XLFaoz7CqAWba4hldLcTNZAEslUHUDkX8qpZ7xopuUj7nwDulCFNhENhEENzYqW1
+        +LO/fNjt+3D832gSarm2CCo74
+X-Received: by 2002:adf:d1c9:0:b0:20f:c3dc:e980 with SMTP id b9-20020adfd1c9000000b0020fc3dce980mr16503390wrd.552.1656410644087;
+        Tue, 28 Jun 2022 03:04:04 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1thV9O1McPGTCkEwn4a3gYeWtN14xejhgmJ7xh5kWvZYNd+w+jW03B1+RRiGJ7d+7UuV6PQTw==
+X-Received: by 2002:adf:d1c9:0:b0:20f:c3dc:e980 with SMTP id b9-20020adfd1c9000000b0020fc3dce980mr16503367wrd.552.1656410643877;
+        Tue, 28 Jun 2022 03:04:03 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id v17-20020a5d43d1000000b0021b95bcaf7fsm13089118wrr.59.2022.06.28.03.04.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 03:04:03 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH 00/14] KVM: nVMX: Use vmcs_config for setting up nested
+ VMX MSRs
+In-Reply-To: <0739589fe08c75c563e10cb41388640c7e050a52.camel@redhat.com>
+References: <20220627160440.31857-1-vkuznets@redhat.com>
+ <0739589fe08c75c563e10cb41388640c7e050a52.camel@redhat.com>
+Date:   Tue, 28 Jun 2022 12:04:02 +0200
+Message-ID: <87h745umst.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 5/5] OPP: Remove custom OPP helper support
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Keerthy <j-keerthy@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <cover.1653991004.git.viresh.kumar@linaro.org>
- <2e6ee73dbc8a231377547a8e9497561cadb38166.1653991004.git.viresh.kumar@linaro.org>
- <565ff879-11e4-1ae4-08d8-1237a875ef12@gmail.com>
- <20220627060636.rfpok75zydgcwwo6@vireshk-i7>
- <4a8114f7-4ee6-a9ad-f5be-ceaf64be8a0e@gmail.com>
- <20220627064155.jo7iqz5h33l7a4vn@vireshk-i7>
- <d18a1f18-d78c-2db8-9b19-196dc88978c2@gmail.com>
- <20220627071937.uneeudaqzo2aa2me@vireshk-i7>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220627071937.uneeudaqzo2aa2me@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/22 10:19, Viresh Kumar wrote:
-> On 27-06-22, 10:09, Dmitry Osipenko wrote:
->> Yes, I missed that multi-clock OPP patch, thanks.
->>
->> Seems _opp_compare_key() won't work properly for the multi-clocks since
->> Tegra doesn't have bandwidth nor level for the 3d OPPs. Why does it need
->> to check opp_table->clk_count == 1? Shouldn't it be opp_table->clk_count
->>> 0?
-> 
-> The problem is that when we have multiple clocks, we can't assume any
-> of them as primary. Its the combination of the clock frequencies that
-> make them unique. Otherwise, what will happen if we have same
-> frequency of the first clock in two OPPs, but different frequency of
-> the second clock.
-> 
-> Because of this, we won't also support multiple clocks in all freq
-> finder APIs, like dev_pm_opp_find_freq_exact(). We can't do that from
-> just one frequency.
-> 
-> Ideally, the drivers should now be calling dev_pm_opp_set_opp() to set
-> the OPP now.
-> 
-> For your case, I think you can just add levels (like index) in the OPP
-> table. So we can uniquely identify each OPP.
-> 
+Maxim Levitsky <mlevitsk@redhat.com> writes:
 
-What about to bump the "by-level" sorting priority, making it above the
-"by-rate" sorting and then always use the first clock for the "by-rate"
-sorting? Then the multi-clock will work for Tegra without breaking dtbs
-and those for whom this sorting option won't be appropriate will have to
-add levels to the DT.
+> On Mon, 2022-06-27 at 18:04 +0200, Vitaly Kuznetsov wrote:
+>> Changes since RFC:
+>> - "KVM: VMX: Extend VMX controls macro shenanigans" PATCH added and the
+>>   infrastructure is later used in other patches [Sean] PATCHes 1-3 added
+>>   to support the change.
+>> - "KVM: VMX: Clear controls obsoleted by EPT at runtime, not setup" PATCH
+>>   added [Sean].
+>> - Commit messages added.
+>> 
+>> vmcs_config is a sanitized version of host VMX MSRs where some controls are
+>> filtered out (e.g. when Enlightened VMCS is enabled, some know bugs are 
+>> discovered, some inconsistencies in controls are detected,...) but
+>> nested_vmx_setup_ctls_msrs() uses raw host MSRs instead. This may end up
+>> in exposing undesired controls to L1. Switch to using vmcs_config instead.
+>> 
+>> Sean Christopherson (1):
+>>   KVM: VMX: Clear controls obsoleted by EPT at runtime, not setup
+>> 
+>> Vitaly Kuznetsov (13):
+>>   KVM: VMX: Check VM_ENTRY_IA32E_MODE in setup_vmcs_config()
+>>   KVM: VMX: Check CPU_BASED_{INTR,NMI}_WINDOW_EXITING in
+>>     setup_vmcs_config()
+>>   KVM: VMX: Tweak the special handling of SECONDARY_EXEC_ENCLS_EXITING
+>>     in setup_vmcs_config()
+>>   KVM: VMX: Extend VMX controls macro shenanigans
+>>   KVM: VMX: Move CPU_BASED_CR8_{LOAD,STORE}_EXITING filtering out of
+>>     setup_vmcs_config()
+>>   KVM: VMX: Add missing VMEXIT controls to vmcs_config
+>>   KVM: VMX: Add missing VMENTRY controls to vmcs_config
+>>   KVM: VMX: Add missing CPU based VM execution controls to vmcs_config
+>>   KVM: nVMX: Use sanitized allowed-1 bits for VMX control MSRs
+>>   KVM: VMX: Store required-1 VMX controls in vmcs_config
+>>   KVM: nVMX: Use sanitized required-1 bits for VMX control MSRs
+>>   KVM: VMX: Cache MSR_IA32_VMX_MISC in vmcs_config
+>>   KVM: nVMX: Use cached host MSR_IA32_VMX_MISC value for setting up
+>>     nested MSR
+>> 
+>>  arch/x86/kvm/vmx/capabilities.h |  16 +--
+>>  arch/x86/kvm/vmx/nested.c       |  37 +++---
+>>  arch/x86/kvm/vmx/nested.h       |   2 +-
+>>  arch/x86/kvm/vmx/vmx.c          | 198 ++++++++++++++------------------
+>>  arch/x86/kvm/vmx/vmx.h          | 118 +++++++++++++++++++
+>>  5 files changed, 229 insertions(+), 142 deletions(-)
+>> 
+> Sorry that I was a bit out of loop on this, so before I review it,
+> does this patch series solve the eVMCS issue we had alone,
+> or we still need the eVMCS version patch series as well?
+
+"[PATCH 00/11] KVM: VMX: Support TscScaling and EnclsExitingBitmap whith
+eVMCS" adds new features, namely TSC scaling for both KVM-on-Hyper-V and
+Hyper-V-on-KVM. This series doesn't add any features but avoids the
+problem reported by Anirudh by properly filtering values in L1 VMX MSRs.
+
+TL;DR: Both series are needed.
 
 -- 
-Best regards,
-Dmitry
+Vitaly
+

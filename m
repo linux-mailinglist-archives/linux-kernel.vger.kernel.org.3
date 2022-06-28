@@ -2,209 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777F855CE10
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F18855D81C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345520AbiF1MdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 08:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
+        id S1345433AbiF1Mdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 08:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344011AbiF1MdE (ORCPT
+        with ESMTP id S235217AbiF1Mde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 08:33:04 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2274DB2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:33:02 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id g20-20020a17090a579400b001ed52939d72so7030537pji.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:33:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dRkS9IzlKKjtIu786n+JWYXVfoXO0pQEumBnE4TFCOU=;
-        b=YpgC7Ch/GB45GgZ62fT3kM966NOgnBtdEmNHFHobihqhhxkMOP0nXZJVX8ERzvPXcQ
-         s42kHhozS1i98t6jf+T8JfuDnNfzz0ew0uqsDEJWRwiyaUhwgVRwxrfm78CtHNLpEgV8
-         c6UfQqnTzWo9jxb4OKEWx0CxA1+IpGiqsoyggjoQ1qAOMENsK17XzSHz9iCjGE84FAmf
-         Ha3OzFbowRJgAaUA+lwWznoSg2f/inXjaUcYJRlUfaHkqcV7lzoMuk4yMcL1fUXCZ4Dj
-         pwt7lljQb0KQ9YjjVqtGAA2789cn89r6IcGce+lKvprkhe8y3nhQB/OGLr3sXL/n85s7
-         FcKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dRkS9IzlKKjtIu786n+JWYXVfoXO0pQEumBnE4TFCOU=;
-        b=720nncO13ei7KpPV8IU+t3aKKCcYeNIZOPYoXcQHSWiz4MN0w1476/99EqiGpoKLKV
-         6K1tRVdCIEsbzD78Eqov5Q1sGLifxMp2MV10HQJpg1caCds2+N8vBJXPqrtGMUY2IIFQ
-         7vb+bnK+L7bg47drEDWSfarws5xkSaGK241q9dLDVolPw4IAAbM6Fu7nWcZbAqgk0qrT
-         5sgQEJ9vhdqqs4j+saRGKD0dbDyf6CNzBrUNmPW/OZivwxSRH71aCDQvwQcKANhbNuX3
-         W/feNpU5eqW3yHg5klMHjtiDA7cTmIdd8YiBcCU9U/ybclbhAn17D5NbTY8hMMb3sAQa
-         yDLg==
-X-Gm-Message-State: AJIora9e2crIl4prEmLQY6m5/jZc4GWlPb3IUF/FPSVNYGKvjzEZWCoC
-        p7/ZhEiS2Avc9t3XA0yFc+O1Uw==
-X-Google-Smtp-Source: AGRyM1uX59w57jR9aBgu/NrJdx1+TzBIpfcDr1legfgu5ZHzPZHwjdU02GQQC0Fbb71Uv+aTYPtPIw==
-X-Received: by 2002:a17:90b:1d06:b0:1ec:cd94:539b with SMTP id on6-20020a17090b1d0600b001eccd94539bmr21206358pjb.215.1656419581577;
-        Tue, 28 Jun 2022 05:33:01 -0700 (PDT)
-Received: from [10.255.246.56] ([139.177.225.232])
-        by smtp.gmail.com with ESMTPSA id bh2-20020a056a02020200b0040d2aea1643sm8992742pgb.29.2022.06.28.05.32.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 05:33:00 -0700 (PDT)
-Message-ID: <b1addf39-d272-322b-ed4e-79328b51f5af@bytedance.com>
-Date:   Tue, 28 Jun 2022 20:32:56 +0800
+        Tue, 28 Jun 2022 08:33:34 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2082.outbound.protection.outlook.com [40.107.244.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E148D1DA67;
+        Tue, 28 Jun 2022 05:33:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jr2Q6ws2xsZrvUKtmpFxEnOkzI+TkcFXgMUkAVTOgwpZnkqdbYvkY3fjSzxD0BFOLh8reggTgK9qA6n/W0OukvTuS/X9p041JqhMZQglfQGkiHrTQy0w4XNaA010pQb/NU2Lh/Ub8wfZm7mqHdjUAiddM9s6CgPAMZO94lbdqO5drI3uAuI2DKSbAOUsFTClt04EXSVsa5thM3E1zE+ulJ0R4b8Zk018yiDT4vzhRmPuJScj32z2CDY5Bq7ptWxF66RAKwJLYAQB9b+8uCPgJDwWCAAgVrqvYKGQ68IPaskoFIlJW3x2yPrGDcByoscSRGujHdg0Gt1WiTMtYCec4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YcKdIQUwmXvswNzp/eojixJuHcyDTnEVCSx9LmKdH8s=;
+ b=LJzY1wm90eGVwcEfX4C3EbMduDxwBcVK/YOnsy+U2SatpZ8NWR7S6vwhLzEHHVyNK7+JnJS5dJIHhSYCJLaPODhvOnpz41woC7qTRAd4i9Tld9Dz8m5eztrhYjWkgD9fyR7XDfzkrZ9h0O/s3u0K+JKOseGFU6pjeebcMYD82P2GkV0QUHsx249uGNS9A6aKK0oNBdEWn82nhHYa63lvEtMqOLumIu5qCOBJ9TggpwEi760GsxmWDgdkWrTNoGlBxZuUp6GmZO6f/D62sROAhbQ5CyYM2P4udiBfb4MMoxoZ6ZS2/v/M5kdSv+8bHsVLrRMbcxn56dbl+GSRIC7yUQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YcKdIQUwmXvswNzp/eojixJuHcyDTnEVCSx9LmKdH8s=;
+ b=l3rU/4Oj/lOd/RwEihJhpC4kWX0ddVz245LvQixpLOIzIC2JU5z/k/D4W4taq2c/5T1X6AN+LqHaoZ7VgPUCssl8K8SlI6lWId8LHMfmmSwKIJaQNaYbeksCa2x8PsK2CHxMLBRdwQZx5WFw8QMEueShnlZids7SBL4pIsjKaKY=
+Received: from BN0PR04CA0156.namprd04.prod.outlook.com (2603:10b6:408:eb::11)
+ by BL1PR12MB5803.namprd12.prod.outlook.com (2603:10b6:208:393::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Tue, 28 Jun
+ 2022 12:33:31 +0000
+Received: from BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:eb:cafe::b5) by BN0PR04CA0156.outlook.office365.com
+ (2603:10b6:408:eb::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14 via Frontend
+ Transport; Tue, 28 Jun 2022 12:33:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT039.mail.protection.outlook.com (10.13.177.169) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5373.15 via Frontend Transport; Tue, 28 Jun 2022 12:33:31 +0000
+Received: from sp5-759chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 28 Jun
+ 2022 07:33:30 -0500
+From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
+CC:     <pbonzini@redhat.com>, <mlevitsk@redhat.com>, <seanjc@google.com>,
+        <joro@8bytes.org>, <jon.grimm@amd.com>, <wei.huang2@amd.com>,
+        <terry.bowman@amd.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Subject: [PATCH] KVM: SVM: Fix x2APIC Logical ID calculation for avic_kick_target_vcpus_fast
+Date:   Tue, 28 Jun 2022 07:33:14 -0500
+Message-ID: <20220628123314.486001-1-suravee.suthikulpanit@amd.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH v4] sched/fair: combine detach into dequeue when migrating
- task
-Content-Language: en-US
-To:     mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20220620133608.78498-1-zhouchengming@bytedance.com>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <20220620133608.78498-1-zhouchengming@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 697179d2-56f3-4ed4-f043-08da590268fa
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5803:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fokju9d08OKQZDp5g7O/RYMrWbu03Tv6F2aOT1NwP945Ktn2yLNk4BEIC0a1/GZtrEKB+LQ217kbTwwKXosCPvrozk/5r9a9uXmNGFbTyTiOrUw19JbOoBOnKdr5JZvjn3rq4HGaD5hvcLFQD7JipeGmkltLnHsGuYaFn5u0RDhiWp79N5EzZN4FJ5DRp4TqcBeA4hnIslUUcG8nFkRHV+SEY1x+fGtNLl9RIWAWDm5dOzSbqSAD+BwrjEZrxHw2ray2wOVQEoMUjqT6VGQucakYP85/vRpxRYWHo3XJyJ8IqTUnv9/91M2qFiot42SZXeiemWrArY2JLtD/4ZSQmHAM4YLLi++DSHSQreMjnxqqEAmhuGEFXSHwetIw7B0kIDSsyIphFiC7xMkj+5lp67646/bUQUb7MqnJ+U35nLu+Oja6ZqlBMr8NYTDUBiKDUUW/iidPFuS3ps7T5BtDsr2UuPyB6voYWDrkPaJerXkUvsfN5kyrNUPnsTA4FH5KuqHOMecQy7frU3bdMh8eQarxkxb5btt+UG77iRJQV42707O67v1KPace1RE9F9zC7RgIxPLJsXofjfDT6jaUpp2CwvBlmab4gNl02VPjaDP+QCA+i4yC9mxfP9a4Mdat9M2gSTS1/5be6C2/sLXE6sZbUWt8gF+FvJ4hNtMO4GtHTXLxcTPbdLX8illJYU+pzP79EjPLsBNIgNC/BNPm3q1FY/t9ZUNoEGzeFmi5CsfLXqfN18ZcRi1Qf4okBDHiNbqXHd0twW8FZwB0AbkkPI0AWhSN73NnLK1JVsrVEqf4MLi59e3JqwOiQDJ9doah5PRchpsJQ2HbrfYAu0Spaw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(396003)(346002)(39860400002)(40470700004)(36840700001)(46966006)(478600001)(7696005)(5660300002)(70586007)(41300700001)(16526019)(70206006)(110136005)(4326008)(1076003)(186003)(26005)(8676002)(356005)(40480700001)(54906003)(82740400003)(82310400005)(81166007)(8936002)(316002)(6666004)(2616005)(83380400001)(2906002)(86362001)(40460700003)(426003)(4744005)(47076005)(36860700001)(336012)(36756003)(44832011)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 12:33:31.1647
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 697179d2-56f3-4ed4-f043-08da590268fa
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5803
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, friendly ping...
+For X2APIC ID in cluster mode, the logical ID is bit [15:0].
 
-Thanks.
+Fixes: 603ccef42ce9 ("KVM: x86: SVM: fix avic_kick_target_vcpus_fast")
+Cc: Maxim Levitsky <mlevitsk@redhat.com>
+Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+---
+ arch/x86/kvm/svm/avic.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 2022/6/20 21:36, Chengming Zhou wrote:
-> When we are migrating task out of the CPU, we can combine detach and
-> propagation into dequeue_entity() to save the detach_entity_cfs_rq()
-> -> propagate_entity_cfs_rq() call in detach_entity_cfs_rq() in
-> migrate_task_rq_fair().
-> 
-> This optimization is like combining DO_ATTACH in the enqueue_entity()
-> when migrating task to the CPU.
-> 
-> So we don't have to traverse the CFS tree extra time to do the
-> detach_entity_cfs_rq() -> propagate_entity_cfs_rq() call, which
-> wouldn't be called anymore with this patch's change.
-> 
-> Copied from Dietmar's much clearer comment:
-> 
-> detach_task()
->   deactivate_task()
->     dequeue_task_fair()
->       for_each_sched_entity(se)
->         dequeue_entity()
->           update_load_avg() /* (1) */
-> 
->   set_task_cpu()
->     migrate_task_rq_fair()
->       /* called detach_entity_cfs_rq() before the patch (2) */
-> 
-> This patch save the propagate_entity_cfs_rq(&p->se) call from (2)
-> by doing the detach_entity_load_avg(), update_tg_load_avg() for
-> a migrating task inside (1) (the task being the first se in the loop)
-> 
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> ---
-> v4:
->  - change the commit message a little.
->  - remove the forward declaration of detach_entity_cfs_rq()
->  - remove verbose comments in code.
-> 
-> v3:
->  - change to use task_on_rq_migrating() and put Dietmar's much clearer
->    description in the commit message. Thanks!
-> 
-> v2:
->  - fix !CONFIG_SMP build error
-> ---
->  kernel/sched/fair.c | 30 +++++++++++++++++-------------
->  1 file changed, 17 insertions(+), 13 deletions(-)
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 8bed75757e65..31d53c11e244 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -3931,6 +3931,7 @@ static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
->  #define UPDATE_TG	0x1
->  #define SKIP_AGE_LOAD	0x2
->  #define DO_ATTACH	0x4
-> +#define DO_DETACH	0x8
->  
->  /* Update task and its cfs_rq load average */
->  static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
-> @@ -3948,7 +3949,14 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
->  	decayed  = update_cfs_rq_load_avg(now, cfs_rq);
->  	decayed |= propagate_entity_load_avg(se);
->  
-> -	if (!se->avg.last_update_time && (flags & DO_ATTACH)) {
-> +	if (flags & DO_DETACH) {
-> +		/*
-> +		 * DO_DETACH means we're here from dequeue_entity()
-> +		 * and we are migrating task out of the CPU.
-> +		 */
-> +		detach_entity_load_avg(cfs_rq, se);
-> +		update_tg_load_avg(cfs_rq);
-> +	} else if (!se->avg.last_update_time && (flags & DO_ATTACH)) {
->  
->  		/*
->  		 * DO_ATTACH means we're here from enqueue_entity().
-> @@ -4241,6 +4249,7 @@ static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
->  #define UPDATE_TG	0x0
->  #define SKIP_AGE_LOAD	0x0
->  #define DO_ATTACH	0x0
-> +#define DO_DETACH	0x0
->  
->  static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int not_used1)
->  {
-> @@ -4460,6 +4469,11 @@ static __always_inline void return_cfs_rq_runtime(struct cfs_rq *cfs_rq);
->  static void
->  dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
->  {
-> +	int action = UPDATE_TG;
-> +
-> +	if (entity_is_task(se) && task_on_rq_migrating(task_of(se)))
-> +		action |= DO_DETACH;
-> +
->  	/*
->  	 * Update run-time statistics of the 'current'.
->  	 */
-> @@ -4473,7 +4487,7 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
->  	 *   - For group entity, update its weight to reflect the new share
->  	 *     of its group cfs_rq.
->  	 */
-> -	update_load_avg(cfs_rq, se, UPDATE_TG);
-> +	update_load_avg(cfs_rq, se, action);
->  	se_update_runnable(se);
->  
->  	update_stats_dequeue_fair(cfs_rq, se, flags);
-> @@ -6938,8 +6952,6 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
->  	return new_cpu;
->  }
->  
-> -static void detach_entity_cfs_rq(struct sched_entity *se);
-> -
->  /*
->   * Called immediately before a task is migrated to a new CPU; task_cpu(p) and
->   * cfs_rq_of(p) references at time of call are still valid and identify the
-> @@ -6973,15 +6985,7 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
->  		se->vruntime -= min_vruntime;
->  	}
->  
-> -	if (p->on_rq == TASK_ON_RQ_MIGRATING) {
-> -		/*
-> -		 * In case of TASK_ON_RQ_MIGRATING we in fact hold the 'old'
-> -		 * rq->lock and can modify state directly.
-> -		 */
-> -		lockdep_assert_rq_held(task_rq(p));
-> -		detach_entity_cfs_rq(&p->se);
-> -
-> -	} else {
-> +	if (!task_on_rq_migrating(p)) {
->  		/*
->  		 * We are supposed to update the task to "current" time, then
->  		 * its up to date and ready to go to new CPU/cfs_rq. But we
+diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+index a830468d9cee..29f393251c4c 100644
+--- a/arch/x86/kvm/svm/avic.c
++++ b/arch/x86/kvm/svm/avic.c
+@@ -378,7 +378,7 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
+ 
+ 		if (apic_x2apic_mode(source)) {
+ 			/* 16 bit dest mask, 16 bit cluster id */
+-			bitmap = dest & 0xFFFF0000;
++			bitmap = dest & 0xFFFF;
+ 			cluster = (dest >> 16) << 4;
+ 		} else if (kvm_lapic_get_reg(source, APIC_DFR) == APIC_DFR_FLAT) {
+ 			/* 8 bit dest mask*/
+-- 
+2.32.0
+

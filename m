@@ -2,111 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBB555E38A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED0655E3AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344539AbiF1Mox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 08:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
+        id S1345895AbiF1Mp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 08:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240118AbiF1Mov (ORCPT
+        with ESMTP id S1345810AbiF1Mpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 08:44:51 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477B419C17;
-        Tue, 28 Jun 2022 05:44:51 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SCOqbr017601;
-        Tue, 28 Jun 2022 12:44:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=P3twaWHhDTd77mVpF/4CwpTAPR0IiybHjJNeSDkRcL0=;
- b=YwrWAEqSsTmlqynz7lKcfShqsKBIFgU9CMueffzw0g3d3QFZbrujWziXJwmMcte0tS3s
- PomybUJhf2QQKm9wsQQKOSu13v/4Fik9EiUbSv90l6Q+YIRiINfn/iEzkjfEIz3Xs22Z
- yOg83164CET4v2Ary85VNBelO6NSMqcrXslYCVGINCpZGLJ3/dOELlavoZzAx7cR9SUy
- 664wqGPZIoQjgFPFbIygtKsHYudwhnfRwpQQ4rsbx67zJCI6qyfZl9mjD3YSN+uRbb9Y
- sXJP1lHQN5bldDX18PznxAH5Kj+2q7x58i9NLF66hfLvuPDBXEv5YwhVWix+EMkLtbrK Jw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h00j82jgq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 12:44:47 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25SCavjf020511;
-        Tue, 28 Jun 2022 12:44:45 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3gwt08vuhw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 12:44:45 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25SCiggb13042154
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Jun 2022 12:44:42 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2BFE35204F;
-        Tue, 28 Jun 2022 12:44:42 +0000 (GMT)
-Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.7.238])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 8D4B05204E;
-        Tue, 28 Jun 2022 12:44:41 +0000 (GMT)
+        Tue, 28 Jun 2022 08:45:34 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD7F1D0DC;
+        Tue, 28 Jun 2022 05:45:25 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id u15so25492228ejc.10;
+        Tue, 28 Jun 2022 05:45:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=FUvTBZSvTkQG8k5ahx+vCE8pnavlPjrhJsWTl2v7qY4=;
+        b=YUsA1imIhupuf9Wojjd9t1tkr06B/Q5S+154aH/XHbZiBawjU/E3OSL0UxsAjaTQSq
+         2Ttr42qCSlo9mEQGVAEd7GFglPPvmNBMTDfpZ4Np4BSsCmSm4lltW8n0WAZgY4Tl7j6n
+         oOGDhXVfcxu4RL5rhr/VynR6l7ATR5G7koin5wvSdPynWfmgUzEMouVgCIwuF3bZlnHN
+         pYPE9fYeE1mCy7z7AkDBi5LV0Kl6de/fqQ6yZib5eMkINF4h/QJS1b7zCFrX6RX8nQXf
+         DWHLqxAoYTHHbO8yBlxzMzVzVFOprF5e+duPfuyyB+obihpjp1V6Pl9W+Fz2Pher7Jmi
+         TjdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=FUvTBZSvTkQG8k5ahx+vCE8pnavlPjrhJsWTl2v7qY4=;
+        b=Ln30lMjp66Ap7wnOlQClsfvcDAjen2P7OOjl+iol17zrWqYb9oLtSGQz782NqmDeZZ
+         gpigUGJEXQccuDr15JSunJndXqdiWDgpWs3Rnp24K60doEVILCME3WgiMrdPgAr6wZB6
+         1vrpvajNF1GxCV8BQrlnl5bi1MlX7igI9e7XFMEGqPW7kpTUXxLV6BDzfEMcy3vyu2p9
+         PK4kVtn0ZoDCQJcexKWd+/Rss3tnsfLXJzNkVFEiSPqy27wfsUFYO/YIZMN+E87adGq+
+         jsX27kafbaf8QJ5o03ItGPeJ6fTYpn3x0zcstxE3iW5WF95Li0ZswRKFonFr9oQDVmh3
+         U8ug==
+X-Gm-Message-State: AJIora+07xdsgbjEHNV2O5pEgjzlUS91/kGrOthp2eFq7Icx8Ni9ZXhB
+        Lw4CAuURQIib7NCqyvxbg5M=
+X-Google-Smtp-Source: AGRyM1uyuIl2+iwMosBXcvxSsRRQMisrWpqCTCRI2n8Z/h8yD5HhzesYWyv9VyZ3X2v8ii8N8r1Org==
+X-Received: by 2002:a17:907:3ea6:b0:726:3554:cf7a with SMTP id hs38-20020a1709073ea600b007263554cf7amr17753304ejc.384.1656420324011;
+        Tue, 28 Jun 2022 05:45:24 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-095-114-061-215.95.114.pool.telefonica.de. [95.114.61.215])
+        by smtp.googlemail.com with ESMTPSA id f13-20020a170906824d00b00726e108b566sm622871ejx.173.2022.06.28.05.45.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 05:45:23 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        p.zabel@pengutronix.de
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        vkoul@kernel.org, kishon@ti.com, rtanwar@maxlinear.com,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v1 8/9] reset: lantiq: Remove driver as it has been replaced by reset-intel-gw
 Date:   Tue, 28 Jun 2022 14:44:40 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Zhang Jiaming <jiaming@nfschina.com>
-Cc:     hca@linux.ibm.com, gor@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, jwi@linux.ibm.com, bblock@linux.ibm.com,
-        davem@davemloft.net, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
-        renyu@nfschina.com
-Subject: Re: [PATCH] s390/qdio: Fix spelling mistake
-Message-ID: <Yrr3uGLBIm8KLiLN@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-References: <20220623060543.12870-1-jiaming@nfschina.com>
+Message-Id: <20220628124441.2385023-9-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220628124441.2385023-1-martin.blumenstingl@googlemail.com>
+References: <20220628124441.2385023-1-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623060543.12870-1-jiaming@nfschina.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: p5I7pTmnw_MLQL_-Hj5SgjsTUXCH1NHu
-X-Proofpoint-ORIG-GUID: p5I7pTmnw_MLQL_-Hj5SgjsTUXCH1NHu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-28_07,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 impostorscore=0 suspectscore=0 mlxlogscore=871
- clxscore=1011 phishscore=0 bulkscore=0 spamscore=0 priorityscore=1501
- mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206280052
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 02:05:43PM +0800, Zhang Jiaming wrote:
-> Change 'defineable' to 'definable'.
-> Change 'paramater' to 'parameter'.
-> 
-> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
-> ---
->  arch/s390/include/asm/qdio.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/s390/include/asm/qdio.h b/arch/s390/include/asm/qdio.h
-> index 54ae2dc65e3b..2f983e0b95e0 100644
-> --- a/arch/s390/include/asm/qdio.h
-> +++ b/arch/s390/include/asm/qdio.h
-> @@ -133,9 +133,9 @@ struct slibe {
->   * @sb_count: number of storage blocks
->   * @sba: storage block element addresses
->   * @dcount: size of storage block elements
-> - * @user0: user defineable value
-> - * @res4: reserved paramater
-> - * @user1: user defineable value
-> + * @user0: user definable value
-> + * @res4: reserved parameter
-> + * @user1: user definable value
->   */
->  struct qaob {
->  	u64 res0[6];
+Now that we have replaced the reset-lantiq driver with the
+reset-intel-gw driver we can remove the old code.
 
-Applied, thanks!
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+---
+ drivers/reset/Kconfig        |   6 -
+ drivers/reset/Makefile       |   1 -
+ drivers/reset/reset-lantiq.c | 210 -----------------------------------
+ 3 files changed, 217 deletions(-)
+ delete mode 100644 drivers/reset/reset-lantiq.c
+
+diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+index fb49c465078f..22e28f5cf154 100644
+--- a/drivers/reset/Kconfig
++++ b/drivers/reset/Kconfig
+@@ -103,12 +103,6 @@ config RESET_K210
+ 	  Say Y if you want to control reset signals provided by this
+ 	  controller.
+ 
+-config RESET_LANTIQ
+-	bool "Lantiq XWAY Reset Driver" if COMPILE_TEST
+-	default SOC_TYPE_XWAY
+-	help
+-	  This enables the reset controller driver for Lantiq / Intel XWAY SoCs.
+-
+ config RESET_LPC18XX
+ 	bool "LPC18xx/43xx Reset Driver" if COMPILE_TEST
+ 	default ARCH_LPC18XX
+diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
+index a80a9c4008a7..9cb37e7890f1 100644
+--- a/drivers/reset/Makefile
++++ b/drivers/reset/Makefile
+@@ -14,7 +14,6 @@ obj-$(CONFIG_RESET_HSDK) += reset-hsdk.o
+ obj-$(CONFIG_RESET_IMX7) += reset-imx7.o
+ obj-$(CONFIG_RESET_INTEL_GW) += reset-intel-gw.o
+ obj-$(CONFIG_RESET_K210) += reset-k210.o
+-obj-$(CONFIG_RESET_LANTIQ) += reset-lantiq.o
+ obj-$(CONFIG_RESET_LPC18XX) += reset-lpc18xx.o
+ obj-$(CONFIG_RESET_MCHP_SPARX5) += reset-microchip-sparx5.o
+ obj-$(CONFIG_RESET_MESON) += reset-meson.o
+diff --git a/drivers/reset/reset-lantiq.c b/drivers/reset/reset-lantiq.c
+deleted file mode 100644
+index b936cfe85641..000000000000
+--- a/drivers/reset/reset-lantiq.c
++++ /dev/null
+@@ -1,210 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- *
+- *  Copyright (C) 2010 John Crispin <blogic@phrozen.org>
+- *  Copyright (C) 2013-2015 Lantiq Beteiligungs-GmbH & Co.KG
+- *  Copyright (C) 2016 Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+- *  Copyright (C) 2017 Hauke Mehrtens <hauke@hauke-m.de>
+- */
+-
+-#include <linux/mfd/syscon.h>
+-#include <linux/module.h>
+-#include <linux/regmap.h>
+-#include <linux/reset-controller.h>
+-#include <linux/of_address.h>
+-#include <linux/of_platform.h>
+-#include <linux/platform_device.h>
+-#include <linux/property.h>
+-
+-#define LANTIQ_RCU_RESET_TIMEOUT	10000
+-
+-struct lantiq_rcu_reset_priv {
+-	struct reset_controller_dev rcdev;
+-	struct device *dev;
+-	struct regmap *regmap;
+-	u32 reset_offset;
+-	u32 status_offset;
+-};
+-
+-static struct lantiq_rcu_reset_priv *to_lantiq_rcu_reset_priv(
+-	struct reset_controller_dev *rcdev)
+-{
+-	return container_of(rcdev, struct lantiq_rcu_reset_priv, rcdev);
+-}
+-
+-static int lantiq_rcu_reset_status(struct reset_controller_dev *rcdev,
+-				   unsigned long id)
+-{
+-	struct lantiq_rcu_reset_priv *priv = to_lantiq_rcu_reset_priv(rcdev);
+-	unsigned int status = (id >> 8) & 0x1f;
+-	u32 val;
+-	int ret;
+-
+-	ret = regmap_read(priv->regmap, priv->status_offset, &val);
+-	if (ret)
+-		return ret;
+-
+-	return !!(val & BIT(status));
+-}
+-
+-static int lantiq_rcu_reset_status_timeout(struct reset_controller_dev *rcdev,
+-					   unsigned long id, bool assert)
+-{
+-	int ret;
+-	int retry = LANTIQ_RCU_RESET_TIMEOUT;
+-
+-	do {
+-		ret = lantiq_rcu_reset_status(rcdev, id);
+-		if (ret < 0)
+-			return ret;
+-		if (ret == assert)
+-			return 0;
+-		usleep_range(20, 40);
+-	} while (--retry);
+-
+-	return -ETIMEDOUT;
+-}
+-
+-static int lantiq_rcu_reset_update(struct reset_controller_dev *rcdev,
+-				   unsigned long id, bool assert)
+-{
+-	struct lantiq_rcu_reset_priv *priv = to_lantiq_rcu_reset_priv(rcdev);
+-	unsigned int set = id & 0x1f;
+-	u32 val = assert ? BIT(set) : 0;
+-	int ret;
+-
+-	ret = regmap_update_bits(priv->regmap, priv->reset_offset, BIT(set),
+-				 val);
+-	if (ret) {
+-		dev_err(priv->dev, "Failed to set reset bit %u\n", set);
+-		return ret;
+-	}
+-
+-
+-	ret = lantiq_rcu_reset_status_timeout(rcdev, id, assert);
+-	if (ret)
+-		dev_err(priv->dev, "Failed to %s bit %u\n",
+-			assert ? "assert" : "deassert", set);
+-
+-	return ret;
+-}
+-
+-static int lantiq_rcu_reset_assert(struct reset_controller_dev *rcdev,
+-			     unsigned long id)
+-{
+-	return lantiq_rcu_reset_update(rcdev, id, true);
+-}
+-
+-static int lantiq_rcu_reset_deassert(struct reset_controller_dev *rcdev,
+-			       unsigned long id)
+-{
+-	return lantiq_rcu_reset_update(rcdev, id, false);
+-}
+-
+-static int lantiq_rcu_reset_reset(struct reset_controller_dev *rcdev,
+-			    unsigned long id)
+-{
+-	int ret;
+-
+-	ret = lantiq_rcu_reset_assert(rcdev, id);
+-	if (ret)
+-		return ret;
+-
+-	return lantiq_rcu_reset_deassert(rcdev, id);
+-}
+-
+-static const struct reset_control_ops lantiq_rcu_reset_ops = {
+-	.assert = lantiq_rcu_reset_assert,
+-	.deassert = lantiq_rcu_reset_deassert,
+-	.status = lantiq_rcu_reset_status,
+-	.reset	= lantiq_rcu_reset_reset,
+-};
+-
+-static int lantiq_rcu_reset_of_parse(struct platform_device *pdev,
+-			       struct lantiq_rcu_reset_priv *priv)
+-{
+-	struct device *dev = &pdev->dev;
+-	const __be32 *offset;
+-
+-	priv->regmap = syscon_node_to_regmap(dev->of_node->parent);
+-	if (IS_ERR(priv->regmap)) {
+-		dev_err(&pdev->dev, "Failed to lookup RCU regmap\n");
+-		return PTR_ERR(priv->regmap);
+-	}
+-
+-	offset = of_get_address(dev->of_node, 0, NULL, NULL);
+-	if (!offset) {
+-		dev_err(&pdev->dev, "Failed to get RCU reset offset\n");
+-		return -ENOENT;
+-	}
+-	priv->reset_offset = __be32_to_cpu(*offset);
+-
+-	offset = of_get_address(dev->of_node, 1, NULL, NULL);
+-	if (!offset) {
+-		dev_err(&pdev->dev, "Failed to get RCU status offset\n");
+-		return -ENOENT;
+-	}
+-	priv->status_offset = __be32_to_cpu(*offset);
+-
+-	return 0;
+-}
+-
+-static int lantiq_rcu_reset_xlate(struct reset_controller_dev *rcdev,
+-				  const struct of_phandle_args *reset_spec)
+-{
+-	unsigned int status, set;
+-
+-	set = reset_spec->args[0];
+-	status = reset_spec->args[1];
+-
+-	if (set >= rcdev->nr_resets || status >= rcdev->nr_resets)
+-		return -EINVAL;
+-
+-	return (status << 8) | set;
+-}
+-
+-static int lantiq_rcu_reset_probe(struct platform_device *pdev)
+-{
+-	struct lantiq_rcu_reset_priv *priv;
+-	int err;
+-
+-	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+-	if (!priv)
+-		return -ENOMEM;
+-
+-	priv->dev = &pdev->dev;
+-	platform_set_drvdata(pdev, priv);
+-
+-	err = lantiq_rcu_reset_of_parse(pdev, priv);
+-	if (err)
+-		return err;
+-
+-	priv->rcdev.ops = &lantiq_rcu_reset_ops;
+-	priv->rcdev.owner = THIS_MODULE;
+-	priv->rcdev.of_node = pdev->dev.of_node;
+-	priv->rcdev.nr_resets = 32;
+-	priv->rcdev.of_xlate = lantiq_rcu_reset_xlate;
+-	priv->rcdev.of_reset_n_cells = 2;
+-
+-	return devm_reset_controller_register(&pdev->dev, &priv->rcdev);
+-}
+-
+-static const struct of_device_id lantiq_rcu_reset_dt_ids[] = {
+-	{ .compatible = "lantiq,danube-reset", },
+-	{ .compatible = "lantiq,xrx200-reset", },
+-	{ },
+-};
+-MODULE_DEVICE_TABLE(of, lantiq_rcu_reset_dt_ids);
+-
+-static struct platform_driver lantiq_rcu_reset_driver = {
+-	.probe	= lantiq_rcu_reset_probe,
+-	.driver = {
+-		.name		= "lantiq-reset",
+-		.of_match_table	= lantiq_rcu_reset_dt_ids,
+-	},
+-};
+-module_platform_driver(lantiq_rcu_reset_driver);
+-
+-MODULE_AUTHOR("Martin Blumenstingl <martin.blumenstingl@googlemail.com>");
+-MODULE_DESCRIPTION("Lantiq XWAY RCU Reset Controller Driver");
+-MODULE_LICENSE("GPL");
+-- 
+2.36.1
+

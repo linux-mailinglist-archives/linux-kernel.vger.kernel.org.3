@@ -2,75 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78D955DC7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3ACC55C9B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345037AbiF1Lxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 07:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52412 "EHLO
+        id S1345113AbiF1LyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 07:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236568AbiF1Lxr (ORCPT
+        with ESMTP id S230332AbiF1Lx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 07:53:47 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3C330F7F
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:53:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656417226; x=1687953226;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ajn0hyQvZuCFAHtCWj0xQ7s0Zvw6UN66/hjKZRjJUTE=;
-  b=L7LDzEAWQHQBWE0ACEy0GicvnRSUxcK/muW/fhiNj/n5dqTlfBrQktta
-   fRmR5quhed6kHIryOn295rhFiLHV3NwbcFKRhfpeamtwSOQ++eY98EJN3
-   fnAMszuC8iEXpKV9GOxLlluQZp/yUfsWUOnqdECCi8jbJ3jZgseiMotQk
-   C/4Zxd7wHJQkjbl/7vKynH1HgLi2SkBDgvh2on3/vxZa+lCt/FKpG8pKc
-   OKgTlSDsb2ppEQ2/70PR+K6zJxA7PdzOCMyLwO2aucc+O54tr2dpmynPY
-   RrvyIlNjYKRbjqE6leBPnMhF3zSw3XNUct7K+9uceLmAl1OBRNRDqRuj+
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="345715747"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="345715747"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 04:53:46 -0700
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="646882963"
-Received: from ltang11-mobl1.ccr.corp.intel.com (HELO [10.249.169.64]) ([10.249.169.64])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 04:53:41 -0700
-Message-ID: <935ca9e3-28c9-99af-5609-41bb1500b2b3@linux.intel.com>
-Date:   Tue, 28 Jun 2022 19:53:39 +0800
+        Tue, 28 Jun 2022 07:53:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58C563120A
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:53:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656417236;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9DZIBhwK0nu+d+e5Dn67t8pp9MEtfy3sJMXiRir3HYs=;
+        b=LNu9OM9cAYgxrfyZeRwLmHBS7TAL0IaUoHUvTrzQ2mE1PK/LeF3yJx2YR+vIcXkeIwejV/
+        ENAnqxoT2xF+d9rBpu46AxwrezwYDpLgAgh6duPHXQUMf36T2LZw2+XmOcnLANfqi/j07p
+        cXDROtm2cLFqP4OB3XaRwbC+/pvfrjo=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-153-zy5_MC-zMIaJ6es2QX9F7w-1; Tue, 28 Jun 2022 07:53:55 -0400
+X-MC-Unique: zy5_MC-zMIaJ6es2QX9F7w-1
+Received: by mail-qv1-f70.google.com with SMTP id m1-20020a0cf181000000b0046e65e564cfso12060259qvl.17
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:53:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=9DZIBhwK0nu+d+e5Dn67t8pp9MEtfy3sJMXiRir3HYs=;
+        b=bCX8wyLKGNJhAM0plEmwKSsRSKlnqT8ucWXYF0g6+7TI4uHbWEMC05FrRxuxeNBYnt
+         PQ4VSzFs2fjOboX/+Qt30snk4LhsO1Zpoypl8TLd2Q0N33rj4LeFQhG/qfFHmHdcaHKh
+         J7hf6leDYmSci6cns8S7q0j5CzN7kT1Mmdau8iMLLpCIfJ9aCG1jjKgZ8t4umhoO3Nu9
+         r8ODCWhqnXLfv8pA1tqCNmz8rNu36CL1ZcKEGYLxSgVKpciEgIAzYPwGXXKlNDUxYyZK
+         /VdSmmYku89eeWwX4WoVLfhsovsRf2kiyv/TcCrwTVak2VJPcsMpTpU10qhCTIWoVLZw
+         qcig==
+X-Gm-Message-State: AJIora/xCoQ4KhpYEvPVscXsuZATVXK6kFW/0siJZJQCP56La2lu+slu
+        3MpPql4V+1br17HvCQFN/gO4eFYaJBkPDF0O/ZhyljZ8O1TJXiOXw9YCXWAcgbyisL5hlGF2TuS
+        Kh6D6+sm0fWuo6KjeTrd0rPFR
+X-Received: by 2002:a37:a9d0:0:b0:6af:1ba4:c3e5 with SMTP id s199-20020a37a9d0000000b006af1ba4c3e5mr8500860qke.167.1656417234893;
+        Tue, 28 Jun 2022 04:53:54 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tsML0jjLfuArn0V98uqgHi7yCfymN14awwvePjx5qt4Ac2aBE1EXWTFaiUYpN07axMfRvatg==
+X-Received: by 2002:a37:a9d0:0:b0:6af:1ba4:c3e5 with SMTP id s199-20020a37a9d0000000b006af1ba4c3e5mr8500833qke.167.1656417234666;
+        Tue, 28 Jun 2022 04:53:54 -0700 (PDT)
+Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
+        by smtp.gmail.com with ESMTPSA id bw20-20020a05622a099400b00304bc2acc25sm8851128qtb.6.2022.06.28.04.53.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 04:53:54 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 07:53:51 -0400
+From:   Brian Foster <bfoster@redhat.com>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     ckoenig.leichtzumerken@gmail.com, christian.koenig@amd.com,
+        viro@zeniv.linux.org.uk, hch@infradead.org,
+        stephen.s.brennan@oracle.com, David.Laight@aculab.com,
+        ilkos@google.com, tjmercier@google.com, surenb@google.com,
+        kernel-team@android.com, Jonathan Corbet <corbet@lwn.net>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v2 1/2] procfs: Add 'size' to /proc/<pid>/fdinfo/
+Message-ID: <Yrrrz7MxMu8OoEPU@bfoster>
+References: <20220623220613.3014268-1-kaleshsingh@google.com>
+ <20220623220613.3014268-2-kaleshsingh@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH v9 10/11] iommu: Per-domain I/O page fault handling
-Content-Language: en-US
-To:     Ethan Zhao <haifeng.zhao@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>
-References: <20220621144353.17547-1-baolu.lu@linux.intel.com>
- <20220621144353.17547-11-baolu.lu@linux.intel.com>
- <faacb997-0c0a-04e1-903d-53857f463214@linux.intel.com>
- <693a3604-d70b-e08c-2621-7f0cb9bdb6ca@linux.intel.com>
- <75b17c70-1658-91ea-0992-1be769550943@linux.intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <75b17c70-1658-91ea-0992-1be769550943@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20220623220613.3014268-2-kaleshsingh@google.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,129 +93,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/28 17:10, Ethan Zhao wrote:
-> Hi, Baolu
+On Thu, Jun 23, 2022 at 03:06:06PM -0700, Kalesh Singh wrote:
+> To be able to account the amount of memory a process is keeping pinned
+> by open file descriptors add a 'size' field to fdinfo output.
 > 
-> 在 2022/6/28 14:28, Baolu Lu 写道:
->> Hi Ethan,
->>
->> On 2022/6/27 21:03, Ethan Zhao wrote:
->>> Hi,
->>>
->>> 在 2022/6/21 22:43, Lu Baolu 写道:
->>>> Tweak the I/O page fault handling framework to route the page faults to
->>>> the domain and call the page fault handler retrieved from the domain.
->>>> This makes the I/O page fault handling framework possible to serve more
->>>> usage scenarios as long as they have an IOMMU domain and install a page
->>>> fault handler in it. Some unused functions are also removed to avoid
->>>> dead code.
->>>>
->>>> The iommu_get_domain_for_dev_pasid() which retrieves attached domain
->>>> for a {device, PASID} pair is used. It will be used by the page fault
->>>> handling framework which knows {device, PASID} reported from the iommu
->>>> driver. We have a guarantee that the SVA domain doesn't go away during
->>>> IOPF handling, because unbind() waits for pending faults with
->>>> iopf_queue_flush_dev() before freeing the domain. Hence, there's no 
->>>> need
->>>> to synchronize life cycle of the iommu domains between the unbind() and
->>>> the interrupt threads.
->>>>
->>>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->>>> Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
->>>> ---
->>>>   drivers/iommu/io-pgfault.c | 64 
->>>> +++++---------------------------------
->>>>   1 file changed, 7 insertions(+), 57 deletions(-)
->>>>
->>>> diff --git a/drivers/iommu/io-pgfault.c b/drivers/iommu/io-pgfault.c
->>>> index aee9e033012f..4f24ec703479 100644
->>>> --- a/drivers/iommu/io-pgfault.c
->>>> +++ b/drivers/iommu/io-pgfault.c
->>>> @@ -69,69 +69,18 @@ static int iopf_complete_group(struct device 
->>>> *dev, struct iopf_fault *iopf,
->>>>       return iommu_page_response(dev, &resp);
->>>>   }
->>>> -static enum iommu_page_response_code
->>>> -iopf_handle_single(struct iopf_fault *iopf)
->>>> -{
->>>> -    vm_fault_t ret;
->>>> -    struct mm_struct *mm;
->>>> -    struct vm_area_struct *vma;
->>>> -    unsigned int access_flags = 0;
->>>> -    unsigned int fault_flags = FAULT_FLAG_REMOTE;
->>>> -    struct iommu_fault_page_request *prm = &iopf->fault.prm;
->>>> -    enum iommu_page_response_code status = IOMMU_PAGE_RESP_INVALID;
->>>> -
->>>> -    if (!(prm->flags & IOMMU_FAULT_PAGE_REQUEST_PASID_VALID))
->>>> -        return status;
->>>> -
->>>> -    mm = iommu_sva_find(prm->pasid);
->>>> -    if (IS_ERR_OR_NULL(mm))
->>>> -        return status;
->>>> -
->>>> -    mmap_read_lock(mm);
->>>> -
->>>> -    vma = find_extend_vma(mm, prm->addr);
->>>> -    if (!vma)
->>>> -        /* Unmapped area */
->>>> -        goto out_put_mm;
->>>> -
->>>> -    if (prm->perm & IOMMU_FAULT_PERM_READ)
->>>> -        access_flags |= VM_READ;
->>>> -
->>>> -    if (prm->perm & IOMMU_FAULT_PERM_WRITE) {
->>>> -        access_flags |= VM_WRITE;
->>>> -        fault_flags |= FAULT_FLAG_WRITE;
->>>> -    }
->>>> -
->>>> -    if (prm->perm & IOMMU_FAULT_PERM_EXEC) {
->>>> -        access_flags |= VM_EXEC;
->>>> -        fault_flags |= FAULT_FLAG_INSTRUCTION;
->>>> -    }
->>>> -
->>>> -    if (!(prm->perm & IOMMU_FAULT_PERM_PRIV))
->>>> -        fault_flags |= FAULT_FLAG_USER;
->>>> -
->>>> -    if (access_flags & ~vma->vm_flags)
->>>> -        /* Access fault */
->>>> -        goto out_put_mm;
->>>> -
->>>> -    ret = handle_mm_fault(vma, prm->addr, fault_flags, NULL);
->>>> -    status = ret & VM_FAULT_ERROR ? IOMMU_PAGE_RESP_INVALID :
->>>> -        IOMMU_PAGE_RESP_SUCCESS;
->>>> -
->>>> -out_put_mm:
->>>> -    mmap_read_unlock(mm);
->>>> -    mmput(mm);
->>>> -
->>>> -    return status;
->>>> -}
->>>> -
->>>
->>> Once the iopf_handle_single() is removed, the name of 
->>> iopf_handle_group() looks a little weired
->>>
->>> and confused, does this group mean the iommu group (domain) ? while I 
->>> take some minutes to
->>
->> No. This is not the iommu group. It's page request group defined by the
->> PCI SIG spec. Multiple page requests could be put in a group with a
->> same group id. All page requests in a group could be responded to device
->> in one shot.
+> dmabufs fds already expose a 'size' field for this reason, remove this
+> and make it a common field for all fds. This allows tracking of
+> other types of memory (e.g. memfd and ashmem in Android).
 > 
-> Thanks your explaination, understand the concept of PCIe PRG.  I meant
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> Reviewed-by: Christian K�nig <christian.koenig@amd.com>
+> ---
 > 
-> do we still have the necessity to mention the "group" here in the name
+> Changes in v2:
+>   - Add Christian's Reviewed-by
 > 
-> iopf_handle_group(),  which one is better ? iopf_handle_prg() or
+> Changes from rfc:
+>   - Split adding 'size' and 'path' into a separate patches, per Christian
+>   - Split fdinfo seq_printf into separate lines, per Christian
+>   - Fix indentation (use tabs) in documentaion, per Randy
 > 
-> iopf_handler(),  perhaps none of them ? :)
+>  Documentation/filesystems/proc.rst | 12 ++++++++++--
+>  drivers/dma-buf/dma-buf.c          |  1 -
+>  fs/proc/fd.c                       |  9 +++++----
+>  3 files changed, 15 insertions(+), 7 deletions(-)
+> 
+...
+> diff --git a/fs/proc/fd.c b/fs/proc/fd.c
+> index 913bef0d2a36..464bc3f55759 100644
+> --- a/fs/proc/fd.c
+> +++ b/fs/proc/fd.c
+> @@ -54,10 +54,11 @@ static int seq_show(struct seq_file *m, void *v)
+>  	if (ret)
+>  		return ret;
+>  
+> -	seq_printf(m, "pos:\t%lli\nflags:\t0%o\nmnt_id:\t%i\nino:\t%lu\n",
+> -		   (long long)file->f_pos, f_flags,
+> -		   real_mount(file->f_path.mnt)->mnt_id,
+> -		   file_inode(file)->i_ino);
+> +	seq_printf(m, "pos:\t%lli\n", (long long)file->f_pos);
+> +	seq_printf(m, "flags:\t0%o\n", f_flags);
+> +	seq_printf(m, "mnt_id:\t%i\n", real_mount(file->f_path.mnt)->mnt_id);
+> +	seq_printf(m, "ino:\t%lu\n", file_inode(file)->i_ino);
+> +	seq_printf(m, "size:\t%lli\n", (long long)file_inode(file)->i_size);
 
-Oh! Sorry for the misunderstanding.
+Hi Kalesh,
 
-I have no strong feeling to change this naming. :-) All the names
-express what the helper does. Jean is the author of this framework. If
-he has the same idea as you, I don't mind renaming it in this patch.
+Any reason not to use i_size_read() here?
 
-Best regards,
-baolu
+Also not sure if it matters that much for your use case, but something
+worth noting at least with shmem is that one can do something like:
+
+# cat /proc/meminfo | grep Shmem:
+Shmem:               764 kB
+# xfs_io -fc "falloc -k 0 10m" ./file
+# ls -alh file 
+-rw-------. 1 root root 0 Jun 28 07:22 file
+# stat file 
+  File: file
+  Size: 0               Blocks: 20480      IO Block: 4096   regular empty file
+# cat /proc/meminfo | grep Shmem:
+Shmem:             11004 kB
+
+... where the resulting memory usage isn't reflected in i_size (but is
+is in i_blocks/bytes).
+
+Brian
+
+>  
+>  	/* show_fd_locks() never deferences files so a stale value is safe */
+>  	show_fd_locks(m, file, files);
+> -- 
+> 2.37.0.rc0.161.g10f37bed90-goog
+> 
+

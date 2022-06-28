@@ -2,179 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15FD755C31A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1AE55D274
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244525AbiF1IXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 04:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
+        id S245460AbiF1IXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 04:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244927AbiF1IVw (ORCPT
+        with ESMTP id S245440AbiF1IWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 04:21:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1786B2E096
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:20:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656404447;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ncuimMgu6pl/bxccvatpC+AvPLsScqnjbUVdgB7ZYmM=;
-        b=Wb8nSj/4xTcOkT0yB9UibUHMTC8lEg2/6WHv7VDR32pNCu86bKMtr3OgVn6T0QFNtsiMUd
-        jiJ0wUXN4njqqhUnBPIfRnDJ8tTDiSTag7yesiooQsdIVY2HgCchRRHBRQLvaTRNLnRGWA
-        T0JuhZUwns9vzKqATuCAPzio6WWCiFs=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-466-jHapxgtNO-uzoyw9noJDHw-1; Tue, 28 Jun 2022 04:20:46 -0400
-X-MC-Unique: jHapxgtNO-uzoyw9noJDHw-1
-Received: by mail-wr1-f72.google.com with SMTP id r20-20020adfb1d4000000b0021b8507563eso1604684wra.16
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:20:46 -0700 (PDT)
+        Tue, 28 Jun 2022 04:22:19 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DEF2E0B6;
+        Tue, 28 Jun 2022 01:21:22 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id x4so11359504pfq.2;
+        Tue, 28 Jun 2022 01:21:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=K38YHnI8KKXEsu+LVCyhxZDBDqf305H9Xn5K2Tu2gdA=;
+        b=N6AaPW03jIoV2m3jDKOx4pZa24jTgD/3obADz9jYwVMbUqqYOjh9HHQepI7obo9wo1
+         bGAnpuqAsT6TCAz72wo6D/wlLXkKIQht7p667oB/N8IjpA74e4UlPc0XMIhBJm1B7Nig
+         V7dwJqhlz4TcofZTq6TLk9Jj6p/adcYBVBMkO+cvR3feAbT1uzgx8vShHwdXAeYI8c1F
+         7bCFh3bcy1qEySiJHQlp321EH3/2dWywbkNqSmS316O/pfb725/OcysXIwe+Ru+WIrHI
+         B43issXB70i//e3PNTODJkyyapwE+Qlnuq+deTrSejnld9dVqe4KdErNZ+2IYyWJ20ji
+         dCFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ncuimMgu6pl/bxccvatpC+AvPLsScqnjbUVdgB7ZYmM=;
-        b=xU4h7U5WezQ0Fn9Ue/FqUccZ/ZGYiO1BYtxqKM48xVydHGBN5QapHuNUniEZRJcGvM
-         dbiUMaQggJzOLso06Ow7mFvOxS/aYtlh2pihlp9LIQg/IJ2eZjcq1eP9spionGCP4zOi
-         01iTXyvSeQIFkyQn1+5BI15RvqJrbRc4fRd0q94sbeeRkvWRxH5h2v8DmG/wfW1IbtyQ
-         VuNDS3q4GgZXBDohIQMAIUW3U1KbabFeuASDRuINgqAdpYFGMtoHG0/EJZidg3yX92mG
-         VeU0yUf8vTceJK+v5pfVeOt5uhfXBnh9ticP2FlDScK6MsYAZYCL3jgz2Ro3iZhnumD8
-         zwEQ==
-X-Gm-Message-State: AJIora9aUA6RtM4STmekKIZrvwossH/xboSNqwjrLyXUBfTrTPvGJ6Ho
-        AiNWV//45svPMkdORagV8vaVdLvF6Bl8u/jgXEUB1tHCkhCgYWd80RkKfEW/Qmu96TmTKx+9IZQ
-        r6CyBbvQvBT38sULnUEgEmimM
-X-Received: by 2002:a05:6000:1251:b0:21a:efae:6cbe with SMTP id j17-20020a056000125100b0021aefae6cbemr15965701wrx.281.1656404445263;
-        Tue, 28 Jun 2022 01:20:45 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uFs5cqhURYlQN3b9jrNVSRJIonINM5X+1RgZ3OW45c0RMzsf1qhtcrAfdCV4vgV+au5tBFvA==
-X-Received: by 2002:a05:6000:1251:b0:21a:efae:6cbe with SMTP id j17-20020a056000125100b0021aefae6cbemr15965679wrx.281.1656404445020;
-        Tue, 28 Jun 2022 01:20:45 -0700 (PDT)
-Received: from work-vm (cpc109025-salf6-2-0-cust480.10-2.cable.virginm.net. [82.30.61.225])
-        by smtp.gmail.com with ESMTPSA id f13-20020a05600c154d00b0039ee391a024sm22785542wmg.14.2022.06.28.01.20.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 01:20:43 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 09:20:41 +0100
-From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Jue Wang <juew@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Nadav Amit <namit@vmware.com>
-Subject: Re: [RFC PATCH 00/26] hugetlb: Introduce HugeTLB high-granularity
- mapping
-Message-ID: <Yrq52SCUa6KN4LsR@work-vm>
-References: <20220624173656.2033256-1-jthoughton@google.com>
- <YrYCeYy0rjfGhT/W@casper.infradead.org>
- <CADrL8HUtdd=yEtY=bhHRYVjA30O1CAd6XEj+oTNjviWkSmzowQ@mail.gmail.com>
- <YrnvORvPKbzgxLCu@work-vm>
- <CADrL8HX4eNREyiuDPSoQpZPObTe7Kto3UurMHYeeO-3TdTo87w@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=K38YHnI8KKXEsu+LVCyhxZDBDqf305H9Xn5K2Tu2gdA=;
+        b=KRDnFXF985oDli69q00w8RKSISzMqqd48Q7sulfQ6P8xnaVIjCEFiVg0OweIUEPz/H
+         k6+wMQe3rkbD+FAhGMoKiIlVVSlfyRC79by238aM++5i63xziNQLJiKxAd/BPAmk0B0m
+         jwKegt9OFZz8Hm7+aNpKPg+gdIdo0xnpPHuKhSTmKidreOsdW4NRJlx8Vamk2ryFte95
+         hHRERkdyMlBbNl+VOwzsynqA9eFz3m2ZW9D3HLTUIrfh/+7eQ7ejjyA6KuloYzWHbay9
+         WqMeoMutHVr/Yay58y1tSa2quIvOExTQyyQpUd0gZuSbs69MHAYP1n3I0iE/2oGuwk4T
+         SSdA==
+X-Gm-Message-State: AJIora9AudDD9ajG1uIHNUfJKW6ElF9YSwPkSwIDoaVUvcZ7IxXijfQW
+        taBoC0eFb6jgykWp7O1McqA=
+X-Google-Smtp-Source: AGRyM1vzV0946cmKDfPi8etd9t3x9Axs+ph84lTvs8chlDQbrEfCA3LifQ8bYyHlY/LrpZ2pZ2PEpw==
+X-Received: by 2002:a63:ef0b:0:b0:40d:287d:71e1 with SMTP id u11-20020a63ef0b000000b0040d287d71e1mr16695519pgh.330.1656404482154;
+        Tue, 28 Jun 2022 01:21:22 -0700 (PDT)
+Received: from [192.168.50.247] ([103.84.139.165])
+        by smtp.gmail.com with ESMTPSA id q5-20020a170902bd8500b001640beeebf1sm8510168pls.268.2022.06.28.01.21.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 01:21:21 -0700 (PDT)
+Message-ID: <8f647d13-ed5d-6799-97b1-3f5061879d9e@gmail.com>
+Date:   Tue, 28 Jun 2022 16:21:17 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADrL8HX4eNREyiuDPSoQpZPObTe7Kto3UurMHYeeO-3TdTo87w@mail.gmail.com>
-User-Agent: Mutt/2.2.6 (2022-06-05)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] net: tipc: fix possible infoleak in tipc_mon_rcv()
+Content-Language: en-US
+To:     Tung Quang Nguyen <tung.q.nguyen@dektech.com.au>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "tipc-discussion@lists.sourceforge.net" 
+        <tipc-discussion@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jmaloy@redhat.com" <jmaloy@redhat.com>,
+        "ying.xue@windriver.com" <ying.xue@windriver.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>
+References: <20220628025921.14767-1-hbh25y@gmail.com>
+ <DB9PR05MB9078C87512422E22556EDA3888B89@DB9PR05MB9078.eurprd05.prod.outlook.com>
+From:   Hangyu Hua <hbh25y@gmail.com>
+In-Reply-To: <DB9PR05MB9078C87512422E22556EDA3888B89@DB9PR05MB9078.eurprd05.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* James Houghton (jthoughton@google.com) wrote:
-> On Mon, Jun 27, 2022 at 10:56 AM Dr. David Alan Gilbert
-> <dgilbert@redhat.com> wrote:
-> >
-> > * James Houghton (jthoughton@google.com) wrote:
-> > > On Fri, Jun 24, 2022 at 11:29 AM Matthew Wilcox <willy@infradead.org> wrote:
-> > > >
-> > > > On Fri, Jun 24, 2022 at 05:36:30PM +0000, James Houghton wrote:
-> > > > > [1] This used to be called HugeTLB double mapping, a bad and confusing
-> > > > >     name. "High-granularity mapping" is not a great name either. I am open
-> > > > >     to better names.
-> > > >
-> > > > Oh good, I was grinding my teeth every time I read it ;-)
-> > > >
-> > > > How does "Fine granularity" work for you?
-> > > > "sub-page mapping" might work too.
-> > >
-> > > "Granularity", as I've come to realize, is hard to say, so I think I
-> > > prefer sub-page mapping. :) So to recap the suggestions I have so far:
-> > >
-> > > 1. Sub-page mapping
-> > > 2. Granular mapping
-> > > 3. Flexible mapping
-> > >
-> > > I'll pick one of these (or maybe some other one that works better) for
-> > > the next version of this series.
-> >
-> > <shrug> Just a name; SPM might work (although may confuse those
-> > architectures which had subprotection for normal pages), and at least
-> > we can mispronounce it.
-> >
-> > In 14/26 your commit message says:
-> >
-> >   1. Faults can be passed to handle_userfault. (Userspace will want to
-> >      use UFFD_FEATURE_REAL_ADDRESS to get the real address to know which
-> >      region they should be call UFFDIO_CONTINUE on later.)
-> >
-> > can you explain what that new UFFD_FEATURE does?
-> 
-> +cc Nadav Amit <namit@vmware.com> to check me here.
-> 
-> Sorry, this should be UFFD_FEATURE_EXACT_ADDRESS. It isn't a new
-> feature, and it actually isn't needed (I will correct the commit
-> message). Why it isn't needed is a little bit complicated, though. Let
-> me explain:
-> 
-> Before UFFD_FEATURE_EXACT_ADDRESS was introduced, the address that
-> userfaultfd gave userspace for HugeTLB pages was rounded down to be
-> hstate-size-aligned. This would have had to change, because userspace,
-> to take advantage of HGM, needs to know which 4K piece to install.
-> 
-> However, after UFFD_FEATURE_EXACT_ADDRESS was introduced[1], the
-> address was rounded down to be PAGE_SIZE-aligned instead, even if the
-> flag wasn't used. I think this was an unintended change. If the flag
-> is used, then the address isn't rounded at all -- that was the
-> intended purpose of this flag. Hope that makes sense.
+On 2022/6/28 11:35, Tung Quang Nguyen wrote:
+>> -----Original Message-----
+>> From: Hangyu Hua <hbh25y@gmail.com>
+>> Sent: Tuesday, June 28, 2022 9:59 AM
+>> To: jmaloy@redhat.com; ying.xue@windriver.com; davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+>> pabeni@redhat.com
+>> Cc: netdev@vger.kernel.org; tipc-discussion@lists.sourceforge.net; linux-kernel@vger.kernel.org; Hangyu Hua <hbh25y@gmail.com>
+>> Subject: [PATCH] net: tipc: fix possible infoleak in tipc_mon_rcv()
+>> 
+>> dom_bef is use to cache current domain record only if current domain
+>> exists. But when current domain does not exist, dom_bef will still be used
+>> in mon_identify_lost_members. This may lead to an information leak.
+>> 
+>> Fix this by adding a memset before using dom_bef.
+>> 
+>> Fixes: 35c55c9877f8 ("tipc: add neighbor monitoring framework")
+>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com <mailto:hbh25y@gmail.com>>
+>> ---
+>>  net/tipc/monitor.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>> 
+>> diff --git a/net/tipc/monitor.c b/net/tipc/monitor.c
+>> index 2f4d23238a7e..67084e5aa15c 100644
+>> --- a/net/tipc/monitor.c
+>> +++ b/net/tipc/monitor.c
+>> @@ -534,6 +534,7 @@ void tipc_mon_rcv(struct net *net, void *data, u16 dlen, u32 addr,
+>>        state->peer_gen = new_gen;
+>> 
+>>        /* Cache current domain record for later use */
+>> +     memset(&dom_bef, 0, sizeof(dom_bef));
+>>        dom_bef.member_cnt = 0;
+> Please remove /dom_bef.member_cnt = 0;/ if memset() is used instead.
 
-Oh that's 'fun'; right but the need for the less-rounded address makes
-sense.
+I get it. I will send a v2.
 
-One other thing I thought of; you provide the modified 'CONTINUE'
-behaviour, which works for postcopy as long as you use two mappings in
-userspace; one protected by userfault, and one which you do the writes
-to, and then issue the CONTINUE into the protected mapping; that's fine,
-but it's not currently how we have our postcopy code wired up in qemu,
-we have one mapping and use UFFDIO_COPY to place the page.
-Requiring the two mappings is fine, but it's probably worth pointing out
-the need for it somewhere.
+Thanks,
+Hangyu
 
-Dave
-
-> The new userfaultfd feature, UFFD_FEATURE_MINOR_HUGETLBFS_HGM, informs
-> userspace that high-granularity CONTINUEs are available.
-> 
-> [1] commit 824ddc601adc ("userfaultfd: provide unmasked address on page-fault")
-> 
-> 
-> >
-> > Dave
-> >
-> > --
-> > Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
-> >
-> 
--- 
-Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
-
+>>        dom = peer->domain;
+>>        if (dom)
+>> --
+>> 2.25.1

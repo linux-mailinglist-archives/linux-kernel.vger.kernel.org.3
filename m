@@ -2,42 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F8155C6D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2F055C22D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243281AbiF1BxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 21:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
+        id S243297AbiF1Bxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 21:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243234AbiF1BxL (ORCPT
+        with ESMTP id S243289AbiF1Bxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 21:53:11 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BB065A7;
-        Mon, 27 Jun 2022 18:53:10 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1o60PU-00BwwO-6P; Tue, 28 Jun 2022 11:53:01 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Tue, 28 Jun 2022 09:53:00 +0800
-Date:   Tue, 28 Jun 2022 09:53:00 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        Gregory Erwin <gregerwin256@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Rui Salvaterra <rsalvaterra@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v6] ath9k: sleep for less time when unregistering hwrng
-Message-ID: <Yrpe/D+PU078OoIn@gondor.apana.org.au>
-References: <20220627113749.564132-1-Jason@zx2c4.com>
- <20220627120735.611821-1-Jason@zx2c4.com>
+        Mon, 27 Jun 2022 21:53:30 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E804CB860
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 18:53:28 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id t21so10666459pfq.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 18:53:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=wistron-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qmNe/0N3fselmjXx6WkFjhVxkRMv0d5IBKx3lO9MXkg=;
+        b=UNsaSKXvhyPVTm2DEwZmNzWe7Vo+++Awnh+gFpClAhy8HlwHpzG+Z7zhxPZUfRnGd1
+         HIhvVUFI2ADEGsu/vdM3ow/HGbzT39WdDv889cAipONE3vkMNNvNbM575X6paPnFIdiz
+         uNT6eoVqGOWH4FFCft2z+0fMfknGqU8mzrsuaCRH41kNFt1oz4DY2SemNRfnJzGfXK8v
+         0cUIcuoIiB7UMXfk3o3ULwjBAzGxSBPrmGLLSR2Np2KAsfCEVI278jMtfMrxuQvxPHLf
+         5r0keiF+noXuTUWL6DdZt4O7DWkG8hQsPhi3PzsYSBaV8shxUwQgle1zidnE2kuL56PN
+         lhQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qmNe/0N3fselmjXx6WkFjhVxkRMv0d5IBKx3lO9MXkg=;
+        b=hbBu9l0NlzIHtmT+NFXDc5olVYGwyIQAqijcczTsCAEEZUlqRLyPj3keviMBeLaYvK
+         Bgp1P3vdkEfb1wXXKXpxLXRpBtRZmRp+tYHQxAsrZGV732isEYubpPKh+ft/FNc/zGeK
+         DoPFCMEee/peeflkHR+eqNjQrAfqsHWb6bIK5MGdYSS9qIKktOxJgKs4QGsiC0cQtM5a
+         OPzUlgSohyYa8szfGgxJuwf8oDF8//MWu8jJi4IZCFd8ezxYO+ig+oQnGF5/qwzEAbn1
+         1q+1nKREgzeX46DZDpNc53XDOz3rps9Gghk+Rhq3QHVTPaXr2Nw1sW/SkyAjlZXK4vD9
+         OM7A==
+X-Gm-Message-State: AJIora87AZ9KfU/PuIIsbiTcsFEjyv5EYdjvV5tvrv58seHn4YllfsKu
+        oU4jcKncEOlrlYkgPKazif/xSw==
+X-Google-Smtp-Source: AGRyM1sEdmmSKiRug0JES0Mnz8bDifIHsM4ASO0PiDH35MxEPibvVHpL9D6WFZFnmA3BbqsrIvSibA==
+X-Received: by 2002:a63:ae48:0:b0:40c:3775:8b49 with SMTP id e8-20020a63ae48000000b0040c37758b49mr15259472pgp.268.1656381208345;
+        Mon, 27 Jun 2022 18:53:28 -0700 (PDT)
+Received: from localhost (1-164-249-67.dynamic-ip.hinet.net. [1.164.249.67])
+        by smtp.gmail.com with ESMTPSA id 11-20020a63164b000000b0040d4c8e335csm7722004pgw.75.2022.06.27.18.53.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 18:53:28 -0700 (PDT)
+From:   Franklin Lin <franklin_lin@wistron.corp-partner.google.com>
+To:     edumazet@google.com
+Cc:     kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, franklin_lin@wistron.com,
+        franklin_lin <franklin_lin@wistron.corp-partner.google.com>
+Subject: [PATCH] drivers/net/usb/r8152: Enable MAC address passthru support
+Date:   Tue, 28 Jun 2022 09:53:25 +0800
+Message-Id: <20220628015325.1204234-1-franklin_lin@wistron.corp-partner.google.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220627120735.611821-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,36 +70,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 02:07:35PM +0200, Jason A. Donenfeld wrote:
-> Even though hwrng provides a `wait` parameter, it doesn't work very well
-> when waiting for a long time. There are numerous deadlocks that emerge
-> related to shutdown. Work around this API limitation by waiting for a
-> shorter amount of time and erroring more frequently. This commit also
-> prevents hwrng from splatting messages to dmesg when there's a timeout
-> and switches to using schedule_timeout_interruptible(), so that the
-> kthread can be stopped.
-> 
-> Reported-by: Gregory Erwin <gregerwin256@gmail.com>
-> Tested-by: Gregory Erwin <gregerwin256@gmail.com>
-> Cc: Toke Høiland-Jørgensen <toke@redhat.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Rui Salvaterra <rsalvaterra@gmail.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: stable@vger.kernel.org
-> Fixes: fcd09c90c3c5 ("ath9k: use hw_random API instead of directly dumping into random.c")
-> Link: https://lore.kernel.org/all/CAO+Okf6ZJC5-nTE_EJUGQtd8JiCkiEHytGgDsFGTEjs0c00giw@mail.gmail.com/
-> Link: https://lore.kernel.org/lkml/CAO+Okf5k+C+SE6pMVfPf-d8MfVPVq4PO7EY8Hys_DVXtent3HA@mail.gmail.com/
-> Link: https://bugs.archlinux.org/task/75138
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  drivers/char/hw_random/core.c        |  5 +++--
->  drivers/net/wireless/ath/ath9k/rng.c | 20 +++-----------------
->  2 files changed, 6 insertions(+), 19 deletions(-)
+From: franklin_lin <franklin_lin@wistron.corp-partner.google.com>
 
-Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
+Enable the support for providing a MAC address
+for a dock to use based on the VPD values set in the platform.
 
-Thanks,
+Signed-off-by: franklin_lin <franklin_lin@wistron.corp-partner.google.com>
+---
+ drivers/net/usb/r8152.c | 49 ++++++++++++++++++++++++++++++-----------
+ 1 file changed, 36 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 7389d6ef8..732e48d99 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -3,6 +3,7 @@
+  *  Copyright (c) 2014 Realtek Semiconductor Corp. All rights reserved.
+  */
+ 
++#include <linux/fs.h>
+ #include <linux/signal.h>
+ #include <linux/slab.h>
+ #include <linux/module.h>
+@@ -1608,6 +1609,11 @@ static int vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr *sa)
+ 	acpi_object_type mac_obj_type;
+ 	int mac_strlen;
+ 
++	struct file *fp;
++	unsigned char read_buf[32];
++	loff_t f_pos = 0;
++	int i, j, len;
++
+ 	if (tp->lenovo_macpassthru) {
+ 		mac_obj_name = "\\MACA";
+ 		mac_obj_type = ACPI_TYPE_STRING;
+@@ -1641,22 +1647,39 @@ static int vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr *sa)
+ 	/* returns _AUXMAC_#AABBCCDDEEFF# */
+ 	status = acpi_evaluate_object(NULL, mac_obj_name, NULL, &buffer);
+ 	obj = (union acpi_object *)buffer.pointer;
+-	if (!ACPI_SUCCESS(status))
+-		return -ENODEV;
+-	if (obj->type != mac_obj_type || obj->string.length != mac_strlen) {
+-		netif_warn(tp, probe, tp->netdev,
++	if (ACPI_SUCCESS(status)) {
++		if (obj->type != mac_obj_type || obj->string.length != mac_strlen) {
++			netif_warn(tp, probe, tp->netdev,
+ 			   "Invalid buffer for pass-thru MAC addr: (%d, %d)\n",
+ 			   obj->type, obj->string.length);
+-		goto amacout;
+-	}
+-
+-	if (strncmp(obj->string.pointer, "_AUXMAC_#", 9) != 0 ||
+-	    strncmp(obj->string.pointer + 0x15, "#", 1) != 0) {
+-		netif_warn(tp, probe, tp->netdev,
+-			   "Invalid header when reading pass-thru MAC addr\n");
+-		goto amacout;
++			goto amacout;
++		}
++		if (strncmp(obj->string.pointer, "_AUXMAC_#", 9) != 0 ||
++			strncmp(obj->string.pointer + 0x15, "#", 1) != 0) {
++			netif_warn(tp, probe, tp->netdev,
++				"Invalid header when reading pass-thru MAC addr\n");
++			goto amacout;
++		}
++		ret = hex2bin(buf, obj->string.pointer + 9, 6);
++	} else {
++		/* read from "/sys/firmware/vpd/ro/dock_mac" */
++		fp = filp_open("/sys/firmware/vpd/ro/dock_mac", O_RDONLY, 0);
++		if (IS_ERR(fp))
++			return -ENOENT;
++		kernel_read(fp, read_buf, 32, &f_pos);
++		len = strlen(read_buf);
++		/* remove ':' form mac address string */
++		for (i = 0; i < len; i++) {
++			if (read_buf[i] == ':') {
++				for (j = i; j < len; j++)
++					read_buf[j] = read_buf[j+1];
++				len--;
++				i--;
++			}
++		}
++		filp_close(fp, NULL);
++		ret = hex2bin(buf, read_buf, 6);
+ 	}
+-	ret = hex2bin(buf, obj->string.pointer + 9, 6);
+ 	if (!(ret == 0 && is_valid_ether_addr(buf))) {
+ 		netif_warn(tp, probe, tp->netdev,
+ 			   "Invalid MAC for pass-thru MAC addr: %d, %pM\n",
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.34.1
+

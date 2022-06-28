@@ -2,214 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF5155ED1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BA455ED7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234844AbiF1S6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 14:58:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
+        id S232864AbiF1TEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 15:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234021AbiF1S6a (ORCPT
+        with ESMTP id S234200AbiF1TBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:58:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C50561171
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 11:58:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656442702;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2lf7QwNhxdo+quqMTGK7aQY+8Wzt942aQ0JT7PbSYKk=;
-        b=MXSIJWSTJ2Zzjp3qqraBUAbQD7rRJj3KZdpGGi4hsK6xv5bPbkACX1OT83+SBUvA9Fg30M
-        BSLt6O4zOsiubHxjhA01LcZGRW2me5nqLKtYTloFSuN9ddgOMkECkkgaWLv/uYKPHCVLUY
-        NCprf8pMAPRNpbyJhkXU6VXrTO7SqOA=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-60-RsjZgpj2NBO_ixqJjRh3nQ-1; Tue, 28 Jun 2022 14:58:21 -0400
-X-MC-Unique: RsjZgpj2NBO_ixqJjRh3nQ-1
-Received: by mail-wm1-f71.google.com with SMTP id j19-20020a05600c191300b003a048196712so4160033wmq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 11:58:20 -0700 (PDT)
+        Tue, 28 Jun 2022 15:01:17 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDF3CE18;
+        Tue, 28 Jun 2022 12:00:47 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id v38so13098560ybi.3;
+        Tue, 28 Jun 2022 12:00:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hfrZZUEEnusraqTcoBwljzuTX+gSwEEKqtBGfjRQA5s=;
+        b=Fjr1Ac23mV/gAq32rtrGhHFbiAtx7Z/rqECiXYYFvDabBSHfwkresVl4zV4BHJdgXL
+         BLMyCajzhrK84VdRjqrhOtDnZm4/X8iuNxXeTJm1qsWD3joGoa7VoiTCktl2aFuvDG/8
+         1IJjrLsSBbKE2raRCPJeTs34T93kFvT1Ay+raFqYsBhz1GM2+5erS+hp1ZL6N8oesb0q
+         E5NoJKh3QOGwmAOUBKnnrnfPWFopo7ls7rzGsOQCloKeaMn5R9ROtlECpO87RRCKd0ma
+         Kng+5H0c53E1HoHKIv3FYgHdYWWHBYjYsZg8D9i16tPHAOzzS4rXP4i9w7zDLvRSzZ6Y
+         8yFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2lf7QwNhxdo+quqMTGK7aQY+8Wzt942aQ0JT7PbSYKk=;
-        b=j9wXdmSWL2QUteYKaHD2yJbNJPam2o5TVSJLebKz9SrV8bP89BA9+UErHTkadFXsbu
-         c/rREsragZsPqBdmGTBoz9t4qoq5ikguOF2BWSYAx6056Q1Ce8fM3u+HZ6NtudfiiUZ8
-         V/2wvsUE+od7YCxMRekOuQFIk5JhVEfP1aHxB7w36sU/SVsiC4OLrKimG7Ex6dZ3yL+Y
-         KG/ToT6c/zSZqfF+sGUADu7nscJhPHk6bB3daoXJhLNsMlbT2shHj0V6d3UpwK0Cp9t3
-         RRKhk6iDcKBGpUz6mtLcUJWyS2oJUTOo/WmptIuIuHEHfCPReESoTjK9Wo8QUxRJ9Ji8
-         y4/A==
-X-Gm-Message-State: AJIora/xM7W2EuwBm/jxbbfr6s65/MvMw5NrJgI5O7H9K2zmTenYCGvB
-        bVLY4gHYJAfBygQEkue9gKETP1a6iBz+Ld65raJpiO9roD522bLK1ytfdE1vd0Js/NdSV1lAmuP
-        DDhB1u39A3JfE8eiu7rGYYCHk
-X-Received: by 2002:a05:600c:5022:b0:39c:7f6c:ab44 with SMTP id n34-20020a05600c502200b0039c7f6cab44mr1136473wmr.97.1656442699781;
-        Tue, 28 Jun 2022 11:58:19 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1szlySBmm8GkNFrjrCF0IMcWnh1Lja8Zw3SseqWkis7etEldh2DCLEG7RhUJHJijP9HlpeLSQ==
-X-Received: by 2002:a05:600c:5022:b0:39c:7f6c:ab44 with SMTP id n34-20020a05600c502200b0039c7f6cab44mr1136417wmr.97.1656442699439;
-        Tue, 28 Jun 2022 11:58:19 -0700 (PDT)
-Received: from work-vm (cpc109025-salf6-2-0-cust480.10-2.cable.virginm.net. [82.30.61.225])
-        by smtp.gmail.com with ESMTPSA id s2-20020adfea82000000b0021b90d7b2c9sm14365759wrm.24.2022.06.28.11.58.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 11:58:18 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 19:58:15 +0100
-From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "jroedel@suse.de" <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "slp@redhat.com" <slp@redhat.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "tobin@ibm.com" <tobin@ibm.com>, "bp@alien8.de" <bp@alien8.de>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "marcorr@google.com" <marcorr@google.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alpergun@google.com" <alpergun@google.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: Re: [PATCH Part2 v6 06/49] x86/sev: Add helper functions for
- RMPUPDATE and PSMASH instruction
-Message-ID: <YrtPR+qylZ74ciMT@work-vm>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <e4643e9d37fcb025d0aec9080feefaae5e9245d5.1655761627.git.ashish.kalra@amd.com>
- <YrH0ca3Sam7Ru11c@work-vm>
- <SN6PR12MB2767FBF0848B906B9F0284D28EB39@SN6PR12MB2767.namprd12.prod.outlook.com>
- <BYAPR12MB2759910E715C69D1027CCE678EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
- <Yrrc/6x70wa14c5t@work-vm>
- <SN6PR12MB27677062FBBF9D62C7BF41D88EB89@SN6PR12MB2767.namprd12.prod.outlook.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hfrZZUEEnusraqTcoBwljzuTX+gSwEEKqtBGfjRQA5s=;
+        b=Yy43Qu9RGoPdubg8DX4YjoS6+LJz7D5mJQjysek5bQtKD/L+HCKs0l9810tXyEXPlK
+         7SzBVvrKRXNpknx/YqRZW/JmXhSrCeCG/W7Fwc9RLn1uMLT4RCpZXIYxu5DHxBeos7a/
+         VFuDoUoujyNhV2sPvC1OjB0H0JBwlsEBP+1HsZUtPBuLbSZBnVRqLM6+ZJSyZ72U3w3/
+         UJSHIvs8Ej6EN6YtgBADqDyIprhD1ldbK4qVnAqBSKGUkLjp1gMGSkY+84ubmlSsiU4G
+         YDwYgVOLVbZUCgttyxtAllyz3YSyPmNHrwGhsBWZMuZvbKIO9PGGcJ0v4eK2zuR66fx7
+         WIgQ==
+X-Gm-Message-State: AJIora/zTnXKQ1PszPiF4gniNVy0DpHoO9ES4Dhxf6CKKXoLXbTlc/6G
+        l8mLjR/Oi3UrdRWalDDhdtL4GLn7Ul5jFJP8jM8=
+X-Google-Smtp-Source: AGRyM1ubmnldUYfOH5scD10FhmXU1zZDYRVh2ucvLL7Z7EYE8yjowr6ydYCwm+ayjB00+OKR6o9rr9MjILNWmBIOCbg=
+X-Received: by 2002:a25:dd83:0:b0:66c:8d8d:4f5f with SMTP id
+ u125-20020a25dd83000000b0066c8d8d4f5fmr19106724ybg.79.1656442846932; Tue, 28
+ Jun 2022 12:00:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SN6PR12MB27677062FBBF9D62C7BF41D88EB89@SN6PR12MB2767.namprd12.prod.outlook.com>
-User-Agent: Mutt/2.2.6 (2022-06-05)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220628081709.829811-1-colin.foster@in-advantage.com>
+ <20220628081709.829811-4-colin.foster@in-advantage.com> <CAHp75Vcm=Zopv2CZZFWwqgxQ_g8XqNRZB6zEcX3F4BhmcPGxFA@mail.gmail.com>
+ <20220628182535.GC855398@euler>
+In-Reply-To: <20220628182535.GC855398@euler>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 28 Jun 2022 21:00:06 +0200
+Message-ID: <CAHp75VejZB8Wg4tuz51r1ezLw0vawP+LNcYkmHd5FjyQTW4asA@mail.gmail.com>
+Subject: Re: [PATCH v11 net-next 3/9] pinctrl: ocelot: allow pinctrl-ocelot to
+ be loaded as a module
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Terry Bowman <terry.bowman@amd.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Kalra, Ashish (Ashish.Kalra@amd.com) wrote:
-> [AMD Official Use Only - General]
-> 
-> Hello Dave,
-> 
-> -----Original Message-----
-> From: Dr. David Alan Gilbert <dgilbert@redhat.com> 
-> Sent: Tuesday, June 28, 2022 5:51 AM
-> To: Kalra, Ashish <Ashish.Kalra@amd.com>
-> Cc: x86@kernel.org; linux-kernel@vger.kernel.org; kvm@vger.kernel.org; linux-coco@lists.linux.dev; linux-mm@kvack.org; linux-crypto@vger.kernel.org; tglx@linutronix.de; mingo@redhat.com; jroedel@suse.de; Lendacky, Thomas <Thomas.Lendacky@amd.com>; hpa@zytor.com; ardb@kernel.org; pbonzini@redhat.com; seanjc@google.com; vkuznets@redhat.com; jmattson@google.com; luto@kernel.org; dave.hansen@linux.intel.com; slp@redhat.com; pgonda@google.com; peterz@infradead.org; srinivas.pandruvada@linux.intel.com; rientjes@google.com; dovmurik@linux.ibm.com; tobin@ibm.com; bp@alien8.de; Roth, Michael <Michael.Roth@amd.com>; vbabka@suse.cz; kirill@shutemov.name; ak@linux.intel.com; tony.luck@intel.com; marcorr@google.com; sathyanarayanan.kuppuswamy@linux.intel.com; alpergun@google.com; jarkko@kernel.org
-> Subject: Re: [PATCH Part2 v6 06/49] x86/sev: Add helper functions for RMPUPDATE and PSMASH instruction
-> 
-> * Kalra, Ashish (Ashish.Kalra@amd.com) wrote:
-> > [AMD Official Use Only - General]
-> > 
-> > >>>  /*
-> > >>>   * The RMP entry format is not architectural. The format is 
-> > >>> defined in PPR @@ -126,6 +128,15 @@ struct snp_guest_platform_data {
-> > >>>  	u64 secrets_gpa;
-> > >>>  };
-> > >>>  
-> > >>> +struct rmpupdate {
-> > >>> +	u64 gpa;
-> > >>> +	u8 assigned;
-> > >>> +	u8 pagesize;
-> > >>> +	u8 immutable;
-> > >>> +	u8 rsvd;
-> > >>> +	u32 asid;
-> > >>> +} __packed;
-> > 
-> > >>I see above it says the RMP entry format isn't architectural; is this 'rmpupdate' structure? If not how is this going to get handled when we have a couple >of SNP capable CPUs with different layouts?
-> > 
-> > >Architectural implies that it is defined in the APM and shouldn't change in such a way as to not be backward compatible. 
-> > >I probably think the wording here should be architecture independent or more precisely platform independent.
-> > 
-> > Some more clarity on this: 
-> > 
-> > Actually, the PPR for family 19h Model 01h, Rev B1 defines the RMP entry format as below:
-> > 
-> > 2.1.4.2 RMP Entry Format
-> > Architecturally the format of RMP entries are not specified in APM. In order to assist software, the following table specifies select portions of the RMP entry format for this specific product. Each RMP entry is 16B in size and is formatted as follows. Software should not rely on any field definitions not specified in this table and the format of an RMP entry may change in future processors. 
-> > 
-> > Architectural implies that it is defined in the APM and shouldn't change in such a way as to not be backward compatible. So non-architectural in this context means that it is only defined in our PPR.
-> > 
-> > So actually this RPM entry definition is platform dependent and will need to be changed for different AMD processors and that change has to be handled correspondingly in the dump_rmpentry() code. 
-> 
-> > You'll need a way to make that fail cleanly when run on a newer CPU with different layout, and a way to build kernels that can handle more than one layout.
-> 
-> Yes, I will be adding a check for CPU family/model as following :
-> 
-> static int __init snp_rmptable_init(void)
-> {
-> +       int family, model;
-> 
->       if (!boot_cpu_has(X86_FEATURE_SEV_SNP))
->                return 0;
-> 
-> +       family = boot_cpu_data.x86;
-> +       model  = boot_cpu_data.x86_model;
-> 
-> +       /*
-> +        * RMP table entry format is not architectural and it can vary by processor and
-> +        * is defined by the per-processor PPR. Restrict SNP support on the known CPU
-> +        * model and family for which the RMP table entry format is currently defined for.
-> +        */
-> +       if (family != 0x19 || model > 0xaf)
-> +               goto nosnp;
+On Tue, Jun 28, 2022 at 8:25 PM Colin Foster
+<colin.foster@in-advantage.com> wrote:
+> On Tue, Jun 28, 2022 at 02:53:49PM +0200, Andy Shevchenko wrote:
+> > On Tue, Jun 28, 2022 at 10:17 AM Colin Foster
+> > <colin.foster@in-advantage.com> wrote:
 
-please add a print there to say why you're not enabling SNP.
+...
 
-It would be great if your firmware could give you an 'rmpentry version'; and
-then if a new model came out that happened to have the same layout
-everything would just carryon working by checking that rather than
-the actual family/model.
+> > >  builtin_platform_driver(ocelot_pinctrl_driver);
+> >
+> > This contradicts the logic behind this change. Perhaps you need to
+> > move to module_platform_driver(). (Yes, I think functionally it won't
+> > be any changes if ->remove() is not needed, but for the sake of
+> > logical correctness...)
+>
+> I'll do this. Thanks.
+>
+> Process question: If I make this change is it typical to remove all
+> Reviewed-By tags? I assume "yes"
 
-> +
-> 
-> This way SNP will only be enabled specifically on the platforms for which this RMP entry
-> format is defined in those processor's PPR. This will work for Milan and Genoa as of now.
-> 
-> Additionally as per Sean's suggestion, I will be moving the RMP structure definition to sev.c,
-> which will make it a private structure and not exposed to other parts of the kernel.
-> 
-> Also in the future we will have an architectural interface to read the RMP table entry,
-> we will first check for it's availability and if not available fall back to the RMP table
-> entry structure definition.
+I would not. This change is logical continuation and I truly believe
+every reviewer will agree on it.
 
-Dave
-
->  Thanks,
->  Ashish
-> 
 -- 
-Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
-
+With Best Regards,
+Andy Shevchenko

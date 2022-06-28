@@ -2,154 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE13055EA12
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C3955EA16
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbiF1Qng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 12:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54762 "EHLO
+        id S235044AbiF1QpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 12:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235162AbiF1QmO (ORCPT
+        with ESMTP id S235346AbiF1Qnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:42:14 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C064FCD4;
-        Tue, 28 Jun 2022 09:39:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656434393; x=1687970393;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=jnXDJ3dIjSp6xHcVtKny8xhd8b/hK+Z5R6b5A+1lEbk=;
-  b=Vp0LDYg0HXrIARfMDJmFhDYkuK1MmPwBAbdXABFdm4Pa6Yu66vAawQ1W
-   292Y7d6cyYr9/ZEQZFsFnIx3kpD/qtqrkFLWfbR+2wpwoYn3g0Gi7wJ6t
-   JfJ116tVYJQCA47YTwqRiisQkJNOQEew9j70ogSJPb9+VZTBciacHJnOv
-   FAIPpnISQPK3pZgjc85okzy3/TGAytyUDV5dy+fhfVA9/0AcaHeMAzxCl
-   j9HCUE6bzM4kigR6MtGTpdNEUkx7DNhUT440wDHYoJOcAUbqHpa3Bcasf
-   9N0dp9HkLvwW4cr21P8qpR1r0BHwh1o7c843nk0IWBQX34LI9j8t0Ubuf
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="280551371"
-X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="280551371"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 09:39:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="658198138"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Jun 2022 09:39:32 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 28 Jun 2022 09:39:31 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 28 Jun 2022 09:39:31 -0700
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
- Tue, 28 Jun 2022 09:39:31 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     "tarumizu.kohei@fujitsu.com" <tarumizu.kohei@fujitsu.com>,
-        'Linus Walleij' <linus.walleij@linaro.org>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "eugenis@google.com" <eugenis@google.com>,
-        "pcc@google.com" <pcc@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "marcos@orca.pet" <marcos@orca.pet>,
-        "marcan@marcan.st" <marcan@marcan.st>,
-        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
-        "conor.dooley@microchip.com" <conor.dooley@microchip.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "ast@kernel.org" <ast@kernel.org>,
-        "peter.chen@kernel.org" <peter.chen@kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Subject: RE: [PATCH v5 0/6] Add hardware prefetch control driver for A64FX and
- x86
-Thread-Topic: [PATCH v5 0/6] Add hardware prefetch control driver for A64FX
- and x86
-Thread-Index: AQHYemdOe4e+BwzSVEeUnZkOYa/FOK1JFpkAgAY1RYCAAArrgIAEgNwAgA+7kYCAAdqygP//t3Xw
-Date:   Tue, 28 Jun 2022 16:39:31 +0000
-Message-ID: <c2fb1376536d471f88b58ad82859a183@intel.com>
-References: <20220607120530.2447112-1-tarumizu.kohei@fujitsu.com>
- <YqNCDrqcp9t8HlUJ@kroah.com>
- <OSBPR01MB203749DA00C7BEE5741AFEB980AA9@OSBPR01MB2037.jpnprd01.prod.outlook.com>
- <YqiAY689pOJbHKUd@kroah.com>
- <TY2PR01MB20426C7822E46B2E8B2525FB80AF9@TY2PR01MB2042.jpnprd01.prod.outlook.com>
- <CACRpkdaV8+06gzxi3ou4+nxa28R5Rhzg+KJ8HWh4gyK4AkoC9g@mail.gmail.com>
- <OSBPR01MB203739DD69FB8C50990C356A80B89@OSBPR01MB2037.jpnprd01.prod.outlook.com>
-In-Reply-To: <OSBPR01MB203739DD69FB8C50990C356A80B89@OSBPR01MB2037.jpnprd01.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-msip_labels: =?utf-8?B?TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2Uw?=
- =?utf-8?B?NTBfQWN0aW9uSWQ9NzBjY2M1ODgtNDljNi00ZGUxLWJhMmQtMDIyYzBmYmZl?=
- =?utf-8?B?OWYzO01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQtM2IwZjRm?=
- =?utf-8?B?ZWNlMDUwX0NvbnRlbnRCaXRzPTA7TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5?=
- =?utf-8?B?LTQyYWMtYWI0ZC0zYjBmNGZlY2UwNTBfRW5hYmxlZD10cnVlO01TSVBfTGFi?=
- =?utf-8?B?ZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQtM2IwZjRmZWNlMDUwX01ldGhv?=
- =?utf-8?B?ZD1TdGFuZGFyZDtNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1hYjRk?=
- =?utf-8?B?LTNiMGY0ZmVjZTA1MF9OYW1lPUZVSklUU1UtUkVTVFJJQ1RFRO+/ou++gA==?=
- =?utf-8?B?776LO01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQtM2IwZjRm?=
- =?utf-8?B?ZWNlMDUwX1NldERhdGU9MjAyMi0wNi0yOFQxMzo0MDo0NFo7TVNJUF9MYWJl?=
- =?utf-8?B?bF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2UwNTBfU2l0ZUlk?=
- =?utf-8?Q?=3Da19f121d-81e1-4858-a9d8-736e267fd4c7;?=
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 28 Jun 2022 12:43:50 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075BC5F94;
+        Tue, 28 Jun 2022 09:42:06 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SGbsuW028382;
+        Tue, 28 Jun 2022 16:42:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=K/UBgtt6/6uSNgscEd4vgJNPQ+dVZWfUMfcvFGbarcg=;
+ b=DSAEI3dS00lCLQ6/zm/wqXchVF94xuTxk2xA5sGeRRwOVxycQzC+IlW0Czb6iaTzIBGf
+ s9S79PPet2qs5vt5sXrTstqVoXmNhXs+FfHnEGyQDOVgNIC4ry2IILqSZxXUYG8J90rM
+ AnRvjSkKz08MktFM3WU2Q0PAY65Zxt/m0+45ysITi1ttvFvT7i2wFAeRFudoE0r0hLa0
+ 7NUSBA5hOQk9/dm7lWN+iNmlwx5PBhss29kDoCUrSXqdUHIr1I8ELOkKge5TU80VBFqj
+ nn2zESMU+Q2BLG26T7mWGkD+0jhUisGxbAkdhfJbjjvWHRTxn5o6Wlu8gUsQvGD7Szv1 jQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h04ybgmsc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 16:42:05 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25SGc76A032403;
+        Tue, 28 Jun 2022 16:42:05 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h04ybgmrj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 16:42:05 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25SGLHa7023234;
+        Tue, 28 Jun 2022 16:42:03 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06fra.de.ibm.com with ESMTP id 3gwsmhuvan-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 16:42:03 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25SGg0VK22348200
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Jun 2022 16:42:00 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 09360A4054;
+        Tue, 28 Jun 2022 16:42:00 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5EFBCA405B;
+        Tue, 28 Jun 2022 16:41:59 +0000 (GMT)
+Received: from [9.171.1.134] (unknown [9.171.1.134])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 28 Jun 2022 16:41:59 +0000 (GMT)
+Message-ID: <03c79e51-7a0b-f406-d4d2-b10f43b6a7a1@linux.ibm.com>
+Date:   Tue, 28 Jun 2022 18:41:59 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v10 3/3] KVM: s390: resetting the Topology-Change-Report
+Content-Language: en-US
+To:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
+        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, wintera@linux.ibm.com,
+        seiden@linux.ibm.com, nrb@linux.ibm.com
+References: <20220620125437.37122-1-pmorel@linux.ibm.com>
+ <20220620125437.37122-4-pmorel@linux.ibm.com>
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+In-Reply-To: <20220620125437.37122-4-pmorel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: dt4x60niNnGOVhDQfRJjS-0ITOpfPtao
+X-Proofpoint-ORIG-GUID: T7exu_1iiNudLmngWcsfkf-13S1dGpGU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-28_09,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ suspectscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0 impostorscore=0
+ priorityscore=1501 malwarescore=0 lowpriorityscore=0 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206280065
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pj4gVGhlIHJpZ2h0IHdheSB0byBzb2x2ZSB0aGlzIGlzIHRvIG1ha2UgdGhlIExpbnV4IGtlcm5l
-bCBjb250YWluIHRoZSBuZWNlc3NhcnkNCj4+IGhldXJpc3RpY3MgdG8gaWRlbnRpZnkgd2hpY2gg
-dGFza3MgYW5kIHRodXMgY29yZXMgbmVlZCB0aGlzIHRvIGltcHJvdmUgZWZmaWNpZW5jeQ0KPj4g
-YW5kIHRoZW4gYXBwbHkgaXQgYXV0b21hdGljYWxseS4NCj4+DQo+PiBQdXR0aW5nIGl0IGluIHVz
-ZXJzcGFjZSBpcyBtYWtpbmcgYSBodW1hbiBkbyBhIG1hY2hpbmVzIGpvYiB3aGljaCBpc24ndA0K
-Pj4gc3VzdGFpbmFibGUuDQo+Pg0KPj4gQnkgcHV0dGluZyB0aGUgaGV1cmlzdGljcyBpbiBrZXJu
-ZWxzcGFjZSBMaW51eCB3aWxsIGltcHJvdmUgcGVyZm9ybWFuY2UgYWxzbyBvbg0KPj4gd29ya2xv
-YWRzIHRoZSBodW1hbiBvcGVyYXRvciBkaWRuJ3QgdGhpbmsgb2YgYXMgdGhlIG1hY2hpbmUgd2ls
-bCBkZXRlY3QgdGhlbSBmcm9tDQo+PiBzdGF0aWN0aWNhbCBvciBvdGhlciBiZWhhdmlvdXIgcGF0
-dGVybnMuDQo+DQo+SW4gb3JkZXIgdG8gcHV0IHRoZSBoZXVyaXN0aWNzIGludG8ga2VybmVsc3Bh
-Y2UgTGludXgsIEkgdGhpbmsgaXQNCj5uZWNlc3NhcnkgdG8gY29uc2lkZXIgdGhlIGZvbGxvd2lu
-ZyB0d28gcG9pbnRzLg0KPg0KPjEpIFdoaWNoIGNvcmVzIGFyZSB0aWVkIHdpdGggdGhlIHByb2Nl
-c3M/DQo+VGhpcyBpcyBkaWZmZXJlbnQgZnJvbSB0aGUgY29yZSBvbiB3aGljaCB0aGUgcHJvY2Vz
-cyBjYW4gcnVuLiBJdA0KPnByb2JhYmx5IG5lZWQgdG8gY29tYmluZSBzb21lIENQVSByZXNvdXJj
-ZSBsaW1pdCB0byBhdm9pZCBhZmZlY3RpbmcNCj5ub24tdGFyZ2V0IHByb2Nlc3Nlcy4NCj4NCj4y
-KSBIb3cgdG8gZGVyaXZlIHRoZSB2YWx1ZSB0byBzZXQgaW4gdGhlIHJlZ2lzdGVyPw0KPkl0IGlz
-IG5lY2Vzc2FyeSB0byB2ZXJpZnkgd2hldGhlciBhbiBhcHByb3ByaWF0ZSBzZXQgdmFsdWUgY2Fu
-IGJlDQo+ZGVyaXZlZCB1c2luZyBzdGF0aXN0aWNhbCBpbmZvcm1hdGlvbiwgZXRjLiBJbiBhZGRp
-dGlvbiwgdG8gcHJldmVudA0KPnRoZSBjb3N0IG9mIGF1dG9tYXRpYyBkZXJpdmF0aW9uIGZyb20g
-ZXhjZWVkaW5nIHRoZSB2YWx1ZSB0aGF0IHdvdWxkDQo+YmUgaW1wcm92ZWQgYnkgaXQuDQo+DQo+
-SSBkb24ndCBoYXZlIGEgcHJvc3BlY3QgZm9yIHJlc29sdmluZyB0aGVzZSBpc3N1ZXMgeWV0LiBJ
-IHdpbGwNCj5jb250aW51ZSB0aGVzZSBjb25zaWRlcmF0aW9ucy4NCg0KQW5vdGhlciBhcHByb2Fj
-aCB3b3VsZCBiZSB0byBtYWtlIHRoZSBzZXQgb2YgcHJlZmV0Y2ggc2V0dGluZ3MNCmEgdGFzayBh
-dHRyaWJ1dGUuIFRoZW4gc2V0IHRoZW0gaW4gdGhlIGNvbnRleHQgc3dpdGNoIGNvZGUgd2hlbg0K
-dGhlIHByb2Nlc3MgaXMgYWJvdXQgdG8gcnVuIG9uIGEgQ1BVLg0KDQpCdXQgdGhhdCBhc3N1bWVz
-IHlvdSBjYW4gY2hlYXBseSBjaGFuZ2UgdGhlIGF0dHJpYnV0ZXMuIElmIGRvaW5nDQpzbyByZXF1
-aXJlcyBtdWx0aXBsZSBNU1Igd3JpdGVzIChvbiB4ODYpIGl0IG1pZ2h0IGJlIGEgbm9uLXN0YXJ0
-ZXIuDQoNCi1Ub255DQo=
+On 6/20/22 14:54, Pierre Morel wrote:
+> During a subsystem reset the Topology-Change-Report is cleared.
+> Let's give userland the possibility to clear the MTCR in the case
+> of a subsystem reset.
+> 
+> To migrate the MTCR, we give userland the possibility to
+> query the MTCR state.
+> 
+> We indicate KVM support for the CPU topology facility with a new
+> KVM capability: KVM_CAP_S390_CPU_TOPOLOGY.
+> 
+> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
+> ---
+>  Documentation/virt/kvm/api.rst   | 31 +++++++++++
+>  arch/s390/include/uapi/asm/kvm.h | 10 ++++
+>  arch/s390/kvm/kvm-s390.c         | 96 ++++++++++++++++++++++++++++++++
+>  include/uapi/linux/kvm.h         |  1 +
+>  4 files changed, 138 insertions(+)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 11e00a46c610..326f8b7e7671 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -7956,6 +7956,37 @@ should adjust CPUID leaf 0xA to reflect that the PMU is disabled.
+>  When enabled, KVM will exit to userspace with KVM_EXIT_SYSTEM_EVENT of
+>  type KVM_SYSTEM_EVENT_SUSPEND to process the guest suspend request.
+> 
+> +8.37 KVM_CAP_S390_CPU_TOPOLOGY
+> +------------------------------
+> +
+> +:Capability: KVM_CAP_S390_CPU_TOPOLOGY
+> +:Architectures: s390
+> +:Type: vm
+> +
+> +This capability indicates that KVM will provide the S390 CPU Topology
+> +facility which consist of the interpretation of the PTF instruction for
+> +the Function Code 2 along with interception and forwarding of both the
+> +PTF instruction with Function Codes 0 or 1 and the STSI(15,1,x)
+> +instruction to the userland hypervisor.
+
+The way the code is written, STSI 15.x.x is forwarded to user space,
+might actually make sense to future proof the code by restricting that
+to 15.1.2-6 in priv.c.
+> +
+> +The stfle facility 11, CPU Topology facility, should not be provided
+> +to the guest without this capability.
+> +
+> +When this capability is present, KVM provides a new attribute group
+> +on vm fd, KVM_S390_VM_CPU_TOPOLOGY.
+> +This new attribute allows to get, set or clear the Modified Change
+> +Topology Report (MTCR) bit of the SCA through the kvm_device_attr
+> +structure.
+> +
+> +Getting the MTCR bit is realized by using a kvm_device_attr attr
+> +entry value of KVM_GET_DEVICE_ATTR and with kvm_device_attr addr
+> +entry pointing to the address of a struct kvm_cpu_topology.
+> +The value of the MTCR is return by the bit mtcr of the structure.
+> +
+> +When using KVM_SET_DEVICE_ATTR the MTCR is set by using the
+> +attr->attr value KVM_S390_VM_CPU_TOPO_MTCR_SET and cleared by
+> +using KVM_S390_VM_CPU_TOPO_MTCR_CLEAR.
+> +
+>  9. Known KVM API problems
+>  =========================
+> 
+> diff --git a/arch/s390/include/uapi/asm/kvm.h b/arch/s390/include/uapi/asm/kvm.h
+> index 7a6b14874d65..df5e8279ffd0 100644
+> --- a/arch/s390/include/uapi/asm/kvm.h
+> +++ b/arch/s390/include/uapi/asm/kvm.h
+> @@ -74,6 +74,7 @@ struct kvm_s390_io_adapter_req {
+>  #define KVM_S390_VM_CRYPTO		2
+>  #define KVM_S390_VM_CPU_MODEL		3
+>  #define KVM_S390_VM_MIGRATION		4
+> +#define KVM_S390_VM_CPU_TOPOLOGY	5
+> 
+>  /* kvm attributes for mem_ctrl */
+>  #define KVM_S390_VM_MEM_ENABLE_CMMA	0
+> @@ -171,6 +172,15 @@ struct kvm_s390_vm_cpu_subfunc {
+>  #define KVM_S390_VM_MIGRATION_START	1
+>  #define KVM_S390_VM_MIGRATION_STATUS	2
+> 
+> +/* kvm attributes for cpu topology */
+> +#define KVM_S390_VM_CPU_TOPO_MTCR_CLEAR	0
+> +#define KVM_S390_VM_CPU_TOPO_MTCR_SET	1
+
+Are you going to transition to a set-value-provided-by-user API with the next series?
+I don't particularly like that MTCR is user visible, it's kind of an implementation detail.
+
+> +
+> +struct kvm_cpu_topology {
+> +	__u16 mtcr : 1;
+
+So I'd give this a more descriptive name, report_topology_change/topo_change_report_pending ?
+
+> +	__u16 reserved : 15;
+
+Are these bits for future proofing? If so a few more would do no harm IMO.
+> +};
+
+The use of a bit field in uapi surprised my, but I guess it's fine and kvm_sync_regs has them too.
+> +
+>  /* for KVM_GET_REGS and KVM_SET_REGS */
+>  struct kvm_regs {
+>  	/* general purpose regs for s390 */
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 95b96019ca8e..ae39041bb149 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -606,6 +606,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  	case KVM_CAP_S390_PROTECTED:
+>  		r = is_prot_virt_host();
+>  		break;
+> +	case KVM_CAP_S390_CPU_TOPOLOGY:
+> +		r = test_facility(11);
+> +		break;
+>  	default:
+>  		r = 0;
+>  	}
+> @@ -817,6 +820,20 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm, struct kvm_enable_cap *cap)
+>  		icpt_operexc_on_all_vcpus(kvm);
+>  		r = 0;
+>  		break;
+> +	case KVM_CAP_S390_CPU_TOPOLOGY:
+> +		r = -EINVAL;
+> +		mutex_lock(&kvm->lock);
+> +		if (kvm->created_vcpus) {
+> +			r = -EBUSY;
+> +		} else if (test_facility(11)) {
+> +			set_kvm_facility(kvm->arch.model.fac_mask, 11);
+> +			set_kvm_facility(kvm->arch.model.fac_list, 11);
+> +			r = 0;
+> +		}
+> +		mutex_unlock(&kvm->lock);
+> +		VM_EVENT(kvm, 3, "ENABLE: CPU TOPOLOGY %s",
+
+Most of the other cases spell out the cap, so it'd be "ENABLE: CAP_S390_CPU_TOPOLOGY %s".
+
+> +			 r ? "(not available)" : "(success)");
+> +		break;
+>  	default:
+>  		r = -EINVAL;
+>  		break;
+> @@ -1710,6 +1727,76 @@ static void kvm_s390_sca_set_mtcr(struct kvm *kvm)
+>  	ipte_unlock(kvm);
+>  }
+> 
+
+Some brainstorming function names:
+
+kvm_s390_get_topo_change_report
+kvm_s390_(un|re)set_topo_change_report
+kvm_s390_(publish|revoke|unpublish)_topo_change_report
+kvm_s390_(report|signal|revoke)_topology_change
+
+[...]
+

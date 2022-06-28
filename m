@@ -2,171 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE84D55CE5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C78D955DC7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345267AbiF1LxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 07:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52244 "EHLO
+        id S1345037AbiF1Lxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 07:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236568AbiF1LxM (ORCPT
+        with ESMTP id S236568AbiF1Lxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 07:53:12 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88C130F79;
-        Tue, 28 Jun 2022 04:53:11 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2ef5380669cso114055487b3.9;
-        Tue, 28 Jun 2022 04:53:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=XNYX9WokN0679cD0D/hGygcBjjhtjrHu3X0w/VyXDQg=;
-        b=p+9m14+6QsTCZ3pdtSfJn+WEHQmDbBfmFgyzcxQlQAFSE6IZY+I2k0I60ILS1T6sE6
-         5tfPY5UZgBU3FRb4NSW//C4Rx1Ok8ZtMgaPCeNnseoVwEVJEBVFNSrjEMdO0/aE06dMF
-         bO4JyL56j2waskXr5NRKktwhHstWwfoOWUIKXEVeyeHLnlyJ69uPTTPHfcyFtQdII3ir
-         DcrqRmp4yuJtYhQikKQO4K74tylJuh4wPkW3XPaMf8NJTGy1r4c5kq60uETiZZASMznb
-         ZWFQkb1edLWF2vaOXd4DP8s5wnw2b9QM2i0kdqnmPmBiANAXfuc6nrwo6+J80NhmvMlD
-         X06w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XNYX9WokN0679cD0D/hGygcBjjhtjrHu3X0w/VyXDQg=;
-        b=gMCi5KiuOCUMC69Re5b0/9L++ghu2RXNDuEI5AwSOua/EJIY3+TPmS8Geaghgr2X+5
-         2tnT0p302GOuGVVkMHcPnvsmGS2Oc5+5V63/h5rVD/3dPlY5gi43bmlER5lskl+SPxP0
-         ZpObq//ZGJ+K795oHNO1YimTRkK9Q48v1pN7FJbw8Gc3RxjIC4HoSTiXzur0EHYYZNz1
-         QcDKyFGzG3BLAS//yZWdqK9jeJ903xsuFm11t7srKE0MWnmKidMKWyi1EgpUWzp3KGKM
-         44rGhD6SUFF+uX3XfqfqBj6tXQtgDneJl3t5uiC3RKhi5qCuXfG/ax7o+5QSRF1buL4S
-         7yaA==
-X-Gm-Message-State: AJIora9B+i+3eFd33AR/+SmeQRIniyyJPgSc+Ykf0r4TtY/hRkwT0ISv
-        8vyjcfuX2IhMGwHEJS5RcGnD8hhUTQbRGXTf0+E=
-X-Google-Smtp-Source: AGRyM1t1yvSVmh1UzQdiLz0fOsWVO4xcBW2SRjndRAGwREFZZ1pQOPCCdyP/RInbExx8gXe7S6V6QoaMvGta8vqrn/0=
-X-Received: by 2002:a81:2386:0:b0:317:6586:8901 with SMTP id
- j128-20020a812386000000b0031765868901mr20865815ywj.195.1656417190958; Tue, 28
- Jun 2022 04:53:10 -0700 (PDT)
+        Tue, 28 Jun 2022 07:53:47 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3C330F7F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:53:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656417226; x=1687953226;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Ajn0hyQvZuCFAHtCWj0xQ7s0Zvw6UN66/hjKZRjJUTE=;
+  b=L7LDzEAWQHQBWE0ACEy0GicvnRSUxcK/muW/fhiNj/n5dqTlfBrQktta
+   fRmR5quhed6kHIryOn295rhFiLHV3NwbcFKRhfpeamtwSOQ++eY98EJN3
+   fnAMszuC8iEXpKV9GOxLlluQZp/yUfsWUOnqdECCi8jbJ3jZgseiMotQk
+   C/4Zxd7wHJQkjbl/7vKynH1HgLi2SkBDgvh2on3/vxZa+lCt/FKpG8pKc
+   OKgTlSDsb2ppEQ2/70PR+K6zJxA7PdzOCMyLwO2aucc+O54tr2dpmynPY
+   RrvyIlNjYKRbjqE6leBPnMhF3zSw3XNUct7K+9uceLmAl1OBRNRDqRuj+
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="345715747"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="345715747"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 04:53:46 -0700
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="646882963"
+Received: from ltang11-mobl1.ccr.corp.intel.com (HELO [10.249.169.64]) ([10.249.169.64])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 04:53:41 -0700
+Message-ID: <935ca9e3-28c9-99af-5609-41bb1500b2b3@linux.intel.com>
+Date:   Tue, 28 Jun 2022 19:53:39 +0800
 MIME-Version: 1.0
-References: <20220623115631.22209-1-peterwu.pub@gmail.com> <20220623115631.22209-8-peterwu.pub@gmail.com>
- <CAHp75Vd95sEQz8y4ZcviUKaC9ic27yitR+VCwkfb38MTTe0mkg@mail.gmail.com> <CABtFH5K_vB5Rmo+2zAJ8PuMeMvC9x-yhDL93ByOLD+gc2maQYg@mail.gmail.com>
-In-Reply-To: <CABtFH5K_vB5Rmo+2zAJ8PuMeMvC9x-yhDL93ByOLD+gc2maQYg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 28 Jun 2022 13:52:34 +0200
-Message-ID: <CAHp75Vc0t+3p2TGs9kZ-6JP8y-+cmSF++9uCfbWAgFhapteh-A@mail.gmail.com>
-Subject: Re: [PATCH v3 07/14] mfd: mt6370: Add Mediatek MT6370 support
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [PATCH v9 10/11] iommu: Per-domain I/O page fault handling
+Content-Language: en-US
+To:     Ethan Zhao <haifeng.zhao@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>
+References: <20220621144353.17547-1-baolu.lu@linux.intel.com>
+ <20220621144353.17547-11-baolu.lu@linux.intel.com>
+ <faacb997-0c0a-04e1-903d-53857f463214@linux.intel.com>
+ <693a3604-d70b-e08c-2621-7f0cb9bdb6ca@linux.intel.com>
+ <75b17c70-1658-91ea-0992-1be769550943@linux.intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <75b17c70-1658-91ea-0992-1be769550943@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 12:19 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
-> Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B46=E6=
-=9C=8824=E6=97=A5 =E9=80=B1=E4=BA=94 =E5=87=8C=E6=99=A82:01=E5=AF=AB=E9=81=
-=93=EF=BC=9A
-> > On Thu, Jun 23, 2022 at 1:59 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote=
-:
+On 2022/6/28 17:10, Ethan Zhao wrote:
+> Hi, Baolu
+> 
+> 在 2022/6/28 14:28, Baolu Lu 写道:
+>> Hi Ethan,
+>>
+>> On 2022/6/27 21:03, Ethan Zhao wrote:
+>>> Hi,
+>>>
+>>> 在 2022/6/21 22:43, Lu Baolu 写道:
+>>>> Tweak the I/O page fault handling framework to route the page faults to
+>>>> the domain and call the page fault handler retrieved from the domain.
+>>>> This makes the I/O page fault handling framework possible to serve more
+>>>> usage scenarios as long as they have an IOMMU domain and install a page
+>>>> fault handler in it. Some unused functions are also removed to avoid
+>>>> dead code.
+>>>>
+>>>> The iommu_get_domain_for_dev_pasid() which retrieves attached domain
+>>>> for a {device, PASID} pair is used. It will be used by the page fault
+>>>> handling framework which knows {device, PASID} reported from the iommu
+>>>> driver. We have a guarantee that the SVA domain doesn't go away during
+>>>> IOPF handling, because unbind() waits for pending faults with
+>>>> iopf_queue_flush_dev() before freeing the domain. Hence, there's no 
+>>>> need
+>>>> to synchronize life cycle of the iommu domains between the unbind() and
+>>>> the interrupt threads.
+>>>>
+>>>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>>>> Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+>>>> ---
+>>>>   drivers/iommu/io-pgfault.c | 64 
+>>>> +++++---------------------------------
+>>>>   1 file changed, 7 insertions(+), 57 deletions(-)
+>>>>
+>>>> diff --git a/drivers/iommu/io-pgfault.c b/drivers/iommu/io-pgfault.c
+>>>> index aee9e033012f..4f24ec703479 100644
+>>>> --- a/drivers/iommu/io-pgfault.c
+>>>> +++ b/drivers/iommu/io-pgfault.c
+>>>> @@ -69,69 +69,18 @@ static int iopf_complete_group(struct device 
+>>>> *dev, struct iopf_fault *iopf,
+>>>>       return iommu_page_response(dev, &resp);
+>>>>   }
+>>>> -static enum iommu_page_response_code
+>>>> -iopf_handle_single(struct iopf_fault *iopf)
+>>>> -{
+>>>> -    vm_fault_t ret;
+>>>> -    struct mm_struct *mm;
+>>>> -    struct vm_area_struct *vma;
+>>>> -    unsigned int access_flags = 0;
+>>>> -    unsigned int fault_flags = FAULT_FLAG_REMOTE;
+>>>> -    struct iommu_fault_page_request *prm = &iopf->fault.prm;
+>>>> -    enum iommu_page_response_code status = IOMMU_PAGE_RESP_INVALID;
+>>>> -
+>>>> -    if (!(prm->flags & IOMMU_FAULT_PAGE_REQUEST_PASID_VALID))
+>>>> -        return status;
+>>>> -
+>>>> -    mm = iommu_sva_find(prm->pasid);
+>>>> -    if (IS_ERR_OR_NULL(mm))
+>>>> -        return status;
+>>>> -
+>>>> -    mmap_read_lock(mm);
+>>>> -
+>>>> -    vma = find_extend_vma(mm, prm->addr);
+>>>> -    if (!vma)
+>>>> -        /* Unmapped area */
+>>>> -        goto out_put_mm;
+>>>> -
+>>>> -    if (prm->perm & IOMMU_FAULT_PERM_READ)
+>>>> -        access_flags |= VM_READ;
+>>>> -
+>>>> -    if (prm->perm & IOMMU_FAULT_PERM_WRITE) {
+>>>> -        access_flags |= VM_WRITE;
+>>>> -        fault_flags |= FAULT_FLAG_WRITE;
+>>>> -    }
+>>>> -
+>>>> -    if (prm->perm & IOMMU_FAULT_PERM_EXEC) {
+>>>> -        access_flags |= VM_EXEC;
+>>>> -        fault_flags |= FAULT_FLAG_INSTRUCTION;
+>>>> -    }
+>>>> -
+>>>> -    if (!(prm->perm & IOMMU_FAULT_PERM_PRIV))
+>>>> -        fault_flags |= FAULT_FLAG_USER;
+>>>> -
+>>>> -    if (access_flags & ~vma->vm_flags)
+>>>> -        /* Access fault */
+>>>> -        goto out_put_mm;
+>>>> -
+>>>> -    ret = handle_mm_fault(vma, prm->addr, fault_flags, NULL);
+>>>> -    status = ret & VM_FAULT_ERROR ? IOMMU_PAGE_RESP_INVALID :
+>>>> -        IOMMU_PAGE_RESP_SUCCESS;
+>>>> -
+>>>> -out_put_mm:
+>>>> -    mmap_read_unlock(mm);
+>>>> -    mmput(mm);
+>>>> -
+>>>> -    return status;
+>>>> -}
+>>>> -
+>>>
+>>> Once the iopf_handle_single() is removed, the name of 
+>>> iopf_handle_group() looks a little weired
+>>>
+>>> and confused, does this group mean the iommu group (domain) ? while I 
+>>> take some minutes to
+>>
+>> No. This is not the iommu group. It's page request group defined by the
+>> PCI SIG spec. Multiple page requests could be put in a group with a
+>> same group id. All page requests in a group could be responded to device
+>> in one shot.
+> 
+> Thanks your explaination, understand the concept of PCIe PRG.  I meant
+> 
+> do we still have the necessity to mention the "group" here in the name
+> 
+> iopf_handle_group(),  which one is better ? iopf_handle_prg() or
+> 
+> iopf_handler(),  perhaps none of them ? :)
 
-...
+Oh! Sorry for the misunderstanding.
 
-> > >  obj-$(CONFIG_INTEL_SOC_PMIC_BXTWC)  +=3D intel_soc_pmic_bxtwc.o
-> > >  obj-$(CONFIG_INTEL_SOC_PMIC_CHTWC)     +=3D intel_soc_pmic_chtwc.o
-> > >  obj-$(CONFIG_INTEL_SOC_PMIC_CHTDC_TI)  +=3D intel_soc_pmic_chtdc_ti.=
-o
-> > >  obj-$(CONFIG_MFD_MT6360)       +=3D mt6360-core.o
-> > > +obj-$(CONFIG_MFD_MT6370)       +=3D mt6370.o
-> > >  mt6397-objs                    :=3D mt6397-core.o mt6397-irq.o mt635=
-8-irq.o
-> > >  obj-$(CONFIG_MFD_MT6397)       +=3D mt6397.o
-> > >  obj-$(CONFIG_INTEL_SOC_PMIC_MRFLD)     +=3D intel_soc_pmic_mrfld.o
-> >
-> > This whole bunch of drivers is in the wrong place in Makefile.
-> >
-> > https://lore.kernel.org/all/20220616182524.7956-2-andriy.shevchenko@lin=
-ux.intel.com/
->
-> hmm... So shall we need to cherry-pick your this patch first,
-> then modify the Makefile before the next submission??
+I have no strong feeling to change this naming. :-) All the names
+express what the helper does. Jean is the author of this framework. If
+he has the same idea as you, I don't mind renaming it in this patch.
 
-I don't know what Lee's preferences are, but at least I have these
-options in mind:
-1) wait until Lee applies my series;
-2) take that single patch to your tree as a precursor.
-
-In the second case you will need to send the series with that patch as well=
-.
-
-...
-
-> > > +#define MT6370_REG_MAXADDR     0x1FF
-> >
-> > Wondering if (BIT(10) - 1) gives a better hint on how hardware limits
-> > this (so it will be clear it's 10-bit address).
->
-> well... This "0x1FF" is just a virtual mapping value to map the max
-> address of the PMU bank(0x1XX).
-> So, I feel its means is different from using (BIT(10) - 1) here.
-
-Perhaps a comment then?
-
-...
-
-> > > +       if (ret < 0)
-> > > +               return ret;
-> > > +       else if (ret !=3D val_size)
-> >
-> > Redundant 'else'.
->
-> I'm not quite sure what you mean, so I made the following changes first.
-> ------------------------------------
->        if (ret < 0)
->               return ret;
->        if (ret !=3D val_size)
->               return -EIO;
-> ------------------------------------
-> I don't know if it meets your expectations??
-
-Yes.
-
-> > > +               return -EIO;
-
---=20
-With Best Regards,
-Andy Shevchenko
+Best regards,
+baolu

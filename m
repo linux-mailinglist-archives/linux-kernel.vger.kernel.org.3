@@ -2,137 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 926DF55C657
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2992755C9DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344881AbiF1LDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 07:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60138 "EHLO
+        id S1344973AbiF1LDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 07:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344790AbiF1LDM (ORCPT
+        with ESMTP id S1344424AbiF1LDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 07:03:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0C91AF01
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:03:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A022B81DD2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 11:03:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09003C341CA;
-        Tue, 28 Jun 2022 11:03:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656414187;
-        bh=uTdZoZ1skcBJGBohuXIOVKRZtrAs0MBBTX+3FECPSPM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gTFnpETkyGVGCIM4IT+CvqMTRBxfyUH2ihtD+Z6y8Fzhuz4K6ByL17dn/JqWo8U52
-         cnkKJSbGRShN9x+q28qb8+1m77QJFbv3jW+QYoE88uZmQ34rBdSvSZLN26Xvqs+3tQ
-         cYVl5Fhu2urVJCiAdyRBsC++ERu6xrPgJOcZygVO/x+neqyExKrH9fDG9FZlQZpnlQ
-         lcM6W3Mr7Olw/eiFcb1Iw6w8fAd+Qub5SNLeXBHghqtoR0eltM1t/2O+TAJ2Wy1snX
-         YViUPVJ/3BWwr8PTT1a3nX6ZjKV/Xx3yAuq9ED4fBURDkfXglUOus9Ay1UiiqnduEk
-         KmS0ChAUYW93A==
-Date:   Tue, 28 Jun 2022 12:03:02 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Zhou Guanghui <zhouguanghui1@huawei.com>
-Cc:     akpm@linux-foundation.org, rppt@kernel.org,
-        anshuman.khandual@arm.com, darren@os.amperecomputing.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org, xuqiang36@huawei.com
-Subject: Re: [PATCH v5] memblock,arm64: Expand the static memblock memory
- table
-Message-ID: <20220628110301.GA23703@willie-the-truck>
-References: <20220615102742.96450-1-zhouguanghui1@huawei.com>
+        Tue, 28 Jun 2022 07:03:31 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74F0AE61
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:03:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656414211; x=1687950211;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GjAwO+mJ2oS3BLSp8nWYdFQ1+QP7mT5Qm8Sp/B7dOz8=;
+  b=j62epdaQtRKnpz+P6X1U/gow860xBSGdGBH0ONEd7Wlf+c2n6MDYAXHR
+   zqyrr8067V0zGfO+SYlrF4ykPIUG6lhPRIZSl94sc1PktzvZv+Un3d9kG
+   3+o1DIwGIL2avZtR4QkszJbnFV/kPevJO8ktcS8cNCF/71kJ4sEa7ZJAx
+   Oi1+iACFHoLBOBOu+dCl/NXMKmVLFMjbSPx7f7Ju4j0LBwNn8ebsWO6ja
+   0kB6zdIdSD3c8Ybn/fmiofY7qTBN8h2+sDtO0wfNaKZBsAV2/yBQqjtKm
+   RDnf8EdoK/h4LSmY0juid3DwDXUd7blDTNDeZQ8rAEqM1dBUXB7wAN0n6
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="264749861"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="264749861"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 04:03:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="836635133"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 28 Jun 2022 04:03:28 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o690C-0009wU-5e;
+        Tue, 28 Jun 2022 11:03:28 +0000
+Date:   Tue, 28 Jun 2022 19:03:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:quic_neeraju.2022.06.27a] BUILD SUCCESS
+ 42487e4da04fe251d599eb87f7943c1c4d845a65
+Message-ID: <62badff3.x7yMDYqWMk6ASQ/r%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615102742.96450-1-zhouguanghui1@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 10:27:42AM +0000, Zhou Guanghui wrote:
-> In a system(Huawei Ascend ARM64 SoC) using HBM, a multi-bit ECC error
-> occurs, and the BIOS will mark the corresponding area (for example, 2 MB)
-> as unusable. When the system restarts next time, these areas are not
-> reported or reported as EFI_UNUSABLE_MEMORY. Both cases lead to an
-> increase in the number of memblocks, whereas EFI_UNUSABLE_MEMORY
-> leads to a larger number of memblocks.
-> 
-> For example, if the EFI_UNUSABLE_MEMORY type is reported:
-> ...
-> memory[0x92]    [0x0000200834a00000-0x0000200835bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
-> memory[0x93]    [0x0000200835c00000-0x0000200835dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-> memory[0x94]    [0x0000200835e00000-0x00002008367fffff], 0x0000000000a00000 bytes on node 7 flags: 0x0
-> memory[0x95]    [0x0000200836800000-0x00002008369fffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-> memory[0x96]    [0x0000200836a00000-0x0000200837bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
-> memory[0x97]    [0x0000200837c00000-0x0000200837dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-> memory[0x98]    [0x0000200837e00000-0x000020087fffffff], 0x0000000048200000 bytes on node 7 flags: 0x0
-> memory[0x99]    [0x0000200880000000-0x0000200bcfffffff], 0x0000000350000000 bytes on node 6 flags: 0x0
-> memory[0x9a]    [0x0000200bd0000000-0x0000200bd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-> memory[0x9b]    [0x0000200bd0200000-0x0000200bd07fffff], 0x0000000000600000 bytes on node 6 flags: 0x0
-> memory[0x9c]    [0x0000200bd0800000-0x0000200bd09fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-> memory[0x9d]    [0x0000200bd0a00000-0x0000200fcfffffff], 0x00000003ff600000 bytes on node 6 flags: 0x0
-> memory[0x9e]    [0x0000200fd0000000-0x0000200fd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-> memory[0x9f]    [0x0000200fd0200000-0x0000200fffffffff], 0x000000002fe00000 bytes on node 6 flags: 0x0
-> ...
-> 
-> The EFI memory map is parsed to construct the memblock arrays before
-> the memblock arrays can be resized. As the result, memory regions
-> beyond INIT_MEMBLOCK_REGIONS are lost.
-> 
-> Add a new macro INIT_MEMBLOCK_MEMORY_REGTIONS to replace
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git quic_neeraju.2022.06.27a
+branch HEAD: 42487e4da04fe251d599eb87f7943c1c4d845a65  srcu: Reduce blocking agressiveness of expedited grace periods further
 
-nit: s/REGTIONS/REGIONS/
+elapsed time: 727m
 
-> INIT_MEMBLOCK_REGTIONS to define the size of the static memblock.memory
-> array.
-> 
-> Allow overriding memblock.memory array size with architecture defined
-> INIT_MEMBLOCK_MEMORY_REGIONS and make arm64 to set
-> INIT_MEMBLOCK_MEMORY_REGIONS to 1024 when CONFIG_EFI is enabled.
-> 
-> Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
-> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
-> Tested-by: Darren Hart <darren@os.amperecomputing.com>
-> ---
->  arch/arm64/include/asm/memory.h |  9 +++++++++
->  mm/memblock.c                   | 14 +++++++++-----
->  2 files changed, 18 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
-> index 0af70d9abede..ce8614fa376a 100644
-> --- a/arch/arm64/include/asm/memory.h
-> +++ b/arch/arm64/include/asm/memory.h
-> @@ -364,6 +364,15 @@ void dump_mem_limit(void);
->  # define INIT_MEMBLOCK_RESERVED_REGIONS	(INIT_MEMBLOCK_REGIONS + NR_CPUS + 1)
->  #endif
->  
-> +/*
-> + * memory regions which marked with flag MEMBLOCK_NOMAP(for example, the memory
-> + * of the EFI_UNUSABLE_MEMORY type) may divide a continuous memory block into
-> + * multiple parts. As a result, the number of memory regions is large.
-> + */
-> +#ifdef CONFIG_EFI
-> +#define INIT_MEMBLOCK_MEMORY_REGIONS	(INIT_MEMBLOCK_REGIONS * 8)
-> +#endif
-> +
->  #include <asm-generic/memory_model.h>
->  
->  #endif /* __ASM_MEMORY_H */
+configs tested: 52
+configs skipped: 2
 
-For the arm64 bit:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Acked-by: Will Deacon <will@kernel.org>
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+ia64                             allmodconfig
+alpha                            allyesconfig
+arc                              allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                                defconfig
+i386                             allyesconfig
+x86_64               randconfig-a012-20220627
+x86_64               randconfig-a011-20220627
+x86_64               randconfig-a013-20220627
+x86_64               randconfig-a014-20220627
+x86_64               randconfig-a015-20220627
+x86_64               randconfig-a016-20220627
+i386                 randconfig-a012-20220627
+i386                 randconfig-a011-20220627
+i386                 randconfig-a016-20220627
+i386                 randconfig-a013-20220627
+i386                 randconfig-a014-20220627
+i386                 randconfig-a015-20220627
+arc                  randconfig-r043-20220627
+s390                 randconfig-r044-20220627
+riscv                randconfig-r042-20220627
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
 
-I'm assuming Andrew will pick this up, but please yell if you'd prefer it
-to go via the arm64 tree.
+clang tested configs:
+x86_64               randconfig-a002-20220627
+x86_64               randconfig-a003-20220627
+x86_64               randconfig-a001-20220627
+x86_64               randconfig-a005-20220627
+x86_64               randconfig-a004-20220627
+x86_64               randconfig-a006-20220627
+i386                 randconfig-a002-20220627
+i386                 randconfig-a004-20220627
+i386                 randconfig-a003-20220627
+i386                 randconfig-a001-20220627
+i386                 randconfig-a005-20220627
+i386                 randconfig-a006-20220627
+hexagon              randconfig-r041-20220627
+hexagon              randconfig-r045-20220627
 
-Will
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

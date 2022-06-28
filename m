@@ -2,96 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DCBB55E216
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3776555E019
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344527AbiF1Jtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
+        id S1344314AbiF1Jto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344511AbiF1JtA (ORCPT
+        with ESMTP id S1344543AbiF1JtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:49:00 -0400
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A9E2CDF0;
-        Tue, 28 Jun 2022 02:48:55 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id cs6so19172817qvb.6;
-        Tue, 28 Jun 2022 02:48:55 -0700 (PDT)
+        Tue, 28 Jun 2022 05:49:04 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174232D1F7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:49:01 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id i18so21289305lfu.8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:49:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=801n56RRF19njvd3sN05U/Pk8HphuQt6u550b7DOhRU=;
+        b=Sfi0J69vaMPOEhNG6WtijHlldNNBSyYKnabmbOfatQmzjdbaXohnb9sm9+yIsihXvi
+         QJ6SWz6Kek1j6cgGpPZjrhIwqFGVDwFz/nBlqGdA/jXJN2i6beXkwxUrk0LV2gvs2pPE
+         mhM8qjY9dRRa5iwv6n0/36hybYgJBVcA10VCg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qmsHjaT7nLNEUigJCn2XHg2FRw3Jceu7QHHPyWgnjqo=;
-        b=g5JAVx8ZIm1q8Y7AknFfm7h6VYFxH09KkZoOBIfWOZKJTFYcos7Mj/2Ot0ksGUnq3J
-         63pqG2OSuCnag4pUCj66FmuW+WlTlfH40MoBmmZ0v8Cb0uCp0k9dw/BNkFexGkAeU0jr
-         k9G7IJ5+3bPd5nMDYnQFxJ7RKW97kvvLfZjfcFmY/2c3c3evUBNSJxxE6xk84NBdPpoy
-         ZENdiMLHTK0i/R1L+TTaS9iekN6T5Jb+XZbLPKP4Vr4dPsdvOEZQDLtmNqg39uDthWhA
-         JEf23U9Aoucfr0dA2S9L8VRWbD75K/2IIJV5fKLMBvcVf+UuVA4YMjnSCxB1y+n1MEb3
-         cqpQ==
-X-Gm-Message-State: AJIora8m/03PPZOzQvuyJL1als/Wtbq1uHJf5SWj82h/6vWAqcJZHwv0
-        xKl9IHFqvCUf77vMg7ho/XFBV9QQRpM5Ew==
-X-Google-Smtp-Source: AGRyM1vv8FMtgbhpCc3DfK5B3yHX8YT5E/HLbE1yPAxs+AAoNh0T3/m3lJxflo9ovLN6I7FlIC0sLA==
-X-Received: by 2002:a05:622a:54a:b0:318:444c:d9cf with SMTP id m10-20020a05622a054a00b00318444cd9cfmr11919011qtx.646.1656409734082;
-        Tue, 28 Jun 2022 02:48:54 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id s9-20020ac85289000000b00304efba3d84sm8748589qtn.25.2022.06.28.02.48.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 02:48:53 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id v185so11759474ybe.8;
-        Tue, 28 Jun 2022 02:48:53 -0700 (PDT)
-X-Received: by 2002:a05:6902:a:b0:65c:b38e:6d9f with SMTP id
- l10-20020a056902000a00b0065cb38e6d9fmr19354286ybh.36.1656409733344; Tue, 28
- Jun 2022 02:48:53 -0700 (PDT)
+        bh=801n56RRF19njvd3sN05U/Pk8HphuQt6u550b7DOhRU=;
+        b=BnM8WkFDFgN87Y4FxAAzSuOcvvVtxsq60gPsyoii1llrpI95YvE4aR9hy2GvHDREit
+         7UBF9spwyMuPpnnRs3UFkHZfWAhmq6W08BDDfcHVifX5mEhug8kmgqU8MEF7jLh5znus
+         2YzMD+jUQjBr3GJtt5v0DH9L9doXn0X9cehVvzY2JOnQHdMdHAoaMIYJYi37bSw5yGdc
+         o5CDqTHMVDbdwVSMAj3EFg8RQLFMXOs4PlKg9lH+/8KqKzLc7+O0MoeG6h0iPp6WjMMm
+         UMQq24NxwEPErpxcB77OVcL3koTvMBThtbW0dFmSbUnn1zVe3LjTMtjmU3f/QhH/PJ0l
+         2B0Q==
+X-Gm-Message-State: AJIora+sMFV5ROLe1SbJSsZW3kTdOKfDEb8oyPWlzPyXyGhpLwgJzdrl
+        tP+cUUXFP13eoW//pWRi0tR3qdwN3Z7qpV9mukRN1g==
+X-Google-Smtp-Source: AGRyM1v9VpZqgUeR8hbmV2LkX0jtJ4z1jBxFd7ywaOEYWsrdztcyr+Zma9hibdiHk7yxd1rIAzY7os2Cfgn+rdIMq6k=
+X-Received: by 2002:a05:6512:1192:b0:481:4ba:f14d with SMTP id
+ g18-20020a056512119200b0048104baf14dmr10376899lfr.662.1656409739307; Tue, 28
+ Jun 2022 02:48:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220622181723.13033-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220622181723.13033-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220622181723.13033-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 28 Jun 2022 11:48:41 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX-yE3MAR8ugEj6CZ5u-Bfv81pvs0FC0gZ4WrXOt0DHzg@mail.gmail.com>
-Message-ID: <CAMuHMdX-yE3MAR8ugEj6CZ5u-Bfv81pvs0FC0gZ4WrXOt0DHzg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: clock: r9a07g043-cpg: Add Renesas
- RZ/Five CPG Clock and Reset Definitions
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220614122821.3646071-1-dario.binacchi@amarulasolutions.com>
+ <20220614122821.3646071-6-dario.binacchi@amarulasolutions.com> <20220628092833.uo66jbnwhh5af6je@pengutronix.de>
+In-Reply-To: <20220628092833.uo66jbnwhh5af6je@pengutronix.de>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Tue, 28 Jun 2022 11:48:48 +0200
+Message-ID: <CABGWkvrdw27T+g==HrknM+52mhvgEDS_4P9__7tsc+aV-oAvCw@mail.gmail.com>
+Subject: Re: [PATCH v4 05/12] can: slcan: use CAN network device driver API
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 8:17 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Renesas RZ/Five SoC has almost the same clock structure compared to the
-> Renesas RZ/G2UL SoC, re-use the r9a07g043-cpg.h header file and just
-> amend the RZ/Five CPG clock and reset definitions.
+Hi Marc,
+
+On Tue, Jun 28, 2022 at 11:28 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
 >
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> On 14.06.2022 14:28:14, Dario Binacchi wrote:
+> > As suggested by commit [1], now the driver uses the functions and the
+> > data structures provided by the CAN network device driver interface.
+> >
+> > Currently the driver doesn't implement a way to set bitrate for SLCAN
+> > based devices via ip tool, so you'll have to do this by slcand or
+> > slcan_attach invocation through the -sX parameter:
+> >
+> > - slcan_attach -f -s6 -o /dev/ttyACM0
+> > - slcand -f -s8 -o /dev/ttyUSB0
+> >
+> > where -s6 in will set adapter's bitrate to 500 Kbit/s and -s8 to
+> > 1Mbit/s.
+> > See the table below for further CAN bitrates:
+> > - s0 ->   10 Kbit/s
+> > - s1 ->   20 Kbit/s
+> > - s2 ->   50 Kbit/s
+> > - s3 ->  100 Kbit/s
+> > - s4 ->  125 Kbit/s
+> > - s5 ->  250 Kbit/s
+> > - s6 ->  500 Kbit/s
+> > - s7 ->  800 Kbit/s
+> > - s8 -> 1000 Kbit/s
+> >
+> > In doing so, the struct can_priv::bittiming.bitrate of the driver is not
+> > set and since the open_candev() checks that the bitrate has been set, it
+> > must be a non-zero value, the bitrate is set to a fake value (-1U)
+> > before it is called.
+> >
+> > The patch also changes the slcan_devs locking from rtnl to spin_lock. The
+> > change was tested with a kernel with the CONFIG_PROVE_LOCKING option
+> > enabled that did not show any errors.
+>
+> You're not allowed to call alloc_candev() with a spin_lock held. See
+> today's kernel test robot mail:
+>
+> | https://lore.kernel.org/all/YrpqO5jepAvv4zkf@xsang-OptiPlex-9020
+>
+> I think it's best to keep the rtnl for now.
 
-Will queue in renesas-clk-for-v5.20.
+The rtnl_lock() uses a mutex while I used a spin_lock.
 
-Gr{oetje,eeting}s,
+static DEFINE_MUTEX(rtnl_mutex);
 
-                        Geert
+void rtnl_lock(void)
+{
+mutex_lock(&rtnl_mutex);
+}
+EXPORT_SYMBOL(rtnl_lock);
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+So might it be worth trying with a mutex instead of rtnl_lock(), or do
+you think it is
+safer to return to rtn_lock () anyway?
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks and regards,
+Dario
+
+>
+> regards,
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+
+-- 
+
+Dario Binacchi
+
+Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com

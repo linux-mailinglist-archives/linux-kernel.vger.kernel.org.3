@@ -2,156 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C6AE55D6D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7328055D749
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240397AbiF1J6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47188 "EHLO
+        id S1344661AbiF1J5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344682AbiF1J5W (ORCPT
+        with ESMTP id S242271AbiF1J5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:57:22 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F492F66C
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:57:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=ol0vCMaWlj3xRpRtD6xgeBpq8sM8wJOrSwpovqb5Oqg=; b=LGGJ6IUUPsmP67NCIIwApCOpZb
-        C3zYxbyPHfbOBxCW8nVA3J77CnKzgUdEGrcBUV3yRNwfaB/ZDESe3mD/FgjE+qwIC+FXPnp9+0KI/
-        b10WrelHhSRXWt9f4+/rkSKELiB7mI+r84ax9MEgSuBWgXj3lU6z9zXoB20zcl5jT7X3xtOc/OJNk
-        4jacvMiRBIwsiYkoPxlFD1POjYF7IwPwECyqeFtB+TyIvVCrsM/8m+pPooR8syk+JpEgywsEMqNpX
-        Np4WlLV6VcR0qd+t4yTXEq6dAr5MI/akvVUEqYk6WpPDcxOHZijRGsEl1UUJJb49TWJeefjydUCYY
-        FySqfitA==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o67x7-00E15L-Dp; Tue, 28 Jun 2022 09:56:39 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AA4593001F3;
-        Tue, 28 Jun 2022 11:56:10 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8BF512022E4D3; Tue, 28 Jun 2022 11:56:10 +0200 (CEST)
-Date:   Tue, 28 Jun 2022 11:56:10 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     masahiroy@kernel.org, mmarek@suse.cz, paul.gortmaker@windriver.com,
-        arnd@arndb.de
-Cc:     rppt@kernel.org, bp@alien8.de, linux-kernel@vger.kernel.org
-Subject: [RFC][PATCH] kconfig: Add implicit CONFIG_ prefix to IS_ENABLED()
- and co
-Message-ID: <YrrQOifFIiISf/3g@hirez.programming.kicks-ass.net>
+        Tue, 28 Jun 2022 05:57:07 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98DB2FFC0;
+        Tue, 28 Jun 2022 02:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656410198; x=1687946198;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=E8g6oATwOn9T0Tp0qEpsI5CmgdS7Yl7GaxAoiXWVZNk=;
+  b=CoFMyxXtUsCwpMRcWLxREQy0GpsI6BEY5vjggLEhlq6gxKfh9PztP9Bh
+   gHs/240mQivk4Ys6mHmrw3Us2tkcw5IE9j7SL6cm1Xs0CjIixAkCazN1J
+   PhbXKUU7LUwshBkfQuf6GYlVw0v+GBY2MXvIWxCleC4I06DVbGftrCL3V
+   bdtypczHgSg0kJR/6o6S1PEPn0rAO4yVIIoCshRlGB49OJdIzcGhPmiyd
+   ltdtO0RohtZzKM9DdlP66EDkt0G3Rppa0eE0k5uEa8IWAXVDmVNN5ISTF
+   NjwO5CZ/x21srfKZ7EYspOrFqXu30tT9snIcpuWr/GE2dfReLlPCKPGUG
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="270445391"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="270445391"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 02:56:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="732691163"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 28 Jun 2022 02:56:30 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 28 Jun 2022 12:56:30 +0300
+Date:   Tue, 28 Jun 2022 12:56:30 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Cc:     robh+dt@kernel.org, gregkh@linuxfoundation.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        amelie.delaunay@foss.st.com, alexandre.torgue@foss.st.com
+Subject: Re: [PATCH 2/4] usb: typec: ucsi: stm32g0: add support for stm32g0
+ i2c controller
+Message-ID: <YrrQTiCWsnRKAzn7@kuha.fi.intel.com>
+References: <20220624155413.399190-1-fabrice.gasnier@foss.st.com>
+ <20220624155413.399190-3-fabrice.gasnier@foss.st.com>
+ <YrmtzDfFm17PFl2r@kuha.fi.intel.com>
+ <bd35eb19-cfda-4799-1ab0-0578d3c79466@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <bd35eb19-cfda-4799-1ab0-0578d3c79466@foss.st.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 28, 2022 at 09:21:12AM +0200, Fabrice Gasnier wrote:
+> On 6/27/22 15:17, Heikki Krogerus wrote:
+> > Hi,
+> > 
+> > On Fri, Jun 24, 2022 at 05:54:11PM +0200, Fabrice Gasnier wrote:
+> >> +static int ucsi_stm32g0_probe(struct i2c_client *client, const struct i2c_device_id *id)
+> >> +{
+> >> +	struct device *dev = &client->dev;
+> >> +	struct ucsi_stm32g0 *g0;
+> >> +	int ret;
+> >> +
+> >> +	g0 = devm_kzalloc(dev, sizeof(*g0), GFP_KERNEL);
+> >> +	if (!g0)
+> >> +		return -ENOMEM;
+> >> +
+> >> +	g0->dev = dev;
+> >> +	g0->client = client;
+> >> +	init_completion(&g0->complete);
+> >> +	i2c_set_clientdata(client, g0);
+> >> +
+> >> +	g0->ucsi = ucsi_create(dev, &ucsi_stm32g0_ops);
+> >> +	if (IS_ERR(g0->ucsi))
+> >> +		return PTR_ERR(g0->ucsi);
+> >> +
+> >> +	ucsi_set_drvdata(g0->ucsi, g0);
+> >> +
+> >> +	/* Request alert interrupt */
+> >> +	ret = request_threaded_irq(client->irq, NULL, ucsi_stm32g0_irq_handler, IRQF_ONESHOT,
+> >> +				   dev_name(&client->dev), g0);
+> >> +	if (ret) {
+> >> +		dev_err_probe(dev, ret, "request IRQ failed\n");
+> >> +		goto destroy;
+> >> +	}
+> >> +
+> >> +	ret = ucsi_register(g0->ucsi);
+> >> +	if (ret) {
+> >> +		dev_err_probe(dev, ret, "ucsi_register failed\n");
+> >> +		goto freeirq;
+> >> +	}
+> > 
+> > If there isn't UCSI firmware, then ucsi_register() will always safely
+> > fail here, right?
+> 
+> Hi Heikki,
+> 
+> Yes, in such a case, the first i2c read (UCSI_VERSION) in
+> ucsi_register() will return an error and safely fail here.
 
-Since IS_ENABLED() (and friends) are clearly meant to be used on
-CONFIG_foo symbols and IS_ENABLED(CONFIG_ is so long and almost an
-tautology, allow the more compact usage of: IS_ENABLED(foo).
+Okay, thanks.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
-
-With this on, something like:
-
-  for i in IS_BUILTIN IS_MODULE IS_REACHABLE IS_ENABLED;
-  do
-	git grep -wl $i | while read file;
-	do
-		sed -ie "s/${i}(CONFIG_/${i}(/g" $file;
-        done;
-  done
-
-can be used to convert all existing instance. Allowing, after time
-passes, to remove the CONFIG_ usage if so desired.
-
----
- tools/include/linux/kconfig.h   |    7 ++++---
- include/linux/kconfig.h         |    7 ++++---
- 2 files changed, 8 insertions(+), 6 deletions(-)
-
---- a/include/linux/kconfig.h
-+++ b/include/linux/kconfig.h
-@@ -38,6 +38,7 @@
-  * When CONFIG_BOOGER is not defined, we generate a (... 1, 0) pair, and when
-  * the last step cherry picks the 2nd arg, we get a zero.
-  */
-+#define _is_defined(x)			__or(__is_defined(x), __is_defined(CONFIG_##x))
- #define __is_defined(x)			___is_defined(x)
- #define ___is_defined(val)		____is_defined(__ARG_PLACEHOLDER_##val)
- #define ____is_defined(arg1_or_junk)	__take_second_arg(arg1_or_junk 1, 0)
-@@ -47,14 +48,14 @@
-  * otherwise. For boolean options, this is equivalent to
-  * IS_ENABLED(CONFIG_FOO).
-  */
--#define IS_BUILTIN(option) __is_defined(option)
-+#define IS_BUILTIN(option) _is_defined(option)
- 
- /*
-  * IS_MODULE(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'm', 0
-  * otherwise.  CONFIG_FOO=m results in "#define CONFIG_FOO_MODULE 1" in
-  * autoconf.h.
-  */
--#define IS_MODULE(option) __is_defined(option##_MODULE)
-+#define IS_MODULE(option) _is_defined(option##_MODULE)
- 
- /*
-  * IS_REACHABLE(CONFIG_FOO) evaluates to 1 if the currently compiled
-@@ -63,7 +64,7 @@
-  * built-in code when CONFIG_FOO is set to 'm'.
-  */
- #define IS_REACHABLE(option) __or(IS_BUILTIN(option), \
--				__and(IS_MODULE(option), __is_defined(MODULE)))
-+				__and(IS_MODULE(option), _is_defined(MODULE)))
- 
- /*
-  * IS_ENABLED(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'y' or 'm',
---- a/tools/include/linux/kconfig.h
-+++ b/tools/include/linux/kconfig.h
-@@ -32,6 +32,7 @@
-  * When CONFIG_BOOGER is not defined, we generate a (... 1, 0) pair, and when
-  * the last step cherry picks the 2nd arg, we get a zero.
-  */
-+#define _is_defined(x)			__or(__is_defined(x), __is_defined(CONFIG_##x))
- #define __is_defined(x)			___is_defined(x)
- #define ___is_defined(val)		____is_defined(__ARG_PLACEHOLDER_##val)
- #define ____is_defined(arg1_or_junk)	__take_second_arg(arg1_or_junk 1, 0)
-@@ -41,13 +42,13 @@
-  * otherwise. For boolean options, this is equivalent to
-  * IS_ENABLED(CONFIG_FOO).
-  */
--#define IS_BUILTIN(option) __is_defined(option)
-+#define IS_BUILTIN(option) _is_defined(option)
- 
- /*
-  * IS_MODULE(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'm', 0
-  * otherwise.
-  */
--#define IS_MODULE(option) __is_defined(option##_MODULE)
-+#define IS_MODULE(option) _is_defined(option##_MODULE)
- 
- /*
-  * IS_REACHABLE(CONFIG_FOO) evaluates to 1 if the currently compiled
-@@ -56,7 +57,7 @@
-  * built-in code when CONFIG_FOO is set to 'm'.
-  */
- #define IS_REACHABLE(option) __or(IS_BUILTIN(option), \
--				__and(IS_MODULE(option), __is_defined(MODULE)))
-+				__and(IS_MODULE(option), _is_defined(MODULE)))
- 
- /*
-  * IS_ENABLED(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'y' or 'm',
-
+-- 
+heikki

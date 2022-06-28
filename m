@@ -2,183 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A2955ED15
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B0FA55ED28
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232705AbiF1Syo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 14:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
+        id S234213AbiF1TAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 15:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbiF1Sym (ORCPT
+        with ESMTP id S232604AbiF1TAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:54:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E74622BD3;
-        Tue, 28 Jun 2022 11:54:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 348BEB81F21;
-        Tue, 28 Jun 2022 18:54:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1812C3411D;
-        Tue, 28 Jun 2022 18:54:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656442478;
-        bh=u8hEW7vux9iWZsA17pwpC0Xoyc2INnxaQpwJS9+5oLU=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=aut/A4GTMw3jzzC61HvV4Pxub63Yl3zq1QD/P6hCp9Odn+bJBnqwbhJc1wO812UBG
-         9GN86SmtgztNokhvz+GV7j4zHrYA97eQVl+zEa7MuNNK9DQNv3x8ztCFnW7laCPHY0
-         Mj0gx40mMyh/ymF9hpdAoINHsMpzBsBNiEAHQHvlsxiEZViaFDrAhN8Ec58WZ8wnQh
-         b9qEVAXZhD3+zLdQU5zMmtZs9AyAQRwCiononG+SwYvjpwQZwRT3SN7vBE/tEcGStS
-         JSG4tuHyhF/MOJSS+ItO9iWfSLBJlPTM6G3R/LaKMcEmx+d+6B0BTxDmuW/LD4DBMu
-         RZyiNpwXXEmYQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id BC78C5C0458; Tue, 28 Jun 2022 11:54:37 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 11:54:37 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
-Cc:     rcu@vger.kernel.org, urezki@gmail.com, uladzislau.rezki@sony.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <christian@brauner.io>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        linux-kernel@vger.kernel.org,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, wireguard@lists.zx2c4.com,
-        Theodore Ts'o <tytso@mit.edu>, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        amd-gfx@lists.freedesktop.org
-Subject: Re: CONFIG_ANDROID (was: rcu_sched detected expedited stalls in
- amdgpu after suspend)
-Message-ID: <20220628185437.GA1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <1656357116.rhe0mufk6a.none.ref@localhost>
- <1656357116.rhe0mufk6a.none@localhost>
- <20220627204139.GL1790663@paulmck-ThinkPad-P17-Gen-1>
- <1656379893.q9yb069erk.none@localhost>
- <20220628041252.GV1790663@paulmck-ThinkPad-P17-Gen-1>
- <1656421946.ic03168yc3.none@localhost>
+        Tue, 28 Jun 2022 15:00:14 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A672764A;
+        Tue, 28 Jun 2022 11:59:54 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id z7so18862477edm.13;
+        Tue, 28 Jun 2022 11:59:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+5svx5LwjLEEoN4gETD1VRjFETGWrIKeBab47sR6QxQ=;
+        b=gBsgfrXhzDpMZG/uB1HEIAh8ul/REXioVN/FTh/1X2T4t2y7Ht43pNoarj1FLNOYRG
+         9oknH/ocoEsmauWwT93Nqe49Y3WtPlTCPCj0fsHOelyplkHXOj1W/8zL6ORteF3MYTx5
+         UwM3b/JO1GeySOonAuQgNw8yXDw6SdBdpAi6Zici3spAd/q6C104xQCtiniWuk2/5hYl
+         lHZUdweAKbXKhvEz9rlUFIOJId4i1un1RXbyAmhOOxl3P5A9KQ0TrV974dp94W5CPRac
+         2aOimt2FSTltpNNcnuyNIpGTkspG8V0xpUb8vxkgThCIgSSNKpI8dGGOqxhlDPjV9yD6
+         LQ9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+5svx5LwjLEEoN4gETD1VRjFETGWrIKeBab47sR6QxQ=;
+        b=H1oCMOMJqzw0IdtK5M6ZS0yRDRhwbef24rXOY7078GFKfrt8olVh/uT6R0mnRDi7ng
+         yh00FIe2GHDTfamdLPq94l18QKAtgbf9V0YZcqLp0fSIFfsNYK6fz82xV8bg1xhXF7u8
+         IsIxssmLQ4hp1Bhlr6FfOffQFuvvp7wRAXWC+8ng2eOsRMErZCxSaq5AM4yRXUafAjyY
+         Sr/RNPBMvbOavoA4o9zv8o/fadR0pUPwJX9Lmy9a8QBljpMu+ekPIZ3X4XNgI2660EKp
+         bD2pmceMsB+b/KvS+lAWnUZ6TJRZ8mzfEh6FZgjS24BZGA9upcHEH7bxLWgcZjfUgAam
+         2f7g==
+X-Gm-Message-State: AJIora+P/727QXGVty2ZTASFL0hYtpdncCXar2UdDaVeX5yNSGaVB/XP
+        f2dn6GRGpkIDEwybfX2INBR9BTkzCXluMA==
+X-Google-Smtp-Source: AGRyM1vS7ZvW2V/yomp7fG86RmudHB9XbPpcXCZSGU4ezs3/2UisA33JqF1qB8Ns+EVE/6Wi9lTbpA==
+X-Received: by 2002:a05:6402:e83:b0:435:a9bd:8134 with SMTP id h3-20020a0564020e8300b00435a9bd8134mr24664533eda.243.1656442792470;
+        Tue, 28 Jun 2022 11:59:52 -0700 (PDT)
+Received: from 127.0.0.1localhost (188.28.125.106.threembb.co.uk. [188.28.125.106])
+        by smtp.gmail.com with ESMTPSA id t21-20020a05640203d500b0043573c59ea0sm9758451edw.90.2022.06.28.11.59.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 11:59:52 -0700 (PDT)
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     io-uring@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Jens Axboe <axboe@kernel.dk>, kernel-team@fb.com,
+        Pavel Begunkov <asml.silence@gmail.com>
+Subject: [RFC net-next v3 00/29] io_uring zerocopy send
+Date:   Tue, 28 Jun 2022 19:56:22 +0100
+Message-Id: <cover.1653992701.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1656421946.ic03168yc3.none@localhost>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 11:02:40AM -0400, Alex Xu (Hello71) wrote:
-> Excerpts from Paul E. McKenney's message of June 28, 2022 12:12 am:
-> > On Mon, Jun 27, 2022 at 09:50:53PM -0400, Alex Xu (Hello71) wrote:
-> >> Ah, I see. I have selected the default value for 
-> >> CONFIG_RCU_EXP_CPU_STALL_TIMEOUT, but that is 20 if ANDROID. I am not 
-> >> using Android; I'm not sure there exist Android devices with AMD GPUs. 
-> >> However, I have set CONFIG_ANDROID=y in order to use 
-> >> ANDROID_BINDER_IPC=m for emulation.
-> >> 
-> >> In general, I think CONFIG_ANDROID is not a reliable method for 
-> >> detecting if the kernel is for an Android device; for example, Fedora 
-> >> sets CONFIG_ANDROID, but (AFAIK) its kernel is not intended for use with 
-> >> Android userspace.
-> >> 
-> >> On the other hand, it's not clear to me why the value 20 should be for 
-> >> Android only anyways. If, as you say in 
-> >> https://lore.kernel.org/lkml/20220216195508.GM4285@paulmck-ThinkPad-P17-Gen-1/,
-> >> it is related to the size of the system, perhaps some other heuristic 
-> >> would be more appropriate.
-> > 
-> > It is related to the fact that quite a few Android guys want these
-> > 20-millisecond short-timeout expedited RCU CPU stall warnings, but no one
-> > else does.  Not yet anyway.
-> > 
-> > And let's face it, the intent and purpose of CONFIG_ANDROID=y is extremely
-> > straightforward and unmistakeable.  So perhaps people not running Android
-> > devices but wanting a little bit of the Android functionality should do
-> > something other than setting CONFIG_ANDROID=y in their .config files.  Me,
-> > I am surprised that it took this long for something like this to bite you.
-> > 
-> > But just out of curiosity, what would you suggest instead?
-> 
-> Both Debian and Fedora set CONFIG_ANDROID, specifically for binder. If 
-> major distro vendors are consistently making this "mistake", then 
-> perhaps the problem is elsewhere.
-> 
-> In my own opinion, assuming that binderfs means Android vendor is not a 
-> good assumption. The ANDROID help says:
-> 
-> > Enable support for various drivers needed on the Android platform
-> 
-> It doesn't say "Enable only if building an Android device", or "Enable 
-> only if you are Google". Isn't the traditional Linux philosophy a 
-> collection of pieces to be assembled, without gratuitous hidden 
-> dependencies? For example, [0] removes the unnecessary Android 
-> dependency, it doesn't block the whole thing with "depends on ANDROID".
-> 
-> It seems to me that the proper way to set some configuration for Android 
-> kernels is or should be to ask the Android kernel config maintainers, 
-> not to set it based on an upstream kernel option. There is, after all, 
-> no CONFIG_FEDORA or CONFIG_UBUNTU or CONFIG_HANNAH_MONTANA.
-> 
-> WireGuard and random also use CONFIG_ANDROID in a similar "proxy" way as 
-> rcu, there to see if suspends are "frequent". This seems dubious for the 
-> same reasons.
-> 
-> I wonder if it might be time to retire CONFIG_ANDROID: the only 
-> remaining driver covered is binder, which originates from Android but 
-> is no longer used exclusively on Android systems. Like ufs-qcom, binder 
-> is no longer used exclusively on Android devices; it is also used for 
-> Android device emulators, which might be used on Android-like mobile 
-> devices, or might not.
-> 
-> My understanding is that both Android and upstream kernel developers 
-> intend to add no more Android-specific drivers, so binder should be the 
-> only one covered for the foreseeable future.
+The third iteration of patches for zerocopy io_uring sends. I fixed
+all known issues since the previous version and reshuffled io_uring
+patches, but the net/ code didn't change much. I think it's ready
+and will send it as a non-RFC soon.
 
-Thank you for the perspective, but you never did suggest an alternative.
+All tests below are done using io_uring with all relevant performance
+options turned on. Numbers look good, send + flush per request, which
+is the worst case, is on par with non-zerocopy with the payload size
+lower than 600 bytes with dummy netdev and b/w 1200-1500 for NIC tests.
+Without "buffer-free" notification flushing at all it's on par with NIC
+at around 600 bytes.
 
-So here is is what I suggest given the current setup:
+dummy:
+IO size | non-zc (tx/s) | zc (tx/s)      | zc + flush (tx/s)
+8000    | 1299916       | 2396600 (+84%) | 2224219 (+71%)
+4000    | 1869230       | 2344146 (+25%) | 2170069 (+16%)
+1200    | 2071617       | 2361960 (+14%) | 2203052 (+6%)
+600     | 2106794       | 2381527 (+13%) | 2195295 (+4%)
 
-config RCU_EXP_CPU_STALL_TIMEOUT
-	int "Expedited RCU CPU stall timeout in milliseconds"
-	depends on RCU_STALL_COMMON
-	range 0 21000
-	default 20 if ANDROID
-	default 0 if !ANDROID
-	help
-	  If a given expedited RCU grace period extends more than the
-	  specified number of milliseconds, a CPU stall warning is printed.
-	  If the RCU grace period persists, additional CPU stall warnings
-	  are printed at more widely spaced intervals.  A value of zero
-	  says to use the RCU_CPU_STALL_TIMEOUT value converted from
-	  seconds to milliseconds.
+NIC:
+IO size | non-zc (tx/s) | zc (tx/s)      | zc + flush (tx/s)
+4000    | 495134        | 606420 (+22%)  | 558971 (+12%)
+1500    | 551808        | 577116 (+4.5%) | 565803 (+2.5%)
+1000    | 584677        | 592088 (+1.2%) | 560885 (-4%)
+600     | 596292        | 598550 (+0.4%) | 555366 (-6.7%)
 
-The default, and only the default, is controlled by ANDROID.
+Apart from zerocopy, it also removes page referencing for reigstered
+buffers (used in all zc tests). I'm experimenting with notificaiton
+optimsation, which should improve the 3rd column, but that will go
+separately from this series. I've also seen good CPU usage reduction
+for TCP comparing to non-zc, but not posting numbers as had problems
+saturating CPU.
 
-All you need to do to get the previous behavior is to add something like
-this to your defconfig file:
+Links:
 
-CONFIG_RCU_EXP_CPU_STALL_TIMEOUT=21000
+  RFC v1:
+  https://lore.kernel.org/io-uring/cover.1638282789.git.asml.silence@gmail.com/
 
-Any reason why this will not work for you?
+  RFC v2:
+  https://lore.kernel.org/io-uring/cover.1640029579.git.asml.silence@gmail.com/
 
-> > For that matter, why the private reply?
-> 
-> Mail client issues, not intentional. Lists re-added, plus Android, 
-> WireGuard, and random.
+  liburing (copy of the benchmark + some tests):
+  https://github.com/isilence/liburing/tree/zc_v3
 
-Thank you!
+  kernel repo:
+  https://github.com/isilence/linux/tree/zc_v3
 
-							Thanx, Paul
+API design overview:
 
-> Thanks,
-> Alex.
-> 
-> [0] https://lore.kernel.org/all/20220321151853.24138-1-krzk@kernel.org/
+  First we take an internal zerocopy handler, aka struct ubuf_info, and let
+  io_uring to pass it into the network layer in struct msghdr. io_uring
+  stores them as wrapping into struct io_notif.
+
+  It also has an array of so called notification slots, each keeps one and
+  only one active notifier at a time, to which the userspace can bind requests
+  by specifying the slot index. Then the userspace can request to flush a
+  notifier, so when all buffers and requests used with this notifier
+  complete/freed it'll post one CQE.
+
+  The userspace can't bind new requests to a flushed notifier, however,
+  it can use the slot as flushing automatically replaces the notifier with
+  a new one.
+
+Changelog:
+
+  RFC v2 -> RFC v3:
+    TCP support
+    accounting for normal (non-registered) buffers
+    allow to combine reg and normal requests within a notifier
+    notification flushing via IORING_OP_RSRC_UPDATE
+    overriding io_uring notification tag/user_data
+    add ubuf_info submmision side reference caching/batching
+    fix buffer indexing
+    fix io-wq ->uring_lock locking
+    fix bugs when mixing with MSG_ZEROCOPY
+    fix managed refs bugs in skbuff.c
+    numerous cleanups
+
+  RFC -> RFC v2:
+    remove additional overhead for non-zc from skb_release_data()
+    avoid msg propagation, hide extra bits of non-zc overhead
+    task_work based "buffer free" notifications
+    improve io_uring's notification refcounting
+    added 5/19, (no pfmemalloc tracking)
+    added 8/19 and 9/19 preventing small copies with zc
+    misc small changes
+
+Pavel Begunkov (29):
+  ipv4: avoid partial copy for zc
+  ipv6: avoid partial copy for zc
+  skbuff: add SKBFL_DONT_ORPHAN flag
+  skbuff: carry external ubuf_info in msghdr
+  net: bvec specific path in zerocopy_sg_from_iter
+  net: optimise bvec-based zc page referencing
+  net: don't track pfmemalloc for managed frags
+  skbuff: don't mix ubuf_info of different types
+  ipv4/udp: support zc with managed data
+  ipv6/udp: support zc with managed data
+  tcp: support zc with managed data
+  tcp: kill extra io_uring's uarg refcounting
+  net: let callers provide extra ubuf_info refs
+  io_uring: opcode independent fixed buf import
+  io_uring: add zc notification infrastructure
+  io_uring: cache struct io_notif
+  io_uring: complete notifiers in tw
+  io_uring: add notification slot registration
+  io_uring: rename IORING_OP_FILES_UPDATE
+  io_uring: add zc notification flush requests
+  io_uring: wire send zc request type
+  io_uring: account locked pages for non-fixed zc
+  io_uring: allow to pass addr into sendzc
+  io_uring: add rsrc referencing for notifiers
+  io_uring: sendzc with fixed buffers
+  io_uring: flush notifiers after sendzc
+  io_uring: allow to override zc tag on flush
+  io_uring: batch submission notif referencing
+  selftests/io_uring: test zerocopy send
+
+ fs/io_uring.c                                 | 566 +++++++++++++++-
+ include/linux/skbuff.h                        |  59 +-
+ include/linux/socket.h                        |   8 +
+ include/uapi/linux/io_uring.h                 |  43 +-
+ net/compat.c                                  |   2 +
+ net/core/datagram.c                           |  53 +-
+ net/core/skbuff.c                             |  35 +-
+ net/ipv4/ip_output.c                          |  66 +-
+ net/ipv4/tcp.c                                |  56 +-
+ net/ipv6/ip6_output.c                         |  65 +-
+ net/socket.c                                  |   6 +
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../selftests/net/io_uring_zerocopy_tx.c      | 605 ++++++++++++++++++
+ .../selftests/net/io_uring_zerocopy_tx.sh     | 131 ++++
+ 14 files changed, 1613 insertions(+), 83 deletions(-)
+ create mode 100644 tools/testing/selftests/net/io_uring_zerocopy_tx.c
+ create mode 100755 tools/testing/selftests/net/io_uring_zerocopy_tx.sh
+
+-- 
+2.36.1
+

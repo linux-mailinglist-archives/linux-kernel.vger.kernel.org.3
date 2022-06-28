@@ -2,167 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D3855ED0E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E0E55ED13
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234087AbiF1SuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 14:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
+        id S232850AbiF1SyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 14:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234041AbiF1St7 (ORCPT
+        with ESMTP id S229766AbiF1SyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:49:59 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B1024956;
-        Tue, 28 Jun 2022 11:49:58 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id d17so13361411wrc.10;
-        Tue, 28 Jun 2022 11:49:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=v12W7lrwEZaMnJj/8/YW2fjv7549ZdYfdH8DoyJsAPU=;
-        b=Oc8qV2LqyBUhEWiuQFy7QvJeR4shc+Sfl5kJtkr/YIsuWRVZbdRkF8CD9PUPE1Vn8F
-         evZHqpoMaVN6ODzvR68EVjtVmhEZl+Il3Qymm1rCZBpUUnLcToS7JJTZSDiFLiz86SSy
-         APZ87lZJ/aWVOpMlctUc46BcvpePcH3tQD+Y8+ldRzayq6i3gMWZhevjZurKQcJXBiLQ
-         yqWFVebYZRbjyNATEDol9ONAP7t86DmjoVI81ODlhal7Yb1I7JPNKLyZ3RnCYMSaMMTv
-         u9UpzNY39krMjzIKeeIQRhxc4+Aej06Bd19deVppPpLEjXZoYJKr5Jk3xHZd3LIFnMin
-         KmIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=v12W7lrwEZaMnJj/8/YW2fjv7549ZdYfdH8DoyJsAPU=;
-        b=wFfHRWYPD088Z1qlSN0c7QbMNy/tZPfnzcMMKzCi8HndxPlnoHDEXq7bytuas37XDp
-         d7qn9C4V/ZdWV5kKn/Wb3I/H8CgGk3b1Xg7+8IzMN5mm7HmQ8a2vEbxhaFEBQLZHCa8m
-         jwAlTCTMPW/jFkvsivF02j7p2hkRgDQgdDPI/uAj5YEhJgGHG/NGLBqy0c1W9/PtK5WT
-         z50AoiBhzbYRwgEkL8+J/ikTp2cpTBX2LY9cF97VC0/hxZRPGrRltUMT+vapBPL5rcgn
-         eNyQwaysm3hRuSHv79p5/JuGxISItur5Fne7N6N+2HTRsy4cHDrdFqEOyWi+chSdd2Tf
-         GEdw==
-X-Gm-Message-State: AJIora/4r2HLmIp/gOOkf/STm5yEID+dAaaGSAH9tf5rQpuEnoluSuZk
-        nGPp8aUnC4+FygBvl/QgmcyYsMPQig4=
-X-Google-Smtp-Source: AGRyM1ue70t4mReX8BosJPQG8RZjjJfVbUvjGPOzvXYf2h4d6+aXr3IYvgrLVgeEsaKhmBPo4Ugu5w==
-X-Received: by 2002:a5d:6b91:0:b0:21b:bc0b:7282 with SMTP id n17-20020a5d6b91000000b0021bbc0b7282mr19213599wrx.375.1656442196924;
-        Tue, 28 Jun 2022 11:49:56 -0700 (PDT)
-Received: from localhost.localdomain (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
-        by smtp.gmail.com with ESMTPSA id z21-20020a1c4c15000000b0039c871d3191sm460368wmf.3.2022.06.28.11.49.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 11:49:54 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Tyler Hicks <code@tyhicks.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Seth Forshee <sforshee@digitalocean.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tue, 28 Jun 2022 14:54:05 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A81A22BD3;
+        Tue, 28 Jun 2022 11:54:03 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 18:53:55 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1656442441;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=htPFhHOsa3d7/VGnFqnbz5VFkkx8xDdtzMvjjntEVQQ=;
+        b=d6djTxUwEkHGAYEqJ+FSn4G/FZeJSZoQaoOZxxQhJaqcI2qvYIgXT+trdlZ0GWC661TwyO
+        1oiSHS8oHUyMAMhElHKJhcjJFylgZXvccpHWWmhbSO2Tv35HgJpLHoM6RfUaZ/baIXg/yK
+        KB8JzslXVDM8K4q77AikRR+g7gpG87A=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Jan Kara <jack@suse.cz>,
-        Muchun Song <songmuchun@bytedance.com>,
+        Michal Hocko <mhocko@kernel.org>,
         Roman Gushchin <roman.gushchin@linux.dev>,
-        "Theodore Ts'o" <tytso@mit.edu>, ecryptfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [RFC PATCH] ecryptfs: Replace kmap() with kmap_local_page()
-Date:   Tue, 28 Jun 2022 20:49:50 +0200
-Message-Id: <20220628184950.2045-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Shakeel Butt <shakeelb@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 4/4] KVM: arm64/mmu: count KVM s2 mmu usage in
+ secondary pagetable stats
+Message-ID: <YrtOQxEi8fijGwSQ@google.com>
+References: <20220606222058.86688-1-yosryahmed@google.com>
+ <20220606222058.86688-5-yosryahmed@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220606222058.86688-5-yosryahmed@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of kmap() is being deprecated in favor of kmap_local_page().
+Hi Yosry,
 
-With kmap_local_page() the mappings are per thread, CPU local and not
-globally visible.
+On Mon, Jun 06, 2022 at 10:20:58PM +0000, Yosry Ahmed wrote:
+> Count the pages used by KVM in arm64 for stage2 mmu in secondary pagetable
+> stats.
 
-Use kmap_local_page() on all calling sites where kmap() is currently used.
+You could probably benefit from being a bit more verbose in the commit
+message here as well, per Sean's feedback.
 
-The mappings in fs/ecryptfs seem to conform to the prerequisites for
-easy conversions to kmap_local_page(), however I am not familiar with this
-code.
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
+>  arch/arm64/kvm/mmu.c | 36 ++++++++++++++++++++++++++++++++----
+>  1 file changed, 32 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index f5651a05b6a85..80bc92601fd96 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -92,9 +92,13 @@ static bool kvm_is_device_pfn(unsigned long pfn)
+>  static void *stage2_memcache_zalloc_page(void *arg)
+>  {
+>  	struct kvm_mmu_memory_cache *mc = arg;
+> +	void *virt;
+>  
+>  	/* Allocated with __GFP_ZERO, so no need to zero */
+> -	return kvm_mmu_memory_cache_alloc(mc);
+> +	virt = kvm_mmu_memory_cache_alloc(mc);
+> +	if (virt)
+> +		kvm_account_pgtable_pages(virt, 1);
+> +	return virt;
+>  }
+>  
+>  static void *kvm_host_zalloc_pages_exact(size_t size)
+> @@ -102,6 +106,21 @@ static void *kvm_host_zalloc_pages_exact(size_t size)
+>  	return alloc_pages_exact(size, GFP_KERNEL_ACCOUNT | __GFP_ZERO);
+>  }
+>  
+> +static void *kvm_s2_zalloc_pages_exact(size_t size)
+> +{
+> +	void *virt = kvm_host_zalloc_pages_exact(size);
+> +
+> +	if (virt)
+> +		kvm_account_pgtable_pages(virt, (size >> PAGE_SHIFT));
+> +	return virt;
+> +}
+> +
+> +static void kvm_s2_free_pages_exact(void *virt, size_t size)
+> +{
+> +	kvm_account_pgtable_pages(virt, -(size >> PAGE_SHIFT));
+> +	free_pages_exact(virt, size);
+> +}
+> +
+>  static void kvm_host_get_page(void *addr)
+>  {
+>  	get_page(virt_to_page(addr));
+> @@ -112,6 +131,15 @@ static void kvm_host_put_page(void *addr)
+>  	put_page(virt_to_page(addr));
+>  }
+>  
+> +static void kvm_s2_put_page(void *addr)
+> +{
+> +	struct page *p = virt_to_page(addr);
+> +	/* Dropping last refcount, the page will be freed */
+> +	if (page_count(p) == 1)
+> +		kvm_account_pgtable_pages(addr, -1);
+> +	put_page(p);
 
-This is why this is an RFC PATCH. I'd appreciate if people familiar with
-eCryptfs could test and confirm whether these conversions are safe or not.
+Probably more of a note to myself with the parallel fault series, but
+this is a race waiting to happen. This only works because stage 2 pages
+are dropped behind the write lock.
 
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- fs/ecryptfs/crypto.c     | 8 ++++----
- fs/ecryptfs/read_write.c | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+Besides the commit message nit:
 
-diff --git a/fs/ecryptfs/crypto.c b/fs/ecryptfs/crypto.c
-index e3f5d7f3c8a0..03263ebcccc6 100644
---- a/fs/ecryptfs/crypto.c
-+++ b/fs/ecryptfs/crypto.c
-@@ -465,10 +465,10 @@ int ecryptfs_encrypt_page(struct page *page)
- 	}
- 
- 	lower_offset = lower_offset_for_page(crypt_stat, page);
--	enc_extent_virt = kmap(enc_extent_page);
-+	enc_extent_virt = kmap_local_page(enc_extent_page);
- 	rc = ecryptfs_write_lower(ecryptfs_inode, enc_extent_virt, lower_offset,
- 				  PAGE_SIZE);
--	kunmap(enc_extent_page);
-+	kunmap_local(enc_extent_virt);
- 	if (rc < 0) {
- 		ecryptfs_printk(KERN_ERR,
- 			"Error attempting to write lower page; rc = [%d]\n",
-@@ -514,10 +514,10 @@ int ecryptfs_decrypt_page(struct page *page)
- 	BUG_ON(!(crypt_stat->flags & ECRYPTFS_ENCRYPTED));
- 
- 	lower_offset = lower_offset_for_page(crypt_stat, page);
--	page_virt = kmap(page);
-+	page_virt = kmap_local_page(page);
- 	rc = ecryptfs_read_lower(page_virt, lower_offset, PAGE_SIZE,
- 				 ecryptfs_inode);
--	kunmap(page);
-+	kunmap_local(page_virt);
- 	if (rc < 0) {
- 		ecryptfs_printk(KERN_ERR,
- 			"Error attempting to read lower page; rc = [%d]\n",
-diff --git a/fs/ecryptfs/read_write.c b/fs/ecryptfs/read_write.c
-index 60bdcaddcbe5..5edf027c8359 100644
---- a/fs/ecryptfs/read_write.c
-+++ b/fs/ecryptfs/read_write.c
-@@ -64,11 +64,11 @@ int ecryptfs_write_lower_page_segment(struct inode *ecryptfs_inode,
- 
- 	offset = ((((loff_t)page_for_lower->index) << PAGE_SHIFT)
- 		  + offset_in_page);
--	virt = kmap(page_for_lower);
-+	virt = kmap_local_page(page_for_lower);
- 	rc = ecryptfs_write_lower(ecryptfs_inode, virt, offset, size);
- 	if (rc > 0)
- 		rc = 0;
--	kunmap(page_for_lower);
-+	kunmap_local(virt);
- 	return rc;
- }
- 
-@@ -253,11 +253,11 @@ int ecryptfs_read_lower_page_segment(struct page *page_for_ecryptfs,
- 	int rc;
- 
- 	offset = ((((loff_t)page_index) << PAGE_SHIFT) + offset_in_page);
--	virt = kmap(page_for_ecryptfs);
-+	virt = kmap_local_page(page_for_ecryptfs);
- 	rc = ecryptfs_read_lower(virt, offset, size, ecryptfs_inode);
- 	if (rc > 0)
- 		rc = 0;
--	kunmap(page_for_ecryptfs);
-+	kunmap_local(virt);
- 	flush_dcache_page(page_for_ecryptfs);
- 	return rc;
- }
--- 
-2.36.1
-
+Reviewed-by: Oliver Upton <oliver.upton@linux.dev>

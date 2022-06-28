@@ -2,79 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392B655E6B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5B155E944
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346642AbiF1PYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:24:55 -0400
+        id S1347521AbiF1PZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:25:08 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346971AbiF1PYw (ORCPT
+        with ESMTP id S1347827AbiF1PYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:24:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38D02DAA3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:24:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DE7761553
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 15:24:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69F88C341CD;
-        Tue, 28 Jun 2022 15:24:44 +0000 (UTC)
-Date:   Tue, 28 Jun 2022 11:24:42 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     John 'Warthog9' Hawley <warthog9@eaglescrag.net>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: possible trace_printk() bug in v5.19-rc1
-Message-ID: <20220628112442.2b530c3b@gandalf.local.home>
-In-Reply-To: <25C37F40-7D8E-41C6-961F-0774C8138CCB@oracle.com>
-References: <F6C267B0-83EA-4151-A4EC-44482AC52C59@oracle.com>
-        <20220616113400.15335d91@gandalf.local.home>
-        <E309A098-DA06-490D-A75C-E6295C2987B9@oracle.com>
-        <20220617155019.373adda7@gandalf.local.home>
-        <3BAD2CD9-3A34-4140-A28C-0FE798B83C41@oracle.com>
-        <355D2478-33D3-4046-8422-E512F42C51BC@oracle.com>
-        <20220624190819.59df11d3@rorschach.local.home>
-        <3EB14A14-767B-4B66-9B28-97DDE7EECFD2@oracle.com>
-        <20220625134552.08c1a23a@rorschach.local.home>
-        <0bf1d366-348c-0f91-8f0a-fc9cc6228783@kernel.org>
-        <12417afa-331b-e0f6-a3b0-19623e38590b@eaglescrag.net>
-        <308F6A3B-1FB9-42CD-8239-12B0FD0F5FDB@oracle.com>
-        <20220627131140.56761db9@gandalf.local.home>
-        <25C37F40-7D8E-41C6-961F-0774C8138CCB@oracle.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 28 Jun 2022 11:24:54 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EADB27FFB;
+        Tue, 28 Jun 2022 08:24:53 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id u12-20020a05600c210c00b003a02b16d2b8so7809274wml.2;
+        Tue, 28 Jun 2022 08:24:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WcFMAgdziIll53iZkb94h130Il19T6Y6bJm+DbymwFQ=;
+        b=JWdJ7nbLyzMBpijhEbXM7MypI0Qlwif+4xUbm0g9g+V/YVYSQIr0HmZpbz0eQcrndB
+         mI2sAXvt/7l4TRY8ta671E+/2mL5XMGpL6BwPmet6b5Fb9JOZp+b9w3Bu++slccELRS2
+         IcwWVvLlGH7Z/03Hip3s7OmCQialQeepCw7V5W4Uz3c48QUEV7hNO0vyVJP9dZTzfUT2
+         zxzWbVANWZSglzHw9Yj8nBHWbXeK7A0AVb3PEgGMABpE85vPtf+LW7Z3/PeBDuMMzN71
+         sl+tyLIpNadpjeyYTWTAefP80ypI+HVbHB8PuuMg0MxCz4ee9TaTAUaHHuT/2SIXuMnW
+         D4mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WcFMAgdziIll53iZkb94h130Il19T6Y6bJm+DbymwFQ=;
+        b=7Rkq3vQHrdKZSYJZFRp/AOOQhdg9ysMrP82P7Z8s/gXSVYxIkZzLv38iaN+NU/lwzm
+         ur6IvFANwJkT/nSHSgIRHOe0avcTbu8Ei9i+dlyUUKtlKU3CRUM+k2amHfvcvR5fW2BG
+         n31/KOSaoeBddEAIk3Z4rg/U3fYZIaXIx8e5WBlRzE5LX8SQphSEFzMMFCWM5BqCuV1w
+         Nkqcr5JYV6evJx1ciORqRJBgFft/5JM0yunEg+GfNraM5bShh/0SS2zI9n75v9apAFMX
+         MVtdxJBA1JEhZ6EzMi6HWqEgKtTjkE7c9JpVK4+r1sKSwnQ/zF7KHA9u93Rq60yTjxgK
+         0O2A==
+X-Gm-Message-State: AJIora86WNUZpUrNbtus/tMm9lxLfCqfJKcpwnc6Cgi4Ti+CndNdy9an
+        zCnIwX5NKBkRHjEBuvGZfK0=
+X-Google-Smtp-Source: AGRyM1s/PznpZYnHETKAA6z+rPhfFUEY5Vbrhkca4T46fq9s4fRBlaZnd3AovhnmDAp0qaQq/vgLbQ==
+X-Received: by 2002:a1c:ac83:0:b0:39c:87fc:5797 with SMTP id v125-20020a1cac83000000b0039c87fc5797mr162568wme.13.1656429892193;
+        Tue, 28 Jun 2022 08:24:52 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id 3-20020a05600c230300b003973c54bd69sm21564221wmo.1.2022.06.28.08.24.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 08:24:51 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: atomisp: clean up for-loop, remove redundant assignment to variable i
+Date:   Tue, 28 Jun 2022 16:24:51 +0100
+Message-Id: <20220628152451.184416-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Jun 2022 17:19:18 +0000
-Chuck Lever III <chuck.lever@oracle.com> wrote:
+There is a for-loop that initializes variable i but does not use it; the
+assignment is redundant and can be removed. The proceeding assignment to
+pointer fw can also be moved into the for-loop to clean up the code.
 
-> > The symbol lookup problem still exists. What about the get_sockaddr() not
-> > processing?  
-> 
-> "trace-cmd report" no longer produces the get_sockaddr warning messages,
-> but tracepoints that use __get_sockaddr() still FAIL TO PARSE on my
-> system:
-> 
->             nfsd-1167  [005]   117.853235: nfsd_cb_probe:        [FAILED TO PARSE] state=0x1 cl_boot=1656349219 cl_id=3054917767 addr=ARRAY[02, 00, 00, 00, c0, a8, 02, 43, 00, 00, 00, 00, 00, 00, 00, 00]
->    kworker/u24:2-985   [003]   117.853368: nfsd_cb_setup:        [FAILED TO PARSE] cl_boot=1656349219 cl_id=3054917767 authflavor=0x1 addr=ARRAY[02, 00, 00, 00, c0, a8, 02, 43, 00, 00, 00, 00, 00, 00, 00, 00] netid=rdma
->    kworker/u24:2-985   [003]   117.853370: nfsd_cb_state:        [FAILED TO PARSE] state=0x0 cl_boot=1656349219 cl_id=3054917767 addr=ARRAY[02, 00, 00, 00, c0, a8, 02, 43, 00, 00, 00, 00, 00, 00, 00, 00]
-> 
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/staging/media/atomisp/pci/sh_css.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-I remember writing a patch to fix this, but it looks to never have been
-applied. And worse yet, I can't find it :-/
+diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
+index 1d605e533e29..576dffa9d2cb 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css.c
++++ b/drivers/staging/media/atomisp/pci/sh_css.c
+@@ -3510,8 +3510,7 @@ create_host_acc_pipeline(struct ia_css_pipe *pipe)
+ 	if (pipe->config.acc_extension)
+ 		pipe->pipeline.pipe_qos_config = 0;
+ 
+-	fw = pipe->vf_stage;
+-	for (i = 0; fw; fw = fw->next) {
++	for (fw = pipe->vf_stage; fw; fw = fw->next) {
+ 		err = sh_css_pipeline_add_acc_stage(&pipe->pipeline, fw);
+ 		if (err)
+ 			goto ERR;
+-- 
+2.35.3
 
-Oh well, I guess I just need to write it again.
-
--- Steve

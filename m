@@ -2,80 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 586EA55E27E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5095355C649
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344897AbiF1KR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 06:17:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
+        id S1344566AbiF1KSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 06:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344906AbiF1KRr (ORCPT
+        with ESMTP id S1344883AbiF1KSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:17:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73552FE6B;
-        Tue, 28 Jun 2022 03:17:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61916B81DBB;
-        Tue, 28 Jun 2022 10:17:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D4DC341CC;
-        Tue, 28 Jun 2022 10:17:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656411461;
-        bh=3rvBGil83uXwD8MzZK79v+yLcATGD+HIirq3TFII2vs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tS/ba/x1vAKBAXeLugjjX6VO7FOvPjSmJz8ssL60JmfMWw6Xgve5DJ5ZatYc77nXj
-         T17FeM40FnP99xrCzMtvVNnXRH22PxKJvIQ4ZATFKt89m/+oRrCYac/B5Aec0iQlZH
-         EEqx8xQpl1pDECvIG3ZO2T4gd2/uNhMpuoUgD3BWibC4CK82NJ94/M2eur0iFOwiYo
-         fn2C0wiJ8rJMXm7nbrvRo2cahvPIihrnhs2uhtsXDVP6+wYE6KxkhXj1DM2xG4QRO6
-         QydBEHUMHIfO86S+TW3KFTHnU5yDH2L+ytOEof4nOI0qk1nrbDWfREJNqdxDF3OGe0
-         2sVWPyG9SauuQ==
-Date:   Tue, 28 Jun 2022 12:17:35 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 06/22] fs: attr: update vfs uid/gid parameters at
- kernel-doc
-Message-ID: <20220628101735.s2ypei7yperhamhd@wittgenstein>
-References: <cover.1656409369.git.mchehab@kernel.org>
- <cd2746e9496731e559dc8129c6bade369be25c4b.1656409369.git.mchehab@kernel.org>
+        Tue, 28 Jun 2022 06:18:07 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5649C74;
+        Tue, 28 Jun 2022 03:18:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=iHCW4kNEa1z/GyknGrZoZXOa9/2qYzxqyCQLRUMg9Y0=; b=2iOKRsv293IWJK/kC1LT0zoc7c
+        m7lnR+g8tpNS8E318vfCev/hRoddQP/yGkXZQ6WrchM6sActa9/BmwOxyZ9wRZQe9wcCLvDvF2XZW
+        vyva9l3wv8WlkFlwod2Q/oWWNkkBGhkA14xhJkFq4z1WW7oDj58DVXdskChKybFJUAWc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1o68I3-008YGJ-J0; Tue, 28 Jun 2022 12:17:51 +0200
+Date:   Tue, 28 Jun 2022 12:17:51 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Franklin Lin <franklin_lin@wistron.corp-partner.google.com>
+Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        franklin_lin@wistron.com
+Subject: Re: [PATCH] drivers/net/usb/r8152: Enable MAC address passthru
+ support
+Message-ID: <YrrVT33IZ1hMkhw2@lunn.ch>
+References: <20220628015325.1204234-1-franklin_lin@wistron.corp-partner.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cd2746e9496731e559dc8129c6bade369be25c4b.1656409369.git.mchehab@kernel.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220628015325.1204234-1-franklin_lin@wistron.corp-partner.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 10:46:10AM +0100, Mauro Carvalho Chehab wrote:
-> The vfs uid/gid parameters have a different name at the function
-> prototype causing kernel-doc warnings. Update them for the parameters
-> to match, fixing those warnings:
+On Tue, Jun 28, 2022 at 09:53:25AM +0800, Franklin Lin wrote:
+> From: franklin_lin <franklin_lin@wistron.corp-partner.google.com>
 > 
-> 	fs/attr.c:36: warning: Function parameter or member 'ia_vfsuid' not described in 'chown_ok'
-> 	fs/attr.c:36: warning: Excess function parameter 'uid' description in 'chown_ok'
-> 	fs/attr.c:63: warning: Function parameter or member 'ia_vfsgid' not described in 'chgrp_ok'
-> 	fs/attr.c:63: warning: Excess function parameter 'gid' description in 'chgrp_ok'
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
+> Enable the support for providing a MAC address
+> for a dock to use based on the VPD values set in the platform.
 
-This is already fixed in my tree and in -next as
-81a1807d80dd26cdf8a357cf55f556ade90c7fda
+Maybe i'm missing it, but i don't see any code which verifies this
+r8152 is actually in the dock, and not a USB ethernet dongle plugged
+into some port of either the laptop or the dock itself.
 
-So you can drop this.
-
-Thanks!
-Christian
+     Andrew

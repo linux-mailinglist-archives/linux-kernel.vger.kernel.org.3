@@ -2,65 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A6655DF6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D430555E07B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242031AbiF1ArT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 20:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
+        id S242125AbiF1AtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 20:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234908AbiF1ArS (ORCPT
+        with ESMTP id S233116AbiF1AtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 20:47:18 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999E9DF2D
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 17:47:17 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id y77so15208304oia.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 17:47:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CmaV9NQoW/Fd662ZqYGgD45ASvjbDpDWdPEsvS2puqM=;
-        b=gG4xBAQZG+ETFRDPO3xDVpqxjka4QuQdvw7yyaHT/XjY6P4wj/AS1Hb+LPrNQkL4q2
-         kKuD0BLK2u8RhvKJ5EQ29jUmROplqkDr0gkL56nWz27d8XdfHUDCoYNoKLDmkhXBS4Vc
-         uHaXZU2keHYh/KthmyM2uKWucb3YMDoLepGVIDKGhABScKuFJsulpCT8qMXw2hBdutG3
-         e5cD6+Ozi0LMM1BJJYLYYcy51HPGo8v3GdCdz/hVZC3R1SWhPegp5jp8HBlwCGbn7Tea
-         uBOhvTY7v867T4Nlx0rc9ClJnjCZPKr9oSR6ZSwqJzIIhOUMp76SQyXVpYadOj70pirl
-         okMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CmaV9NQoW/Fd662ZqYGgD45ASvjbDpDWdPEsvS2puqM=;
-        b=i3TapAhhuxBwEbghAGVJavZkAgqtalET8+pwPrb0dARgh6pLPi8zMJhDmYf2A/OW6j
-         cM5fJn2qs0q+U51Tjg/S1U0RIyOvCQg42sv0Q4kPtxK0ifIgzOoItHOQ81r1mN8+w6Ht
-         PdXmojwnVf/Qz2dj87Jxp9M5/bWMYNm88X9MpVeTZxVy6fX9weGSY24pvIhduicx1UcF
-         uaEB32OjDk5uPRKleg5KMBg4Wa05lSWlDy+ggxfL3Fi8p4GD5FVugRFjRUH+Y+ap5j2h
-         Q4H1n0AmtaK3BL/Wzd7yqe/v4/6LnV2i1l1JxF/HS4CIfvBQLwREvybkVgR8mdbObbBS
-         FOKA==
-X-Gm-Message-State: AJIora8+tJYwHgCBkgb3fVXGWiQne3ItyOgg+JPyyfMuO+lJPXW5dI3h
-        mZyGFHdFuDXjrdVG+rTZII0pTpRgyITdY/D6PEPagepW8UfbYhGz
-X-Google-Smtp-Source: AGRyM1urInjctET96oj51M0B3XZ00J8P6KIKs5gOKFT0R+ElWvC6ntuNIUQmFXbmzLc04vtCwKSOmizEMBQOA2N/MeI=
-X-Received: by 2002:aca:1113:0:b0:335:6d08:31a2 with SMTP id
- 19-20020aca1113000000b003356d0831a2mr5519853oir.258.1656377236924; Mon, 27
- Jun 2022 17:47:16 -0700 (PDT)
+        Mon, 27 Jun 2022 20:49:10 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D588B11;
+        Mon, 27 Jun 2022 17:49:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656377349; x=1687913349;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Gm2N2ZUm+7WdloRrAvNjqF430gKN+MlOv6l36JlXkjc=;
+  b=lWrkUjEyY60Np13XzzZVMd59yZ63fF238KmrPaq6wbz2E5KOSM2FENSX
+   9eeMdhZcJKLg6L1Plre0LrcVR7nAZP/kNf0/HvQcF3RTA7fhS5xDD1vJY
+   X48FD9OEP+H/Y7X84jcqdfmu8WbLjpaPKM6QRHxxe9a02T2a+CNENWEpG
+   Y0Sg+iwDCg+jd/yfLqYToYcr2c41QGr9P4URs0wrE/qmuNQJOwh2GxdxU
+   Lf+CWvpize21ox6u5Hg7YhDLZnNJQG1436Vv0h/segkwkDB5vJa+AV5a7
+   rpSGj4rjnpTmONZVwIEG0GfuwBJTZEQL7PnLOgpiT/nMi4aMAYEx1xvMM
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="270345527"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="270345527"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 17:49:08 -0700
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="646669100"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.174.143]) ([10.249.174.143])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 17:49:05 -0700
+Message-ID: <28110f9c-b84c-591a-d365-ae4412408e48@intel.com>
+Date:   Tue, 28 Jun 2022 08:48:35 +0800
 MIME-Version: 1.0
-References: <20220627131202.3148329-1-ckeepax@opensource.cirrus.com>
-In-Reply-To: <20220627131202.3148329-1-ckeepax@opensource.cirrus.com>
-From:   Souptick Joarder <jrdr.linux@gmail.com>
-Date:   Tue, 28 Jun 2022 06:17:05 +0530
-Message-ID: <CAFqt6zaNzKioWbXrN+JqQPvy82vFqj29M36ApnjzdTV-c=6_aA@mail.gmail.com>
-Subject: Re: [PATCH v2] ASoC: samsung: s3c24xx-i2s: Fix typo in DAIFMT handling
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     Mark Brown <broonie@kernel.org>, krzysztof.kozlowski@linaro.org,
-        s.nawrocki@samsung.com, Liam Girdwood <lgirdwood@gmail.com>,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.10.0
+Subject: Re: [PATCH v5 15/22] x86/virt/tdx: Allocate and set up PAMTs for
+ TDMRs
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1655894131.git.kai.huang@intel.com>
+ <c504a8acd06dc455050c25e2a4cc70aef5eb9358.1655894131.git.kai.huang@intel.com>
+ <e72703b0-767a-ec88-7cb6-f95a3564d823@intel.com>
+ <b376aef05bc032fdf8cc23762ce77a14830440cd.camel@intel.com>
+ <b43bf089-1202-a1fe-cbb3-d4e0926cab67@intel.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <b43bf089-1202-a1fe-cbb3-d4e0926cab67@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,47 +75,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 6:42 PM Charles Keepax
-<ckeepax@opensource.cirrus.com> wrote:
->
-> The conversion of the set_fmt callback to direct clock specification
-> included a small typo, correct the affected code.
+On 6/28/2022 4:41 AM, Dave Hansen wrote:
+> On 6/27/22 03:31, Kai Huang wrote:
+>>>> +/* Page sizes supported by TDX */
+>>>> +enum tdx_page_sz {
+>>>> +	TDX_PG_4K,
+>>>> +	TDX_PG_2M,
+>>>> +	TDX_PG_1G,
+>>>> +	TDX_PG_MAX,
+>>>> +};
+>>> Are these the same constants as the magic numbers in Kirill's
+>>> try_accept_one()?
+>> try_accept_once() uses 'enum pg_level' PG_LEVEL_{4K,2M,1G} directly.  They can
+>> be used directly too, but 'enum pg_level' has more than we need here:
+> 
+> I meant this:
+> 
+> +       switch (level) {
+> +       case PG_LEVEL_4K:
+> +               page_size = 0;
+> +               break;
+> 
+> Because TDX_PG_4K==page_size==0, and for this:
+> 
+> +       case PG_LEVEL_2M:
+> +               page_size = 1;
 
-sound/soc/samsung/s3c24xx-i2s.c: In function 's3c24xx_i2s_set_fmt':
->> sound/soc/samsung/s3c24xx-i2s.c:173:14: error: 'SND_SOC_DAIFMT_BC_CFC' undeclared (first use in this function); did you mean 'SND_SOC_DAIFMT_BC_FC'?
-     173 |         case SND_SOC_DAIFMT_BC_CFC:
-         |              ^~~~~~~~~~~~~~~~~~~~~
-         |              SND_SOC_DAIFMT_BC_FC
+here we can just do
 
-Adding this actual error msg from the kernel test robot will be helpful.
+	page_size = level - 1;
 
-Reviewed-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
->
-> Fixes: 0b491c7c1b25 ("ASoC: samsung: Update to use set_fmt_new callback")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-> ---
->
-> Changes since v1:
->  - Correct fixes tag.
->
->  sound/soc/samsung/s3c24xx-i2s.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/sound/soc/samsung/s3c24xx-i2s.c b/sound/soc/samsung/s3c24xx-i2s.c
-> index 4082ad7cbcc11..c1a314b86b155 100644
-> --- a/sound/soc/samsung/s3c24xx-i2s.c
-> +++ b/sound/soc/samsung/s3c24xx-i2s.c
-> @@ -170,7 +170,7 @@ static int s3c24xx_i2s_set_fmt(struct snd_soc_dai *cpu_dai,
->         pr_debug("hw_params r: IISMOD: %x \n", iismod);
->
->         switch (fmt & SND_SOC_DAIFMT_CLOCK_PROVIDER_MASK) {
-> -       case SND_SOC_DAIFMT_BC_CFC:
-> +       case SND_SOC_DAIFMT_BC_FC:
->                 iismod |= S3C2410_IISMOD_SLAVE;
->                 break;
->         case SND_SOC_DAIFMT_BP_FP:
-> --
-> 2.30.2
->
+or
+	
+	tdx_page_level = level - 1;
+
+yes, TDX's page level definition is one level smaller of Linux's definition.
+
+> where TDX_PG_2M==page_size==1
+> 
+> See?
+> 
+> Are Kirill's magic 0/1/2 numbers the same as
+> 
+> 	TDX_PG_4K,
+> 	TDX_PG_2M,
+> 	TDX_PG_1G,
+> 
+> ?
+
+
+

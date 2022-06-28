@@ -2,165 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3776555E019
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 296CC55CC8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344314AbiF1Jto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
+        id S1344385AbiF1JuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344543AbiF1JtE (ORCPT
+        with ESMTP id S241460AbiF1JuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:49:04 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174232D1F7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:49:01 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id i18so21289305lfu.8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:49:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=801n56RRF19njvd3sN05U/Pk8HphuQt6u550b7DOhRU=;
-        b=Sfi0J69vaMPOEhNG6WtijHlldNNBSyYKnabmbOfatQmzjdbaXohnb9sm9+yIsihXvi
-         QJ6SWz6Kek1j6cgGpPZjrhIwqFGVDwFz/nBlqGdA/jXJN2i6beXkwxUrk0LV2gvs2pPE
-         mhM8qjY9dRRa5iwv6n0/36hybYgJBVcA10VCg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=801n56RRF19njvd3sN05U/Pk8HphuQt6u550b7DOhRU=;
-        b=BnM8WkFDFgN87Y4FxAAzSuOcvvVtxsq60gPsyoii1llrpI95YvE4aR9hy2GvHDREit
-         7UBF9spwyMuPpnnRs3UFkHZfWAhmq6W08BDDfcHVifX5mEhug8kmgqU8MEF7jLh5znus
-         2YzMD+jUQjBr3GJtt5v0DH9L9doXn0X9cehVvzY2JOnQHdMdHAoaMIYJYi37bSw5yGdc
-         o5CDqTHMVDbdwVSMAj3EFg8RQLFMXOs4PlKg9lH+/8KqKzLc7+O0MoeG6h0iPp6WjMMm
-         UMQq24NxwEPErpxcB77OVcL3koTvMBThtbW0dFmSbUnn1zVe3LjTMtjmU3f/QhH/PJ0l
-         2B0Q==
-X-Gm-Message-State: AJIora+sMFV5ROLe1SbJSsZW3kTdOKfDEb8oyPWlzPyXyGhpLwgJzdrl
-        tP+cUUXFP13eoW//pWRi0tR3qdwN3Z7qpV9mukRN1g==
-X-Google-Smtp-Source: AGRyM1v9VpZqgUeR8hbmV2LkX0jtJ4z1jBxFd7ywaOEYWsrdztcyr+Zma9hibdiHk7yxd1rIAzY7os2Cfgn+rdIMq6k=
-X-Received: by 2002:a05:6512:1192:b0:481:4ba:f14d with SMTP id
- g18-20020a056512119200b0048104baf14dmr10376899lfr.662.1656409739307; Tue, 28
- Jun 2022 02:48:59 -0700 (PDT)
+        Tue, 28 Jun 2022 05:50:13 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B96DC8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:50:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656409813; x=1687945813;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EMA9/2kguHnQyf44jaUpIuGsTVx9ehFERtpHBeOXGic=;
+  b=mbKJj3voNsMMC2aFuZWMGEfoJMqHktqsy7l118EDpGMIg0AXnAn7mzPd
+   4PIznzki/QPoQP9piZFjyk4qtPSYjqJvQhQj4+1pAmu5oE6McZ6HNDgYz
+   nA3Sw/XTs3bgt70lrbuNo7LXdVoGjdXRlWeVzRf6xOcSnr1TrSL1LIGv7
+   cDUDKpBqHK1Om+w0l3SPx9Z2JeZgPxoWTBxlnZXzz9HHPR2wFueLQZ2R8
+   CqlveAoKyhuqPZPc1OqXg2hbuVEh+OusnvsIIreotHkPvg20r0oX1B05R
+   /aXtZy3NLpWtjSKxHbwWjiT/dkrCmYA1ueaZi9VvdHciWI0kiANjl3nwl
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="282430593"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="282430593"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 02:50:12 -0700
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="658070480"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 02:50:11 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o67rE-000wfu-L9;
+        Tue, 28 Jun 2022 12:50:08 +0300
+Date:   Tue, 28 Jun 2022 12:50:08 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH v1 1/9] mfd: intel_soc_pmic_crc: Merge Intel PMIC core to
+ crc
+Message-ID: <YrrO0CQVv6hj1AB0@smile.fi.intel.com>
+References: <20220616182524.7956-1-andriy.shevchenko@linux.intel.com>
+ <Yrmr175fsQi6ToEY@google.com>
 MIME-Version: 1.0
-References: <20220614122821.3646071-1-dario.binacchi@amarulasolutions.com>
- <20220614122821.3646071-6-dario.binacchi@amarulasolutions.com> <20220628092833.uo66jbnwhh5af6je@pengutronix.de>
-In-Reply-To: <20220628092833.uo66jbnwhh5af6je@pengutronix.de>
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Tue, 28 Jun 2022 11:48:48 +0200
-Message-ID: <CABGWkvrdw27T+g==HrknM+52mhvgEDS_4P9__7tsc+aV-oAvCw@mail.gmail.com>
-Subject: Re: [PATCH v4 05/12] can: slcan: use CAN network device driver API
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        michael@amarulasolutions.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yrmr175fsQi6ToEY@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+On Mon, Jun 27, 2022 at 02:08:39PM +0100, Lee Jones wrote:
+> On Thu, 16 Jun 2022, Andy Shevchenko wrote:
 
-On Tue, Jun 28, 2022 at 11:28 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 14.06.2022 14:28:14, Dario Binacchi wrote:
-> > As suggested by commit [1], now the driver uses the functions and the
-> > data structures provided by the CAN network device driver interface.
-> >
-> > Currently the driver doesn't implement a way to set bitrate for SLCAN
-> > based devices via ip tool, so you'll have to do this by slcand or
-> > slcan_attach invocation through the -sX parameter:
-> >
-> > - slcan_attach -f -s6 -o /dev/ttyACM0
-> > - slcand -f -s8 -o /dev/ttyUSB0
-> >
-> > where -s6 in will set adapter's bitrate to 500 Kbit/s and -s8 to
-> > 1Mbit/s.
-> > See the table below for further CAN bitrates:
-> > - s0 ->   10 Kbit/s
-> > - s1 ->   20 Kbit/s
-> > - s2 ->   50 Kbit/s
-> > - s3 ->  100 Kbit/s
-> > - s4 ->  125 Kbit/s
-> > - s5 ->  250 Kbit/s
-> > - s6 ->  500 Kbit/s
-> > - s7 ->  800 Kbit/s
-> > - s8 -> 1000 Kbit/s
-> >
-> > In doing so, the struct can_priv::bittiming.bitrate of the driver is not
-> > set and since the open_candev() checks that the bitrate has been set, it
-> > must be a non-zero value, the bitrate is set to a fake value (-1U)
-> > before it is called.
-> >
-> > The patch also changes the slcan_devs locking from rtnl to spin_lock. The
-> > change was tested with a kernel with the CONFIG_PROVE_LOCKING option
-> > enabled that did not show any errors.
->
-> You're not allowed to call alloc_candev() with a spin_lock held. See
-> today's kernel test robot mail:
->
-> | https://lore.kernel.org/all/YrpqO5jepAvv4zkf@xsang-OptiPlex-9020
->
-> I think it's best to keep the rtnl for now.
+...
 
-The rtnl_lock() uses a mutex while I used a spin_lock.
+> >  drivers/mfd/intel_soc_pmic_core.c | 160 -----------------------------
+> >  drivers/mfd/intel_soc_pmic_core.h |  25 -----
+> >  drivers/mfd/intel_soc_pmic_crc.c  | 162 ++++++++++++++++++++++++++++--
+> >  4 files changed, 157 insertions(+), 193 deletions(-)
+> >  delete mode 100644 drivers/mfd/intel_soc_pmic_core.c
+> >  delete mode 100644 drivers/mfd/intel_soc_pmic_core.h
+> 
+> Can you submit this again with the -M flag please.
 
-static DEFINE_MUTEX(rtnl_mutex);
+This is done with this flag. Basically for the last several years I do my
+submissions with that flag.
 
-void rtnl_lock(void)
-{
-mutex_lock(&rtnl_mutex);
-}
-EXPORT_SYMBOL(rtnl_lock);
+Anything else I can do?
 
-So might it be worth trying with a mutex instead of rtnl_lock(), or do
-you think it is
-safer to return to rtn_lock () anyway?
-
-Thanks and regards,
-Dario
-
->
-> regards,
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
-
+> Trying to figure out what exactly changed is proving challenging.
 
 -- 
-
-Dario Binacchi
-
-Embedded Linux Developer
-
-dario.binacchi@amarulasolutions.com
-
-__________________________________
+With Best Regards,
+Andy Shevchenko
 
 
-Amarula Solutions SRL
-
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 042 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com

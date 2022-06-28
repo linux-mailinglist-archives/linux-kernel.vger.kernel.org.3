@@ -2,143 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29C655D1F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0358A55DFE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243795AbiF1ITT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 04:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
+        id S245274AbiF1IUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 04:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243873AbiF1IS4 (ORCPT
+        with ESMTP id S242560AbiF1ITD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 04:18:56 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383282DA8E;
-        Tue, 28 Jun 2022 01:17:15 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id k129so5446562wme.0;
-        Tue, 28 Jun 2022 01:17:15 -0700 (PDT)
+        Tue, 28 Jun 2022 04:19:03 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D45F2DAA8;
+        Tue, 28 Jun 2022 01:17:41 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id a11-20020a17090acb8b00b001eca0041455so11620966pju.1;
+        Tue, 28 Jun 2022 01:17:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:date:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rvtNK3NUMkA8CEKQZP6QnJui/bz93uaFnF6matKQyQM=;
-        b=cxAglpNwSh89Nnir5pAQ7ttQI2O9psUBx/mFiwgkBjNaiztLg+9vV2idAHUlq65XHu
-         2kg7maDDPRYq60w8hevSYnMBCGoc2b7LP7uC+vPgY9HTvgXd/pAGwaiT2/AmoO5NvPZQ
-         Pw7C3O5PHfDYdY7BTZPz9ueL5C+B5EpwGRstFjXazmSVuJBiY2orpEj+r8yFfP1FcWvm
-         f2J46zgVt0BFOB/gWI5RnOheRBehRsZCKhi0NDRko8AHLaYt0aqV/bSZEibKuC5bAAaT
-         /QuUPpPssS4xW8xM4+y6XFwxGEjT9rG/KA9H2/lgoItG7buGO0SC5KKJ38Zuj8QY9Y9e
-         uVsg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NhvXMK8bFw6njNlQyliLjVolxFmrQvweDYEjgua0NV8=;
+        b=bkcBTv8p4RsYt48WZxvsE/a/MiJmHGufkP3vhXuXj8VBihMxjuYzO5rkby9KeGzYt9
+         qLug/u/yvmZRqarN/DvBMqWAAIS9C2JJGUXwJDFwUDtXcdGnHYJEm0wFo1g8yPBrM1u8
+         g/YFOw5rgpDwAxOwroSVhx83U4BXiizfQ7n7I11Q/aEoEH7oSVJFsBbzbW6jflsKMp6w
+         LHBIsaWTE8RqVUpjeJ3CW6QrqmjT2VYEK0ZDvBupmDwjUrbU//VNYqiYiDDTpf6Drml1
+         qoh71ZSfuO5Sf8TIdUzp8O8/T7aUe1DZOA/i56kSU3AD/vWhyRGhTrv7Yiku+Xg1CgAP
+         mm/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rvtNK3NUMkA8CEKQZP6QnJui/bz93uaFnF6matKQyQM=;
-        b=WezqgjzZqX7FYUWaEamf2hj8Onyuh9aRlnin0SrmMffvafiVRGsdxlf8NLp8fcVxHK
-         sfFLSNPhiwLwrdH2PgFevUjDAZ7q7AZ/ZihEt7mqSFl3v053tkTQ8jMgRcOPvQ3mFEop
-         xyP31QZPFoEpuvAyQzImqeZYQOE91Gg3I/LI0U07p9ITHWWoboUQ+np40xB0Hp30CPjq
-         RP818RERdjKylZSaRa0s+4vLsTjYnpEyxY/K6o5mXernIPb+gP7b7qBXJ0+laRV9KETY
-         XKF6BGbKKfwBbsRpTws67DWZRdXQaQ8cQcKVLqSI7Wm1SdKHaULdToyyHCrHfGeGWQ9j
-         qMqA==
-X-Gm-Message-State: AJIora+yW9VyYOOKyeJz4LfmTCEymtvZpNXqZmKcNAMLyTas2vDt03//
-        6HTIPF0cSbLGyF1k4yGpjCg=
-X-Google-Smtp-Source: AGRyM1uRSYDZ9aC5Z8EfsD/JtEoL1Mk+C1NLf+4DXGkBtIFLknP8eoN1sBhSiqy97pj2VMo4RrXs0A==
-X-Received: by 2002:a05:600c:a42:b0:39c:9086:8a34 with SMTP id c2-20020a05600c0a4200b0039c90868a34mr24969500wmq.169.1656404233695;
-        Tue, 28 Jun 2022 01:17:13 -0700 (PDT)
-Received: from krava (net-109-116-206-47.cust.vodafonedsl.it. [109.116.206.47])
-        by smtp.gmail.com with ESMTPSA id y10-20020a1c4b0a000000b0039c587342d8sm20620836wma.3.2022.06.28.01.17.11
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NhvXMK8bFw6njNlQyliLjVolxFmrQvweDYEjgua0NV8=;
+        b=rcyGnATCt26aiyrqVWIBz76T0I3a7ToZ3Brfz6DAu5ZN8w0NbKkKApve0kfZRM1tou
+         Fx3P0qIyMI07qIW/IezroyYsHD4H35NlfE4rxy4q3Az0hIL5tzE0TpOYfs2S7mbriYJJ
+         Fd4IzFNqhjmOd7kNGywCHVz5TpH3Rab1rWG8sJ6LvDR7Kga4NAC6YycAeudl7HcpDNDf
+         q0q1qW5m1SC7deA1Q6ARMF8l3U9VT14TR6q+gprjHS3cqBPmkY8JQfzeMdGegxm2In+H
+         31V1uk3NxRDMTndNJIcO/ZIyHasNrxRLHq1bdZ/pFIdZr+JmmVjfjt+glLQn9uOr6MrP
+         B8xA==
+X-Gm-Message-State: AJIora82XOQieSAIIh4yVT0WlVfn1D0r+vmtij8K7Slu9nK7i+P8e9Zw
+        ROyHLvsZG7q9jyhMV2OmiKA=
+X-Google-Smtp-Source: AGRyM1sgluu4OgUva5oJgOl67WyN5tOvnNzOIRJ2llMgHgHZDuxJBd4ZUr9XiqURhNHTsyxo8Ik/sA==
+X-Received: by 2002:a17:903:32c4:b0:16a:4227:cd68 with SMTP id i4-20020a17090332c400b0016a4227cd68mr3722753plr.173.1656404260702;
+        Tue, 28 Jun 2022 01:17:40 -0700 (PDT)
+Received: from mi-HP-ProDesk-680-G4-MT.mioffice.cn ([43.224.245.232])
+        by smtp.gmail.com with ESMTPSA id b16-20020a17090a101000b001eeeb40092fsm2931223pja.21.2022.06.28.01.17.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 01:17:13 -0700 (PDT)
-From:   olsajiri@gmail.com
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>, To: Ian Rogers <irogers@google.com>;
-Date:   Tue, 28 Jun 2022 10:17:10 +0200
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH] perf bpf: 8 byte align bpil data
-Message-ID: <Yrq5Bun3Nmb1vrW3@krava>
-References: <20220614014714.1407239-1-irogers@google.com>
+        Tue, 28 Jun 2022 01:17:40 -0700 (PDT)
+From:   Guowei Du <duguoweisz@gmail.com>
+To:     jack@suse.cz, amir73il@gmail.com, repnop@google.com
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        duguowei <duguowei@xiaomi.com>
+Subject: [PATCH 5/5] fanotify: add inline modifier
+Date:   Tue, 28 Jun 2022 16:17:31 +0800
+Message-Id: <20220628081731.22411-1-duguoweisz@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614014714.1407239-1-irogers@google.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MISSING_HEADERS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 06:47:14PM -0700, Ian Rogers wrote:
-> bpil data is accessed assuming 64-bit alignment resulting in undefined
-> behavior as the data is just byte aligned. With an -fsanitize=undefined
-> build the following errors are observed:
+From: duguowei <duguowei@xiaomi.com>
 
-I need to add -w to get the clean build with that, do you see that as well?
+No functional change.
+This patch only makes a little change for compiling.
 
-  $ make EXTRA_CFLAGS='-fsanitize=undefined -w'
+Signed-off-by: duguowei <duguowei@xiaomi.com>
+---
+ fs/notify/fanotify/fanotify.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
-> 
-> $ sudo perf record -a sleep 1
-> util/bpf-event.c:310:22: runtime error: load of misaligned address 0x55f61084520f for type '__u64', which requires 8 byte alignment
-> 0x55f61084520f: note: pointer points here
->  a8 fe ff ff 3c  51 d3 c0 ff ff ff ff 04  84 d3 c0 ff ff ff ff d8  aa d3 c0 ff ff ff ff a4  c0 d3 c0
->              ^
-> util/bpf-event.c:311:20: runtime error: load of misaligned address 0x55f61084522f for type '__u32', which requires 4 byte alignment
-> 0x55f61084522f: note: pointer points here
->  ff ff ff ff c7  17 00 00 f1 02 00 00 1f  04 00 00 58 04 00 00 00  00 00 00 0f 00 00 00 63  02 00 00
->              ^
-> util/bpf-event.c:198:33: runtime error: member access within misaligned address 0x55f61084523f for type 'const struct bpf_func_info', which requires 4 byte alignment
-> 0x55f61084523f: note: pointer points here
->  58 04 00 00 00  00 00 00 0f 00 00 00 63  02 00 00 3b 00 00 00 ab  02 00 00 44 00 00 00 14  03 00 00
+diff --git a/fs/notify/fanotify/fanotify.c b/fs/notify/fanotify/fanotify.c
+index 4f897e109547..a32752350e0e 100644
+--- a/fs/notify/fanotify/fanotify.c
++++ b/fs/notify/fanotify/fanotify.c
+@@ -18,12 +18,12 @@
+ 
+ #include "fanotify.h"
+ 
+-static bool fanotify_path_equal(struct path *p1, struct path *p2)
++static inline bool fanotify_path_equal(struct path *p1, struct path *p2)
+ {
+ 	return p1->mnt == p2->mnt && p1->dentry == p2->dentry;
+ }
+ 
+-static unsigned int fanotify_hash_path(const struct path *path)
++static inline unsigned int fanotify_hash_path(const struct path *path)
+ {
+ 	return hash_ptr(path->dentry, FANOTIFY_EVENT_HASH_BITS) ^
+ 		hash_ptr(path->mnt, FANOTIFY_EVENT_HASH_BITS);
+@@ -35,20 +35,18 @@ static inline bool fanotify_fsid_equal(__kernel_fsid_t *fsid1,
+ 	return fsid1->val[0] == fsid2->val[0] && fsid1->val[1] == fsid2->val[1];
+ }
+ 
+-static unsigned int fanotify_hash_fsid(__kernel_fsid_t *fsid)
++static inline unsigned int fanotify_hash_fsid(__kernel_fsid_t *fsid)
+ {
+ 	return hash_32(fsid->val[0], FANOTIFY_EVENT_HASH_BITS) ^
+ 		hash_32(fsid->val[1], FANOTIFY_EVENT_HASH_BITS);
+ }
+ 
+-static bool fanotify_fh_equal(struct fanotify_fh *fh1,
++static inline bool fanotify_fh_equal(struct fanotify_fh *fh1,
+ 			      struct fanotify_fh *fh2)
+ {
+-	if (fh1->type != fh2->type || fh1->len != fh2->len)
+-		return false;
+-
+-	return !fh1->len ||
+-		!memcmp(fanotify_fh_buf(fh1), fanotify_fh_buf(fh2), fh1->len);
++	return fh1->type == fh2->type && fh1->len == fh2->len &&
++		(!fh1->len ||
++		 !memcmp(fanotify_fh_buf(fh1), fanotify_fh_buf(fh2), fh1->len));
+ }
+ 
+ static unsigned int fanotify_hash_fh(struct fanotify_fh *fh)
+-- 
+2.36.1
 
-
-and I'm also getting another error in:
-
-[root@krava perf]# ./perf record -a sleep 1
-util/synthetic-events.c:1202:11: runtime error: member access within misaligned address 0x00000286f7ea for type 'struct perf_record_record_cpu_map', which requires 8 byte alignment
-0x00000286f7ea: note: pointer points here
- 20 00  01 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00
-              ^ 
-util/synthetic-events.c:1203:18: runtime error: member access within misaligned address 0x00000286f7ea for type 'struct perf_record_record_cpu_map', which requires 8 byte alignment
-0x00000286f7ea: note: pointer points here
- 20 00  01 00 01 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00
-              ^ 
-util/synthetic-events.c:1206:46: runtime error: member access within misaligned address 0x00000286f7ea for type 'struct perf_record_record_cpu_map', which requires 8 byte alignment
-0x00000286f7ea: note: pointer points here
- 20 00  01 00 01 00 08 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00
-              ^ 
-/home/jolsa/kernel/linux-perf/tools/include/asm-generic/bitops/atomic.h:10:29: runtime error: load of misaligned address 0x00000286f7f2 for type 'long unsigned int', which requires 8 byte alignment
-0x00000286f7f2: note: pointer points here
- 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  51 00 00 00 00 00
-              ^ 
-
-are you going to address this one as well?
-
-
-the reason for this one is that 'data' in struct perf_record_cpu_map_data
-is not alligned(8), so that's why I raised the question in my other reply ;-)
-
-I wonder we should mark all tools/lib/perf/include/perf/event.h types
-as packed to prevent any compiler padding
-
-thanks,
-jirka

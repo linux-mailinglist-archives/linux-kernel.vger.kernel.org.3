@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9603255D636
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3969E55D3E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244033AbiF1DBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 23:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
+        id S244054AbiF1DBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 23:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiF1DBQ (ORCPT
+        with ESMTP id S231207AbiF1DBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 23:01:16 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866D4F7D
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:01:14 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LX8Sq1HCczkWJn;
-        Tue, 28 Jun 2022 10:59:23 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 28 Jun 2022 11:01:12 +0800
-Subject: Re: [PATCH v2 1/9] mm/hugetlb: remove checking hstate_is_gigantic()
- in return_unused_surplus_pages()
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-CC:     Muchun Song <songmuchun@bytedance.com>,
-        Naoya Horiguchi <nao.horiguchi@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-References: <20220623235153.2623702-1-naoya.horiguchi@linux.dev>
- <20220623235153.2623702-2-naoya.horiguchi@linux.dev>
- <0b69e3ef-0123-4575-b68d-4d9b2067aa0e@huawei.com>
- <YrVv3gKMxbu/dwCs@FVFYT0MHHV2J.usts.net>
- <e9a22524-d9f6-1018-a712-00adb90d432a@huawei.com>
- <20220624083428.GA2070418@hori.linux.bs1.fc.nec.co.jp>
- <YrYMS5sATPzEgUxb@monkey>
- <20220627060231.GA2159330@hori.linux.bs1.fc.nec.co.jp>
- <Yrnn+QS8JCMT/3JV@monkey>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <227ccd06-a945-e4c5-8cff-37817f777781@huawei.com>
-Date:   Tue, 28 Jun 2022 11:01:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 27 Jun 2022 23:01:54 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A05F7D;
+        Mon, 27 Jun 2022 20:01:44 -0700 (PDT)
+X-UUID: 5688a09374f044aa835eded943486335-20220628
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:99efdc5b-b5e7-472f-ac3d-d7e5812244ce,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:87442a2,CLOUDID:aaccf085-57f0-47ca-ba27-fe8c57fbf305,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 5688a09374f044aa835eded943486335-20220628
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1330623918; Tue, 28 Jun 2022 11:01:34 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 28 Jun 2022 11:01:33 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 28 Jun 2022 11:01:33 +0800
+Message-ID: <4bc40d79d6f6d3b2bf470a7c09375859a31b5e40.camel@mediatek.com>
+Subject: Re: [PATCH v14 12/15] drm/mediatek: dpi: Add YUV422 output support
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 28 Jun 2022 11:01:33 +0800
+In-Reply-To: <c3a2feae4295f3300f723a9bfd8cdf0b1c938c81.camel@mediatek.com>
+References: <20220624030946.14961-1-rex-bc.chen@mediatek.com>
+         <20220624030946.14961-13-rex-bc.chen@mediatek.com>
+         <a59a61a81e45fd361774a28a66ffd3d673cb3148.camel@mediatek.com>
+         <5b0613b9cc983e24a997c122b2892b35cf8346d3.camel@mediatek.com>
+         <c3a2feae4295f3300f723a9bfd8cdf0b1c938c81.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-In-Reply-To: <Yrnn+QS8JCMT/3JV@monkey>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,83 +71,253 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/28 1:25, Mike Kravetz wrote:
-> On 06/27/22 06:02, HORIGUCHI NAOYA(堀口 直也) wrote:
->> On Fri, Jun 24, 2022 at 12:11:07PM -0700, Mike Kravetz wrote:
->>> On 06/24/22 08:34, HORIGUCHI NAOYA(堀口 直也) wrote:
->>>> On Fri, Jun 24, 2022 at 04:15:19PM +0800, Miaohe Lin wrote:
->>>>> On 2022/6/24 16:03, Muchun Song wrote:
->>>>>> On Fri, Jun 24, 2022 at 10:25:48AM +0800, Miaohe Lin wrote:
->>>>>>> On 2022/6/24 7:51, Naoya Horiguchi wrote:
->>>>>>>> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
->>>>>>>
->>>>>>> IIUC it might be better to do the below check:
->>>>>>> 	/*
->>>>>>> 	 * Cannot return gigantic pages currently if runtime gigantic page
->>>>>>> 	 * allocation is not supported.
->>>>>>> 	 */
->>>>>>> 	if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported())
->>>>>>> 		goto out;
->>>>>>>
->>>>>>
->>>>>> The change looks good to me. However, the comments above is unnecessary
->>>>>> since gigantic_page_runtime_supported() is straightforward.
->>>>>
->>>>> Agree. The comments can be removed.
->>>>
->>>> Thank you, both. Adding !gigantic_page_runtime_supported without comment
->>>> makes sense to me.
->>>
->>> The change above makes sense to me.  However, ...
->>>
->>> If we make the change above, will we have the same strange situation described
->>> in the commit message when !gigantic_page_runtime_supported() is true?
->>>
->>> IIUC, !gigantic_page_runtime_supported implies that gigantic hugetlb
->>> pages can not be allocated or freed at run time.  They can only be
->>> allocated at boot time.  So, there should NEVER be surplus gigantic
->>> pages if !gigantic_page_runtime_supported().
->>
->> I have the same understanding as the above.
->>
->>>  To avoid this situation,
->>> perhaps we should change set_max_huge_pages as follows (not tested)?
->>
->> The suggested diff looks clearer about what it does, so I'd like to take it
->> in the next version.  Then, what do we do on the "if (hstate_if_gigantic())"
->> check in return_unused_surplus_pages in the original suggestion?  Should it
->> be kept as is, or removed, or checked with !gigantic_page_runtime_supported()?
->> I guess that the new checks prevent calling return_unused_surplus_pages()
->> during pool shrinking, so the check seems not necessary any more.
+On Tue, 2022-06-28 at 10:38 +0800, CK Hu wrote:
+> On Tue, 2022-06-28 at 10:28 +0800, Rex-BC Chen wrote:
+> > On Tue, 2022-06-28 at 10:15 +0800, CK Hu wrote:
+> > > Hi, Bo-Chen:
+> > > 
+> > > On Fri, 2022-06-24 at 11:09 +0800, Bo-Chen Chen wrote:
+> > > > Dp_intf supports YUV422 as output format. In MT8195 Chrome
+> > > > project,
+> > > > YUV422 output format is used for 4K resolution.
+> > > > 
+> > > > To support this, it is also needed to support color format
+> > > > transfer.
+> > > > Color format transfer is a new feature for both dpi and dpintf
+> > > > of
+> > > > MT8195.
+> > > > 
+> > > > The input format could be RGB888 and output format for dp_intf
+> > > > should
+> > > > be
+> > > > YUV422. Therefore, we add a mtk_dpi_matrix_sel() helper to
+> > > > update
+> > > > the
+> > > > DPI_MATRIX_SET register depending on the color format.
+> > > > 
+> > > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > > > Reviewed-by: AngeloGioacchino Del Regno <
+> > > > angelogioacchino.delregno@collabora.com>
+> > > > ---
+> > > >  drivers/gpu/drm/mediatek/mtk_dpi.c      | 34
+> > > > ++++++++++++++++++++++++-
+> > > >  drivers/gpu/drm/mediatek/mtk_dpi_regs.h |  3 +++
+> > > >  2 files changed, 36 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > > > b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > > > index 9e4250356342..438bf3bc5e4a 100644
+> > > > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > > > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > > > @@ -128,6 +128,7 @@ struct mtk_dpi_yc_limit {
+> > > >   * @num_output_fmts: Quantity of supported output formats.
+> > > >   * @is_ck_de_pol: Support CK/DE polarity.
+> > > >   * @swap_input_support: Support input swap function.
+> > > > + * @color_fmt_trans_support: Enable color format transfer.
+> > > >   * @dimension_mask: Mask used for HWIDTH, HPORCH, VSYNC_WIDTH
+> > > > and
+> > > > VSYNC_PORCH
+> > > >   *		    (no shift).
+> > > >   * @hvsize_mask: Mask of HSIZE and VSIZE mask (no shift).
+> > > > @@ -144,6 +145,7 @@ struct mtk_dpi_conf {
+> > > >  	u32 num_output_fmts;
+> > > >  	bool is_ck_de_pol;
+> > > >  	bool swap_input_support;
+> > > > +	bool color_fmt_trans_support;
+> > > >  	u32 dimension_mask;
+> > > >  	u32 hvsize_mask;
+> > > >  	u32 channel_swap_shift;
+> > > > @@ -412,6 +414,31 @@ static void
+> > > > mtk_dpi_config_disable_edge(struct
+> > > > mtk_dpi *dpi)
+> > > >  		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0,
+> > > > EDGE_SEL_EN);
+> > > >  }
+> > > >  
+> > > > +static void mtk_dpi_matrix_sel(struct mtk_dpi *dpi,
+> > > > +			       enum mtk_dpi_out_color_format
+> > > > format)
+> > > > +{
+> > > > +	u32 matrix_sel = 0;
+> > > > +
+> > > > +	if (!dpi->conf->color_fmt_trans_support) {
+> > > > +		dev_info(dpi->dev, "matrix_sel is not
+> > > > supported.\n");
+> > > > +		return;
+> > > > +	}
+> > > > +
+> > > > +	switch (format) {
+> > > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_422:
+> > > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL:
+> > > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_444:
+> > > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL:
+> > > 
+> > > I think the transform formula are different for full range and
+> > > non-
+> > > full 
+> > > range. Please make sure '0x2' is for full range or non-full
+> > > range.
+> > > If
+> > > you are not sure, you could provide the transform matrix of '0x2'
+> > > so
+> > > we
+> > > could find out it's full or non-full.
+> > > 
+> > > > +	case MTK_DPI_COLOR_FORMAT_XV_YCC:
+> > > > +		if (dpi->mode.hdisplay <= 720)
+> > > > +			matrix_sel = 0x2;
+> > > 
+> > > Symbolize '0x2'.
+> > > 
+> > > > +		break;
+> > > > +	default:
+> > > > +		break;
+> > > > +	}
+> > > > +	mtk_dpi_mask(dpi, DPI_MATRIX_SET, matrix_sel,
+> > > > INT_MATRIX_SEL_MASK);
+> > > > +}
+> > > > +
+> > > >  static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
+> > > >  					enum
+> > > > mtk_dpi_out_color_format
+> > > > format)
+> > > >  {
+> > > > @@ -419,6 +446,7 @@ static void
+> > > > mtk_dpi_config_color_format(struct
+> > > > mtk_dpi *dpi,
+> > > >  	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
+> > > >  		mtk_dpi_config_yuv422_enable(dpi, false);
+> > > >  		mtk_dpi_config_csc_enable(dpi, true);
+> > > > +		mtk_dpi_matrix_sel(dpi, format);
+> > > 
+> > > Why mt8173 support MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL but it
+> > > does
+> > > not
+> > > call mtk_dpi_matrix_sel()? It seems that mt8173 also need to call
+> > > mtk_dpi_matrix_sel() but lost and this patch looks like a bug fix
+> > > for
+> > > all SoC DPI driver.
+> > > 
+> > > Regards,
+> > > CK
+> > > 
+> > 
+> > Hello CK,
+> > 
+> > MT8173 does not support MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL as
+> > output
+> > format, the output format is:
+> > 
+> > static const u32 mt8173_output_fmts[] = {
+> > 	MEDIA_BUS_FMT_RGB888_1X24,
+> > };
+> > 
+> > or do I misunderstand?
 > 
-> My first thought was to keep the check in return_unused_surplus_pages() as it
-> is called in other code paths.  However, it SHOULD only try to free surplus
-> hugetlb pages.  With the modifications to set_max_huge_pages we will not
-> have any surplus gigantic pages if !gigantic_page_runtime_supported, so
-> the check can be removed.
+> In the first patch [1], it define
 > 
-> Also note that we never try to dynamically allocate surplus gigantic pages.
-> This also is left over from the time when we could not easily allocate a
-> gigantic page at runtime.  It would not surprise me if someone found a use
-> case to ease this restriction in the future.  Especially so if 1G THP support
-> is ever added.  If this happens, the check would be necessary and I would
-> guess that it would not be added.
+> +enum mtk_dpi_out_color_format {
+> +	MTK_DPI_COLOR_FORMAT_RGB,
+> +	MTK_DPI_COLOR_FORMAT_RGB_FULL,
+> +	MTK_DPI_COLOR_FORMAT_YCBCR_444,
+> +	MTK_DPI_COLOR_FORMAT_YCBCR_422,
+> +	MTK_DPI_COLOR_FORMAT_XV_YCC,
+> +	MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL,
+> +	MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL
+> +};
 > 
-> Sorry for thinking our loud!!!  Although not necessary, it 'might' be a good
-> idea to leave the check because it would be overlooked if dynamic allocation
-> of gigantic surplus pages is ever added.  I do not have a strong opinion.
+> and this function also process MTK_DPI_COLOR_FORMAT_YCBCR_444,
+> MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL, MTK_DPI_COLOR_FORMAT_YCBCR_422,
+> and MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL. So I think it want to
+> process
+> output YUV but the caller of mtk_dpi_config_color_format() just pass
+> RGB into this function. If mt8173 does not support YUV output, I
+> think
+> you should remove YUV processing in this function first, and then add
+> back YUV processing in this function.
 > 
-> P.S. This also reminds me that a similar check should be added to the
-> demote hugetlb code path.  It would be bad if !gigantic_page_runtime_supported
-> and we demoted a gigantic page into numerous non-gigantic pages.  I will
-> send a patch.
+> [1] 
+> 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/gpu/drm/mediatek/mtk_dpi.c?h=v5.19-rc4&id=9e629c17aa8d7a75b8c1d99ed42892cd8ba7cdc4
+> 
+> Regards,
+> CK
+> 
 
-Out-of-topic
-There're some places check "if (hstate_is_gigantic(h))" while others check
-"if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported())". Should
-we make it explicit in some manner when gigantic_page_runtime_supported is
-needed to make code easier to follow?
+Hello CK,
 
-Just a trivial suggestion. Thanks!
+I don't think it should be remove. After all, it is accepted and from
+[1], we can see it assgin output format always as RGB.
++	dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
 
+After that, it also added patch of supporting changing output
+format[2].
+
+We have support output as YUV422 now. I think it's ok to just add this.
+If we remove them and add them back, I think it is a little bit
+redundant. And I also can add a commit message like "output format
+YUV422 is not support for previous MediaTek SoCs. MT8195 supports
+output format as YUV422.."
+
+What do you think?
+
+[2]: 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/gpu/drm/mediatek/mtk_dpi.c?h=v5.19-rc4&id=be63f6e8601ff21139da93623754717e92cbd8db
+
+BRs,
+Bo-Chen
+> > 
+> > BRs,
+> > Bo-Chen
+> > 
+> > > >  		if (dpi->conf->swap_input_support)
+> > > >  			mtk_dpi_config_swap_input(dpi, false);
+> > > >  		mtk_dpi_config_channel_swap(dpi,
+> > > > MTK_DPI_OUT_CHANNEL_SWAP_BGR);
+> > > > @@ -426,6 +454,7 @@ static void
+> > > > mtk_dpi_config_color_format(struct
+> > > > mtk_dpi *dpi,
+> > > >  		   (format ==
+> > > > MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
+> > > >  		mtk_dpi_config_yuv422_enable(dpi, true);
+> > > >  		mtk_dpi_config_csc_enable(dpi, true);
+> > > > +		mtk_dpi_matrix_sel(dpi, format);
+> > > >  		if (dpi->conf->swap_input_support)
+> > > >  			mtk_dpi_config_swap_input(dpi, true);
+> > > >  		else
+> > > > @@ -673,7 +702,10 @@ static int
+> > > > mtk_dpi_bridge_atomic_check(struct
+> > > > drm_bridge *bridge,
+> > > >  	dpi->bit_num = MTK_DPI_OUT_BIT_NUM_8BITS;
+> > > >  	dpi->channel_swap = MTK_DPI_OUT_CHANNEL_SWAP_RGB;
+> > > >  	dpi->yc_map = MTK_DPI_OUT_YC_MAP_RGB;
+> > > > -	dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
+> > > > +	if (out_bus_format == MEDIA_BUS_FMT_YUYV8_1X16)
+> > > > +		dpi->color_format =
+> > > > MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL;
+> > > > +	else
+> > > > +		dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
+> > > >  
+> > > >  	return 0;
+> > > >  }
+> > > > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > > > b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > > > index 3a02fabe1662..cca0dccb84a2 100644
+> > > > --- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > > > +++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > > > @@ -217,4 +217,7 @@
+> > > >  
+> > > >  #define EDGE_SEL_EN			BIT(5)
+> > > >  #define H_FRE_2N			BIT(25)
+> > > > +
+> > > > +#define DPI_MATRIX_SET		0xB4
+> > > > +#define INT_MATRIX_SEL_MASK		GENMASK(4, 0)
+> > > >  #endif /* __MTK_DPI_REGS_H */
+> > > 
+> > > 
+> > 
+> > 
 > 
+> 
+

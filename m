@@ -2,101 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A60E55C4CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0D155E138
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344038AbiF1Iy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 04:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
+        id S229680AbiF1I6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 04:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344019AbiF1Iy5 (ORCPT
+        with ESMTP id S242244AbiF1I6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 04:54:57 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8382DA90;
-        Tue, 28 Jun 2022 01:54:56 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id t21so11432092pfq.1;
-        Tue, 28 Jun 2022 01:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WC8mCwxcFPmaNTe2dlW1gLIl9Or1Z5lRzz4HZt059cU=;
-        b=KQaVeMvIK6tuqnHSMdPgFQMzEqe69xzapzWGFSkXXSzGpslkQZiKvpkndmQmbvsQcF
-         3eXYDi6vX572wjK1KHg1/m0lgsL0BzcS+4uH0x/bLsxCuBZ0gndhW9kk5MVotcXKys3i
-         2883cqdlYnIiUEZAG9lnMss+hKV11KcDexX/q8Ck+9JV6hztDT62MxRvojYqjflEzzhm
-         eHcphQSn19g19YEIhpvYD3KwbPVQ6+oOqM+oTYDLgrXk7uYO4/1y81riptgqSYbbFpHX
-         0bnzAlRt0K6NiVw/GrbUWMXmhakslOMse/ynaMzUje6+r4G45B6SoUDy7JC+HjB3lEbn
-         xIEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WC8mCwxcFPmaNTe2dlW1gLIl9Or1Z5lRzz4HZt059cU=;
-        b=zZ5+VjCVAwkOxpe2NuTMsYwalWQW/w6ykY2R2y0/A1Kw8p3eSX6a5FTkDDmVspofYn
-         fouDG4dhtIOiUKX7vaGwc1N2Poqw0rSP0IML0Y6DUVJrwl38fiaCZ87yV4COcdYFww2F
-         ItiSebpF5/Zg+C5YFSNAj9a0qTk1FWWQ5/LIRyiX9ZTOTC0uk4611BMSzAUUxpAcpyjU
-         JURh9uSAhSEk6pVhmH+21e20CTDsZSkD4SMDAf9+7C6sN41SzpzVjbd8QeBWEq/mH4At
-         +mFT1lJQmGK2iUJdqMo00y0W/pP8U124x0rIktFEyPXQsip7Z9hgHkhZ2539Tozm5kvV
-         EWXQ==
-X-Gm-Message-State: AJIora+uFeR1Oh4vU4OriBk75uCcMCJEBwG0BkC6LuhbDVd/XpBYNPVV
-        QvZdmgY8qvSnYzfj2bhF5Ko=
-X-Google-Smtp-Source: AGRyM1uiulusMvDPUmm/nYRbHm8DSfvspJVNvlbmGIdRAexX4Kc34/cplPHlah8MfxNGVhbXo74LZQ==
-X-Received: by 2002:a63:f413:0:b0:40d:ba87:53f8 with SMTP id g19-20020a63f413000000b0040dba8753f8mr14812732pgi.193.1656406496018;
-        Tue, 28 Jun 2022 01:54:56 -0700 (PDT)
-Received: from chrome.huaqin.com ([101.78.151.222])
-        by smtp.gmail.com with ESMTPSA id r9-20020a17090a0ac900b001e095a5477bsm11120939pje.33.2022.06.28.01.54.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 01:54:55 -0700 (PDT)
-From:   Rex Nie <rexnie3@gmail.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, spanda@codeaurora.org, dianders@chromium.org,
-        devicetree@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh@kernel.org>, Rex Nie <rexnie3@gmail.com>
-Subject: [PATCH 2/2] dt-bindings: display: simple: Add InnoLux n140hca-eac panel
-Date:   Tue, 28 Jun 2022 16:54:48 +0800
-Message-Id: <20220628085448.2147440-1-rexnie3@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 28 Jun 2022 04:58:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742B4B4B;
+        Tue, 28 Jun 2022 01:58:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1B1D61548;
+        Tue, 28 Jun 2022 08:58:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4475EC3411D;
+        Tue, 28 Jun 2022 08:58:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656406711;
+        bh=5S9xPKZrc7nmOZmYexyOwDlb74dnXm3mkY7WwiGdm34=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WpXPbMzf1KsgHn5mb3ndtqAD+Fvn6oLjzotcwyKdV/vq2FuGmc+Abnshd3Vl/6Ast
+         YlmP3fvwCeEO3vbMtyU+0CSCIxqxuuyxGBfvYBJviLXkLBfM6inzPc527Due+CivO3
+         0q+KYNZp3RLZr7xFAyG6UYJzeTCXAlnMdtDVIdpXhzsvXafB69D8tgDLRXXKPOuvDF
+         7zodsPotdl/4BiOqWoVkGOMYNmK5CL7FW2+eZe+kpgC5S/m9Y9LTrSaqVqJFNJg1ak
+         SsfL9TsaTtHQrx0lLu1rREfzE3jZdCBNr+jobK/k0rnsoED5Aw5H5eIcgXOmDdLHSs
+         33nYHYEOXer4A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1o673C-0004EL-OM; Tue, 28 Jun 2022 10:58:27 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH] clk: qcom: gcc-sc8280xp: use phy-mux clock for PCIe
+Date:   Tue, 28 Jun 2022 10:57:07 +0200
+Message-Id: <20220628085707.16214-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for InnoLux n140hca-eac display panel. It is a 14" eDP panel
-with 1920x1080 display resolution.
+Use the new phy-mux clock implementation for the PCIe pipe clock muxes
+so that the pipe clock source is set to the QMP PHY PLL when the
+downstream pipe clock is enabled and restored to the always-on XO when
+it is again disabled.
 
-Signed-off-by: Rex Nie <rexnie3@gmail.com>
-Acked-by: Rob Herring <robh@kernel.org>
+This is needed to prevent the corresponding GDSC from hanging when
+enabling or disabling the PCIe power domain, something which requires a
+ticking source.
+
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- .../devicetree/bindings/display/panel/panel-simple.yaml         | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/clk/qcom/gcc-sc8280xp.c | 121 ++++++++------------------------
+ 1 file changed, 31 insertions(+), 90 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-index a5568d1dc272..51e573615aab 100644
---- a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-@@ -186,6 +186,8 @@ properties:
-       - innolux,n116bge
-         # InnoLux 13.3" FHD (1920x1080) eDP TFT LCD panel
-       - innolux,n125hce-gn1
-+        # InnoLux 14" FHD (1920x1080) eDP TFT LCD panel
-+      - innolux,n140hca-eac
-         # InnoLux 15.6" WXGA TFT LCD panel
-       - innolux,n156bge-l21
-         # Innolux Corporation 7.0" WSVGA (1024x600) TFT LCD panel
+diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
+index f186ddf6954e..a2f3ffcc5849 100644
+--- a/drivers/clk/qcom/gcc-sc8280xp.c
++++ b/drivers/clk/qcom/gcc-sc8280xp.c
+@@ -20,6 +20,7 @@
+ #include "clk-regmap.h"
+ #include "clk-regmap-divider.h"
+ #include "clk-regmap-mux.h"
++#include "clk-regmap-phy-mux.h"
+ #include "common.h"
+ #include "gdsc.h"
+ #include "reset.h"
+@@ -82,11 +83,6 @@ enum {
+ 	P_GCC_USB4_PHY_PCIE_PIPEGMUX_CLK_SRC,
+ 	P_GCC_USB4_PHY_PIPEGMUX_CLK_SRC,
+ 	P_GCC_USB4_PHY_SYS_PIPEGMUX_CLK_SRC,
+-	P_PCIE_2A_PIPE_CLK,
+-	P_PCIE_2B_PIPE_CLK,
+-	P_PCIE_3A_PIPE_CLK,
+-	P_PCIE_3B_PIPE_CLK,
+-	P_PCIE_4_PIPE_CLK,
+ 	P_QUSB4PHY_1_GCC_USB4_RX0_CLK,
+ 	P_QUSB4PHY_1_GCC_USB4_RX1_CLK,
+ 	P_QUSB4PHY_GCC_USB4_RX0_CLK,
+@@ -351,56 +347,6 @@ static const struct clk_parent_data gcc_parent_data_9[] = {
+ 	{ .hw = &gcc_gpll0_out_even.clkr.hw },
+ };
+ 
+-static const struct parent_map gcc_parent_map_10[] = {
+-	{ P_PCIE_2A_PIPE_CLK, 0 },
+-	{ P_BI_TCXO, 2 },
+-};
+-
+-static const struct clk_parent_data gcc_parent_data_10[] = {
+-	{ .index = DT_PCIE_2A_PIPE_CLK },
+-	{ .index = DT_BI_TCXO },
+-};
+-
+-static const struct parent_map gcc_parent_map_11[] = {
+-	{ P_PCIE_2B_PIPE_CLK, 0 },
+-	{ P_BI_TCXO, 2 },
+-};
+-
+-static const struct clk_parent_data gcc_parent_data_11[] = {
+-	{ .index = DT_PCIE_2B_PIPE_CLK },
+-	{ .index = DT_BI_TCXO },
+-};
+-
+-static const struct parent_map gcc_parent_map_12[] = {
+-	{ P_PCIE_3A_PIPE_CLK, 0 },
+-	{ P_BI_TCXO, 2 },
+-};
+-
+-static const struct clk_parent_data gcc_parent_data_12[] = {
+-	{ .index = DT_PCIE_3A_PIPE_CLK },
+-	{ .index = DT_BI_TCXO },
+-};
+-
+-static const struct parent_map gcc_parent_map_13[] = {
+-	{ P_PCIE_3B_PIPE_CLK, 0 },
+-	{ P_BI_TCXO, 2 },
+-};
+-
+-static const struct clk_parent_data gcc_parent_data_13[] = {
+-	{ .index = DT_PCIE_3B_PIPE_CLK },
+-	{ .index = DT_BI_TCXO },
+-};
+-
+-static const struct parent_map gcc_parent_map_14[] = {
+-	{ P_PCIE_4_PIPE_CLK, 0 },
+-	{ P_BI_TCXO, 2 },
+-};
+-
+-static const struct clk_parent_data gcc_parent_data_14[] = {
+-	{ .index = DT_PCIE_4_PIPE_CLK },
+-	{ .index = DT_BI_TCXO },
+-};
+-
+ static const struct parent_map gcc_parent_map_15[] = {
+ 	{ P_BI_TCXO, 0 },
+ 	{ P_GCC_GPLL0_OUT_MAIN, 1 },
+@@ -741,77 +687,72 @@ static const struct clk_parent_data gcc_parent_data_41[] = {
+ 	{ .index = DT_USB4_PHY_GCC_USB4_PCIE_PIPE_CLK },
+ };
+ 
+-static struct clk_regmap_mux gcc_pcie_2a_pipe_clk_src = {
++static struct clk_regmap_phy_mux gcc_pcie_2a_pipe_clk_src = {
+ 	.reg = 0x9d05c,
+-	.shift = 0,
+-	.width = 2,
+-	.parent_map = gcc_parent_map_10,
+ 	.clkr = {
+ 		.hw.init = &(const struct clk_init_data) {
+ 			.name = "gcc_pcie_2a_pipe_clk_src",
+-			.parent_data = gcc_parent_data_10,
+-			.num_parents = ARRAY_SIZE(gcc_parent_data_10),
+-			.ops = &clk_regmap_mux_closest_ops,
++			.parent_data = &(const struct clk_parent_data){
++				.index = DT_PCIE_2A_PIPE_CLK,
++			},
++			.num_parents = 1,
++			.ops = &clk_regmap_phy_mux_ops,
+ 		},
+ 	},
+ };
+ 
+-static struct clk_regmap_mux gcc_pcie_2b_pipe_clk_src = {
++static struct clk_regmap_phy_mux gcc_pcie_2b_pipe_clk_src = {
+ 	.reg = 0x9e05c,
+-	.shift = 0,
+-	.width = 2,
+-	.parent_map = gcc_parent_map_11,
+ 	.clkr = {
+ 		.hw.init = &(const struct clk_init_data) {
+ 			.name = "gcc_pcie_2b_pipe_clk_src",
+-			.parent_data = gcc_parent_data_11,
+-			.num_parents = ARRAY_SIZE(gcc_parent_data_11),
+-			.ops = &clk_regmap_mux_closest_ops,
++			.parent_data = &(const struct clk_parent_data){
++				.index = DT_PCIE_2B_PIPE_CLK,
++			},
++			.num_parents = 1,
++			.ops = &clk_regmap_phy_mux_ops,
+ 		},
+ 	},
+ };
+ 
+-static struct clk_regmap_mux gcc_pcie_3a_pipe_clk_src = {
++static struct clk_regmap_phy_mux gcc_pcie_3a_pipe_clk_src = {
+ 	.reg = 0xa005c,
+-	.shift = 0,
+-	.width = 2,
+-	.parent_map = gcc_parent_map_12,
+ 	.clkr = {
+ 		.hw.init = &(const struct clk_init_data) {
+ 			.name = "gcc_pcie_3a_pipe_clk_src",
+-			.parent_data = gcc_parent_data_12,
+-			.num_parents = ARRAY_SIZE(gcc_parent_data_12),
+-			.ops = &clk_regmap_mux_closest_ops,
++			.parent_data = &(const struct clk_parent_data){
++				.index = DT_PCIE_3A_PIPE_CLK,
++			},
++			.num_parents = 1,
++			.ops = &clk_regmap_phy_mux_ops,
+ 		},
+ 	},
+ };
+ 
+-static struct clk_regmap_mux gcc_pcie_3b_pipe_clk_src = {
++static struct clk_regmap_phy_mux gcc_pcie_3b_pipe_clk_src = {
+ 	.reg = 0xa205c,
+-	.shift = 0,
+-	.width = 2,
+-	.parent_map = gcc_parent_map_13,
+ 	.clkr = {
+ 		.hw.init = &(const struct clk_init_data) {
+ 			.name = "gcc_pcie_3b_pipe_clk_src",
+-			.parent_data = gcc_parent_data_13,
+-			.num_parents = ARRAY_SIZE(gcc_parent_data_13),
+-			.ops = &clk_regmap_mux_closest_ops,
++			.parent_data = &(const struct clk_parent_data){
++				.index = DT_PCIE_3B_PIPE_CLK,
++			},
++			.num_parents = 1,
++			.ops = &clk_regmap_phy_mux_ops,
+ 		},
+ 	},
+ };
+ 
+-static struct clk_regmap_mux gcc_pcie_4_pipe_clk_src = {
++static struct clk_regmap_phy_mux gcc_pcie_4_pipe_clk_src = {
+ 	.reg = 0x6b05c,
+-	.shift = 0,
+-	.width = 2,
+-	.parent_map = gcc_parent_map_14,
+ 	.clkr = {
+ 		.hw.init = &(const struct clk_init_data) {
+ 			.name = "gcc_pcie_4_pipe_clk_src",
+-			.parent_data = gcc_parent_data_14,
+-			.num_parents = ARRAY_SIZE(gcc_parent_data_14),
+-			.ops = &clk_regmap_mux_closest_ops,
++			.parent_data = &(const struct clk_parent_data){
++				.index = DT_PCIE_4_PIPE_CLK,
++			},
++			.num_parents = 1,
++			.ops = &clk_regmap_phy_mux_ops,
+ 		},
+ 	},
+ };
 -- 
-2.25.1
+2.35.1
 

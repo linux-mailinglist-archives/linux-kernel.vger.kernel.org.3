@@ -2,82 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C69F55D07E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2035F55DBED
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243490AbiF1DnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 23:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
+        id S243523AbiF1DpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 23:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbiF1DnK (ORCPT
+        with ESMTP id S238782AbiF1DpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 23:43:10 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEA52672
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:43:06 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id a4so6448387lfm.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wqQTvy4npFnWvHaeytKvLIfMhrlsDZms9Ty/8zJvQjs=;
-        b=64xD/V4SyUPW+r9Dv8phb4pTH4m0bCeeUz5aipfYF7c5UGDNkGiFBmg+C6z8y1Hrbr
-         du+px0oVBuZ+uX02mYW+Dl6Jh+fxDHKqQXmWUZuXy2ryeQYSYs8FrRD+CZO8wraGqO5n
-         7IySqR1dCXsHmRt7gxHDWXK3RhgffiSFFMrHh/x+6cKqmtYcFZ4ratxoXAJe3J9S4wnr
-         yJEqZci8S9QMvNexA/TvkWJANj800nAn8LlQs7d/hAYl3U4FjbLBZajINip30oMR4JsW
-         Lrf9MYDoTwmpGxE+th98A5tqW14W5oXwHrcqbD9TIoMuyiaK7dCFbUpHU7GEMPWMjVpZ
-         vStQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wqQTvy4npFnWvHaeytKvLIfMhrlsDZms9Ty/8zJvQjs=;
-        b=Ft9asG2M9zCwhCT5ZTQw62Jy4/WAb2XSM226N9Pmib+O3V3oYhivPnEcvih/1g8PwO
-         HBvGcMDAVL6rDPb0wUGmhf6D02pJOR/byiyD9gZANqVQkUlVbWXmfRxTAFAtHDfRp5HS
-         aNpW7YmtaQ+kNI2D+UBWYHXkNPBEmEU/S/QUd9Ww4orbUpssFthL7BC8pUd8WULczaaL
-         oce0k9AhCCsPi8hZsSE/0WCNUILAQP19FwNO/5yb9msH0GbzF+55j0FxbtxjiaKQmaJq
-         LZuRbEwtKv84jNhFxzeJ312ffIfWX9QRm5MflKIhCZ3hIGNmtliHTdzbYwd4hHdJuyNQ
-         fq/Q==
-X-Gm-Message-State: AJIora+GnENWzAXSZbtV9hqsGmo/rHPnogXps4VNYxB6VzLUxV4XFeqo
-        y0F2JBetKWZOJset+DGeXTeBOg==
-X-Google-Smtp-Source: AGRyM1uClJxQRttLZzkyeEI9s/FAeEu5A4OnJvh/ak//r13c+AlqjSUMcfZ222BEJVd6tRcw50JWvQ==
-X-Received: by 2002:a19:7917:0:b0:481:e0c:29fd with SMTP id u23-20020a197917000000b004810e0c29fdmr8139579lfc.350.1656387784592;
-        Mon, 27 Jun 2022 20:43:04 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.129])
-        by smtp.gmail.com with ESMTPSA id o19-20020ac24e93000000b0047f8cb94004sm2038474lfr.35.2022.06.27.20.43.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 20:43:04 -0700 (PDT)
-Message-ID: <e93596ef-d4eb-5fcb-744c-9ef99cb5a69e@openvz.org>
-Date:   Tue, 28 Jun 2022 06:43:02 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH mm v2] memcg: notify about global mem_cgroup_id space
- depletion
-Content-Language: en-US
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Michal Hocko <mhocko@suse.com>, kernel@openvz.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Cgroups <cgroups@vger.kernel.org>
-References: <Yre8tNUY8vBrO0yl@castle>
- <97bed1fd-f230-c2ea-1cb6-8230825a9a64@openvz.org>
- <CAMZfGtWQEFmyuDngPfg59D-+b9sf58m9qhGoVPSQ_jAGmgT+sg@mail.gmail.com>
- <f3e4059c-69ea-eccd-a22f-9f6c6780f33a@openvz.org> <YrpVP6rpYGFsl3jj@castle>
-From:   Vasily Averin <vvs@openvz.org>
-In-Reply-To: <YrpVP6rpYGFsl3jj@castle>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        Mon, 27 Jun 2022 23:45:22 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD09324BF7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:45:13 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.190.70.91])
+        by mail-app2 (Coremail) with SMTP id by_KCgCnvEA6ebpic5u+Ag--.56483S2;
+        Tue, 28 Jun 2022 11:45:07 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     rafael@kernel.org, gregkh@linuxfoundation.org,
+        johannes@sipsolutions.net, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH v7] devcoredump: change gfp_t parameter of kzalloc to GFP_KERNEL
+Date:   Tue, 28 Jun 2022 11:44:58 +0800
+Message-Id: <20220628034458.17384-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgCnvEA6ebpic5u+Ag--.56483S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7urWkJr4rXr1DGr1UCr1xZrb_yoW8XrWxpF
+        4rGas2yFZ5Gr4S9a4DWF4fW3W5Aw17JFW8Wa4j93yUuws3Ar17CrWDtFW5Aw1DX34rtFW5
+        XF15Jw18uFy7taUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r10
+        6r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUZa9-UUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAggPAVZdtabqkgAcs4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,54 +52,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/22 04:11, Roman Gushchin wrote:
-> On Mon, Jun 27, 2022 at 09:49:18AM +0300, Vasily Averin wrote:
->> On 6/27/22 06:23, Muchun Song wrote:
->>> If the caller can know -ENOSPC is returned by mkdir(), then I
->>> think the user (perhaps systemd) is the best place to throw out the
->>> error message instead of in the kernel log. Right?
->>
->> Such an incident may occur inside the container.
->> OpenVZ nodes can host 300-400 containers, and the host admin cannot
->> monitor guest logs. the dmesg message is necessary to inform the host
->> owner that the global limit has been reached, otherwise he can
->> continue to believe that there are no problems on the node.
-> 
-> Why this is happening? It's hard to believe someone really needs that
-> many cgroups. Is this when somebody fails to delete old cgroups?
+The dev_coredumpv() and dev_coredumpm() could not be used in atomic
+context, because they call kvasprintf_const() and kstrdup() with
+GFP_KERNEL parameter. The process is shown below:
 
-I do not have direct claims that some node really reached this limit,
-however I saw crashdumps with 30000+ cgroups.
+dev_coredumpv(.., gfp_t gfp)
+  dev_coredumpm(.., gfp_t gfp)
+    kzalloc(.., gfp);
+    dev_set_name
+      kobject_set_name_vargs
+        kvasprintf_const(GFP_KERNEL, ...); //may sleep
+          kstrdup(s, GFP_KERNEL); //may sleep
 
-Theoretically OpenVz/LXC nodes can host up to several thousand containers
-per node. Practically production nodes with 300-400 containers are a
-common thing. I assume that each container can easily use up to 100-200
-memory cgroups, and I think this is normal consumption.
+This patch changes the gfp_t parameter of kzalloc() in dev_coredumpm() to
+GFP_KERNEL in order to show they could not be used in atomic context.
 
-Therefore, I believe that 64K limit is quite achievable in real life.
-Primary goal of my patch is to confirm this theory.
+What's more, this patch does not remove the gfp_t parameter in
+dev_coredumpv() and dev_coredumpm() in order that it will not influence
+other new users that are added in other trees.
 
-> I wanted to say that it's better to introduce a memcg event, but then
-> I realized it's probably not worth the wasted space. Is this a common
-> scenario?
-> 
-> I think a better approach will be to add a cgroup event (displayed via
-> cgroup.events) about reaching the maximum limit of cgroups. E.g.
-> cgroups.events::max_nr_reached. Then you can set cgroup.max.descendants
-> to some value below memcg_id space size. It's more work, but IMO it's
-> a better way to communicate this event. As a bonus, you can easily
-> get an idea which cgroup depletes the limit.
+Fixes: 833c95456a70 ("device coredump: add new device coredump class")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+Changes in v7:
+  - change gfp_t parameter of kzalloc in dev_coredumpm() to GFP_KERNEL.
 
-For my goal (i.e. just to confirm that 64K limit was reached) this
-functionality is too complicated. This confirmation is important because
-it should push us to increase the global limit.
+ drivers/base/devcoredump.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-However, I think your idea is great, In perspective it helps both OpenVZ
-and LXC and possibly Shakeel to understand the real memcg using and set
-the proper limit for containers. 
+diff --git a/drivers/base/devcoredump.c b/drivers/base/devcoredump.c
+index f4d794d6bb8..cf60aacf8a8 100644
+--- a/drivers/base/devcoredump.c
++++ b/drivers/base/devcoredump.c
+@@ -268,7 +268,7 @@ void dev_coredumpm(struct device *dev, struct module *owner,
+ 	if (!try_module_get(owner))
+ 		goto free;
+ 
+-	devcd = kzalloc(sizeof(*devcd), gfp);
++	devcd = kzalloc(sizeof(*devcd), GFP_KERNEL);
+ 	if (!devcd)
+ 		goto put_module;
+ 
+-- 
+2.17.1
 
-I'm going to prepare such patches, however I'm not sure I'll have enough
-time for this task in the near future.
-
-Thank you,
-	Vasily Averin

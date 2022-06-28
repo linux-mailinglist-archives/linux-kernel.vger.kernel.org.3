@@ -2,121 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83B155EA55
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5474155EA63
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbiF1Qzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 12:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40128 "EHLO
+        id S232176AbiF1Q5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 12:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233103AbiF1Qyz (ORCPT
+        with ESMTP id S232303AbiF1Q4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:54:55 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFF82B272
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:53:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656435215; x=1687971215;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=btsKwvH/DJEOr0VAnwqYMJeRJHamouJbM/1L9sC1LpE=;
-  b=bnRC9rI+fqx1dIqQSfcWtvd22R/Eg8mK5yXMBDf96HsEDsJ3jiR+37aE
-   NQXFh+s/VeKZjLOHzrb9evYrutEXZn/cv6l1hJNckaVmzz8Ewjrkq5Ihn
-   f9nc2TvtVoGQn84YJFTUyUfYWAR74JVCJqOOxtiHMlHAj4Jgqo1Wm6rXV
-   7Cx+DVsBtAQ1gKKm0Ex1kkD2jpM2MuqJMrRALp/iqGNahZRS7owJlfxr0
-   JfYLdUG/qYuBry+y6vu9qOqLkl+dESIKXjAGfsroc4PX99hUUhsT9CcbN
-   SdK6jvb0Hg0Zgza9b8qfGFjukZgdHUyLJT6LUKXF4fQvC38L2geHgnNpf
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="282529109"
-X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="282529109"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 09:53:33 -0700
-X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="587932914"
-Received: from staibmic-mobl1.amr.corp.intel.com (HELO [10.209.67.166]) ([10.209.67.166])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 09:53:32 -0700
-Message-ID: <de8d1830-9553-dd8f-8b12-308985c98b40@intel.com>
-Date:   Tue, 28 Jun 2022 09:52:28 -0700
+        Tue, 28 Jun 2022 12:56:31 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9D321E1C
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:56:16 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id u14so18265865qvv.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:56:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jqNLofw/D/PgB2PwZMkDfeM2ZVnMx72QWP1RSRdpmQo=;
+        b=pHh6mjp31yvbo8A34LLzMDENTfRddWdvKsjXFp578aFN88WyGnMogyiV3dp3/v5EVH
+         4jOMmiR2Qxitr1TmYkZbQU3o55SLX2qqGtZZUkY1NboZ5K9YVba9XWXMJ2HrBeI5rC9P
+         mahSZs2mD1JH4sHb3p/1ImusiiICFxQzG4LXA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jqNLofw/D/PgB2PwZMkDfeM2ZVnMx72QWP1RSRdpmQo=;
+        b=FwszwsTWNdBdN+UO74NfrHYM1zFEuOfk6U0Fbg7yc/kTpjuPylXxWQ1IZ5XWcifYt8
+         S5jZ9Spq9nzE5AuLGMlHY/hVrTlIJaSA+4bt4usTr/C3DEZf+fK6CoMb5jDIIBxHU8GM
+         6Rl4rF2Qik/AS1GYK8zQ0DFExf+0jQTnjW/LgU6oxuRpSTO5lJs42YmQ0TreQcAqtE78
+         QI82nRGQTq2mg5GVuV/pX0kiQErCNDCWgBzcaq9hswvKa8lky3raLstOzNAkhjpwuh/C
+         yhMY8lxG924a56tsmK5WEYEF8l2yLGD4nywgW+87oIOP4UEddpWfw2a1HRCIg9Zf690g
+         tH0w==
+X-Gm-Message-State: AJIora8O4Ev3h3Hv90VqegwNRK5/cM4grJTOjcTlmiMTiOveZ94Tbcb3
+        GhFFJAYJZb3fXJzKB4l+1355sdN7+wtyupLR
+X-Google-Smtp-Source: AGRyM1sudwCjEYgzNWIA35xMKylvU+kWeJ9NFoOzHVRhkAOGNX3RF7lsg0poVrifS0ZVdWOcv3Jl1Q==
+X-Received: by 2002:a05:6214:1c0f:b0:470:9d07:2f5d with SMTP id u15-20020a0562141c0f00b004709d072f5dmr3204675qvc.12.1656435375174;
+        Tue, 28 Jun 2022 09:56:15 -0700 (PDT)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id c190-20020ae9edc7000000b006a743b360bcsm10710238qkg.136.2022.06.28.09.56.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 09:56:14 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 16:56:14 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
+        vineeth@bitbyteword.org
+Subject: Re: [PATCH v2 8/8] rcu/kfree: Fix kfree_rcu_shrink_count() return
+ value
+Message-ID: <YrsyrmDbfnkpfDEP@google.com>
+References: <20220622225102.2112026-1-joel@joelfernandes.org>
+ <20220622225102.2112026-10-joel@joelfernandes.org>
+ <Yrn9a5pOvhvL/eZj@pc638.lan>
+ <20220627205907.GM1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YroelcGVNhQj91ab@google.com>
+ <20220627214359.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [REGRESSION] Unable to unlock encrypted disk starting with kernel
- 5.19-rc1+
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        Alexandre Messier <alex@me.ssier.org>
-Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de,
-        Andrew.Cooper3@citrix.com, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        regressions@lists.linux.dev
-References: <6025678c-e94a-6966-e298-82fad658a889@me.ssier.org>
- <YrrHwxtD2dpts7PF@zn.tnic>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <YrrHwxtD2dpts7PF@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220627214359.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-First of all, thank you for bisecting this!  I know those are a lot of work.
+On Mon, Jun 27, 2022 at 02:43:59PM -0700, Paul E. McKenney wrote:
+> On Mon, Jun 27, 2022 at 09:18:13PM +0000, Joel Fernandes wrote:
+> > On Mon, Jun 27, 2022 at 01:59:07PM -0700, Paul E. McKenney wrote:
+> > > On Mon, Jun 27, 2022 at 08:56:43PM +0200, Uladzislau Rezki wrote:
+> > > > > As per the comments in include/linux/shrinker.h, .count_objects callback
+> > > > > should return the number of freeable items, but if there are no objects
+> > > > > to free, SHRINK_EMPTY should be returned. The only time 0 is returned
+> > > > > should be when we are unable to determine the number of objects, or the
+> > > > > cache should be skipped for another reason.
+> > > > > 
+> > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > > > ---
+> > > > >  kernel/rcu/tree.c | 2 +-
+> > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > 
+> > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > > > index 711679d10cbb..935788e8d2d7 100644
+> > > > > --- a/kernel/rcu/tree.c
+> > > > > +++ b/kernel/rcu/tree.c
+> > > > > @@ -3722,7 +3722,7 @@ kfree_rcu_shrink_count(struct shrinker *shrink, struct shrink_control *sc)
+> > > > >  		atomic_set(&krcp->backoff_page_cache_fill, 1);
+> > > > >  	}
+> > > > >  
+> > > > > -	return count;
+> > > > > +	return count == 0 ? SHRINK_EMPTY : count;
+> > > > >  }
+> > > > >  
+> > > > >  static unsigned long
+> > > > > -- 
+> > > > > 2.37.0.rc0.104.g0611611a94-goog
+> > > > > 
+> > > > Looks good to me!
+> > > > 
+> > > > Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > 
+> > > Now that you mention it, this does look independent of the rest of
+> > > the series.  I have pulled it in with Uladzislau's Reviewed-by.
+> > 
+> > Thanks Paul and Vlad!
+> > 
+> > Paul, apologies for being quiet. I have been working on the series and the
+> > review comments carefully. I appreciate your help with this work.
+> 
+> Not a problem.  After all, this stuff is changing some of the trickier
+> parts of RCU.  We must therefore assume that some significant time and
+> effort will be required to get it right.
 
-That XSAVEC patch modifies the AVX register save/restore code.  There is
-a set of x86 AES acceleration instructions called AES-NI.  Those
-instructions use the AVX registers.  So, it's at least a plausible
-connection between that patch and your symptoms.  But, I don't think
-anyone's been able to reproduce what you're seeing yet.
+To your point about trickier parts of RCU, the v2 series though I tested it
+before submitting is now giving me strange results with rcuscale. Sometimes
+laziness does not seem to be in effect (as pointed out by rcuscale), other
+times I am seeing stalls.
 
-The kernel XSAVE buffer formats also differ slightly between AMD and
-Intel.  That *should* be OK, but it might explain why I can't reproduce
-this.
+So I have to carefully look through all of this again. I am not sure why I
+was not seeing these issues with the exact same code before (frustrated).
 
-If you get a chance, could you apply this (ugly hackish) patch to the
-userspace 'cryptsetup' utility and run it?
+thanks,
 
-	https://sr71.net/~dave/intel/cryptsetup-memcmp.patch
+ - Joel
 
-On Ubuntu at least, it was as simple as:
-
-	apt-get source cryptsetup
-	apt-get build-dep cryptsetup
-	cd cryptsetup-1.6.6
-	./configure
-	make
-
-Then I could run:
-
-	./src/cryptsetup benchmark --cipher=aes-xts --key-size=512
-and
-	./src/cryptsetup benchmark --cipher=aes-xts --key-size=256
-
-With that patch applied, you should see some output like:
-
-# ./src/cryptsetup benchmark --cipher=aes-xts --key-size=512
-# Tests are approximate using memory only (no storage IO).
-memcmp12: 0
-memcmp23: 0
-memcmp13: 0
-memcmp12: -173
-memcmp23: 173
-memcmp13: 0
-#  Algorithm | Key |  Encryption |  Decryption
-     aes-xts   512b  4592.2 MiB/s  4192.0 MiB/s
-
-The "memcmp13:" lines should both be 0.  That means that an encryption
-and decryption cycle didn't change the data.  You *might* have to run
-this in a loop if there's some kind of bad timing involved in triggering
-the bug.
-
-If you see a "memcmp13:" with something other than 0, that will narrow
-things down and means we'll have a pretty quick reproducer that doesn't
-involve luks which should speed things along.

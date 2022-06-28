@@ -2,221 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52EA355E65F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412BE55E6BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347806AbiF1PUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53062 "EHLO
+        id S1347821AbiF1PV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344555AbiF1PUa (ORCPT
+        with ESMTP id S1344555AbiF1PV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:20:30 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F67032EF5;
-        Tue, 28 Jun 2022 08:20:29 -0700 (PDT)
+        Tue, 28 Jun 2022 11:21:26 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A014132EE0;
+        Tue, 28 Jun 2022 08:21:25 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso13062514pjk.0;
+        Tue, 28 Jun 2022 08:21:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656429629; x=1687965629;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/kH8GubTfw963zb0YPRUYAeVknTxA6TmZdDQvBJ+pxU=;
-  b=WctqYpubYecF1m1/WaUyXho1eyUF2D6qg27p/xuaefrDrzNMjQzDz5Eu
-   FgmcJ2FIEvYGdu91QnPEghU61ai+HL4ru2ci9B6urlzb/BtmPBg27CDd/
-   JWGNPo6Qd0cd3UJyD+V+gvO1V2amOjF5pqRswbITkPifhZ6/dM2TbIK81
-   E=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Jun 2022 08:20:29 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 08:20:28 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 28 Jun 2022 08:20:28 -0700
-Received: from [10.216.26.50] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 28 Jun
- 2022 08:20:22 -0700
-Message-ID: <1cb53abf-067a-25d2-1596-fe3961725e93@quicinc.com>
-Date:   Tue, 28 Jun 2022 20:50:19 +0530
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zDPpePt6CeKE4jRJhPC/US5+QOggpwLxdGTuenyEguM=;
+        b=qKiq7D8HvPbea819MTA57dhnc7TaWUbn0cxkogrbuDdJT0ITkJcBAO4ojiijS9CPpu
+         HA6VbP8zuKTQAHXjrvY1vPf569vhOKa0N5dN891YQ+D2v0jW6mf8eBurobPsOuptRAIo
+         mj5kW67WN0LAj/wPlm8UNf8z8gRRqfOBEL1MOQ8wCraZNd/Ny7hIcshH2aliGCFcC4kB
+         SVQuDgrJdHJlEfAVtZsm7AnqQpFSwltF5cwr/qHvnIh6tbPkSGwrC4ytOL8eGzKfQnzo
+         aeDODXQTgdfVGZ+3RiztIhI40QADRN0LBQpIys1vNCd/7nRYra5LFgKRjc70TDbWR1tm
+         xFJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zDPpePt6CeKE4jRJhPC/US5+QOggpwLxdGTuenyEguM=;
+        b=hMi5tHn9jV2918F7+uvoYFXKyG4idzYKkuLBua9kmJdIhKmDF089v1CcMtHTezMX9V
+         WIf8DvjUFqCrKymCoV8lyxhmPdqfgAMTGawvKWqIhG3Qlp1m9O3WcFZ69RKtifg2JIIN
+         lQEEm+0mLWB60hfj8oLMOg5UML72X0SxWQktDe40u4X6K3WztbzGIZZeEAKv91rmNZs3
+         Qhf79P0escuHEmrH1LJblDyxzgAxHJdQ+psQm6H+D0rsl6kv+EoDNzEDto8yiTN0eY7h
+         vfj1pF+cLP3UUdwrDWTVbjBsyetNFTEDw+rrSc6bqJ6P1xiv1+DdrLSOUWdKkIP9YjQd
+         9U6Q==
+X-Gm-Message-State: AJIora/Hwv/7tQ20aGigoYchKTwmlTyU+7LQCzxWaOV+/Os1rkhoAVzj
+        mgsJ+EFpHGal8rJzwmNgN22Y7CUPAEc=
+X-Google-Smtp-Source: AGRyM1sQbPe5xKOzDFAPg+mYwOyvB61ITglWnHqLG1kExdO/SOcjVZZkr68emVbP11LnQttklJ8qTg==
+X-Received: by 2002:a17:90a:410a:b0:1ec:7fc8:6d15 with SMTP id u10-20020a17090a410a00b001ec7fc86d15mr139705pjf.236.1656429684953;
+        Tue, 28 Jun 2022 08:21:24 -0700 (PDT)
+Received: from [192.168.66.3] (p912131-ipoe.ipoe.ocn.ne.jp. [153.243.13.130])
+        by smtp.gmail.com with ESMTPSA id l14-20020a170903244e00b001674f2e1c3asm9586152pls.74.2022.06.28.08.21.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 08:21:24 -0700 (PDT)
+Message-ID: <d0559a60-a4c1-19a9-39c5-18a5e2e460ca@gmail.com>
+Date:   Wed, 29 Jun 2022 00:21:21 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v4 4/4] arm64: dts: qcom: sdm845: Add CPU BWMON
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] HID: amd_sfh: Ignore uninitialized device
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Andy Gross <agross@kernel.org>, Georgi Djakov <djakov@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Thara Gopinath" <thara.gopinath@linaro.org>
-References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
- <20220601101140.170504-5-krzysztof.kozlowski@linaro.org>
- <bc423d7b-df03-d4e2-2898-0873db710943@quicinc.com>
- <64eb52ee-b3ac-3d94-cfce-ceb1c88dddb6@linaro.org>
- <042cb765-113b-9335-edae-595addf50dd0@quicinc.com>
- <23320e3c-40c3-12bb-0a1c-7e659a1961f2@linaro.org>
- <YrfSWw9Wpq5TsRUt@builder.lan>
- <47e1fcb4-237b-b880-b1b2-3910cc19e727@linaro.org>
- <59b5115e-0fe5-dbe1-552b-c29e771c0583@quicinc.com>
- <c43d4c9e-54d6-7b00-0ff7-e114850302ad@linaro.org>
- <173717b1-9cd9-9298-3a20-7dd3d95339af@quicinc.com>
- <9b6486b7-418a-0102-213d-f6a5451c8c7c@linaro.org>
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-In-Reply-To: <9b6486b7-418a-0102-213d-f6a5451c8c7c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     Basavaraj Natikar <basavaraj.natikar@amd.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220626081339.7243-1-akihiko.odaki@gmail.com>
+ <b17f4e85-8a35-65ab-34de-0978bdc4cfea@amd.com>
+ <8c95e3d7-cff6-c56e-e197-fdd0911d81aa@gmail.com>
+ <3ff059d8-2d89-6ea1-209b-3c8855561acb@amd.com>
+From:   Akihiko Odaki <akihiko.odaki@gmail.com>
+In-Reply-To: <3ff059d8-2d89-6ea1-209b-3c8855561acb@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/28/2022 7:32 PM, Krzysztof Kozlowski wrote:
-> On 28/06/2022 15:15, Rajendra Nayak wrote:
->>
->>
->> On 6/28/2022 4:20 PM, Krzysztof Kozlowski wrote:
->>> On 28/06/2022 12:36, Rajendra Nayak wrote:
+On 2022/06/29 0:14, Limonciello, Mario wrote:
+> On 6/28/2022 10:11, Akihiko Odaki wrote:
+>> On 2022/06/28 23:42, Limonciello, Mario wrote:
+>>> On 6/26/2022 03:13, Akihiko Odaki wrote:
+>>>> Lenovo ThinkPad C13 Yoga has AMD Sensor Fusion Hub, but it is not used
+>>>> because Chrome OS EC Sensor Hub is used instead. The system therefore
+>>>> never loads the firmware for MP2 and MP2 does not work. It results in
+>>>> AMD_P2C_MSG3 register to have -1 as its value.
 >>>>
->>>> On 6/27/2022 6:09 PM, Krzysztof Kozlowski wrote:
->>>>> On 26/06/2022 05:28, Bjorn Andersson wrote:
->>>>>> On Thu 23 Jun 07:58 CDT 2022, Krzysztof Kozlowski wrote:
->>>>>>
->>>>>>> On 23/06/2022 08:48, Rajendra Nayak wrote:
->>>>>>>>>>> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>>>>>>>>>> index 83e8b63f0910..adffb9c70566 100644
->>>>>>>>>>> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>>>>>>>>>> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>>>>>>>>>> @@ -2026,6 +2026,60 @@ llcc: system-cache-controller@1100000 {
->>>>>>>>>>>       			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
->>>>>>>>>>>       		};
->>>>>>>>>>>       
->>>>>>>>>>> +		pmu@1436400 {
->>>>>>>>>>> +			compatible = "qcom,sdm845-cpu-bwmon";
->>>>>>>>>>> +			reg = <0 0x01436400 0 0x600>;
->>>>>>>>>>> +
->>>>>>>>>>> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
->>>>>>>>>>> +
->>>>>>>>>>> +			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
->>>>>>>>>>> +					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
->>>>>>>>>>> +			interconnect-names = "ddr", "l3c";
->>>>>>>>>>
->>>>>>>>>> Is this the pmu/bwmon instance between the cpu and caches or the one between the caches and DDR?
->>>>>>>>>
->>>>>>>>> To my understanding this is the one between CPU and caches.
->>>>>>>>
->>>>>>>> Ok, but then because the OPP table lists the DDR bw first and Cache bw second, isn't the driver
->>>>>>>> ending up comparing the bw values thrown by the pmu against the DDR bw instead of the Cache BW?
->>>>>>>
->>>>>>> I double checked now and you're right.
->>>>>>>
->>>>>>>> Atleast with my testing on sc7280 I found this to mess things up and I always was ending up at
->>>>>>>> higher OPPs even while the system was completely idle. Comparing the values against the Cache bw
->>>>>>>> fixed it.(sc7280 also has a bwmon4 instance between the cpu and caches and a bwmon5 between the cache
->>>>>>>> and DDR)
->>>>>>>
->>>>>>> In my case it exposes different issue - under performance. Somehow the
->>>>>>> bwmon does not report bandwidth high enough to vote for high bandwidth.
->>>>>>>
->>>>>>> After removing the DDR interconnect and bandwidth OPP values I have for:
->>>>>>> sysbench --threads=8 --time=60 --memory-total-size=20T --test=memory
->>>>>>> --memory-block-size=4M run
->>>>>>>
->>>>>>> 1. Vanilla: 29768 MB/s
->>>>>>> 2. Vanilla without CPU votes: 8728 MB/s
->>>>>>> 3. Previous bwmon (voting too high): 32007 MB/s
->>>>>>> 4. Fixed bwmon 24911 MB/s
->>>>>>> Bwmon does not vote for maximum L3 speed:
->>>>>>> bwmon report 9408 MB/s (thresholds set: <9216000 15052801>
->>>>>>> )
->>>>>>> osm l3 aggregate 14355 MBps -> 897 MHz, level 7, bw 14355 MBps
->>>>>>>
->>>>>>> Maybe that's just problem with missing governor which would vote for
->>>>>>> bandwidth rounding up or anticipating higher needs.
->>>>>>>
->>>>>>>>>> Depending on which one it is, shouldn;t we just be scaling either one and not both the interconnect paths?
->>>>>>>>>
->>>>>>>>> The interconnects are the same as ones used for CPU nodes, therefore if
->>>>>>>>> we want to scale both when scaling CPU, then we also want to scale both
->>>>>>>>> when seeing traffic between CPU and cache.
->>>>>>>>
->>>>>>>> Well, they were both associated with the CPU node because with no other input to decide on _when_
->>>>>>>> to scale the caches and DDR, we just put a mapping table which simply mapped a CPU freq to a L3 _and_
->>>>>>>> DDR freq. So with just one input (CPU freq) we decided on what should be both the L3 freq and DDR freq.
->>>>>>>>
->>>>>>>> Now with 2 pmu's, we have 2 inputs, so we can individually scale the L3 based on the cache PMU
->>>>>>>> counters and DDR based on the DDR PMU counters, no?
->>>>>>>>
->>>>>>>> Since you said you have plans to add the other pmu support as well (bwmon5 between the cache and DDR)
->>>>>>>> how else would you have the OPP table associated with that pmu instance? Would you again have both the
->>>>>>>> L3 and DDR scale based on the inputs from that bwmon too?
->>>>>>>
->>>>>>> Good point, thanks for sharing. I think you're right. I'll keep only the
->>>>>>> l3c interconnect path.
->>>>>>>
->>>>>>
->>>>>> If I understand correctly, <&osm_l3 MASTER_OSM_L3_APPS &osm_l3
->>>>>> SLAVE_OSM_L3> relates to the L3 cache speed, which sits inside the CPU
->>>>>> subsystem. As such traffic hitting this cache will not show up in either
->>>>>> bwmon instance.
->>>>>>
->>>>>> The path <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>
->>>>>> affects the DDR frequency. So the traffic measured by the cpu-bwmon
->>>>>> would be the CPU subsystems traffic that missed the L1/L2/L3 caches and
->>>>>> hits the memory bus towards DDR.
+>>>> Without this change, the driver interprets the value as it supports all
+>>>> sensor types and exposes them, which confuses a userspace program,
+>>>> iio-sensor-proxy, and makes it to use the non-functioning sensors
+>>>> instead of functioning sensors exposed via Chrome OS EC Sensor Hub.
 >>>>
->>>> That seems right, looking some more into the downstream code and register definitions
->>>> I see the 2 bwmon instances actually lie on the path outside CPU SS towards DDR,
->>>> first one (bwmon4) is between the CPUSS and LLCC (system cache) and the second one
->>>> (bwmon5) between LLCC and DDR. So we should use the counters from bwmon4 to
->>>> scale the CPU-LLCC path (and not L3), on sc7280 that would mean splitting the
->>>> <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3> into
->>>> <&gem_noc MASTER_APPSS_PROC 3 &gem_noc SLAVE_LLCC 3> (voting based on the bwmon4 inputs)
-> 
-> For sdm845 SLAVE_LLCC is in mem_noc, so I guess mc_virt on sc7280?
-
-thats correct,
-
-> 
->>>> and <&mc_virt MASTER_LLCC 3 &mc_virt SLAVE_EBI1 3> (voting based on the bwmon5 inputs)
->>>> and similar for sdm845 too.
+>>>> Check the version bits included in AMD_P2C_MSG3 register and ignore the
+>>>> device if all of the bits are set.
 >>>>
->>>> L3 should perhaps still be voted based on the cpu freq as done today.
 >>>
->>> This would mean that original bandwidth values (800 - 7216 MB/s) were
->>> correct. However we have still your observation that bwmon kicks in very
->>> fast and my measurements that sampled bwmon data shows bandwidth ~20000
->>> MB/s.
+>>> Have you already confirmed this failure happens in 5.19-rc1 or later 
+>>> as well?  I would think that b5d7f43e97dabfa04a4be5ff027ce7da119332be 
+>>> should have fixed it.
 >>
->> Right, thats because the bandwidth supported between the cpu<->llcc path is much higher
->> than the DDR frequencies. For instance on sc7280, I see (2288 - 15258 MB/s) for LLCC while
->> the DDR max is 8532 MB/s.
+>> Yes. I confirmed it with 78ca55889a549a9a194c6ec666836329b774ab6d.
+>>
 > 
-> OK, that sounds right.
+> Thanks for confirming.
 > 
-> Another point is that I did not find actual scaling of throughput via
-> that interconnect path:
-> <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_LLCC 3>
+>> b5d7f43e97dabfa04a4be5ff027ce7da119332be deals with the case where it 
+>> advertises v2 but it doesn't in my case.
+> 
+> In your case it actually goes down the v1 ops path then right?
 
-Shouldn't this be <&gladiator_noc MASTER_APPSS_PROC 3 &gladiator_noc SLAVE_LLCC 3> on sdm845?
+Yes, but I doubt even that is correct in this case. I guess the v1 
+protocol would have a value 1 for acs in mp2_select_ops(), but it is 15 
+in this case. It would be nice if you confirm that hypothesis.
+
+Regards,
+Akihiko Odaki
 
 > 
-> so I cannot test impact of bwmon that way.
+> Basavaraj - is discovery unique to v2?  Or does it also exist for v1?
+> If it also exists for v1 I think that's a cleaner solution.
 > 
-> Best regards,
-> Krzysztof
+>>
+>> Regards,
+>> Akihiko Odaki
+>>
+>>>
+>>>> Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
+>>>> ---
+>>>>   drivers/hid/amd-sfh-hid/amd_sfh_pcie.c | 4 ++++
+>>>>   1 file changed, 4 insertions(+)
+>>>>
+>>>> diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c 
+>>>> b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
+>>>> index dadc491bbf6b..4137e5da77ad 100644
+>>>> --- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
+>>>> +++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
+>>>> @@ -271,6 +271,8 @@ static void mp2_select_ops(struct amd_mp2_dev 
+>>>> *privdata)
+>>>>       case V2_STATUS:
+>>>>           privdata->mp2_ops = &amd_sfh_ops_v2;
+>>>>           break;
+>>>> +    case 15:
+>>>> +        break;
+>>>>       default:
+>>>>           privdata->mp2_ops = &amd_sfh_ops;
+>>>>           break;
+>>>> @@ -317,6 +319,8 @@ static int amd_mp2_pci_probe(struct pci_dev 
+>>>> *pdev, const struct pci_device_id *i
+>>>>           return -ENOMEM;
+>>>>       mp2_select_ops(privdata);
+>>>> +    if (!privdata->mp2_ops)
+>>>> +        return -ENODEV;
+>>>>       rc = amd_sfh_irq_init(privdata);
+>>>>       if (rc) {
+>>>
+>>
+> 
+

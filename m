@@ -2,92 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8625A55DB6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE1355D601
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245500AbiF1G1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 02:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
+        id S245357AbiF1Ghd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 02:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234982AbiF1G1M (ORCPT
+        with ESMTP id S245668AbiF1GhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 02:27:12 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8672316E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:27:11 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LXF3n4sDFz9stm;
-        Tue, 28 Jun 2022 14:26:29 +0800 (CST)
-Received: from dggpeml500003.china.huawei.com (7.185.36.200) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 28 Jun 2022 14:27:09 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500003.china.huawei.com
- (7.185.36.200) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 28 Jun
- 2022 14:27:08 +0800
-From:   Yu Liao <liaoyu15@huawei.com>
-To:     <emma@anholt.net>, <mripard@kernel.org>, <eric@anholt.net>,
-        <bbrezillon@kernel.org>
-CC:     <liaoyu15@huawei.com>, <liwei391@huawei.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/vc4: fix dereference before NULL check
-Date:   Tue, 28 Jun 2022 14:36:57 +0800
-Message-ID: <20220628063657.3169049-1-liaoyu15@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 28 Jun 2022 02:37:22 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA9360C0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:37:20 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id i8-20020a17090aee8800b001ecc929d14dso11713317pjz.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:37:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=MqYzMC6Te7mlb10SfH+/fm3WKhKw2/0wG3c+ugfn1go=;
+        b=VYt1p89pFqNN9bWhxz+uiIHDDeaKUiThIHYcnA3b6Q4sCoqKFrmOFAxouoIAWIxv44
+         oq8cvexu8JvcOLvcIXP9I5RyTGv362pdNfYZwTygLrkaEqO638k0VWF/o9Wpm055Bg10
+         DnYSOANLA9hPxynYyV5/H3G6vOZtIGGi5PszUJGmZa3X/BHzrlE+Kot5hiYhV+MPO2Fx
+         K2boW1z1Bk1hZevFYBwwCsKiCfNxz7b4chZ9GVKugCHC5vfweIK4+3/3PnFMqOAR62LX
+         6ZOKltumQ1QVzeIrVzrPG3tKmfA3UmRUGnkNK2JEo+sZix5pdW5+siZZ5Ur7hrvMc31h
+         zUwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=MqYzMC6Te7mlb10SfH+/fm3WKhKw2/0wG3c+ugfn1go=;
+        b=2p7F5BPYeZO2FygJMfzF49CI5J7psQHGCG7vzk33PI5s4/gKQwwa/G+ACQL/8LaDBG
+         jMbqVfYv+tGlL4hul3bgWbXpdKUyhHVUCAyIraL5BeDJEiIdJB2wjFzYy7sssxm/kgcC
+         hVmuAFVj7K+E/kgVlH/ZELhrx4hvaSgVLFEtGjHfYrS05Bm8/eniiwrax6pPZtVJenUY
+         +Ubaw6mY6bZkD/0iHSire6eAdCfyS2eQJwPY+f/tWGQdlSmf4zL06eFu015ywcsto//i
+         w68LyaUo4DMawqH3kn10IsLmGeeYv+UT39tUDB8R4iCLDBHY5atnrKdSGlCdNdnRPnlz
+         Fxjw==
+X-Gm-Message-State: AJIora+Hwvl2OzW9/AkPFd3A4SDUcNHlCNhDMocsy8cPLUymjQ9K8EZJ
+        FE3dCU/wKWx6otgQjL/IyZIiHfzkAvFk
+X-Google-Smtp-Source: AGRyM1vJHZiVEQTsGRo0ArrFYMPWcuuPYuc/iE6XO49ONg9YiUMf82xLNF5Fiq6EeD6/DYROMCi4Kg==
+X-Received: by 2002:a17:902:c948:b0:16a:58f4:c142 with SMTP id i8-20020a170902c94800b0016a58f4c142mr2168340pla.103.1656398239965;
+        Mon, 27 Jun 2022 23:37:19 -0700 (PDT)
+Received: from thinkpad ([27.111.75.159])
+        by smtp.gmail.com with ESMTPSA id x5-20020a1709029a4500b001678e9670d8sm8388858plv.2.2022.06.27.23.37.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 23:37:19 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 12:07:14 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v5 06/18] PCI: dwc: Enable CDM-check independently
+ from the num_lanes value
+Message-ID: <20220628063714.GC23601@thinkpad>
+References: <20220624143428.8334-1-Sergey.Semin@baikalelectronics.ru>
+ <20220624143428.8334-7-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500003.china.huawei.com (7.185.36.200)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220624143428.8334-7-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "perfmon" pointer is equal to the return value of idr_find
-which may be NULL, access by vc4_perfmon_get before checking if
-it was NULL. Fix this by dereferencing "perfmon" after "perfmon"
-has been null checked.
+On Fri, Jun 24, 2022 at 05:34:16PM +0300, Serge Semin wrote:
+> Currently the embedded CDM IOs consistency check-engine is enabled only if
+> the num_lanes field of dw_pcie structure is set to non-zero value. It's
+> definitely wrong since the CDM checking has nothing to do with the PCIe
+> lanes settings, while that feature will be left disabled for the platforms
+> which expect it being enabled and prefer keeping the default lanes setup.
+> Let's fix that by enabling the CDM-check feature before the num_lanes
+> parameter is handled.
+> 
+> Fixes: 07f123def73e ("PCI: dwc: Add support to enable CDM register check")
 
-Addresses-Coverity: ("Dereference before null check")
-Fixes: 65101d8c9108 ("drm/vc4: Expose performance counters to userspace")
-Signed-off-by: Yu Liao <liaoyu15@huawei.com>
----
- drivers/gpu/drm/vc4/vc4_perfmon.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-diff --git a/drivers/gpu/drm/vc4/vc4_perfmon.c b/drivers/gpu/drm/vc4/vc4_perfmon.c
-index c7f5adb6bcf8..ca969b8c7dde 100644
---- a/drivers/gpu/drm/vc4/vc4_perfmon.c
-+++ b/drivers/gpu/drm/vc4/vc4_perfmon.c
-@@ -17,13 +17,17 @@
- 
- void vc4_perfmon_get(struct vc4_perfmon *perfmon)
- {
--	struct vc4_dev *vc4 = perfmon->dev;
-+	struct vc4_dev *vc4;
-+
-+	if (!perfmon)
-+		return;
-+
-+	vc4 = perfmon->dev;
- 
- 	if (WARN_ON_ONCE(vc4->is_vc5))
- 		return;
- 
--	if (perfmon)
--		refcount_inc(&perfmon->refcnt);
-+	refcount_inc(&perfmon->refcnt);
- }
- 
- void vc4_perfmon_put(struct vc4_perfmon *perfmon)
+Thanks,
+Mani
+
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Vidya Sagar <vidyas@nvidia.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> 
+> ---
+> 
+> Changelog v4:
+> - This is a new patch created on v4 lap of the series.
+> ---
+>  drivers/pci/controller/dwc/pcie-designware.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index 347251bf87d0..5848cc520b52 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -740,6 +740,13 @@ void dw_pcie_setup(struct dw_pcie *pci)
+>  	val |= PORT_LINK_DLL_LINK_EN;
+>  	dw_pcie_writel_dbi(pci, PCIE_PORT_LINK_CONTROL, val);
+>  
+> +	if (of_property_read_bool(np, "snps,enable-cdm-check")) {
+> +		val = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS);
+> +		val |= PCIE_PL_CHK_REG_CHK_REG_CONTINUOUS |
+> +		       PCIE_PL_CHK_REG_CHK_REG_START;
+> +		dw_pcie_writel_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS, val);
+> +	}
+> +
+>  	of_property_read_u32(np, "num-lanes", &pci->num_lanes);
+>  	if (!pci->num_lanes) {
+>  		dev_dbg(pci->dev, "Using h/w default number of lanes\n");
+> @@ -786,11 +793,4 @@ void dw_pcie_setup(struct dw_pcie *pci)
+>  		break;
+>  	}
+>  	dw_pcie_writel_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL, val);
+> -
+> -	if (of_property_read_bool(np, "snps,enable-cdm-check")) {
+> -		val = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS);
+> -		val |= PCIE_PL_CHK_REG_CHK_REG_CONTINUOUS |
+> -		       PCIE_PL_CHK_REG_CHK_REG_START;
+> -		dw_pcie_writel_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS, val);
+> -	}
+>  }
+> -- 
+> 2.35.1
+> 
+
 -- 
-2.25.1
-
+மணிவண்ணன் சதாசிவம்

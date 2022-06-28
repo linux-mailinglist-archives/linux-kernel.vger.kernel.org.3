@@ -2,58 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD93255EFCB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CA7755EFE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbiF1Uqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 16:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
+        id S231172AbiF1UtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 16:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbiF1UqZ (ORCPT
+        with ESMTP id S229712AbiF1UtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 16:46:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE2BA26540
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:46:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656449183;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AxAXLtt/qHvFpa3MozdupVmWHjm0h9gbo/SJ35DEqEU=;
-        b=AkvC6jv+M37tgpOP65vZH4/4cdLNg3KsGNIqLJpZKcQovLqmu6XRqAL/E+xQzzBvPA/mZ4
-        WkULmqeik0ZydXo40p3c0Rymj/7SuMfvC45W7gNwaXVWxaSQ2emh8NXYpuwYLNujyBovb7
-        VXso10Bg1jB0eHpYgmo+Jb51vbLycgs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-479-Jj1d7vLEMh2BLGWcJF-AOw-1; Tue, 28 Jun 2022 16:46:20 -0400
-X-MC-Unique: Jj1d7vLEMh2BLGWcJF-AOw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E737818A6584;
-        Tue, 28 Jun 2022 20:46:19 +0000 (UTC)
-Received: from max.localdomain (unknown [10.40.193.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0026C40D282F;
-        Tue, 28 Jun 2022 20:46:18 +0000 (UTC)
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-To:     cluster-devel@redhat.com
-Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 5/5] gfs2: Mark the remaining process-independent glock holders as GL_NOPID
-Date:   Tue, 28 Jun 2022 22:46:11 +0200
-Message-Id: <20220628204611.651126-6-agruenba@redhat.com>
-In-Reply-To: <20220628204611.651126-1-agruenba@redhat.com>
-References: <20220628204611.651126-1-agruenba@redhat.com>
+        Tue, 28 Jun 2022 16:49:07 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318FD2FFCB;
+        Tue, 28 Jun 2022 13:49:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656449343; x=1687985343;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cg45xE86ZQPIpdJNzgkrosfv+mhFQVH6uL2peFEdMEk=;
+  b=wL9gwpdJi6fiCwotYwWrUwF6zpq82Uvbb90LluPsZVVgqv+u6T8/Hb8q
+   X2a9Lk2q9pYOEyBv4Et0eNoarTZ7zNrcHRp0IhqY9mWHtjSfqgQnWwHLR
+   dgLVUTpZ9L+d/fMi0NF1scAkZM8RPdF8yM3/Xsvmxe5bTdKi1FyenAeNc
+   jDpmVv7x1oo5AP5SbSCxCVcefTOmNBce4h2zVJea+TCwS/zUWvWE5ukWp
+   dftXt/VHscpba7X6+L/bkXnauj5Mjbk6I+SjNAurcnECkQlcHCFx6isO4
+   2rE2NwJY0NaO+Y09YwYMcjSVkh8bI4dAwW2Qug/1t8XJsbVcpBh9VP3hj
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
+   d="scan'208";a="170271606"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jun 2022 13:49:02 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 28 Jun 2022 13:49:02 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Tue, 28 Jun 2022 13:49:01 -0700
+Date:   Tue, 28 Jun 2022 22:52:54 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Michael Walle <michael@walle.cc>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: fwnode_for_each_child_node() and OF backend discrepancy
+Message-ID: <20220628205254.gnllvaz7w5jmpfe5@soft-dev3-1.localhost>
+References: <CAHp75Vd6e3WwHPfyL=GP=vsoWhwGXadwQziiRRwfHPfjkX2eFg@mail.gmail.com>
+ <2f2d7685e0e43194270a310034004970@walle.cc>
+ <CAHp75VcANMjxgS6S24Zh+mz66usb6LBnQk-ENvU9JHSXXsG1DA@mail.gmail.com>
+ <9e58f421c27121977d11381530757a6e@walle.cc>
+ <3ab8afab-b6b7-46aa-06d4-6740cee422d7@linaro.org>
+ <288f56ba9cfad46354203b7698babe91@walle.cc>
+ <daaddbd5-1cd4-d3ce-869a-249bdd8aecb9@linaro.org>
+ <96f40ae6abf76af3b643b1e1c60d1d9f@walle.cc>
+ <f9eb6d94-c451-0c9f-f123-2f1324f68b68@linaro.org>
+ <CAHp75VdWdUY-XyGBsQb3i9thCswmBo4UEAEaZCO5MC_HMW+fSQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VdWdUY-XyGBsQb3i9thCswmBo4UEAEaZCO5MC_HMW+fSQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,139 +77,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the GL_NOPID flag for the remaining glock holders which are not
-associated with the current process.
+The 06/28/2022 22:28, Andy Shevchenko wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> On Tue, Jun 28, 2022 at 5:17 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> > On 28/06/2022 17:09, Michael Walle wrote:
 
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
----
- fs/gfs2/inode.c      |  6 ++++--
- fs/gfs2/ops_fstype.c | 14 ++++++++------
- fs/gfs2/super.c      |  3 ++-
- fs/gfs2/util.c       |  6 ++++--
- 4 files changed, 18 insertions(+), 11 deletions(-)
+Hi,
 
-diff --git a/fs/gfs2/inode.c b/fs/gfs2/inode.c
-index c8ec876f33ea..e211ed8636b5 100644
---- a/fs/gfs2/inode.c
-+++ b/fs/gfs2/inode.c
-@@ -143,7 +143,8 @@ struct inode *gfs2_inode_lookup(struct super_block *sb, unsigned int type,
- 
- 		if (blktype != GFS2_BLKST_UNLINKED)
- 			gfs2_cancel_delete_work(io_gl);
--		error = gfs2_glock_nq_init(io_gl, LM_ST_SHARED, GL_EXACT,
-+		error = gfs2_glock_nq_init(io_gl, LM_ST_SHARED,
-+					   GL_EXACT | GL_NOPID,
- 					   &ip->i_iopen_gh);
- 		gfs2_glock_put(io_gl);
- 		if (unlikely(error))
-@@ -720,7 +721,8 @@ static int gfs2_create_inode(struct inode *dir, struct dentry *dentry,
- 	error = insert_inode_locked4(inode, ip->i_no_addr, iget_test, &ip->i_no_addr);
- 	BUG_ON(error);
- 
--	error = gfs2_glock_nq_init(io_gl, LM_ST_SHARED, GL_EXACT, &ip->i_iopen_gh);
-+	error = gfs2_glock_nq_init(io_gl, LM_ST_SHARED, GL_EXACT | GL_NOPID,
-+				   &ip->i_iopen_gh);
- 	if (error)
- 		goto fail_gunlock2;
- 
-diff --git a/fs/gfs2/ops_fstype.c b/fs/gfs2/ops_fstype.c
-index c9b423c874a3..904a2d47c4b3 100644
---- a/fs/gfs2/ops_fstype.c
-+++ b/fs/gfs2/ops_fstype.c
-@@ -403,7 +403,8 @@ static int init_locking(struct gfs2_sbd *sdp, struct gfs2_holder *mount_gh,
- 
- 	error = gfs2_glock_nq_num(sdp,
- 				  GFS2_MOUNT_LOCK, &gfs2_nondisk_glops,
--				  LM_ST_EXCLUSIVE, LM_FLAG_NOEXP | GL_NOCACHE,
-+				  LM_ST_EXCLUSIVE,
-+				  LM_FLAG_NOEXP | GL_NOCACHE | GL_NOPID,
- 				  mount_gh);
- 	if (error) {
- 		fs_err(sdp, "can't acquire mount glock: %d\n", error);
-@@ -413,7 +414,7 @@ static int init_locking(struct gfs2_sbd *sdp, struct gfs2_holder *mount_gh,
- 	error = gfs2_glock_nq_num(sdp,
- 				  GFS2_LIVE_LOCK, &gfs2_nondisk_glops,
- 				  LM_ST_SHARED,
--				  LM_FLAG_NOEXP | GL_EXACT,
-+				  LM_FLAG_NOEXP | GL_EXACT | GL_NOPID,
- 				  &sdp->sd_live_gh);
- 	if (error) {
- 		fs_err(sdp, "can't acquire live glock: %d\n", error);
-@@ -689,7 +690,7 @@ static int init_statfs(struct gfs2_sbd *sdp)
- 	iput(pn);
- 	pn = NULL;
- 	ip = GFS2_I(sdp->sd_sc_inode);
--	error = gfs2_glock_nq_init(ip->i_gl, LM_ST_EXCLUSIVE, 0,
-+	error = gfs2_glock_nq_init(ip->i_gl, LM_ST_EXCLUSIVE, GL_NOPID,
- 				   &sdp->sd_sc_gh);
- 	if (error) {
- 		fs_err(sdp, "can't lock local \"sc\" file: %d\n", error);
-@@ -778,7 +779,7 @@ static int init_journal(struct gfs2_sbd *sdp, int undo)
- 		error = gfs2_glock_nq_num(sdp, sdp->sd_lockstruct.ls_jid,
- 					  &gfs2_journal_glops,
- 					  LM_ST_EXCLUSIVE,
--					  LM_FLAG_NOEXP | GL_NOCACHE,
-+					  LM_FLAG_NOEXP | GL_NOCACHE | GL_NOPID,
- 					  &sdp->sd_journal_gh);
- 		if (error) {
- 			fs_err(sdp, "can't acquire journal glock: %d\n", error);
-@@ -788,7 +789,8 @@ static int init_journal(struct gfs2_sbd *sdp, int undo)
- 		ip = GFS2_I(sdp->sd_jdesc->jd_inode);
- 		sdp->sd_jinode_gl = ip->i_gl;
- 		error = gfs2_glock_nq_init(ip->i_gl, LM_ST_SHARED,
--					   LM_FLAG_NOEXP | GL_EXACT | GL_NOCACHE,
-+					   LM_FLAG_NOEXP | GL_EXACT |
-+					   GL_NOCACHE | GL_NOPID,
- 					   &sdp->sd_jinode_gh);
- 		if (error) {
- 			fs_err(sdp, "can't acquire journal inode glock: %d\n",
-@@ -959,7 +961,7 @@ static int init_per_node(struct gfs2_sbd *sdp, int undo)
- 	pn = NULL;
- 
- 	ip = GFS2_I(sdp->sd_qc_inode);
--	error = gfs2_glock_nq_init(ip->i_gl, LM_ST_EXCLUSIVE, 0,
-+	error = gfs2_glock_nq_init(ip->i_gl, LM_ST_EXCLUSIVE, GL_NOPID,
- 				   &sdp->sd_qc_gh);
- 	if (error) {
- 		fs_err(sdp, "can't lock local \"qc\" file: %d\n", error);
-diff --git a/fs/gfs2/super.c b/fs/gfs2/super.c
-index bdb773e5c88f..90db4a289269 100644
---- a/fs/gfs2/super.c
-+++ b/fs/gfs2/super.c
-@@ -346,7 +346,8 @@ static int gfs2_lock_fs_check_clean(struct gfs2_sbd *sdp)
- 	}
- 
- 	error = gfs2_glock_nq_init(sdp->sd_freeze_gl, LM_ST_EXCLUSIVE,
--				   LM_FLAG_NOEXP, &sdp->sd_freeze_gh);
-+				   LM_FLAG_NOEXP | GL_NOPID,
-+				   &sdp->sd_freeze_gh);
- 	if (error)
- 		goto out;
- 
-diff --git a/fs/gfs2/util.c b/fs/gfs2/util.c
-index 8241029a2a5d..95d733dd3c25 100644
---- a/fs/gfs2/util.c
-+++ b/fs/gfs2/util.c
-@@ -226,7 +226,8 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
- 	 */
- 	fs_warn(sdp, "Requesting recovery of jid %d.\n",
- 		sdp->sd_lockstruct.ls_jid);
--	gfs2_holder_reinit(LM_ST_EXCLUSIVE, LM_FLAG_TRY_1CB | LM_FLAG_NOEXP,
-+	gfs2_holder_reinit(LM_ST_EXCLUSIVE,
-+			   LM_FLAG_TRY_1CB | LM_FLAG_NOEXP | GL_NOPID,
- 			   &sdp->sd_live_gh);
- 	msleep(GL_GLOCK_MAX_HOLD);
- 	/*
-@@ -251,7 +252,8 @@ static void signal_our_withdraw(struct gfs2_sbd *sdp)
- 			fs_warn(sdp, "Unable to recover our journal jid %d.\n",
- 				sdp->sd_lockstruct.ls_jid);
- 		gfs2_glock_dq_wait(&sdp->sd_live_gh);
--		gfs2_holder_reinit(LM_ST_SHARED, LM_FLAG_NOEXP | GL_EXACT,
-+		gfs2_holder_reinit(LM_ST_SHARED,
-+				   LM_FLAG_NOEXP | GL_EXACT | GL_NOPID,
- 				   &sdp->sd_live_gh);
- 		gfs2_glock_nq(&sdp->sd_live_gh);
- 	}
+Sorry for joint this late.
+
+> 
+> ...
+> 
+> > > Mh. Assume a SoC with an integrated ethernet switch. Some ports
+> > > are externally connected, some don't. I'd think they should be disabled,
+> > > no? Until now, all bindings I know, treat them as disabled. But OTOH
+> > > you still need to do some configurations on them, like disable port
+> > > forwarding, disable them or whatever. So the hardware is present, but
+> > > it is not connected to anything.
+> >
+> > I see your point and the meaning is okay... except that drivers don't
+> > touch disabled nodes. If a device (with some address space) is disabled,
+> > you do not write there "please be power off". Here the case is a bit
+> > different, because I think ports do not have their own address space.
+> > Yet it contradicts the logic - something is disabled in DT and you
+> > expect to perform actual operations on it.
+> 
+> You beat me up to this comment, I also see a contradiction of what
+> "disabled" means in your, Michael, case and what it should be.
+> 
+> If you need to perform an operation on some piece of HW, it has not to
+> be disabled.
+> 
+> Or, you may deduce them by knowing how many ports in hardware (this is
+> usually done not by counting the nodes, but by a property) and do
+> whatever you want on ones, you have  not listed (by port_num) in the
+> array of parsed children.
+
+It is not possible to have a defined for the MAX number of ports that
+supported by lan966x. Which is 8. And assigned that define to
+num_phys_ports instead of counting the entries in DT?
+I have seen that sparx5 is doing something similar. [1]
+
+Also unfortunately, I am not aware of any register that says if it is
+lan9662 or lan9668.
+
+Also lan9662 can have up to 4 ports.
+
+[1] https://elixir.bootlin.com/linux/v5.19-rc4/source/drivers/net/ethernet/microchip/sparx5/sparx5_main.h#L231
+
+> 
+> --
+> With Best Regards,
+> Andy Shevchenko
+
 -- 
-2.35.1
-
+/Horatiu

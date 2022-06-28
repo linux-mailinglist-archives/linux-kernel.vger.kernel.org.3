@@ -2,441 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB26955DBAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B137755D4B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245260AbiF1GH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 02:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
+        id S245309AbiF1GHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 02:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236321AbiF1GHV (ORCPT
+        with ESMTP id S245307AbiF1GHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 02:07:21 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F19426129
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:07:19 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id s1so16021325wra.9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:07:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UlC45+E/EEsREXomgnlTyZyN/c9acM72aDVSIPabFQo=;
-        b=p5WY7Wfn4Mx/ulZYT3RM4hBp+YoKtc0dDCdrTO1g2QWV1ElLpgTwWuS6QQokcpirjF
-         +arAqXMk8IFkq2ajI5KOj5FuhLdYTicGMKEcbY65+wuVtsSRYup4TfHwqgNRAR7Xlg9d
-         q05lTdHGCRsUfcvvRAgATIv7YkIjkePTLd8hZjfePOsvCIYvadb1atcYfDtkRsJWb0Un
-         R+RekmfTm6afRtnK+WaUgFGpRBXw2asDnDj51jKdQOc6QspSQLctYkflsFKnSRNWQ295
-         HH3al6lGm5cMR4fzQsQqm3ORU32X3wvOsAoabqN9AJdIUiLI3eTf7mbmjL9O6yf/shjA
-         oojQ==
+        Tue, 28 Jun 2022 02:07:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E01A32317E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:07:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656396459;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4/ohXfoyTxXbbZ4JXPTRZWXDX41bqJBMWZuEwckjalc=;
+        b=Vl7PnRz6Cf7vSmxadCGZ0lwbZTaWrbxHGu6HngtL0LwwV2bWEUFuNdcMqFq/nngfJTOWTL
+        zHvixbwNBFbAYsoLLxNIXl6XM94B3dw5xRBMhIWc+aIH/Be5up794ejy9MLybhQRzl4uxM
+        E4ocLEEOQqUKftfTX20N8B6Z9uow6Ic=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-13-AZ4CsCd0PCSVQGSzTZwWvA-1; Tue, 28 Jun 2022 02:07:37 -0400
+X-MC-Unique: AZ4CsCd0PCSVQGSzTZwWvA-1
+Received: by mail-wr1-f72.google.com with SMTP id j14-20020adfa54e000000b0021b8c8204easo1474000wrb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:07:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UlC45+E/EEsREXomgnlTyZyN/c9acM72aDVSIPabFQo=;
-        b=WHaTZg4Dct8tPnj1hpReOuzVDPQYpEinzGJVbPFpdBBoMyGz4f5V6PVORLpsKkCPf1
-         bknlZlRyO0GebjAioPBUMQFuBmk7oXI+6cD5CgocNRKlzPLDLeiH10/av2+XgmTvKDOB
-         VoAx0BQZEr9+icfTDSMxtgS4guE/5vd9zZ2lUf2XURDM7oJE8x96ob0k/oSNeTuIZpIN
-         xp/TekicX/dIdIY1AWEx6HCeaRF1W5NwYTIRUw0I+N1SKh5h0D5XKezFZKcOzpJFfWxD
-         zWQbp4ctd+FEABwXc8n9MvVWicTeGPdM+0OqAFyI/gfugR/ktajT06PyZtysXG7/9yhe
-         tCYQ==
-X-Gm-Message-State: AJIora8Rg4X//CZ2ZTlbXJxyt9ia2Guiuu2Ww+oOWrm8RfX37N3JRCHE
-        WyIsfjSdU51h/Qrd6+DishQO100zU5u4b2PXCcaHYA==
-X-Google-Smtp-Source: AGRyM1sGTR8q97z3Ojh1T9dJClXoZ9KcRPM+WoWjltPOEM9eYc/I2T8u5jQzEIKG0heOEvIIcmgIiwEeEm3ECOw+U5c=
-X-Received: by 2002:a5d:664d:0:b0:21a:3b82:6bb2 with SMTP id
- f13-20020a5d664d000000b0021a3b826bb2mr15982525wrw.534.1656396437938; Mon, 27
- Jun 2022 23:07:17 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4/ohXfoyTxXbbZ4JXPTRZWXDX41bqJBMWZuEwckjalc=;
+        b=YJLPh22UEQu8hNYwaW8qSA4Jsk1sKBr56SzkTLBzBhKGxMnQyqmrR4zg2fT8xoETJt
+         WoVM5MZ5+89rXLIUQ1bnQypwDlYXt2XhqT85FsmZAIzXQop06DXiWh8mA9HuLl7xgNTJ
+         PS6TkvoUAwYcyhEPFOAQ/hKjL56oshDaqPVZpn0hayXc9R8bC847IjjFTqOSHwV364tz
+         j6TIFheWci5Y7IgrxRW6LNu0Q6RLGCJbLvVZwadFeBXBK6DlFyrMMtUOLiObo/RgFaoI
+         OwbafoGvFY8rpZ3Yt9okNFtAw1JbnvkOwfZZko7PRdxTz2FEIHBzrvzyYIYkXBQfPRGt
+         yRYg==
+X-Gm-Message-State: AJIora+PXzJgE+yGrbnRIBJuE/cl98r9fXOzODx5nPV78PAuNPlmEikg
+        mUNzeQh8k5nsco6/HN/6VAc/MhiHZ1CXekaiuMZxoHj+aZ0up4H921hVYAtGwp3rI5+A5Z4sG76
+        aqdx8DA9waysWYrvdQlYusRG/
+X-Received: by 2002:a05:600c:4f03:b0:3a0:55a2:bb4 with SMTP id l3-20020a05600c4f0300b003a055a20bb4mr773150wmq.181.1656396456020;
+        Mon, 27 Jun 2022 23:07:36 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tnKDdkDZ3kiiEnkoZfMNpkuN3upCNoU9G4kzO0+7iWrkAtWlJT4hm3GqrGeWyQF/DE2dYdXg==
+X-Received: by 2002:a05:600c:4f03:b0:3a0:55a2:bb4 with SMTP id l3-20020a05600c4f0300b003a055a20bb4mr773131wmq.181.1656396455786;
+        Mon, 27 Jun 2022 23:07:35 -0700 (PDT)
+Received: from redhat.com ([2.52.23.204])
+        by smtp.gmail.com with ESMTPSA id z22-20020a05600c221600b003a0499df21asm7127532wml.25.2022.06.27.23.07.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 23:07:35 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 02:07:31 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Cindy Lu <lulu@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] vhost: Add rbtree vdpa_mem_tree to saved the
+ counted mem
+Message-ID: <20220628020622-mutt-send-email-mst@kernel.org>
+References: <20220626090409.1011144-1-lulu@redhat.com>
+ <20220626055420-mutt-send-email-mst@kernel.org>
+ <CACLfguVMfqAiCVoNVr7J8ooQa35tNJOSK-XHqsdE3hdXsfOZ+A@mail.gmail.com>
+ <20220627055826-mutt-send-email-mst@kernel.org>
+ <CACGkMEugJQY-QsnekKHWSdaG0H03qFxdmu+O1tQKMge65bFmHw@mail.gmail.com>
+ <20220628014642-mutt-send-email-mst@kernel.org>
+ <CACGkMEvt9QVvZb+gEuynazGmEM-j22QdiEH_V-oWD1=NZQS+5g@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220610194435.2268290-1-yosryahmed@google.com>
- <20220610194435.2268290-5-yosryahmed@google.com> <f6c0274d-73c4-e05b-6405-4062230c4a14@fb.com>
-In-Reply-To: <f6c0274d-73c4-e05b-6405-4062230c4a14@fb.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 27 Jun 2022 23:06:41 -0700
-Message-ID: <CAJD7tkaNV_QUQyYRdCsuXcnSSpw9kSmY1D=faJBsQBYO3x4QHw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 4/8] bpf: Introduce cgroup iter
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEvt9QVvZb+gEuynazGmEM-j22QdiEH_V-oWD1=NZQS+5g@mail.gmail.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 9:09 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 6/10/22 12:44 PM, Yosry Ahmed wrote:
-> > From: Hao Luo <haoluo@google.com>
+On Tue, Jun 28, 2022 at 02:03:38PM +0800, Jason Wang wrote:
+> On Tue, Jun 28, 2022 at 1:58 PM Michael S. Tsirkin <mst@redhat.com> wrote:
 > >
-> > Cgroup_iter is a type of bpf_iter. It walks over cgroups in two modes:
+> > On Tue, Jun 28, 2022 at 11:54:27AM +0800, Jason Wang wrote:
+> > > On Mon, Jun 27, 2022 at 6:01 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > >
+> > > > On Mon, Jun 27, 2022 at 04:12:57PM +0800, Cindy Lu wrote:
+> > > > > On Sun, Jun 26, 2022 at 6:01 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > >
+> > > > > > On Sun, Jun 26, 2022 at 05:04:08PM +0800, Cindy Lu wrote:
+> > > > > > > We count pinned_vm as follow in vhost-vDPA
+> > > > > > >
+> > > > > > > lock_limit = rlimit(RLIMIT_MEMLOCK) >> PAGE_SHIFT;
+> > > > > > > if (npages + atomic64_read(&dev->mm->pinned_vm) > lock_limit) {
+> > > > > > >          ret = -ENOMEM;
+> > > > > > >          goto unlock;
+> > > > > > > }
+> > > > > > > This means if we have two vDPA devices for the same VM the pages
+> > > > > > > would be counted twice. So we add a tree to save the page that
+> > > > > > > counted and we will not count it again.
+> > > > > > >
+> > > > > > > Add vdpa_mem_tree to saved the mem that already counted.
+> > > > > > > use a hlist to saved the root for vdpa_mem_tree.
+> > > > > > >
+> > > > > > > Signed-off-by: Cindy Lu <lulu@redhat.com>
+> > > > > > > ---
+> > > > > > >  drivers/vhost/vhost.c | 63 +++++++++++++++++++++++++++++++++++++++++++
+> > > > > > >  drivers/vhost/vhost.h |  1 +
+> > > > > > >  2 files changed, 64 insertions(+)
+> > > > > > >
+> > > > > > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> > > > > > > index 40097826cff0..4ca8b1ed944b 100644
+> > > > > > > --- a/drivers/vhost/vhost.c
+> > > > > > > +++ b/drivers/vhost/vhost.c
+> > > > > > > @@ -32,6 +32,8 @@
+> > > > > > >  #include <linux/kcov.h>
+> > > > > > >
+> > > > > > >  #include "vhost.h"
+> > > > > > > +#include <linux/hashtable.h>
+> > > > > > > +#include <linux/jhash.h>
+> > > > > > >
+> > > > > > >  static ushort max_mem_regions = 64;
+> > > > > > >  module_param(max_mem_regions, ushort, 0444);
+> > > > > > > @@ -49,6 +51,14 @@ enum {
+> > > > > > >  #define vhost_used_event(vq) ((__virtio16 __user *)&vq->avail->ring[vq->num])
+> > > > > > >  #define vhost_avail_event(vq) ((__virtio16 __user *)&vq->used->ring[vq->num])
+> > > > > > >
+> > > > > > > +struct vhost_vdpa_rbtree_node {
+> > > > > > > +     struct hlist_node node;
+> > > > > > > +     struct rb_root_cached vdpa_mem_tree;
+> > > > > > > +     struct mm_struct *mm_using;
+> > > > > > > +};
+> > > > > > > +static DECLARE_HASHTABLE(vhost_vdpa_rbtree_hlist, 8);
+> > > > > > > +int vhost_vdpa_rbtree_hlist_status;
+> > > > > > > +
+> > > > > > >  #ifdef CONFIG_VHOST_CROSS_ENDIAN_LEGACY
+> > > > > > >  static void vhost_disable_cross_endian(struct vhost_virtqueue *vq)
+> > > > > > >  {
+> > > > > >
+> > > > > > Are you trying to save some per-mm information here?
+> > > > > > Can't we just add it to mm_struct?
+> > > > > >
+> > > > > yes, this is a per-mm information, but I have checked with jason before,
+> > > > > seems it maybe difficult to change the mm_struct in upstream
+> > > > > so I add an to add a hlist  instead
+> > > > > Thanks
+> > > > > Cindy
+> > > >
+> > > > Difficult how?
+> > >
+> > > It is only useful for vDPA probably. Though it could be used by VFIO
+> > > as well, VFIO does pinning/accounting at the container level and it
+> > > has been there for years.
 > >
-> >   - walking a cgroup's descendants.
-> >   - walking a cgroup's ancestors.
->
-> The implementation has another choice, BPF_ITER_CGROUP_PARENT_UP.
-> We should add it here as well.
->
+> > Yes it's been there, I'm not sure this means it's perfect.
+> > Also, rdma guys might be interested too I guess?
+> 
+> It looks to me they plan to go to iommufd as well.
+> 
+> >
+> > > vDPA have an implicit "container" the
+> > > mm_struct, but the accounting is done per device right now.
+> > >
+> > > In the future, when vDPA switches to iommufd, it can be then solved at
+> > > iommufd level.
+> >
+> > So is it even worth fixing now?
+> 
+> Not sure, but I guess it's better. (Or we need to teach the libvirt to
+> have special care on this).
 
-BPF_ITER_CGROUP_PARENT_UP is expressed here, I think what's actually
-missing here (and down below where only 2 modes are specified again)
-is that walking descendants is broken down into two separate modes,
-pre and post order traversals.
+It already has to for existing kernels.  Let's just move to iommufd
+faster then?
 
 > >
-> > When attaching cgroup_iter, one can set a cgroup to the iter_link
-> > created from attaching. This cgroup is passed as a file descriptor and
-> > serves as the starting point of the walk. If no cgroup is specified,
-> > the starting point will be the root cgroup.
+> > > And if we do this in mm, it will bring extra overheads.
+> > >
+> > > Thanks
 > >
-> > For walking descendants, one can specify the order: either pre-order or
-> > post-order. For walking ancestors, the walk starts at the specified
-> > cgroup and ends at the root.
+> > Pointer per mm, not too bad ...
+> 
+> Unless we enable it unconditionally, it requires a lot of tree
+> operations at least.
+> 
+> Thanks
+
+Not sure I understand.
+
 > >
-> > One can also terminate the walk early by returning 1 from the iter
-> > program.
+> > > > You get more scrutiny if you try, for sure,
+> > > > and you need to need to generalize it enough that it looks
+> > > > useful outside the driver. But I guess that's good?
+> > > >
+> > > > > >
+> > > > > >
+> > > > > > > @@ -571,6 +581,51 @@ static void vhost_detach_mm(struct vhost_dev *dev)
+> > > > > > >       dev->mm = NULL;
+> > > > > > >  }
+> > > > > > >
+> > > > > > > +struct rb_root_cached *vhost_vdpa_get_mem_tree(struct mm_struct *mm)
+> > > > > > > +{
+> > > > > > > +     struct vhost_vdpa_rbtree_node *rbtree_root = NULL;
+> > > > > > > +     struct rb_root_cached *vdpa_tree;
+> > > > > > > +     u32 key;
+> > > > > > > +
+> > > > > > > +     /* No hased table, init one */
+> > > > > > > +     if (vhost_vdpa_rbtree_hlist_status == 0) {
+> > > > > > > +             hash_init(vhost_vdpa_rbtree_hlist);
+> > > > > > > +             vhost_vdpa_rbtree_hlist_status = 1;
+> > > > > > > +     }
+> > > > > > > +
+> > > > > > > +     key = jhash_1word((u64)mm, JHASH_INITVAL);
+> > > > > > > +     hash_for_each_possible(vhost_vdpa_rbtree_hlist, rbtree_root, node,
+> > > > > > > +                            key) {
+> > > > > > > +             if (rbtree_root->mm_using == mm)
+> > > > > > > +                     return &(rbtree_root->vdpa_mem_tree);
+> > > > > > > +     }
+> > > > > > > +     rbtree_root = kmalloc(sizeof(*rbtree_root), GFP_KERNEL);
+> > > > > > > +     if (!rbtree_root)
+> > > > > > > +             return NULL;
+> > > > > > > +     rbtree_root->mm_using = mm;
+> > > > > > > +     rbtree_root->vdpa_mem_tree = RB_ROOT_CACHED;
+> > > > > > > +     hash_add(vhost_vdpa_rbtree_hlist, &rbtree_root->node, key);
+> > > > > > > +     vdpa_tree = &(rbtree_root->vdpa_mem_tree);
+> > > > > > > +     return vdpa_tree;
+> > > > > > > +}
+> > > > > > > +
+> > > > > > > +void vhost_vdpa_relase_mem_tree(struct mm_struct *mm)
+> > > > > > > +{
+> > > > > > > +     struct vhost_vdpa_rbtree_node *rbtree_root = NULL;
+> > > > > > > +     u32 key;
+> > > > > > > +
+> > > > > > > +     key = jhash_1word((u64)mm, JHASH_INITVAL);
+> > > > > > > +
+> > > > > > > +     /* No hased table, init one */
+> > > > > > > +     hash_for_each_possible(vhost_vdpa_rbtree_hlist, rbtree_root, node,
+> > > > > > > +                            key) {
+> > > > > > > +             if (rbtree_root->mm_using == mm) {
+> > > > > > > +                     hash_del(&rbtree_root->node);
+> > > > > > > +                     kfree(rbtree_root);
+> > > > > > > +             }
+> > > > > > > +     }
+> > > > > > > +}
+> > > > > > > +
+> > > > > > >  /* Caller should have device mutex */
+> > > > > > >  long vhost_dev_set_owner(struct vhost_dev *dev)
+> > > > > > >  {
+> > > > > > > @@ -605,6 +660,11 @@ long vhost_dev_set_owner(struct vhost_dev *dev)
+> > > > > > >       err = vhost_dev_alloc_iovecs(dev);
+> > > > > > >       if (err)
+> > > > > > >               goto err_cgroup;
+> > > > > > > +     dev->vdpa_mem_tree = vhost_vdpa_get_mem_tree(dev->mm);
+> > > > > > > +     if (dev->vdpa_mem_tree == NULL) {
+> > > > > > > +             err = -ENOMEM;
+> > > > > > > +             goto err_cgroup;
+> > > > > > > +     }
+> > > > > > >
+> > > > > > >       return 0;
+> > > > > > >  err_cgroup:
+> > > > > > > @@ -613,6 +673,7 @@ long vhost_dev_set_owner(struct vhost_dev *dev)
+> > > > > > >               dev->worker = NULL;
+> > > > > > >       }
+> > > > > > >  err_worker:
+> > > > > > > +     vhost_vdpa_relase_mem_tree(dev->mm);
+> > > > > > >       vhost_detach_mm(dev);
+> > > > > > >       dev->kcov_handle = 0;
+> > > > > > >  err_mm:
+> > > > > > > @@ -710,6 +771,8 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+> > > > > > >               dev->worker = NULL;
+> > > > > > >               dev->kcov_handle = 0;
+> > > > > > >       }
+> > > > > > > +
+> > > > > > > +     vhost_vdpa_relase_mem_tree(dev->mm);
+> > > > > > >       vhost_detach_mm(dev);
+> > > > > > >  }
+> > > > > > >  EXPORT_SYMBOL_GPL(vhost_dev_cleanup);
+> > > > > > > diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
+> > > > > > > index d9109107af08..84de33de3abf 100644
+> > > > > > > --- a/drivers/vhost/vhost.h
+> > > > > > > +++ b/drivers/vhost/vhost.h
+> > > > > > > @@ -160,6 +160,7 @@ struct vhost_dev {
+> > > > > > >       int byte_weight;
+> > > > > > >       u64 kcov_handle;
+> > > > > > >       bool use_worker;
+> > > > > > > +     struct rb_root_cached *vdpa_mem_tree;
+> > > > > > >       int (*msg_handler)(struct vhost_dev *dev, u32 asid,
+> > > > > > >                          struct vhost_iotlb_msg *msg);
+> > > > > > >  };
+> > > > > > > --
+> > > > > > > 2.34.3
+> > > > > >
+> > > >
 > >
-> > Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
-> > program is called with cgroup_mutex held.
->
-> Overall looks good to me with a few nits below.
->
-> Acked-by: Yonghong Song <yhs@fb.com>
->
-> >
-> > Signed-off-by: Hao Luo <haoluo@google.com>
-> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > ---
-> >   include/linux/bpf.h            |   8 ++
-> >   include/uapi/linux/bpf.h       |  21 +++
-> >   kernel/bpf/Makefile            |   2 +-
-> >   kernel/bpf/cgroup_iter.c       | 235 +++++++++++++++++++++++++++++++++
-> >   tools/include/uapi/linux/bpf.h |  21 +++
-> >   5 files changed, 286 insertions(+), 1 deletion(-)
-> >   create mode 100644 kernel/bpf/cgroup_iter.c
-> >
-> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > index 8e6092d0ea956..48d8e836b9748 100644
-> > --- a/include/linux/bpf.h
-> > +++ b/include/linux/bpf.h
-> > @@ -44,6 +44,7 @@ struct kobject;
-> >   struct mem_cgroup;
-> >   struct module;
-> >   struct bpf_func_state;
-> > +struct cgroup;
-> >
-> >   extern struct idr btf_idr;
-> >   extern spinlock_t btf_idr_lock;
-> > @@ -1590,7 +1591,14 @@ int bpf_obj_get_user(const char __user *pathname, int flags);
-> >       int __init bpf_iter_ ## target(args) { return 0; }
-> >
-> >   struct bpf_iter_aux_info {
-> > +     /* for map_elem iter */
-> >       struct bpf_map *map;
-> > +
-> > +     /* for cgroup iter */
-> > +     struct {
-> > +             struct cgroup *start; /* starting cgroup */
-> > +             int order;
-> > +     } cgroup;
-> >   };
-> >
-> >   typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
-> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > index f4009dbdf62da..4fd05cde19116 100644
-> > --- a/include/uapi/linux/bpf.h
-> > +++ b/include/uapi/linux/bpf.h
-> > @@ -87,10 +87,27 @@ struct bpf_cgroup_storage_key {
-> >       __u32   attach_type;            /* program attach type (enum bpf_attach_type) */
-> >   };
-> >
-> > +enum bpf_iter_cgroup_traversal_order {
-> > +     BPF_ITER_CGROUP_PRE = 0,        /* pre-order traversal */
-> > +     BPF_ITER_CGROUP_POST,           /* post-order traversal */
-> > +     BPF_ITER_CGROUP_PARENT_UP,      /* traversal of ancestors up to the root */
-> > +};
-> > +
-> >   union bpf_iter_link_info {
-> >       struct {
-> >               __u32   map_fd;
-> >       } map;
-> > +
-> > +     /* cgroup_iter walks either the live descendants of a cgroup subtree, or the ancestors
-> > +      * of a given cgroup.
-> > +      */
-> > +     struct {
-> > +             /* Cgroup file descriptor. This is root of the subtree if for walking the
-> > +              * descendants; this is the starting cgroup if for walking the ancestors.
-> > +              */
-> > +             __u32   cgroup_fd;
-> > +             __u32   traversal_order;
-> > +     } cgroup;
-> >   };
-> >
-> >   /* BPF syscall commands, see bpf(2) man-page for more details. */
-> > @@ -6050,6 +6067,10 @@ struct bpf_link_info {
-> >                               struct {
-> >                                       __u32 map_id;
-> >                               } map;
-> > +                             struct {
-> > +                                     __u32 traversal_order;
-> > +                                     __aligned_u64 cgroup_id;
-> > +                             } cgroup;
-> >                       };
-> >               } iter;
-> >               struct  {
-> > diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-> > index 057ba8e01e70f..9741b9314fb46 100644
-> > --- a/kernel/bpf/Makefile
-> > +++ b/kernel/bpf/Makefile
-> > @@ -8,7 +8,7 @@ CFLAGS_core.o += $(call cc-disable-warning, override-init) $(cflags-nogcse-yy)
-> >
-> >   obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
-> >   obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
-> > -obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o
-> > +obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o cgroup_iter.o
-> >   obj-$(CONFIG_BPF_SYSCALL) += bpf_local_storage.o bpf_task_storage.o
-> >   obj-${CONFIG_BPF_LSM}         += bpf_inode_storage.o
-> >   obj-$(CONFIG_BPF_SYSCALL) += disasm.o
-> > diff --git a/kernel/bpf/cgroup_iter.c b/kernel/bpf/cgroup_iter.c
-> > new file mode 100644
-> > index 0000000000000..88deb655efa71
-> > --- /dev/null
-> > +++ b/kernel/bpf/cgroup_iter.c
-> > @@ -0,0 +1,235 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/* Copyright (c) 2022 Google */
-> > +#include <linux/bpf.h>
-> > +#include <linux/btf_ids.h>
-> > +#include <linux/cgroup.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/seq_file.h>
-> > +
-> > +#include "../cgroup/cgroup-internal.h"  /* cgroup_mutex and cgroup_is_dead */
-> > +
-> > +/* cgroup_iter provides two modes of traversal to the cgroup hierarchy.
-> > + *
-> > + *  1. Walk the descendants of a cgroup.
-> > + *  2. Walk the ancestors of a cgroup.
->
-> three modes here?
->
-> > + *
-> > + * For walking descendants, cgroup_iter can walk in either pre-order or
-> > + * post-order. For walking ancestors, the iter walks up from a cgroup to
-> > + * the root.
-> > + *
-> > + * The iter program can terminate the walk early by returning 1. Walk
-> > + * continues if prog returns 0.
-> > + *
-> > + * The prog can check (seq->num == 0) to determine whether this is
-> > + * the first element. The prog may also be passed a NULL cgroup,
-> > + * which means the walk has completed and the prog has a chance to
-> > + * do post-processing, such as outputing an epilogue.
-> > + *
-> > + * Note: the iter_prog is called with cgroup_mutex held.
-> > + */
-> > +
-> > +struct bpf_iter__cgroup {
-> > +     __bpf_md_ptr(struct bpf_iter_meta *, meta);
-> > +     __bpf_md_ptr(struct cgroup *, cgroup);
-> > +};
-> > +
-> > +struct cgroup_iter_priv {
-> > +     struct cgroup_subsys_state *start_css;
-> > +     bool terminate;
-> > +     int order;
-> > +};
-> > +
-> > +static void *cgroup_iter_seq_start(struct seq_file *seq, loff_t *pos)
-> > +{
-> > +     struct cgroup_iter_priv *p = seq->private;
-> > +
-> > +     mutex_lock(&cgroup_mutex);
-> > +
-> > +     /* support only one session */
-> > +     if (*pos > 0)
-> > +             return NULL;
-> > +
-> > +     ++*pos;
-> > +     p->terminate = false;
-> > +     if (p->order == BPF_ITER_CGROUP_PRE)
-> > +             return css_next_descendant_pre(NULL, p->start_css);
-> > +     else if (p->order == BPF_ITER_CGROUP_POST)
-> > +             return css_next_descendant_post(NULL, p->start_css);
-> > +     else /* BPF_ITER_CGROUP_PARENT_UP */
-> > +             return p->start_css;
-> > +}
-> > +
-> > +static int __cgroup_iter_seq_show(struct seq_file *seq,
-> > +                               struct cgroup_subsys_state *css, int in_stop);
-> > +
-> > +static void cgroup_iter_seq_stop(struct seq_file *seq, void *v)
-> > +{
-> > +     /* pass NULL to the prog for post-processing */
-> > +     if (!v)
-> > +             __cgroup_iter_seq_show(seq, NULL, true);
-> > +     mutex_unlock(&cgroup_mutex);
-> > +}
-> > +
-> > +static void *cgroup_iter_seq_next(struct seq_file *seq, void *v, loff_t *pos)
-> > +{
-> > +     struct cgroup_subsys_state *curr = (struct cgroup_subsys_state *)v;
-> > +     struct cgroup_iter_priv *p = seq->private;
-> > +
-> > +     ++*pos;
-> > +     if (p->terminate)
-> > +             return NULL;
-> > +
-> > +     if (p->order == BPF_ITER_CGROUP_PRE)
-> > +             return css_next_descendant_pre(curr, p->start_css);
-> > +     else if (p->order == BPF_ITER_CGROUP_POST)
-> > +             return css_next_descendant_post(curr, p->start_css);
-> > +     else
-> > +             return curr->parent;
-> > +}
-> > +
-> > +static int __cgroup_iter_seq_show(struct seq_file *seq,
-> > +                               struct cgroup_subsys_state *css, int in_stop)
-> > +{
-> > +     struct cgroup_iter_priv *p = seq->private;
-> > +     struct bpf_iter__cgroup ctx;
-> > +     struct bpf_iter_meta meta;
-> > +     struct bpf_prog *prog;
-> > +     int ret = 0;
-> > +
-> > +     /* cgroup is dead, skip this element */
-> > +     if (css && cgroup_is_dead(css->cgroup))
-> > +             return 0;
-> > +
-> > +     ctx.meta = &meta;
-> > +     ctx.cgroup = css ? css->cgroup : NULL;
-> > +     meta.seq = seq;
-> > +     prog = bpf_iter_get_info(&meta, in_stop);
-> > +     if (prog)
-> > +             ret = bpf_iter_run_prog(prog, &ctx);
-> > +
-> > +     /* if prog returns > 0, terminate after this element. */
-> > +     if (ret != 0)
-> > +             p->terminate = true;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int cgroup_iter_seq_show(struct seq_file *seq, void *v)
-> > +{
-> > +     return __cgroup_iter_seq_show(seq, (struct cgroup_subsys_state *)v,
-> > +                                   false);
-> > +}
-> > +
-> > +static const struct seq_operations cgroup_iter_seq_ops = {
-> > +     .start  = cgroup_iter_seq_start,
-> > +     .next   = cgroup_iter_seq_next,
-> > +     .stop   = cgroup_iter_seq_stop,
-> > +     .show   = cgroup_iter_seq_show,
-> > +};
-> > +
-> > +BTF_ID_LIST_SINGLE(bpf_cgroup_btf_id, struct, cgroup)
-> > +
-> > +static int cgroup_iter_seq_init(void *priv, struct bpf_iter_aux_info *aux)
-> > +{
-> > +     struct cgroup_iter_priv *p = (struct cgroup_iter_priv *)priv;
-> > +     struct cgroup *cgrp = aux->cgroup.start;
-> > +
-> > +     p->start_css = &cgrp->self;
-> > +     p->terminate = false;
-> > +     p->order = aux->cgroup.order;
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct bpf_iter_seq_info cgroup_iter_seq_info = {
-> > +     .seq_ops                = &cgroup_iter_seq_ops,
-> > +     .init_seq_private       = cgroup_iter_seq_init,
-> > +     .seq_priv_size          = sizeof(struct cgroup_iter_priv),
-> > +};
-> > +
-> > +static int bpf_iter_attach_cgroup(struct bpf_prog *prog,
-> > +                               union bpf_iter_link_info *linfo,
-> > +                               struct bpf_iter_aux_info *aux)
-> > +{
-> > +     int fd = linfo->cgroup.cgroup_fd;
-> > +     struct cgroup *cgrp;
-> > +
-> > +     if (fd)
-> > +             cgrp = cgroup_get_from_fd(fd);
-> > +     else /* walk the entire hierarchy by default. */
-> > +             cgrp = cgroup_get_from_path("/");
-> > +
-> > +     if (IS_ERR(cgrp))
-> > +             return PTR_ERR(cgrp);
-> > +
-> > +     aux->cgroup.start = cgrp;
-> > +     aux->cgroup.order = linfo->cgroup.traversal_order;
->
-> The legality of traversal_order should be checked.
->
-> > +     return 0;
-> > +}
-> > +
-> > +static void bpf_iter_detach_cgroup(struct bpf_iter_aux_info *aux)
-> > +{
-> > +     cgroup_put(aux->cgroup.start);
-> > +}
-> > +
-> > +static void bpf_iter_cgroup_show_fdinfo(const struct bpf_iter_aux_info *aux,
-> > +                                     struct seq_file *seq)
-> > +{
-> > +     char *buf;
-> > +
-> > +     buf = kzalloc(PATH_MAX, GFP_KERNEL);
-> > +     if (!buf) {
-> > +             seq_puts(seq, "cgroup_path:\n");
->
-> This is a really unlikely case. maybe "cgroup_path:<unknown>"?
->
-> > +             goto show_order;
-> > +     }
-> > +
-> > +     /* If cgroup_path_ns() fails, buf will be an empty string, cgroup_path
-> > +      * will print nothing.
-> > +      *
-> > +      * Path is in the calling process's cgroup namespace.
-> > +      */
-> > +     cgroup_path_ns(aux->cgroup.start, buf, PATH_MAX,
-> > +                    current->nsproxy->cgroup_ns);
-> > +     seq_printf(seq, "cgroup_path:\t%s\n", buf);
-> > +     kfree(buf);
-> > +
-> > +show_order:
-> > +     if (aux->cgroup.order == BPF_ITER_CGROUP_PRE)
-> > +             seq_puts(seq, "traversal_order: pre\n");
-> > +     else if (aux->cgroup.order == BPF_ITER_CGROUP_POST)
-> > +             seq_puts(seq, "traversal_order: post\n");
-> > +     else /* BPF_ITER_CGROUP_PARENT_UP */
-> > +             seq_puts(seq, "traversal_order: parent_up\n");
-> > +}
-> > +
-> [...]
+

@@ -2,88 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E20855E985
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C63955E706
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346146AbiF1ONc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 10:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53610 "EHLO
+        id S1345827AbiF1OPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 10:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbiF1ONa (ORCPT
+        with ESMTP id S1345249AbiF1OP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 10:13:30 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE811EC51
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 07:13:30 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id q132so22398353ybg.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 07:13:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5Ak9fGBSyNTC9/zM2LmAtjsPfz0fauhmhcL7y4wTmPs=;
-        b=AWjGfj5bvqdOWR0OCeEbsZwXgKhFXY1IVpM59omVQIQ5g9UT3qIVK+sTls/SSa8N0u
-         gNKxXtFnuCj8BwgRlShIV6JZ7rRPMV0WYd/Z3v5UP6m4nht2KvodkA9Ra5fSqwgpvT1A
-         6odq10H/hYXdyKO68R1v/pgTC24/DPfGWy+I5KQJRi8NqRUkLHKvw8x/nL474HqXUPuO
-         Wn8AKWrpRfmNr2+TsU7XoTRiQkpz6cdKZF7OHeT6yM6qK5EWaEfzpk0VRWJjsnMwQ/VB
-         ldZXGycBnyUmJ6+6Auv9MiEwoy/75pubtFPA2hsaqieRS1YF/P4QuQHbO/rida3LwNN7
-         g9ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5Ak9fGBSyNTC9/zM2LmAtjsPfz0fauhmhcL7y4wTmPs=;
-        b=tKLntu0V5TZDtkuuIZmvx3Napi5ETgqde2biQvcFh5xwzavx+vLVwouxY0Z8/sT+xu
-         kqAe7h6Mv51dYZZaKq2HOBhj3Kj7PipWot7OUW6hNBnbmpdQPVJexJItykh9Yn44oNqq
-         lgV1Cic2iNrXhAmoVjDDUzFnCTCjLLJvXwtLNKfIOJ75Btt6x3zVNGHBSxa6t7GbSFMM
-         m9C14mDSE5qBP5Rty/cUPuKy7CUq/WiuQyfSzQoxWdenmpZvG/folqiSJVq0Sdi1cq2f
-         oAYy09BSllgwZPdWaKzkQOgl9mXQ90oWjolWr7DTjUv81G/BhxfBOC0I9riqQr3WL4sk
-         DSCw==
-X-Gm-Message-State: AJIora+7Z5y3KWol/c3cXsln7YTms6pemcplIj+NF6cycObohL8q0IQ8
-        X3BCWuCfozB+9fF/rUN6ZksCFMKVqOjJPIy3ZkX41g==
-X-Google-Smtp-Source: AGRyM1tzbdsFHeeYT4fOTsfzgP49TpefwICfzEQ63caT6oTXLjkLH1NlVPVj5M+nSxqLxg5MWOERTK9fRabKLmHP74g=
-X-Received: by 2002:a25:cac5:0:b0:66d:2c32:8593 with SMTP id
- a188-20020a25cac5000000b0066d2c328593mr3202257ybg.626.1656425609426; Tue, 28
- Jun 2022 07:13:29 -0700 (PDT)
+        Tue, 28 Jun 2022 10:15:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F7F92EA0C
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 07:15:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656425724;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YKpvy+ys5Io23rSSPdIQF7QGBfeppNwRyDdDVCI8M4k=;
+        b=UKqw/evQvnMwX8MBzhLRgh4s8NidKPN8h3qEuh/T2rBojX/ci8FtFzfIBy9KtgTRmezv0y
+        iGBefmxceQAXzTiUdHp9PtHyo+991Z0ogr0WG77rl0RECValJyZC/tnqtl19bui2RLzVuv
+        cE5vpj+iNdoyWyarRwWVNdb7BA/eslY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-365-RapeBXjPNjO2KnlgZm8wiw-1; Tue, 28 Jun 2022 10:15:21 -0400
+X-MC-Unique: RapeBXjPNjO2KnlgZm8wiw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8C91E811E76;
+        Tue, 28 Jun 2022 14:15:07 +0000 (UTC)
+Received: from [10.22.34.187] (unknown [10.22.34.187])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7EA61C28118;
+        Tue, 28 Jun 2022 14:15:06 +0000 (UTC)
+Message-ID: <588a3276-5481-0a9f-9eac-fed09eede4f2@redhat.com>
+Date:   Tue, 28 Jun 2022 10:15:06 -0400
 MIME-Version: 1.0
-References: <20220627142350.742973-1-fabien.dessenne@foss.st.com>
-In-Reply-To: <20220627142350.742973-1-fabien.dessenne@foss.st.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 28 Jun 2022 16:13:18 +0200
-Message-ID: <CACRpkdZQNs6BgchbxFN4rHzk41xUnJKcxKTi78xTduq32y4urQ@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: stm32: fix optional IRQ support to gpios
-To:     Fabien Dessenne <fabien.dessenne@foss.st.com>
-Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-gpio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6] x86/paravirt: useless assignment instructions cause
+ Unixbench full core performance degradation
+Content-Language: en-US
+To:     Guo Hui <guohui@uniontech.com>, peterz@infradead.org
+Cc:     jgross@suse.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, will@kernel.org, boqun.feng@gmail.com,
+        virtualization@lists.linux-foundation.org,
+        wangxiaohua@uniontech.com, linux-kernel@vger.kernel.org
+References: <c69f25d2-128d-0ff8-ecba-93c82e1adfde@redhat.com>
+ <20220628125421.12364-1-guohui@uniontech.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220628125421.12364-1-guohui@uniontech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 4:24 PM Fabien Dessenne
-<fabien.dessenne@foss.st.com> wrote:
-
-> To act as an interrupt controller, a gpio bank relies on the
-> "interrupt-parent" of the pin controller.
-> When this optional "interrupt-parent" misses, do not create any IRQ domain.
+On 6/28/22 08:54, Guo Hui wrote:
+> The instructions assigned to the vcpu_is_preempted function parameter
+> in the X86 architecture physical machine are redundant instructions,
+> causing the multi-core performance of Unixbench to drop by about 4% to 5%.
+> The C function is as follows:
+> static bool vcpu_is_preempted(long vcpu);
 >
-> This fixes a "NULL pointer in stm32_gpio_domain_alloc()" kernel crash when
-> the interrupt-parent = <exti> property is not declared in the Device Tree.
+> The parameter 'vcpu' in the function osq_lock
+> that calls the function vcpu_is_preempted is assigned as follows:
 >
-> Fixes: 0eb9f683336d ("pinctrl: Add IRQ support to STM32 gpios")
+> The C code is in the function node_cpu:
+> cpu = node->cpu - 1;
 >
-> Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
+> The instructions corresponding to the C code are:
+> mov 0x14(%rax),%edi
+> sub $0x1,%edi
+>
+> The above instructions are unnecessary
+> in the X86 Native operating environment,
+> causing high cache-misses and degrading performance.
+>
+> This patch uses static_key to not execute this instruction
+> in the Native runtime environment.
+>
+> The patch effect is as follows two machines,
+> Unixbench runs with full core score:
+>
+> 1. Machine configuration:
+> Intel(R) Xeon(R) Silver 4210 CPU @ 2.20GHz
+> CPU core: 40
+> Memory: 256G
+> OS Kernel: 5.19-rc3
+>
+> Before using the patch:
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0  948326591.2  81261.9
+> Double-Precision Whetstone                       55.0     211986.3  38543.0
+> Execl Throughput                                 43.0      43453.2  10105.4
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     438936.2   1108.4
+> File Copy 256 bufsize 500 maxblocks            1655.0     118197.4    714.2
+> File Copy 4096 bufsize 8000 maxblocks          5800.0    1534674.7   2646.0
+> Pipe Throughput                               12440.0   46482107.6  37365.0
+> Pipe-based Context Switching                   4000.0    1915094.2   4787.7
+> Process Creation                                126.0      85442.2   6781.1
+> Shell Scripts (1 concurrent)                     42.4      69400.7  16368.1
+> Shell Scripts (8 concurrent)                      6.0       8877.2  14795.3
+> System Call Overhead                          15000.0    4714906.1   3143.3
+>                                                                     ========
+> System Benchmarks Index Score                                        7923.3
+>
+> After using the patch:
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0  947032915.5  81151.1
+> Double-Precision Whetstone                       55.0     211971.2  38540.2
+> Execl Throughput                                 43.0      45054.8  10477.9
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     515024.9   1300.6
+> File Copy 256 bufsize 500 maxblocks            1655.0     146354.6    884.3
+> File Copy 4096 bufsize 8000 maxblocks          5800.0    1679995.9   2896.5
+> Pipe Throughput                               12440.0   46466394.2  37352.4
+> Pipe-based Context Switching                   4000.0    1898221.4   4745.6
+> Process Creation                                126.0      85653.1   6797.9
+> Shell Scripts (1 concurrent)                     42.4      69437.3  16376.7
+> Shell Scripts (8 concurrent)                      6.0       8898.9  14831.4
+> System Call Overhead                          15000.0    4658746.7   3105.8
+>                                                                     ========
+> System Benchmarks Index Score                                        8248.8
+>
+> 2. Machine configuration:
+> Hygon C86 7185 32-core Processor
+> CPU core: 128
+> Memory: 256G
+> OS Kernel: 5.19-rc3
+>
+> Before using the patch:
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0 2256644068.3 193371.4
+> Double-Precision Whetstone                       55.0     438969.9  79812.7
+> Execl Throughput                                 43.0      10108.6   2350.8
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     275892.8    696.7
+> File Copy 256 bufsize 500 maxblocks            1655.0      72082.7    435.5
+> File Copy 4096 bufsize 8000 maxblocks          5800.0     925043.4   1594.9
+> Pipe Throughput                               12440.0  118905512.5  95583.2
+> Pipe-based Context Switching                   4000.0    7820945.7  19552.4
+> Process Creation                                126.0      31233.3   2478.8
+> Shell Scripts (1 concurrent)                     42.4      49042.8  11566.7
+> Shell Scripts (8 concurrent)                      6.0       6656.0  11093.3
+> System Call Overhead                          15000.0    6816047.5   4544.0
+>                                                                     ========
+> System Benchmarks Index Score                                        7756.6
+>
+> After using the patch:
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0 2252272929.4 192996.8
+> Double-Precision Whetstone                       55.0     451847.2  82154.0
+> Execl Throughput                                 43.0      10595.1   2464.0
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     301279.3    760.8
+> File Copy 256 bufsize 500 maxblocks            1655.0      79291.3    479.1
+> File Copy 4096 bufsize 8000 maxblocks          5800.0    1039755.2   1792.7
+> Pipe Throughput                               12440.0  118701468.1  95419.2
+> Pipe-based Context Switching                   4000.0    8073453.3  20183.6
+> Process Creation                                126.0      33440.9   2654.0
+> Shell Scripts (1 concurrent)                     42.4      52722.6  12434.6
+> Shell Scripts (8 concurrent)                      6.0       7050.4  11750.6
+> System Call Overhead                          15000.0    6834371.5   4556.2
+>                                                                     ========
+> System Benchmarks Index Score                                        8157.8
+>
+> Signed-off-by: Guo Hui <guohui@uniontech.com>
+> ---
+>   arch/x86/kernel/paravirt-spinlocks.c |  4 ++++
+>   kernel/locking/osq_lock.c            | 12 +++++++++++-
+>   2 files changed, 15 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/kernel/paravirt-spinlocks.c b/arch/x86/kernel/paravirt-spinlocks.c
+> index 9e1ea99..a2eb375 100644
+> --- a/arch/x86/kernel/paravirt-spinlocks.c
+> +++ b/arch/x86/kernel/paravirt-spinlocks.c
+> @@ -33,6 +33,8 @@ bool pv_is_native_vcpu_is_preempted(void)
+>   		__raw_callee_save___native_vcpu_is_preempted;
+>   }
+>   
+> +DECLARE_STATIC_KEY_TRUE(vcpu_has_preemption);
+> +
+>   void __init paravirt_set_cap(void)
+>   {
+>   	if (!pv_is_native_spin_unlock())
+> @@ -40,4 +42,6 @@ void __init paravirt_set_cap(void)
+>   
+>   	if (!pv_is_native_vcpu_is_preempted())
+>   		setup_force_cpu_cap(X86_FEATURE_VCPUPREEMPT);
+> +	else
+> +		static_branch_disable(&vcpu_has_preemption);
+>   }
+> diff --git a/kernel/locking/osq_lock.c b/kernel/locking/osq_lock.c
+> index d5610ad..883e815 100644
+> --- a/kernel/locking/osq_lock.c
+> +++ b/kernel/locking/osq_lock.c
+> @@ -27,6 +27,16 @@ static inline int node_cpu(struct optimistic_spin_node *node)
+>   	return node->cpu - 1;
+>   }
+>   
+> +DEFINE_STATIC_KEY_TRUE(vcpu_has_preemption);
+> +
+> +static inline bool vcpu_is_preempted_node(struct optimistic_spin_node *node)
+> +{
+> +	if (static_branch_likely(&vcpu_has_preemption))
+> +		return vcpu_is_preempted(node_cpu(node->prev));
+> +
+> +	return false;
+> +}
+> +
+>   static inline struct optimistic_spin_node *decode_cpu(int encoded_cpu_val)
+>   {
+>   	int cpu_nr = encoded_cpu_val - 1;
+> @@ -141,7 +151,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
+>   	 * polling, be careful.
+>   	 */
+>   	if (smp_cond_load_relaxed(&node->locked, VAL || need_resched() ||
+> -				  vcpu_is_preempted(node_cpu(node->prev))))
+> +						vcpu_is_preempted_node(node)))
+>   		return true;
+>   
+>   	/* unqueue */
 
-Patch applied for fixes.
+How about a further improvement on configurations that don't use 
+vcpu_is_preempted() at all?
 
-Yours,
-Linus Walleij
++#ifdef vcpu_is_preempted
++DEFINE_STATIC_KEY_TRUE(vcpu_has_preemption);
++
+  static inline int node_cpu(struct optimistic_spin_node *node)
+  {
+         return node->cpu - 1;
+  }
+
++static inline bool vcpu_is_preempted_node(struct optimistic_spin_node 
+*node)
++{
++       if (static_branch_likely(&vcpu_has_preemption))
++               return vcpu_is_preempted(node_cpu(node->prev));
++
++       return false;
++}
++#else
++static inline bool vcpu_is_preempted_node(struct optimistic_spin_node 
+*node)
++{
++       return false;
++}
++#endif
++
+  static inline struct optimistic_spin_node *decode_cpu(int encoded_cpu_val)
+  {
+         int cpu_nr = encoded_cpu_val - 1;
+@@ -141,7 +158,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
+          * polling, be careful.
+          */
+         if (smp_cond_load_relaxed(&node->locked, VAL || need_resched() ||
+- vcpu_is_preempted(node_cpu(node->prev))))
++                                 vcpu_is_preempted_node(node)))
+                 return true;
+
+         /* unqueue */
+
+For those configurations, vcpu_is_preempted_node() will just get 
+compiled out.
+
+Cheers,
+Longman
+

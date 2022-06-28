@@ -2,208 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C251255CDE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B119555DC36
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345560AbiF1MOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 08:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
+        id S1345375AbiF1MPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 08:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345129AbiF1MOc (ORCPT
+        with ESMTP id S245056AbiF1MPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 08:14:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B79C23BCA
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:14:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656418470;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aiFneYnWaLi2y/lwyk0xtCtPW1xJaeDQIG0+th5sfkA=;
-        b=EzfzkNeCxhx3y+hSV9A50xU2olr22NGJsH0BWjlkv/n3NegmCpGNqvFJ238HCIj5pzseWk
-        6CAIAJ2cvg5Rfwt5rwImNIHrH0b8+7rwcxma9PwwgbPrjKWhMLqFfdlOm6np6/XcsEY2uy
-        hH1Gx4LOlvXTwmkVbCLMQaTiJTnOQxI=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-209-QU2DiHpBMWOIGRK-adPJJw-1; Tue, 28 Jun 2022 08:14:29 -0400
-X-MC-Unique: QU2DiHpBMWOIGRK-adPJJw-1
-Received: by mail-wm1-f71.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so7050739wmj.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:14:29 -0700 (PDT)
+        Tue, 28 Jun 2022 08:15:45 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EFB25C69;
+        Tue, 28 Jun 2022 05:15:44 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id t24so21954742lfr.4;
+        Tue, 28 Jun 2022 05:15:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kHEtyK+afTRnQvXusEeUxociKuBzGjWIXP0enqXElr4=;
+        b=TlWmuP9OMB55nUga7W5Kqb+EYt92GmaRCn+lORX2tVqbIS2iAiZE0qlE7SPyMqN7Mz
+         9qd/GTchlefchvGIf7S2Ygp2xyvO9bn0EqTY4CIJfi/EBbyo6g8/rurTpGuzrNeIhhrm
+         b0fHMfBB2bQiVMu4x0RLFrmdoDewbJgWTz5OHxID+I/faCylsOEBCllozznBGhKjB9NG
+         IO6SScQWolkLGyv6zOBiphNyTcSngcBog4aeUB/0cRXdHiCWANbX+kz+np5F+1YjQsiV
+         8v3a4zkUnR5p4yrMhxx4v2ZZOTcchOmukvKy3bpsxv1LPWade1ff3YP39cPNO/G8fjrq
+         y9CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=aiFneYnWaLi2y/lwyk0xtCtPW1xJaeDQIG0+th5sfkA=;
-        b=O5NmMPUq58z/hC5W1h5u2t+L7mHmpqHWmSsgXGf1H1MCZ9Qk+GhZHNchhhFDWhB2za
-         o+VaRx6mScBRvvHGOB9eaIfDATv+7moRLkgGLcyhYzQgidl3/ke5StBeFlUU+PwBwFzP
-         h79JJae/fqMPTDygYFKT9tluBqglngfhjgk8/EOY3XZI/aC6HI7JuTUKCJLAV+R4G6xP
-         e1TLTrm1NeL46Cvw1b7/odZcca7jS6wL4dxpHFoZyxmO5yhzfE1j0oKl7y1BT/NVJlk1
-         Er/0tkVBXTeBsl6noc1GeZnHXquhKAYjsbgFf7yA82lO+9aywsIMEXnNFMv/Gv033Pok
-         nnYA==
-X-Gm-Message-State: AJIora95DLCAW4xlccOXKCSduMW87xsiwdH+INm5ZSRnHgrKBX60oOe7
-        UJxKFHHJ/9rB87BZ6aNUoJYCtjRdugOKS0k9LLWFAZtqKL76TezUgFjoS54Bv+2cd18i+IhhOLo
-        8KeFEE0Y6XMAIjfAuir7RYGpS
-X-Received: by 2002:a05:600c:19cf:b0:3a0:3df0:867 with SMTP id u15-20020a05600c19cf00b003a03df00867mr21556948wmq.106.1656418468015;
-        Tue, 28 Jun 2022 05:14:28 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tZuVISaBsKDBr4Vr2CI5+w4CnYPLYGgqSJp3ot7IJkUTGZI6jaYqP4Q3Taj+47wuRFF7PdiQ==
-X-Received: by 2002:a05:600c:19cf:b0:3a0:3df0:867 with SMTP id u15-20020a05600c19cf00b003a03df00867mr21556924wmq.106.1656418467728;
-        Tue, 28 Jun 2022 05:14:27 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id w9-20020a5d6089000000b0020e5b4ebaecsm13594634wrt.4.2022.06.28.05.14.26
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kHEtyK+afTRnQvXusEeUxociKuBzGjWIXP0enqXElr4=;
+        b=NfDRn+zKhBBmU7pO8KqXKrcS+5g6FqffEKA7WUnOODDjncJ5ZkDnwZruF/zYy6agau
+         hGA8xudpIsxCUqWY5JA/7UaiUKFofAFLYx+C54cSoy9wRVzVzf91ibpJ2bSBsGMbZ65J
+         4DiolMnSq1uKGk9/Zm+r6qp+gaO1plA3z5AITHr64GKeTOSLVkVxRfFW3vLzy6oE5jMH
+         KRdiTwtxmc8IUELjCrdekEW0e8P2LNCY/xw6orNgM+3IRph1HLo7dwZElSpfgEHb4D3m
+         3zhg+4mkmiEk1EIYH607aKCfC5MUIOx4nlvSh3IlplvRaem3RqypVxoW/comBjtrsPuJ
+         znhw==
+X-Gm-Message-State: AJIora9CIEe9gRyAVtwFjXU70JwqpJyvF20f93FVpi90nqxHqSSRDAO9
+        +ZcBRgSQrYZ7OrWl5NjVHFQ=
+X-Google-Smtp-Source: AGRyM1t7DdAiCPvHaJfAL5XAZk51QH8pq3Kn/IpSL6rLsVGim6I6libSANqVs/uASK5kDKtDS0UtrA==
+X-Received: by 2002:a05:6512:2287:b0:481:337a:4591 with SMTP id f7-20020a056512228700b00481337a4591mr1398358lfu.95.1656418543213;
+        Tue, 28 Jun 2022 05:15:43 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id a20-20020a05651c031400b0025aa2f6d700sm1602530ljp.62.2022.06.28.05.15.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 05:14:26 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-Cc:     mail@anirudhrb.com, kumarpraveen@linux.microsoft.com,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        wei.liu@kernel.org, robert.bradford@intel.com, liuwe@microsoft.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Ilias Stamatis <ilstam@amazon.com>
-Subject: Re: [PATCH v2] KVM: nVMX: Don't expose eVMCS unsupported fields to L1
-In-Reply-To: <20220628103241.1785380-1-anrayabh@linux.microsoft.com>
-References: <20220628103241.1785380-1-anrayabh@linux.microsoft.com>
-Date:   Tue, 28 Jun 2022 14:14:25 +0200
-Message-ID: <87bkudugri.fsf@redhat.com>
+        Tue, 28 Jun 2022 05:15:42 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 15:15:40 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 04/17] dt-bindings: PCI: dwc: Add max-link-speed
+ common property
+Message-ID: <20220628121540.oilmolkhqa43tf4e@mobilestation>
+References: <20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610085706.15741-5-Sergey.Semin@baikalelectronics.ru>
+ <20220615145550.GA1069883-robh@kernel.org>
+ <20220619142720.tzfgefunvf3kirul@mobilestation>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220619142720.tzfgefunvf3kirul@mobilestation>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Anirudh Rayabharam <anrayabh@linux.microsoft.com> writes:
+Rob,
+Could you please get your attention back to this this thread?
 
-> When running cloud-hypervisor tests, VM entry into an L2 guest on KVM on
-> Hyper-V fails with this splat (stripped for brevity):
->
-> [ 1481.600386] WARNING: CPU: 4 PID: 7641 at arch/x86/kvm/vmx/nested.c:4563 nested_vmx_vmexit+0x70d/0x790 [kvm_intel]
-> [ 1481.600427] CPU: 4 PID: 7641 Comm: vcpu2 Not tainted 5.15.0-1008-azure #9-Ubuntu
-> [ 1481.600429] Hardware name: Microsoft Corporation Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.1 07/22/2021
-> [ 1481.600430] RIP: 0010:nested_vmx_vmexit+0x70d/0x790 [kvm_intel]
-> [ 1481.600447] Call Trace:
-> [ 1481.600449]  <TASK>
-> [ 1481.600451]  nested_vmx_reflect_vmexit+0x10b/0x440 [kvm_intel]
-> [ 1481.600457]  __vmx_handle_exit+0xef/0x670 [kvm_intel]
-> [ 1481.600467]  vmx_handle_exit+0x12/0x50 [kvm_intel]
-> [ 1481.600472]  vcpu_enter_guest+0x83a/0xfd0 [kvm]
-> [ 1481.600524]  vcpu_run+0x5e/0x240 [kvm]
-> [ 1481.600560]  kvm_arch_vcpu_ioctl_run+0xd7/0x550 [kvm]
-> [ 1481.600597]  kvm_vcpu_ioctl+0x29a/0x6d0 [kvm]
-> [ 1481.600634]  __x64_sys_ioctl+0x91/0xc0
-> [ 1481.600637]  do_syscall_64+0x5c/0xc0
-> [ 1481.600667]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [ 1481.600670] RIP: 0033:0x7f688becdaff
-> [ 1481.600686]  </TASK>
->
-> TSC multiplier field is currently not supported in EVMCS in KVM. It was
-> previously not supported from Hyper-V but has been added since. Because
-> it is not supported in KVM the use "TSC scaling control" is filtered out
-> of vmcs_config by evmcs_sanitize_exec_ctrls().
->
-> However, in nested_vmx_setup_ctls_msrs(), TSC scaling is exposed to L1.
-> eVMCS unsupported fields are not sanitized. When L1 tries to launch an L2
-> guest, vmcs12 has TSC scaling enabled. This propagates to vmcs02. But KVM
-> doesn't set the TSC multiplier value because kvm_has_tsc_control is false.
-> Due to this VM entry for L2 guest fails. (VM entry fails if
-> "use TSC scaling" is 1 but TSC multiplier is 0.)
->
-> To fix, in nested_vmx_setup_ctls_msrs(), sanitize the values read from MSRs
-> by filtering out fields that are not supported by eVMCS.
->
-> This is a stable-friendly intermediate fix. A more comprehensive fix is
-> in progress [1] but is probably too complicated to safely apply to
-> stable.
->
-> [1]: https://lore.kernel.org/kvm/20220627160440.31857-1-vkuznets@redhat.com/
->
-> Fixes: d041b5ea93352 ("KVM: nVMX: Enable nested TSC scaling")
-> Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-> ---
->
-> Changes since v1:
-> - Sanitize all eVMCS unsupported fields instead of just TSC scaling.
->
-> v1: https://lore.kernel.org/lkml/20220613161611.3567556-1-anrayabh@linux.microsoft.com/
->
-> ---
->  arch/x86/kvm/vmx/nested.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index f5cb18e00e78..f88d748c7cc6 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -6564,6 +6564,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->  		msrs->pinbased_ctls_high);
->  	msrs->pinbased_ctls_low |=
->  		PIN_BASED_ALWAYSON_WITHOUT_TRUE_MSR;
-> +#if IS_ENABLED(CONFIG_HYPERV)
-> +	if (static_branch_unlikely(&enable_evmcs))
-> +		msrs->pinbased_ctls_high &= ~EVMCS1_UNSUPPORTED_PINCTRL;
-> +#endif
->  	msrs->pinbased_ctls_high &=
->  		PIN_BASED_EXT_INTR_MASK |
->  		PIN_BASED_NMI_EXITING |
-> @@ -6580,6 +6584,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->  	msrs->exit_ctls_low =
->  		VM_EXIT_ALWAYSON_WITHOUT_TRUE_MSR;
->  
-> +#if IS_ENABLED(CONFIG_HYPERV)
-> +	if (static_branch_unlikely(&enable_evmcs))
-> +		msrs->exit_ctls_high &= ~EVMCS1_UNSUPPORTED_VMEXIT_CTRL;
-> +#endif
->  	msrs->exit_ctls_high &=
->  #ifdef CONFIG_X86_64
->  		VM_EXIT_HOST_ADDR_SPACE_SIZE |
-> @@ -6600,6 +6608,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->  		msrs->entry_ctls_high);
->  	msrs->entry_ctls_low =
->  		VM_ENTRY_ALWAYSON_WITHOUT_TRUE_MSR;
-> +#if IS_ENABLED(CONFIG_HYPERV)
-> +	if (static_branch_unlikely(&enable_evmcs))
-> +		msrs->entry_ctls_high &= ~EVMCS1_UNSUPPORTED_VMENTRY_CTRL;
-> +#endif
->  	msrs->entry_ctls_high &=
->  #ifdef CONFIG_X86_64
->  		VM_ENTRY_IA32E_MODE |
-> @@ -6657,6 +6669,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->  		      msrs->secondary_ctls_high);
->  
->  	msrs->secondary_ctls_low = 0;
-> +#if IS_ENABLED(CONFIG_HYPERV)
-> +	if (static_branch_unlikely(&enable_evmcs))
-> +		msrs->secondary_ctls_high &= ~EVMCS1_UNSUPPORTED_2NDEXEC;
-> +#endif
->  	msrs->secondary_ctls_high &=
->  		SECONDARY_EXEC_DESC |
->  		SECONDARY_EXEC_ENABLE_RDTSCP |
+-Sergey
 
-(In theory, threre's also EVMCS1_UNSUPPORTED_VMFUNC filtering out
-VMX_VMFUNC_EPTP_SWITCHING (as eVMCS EPTP_LIST_ADDRESS) but it is not
-used by KVM)
-
-As I said in another thread, I think this is fine as a
-stable@/intermediate fix. Assuming the way to go for mainline is my
-"KVM: nVMX: Use vmcs_config for setting up nested VMX MSRs", this patch
-won't be needed and can be reverted.
-
--- 
-Vitaly
-
+On Sun, Jun 19, 2022 at 05:27:20PM +0300, Serge Semin wrote:
+> On Wed, Jun 15, 2022 at 08:55:50AM -0600, Rob Herring wrote:
+> > On Fri, Jun 10, 2022 at 11:56:52AM +0300, Serge Semin wrote:
+> > > In accordance with [1] DW PCIe controllers support up to Gen5 link speed.
+> > > Let's add the max-link-speed property upper bound to 5 then. The DT
+> > > bindings of the particular devices are expected to setup more strict
+> > > constraint on that parameter.
+> > > 
+> > > [1] Synopsys DesignWare Cores PCI Express Controller Databook, Version
+> > > 5.40a, March 2019, p. 27
+> > > 
+> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > > 
+> > > ---
+> > > 
+> > > Changelog v3:
+> > > - This is a new patch unpinned from the next one:
+> > >   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
+> > >   by the Rob' request. (@Rob)
+> > > ---
+> > >  Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml | 3 +++
+> > >  Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml     | 2 ++
+> > >  Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml        | 1 +
+> > >  3 files changed, 6 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
+> > > index 627a5d6625ba..b2fbe886981b 100644
+> > > --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
+> > > +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
+> > > @@ -45,6 +45,9 @@ properties:
+> > >        the peripheral devices available on the PCIe bus.
+> > >      maxItems: 1
+> > >  
+> > > +  max-link-speed:
+> > > +    maximum: 5
+> > 
+> 
+> > Unless the default is less than the max, shouldn't the max here be 1 
+> > less than the h/w max?
+> 
+> Why? AFAIU max-link-speed semantics it works as less-than-or-equal
+> operator isn't it? The modern DW PCIe Root ports and Endpoints
+> IP-cores support up to Gen5 PCIe speed including the Gen5 mode (see
+> the CX_MAX_PCIE_SPEED IP-core synthesize paramter). It's reasonable to
+> set the max-link-speed here to be in coherency with the IP-core
+> reference manual.
+> 
+> > 
+> > > +
+> > >    num-lanes:
+> > >      description:
+> > >        Number of PCIe link lanes to use. Can be omitted should the already
+> > > diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
+> > > index dcd521aed213..fc3b5d4ac245 100644
+> > > --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
+> > > +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
+> > > @@ -55,4 +55,6 @@ examples:
+> > >  
+> > >        phys = <&pcie_phy0>, <&pcie_phy1>, <&pcie_phy2>, <&pcie_phy3>;
+> > >        phy-names = "pcie0", "pcie1", "pcie2", "pcie3";
+> > > +
+> > > +      max-link-speed = <3>;
+> > >      };
+> > > diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+> > > index 4a5c8b933b52..01cedf51e0f8 100644
+> > > --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+> > > +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+> > > @@ -74,4 +74,5 @@ examples:
+> > >        phy-names = "pcie";
+> > >  
+> > >        num-lanes = <1>;
+> > > +      max-link-speed = <3>;
+> > 
+> 
+> > This should give you an error because pci-bus.yaml only goes up to 4. 
+> 
+> I've set max-link-speed to "3" here. So no error will be caused neither
+> by this schema nor by the pci-bus.yaml bindings.
+> 
+> * Though these examples won't be evaluated because the generic DW PCIe
+> RP and EP schemas have been marked as "select: false".
+> 
+> > 
+> > I'm not really sure that limiting it in the common schema is too useful. 
+> > We're going to be updating it one step at a time. Limiting it is really 
+> > only helpful for specific implementations.
+> > 
+> 
+> I disagree. As I said above the max PCIe speed limit set here has been
+> taken from the HW reference manual so it describes the modern DW PCIe
+> controllers capability. No mater what value is set by the pci-bus.yaml
+> schema (eventually we'll get to have it increased to Gen5 too) we can
+> use the DW PCIe-specific limitation here as a known upper capabilities
+> bound.
+> 
+> > Patch 1 didn't apply for me, so none of the checks ran.
+> 
+> I see. The series will be re-based onto 5.19-rc1 in the next patchset
+> revision.
+> 
+> -Sergey
+> 
+> > 
+> > Rob

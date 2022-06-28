@@ -2,154 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C131155EA48
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFAF55EA2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231993AbiF1Qqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 12:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59504 "EHLO
+        id S230497AbiF1QuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 12:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbiF1QpO (ORCPT
+        with ESMTP id S237642AbiF1Qrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:45:14 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC12FE7;
-        Tue, 28 Jun 2022 09:43:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=2/M/g5u5jwnlXk0l7tYRn4YYZxyECZLA2UT2UxDh/rE=; b=vXjUkTHoKF9wG+0zPAswh9DSOb
-        RsQSXx7BoC5v/xQ14v1zMPvDwiKVB9Sv2pxEc+XWcncKgq0Z/HT8WubPMvV1qsxccdXwoaTvj3S7Z
-        NDXkr5OwavFOhntxOrMQE/BVQyD2h3QjHfMa5DIjvskJ5PHebKiMdjxEjgcs/JcMgj2jjBF6Cqefd
-        U04OBrXPApVGa3j0spj3ivPGv0+APH8fmUzv54/WWnTL1eDLSBkw3GFSMTttu5+ELD+HxNI/iBadG
-        e8axuok8t2CWG2iEnpAavMQR1vXUTjvpcsPBfiz+jk3khYCvd1qw7iBrOq/WNmg1KuMTd3a5KWtnc
-        9yB/LKPw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33068)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1o6EIu-0001r6-9p; Tue, 28 Jun 2022 17:43:08 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1o6EIk-00052x-LT; Tue, 28 Jun 2022 17:42:58 +0100
-Date:   Tue, 28 Jun 2022 17:42:58 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v9 05/16] net: pcs: add Renesas MII converter
- driver
-Message-ID: <YrsvkqBbzUvTYOeI@shell.armlinux.org.uk>
-References: <20220624144001.95518-1-clement.leger@bootlin.com>
- <20220624144001.95518-6-clement.leger@bootlin.com>
+        Tue, 28 Jun 2022 12:47:46 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4561C286D7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:44:50 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1048b8a38bbso17748819fac.12
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:44:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:reply-to:from:in-reply-to:content-transfer-encoding;
+        bh=vJfBn+f7lVK7AifdRhZ14mIHvBk5ROqtbtEkpEUekVI=;
+        b=PStwN8J9WglnPwSrV0dM3AVahzXE6kSqMbbkzaOjiLnRigpJdtZbsznzA6h0ZHFxCl
+         VCc2EwXkgQTpc2I8msSXawKjWhovEq4qPlEq9FHqwcAnhsRf38LfjGSr2OksXXnBDVe5
+         D2AXYVst8rALAmrORJawmosR19EMmGOJojF8g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:reply-to:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vJfBn+f7lVK7AifdRhZ14mIHvBk5ROqtbtEkpEUekVI=;
+        b=gNlNLLu2Hdn7x2O+oc2n+O/NmCIpI7jcdrwOjoCaL0zFkAjZU+cLtoZGNqtP1u/nwd
+         D3GbFuL8R/DZbidMDGwzmE6GVdIbNihvpGUEZKfeiK0ZaR4ObAUA+ZZNM5wr6/u6p3Gn
+         4ORQ+X0AtcOzOR4E9ab/BiUDmBv+hTp8/rQOtX2R/WMZuGqdhgiHeteawD5IgkYZTjVI
+         r2bjzgiupzvRPMcRGz7UF4oTnzlq95TF/dJZNwitrVuP6yQy9GRcLu1tPTXqA8vCYcyL
+         nO/LqJAYCVU31ZO1RANFhwB05/rSZ+J5iH/kKwob+/MrSsZNKREx2FYweUd4mTZn8rn1
+         eOAQ==
+X-Gm-Message-State: AJIora/lNErg0pX952n1jGwyihCbc8Hd54vOm+V431WNlaOlRG1skC6l
+        19EiJd7+UzEsrb2MoHfkTFWn9A==
+X-Google-Smtp-Source: AGRyM1uH8/M2iGX2n2wOrXwL+tXc5HmSsj392p52tR/beA2RwQ1QmjHwdDlm5rbSnYFM5umdpppZNA==
+X-Received: by 2002:a05:6870:649e:b0:ed:a1c0:f810 with SMTP id cz30-20020a056870649e00b000eda1c0f810mr285467oab.289.1656434689573;
+        Tue, 28 Jun 2022 09:44:49 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id y27-20020a544d9b000000b0032b99637366sm4400950oix.25.2022.06.28.09.44.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 09:44:49 -0700 (PDT)
+Message-ID: <83b9774f-5cda-d05f-e62d-7bf7547ae7ba@cloudflare.com>
+Date:   Tue, 28 Jun 2022 11:44:47 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220624144001.95518-6-clement.leger@bootlin.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 0/2] Introduce security_create_user_ns()
+Content-Language: en-US
+To:     KP Singh <kpsingh@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Christian Brauner <brauner@kernel.org>, revest@chromium.org,
+        jackmanb@chromium.org, ast@kernel.org, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@cloudflare.com
+References: <20220621233939.993579-1-fred@cloudflare.com>
+ <ce1653b1-feb0-1a99-0e97-8dfb289eeb79@schaufler-ca.com>
+ <b72c889a-4a50-3330-baae-3bbf065e7187@cloudflare.com>
+ <CAHC9VhSTkEMT90Tk+=iTyp3npWEm+3imrkFVX2qb=XsOPp9F=A@mail.gmail.com>
+ <20220627121137.cnmctlxxtcgzwrws@wittgenstein>
+ <CAHC9VhSQH9tE-NgU6Q-GLqSy7R6FVjSbp4Tc4gVTbjZCqAWy5Q@mail.gmail.com>
+ <6a8fba0a-c9c9-61ba-793a-c2e0c2924f88@iogearbox.net>
+ <CAHC9VhQQJH95jTWMOGDB4deS=whSfnaF_e73zoabOOeHJMv+0Q@mail.gmail.com>
+ <685096bb-af0a-08c0-491a-e176ac009e85@schaufler-ca.com>
+ <9ae473c4-cd42-bb45-bce2-8aa2e4784a43@cloudflare.com>
+ <d70d3b2d-6c3f-b1fc-f40c-f5ec01a627c0@schaufler-ca.com>
+ <CACYkzJ6GmotfhBk1+9BjGC6Ct7bGxQGVTZTX2iQcrhjfV7VHwQ@mail.gmail.com>
+Reply-To: CACYkzJ6GmotfhBk1+9BjGC6Ct7bGxQGVTZTX2iQcrhjfV7VHwQ@mail.gmail.com
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <CACYkzJ6GmotfhBk1+9BjGC6Ct7bGxQGVTZTX2iQcrhjfV7VHwQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 04:39:50PM +0200, Clément Léger wrote:
-> Add a PCS driver for the MII converter that is present on the Renesas
-> RZ/N1 SoC. This MII converter is reponsible for converting MII to
-> RMII/RGMII or act as a MII pass-trough. Exposing it as a PCS allows to
-> reuse it in both the switch driver and the stmmac driver. Currently,
-> this driver only allows the PCS to be used by the dual Cortex-A7
-> subsystem since the register locking system is not used.
+On 6/28/22 11:12 AM, KP Singh wrote:
+> On Tue, Jun 28, 2022 at 6:02 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>>
+>> On 6/28/2022 8:14 AM, Frederick Lawler wrote:
+>>> On 6/27/22 6:18 PM, Casey Schaufler wrote:
+>>>> On 6/27/2022 3:27 PM, Paul Moore wrote:
+>>>>> On Mon, Jun 27, 2022 at 6:15 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>>>>>> On 6/27/22 11:56 PM, Paul Moore wrote:
+>>>>>>> On Mon, Jun 27, 2022 at 8:11 AM Christian Brauner <brauner@kernel.org> wrote:
+>>>>>>>> On Thu, Jun 23, 2022 at 11:21:37PM -0400, Paul Moore wrote:
+>>>>>>> ...
+>>>>>>>
+>>>>>>>>> This is one of the reasons why I usually like to see at least one LSM
+>>>>>>>>> implementation to go along with every new/modified hook.  The
+>>>>>>>>> implementation forces you to think about what information is necessary
+>>>>>>>>> to perform a basic access control decision; sometimes it isn't always
+>>>>>>>>> obvious until you have to write the access control :)
+>>>>>>>> I spoke to Frederick at length during LSS and as I've been given to
+>>>>>>>> understand there's a eBPF program that would immediately use this new
+>>>>>>>> hook. Now I don't want to get into the whole "Is the eBPF LSM hook
+>>>>>>>> infrastructure an LSM" but I think we can let this count as a legitimate
+>>>>>>>> first user of this hook/code.
+>>>>>>> Yes, for the most part I don't really worry about the "is a BPF LSM a
+>>>>>>> LSM?" question, it's generally not important for most discussions.
+>>>>>>> However, there is an issue unique to the BPF LSMs which I think is
+>>>>>>> relevant here: there is no hook implementation code living under
+>>>>>>> security/.  While I talked about a hook implementation being helpful
+>>>>>>> to verify the hook prototype, it is also helpful in providing an
+>>>>>>> in-tree example for other LSMs; unfortunately we don't get that same
+>>>>>>> example value when the initial hook implementation is a BPF LSM.
+>>>>>> I would argue that such a patch series must come together with a BPF
+>>>>>> selftest which then i) contains an in-tree usage example, ii) adds BPF
+>>>>>> CI test coverage. Shipping with a BPF selftest at least would be the
+>>>>>> usual expectation.
+>>>>> I'm not going to disagree with that, I generally require matching
+>>>>> tests for new SELinux kernel code, but I was careful to mention code
+>>>>> under 'security/' and not necessarily just a test implementation :)  I
+>>>>> don't want to get into a big discussion about it, but I think having a
+>>>>> working implementation somewhere under 'security/' is more
+>>>>> discoverable for most LSM folks.
+>>>>
+>>>> I agree. It would be unfortunate if we added a hook explicitly for eBPF
+>>>> only to discover that the proposed user needs something different. The
+>>>> LSM community should have a chance to review the code before committing
+>>>> to all the maintenance required in supporting it.
+>>>>
+>>>> Is there a reference on how to write an eBPF security module?
+>>>
+>>> There's a documentation page that briefly touches on a BPF LSM implementation [1].
+>>
+>> That's a brief touch, alright. I'll grant that the LSM interface isn't
+>> especially well documented for C developers, but we have done tutorials
+>> and have multiple examples. I worry that without an in-tree example for
+>> eBPF we might well be setting developers up for spectacular failure.
+>>
 > 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-> Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+> Casey, Daniel and I are recommending an in-tree example, it will be
+> in BPF selftests and we will CC you on the reviews.
+> 
+> Frederick, is that okay with you?
 
-Looks good to me, thanks.
+Yep.
 
-The only issue I haven't brought up is:
+> 
+>>>
+>>>> There should be something out there warning the eBPF programmer of the
+>>>> implications of providing a secid_to_secctx hook for starters.
+>>>>
+>>>
+>>> Links:
+>>> 1. https://docs.kernel.org/bpf/prog_lsm.html?highlight=bpf+lsm#
+>>>
 
-> +static int miic_config(struct phylink_pcs *pcs, unsigned int mode,
-> +		       phy_interface_t interface,
-> +		       const unsigned long *advertising, bool permit)
-> +{
-> +	struct miic_port *miic_port = phylink_pcs_to_miic_port(pcs);
-> +	struct miic *miic = miic_port->miic;
-> +	int port = miic_port->port;
-> +	u32 speed, conv_mode, val;
-> +
-> +	switch (interface) {
-> +	case PHY_INTERFACE_MODE_RMII:
-> +		conv_mode = CONV_MODE_RMII;
-> +		speed = CONV_MODE_100MBPS;
-> +		break;
-> +	case PHY_INTERFACE_MODE_RGMII:
-> +	case PHY_INTERFACE_MODE_RGMII_ID:
-> +	case PHY_INTERFACE_MODE_RGMII_TXID:
-> +	case PHY_INTERFACE_MODE_RGMII_RXID:
-> +		conv_mode = CONV_MODE_RGMII;
-> +		speed = CONV_MODE_1000MBPS;
-> +		break;
-> +	case PHY_INTERFACE_MODE_MII:
-> +		conv_mode = CONV_MODE_MII;
-> +		/* When in MII mode, speed should be set to 0 (which is actually
-> +		 * CONV_MODE_10MBPS)
-> +		 */
-> +		speed = CONV_MODE_10MBPS;
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	val = FIELD_PREP(MIIC_CONVCTRL_CONV_MODE, conv_mode) |
-> +	      FIELD_PREP(MIIC_CONVCTRL_CONV_SPEED, speed);
-> +
-> +	miic_reg_rmw(miic, MIIC_CONVCTRL(port),
-> +		     MIIC_CONVCTRL_CONV_MODE | MIIC_CONVCTRL_CONV_SPEED, val);
-> +	miic_converter_enable(miic_port->miic, miic_port->port, 1);
-> +
-> +	return 0;
-> +}
-
-the stting of the speed here. As this function can be called as a result
-of ethtool setting the configuration while the link is up, this could
-have disasterous effects on the link. This will only happen if there is
-no PHY present and we aren't using fixed-link mode.
-
-Therefore, I'm willing to get this pass, but I think it would be better
-if the speed was only updated if the interface setting is actually
-being changed. So:
-
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

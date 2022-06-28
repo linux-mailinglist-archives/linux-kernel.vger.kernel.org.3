@@ -2,96 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8AD55D880
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F9955E27B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241732AbiF1HSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 03:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
+        id S241893AbiF1HSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 03:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241783AbiF1HRU (ORCPT
+        with ESMTP id S241591AbiF1HSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 03:17:20 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CB22CCBC;
-        Tue, 28 Jun 2022 00:17:18 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LXG7n0lRdz1L8mG;
-        Tue, 28 Jun 2022 15:15:01 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 28 Jun 2022 15:17:15 +0800
-CC:     <yangyicong@hisilicon.com>, Greg KH <gregkh@linuxfoundation.org>,
-        <helgaas@kernel.org>, <lorenzo.pieralisi@arm.com>,
-        <jonathan.cameron@huawei.com>, <robin.murphy@arm.com>,
-        <leo.yan@linaro.org>, <will@kernel.org>, <joro@8bytes.org>,
-        <shameerali.kolothum.thodi@huawei.com>, <mingo@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <john.garry@huawei.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-pci@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
-        <liuqi115@huawei.com>, <james.clark@arm.com>,
-        <zhangshaokun@hisilicon.com>, <linuxarm@huawei.com>,
-        <alexander.shishkin@linux.intel.com>, <acme@kernel.org>
-Subject: Re: [PATCH v9 0/8] Add support for HiSilicon PCIe Tune and Trace
- device
-To:     <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
-        <suzuki.poulose@arm.com>, Peter Zijlstra <peterz@infradead.org>
-References: <20220606115555.41103-1-yangyicong@hisilicon.com>
- <af6723f1-c0c5-8af5-857c-af9280e705af@huawei.com>
- <Yrms2cI05O2yZRKU@kroah.com>
- <e737393a-56dd-7d24-33d3-e935b14ba758@huawei.com>
- <Yrm4O+AFbgnoBVba@hirez.programming.kicks-ass.net>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <6c923b13-a588-9511-3f94-3241c8aacac5@huawei.com>
-Date:   Tue, 28 Jun 2022 15:17:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Tue, 28 Jun 2022 03:18:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3219C2CDF1;
+        Tue, 28 Jun 2022 00:17:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2E5BB81CD3;
+        Tue, 28 Jun 2022 07:17:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D803C341CB;
+        Tue, 28 Jun 2022 07:17:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656400676;
+        bh=9f3hskPxoIjzFqhBj1+BqdFVuxoMB7KN1AknVE1N6C0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pyvJQc1J0UjDydiW+SD4ddCS1eB/njx9dSX1MPIyYOnTeRBQsQ0xwhfGZG/DU69zR
+         efeCMwfpOrlUFGQANe7y1zhqAgklewzwFM1LY/4lDUsTrvz5sWDKG86uu8oFo+fiix
+         u+qTUjqEgVr2O8NkBz+mF54s6RGMh2xkRNpX6qrqITS4vzbCSE+pWp9TmSrDrQH+Ik
+         IbyDaPUQThh8rJBpPp2vs4slme+zg2FBvxYauWAfne+mya5HZ4kWKilQEjPBTEN7Io
+         49Z9R2jRBhdxxoOPy4ceS6nOw++fQ3Kg7pRYFez+QfbIq4IOZsIPzVC4p+FYT5yl5B
+         /EcHmj0xo+UTw==
+Date:   Tue, 28 Jun 2022 08:17:49 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, Harinder Singh <sharinder@google.com>,
+        Tim Bird <tim.bird@sony.com>
+Subject: Re: [PATCH] Documentation: kunit: eliminate code-block warnings
+Message-ID: <20220628081744.7e6955e6@sal.lan>
+In-Reply-To: <4c403239-3c71-4ab9-2168-f7e9d77008b2@infradead.org>
+References: <20220401024707.10550-1-rdunlap@infradead.org>
+        <87fsjt50c8.fsf@meer.lwn.net>
+        <4c403239-3c71-4ab9-2168-f7e9d77008b2@infradead.org>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <Yrm4O+AFbgnoBVba@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/27 22:01, Peter Zijlstra wrote:
-> On Mon, Jun 27, 2022 at 09:25:42PM +0800, Yicong Yang wrote:
->> On 2022/6/27 21:12, Greg KH wrote:
->>> On Mon, Jun 27, 2022 at 07:18:12PM +0800, Yicong Yang wrote:
->>>> Hi Greg,
->>>>
->>>> Since the kernel side of this device has been reviewed for 8 versions with
->>>> all comments addressed and no more comment since v9 posted in 5.19-rc1,
->>>> is it ok to merge it first (for Patch 1-3 and 7-8)?
->>>
->>> I am not the maintainer of this subsystem, so I do not understand why
->>> you are asking me :(
->>>
->>
->> I checked the log of drivers/hwtracing and seems patches of coresight/intel_th/stm
->> applied by different maintainers and I see you applied some patches of intel_th/stm.
->> Should any of these three maintainers or you can help applied this?
+Em Sat, 25 Jun 2022 08:12:00 -0700
+Randy Dunlap <rdunlap@infradead.org> escreveu:
+
+> > So which version of Sphinx are you using?  The language argument became
+> > optional in 2.0, so you'd need to be running something pretty ancient to
+> > see this.
+> > 
+> > Ah, I see 1.8.5 in your later message...how wedded are you to that
+> > version?  
 > 
-> I was hoping Mark would have a look, since he knows this ARM stuff
-> better than me. But ISTR he's somewhat busy atm too. But an ACK from the
-> CoreSight people would also be appreciated.
+> It's what ships with OpenSuse Leap 15.3, which I have been using for quite
+> a long time.
 > 
+> I see that there is now OpenSuse Leap 15.4, so I could upgrade to that,
+> but I don't know what version on Sphinx it uses.
 
-Thanks for the instruction.
+It seems that there are two versions on it, packaged with different
+names:
 
-Hi Mark, Mathieu and Suzuki,
+2.3.1:
+	https://download.opensuse.org/distribution/leap/15.4/repo/oss/noarch/python3-Sphinx-2.3.1-150400.1.7.noarch.rpm
+4.2.0:
+	https://download.opensuse.org/distribution/leap/15.4/repo/oss/noarch/python3-Sphinx_4_2_0-4.2.0-150400.11.6.noarch.rpm
 
-May I have an ack from you to have the driver part of this device merged?
+It should be noticed that, while we don't decide to remove support for
+Sphinx < 3, kernel-doc has two different outputs, depending on Sphinx C
+domain support. The legacy support is enabled with version < 3 [1].
 
-Thanks!
+As we're currently discussing dropping support for Sphinx version < 3,
+I would recommend you to use the 4.2 package.
+
+Regards,
+Mauro
+
+[1] Version 3.0 is a bad choice, as the C domain is partially broken.

@@ -2,158 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1122955E862
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B58E55E6E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347825AbiF1P2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
+        id S1346416AbiF1P26 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 28 Jun 2022 11:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347466AbiF1P2P (ORCPT
+        with ESMTP id S1345696AbiF1P2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:28:15 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F29B220
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:28:14 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id u9so17603233oiv.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:28:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VcRyPc8yqfBxbqxUzat8njTxsc7Bb/ts4TuWMruxwXc=;
-        b=qk/4IDec+8fxrqULQrpZO7A+IWJXUJpEiB5Ohkg+/CQhlzu0O0WgEpbiGmUM5FmEq/
-         RpC3JfEieF+a7vYutAGb4X2QB6YnZddV3GSi0w2AcY4/1nm54BZ5Bjy2BiXeNYvjscQv
-         WnTICfihQqVLUe+okt4h6XX9qsyKCqdYPAeA7oboAum1CHfo/15nmR7R6EZIFzVNxlPc
-         0sJcbeIUzVlK3l1I6tIeQ8ulpcZCnjjh6O3PFvLiDNXPaQgkx7Aj1qm8mzAXSj7JtlmZ
-         NbdREPs4SYGKMzuG4LpLjtxUyQqlv8GYjlVlJo4OyG3RBk+MaqMSZJZfwEAip8PUan+x
-         koDQ==
+        Tue, 28 Jun 2022 11:28:55 -0400
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4FBBF9;
+        Tue, 28 Jun 2022 08:28:54 -0700 (PDT)
+Received: by mail-qv1-f47.google.com with SMTP id q4so20506459qvq.8;
+        Tue, 28 Jun 2022 08:28:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VcRyPc8yqfBxbqxUzat8njTxsc7Bb/ts4TuWMruxwXc=;
-        b=xLNE0g7DI7pAC9YEu/8yeuJrh2qCVbUjKhFsuH4bb7WxKfQ/q3fESR3ctIR0YOU+b6
-         /q0WJgeiK5ycGe64N1KZCak6Xc28tLc/ly4wB7RCJNl9ZVPUxQDqMSjJeebaQ4Z8vdrS
-         ncTmffHgQ90VRl6YAC8iR3vk72Fpae/G1d9q0AiLcaD5xcvaWCh7Id75WxHiik5JMVle
-         1DW8ajQw81DzSQtcsVuNAUQwwtiwkpNlse74sm2tNtnp3krLw5XeAmNcOh6AHOqJK7YU
-         Ty5OwE2Xv8M/iauMxQ0wBeEKXeLRzzPc9ZsaviyBe6dVdsTJVVogx0YXdDf90VgcVd0D
-         e0gg==
-X-Gm-Message-State: AJIora9dbbSfOD/m0Ba2bDBMHRLa9m4L+Kha/BgcdoXHnOMawEX1eVKu
-        2f9ojo5dSiUUF2FAu4oM9889kPdH+25tjrYLjeJ3WQ==
-X-Google-Smtp-Source: AGRyM1tXngT9JL9wLeQfuXpG9o8+IuZ1kJ+YSWsVi8szy046wDER0SHngLlWaqB2LZAeuTSoZmOQDF7S2pRCt0uG0KE=
-X-Received: by 2002:a05:6808:2124:b0:335:7483:f62d with SMTP id
- r36-20020a056808212400b003357483f62dmr128877oiw.112.1656430093380; Tue, 28
- Jun 2022 08:28:13 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=rWGuKnx4Ujs9MkjGuIowwwhdvBAe4X1vSQOEKzeoNPs=;
+        b=4DCbD1rF0scov5Ko7iDju9vfgg7rLsjW7qsJGtC8D6jre+pPsBC78/VT9hv3JGZOAt
+         34wSXyjcaeQwKqfBk81e8P4l+7PQ2q8QUxmcrBBn4gXrpgESafmFXlySYvuULJf0mxF1
+         tsVkNNxN8S7PMOo/6TULTnOHdDKxF/bF65JXC7e1g558pzmNdw5uQZCJh6KT+pwfLeCR
+         zh+vFHzhZFjVBzBbUetd+BxoFLq5qk2Q6N9j0/IpU4ulKe+UmChiU+bKe8tZNkje2yPw
+         ocje7m++kHyNCGrWFr8gJknXDGZbgEIzd+ueJgZltbtQ0BCpXAHZjHQqgw5Bi88Foqdw
+         JvQA==
+X-Gm-Message-State: AJIora+Ia7iN9nC1l+uansP/0g+kOmd8RmPF2bhIwI1n2XulP1/PrTEB
+        az5bSLIuee1Yj/XMQBoConNUcMxllDfxRQ==
+X-Google-Smtp-Source: AGRyM1tqwjvQCLtYoNT4ij+Qnjr0uI8ehRX4sKRW0KViu46Vu9lNJtAIA8G+uJH5CjOBrnraFMRByw==
+X-Received: by 2002:a05:622a:1108:b0:305:3092:b831 with SMTP id e8-20020a05622a110800b003053092b831mr13808695qty.624.1656430133241;
+        Tue, 28 Jun 2022 08:28:53 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id m14-20020a05620a290e00b006a6b498e23esm12226163qkp.81.2022.06.28.08.28.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 08:28:52 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id r3so22838484ybr.6;
+        Tue, 28 Jun 2022 08:28:52 -0700 (PDT)
+X-Received: by 2002:a05:6902:1141:b0:669:3f2a:c6bb with SMTP id
+ p1-20020a056902114100b006693f2ac6bbmr18971911ybu.365.1656430131905; Tue, 28
+ Jun 2022 08:28:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220627160440.31857-1-vkuznets@redhat.com> <CALMp9eQL2a+mStk-cLwVX6NVqwAso2UYxAO7UD=Xi2TSGwUM2A@mail.gmail.com>
- <87y1xgubot.fsf@redhat.com>
-In-Reply-To: <87y1xgubot.fsf@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Tue, 28 Jun 2022 08:28:02 -0700
-Message-ID: <CALMp9eSBLcvuNDquvSfUnaF3S3f4ZkzqDRSsz-v93ZeX=xnssg@mail.gmail.com>
-Subject: Re: [PATCH 00/14] KVM: nVMX: Use vmcs_config for setting up nested
- VMX MSRs
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220624144001.95518-1-clement.leger@bootlin.com> <20220624144001.95518-13-clement.leger@bootlin.com>
+In-Reply-To: <20220624144001.95518-13-clement.leger@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 28 Jun 2022 17:28:39 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWDL7k9m_ephLsFtsfceKPkO5WF=bbp6iQMaU+608H-Ew@mail.gmail.com>
+Message-ID: <CAMuHMdWDL7k9m_ephLsFtsfceKPkO5WF=bbp6iQMaU+608H-Ew@mail.gmail.com>
+Subject: Re: [PATCH net-next v9 12/16] ARM: dts: r9a06g032: describe MII converter
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 7:04 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+On Fri, Jun 24, 2022 at 4:41 PM Clément Léger <clement.leger@bootlin.com> wrote:
+> Add the MII converter node which describes the MII converter that is
+> present on the RZ/N1 SoC.
 >
-> Jim Mattson <jmattson@google.com> writes:
->
-> > On Mon, Jun 27, 2022 at 9:04 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
-> >>
-> >> Changes since RFC:
-> >> - "KVM: VMX: Extend VMX controls macro shenanigans" PATCH added and the
-> >>   infrastructure is later used in other patches [Sean] PATCHes 1-3 added
-> >>   to support the change.
-> >> - "KVM: VMX: Clear controls obsoleted by EPT at runtime, not setup" PATCH
-> >>   added [Sean].
-> >> - Commit messages added.
-> >>
-> >> vmcs_config is a sanitized version of host VMX MSRs where some controls are
-> >> filtered out (e.g. when Enlightened VMCS is enabled, some know bugs are
-> >> discovered, some inconsistencies in controls are detected,...) but
-> >> nested_vmx_setup_ctls_msrs() uses raw host MSRs instead. This may end up
-> >> in exposing undesired controls to L1. Switch to using vmcs_config instead.
-> >>
-> >> Sean Christopherson (1):
-> >>   KVM: VMX: Clear controls obsoleted by EPT at runtime, not setup
-> >>
-> >> Vitaly Kuznetsov (13):
-> >>   KVM: VMX: Check VM_ENTRY_IA32E_MODE in setup_vmcs_config()
-> >>   KVM: VMX: Check CPU_BASED_{INTR,NMI}_WINDOW_EXITING in
-> >>     setup_vmcs_config()
-> >>   KVM: VMX: Tweak the special handling of SECONDARY_EXEC_ENCLS_EXITING
-> >>     in setup_vmcs_config()
-> >>   KVM: VMX: Extend VMX controls macro shenanigans
-> >>   KVM: VMX: Move CPU_BASED_CR8_{LOAD,STORE}_EXITING filtering out of
-> >>     setup_vmcs_config()
-> >>   KVM: VMX: Add missing VMEXIT controls to vmcs_config
-> >>   KVM: VMX: Add missing VMENTRY controls to vmcs_config
-> >>   KVM: VMX: Add missing CPU based VM execution controls to vmcs_config
-> >>   KVM: nVMX: Use sanitized allowed-1 bits for VMX control MSRs
-> >>   KVM: VMX: Store required-1 VMX controls in vmcs_config
-> >>   KVM: nVMX: Use sanitized required-1 bits for VMX control MSRs
-> >>   KVM: VMX: Cache MSR_IA32_VMX_MISC in vmcs_config
-> >>   KVM: nVMX: Use cached host MSR_IA32_VMX_MISC value for setting up
-> >>     nested MSR
-> >>
-> >>  arch/x86/kvm/vmx/capabilities.h |  16 +--
-> >>  arch/x86/kvm/vmx/nested.c       |  37 +++---
-> >>  arch/x86/kvm/vmx/nested.h       |   2 +-
-> >>  arch/x86/kvm/vmx/vmx.c          | 198 ++++++++++++++------------------
-> >>  arch/x86/kvm/vmx/vmx.h          | 118 +++++++++++++++++++
-> >>  5 files changed, 229 insertions(+), 142 deletions(-)
-> >>
-> >> --
-> >> 2.35.3
-> >>
-> >
-> > Just checking that this doesn't introduce any backwards-compatibility
-> > issues. That is, all features that were reported as being available in
-> > the past should still be available moving forward.
-> >
->
-> All the controls nested_vmx_setup_ctls_msrs() set are in the newly
-> introduced KVM_REQ_VMX_*/KVM_OPT_VMX_* sets so we should be good here
-> (unless I screwed up, of course).
->
-> There's going to be some changes though. E.g this series was started by
-> Anirudh's report when KVM was exposing SECONDARY_EXEC_TSC_SCALING while
-> running on KVM and using eVMCS which doesn't support the control. This
-> is a bug and I don't think we need and 'bug compatibility' here.
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
 
-You cannot force VM termination on a kernel upgrade. On live migration
-from an older kernel, the new kernel must be willing to accept the
-suspended state of a VM that was running under the older kernel. In
-particular, the new KVM_SET_MSRS must accept the values of the VMX
-capability MSRS that userspace obtains from the older KVM_GET_MSRS. I
-don't know if this is what you are referring to as "bug
-compatibility," but if it is, then we absolutely do need it.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v5.20.
 
-> Another change is that VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL/
-> VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL will now be filtered out on the
-> "broken" CPUs (the list is in setup_vmcs_config()). I *think* this is
-> also OK but if not, we can move the filtering to vmx_vmentry_ctrl()/
-> vmx_vmexit_ctrl().
->
-> --
-> Vitaly
->
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

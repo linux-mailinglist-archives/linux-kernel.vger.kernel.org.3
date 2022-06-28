@@ -2,169 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489F155EA59
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E44A755E9DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232932AbiF1QyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 12:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
+        id S233604AbiF1QfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 12:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236564AbiF1Qwp (ORCPT
+        with ESMTP id S232042AbiF1QeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:52:45 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2049.outbound.protection.outlook.com [40.107.244.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE59821E18;
-        Tue, 28 Jun 2022 09:51:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n+8PYzusqxYvR4l29TFgunYYIiB/h+i2+brkMiSmw+p+k2+uf8YEKTgaQp4bUqacK5WXfO6P1J6ivTYdnvlf5OOhynxHRGHX665atgukWFuE0UGaUwdfgMVd7/TLYb4VLbQEfzmW6LV4vNNmLww6zi1G3B8XqsZ3UzELgeTnWPg/EAdP6QNIFsdNnq0/lkkhU0xm57P3vIHvBF+xnZbf9WXDDYHK7lsBHTexAVSLV7wxZRzXU2b2VyLbfvBVaqRsI3RWQGS2Ok6o2rI/LXD7aJqNQ5VZuja6P2xXS34ghRwpWjhPbA1pau3ruYNKWwRq3Yv83iN8FmStIjzvHMBwCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QJ72MQ+1Ex+mmjjxNHxLHh+EokjldREt+Y+HQIcwi9k=;
- b=QMEKqIE+aGnlz9POr/9CElfH1LJBIdypXrZY6ivGlQuN4DYCTo63sibzvXVvlSL88RZG20XGf4+SxEYaBrPrlTSfYCGZEKgzQzN9qeoDR2UspoU04sBjNNBZGrjjDozXjGfWKPw73N34dT+f1G3JYhWVqwSqErabY4cdNXGjeswa/PBr9/NfddkUuEL9hC7ztAYjD2LESLByoWMvITCwm+UziUTrAuOuMRm1GMXxS4B9T/IF5SWZ35DpWcayQeHGogDKH9mDbIDO1buz3xainGINfF9acQtwP4krckMqSwUNIvoMLYQpsRrHexK77KYllIYpPlNaLiM+Qxx4wQosDw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QJ72MQ+1Ex+mmjjxNHxLHh+EokjldREt+Y+HQIcwi9k=;
- b=IV+Jj9yNinJKCcF4SWoCyynK1iOwlJQxW02139ZTxwFE9f9h+4Gc2B0AHKKnyTAfErNtB1uOGM9BN+VtLzkdjxcTIc1S+6PwYU92eQT/C9YlQVDlZQaEjzIfYsKjVk8zs/CdxHvvNNgv/uF7niififJ0J3y66pyebEI5K/xFiOo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-Received: from PH0PR05MB8703.namprd05.prod.outlook.com (2603:10b6:510:bd::5)
- by SJ0PR05MB7675.namprd05.prod.outlook.com (2603:10b6:a03:2ca::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.13; Tue, 28 Jun
- 2022 16:51:23 +0000
-Received: from PH0PR05MB8703.namprd05.prod.outlook.com
- ([fe80::dc16:cc4c:985a:89ec]) by PH0PR05MB8703.namprd05.prod.outlook.com
- ([fe80::dc16:cc4c:985a:89ec%9]) with mapi id 15.20.5395.014; Tue, 28 Jun 2022
- 16:51:23 +0000
-From:   Ajay Kaher <akaher@vmware.com>
-To:     bhelgaas@google.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com
-Cc:     x86@kernel.org, hpa@zytor.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        rostedt@goodmis.org, namit@vmware.com, srivatsab@vmware.com,
-        srivatsa@csail.mit.edu, amakhalov@vmware.com, anishs@vmware.com,
-        vsirnapalli@vmware.com, akaher@vmware.com, er.ajay.kaher@gmail.com
-Subject: [PATCH] MMIO should have more priority then IO 
-Date:   Tue, 28 Jun 2022 21:59:21 +0530
-Message-Id: <1656433761-9163-1-git-send-email-akaher@vmware.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: BY5PR13CA0014.namprd13.prod.outlook.com
- (2603:10b6:a03:180::27) To PH0PR05MB8703.namprd05.prod.outlook.com
- (2603:10b6:510:bd::5)
+        Tue, 28 Jun 2022 12:34:20 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DD32AC75
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:31:11 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id c4so11531101plc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:31:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cF+v3xaxVEy+SunxyV5FbyGgHqR8srXqFsaqFoR1tTU=;
+        b=Tb/AbhsmkTF7L1MJTGV0JTBgTb/yNK3WWoLZ7cxqxeX0H40RWvO2doFYqpmty5HW4c
+         ahFhGrzB5cEduL5dW4ye6mnhLsns5ytFNgb5mJTII1gAaHg/bUzoYdiw1q/f2/stV8DS
+         AnA2CQaXiTGHZoZ91WwVazQfM95SbI0OsdBROcUoo14G3RU4bMRLKbm8WGm7pVYS5y4a
+         09vrVF3mPTahGEch3yZc4GmUV9uUdlcMzms0cFgRGPmDRvfXvXwf2yym96KH10VNb7NY
+         Dto0Z66BEsEsaRc6+vT+XP+yNbN0QUD5yNkMC6ft09AL7sc+M5BEhoDa8em5isayK9GU
+         0jpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cF+v3xaxVEy+SunxyV5FbyGgHqR8srXqFsaqFoR1tTU=;
+        b=7X+Jde15OHpFwvyc/X0y8rJoGSrokMI5HvTAAEBq9++pC8x1gWNSwyWmZqoX+0eOSC
+         2UxMiVBKx3qg0uh+Y8HA/Bih32fAp5hE/moC8A+v5OxDJAW82rJN8zYSePgHaxx+K5J1
+         avn/qnApir0jj5XY22yKCG8y6IbQW0pKtzAp5tWWim1oCUkc2UXEM+80xyfD7+D4eOjM
+         kXLo6BnYTl8mTYSjqUOvbnwyA0uJnCJkleO2rfEYBs6LZd4pX0f+m5ReUXf5nIZ6to6P
+         3SLyXdi43Jjo9QwJ5vegIsYQenl6s7B75RRSYMRlX+pfSeolr4aORYN+FRpjVIf5aEul
+         QFmQ==
+X-Gm-Message-State: AJIora/FtXRMFBKC4gZSP+myApBvmyfLuP3Xtnt3QU88j49NmlAHmrDg
+        glhq1DtVox780BSzmeuzn8AhjBwd0HBkaQ==
+X-Google-Smtp-Source: AGRyM1vjZ+5N/f77O5qPXoiVUX4pJGxwAQyaaZJRH8JaYvnupRlQYS0vdL1n6f3pazJlx6c2NeH+PA==
+X-Received: by 2002:a17:903:1c4:b0:16b:7928:95ce with SMTP id e4-20020a17090301c400b0016b792895cemr4459758plh.158.1656433870761;
+        Tue, 28 Jun 2022 09:31:10 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id i3-20020a170902cf0300b0016a0ac06424sm9576140plg.51.2022.06.28.09.31.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 09:31:09 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 10:31:07 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Hangyu Hua <hbh25y@gmail.com>, bjorn.andersson@linaro.org,
+        gregkh@linuxfoundation.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] rpmsg: fix possible refcount leak in
+ rpmsg_register_device_override()
+Message-ID: <20220628163107.GA1942439@p14s>
+References: <20220624024120.11576-1-hbh25y@gmail.com>
+ <20220624173621.GC1736477@p14s>
+ <47db0cd8-c940-6e74-f8dc-8e3931e13d80@linaro.org>
+ <CANLsYkzT5ZROReZNQ_eYL-r49ijaZYZ5TzdMpqy1RK0_hvW3_Q@mail.gmail.com>
+ <0bbee169-6fdc-b50e-87f7-1551dac821e2@linaro.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c0dd696f-0059-4f86-956d-08da59266ee8
-X-MS-TrafficTypeDiagnostic: SJ0PR05MB7675:EE_
-X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cUx4N0SH5CyOsbvvz3MR4Fuxk2yUVwsy2mBIsJcRjA9f+n7ceNhRNsMY54tSv5jVzv8Gwk24oS/HIxr8BJe081GEjJ73VHm92/f+OMSqL1sidIT0mJadHJJ1Bp0pkxr7Q30lVUJ0+jvE6dwF4I4TNVIM0zJ3pFV5P1XwrJfDuxit7WIKYJ2f2rYt7JeZRp+2WMaH8T7VoXjMewaemcHOY9AlfF2yGCsqp/3deGkw0LK077E4Ks+XfIWgEVZaUbc4fxB1ymwEaaKCzM3ABa++vdi4KqHVYNRRiB/xzcXGqMRuqVZ0mr5rZg6753xsa0/T6O7avPPl6ETRC7Q20YJFz+IPlKIQGPWeZW8rFSAgkoVijNVuLKHeZhIh3dL8pCTld7NCdhUBFgzPDgRuPq0ib5P/rTpC6ulpHetd++CibnoOM+/Jo3BBXE8XsStycUEivf6lWnmoRR8gbOt+LyVuVeZCiawYEtzJjL5NdQWkf08IpJQc0I4zGetG1LLhKERZwO3B6MWV9LZ/jU36kuL5BrvzT0cfKeCPoUY/Ss6SWX9u19Td1v1phQDwHise5WLsGIcJbr/HvcnXyn0En1AZmCHx8evuFpgIOXupBQYdqDRzTThZqQ7Jbumu7yWQCQzUiA4m/gVS5Kwda4fNT2nRxRKal4/NvDd4Lnwt/9HkXYzdBXrF6r8AnJaObOBHnGh/n8jBD3mFE81JG4fOsloqk8GeJKwxkxsPU+6mm0x7SSyk7iwH4lOmJW5VNLctbBjSE57IQwcA9kz1FTLe+3YJxCmkai9YN/AninRBW9kslNE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR05MB8703.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(396003)(39860400002)(136003)(376002)(7416002)(6506007)(2906002)(66946007)(8676002)(66476007)(52116002)(4326008)(41300700001)(8936002)(26005)(478600001)(66556008)(38100700002)(38350700002)(86362001)(2616005)(5660300002)(6512007)(4743002)(186003)(36756003)(6486002)(316002)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cTZgb+36/LVmqUmGQpt4heDtxZm4u7XPJNiHoGt8Wa+jTLAnsoWyq0r7Gmer?=
- =?us-ascii?Q?kTyBqO/mzTzAvmlKRuylGuMwPnZyeFJ19Nklwpq4CI9TvLsrQUVb5tS5hFs5?=
- =?us-ascii?Q?pjR+BUxG6nKaiw8tg4rQ1kWdbLyYr6VoR4fpCU15PqDabfxVKKomMfjwBBnC?=
- =?us-ascii?Q?zP/hgVAdGEQcWb5B0YmzAZBH3gDZ6nzbkJuzP/GzV+MHLVBpr7b6k9A5OadV?=
- =?us-ascii?Q?gzQsubkuvvykydsqOpodM8sDGVafsDoegErolTvMYgFeRcaGfCJWvHogQ3Kw?=
- =?us-ascii?Q?RTo3DvGxnV7g59z46Nn7XaAuzseKQSMjfWxyv1+k7KTTSpLVFtXxuOE3U3Wm?=
- =?us-ascii?Q?wlthN7fcbrkW+e5zF5mr7oCfkHwuyrOmpFA3D9O9aQWXU8PTXKGyYkfPdckR?=
- =?us-ascii?Q?vqsFw4KNKJ5YGF9x2VNZsQyg0NYvD9Qj/O0bKkgUXo/dZEuffjt9vIWTA9D+?=
- =?us-ascii?Q?QWmyi/Ly7lmELmPAiJAZG57AZjylkRf55v3WvLCAr7dSof66EFRemSb9LCEK?=
- =?us-ascii?Q?9UhMtv3jR6zR7ev3D2l3t+g39+VUhAkei3NEMhEbg2a4pVJfO/Tn4lvD/put?=
- =?us-ascii?Q?Jxc5+qN5g1t2nkkhCHZaxube5ScU0/Wto7yGNCeSqQJM/oXh2TqqsJ0aJ2Om?=
- =?us-ascii?Q?jwZfeA4xsloWBH8i7Fhhly033Dc85qco67KTotX+3CsQAszCWKVL1GCLZeG5?=
- =?us-ascii?Q?kJisPiTNgalpJ4XYrse5u0fBJVSpsCZFY+hVQtP1H0eCuBWXRLKhOUaFey2m?=
- =?us-ascii?Q?yuGfDfF4Lx7se3mwXDDaFV8+BRSJf0t6dTKE16/fOPujo1mHdu2CtjLdNToI?=
- =?us-ascii?Q?PhJlu0LrOyzZ6IydHCBShMeIyq5+ID6o6FivV8n+YgVaCIKBMEAmoDhpxxia?=
- =?us-ascii?Q?iCsaQPnkRmGz8Mp8UJJUDnXGW8Z/hv2Mqpdo1nZZt0PUNynfsRzHjQrrlFD9?=
- =?us-ascii?Q?0Nsn0SdRoJdMcAKILPnmJMpOQO7r1rFN0VhjEbyKRueWhg0FSPsCJxfeokeQ?=
- =?us-ascii?Q?GdKAHBA1yq9T4021QC5TqSbkpSBDg7t0h9rk9OzWiEUkHKHizk3Ksjs49z4w?=
- =?us-ascii?Q?cNbD8s70QCrtg8bMD9dYC1/qP/cJWEVdy1JOw0US41Vp7UnSWH/pGEsfUcoj?=
- =?us-ascii?Q?6LSr6tIwZbFRe8P0Ba1YmD3V2fGq/VgAe/NbqOk6Qx/VZzhjQlL2nBtRnheI?=
- =?us-ascii?Q?FSiYhSQnL9dTdcwnxpLn0QC5Np6Oge3BcJmlDxhmva4OkwzQaSCxMDXvaHMS?=
- =?us-ascii?Q?aR0PpT7gIg3F2XBCMVusy2ywkyn/yvbO0IJSbPuKix2WvctCOLKGo4ffup+K?=
- =?us-ascii?Q?Km4QvR/Ougyrz3HagQeh7wwzW4oeuQxc8/dWsV+u/4fSahVuOytD+F1duunZ?=
- =?us-ascii?Q?9nvyN8Uad5Zc33pxYtCh86CXuFgpvTGpBFUC6JpDhLgBQIhJExns/eVx+6le?=
- =?us-ascii?Q?7X5KXdqaCmEGYRZ/S6DVwRIyj1vwX/+HLaZYCbs7NGlNdFiRO0TWB7UZ4/G8?=
- =?us-ascii?Q?FmLR7H+3zYl6IEtNfivtDxVvdTSTjDbxeaY2mcymAZgNmy3C1/I8CTqIjO2r?=
- =?us-ascii?Q?E/AQSXC8OuPS8g8WU7v9Y7T+NL7bIB6fsbJivEdR?=
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0dd696f-0059-4f86-956d-08da59266ee8
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR05MB8703.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 16:51:23.2274
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RxEHav1X3wJHjgFkfaK5V5CXAFBzgWiwags7j5CMvXd1AgEMZJf4CuIqdzceMQdyFmbStOpDs2jj2zjIV3h25g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR05MB7675
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0bbee169-6fdc-b50e-87f7-1551dac821e2@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Port IO instructions (PIO) are less efficient than MMIO (memory
-mapped I/O). They require twice as many PCI accesses and PIO
-instructions are serializing. As a result, MMIO should be preferred
-when possible over PIO.
+On Sat, Jun 25, 2022 at 09:40:36PM +0200, Krzysztof Kozlowski wrote:
+> On 24/06/2022 20:43, Mathieu Poirier wrote:
+> > On Fri, 24 Jun 2022 at 11:45, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 24/06/2022 19:36, Mathieu Poirier wrote:
+> >>> On Fri, Jun 24, 2022 at 10:41:20AM +0800, Hangyu Hua wrote:
+> >>>> rpmsg_register_device_override need to call put_device to free vch when
+> >>>> driver_set_override fails.
+> >>>>
+> >>>> Fix this by adding a put_device() to the error path.
+> >>>>
+> >>>> Fixes: bb17d110cbf2 ("rpmsg: Fix calling device_lock() on non-initialized device")
+> >>>
+> >>> This is funny... Neither Bjorn nor I have reviewed this patch...
+> >>
+> >> It was a fix for commit in Greg's tree and Greg's pick it up after a
+> >> week or something. I am not sure if that's actually funny that Greg has
+> >> to pick it up without review :(
+> >>
+> > 
+> > The patch was sent out on April 19th and committed 3 days later on
+> > April 22nd.  Is 3 days the new patch review time standard?
+> 
+> Neither 19th, nor 22nd are correct. The patch which you set you never
+> reviewed, so commit bb17d110cbf2 was sent on 29th of April:
+> https://lore.kernel.org/all/20220429195946.1061725-1-krzysztof.kozlowski@linaro.org/
+>
 
-Bare metal test result
-1 million reads using raw_pci_read() took:
-PIO: 0.433153 Sec.
-MMIO: 0.268792 Sec.
+Twitchy fingers... Those dates are for commit 42cd402b8fd4, which is referenced
+by bb17d110cbf2.
 
-Virtual Machine test result
-1 hundred thousand reads using raw_pci_read() took:
-PIO: 12.809 Sec.
-MMIO: took 8.517 Sec.
+The end result is the same, that is patches related to the remoteproc/rpmsg
+subsystems (or any subsystem) should not be committed before their maintainers
+have the opportunity to review them.
 
-Signed-off-by: Ajay Kaher <akaher@vmware.com>
----
- arch/x86/pci/common.c          |  8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/pci/common.c b/arch/x86/pci/common.c
-index 3507f456f..0b3383d9c 100644
---- a/arch/x86/pci/common.c
-+++ b/arch/x86/pci/common.c
-@@ -40,20 +40,20 @@ const struct pci_raw_ops *__read_mostly raw_pci_ext_ops;
- int raw_pci_read(unsigned int domain, unsigned int bus, unsigned int devfn,
- 						int reg, int len, u32 *val)
- {
-+	if (raw_pci_ext_ops)
-+		return raw_pci_ext_ops->read(domain, bus, devfn, reg, len, val);
- 	if (domain == 0 && reg < 256 && raw_pci_ops)
- 		return raw_pci_ops->read(domain, bus, devfn, reg, len, val);
--	if (raw_pci_ext_ops)
--		return raw_pci_ext_ops->read(domain, bus, devfn, reg, len, val);
- 	return -EINVAL;
- }
- 
- int raw_pci_write(unsigned int domain, unsigned int bus, unsigned int devfn,
- 						int reg, int len, u32 val)
- {
-+	if (raw_pci_ext_ops)
-+		return raw_pci_ext_ops->write(domain, bus, devfn, reg, len, val);
- 	if (domain == 0 && reg < 256 && raw_pci_ops)
- 		return raw_pci_ops->write(domain, bus, devfn, reg, len, val);
--	if (raw_pci_ext_ops)
--		return raw_pci_ext_ops->write(domain, bus, devfn, reg, len, val);
- 	return -EINVAL;
- }
- 
--- 
-2.30.0
-
+> And committed on 6 of May, which gives some time for review. Where did
+> you see the other dates?
+> 
+> 
+> Best regards,
+> Krzysztof

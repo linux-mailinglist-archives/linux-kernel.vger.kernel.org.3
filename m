@@ -2,220 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A6F55E8FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69BCD55E8A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347890AbiF1PeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
+        id S1347862AbiF1Pek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347889AbiF1PeH (ORCPT
+        with ESMTP id S1347929AbiF1Peb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:34:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA6A2C656;
-        Tue, 28 Jun 2022 08:34:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE69B6157F;
-        Tue, 28 Jun 2022 15:34:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51223C3411D;
-        Tue, 28 Jun 2022 15:34:04 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="M6VMqQUp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656430442;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=y0lZ4KUV8UB2MGHdDpLNiE999LZukoHN15YiJs71eY4=;
-        b=M6VMqQUpNH3bgXpNntMSJk0EUmeXeiOCsJAd/6wU05hKKMEZF0ZT28RF0MCbQKGI+IwDHm
-        znP2O9feIB5Cj7qguw0NgXnl+HXGYDGve5Lc7eX4S8v9JyRUGUyXKDISN4xK04oIyo7Dba
-        Zt1VIpNZ1DxYR2GD1LOZpvv/AINVYhE=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 532837ab (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 28 Jun 2022 15:34:02 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        robh@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Kees Cook <keescook@chromium.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Will Deacon <will@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH] dt-bindings: chosen: remove
-Date:   Tue, 28 Jun 2022 17:33:54 +0200
-Message-Id: <20220628153354.870543-1-Jason@zx2c4.com>
-In-Reply-To: <YrserfmdD+QH+y/X@zx2c4.com>
-References: <YrserfmdD+QH+y/X@zx2c4.com>
+        Tue, 28 Jun 2022 11:34:31 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03092CCB9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:34:27 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SAPO2I011111;
+        Tue, 28 Jun 2022 10:34:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=h+s9sft2OOTYhSCEtjVTTS2VSJSR6LqopQ6K+pEwIRY=;
+ b=AtplLyi05zdDxYYYLThPcpN9i8Bxhxt9LTFfnKSl0gxy/sLXiWTZlmkuB+yAnR1A0Viy
+ +s7OsIWVwHcxpVuXhwXT2evs5nVF1C1ndRt4eIKdjJQ8AZn7mNRQxwdVNX3hJ8WU5QHc
+ +2ShX/kkaIWRFteDwDyurQ0DFUuNCZGdAgjSntSEBuyf9SlSBvCSro3POnbh9HLvKsBG
+ AV2Ns5MwOiYYRBXphznOorzHWLIw6NRvoDUYjA9ZRMIwooo+TKsTb4RRzgrn8qnJXdFL
+ UjMf9nG4zDe6iZ/aE0kK5g4zEDBp8QOVkn5cqcNmdzF044Fl8KSk6rdimubCvGRwAFzy 5Q== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3gwys2mat2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 28 Jun 2022 10:34:11 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 28 Jun
+ 2022 16:34:09 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
+ Transport; Tue, 28 Jun 2022 16:34:09 +0100
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 46FF72A1;
+        Tue, 28 Jun 2022 15:34:09 +0000 (UTC)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <broonie@kernel.org>
+CC:     <lgirdwood@gmail.com>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/4] ASoC: wm5102: Fix event generation for output compensation
+Date:   Tue, 28 Jun 2022 16:34:06 +0100
+Message-ID: <20220628153409.3266932-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: JDtivHhNZ4rrKEk9EKjZzAiA3ElKlLOK
+X-Proofpoint-GUID: JDtivHhNZ4rrKEk9EKjZzAiA3ElKlLOK
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Apparently this is no longer maintained and undesired. Remove it.
+The output compensation controls always returns zero regardless of if
+the control value was updated. This results in missing notifications
+to user-space of the control change. Update the handling to return 1
+when the value is changed.
 
-Link: https://lore.kernel.org/lkml/c8dddfe6-6385-ed34-e789-9f845c8a32bd@linaro.org/
-Link: https://lore.kernel.org/lkml/CAL_Jsq+uSdk9YNbUW35yjN3q8-3FDobrxHmBpy=4RKmCfnB0KQ@mail.gmail.com/
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
- Documentation/devicetree/bindings/chosen.txt | 137 -------------------
- 1 file changed, 137 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/chosen.txt
+ sound/soc/codecs/wm5102.c | 21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/chosen.txt b/Documentation/devicetree/bindings/chosen.txt
-deleted file mode 100644
-index 1cc3aa10dcb1..000000000000
---- a/Documentation/devicetree/bindings/chosen.txt
-+++ /dev/null
-@@ -1,137 +0,0 @@
--The chosen node
-----------------
--
--The chosen node does not represent a real device, but serves as a place
--for passing data between firmware and the operating system, like boot
--arguments. Data in the chosen node does not represent the hardware.
--
--The following properties are recognized:
--
--
--kaslr-seed
-------------
--
--This property is used when booting with CONFIG_RANDOMIZE_BASE as the
--entropy used to randomize the kernel image base address location. Since
--it is used directly, this value is intended only for KASLR, and should
--not be used for other purposes (as it may leak information about KASLR
--offsets). It is parsed as a u64 value, e.g.
--
--/ {
--	chosen {
--		kaslr-seed = <0xfeedbeef 0xc0def00d>;
--	};
--};
--
--Note that if this property is set from UEFI (or a bootloader in EFI
--mode) when EFI_RNG_PROTOCOL is supported, it will be overwritten by
--the Linux EFI stub (which will populate the property itself, using
--EFI_RNG_PROTOCOL).
--
--stdout-path
-------------
--
--Device trees may specify the device to be used for boot console output
--with a stdout-path property under /chosen, as described in the Devicetree
--Specification, e.g.
--
--/ {
--	chosen {
--		stdout-path = "/serial@f00:115200";
--	};
--
--	serial@f00 {
--		compatible = "vendor,some-uart";
--		reg = <0xf00 0x10>;
--	};
--};
--
--If the character ":" is present in the value, this terminates the path.
--The meaning of any characters following the ":" is device-specific, and
--must be specified in the relevant binding documentation.
--
--For UART devices, the preferred binding is a string in the form:
--
--	<baud>{<parity>{<bits>{<flow>}}}
--
--where
--
--	baud	- baud rate in decimal
--	parity	- 'n' (none), 'o', (odd) or 'e' (even)
--	bits	- number of data bits
--	flow	- 'r' (rts)
--
--For example: 115200n8r
--
--Implementation note: Linux will look for the property "linux,stdout-path" or
--on PowerPC "stdout" if "stdout-path" is not found.  However, the
--"linux,stdout-path" and "stdout" properties are deprecated. New platforms
--should only use the "stdout-path" property.
--
--linux,booted-from-kexec
-------------------------
--
--This property is set (currently only on PowerPC, and only needed on
--book3e) by some versions of kexec-tools to tell the new kernel that it
--is being booted by kexec, as the booting environment may differ (e.g.
--a different secondary CPU release mechanism)
--
--linux,usable-memory-range
---------------------------
--
--This property holds a base address and size, describing a limited region in
--which memory may be considered available for use by the kernel. Memory outside
--of this range is not available for use.
--
--This property describes a limitation: memory within this range is only
--valid when also described through another mechanism that the kernel
--would otherwise use to determine available memory (e.g. memory nodes
--or the EFI memory map). Valid memory may be sparse within the range.
--e.g.
--
--/ {
--	chosen {
--		linux,usable-memory-range = <0x9 0xf0000000 0x0 0x10000000>;
--	};
--};
--
--The main usage is for crash dump kernel to identify its own usable
--memory and exclude, at its boot time, any other memory areas that are
--part of the panicked kernel's memory.
--
--While this property does not represent a real hardware, the address
--and the size are expressed in #address-cells and #size-cells,
--respectively, of the root node.
--
--linux,elfcorehdr
------------------
--
--This property holds the memory range, the address and the size, of the elf
--core header which mainly describes the panicked kernel's memory layout as
--PT_LOAD segments of elf format.
--e.g.
--
--/ {
--	chosen {
--		linux,elfcorehdr = <0x9 0xfffff000 0x0 0x800>;
--	};
--};
--
--While this property does not represent a real hardware, the address
--and the size are expressed in #address-cells and #size-cells,
--respectively, of the root node.
--
--linux,initrd-start and linux,initrd-end
-----------------------------------------
--
--These properties hold the physical start and end address of an initrd that's
--loaded by the bootloader. Note that linux,initrd-start is inclusive, but
--linux,initrd-end is exclusive.
--e.g.
--
--/ {
--	chosen {
--		linux,initrd-start = <0x82000000>;
--		linux,initrd-end = <0x82800000>;
--	};
--};
+diff --git a/sound/soc/codecs/wm5102.c b/sound/soc/codecs/wm5102.c
+index da2f8998df87a..b034df47a5ef1 100644
+--- a/sound/soc/codecs/wm5102.c
++++ b/sound/soc/codecs/wm5102.c
+@@ -680,12 +680,17 @@ static int wm5102_out_comp_coeff_put(struct snd_kcontrol *kcontrol,
+ {
+ 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
+ 	struct arizona *arizona = dev_get_drvdata(component->dev->parent);
++	uint16_t dac_comp_coeff = get_unaligned_be16(ucontrol->value.bytes.data);
++	int ret = 0;
+ 
+ 	mutex_lock(&arizona->dac_comp_lock);
+-	arizona->dac_comp_coeff = get_unaligned_be16(ucontrol->value.bytes.data);
++	if (arizona->dac_comp_coeff != dac_comp_coeff) {
++		arizona->dac_comp_coeff = dac_comp_coeff;
++		ret = 1;
++	}
+ 	mutex_unlock(&arizona->dac_comp_lock);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static int wm5102_out_comp_switch_get(struct snd_kcontrol *kcontrol,
+@@ -706,12 +711,20 @@ static int wm5102_out_comp_switch_put(struct snd_kcontrol *kcontrol,
+ {
+ 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
+ 	struct arizona *arizona = dev_get_drvdata(component->dev->parent);
++	struct soc_mixer_control *mc = (struct soc_mixer_control *)kcontrol->private_value;
++	int ret = 0;
++
++	if (ucontrol->value.integer.value[0] > mc->max)
++		return -EINVAL;
+ 
+ 	mutex_lock(&arizona->dac_comp_lock);
+-	arizona->dac_comp_enabled = ucontrol->value.integer.value[0];
++	if (arizona->dac_comp_enabled != ucontrol->value.integer.value[0]) {
++		arizona->dac_comp_enabled = ucontrol->value.integer.value[0];
++		ret = 1;
++	}
+ 	mutex_unlock(&arizona->dac_comp_lock);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static const char * const wm5102_osr_text[] = {
 -- 
-2.35.1
+2.30.2
 

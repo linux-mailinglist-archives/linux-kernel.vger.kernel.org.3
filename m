@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB4C55E43E
+	by mail.lfdr.de (Postfix) with ESMTP id E613B55E441
 	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346260AbiF1NQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40096 "EHLO
+        id S231203AbiF1NQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346229AbiF1NQd (ORCPT
+        with ESMTP id S1346241AbiF1NQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:16:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3924A313A9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:16:30 -0700 (PDT)
+        Tue, 28 Jun 2022 09:16:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FBE31907
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:16:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9D72B81E1B
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:16:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C392CC3411D;
-        Tue, 28 Jun 2022 13:16:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 847A361772
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:16:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19D4DC341CC;
+        Tue, 28 Jun 2022 13:16:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656422187;
-        bh=LNgGMXhW8cnZg8tTd5hoUafa4/fXakMANxgk+N3TK/s=;
-        h=From:To:Cc:Subject:Date:From;
-        b=B46BDeNgFKjt9qdT/vprNtroDmZ4EMwL85FIA9ExL++zS6Gr9hB5rAOst/KEsrsqA
-         7HR9pkQGp9a9RLpPvDBCUUH9LVz6/AQBtO4FEGB7cSRCUiS2WaPrMM/Qg0Y8ual4Xd
-         j8hqewQncxsuyQT5RWoy5wWFgP/ok+samJ3ehS1x4slbJ6Ua51xzyZ9T1BzdQc3Vy4
-         TqBA+5aVDvDsktkVlqMXb2wlhJwUaq52cI+fR1rOoICf9tuih8p0CP11uvO7FXf0oT
-         +ME6Evl0UPwdlraBpCSQarS2PEaXtH7accRTlLeNWlR7JeF08BHefo75FLHwChGiX6
-         Fz52sQ+ADEWPg==
+        s=k20201202; t=1656422191;
+        bh=TbV3AxRYc/xnNHiMMICF6mBjEdmNsICEJc79F/DGTgc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BbUogdOPiiW3Y7Qq5WPgg6dCFvdH7KWXYvmHTKf5E8HQ3EJVwaA2OIuGUu7v2HiAl
+         xGZLD9JjnKsX/893SVh3gLUq+VifU7IhEMABZU/I+KXzT52rRV74C488NCH+dpO+/Y
+         z2m9S7DddVSlmBk1IBJKloQk5EdHtxEBdbao5vCeLDlUwbPTz9Hh/WGaHjtHRG9nCi
+         rcT8HnluPIlRv9mcuU+HLl4uLUGee73dIGuG+Hn9j8bPaCIstDfL4UUXaCmi5L2l2c
+         ORObKxIojhPxI2DJLXvq81tumaw4rbUVVpQSEtFEAoni4Ioohu+lcG4yt2huXyPKtL
+         2EzZTjMSZKFpg==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -53,10 +53,12 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Paul Gortmaker <paul.gortmaker@windriver.com>,
         Uladzislau Rezki <uladzislau.rezki@sony.com>,
         Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH 00/20] rcu/context-tracking: Merge RCU eqs-dynticks counter to context tracking v5
-Date:   Tue, 28 Jun 2022 15:15:59 +0200
-Message-Id: <20220628131619.2109651-1-frederic@kernel.org>
+Subject: [PATCH 01/20] context_tracking: Remove unused context_tracking_in_user()
+Date:   Tue, 28 Jun 2022 15:16:00 +0200
+Message-Id: <20220628131619.2109651-2-frederic@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220628131619.2109651-1-frederic@kernel.org>
+References: <20220628131619.2109651-1-frederic@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -69,107 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the same as rcu:ctxt.2022.06.21a (no rebase) with minimal changes
-on the following patches:
+This function is not used and CT_WARN_ON() coupled with ct_state() is
+the preferred way to assert context tracking state values.
 
-* [06/20] fix missing function renames on xtensa (thanks Max Filippov, SOB added)
-* [09/20] fix missing Kconfig renames on xtensa (thanks Max Filippov, SOB added)
-          and also on loongarch.
-* [18/20] remove unecessary and buggy notrace from rcu_preempt_deferred_qs(). It's called
-          after intrumentation_begin() in EQS functions.
-
-git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-	rcu/ctxt.2022.06.27
-
-HEAD: cb0045adde39bba5ffc620a184b1685a869569d8
-
-Thanks,
-	Frederic
+Reported-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Nicolas Saenz Julienne <nsaenz@kernel.org>
+Cc: Marcelo Tosatti <mtosatti@redhat.com>
+Cc: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Cc: Yu Liao <liaoyu15@huawei.com>
+Cc: Phil Auld <pauld@redhat.com>
+Cc: Paul Gortmaker<paul.gortmaker@windriver.com>
+Cc: Alex Belits <abelits@marvell.com>
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
+ include/linux/context_tracking_state.h | 5 -----
+ 1 file changed, 5 deletions(-)
 
-Frederic Weisbecker (19):
-      context_tracking: Remove unused context_tracking_in_user()
-      context_tracking: Add a note about noinstr VS unsafe context tracking functions
-      context_tracking: Rename __context_tracking_enter/exit() to __ct_user_enter/exit()
-      context_tracking: Rename context_tracking_user_enter/exit() to user_enter/exit_callable()
-      context_tracking: Rename context_tracking_enter/exit() to ct_user_enter/exit()
-      context_tracking: Rename context_tracking_cpu_set() to ct_cpu_track_user()
-      context_tracking: Split user tracking Kconfig
-      context_tracking: Take idle eqs entrypoints over RCU
-      context_tracking: Take IRQ eqs entrypoints over RCU
-      context_tracking: Take NMI eqs entrypoints over RCU
-      rcu/context-tracking: Remove rcu_irq_enter/exit()
-      rcu/context_tracking: Move dynticks counter to context tracking
-      rcu/context_tracking: Move dynticks_nesting to context tracking
-      rcu/context_tracking: Move dynticks_nmi_nesting to context tracking
-      rcu/context-tracking: Move deferred nocb resched to context tracking
-      rcu/context-tracking: Move RCU-dynticks internal functions to context_tracking
-      rcu/context-tracking: Remove unused and/or unecessary middle functions
-      context_tracking: Convert state to atomic_t
-      MAINTAINERS: Add Paul as context tracking maintainer
+diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
+index ae1e63e26947..edc7b46376a6 100644
+--- a/include/linux/context_tracking_state.h
++++ b/include/linux/context_tracking_state.h
+@@ -41,12 +41,7 @@ static inline bool context_tracking_enabled_this_cpu(void)
+ 	return context_tracking_enabled() && __this_cpu_read(context_tracking.active);
+ }
+ 
+-static __always_inline bool context_tracking_in_user(void)
+-{
+-	return __this_cpu_read(context_tracking.state) == CONTEXT_USER;
+-}
+ #else
+-static __always_inline bool context_tracking_in_user(void) { return false; }
+ static __always_inline bool context_tracking_enabled(void) { return false; }
+ static __always_inline bool context_tracking_enabled_cpu(int cpu) { return false; }
+ static __always_inline bool context_tracking_enabled_this_cpu(void) { return false; }
+-- 
+2.25.1
 
-Paul E. McKenney (1):
-      context_tracking: Use arch_atomic_read() in __ct_state for KASAN
-
-
- .../RCU/Design/Requirements/Requirements.rst       |  10 +-
- Documentation/RCU/stallwarn.rst                    |   6 +-
- .../time/context-tracking/arch-support.txt         |   6 +-
- MAINTAINERS                                        |   1 +
- arch/Kconfig                                       |   8 +-
- arch/arm/Kconfig                                   |   2 +-
- arch/arm/kernel/entry-common.S                     |   4 +-
- arch/arm/kernel/entry-header.S                     |  12 +-
- arch/arm/mach-imx/cpuidle-imx6q.c                  |   5 +-
- arch/arm64/Kconfig                                 |   2 +-
- arch/arm64/kernel/entry-common.c                   |  14 +-
- arch/csky/Kconfig                                  |   2 +-
- arch/csky/kernel/entry.S                           |   8 +-
- arch/loongarch/Kconfig                             |   2 +-
- arch/mips/Kconfig                                  |   2 +-
- arch/powerpc/Kconfig                               |   2 +-
- arch/powerpc/include/asm/context_tracking.h        |   2 +-
- arch/riscv/Kconfig                                 |   2 +-
- arch/riscv/kernel/entry.S                          |  12 +-
- arch/sparc/Kconfig                                 |   2 +-
- arch/sparc/kernel/rtrap_64.S                       |   2 +-
- arch/x86/Kconfig                                   |   4 +-
- arch/x86/mm/fault.c                                |   2 +-
- arch/xtensa/Kconfig                                |   2 +-
- arch/xtensa/kernel/entry.S                         |   8 +-
- drivers/acpi/processor_idle.c                      |   5 +-
- drivers/cpuidle/cpuidle-psci.c                     |   8 +-
- drivers/cpuidle/cpuidle-riscv-sbi.c                |   8 +-
- drivers/cpuidle/cpuidle.c                          |   9 +-
- include/linux/context_tracking.h                   |  95 ++--
- include/linux/context_tracking_irq.h               |  21 +
- include/linux/context_tracking_state.h             | 113 +++-
- include/linux/entry-common.h                       |  10 +-
- include/linux/hardirq.h                            |  12 +-
- include/linux/rcupdate.h                           |  17 +-
- include/linux/rcutiny.h                            |   6 -
- include/linux/rcutree.h                            |   9 +-
- include/linux/tracepoint.h                         |   4 +-
- init/Kconfig                                       |   4 +-
- kernel/cfi.c                                       |   4 +-
- kernel/context_tracking.c                          | 617 +++++++++++++++++++--
- kernel/cpu_pm.c                                    |   8 +-
- kernel/entry/common.c                              |  16 +-
- kernel/extable.c                                   |   4 +-
- kernel/locking/lockdep.c                           |   2 +-
- kernel/rcu/Kconfig                                 |   2 +
- kernel/rcu/rcu.h                                   |   4 -
- kernel/rcu/tree.c                                  | 476 +---------------
- kernel/rcu/tree.h                                  |   8 -
- kernel/rcu/tree_exp.h                              |   2 +-
- kernel/rcu/tree_plugin.h                           |  38 +-
- kernel/rcu/tree_stall.h                            |   8 +-
- kernel/rcu/update.c                                |   2 +-
- kernel/sched/core.c                                |   2 +-
- kernel/sched/idle.c                                |  10 +-
- kernel/sched/sched.h                               |   1 +
- kernel/softirq.c                                   |   4 +-
- kernel/time/Kconfig                                |  37 +-
- kernel/time/tick-sched.c                           |   2 +-
- kernel/trace/trace.c                               |   8 +-
- 60 files changed, 934 insertions(+), 764 deletions(-)

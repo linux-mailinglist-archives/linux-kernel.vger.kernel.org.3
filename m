@@ -2,127 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A68755C76D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FAE655CAB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345078AbiF1L0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 07:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S1345497AbiF1L2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 07:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbiF1L0q (ORCPT
+        with ESMTP id S1345460AbiF1L2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 07:26:46 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2052.outbound.protection.outlook.com [40.107.22.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48F62CDF0;
-        Tue, 28 Jun 2022 04:26:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f0RDJfZw6vj54LRuO1G2LJv1UtSGWhl3Z31N28F9RomxfOqQz6rxL7wrywpXQPt9jqhMHC0omwwY7sthH/5LgKjwNrw2hvlEMFDw/DaUb/fXglISeFJwA1fn3T53FEljRYtkznNVA0pMsmLPMrWqQvVEoWFNrHuxZqIapC1YTdCqh9UiF5yb9lIOy8oW3c6eNsvKuPmuFNGrITsp7A/RRYMAAzAAayL+SAVcW9imRn0xf8ynQMdT1ryUWOF7l3qYmx7UbxpDa2NOyS584yqkQbIL4cwF+xPLnxKDpUhcRkqGzb35gAsA9TvFPXgyVC9VZWuUnC+xc0+xZHQshXS3ug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Jnz3xjMw36qokxaOvBCds+sOvQGnOugaz6/aUwKsx0k=;
- b=M7V7WqYH89yq3+1N9Gt4N5MQoVTj1BvHhN4Q0mv30v5nf9yqEcHTIJpq3Zj+cQcW6pxfI08+8jgvCAQf1X5Tqjjz3DnPnpcryCS/hUJhO9W6JwhG5l/TEh1MIZ/zWvq5K3utpF/BdgzAaUN5ierXo2SANufgwhMylhTvMOLfXkjL29I9cHz5IfEWxXj7yy38h6AixInvu00SRVa9eUoqMN02KPueH1JRJFvFE357PIt0wqJN+vq8It8oE++W4Pdp189mQrTfqm+TtDiTY4jAJAc3i9wpTWzCJlF5V8qIJJFhSOCE3jbot3I5WFU6v0dTJnHqr5/y4mTYpB45suKnFA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Jnz3xjMw36qokxaOvBCds+sOvQGnOugaz6/aUwKsx0k=;
- b=y4skIj+mPEFWriOHkbo+opD9I2VUpwq4BcY9sQBf/uAZTtekJkH3ZPb4aFVd9GB3AvXb/x/tEyfRyui8ZNN9ZEISw7qEf7Ds8giya88by6rUbcpEn+5BkSVR443NbqpIUyOY74Go4mPtWmJg1v9MU2sHQGbknznPcHEccGEpQIoZyTx9fHMb92yGEi5nYtk4RjAc0gL6AeUW6L4exffXlRm/S+sVlspzVn/snJTulL2AGIjU8p0PyHLDJuUYAVUSnavojcw3VFFAvfmlk/fFmA2ujXMe5+iXzi/D31Z1dj5F6E+eusOUtUfgYIebDwyorzP3ePvwRxJkk1KYc6s8Tg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16) by AM5PR0402MB2753.eurprd04.prod.outlook.com
- (2603:10a6:203:a0::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Tue, 28 Jun
- 2022 11:26:43 +0000
-Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- ([fe80::21d5:a855:6e65:cf5d]) by VI1PR0401MB2526.eurprd04.prod.outlook.com
- ([fe80::21d5:a855:6e65:cf5d%12]) with mapi id 15.20.5373.018; Tue, 28 Jun
- 2022 11:26:42 +0000
-Message-ID: <d7c3ce9f-d144-0083-162b-448570f2b5e5@suse.com>
-Date:   Tue, 28 Jun 2022 13:26:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] drivers/net/usb/r8152: Enable MAC address passthru
- support
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Franklin Lin <franklin_lin@wistron.corp-partner.google.com>
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        franklin_lin@wistron.com
-References: <20220628015325.1204234-1-franklin_lin@wistron.corp-partner.google.com>
- <YrrVT33IZ1hMkhw2@lunn.ch>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <YrrVT33IZ1hMkhw2@lunn.ch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS9PR04CA0033.eurprd04.prod.outlook.com
- (2603:10a6:20b:46a::8) To VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16)
+        Tue, 28 Jun 2022 07:28:09 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5073CE5C;
+        Tue, 28 Jun 2022 04:28:08 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id u12so25057171eja.8;
+        Tue, 28 Jun 2022 04:28:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=inDOpdCUQzR/8S+9fAaTVfT632HEMGCp6YCOVifU2kw=;
+        b=jc4hFd9jdYGeJvFHrv+UO/R44jwrsXG/F4bCuk6p2pdqGMD6t0HviouLBwPhg4MqLz
+         tkTnQeX0ybNvr8ftVO/yDIlPi320Lz2+Oy/2JewLRneLeI5ww/p7Iu2lIPmEsPFCya7S
+         qKT0JQ1Y3XOXW4iel31odz9r8fkulW0fz0kHPKHgXCpESS8nVOjs9YdYgGyJMeXVj0Qf
+         fDL4/JNAaDLk5KKQ1ia3lF27yjQqAhR/wBxFZOChWksQ2L16R4SZ5j9033XVExEPt0ni
+         HATqEwo6Z/Mc5JsxDJnNOFOUDoHhhWIX3OWG/k3bw9K2fA3H8lb22Jw3ST3iESjyjPZN
+         onvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=inDOpdCUQzR/8S+9fAaTVfT632HEMGCp6YCOVifU2kw=;
+        b=bziMTi96VCxl6aSu+zq5rXnnEYwfp3fAxFCtaVJ6v4tLzfPYEZp58HPNN8+RuEBbvz
+         EDUQs1BisQoBd33lWYlVHoDvbjJlVLgyS6y8ScXwZM1WNyLold2C5U8q6DPS6nh5FiYA
+         cKkbXaPki5auxGkjrgwRLoR0X9zvlTfA1WrE4AMGsgv7b8BVy4BWCbZoSIYxEnUIuqfM
+         qTmnR6oNJQ+XLZoePWPoNW87eTjs1X9OCPbbyEp/KaI+b8PZSYy42taKEc6SpAQcPPfI
+         G4VepGBE5MUVW4H4C5uClRWbeykcKPiClD203vB55/HqI8DRQ1vpmVJZPXE8Jqb0LlI0
+         2RNA==
+X-Gm-Message-State: AJIora9HI7qJEdFJ8LlGfprdCRnaTfjbdwfSdniOgprOybbmcTrPFFLW
+        bJpNw12zpjnEF0C2bCAtKZ7dZTUOkIE=
+X-Google-Smtp-Source: AGRyM1ur91VeMBh2tzN91CwCPguBdLKKSYQdo3d8X5J02oGrVOU4qUlP2KJPKAAD/IaJT61hEvc3kA==
+X-Received: by 2002:a17:907:94ce:b0:726:449e:73cc with SMTP id dn14-20020a17090794ce00b00726449e73ccmr16313870ejc.270.1656415686765;
+        Tue, 28 Jun 2022 04:28:06 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-095-114-061-215.95.114.pool.telefonica.de. [95.114.61.215])
+        by smtp.googlemail.com with ESMTPSA id h6-20020aa7cdc6000000b00435720b7a1csm9456318edw.20.2022.06.28.04.28.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 04:28:06 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tlanger@maxlinear.com,
+        rtanwar@maxlinear.com, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH RFC v1 0/8] intel-nand-controller: Fixes, cleanups and questions
+Date:   Tue, 28 Jun 2022 13:27:23 +0200
+Message-Id: <20220628112731.2041976-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5bd165b6-958d-472e-cb31-08da58f9138b
-X-MS-TrafficTypeDiagnostic: AM5PR0402MB2753:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: d/+JbpnbYkvHxUuVOhEZOQIyourDJZbjLU7yhP/47EQdy+e626fp5Gp2vgrQ8FsDqbfvazQOBMIvXHM3ubMKGucy1r5V1PZ+alMC0yIboBilme1zEKjedrOJmUwce5DW2lrMT9qcR89YM0BYkvJ1pMn6yFegJsblylWsa2p6jRM8udx6CBC2YYLAe/kL/ZbYHk1IcQgz6xhs8vFH3XrG9bueefp7b9kLh9NXab9qgSerLws1sbGvqvybl2DWxDTD9axZbvZrNmzVmsjIQcYLg/qSKAbQitNsGOC9FSynAzrRehyuyHkGbHqiJsC+6ZpLuffgsTt7AW7Npcrv1ybMfOTJpS/xTiRrAU5/VHNESz4XU2wCZR4i2kuZd19U9iFKvgrVf4MCVsmBTX3YM9+qqmjdZeVyWEX2pRbvUh3chG9T+8gs8ddupNcg/9IdEkOqTeZ8Wkpu70aIkMc6XPEfLgEvSxqW/95PgsPRL3RAOSlMvX5N3ql1uRBRinbnRepcBo5VBhUDRZaiX/pPNHwQZ7Bpu899OmflKeh+S53gzgmrzFIlJ3Fl4woeoJxe5H6Kd+GuLnE58WBwXbQ8mxegGdb04n25PSM+n+ecv/AjzgkTkZEoz5kndPUXbIkArOL8ED3HbPLtYPep6JZWapdlTuuTHR5vKVRucH3PPLRT7ax3Ep9iIRRDSpbYH+1cl8PfFQFrhzZ8M08yMYBqFKQpZl0paPzFLTOf+e3i0OLeGIKw+zOKtD7yLtoVKcvljjy2UJrViUp3pmDl20am+JLYJwvNnf2f8cQrIERVX/8jT7p7KP9SIKiW4kxJqhDTHVgc
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(366004)(376002)(346002)(136003)(396003)(66946007)(4326008)(66556008)(6486002)(31686004)(6506007)(2906002)(478600001)(110136005)(316002)(8676002)(2616005)(38100700002)(66476007)(186003)(41300700001)(36756003)(53546011)(5660300002)(7416002)(86362001)(4744005)(8936002)(6512007)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RnlpdFErNHZzNU9URzFOdThjb3RzLzRiMmttREJvMC9HZjl3bDFOMHg4V1lQ?=
- =?utf-8?B?MG9MVXJ2aUJXSXBNRHNBc2V4aU9OdGNIQkZ2bFkwUkhoc0ZjZkZYdnFVclJX?=
- =?utf-8?B?ejBQSXZiajEvQjZKbU1wRmZGRzdsb0xWRnowaktrYVgvVG4vd3phbkFEWjRV?=
- =?utf-8?B?OXBtUTQweFczQVZza2UrOCsydS9lSjB0OGtTeWdDUnB6cHdtc1NwcWFJU3RW?=
- =?utf-8?B?WVBlNGtkNys2RFhqRVprcjNYck4wUkpRRDJ0RDhQZWtHdnp3Ti9mRWl0N2R3?=
- =?utf-8?B?eUUyZE9ZTXZ2cWNsWUphVWx3VDlJWWJVdzJTVW8zK1djQnJ1bGdMbm92Rmhz?=
- =?utf-8?B?YTYwS0tpNEUwZGl6ZjhPb05XVUFMbFFmWnF5Qk9WNHgyWWNVSmx0ckkvTUQ2?=
- =?utf-8?B?R1dlVjhpZGYxUitvU2hnNEJLMUJnbFRQK1VkYUpSWDJoUW5PcnJpUGdyd1kr?=
- =?utf-8?B?UmVpUUZBSk9lKytXK01GLzZtQ3ZvMGZUalFYVDRsRlVBaUVaZS80WkIxS01l?=
- =?utf-8?B?bThXTzhIS2F5MjdtYVZ4Sy95S1RlSExBaG5TUzJwY0tzc2xKQzBTWUtoeitT?=
- =?utf-8?B?Z2xoNVlkRERteXVpcWZOWHA0U1RLT2VKZlQ1UEtaVmhCMmVob0xJREhkblVV?=
- =?utf-8?B?NzNwNENWOXpNVFpRTXlSOEZzb2N3Qm52aHBPdnlVeDVFTlR0V3ZKRG1kNmcw?=
- =?utf-8?B?UmpjSDc3WTFQOHhWbDZUbjRnNXVxK2I4SlcxYU9IZVNuNExjLzBtZjBHRXV0?=
- =?utf-8?B?V3VVYzBabXpBTHg4azhHcWN5Skd5bUVhUW5XWEhicHFYQ1dLdTFIYXZhWnB1?=
- =?utf-8?B?VUEzMmtmeUhiTEtiZlA1UDBXR1ArZ0xrL3REN3QzRXdYTFhpRjJ5MFFLRnJa?=
- =?utf-8?B?Y00xMlVnRGNjUHhFTGMrRGgyRWVzcjREellNbkt1bkovd2JEMHJqQ1l5T25x?=
- =?utf-8?B?cEd0MitCa2liemtKVC9temRzRG1rZUY1SW5lSHZCUTFFem1jQ1JXeERrUkht?=
- =?utf-8?B?aG51WUNvUnZHa002dllJYVZrRlRlZmg5TS9XWDZpdEFsdjBWUXVKY0xhNDE1?=
- =?utf-8?B?TXZjL0QralpPUzlzVndobTlrVmtDbnhocWFJdmRJRUlJZ2lKOWVEYmwvVHRT?=
- =?utf-8?B?YkZUZGd6bGhPb05TWjFaVFJ2ak5uVXFRVUxjVmMwOXkwdk9oT24xdXYrMS8z?=
- =?utf-8?B?cUxyV1NWbGk5cUlIaG5DeDJDY001OC9MZ0kwVElIQTZFLzljWEJZcGdkczRE?=
- =?utf-8?B?Y3lFTS9uenoxbHJvK2dWM2NpUTF0Z1U3VzRWU1dyNlBaY3MwV2tWQjNuSlE5?=
- =?utf-8?B?VFFSdDJ6VHh4ZnJYY3JFU2Q4RDRoT0V5STBudG0yaXVXZklqcm8ra0wvOHk5?=
- =?utf-8?B?TkxjNElqdEhtalBYaExrckVtc0tucXRvZUpzQjVMUHpZbjMzVU1KdzJwQll2?=
- =?utf-8?B?OHRiLzN0b2ZaTW15R3pGM0RLcXVxdXdKdjVuSHJ2R3NESnoyQzFTaTVEYkpm?=
- =?utf-8?B?YlVyTkJNSHNEeGo0cUFXQUpJak1NY292dDNKRVJYczdwWTNNc1RtNUlBdHJP?=
- =?utf-8?B?NkFFQ0RTQU55OElxNkg4NlN0TzBWOWlwc2MvZDllMzQzVUFzMjhzN1c2Smcw?=
- =?utf-8?B?bHUrZ1hQK3ZGSEZrMjNuSVNWNzFYUVhMM1lwNmZHNll3VHFOYlViMnU0T3F0?=
- =?utf-8?B?bDVUM05PR3ZCRDhycXdZcCtSbmdSd0h4OWp2aWg1dUs1YjFXN0FjNkRydjdr?=
- =?utf-8?B?aXdvYWRSWVBDRWhMdnVyL3g5UEdPVUl0YUVkL1FySVAwNXlSVXk4dWQrR2xv?=
- =?utf-8?B?L1dOU2hhT212M2VHT1NmUXpLSlJZOWd6cXR5dVJLNjlTVXkvWGpMc0pKd0VR?=
- =?utf-8?B?T3dZbUVJUFlDRDBlRTNCZFdxclZWZjNpK0lYR3NaZE5TSUJOZnQ3eFJxbVd4?=
- =?utf-8?B?RlZacldVbzdHOHl2TExGbm5kMWJJWmE2bGlRYS9tVDcvVC9aWnByZnZCRDUy?=
- =?utf-8?B?MzlhaTJmTVhteGxId044dkswYUdhR0hMUXE3a2twYzYzMEdFRG9LM3JXeTZo?=
- =?utf-8?B?UGJYNEorTGZBTkRpMUtpZVdWT0tZNnBMcmFvbDVqaE5qWWlQWnlSZGRES0Vh?=
- =?utf-8?B?N3lhOE9oWUw4NXl2MDc4VGo4VXdBU2d4eFBucWdPT2xXTmF3c2t0dnhMR2gw?=
- =?utf-8?Q?V4Vbv+ggQ74ZF97gGUrFvJ1ZfiXzzDxmVPQtvmpXKXSX?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5bd165b6-958d-472e-cb31-08da58f9138b
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2526.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 11:26:42.5938
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DYdQhjEr4DgS6520kkKgVcm0e/11+sRPXx8pHwq36Ux7a7Edo9132ETbWS05siHC80V1Bixn2xgDt0XcYIzF6g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0402MB2753
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,22 +70,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+I am trying to replace the xway_nand driver (which is still using the
+legacy NAND API) with the intel-nand-controller driver. The Intel LGM
+IP (for which intel-nand-controller was implemented) uses a newer
+version of the EBU NAND and HSNAND IP found in Lantiq XWAY SoCs. The
+most notable change is the addition of HSNAND Intel LGM SoCs (it's not
+clear to me if/which Lantiq SoCs also have this DMA engine).
+
+While testing my changes on a Lantiq xRX200 SoC I came across some
+issues with the intel-nand-controller driver. The problems I found are:
+1) Mismatch between dt-bindings and driver implementation (compatible
+   string, patch #1 and patch #4) and hardware capabilities (number of
+   CS lines, patch #1).
+2) The driver reads the CS (chip select) line from the NAND controller's
+   reg property. In the dt-bindings example this is 0xe0f00000. I don't
+   understand how this can even work on Intel SoCs. My understanding is
+   that it must be read from the NAND chip (child node).
+3) A few smaller code cleanups to make the driver easier to understand
+   (patches #5 to #8)
+4) I tried to understand the timing parameter calculation code but found
+   that it probably doesn't work on the Intel LGM SoCs either. The
+   dt-bindings example use clock ID 125 which is LGM_GCLK_EBU. So far
+   this is fine because EBU is the actual IP block for the NAND
+   interface. However, drivers/clk/x86/clk-lgm.c defines this clock as
+   a gate without a parent, so it's rate (as read by Linux) is always 0.
+   The intel-nand-controller driver then tries to calculate:
+     rate = clk_get_rate(ctrl->clk) / HZ_PER_MHZ
+   (rate will be 0 because clk_get_rate() returns 0) and then:
+     DIV_ROUND_UP(USEC_PER_SEC, rate)
+   (this then tries to divide by zero)
+
+Before this series is applied it would be great to have these questions
+answered:
+- My understanding is that the chip select line (reg property of the
+  NAND controller's child node) refers to the chip select line of the
+  controller. Let's say we have a controller with two CS lines. A NAND
+  flash chip (which a single chip select line) is connected to the
+  second CS line of the controller. Is my understanding correct that
+  the NAND chip device-tree node should get reg = <1> in this case?
+- Who from Maxlinear (who took over Intel's AnyWAN division, which
+  previously worked on the drivers for the Intel LGM SoCs) can send a
+  patch to correct the LGM_GCLK_EBU clock rate in
+  drivers/clk/x86/clk-lgm.c? Or is LGM dead and the various drivers
+  should be removed instead?
+- Who from Maxlinear can provide insights into which clock is connected
+  to the EBU NAND controller on Lantiq XWAY (Danube, xRX100, xRX200,
+  xRX300) SoCs as well as newer GRX350/GRX550 SoCs so that I can make
+  the intel-nand-controller work without hardcoded timing settings on
+  the XWAY SoCs?
+
+Due to the severity of issues 2) and 4) above I am targeting linux-next
+with this series. In my opinion there's no point in backporting these
+fixes to a driver which has been broken since it was upstreamed.
 
 
-On 28.06.22 12:17, Andrew Lunn wrote:
-> On Tue, Jun 28, 2022 at 09:53:25AM +0800, Franklin Lin wrote:
->> From: franklin_lin <franklin_lin@wistron.corp-partner.google.com>
->>
->> Enable the support for providing a MAC address
->> for a dock to use based on the VPD values set in the platform.
-> 
-> Maybe i'm missing it, but i don't see any code which verifies this
-> r8152 is actually in the dock, and not a USB ethernet dongle plugged
-> into some port of either the laptop or the dock itself.
+Best regards,
+Martin
 
-And it will happily assign the same MAC to multiple devices.
-I am afraid this patch needs some basic redesign.
 
-	Regards
-		Oliver
+Martin Blumenstingl (8):
+  dt-bindings: mtd: intel: lgm-nand: Fix compatible string
+  dt-bindings: mtd: intel: lgm-nand: Fix maximum chip select value
+  mtd: rawnand: intel: Read the chip-select line from the correct OF
+    node
+  mtd: rawnand: intel: Remove undocumented compatible string
+  mtd: rawnand: intel: Don't re-define NAND_DATA_IFACE_CHECK_ONLY
+  mtd: rawnand: intel: Remove unused nand_pa member from ebu_nand_cs
+  mtd: rawnand: intel: Remove unused clk_rate member from struct
+    ebu_nand
+  mtd: rawnand: intel: Use devm_platform_ioremap_resource_byname()
+
+ .../bindings/mtd/intel,lgm-nand.yaml          |  8 +++---
+ drivers/mtd/nand/raw/intel-nand-controller.c  | 28 +++++++++----------
+ 2 files changed, 17 insertions(+), 19 deletions(-)
+
+-- 
+2.36.1
 

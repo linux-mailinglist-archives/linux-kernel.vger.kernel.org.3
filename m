@@ -2,111 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2B655C395
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D07C055D795
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344237AbiF1JYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
+        id S229935AbiF1JXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344184AbiF1JYQ (ORCPT
+        with ESMTP id S1344236AbiF1JWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:24:16 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8103227FF8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:24:11 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id r66so11648526pgr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:24:11 -0700 (PDT)
+        Tue, 28 Jun 2022 05:22:38 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591611D314;
+        Tue, 28 Jun 2022 02:22:37 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id n10so10587417plp.0;
+        Tue, 28 Jun 2022 02:22:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tKsl/FyBMuyoLwv1dbdkul0HUkyTRTbta9GTd/qg648=;
-        b=kmlXP3rmTBXz5+4TJo//hmT2jB4MxmfWPs8iGQkHOlQBg+rsoPITThmujE5oZlqSyG
-         fWu7CtFdyuxFIJPn+ajdlR9dCr4S51oy4WvnwewRQZdfq7E+j0mQSwzwRjSgIvguexqG
-         fk3Qt+5y38+wp9WNkk+LMSBP0nc8nXemI+xT/4laLfvG8cccB66V1pbT2qVRKK9w1/7z
-         UOZnxF6q0kGOYIWB/RFeprJs1fGdcR+PEaOaKE3JNBOyceQycTM2BgCSUGxmZLe99u1C
-         xX95JGCPjlHlauI6BtduVriW4yYgE9uvq9xJq+thJNgUvkPEcXuFCutJkJYjKCnMEGKi
-         LBKA==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=/RPscv3+8g8rx4jXo23oMEeXPiuNo7BXGYwm+0AjXxs=;
+        b=To1tuJ6ezfSPRvfvYleOSb9lKKOhueWfZvhziXTEgCM9PUQE9mQ/xhT/GQKDwAx3+K
+         VCwO+26BUmVeT7tjCm709OpoNluVA5TQnQMiEBOnZWK6u0h7/2MQKkzXLs/QTBPtLd+t
+         uaEv/5/AD3aMBX+7rY78FIuqtsaMYfGOxtLmBiFL7mE3st9gwwEYdkaho0GnDCcCS+C6
+         4iEp8WxQDcPWTMDrt/QPMRtV+Nsnq3jb5UHhTTcpJedWllF567kplSbpUcwnVLjnZnAa
+         /5C8nTucMrmiuELtf9puqfjdHfigFReLoMkmJ6zo4PcDCEvdsypTDDGCHRq1camco5J+
+         ++lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tKsl/FyBMuyoLwv1dbdkul0HUkyTRTbta9GTd/qg648=;
-        b=iWgwWiT9CF5DU7dMuZve8Z75K49m0vmDrPzmxwJLUGOFZ7xDI9FsFtrKxlKs7BCjXe
-         gqkhNXXiRAavRer8U4WI4PXMOLeEmINiWg7SCNbugLCWgM+/VC/wxO2++0pjQsgqSCm9
-         kYKADxXzXfdLmK61cepjkxPfrtAXuUtJcvf0MW2V0qiUNx1npFhiKtVpwBNjCnEbbi+K
-         ssNLU8tXVjamMwUnCCNFuw0SD07N1NLLn+KCtBO3conL0Cg1no94QAka6wjuIbO8pGGJ
-         ChLl88fAismrdqRKpRRmr0K5cSgmxh+x9akNzNEyAklVE28/Br7wonJSNC/ok3uBCJJE
-         GvWA==
-X-Gm-Message-State: AJIora84oWEoyF/zFC9ePsBWXYHnzZPQtNqRNGXXLo2ZKLtA/cxcnLLv
-        RK04+1PIba8/hKDvYrrAINfa6Q==
-X-Google-Smtp-Source: AGRyM1tM8i7pH8lTHkass0ZEXT2Z2SMP+f0quLdvC0M1TlAQly/dZen+wWI1RJzBbMXck8L6xsm+yg==
-X-Received: by 2002:a63:a748:0:b0:40c:9a36:ff9a with SMTP id w8-20020a63a748000000b0040c9a36ff9amr16326337pgo.545.1656408251045;
-        Tue, 28 Jun 2022 02:24:11 -0700 (PDT)
-Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id mm9-20020a17090b358900b001ec729d4f08sm8780463pjb.54.2022.06.28.02.24.07
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=/RPscv3+8g8rx4jXo23oMEeXPiuNo7BXGYwm+0AjXxs=;
+        b=u82EjJlCCIcvKHmEVtCSWd6+mXAy1iqPxgQKMvYluUpYtFi6PmtvolOQkWCxY0vAI/
+         YLUBlP6gIc7FhqO0M2PvcG5v9I/YgpjXtLbXOqXwgnVLyq6cBbzB0/9uZTpR+Mgnpdew
+         zE3fu/dshLAm9jjiXIFIB5RvpFhgFGP8btvfa5jjIRxlZ+FhFSyGtpcFL1Nn0RHYIU8o
+         hOpMWqyKfPxXsaHQt0oUnIA2D7p6+Kr2kJZOSzvk8/yReIsJuWaenPf/kMJbGFq4Duc+
+         pGn3IQBNgeFWg06r9jBvEPhNlLwu/jT42or8Oy1tpYrpR8M77HmuTlf8QYSB5AfVHm1v
+         ZVsA==
+X-Gm-Message-State: AJIora/RqHoZziuODpDtdhb1mxlvzz0+/MGni9AIjxSRm3i0vIJR5nBV
+        ffN1UlIVP5BEM/ErWQxRBxU=
+X-Google-Smtp-Source: AGRyM1uO4shhe2Mc2XBAl9CUgG5Vgh4gk8x1TLLyeTMM88uYJk5piLi8VUIAziOH8v19ngumbUBM/A==
+X-Received: by 2002:a17:90b:1e0e:b0:1ec:b2a6:c9d0 with SMTP id pg14-20020a17090b1e0e00b001ecb2a6c9d0mr26659992pjb.230.1656408156659;
+        Tue, 28 Jun 2022 02:22:36 -0700 (PDT)
+Received: from localhost ([121.167.227.144])
+        by smtp.gmail.com with ESMTPSA id p9-20020a1709026b8900b0016372486febsm8688757plk.297.2022.06.28.02.22.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 02:24:10 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     mike.kravetz@oracle.com, david@redhat.com,
-        akpm@linux-foundation.org, corbet@lwn.net
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, duanxiongchun@bytedance.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH v2 5/8] mm: hugetlb_vmemmap: replace early_param() with core_param()
-Date:   Tue, 28 Jun 2022 17:22:32 +0800
-Message-Id: <20220628092235.91270-6-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.1 (Apple Git-133)
-In-Reply-To: <20220628092235.91270-1-songmuchun@bytedance.com>
-References: <20220628092235.91270-1-songmuchun@bytedance.com>
+        Tue, 28 Jun 2022 02:22:36 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 28 Jun 2022 18:22:33 +0900
+From:   Tejun Heo <tj@kernel.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     Vasily Averin <vvs@openvz.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
+Subject: Re: [PATCH cgroup] cgroup: set the correct return code if hierarchy
+ limits are reached
+Message-ID: <YrrIWe/nn5hoVyu9@mtj.duckdns.org>
+References: <186d5b5b-a082-3814-9963-bf57dfe08511@openvz.org>
+ <d8a9e9c6-856e-1502-95ac-abf9700ff568@openvz.org>
+ <YrpO9CUDt8hpUprr@castle>
+ <17916824-ba97-68ba-8166-9402d5f4440c@openvz.org>
+ <20220628091648.GA12249@blackbody.suse.cz>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220628091648.GA12249@blackbody.suse.cz>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After the following commit:
+On Tue, Jun 28, 2022 at 11:16:48AM +0200, Michal Koutný wrote:
+> The mkdir(2) manpage doesn't list EAGAIN at all. ENOSPC makes better
+> sense here. (And I suspect the dependency on this particular value won't
+> be very wide spread.)
 
-  78f39084b41d ("mm: hugetlb_vmemmap: add hugetlb_optimize_vmemmap sysctl")
+Given how we use these system calls as triggers for random kernel
+operations, I don't think adhering to posix standard is necessary or
+possible. Using an error code which isn't listed in the man page isn't
+particularly high in the list of discrepancies.
 
-There is no order requirement between the parameter of "hugetlb_free_vmemmap"
-and "hugepages" since we have removed the check of whether HVO is enabled
-from hugetlb_vmemmap_init(). Therefore we can safely replace early_param()
-with core_param() to simplify the code.
+Again, I'm not against changing it but I'd like to see better
+rationales. On one side, we have "it's been this way for a long time
+and there's nothing particularly broken about it". I'm not sure the
+arguments we have for the other side is strong enough yet.
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
----
- mm/hugetlb_vmemmap.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+Thanks.
 
-diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
-index 4d404d10c682..b55be6d93f92 100644
---- a/mm/hugetlb_vmemmap.c
-+++ b/mm/hugetlb_vmemmap.c
-@@ -423,14 +423,8 @@ static int vmemmap_remap_alloc(unsigned long start, unsigned long end,
- DEFINE_STATIC_KEY_FALSE(hugetlb_optimize_vmemmap_key);
- EXPORT_SYMBOL(hugetlb_optimize_vmemmap_key);
- 
--static bool vmemmap_optimize_enabled =
--	IS_ENABLED(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON);
--
--static int __init hugetlb_vmemmap_early_param(char *buf)
--{
--	return kstrtobool(buf, &vmemmap_optimize_enabled);
--}
--early_param("hugetlb_free_vmemmap", hugetlb_vmemmap_early_param);
-+static bool vmemmap_optimize_enabled = IS_ENABLED(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON);
-+core_param(hugetlb_free_vmemmap, vmemmap_optimize_enabled, bool, 0);
- 
- /*
-  * Previously discarded vmemmap pages will be allocated and remapping
 -- 
-2.11.0
-
+tejun

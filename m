@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 211C255DA44
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46CCC55D4B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243596AbiF1EjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 00:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
+        id S238993AbiF1Eiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 00:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbiF1Eiw (ORCPT
+        with ESMTP id S230241AbiF1Eiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 00:38:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6403B5;
-        Mon, 27 Jun 2022 21:38:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7796B81C18;
-        Tue, 28 Jun 2022 04:38:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB74AC3411D;
-        Tue, 28 Jun 2022 04:38:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656391129;
-        bh=nNr9e3DkyzRpISv/TUSNImIsSI6npMd6I/9ac777X9M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HkMp0hFeKN0v3bPMd8NBLbiynojp2wKWd9q+pSiqiMuT84hlmUFA6VZLCKjrQtqos
-         ZgM+MAnSPkjjWRvIUAEg/WGoRI6INZA5lfZ5tjLIrD5AQde9aOGffql8uFS9bbwY9M
-         YGXPaPWC8ExStSkoJ8RGw4w0obKQ7lGpEtw9MTH7pm6YabLdUVhr4ZJWw0EGaC0AG3
-         rGGe6IsQzw2Imdvc+7K+kruPQfKflk0IfagjgqnuQzfffF/9qrU2FRaqq9ppepA820
-         5Q8Dvdz4QX7k/RrV7CmzPHT0avyAG9ZtKDkBH8Nkap4/rjZxAnnFPltoMcgMutr5BX
-         rDt/xsYkYe0Xg==
-Date:   Mon, 27 Jun 2022 21:38:47 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Wentao_Liang <Wentao_Liang_g@163.com>,
-        "David S . Miller" <davem@davemloft.net>, jdmason@kudzu.us,
-        edumazet@google.com, pabeni@redhat.com, paskripkin@gmail.com,
-        jgg@ziepe.ca, liuhangbin@gmail.com, arnd@arndb.de,
-        christophe.jaillet@wanadoo.fr, netdev@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.18 24/53] drivers/net/ethernet/neterion/vxge:
- Fix a use-after-free bug in vxge-main.c
-Message-ID: <20220627213847.60d09e43@kernel.org>
-In-Reply-To: <20220628021839.594423-24-sashal@kernel.org>
-References: <20220628021839.594423-1-sashal@kernel.org>
-        <20220628021839.594423-24-sashal@kernel.org>
+        Tue, 28 Jun 2022 00:38:51 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE9D73B5;
+        Mon, 27 Jun 2022 21:38:50 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 6517B81BC;
+        Tue, 28 Jun 2022 04:33:38 +0000 (UTC)
+Date:   Tue, 28 Jun 2022 07:38:49 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Liang He <windhl@126.com>
+Cc:     linux@armlinux.org.uk, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm: mach-omap2: omap4-common: Fix refcount leak bug
+Message-ID: <YrqF2bXbxcYFsUy6@atomide.com>
+References: <20220617035548.4003393-1-windhl@126.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220617035548.4003393-1-windhl@126.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Jun 2022 22:18:10 -0400 Sasha Levin wrote:
-> From: Wentao_Liang <Wentao_Liang_g@163.com>
+* Liang He <windhl@126.com> [220617 06:51]:
+> In omap4_sram_init(), of_find_compatible_node() will return a node
+> pointer with refcount incremented. We should use of_node_put() when
+> it is not used anymore.
 > 
-> [ Upstream commit 8fc74d18639a2402ca52b177e990428e26ea881f ]
+> Signed-off-by: Liang He <windhl@126.com>
+> ---
+>  arch/arm/mach-omap2/omap4-common.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> The pointer vdev points to a memory region adjacent to a net_device
-> structure ndev, which is a field of hldev. At line 4740, the invocation
-> to vxge_device_unregister unregisters device hldev, and it also releases
-> the memory region pointed by vdev->bar0. At line 4743, the freed memory
-> region is referenced (i.e., iounmap(vdev->bar0)), resulting in a
-> use-after-free vulnerability. We can fix the bug by calling iounmap
-> before vxge_device_unregister.
+> diff --git a/arch/arm/mach-omap2/omap4-common.c b/arch/arm/mach-omap2/omap4-common.c
+> index 6d1eb4eefefe..e981bf57e64f 100644
+> --- a/arch/arm/mach-omap2/omap4-common.c
+> +++ b/arch/arm/mach-omap2/omap4-common.c
+> @@ -135,6 +135,7 @@ static int __init omap4_sram_init(void)
+>  		pr_warn("%s:Unable to allocate sram needed to handle errata I688\n",
+>  			__func__);
+>  	sram_pool = of_gen_pool_get(np, "sram", 0);
+> +	of_node_put(np);
+>  	if (!sram_pool)
+>  		pr_warn("%s:Unable to get sram pool needed to handle errata I688\n",
+>  			__func__);
 
-This is a dud see commit 877fe9d49b74 ("Revert
-"drivers/net/ethernet/neterion/vxge: Fix a use-after-free bug in vxge-main.c"")
+Here too sram_pool is used aftger of_node_put().
 
+Regards,
+
+Tony

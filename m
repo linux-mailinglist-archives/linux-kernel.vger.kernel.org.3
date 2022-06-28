@@ -2,97 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5D055F04A
+	by mail.lfdr.de (Postfix) with ESMTP id 6593555F04B
 	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 23:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbiF1VZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 17:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37180 "EHLO
+        id S231310AbiF1VZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 17:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiF1VZ3 (ORCPT
+        with ESMTP id S230497AbiF1VZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 17:25:29 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF273A730;
-        Tue, 28 Jun 2022 14:25:29 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id f190so7847319wma.5;
-        Tue, 28 Jun 2022 14:25:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ggP20+YtDR/ba9ZGcccJ7AMV2oMsWGgviBSb7C0BwSo=;
-        b=L7DkmGA4vHMTLK7wq4lGxEi16hlAS20VwFe7CLrCWR6U4pAUNC1xYKXrwv+CBExbM7
-         dLCc4ng70SF2VHI26CY+JAfKM7CMlcV6xn0tGiCjVqpINZ5aZeUXVztJ24xUCqarR07Q
-         F39K7Qj3A0lGD+5GdKhTzloNYYA8LxiJyOCYrwieL6nxMGdhCAbvKkw/gZZbw7w7mmZN
-         iNZZKrUYEHzNg8Iyeo0+O6jNRuarL15dAfWWWmO/Vd/OzvFSzttOTlcb1va26M94PrTH
-         Up0hNH1bVMqqsbDS02QAy9pfoM6Qtl5jukgt/y3+uhJse+XuI7ea2eDVqVJgiHnhSGwD
-         e1AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ggP20+YtDR/ba9ZGcccJ7AMV2oMsWGgviBSb7C0BwSo=;
-        b=8Gk5xUmPLY41eeyhudOr1/YQKY4YvteH+5ITf++F3rucRLLUNbx79skoKWzIIO8b6w
-         nRO/sVYf0CKXUO0gQhd/IC1iNH0Ezg7n4/gjztglLUNjFg6CibF42PnJ6JgYYTFe52Fa
-         ksdrRaI0IT+oju5CsJaUH9BbQ2TVg2IJ563LxCKDNyjfj96tkXF+Q8627wD8n43R/7fW
-         QE+1HMex9RBFtz/pfj63DF79OdIIdjNdJEF0aXlgSRQ4jjgnzux1kmL82PU63+M1ctBw
-         BrBW2aeeYnfMCBdx5+LlK/B86JletxfJUrfU9xFu3g8xSBO59uj5dsCaOsfCXE2gmLXL
-         4nUg==
-X-Gm-Message-State: AJIora9UHODRC1ln4x0fpFtD0hKI88ZxhMqN6OZ64FL9bcmT5HUbCQob
-        e7f7QnioKt+q5DrEMnKqtjk=
-X-Google-Smtp-Source: AGRyM1sX6vcWI+ufYs2TQWTtdp6s5a2mtPPCla3n2TrP+X81JVA2O9xRgbPhB7B8f4ygrqldae+ezQ==
-X-Received: by 2002:a05:600c:3c83:b0:39c:9039:852c with SMTP id bg3-20020a05600c3c8300b0039c9039852cmr1785941wmb.187.1656451527504;
-        Tue, 28 Jun 2022 14:25:27 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id bg11-20020a05600c3c8b00b003a04a9504b0sm966567wmb.40.2022.06.28.14.25.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 14:25:26 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] nfsd: remove redundant assignment to variable len
-Date:   Tue, 28 Jun 2022 22:25:25 +0100
-Message-Id: <20220628212525.353730-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 28 Jun 2022 17:25:31 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0293A731;
+        Tue, 28 Jun 2022 14:25:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656451530; x=1687987530;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Oyn51vMDRf7A3tVCT6X7kOOy8czfccgv/KeqlJoi94o=;
+  b=jEMy/gxTOzfYZMeKvYzSgf2JnjI88JEN+JkTIIZsT1HL1hNuNtK6hc6I
+   bTXZ4CAW5QAeVgBods3mHhDGttNcN3JfPA/e7dH/pVXUZctNghDmk+XWs
+   FL6sXjRXPA9Y57U2kSRoZ8Hwv/XZ3+vKCaeuW24SXyVclZA/78bBx598s
+   i9YV5URNXCEjz5yf3aBmCLw32Oj4DC0OUf/gP3OkAyGa3pz6740xWKvwM
+   dLsZNMALbxZPLxqC2cJspFhkck9LFDIDitspKiTjrZcf3vcEaBzxjCnQk
+   mBtPEiwmFpTf4kBRrZLbyu9EKQDsUuEhiCpi1s9dNW0NhD2hvmc2s3Rih
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="281886709"
+X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
+   d="scan'208";a="281886709"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 14:25:30 -0700
+X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
+   d="scan'208";a="680213065"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 14:25:29 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o6Ii6-000xAc-L0;
+        Wed, 29 Jun 2022 00:25:26 +0300
+Date:   Wed, 29 Jun 2022 00:25:26 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] serial: 8250_dw: Rename offset to reg_offset
+Message-ID: <YrtxxqnQ5fZKsUoY@smile.fi.intel.com>
+References: <20220628134234.53771-1-ilpo.jarvinen@linux.intel.com>
+ <20220628134234.53771-3-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220628134234.53771-3-ilpo.jarvinen@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable len is being assigned a value zero and this is never
-read, it is being re-assigned later. The assignment is redundant
-and can be removed.
+On Tue, Jun 28, 2022 at 04:42:32PM +0300, Ilpo Järvinen wrote:
+> Get 'offset' variable out of the way of parameter named 'offset',
+> rename it to 'reg_offset'. This is very short lived change as
+> reg_offset is going to be soon removed.
 
-Cleans up clang scan-build warning:
-fs/nfsd/nfsctl.c:636:2: warning: Value stored to 'len' is never read
+I'm not sure why this change then even needed...
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/nfsd/nfsctl.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/fs/nfsd/nfsctl.c b/fs/nfsd/nfsctl.c
-index 0621c2faf242..66c352bf61b1 100644
---- a/fs/nfsd/nfsctl.c
-+++ b/fs/nfsd/nfsctl.c
-@@ -633,7 +633,6 @@ static ssize_t __write_versions(struct file *file, char *buf, size_t size)
- 	}
- 
- 	/* Now write current state into reply buffer */
--	len = 0;
- 	sep = "";
- 	remaining = SIMPLE_TRANSACTION_LIMIT;
- 	for (num=2 ; num <= 4 ; num++) {
 -- 
-2.35.3
+With Best Regards,
+Andy Shevchenko
+
 

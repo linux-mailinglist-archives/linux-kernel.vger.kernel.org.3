@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A2E55E11D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A6F55E2EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344190AbiF1JYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
+        id S1344258AbiF1JYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344189AbiF1JYF (ORCPT
+        with ESMTP id S1344169AbiF1JYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:24:05 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF47021E2D
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:23:57 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 23so11622730pgc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:23:57 -0700 (PDT)
+        Tue, 28 Jun 2022 05:24:13 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AB522BCE
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:24:01 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id h192so11654957pgc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:24:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vHYbuFYn6YlvT9Fdnx+EOgau5cAMH353uP8QsaR7HRc=;
-        b=0nmaiILBL0Ishd8eJaNF98NYu3O4qdMxGBddKMrRd4lKI3pIXG2GNpFNO291L209NS
-         ENsmr/FnVypwU6JuPmk8nxqdIYeX+7CSw8NXSCcpP1ppbnISwIxJ2POPJAsC6DTq8Esg
-         Zs1H9dPG/lWkPaeYDBgoVc7YB/Cj4gQO0vl1Jcfp+ZHzJ7EAe8lD72i4dIS0TXtUIWAO
-         Yzzg7jCU8Z0VPJmoXsGyQYF/6pGl6tpzJieZLxGcc7sl/gks2UHfYQxk9u/t8E6MTJv1
-         mzR4QNWxJDeNdOI8ldEEWIt2h0L1Ot3uduS//eR0kMfCVNqSeByotggZxNMD+gp5Ik3H
-         mUGw==
+        bh=GadOaB9//lTjsftcfvLcU7ls1fHJ0eHs1kLHSyAzf48=;
+        b=uIFwED43iTWw2M0vHEtBVjPF4wMne05WSqqCpyGzzgJLiqgFVBC/FT3uZs1BH9nB5S
+         kGPj5F2xAffSLbTN2oXrNvLXriMHlfrgsaPFtIMaE4Ijx+PtwYPFp4BocQwa83WBLKPp
+         f3NB8knmejgYe9/DZmjhsykYjXKjvnZP3IztFkPQYBe+H0EYJagTFTo3umMnRLQLhEDA
+         4fmKWjUQQ9ngNa/3AOmAwok+bglel39uGX2XC/z8S+QcvVUqQHHZH9gGYhU2qrEW6RZM
+         CjltfcgaPlT26E83vT0NpmSuUDzm4yZKIybjVhj2dCTGTOn3HWxHFPt6L5iKjj6JRlxR
+         /0oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vHYbuFYn6YlvT9Fdnx+EOgau5cAMH353uP8QsaR7HRc=;
-        b=LVB5NiUXj1ZZWkxkhlNG0a6P1atAqz33/9hVM1qwvdya6uEsGdNbQ9Gx9qMWFRwvWg
-         2XosLKwSa2A3lzKP3o0XmEoG7PN5dQ8X1ANh8atSZcdDdegSpopOuhTZpipYi+bfVyy3
-         pOng0jM6wKHyFCMyCek6XVXnG2hs+52pY9+EFbgtqX4IT0/Udhghc7gkOg1lKttfD0yW
-         CzUkrD/VBYaKpV0Hlm9FD7TnINfX30Pzc64jyX7Hnny1/gs1S2Pgg+HzJrEs8eZYwNZF
-         H+3YqEIlwLGL4KeLHaAlqBqdVpJn24+Y18YnLeX6cmZNBhu0l31Kq32XFzIRk7Fv2YTV
-         rXxw==
-X-Gm-Message-State: AJIora+jEkpu3v3+DSKhlTqvkgxL75+Mdh9YPUwPOyl9T31Pep3JNYKz
-        OhNihCY6GRNbWVDBYxn8jmBBsA==
-X-Google-Smtp-Source: AGRyM1s6QKp3YFjgnn8w5wpZ4YzfRjz+2CBC2gen+rq5Ge2yaCfXPCuQ2lsG85yC5I4qOXZwEMrYdQ==
-X-Received: by 2002:a63:7c49:0:b0:40c:b3f9:18c5 with SMTP id l9-20020a637c49000000b0040cb3f918c5mr16240298pgn.588.1656408237450;
-        Tue, 28 Jun 2022 02:23:57 -0700 (PDT)
+        bh=GadOaB9//lTjsftcfvLcU7ls1fHJ0eHs1kLHSyAzf48=;
+        b=CGR9yOrZmMX5a3cylZrbpAKqfp78bHD5fgY3IuiQn2VABn6jRf9fW8Xbn/Wg/f9F4i
+         FgDhfiTpuq3Sd6NOiBoxSEMgTH7oFZkKbXtf8IUxKbQxtWdQuo1wSu+N4957MZSOf/ch
+         loYjmf1hch6Qj2TLwzB1tvCbn8dPxfFRy+bNU+H8xyfbR5TVKNtQnjEUvyPZzKwRpTgI
+         jA1WXuZJEpR3ykZNpdQOQ8Va3+Tvsuzb8bXOUo9gHAZf6tJQ73LO6XYTGIfNoSbDDc+P
+         owMgAayGLU7lgbJLHYfr2rxv6J2ZeeoqPBRZ0JzAvq8+0Dtla/h3O8zoVrAgdeI6DjxZ
+         j93g==
+X-Gm-Message-State: AJIora9FZl8Ug8+bc/26SHxYNARkQXhnkEawD7u+4qAJWfBvpjTN1zFl
+        TIUBVPOcknXN3Ds+XGFJkSF3Fg==
+X-Google-Smtp-Source: AGRyM1t6Ppx0XVD1JhEmnFdJgiMDcffWiFZvh9iTr4GrrpCCd/kYZfZVd3D5Pitcc4s9IFx/XV7BaQ==
+X-Received: by 2002:a63:904b:0:b0:40d:1d01:39aa with SMTP id a72-20020a63904b000000b0040d1d0139aamr16508254pge.68.1656408241430;
+        Tue, 28 Jun 2022 02:24:01 -0700 (PDT)
 Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id mm9-20020a17090b358900b001ec729d4f08sm8780463pjb.54.2022.06.28.02.23.53
+        by smtp.gmail.com with ESMTPSA id mm9-20020a17090b358900b001ec729d4f08sm8780463pjb.54.2022.06.28.02.23.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 02:23:57 -0700 (PDT)
+        Tue, 28 Jun 2022 02:24:01 -0700 (PDT)
 From:   Muchun Song <songmuchun@bytedance.com>
 To:     mike.kravetz@oracle.com, david@redhat.com,
         akpm@linux-foundation.org, corbet@lwn.net
@@ -55,9 +55,9 @@ Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, duanxiongchun@bytedance.com,
         Muchun Song <songmuchun@bytedance.com>,
         Oscar Salvador <osalvador@suse.de>
-Subject: [PATCH v2 2/8] mm: hugetlb_vmemmap: optimize vmemmap_optimize_mode handling
-Date:   Tue, 28 Jun 2022 17:22:29 +0800
-Message-Id: <20220628092235.91270-3-songmuchun@bytedance.com>
+Subject: [PATCH v2 3/8] mm: hugetlb_vmemmap: introduce the name HVO
+Date:   Tue, 28 Jun 2022 17:22:30 +0800
+Message-Id: <20220628092235.91270-4-songmuchun@bytedance.com>
 X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 In-Reply-To: <20220628092235.91270-1-songmuchun@bytedance.com>
 References: <20220628092235.91270-1-songmuchun@bytedance.com>
@@ -72,155 +72,196 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We hold an another reference to hugetlb_optimize_vmemmap_key when
-making vmemmap_optimize_mode on, because we use static_key to tell
-memory_hotplug that memory_hotplug.memmap_on_memory should be
-overridden.  However, this rule has gone when we have introduced
-PageVmemmapSelfHosted.  Therefore, we could simplify
-vmemmap_optimize_mode handling by not holding an another reference
-to hugetlb_optimize_vmemmap_key.  This also means that we not
-incur the extra page_fixed_fake_head checks if there are no
-vmemmap optinmized hugetlb pages after this change.
+It it inconvenient to mention the feature of optimizing vmemmap pages associated
+with HugeTLB pages when communicating with others since there is no specific or
+abbreviated name for it when it is first introduced.  Let us give it a name HVO
+(HugeTLB Vmemmap Optimization) from now.
 
+This commit also updates the document about "hugetlb_free_vmemmap" by the way
+discussed in thread [1].
+
+Link: https://lore.kernel.org/all/21aae898-d54d-cc4b-a11f-1bb7fddcfffa@redhat.com/ [1]
 Signed-off-by: Muchun Song <songmuchun@bytedance.com>
 Reviewed-by: Oscar Salvador <osalvador@suse.de>
 Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 ---
- include/linux/page-flags.h |  6 ++---
- mm/hugetlb_vmemmap.c       | 65 +++++-----------------------------------------
- 2 files changed, 9 insertions(+), 62 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt |  7 ++++---
+ Documentation/admin-guide/mm/hugetlbpage.rst    |  4 ++--
+ Documentation/admin-guide/mm/memory-hotplug.rst |  4 ++--
+ Documentation/admin-guide/sysctl/vm.rst         |  3 +--
+ Documentation/vm/vmemmap_dedup.rst              |  2 ++
+ fs/Kconfig                                      | 12 +++++-------
+ include/linux/page-flags.h                      |  3 +--
+ mm/hugetlb_vmemmap.c                            |  8 ++++----
+ mm/hugetlb_vmemmap.h                            |  4 ++--
+ 9 files changed, 23 insertions(+), 24 deletions(-)
 
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 578eb9ef1089..1e30e826041d 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -1725,12 +1725,13 @@
+ 	hugetlb_free_vmemmap=
+ 			[KNL] Reguires CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+ 			enabled.
++			Control if HugeTLB Vmemmap Optimization (HVO) is enabled.
+ 			Allows heavy hugetlb users to free up some more
+ 			memory (7 * PAGE_SIZE for each 2MB hugetlb page).
+-			Format: { [oO][Nn]/Y/y/1 | [oO][Ff]/N/n/0 (default) }
++			Format: { on | off (default) }
+ 
+-			[oO][Nn]/Y/y/1: enable the feature
+-			[oO][Ff]/N/n/0: disable the feature
++			on: enable HVO
++			off: disable HVO
+ 
+ 			Built with CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON=y,
+ 			the default is on.
+diff --git a/Documentation/admin-guide/mm/hugetlbpage.rst b/Documentation/admin-guide/mm/hugetlbpage.rst
+index a90330d0a837..8e2727dc18d4 100644
+--- a/Documentation/admin-guide/mm/hugetlbpage.rst
++++ b/Documentation/admin-guide/mm/hugetlbpage.rst
+@@ -164,8 +164,8 @@ default_hugepagesz
+ 	will all result in 256 2M huge pages being allocated.  Valid default
+ 	huge page size is architecture dependent.
+ hugetlb_free_vmemmap
+-	When CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP is set, this enables optimizing
+-	unused vmemmap pages associated with each HugeTLB page.
++	When CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP is set, this enables HugeTLB
++	Vmemmap Optimization (HVO).
+ 
+ When multiple huge page sizes are supported, ``/proc/sys/vm/nr_hugepages``
+ indicates the current number of pre-allocated huge pages of the default size.
+diff --git a/Documentation/admin-guide/mm/memory-hotplug.rst b/Documentation/admin-guide/mm/memory-hotplug.rst
+index 0f56ecd8ac05..a3c9e8ad8fa0 100644
+--- a/Documentation/admin-guide/mm/memory-hotplug.rst
++++ b/Documentation/admin-guide/mm/memory-hotplug.rst
+@@ -653,8 +653,8 @@ block might fail:
+ - Concurrent activity that operates on the same physical memory area, such as
+   allocating gigantic pages, can result in temporary offlining failures.
+ 
+-- Out of memory when dissolving huge pages, especially when freeing unused
+-  vmemmap pages associated with each hugetlb page is enabled.
++- Out of memory when dissolving huge pages, especially when HugeTLB Vmemmap
++  Optimization (HVO) is enabled.
+ 
+   Offlining code may be able to migrate huge page contents, but may not be able
+   to dissolve the source huge page because it fails allocating (unmovable) pages
+diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
+index e3a952d1fd35..f15099eaaf36 100644
+--- a/Documentation/admin-guide/sysctl/vm.rst
++++ b/Documentation/admin-guide/sysctl/vm.rst
+@@ -569,8 +569,7 @@ This knob is not available when the size of 'struct page' (a structure defined
+ in include/linux/mm_types.h) is not power of two (an unusual system config could
+ result in this).
+ 
+-Enable (set to 1) or disable (set to 0) the feature of optimizing vmemmap pages
+-associated with each HugeTLB page.
++Enable (set to 1) or disable (set to 0) HugeTLB Vmemmap Optimization (HVO).
+ 
+ Once enabled, the vmemmap pages of subsequent allocation of HugeTLB pages from
+ buddy allocator will be optimized (7 pages per 2MB HugeTLB page and 4095 pages
+diff --git a/Documentation/vm/vmemmap_dedup.rst b/Documentation/vm/vmemmap_dedup.rst
+index c9c495f62d12..7d7a161aa364 100644
+--- a/Documentation/vm/vmemmap_dedup.rst
++++ b/Documentation/vm/vmemmap_dedup.rst
+@@ -7,6 +7,8 @@ A vmemmap diet for HugeTLB and Device DAX
+ HugeTLB
+ =======
+ 
++This section is to explain how HugeTLB Vmemmap Optimization (HVO) works.
++
+ The struct page structures (page structs) are used to describe a physical
+ page frame. By default, there is a one-to-one mapping from a page frame to
+ it's corresponding page struct.
+diff --git a/fs/Kconfig b/fs/Kconfig
+index 5976eb33535f..a547307c1ae8 100644
+--- a/fs/Kconfig
++++ b/fs/Kconfig
+@@ -247,8 +247,7 @@ config HUGETLB_PAGE
+ 
+ #
+ # Select this config option from the architecture Kconfig, if it is preferred
+-# to enable the feature of minimizing overhead of struct page associated with
+-# each HugeTLB page.
++# to enable the feature of HugeTLB Vmemmap Optimization (HVO).
+ #
+ config ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+ 	bool
+@@ -259,14 +258,13 @@ config HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+ 	depends on SPARSEMEM_VMEMMAP
+ 
+ config HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON
+-	bool "Default optimizing vmemmap pages of HugeTLB to on"
++	bool "HugeTLB Vmemmap Optimization (HVO) defaults to on"
+ 	default n
+ 	depends on HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+ 	help
+-	  When using HUGETLB_PAGE_OPTIMIZE_VMEMMAP, the optimizing unused vmemmap
+-	  pages associated with each HugeTLB page is default off. Say Y here
+-	  to enable optimizing vmemmap pages of HugeTLB by default. It can then
+-	  be disabled on the command line via hugetlb_free_vmemmap=off.
++	  The HugeTLB VmemmapvOptimization (HVO) defaults to off. Say Y here to
++	  enable HVO by default. It can be disabled via hugetlb_free_vmemmap=off
++	  (boot command line) or hugetlb_optimize_vmemmap (sysctl).
+ 
+ config MEMFD_CREATE
+ 	def_bool TMPFS || HUGETLBFS
 diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index 2455405ab82b..b44cc24d7496 100644
+index b44cc24d7496..78ed46ae6ee5 100644
 --- a/include/linux/page-flags.h
 +++ b/include/linux/page-flags.h
-@@ -205,8 +205,7 @@ enum pageflags {
- #ifndef __GENERATING_BOUNDS_H
- 
- #ifdef CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
--DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
--			 hugetlb_optimize_vmemmap_key);
-+DECLARE_STATIC_KEY_FALSE(hugetlb_optimize_vmemmap_key);
+@@ -208,8 +208,7 @@ enum pageflags {
+ DECLARE_STATIC_KEY_FALSE(hugetlb_optimize_vmemmap_key);
  
  /*
-  * If the feature of optimizing vmemmap pages associated with each HugeTLB
-@@ -226,8 +225,7 @@ DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-  */
- static __always_inline const struct page *page_fixed_fake_head(const struct page *page)
- {
--	if (!static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
--				 &hugetlb_optimize_vmemmap_key))
-+	if (!static_branch_unlikely(&hugetlb_optimize_vmemmap_key))
- 		return page;
- 
- 	/*
+- * If the feature of optimizing vmemmap pages associated with each HugeTLB
+- * page is enabled, the head vmemmap page frame is reused and all of the tail
++ * If HVO is enabled, the head vmemmap page frame is reused and all of the tail
+  * vmemmap addresses map to the head vmemmap page frame (furture details can
+  * refer to the figure at the head of the mm/hugetlb_vmemmap.c).  In other
+  * words, there are more than one page struct with PG_head associated with each
 diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
-index 6d9801bb3fec..0c2f15a35d62 100644
+index 0c2f15a35d62..7161f86a43a6 100644
 --- a/mm/hugetlb_vmemmap.c
 +++ b/mm/hugetlb_vmemmap.c
-@@ -23,42 +23,15 @@
- #define RESERVE_VMEMMAP_NR		1U
- #define RESERVE_VMEMMAP_SIZE		(RESERVE_VMEMMAP_NR << PAGE_SHIFT)
+@@ -1,8 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * Optimize vmemmap pages associated with HugeTLB
++ * HugeTLB Vmemmap Optimization (HVO)
+  *
+- * Copyright (c) 2020, Bytedance. All rights reserved.
++ * Copyright (c) 2020, ByteDance. All rights reserved.
+  *
+  *     Author: Muchun Song <songmuchun@bytedance.com>
+  *
+@@ -156,8 +156,8 @@ void __init hugetlb_vmemmap_init(struct hstate *h)
  
--enum vmemmap_optimize_mode {
--	VMEMMAP_OPTIMIZE_OFF,
--	VMEMMAP_OPTIMIZE_ON,
--};
--
--DEFINE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
--			hugetlb_optimize_vmemmap_key);
-+DEFINE_STATIC_KEY_FALSE(hugetlb_optimize_vmemmap_key);
- EXPORT_SYMBOL(hugetlb_optimize_vmemmap_key);
- 
--static enum vmemmap_optimize_mode vmemmap_optimize_mode =
-+static bool vmemmap_optimize_enabled =
- 	IS_ENABLED(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON);
- 
--static void vmemmap_optimize_mode_switch(enum vmemmap_optimize_mode to)
--{
--	if (vmemmap_optimize_mode == to)
--		return;
--
--	if (to == VMEMMAP_OPTIMIZE_OFF)
--		static_branch_dec(&hugetlb_optimize_vmemmap_key);
--	else
--		static_branch_inc(&hugetlb_optimize_vmemmap_key);
--	WRITE_ONCE(vmemmap_optimize_mode, to);
--}
--
- static int __init hugetlb_vmemmap_early_param(char *buf)
- {
--	bool enable;
--	enum vmemmap_optimize_mode mode;
--
--	if (kstrtobool(buf, &enable))
--		return -EINVAL;
--
--	mode = enable ? VMEMMAP_OPTIMIZE_ON : VMEMMAP_OPTIMIZE_OFF;
--	vmemmap_optimize_mode_switch(mode);
--
--	return 0;
-+	return kstrtobool(buf, &vmemmap_optimize_enabled);
- }
- early_param("hugetlb_free_vmemmap", hugetlb_vmemmap_early_param);
- 
-@@ -100,7 +73,7 @@ int hugetlb_vmemmap_alloc(struct hstate *h, struct page *head)
- static unsigned int vmemmap_optimizable_pages(struct hstate *h,
- 					      struct page *head)
- {
--	if (READ_ONCE(vmemmap_optimize_mode) == VMEMMAP_OPTIMIZE_OFF)
-+	if (!READ_ONCE(vmemmap_optimize_enabled))
- 		return 0;
- 
- 	if (IS_ENABLED(CONFIG_MEMORY_HOTPLUG)) {
-@@ -191,7 +164,6 @@ void __init hugetlb_vmemmap_init(struct hstate *h)
- 
- 	if (!is_power_of_2(sizeof(struct page))) {
- 		pr_warn_once("cannot optimize vmemmap pages because \"struct page\" crosses page boundaries\n");
--		static_branch_disable(&hugetlb_optimize_vmemmap_key);
- 		return;
- 	}
- 
-@@ -212,36 +184,13 @@ void __init hugetlb_vmemmap_init(struct hstate *h)
- }
- 
- #ifdef CONFIG_PROC_SYSCTL
--static int hugetlb_optimize_vmemmap_handler(struct ctl_table *table, int write,
--					    void *buffer, size_t *length,
--					    loff_t *ppos)
--{
--	int ret;
--	enum vmemmap_optimize_mode mode;
--	static DEFINE_MUTEX(sysctl_mutex);
--
--	if (write && !capable(CAP_SYS_ADMIN))
--		return -EPERM;
--
--	mutex_lock(&sysctl_mutex);
--	mode = vmemmap_optimize_mode;
--	table->data = &mode;
--	ret = proc_dointvec_minmax(table, write, buffer, length, ppos);
--	if (write && !ret)
--		vmemmap_optimize_mode_switch(mode);
--	mutex_unlock(&sysctl_mutex);
--
--	return ret;
--}
--
- static struct ctl_table hugetlb_vmemmap_sysctls[] = {
- 	{
- 		.procname	= "hugetlb_optimize_vmemmap",
--		.maxlen		= sizeof(enum vmemmap_optimize_mode),
-+		.data		= &vmemmap_optimize_enabled,
-+		.maxlen		= sizeof(int),
- 		.mode		= 0644,
--		.proc_handler	= hugetlb_optimize_vmemmap_handler,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_ONE,
-+		.proc_handler	= proc_dobool,
- 	},
- 	{ }
- };
+ 	/*
+ 	 * There are only (RESERVE_VMEMMAP_SIZE / sizeof(struct page)) struct
+-	 * page structs that can be used when CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP,
+-	 * so add a BUILD_BUG_ON to catch invalid usage of the tail struct page.
++	 * page structs that can be used when HVO is enabled, add a BUILD_BUG_ON
++	 * to catch invalid usage of the tail page structs.
+ 	 */
+ 	BUILD_BUG_ON(__NR_USED_SUBPAGE >=
+ 		     RESERVE_VMEMMAP_SIZE / sizeof(struct page));
+diff --git a/mm/hugetlb_vmemmap.h b/mm/hugetlb_vmemmap.h
+index 109b0a53b6fe..ba66fadad9fc 100644
+--- a/mm/hugetlb_vmemmap.h
++++ b/mm/hugetlb_vmemmap.h
+@@ -1,8 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * Optimize vmemmap pages associated with HugeTLB
++ * HugeTLB Vmemmap Optimization (HVO)
+  *
+- * Copyright (c) 2020, Bytedance. All rights reserved.
++ * Copyright (c) 2020, ByteDance. All rights reserved.
+  *
+  *     Author: Muchun Song <songmuchun@bytedance.com>
+  */
 -- 
 2.11.0
 

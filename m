@@ -2,72 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B33355E7F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E5055E714
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233109AbiF1QUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 12:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
+        id S231735AbiF1QWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 12:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232951AbiF1QUG (ORCPT
+        with ESMTP id S238927AbiF1QVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:20:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C773AA73
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:12:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8BDFB81F14
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 16:12:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7252AC341CC
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 16:12:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656432757;
-        bh=EIP5j5pZ7wbFNo8siwNKuft7SrlYIU0lHe3T+ppJNCY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RthYxAUpkMhtCPVpjqK/2tyQbKXMLwVyHDoez99UtKDcFb4i7v/gA+J0j79uGS05+
-         JmBwd5N8KOjpUWYgdyPSEcR9LDD4l4m5LDMxFXzIVFYP81P/+k9gYmetUTpowsrObO
-         swu7ITNGRhlx3cW8/JVzyWwoJZ7qipXr7+YPZkMHKjFB32WNM8n+wc78dcfwsohPhp
-         zFf06R5P+++x/7X7p6mwEvht4NCmX4EIurJINw0Z7A6Xqh5jebH0IjlwuQWR0Fy/MS
-         CukYIpGb9G+tBIEa0P7mqUUfmNf/8s4bK/GhrfEfxiju9wLSpPMS+KaqLFT7QtJkf8
-         yDYVUCsB4z/mA==
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-3137316bb69so122011937b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:12:37 -0700 (PDT)
-X-Gm-Message-State: AJIora8LJ508j9d6NjpihHMRpdBq9Vlb0fUU1C8SpM7tfJJlEHJklrcu
-        Tx+sTsUQBCWdLodqSo57nLkxKh+pZYcNdIKnZvS6PQ==
-X-Google-Smtp-Source: AGRyM1tAQfsb70s3aJIgwOAS2pkRUBhwPFRBswHFom3lZRvCVZ4Ufl+bfM0XenuZWxEdN1dwZ1aAvc0cdAEfPtaF0a8=
-X-Received: by 2002:a81:1b4b:0:b0:317:a2dd:31fa with SMTP id
- b72-20020a811b4b000000b00317a2dd31famr22481892ywb.476.1656432756482; Tue, 28
- Jun 2022 09:12:36 -0700 (PDT)
+        Tue, 28 Jun 2022 12:21:17 -0400
+Received: from smtpbg154.qq.com (smtpbg154.qq.com [15.184.224.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD955FF1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 09:13:06 -0700 (PDT)
+X-QQ-mid: bizesmtp77t1656432776t9dhjajh
+Received: from localhost.localdomain ( [113.200.76.118])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 29 Jun 2022 00:12:53 +0800 (CST)
+X-QQ-SSF: 01400000002000D0F000B00A0000000
+X-QQ-FEAT: 4cpXC9Ki5eKF7EOCm2FvOC8HFcB8itLnnlFoLQmuChMLHaacg6tw8SH8bwCCf
+        coT/XPX1IDIdyI9HMQDVIQHWHZXddOMX00+Z1hf65om/1yB7OtwqeOluMRe+tVtBH3ubor4
+        ett4zoLU3YpdfZRvpSjEW0JfO5eKof0IOzyzGk8zGk1XRiK4arsonuDu36j2mWeeKcbUzya
+        ue+rDe6Cn60T+kgTrIAaxhZatY5kiIXEOwRzYeVWj07Bz1Li7y5YBugivEWAI892kzK2Ojk
+        0F8eS3XDobX+ajEm1bahJyGHjOYFjk8/pTUUsoifu+5+2VCipueimMjXTcljx5uSrZh1YX3
+        5pZdDEX
+X-QQ-GoodBg: 2
+From:   Guo Hui <guohui@uniontech.com>
+To:     peterz@infradead.org
+Cc:     longman@redhat.com, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, will@kernel.org,
+        boqun.feng@gmail.com, virtualization@lists.linux-foundation.org,
+        wangxiaohua@uniontech.com, linux-kernel@vger.kernel.org,
+        Guo Hui <guohui@uniontech.com>
+Subject: [PATCH v7] x86/paravirt: useless assignment instructions cause Unixbench full core   performance degradation
+Date:   Wed, 29 Jun 2022 00:12:51 +0800
+Message-Id: <20220628161251.21950-1-guohui@uniontech.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <588a3276-5481-0a9f-9eac-fed09eede4f2@redhat.com>
+References: <588a3276-5481-0a9f-9eac-fed09eede4f2@redhat.com>
 MIME-Version: 1.0
-References: <20220621233939.993579-1-fred@cloudflare.com> <ce1653b1-feb0-1a99-0e97-8dfb289eeb79@schaufler-ca.com>
- <b72c889a-4a50-3330-baae-3bbf065e7187@cloudflare.com> <CAHC9VhSTkEMT90Tk+=iTyp3npWEm+3imrkFVX2qb=XsOPp9F=A@mail.gmail.com>
- <20220627121137.cnmctlxxtcgzwrws@wittgenstein> <CAHC9VhSQH9tE-NgU6Q-GLqSy7R6FVjSbp4Tc4gVTbjZCqAWy5Q@mail.gmail.com>
- <6a8fba0a-c9c9-61ba-793a-c2e0c2924f88@iogearbox.net> <CAHC9VhQQJH95jTWMOGDB4deS=whSfnaF_e73zoabOOeHJMv+0Q@mail.gmail.com>
- <685096bb-af0a-08c0-491a-e176ac009e85@schaufler-ca.com> <9ae473c4-cd42-bb45-bce2-8aa2e4784a43@cloudflare.com>
- <d70d3b2d-6c3f-b1fc-f40c-f5ec01a627c0@schaufler-ca.com>
-In-Reply-To: <d70d3b2d-6c3f-b1fc-f40c-f5ec01a627c0@schaufler-ca.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Tue, 28 Jun 2022 18:12:25 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ6GmotfhBk1+9BjGC6Ct7bGxQGVTZTX2iQcrhjfV7VHwQ@mail.gmail.com>
-Message-ID: <CACYkzJ6GmotfhBk1+9BjGC6Ct7bGxQGVTZTX2iQcrhjfV7VHwQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Introduce security_create_user_ns()
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Frederick Lawler <fred@cloudflare.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Christian Brauner <brauner@kernel.org>, revest@chromium.org,
-        jackmanb@chromium.org, ast@kernel.org, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@cloudflare.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign10
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,71 +56,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 6:02 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->
-> On 6/28/2022 8:14 AM, Frederick Lawler wrote:
-> > On 6/27/22 6:18 PM, Casey Schaufler wrote:
-> >> On 6/27/2022 3:27 PM, Paul Moore wrote:
-> >>> On Mon, Jun 27, 2022 at 6:15 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
-> >>>> On 6/27/22 11:56 PM, Paul Moore wrote:
-> >>>>> On Mon, Jun 27, 2022 at 8:11 AM Christian Brauner <brauner@kernel.org> wrote:
-> >>>>>> On Thu, Jun 23, 2022 at 11:21:37PM -0400, Paul Moore wrote:
-> >>>>> ...
-> >>>>>
-> >>>>>>> This is one of the reasons why I usually like to see at least one LSM
-> >>>>>>> implementation to go along with every new/modified hook.  The
-> >>>>>>> implementation forces you to think about what information is necessary
-> >>>>>>> to perform a basic access control decision; sometimes it isn't always
-> >>>>>>> obvious until you have to write the access control :)
-> >>>>>> I spoke to Frederick at length during LSS and as I've been given to
-> >>>>>> understand there's a eBPF program that would immediately use this new
-> >>>>>> hook. Now I don't want to get into the whole "Is the eBPF LSM hook
-> >>>>>> infrastructure an LSM" but I think we can let this count as a legitimate
-> >>>>>> first user of this hook/code.
-> >>>>> Yes, for the most part I don't really worry about the "is a BPF LSM a
-> >>>>> LSM?" question, it's generally not important for most discussions.
-> >>>>> However, there is an issue unique to the BPF LSMs which I think is
-> >>>>> relevant here: there is no hook implementation code living under
-> >>>>> security/.  While I talked about a hook implementation being helpful
-> >>>>> to verify the hook prototype, it is also helpful in providing an
-> >>>>> in-tree example for other LSMs; unfortunately we don't get that same
-> >>>>> example value when the initial hook implementation is a BPF LSM.
-> >>>> I would argue that such a patch series must come together with a BPF
-> >>>> selftest which then i) contains an in-tree usage example, ii) adds BPF
-> >>>> CI test coverage. Shipping with a BPF selftest at least would be the
-> >>>> usual expectation.
-> >>> I'm not going to disagree with that, I generally require matching
-> >>> tests for new SELinux kernel code, but I was careful to mention code
-> >>> under 'security/' and not necessarily just a test implementation :)  I
-> >>> don't want to get into a big discussion about it, but I think having a
-> >>> working implementation somewhere under 'security/' is more
-> >>> discoverable for most LSM folks.
-> >>
-> >> I agree. It would be unfortunate if we added a hook explicitly for eBPF
-> >> only to discover that the proposed user needs something different. The
-> >> LSM community should have a chance to review the code before committing
-> >> to all the maintenance required in supporting it.
-> >>
-> >> Is there a reference on how to write an eBPF security module?
-> >
-> > There's a documentation page that briefly touches on a BPF LSM implementation [1].
->
-> That's a brief touch, alright. I'll grant that the LSM interface isn't
-> especially well documented for C developers, but we have done tutorials
-> and have multiple examples. I worry that without an in-tree example for
-> eBPF we might well be setting developers up for spectacular failure.
->
+The instructions assigned to the vcpu_is_preempted function parameter
+in the X86 architecture physical machine are redundant instructions,
+causing the multi-core performance of Unixbench to drop by about 4% to 5%.
+The C function is as follows:
+static bool vcpu_is_preempted(long vcpu);
 
-Casey, Daniel and I are recommending an in-tree example, it will be
-in BPF selftests and we will CC you on the reviews.
+The parameter 'vcpu' in the function osq_lock
+that calls the function vcpu_is_preempted is assigned as follows:
 
-Frederick, is that okay with you?
+The C code is in the function node_cpu:
+cpu = node->cpu - 1;
 
-> >
-> >> There should be something out there warning the eBPF programmer of the
-> >> implications of providing a secid_to_secctx hook for starters.
-> >>
-> >
-> > Links:
-> > 1. https://docs.kernel.org/bpf/prog_lsm.html?highlight=bpf+lsm#
-> >
+The instructions corresponding to the C code are:
+mov 0x14(%rax),%edi
+sub $0x1,%edi
+
+The above instructions are unnecessary
+in the X86 Native operating environment,
+causing high cache-misses and degrading performance.
+
+This patch uses static_key to not execute this instruction
+in the Native runtime environment.
+
+The patch effect is as follows two machines,
+Unixbench runs with full core score:
+
+1. Machine configuration:
+Intel(R) Xeon(R) Silver 4210 CPU @ 2.20GHz
+CPU core: 40
+Memory: 256G
+OS Kernel: 5.19-rc3
+
+Before using the patch:
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0  948326591.2  81261.9
+Double-Precision Whetstone                       55.0     211986.3  38543.0
+Execl Throughput                                 43.0      43453.2  10105.4
+File Copy 1024 bufsize 2000 maxblocks          3960.0     438936.2   1108.4
+File Copy 256 bufsize 500 maxblocks            1655.0     118197.4    714.2
+File Copy 4096 bufsize 8000 maxblocks          5800.0    1534674.7   2646.0
+Pipe Throughput                               12440.0   46482107.6  37365.0
+Pipe-based Context Switching                   4000.0    1915094.2   4787.7
+Process Creation                                126.0      85442.2   6781.1
+Shell Scripts (1 concurrent)                     42.4      69400.7  16368.1
+Shell Scripts (8 concurrent)                      6.0       8877.2  14795.3
+System Call Overhead                          15000.0    4714906.1   3143.3
+                                                                   ========
+System Benchmarks Index Score                                        7923.3
+
+After using the patch:
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0  947032915.5  81151.1
+Double-Precision Whetstone                       55.0     211971.2  38540.2
+Execl Throughput                                 43.0      45054.8  10477.9
+File Copy 1024 bufsize 2000 maxblocks          3960.0     515024.9   1300.6
+File Copy 256 bufsize 500 maxblocks            1655.0     146354.6    884.3
+File Copy 4096 bufsize 8000 maxblocks          5800.0    1679995.9   2896.5
+Pipe Throughput                               12440.0   46466394.2  37352.4
+Pipe-based Context Switching                   4000.0    1898221.4   4745.6
+Process Creation                                126.0      85653.1   6797.9
+Shell Scripts (1 concurrent)                     42.4      69437.3  16376.7
+Shell Scripts (8 concurrent)                      6.0       8898.9  14831.4
+System Call Overhead                          15000.0    4658746.7   3105.8
+                                                                   ========
+System Benchmarks Index Score                                        8248.8
+
+2. Machine configuration:
+Hygon C86 7185 32-core Processor
+CPU core: 128
+Memory: 256G
+OS Kernel: 5.19-rc3
+
+Before using the patch:
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0 2256644068.3 193371.4
+Double-Precision Whetstone                       55.0     438969.9  79812.7
+Execl Throughput                                 43.0      10108.6   2350.8
+File Copy 1024 bufsize 2000 maxblocks          3960.0     275892.8    696.7
+File Copy 256 bufsize 500 maxblocks            1655.0      72082.7    435.5
+File Copy 4096 bufsize 8000 maxblocks          5800.0     925043.4   1594.9
+Pipe Throughput                               12440.0  118905512.5  95583.2
+Pipe-based Context Switching                   4000.0    7820945.7  19552.4
+Process Creation                                126.0      31233.3   2478.8
+Shell Scripts (1 concurrent)                     42.4      49042.8  11566.7
+Shell Scripts (8 concurrent)                      6.0       6656.0  11093.3
+System Call Overhead                          15000.0    6816047.5   4544.0
+                                                                   ========
+System Benchmarks Index Score                                        7756.6
+
+After using the patch:
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0 2252272929.4 192996.8
+Double-Precision Whetstone                       55.0     451847.2  82154.0
+Execl Throughput                                 43.0      10595.1   2464.0
+File Copy 1024 bufsize 2000 maxblocks          3960.0     301279.3    760.8
+File Copy 256 bufsize 500 maxblocks            1655.0      79291.3    479.1
+File Copy 4096 bufsize 8000 maxblocks          5800.0    1039755.2   1792.7
+Pipe Throughput                               12440.0  118701468.1  95419.2
+Pipe-based Context Switching                   4000.0    8073453.3  20183.6
+Process Creation                                126.0      33440.9   2654.0
+Shell Scripts (1 concurrent)                     42.4      52722.6  12434.6
+Shell Scripts (8 concurrent)                      6.0       7050.4  11750.6
+System Call Overhead                          15000.0    6834371.5   4556.2
+                                                                   ========
+System Benchmarks Index Score                                        8157.8
+
+Signed-off-by: Guo Hui <guohui@uniontech.com>
+---
+ arch/x86/kernel/paravirt-spinlocks.c |  4 ++++
+ kernel/locking/osq_lock.c            | 19 ++++++++++++++++++-
+ 2 files changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/paravirt-spinlocks.c b/arch/x86/kernel/paravirt-spinlocks.c
+index 9e1ea99ad..a2eb375e2 100644
+--- a/arch/x86/kernel/paravirt-spinlocks.c
++++ b/arch/x86/kernel/paravirt-spinlocks.c
+@@ -33,6 +33,8 @@ bool pv_is_native_vcpu_is_preempted(void)
+ 		__raw_callee_save___native_vcpu_is_preempted;
+ }
+ 
++DECLARE_STATIC_KEY_TRUE(vcpu_has_preemption);
++
+ void __init paravirt_set_cap(void)
+ {
+ 	if (!pv_is_native_spin_unlock())
+@@ -40,4 +42,6 @@ void __init paravirt_set_cap(void)
+ 
+ 	if (!pv_is_native_vcpu_is_preempted())
+ 		setup_force_cpu_cap(X86_FEATURE_VCPUPREEMPT);
++	else
++		static_branch_disable(&vcpu_has_preemption);
+ }
+diff --git a/kernel/locking/osq_lock.c b/kernel/locking/osq_lock.c
+index d5610ad52..f521b0f6d 100644
+--- a/kernel/locking/osq_lock.c
++++ b/kernel/locking/osq_lock.c
+@@ -27,6 +27,23 @@ static inline int node_cpu(struct optimistic_spin_node *node)
+ 	return node->cpu - 1;
+ }
+ 
++#ifdef vcpu_is_preempted
++DEFINE_STATIC_KEY_TRUE(vcpu_has_preemption);
++
++static inline bool vcpu_is_preempted_node(struct optimistic_spin_node *node)
++{
++	if (static_branch_likely(&vcpu_has_preemption))
++		return vcpu_is_preempted(node_cpu(node->prev));
++
++	return false;
++}
++#else
++static inline bool vcpu_is_preempted_node(struct optimistic_spin_node *node)
++{
++	return false;
++}
++#endif
++
+ static inline struct optimistic_spin_node *decode_cpu(int encoded_cpu_val)
+ {
+ 	int cpu_nr = encoded_cpu_val - 1;
+@@ -141,7 +158,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
+ 	 * polling, be careful.
+ 	 */
+ 	if (smp_cond_load_relaxed(&node->locked, VAL || need_resched() ||
+-				  vcpu_is_preempted(node_cpu(node->prev))))
++						vcpu_is_preempted_node(node)))
+ 		return true;
+ 
+ 	/* unqueue */
+-- 
+2.20.1
+
+
+

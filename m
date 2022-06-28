@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0AB55E2CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A9B55D37B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244618AbiF1IVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 04:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43294 "EHLO
+        id S229521AbiF1IT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 04:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244391AbiF1ITG (ORCPT
+        with ESMTP id S242502AbiF1ITE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 04:19:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66661D0E3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:18:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 28 Jun 2022 04:19:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98EBC2D1C6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:17:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656404278;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4ANCIygcKkNb0sxE6zYRICe30C7lk84k3shbREy4O7w=;
+        b=MLH8MRsXhRTwdZmgM/DUodzguWNIqENHONo7EgdW02hmvBHbi+eZrDFg5Rj5QjMnbNsyoc
+        1yg7t2k05ulyn6UO+GvxeRJ3rWubqjUX7RtYsz4HjYu3eQbkogWUlFgWhhm4AmFEb5vsex
+        bwEtGc0F6WykfDcVqWjalJQUyDsvcy4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-446-qCu0jKULMfmE6tRgknBLRg-1; Tue, 28 Jun 2022 04:17:54 -0400
+X-MC-Unique: qCu0jKULMfmE6tRgknBLRg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AA6361123
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:18:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF997C3411D
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:18:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656404296;
-        bh=RMg7E+x3vHTxSbUYjFMVPPEBPMSzGiTawfTpd32I/sA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=aecUCUplvSdKPkowr+RzeUrJc2796n1fwINh8lb0HmtvRr3y6W7FSR2iH/3WiMY2w
-         UjES0MXbx9f6P+U8HRX4of8JG4RAItquLK01bODaZKKylNk45tiqZzLhRQMgj9vS7b
-         7sTTzQJ9kyYirRZU5ZzKeAiIBjWer4ICkoERp8K6EaccxuSQvTIsu6wqxczhGqVout
-         UtK9JnI7wZHsA4EszlGJTLe6IC88YDcAbVVtgXY8RQArIV3wM5RvN5ahLK5rS/OpIp
-         5RXTeCs4wqmBN4NtU/PowWNocMdWvsDF2o9sxIU/wUtyuD1QeZ4mdphSHCK9f+LmyQ
-         nmp0bc3sGCyQA==
-Received: by mail-yb1-f174.google.com with SMTP id g4so9380359ybg.9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:18:16 -0700 (PDT)
-X-Gm-Message-State: AJIora9sqPWe+uvhpQwu5Vmiw4yUYA1fIcmv3SH2Kg45WfmAcGGl6WwP
-        TaHfzYWj46DhXvaiWs74OMmzYWWeNtlzM1jFU/0=
-X-Google-Smtp-Source: AGRyM1vqdOjhQ2ZrPVUr5zqZwiKzqeE6EDH2z7wJNlmN3i9l1pIoq2fqEoiN1PkXLUX7bgIXHossNk4Nmp7B70QRW30=
-X-Received: by 2002:a25:cc56:0:b0:66c:d0f6:2f0e with SMTP id
- l83-20020a25cc56000000b0066cd0f62f0emr10035098ybf.168.1656404295825; Tue, 28
- Jun 2022 01:18:15 -0700 (PDT)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0DD2F1C00AC5;
+        Tue, 28 Jun 2022 08:17:54 +0000 (UTC)
+Received: from localhost (unknown [10.39.193.129])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5F3229D54;
+        Tue, 28 Jun 2022 08:17:53 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Schspa Shi <schspa@gmail.com>, alex.williamson@redhat.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhaohui.shi@horizon.ai, Schspa Shi <schspa@gmail.com>
+Subject: Re: [PATCH] vfio: Fix double free for caps->buf
+In-Reply-To: <20220628050711.74945-1-schspa@gmail.com>
+Organization: Red Hat GmbH
+References: <20220628050711.74945-1-schspa@gmail.com>
+User-Agent: Notmuch/0.36 (https://notmuchmail.org)
+Date:   Tue, 28 Jun 2022 10:17:52 +0200
+Message-ID: <8735fpcibz.fsf@redhat.com>
 MIME-Version: 1.0
-References: <20220627202620.961350-1-ogabbay@kernel.org> <20220627202620.961350-3-ogabbay@kernel.org>
- <Yrqgs9koXkfIG1KI@kroah.com>
-In-Reply-To: <Yrqgs9koXkfIG1KI@kroah.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Tue, 28 Jun 2022 11:17:49 +0300
-X-Gmail-Original-Message-ID: <CAFCwf12eDSwyJnGgxQAcYMG_5OYGvCD0WGO2r3VZbBdFM70dqg@mail.gmail.com>
-Message-ID: <CAFCwf12eDSwyJnGgxQAcYMG_5OYGvCD0WGO2r3VZbBdFM70dqg@mail.gmail.com>
-Subject: Re: [PATCH 02/12] uapi: habanalabs: add gaudi2 defines
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,174 +61,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 9:33 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+On Tue, Jun 28 2022, Schspa Shi <schspa@gmail.com> wrote:
+
+> There is a double free, if vfio_iommu_dma_avail_build_caps
+> calls failed.
 >
-> On Mon, Jun 27, 2022 at 11:26:10PM +0300, Oded Gabbay wrote:
-> > @@ -456,7 +841,7 @@ struct hl_info_hw_ip_info {
-> >       __u32 num_of_events;
-> >       __u32 device_id;
-> >       __u32 module_id;
-> > -     __u32 reserved;
-> > +     __u32 decoder_enabled_mask;
-> >       __u16 first_available_interrupt_id;
-> >       __u16 server_type;
-> >       __u32 cpld_version;
-> > @@ -466,12 +851,13 @@ struct hl_info_hw_ip_info {
-> >       __u32 psoc_pci_pll_div_factor;
-> >       __u8 tpc_enabled_mask;
-> >       __u8 dram_enabled;
-> > -     __u8 pad[2];
-> > +     __u8 reserved;
-> > +     __u8 mme_master_slave_mode;
+> The following call path will call vfio_info_cap_add multiple times
 >
-> You are moving fields around (reserved moved to a different spot, and
-> you were checking that reserved was always 0, right?) and renaming them.
-> Is that going to break userspace?
+> vfio_iommu_type1_get_info
+> 	if (!ret)
+> 		ret = vfio_iommu_dma_avail_build_caps(iommu, &caps);
+>
+> 	if (!ret)
+> 		ret = vfio_iommu_iova_build_caps(iommu, &caps);
+>
+> If krealloc failed on vfio_info_cap_add, there will be a double free.
 
-No, I don't think it will break userspace. Those variables are
-replaced with exactly the same field type (u32 -> u32 , u8 pad[2] ->
-two u8 variables).
-
-Anyway, this structure is only for output to the userspace. We just
-get a pointer from userspace for a location to copy_to_user this
-information. So I don't care what was in that location in the first
-place.
-
-And yes, reserved fields were always initialized to 0 by the driver.
+But it will only call it several times if the last call didn't fail,
+won't it?
 
 >
+> Signed-off-by: Schspa Shi <schspa@gmail.com>
+> ---
+>  drivers/vfio/vfio.c | 1 +
+>  1 file changed, 1 insertion(+)
 >
->
->
-> >       __u8 cpucp_version[HL_INFO_VERSION_MAX_LEN];
-> >       __u8 card_name[HL_INFO_CARD_NAME_MAX_LEN];
-> > -     __u64 reserved2;
-> > +     __u64 tpc_enabled_mask_ext;
-> >       __u64 dram_page_size;
-> > -     __u32 reserved3;
-> > +     __u32 edma_enabled_mask;
-> >       __u16 number_of_user_interrupts;
-> >       __u16 pad2;
-> >       __u64 reserved4;
-> > @@ -722,6 +1108,44 @@ struct hl_info_dev_memalloc_page_sizes {
-> >       __u64 page_order_bitmask;
-> >  };
-> >
-> > +#define HL_TPM_PCR_DATA_BUF_SZ               256
-> > +#define HL_TPM_PCR_QUOTE_BUF_SZ              510     /* (512 - 2) 2 bytes used for size */
-> > +#define HL_TPM_SIGNATURE_BUF_SZ              255     /* (256 - 1) 1 byte used for size */
-> > +#define HL_TPM_PUB_DATA_BUF_SZ               510     /* (512 - 2) 2 bytes used for size */
-> > +#define HL_TPM_CERTIFICATE_BUF_SZ    2046    /* (2048 - 2) 2 bytes used for size */
-> > +
-> > +/**
-> > + * struct hl_info_tpm - attestation data of the boot from the TPM
-> > + * @nonce: number only used once. random number provided by host. this also passed to the quote
-> > + *         command as a qualifying data.
-> > + * @pcr_quote_len: length of the attestation quote data in bytes
-> > + * @pub_data_len: length of the public data in bytes
-> > + * @certificate_len: length of the certificate in bytes
-> > + * @pcr_num_reg: number of PCR registers in the pcr_data array
-> > + * @pcr_reg_len: length of each PCR register in the pcr_data array in bytes
-> > + * @quote_sig_len: length of the attestation signature in bytes
-> > + * @pcr_data: raw values of the PCR registers from the TPM
-> > + * @pcr_quote: attestation data structure (TPM2B_ATTEST) from the TPM
-> > + * @public_data: public key and certificate info from the TPM (outPublic + name + qualifiedName)
-> > + * @certificate: certificate for the attestation data, read from the TPM NV mem
-> > + * @quote_sig: signature structure (TPMT_SIGNATURE) of the attestation data
-> > + */
-> > +struct hl_info_tpm {
-> > +     __u32 nonce;
-> > +     __u16 pcr_quote_len;
-> > +     __u16 pub_data_len;
-> > +     __u16 certificate_len;
-> > +     __u8 pcr_num_reg;
-> > +     __u8 pcr_reg_len;
-> > +     __u8 quote_sig_len;
-> > +     __u8 pcr_data[HL_TPM_PCR_DATA_BUF_SZ];
-> > +     __u8 pcr_quote[HL_TPM_PCR_QUOTE_BUF_SZ];
-> > +     __u8 public_data[HL_TPM_PUB_DATA_BUF_SZ];
-> > +     __u8 certificate[HL_TPM_CERTIFICATE_BUF_SZ];
-> > +     __u8 quote_sig[HL_TPM_SIGNATURE_BUF_SZ];
-> > +     __u8 pad0[2];
->
-> Do you always check that pad0 is set to 0 in the kernel code?
-Yes, we always cleared it. This structure is always generated by the
-kernel driver and consumed by the user code. Never vice-versa.
+> diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
+> index 61e71c1154be..a0fb93866f61 100644
+> --- a/drivers/vfio/vfio.c
+> +++ b/drivers/vfio/vfio.c
+> @@ -1812,6 +1812,7 @@ struct vfio_info_cap_header *vfio_info_cap_add(struct vfio_info_cap *caps,
+>  	buf = krealloc(caps->buf, caps->size + size, GFP_KERNEL);
+>  	if (!buf) {
+>  		kfree(caps->buf);
+> +		caps->buf = NULL;
 
->
-> > +};
-> > +
-> >  enum gaudi_dcores {
-> >       HL_GAUDI_WS_DCORE,
-> >       HL_GAUDI_WN_DCORE,
-> > @@ -742,6 +1166,7 @@ enum gaudi_dcores {
-> >   * @period_ms: Period value, in milliseconds, for utilization rate in range 100ms - 1000ms in 100 ms
-> >   *             resolution. Currently not in use.
-> >   * @pll_index: Index as defined in hl_<asic type>_pll_index enumeration.
-> > + * @tpm_nonce: Nonce number used for tpm attestation.
-> >   * @eventfd: event file descriptor for event notifications.
-> >   * @pad: Padding to 64 bit.
-> >   */
-> > @@ -755,6 +1180,7 @@ struct hl_info_args {
-> >               __u32 ctx_id;
-> >               __u32 period_ms;
-> >               __u32 pll_index;
-> > +             __u32 tpm_nonce;
-> >               __u32 eventfd;
-> >       };
->
-> You added a new field to the middle of a structure, did that just break
-> userspace built with the old structure from working with a new kernel?
-It's a union, not a structure.
+We could add this as some kind of hardening, I guess. Current callers
+all seem to deal with failure correctly.
 
->
-> > @@ -1400,7 +1837,16 @@ struct hl_debug_params_bmon {
-> >
-> >       /* Trace source ID */
-> >       __u32 id;
-> > -     __u32 pad;
-> > +
-> > +     /* Control register */
-> > +     __u32 control;
-> > +
-> > +     /* Two more address ranges that the user can request to filter */
-> > +     __u64 start_addr2;
-> > +     __u64 end_addr2;
-> > +
-> > +     __u64 start_addr3;
-> > +     __u64 end_addr3;
-> >  };
->
-> Adding to the end is good, but again, will old userspace and new kernel
-> still work properly?
-Yes. We get from the userspace the pointer to copy-to-user this
-structure into, and the maximum size to copy.
-In the driver we check the maximum size the user gave us vs. the
-sizeof(structure).
-We copy the minimum between the two sizes, so if we work vs. old
-userspace which has an old version of this structure, we will copy the
-amount of bytes that represent his version of the structure.
+>  		caps->size = 0;
+>  		return ERR_PTR(-ENOMEM);
+>  	}
 
->
-> >
-> >  struct hl_debug_params_spmu {
-> > @@ -1409,7 +1855,11 @@ struct hl_debug_params_spmu {
-> >
-> >       /* Number of event types selection */
-> >       __u32 event_types_num;
-> > -     __u32 pad;
-> > +
-> > +     /* TRC configuration register values */
-> > +     __u32 pmtrc_val;
-> > +     __u32 trc_ctrl_host_val;
-> > +     __u32 trc_en_host_val;
-> >  };
->
-> Same here, you increased the size.
-Same answer.
-Thanks,
-Oded
->
-> thanks,
->
-> greg k-h

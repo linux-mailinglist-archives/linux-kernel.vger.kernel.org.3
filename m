@@ -2,197 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A3455E027
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E67F555C826
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345359AbiF1MDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 08:03:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
+        id S245119AbiF1MF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 08:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344929AbiF1MDR (ORCPT
+        with ESMTP id S230446AbiF1MFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 08:03:17 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD4226F1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:03:17 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0C2DD21EDC;
-        Tue, 28 Jun 2022 12:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1656417796; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yVWg7wp4h+Cfn2qEfC6WV/K5Vv+RBe+YiFsHKlpkmZQ=;
-        b=hn0c66rsHaEfSrsSHHC75IHTya+X9eM25nyDtKYbte2CMyE/UkS5l2Qk+r7uMe2XaB4x9P
-        FyitlS0G+yD3KL+iWvvwRwSZHj4mp6FJMYNS74SzKWDKnaIsRvJJS0jRmErIdE30Vr6sL4
-        WYPCi5jahpUkFo1HGGlnS4TmaMnHVBM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A35D5139E9;
-        Tue, 28 Jun 2022 12:03:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HhcWJgPuumJVFAAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 28 Jun 2022 12:03:15 +0000
-Message-ID: <8e7faa1d-9e72-5b2e-2a70-426d822d05b3@suse.com>
-Date:   Tue, 28 Jun 2022 14:03:15 +0200
+        Tue, 28 Jun 2022 08:05:23 -0400
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D0932055;
+        Tue, 28 Jun 2022 05:04:52 -0700 (PDT)
+Received: by mail-qv1-f41.google.com with SMTP id 2so4652923qvc.0;
+        Tue, 28 Jun 2022 05:04:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zlmmkmS67MAx6J5t/JGg1s0oRcCGTGtJn2BOovrT090=;
+        b=8RkH+W+ryhhz/FoQncAXKmUE6sUpCvQE+7+qqqXGUJrf+vsSZSfxugraKxEFSZnN1W
+         t1+U5+6qbYVEVFBfYexEBi3waJBvXJt4hORFfq6TH8E6ieGeKYsITGws0VPMAcJ85Q+U
+         2S81G3NYjPeja4ko4cOqewS/vrLwEjDjA03LjbyjjxOmlrx0FCO/Am6hXCOAu8CBirtK
+         SGr0UFHlUMFA3I62ObHUm6KS7t6qtqbSXvgxk6Y2LEEjVq3QLGtdTQz+68niJ21zFRHw
+         u4GnuN4EaE8GthiXVZroE2PK8IC6OEAgFWWqeXt0uz6hGVgDsHwYtHobLfors+JcnGL+
+         wfyQ==
+X-Gm-Message-State: AJIora/N8UHnL7xf5JPQ4e6BaIdX+R4nRJUAj3IgzOIHvzQZpYNCcfvb
+        Hi5yLlvzTGh1GTb2YeEOJiXUKmD4eVoajw==
+X-Google-Smtp-Source: AGRyM1sz72p4COf8/RBcOlJtUES927w++F6UxKr7nj5/nlr5TQghovBDSJXWvWDBmnQpFNqQTo4xoQ==
+X-Received: by 2002:a05:6214:5841:b0:470:4b9c:9c95 with SMTP id ml1-20020a056214584100b004704b9c9c95mr3102799qvb.41.1656417891375;
+        Tue, 28 Jun 2022 05:04:51 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id bq30-20020a05620a469e00b006a785ba0c25sm533130qkb.77.2022.06.28.05.04.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 05:04:51 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31bf327d4b5so25092717b3.13;
+        Tue, 28 Jun 2022 05:04:50 -0700 (PDT)
+X-Received: by 2002:a0d:c787:0:b0:31b:a963:e1de with SMTP id
+ j129-20020a0dc787000000b0031ba963e1demr13694935ywd.283.1656417890619; Tue, 28
+ Jun 2022 05:04:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     Jan Beulich <jbeulich@suse.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220623094608.7294-1-jgross@suse.com>
- <20220623094608.7294-2-jgross@suse.com>
- <117fd526-a241-2f01-47b5-e40e1803124b@suse.com>
-From:   Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH v2 1/3] x86/xen: use clear_bss() for Xen PV guests
-In-Reply-To: <117fd526-a241-2f01-47b5-e40e1803124b@suse.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------PKRvAy4qT3iQa0ns18QQvZQy"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220615101227.13463-1-wsa+renesas@sang-engineering.com>
+ <CAMuHMdVX9_qO2Ydi=_57NC2fFRy=YAzuSV7xH=huAamXKOKwCA@mail.gmail.com> <YrrhO+kb5d2rtTNA@shikoro>
+In-Reply-To: <YrrhO+kb5d2rtTNA@shikoro>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 28 Jun 2022 14:04:38 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXVJV0Or_6HbusKdFhVAi3OQKw=udYBS2B0-iH7DpjS7w@mail.gmail.com>
+Message-ID: <CAMuHMdXVJV0Or_6HbusKdFhVAi3OQKw=udYBS2B0-iH7DpjS7w@mail.gmail.com>
+Subject: Re: [PATCH] clk: renesas: rcar-gen4: implement SDSRC properly
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------PKRvAy4qT3iQa0ns18QQvZQy
-Content-Type: multipart/mixed; boundary="------------80o8n7krF6sw0zfxyPWo7gx5";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Jan Beulich <jbeulich@suse.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>,
- Boris Ostrovsky <boris.ostrovsky@oracle.com>,
- xen-devel@lists.xenproject.org, x86@kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <8e7faa1d-9e72-5b2e-2a70-426d822d05b3@suse.com>
-Subject: Re: [PATCH v2 1/3] x86/xen: use clear_bss() for Xen PV guests
-References: <20220623094608.7294-1-jgross@suse.com>
- <20220623094608.7294-2-jgross@suse.com>
- <117fd526-a241-2f01-47b5-e40e1803124b@suse.com>
-In-Reply-To: <117fd526-a241-2f01-47b5-e40e1803124b@suse.com>
+Hi Wolfram,
 
---------------80o8n7krF6sw0zfxyPWo7gx5
-Content-Type: multipart/mixed; boundary="------------sDLlMP0x9f6jm3WTSHG4Qbmi"
+On Tue, Jun 28, 2022 at 1:08 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> > > Tested on my Spider board (r8a779f0). Only build tested for r8a779g0 but
+> > > the docs for the registers are the same.
+> >
+> > While the SDSRCSEL bits are the same, the register at offset 0x8a4 is
+> > called SD0CKCR1 on R-Car S4-8, and CKSRCSELCR on R-Car V4H.
+> > I guess that is why you removed the definition of SD0CKCR1, and stored
+> > the register offset in DEF_GEN4_SDSRC(), despite both being the same?
+>
+> TBH, no :) I did that to be future proof in case the register gets moved
+> somewhere else. Also, this is consistent how we did it with DEF_GEN3_SD.
 
---------------sDLlMP0x9f6jm3WTSHG4Qbmi
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+In case of DEF_GEN3_SD(), we have a register offset parameter because
+most affected SoCs have multiple SDHI instances, and multiple registers
+to control their clocks.
 
-T24gMjMuMDYuMjIgMTE6NTEsIEphbiBCZXVsaWNoIHdyb3RlOg0KPiBPbiAyMy4wNi4yMDIy
-IDExOjQ2LCBKdWVyZ2VuIEdyb3NzIHdyb3RlOg0KPj4gLS0tIGEvYXJjaC94ODYveGVuL2Vu
-bGlnaHRlbl9wdi5jDQo+PiArKysgYi9hcmNoL3g4Ni94ZW4vZW5saWdodGVuX3B2LmMNCj4+
-IEBAIC0xMTgzLDE1ICsxMTgzLDE5IEBAIHN0YXRpYyB2b2lkIF9faW5pdCB4ZW5fZG9tdV9z
-ZXRfbGVnYWN5X2ZlYXR1cmVzKHZvaWQpDQo+PiAgIGV4dGVybiB2b2lkIGVhcmx5X3hlbl9p
-cmV0X3BhdGNoKHZvaWQpOw0KPj4gICANCj4+ICAgLyogRmlyc3QgQyBmdW5jdGlvbiB0byBi
-ZSBjYWxsZWQgb24gWGVuIGJvb3QgKi8NCj4+IC1hc21saW5rYWdlIF9fdmlzaWJsZSB2b2lk
-IF9faW5pdCB4ZW5fc3RhcnRfa2VybmVsKHZvaWQpDQo+PiArYXNtbGlua2FnZSBfX3Zpc2li
-bGUgdm9pZCBfX2luaXQgeGVuX3N0YXJ0X2tlcm5lbChzdHJ1Y3Qgc3RhcnRfaW5mbyAqc2kp
-DQo+PiAgIHsNCj4+ICAgCXN0cnVjdCBwaHlzZGV2X3NldF9pb3BsIHNldF9pb3BsOw0KPj4g
-ICAJdW5zaWduZWQgbG9uZyBpbml0cmRfc3RhcnQgPSAwOw0KPj4gICAJaW50IHJjOw0KPj4g
-ICANCj4+IC0JaWYgKCF4ZW5fc3RhcnRfaW5mbykNCj4+ICsJaWYgKCFzaSkNCj4+ICAgCQly
-ZXR1cm47DQo+PiAgIA0KPj4gKwljbGVhcl9ic3MoKTsNCj4gDQo+IEFzIHBlciBzdWJzZXF1
-ZW50IG9ic2VydmF0aW9uLCB0aGlzIHNob3VsZG4ndCByZWFsbHkgYmUgbmVlZGVkOiBUaGUN
-Cj4gaHlwZXJ2aXNvciAob3IgdG9vbCBzdGFjayBmb3IgRG9tVS1zKSBhbHJlYWR5IGRvZXMg
-c28uIFdoaWxlIEkgZ3Vlc3MNCj4gd2Ugd2FudCB0byBrZWVwIGl0IHRvIGJlIG9uIHRoZSBz
-YWZlIHNpZGUsIG1heWJlIHdvcnRoIGEgY29tbWVudD8NCg0KQXJlIHlvdSBzdXJlIGFsbCBw
-b3NzaWJsZSBib290IGxvYWRlcnMgYXJlIGNsZWFyaW5nIGFsbG9jLW9ubHkgc2VjdGlvbnM/
-DQoNCkknZCByYXRoZXIgbm90IGNvdW50IG9uIGUuZy4gZ3J1YiBkb2luZyB0aGlzIGluIGFs
-bCBjYXNlcy4NCg0KDQpKdWVyZ2VuDQo=
---------------sDLlMP0x9f6jm3WTSHG4Qbmi
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+> > >         case CLK_TYPE_GEN4_SDSRC:
+> > > -               div = ((readl(base + SD0CKCR1) >> 29) & 0x03) + 4;
+> > > +               value = (readl(base + core->offset) >> 29) & 3;
+> > > +               if (value) {
+> > > +                       div = value + 4;
+> > > +               } else {
+> > > +                       parent = clks[core->parent >> 16];
+> > > +                       if (IS_ERR(parent))
+> > > +                               return ERR_CAST(parent);
+> > > +                       div = 2;
+> > > +               }
+> >
+> > So this gives the exact same divider of PLL5 before.
+> >
+> > The clock diagram indeed shows different paths for value 0
+> > (PLL5 -> 1/2 -> 1/2) and values 1 and 2 (PLL5 -> {1/5 or 1/6}).
+> > But the textual description for SDSRC says "The SDSRC divider divides
+> > PLL5 output clock", matching the original code.
+> >
+> > Do we have to complicate the code? ;-)
+> > I guess the clock diagram was based on the diagram for R-Car H3
+> > (which has two daisy-chained fixed 1/2 dividers), with the new 1/5
+> > and 1/6 dividers added.
+>
+> We don't have to complicate the code unnecessarily. If you think the
+> diagram is flawed, then we can keep the current code. I changed the code
+> because I was confused when checking 'clk_summary' with the diagram and
+> wanted to make it proper to reduce my confusion.
+>
+> My patches to enable eMMC on Spider have a significantly lower
+> throughput than the BSP, so this was the first step of trying to verify
+> things and get the clocks in shape.
+>
+> If you call it superfluous, then we can drop it. No hard feelings here.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+OK, so let's drop this.
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+Gr{oetje,eeting}s,
 
---------------sDLlMP0x9f6jm3WTSHG4Qbmi--
+                        Geert
 
---------------80o8n7krF6sw0zfxyPWo7gx5--
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
---------------PKRvAy4qT3iQa0ns18QQvZQy
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmK67gMFAwAAAAAACgkQsN6d1ii/Ey8H
-Ugf+OD0yOcSu9qozk0L8XeQDqTSi3n0Bqexn+BBDt0XHm6r4L2T2nvJU+bm4aH5cJDM8yrn6ZBze
-cv9u3M/ecd16V2FT4ISCgC769pZX+9BEUD+GGwKsEhCaTiVw67M+Te/HqgqrnMClvQD4WBOBU4a5
-AFaJRyBb1kymiMPPW16OlNeGH8a1+5/m6G3Kxz4bvfbhuAJDeusORVKsHEwts77+8wHd7ZRQG6O+
-d9OmaoT9tpFr1QSOCfYLx5X4wGnr+G6LFX8955T1JzKkVJ9g275FTBnStHGtnGcXsxFpkMv7ejK9
-EQMtmeyo0A+EVQt3QXGr9aRZL5jZR8uw7De/F9rXCA==
-=5oig
------END PGP SIGNATURE-----
-
---------------PKRvAy4qT3iQa0ns18QQvZQy--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

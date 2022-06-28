@@ -2,174 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B3155EAF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B8055EAFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233265AbiF1RXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 13:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
+        id S232920AbiF1RZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 13:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233136AbiF1RX0 (ORCPT
+        with ESMTP id S231738AbiF1RZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 13:23:26 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C605F2D1F0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:23:24 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id u14so18386480qvv.2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7a9uw7xwjGqPRQqY1yb1sbID6LzC3CRVQFUu2rtKuVw=;
-        b=kuIgtnZugIgrCoQ2szIFHgKx2Z2B0TdEc3P0bG5DturMnnsmoHmgM22eNRHtJyJ9FF
-         z/sCIRfo1rnPR9e5CWaudeH/etUOfT4gf92RJ+p3GepiwIaq64jzCKaSz7pInb9UEFwM
-         uRXy6n2tjrhpWd032bYu05t4d9s1IurkIFuPaJ2MuMvedGpx7F515tGraB7QlfBdMeC5
-         BA+b8l1BRC3tro3IjSGkiNwunhp5e+9RxCNQwEwEsmAgCH02XxAL1psx91g53QzVrMCf
-         Wn/LvKXIAnmZqOjmYIDYf+JyMuk8IaIbdBIh3AZD6PiOueI/TRUs5IewtW1yCxbFwiDy
-         6Usw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7a9uw7xwjGqPRQqY1yb1sbID6LzC3CRVQFUu2rtKuVw=;
-        b=Ehbctk9j07/KduIGpA7j0wHVyNamACoKLUbS05ASef3AI8TaE8rWZ7DiqqEp6nTyjJ
-         Gztlrp7LgYjtphxQ82D9YcyxpciNKS6YxB7giD9uZnxYOB+0vOdjAfC+8G+fMMIEKR9E
-         nmGKKb6xRHy2gaSfeDsAmBIz1XWO+d54MSsucWP6foauvYElu3D3UIGRdW+xFcPLZ0/R
-         4f+wZhw315fOJWbM4msKpl22KGllAsEC+jnQAMGBhT6JdlmN7cTpcCfF4ADgkhyh+0KM
-         Iwul7DZQA4JNszA1QVhJCu+VrEwnNG64at9SudUdJ/IqPlx2MuWTKGgRB5L0oWxiWiMV
-         QSZQ==
-X-Gm-Message-State: AJIora9ANatlx/WwH/nk0iWyWylCDMfcme5vsxQkOzzKGHEXW7HPuXwP
-        RNcdNo8wTKTcxstjCZFwVw==
-X-Google-Smtp-Source: AGRyM1sBOIKYUcU93DKs8yJJkoa9dQ0/94D5Fq3apoISJdDTjhiP9VeWZCuOycN7adxiCYh3wMbQ3A==
-X-Received: by 2002:ac8:5e0a:0:b0:31b:f15f:76b with SMTP id h10-20020ac85e0a000000b0031bf15f076bmr3298669qtx.502.1656437003234;
-        Tue, 28 Jun 2022 10:23:23 -0700 (PDT)
-Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id b12-20020a05620a0f8c00b006a34a22bc60sm11080269qkn.9.2022.06.28.10.23.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 10:23:22 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 13:23:21 -0400
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH v5whatever, now with typechecking] vsprintf: %pf(%p)
-Message-ID: <20220628172321.gbgfif7zgz5ny3mo@moria.home.lan>
-References: <20220628032439.3314451-1-kent.overstreet@gmail.com>
- <CAHk-=wiGMNvKaVuSDD7y2JeK+NsNyXtqZEusOLmEw9uE+0ZySg@mail.gmail.com>
+        Tue, 28 Jun 2022 13:25:27 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A8539821;
+        Tue, 28 Jun 2022 10:25:25 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SH86e2016204;
+        Tue, 28 Jun 2022 17:25:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=m4j3y3RvkIM6SWeHtONEy1ljKBPfeHeA0FSrfKMn9qs=;
+ b=qG1qnycdUJJg71tCbFND6rP86rIil8j2PsHZFDbyZ8o+W943G/lE28lH8dW/PNV9k5G4
+ DHwuvG+dRZVoTu2WQKkq9549yZCg20G2hFWUJ4yocqecMdDa27z9dHQV8Ai2HlYguCVI
+ VLErP6tHcCJIIie1QvmsG6qO9zhjg/Xjj2D0Gf6dxSJ5nZRT75ntNuGW9YxFzixTRSqW
+ DyRnjZTpZl34dnRScCaqKiec+eVf9TLI9xdWMR0Yqw7Qzik6BDHVkMyBO4Uk6li/O1Tn
+ 05SAhXqdbtNf7hqrHEbB7Vz64UiI4RULlEoVDYcL4ttZAZE+nVWGtQA51qgsZ4gh3YrU HQ== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h05sd0huq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 17:25:16 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25SHLBC9021275;
+        Tue, 28 Jun 2022 17:25:15 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma04wdc.us.ibm.com with ESMTP id 3gwt09pxyg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 17:25:15 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25SHPEOd33489318
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Jun 2022 17:25:14 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 64E64BE04F;
+        Tue, 28 Jun 2022 17:25:14 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C91D2BE054;
+        Tue, 28 Jun 2022 17:25:13 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 28 Jun 2022 17:25:13 +0000 (GMT)
+Message-ID: <4dec36a6-e4be-196c-1af7-3d84c964394f@linux.ibm.com>
+Date:   Tue, 28 Jun 2022 13:25:13 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiGMNvKaVuSDD7y2JeK+NsNyXtqZEusOLmEw9uE+0ZySg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3 0/3] tpm: Preserve TPM measurement log across kexec
+ (ppc64)
+Content-Language: en-US
+To:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     nayna@linux.ibm.com, nasastry@in.ibm.com, mpe@ellerman.id.au
+References: <20220628165820.883222-1-stefanb@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220628165820.883222-1-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: UPxcaoS2IWgnZEiR4HPlabB68h_GKNcO
+X-Proofpoint-GUID: UPxcaoS2IWgnZEiR4HPlabB68h_GKNcO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-28_10,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 lowpriorityscore=0 suspectscore=0 impostorscore=0
+ mlxlogscore=662 adultscore=0 malwarescore=0 clxscore=1015 mlxscore=0
+ spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206280068
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 09:46:46PM -0700, Linus Torvalds wrote:
->     // type warning *and* link-time failure
->     extern int not_a_pointer;
+On 6/28/22 12:58, Stefan Berger wrote:
+> The of-tree subsystem does not currently preserve the IBM vTPM 1.2 and
+> vTPM 2.0 measurement logs across a kexec on ppc64. This series fixes this
+> for the kexec_file_load() syscall using the flattened device tree (fdt) to
+> carry the measurement log's buffer across kexec.
 > 
->     extern int pretty_print_int(int *);
->     extern int pretty_print_long_long(long long *);
+>     Stefan
 > 
->     #define __PP_FN(ptr) _Generic(*(ptr),               \
->         int:            pretty_print_int,       \
->         long long:      pretty_print_long_long, \
->         default:        not_a_pointer )
+
+v3:
+  - Moved TPM Open Firmware related function to 
+drivers/char/tpm/eventlog/tpm_of.c
+
+v2:
+  - rearranged patches
+  - fixed compilation issues for x86
+
+
+> Stefan Berger (3):
+>    tpm: of: Make of-tree specific function commonly available
+>    of: kexec: Refactor IMA buffer related functions to make them reusable
+>    tpm/kexec: Duplicate TPM measurement log in of-tree for kexec
 > 
->     #define __PP_CHECK(fn,ptr)  \
->         __PP_MAGIC+(__typeof__ ((fn)(ptr)))0, fn, ptr
+>   drivers/char/Makefile              |   1 +
+>   drivers/char/tpm/Makefile          |   1 +
+>   drivers/char/tpm/eventlog/of.c     |  31 +--
+>   drivers/char/tpm/eventlog/tpm_of.c |  27 +++
+>   drivers/of/kexec.c                 | 293 +++++++++++++++++++++++++----
+>   include/linux/kexec.h              |   6 +
+>   include/linux/of.h                 |   8 +-
+>   include/linux/tpm.h                |   5 +
+>   kernel/kexec_file.c                |   6 +
+>   9 files changed, 315 insertions(+), 63 deletions(-)
+>   create mode 100644 drivers/char/tpm/eventlog/tpm_of.c
 > 
->    #define pretty_fn(fn,ptr) &(struct pretty_print_struct) \
->        { __PP_CHECK(__PP_FN(ptr), ptr) }
-> 
->     #define pretty_print(ptr) pretty_fn(__PP_FN(ptr), ptr)
-> 
->     void test_me(int val)
->     {
->         printf("%pf\n", pretty_print(&val));
->     }
-
-Your version is nicer for the simpler cases, but it's not general enough for
-what I'm looking at.
-
- - We need to be able to specify the pretty-printer function, and not just have
-   one per type
-
-From the commit message for my patch converting %p[iI] pretty printers to
-printbuf style pretty printers:
-
-     %piS     -> prt_sockaddr_zeropad
-     %pIS     -> prt_sockaddr
-     %pISc    -> prt_sockaddr_compressed
-     %pISfc   -> prt_sockaddr_flow_compressed
-     %pISp    -> prt_sockaddr_port
-     %pISpc   -> prt_sockaddr_port_compressed
-     %pISpsc  -> prt_sockaddr_port_scope_compressed
-     %pISpfc  -> prt_sockaddr_port_flow_compressed
-     %pISpfsc -> prt_sockaddr_port_scope_flow_compressed
-
-That's just sockaddrs, and I limited it to creating functions for the printk
-formats that are actually currently in use.
-
-What we _really_ want is just to have a separate flags argument to prt_sockaddr,
-but in the current code only pointer arguments are supported.
-
- - We need pretty-printer functions that take variable numbers of arguments, and
-   not just for a flags argument
-
-In my OOM report patch series, I'm doing
-
-printk("%pf()", CALL_PP(slabs_to_text));
-printk("%pf()", CALL_PP(shrinkers_to_text));
-
-We want slabs_to_text and shrinkers_to_text to be pretty-printers instead of
-just calling printk directly so that procfs/sysfs/whatever the current fashion
-is can also dump the same report.
-
-And in bcachefs, I've got a bunch of pretty-printers that need a pointer to the
-filesystem object in addition to a pointer to the object they're printing so
-that they can decode all kinds of things. Pretty sure this is going to come up
-elsewhere (other filesystems, for sure).
-
-Also:
-
-I want the pretty-printer function to be specified explicitly, so that when
-reading the code we can cscope to it. When we're doing a function call, even
-indirectly, _I want the name of that function in front of me_ and I think that
-is one of the major advantages of this approach vs. our current %p extensions.
-
-BUT
-
-Maybe we can get rid of specifying the arguments in the format string, and have
-it be just %pf instead of %pf(...).
-
-The struct call_pp needs to handle a variable number of arguments, not just one
-as in your example, and I really do want it to handle integer arguments, and not
-just pointer arguments.
-
-So here's the $20 million question: Can we, safely, on all archictectures, treat
-all arguments as ulongs as long as the actual function arguments are either
-pointers or integers not bigger than a ulong? Or are there crazy architectures
-out there where passing pointers is different from passing integers in the ABI?
-
-We'd also really like to be able to pass u64s too - prt_u64() is now a standard
-pretty-printer, along with prt_u64_human_readable()!
-
-Because yeah fundamentally the reason for the %pf(%p,%llu) thing is that we know
-how to pass those types through varargs to sprintf, and libffi is a thing so we
-know that the future we'll be able to do constructed function calls including
-with u64 arguments, so this seems solvable.
-
-But maybe serializing them before the call in struct call_pp isn't actually any
-harder, and actually it gets around the fact that C promotes all ints smaller
-than ints to ints in varargs, so that's nice.
-
-I need to think about this some more.

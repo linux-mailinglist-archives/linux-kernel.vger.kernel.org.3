@@ -2,163 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE6C55E1EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE5055DDE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344569AbiF1K3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 06:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
+        id S1344807AbiF1KaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 06:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344360AbiF1K3K (ORCPT
+        with ESMTP id S244644AbiF1KaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:29:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A068B2E9F5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:29:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 37D45618F8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:29:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DF16C3411D;
-        Tue, 28 Jun 2022 10:29:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656412148;
-        bh=+YIuG1Dsd0HeHOGBZVaaHHzCNV1scW8f/GDWrpvaTgY=;
+        Tue, 28 Jun 2022 06:30:20 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5577B2E6BE;
+        Tue, 28 Jun 2022 03:30:19 -0700 (PDT)
+Received: from anrayabh-desk (unknown [167.220.238.193])
+        by linux.microsoft.com (Postfix) with ESMTPSA id EB4C120CD15E;
+        Tue, 28 Jun 2022 03:30:13 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EB4C120CD15E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1656412218;
+        bh=JQm/F3y5KpRHHQKfnCN47o1gbSsO/+OUxUcmzwEpM+w=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z7tM/ZPU6SO5+GzGwBpa/Gm78NTdkVjUYN/gGRSA9HumjmIxnx5h0nEc+TLzGwiuP
-         4/6v/JK+wVj+2rbcuWtx0eEVl3FwxN+6sbcfNQmqfJ2e0G/pFAB3X5hU1JepRhWpZl
-         qrlHvaKgG7brJFCcdAo9InJmEWK00AAka9wMITObRplPoiXlsnMUV87OrYc0wgC6hG
-         nmZnjYq5QMIUZT0hwVDwil0EC7i6DwtwWD7UiRLBJ3xOVMRzkMupHwZYpTQiDHBBfR
-         b6X+nhf0qoVBc0MZEOAIxnEu/2xa4qADQFSuyZpbq7ouCLfi83etTAh6lI9iI8kLBS
-         64nHOY2oTKZdg==
-Date:   Tue, 28 Jun 2022 13:28:55 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     masahiroy@kernel.org, mmarek@suse.cz, paul.gortmaker@windriver.com,
-        arnd@arndb.de, bp@alien8.de, linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH] kconfig: Add implicit CONFIG_ prefix to
- IS_ENABLED() and co
-Message-ID: <YrrX594QO2pnpLxM@kernel.org>
-References: <YrrQOifFIiISf/3g@hirez.programming.kicks-ass.net>
+        b=U5cscUJSP6D+FZWBOAujwe5QW9HXONS5YfZQv+keY574JNdWOdz9WTKXOc2IroxHi
+         1pA4kqI+mV0Wm8JO9OCPD+LfnoA3Oe/QQ0Lyzs7jw1vYbTC++NTzuq/DgFSA+SXiXv
+         HuYytuoFMQtCdcZaAYs43D8be1sZJv0PLEyAQeE8=
+Date:   Tue, 28 Jun 2022 16:00:08 +0530
+From:   Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Ilias Stamatis <ilstam@amazon.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, mail@anirudhrb.com,
+        kumarpraveen@linux.microsoft.com, wei.liu@kernel.org,
+        robert.bradford@intel.com, liuwe@microsoft.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: nVMX: Don't expose TSC scaling to L1 when on Hyper-V
+Message-ID: <YrrYMHbiO0UuLZYN@anrayabh-desk>
+References: <YqdsjW4/zsYaJahf@google.com>
+ <YqipLpHI24NdhgJO@anrayabh-desk>
+ <YqiwoOP4HX2LniI4@google.com>
+ <87zgi5xh42.fsf@redhat.com>
+ <YrMenI1mTbqA9MaR@anrayabh-desk>
+ <87r13gyde8.fsf@redhat.com>
+ <YrNBHFLzAgcsw19O@anrayabh-desk>
+ <87k098y77x.fsf@redhat.com>
+ <YrQ9rt61a8tPWWGO@anrayabh-desk>
+ <87bkujy4z9.fsf@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YrrQOifFIiISf/3g@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87bkujy4z9.fsf@redhat.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 11:56:10AM +0200, Peter Zijlstra wrote:
+On Thu, Jun 23, 2022 at 01:49:30PM +0200, Vitaly Kuznetsov wrote:
+> Anirudh Rayabharam <anrayabh@linux.microsoft.com> writes:
 > 
-> Since IS_ENABLED() (and friends) are clearly meant to be used on
-> CONFIG_foo symbols and IS_ENABLED(CONFIG_ is so long and almost an
-> tautology, allow the more compact usage of: IS_ENABLED(foo).
+> > On Wed, Jun 22, 2022 at 06:48:50PM +0200, Vitaly Kuznetsov wrote:
+> >> Anirudh Rayabharam <anrayabh@linux.microsoft.com> writes:
+> >> 
+> >> > On Wed, Jun 22, 2022 at 04:35:27PM +0200, Vitaly Kuznetsov wrote:
+> >> 
+> >> ...
+> >> 
+> >> >> 
+> >> >> I've tried to pick it up but it's actually much harder than I think. The
+> >> >> patch has some minor issues ('&vmcs_config.nested' needs to be switched
+> >> >> to '&vmcs_conf->nested' in nested_vmx_setup_ctls_msrs()), but the main
+> >> >> problem is that the set of controls nested_vmx_setup_ctls_msrs() needs
+> >> >> is NOT a subset of vmcs_config (setup_vmcs_config()). I was able to
+> >> >> identify at least:
+> >> 
+> >> ...
+> >> 
+> >> I've jsut sent "[PATCH RFC v1 00/10] KVM: nVMX: Use vmcs_config for
+> >> setting up nested VMX MSRs" which implements Sean's suggestion. Hope
+> >> this is the way to go for mainline.
+> >> 
+> >> >
+> >> > How about we do something simple like the patch below to start with?
+> >> > This will easily apply to stable and we can continue improving upon
+> >> > it with follow up patches on mainline.
+> >> >
+> >> 
+> >> Personally, I'm not against this for @stable. Alternatively, in case the
+> >
+> > I think it's a good intermediate fix for mainline too. It is easier to land
+> > it in stable if it already exists in mainline. It can stay in mainline
+> > until your series lands and replaces it with the vmcs_config approach.
+> >
+> > What do you think?
+> >
 > 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Paolo's call but personally I think both series can make 5.20 so there's
+> no need for an intermediate solution.
 
-FWIW: 
-Reviewed-by: Mike Rapoport <rppt@linux.ibm.com>
+Only reason I see for this intermediate solution is to automatically
+land the fix in stable without bothering to write a special backport.
 
-> ---
-> 
-> With this on, something like:
-> 
->   for i in IS_BUILTIN IS_MODULE IS_REACHABLE IS_ENABLED;
->   do
-> 	git grep -wl $i | while read file;
-> 	do
-> 		sed -ie "s/${i}(CONFIG_/${i}(/g" $file;
->       done;
->   done
-> 
-> can be used to convert all existing instance. Allowing, after time
-> passes, to remove the CONFIG_ usage if so desired.
-> 
-> ---
->  tools/include/linux/kconfig.h   |    7 ++++---
->  include/linux/kconfig.h         |    7 ++++---
->  2 files changed, 8 insertions(+), 6 deletions(-)
-> 
-> --- a/include/linux/kconfig.h
-> +++ b/include/linux/kconfig.h
-> @@ -38,6 +38,7 @@
->   * When CONFIG_BOOGER is not defined, we generate a (... 1, 0) pair, and when
->   * the last step cherry picks the 2nd arg, we get a zero.
->   */
-> +#define _is_defined(x)			__or(__is_defined(x), __is_defined(CONFIG_##x))
->  #define __is_defined(x)			___is_defined(x)
->  #define ___is_defined(val)		____is_defined(__ARG_PLACEHOLDER_##val)
->  #define ____is_defined(arg1_or_junk)	__take_second_arg(arg1_or_junk 1, 0)
-> @@ -47,14 +48,14 @@
->   * otherwise. For boolean options, this is equivalent to
->   * IS_ENABLED(CONFIG_FOO).
->   */
-> -#define IS_BUILTIN(option) __is_defined(option)
-> +#define IS_BUILTIN(option) _is_defined(option)
->  
->  /*
->   * IS_MODULE(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'm', 0
->   * otherwise.  CONFIG_FOO=m results in "#define CONFIG_FOO_MODULE 1" in
->   * autoconf.h.
->   */
-> -#define IS_MODULE(option) __is_defined(option##_MODULE)
-> +#define IS_MODULE(option) _is_defined(option##_MODULE)
->  
->  /*
->   * IS_REACHABLE(CONFIG_FOO) evaluates to 1 if the currently compiled
-> @@ -63,7 +64,7 @@
->   * built-in code when CONFIG_FOO is set to 'm'.
->   */
->  #define IS_REACHABLE(option) __or(IS_BUILTIN(option), \
-> -				__and(IS_MODULE(option), __is_defined(MODULE)))
-> +				__and(IS_MODULE(option), _is_defined(MODULE)))
->  
->  /*
->   * IS_ENABLED(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'y' or 'm',
-> --- a/tools/include/linux/kconfig.h
-> +++ b/tools/include/linux/kconfig.h
-> @@ -32,6 +32,7 @@
->   * When CONFIG_BOOGER is not defined, we generate a (... 1, 0) pair, and when
->   * the last step cherry picks the 2nd arg, we get a zero.
->   */
-> +#define _is_defined(x)			__or(__is_defined(x), __is_defined(CONFIG_##x))
->  #define __is_defined(x)			___is_defined(x)
->  #define ___is_defined(val)		____is_defined(__ARG_PLACEHOLDER_##val)
->  #define ____is_defined(arg1_or_junk)	__take_second_arg(arg1_or_junk 1, 0)
-> @@ -41,13 +42,13 @@
->   * otherwise. For boolean options, this is equivalent to
->   * IS_ENABLED(CONFIG_FOO).
->   */
-> -#define IS_BUILTIN(option) __is_defined(option)
-> +#define IS_BUILTIN(option) _is_defined(option)
->  
->  /*
->   * IS_MODULE(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'm', 0
->   * otherwise.
->   */
-> -#define IS_MODULE(option) __is_defined(option##_MODULE)
-> +#define IS_MODULE(option) _is_defined(option##_MODULE)
->  
->  /*
->   * IS_REACHABLE(CONFIG_FOO) evaluates to 1 if the currently compiled
-> @@ -56,7 +57,7 @@
->   * built-in code when CONFIG_FOO is set to 'm'.
->   */
->  #define IS_REACHABLE(option) __or(IS_BUILTIN(option), \
-> -				__and(IS_MODULE(option), __is_defined(MODULE)))
-> +				__and(IS_MODULE(option), _is_defined(MODULE)))
->  
->  /*
->   * IS_ENABLED(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'y' or 'm',
-> 
+I will send it as a proper patch and see if there is any interest in
+taking it.
 
--- 
-Sincerely yours,
-Mike.
+	- Anirudh.

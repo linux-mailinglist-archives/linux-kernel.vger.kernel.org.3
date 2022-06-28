@@ -2,74 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16FB755CE01
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B6755CFF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241596AbiF1AcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 20:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34180 "EHLO
+        id S242274AbiF1Aco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 20:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236583AbiF1AcG (ORCPT
+        with ESMTP id S240417AbiF1Acl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 20:32:06 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5343310FF3;
-        Mon, 27 Jun 2022 17:32:04 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so14141527pjl.5;
-        Mon, 27 Jun 2022 17:32:04 -0700 (PDT)
+        Mon, 27 Jun 2022 20:32:41 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247B211C39
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 17:32:40 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id fd6so15331464edb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 17:32:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OFFvy82t3qS2mWvKMEQ2PiSLGvpukFE2JbAHWF/b/0o=;
-        b=NSCcXg1ekuYiFLFIOJztsGrrf6k+Y/n8ieyeC9AuJKRrjhP+8mtp6WwejPs6ymRPCr
-         3+qJflUm1uVqFWeK/w0HEf5BqijTsqUmFg2VZxI9rM7nQNtF0sLdUCFnkyWsgQ6KUdZb
-         3v2/pkEqEbMMVwSSxAou0C8ixVtoQVE4C2gPxOlIBB0uFBopc3EJEWr7FrAsI607E/r5
-         Uz258GrQ4ESmM+gBquhd/ZPfXvC9SRQ8EMF2KLx4JiVVW7ZwmMHy7098bTEBnI2ZqI2P
-         J9d58NUejrTgglboOKwIQeUjZ54xY3xQX8pcvkNA2isKfxoSVhCxmtmtSerA+UHsitTo
-         321w==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8Q3mnW84jUqdgpykLDoSX2GKb3HxOWqoNxuuDWEfYTk=;
+        b=aN8n/Ewk6msXQ/9qK+grUusqgi+DBFsyTdUqs+HaoMooD4AgjAqtDrFjAqFuNJCLmT
+         vgQfk8zmvnDI4+T/yJhYyvj6uveVJhrnAP/rfXNsxSBKv19ZW7leWtr1ToERksnD7NBF
+         kuy/+nPGZYkJOGigjxJNMbCyFk/Dc9bJhyugH4FYNPQaTFsmlKabASzJ1CYkey1rkqtL
+         RqOkFCrRTpHOIFxklgG7LJrOKsjX4MiEH55eZCdbw4uGvkgMOQzZVxTwLANMkp83BheC
+         2XLgmfqezKJ9HFVcjWHANJxx/kpoOqr310uFVy96m6SW8/MUA1iYN6L+O2Z9JmR+2YMU
+         hS2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OFFvy82t3qS2mWvKMEQ2PiSLGvpukFE2JbAHWF/b/0o=;
-        b=IwRCVZctYsxo1MGnYbuNOb+gO5/3RTHgEJ6ppnqgtO+WV8m5yQPaQWzDCgrRqs8WKQ
-         l8MXHXeSMvMX/H2XnISWkKW0XU8eZqDj4l4EnO08QPywMHazE2QJZ9e4C6HxmSNSICef
-         MbdGy80obg3Xb52fYbDiKmHfH7zltXFwGFgwz1QoeFYpYcCD8AI0bbTJ4kQ7o/3HvVCY
-         SOeF2gLA84QpBzrrrwQYOcLoMjkAs3PETxsW5xTODzT3qxcL3OKxE2tzlddTUzvW0dJv
-         tQFLMu4g3HEOCdJSh2ihbxjLkE4vVsEqr5gG53L9r7PZPyn8jiNDYloGvblfpms8XI7U
-         d2jg==
-X-Gm-Message-State: AJIora+pSNHpdQJ2wJWkQFKAKWrflL9euXBHk95D5IoHiabo4t7l0OGh
-        6Acu6Zuo8aaGyDC5CdsueXU=
-X-Google-Smtp-Source: AGRyM1tWsgyFKFnn4ji+g5YZhEaM1wplTOBNsi5KT3WKRaD4wmjJG2KzTXbtuZlDoMCjfrKa2kFccw==
-X-Received: by 2002:a17:903:41d2:b0:16a:2cca:4869 with SMTP id u18-20020a17090341d200b0016a2cca4869mr2157470ple.13.1656376323885;
-        Mon, 27 Jun 2022 17:32:03 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-39.three.co.id. [116.206.12.39])
-        by smtp.gmail.com with ESMTPSA id x9-20020a634849000000b0040d75537824sm7726863pgk.86.2022.06.27.17.32.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 17:32:03 -0700 (PDT)
-Message-ID: <e2eee869-3e72-ea18-6afc-73fe5bc5dbd3@gmail.com>
-Date:   Tue, 28 Jun 2022 07:31:54 +0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8Q3mnW84jUqdgpykLDoSX2GKb3HxOWqoNxuuDWEfYTk=;
+        b=I0jQCzasDFCKBGD58/rwk2mqIE11kd7LI4rhGzrdqjTcBcOo5A7x8RNr3QMFMc3sNb
+         Nz9IhCY/gJOZidAGjyDbYfTsvgd0Skzp478pq7rr1bynvl0tc4qdphaoqKZ3sFFHLw6m
+         /j+Hu+5g8LZJtmDamoTqkP7QxSWv1oYh/f1ftojl32eJqMAlRRnw3hxGbvvgZTTV5RTd
+         LZ1HzNlT2nrA6kXNYXThmDSgq5Ew+Qnd6OmWZ1uHyT26xMDgCzZ6wANSEYJ3J8hpEFL8
+         DF4TKNVGZ7rttpV6Hw9PpQlg8NuvWfzQDSp4dcGdc9NmgrXFCQDMNg9RJfmFcHWpMjHD
+         /r1g==
+X-Gm-Message-State: AJIora8WhClJOkKAkYUzzJ3ZB79wRrG98iWQXJufAvIFmo+Np/EMcbwn
+        sc2ysOnZTnznNYDdGnxjIYJW
+X-Google-Smtp-Source: AGRyM1tqCn8Fe1/4bgFm3vpkdRdORJ78GjESczmpnULUOJh4m6d3ktzRSG2FQW8G5SvIYFHeUACdTw==
+X-Received: by 2002:a05:6402:510b:b0:437:28b0:8988 with SMTP id m11-20020a056402510b00b0043728b08988mr20709681edd.260.1656376358509;
+        Mon, 27 Jun 2022 17:32:38 -0700 (PDT)
+Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
+        by smtp.gmail.com with ESMTPSA id i13-20020a170906444d00b00722eeb368cesm5652978ejp.64.2022.06.27.17.32.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 17:32:37 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 00:32:33 +0000
+From:   Wedson Almeida Filho <wedsonaf@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Tejun Heo <tj@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>
+Subject: Re: [PATCH 3/3] kthread: Stop abusing TASK_UNINTERRUPTIBLE
+ (INCOMPLETE)
+Message-ID: <YrpMIcECVOMPVpJN@google.com>
+References: <CAHk-=wiutNT47oNhyk_WvMj2qp4pehYFptXCUzW=u_2STLQiww@mail.gmail.com>
+ <CAHk-=whX_=BNZ4kVEAu2NV3CMnhwsuYTyE65FQXUMx8VPNOAOA@mail.gmail.com>
+ <87ilonuti2.fsf_-_@email.froward.int.ebiederm.org>
+ <871qvbutex.fsf_-_@email.froward.int.ebiederm.org>
+ <CAHk-=wg9eqtrpYrjJ=yobkwkTimWFtiDd_JOfADttG0fyAJrqg@mail.gmail.com>
+ <YrjAJN7dDJ9R7Ocu@mtj.duckdns.org>
+ <Yrlavf4Ymnz4T3LM@hirez.programming.kicks-ass.net>
+ <YrlmOA/Xd+U7+b2E@mtj.duckdns.org>
+ <YrnxHBoi6sO0vqV0@google.com>
+ <Yrop5Wzc72GIREVv@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] docs: fix 'make htmldocs' warning in leds
-Content-Language: en-US
-To:     Praghadeesh T K S <praghadeeshthevendria@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        skhan@linuxfoundation.org, praghadeeshtks@zohomail.in
-References: <20220627214311.7817-1-praghadeeshthevendria@gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220627214311.7817-1-praghadeeshthevendria@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yrop5Wzc72GIREVv@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,32 +91,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/22 04:43, Praghadeesh T K S wrote:
-> Fix following 'make htmldocs' warnings:
-> ./Documentation/leds/leds-qcom-lpg.rst: WARNING:
-> document isn't included in any toctree
+On Tue, Jun 28, 2022 at 12:06:29AM +0200, Peter Zijlstra wrote:
+> On Mon, Jun 27, 2022 at 06:04:12PM +0000, Wedson Almeida Filho wrote:
 > 
-> Signed-off-by: Praghadeesh T K S <praghadeeshthevendria@gmail.com>
-> ---
->  Documentation/leds/index.rst | 1 +
->  1 file changed, 1 insertion(+)
+> >   let new_thread = task::new_paused(|| pr_info!("Hello world\n"))?;
 > 
-> diff --git a/Documentation/leds/index.rst b/Documentation/leds/index.rst
-> index e5d63b9..b9ca081 100644
-> --- a/Documentation/leds/index.rst
-> +++ b/Documentation/leds/index.rst
-> @@ -26,3 +26,4 @@ LEDs
->     leds-lp55xx
->     leds-mlxcpld
->     leds-sc27xx
-> +   leds-qcom-lpg
+> I'm still having a really hard time with this Rust stuff, the above
+> looks like a syntax error and random characters to me :/
 
-Hi,
-
-I had already sent the fix at [1] (resend at [2]). Thanks anyway.
-
-[1]: https://lore.kernel.org/linux-doc/20220604015735.249707-1-bagasdotme@gmail.com/
-[2]: https://lore.kernel.org/linux-doc/20220612000125.9777-1-bagasdotme@gmail.com/
-
--- 
-An old man doll... just what I always wanted! - Clara
+Peter, I meant to ask in my previous email: setting aside the syntax for
+a moment, do you have an opinion on the sort of things that Rust allows
+us to enforce at compile time (as exemplified in the new_paused()
+fragment)?

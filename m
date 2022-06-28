@@ -2,103 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6615E55E196
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF4255DD23
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344339AbiF1KMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 06:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42432 "EHLO
+        id S1343768AbiF1KO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 06:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233434AbiF1KMm (ORCPT
+        with ESMTP id S245559AbiF1KOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:12:42 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D5B2FE49
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:12:41 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id v9so1333358wrp.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:12:41 -0700 (PDT)
+        Tue, 28 Jun 2022 06:14:25 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BADA11823;
+        Tue, 28 Jun 2022 03:14:24 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 9so11741362pgd.7;
+        Tue, 28 Jun 2022 03:14:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:mime-version
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=rTu9XAWen9WoHj1yR5c7Lkpd0pwfwXCy8JkwcyJEXh0=;
-        b=e0z+uzEQ0z82O34jFflF1Z/uP+hlboiW2wesXrgX9LNyU6j72yAqAdIdmruyVWKMJj
-         45Ez3pLouqJILdv43Jn3QKmhjJ6MlT50n5JqEogop+2q+WveBB2lhwBpuF9E2Rgh+Izs
-         oHZBiitOm6aK9vUzh2rVwmpocxE0NyUoKfDrfJFmBNd02pHD00VQNFvREjitCg1Z07F5
-         iIGUSDdnihSCUANGK5UDEDsKx44E97geIPm6C0gYrr8gAYQ7zILoigM6oT34GKlQcEjP
-         /Ap0cDYMm1/+1l3eNZqlS82PcLRzXm1M7Kl5C6KLADYVJuTKtO0WjCoOm/blbXmIt9pk
-         fpOg==
+        bh=NE608PFRqILqnXG38pNU+ErLdjvxNJ1H7ziYliYZy30=;
+        b=ey1r16TEJvqhT+OBlAkqFMMCKk6sqkRnafipi1kDG1s/Xt9rxwnJJnZDnOx5OYQ3Ki
+         B3sqnwH/Lua6v6KwVxgbxoIODlSf+UUCcqNzzZMlXJpW7etXr+t6hCePViCUn1n5UjeX
+         cJDEwhmhm4mgyrJ5mHHlHbxp9LZWgsbEUeji+XEb3xbf7fK6OfhwVKrUKLG1mkGDZ8j8
+         o2duNF4x0OHFShBo9Agi+7APFkl3q+AJilLvUfQa33T9vYTid12E3qv7JIqNhx1i45vc
+         HYDGqJJptpu/VgZUs+b2RXKCZOgIGRPVNKAgcpFdOCt58+GfVv3iYiIzHVrWEhBpYaae
+         TWKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=rTu9XAWen9WoHj1yR5c7Lkpd0pwfwXCy8JkwcyJEXh0=;
-        b=5nHk/DYkegXNmq8xSyFHVWLkMEMJBfSdUwxFUNYyKfbBduNLzLIrvq/TpQ2CDRdwkB
-         Ypu00co74wqR9RunFdy74739TMVVz/QTV7l+x7ZaEcL83qoG1NnaoK0WBzL8Df2hyHEz
-         Zd+WPGtmMaFfPD6MN7qU7bGAWYSNUU+i3ey6IPuksKlyiDVhVkwJi49ialIXyb49SzG9
-         VyD0cG5a5YyYxipq7eqpNJNWhPEq72T6QOF6a11YNBIqG79T91IlfvITqG6e+hd4Gqw9
-         561o7ocgL5m7NaoIdR316+orUXAXIHKqrfqgfa3E5DCWIpBo1YoeOx0XN3qEBFaMdE7J
-         lsGw==
-X-Gm-Message-State: AJIora+esD0RSuSSDWUOcFgXmAYYi3gpLfglPYvIYH+n1MK4YjnOvEyk
-        QnzF+qWPXCNL/eFxb7ILz3A1Bw==
-X-Google-Smtp-Source: AGRyM1uRGv3iuoKnkhxHQdrR1+LULm1cUgtzHMR1gwCAnsz0PMgjk8VPkm4JlKAXFvl+kgHQ/kzUzA==
-X-Received: by 2002:a05:6000:1786:b0:21d:2180:1839 with SMTP id e6-20020a056000178600b0021d21801839mr1043810wrg.596.1656411160443;
-        Tue, 28 Jun 2022 03:12:40 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id n12-20020a5d6b8c000000b0020c5253d8fcsm15750078wrx.72.2022.06.28.03.12.38
+        bh=NE608PFRqILqnXG38pNU+ErLdjvxNJ1H7ziYliYZy30=;
+        b=mZOMLy9qCIO/UkGs2GEm9aRuatZgAbag6w9pmuZgckoU5fxWAe3h+Zr+B4rhwv+JsG
+         IrvQ7uHcDVv1a++D2fprsqmsy6PwWwPGBWAnoaBIb8ZSVFbBxnfjvCEpRIg2COA2p94x
+         WO4DFUrVBUyy8XtPc4Y8dudakktsk4o4+JEZRJj2w9WCJLxH3A1Y2dm8gYeGgR655ciB
+         sauxbXUmClpXDGOKHuYIm6wP6vw+GoydLpavi8ZUScWvks9ZJk88+hn58qhXJ2HtlCKT
+         Z/OPM+YND030Sgk7p4X3CrhcvLkvUvzO/+CL4BfQjf5xxUO1ufqarct5qj9mTlU7bpq/
+         kiAA==
+X-Gm-Message-State: AJIora9llB9VTL8dNAizfR3YM0Jy7eEO9DdjpZHMaY4sgQGBsP8bEV9f
+        +4hrZqzHUZ7bWzbLYPk4Z54=
+X-Google-Smtp-Source: AGRyM1uI4MLDZQfYaCHV4jPt4mYNUz2wxqGb1G96X+jR3z+y3WBlBt7oASCmkq03eWuOAQLK19klQQ==
+X-Received: by 2002:a63:2254:0:b0:40d:d291:7710 with SMTP id t20-20020a632254000000b0040dd2917710mr12841095pgm.269.1656411264021;
+        Tue, 28 Jun 2022 03:14:24 -0700 (PDT)
+Received: from mi-HP-ProDesk-680-G4-MT.mioffice.cn ([43.224.245.232])
+        by smtp.gmail.com with ESMTPSA id c16-20020a170902b69000b001678dcb4c5asm8890437pls.100.2022.06.28.03.14.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 03:12:39 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Arnd Bergmann <arnd@arndb.de>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ASoC: samsung: h1940_uda1380: Include proper GPIO consumer header
-Date:   Tue, 28 Jun 2022 12:12:34 +0200
-Message-Id: <20220628101234.34765-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 28 Jun 2022 03:14:23 -0700 (PDT)
+From:   Guowei Du <duguoweisz@gmail.com>
+To:     jack@suse.cz, amir73il@gmail.com, repnop@google.com,
+        brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        duguowei <duguowei@xiaomi.com>
+Subject: [PATCH 6/6] fanotify: add current_user_instances node
+Date:   Tue, 28 Jun 2022 18:14:13 +0800
+Message-Id: <20220628101413.10432-1-duguoweisz@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-h1940_uda1380 uses gpiod*/GPIOD* so it should include GPIO consumer
-header.
+From: duguowei <duguowei@xiaomi.com>
 
-Fixes: 9666e27f90b9 ("ASoC: samsung: h1940: turn into platform driver")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Add a node of sysctl, which is current_user_instances.
+It shows current initialized group counts of system.
 
+Signed-off-by: duguowei <duguowei@xiaomi.com>
 ---
+ fs/notify/fanotify/fanotify_user.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-Changes since v1:
-1. Fix typo in commit subject.
----
- sound/soc/samsung/h1940_uda1380.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/sound/soc/samsung/h1940_uda1380.c b/sound/soc/samsung/h1940_uda1380.c
-index 907266aee839..fa45a54ab18f 100644
---- a/sound/soc/samsung/h1940_uda1380.c
-+++ b/sound/soc/samsung/h1940_uda1380.c
-@@ -8,7 +8,7 @@
- // Based on version from Arnaud Patard <arnaud.patard@rtp-net.org>
+diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
+index c2255b440df9..39674fbffc4f 100644
+--- a/fs/notify/fanotify/fanotify_user.c
++++ b/fs/notify/fanotify/fanotify_user.c
+@@ -51,6 +51,8 @@
  
- #include <linux/types.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/module.h>
+ /* configurable via /proc/sys/fs/fanotify/ */
+ static int fanotify_max_queued_events __read_mostly;
++/* current initialized group count */
++static int fanotify_user_instances __read_mostly;
  
- #include <sound/soc.h>
+ #ifdef CONFIG_SYSCTL
+ 
+@@ -86,6 +88,14 @@ static struct ctl_table fanotify_table[] = {
+ 		.proc_handler	= proc_dointvec_minmax,
+ 		.extra1		= SYSCTL_ZERO
+ 	},
++	{
++		.procname	= "current_user_instances",
++		.data		= &fanotify_user_instances,
++		.maxlen		= sizeof(int),
++		.mode		= 0444,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= SYSCTL_ZERO
++	},
+ 	{ }
+ };
+ 
+@@ -905,6 +915,8 @@ static int fanotify_release(struct inode *ignored, struct file *file)
+ 	/* matches the fanotify_init->fsnotify_alloc_group */
+ 	fsnotify_destroy_group(group);
+ 
++	fanotify_user_instances--;
++
+ 	return 0;
+ }
+ 
+@@ -1459,6 +1471,8 @@ SYSCALL_DEFINE2(fanotify_init, unsigned int, flags, unsigned int, event_f_flags)
+ 	if (fd < 0)
+ 		goto out_destroy_group;
+ 
++	fanotify_user_instances++;
++
+ 	return fd;
+ 
+ out_destroy_group:
 -- 
-2.34.1
+2.36.1
 

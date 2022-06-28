@@ -2,161 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64F755D8B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5149F55C733
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243421AbiF1Dh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 23:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
+        id S243274AbiF1Dho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 23:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243263AbiF1DhT (ORCPT
+        with ESMTP id S243355AbiF1Dh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 23:37:19 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E38824F0B;
-        Mon, 27 Jun 2022 20:37:18 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id x1-20020a17090abc8100b001ec7f8a51f5so14545730pjr.0;
-        Mon, 27 Jun 2022 20:37:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=G2ZI6aMz7mjHuacv2TpkSw0NDmBUe+64bYW0SIydJ1c=;
-        b=qWSblFa8OsXeRRuOE0A/MhNHBxZKjTtnAjA3B92NuHrFB/xQ73Fq7JAKZUSMerimfT
-         lBSSFX/cc7HP+4o4G7SOWtrqiLpi4rHj+7ziQmJ35u3jjOOm2e9ac+evtsQMtVrwuZ1h
-         a9SX3SXZu+eo1UC2XDtg2s/Pu83GBvFAdf4C/tWCKkcVqS6taZRukb8hRGey3TmfV0HB
-         FcJRkmGlhU9w+CtES91WezFc/koimMNnM+sIWw0Uv8lVDjCBwiKzsnwM45X25OQhTS9/
-         2ZwjgfwJMOEVBvLs5Xii9V84Y6XJDH2AP4+l1Va9ssEOCMJ7YbT6u9tnFbHhGz7+/q+a
-         CCyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=G2ZI6aMz7mjHuacv2TpkSw0NDmBUe+64bYW0SIydJ1c=;
-        b=1XfD09bXED5IvhCs0K8qkQNjYUR79k1eMB4BPXi1b0CCI5GTPnw1dEu8qsKqUk4vA+
-         Nj+215lWmHtkn+ipP5udkK3PW5s1iQl/JOOquaVtKlixfYzR/uR1oT84kdLk7mrALZDO
-         K2cbmGHK9BzTyo8+xGt/XbZABJlN3DsFa8XY/J/rTpp3PvqiZYYIcrQoOofeioLAZhE4
-         2hHdH3xsgPSVVGNKNPcJvJk+CBcV2IdkjMIs6Kvw14rgGWRMal19EcivyTM8nTzWGvbM
-         R8Imjh53GW/LJsdGDo3Bk6rSsSr/VY8OjtBNYK4ELv2r+B+0qplm11PmU1Y+pjqnVANo
-         mPNQ==
-X-Gm-Message-State: AJIora+hxluwgSu3RiYe1R3Y8LDuK6xX/ztrYfvsTcVybCS8jln8OuGT
-        twfdlhoiaYymHII3Lp6OMrQ=
-X-Google-Smtp-Source: AGRyM1v/JF9sZ/ij650I5WlKuyttuPJ8uAaz2+f1pjdmNhjhPRS105MXj2fjZLNNlVjiJJn/+TK2KA==
-X-Received: by 2002:a17:90a:aa96:b0:1ea:3780:c3dc with SMTP id l22-20020a17090aaa9600b001ea3780c3dcmr25121973pjq.241.1656387437966;
-        Mon, 27 Jun 2022 20:37:17 -0700 (PDT)
-Received: from fedora ([103.230.148.187])
-        by smtp.gmail.com with ESMTPSA id im22-20020a170902bb1600b0016a3f9e528asm2912212plb.57.2022.06.27.20.37.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 20:37:16 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 09:07:11 +0530
-From:   Gautam Menghani <gautammenghani201@gmail.com>
-To:     sj@kernel.org
-Cc:     skhan@linuxfoundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] kselftests/damon: add support for cases where debugfs
- cannot be read
-Message-ID: <Yrp3ZwF4Q/xPDrwG@fedora>
-References: <20220625200334.83818-1-sj@kernel.org>
- <7d6b7de6-4609-e6ca-0a88-1f9799c70769@linuxfoundation.org>
- <Yrn6BxU298rzjiak@fedora>
+        Mon, 27 Jun 2022 23:37:27 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0510924F12;
+        Mon, 27 Jun 2022 20:37:24 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R801e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VHfBdgf_1656387440;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VHfBdgf_1656387440)
+          by smtp.aliyun-inc.com;
+          Tue, 28 Jun 2022 11:37:21 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Gilad Ben-Yossef <gilad@benyossef.com>,
+        Eric Biggers <ebiggers@google.com>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH v3] KEYS: asymmetric: enforce SM2 signature use pkey algo
+Date:   Tue, 28 Jun 2022 11:37:20 +0800
+Message-Id: <20220628033720.43847-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yrn6BxU298rzjiak@fedora>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cc'ing everyone as I forgot to group reply before. Also, I have included the 
-example outputs in this reply.
-On Tue, Jun 28, 2022 at 12:12:15AM +0530, Gautam Menghani wrote:
-> On Mon, Jun 27, 2022 at 11:00:18AM -0600, Shuah Khan wrote:
-> > On 6/25/22 2:03 PM, SeongJae Park wrote:
-> > > Hi Gautam,
-> > > 
-> > > On Sun, 26 Jun 2022 01:22:45 +0530 Gautam <gautammenghani201@gmail.com> wrote:
-> > > 
-> > > > The kernel is in lockdown mode when secureboot is enabled and hence
-> > > > debugfs cannot be used. Add support for this and other general cases
-> > > > where debugfs cannot be read and communicate the same to the user before
-> > > > running tests.
-> > > > 
-> > > > Signed-off-by: Gautam <gautammenghani201@gmail.com>
-> > > 
-> > > Reviewed-by: SeongJae Park <sj@kernel.org>
-> > > 
-> > > 
-> > > Thanks,
-> > > SJ
-> > > 
-> > > > ---
-> > > > Changes in v2:
-> > > > 1. Modify the error message to account for general cases.
-> > > > 2. Change the return code so that the test is skipped.
-> > > > 
-> > > > Changes in v3:
-> > > > 1. Change the name of variable holding the error message.
-> > > > 
-> > > > Changes in v4:
-> > > > 1. Correct the mode of the source file.
-> > > > 
-> > > >   tools/testing/selftests/damon/_chk_dependency.sh | 10 ++++++++++
-> > > >   1 file changed, 10 insertions(+)
-> > > > 
-> > > > diff --git a/tools/testing/selftests/damon/_chk_dependency.sh b/tools/testing/selftests/damon/_chk_dependency.sh
-> > > > index 0189db81550b..0328ac0b5a5e 100644
-> > > > --- a/tools/testing/selftests/damon/_chk_dependency.sh
-> > > > +++ b/tools/testing/selftests/damon/_chk_dependency.sh
-> > > > @@ -26,3 +26,13 @@ do
-> > > >   		exit 1
-> > > >   	fi
-> > > >   done
-> > > > +
-> > > > +permission_error="Operation not permitted"
-> > > > +for f in attrs target_ids monitor_on
-> > > > +do
-> > > > +	status=$( cat "$DBGFS/$f" 2>&1 )
-> > > > +	if [ "${status#*$permission_error}" != "$status" ]; then
-> > > > +		echo "Permission for reading $DBGFS/$f denied; maybe secureboot enabled?"
-> > 
-> > btw - does this run as a regular user or does it need root privilege?
-> > If so add a test for that and skip with a message.
-> 
-> Yes this condition is reachable only with root user. If damon tests are run
-> as regular user, the root check condition already skips the tests.
-> 
-> Tests output as regular user:
-> +TAP version 13
-> +1..6
-> +# selftests: damon: debugfs_attrs.sh
-> +# Run as root
-> +ok 1 selftests: damon: debugfs_attrs.sh # SKIP
-> +# selftests: damon: debugfs_schemes.sh
-> +# Run as root
-> 
-> Tests output as root user:
-> +TAP version 13
-> +1..6
-> +# selftests: damon: debugfs_attrs.sh
-> +# Permission for reading /sys/kernel/debug/damon/attrs denied; maybe secureboot enabled?
-> +ok 1 selftests: damon: debugfs_attrs.sh # SKIP
-> +# selftests: damon: debugfs_schemes.sh
-> +# Permission for reading /sys/kernel/debug/damon/attrs denied; maybe secureboot enabled?
-> 
-> Is any change needed in this patch?
-> 
-> > > > +		exit $ksft_skip
-> > > > +	fi
-> > > > +done
-> > > > -- 
-> > > > 2.36.1
-> > > 
-> > thanks,
-> > -- Shuah
+The signature verification of SM2 needs to add the Za value and
+recalculate sig->digest, which requires the detection of the pkey_algo
+in public_key_verify_signature(). As Eric Biggers said, the pkey_algo
+field in sig is attacker-controlled and should be use pkey->pkey_algo
+instead of sig->pkey_algo, and secondly, if sig->pkey_algo is NULL, it
+will also cause signature verification failure.
+
+The software_key_determine_akcipher() already forces the algorithms
+are matched, so the SM3 algorithm is enforced in the SM2 signature,
+although this has been checked, we still avoid using any algorithm
+information in the signature as input.
+
+Fixes: 215525639631 ("X.509: support OSCCA SM2-with-SM3 certificate verification")
+Reported-by: Eric Biggers <ebiggers@google.com>
+Cc: stable@vger.kernel.org # v5.10+
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+---
+ crypto/asymmetric_keys/public_key.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
+index 7c9e6be35c30..2f8352e88860 100644
+--- a/crypto/asymmetric_keys/public_key.c
++++ b/crypto/asymmetric_keys/public_key.c
+@@ -304,6 +304,10 @@ static int cert_sig_digest_update(const struct public_key_signature *sig,
+ 
+ 	BUG_ON(!sig->data);
+ 
++	/* SM2 signatures always use the SM3 hash algorithm */
++	if (!sig->hash_algo || strcmp(sig->hash_algo, "sm3") != 0)
++		return -EINVAL;
++
+ 	ret = sm2_compute_z_digest(tfm_pkey, SM2_DEFAULT_USERID,
+ 					SM2_DEFAULT_USERID_LEN, dgst);
+ 	if (ret)
+@@ -414,8 +418,7 @@ int public_key_verify_signature(const struct public_key *pkey,
+ 	if (ret)
+ 		goto error_free_key;
+ 
+-	if (sig->pkey_algo && strcmp(sig->pkey_algo, "sm2") == 0 &&
+-	    sig->data_size) {
++	if (strcmp(pkey->pkey_algo, "sm2") == 0 && sig->data_size) {
+ 		ret = cert_sig_digest_update(sig, tfm);
+ 		if (ret)
+ 			goto error_free_key;
+-- 
+2.24.3 (Apple Git-128)
+

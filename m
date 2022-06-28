@@ -2,110 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBE755CBCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D15D755CD12
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244755AbiF1FZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 01:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S244711AbiF1FcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 01:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244711AbiF1FZd (ORCPT
+        with ESMTP id S229698AbiF1FcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 01:25:33 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E133B1F;
-        Mon, 27 Jun 2022 22:25:32 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id z14so11173461pgh.0;
-        Mon, 27 Jun 2022 22:25:32 -0700 (PDT)
+        Tue, 28 Jun 2022 01:32:02 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E65711A36;
+        Mon, 27 Jun 2022 22:32:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:to:cc:references:subject
-         :content-language:from:in-reply-to:content-transfer-encoding;
-        bh=pgonluzyL1h+kykYHqoeMzba6ZA6ttg4BlJry44nex8=;
-        b=Y8M8fifZYgvmkexdtyaLShnQcaD3jHHKHf7dssYushX0hW0f8wBgxiV++I1pxCx4lV
-         83c9fOw5M6Xwmyorz6eoee18QdevPjxGcEjsA81ltXTIYV5ZaRxV4kSIMOSE3qRtnRM8
-         YRMV3TVLvFVDtYimxf9s++pcAwdGKDXoo7jnKVPbc5pztyUdmR5Hy9OyxZtsz0SYQroK
-         5zLo2z2ueUVg7xbY2+ocmiCx7VdiljWbk/f7dUwT3ubL585I/Ca1I+OAeIR7FE7M1C8W
-         94Q5S1K9+0D02ZqUnuipaYFlz4bIeO/uYFoXmHkZvh62f0R5WCRDjar4X49mAjFZgr3R
-         ZkeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
-         :references:subject:content-language:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pgonluzyL1h+kykYHqoeMzba6ZA6ttg4BlJry44nex8=;
-        b=JoG6YGu/E4SdP2IvBUiBS7UiHx3rlcsCLr/ZOKBo8QatsMvFEA4OmTz5n4/Y850x43
-         IvPSvIETku70YoO0+FAozDEGO+cQe3wT1ho6baKEmsoH2+Xx5isBWXb4nPl4vhjFf+KY
-         ePy7DppXncG61Tniqw0rPwa2V1yB80OSCzUrBxu/q0D19B4WdcgzLxGJFwLDAMVoxpfp
-         qCKF8UdH925TpW5Dyh6xrl69D5kK0xqdZMV5JLxAQL8nbBtb4DmChebJfa5NJxwtAwLa
-         IgVpKHs/1NNZX6wX2o3NT/F9+tyGKlbX/zGncvuYQtTvpEkwCD2NZIEDH6Pk2JpJz3jq
-         Q/Sg==
-X-Gm-Message-State: AJIora92hBD4HIil8jsSzDgd3ve2aMYbkSbTZAC2OdNJhERzYSJ42Rcc
-        /qzTxjAdsaJBxdSWAuHQT2k=
-X-Google-Smtp-Source: AGRyM1saugDpzmQnPjMdIM+x5hsbK7gOzY4bjoUJU98ivxmGXPnWENN/xbgWqWBrUPP3CiYfXqo0yA==
-X-Received: by 2002:aa7:9258:0:b0:525:4214:e937 with SMTP id 24-20020aa79258000000b005254214e937mr1680782pfp.15.1656393931921;
-        Mon, 27 Jun 2022 22:25:31 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id q2-20020a170902f34200b0016a2a8c7e8fsm8174595ple.143.2022.06.27.22.25.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 22:25:31 -0700 (PDT)
-Message-ID: <a2be48e5-e559-17d7-5ae7-d1205a737ea4@gmail.com>
-Date:   Tue, 28 Jun 2022 14:25:26 +0900
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656394321; x=1687930321;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=apiE6ZqVRDttlfHw7HYKu5F6fqY2OHrTk8IJQ7nNCLc=;
+  b=DSem2kWV3QQXc8Ddx5BSeWLY+sDt3H3lFCh27SX5RtU4KPJYdaDsqFvx
+   viW4/rf5LH5/WB/CFwsGr9VTaJINwr51ehACQOZ1sCzHhmd30oyGYOYuz
+   pdC5Lg92PLN2DtzAqzK4Zvjuzv7bXdgMxC/QiGZRlkl9J41Uh8dJlCszu
+   4=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 Jun 2022 22:32:01 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 22:32:00 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 27 Jun 2022 22:31:59 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 27 Jun 2022 22:31:53 -0700
+Date:   Tue, 28 Jun 2022 11:01:48 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Stephen Boyd <swboyd@chromium.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Mathias Nyman" <mathias.nyman@intel.com>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_vpulyala@quicinc.com>
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
+References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
+ <YpkRDi2m7cLaKYEf@google.com>
+ <Yp5nf2w8uVZ38/XZ@google.com>
+ <Yqd9IHQEj3Ex+FcF@google.com>
+ <YqjLHyUVEjf7I3MI@google.com>
+ <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
+ <YqtlRQOwb3t6Xtd0@google.com>
+ <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
+ <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     alexs@kernel.org, corbet@lwn.net, federico.vaga@vaga.pv.it,
-        jdelvare@suse.com, kernel-janitors@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        siyanteng@loongson.cn, src.res@email.cn,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <20220627151819.22694-9-lukas.bulwahn@gmail.com>
-Subject: Re: [RFC PATCH 08/11] docs: ja_JP: howto: remove reference to removed
- submitting-drivers
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20220627151819.22694-9-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTHVrYXMsDQoNCk9uIE1vbiwgMjcgSnVuIDIwMjIgMTc6MTg6MTYgKzAyMDAsIEx1a2Fz
-IEJ1bHdhaG4gd3JvdGU6DQo+IFRoZSBkb2N1bWVudCBzdWJtaXR0aW5nLWRyaXZlcnMucnN0
-IHdhcyBkZWxldGVkLiBUaGlzIHJlbW92ZXMgdGhlDQo+IGNvcnJlc3BvbmRpbmcgcmVmZXJl
-bmNlIGluIHRoZSBKYXBhbmVzZSB0cmFuc2xhdGlvbiBvZiB0aGUgaG93dG8uDQo+IA0KPiBT
-aWduZWQtb2ZmLWJ5OiBMdWthcyBCdWx3YWhuIDxsdWthcy5idWx3YWhuQGdtYWlsLmNvbT4N
-Cg0KU2VlIGJlbG93IGZvciBzdWdnZXN0aW9uIG9mIHBsdXJhbCB0byBzaW5ndWxhciBjaGFu
-Z2UuDQoNCj4gLS0tDQo+ICBEb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9KUC9ob3d0
-by5yc3QgfCAyICstDQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVs
-ZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9u
-cy9qYV9KUC9ob3d0by5yc3QgYi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9KUC9o
-b3d0by5yc3QNCj4gaW5kZXggMzhmZWQ2ZmU2MmZlLi4wM2IyMDc5ZTRkNWQgMTAwNjQ0DQo+
-IC0tLSBhL0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL2phX0pQL2hvd3RvLnJzdA0KPiAr
-KysgYi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9KUC9ob3d0by5yc3QNCj4gQEAg
-LTEyOSw3ICsxMjksNyBAQCBsaW51eC1hcGlAdmdlci5rZXJuZWwub3JnIOOBq+mAgeOCi+OB
-k+OBqOOCkuWLp+OCgeOBvuOBmeOAgg0KPiAgICAgIOODq+OBq+W+k+OBo+OBpuOBhOOCi+OC
-guOBruOBoOOBkeOCkuWPl+OBkeS7mOOBkeOAgeWkmuOBj+OBruS6uuOBr+ato+OBl+OBhOOC
-ueOCv+OCpOODq+OBruOCs+ODvOODiQ0KPiAgICAgIOOBoOOBkeOCkuODrOODk+ODpeODvOOB
-l+OBvuOBmeOAgg0KPiAgDQo+IC0gIDpyZWY6YERvY3VtZW50YXRpb24vcHJvY2Vzcy9zdWJt
-aXR0aW5nLXBhdGNoZXMucnN0IDxjb2RpbmdzdHlsZT5gIOOBqCA6cmVmOmBEb2N1bWVudGF0
-aW9uL3Byb2Nlc3Mvc3VibWl0dGluZy1kcml2ZXJzLnJzdCA8c3VibWl0dGluZ2RyaXZlcnM+
-YA0KPiArICA6cmVmOmBEb2N1bWVudGF0aW9uL3Byb2Nlc3Mvc3VibWl0dGluZy1wYXRjaGVz
-LnJzdCA8Y29kaW5nc3R5bGU+YA0KPiAgICAgIOOBk+OCjOOCieOBruODleOCoeOCpOODq+OB
-q+OBr+OAgeOBqeOBhuOChOOBo+OBpuOBhuOBvuOBj+ODkeODg+ODgeOCkuS9nOOBo+OBpuaK
-leeov+OBmeOCi+OBi+OBq+OBpA0KDQogICAgICAg44GT44Gu44OV44Kh44Kk44Or44Gr44Gv
-44CB44Gp44GG44KE44Gj44Gm44GG44G+44GP44OR44OD44OB44KS5L2c44Gj44Gm5oqV56i/
-44GZ44KL44GL44Gr44GkDQoNCj4gICAgICDjgYTjgabpnZ7luLjjgavoqbPjgZfjgY/mm7jj
-gYvjgozjgabjgYrjgorjgIHku6XkuIvjgpLlkKvjgb/jgb7jgZkgKOOBk+OCjOOBoOOBkeOB
-q+mZkOOCieOBquOBhA0KPiAgICAgIOOBkeOCjOOBqeOCgikNCj4gLS0gDQo+IDIuMTcuMQ0K
-DQogICAgICAgIFRoYW5rcywgQWtpcmENCg0K
+On Mon, Jun 27, 2022 at 01:02:49PM -0700, Stephen Boyd wrote:
+> Quoting Pavan Kondeti (2022-06-20 01:54:15)
+> > +Felipe, Bjorn
+> >
+> > On Thu, Jun 16, 2022 at 10:15:49AM -0700, Matthias Kaehlcke wrote:
+> > > On Thu, Jun 16, 2022 at 02:41:10PM +0530, Pavan Kondeti wrote:
+> > >
+> > > Good point! It doesn't really ensure that the child is probed (actually it
+> > > won't be probed and DL_FLAG_AUTOPROBE_CONSUMER doesn't make sense here), it
+> > > could happen that dwc3_qcom_probe() is deferred multiple times, but eventually
+> > > the PHYs should be ready and dwc3_probe() be invoked through
+> > > of_platform_populate().
+> >
+> > This is a generic problem i.e if a parent can only proceed after the child
+> > devices are bounded (i.e probed successfully), how to ensure this behavior
+> > from the parent's probe? Since we can't block the parent probe (async probe is
+> > not the default behavior), we have to identify the condition that the children
+> > are deferring probe, so that parent also can do that.
+> >
+> > Can we add a API in drivers core to tell if a device probe is deferred or
+> > not? This can be done by testing list_empty(&dev->p->deferred_probe) under
+> > deferred_probe_mutex mutex. The parent can return EPROBE_DEFER based on this
+> > API return value.
+> >
+> > Another alternative would be explicitly checking if the child device suppliers
+> > are ready or not before adding child device. That would require decoupling
+> > of_platform_populate() to creating devices and adding devices.
+> >
+> > Note that this problem is not just limited to suppliers not ready. if the
+> > dwc3-qcom is made asynchronous probe, then its child also probed
+> > asynchronously and there is no guarantee that child would be probed by the
+> > time of_platform_populate() is returned.  The bus notifier might come handy
+> > in this case. The parent can register for this notifier and waiting for
+> > the children device's BUS_NOTIFY_BOUND_DRIVER/BUS_NOTIFY_DRIVER_NOT_BOUND
+> > notifications. This would also work in our case, if we move to
+> > of_platform_populate() outside the probe().
+> >
+> > Would like to hear other people thoughts on this.
+> >
+> 
+> I'm not following very closely but it sounds like a problem that may be
+> solved by using the component driver code (see
+> include/linux/component.h). That would let you move anything that needs
+> to be done once the child devices probe to the aggregate driver 'bind'
+> function (see struct component_master_ops::bind).
+
+Thanks Stephen for letting us know about the component device framework.
+
+IIUC, 
+
+- dwc3-qcom (parent of the dwc3 core) registers as a component master by
+calling component_master_add_with_match() before calling
+of_platform_populate(). The match callback could be as simple as comparing
+the device against our child device.
+
+- The dwc3 core (child) at the end of its probe can add as a component by calling
+component_add(). 
+
+- The above triggers the component_master_ops::bind callback implemented in
+  dwc3-qcom driver which signals that we are good to go.
+
+- The dwc-qcom can call component_bind_all() to finish the formality i.e
+  telling the dwc3 core that we are good to go.
+
+Is my understanding correct? This is what we are looking for i.e a way for
+the child device(s) to signal the parent when the former is bounded.
+
+Also what happens when the child device probe fails for any reason. i.e
+component_add() would never be called so the master driver i.e dwc3-qcom would
+wait indefinitely. May be it needs to implement a timeout or runtime suspend
+etc should take care of keeping the resoures in suspend state.
+
+Thanks,
+Pavan

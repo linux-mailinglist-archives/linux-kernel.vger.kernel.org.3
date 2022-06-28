@@ -2,227 +2,354 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F9855EA87
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D0A55EA7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233330AbiF1Q7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 12:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
+        id S232417AbiF1RC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 13:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237758AbiF1Q7A (ORCPT
+        with ESMTP id S233854AbiF1RC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:59:00 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9693EC0;
-        Tue, 28 Jun 2022 09:58:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656435539; x=1687971539;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=KourgPet7es5Jm2jxp5d3VhP1vL/qRXjRi9KWZ65knk=;
-  b=bA+0rWohQE6ADwb1+MBZkYwmyuYV2R4/eLKv1hL6M7sWS9csR5uUGePG
-   6j5y9CqpIfhN8MPfEG2fAi3BlSUimjHTXxC/xMyk3Mf7ZMz9QPi8v89vC
-   7kqOJIdk7XOuXigRfH6Qyygxcd49E/qWRuLBwYDnICrj0BBdMJxO0tY2Q
-   mMfyjiqEwgIIBtyGDgq1Xmr9lzu3YZVOWPGQ4kR6K/XsHzY4HrE4Trmpc
-   5tfx4wcukmi4bwoazqD3DQgwi9507n+lMow4nEMUn2E3RJN1Pw9+wHPW/
-   y+zyj8m/DpvPWMW3ak0pQXKDuuo8aTyvjRZfw+0iQrhLEPsAkRrvsAQyq
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="343485034"
-X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="343485034"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 09:58:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="587934833"
-Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
-  by orsmga007.jf.intel.com with ESMTP; 28 Jun 2022 09:58:49 -0700
-Received: from orsmsx606.amr.corp.intel.com (10.22.229.19) by
- ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 28 Jun 2022 09:58:48 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Tue, 28 Jun 2022 09:58:48 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.174)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Tue, 28 Jun 2022 09:58:48 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UXkbVy0bePPMF5tKL/eO9pnLTEnZW0m6NiYXpgbze9+ShuwFXrQWsIIkE5sAvAoTu4ApcQ2wneAFEaOfIsCPayHlolYNXcCFR29uwDSjNK+VTnPKP9Ypr8V0q/iZD5cnKP+lbalyGHDmrAwocEg9f/Y1aRS5x9IoV7tZnm64uhQcDDyaa393CaZMux082e0XaP/hlXCiRgG7lR+y1eLXfSB50VbwT63gMN08Qv32HmZ6piGleDIsSjP3U73LThKH2C2j0Z0Wj8Lmk09zgD21GXZGNDiFSmZgqNcn1R5hNMLvtGsHiQwNUklzVSrxo7VO+jzEVNbHAQlv8kCPCgL19Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4Uy0iwdwqeVEcTTrpDLioU955NYy9bxMphYBC1JgXCY=;
- b=F++/n0DcwMADpDf27yBerzunxDpdZwxzMMD6HKKMVxacPdyJefIrVOSx4N3tQWmW1Z7laOjCQ8n+Dfy/zBmptcIc2lnWKXCVzV8+NHcncjTuFkkc6WCp3qzwFFn2RmCKnOZxEp/nNLW4SkaYf0d+Ei5CaRiCIlaO/0a5arXUL5CLZH8fr8ohOkG8yXI91xHnKnhVNUUMeS7Tx5zwU9QhISwKPVQCrsFfx9RmnDbkg1JKvreFYYjQ5VvQi+FLJfYjALNTHtBP2nmmKehfu6OJSbCpQ3tLdqEc2xwhcdwgVFQc53eTDMi5UzamTZkaV1VwonblV+dOg5O9Y2sTfYkZfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6311.namprd11.prod.outlook.com (2603:10b6:8:a6::21) by
- BL0PR11MB3444.namprd11.prod.outlook.com (2603:10b6:208:6f::29) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5373.17; Tue, 28 Jun 2022 16:58:46 +0000
-Received: from DM4PR11MB6311.namprd11.prod.outlook.com
- ([fe80::e912:6a38:4502:f207]) by DM4PR11MB6311.namprd11.prod.outlook.com
- ([fe80::e912:6a38:4502:f207%5]) with mapi id 15.20.5373.018; Tue, 28 Jun 2022
- 16:58:46 +0000
-Date:   Tue, 28 Jun 2022 09:58:39 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Li, Ming" <ming4.li@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Lukas Wunner <lukas@wunner.de>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Dave Jiang" <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V12 3/9] PCI: Create PCIe library functions in support of
- DOE mailboxes.
-Message-ID: <YrszP+S3XLpmZL3n@iweiny-desk3>
-References: <20220628041527.742333-1-ira.weiny@intel.com>
- <20220628041527.742333-4-ira.weiny@intel.com>
- <20220628153848.00007818@Huawei.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220628153848.00007818@Huawei.com>
-X-ClientProxiedBy: BYAPR07CA0030.namprd07.prod.outlook.com
- (2603:10b6:a02:bc::43) To DM4PR11MB6311.namprd11.prod.outlook.com
- (2603:10b6:8:a6::21)
+        Tue, 28 Jun 2022 13:02:27 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279A824F36;
+        Tue, 28 Jun 2022 10:02:10 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SCst7f003744;
+        Tue, 28 Jun 2022 19:01:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=BMotZWpCCfiO7PWNHjygZuqAvONIxCQdUg4VBGbS1Bk=;
+ b=5W4XksWskcYGpqTB/7PPVNM2j59Uq8tmHtokmRoieiG+GLhnfzIKc8GOE8lwy72wwr3x
+ b+KYTjGpT8y3kDbSoO1JjQhbSPAJ/OYK0i8r7NO8sJxhKDz3zD6GaUm47ytNREb8xtiI
+ 8t/1zLFt0IUrmN0ctH9VLVJObE/pcnW0GdwxY/3bWu3QHrOpMfzwaijyKgfSpuv2iirR
+ wclQn1degeZ6BwxwYCpEVlhdrad9BTW4a0+/nVrOGD5qoOCc3SGckt++qR6bG12OC8o0
+ j+7nBQHgLoFbXcxZL5M5zFpJzsif4sfZQe8mqzz4aDairB5KA4lSv0mPoCBLUaC6i8QO uA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gydcu7k2t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 19:01:48 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E90DE10002A;
+        Tue, 28 Jun 2022 19:01:46 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 04786226FDF;
+        Tue, 28 Jun 2022 19:01:46 +0200 (CEST)
+Received: from [10.48.1.102] (10.75.127.47) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 28 Jun
+ 2022 19:01:42 +0200
+Message-ID: <6ef58f1f-ee8a-b060-6fda-d1388b3ede6d@foss.st.com>
+Date:   Tue, 28 Jun 2022 19:01:42 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 984f5437-a999-4458-6d2d-08da59277724
-X-MS-TrafficTypeDiagnostic: BL0PR11MB3444:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: C6TS9eAQLQk6S96fEhTGYvl41KNxUbY3DLltdkcXwEYUqQscsJlzrST2ym+u9zmev5soeDx8XoLjPSApDpXMeA1vaqvml6G4Hz4uyYUN9Mg1y/Yxp5xgvpX9hploq0l0Xl/+hCaDD7+P5M+wCU6QtNn9Fhz08spx/Owsyy9oFiaijbo8QXh0ZYPlxPqFWIm3K/YztQCoW5Hqe8jJbFs4akmLhHdQ17DkFRyty+lanBDAa5aToGzTr8iL7w6kO1pcMDc9l2jQdcIFpnEXXhEbSXst1yY8abqgkXUDNR6NGhoCq+Jic+J9sOAjT7YOhooQMRceXGJxEILiqHNPGyfy5X5i3cN7exbl1exPLF/7rxAakn14oUrk6yvwSvFkuNSHSzXAzlBRspEhGwrxSwZfSDbsRid7JSRuyEZVN8deMhlVbBWqGBxtG6+SeDlmCHJ3ED+AwniKLviMQgSHsqXJrSGr87WtJq4OfmnZhgagRLl/pMqZahQiuBTt8FSB3+0sbq3vMNcJy8z6RIUKOg3qxmWGVjLix9ef1TvfYW6OkgwkiHrdVrXLdnGiAf6NxG5S0bHwB0tg+t5jtinCt4Jus8qvS62/j/DUNf337Uv0AELlErGPxMQG1ie9RL5B5xD6ye1O21CwBf1fDDvHXbzU7+L4HvD5IMtwsrDgqP3ZFmkUK528XzMGD37kbzVw4/ctHsn3iHOePTYFRGh1ILw0FUE6aLv4Xrxq0ySz156tfS9TBjCAtshrSnmijS/H2K5uSUtIUDxGxlso6mjLTsPCQM6yMc9mHwMswL+L0gMRHS0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6311.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(346002)(39860400002)(136003)(396003)(366004)(83380400001)(6666004)(15650500001)(6486002)(66946007)(186003)(5660300002)(316002)(478600001)(6916009)(33716001)(66476007)(86362001)(38100700002)(9686003)(54906003)(44832011)(66556008)(2906002)(8936002)(41300700001)(6512007)(82960400001)(4326008)(8676002)(6506007)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oLJqZRffZsSz4R4DM7D5ADl3InZUZKebp2IR/+fhJQtqARKDwivG8vNIxqGV?=
- =?us-ascii?Q?ZhyKEyWd+dCHhfXBKoPp08dbeCdc5UAZvWwJcVtxG/5niHKXlCSwwxcuLKjx?=
- =?us-ascii?Q?uuwZ8VDjmg5Hu3Bz23eXb3oZ8Ta2DSAjGZ9VJ5f7E1KoY0FCMIADLAGn2Owp?=
- =?us-ascii?Q?PuI0YNp5sW6pvUS5VEQ+yufV9MCZe0KONSZmaRaHpr513SQ1mWyxeBHnXwjk?=
- =?us-ascii?Q?ITMQ6CGL6v/LHX32iIODNxN9RQEPUA+9Ni94HJcRNeQoZPBQtpB+0Y6Sj5O1?=
- =?us-ascii?Q?PM4UjG5gJ1Vty1Iej8DCvEUzXiNv8UltHt/ohzhPNGmJ0KL6Y+UFYywHp3e/?=
- =?us-ascii?Q?NCTXGvai5TbTG7cWu6p9ogcqWcyF4TQt+6+DrZTbZ8ZyhaPQJE5sYEWs35Ti?=
- =?us-ascii?Q?/VUX2P/mZmmcqkYRRLhrx5YEvwiKRvDByg2z4eYWd+01NI9mk94Ijdguwi4O?=
- =?us-ascii?Q?aGRWiAWjPOqY7LW6nSshf368TD+c0QdPaJUsIsqgx8KTzxD5SlQZzHMx+YhI?=
- =?us-ascii?Q?4YX3VOwN1fpnFpkaV9mXqmKFezFoX3gm5BiO0otAOt/PSw+qUeTZRBc8i/IU?=
- =?us-ascii?Q?JC9umX2/lGpuORhUjECxAt6PvwuKhvH0k2LbeOOBIGky+pIpb5l3jrEqdczU?=
- =?us-ascii?Q?6uIdiMnGcu0kf0U6jdxOa0dbmjR/kEKBjO3z5Ce2ehSUhVvNoFm/Gt9ZFVaj?=
- =?us-ascii?Q?9rA0eeDCymfNs6M7JWRIMheWC9c8sTUbqutJXovMporv66Ep/nypnTNh/z+4?=
- =?us-ascii?Q?TXpHDElm5gGM9n5lzP2aL3EWJdn4D8p5O66ur8Y2bl5fTSvEpdF7CrHqSnR2?=
- =?us-ascii?Q?/RdCVcuK0XB1kb3G2w9Ow5GHg6EintvJN9KUvjhyB6h2XMyAqEehxzDHOnOB?=
- =?us-ascii?Q?fAl3XP7qnl6Ja0YpRNHEgP/V9EMTXKnZIt7LdHqJpfA+Zx/ppL9T3qcsB7fP?=
- =?us-ascii?Q?mtG768VkvQ2wEje27AZI7Vw2B24yMbz0gf4BlbBeK4h51cGDSKBbqTTJ1Rip?=
- =?us-ascii?Q?e6bqGhLbZpJp/+P7dy6mH4mzmFBujjw+mAKfgPidpCg30VQrOmvLnwADn8Pf?=
- =?us-ascii?Q?YXJzccGi44FHi8mIjqKi9bcWS7qnU2wjOlm1AMYLqhrHh2kIzpbs0dlaKl6c?=
- =?us-ascii?Q?JXNgLAxLitafMrYXsHTzRgodAjv7mBuWFmxXAUSN/CBSdlMBybcDgK5NSUk9?=
- =?us-ascii?Q?ATqnMTyk43cNa8mgnELowrD181Ba17TRs2LVuXkrTzqGk6CoYQWwI4nPQ/fi?=
- =?us-ascii?Q?4G1AosnK40mIPiOu8rHgDV/4KWXIRFDivWeqdUiJeYFOrvl0/Yjc8o26ix5c?=
- =?us-ascii?Q?4DX6BhcNAVPLqv9YUQiu2RUmMLERY30WRxED7/6vY7zCB1YLcWSK1U7lOG/E?=
- =?us-ascii?Q?CcGYTSjWAd2tX1lIHyMRrr1seqBoyRs3ebqN78kEBnO9zoe9iqjE6eRC266k?=
- =?us-ascii?Q?W88ZxJOx2Oee7oFVkRFkjUi8KOqtKS5FLYzkYYubTQ68rEQw+JC6TP+wGVUj?=
- =?us-ascii?Q?pZK+ZLVAfmOkkfTrTJINaMsOps26tM42Mz5AwX7cTEnX5IhSsPO18r6aHV7K?=
- =?us-ascii?Q?3tg5h1Glmkh90fIqtUGGUma4i3KFX0MQthDT0GH/b1jO8ezmvyH0mEBymEAn?=
- =?us-ascii?Q?HxZUnJkYV6WOBOq+QrLQO9tiPTiqtiLdzY5sCitMVdFK?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 984f5437-a999-4458-6d2d-08da59277724
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6311.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 16:58:46.5081
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1/MwO6me5y2Ntkg5eDA1BtF0aQ2McabF4ht6Q8VcFT3pdW2vcv6qEZelasrqxDEOIFielKH75VzoMMvcfEe0Yg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR11MB3444
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/4] dt-bindings: usb: typec: add bindings for stm32g0
+ controller
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <robh+dt@kernel.org>, <heikki.krogerus@linux.intel.com>,
+        <gregkh@linuxfoundation.org>
+CC:     <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>
+References: <20220624155413.399190-1-fabrice.gasnier@foss.st.com>
+ <20220624155413.399190-2-fabrice.gasnier@foss.st.com>
+ <ddb0e946-c955-1404-c1cd-c2548f34ec35@linaro.org>
+ <845d6817-d2e4-7925-f7f5-da1102514636@foss.st.com>
+ <286633b2-43d2-655e-b3f1-54bf5c7a4a21@linaro.org>
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+In-Reply-To: <286633b2-43d2-655e-b3f1-54bf5c7a4a21@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-28_10,2022-06-28_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 03:38:48PM +0100, Jonathan Cameron wrote:
-> On Mon, 27 Jun 2022 21:15:21 -0700
-> ira.weiny@intel.com wrote:
-> 
-> > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > 
-> > Introduced in a PCIe r6.0, sec 6.30, DOE provides a config space based
-> > mailbox with standard protocol discovery.  Each mailbox is accessed
-> > through a DOE Extended Capability.
-> > 
-> > Each DOE mailbox must support the DOE discovery protocol in addition to
-> > any number of additional protocols.
-> > 
-> > Define core PCIe functionality to manage a single PCIe DOE mailbox at a
-> > defined config space offset.  Functionality includes iterating,
-> > creating, query of supported protocol, and task submission.  Destruction
-> > of the mailboxes is device managed.
-> > 
-> > If interrupts are desired, the interrupt number can be queried and
-> > passed to the create function.  Passing a negative value disables
-> > interrupts for that mailbox.  It is the caller's responsibility to ensure
-> > enough interrupt vectors are allocated.
-> > 
-> > Cc: "Li, Ming" <ming4.li@intel.com>
-> > Cc: Bjorn Helgaas <helgaas@kernel.org>
-> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Co-developed-by: Ira Weiny <ira.weiny@intel.com>
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
-> +static void *pci_doe_xa_entry(u16 vid, u8 prot)
-> +{
-> +	return (void *)(((unsigned long)vid << 16) | prot);
-> +}
-> ...
-> 
-> > +static int pci_doe_cache_protocols(struct pci_doe_mb *doe_mb)
-> > +{
-> > +	u8 index = 0;
-> > +	u8 xa_idx = 0;
-> > +
-> > +	do {
-> > +		int rc;
-> > +		u16 vid;
-> > +		u8 prot;
-> > +
-> > +		rc = pci_doe_discovery(doe_mb, &index, &vid, &prot);
-> > +		if (rc)
-> > +			return rc;
-> > +
-> > +		pci_dbg(doe_mb->pdev,
-> > +			"[%x] Found protocol %d vid: %x prot: %x\n",
-> > +			doe_mb->cap_offset, xa_idx, vid, prot);
-> > +
-> > +		rc = xa_insert(&doe_mb->prots, xa_idx++,
-> > +			       pci_doe_xa_entry(vid, prot), GFP_KERNEL);
-> 
-> I'm not that familiar with xarray, but the docs suggest that you have
-> to use xa_mk_value() to store an integer directly into it.
+On 6/28/22 12:28, Krzysztof Kozlowski wrote:
+> On 27/06/2022 16:21, Fabrice Gasnier wrote:
+>> On 6/24/22 18:16, Krzysztof Kozlowski wrote:
+>>> On 24/06/2022 17:54, Fabrice Gasnier wrote:
+>>>> This patch adds DT schema documentation for the STM32G0 Type-C controller.
+>>>
+>>> No "This patch"
+>>
+>> Hi Krzysztof,
+>>
+>> ack,
+>>
+>>>
+>>> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+>>>
+>>>> STM32G0 provides an integrated USB Type-C and power delivery interface.
+>>>> It can be programmed with a firmware to handle UCSI protocol over I2C
+>>>> interface. A GPIO is used as an interrupt line.
+>>>> It may be used as a wakeup source, so use optional "wakeup-source" and
+>>>> "power-domains" properties to support wakeup.
+>>>>
+>>>> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+>>>> ---
+>>>>  .../bindings/usb/st,typec-stm32g0.yaml        | 83 +++++++++++++++++++
+>>>>  1 file changed, 83 insertions(+)
+>>>>  create mode 100644 Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml b/Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
+>>>> new file mode 100644
+>>>> index 0000000000000..b2729bd015a1a
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
+>>>> @@ -0,0 +1,83 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: "http://devicetree.org/schemas/usb/st,typec-stm32g0.yaml#"
+>>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>>>
+>>> No quotes.
+>>
+>> ack,
+>>
+>>>
+>>>> +
+>>>> +title: STMicroelectronics STM32G0 Type-C controller bindings
+>>>
+>>> s/bindings//
+>>
+>> ack,
+>>
+>>>
+>>>> +
+>>>> +description: |
+>>>> +  The STM32G0 MCU can be programmed to control Type-C connector(s) through I2C
+>>>> +  typically using the UCSI protocol over I2C, with a dedicated alert
+>>>> +  (interrupt) pin.
+>>>> +
+>>>> +maintainers:
+>>>> +  - Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    const: st,stm32g0-typec
+>>>> +
+>>>> +  reg:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  interrupts:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  connector:
+>>>> +    type: object> +    allOf:
+>>>> +      - $ref: ../connector/usb-connector.yaml#
+>>>
+>>> Full path, so /schemas/connector/...
+>>>
+>>> unevaluatedProperties: false
 
-Indeed I missed that.  Thanks.
-Ira
+Hi Krzysztof,
+
+I Just figured out usb-connector schema has "additionalProperties:
+true". Adding "unevaluatedProperties: false" here seem to be useless.
+At least at my end, this make any dummy property added in the example
+below to be validated without error by the schema.
+
+Should this be updated in usb-connector.yaml instead ?
+
+Shall I omit it here in the end ?
+
+>>
+>> ack,
+>>
+>>>
+>>>> +
+>>>> +  firmware-name:
+>>>> +    description: |
+>>>> +      Should contain the name of the default firmware image
+>>>> +      file located on the firmware search path
+>>>> +
+>>>> +  wakeup-source: true
+>>>> +  power-domains: true
+>>>
+>>> maxItems
+>>
+>> Do you mean maxItems regarding the "power-domains" property ?
+> 
+> Yes.
+> 
+>> This will depend on the user platform, where it's used as an I2C device.
+>> So I'm not sure this can / should be specified here.
+>> Could please you clarify ?
+> 
+> Then maybe this property is not valid here. Power domains usually are
+> used for blocks of a SoC, having common power source and power gating.
+> In your case it looks much more like a regulator supply.
+
+This property is used in our implementation to refer to SOC PM domain
+for GPIO that is used to wakeup the system. This isn't only a regulator,
+this PM domain serves various IPs such as I2C, GPIO, UART... (it manages
+regulator and clocks used in low power).
+
+I can limit to 1 item if this is fine for you ?
+
+e.g. maxItems: 1
 
 > 
-> > +		if (rc)
-> > +			return -ENOMEM;
-> > +	} while (index);
-> > +
-> > +	return 0;
-> > +}
-> > +
+>>
+>>>
+>>>> +
+>>>> +required:
+>>>> +  - compatible
+>>>> +  - reg
+>>>> +  - interrupts
+>>>> +
+>>>> +additionalProperties: false
+>>>> +
+>>>> +examples:
+>>>> +  - |
+>>>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>>>> +    i2c5 {
+>>>
+>>> Just "i2c"
+>>
+>> ack,
+>>
+>>>
+>>>> +      #address-cells = <1>;
+>>>> +      #size-cells = <0>;
+>>>> +
+>>>> +      stm32g0@53 {
+>>>
+>>> Generic node name describing class of the device.
+>>
+>>
+>> I wasn't aware of generic node name for an I2C device (not talking of
+>> the controller). I may have missed it.
+>>
+>> Could you please clarify ?
+> 
+> The class of a device is not a I2C device. I2C is just a bus. For
+> example the generic name for Power Management IC connected over I2C
+> (quite common case) is "pmic".
+> 
+> For USB HCD controllers the generic name is "usb". For USB
+> ports/connectors this is "connector". So what is your hardware?
+> "interface" is a bit too unspecific to figure it out.
+
+Thanks, I better understand your point now.
+
+A common definition for the hardware here could be "USB Type-C PD
+controller". I'll improve this schema title by the way.
+
+I had a quick look in various .dts files. I could find mainly:
+- typec-portc@hh
+- usb-typec@hh
+- typec@hh
+
+Not sure if this has already been discussed in other reviews, it lacks
+the "controller" idea in the naming IMHO.
+Perhaps something like "typec-pd-controller" or
+"usb-typec-pd-controller" could be used here ?
+
+Otherwise, I could adopt the shortest "typec" name if it's fine for you ?
+
+> 
+>>
+>>>
+>>>> +        compatible = "st,stm32g0-typec";
+>>>> +        reg = <0x53>;
+>>>> +        /* Alert pin on GPIO PE12 */
+>>>> +        interrupts = <12 IRQ_TYPE_EDGE_FALLING>;
+>>>> +        interrupt-parent = <&gpioe>;
+>>>> +
+>>>> +        /* Example with one type-C connector */
+>>>> +        connector {
+>>>> +          compatible = "usb-c-connector";
+>>>> +          label = "USB-C";
+>>>> +
+>>>> +          port {
+>>>
+>>> This does not look like proper schema of connector.yaml.
+>>
+>> This refers to graph.yaml [1], where similar example is seen [2].
+>>
+>> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/graph.yaml#L79
+>>
+>> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/graph.yaml#L207
+> 
+> Just look at the usb-conector schema. It's different. You miss ports.
+> Maybe other properties as well.
+
+
+(I may miss something, and got confused around port/ports earlier)
+The graph properties seems to allow both the 'port' and 'ports' syntax
+thanks to the graph definition.
+The "port" syntax is also used in other typec controller schemas.
+
+There's only one port in this example. Of course other example could use
+two or more ports (like for USB HS / SS / aux) which would require using
+the "ports" node (with port@0/1/2 childs).
+
+I can adopt the "ports" node if you prefer. As I see it just doesn't
+bring much in the current example (The only drawback is this adds one
+indentation/node level w.r.t. the bellow example, so not a big deal).
+
+Please advise,
+
+Thanks for reviewing,
+Best Regards,
+Fabrice
+
+> 
+>>
+>>     device-1 {
+>>         port {
+>>             device_1_output: endpoint {
+>>                 remote-endpoint = <&device_2_input>;
+>>             };
+>>         };
+>>     };
+>>     device-2 {
+>>         port {
+>>             device_2_input: endpoint {
+>>                 remote-endpoint = <&device_1_output>;
+>>             };
+>>         };
+>>     };
+>>
+>>
+>> Could you please clarify this point too ?
+>>
+>>>
+>>>> +            con_usb_c_ep: endpoint {
+>>>> +              remote-endpoint = <&usbotg_hs_ep>;
+>>>> +            };
+>>>> +          };
+>>>> +        };
+>>>> +      };
+>>>> +    };
+>>>> +
+>>>> +    usbotg_hs {
+>>>
+>>> Generic node names, no underscores in node names.
+>>
+>> ack, I guess you'd recommend "usb" here. I'll update it.
+> 
+> Yes, looks like usb.
+> 
+> 
+> Best regards,
+> Krzysztof

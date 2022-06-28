@@ -2,86 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12EC55E92A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A5755E6D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346819AbiF1Ogt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 10:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47022 "EHLO
+        id S1346877AbiF1OhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 10:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346391AbiF1Ogr (ORCPT
+        with ESMTP id S1346842AbiF1OhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 10:36:47 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05692C651
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 07:36:45 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id lw20so26237757ejb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 07:36:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1kG5KHBbJK53FyqEc1h82Hzpb97sM1z63scdMZFmZU0=;
-        b=WWluulmXXBI8m3ENfy2GJ9QWnt0QqRikc4ZvP592zsX/93LReUqVGWewqmF7WNxuN8
-         oiGVAuJ7RgMl2Sd7cYcY4HBlU26kxOU2tceKLYaPjO2JBBBk1i5ZjzYguun7YZElgQBG
-         KwErKupJyqYCFixUtKTkfcefy8nKOa0YR5kapZwuMwi3MXqdR0/zE9ts5rj/Pw41Ts7v
-         DBl3f3AAw7OVNrYrI2XVNFz3Q7++YmDCNDdMEBUoSSL1xMhISu6kJHP4FtwrNAlSiz8k
-         TKAbAJqFpnsjpgtzQQWNhG5tSljTdNX1x3laF0h67J5rqxUGTtAxiyJTakOyPj/uRHv6
-         Igwg==
+        Tue, 28 Jun 2022 10:37:05 -0400
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15CC2C647;
+        Tue, 28 Jun 2022 07:37:03 -0700 (PDT)
+Received: by mail-il1-f176.google.com with SMTP id i17so8255579ils.12;
+        Tue, 28 Jun 2022 07:37:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1kG5KHBbJK53FyqEc1h82Hzpb97sM1z63scdMZFmZU0=;
-        b=eW8/TtGlIyHOp3VaGuq8pBcYrq3LxkMnU3mVMa5OIzUQPZDgbgVYx4Hsx931+9RvmS
-         FdOjfCwWWivXRetEZjLswse1cwYMl9n4u8ImbGtUvlpdaD3MS/XI1MxCc30xL2bVwtZb
-         PnZpNGAsrai6mmXBV5rSCUqvxWpgcYPRNj0uBa/z9q4RM4peyMSK60RY2i+NBtef3SbD
-         dIvS/vpxj1KgAkUIc92YKGtvqha68JUHz460OjSgeJBmQB4162XRccOcXygHiYlZbcog
-         xC/TwA7HEYcB1Iyu2/s0A/yz0DweYAC+QMyB2lsH6ITi5BfN0l1AqtykYkcW+dtK3JJl
-         n9PA==
-X-Gm-Message-State: AJIora/MbGhaSY3bXjr5V2Rf5oIUwxlbHCennm0/eKjezZPZAfPDb6gI
-        dogeMDV7yNXLT3GzOgpoojr8dQ==
-X-Google-Smtp-Source: AGRyM1sVC7TWIYpt1oIZW6wYctnUWBGj4Dur26pc2yKwD7xpPyvlOl/zb+adOPdngTZFXm/Rlj4gQA==
-X-Received: by 2002:a17:907:3e0e:b0:726:602b:c19b with SMTP id hp14-20020a1709073e0e00b00726602bc19bmr16383689ejc.117.1656427004391;
-        Tue, 28 Jun 2022 07:36:44 -0700 (PDT)
-Received: from [192.168.0.254] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id y21-20020a170906559500b00726dbb16b8dsm780222ejp.65.2022.06.28.07.36.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 07:36:43 -0700 (PDT)
-Message-ID: <daaddbd5-1cd4-d3ce-869a-249bdd8aecb9@linaro.org>
-Date:   Tue, 28 Jun 2022 16:36:42 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=A1IJcZJ/hlL884WwHr614CqNiCZ/WVZ7mtlSDIsFU1s=;
+        b=iObil4jRBsYFr5DgetYsegl9YtOUJRdmVQE6lDRHKX9g00Mwgyg1cZzPg4G9/63J38
+         xWkb8rYopUcqETdB773LPVH1CPp7vDfZnh8/OVsArCwmXOAY/eps5I9h2EoQR3dElm/p
+         uupTlL8gHQe0WYpfQYxBl/nUf0RhSNKnCOS1B4OnQfUl65ZHPLQMt43pNNlaBYzQv1pP
+         z+oJnbEMz3i/NPLtcpiAUQJ62SW+KwFYWU8PyiD008V5BvOxBDHDBTBwm9q8hiTgAP+y
+         F5TwuTGTfr/UAVWxFDGrwsSMP+dDakTO+56ehzP/FDAlA4ZuIEUN1SytHnCEZvyxyshD
+         0qjg==
+X-Gm-Message-State: AJIora+2ozQj7iNp4geFz4Xrrrp40w/sjLQqKSpIBdqDrbQCnVQZp8Yw
+        SxpL6KPJTaQLVLKaF9R1fw==
+X-Google-Smtp-Source: AGRyM1vWantaaEVLWxSMmc91idW90bcTQDTqEJa+Xl/smZ1uzAXfk0cGXzKcb6Tr53u0DPCJ/lazrw==
+X-Received: by 2002:a05:6e02:16cf:b0:2d1:a511:499b with SMTP id 15-20020a056e0216cf00b002d1a511499bmr11115588ilx.77.1656427023250;
+        Tue, 28 Jun 2022 07:37:03 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id u13-20020a5d818d000000b0067513ad66c3sm5448207ion.41.2022.06.28.07.37.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 07:37:02 -0700 (PDT)
+Received: (nullmailer pid 425510 invoked by uid 1000);
+        Tue, 28 Jun 2022 14:36:59 -0000
+Date:   Tue, 28 Jun 2022 08:36:59 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     frowand.list@gmail.com
+Cc:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lizhi Hou <lizhi.hou@xilinx.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 2/2]  of: unittest: treat missing of_root as error
+ instead of fixing up
+Message-ID: <20220628143659.GA424332-robh@kernel.org>
+References: <20220624034327.2542112-1-frowand.list@gmail.com>
+ <20220624034327.2542112-3-frowand.list@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: fwnode_for_each_child_node() and OF backend discrepancy
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-References: <4e1d5db9dea68d82c94336a1d6aac404@walle.cc>
- <Yrrhs3D++V79/4Jk@smile.fi.intel.com>
- <f17d3ecfecf4491dd15b1fa092205f3f@walle.cc>
- <CAHp75Vd6e3WwHPfyL=GP=vsoWhwGXadwQziiRRwfHPfjkX2eFg@mail.gmail.com>
- <2f2d7685e0e43194270a310034004970@walle.cc>
- <CAHp75VcANMjxgS6S24Zh+mz66usb6LBnQk-ENvU9JHSXXsG1DA@mail.gmail.com>
- <9e58f421c27121977d11381530757a6e@walle.cc>
- <3ab8afab-b6b7-46aa-06d4-6740cee422d7@linaro.org>
- <288f56ba9cfad46354203b7698babe91@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <288f56ba9cfad46354203b7698babe91@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220624034327.2542112-3-frowand.list@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,82 +69,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/06/2022 16:22, Michael Walle wrote:
->>> I can't follow you here. Please note, that you need the actual
->>> physical port number. It's not a made up number, but corresponds
->>> to a physical port on that ethernet switch. So you can't just skip
->>> the disabled ones. port@2 must have port number 2.
->>
->> The number "2" you get from the reg property, so where is exactly the
->> problem?
+On Thu, Jun 23, 2022 at 10:43:27PM -0500, frowand.list@gmail.com wrote:
+> From: Frank Rowand <frank.rowand@sony.com>
 > 
-> That you need to get the total number of ports of the hardware (which
-> is also used for things beyond validation, eg. during switch init
-> all ports will are disabled). And right now, that is done by counting
-> all the nodes - which is bad, I guess we agree here. 
+>  setup_of() now ensures that of_root node is populated with the
+>  root of a default devicetree. Remove the unittest code that
+>  created of_root if it was missing.  Verify that of_root is
+>  valid before attempting to attach the testcase-data subtree.
 
-It's bad also from another reason - the DT node was explicitly disabled,
-but you perform some operation on actual hardware representing this
-node. I would assume that a disabled DT node means it is not
-operational, e.g. hardware not present or missing clocks, so you should
-not treat it as another meaning - power down/unused.
-
-> But it works,
-> as long as no ports are disabled and all ports are described in the
-> device tree. But I have device trees where some are disabled.
-
-I am not sure if I follow this. You have devices which
-1. have unused ports, but all DT nodes are available/okay,
-2. have unused ports, which are in DT status=disabled?
-
-Doesn't case 2 break the bindings? If so, we don't care about such
-out-of-tree users. We cannot support all of possible weird combinations
-in out-of-tree DTS files...
+What happened with the formatting here?
 
 > 
-> I assume, you cannot read the hardware itself to get the number of
-> physical ports; and we have the compatible "microchip,lan966x-switch",
-> which is the generic one, so it could be the LAN9668 (with 8 ports)
-> or the LAN9662 (with 2 ports). 
-
-I'll keep that argument for future when I see again patches adding such
-wildcard compatible. :) I had to discuss with some folks...
-
-Although the compatible difference does not have to be important here,
-because one could say the 9662 and 9668 programming model is exaclty the
-same and they differ by number of ports. This number of ports can be a
-dedicated property or counted from the children (if they were all
-available).
-
-> We somehow have to retain backwards
-> compatibility. Thus my idea was to at least make the handling slightly
-> better and count *any* child nodes. So it doesn't fall apart with 
-> disabled
-> nodes. Then introduce proper compatible strings 
-> "microchip,lan9668-switch"
-> and use that to hardcode the num_phys_ports to 8. But there will be
-> device trees with microchip,lan966x-switch out there, which we do want
-> to support.
+> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+> ---
+>  drivers/of/unittest.c | 16 ++++++----------
+>  1 file changed, 6 insertions(+), 10 deletions(-)
 > 
-> I see the following options:
->   (1) just don't care and get rid of the "microchip,lan966x-switch"
->       compatible
->   (2) quick fix for the older kernels by counting all the nodes and
->       proper fix for the newer kernels with dedicated compatibles
->   (3) no fix for older kernels, introduce new compatibles for new
->       kernels
-
-I propose this one. I would not care about out-of-tree DTSes which
-decided to disable random stuff and expect things working. :)
-
->   (4) keep generic compatible if the hardware can be read out to get
->       the number of ports.
+> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+> index 7f6bba18c515..9d106998c1f2 100644
+> --- a/drivers/of/unittest.c
+> +++ b/drivers/of/unittest.c
+> @@ -1469,20 +1469,16 @@ static int __init unittest_data_add(void)
+>  		return -EINVAL;
+>  	}
+>  
+> -	if (!of_root) {
+> -		of_root = unittest_data_node;
+> -		for_each_of_allnodes(np)
+> -			__of_attach_node_sysfs(np);
+> -		of_aliases = of_find_node_by_path("/aliases");
+> -		of_chosen = of_find_node_by_path("/chosen");
+> -		of_overlay_mutex_unlock();
+> -		return 0;
+> -	}
+> -
+>  	EXPECT_BEGIN(KERN_INFO,
+>  		     "Duplicate name in testcase-data, renamed to \"duplicate-name#1\"");
+>  
+>  	/* attach the sub-tree to live tree */
+> +	if (!of_root) {
+> +		pr_warn("%s: no live tree to attach sub-tree\n", __func__);
+> +		kfree(unittest_data);
+> +		return -ENODEV;
+> +	}
+> +
+>  	np = unittest_data_node->child;
+>  	while (np) {
+>  		struct device_node *next = np->sibling;
+> -- 
+> Frank Rowand <frank.rowand@sony.com>
 > 
-> I think (1) isn't the way to go. (2) was my try until I noticed
-> that odd fwnode behavior. But judging by this thread, I don't think
-> thats possible. I don't know if (4) is possible at all. If not we'd
-> be left with (3).
-
-
-Best regards,
-Krzysztof
+> 

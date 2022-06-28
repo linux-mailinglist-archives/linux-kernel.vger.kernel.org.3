@@ -2,314 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7A855EAFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA42655EB00
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbiF1RZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 13:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
+        id S232992AbiF1R1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 13:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232974AbiF1RZe (ORCPT
+        with ESMTP id S231578AbiF1R1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 13:25:34 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2127.outbound.protection.outlook.com [40.107.237.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D3639836;
-        Tue, 28 Jun 2022 10:25:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PrSSRalkLn3y6ZA2bwTB/ZoxjoB2wp/kWbA7xOAxmzHjIt47Upd5Xgd359m6kxvazpBkHJJX6bbkxOPtsGdi1EBO7uTMtOoK76OBM5Iu75UM+NB6tBg54pRfZL6J9ItGIAlGuh8BZmI8eSgQcIsGwY8hM2VP0xf1NgvdK9/jYobgiCKKEQjDOseN1EcEIjeyQ6MAX+4mpZe1ZjmV6tR+oE872QGtPtdcoWboKMlPyOibnT/xN7oT7JVmP1kTkZZ6BpVniefog+5uVamBGc/dbXvOA/AZ0sgUq5xdRPPpzg+GfAs1oXvPsRhPsLvsZmbrmqssxRRZxHEqs4+mmvcRzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XerrAoZxG2F/o4A5m3BG3FeOSqaa26n887f1GCfEBCg=;
- b=LpMfcUdLvr/iF3kVrOAz1cUxZh2kPJqoNCUfJEltCD+GNtAgXRa9MUB7tDW+2YPjRtTLDK9Ztgr5c1IeBfMj4SdPT3mjr2YAUnJeZNRWEPO0cZ0rXLmiMsR6kjaKIndyvcuhBoKdI+/hP+mM2tUW8TL8vZ0hFyCtlrHSne5mOT3Ry+ObDEiIU6i++r53+AQegfCNCNvTKIQLymJ8KBwGdVjGZW+gALPrCKAGhGuuuN6ecpuijKLaNB9Ke6Tcq8pstaISY6+Ybu1k3BM+V2ieaizLUCcpi4w4M9kCpvMyefWEln2SQrb3j6o55zQOZ+MxT1Ur+gH8Y5rRIyzVmaVLoQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+        Tue, 28 Jun 2022 13:27:04 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D7B3A1B1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:27:02 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id j1so12654256vsj.12
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:27:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XerrAoZxG2F/o4A5m3BG3FeOSqaa26n887f1GCfEBCg=;
- b=TkEfCQ4vdrXQBFdoW6RcxO/TtnswoaxHKnXQ8riCOLGDygMyyB3FT+GaiEYtZrRiJWP92S18fb7xeD3+XoRaUN5SQBq2Z4BWd9tsrx0gafpPWRCEhXzGNZd1Y72eO/XVPtAaz0h2ycliLmQdrJ9wjAa4TGAtd7Kspirq9QJjGLs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by CH2PR10MB4263.namprd10.prod.outlook.com
- (2603:10b6:610:a6::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Tue, 28 Jun
- 2022 17:25:29 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::712f:6916:3431:e74e]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::712f:6916:3431:e74e%6]) with mapi id 15.20.5373.018; Tue, 28 Jun 2022
- 17:25:29 +0000
-Date:   Tue, 28 Jun 2022 10:25:18 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Subject: Re: [PATCH v11 net-next 1/9] mfd: ocelot: add helper to get regmap
- from a resource
-Message-ID: <20220628172518.GA855398@euler>
-References: <20220628081709.829811-1-colin.foster@in-advantage.com>
- <20220628081709.829811-2-colin.foster@in-advantage.com>
- <20220628160809.marto7t6k24lneau@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628160809.marto7t6k24lneau@skbuf>
-X-ClientProxiedBy: CO2PR05CA0108.namprd05.prod.outlook.com
- (2603:10b6:104:1::34) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qhyBnAO5QNoF6w+Lsog5TuZgN4aDac8U8BguLGYhLjI=;
+        b=S8APzwr+Vhh9BgpyrDN8EoZVFKgT2q0w+Qh23YJX0OKJtu8sLxD3jZG31rxdq7f503
+         fRXSZTW2kMrWo1JzoRd21ArLvAEN5Oe7vAdthOKUpEDRFVkeKOxGYXlvPF+616rKbqpU
+         jEA1yha7GfeElgBTHD+HW6q0QTfbGYlFGnII7QLC4Eru1tXy+4B82YAri7wnv+IGEeM9
+         RM0hX8rKRtcHqZHcZNmkAD5aShH482DzlFCDcmHgfwLN2aMGg1nk0Qsm97zu5wxbKR6k
+         hKecFNqXGvj0PEyhDQhCSoshBmB+7UIKBaoeeJv+XCP6hKa0dnW2bh6s7Dc6Sqq4/XcG
+         LUWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qhyBnAO5QNoF6w+Lsog5TuZgN4aDac8U8BguLGYhLjI=;
+        b=KYm+LqJDltNgSfHmaKwXQzSfPS5Qvkcs6FwXbyuHpF/0Eysxm8cBCKxuLb7hBpfe7P
+         90a7YGZampyP9VxtC7lenODMz17KSUzmZu54K/W+mfCzXy+BONaJWbujaSzD0GqrQvWz
+         7naFhte7bLS27gCgpsLW95rcrjBtj54oBAsrT8DUfWrfz8e9+xixdPf0YhKIH6QkgZgr
+         BA455nJS3YrIjflzPbzVTSTWOr4wgac/P1N5jad4RHqC//+E4VdPslH2gUU4yqbjyQXq
+         cuHA+VlQi1PMrg2xFL5iTWgheBmkl99uvqbNbbagGXFxzMtNgpJLE/fVs2JW4/6/eyrU
+         Z0Ng==
+X-Gm-Message-State: AJIora/XHSAlcql0ZHU90HOLO8WYt1QFTvQeiTh62vjIDFGepkmk+knr
+        uU3yuj5pTUGONKN1xYHeEoVeQ9hpkXdTbShvFfga9g==
+X-Google-Smtp-Source: AGRyM1v1HZYiDVEp7Bu2EbXStl1WmLdTrAmR/vKEBHl8rLxLi1E90YW5y+3EigoFHkQ8yB3rcF5EvJu58kpHOoWkHBY=
+X-Received: by 2002:a67:f958:0:b0:354:3f56:8a2d with SMTP id
+ u24-20020a67f958000000b003543f568a2dmr2171129vsq.59.1656437221096; Tue, 28
+ Jun 2022 10:27:01 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: afaaf05c-bd73-43be-40e6-08da592b3258
-X-MS-TrafficTypeDiagnostic: CH2PR10MB4263:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gjoXb5PqL6SfnjYDpYlMe4aUoc9qOvXHqDuQln4Up9Efz61OQgpeby9KmDzyddUSG4NaKkHOa49StGWEpmZe8ELbf+Xe9kivYWJE9xrXcwMR9H5c4nY9YS1G/5KBmLf1SoO+mZQwK35BrG5BejSyBW9aMqkWTPYJYMHIGJ+BwUjIIQOg8Jcx1PcoBk7PUyriV+4TwzAy/7sWmoGIQ4FTwRIL4AhcmSe2MNAuH54lu6qF4OBuzx6JKhffmcx0tGRlRbkkqefkYUxrWdhfm1FShGQwcuxxhNjMLdTnVLEhe27g6LJoAonaPW1Bwf8lzVot7Nk1Ai2st1fs+e5yEtFhxu5qQmDRoDQZ/6Oo6tsMZMMqAWFovC7J0Qzp/DtWLRqmgBTEY+FFFcIBN9U5ULy9tDE7I1/Jq9WyRVUaUtiD6PJp19cfuodeI9uAS1wXCXmUBEeJKvYSXXDxln4SgBnBJnhHR22BthnDKU9nHrRteJB/1FLjga7Bk8YQz8ysIp987LUddFkUfcRUVl2kvx+Ucvr60EyvhjFqWZMGvhv6dASo0kqHZXcupQX6/khIM7mkg7daFNXXk0G8oJGKWPD5rAWOIapzFkVWDje62J97+GqMatbqmzMB+HUkUSw35YNv+zSAbg/kAzf0ulFi8Kl1DVT4MgrLFQJv+zgphwxLeAUAi9O0+HvsVwmMMIZ0aXsVVkdL9Hxh1HhejVO3bW4xP9D/nMasdTjppMflftOP2N9qB9lrqYd7iiOlAOE5kOABhKsX3+vLWshYfabUKvphUB1o+5QL1oPJ/1lWpxvK4xI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(376002)(346002)(136003)(39830400003)(396003)(33716001)(44832011)(54906003)(38350700002)(6666004)(6916009)(5660300002)(7416002)(26005)(38100700002)(2906002)(41300700001)(186003)(66946007)(66476007)(1076003)(33656002)(8936002)(8676002)(478600001)(66556008)(6506007)(6512007)(6486002)(9686003)(86362001)(52116002)(4326008)(316002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ax3MLyluLNNdgSptoQNI0RBDNE9N8fqdCLf596gw67FCqQwA1JSZv1Bh4kRW?=
- =?us-ascii?Q?pgWvj4cqttOqcl36aJh5mJvp9WbLIA7jODKGUtdRaH5bFqKx+B408EYevGw7?=
- =?us-ascii?Q?11cFxb5eVKOBks/edsgiRdBv+Ikt0hvwRfijXRxAT6cN7ariTil/9gjGCXjN?=
- =?us-ascii?Q?DNXQe0toe2SjRF/gcKv56Gw+D/sBWM5quunrP97PehRz7lSzaoUWm0uipiH4?=
- =?us-ascii?Q?NvqIRrta3QBZ7Ejdsdv2E4lhSqHzzSoIP8z76OevKR0flfjf9xbbmHjp73/B?=
- =?us-ascii?Q?NsR0Nk+UCgODsjNHS0N1AJxpKYOpRUcJqhFIMHYH0GjBfe4e5bQ1HeYPEQh+?=
- =?us-ascii?Q?5DnLA79BwS4m/egQ+GIe9olXsLdP4FPeGC4GC9/PKHIucOdfZR77MHwGB0fY?=
- =?us-ascii?Q?IU0nc3HponucrhCAa9aH6H+8b7xDqygMYcrZu29RixRWEGtBuJyGXE6OBwwD?=
- =?us-ascii?Q?r/dYB9U3/5oWDYWxmkeLaHMxkiPdO17lhuXlMyarhBvLerM/qckGJbsGhlHk?=
- =?us-ascii?Q?vaAYXJsV1g4EuDkJ0ACiXVZq8WnKgIKNIHKl73Pdpzzwe3umho6WjypBghkk?=
- =?us-ascii?Q?W4B8+nkWuee0Yw4W7dBzrwhWyNGpKFl8ZrXUIRP6LkCgrgMqSj9OP08q5zXG?=
- =?us-ascii?Q?gxC4c3F7vtlu8x2fxVbIdbrXDIOvd3PyruoU/C7idb3E3h5+FJWNUKkHi2rx?=
- =?us-ascii?Q?DkXSNjgVAn0M3DePnYyBQkr/v51pc8GCtZ72o+kqwvfmt3CHYsrqEqG6gV2B?=
- =?us-ascii?Q?CFhCjTI9jQ1rC1kFTXEtyku0mXGlIrIbCQNCBDMQvcgj4r63+WBmvfGIQKCM?=
- =?us-ascii?Q?j2mCWDgLBZl2V2PTVb0i5jOme4TAwcbWO+zOkRMwJx1NK4SMnJEwy/jIfEJ+?=
- =?us-ascii?Q?Qb4gBsGz5UxtoKp0diGML2QOyLdwltdjHbq4uQ9pEPVFYrrn1lsfW9/tolCx?=
- =?us-ascii?Q?eSV32654NbIv58UJXkoKi+BriwJtVGCn1/MvfMAI95+S1Fe7msr4Pdqm7LIB?=
- =?us-ascii?Q?EQznElGvzs2akQLi9pRKfvz/t6AmGKDa3D4v0AlNUBiXrKJ7qxpmFYw0Qvj6?=
- =?us-ascii?Q?uqZ+tjGRCd7EuYwompFBxk9WP/ZC07eS1a+jOj7hd9lWoCA98DxFtxkmRutJ?=
- =?us-ascii?Q?OJkAfCXjz6wDO9arezFKi5P/PDWazNLXv7I2vV1Phiasdg0sZYBRaDvUGZyg?=
- =?us-ascii?Q?iEN3qmPgTDRsDpAd7ySPaJCZFSI8ZfSKaNvtkBiUOZJJmU6LxYZJBPcS7QWd?=
- =?us-ascii?Q?eyzDA4Wk2+w4CCcl2ZibZtWxSsoolz7ZCDSqzc4151jUPQ0yRoY0L7u/ZYgR?=
- =?us-ascii?Q?mYl+RcGmStpiDYV7Gm1iP5QThF/L+FjNLa8cZbNdRPAnbLzahAdLhgFh4YiE?=
- =?us-ascii?Q?OKqY/uEBCfcNHjRWW4eljcaOe6Shc2rKeqIsOVvI6IXUx9DwFG0yljxZxo9d?=
- =?us-ascii?Q?vqLGGRKHTJi/PyUVWKNw9q0WrKFaPVEt13Oqwv+JDnuSwx3YEslJiD8wFnhN?=
- =?us-ascii?Q?Kig2YAObwPycleQW8QfwbIhUob0+Vr9oVqp3JvIMjZafZ41haYlVbtjMMZlj?=
- =?us-ascii?Q?Qr4q+2cWlznrsd0/kFMe28fJIIoNMPZXpd0QE4sVwvS3/hELGKztAost/Rhp?=
- =?us-ascii?Q?7zDa0seoOI3x2hw3Mwiz47Q=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: afaaf05c-bd73-43be-40e6-08da592b3258
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 17:25:29.1644
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0mtXvhQHLS7KJ9/I4Fg+Kc/0RqfZfzEABcG9i0yjb0ny4vqWClm8RQEUXLCEC0aQlz9WY+g/MBedeUy8fAvWZuIwfmesF3WcjngIqPj4CbQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4263
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220624173656.2033256-1-jthoughton@google.com>
+ <CAHS8izPnJd5EQjUi9cOk=03u3X1rk0PexTQZi+bEE4VMtFfksQ@mail.gmail.com> <CADrL8HWse7-=1Z=1_d8szwdkhFH1t8L4pOBO7E7yxgCYF-gc8w@mail.gmail.com>
+In-Reply-To: <CADrL8HWse7-=1Z=1_d8szwdkhFH1t8L4pOBO7E7yxgCYF-gc8w@mail.gmail.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Tue, 28 Jun 2022 10:26:49 -0700
+Message-ID: <CAHS8izNSsEW88Q=ozcC2rbnmvcX3zOL-qkFTPgn=M6S1R5t=Yw@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/26] hugetlb: Introduce HugeTLB high-granularity mapping
+To:     James Houghton <jthoughton@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Jue Wang <juew@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vladimir,
-
-On Tue, Jun 28, 2022 at 04:08:10PM +0000, Vladimir Oltean wrote:
-> On Tue, Jun 28, 2022 at 01:17:01AM -0700, Colin Foster wrote:
-> > diff --git a/include/linux/mfd/ocelot.h b/include/linux/mfd/ocelot.h
-> > new file mode 100644
-> > index 000000000000..5c95e4ee38a6
-> > --- /dev/null
-> > +++ b/include/linux/mfd/ocelot.h
-> > @@ -0,0 +1,27 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 OR MIT */
-> > +/* Copyright 2022 Innovative Advantage Inc. */
-> > +
-> > +#include <linux/err.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/regmap.h>
-> > +#include <linux/types.h>
-> > +
-> > +struct resource;
-> > +
-> > +static inline struct regmap *
-> > +ocelot_platform_init_regmap_from_resource(struct platform_device *pdev,
-> > +					  unsigned int index,
-> > +					  const struct regmap_config *config)
-> 
-> I think this function name is too long (especially if you're going to
-> also introduce ocelot_platform_init_regmap_from_resource_optional),
-> and I have the impression that the "platform_init_" part of the name
-> doesn't bring too much value. How about ocelot_regmap_from_resource()?
-
-I thought the same thing after your first email. My thought was "how do
-I indent that?" :-)
-
-> 
-> > +{
-> > +	struct resource *res;
-> > +	u32 __iomem *regs;
-> > +
-> > +	regs = devm_platform_get_and_ioremap_resource(pdev, index, &res);
-> > +
-> > +	if (!res)
-> > +		return ERR_PTR(-ENOENT);
-> > +	else if (IS_ERR(regs))
-> > +		return ERR_CAST(regs);
-> > +	else
-> > +		return devm_regmap_init_mmio(&pdev->dev, regs, config);
-> > +}
-> > -- 
-> > 2.25.1
+On Mon, Jun 27, 2022 at 9:27 AM James Houghton <jthoughton@google.com> wrote:
+>
+> On Fri, Jun 24, 2022 at 11:41 AM Mina Almasry <almasrymina@google.com> wrote:
 > >
-> 
-> To illustrate what I'm trying to say, these would be the shim
-> definitions:
-> 
-> static inline struct regmap *
-> ocelot_regmap_from_resource(struct platform_device *pdev,
-> 			    unsigned int index,
-> 			    const struct regmap_config *config)
-> {
-> 	struct resource *res;
-> 	void __iomem *regs;
-> 
-> 	regs = devm_platform_get_and_ioremap_resource(pdev, index, &res);
-> 	if (IS_ERR(regs))
-> 		return regs;
-> 
-> 	return devm_regmap_init_mmio(&pdev->dev, regs, config);
-> }
-> 
-> static inline struct regmap *
-> ocelot_regmap_from_resource_optional(struct platform_device *pdev,
-> 				     unsigned int index,
-> 				     const struct regmap_config *config)
-> {
-> 	struct resource *res;
-> 	void __iomem *regs;
-> 
-> 	res = platform_get_resource(pdev, IORESOURCE_MEM, index);
-> 	if (!res)
-> 		return NULL;
-> 
-> 	regs = devm_ioremap_resource(&pdev->dev, r);
-> 	if (IS_ERR(regs))
-> 		return regs;
-> 
-> 	return devm_regmap_init_mmio(&pdev->dev, regs, config);
-> }
-> 
-> and these would be the full versions:
-> 
-> static struct regmap *
-> ocelot_regmap_from_mem_resource(struct device *dev, struct resource *res,
-> 				const struct regmap_config *config)
-> {
-> 	void __iomem *regs;
-> 
-> 	regs = devm_ioremap_resource(dev, r);
-> 	if (IS_ERR(regs))
-> 		return regs;
-> 
-> 	return devm_regmap_init_mmio(dev, regs, config);
-> }
-> 
-> static struct regmap *
-> ocelot_regmap_from_reg_resource(struct device *dev, struct resource *res,
-> 				const struct regmap_config *config)
-> {
-> 	/* Open question: how to differentiate SPI from I2C resources? */
+> > On Fri, Jun 24, 2022 at 10:37 AM James Houghton <jthoughton@google.com> wrote:
+> > >
+> > > [trimmed...]
+> > > ---- Userspace API ----
+> > >
+> > > This patch series introduces a single way to take advantage of
+> > > high-granularity mapping: via UFFDIO_CONTINUE. UFFDIO_CONTINUE allows
+> > > userspace to resolve MINOR page faults on shared VMAs.
+> > >
+> > > To collapse a HugeTLB address range that has been mapped with several
+> > > UFFDIO_CONTINUE operations, userspace can issue MADV_COLLAPSE. We expect
+> > > userspace to know when all pages (that they care about) have been fetched.
+> > >
+> >
+> > Thanks James! Cover letter looks good. A few questions:
+> >
+> > Why not have the kernel collapse the hugepage once all the 4K pages
+> > have been fetched automatically? It would remove the need for a new
+> > userspace API, and AFACT there aren't really any cases where it is
+> > beneficial to have a hugepage sharded into 4K mappings when those
+> > mappings can be collapsed.
+>
+> The reason that we don't automatically collapse mappings is because it
+> would take additional complexity, and it is less flexible. Consider
+> the case of 1G pages on x86: currently, userspace can collapse the
+> whole page when it's all ready, but they can also choose to collapse a
+> 2M piece of it. On architectures with more supported hugepage sizes
+> (e.g., arm64), userspace has even more possibilities for when to
+> collapse. This likely further complicates a potential
+> automatic-collapse solution. Userspace may also want to collapse the
+> mapping for an entire hugepage without completely mapping the hugepage
+> first (this would also be possible by issuing UFFDIO_CONTINUE on all
+> the holes, though).
+>
 
-My expectation is to set something up in drivers/mfd/ocelot-{spi,i2c}.c
-and have an if/else / switch. PCIe might actually be our first hardware
-spin.
+To be honest I'm don't think I'm a fan of this. I don't think this
+saves complexity, but rather pushes it to the userspace. I.e. the
+userspace now must track which regions are faulted in and which are
+not to call MADV_COLLAPSE at the right time. Also, if the userspace
+gets it wrong it may accidentally not call MADV_COLLAPSE (and not get
+any hugepages) or call MADV_COLLAPSE too early and have to deal with a
+storm of maybe hundreds of minor faults at once which may take too
+long to resolve and may impact guest stability, yes?
 
-> 	return ocelot_spi_init_regmap(dev->parent, dev, res);
-> }
-> 
-> struct regmap *
-> ocelot_regmap_from_resource_optional(struct platform_device *pdev,
-> 				     unsigned int index,
-> 				     const struct regmap_config *config)
-> {
-> 	struct device *dev = &pdev->dev;
-> 	struct resource *res;
-> 
-> 	res = platform_get_resource(pdev, IORESOURCE_MEM, index);
-> 	if (res)
-> 		return ocelot_regmap_from_mem_resource(dev, res, config);
-> 
-> 	/*
-> 	 * Fall back to using IORESOURCE_REG, which is possible in an
-> 	 * MFD configuration
-> 	 */
-> 	res = platform_get_resource(pdev, IORESOURCE_REG, index);
-> 	if (res)
-> 		return ocelot_regmap_from_reg_resource(dev, res, config);
-> 
-> 	return NULL;
-> }
-> 
-> struct regmap *
-> ocelot_regmap_from_resource(struct platform_device *pdev,
-> 			    unsigned int index,
-> 			    const struct regmap_config *config)
-> {
-> 	struct regmap *map;
-> 
-> 	map = ocelot_regmap_from_resource_optional(pdev, index, config);
-> 	return map ? : ERR_PTR(-ENOENT);
-> }
-> 
-> I hope I didn't get something wrong, this is all code written within the
-> email client, so it is obviously not compiled/tested....
+For these reasons I think automatic collapsing is something that will
+eventually be implemented by us or someone else, and at that point
+MADV_COLLAPSE for hugetlb memory will become obsolete; i.e. this patch
+is adding a userspace API that will probably need to be maintained for
+perpetuity but actually is likely going to be going obsolete "soon".
+For this reason I had hoped that automatic collapsing would come with
+V1.
 
-Yep - I definitely get the point. And thanks for the review.
+I wonder if we can have a very simple first try at automatic
+collapsing for V1? I.e., can we support collapsing to the hstate size
+and only that? So 4K pages can only be either collapsed to 2MB or 1G
+on x86 depending on the hstate size. I think this may be not too
+difficult to implement: we can have a counter similar to mapcount that
+tracks how many of the subpages are mapped (subpage_mapcount). Once
+all the subpages are mapped (the counter reaches a certain value),
+trigger collapsing similar to hstate size MADV_COLLAPSE.
 
-The other (bigger?) issue is around how this MFD can be loaded as a
-module. Right now it is pretty straightforward to say
-#if IS_ENABLED(CONFIG_MFD_OCELOT). Theres a level of nuance if
-CONFIG_MFD_OCELOT=m while the child devices are compiled in
-(CONFIG_PINCTRL_MICROCHIP_SGPIO=y for example). It still feels like this
-code belongs somewhere in platform / resource / device / mfd...?
+I gather that no one else reviewing this has raised this issue thus
+far so it might not be a big deal and I will continue to review the
+RFC, but I had hoped for automatic collapsing myself for the reasons
+above.
 
-It might be perfectly valid to have multiple SGPIO controllers - one
-local and one remote / SPI. But without the CONFIG_MFD_OCELOT module
-loaded, I don't think the SGPIO module would work.
+> >
+> > > ---- HugeTLB Changes ----
+> > >
+> > > - Mapcount
+> > > The way mapcount is handled is different from the way that it was handled
+> > > before. If the PUD for a hugepage is not none, a hugepage's mapcount will
+> > > be increased. This scheme means that, for hugepages that aren't mapped at
+> > > high granularity, their mapcounts will remain the same as what they would
+> > > have been pre-HGM.
+> > >
+> >
+> > Sorry, I didn't quite follow this. It says mapcount is handled
+> > differently, but the same if the page is not mapped at high
+> > granularity. Can you elaborate on how the mapcount handling will be
+> > different when the page is mapped at high granularity?
+>
+> I guess I didn't phrase this very well. For the sake of simplicity,
+> consider 1G pages on x86, typically mapped with leaf-level PUDs.
+> Previously, there were two possibilities for how a hugepage was
+> mapped, either it was (1) completely mapped (PUD is present and a
+> leaf), or (2) it wasn't mapped (PUD is none). Now we have a third
+> case, where the PUD is not none but also not a leaf (this usually
+> means that the page is partially mapped). We handle this case as if
+> the whole page was mapped. That is, if we partially map a hugepage
+> that was previously unmapped (making the PUD point to PMDs), we
+> increment its mapcount, and if we completely unmap a partially mapped
+> hugepage (making the PUD none), we decrement its mapcount. If we
+> collapse a non-leaf PUD to a leaf PUD, we don't change mapcount.
+>
+> It is possible for a PUD to be present and not a leaf (mapcount has
+> been incremented) but for the page to still be unmapped: if the PMDs
+> (or PTEs) underneath are all none. This case is atypical, and as of
+> this RFC (without bestowing MADV_DONTNEED with HGM flexibility), I
+> think it would be very difficult to get this to happen.
+>
 
-This patch set deals with the issue by setting MFD_OCELOT to a boolean -
-but in the long run I think a module makes sense. I admittedly haven't
-spent enough time researching (bashing my head against the wall) this,
-but this seems like a good opportunity to at least express that I'm
-expecting to have to deal with this issue soon. I met with Alexandre at
-ELC this past week, and he said Arnd (both added to CC) might be a good
-resource - but again I'd like to do a little more searching before
-throwing it over the wall.
+Thank you for the detailed explanation. Please add it to the cover letter.
+
+I wonder the case "PUD present but all the PMD are none": is that a
+bug? I don't understand the usefulness of that. Not a comment on this
+patch but rather a curiosity.
+
+> >
+> > > - Page table walking and manipulation
+> > > A new function, hugetlb_walk_to, handles walking HugeTLB page tables for
+> > > high-granularity mappings. Eventually, it's possible to merge
+> > > hugetlb_walk_to with huge_pte_offset and huge_pte_alloc.
+> > >
+> > > We keep track of HugeTLB page table entries with a new struct, hugetlb_pte.
+> > > This is because we generally need to know the "size" of a PTE (previously
+> > > always just huge_page_size(hstate)).
+> > >
+> > > For every page table manipulation function that has a huge version (e.g.
+> > > huge_ptep_get and ptep_get), there is a wrapper for it (e.g.
+> > > hugetlb_ptep_get).  The correct version is used depending on if a HugeTLB
+> > > PTE really is "huge".
+> > >
+> > > - Synchronization
+> > > For existing bits of HugeTLB, synchronization is unchanged. For splitting
+> > > and collapsing HugeTLB PTEs, we require that the i_mmap_rw_sem is held for
+> > > writing, and for doing high-granularity page table walks, we require it to
+> > > be held for reading.
+> > >
+> > > ---- Limitations & Future Changes ----
+> > >
+> > > This patch series only implements high-granularity mapping for VM_SHARED
+> > > VMAs.  I intend to implement enough HGM to support 4K unmapping for memory
+> > > failure recovery for both shared and private mappings.
+> > >
+> > > The memory failure use case poses its own challenges that can be
+> > > addressed, but I will do so in a separate RFC.
+> > >
+> > > Performance has not been heavily scrutinized with this patch series. There
+> > > are places where lock contention can significantly reduce performance. This
+> > > will be addressed later.
+> > >
+> > > The patch series, as it stands right now, is compatible with the VMEMMAP
+> > > page struct optimization[3], as we do not need to modify data contained
+> > > in the subpage page structs.
+> > >
+> > > Other omissions:
+> > >  - Compatibility with userfaultfd write-protect (will be included in v1).
+> > >  - Support for mremap() (will be included in v1). This looks a lot like
+> > >    the support we have for fork().
+> > >  - Documentation changes (will be included in v1).
+> > >  - Completely ignores PMD sharing and hugepage migration (will be included
+> > >    in v1).
+> > >  - Implementations for architectures that don't use GENERAL_HUGETLB other
+> > >    than arm64.
+> > >
+> > > ---- Patch Breakdown ----
+> > >
+> > > Patch 1     - Preliminary changes
+> > > Patch 2-10  - HugeTLB HGM core changes
+> > > Patch 11-13 - HugeTLB HGM page table walking functionality
+> > > Patch 14-19 - HugeTLB HGM compatibility with other bits
+> > > Patch 20-23 - Userfaultfd and collapse changes
+> > > Patch 24-26 - arm64 support and selftests
+> > >
+> > > [1] This used to be called HugeTLB double mapping, a bad and confusing
+> > >     name. "High-granularity mapping" is not a great name either. I am open
+> > >     to better names.
+> >
+> > I would drop 1 extra word and do "granular mapping", as in the mapping
+> > is more granular than what it normally is (2MB/1G, etc).
+>
+> Noted. :)

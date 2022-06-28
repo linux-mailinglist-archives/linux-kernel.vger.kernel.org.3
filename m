@@ -2,110 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF2055D855
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABDEA55C573
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245404AbiF1CfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 22:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
+        id S245395AbiF1Ce7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 22:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245365AbiF1Cc0 (ORCPT
+        with ESMTP id S245645AbiF1CdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 22:32:26 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC6125C66;
-        Mon, 27 Jun 2022 19:30:45 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LX7qj0jdrz4yW9;
-        Tue, 28 Jun 2022 12:30:41 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1656383441;
-        bh=183Ifzju1Y8pI3+aCwyoMpycdvgHXeXxZv4hkg68xc0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=h++5nLGGTBccYZfx1SHJn33zeI2+/S1Bki3I/HQYVaw1vig8ZbGX4KK6efplC8JVK
-         aq7MmB4wP3baWpPkrIY5Qf1y/e8ZhaiLMPAT4kBY5bEGH/ci06TNSzFkIjf6+Bn1wl
-         FGH1VJ7d4VzhRUf/X/fVa165h/xQLTOl1REdOvnWJhzhK27JMHW0jV7FtzJu1Obk0K
-         n2u7sOsVeCXYkRH9nENa2mUWMHsSD1+6owR9bphsaR7VcDjERRTuGUMng2yI7EGor9
-         WarTTYKCzTHmgBQMZtjrHQTJ51J3y/rkpyDuupHfbgoCf4AwtnwlApPIB/H8im/l9l
-         vWTxkHl/8S8MQ==
-Date:   Tue, 28 Jun 2022 12:30:35 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Asmaa Mnebhi <asmaa@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the battery tree
-Message-ID: <20220628123035.167f28ea@canb.auug.org.au>
-In-Reply-To: <20220624124730.3516928c@canb.auug.org.au>
-References: <20220620104503.11c0f2e1@canb.auug.org.au>
-        <20220624124730.3516928c@canb.auug.org.au>
+        Mon, 27 Jun 2022 22:33:02 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150082.outbound.protection.outlook.com [40.107.15.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE6A2654B
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 19:32:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JsvK6KgrcfjtxK9w1ZmIMksznGXkHn/RttSC8T0dMpwXSNqshRPmOxyi9eN4UjGZvSVIfQzUH7iHJno9yhgtG9MtcjRkUTpCIoG7UwepHBXcTp7I5kzaIIr7l2ucIuKJrV5Z16O6QhvxYQ4tL1zvkzYUND/Hz2jfNZKWNvbeSkeZ1rCeKcjdXGpePEe9pZAhW/K97efASyjLUwTKR6lJ11YkCSWFWWxMLfTQlrVP2b3yBOUHjraDuKnD1bVcVEF92nmBEbjXzYx+YhRaas7dCShjqRroZWeRuGYiddYd1lDaUZKe4EuncUqQLwZUi6QsZi17ffhd2SN3ysrRjjlJOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nFQQfM2YarTDw0kUSoPq/7Paj3yWvHcbZimI3ejFrgc=;
+ b=VPBjpcYOrgiHMjibHSvOuaSMwUrk94QrUzzbwTRE1fqHDJCaARR5WSlfa4cL5lIVBIOKpiywybEfjXxi8dpseL5uaTE5GdYXY6NuO8+zJUtCYIUcHm1/pHR/TfqW4Y/3me3A5FE/Ml240YSC7kgwV5BqejDWJA87oV9b8jGSxf0qp5EC3KBzWv+b0+OrfGy7OQfQzdBgk74L41SmpZjkMWAuXgSPOUhx6KAYhhHQpEH8T7ncUHhfXhS7joWFb+F/d3y2xXwqw1GtLwg9TXotEjtAfA6tu7gnoAL69ntetlTEwgx+Ss1jIhcnHXIFiqAfTDezGb2Fj5nmTOvCSvM6EA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nFQQfM2YarTDw0kUSoPq/7Paj3yWvHcbZimI3ejFrgc=;
+ b=IlAaM2DHeC/jEg4eN8pIuMsC5Bci5Lr0nA08iMzbO5JBArxUz0etKJPOTuG2Hh7/ToKJIKkt2Fx4+Gl5HYQtlCfS0EgEKrQjHrXyXCElnuWx8bxTy3GVqMeg6Ui7SO78/sObWIUDIxnw9zs/p3AmpQ0dfiYJMs8yeTlMxpWlKrU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by DB6PR0401MB2279.eurprd04.prod.outlook.com (2603:10a6:4:49::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Tue, 28 Jun
+ 2022 02:32:13 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::416e:6e99:bac6:d3a9]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::416e:6e99:bac6:d3a9%5]) with mapi id 15.20.5373.018; Tue, 28 Jun 2022
+ 02:32:13 +0000
+Message-ID: <9f5b511708ca9b30ef101a46a5d1b76f03b2c4fc.camel@nxp.com>
+Subject: Re: [PATCH v2] drm/bridge: imx: i.MX8 bridge drivers should depend
+ on ARCH_MXC
+From:   Liu Ying <victor.liu@nxp.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Marek Vasut <marex@denx.de>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Tue, 28 Jun 2022 10:31:32 +0800
+In-Reply-To: <b625ba83-fee9-b668-09db-976cb3bef3ca@baylibre.com>
+References: <42c542b53a1c8027b23a045045fbb7b34479913d.1656072500.git.geert+renesas@glider.be>
+         <b625ba83-fee9-b668-09db-976cb3bef3ca@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SGXP274CA0009.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::21)
+ To AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Uek7JuHLB.xW/WUpLGaHjbb";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fcb03a7f-5b2c-45f9-d578-08da58ae6901
+X-MS-TrafficTypeDiagnostic: DB6PR0401MB2279:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TCMfARWTWaUthI6312yJD9iTW+fcB58lthvIQ9ZzFwVXbejpVRikx1kNwBMrC/xcCQJ3IACV8zecN9mYv16Y0++U2eikfb5SF/ZmoAiB5V9Fk/S/IVj9yxfR9cqhfin9ZjnRH5DkZvP7NbhbHnIZIt4HU/lgCit2JYOn3rOvcTSD9FWrI9c9f6qDLleBNE6qGhghxyFm18J5TUnF3t4cEjT5QN2C/suZwZa/a7U+7Nn+3w+5UTDDmMLo3jstXzkbyjru8uN+wwTE87LM6Bb9dbDzI3gemdneWwRur3KUeTABOq9BD2a7xp1djxuZf7CllbujbedcxVhrRofRgo1bQkLJ5+qrXJUF8840JpzuexSoAFLm+PzCKIhJNv5wQBBoSYvkv/dkU2BFSS3MbniHea0kJI8qlRyaTMso8VAXSi7d/2Z0maQG3t1StLxJCFh7treWgON1hCth9ccqc4sifZY1piHQs5QyNVKUXIdMsSygE/6t7FkaGIF614ybuY7ptu8UCi0RTTnWRHVxWVe6X6zWGyvqmePIfyN1G5V446UNdodjhE9D3mnK04eogFIHdXl5vI8E6Q+kqSxdsdSdwHLnDxTfmk2t7Ab76bPIKX3fHwTyDkung7qIs+DfpZjgqFm8G8tvaPKrz1rx83hBJMG1Q5wcO69GPThd0mdoHKac5X8mhX8JJAyJKLr4CwKtpA5bfFXA1XamahjHf4IgijlR7uTEuv2Ml34DfDYgJlixDGdCjhBc7IXCOoc89F0M2VzMO70AUcTA97hKqbnEdKbQxdeLrJmICUc2UuCJ7XF2caGIq6OCiYqWocrXIqqDkh6HHBkifzglNInb0gk7XdTflEGN255amDFYprdlmXZPES7ajcLboVUFxZXqu5N7ueHOnaEwddJi+c2iYyBoxw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(396003)(346002)(366004)(376002)(478600001)(2906002)(2616005)(5660300002)(6512007)(7416002)(41300700001)(86362001)(6486002)(26005)(52116002)(921005)(6506007)(53546011)(8936002)(66556008)(38100700002)(6666004)(966005)(110136005)(38350700002)(4326008)(66946007)(186003)(66476007)(36756003)(316002)(8676002)(99106002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eWlySGxFN2M4SVFUTFRlMEhVWWt0OGNyVTVUN1dqR0FuOXo4eGpld2pINlBT?=
+ =?utf-8?B?V1dackFCTUdscHAwaEg0RUJ0TXFGdU9pMXRqeFNMcUhqVFZ6eWlnWERUUWtI?=
+ =?utf-8?B?OUpQRUNrRDNBaUxkQVhlc3NjUEluZlFMdkJFSnJwOWhSZEF3dmUwTnVXK3Jn?=
+ =?utf-8?B?SkhZclZ3aDF6bFA1bWRFNnlHK0NEMmwrazBqSGJJMS81VkxLdlhleGVJSys2?=
+ =?utf-8?B?aVRHUFU5RUNxV3lPM3V6Z1QvbWNzcmNIRVJoN05sQzBucGRYa0ZiMVBDajBC?=
+ =?utf-8?B?dmZISG1uTEtCVHlmMXdlanVnL3Y2V3VzU1YrRVBUQUF3OEh0b1NRREM4TUlC?=
+ =?utf-8?B?NWh3cFhjM1liWDhrSFkyM0JuNms3dGN1Um44cmpUZzJvOTdia3kzR0J3VlNE?=
+ =?utf-8?B?QjhPallNeXY1YUZNUGMzeWxxOXhnSUpoL2xJQ3BFUFB6d0pEdzVyZUNidkVw?=
+ =?utf-8?B?ZEljeFY4R010WlNRcDdnN3MrYjlHeVg3UWVFREtBeFpGRWNNdGVzY09PY2JP?=
+ =?utf-8?B?TUpNbXpqd1NDY0xpTGd0TVJoMExyUDZTV0piTXJFR25vQU54eDZIdzNVejNO?=
+ =?utf-8?B?RUNQaXpNTkZkMk5pY3o3VE9aR0Fib1QxWW9xc2NYN1VUOWJpTExnTzI4dzZu?=
+ =?utf-8?B?SzFrM3UzZjlFVW5GUFltTThCbUc1YmNpaWNpQnJDQ0pXOGhuZHBnNGtpajl3?=
+ =?utf-8?B?bGw2bFozUXFOQWtEN1NSaEF2allXYTBpTWJBUUJZV1A0Nk13dHNYTmw2L0hu?=
+ =?utf-8?B?aUcwZGhCdkJVSHBTT1RwOWhWc1hDYmZRaExGREZaSUQ0aytLcUR1bE5FQVFO?=
+ =?utf-8?B?NDc5dUwwdUtKMzBCTmV4V2ppNmo5KzJNcUpEQU1SYUxzbVplUW40K0lmTVRj?=
+ =?utf-8?B?cWI1S2Nhck5mR3F5dFV2TXlLQWlySngvWG1EdVJSQWpQRFh4SmgwT25uazF2?=
+ =?utf-8?B?ZEc3S1VGUEhNRVNSMUlqM2dRWkJoelpNYkM0QW5qaTMvVFdwMFdZa3lpbWNX?=
+ =?utf-8?B?bndCcVlkVVJ1OEMza3BmYVFyTzRNdWtVdFNFVjJLWklMV25nbGJ2QUtrS1ll?=
+ =?utf-8?B?dWxHejhqNnJBVEJWcFF1YW8xYm1FQnR6Q0lhbEVySUlTUTBlQ05adGxuRWVO?=
+ =?utf-8?B?ZkNHUTBXU2FZb01iNGtZcHAvYmsvYk1SWXlrS2Y1a3lzdE91L0wwZnVOM09a?=
+ =?utf-8?B?emRxZkNJVDhza09lLzZ4UFNieHdqZHl3Vjdqc0M3RnRXM2FjR0pVdjhtb0tm?=
+ =?utf-8?B?aWlMdnBzVFo1S1lndUh6VjEwRURKdTB6SGpIaGNyVlFST05HY1JlK1NwdzYr?=
+ =?utf-8?B?WmQ0Q2trQ0JZTmt3WWtuTHc1RUlqRUVkRnpTbnp6KytrY2xIU2s4OE9ubEIz?=
+ =?utf-8?B?ak1McVdrRnpPRW9SQlViUzVnRERTS3FTRVllZlRNMW5HUTN5bjBLVEQ0L3Q0?=
+ =?utf-8?B?NzB4d2hlL2h3enJsRXhtWDBtNmVYQ1o1Sm1jenF4SkZaeGtRUU1teUw5a2dM?=
+ =?utf-8?B?SHlwTVJFNnN2d29hQ3hZREIrNWFZeVJyR01hZURZQktNQXh4Tk1aYzkvQnBr?=
+ =?utf-8?B?cmhQZzRTczluK1puYnFTekNiMkhDa21LTkdNQ3RYNG9jNEJIQ21QVm1QT2Fq?=
+ =?utf-8?B?bUtYS3dkUnc5ZklPditlVkFqU2dYeGxxUDhwZTJCQU9GdXBxelExZENlTEIv?=
+ =?utf-8?B?cUFPUis5WkNSS1YyL0ZaVVFpbWszdXU3RFJtdzhHS2NMU2x5UCticmFtN0VQ?=
+ =?utf-8?B?K3l1bnJYWmFNbjdkaFRZaGdNWlRJQlRSdFhzUkt6V1JEYVJiS3h4bk5HbXYw?=
+ =?utf-8?B?MDdLV3VPYngxK3RhU3BKdExsNUdJQk5hVXRDM3lHWUVwdURlQlFTNWtHTXpS?=
+ =?utf-8?B?bWpaTzdmODdDNlI2TnZKWjJmakxsazZVNDRWenNkZjJFaGxqK1A1NkRVYXgx?=
+ =?utf-8?B?Y0FsTnRzL1FEeE9GOWRMLzlmSnJvZ29qbFdRYUpQKzdiSUYySGUxSW5qWHdx?=
+ =?utf-8?B?TTNZRlNHM05hRXlyMkpSRWNwQjQ0RjNVa0RVK1B4T0o2VXNpREk4VG43Vks1?=
+ =?utf-8?B?eDlRM2g1Y3FrOENlMXNWQldOMXlFSDR0YXM1RXBxaXZtaGhYRTQxQXdnZ2Ru?=
+ =?utf-8?Q?D9bbUHEgpcMBQbeN1rRzjzUaD?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fcb03a7f-5b2c-45f9-d578-08da58ae6901
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 02:32:13.7502
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9izDWx0J/P8wY5pQkl7Hs97qtDQrAknhZeqZ/QQzHtB15cJDVXa2BdFlxMwZkFmFNk5ii2j9UPCwsvQrdnkQEA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0401MB2279
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Uek7JuHLB.xW/WUpLGaHjbb
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, 2022-06-27 at 14:22 +0200, Neil Armstrong wrote:
+> Hi,
 
-Hi all,
+Hi,
 
-On Fri, 24 Jun 2022 12:47:30 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Mon, 20 Jun 2022 10:45:03 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >=20
-> > After merging the battery tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> >=20
-> > drivers/power/reset/pwr-mlxbf.c: In function 'pwr_mlxbf_probe':
-> > drivers/power/reset/pwr-mlxbf.c:67:15: error: implicit declaration of f=
-unction 'devm_work_autocancel' [-Werror=3Dimplicit-function-declaration]
-> >    67 |         err =3D devm_work_autocancel(dev, &priv->send_work, pwr=
-_mlxbf_send_work);
-> >       |               ^~~~~~~~~~~~~~~~~~~~
-> > cc1: all warnings being treated as errors
-> >=20
-> > Caused by commit
-> >=20
-> >   a4c0094fcf76 ("power: reset: pwr-mlxbf: add BlueField SoC power contr=
-ol driver")
-> >=20
-> > I have used the battery tree from next-20220617 for today. =20
->=20
-> I am still seeing this failure.
+> 
+> On 24/06/2022 14:10, Geert Uytterhoeven wrote:
+> > The various Freescale i.MX8 display bridges are only present on
+> > Freescale i.MX8 SoCs.  Hence add a dependency on ARCH_MXC, to
+> > prevent
+> > asking the user about these drivers when configuring a kernel
+> > without
+> > i.MX SoC support.
+> > 
+> > Fixes: e60c4354840b2fe8 ("drm/bridge: imx: Add LDB support for
+> > i.MX8qm")
+> > Fixes: 3818715f62b42b5c ("drm/bridge: imx: Add LDB support for
+> > i.MX8qxp")
+> > Fixes: 96988a526c97cfbe ("drm/bridge: imx: Add i.MX8qxp pixel link
+> > to DPI support")
+> > Fixes: 1ec17c26bc06289d ("drm/bridge: imx: Add i.MX8qm/qxp display
+> > pixel link support")
+> > Fixes: 93e163a9e0392aca ("drm/bridge: imx: Add i.MX8qm/qxp pixel
+> > combiner support")
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > Reviewed-by: Liu Ying <victor.liu@nxp.com>
+> > ---
+> > v2:
+> >    - s/i.MX8MP/i.MX8/,
+> >    - Add Reviewed-by.
+> > ---
+> >   drivers/gpu/drm/bridge/imx/Kconfig | 4 ++++
+> >   1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/drivers/gpu/drm/bridge/imx/Kconfig
+> > b/drivers/gpu/drm/bridge/imx/Kconfig
+> > index 212a7b0e64fd8b5a..608f47f41bcd1c81 100644
+> > --- a/drivers/gpu/drm/bridge/imx/Kconfig
+> > +++ b/drivers/gpu/drm/bridge/imx/Kconfig
+> > @@ -1,3 +1,5 @@
+> > +if ARCH_MXC || COMPILE_TEST
+> > +
+> >   config DRM_IMX8QM_LDB
+> >   	tristate "Freescale i.MX8QM LVDS display bridge"
+> >   	depends on OF
+> > @@ -41,3 +43,5 @@ config DRM_IMX8QXP_PIXEL_LINK_TO_DPI
+> >   	help
+> >   	  Choose this to enable pixel link to display pixel
+> > interface(PXL2DPI)
+> >   	  found in Freescale i.MX8qxp processor.
+> > +
+> > +endif # ARCH_MXC || COMPILE_TEST
+> 
+> I was wondering why those were added in drivers/gpu/drm/bridge/imx
+> since they are specific to NXP SoCs,
+> I think they should be moved in the right drm imx subsystem instead
+> of this change.
 
-I am still getting this failure.
+There are 2 directories which contain display controller drivers for
+i.MX SoCs:
+a. drivers/gpu/drm/imx - i.MX51/53/6qdl IPUv3, i.MX8mq DCSS and
+   i.MX8qm/qxp DPU([1], not landed yet)
+b. drivers/gpu/drm/mxsfb - i.MX23/28/6sx/8mq LCDIF and i.MX8mp
+   LCDIFv3([2], not landed yet)
 
---=20
-Cheers,
-Stephen Rothwell
+Bridges added in drivers/gpu/drm/bridge/imx make it possible to share
+bridge drivers across display controllers.  I see chance to use the
+LVDS Display Bridge(LDB) helper(imx-ldb-helper.c) for i.MX6sx LDB.
 
---Sig_/Uek7JuHLB.xW/WUpLGaHjbb
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+[1] 
+https://patchwork.kernel.org/project/dri-devel/patch/20220407091156.1211923-6-victor.liu@nxp.com/
+[2] 
+https://patchwork.kernel.org/project/dri-devel/patch/20220624180201.150417-2-marex@denx.de/
 
------BEGIN PGP SIGNATURE-----
+Regards,
+Liu Ying
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK6Z8sACgkQAVBC80lX
-0GzPCAf9GHvzifB5AcyMJZcEIZ/RNOzafUZUidclYNN5KWYN5fXSdVTVvaJgFtdN
-4ESjGa+8Sa4TL8e8V91yGnJPh0v0nsJflton7WGpGIKTY/oImismVd1o8aX55D/U
-NYh68pVRDCAupOo9EhiJpqqyEFx8w5VhMKXso6xd7pFolGru4BdwpoPpb2zeXMB1
-/1Ws3fP9BQxzzXwoUd4RsBncYwOWt5QcC7Lc14Kxh1mFXQ47c+LCwGedXihAnBHv
-2JbF9yeJWoN9Yp8p5w+cYAiNJyhCVDJ5S/7GxJKvj9YabTjBm2lfrG0XA51/JgXf
-NT+TLl38KBxpg18G6mXBLmhMpBW0/g==
-=r89t
------END PGP SIGNATURE-----
-
---Sig_/Uek7JuHLB.xW/WUpLGaHjbb--

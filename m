@@ -2,113 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5BFB55EB86
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8885D55EB88
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233448AbiF1R5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 13:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
+        id S233563AbiF1R5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 13:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233381AbiF1R5V (ORCPT
+        with ESMTP id S233538AbiF1R5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 13:57:21 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DB863EF
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:57:21 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id 128so12658261pfv.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:57:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SyXP69UMdpWhbeCjVMeoYpoBgv9ZnYwJYIVHkhJptJk=;
-        b=W7LI5MjRbDRJuY3TkbfMVg3CvpLTFQpVGwBoa75khlNp1ZdHPydtPqdBx90PVaeKYs
-         E8P4BqbFG2iFDfzssjEaMp6oRYfSQ5GVOB3st43drA1/x6wgqiVSTY2eUWCnuI3XnYac
-         FP9IqQ0sMrhEjeu0VtA9uOQiAqAP2K4UDjW+e51WoJm7ZrDNXOrdXFIzP6E8oycOftbm
-         KHPNga83xVw1OsGbgOAuoG+FIPteLglULZxn7ndByqXmFxCSZWeEXNE9RP95HtgIzCJ4
-         oHM/i7Y3zY6hTGGtD2jVBXeuj6bveEobxbx+NANP00zUU4wknXeP2rksKhNbzmzRjBL5
-         bhag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=SyXP69UMdpWhbeCjVMeoYpoBgv9ZnYwJYIVHkhJptJk=;
-        b=7MMdZdH1oDw8wIE3TSB091IkFCvWCHmFaj5J3uIW+g2gokBmjhbbcI3Aw/ZXZemDD6
-         V8HAF24uQm/EuVAp7IlrBc/BCjw8Djsn/27UySnhQ90nHHLCYfHW8/mmJf8c2IvlU20O
-         aSoRmntIWAJOf5vqKfU3hWzs9PK2/K/IBy4iNKgasQoSPjOHpzv3Ze0x7oXZIJET9NY6
-         oXv837+OM/JocqSUv9jy0W7/04zOY4eT7cSUPITLsZq6on5jG9Ws1qTdfo7TKt6VU6NE
-         HwlEQ9NQejGrUEu4tTfsUHVKJn3vByGzGuY8h14miEBvfxm51z97NuuUwUNGdOFD3Woh
-         78WQ==
-X-Gm-Message-State: AJIora+GPEVPIGNzSLhoi6GUy8R+5rUFpHEeDe7D4S+igsgnGOS/jTPU
-        7iXDBDiq+7HurCp6JOM7k+w=
-X-Google-Smtp-Source: AGRyM1u0MylCDOrOADEDOsEI79Kl+AhmOEou6aOx32/kntofp1Hvc/6pHilVAWq2OMJj6Un2XIsWKg==
-X-Received: by 2002:a05:6a00:3498:b0:525:448a:de0 with SMTP id cp24-20020a056a00349800b00525448a0de0mr5892554pfb.85.1656439040742;
-        Tue, 28 Jun 2022 10:57:20 -0700 (PDT)
-Received: from localhost ([121.167.227.144])
-        by smtp.gmail.com with ESMTPSA id n24-20020a170902969800b0016a034ae481sm9610429plp.176.2022.06.28.10.57.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 10:57:20 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 29 Jun 2022 02:57:17 +0900
-From:   Tejun Heo <tj@kernel.org>
-To:     Josh Don <joshdon@google.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Cruz Zhao <CruzZhao@linux.alibaba.com>
-Subject: Re: [PATCH v3] sched/core: add forced idle accounting for cgroups
-Message-ID: <YrtA/ZksAYaxqcx3@mtj.duckdns.org>
-References: <20220621234443.3506529-1-joshdon@google.com>
- <Yrl1Tdds6g7h60F3@mtj.duckdns.org>
- <CABk29NvMRWbJgZ7VdzdeDVz0v=PKJJJ0gFk=+X884U25ZJhbsA@mail.gmail.com>
+        Tue, 28 Jun 2022 13:57:33 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18BD6449;
+        Tue, 28 Jun 2022 10:57:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Vjg9D6mYYFJGeU1AQjii4m5nzMNHpeZUnrBbDeaKDr4=; b=HA6Z1Qt57wuYGUSB9XJkb+MXDk
+        QrX0xxYw7itX6Ii6Q0EXoAKY+2SThF/RndC3vzQ1xu2cF24+vsRNEGzQJNEelYhR+IEz9HozaNcX6
+        IJ3UUOCvurJJu7+M629WgZWW/5opgNM8j2oxBnQuWxggrstkNVeli9uRjfdocutzhGbRM9bgsh1Fe
+        Ef2TySNknnxpMP41cKM7R+y3cpbUlD/1WkrXXEijlD5nah2BcZI3oeWlzjmpNz6jyubXW0pFHH5YF
+        Qj4muANOfx3YbKJ+oHQjbtP66u09ckRTh1pGmj7QKRyOD3TQZiPZ7ZIWTKbFZG1bImSYmdCdxVadQ
+        Rrw4V5Zg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1o6FSl-005hVo-OV;
+        Tue, 28 Jun 2022 17:57:23 +0000
+Date:   Tue, 28 Jun 2022 18:57:23 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Ian Kent <raven@themaw.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Siddhesh Poyarekar <siddhesh@gotplt.org>,
+        David Howells <dhowells@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Carlos Maiolino <cmaiolino@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] vfs: escape hash as well
+Message-ID: <YrtBA8fiE+if1r5i@ZenIV>
+References: <165637619182.37717.17755020386697900473.stgit@donald.themaw.net>
+ <165637625806.37717.2027157232247047949.stgit@donald.themaw.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABk29NvMRWbJgZ7VdzdeDVz0v=PKJJJ0gFk=+X884U25ZJhbsA@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <165637625806.37717.2027157232247047949.stgit@donald.themaw.net>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Mon, Jun 27, 2022 at 03:35:21PM -0700, Josh Don wrote:
-> > Would it make sense to namespace the name to reflect the fact that
-> > this is tied to core scheduling? e.g. something like
-> > core.force_idle_usec (and yeah, underscore between words, please). I
-> > kinda hate that the feature is named "core". The word is so
-> > overloaded.
+On Tue, Jun 28, 2022 at 08:30:58AM +0800, Ian Kent wrote:
+> From: Siddhesh Poyarekar <siddhesh@gotplt.org>
 > 
-> Sure, although a namespace of "core_sched" would be a bit clearer,
-> since as you point out "core" is pretty overloaded :)
-
-Yeah, core_sched is probabaly better and hopefully it'll get better as
-we get used to the name.
-
-> Lack of underscore for forceidle was to be consistent with
-> "core_forceidle_sum" being dumped from /proc/pid/sched, but I'm fine
-> with it either way.
+> When a filesystem is mounted with a name that starts with a #:
 > 
-> So,
+>  # mount '#name' /mnt/bad -t tmpfs
 > 
-> core_sched.force_idle_usec ?
+> this will cause the entry to look like this (leading space added so
+> that git does not strip it out):
+> 
+>  #name /mnt/bad tmpfs rw,seclabel,relatime,inode64 0 0
+> 
+> This breaks getmntent and any code that aims to parse fstab as well as
+> /proc/mounts with the same logic since they need to strip leading spaces
+> or skip over comment lines, due to which they report incorrect output or
+> skip over the line respectively.
+> 
+> Solve this by translating the hash character into its octal encoding
+> equivalent so that applications can decode the name correctly.
+> 
+> Signed-off-by: Siddhesh Poyarekar <siddhesh@gotplt.org>
+> Signed-off-by: Ian Kent <raven@themaw.net>
 
-Yeah, that'd be my preference.
-
-Thanks.
-
--- 
-tejun
+ACK; I'll grab that one (in #work.misc - I don't believe it's #fixes
+fodder).

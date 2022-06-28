@@ -2,84 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A265255CAFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7028255DD54
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344214AbiF1KEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 06:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
+        id S1344639AbiF1KFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 06:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344169AbiF1KEx (ORCPT
+        with ESMTP id S245283AbiF1KFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:04:53 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2B22D1C9;
-        Tue, 28 Jun 2022 03:04:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656410692; x=1687946692;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=V8xmQPHT1mCLQeDpG45Uq0txHRzx1XRmzSSIhRmQbPE=;
-  b=GkEH+FWbUO+5DRLixED9hMGJit7an5JnpC03J0SDxipRWxYCAQel6D1v
-   f1Ijs3R9g/NwuezbYLQ3vK1pFqqucR6qDp0gPZuCGCL/F18mR5qcTY20I
-   7uSPZdcr4xBOojFR7cQsUYMgZ59pgBCAmWrdWaEZ2cIMmBqnq3BNOizO2
-   OYQOLuXgHuasHg5qmahzEpz+ZyLumVSy6fIC0PB03gzXyYJQxjfHlyrt/
-   k6eyZwo2NiBX1aWKnsDDDWrVo5gKTdzZhoyLyBRzgpOxN26AD93IzZbI+
-   qQcYuDOhP+XP2glq6Z7kL9pg09aGyXMrYwTP1tSaKEQMRXS3nZ0bmtwT+
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="345695538"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="345695538"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 03:04:51 -0700
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="617134907"
-Received: from nherzalx-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.96.221])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 03:04:45 -0700
-Message-ID: <2b676b19db423b995a21c7f215ed117c345c60d9.camel@intel.com>
-Subject: Re: [PATCH v5 02/22] cc_platform: Add new attribute to prevent ACPI
- CPU hotplug
-From:   Kai Huang <kai.huang@intel.com>
-To:     Igor Mammedov <imammedo@redhat.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kvm-devel <kvm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        isaku.yamahata@intel.com, Tom Lendacky <thomas.lendacky@amd.com>,
-        Tianyu.Lan@microsoft.com, Randy Dunlap <rdunlap@infradead.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Yue Haibing <yuehaibing@huawei.com>, dongli.zhang@oracle.com
-Date:   Tue, 28 Jun 2022 22:04:43 +1200
-In-Reply-To: <20220627100155.71a7b34c@redhat.com>
-References: <cover.1655894131.git.kai.huang@intel.com>
-         <f4bff93d83814ea1f54494f51ce3e5d954cf0f5b.1655894131.git.kai.huang@intel.com>
-         <CAJZ5v0jV8ODcxuLL+iSpYbW7w=GFtUSakN-n8CO5Zmun3K-Erg@mail.gmail.com>
-         <d3ba563f3f4e7aaf90fb99d20c651b5751972f7b.camel@intel.com>
-         <20220627100155.71a7b34c@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Tue, 28 Jun 2022 06:05:52 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE032E9E1;
+        Tue, 28 Jun 2022 03:05:48 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.81.16) by msexch01.omp.ru (10.188.4.12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 28 Jun
+ 2022 13:05:26 +0300
+Subject: Re: [PATCH] ata: pata_cs5535: Fix W=1 warnings
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        John Garry <john.garry@huawei.com>
+CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1656335540-50293-1-git-send-email-john.garry@huawei.com>
+ <16f727b8-c3b0-c828-0c5b-6728a6e7934f@opensource.wdc.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <9044b81f-76db-75de-db74-f45d6e5ea71e@omp.ru>
+Date:   Tue, 28 Jun 2022 13:05:26 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <16f727b8-c3b0-c828-0c5b-6728a6e7934f@opensource.wdc.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [31.173.81.16]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 06/28/2022 09:48:27
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 171392 [Jun 28 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 491 491 a718ef6dc942138335b0bcd7ab07f27b5c06005e
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.81.16 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.81.16 in (user) dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;31.173.81.16:7.7.3,7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.81.16
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 06/28/2022 09:52:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 6/28/2022 8:55:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,154 +81,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-27 at 10:01 +0200, Igor Mammedov wrote:
-> On Thu, 23 Jun 2022 12:01:48 +1200
-> Kai Huang <kai.huang@intel.com> wrote:
->=20
-> > On Wed, 2022-06-22 at 13:42 +0200, Rafael J. Wysocki wrote:
-> > > On Wed, Jun 22, 2022 at 1:16 PM Kai Huang <kai.huang@intel.com> wrote=
-: =20
-> > > >=20
-> > > > Platforms with confidential computing technology may not support AC=
-PI
-> > > > CPU hotplug when such technology is enabled by the BIOS.  Examples
-> > > > include Intel platforms which support Intel Trust Domain Extensions
-> > > > (TDX).
-> > > >=20
-> > > > If the kernel ever receives ACPI CPU hotplug event, it is likely a =
-BIOS
-> > > > bug.  For ACPI CPU hot-add, the kernel should speak out this is a B=
-IOS
-> > > > bug and reject the new CPU.  For hot-removal, for simplicity just a=
-ssume
-> > > > the kernel cannot continue to work normally, and BUG().
-> > > >=20
-> > > > Add a new attribute CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED to indicate t=
-he
-> > > > platform doesn't support ACPI CPU hotplug, so that kernel can handl=
-e
-> > > > ACPI CPU hotplug events for such platform.  The existing attribute
-> > > > CC_ATTR_HOTPLUG_DISABLED is for software CPU hotplug thus doesn't f=
-it.
-> > > >=20
-> > > > In acpi_processor_{add|remove}(), add early check against this attr=
-ibute
-> > > > and handle accordingly if it is set.
-> > > >=20
-> > > > Also take this chance to rename existing CC_ATTR_HOTPLUG_DISABLED t=
-o
-> > > > CC_ATTR_CPU_HOTPLUG_DISABLED as it is for software CPU hotplug.
-> > > >=20
-> > > > Signed-off-by: Kai Huang <kai.huang@intel.com>
-> > > > ---
-> > > >  arch/x86/coco/core.c          |  2 +-
-> > > >  drivers/acpi/acpi_processor.c | 23 +++++++++++++++++++++++
-> > > >  include/linux/cc_platform.h   | 15 +++++++++++++--
-> > > >  kernel/cpu.c                  |  2 +-
-> > > >  4 files changed, 38 insertions(+), 4 deletions(-)
-> > > >=20
-> > > > diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-> > > > index 4320fadae716..1bde1af75296 100644
-> > > > --- a/arch/x86/coco/core.c
-> > > > +++ b/arch/x86/coco/core.c
-> > > > @@ -20,7 +20,7 @@ static bool intel_cc_platform_has(enum cc_attr at=
-tr)
-> > > >  {
-> > > >         switch (attr) {
-> > > >         case CC_ATTR_GUEST_UNROLL_STRING_IO:
-> > > > -       case CC_ATTR_HOTPLUG_DISABLED:
-> > > > +       case CC_ATTR_CPU_HOTPLUG_DISABLED:
-> > > >         case CC_ATTR_GUEST_MEM_ENCRYPT:
-> > > >         case CC_ATTR_MEM_ENCRYPT:
-> > > >                 return true;
-> > > > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_proc=
-essor.c
-> > > > index 6737b1cbf6d6..b960db864cd4 100644
-> > > > --- a/drivers/acpi/acpi_processor.c
-> > > > +++ b/drivers/acpi/acpi_processor.c
-> > > > @@ -15,6 +15,7 @@
-> > > >  #include <linux/kernel.h>
-> > > >  #include <linux/module.h>
-> > > >  #include <linux/pci.h>
-> > > > +#include <linux/cc_platform.h>
-> > > >=20
-> > > >  #include <acpi/processor.h>
-> > > >=20
-> > > > @@ -357,6 +358,17 @@ static int acpi_processor_add(struct acpi_devi=
-ce *device,
-> > > >         struct device *dev;
-> > > >         int result =3D 0;
-> > > >=20
-> > > > +       /*
-> > > > +        * If the confidential computing platform doesn't support A=
-CPI
-> > > > +        * memory hotplug, the BIOS should never deliver such event=
- to
-> > > > +        * the kernel.  Report ACPI CPU hot-add as a BIOS bug and i=
-gnore
-> > > > +        * the new CPU.
-> > > > +        */
-> > > > +       if (cc_platform_has(CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED)) { =
-=20
-> > >=20
-> > > This will affect initialization, not just hotplug AFAICS.
-> > >=20
-> > > You should reset the .hotplug.enabled flag in processor_handler to
-> > > false instead. =20
-> >=20
-> > Hi Rafael,
-> >=20
-> > Thanks for the review.  By "affect initialization" did you mean this
-> > acpi_processor_add() is also called during kernel boot when any logical=
- cpu is
-> > brought up?  Or do you mean ACPI CPU hotplug can also happen during ker=
-nel boot
-> > (after acpi_processor_init())?
-> >=20
-> > I see acpi_processor_init() calls acpi_processor_check_duplicates() whi=
-ch calls
-> > acpi_evaluate_object() but I don't know details of ACPI so I don't know=
- whether
-> > this would trigger acpi_processor_add().
-> >=20
-> > One thing is TDX doesn't support ACPI CPU hotplug is an architectural t=
-hing, so
-> > it is illegal even if it happens during kernel boot.  Dave's idea is th=
-e kernel
-> > should  speak out loudly if physical CPU hotplug indeed happened on (BI=
-OS) TDX-
-> > enabled platforms.  Otherwise perhaps we can just give up initializing =
-the ACPI
-> > CPU hotplug in acpi_processor_init(), something like below?
->=20
-> The thing is that by the time ACPI machinery kicks in, physical hotplug
-> has already happened and in case of (kvm+qemu+ovmf hypervisor combo)
-> firmware has already handled it somehow and handed it over to ACPI.
-> If you say it's architectural thing then cpu hotplug is platform/firmware
-> bug and should be disabled there instead of working around it in the kern=
-el.
->=20
-> Perhaps instead of 'preventing' hotplug, complain/panic and be done with =
-it.
+Hello!
 
-Hi Igor,
-
-Thanks for feedback.  Yes the current implementation actually reports CPU h=
-ot-
-add as BIOS bug.  I think I can report BIOS bug for hot-removal too.  And
-currently I actually used BUG() for the hot-removal case.  For hot-add I di=
-dn't
-use BUG() but rejected the new CPU as the latter is more conservative.=20
-
-Hi Rafael,
-
-I am not sure I got what you mean by "This will affect initialization, not =
-just
-hotplug AFAICS", could you elaborate a little bit?  Thanks.
+On 6/28/22 11:59 AM, Damien Le Moal wrote:
+[...]
+>> x86_64 allmodconfig build with W=1 gives these warnings:
+>>
+>> drivers/ata/pata_cs5535.c: In function ‘cs5535_set_piomode’:
+>> drivers/ata/pata_cs5535.c:93:11: error: variable ‘dummy’ set but not used [-Werror=unused-but-set-variable]
+>>   u32 reg, dummy;
+>>            ^~~~~
+>> drivers/ata/pata_cs5535.c: In function ‘cs5535_set_dmamode’:
+>> drivers/ata/pata_cs5535.c:132:11: error: variable ‘dummy’ set but not used [-Werror=unused-but-set-variable]
+>>   u32 reg, dummy;
+>>            ^~~~~
+>> cc1: all warnings being treated as errors
+>>
+>> Mark variables 'dummy' as "maybe unused" to satisfy when rdmsr() is
+>> stubbed, which is the same as what we already do in pata_cs5536.c .
+>>
+>> Signed-off-by: John Garry <john.garry@huawei.com>
 
 
---=20
-Thanks,
--Kai
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
+> Looks good, but I wonder why I am not getting this warning. I always do
+> W=1 and C=1 builds. I tried allmodconfig now and I am not getting the
+> warning...
+
+   I can confirm the (fatal) warnings with RedHat gcc 10.3.1... but somehow they only
+occur on x86_64 with allmodconfig indeed (which is strange)...
+
+[...]
+
+MBR, Sergey
 

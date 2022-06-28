@@ -2,109 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D37C55EAB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD47755EAB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232550AbiF1RJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 13:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
+        id S232353AbiF1RLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 13:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiF1RJJ (ORCPT
+        with ESMTP id S229835AbiF1RLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 13:09:09 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F272C126;
-        Tue, 28 Jun 2022 10:09:08 -0700 (PDT)
+        Tue, 28 Jun 2022 13:11:18 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A3C2C13B
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:11:17 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-101d96fe0a5so17927865fac.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 10:11:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656436148; x=1687972148;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=U85zC74FglfaUgTtPENvXAGKtODUMugCZKKLb7eNRJc=;
-  b=oxRAHogzZHLpvrUQWGYcAafW3o1BpJFT7u/MyUi2yTpeXzKZV8V9gUPL
-   iFM4/kT4WrhjE4F55tlpt2HuwH1IWGE83uLsGOVJGczhyOqMDvzJvOGym
-   Hgrq8cvUkmu7brMEYemPzYEEnJm1AGZ3YBPcq3lpDBrPXk8Nv2rcLKgG3
-   Y=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Jun 2022 10:09:08 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 10:09:08 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 28 Jun 2022 10:09:07 -0700
-Received: from [10.110.50.59] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 28 Jun
- 2022 10:09:06 -0700
-Message-ID: <fa624172-2aee-1d10-cbdb-398681002fdc@quicinc.com>
-Date:   Tue, 28 Jun 2022 10:09:06 -0700
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=B9iQSlpW/Sg98O8w3kQrkvkAcMFnb09BQssJyDNeW5o=;
+        b=RgTwDThn6/Nl98GpEo6dfFMm4xqIZT7SgaRaNSYHH2qpRxST1hbQCcxFtBIrgmgsdB
+         KeWqHT6gpzsh04hezaHxC3GesbwdfbNWcAhlTKVekIOdZdMzT44oooHw1y6wDJvkrpnk
+         fNgxFWeHxYUIWW4gUhFc1VTbb+JXvoyDk4bhaxjCJ+r9q0yZVOOezChnp9zTdALdJVqx
+         bW7su34tRzk2WsIyzgmi9eqt+91g92tQmzDBI7H7qB70kKMymmSQzeWPd1526SFUvKWN
+         OsTTcAuiJDqVbEErmzlRq7E1m08COd0HYD5FhZDs5z5AmO1mZRChmoy+ACqtR9GyJphu
+         DtnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=B9iQSlpW/Sg98O8w3kQrkvkAcMFnb09BQssJyDNeW5o=;
+        b=hv3IZWl6EKzJJeW/IjLLhO001RHKNqpOOzuUuu/8UWvN3MymobVWlC2om1F60DfyZg
+         etpErG9bK5YBpXkSOuPkrLwBslIRoRn5RkeSEVvBtfEJOmy+lZtDalXF/Z33qKDpa0MR
+         j4yhw8LE+1GYT0XHo0qW8JV9tGwU4UZRUFYh4P1BCzyHexCUYpMzdgybrVLYBsxT24gs
+         g2apHp5GIbNsGx7Ak5yT9rWbHfwGu6AfvOx4d0Z1FM3FRkbikeTaHyO3Y3f0s8EYycr0
+         DRuM1Q2KbcDlNTedl/zoSYRHLi5jP4apFf2yMVYTGRVJB0cCoND7gYx9FJfvnlDJEkyc
+         ayTg==
+X-Gm-Message-State: AJIora/ysSpVhDlm1vBsWmp6HcbAxLePbaCqfTziPhkIhHx6K173GEpm
+        pvjFmKV5LTh/wECFrmQN06mo8jjxsdv3I/W5hCAflg==
+X-Google-Smtp-Source: AGRyM1sR4z6Ah0rmM+btTilt1SEBv5YU5YK20x1hgCzFACKUxuftJ/EZ2eE9WBOB9VocegfWn+DlqKjSGy/lk5o+liI=
+X-Received: by 2002:a05:6870:d3c7:b0:104:9120:8555 with SMTP id
+ l7-20020a056870d3c700b0010491208555mr360162oag.181.1656436275331; Tue, 28 Jun
+ 2022 10:11:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 02/22] net: mac80211: add a missing comma at kernel-doc
- markup
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-References: <cover.1656409369.git.mchehab@kernel.org>
- <11c1bdb861d89c93058fcfe312749b482851cbdb.1656409369.git.mchehab@kernel.org>
-From:   Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <11c1bdb861d89c93058fcfe312749b482851cbdb.1656409369.git.mchehab@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220627160440.31857-1-vkuznets@redhat.com> <CALMp9eQL2a+mStk-cLwVX6NVqwAso2UYxAO7UD=Xi2TSGwUM2A@mail.gmail.com>
+ <87y1xgubot.fsf@redhat.com> <CALMp9eSBLcvuNDquvSfUnaF3S3f4ZkzqDRSsz-v93ZeX=xnssg@mail.gmail.com>
+ <87letgu68x.fsf@redhat.com>
+In-Reply-To: <87letgu68x.fsf@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Tue, 28 Jun 2022 10:11:04 -0700
+Message-ID: <CALMp9eQ35g8GpwObYBJRxjuxZAC8P_HNMMaC0v0uZeC+pMeW_Q@mail.gmail.com>
+Subject: Re: [PATCH 00/14] KVM: nVMX: Use vmcs_config for setting up nested
+ VMX MSRs
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/2022 2:46 AM, Mauro Carvalho Chehab wrote:
-> The lack of the comma makes it to not parse the function parameter:
+On Tue, Jun 28, 2022 at 9:01 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+>
+> Jim Mattson <jmattson@google.com> writes:
+>
+> > On Tue, Jun 28, 2022 at 7:04 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+> >>
+>
+> ...
+>
+> >> Jim Mattson <jmattson@google.com> writes:
+> >>
+> >> > Just checking that this doesn't introduce any backwards-compatibility
+> >> > issues. That is, all features that were reported as being available in
+> >> > the past should still be available moving forward.
+> >> >
+> >>
+> >> All the controls nested_vmx_setup_ctls_msrs() set are in the newly
+> >> introduced KVM_REQ_VMX_*/KVM_OPT_VMX_* sets so we should be good here
+> >> (unless I screwed up, of course).
+> >>
+> >> There's going to be some changes though. E.g this series was started by
+> >> Anirudh's report when KVM was exposing SECONDARY_EXEC_TSC_SCALING while
+> >> running on KVM and using eVMCS which doesn't support the control. This
+> >> is a bug and I don't think we need and 'bug compatibility' here.
+> >
+> > You cannot force VM termination on a kernel upgrade. On live migration
+> > from an older kernel, the new kernel must be willing to accept the
+> > suspended state of a VM that was running under the older kernel. In
+> > particular, the new KVM_SET_MSRS must accept the values of the VMX
+> > capability MSRS that userspace obtains from the older KVM_GET_MSRS. I
+> > don't know if this is what you are referring to as "bug
+> > compatibility," but if it is, then we absolutely do need it.
+> >
+>
+> Oh, right you are, we do seem to have a problem. Even for eVMCS case,
+> the fact that we expose a feature which can't be used in VMX control
+> MSRs doesn't mean that the VM is broken. In particular, the VM may not
+> be using VMX features at all. Same goes to PERF_GLOBAL_CTRL errata.
+>
+> vmx_restore_control_msr() currenly does strict checking of the supplied
+> data against what was initially set by nested_vmx_setup_ctls_msrs(),
+> this basically means we cannot drop feature bits, just add them. Out of
+> top of my head I don't see a solution other than relaxing the check by
+> introducing a "revoke list"... Another questions is whether we want
+> guest visible MSR value to remain like it was before migration or we can
+> be brave and clear 'broken' feature bits there (the features are
+> 'broken' so they couldn't be in use, right?). I'm not sure.
 
-nit: s/comma/colon/
+Read-only MSRs cannot be changed after their values may have been
+observed by the guest.
 
-> 	include/net/mac80211.h:6250: warning: Function parameter or member 'vif' not described in 'ieee80211_channel_switch_disconnect'
-> 
-> Fix it.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH 00/22] at: https://lore.kernel.org/all/cover.1656409369.git.mchehab@kernel.org/
-> 
->   include/net/mac80211.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/net/mac80211.h b/include/net/mac80211.h
-> index 27f24ac0426d..c0557142343f 100644
-> --- a/include/net/mac80211.h
-> +++ b/include/net/mac80211.h
-> @@ -6238,7 +6238,7 @@ void ieee80211_chswitch_done(struct ieee80211_vif *vif, bool success);
->   
->   /**
->    * ieee80211_channel_switch_disconnect - disconnect due to channel switch error
-> - * @vif &struct ieee80211_vif pointer from the add_interface callback.
-> + * @vif: &struct ieee80211_vif pointer from the add_interface callback.
->    * @block_tx: if %true, do not send deauth frame.
->    *
->    * Instruct mac80211 to disconnect due to a channel switch error. The channel
+> Anirudh, the same concern applies to your 'intermediate' patch too.
+>
+> Smart ideas on what can be done are more than welcome)
 
+You could define a bunch of "quirks," and userspace could use
+KVM_CAP_DISABLE_QUIRKS2 to ask that the broken bits be cleared.

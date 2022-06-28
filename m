@@ -2,189 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6AD55CE9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F5455D9B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243290AbiF1DdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 23:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S243432AbiF1Deo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 23:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243224AbiF1DdP (ORCPT
+        with ESMTP id S243262AbiF1Dej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 23:33:15 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D0F19295;
-        Mon, 27 Jun 2022 20:33:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656387194; x=1687923194;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RIjvKUR796IyUxJTtFj5FcgK1bph80T/8NgXlcqVZDs=;
-  b=cqkhiDiaroMY14r2sNoG0OaoRhawsBoXAgkSrSuw8zzv2rcnjwlHC+Dl
-   2Shn0dG98cpPWdmbF4Ko7clBK2SSVpXVmROeFOcuuSUuEQ89GQSyjGHJU
-   Cng8iq8gE3Yn41auc9+3CFo7/6XdHvH6PjxSN3LhIhCqYqpMKXdkQGVrI
-   tIWdmsdZRmbU4OuboLcRk6LKH51SyW0fjQQkkCrz78qFMzMy2RThtxXrf
-   efqf1fEbshD+S53/jC3EFo2Fv4ReXqFwWqleD+DCqNkNePGRKWYygDVok
-   9+MO+QkgrJx2JNjKBBxeAanX7N8nDZozS/MlH7qaVMqyQUgThcBR7vVqH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="279168348"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="279168348"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 20:33:13 -0700
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="767016640"
-Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 20:33:13 -0700
-Date:   Mon, 27 Jun 2022 20:32:29 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     "Weiny, Ira" <ira.weiny@intel.com>
-Cc:     "Williams, Dan J" <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        "Verma, Vishal L" <vishal.l.verma@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V11 7/8] cxl/port: Retry reading CDAT on failure
-Message-ID: <20220628033229.GA1575428@alison-desk>
-References: <20220610202259.3544623-1-ira.weiny@intel.com>
- <20220610202259.3544623-8-ira.weiny@intel.com>
+        Mon, 27 Jun 2022 23:34:39 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5825E2315F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:34:38 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d5so9871693plo.12
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:34:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=pZ+/evlGnsJ8jD6C9tMwnqlQXDJt8JhJGnpn4OPCdjs=;
+        b=ZKbAeK5dLgm2DXSIg5wecdROkd4oaR5bX00Hgrpx3CycC+gycPH90r8HsP89MIggwQ
+         Tgue21oNaVdD1QixnmeuatxNcsmJG4xKnv5Gp+DxvrMF89AnWKUGEelvc0PlxtyZQ98G
+         gRIANjbvmLyMraCLSQKxlpOsnPK+SulUvHUW7egM/R2LRJjKiT5EpDedRPJxzTVsmiol
+         iQyxuXdUdrSqbd4vg9WhMKMZGwzXpEjFJdSGjQZIDiX08h4PJTmF0avQSLtwZfOnSyX8
+         OcFZz2Kc/mQjCSMoB6dKyXJXSiNEZOxcLLNhniWqQszFiShJRUMnJs8r8vqXCcFFYZFe
+         CJ2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pZ+/evlGnsJ8jD6C9tMwnqlQXDJt8JhJGnpn4OPCdjs=;
+        b=EN5GGiQajD+yLmrdCnxpAKL8V9wL30DLqEqmrjCsNWKNYR9yG0rS8wBEEWqoX4IK54
+         P+qR3R+UOablLWSxhQ3A7gbLozJy5PdTh+CR/npjOu38m8Ym30ogpIZIwIoih9Ly/2cL
+         /lS8loO3uaPTK/wJXSCso7NugmBb3PY7wW4M911XwvWs3J1ANU49U1DQL3R/AxVUHa+9
+         GkvDRowyH70VOYSJm1+bMKMln/Mutx3plHpzSZ+Sbytug41vgVhwWgiSfg22bjkw2f4D
+         lh2Q5OhYbZjIyKN2hAGsZRYA/APU9HvARjCT2slwO+nq5BMuqH1zFbCKIxcN5Y4rt01C
+         kNTQ==
+X-Gm-Message-State: AJIora/aMx13cFr4bbnxap9reQYtR1V2LqbfhZBJ/zsL9K4J6iqsJ7ft
+        DSndBhn+7hpSR9vLzHdjkp2/Wg==
+X-Google-Smtp-Source: AGRyM1uTk/gqugCXTP+8MBHLnYa3VLEn9+TuUj54C7lV4fs/Sl3H+2Kf2QtAKD6V0UZkAx7Wg9hRgg==
+X-Received: by 2002:a17:90b:3ece:b0:1ed:13a9:8531 with SMTP id rm14-20020a17090b3ece00b001ed13a98531mr24513558pjb.183.1656387277925;
+        Mon, 27 Jun 2022 20:34:37 -0700 (PDT)
+Received: from [10.4.214.173] ([139.177.225.253])
+        by smtp.gmail.com with ESMTPSA id j10-20020aa78d0a000000b00522c3f34362sm8036655pfe.215.2022.06.27.20.34.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 20:34:37 -0700 (PDT)
+Message-ID: <f3d8aabe-3d02-8851-b5e9-b0dcdb7c0b6e@bytedance.com>
+Date:   Tue, 28 Jun 2022 11:34:29 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610202259.3544623-8-ira.weiny@intel.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH] mm: hugetlb: kill set_huge_swap_pte_at()
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     mike.kravetz@oracle.com, songmuchun@bytedance.com,
+        akpm@linux-foundation.org, catalin.marinas@arm.com,
+        will@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20220626145717.53572-1-zhengqi.arch@bytedance.com>
+ <YrnBm9FGizF1iLsW@casper.infradead.org>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <YrnBm9FGizF1iLsW@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 01:22:58PM -0700, Ira Weiny wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> The CDAT read may fail for a number of reasons but mainly it is possible
-> to get different parts of a valid state.  The checksum in the CDAT table
-> protects against this.
-> 
-> Now that the cdat data is validated, issue a retry if the CDAT read
-> fails.  For now 5 retries are implemented.
-> 
-> Reviewed-by: Ben Widawsky <bwidawsk@kernel.org>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
->
-
-Reviewed-by: Alison Schofield <alison.schofield@intel.com>
 
 
-> ---
-> Changes from V10
-> 	Pick up review tag and fix commit message
+On 2022/6/27 22:41, Matthew Wilcox wrote:
+> On Sun, Jun 26, 2022 at 10:57:17PM +0800, Qi Zheng wrote:
+>> The commit e5251fd43007 ("mm/hugetlb: introduce set_huge_swap_pte_at()
+>> helper") add set_huge_swap_pte_at() to handle swap entries on
+>> architectures that support hugepages consisting of contiguous ptes.
+>> And currently the set_huge_swap_pte_at() is only overridden by arm64.
 > 
-> Changes from V9
-> 	Alison Schofield/Davidlohr Bueso
-> 		Print debug on each iteration and error only after failure
+> Bleh.  I hate the way we handle these currently.
 > 
-> Changes from V8
-> 	Move code to cxl/core/pci.c
+>> +static inline struct folio *hugetlb_swap_entry_to_folio(swp_entry_t entry)
+>> +{
+>> +	VM_BUG_ON(!is_migration_entry(entry) && !is_hwpoison_entry(entry));
+>> +
+>> +	return page_folio(pfn_to_page(swp_offset(entry)));
+>> +}
 > 
-> Changes from V6
-> 	Move to pci.c
-> 	Fix retries count
-> 	Change to 5 retries
+> We haven't needed a pfn_to_folio() yet, but perhaps we should have one?
+
+Hi,
+
+IMO, it would be better to have a pfn_to_folio(), which can save the
+redundant page_folio() call in the current case.
+
+But this is not related to the current patch, maybe it can be a
+separate optimization patch.
+
 > 
-> Changes from V5:
-> 	New patch -- easy to push off or drop.
-> ---
->  drivers/cxl/core/pci.c | 40 +++++++++++++++++++++++++++++++---------
->  1 file changed, 31 insertions(+), 9 deletions(-)
+> Related, how should we store migration entries for multi-order folios
+> in the page tables?  We can either encode the individual page in
+> question, or we can encode the folio.  Do we need to support folios
+> being mapped askew (ie unaligned), or will folios always be mapped
+> aligned?
+
+Do we currently have a scenario where we need to use skew mapped folios?
+Maybe it can be used in pte-mapped THP? Hmm, I have no idea.
+
 > 
-> diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
-> index cb70287e2984..fd02bc7c0d97 100644
-> --- a/drivers/cxl/core/pci.c
-> +++ b/drivers/cxl/core/pci.c
-> @@ -617,19 +617,13 @@ static int cxl_cdat_read_table(struct device *dev,
->  	return rc;
->  }
->  
-> -/**
-> - * read_cdat_data - Read the CDAT data on this port
-> - * @port: Port to read data from
-> - *
-> - * This call will sleep waiting for responses from the DOE mailbox.
-> - */
-> -void read_cdat_data(struct cxl_port *port)
-> +static int __read_cdat_data(struct cxl_port *port)
->  {
->  	static struct pci_doe_mb *cdat_mb;
->  	struct device *dev = &port->dev;
->  	struct device *uport = port->uport;
->  	size_t cdat_length;
-> -	int ret;
-> +	int ret = 0;
->  
->  	/*
->  	 * Ensure a reference on the underlying uport device which has the
-> @@ -640,17 +634,21 @@ void read_cdat_data(struct cxl_port *port)
->  	cdat_mb = find_cdat_mb(uport);
->  	if (!cdat_mb) {
->  		dev_dbg(dev, "No CDAT mailbox\n");
-> +		ret = -EIO;
->  		goto out;
->  	}
->  
->  	if (cxl_cdat_get_length(dev, cdat_mb, &cdat_length)) {
->  		dev_dbg(dev, "No CDAT length\n");
-> +		ret = -EIO;
->  		goto out;
->  	}
->  
->  	port->cdat.table = devm_kzalloc(dev, cdat_length, GFP_KERNEL);
-> -	if (!port->cdat.table)
-> +	if (!port->cdat.table) {
-> +		ret = -ENOMEM;
->  		goto out;
-> +	}
->  
->  	port->cdat.length = cdat_length;
->  	ret = cxl_cdat_read_table(dev, cdat_mb, &port->cdat);
-> @@ -664,5 +662,29 @@ void read_cdat_data(struct cxl_port *port)
->  
->  out:
->  	put_device(uport);
-> +	return ret;
-> +}
-> +
-> +/**
-> + * read_cdat_data - Read the CDAT data on this port
-> + * @port: Port to read data from
-> + *
-> + * This call will sleep waiting for responses from the DOE mailbox.
-> + */
-> +void read_cdat_data(struct cxl_port *port)
-> +{
-> +	int retries = 5;
-> +	int rc;
-> +
-> +	while (retries--) {
-> +		rc = __read_cdat_data(port);
-> +		if (!rc)
-> +			return;
-> +		dev_dbg(&port->dev,
-> +			"CDAT data read error rc=%d (retries %d)\n",
-> +			rc, retries);
-> +	}
-> +	dev_err(&port->dev, "CDAT data read failed after %d retries\n",
-> +		retries);
->  }
->  EXPORT_SYMBOL_NS_GPL(read_cdat_data, CXL);
-> -- 
-> 2.35.1
+>> +	if (!pte_present(pte)) {
+>> +		struct folio *folio;
+>> +
+>> +		folio = hugetlb_swap_entry_to_folio(pte_to_swp_entry(pte));
+>> +		ncontig = num_contig_ptes(folio_size(folio), &pgsize);
+>> +
+>> +		for (i = 0; i < ncontig; i++, ptep++)
+>> +			set_pte_at(mm, addr, ptep, pte);
+>> +		return;
+>> +	}
 > 
+> It seems like a shame to calculate folio_size() only to turn it into a
+> number of pages.  Don't you want to just use:
+> 
+> 		ncontig = folio_nr_pages(folio);
+
+We can't use folio_nr_pages() here, because for PMD_SIZE we only need
+one entry instead of the PTRS_PER_PTE entries returned by
+folio_nr_pages().
+
+Thanks,
+Qi
+
+> 
+
+-- 
+Thanks,
+Qi

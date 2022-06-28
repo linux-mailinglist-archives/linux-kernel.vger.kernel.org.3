@@ -2,62 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A951055D8D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6AE55D6D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344547AbiF1J4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
+        id S240397AbiF1J6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244326AbiF1J4A (ORCPT
+        with ESMTP id S1344682AbiF1J5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:56:00 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C282ED7F;
-        Tue, 28 Jun 2022 02:55:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656410136; x=1687946136;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZySJLtccvViq3V6jqeioJpJY2xcTgx0ACUTORRR1JEg=;
-  b=AKvhSZkADlFqUmDylhXcP7UmnnFPiOrtXsvsEeBHrT0GEATzDSXpf8Ln
-   Vf6ArNgoQsz2ThLXYxRWe91wMHSeXyeur3EgJYLxe/WKf1BdB1Y9BvavP
-   pTQOVuNT1EJVo50OlqHqcHDoVTRlNJ4LM+aL3xhxseuBixjWT5PN1vkAz
-   OqS6aY3mST/V7477wY5kBDyXFbumPaPAbwKzSPvwFd3QxzWJzOK9NBnaO
-   uSIl7VbHaUmbwSfYHOCxHFfvOothCvX7PtjkG/RE7vg+zxALywcPLSgTS
-   INLqajweLkcTDLb3sTTRI7T95/KRKSxJh9a2sVUPj8fzb/GOJxh9QhBkH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="343385713"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="343385713"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 02:55:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="732690989"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 28 Jun 2022 02:55:30 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 28 Jun 2022 12:55:29 +0300
-Date:   Tue, 28 Jun 2022 12:55:29 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 20/22] usb: typec_altmode: add a missing "@" at a
- kernel-doc parameter
-Message-ID: <YrrQES9cTnKhp+6h@kuha.fi.intel.com>
-References: <cover.1656409369.git.mchehab@kernel.org>
- <70dc4c5d744cf1fe9a0efe6b85deaa0489628282.1656409369.git.mchehab@kernel.org>
+        Tue, 28 Jun 2022 05:57:22 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F492F66C
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:57:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=ol0vCMaWlj3xRpRtD6xgeBpq8sM8wJOrSwpovqb5Oqg=; b=LGGJ6IUUPsmP67NCIIwApCOpZb
+        C3zYxbyPHfbOBxCW8nVA3J77CnKzgUdEGrcBUV3yRNwfaB/ZDESe3mD/FgjE+qwIC+FXPnp9+0KI/
+        b10WrelHhSRXWt9f4+/rkSKELiB7mI+r84ax9MEgSuBWgXj3lU6z9zXoB20zcl5jT7X3xtOc/OJNk
+        4jacvMiRBIwsiYkoPxlFD1POjYF7IwPwECyqeFtB+TyIvVCrsM/8m+pPooR8syk+JpEgywsEMqNpX
+        Np4WlLV6VcR0qd+t4yTXEq6dAr5MI/akvVUEqYk6WpPDcxOHZijRGsEl1UUJJb49TWJeefjydUCYY
+        FySqfitA==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o67x7-00E15L-Dp; Tue, 28 Jun 2022 09:56:39 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AA4593001F3;
+        Tue, 28 Jun 2022 11:56:10 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8BF512022E4D3; Tue, 28 Jun 2022 11:56:10 +0200 (CEST)
+Date:   Tue, 28 Jun 2022 11:56:10 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     masahiroy@kernel.org, mmarek@suse.cz, paul.gortmaker@windriver.com,
+        arnd@arndb.de
+Cc:     rppt@kernel.org, bp@alien8.de, linux-kernel@vger.kernel.org
+Subject: [RFC][PATCH] kconfig: Add implicit CONFIG_ prefix to IS_ENABLED()
+ and co
+Message-ID: <YrrQOifFIiISf/3g@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <70dc4c5d744cf1fe9a0efe6b85deaa0489628282.1656409369.git.mchehab@kernel.org>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,37 +57,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 10:46:24AM +0100, Mauro Carvalho Chehab wrote:
-> Without that, the parameter is not properly parsed:
-> 	include/linux/usb/typec_altmode.h:132: warning: Function parameter or member 'altmode' not described in 'typec_altmode_get_orientation'
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Since IS_ENABLED() (and friends) are clearly meant to be used on
+CONFIG_foo symbols and IS_ENABLED(CONFIG_ is so long and almost an
+tautology, allow the more compact usage of: IS_ENABLED(foo).
 
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH 00/22] at: https://lore.kernel.org/all/cover.1656409369.git.mchehab@kernel.org/
-> 
->  include/linux/usb/typec_altmode.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
-> index 65933cbe9129..350d49012659 100644
-> --- a/include/linux/usb/typec_altmode.h
-> +++ b/include/linux/usb/typec_altmode.h
-> @@ -124,7 +124,7 @@ struct typec_altmode *typec_match_altmode(struct typec_altmode **altmodes,
->  
->  /**
->   * typec_altmode_get_orientation - Get cable plug orientation
-> - * altmode: Handle to the alternate mode
-> + * @altmode: Handle to the alternate mode
->   */
->  static inline enum typec_orientation
->  typec_altmode_get_orientation(struct typec_altmode *altmode)
-> -- 
-> 2.36.1
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
 
--- 
-heikki
+With this on, something like:
+
+  for i in IS_BUILTIN IS_MODULE IS_REACHABLE IS_ENABLED;
+  do
+	git grep -wl $i | while read file;
+	do
+		sed -ie "s/${i}(CONFIG_/${i}(/g" $file;
+        done;
+  done
+
+can be used to convert all existing instance. Allowing, after time
+passes, to remove the CONFIG_ usage if so desired.
+
+---
+ tools/include/linux/kconfig.h   |    7 ++++---
+ include/linux/kconfig.h         |    7 ++++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
+
+--- a/include/linux/kconfig.h
++++ b/include/linux/kconfig.h
+@@ -38,6 +38,7 @@
+  * When CONFIG_BOOGER is not defined, we generate a (... 1, 0) pair, and when
+  * the last step cherry picks the 2nd arg, we get a zero.
+  */
++#define _is_defined(x)			__or(__is_defined(x), __is_defined(CONFIG_##x))
+ #define __is_defined(x)			___is_defined(x)
+ #define ___is_defined(val)		____is_defined(__ARG_PLACEHOLDER_##val)
+ #define ____is_defined(arg1_or_junk)	__take_second_arg(arg1_or_junk 1, 0)
+@@ -47,14 +48,14 @@
+  * otherwise. For boolean options, this is equivalent to
+  * IS_ENABLED(CONFIG_FOO).
+  */
+-#define IS_BUILTIN(option) __is_defined(option)
++#define IS_BUILTIN(option) _is_defined(option)
+ 
+ /*
+  * IS_MODULE(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'm', 0
+  * otherwise.  CONFIG_FOO=m results in "#define CONFIG_FOO_MODULE 1" in
+  * autoconf.h.
+  */
+-#define IS_MODULE(option) __is_defined(option##_MODULE)
++#define IS_MODULE(option) _is_defined(option##_MODULE)
+ 
+ /*
+  * IS_REACHABLE(CONFIG_FOO) evaluates to 1 if the currently compiled
+@@ -63,7 +64,7 @@
+  * built-in code when CONFIG_FOO is set to 'm'.
+  */
+ #define IS_REACHABLE(option) __or(IS_BUILTIN(option), \
+-				__and(IS_MODULE(option), __is_defined(MODULE)))
++				__and(IS_MODULE(option), _is_defined(MODULE)))
+ 
+ /*
+  * IS_ENABLED(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'y' or 'm',
+--- a/tools/include/linux/kconfig.h
++++ b/tools/include/linux/kconfig.h
+@@ -32,6 +32,7 @@
+  * When CONFIG_BOOGER is not defined, we generate a (... 1, 0) pair, and when
+  * the last step cherry picks the 2nd arg, we get a zero.
+  */
++#define _is_defined(x)			__or(__is_defined(x), __is_defined(CONFIG_##x))
+ #define __is_defined(x)			___is_defined(x)
+ #define ___is_defined(val)		____is_defined(__ARG_PLACEHOLDER_##val)
+ #define ____is_defined(arg1_or_junk)	__take_second_arg(arg1_or_junk 1, 0)
+@@ -41,13 +42,13 @@
+  * otherwise. For boolean options, this is equivalent to
+  * IS_ENABLED(CONFIG_FOO).
+  */
+-#define IS_BUILTIN(option) __is_defined(option)
++#define IS_BUILTIN(option) _is_defined(option)
+ 
+ /*
+  * IS_MODULE(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'm', 0
+  * otherwise.
+  */
+-#define IS_MODULE(option) __is_defined(option##_MODULE)
++#define IS_MODULE(option) _is_defined(option##_MODULE)
+ 
+ /*
+  * IS_REACHABLE(CONFIG_FOO) evaluates to 1 if the currently compiled
+@@ -56,7 +57,7 @@
+  * built-in code when CONFIG_FOO is set to 'm'.
+  */
+ #define IS_REACHABLE(option) __or(IS_BUILTIN(option), \
+-				__and(IS_MODULE(option), __is_defined(MODULE)))
++				__and(IS_MODULE(option), _is_defined(MODULE)))
+ 
+ /*
+  * IS_ENABLED(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'y' or 'm',
+

@@ -2,175 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED25355C33C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CFB555D805
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343980AbiF1Ikz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 04:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
+        id S1343967AbiF1Ikn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 04:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343975AbiF1Iky (ORCPT
+        with ESMTP id S245625AbiF1Ikl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 04:40:54 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB35F27FE1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:40:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656405653; x=1687941653;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=vIrh23fwc+A6GJmBGy3A7Hytj4GuWLrqOctchdNuVdY=;
-  b=AChWDn+gy/3rT7H+yVuwl+gZBVOEu6tiEwQaiohsJ5U0KXDvLbWZbWL8
-   o7vVsRjffCfHSK7DS6ECB6grXY+TS38RuFaXED9govws/6bu3vCjl0JCv
-   qxqUtH7BqwmMQSGxdePBN+HWyclJo4wSd3dvUVS3ovBee3kNTty3r0X+y
-   Th/0Bt/JT0N49UMmI166V5Ka/qMnNRgY2kxxCiXvXtS7abs5YRWCxOhpc
-   vut+/0B1B8rlGr1pXq8H3WxRJVVVa+txiD0gRu9tbMNFDDZgsCxMjTKRO
-   bj+dZ0lJyWd4/MKq9XpuH/jd4cO+1qGcKON95jv1dFT5j9bvZf5Dh6R6A
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="264717802"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="264717802"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 01:40:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="767095222"
-Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
-  by orsmga005.jf.intel.com with ESMTP; 28 Jun 2022 01:40:34 -0700
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 28 Jun 2022 01:40:34 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 28 Jun 2022 01:40:33 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Tue, 28 Jun 2022 01:40:33 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Tue, 28 Jun 2022 01:40:33 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HHKRDsYs6Ay7HUmZZO/kqad0tjcsVhcQHJJ46h6ojRwEc3RAboRuYjtF0VLFGjBaxfdSVdG/6zcp97Rp152TBy3w2JRHrSzh5LsDHDEqXkat24Pi55LvtgP+QyGSBEviaC4HD0Bx2dhOwXQ4mtIewU+eejwZY0yUWSJHay+wm9iLr8e+iZx1yXen3RKJM/ePSVnThscKmlZ3oVW/amvfMYcTZOJaNrbSTYPd4mIwBcYL1oFbA9gOjZNCfpdlYCBNr3aCs9y5TnZEX3RDF0uSYbLyOp6Io89vE5i90cx3aXagNb8ZS4RJb3vYvb4vPGrIkVfbsGE8KB6kPWP9Cemi+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vIrh23fwc+A6GJmBGy3A7Hytj4GuWLrqOctchdNuVdY=;
- b=S6rX5yjUB6D0E2aaWDb3HbTWP/6bu2J6MdhtbjThxLK/X/6Q11cNcKizn/pIsh8yKDKD0kOgYA6dAHdAp+Z1G7/cvdKs6yMX//sEtA9z2AVPxe8+ik+lXQXvmmmILRm/DgKF8i81RQ47bTamTSO8KQGfuye1+OEGlNEvWAxRb8xjioYlH3N8S5f/Hvv2cpyPZ/KXx1gnnsYX5yEhe0bRWURhIsGjs8d+pqw1MuMq96flfmVBEuyMbJ8cMwDzSLlftVC2DkjTyuija28eYAdkGou/AowtExnFjhw+lN8eq9U0V2V6MWGzOT30It16oJOJ/JrQ4LTvERTgwC7CEFHoMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by SJ1PR11MB6153.namprd11.prod.outlook.com (2603:10b6:a03:488::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Tue, 28 Jun
- 2022 08:40:32 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::8435:5a99:1e28:b38c]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::8435:5a99:1e28:b38c%2]) with mapi id 15.20.5373.018; Tue, 28 Jun 2022
- 08:40:32 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Jason Gunthorpe" <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>, Vinod Koul <vkoul@kernel.org>
-CC:     Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Jean-Philippe Brucker" <jean-philippe@linaro.org>
-Subject: RE: [PATCH v9 11/11] iommu: Rename iommu-sva-lib.{c,h}
-Thread-Topic: [PATCH v9 11/11] iommu: Rename iommu-sva-lib.{c,h}
-Thread-Index: AQHYhX4J7A3caPf9kEinyHwrYlaqza1kil9Q
-Date:   Tue, 28 Jun 2022 08:40:32 +0000
-Message-ID: <BN9PR11MB5276C15E0C2BCDB5E2C1ADA68CB89@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20220621144353.17547-1-baolu.lu@linux.intel.com>
- <20220621144353.17547-12-baolu.lu@linux.intel.com>
-In-Reply-To: <20220621144353.17547-12-baolu.lu@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c476951a-ffa4-4055-ae05-08da58e1dcb8
-x-ms-traffictypediagnostic: SJ1PR11MB6153:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: d5rRNxzqColtvMsj/UDwvG+9fwZtPnrEve+buks6/MabPm8QuZ/N+YJwnE8MELku/XIJ9VstIAWtippyT5Ba9kteiw7GMQc7tkkdwF7K/6johWMtdiR012mu9uTH8dUwTD5Ti8uB1eXhKulReLpLO/dRjhDw8CkyXOZ8GO2ctfwNLsutRo3kuoY5QdTGFEY+fnfR52rwqwf2bboQ0bv6BAoVuDLv84H1msZwf63mXVFWMxLtAVFIXhv11c1/CUmhb1VoInwq4wKI9j12wIGLVfmHqf+Oez4dzlwWMFha7rp39GcpxrnYPeKazEo49GHkDldr9eiShVkNwKLmKgKlEDh4iDHeZYNyfhwd7NRth1HA61nAN1DjS+uaSE4q59OXRmiCaHZPGQIfY5DjUo14Pf72szcGJ0Cuno2rIWDTfvM/d5QZFGfzebXu0pgydYTJBkRXGgMRs/p6IMsim6tpLfu9Lz+ZC+ilDvnVgJoaIOe/KvWAKAMnzQO5ERsehtLphWFMKTRwLF5n2iLQyXPdLYLTbbIhwEQGVluXTP87Nr3s4abQB5xuHUGE/0SUj59zD+lVN4fTjh9sZyTAjAMAgKQONRstpgUsT9BqoCwWnHhDvrQT3lcV4u4OdnH0bM35m8xP2YF3zx3OimsnG/3np6dn5PaBg1JUl8od0zExGeU2cIc34ZTMkETm0bcW7C826IFeQEx3l8jZ8V/Ae4u2RojjfAlFque0PL23IcFneICHbhScqcTmMckK5SmkkB+/zAIThl3r9FYO6UVhG0iItfnNualf63hyukWmCvxuRKQ3y8MeooPj5/cn7jwfV4o7
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(136003)(346002)(39860400002)(376002)(366004)(66446008)(52536014)(2906002)(8676002)(54906003)(4326008)(64756008)(66946007)(33656002)(38100700002)(66556008)(66476007)(38070700005)(110136005)(8936002)(316002)(7416002)(5660300002)(82960400001)(7696005)(26005)(6506007)(76116006)(921005)(9686003)(122000001)(71200400001)(41300700001)(478600001)(186003)(558084003)(86362001)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8qbc+xzFFGaWWj/+Q9baHcNCvP+sCJDTc2zIL7OJtkgFc0n1MEWz27Z+PXsH?=
- =?us-ascii?Q?Pl1DaDM6/X77mo82JR0sqbIX5hkRYTBYYqkbaX1K8RBsoDINdykd8LAVrrZU?=
- =?us-ascii?Q?GsBOHRCJ+5AfNDQjAHpKfqEDzqsDcN+RwnLkpHZSlWwphfi85oyIsXlf+8lj?=
- =?us-ascii?Q?M8rcWhpMIEHn/X9w2jqL4sQWQXgn4UbZ5ZiftAdhNRIhGc+2Nkf87z99h8zq?=
- =?us-ascii?Q?4Diu2jbJbgSJEz6CDkD9NeTdNf04wyiOmOUkoJcbl+5v4Bi2Q2vlXb4p9adf?=
- =?us-ascii?Q?0ux+II2xj/dUIxgcJin0oakdR8HubeGMa4s6sMRu92/XFsFOBVJ8GN8o5GQE?=
- =?us-ascii?Q?CGaQGZN8vq1ctmVi4I0lkiutNzmJkk+KfqhkVkPqysdtXMnoNBj9vv3R+p8o?=
- =?us-ascii?Q?1dgPHfVpdToHUhdrapuiLSJ+qWfHzGfMJQdQKyDgHOW8aj6emS3Lop6ZV1hU?=
- =?us-ascii?Q?8TPHfXzBxVPL1oW7CLq8bOR5Cr8AJW4tVM/tdSz8Z3S/ZL5F3vFBEOC6K3jx?=
- =?us-ascii?Q?hwe1LTiV/ubzpkyv8UwK9e3hDwSAfQSienzLx3w5Pfm5FKcznE7Dz9+WTgtG?=
- =?us-ascii?Q?ATJapDI5WW63Mv9f3u1PzBUoEwKBwXIjSbH4yDyt9gUiks4bNDStg/u7QERC?=
- =?us-ascii?Q?29GxegFQMyOO768Ld3NWvB40ux1/n9M9PHZs+yPA+p3+Rqtzore+y6WFQbMe?=
- =?us-ascii?Q?6TQVm9v6AorClEruudtntVoerm3/s6si6c48wApCCoAVhpsinvwfE8BjqHKR?=
- =?us-ascii?Q?eqUNQrxZabiIqY9rlU4G1YOulBQNkYglf1RD6d2rv1Dkrw0rybAtK2nQRbg6?=
- =?us-ascii?Q?xydb9tIBtqhKW58y0PHjsu0exSH31N2DRC3vIJdPCIJuzO41ybrYBz/TZ2vo?=
- =?us-ascii?Q?/Oojy+71rrekLmKTDuI5Tt/EhHRJmQomU6JW0qJWr3f61RqLSuJjXOpSIpMI?=
- =?us-ascii?Q?8901/f29OXOs9KxZTaHxI9ObysB2L7BzLemMjDzsVYCnYbe9uZH7nfHA6lo9?=
- =?us-ascii?Q?35PpK+8qkKk4gz8NmFDV+2PTclLzMYpTj8elZwFB4tNh7B+4w9hg6Rfp465O?=
- =?us-ascii?Q?BPqXq/T4ROi9SZWaLipW7nrbJLNlvkC4PlPvEH0md2j9FO4OVRXaMp/urrZY?=
- =?us-ascii?Q?yhkaRxm2z9i9Dxdkcd4N5HR1mOJpuhj+kZ2CMdP/uLjHeK/LSnTkoijDbTv9?=
- =?us-ascii?Q?IQ+4gMEgQo7txupNtNpiSnEYTpn38+2aTkt9yYoqTMaV837YW6PT2S3Qu6vE?=
- =?us-ascii?Q?3Peg8BcMKQiOxexdn8eLHWPo1ECRBegp1tCUdAou31frYmI/ER/WSZSp8p3v?=
- =?us-ascii?Q?6hMXR9ojOfMFTRVVlaWvO5ZBaE/E9Pjys3U1ufuxXIsHr2okNML/O0VeIsBu?=
- =?us-ascii?Q?MpI7N0apxFBJ6Iq1eRVGNvVWHxTh0Zq+D+7DjLLJnjgfEg9QlZ67EEy4VLyt?=
- =?us-ascii?Q?X413SQQv1pYOKbsbiEjCmbkIt/ahdmvms12MlYxxG0ibvXxeuDXjBd2H0K6f?=
- =?us-ascii?Q?Dhf4XGYkk9wzMLiqOW8s3nEzkdGyh0n2FeH3jDN8HdlQHVO4HmRqnD9ovu1V?=
- =?us-ascii?Q?SlewLFvr7HeixSUsK6dc6GRCjeRZ4y6T4oAagNVd?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 28 Jun 2022 04:40:41 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83B6275D9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:40:39 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 189so6413429wmz.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6Lbg8hiePwmdtMf2MTesLuQh0S2jMkJ7x67kCBoWQYs=;
+        b=SEMOuACQA6Q/qb4zYaJeeMbmMF7IcRiJVg8XjLeUCRu6lwKjgSK+F6XnBY0TXROVY+
+         YgblATFVUzeZewhX/CvRo3PwPk5IoNrCnFkcpOJsGcTFfNre5QlrWTnW9q6wEVE4YiJO
+         JvAnbym9Iru1+wrjQKYeuMxBROiriUeD9Q2XIWc290P+Nh4/0Sh5SVtyS5eI9f7RBsHG
+         sH7zcpqYXSfgFyb+uyQ4WigPMs9fhp65KC6K6uF7eTDjLNP9nOEc832aMtsH4VzcvHbZ
+         5FirQa8xaZZ7Sr1DIdCjmo98WfcnRsKy4bwO3UAqh6diNmkavuLtGRiwH21HvJ7h/HfH
+         zStg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6Lbg8hiePwmdtMf2MTesLuQh0S2jMkJ7x67kCBoWQYs=;
+        b=JjiACbOKQRWgQakBz+YUv2EnXa7NdDXIMhDFgYN/9mjoyRiRLMh8J3yJyj2JMr0wQN
+         Z8qSDImN2EyVimBHYqwQ5lTd3UYIg0Jg94mYqBilq3XJy3nLsGP+pQTfeHQsENywOxkF
+         BkQNW0La3tmnQYE3EFT2W7lFY51q4rnwsEUZVGa+1xnT//rvuh0yhgAD9bj4zxyOiJ+x
+         WTsv+t0kAO3KUg2q3CV6g03KNrATBylHqjsWJ+V0XMwSVre9gIT0bVJ5LaGc1xnaODcx
+         jld+KL7pMeTcA6vyB62gV3PMx6xQ/dL/eb2Vsop/TXQGjw/5qRwce1fDOdfgOCyw9NHB
+         pFFg==
+X-Gm-Message-State: AJIora9MAE0i3EM5+MJhAMDtIXxqso5sLSWZS86bF/kMf9GevJIHOaVk
+        S03uhsRwpheNErGiWNbdx7g/BA==
+X-Google-Smtp-Source: AGRyM1sYiMX+mQzc6XVbuNuqmR0VfukA/5oXQkaUF29OpnEqJM08oWyRgjHvCHqmSVSo8Qpou5On0Q==
+X-Received: by 2002:a05:600c:3553:b0:3a0:519b:4b96 with SMTP id i19-20020a05600c355300b003a0519b4b96mr3067246wmq.61.1656405638275;
+        Tue, 28 Jun 2022 01:40:38 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id ay14-20020a5d6f0e000000b0021b91ec8f6esm13037026wrb.67.2022.06.28.01.40.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 01:40:37 -0700 (PDT)
+Message-ID: <f4b13249-abe8-080f-4d36-24ef67d4fb62@linaro.org>
+Date:   Tue, 28 Jun 2022 10:40:36 +0200
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c476951a-ffa4-4055-ae05-08da58e1dcb8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2022 08:40:32.0167
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vCyI2AL98o112y25XVwntuFh4BN452ytoNCV7wRUGhiDk8TlKcKnDchb3lyaraPMa7Z3AbBsqD7P0Yy+ubnCCg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR11MB6153
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 3/3] thermal/drivers/u8500: Remove the get_trend function
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, rafael@kernel.org
+References: <20220616202537.303655-1-daniel.lezcano@linaro.org>
+ <20220616202537.303655-3-daniel.lezcano@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220616202537.303655-3-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Lu Baolu <baolu.lu@linux.intel.com>
-> Sent: Tuesday, June 21, 2022 10:44 PM
->=20
-> Rename iommu-sva-lib.c[h] to iommu-sva.c[h] as it contains all code
-> for SVA implementation in iommu core.
->=20
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Adding Linus who is missing in the recipient list.
+
+
+On 16/06/2022 22:25, Daniel Lezcano wrote:
+> The get_trend function relies on the interrupt to set the raising or
+> dropping trend. However the interpolated temperature is already giving
+> the temperature information to the thermal framework which is able to
+> deduce the trend.
+> 
+> Remove the trend code.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>   drivers/thermal/db8500_thermal.c | 26 ++++----------------------
+>   1 file changed, 4 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/thermal/db8500_thermal.c b/drivers/thermal/db8500_thermal.c
+> index 21d4d6e6409a..ed40cfd9ab7d 100644
+> --- a/drivers/thermal/db8500_thermal.c
+> +++ b/drivers/thermal/db8500_thermal.c
+> @@ -53,7 +53,6 @@ static const unsigned long db8500_thermal_points[] = {
+>   
+>   struct db8500_thermal_zone {
+>   	struct thermal_zone_device *tz;
+> -	enum thermal_trend trend;
+>   	unsigned long interpolated_temp;
+>   	unsigned int cur_index;
+>   };
+> @@ -73,24 +72,12 @@ static int db8500_thermal_get_temp(void *data, int *temp)
+>   	return 0;
+>   }
+>   
+> -/* Callback to get temperature changing trend */
+> -static int db8500_thermal_get_trend(void *data, int trip, enum thermal_trend *trend)
+> -{
+> -	struct db8500_thermal_zone *th = data;
+> -
+> -	*trend = th->trend;
+> -
+> -	return 0;
+> -}
+> -
+>   static struct thermal_zone_of_device_ops thdev_ops = {
+>   	.get_temp = db8500_thermal_get_temp,
+> -	.get_trend = db8500_thermal_get_trend,
+>   };
+>   
+>   static void db8500_thermal_update_config(struct db8500_thermal_zone *th,
+>   					 unsigned int idx,
+> -					 enum thermal_trend trend,
+>   					 unsigned long next_low,
+>   					 unsigned long next_high)
+>   {
+> @@ -98,7 +85,6 @@ static void db8500_thermal_update_config(struct db8500_thermal_zone *th,
+>   
+>   	th->cur_index = idx;
+>   	th->interpolated_temp = (next_low + next_high)/2;
+> -	th->trend = trend;
+>   
+>   	/*
+>   	 * The PRCMU accept absolute temperatures in celsius so divide
+> @@ -127,8 +113,7 @@ static irqreturn_t prcmu_low_irq_handler(int irq, void *irq_data)
+>   	}
+>   	idx -= 1;
+>   
+> -	db8500_thermal_update_config(th, idx, THERMAL_TREND_DROPPING,
+> -				     next_low, next_high);
+> +	db8500_thermal_update_config(th, idx, next_low, next_high);
+>   	dev_dbg(&th->tz->device,
+>   		"PRCMU set max %ld, min %ld\n", next_high, next_low);
+>   
+> @@ -149,8 +134,7 @@ static irqreturn_t prcmu_high_irq_handler(int irq, void *irq_data)
+>   		next_low = db8500_thermal_points[idx];
+>   		idx += 1;
+>   
+> -		db8500_thermal_update_config(th, idx, THERMAL_TREND_RAISING,
+> -					     next_low, next_high);
+> +		db8500_thermal_update_config(th, idx, next_low, next_high);
+>   
+>   		dev_dbg(&th->tz->device,
+>   			"PRCMU set max %ld, min %ld\n", next_high, next_low);
+> @@ -210,8 +194,7 @@ static int db8500_thermal_probe(struct platform_device *pdev)
+>   	dev_info(dev, "thermal zone sensor registered\n");
+>   
+>   	/* Start measuring at the lowest point */
+> -	db8500_thermal_update_config(th, 0, THERMAL_TREND_STABLE,
+> -				     PRCMU_DEFAULT_LOW_TEMP,
+> +	db8500_thermal_update_config(th, 0, PRCMU_DEFAULT_LOW_TEMP,
+>   				     db8500_thermal_points[0]);
+>   
+>   	platform_set_drvdata(pdev, th);
+> @@ -232,8 +215,7 @@ static int db8500_thermal_resume(struct platform_device *pdev)
+>   	struct db8500_thermal_zone *th = platform_get_drvdata(pdev);
+>   
+>   	/* Resume and start measuring at the lowest point */
+> -	db8500_thermal_update_config(th, 0, THERMAL_TREND_STABLE,
+> -				     PRCMU_DEFAULT_LOW_TEMP,
+> +	db8500_thermal_update_config(th, 0, PRCMU_DEFAULT_LOW_TEMP,
+>   				     db8500_thermal_points[0]);
+>   
+>   	return 0;
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

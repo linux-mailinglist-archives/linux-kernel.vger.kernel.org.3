@@ -2,79 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B90A855EFA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B0355EFA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbiF1UdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 16:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49556 "EHLO
+        id S232180AbiF1Udg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 16:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiF1UdA (ORCPT
+        with ESMTP id S229459AbiF1Udd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 16:33:00 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC618BF7F;
-        Tue, 28 Jun 2022 13:32:59 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id x138so10352445pfc.3;
-        Tue, 28 Jun 2022 13:32:59 -0700 (PDT)
+        Tue, 28 Jun 2022 16:33:33 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6152619C2C
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:33:32 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id z66so13162944vsb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:33:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wg8+F4TuFkG1xW6NWKjkWvVt/UeHSlIng0uV9LgXC0s=;
-        b=dqVD2Rci/rbAyFFszQrdO48V3S3apzN/yRFMOMcr7JtbtriXkLnLJitsUgfjpKK7Z+
-         y3wyvHK8B+WaonGnTc3snZIYrvkvrsgye37c3cz/Nv3PqEHIVjHKpCAxIUZpDcYWB1Pa
-         W28xlLtVHPr0jPhsgbGyLDnnMxbmJtr6HZc2hIf4sJchxwIx8Trtr/D3vqK2l+XR8mcG
-         tiRixn1dYXmdcwA1bWJVXJLvjExYl+8rbKfSTzRIlgZUBy9o5lK7liort9h1mXq8IwCQ
-         MNSskNRcEG8URFcpPrhzcZE1KQSIfSI5e/S110Bpk2XOPXqdwAb5Kx9aH+u6bmpOrZQg
-         xMZw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=96xhbYiTU/KE791cPv1Ec34DiphPIV0a/3KLjf6U6CU=;
+        b=pJdg7XilXTxEPJguu4B1V6t1yFrgRPJzgTB0zzXha1C0GXvPImTaTne5Zzeo0FeO/X
+         8T98FE9DmEc7nU6//lotpccvFw+/0RR1fnbOxgJQoOr1Y3U6ouyJOrn1EDUAWehotCSx
+         L1ReCZAm7nyaboEl+krLn/tXxHQ1nYzVpDyvDBkYS8gt59GGHCQahyjA76hMGmvVZGma
+         CI9704uPQwIqsRGyqxBNg4Vsd1+c8AkXgPFMDN/vkiNrtHBmpoN6c/ILQXw8FtTDOS+g
+         BQnwIkKVjlosjhxBA/69lY+KXRf3Ne96YenH4qA/kirD8hVWx3oXZB6bSnv6UROwPy5v
+         0+lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wg8+F4TuFkG1xW6NWKjkWvVt/UeHSlIng0uV9LgXC0s=;
-        b=FwTpOluSW+cHmSkkBetOPbGEZRnajbNYrlquCEKgNK5MdPR3P+qObuDg4VHpgbH6ck
-         mXq5GbMcjlnINpSqATrp4ZZGbmdYFDfsqdqh5Ty8SeZ92JMy1ToQAJcAZHpz1o12482t
-         YfoKgF1FtufvcupDOAlsQF6b4UGZgemZQ5ihEwRJCGGqvRwFt1Q2rbMPCz0HdGxwGU/k
-         /1j3TQ0chd+RCzAIhPSIbUx1I/2Na2GeGbJv0bl4gbAg9KQluTmW0VDHdPRq9xxSw3ht
-         JQ/Z9wAzb8Kz0UOuvReKl+IXGmciTSpLtLISGdNvtYWELwkHPU46KogQTAdKQeEFoZko
-         wbHg==
-X-Gm-Message-State: AJIora9fNhxJiRsVrQHZBNLfNMXEQn56K1yLDsiUI+r25z0MH3MGi5VR
-        CQXiIBXa3B0BdJMCzlC9WyU=
-X-Google-Smtp-Source: AGRyM1udAr2RA5pfWkYa0XVxSNy7W5KHGCo6ZXIjn694WLrbM6NtFsMcKbOusvCcRMF0+doZu0RiGw==
-X-Received: by 2002:a63:88c3:0:b0:40d:5f26:bfa8 with SMTP id l186-20020a6388c3000000b0040d5f26bfa8mr19136588pgd.608.1656448379122;
-        Tue, 28 Jun 2022 13:32:59 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id x10-20020a1709027c0a00b0016a6caacaefsm9272820pll.103.2022.06.28.13.32.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 13:32:58 -0700 (PDT)
-Message-ID: <ef48302b-3421-ebbe-7135-1297cffba7ed@gmail.com>
-Date:   Tue, 28 Jun 2022 13:32:56 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=96xhbYiTU/KE791cPv1Ec34DiphPIV0a/3KLjf6U6CU=;
+        b=r8Isa2/60z7QWkz88vX+FxjCMuJLTJ/kX/nCFuIA4bvQ3JSVPOiW97Cdn2yGRwqLdh
+         b59/SLfAubKS0TAf2SeRPN6NgSkCjvcTUYzTTd4syaTqQkg4ukVYxthwJdP/0Fy2QLwZ
+         VDuAd/IJkUgM2UhD22Um9QgLocVXkliI7jN6fwAGTcmYXNdQVJbtsPe0a3q20TMwKXUY
+         iBsSWZOO7E5iChGTfP7lC3AThJnRuTEp6ATXFTeCRHYrPNhy+BqeFeipT4WpHQ5YSIq4
+         3p3wETtCuPw4wd10ky9ObQO94VDpTODE3pwlibGGsI51eKXQLL8vAGqfcBmF8r7Xj4nS
+         sLJA==
+X-Gm-Message-State: AJIora/FIG3OjLNt1MOrTLrw5ighbJkCIiBqhqIBA/HR4b/YwQe+/QC9
+        0bO7XrwlibT/RPWEdQ0jQGHV/DybcrhJN7Bth17fEA==
+X-Google-Smtp-Source: AGRyM1uVlFBAQwA+pYsT/CH8aC8G895Y3mPd0TsSfST3Ox2ZooTS7yCmHDP6hooIdjCk7r0C7q0e1IpezEcsMQUiEgA=
+X-Received: by 2002:a05:6102:f81:b0:354:3967:118a with SMTP id
+ e1-20020a0561020f8100b003543967118amr2549996vsv.67.1656448411327; Tue, 28 Jun
+ 2022 13:33:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.4 57/60] modpost: fix section mismatch check for
- exported init/exit sections
-Content-Language: en-US
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jessica Yu <jeyu@kernel.org>
-References: <20220627111927.641837068@linuxfoundation.org>
- <20220627111929.368555413@linuxfoundation.org>
- <6cd16364-f0cd-b3f3-248f-4b6d585d05ef@gmail.com>
- <CAKwvOdm8UiY8CsqNgyoq4MdC2TbBj-1+cRE+fWZ9+vVBxNZz_Q@mail.gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <CAKwvOdm8UiY8CsqNgyoq4MdC2TbBj-1+cRE+fWZ9+vVBxNZz_Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220624173656.2033256-1-jthoughton@google.com> <20220624173656.2033256-10-jthoughton@google.com>
+In-Reply-To: <20220624173656.2033256-10-jthoughton@google.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Tue, 28 Jun 2022 13:33:19 -0700
+Message-ID: <CAHS8izNb5quGb-iqj3h52i9sFKwxYy=HiMmyVYVTMOKjWeZrtg@mail.gmail.com>
+Subject: Re: [RFC PATCH 09/26] hugetlb: add hugetlb_hgm_enabled
+To:     James Houghton <jthoughton@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Jue Wang <juew@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,66 +75,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/22 12:11, Nick Desaulniers wrote:
-> On Mon, Jun 27, 2022 at 10:03 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
->>
->> On 6/27/22 04:22, Greg Kroah-Hartman wrote:
->>> From: Masahiro Yamada <masahiroy@kernel.org>
->>>
->>> commit 28438794aba47a27e922857d27b31b74e8559143 upstream.
->>>
->>> Since commit f02e8a6596b7 ("module: Sort exported symbols"),
->>> EXPORT_SYMBOL* is placed in the individual section ___ksymtab(_gpl)+<sym>
->>> (3 leading underscores instead of 2).
->>>
->>> Since then, modpost cannot detect the bad combination of EXPORT_SYMBOL
->>> and __init/__exit.
->>>
->>> Fix the .fromsec field.
->>>
->>> Fixes: f02e8a6596b7 ("module: Sort exported symbols")
->>> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->>> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>
->> This commit causes the following warning to show up on my kernel builds
->> used for testing 5.4 stable candidates:
->>
->> WARNING: vmlinux.o(___ksymtab+drm_fb_helper_modinit+0x0): Section
->> mismatch in reference from the variable __ksymtab_drm_fb_helper_modinit
->> to the function .init.text:drm_fb_helper_modinit()
->> The symbol drm_fb_helper_modinit is exported and annotated __init
->> Fix this by removing the __init annotation of drm_fb_helper_modinit or
->> drop the export.
-> 
-> Thanks for the report. Looks like the patch is "working as intended."
-> 
-> It looks like drm_fb_helper_modinit was deleted outright in
-> commit bf22c9ec39da ("drm: remove drm_fb_helper_modinit")
-> in v5.12-rc1.
-> 
-> Florian, can you test if that cherry-picks cleanly and resolves the
-> issue for you?
+On Fri, Jun 24, 2022 at 10:37 AM James Houghton <jthoughton@google.com> wrote:
+>
+> Currently, this is always true if the VMA is shared. In the future, it's
+> possible that private mappings will get some or all HGM functionality.
+>
+> Signed-off-by: James Houghton <jthoughton@google.com>
 
-It does and it does, thanks!
+Reviewed-by: Mina Almasry <almasrymina@google.com>
 
-> 
-> Maybe let's check with Christoph if it's ok to backport bf22c9ec39da
-> to stable 5.10 and 5.4?
-> 
->>
->> The kernel configuration to reproduce this is located here (this is 5.10
->> but works in 5.4 as well):
->>
->> https://gist.github.com/2c3e8edd5ceb089c8040db724073d941
->>
->> Same applies to the 5.10, 5.15 and 5.18 stable queues FWIW.
->> --
->> Florian
-> 
-> 
-> 
+> ---
+>  include/linux/hugetlb.h | 10 ++++++++++
+>  mm/hugetlb.c            |  8 ++++++++
+>  2 files changed, 18 insertions(+)
+>
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index 33ba48fac551..e7a6b944d0cc 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -1174,6 +1174,16 @@ static inline void set_huge_pte_at(struct mm_struct *mm, unsigned long addr,
+>  }
+>  #endif /* CONFIG_HUGETLB_PAGE */
+>
+> +#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
+> +/* If HugeTLB high-granularity mappings are enabled for this VMA. */
+> +bool hugetlb_hgm_enabled(struct vm_area_struct *vma);
+> +#else
+> +static inline bool hugetlb_hgm_enabled(struct vm_area_struct *vma)
+> +{
+> +       return false;
+> +}
+> +#endif
+> +
+>  static inline spinlock_t *huge_pte_lock(struct hstate *h,
+>                                         struct mm_struct *mm, pte_t *pte)
+>  {
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index a2d2ffa76173..8b10b941458d 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -6983,6 +6983,14 @@ pte_t *huge_pte_offset(struct mm_struct *mm,
+>
+>  #endif /* CONFIG_ARCH_WANT_GENERAL_HUGETLB */
+>
+> +#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
+> +bool hugetlb_hgm_enabled(struct vm_area_struct *vma)
+> +{
+> +       /* All shared VMAs have HGM enabled. */
 
+Personally I find the comment redundant; the next line does just that.
 
--- 
-Florian
+What about VM_MAYSHARE? Should those also have HGM enabled?
+
+Is it possible to get some docs with this series for V1? This would be
+something to highlight in the docs.
+
+> +       return vma->vm_flags & VM_SHARED;
+> +}
+> +#endif /* CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING */
+> +
+>  /*
+>   * These functions are overwritable if your architecture needs its own
+>   * behavior.
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
+>

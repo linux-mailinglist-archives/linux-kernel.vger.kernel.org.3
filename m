@@ -2,129 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1662155EBF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D1755EC02
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233857AbiF1SGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 14:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
+        id S233932AbiF1SGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 14:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233855AbiF1SGA (ORCPT
+        with ESMTP id S233885AbiF1SGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:06:00 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456A61EAD6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 11:05:55 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id p14so12713217pfh.6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 11:05:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=pTcGgtfSu6n7KkCWKQ4ciWe5XeKK5S4riO8KfNVW7Ig=;
-        b=F/CZTCTDOlhkWqZ+vOzW0DaoZ/EZ1dOhoCSSJ2RrwBNwuY7CCyvEtaLLk8DO+FYVI8
-         oY1bh2Rw2NH/e7uwuajkABgxQQynq/vb9wDrQT1ziurYSmeBDoqa9s9XGmGLyXXXVu1m
-         Ptj/OKkdrLcBprdD9gQ9RffSNU26yKh9HCJiI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=pTcGgtfSu6n7KkCWKQ4ciWe5XeKK5S4riO8KfNVW7Ig=;
-        b=yVKFab56u1lvloYqgLebNHTkaUcU9+BuvuPUBkEb5GFMjp1pv3RSRzI65DiOB+dw9N
-         Q7cBOwXvoe56f6X9F/VvDbxlJgTBjV+voS3J/EUr83qCg+8bMcBZHd9+CWEUkZvq4X2E
-         ZE4QSjddA+zuKLYHgTkaYeEvPiaskgTOyZEP9tN7AOWnghZ0xDdpJUVD0xhEg8IpdpgP
-         cLKWnb+6zJsPXCRN3YHsWHxaFGi+YT83Io6ft9s+cvSiqfulLRZyEEjKGqreXHC0jMm7
-         ZKNpmczblox8UIcJW8X6tD5FNPNKmpRhZXjhPHR2noqY7lxNfuoPBpES8AyZG1K2jT5i
-         P3Bw==
-X-Gm-Message-State: AJIora99J154rw3K9j4zhqSriRIlsPlz/06JCHKwgxJAqY4xhsZTMiy5
-        y9H3tKrrhfQLwC/0Tn6uIpJ0lA==
-X-Google-Smtp-Source: AGRyM1v6cdnwBfGpeB2JnkCbahQ14YUYaqjRd3VUKbR8YPBigZjfWVkzlvmFIFzfbBj+r2XqbA+86w==
-X-Received: by 2002:a63:7412:0:b0:40c:fa27:9d07 with SMTP id p18-20020a637412000000b0040cfa279d07mr18441815pgc.27.1656439554674;
-        Tue, 28 Jun 2022 11:05:54 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i3-20020a170902cf0300b0016a0ac06424sm9669985plg.51.2022.06.28.11.05.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 11:05:54 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 11:05:53 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        dm-devel@redhat.com, linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-btrfs <linux-btrfs@vger.kernel.org>,
-        linux-can@vger.kernel.org,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux1394-devel@lists.sourceforge.net, io-uring@vger.kernel.org,
-        lvs-devel@vger.kernel.org,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        nvdimm@lists.linux.dev,
-        NetFilter <netfilter-devel@vger.kernel.org>,
-        coreteam@netfilter.org, linux-perf-users@vger.kernel.org,
-        linux-raid@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        scsi <linux-scsi@vger.kernel.org>,
-        target-devel <target-devel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        V9FS Developers <v9fs-developer@lists.sourceforge.net>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] treewide: uapi: Replace zero-length arrays with
- flexible-array members
-Message-ID: <202206281104.7CC3935@keescook>
-References: <20220627180432.GA136081@embeddedor>
- <CAMuHMdU27TG_rpd=WTRPRcY22A4j4aN-6d_8OmK2aNpX06G3ig@mail.gmail.com>
+        Tue, 28 Jun 2022 14:06:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 238E51D0F2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 11:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656439560;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5GEsiZ5pfkbMA5kewtyoQDVS/PBlIbuW5xmHg+1qqHA=;
+        b=AzTJqAMvZjTJ0cPd9c0C3lRIXHbJ3nSVwgb7CWzmfx1NfIrL72v7ukI0DDTgaQZWTZVJw9
+        014ZETS255YO8b2ADhuvTJRAPxrC0aeXb79Hj7mNhErJrpse1Ynq0LIkNTb/QZWEykElxT
+        5h5w8IwEBss4R91GlM9pQGwj20h5z40=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-127-oUIR4xKhNb2y20GilZVQww-1; Tue, 28 Jun 2022 14:05:56 -0400
+X-MC-Unique: oUIR4xKhNb2y20GilZVQww-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4018389B841;
+        Tue, 28 Jun 2022 18:05:56 +0000 (UTC)
+Received: from [10.22.34.187] (unknown [10.22.34.187])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AC80140334D;
+        Tue, 28 Jun 2022 18:05:55 +0000 (UTC)
+Message-ID: <218522c9-97b9-7659-ce31-2dbc4b0c6a60@redhat.com>
+Date:   Tue, 28 Jun 2022 14:05:55 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdU27TG_rpd=WTRPRcY22A4j4aN-6d_8OmK2aNpX06G3ig@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V7 1/5] asm-generic: ticket-lock: Remove unnecessary
+ atomic_read
+Content-Language: en-US
+To:     guoren@kernel.org, palmer@rivosinc.com, arnd@arndb.de,
+        mingo@redhat.com, will@kernel.org, boqun.feng@gmail.com
+Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20220628081707.1997728-1-guoren@kernel.org>
+ <20220628081707.1997728-2-guoren@kernel.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220628081707.1997728-2-guoren@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 09:27:21AM +0200, Geert Uytterhoeven wrote:
-> Hi Gustavo,
-> 
-> Thanks for your patch!
-> 
-> On Mon, Jun 27, 2022 at 8:04 PM Gustavo A. R. Silva
-> <gustavoars@kernel.org> wrote:
-> > There is a regular need in the kernel to provide a way to declare
-> > having a dynamically sized set of trailing elements in a structure.
-> > Kernel code should always use “flexible array members”[1] for these
-> > cases. The older style of one-element or zero-length arrays should
-> > no longer be used[2].
-> 
-> These rules apply to the kernel, but uapi is not considered part of the
-> kernel, so different rules apply.  Uapi header files should work with
-> whatever compiler that can be used for compiling userspace.
+On 6/28/22 04:17, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Remove unnecessary atomic_read in arch_spin_value_unlocked(lock),
+> because the value has been in lock. This patch could prevent
+> arch_spin_value_unlocked contend spin_lock data again.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> ---
+>   include/asm-generic/spinlock.h | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
+> index fdfebcb050f4..f1e4fa100f5a 100644
+> --- a/include/asm-generic/spinlock.h
+> +++ b/include/asm-generic/spinlock.h
+> @@ -84,7 +84,9 @@ static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
+>   
+>   static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+>   {
+> -	return !arch_spin_is_locked(&lock);
+> +	u32 val = lock.counter;
+> +
+> +	return ((val >> 16) == (val & 0xffff));
+>   }
+>   
+>   #include <asm/qrwlock.h>
 
-Right, userspace isn't bound by these rules, but the kernel ends up
-consuming these structures, so we need to fix them. The [0] -> []
-changes (when they are not erroneously being used within other
-structures) is valid for all compilers. Flexible arrays are C99; it's
-been 23 years. :)
+lockref.c is the only current user of arch_spin_value_unlocked(). This 
+change is probably OK with this particular use case. Do you have any 
+performance data about the improvement due to this change?
 
-But, yes, where we DO break stuff we need to workaround it, etc.
+You may have to document that we have to revisit that if another use 
+case shows up.
 
--- 
-Kees Cook
+Cheers,
+Longman
+

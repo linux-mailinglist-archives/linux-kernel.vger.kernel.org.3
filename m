@@ -2,70 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A4FF55C4A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3BA55D2DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343782AbiF1Cis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 22:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
+        id S245455AbiF1Cnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 22:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245441AbiF1Ci1 (ORCPT
+        with ESMTP id S1343873AbiF1Cml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 22:38:27 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D06DF2F;
-        Mon, 27 Jun 2022 19:38:23 -0700 (PDT)
-X-UUID: a146c970339d47ad826cf5b5f1079304-20220628
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:da29cecd-c53e-4c38-bfd1-a1c490d2d610,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:87442a2,CLOUDID:0f1df085-57f0-47ca-ba27-fe8c57fbf305,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: a146c970339d47ad826cf5b5f1079304-20220628
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1369703116; Tue, 28 Jun 2022 10:38:17 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 28 Jun 2022 10:38:15 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 28 Jun 2022 10:38:15 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 28 Jun 2022 10:38:15 +0800
-Message-ID: <c3a2feae4295f3300f723a9bfd8cdf0b1c938c81.camel@mediatek.com>
-Subject: Re: [PATCH v14 12/15] drm/mediatek: dpi: Add YUV422 output support
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 28 Jun 2022 10:38:15 +0800
-In-Reply-To: <5b0613b9cc983e24a997c122b2892b35cf8346d3.camel@mediatek.com>
-References: <20220624030946.14961-1-rex-bc.chen@mediatek.com>
-         <20220624030946.14961-13-rex-bc.chen@mediatek.com>
-         <a59a61a81e45fd361774a28a66ffd3d673cb3148.camel@mediatek.com>
-         <5b0613b9cc983e24a997c122b2892b35cf8346d3.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 27 Jun 2022 22:42:41 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB3E28E03
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 19:40:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656384020; x=1687920020;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6prhAM7uyIz2y3DiMFC1o+cv5uOpyZoaoCenv7Rj18k=;
+  b=Ne82lhZJaZzgQHDTgGhcp0V/Vk89Gyrk8qjvMaoKSwKmD1/X8D7e7p2w
+   SAEwi8NPaSCIUB9azCJbx6KtjoYLSXr+p6lqEpNKvCUmZlZpM4Wk8BTva
+   ff47yN/sBe53xqY3XaIptCuObw24mmvWtkG1BH9xtdUn5y972IYZXhVRL
+   nEpwBpxdMzQlfml/8E2Dfs6ot3XDE0VMlGyQLb0dNJcl3tNft2CfF2p2K
+   oIQdwyqWgIZK9w594EzRYfrb0fHL/HEJRcQodglBDLF/JdYcfBS1WYjwN
+   /NKn4XbmJmMw9OPVEBtgtnv9p2cbawpEyyDr8VgVkOrFn5l8W1ssSaJ1a
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="280374793"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="280374793"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 19:40:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="594573569"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 27 Jun 2022 19:40:18 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o619F-0009Pi-B4;
+        Tue, 28 Jun 2022 02:40:17 +0000
+Date:   Tue, 28 Jun 2022 10:40:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Peter Robinson <pbrobinson@gmail.com>
+Subject: [broadcom-stblinux:drivers/next 5/6]
+ drivers/soc/bcm/bcm2835-power.c:635:31: error: 'struct bcm2835_pm' has no
+ member named 'rpivid_asb'
+Message-ID: <202206281021.SubdbYfn-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,214 +64,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-28 at 10:28 +0800, Rex-BC Chen wrote:
-> On Tue, 2022-06-28 at 10:15 +0800, CK Hu wrote:
-> > Hi, Bo-Chen:
-> > 
-> > On Fri, 2022-06-24 at 11:09 +0800, Bo-Chen Chen wrote:
-> > > Dp_intf supports YUV422 as output format. In MT8195 Chrome
-> > > project,
-> > > YUV422 output format is used for 4K resolution.
-> > > 
-> > > To support this, it is also needed to support color format
-> > > transfer.
-> > > Color format transfer is a new feature for both dpi and dpintf of
-> > > MT8195.
-> > > 
-> > > The input format could be RGB888 and output format for dp_intf
-> > > should
-> > > be
-> > > YUV422. Therefore, we add a mtk_dpi_matrix_sel() helper to update
-> > > the
-> > > DPI_MATRIX_SET register depending on the color format.
-> > > 
-> > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > > Reviewed-by: AngeloGioacchino Del Regno <
-> > > angelogioacchino.delregno@collabora.com>
-> > > ---
-> > >  drivers/gpu/drm/mediatek/mtk_dpi.c      | 34
-> > > ++++++++++++++++++++++++-
-> > >  drivers/gpu/drm/mediatek/mtk_dpi_regs.h |  3 +++
-> > >  2 files changed, 36 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > > b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > > index 9e4250356342..438bf3bc5e4a 100644
-> > > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > > @@ -128,6 +128,7 @@ struct mtk_dpi_yc_limit {
-> > >   * @num_output_fmts: Quantity of supported output formats.
-> > >   * @is_ck_de_pol: Support CK/DE polarity.
-> > >   * @swap_input_support: Support input swap function.
-> > > + * @color_fmt_trans_support: Enable color format transfer.
-> > >   * @dimension_mask: Mask used for HWIDTH, HPORCH, VSYNC_WIDTH
-> > > and
-> > > VSYNC_PORCH
-> > >   *		    (no shift).
-> > >   * @hvsize_mask: Mask of HSIZE and VSIZE mask (no shift).
-> > > @@ -144,6 +145,7 @@ struct mtk_dpi_conf {
-> > >  	u32 num_output_fmts;
-> > >  	bool is_ck_de_pol;
-> > >  	bool swap_input_support;
-> > > +	bool color_fmt_trans_support;
-> > >  	u32 dimension_mask;
-> > >  	u32 hvsize_mask;
-> > >  	u32 channel_swap_shift;
-> > > @@ -412,6 +414,31 @@ static void
-> > > mtk_dpi_config_disable_edge(struct
-> > > mtk_dpi *dpi)
-> > >  		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0,
-> > > EDGE_SEL_EN);
-> > >  }
-> > >  
-> > > +static void mtk_dpi_matrix_sel(struct mtk_dpi *dpi,
-> > > +			       enum mtk_dpi_out_color_format format)
-> > > +{
-> > > +	u32 matrix_sel = 0;
-> > > +
-> > > +	if (!dpi->conf->color_fmt_trans_support) {
-> > > +		dev_info(dpi->dev, "matrix_sel is not supported.\n");
-> > > +		return;
-> > > +	}
-> > > +
-> > > +	switch (format) {
-> > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_422:
-> > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL:
-> > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_444:
-> > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL:
-> > 
-> > I think the transform formula are different for full range and non-
-> > full 
-> > range. Please make sure '0x2' is for full range or non-full range.
-> > If
-> > you are not sure, you could provide the transform matrix of '0x2'
-> > so
-> > we
-> > could find out it's full or non-full.
-> > 
-> > > +	case MTK_DPI_COLOR_FORMAT_XV_YCC:
-> > > +		if (dpi->mode.hdisplay <= 720)
-> > > +			matrix_sel = 0x2;
-> > 
-> > Symbolize '0x2'.
-> > 
-> > > +		break;
-> > > +	default:
-> > > +		break;
-> > > +	}
-> > > +	mtk_dpi_mask(dpi, DPI_MATRIX_SET, matrix_sel,
-> > > INT_MATRIX_SEL_MASK);
-> > > +}
-> > > +
-> > >  static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
-> > >  					enum mtk_dpi_out_color_format
-> > > format)
-> > >  {
-> > > @@ -419,6 +446,7 @@ static void
-> > > mtk_dpi_config_color_format(struct
-> > > mtk_dpi *dpi,
-> > >  	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
-> > >  		mtk_dpi_config_yuv422_enable(dpi, false);
-> > >  		mtk_dpi_config_csc_enable(dpi, true);
-> > > +		mtk_dpi_matrix_sel(dpi, format);
-> > 
-> > Why mt8173 support MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL but it does
-> > not
-> > call mtk_dpi_matrix_sel()? It seems that mt8173 also need to call
-> > mtk_dpi_matrix_sel() but lost and this patch looks like a bug fix
-> > for
-> > all SoC DPI driver.
-> > 
-> > Regards,
-> > CK
-> > 
-> 
-> Hello CK,
-> 
-> MT8173 does not support MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL as output
-> format, the output format is:
-> 
-> static const u32 mt8173_output_fmts[] = {
-> 	MEDIA_BUS_FMT_RGB888_1X24,
-> };
-> 
-> or do I misunderstand?
+tree:   https://github.com/Broadcom/stblinux drivers/next
+head:   c8a8778a2c38eb66d35008072177cddd7d80eeda
+commit: d5eba4a03b1d2d6e2192fa9a03ccc2cfb5d9750e [5/6] soc: bcm: bcm2835-power: Add support for BCM2711's RPiVid ASB
+config: riscv-randconfig-r024-20220627 (https://download.01.org/0day-ci/archive/20220628/202206281021.SubdbYfn-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/Broadcom/stblinux/commit/d5eba4a03b1d2d6e2192fa9a03ccc2cfb5d9750e
+        git remote add broadcom-stblinux https://github.com/Broadcom/stblinux
+        git fetch --no-tags broadcom-stblinux drivers/next
+        git checkout d5eba4a03b1d2d6e2192fa9a03ccc2cfb5d9750e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/soc/bcm/
 
-In the first patch [1], it define
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-+enum mtk_dpi_out_color_format {
-+	MTK_DPI_COLOR_FORMAT_RGB,
-+	MTK_DPI_COLOR_FORMAT_RGB_FULL,
-+	MTK_DPI_COLOR_FORMAT_YCBCR_444,
-+	MTK_DPI_COLOR_FORMAT_YCBCR_422,
-+	MTK_DPI_COLOR_FORMAT_XV_YCC,
-+	MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL,
-+	MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL
-+};
+All errors (new ones prefixed by >>):
 
-and this function also process MTK_DPI_COLOR_FORMAT_YCBCR_444,
-MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL, MTK_DPI_COLOR_FORMAT_YCBCR_422,
-and MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL. So I think it want to process
-output YUV but the caller of mtk_dpi_config_color_format() just pass
-RGB into this function. If mt8173 does not support YUV output, I think
-you should remove YUV processing in this function first, and then add
-back YUV processing in this function.
+   drivers/soc/bcm/bcm2835-power.c: In function 'bcm2835_power_probe':
+>> drivers/soc/bcm/bcm2835-power.c:635:31: error: 'struct bcm2835_pm' has no member named 'rpivid_asb'
+     635 |         power->rpivid_asb = pm->rpivid_asb;
+         |                               ^~
 
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/gpu/drm/mediatek/mtk_dpi.c?h=v5.19-rc4&id=9e629c17aa8d7a75b8c1d99ed42892cd8ba7cdc4
 
-Regards,
-CK
+vim +635 drivers/soc/bcm/bcm2835-power.c
 
-> 
-> BRs,
-> Bo-Chen
-> 
-> > >  		if (dpi->conf->swap_input_support)
-> > >  			mtk_dpi_config_swap_input(dpi, false);
-> > >  		mtk_dpi_config_channel_swap(dpi,
-> > > MTK_DPI_OUT_CHANNEL_SWAP_BGR);
-> > > @@ -426,6 +454,7 @@ static void
-> > > mtk_dpi_config_color_format(struct
-> > > mtk_dpi *dpi,
-> > >  		   (format == MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
-> > >  		mtk_dpi_config_yuv422_enable(dpi, true);
-> > >  		mtk_dpi_config_csc_enable(dpi, true);
-> > > +		mtk_dpi_matrix_sel(dpi, format);
-> > >  		if (dpi->conf->swap_input_support)
-> > >  			mtk_dpi_config_swap_input(dpi, true);
-> > >  		else
-> > > @@ -673,7 +702,10 @@ static int
-> > > mtk_dpi_bridge_atomic_check(struct
-> > > drm_bridge *bridge,
-> > >  	dpi->bit_num = MTK_DPI_OUT_BIT_NUM_8BITS;
-> > >  	dpi->channel_swap = MTK_DPI_OUT_CHANNEL_SWAP_RGB;
-> > >  	dpi->yc_map = MTK_DPI_OUT_YC_MAP_RGB;
-> > > -	dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
-> > > +	if (out_bus_format == MEDIA_BUS_FMT_YUYV8_1X16)
-> > > +		dpi->color_format =
-> > > MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL;
-> > > +	else
-> > > +		dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
-> > >  
-> > >  	return 0;
-> > >  }
-> > > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> > > b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> > > index 3a02fabe1662..cca0dccb84a2 100644
-> > > --- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> > > +++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> > > @@ -217,4 +217,7 @@
-> > >  
-> > >  #define EDGE_SEL_EN			BIT(5)
-> > >  #define H_FRE_2N			BIT(25)
-> > > +
-> > > +#define DPI_MATRIX_SET		0xB4
-> > > +#define INT_MATRIX_SEL_MASK		GENMASK(4, 0)
-> > >  #endif /* __MTK_DPI_REGS_H */
-> > 
-> > 
-> 
-> 
+   607	
+   608	static int bcm2835_power_probe(struct platform_device *pdev)
+   609	{
+   610		struct bcm2835_pm *pm = dev_get_drvdata(pdev->dev.parent);
+   611		struct device *dev = &pdev->dev;
+   612		struct bcm2835_power *power;
+   613		static const struct {
+   614			int parent, child;
+   615		} domain_deps[] = {
+   616			{ BCM2835_POWER_DOMAIN_GRAFX, BCM2835_POWER_DOMAIN_GRAFX_V3D },
+   617			{ BCM2835_POWER_DOMAIN_IMAGE, BCM2835_POWER_DOMAIN_IMAGE_PERI },
+   618			{ BCM2835_POWER_DOMAIN_IMAGE, BCM2835_POWER_DOMAIN_IMAGE_H264 },
+   619			{ BCM2835_POWER_DOMAIN_IMAGE, BCM2835_POWER_DOMAIN_IMAGE_ISP },
+   620			{ BCM2835_POWER_DOMAIN_IMAGE_PERI, BCM2835_POWER_DOMAIN_USB },
+   621			{ BCM2835_POWER_DOMAIN_IMAGE_PERI, BCM2835_POWER_DOMAIN_CAM0 },
+   622			{ BCM2835_POWER_DOMAIN_IMAGE_PERI, BCM2835_POWER_DOMAIN_CAM1 },
+   623		};
+   624		int ret = 0, i;
+   625		u32 id;
+   626	
+   627		power = devm_kzalloc(dev, sizeof(*power), GFP_KERNEL);
+   628		if (!power)
+   629			return -ENOMEM;
+   630		platform_set_drvdata(pdev, power);
+   631	
+   632		power->dev = dev;
+   633		power->base = pm->base;
+   634		power->asb = pm->asb;
+ > 635		power->rpivid_asb = pm->rpivid_asb;
+   636	
+   637		id = readl(power->asb + ASB_AXI_BRDG_ID);
+   638		if (id != BCM2835_BRDG_ID /* "BRDG" */) {
+   639			dev_err(dev, "ASB register ID returned 0x%08x\n", id);
+   640			return -ENODEV;
+   641		}
+   642	
+   643		if (power->rpivid_asb) {
+   644			id = readl(power->rpivid_asb + ASB_AXI_BRDG_ID);
+   645			if (id != BCM2835_BRDG_ID /* "BRDG" */) {
+   646				dev_err(dev, "RPiVid ASB register ID returned 0x%08x\n",
+   647					     id);
+   648				return -ENODEV;
+   649			}
+   650		}
+   651	
+   652		power->pd_xlate.domains = devm_kcalloc(dev,
+   653						       ARRAY_SIZE(power_domain_names),
+   654						       sizeof(*power->pd_xlate.domains),
+   655						       GFP_KERNEL);
+   656		if (!power->pd_xlate.domains)
+   657			return -ENOMEM;
+   658	
+   659		power->pd_xlate.num_domains = ARRAY_SIZE(power_domain_names);
+   660	
+   661		for (i = 0; i < ARRAY_SIZE(power_domain_names); i++) {
+   662			ret = bcm2835_init_power_domain(power, i, power_domain_names[i]);
+   663			if (ret)
+   664				goto fail;
+   665		}
+   666	
+   667		for (i = 0; i < ARRAY_SIZE(domain_deps); i++) {
+   668			pm_genpd_add_subdomain(&power->domains[domain_deps[i].parent].base,
+   669					       &power->domains[domain_deps[i].child].base);
+   670		}
+   671	
+   672		power->reset.owner = THIS_MODULE;
+   673		power->reset.nr_resets = BCM2835_RESET_COUNT;
+   674		power->reset.ops = &bcm2835_reset_ops;
+   675		power->reset.of_node = dev->parent->of_node;
+   676	
+   677		ret = devm_reset_controller_register(dev, &power->reset);
+   678		if (ret)
+   679			goto fail;
+   680	
+   681		of_genpd_add_provider_onecell(dev->parent->of_node, &power->pd_xlate);
+   682	
+   683		dev_info(dev, "Broadcom BCM2835 power domains driver");
+   684		return 0;
+   685	
+   686	fail:
+   687		for (i = 0; i < ARRAY_SIZE(power_domain_names); i++) {
+   688			struct generic_pm_domain *dom = &power->domains[i].base;
+   689	
+   690			if (dom->name)
+   691				pm_genpd_remove(dom);
+   692		}
+   693		return ret;
+   694	}
+   695	
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

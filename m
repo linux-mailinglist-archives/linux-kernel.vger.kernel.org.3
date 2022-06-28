@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0EA055DCF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57DCA55DD5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240438AbiF1HQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 03:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
+        id S241053AbiF1HQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 03:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238901AbiF1HQg (ORCPT
+        with ESMTP id S238901AbiF1HQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 03:16:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5253B2C648;
-        Tue, 28 Jun 2022 00:16:35 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 07:16:32 -0000
+        Tue, 28 Jun 2022 03:16:45 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8BD2C66B;
+        Tue, 28 Jun 2022 00:16:43 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 07:16:41 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1656400593;
+        s=2020; t=1656400602;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UH6GiLvl6EPgMRDFC8w8CCwZJcIkbtjTfEHNzAI9Mmg=;
-        b=ggYxpFGEAW/jHJdWoDJOod6bQQNpEFu5rDrgfXYCEJELT/vo+dcj5UhOAOfOgAj4ge71ox
-        rHCgVHvd4QfXfbYrvh2umZKhFTZ8+AaH35v7y6zZTFvWd4eZBIHCVA++9sqJzdOA63Bv2w
-        9bn0Jw8D+KfqjElEYX5M46O5w7HHT1EgALt/xqZYgC7/zK5wIwt+g9haqUa4nRLP1qOV19
-        cNmgBgH/VGRI2S1aMu7IpTN16FcVwEi7AWPBiIpKYHO7Fu/hcVQ/tD/iNPzYrgm8l4uVDo
-        9tB+6b+9boe5Zg8qmw8FiNAYF6o+oo6SMeKW65yKO1/pN5pmSBaooEbO6HGNBQ==
+        bh=IgFLK0iODUrJ2aDlbgobwfIRoLSFBTmVvo9jbgNIytU=;
+        b=rBsHMu5Tr82G/0yk0KIrJc/AlSQOApCaF+ZnbcdnyvnJgMhk4JJt58JWIy5KOLijmXDjEQ
+        lUL8+mPUnqS3EFhrKAKDIUpUg3t4hSm2jDb9TB9Bl+8jHkaLZx3T04WsTiLso91FUU8kB6
+        KHEr6obpnnXE5nTV47zrCIrc0aYp3okRxKWtDdYD1X4iTItz9vIhuc0fu0kC0Wo1yt8wRY
+        nnT322zW0ysDmgRUPXLcKeFzmMPd9vVMWOZlId5af12uEiQMUOEm/3KDLGWGHRjqqmUqMi
+        hqUhpaMW6JLzPRwOqYwlKVDdn0+BP0pGhvhxdVkolRziS0L5z5DGnGiTsEimNw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1656400593;
+        s=2020e; t=1656400602;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UH6GiLvl6EPgMRDFC8w8CCwZJcIkbtjTfEHNzAI9Mmg=;
-        b=U5hrbqDJwd/Gzb2FDuHXZCeCD544bSgfkTiG18o33iIry/rJHBxuMiQ+thqz7xs/8b+gr9
-        0bRDNH+6+PPYqbAg==
-From:   "tip-bot2 for Namhyung Kim" <tip-bot2@linutronix.de>
+        bh=IgFLK0iODUrJ2aDlbgobwfIRoLSFBTmVvo9jbgNIytU=;
+        b=KFR3mRYY787lt4+Dp7JG2Mn9VWh/v7d4MjG16qRgDzV13KjLEYGhiQtFbaGvZ0i1AWAWem
+        du/JlvzX3ljKszAA==
+From:   "tip-bot2 for Chen Yu" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/core: Add a new read format to get a number of
- lost samples
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: sched/core] sched/fair: Introduce SIS_UTIL to search idle CPU
+ based on sum of util_avg
+Cc:     Tim Chen <tim.c.chen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chen Yu <yu.c.chen@intel.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Mohini Narkhede <mohini.narkhede@intel.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220616180623.1358843-1-namhyung@kernel.org>
-References: <20220616180623.1358843-1-namhyung@kernel.org>
+In-Reply-To: <20220612163428.849378-1-yu.c.chen@intel.com>
+References: <20220612163428.849378-1-yu.c.chen@intel.com>
 MIME-Version: 1.0
-Message-ID: <165640059260.4207.6165560170010032582.tip-bot2@tip-bot2>
+Message-ID: <165640060107.4207.18067902344091237181.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,194 +70,541 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/core branch of tip:
+The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     119a784c81270eb88e573174ed2209225d646656
-Gitweb:        https://git.kernel.org/tip/119a784c81270eb88e573174ed2209225d646656
-Author:        Namhyung Kim <namhyung@kernel.org>
-AuthorDate:    Thu, 16 Jun 2022 11:06:23 -07:00
+Commit-ID:     70fb5ccf2ebb09a0c8ebba775041567812d45f86
+Gitweb:        https://git.kernel.org/tip/70fb5ccf2ebb09a0c8ebba775041567812d45f86
+Author:        Chen Yu <yu.c.chen@intel.com>
+AuthorDate:    Mon, 13 Jun 2022 00:34:28 +08:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 28 Jun 2022 09:08:31 +02:00
+CommitterDate: Tue, 28 Jun 2022 09:08:30 +02:00
 
-perf/core: Add a new read format to get a number of lost samples
+sched/fair: Introduce SIS_UTIL to search idle CPU based on sum of util_avg
 
-Sometimes we want to know an accurate number of samples even if it's
-lost.  Currenlty PERF_RECORD_LOST is generated for a ring-buffer which
-might be shared with other events.  So it's hard to know per-event
-lost count.
+[Problem Statement]
+select_idle_cpu() might spend too much time searching for an idle CPU,
+when the system is overloaded.
 
-Add event->lost_samples field and PERF_FORMAT_LOST to retrieve it from
-userspace.
+The following histogram is the time spent in select_idle_cpu(),
+when running 224 instances of netperf on a system with 112 CPUs
+per LLC domain:
 
-Original-patch-by: Jiri Olsa <jolsa@redhat.com>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+@usecs:
+[0]                  533 |                                                    |
+[1]                 5495 |                                                    |
+[2, 4)             12008 |                                                    |
+[4, 8)            239252 |                                                    |
+[8, 16)          4041924 |@@@@@@@@@@@@@@                                      |
+[16, 32)        12357398 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@         |
+[32, 64)        14820255 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+[64, 128)       13047682 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       |
+[128, 256)       8235013 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@                        |
+[256, 512)       4507667 |@@@@@@@@@@@@@@@                                     |
+[512, 1K)        2600472 |@@@@@@@@@                                           |
+[1K, 2K)          927912 |@@@                                                 |
+[2K, 4K)          218720 |                                                    |
+[4K, 8K)           98161 |                                                    |
+[8K, 16K)          37722 |                                                    |
+[16K, 32K)          6715 |                                                    |
+[32K, 64K)           477 |                                                    |
+[64K, 128K)            7 |                                                    |
+
+netperf latency usecs:
+=======
+case            	load    	    Lat_99th	    std%
+TCP_RR          	thread-224	      257.39	(  0.21)
+
+The time spent in select_idle_cpu() is visible to netperf and might have a negative
+impact.
+
+[Symptom analysis]
+The patch [1] from Mel Gorman has been applied to track the efficiency
+of select_idle_sibling. Copy the indicators here:
+
+SIS Search Efficiency(se_eff%):
+        A ratio expressed as a percentage of runqueues scanned versus
+        idle CPUs found. A 100% efficiency indicates that the target,
+        prev or recent CPU of a task was idle at wakeup. The lower the
+        efficiency, the more runqueues were scanned before an idle CPU
+        was found.
+
+SIS Domain Search Efficiency(dom_eff%):
+        Similar, except only for the slower SIS
+	patch.
+
+SIS Fast Success Rate(fast_rate%):
+        Percentage of SIS that used target, prev or
+	recent CPUs.
+
+SIS Success rate(success_rate%):
+        Percentage of scans that found an idle CPU.
+
+The test is based on Aubrey's schedtests tool, including netperf, hackbench,
+schbench and tbench.
+
+Test on vanilla kernel:
+schedstat_parse.py -f netperf_vanilla.log
+case	        load	    se_eff%	    dom_eff%	  fast_rate%	success_rate%
+TCP_RR	   28 threads	     99.978	      18.535	      99.995	     100.000
+TCP_RR	   56 threads	     99.397	       5.671	      99.964	     100.000
+TCP_RR	   84 threads	     21.721	       6.818	      73.632	     100.000
+TCP_RR	  112 threads	     12.500	       5.533	      59.000	     100.000
+TCP_RR	  140 threads	      8.524	       4.535	      49.020	     100.000
+TCP_RR	  168 threads	      6.438	       3.945	      40.309	      99.999
+TCP_RR	  196 threads	      5.397	       3.718	      32.320	      99.982
+TCP_RR	  224 threads	      4.874	       3.661	      25.775	      99.767
+UDP_RR	   28 threads	     99.988	      17.704	      99.997	     100.000
+UDP_RR	   56 threads	     99.528	       5.977	      99.970	     100.000
+UDP_RR	   84 threads	     24.219	       6.992	      76.479	     100.000
+UDP_RR	  112 threads	     13.907	       5.706	      62.538	     100.000
+UDP_RR	  140 threads	      9.408	       4.699	      52.519	     100.000
+UDP_RR	  168 threads	      7.095	       4.077	      44.352	     100.000
+UDP_RR	  196 threads	      5.757	       3.775	      35.764	      99.991
+UDP_RR	  224 threads	      5.124	       3.704	      28.748	      99.860
+
+schedstat_parse.py -f schbench_vanilla.log
+(each group has 28 tasks)
+case	        load	    se_eff%	    dom_eff%	  fast_rate%	success_rate%
+normal	   1   mthread	     99.152	       6.400	      99.941	     100.000
+normal	   2   mthreads	     97.844	       4.003	      99.908	     100.000
+normal	   3   mthreads	     96.395	       2.118	      99.917	      99.998
+normal	   4   mthreads	     55.288	       1.451	      98.615	      99.804
+normal	   5   mthreads	      7.004	       1.870	      45.597	      61.036
+normal	   6   mthreads	      3.354	       1.346	      20.777	      34.230
+normal	   7   mthreads	      2.183	       1.028	      11.257	      21.055
+normal	   8   mthreads	      1.653	       0.825	       7.849	      15.549
+
+schedstat_parse.py -f hackbench_vanilla.log
+(each group has 28 tasks)
+case			load	        se_eff%	    dom_eff%	  fast_rate%	success_rate%
+process-pipe	     1 group	         99.991	       7.692	      99.999	     100.000
+process-pipe	    2 groups	         99.934	       4.615	      99.997	     100.000
+process-pipe	    3 groups	         99.597	       3.198	      99.987	     100.000
+process-pipe	    4 groups	         98.378	       2.464	      99.958	     100.000
+process-pipe	    5 groups	         27.474	       3.653	      89.811	      99.800
+process-pipe	    6 groups	         20.201	       4.098	      82.763	      99.570
+process-pipe	    7 groups	         16.423	       4.156	      77.398	      99.316
+process-pipe	    8 groups	         13.165	       3.920	      72.232	      98.828
+process-sockets	     1 group	         99.977	       5.882	      99.999	     100.000
+process-sockets	    2 groups	         99.927	       5.505	      99.996	     100.000
+process-sockets	    3 groups	         99.397	       3.250	      99.980	     100.000
+process-sockets	    4 groups	         79.680	       4.258	      98.864	      99.998
+process-sockets	    5 groups	          7.673	       2.503	      63.659	      92.115
+process-sockets	    6 groups	          4.642	       1.584	      58.946	      88.048
+process-sockets	    7 groups	          3.493	       1.379	      49.816	      81.164
+process-sockets	    8 groups	          3.015	       1.407	      40.845	      75.500
+threads-pipe	     1 group	         99.997	       0.000	     100.000	     100.000
+threads-pipe	    2 groups	         99.894	       2.932	      99.997	     100.000
+threads-pipe	    3 groups	         99.611	       4.117	      99.983	     100.000
+threads-pipe	    4 groups	         97.703	       2.624	      99.937	     100.000
+threads-pipe	    5 groups	         22.919	       3.623	      87.150	      99.764
+threads-pipe	    6 groups	         18.016	       4.038	      80.491	      99.557
+threads-pipe	    7 groups	         14.663	       3.991	      75.239	      99.247
+threads-pipe	    8 groups	         12.242	       3.808	      70.651	      98.644
+threads-sockets	     1 group	         99.990	       6.667	      99.999	     100.000
+threads-sockets	    2 groups	         99.940	       5.114	      99.997	     100.000
+threads-sockets	    3 groups	         99.469	       4.115	      99.977	     100.000
+threads-sockets	    4 groups	         87.528	       4.038	      99.400	     100.000
+threads-sockets	    5 groups	          6.942	       2.398	      59.244	      88.337
+threads-sockets	    6 groups	          4.359	       1.954	      49.448	      87.860
+threads-sockets	    7 groups	          2.845	       1.345	      41.198	      77.102
+threads-sockets	    8 groups	          2.871	       1.404	      38.512	      74.312
+
+schedstat_parse.py -f tbench_vanilla.log
+case			load	      se_eff%	    dom_eff%	  fast_rate%	success_rate%
+loopback	  28 threads	       99.976	      18.369	      99.995	     100.000
+loopback	  56 threads	       99.222	       7.799	      99.934	     100.000
+loopback	  84 threads	       19.723	       6.819	      70.215	     100.000
+loopback	 112 threads	       11.283	       5.371	      55.371	      99.999
+loopback	 140 threads	        0.000	       0.000	       0.000	       0.000
+loopback	 168 threads	        0.000	       0.000	       0.000	       0.000
+loopback	 196 threads	        0.000	       0.000	       0.000	       0.000
+loopback	 224 threads	        0.000	       0.000	       0.000	       0.000
+
+According to the test above, if the system becomes busy, the
+SIS Search Efficiency(se_eff%) drops significantly. Although some
+benchmarks would finally find an idle CPU(success_rate% = 100%), it is
+doubtful whether it is worth it to search the whole LLC domain.
+
+[Proposal]
+It would be ideal to have a crystal ball to answer this question:
+How many CPUs must a wakeup path walk down, before it can find an idle
+CPU? Many potential metrics could be used to predict the number.
+One candidate is the sum of util_avg in this LLC domain. The benefit
+of choosing util_avg is that it is a metric of accumulated historic
+activity, which seems to be smoother than instantaneous metrics
+(such as rq->nr_running). Besides, choosing the sum of util_avg
+would help predict the load of the LLC domain more precisely, because
+SIS_PROP uses one CPU's idle time to estimate the total LLC domain idle
+time.
+
+In summary, the lower the util_avg is, the more select_idle_cpu()
+should scan for idle CPU, and vice versa. When the sum of util_avg
+in this LLC domain hits 85% or above, the scan stops. The reason to
+choose 85% as the threshold is that this is the imbalance_pct(117)
+when a LLC sched group is overloaded.
+
+Introduce the quadratic function:
+
+y = SCHED_CAPACITY_SCALE - p * x^2
+and y'= y / SCHED_CAPACITY_SCALE
+
+x is the ratio of sum_util compared to the CPU capacity:
+x = sum_util / (llc_weight * SCHED_CAPACITY_SCALE)
+y' is the ratio of CPUs to be scanned in the LLC domain,
+and the number of CPUs to scan is calculated by:
+
+nr_scan = llc_weight * y'
+
+Choosing quadratic function is because:
+[1] Compared to the linear function, it scans more aggressively when the
+    sum_util is low.
+[2] Compared to the exponential function, it is easier to calculate.
+[3] It seems that there is no accurate mapping between the sum of util_avg
+    and the number of CPUs to be scanned. Use heuristic scan for now.
+
+For a platform with 112 CPUs per LLC, the number of CPUs to scan is:
+sum_util%   0    5   15   25  35  45  55   65   75   85   86 ...
+scan_nr   112  111  108  102  93  81  65   47   25    1    0 ...
+
+For a platform with 16 CPUs per LLC, the number of CPUs to scan is:
+sum_util%   0    5   15   25  35  45  55   65   75   85   86 ...
+scan_nr    16   15   15   14  13  11   9    6    3    0    0 ...
+
+Furthermore, to minimize the overhead of calculating the metrics in
+select_idle_cpu(), borrow the statistics from periodic load balance.
+As mentioned by Abel, on a platform with 112 CPUs per LLC, the
+sum_util calculated by periodic load balance after 112 ms would
+decay to about 0.5 * 0.5 * 0.5 * 0.7 = 8.75%, thus bringing a delay
+in reflecting the latest utilization. But it is a trade-off.
+Checking the util_avg in newidle load balance would be more frequent,
+but it brings overhead - multiple CPUs write/read the per-LLC shared
+variable and introduces cache contention. Tim also mentioned that,
+it is allowed to be non-optimal in terms of scheduling for the
+short-term variations, but if there is a long-term trend in the load
+behavior, the scheduler can adjust for that.
+
+When SIS_UTIL is enabled, the select_idle_cpu() uses the nr_scan
+calculated by SIS_UTIL instead of the one from SIS_PROP. As Peter and
+Mel suggested, SIS_UTIL should be enabled by default.
+
+This patch is based on the util_avg, which is very sensitive to the
+CPU frequency invariance. There is an issue that, when the max frequency
+has been clamp, the util_avg would decay insanely fast when
+the CPU is idle. Commit addca285120b ("cpufreq: intel_pstate: Handle no_turbo
+in frequency invariance") could be used to mitigate this symptom, by adjusting
+the arch_max_freq_ratio when turbo is disabled. But this issue is still
+not thoroughly fixed, because the current code is unaware of the user-specified
+max CPU frequency.
+
+[Test result]
+
+netperf and tbench were launched with 25% 50% 75% 100% 125% 150%
+175% 200% of CPU number respectively. Hackbench and schbench were launched
+by 1, 2 ,4, 8 groups. Each test lasts for 100 seconds and repeats 3 times.
+
+The following is the benchmark result comparison between
+baseline:vanilla v5.19-rc1 and compare:patched kernel. Positive compare%
+indicates better performance.
+
+Each netperf test is a:
+netperf -4 -H 127.0.1 -t TCP/UDP_RR -c -C -l 100
+netperf.throughput
+=======
+case            	load    	baseline(std%)	compare%( std%)
+TCP_RR          	28 threads	 1.00 (  0.34)	 -0.16 (  0.40)
+TCP_RR          	56 threads	 1.00 (  0.19)	 -0.02 (  0.20)
+TCP_RR          	84 threads	 1.00 (  0.39)	 -0.47 (  0.40)
+TCP_RR          	112 threads	 1.00 (  0.21)	 -0.66 (  0.22)
+TCP_RR          	140 threads	 1.00 (  0.19)	 -0.69 (  0.19)
+TCP_RR          	168 threads	 1.00 (  0.18)	 -0.48 (  0.18)
+TCP_RR          	196 threads	 1.00 (  0.16)	+194.70 ( 16.43)
+TCP_RR          	224 threads	 1.00 (  0.16)	+197.30 (  7.85)
+UDP_RR          	28 threads	 1.00 (  0.37)	 +0.35 (  0.33)
+UDP_RR          	56 threads	 1.00 ( 11.18)	 -0.32 (  0.21)
+UDP_RR          	84 threads	 1.00 (  1.46)	 -0.98 (  0.32)
+UDP_RR          	112 threads	 1.00 ( 28.85)	 -2.48 ( 19.61)
+UDP_RR          	140 threads	 1.00 (  0.70)	 -0.71 ( 14.04)
+UDP_RR          	168 threads	 1.00 ( 14.33)	 -0.26 ( 11.16)
+UDP_RR          	196 threads	 1.00 ( 12.92)	+186.92 ( 20.93)
+UDP_RR          	224 threads	 1.00 ( 11.74)	+196.79 ( 18.62)
+
+Take the 224 threads as an example, the SIS search metrics changes are
+illustrated below:
+
+    vanilla                    patched
+   4544492          +237.5%   15338634        sched_debug.cpu.sis_domain_search.avg
+     38539        +39686.8%   15333634        sched_debug.cpu.sis_failed.avg
+  128300000          -87.9%   15551326        sched_debug.cpu.sis_scanned.avg
+   5842896          +162.7%   15347978        sched_debug.cpu.sis_search.avg
+
+There is -87.9% less CPU scans after patched, which indicates lower overhead.
+Besides, with this patch applied, there is -13% less rq lock contention
+in perf-profile.calltrace.cycles-pp._raw_spin_lock.raw_spin_rq_lock_nested
+.try_to_wake_up.default_wake_function.woken_wake_function.
+This might help explain the performance improvement - Because this patch allows
+the waking task to remain on the previous CPU, rather than grabbing other CPUs'
+lock.
+
+Each hackbench test is a:
+hackbench -g $job --process/threads --pipe/sockets -l 1000000 -s 100
+hackbench.throughput
+=========
+case            	load    	baseline(std%)	compare%( std%)
+process-pipe    	1 group 	 1.00 (  1.29)	 +0.57 (  0.47)
+process-pipe    	2 groups 	 1.00 (  0.27)	 +0.77 (  0.81)
+process-pipe    	4 groups 	 1.00 (  0.26)	 +1.17 (  0.02)
+process-pipe    	8 groups 	 1.00 (  0.15)	 -4.79 (  0.02)
+process-sockets 	1 group 	 1.00 (  0.63)	 -0.92 (  0.13)
+process-sockets 	2 groups 	 1.00 (  0.03)	 -0.83 (  0.14)
+process-sockets 	4 groups 	 1.00 (  0.40)	 +5.20 (  0.26)
+process-sockets 	8 groups 	 1.00 (  0.04)	 +3.52 (  0.03)
+threads-pipe    	1 group 	 1.00 (  1.28)	 +0.07 (  0.14)
+threads-pipe    	2 groups 	 1.00 (  0.22)	 -0.49 (  0.74)
+threads-pipe    	4 groups 	 1.00 (  0.05)	 +1.88 (  0.13)
+threads-pipe    	8 groups 	 1.00 (  0.09)	 -4.90 (  0.06)
+threads-sockets 	1 group 	 1.00 (  0.25)	 -0.70 (  0.53)
+threads-sockets 	2 groups 	 1.00 (  0.10)	 -0.63 (  0.26)
+threads-sockets 	4 groups 	 1.00 (  0.19)	+11.92 (  0.24)
+threads-sockets 	8 groups 	 1.00 (  0.08)	 +4.31 (  0.11)
+
+Each tbench test is a:
+tbench -t 100 $job 127.0.0.1
+tbench.throughput
+======
+case            	load    	baseline(std%)	compare%( std%)
+loopback        	28 threads	 1.00 (  0.06)	 -0.14 (  0.09)
+loopback        	56 threads	 1.00 (  0.03)	 -0.04 (  0.17)
+loopback        	84 threads	 1.00 (  0.05)	 +0.36 (  0.13)
+loopback        	112 threads	 1.00 (  0.03)	 +0.51 (  0.03)
+loopback        	140 threads	 1.00 (  0.02)	 -1.67 (  0.19)
+loopback        	168 threads	 1.00 (  0.38)	 +1.27 (  0.27)
+loopback        	196 threads	 1.00 (  0.11)	 +1.34 (  0.17)
+loopback        	224 threads	 1.00 (  0.11)	 +1.67 (  0.22)
+
+Each schbench test is a:
+schbench -m $job -t 28 -r 100 -s 30000 -c 30000
+schbench.latency_90%_us
+========
+case            	load    	baseline(std%)	compare%( std%)
+normal          	1 mthread	 1.00 ( 31.22)	 -7.36 ( 20.25)*
+normal          	2 mthreads	 1.00 (  2.45)	 -0.48 (  1.79)
+normal          	4 mthreads	 1.00 (  1.69)	 +0.45 (  0.64)
+normal          	8 mthreads	 1.00 (  5.47)	 +9.81 ( 14.28)
+
+*Consider the Standard Deviation, this -7.36% regression might not be valid.
+
+Also, a OLTP workload with a commercial RDBMS has been tested, and there
+is no significant change.
+
+There were concerns that unbalanced tasks among CPUs would cause problems.
+For example, suppose the LLC domain is composed of 8 CPUs, and 7 tasks are
+bound to CPU0~CPU6, while CPU7 is idle:
+
+          CPU0    CPU1    CPU2    CPU3    CPU4    CPU5    CPU6    CPU7
+util_avg  1024    1024    1024    1024    1024    1024    1024    0
+
+Since the util_avg ratio is 87.5%( = 7/8 ), which is higher than 85%,
+select_idle_cpu() will not scan, thus CPU7 is undetected during scan.
+But according to Mel, it is unlikely the CPU7 will be idle all the time
+because CPU7 could pull some tasks via CPU_NEWLY_IDLE.
+
+lkp(kernel test robot) has reported a regression on stress-ng.sock on a
+very busy system. According to the sched_debug statistics, it might be caused
+by SIS_UTIL terminates the scan and chooses a previous CPU earlier, and this
+might introduce more context switch, especially involuntary preemption, which
+impacts a busy stress-ng. This regression has shown that, not all benchmarks
+in every scenario benefit from idle CPU scan limit, and it needs further
+investigation.
+
+Besides, there is slight regression in hackbench's 16 groups case when the
+LLC domain has 16 CPUs. Prateek mentioned that we should scan aggressively
+in an LLC domain with 16 CPUs. Because the cost to search for an idle one
+among 16 CPUs is negligible. The current patch aims to propose a generic
+solution and only considers the util_avg. Something like the below could
+be applied on top of the current patch to fulfill the requirement:
+
+	if (llc_weight <= 16)
+		nr_scan = nr_scan * 32 / llc_weight;
+
+For LLC domain with 16 CPUs, the nr_scan will be expanded to 2 times large.
+The smaller the CPU number this LLC domain has, the larger nr_scan will be
+expanded. This needs further investigation.
+
+There is also ongoing work[2] from Abel to filter out the busy CPUs during
+wakeup, to further speed up the idle CPU scan. And it could be a following-up
+optimization on top of this change.
+
+Suggested-by: Tim Chen <tim.c.chen@intel.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220616180623.1358843-1-namhyung@kernel.org
+Tested-by: Yicong Yang <yangyicong@hisilicon.com>
+Tested-by: Mohini Narkhede <mohini.narkhede@intel.com>
+Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
+Link: https://lore.kernel.org/r/20220612163428.849378-1-yu.c.chen@intel.com
 ---
- include/linux/perf_event.h      |  2 ++
- include/uapi/linux/perf_event.h |  5 ++++-
- kernel/events/core.c            | 21 ++++++++++++++++++---
- kernel/events/ring_buffer.c     |  5 ++++-
- 4 files changed, 28 insertions(+), 5 deletions(-)
+ include/linux/sched/topology.h |  1 +-
+ kernel/sched/fair.c            | 87 +++++++++++++++++++++++++++++++++-
+ kernel/sched/features.h        |  3 +-
+ 3 files changed, 90 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index da75956..ee8b9ec 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -759,6 +759,8 @@ struct perf_event {
- 	struct pid_namespace		*ns;
- 	u64				id;
- 
-+	atomic64_t			lost_samples;
-+
- 	u64				(*clock)(void);
- 	perf_overflow_handler_t		overflow_handler;
- 	void				*overflow_handler_context;
-diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-index d37629d..0474ee3 100644
---- a/include/uapi/linux/perf_event.h
-+++ b/include/uapi/linux/perf_event.h
-@@ -301,6 +301,7 @@ enum {
-  *	  { u64		time_enabled; } && PERF_FORMAT_TOTAL_TIME_ENABLED
-  *	  { u64		time_running; } && PERF_FORMAT_TOTAL_TIME_RUNNING
-  *	  { u64		id;           } && PERF_FORMAT_ID
-+ *	  { u64		lost;         } && PERF_FORMAT_LOST
-  *	} && !PERF_FORMAT_GROUP
-  *
-  *	{ u64		nr;
-@@ -308,6 +309,7 @@ enum {
-  *	  { u64		time_running; } && PERF_FORMAT_TOTAL_TIME_RUNNING
-  *	  { u64		value;
-  *	    { u64	id;           } && PERF_FORMAT_ID
-+ *	    { u64	lost;         } && PERF_FORMAT_LOST
-  *	  }		cntr[nr];
-  *	} && PERF_FORMAT_GROUP
-  * };
-@@ -317,8 +319,9 @@ enum perf_event_read_format {
- 	PERF_FORMAT_TOTAL_TIME_RUNNING		= 1U << 1,
- 	PERF_FORMAT_ID				= 1U << 2,
- 	PERF_FORMAT_GROUP			= 1U << 3,
-+	PERF_FORMAT_LOST			= 1U << 4,
- 
--	PERF_FORMAT_MAX = 1U << 4,		/* non-ABI */
-+	PERF_FORMAT_MAX = 1U << 5,		/* non-ABI */
+diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
+index 56cffe4..816df6c 100644
+--- a/include/linux/sched/topology.h
++++ b/include/linux/sched/topology.h
+@@ -81,6 +81,7 @@ struct sched_domain_shared {
+ 	atomic_t	ref;
+ 	atomic_t	nr_busy_cpus;
+ 	int		has_idle_cores;
++	int		nr_idle_scan;
  };
  
- #define PERF_ATTR_SIZE_VER0	64	/* sizeof first published struct */
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 80782cd..4d8c335 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -1819,6 +1819,9 @@ static void __perf_event_read_size(struct perf_event *event, int nr_siblings)
- 	if (event->attr.read_format & PERF_FORMAT_ID)
- 		entry += sizeof(u64);
- 
-+	if (event->attr.read_format & PERF_FORMAT_LOST)
-+		entry += sizeof(u64);
-+
- 	if (event->attr.read_format & PERF_FORMAT_GROUP) {
- 		nr += nr_siblings;
- 		size += sizeof(u64);
-@@ -5260,11 +5263,15 @@ static int __perf_read_group_add(struct perf_event *leader,
- 	values[n++] += perf_event_count(leader);
- 	if (read_format & PERF_FORMAT_ID)
- 		values[n++] = primary_event_id(leader);
-+	if (read_format & PERF_FORMAT_LOST)
-+		values[n++] = atomic64_read(&leader->lost_samples);
- 
- 	for_each_sibling_event(sub, leader) {
- 		values[n++] += perf_event_count(sub);
- 		if (read_format & PERF_FORMAT_ID)
- 			values[n++] = primary_event_id(sub);
-+		if (read_format & PERF_FORMAT_LOST)
-+			values[n++] = atomic64_read(&sub->lost_samples);
+ struct sched_domain {
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 7400600..f80ae86 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6332,6 +6332,7 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool 
+ {
+ 	struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
+ 	int i, cpu, idle_cpu = -1, nr = INT_MAX;
++	struct sched_domain_shared *sd_share;
+ 	struct rq *this_rq = this_rq();
+ 	int this = smp_processor_id();
+ 	struct sched_domain *this_sd;
+@@ -6371,6 +6372,17 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool 
+ 		time = cpu_clock(this);
  	}
  
- 	raw_spin_unlock_irqrestore(&ctx->lock, flags);
-@@ -5321,7 +5328,7 @@ static int perf_read_one(struct perf_event *event,
- 				 u64 read_format, char __user *buf)
- {
- 	u64 enabled, running;
--	u64 values[4];
-+	u64 values[5];
- 	int n = 0;
- 
- 	values[n++] = __perf_event_read_value(event, &enabled, &running);
-@@ -5331,6 +5338,8 @@ static int perf_read_one(struct perf_event *event,
- 		values[n++] = running;
- 	if (read_format & PERF_FORMAT_ID)
- 		values[n++] = primary_event_id(event);
-+	if (read_format & PERF_FORMAT_LOST)
-+		values[n++] = atomic64_read(&event->lost_samples);
- 
- 	if (copy_to_user(buf, values, n * sizeof(u64)))
- 		return -EFAULT;
-@@ -6858,7 +6867,7 @@ static void perf_output_read_one(struct perf_output_handle *handle,
- 				 u64 enabled, u64 running)
- {
- 	u64 read_format = event->attr.read_format;
--	u64 values[4];
-+	u64 values[5];
- 	int n = 0;
- 
- 	values[n++] = perf_event_count(event);
-@@ -6872,6 +6881,8 @@ static void perf_output_read_one(struct perf_output_handle *handle,
- 	}
- 	if (read_format & PERF_FORMAT_ID)
- 		values[n++] = primary_event_id(event);
-+	if (read_format & PERF_FORMAT_LOST)
-+		values[n++] = atomic64_read(&event->lost_samples);
- 
- 	__output_copy(handle, values, n * sizeof(u64));
- }
-@@ -6882,7 +6893,7 @@ static void perf_output_read_group(struct perf_output_handle *handle,
- {
- 	struct perf_event *leader = event->group_leader, *sub;
- 	u64 read_format = event->attr.read_format;
--	u64 values[5];
-+	u64 values[6];
- 	int n = 0;
- 
- 	values[n++] = 1 + leader->nr_siblings;
-@@ -6900,6 +6911,8 @@ static void perf_output_read_group(struct perf_output_handle *handle,
- 	values[n++] = perf_event_count(leader);
- 	if (read_format & PERF_FORMAT_ID)
- 		values[n++] = primary_event_id(leader);
-+	if (read_format & PERF_FORMAT_LOST)
-+		values[n++] = atomic64_read(&leader->lost_samples);
- 
- 	__output_copy(handle, values, n * sizeof(u64));
- 
-@@ -6913,6 +6926,8 @@ static void perf_output_read_group(struct perf_output_handle *handle,
- 		values[n++] = perf_event_count(sub);
- 		if (read_format & PERF_FORMAT_ID)
- 			values[n++] = primary_event_id(sub);
-+		if (read_format & PERF_FORMAT_LOST)
-+			values[n++] = atomic64_read(&sub->lost_samples);
- 
- 		__output_copy(handle, values, n * sizeof(u64));
- 	}
-diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
-index fb35b92..7261320 100644
---- a/kernel/events/ring_buffer.c
-+++ b/kernel/events/ring_buffer.c
-@@ -172,8 +172,10 @@ __perf_output_begin(struct perf_output_handle *handle,
- 		goto out;
- 
- 	if (unlikely(rb->paused)) {
--		if (rb->nr_pages)
-+		if (rb->nr_pages) {
- 			local_inc(&rb->lost);
-+			atomic64_inc(&event->lost_samples);
++	if (sched_feat(SIS_UTIL)) {
++		sd_share = rcu_dereference(per_cpu(sd_llc_shared, target));
++		if (sd_share) {
++			/* because !--nr is the condition to stop scan */
++			nr = READ_ONCE(sd_share->nr_idle_scan) + 1;
++			/* overloaded LLC is unlikely to have idle cpu/core */
++			if (nr == 1)
++				return -1;
 +		}
- 		goto out;
++	}
++
+ 	for_each_cpu_wrap(cpu, cpus, target + 1) {
+ 		if (has_idle_core) {
+ 			i = select_idle_core(p, cpu, cpus, &idle_cpu);
+@@ -9224,6 +9236,77 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+ 	return idlest;
+ }
+ 
++static void update_idle_cpu_scan(struct lb_env *env,
++				 unsigned long sum_util)
++{
++	struct sched_domain_shared *sd_share;
++	int llc_weight, pct;
++	u64 x, y, tmp;
++	/*
++	 * Update the number of CPUs to scan in LLC domain, which could
++	 * be used as a hint in select_idle_cpu(). The update of sd_share
++	 * could be expensive because it is within a shared cache line.
++	 * So the write of this hint only occurs during periodic load
++	 * balancing, rather than CPU_NEWLY_IDLE, because the latter
++	 * can fire way more frequently than the former.
++	 */
++	if (!sched_feat(SIS_UTIL) || env->idle == CPU_NEWLY_IDLE)
++		return;
++
++	llc_weight = per_cpu(sd_llc_size, env->dst_cpu);
++	if (env->sd->span_weight != llc_weight)
++		return;
++
++	sd_share = rcu_dereference(per_cpu(sd_llc_shared, env->dst_cpu));
++	if (!sd_share)
++		return;
++
++	/*
++	 * The number of CPUs to search drops as sum_util increases, when
++	 * sum_util hits 85% or above, the scan stops.
++	 * The reason to choose 85% as the threshold is because this is the
++	 * imbalance_pct(117) when a LLC sched group is overloaded.
++	 *
++	 * let y = SCHED_CAPACITY_SCALE - p * x^2                       [1]
++	 * and y'= y / SCHED_CAPACITY_SCALE
++	 *
++	 * x is the ratio of sum_util compared to the CPU capacity:
++	 * x = sum_util / (llc_weight * SCHED_CAPACITY_SCALE)
++	 * y' is the ratio of CPUs to be scanned in the LLC domain,
++	 * and the number of CPUs to scan is calculated by:
++	 *
++	 * nr_scan = llc_weight * y'                                    [2]
++	 *
++	 * When x hits the threshold of overloaded, AKA, when
++	 * x = 100 / pct, y drops to 0. According to [1],
++	 * p should be SCHED_CAPACITY_SCALE * pct^2 / 10000
++	 *
++	 * Scale x by SCHED_CAPACITY_SCALE:
++	 * x' = sum_util / llc_weight;                                  [3]
++	 *
++	 * and finally [1] becomes:
++	 * y = SCHED_CAPACITY_SCALE -
++	 *     x'^2 * pct^2 / (10000 * SCHED_CAPACITY_SCALE)            [4]
++	 *
++	 */
++	/* equation [3] */
++	x = sum_util;
++	do_div(x, llc_weight);
++
++	/* equation [4] */
++	pct = env->sd->imbalance_pct;
++	tmp = x * x * pct * pct;
++	do_div(tmp, 10000 * SCHED_CAPACITY_SCALE);
++	tmp = min_t(long, tmp, SCHED_CAPACITY_SCALE);
++	y = SCHED_CAPACITY_SCALE - tmp;
++
++	/* equation [2] */
++	y *= llc_weight;
++	do_div(y, SCHED_CAPACITY_SCALE);
++	if ((int)y != sd_share->nr_idle_scan)
++		WRITE_ONCE(sd_share->nr_idle_scan, (int)y);
++}
++
+ /**
+  * update_sd_lb_stats - Update sched_domain's statistics for load balancing.
+  * @env: The load balancing environment.
+@@ -9236,6 +9319,7 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
+ 	struct sched_group *sg = env->sd->groups;
+ 	struct sg_lb_stats *local = &sds->local_stat;
+ 	struct sg_lb_stats tmp_sgs;
++	unsigned long sum_util = 0;
+ 	int sg_status = 0;
+ 
+ 	do {
+@@ -9268,6 +9352,7 @@ next_group:
+ 		sds->total_load += sgs->group_load;
+ 		sds->total_capacity += sgs->group_capacity;
+ 
++		sum_util += sgs->group_util;
+ 		sg = sg->next;
+ 	} while (sg != env->sd->groups);
+ 
+@@ -9293,6 +9378,8 @@ next_group:
+ 		WRITE_ONCE(rd->overutilized, SG_OVERUTILIZED);
+ 		trace_sched_overutilized_tp(rd, SG_OVERUTILIZED);
  	}
++
++	update_idle_cpu_scan(env, sum_util);
+ }
  
-@@ -254,6 +256,7 @@ __perf_output_begin(struct perf_output_handle *handle,
+ /**
+diff --git a/kernel/sched/features.h b/kernel/sched/features.h
+index 1cf435b..ee7f23c 100644
+--- a/kernel/sched/features.h
++++ b/kernel/sched/features.h
+@@ -60,7 +60,8 @@ SCHED_FEAT(TTWU_QUEUE, true)
+ /*
+  * When doing wakeups, attempt to limit superfluous scans of the LLC domain.
+  */
+-SCHED_FEAT(SIS_PROP, true)
++SCHED_FEAT(SIS_PROP, false)
++SCHED_FEAT(SIS_UTIL, true)
  
- fail:
- 	local_inc(&rb->lost);
-+	atomic64_inc(&event->lost_samples);
- 	perf_output_put_handle(handle);
- out:
- 	rcu_read_unlock();
+ /*
+  * Issue a WARN when we do multiple update_rq_clock() calls

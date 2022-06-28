@@ -2,215 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78EC455F1EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 01:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D56F55F1F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 01:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231203AbiF1Xfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 19:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
+        id S229556AbiF1Xkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 19:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiF1Xfb (ORCPT
+        with ESMTP id S229450AbiF1Xkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 19:35:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E3B39179;
-        Tue, 28 Jun 2022 16:35:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0C5B61B3B;
-        Tue, 28 Jun 2022 23:35:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13FC6C341C8;
-        Tue, 28 Jun 2022 23:35:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656459329;
-        bh=fQYRcfDKbOKjA8UDjIgsDeAHKb07ceqSzVYYAxiPq8Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=oJfFb0DQzLcD2h4iGB1Yb2sEbslHpsh8WP0p2TSIh+Xd7syFGtYiTvyeziwDN+EDd
-         D0jEO4547u6HIU/bUowhjzc9WaHwQ7o3g+ivhUwNfFCrPyHWDxGz9HFxPHUJSxOaUT
-         LfPjQodNX4T7+CVqnSRaCnU1/S/Clr6nsy2hIrVVMJnnk/MeEI0LHPVDF2TBi+B4HA
-         69TrLwuVFIy/uOHFRjqAu+SFRI7NOfU2aT7eak29N/X7B9JPymZk24xAbAoNl1Qybk
-         JDyAbRNtx+LCN6ejuaM2UcNTbHx08ZjNSmygB8/HrDpAMuIZIZvdxzRhcAKp4vzkIw
-         8pktYWP2d6P7A==
-Date:   Tue, 28 Jun 2022 18:35:27 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v5 00/18] PCI: dwc: Various fixes and cleanups
-Message-ID: <20220628233527.GA1883848@bhelgaas>
+        Tue, 28 Jun 2022 19:40:35 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0FD32EC0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 16:40:34 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id p7so23493222ybm.7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 16:40:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=ecd1Q2yPx0A7W7K7jCuZP1F8wCmAYdVKX1aCc8pJ7gM=;
+        b=QvNsVHWcwxDC0Ljn7LCNxtCUWV5DAzQ3PPXpGoHxkrgW+/voKwr44JOYQDkUJ3SbEm
+         kAF+V6jDHT6StaDm0Y3fTy3Qe2XnBk0fE8RIX6LHeYJPkGVHqtxu0Tago+3gCnmqpgnG
+         j4gphlk4w1fbsPd+xvESwhagVgTOJNjRUCSYskbwMZea+N+VtW0n1eexD8qCuZmW2uUk
+         v9JbWWYcGjVkYXtNrHLF2zPt2k/MGoDMH/JO3ZUEQR/5eUrdFyiHwAPNXXG4/Jo14YZw
+         qkI+ihHPqAGtT33pQTORhi0phBiJWQ8xitb3isY3OBcyYCeQDQsTkD926YHe2ZY5jwk0
+         0jyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=ecd1Q2yPx0A7W7K7jCuZP1F8wCmAYdVKX1aCc8pJ7gM=;
+        b=wFr63yXx5XFQMMkspx3BFYuZqNlCSr8F48/nEqNfOIgxtWRz4SBxT/TVJJAqQpkIMT
+         2ifkAetM+RNFz2EHaB2NMvYCN0Hxya+GJIrNmss58x7wgj/BttfLocFhZNwim6xiO5pK
+         LjNYQYolGLX6Mxt9GHdq1vAJJlOjS1LtnbRZo46To/uvVrkEQPA4pErIL1QPt2LtVK58
+         ePMJqm/yo4eox54LL/bhRd+jHSwXxpDKgd8JznApioR+ru4J+mrgXHNfMBt7Zwwqpnga
+         c0shOvMwXwhB0ARUPgNl6umpuwpepX+MSu3RLhIXpeQtjHCXmYq+/pcsTjLr4pvog3Oj
+         dXKg==
+X-Gm-Message-State: AJIora9xWZmRk47AFOjUxUKQPofMiLO8WPTkTnGZRvm5k9QbDzq2MxUb
+        cOQJZNLSbzbhL/vTboqL4lLsYfhqNrN28Wrl42c=
+X-Google-Smtp-Source: AGRyM1v8apNRY5qwfmEpxRjfh1Vv5DBYKpZs7VbnMm1KODl7Kg3sudOvj5Oxs0ws6KBdhaBJlgMjj/9IGy1wXk30Z7A=
+X-Received: by 2002:a25:6f86:0:b0:669:22f7:b94f with SMTP id
+ k128-20020a256f86000000b0066922f7b94fmr356806ybc.327.1656459633643; Tue, 28
+ Jun 2022 16:40:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220624143428.8334-1-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Sender: d7372548645@gmail.com
+Received: by 2002:a05:7010:1e11:b0:2e1:eb33:312c with HTTP; Tue, 28 Jun 2022
+ 16:40:33 -0700 (PDT)
+From:   "Mr. Jimmy Moore" <jimmymoore265@gmail.com>
+Date:   Wed, 29 Jun 2022 02:40:33 +0300
+X-Google-Sender-Auth: B1Rq75kaNfm281ew3BKOuYfuR6Y
+Message-ID: <CAGcADL_ANBLQJYw9RdrTNA7Qp6_Or4LmBOcmgzWskWzitGPNRw@mail.gmail.com>
+Subject: UNITED NATIONS COVID-19 COMPENSATION FUNDS.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,MILLION_USD,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 05:34:10PM +0300, Serge Semin wrote:
-> This patchset is a first one in the series created in the framework of
-> my Baikal-T1 PCIe/eDMA-related work:
-> 
-> [1: In-progress v5] PCI: dwc: Various fixes and cleanups
-> Link: ---you are looking at it---
-> [2: In-progress v3] PCI: dwc: Add hw version and dma-ranges support
-> Link: https://lore.kernel.org/linux-pci/20220610084444.14549-1-Sergey.Semin@baikalelectronics.ru/
-> [3: In-progress v3] PCI: dwc: Add generic resources and Baikal-T1 support
-> Link: https://lore.kernel.org/linux-pci/20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru/
-> [4: In-progress v3] dmaengine: dw-edma: Add RP/EP local DMA support
-> Link: https://lore.kernel.org/linux-pci/20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru/
-> 
-> Note it is very recommended to merge the patchsets in the same order as
-> they are placed in the list above in order to prevent possible merge
-> conflicts. Nothing prevents them from being reviewed synchronously though.
-> Any tests are very welcome!
-> 
-> As it can be easily inferred from the patchset title, this series is about
-> the DW PCIe Root Port/Endpoint driver fixes and the code cleanups, where
-> fixes come before the cleanup patches. The patchset starts with adding the
-> stop_link() platform-specific method invocation in case of the PCIe host
-> probe procedure errors. It has been missing in the cleanup-on-error path
-> of the DW PCIe Host initialization method. After that the unrolled CSRs
-> layout is added to the iATU disable procedure. In third the disable iATU
-> procedure is fixed to be called only for the internal ATU as being
-> specific for the internal ATU implementation. Then the outbound iATU
-> extended region setup procedure is fixed to have the INCREASE_REGION_SIZE
-> flag set based on the limit-address - not the region size one. The last
-> but not least the CDM-check enabling procedure is fixed to be independent
-> from the non-related num_lanes field state.
-> 
-> Afterwards there is a series of cleanups. It concerns the changes like
-> adding braces to the multi-line if-else constructions, trailing new-lines
-> to the print format-string, dropping unnecessary version checking, and
-> various code simplifications and optimizations.
-> 
-> New features like adding two-level DT bindings abstraction, adding better
-> structured IP-core version interface, adding iATU regions size detection
-> and the PCIe regions verification procedure, adding dma-ranges support,
-> introducing a set of generic platform clocks and resets and finally adding
-> Baikal-T1 PCIe interface support will be submitted in the next part of the
-> series.
-> 
-> Link: https://lore.kernel.org/linux-pci/20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v2:
-> - Fix the end address of the example in the patch log with
->   the INCREASE_REGION_SIZE flag usage fixup. It should be
->   0x1000FFFF and not 0x0000FFFF (@Manivannan).
-> - Add the cleanup-on-error path to the dw_pcie_ep_init() function.
->   (@Manivannan)
-> 
-> Link: https://lore.kernel.org/linux-pci/20220503212300.30105-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v3:
-> - Convert region variable type to u32 in order to fix the implicit type
->   conversion peculiarity. (@kbot)
-> - Rebase onto v5.18-rc6.
-> 
-> Link: https://lore.kernel.org/linux-pci/20220517125058.18488-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v4:
-> - Move the patch "PCI: dwc: Deallocate EPC memory on EP init error" to
->   being applied before the cleanup patches.
-> - Add a new fixes patch: "PCI: dwc: Enable CDM-check independently from
->   the num_lanes value".
-> - Add a new cleanup patch: "PCI: dwc: Organize local variables usage".
-> - Add a new cleanup patch: "PCI: dwc: Re-use local pointer to the
->   resource data".
-> - Add a new cleanup patch: "PCI: dwc: Add start_link/stop_link inliners".
-> - Add a new cleanup patch: "PCI: dwc: Move io_cfg_atu_shared to the Root
->   Port descriptor".
-> - Add a new cleanup patch: "PCI: dwc: Add dw_ prefix to the pcie_port
->   structure name".
-> - Drop the patch "PCI: dwc: Don't use generic IO-ops for DBI-space
->   access". (@Rob)
-> - Drop Manivannan tested tag from the changed patches.
-> - Rebase onto v5.18.
-> 
-> Link: https://lore.kernel.org/linux-pci/20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v5:
-> - Just resend the series.
-> - Rebase onto v5.19-rcX.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> Cc: Jingoo Han <jingoohan1@gmail.com>
-> Cc: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-> Cc: "Krzysztof Wilczyński" <kw@linux.com>
-> Cc: Frank Li <Frank.Li@nxp.com>
-> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Cc: linux-pci@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
+UNITED NATIONS COVID-19 OVERDUE COMPENSATION UNIT.
+REFERENCE PAYMENT CODE: 8525595
+BAILOUT AMOUNT:$3.5 MILLION USD
+ADDRESS: NEW YORK, NY 10017, UNITED STATES
 
-I applied these to pci/ctrl/dwc-fixes for now.  We'll have some tweaks
-(to merge with previous dwc changes, if nothing else), but I pushed
-this interim version since I'll be on vacation for a week or so.
+Dear award recipient, Covid-19 Compensation funds.
 
-Looks like some nice fixes and cleanups, thank you!
+You are receiving this correspondence because we have finally reached
+a consensus with the UN, IRS, and IMF that your total fund worth $3.5
+Million Dollars of Covid-19 Compensation payment shall be delivered to
+your nominated mode of receipt, and you are expected to pay the sum of
+$12,000 for levies owed to authorities after receiving your funds.
 
-> Serge Semin (18):
->   PCI: dwc: Stop link in the host init error and de-initialization
->   PCI: dwc: Add unroll iATU space support to the regions disable method
->   PCI: dwc: Disable outbound windows for controllers with iATU
->   PCI: dwc: Set INCREASE_REGION_SIZE flag based on limit address
->   PCI: dwc: Deallocate EPC memory on EP init error
->   PCI: dwc: Enable CDM-check independently from the num_lanes value
->   PCI: dwc: Add braces to the multi-line if-else statements
->   PCI: dwc: Add trailing new-line literals to the log messages
->   PCI: dwc: Discard IP-core version checking on unrolled iATU detection
->   PCI: dwc: Convert Link-up status method to using dw_pcie_readl_dbi()
->   PCI: dwc: Organize local variables usage
->   PCI: dwc: Re-use local pointer to the resource data
->   PCI: dwc: Add start_link/stop_link inliners
->   PCI: dwc: Move io_cfg_atu_shared to the Root Port descriptor
->   PCI: dwc: Add dw_ prefix to the pcie_port structure name
->   PCI: dwc-plat: Simplify the probe method return value handling
->   PCI: dwc-plat: Discard unused regmap pointer
->   PCI: dwc-plat: Drop dw_plat_pcie_of_match forward declaration
-> 
->  drivers/pci/controller/dwc/pci-dra7xx.c       |  12 +--
->  drivers/pci/controller/dwc/pci-exynos.c       |   6 +-
->  drivers/pci/controller/dwc/pci-imx6.c         |   6 +-
->  drivers/pci/controller/dwc/pci-keystone.c     |  20 ++--
->  .../pci/controller/dwc/pci-layerscape-ep.c    |  12 ---
->  drivers/pci/controller/dwc/pci-layerscape.c   |   2 +-
->  drivers/pci/controller/dwc/pci-meson.c        |   2 +-
->  drivers/pci/controller/dwc/pcie-al.c          |   6 +-
->  drivers/pci/controller/dwc/pcie-armada8k.c    |   4 +-
->  drivers/pci/controller/dwc/pcie-artpec6.c     |   4 +-
->  .../pci/controller/dwc/pcie-designware-ep.c   |  30 ++++--
->  .../pci/controller/dwc/pcie-designware-host.c | 102 ++++++++++--------
->  .../pci/controller/dwc/pcie-designware-plat.c |  25 ++---
->  drivers/pci/controller/dwc/pcie-designware.c  |  72 +++++++------
->  drivers/pci/controller/dwc/pcie-designware.h  |  46 +++++---
->  drivers/pci/controller/dwc/pcie-dw-rockchip.c |   4 +-
->  drivers/pci/controller/dwc/pcie-fu740.c       |   2 +-
->  drivers/pci/controller/dwc/pcie-histb.c       |  10 +-
->  drivers/pci/controller/dwc/pcie-intel-gw.c    |   6 +-
->  drivers/pci/controller/dwc/pcie-keembay.c     |   4 +-
->  drivers/pci/controller/dwc/pcie-kirin.c       |   2 +-
->  drivers/pci/controller/dwc/pcie-qcom.c        |   4 +-
->  drivers/pci/controller/dwc/pcie-spear13xx.c   |   6 +-
->  drivers/pci/controller/dwc/pcie-tegra194.c    |  22 ++--
->  drivers/pci/controller/dwc/pcie-uniphier.c    |  10 +-
->  drivers/pci/controller/dwc/pcie-visconti.c    |   6 +-
->  26 files changed, 224 insertions(+), 201 deletions(-)
-> 
-> -- 
-> 2.35.1
-> 
+You have a grace period of 2 weeks to pay the $12,000 levy after you
+have received your Covid-19 Compensation total sum of $3.5 Million. We
+shall proceed with the payment of your bailout grant only if you agree
+to the terms and conditions stated.
+
+Contact Dr. Mustafa Ali for more information by email at: (
+mustafaliali180@gmail.com ) Your consent in this regard would be
+highly appreciated.
+
+Regards,
+Mr. Jimmy Moore.
+Undersecretary-General United Nations
+Office of Internal Oversight-UNIOS.

@@ -2,67 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB1C55DF0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48FE355D661
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344115AbiF1JRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43850 "EHLO
+        id S1344121AbiF1JSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343642AbiF1JRe (ORCPT
+        with ESMTP id S243314AbiF1JSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:17:34 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B752186C2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:17:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656407853; x=1687943853;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wrax32PwvedZxjaRNxkBwT6yVi7BY94I002uISo0sL8=;
-  b=VpOKYmK40xOI1LclSSYYR+xkfHqz0P19p40VW3I6j4AHI2qy07orrLJX
-   MwpPqF7q7YIGwgZOnHEPMWLNu8Knyrq062NetjA67omOup0rJ6r7TW7l6
-   rvVrqu1o29N2UwkTTG/CbxEIfmT0wuG8hLMckMH1c3V6U0Vf/1snKFbBP
-   0=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Jun 2022 02:17:32 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 02:17:32 -0700
-Received: from [10.50.26.93] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 28 Jun
- 2022 02:17:27 -0700
-Message-ID: <dc24db89-05ae-c113-6728-de797e041123@quicinc.com>
-Date:   Tue, 28 Jun 2022 14:47:24 +0530
+        Tue, 28 Jun 2022 05:18:53 -0400
+Received: from shelob.oktetlabs.ru (shelob.oktetlabs.ru [91.220.146.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE661CFC2;
+        Tue, 28 Jun 2022 02:18:52 -0700 (PDT)
+Received: from bree.oktetlabs.ru (bree.oktetlabs.ru [192.168.34.5])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by shelob.oktetlabs.ru (Postfix) with ESMTPS id 0DBA6AA;
+        Tue, 28 Jun 2022 12:18:51 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 shelob.oktetlabs.ru 0DBA6AA
+Authentication-Results: shelob.oktetlabs.ru/0DBA6AA; dkim=none;
+        dkim-atps=neutral
+From:   Ivan Malov <ivan.malov@oktetlabs.ru>
+To:     Magnus Karlsson <magnus.karlsson@intel.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        netdev@vger.kernel.org
+Cc:     Andrew Rybchenko <andrew.rybchenko@oktetlabs.ru>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Maxim Mikityanskiy <maximmi@mellanox.com>
+Subject: [PATCH net v3 1/1] xsk: clear page contiguity bit when unmapping pool
+Date:   Tue, 28 Jun 2022 12:18:48 +0300
+Message-Id: <20220628091848.534803-1-ivan.malov@oktetlabs.ru>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220627190120.176470-1-ivan.malov@oktetlabs.ru>
+References: <20220627190120.176470-1-ivan.malov@oktetlabs.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] srcu: Reduce blocking agressiveness of expedited grace
- periods further
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-CC:     <paulmck@kernel.org>, <frederic@kernel.org>,
-        <josh@joshtriplett.org>, <rostedt@goodmis.org>,
-        <mathieu.desnoyers@efficios.com>, <jiangshanlai@gmail.com>,
-        <joel@joelfernandes.org>, <linux-kernel@vger.kernel.org>,
-        <zhangfei.gao@foxmail.com>, <boqun.feng@gmail.com>,
-        <urezki@gmail.com>, <shameerali.kolothum.thodi@huawei.com>,
-        <pbonzini@redhat.com>, <mtosatti@redhat.com>,
-        <eric.auger@redhat.com>, <chenxiang66@hisilicon.com>
-References: <20220627123706.20187-1-quic_neeraju@quicinc.com>
- <875ykl2mb2.wl-maz@kernel.org>
-From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
-In-Reply-To: <875ykl2mb2.wl-maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_ADSP_DISCARD,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,82 +59,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When a XSK pool gets mapped, xp_check_dma_contiguity() adds bit 0x1
+to pages' DMA addresses that go in ascending order and at 4K stride.
+The problem is that the bit does not get cleared before doing unmap.
+As a result, a lot of warnings from iommu_dma_unmap_page() are seen
+in dmesg, which indicates that lookups by iommu_iova_to_phys() fail.
 
+Fixes: 2b43470add8c ("xsk: Introduce AF_XDP buffer allocation API")
+Signed-off-by: Ivan Malov <ivan.malov@oktetlabs.ru>
+---
+ v1 -> v2: minor adjustments to dispose of the "Fixes:" tag warning
+ v2 -> v3: extra refinements to apply notes from Magnus Karlsson
 
-On 6/28/2022 2:32 PM, Marc Zyngier wrote:
-> On Mon, 27 Jun 2022 13:37:06 +0100,
-> Neeraj Upadhyay <quic_neeraju@quicinc.com> wrote:
->>
->> Commit 640a7d37c3f4 ("srcu: Block less aggressively for expedited
->> grace periods") highlights a problem where aggressively blocking
->> SRCU expedited grace periods, as was introduced in commit
->> 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
->> from consuming CPU"), introduces ~2 minutes delay to the overall
->> ~3.5 minutes boot time, when starting VMs with "-bios QEMU_EFI.fd"
->> cmdline on qemu, which results in very high rate of memslots
->> add/remove, which causes > ~6000 synchronize_srcu() calls for
->> kvm->srcu SRCU instance.
->>
->> Below table captures the experiments done by Zhangfei Gao, Shameer,
->> to measure the boottime impact with various values of non-sleeping
->> per phase counts, with HZ_250 and preemption enabled:
->>
->> +──────────────────────────+────────────────+
->> | SRCU_MAX_NODELAY_PHASE   | Boot time (s)  |
->> +──────────────────────────+────────────────+
->> | 100                      | 30.053         |
->> | 150                      | 25.151         |
->> | 200                      | 20.704         |
->> | 250                      | 15.748         |
->> | 500                      | 11.401         |
->> | 1000                     | 11.443         |
->> | 10000                    | 11.258         |
->> | 1000000                  | 11.154         |
->> +──────────────────────────+────────────────+
->>
->> Analysis on the experiment results showed improved boot time
->> with non blocking delays close to one jiffy duration. This
->> was also seen when number of per-phase iterations were scaled
->> to one jiffy.
->>
->> So, this change scales per-grace-period phase number of non-sleeping
->> polls, soiuch that, non-sleeping polls are done for one jiffy. In addition
->> to this, srcu_get_delay() call in srcu_gp_end(), which is used to calculate
->> the delay used for scheduling callbacks, is replaced with the check for
->> expedited grace period. This is done, to schedule cbs for completed expedited
->> grace periods immediately, which results in improved boot time seen in
->> experiments.
->>
->> In addition to the changes to default per phase delays, this change
->> adds 3 new kernel parameters - srcutree.srcu_max_nodelay,
->> srcutree.srcu_max_nodelay_phase, srcutree.srcu_retry_check_delay.
->> This allows users to configure the srcu grace period scanning delays,
->> depending on their system configuration requirements.
->>
->> Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> 
-> I've given this a go on one of my test platforms (the one I noticed
-> the issue on the first place), and found that the initial part of the
-> EFI boot under KVM (pointlessly wiping the emulated flash) went down
-> to 1m7s from 3m50s (HZ=250).
-> 
-> Clearly a massive improvement, but still a far cry from the original
-> ~40s (yes, this box is utter crap -- which is why I use it).
+ net/xdp/xsk_buff_pool.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Do you see any improvement by using "srcutree.srcu_max_nodelay=1000" 
-bootarg, on top of this patch?
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index 87bdd71c7bb6..f70112176b7c 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -332,6 +332,7 @@ static void __xp_dma_unmap(struct xsk_dma_map *dma_map, unsigned long attrs)
+ 	for (i = 0; i < dma_map->dma_pages_cnt; i++) {
+ 		dma = &dma_map->dma_pages[i];
+ 		if (*dma) {
++			*dma &= ~XSK_NEXT_PG_CONTIG_MASK;
+ 			dma_unmap_page_attrs(dma_map->dev, *dma, PAGE_SIZE,
+ 					     DMA_BIDIRECTIONAL, attrs);
+ 			*dma = 0;
+-- 
+2.30.2
 
-> 
-> Anyway:
-> 
-> Tested-by: Marc Zyngier <maz@kernel.org>
-
-Thanks!
-
-
-Thanks
-Neeraj
-
-> 
-> 	M.
-> 

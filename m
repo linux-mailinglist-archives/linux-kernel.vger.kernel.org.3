@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BCED55EF6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EEA55EF41
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbiF1UWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 16:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33754 "EHLO
+        id S232699AbiF1UWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 16:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbiF1UVa (ORCPT
+        with ESMTP id S230062AbiF1UVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 16:21:30 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251643CFDA
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:19:20 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-101ab23ff3fso18615327fac.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:19:20 -0700 (PDT)
+        Tue, 28 Jun 2022 16:21:31 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8973CFDE
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:19:22 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id n11-20020a4ad12b000000b00425b01c3326so881929oor.8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:19:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=s4j/VUuwpqAhpSmewB4QnlDQdKmoLMZa5xK7xdwSdiY=;
-        b=fCceC5v0ighl7q4Q/LNtvixvAyZkLH98vCNJu7JsIt/odnS5zfkGFKbJQASWEXeraY
-         W93TV/DY1qqNvu8mDFQlUkSauPmKLrC641yKZK3ybpEEWHfSRYX5n6rqn0G/JdFqUYZq
-         PrwOsP1reyTu7JJVlKYMVsr7uDK1Qi2oW+/JnM/iOjxKd4KHqsoGdM1wWZE5ZAcR9rq/
-         VGWL9Tli5HAO6vxgi6awDnwtyLF4uDFBdCUmzAMrJ6CFPp0cNDP97Iroxog/2rNBKIC3
-         wAttVtcWIKpmvgAfc1AXeO+/MPtpDI3UOmAszgeMWdcz0dS0SpkxTzX6c3dMrPinRv5J
-         13Lg==
+        bh=tAHGQbVmQ1A6SvCQdDH+tny2AATVkTbYV8z5fCu3dcc=;
+        b=yK7wf/0o1/gDJuXeCr5ad8Qnd2IwdDj+J02qzaI05ZQCG2mTobkaI4zCByLrIQfgQQ
+         pdJfXi14NGf8Ou+J2D/6c5Um6MpApUlSjJmUeH5+YvhP/+gJvH4OQhytp72bzS8AwxXx
+         M05OsNu+mV+PygR8Ve7RAfTsVO4R/3ZAp9opTD4/RfONgYfsFwh/JJAT+r1/dK0Os13x
+         8nVM1fTI2k1Kj/BuzHH2wHcgSn9B1NSmbtVV9rkh330dcI/8O6j7/MknQcxY1o1ZZ5EF
+         HWxg60+QXcoHD7pEM5McGSJv1cqsWvY2mHnE9TXSnkrJqiHeAyqtCHck3ZKO3dV9VnDt
+         SpkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=s4j/VUuwpqAhpSmewB4QnlDQdKmoLMZa5xK7xdwSdiY=;
-        b=3h9XhG1Sx/zNtzDrOrIqQEKo8Lf++mPMX3xrl8Es21dAiLpt9x291ZDyMKI/0FVMzi
-         f7dovZBaOAZXihbSdaMtMwFLMMiTJJXHHSYdoJdlUl9mANaOOlm6soNpGeV5o/1BlWrF
-         AVU+Um/5v55+BDzEQUx/jLnxUc03ciQjTFxYzwIj8hk96gGpHZ4VcwECFEbh1Y2bJ4wL
-         b1XFUEh4NuxN9e0XeXbsTQgYJIUHaRy7vUSgXJ40IFvjeTLBJFSykf46b30pAoOTZQl2
-         7gPB3p3gkV0X7AMXKzxyTWhdCeYZWxJAyX+YJ5rPBfb2w5vgeNHBFk2/0NrQ6sAc/0sg
-         j1tg==
-X-Gm-Message-State: AJIora8M3YRJFnGTSdi0PIUqGUGOWreMKGDm8wdOwXWAJU6YVI9lVmew
-        Jle+KIJ+dk2+TVfVtMtnXHV8Og==
-X-Google-Smtp-Source: AGRyM1t174wUlHbxXOqM4bbDzzYwPcVUN1D9gm8KhN+pNVbPVi7JI8C5EOvMqDK7JeAwLThjphA2yQ==
-X-Received: by 2002:a05:6870:3920:b0:101:d628:b053 with SMTP id b32-20020a056870392000b00101d628b053mr851287oap.111.1656447559505;
-        Tue, 28 Jun 2022 13:19:19 -0700 (PDT)
+        bh=tAHGQbVmQ1A6SvCQdDH+tny2AATVkTbYV8z5fCu3dcc=;
+        b=tNvm54YTJx1rcryJf1Jfa9w4U3HywvCuo0GLUf/Dnnd++wBUsW7rEz68c9fqcLWOfa
+         4kyJ/qodhUVf4eAyfszhllwtTPuibVByJP0hdVx2bdSnA+H3zb165Gf4W6upsVSFsWU3
+         D/pjRi5TVoUFhVirR3KBiIaAHrajDQeDxU6ZO6dfHGruey/3WPYPn0MQQK2TU13nfeER
+         r6gNfRM5/D4ZyjS1x43tmELkslcpLEIzsWmdQAdWEiq0NGwO/XUs2OPjg974AXIa+tEY
+         Q3ec1PNuwoqNz91rjiKoIkPHUgeg4mpSXDNaNs8SJEGiTc8Kz4OFuT8PmzF8rxwy/Ohg
+         cFsg==
+X-Gm-Message-State: AJIora+Dp0smiOdqxrG8v5QVFgzaIFkUocc+0LkQVtdHLkduur+ukweV
+        qmHs18jjfHg6utmZBe3E8lCUsQ==
+X-Google-Smtp-Source: AGRyM1sjtPSohyWRR3lV5ZVEdjTcmWB759mhaFLW/2HtSLrS7VnBp/EvoQgz/2Mld84Kb+2JwxjGVw==
+X-Received: by 2002:a4a:a846:0:b0:425:bfa1:9795 with SMTP id p6-20020a4aa846000000b00425bfa19795mr1697567oom.67.1656447561668;
+        Tue, 28 Jun 2022 13:19:21 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id a12-20020a056870d60c00b000f30837129esm9536923oaq.55.2022.06.28.13.19.18
+        by smtp.gmail.com with ESMTPSA id a12-20020a056870d60c00b000f30837129esm9536923oaq.55.2022.06.28.13.19.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 13:19:18 -0700 (PDT)
+        Tue, 28 Jun 2022 13:19:20 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     ~postmarketos/upstreaming@lists.sr.ht,
         Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: Re: (subset) [PATCH v3] soc: qcom: cmd-db: replace strscpy_pad() with strncpy()
-Date:   Tue, 28 Jun 2022 15:18:54 -0500
-Message-Id: <165644753308.10525.5322214498477940111.b4-ty@linaro.org>
+Cc:     martin.botka@somainline.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        angelogioacchino.delregno@somainline.org
+Subject: Re: [PATCH 01/14] arm64: dts: qcom: msm8998*: Fix TLMM and pin nodes
+Date:   Tue, 28 Jun 2022 15:18:55 -0500
+Message-Id: <165644753307.10525.8428887869239635965.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220628064301.v3.1.Ie7b480cd99e2c13319220cbc108caf2bcd41286b@changeid>
-References: <20220628064301.v3.1.Ie7b480cd99e2c13319220cbc108caf2bcd41286b@changeid>
+In-Reply-To: <20220430162353.607709-1-konrad.dybcio@somainline.org>
+References: <20220430162353.607709-1-konrad.dybcio@somainline.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,22 +77,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Jun 2022 06:43:13 -0700, Douglas Anderson wrote:
-> Commit ac0126a01735 ("soc: qcom: cmd-db: replace strncpy() with
-> strscpy_pad()") breaks booting on my sc7280-herobrine-herobrine
-> device. From printouts I see that at bootup the function is called
-> with an id of "lnbclka2" which is 8 bytes big.
+On Sat, 30 Apr 2022 18:23:39 +0200, Konrad Dybcio wrote:
+> Remove the unnecessary level of indentation, commonize SDC2 pins and notice
+> that SDCC2_CD_ON and _OFF is identical, deduplicate it!
 > 
-> Previously all 8 bytes of this string were copied to the
-> destination. Now only 7 bytes will be copied since strscpy_pad() saves
-> a byte for '\0' termination.
+> Also, remove some unnecessary overrides and use decimal values in #-cells
 > 
-> [...]
+> 
 
 Applied, thanks!
 
-[1/1] soc: qcom: cmd-db: replace strscpy_pad() with strncpy()
-      commit: fe72f9bce137055fb744d4f8a91baa234ec07baa
+[01/14] arm64: dts: qcom: msm8998*: Fix TLMM and pin nodes
+        commit: 12541f687e4994774cbb4158e5fe3ecd6c639bdf
+[02/14] arm64: dts: qcom: msm8998-clamshell: Clean up the DT
+        commit: ce383e80782e9b416d5022dc692fc80306358372
+[03/14] arm64: dts: qcom: msm8998-laptops: Clean up DTs
+        commit: 16901ba567d789557b90871e23504a2118c35216
+[04/14] arm64: dts: qcom: msm8998-yoshino-lilac: Disable LVS1
+        commit: 4efbec42c050e9e59171822a3829c9a364e88611
+[05/14] arm64: dts: qcom: msm8998-yoshino: Add USB extcon
+        commit: 6dad36ebe1cb219615ead56692cea816d144c645
+[06/14] arm64: dts: qcom: msm8998-yoshino: Remove simple-bus compatible from clocks{}
+        commit: 016928c052a75bef4ef66d844f0000058429e18c
+[07/14] arm64: dts: qcom: msm8998-yoshino/oneplus: Use pm8005_regulators label
+        commit: b448501c2e770aad1c09abadec2045c35eb08f36
+[08/14] arm64: dts: qcom: msm8998-oneplus: Apply style fixes
+        commit: bc0e82fbb25b32b5c69bef017ebd3e79b85883d4
+[09/14] arm64: dts: qcom: msm8998-fxtec: Use "okay" instead of "ok"
+        commit: 20bba6b73264e7a7f1743676d7942e25d3a2131d
+[10/14] arm64: dts: qcom: msm8998*: Keep MMCC & MMSS_SMMU enabled by default
+        commit: 392b73cb816094348abb7e3ff1288b5786b4ee16
+[11/14] arm64: dts: qcom: msm8998-oneplus: Add clocks & GDSC to simplefb
+        commit: d582c02012d2a07251339bf0762223dbc6bb2955
+[12/14] arm64: dts: qcom: msm8998*: Clean up #includes
+        commit: 5d393f14d4de41ff30ccad78129d96606eca827c
+[13/14] arm64: dts: qcom: msm8998-fxtec: Decouple from 8998 MTP
+        commit: d0eaf4122c9eb6a7536bf1a607c0570ca82daa99
+[14/14] arm64: dts: qcom: msm8998-mtp: Merge and fix up the DT
+        commit: 3ae6156e2f414f0ba2bf860e4173bbd366d5e101
 
 Best regards,
 -- 

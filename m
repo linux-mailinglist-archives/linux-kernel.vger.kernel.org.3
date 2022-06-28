@@ -2,100 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A1055F190
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 00:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1814A55F195
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 00:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiF1Ws7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 18:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49004 "EHLO
+        id S230347AbiF1WuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 18:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiF1Ws4 (ORCPT
+        with ESMTP id S229460AbiF1WuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 18:48:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3113A709;
-        Tue, 28 Jun 2022 15:48:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20E6761AC0;
-        Tue, 28 Jun 2022 22:48:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAE46C341C8;
-        Tue, 28 Jun 2022 22:48:51 +0000 (UTC)
-Date:   Tue, 28 Jun 2022 18:48:50 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v4 12/12] sched,signal,ptrace: Rework TASK_TRACED,
- TASK_STOPPED state
-Message-ID: <20220628184850.05f60d1e@gandalf.local.home>
-In-Reply-To: <87czess94h.fsf@email.froward.int.ebiederm.org>
-References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
-        <20220505182645.497868-12-ebiederm@xmission.com>
-        <YrHA5UkJLornOdCz@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-        <877d5ajesi.fsf@email.froward.int.ebiederm.org>
-        <YrHgo8GKFPWwoBoJ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-        <87y1xk8zx5.fsf@email.froward.int.ebiederm.org>
-        <YrtKReO2vIiX8VVU@tuxmaker.boeblingen.de.ibm.com>
-        <87czess94h.fsf@email.froward.int.ebiederm.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 28 Jun 2022 18:50:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DE3139833
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 15:50:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656456608;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W3kLhAZGK2ncHck2YD7sSY1Nrpc3ON/goS7rYhosu+8=;
+        b=UL1SNrMwUdd20s0cmAaG3JJ2iRMZW4q3oCJwymQxqFI0j5fBBS9VBlwy78BQ0Sl0fXBv5n
+        cA/n+wWOjakgC2kc/8BYvqqbR+y/laS/f1SiVFMj3EEDybVJ/4Yy1OuUPGusRjxT471g8R
+        iG/pqxJAawUAz7fOzaIw3qzBVz9LqmY=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-384-T_bPul65N5WCITLsYaO6xg-1; Tue, 28 Jun 2022 18:50:07 -0400
+X-MC-Unique: T_bPul65N5WCITLsYaO6xg-1
+Received: by mail-io1-f72.google.com with SMTP id x4-20020a6bd004000000b00675354ad495so4047011ioa.20
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 15:50:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=W3kLhAZGK2ncHck2YD7sSY1Nrpc3ON/goS7rYhosu+8=;
+        b=ltXI0tGmjPjFvbVR8axGPBkbYF394vc+wFf2XO3zkD8SRkUaMN8FB4v5W9/U2OQujC
+         xONkvcHL7sPn1DZuc3BruZQs3kcqBpun1VfpBuqLeXxlN5T4lVLwue5mCZb5RpLw57H0
+         LY8AmLJV/FVtYZi+mQRh63/CE8R/Jtz1F7wzTLCIQzdcOT0qve/2vKsHzCVByxiXTr9I
+         2kHgF/DAWPihO087NM7vBg0E/OPaD4dHaCYHAmoBgXyqhI967q3lfw1ex8TDgIwZcrLa
+         mGdkmDGcPmqWcedqWMbHJrDIc+qlHB+bijr/TKj7rvdqKbxRUH5dwyXg37TVkSeXHCtM
+         Z0hA==
+X-Gm-Message-State: AJIora/ir4eykBSE2P7LQJRyIZongawkmitLBhaNg3tz5fZvd/K4TDL3
+        2Lx9HehKQGqgN+4ZVpbmZvD/sYAWRc7kGsTD0MXP42zNThc6SQJc/Xhf3kbytffsgaYvQidbccq
+        pthWFC0nnGX5pvOALNtVzX58J
+X-Received: by 2002:a05:6e02:15c9:b0:2da:c33e:49c7 with SMTP id q9-20020a056e0215c900b002dac33e49c7mr18965ilu.26.1656456606271;
+        Tue, 28 Jun 2022 15:50:06 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uvOepd4UW7ERHSNp4aEwCJ76y/hhPsMiiTQrUS6nrxdaYCpU21kA6tkiY9yBbjfWLSCFQliA==
+X-Received: by 2002:a05:6e02:15c9:b0:2da:c33e:49c7 with SMTP id q9-20020a056e0215c900b002dac33e49c7mr18948ilu.26.1656456606042;
+        Tue, 28 Jun 2022 15:50:06 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id j25-20020a02a699000000b00339c33df66bsm6537922jam.118.2022.06.28.15.50.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 15:50:05 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 18:50:03 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH 2/4] kvm: Merge "atomic" and "write" in
+ __gfn_to_pfn_memslot()
+Message-ID: <YruFm8vJMPxVUJTO@xz-m1.local>
+References: <20220622213656.81546-1-peterx@redhat.com>
+ <20220622213656.81546-3-peterx@redhat.com>
+ <c047c213-252b-4a0b-9720-070307962d23@nvidia.com>
+ <Yrtar+i2X0YjmD/F@xz-m1.local>
+ <02831f10-3077-8836-34d0-bb853516099f@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <02831f10-3077-8836-34d0-bb853516099f@nvidia.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Jun 2022 17:42:22 -0500
-"Eric W. Biederman" <ebiederm@xmission.com> wrote:
+On Tue, Jun 28, 2022 at 02:52:04PM -0700, John Hubbard wrote:
+> On 6/28/22 12:46, Peter Xu wrote:
+> > I'd try to argu with "I prefixed it with kvm_", but oh well.. yes they're a
+> > bit close :)
+> > 
+> > > 
+> > > Yes, "read the code", but if you can come up with a better TLA than GTP
+> > > here, let's consider using it.
+> > 
+> > Could I ask what's TLA?  Any suggestions on the abbrev, btw?
+> 
+> "Three-Letter Acronym". I love "TLA" because the very fact that one has
+> to ask what it means, shows why using them makes it harder to communicate. :)
 
-> diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-> index 156a99283b11..cb85bcf84640 100644
-> --- a/kernel/ptrace.c
-> +++ b/kernel/ptrace.c
-> @@ -202,6 +202,7 @@ static bool ptrace_freeze_traced(struct task_struct *task)
->  	spin_lock_irq(&task->sighand->siglock);
->  	if (task_is_traced(task) && !looks_like_a_spurious_pid(task) &&
->  	    !__fatal_signal_pending(task)) {
-> +		smp_rmb();
->  		task->jobctl |= JOBCTL_PTRACE_FROZEN;
->  		ret = true;
->  	}
-> diff --git a/kernel/signal.c b/kernel/signal.c
-> index edb1dc9b00dc..bcd576e9de66 100644
-> --- a/kernel/signal.c
-> +++ b/kernel/signal.c
-> @@ -2233,6 +2233,7 @@ static int ptrace_stop(int exit_code, int why, unsigned long message,
->  		return exit_code;
->  
->  	set_special_state(TASK_TRACED);
-> +	smp_wmb();
->  	current->jobctl |= JOBCTL_TRACED;
->  
+Ha!
 
-Are not these both done under the sighand->siglock spinlock?
+> 
+> As for alternatives, here I'll demonstrate that "GTP" actually is probably
+> better than anything else I can come up with, heh. Brainstorming:
+> 
+>     * GPN ("Guest pfn to pfn")
+>     * GTPN (similar, but with a "T" for "to")
+>     * GFNC ("guest frame number conversion")
 
-That is, the two paths should already be synchronized, and the memory
-barriers will not help anything inside the locks. The locking should (and
-must) handle all that.
+Always a challenge on the naming kongfu. :-D
 
--- Steve
+One good thing on using TLA in macros, flags and codes (rather than simply
+mention some three letters): we can easily jump to the label of any of the
+flags when we want to figure out what it means, and logically there'll (and
+should) be explanations of the abbrev in the headers if it's a good header.
+
+Example: it's even not easy to figure out what GFP is in GFP_KERNEL flag
+for someone not familiar with mm (when I wrote this line, I got lost!), but
+when that happens we do jump label and at the entry of gfp.h we'll see:
+
+ * ...  The GFP acronym stands for get_free_pages(),
+
+And if you see the patch I actually did something similar (in kvm_host.h):
+
+ /* gfn_to_pfn (gtp) flags */
+ ...
+
+I'd still go for GTP, but let me know if you think any of the above is
+better, I can switch.
+
+Thanks,
+
+-- 
+Peter Xu
 

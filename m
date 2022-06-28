@@ -2,101 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 047F255E9A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD5C55E7EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347251AbiF1OsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 10:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55478 "EHLO
+        id S1347535AbiF1OtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 10:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347430AbiF1Ort (ORCPT
+        with ESMTP id S1346126AbiF1OtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 10:47:49 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C092ED55;
-        Tue, 28 Jun 2022 07:47:49 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id w19-20020a17090a8a1300b001ec79064d8dso16173119pjn.2;
-        Tue, 28 Jun 2022 07:47:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=BXzXMPRraOx++61I5HiXQxmi+n2UhItjFbQwWVVM4Ow=;
-        b=OKsJEYw5tdOZKy7aXCItManEtTDj9UYO9SCXKpa+OhNYFrBtuO+EW9o9mqJt4AxhcS
-         cCqjuCUu6K8HsdatBtsNSndSN0XzQ8qEIHw+pnlcw42Nk7i3A6oCerTYmZ0atlP9PZyC
-         xvWeScrfzZSeTzYEAdLNsBjfx2AL9me9WC8iMxkNMMzIgqahLyPdinOPJc7iVbSwKuVs
-         h8BRkQ8gZk2RtCFcf+c/1B9qSnDOERbLREZ89aPumg4AYvw8DV4PayWpGmFgThxLb+3e
-         UXTNk4V1BFsfoBYcW8/knBrfbkffm1Q6noPawsN1+kud7vNju2rkoiuBEhNWoBzsINyR
-         MmtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BXzXMPRraOx++61I5HiXQxmi+n2UhItjFbQwWVVM4Ow=;
-        b=BCyg03P5Ar4sX40/DEdmRd0SQ8HTS+nTTtNf4/pfHPNl7HkOYBs91vaDbgQYB7HEUf
-         qDWp6EP+DLvzpzap8CnVDLsJXeJD2D3z0YCIFpk4YIqJ1FAtPYV+15CG0pCtlygt6DOe
-         1J30/CMgjP3awffVBpIBesrqcsS+98t/ScnMChZHINf3asYeP0D2B1e7G3Y2/sktklSb
-         GUh5NYkAUZYalcHpo774WOzFGwPoBPMe0S5Z55MJM0yDgBIXDo55SkpButcprxmyilRj
-         x2FEcOuyTEh3m7sbAWLaRXTsUKPCYHp9wH6fKSCRK5lXjdKYHxGZKnjByOHFmDz0ojK2
-         sP0g==
-X-Gm-Message-State: AJIora+KV/c97xgLBz4o2qvtGBAUyaSIPaWVqNfR/Ah+jzGUC3qwyy9c
-        lt9BpD4AxVQY+w8+IxUYdqA=
-X-Google-Smtp-Source: AGRyM1uWYTT09mk1/TqJ926mo4NJgBy/cpVUZqrnrdZKfJspA98VW0hlLq2xunE27c94f8Izi7Xw8A==
-X-Received: by 2002:a17:90a:f318:b0:1ec:b74b:9b82 with SMTP id ca24-20020a17090af31800b001ecb74b9b82mr22578331pjb.198.1656427668720;
-        Tue, 28 Jun 2022 07:47:48 -0700 (PDT)
-Received: from ?IPV6:2600:8802:b00:4a48:c569:fa46:5b43:1b1e? ([2600:8802:b00:4a48:c569:fa46:5b43:1b1e])
-        by smtp.gmail.com with ESMTPSA id t5-20020a17090abc4500b001ea629a431bsm9638054pjv.8.2022.06.28.07.47.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 07:47:48 -0700 (PDT)
-Message-ID: <b2270c71-4f85-3d22-e39f-48457d2892f9@gmail.com>
-Date:   Tue, 28 Jun 2022 07:47:47 -0700
+        Tue, 28 Jun 2022 10:49:23 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D812F01F;
+        Tue, 28 Jun 2022 07:49:22 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4LXSCy3XXsz9tTw;
+        Tue, 28 Jun 2022 16:49:18 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 2UtnhNzopbXw; Tue, 28 Jun 2022 16:49:18 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LXSCx4ylfz9tV1;
+        Tue, 28 Jun 2022 16:49:17 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 8770A8B787;
+        Tue, 28 Jun 2022 16:49:17 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 3e92SFMNOl1c; Tue, 28 Jun 2022 16:49:17 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.132])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 38FB28B765;
+        Tue, 28 Jun 2022 16:49:17 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 25SEn7C32928187
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 16:49:07 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 25SEn70V2928183;
+        Tue, 28 Jun 2022 16:49:07 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, dja@axtens.net
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        stable@vger.kernel.org
+Subject: [PATCH v1 1/6] powerpc/64e: Fix early TLB miss with KUAP
+Date:   Tue, 28 Jun 2022 16:48:54 +0200
+Message-Id: <8d6c5859a45935d6e1a336da4dc20be421e8cea7.1656427701.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH net-next v2 4/4] net: dsa: microchip: count pause packets
- together will all other packets
-Content-Language: en-US
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
-        UNGLinuxDriver@microchip.com
-References: <20220628085155.2591201-1-o.rempel@pengutronix.de>
- <20220628085155.2591201-5-o.rempel@pengutronix.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220628085155.2591201-5-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1656427736; l=2726; s=20211009; h=from:subject:message-id; bh=4c9cq6TjMjaZsHx8VkXNUgeyvb6bfH74ZSSKL8bYUs8=; b=SF5iSK7Ye4Q+8F6+uETerT8Y4xg2atv7a8xzA5RRwjQ0BieTWvBNamBMtM+PUxwpJNgV2/V66k4c 5FFHmehFB3AzouAMpaZRrZAJixojUdOLIqZyHGkcfVsUoae0itdr
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+With KUAP, the TLB miss handler bails out when an access to user
+memory is performed with a nul TID.
 
+But the normal TLB miss routine which is only used early during boot
+does the check regardless for all memory areas, not only user memory.
 
-On 6/28/2022 1:51 AM, Oleksij Rempel wrote:
-> This switch is calculating tx/rx_bytes for all packets including pause.
-> So, include rx/tx_pause counter to rx/tx_packets to make tx/rx_bytes fit
-> to rx/tx_packets.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+By chance there is no early IO or vmalloc access, but when KASAN
+come we will start having early TLB misses.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Fix it by creating a special branch for user accesses similar to the
+one in the 'bolted' TLB miss handlers. Unfortunately SPRN_MAS1 is
+now read too early and there are no registers available to preserve
+it so it will be read a second time.
 
-Might have been worth a comment above to explain why the pause frame 
-counting is appropriate, or we can always go back to git log. Thanks!
+Fixes: 57bc963837f5 ("powerpc/kuap: Wire-up KUAP on book3e/64")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/mm/nohash/tlb_low_64e.S | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
+
+diff --git a/arch/powerpc/mm/nohash/tlb_low_64e.S b/arch/powerpc/mm/nohash/tlb_low_64e.S
+index 8b97c4acfebf..9e9ab3803fb2 100644
+--- a/arch/powerpc/mm/nohash/tlb_low_64e.S
++++ b/arch/powerpc/mm/nohash/tlb_low_64e.S
+@@ -583,7 +583,7 @@ itlb_miss_fault_e6500:
+ 	 */
+ 	rlwimi	r11,r14,32-19,27,27
+ 	rlwimi	r11,r14,32-16,19,19
+-	beq	normal_tlb_miss
++	beq	normal_tlb_miss_user
+ 	/* XXX replace the RMW cycles with immediate loads + writes */
+ 1:	mfspr	r10,SPRN_MAS1
+ 	cmpldi	cr0,r15,8		/* Check for vmalloc region */
+@@ -626,7 +626,7 @@ itlb_miss_fault_e6500:
+ 
+ 	cmpldi	cr0,r15,0			/* Check for user region */
+ 	std	r14,EX_TLB_ESR(r12)		/* write crazy -1 to frame */
+-	beq	normal_tlb_miss
++	beq	normal_tlb_miss_user
+ 
+ 	li	r11,_PAGE_PRESENT|_PAGE_BAP_SX	/* Base perm */
+ 	oris	r11,r11,_PAGE_ACCESSED@h
+@@ -653,6 +653,12 @@ itlb_miss_fault_e6500:
+  * r11 = PTE permission mask
+  * r10 = crap (free to use)
+  */
++normal_tlb_miss_user:
++#ifdef CONFIG_PPC_KUAP
++	mfspr	r14,SPRN_MAS1
++	rlwinm.	r14,r14,0,0x3fff0000
++	beq-	normal_tlb_miss_access_fault /* KUAP fault */
++#endif
+ normal_tlb_miss:
+ 	/* So we first construct the page table address. We do that by
+ 	 * shifting the bottom of the address (not the region ID) by
+@@ -683,11 +689,6 @@ finish_normal_tlb_miss:
+ 	/* Check if required permissions are met */
+ 	andc.	r15,r11,r14
+ 	bne-	normal_tlb_miss_access_fault
+-#ifdef CONFIG_PPC_KUAP
+-	mfspr	r11,SPRN_MAS1
+-	rlwinm.	r10,r11,0,0x3fff0000
+-	beq-	normal_tlb_miss_access_fault /* KUAP fault */
+-#endif
+ 
+ 	/* Now we build the MAS:
+ 	 *
+@@ -709,9 +710,7 @@ finish_normal_tlb_miss:
+ 	rldicl	r10,r14,64-8,64-8
+ 	cmpldi	cr0,r10,BOOK3E_PAGESZ_4K
+ 	beq-	1f
+-#ifndef CONFIG_PPC_KUAP
+ 	mfspr	r11,SPRN_MAS1
+-#endif
+ 	rlwimi	r11,r14,31,21,24
+ 	rlwinm	r11,r11,0,21,19
+ 	mtspr	SPRN_MAS1,r11
 -- 
-Florian
+2.36.1
+

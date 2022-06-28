@@ -2,193 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C882F55D593
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C69F555CF63
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245741AbiF1Gdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 02:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
+        id S1343530AbiF1Gep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 02:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343499AbiF1Gdf (ORCPT
+        with ESMTP id S245712AbiF1GeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 02:33:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA4BB71
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 23:33:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D0A4618FB
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:33:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C0FBC3411D;
-        Tue, 28 Jun 2022 06:33:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656398006;
-        bh=3Gb+thKC8tBOSqjuQCp0B4dhsLQzuckBwDvfum6vQ7Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TZZtP7prTZccZ6iGBBpF9SMGg+lcXsWBSD5ClLMSPCUTxGTYSk+Z1FDXNZdp3g3qe
-         s4OpHkjRVFwIor2863TvVsm6eNNdeTtG3yL+30ThzY7qe0eDqHe8fWfXjECmK7smnM
-         BHPzPpT+Buu5/IuEom4b4m8FnCQAHEydKBXehoF8=
-Date:   Tue, 28 Jun 2022 08:33:23 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Oded Gabbay <ogabbay@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/12] uapi: habanalabs: add gaudi2 defines
-Message-ID: <Yrqgs9koXkfIG1KI@kroah.com>
-References: <20220627202620.961350-1-ogabbay@kernel.org>
- <20220627202620.961350-3-ogabbay@kernel.org>
+        Tue, 28 Jun 2022 02:34:02 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7288DF6A;
+        Mon, 27 Jun 2022 23:34:00 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25S6XnhV075706;
+        Tue, 28 Jun 2022 01:33:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1656398029;
+        bh=gQpauwvT+3IQ8TE9iAJyxTmOdu5H7mkPZ8142Alt/ZQ=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=CcedCWVNtcXPfdTNMyDG/eZ3M3lIqIfACq25+4HoyA/5yjJdWG99LBrDnLMdYpz57
+         RRojxX1Ec3PV5Gl/B2hMWOaJrl2wSahEHyYhciFrmNcmnW2zqjge6q8iJGCMigsCXy
+         ZQxwbWSMN/tpoM2rEN7GZcIgGqicjP+dPFlLbJ4k=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25S6Xnhk036982
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 28 Jun 2022 01:33:49 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 28
+ Jun 2022 01:33:48 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 28 Jun 2022 01:33:48 -0500
+Received: from [172.24.145.182] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25S6XjNn026376;
+        Tue, 28 Jun 2022 01:33:46 -0500
+Message-ID: <894d0c03-487b-40fc-5634-5b1a78b48701@ti.com>
+Date:   Tue, 28 Jun 2022 12:03:45 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627202620.961350-3-ogabbay@kernel.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] arm64: dts: ti: k3-j721s2-main: Enable crypto accelerator
+Content-Language: en-US
+To:     Jayesh Choudhary <j-choudhary@ti.com>, <devicetree@vger.kernel.org>
+CC:     <nm@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220628054518.350717-1-j-choudhary@ti.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <20220628054518.350717-1-j-choudhary@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 11:26:10PM +0300, Oded Gabbay wrote:
-> @@ -456,7 +841,7 @@ struct hl_info_hw_ip_info {
->  	__u32 num_of_events;
->  	__u32 device_id;
->  	__u32 module_id;
-> -	__u32 reserved;
-> +	__u32 decoder_enabled_mask;
->  	__u16 first_available_interrupt_id;
->  	__u16 server_type;
->  	__u32 cpld_version;
-> @@ -466,12 +851,13 @@ struct hl_info_hw_ip_info {
->  	__u32 psoc_pci_pll_div_factor;
->  	__u8 tpc_enabled_mask;
->  	__u8 dram_enabled;
-> -	__u8 pad[2];
-> +	__u8 reserved;
-> +	__u8 mme_master_slave_mode;
+Hi,
 
-You are moving fields around (reserved moved to a different spot, and
-you were checking that reserved was always 0, right?) and renaming them.
-Is that going to break userspace?
-
-
-
-
->  	__u8 cpucp_version[HL_INFO_VERSION_MAX_LEN];
->  	__u8 card_name[HL_INFO_CARD_NAME_MAX_LEN];
-> -	__u64 reserved2;
-> +	__u64 tpc_enabled_mask_ext;
->  	__u64 dram_page_size;
-> -	__u32 reserved3;
-> +	__u32 edma_enabled_mask;
->  	__u16 number_of_user_interrupts;
->  	__u16 pad2;
->  	__u64 reserved4;
-> @@ -722,6 +1108,44 @@ struct hl_info_dev_memalloc_page_sizes {
->  	__u64 page_order_bitmask;
->  };
->  
-> +#define HL_TPM_PCR_DATA_BUF_SZ		256
-> +#define HL_TPM_PCR_QUOTE_BUF_SZ		510	/* (512 - 2) 2 bytes used for size */
-> +#define HL_TPM_SIGNATURE_BUF_SZ		255	/* (256 - 1) 1 byte used for size */
-> +#define HL_TPM_PUB_DATA_BUF_SZ		510	/* (512 - 2) 2 bytes used for size */
-> +#define HL_TPM_CERTIFICATE_BUF_SZ	2046	/* (2048 - 2) 2 bytes used for size */
+On 28/06/22 11:15, Jayesh Choudhary wrote:
+> +	main_crypto: crypto@4e00000 {
+> +		compatible = "ti,j721e-sa2ul";
+> +		reg = <0x00 0x4e00000 0x00 0x1200>;
+> +		power-domains = <&k3_pds 297 TI_SCI_PD_SHARED>;
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges = <0x00 0x04e00000 0x00 0x04e00000 0x00 0x30000>;
 > +
-> +/**
-> + * struct hl_info_tpm - attestation data of the boot from the TPM
-> + * @nonce: number only used once. random number provided by host. this also passed to the quote
-> + *         command as a qualifying data.
-> + * @pcr_quote_len: length of the attestation quote data in bytes
-> + * @pub_data_len: length of the public data in bytes
-> + * @certificate_len: length of the certificate in bytes
-> + * @pcr_num_reg: number of PCR registers in the pcr_data array
-> + * @pcr_reg_len: length of each PCR register in the pcr_data array in bytes
-> + * @quote_sig_len: length of the attestation signature in bytes
-> + * @pcr_data: raw values of the PCR registers from the TPM
-> + * @pcr_quote: attestation data structure (TPM2B_ATTEST) from the TPM
-> + * @public_data: public key and certificate info from the TPM (outPublic + name + qualifiedName)
-> + * @certificate: certificate for the attestation data, read from the TPM NV mem
-> + * @quote_sig: signature structure (TPMT_SIGNATURE) of the attestation data
-> + */
-> +struct hl_info_tpm {
-> +	__u32 nonce;
-> +	__u16 pcr_quote_len;
-> +	__u16 pub_data_len;
-> +	__u16 certificate_len;
-> +	__u8 pcr_num_reg;
-> +	__u8 pcr_reg_len;
-> +	__u8 quote_sig_len;
-> +	__u8 pcr_data[HL_TPM_PCR_DATA_BUF_SZ];
-> +	__u8 pcr_quote[HL_TPM_PCR_QUOTE_BUF_SZ];
-> +	__u8 public_data[HL_TPM_PUB_DATA_BUF_SZ];
-> +	__u8 certificate[HL_TPM_CERTIFICATE_BUF_SZ];
-> +	__u8 quote_sig[HL_TPM_SIGNATURE_BUF_SZ];
-> +	__u8 pad0[2];
+> +		dmas = <&main_udmap 0xca40>, <&main_udmap 0x4a40>,
+> +				<&main_udmap 0x4a41>;
+> +		dma-names = "tx", "rx1", "rx2";
 
-Do you always check that pad0 is set to 0 in the kernel code?
 
-> +};
+> +		dma-coherent;
+
+
+Crytpo device itself is not dma-coherent as it can never be bus master.
+Its the DMAengine that does data movement and the buffers are to be
+mapped to dmaengine provider. So this property should be dropped
+
+> +	};
 > +
->  enum gaudi_dcores {
->  	HL_GAUDI_WS_DCORE,
->  	HL_GAUDI_WN_DCORE,
-> @@ -742,6 +1166,7 @@ enum gaudi_dcores {
->   * @period_ms: Period value, in milliseconds, for utilization rate in range 100ms - 1000ms in 100 ms
->   *             resolution. Currently not in use.
->   * @pll_index: Index as defined in hl_<asic type>_pll_index enumeration.
-> + * @tpm_nonce: Nonce number used for tpm attestation.
->   * @eventfd: event file descriptor for event notifications.
->   * @pad: Padding to 64 bit.
->   */
-> @@ -755,6 +1180,7 @@ struct hl_info_args {
->  		__u32 ctx_id;
->  		__u32 period_ms;
->  		__u32 pll_index;
-> +		__u32 tpm_nonce;
->  		__u32 eventfd;
->  	};
 
-You added a new field to the middle of a structure, did that just break
-userspace built with the old structure from working with a new kernel?
-
-> @@ -1400,7 +1837,16 @@ struct hl_debug_params_bmon {
->  
->  	/* Trace source ID */
->  	__u32 id;
-> -	__u32 pad;
-> +
-> +	/* Control register */
-> +	__u32 control;
-> +
-> +	/* Two more address ranges that the user can request to filter */
-> +	__u64 start_addr2;
-> +	__u64 end_addr2;
-> +
-> +	__u64 start_addr3;
-> +	__u64 end_addr3;
->  };
-
-Adding to the end is good, but again, will old userspace and new kernel
-still work properly?
-
->  
->  struct hl_debug_params_spmu {
-> @@ -1409,7 +1855,11 @@ struct hl_debug_params_spmu {
->  
->  	/* Number of event types selection */
->  	__u32 event_types_num;
-> -	__u32 pad;
-> +
-> +	/* TRC configuration register values */
-> +	__u32 pmtrc_val;
-> +	__u32 trc_ctrl_host_val;
-> +	__u32 trc_en_host_val;
->  };
-
-Same here, you increased the size.
-
-thanks,
-
-greg k-h
+-- 
+Regards
+Vignesh

@@ -2,77 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7B255E81F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F11655E6AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347256AbiF1P0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
+        id S1347303AbiF1P1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347190AbiF1P0J (ORCPT
+        with ESMTP id S1347438AbiF1P1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:26:09 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4ABF2DAA3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:26:08 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id i25so12706625wrc.13
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:26:08 -0700 (PDT)
+        Tue, 28 Jun 2022 11:27:00 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354192DAB3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:26:53 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id o19so16267445ybg.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:26:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vHL7KLG7cNuB7LCeGAkW01vH5AeHqBrHUv1IstKU05Q=;
-        b=G/lrcJnISuX92SQ+iq8Fv8dYzQO9R72BfpagBmEOi8ngHAQNAOTDrcoKNScmK3DnOz
-         io06T+YiFAkKhPc42RDQ/rqHyaC/yVa8sAFk2QkjQvwUydzOBgZHXQwZuIJIN13kDgG5
-         iPO3AVOjd+v78xfoUsPuMADZA5UzKM/CbJ2xX59v9oHhi4s+uXSJeVPYqF2kNRW3GgXI
-         MYXT0+vM7agOcZ1esrJPUW9n785ddjsPA/l4m0EOsA/sTqvgmLiOOOcn9S8E+70BcOJr
-         NmBhkNE5lxe4xbdCDWtgtpiX71HiRSjXuZifF6LnjV42gVazBha68w/qzjKIzhJNzpBg
-         ciRA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rF/IoFS6dEefZ50Zn+gGIbvuml2sqcE3qPyHBncFVp4=;
+        b=PGj5xqamKGc5GcW/i6XNREBSQGep0PnX2M/fnLRjgXJoeaYVbqcWq9GUj5UpMLRrHV
+         rcsykDQ0moamO9cu/KSUduzxryt1E2xTuGXW89l++XMCWh1lrSoDE1aIkH74wLv4+jiR
+         4XGgwhFznMuFDSjfnF3KHiaYqDXZiWBMfUQIGFBjxrzN6EiVsXeS0Zgab0AnLtHI+a6v
+         CQ+m693NM6/UA8cCBBe/hv1ns27fY0tSf4Qqxg74WHUqMX8j4Hyv2T3ZJC9DJyXMRxSn
+         zo7Z7geIgl1GjDEZgZugnkZTNy7TtisFuEzE29HW0o/NDzuCnzPYSxGZ5ZC/EfNXA/50
+         qzjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vHL7KLG7cNuB7LCeGAkW01vH5AeHqBrHUv1IstKU05Q=;
-        b=flZEA8izaoF18nLTfE1tOwJROfrj+6HbAv0sM5w86igqHasgXh4kq1aCSHti6kFcyN
-         1Vl/oTQTUB+oTyTFLLuIK3kGwXQ2HoshMnA1qkLZSdtKnxpMtobVfSLg7gjf7x5Rh4lh
-         CbFducPCDFbqhGrWIELuOdrzmOOiBQtgDvOrSMVtYzFW9pEI1Hz3KQgj/k/5WON+dY1Y
-         kJcdm1OlSgh6xQ2a7Ya8qFxeoZjFuLLMgwrj63kSpAKTn81aEkZ/f7mWmrBS9zPt4NfJ
-         v82XWoWsbnObz4bfbhvYs8LIMFErukLo7HouijETb2zKSv8DgGJUpfi1SCY5SB6KLE3V
-         ulng==
-X-Gm-Message-State: AJIora9epMF8XCC2gS5sdVydiGs4yq2jHEHU+9VOlQ1DUNkOF/5fC5jM
-        BQJs1fPunD/wWw/iknARNcgGdA==
-X-Google-Smtp-Source: AGRyM1uImHgo1CFyv3j+ARJwngGN5DnquV/SQpht6gc3qTPcHnrSKpRMhocjL0T1LMvu/CHIwwBECw==
-X-Received: by 2002:a5d:6da9:0:b0:21b:bf88:1ab0 with SMTP id u9-20020a5d6da9000000b0021bbf881ab0mr16293580wrs.66.1656429967115;
-        Tue, 28 Jun 2022 08:26:07 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id g13-20020adffc8d000000b0021b99efceb6sm14057462wrr.22.2022.06.28.08.26.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 08:26:06 -0700 (PDT)
-Message-ID: <0603d0e5-df0b-f47c-4391-b0860b07c13a@linaro.org>
-Date:   Tue, 28 Jun 2022 17:26:05 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rF/IoFS6dEefZ50Zn+gGIbvuml2sqcE3qPyHBncFVp4=;
+        b=jpgMRd+KO6iM1AmncDPKSUsqB5GgLXW8uaXt/SSuk/2F7H2M8ZzMU22PqLR4BTu8oE
+         IQJ/Vwc4sF0XTgYUDpbcrKk390JbSthEHwssDm1kVUMsTHV00OA/oaHeX6YP1xoT8jvd
+         AohdPmpTp5XzFTS361EWDYDd4DmCFmP2zE17YqznnCz0slRSKyicaqSi64oE7ak5lk/W
+         TLpdqowNN3MvKRLPcYmnoa+HEQSguzOXsYRRquQ5I3mIH9P11RJzgKjdDuSWtUTeUq1P
+         vJx0XkweCNqyxsk4jdbhW8vpvdkMICwN0jZefa6UmfgQgVID4M6G5vL9XubXz0dIvUZz
+         1M0A==
+X-Gm-Message-State: AJIora+qpjRnNx4kUhw7jDB6dx2/MZSgnDVdW4VQ8wtNMuYTuwckxDTc
+        +gt7E4hqfwhX1ODgaGHTMp5nUW4CSN1O/yyfV5BG6g==
+X-Google-Smtp-Source: AGRyM1vHN+vAhxiGieH0dQ/W+mfLaS4GSYbuaAviuaEJSIddxoKTMjLhhQ5pnrivWo/d1b4gt79DTHXWkdhPVyAaPxM=
+X-Received: by 2002:a05:6902:1501:b0:66d:2ae0:46b5 with SMTP id
+ q1-20020a056902150100b0066d2ae046b5mr3925916ybu.225.1656430012308; Tue, 28
+ Jun 2022 08:26:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 3/3] thermal/sysfs: Remove cooling device sysfs statistics
-Content-Language: en-US
-To:     Wei Wang <wvw@google.com>, linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org
-References: <20220601151441.9128-1-daniel.lezcano@linaro.org>
- <20220601151441.9128-3-daniel.lezcano@linaro.org>
- <be8395e3-98d7-7a8f-7153-c491b22d4463@arm.com>
- <cb35e356-bc90-2a67-6983-1a4c3a0ea62d@linaro.org>
- <eada018c-b857-7946-ae4b-2532e6866a45@arm.com>
- <CAHRSSEz9ExOgvByycztKYf1ncxCKeoy3uHuyQcnUC1r5nujc2w@mail.gmail.com>
- <0ca654c0-d7b4-b955-7e9b-542452659694@linaro.org>
- <CAGXk5yqCNUpGpHkecVP8U=ys9NF6dJAMu6R0E+jpgvcSVFN+Ug@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAGXk5yqCNUpGpHkecVP8U=ys9NF6dJAMu6R0E+jpgvcSVFN+Ug@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220620133608.78498-1-zhouchengming@bytedance.com>
+In-Reply-To: <20220620133608.78498-1-zhouchengming@bytedance.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 28 Jun 2022 17:26:41 +0200
+Message-ID: <CAKfTPtAUrR97jmifveYCUxmaKJ_95v+N_3DDPVdMnBwrgFdRCw@mail.gmail.com>
+Subject: Re: [PATCH v4] sched/fair: combine detach into dequeue when migrating task
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,79 +67,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/06/2022 08:02, Wei Wang wrote:
-> On Fri, Jun 3, 2022 at 4:04 AM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->>
->> Hi Todd,
->>
->> [adding Wei]
->>
->> On 02/06/2022 21:02, Todd Kjos wrote:
->>> On Thu, Jun 2, 2022 at 2:16 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> [ ... ]
->>
->>>> I see, it makes sense. Let's see if Todd and Android folks don't
->>>> use this thermal sysfs stats, so we could remove them.
->>>
->>> Android HALs do use the thermal sysfs stats. debugfs isn't a viable
->>> replacement since debugfs must not be mounted during normal operation.
->>
->> Thanks for your answer.
->>
->> I'm curious, what is the purpose of getting the statistics, especially
->> the transitions stats from normal operation?
->>
->> There were some complains about systems having a high number of cooling
->> devices with a lot of states. The state transitions are represented as a
->> matrix and result in up to hundred of megabytes of memory wasted.
->>
->> Moreover, sysfs being limited a page size, the output is often truncated.
->>
->> As it is automatically enabled for GKI, this waste of memory which is
->> not negligible for system with low memory can not be avoided.
->>
->> I went through the thermal HAL but did not find an usage of these
->> statistics, do you have a pointer to the code using them ?
->>
->> Thanks
->>
->>     -- Daniel
->>
->>
-> 
-> Sorry for the late reply, trying to catch up on emails after sick
-> recovery. We use it for stats collection to understand thermal
-> residency, and it is not in the HAL code, we don't use the transition
-> table heavily though. Are some of the devices having too many cooling
-> devices? Can we have a config to enable stats for a given cooling
-> device?
+On Mon, 20 Jun 2022 at 15:36, Chengming Zhou
+<zhouchengming@bytedance.com> wrote:
+>
+> When we are migrating task out of the CPU, we can combine detach and
+> propagation into dequeue_entity() to save the detach_entity_cfs_rq()
+> -> propagate_entity_cfs_rq() call in detach_entity_cfs_rq() in
+> migrate_task_rq_fair().
+>
+> This optimization is like combining DO_ATTACH in the enqueue_entity()
+> when migrating task to the CPU.
+> -> propagate_entity_cfs_rq() call in detach_entity_cfs_rq() in
+> migrate_task_rq_fair().
+>
+>
+> So we don't have to traverse the CFS tree extra time to do the
+> detach_entity_cfs_rq() -> propagate_entity_cfs_rq() call, which
+> wouldn't be called anymore with this patch's change.
+>
+> Copied from Dietmar's much clearer comment:
 
+Although It's nice to keep the author of a comment, it should not be
+part of the commit message.
 
-The stats table is bogus. As soon as the combination of the states leads 
-to a size greater than a page size, then the result is truncated.
+> detach_task()
+>   deactivate_task()
+>     dequeue_task_fair()
+>       for_each_sched_entity(se)
+>         dequeue_entity()
+>           update_load_avg()   /* (1) */
+              detach_entity_load_avg()
 
-As the cooling devices is also abused to mimic power capping capable 
-device, we are ending up to 1024 states sometimes.
+> set_task_cpu()
+>  migrate_task_rq_fair()
+>    detach_entity_cfs_rq() /* (2) */
+       update_load_avg();
+       detach_entity_load_avg();
+       propagate_entity_cfs_rq();
+         for_each_sched_entity()
+           update_load_avg()
 
-Moreover, having the option set also create tables which take MB of 
-memory for nothing.
+Could you add the full call stack so we can see more easily the extra
+loop that is saved
+>
+> This patch save the propagate_entity_cfs_rq(&p->se) call from (2)
+> by doing the detach_entity_load_avg(), update_tg_load_avg() for
+> a migrating task inside (1) (the task being the first se in the loop)
+>
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 
-The option only enables the stats for all the cooling device stats.
+Apart the small nit above:
 
-As you mentioned, it seems to you are using the stats for debugging 
-purpose. The debugfs provides the same information, except it does only 
-show the transitions would actually happened and we are no longer 
-limited to a page size.
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
 
-Would it be acceptable to remove the sysfs stats ?
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> ---
+> v4:
+>  - change the commit message a little.
+>  - remove the forward declaration of detach_entity_cfs_rq()
+>  - remove verbose comments in code.
+>
+> v3:
+>  - change to use task_on_rq_migrating() and put Dietmar's much clearer
+>    description in the commit message. Thanks!
+>
+> v2:
+>  - fix !CONFIG_SMP build error
+> ---
+>  kernel/sched/fair.c | 30 +++++++++++++++++-------------
+>  1 file changed, 17 insertions(+), 13 deletions(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 8bed75757e65..31d53c11e244 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -3931,6 +3931,7 @@ static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+>  #define UPDATE_TG      0x1
+>  #define SKIP_AGE_LOAD  0x2
+>  #define DO_ATTACH      0x4
+> +#define DO_DETACH      0x8
+>
+>  /* Update task and its cfs_rq load average */
+>  static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+> @@ -3948,7 +3949,14 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+>         decayed  = update_cfs_rq_load_avg(now, cfs_rq);
+>         decayed |= propagate_entity_load_avg(se);
+>
+> -       if (!se->avg.last_update_time && (flags & DO_ATTACH)) {
+> +       if (flags & DO_DETACH) {
+> +               /*
+> +                * DO_DETACH means we're here from dequeue_entity()
+> +                * and we are migrating task out of the CPU.
+> +                */
+> +               detach_entity_load_avg(cfs_rq, se);
+> +               update_tg_load_avg(cfs_rq);
+> +       } else if (!se->avg.last_update_time && (flags & DO_ATTACH)) {
+>
+>                 /*
+>                  * DO_ATTACH means we're here from enqueue_entity().
+> @@ -4241,6 +4249,7 @@ static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
+>  #define UPDATE_TG      0x0
+>  #define SKIP_AGE_LOAD  0x0
+>  #define DO_ATTACH      0x0
+> +#define DO_DETACH      0x0
+>
+>  static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int not_used1)
+>  {
+> @@ -4460,6 +4469,11 @@ static __always_inline void return_cfs_rq_runtime(struct cfs_rq *cfs_rq);
+>  static void
+>  dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+>  {
+> +       int action = UPDATE_TG;
+> +
+> +       if (entity_is_task(se) && task_on_rq_migrating(task_of(se)))
+> +               action |= DO_DETACH;
+> +
+>         /*
+>          * Update run-time statistics of the 'current'.
+>          */
+> @@ -4473,7 +4487,7 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+>          *   - For group entity, update its weight to reflect the new share
+>          *     of its group cfs_rq.
+>          */
+> -       update_load_avg(cfs_rq, se, UPDATE_TG);
+> +       update_load_avg(cfs_rq, se, action);
+>         se_update_runnable(se);
+>
+>         update_stats_dequeue_fair(cfs_rq, se, flags);
+> @@ -6938,8 +6952,6 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
+>         return new_cpu;
+>  }
+>
+> -static void detach_entity_cfs_rq(struct sched_entity *se);
+> -
+>  /*
+>   * Called immediately before a task is migrated to a new CPU; task_cpu(p) and
+>   * cfs_rq_of(p) references at time of call are still valid and identify the
+> @@ -6973,15 +6985,7 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+>                 se->vruntime -= min_vruntime;
+>         }
+>
+> -       if (p->on_rq == TASK_ON_RQ_MIGRATING) {
+> -               /*
+> -                * In case of TASK_ON_RQ_MIGRATING we in fact hold the 'old'
+> -                * rq->lock and can modify state directly.
+> -                */
+> -               lockdep_assert_rq_held(task_rq(p));
+> -               detach_entity_cfs_rq(&p->se);
+> -
+> -       } else {
+> +       if (!task_on_rq_migrating(p)) {
+>                 /*
+>                  * We are supposed to update the task to "current" time, then
+>                  * its up to date and ready to go to new CPU/cfs_rq. But we
+> --
+> 2.36.1
+>

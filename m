@@ -2,135 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C113B55FB3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D37C55EAB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbiF2JAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 05:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
+        id S232550AbiF1RJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 13:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232777AbiF2JAE (ORCPT
+        with ESMTP id S230102AbiF1RJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 05:00:04 -0400
-Received: from eggs.gnu.org (eggs.gnu.org [IPv6:2001:470:142:3::10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F502559B;
-        Wed, 29 Jun 2022 02:00:02 -0700 (PDT)
-Received: from fencepost.gnu.org ([2001:470:142:3::e]:53108)
-        by eggs.gnu.org with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <jemarch@gnu.org>)
-        id 1o6TYF-0005Kw-9z; Wed, 29 Jun 2022 04:59:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gnu.org;
-        s=fencepost-gnu-org; h=MIME-Version:In-Reply-To:Date:References:Subject:To:
-        From; bh=yWORYvO8IZ9m60ZBZWENFQneFKxqNCr4t6RwBfhrer8=; b=ZLZ9KuZCd2SDqrpxJkqG
-        +voaKIJHCJpC+q0cXtrUfhueCJsMy9b5IpuYNrBi1ZsisbdXzVeW8k198uXzUTQjRCqxtQApieX1R
-        MlzEblWkgl7NvdGKemQ/k3Y6sIsQ8pXgH0L9I9kRNsI8ahjLP/kmoVm8rd5IiMo9w43cFOfIxCJ0N
-        JrjZIw461zbNGHFQh2WX91YCN+NWzn5AuwvBzULSP6VED+1Z3PBxtWs+0U4riWxM4tdsFLXw6dpSx
-        c+4JxUsfnnUyIHNe7vsb93q8jyjp/aWhivj7IAs6xF58Gs0w5hd+8goOCdCYnMDHgMhurqlqUAA4C
-        t2mdmgcf0S2KPg==;
-Received: from dynamic-077-182-178-150.77.182.pool.telefonica.de ([77.182.178.150]:54142 helo=termi.gnu.org)
-        by fencepost.gnu.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <jemarch@gnu.org>)
-        id 1o6TYE-0002JL-IW; Wed, 29 Jun 2022 04:59:59 -0400
-From:   "Jose E. Marchesi" <jemarch@gnu.org>
-To:     Ruud van der Pas <ruud.vanderpas@oracle.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Vladimir Mezentsev <vladimir.mezentsev@oracle.com>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
-        Wenlei He <wenlei@fb.com>, Hongtao Yu <hoy@fb.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        linux-toolchains@vger.kernel.org, elena.zannoni@oracle.com
-Subject: Re: plumbers session on profiling?
-References: <CAKwvOdkyY9rsH3eViMK-_4iz_W_usumz5nD+3AhbNCVQ3FRCjA@mail.gmail.com>
-        <CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
-        <87mtf7z0rt.fsf@gnu.org>
-        <6F9E9D93-3913-4022-9384-D809C8EF7715@oracle.com>
-        <CAKwvOdm=_YqBpuBzouqoWHYNe6MMUE10vqF0PUkU=hcOj+UqrQ@mail.gmail.com>
-        <B0A01DE7-1B50-479A-92DF-DAFAB3F06E0F@oracle.com>
-Date:   Tue, 28 Jun 2022 19:08:48 +0200
-In-Reply-To: <B0A01DE7-1B50-479A-92DF-DAFAB3F06E0F@oracle.com> (Ruud van der
-        Pas's message of "Thu, 23 Jun 2022 23:21:07 +0200")
-Message-ID: <878rpgpvfj.fsf@gnu.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Tue, 28 Jun 2022 13:09:09 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F272C126;
+        Tue, 28 Jun 2022 10:09:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656436148; x=1687972148;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=U85zC74FglfaUgTtPENvXAGKtODUMugCZKKLb7eNRJc=;
+  b=oxRAHogzZHLpvrUQWGYcAafW3o1BpJFT7u/MyUi2yTpeXzKZV8V9gUPL
+   iFM4/kT4WrhjE4F55tlpt2HuwH1IWGE83uLsGOVJGczhyOqMDvzJvOGym
+   Hgrq8cvUkmu7brMEYemPzYEEnJm1AGZ3YBPcq3lpDBrPXk8Nv2rcLKgG3
+   Y=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Jun 2022 10:09:08 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 10:09:08 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 28 Jun 2022 10:09:07 -0700
+Received: from [10.110.50.59] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 28 Jun
+ 2022 10:09:06 -0700
+Message-ID: <fa624172-2aee-1d10-cbdb-398681002fdc@quicinc.com>
+Date:   Tue, 28 Jun 2022 10:09:06 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 02/22] net: mac80211: add a missing comma at kernel-doc
+ markup
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <cover.1656409369.git.mchehab@kernel.org>
+ <11c1bdb861d89c93058fcfe312749b482851cbdb.1656409369.git.mchehab@kernel.org>
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <11c1bdb861d89c93058fcfe312749b482851cbdb.1656409369.git.mchehab@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/28/2022 2:46 AM, Mauro Carvalho Chehab wrote:
+> The lack of the comma makes it to not parse the function parameter:
 
-[Added linux-toolchains@vger in CC]
+nit: s/comma/colon/
 
-It would be interesting to have some discussion in the Toolchains track
-on building the kernel with PGO/FDO.  I have seen a raise on interest on
-the topic in several companies, but it would make very little sense if
-no kernel hacker is interested in participating... anybody?
+> 	include/net/mac80211.h:6250: warning: Function parameter or member 'vif' not described in 'ieee80211_channel_switch_disconnect'
+> 
+> Fix it.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+> 
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH 00/22] at: https://lore.kernel.org/all/cover.1656409369.git.mchehab@kernel.org/
+> 
+>   include/net/mac80211.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/net/mac80211.h b/include/net/mac80211.h
+> index 27f24ac0426d..c0557142343f 100644
+> --- a/include/net/mac80211.h
+> +++ b/include/net/mac80211.h
+> @@ -6238,7 +6238,7 @@ void ieee80211_chswitch_done(struct ieee80211_vif *vif, bool success);
+>   
+>   /**
+>    * ieee80211_channel_switch_disconnect - disconnect due to channel switch error
+> - * @vif &struct ieee80211_vif pointer from the add_interface callback.
+> + * @vif: &struct ieee80211_vif pointer from the add_interface callback.
+>    * @block_tx: if %true, do not send deauth frame.
+>    *
+>    * Instruct mac80211 to disconnect due to a channel switch error. The channel
 
-> Hi Nick,
->
-> Apologies for the delay. It's been a busy week with gprofng related work.
->
->> If you're still considering attending Linux Plumbers conf, please
->> submit a proposal:
->> https://lpc.events/event/16/abstracts/
->> Please make sure to select "Toolchains Track" as the "Track" after
->> clicking on "Submit new abstract."
->
-> Thanks for asking!
->
-> Our presence largely depends on a discussion on kernel profiling and
-> to see what we might be able to do with gprofng regarding this.
->
->>From our side, the main person will be Vladimir. He knows the code
-> inside and out, but I will also try to attend such a session.
->
-> Is there any news regarding such a session on kernel profiling?
->
-> Kind regards, Ruud
->
->> 
->>> 
->>> Kind regards, Ruud
->>> 
->>>> On 24 May 2022, at 12:24, Jose E. Marchesi <jemarch@gnu.org> wrote:
->>>> 
->>>> 
->>>> I am adding Ruud van der Pas in CC. He works in gprofng and would be
->>>> willing to participate in a discussion on kernel profiling.
->>>> 
->>>>> (Re-sending with Vladamir's email addr fixed; sorry for the noise)
->>>>> 
->>>>> On Fri, Apr 15, 2022 at 10:54 AM Nick Desaulniers
->>>>> <ndesaulniers@google.com> wrote:
->>>>>> 
->>>>>> Hi Sami, Bill, Jose, and Vladamir,
->>>>>> Jose and I are currently in the planning process to put together a
->>>>>> Kernel+Toolchain microconference track at Linux Plumbers Conference
->>>>>> this year (Sept 12-14) in Dublin, Ireland.
->>>>>> 
->>>>>> Would you all be interested in leading a session discussing various
->>>>>> profiling related topics such as:
->>>>>> * gprofng
->>>>>> * PGO
->>>>>> * AutoFDO
->>>>>> 
->>>>>> Would others find such a discussion useful?
->>>>>> --
->>>>>> Thanks,
->>>>>> ~Nick Desaulniers
->>> 
->> 
->> 
->> -- 
->> Thanks,
->> ~Nick Desaulniers

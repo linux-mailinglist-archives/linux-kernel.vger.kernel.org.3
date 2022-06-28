@@ -2,75 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBB155EFB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554DB55EFB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbiF1UkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 16:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
+        id S230208AbiF1Ukx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 16:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbiF1UkG (ORCPT
+        with ESMTP id S230409AbiF1Ukv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 16:40:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A94520BF3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:40:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656448803;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CGLaXyxLtS2RSX+ruaLC5L5b9q7shHcOM9kFn/gAU+s=;
-        b=eEbWk5OheCJpZfB/mzsJcF3n54KIhO8Hdhhk1DkEYmfOgDi933UgMutnTeaNaO0geUW6TR
-        SALdNQWhsBdgwHs6xpvIB2YY16KGoVIGVJXxX16VkpJBk/5i9+Uu03iKEDPPalvyRC9MJx
-        upoK9+XlTm27GdcJetRcz4grGysbEsA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-567-62tZ8YqaPqSSquNMfU5MvQ-1; Tue, 28 Jun 2022 16:40:02 -0400
-X-MC-Unique: 62tZ8YqaPqSSquNMfU5MvQ-1
-Received: by mail-wm1-f69.google.com with SMTP id be12-20020a05600c1e8c00b0039c506b52a4so132043wmb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:40:01 -0700 (PDT)
+        Tue, 28 Jun 2022 16:40:51 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC982248D2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:40:45 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id y10-20020a9d634a000000b006167f7ce0c5so10632059otk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=g7DzDcGO0C//Tm2mK6aKPbRwKZWmv3UtbhY+R8SWnp0=;
+        b=KWNEvpPfmo2SmKf5bhaztGdiQA6tvFbLTUxtrhK6rIjkzfNXr0keJwbndIKL9tV+kc
+         GJvLAH4zZhqCxZY5XcSqSB007mXJECoqbN7dcQdel3VfCXDBC+smGP7zRPJ+jnJwH0lC
+         EKUm1ID9cMqQTYUrXSF130ZWwW3VemS6uvCCk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CGLaXyxLtS2RSX+ruaLC5L5b9q7shHcOM9kFn/gAU+s=;
-        b=lzvxXXJUDO0RShhqha5l/OKuAuKe4uRWlenpJS+q1mlSDfIeEaYLRt5Lv+bSOBLqCL
-         gWUgCyryStAS3Xf7x0uCyUCXAD4WxT3nRGmmI/rBc5061HXrS7bfmXZ7WIqk9skmJn3k
-         +pix1OhXF+weWI0UnLJjEZvH/g7sqYrMrOWW/cpQ6HGVQDq/jYNWANw68Tfet6ei/48C
-         vuZkz19yC5grDuKkW5M6p8cgS63uYPbqYikXSQgRoYK4Fy2AILtBSAJECHlvXkSCMV6v
-         T1JTxTjtg5gNqUGbsdcxSZNfY6+cV2SGxHSdqxF+GYfJDjOsDLqitTNyptBZFSh1FGaN
-         8duA==
-X-Gm-Message-State: AJIora9cTtFaxP6dXvqsmon8YSFlpkCTB0wIz4EkqEbQ8hOEI76my/HD
-        bYFZJxbKN+Fxa8JAl/ZRVLKQuFzdTO77Fpy6V+29iSZhvzXnVDmKDQIgMrx4Kec/rS36TR9vx2U
-        GjqmeRnfNeFg2vZQwgvRqGaBy
-X-Received: by 2002:a5d:4205:0:b0:21b:89ea:b5e3 with SMTP id n5-20020a5d4205000000b0021b89eab5e3mr18403187wrq.103.1656448800864;
-        Tue, 28 Jun 2022 13:40:00 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1stXRbnYj9xa9v+Dh058tTTbo+XuIUckpFFfQHVMfNz/XwZpJF2tJtQ/iyTQoS3Mc1VNz2gcw==
-X-Received: by 2002:a5d:4205:0:b0:21b:89ea:b5e3 with SMTP id n5-20020a5d4205000000b0021b89eab5e3mr18403174wrq.103.1656448800651;
-        Tue, 28 Jun 2022 13:40:00 -0700 (PDT)
-Received: from redhat.com ([2.52.23.204])
-        by smtp.gmail.com with ESMTPSA id c3-20020adfef43000000b0021bab0ba755sm15121087wrp.106.2022.06.28.13.39.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 13:40:00 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 16:39:55 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Xu Qiang <xuqiang36@huawei.com>
-Cc:     jasowang@redhat.com, elic@nvidia.com, si-wei.liu@oracle.com,
-        parav@nvidia.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, rui.xiang@huawei.com
-Subject: Re: [PATCH v2 -next] vdpa/mlx5: Use eth_zero_addr() to assign zero
- address
-Message-ID: <20220628163950-mutt-send-email-mst@kernel.org>
-References: <20220628123457.90884-1-xuqiang36@huawei.com>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=g7DzDcGO0C//Tm2mK6aKPbRwKZWmv3UtbhY+R8SWnp0=;
+        b=VSCAM8kohrkk9Gjn+kuBnL7eP1IpEE/cHMmPx0euhcKX8HWibh0qGtVb1BjIve7NJ9
+         I6gMIf9TitTnj6rUli9OnAvrFeE16fsFDFa8nVtWLeNn7vmMUpVdJwBrz++J8WFA72V1
+         9+nCS7HiLUm2JLqFM8VeuattzRqXIgrNe26Rktzmc2X4mUEhMpYF73ehdsEPqnUi8oqd
+         DOPH6efM3oAolum3kE70aXKpTLNj7hatF4kj91kJ78yxFyUm2mPzURCHZcMMkty3xPP8
+         H30gIGME2KVP5GuUM2AZUKNqatvKCAbN/1yk67dYpwZ6gxKUUUxpcU3d8RwyanupqDF5
+         V8eg==
+X-Gm-Message-State: AJIora/fHQjkNkxdYHo4eWqgm70gza30h8kwKaB8qU9Fbj4xRoUiRNLY
+        WaJfeYjfqDfn4LfBDKqHKoAqrODRwzxmsJGkSE1D5xgjwKU=
+X-Google-Smtp-Source: AGRyM1tGIqN+N5fxU26uQPwuhb/+Q+PPDxiV9zB3lkXobvidTtjy4ULjamLp4gDIpHvSTR5pfmD19QEOr8obxLOLWwA=
+X-Received: by 2002:a9d:6484:0:b0:60b:eb0b:4054 with SMTP id
+ g4-20020a9d6484000000b0060beb0b4054mr9324278otl.159.1656448844842; Tue, 28
+ Jun 2022 13:40:44 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 28 Jun 2022 15:40:44 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628123457.90884-1-xuqiang36@huawei.com>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CACeCKafR8hFke_tc2=1VGDNF-CFrZoAG1aUKuxGJG-6pd37hbg@mail.gmail.com>
+References: <20220622173605.1168416-1-pmalani@chromium.org>
+ <20220622173605.1168416-6-pmalani@chromium.org> <CAE-0n517BB8YbN5AZG6M3ZrZGOJDV=+t0R9d8wD+gVqO1aD1Xg@mail.gmail.com>
+ <CACeCKafR8hFke_tc2=1VGDNF-CFrZoAG1aUKuxGJG-6pd37hbg@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 28 Jun 2022 15:40:44 -0500
+Message-ID: <CAE-0n50XbO5Wu4-429Ao05A4QrbSXoi1wBjTpGFjKm3pZj1Ybg@mail.gmail.com>
+Subject: Re: [PATCH v5 5/9] drm/bridge: anx7625: Add typec_mux_set callback function
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        Pin-Yen Lin <treapking@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,35 +91,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 12:34:57PM +0000, Xu Qiang wrote:
-> Using eth_zero_addr() to assign zero address instead of memset().
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Xu Qiang <xuqiang36@huawei.com>
+Quoting Prashant Malani (2022-06-28 12:48:11)
+> On Tue, Jun 28, 2022 at 12:25 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> >
+> > Quoting Prashant Malani (2022-06-22 10:34:34)
+> > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > index bd21f159b973..5992fc8beeeb 100644
+> > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+[..]
+> > > +
+> > > +       if (ctx->num_typec_switches == 1)
+> >
+> > How do we handle the case where the usb-c-connector is directly
+> > connected to the RX1/TX1 and RX2/TX2 pins? This device would be an
+> > orientation (normal/reverse) and mode switch (usb/dp) in that scenario,
+> > but this code is written in a way that the orientation switch isn't
+> > going to flip the crosspoint switch for the different pin assignments.
+>
+> If all 4 SS lanes are connected to 1 usb-c-connector; there would be
+> just 1 "typec-switch" node.
+> In that case, the DT would only specify it as an "orientation-switch"
+> and register
+> an orientation-switch with the Type-C framework. The orientation switch would
+> pretty much do what the mode-switch callback does here (configuring
+> the crosspoint
+> switch).
+> One could also register a "mode-switch" there but it wouldn't do
+> anything (all 4 lanes are already
+> connected so there is nothing to re-route in the crosspoint switch).
+> Hence the above "if" check.
 
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
+Would we still want to route the DP traffic out if the pin assignment
+didn't have DP? Does the hardware support some mode where the DP traffic
+is shutdown? Or maybe the HPD pin needs to be quieted unless DP is
+assigned?
 
-> ---
-> v2:
-> - fix typo in commit log
->  drivers/vdpa/mlx5/net/mlx5_vnet.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> index e85c1d71f4ed..f738c78ef446 100644
-> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> @@ -1457,8 +1457,8 @@ static int mlx5_vdpa_add_mac_vlan_rules(struct mlx5_vdpa_net *ndev, u8 *mac,
->  
->  	*ucast = rule;
->  
-> -	memset(dmac_c, 0, ETH_ALEN);
-> -	memset(dmac_v, 0, ETH_ALEN);
-> +	eth_zero_addr(dmac_c);
-> +	eth_zero_addr(dmac_v);
->  	dmac_c[0] = 1;
->  	dmac_v[0] = 1;
->  	rule = mlx5_add_flow_rules(ndev->rxft, spec, &flow_act, &dest, 1);
-> -- 
-> 2.17.1
+I suppose none of those things matter though as long as there is some
+typec switch registered here so that the driver can be informed of the
+pin assignment. Is it right that the "mode-switch" property is only
+required in DT if this device is going to control the mode of the
+connector, i.e. USB+DP, or just DP? Where this device can't do that
+because it doesn't support only DP.
 
+>
+> Unfortunately, I don't have hardware which connects all 4 SS lanes
+> from 1 Type-C port
+> to the anx7625, so I didn't add the orientation switch handling to the
+> driver (since I have no way of verifying it).
+
+Alright. Maybe add a TODO then so it's more obvious that orientation
+isn't handled.
+
+>
+> Regarding DP alt-mode pin assignments : I think anx7625 will only support Pin D
+> (only 2 lane DP, no 4 lane DP).
+>
+
+Makes sense. Thanks!

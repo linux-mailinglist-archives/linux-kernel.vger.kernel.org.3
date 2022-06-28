@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D9555EF96
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF4455EF9B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232577AbiF1U2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 16:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
+        id S232589AbiF1U3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 16:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233912AbiF1U2S (ORCPT
+        with ESMTP id S232533AbiF1U3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 16:28:18 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5D91C937
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:25:38 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id z66so13143979vsb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:25:38 -0700 (PDT)
+        Tue, 28 Jun 2022 16:29:00 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807001A5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:27:57 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id q28so917818vsp.7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:27:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Enhe/nonN+cjOXq0VkfmEAmv3jt9mvt8AKrDL/yyTa4=;
-        b=Rx5Sf1FiofQmqFlsHUKetNpDiqLe6X3tIU4aiSmJvBRAYqoE9sL+qBVERKwWnwMfbx
-         I3T5xfw85xlU+iQZvHg7QGgJTVPand15b7S3gi8JQu+bZLutZokdnkvKhRd1XxhASkYL
-         4k4P4r012MlC/z4Mp/mwZFm4pIqsvPQF/oNQHsI5xhcJhw6KKsOLEwgzXhXrsMW7Ip5e
-         15oSy2weWA5aVhX0PBO0xv1S9Rw+NF7vPODlhu2oWBrTK457zvxzlehOW8tr50P0g5Rl
-         zE3cZ8Y/4hwS7mUAyetOFxPq0PwO1r5FETxIAUhQY5LtVkYx0xQMaRv/z5ov1cwqbv17
-         ep2g==
+        bh=2jLxzzGBS8SBXC6kEJLju797m9m9QFRVwbOOwePPZP8=;
+        b=FXKxKU9S+Ca0kD67fbB4DM3QhjswVAkP5EfG/bmwZd9+oS/viVeF0g3nMSgjbgBjQD
+         BTm0nkhvSHeFop49uJLDPAH+QUnh6aSOMJA/pNg4SqNw0RnB/Pve0FNEiGCmoamXZ7qw
+         CxodY02mcA0FwKCgEdmRhHse5+Oa/5nLGexobXlYHnZc+NDAbkWkwT05Cwd8JVb5kxRK
+         h9htBiCNZp0kHS0yI7m32r4d9Wlsrv4v3yobGATxY9IKnHeZriW6HpjtIHCvDDj27Kjs
+         Cm16lEcK50A6DI2PZRLp35l58GgOGYxYbqd2FoFliqSp2toRJeSPuLGP2Wt2LpJVXe11
+         0NXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Enhe/nonN+cjOXq0VkfmEAmv3jt9mvt8AKrDL/yyTa4=;
-        b=r45JprW8DalRaCgDLRs8PW+waSpV3R1emKS7IK/vIhEmyYsM18z8eJVdPfYWnj8enn
-         kvLEkEoWt2fCWywS8CMRsmEGrtv9i4CZwKdT9LNAmAVwnfMnmMdqt7BKu7wmj38B+lDg
-         EXtE9rMIQ1Qg2SWtR5q36QXB4u0xy59qyV8V7tC2qMvv16bX0w5VbBHlPAFWAJD/hvQ6
-         txf2tY0NoRzQR+cgpR0q5ywxMp4baTaoh2v4sgTwyEC61Brd1I02w++7hWk7ZUtX7S06
-         QpktiKU4vREqgAw59MG/F/LyEHIkJ6qmSQdVBOpBCE8t9K8qd+IkqSDMoElMK5mvamQs
-         Wsuw==
-X-Gm-Message-State: AJIora/7I+IRSc+Ss6fGr2dEenwbW84U8uEc7doGdDe8B82AmwNzdcze
-        OLajhdNYmIUoCQwICb+Yimv3LLKkooiabbbs8pgwAw==
-X-Google-Smtp-Source: AGRyM1t0zvxZV+6K5EnJlEG+JRDrvBQyifa/s+ZMlTRWe7hYhBOlX03K5Qu9qT+JlLR85kbBFRgfWQiHtCZKYj80XRI=
-X-Received: by 2002:a05:6102:f81:b0:354:3967:118a with SMTP id
- e1-20020a0561020f8100b003543967118amr2538942vsv.67.1656447937672; Tue, 28 Jun
- 2022 13:25:37 -0700 (PDT)
+        bh=2jLxzzGBS8SBXC6kEJLju797m9m9QFRVwbOOwePPZP8=;
+        b=XdnWnMEt7TErX3JFXxcJN1KS4VBNB6tH6X8yBtplzwMZg158mzlChSq0ui9Aik2NMN
+         Lo48aW8HAb6BcpKAXM6NUOXwolByN6JxT/BVxQc4e98u7981A4JpKhBM4jl5SMv7Oh7Q
+         ZadshySFjsyA/38B1bAusGaNzB1F1S1isH1Uhg76gARiOO9AQ1HhK0udOaaX4lKiKSP8
+         d99I9wd8ybQv2aapnmTga0lsfPqS4vKBQNgbo9vCdudaw7QWyONDzA6tVet83KH5/Hb4
+         mak8xTM/0pIotOpKWm0xf1dWJxBlXztjuypxLRX3lgRuyRqciJb1Ylz8Mxaefmm5dzpy
+         fDGg==
+X-Gm-Message-State: AJIora/P9o3ZFOqzFGS1pyUctCfoX0PTt1tOui4wRhPrfzujFD/1ecrT
+        yv+o03pxDDEsQiLxC2g28kVVlOWIovVaat6KM+ViCw==
+X-Google-Smtp-Source: AGRyM1uEm5rLU/ghy5u7cLmUbBpWxSZfpFCDhs61n6N0NJIXCa3r5y/zwUxUQOzoSpyd/kmgK7Wu2MgsrA2V7UQLYPE=
+X-Received: by 2002:a05:6102:101:b0:354:355b:711b with SMTP id
+ z1-20020a056102010100b00354355b711bmr2710147vsq.61.1656448076572; Tue, 28 Jun
+ 2022 13:27:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220624173656.2033256-1-jthoughton@google.com> <20220624173656.2033256-8-jthoughton@google.com>
-In-Reply-To: <20220624173656.2033256-8-jthoughton@google.com>
+References: <20220624173656.2033256-1-jthoughton@google.com> <20220624173656.2033256-9-jthoughton@google.com>
+In-Reply-To: <20220624173656.2033256-9-jthoughton@google.com>
 From:   Mina Almasry <almasrymina@google.com>
-Date:   Tue, 28 Jun 2022 13:25:26 -0700
-Message-ID: <CAHS8izM-xWCA6EuZP4=n3sg4OSVuD_NMJS6gCZHbLs7YN8Z+cg@mail.gmail.com>
-Subject: Re: [RFC PATCH 07/26] hugetlb: add hugetlb_pte to track HugeTLB page
- table entries
+Date:   Tue, 28 Jun 2022 13:27:44 -0700
+Message-ID: <CAHS8izOhmp7PF++AaQTf403LpfW7ta1YyWQwRLkzopP0FADArQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 08/26] hugetlb: add hugetlb_free_range to free PT structures
 To:     James Houghton <jthoughton@google.com>
 Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -78,233 +77,60 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, Jun 24, 2022 at 10:37 AM James Houghton <jthoughton@google.com> wrote:
 >
-> After high-granularity mapping, page table entries for HugeTLB pages can
-> be of any size/type. (For example, we can have a 1G page mapped with a
-> mix of PMDs and PTEs.) This struct is to help keep track of a HugeTLB
-> PTE after we have done a page table walk.
->
-> Without this, we'd have to pass around the "size" of the PTE everywhere.
-> We effectively did this before; it could be fetched from the hstate,
-> which we pass around pretty much everywhere.
->
-> This commit includes definitions for some basic helper functions that
-> are used later. These helper functions wrap existing PTE
-> inspection/modification functions, where the correct version is picked
-> depending on if the HugeTLB PTE is actually "huge" or not. (Previously,
-> all HugeTLB PTEs were "huge").
->
-> For example, hugetlb_ptep_get wraps huge_ptep_get and ptep_get, where
-> ptep_get is used when the HugeTLB PTE is PAGE_SIZE, and huge_ptep_get is
-> used in all other cases.
+> This is a helper function for freeing the bits of the page table that
+> map a particular HugeTLB PTE.
 >
 > Signed-off-by: James Houghton <jthoughton@google.com>
 > ---
->  include/linux/hugetlb.h | 84 +++++++++++++++++++++++++++++++++++++++++
->  mm/hugetlb.c            | 57 ++++++++++++++++++++++++++++
->  2 files changed, 141 insertions(+)
+>  include/linux/hugetlb.h |  2 ++
+>  mm/hugetlb.c            | 17 +++++++++++++++++
+>  2 files changed, 19 insertions(+)
 >
 > diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> index 5fe1db46d8c9..1d4ec9dfdebf 100644
+> index 1d4ec9dfdebf..33ba48fac551 100644
 > --- a/include/linux/hugetlb.h
 > +++ b/include/linux/hugetlb.h
-> @@ -46,6 +46,68 @@ enum {
->         __NR_USED_SUBPAGE,
->  };
+> @@ -107,6 +107,8 @@ bool hugetlb_pte_none_mostly(const struct hugetlb_pte *hpte);
+>  pte_t hugetlb_ptep_get(const struct hugetlb_pte *hpte);
+>  void hugetlb_pte_clear(struct mm_struct *mm, const struct hugetlb_pte *hpte,
+>                        unsigned long address);
+> +void hugetlb_free_range(struct mmu_gather *tlb, const struct hugetlb_pte *hpte,
+> +                       unsigned long start, unsigned long end);
 >
-> +struct hugetlb_pte {
-> +       pte_t *ptep;
-> +       unsigned int shift;
-> +};
-> +
-> +static inline
-> +void hugetlb_pte_init(struct hugetlb_pte *hpte)
-> +{
-> +       hpte->ptep = NULL;
-
-shift = 0; ?
-
-> +}
-> +
-> +static inline
-> +void hugetlb_pte_populate(struct hugetlb_pte *hpte, pte_t *ptep,
-> +                         unsigned int shift)
-> +{
-> +       BUG_ON(!ptep);
-> +       hpte->ptep = ptep;
-> +       hpte->shift = shift;
-> +}
-> +
-> +static inline
-> +unsigned long hugetlb_pte_size(const struct hugetlb_pte *hpte)
-> +{
-> +       BUG_ON(!hpte->ptep);
-> +       return 1UL << hpte->shift;
-> +}
-> +
-
-This helper is quite redundant in my opinion.
-
-> +static inline
-> +unsigned long hugetlb_pte_mask(const struct hugetlb_pte *hpte)
-> +{
-> +       BUG_ON(!hpte->ptep);
-> +       return ~(hugetlb_pte_size(hpte) - 1);
-> +}
-> +
-> +static inline
-> +unsigned int hugetlb_pte_shift(const struct hugetlb_pte *hpte)
-> +{
-> +       BUG_ON(!hpte->ptep);
-> +       return hpte->shift;
-> +}
-> +
-
-This one jumps as quite redundant too.
-
-> +static inline
-> +bool hugetlb_pte_huge(const struct hugetlb_pte *hpte)
-> +{
-> +       return !IS_ENABLED(CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING) ||
-> +               hugetlb_pte_shift(hpte) > PAGE_SHIFT;
-> +}
-> +
-
-I'm guessing the !IS_ENABLED() check is because only the HGM code
-would store a non-huge pte in a hugetlb_pte struct. I think it's a bit
-fragile because anyone can add code in the future that uses
-hugetlb_pte in unexpected ways, but I will concede that it is correct
-as written.
-
-> +static inline
-> +void hugetlb_pte_copy(struct hugetlb_pte *dest, const struct hugetlb_pte *src)
-> +{
-> +       dest->ptep = src->ptep;
-> +       dest->shift = src->shift;
-> +}
-> +
-> +bool hugetlb_pte_present_leaf(const struct hugetlb_pte *hpte);
-> +bool hugetlb_pte_none(const struct hugetlb_pte *hpte);
-> +bool hugetlb_pte_none_mostly(const struct hugetlb_pte *hpte);
-> +pte_t hugetlb_ptep_get(const struct hugetlb_pte *hpte);
-> +void hugetlb_pte_clear(struct mm_struct *mm, const struct hugetlb_pte *hpte,
-> +                      unsigned long address);
-> +
 >  struct hugepage_subpool {
 >         spinlock_t lock;
->         long count;
-> @@ -1130,6 +1192,28 @@ static inline spinlock_t *huge_pte_lock_shift(unsigned int shift,
->         return ptl;
->  }
->
-> +static inline
-
-Maybe for organization, move all the static functions you're adding
-above the hugetlb_pte_* declarations you're adding?
-
-> +spinlock_t *hugetlb_pte_lockptr(struct mm_struct *mm, struct hugetlb_pte *hpte)
-> +{
-> +
-> +       BUG_ON(!hpte->ptep);
-> +       // Only use huge_pte_lockptr if we are at leaf-level. Otherwise use
-> +       // the regular page table lock.
-
-Does checkpatch.pl not complain about // style comments? I think those
-are not allowed, no?
-
-> +       if (hugetlb_pte_none(hpte) || hugetlb_pte_present_leaf(hpte))
-> +               return huge_pte_lockptr(hugetlb_pte_shift(hpte),
-> +                               mm, hpte->ptep);
-> +       return &mm->page_table_lock;
-> +}
-> +
-> +static inline
-> +spinlock_t *hugetlb_pte_lock(struct mm_struct *mm, struct hugetlb_pte *hpte)
-> +{
-> +       spinlock_t *ptl = hugetlb_pte_lockptr(mm, hpte);
-> +
-> +       spin_lock(ptl);
-> +       return ptl;
-> +}
-> +
->  #if defined(CONFIG_HUGETLB_PAGE) && defined(CONFIG_CMA)
->  extern void __init hugetlb_cma_reserve(int order);
->  extern void __init hugetlb_cma_check(void);
 > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index d6d0d4c03def..1a1434e29740 100644
+> index 1a1434e29740..a2d2ffa76173 100644
 > --- a/mm/hugetlb.c
 > +++ b/mm/hugetlb.c
-> @@ -1120,6 +1120,63 @@ static bool vma_has_reserves(struct vm_area_struct *vma, long chg)
+> @@ -1120,6 +1120,23 @@ static bool vma_has_reserves(struct vm_area_struct *vma, long chg)
 >         return false;
 >  }
 >
-> +bool hugetlb_pte_present_leaf(const struct hugetlb_pte *hpte)
+> +void hugetlb_free_range(struct mmu_gather *tlb, const struct hugetlb_pte *hpte,
+> +                       unsigned long start, unsigned long end)
 > +{
-> +       pgd_t pgd;
-> +       p4d_t p4d;
-> +       pud_t pud;
-> +       pmd_t pmd;
+> +       unsigned long floor = start & hugetlb_pte_mask(hpte);
+> +       unsigned long ceiling = floor + hugetlb_pte_size(hpte);
 > +
-> +       BUG_ON(!hpte->ptep);
 > +       if (hugetlb_pte_size(hpte) >= PGDIR_SIZE) {
-> +               pgd = *(pgd_t *)hpte->ptep;
-> +               return pgd_present(pgd) && pgd_leaf(pgd);
+> +               free_p4d_range(tlb, (pgd_t *)hpte->ptep, start, end, floor, ceiling);
 > +       } else if (hugetlb_pte_size(hpte) >= P4D_SIZE) {
-> +               p4d = *(p4d_t *)hpte->ptep;
-> +               return p4d_present(p4d) && p4d_leaf(p4d);
+> +               free_pud_range(tlb, (p4d_t *)hpte->ptep, start, end, floor, ceiling);
 > +       } else if (hugetlb_pte_size(hpte) >= PUD_SIZE) {
-> +               pud = *(pud_t *)hpte->ptep;
-> +               return pud_present(pud) && pud_leaf(pud);
+> +               free_pmd_range(tlb, (pud_t *)hpte->ptep, start, end, floor, ceiling);
 > +       } else if (hugetlb_pte_size(hpte) >= PMD_SIZE) {
-> +               pmd = *(pmd_t *)hpte->ptep;
-> +               return pmd_present(pmd) && pmd_leaf(pmd);
-> +       } else if (hugetlb_pte_size(hpte) >= PAGE_SIZE)
-> +               return pte_present(*hpte->ptep);
+> +               free_pte_range(tlb, (pmd_t *)hpte->ptep, start);
+> +       }
 
-The use of >= is a bit curious to me. Shouldn't these be ==?
+Same as the previous patch: I wonder about >=, and if possible
+calculate hugetlb_pte_size() once, or use *_SHIFT comparison.
 
-Also probably doesn't matter but I was thinking to use *_SHIFTs
-instead of *_SIZE so you don't have to calculate the size 5 times in
-this routine, or calculate hugetlb_pte_size() once for some less code
-duplication and re-use?
-
-> +       BUG();
 > +}
 > +
-> +bool hugetlb_pte_none(const struct hugetlb_pte *hpte)
-> +{
-> +       if (hugetlb_pte_huge(hpte))
-> +               return huge_pte_none(huge_ptep_get(hpte->ptep));
-> +       return pte_none(ptep_get(hpte->ptep));
-> +}
-> +
-> +bool hugetlb_pte_none_mostly(const struct hugetlb_pte *hpte)
-> +{
-> +       if (hugetlb_pte_huge(hpte))
-> +               return huge_pte_none_mostly(huge_ptep_get(hpte->ptep));
-> +       return pte_none_mostly(ptep_get(hpte->ptep));
-> +}
-> +
-> +pte_t hugetlb_ptep_get(const struct hugetlb_pte *hpte)
-> +{
-> +       if (hugetlb_pte_huge(hpte))
-> +               return huge_ptep_get(hpte->ptep);
-> +       return ptep_get(hpte->ptep);
-> +}
-> +
-> +void hugetlb_pte_clear(struct mm_struct *mm, const struct hugetlb_pte *hpte,
-> +                      unsigned long address)
-> +{
-> +       BUG_ON(!hpte->ptep);
-> +       unsigned long sz = hugetlb_pte_size(hpte);
-> +
-> +       if (sz > PAGE_SIZE)
-> +               return huge_pte_clear(mm, address, hpte->ptep, sz);
-> +       return pte_clear(mm, address, hpte->ptep);
-> +}
-> +
->  static void enqueue_huge_page(struct hstate *h, struct page *page)
+>  bool hugetlb_pte_present_leaf(const struct hugetlb_pte *hpte)
 >  {
->         int nid = page_to_nid(page);
+>         pgd_t pgd;
 > --
 > 2.37.0.rc0.161.g10f37bed90-goog
 >

@@ -2,120 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F188655F198
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 00:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B40F655F153
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 00:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbiF1Wua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 18:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
+        id S229512AbiF1WXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 18:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230396AbiF1Wu2 (ORCPT
+        with ESMTP id S231192AbiF1WWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 18:50:28 -0400
-Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 954DF39833;
-        Tue, 28 Jun 2022 15:50:27 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
-        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 092A910E7862;
-        Wed, 29 Jun 2022 08:17:58 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1o6JWv-00CEcF-Ry; Wed, 29 Jun 2022 08:17:57 +1000
-Date:   Wed, 29 Jun 2022 08:17:57 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>, linux-mm@kvack.org
-Subject: Re: Multi-page folio issues in 5.19-rc4 (was [PATCH v3 25/25] xfs:
- Support large folios)
-Message-ID: <20220628221757.GJ227878@dread.disaster.area>
-References: <20211216210715.3801857-1-willy@infradead.org>
- <20211216210715.3801857-26-willy@infradead.org>
- <YrO243DkbckLTfP7@magnolia>
- <Yrku31ws6OCxRGSQ@magnolia>
- <Yrm6YM2uS+qOoPcn@casper.infradead.org>
- <YrosM1+yvMYliw2l@magnolia>
- <20220628073120.GI227878@dread.disaster.area>
- <YrrlrMK/7pyZwZj2@casper.infradead.org>
- <Yrrmq4hmJPkf5V7s@casper.infradead.org>
- <Yrr/oBlf1Eig8uKS@casper.infradead.org>
+        Tue, 28 Jun 2022 18:22:04 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F873FBF9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 15:18:39 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id q9so19643150wrd.8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 15:18:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=BeXPYPsPcks1vJnkCiVR+AZ4T0LVp8r4SqdR8q577ps=;
+        b=GPDc5Ne1/t+yvsW3Zw0uTBJiRPqABbV7d6iM8bfuusK5H39x+/WZITaYKgU8TsNogF
+         TlkUn6WfF0pK/0V1ftgApLGmqueyGM4ePfk1cw+ofrd/xlGAqZ+lki61xMTZKtEH2q19
+         DJHmL1e1ScMdpk8ETbUl33lEtxw3EyTcbuvPr9h35Oy5gKF5czZ0+11hfoyCB6T5lJkm
+         brY+xpKK3dY9dUCTlkZkYsUMAeCqMjQGFXwMaUnxEO/lHkKVuQJjAseYsc6NPvEcsG7o
+         7FX0RuohRm51uxkjTI19J5OFzEYkC2rKkC9IXUnxb3YB6vAL/5yveRMijZ/WXt5UTV9K
+         lcfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=BeXPYPsPcks1vJnkCiVR+AZ4T0LVp8r4SqdR8q577ps=;
+        b=5S12+GN9P1FhV5mBpyzL0NQE6lUITU9vZXM1IyWsMmTm7MQW1+doWwvim2NcvWseA5
+         GTHgYKq7k3hVcfaEClJbnQqW5rxHMKJ2atBfGXAV/QEOnhe5b10Ug1idMWn46KNxBtJZ
+         0GV+N8DByEBgN2Q4ildmvBJVzdWd84AefvI/H1LJeTvFCSj26H1KIBPtVvq55QQv7YJr
+         Jzv1exsW6QEHrr5+kf7Vgahxwb6h5dLn4E1X/2Qn6fkbeYj43ROLW5UynmRRFbhWyN61
+         gObB6qWt//nkahPNNe/XVxeGoNQANx8MJTpPj3NH6rN/jlkOumsHaVsABLKTPJRRbw0s
+         mQhw==
+X-Gm-Message-State: AJIora+g9eJqHMMM/knVjMl/DNVAeA9HCtLenCjQLwJNuxAAqUFNebcx
+        2fbwsu3nc6c/ASYddgAfnkovU4JvbIGbiW/RJdw=
+X-Google-Smtp-Source: AGRyM1smyTQMQyrdcmp1N5CRb2Pq7Og+0Qb10LZ8nhgBoIqCtQYN4M9y+PhLb30lIJ1vBLpKwvNk5SnNivlVnlMjO4A=
+X-Received: by 2002:a5d:4a48:0:b0:21b:9ee2:a6e0 with SMTP id
+ v8-20020a5d4a48000000b0021b9ee2a6e0mr36896wrs.468.1656454708330; Tue, 28 Jun
+ 2022 15:18:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yrr/oBlf1Eig8uKS@casper.infradead.org>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=62bb7e19
-        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
-        a=kj9zAlcOel0A:10 a=JPEYwPQDsx4A:10 a=20KFwNOVAAAA:8 a=7-415B0cAAAA:8
-        a=I0e5OopBZKVaJ7lt07gA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a5d:4bcc:0:0:0:0:0 with HTTP; Tue, 28 Jun 2022 15:18:27
+ -0700 (PDT)
+From:   Drzulu Nelson <dr.zulunelson09@gmail.com>
+Date:   Tue, 28 Jun 2022 15:18:27 -0700
+Message-ID: <CALWycZqSf3Rt48JZMftt2pVEmBCSMAujxZJ9a5P4zemVHFwMFQ@mail.gmail.com>
+Subject: Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.8 required=5.0 tests=ADVANCE_FEE_3_NEW,BAYES_50,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:42f listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [dr.zulunelson09[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [dr.zulunelson09[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.0 FREEMAIL_REPLY From and body contain different freemails
+        *  3.5 ADVANCE_FEE_3_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+        *  2.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 02:18:24PM +0100, Matthew Wilcox wrote:
-> On Tue, Jun 28, 2022 at 12:31:55PM +0100, Matthew Wilcox wrote:
-> > On Tue, Jun 28, 2022 at 12:27:40PM +0100, Matthew Wilcox wrote:
-> > > On Tue, Jun 28, 2022 at 05:31:20PM +1000, Dave Chinner wrote:
-> > > > So using this technique, I've discovered that there's a dirty page
-> > > > accounting leak that eventually results in fsx hanging in
-> > > > balance_dirty_pages().
-> > > 
-> > > Alas, I think this is only an accounting error, and not related to
-> > > the problem(s) that Darrick & Zorro are seeing.  I think what you're
-> > > seeing is dirty pages being dropped at truncation without the
-> > > appropriate accounting.  ie this should be the fix:
-> > 
-> > Argh, try one that actually compiles.
-> 
-> ... that one's going to underflow the accounting.  Maybe I shouldn't
-> be writing code at 6am?
-> 
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index f7248002dad9..4eec6ee83e44 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -18,6 +18,7 @@
->  #include <linux/shrinker.h>
->  #include <linux/mm_inline.h>
->  #include <linux/swapops.h>
-> +#include <linux/backing-dev.h>
->  #include <linux/dax.h>
->  #include <linux/khugepaged.h>
->  #include <linux/freezer.h>
-> @@ -2439,11 +2440,15 @@ static void __split_huge_page(struct page *page, struct list_head *list,
->  		__split_huge_page_tail(head, i, lruvec, list);
->  		/* Some pages can be beyond EOF: drop them from page cache */
->  		if (head[i].index >= end) {
-> -			ClearPageDirty(head + i);
-> -			__delete_from_page_cache(head + i, NULL);
-> +			struct folio *tail = page_folio(head + i);
-> +
->  			if (shmem_mapping(head->mapping))
->  				shmem_uncharge(head->mapping->host, 1);
-> -			put_page(head + i);
-> +			else if (folio_test_clear_dirty(tail))
-> +				folio_account_cleaned(tail,
-> +					inode_to_wb(folio->mapping->host));
-> +			__filemap_remove_folio(tail, NULL);
-> +			folio_put(tail);
->  		} else if (!PageAnon(page)) {
->  			__xa_store(&head->mapping->i_pages, head[i].index,
->  					head + i, 0);
-> 
+--=20
 
-Yup, that fixes the leak.
+--=20
+Ordering beneficiary,
 
-Tested-by: Dave Chinner <dchinner@redhat.com>
+This is to inform you that your payment file has been included in the
+first batch,Consequently, payment approval has been issued by the
+International Monitory Fund (IMF) for an initial payment of =E2=82=AC
+4,650,000,00 being part of your long-overdue payment.
 
-Cheers,
+To facilitate this and avoid further bureaucratic bottlenecks,an
+accredited financial institution has been appointed to handle your
+payment file as well as others that fall in the same category.
 
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+I therefore request to know if you are interested in receiving this
+fund within the next seven banking days or would prefer to have it at
+a later date within the year. If you are ready to receive the above
+mentioned figure as explained,let me know immediately so I can send
+you contact details for the appointed financial institution.
+
+Kindly reply through my private email: ( officeauditor28@gmail.com )
+
+Yours In Servive
+For;The International Monitory Fund (IMF)
+London Ln,Bromley BR1 4HF,UK
+Visit our website: www.imf.org

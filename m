@@ -2,72 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A9355E68C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:30:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E18E255E910
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346239AbiF1OSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 10:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
+        id S1344228AbiF1OUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 10:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346441AbiF1OSc (ORCPT
+        with ESMTP id S231749AbiF1OUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 10:18:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81CCDEA;
-        Tue, 28 Jun 2022 07:18:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5AFB9B81E0B;
-        Tue, 28 Jun 2022 14:18:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B5F2C341C6;
-        Tue, 28 Jun 2022 14:18:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656425908;
-        bh=gNqsfpabtVurh3KrN/HDHkVIuq5HYEGkFj0dq9pxBp0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LKmDxdeiZbNhcfCtRCGKrWsyjlCMGrWNe6JPI6+0Ud4+CdurjXwUmrO+N85g9uStN
-         ZMyX+h6jcWDShk2bKHv4I1CwjG76KgIokSJRaPNHE+tAExMRqCJhyYb+qk23PpSnt8
-         UZagMIRlLLl0N2746CMcacDFBvR451lE95WpeBq0GW4QDuaouxlRRNIVOVHDclrQ6f
-         3R9oBNaPqtGDm4Fzozu0TEhclsuvbNSWpoAarBMEoFPJEcd4AO2pVjb65zJgdF1PVp
-         ef3Ggil+1czhmYD/i4aHezmCjBjk3ri61YXhTXJoT9Ami17Y24U2vq1uockAAm5n3K
-         LL1PsE5NQ0Syg==
-Date:   Tue, 28 Jun 2022 16:18:23 +0200
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Stephen Hemminger <stephen@networkplumber.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, dm-devel@redhat.com,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, io-uring@vger.kernel.org,
-        lvs-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        kasan-dev@googlegroups.com, linux-mmc@vger.kernel.org,
-        nvdimm@lists.linux.dev, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-perf-users@vger.kernel.org,
-        linux-raid@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        v9fs-developer@lists.sourceforge.net, linux-rdma@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] treewide: uapi: Replace zero-length arrays with
- flexible-array members
-Message-ID: <20220628141823.GB25163@embeddedor>
-References: <20220627180432.GA136081@embeddedor>
- <20220627125343.44e24c41@hermes.local>
+        Tue, 28 Jun 2022 10:20:32 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A7220BD6;
+        Tue, 28 Jun 2022 07:20:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=bGZWR4+xFQDcZf+1dFjdwobB0qRnC6+pf315BRLfGmw=; b=P+YP6JXp82I3hU0HChO35R7Xd5
+        SlXmDXZWicbX2zdNga0elkAGrONI5wXy5yU2x7sSjY8AljxvBkYBG+rRDz5Ey1jajKiWEO2cgYk2j
+        bZfnvlDg2OduF4iL3Y3QWbWw62OgHA2cVz5HlevQ37by6ZqZfT2mjXb1hwi9C0YYtWjBBwqpbvlOe
+        rn4Zyrxvf3BJC+0dQP3ONHPMssC1Xpak1p4zjB154q37hYif/uf+hydGitiKez0WNoNyTM821wI1/
+        TyHjtdSCs+jfuSKE+Xj95liXXik6VX8wC1AGILmORkZSYkhl0leBu8bx/A2CqtwJ+4yYA3I3mfrKa
+        tAaOvBHw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o6C4p-006gmR-KJ; Tue, 28 Jun 2022 14:20:27 +0000
+Message-ID: <62cdc6ce-1940-8b94-6c96-0f48f62c03d3@infradead.org>
+Date:   Tue, 28 Jun 2022 07:20:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220627125343.44e24c41@hermes.local>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] Documentation: kunit: eliminate code-block warnings
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, Harinder Singh <sharinder@google.com>,
+        Tim Bird <tim.bird@sony.com>
+References: <20220401024707.10550-1-rdunlap@infradead.org>
+ <87fsjt50c8.fsf@meer.lwn.net>
+ <4c403239-3c71-4ab9-2168-f7e9d77008b2@infradead.org>
+ <20220628081744.7e6955e6@sal.lan>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220628081744.7e6955e6@sal.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,16 +59,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 12:53:43PM -0700, Stephen Hemminger wrote:
-> Thanks this fixes warning with gcc-12 in iproute2.
-> In function ‘xfrm_algo_parse’,
->     inlined from ‘xfrm_state_modify.constprop’ at xfrm_state.c:573:5:
-> xfrm_state.c:162:32: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
->   162 |                         buf[j] = val;
->       |                         ~~~~~~~^~~~~
+Hi Mauro,
 
-Great! This gives me hope. :)
+On 6/28/22 00:17, Mauro Carvalho Chehab wrote:
+> Em Sat, 25 Jun 2022 08:12:00 -0700
+> Randy Dunlap <rdunlap@infradead.org> escreveu:
+> 
+>>> So which version of Sphinx are you using?  The language argument became
+>>> optional in 2.0, so you'd need to be running something pretty ancient to
+>>> see this.
+>>>
+>>> Ah, I see 1.8.5 in your later message...how wedded are you to that
+>>> version?  
+>>
+>> It's what ships with OpenSuse Leap 15.3, which I have been using for quite
+>> a long time.
+>>
+>> I see that there is now OpenSuse Leap 15.4, so I could upgrade to that,
+>> but I don't know what version on Sphinx it uses.
+> 
+> It seems that there are two versions on it, packaged with different
+> names:
+> 
+> 2.3.1:
+> 	https://download.opensuse.org/distribution/leap/15.4/repo/oss/noarch/python3-Sphinx-2.3.1-150400.1.7.noarch.rpm
+> 4.2.0:
+> 	https://download.opensuse.org/distribution/leap/15.4/repo/oss/noarch/python3-Sphinx_4_2_0-4.2.0-150400.11.6.noarch.rpm
+> 
+> It should be noticed that, while we don't decide to remove support for
+> Sphinx < 3, kernel-doc has two different outputs, depending on Sphinx C
+> domain support. The legacy support is enabled with version < 3 [1].
+> 
+> As we're currently discussing dropping support for Sphinx version < 3,
+> I would recommend you to use the 4.2 package.
+> 
+> Regards,
+> Mauro
+> 
+> [1] Version 3.0 is a bad choice, as the C domain is partially broken.
 
-Thanks
---
-Gustavo
+Thanks for the info. I'll take care of it.
+
+-- 
+~Randy

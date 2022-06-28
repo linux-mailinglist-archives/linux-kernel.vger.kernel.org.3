@@ -2,120 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F056355ED8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B855155ED91
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235907AbiF1TFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 15:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
+        id S235883AbiF1TGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 15:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235415AbiF1TFL (ORCPT
+        with ESMTP id S235728AbiF1TFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 15:05:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8763C2CC8F;
-        Tue, 28 Jun 2022 12:05:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18E9C618E2;
-        Tue, 28 Jun 2022 19:05:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97EEFC3411D;
-        Tue, 28 Jun 2022 19:05:07 +0000 (UTC)
-Date:   Tue, 28 Jun 2022 15:05:06 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-Subject: Re: [PATCH V4 11/20] rv/monitor: wwnr instrumentation and
- Makefile/Kconfig entries
-Message-ID: <20220628150506.291d093a@gandalf.local.home>
-In-Reply-To: <944694879f67c0e635815ac57154be477a1b9108.1655368610.git.bristot@kernel.org>
-References: <cover.1655368610.git.bristot@kernel.org>
-        <944694879f67c0e635815ac57154be477a1b9108.1655368610.git.bristot@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 28 Jun 2022 15:05:31 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA131C122
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 12:05:26 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-101ec2d6087so18322583fac.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 12:05:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7rpepXQ7MoTX7jgDnqruqbXS4kYEhIFVMSPcRo6CMIA=;
+        b=RV7tV4wMrVTS377CAAvh/1t4rSKEiJ9YCis3oRYHCpC5gvZQAd3ijGt+qx8y87XQ2v
+         HXkrHQzQxl2HRzs18pxWd2A85m2uYNAcZxFWAlpABXhyi9DxAenGhLMGDhFngZ8gQRN3
+         kciJtTxPZxw9pvlhSwDOsizpYRv/gZN2C8c+YXAz4JybN8i/Z0vXS5WsXqucQ6XI2k+m
+         fQjWHlU7w4GcFDubH0GQTf2UKu9PsD7hG+XBVm7OWzS3NrhX8KyT+KlRYV1vIotVOls8
+         Hi3GROfyujIRuOm65SJ9D5cA3POeVvdoBFpBjSJsY836MmT1R7vS0IVRF8AExAv6f9kk
+         H/vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7rpepXQ7MoTX7jgDnqruqbXS4kYEhIFVMSPcRo6CMIA=;
+        b=p25KVtfoNV19vNIUzIwftAMMjRsztOrRbaLE39XgoH5Pph6ucvKxjuBlEr7qDsPHCw
+         qOuoTBPoIPEPc1VdR88PMWXMssCSYGUBDLEuBheXMQygJ/SHIlyuhJTicFRgIecgpGTO
+         11FUp4N8RVUouAnbkvcQbzZgtHr15YVzuaIrkCRJAqO/02EYxr1p79QriBMuU0eYmnZd
+         W9FQqjEr/7M9Mtkk331q4JiJKyqV/pqIB3yHo05V/pa1OoHVcVLPw3MnuhkzQCskqogp
+         BgoZUJqmdejLsMSjotuwCuFl2m2fKWi3KLdTvhftGtakkW3QH3Z6BOwhVgJBIiGIO/IG
+         HgLw==
+X-Gm-Message-State: AJIora/auAww/j1+tqnip0ABnXrL1cNiQqUzKpq0kSoB4r/nUAo5CgwQ
+        8GIQ5I1iNrZaEu568Jn2jb02vA==
+X-Google-Smtp-Source: AGRyM1tOoQ4XHySVoKEHg7PMnDK8eOS/21P2AH31NPdXic4KRq7OI36aPs3Ti5RkN9Wy9jcYVCwbZg==
+X-Received: by 2002:a05:6870:231d:b0:10b:7a0e:1be6 with SMTP id w29-20020a056870231d00b0010b7a0e1be6mr691329oao.114.1656443125781;
+        Tue, 28 Jun 2022 12:05:25 -0700 (PDT)
+Received: from eze-laptop ([190.190.187.68])
+        by smtp.gmail.com with ESMTPSA id 127-20020aca0785000000b00334c2e81dfbsm131742oih.0.2022.06.28.12.05.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 12:05:25 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 16:05:19 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Sebastian Fricke <sebastian.fricke@collabora.com>
+Cc:     linux-media@vger.kernel.org, kernel@collabora.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: Fix incorrect P010 chroma order description
+Message-ID: <YrtQ70tLrPgeZWzz@eze-laptop>
+References: <20220627071224.16787-1-sebastian.fricke@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220627071224.16787-1-sebastian.fricke@collabora.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022 10:44:53 +0200
-Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
+On Mon, Jun 27, 2022 at 09:12:23AM +0200, Sebastian Fricke wrote:
+> The chroma order of P010 is `CbCr`,
+> match with the descriptions in `include/uapi/linux/videodev2.h` and the
+> documentation.
+> 
+> Fixes: 5374d8fb75f31 Add P010 video format
+> 
+> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 
-> diff --git a/kernel/trace/rv/monitors/wwnr/wwnr.c b/kernel/trace/rv/monitors/wwnr/wwnr.c
-> index 8ba01f0f0df8..3fe1ad9125d3 100644
-> --- a/kernel/trace/rv/monitors/wwnr/wwnr.c
-> +++ b/kernel/trace/rv/monitors/wwnr/wwnr.c
-> @@ -10,11 +10,8 @@
->  
->  #define MODULE_NAME "wwnr"
->  
-> -/*
-> - * XXX: include required tracepoint headers, e.g.,
-> - * #include <linux/trace/events/sched.h>
-> - */
->  #include <trace/events/rv.h>
-> +#include <trace/events/sched.h>
->  
->  /*
->   * This is the self-generated part of the monitor. Generally, there is no need
-> @@ -37,21 +34,20 @@ DECLARE_DA_MON_PER_TASK(wwnr, char);
->   * are translated into model's event.
->   *
->   */
-> -static void handle_switch_in(void *data, /* XXX: fill header */)
-> +static void handle_switch(void *data, bool preempt, struct task_struct *p,
-> +			  struct task_struct *n, unsigned int prev_state)
->  {
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-
-Patch 8 was the "educational" patch. There's no reason to split 10 and 11
-up too.
-
--- Steve
-
-
-> -	struct task_struct *p = /* XXX: how do I get p? */;
-> -	da_handle_event_wwnr(p, switch_in_wwnr);
-> -}
-> +	/* start monitoring only after the first suspension */
-> +	if (prev_state == TASK_INTERRUPTIBLE)
-> +		da_handle_init_event_wwnr(p, switch_out_wwnr);
-> +	else
-> +		da_handle_event_wwnr(p, switch_out_wwnr);
->  
-> -static void handle_switch_out(void *data, /* XXX: fill header */)
-> -{
-> -	struct task_struct *p = /* XXX: how do I get p? */;
-> -	da_handle_event_wwnr(p, switch_out_wwnr);
-> +	da_handle_event_wwnr(n, switch_in_wwnr);
->  }
->  
-> -static void handle_wakeup(void *data, /* XXX: fill header */)
-> +static void handle_wakeup(void *data, struct task_struct *p)
->  {
-> -	struct task_struct *p = /* XXX: how do I get p? */;
->  	da_handle_event_wwnr(p, wakeup_wwnr);
->  }
+> ---
+>  drivers/media/v4l2-core/v4l2-ioctl.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> index e2526701294e..e03362c8aef9 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -1306,7 +1306,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+>  	case V4L2_PIX_FMT_NV61:		descr = "Y/CrCb 4:2:2"; break;
+>  	case V4L2_PIX_FMT_NV24:		descr = "Y/CbCr 4:4:4"; break;
+>  	case V4L2_PIX_FMT_NV42:		descr = "Y/CrCb 4:4:4"; break;
+> -	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/CrCb 4:2:0"; break;
+> +	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/CbCr 4:2:0"; break;
+>  	case V4L2_PIX_FMT_NV12_4L4:	descr = "Y/CbCr 4:2:0 (4x4 Linear)"; break;
+>  	case V4L2_PIX_FMT_NV12_16L16:	descr = "Y/CbCr 4:2:0 (16x16 Linear)"; break;
+>  	case V4L2_PIX_FMT_NV12_32L32:   descr = "Y/CbCr 4:2:0 (32x32 Linear)"; break;
+> -- 
+> 2.25.1
+> 

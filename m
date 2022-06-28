@@ -2,102 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7204755CC49
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1996955D3CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245735AbiF1Jvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
+        id S1344530AbiF1Jv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241460AbiF1Jvn (ORCPT
+        with ESMTP id S1344491AbiF1Jvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Jun 2022 05:51:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D98A2AE3F;
-        Tue, 28 Jun 2022 02:51:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE8F2BB3D
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:51:43 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id B553A1FD50;
+        Tue, 28 Jun 2022 09:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1656409901; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nv3GhukGgUnIZkRzen+HbLRhRFVrkufiUI5WwB64rbs=;
+        b=RSlMJQSz9U3bUE9NtANP5s04nyAIJC/RBPA2K885jLaum9DkoL33xRmQ7yZXu8y7CfXNwf
+        756oL5sJzyB2HEFUyZdVks8wcHFsvIPC4WlK3cb3ra4hE2SVVvfeWMRpdvE5zHwuIEMCfw
+        2LRmR8cCYfXhlVwB7PHceJQ7DkRdq4c=
+Received: from suse.cz (unknown [10.100.201.202])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B654B81D79;
+        by relay2.suse.de (Postfix) with ESMTPS id 563C72C141;
         Tue, 28 Jun 2022 09:51:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5884C3411D;
-        Tue, 28 Jun 2022 09:51:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656409900;
-        bh=2MJDoSVSUvHYBQTXDGlST2aZE277KT5703sWMj70kjM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pws1kpE3r+YJwttZPjszbUdhTl59v0B+/FxkYHEkwFNThrNOZAknMy4RPwk2Vw085
-         WfTfoGcl5pK5xqZsh/dr8omX0xXEjsTBYdEXker6SL707CqtbGnUiAu3vOrCKVkDqI
-         C9qyRQ+G0KUZEvZqz6WBPlcvtV9qWU3Z0AM1rmQ9ppFNTP6sdCcTEgpICnJqpGi3Rd
-         7wXzFjJZdzb9hpxW63tbO0w0JsJtqlzR4Qc2rdmDm2EpsF+c9lwrq+JpwabcfrrUse
-         O7DEm59lo29LpDcKhKjPSm+L2nFTdLetyKsrZNbn+IaCaVRKX9QHuyi1f3DC14LpSe
-         l8Y7IQCUqNFOQ==
-Received: by pali.im (Postfix)
-        id C50A77AE; Tue, 28 Jun 2022 11:51:36 +0200 (CEST)
-Date:   Tue, 28 Jun 2022 11:51:36 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Allen Yan <yanwei@marvell.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial: mvebu: Apply old baudrate to termios
-Message-ID: <20220628095136.fhtjjjkj3mre7hwa@pali>
-References: <20220628094155.26297-1-ilpo.jarvinen@linux.intel.com>
+Date:   Tue, 28 Jun 2022 11:51:37 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: Re: re. Spurious wakeup on a newly created kthread
+Message-ID: <YrrPKU2y4liY91u9@alley>
+References: <20220622140853.31383-1-pmladek@suse.com>
+ <YraWWl+Go17uPOgR@mtj.duckdns.org>
+ <CAHk-=wiC7rj1o7vTnYUPfD7YxAu09MZiZbahHqvLm9+Cgg1dFw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220628094155.26297-1-ilpo.jarvinen@linux.intel.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=wiC7rj1o7vTnYUPfD7YxAu09MZiZbahHqvLm9+Cgg1dFw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 28 June 2022 12:41:55 Ilpo Järvinen wrote:
-> A fallback baud rate was derived from old termios but got never applied
-> to (new/current) termios. Old termios is dropped once ->set_termios()
-> call chain completes, only termios persists the values. Encode also the
-> old baud rate into termios.
+On Sat 2022-06-25 10:01:35, Linus Torvalds wrote:
+> On Fri, Jun 24, 2022 at 10:00 PM Tejun Heo <tj@kernel.org> wrote:
+> For example, the reason that quoted patch cannot be right is that this
+> code pattern:
 > 
-> Fixes: 68a0db1d7da2 ("serial: mvebu-uart: add function to change baudrate")
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+>   while (wait_for_completion_interruptible(&worker->ready_to_start))
+>     ;
+> 
+> is not valid kernel code. EVER. There is absolutely no way that can be correct.
+> 
+> Either that code can take a signal, or it cannot. If it can take a
+> signal, it had better react to said signal. If it cannot, it must not
+> use an interruptble sleep - since now that loop turned into a
+> kernel-side busy-loop.
 
-Hello! Could you explain a bit more what is this patch fixing? I have
-not caught it yet. Do you have a test scenario which can demonstrate
-this issue? Because I have tested this driver more deeply (on Mox
-and Espressobin) and I have not seen any remaining issue with reporting
-incorrect baudrate.
+I agree that the code is ugly and does not make sense.
 
-> ---
->  drivers/tty/serial/mvebu-uart.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/mvebu-uart.c b/drivers/tty/serial/mvebu-uart.c
-> index 0429c2a54290..12a79018697f 100644
-> --- a/drivers/tty/serial/mvebu-uart.c
-> +++ b/drivers/tty/serial/mvebu-uart.c
-> @@ -592,10 +592,9 @@ static void mvebu_uart_set_termios(struct uart_port *port,
->  		if (old)
->  			baud = uart_get_baud_rate(port, old, NULL,
->  						  min_baud, max_baud);
-> -	} else {
-> -		tty_termios_encode_baud_rate(termios, baud, baud);
-> -		uart_update_timeout(port, termios->c_cflag, baud);
->  	}
-> +	tty_termios_encode_baud_rate(termios, baud, baud);
-> +	uart_update_timeout(port, termios->c_cflag, baud);
->  
->  	/* Only the following flag changes are supported */
->  	if (old) {
-> 
-> -- 
-> tg: (f287f971e256..) fix/mvebu-apply-old-baud (depends on: tty-next)
+JFYI, I did it this way because I wanted to calm down the hung task
+detector. kthreads ignore signals so that I did not think about
+this aspect. I though that I saw this trick somewhere.
+
+Do not ask me why I wanted to calm down the hung task detector.
+I quess that I felt overloaded and wished a calm day
+or something like this. I agree that it does not make
+much sense.
+
+Best Regards,
+Petr

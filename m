@@ -2,61 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4B555DB2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8268955D223
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344935AbiF1Ke4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 06:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
+        id S1344947AbiF1KfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 06:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344922AbiF1Kez (ORCPT
+        with ESMTP id S1344938AbiF1KfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:34:55 -0400
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F5531394;
-        Tue, 28 Jun 2022 03:34:54 -0700 (PDT)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 28 Jun 2022 06:35:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6E1313BE;
+        Tue, 28 Jun 2022 03:35:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4LXLZL2bFCz9sbl;
-        Tue, 28 Jun 2022 12:34:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1656412490;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GCsmhwxPKBHJ46dWmiVRWHiUT3ks2E1dAcyONJ6hmBo=;
-        b=osKoUFpDaV9Xn6/YR52+bC3Tp28nCtNfV1JX5uc6mV+dvDRWGRuKf/MHczF+HeCF4rqvR7
-        mezcwxwPkJRVbqBszbnVuriVCGDFFqb56FfwdDKZl6ybcE1cZhXjAEVbKEzu/c9i+avuJy
-        lLhvsIRSB4qRpw7QlHM89oMr1xADNSThQcLNaR0vCS79jfevUDcDgd+uYUamRsUMkX+xHh
-        T58dZSzAHkXHgmwp1SyMUhnYq7ZVj6wokc/STn8FlrgS1dFtokX/XxUiId1/ylmbG7yicV
-        CTJOo7cvhVVQ+tSZZmZsMfvlZhAuTHjdcj6XiuHiWgfBRE7IdRMx6quP7QoJ/w==
-Message-ID: <9d02d901-8015-dc02-250b-97ed1cfa16c2@mailbox.org>
-Date:   Tue, 28 Jun 2022 12:34:48 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8E9CB81DC6;
+        Tue, 28 Jun 2022 10:35:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14493C3411D;
+        Tue, 28 Jun 2022 10:35:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656412505;
+        bh=nmAD0wkHPJj75POEBn9llYxTmYYIW9jt0N+pB+TZRr8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gCuKjyAePOHhaAZuR1nGo64rN/yFJfZuXyujuEeQcmipVVCnq4LwDzmvO5gAov5Js
+         ievamH+VFSXlKJuzRUeKZktjFPCwKxt/k/CDRKkmY8u5q3MAqQUp7CWuSXM1U4XHbX
+         2zUxEVRTz3lNNXpP1FDgDR0B1KYo0TgixLRbyfiK0gh05hZcM/fx4czGqbIgQZDocW
+         KwZVnYNjcr2PfNUT3YxH9aZpAj3e81t5PZsXOySBi/PzrSIPI20g1wxX9f0AaHXPvI
+         1qGito6O0MAb+xw32lKEnd6PR4lSVZz5KaXv89Mg+Wgf8m9lmRPrQAdgmnMOoUoWwQ
+         L8f75Gs3AOuGA==
+Date:   Tue, 28 Jun 2022 11:35:00 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 18/22] regulator: fix a kernel-doc warning
+Message-ID: <YrrZVDUXzHNtvLNi@sirena.org.uk>
+References: <cover.1656409369.git.mchehab@kernel.org>
+ <15efc16e878aa327aa2769023bcdf959a795f41d.1656409369.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 09/14] drm/radeon: use drm_oom_badness
-Content-Language: en-CA
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        dri-devel@lists.freedesktop.org
-Cc:     mhocko@suse.com,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20220624080444.7619-1-christian.koenig@amd.com>
- <20220624080444.7619-10-christian.koenig@amd.com>
-From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
-In-Reply-To: <20220624080444.7619-10-christian.koenig@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: cutc5b13i4ckkykp1cme1mpqiajc1ikh
-X-MBO-RS-ID: dec7526ba758fff16cd
-X-Rspamd-Queue-Id: 4LXLZL2bFCz9sbl
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6l3VTahVwLIvYoL/"
+Content-Disposition: inline
+In-Reply-To: <15efc16e878aa327aa2769023bcdf959a795f41d.1656409369.git.mchehab@kernel.org>
+X-Cookie: I like your SNOOPY POSTER!!
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,30 +60,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-24 10:04, Christian König wrote:
-> This allows the OOM killer to make a better decision which process to reap.
-> 
-> Signed-off-by: Christian König <christian.koenig@amd.com>
-> ---
->  drivers/gpu/drm/radeon/radeon_drv.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/gpu/drm/radeon/radeon_drv.c b/drivers/gpu/drm/radeon/radeon_drv.c
-> index 956c72b5aa33..11d310cdd2e8 100644
-> --- a/drivers/gpu/drm/radeon/radeon_drv.c
-> +++ b/drivers/gpu/drm/radeon/radeon_drv.c
-> @@ -550,6 +550,7 @@ static const struct file_operations radeon_driver_kms_fops = {
->  #ifdef CONFIG_COMPAT
->  	.compat_ioctl = radeon_kms_compat_ioctl,
->  #endif
-> +	.file_rss = drm_file_rss,
->  };
->  
->  static const struct drm_ioctl_desc radeon_ioctls_kms[] = {
 
-Shortlog should now say "use drm_file_rss", right?
+--6l3VTahVwLIvYoL/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Tue, Jun 28, 2022 at 10:46:22AM +0100, Mauro Carvalho Chehab wrote:
+> document n_ramp_values field at struct regulator_desc, in order
+> to solve this warning:
 
--- 
-Earthling Michel Dänzer            |                  https://redhat.com
-Libre software enthusiast          |         Mesa and Xwayland developer
+This is patch 18 of a series for which I don't have a cover letter or
+anything.  What's the story with dependencies here?
+
+--6l3VTahVwLIvYoL/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK62VQACgkQJNaLcl1U
+h9D7MAf/TDKw+iaQTVZC0yWj0l7aunVFuGoLANysHVQ0y72uxSOnR29paCHQmsGA
+u5p2SUYFsJM0pik355wg9S3uE8S5tWQCsjeYu9UBHab6MR8wB2ePuJuVaHzIVFHc
+3WR48A9NsuSpsKaj1OswKQ1xrXlrtebr8wi1sJ9YnfS9WsPV4ZA1f5YnQ2tBncrY
+ZAOlULXRQSsnmOVAjxUIOymOs7/AVJVtr7//18YJ4kFOSIsM9tB1xWBY9oVCXMqQ
+LqsR57hMckpIttFK54qtiVoHX/vyGyvGbglzdvA/xU84FO+30JkvajYLDTPGuNFE
+zzxixyd5RmedfZLFM3I8ZPPLVPJt7g==
+=lBOH
+-----END PGP SIGNATURE-----
+
+--6l3VTahVwLIvYoL/--

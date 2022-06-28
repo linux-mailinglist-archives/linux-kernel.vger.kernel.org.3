@@ -2,128 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1ACC55E60C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A04255E72E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346992AbiF1Oi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 10:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49770 "EHLO
+        id S235077AbiF1Oj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 10:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346102AbiF1Oiz (ORCPT
+        with ESMTP id S1346535AbiF1OjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 10:38:55 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5232873F;
-        Tue, 28 Jun 2022 07:38:54 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7626510000E;
-        Tue, 28 Jun 2022 14:38:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656427132;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WsNOELfNmIxzQ7L2JBSj8agbCQSyUjW6SfWZR6bYZWA=;
-        b=mGygbv+Beb+GbEw5LbZy//jxGsgoZZ9PrMfy6SH6QiLzOpVhEf1cCZbYpcj7lRU4ftC1QY
-        qe25Dqe754qKebRkedmmxMqFxiiWV/Vcp1+KDif21GKvgtsr9h7WgtK9Qpf0Dkp/YdwqUq
-        8KhOm/c9ljtLFqAHfHZz9qu/vH/ICLODzjnqCxkaK1qsRwIgsH1foh35qAXdIuWmVpwyYI
-        SctsafuGYgLaZfFKjzi8yr+stqR6Ma/mwt7yTtqQFszxBQDTP76gdYKpw500xCXG/2MZV9
-        OSDUiBaEI1bou1zGrOBYw/y1KvcdB+sP+6oJLQEGehErmvx6p65lKDHa1UKjCw==
-Date:   Tue, 28 Jun 2022 16:38:50 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tlanger@maxlinear.com,
-        rtanwar@maxlinear.com, richard@nod.at, vigneshr@ti.com
-Subject: Re: [PATCH RFC v1 0/8] intel-nand-controller: Fixes, cleanups and
- questions
-Message-ID: <20220628163850.17c56935@xps-13>
-In-Reply-To: <20220628112731.2041976-1-martin.blumenstingl@googlemail.com>
-References: <20220628112731.2041976-1-martin.blumenstingl@googlemail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Tue, 28 Jun 2022 10:39:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245E42A249;
+        Tue, 28 Jun 2022 07:39:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B372161B10;
+        Tue, 28 Jun 2022 14:39:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E474BC3411D;
+        Tue, 28 Jun 2022 14:39:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656427160;
+        bh=iXjQOMUw2pEqEisHPWIOBTot93+QZsYt/nHRRPucOyc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LqR9CN0wDjLJFmWy9tW2JNnugtju01skjVmIwyQGlS5tghYgB2YEq4/jUGrLRfGT3
+         X9BHevJs3fCge08w6NZKeppOw+9z51olocTjzUylhUoMuUjoONGWH1B1zIv6nECXaZ
+         V6mALMeromolaLDKWIpQyYIqr4t120G2e7uibto8Dz8RlAXXtdc2+YNNKEbDmUYnRo
+         aliyLR4CE1KvCCv916ievOlW2XY5G+VY0U09vTItsQI/XUdhnLRaIvaK648LtRee3m
+         UCPoM7dMfsLjLGBlbZtgzdnDQ0jtFNrp2sdvZPdfT/SfnRwSahuRVM3F3bVi6TJeXg
+         63yRl8mMg8C7g==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 6C2E04096F; Tue, 28 Jun 2022 11:39:16 -0300 (-03)
+Date:   Tue, 28 Jun 2022 11:39:16 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Sedat Dilek <sedat.dilek@gmail.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Linux v5.19-rc1] tools/perf/a.out remains after make -C
+ tools/perf clean
+Message-ID: <YrsSlH8OCR0JSlxA@kernel.org>
+References: <20220607000851.39798-1-irogers@google.com>
+ <CA+icZUWpSF6ge76JVp1qBC5QhC1AwNacs5Di=e1QSbAD+SVKUA@mail.gmail.com>
+ <YqjggY64PKfog0YW@kernel.org>
+ <CA+icZUUx_Re+w9S7eHXma9aC=8T8ypp8=+tkJy7zJMrUocMSKQ@mail.gmail.com>
+ <Yrh7uSL0AybSqd0V@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yrh7uSL0AybSqd0V@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
+Em Sun, Jun 26, 2022 at 12:31:05PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Wed, Jun 15, 2022 at 12:11:48AM +0200, Sedat Dilek escreveu:
+> >                   bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
+> >                   aio: [ on  ]  # HAVE_AIO_SUPPORT
+> >                  zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
+> >               libpfm4: [ OFF ]  # HAVE_LIBPFM
+> > 
+> > Tried `make distclean`.
+> > Tried `make tools/ clean` but tools/tracing/rtla produces errors (rm clean).
+> > Still exists: tools/perf/a.out.
+> 
+> I started seeing this here, will investigate and re-read your reports,
+> thanks for sending them!
 
-martin.blumenstingl@googlemail.com wrote on Tue, 28 Jun 2022 13:27:23
-+0200:
+This is only happening when I use CC=clang, here I have clang 13, just
+making a note, seems related to a feature check,
+tools/build/feature/test-hello.c.
 
-> Hello,
->=20
-> I am trying to replace the xway_nand driver (which is still using the
-> legacy NAND API) with the intel-nand-controller driver. The Intel LGM
-> IP (for which intel-nand-controller was implemented) uses a newer
-> version of the EBU NAND and HSNAND IP found in Lantiq XWAY SoCs. The
-> most notable change is the addition of HSNAND Intel LGM SoCs (it's not
-> clear to me if/which Lantiq SoCs also have this DMA engine).
->=20
-> While testing my changes on a Lantiq xRX200 SoC I came across some
-> issues with the intel-nand-controller driver. The problems I found are:
-> 1) Mismatch between dt-bindings and driver implementation (compatible
->    string, patch #1 and patch #4) and hardware capabilities (number of
->    CS lines, patch #1).
-> 2) The driver reads the CS (chip select) line from the NAND controller's
->    reg property. In the dt-bindings example this is 0xe0f00000. I don't
->    understand how this can even work on Intel SoCs. My understanding is
->    that it must be read from the NAND chip (child node).
-
-Yes
-
-> 3) A few smaller code cleanups to make the driver easier to understand
->    (patches #5 to #8)
-> 4) I tried to understand the timing parameter calculation code but found
->    that it probably doesn't work on the Intel LGM SoCs either. The
->    dt-bindings example use clock ID 125 which is LGM_GCLK_EBU. So far
->    this is fine because EBU is the actual IP block for the NAND
->    interface. However, drivers/clk/x86/clk-lgm.c defines this clock as
->    a gate without a parent, so it's rate (as read by Linux) is always 0.
->    The intel-nand-controller driver then tries to calculate:
->      rate =3D clk_get_rate(ctrl->clk) / HZ_PER_MHZ
->    (rate will be 0 because clk_get_rate() returns 0) and then:
->      DIV_ROUND_UP(USEC_PER_SEC, rate)
->    (this then tries to divide by zero)
->=20
-> Before this series is applied it would be great to have these questions
-> answered:
-> - My understanding is that the chip select line (reg property of the
->   NAND controller's child node) refers to the chip select line of the
->   controller. Let's say we have a controller with two CS lines. A NAND
->   flash chip (which a single chip select line) is connected to the
->   second CS line of the controller. Is my understanding correct that
->   the NAND chip device-tree node should get reg =3D <1> in this case?
-
-Yes
-
-> - Who from Maxlinear (who took over Intel's AnyWAN division, which
->   previously worked on the drivers for the Intel LGM SoCs) can send a
->   patch to correct the LGM_GCLK_EBU clock rate in
->   drivers/clk/x86/clk-lgm.c? Or is LGM dead and the various drivers
->   should be removed instead?
-> - Who from Maxlinear can provide insights into which clock is connected
->   to the EBU NAND controller on Lantiq XWAY (Danube, xRX100, xRX200,
->   xRX300) SoCs as well as newer GRX350/GRX550 SoCs so that I can make
->   the intel-nand-controller work without hardcoded timing settings on
->   the XWAY SoCs?
->=20
-> Due to the severity of issues 2) and 4) above I am targeting linux-next
-> with this series. In my opinion there's no point in backporting these
-> fixes to a driver which has been broken since it was upstreamed.
-
-The changes look good to me, please resend with the bindings file name
-fixed and we should be good.
-
-Thanks,
-Miqu=C3=A8l
+- Arnaldo

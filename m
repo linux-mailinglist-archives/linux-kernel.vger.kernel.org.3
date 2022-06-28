@@ -2,141 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6A955D58F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B6055D9E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243020AbiF1BRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 21:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42770 "EHLO
+        id S242221AbiF1A5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 20:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241093AbiF1BRH (ORCPT
+        with ESMTP id S235529AbiF1A5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 21:17:07 -0400
-Received: from sonic302-26.consmr.mail.ne1.yahoo.com (sonic302-26.consmr.mail.ne1.yahoo.com [66.163.186.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E9822BD1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 18:17:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1656379025; bh=ZdG4xpFqsU+bajALxcF2VlnWGR52G82iCMkdVTc2osE=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=aQqENFqDKiIjusmJdO1dPjKaNLnGBnUwe49kFxwaFK6ffWAElWmFS9Ltb8glOEyerFNMmWqxQT8RLwQioV4XVddc0YYisckcKkSZFpTabpgPPt5iXvTj/hIbe7f5CKHUudTK+mZysfHZAn1Hh/ZZPUjPAs5YKwgVnVhrxsKOmokjz6KHxT/so7j9v5xI2PYDR/u4BhEfg3SOe4yWVQsngBAnq/LT+VHm4oz579DrE+C8ryLBZULybnpwQPfhesoTyVOAaa2d01r2gmP9wXb0Hc0kMc8f8bMX9LVe5p3uE7CYGrVIeZvjxkvssKMrynfeT0NF1JA/FWzt8JnhlIzNZQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1656379025; bh=BnocZkrCMlnPpcI7bRWVONAkAFgvhD00MmVMzPoMYx2=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=UCo8YMjCI1hzPwCZdrJMCos57//QRTY9pBOfovM9eq13EDMDOT3fK+YjkmvOWaiBprgwQVLfeatf7mg9tgmHC8Z406r1Ow8va9q1LAjUxeMh7JNwoN/ZYRS+6AdMjIyLgirRNvuQk4FtHwrGqbkIz0D9fLi0aedg6v4LcbEaWGExE8ocrZoAqt6yqCLY59hTzcEvBmLqMkWL3S8ocww2ejfJdkoO/+MMPswajXZsFLJetbOn5MscIHTdVvtlGEyMtlnpB3NKSYoOewF5Or+0c8ks5ALQ0wqzENj3ihK5CkN0DuV5ONU3mj4loyeEsbuAVWFjdUg/vrWmz0riKHUB0g==
-X-YMail-OSG: 6j1tcUcVM1mY2pNz0kc_UTsA6EKFHKdzu_9v.DMblyd0JwQA4uua4O37jDB_3yy
- ATeycsio_CKScXnjbPqwxNIQ3__ihPR74kRXInix43UqGeNZO2gC0H7sI530PkdCpYBCvdM5yuIK
- f4fdCnOyZMyHqLV7RKm2w9mYY7CRN06uTomOnP38BrpqJr4T16g0eGrHdU2yWAeQm47vEI6tvuDm
- tmsjW9zLYPNvtcFSP2RXu4zdaJ3YyE8kJaO6gGE2QbnJ1_gWOB_h39PWUum_7GrlxMZk37eYCfz9
- UEeeidfvGSDJneVDTA7Z4v98e9qZyM1z6qceJ0YOYcpxw4XMKnJY.KGq_jCFwEACR17FPA_4IeFE
- EUeC4F13p5HscqkpsA0jImYJSu_ELaPEFuvOMWP0h68eIHjWN1SSL1dDo4DIssIoblVmOT2A4VMx
- dCsUIjBgyUBQcspekNYJjleJM90xXfmt5qWUWEDsEyZ40whVka9bk8L2WjA7Vo.iJjZExosssV96
- ESnP_NsxxB4FVziVhWtS4w5Q8DqLmslmXHfV9O8wA4c1DcybhZhg26aK57c0rvPnkOf4pJ3pJ29S
- C8XBiO2C_YZxJ5k.IvPUEMmVibsNNB9KlSwleER2zjQbtnAgfBvGFXckvqQYYfFk2pLIRkyjYl23
- MbOZvigxoWfoX.OsRz24EEr3gnvElahfvWKMgVvk1bfIQVndOgJrFQJDduToYyPqyC7nzXWHxPHD
- czXsmAWMNAI7CAlFcZEzsBgLh6c7xcQe.MTCkAWryzHW5OZrSzATA3x9Dq.CH0nI_0TXy8zWCvv6
- GpC8KEkz2BajPVcIc.rGvOqXp5f0KJBL4ppw9MIL0wSX._CUq2nG0DhSzeakbOzMf2VQwp8Mo.oD
- sDZ6mjNPzLnq7b_0NuUDynVOeFugRkcvrIp4n0yuEtRklIw7tGddRu8A8hVJJMPlV6Z2GHrh8UnK
- rTV6lioHGMpG0CL7cFWAtu8akMiDJ4BjYiREW0jMHMisQGGVw6.MpWHy3A2JrLpT0.jOOi2kZG3S
- O6kBleAfb13cTuUT66N.Z_5DIhKhWpEp.jlBe6m6xvtp62gzULlldwax_kSFMvCnpFiyF3W11JCs
- h.FC.rDaiT58olhbuwc00hUJ6rusKLyCU0b2P5dTRnRREUzvt.vr..jMApU.Mp9suDVYMjDnR3oi
- 52GKHddLGQQsxI8tDwVFR_TTE5iwaBdk8W0T_baeRVzSWsca1eclrpXNfY_Fydjnu5H.ALE1_MnD
- Caz74gAdJBGOR6QDz65G9gCRWQulpC0F_x9H0tjnPTKbyOaWUtgMnvG.Ww1umbnZDrQia1TCwe45
- VDPbmt5kePhEPu7MYlCgIpeqKMnl3JxAwUOM1lwpzygZbOqRBNPy0LEycGYS7mbOAPmTh8N3QSpQ
- 8tqY9GvpLNCT7PRvRGhAPiYhYHaGH6ISohRsjd1mpS9zzYWtyvVEOjnoZhox482m3dZzpb3pvO1V
- mOdKlELV6GIvBC_ryxbooMMFGueLdIsJiOivAr71hjQE8Qdj73FCqoUsnSU45XbbZwCvYhVKtg4Y
- rCHNx56ahlxJWQc9C1gZYfr0XNAFHa9FBeWD6RYljhXlnV7Ycp9oxHW4zLVjC2udolfbOGy5wXen
- 5TcyLzy4VDN7vw8YwwOmkELvHNncgU0O3y9OZs.9syGQRW050us7wSwKLzygc3Fz.M8aUv7MJ6y0
- 5r1KUkR8kKVsM64KigKPwLeK7nNoMayg4svzeovGzf0Mi3EfsrOwADWBAgDyRzOk39HCBELFp9mK
- q8fMZsu_xQBL.5DAnuXEvpVzyh18h.1.jMsh27.J8UX7i3Rlp3luG60KuphuhoTOsA34kWzKWrIC
- SJFD0tYYBkKlXiDri9KGsgYqjkKdBxdHHM7vzKN9riRU85qRF2df.zWv59xDlvl6Tp8uXQ3jS._D
- 6ZHlwjML6K16hglU7S.ZZtSU4FduUMdtmEQG72bwJePibT9DWq0jgnGd0mzhbsGGDEc9FT8ETu.U
- 2tOidP.nkyQaCtjgQXwpi.q3.RRmjLlvcJTscWSv2ZqGHzaSnTB4JJp6UPVLTAUgewHawWiXzW89
- Z0Wfa1FAid.P3zOKpLqk3PjLJTTZawCf0iUBC1iHFCxFZ2gCCsfnPflohCvBlULRNO9.5zTPA6a7
- xwlYPaB4r4cCmUDubRJ9X0HEH3HjBirzJmTzVjOeHVFMFoiFYrHC.MRUs8hr822jjqVYQfc7B9G0
- 3BkEY1drcIIP03opXGTAKJTHZiF_0zMjx.vJdrQ0rNsaG2GuCqkWVp85xwuM-
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ne1.yahoo.com with HTTP; Tue, 28 Jun 2022 01:17:05 +0000
-Received: by hermes--production-bf1-7f5f59bd5b-9k855 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 9cbde2a328acbc97554c754593bf0b6d;
-          Tue, 28 Jun 2022 01:17:01 +0000 (UTC)
-From:   Casey Schaufler <casey@schaufler-ca.com>
-To:     casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     casey@schaufler-ca.com, linux-audit@redhat.com,
-        keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v37 33/33] AppArmor: Remove the exclusive flag
-Date:   Mon, 27 Jun 2022 17:56:11 -0700
-Message-Id: <20220628005611.13106-34-casey@schaufler-ca.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220628005611.13106-1-casey@schaufler-ca.com>
-References: <20220628005611.13106-1-casey@schaufler-ca.com>
+        Mon, 27 Jun 2022 20:57:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C96B61D309
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 17:56:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656377815;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Le9rasWFftvBUIXdCkHOfomOzNQQm9TeUsAxHwjuOAw=;
+        b=F7hi+/4lYy3BA7h7un18gCZGAj0nKtLjGo7wlZh4iZhxQh2hiKcacqsiXo5Kmigjea7t9T
+        UmQTAyso++QiR5Li5ssXYsHFTeaOFUxba9l2nNmPrb857xfAQEjL6dMoJhiLqdOkO6JTgt
+        jVQwBeQev2FEef0LQIBDHzZQIjqAEvg=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-330-INFJW7ACNp62JTNzf8KNmQ-1; Mon, 27 Jun 2022 20:56:54 -0400
+X-MC-Unique: INFJW7ACNp62JTNzf8KNmQ-1
+Received: by mail-qk1-f200.google.com with SMTP id l189-20020a37bbc6000000b006af2596c5e8so4959310qkf.14
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 17:56:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Le9rasWFftvBUIXdCkHOfomOzNQQm9TeUsAxHwjuOAw=;
+        b=z5UrRx0h6L9vHxhSSmveR/4auxMz5D6b2ofkvMhI6VQO5rx44UziTEdl3l2l3sfb99
+         bp0QUhPBzSYWyflG91fFxW2scVkFq0UB1DPSPpy+CCj382SsoKi5WnXyAEk5mcE/d6GB
+         kyYbjAYJgW0xGbA0Jj1askkVE0IRhKJ+v0zsKhLm0ENdRl6h4P9UBhGHnD/2lHD4HWCx
+         dId4eALXxKgam9vA16mhNivfx2Z0cLnTd9cNkO886DPB+JOsTTM6iolbxwfdJpzpREHQ
+         q8S1J8Xv4sIsb6jRGAYQ9jpkeIu+RzCq2aSvZPI7KDyDaJ8ThMpIh5arqbHh9f8aJ3c7
+         nzRw==
+X-Gm-Message-State: AJIora/TdSA0o1TAc09a1xV8WEEDViG+QavtpG6C5PSl7eJVvn1GHGP4
+        MdL12l5fdEmPh+U72ulJpHApFej5ZdCcFCEefLLloq5CNwgOj5Y2lQVK89TfooA9Gvj8RJ+HdWD
+        UopUpTFB5o66kfkGiXEPv5A7SLMl0SC7UUccWayaD
+X-Received: by 2002:a05:622a:1306:b0:31a:f73e:3d6d with SMTP id v6-20020a05622a130600b0031af73e3d6dmr4502026qtk.339.1656377814094;
+        Mon, 27 Jun 2022 17:56:54 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sFL8MzmxZyh2qnSdqly13+uMFK0IBDjQrSTquxB94TtYvbMTQHQ5Agm2zgV9VXjYMWhLtxVo1TwdIgig7APGY=
+X-Received: by 2002:a05:622a:1306:b0:31a:f73e:3d6d with SMTP id
+ v6-20020a05622a130600b0031af73e3d6dmr4502021qtk.339.1656377813876; Mon, 27
+ Jun 2022 17:56:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CAK-6q+hd-L54cqOiFNuufS2_VF5XS0R8cjQL7es8921+2u3uwQ@mail.gmail.com>
+ <20220627184232.tjfuzeir57l3h5ll@mail>
+In-Reply-To: <20220627184232.tjfuzeir57l3h5ll@mail>
+From:   Alexander Aring <aahringo@redhat.com>
+Date:   Mon, 27 Jun 2022 20:56:42 -0400
+Message-ID: <CAK-6q+haOfQD8_N6pEm80BTrUXwaj07ZBcXP-EBHftpTVEc1XQ@mail.gmail.com>
+Subject: Re: sparse warnings related to kref_put_lock() and refcount_dec_and_lock()
+To:     Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        jacob.e.keller@intel.com, akpm@linux-foundation.org,
+        thunder.leizhen@huawei.com
+Cc:     linux-sparse@vger.kernel.org,
+        cluster-devel <cluster-devel@redhat.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the inclusion of the interface LSM process attribute
-mechanism AppArmor no longer needs to be treated as an
-"exclusive" security module. Remove the flag that indicates
-it is exclusive. Remove the stub getpeersec_dgram AppArmor
-hook as it has no effect in the single LSM case and
-interferes in the multiple LSM case.
+Hi Luc and others,
 
-Acked-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-Acked-by: John Johansen <john.johansen@canonical.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
----
- security/apparmor/lsm.c | 20 +-------------------
- 1 file changed, 1 insertion(+), 19 deletions(-)
+On Mon, Jun 27, 2022 at 2:42 PM Luc Van Oostenryck
+<luc.vanoostenryck@gmail.com> wrote:
+>
+> On Mon, Jun 27, 2022 at 11:15:17AM -0400, Alexander Aring wrote:
+> > Hi,
+> >
+> > I recently converted to use kref_put_lock() in fs/dlm subsystem and
+> > now I get the following warning in sparse:
+> >
+> > warning: context imbalance in 'put_rsb' - unexpected unlock
+> >
+> > It seems sparse is not able to detect that there is a conditional
+> > requirement that the lock passed to kref_put_lock() (or also
+> > refcount_dec_and_lock()) is locked or not. I evaluate the return value
+> > to check if kref_put_lock() helds the lock and unlock it then. The
+> > idea is that the lock needs only to be held when the refcount is going
+> > to be zero.
+> >
+> > It seems other users unlock the lock at the release callback of
+> > kref_put_lock() and annotate the callback with "__releases()" which
+> > seems to work to avoid the sparse warning. However this works if you
+> > don't have additional stack pointers which you need to pass to the
+> > release callback.
+> >
+> > My question would be is this a known problem and a recommended way to
+> > avoid this sparse warning (maybe just for now)?
+>
+> Hi,
+>
+> I suppose that your case here can be simplified into something like:
+>
+>         if (some_condition)
+>                 take(some_lock);
+>
+>         do_stuff();
+>
+>         if (some_condition)
+>                 release(some_lock);
+>
+> Sparse issues the 'context imbalance' warning because, a priori,
+> it can't exclude that some execution will takes the lock and not
+> releases it (or the opposite). In some case, when do_stuff() is
+> very simple, sparse can see that everything is OK, but generally
+> it won't (some whole kernel analysis but the general case is
+> undecidable anyway).
+>
+> The recommended way would be to write things rather like this:
+>
+>         if (some_condition) {
+>                 take(some_lock);
+>                 do_stuff();
+>                 release(some_lock);
+>         } else {
+>                 do_stuff();
+>         }
+>
 
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index 1fdb885facbb..1d742d864e0b 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -1165,22 +1165,6 @@ static int apparmor_socket_getpeersec_stream(struct socket *sock,
- 	return error;
- }
- 
--/**
-- * apparmor_socket_getpeersec_dgram - get security label of packet
-- * @sock: the peer socket
-- * @skb: packet data
-- * @secid: pointer to where to put the secid of the packet
-- *
-- * Sets the netlabel socket state on sk from parent
-- */
--static int apparmor_socket_getpeersec_dgram(struct socket *sock,
--					    struct sk_buff *skb, u32 *secid)
--
--{
--	/* TODO: requires secid support */
--	return -ENOPROTOOPT;
--}
--
- /**
-  * apparmor_sock_graft - Initialize newly created socket
-  * @sk: child sock
-@@ -1284,8 +1268,6 @@ static struct security_hook_list apparmor_hooks[] __lsm_ro_after_init = {
- #endif
- 	LSM_HOOK_INIT(socket_getpeersec_stream,
- 		      apparmor_socket_getpeersec_stream),
--	LSM_HOOK_INIT(socket_getpeersec_dgram,
--		      apparmor_socket_getpeersec_dgram),
- 	LSM_HOOK_INIT(sock_graft, apparmor_sock_graft),
- #ifdef CONFIG_NETWORK_SECMARK
- 	LSM_HOOK_INIT(inet_conn_request, apparmor_inet_conn_request),
-@@ -1939,7 +1921,7 @@ static int __init apparmor_init(void)
- 
- DEFINE_LSM(apparmor) = {
- 	.name = "apparmor",
--	.flags = LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
-+	.flags = LSM_FLAG_LEGACY_MAJOR,
- 	.enabled = &apparmor_enabled,
- 	.blobs = &apparmor_blob_sizes,
- 	.init = apparmor_init,
--- 
-2.36.1
+This is not an alternative for me because the lock needs to hold
+during the "some_condition". (More background is that we dealing with
+data structures here and cannot allow a get() from this data
+structures during "some_condition", the lock is preventing this)
+It is the refcount code which causes trouble here [0] and I think the
+refcount code should never call the unlock() procedure in any
+condition and leave it to the caller to call unlock() in any case.
+
+I to'ed (hope to get more attention to this) more people related to
+lib/refcount.c implementation (provided by get_maintainers.pl -f).
+
+>
+> The __acquires() and __releases() annotations are needed for sparse
+> to know that the annotated function always take or always release
+> some lock but won't handle conditional locks.
+>
+
+If we change the refcount code to _never_ calling unlock() for the
+specific lock, then all those foo_and_lock_bar() functions can be
+annotated with "__acquires()". This should also end in the same code?
+For me it looks like the current implementation of refcount.c is fine
+except sparse cannot figure out what's going on and maybe a reason to
+change the specific handling to the mentioned one.
+
+> I hope that this is helpful to you.
+>
+
+I hope we will find some solution, because I don't like sparse warnings.
+
+- Alex
+
+[0] https://elixir.bootlin.com/linux/v5.19-rc4/source/lib/refcount.c#L144
 

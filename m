@@ -2,144 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5252055DB9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA51655DC0A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245019AbiF1JEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
+        id S245747AbiF1JHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241106AbiF1JEC (ORCPT
+        with ESMTP id S236430AbiF1JHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:04:02 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF5912628;
-        Tue, 28 Jun 2022 02:04:01 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25S8rufq022609;
-        Tue, 28 Jun 2022 09:04:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : from : subject : content-type :
- content-transfer-encoding; s=pp1;
- bh=EJGVXcpSjcj2Rfl0CfzF9RguZzjarCzVFCxQ9X1hCYA=;
- b=hpBIKYse59AYbk67PIxoVLV0X8SH144AOjWgED1Hpa318cMB1MwMfGTRf3oa9M1NizLZ
- C1DpGpSImybohGoVjjgLH+usLZ6sDhFJE1eDTw40VPfZmduESxJTlv1ckLX1sCWqlNCS
- /0SMWMA7MqR7MD8I8EVfPWBC5BHko3oJ43td32WE/epnnpKn7S5b/hzZsOJUHkns0NlG
- h4VLyZ9gv02rxlvX2HjJ1F4jJvrWRuyXj6uYt0kfY/kvoN+gB2F8Qjx79CTh5pg8pzQT
- rPi33MhEo9M6Bf8vye/ovlpq6ylZLcndXdnY/3WXXkVK5zYSZVmA/7J4QC6RaeXWQIXH 2g== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gyxhk87we-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 09:04:00 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25S8nxWt017280;
-        Tue, 28 Jun 2022 09:03:59 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma03wdc.us.ibm.com with ESMTP id 3gwt09c4y5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 09:03:59 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25S93xOq37945742
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Jun 2022 09:03:59 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 55B22124052;
-        Tue, 28 Jun 2022 09:03:59 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F282F124053;
-        Tue, 28 Jun 2022 09:03:56 +0000 (GMT)
-Received: from [9.43.77.224] (unknown [9.43.77.224])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 28 Jun 2022 09:03:56 +0000 (GMT)
-Message-ID: <3c38b723-40e6-ded9-5a3b-7b442a3f65d8@linux.vnet.ibm.com>
-Date:   Tue, 28 Jun 2022 14:33:55 +0530
-MIME-Version: 1.0
+        Tue, 28 Jun 2022 05:07:15 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70117.outbound.protection.outlook.com [40.107.7.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E62F1277D
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:07:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CqBp5HYw4wgN6jo/zte7G9oAgl1HLy3Jvv4O2ZZf7iXUOjHcpBe8iw1knSxG21rCCvwjvVYsQ+WR2vfG+JluZSdKMZ792ZCKKVM5344QLFt5aIqbSHcGx3XdNDl2yb9Fw/DtVtbmAvwhD1A37Tf/D4ycQGd6pRbtqNkH5Q4EINyBDhKXLgNSJzhPfo8K+Y/BzLPzGiAYlDzDGmKOgYlUHqPAblhZlkbrsDkBAaGgE5g5gO4FDBaTlgGYkp2pNl8jeKy6g1PQkwMiCZqtHP/yP+jtGW1vcmsMO+2k9Yt+x3pV0RcJDWNP8+fGq+2ELz7u1IU6M3Tf+lCEpZ9f8CPRFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vZU7TgShkxCIolXONrNJ4R5Db7+escX0r5yxhh4lMwU=;
+ b=UquZ0i27vgSn73vjgvIXVd/vOgnq9295LlZ7fqdYnQW476umiWbIPOa0bXxtNNSM6XtKwANs30SQ7LkEQohiZfxqE+ucvMUorCH/AqlMlGQxap72EfrzYuLcv2nmL2DNkk45rIMRIIoNTih5l5E9Pbtj8B7MM/PYDNuRHPiwWJGGo1xuwnhQl7haNsDc3cEcZLW7Xskb1+Jm+HXmzIhZUfvQJcRvsWR+6f5Z/mgNQoW1fiKt62vx4Lk+CeXXJ/Etv/8G8y2P5ertdP8fNmtBCHC3ftsQp+x7vhV4T+uJaDGcUEwql3vMDdC3upi3sb2WGKGGA4930u+AySWapEwkjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vZU7TgShkxCIolXONrNJ4R5Db7+escX0r5yxhh4lMwU=;
+ b=OZ8RGWqWycbbzWuiZ5AQbFGB9tuSMEyEpTExpw1jtHen+k9lgkZBg3fTZPojG01Zx+p1a34YiVEU76di52GVABdw8ZU4umGUZM5q7WczkplrooIyIPOeJ0frgX10VberUlrsPUHx7ErKxRPpLt96vSZW4L5H4ronm43DngIbCzI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from VE1PR08MB4765.eurprd08.prod.outlook.com (2603:10a6:802:a5::16)
+ by HE1PR0801MB1691.eurprd08.prod.outlook.com (2603:10a6:3:7b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Tue, 28 Jun
+ 2022 09:07:07 +0000
+Received: from VE1PR08MB4765.eurprd08.prod.outlook.com
+ ([fe80::60dd:9fed:c95d:e54]) by VE1PR08MB4765.eurprd08.prod.outlook.com
+ ([fe80::60dd:9fed:c95d:e54%7]) with mapi id 15.20.5373.018; Tue, 28 Jun 2022
+ 09:07:07 +0000
+Message-ID: <00e716d9-3ef8-a3b2-e1a9-26ddaadf3ea3@virtuozzo.com>
+Date:   Tue, 28 Jun 2022 12:07:05 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/1] Create debugfs file with virtio balloon usage
+ information
 Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-Cc:     abdhalee@linux.vnet.ibm.com, sachinp@linux.vnet.com,
-        mputtash@linux.vnet.com
-From:   Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
-Subject: [linux-next] [[5.19.0-rc4-next-20220627] WARNING during reboot to
- linux-next kernel
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, kernel@openvz.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <20220627085838-mutt-send-email-mst@kernel.org>
+ <20220627191910.22734-1-alexander.atanasov@virtuozzo.com>
+ <20220627163714-mutt-send-email-mst@kernel.org>
+From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+In-Reply-To: <20220627163714-mutt-send-email-mst@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _pt95T9ALtjXM3taInJZXnEO77dkQKhw
-X-Proofpoint-GUID: _pt95T9ALtjXM3taInJZXnEO77dkQKhw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-27_09,2022-06-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- phishscore=0 mlxscore=0 malwarescore=0 spamscore=0 mlxlogscore=738
- priorityscore=1501 lowpriorityscore=0 suspectscore=0 adultscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206280037
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: VI1PR0601CA0006.eurprd06.prod.outlook.com
+ (2603:10a6:800:1e::16) To VE1PR08MB4765.eurprd08.prod.outlook.com
+ (2603:10a6:802:a5::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cfbab786-0d52-4148-9a92-08da58e5938b
+X-MS-TrafficTypeDiagnostic: HE1PR0801MB1691:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iDmfAPy3snJR8SKXIkC+McVk6+6yV8bE4jAXm3P3KA427DV1oxdu+V4DNajpw1uulAJd9ywOoo+zVKDH6JINpi/mPiqvQL+UugX0B1c2qpzkVaJpX/vtKJgToA6emzS1w8WaXF0IU15gb/VT8YAATmd9RvNSagicLCtv4ZEayXi4m3l4g+m27o0wfl4P4votta7UrkcoOs98gNGyTbOXYYQHWv9H1MaxOOYhyS4kFzlj7pvxHR4Q1Ssmy+ewyqyZ47CcIoRExJpyBlv+POEbFxckk09FSKkW5KzxsVDMXNnA+l4Oaf1hpC3YPYpoK9u9TeyXQb9pYJYvaaq49D9yLBvhDGhri4+GHI+w11Pv7p0OKeDr8oU+gjjcMLo42zsKpGrWRfwVB5I5aXgTF+zd/6uHRKlfwTQxHYUIgraA0QQLxyvvuOiAyKiNRWVuV12xH4wJuQVb/JXefME96kDC9xqyWZh7awQTS8z2zuxUTmR5jN9i9iF1ChBwgvCMV73v4/8xdlcGBvxahIBaodObngPaiks+RIFZoGFUTGorZFogWyKRk0qQS/asezIj4TwnSX7BCYMw8VBtnvZ0kvceuKydH4g9ADBhkM0tinzeXfSbcWZqtKN2KBNWM0tCNgJ3SFyvWiMFP0dtC1viZuXDT5/0TNGYpnIIKNFqCdWs53g9Yd2ewmg0Xrqecjj3IT16p+SWoAKCGOsMw4ELJV/pZLZIeUD3ZRixUjSyN5Jkuude/Vh5WeUvH1n2jDowNJ/8BO39OhWKR5FOt+rfx9a22H8FCKyaMyv6Xb136ZpN6SaBQ8Zok5yjxzhlCo01mIftwjUJ4306e0Ae26c7UiLXy+2sMfXtKPpWCSJhXh1DbLU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4765.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(346002)(376002)(39850400004)(136003)(52116002)(86362001)(26005)(8676002)(83380400001)(53546011)(6506007)(4326008)(31696002)(66946007)(66476007)(66556008)(6512007)(6486002)(478600001)(44832011)(8936002)(2616005)(2906002)(36756003)(38100700002)(6916009)(5660300002)(41300700001)(316002)(38350700002)(31686004)(54906003)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a0JvdjNOSFdzUVd4bWZqbWw4ZXhWKytyd2x0OTlweUYxWi9lZzNMYUd2eGJI?=
+ =?utf-8?B?REUvbzFBcG1LbUVjR25GMk95RkFERDNxMGwrZDlnN0Y5VFRxRjVvRHFNeHBK?=
+ =?utf-8?B?bTd1NEhxRktsd3RUT3hiSE1YZlhWNGlEWStqc1FpVEZ3L2pkSXprLzNnZ2dR?=
+ =?utf-8?B?aEFsL2ZPZGYxekRFVVdnYWRYUldLSTBXdm5YWFUxS0pXa0lTSmRlaUM0L2h2?=
+ =?utf-8?B?L1ZTWjE5dFNhOVN4VmpGWmNmeFdNNjRYTEoydm5GS3daTW9LTHdSbk0vWmgz?=
+ =?utf-8?B?UzNJR3lieXN6UE0wb29vMFl5TDFmNERsNjdPT0YrTnNGSVVrS0d6bGt4SGM4?=
+ =?utf-8?B?ay95RHNJb1pkdHpxS1dsa3Q3a3VHYkZoUmdwRy80NS9PWVYxcjArMXRTQmIr?=
+ =?utf-8?B?R0dMMkZaYnNPbEdMeFJPSjN2bHN6a012dEh2UWZ1STJHa2RFd2syeDdaUGRw?=
+ =?utf-8?B?S0ZyUC9BMm80T282aDVuMkp5b2pBV3c4bUtoN3FiOCtPem9yUjZEaXhLMUMx?=
+ =?utf-8?B?dzJXWW1XOExtNEtGYjVRcUlaNXBocDhwWnRNQ2ZwTzVVWjkrcG1rYjlmWHNC?=
+ =?utf-8?B?S3dFbGZhRW9QUGtNd1JVbFJ1RWxGTFlleVE0cFFFZHJkdFZaMUFDVHJNZWhr?=
+ =?utf-8?B?eml4QkEyMzhLNEhDem9QaDVHMG44a081YURSY2t3RVJlYm1TYytqSk10QW5S?=
+ =?utf-8?B?KzhlQnBWZUZ2WTRoUWlDVVJPVWp4MFlaYWxxWW9qTWpWTGlLNmdOVFhYd3dX?=
+ =?utf-8?B?QkltSmZYSjVPOGFZTkFwMStMamZpL09kMEx4VUxOUXM3T2puMGtHUDNMV2x0?=
+ =?utf-8?B?cEtMajE4cGNpOU9pK1UxZjdJczJLRjQ2T1NwalY3V2phUkJGQXhiMWhwK0xO?=
+ =?utf-8?B?OUhUWXIxSzFKN0VPbGozOE1laHM2WC9kQW8wd2xWQy8wOXMvcThScnJnTHJa?=
+ =?utf-8?B?a2ZwZi9TelJJcDNNQkNzTEMzTjRPNTlPNVk4b2tUeWh1bU53b3Z0STNLQ21x?=
+ =?utf-8?B?aFk4UVgzZkppaVlBcUdHVUlHUWw5Zk1pbXk3eVdwbmQyRW1BZ1RrMWFaaHBZ?=
+ =?utf-8?B?dy9rdEpteXJRZWFYRXVldENTdXFZdGxnTHl5TWR0dm15anJ0WVhURHBzRFRY?=
+ =?utf-8?B?bi9WN1hkNDJoS292T2RDMmFVYXNyQS9ONDgzZldveFdRQzFWT3VTTDJvcFNE?=
+ =?utf-8?B?aDR5RFo1R1lQY1FWc29KM1ZaT1FCd2ozd3QyM3Z5ZVgxR1lJL09pVmppdVVs?=
+ =?utf-8?B?aDFBY1J6MmJKcnFoZzlqQ0xXWmNhRnJkWkNZZ0tXZEVmRUVrNWgvcTFVUVNH?=
+ =?utf-8?B?NjVzemJ4Tlg3VXFxTWppZldWRkp1UVJBdkFyOXJRa01NUFJXRkRJL2JmRmdI?=
+ =?utf-8?B?UEJ6Q3RYUnJrL2RFZENWVy9JMXNFa1NUT25aUk0vNjJOVVVhV1B0cnh6akE4?=
+ =?utf-8?B?OG1ydm56anA3Yk5NVGJSRkloeGJXNEVZVXpIMFErOVR1enhjMHFHTUVvWjVy?=
+ =?utf-8?B?bWNaUWErZ0lyaHJRQXEyT2VtbWJzd1BEZnV1SVFGL2EzbXZqaWU5WXpKcEFP?=
+ =?utf-8?B?SlBodlZPYm94Vnpnalgva21aaHFZSlhJNGdxbEhiZXp0R011bllHRlRhYmVi?=
+ =?utf-8?B?aXZwN0J2Rk5KQnJkT01jQkRiU013TEY2WjcvNkcrdXRqdWlXV3A3MGwrQlZ4?=
+ =?utf-8?B?NlVkOHlnVG00RFJxOGNHdUNCREVmNVlYZnI4SE0xaFFwUFkvMUhzUFhZOUdn?=
+ =?utf-8?B?L1B6RHkwWS9lUTlpUmNvcXZYNkNTaUFzM1ZhMTFFTDlwL1ZnRjMwSkM1Mldl?=
+ =?utf-8?B?aFJTQy9sVDJFUE5rUkdBRHJEQWVkek1NUWVMRG56TzUzV3F0b2h0bEh5dW0r?=
+ =?utf-8?B?MDBBNFBtbWNtc2xtWXNlQVo0Y0tIZVNZNldUWkRHM2ZCaENVVDlOYzBueGVT?=
+ =?utf-8?B?dUYwOTY4b0pEM0cxRHM5c1hPdXNKQWFzcUtPM2FzV0Q2VkNDbWYvNlZxT0FR?=
+ =?utf-8?B?ZFg2bVBoSy9DbUtsSE5NNGl5aExRbEFWb3ZmditGMHFYQjdSbWxqTjMyM0p6?=
+ =?utf-8?B?RXdGUzFxYm96TVA0V0dXcEhLSE1hNGZVZ1JJa0NlVER4UW1JMEdNZlAzZXRG?=
+ =?utf-8?B?aEpUQzZ6TlJURU52S2dJUHVyMmdKaWRQWHMvTDR1WjYrcDVHSVJ2eGgrdnBs?=
+ =?utf-8?B?YkE9PQ==?=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cfbab786-0d52-4148-9a92-08da58e5938b
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4765.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 09:07:07.4220
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jlhhWTd58N9acU4onv/ty0njV0Hdjiy/Kb3PiCUz1UYCmu9ogL3WObEiNbgkGG2OJ6S6B0qPHBg7AymkVxJXbz2+fTfaow9hWAIVKkA7oNM/xLHboh/AuuZVmPXPocT0
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0801MB1691
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
+Hello,
 
-[linux-next] [[5.19.0-rc4-next-20220627] WARNING during reboot to 
-linux-next kernel
+On 27/06/2022 23:42, Michael S. Tsirkin wrote:
+> On Mon, Jun 27, 2022 at 07:19:09PM +0000, Alexander Atanasov wrote:
+>> Allow the guest to know how much it is ballooned by the host.
+>> It is useful when debugging out of memory conditions.
+>>
+>> When host gets back memory from the guest it is accounted
+>> as used memory in the guest but the guest have no way to know
+>> how much it is actually ballooned.
+>>
+>> No pretty printing and fixed as per coding style.
+>> ....
+>> +static int virtio_balloon_debug_show(struct seq_file *f, void *offset)
+>> +{
+>> +	struct virtio_balloon *b = f->private;
+>> +	u32 num_pages;
+>> +	struct sysinfo i;
+>> +
+>> +	si_meminfo(&i);
+>> +
+>> +	seq_printf(f, "%-22s: %llx\n", "capabilities", b->vdev->features);
+> why do we need this in debugfs? Isn't this available in sysfs already?
 
---- Call Traces ---
-[    1.788574] ------------[ cut here ]------------
-[    1.788577] alg: self-tests for rsa-generic (rsa) failed (rc=-22)
-[    1.788586] WARNING: CPU: 9 PID: 218 at crypto/testmgr.c:5774 
-alg_test+0x438/0x880
-[    1.788598] Modules linked in:
-[    1.788603] CPU: 9 PID: 218 Comm: cryptomgr_test Not tainted 
-5.19.0-rc4-next-20220627-autotest #1
-[    1.788609] NIP:  c00000000062e078 LR: c00000000062e074 CTR: 
-c00000000075e020
-[    1.788614] REGS: c00000000e733980 TRAP: 0700   Not tainted 
-(5.19.0-rc4-next-20220627-autotest)
-[    1.788620] MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: 
-28008822  XER: 20040005
-[    1.788632] CFAR: c00000000014f244 IRQMASK: 0
-[    1.788632] GPR00: c00000000062e074 c00000000e733c20 c000000002a12000 
-0000000000000035
-[    1.788632] GPR04: 00000000ffff7fff c00000000e7339e0 c00000000e7339d8 
-0000000000000000
-[    1.788632] GPR08: c000000002826b78 0000000000000000 c000000002566a50 
-c0000000028e6bb8
-[    1.788632] GPR12: 0000000000008000 c00000000fff3280 c00000000018b6d8 
-c00000000d640080
-[    1.788632] GPR16: 0000000000000000 0000000000000000 0000000000000000 
-0000000000000000
-[    1.788632] GPR20: 0000000000000000 0000000000000000 0000000000000000 
-0000000000000000
-[    1.788632] GPR24: c000000000da49e8 0000000000000000 c000000050630480 
-0000000000000400
-[    1.788632] GPR28: c000000050630400 000000000000000d c000000002cd33d8 
-ffffffffffffffea
-[    1.788691] NIP [c00000000062e078] alg_test+0x438/0x880
-[    1.788696] LR [c00000000062e074] alg_test+0x434/0x880
-[    1.788701] Call Trace:
-[    1.788704] [c00000000e733c20] [c00000000062e074] 
-alg_test+0x434/0x880 (unreliable)
-[    1.788712] [c00000000e733d90] [c00000000062c040] 
-cryptomgr_test+0x40/0x70
-[    1.788718] [c00000000e733dc0] [c00000000018b7f4] kthread+0x124/0x130
-[    1.788726] [c00000000e733e10] [c00000000000ce54] 
-ret_from_kernel_thread+0x5c/0x64
-[    1.788733] Instruction dump:
-[    1.788736] 409e02e4 3d22002c 892913fd 2f890000 409e02d4 3c62fe63 
-7f45d378 7f84e378
-[    1.788746] 7fe6fb78 3863fa90 4bb2116d 60000000 <0fe00000> fa2100f8 
-fa410100 fa610108
-[    1.788757] ---[ end trace 0000000000000000 ]---
+Yes, it doesn't make sense to have it without pretty printing. I will 
+remove it.
+
+>> +	seq_printf(f, "%-22s: %d\n", "page_size", 4096);
+> I suspect this function doesn't work properly when page size is not 4K.
+
+It is the page size used by the balloon and it is always 4K and not the 
+page size used by the guest which can be different.
+
+/*
+  * Balloon device works in 4K page units.  So each page is pointed to by
+  * multiple balloon pages.  All memory counters in this driver are in 
+balloon
+  * page units.
+  */
+
+And the code agrees with the comment. To be consistent the file must use 
+the same units.
+
+
+>> +
+>> +	virtio_cread_le(b->vdev, struct virtio_balloon_config, actual,
+>> +			&num_pages);
+>> +	/* Memory returned to host or amount we can inflate if possible */
+>> +	seq_printf(f, "%-22s: %u\n", "ballooned_pages", num_pages);
+> I don't really get the comment here.
+
+I will try to reword it to be more clear .
+
+     /*
+      * Pages allocated by host from the guest memory.
+      * Host inflates the balloon to get more memory.
+      * Guest needs to deflate the balloon to get more memory.
+      */
+
+>> +	/* Total Memory for the guest from host */
+>> +	seq_printf(f, "%-22s: %lu\n", "total_pages", i.totalram);
+>> +
+>> +	/* Current memory for the guest */
+>> +	seq_printf(f, "%-22s: %lu\n", "current_pages", i.totalram - num_pages);
+> Are you sure these are in units of 4Kbyte pages?
+
+The guest can have a different page size, so a conversion to balloon 
+page size is required - fix in the following patch .
+
 -- 
-
-
 Regards,
-Tasmiya Nalatwad
-IBM Linux Technology Center
+Alexander Atanasov
+

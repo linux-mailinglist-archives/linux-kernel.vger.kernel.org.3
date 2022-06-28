@@ -2,113 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8AE355DCDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA4755E2A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245729AbiF1Hw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 03:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46958 "EHLO
+        id S1343570AbiF1Hw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 03:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245750AbiF1HwX (ORCPT
+        with ESMTP id S245739AbiF1Hw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 03:52:23 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643135FA4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 00:52:21 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id v9so786546wrp.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 00:52:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5wtHtb6a4km6y1q/2Gud2nKYl0FjGtl/d3/Yc67raLo=;
-        b=gNopNL4TjvZr1GFncUxCPJwnmzkhQwU/DDC9PVrWnC/fwJo1kJBGw/yk0yfJgzg34d
-         lf+8l7VgLdHhdycA3aKmQqehBkmpR+Q6FYo2ggjixo/0hwm9zX7uNtXDBJSh0A/YUZkn
-         iAJmAwuUx9PDL8c2JWSasMs9gBPMXXB6YCxP4oPPqeoZWSORkDdtr/VWnA2gc+6g1q1a
-         uC7o0B2jCAe3J2ueKQwj+JY/9tqcckOhYt6NOlaTXb+79ZRTJXtuS4q7aCZD8eEhB/1/
-         aWfXjMm6I71ALA363gpoAaZbailT9UF0MCSqNRYSkDTaOsV+yt51NbDokJEkjLVLRb6Z
-         T5nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5wtHtb6a4km6y1q/2Gud2nKYl0FjGtl/d3/Yc67raLo=;
-        b=HQg0XN95mk/nH/TwC85GQ4ELQPyUhfqi3zkN6dpuy3nbPj43QBZHxdTLNrWisuh5MG
-         M5LNJ84XEo/C0x+Pr+udhsH9iNBK5Tsrt97EXkdvWJOQVUmHLRv4Uzg9GjHxkEZ/Ck1M
-         WgibVDP6E/sJJTfCEj6CsjCBM4wgFCh+KiJUxqdjsKW41bjYVxX2ZchvtzP0GRYesf61
-         96fl7onmBg06hvh1BrM2XbTEqrc0WrwOWTfAxWOU3ieSTbA1I1CrHaN6VHdoCUdjJokS
-         D3wQOFzJkUH8aLrQbtcW++irehCApdAmHDtL91zCiOs/g80iQjd8AaBchDTc+R5SMmmg
-         g6Vg==
-X-Gm-Message-State: AJIora8V/vruXUALE4Cyw08aUeuqYIem8rQF2eF/iFNRS60kKK9QKvhr
-        oZF+znLZozd7GdF2HfwuVC1uXQ==
-X-Google-Smtp-Source: AGRyM1vNvljPQ++qCrBVJeHCd22sqlJI9hgRYvAcuXWk0IjXScw3qn4brfBRq0r+ULDubADavAus2w==
-X-Received: by 2002:a05:6000:1052:b0:21b:927c:1559 with SMTP id c18-20020a056000105200b0021b927c1559mr15880906wrx.303.1656402739989;
-        Tue, 28 Jun 2022 00:52:19 -0700 (PDT)
-Received: from [192.168.0.252] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id v15-20020a5d43cf000000b0021badf3cb26sm15403886wrr.63.2022.06.28.00.52.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 00:52:19 -0700 (PDT)
-Message-ID: <4c8aae23-cf6e-cc68-38a2-a9f8abcc1ba8@linaro.org>
-Date:   Tue, 28 Jun 2022 09:52:18 +0200
+        Tue, 28 Jun 2022 03:52:57 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79D855A3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 00:52:55 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VHg7YAo_1656402769;
+Received: from 30.225.28.186(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VHg7YAo_1656402769)
+          by smtp.aliyun-inc.com;
+          Tue, 28 Jun 2022 15:52:51 +0800
+Message-ID: <2e76694e-9ead-fc05-c8ad-01646ff02151@linux.alibaba.com>
+Date:   Tue, 28 Jun 2022 15:52:48 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH] dt-bindings: cpufreq: qcom-cpufreq-nvmem: fix board
- compatible in example
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220627143340.477120-1-krzysztof.kozlowski@linaro.org>
- <20220627195040.GA2840123-robh@kernel.org>
- <20220628004507.kghkkf6vx3l2hpqe@vireshk-i7>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220628004507.kghkkf6vx3l2hpqe@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] arm64: mm: fix linear mapping mem access performace
+ degradation
+From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
+        Mike Rapoport <rppt@kernel.org>
+Cc:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
+        will@kernel.org, akpm@linux-foundation.org, david@redhat.com,
+        jianyong.wu@arm.com, james.morse@arm.com, quic_qiancai@quicinc.com,
+        christophe.leroy@csgroup.eu, jonathan@marek.ca,
+        mark.rutland@arm.com, anshuman.khandual@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        geert+renesas@glider.be, ardb@kernel.org, linux-mm@kvack.org,
+        bhe@redhat.com, Yao Hongbo <yaohongbo@linux.alibaba.com>
+References: <1656241815-28494-1-git-send-email-guanghuifeng@linux.alibaba.com>
+ <YrlPfjv2Wf/C77DI@kernel.org>
+ <4d18d303-aeed-0beb-a8a4-32893f2d438d@linux.alibaba.com>
+ <Yrl9FcVv1wZ5MnRp@kernel.org>
+ <ae5c6c07-1d49-ffd2-6f62-69df4308d0bb@linux.alibaba.com>
+ <32aefb80-c59c-74b6-c373-dd24edba0752@huawei.com>
+ <075b0a8e-cb7e-70f6-b45a-54cd31886794@linux.alibaba.com>
+ <55873a70-da46-b0f6-db81-841a2b5e886a@huawei.com>
+ <54f13945-fa35-247d-ca33-182931fd05ff@linux.alibaba.com>
+In-Reply-To: <54f13945-fa35-247d-ca33-182931fd05ff@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/06/2022 02:45, Viresh Kumar wrote:
-> On 27-06-22, 13:50, Rob Herring wrote:
->> On Mon, Jun 27, 2022 at 04:33:40PM +0200, Krzysztof Kozlowski wrote:
->>> In the example, alone compatible "qcom,qcs404" is not correct.  Add
->>> proper board compatibles for QCS404 Evaluation Board.
->>>
->>> Reported-by: Rob Herring <robh@kernel.org>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>
->>> ---
->>>
->>> Can be picked up independently, although the issue reported by Rob was
->>> caused by:
->>> https://lore.kernel.org/all/CAL_JsqKXDs=QHKob2Xy6vAFZfnkM9ggfmqf9TNA1hv8TScTmgQ@mail.gmail.com/
->>
->> Best to go in that tree unless it's going to take weeks...
+
+
+在 2022/6/28 11:06, guanghui.fgh 写道:
+> Thanks.
 > 
-> Lemme know Krzysztof about the timing, I am going to send a pull
-> request for cpufreq fixes very soon, so I can take it as well if you
-> want.
+> 在 2022/6/28 9:34, Leizhen (ThunderTown) 写道:
+>>
+>>
+>> On 2022/6/27 20:25, guanghui.fgh wrote:
+>>> Thanks.
+>>>
+>>> 在 2022/6/27 20:06, Leizhen (ThunderTown) 写道:
+>>>>
+>>>>
+>>>> On 2022/6/27 18:46, guanghui.fgh wrote:
+>>>>>
+>>>>>
+>>>>> 在 2022/6/27 17:49, Mike Rapoport 写道:
+>>>>>> Please don't post HTML.
+>>>>>>
+>>>>>> On Mon, Jun 27, 2022 at 05:24:10PM +0800, guanghui.fgh wrote:
+>>>>>>> Thanks.
+>>>>>>>
+>>>>>>> 在 2022/6/27 14:34, Mike Rapoport 写道:
+>>>>>>>
+>>>>>>>        On Sun, Jun 26, 2022 at 07:10:15PM +0800, Guanghui Feng 
+>>>>>>> wrote:
+>>>>>>>
+>>>>>>>            The arm64 can build 2M/1G block/sectiion mapping. When 
+>>>>>>> using DMA/DMA32 zone
+>>>>>>>            (enable crashkernel, disable rodata full, disable 
+>>>>>>> kfence), the mem_map will
+>>>>>>>            use non block/section mapping(for crashkernel requires 
+>>>>>>> to shrink the region
+>>>>>>>            in page granularity). But it will degrade performance 
+>>>>>>> when doing larging
+>>>>>>>            continuous mem access in kernel(memcpy/memmove, etc).
+>>>>>>>
+>>>>>>>            There are many changes and discussions:
+>>>>>>>            commit 031495635b46
+>>>>>>>            commit 1a8e1cef7603
+>>>>>>>            commit 8424ecdde7df
+>>>>>>>            commit 0a30c53573b0
+>>>>>>>            commit 2687275a5843
+>>>>>>>
+>>>>>>>        Please include oneline summary of the commit. (See section 
+>>>>>>> "Describe your
+>>>>>>>        changes" in Documentation/process/submitting-patches.rst)
+>>>>>>>
+>>>>>>> OK, I will add oneline summary in the git commit messages.
+>>>>>>>
+>>>>>>>            This patch changes mem_map to use block/section 
+>>>>>>> mapping with crashkernel.
+>>>>>>>            Firstly, do block/section mapping(normally 2M or 1G) 
+>>>>>>> for all avail mem at
+>>>>>>>            mem_map, reserve crashkernel memory. And then walking 
+>>>>>>> pagetable to split
+>>>>>>>            block/section mapping to non block/section 
+>>>>>>> mapping(normally 4K) [[[only]]]
+>>>>>>>            for crashkernel mem.
+>>>>>>>
+>>>>>>>        This already happens when ZONE_DMA/ZONE_DMA32 are 
+>>>>>>> disabled. Please explain
+>>>>>>>        why is it Ok to change the way the memory is mapped with
+>>>>>>>        ZONE_DMA/ZONE_DMA32 enabled.
+>>>>>>>
+>>>>>>> In short:
+>>>>>>>
+>>>>>>> 1.building all avail mem with block/section mapping（normally 
+>>>>>>> 1G/2M） without
+>>>>>>> inspecting crashkernel
+>>>>>>> 2. Reserve crashkernel mem as same as previous doing
+>>>>>>> 3. only change the crashkernle mem mapping to normal 
+>>>>>>> mapping(normally 4k).
+>>>>>>> With this method, there are block/section mapping as more as 
+>>>>>>> possible.
+>>>>>>
+>>>>>> This does not answer the question why changing the way the memory 
+>>>>>> is mapped
+>>>>>> when there is ZONE_DMA/DMA32 and crashkernel won't cause a 
+>>>>>> regression.
+>>>>>>
+>>>>> 1.Quoted messages from arch/arm64/mm/init.c
+>>>>>
+>>>>> "Memory reservation for crash kernel either done early or deferred
+>>>>> depending on DMA memory zones configs (ZONE_DMA) --
+>>>>>
+>>>>> In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
+>>>>> here instead of max_zone_phys().  This lets early reservation of
+>>>>> crash kernel memory which has a dependency on arm64_dma_phys_limit.
+>>>>> Reserving memory early for crash kernel allows linear creation of 
+>>>>> block
+>>>>> mappings (greater than page-granularity) for all the memory bank 
+>>>>> rangs.
+>>>>> In this scheme a comparatively quicker boot is observed.
+>>>>>
+>>>>> If ZONE_DMA configs are defined, crash kernel memory reservation
+>>>>> is delayed until DMA zone memory range size initialization 
+>>>>> performed in
+>>>>> zone_sizes_init().  The defer is necessary to steer clear of DMA zone
+>>>>> memory range to avoid overlap allocation.  So crash kernel memory 
+>>>>> boundaries are not known when mapping all bank memory ranges, which 
+>>>>> otherwise means not possible to exclude crash kernel range from 
+>>>>> creating block mappings so page-granularity mappings are created 
+>>>>> for the entire memory range."
+>>>>>
+>>>>> Namely, the init order: memblock init--->linear mem mapping(4k 
+>>>>> mapping for crashkernel, requirinig page-granularity 
+>>>>> changing))--->zone dma limit--->reserve crashkernel.
+>>>>> So when enable ZONE DMA and using crashkernel, the mem mapping 
+>>>>> using 4k mapping.
+>>>>>
+>>>>> 2.As mentioned above, when linear mem use 4k mapping simply, there 
+>>>>> is high dtlb miss(degrade performance).
+>>>>> This patch use block/section mapping as far as possible with 
+>>>>> performance improvement.
+>>>>>
+>>>>> 3.This patch reserve crashkernel as same as the history(ZONE DMA & 
+>>>>> crashkernel reserving order), and only change the linear mem 
+>>>>> mapping to block/section mapping.
+>>>>> .
+>>>>>
+>>>>
+>>>> I think Mike Rapoport's probably asking you to answer whether you've
+>>>> taken into account such as BBM. For example, the following code:
+>>>> we should prepare the next level pgtable first, then change 2M block
+>>>> mapping to 4K page mapping, and flush TLB at the end.
+>>>>> +static void init_crashkernel_pmd(pud_t *pudp, unsigned long addr,
+>>>> +                 unsigned long end, phys_addr_t phys,
+>>>> +                 pgprot_t prot,
+>>>> +                 phys_addr_t (*pgtable_alloc)(int), int flags)
+>>>> +{
+>>>> +    phys_addr_t map_offset;
+>>>> +    unsigned long next;
+>>>> +    pmd_t *pmdp;
+>>>> +    pmdval_t pmdval;
+>>>> +
+>>>> +    pmdp = pmd_offset(pudp, addr);
+>>>> +    do {
+>>>> +        next = pmd_addr_end(addr, end);
+>>>> +        if (!pmd_none(*pmdp) && pmd_sect(*pmdp)) {
+>>>> +            phys_addr_t pte_phys = pgtable_alloc(PAGE_SHIFT);
+>>>> +            pmd_clear(pmdp);
+>>>> +            pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
+>>>> +            if (flags & NO_EXEC_MAPPINGS)
+>>>> +                pmdval |= PMD_TABLE_PXN;
+>>>> +            __pmd_populate(pmdp, pte_phys, pmdval);
+>>>> +            flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+>>>>
+>>>> The pgtable is empty now. However, memory other than crashkernel may 
+>>>> be being accessed.
+>>> 1.When reserving crashkernel and remapping linear mem mapping, there 
+>>> is only one boot cpu running. There is no other cpu/thread running at 
+>>> the same time.
+>>
+>> So, put this in the code comment?
+> OK.
+>>
+>> If scalability is considered and unpredictable changes occur in the 
+>> future, for example,
+>> other modules also need this mapping function. It would be better to 
+>> deal with the BBM now,
+>> and make this public.
+> OK, could you give me some advice?
+>>
+>>
+>>>
+>>> 2.When clearing block/section mapping, I have flush tlb by 
+>>> flush_tlb_kernel_range. Afterwards rebuilt 4k mapping(I think it's no 
+>>> need flush tlb).
+>>
+>>
+>>>
+>>>>
+>>>> +
+>>>> +            map_offset = addr - (addr & PMD_MASK);
+>>>> +            if (map_offset)
+>>>> +                alloc_init_cont_pte(pmdp, addr & PMD_MASK, addr,
+>>>> +                        phys - map_offset, prot,
+>>>> +                        pgtable_alloc, flags);
+>>>> +
+>>>> +            if (next < (addr & PMD_MASK) + PMD_SIZE)
+>>>> +                alloc_init_cont_pte(pmdp, next, (addr & PUD_MASK) +
+>>>> +                        PUD_SIZE, next - addr + phys,
+>>>> +                        prot, pgtable_alloc, flags);
+>>
+>> Here and alloc_crashkernel_pud() should use the raw flags. It may not 
+>> contain  (NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS)
+> Yes. the mem out of crashkernel should use block/section mapping as far 
+> as possible including the LeftMargin and RightMargin.
+> But I had test it on HiSilicon Kunpeng 920-6426 with it and get 
+> performacne degrade(without NO_BLOCK_MAPPINGS/NO_CONT_MAPPINGS flags for 
+> the left/right margin)
+> It's strange, could you give some advice? Maybe it's good for other arm 
+> platform except for HiSilicon Kunpeng 920-6426.
+There should split non-crashkernel mem [[[ without ]]]
+NO_BLOCK_MAPPINGS/NO_CONT_MAPPINGS flags
 
+I had test it on other arm platform [[[ non HiSilicon arm platform ]]] 
+and also get performance improvement greatly.
 
-Thanks Viresh, but I think Rob has a point here - this should be rather
-same tree, otherwise checks on your tree complain about undocumented
-board compatibles from this patch (because they are in this original tree).
+Could you help me to check the difference betweent HiSilicon Kunpeng 
+920-6426 and other arm platform for the block/section mapping TLB support?
 
-I'll take it and add to my pull request for Rob or Bjorn.
-
-Best regards,
-Krzysztof
+>>
+>>>> +        }
+>>>> +        alloc_crashkernel_cont_pte(pmdp, addr, next, phys, prot,
+>>>> +                       pgtable_alloc, flags);
+>>>> +        phys += next - addr;
+>>>> +    } while (pmdp++, addr = next, addr != end);
+>>>> +}
+>>>>
+>>> .
+>>>
+>>

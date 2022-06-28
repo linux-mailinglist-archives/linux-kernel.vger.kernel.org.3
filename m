@@ -2,53 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA5455C417
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B5D55CDD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243040AbiF1CRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 22:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
+        id S242923AbiF1CPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 22:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241900AbiF1CRO (ORCPT
+        with ESMTP id S241842AbiF1CPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 22:17:14 -0400
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BC623146;
-        Mon, 27 Jun 2022 19:17:06 -0700 (PDT)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 25S1wfO2055689;
-        Tue, 28 Jun 2022 09:58:41 +0800 (GMT-8)
-        (envelope-from neal_liu@aspeedtech.com)
-Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 28 Jun
- 2022 10:14:40 +0800
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     Roger Quadros <roger.quadros@nokia.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <BMC-SW@aspeedtech.com>
-Subject: [PATCH v3] usb: gadget: f_mass_storage: Make CD-ROM emulation works with Windows OS
-Date:   Tue, 28 Jun 2022 10:14:36 +0800
-Message-ID: <20220628021436.3252262-1-neal_liu@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 27 Jun 2022 22:15:41 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8DC922BF8;
+        Mon, 27 Jun 2022 19:15:39 -0700 (PDT)
+X-UUID: b179504e3878411094a1b26acce61b7b-20220628
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:717cc8a4-c1ce-4b56-90eb-7ea83dc9f664,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:87442a2,CLOUDID:8ef8fed5-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: b179504e3878411094a1b26acce61b7b-20220628
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 518001723; Tue, 28 Jun 2022 10:15:33 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 28 Jun 2022 10:15:32 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 28 Jun 2022 10:15:32 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 28 Jun 2022 10:15:32 +0800
+Message-ID: <a59a61a81e45fd361774a28a66ffd3d673cb3148.camel@mediatek.com>
+Subject: Re: [PATCH v14 12/15] drm/mediatek: dpi: Add YUV422 output support
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 28 Jun 2022 10:15:30 +0800
+In-Reply-To: <20220624030946.14961-13-rex-bc.chen@mediatek.com>
+References: <20220624030946.14961-1-rex-bc.chen@mediatek.com>
+         <20220624030946.14961-13-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.10.10]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 25S1wfO2055689
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,66 +71,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add read TOC with format 1 to support CD-ROM emulation with
-Windows OS.
-This patch is tested on Windows OS Server 2019.
+Hi, Bo-Chen:
 
-Fixes: 89ada0fe669a ("usb: gadget: f_mass_storage: Make CD-ROM emulation work
-with Mac OS-X")
-Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
----
-v3:
-- ignore start_track value with format 1
-- add fixes tags
-- revise comments properly
+On Fri, 2022-06-24 at 11:09 +0800, Bo-Chen Chen wrote:
+> Dp_intf supports YUV422 as output format. In MT8195 Chrome project,
+> YUV422 output format is used for 4K resolution.
+> 
+> To support this, it is also needed to support color format transfer.
+> Color format transfer is a new feature for both dpi and dpintf of
+> MT8195.
+> 
+> The input format could be RGB888 and output format for dp_intf should
+> be
+> YUV422. Therefore, we add a mtk_dpi_matrix_sel() helper to update the
+> DPI_MATRIX_SET register depending on the color format.
+> 
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dpi.c      | 34
+> ++++++++++++++++++++++++-
+>  drivers/gpu/drm/mediatek/mtk_dpi_regs.h |  3 +++
+>  2 files changed, 36 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index 9e4250356342..438bf3bc5e4a 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -128,6 +128,7 @@ struct mtk_dpi_yc_limit {
+>   * @num_output_fmts: Quantity of supported output formats.
+>   * @is_ck_de_pol: Support CK/DE polarity.
+>   * @swap_input_support: Support input swap function.
+> + * @color_fmt_trans_support: Enable color format transfer.
+>   * @dimension_mask: Mask used for HWIDTH, HPORCH, VSYNC_WIDTH and
+> VSYNC_PORCH
+>   *		    (no shift).
+>   * @hvsize_mask: Mask of HSIZE and VSIZE mask (no shift).
+> @@ -144,6 +145,7 @@ struct mtk_dpi_conf {
+>  	u32 num_output_fmts;
+>  	bool is_ck_de_pol;
+>  	bool swap_input_support;
+> +	bool color_fmt_trans_support;
+>  	u32 dimension_mask;
+>  	u32 hvsize_mask;
+>  	u32 channel_swap_shift;
+> @@ -412,6 +414,31 @@ static void mtk_dpi_config_disable_edge(struct
+> mtk_dpi *dpi)
+>  		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0,
+> EDGE_SEL_EN);
+>  }
+>  
+> +static void mtk_dpi_matrix_sel(struct mtk_dpi *dpi,
+> +			       enum mtk_dpi_out_color_format format)
+> +{
+> +	u32 matrix_sel = 0;
+> +
+> +	if (!dpi->conf->color_fmt_trans_support) {
+> +		dev_info(dpi->dev, "matrix_sel is not supported.\n");
+> +		return;
+> +	}
+> +
+> +	switch (format) {
+> +	case MTK_DPI_COLOR_FORMAT_YCBCR_422:
+> +	case MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL:
+> +	case MTK_DPI_COLOR_FORMAT_YCBCR_444:
+> +	case MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL:
 
-v2:
-- revise comments
+I think the transform formula are different for full range and non-full 
+range. Please make sure '0x2' is for full range or non-full range. If
+you are not sure, you could provide the transform matrix of '0x2' so we
+could find out it's full or non-full.
 
- drivers/usb/gadget/function/f_mass_storage.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+> +	case MTK_DPI_COLOR_FORMAT_XV_YCC:
+> +		if (dpi->mode.hdisplay <= 720)
+> +			matrix_sel = 0x2;
 
-diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-index 3a77bca0ebe1..e884f295504f 100644
---- a/drivers/usb/gadget/function/f_mass_storage.c
-+++ b/drivers/usb/gadget/function/f_mass_storage.c
-@@ -1192,13 +1192,14 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
- 	u8		format;
- 	int		i, len;
- 
-+	format = common->cmnd[2] & 0xf;
-+
- 	if ((common->cmnd[1] & ~0x02) != 0 ||	/* Mask away MSF */
--			start_track > 1) {
-+			(start_track > 1 && format != 0x1)) {
- 		curlun->sense_data = SS_INVALID_FIELD_IN_CDB;
- 		return -EINVAL;
- 	}
- 
--	format = common->cmnd[2] & 0xf;
- 	/*
- 	 * Check if CDB is old style SFF-8020i
- 	 * i.e. format is in 2 MSBs of byte 9
-@@ -1208,8 +1209,8 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
- 		format = (common->cmnd[9] >> 6) & 0x3;
- 
- 	switch (format) {
--	case 0:
--		/* Formatted TOC */
-+	case 0:	/* Formatted TOC */
-+	case 1:	/* Multi-session info */
- 		len = 4 + 2*8;		/* 4 byte header + 2 descriptors */
- 		memset(buf, 0, len);
- 		buf[1] = len - 2;	/* TOC Length excludes length field */
-@@ -1250,7 +1251,7 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
- 		return len;
- 
- 	default:
--		/* Multi-session, PMA, ATIP, CD-TEXT not supported/required */
-+		/* PMA, ATIP, CD-TEXT not supported/required */
- 		curlun->sense_data = SS_INVALID_FIELD_IN_CDB;
- 		return -EINVAL;
- 	}
--- 
-2.25.1
+Symbolize '0x2'.
+
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +	mtk_dpi_mask(dpi, DPI_MATRIX_SET, matrix_sel,
+> INT_MATRIX_SEL_MASK);
+> +}
+> +
+>  static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
+>  					enum mtk_dpi_out_color_format
+> format)
+>  {
+> @@ -419,6 +446,7 @@ static void mtk_dpi_config_color_format(struct
+> mtk_dpi *dpi,
+>  	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
+>  		mtk_dpi_config_yuv422_enable(dpi, false);
+>  		mtk_dpi_config_csc_enable(dpi, true);
+> +		mtk_dpi_matrix_sel(dpi, format);
+
+Why mt8173 support MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL but it does not
+call mtk_dpi_matrix_sel()? It seems that mt8173 also need to call
+mtk_dpi_matrix_sel() but lost and this patch looks like a bug fix for
+all SoC DPI driver.
+
+Regards,
+CK
+
+>  		if (dpi->conf->swap_input_support)
+>  			mtk_dpi_config_swap_input(dpi, false);
+>  		mtk_dpi_config_channel_swap(dpi,
+> MTK_DPI_OUT_CHANNEL_SWAP_BGR);
+> @@ -426,6 +454,7 @@ static void mtk_dpi_config_color_format(struct
+> mtk_dpi *dpi,
+>  		   (format == MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
+>  		mtk_dpi_config_yuv422_enable(dpi, true);
+>  		mtk_dpi_config_csc_enable(dpi, true);
+> +		mtk_dpi_matrix_sel(dpi, format);
+>  		if (dpi->conf->swap_input_support)
+>  			mtk_dpi_config_swap_input(dpi, true);
+>  		else
+> @@ -673,7 +702,10 @@ static int mtk_dpi_bridge_atomic_check(struct
+> drm_bridge *bridge,
+>  	dpi->bit_num = MTK_DPI_OUT_BIT_NUM_8BITS;
+>  	dpi->channel_swap = MTK_DPI_OUT_CHANNEL_SWAP_RGB;
+>  	dpi->yc_map = MTK_DPI_OUT_YC_MAP_RGB;
+> -	dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
+> +	if (out_bus_format == MEDIA_BUS_FMT_YUYV8_1X16)
+> +		dpi->color_format =
+> MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL;
+> +	else
+> +		dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
+>  
+>  	return 0;
+>  }
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> index 3a02fabe1662..cca0dccb84a2 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> @@ -217,4 +217,7 @@
+>  
+>  #define EDGE_SEL_EN			BIT(5)
+>  #define H_FRE_2N			BIT(25)
+> +
+> +#define DPI_MATRIX_SET		0xB4
+> +#define INT_MATRIX_SEL_MASK		GENMASK(4, 0)
+>  #endif /* __MTK_DPI_REGS_H */
 

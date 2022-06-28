@@ -2,123 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6243C55E72C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E8B55E749
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345526AbiF1Nzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
+        id S1346998AbiF1Nz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245534AbiF1Nze (ORCPT
+        with ESMTP id S1346012AbiF1Nz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:55:34 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC5230542;
-        Tue, 28 Jun 2022 06:55:33 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id h9-20020a17090a648900b001ecb8596e43so12687045pjj.5;
-        Tue, 28 Jun 2022 06:55:33 -0700 (PDT)
+        Tue, 28 Jun 2022 09:55:57 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE1531528
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:55:56 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-317710edb9dso118413087b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:55:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=BDUJ/ka+kgkQoriSSldrNOaZy2Lthlgzh4tWOgyV1eg=;
-        b=TTcVoKDwF/QDCDhip9ZNimV8pF3crRWHTJ3htHT9TRpOVaa0OEhUJsLWLYvjeHvfpg
-         lW9Z3yjh68KgFUkH0zRbYLGF7frgorqrDpa1HhEfqJ1nobJRdob+22uuUqIQ3ep4PVIo
-         jhUpbWBMfdxuSQNtUaAQVOeXBwitrScreoawp8isdXe9FKRtIJJSNvttP7nJDt7sDPuf
-         WhuK5Du25kXZTZKE2PJmbepcoa+2woOeKOshq/vwP1QtGK3lziv+XJyuMgw5AnXIiTFp
-         jlMvO2X/3hx/eAlZXAgXjZcM9637e9k5Fesr1sI38+PcTum0aI4YlXq4wl219KI9BCaF
-         1DQA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kxOhQolvwduRWfHp8nzmrFY1G8WxOuz7AW66OC89GlU=;
+        b=aIvg8hbrgemKNvg22KLNdqF1iZoyHZJHvQ+cI+1v3vreL1Y0S/gmjfQZRi5rozr2NI
+         n3Mg0QxI1maN80y0myC76XImJj4HD1RLw+ZsrntlrYTIRfINOWrtKjFTl9j9pEHxTRIH
+         CaBkZBYNtfv0LqzNEIAyMsaDTCLdG2X6M1ur4zd4FD3M5OM94hTv3E7iOtT+YeLF4fcX
+         JYs2H7JNSAHpqyUrfpPnrRfedI/SjA36/E3kp3426It+zCbbrtRlghG2I36Tpgby2rLC
+         H7jxp/FZGvL0IT50hh9/1jInVjASJeRXbayWWnpkHzeO4EHnOwgTCJxIv8xpsKUGrzDx
+         kxTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=BDUJ/ka+kgkQoriSSldrNOaZy2Lthlgzh4tWOgyV1eg=;
-        b=xYPzPBw9gQa79/+D0oplG6e4osCyT8bVrF6iUqX1V3+4VGYqQZMPOs3/9HIxgMbrQo
-         n7yzZrhfSQ76vs103IptgXmfQnULBeh1+VIMZw8Dxmt6M/2wQw2xAN6qwdvBbyvfoZLY
-         D/AXeTCZt4RUgu2npWO9xJfGiWQb5cF4777VjSgN2sQGOxmBVWa7yOPueloLekdqn1Xc
-         kMqBLvf8u4j7gGPh90Su/CY6RLZKDw/ZqI9p6D9QUPk4u3YUULZZ9R8PYAJuMjbrqfga
-         ruGxSYj589kSodL2D+mEvHDnAHOEs8C9WEGOiPBQBGWmNxFbteHmip1gr7o2DsKwx4/o
-         yl+g==
-X-Gm-Message-State: AJIora8L0nt5XcwX3u8BcBBDYbnihtgghhI8SXM7NnQ5FhIDdiZ/bggZ
-        vO6ASKuNLM8GZF20+xT9uuo=
-X-Google-Smtp-Source: AGRyM1tPf23++oTwJhdLzgnRQtVlTLSLIDsf8xfKQ5RuIU55wlphxpz/Eafpsh3K64XDOfBxVSFiXQ==
-X-Received: by 2002:a17:90b:d86:b0:1ec:caca:170a with SMTP id bg6-20020a17090b0d8600b001eccaca170amr27829769pjb.94.1656424532909;
-        Tue, 28 Jun 2022 06:55:32 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 64-20020a17090a09c600b001ec9ae91e30sm11594026pjo.12.2022.06.28.06.55.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 06:55:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c230ccdc-b20d-32a6-c3cb-715698d06945@roeck-us.net>
-Date:   Tue, 28 Jun 2022 06:55:29 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kxOhQolvwduRWfHp8nzmrFY1G8WxOuz7AW66OC89GlU=;
+        b=1K1HyoPU08IMZtkUHrPBHZb1ShFX6jBpPbVUemVj9SlvhyDoCagjRKFgeTfukN4VfH
+         bzk/0hi1S8QohrTkA0J27GKux0tAx83DQaBpyFpgs+eAsRTCb3X683yaNqJUip2O17qH
+         H71/dNOR/zwDuatympUo5Q2uw2Djo+CfnbR70wX5cwvlRHAPKkdUryfdZtlL4JZt2OLm
+         HgL3vqOjwP/XyIcjA4SsN7YPmPQYgQm8chTXp2qOkCAsQgAGUlf3kNOtEfwLA7C7KvRQ
+         75J3rXsw7zRgGkmhCiScLmPupDhDhMb2e5E/SafWs22OEA6spqOBqq+j3oHtmih9ADXc
+         osXQ==
+X-Gm-Message-State: AJIora/ypr67RDO5WYftMS4m5xG7Wja3kCszoolaUdTCADy8b2N2BBrB
+        MZ7q4IO2krYRLNoc8tAxPM/N3V8ydQaZbdJtsP1vIw==
+X-Google-Smtp-Source: AGRyM1szGG02RfG3EL5P+6lP1i3HtBscAKZM0qaNbzmp3Aol7aLOgPMpcWX50uoxmoqOY7esyzE1BBj3sY16WXS+L74=
+X-Received: by 2002:a0d:e20a:0:b0:317:ce36:a3a0 with SMTP id
+ l10-20020a0de20a000000b00317ce36a3a0mr22354878ywe.448.1656424555304; Tue, 28
+ Jun 2022 06:55:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Schspa Shi <schspa@gmail.com>, wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhaohui.shi@horizon.ai
-References: <20220628054539.33187-1-schspa@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] watchdog: dw_wdt: Fix buffer overflow when get timeout
-In-Reply-To: <20220628054539.33187-1-schspa@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220624081022.32384-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220624081022.32384-1-krzysztof.kozlowski@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 28 Jun 2022 15:55:44 +0200
+Message-ID: <CACRpkdabjb45WNLPa6gRDiCDm0u1swDpYq3D1pju4HmcCetoYA@mail.gmail.com>
+Subject: Re: [GIT PULL][PATCH] pinctrl: samsung: do not use bindings header
+ with constants
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/22 22:45, Schspa Shi wrote:
-> The top_val can be obtained from device-tree, if it is not configured
-> correctly, there will be buffer overflow.
-> 
-> Signed-off-by: Schspa Shi <schspa@gmail.com>
-> ---
->   drivers/watchdog/dw_wdt.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
-> index cd578843277e..1f8605c0d712 100644
-> --- a/drivers/watchdog/dw_wdt.c
-> +++ b/drivers/watchdog/dw_wdt.c
-> @@ -155,6 +155,9 @@ static unsigned int dw_wdt_get_min_timeout(struct dw_wdt *dw_wdt)
->   			break;
->   	}
->   
-> +	if (WARN_ON_ONCE(idx == DW_WDT_NUM_TOPS))
-> +		idx = DW_WDT_NUM_TOPS - 1;
-> +
-dw_wdt_get_min_timeout() returns the lowest non-0 configurable timeout.
-The  last entry in the timeout array must not be 0, meaning there must
-be at least one entry in the array where the timeout is not 0. Therefore
-this situation can not happen.
+On Fri, Jun 24, 2022 at 10:10 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> The Samsung SoC pin controller driver uses only three defines from the
+> bindings header with pin configuration register values, which proves
+> the point that this header is not a proper bindings-type abstraction
+> layer with IDs.
+>
+> Define the needed register values directly in the driver and stop using
+> the bindings header.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Chanho Park <chanho61.park@samsung.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Link: https://lore.kernel.org/r/20220605160508.134075-8-krzysztof.kozlowski@linaro.org
 
->   	return dw_wdt->timeouts[idx].sec;
->   }
->   
-> @@ -178,6 +181,9 @@ static unsigned int dw_wdt_get_timeout(struct dw_wdt *dw_wdt)
->   			break;
->   	}
->   
-> +	if (WARN_ON_ONCE(idx == DW_WDT_NUM_TOPS))
-> +		idx = DW_WDT_NUM_TOPS - 1;
-> +
+Patch applied.
 
-idx is derived from a top_val value written into WDOG_TIMEOUT_RANGE_REG_OFFSET,
-and the value written is derived from an entry in the timeouts array.
-This array contains an entry for each possible top_val. While the array is not
-sorted by top_val, dw_wdt_handle_tops() still guarantees that an entry exists.
-
-I do not see how bad devicetree data can circumvent that. If it does, please
-provide an example and explain.
-
-Thanks,
-Guenter
+Yours,
+Linus Walleij

@@ -2,93 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 296CC55CC8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7204755CC49
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344385AbiF1JuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
+        id S245735AbiF1Jvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241460AbiF1JuN (ORCPT
+        with ESMTP id S241460AbiF1Jvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:50:13 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B96DC8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:50:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656409813; x=1687945813;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EMA9/2kguHnQyf44jaUpIuGsTVx9ehFERtpHBeOXGic=;
-  b=mbKJj3voNsMMC2aFuZWMGEfoJMqHktqsy7l118EDpGMIg0AXnAn7mzPd
-   4PIznzki/QPoQP9piZFjyk4qtPSYjqJvQhQj4+1pAmu5oE6McZ6HNDgYz
-   nA3Sw/XTs3bgt70lrbuNo7LXdVoGjdXRlWeVzRf6xOcSnr1TrSL1LIGv7
-   cDUDKpBqHK1Om+w0l3SPx9Z2JeZgPxoWTBxlnZXzz9HHPR2wFueLQZ2R8
-   CqlveAoKyhuqPZPc1OqXg2hbuVEh+OusnvsIIreotHkPvg20r0oX1B05R
-   /aXtZy3NLpWtjSKxHbwWjiT/dkrCmYA1ueaZi9VvdHciWI0kiANjl3nwl
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="282430593"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="282430593"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 02:50:12 -0700
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="658070480"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 02:50:11 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o67rE-000wfu-L9;
-        Tue, 28 Jun 2022 12:50:08 +0300
-Date:   Tue, 28 Jun 2022 12:50:08 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>
-Subject: Re: [PATCH v1 1/9] mfd: intel_soc_pmic_crc: Merge Intel PMIC core to
- crc
-Message-ID: <YrrO0CQVv6hj1AB0@smile.fi.intel.com>
-References: <20220616182524.7956-1-andriy.shevchenko@linux.intel.com>
- <Yrmr175fsQi6ToEY@google.com>
+        Tue, 28 Jun 2022 05:51:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D98A2AE3F;
+        Tue, 28 Jun 2022 02:51:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B654B81D79;
+        Tue, 28 Jun 2022 09:51:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5884C3411D;
+        Tue, 28 Jun 2022 09:51:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656409900;
+        bh=2MJDoSVSUvHYBQTXDGlST2aZE277KT5703sWMj70kjM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pws1kpE3r+YJwttZPjszbUdhTl59v0B+/FxkYHEkwFNThrNOZAknMy4RPwk2Vw085
+         WfTfoGcl5pK5xqZsh/dr8omX0xXEjsTBYdEXker6SL707CqtbGnUiAu3vOrCKVkDqI
+         C9qyRQ+G0KUZEvZqz6WBPlcvtV9qWU3Z0AM1rmQ9ppFNTP6sdCcTEgpICnJqpGi3Rd
+         7wXzFjJZdzb9hpxW63tbO0w0JsJtqlzR4Qc2rdmDm2EpsF+c9lwrq+JpwabcfrrUse
+         O7DEm59lo29LpDcKhKjPSm+L2nFTdLetyKsrZNbn+IaCaVRKX9QHuyi1f3DC14LpSe
+         l8Y7IQCUqNFOQ==
+Received: by pali.im (Postfix)
+        id C50A77AE; Tue, 28 Jun 2022 11:51:36 +0200 (CEST)
+Date:   Tue, 28 Jun 2022 11:51:36 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Allen Yan <yanwei@marvell.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] serial: mvebu: Apply old baudrate to termios
+Message-ID: <20220628095136.fhtjjjkj3mre7hwa@pali>
+References: <20220628094155.26297-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yrmr175fsQi6ToEY@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220628094155.26297-1-ilpo.jarvinen@linux.intel.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 02:08:39PM +0100, Lee Jones wrote:
-> On Thu, 16 Jun 2022, Andy Shevchenko wrote:
-
-...
-
-> >  drivers/mfd/intel_soc_pmic_core.c | 160 -----------------------------
-> >  drivers/mfd/intel_soc_pmic_core.h |  25 -----
-> >  drivers/mfd/intel_soc_pmic_crc.c  | 162 ++++++++++++++++++++++++++++--
-> >  4 files changed, 157 insertions(+), 193 deletions(-)
-> >  delete mode 100644 drivers/mfd/intel_soc_pmic_core.c
-> >  delete mode 100644 drivers/mfd/intel_soc_pmic_core.h
+On Tuesday 28 June 2022 12:41:55 Ilpo Järvinen wrote:
+> A fallback baud rate was derived from old termios but got never applied
+> to (new/current) termios. Old termios is dropped once ->set_termios()
+> call chain completes, only termios persists the values. Encode also the
+> old baud rate into termios.
 > 
-> Can you submit this again with the -M flag please.
+> Fixes: 68a0db1d7da2 ("serial: mvebu-uart: add function to change baudrate")
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-This is done with this flag. Basically for the last several years I do my
-submissions with that flag.
+Hello! Could you explain a bit more what is this patch fixing? I have
+not caught it yet. Do you have a test scenario which can demonstrate
+this issue? Because I have tested this driver more deeply (on Mox
+and Espressobin) and I have not seen any remaining issue with reporting
+incorrect baudrate.
 
-Anything else I can do?
-
-> Trying to figure out what exactly changed is proving challenging.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> ---
+>  drivers/tty/serial/mvebu-uart.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/mvebu-uart.c b/drivers/tty/serial/mvebu-uart.c
+> index 0429c2a54290..12a79018697f 100644
+> --- a/drivers/tty/serial/mvebu-uart.c
+> +++ b/drivers/tty/serial/mvebu-uart.c
+> @@ -592,10 +592,9 @@ static void mvebu_uart_set_termios(struct uart_port *port,
+>  		if (old)
+>  			baud = uart_get_baud_rate(port, old, NULL,
+>  						  min_baud, max_baud);
+> -	} else {
+> -		tty_termios_encode_baud_rate(termios, baud, baud);
+> -		uart_update_timeout(port, termios->c_cflag, baud);
+>  	}
+> +	tty_termios_encode_baud_rate(termios, baud, baud);
+> +	uart_update_timeout(port, termios->c_cflag, baud);
+>  
+>  	/* Only the following flag changes are supported */
+>  	if (old) {
+> 
+> -- 
+> tg: (f287f971e256..) fix/mvebu-apply-old-baud (depends on: tty-next)

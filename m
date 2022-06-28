@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580C355EF82
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AA155EF57
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 22:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233158AbiF1UWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 16:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
+        id S233235AbiF1UWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 16:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232262AbiF1UVj (ORCPT
+        with ESMTP id S232299AbiF1UVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 28 Jun 2022 16:21:39 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C321EA8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:19:32 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id l81so18744829oif.9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:19:32 -0700 (PDT)
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EF410D2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:19:33 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id n12-20020a9d64cc000000b00616ebd87fc4so1707482otl.7
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:19:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6FamQGB9CD5dY+rNMN2KXZg8bPEzG8hfZukPK5OM8oE=;
-        b=jGGCbx4lcSAgARVpp97pLkHzge2D+PqjTUCrv31cNsYclz07jjVtXiEpCXntnip7uC
-         40ezDMWAYGtDGEkojRB+byXWtSJ0ufgvimKETa3abEWsePV7dt9NT5EI5xpjPqZdO/eM
-         7cQ/y/c+l8RowWG2CnNNm+pprEJHFp4TFd+ECrCih9VPi5Gt/l1AJBiJ/fIvN081E++W
-         vFK/WqrU3KcKx1KGxBdjOLI1Jeb8lkxoGG5v9EXm0L5HhOgcf4iU2ayuGQitecssndv0
-         sTR/YeRhSfOGsVt/7+UpNZq2VEPOgBddbFwCS+SCROiuhDLllYBzbzYjVH2HLZPd7aIF
-         MbMg==
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=86x1pCfc8rA3POoegBiHBkAv35qybvdQxmmuFQbL0RY=;
+        b=A6HkriEQVjr8xBuNaJxh8JbFRPp03vxUK0kdmszuwswcz3UumF7ltjqYHiPb5zguuv
+         kldVj/3VuIudYRuWWPOEGV6Ww2HO28uttd9nIej6BtkFUbARrqboOl5omXaEJDKUcbGu
+         NUlwAlhXGlPx/UJp+osIXmBD/cPWvb2j8b7fXR7gLBNBjLVXlkG4ZaFrII8ajmpj0FoY
+         /JDZTYHD3BuNjGJlSA6uaDsxtI1x3L7PA3m5oUGeENCqHfD3e4S+97nSMTbF2cYPcIAs
+         CiOqVKtC7EX+AM1w0fLIG/zKfFdSdTBYR5rKHSf3kzm/p4JdypB2ck6X1LNCNlgimwK8
+         V0fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6FamQGB9CD5dY+rNMN2KXZg8bPEzG8hfZukPK5OM8oE=;
-        b=3RlTAYYRrXNdjM013JY/SvpcuXxFenQTw6udQZi1al+itGVfmr3g5ZriNNWQAy0gSo
-         uA49elDz/U56SskIx2Z/gpIhsL5waBlZSXMUfiQrFpZ9E771EgJriuO5YJu8AtTrVrv+
-         yyYOquzq3pVwPZ64/nt9rWW4v6cLcxQhVWXjMibPbV3Q0fVSZwcQtMaoCcyj7gKKDqN7
-         zgR6Z9af9S9kw8xndA6LS9j6h60Fl4mc9R7sWMsTgVaJtP9k93BOLscJdaOrWE+STxtm
-         JVTC1ncI+WuTXBEsTytrGe45vWNPTp2xZPD8Phy5+eh/o+uCRM5gAl48XSLuLTFyYYhs
-         L+ug==
-X-Gm-Message-State: AJIora8OMxc8MXnuG15XoQsTreZaQwyQBbb+DkNtoJnyohwQCiGr/10X
-        Li2CRzXlyUlWzvAhXYLcfmbporEb7HM/+w==
-X-Google-Smtp-Source: AGRyM1t5AcsdLJuztGShNHBpJ7nQWZZlZTULXOarrtiGgxRCSZpFhRuiDuQgfbGayPzjOwyPku+9TA==
-X-Received: by 2002:a05:6808:1385:b0:32f:729e:4869 with SMTP id c5-20020a056808138500b0032f729e4869mr942978oiw.5.1656447571474;
-        Tue, 28 Jun 2022 13:19:31 -0700 (PDT)
+        bh=86x1pCfc8rA3POoegBiHBkAv35qybvdQxmmuFQbL0RY=;
+        b=nkObqEd55VIraAE3hpvCpjGWz9Bav6jAVXb304NGwAA7JaGC46oOLxo+PK1dcH2Flj
+         Q4uPEs+ZtvHjgf3ap0aIAdofkZHR+xIjUfOHRwR86EruSkLbMHteR052IVEXAe5IgsPr
+         gh7dwYvzaFu53O/Kdydj/JuV/JtnzArL2sM2TbJM7gl8Qzetcp3sD0cJ8VP4boNby4GP
+         0qMOT/EM+5EVrsnGR/Diiwad24suA3HNEbbMwd4V35r+I0GRyr0HqbC+WldJIdGA9LbP
+         n8r4wS7BGDHkU2cQBalz3inOo0/ZPWUZU6Wb0JZjk5wxnpisq7ZzD/GJ1KKgJlreLiUJ
+         lXqA==
+X-Gm-Message-State: AJIora84DdHiaG3Gc3QzUP36XOcivS/2P/ABmUPdNmbONUtJe4eR/NBN
+        J02ApD5mFiEiwgm5ofwU3VCXX5q5ZmLRfg==
+X-Google-Smtp-Source: AGRyM1v2wSkt8bjJkTtoUzltW4b6g1kt7GztuslhqRHJPErlzBtKH9XduvJ8939ewp16ELTmMuJOQQ==
+X-Received: by 2002:a9d:6ac4:0:b0:616:b183:c7e6 with SMTP id m4-20020a9d6ac4000000b00616b183c7e6mr9307839otq.353.1656447572712;
+        Tue, 28 Jun 2022 13:19:32 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id a12-20020a056870d60c00b000f30837129esm9536923oaq.55.2022.06.28.13.19.30
+        by smtp.gmail.com with ESMTPSA id a12-20020a056870d60c00b000f30837129esm9536923oaq.55.2022.06.28.13.19.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 13:19:30 -0700 (PDT)
+        Tue, 28 Jun 2022 13:19:32 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Andy Gross <agross@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Luca Weiss <luca@z3ntu.xyz>, David Heidelberg <david@ixit.cz>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: Re: (subset) [PATCH 4/4] ARM: dts: qcom: add missing gpio-ranges in PMIC GPIOs
-Date:   Tue, 28 Jun 2022 15:19:02 -0500
-Message-Id: <165644753308.10525.5331559742461486598.b4-ty@linaro.org>
+Subject: Re: (subset) [PATCH v2] arm64: dts: qcom: align OPP table names with DT schema
+Date:   Tue, 28 Jun 2022 15:19:03 -0500
+Message-Id: <165644753306.10525.17507331661457165326.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220508135932.132378-5-krzysztof.kozlowski@linaro.org>
-References: <20220508135932.132378-1-krzysztof.kozlowski@linaro.org> <20220508135932.132378-5-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220627093250.84391-1-krzysztof.kozlowski@linaro.org>
+References: <20220627093250.84391-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -77,17 +74,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 8 May 2022 15:59:32 +0200, Krzysztof Kozlowski wrote:
-> The new Qualcomm PMIC GPIO bindings require gpio-ranges property:
+On Mon, 27 Jun 2022 11:32:50 +0200, Krzysztof Kozlowski wrote:
+> DT schema expects names of operating points tables to start with
+> "opp-table":
 > 
->   qcom-sdx55-telit-fn980-tlb.dtb: gpio@c000: 'gpio-ranges' is a required property
+>   ipq6018-cp01-c1.dtb: cpu_opp_table: $nodename:0: 'cpu_opp_table' does not match '^opp-table(-[a-z0-9]+)?$'
 > 
+> Use hyphens instead of underscores, fix the names to match DT schema or
+> remove the prefix entirely when it is not needed.
 > 
+> [...]
 
 Applied, thanks!
 
-[4/4] ARM: dts: qcom: add missing gpio-ranges in PMIC GPIOs
-      commit: eea939a0da869e00f40e41182edbcd911ee11fd4
+[1/1] arm64: dts: qcom: align OPP table names with DT schema
+      commit: 0e3e654696074b304302c7cc2a67314b7875f1ae
 
 Best regards,
 -- 

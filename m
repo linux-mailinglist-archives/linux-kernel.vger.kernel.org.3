@@ -2,98 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BAE55E792
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8678855E71D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346865AbiF1NpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
+        id S1346814AbiF1NrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346911AbiF1No5 (ORCPT
+        with ESMTP id S1346043AbiF1NrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:44:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 684A72CDD0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:44:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656423893;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hTKU2Np09ZtKabep+TfxXVYS1Y9DSz+czzdyoC+zeWM=;
-        b=EAGPn7vUKcbB6rfFOvSpssKNBAt9yRZ37cGVBNH2iKbD8MPdiX0VoWsV2Elfejqb98IJ7U
-        6JMbOJUR31CkDOsXvAfOII4i/8+XEZvuhkzwQOJY8wETZAIacJXtvSZGODiFnct/tfTSTs
-        hx0P55zQPnfdh4LE+UVM9NDfGmGtrvE=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-108-J6SjuZ5QMMilJyD90QBbYQ-1; Tue, 28 Jun 2022 09:44:51 -0400
-X-MC-Unique: J6SjuZ5QMMilJyD90QBbYQ-1
-Received: by mail-wm1-f71.google.com with SMTP id n15-20020a05600c4f8f00b0039c3e76d646so7125747wmq.7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:44:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=hTKU2Np09ZtKabep+TfxXVYS1Y9DSz+czzdyoC+zeWM=;
-        b=0Ntauh+EYC7w+WnYoBHXcAjEXsPa+keORcJE4ZD/nADPu+vZBWoWGhEC/hHzieZeD+
-         C1UhdpuqsCxc6hEh7i+WIp14rSgYqeFnsbb0UulFMBu/d7bLawY4bQy8u+qRXJkzM7rq
-         AZGyEPP13W1BsQ+78cYubprHdYGRocb058RQ1yFDhuqLNHRj12CstKrJ31dz38Sd3qUB
-         GnLK0de3Pu8qpFLdoekAGxJl/YVqqJKLfsOsI+amF9y6HUu4KKCpociLdrQ8zyD3HUQr
-         RgaQkh8WHJZa3cJGqh2XkNoHf+sBEi1Sug+GWVZlEL0Hed2EP3pNr+TJwLfYbHgpIq1+
-         ZljQ==
-X-Gm-Message-State: AJIora9VTc19q92GC2FJSTILJVHLGmZ79FF0QZK/THCJymVohb39tLhv
-        LUc45q7OEQmAPrpFalLiUMESoHF7N9ThM/yP44rAFRlC02QYoeqvpH7VhuQhPYbXu1+Kmp9svVu
-        U+11aE6UHZE2M1Ib2RaA2nT09
-X-Received: by 2002:a05:6000:79e:b0:21b:bc0a:99d4 with SMTP id bu30-20020a056000079e00b0021bbc0a99d4mr17240185wrb.565.1656423890336;
-        Tue, 28 Jun 2022 06:44:50 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sPWXFvUvtzyxCMk9Gd6kxz02V2LWzAokqDn4AqQ5aZX6+OSB5A0LtPAjU3qDMm4YViNyvqeQ==
-X-Received: by 2002:a05:6000:79e:b0:21b:bc0a:99d4 with SMTP id bu30-20020a056000079e00b0021bbc0a99d4mr17240143wrb.565.1656423890092;
-        Tue, 28 Jun 2022 06:44:50 -0700 (PDT)
-Received: from sgarzare-redhat (host-87-11-6-149.retail.telecomitalia.it. [87.11.6.149])
-        by smtp.gmail.com with ESMTPSA id g13-20020adffc8d000000b0021b99efceb6sm13809079wrr.22.2022.06.28.06.44.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 06:44:49 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 15:44:46 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>
-Cc:     netdev <netdev@vger.kernel.org>, Jason Wang <jasowang@redhat.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux Virtualization <virtualization@lists.linux-foundation.org>,
-        kvm <kvm@vger.kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Cindy Lu <lulu@redhat.com>,
-        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>, Piotr.Uminski@intel.com,
-        habetsm.xilinx@gmail.com, "Dawar, Gautam" <gautam.dawar@amd.com>,
-        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        Laurent Vivier <lvivier@redhat.com>,
-        Longpeng <longpeng2@huawei.com>,
-        Dinan Gunawardena <dinang@xilinx.com>,
-        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
-        Martin Porter <martinpo@xilinx.com>,
-        Eli Cohen <elic@nvidia.com>, ecree.xilinx@gmail.com,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Harpreet Singh Anand <hanand@xilinx.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Zhang Min <zhang.min9@zte.com.cn>
-Subject: Re: [PATCH v6 3/4] vhost-vdpa: uAPI to suspend the device
-Message-ID: <CAGxU2F43+5zsQOR4ReTtQtEF47s6y-XKcevosMOzUdEqpLhAsg@mail.gmail.com>
-References: <20220623160738.632852-1-eperezma@redhat.com>
- <20220623160738.632852-4-eperezma@redhat.com>
+        Tue, 28 Jun 2022 09:47:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED252A948
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:47:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68A9D61981
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 13:47:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2654C3411D;
+        Tue, 28 Jun 2022 13:46:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656424019;
+        bh=QUu2aLIsAEuzpPDL8ZQeilgnfmY0TkzTRUtegNT7pIE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=d3pZnEAuLHpUaosc38q+nESJobsO4X25MJ15fCFlznVxY2DudkQMaEV3Oc7QLbaLH
+         0f7JLIXAJuhfTiUyc3uLNjsqM1RUVkHev2h1MDfkFh6RaThgxuttgVRCvcnZVV4m1U
+         wghkmd2pIDAMty3Vnf4NU1+FDRzJIVSM95UpcA2rpl4h0byawzYmVBRrtxiY7eaoyf
+         50YwYNxWwZGmBVH7O1zlC+gmHh0OlzwJ0WgdYRZpRm45+IhY0/mvzZVY4Jo/AK2PGi
+         M6aq6AfCYhqV059Vt9vh/v3GH+54oxg4kKXbepebnxI3duCOa+KMypxG0gFylfim/z
+         NRCFi6DrE270w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 259625C0458; Tue, 28 Jun 2022 06:46:59 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 06:46:59 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Neeraj Upadhyay <quic_neeraju@quicinc.com>, frederic@kernel.org,
+        josh@joshtriplett.org, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, linux-kernel@vger.kernel.org,
+        zhangfei.gao@foxmail.com, boqun.feng@gmail.com, urezki@gmail.com,
+        shameerali.kolothum.thodi@huawei.com, pbonzini@redhat.com,
+        mtosatti@redhat.com, eric.auger@redhat.com,
+        chenxiang66@hisilicon.com
+Subject: Re: [PATCH] srcu: Reduce blocking agressiveness of expedited grace
+ periods further
+Message-ID: <20220628134659.GY1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220627123706.20187-1-quic_neeraju@quicinc.com>
+ <875ykl2mb2.wl-maz@kernel.org>
+ <dc24db89-05ae-c113-6728-de797e041123@quicinc.com>
+ <874k052kxh.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220623160738.632852-4-eperezma@redhat.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <874k052kxh.wl-maz@kernel.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,91 +68,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 06:07:37PM +0200, Eugenio P�rez wrote:
->The ioctl adds support for suspending the device from userspace.
->
->This is a must before getting virtqueue indexes (base) for live migration,
->since the device could modify them after userland gets them. There are
->individual ways to perform that action for some devices
->(VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no
->way to perform it for any vhost device (and, in particular, vhost-vdpa).
->
->After a successful return of the ioctl call the device must not process
->more virtqueue descriptors. The device can answer to read or writes of
->config fields as if it were not suspended. In particular, writing to
->"queue_enable" with a value of 1 will not make the device start
->processing buffers of the virtqueue.
->
->Signed-off-by: Eugenio P�rez <eperezma@redhat.com>
->---
-> drivers/vhost/vdpa.c       | 19 +++++++++++++++++++
-> include/uapi/linux/vhost.h | 14 ++++++++++++++
-> 2 files changed, 33 insertions(+)
->
->diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
->index 3d636e192061..7fa671ac4bdf 100644
->--- a/drivers/vhost/vdpa.c
->+++ b/drivers/vhost/vdpa.c
->@@ -478,6 +478,22 @@ static long vhost_vdpa_get_vqs_count(struct vhost_vdpa *v, u32 __user *argp)
->       return 0;
-> }
->
->+/* After a successful return of ioctl the device must not process more
->+ * virtqueue descriptors. The device can answer to read or writes of config
->+ * fields as if it were not suspended. In particular, writing to "queue_enable"
->+ * with a value of 1 will not make the device start processing buffers.
->+ */
->+static long vhost_vdpa_suspend(struct vhost_vdpa *v)
->+{
->+      struct vdpa_device *vdpa = v->vdpa;
->+      const struct vdpa_config_ops *ops = vdpa->config;
->+
->+      if (!ops->suspend)
->+              return -EOPNOTSUPP;
->+
->+      return ops->suspend(vdpa);
->+}
->+
-> static long vhost_vdpa_vring_ioctl(struct vhost_vdpa *v, unsigned int cmd,
->                                  void __user *argp)
-> {
->@@ -654,6 +670,9 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
->       case VHOST_VDPA_GET_VQS_COUNT:
->               r = vhost_vdpa_get_vqs_count(v, argp);
->               break;
->+      case VHOST_VDPA_SUSPEND:
->+              r = vhost_vdpa_suspend(v);
->+              break;
->       default:
->               r = vhost_dev_ioctl(&v->vdev, cmd, argp);
->               if (r == -ENOIOCTLCMD)
->diff --git a/include/uapi/linux/vhost.h b/include/uapi/linux/vhost.h
->index cab645d4a645..6d9f45163155 100644
->--- a/include/uapi/linux/vhost.h
->+++ b/include/uapi/linux/vhost.h
->@@ -171,4 +171,18 @@
-> #define VHOST_VDPA_SET_GROUP_ASID     _IOW(VHOST_VIRTIO, 0x7C, \
->                                            struct vhost_vring_state)
->
->+/* Suspend or resume a device so it does not process virtqueue requests anymore
->+ *
->+ * After the return of ioctl with suspend != 0, the device must finish any
->+ * pending operations like in flight requests. It must also preserve all the
->+ * necessary state (the virtqueue vring base plus the possible device specific
->+ * states) that is required for restoring in the future. The device must not
->+ * change its configuration after that point.
->+ *
->+ * After the return of ioctl with suspend == 0, the device can continue
->+ * processing buffers as long as typical conditions are met (vq is enabled,
->+ * DRIVER_OK status bit is enabled, etc).
->+ */
->+#define VHOST_VDPA_SUSPEND            _IOW(VHOST_VIRTIO, 0x7D, int)
-                                         ^
-IIUC we are not using the argument anymore, so this should be changed in
-_IO(VHOST_VIRTIO, 0x7D).
+On Tue, Jun 28, 2022 at 10:31:54AM +0100, Marc Zyngier wrote:
+> On Tue, 28 Jun 2022 10:17:24 +0100,
+> Neeraj Upadhyay <quic_neeraju@quicinc.com> wrote:
+> > 
+> > 
+> > 
+> > On 6/28/2022 2:32 PM, Marc Zyngier wrote:
+> > > On Mon, 27 Jun 2022 13:37:06 +0100,
+> > > Neeraj Upadhyay <quic_neeraju@quicinc.com> wrote:
+> > >> 
+> > >> Commit 640a7d37c3f4 ("srcu: Block less aggressively for expedited
+> > >> grace periods") highlights a problem where aggressively blocking
+> > >> SRCU expedited grace periods, as was introduced in commit
+> > >> 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
+> > >> from consuming CPU"), introduces ~2 minutes delay to the overall
+> > >> ~3.5 minutes boot time, when starting VMs with "-bios QEMU_EFI.fd"
+> > >> cmdline on qemu, which results in very high rate of memslots
+> > >> add/remove, which causes > ~6000 synchronize_srcu() calls for
+> > >> kvm->srcu SRCU instance.
+> > >> 
+> > >> Below table captures the experiments done by Zhangfei Gao, Shameer,
+> > >> to measure the boottime impact with various values of non-sleeping
+> > >> per phase counts, with HZ_250 and preemption enabled:
+> > >> 
+> > >> +──────────────────────────+────────────────+
+> > >> | SRCU_MAX_NODELAY_PHASE   | Boot time (s)  |
+> > >> +──────────────────────────+────────────────+
+> > >> | 100                      | 30.053         |
+> > >> | 150                      | 25.151         |
+> > >> | 200                      | 20.704         |
+> > >> | 250                      | 15.748         |
+> > >> | 500                      | 11.401         |
+> > >> | 1000                     | 11.443         |
+> > >> | 10000                    | 11.258         |
+> > >> | 1000000                  | 11.154         |
+> > >> +──────────────────────────+────────────────+
+> > >> 
+> > >> Analysis on the experiment results showed improved boot time
+> > >> with non blocking delays close to one jiffy duration. This
+> > >> was also seen when number of per-phase iterations were scaled
+> > >> to one jiffy.
+> > >> 
+> > >> So, this change scales per-grace-period phase number of non-sleeping
+> > >> polls, soiuch that, non-sleeping polls are done for one jiffy. In addition
+> > >> to this, srcu_get_delay() call in srcu_gp_end(), which is used to calculate
+> > >> the delay used for scheduling callbacks, is replaced with the check for
+> > >> expedited grace period. This is done, to schedule cbs for completed expedited
+> > >> grace periods immediately, which results in improved boot time seen in
+> > >> experiments.
+> > >> 
+> > >> In addition to the changes to default per phase delays, this change
+> > >> adds 3 new kernel parameters - srcutree.srcu_max_nodelay,
+> > >> srcutree.srcu_max_nodelay_phase, srcutree.srcu_retry_check_delay.
+> > >> This allows users to configure the srcu grace period scanning delays,
+> > >> depending on their system configuration requirements.
+> > >> 
+> > >> Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> > > 
+> > > I've given this a go on one of my test platforms (the one I noticed
+> > > the issue on the first place), and found that the initial part of the
+> > > EFI boot under KVM (pointlessly wiping the emulated flash) went down
+> > > to 1m7s from 3m50s (HZ=250).
+> > > 
+> > > Clearly a massive improvement, but still a far cry from the original
+> > > ~40s (yes, this box is utter crap -- which is why I use it).
+> > 
+> > Do you see any improvement by using "srcutree.srcu_max_nodelay=1000"
+> > bootarg, on top of this patch?
+> 
+> Yup, this brings it back to 43s on a quick test run, which is close
+> enough to what I had before.
+> 
+> How does a random user come up with such a value though?
 
-And we should update a bit the documentation.
+There was some talk of moving from synchronize_srcu_expedited() to
+call_srcu() with the occasional srcu_barrier() to avoid OOM.  If that
+proves to be practical, that should get decent performance with little
+tuning.  But in the meantime, we need to avoid hangs due to CPU-bound
+tasks in one workload while still avoiding massive boot-time slowdowns
+in your workload.
 
-Thanks,
-Stefano
+Right now, Neeraj's carefully  tuned approach is the one way we know to
+square this particular circle.
 
+							Thanx, Paul

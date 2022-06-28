@@ -2,111 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D68E55C1E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0291E55C3A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245083AbiF1Fpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 01:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
+        id S245150AbiF1Fpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 01:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245043AbiF1Fpc (ORCPT
+        with ESMTP id S243496AbiF1Fpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 01:45:32 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF34B1CFEA;
-        Mon, 27 Jun 2022 22:45:30 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25S5jK6L068682;
-        Tue, 28 Jun 2022 00:45:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1656395120;
-        bh=ZOFIzzxgdd4Ofgh8k/nCeoLR+zNbypkEb0hbyzA2ft0=;
-        h=From:To:CC:Subject:Date;
-        b=EMWHXWA5ZXZ+cRcTmpjImd4FLaLRVdAKlQV64aMGKI617GJfoQ2N+jADltGrdYMqH
-         twwbEZnXNQRantzdZAGDtXiX170/C7Uz0WHnlpT2IWKjUKEiYmsFIN5ExonaajRclQ
-         50pt+IOKmr5tEs7okRLO4OQ5Fke30tI6bH+sRoSo=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25S5jKKf014983
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 28 Jun 2022 00:45:20 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 28
- Jun 2022 00:45:19 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 28 Jun 2022 00:45:19 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25S5jJTJ030296;
-        Tue, 28 Jun 2022 00:45:19 -0500
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-To:     <devicetree@vger.kernel.org>
-CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <j-choudhary@ti.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] arm64: dts: ti: k3-j721s2-main: Enable crypto accelerator
-Date:   Tue, 28 Jun 2022 11:15:18 +0530
-Message-ID: <20220628054518.350717-1-j-choudhary@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 28 Jun 2022 01:45:50 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4C31EAC9;
+        Mon, 27 Jun 2022 22:45:49 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id v6so8929921qkh.2;
+        Mon, 27 Jun 2022 22:45:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bDB1yQIYsmDWYDrdv3aqDf3xld4an2jBw75K40efpKQ=;
+        b=AVlqRKA9fQpKhzMjJ/YjxARfBVbnVtbVvcoyN2TRyUdR+R0UJnLIyM1EvLINj00Iyn
+         B19+WAZx1kN4XiJ7ar1vu1h7DM6ZIbx9YdeGbJnda1Y4dgvOb5bZqCr7ULg6c+uckzop
+         2pVjy3AWDwVGyjoR5Uv0I4NKugIu+f3JuMzFHn4zFSYaL+m/gQAGiGbx8KuN2B4Aw5nl
+         JZKp4HC82Uyqq7CT+b3gSeeXTYUH6f33VsDU8+Ikeu4Ec6/74ZxGZRxldS1mPBi0I7NE
+         qseDenQecnLDBKPEOMh6QVK/e7MvdkW7Y8rHJbEjwip4vDa/Jf+rs0ZP/z/kRdWtdaao
+         YodA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bDB1yQIYsmDWYDrdv3aqDf3xld4an2jBw75K40efpKQ=;
+        b=KE7eXWUrFZ8HkE5AYdqgEwsMZokuzKvf16X75kIL36Kk9WFl9VT3aL9mQ2rFi60W40
+         M5ZNTbuztTbq1D7hqz7SKW6g0hqPM1ZjYsqzalhqx7RuIsgDN8zr9uCn7PNBXBwIF8lb
+         NTQUbmwjEKzm7u8dNO8H3fd7WN+MuzQp4YtdAAQouS5CYD7m3FYBqQwi2crKjdvOhuEj
+         k7y3IJ5WbeOUcxbzf7Jb15p1Z3H8rI1OzDlZH81Cf1QEioBxqII91+5Q3nl/3J3Uvgs5
+         rJTe05ZLXv8uHYtXpAaQa7pGMImkppe/Q2SouDZm+bRbbEsOEfXGBmsZaa7R19tTveBM
+         Bn1w==
+X-Gm-Message-State: AJIora9S/Le76p5OiZm3bStE8QF6ysHgn0CcwvnpdtQ7baaCxCJ9jHak
+        tAuVqmvwb3k9LlxYzNEKL1U=
+X-Google-Smtp-Source: AGRyM1tf5mJP+t3vGwsUjLUnw/w1HOD6eqfpDPcHaSfcs5FbCMA26VN8obCrZ2yZ+lIi9v7qYfZByw==
+X-Received: by 2002:a05:620a:4053:b0:6af:2d27:e791 with SMTP id i19-20020a05620a405300b006af2d27e791mr5244735qko.555.1656395148651;
+        Mon, 27 Jun 2022 22:45:48 -0700 (PDT)
+Received: from MBP.hobot.cc (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with ESMTPSA id x26-20020ae9e91a000000b006a6edbbca84sm9850143qkf.94.2022.06.27.22.45.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 27 Jun 2022 22:45:48 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhaohui.shi@horizon.ai, Schspa Shi <schspa@gmail.com>
+Subject: [PATCH] watchdog: dw_wdt: Fix buffer overflow when get timeout
+Date:   Tue, 28 Jun 2022 13:45:39 +0800
+Message-Id: <20220628054539.33187-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the node for SA2UL for supporting hardware crypto algorithms,
-including SHA1, SHA256, SHA512, AES, 3DES and AEAD suites.
+The top_val can be obtained from device-tree, if it is not configured
+correctly, there will be buffer overflow.
 
-Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+Signed-off-by: Schspa Shi <schspa@gmail.com>
 ---
+ drivers/watchdog/dw_wdt.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-There is a dependency of this patch on a dmaengine patch:
-<https://lore.kernel.org/all/20220628050232.331956-1-j-choudhary@ti.com/>
-This patch adds the PSIL threads for main domain SA2UL.
-
-Without the above patch, dma-controller fails to get the channel
-and tcrypt module does software crypto. But it does not break boot
-since its runtime and not compile-time.
-
-Testing log: <https://gist.github.com/Jayesh2000/e429c78a545809602e6473886a2a6ae4>
-
- arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-index 34e7d577ae13..79ca34a7e34f 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-@@ -72,6 +72,20 @@
- 		pinctrl-single,function-mask = <0xffffffff>;
- 	};
+diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
+index cd578843277e..1f8605c0d712 100644
+--- a/drivers/watchdog/dw_wdt.c
++++ b/drivers/watchdog/dw_wdt.c
+@@ -155,6 +155,9 @@ static unsigned int dw_wdt_get_min_timeout(struct dw_wdt *dw_wdt)
+ 			break;
+ 	}
  
-+	main_crypto: crypto@4e00000 {
-+		compatible = "ti,j721e-sa2ul";
-+		reg = <0x00 0x4e00000 0x00 0x1200>;
-+		power-domains = <&k3_pds 297 TI_SCI_PD_SHARED>;
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges = <0x00 0x04e00000 0x00 0x04e00000 0x00 0x30000>;
++	if (WARN_ON_ONCE(idx == DW_WDT_NUM_TOPS))
++		idx = DW_WDT_NUM_TOPS - 1;
 +
-+		dmas = <&main_udmap 0xca40>, <&main_udmap 0x4a40>,
-+				<&main_udmap 0x4a41>;
-+		dma-names = "tx", "rx1", "rx2";
-+		dma-coherent;
-+	};
+ 	return dw_wdt->timeouts[idx].sec;
+ }
+ 
+@@ -178,6 +181,9 @@ static unsigned int dw_wdt_get_timeout(struct dw_wdt *dw_wdt)
+ 			break;
+ 	}
+ 
++	if (WARN_ON_ONCE(idx == DW_WDT_NUM_TOPS))
++		idx = DW_WDT_NUM_TOPS - 1;
 +
- 	main_uart0: serial@2800000 {
- 		compatible = "ti,j721e-uart", "ti,am654-uart";
- 		reg = <0x00 0x02800000 0x00 0x200>;
+ 	/*
+ 	 * In IRQ mode due to the two stages counter, the actual timeout is
+ 	 * twice greater than the TOP setting.
 -- 
-2.17.1
+2.29.0
 

@@ -2,204 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192A755DFAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5252055DB9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244358AbiF1JDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60654 "EHLO
+        id S245019AbiF1JEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234531AbiF1JDf (ORCPT
+        with ESMTP id S241106AbiF1JEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:03:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 713AF101E5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656407013;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=0NYU/UPrQyjioW1knJPyA9olh7zp0dP/ynX9yWcIILM=;
-        b=RmeDBoZ7U0tswLNlPsUfKqCb6ohgi/s6Ee0ssTYPzXkx8W3j0hqK6I9+E/8cldf4CUOjH9
-        ty4WNyr2pVBv2a3i3CzFXOeAIuGeDCK5Bi04LLqACywwobGrM+kS7wGL9X8vi9Pv6s7Q/F
-        JWhV0uaWZ/XgdIio3PPYIIURRK4RHTc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-126-P7qrZm7fPWe-tI79Gs6DKQ-1; Tue, 28 Jun 2022 05:03:30 -0400
-X-MC-Unique: P7qrZm7fPWe-tI79Gs6DKQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D3C562999B45;
-        Tue, 28 Jun 2022 09:03:29 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-13-87.pek2.redhat.com [10.72.13.87])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D019140CFD0A;
-        Tue, 28 Jun 2022 09:03:26 +0000 (UTC)
-From:   Jason Wang <jasowang@redhat.com>
-To:     mst@redhat.com, jasowang@redhat.com, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] virtio-net: fix the race between refill work and close
-Date:   Tue, 28 Jun 2022 17:03:24 +0800
-Message-Id: <20220628090324.62219-1-jasowang@redhat.com>
+        Tue, 28 Jun 2022 05:04:02 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF5912628;
+        Tue, 28 Jun 2022 02:04:01 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25S8rufq022609;
+        Tue, 28 Jun 2022 09:04:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : from : subject : content-type :
+ content-transfer-encoding; s=pp1;
+ bh=EJGVXcpSjcj2Rfl0CfzF9RguZzjarCzVFCxQ9X1hCYA=;
+ b=hpBIKYse59AYbk67PIxoVLV0X8SH144AOjWgED1Hpa318cMB1MwMfGTRf3oa9M1NizLZ
+ C1DpGpSImybohGoVjjgLH+usLZ6sDhFJE1eDTw40VPfZmduESxJTlv1ckLX1sCWqlNCS
+ /0SMWMA7MqR7MD8I8EVfPWBC5BHko3oJ43td32WE/epnnpKn7S5b/hzZsOJUHkns0NlG
+ h4VLyZ9gv02rxlvX2HjJ1F4jJvrWRuyXj6uYt0kfY/kvoN+gB2F8Qjx79CTh5pg8pzQT
+ rPi33MhEo9M6Bf8vye/ovlpq6ylZLcndXdnY/3WXXkVK5zYSZVmA/7J4QC6RaeXWQIXH 2g== 
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gyxhk87we-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 09:04:00 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25S8nxWt017280;
+        Tue, 28 Jun 2022 09:03:59 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma03wdc.us.ibm.com with ESMTP id 3gwt09c4y5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jun 2022 09:03:59 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25S93xOq37945742
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Jun 2022 09:03:59 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 55B22124052;
+        Tue, 28 Jun 2022 09:03:59 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F282F124053;
+        Tue, 28 Jun 2022 09:03:56 +0000 (GMT)
+Received: from [9.43.77.224] (unknown [9.43.77.224])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 28 Jun 2022 09:03:56 +0000 (GMT)
+Message-ID: <3c38b723-40e6-ded9-5a3b-7b442a3f65d8@linux.vnet.ibm.com>
+Date:   Tue, 28 Jun 2022 14:33:55 +0530
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+Cc:     abdhalee@linux.vnet.ibm.com, sachinp@linux.vnet.com,
+        mputtash@linux.vnet.com
+From:   Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
+Subject: [linux-next] [[5.19.0-rc4-next-20220627] WARNING during reboot to
+ linux-next kernel
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: _pt95T9ALtjXM3taInJZXnEO77dkQKhw
+X-Proofpoint-GUID: _pt95T9ALtjXM3taInJZXnEO77dkQKhw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-27_09,2022-06-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ phishscore=0 mlxscore=0 malwarescore=0 spamscore=0 mlxlogscore=738
+ priorityscore=1501 lowpriorityscore=0 suspectscore=0 adultscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206280037
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We try using cancel_delayed_work_sync() to prevent the work from
-enabling NAPI. This is insufficient since we don't disable the the
-source the scheduling of the refill work. This means an NAPI after
-cancel_delayed_work_sync() can schedule the refill work then can
-re-enable the NAPI that leads to use-after-free [1].
+Greetings,
 
-Since the work can enable NAPI, we can't simply disable NAPI before
-calling cancel_delayed_work_sync(). So fix this by introducing a
-dedicated boolean to control whether or not the work could be
-scheduled from NAPI.
+[linux-next] [[5.19.0-rc4-next-20220627] WARNING during reboot to 
+linux-next kernel
 
-[1]
-==================================================================
-BUG: KASAN: use-after-free in refill_work+0x43/0xd4
-Read of size 2 at addr ffff88810562c92e by task kworker/2:1/42
-
-CPU: 2 PID: 42 Comm: kworker/2:1 Not tainted 5.19.0-rc1+ #480
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-Workqueue: events refill_work
-Call Trace:
- <TASK>
- dump_stack_lvl+0x34/0x44
- print_report.cold+0xbb/0x6ac
- ? _printk+0xad/0xde
- ? refill_work+0x43/0xd4
- kasan_report+0xa8/0x130
- ? refill_work+0x43/0xd4
- refill_work+0x43/0xd4
- process_one_work+0x43d/0x780
- worker_thread+0x2a0/0x6f0
- ? process_one_work+0x780/0x780
- kthread+0x167/0x1a0
- ? kthread_exit+0x50/0x50
- ret_from_fork+0x22/0x30
- </TASK>
-...
-
-Fixes: b2baed69e605c ("virtio_net: set/cancel work on ndo_open/ndo_stop")
-Signed-off-by: Jason Wang <jasowang@redhat.com>
----
- drivers/net/virtio_net.c | 38 ++++++++++++++++++++++++++++++++++++--
- 1 file changed, 36 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index db05b5e930be..21bf1e5c81ef 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -251,6 +251,12 @@ struct virtnet_info {
- 	/* Does the affinity hint is set for virtqueues? */
- 	bool affinity_hint_set;
- 
-+	/* Is refill work enabled? */
-+	bool refill_work_enabled;
-+
-+	/* The lock to synchronize the access to refill_work_enabled */
-+	spinlock_t refill_lock;
-+
- 	/* CPU hotplug instances for online & dead */
- 	struct hlist_node node;
- 	struct hlist_node node_dead;
-@@ -348,6 +354,20 @@ static struct page *get_a_page(struct receive_queue *rq, gfp_t gfp_mask)
- 	return p;
- }
- 
-+static void enable_refill_work(struct virtnet_info *vi)
-+{
-+	spin_lock(&vi->refill_lock);
-+	vi->refill_work_enabled = true;
-+	spin_unlock(&vi->refill_lock);
-+}
-+
-+static void disable_refill_work(struct virtnet_info *vi)
-+{
-+	spin_lock(&vi->refill_lock);
-+	vi->refill_work_enabled = false;
-+	spin_unlock(&vi->refill_lock);
-+}
-+
- static void virtqueue_napi_schedule(struct napi_struct *napi,
- 				    struct virtqueue *vq)
- {
-@@ -1527,8 +1547,12 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
- 	}
- 
- 	if (rq->vq->num_free > min((unsigned int)budget, virtqueue_get_vring_size(rq->vq)) / 2) {
--		if (!try_fill_recv(vi, rq, GFP_ATOMIC))
--			schedule_delayed_work(&vi->refill, 0);
-+		if (!try_fill_recv(vi, rq, GFP_ATOMIC)) {
-+			spin_lock(&vi->refill_lock);
-+			if (vi->refill_work_enabled)
-+				schedule_delayed_work(&vi->refill, 0);
-+			spin_unlock(&vi->refill_lock);
-+		}
- 	}
- 
- 	u64_stats_update_begin(&rq->stats.syncp);
-@@ -1651,6 +1675,8 @@ static int virtnet_open(struct net_device *dev)
- 	struct virtnet_info *vi = netdev_priv(dev);
- 	int i, err;
- 
-+	enable_refill_work(vi);
-+
- 	for (i = 0; i < vi->max_queue_pairs; i++) {
- 		if (i < vi->curr_queue_pairs)
- 			/* Make sure we have some buffers: if oom use wq. */
-@@ -2033,6 +2059,8 @@ static int virtnet_close(struct net_device *dev)
- 	struct virtnet_info *vi = netdev_priv(dev);
- 	int i;
- 
-+	/* Make sure NAPI doesn't schedule refill work */
-+	disable_refill_work(vi);
- 	/* Make sure refill_work doesn't re-enable napi! */
- 	cancel_delayed_work_sync(&vi->refill);
- 
-@@ -2776,6 +2804,9 @@ static void virtnet_freeze_down(struct virtio_device *vdev)
- 	netif_tx_lock_bh(vi->dev);
- 	netif_device_detach(vi->dev);
- 	netif_tx_unlock_bh(vi->dev);
-+	/* Make sure NAPI doesn't schedule refill work */
-+	disable_refill_work(vi);
-+	/* Make sure refill_work doesn't re-enable napi! */
- 	cancel_delayed_work_sync(&vi->refill);
- 
- 	if (netif_running(vi->dev)) {
-@@ -2799,6 +2830,8 @@ static int virtnet_restore_up(struct virtio_device *vdev)
- 
- 	virtio_device_ready(vdev);
- 
-+	enable_refill_work(vi);
-+
- 	if (netif_running(vi->dev)) {
- 		for (i = 0; i < vi->curr_queue_pairs; i++)
- 			if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
-@@ -3548,6 +3581,7 @@ static int virtnet_probe(struct virtio_device *vdev)
- 	vdev->priv = vi;
- 
- 	INIT_WORK(&vi->config_work, virtnet_config_changed_work);
-+	spin_lock_init(&vi->refill_lock);
- 
- 	/* If we can receive ANY GSO packets, we must allocate large ones. */
- 	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
+--- Call Traces ---
+[    1.788574] ------------[ cut here ]------------
+[    1.788577] alg: self-tests for rsa-generic (rsa) failed (rc=-22)
+[    1.788586] WARNING: CPU: 9 PID: 218 at crypto/testmgr.c:5774 
+alg_test+0x438/0x880
+[    1.788598] Modules linked in:
+[    1.788603] CPU: 9 PID: 218 Comm: cryptomgr_test Not tainted 
+5.19.0-rc4-next-20220627-autotest #1
+[    1.788609] NIP:  c00000000062e078 LR: c00000000062e074 CTR: 
+c00000000075e020
+[    1.788614] REGS: c00000000e733980 TRAP: 0700   Not tainted 
+(5.19.0-rc4-next-20220627-autotest)
+[    1.788620] MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: 
+28008822  XER: 20040005
+[    1.788632] CFAR: c00000000014f244 IRQMASK: 0
+[    1.788632] GPR00: c00000000062e074 c00000000e733c20 c000000002a12000 
+0000000000000035
+[    1.788632] GPR04: 00000000ffff7fff c00000000e7339e0 c00000000e7339d8 
+0000000000000000
+[    1.788632] GPR08: c000000002826b78 0000000000000000 c000000002566a50 
+c0000000028e6bb8
+[    1.788632] GPR12: 0000000000008000 c00000000fff3280 c00000000018b6d8 
+c00000000d640080
+[    1.788632] GPR16: 0000000000000000 0000000000000000 0000000000000000 
+0000000000000000
+[    1.788632] GPR20: 0000000000000000 0000000000000000 0000000000000000 
+0000000000000000
+[    1.788632] GPR24: c000000000da49e8 0000000000000000 c000000050630480 
+0000000000000400
+[    1.788632] GPR28: c000000050630400 000000000000000d c000000002cd33d8 
+ffffffffffffffea
+[    1.788691] NIP [c00000000062e078] alg_test+0x438/0x880
+[    1.788696] LR [c00000000062e074] alg_test+0x434/0x880
+[    1.788701] Call Trace:
+[    1.788704] [c00000000e733c20] [c00000000062e074] 
+alg_test+0x434/0x880 (unreliable)
+[    1.788712] [c00000000e733d90] [c00000000062c040] 
+cryptomgr_test+0x40/0x70
+[    1.788718] [c00000000e733dc0] [c00000000018b7f4] kthread+0x124/0x130
+[    1.788726] [c00000000e733e10] [c00000000000ce54] 
+ret_from_kernel_thread+0x5c/0x64
+[    1.788733] Instruction dump:
+[    1.788736] 409e02e4 3d22002c 892913fd 2f890000 409e02d4 3c62fe63 
+7f45d378 7f84e378
+[    1.788746] 7fe6fb78 3863fa90 4bb2116d 60000000 <0fe00000> fa2100f8 
+fa410100 fa610108
+[    1.788757] ---[ end trace 0000000000000000 ]---
 -- 
-2.25.1
 
+
+Regards,
+Tasmiya Nalatwad
+IBM Linux Technology Center

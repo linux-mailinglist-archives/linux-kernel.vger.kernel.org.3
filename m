@@ -2,87 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E41255D46B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:13:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BA255CA91
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242348AbiF1HXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 03:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54958 "EHLO
+        id S242315AbiF1HXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 03:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242305AbiF1HXP (ORCPT
+        with ESMTP id S241877AbiF1HXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 03:23:15 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F24286D6;
-        Tue, 28 Jun 2022 00:23:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=ZN46xJfx0F1znhp+nDlAJ1g2eUoXZJqOv+162R9HeD8=; b=eG97E/B3oqw24lLG7tEOVBAvQS
-        0SF9LGFggMqBD1Fky2NGz2LEo7LHR0UnEH6Mceh97lKOCQsX5TVQRfWAeWmMfPbAuYl7FFYb3/A+4
-        5sPyrhZv6MV3v2cQejM/sUJqTXx83x9NOaSz2YQ9dCxikY6wHeWdOLWGnpf+Vx1QCYzE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1o65Yj-008XL1-Il; Tue, 28 Jun 2022 09:22:53 +0200
-Date:   Tue, 28 Jun 2022 09:22:53 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next v1 2/3] net: dsa: ar9331: add support for pause
- stats
-Message-ID: <YrqsTY0uUy4AwKHN@lunn.ch>
-References: <20220624125902.4068436-1-o.rempel@pengutronix.de>
- <20220624125902.4068436-2-o.rempel@pengutronix.de>
- <20220624220317.ckhx6z7cmzegvoqi@skbuf>
- <20220626171008.GA7581@pengutronix.de>
- <20220627091521.3b80a4e8@kernel.org>
- <20220627200238.en2b5zij4sakau2t@skbuf>
- <20220627200959.683de11b@kernel.org>
+        Tue, 28 Jun 2022 03:23:11 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA7B2DD6
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 00:23:10 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 26D926601856;
+        Tue, 28 Jun 2022 08:23:09 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656400989;
+        bh=tkMWwHg3XLqb6lHOLMAd96X4R33y38F3yPePIgGCoK4=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=DS4rM0xlJ/PsTDzSk5MFk9QRUuAF4NvI53elJoysMMoSbdStn25/OGcattMVg66ZY
+         mj8oGKbiUSXJESayjg0iEwFwm6fb66nD4BD+Ea/Py3FBW0lpqMJQE19YjGK8MljcQs
+         gzzxmPNjqAZvLepvbTbrYQnzInrAeZ6PJJM1HZSDhw39VHxxkUl7+XDaioBSsODIC6
+         yj25QOcHqBLjT+Oo2GxUFRb55Wa9nzo8/dxcSegJ5vsgGEJsbhAQgjUE/w6rJpCHWI
+         sDNhPDdozSSc8wQXYu9F3jIJ4aNNZTiSwPzfQJVVEW92xI5eBPnVLWhldKRC83OiF1
+         aaAExN1t8Y9qg==
+Message-ID: <253e9ec1-bcd8-c790-95b8-afbcc21e7163@collabora.com>
+Date:   Tue, 28 Jun 2022 10:23:06 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627200959.683de11b@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v1] ARM: Silence proc-v7-bugs.c spam about disabled
+ Spectre workarounds
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Russell King <rmk+kernel@armlinux.org.uk>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220519161310.1489625-1-dmitry.osipenko@collabora.com>
+In-Reply-To: <20220519161310.1489625-1-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Yeah, the corrections are always iffy. I understand the doubts, and we
-> can probably leave things "under-specified" until someone with a strong
-> preference comes along. But I hope that the virt example makes it clear
-> that neither of the choices is better (SR-IOV NICs would have to start
-> adding the pause if we declare rtnl stats as inclusive).
+On 5/19/22 19:13, Dmitry Osipenko wrote:
+> Print message about disabled Spectre workarounds only once to stop
+> endless spam into KSMG each time CPU goes out from idling state.
+> This spam makes system unusable with CONFIG_HARDEN_BRANCH_PREDICTOR=n
+> for those who don't care about security and wants maximum performance.
 > 
-> I can see advantages to both counting (they are packets) and not
-> counting those frames (Linux doesn't see them, they get "invented" 
-> by HW).
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> ---
+>  arch/arm/mm/proc-v7-bugs.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> Stats are hard.
+> diff --git a/arch/arm/mm/proc-v7-bugs.c b/arch/arm/mm/proc-v7-bugs.c
+> index fb9f3eb6bf48..f9730eba0632 100644
+> --- a/arch/arm/mm/proc-v7-bugs.c
+> +++ b/arch/arm/mm/proc-v7-bugs.c
+> @@ -108,8 +108,7 @@ static unsigned int spectre_v2_install_workaround(unsigned int method)
+>  #else
+>  static unsigned int spectre_v2_install_workaround(unsigned int method)
+>  {
+> -	pr_info("CPU%u: Spectre V2: workarounds disabled by configuration\n",
+> -		smp_processor_id());
+> +	pr_info_once("Spectre V2: workarounds disabled by configuration\n");
+>  
+>  	return SPECTRE_VULNERABLE;
+>  }
 
-I doubt we can define it either way. I once submitted a patch for one
-driver to make it ignore CRC bytes. It then gave the exact same counts
-as another hardware i was using, making the testing i was doing
-simpler.
+Hello Russell,
 
-The patch got rejected simply because we have both, with CRC and
-without CRC, neither is correct, neither is wrong.
+Could you please apply this patch? I tried to use yours patch tracker
+today and it doesn't allow me to recover my password (server error: MAIL
+FROM command failed Detail: Space shortage).
 
-So i would keep it KISS, pause frames can be included, but i would not
-go to extra effort to include them, or to exclude them.
+Thanks!
 
-   Andrew
+-- 
+Best regards,
+Dmitry

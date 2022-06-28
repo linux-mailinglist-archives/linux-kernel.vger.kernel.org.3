@@ -2,107 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC5E55E40F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7789555E412
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235959AbiF1NKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S1345569AbiF1NL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbiF1NKH (ORCPT
+        with ESMTP id S245441AbiF1NLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:10:07 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36FF6411
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:10:05 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id v185so12596572ybe.8
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:10:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0ZW3XqarvTcGhZ4Peie0PakfFooFWkf6ipw6nAT5DK0=;
-        b=kCf9o6/0aD5+Onn97DhZLKfxw23aiwSbWQ3wt8mFoCdH+LjvNVVhyHZrAjseX0NWrN
-         zimXeTlzcsePfCsKfNUe2CcGIVa/wrTuQYf71uyvPNwYH5Toe8RyOGCqldn+XbJd+eXu
-         Hf0DeQ66vCbWLYXux5M2YqXImKJiT37AMwrsS9i5deSkUrYmy22k7VDXkg3CoD9p5DRB
-         Z5Mpogjkt5F719HhCMQYv6MEJuJR+ujHXe33gkTF33jPPsX+Eui0zRqLcqEJMHgL1FXw
-         cjVcvfn72nIgSfSalkb/FiXX3YPX78N4BM8l8tTsT8dtjsfMK+aH+lkwQGW4Nt2h6hcn
-         6p2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0ZW3XqarvTcGhZ4Peie0PakfFooFWkf6ipw6nAT5DK0=;
-        b=Qn2oj3kjVE6bgywzXhoun8HhaFFDjL3KJp46G1iqRt3MVfnrsQmtaADbhrya6NvIis
-         w7B5FG/fPxBMNyjh+jDxsrqT5mSepiGNtqEA8FpTDtkeb1cMKikjfrrSj7l+uUFi0if/
-         zKGgpunHsJehrAQHIy2AjScLXCXH49ZsZusVLngbQ+EuFC4z2huTCa+LodhhotCRZPnl
-         hUy6FJ7aFsf89ZBlbap0ijMWAS8c/k5xgDzxkKWU0Z981MWZWoAgJUhtNZvI3cD4GFeO
-         PzBCq2Nt0LA9UU5Ow053dRvF9sf/S6NGmkyeJ1D1SOO1agD/SL6Qvec5adD9W12KboXo
-         uLNQ==
-X-Gm-Message-State: AJIora9gTB30O8ZilA9xkX+ajdwqCZ8rUHNQ3BGenjeBj3TQc7AdnYj5
-        0VobXvo5Q7CGNOAsAwbvSDyi/+Ml1rHTitftMhFDuQ==
-X-Google-Smtp-Source: AGRyM1tf6Oi2cTjL5Xen3Ry8mKIsaQdlmT4EjbmjDbOehmH4tttuvrwdwMm9BEXAu/FfRgr09oipji2FOAjmIeuskqo=
-X-Received: by 2002:a25:cac5:0:b0:66d:2c32:8593 with SMTP id
- a188-20020a25cac5000000b0066d2c328593mr2891580ybg.626.1656421804675; Tue, 28
- Jun 2022 06:10:04 -0700 (PDT)
+        Tue, 28 Jun 2022 09:11:17 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD47645A;
+        Tue, 28 Jun 2022 06:11:15 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 714326601856;
+        Tue, 28 Jun 2022 14:11:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656421873;
+        bh=KNSZUjyY4CuF71/A7Usafn7IJCqpjpqnNb+s/bjmhpM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JVdCL4pOrZRjPYlW1sSxr0ov8MYwr/h/jFUMEmO4yZZL0Thh0VqUNftTIaNvUwEmY
+         myolbgF/rRAWBiGj8as5x4lXrPgfvowspQRix7IvWX3ujENW9n/A9RgofDbIFplpJ1
+         XKBUEiGyhohLkxg095z15R9kLoSIzKX7UR4GwSE03H/Wl5+upu3XGKE9fggwC3rLAJ
+         YwztUDyhr9vdUcLY8PyCIUcj0FTuvMwiQySOEZvk1YLzw5WODsuuCzO2945ZS6eOcK
+         kbjoe/4U6aWPVrza0Q6OS9hOE9m0uzU59dItxkwobNx4NGuRgKEN7SpAkBhFBnLjES
+         o9MoSYPi5XeiA==
+Message-ID: <8c5d3cb0-70fa-81a7-33a2-50f45bf8f40e@collabora.com>
+Date:   Tue, 28 Jun 2022 16:11:07 +0300
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <20220601070707.3946847-8-saravanak@google.com> <20220622074756.GA1647@pengutronix.de>
- <CACRpkdYe=u9Ozj_dtLVr6GSau8yS5H7LnBNNrQHki1CJ1zST0A@mail.gmail.com> <CAGETcx_qm7DWbNVTLfF9jTgGA8uH8oAQzbPcMDh4L6+5mdRFog@mail.gmail.com>
-In-Reply-To: <CAGETcx_qm7DWbNVTLfF9jTgGA8uH8oAQzbPcMDh4L6+5mdRFog@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 28 Jun 2022 15:09:53 +0200
-Message-ID: <CACRpkdYkbVWayPEukyKcSQuzMuV=BmhBwBA6GuoNvb3HLWLNUQ@mail.gmail.com>
-Subject: Re: [PATCH v2 7/9] driver core: Set fw_devlink.strict=1 by default
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Sascha Hauer <sha@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v6 00/22] Add generic memory shrinker to VirtIO-GPU and
+ Panfrost DRM drivers
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, amd-gfx@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, kernel@collabora.com
+References: <20220526235040.678984-1-dmitry.osipenko@collabora.com>
+ <49cc6f0c-e90e-8edd-52e7-4188620e2c28@arm.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <49cc6f0c-e90e-8edd-52e7-4188620e2c28@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 9:40 PM Saravana Kannan <saravanak@google.com> wrote:
+Hello Robin,
 
-> Actually, why isn't earlyconsole being used? That doesn't get blocked
-> on anything and the main point of that is to have console working from
-> really early on.
+On 6/28/22 15:31, Robin Murphy wrote:
+>> Hello,
+>>
+>> This patchset introduces memory shrinker for the VirtIO-GPU DRM driver
+>> and adds memory purging and eviction support to VirtIO-GPU driver.
+>>
+>> The new dma-buf locking convention is introduced here as well.
+>>
+>> During OOM, the shrinker will release BOs that are marked as "not needed"
+>> by userspace using the new madvise IOCTL, it will also evict idling BOs
+>> to SWAP. The userspace in this case is the Mesa VirGL driver, it will
+>> mark
+>> the cached BOs as "not needed", allowing kernel driver to release memory
+>> of the cached shmem BOs on lowmem situations, preventing OOM kills.
+>>
+>> The Panfrost driver is switched to use generic memory shrinker.
+> 
+> I think we still have some outstanding issues here - Alyssa reported
+> some weirdness yesterday, so I just tried provoking a low-memory
+> condition locally with this series applied and a few debug options
+> enabled, and the results as below were... interesting.
 
-For Arm (arch/arm) there is a special low-level debug option call low-level
-debug, which you find in e.g:
-arch/arm/Kconfig.debug
-arch/arm/kernel/debug.S
+The warning and crash that you got actually are the minor issues.
 
-This debug facility can print to the UART fifo before even MMU is up, pretty
-much from the first instruction the kernel executes.
+Alyssa caught an interesting PREEMPT_DEBUG issue in the shrinker that I
+haven't seen before.
 
-The versatility of LL-debug means that developers do not use earlyconsole
-much on Arm.
+She is also experiencing another problem in the Panfrost driver with a
+bad shmem pages (I think). It is unrelated to this patchset and
+apparently require an extra setup for the reproduction.
 
-I don't know about arm64 though.
-
-Yours,
-Linus Walleij
+-- 
+Best regards,
+Dmitry

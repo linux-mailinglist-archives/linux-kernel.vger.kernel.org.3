@@ -2,192 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B9455D917
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8AD55D880
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241814AbiF1HRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 03:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
+        id S241732AbiF1HSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 03:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241113AbiF1HQu (ORCPT
+        with ESMTP id S241783AbiF1HRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 03:16:50 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA572C677;
-        Tue, 28 Jun 2022 00:16:49 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 07:16:47 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1656400608;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7X5Kec0L7pw8Q4seMcLd4oIQMAdicOFNGv0zfK6xBxE=;
-        b=4A5YDh62RdZD92JrcUQWiVNDKGvSkD8byYWnxHE1BFdXNd5R1brxEts/3KklONpCQm/8dC
-        q6263uhvJPopwmJYwUUyGEilMX55iqjyINF0An+EkuvuLtwuBeX/EJNdtLQowTZC5Jr1MH
-        epjSQ7I1VrsrBt/5/UkDE2C5xJBGT8nxL2TglgX+ZrrTrjPCv4cC/9XCq9kT8Wj0X3yQbp
-        lo9eyzy5EPCg9S1++aY6WQovivi223DoIa4zrsqaylwVYVG355TcvBEThZ7f3PJMFdH91+
-        MKd6IIwnhmXs44F4Nde3lqD3q4dHyXYEBdNVNInjmlRR6B0od9mrgV6Br2/Vmw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1656400608;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7X5Kec0L7pw8Q4seMcLd4oIQMAdicOFNGv0zfK6xBxE=;
-        b=g6MRNazjY361KnyJC1Mhmdt0eEpFe0l53yOtLIx8avY/fOXAYhJFixtVASKy7MT3TTE+L4
-        KME9yYbCqd3JcQBw==
-From:   "tip-bot2 for Michael Jeanson" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] selftests/rseq: riscv: use rseq_get_abi() helper
-Cc:     Michael Jeanson <mjeanson@efficios.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220614154830.1367382-2-mjeanson@efficios.com>
-References: <20220614154830.1367382-2-mjeanson@efficios.com>
+        Tue, 28 Jun 2022 03:17:20 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CB22CCBC;
+        Tue, 28 Jun 2022 00:17:18 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LXG7n0lRdz1L8mG;
+        Tue, 28 Jun 2022 15:15:01 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 28 Jun 2022 15:17:15 +0800
+CC:     <yangyicong@hisilicon.com>, Greg KH <gregkh@linuxfoundation.org>,
+        <helgaas@kernel.org>, <lorenzo.pieralisi@arm.com>,
+        <jonathan.cameron@huawei.com>, <robin.murphy@arm.com>,
+        <leo.yan@linaro.org>, <will@kernel.org>, <joro@8bytes.org>,
+        <shameerali.kolothum.thodi@huawei.com>, <mingo@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <john.garry@huawei.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-pci@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
+        <liuqi115@huawei.com>, <james.clark@arm.com>,
+        <zhangshaokun@hisilicon.com>, <linuxarm@huawei.com>,
+        <alexander.shishkin@linux.intel.com>, <acme@kernel.org>
+Subject: Re: [PATCH v9 0/8] Add support for HiSilicon PCIe Tune and Trace
+ device
+To:     <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
+        <suzuki.poulose@arm.com>, Peter Zijlstra <peterz@infradead.org>
+References: <20220606115555.41103-1-yangyicong@hisilicon.com>
+ <af6723f1-c0c5-8af5-857c-af9280e705af@huawei.com>
+ <Yrms2cI05O2yZRKU@kroah.com>
+ <e737393a-56dd-7d24-33d3-e935b14ba758@huawei.com>
+ <Yrm4O+AFbgnoBVba@hirez.programming.kicks-ass.net>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <6c923b13-a588-9511-3f94-3241c8aacac5@huawei.com>
+Date:   Tue, 28 Jun 2022 15:17:15 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Message-ID: <165640060703.4207.13582940534637128711.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+In-Reply-To: <Yrm4O+AFbgnoBVba@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+On 2022/6/27 22:01, Peter Zijlstra wrote:
+> On Mon, Jun 27, 2022 at 09:25:42PM +0800, Yicong Yang wrote:
+>> On 2022/6/27 21:12, Greg KH wrote:
+>>> On Mon, Jun 27, 2022 at 07:18:12PM +0800, Yicong Yang wrote:
+>>>> Hi Greg,
+>>>>
+>>>> Since the kernel side of this device has been reviewed for 8 versions with
+>>>> all comments addressed and no more comment since v9 posted in 5.19-rc1,
+>>>> is it ok to merge it first (for Patch 1-3 and 7-8)?
+>>>
+>>> I am not the maintainer of this subsystem, so I do not understand why
+>>> you are asking me :(
+>>>
+>>
+>> I checked the log of drivers/hwtracing and seems patches of coresight/intel_th/stm
+>> applied by different maintainers and I see you applied some patches of intel_th/stm.
+>> Should any of these three maintainers or you can help applied this?
+> 
+> I was hoping Mark would have a look, since he knows this ARM stuff
+> better than me. But ISTR he's somewhat busy atm too. But an ACK from the
+> CoreSight people would also be appreciated.
+> 
 
-Commit-ID:     4f3394924358fe04ced0411c72fc7eeb0d3be652
-Gitweb:        https://git.kernel.org/tip/4f3394924358fe04ced0411c72fc7eeb0d3be652
-Author:        Michael Jeanson <mjeanson@efficios.com>
-AuthorDate:    Tue, 14 Jun 2022 11:48:28 -04:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 28 Jun 2022 09:08:28 +02:00
+Thanks for the instruction.
 
-selftests/rseq: riscv: use rseq_get_abi() helper
+Hi Mark, Mathieu and Suzuki,
 
-Make the RISC-V rseq selftests compatible with glibc-2.35 by using the
-rseq_get_abi() helper.
+May I have an ack from you to have the driver part of this device merged?
 
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Link: https://lore.kernel.org/r/20220614154830.1367382-2-mjeanson@efficios.com
----
- tools/testing/selftests/rseq/rseq-riscv.h | 36 +++++++++++-----------
- 1 file changed, 18 insertions(+), 18 deletions(-)
-
-diff --git a/tools/testing/selftests/rseq/rseq-riscv.h b/tools/testing/selftests/rseq/rseq-riscv.h
-index b86642f..6f8a605 100644
---- a/tools/testing/selftests/rseq/rseq-riscv.h
-+++ b/tools/testing/selftests/rseq/rseq-riscv.h
-@@ -194,8 +194,8 @@ int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
- 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
- 				  : /* gcc asm goto does not allow outputs */
- 				  : [cpu_id]		"r" (cpu),
--				    [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+				    [current_cpu_id]	"m" (rseq_get_abi()->cpu_id),
-+				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
- 				    [v]			"m" (*v),
- 				    [expect]		"r" (expect),
- 				    [newv]		"r" (newv)
-@@ -251,8 +251,8 @@ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
- 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
- 				  : /* gcc asm goto does not allow outputs */
- 				  : [cpu_id]		"r" (cpu),
--				    [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+				    [current_cpu_id]	"m" (rseq_get_abi()->cpu_id),
-+				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
- 				    [v]			"m" (*v),
- 				    [expectnot]		"r" (expectnot),
- 				    [load]		"m" (*load),
-@@ -301,8 +301,8 @@ int rseq_addv(intptr_t *v, intptr_t count, int cpu)
- 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
- 				  : /* gcc asm goto does not allow outputs */
- 				  : [cpu_id]		"r" (cpu),
--				    [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+				    [current_cpu_id]	"m" (rseq_get_abi()->cpu_id),
-+				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
- 				    [v]			"m" (*v),
- 				    [count]		"r" (count)
- 				    RSEQ_INJECT_INPUT
-@@ -352,8 +352,8 @@ int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
- 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
- 				  : /* gcc asm goto does not allow outputs */
- 				  : [cpu_id]		"r" (cpu),
--				    [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+				    [current_cpu_id]	"m" (rseq_get_abi()->cpu_id),
-+				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
- 				    [expect]		"r" (expect),
- 				    [v]			"m" (*v),
- 				    [newv]		"r" (newv),
-@@ -411,8 +411,8 @@ int rseq_cmpeqv_trystorev_storev_release(intptr_t *v, intptr_t expect,
- 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
- 				  : /* gcc asm goto does not allow outputs */
- 				  : [cpu_id]		"r" (cpu),
--				    [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+				    [current_cpu_id]	"m" (rseq_get_abi()->cpu_id),
-+				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
- 				    [expect]		"r" (expect),
- 				    [v]			"m" (*v),
- 				    [newv]		"r" (newv),
-@@ -472,8 +472,8 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
- 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
- 				  : /* gcc asm goto does not allow outputs */
- 				  : [cpu_id]		"r" (cpu),
--				    [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+				    [current_cpu_id]	"m" (rseq_get_abi()->cpu_id),
-+				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
- 				    [v]			"m" (*v),
- 				    [expect]		"r" (expect),
- 				    [v2]			"m" (*v2),
-@@ -532,8 +532,8 @@ int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
- 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
- 				  : /* gcc asm goto does not allow outputs */
- 				  : [cpu_id]		"r" (cpu),
--				    [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+				    [current_cpu_id]	"m" (rseq_get_abi()->cpu_id),
-+				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
- 				    [expect]		"r" (expect),
- 				    [v]			"m" (*v),
- 				    [newv]		"r" (newv),
-@@ -593,8 +593,8 @@ int rseq_cmpeqv_trymemcpy_storev_release(intptr_t *v, intptr_t expect,
- 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
- 				  : /* gcc asm goto does not allow outputs */
- 				  : [cpu_id]		"r" (cpu),
--				    [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+				    [current_cpu_id]	"m" (rseq_get_abi()->cpu_id),
-+				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
- 				    [expect]		"r" (expect),
- 				    [v]			"m" (*v),
- 				    [newv]		"r" (newv),
-@@ -651,8 +651,8 @@ int rseq_offset_deref_addv(intptr_t *ptr, off_t off, intptr_t inc, int cpu)
- 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
- 				  : /* gcc asm goto does not allow outputs */
- 				  : [cpu_id]		"r" (cpu),
--				    [current_cpu_id]      "m" (__rseq_abi.cpu_id),
--				    [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+				    [current_cpu_id]      "m" (rseq_get_abi()->cpu_id),
-+				    [rseq_cs]		"m" (rseq_get_abi()->rseq_cs.arch.ptr),
- 				    [ptr]			"r" (ptr),
- 				    [off]			"er" (off),
- 				    [inc]			"er" (inc)
+Thanks!

@@ -2,119 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B336055DC5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A1A55D525
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344055AbiF1JIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
+        id S1344067AbiF1JI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234062AbiF1JIN (ORCPT
+        with ESMTP id S234062AbiF1JIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:08:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0FFF91038
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:08:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656407291;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BXAG5b0n3utC+xKu/ur4SDi+QqaWJ5b7MPRWdkNFMEA=;
-        b=Hp2VyrvPxe8OSP1bwAZdtmD6yoQlnUqyqwLnHHzMJl+Z8jj7ZFL8pFM7fHgLQzt2mXOcES
-        rFfvlFfC6gYwAPgAS/UckB5Zi9FLb2QxagEtgU/20j0Nrz2diyzXmwq660FvsFLUmQYDzh
-        KWXD12XfOdQU5IGzcFNIypZM75R4wZM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-FYALN4vtN4yD3bN7U9-Tsw-1; Tue, 28 Jun 2022 05:08:09 -0400
-X-MC-Unique: FYALN4vtN4yD3bN7U9-Tsw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 28 Jun 2022 05:08:22 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1660B766F;
+        Tue, 28 Jun 2022 02:08:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4474F2999B40;
-        Tue, 28 Jun 2022 09:08:09 +0000 (UTC)
-Received: from starship (unknown [10.40.194.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DD37E404E4C8;
-        Tue, 28 Jun 2022 09:08:06 +0000 (UTC)
-Message-ID: <0739589fe08c75c563e10cb41388640c7e050a52.camel@redhat.com>
-Subject: Re: [PATCH 00/14] KVM: nVMX: Use vmcs_config for setting up nested
- VMX MSRs
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 28 Jun 2022 12:08:05 +0300
-In-Reply-To: <20220627160440.31857-1-vkuznets@redhat.com>
-References: <20220627160440.31857-1-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C89A51F9D9;
+        Tue, 28 Jun 2022 09:08:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1656407300; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z/CFWoysazPYOJ+RT+MoOQfwRcysVEsHRQF675n1OGQ=;
+        b=JANHdKn0mmgpP88tAVTqM1LNjgntd0zv2uCWTJynSPXs4KRj2VMbaxE1WDbZpQZfBDRBC7
+        /GxsxqrefLx2qwvL6P8kRKQJWWWolvM97j34XoT+6tfkvvfSzrs8eHKiO+zd0BJYf5cxEi
+        LyXDetrh6tArsfPoS7eKN7rW3YmjliA=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8D158139E9;
+        Tue, 28 Jun 2022 09:08:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id wxFzIQTFumKKQAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 28 Jun 2022 09:08:20 +0000
+Date:   Tue, 28 Jun 2022 11:08:19 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Vasily Averin <vvs@openvz.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@suse.com>, kernel@openvz.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Cgroups <cgroups@vger.kernel.org>
+Subject: Re: [PATCH mm v2] memcg: notify about global mem_cgroup_id space
+ depletion
+Message-ID: <20220628090819.GB30543@blackbody.suse.cz>
+References: <Yre8tNUY8vBrO0yl@castle>
+ <97bed1fd-f230-c2ea-1cb6-8230825a9a64@openvz.org>
+ <CAMZfGtWQEFmyuDngPfg59D-+b9sf58m9qhGoVPSQ_jAGmgT+sg@mail.gmail.com>
+ <f3e4059c-69ea-eccd-a22f-9f6c6780f33a@openvz.org>
+ <YrpVP6rpYGFsl3jj@castle>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrpVP6rpYGFsl3jj@castle>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-27 at 18:04 +0200, Vitaly Kuznetsov wrote:
-> Changes since RFC:
-> - "KVM: VMX: Extend VMX controls macro shenanigans" PATCH added and the
->   infrastructure is later used in other patches [Sean] PATCHes 1-3 added
->   to support the change.
-> - "KVM: VMX: Clear controls obsoleted by EPT at runtime, not setup" PATCH
->   added [Sean].
-> - Commit messages added.
-> 
-> vmcs_config is a sanitized version of host VMX MSRs where some controls are
-> filtered out (e.g. when Enlightened VMCS is enabled, some know bugs are 
-> discovered, some inconsistencies in controls are detected,...) but
-> nested_vmx_setup_ctls_msrs() uses raw host MSRs instead. This may end up
-> in exposing undesired controls to L1. Switch to using vmcs_config instead.
-> 
-> Sean Christopherson (1):
->   KVM: VMX: Clear controls obsoleted by EPT at runtime, not setup
-> 
-> Vitaly Kuznetsov (13):
->   KVM: VMX: Check VM_ENTRY_IA32E_MODE in setup_vmcs_config()
->   KVM: VMX: Check CPU_BASED_{INTR,NMI}_WINDOW_EXITING in
->     setup_vmcs_config()
->   KVM: VMX: Tweak the special handling of SECONDARY_EXEC_ENCLS_EXITING
->     in setup_vmcs_config()
->   KVM: VMX: Extend VMX controls macro shenanigans
->   KVM: VMX: Move CPU_BASED_CR8_{LOAD,STORE}_EXITING filtering out of
->     setup_vmcs_config()
->   KVM: VMX: Add missing VMEXIT controls to vmcs_config
->   KVM: VMX: Add missing VMENTRY controls to vmcs_config
->   KVM: VMX: Add missing CPU based VM execution controls to vmcs_config
->   KVM: nVMX: Use sanitized allowed-1 bits for VMX control MSRs
->   KVM: VMX: Store required-1 VMX controls in vmcs_config
->   KVM: nVMX: Use sanitized required-1 bits for VMX control MSRs
->   KVM: VMX: Cache MSR_IA32_VMX_MISC in vmcs_config
->   KVM: nVMX: Use cached host MSR_IA32_VMX_MISC value for setting up
->     nested MSR
-> 
->  arch/x86/kvm/vmx/capabilities.h |  16 +--
->  arch/x86/kvm/vmx/nested.c       |  37 +++---
->  arch/x86/kvm/vmx/nested.h       |   2 +-
->  arch/x86/kvm/vmx/vmx.c          | 198 ++++++++++++++------------------
->  arch/x86/kvm/vmx/vmx.h          | 118 +++++++++++++++++++
->  5 files changed, 229 insertions(+), 142 deletions(-)
-> 
-Sorry that I was a bit out of loop on this, so before I review it,
-does this patch series solve the eVMCS issue we had alone,
-or we still need the eVMCS version patch series as well?
+On Mon, Jun 27, 2022 at 06:11:27PM -0700, Roman Gushchin <roman.gushchin@linux.dev> wrote:
+> I think a better approach will be to add a cgroup event (displayed via
+> cgroup.events) about reaching the maximum limit of cgroups. E.g.
+> cgroups.events::max_nr_reached.
 
-Best regards,
-	Maxim Levitsky
+This sounds like a good generalization.
 
+> Then you can set cgroup.max.descendants to some value below memcg_id
+> space size. It's more work, but IMO it's a better way to communicate
+> this event. As a bonus, you can easily get an idea which cgroup
+> depletes the limit.
+
+Just mind there's a difference between events: what cgroup's limit was
+hit and what cgroup was affected by the limit [1] (the former is more
+useful for the calibration if I understand the situation).
+
+Michal
+
+[1] https://lore.kernel.org/all/20200205134426.10570-2-mkoutny@suse.com/

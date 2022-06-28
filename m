@@ -2,132 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 429E155C21B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9603255D636
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243980AbiF1DAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 23:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
+        id S244033AbiF1DBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 23:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiF1DAp (ORCPT
+        with ESMTP id S231207AbiF1DBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 23:00:45 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56D6E57
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:00:44 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-3177f4ce3e2so103436747b3.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:00:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=NGQFBKn6mTJLQJJQb0hf6HN+JadFUru77ofDSmMfQME=;
-        b=rc0n1c6TbIrQRNmMMiEnaFh0hkBAnLACeL7OVUBc1y63A9tRBXlkByzzujNZkWLuAc
-         J2OdWFCudl0xouJCt7hJmzZ8KtYihsfHhff9u1eCTd+ow+JMUq/fRL1W0lpGuZtcgNJt
-         NhXTHPFoB66MWty0x0OcTWKeq1qIoqHuUUtesJb6va754w3Of4LZFLBxocLfYxXqjZu2
-         18ez++TyOlnFMvyGG/xy/Ub89MG2F4WRe8IsXnAEBC03Jnkz7o0QfkU0XQaP7AONxHfy
-         NXOvOrb/Fq/Nz406VXbfwz3cuSSGLNExm8RydGxWaaAZBKsHiD3XQ8n9HbHHWECPvru5
-         xATQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NGQFBKn6mTJLQJJQb0hf6HN+JadFUru77ofDSmMfQME=;
-        b=nYK5ez0ca+ojxfzDng8TG/yj5sroISDo3+DSbIzYZJUuJGzcq9PgeDD4uegRsHH1Uw
-         Xu5N9qox/koYtbQGXWogMO0EKTkAnyHjLzaa1n82CXOiUtDEWNJ5AOg/TnK8Bo5P/gIC
-         ya6g5F1JSfIL5rnYKmG66fNlw/oDcB880XSOYSzJ20kOx3jYv/3R3rNYvsGEIjl1R8S7
-         AEo3obyTX5kNRozSyBuJO25ceIivLSaYhQuKgYwTRjRyOLte/FFVuXNXmaN+A9UxCq5z
-         +m72XUou4mwoc2q+Cx/voB9QCIr3B7YvjF2TO4pBCW8ITNsYeEYndNhjvlgnLcD5J+5T
-         Rkkw==
-X-Gm-Message-State: AJIora89OBg3rYa0yLEnnjf/BiMcxQCEht7b5bbg6cibkYM7+ijXI5j6
-        rGjUs3mMC2Jez5eAPmUt5GSzX4x/VmiYOuL6GRTZRA==
-X-Google-Smtp-Source: AGRyM1vNTu5scvESmObYMGE7sPUp2Y8jmjQXh5dEqfRMki2YHOK/AUCj+at+NEttVXdfG4i+8ADKbHWvMr50nzzZPh8=
-X-Received: by 2002:a81:4896:0:b0:317:f767:95f8 with SMTP id
- v144-20020a814896000000b00317f76795f8mr19057497ywa.218.1656385243830; Mon, 27
- Jun 2022 20:00:43 -0700 (PDT)
+        Mon, 27 Jun 2022 23:01:16 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866D4F7D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:01:14 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LX8Sq1HCczkWJn;
+        Tue, 28 Jun 2022 10:59:23 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 28 Jun 2022 11:01:12 +0800
+Subject: Re: [PATCH v2 1/9] mm/hugetlb: remove checking hstate_is_gigantic()
+ in return_unused_surplus_pages()
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+CC:     Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <nao.horiguchi@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+References: <20220623235153.2623702-1-naoya.horiguchi@linux.dev>
+ <20220623235153.2623702-2-naoya.horiguchi@linux.dev>
+ <0b69e3ef-0123-4575-b68d-4d9b2067aa0e@huawei.com>
+ <YrVv3gKMxbu/dwCs@FVFYT0MHHV2J.usts.net>
+ <e9a22524-d9f6-1018-a712-00adb90d432a@huawei.com>
+ <20220624083428.GA2070418@hori.linux.bs1.fc.nec.co.jp>
+ <YrYMS5sATPzEgUxb@monkey>
+ <20220627060231.GA2159330@hori.linux.bs1.fc.nec.co.jp>
+ <Yrnn+QS8JCMT/3JV@monkey>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <227ccd06-a945-e4c5-8cff-37817f777781@huawei.com>
+Date:   Tue, 28 Jun 2022 11:01:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20220622062027.994614-1-peng.fan@oss.nxp.com> <20220622072435.GT1615@pengutronix.de>
- <CAGETcx_R0zr1PMgNO8HAqcWpaQNOBGzpYdnrMa2MD=HP6mzDqg@mail.gmail.com> <cb65069b-909a-7318-68d8-eaa23c316740@oss.nxp.com>
-In-Reply-To: <cb65069b-909a-7318-68d8-eaa23c316740@oss.nxp.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 27 Jun 2022 20:00:07 -0700
-Message-ID: <CAGETcx-=x=M8ULfJyLtKP11qXvjPYBGAVTD7RNhg1BOGx1UEYg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: imx8mp: drop dmas property for uart console
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        festevam@gmail.com, linux-imx@nxp.com, hvilleneuve@dimonoff.com,
-        l.stach@pengutronix.de, abbaraju.manojsai@amarulasolutions.com,
-        jagan@amarulasolutions.com, matteo.lisi@engicam.com,
-        tharvey@gateworks.com, t.remmet@phytec.de,
-        u.kleine-koenig@pengutronix.de, t.remmet@phytec.deh,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <Yrnn+QS8JCMT/3JV@monkey>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 1:22 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote=
-:
->
-> Hi Saravana,
->
-> =E5=9C=A8 2022/6/25 15:15, Saravana Kannan =E5=86=99=E9=81=93:
-> > On Wed, Jun 22, 2022 at 12:24 AM Sascha Hauer <s.hauer@pengutronix.de> =
-wrote:
-> >> +Cc Saravana Kannan <saravanak@google.com>, the author of 71066545b48e=
-4
-> >>
-> >> On Wed, Jun 22, 2022 at 02:20:27PM +0800, Peng Fan (OSS) wrote:
-> >>> From: Peng Fan <peng.fan@nxp.com>
-> >>>
-> >>> Commit 71066545b48e4("driver core: Set fw_devlink.strict=3D1 by defau=
-lt")
-> >>> default set fw_devlink to true. This has a side effect to i.MX uart
-> >>> console. The sdma will make the i.MX8MP uart driver defer probe for s=
-ome
-> >>> time (~10s with i.MX8MP-EVK board) until sdma ready, because sdma is =
-a
-> >>> supplier with property dmas set in device tree node.
-> >> I just tested this on an i.MX6 board and observed the same behaviour.
-> >> The same will happen on any other i.MX board as well. This will also
-> >> likely happen on any other SoC on which the UART driver uses dmaengine=
-.
-> >>
-> >>> Since this uart is for console, we need log printed out as soon as
-> >>> possible, so remove the dmas property for the uart console node.
-> >> Fixing this at board level is not really an option because that means
-> >> fixing each and every, at least i.MX board in the tree. Furthermore
-> >> this would mean to bring the deleted property back in and to remove
-> >> another dmas property should a user want to switch to another console
-> >> port.
-> >>
-> >> For what it's worth: NACK for 71066545b48e4.
-> > Hi Peng/Sascha/Fabio,
-> >
-> > I was looking at a fix for this (even when stdout-path isn't set in
-> > DT) and looking at the older code (say, 5.18), and it looks like
-> > before my recent changes the console would still only get probed
-> > during late_initcall(). Does that match your experience?
->
-> I could not get you. In driver, it is module init:
-> module_init(imx_uart_init), not late_initcall.
->
+On 2022/6/28 1:25, Mike Kravetz wrote:
+> On 06/27/22 06:02, HORIGUCHI NAOYA(堀口 直也) wrote:
+>> On Fri, Jun 24, 2022 at 12:11:07PM -0700, Mike Kravetz wrote:
+>>> On 06/24/22 08:34, HORIGUCHI NAOYA(堀口 直也) wrote:
+>>>> On Fri, Jun 24, 2022 at 04:15:19PM +0800, Miaohe Lin wrote:
+>>>>> On 2022/6/24 16:03, Muchun Song wrote:
+>>>>>> On Fri, Jun 24, 2022 at 10:25:48AM +0800, Miaohe Lin wrote:
+>>>>>>> On 2022/6/24 7:51, Naoya Horiguchi wrote:
+>>>>>>>> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>>>>>>>
+>>>>>>> IIUC it might be better to do the below check:
+>>>>>>> 	/*
+>>>>>>> 	 * Cannot return gigantic pages currently if runtime gigantic page
+>>>>>>> 	 * allocation is not supported.
+>>>>>>> 	 */
+>>>>>>> 	if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported())
+>>>>>>> 		goto out;
+>>>>>>>
+>>>>>>
+>>>>>> The change looks good to me. However, the comments above is unnecessary
+>>>>>> since gigantic_page_runtime_supported() is straightforward.
+>>>>>
+>>>>> Agree. The comments can be removed.
+>>>>
+>>>> Thank you, both. Adding !gigantic_page_runtime_supported without comment
+>>>> makes sense to me.
+>>>
+>>> The change above makes sense to me.  However, ...
+>>>
+>>> If we make the change above, will we have the same strange situation described
+>>> in the commit message when !gigantic_page_runtime_supported() is true?
+>>>
+>>> IIUC, !gigantic_page_runtime_supported implies that gigantic hugetlb
+>>> pages can not be allocated or freed at run time.  They can only be
+>>> allocated at boot time.  So, there should NEVER be surplus gigantic
+>>> pages if !gigantic_page_runtime_supported().
+>>
+>> I have the same understanding as the above.
+>>
+>>>  To avoid this situation,
+>>> perhaps we should change set_max_huge_pages as follows (not tested)?
+>>
+>> The suggested diff looks clearer about what it does, so I'd like to take it
+>> in the next version.  Then, what do we do on the "if (hstate_if_gigantic())"
+>> check in return_unused_surplus_pages in the original suggestion?  Should it
+>> be kept as is, or removed, or checked with !gigantic_page_runtime_supported()?
+>> I guess that the new checks prevent calling return_unused_surplus_pages()
+>> during pool shrinking, so the check seems not necessary any more.
+> 
+> My first thought was to keep the check in return_unused_surplus_pages() as it
+> is called in other code paths.  However, it SHOULD only try to free surplus
+> hugetlb pages.  With the modifications to set_max_huge_pages we will not
+> have any surplus gigantic pages if !gigantic_page_runtime_supported, so
+> the check can be removed.
+> 
+> Also note that we never try to dynamically allocate surplus gigantic pages.
+> This also is left over from the time when we could not easily allocate a
+> gigantic page at runtime.  It would not surprise me if someone found a use
+> case to ease this restriction in the future.  Especially so if 1G THP support
+> is ever added.  If this happens, the check would be necessary and I would
+> guess that it would not be added.
+> 
+> Sorry for thinking our loud!!!  Although not necessary, it 'might' be a good
+> idea to leave the check because it would be overlooked if dynamic allocation
+> of gigantic surplus pages is ever added.  I do not have a strong opinion.
+> 
+> P.S. This also reminds me that a similar check should be added to the
+> demote hugetlb code path.  It would be bad if !gigantic_page_runtime_supported
+> and we demoted a gigantic page into numerous non-gigantic pages.  I will
+> send a patch.
 
-Correct, the driver does use module_init(). However, because of how
-driver_deferred_probe_check_state() is implemented in 5.18, the
-console would get deferred probe until late_initcall(). In my earlier
-email, I'm trying to get you to confirm my analysis is what you were
-seeing in 5.18 (or 5.19-rcX without my series that deletes
-driver_deferred_probe_check_state()).
+Out-of-topic
+There're some places check "if (hstate_is_gigantic(h))" while others check
+"if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported())". Should
+we make it explicit in some manner when gigantic_page_runtime_supported is
+needed to make code easier to follow?
 
--Saravana
+Just a trivial suggestion. Thanks!
+
+> 

@@ -2,126 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4090855E80C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819D355E63A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347612AbiF1PMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
+        id S1347623AbiF1PM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347605AbiF1PL7 (ORCPT
+        with ESMTP id S1345940AbiF1PM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:11:59 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3FC2B27B
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:11:58 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id u9so17538733oiv.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:11:58 -0700 (PDT)
+        Tue, 28 Jun 2022 11:12:26 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE372B252
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:12:25 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id k15so13158844iok.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:12:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=r3T/Vv9JYSOoPod+m53QhPFgDxt80YZRfCW/0xTpL5E=;
-        b=BBUiogqF5aD42O+to2up8XXG99jnen4vcvT4q3uQtZWs7+5mzSEKSYODAdtIflRbLE
-         IPFqk4z92H9szCzlWLxTFzC+B3jy/j1V0h6mT51YkeeSnTTnN4sVfQJRfOFkpq2E1/u3
-         etXfIGWfuoS2l3wqhkFH0Jw1FohRaZbf9LZsk=
+        bh=zgi/7+6eFIGPqLxDNnNayXAaz/C0VCUdgOz60BwoFKs=;
+        b=0r1VeEQo5BOUs0Y42+eaSNEbybS3y2cKZGt3LzIE9MLH4xZ/pOk29uczR2mRzckFIn
+         rc5nrZcBH+dnh4TVbyQ212cs09osFIzsQmM7kSYnsm97i4d5JVf6L8SUk8IWVPWhF8At
+         cXp+CKy41AvPwvrdRD8jafW7bvmWdn5t5Yh0gSxP83Ln11Me+tpUp1XjPXE2J5+aAQ6O
+         ijPERjNTZ7ephOs3pQGJ/LjMVrsNZ2UMbSv/ifvdPzslYdSq9Sr5AlHk5PcHfNK26DBX
+         I9s2BV8oa0H0u6yTyLerp/Ka0uT3rKqimNKG90S8I5Wlo1LS5RhynQeZUkYFp2F+waTX
+         7zpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=r3T/Vv9JYSOoPod+m53QhPFgDxt80YZRfCW/0xTpL5E=;
-        b=rpk7p7L6B1+iL04rHHR0h9mwEJrOAND+x6olAksnO0pRZ/tn2zkAC2ZfeMyAS2BK32
-         rtzRLn2GKBlxcAvss6zW4PUfX09+cFgRMKompifrc1OUHqcqa2O+rCqhIFE6r2lSnTKN
-         iSFdRTkRK/27w77TWeeXZ5j58vRpk2K5IKyuK/CLQDXQ4g4qd6P5iZv7wpWEjUIM+/k2
-         vGM4X8GKQNdmMbyCMazs07xVjZRVNIUZP6ueDyOiJKH3tPqfyXgLUyVfo+ts9Y6EqrPH
-         jeZ30sJABQ6u97WfFxeejD411jWKBHvH+MRnjM2WQchk0OVMk0M2OTWgJGpWr4h8HYX3
-         Jy7g==
-X-Gm-Message-State: AJIora9tc/drgkA9EQMLzwa4hfeuHHmaGVgPbYC8CxpUWjpImuXhwaXH
-        wkmDKOzs5neW9YJ4M391EIQItQ==
-X-Google-Smtp-Source: AGRyM1tODMgw6IwHCo3Y/vl7DX4YsQjJs6rmWSkZYVGx9VjVR30VT0v1uSVo/UfRSgUjW8RYxxJ21g==
-X-Received: by 2002:a05:6808:9b9:b0:335:7039:8756 with SMTP id e25-20020a05680809b900b0033570398756mr65082oig.212.1656429117444;
-        Tue, 28 Jun 2022 08:11:57 -0700 (PDT)
-Received: from [192.168.0.41] ([184.4.90.121])
-        by smtp.gmail.com with ESMTPSA id w12-20020a056870a2cc00b000f33624baa4sm9103814oak.18.2022.06.28.08.11.55
+        bh=zgi/7+6eFIGPqLxDNnNayXAaz/C0VCUdgOz60BwoFKs=;
+        b=y/HtffwVNYoDOioxP+H5zdqgTj6ruOBNOjSGrVAVRexYhI6GUaeFFVgnfqwJrq6bAx
+         jjBuaNRBwobsKm4sspvzD+vieNoaq/8vytNbCRQW9tbnICs4MQHQAaJG/WyNKZTbaPfa
+         kITFrLP0L14NMC5Zu1ZgwJVCnj5J2+doB5qAc1Kj77BfqHyoS/oZA9wGA5wOKawXz4pN
+         Re16GSUxJ9YYTRRgERpzHtszXcxIefuM/xILw5jy4lY/JqMZoAaioyRFgRsqoh8A5ofo
+         AoVHGeQYoqAAnELW3by+vGPs6eqpzD/t/z+mTz6/CgM+9ruOOZNpASd9YmFi0+KvNxju
+         f8lQ==
+X-Gm-Message-State: AJIora+Ho8C+umdN82vdtnnqTDn/HcR7xGCrrPyFACXsNNNEUSrxA20u
+        8y3ixaj/yn2qtLPg1cHxDLL4cQ==
+X-Google-Smtp-Source: AGRyM1sVN+VpZN9Z56m7ywKdMJuC8hcC2TskLsnRvqym9GlzU3JPaYJkHd+rbii+2PEEHQ3OFDPW6g==
+X-Received: by 2002:a05:6638:42c9:b0:33c:1243:282c with SMTP id bm9-20020a05663842c900b0033c1243282cmr9789767jab.290.1656429144868;
+        Tue, 28 Jun 2022 08:12:24 -0700 (PDT)
+Received: from [192.168.1.172] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id q18-20020a02cf12000000b0033c829dd5b8sm4116937jar.161.2022.06.28.08.12.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 08:11:56 -0700 (PDT)
-Message-ID: <edc5164b-8e02-2588-1c5b-d917049f666a@cloudflare.com>
-Date:   Tue, 28 Jun 2022 10:11:55 -0500
+        Tue, 28 Jun 2022 08:12:24 -0700 (PDT)
+Message-ID: <b666a619-1b4c-0c47-95b9-8db185b1ad05@kernel.dk>
+Date:   Tue, 28 Jun 2022 09:12:21 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH 0/2] Introduce security_create_user_ns()
+Subject: Re: [PATCH for-next 2/8] io_uring: restore bgid in io_put_kbuf
 Content-Language: en-US
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Paul Moore <paul@paul-moore.com>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@cloudflare.com
-References: <20220621233939.993579-1-fred@cloudflare.com>
- <ce1653b1-feb0-1a99-0e97-8dfb289eeb79@schaufler-ca.com>
- <b72c889a-4a50-3330-baae-3bbf065e7187@cloudflare.com>
- <CAHC9VhSTkEMT90Tk+=iTyp3npWEm+3imrkFVX2qb=XsOPp9F=A@mail.gmail.com>
- <20220627121137.cnmctlxxtcgzwrws@wittgenstein>
- <CAHC9VhSQH9tE-NgU6Q-GLqSy7R6FVjSbp4Tc4gVTbjZCqAWy5Q@mail.gmail.com>
- <6a8fba0a-c9c9-61ba-793a-c2e0c2924f88@iogearbox.net>
-From:   Frederick Lawler <fred@cloudflare.com>
-In-Reply-To: <6a8fba0a-c9c9-61ba-793a-c2e0c2924f88@iogearbox.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Dylan Yudaken <dylany@fb.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org
+Cc:     Kernel-team@fb.com, linux-kernel@vger.kernel.org
+References: <20220628150228.1379645-1-dylany@fb.com>
+ <20220628150228.1379645-3-dylany@fb.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220628150228.1379645-3-dylany@fb.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/22 5:15 PM, Daniel Borkmann wrote:
-> On 6/27/22 11:56 PM, Paul Moore wrote:
->> On Mon, Jun 27, 2022 at 8:11 AM Christian Brauner <brauner@kernel.org> 
->> wrote:
->>> On Thu, Jun 23, 2022 at 11:21:37PM -0400, Paul Moore wrote:
->>
->> ...
->>
->>>> This is one of the reasons why I usually like to see at least one LSM
->>>> implementation to go along with every new/modified hook.  The
->>>> implementation forces you to think about what information is necessary
->>>> to perform a basic access control decision; sometimes it isn't always
->>>> obvious until you have to write the access control :)
->>>
->>> I spoke to Frederick at length during LSS and as I've been given to
->>> understand there's a eBPF program that would immediately use this new
->>> hook. Now I don't want to get into the whole "Is the eBPF LSM hook
->>> infrastructure an LSM" but I think we can let this count as a legitimate
->>> first user of this hook/code.
->>
->> Yes, for the most part I don't really worry about the "is a BPF LSM a
->> LSM?" question, it's generally not important for most discussions.
->> However, there is an issue unique to the BPF LSMs which I think is
->> relevant here: there is no hook implementation code living under
->> security/.  While I talked about a hook implementation being helpful
->> to verify the hook prototype, it is also helpful in providing an
->> in-tree example for other LSMs; unfortunately we don't get that same
->> example value when the initial hook implementation is a BPF LSM.
+On 6/28/22 9:02 AM, Dylan Yudaken wrote:
+> Attempt to restore bgid. This is needed when recycling unused buffers as
+> the next time around it will want the correct bgid.
 > 
-> I would argue that such a patch series must come together with a BPF
-> selftest which then i) contains an in-tree usage example, ii) adds BPF
-> CI test coverage. Shipping with a BPF selftest at least would be the
-> usual expectation.
-
-Sounds good. I'll add both a eBPF selftest and SELinux implementation 
-for v2.
-
+> Signed-off-by: Dylan Yudaken <dylany@fb.com>
+> ---
+>  io_uring/kbuf.h | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 > 
-> Thanks,
-> Daniel
+> diff --git a/io_uring/kbuf.h b/io_uring/kbuf.h
+> index 3d48f1ab5439..c64f02ea1c30 100644
+> --- a/io_uring/kbuf.h
+> +++ b/io_uring/kbuf.h
+> @@ -96,16 +96,20 @@ static inline void io_kbuf_recycle(struct io_kiocb *req, unsigned issue_flags)
+>  static inline unsigned int __io_put_kbuf_list(struct io_kiocb *req,
+>  					      struct list_head *list)
+>  {
+> +	unsigned int ret = IORING_CQE_F_BUFFER | (req->buf_index << IORING_CQE_BUFFER_SHIFT);
+>  	if (req->flags & REQ_F_BUFFER_RING) {
+
+Should have a newline here after the 'ret' variable declaration.
+
+-- 
+Jens Axboe
 

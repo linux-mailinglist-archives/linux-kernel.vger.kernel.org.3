@@ -2,303 +2,385 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67CE055E845
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7106755E65C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348016AbiF1Poh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53654 "EHLO
+        id S1347451AbiF1Ppv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347451AbiF1Poe (ORCPT
+        with ESMTP id S1347081AbiF1Ppp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:44:34 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D19036B4A
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:44:33 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id pk21so26675649ejb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:44:32 -0700 (PDT)
+        Tue, 28 Jun 2022 11:45:45 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FD03703D
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:45:42 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id f39so23053213lfv.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:45:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=406yLlQLKjMCPBS3XzimDcu/hdIBGhJCqQAdv4NXB8c=;
-        b=KcZM9Z4k5Wgnc+FacREdF75fAvwKxd+Bax2++TOk3qKmi9pMLTdT71+X/LdpZeyRnR
-         nlbcfSk+m1vbWPfmYqvkgbwgtiu53+Xx32W0pkjKpVlNzFFdVMCyMzfyFgIuvbWzuWP9
-         se6ACTywYSGX9nEjnZMPJUx37yFRfd82T8RtNqZfN1etWnHap7QeTnWHY0PA7eEjAxUH
-         P5bsdmE77lDW20+7ZZfsYM8D4ynPYZbI3XoFeAsU+lB8uQlVASQnSaeJkS3NOHzKMsFR
-         yaJQBFJNIB/N/edZVVa8z+XSXc05ZGtvEjCB2c+EDAe8QHKAc9exDq9sP8LQNhzSk15Z
-         mj3A==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4W7G4HHn4e0MzSigkgQjmcxAYL0f3Ih5AyaRGznr2IM=;
+        b=IK9851jTRY2xsjoBNT7rfM1GcPrCVi49xTq1KtfwueNui2l5vYlKo7gRMy0D2UmsUI
+         f2bXo23pl+rDeiyfCwPeNMjJWxSR7UO6ZxZtepk5aRKbVN7aiEuir7D+gW9BDuBIzW8d
+         FWkjgp+AuVv8aK7nqN2+8rQRYC37y9bW7jwYeNE3yIouwOF37677+qwmZ0IRPWMiBYku
+         HWJ3SIE/GgdgiTecbyttMB4eov9KrjQcqKX4tboVHloesRbr6i6wG0VwW6OlOjTHSatH
+         pzC32e5LaGeR2blSrnok2U6nmLjTjVmSdLDqUoKDRFJ+O4IKel/mRUvZVZnkbkz4WD0Y
+         D0Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=406yLlQLKjMCPBS3XzimDcu/hdIBGhJCqQAdv4NXB8c=;
-        b=gZ1I8WMfLQ1u6lfUhxUg0KLWrWZkL4Z9JwrtaNqvWXaYQIexXK/prukQOhvVEoKysC
-         hAMfmouJyF/ty1RKI21YST/aNIPv0Mnore/gHwPXGybk2mLoTvWzKGQi9EWiv11upO0E
-         8B+ScNyYka+i2L0pU6pi9Usbi8xpCZsB5oPiCOhAqmHkkhFBDfyZ6ag5eZ8HUIGSq8Jb
-         FiD9VEd8LRQPHlL6RxAJ68E9eunJi8Xoxqf+dcvLM1aSyfYY5bTvCmXN1kSYE+I6vJt6
-         Yb8+AdUDgUrR5EhEJuiLHsIvdcX11FVi8xuYp1eb68DnCGCdWi3ibB8J3gLrj/wO+uuH
-         zMww==
-X-Gm-Message-State: AJIora8COjVfiSjOck9Qux9N0uaB1q5AmFATfe1eu78jEQZNHa4O/q2e
-        ndDu+22THiBGzPyoElToeqcC8A==
-X-Google-Smtp-Source: AGRyM1sj3GoND2FtW75ZdMgcEf/UpyLQ3OzOh/0DO82t4LLsflF1HgMMTXpWkyWEa/fq5eXR0H4Sew==
-X-Received: by 2002:a17:907:9689:b0:71e:56c1:838b with SMTP id hd9-20020a170907968900b0071e56c1838bmr18607147ejc.304.1656431071520;
-        Tue, 28 Jun 2022 08:44:31 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id n22-20020a1709067b5600b00722ea7a7febsm6561195ejo.194.2022.06.28.08.44.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 08:44:30 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 18:44:29 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        kernel-team@android.com, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, Andrei Damian <A.Damian@nxp.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 13/17] driver core: Use device's fwnode to check if it
- is waiting for suppliers
-Message-ID: <Yrsh3b+jBuOxRzxO@linaro.org>
-References: <20201121020232.908850-1-saravanak@google.com>
- <20201121020232.908850-14-saravanak@google.com>
- <YrmXpcU1NTYW6T/n@linaro.org>
- <CAGETcx8dwNcZFFzhhv=kMhpuQnyaEekrycpAmGusD-s+qfvA9g@mail.gmail.com>
- <YrsdLQrOtg1qdaoE@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4W7G4HHn4e0MzSigkgQjmcxAYL0f3Ih5AyaRGznr2IM=;
+        b=Zbf7Tr3z8gmsDp70pXiUSTUsHD5DyZU3ZT5fsG5JD3+RJh3iqi62cfwsCyKi+339Nl
+         /wsSYEew2eSbRddMO/pYcv9ao1opma77mgxyLtcnWjQMoN+ZewudxIvBiTNI70N17Mly
+         1V4G68l3P3njtwDquYwyqe0SBPCHd6ZVc9DKd3Wnd0TBPcwQjC/e6kSocbQN0gFzb9Q2
+         jLDh7AVm8XobvT2c8s0wHE4qFrVNvZkTkHFc4RjHJvGfzAgldvojkAICCLIMdB1nnoqv
+         e5KDYo9fCo/LK5EbGklRBaSnQcGVKxOlCszvn22ptWQpYkSv2u+3jlzrgzUbwABqum+t
+         BfGQ==
+X-Gm-Message-State: AJIora+YUkA9eGDAioWiXEpJ+GoCzcLhslnFred13hSaATZn2+BCEB+2
+        L8Msia31KBgxv8jKJ93ykjXnI4u00btNWCMmVytGEg==
+X-Google-Smtp-Source: AGRyM1sV8mtgBrrowLuH5p5s7HXBCFMh7fQxztqG6c8lUrY7tmUGZGEL/TA+et3jfvRgEcdxSip6iuZWhit6JFBut74=
+X-Received: by 2002:a05:6512:39ce:b0:481:31e4:1e06 with SMTP id
+ k14-20020a05651239ce00b0048131e41e06mr2237865lfu.376.1656431140732; Tue, 28
+ Jun 2022 08:45:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrsdLQrOtg1qdaoE@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220628095833.2579903-1-elver@google.com> <20220628095833.2579903-14-elver@google.com>
+In-Reply-To: <20220628095833.2579903-14-elver@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 28 Jun 2022 17:45:29 +0200
+Message-ID: <CACT4Y+aJZzkYHc+YJRApOLG-NYe8zXMaqxpQgQQFAy5WY97Ttg@mail.gmail.com>
+Subject: Re: [PATCH v2 13/13] perf/hw_breakpoint: Optimize toggle_bp_slot()
+ for CPU-independent task targets
+To:     Marco Elver <elver@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, linux-sh@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-06-28 18:24:29, Abel Vesa wrote:
-> On 22-06-27 15:30:25, Saravana Kannan wrote:
-> > On Mon, Jun 27, 2022 at 4:42 AM Abel Vesa <abel.vesa@linaro.org> wrote:
-> > >
+On Tue, 28 Jun 2022 at 11:59, Marco Elver <elver@google.com> wrote:
+>
+> We can still see that a majority of the time is spent hashing task pointers:
+>
+>     ...
+>     16.98%  [kernel]       [k] rhashtable_jhash2
+>     ...
+>
+> Doing the bookkeeping in toggle_bp_slots() is currently O(#cpus),
+> calling task_bp_pinned() for each CPU, even if task_bp_pinned() is
+> CPU-independent. The reason for this is to update the per-CPU
+> 'tsk_pinned' histogram.
+>
+> To optimize the CPU-independent case to O(1), keep a separate
+> CPU-independent 'tsk_pinned_all' histogram.
+>
+> The major source of complexity are transitions between "all
+> CPU-independent task breakpoints" and "mixed CPU-independent and
+> CPU-dependent task breakpoints". The code comments list all cases that
+> require handling.
+>
+> After this optimization:
+>
+>  | $> perf bench -r 100 breakpoint thread -b 4 -p 128 -t 512
+>  |      Total time: 1.758 [sec]
+>  |
+>  |       34.336621 usecs/op
+>  |     4395.087500 usecs/op/cpu
+>
+>     38.08%  [kernel]       [k] queued_spin_lock_slowpath
+>     10.81%  [kernel]       [k] smp_cfm_core_cond
+>      3.01%  [kernel]       [k] update_sg_lb_stats
+>      2.58%  [kernel]       [k] osq_lock
+>      2.57%  [kernel]       [k] llist_reverse_order
+>      1.45%  [kernel]       [k] find_next_bit
+>      1.21%  [kernel]       [k] flush_tlb_func_common
+>      1.01%  [kernel]       [k] arch_install_hw_breakpoint
+>
+> Showing that the time spent hashing keys has become insignificant.
+>
+> With the given benchmark parameters, that's an improvement of 12%
+> compared with the old O(#cpus) version.
+>
+> And finally, using the less aggressive parameters from the preceding
+> changes, we now observe:
+>
+>  | $> perf bench -r 30 breakpoint thread -b 4 -p 64 -t 64
+>  |      Total time: 0.067 [sec]
+>  |
+>  |       35.292187 usecs/op
+>  |     2258.700000 usecs/op/cpu
+>
+> Which is an improvement of 12% compared to without the histogram
+> optimizations (baseline is 40 usecs/op). This is now on par with the
+> theoretical ideal (constraints disabled), and only 12% slower than no
+> breakpoints at all.
+>
+> Signed-off-by: Marco Elver <elver@google.com>
 
-Oups, forget this reply since it not to the right message-id.
+Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
 
-Will do it properly right now.
+I don't see any bugs. But the code is quite complex. Does it make
+sense to add some asserts to the histogram type? E.g. counters don't
+underflow, weight is not negative (e.g. accidentally added -1 returned
+from task_bp_pinned()). Not sure if it will be enough to catch all
+types of bugs, though.
+Could kunit tests check that histograms are all 0's at the end?
+
+I am not just about the current code (which may be correct), but also
+future modifications to this code.
 
 
-> > > On 20-11-20 18:02:28, Saravana Kannan wrote:
-> > > > To check if a device is still waiting for its supplier devices to be
-> > > > added, we used to check if the devices is in a global
-> > > > waiting_for_suppliers list. Since the global list will be deleted in
-> > > > subsequent patches, this patch stops using this check.
-> > > >
-> > > > Instead, this patch uses a more device specific check. It checks if the
-> > > > device's fwnode has any fwnode links that haven't been converted to
-> > > > device links yet.
-> > > >
-> > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > > > ---
-> > > >  drivers/base/core.c | 18 ++++++++----------
-> > > >  1 file changed, 8 insertions(+), 10 deletions(-)
-> > > >
-> > > > diff --git a/drivers/base/core.c b/drivers/base/core.c
-> > > > index 395dece1c83a..1873cecb0cc4 100644
-> > > > --- a/drivers/base/core.c
-> > > > +++ b/drivers/base/core.c
-> > > > @@ -51,6 +51,7 @@ static DEFINE_MUTEX(wfs_lock);
-> > > >  static LIST_HEAD(deferred_sync);
-> > > >  static unsigned int defer_sync_state_count = 1;
-> > > >  static DEFINE_MUTEX(fwnode_link_lock);
-> > > > +static bool fw_devlink_is_permissive(void);
-> > > >
-> > > >  /**
-> > > >   * fwnode_link_add - Create a link between two fwnode_handles.
-> > > > @@ -995,13 +996,13 @@ int device_links_check_suppliers(struct device *dev)
-> > > >        * Device waiting for supplier to become available is not allowed to
-> > > >        * probe.
-> > > >        */
-> > > > -     mutex_lock(&wfs_lock);
-> > > > -     if (!list_empty(&dev->links.needs_suppliers) &&
-> > > > -         dev->links.need_for_probe) {
-> > > > -             mutex_unlock(&wfs_lock);
-> > > > +     mutex_lock(&fwnode_link_lock);
-> > > > +     if (dev->fwnode && !list_empty(&dev->fwnode->suppliers) &&
-> > > > +         !fw_devlink_is_permissive()) {
-> > > > +             mutex_unlock(&fwnode_link_lock);
-> > >
-> > > Hi Saravana,
-> > >
-> > > First of, sorry for going back to this.
-> >
-> > No worries at all. If there's an issue with fw_devlink, I want to have it fixed.
-> >
-> > > There is a scenario where this check will not work and probably should
-> > > work. It goes like this:
-> > >
-> > > A clock controller is not allowed to probe because it uses a clock from a child device of a
-> > > consumer, like so:
-> > >
-> > >         dispcc: clock-controller@af00000 {
-> > >                 clocks = <&dsi0_phy 0>;
-> > >         };
-> > >
-> > >         mdss: mdss@ae00000 {
-> > >                 clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>;
-> > >
-> > >                 dsi0_phy: dsi-phy@ae94400 {
-> > >                         clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> > >                 };
-> > >         };
-> > >
-> > > This is a real scenario actually, but I stripped it down to the essentials.
-> >
-> > I'm well aware of this scenario and explicitly wrote code to address this :)
-> >
+> ---
+> v2:
+> * New patch.
+> ---
+>  kernel/events/hw_breakpoint.c | 152 +++++++++++++++++++++++++++-------
+>  1 file changed, 121 insertions(+), 31 deletions(-)
 >
-> Actually, the problem seems to be when you have two dsi phys.
-> Like so:
+> diff --git a/kernel/events/hw_breakpoint.c b/kernel/events/hw_breakpoint.c
+> index b5180a2ccfbf..31b24e42f2b5 100644
+> --- a/kernel/events/hw_breakpoint.c
+> +++ b/kernel/events/hw_breakpoint.c
+> @@ -66,6 +66,8 @@ static struct bp_cpuinfo *get_bp_info(int cpu, enum bp_type_idx type)
 >
->          dispcc: clock-controller@af00000 {
->                  clocks = <&dsi0_phy 0>;
->                  clocks = <&dsi1_phy 0>;
->          };
+>  /* Number of pinned CPU breakpoints globally. */
+>  static struct bp_slots_histogram cpu_pinned[TYPE_MAX];
+> +/* Number of pinned CPU-independent task breakpoints. */
+> +static struct bp_slots_histogram tsk_pinned_all[TYPE_MAX];
 >
->          mdss: mdss@ae00000 {
->                  clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>;
+>  /* Keep track of the breakpoints attached to tasks */
+>  static struct rhltable task_bps_ht;
+> @@ -200,6 +202,8 @@ static __init int init_breakpoint_slots(void)
+>         for (i = 0; i < TYPE_MAX; i++) {
+>                 if (!bp_slots_histogram_alloc(&cpu_pinned[i], i))
+>                         goto err;
+> +               if (!bp_slots_histogram_alloc(&tsk_pinned_all[i], i))
+> +                       goto err;
+>         }
 >
->                  dsi0_phy: dsi-phy@ae94400 {
->                          clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
->                  };
+>         return 0;
+> @@ -210,8 +214,10 @@ static __init int init_breakpoint_slots(void)
+>                 if (err_cpu == cpu)
+>                         break;
+>         }
+> -       for (i = 0; i < TYPE_MAX; i++)
+> +       for (i = 0; i < TYPE_MAX; i++) {
+>                 bp_slots_histogram_free(&cpu_pinned[i]);
+> +               bp_slots_histogram_free(&tsk_pinned_all[i]);
+> +       }
 >
-> 		 dsi1_phy: dsi-phy@ae64400 {
->                          clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
->                  };
->          };
+>         return -ENOMEM;
+>  }
+> @@ -245,6 +251,26 @@ bp_slots_histogram_max(struct bp_slots_histogram *hist, enum bp_type_idx type)
+>         return 0;
+>  }
 >
-> And from what I've seen happening so far is that the device_is_dependent
-> check for the parent of the supplier (if it also a consumer) seems to return
-> false on second pass of the same link due to the DL_FLAG_SYNC_STATE_ONLY
-> being set this time around.
+> +static int
+> +bp_slots_histogram_max_merge(struct bp_slots_histogram *hist1, struct bp_slots_histogram *hist2,
+> +                            enum bp_type_idx type)
+> +{
+> +       for (int i = hw_breakpoint_slots_cached(type) - 1; i >= 0; i--) {
+> +               const int count1 = atomic_read(&hist1->count[i]);
+> +               const int count2 = atomic_read(&hist2->count[i]);
+> +
+> +               /* Catch unexpected writers; we want a stable snapshot. */
+> +               ASSERT_EXCLUSIVE_WRITER(hist1->count[i]);
+> +               ASSERT_EXCLUSIVE_WRITER(hist2->count[i]);
+> +               if (count1 + count2 > 0)
+> +                       return i + 1;
+> +               WARN(count1 < 0, "inconsistent breakpoint slots histogram");
+> +               WARN(count2 < 0, "inconsistent breakpoint slots histogram");
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  #ifndef hw_breakpoint_weight
+>  static inline int hw_breakpoint_weight(struct perf_event *bp)
+>  {
+> @@ -273,7 +299,7 @@ static unsigned int max_task_bp_pinned(int cpu, enum bp_type_idx type)
+>          * toggle_bp_task_slot() to tsk_pinned, and we get a stable snapshot.
+>          */
+>         lockdep_assert_held_write(&bp_cpuinfo_sem);
+> -       return bp_slots_histogram_max(tsk_pinned, type);
+> +       return bp_slots_histogram_max_merge(tsk_pinned, &tsk_pinned_all[type], type);
+>  }
 >
-> > See this comment in fw_devlink_create_devlink()
-> >
-> >        /*
-> >          * If we can't find the supplier device from its fwnode, it might be
-> >          * due to a cyclic dependency between fwnodes. Some of these cycles can
-> >          * be broken by applying logic. Check for these types of cycles and
-> >          * break them so that devices in the cycle probe properly.
-> >          *
-> >          * If the supplier's parent is dependent on the consumer, then the
-> >          * consumer and supplier have a cyclic dependency. Since fw_devlink
-> >          * can't tell which of the inferred dependencies are incorrect, don't
-> >          * enforce probe ordering between any of the devices in this cyclic
-> >          * dependency. Do this by relaxing all the fw_devlink device links in
-> >          * this cycle and by treating the fwnode link between the consumer and
-> >          * the supplier as an invalid dependency.
-> >          */
-> >
+>  /*
+> @@ -366,40 +392,22 @@ max_bp_pinned_slots(struct perf_event *bp, enum bp_type_idx type)
+>         return pinned_slots;
+>  }
 >
-> So when this thing you mentioned above is happening for the second dsi
-> phy (order doesn't matter), since the dsi phy itself cannot be found,
-> the device_is_dependent is run for the same link: dispcc -> mdss
-> (supplier -> consumer), but again, since it has the
-> DL_FLAG_SYNC_STATE_ONLY this time around, it will skip that specific
-> link.
+> -/*
+> - * Add a pinned breakpoint for the given task in our constraint table
+> - */
+> -static void toggle_bp_task_slot(struct perf_event *bp, int cpu,
+> -                               enum bp_type_idx type, int weight)
+> -{
+> -       struct bp_slots_histogram *tsk_pinned = &get_bp_info(cpu, type)->tsk_pinned;
+> -
+> -       /*
+> -        * If bp->hw.target, tsk_pinned is only modified, but not used
+> -        * otherwise. We can permit concurrent updates as long as there are no
+> -        * other uses: having acquired bp_cpuinfo_sem as a reader allows
+> -        * concurrent updates here. Uses of tsk_pinned will require acquiring
+> -        * bp_cpuinfo_sem as a writer to stabilize tsk_pinned's value.
+> -        */
+> -       lockdep_assert_held_read(&bp_cpuinfo_sem);
+> -       bp_slots_histogram_add(tsk_pinned, task_bp_pinned(cpu, bp, type), weight);
+> -}
+> -
+>  /*
+>   * Add/remove the given breakpoint in our constraint table
+>   */
+>  static int
+> -toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
+> -              int weight)
+> +toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type, int weight)
+>  {
+> -       const struct cpumask *cpumask = cpumask_of_bp(bp);
+> -       int cpu;
+> +       int cpu, next_tsk_pinned;
 >
-> > Applying this comment to your example, dispcc is the "consumer",
-> > dsi0_phy is the "supplier" and mdss is the "supplier's parent".
-> >
-> > And because we can't guarantee the order of addition of these top
-> > level devices is why I also have this piece of recursive call inside
-> > __fw_devlink_link_to_suppliers():
-> >
-> >                 /*
-> >                  * If a device link was successfully created to a supplier, we
-> >                  * now need to try and link the supplier to all its suppliers.
-> >                  *
-> >                  * This is needed to detect and delete false dependencies in
-> >                  * fwnode links that haven't been converted to a device link
-> >                  * yet. See comments in fw_devlink_create_devlink() for more
-> >                  * details on the false dependency.
-> >                  *
-> >                  * Without deleting these false dependencies, some devices will
-> >                  * never probe because they'll keep waiting for their false
-> >                  * dependency fwnode links to be converted to device links.
-> >                  */
-> >                 sup_dev = get_dev_from_fwnode(sup);
-> >                 __fw_devlink_link_to_suppliers(sup_dev, sup_dev->fwnode);
-> >                 put_device(sup_dev);
-> >
-> > So when mdss gets added, we'll link it to dispcc and then check if
-> > dispcc has any suppliers it needs to link to. And that's when the
-> > logic will catch the cycle and fix it.
-> >
-> > Can you tell me why this wouldn't unblock the probing of dispcc? Are
-> > you actually hitting this on a device? If so, can you please check why
-> > this logic isn't sufficient to catch and undo the cycle?
-> >
+>         if (!enable)
+>                 weight = -weight;
 >
-> This is happening on Qualcomm SDM845 with Linus's tree.
+> -       /* Pinned counter cpu profiling */
+>         if (!bp->hw.target) {
+> +               /*
+> +                * Update the pinned CPU slots, in per-CPU bp_cpuinfo and in the
+> +                * global histogram.
+> +                */
+>                 struct bp_cpuinfo *info = get_bp_info(bp->cpu, type);
 >
-> > Thanks,
-> > Saravana
-> >
-> > > So, the dsi0_phy will be "device_add'ed" (through of_platform_populate) by the mdss probe.
-> > > The mdss will probe defer waiting for the DISP_CC_MDSS_MDP_CLK, while
-> > > the dispcc will probe defer waiting for the dsi0_phy (supplier).
-> > >
-> > > Basically, this 'supplier availability check' does not work when a supplier might
-> > > be populated by a consumer of the device that is currently trying to probe.
-> > >
-> > >
-> > > Abel
-> > >
-> > >
-> > > >               return -EPROBE_DEFER;
-> > > >       }
-> > > > -     mutex_unlock(&wfs_lock);
-> > > > +     mutex_unlock(&fwnode_link_lock);
-> > > >
-> > > >       device_links_write_lock();
-> > > >
-> > > > @@ -1167,10 +1168,7 @@ static ssize_t waiting_for_supplier_show(struct device *dev,
-> > > >       bool val;
-> > > >
-> > > >       device_lock(dev);
-> > > > -     mutex_lock(&wfs_lock);
-> > > > -     val = !list_empty(&dev->links.needs_suppliers)
-> > > > -           && dev->links.need_for_probe;
-> > > > -     mutex_unlock(&wfs_lock);
-> > > > +     val = !list_empty(&dev->fwnode->suppliers);
-> > > >       device_unlock(dev);
-> > > >       return sysfs_emit(buf, "%u\n", val);
-> > > >  }
-> > > > @@ -2202,7 +2200,7 @@ static int device_add_attrs(struct device *dev)
-> > > >                       goto err_remove_dev_groups;
-> > > >       }
-> > > >
-> > > > -     if (fw_devlink_flags && !fw_devlink_is_permissive()) {
-> > > > +     if (fw_devlink_flags && !fw_devlink_is_permissive() && dev->fwnode) {
-> > > >               error = device_create_file(dev, &dev_attr_waiting_for_supplier);
-> > > >               if (error)
-> > > >                       goto err_remove_dev_online;
-> > > > --
-> > > > 2.29.2.454.gaff20da3a2-goog
-> > > >
-> > > >
-> >
+>                 lockdep_assert_held_write(&bp_cpuinfo_sem);
+> @@ -408,9 +416,91 @@ toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
+>                 return 0;
+>         }
+>
+> -       /* Pinned counter task profiling */
+> -       for_each_cpu(cpu, cpumask)
+> -               toggle_bp_task_slot(bp, cpu, type, weight);
+> +       /*
+> +        * If bp->hw.target, tsk_pinned is only modified, but not used
+> +        * otherwise. We can permit concurrent updates as long as there are no
+> +        * other uses: having acquired bp_cpuinfo_sem as a reader allows
+> +        * concurrent updates here. Uses of tsk_pinned will require acquiring
+> +        * bp_cpuinfo_sem as a writer to stabilize tsk_pinned's value.
+> +        */
+> +       lockdep_assert_held_read(&bp_cpuinfo_sem);
+> +
+> +       /*
+> +        * Update the pinned task slots, in per-CPU bp_cpuinfo and in the global
+> +        * histogram. We need to take care of 5 cases:
+> +        *
+> +        *  1. This breakpoint targets all CPUs (cpu < 0), and there may only
+> +        *     exist other task breakpoints targeting all CPUs. In this case we
+> +        *     can simply update the global slots histogram.
+> +        *
+> +        *  2. This breakpoint targets a specific CPU (cpu >= 0), but there may
+> +        *     only exist other task breakpoints targeting all CPUs.
+> +        *
+> +        *     a. On enable: remove the existing breakpoints from the global
+> +        *        slots histogram and use the per-CPU histogram.
+> +        *
+> +        *     b. On disable: re-insert the existing breakpoints into the global
+> +        *        slots histogram and remove from per-CPU histogram.
+> +        *
+> +        *  3. Some other existing task breakpoints target specific CPUs. Only
+> +        *     update the per-CPU slots histogram.
+> +        */
+> +
+> +       if (!enable) {
+> +               /*
+> +                * Remove before updating histograms so we can determine if this
+> +                * was the last task breakpoint for a specific CPU.
+> +                */
+> +               int ret = rhltable_remove(&task_bps_ht, &bp->hw.bp_list, task_bps_ht_params);
+> +
+> +               if (ret)
+> +                       return ret;
+> +       }
+> +       /*
+> +        * Note: If !enable, next_tsk_pinned will not count the to-be-removed breakpoint.
+> +        */
+> +       next_tsk_pinned = task_bp_pinned(-1, bp, type);
+> +
+> +       if (next_tsk_pinned >= 0) {
+> +               if (bp->cpu < 0) { /* Case 1: fast path */
+> +                       if (!enable)
+> +                               next_tsk_pinned += hw_breakpoint_weight(bp);
+> +                       bp_slots_histogram_add(&tsk_pinned_all[type], next_tsk_pinned, weight);
+> +               } else if (enable) { /* Case 2.a: slow path */
+> +                       /* Add existing to per-CPU histograms. */
+> +                       for_each_possible_cpu(cpu) {
+> +                               bp_slots_histogram_add(&get_bp_info(cpu, type)->tsk_pinned,
+> +                                                      0, next_tsk_pinned);
+> +                       }
+> +                       /* Add this first CPU-pinned task breakpoint. */
+> +                       bp_slots_histogram_add(&get_bp_info(bp->cpu, type)->tsk_pinned,
+> +                                              next_tsk_pinned, weight);
+> +                       /* Rebalance global task pinned histogram. */
+> +                       bp_slots_histogram_add(&tsk_pinned_all[type], next_tsk_pinned,
+> +                                              -next_tsk_pinned);
+> +               } else { /* Case 2.b: slow path */
+> +                       /* Remove this last CPU-pinned task breakpoint. */
+> +                       bp_slots_histogram_add(&get_bp_info(bp->cpu, type)->tsk_pinned,
+> +                                              next_tsk_pinned + hw_breakpoint_weight(bp), weight);
+> +                       /* Remove all from per-CPU histograms. */
+> +                       for_each_possible_cpu(cpu) {
+> +                               bp_slots_histogram_add(&get_bp_info(cpu, type)->tsk_pinned,
+> +                                                      next_tsk_pinned, -next_tsk_pinned);
+> +                       }
+> +                       /* Rebalance global task pinned histogram. */
+> +                       bp_slots_histogram_add(&tsk_pinned_all[type], 0, next_tsk_pinned);
+> +               }
+> +       } else { /* Case 3: slow path */
+> +               const struct cpumask *cpumask = cpumask_of_bp(bp);
+> +
+> +               for_each_cpu(cpu, cpumask) {
+> +                       next_tsk_pinned = task_bp_pinned(cpu, bp, type);
+> +                       if (!enable)
+> +                               next_tsk_pinned += hw_breakpoint_weight(bp);
+> +                       bp_slots_histogram_add(&get_bp_info(cpu, type)->tsk_pinned,
+> +                                              next_tsk_pinned, weight);
+> +               }
+> +       }
+>
+>         /*
+>          * Readers want a stable snapshot of the per-task breakpoint list.
+> @@ -419,8 +509,8 @@ toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
+>
+>         if (enable)
+>                 return rhltable_insert(&task_bps_ht, &bp->hw.bp_list, task_bps_ht_params);
+> -       else
+> -               return rhltable_remove(&task_bps_ht, &bp->hw.bp_list, task_bps_ht_params);
+> +
+> +       return 0;
+>  }
+>
+>  __weak int arch_reserve_bp_slot(struct perf_event *bp)
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
+>

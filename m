@@ -2,121 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7328055D749
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1092455DD49
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344661AbiF1J5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 05:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47890 "EHLO
+        id S1344176AbiF1J5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 05:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242271AbiF1J5H (ORCPT
+        with ESMTP id S242126AbiF1J5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:57:07 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98DB2FFC0;
-        Tue, 28 Jun 2022 02:56:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656410198; x=1687946198;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E8g6oATwOn9T0Tp0qEpsI5CmgdS7Yl7GaxAoiXWVZNk=;
-  b=CoFMyxXtUsCwpMRcWLxREQy0GpsI6BEY5vjggLEhlq6gxKfh9PztP9Bh
-   gHs/240mQivk4Ys6mHmrw3Us2tkcw5IE9j7SL6cm1Xs0CjIixAkCazN1J
-   PhbXKUU7LUwshBkfQuf6GYlVw0v+GBY2MXvIWxCleC4I06DVbGftrCL3V
-   bdtypczHgSg0kJR/6o6S1PEPn0rAO4yVIIoCshRlGB49OJdIzcGhPmiyd
-   ltdtO0RohtZzKM9DdlP66EDkt0G3Rppa0eE0k5uEa8IWAXVDmVNN5ISTF
-   NjwO5CZ/x21srfKZ7EYspOrFqXu30tT9snIcpuWr/GE2dfReLlPCKPGUG
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="270445391"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="270445391"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 02:56:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="732691163"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 28 Jun 2022 02:56:30 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 28 Jun 2022 12:56:30 +0300
-Date:   Tue, 28 Jun 2022 12:56:30 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc:     robh+dt@kernel.org, gregkh@linuxfoundation.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        amelie.delaunay@foss.st.com, alexandre.torgue@foss.st.com
-Subject: Re: [PATCH 2/4] usb: typec: ucsi: stm32g0: add support for stm32g0
- i2c controller
-Message-ID: <YrrQTiCWsnRKAzn7@kuha.fi.intel.com>
-References: <20220624155413.399190-1-fabrice.gasnier@foss.st.com>
- <20220624155413.399190-3-fabrice.gasnier@foss.st.com>
- <YrmtzDfFm17PFl2r@kuha.fi.intel.com>
- <bd35eb19-cfda-4799-1ab0-0578d3c79466@foss.st.com>
+        Tue, 28 Jun 2022 05:57:04 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8986B2F3B1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:56:35 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id b26so4475959wrc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 02:56:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=wdEuikmBJ/uSH2gaEIvi6i1JX85y8COTV4jZQOnGi4U=;
+        b=cfb2dVd/jjGoU1t4eCnt5rrrESWEwbkhC0lfeHTO1of9IEFni0rWqIqpAFQsKsOMZr
+         cEVSNbzBkar/FZAPL5hoU5+opkImmvl5nz/jICX1B+WTFpufBrE2LVeFDeadNKzNPLuV
+         +wO2vdD31DkAYpdzSqbn8vCm7KJjt+QCxlu27GekjZ38d32fWHiLSjxfV8U6PPMOreRt
+         a0thP9ihIChxudVCy16VlffNUDk7jfh7rcZj2kUzxc00WTVTA6OK4D/0AWJXBATRo8D1
+         zFcasrwfp9a3vYAcEgEs16Lx11ojkPOOSlFqty30D8BLbRAVOYWfIIoURPE6xhFgo4u6
+         W6YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=wdEuikmBJ/uSH2gaEIvi6i1JX85y8COTV4jZQOnGi4U=;
+        b=w3dLrxWtZ/il/xi8EbMp6qDwFmjBcvKad5mBDRvylp40t8WDCqti6DwqErlrYyZO1N
+         3B7Lo/q1soPYPMsQNRXs9lcgHyhYIwRWh2h+4xa+IQcg69+vHtkxPa5JKtmUvK8nHQq5
+         0TRqthJa5521R5UkaCAYkrEefy2OctZDie8DQUWWVFl3KHVDZjxLZ3WdRntLZIZF3soP
+         KOyj/WXHO44WCokqb2yJUqnG9tYeNr5boEDK1WD+SgUJN+E7s+b8hMHt1QCVCI7aUZSl
+         PdnNnWKz0IVK0X8VtYLUMpX7ilSthiXOS5B8eC7ctA5R4LK4/C8+Z2E/uOKj755+gU7Z
+         aJ6Q==
+X-Gm-Message-State: AJIora/V3GYn2v6deKKxmWrJdDLi14Pwx1ynNYhGqIpmvDUrjo0UFJaL
+        sB3saVB00GbIVuPK+T0+0mYoTg==
+X-Google-Smtp-Source: AGRyM1vVbyM2jscmxsm6DHRdK1LN9fo1QpdOunf5SfxaiL+hlt17NO4DpXKHalZTtEPuYmUWZGFR5Q==
+X-Received: by 2002:a05:6000:1281:b0:21b:9c01:df79 with SMTP id f1-20020a056000128100b0021b9c01df79mr16366834wrx.563.1656410194009;
+        Tue, 28 Jun 2022 02:56:34 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id e29-20020a5d595d000000b0021bc663ed67sm7872623wri.56.2022.06.28.02.56.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 02:56:33 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 10:56:31 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH v1 11/11] mfd: intel_soc_pmic_bxtwc: Fix spelling in the
+ comment
+Message-ID: <YrrQT8rxDFuAdzt5@google.com>
+References: <20220616165823.4919-1-andriy.shevchenko@linux.intel.com>
+ <20220616165823.4919-11-andriy.shevchenko@linux.intel.com>
+ <Yrl5XZOgD8abd+Qm@google.com>
+ <YrrL+Mil/B1Gh5VN@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <bd35eb19-cfda-4799-1ab0-0578d3c79466@foss.st.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YrrL+Mil/B1Gh5VN@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 09:21:12AM +0200, Fabrice Gasnier wrote:
-> On 6/27/22 15:17, Heikki Krogerus wrote:
-> > Hi,
-> > 
-> > On Fri, Jun 24, 2022 at 05:54:11PM +0200, Fabrice Gasnier wrote:
-> >> +static int ucsi_stm32g0_probe(struct i2c_client *client, const struct i2c_device_id *id)
-> >> +{
-> >> +	struct device *dev = &client->dev;
-> >> +	struct ucsi_stm32g0 *g0;
-> >> +	int ret;
-> >> +
-> >> +	g0 = devm_kzalloc(dev, sizeof(*g0), GFP_KERNEL);
-> >> +	if (!g0)
-> >> +		return -ENOMEM;
-> >> +
-> >> +	g0->dev = dev;
-> >> +	g0->client = client;
-> >> +	init_completion(&g0->complete);
-> >> +	i2c_set_clientdata(client, g0);
-> >> +
-> >> +	g0->ucsi = ucsi_create(dev, &ucsi_stm32g0_ops);
-> >> +	if (IS_ERR(g0->ucsi))
-> >> +		return PTR_ERR(g0->ucsi);
-> >> +
-> >> +	ucsi_set_drvdata(g0->ucsi, g0);
-> >> +
-> >> +	/* Request alert interrupt */
-> >> +	ret = request_threaded_irq(client->irq, NULL, ucsi_stm32g0_irq_handler, IRQF_ONESHOT,
-> >> +				   dev_name(&client->dev), g0);
-> >> +	if (ret) {
-> >> +		dev_err_probe(dev, ret, "request IRQ failed\n");
-> >> +		goto destroy;
-> >> +	}
-> >> +
-> >> +	ret = ucsi_register(g0->ucsi);
-> >> +	if (ret) {
-> >> +		dev_err_probe(dev, ret, "ucsi_register failed\n");
-> >> +		goto freeirq;
-> >> +	}
-> > 
-> > If there isn't UCSI firmware, then ucsi_register() will always safely
-> > fail here, right?
+On Tue, 28 Jun 2022, Andy Shevchenko wrote:
+> On Mon, Jun 27, 2022 at 10:33:17AM +0100, Lee Jones wrote:
+> > On Thu, 16 Jun 2022, Andy Shevchenko wrote:
 > 
-> Hi Heikki,
+> > > -	 * There is known hw bug. Upon reset BIT 5 of register
+> > > +	 * There is known HW bug. Upon reset BIT 5 of register
+> > 
+> > You may as well fix the grammar while you're at it.
 > 
-> Yes, in such a case, the first i2c read (UCSI_VERSION) in
-> ucsi_register() will return an error and safely fail here.
+> Any suggestion from a native speaker? I can propose a few changes, but I'm
+> totally unsure.
 
-Okay, thanks.
+No massive changes, just:
+
+* There is a known H/W bug. Upon reset, BIT 5 of register
+           -       ---                -
+
+> > >  	 * BXTWC_CHGR_LVL1_IRQ is 0 which is the expected value. However,
+> > >  	 * later it's set to 1(masked) automatically by hardware. So we
+> > > -	 * have the software workaround here to unmaksed it in order to let
+> > > -	 * charger interrutp work.
+> > > +	 * have the software workaround here to unmasked it in order to let
+> > > +	 * charger interrupt work.
+
+* place a software workaround here to unmask it again in order to re-enable
+  -------                             ------    -----             ---------
+
+* the charger interrupt.
+  ---
+
+Something like that.  Feel free to adapt it further as you see fit.
 
 -- 
-heikki
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

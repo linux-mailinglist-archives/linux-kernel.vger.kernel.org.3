@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C5555E764
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6708D55E909
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348144AbiF1PPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48270 "EHLO
+        id S1348166AbiF1PPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348073AbiF1PO4 (ORCPT
+        with ESMTP id S1348092AbiF1PPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:14:56 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8510B2F655;
-        Tue, 28 Jun 2022 08:14:53 -0700 (PDT)
+        Tue, 28 Jun 2022 11:15:03 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741492CDE3;
+        Tue, 28 Jun 2022 08:14:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1656429294; x=1687965294;
+  t=1656429297; x=1687965297;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=pVUU3Lll8q0yc83LnCezFHBisGwIbc3sXpOah2Aea/Q=;
-  b=QizY9tVnchRL+jCODboAwZATCrcduiOjYcVaSZRG5yzSe8BSU85n6yO7
-   pHI0Y2zSZ6aoAc0PCe/GzU+SRsfHGQBeScs3EH2RJguW3EdrKM5GCSTAU
-   mC4KOQRgTSIkYxa2D+NlVdD48S4eeFQGjFVRj0WrX2hNXdi7Bk0IzbApG
-   NqvHYNhGdH1Npqo1XmyQDUDJJesb9g4dLeEImUwdm/+buWTaiKzGsUu/G
-   7VW13QOjW9j45saqVejVvjeUvMdKK5okDY954H9yZzVOL8G900lw6URNQ
-   0oJ+S9v+kt14CDzB0FO4wZQ3P3sdcwcR11Jo1cKd4e4xj0HuAS5yg2J0K
-   A==;
+  bh=/944kLo78fvBdyEUIQtXZH5Aejk5V1Uwl/hxYvOfRg0=;
+  b=O/7KQMrK1PibKb+fZKYgrQDhIqfR0uBo3hbc8eU69IIL+FPKLTf7Dj/Q
+   M/L85wMe+xRpfNeQwxg7XlnPyKELBcjwrckN6M/1ptivJdKYlm3rQ7pQN
+   pKd4AJz9n7XcRLZA3SVary+99TgJv/PGBZkGIz3fVvMAd2UEpw1XFv+OR
+   Q9j526bSDUahn98UrnpzFVsuB07YrT3hnlA6A7cI5pnjdbxuh1v2nYMOQ
+   3ew1sJW6YHPbmeGei3mOMu03XMpf0SnQ7ElABnoTA+mqBj1/aYgq+Vo6U
+   ij+YKIaksmoLAhnWfZ4L+MUSxnxLMxNuv+U5n5aqUFTUFHPTo5aFgNat4
+   g==;
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="162420969"
+   d="scan'208";a="169940940"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jun 2022 08:14:53 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jun 2022 08:14:56 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 28 Jun 2022 08:14:50 -0700
+ 15.1.2375.17; Tue, 28 Jun 2022 08:14:54 -0700
 Received: from localhost.localdomain (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 28 Jun 2022 08:14:47 -0700
+ 15.1.2375.17 via Frontend Transport; Tue, 28 Jun 2022 08:14:51 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <eugen.hristev@microchip.com>, <jic23@kernel.org>,
         <lars@metafoo.de>, <nicolas.ferre@microchip.com>,
@@ -47,9 +47,9 @@ To:     <eugen.hristev@microchip.com>, <jic23@kernel.org>,
 CC:     <linux-iio@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v2 11/19] iio: adc: at91-sama5d2_adc: add 64 and 256 oversampling ratio
-Date:   Tue, 28 Jun 2022 18:16:23 +0300
-Message-ID: <20220628151631.3116454-12-claudiu.beznea@microchip.com>
+Subject: [PATCH v2 12/19] iio: adc: at91-sama5d2_adc: move oversampling storage in its function
+Date:   Tue, 28 Jun 2022 18:16:24 +0300
+Message-ID: <20220628151631.3116454-13-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220628151631.3116454-1-claudiu.beznea@microchip.com>
 References: <20220628151631.3116454-1-claudiu.beznea@microchip.com>
@@ -66,91 +66,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add 64 and 256 oversampling ratio support. It is necessary for temperature
-sensor.
+Move the storage of oversampling_ratio in at91_adc_config_emr().
+This prepares for the next commits.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- drivers/iio/adc/at91-sama5d2_adc.c | 31 +++++++++++++++++++++++++-----
- 1 file changed, 26 insertions(+), 5 deletions(-)
+ drivers/iio/adc/at91-sama5d2_adc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/iio/adc/at91-sama5d2_adc.c b/drivers/iio/adc/at91-sama5d2_adc.c
-index f12f46708f22..254c084f7198 100644
+index 254c084f7198..57c78cd23634 100644
 --- a/drivers/iio/adc/at91-sama5d2_adc.c
 +++ b/drivers/iio/adc/at91-sama5d2_adc.c
-@@ -142,6 +142,8 @@ struct at91_adc_reg_layout {
- #define AT91_SAMA5D2_EMR_OSR_1SAMPLES		0
- #define AT91_SAMA5D2_EMR_OSR_4SAMPLES		1
- #define AT91_SAMA5D2_EMR_OSR_16SAMPLES		2
-+#define AT91_SAMA5D2_EMR_OSR_64SAMPLES		3
-+#define AT91_SAMA5D2_EMR_OSR_256SAMPLES		4
- 
- /* Extended Mode Register - Averaging on single trigger event */
- #define AT91_SAMA5D2_EMR_ASTE(V)		((V) << 20)
-@@ -421,7 +423,7 @@ struct at91_adc_platform {
- 	unsigned int				max_index;
- 	unsigned int				hw_trig_cnt;
- 	unsigned int				osr_mask;
--	unsigned int				oversampling_avail[3];
-+	unsigned int				oversampling_avail[5];
- 	unsigned int				oversampling_avail_no;
- 	unsigned int				chan_realbits;
- };
-@@ -642,8 +644,8 @@ static const struct at91_adc_platform sama7g5_platform = {
- #define AT91_SAMA7G5_HW_TRIG_CNT	3
- 	.hw_trig_cnt = AT91_SAMA7G5_HW_TRIG_CNT,
- 	.osr_mask = GENMASK(18, 16),
--	.oversampling_avail = { 1, 4, 16, },
--	.oversampling_avail_no = 3,
-+	.oversampling_avail = { 1, 4, 16, 64, 256, },
-+	.oversampling_avail_no = 5,
- 	.chan_realbits = 16,
- };
- 
-@@ -749,6 +751,15 @@ static int at91_adc_config_emr(struct at91_adc_state *st,
- 	/* configure the extended mode register */
- 	unsigned int emr = at91_adc_readl(st, EMR);
- 	unsigned int osr_mask = st->soc_info.platform->osr_mask;
-+	int i;
-+
-+	/* Check against supported oversampling values. */
-+	for (i = 0; i < st->soc_info.platform->oversampling_avail_no; i++) {
-+		if (oversampling_ratio == st->soc_info.platform->oversampling_avail[i])
-+			break;
-+	}
-+	if (i == st->soc_info.platform->oversampling_avail_no)
-+		return -EINVAL;
- 
- 	/* select oversampling per single trigger event */
- 	emr |= AT91_SAMA5D2_EMR_ASTE(1);
-@@ -770,8 +781,14 @@ static int at91_adc_config_emr(struct at91_adc_state *st,
- 		emr |= AT91_SAMA5D2_EMR_OSR(AT91_SAMA5D2_EMR_OSR_16SAMPLES,
- 					    osr_mask);
- 		break;
--	default:
--		return -EINVAL;
-+	case 64:
-+		emr |= AT91_SAMA5D2_EMR_OSR(AT91_SAMA5D2_EMR_OSR_64SAMPLES,
-+					    osr_mask);
-+		break;
-+	case 256:
-+		emr |= AT91_SAMA5D2_EMR_OSR(AT91_SAMA5D2_EMR_OSR_256SAMPLES,
-+					    osr_mask);
-+		break;
- 	}
+@@ -793,6 +793,8 @@ static int at91_adc_config_emr(struct at91_adc_state *st,
  
  	at91_adc_writel(st, EMR, emr);
-@@ -789,6 +806,10 @@ static int at91_adc_adjust_val_osr(struct at91_adc_state *st, int *val)
- 		nbits = 13;
- 	else if (st->oversampling_ratio == 16)
- 		nbits = 14;
-+	else if (st->oversampling_ratio == 64)
-+		nbits = 15;
-+	else if (st->oversampling_ratio == 256)
-+		nbits = 16;
  
- 	/*
- 	 * We have nbits of real data and channel is registered as
++	st->oversampling_ratio = oversampling_ratio;
++
+ 	return 0;
+ }
+ 
+@@ -1702,8 +1704,6 @@ static int at91_adc_write_raw(struct iio_dev *indio_dev,
+ 		mutex_lock(&st->lock);
+ 		/* update ratio */
+ 		ret = at91_adc_config_emr(st, val);
+-		if (!ret)
+-			st->oversampling_ratio = val;
+ 		mutex_unlock(&st->lock);
+ 		iio_device_release_direct_mode(indio_dev);
+ 		return ret;
 -- 
 2.34.1
 

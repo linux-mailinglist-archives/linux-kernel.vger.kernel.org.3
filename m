@@ -2,69 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE12455E4CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E417855E4E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344309AbiF1NeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
+        id S1346597AbiF1NgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346682AbiF1Ndo (ORCPT
+        with ESMTP id S1346208AbiF1NgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:33:44 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9506B38F;
-        Tue, 28 Jun 2022 06:33:42 -0700 (PDT)
+        Tue, 28 Jun 2022 09:36:04 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25BF7661
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656423360; x=1687959360;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=hkJILEn8D+UzuehCshdjWaKC4oVYeM+R+1OeR3UmSqI=;
+  b=NWSE/v4gdSQhhV5Pflks6pToBEz4YiZpqcbSR1cQjrhO439/MK3JlVB9
+   8wP3xbk+RcoRLXkJ0q4VQytlo1Ho8v60n6egbjLznE3Xv3o9qE7f0MOTM
+   4zA2Js7fh0LQUIauezVcfVF/dB4EZEA0rEq+nxKZR4631KXdu5V4XnaMS
+   fNZIQk7gR3ut6dGLrGOM7VOzf3XaoFqhS4h9WDnt9cBgPEDrAZeore7a5
+   lpK8UzHin+tfQGWiL29k91nSeejFG8tA2AWLHsPtOsYTJi6u8zz1DuF3M
+   rAW3aLuBwtKaXX9h0K7RBzzNyCgy6Y2UdZlXg2/VnRO9+cGxB9rHuV9Ch
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="102093876"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jun 2022 06:36:00 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 28 Jun 2022 06:36:00 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Tue, 28 Jun 2022 06:36:00 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lHUxTCkBMKcANQ4l+2gIZr5s5u0rPf6q09nQ7Bz5WwIuWXQszR7XBavjlLMKk6mx9aAO4sdw1d1i4/DQGE9L7AI1RbbjGgCwTahjSI9nWBFjQD2HtsnDnZrIZe1ZDWZht99mw6ibTp3EOFRbTrk8MbQrVls2EyglNg4p1vd4qNJUR4DKtKTIDeUMSquGN6iC8gbe2CMHH+5cGfL7N1FYlTAYe+CUV6+2WbfifQ5Y56rhp80tv8bOeHI1SPVP+gdc9ml7f3kQpXcnkKV6kv8FwGfcJLCrL4j7wGKIDadGP11z6lxeRKFtTrNFwkI+wmhmtwWkHqAW5a63bHnygrFlcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hkJILEn8D+UzuehCshdjWaKC4oVYeM+R+1OeR3UmSqI=;
+ b=BGzH167Rl70bf2R6e56dMWaoHcf6Rwin10fyxF+rWLkU85oFS++CmuxmEd9kioNWcvorHlebyidHty/0ijNr8UJ2R8bID5It/SLotDm85wSzJfNV9jFdtv/hQZJ3qnRvkI3Ouk7/THIW3adK38f64RhpD73A8Kx+QBKY1snqKQQm17jToPc6dXlIvXdfyFnAGyMjr0AzmO600VAv2YF2wZxtDYxa0AxnMyhCJrfvxHTctLsDxhV3qmqh66bFraiZeVH6la393hwC8Ylq0loWhoYwChSk8HAuy4XOCtdeHVzZrUJ3o678RvzVyMROBo6P3O4YwUoORTL31Ccyg23acw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656423222; x=1687959222;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=YaeCBtQatyqDjijpk5TIF7bbHrkUDXzBl7LKNogOJaE=;
-  b=icBqkWFpHWW7ytd3SfXs61igyaI6dIXmLKCXK6wMXTi0A29PCz/2AnZ7
-   6BV+N7bnkk9IoMsXu5KEk+Rxq+OkZSu4xVwr3P84QV7MO55lPKf/mqZiz
-   FkSCRpKFWC1tOJa+rC4K92KZlF2qJdaohsI2Ctzq1y6mIOUdtsF+ivmiu
-   A=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 28 Jun 2022 06:33:42 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 06:33:43 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 28 Jun 2022 06:33:41 -0700
-Received: from [10.216.26.50] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 28 Jun
- 2022 06:33:36 -0700
-Message-ID: <f6f26717-fb62-0700-cc2e-d6cfe3643e4b@quicinc.com>
-Date:   Tue, 28 Jun 2022 19:03:33 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 4/5] firmware: qcom: scm: Add wait-queue helper functions
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hkJILEn8D+UzuehCshdjWaKC4oVYeM+R+1OeR3UmSqI=;
+ b=nADX/ybpsk2CPZPTmGrO+6FmjxRfqUNtCdFKnFNBjHh7VQTJy54ypJ00UKXfBMdXtySUa/pPNtnQDmj5+GbXnwuxrSKzLh0qFAf30GSY7MKWDpe6ZBrSSe6EkjeHMgmXbiOTiH6cIEl7QhxsAF2Dl3J/iAtjXNvlHolnprcyiDI=
+Received: from CY4PR11MB1960.namprd11.prod.outlook.com (2603:10b6:903:11d::21)
+ by BN6PR11MB1713.namprd11.prod.outlook.com (2603:10b6:404:3c::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15; Tue, 28 Jun
+ 2022 13:35:55 +0000
+Received: from CY4PR11MB1960.namprd11.prod.outlook.com
+ ([fe80::80c4:1a95:649d:2ee0]) by CY4PR11MB1960.namprd11.prod.outlook.com
+ ([fe80::80c4:1a95:649d:2ee0%10]) with mapi id 15.20.5373.018; Tue, 28 Jun
+ 2022 13:35:55 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <linux@armlinux.org.uk>
+CC:     <sboyd@kernel.org>, <Ludovic.Desroches@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/3] ARM: at91: pm: fix wakeup from RTC for ULP1
+Thread-Topic: [PATCH v2 0/3] ARM: at91: pm: fix wakeup from RTC for ULP1
+Thread-Index: AQHYivP+PFq8vGfaZEubO0yCzEwT4Q==
+Date:   Tue, 28 Jun 2022 13:35:55 +0000
+Message-ID: <c74942bc-1a66-ae01-5e61-bdccb85520bd@microchip.com>
+References: <20220523092421.317345-1-claudiu.beznea@microchip.com>
+In-Reply-To: <20220523092421.317345-1-claudiu.beznea@microchip.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     David Heidelberg <david@ixit.cz>,
-        Robert Marko <robimarko@gmail.com>,
-        Elliot Berman <quic_eberman@quicinc.com>
-References: <1656359076-13018-1-git-send-email-quic_gurus@quicinc.com>
- <1656359076-13018-5-git-send-email-quic_gurus@quicinc.com>
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-In-Reply-To: <1656359076-13018-5-git-send-email-quic_gurus@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 62c385b6-a01b-4924-3cf6-08da590b208d
+x-ms-traffictypediagnostic: BN6PR11MB1713:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qG8r52T52Y/e2d5UJM4J5OCDQFDBXTzB8oImVp2zNiFiq8zabzKeYbn0j5UW75U+8vK7RrkNi9j1/zHr/DuYmeRt6UvgrswNG7/faH8XDjD2OnoWR6Bf72OHj30w7MXMt/cFaPQGDJX7E5C6TwtIJ54ONsm6mqc2gP47nT3HwXUQKMZSSftP3zYASTayR0LgZ4+feNUbMTyQMIWoGGIYn1pkxRkE6mDRvnzi8gCkYipzZZvpc1i6IOGJpTP8hcQDoLbjd36KbEDdRR5MKWm040fOf1HB/AY+Jcx0PxBs5ecoLepOSzA7TplSDlBLzki7NAENGEtI9hMv4pqIkwqABoYoQ2xnhLHC0AV/fZkthcvxvs68JfqDaMQyK4ot5qd+T+ySKYhK//sOW6GkWko14JWNq1pqx3yxGVYAKEaHIFsI7gcQIQfrl/C9lUkDEwuyG+CYYs3s4kNj4FHGdo8Y+2v0k3hNSXq81pkRe78JPR3qmQq+J0fdD1uci5ytVYrt+mHffx7TUryOensgM/ztOktJnaVl4Fyfku+HkmfHZRCA16iyV6sDgNw3+ck2SK0A5x24KOxRMttSplZaGdmjsF8ADrtZJ4Uawai/ztIPPUb5/Bfrv+Yk/g0zO50mhE4vupOYSCTSbreqkm/my+8IS4n7wcdTjg0y7263eBUSmDFUYBpt2hfo/8OUdbJoz/OGgTs2FYY0GczU6ko1JWP1FRLbTFuHiZoUWDbBaqYfZyjtsqCl3W7l/VnJy9B9MICeBidfOiPIGcf8OqdR3GqzsqTo8YdiwVFcPp6T38bWqk8ovNsv0trP83PW5pQ7bIKPltEwE1ZRX4/eGDVuboPsh8HWXVdftObtDfotfwnel/0=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1960.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(396003)(366004)(39860400002)(346002)(136003)(316002)(478600001)(66446008)(76116006)(66946007)(4326008)(66476007)(64756008)(8676002)(66556008)(6486002)(71200400001)(53546011)(110136005)(54906003)(91956017)(5660300002)(2906002)(4744005)(41300700001)(8936002)(83380400001)(31696002)(6512007)(36756003)(38100700002)(31686004)(26005)(2616005)(6506007)(38070700005)(122000001)(86362001)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M0FnT0M5VldYNHcyYWozZi9rUlZyZHMxaGNWSzdpdnhyQ040emVrUm94dmJ6?=
+ =?utf-8?B?RTNZTGgxRG5mU2VKeTdWTEo4VHk5NVJlRjdQNDkxL01lZ3B3cGlWdVdmUnpL?=
+ =?utf-8?B?Vzd2OVhxa2ZiK2E2bHY3bm03dFJrYzFJR1VhcGlKUkpSZHlZc2ZPbnoyaWti?=
+ =?utf-8?B?RVgyS2dMa0JaQzhiazlrS05DdXE1SklBWXVHbUlLcWN1RENKSzJMQ3YwMFQ3?=
+ =?utf-8?B?QkRzcWRDRFpTM2JndmFTbXVGeGh4UHVrZEFSWTRsYzRoVUVXUzN0R2ZuUFZ2?=
+ =?utf-8?B?UWwvTFlPenJVOGJjTlp3REJFL2xJREJDUk5qOVpONC9JeDBnV1NpVjlBZCsy?=
+ =?utf-8?B?MXg2d2hJNlJONzgrL1dMUGZRUExlblk1aWdwWUdUeFdFSVdIbVRqZUlQSUlx?=
+ =?utf-8?B?cVVPd3lKOWYxdEpqU2tnVHJzUmZMcnpNbnh2dUxqWGlhQ1dQOGdXVTBXTkpT?=
+ =?utf-8?B?ODRuVk1GVHMvL1k4Tk9hTVA2b0NFRC9sNnBSR3JWY251Q24reHRneVZ1MXZl?=
+ =?utf-8?B?K2NTU3MvL3VUOWtVS2hSWXlRS014VlRhYzF2MkNCdHZ3M2VkY2FkaWxNc3Zi?=
+ =?utf-8?B?RXlJWi9QOCsyaHNGNlRDYzkwNnc5VXc5Zmo0Zm92QnZLaWI3ZkVkQ0RrL2Rs?=
+ =?utf-8?B?alFPbkk2QTgyR0lkRkJNM3JRTGZKdHNJd28rRmZWYWtXQzZzOS9DY3VLMFpE?=
+ =?utf-8?B?dTluT1UwdlNHekczUVMzeVd2NmpNR21hTmxlNURpOFpHamE1VFFYTld6S1pz?=
+ =?utf-8?B?WjA0d29VeG0xVEtFOUY1cFZkQzRvUEowa2VuYW1LWUhzWTRvNE1ibG5yL29W?=
+ =?utf-8?B?T2trR0xzU2hvM01kVUdlR0NZOGlLcElSbnUwYVJOdG1SNWJlaWMvYzVodGJK?=
+ =?utf-8?B?VFRPRnYwcEZLRkFjaU51R3lnUFduVFYxcmh5YXpCdEZiVGp6RzFKYlJjbEpo?=
+ =?utf-8?B?Zy9FMW1obWNicVErSnRqWmNrcU9LWmFOUlVySDViMGFXdC9zdEtGS0NFNG9P?=
+ =?utf-8?B?aGJuemxYZFNmRDI5eTJYQTAvRG1MWG9zVFFiY3pnb3RoTDBORDcxWHZWVVht?=
+ =?utf-8?B?WkR1UWx3ZWVCWmZaUm5rNW5tZ3h1UU83NkNROEFMdkNqZUE0YU93YXF3MTlH?=
+ =?utf-8?B?SXhWUGJFUldFR0pjN0tYbGVsUWcwNGFUREExZFZ1Vm55dGtDMDYxcE5ZTDdk?=
+ =?utf-8?B?eG9ZdXJOZG9BVEY1dTdzRDkyWXlIMVoyNk1sL2NrVkRyUy8zRGlPdlZDdzc5?=
+ =?utf-8?B?eXc1eVhxSDRhN2h1d25wa21qd2xFYlJIdkxoS2xIT1RFaEpqT3NmQWFNRG8y?=
+ =?utf-8?B?ZUhRT1UybVgxbEZLelcxdnRtVGkzcWlaWldsVk0xSFNlNnR4bVIvK0Y0WUo5?=
+ =?utf-8?B?ZUpJWFZSYXBiUnlEbFJXVlZTdHBhQUdXRzhqRjdHYnJGNzhYRnhxM0QwRHox?=
+ =?utf-8?B?d0NyekV0S08vRXA4bEU0cHdNRmhlUnYweEIyVkNoRHliRG9YVWFCMTQ2OHM2?=
+ =?utf-8?B?YkpnbnJTN0dxelNidFBDbThLUlp6ZS8vWUZLSUIwUWMwb2g3WXBuK3gybFJ2?=
+ =?utf-8?B?b1E0Y0Z6L3R5U0pOdm82WkhKUmIyMkpMcmNYNjYwK0FWQzgxYnZHODRrZ2lE?=
+ =?utf-8?B?ZExjN1kvSkFRN0RhRkdjKzRXaEFuNUF5QTlPS3V6MFZDcTgrOHk3c2dQN2J1?=
+ =?utf-8?B?NFBQNmFjN2NuajdVODJnTWtMZ1ZnZTk5STBtb0Y4SHE1QVd1bGppY0NhbFFn?=
+ =?utf-8?B?Rm11TGlSWGt1MGZRcHB6T1M1L0p3V2wyMnhuSTFEMlF1T0FKV0pyMEUyRHlU?=
+ =?utf-8?B?WWpReVlNOXMxZDVqTkR6bHN5cjF2cmhhNSswMy9aYWEyVXRtNWZCUWpkNHhz?=
+ =?utf-8?B?NDlReEIvandzVnBhalZrR1hlM0U1K0UxR1BjaFo4MC9VVjZYMURrOXcwMzlS?=
+ =?utf-8?B?aEpqallTczlyRyt0ZHQ2dHdyYTNLZUJ3RG9iNC9wNHhpYTZ2YXRobnZFMFpp?=
+ =?utf-8?B?dE9hRHF5cnZJNFhCaDNSNUxLMjU3cU5wdnpILzBIYmsxdkV3NjVTcUYwYzZC?=
+ =?utf-8?B?NDNNNmdzUHhxeCtMMnJ1UHo0NDRuYXMyb3FaVUhUTTAwYThpb2FkNkh2cHN1?=
+ =?utf-8?B?VS9xT1pNa2NGNG01SnVscmc0dGIzeEs2TnFjcnVIdGdkT3VoVm5lbit5QVZ2?=
+ =?utf-8?B?ckE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <961B219D6D02B846889E16342D03AA14@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1960.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62c385b6-a01b-4924-3cf6-08da590b208d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2022 13:35:55.1673
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /Rd9csAaB6fcUaAJvILQg2L0P3i2kfjiHV4OtB1UjJcmqu4Vr1Q8TziIp/7RFugK4LpzEQemLfWTFQVX7U+dUv3aqW5GatMWZj2AMJB8G3g=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1713
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,401 +157,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/28/2022 1:14 AM, Guru Das Srinagesh wrote:
-> When the firmware (FW) supports multiple requests per VM, and the VM also
-> supports it via the `enable-multi-call` device tree flag, the floodgates
-
-the bindings actually define 'allow-multi-call'
-
-> are thrown open for them to all reach the firmware at the same time.
-> 
-> Since the firmware currently being used has limited resources, it guards
-> them with a resource lock and puts requests on a wait-queue internally
-> and signals to HLOS that it is doing so. It does this by returning two
-> new return values in addition to success or error: SCM_WAITQ_SLEEP and
-> SCM_WAITQ_WAKE.
-> 
->    1) SCM_WAITQ_SLEEP:
-> 
->    	When an SCM call receives this return value instead of success
->    	or error, FW has placed this call on a wait-queue and
->    	has signalled HLOS to put it to non-interruptible sleep. (The
-> 	mechanism to wake it back up will be described in detail in the
-> 	next patch for the sake of simplicity.)
-> 
-> 	Along with this return value, FW also passes to HLOS `wq_ctx` -
-> 	a unique number (UID) identifying the wait-queue that it has put
-> 	the call on, internally. This is to help HLOS with its own
-> 	bookkeeping to wake this sleeping call later.
-> 
-> 	Additionally, FW also passes to HLOS `smc_call_ctx` - a UID
-> 	identifying the SCM call thus being put to sleep. This is also
-> 	for HLOS' bookkeeping to wake this call up later.
-> 
-> 	These two additional values are passed via the a1 and a2
-> 	registers.
-> 
-> 	N.B.: The "ctx" in the above UID names = "context".
-> 
->    2) SCM_WAITQ_WAKE:
-> 
->    	When an SCM call receives this return value instead of success
->    	or error, FW wishes to signal HLOS to wake up a (different)
->    	previously sleeping call.
-> 
->    	FW tells HLOS which call to wake up via the additional return
->    	values `wq_ctx`, `smc_call_ctx` and `flags`. The first two have
->    	already been explained above.
-> 
->    	`flags` can be either WAKE_ONE or WAKE_ALL. Meaning, wake either
->    	one, or all, of the SCM calls that HLOS is associating with the
->    	given `wq_ctx`.
-> 
-> A sleeping SCM call can be woken up by either an interrupt that FW
-> raises, or via a SCM_WAITQ_WAKE return value for a new SCM call.
-> 
-> The handshake mechanism that HLOS uses to talk to FW about wait-queue
-> operations involves three new SMC calls. These are:
-> 
->    1) get_wq_ctx():
-> 
->      	Arguments: 	None
->      	Returns:	wq_ctx, flags, more_pending
-> 
->      	Get the wait-queue context, and wake up either one or all of the
->      	sleeping SCM calls associated with that wait-queue.
-> 
->      	Additionally, repeat this if there are more wait-queues that are
->      	ready to have their requests woken up (`more_pending`).
-> 
->    2) wq_resume(smc_call_ctx):
-> 
->    	Arguments:	smc_call_ctx
-> 
->    	HLOS needs to issue this in response to receiving an
->    	IRQ, passing to FW the same smc_call_ctx that FW
->    	receives from HLOS via the get_wq_ctx() call.
-> 
->    3) wq_wake_ack(smc_call_ctx):
-> 
->    	Arguments:	smc_call_ctx
-> 
->    	HLOS needs to issue this in response to receiving an
->    	SCM_WAITQ_WAKE, passing to FW the same smc_call_ctx that FW
->    	passed to HLOS via the SMC_WAITQ_WAKE call.
-> 
-> (Reminder that the full handshake mechanism will be detailed in the
-> subsequent patch.)
-> 
-> Also add the interrupt handler that wakes up a sleeping SCM call.
-> 
-> Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
-> ---
->   drivers/firmware/qcom_scm-smc.c |  56 +++++++++++++++++++
->   drivers/firmware/qcom_scm.c     | 118 +++++++++++++++++++++++++++++++++++++++-
->   drivers/firmware/qcom_scm.h     |  12 ++++
->   3 files changed, 185 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/firmware/qcom_scm-smc.c b/drivers/firmware/qcom_scm-smc.c
-> index 66193c2..4150da1 100644
-> --- a/drivers/firmware/qcom_scm-smc.c
-> +++ b/drivers/firmware/qcom_scm-smc.c
-> @@ -53,6 +53,62 @@ static void __scm_smc_do_quirk(const struct arm_smccc_args *smc,
->   	} while (res->a0 == QCOM_SCM_INTERRUPTED);
->   }
->   
-> +static void fill_wq_resume_args(struct arm_smccc_args *resume, u32 smc_call_ctx)
-> +{
-> +	memset(resume->args, 0, ARRAY_SIZE(resume->args));
-> +
-> +	resume->args[0] = ARM_SMCCC_CALL_VAL(ARM_SMCCC_STD_CALL,
-> +			 ARM_SMCCC_SMC_64, ARM_SMCCC_OWNER_SIP,
-> +			 SCM_SMC_FNID(QCOM_SCM_SVC_WAITQ, QCOM_SCM_WAITQ_RESUME));
-> +
-> +	resume->args[1] = QCOM_SCM_ARGS(1);
-> +
-> +	resume->args[2] = smc_call_ctx;
-> +}
-> +
-> +static void fill_wq_wake_ack_args(struct arm_smccc_args *wake_ack, u32 smc_call_ctx)
-> +{
-> +	memset(wake_ack->args, 0, ARRAY_SIZE(wake_ack->args));
-> +
-> +	wake_ack->args[0] = ARM_SMCCC_CALL_VAL(ARM_SMCCC_STD_CALL,
-> +			 ARM_SMCCC_SMC_64, ARM_SMCCC_OWNER_SIP,
-> +			 SCM_SMC_FNID(QCOM_SCM_SVC_WAITQ, QCOM_SCM_WAITQ_ACK));
-> +
-> +	wake_ack->args[1] = QCOM_SCM_ARGS(1);
-> +
-> +	wake_ack->args[2] = smc_call_ctx;
-> +}
-> +
-> +static void fill_get_wq_ctx_args(struct arm_smccc_args *get_wq_ctx)
-> +{
-> +	memset(get_wq_ctx->args, 0, ARRAY_SIZE(get_wq_ctx->args));
-> +
-> +	get_wq_ctx->args[0] = ARM_SMCCC_CALL_VAL(ARM_SMCCC_STD_CALL,
-> +			 ARM_SMCCC_SMC_64, ARM_SMCCC_OWNER_SIP,
-> +			 SCM_SMC_FNID(QCOM_SCM_SVC_WAITQ, QCOM_SCM_WAITQ_GET_WQ_CTX));
-> +}
-> +
-> +int scm_get_wq_ctx(u32 *wq_ctx, u32 *flags, u32 *more_pending)
-> +{
-> +	int ret;
-> +	struct arm_smccc_args get_wq_ctx = {0};
-> +	struct arm_smccc_res get_wq_res;
-> +
-> +	fill_get_wq_ctx_args(&get_wq_ctx);
-> +
-> +	__scm_smc_do_quirk(&get_wq_ctx, &get_wq_res);
-> +	/* Guaranteed to return only success or error, no WAITQ_* */
-> +	ret = get_wq_res.a0;
-> +	if (ret)
-> +		return ret;
-> +
-> +	*wq_ctx = get_wq_res.a1;
-> +	*flags  = get_wq_res.a2;
-> +	*more_pending = get_wq_res.a3;
-> +
-> +	return 0;
-> +}
-> +
->   static void __scm_smc_do(const struct arm_smccc_args *smc,
->   			 struct arm_smccc_res *res, bool atomic)
->   {
-> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> index 4046073..248126c 100644
-> --- a/drivers/firmware/qcom_scm.c
-> +++ b/drivers/firmware/qcom_scm.c
-> @@ -3,8 +3,12 @@
->    * Copyright (C) 2015 Linaro Ltd.
->    * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
->    */
-> +#define pr_fmt(fmt)     "qcom-scm: %s: " fmt, __func__
-> +
->   #include <linux/platform_device.h>
-> +#include <linux/idr.h>
->   #include <linux/init.h>
-> +#include <linux/interrupt.h>
->   #include <linux/cpumask.h>
->   #include <linux/export.h>
->   #include <linux/dma-mapping.h>
-> @@ -12,10 +16,13 @@
->   #include <linux/types.h>
->   #include <linux/qcom_scm.h>
->   #include <linux/of.h>
-> +#include <linux/of_irq.h>
->   #include <linux/of_address.h>
->   #include <linux/of_platform.h>
->   #include <linux/clk.h>
->   #include <linux/reset-controller.h>
-> +#include <linux/spinlock.h>
-> +#include <linux/ktime.h>
->   #include <linux/arm-smccc.h>
->   
->   #include "qcom_scm.h"
-> @@ -29,12 +36,19 @@ bool qcom_scm_allow_multicall = false;
->   #define SCM_HAS_IFACE_CLK	BIT(1)
->   #define SCM_HAS_BUS_CLK		BIT(2)
->   
-> +struct qcom_scm_waitq {
-> +	struct idr idr;
-> +	spinlock_t idr_lock;
-> +	struct work_struct scm_irq_work;
-> +};
-> +
->   struct qcom_scm {
->   	struct device *dev;
->   	struct clk *core_clk;
->   	struct clk *iface_clk;
->   	struct clk *bus_clk;
->   	struct reset_controller_dev reset;
-> +	struct qcom_scm_waitq waitq;
->   
->   	u64 dload_mode_addr;
->   };
-> @@ -56,10 +70,14 @@ struct qcom_scm_mem_map_info {
->   static const u8 qcom_scm_cpu_cold_bits[QCOM_SCM_BOOT_MAX_CPUS] = {
->   	0, BIT(0), BIT(3), BIT(5)
->   };
-> +
->   static const u8 qcom_scm_cpu_warm_bits[QCOM_SCM_BOOT_MAX_CPUS] = {
->   	BIT(2), BIT(1), BIT(4), BIT(6)
->   };
->   
-> +#define QCOM_SMC_WAITQ_FLAG_WAKE_ONE	BIT(0)
-> +#define QCOM_SMC_WAITQ_FLAG_WAKE_ALL	BIT(1)
-> +
->   static const char * const qcom_scm_convention_names[] = {
->   	[SMC_CONVENTION_UNKNOWN] = "unknown",
->   	[SMC_CONVENTION_ARM_32] = "smc arm 32",
-> @@ -1266,11 +1284,92 @@ bool qcom_scm_is_available(void)
->   }
->   EXPORT_SYMBOL(qcom_scm_is_available);
->   
-> +struct completion *qcom_scm_lookup_wq(struct qcom_scm *scm, u32 wq_ctx)
-> +{
-> +	struct completion *wq = NULL;
-> +	u32 wq_ctx_idr = wq_ctx;
-> +	unsigned long flags;
-> +	int err;
-> +
-> +	spin_lock_irqsave(&scm->waitq.idr_lock, flags);
-> +	wq = idr_find(&scm->waitq.idr, wq_ctx);
-> +	if (wq)
-> +		goto out;
-> +
-> +	wq = devm_kzalloc(scm->dev, sizeof(*wq), GFP_ATOMIC);
-> +	if (!wq) {
-> +		wq = ERR_PTR(-ENOMEM);
-> +		goto out;
-> +	}
-> +
-> +	init_completion(wq);
-> +
-> +	err = idr_alloc_u32(&scm->waitq.idr, wq, &wq_ctx_idr,
-> +			    U32_MAX, GFP_ATOMIC);
-> +	if (err < 0) {
-> +		devm_kfree(scm->dev, wq);
-> +		wq = ERR_PTR(err);
-> +	}
-> +
-> +out:
-> +	spin_unlock_irqrestore(&scm->waitq.idr_lock, flags);
-> +	return wq;
-> +}
-> +
-> +void scm_waitq_flag_handler(struct completion *wq, u32 flags)
-> +{
-> +	switch (flags) {
-> +	case QCOM_SMC_WAITQ_FLAG_WAKE_ONE:
-> +		complete(wq);
-> +		break;
-> +	case QCOM_SMC_WAITQ_FLAG_WAKE_ALL:
-> +		complete_all(wq);
-> +		break;
-> +	default:
-> +		pr_err("invalid flags: %u\n", flags);
-> +	}
-> +}
-> +
-> +static void scm_irq_work(struct work_struct *work)
-> +{
-> +	int ret;
-> +	u32 wq_ctx, flags, more_pending = 0;
-> +	struct completion *wq_to_wake;
-> +	struct qcom_scm_waitq *w = container_of(work, struct qcom_scm_waitq, scm_irq_work);
-> +	struct qcom_scm *scm = container_of(w, struct qcom_scm, waitq);
-> +
-> +	do {
-> +		ret = scm_get_wq_ctx(&wq_ctx, &flags, &more_pending);
-> +		if (ret) {
-> +			pr_err("GET_WQ_CTX SMC call failed: %d\n", ret);
-> +			return;
-> +		}
-> +
-> +		wq_to_wake = qcom_scm_lookup_wq(scm, wq_ctx);
-> +		if (IS_ERR_OR_NULL(wq_to_wake)) {
-> +			pr_err("No waitqueue found for wq_ctx %d: %ld\n",
-> +					wq_ctx, PTR_ERR(wq_to_wake));
-> +			return;
-> +		}
-> +
-> +		scm_waitq_flag_handler(wq_to_wake, flags);
-> +	} while (more_pending);
-> +}
-> +
-> +static irqreturn_t qcom_scm_irq_handler(int irq, void *p)
-> +{
-> +	struct qcom_scm *scm = p;
-> +
-> +	schedule_work(&scm->waitq.scm_irq_work);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
->   static int qcom_scm_probe(struct platform_device *pdev)
->   {
->   	struct qcom_scm *scm;
->   	unsigned long clks;
-> -	int ret;
-> +	int irq, ret;
->   
->   	scm = devm_kzalloc(&pdev->dev, sizeof(*scm), GFP_KERNEL);
->   	if (!scm)
-> @@ -1333,12 +1432,28 @@ static int qcom_scm_probe(struct platform_device *pdev)
->   	if (ret)
->   		return ret;
->   
-> +	platform_set_drvdata(pdev, scm);
-> +
->   	__scm = scm;
->   	__scm->dev = &pdev->dev;
->   
-> +	spin_lock_init(&__scm->waitq.idr_lock);
-> +	idr_init(&__scm->waitq.idr);
->   	qcom_scm_allow_multicall = of_property_read_bool(__scm->dev->of_node,
->   							"allow-multi-call");
->   
-> +	INIT_WORK(&__scm->waitq.scm_irq_work, scm_irq_work);
-> +
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq) {
-> +		ret = devm_request_threaded_irq(__scm->dev, irq, NULL,
-> +			qcom_scm_irq_handler, IRQF_ONESHOT, "qcom-scm", __scm);
-> +		if (ret < 0) {
-> +			pr_err("Failed to request qcom-scm irq: %d\n", ret);
-> +			return ret;
-> +		}
-> +	}
-> +
->   	__get_convention();
->   
->   	/*
-> @@ -1354,6 +1469,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
->   
->   static void qcom_scm_shutdown(struct platform_device *pdev)
->   {
-> +	idr_destroy(&__scm->waitq.idr);
->   	/* Clean shutdown, disable download mode to allow normal restart */
->   	if (download_mode)
->   		qcom_scm_set_download_mode(false);
-> diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
-> index c0a4d6b..ae3a331 100644
-> --- a/drivers/firmware/qcom_scm.h
-> +++ b/drivers/firmware/qcom_scm.h
-> @@ -62,6 +62,11 @@ struct qcom_scm_res {
->   	u64 result[MAX_QCOM_SCM_RETS];
->   };
->   
-> +struct qcom_scm;
-> +extern struct completion *qcom_scm_lookup_wq(struct qcom_scm *scm, u32 wq_ctx);
-> +extern void scm_waitq_flag_handler(struct completion *wq, u32 flags);
-> +extern int scm_get_wq_ctx(u32 *wq_ctx, u32 *flags, u32 *more_pending);
-> +
->   #define SCM_SMC_FNID(s, c)	((((s) & 0xFF) << 8) | ((c) & 0xFF))
->   extern int __scm_smc_call(struct device *dev, const struct qcom_scm_desc *desc,
->   			  enum qcom_scm_convention qcom_convention,
-> @@ -131,6 +136,11 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
->   #define QCOM_SCM_SMMU_CONFIG_ERRATA1		0x03
->   #define QCOM_SCM_SMMU_CONFIG_ERRATA1_CLIENT_ALL	0x02
->   
-> +#define QCOM_SCM_SVC_WAITQ			0x24
-> +#define QCOM_SCM_WAITQ_ACK			0x01
-> +#define QCOM_SCM_WAITQ_RESUME			0x02
-> +#define QCOM_SCM_WAITQ_GET_WQ_CTX		0x03
-> +
->   extern void __qcom_scm_init(void);
->   
->   /* common error codes */
-> @@ -141,6 +151,8 @@ extern void __qcom_scm_init(void);
->   #define QCOM_SCM_EINVAL_ARG	-2
->   #define QCOM_SCM_ERROR		-1
->   #define QCOM_SCM_INTERRUPTED	1
-> +#define QCOM_SCM_WAITQ_SLEEP	2
-> +#define QCOM_SCM_WAITQ_WAKE	3
->   
->   static inline int qcom_scm_remap_error(int err)
->   {
+T24gMjMuMDUuMjAyMiAxMjoyNCwgQ2xhdWRpdSBCZXpuZWEgd3JvdGU6DQo+IEhpLA0KPiANCj4g
+U2VyaWVzIGZpeGVzIHRoZSB3YWtldXAgZnJvbSBSVEMgYWxhcm0gZm9yIFVMUDEgb24gU0FNOVg2
+MCBhbmQgU0FNQTdHNS4NCj4gSSBrZXB0IHRoZW0gYXMgMyBwYXRjaGVzIHRvIGJlIGFibGUgdG8g
+YmUgYmFja3BvcnRlZCB0byBwcm9wZXIga2VybmVscy4NCj4gDQo+IFRoYW5rIHlvdSwNCj4gQ2xh
+dWRpdSBCZXpuZWENCj4gDQo+IENoYW5nZXMgaW4gdjI6DQo+IC0gYWRkZWQgcGF0Y2ggd2l0aCB0
+aXRsZQ0KPiAgICJBUk06IGF0OTE6IHBtOiB1c2UgcHJvcGVyIGNvbXBhdGlibGVzIGZvciBzYW1h
+NWQyJ3MgcnRjIg0KPiANCj4gQ2xhdWRpdSBCZXpuZWEgKDMpOg0KPiAgIEFSTTogYXQ5MTogcG06
+IHVzZSBwcm9wZXIgY29tcGF0aWJsZXMgZm9yIHNhbWE1ZDIncyBydGMNCj4gICBBUk06IGF0OTE6
+IHBtOiB1c2UgcHJvcGVyIGNvbXBhdGlibGVzIGZvciBzYW05eDYwJ3MgcnRjIGFuZCBydHQNCj4g
+ICBBUk06IGF0OTE6IHBtOiB1c2UgcHJvcGVyIGNvbXBhdGlibGVzIGZvciBzYW1hN2c1J3MgcnRj
+IGFuZCBydHQNCj4gDQo+ICBhcmNoL2FybS9tYWNoLWF0OTEvcG0uYyB8IDEwICsrKysrLS0tLS0N
+Cj4gIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pDQo+IA0K
+DQpBcHBsaWVkIHRvIGF0OTEtZml4ZXMsIHRoYW5rcyENCg==

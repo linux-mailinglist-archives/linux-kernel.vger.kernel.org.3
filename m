@@ -2,188 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 294B855F029
+	by mail.lfdr.de (Postfix) with ESMTP id 7298F55F02A
 	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 23:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbiF1VHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 17:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
+        id S231609AbiF1VHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 17:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiF1VHW (ORCPT
+        with ESMTP id S231518AbiF1VHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 17:07:22 -0400
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C463A195;
-        Tue, 28 Jun 2022 14:07:20 -0700 (PDT)
-Received: by mail-io1-f41.google.com with SMTP id l24so14093253ion.13;
-        Tue, 28 Jun 2022 14:07:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EdmVCCaapks5mqyJeNP/LvsCykQThbQW4f2v+GKWiVI=;
-        b=luJ0bqm1xTrfmE8BoMNLrxR9JqYYfDFfTLHwVm3QTmMoW5XZ/NJj240R3l8KnBUgwy
-         c32CjerCRsJ0z2eKmRRVH/mQVW3YdeCC0ca9M61HDQO2meRBphhdgYmdZqDuQfscQ4hs
-         uMffIZZlX3QTEsS4/FKy6/31fZN1Vrq7ly1xeZVVobc6w5qHGmHwjyi35pjRp3Yt9vCc
-         du5BTtdbR6kAP3pW4CyLLvJ9NxURzDL+t3A6s0ltBNVLMVVolFASdQEvPg6mBFWsshME
-         Eal7Zte+Le3NMK1J6B+ySXeOGOVhmVzc02T68U8ZhvGgobu6pJ1+qNnXhanJC/mEo/4R
-         rNrg==
-X-Gm-Message-State: AJIora8YHHJc+QcRGxMgt2ScXzCtC97OCHYmEWgjNZLEDy94h24pxOpr
-        PPzHZKKdkIGUiqSFSXKYkg==
-X-Google-Smtp-Source: AGRyM1uc+XPBhifMAguV92DxPvJZX6j7ZucXINm5C5uMzjXPcIlUdRqzojxywk4dF8WrqVqjSlCHzA==
-X-Received: by 2002:a05:6638:2589:b0:333:e976:d0c7 with SMTP id s9-20020a056638258900b00333e976d0c7mr50106jat.16.1656450440054;
-        Tue, 28 Jun 2022 14:07:20 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id b28-20020a026f5c000000b0032e70c4e12fsm6614611jae.28.2022.06.28.14.07.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 14:07:19 -0700 (PDT)
-Received: (nullmailer pid 977856 invoked by uid 1000);
-        Tue, 28 Jun 2022 21:07:16 -0000
-Date:   Tue, 28 Jun 2022 15:07:16 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "kyrie.wu" <kyrie.wu@mediatek.com>
-Cc:     Irui Wang <irui.wang@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        angelogioacchino.delregno@collabora.com,
-        nicolas.dufresne@collabora.com, wenst@chromium.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
-        maoguang.meng@mediatek.com, srv_heupstream@mediatek.com
-Subject: Re: [RESEND V9,1/7] dt-bindings: mediatek: Add mediatek,
- mt8195-jpgenc compatible
-Message-ID: <20220628210716.GA963202-robh@kernel.org>
-References: <20220614121024.31667-1-irui.wang@mediatek.com>
- <20220614121024.31667-2-irui.wang@mediatek.com>
- <20220617231139.GA2610098-robh@kernel.org>
- <329eb655ddb503e4327cbe3cffef625bb44630b1.camel@mediatek.com>
+        Tue, 28 Jun 2022 17:07:40 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78303A1A1;
+        Tue, 28 Jun 2022 14:07:38 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 8575822246;
+        Tue, 28 Jun 2022 23:07:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1656450456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bcnmTdzKIt3h8Y/cXjAdBaWMZpAGYim0e79RrQFMrHc=;
+        b=BxoSIxSld2y217J+0raDd+5Og1lRRU6snjcxB8pR7pJ9N56FXcy/LdBf0iJJjzT0+ozZTd
+        LsUaTNCqrOKVhp8xuIAdQFzQNEVE267QifIa7wW8it7dTsS3Rf2K4acGMboA46D06bCmPB
+        etoEeefURRQ2b/1U7cqikoNYBa7mQdY=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <329eb655ddb503e4327cbe3cffef625bb44630b1.camel@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 28 Jun 2022 23:07:34 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: fwnode_for_each_child_node() and OF backend discrepancy
+In-Reply-To: <20220628205254.gnllvaz7w5jmpfe5@soft-dev3-1.localhost>
+References: <CAHp75Vd6e3WwHPfyL=GP=vsoWhwGXadwQziiRRwfHPfjkX2eFg@mail.gmail.com>
+ <2f2d7685e0e43194270a310034004970@walle.cc>
+ <CAHp75VcANMjxgS6S24Zh+mz66usb6LBnQk-ENvU9JHSXXsG1DA@mail.gmail.com>
+ <9e58f421c27121977d11381530757a6e@walle.cc>
+ <3ab8afab-b6b7-46aa-06d4-6740cee422d7@linaro.org>
+ <288f56ba9cfad46354203b7698babe91@walle.cc>
+ <daaddbd5-1cd4-d3ce-869a-249bdd8aecb9@linaro.org>
+ <96f40ae6abf76af3b643b1e1c60d1d9f@walle.cc>
+ <f9eb6d94-c451-0c9f-f123-2f1324f68b68@linaro.org>
+ <CAHp75VdWdUY-XyGBsQb3i9thCswmBo4UEAEaZCO5MC_HMW+fSQ@mail.gmail.com>
+ <20220628205254.gnllvaz7w5jmpfe5@soft-dev3-1.localhost>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <4782de1fc6692a98bd6c267c2714325f@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 02:04:38PM +0800, kyrie.wu wrote:
-> On Fri, 2022-06-17 at 17:11 -0600, Rob Herring wrote:
-> > On Tue, Jun 14, 2022 at 08:10:18PM +0800, Irui Wang wrote:
-> > > From: kyrie wu <kyrie.wu@mediatek.com>
-> > > 
-> > > Add mediatek,mt8195-jpgenc compatible to binding document.
-> > > 
-> > > Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
-> > > ---
-> > >  .../media/mediatek,mt8195-jpegenc.yaml        | 153
-> > > ++++++++++++++++++
-> > >  1 file changed, 153 insertions(+)
-> > >  create mode 100644
-> > > Documentation/devicetree/bindings/media/mediatek,mt8195-
-> > > jpegenc.yaml
-> > > 
-> > > diff --git
-> > > a/Documentation/devicetree/bindings/media/mediatek,mt8195-
-> > > jpegenc.yaml
-> > > b/Documentation/devicetree/bindings/media/mediatek,mt8195-
-> > > jpegenc.yaml
-> > > new file mode 100644
-> > > index 000000000000..a7f9f723d5db
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/media/mediatek,mt8195-
-> > > jpegenc.yaml
-> > > @@ -0,0 +1,153 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: 
-> > > http://devicetree.org/schemas/media/mediatek,mt8195-jpegenc.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: MediaTek JPEG Encoder Device Tree Bindings
-> > > +
-> > > +maintainers:
-> > > +  - kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>
-> > > +
-> > > +description: |-
-> > > +  MediaTek JPEG Encoder is the JPEG encode hardware present in
-> > > MediaTek SoCs
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    items:
-> > > +      - const: mediatek,mt8195-jpgenc
-> > > +
-> > > +  mediatek,jpegenc-multi-core:
-> > > +    type: boolean
-> > > +    description: |
-> > > +      Indicates whether the jpeg encoder has multiple cores or
-> > > not.
-> > > +
-> > > +  power-domains:
-> > > +    maxItems: 1
-> > > +
-> > > +  iommus:
-> > > +    maxItems: 4
-> > > +    description: |
-> > > +      Points to the respective IOMMU block with master port as
-> > > argument, see
-> > > +      Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> > > for details.
-> > > +      Ports are according to the HW.
-> > > +
-> > > +  "#address-cells":
-> > > +    const: 2
-> > > +
-> > > +  "#size-cells":
-> > > +    const: 2
-> > > +
-> > > +  ranges: true
-> > > +
-> > > +# Required child node:
-> > > +patternProperties:
-> > > +  "^jpgenc@[0-9a-f]+$":
-> > > +    type: object
-> > > +    description: |
-> > > +      The jpeg encoder hardware device node which should be added
-> > > as subnodes to
-> > > +      the main jpeg node.
-> > > +
-> > > +    properties:
-> > > +      compatible:
-> > > +        const: mediatek,mt8195-jpgenc-hw
-> > > +
-> > > +      reg:
-> > > +        maxItems: 1
-> > > +
-> > > +      hw_id:
-> > > +        description: |
-> > > +          Current jpegenc hw id.
-> > 
-> > Same question here. Surely, I asked sometime in the last 8 versions,
-> > but 
-> > no explanation here and I'm not going to go look for it.
-> Dear Rob,
-> I'm sorry for not giving an accurate explanation in time.
-> The MT8195 has own two encoding hardwares, we use hw_id to 
-> represent them.
-> hw_id = 0, for hardware 0, and hw_id = 1, repesents another one.
-> I will improve the description in the next version.
+Am 2022-06-28 22:52, schrieb Horatiu Vultur:
+> The 06/28/2022 22:28, Andy Shevchenko wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
+>> the content is safe
+>> 
+>> On Tue, Jun 28, 2022 at 5:17 PM Krzysztof Kozlowski
+>> <krzysztof.kozlowski@linaro.org> wrote:
+>> > On 28/06/2022 17:09, Michael Walle wrote:
+> 
+> Hi,
+> 
+> Sorry for joint this late.
+> 
+>> 
+>> ...
+>> 
+>> > > Mh. Assume a SoC with an integrated ethernet switch. Some ports
+>> > > are externally connected, some don't. I'd think they should be disabled,
+>> > > no? Until now, all bindings I know, treat them as disabled. But OTOH
+>> > > you still need to do some configurations on them, like disable port
+>> > > forwarding, disable them or whatever. So the hardware is present, but
+>> > > it is not connected to anything.
+>> >
+>> > I see your point and the meaning is okay... except that drivers don't
+>> > touch disabled nodes. If a device (with some address space) is disabled,
+>> > you do not write there "please be power off". Here the case is a bit
+>> > different, because I think ports do not have their own address space.
+>> > Yet it contradicts the logic - something is disabled in DT and you
+>> > expect to perform actual operations on it.
+>> 
+>> You beat me up to this comment, I also see a contradiction of what
+>> "disabled" means in your, Michael, case and what it should be.
+>> 
+>> If you need to perform an operation on some piece of HW, it has not to
+>> be disabled.
+>> 
+>> Or, you may deduce them by knowing how many ports in hardware (this is
+>> usually done not by counting the nodes, but by a property) and do
+>> whatever you want on ones, you have  not listed (by port_num) in the
+>> array of parsed children.
+> 
+> It is not possible to have a defined for the MAX number of ports that
+> supported by lan966x. Which is 8. And assigned that define to
+> num_phys_ports instead of counting the entries in DT?
 
-Why do you care which one is which? 
+You mean also for the lan9662? I'm pretty sure that doesn't
+work. Have a look where num_phys_ports is used. One random
+example:
+https://elixir.bootlin.com/linux/latest/source/drivers/net/ethernet/microchip/lan966x/lan966x_main.c#L874
 
-We generally don't do instance indices in DT, so figure out how not to 
-need this.
+So if your switch only has 4 ports, then I'd guess you'll
+access a non-existing register.
 
-Rob
+-michael

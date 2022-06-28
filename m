@@ -2,64 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A17C55EB9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505ED55EBAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233498AbiF1SB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 14:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47322 "EHLO
+        id S234013AbiF1SDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 14:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbiF1SBV (ORCPT
+        with ESMTP id S232772AbiF1SCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:01:21 -0400
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C21113CDF;
-        Tue, 28 Jun 2022 11:01:20 -0700 (PDT)
-Received: by mail-il1-f169.google.com with SMTP id w10so8693704ilj.4;
-        Tue, 28 Jun 2022 11:01:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vyEzwvPI3BGxNhyGTBd05qTTzI+KUnXsrXGykLBGpWI=;
-        b=wScY8X+R3OFPKDMQSTnt1c8KopyPDckwZuWHsHCnlVqGpq1uUxnMEGX198bOHPtU2k
-         aQOQg1QpKVd8ZzdlgZL/z8wXAj/kE0onJvUu4xYFSzDZXSUqhxDqSkeDiPXTjHvhqaPB
-         BPbg7Ot8c+FEDrcaDTAjImyL+9MRaGQ5Ymwml0A7hz73QXRkO4PaK/xXENVM5EV6roxl
-         m8dSgxurVtER0SoxT8NwzaNiCcEY6PuBeX7DrVc4Oxq4mhNVqIIzX+lHPBUgwFdV8ZIx
-         pZFToHU/aRtX+Qpn16uXFHK0UPYzTyW/3Ip5uev3LCc3Ly+V/piHMhO8YmiKL5FVPvqP
-         yhMg==
-X-Gm-Message-State: AJIora8K5l0/dRQd2WuJHfZtieWjfVVQNTgW+i2VcYxvurG+EX1IL+x5
-        xKysJ0ZQrwxrBFJygeiaJQ==
-X-Google-Smtp-Source: AGRyM1sKk9gL4yQV/igOvLwe9uL1GmQw+zbPQ4Eb34tAfm5CB2E0YhZpPgDOmZvs3Bol0j9fAT7xow==
-X-Received: by 2002:a05:6e02:188a:b0:2d4:7fd:dbf with SMTP id o10-20020a056e02188a00b002d407fd0dbfmr10668739ilu.217.1656439279592;
-        Tue, 28 Jun 2022 11:01:19 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id e39-20020a022127000000b0032e49fcc241sm6317306jaa.176.2022.06.28.11.01.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 11:01:19 -0700 (PDT)
-Received: (nullmailer pid 710546 invoked by uid 1000);
-        Tue, 28 Jun 2022 18:01:18 -0000
-Date:   Tue, 28 Jun 2022 12:01:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 0/3] dt-bindings: Arm CoreSight binding schema
- conversions
-Message-ID: <20220628180118.GA703354-robh@kernel.org>
-References: <20220603011933.3277315-1-robh@kernel.org>
- <20220620165541.GA1458883@p14s>
+        Tue, 28 Jun 2022 14:02:30 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1253E12AF1;
+        Tue, 28 Jun 2022 11:02:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 765B1CE219F;
+        Tue, 28 Jun 2022 18:02:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D38AC3411D;
+        Tue, 28 Jun 2022 18:02:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656439343;
+        bh=cAL7cSlopyAfoe9ePy3AVZXWDpqa/7WVl3RSZd8S3bI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mus5m3U1fKb4931jTyiurB47tvXX5JPxmq6yLOKqpkPBpy0t3k9+zRX0h2LiW51qv
+         i8unuLfiBT0lrYHvw1koheTiUZx4/19Z+oO/A785HMLj4MTcTsI4bt5WajY8z9efw8
+         mnlBZ9ATgqPh33szfh7+rcl1LALXwP3AKKEJERissQng3jPLc0EJfyvCwU/0Q2XBaH
+         Lxm9/SBW78szE2IFhBu6rSJRoPF5EDNzwd7p7Lq0hRfjDxfv6VW4td9f89Tr+ZPM8c
+         NVxB2qhKULqcL+trOEM64Y7meXBLsSHCPASF9ppNjsgBESbgBF8VivYDFnxTmHFo1z
+         8u4xZhuRbnNZw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Dmitry Klochkov <kdmitry556@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, raspl@linux.ibm.com,
+        borntraeger@linux.ibm.com, kvm@vger.kernel.org
+Subject: [PATCH MANUALSEL 5.18 1/3] tools/kvm_stat: fix display of error when multiple processes are found
+Date:   Tue, 28 Jun 2022 14:02:15 -0400
+Message-Id: <20220628180220.621172-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220620165541.GA1458883@p14s>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,41 +56,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 10:55:41AM -0600, Mathieu Poirier wrote:
-> Hi Rob,
-> 
-> On Thu, Jun 02, 2022 at 08:19:30PM -0500, Rob Herring wrote:
-> > This series converts all the CoreSight debug bindings to DT schema
-> > format. These bindings are at the top of the list of occurrences of
-> > bindings without a schema. For arm64 dts files:
-> > 
-> >     702 ['arm,coresight-etm4x', 'arm,primecell']
-> >     536 ['arm,coresight-cpu-debug', 'arm,primecell']
-> >     509 ['arm,coresight-dynamic-funnel', 'arm,primecell']
-> >     213 ['arm,coresight-tmc', 'arm,primecell']
-> >     143 ['arm,coresight-dynamic-replicator', 'arm,primecell']
-> >      97 ['arm,coresight-stm', 'arm,primecell']
-> > 
-> > I'll send a reply to these with the errors in dts files that this
-> > causes. I've reviewed them and they all look legit. Xilinx Zynq though
-> > has 3 clocks instead of 2.
-> > 
-> > v2:
-> >  - Rename other Coresight bindings to use compatible string for filename
-> >  - Add missing arm,coresight-dynamic-replicator.yaml and
-> >    arm,coresight-static-funnel.yaml
-> >  - Update MAINTAINERS
-> >  - Fix coresight.txt references
-> 
-> What a massive undertaking... I have looked scrupulously and everything adds up.
-> Let me know if you were looking for me to pick this up.  Otherwise:
-> 
-> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+From: Dmitry Klochkov <kdmitry556@gmail.com>
 
-Can you apply. I think there was another series from QCom touching 
-the MAINTAINERS entry that will conflict. 
+[ Upstream commit 933b5f9f98da29af646b51b36a0753692908ef64 ]
 
-There's a couple of indentation fixups. Can you fix when applying or do 
-you want me to resend?
+Instead of printing an error message, kvm_stat script fails when we
+restrict statistics to a guest by its name and there are multiple guests
+with such name:
 
-Rob
+  # kvm_stat -g my_vm
+  Traceback (most recent call last):
+    File "/usr/bin/kvm_stat", line 1819, in <module>
+      main()
+    File "/usr/bin/kvm_stat", line 1779, in main
+      options = get_options()
+    File "/usr/bin/kvm_stat", line 1718, in get_options
+      options = argparser.parse_args()
+    File "/usr/lib64/python3.10/argparse.py", line 1825, in parse_args
+      args, argv = self.parse_known_args(args, namespace)
+    File "/usr/lib64/python3.10/argparse.py", line 1858, in parse_known_args
+      namespace, args = self._parse_known_args(args, namespace)
+    File "/usr/lib64/python3.10/argparse.py", line 2067, in _parse_known_args
+      start_index = consume_optional(start_index)
+    File "/usr/lib64/python3.10/argparse.py", line 2007, in consume_optional
+      take_action(action, args, option_string)
+    File "/usr/lib64/python3.10/argparse.py", line 1935, in take_action
+      action(self, namespace, argument_values, option_string)
+    File "/usr/bin/kvm_stat", line 1649, in __call__
+      ' to specify the desired pid'.format(" ".join(pids)))
+  TypeError: sequence item 0: expected str instance, int found
+
+To avoid this, it's needed to convert pids int values to strings before
+pass them to join().
+
+Signed-off-by: Dmitry Klochkov <kdmitry556@gmail.com>
+Message-Id: <20220614121141.160689-1-kdmitry556@gmail.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/kvm/kvm_stat/kvm_stat | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/kvm/kvm_stat/kvm_stat b/tools/kvm/kvm_stat/kvm_stat
+index 5a5bd74f55bd..9c366b3a676d 100755
+--- a/tools/kvm/kvm_stat/kvm_stat
++++ b/tools/kvm/kvm_stat/kvm_stat
+@@ -1646,7 +1646,8 @@ Press any other key to refresh statistics immediately.
+                          .format(values))
+             if len(pids) > 1:
+                 sys.exit('Error: Multiple processes found (pids: {}). Use "-p"'
+-                         ' to specify the desired pid'.format(" ".join(pids)))
++                         ' to specify the desired pid'
++                         .format(" ".join(map(str, pids))))
+             namespace.pid = pids[0]
+ 
+     argparser = argparse.ArgumentParser(description=description_text,
+-- 
+2.35.1
+

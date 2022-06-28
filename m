@@ -2,109 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2A655D9C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7030655D123
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243383AbiF1Djv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 23:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
+        id S243452AbiF1DkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 23:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243270AbiF1Djp (ORCPT
+        with ESMTP id S243472AbiF1DkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 23:39:45 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6309B27A
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:39:45 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id k9so1602733pfg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:39:45 -0700 (PDT)
+        Mon, 27 Jun 2022 23:40:08 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BC22558E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:40:06 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id cw10so23065834ejb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:40:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qjjJpI+R2iNDFP0VUY4y25yOQG9qRilkPuIZPI5DsnA=;
-        b=0tZDL06mUGj/lQPCGfLa5cBOJG/grVT+ds5Ao6RilY0f9aFWb0B6nJX85RSwqSFRnk
-         PScJlpEFfexbX/D5JO9rA4GCyL2F574ul0XC3T7mVuve/vXzC6XzZ4uTdqcjFcW+wESP
-         p4/liCBclr4KxYg+SjbRsY9ZkfvkMokWmJKRZNICkW6gPAW+1l1lKGiUp+W2wNKT3OyF
-         hILDMaUfe5LAalPxIwEmQfxq4xeCiT8VARIScfcwC7enpK7lqEEkvHRcqaTqqw2xAjfA
-         ip1xKYMXTPB/YdD10mhVRjHM0lKidQmhsrOkdsmGf6ifnMRrEOLdEFYv+wpNSh/s7jIc
-         q7zw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=njsS6n4ji3BE+KKs9Ghae72PCh3jyBoDsk0tgxL8FI0=;
+        b=oKbzO6g+eMbCIXAY/CAkhNzW3U44LkmG9aU/g/uUNJcKRk+QCyBD1QTn7GKL8gdjQz
+         mgBuNMESEbBlcM6vLX3Ysd9PmRUMcjZBI3OXxrS/uWhI7J4RN8Cr1uZ9qV1hA/v1vyY6
+         3fvk5o/1yz77QJ6ujGo5Y5pG8LgMybQjyewV0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qjjJpI+R2iNDFP0VUY4y25yOQG9qRilkPuIZPI5DsnA=;
-        b=aJSFjAfIGxK11BFuthZxrFWU/i/T7LNM256qL8yxG90w+eaGl0Vv1gUh7oWtGQ0AK1
-         TVh/S9AM/+NDZKhzty7e9uMIwtSchBKF3x1ySAVxjOaQInpkkeOtuKxbHAdRvVwKl8To
-         828UENfrTFvrNcmJRY3VcqVSXeYZxdlQPr7TQZl65hJyzr7ITb33IsPTueIawQfCvG0F
-         tWjMqDqmz+KdQNxRvqoUrvGq3MxxpE0tusT/A6Nupki5Si6Pd6f2feZUnapsx2FtjXu8
-         Oy4FkCDYWBeVAD5NenaxxdBT0I9qckAbpJCRoJ6qCqQOopPFgR1HNbXmpHzn0H0MbhL/
-         fMdQ==
-X-Gm-Message-State: AJIora9xuFhxRyN6paL4YEGcdNG2PNa05EeFmVDjRmS9kwpPOmkDgNUs
-        Vbo6TyLvjx6Mru6MpD6nJbgqqA==
-X-Google-Smtp-Source: AGRyM1us4e3KtmyvXAPHVS+j/aqInBb/uGkGK8JRwfFX9bP/ocaKTvD4+KgM48SVd1Q6R0/+3uOIIw==
-X-Received: by 2002:a65:6a05:0:b0:3db:27cb:9123 with SMTP id m5-20020a656a05000000b003db27cb9123mr15908679pgu.497.1656387584907;
-        Mon, 27 Jun 2022 20:39:44 -0700 (PDT)
-Received: from [10.4.116.59] ([139.177.225.251])
-        by smtp.gmail.com with ESMTPSA id g26-20020aa7819a000000b0052548b87bd1sm8085043pfi.46.2022.06.27.20.39.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 20:39:44 -0700 (PDT)
-Message-ID: <e72d9b4a-a986-3b73-d4e5-63df40a0bee1@bytedance.com>
-Date:   Tue, 28 Jun 2022 11:39:38 +0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=njsS6n4ji3BE+KKs9Ghae72PCh3jyBoDsk0tgxL8FI0=;
+        b=oUHsWrKRxPwi7SkOIy4OxAjIoy6tu2CYtCKOcnHwfGjCIMrniOWov6uO2zhjAUIMFq
+         HgKSIHizc341v1QW6mHFsU+jZ6l9/g0rFQViKKbzjHs+BlCBR8B/Np9RZ2yRx9Xh7wkB
+         3MiuqBKx2YDXzkjQX5A4RN8nnCAbrgg7G8XS3LBNPzaBMZMQPwFUB6oIyzMQV/tGJY64
+         PikSfyR3OjtEMOuJbLr8f1PGmUltxCbYmUxQJfsW69BAk8sdMpHc06i62LhoQThQVJ2z
+         JZHUxY7NUzjztXazGU1Y4qSDCAp1osuz72xfsI5QSWutVy8x5i0MfP0e7oCg3v245Yvn
+         2O4g==
+X-Gm-Message-State: AJIora+7RKZMTooSFetucmOBGtlDHasfGSd/NCTZH62fryJFzfz+eX38
+        bETEmfVKgszD0CTN6d8Zs8HnvBQF+FoG0JVdod64gA==
+X-Google-Smtp-Source: AGRyM1sBO7xwJRZ5uCX3ceEyfp6ignZ5UYQV3sa/jN/Q1E8Y09DLvGSnyIYwBbliBn8uj6IQnBR2MUhYHX7JamuWAV0=
+X-Received: by 2002:a17:907:7e8b:b0:726:2c51:b06e with SMTP id
+ qb11-20020a1709077e8b00b007262c51b06emr15491776ejc.129.1656387604564; Mon, 27
+ Jun 2022 20:40:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH v4 1/7] sched/fair: default to false in test_idle_cores
-Content-Language: en-US
-To:     Josh Don <joshdon@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Chen Yu <yu.c.chen@intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20220619120451.95251-1-wuyun.abel@bytedance.com>
- <20220619120451.95251-2-wuyun.abel@bytedance.com>
- <CABk29NtfVjXQZORGB1owmBS6C9LZJn8ci15gv4nQm+2DNLEPBA@mail.gmail.com>
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <CABk29NtfVjXQZORGB1owmBS6C9LZJn8ci15gv4nQm+2DNLEPBA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220627152107.645860-1-Jason@zx2c4.com>
+In-Reply-To: <20220627152107.645860-1-Jason@zx2c4.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Tue, 28 Jun 2022 11:39:38 +0800
+Message-ID: <CAJMQK-jGsobw7i4NjQ4oezA0rU03ECs_nY=Txr6TgsHFu2jXhg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: chosen: document rng-seed property
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     krzysztof.kozlowski@linaro.org, robh@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Kees Cook <keescook@chromium.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Josh, thanks for your comments!
+On Mon, Jun 27, 2022 at 11:21 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Document the /chosen/rng-seed property, which has existed for quite some
+> time but without an entry in this file.
+>
+> Fixes: 428826f5358c ("fdt: add support for rng-seed")
+> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+It's currently documented in
+https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/chosen.yaml
 
-On 6/28/22 6:53 AM, Josh Don Wrote:
-> On Sun, Jun 19, 2022 at 5:05 AM Abel Wu <wuyun.abel@bytedance.com> wrote:
->>
->> It's uncertain whether idle cores exist or not if shared sched-domains
->> are not ready, so returning "no idle cores" usually makes sense.
->>
->> While __update_idle_core() is an exception, it checks status of this
->> core and set to shared sched-domain if necessary. So the whole logic
->> depends on the existence of shared domain, and can bail out early if
->> it isn't available. Modern compilers seems capable of handling such
->> cases, so remove the tricky self-defined default return value.
-> 
-> I don't think the compiler will be able to bail out of the smt
-> iteration early, since it'll have to do another rcu dereference for
-> the sd_llc in set(). But I also don't think this case needs
-> optimization, since it should be transient while the domain isn't
-> ready.
-> 
-> Reviewed-by: Josh Don <joshdon@google.com>
+https://lore.kernel.org/lkml/CAL_Jsq+uSdk9YNbUW35yjN3q8-3FDobrxHmBpy=4RKmCfnB0KQ@mail.gmail.com/
 
-Obviously I failed to comprehend the difference between the changed
-assembly code, my bad..
 
-Thanks,
-Abel
+>  Documentation/devicetree/bindings/chosen.txt | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/chosen.txt b/Documentation/devicetree/bindings/chosen.txt
+> index 1cc3aa10dcb1..49b175e133b2 100644
+> --- a/Documentation/devicetree/bindings/chosen.txt
+> +++ b/Documentation/devicetree/bindings/chosen.txt
+> @@ -7,6 +7,21 @@ arguments. Data in the chosen node does not represent the hardware.
+>
+>  The following properties are recognized:
+>
+> +rng-seed
+> +--------
+> +
+> +This property is used to initialize the kernel's random number generator at
+> +the earliest possible opportunity, and will be credited if CONFIG_RANDOM_
+> +TRUST_BOOTLOADER is set. All hardware that has an opportunity to set this
+> +with high quality randomness is encouraged to do so. It is parsed as a byte
+> +array, which should be at least 32 bytes long:
+> +
+> +/ {
+> +       chosen {
+> +               rng-seed = <... random bytes ...>;
+> +       };
+> +};
+> +
+>
+>  kaslr-seed
+>  -----------
+> --
+> 2.35.1
+>

@@ -2,125 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F18855D81C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F87555CA4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345433AbiF1Mdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 08:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
+        id S1344534AbiF1MeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 08:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235217AbiF1Mde (ORCPT
+        with ESMTP id S241951AbiF1MeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 08:33:34 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2082.outbound.protection.outlook.com [40.107.244.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E148D1DA67;
-        Tue, 28 Jun 2022 05:33:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jr2Q6ws2xsZrvUKtmpFxEnOkzI+TkcFXgMUkAVTOgwpZnkqdbYvkY3fjSzxD0BFOLh8reggTgK9qA6n/W0OukvTuS/X9p041JqhMZQglfQGkiHrTQy0w4XNaA010pQb/NU2Lh/Ub8wfZm7mqHdjUAiddM9s6CgPAMZO94lbdqO5drI3uAuI2DKSbAOUsFTClt04EXSVsa5thM3E1zE+ulJ0R4b8Zk018yiDT4vzhRmPuJScj32z2CDY5Bq7ptWxF66RAKwJLYAQB9b+8uCPgJDwWCAAgVrqvYKGQ68IPaskoFIlJW3x2yPrGDcByoscSRGujHdg0Gt1WiTMtYCec4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YcKdIQUwmXvswNzp/eojixJuHcyDTnEVCSx9LmKdH8s=;
- b=LJzY1wm90eGVwcEfX4C3EbMduDxwBcVK/YOnsy+U2SatpZ8NWR7S6vwhLzEHHVyNK7+JnJS5dJIHhSYCJLaPODhvOnpz41woC7qTRAd4i9Tld9Dz8m5eztrhYjWkgD9fyR7XDfzkrZ9h0O/s3u0K+JKOseGFU6pjeebcMYD82P2GkV0QUHsx249uGNS9A6aKK0oNBdEWn82nhHYa63lvEtMqOLumIu5qCOBJ9TggpwEi760GsxmWDgdkWrTNoGlBxZuUp6GmZO6f/D62sROAhbQ5CyYM2P4udiBfb4MMoxoZ6ZS2/v/M5kdSv+8bHsVLrRMbcxn56dbl+GSRIC7yUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YcKdIQUwmXvswNzp/eojixJuHcyDTnEVCSx9LmKdH8s=;
- b=l3rU/4Oj/lOd/RwEihJhpC4kWX0ddVz245LvQixpLOIzIC2JU5z/k/D4W4taq2c/5T1X6AN+LqHaoZ7VgPUCssl8K8SlI6lWId8LHMfmmSwKIJaQNaYbeksCa2x8PsK2CHxMLBRdwQZx5WFw8QMEueShnlZids7SBL4pIsjKaKY=
-Received: from BN0PR04CA0156.namprd04.prod.outlook.com (2603:10b6:408:eb::11)
- by BL1PR12MB5803.namprd12.prod.outlook.com (2603:10b6:208:393::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Tue, 28 Jun
- 2022 12:33:31 +0000
-Received: from BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:eb:cafe::b5) by BN0PR04CA0156.outlook.office365.com
- (2603:10b6:408:eb::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14 via Frontend
- Transport; Tue, 28 Jun 2022 12:33:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT039.mail.protection.outlook.com (10.13.177.169) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5373.15 via Frontend Transport; Tue, 28 Jun 2022 12:33:31 +0000
-Received: from sp5-759chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 28 Jun
- 2022 07:33:30 -0500
-From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
-CC:     <pbonzini@redhat.com>, <mlevitsk@redhat.com>, <seanjc@google.com>,
-        <joro@8bytes.org>, <jon.grimm@amd.com>, <wei.huang2@amd.com>,
-        <terry.bowman@amd.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Subject: [PATCH] KVM: SVM: Fix x2APIC Logical ID calculation for avic_kick_target_vcpus_fast
-Date:   Tue, 28 Jun 2022 07:33:14 -0500
-Message-ID: <20220628123314.486001-1-suravee.suthikulpanit@amd.com>
+        Tue, 28 Jun 2022 08:34:16 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF4F2BB2F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:34:15 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id i8-20020a17090aee8800b001ecc929d14dso12264841pjz.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=AgtvVhfkB9MFjPDZk0eW6qF15/HI/14VLMJggWohgtE=;
+        b=FzhYTx698OOjOlAKVGM1J4TElebsB4vmarv8/HnHUHhC7cxyADcBoWzbyvHI+muvdi
+         37QqLTEMcNFXXEZeBiit0D6jJmcl+D+fogXsNTlgq1xvuTT4uNE97ebrSBBMq3d9MgBa
+         BX2DT6gtYAl1Xyn2/dIDFHx039BQrHp+P/bwXZoXsw2aNMXOP5W+PXG7KJoDbLe/7aLN
+         JNmYI/N87eI/KIxN4vsm7RGs119nknLqjrl5j7++iuDy/t7piYtzd22zX/BnzClkrGeR
+         b6uFhQkmAgi09s6rh0Wg4+QSC06ZqH6s1M6BkiC4XSKiXfyPermoWXK1gBNmNK0fJIua
+         9xcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=AgtvVhfkB9MFjPDZk0eW6qF15/HI/14VLMJggWohgtE=;
+        b=1MY0G6rJn649bPf6TT6upFLOT4D8I1Dy3NtU+7fxBWrASC2K5tvkCj6wn8IantEqB/
+         x/Kl/MZdT6dhZh6YsP52JsB9rbfJXOvP6fmr8n+k/oJssTcI8L3tmrGAEfeqNH6JUYan
+         C4yEuvdPqpxzF7vL2ziqISvnnDZKyjKxook+rCdeHdYIIXqI/XWPLOnShWfzkd+B/1dw
+         D4noFAyzGEAk03DPun3zx3QTJMCs7PAyDgF3wBiHoLzqaZnh4CUT48oXpFWr9PdWNQBd
+         RtFR3lTkWpQr0Dy4Z1eALyMhCxRvBuk744WqWzTob2ZreRuuweWyw7wO8z4LTOIARTm2
+         1Msg==
+X-Gm-Message-State: AJIora/BpFMeZDvdkwOFtgP5EdZp+laZlbWq7JPBPFbBqYV0YR4DPWnl
+        7XI11p5+v8LPXaU7GxxQzvp6Qw==
+X-Google-Smtp-Source: AGRyM1s45gTXj2HZCAEzzkN9IeQD+456rgjNd0s9t9KrgatOucowm4Ql5Rn52HnVu3lNsc2JcGW+Vw==
+X-Received: by 2002:a17:90b:1982:b0:1ec:e2fa:99ae with SMTP id mv2-20020a17090b198200b001ece2fa99aemr26478986pjb.228.1656419654716;
+        Tue, 28 Jun 2022 05:34:14 -0700 (PDT)
+Received: from MacBook-Pro.local.net ([139.177.225.225])
+        by smtp.gmail.com with ESMTPSA id t5-20020a17090abc4500b001ea629a431bsm9409454pjv.8.2022.06.28.05.34.10
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 28 Jun 2022 05:34:14 -0700 (PDT)
+From:   lizhe.67@bytedance.com
+To:     hpa@zytor.com
+Cc:     bp@alien8.de, dave.hansen@intel.com, dave.hansen@linux.intel.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lizefan.x@bytedance.com, lizhe.67@bytedance.com, mingo@redhat.com,
+        tglx@linutronix.de, x86@kernel.org
+Subject: Re: [RFC] memmap: introduce cmdline parameter "memmap=nn[KMG]$" without start addr
+Date:   Tue, 28 Jun 2022 20:34:02 +0800
+Message-Id: <20220628123402.14573-1-lizhe.67@bytedance.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <0EA9CBD4-D083-4546-BFAC-9C3A97420E5B@zytor.com>
+References: <0EA9CBD4-D083-4546-BFAC-9C3A97420E5B@zytor.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 697179d2-56f3-4ed4-f043-08da590268fa
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5803:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fokju9d08OKQZDp5g7O/RYMrWbu03Tv6F2aOT1NwP945Ktn2yLNk4BEIC0a1/GZtrEKB+LQ217kbTwwKXosCPvrozk/5r9a9uXmNGFbTyTiOrUw19JbOoBOnKdr5JZvjn3rq4HGaD5hvcLFQD7JipeGmkltLnHsGuYaFn5u0RDhiWp79N5EzZN4FJ5DRp4TqcBeA4hnIslUUcG8nFkRHV+SEY1x+fGtNLl9RIWAWDm5dOzSbqSAD+BwrjEZrxHw2ray2wOVQEoMUjqT6VGQucakYP85/vRpxRYWHo3XJyJ8IqTUnv9/91M2qFiot42SZXeiemWrArY2JLtD/4ZSQmHAM4YLLi++DSHSQreMjnxqqEAmhuGEFXSHwetIw7B0kIDSsyIphFiC7xMkj+5lp67646/bUQUb7MqnJ+U35nLu+Oja6ZqlBMr8NYTDUBiKDUUW/iidPFuS3ps7T5BtDsr2UuPyB6voYWDrkPaJerXkUvsfN5kyrNUPnsTA4FH5KuqHOMecQy7frU3bdMh8eQarxkxb5btt+UG77iRJQV42707O67v1KPace1RE9F9zC7RgIxPLJsXofjfDT6jaUpp2CwvBlmab4gNl02VPjaDP+QCA+i4yC9mxfP9a4Mdat9M2gSTS1/5be6C2/sLXE6sZbUWt8gF+FvJ4hNtMO4GtHTXLxcTPbdLX8illJYU+pzP79EjPLsBNIgNC/BNPm3q1FY/t9ZUNoEGzeFmi5CsfLXqfN18ZcRi1Qf4okBDHiNbqXHd0twW8FZwB0AbkkPI0AWhSN73NnLK1JVsrVEqf4MLi59e3JqwOiQDJ9doah5PRchpsJQ2HbrfYAu0Spaw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(396003)(346002)(39860400002)(40470700004)(36840700001)(46966006)(478600001)(7696005)(5660300002)(70586007)(41300700001)(16526019)(70206006)(110136005)(4326008)(1076003)(186003)(26005)(8676002)(356005)(40480700001)(54906003)(82740400003)(82310400005)(81166007)(8936002)(316002)(6666004)(2616005)(83380400001)(2906002)(86362001)(40460700003)(426003)(4744005)(47076005)(36860700001)(336012)(36756003)(44832011)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 12:33:31.1647
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 697179d2-56f3-4ed4-f043-08da590268fa
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5803
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For X2APIC ID in cluster mode, the logical ID is bit [15:0].
+On Thu, 23 Jun 2022 11:22:52, H. Peter Anvin <hpa@zytor.com> wrote:
+>>On 6/22/22 23:24, lizhe.67@bytedance.com wrote:
+>>> In our scenario, we need reserve or alloc large continous memory like
+>>> 256M in machine which have different memory specification at just
+>>> boot phase for a user land process.
+>>
+>>Just marking the memory reserved doesn't do any good by itself.  There
+>>must be some *other* kernel code to find this reserved area and make it
+>>available to userspace.
+>>
+>>It seems kinda silly to add this to the kernel without also adding the
+>>other half of the solution.  Plus, we don't really even know what this
+>>is for.  Are there other, better solutions?  I certainly can't offer any
+>>because this changelog did not provide a full picture of the problem
+>>this solves.
+>
+>Don't we already have a large contiguous physical memory allocator for this reason (misdesigned hardware?)
 
-Fixes: 603ccef42ce9 ("KVM: x86: SVM: fix avic_kick_target_vcpus_fast")
-Cc: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
----
- arch/x86/kvm/svm/avic.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index a830468d9cee..29f393251c4c 100644
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -378,7 +378,7 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
- 
- 		if (apic_x2apic_mode(source)) {
- 			/* 16 bit dest mask, 16 bit cluster id */
--			bitmap = dest & 0xFFFF0000;
-+			bitmap = dest & 0xFFFF;
- 			cluster = (dest >> 16) << 4;
- 		} else if (kvm_lapic_get_reg(source, APIC_DFR) == APIC_DFR_FLAT) {
- 			/* 8 bit dest mask*/
--- 
-2.32.0
-
+Yes we have already considered using CMA to realize the requirement. But CMA
+only provides several kernel space interface for memory allocation. It seems
+that userspace do not have a way to access those memory at current kernel.
+In our scenario, we need to reserve large continuous physical memory for a
+userspace program. It stores some data into memory and a hardware will consume
+them. So allocing an area of large continuous memory for userspace program is
+the best way for us.

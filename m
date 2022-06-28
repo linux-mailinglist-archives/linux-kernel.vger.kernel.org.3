@@ -2,79 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC3055EE03
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0361755EE06
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 21:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbiF1Tox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 15:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
+        id S230479AbiF1Tpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 15:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232315AbiF1Toe (ORCPT
+        with ESMTP id S229800AbiF1TpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 15:44:34 -0400
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A206F3C71F;
-        Tue, 28 Jun 2022 12:37:21 -0700 (PDT)
-Received: by mail-il1-f178.google.com with SMTP id a7so3764855ilj.2;
-        Tue, 28 Jun 2022 12:37:21 -0700 (PDT)
+        Tue, 28 Jun 2022 15:45:21 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC273CA6F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 12:38:48 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id k9so3687891pfg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 12:38:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=R/m0Mpk7pVuJiIWprQOno/Hpe4AFomZAEcga9jL9YLA=;
+        b=bhe/sbwpuGVDQTIiuE1vanGErx/2iYmd4JWtUJ9ONgGYg9xWkpKeD/AFx7lxB4Z/1q
+         3/JOWQm0J40kHqjM7KmdJ7b0ORREudvPV3vR2QpJIMz4VsRhAFBhYmfbwJIClZhJFkcB
+         ZTkxA1+uiy/3uB2TDvG90iKHTkB6UafPQXBXntJbSIBHIzWKiZbV96ZGLiEqTn3M1u9H
+         A9dSVBsWM5F5qxyN8i2cxi6OmDkJEYnkrbAmHAf943MJEU9kNJq9XPps/0BsMk85UpMA
+         +YwkTcMRPEYFzgrThZMpITDuq/jmD8Egxrgf6mJiQ3seAVjN7Wa23b/CUgZB14j4tN9v
+         XawQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cO3ERK4XtbJUrNznv3o2iz6iblK9YD2fF9VbD6eP290=;
-        b=bRBf8yD3xU6YnLnP3cf5rKY9/QNBioiHm/blJBqW+hjTgO33PjDqsCGSHfnRyKNgOM
-         cXwor9UjBBfc4HCkHj6Ah1T8c2I3yJcMSsQtUGdovNk8W+bg0AaevPV/QdUT6/cIt8M6
-         fSq8p7qiPFv1Zm1J1lSoVxwLT46Tqbf9bodeEG1wbAyUp/mB5pnwTatUGJLkIRHacE85
-         Gn/X2IUHmHM7ZMYLwWvMAswFzkS0ybnC53KvPTkxDvJkhhlnIZodANy7i3MJTd+Y/V1M
-         +XMCIpLA17ZI1I61obPRLgFxVKe5IfkYPePNC+qVOKg9z62atPacuMqf+LFT+faUQxvW
-         11aA==
-X-Gm-Message-State: AJIora9SRQItduYXhc/D7LS4lfdFtM0UB4a3lP5d54ZZFW7BHgWnBrSl
-        RcKEaZ6k/m+emNdUBjfDfA==
-X-Google-Smtp-Source: AGRyM1tWmrYkETu7J79v1CMzaMfG8jQE/J3ICVZ7PYuE+lwFA6fFbPDw1GpXcmEA8PpxTOE+0bCtFQ==
-X-Received: by 2002:a05:6e02:190c:b0:2d6:5c98:d0e5 with SMTP id w12-20020a056e02190c00b002d65c98d0e5mr11018037ilu.193.1656445040891;
-        Tue, 28 Jun 2022 12:37:20 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id v17-20020a056e020f9100b002d6d8398e88sm6166005ilo.70.2022.06.28.12.37.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 12:37:20 -0700 (PDT)
-Received: (nullmailer pid 852286 invoked by uid 1000);
-        Tue, 28 Jun 2022 19:37:19 -0000
-Date:   Tue, 28 Jun 2022 13:37:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-Cc:     linux-kernel@vger.kernel.org, michals@xilinx.com,
-        bhelgaas@google.com, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, lorenzo.pieralisi@arm.com
-Subject: Re: [PATCH v5 1/2] dt-bindings: PCI: xilinx-cpm: Add Versal CPM5
- Root Port
-Message-ID: <20220628193719.GA852253-robh@kernel.org>
-References: <20220621113653.2354462-1-bharat.kumar.gogada@xilinx.com>
- <20220621113653.2354462-2-bharat.kumar.gogada@xilinx.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=R/m0Mpk7pVuJiIWprQOno/Hpe4AFomZAEcga9jL9YLA=;
+        b=dpZMzfV7Y0krO68LEQNIj9S+pPS9aAqQVloortPcy9jkTuDueO43KeF7SKQ7Tmd08E
+         I6Rd9rIWGBRMIqnjO4O0ytzWS719tg1cmfNoSI9/QXh1MsQ1hylALvA6/ctOMrFoJe6b
+         4wgJC0GjnmyDnDM8sDLcLyScNGTUKRtReoozEoo4u0TYAhUU21eXLbii16Qu46v3uwnW
+         k5hCVDztP2x1jQKEyCr4Zv9aC1WAdTgP0GcyezBITyLykc/Bo+gJDWPtg3nUaypObq3u
+         Vwii1/MPy98SLu8YVfhdBefzt8VTfKEu0NklvQ4FlsSNa5nEDz+C9oXXtaH+DAfnPE3E
+         SvxQ==
+X-Gm-Message-State: AJIora8nhQVSK29vKlqOhkW5EGgpX7ebyEHeFMsB1hZIsSBXP76vZXn1
+        NIBFs0zH6NxDaiDlWsDs94hC5gMXZrmWPA==
+X-Google-Smtp-Source: AGRyM1seN+3lufLgwt0RnuEk9fybZPgxUv9NUsBwylD1Xh4AvsqeKC6WmitZPWs5OCP9YsaX9dJAfg==
+X-Received: by 2002:aa7:96dd:0:b0:525:8869:df13 with SMTP id h29-20020aa796dd000000b005258869df13mr6354581pfq.14.1656445127638;
+        Tue, 28 Jun 2022 12:38:47 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c085:21e1::165b? ([2620:10d:c090:400::5:f46f])
+        by smtp.gmail.com with ESMTPSA id g4-20020a655944000000b003fe4da67980sm9595041pgu.68.2022.06.28.12.38.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 12:38:47 -0700 (PDT)
+Message-ID: <37147b0c-4b11-37df-6c4a-ee2dfeb9cbb7@kernel.dk>
+Date:   Tue, 28 Jun 2022 13:38:44 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220621113653.2354462-2-bharat.kumar.gogada@xilinx.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH][next] io_uring: replace zero-length array with
+ flexible-array member
+Content-Language: en-US
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <20220628193320.GA52629@embeddedor>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220628193320.GA52629@embeddedor>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Jun 2022 17:06:52 +0530, Bharat Kumar Gogada wrote:
-> Xilinx Versal Premium series has CPM5 block which supports Root Port
-> functionality at Gen5 speed.
+On 6/28/22 1:33 PM, Gustavo A. R. Silva wrote:
+> There is a regular need in the kernel to provide a way to declare
+> having a dynamically sized set of trailing elements in a structure.
+> Kernel code should always use ?flexible array members?[1] for these
+> cases. The older style of one-element or zero-length arrays should
+> no longer be used[2].
 > 
-> Add support for YAML schemas documentation for Versal CPM5 Root Port driver.
-> 
-> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-> ---
->  .../bindings/pci/xilinx-versal-cpm.yaml       | 38 ++++++++++++++++++-
->  1 file changed, 37 insertions(+), 1 deletion(-)
-> 
+> [1] https://en.wikipedia.org/wiki/Flexible_array_member
+> [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thanks for sending this separately. As mentioned out-of-band, we already
+have it like this in the io_uring.h header in liburing.
+
+Applied for 5.20.
+
+-- 
+Jens Axboe
+

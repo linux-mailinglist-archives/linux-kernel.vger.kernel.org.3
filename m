@@ -2,210 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC86A55CAE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E9855DEBA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344344AbiF1MBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 08:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
+        id S1345338AbiF1MCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 08:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbiF1MBS (ORCPT
+        with ESMTP id S1344929AbiF1MCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 08:01:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD177248D6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:01:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656417677;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UB+jWJJOrlgRb4vi0jdlysSgI5DHBdJAyORCSjXEsls=;
-        b=Az5jt0RbqyNgUQU/iUCfN032jzUhzLxgFxGc4dsjv8TCDseuMt3iwn/1oXUHNbSGkjm84X
-        66nQDiR4wllA0U3VIbT/FQlFTgFoJceTtNwJuDrcLijKqTKWmCsi+qwQNYZse8NhjP9jDf
-        5aAgGYvO1biLK8h03JpYXAmRxfBwmOc=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-663-8mO4wwZdMl6w9vtI49r0ig-1; Tue, 28 Jun 2022 08:01:15 -0400
-X-MC-Unique: 8mO4wwZdMl6w9vtI49r0ig-1
-Received: by mail-wm1-f69.google.com with SMTP id t20-20020a1c7714000000b003a032360873so8144216wmi.0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:01:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UB+jWJJOrlgRb4vi0jdlysSgI5DHBdJAyORCSjXEsls=;
-        b=W3f4cmGj/JjlwpOxA7lFNoRNzP2hmv3DnD0vscnZqbh3O3jyC/DGBFHXUP9dLVfvka
-         Ju2MY4WjTw8eE2TESAiXfHefuWStSVBLJ0KYaV9RCcryRZy2K1vLDnnod+0wQeI2td0p
-         cQCA1eK5GbPf2W1jxh6aWcz6LzBxeIDaAS6YF7GnqKdv1szFBuDjD6j/xDNojAr4XaND
-         Hcw6d8V/DeSa27AL3iinBibnSL1S7kzlfkIeXqiz6ZqTJ2tpgbG6sspbY6D0NqXDh3u9
-         4YwOKuLxjkYIQw3nbe1SNgIz2ndfzcrU74X1JG1NoKKiQXNGwNQp7JrZotEv83HaBwVd
-         7tQw==
-X-Gm-Message-State: AJIora+U+2j0s/x/IQye7PzApSjQmobNwiVTUC59hXA/aS+Yvqp1E49e
-        LFEnNdtYDNNvJqTQECfPymEkYmb2zNKTRDFCUUidK+SROU1jaQhkac8myQSdriAt4fcnV2Nm07q
-        +P2g5Mli3SxQP/EVtWYqi76Eh
-X-Received: by 2002:a05:6000:60b:b0:21b:bd9b:aa15 with SMTP id bn11-20020a056000060b00b0021bbd9baa15mr16293302wrb.365.1656417674613;
-        Tue, 28 Jun 2022 05:01:14 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t5u3NHA/Kst5TxtCM47Bf7rL+ll44GXY6Jcg/sFDaehltv6YIbLBct0treW57gZ+WpSik8TA==
-X-Received: by 2002:a05:6000:60b:b0:21b:bd9b:aa15 with SMTP id bn11-20020a056000060b00b0021bbd9baa15mr16293277wrb.365.1656417674397;
-        Tue, 28 Jun 2022 05:01:14 -0700 (PDT)
-Received: from localhost (nat-pool-brq-t.redhat.com. [213.175.37.10])
-        by smtp.gmail.com with ESMTPSA id n9-20020a7bcbc9000000b003a039054567sm17186570wmi.18.2022.06.28.05.01.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 05:01:13 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 14:01:12 +0200
-From:   Igor Mammedov <imammedo@redhat.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Kai Huang <kai.huang@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kvm-devel <kvm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        isaku.yamahata@intel.com, Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [PATCH v5 03/22] cc_platform: Add new attribute to prevent ACPI
- memory hotplug
-Message-ID: <20220628140112.661154cf@redhat.com>
-In-Reply-To: <CAJZ5v0jEJNdmkidvcOiRn+OVt01D5095t+nyXaJHKsqEAOvcBQ@mail.gmail.com>
-References: <cover.1655894131.git.kai.huang@intel.com>
-        <87dc19c47bad73509359c8e1e3a81d51d1681e4c.1655894131.git.kai.huang@intel.com>
-        <CAJZ5v0jEJNdmkidvcOiRn+OVt01D5095t+nyXaJHKsqEAOvcBQ@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-redhat-linux-gnu)
+        Tue, 28 Jun 2022 08:02:25 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646432E9F2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:02:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jL1gJrWX37x+h1++tMH8uyXq3CpESXwb4NN7kK1bpMQ=; b=FkBGuceDB+930n1nflLN+Xh7/b
+        nGOeTfqCSPCtLyf4mzzQIKy1oRKK0pbxBc2aAU5HoIJoX+1Hd7sohK11AKhh1wXaYizF/gmftDlTe
+        4DjuWlbuten+rP1bxn1aouP1Fa8TpmLs3IV/Xn2MCEqeltERbKnN6wNen4Mza3d1JOPfidENXdwGy
+        Cx3tNocWai9krfdudDHuTpyG3VU6ywmzBcP9FOjUlU4FegJaM+/mieI30TdGVtztIuAJ4s2CUg7gS
+        r7eFp4ySh5fImKKdPOdPj0cUVUpLTLT1moRiaO/ZTs6mdGM5i+GuS8LcqFdr0ijoPcwUV6dblbRmO
+        m1D2ZQ5Q==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o69uP-00E5X7-Ce; Tue, 28 Jun 2022 12:01:36 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2FBD330017D;
+        Tue, 28 Jun 2022 14:01:31 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1AC342020A5A1; Tue, 28 Jun 2022 14:01:31 +0200 (CEST)
+Date:   Tue, 28 Jun 2022 14:01:31 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>, mmarek@suse.cz,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC][PATCH] kconfig: Add implicit CONFIG_ prefix to
+ IS_ENABLED() and co
+Message-ID: <Yrrtm0rRzLMCzKiM@hirez.programming.kicks-ass.net>
+References: <YrrQOifFIiISf/3g@hirez.programming.kicks-ass.net>
+ <CAK8P3a2XfzQo6emT4pXXxAjWewdP2LiAe2fOskFf-0suSmBJQQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a2XfzQo6emT4pXXxAjWewdP2LiAe2fOskFf-0suSmBJQQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Jun 2022 13:45:01 +0200
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
-
-> On Wed, Jun 22, 2022 at 1:16 PM Kai Huang <kai.huang@intel.com> wrote:
+On Tue, Jun 28, 2022 at 01:19:17PM +0200, Arnd Bergmann wrote:
+> On Tue, Jun 28, 2022 at 11:56 AM Peter Zijlstra <peterz@infradead.org> wrote:
 > >
-> > Platforms with confidential computing technology may not support ACPI
-> > memory hotplug when such technology is enabled by the BIOS.  Examples
-> > include Intel platforms which support Intel Trust Domain Extensions
-> > (TDX).
+> > Since IS_ENABLED() (and friends) are clearly meant to be used on
+> > CONFIG_foo symbols and IS_ENABLED(CONFIG_ is so long and almost an
+> > tautology, allow the more compact usage of: IS_ENABLED(foo).
 > >
-> > If the kernel ever receives ACPI memory hotplug event, it is likely a
-> > BIOS bug.  For ACPI memory hot-add, the kernel should speak out this is
-> > a BIOS bug and reject the new memory.  For hot-removal, for simplicity
-> > just assume the kernel cannot continue to work normally, and just BUG().
-> >
-> > Add a new attribute CC_ATTR_ACPI_MEMORY_HOTPLUG_DISABLED to indicate the
-> > platform doesn't support ACPI memory hotplug, so that kernel can handle
-> > ACPI memory hotplug events for such platform.
-> >
-> > In acpi_memory_device_{add|remove}(), add early check against this
-> > attribute and handle accordingly if it is set.
-> >
-> > Signed-off-by: Kai Huang <kai.huang@intel.com>
-> > ---
-> >  drivers/acpi/acpi_memhotplug.c | 23 +++++++++++++++++++++++
-> >  include/linux/cc_platform.h    | 10 ++++++++++
-> >  2 files changed, 33 insertions(+)
-> >
-> > diff --git a/drivers/acpi/acpi_memhotplug.c b/drivers/acpi/acpi_memhotplug.c
-> > index 24f662d8bd39..94d6354ea453 100644
-> > --- a/drivers/acpi/acpi_memhotplug.c
-> > +++ b/drivers/acpi/acpi_memhotplug.c
-> > @@ -15,6 +15,7 @@
-> >  #include <linux/acpi.h>
-> >  #include <linux/memory.h>
-> >  #include <linux/memory_hotplug.h>
-> > +#include <linux/cc_platform.h>
-> >
-> >  #include "internal.h"
-> >
-> > @@ -291,6 +292,17 @@ static int acpi_memory_device_add(struct acpi_device *device,
-> >         if (!device)
-> >                 return -EINVAL;
-> >
-> > +       /*
-> > +        * If the confidential computing platform doesn't support ACPI
-> > +        * memory hotplug, the BIOS should never deliver such event to
-> > +        * the kernel.  Report ACPI CPU hot-add as a BIOS bug and ignore
-> > +        * the memory device.
-> > +        */
-> > +       if (cc_platform_has(CC_ATTR_ACPI_MEMORY_HOTPLUG_DISABLED)) {  
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > 
-> Same comment as for the acpi_processor driver: this will affect the
-> initialization too and it would be cleaner to reset the
-> .hotplug.enabled flag of the scan handler.
+> I'd prefer to keep the more verbose usage, mainly because it makes it easier
+> to grep for a symbol. If today you do 'git grep CONFIG_PM_SLEEP', you find
+> all instances in Makefile, in #ifdef and in IS_ENABLED(), though not the
+> references in Kconfig language, which leave out the prefix.
 
-with QEMU, it is likely broken when memory is added as
-  '-device pc-dimm'
-on CLI since it's advertised only as device node in DSDT.
+Which is why I never grep for the CONFIG_ thing to begin with, it misses
+the Kconfig site.
 
-> 
-> > +               dev_err(&device->dev, "[BIOS bug]: Platform doesn't support ACPI memory hotplug. New memory device ignored.\n");
-> > +               return -EINVAL;
-> > +       }
-> > +
-> >         mem_device = kzalloc(sizeof(struct acpi_memory_device), GFP_KERNEL);
-> >         if (!mem_device)
-> >                 return -ENOMEM;
-> > @@ -334,6 +346,17 @@ static void acpi_memory_device_remove(struct acpi_device *device)
-> >         if (!device || !acpi_driver_data(device))
-> >                 return;
-> >
-> > +       /*
-> > +        * The confidential computing platform is broken if ACPI memory
-> > +        * hot-removal isn't supported but it happened anyway.  Assume
-> > +        * it is not guaranteed that the kernel can continue to work
-> > +        * normally.  Just BUG().
-> > +        */
-> > +       if (cc_platform_has(CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED)) {
-> > +               dev_err(&device->dev, "Platform doesn't support ACPI memory hotplug. BUG().\n");
-> > +               BUG();
-> > +       }
-> > +
-> >         mem_device = acpi_driver_data(device);
-> >         acpi_memory_remove_memory(mem_device);
-> >         acpi_memory_device_free(mem_device);
-> > diff --git a/include/linux/cc_platform.h b/include/linux/cc_platform.h
-> > index 9ce9256facc8..b831c24bd7f6 100644
-> > --- a/include/linux/cc_platform.h
-> > +++ b/include/linux/cc_platform.h
-> > @@ -93,6 +93,16 @@ enum cc_attr {
-> >          * Examples include TDX platform.
-> >          */
-> >         CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED,
-> > +
-> > +       /**
-> > +        * @CC_ATTR_ACPI_MEMORY_HOTPLUG_DISABLED: ACPI memory hotplug is
-> > +        *                                        not supported.
-> > +        *
-> > +        * The platform/os does not support ACPI memory hotplug.
-> > +        *
-> > +        * Examples include TDX platform.
-> > +        */
-> > +       CC_ATTR_ACPI_MEMORY_HOTPLUG_DISABLED,
-> >  };
-> >
-> >  #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
-> > --
-> > 2.36.1
-> >  
-> 
+> If we remove the prefix for IS_ENABLED(), the same grep fails to get
+> all the results, while searching for the substring without the CONFIG_
+> prefix can end up finding false-positives by finding longer strings (e.g.
+> CONFIG_DEBUG_STACKOVERFLOW vs
+> CONFIG_HAVE_DEBUG_STACKOVERFLOW).
 
+Me being used to that doesn't consider that a real issue :-) I'd much
+rather have the somewhat shorter IS_ENABLED() things.

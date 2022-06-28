@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D14A655DF4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC44F55D2A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245035AbiF1IcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 04:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
+        id S1343896AbiF1IkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 04:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241877AbiF1IcP (ORCPT
+        with ESMTP id S1343897AbiF1IkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 04:32:15 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CE62D1D8;
-        Tue, 28 Jun 2022 01:32:13 -0700 (PDT)
+        Tue, 28 Jun 2022 04:40:17 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517E227CFB;
+        Tue, 28 Jun 2022 01:40:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656405133; x=1687941133;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=2kqXa/uuLryKUFs3CLbGBD4etwbcUy4VHXIUo9tYGK4=;
-  b=LEVPB3/vXo+at6YRCU8O0vDKzzxD2b8WiylDwv6IZ/j3wVXsKiTELTAL
-   6AdS0clRVgvYc0bNHuq1g3iHegZW+qx4yODv3caqZ6GSLYCTbjxRLGg+k
-   n1QfU5pl04jkfCfW6dBY7lPGRbiM69X1U7AUQ5GxXSgjRqLXFHWrSi3oy
-   LAE5ZXaHtAE3PW89P86ITAjX1vw7xPyDl/PT0v2n8aYuRzC3sagdu467e
-   CJd45vSeabwfhL65mPsq+5TKHWi7xnyjpFuejxSdBXihKKcEMSI++gHTc
-   3utqS9PDS6voCnP4fk2fRPYkzqBb75c5u+05B+lX9NMwlFZqrE0W78HtF
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="264716123"
+  t=1656405616; x=1687941616;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HyBPeVMcLYtcvySQ5xAMJcjvoa1PQDR0FQGJvt+N3Cg=;
+  b=eHSjZ60BEZoNF04AQi7pQundgrx6z28TxcC+mH8Pr4DwEfb9ssg6q3PB
+   /tpfL3xqT1TCIK5TvViPsnSM1Cozvkp6LGmIpfIzYeDbqUIXU1IFVMhE7
+   oKcy5ASEcLiEmCTW4UUndKWiTRZhFvDczUUiwfyilUQglqQrfoTFmoEGN
+   zY2OLlrAA4IXnOFd2W+6ku/T+ktxnce3HO53O7uMv6vaggey/C0YKwqF0
+   HUD5dpjhIVvFe07ShOt8KAQzaC+x8eqhybHaylZ1beOx1rvpKk4bTp0z9
+   R9TshbNU1WxNZkREOITFNhrUj958iBH6jMglCGTEfFGrnP2LMHeAy9Gog
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="307156649"
 X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="264716123"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 01:32:13 -0700
+   d="scan'208";a="307156649"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 01:40:16 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="646818234"
-Received: from iannetti-mobl.ger.corp.intel.com ([10.251.216.215])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 01:32:09 -0700
-Date:   Tue, 28 Jun 2022 11:31:50 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-cc:     Lukas Wunner <lukas@wunner.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        vz@mleia.com, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, p.rosenberger@kunbus.com,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Subject: Re: [PATCH 2/8] serial: core, 8250: set RS485 termination gpio in
- serial core
-In-Reply-To: <067e6fa2-6015-2eea-5719-8b75fb08882c@gmx.de>
-Message-ID: <9239f2ea-1a1c-ff27-70b9-931ab99c16@linux.intel.com>
-References: <20220622154659.8710-1-LinoSanfilippo@gmx.de> <20220622154659.8710-3-LinoSanfilippo@gmx.de> <20220625195844.GB2879@wunner.de> <067e6fa2-6015-2eea-5719-8b75fb08882c@gmx.de>
+   d="scan'208";a="658045495"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga004.fm.intel.com with ESMTP; 28 Jun 2022 01:40:12 -0700
+Date:   Tue, 28 Jun 2022 16:31:58 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Nava kishore Manne <nava.manne@xilinx.com>
+Cc:     michal.simek@xilinx.com, hao.wu@intel.com, trix@redhat.com,
+        mdf@kernel.org, gregkh@linuxfoundation.org, ronak.jain@xilinx.com,
+        rajan.vaja@xilinx.com, abhyuday.godhasara@xilinx.com,
+        piyush.mehta@xilinx.com, harsha.harsha@xilinx.com,
+        lakshmi.sai.krishna.potthuri@xilinx.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org, git@xilinx.com
+Subject: Re: [PATCH v2 1/3] fpga: manager: change status api prototype, don't
+ use older
+Message-ID: <20220628083158.GA2442728@yilunxu-OptiPlex-7050>
+References: <20220621092833.1057408-1-nava.manne@xilinx.com>
+ <20220621092833.1057408-2-nava.manne@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220621092833.1057408-2-nava.manne@xilinx.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,54 +67,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 26 Jun 2022, Lino Sanfilippo wrote:
-
-> On 25.06.22 at 21:58, Lukas Wunner wrote:
-> > On Wed, Jun 22, 2022 at 05:46:53PM +0200, Lino Sanfilippo wrote:
-> >> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> >>
-> >> In serial8250_em485_config() the termination GPIO is set with the uart_port
-> >> spinlock held. This is an issue if setting the GPIO line can sleep (e.g.
-> >> since the concerning GPIO expander is connected via SPI or I2C).
-> >>
-> >> Fix this by setting the termination line outside of the uart_port spinlock
-> >> in the serial core.
-> > [...]
-> >> --- a/drivers/tty/serial/serial_core.c
-> >> +++ b/drivers/tty/serial/serial_core.c
-> >> @@ -1400,6 +1411,7 @@ static int uart_set_rs485_config(struct uart_port *port,
-> >>  	if (ret)
-> >>  		return ret;
-> >>  	uart_sanitize_serial_rs485(port, &rs485);
-> >> +	uart_set_rs485_termination(port, &rs485);
-> >>
-> >>  	spin_lock_irqsave(&port->lock, flags);
-> >>  	ret = port->rs485_config(port, &rs485);
-> >
-> > That's one way to solve the issue.  Another would be to push
-> > acquisition of the port spinlock down into drivers.
-> >
-> > I think in most drivers we don't need to take the port spinlock at all
-> > or only for a few specific register accesses.  So taking the lock here
-> > in the midlayer is likely unwarranted.  However, changing that requires
-> > going through every single driver's ->rs485_config() callback and
-> > checking whether it needs the lock or not.
+On Tue, Jun 21, 2022 at 02:58:31PM +0530, Nava kishore Manne wrote:
+> Different vendors have different error sets defined by Hardware.
+> If we always define the new bits when we cannot find an exact 1:1
+> mapping in the core the 64 bits would soon be used out. Also, it's
+> hard to understand the mixture of different error sets.
 > 
-> As a first step its sufficient to take the lock in each drivers rs485_config()
-> function and remove it from uart_set_rs485_config(). Then after time sort out
-> the drivers that dont require the lock and remove it from their function.
+> To address these issues updated the status interface to handle the
+> vendor-specific messages in a generic way. With the updated status
+> interface the vendor-specific driver files can independently handle
+> the error messages.
+
+I think we don't have to provide the vendor specific HW errors in a
+generic way, maybe the vendor specific drivers could handle them by its
+own device attributes.
+
+Since the output value set of the interface is specific to each driver,
+users should still interpret them in specific manners. So doesn't see
+much value for a class interface.
+
+Thanks,
+Yilun
+
 > 
-> However the point of this patch was also to generalize the handling of the
-> termination GPIO, so I would still see this placed in uart_set_rs485_config().
-
-Additional thing to consider is that core currently handles also the 
-port->rs485 assignment under spinlock when ->rs485_config() was 
-successful. TIOCSRS485 ioctl calls are synchronized by other primitives 
-wrt. each other (port mutex and now also termios_rwsem) but drivers 
-probably would like to see consistent rs485 which can only be realized by 
-holding port->lock.
-
-
--- 
- i.
-
+> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+> ---
+> Changes for v2:
+>               - New patch.
+> 
+>  drivers/fpga/dfl-fme-mgr.c    | 20 ++++++++++----------
+>  drivers/fpga/fpga-mgr.c       | 24 +++++-------------------
+>  include/linux/fpga/fpga-mgr.h |  2 +-
+>  3 files changed, 16 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/fpga/dfl-fme-mgr.c b/drivers/fpga/dfl-fme-mgr.c
+> index af0785783b52..5a8e6a41c85c 100644
+> --- a/drivers/fpga/dfl-fme-mgr.c
+> +++ b/drivers/fpga/dfl-fme-mgr.c
+> @@ -72,22 +72,22 @@ struct fme_mgr_priv {
+>  	u64 pr_error;
+>  };
+>  
+> -static u64 pr_error_to_mgr_status(u64 err)
+> +static ssize_t pr_error_to_mgr_status(u64 err, char *buf)
+>  {
+> -	u64 status = 0;
+> +	ssize_t len = 0;
+>  
+>  	if (err & FME_PR_ERR_OPERATION_ERR)
+> -		status |= FPGA_MGR_STATUS_OPERATION_ERR;
+> +		len += sprintf(buf + len, "reconfig operation error\n");
+>  	if (err & FME_PR_ERR_CRC_ERR)
+> -		status |= FPGA_MGR_STATUS_CRC_ERR;
+> +		len += sprintf(buf + len, "reconfig CRC error\n");
+>  	if (err & FME_PR_ERR_INCOMPATIBLE_BS)
+> -		status |= FPGA_MGR_STATUS_INCOMPATIBLE_IMAGE_ERR;
+> +		len += sprintf(buf + len, "reconfig incompatible image\n");
+>  	if (err & FME_PR_ERR_PROTOCOL_ERR)
+> -		status |= FPGA_MGR_STATUS_IP_PROTOCOL_ERR;
+> +		len += sprintf(buf + len, "reconfig IP protocol error\n");
+>  	if (err & FME_PR_ERR_FIFO_OVERFLOW)
+> -		status |= FPGA_MGR_STATUS_FIFO_OVERFLOW_ERR;
+> +		len += sprintf(buf + len, "reconfig fifo overflow error\n");
+>  
+> -	return status;
+> +	return len;
+>  }
+>  
+>  static u64 fme_mgr_pr_error_handle(void __iomem *fme_pr)
+> @@ -252,11 +252,11 @@ static int fme_mgr_write_complete(struct fpga_manager *mgr,
+>  	return 0;
+>  }
+>  
+> -static u64 fme_mgr_status(struct fpga_manager *mgr)
+> +static ssize_t fme_mgr_status(struct fpga_manager *mgr, char *buf)
+>  {
+>  	struct fme_mgr_priv *priv = mgr->priv;
+>  
+> -	return pr_error_to_mgr_status(priv->pr_error);
+> +	return pr_error_to_mgr_status(priv->pr_error, buf);
+>  }
+>  
+>  static const struct fpga_manager_ops fme_mgr_ops = {
+> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+> index 08dc85fcd511..ae8de13a482e 100644
+> --- a/drivers/fpga/fpga-mgr.c
+> +++ b/drivers/fpga/fpga-mgr.c
+> @@ -38,10 +38,11 @@ static inline enum fpga_mgr_states fpga_mgr_state(struct fpga_manager *mgr)
+>  	return FPGA_MGR_STATE_UNKNOWN;
+>  }
+>  
+> -static inline u64 fpga_mgr_status(struct fpga_manager *mgr)
+> +static inline ssize_t fpga_mgr_status(struct fpga_manager *mgr, char *buf)
+>  {
+>  	if (mgr->mops->status)
+> -		return mgr->mops->status(mgr);
+> +		return mgr->mops->status(mgr, buf);
+> +
+>  	return 0;
+>  }
+>  
+> @@ -460,23 +461,8 @@ static ssize_t status_show(struct device *dev,
+>  			   struct device_attribute *attr, char *buf)
+>  {
+>  	struct fpga_manager *mgr = to_fpga_manager(dev);
+> -	u64 status;
+> -	int len = 0;
+> -
+> -	status = fpga_mgr_status(mgr);
+> -
+> -	if (status & FPGA_MGR_STATUS_OPERATION_ERR)
+> -		len += sprintf(buf + len, "reconfig operation error\n");
+> -	if (status & FPGA_MGR_STATUS_CRC_ERR)
+> -		len += sprintf(buf + len, "reconfig CRC error\n");
+> -	if (status & FPGA_MGR_STATUS_INCOMPATIBLE_IMAGE_ERR)
+> -		len += sprintf(buf + len, "reconfig incompatible image\n");
+> -	if (status & FPGA_MGR_STATUS_IP_PROTOCOL_ERR)
+> -		len += sprintf(buf + len, "reconfig IP protocol error\n");
+> -	if (status & FPGA_MGR_STATUS_FIFO_OVERFLOW_ERR)
+> -		len += sprintf(buf + len, "reconfig fifo overflow error\n");
+> -
+> -	return len;
+> +
+> +	return fpga_mgr_status(mgr, buf);
+>  }
+>  
+>  static DEVICE_ATTR_RO(name);
+> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
+> index 0f9468771bb9..42c24426fb7f 100644
+> --- a/include/linux/fpga/fpga-mgr.h
+> +++ b/include/linux/fpga/fpga-mgr.h
+> @@ -154,7 +154,7 @@ struct fpga_manager_info {
+>  struct fpga_manager_ops {
+>  	size_t initial_header_size;
+>  	enum fpga_mgr_states (*state)(struct fpga_manager *mgr);
+> -	u64 (*status)(struct fpga_manager *mgr);
+> +	ssize_t (*status)(struct fpga_manager *mgr, char *buf);
+>  	int (*write_init)(struct fpga_manager *mgr,
+>  			  struct fpga_image_info *info,
+>  			  const char *buf, size_t count);
+> -- 
+> 2.25.1

@@ -2,70 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6043655C7C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C251255CDE7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345628AbiF1MNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 08:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
+        id S1345560AbiF1MOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 08:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344914AbiF1MN3 (ORCPT
+        with ESMTP id S1345129AbiF1MOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 08:13:29 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A7A237C2
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:13:28 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id cv13so12387283pjb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:13:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bSDinnzl56D9PFKDeB860nkVQnIp9oqH1T1HFaPBfr4=;
-        b=LZrAI0t9vW3GfRkSpY5xnTWBpPAMoPHypn1lKSOQhWtqPjmYD3IWl5ZGZwnfqNH4cA
-         UNELUthAvR2LaChKvDDw8gu9lKukzIBW1qWYIakbZ2iOSuacjr0Xi5vGfhCIvf3edIoG
-         Iym+3aKlyhlV8HgZaFldWhGZM/KL1pBVLab4Qn0wUwzNv22YkDl/2EmzqhDUVe8vh/d5
-         CrdV9xvFs1eslvwDl+QI6nx6D4NFcuvzAk58AmdWg7p4DkFHRYMgFrunqJDT2eQ1POvO
-         OvziMaJsAhq/Ued3JYdCr+Z+mQvn1bDRO6QwdMUH2j8tNCWzZPYpUhKlJZQM0Dvi2iiF
-         FneA==
+        Tue, 28 Jun 2022 08:14:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B79C23BCA
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:14:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656418470;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aiFneYnWaLi2y/lwyk0xtCtPW1xJaeDQIG0+th5sfkA=;
+        b=EzfzkNeCxhx3y+hSV9A50xU2olr22NGJsH0BWjlkv/n3NegmCpGNqvFJ238HCIj5pzseWk
+        6CAIAJ2cvg5Rfwt5rwImNIHrH0b8+7rwcxma9PwwgbPrjKWhMLqFfdlOm6np6/XcsEY2uy
+        hH1Gx4LOlvXTwmkVbCLMQaTiJTnOQxI=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-209-QU2DiHpBMWOIGRK-adPJJw-1; Tue, 28 Jun 2022 08:14:29 -0400
+X-MC-Unique: QU2DiHpBMWOIGRK-adPJJw-1
+Received: by mail-wm1-f71.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so7050739wmj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 05:14:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bSDinnzl56D9PFKDeB860nkVQnIp9oqH1T1HFaPBfr4=;
-        b=2wN77AuybqYuQjSd/Hvz3kHKDth/xLrb7mPMhR0t6maJsRZOwoTE2lhTP3xL+fVp2u
-         LrUfeH8EBicC8EFxQi6hePgGFkJbzMhtO+KNHIhOMCSczSnT7taexh3ZjXw06RFZ7YmL
-         evaafTD2qfdHk4ZvtApGnc/DUwa1QWU/pX01czBrl9XRF/pqcZqEAWfvmjHx+r+q+6pv
-         GhevMMTdlTO+f9OdVU0MlgulcF/hWXw8cyfPqTFwbY62+MW+FxEWh+SFei3yYFsJFh0S
-         2iZQlpACwln9pjDydpBA42xBDoEOXtHMLKaDnmGNZ+EBNDyLoxsX3vkxAzJUa8rtUeK+
-         wgDw==
-X-Gm-Message-State: AJIora85Hf1fHmO++Z+ceZHVcGpFAfVjsljIqxviD15GRIT4if0tcnyr
-        GwEMGjGeUALDxBrCGhHo9rbgX9FkX2AH7A==
-X-Google-Smtp-Source: AGRyM1sAf5ZuIfFPHYHjm02zMm3ex+WsIGHP3DaH/nqnRS89Qycce/vuhFMht33UFBTpn5MzHyxBPQ==
-X-Received: by 2002:a17:902:c40f:b0:16a:37de:89c2 with SMTP id k15-20020a170902c40f00b0016a37de89c2mr3505380plk.105.1656418408006;
-        Tue, 28 Jun 2022 05:13:28 -0700 (PDT)
-Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:37e8:2f95:a443:c532])
-        by smtp.gmail.com with ESMTPSA id r19-20020a170902e3d300b00163f8ddf160sm9070496ple.161.2022.06.28.05.13.26
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=aiFneYnWaLi2y/lwyk0xtCtPW1xJaeDQIG0+th5sfkA=;
+        b=O5NmMPUq58z/hC5W1h5u2t+L7mHmpqHWmSsgXGf1H1MCZ9Qk+GhZHNchhhFDWhB2za
+         o+VaRx6mScBRvvHGOB9eaIfDATv+7moRLkgGLcyhYzQgidl3/ke5StBeFlUU+PwBwFzP
+         h79JJae/fqMPTDygYFKT9tluBqglngfhjgk8/EOY3XZI/aC6HI7JuTUKCJLAV+R4G6xP
+         e1TLTrm1NeL46Cvw1b7/odZcca7jS6wL4dxpHFoZyxmO5yhzfE1j0oKl7y1BT/NVJlk1
+         Er/0tkVBXTeBsl6noc1GeZnHXquhKAYjsbgFf7yA82lO+9aywsIMEXnNFMv/Gv033Pok
+         nnYA==
+X-Gm-Message-State: AJIora95DLCAW4xlccOXKCSduMW87xsiwdH+INm5ZSRnHgrKBX60oOe7
+        UJxKFHHJ/9rB87BZ6aNUoJYCtjRdugOKS0k9LLWFAZtqKL76TezUgFjoS54Bv+2cd18i+IhhOLo
+        8KeFEE0Y6XMAIjfAuir7RYGpS
+X-Received: by 2002:a05:600c:19cf:b0:3a0:3df0:867 with SMTP id u15-20020a05600c19cf00b003a03df00867mr21556948wmq.106.1656418468015;
+        Tue, 28 Jun 2022 05:14:28 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tZuVISaBsKDBr4Vr2CI5+w4CnYPLYGgqSJp3ot7IJkUTGZI6jaYqP4Q3Taj+47wuRFF7PdiQ==
+X-Received: by 2002:a05:600c:19cf:b0:3a0:3df0:867 with SMTP id u15-20020a05600c19cf00b003a03df00867mr21556924wmq.106.1656418467728;
+        Tue, 28 Jun 2022 05:14:27 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id w9-20020a5d6089000000b0020e5b4ebaecsm13594634wrt.4.2022.06.28.05.14.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 05:13:27 -0700 (PDT)
-From:   Max Filippov <jcmvbkbc@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Roger Lu <roger.lu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-mediatek@lists.infradead.org,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH] drivers/soc/mediatek: mark svs_resume and svs_suspend as maybe unused
-Date:   Tue, 28 Jun 2022 05:13:26 -0700
-Message-Id: <20220628121326.2097912-1-jcmvbkbc@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 28 Jun 2022 05:14:26 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+Cc:     mail@anirudhrb.com, kumarpraveen@linux.microsoft.com,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        wei.liu@kernel.org, robert.bradford@intel.com, liuwe@microsoft.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Ilias Stamatis <ilstam@amazon.com>
+Subject: Re: [PATCH v2] KVM: nVMX: Don't expose eVMCS unsupported fields to L1
+In-Reply-To: <20220628103241.1785380-1-anrayabh@linux.microsoft.com>
+References: <20220628103241.1785380-1-anrayabh@linux.microsoft.com>
+Date:   Tue, 28 Jun 2022 14:14:25 +0200
+Message-ID: <87bkudugri.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,40 +88,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes the following build errors on platforms without hibernation
-support in linux-next:
+Anirudh Rayabharam <anrayabh@linux.microsoft.com> writes:
 
-drivers/soc/mediatek/mtk-svs.c:1515:12: error: ‘svs_resume’ defined but not used [-Werror=unused-function]
-drivers/soc/mediatek/mtk-svs.c:1481:12: error: ‘svs_suspend’ defined but not used [-Werror=unused-function]
+> When running cloud-hypervisor tests, VM entry into an L2 guest on KVM on
+> Hyper-V fails with this splat (stripped for brevity):
+>
+> [ 1481.600386] WARNING: CPU: 4 PID: 7641 at arch/x86/kvm/vmx/nested.c:4563 nested_vmx_vmexit+0x70d/0x790 [kvm_intel]
+> [ 1481.600427] CPU: 4 PID: 7641 Comm: vcpu2 Not tainted 5.15.0-1008-azure #9-Ubuntu
+> [ 1481.600429] Hardware name: Microsoft Corporation Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.1 07/22/2021
+> [ 1481.600430] RIP: 0010:nested_vmx_vmexit+0x70d/0x790 [kvm_intel]
+> [ 1481.600447] Call Trace:
+> [ 1481.600449]  <TASK>
+> [ 1481.600451]  nested_vmx_reflect_vmexit+0x10b/0x440 [kvm_intel]
+> [ 1481.600457]  __vmx_handle_exit+0xef/0x670 [kvm_intel]
+> [ 1481.600467]  vmx_handle_exit+0x12/0x50 [kvm_intel]
+> [ 1481.600472]  vcpu_enter_guest+0x83a/0xfd0 [kvm]
+> [ 1481.600524]  vcpu_run+0x5e/0x240 [kvm]
+> [ 1481.600560]  kvm_arch_vcpu_ioctl_run+0xd7/0x550 [kvm]
+> [ 1481.600597]  kvm_vcpu_ioctl+0x29a/0x6d0 [kvm]
+> [ 1481.600634]  __x64_sys_ioctl+0x91/0xc0
+> [ 1481.600637]  do_syscall_64+0x5c/0xc0
+> [ 1481.600667]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [ 1481.600670] RIP: 0033:0x7f688becdaff
+> [ 1481.600686]  </TASK>
+>
+> TSC multiplier field is currently not supported in EVMCS in KVM. It was
+> previously not supported from Hyper-V but has been added since. Because
+> it is not supported in KVM the use "TSC scaling control" is filtered out
+> of vmcs_config by evmcs_sanitize_exec_ctrls().
+>
+> However, in nested_vmx_setup_ctls_msrs(), TSC scaling is exposed to L1.
+> eVMCS unsupported fields are not sanitized. When L1 tries to launch an L2
+> guest, vmcs12 has TSC scaling enabled. This propagates to vmcs02. But KVM
+> doesn't set the TSC multiplier value because kvm_has_tsc_control is false.
+> Due to this VM entry for L2 guest fails. (VM entry fails if
+> "use TSC scaling" is 1 but TSC multiplier is 0.)
+>
+> To fix, in nested_vmx_setup_ctls_msrs(), sanitize the values read from MSRs
+> by filtering out fields that are not supported by eVMCS.
+>
+> This is a stable-friendly intermediate fix. A more comprehensive fix is
+> in progress [1] but is probably too complicated to safely apply to
+> stable.
+>
+> [1]: https://lore.kernel.org/kvm/20220627160440.31857-1-vkuznets@redhat.com/
+>
+> Fixes: d041b5ea93352 ("KVM: nVMX: Enable nested TSC scaling")
+> Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+> ---
+>
+> Changes since v1:
+> - Sanitize all eVMCS unsupported fields instead of just TSC scaling.
+>
+> v1: https://lore.kernel.org/lkml/20220613161611.3567556-1-anrayabh@linux.microsoft.com/
+>
+> ---
+>  arch/x86/kvm/vmx/nested.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index f5cb18e00e78..f88d748c7cc6 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -6564,6 +6564,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
+>  		msrs->pinbased_ctls_high);
+>  	msrs->pinbased_ctls_low |=
+>  		PIN_BASED_ALWAYSON_WITHOUT_TRUE_MSR;
+> +#if IS_ENABLED(CONFIG_HYPERV)
+> +	if (static_branch_unlikely(&enable_evmcs))
+> +		msrs->pinbased_ctls_high &= ~EVMCS1_UNSUPPORTED_PINCTRL;
+> +#endif
+>  	msrs->pinbased_ctls_high &=
+>  		PIN_BASED_EXT_INTR_MASK |
+>  		PIN_BASED_NMI_EXITING |
+> @@ -6580,6 +6584,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
+>  	msrs->exit_ctls_low =
+>  		VM_EXIT_ALWAYSON_WITHOUT_TRUE_MSR;
+>  
+> +#if IS_ENABLED(CONFIG_HYPERV)
+> +	if (static_branch_unlikely(&enable_evmcs))
+> +		msrs->exit_ctls_high &= ~EVMCS1_UNSUPPORTED_VMEXIT_CTRL;
+> +#endif
+>  	msrs->exit_ctls_high &=
+>  #ifdef CONFIG_X86_64
+>  		VM_EXIT_HOST_ADDR_SPACE_SIZE |
+> @@ -6600,6 +6608,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
+>  		msrs->entry_ctls_high);
+>  	msrs->entry_ctls_low =
+>  		VM_ENTRY_ALWAYSON_WITHOUT_TRUE_MSR;
+> +#if IS_ENABLED(CONFIG_HYPERV)
+> +	if (static_branch_unlikely(&enable_evmcs))
+> +		msrs->entry_ctls_high &= ~EVMCS1_UNSUPPORTED_VMENTRY_CTRL;
+> +#endif
+>  	msrs->entry_ctls_high &=
+>  #ifdef CONFIG_X86_64
+>  		VM_ENTRY_IA32E_MODE |
+> @@ -6657,6 +6669,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
+>  		      msrs->secondary_ctls_high);
+>  
+>  	msrs->secondary_ctls_low = 0;
+> +#if IS_ENABLED(CONFIG_HYPERV)
+> +	if (static_branch_unlikely(&enable_evmcs))
+> +		msrs->secondary_ctls_high &= ~EVMCS1_UNSUPPORTED_2NDEXEC;
+> +#endif
+>  	msrs->secondary_ctls_high &=
+>  		SECONDARY_EXEC_DESC |
+>  		SECONDARY_EXEC_ENABLE_RDTSCP |
 
-Fixes: 681a02e95000 ("soc: mediatek: SVS: introduce MTK SVS engine")
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- drivers/soc/mediatek/mtk-svs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+(In theory, threre's also EVMCS1_UNSUPPORTED_VMFUNC filtering out
+VMX_VMFUNC_EPTP_SWITCHING (as eVMCS EPTP_LIST_ADDRESS) but it is not
+used by KVM)
 
-diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-index 87e05ab51552..363ab8bffa9f 100644
---- a/drivers/soc/mediatek/mtk-svs.c
-+++ b/drivers/soc/mediatek/mtk-svs.c
-@@ -1478,7 +1478,7 @@ static int svs_start(struct svs_platform *svsp)
- 	return 0;
- }
- 
--static int svs_suspend(struct device *dev)
-+static int __maybe_unused svs_suspend(struct device *dev)
- {
- 	struct svs_platform *svsp = dev_get_drvdata(dev);
- 	struct svs_bank *svsb;
-@@ -1512,7 +1512,7 @@ static int svs_suspend(struct device *dev)
- 	return 0;
- }
- 
--static int svs_resume(struct device *dev)
-+static int __maybe_unused svs_resume(struct device *dev)
- {
- 	struct svs_platform *svsp = dev_get_drvdata(dev);
- 	int ret;
+As I said in another thread, I think this is fine as a
+stable@/intermediate fix. Assuming the way to go for mainline is my
+"KVM: nVMX: Use vmcs_config for setting up nested VMX MSRs", this patch
+won't be needed and can be reverted.
+
 -- 
-2.30.2
+Vitaly
 

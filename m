@@ -2,80 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F6455E368
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9E555DDDA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243889AbiF1IYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 04:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
+        id S244415AbiF1IZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 04:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343909AbiF1IXw (ORCPT
+        with ESMTP id S233980AbiF1IZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 04:23:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6E2F275DD
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:23:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656404587;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qyHqoetnxg5PCrqJPwXKQqt6t1OAl//oQoJPs5YDLec=;
-        b=PX3X9TpZq8H2k4iW1RUm2LVBkB0zoo0WHaG28HABJJdTNInCM4EJNzJ/gjs1MbPkg0aTWU
-        QcQIMeZyv2qHXcxJmaZf7U0J0Dhd+Hsu4LbLcqctv8rfU6yhIvoIB+Vd7h4jTJAxb/CkvH
-        fkanfhsTWUDomrbgFM90wpBbG8CbzYI=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-17-2iwuEnqLO0a62vE3Fg4W2w-1; Tue, 28 Jun 2022 04:23:06 -0400
-X-MC-Unique: 2iwuEnqLO0a62vE3Fg4W2w-1
-Received: by mail-wm1-f69.google.com with SMTP id l17-20020a05600c4f1100b0039c860db521so6780712wmq.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:23:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qyHqoetnxg5PCrqJPwXKQqt6t1OAl//oQoJPs5YDLec=;
-        b=Voi7USLRNCAKQ3vg3tyd3tbAAuUC7ZmNAyHgwLNH+BLjO+k6Tv6aJeRe+QRo97S4Wk
-         QyGbWPfy1CtXEvMMFBWpsk1rQi9MBfHLnUa+2haKXT8XgZbt6OOgka2jQmSaCn71pd/G
-         ecSrcX0gbJz/Xz8flzu8A06sPAQiC37YS5zm+9C1WLuQu6P5l0Sjt0iXCRBONEVRWDec
-         Mw0wmKrboKs6660gEN5CeDRdhwIPIQ+4DTGGc2XSorQVlZ7SG0BwAujy0wUXdDY51nMV
-         xVfD20gXVp+T1I+4IlKcF+2DRcMKZV+XRjFGCr2v/qs51sQkujeQ9uktCuSgtpnpAE4a
-         iXZw==
-X-Gm-Message-State: AJIora+gTU+KiAyVdu2esPb1qEeRsjLQKlbWB3SMYxUqLQnEpw1GyiX9
-        Y/NlT9JQ43THxy1V574/SVzEoi5e6CjvPND2I0PEkXgaGwazuowYwVZyj+BZ4JcG3Xa29vmBeXM
-        yCfLrFlqkaSaVUoAkx6zwehw=
-X-Received: by 2002:adf:f2cc:0:b0:21b:9efa:611a with SMTP id d12-20020adff2cc000000b0021b9efa611amr16991142wrp.573.1656404584983;
-        Tue, 28 Jun 2022 01:23:04 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1u+ynZvW171NUhrXsU4wk5UGlyUXWi+64Z5WVppsnvsN2YX6E0UsI+N4Og47xMumLjtD1Menw==
-X-Received: by 2002:adf:f2cc:0:b0:21b:9efa:611a with SMTP id d12-20020adff2cc000000b0021b9efa611amr16991127wrp.573.1656404584830;
-        Tue, 28 Jun 2022 01:23:04 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id y21-20020a7bc195000000b0039c362311d2sm24102805wmi.9.2022.06.28.01.23.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 01:23:04 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 09:23:03 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] module: Show the last unloaded module's taint flag(s)
-Message-ID: <20220628082303.zelpqlluofwy2hb6@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220627164052.2416485-1-atomlin@redhat.com>
- <20220627164052.2416485-2-atomlin@redhat.com>
- <4ddb64da-58f0-a4af-cf57-a870015a0077@csgroup.eu>
- <20220628074708.fg3ocx3vu7affkxl@ava.usersys.com>
- <b44b2b4a-20e2-2d42-22b1-c1e44c6f999d@csgroup.eu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b44b2b4a-20e2-2d42-22b1-c1e44c6f999d@csgroup.eu>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 28 Jun 2022 04:25:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B3D10B3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:25:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5FCFB81C0F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:25:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DCEDC3411D;
+        Tue, 28 Jun 2022 08:25:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656404728;
+        bh=Pc/cN4VghSzEUqrH/E4GTfuBQ0DAYDi3kn6G0MD6Ug8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e3wx484dWka3SbjMArLpiQFs20z0cOkYMBnt7Pei2yr/NMj2K6AOIr5OLuxSQIHrj
+         /yMnjV42eVLlumv9UfS3xVvxHQg2c0G+3mBN4L1YEFUmdGDq41glZ+qioI2H60diuR
+         31mfnWPP94t3hi+bxRatBL7yQYMQP6qQH7I8amBJ8+xngNeAjzO7g/YAd2aTVKm1yl
+         RjT+5YMPkRcyPx7bQVnO24IhjWAvH6iTVRc0EE7k2MtOjum4JuG0cyf6MOyJ9oKoMk
+         sW7NouW9wDOgxB7jFF9+4RscHWz76nbPii76hEclAAgaM2xv0Rp2N+EK89D7JflJYz
+         ae4qLGvAamYwg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o66XG-003i7y-3A;
+        Tue, 28 Jun 2022 09:25:26 +0100
+Date:   Tue, 28 Jun 2022 09:25:25 +0100
+Message-ID: <877d512o0a.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] irqchip: or1k-pic: Undefine mask_ack for level triggered hardware
+In-Reply-To: <20220628012854.681220-1-shorne@gmail.com>
+References: <20220628012854.681220-1-shorne@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: shorne@gmail.com, linux-kernel@vger.kernel.org, openrisc@lists.librecores.org, jonas@southpole.se, stefan.kristiansson@saunalahti.fi, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,17 +69,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-06-28 08:16 +0000, Christophe Leroy wrote:
-> Are you sure you will never ever end up with a string longer than the 
-> length of last_unloaded_module ?
+On Tue, 28 Jun 2022 02:28:54 +0100,
+Stafford Horne <shorne@gmail.com> wrote:
+> 
+> The mask_ack operation clears the interrupt by writing to the PICSR
+> register.  This we don't want for level triggered interrupt because
+> it does not actually clear the interrupt on the source hardware.
+> 
+> This was causing issues in qemu with multi core setups where
+> interrupts would continue to fire even though they had been cleared in
+> PICSR.
+> 
+> Just remove the mask_ack operation.
+> 
+> Signed-off-by: Stafford Horne <shorne@gmail.com>
+> ---
+> Note,
+> 
+> I currently have this queued with openrisc fixes for 5.19-rcX.  If this is ok
+> with the IRQ maintainers I would like to have this merged via the OpenRISC
+> queue.
+> 
+>  drivers/irqchip/irq-or1k-pic.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/irqchip/irq-or1k-pic.c b/drivers/irqchip/irq-or1k-pic.c
+> index 49b47e787644..f289ccd95291 100644
+> --- a/drivers/irqchip/irq-or1k-pic.c
+> +++ b/drivers/irqchip/irq-or1k-pic.c
+> @@ -66,7 +66,6 @@ static struct or1k_pic_dev or1k_pic_level = {
+>  		.name = "or1k-PIC-level",
+>  		.irq_unmask = or1k_pic_unmask,
+>  		.irq_mask = or1k_pic_mask,
+> -		.irq_mask_ack = or1k_pic_mask_ack,
+>  	},
+>  	.handle = handle_level_irq,
+>  	.flags = IRQ_LEVEL | IRQ_NOPROBE,
 
-If I am not mistaken, the length of 'last_unloaded_module' has been
-increased to accommodate for: the maximum module name, total module flag
-count, '(', ')' and '\0'.
+Acked-by: Marc Zyngier <maz@kernel.org>
 
+Feel free to take this via your tree.
 
-Kind regards,
+	M.
 
 -- 
-Aaron Tomlin
-
+Without deviation from the norm, progress is not possible.

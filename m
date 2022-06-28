@@ -2,206 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3F655EB1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DAB55EB1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 19:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbiF1ReL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 13:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
+        id S232366AbiF1RgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 13:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232500AbiF1ReJ (ORCPT
+        with ESMTP id S232576AbiF1RgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 13:34:09 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F100E27FDA;
-        Tue, 28 Jun 2022 10:34:07 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-318889e6a2cso124507847b3.1;
-        Tue, 28 Jun 2022 10:34:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SHw0pc+VB2/FYpO6oBuZ5Ng5KCvvlIFFOc8mnONyuyI=;
-        b=EoN4OaMP33nLfABMjeLWwmqqgw8dskQ9qZv5Bt5ZU+tg9vDW+xYbJsPkKi7G4B3oMQ
-         OhhMavMt8htM8LBQzv53/f1AQleBJV9rERUdl0zYD4Jb2MiXVG8awspkHjAU07yf7V8Q
-         LhOstuHcNLNmOClGWbUG6wIJB9FAL2kyYTx8F0hV5kX5dl+QZeaRxl5Ewr6TVspBh1n6
-         xFW45KXZjZj+0lCR5xRgrjpjQa6P2D0QFKlUjnI9VfUsYbQjmbOgUlGfk6Hsd0FXMdCg
-         EMeK9fmFrvD3q6wbx6Y9jyaygmKfWWouzsqCDwl7klUFjfH6UM0mb0/qzLT5wPur0qbj
-         H1jQ==
-X-Gm-Message-State: AJIora+ZwEadRDVpwXaQ90SJZlAKK07zqAGfFjOS4ikkvaZ1MHvLnwnZ
-        tTlW0Apk5d+ykeiU9lzNxPbwSO8cBr45K6dnETw=
-X-Google-Smtp-Source: AGRyM1vOyMp+CQR3BYeweDLkOJAsZTQdHJbJw3oJpm23uUpa0F//Mh2xFsHMy0BA4th1hkimwosFIb4STwWhVUk2kSs=
-X-Received: by 2002:a0d:d086:0:b0:31b:d0b2:e11f with SMTP id
- s128-20020a0dd086000000b0031bd0b2e11fmr10908606ywd.515.1656437647135; Tue, 28
- Jun 2022 10:34:07 -0700 (PDT)
+        Tue, 28 Jun 2022 13:36:18 -0400
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90059.outbound.protection.outlook.com [40.107.9.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4FC2E697;
+        Tue, 28 Jun 2022 10:36:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DxdU7w9xC2VK1NI/RG6zhshtBtzmK601+eYrwNI+NOX7F3xsAnV7vlNevCPjTWLr09FByFLjNZpY2OFnzAP+smb4/sxvjGdycXw6852UYlkb2gStiiJcYLpubmH1xvETGCMXvgyIWjQqmnkSV8srNJBXsXZuFdUYH9tlHbVT31Z/lQPLHq5C1xgCLSOneHYkW/KAI3FlECskDstD/XszmVVJuIkzPPVGcRETMp7WkQoN3dWMrots9v6Us/LOAmIW0m2qhB/fHh7NsDByaY3upuq8yl2MansJs6G+Xm1AaEVI4mY28muRcJR0k8RUBTzXW4L+IYRAwDDUC8DqVfsneg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q70/1zb2HtHwtyY4qwLWrvy5mCI7m2AzxaIbJy+ZIuc=;
+ b=l/pTNWGXKUD5myY0HtW7EYQp1lxQlBi2sP+fWUK9TQ2PgVKVbBJJLcWyVe0fRWbRhv1M2odPYm8VBbtvrvBC/isIjXnMHwlDCRhnry+4mSRYhkEzlUo/ely1leQa9A+fclWBgRs1sWtvd3ROA6VCXc9VCF9Evx+HJ/B/fZy2pRwt78ZYYtZeiWWrLFebH0sEn8VUZFKYGA7LG7uDwrHlGs7YCl8+XlzMIAlOHVGqKKC3xppcinENkYeqzX5v/ONfsfpYaz10+jV/gT+WJJevYtH+iS3J8blcYgdZaGwvw0yP7BrPrJL1FXFPABvR3xbVis9RIcAre1ouctvFqRkDOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q70/1zb2HtHwtyY4qwLWrvy5mCI7m2AzxaIbJy+ZIuc=;
+ b=eCJCbZ0CHWeJuw6j31YI+JjChc5C6elqW3uQRdwoxV+nc/Pct3oB/jV9EErbpgswH3EhvVg4BsQI/p/7DOUwF+SIOgS/uIEuj0jhv8yV7xdLf4nWK1U9SUyr2dGk3Rir9ACIy+0wZIfiGjoHr2TK64VNDye4Jt2uO8Ce2YBHyNPPquSXESmXwOaDDpHbj64KroaskLoiu8fuADb3x82kqEvebRiM2huBJ3P1Ec+IJWE3fcQOIEbdJ8qULmKNIH3hVdxQFymMFlr5m4g5qKCeflcXmM6Kt17gV6120KhMWSpXEe4EFuKzHqvpdtD8sVRJdt7w+eDgoanzT3nDJHbMGg==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR1P264MB2175.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:193::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.16; Tue, 28 Jun
+ 2022 17:36:14 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::e10e:bd98:2143:4d44]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::e10e:bd98:2143:4d44%3]) with mapi id 15.20.5373.018; Tue, 28 Jun 2022
+ 17:36:14 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>
+CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH -next, v2] powerpc: add support for syscall stack
+ randomization
+Thread-Topic: [PATCH -next, v2] powerpc: add support for syscall stack
+ randomization
+Thread-Index: AQHYaPdTunVcEFnzrkuVGzylM2/kWa1lWS8A
+Date:   Tue, 28 Jun 2022 17:36:14 +0000
+Message-ID: <cfbfcbf8-0350-9b73-bacc-53effeb1f1f2@csgroup.eu>
+References: <20220516073225.112875-1-xiujianfeng@huawei.com>
+In-Reply-To: <20220516073225.112875-1-xiujianfeng@huawei.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6fde031a-d553-43d1-26a0-08da592cb2fc
+x-ms-traffictypediagnostic: PR1P264MB2175:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IPijhAJ8nMLVTkSBMo9lvG7f+Ak9tQPezvblDY8P0XDrQ5jgMIXn+RHSFgkrYGfa8zOBnC9/5ic+o9lBDmkplHwGJFsXKPo562cQUgWyqsgpKLhjHW1Oo+dRC9A9hr36CJd3mq07gnhnTJa93FfkSR7XMUpY8oKmp3EQh+wIXe2rBVpwWmXIowqJzgLw4XyqelGvybncr8+Dmd9MXZY5W+pF8LOF2X0akP0a+Ru++pxLjU8U5Oxj6DAw3oJZNGk9r4lNk8htcWml16CvMSAN82IBEraoWPsQeUdGmGNHGRAQjcAccI4dvjCX5HVPRbv3RQBCj8F7tYGPBkyUjy+3l+FMfna1ZrKKqinBDBHkA1AJ06HEX2Hha7pBgCZA2/eug8j7sg5SVaLSqH8WE+NgbXITJFj3Twz0FQapUaHbOJWHvv5LU7xdXNWywRuXZ62vV6lkonMdZE/QIMUCKjUeJRr3CKnQeH4OS2WMmhsfzyv0d5+C3MZqJyxU/Ius9s+8Mvx8JcqLF5iz9XBZGzhwYiMu7tv65Qz+akjqvkeaV4kVmpBbpJ3nEd+GMLl0G6kyXKWlycVnoy/ji3LsKf/aFJViF6lg0BafqapqA5bUdRYA8Wmp4oFQRpmei0zVNGQdoo4vV5EQQmO0JrZsByL2uCziFo70VKh+imAe3Z9zueag4nyjK32Nqk+i67u2U7VkIN1SdXhj4yJI4COxJE0eDeeoFt/xc3VcWSfU5xaU+lzIbi2IXRLkuzFg/XP5xJIYACKOl8zDROXm1rqDVbKQgbeJaRpOLk0VBRRM3Mltxq1U3U++LEXq4i+bGevmQUgPQ/sWajy64Qnbqu+TFliQSh1WBFJTWqWD8R+2FAeseBXtcBQT37TGjlvnOM7a3/0ZyGDqTklynV4kzhOQcdCvMw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(39860400002)(376002)(346002)(366004)(31686004)(66574015)(31696002)(64756008)(122000001)(2616005)(110136005)(7416002)(478600001)(26005)(186003)(36756003)(71200400001)(76116006)(38070700005)(316002)(66476007)(54906003)(38100700002)(83380400001)(66946007)(91956017)(66556008)(66446008)(44832011)(4326008)(6506007)(966005)(8936002)(86362001)(41300700001)(6512007)(8676002)(5660300002)(6486002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aU5PRzIwYTFCUWlQTFN6TUt0N29qYi9ITUoxVmdTRnJwQW5ESjZocUhJZHhj?=
+ =?utf-8?B?TFk3dUhIZlZsUHVIVkJjRTVBcTQ1OHN2SmFWTjVPOGpuazhwVnVWb3JhVnkw?=
+ =?utf-8?B?NmJKc1lRQXdZbWpqZXl4RzdMUnY5VFZUOERvMGRkTnJYTmxxVEZJQ3BzZDZ5?=
+ =?utf-8?B?d0lIcy85NVhGaFZJTE5DNjRZMWV0aElyMTUvWHVPVkl5ak9RMnNnZFA3Q0Vs?=
+ =?utf-8?B?cFkreWhIbGo1MExINERKNUxJY2tVREZ5d1R1ZXFkK200T1lrMlMxdEd4ekgw?=
+ =?utf-8?B?YWg3b1BuU28xVElTWis4OGs1NG00dldMZSswN2R4bnlwQWNVeE9uNzdhMmNM?=
+ =?utf-8?B?ditvQlQrclZCcTZsbzJOZXJuRm1ML3dHWG12d3dJZW1QZjF5Y3R3TmhMdGNE?=
+ =?utf-8?B?bmdjdkk1clVBdFZxQmllUktMVUpZMmpNWXdHb2lKb2U1a0ZPeUFheXpjdCtM?=
+ =?utf-8?B?am1YNkcrTGxFQXhxU0tTb2dFNFlHaWt5WjVkYy9pci9MNk1uRFRJbzF6dVJF?=
+ =?utf-8?B?SkNzQTZRV3dKUGtHc3Y1ckFNZnNpMHpmZm0wUHJ0S1QzVk55RTVZeFF3T3lh?=
+ =?utf-8?B?SVVSZmQvZ2Zhd1hIeWFXdXlwYzlFWEdzWlh2MElWQ01ocGk3R1hRbmpmRHdz?=
+ =?utf-8?B?U3RYQkZYenJVQ1NjSjJ3OVIreDNFSU9ZRjJ6VTFSTkdiZnJQUW9UVkQ5OVRL?=
+ =?utf-8?B?SlhDb1RteE1haFNMMTdKb096OGw5by84bG9vcnNaUGlrU0V3R1QyWmY4UlNM?=
+ =?utf-8?B?UjBMRDltdHNyYVR0ZFd2L0VRVWU4dXFndzFZNVZHYXRxZGUzT1BmNHBITWsz?=
+ =?utf-8?B?WERDWi9CQ25HLzVueS8xdWRzWGkxT0lLV0k4bmJJWEdZUkltRDFuZWZwdGRl?=
+ =?utf-8?B?bnNPeDFNVXU1Q3prL2JMNWRVMzdkTUNkdWlvWVFpRWJQVWtJYVNTZWhGNE11?=
+ =?utf-8?B?U3NybFNHcFdnTXluMXlscVZ0d3BtV2lEUU5vY0pOUldLeU1LQ2JMMlg0WGtJ?=
+ =?utf-8?B?MjdLYVBIVENPYVJtYmczcGFlRlN4TTdqUzBnQWUvcmU5d0liSHNHK1F4NU1q?=
+ =?utf-8?B?QmM0VGt2MVdXTlhreFlZY2JQYkJ5VU0wSVVrOURjd2kxUzFueHFZdmVMV3Z6?=
+ =?utf-8?B?cjBhM29haVArRFovSnRBSFN6d3Rvb0lWZFFoWmlpVDNKVEdueDRFSHZrTURm?=
+ =?utf-8?B?NW00VlE2NHA4bXh2VVVMZWVja1ZKNk9za29teXJua0QxaUFlcENuUWVzUTJi?=
+ =?utf-8?B?U2tzNmloWk94WHJmVFhURnZHR3M5K1RoSDdzR3ZvTUJBMkEvYjVNS0Z4ZDFD?=
+ =?utf-8?B?WFRhOWQvdkdyRWtaSlpvaEpONWRoclFTRGluRG5FNkFwWjZUaWtadmJNemR1?=
+ =?utf-8?B?OEdwWTBrRG14ZFFSZUhvL3lCcml5MUZDN0dDZkpKZUF2WlhJWk5DWEJROVVr?=
+ =?utf-8?B?eG1NN3V1VjFMV0ZZQ2hWcEtIR1JmRENWTmNZTkNyQ2NJMHcxaVQwTmlyRldH?=
+ =?utf-8?B?UG5RMTgydC8ycUJocTlkQVZYOVlZZS90aUk4Njcvb25GaTR5ZnhLS0x6VWx3?=
+ =?utf-8?B?UzZiUklSMUtzbnMwRVBVUHZUTVpsMWRiVFp6Ym5VbUlWME9VYjJCcGRwalNz?=
+ =?utf-8?B?Q29wZy9DZWtnNStHeExJYmt2S3QvdzI0M01wdDVYT0l2OWFmQWZKNVF3U1hu?=
+ =?utf-8?B?dVRSZEJtYUZab1U0eHRLdGVQc08zT1ZybitCUVFNaUozUmU4NkF6aTNERG55?=
+ =?utf-8?B?VXNOMEFqRDgzenI4Q1ZnaVFRZFRzVFVRN01UN3RHZW9nYnFiQ2VRYnRpdFJk?=
+ =?utf-8?B?K1FBTDNWdHRabGdocDM5WEMybVBUQm5WK1FDTTN5WDFHNlhyMGc3bVpWMStH?=
+ =?utf-8?B?L2F5dVJDd0hMWktxL0RFQVJDZXdSWkM3QWhLVTNVS2ZDT2tKRWlzQXVsUjRT?=
+ =?utf-8?B?VGR1bWROTHhSNHJGSXBHeERMMW4vUzVCTDl4cVFMTzZTdlBRbU82bkNnS1Az?=
+ =?utf-8?B?bklmOVIweEhIZ1lXSnUwTy9LMnAvNUFJYWVSaWNNNGhYRVB0TDF4STdmK1Fr?=
+ =?utf-8?B?Ty9NSnNycXpmQU1CTXNlR0JFbElNVjF0aERBRHNBQnhEdnh6RnpFUlZ3NHNJ?=
+ =?utf-8?B?TTAxRHRuLy9sUnV4S08weUlVbHd4NHVndXBHR2ZmTE9OWVdIY2U2S1hKaFdy?=
+ =?utf-8?Q?y4VIgOuRs7PDQWZmeR04l2w=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8C11FFD2945DF0439B7126A1F546C5A3@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <cover.1655894131.git.kai.huang@intel.com> <f4bff93d83814ea1f54494f51ce3e5d954cf0f5b.1655894131.git.kai.huang@intel.com>
- <CAJZ5v0jV8ODcxuLL+iSpYbW7w=GFtUSakN-n8CO5Zmun3K-Erg@mail.gmail.com>
- <d3ba563f3f4e7aaf90fb99d20c651b5751972f7b.camel@intel.com>
- <20220627100155.71a7b34c@redhat.com> <2b676b19db423b995a21c7f215ed117c345c60d9.camel@intel.com>
-In-Reply-To: <2b676b19db423b995a21c7f215ed117c345c60d9.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 28 Jun 2022 19:33:56 +0200
-Message-ID: <CAJZ5v0gtinPZnVKvZzJDc1Ph+DPdNWxVdwwqr32z1Tecx+Qm7Q@mail.gmail.com>
-Subject: Re: [PATCH v5 02/22] cc_platform: Add new attribute to prevent ACPI
- CPU hotplug
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     Igor Mammedov <imammedo@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kvm-devel <kvm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        isaku.yamahata@intel.com, Tom Lendacky <thomas.lendacky@amd.com>,
-        Tianyu.Lan@microsoft.com, Randy Dunlap <rdunlap@infradead.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Yue Haibing <yuehaibing@huawei.com>, dongli.zhang@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6fde031a-d553-43d1-26a0-08da592cb2fc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2022 17:36:14.2180
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: I0YLvoKgqsmd7ptpC1qc+8mPZYw8MQySZQvTclxh8IpHFwiDl8Xx5tOOS6EAXoSOYACKezN6VeO8kK64G9k0r0V16RTn30qdSWchl99kaNY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2175
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 12:04 PM Kai Huang <kai.huang@intel.com> wrote:
->
-> On Mon, 2022-06-27 at 10:01 +0200, Igor Mammedov wrote:
-> > On Thu, 23 Jun 2022 12:01:48 +1200
-> > Kai Huang <kai.huang@intel.com> wrote:
-> >
-> > > On Wed, 2022-06-22 at 13:42 +0200, Rafael J. Wysocki wrote:
-> > > > On Wed, Jun 22, 2022 at 1:16 PM Kai Huang <kai.huang@intel.com> wrote:
-> > > > >
-> > > > > Platforms with confidential computing technology may not support ACPI
-> > > > > CPU hotplug when such technology is enabled by the BIOS.  Examples
-> > > > > include Intel platforms which support Intel Trust Domain Extensions
-> > > > > (TDX).
-> > > > >
-> > > > > If the kernel ever receives ACPI CPU hotplug event, it is likely a BIOS
-> > > > > bug.  For ACPI CPU hot-add, the kernel should speak out this is a BIOS
-> > > > > bug and reject the new CPU.  For hot-removal, for simplicity just assume
-> > > > > the kernel cannot continue to work normally, and BUG().
-> > > > >
-> > > > > Add a new attribute CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED to indicate the
-> > > > > platform doesn't support ACPI CPU hotplug, so that kernel can handle
-> > > > > ACPI CPU hotplug events for such platform.  The existing attribute
-> > > > > CC_ATTR_HOTPLUG_DISABLED is for software CPU hotplug thus doesn't fit.
-> > > > >
-> > > > > In acpi_processor_{add|remove}(), add early check against this attribute
-> > > > > and handle accordingly if it is set.
-> > > > >
-> > > > > Also take this chance to rename existing CC_ATTR_HOTPLUG_DISABLED to
-> > > > > CC_ATTR_CPU_HOTPLUG_DISABLED as it is for software CPU hotplug.
-> > > > >
-> > > > > Signed-off-by: Kai Huang <kai.huang@intel.com>
-> > > > > ---
-> > > > >  arch/x86/coco/core.c          |  2 +-
-> > > > >  drivers/acpi/acpi_processor.c | 23 +++++++++++++++++++++++
-> > > > >  include/linux/cc_platform.h   | 15 +++++++++++++--
-> > > > >  kernel/cpu.c                  |  2 +-
-> > > > >  4 files changed, 38 insertions(+), 4 deletions(-)
-> > > > >
-> > > > > diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-> > > > > index 4320fadae716..1bde1af75296 100644
-> > > > > --- a/arch/x86/coco/core.c
-> > > > > +++ b/arch/x86/coco/core.c
-> > > > > @@ -20,7 +20,7 @@ static bool intel_cc_platform_has(enum cc_attr attr)
-> > > > >  {
-> > > > >         switch (attr) {
-> > > > >         case CC_ATTR_GUEST_UNROLL_STRING_IO:
-> > > > > -       case CC_ATTR_HOTPLUG_DISABLED:
-> > > > > +       case CC_ATTR_CPU_HOTPLUG_DISABLED:
-> > > > >         case CC_ATTR_GUEST_MEM_ENCRYPT:
-> > > > >         case CC_ATTR_MEM_ENCRYPT:
-> > > > >                 return true;
-> > > > > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> > > > > index 6737b1cbf6d6..b960db864cd4 100644
-> > > > > --- a/drivers/acpi/acpi_processor.c
-> > > > > +++ b/drivers/acpi/acpi_processor.c
-> > > > > @@ -15,6 +15,7 @@
-> > > > >  #include <linux/kernel.h>
-> > > > >  #include <linux/module.h>
-> > > > >  #include <linux/pci.h>
-> > > > > +#include <linux/cc_platform.h>
-> > > > >
-> > > > >  #include <acpi/processor.h>
-> > > > >
-> > > > > @@ -357,6 +358,17 @@ static int acpi_processor_add(struct acpi_device *device,
-> > > > >         struct device *dev;
-> > > > >         int result = 0;
-> > > > >
-> > > > > +       /*
-> > > > > +        * If the confidential computing platform doesn't support ACPI
-> > > > > +        * memory hotplug, the BIOS should never deliver such event to
-> > > > > +        * the kernel.  Report ACPI CPU hot-add as a BIOS bug and ignore
-> > > > > +        * the new CPU.
-> > > > > +        */
-> > > > > +       if (cc_platform_has(CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED)) {
-> > > >
-> > > > This will affect initialization, not just hotplug AFAICS.
-> > > >
-> > > > You should reset the .hotplug.enabled flag in processor_handler to
-> > > > false instead.
-> > >
-> > > Hi Rafael,
-> > >
-> > > Thanks for the review.  By "affect initialization" did you mean this
-> > > acpi_processor_add() is also called during kernel boot when any logical cpu is
-> > > brought up?  Or do you mean ACPI CPU hotplug can also happen during kernel boot
-> > > (after acpi_processor_init())?
-> > >
-> > > I see acpi_processor_init() calls acpi_processor_check_duplicates() which calls
-> > > acpi_evaluate_object() but I don't know details of ACPI so I don't know whether
-> > > this would trigger acpi_processor_add().
-> > >
-> > > One thing is TDX doesn't support ACPI CPU hotplug is an architectural thing, so
-> > > it is illegal even if it happens during kernel boot.  Dave's idea is the kernel
-> > > should  speak out loudly if physical CPU hotplug indeed happened on (BIOS) TDX-
-> > > enabled platforms.  Otherwise perhaps we can just give up initializing the ACPI
-> > > CPU hotplug in acpi_processor_init(), something like below?
-> >
-> > The thing is that by the time ACPI machinery kicks in, physical hotplug
-> > has already happened and in case of (kvm+qemu+ovmf hypervisor combo)
-> > firmware has already handled it somehow and handed it over to ACPI.
-> > If you say it's architectural thing then cpu hotplug is platform/firmware
-> > bug and should be disabled there instead of working around it in the kernel.
-> >
-> > Perhaps instead of 'preventing' hotplug, complain/panic and be done with it.
->
-> Hi Igor,
->
-> Thanks for feedback.  Yes the current implementation actually reports CPU hot-
-> add as BIOS bug.  I think I can report BIOS bug for hot-removal too.  And
-> currently I actually used BUG() for the hot-removal case.  For hot-add I didn't
-> use BUG() but rejected the new CPU as the latter is more conservative.
->
-> Hi Rafael,
->
-> I am not sure I got what you mean by "This will affect initialization, not just
-> hotplug AFAICS", could you elaborate a little bit?  Thanks.
-
-So acpi_processor_add() is called for CPUs that are already present at
-init time, not just for the hot-added ones.
-
-One of the things it does is to associate an ACPI companion with the given CPU.
-
-Don't you need that to happen?
+DQoNCkxlIDE2LzA1LzIwMjIgw6AgMDk6MzIsIFhpdSBKaWFuZmVuZyBhIMOpY3JpdMKgOg0KPiBB
+ZGQgc3VwcG9ydCBmb3IgYWRkaW5nIGEgcmFuZG9tIG9mZnNldCB0byB0aGUgc3RhY2sgd2hpbGUg
+aGFuZGxpbmcNCj4gc3lzY2FsbHMuIFRoaXMgcGF0Y2ggdXNlcyBtZnRiKCkgaW5zdGVhZCBvZiBn
+ZXRfcmFuZG9tX2ludCgpIGZvciBiZXR0ZXINCj4gcGVyZm9ybWFuY2UuDQo+IA0KPiBJbiBvcmRl
+ciB0byBhdm9pZCB1bmNvbmRpdGlvbmFsIHN0YWNrIGNhbmFyaWVzIG9uIHN5c2NhbGwgZW50cnkg
+KGR1ZSB0bw0KPiB0aGUgdXNlIG9mIGFsbG9jYSgpKSwgYWxzbyBkaXNhYmxlIHN0YWNrIHByb3Rl
+Y3RvciB0byBhdm9pZCB0cmlnZ2VyaW5nDQo+IG5lZWRsZXNzIGNoZWNrcyBhbmQgc2xvd2luZyBk
+b3duIHRoZSBlbnRyeSBwYXRoLiBBcyB0aGVyZSBpcyBubyBnZW5lcmFsDQo+IHdheSB0byBjb250
+cm9sIHN0YWNrIHByb3RlY3RvciBjb3ZlcmFnZSB3aXRoIGEgZnVuY3Rpb24gYXR0cmlidXRlLCB0
+aGlzDQo+IG11c3QgYmUgZGlzYWJsZWQgYXQgdGhlIGNvbXBpbGF0aW9uIHVuaXQgbGV2ZWwuDQo+
+IA0KPiBTaWduZWQtb2ZmLWJ5OiBYaXUgSmlhbmZlbmcgPHhpdWppYW5mZW5nQGh1YXdlaS5jb20+
+DQo+IA0KDQpEaWQgeW91IHNlZSB0aGlzIHBhdGNoIGdlbmVyYXRlcyBzcGFyc2Ugd2FybmluZ3Mg
+Pw0KDQpTZWUgDQpodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvbGludXhwcGMt
+ZGV2L3BhdGNoLzIwMjIwNTE2MDczMjI1LjExMjg3NS0xLXhpdWppYW5mZW5nQGh1YXdlaS5jb20v
+DQoNCkl0IGlzIG5vdCBkaXJlY3RseSByZWxhdGVkIHRvIHRoaXMgcGF0Y2ggYnV0IHRoYXQncyB3
+b3J0aCBhIHBhdGNoIHRvIGZpeCBpdC4NCg0KPiAtLS0NCj4gQ2hhbmdlcyBpbiB2MjoNCj4gICAg
+LW1vdmUgY2hvb3NlIGNob29zZV9yYW5kb21fa3N0YWNrX29mZnNldCgpIHRvIHRoZSBlbmQgb2Yg
+c3lzdGVtX2NhbGxfZXhjZXB0aW9uDQo+ICAgIC1hbGxvdyBmdWxsIDYgKDEwKSBiaXRzIG9mIGVu
+dHJvcHkNCj4gICAgLWRpc2FibGUgc3RhY2stcHJvdGVjdG9yIGZvciBpbnRlcnJ1cHQuYw0KPiAt
+LS0NCj4gICBhcmNoL3Bvd2VycGMvS2NvbmZpZyAgICAgICAgICAgIHwgIDEgKw0KPiAgIGFyY2gv
+cG93ZXJwYy9rZXJuZWwvTWFrZWZpbGUgICAgfCAgNyArKysrKysrDQo+ICAgYXJjaC9wb3dlcnBj
+L2tlcm5lbC9pbnRlcnJ1cHQuYyB8IDE5ICsrKysrKysrKysrKysrKysrKy0NCj4gICAzIGZpbGVz
+IGNoYW5nZWQsIDI2IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1n
+aXQgYS9hcmNoL3Bvd2VycGMvS2NvbmZpZyBiL2FyY2gvcG93ZXJwYy9LY29uZmlnDQo+IGluZGV4
+IDk4MzA5ZWVhZTA5Yy4uMmYwMDE5YTAwNTRlIDEwMDY0NA0KPiAtLS0gYS9hcmNoL3Bvd2VycGMv
+S2NvbmZpZw0KPiArKysgYi9hcmNoL3Bvd2VycGMvS2NvbmZpZw0KPiBAQCAtMTkyLDYgKzE5Miw3
+IEBAIGNvbmZpZyBQUEMNCj4gICAJc2VsZWN0IEhBVkVfQVJDSF9LQVNBTgkJCWlmIFBQQzMyICYm
+IFBQQ19QQUdFX1NISUZUIDw9IDE0DQo+ICAgCXNlbGVjdCBIQVZFX0FSQ0hfS0FTQU5fVk1BTExP
+QwkJaWYgUFBDMzIgJiYgUFBDX1BBR0VfU0hJRlQgPD0gMTQNCj4gICAJc2VsZWN0IEhBVkVfQVJD
+SF9LRkVOQ0UJCQlpZiBQUENfQk9PSzNTXzMyIHx8IFBQQ184eHggfHwgNDB4DQo+ICsJc2VsZWN0
+IEhBVkVfQVJDSF9SQU5ET01JWkVfS1NUQUNLX09GRlNFVA0KPiAgIAlzZWxlY3QgSEFWRV9BUkNI
+X0tHREINCj4gICAJc2VsZWN0IEhBVkVfQVJDSF9NTUFQX1JORF9CSVRTDQo+ICAgCXNlbGVjdCBI
+QVZFX0FSQ0hfTU1BUF9STkRfQ09NUEFUX0JJVFMJaWYgQ09NUEFUDQo+IGRpZmYgLS1naXQgYS9h
+cmNoL3Bvd2VycGMva2VybmVsL01ha2VmaWxlIGIvYXJjaC9wb3dlcnBjL2tlcm5lbC9NYWtlZmls
+ZQ0KPiBpbmRleCA0ZGRkMTYxYWVmMzIuLjVjNWU4NWI4MjI5YiAxMDA2NDQNCj4gLS0tIGEvYXJj
+aC9wb3dlcnBjL2tlcm5lbC9NYWtlZmlsZQ0KPiArKysgYi9hcmNoL3Bvd2VycGMva2VybmVsL01h
+a2VmaWxlDQo+IEBAIC00MCw2ICs0MCwxMyBAQCBDRkxBR1NfY3B1dGFibGUubyArPSAtRERJU0FC
+TEVfQlJBTkNIX1BST0ZJTElORw0KPiAgIENGTEFHU19idGV4dC5vICs9IC1ERElTQUJMRV9CUkFO
+Q0hfUFJPRklMSU5HDQo+ICAgZW5kaWYNCj4gICANCj4gKyNpZmRlZiBDT05GSUdfUkFORE9NSVpF
+X0tTVEFDS19PRkZTRVQNCj4gKyMgUmVtb3ZlIHN0YWNrIHByb3RlY3RvciB0byBhdm9pZCB0cmln
+Z2VyaW5nIHVubmVlZGVkIHN0YWNrIGNhbmFyeQ0KPiArIyBjaGVja3MgZHVlIHRvIHJhbmRvbWl6
+ZV9rc3RhY2tfb2Zmc2V0Lg0KPiArQ0ZMQUdTX1JFTU9WRV9pbnRlcnJ1cHQubyA9IC1mc3RhY2st
+cHJvdGVjdG9yIC1mc3RhY2stcHJvdGVjdG9yLXN0cm9uZw0KPiArQ0ZMQUdTX2ludGVycnVwdC5v
+ICs9IC1mbm8tc3RhY2stcHJvdGVjdG9yDQo+ICsjZW5kaWYNCj4gKw0KPiAgIG9iai15CQkJCTo9
+IGNwdXRhYmxlLm8gc3lzY2FsbHMubyBcDQo+ICAgCQkJCSAgIGlycS5vIGFsaWduLm8gc2lnbmFs
+XyQoQklUUykubyBwbWMubyB2ZHNvLm8gXA0KPiAgIAkJCQkgICBwcm9jZXNzLm8gc3lzdGJsLm8g
+aWRsZS5vIFwNCj4gZGlmZiAtLWdpdCBhL2FyY2gvcG93ZXJwYy9rZXJuZWwvaW50ZXJydXB0LmMg
+Yi9hcmNoL3Bvd2VycGMva2VybmVsL2ludGVycnVwdC5jDQo+IGluZGV4IDc4NGVhMzI4OWM4NC4u
+ZDdjZGNiNmZjMzM2IDEwMDY0NA0KPiAtLS0gYS9hcmNoL3Bvd2VycGMva2VybmVsL2ludGVycnVw
+dC5jDQo+ICsrKyBiL2FyY2gvcG93ZXJwYy9rZXJuZWwvaW50ZXJydXB0LmMNCj4gQEAgLTQsNiAr
+NCw3IEBADQo+ICAgI2luY2x1ZGUgPGxpbnV4L2Vyci5oPg0KPiAgICNpbmNsdWRlIDxsaW51eC9j
+b21wYXQuaD4NCj4gICAjaW5jbHVkZSA8bGludXgvc2NoZWQvZGVidWcuaD4gLyogZm9yIHNob3df
+cmVncyAqLw0KPiArI2luY2x1ZGUgPGxpbnV4L3JhbmRvbWl6ZV9rc3RhY2suaD4NCj4gICANCj4g
+ICAjaW5jbHVkZSA8YXNtL2t1cC5oPg0KPiAgICNpbmNsdWRlIDxhc20vY3B1dGltZS5oPg0KPiBA
+QCAtNzgsMTAgKzc5LDEyIEBAIG5vdHJhY2UgbG9uZyBzeXN0ZW1fY2FsbF9leGNlcHRpb24obG9u
+ZyByMywgbG9uZyByNCwgbG9uZyByNSwNCj4gICAJCQkJICAgbG9uZyByNiwgbG9uZyByNywgbG9u
+ZyByOCwNCj4gICAJCQkJICAgdW5zaWduZWQgbG9uZyByMCwgc3RydWN0IHB0X3JlZ3MgKnJlZ3Mp
+DQo+ICAgew0KPiArCWxvbmcgcmV0Ow0KPiAgIAlzeXNjYWxsX2ZuIGY7DQo+ICAgDQo+ICAgCWt1
+YXBfbG9jaygpOw0KPiAgIA0KPiArCWFkZF9yYW5kb21fa3N0YWNrX29mZnNldCgpOw0KPiAgIAly
+ZWdzLT5vcmlnX2dwcjMgPSByMzsNCj4gICANCj4gICAJaWYgKElTX0VOQUJMRUQoQ09ORklHX1BQ
+Q19JUlFfU09GVF9NQVNLX0RFQlVHKSkNCj4gQEAgLTIyOSw3ICsyMzIsMjEgQEAgbm90cmFjZSBs
+b25nIHN5c3RlbV9jYWxsX2V4Y2VwdGlvbihsb25nIHIzLCBsb25nIHI0LCBsb25nIHI1LA0KPiAg
+IAkJZiA9ICh2b2lkICopc3lzX2NhbGxfdGFibGVbcjBdOw0KPiAgIAl9DQo+ICAgDQo+IC0JcmV0
+dXJuIGYocjMsIHI0LCByNSwgcjYsIHI3LCByOCk7DQo+ICsJcmV0ID0gZihyMywgcjQsIHI1LCBy
+NiwgcjcsIHI4KTsNCj4gKwkvKg0KPiArCSAqIFVsdGltYXRlbHksIHRoaXMgdmFsdWUgd2lsbCBn
+ZXQgbGltaXRlZCBieSBLU1RBQ0tfT0ZGU0VUX01BWCgpLA0KPiArCSAqIHNvIHRoZSBtYXhpbXVt
+IHN0YWNrIG9mZnNldCBpcyAxayBieXRlcygxMCBiaXRzKS4NCj4gKwkgKg0KPiArCSAqIFRoZSBh
+Y3R1YWwgZW50cm9weSB3aWxsIGJlIGZ1cnRoZXIgcmVkdWNlZCBieSB0aGUgY29tcGlsZXIgd2hl
+bg0KPiArCSAqIGFwcGx5aW5nIHN0YWNrIGFsaWdubWVudCBjb25zdHJhaW50czogdGhlIHBvd2Vy
+cGMgYXJjaGl0ZWN0dXJlDQo+ICsJICogbWF5IGhhdmUgdHdvIGtpbmRzIG9mIHN0YWNrIGFsaWdu
+bWVudCgxNi1ieXRlcyBhbmQgOC1ieXRlcykuDQo+ICsJICoNCj4gKwkgKiBTbyB0aGUgcmVzdWx0
+aW5nIDYgb3IgNyBiaXRzIG9mIGVudHJvcHkgaXMgc2VlbiBpbiBTUFs5OjRdIG9yIFNQWzk6M10u
+DQo+ICsJICoNCj4gKwkgKi8NCj4gKwljaG9vc2VfcmFuZG9tX2tzdGFja19vZmZzZXQobWZ0Yigp
+KTsNCj4gKw0KPiArCXJldHVybiByZXQ7DQo+ICAgfQ0KPiAgIA0KPiAgIHN0YXRpYyBub3RyYWNl
+IHZvaWQgYm9va2VfbG9hZF9kYmNyMCh2b2lkKQ==

@@ -2,85 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5BE55D993
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBB755C896
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345095AbiF1KuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 06:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49614 "EHLO
+        id S240412AbiF1Kut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 06:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345086AbiF1KuL (ORCPT
+        with ESMTP id S235054AbiF1Kur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:50:11 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC75024BF7
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:50:09 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id k22so17080314wrd.6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:50:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=D5Yp5z0uikP6kZlGS2YEDpfiM1NMX3Tdy1o4tE54EkA=;
-        b=Hg+wVajBl/9GBW5iP5GGK542lVYHM9R+b6dZWTYA7FDr47v9J6UeJGHXiLJTbCEJ6v
-         WHjCoMSJdZ/W6vpEsQ5wQ8FEm7LOHPqGbY0/janBLRCclpjjR2ahzmumZgpjhQ3mU3Zz
-         9Zd9+YgvoVxJqzunjKGfA0ap0YWqSuM1NOp6Nb1YWaucHgh5uj0+kiJB3QEMS7cJvl9t
-         /1Czsxg+/cWEall8YwkcLog2xVRlmlTZ2hu2padxJJOQno/eXf8hOissbXfcF5yMrBM3
-         dUvj3+OeReeO1KrwnNRbUjw5g9Qcs6be3RoB7VM0Agk3ajrl8Rx4r6pyVdncShKfdlB3
-         QuaA==
+        Tue, 28 Jun 2022 06:50:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFADE24F26
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:50:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656413445;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fBnpEBJJsEjj4xp1XzlNmSDPEps8RE1TeLCO9pCV3b8=;
+        b=SkYaCJ3aw8yYG2A60W8Ls7UT3W3arTz5lw4NWYcdT7U7QRxu3PK3+Lfs5BjOOINVWLy0RS
+        UleCkdMpeB82MEE3pyIEMET2YmQPTwa/t+5kGkywSBScOWv0kdHOaL0G09aTsQGfJEWP6p
+        SGiitsAeu9mg3Iho4eDKH9Sd1k771p4=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-189-UqX5xog9NLKsX-sCJ8EeHA-1; Tue, 28 Jun 2022 06:50:44 -0400
+X-MC-Unique: UqX5xog9NLKsX-sCJ8EeHA-1
+Received: by mail-wm1-f72.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so6961059wmj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 03:50:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=D5Yp5z0uikP6kZlGS2YEDpfiM1NMX3Tdy1o4tE54EkA=;
-        b=whoI21A1K0HxXgAS00YBX5ZnTNjlrmTNTGUQM8mJVyuuUTK0kuEqfjr0lib5pg/mPt
-         HvSUmVB29p0ECOwsZ4AT4Je95Pu+a/vDIJPrsboskzmoZ/cfF39cCRIStV003ljiJXks
-         pMHbSoNoI/Zj++qMBaa46FDfPrFMiDE/ka8RB1nIKRo3IbQoS/Y+Vkt8xxG+X6+9qtEK
-         hKs4xg9v8403hwhp1J32YY5RJHlS5i3WEnL0f8mocWS+jGAPPOf+dNpYJqFf5BAQtXW0
-         ZB6KDYozZkdQMO2Ssmru16piUTbK15SXRcI+kjE0d9vMSMPAFVA4KOsJK0RFpbbVmGuw
-         Pu2g==
-X-Gm-Message-State: AJIora9bri1c4KpqTgSapZsJWloyCmvNTA7/uP4U1gNKN5BJooCer45B
-        B6HqdctL7sJLkXhpywnTyvItr+cJs35V0w==
-X-Google-Smtp-Source: AGRyM1t7ldsuF7FbFQ8lRlxojUnda3gtbTbepfnR5FLUMtmeZyXYf5l0XxZNFLDSGICVmiAPYzeSbg==
-X-Received: by 2002:adf:ed0d:0:b0:21b:978f:e53 with SMTP id a13-20020adfed0d000000b0021b978f0e53mr17045714wro.8.1656413408515;
-        Tue, 28 Jun 2022 03:50:08 -0700 (PDT)
-Received: from [192.168.0.252] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id n18-20020a05600c501200b003a04d19dab3sm3538689wmr.3.2022.06.28.03.50.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 03:50:07 -0700 (PDT)
-Message-ID: <c43d4c9e-54d6-7b00-0ff7-e114850302ad@linaro.org>
-Date:   Tue, 28 Jun 2022 12:50:06 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=fBnpEBJJsEjj4xp1XzlNmSDPEps8RE1TeLCO9pCV3b8=;
+        b=Vr0EO2ooi/g4/PZXdOvUITdjO2bi6daeOz8vTJj5Upc/qjUut4EHYjph73W1949ffj
+         uXoOCCgFGw44o/qKecDkdXqpcAfUOyUb3fgkJKXK41zJCpG8TAKBBXd+L52Qyw3tMhJ1
+         f0+6Dt47SV9KP47FBX7LRwUpKNJUH00f6a99m9zNZFbcZ2XuKQva8vS7MLZFWy3WnsvP
+         7wZNukKwWxSjjdNI1dp6tkMLGolY8X4vKhsqDniHtI2M5ukmHCaGIgXhj8fLQtYuZ1sk
+         5cooTWB0jpwMEoBvbivcwDD3JidTYVHP2I8VlnnBwRwHZT640n/PStjn7LDjxkAHdmvx
+         /Brw==
+X-Gm-Message-State: AJIora8bzt2UxCu/GegmoliL+B1de3mWFOHMmkiNaRrNS9RdjfjmqcsR
+        YQN3fOUTxQOQdn74AKvaItUyPA3lMwkMmxTTIE9ZeWkbNAEXQSWTYLKcde7lCnyi+R2SdLS7YSs
+        9Wowa2hq7+1PUAe7AFhH/7Px1
+X-Received: by 2002:a05:600c:1547:b0:39c:7fc6:3082 with SMTP id f7-20020a05600c154700b0039c7fc63082mr26228186wmg.189.1656413442953;
+        Tue, 28 Jun 2022 03:50:42 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sOc62+TwZm4Lysu7PiidKj6NprJiStBGJ45lIax1y18ihr6TTIBSDrSl64O72de4xS9gTWfQ==
+X-Received: by 2002:a05:600c:1547:b0:39c:7fc6:3082 with SMTP id f7-20020a05600c154700b0039c7fc63082mr26228150wmg.189.1656413442750;
+        Tue, 28 Jun 2022 03:50:42 -0700 (PDT)
+Received: from work-vm (cpc109025-salf6-2-0-cust480.10-2.cable.virginm.net. [82.30.61.225])
+        by smtp.gmail.com with ESMTPSA id s11-20020a5d4ecb000000b0020fe61acd09sm13521418wrv.12.2022.06.28.03.50.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 03:50:42 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 11:50:39 +0100
+From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "jroedel@suse.de" <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "slp@redhat.com" <slp@redhat.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
+        "tobin@ibm.com" <tobin@ibm.com>, "bp@alien8.de" <bp@alien8.de>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "marcorr@google.com" <marcorr@google.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "alpergun@google.com" <alpergun@google.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
+Subject: Re: [PATCH Part2 v6 06/49] x86/sev: Add helper functions for
+ RMPUPDATE and PSMASH instruction
+Message-ID: <Yrrc/6x70wa14c5t@work-vm>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <e4643e9d37fcb025d0aec9080feefaae5e9245d5.1655761627.git.ashish.kalra@amd.com>
+ <YrH0ca3Sam7Ru11c@work-vm>
+ <SN6PR12MB2767FBF0848B906B9F0284D28EB39@SN6PR12MB2767.namprd12.prod.outlook.com>
+ <BYAPR12MB2759910E715C69D1027CCE678EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 4/4] arm64: dts: qcom: sdm845: Add CPU BWMON
-Content-Language: en-US
-To:     Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Thara Gopinath <thara.gopinath@linaro.org>
-References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
- <20220601101140.170504-5-krzysztof.kozlowski@linaro.org>
- <bc423d7b-df03-d4e2-2898-0873db710943@quicinc.com>
- <64eb52ee-b3ac-3d94-cfce-ceb1c88dddb6@linaro.org>
- <042cb765-113b-9335-edae-595addf50dd0@quicinc.com>
- <23320e3c-40c3-12bb-0a1c-7e659a1961f2@linaro.org>
- <YrfSWw9Wpq5TsRUt@builder.lan>
- <47e1fcb4-237b-b880-b1b2-3910cc19e727@linaro.org>
- <59b5115e-0fe5-dbe1-552b-c29e771c0583@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <59b5115e-0fe5-dbe1-552b-c29e771c0583@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR12MB2759910E715C69D1027CCE678EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+User-Agent: Mutt/2.2.6 (2022-06-05)
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,112 +116,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/06/2022 12:36, Rajendra Nayak wrote:
+* Kalra, Ashish (Ashish.Kalra@amd.com) wrote:
+> [AMD Official Use Only - General]
 > 
-> On 6/27/2022 6:09 PM, Krzysztof Kozlowski wrote:
->> On 26/06/2022 05:28, Bjorn Andersson wrote:
->>> On Thu 23 Jun 07:58 CDT 2022, Krzysztof Kozlowski wrote:
->>>
->>>> On 23/06/2022 08:48, Rajendra Nayak wrote:
->>>>>>>> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>>>>>>> index 83e8b63f0910..adffb9c70566 100644
->>>>>>>> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>>>>>>> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>>>>>>> @@ -2026,6 +2026,60 @@ llcc: system-cache-controller@1100000 {
->>>>>>>>     			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
->>>>>>>>     		};
->>>>>>>>     
->>>>>>>> +		pmu@1436400 {
->>>>>>>> +			compatible = "qcom,sdm845-cpu-bwmon";
->>>>>>>> +			reg = <0 0x01436400 0 0x600>;
->>>>>>>> +
->>>>>>>> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
->>>>>>>> +
->>>>>>>> +			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
->>>>>>>> +					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
->>>>>>>> +			interconnect-names = "ddr", "l3c";
->>>>>>>
->>>>>>> Is this the pmu/bwmon instance between the cpu and caches or the one between the caches and DDR?
->>>>>>
->>>>>> To my understanding this is the one between CPU and caches.
->>>>>
->>>>> Ok, but then because the OPP table lists the DDR bw first and Cache bw second, isn't the driver
->>>>> ending up comparing the bw values thrown by the pmu against the DDR bw instead of the Cache BW?
->>>>
->>>> I double checked now and you're right.
->>>>
->>>>> Atleast with my testing on sc7280 I found this to mess things up and I always was ending up at
->>>>> higher OPPs even while the system was completely idle. Comparing the values against the Cache bw
->>>>> fixed it.(sc7280 also has a bwmon4 instance between the cpu and caches and a bwmon5 between the cache
->>>>> and DDR)
->>>>
->>>> In my case it exposes different issue - under performance. Somehow the
->>>> bwmon does not report bandwidth high enough to vote for high bandwidth.
->>>>
->>>> After removing the DDR interconnect and bandwidth OPP values I have for:
->>>> sysbench --threads=8 --time=60 --memory-total-size=20T --test=memory
->>>> --memory-block-size=4M run
->>>>
->>>> 1. Vanilla: 29768 MB/s
->>>> 2. Vanilla without CPU votes: 8728 MB/s
->>>> 3. Previous bwmon (voting too high): 32007 MB/s
->>>> 4. Fixed bwmon 24911 MB/s
->>>> Bwmon does not vote for maximum L3 speed:
->>>> bwmon report 9408 MB/s (thresholds set: <9216000 15052801>
->>>> )
->>>> osm l3 aggregate 14355 MBps -> 897 MHz, level 7, bw 14355 MBps
->>>>
->>>> Maybe that's just problem with missing governor which would vote for
->>>> bandwidth rounding up or anticipating higher needs.
->>>>
->>>>>>> Depending on which one it is, shouldn;t we just be scaling either one and not both the interconnect paths?
->>>>>>
->>>>>> The interconnects are the same as ones used for CPU nodes, therefore if
->>>>>> we want to scale both when scaling CPU, then we also want to scale both
->>>>>> when seeing traffic between CPU and cache.
->>>>>
->>>>> Well, they were both associated with the CPU node because with no other input to decide on _when_
->>>>> to scale the caches and DDR, we just put a mapping table which simply mapped a CPU freq to a L3 _and_
->>>>> DDR freq. So with just one input (CPU freq) we decided on what should be both the L3 freq and DDR freq.
->>>>>
->>>>> Now with 2 pmu's, we have 2 inputs, so we can individually scale the L3 based on the cache PMU
->>>>> counters and DDR based on the DDR PMU counters, no?
->>>>>
->>>>> Since you said you have plans to add the other pmu support as well (bwmon5 between the cache and DDR)
->>>>> how else would you have the OPP table associated with that pmu instance? Would you again have both the
->>>>> L3 and DDR scale based on the inputs from that bwmon too?
->>>>
->>>> Good point, thanks for sharing. I think you're right. I'll keep only the
->>>> l3c interconnect path.
->>>>
->>>
->>> If I understand correctly, <&osm_l3 MASTER_OSM_L3_APPS &osm_l3
->>> SLAVE_OSM_L3> relates to the L3 cache speed, which sits inside the CPU
->>> subsystem. As such traffic hitting this cache will not show up in either
->>> bwmon instance.
->>>
->>> The path <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>
->>> affects the DDR frequency. So the traffic measured by the cpu-bwmon
->>> would be the CPU subsystems traffic that missed the L1/L2/L3 caches and
->>> hits the memory bus towards DDR.
+> >>>  /*
+> >>>   * The RMP entry format is not architectural. The format is defined 
+> >>> in PPR @@ -126,6 +128,15 @@ struct snp_guest_platform_data {
+> >>>  	u64 secrets_gpa;
+> >>>  };
+> >>>  
+> >>> +struct rmpupdate {
+> >>> +	u64 gpa;
+> >>> +	u8 assigned;
+> >>> +	u8 pagesize;
+> >>> +	u8 immutable;
+> >>> +	u8 rsvd;
+> >>> +	u32 asid;
+> >>> +} __packed;
 > 
-> That seems right, looking some more into the downstream code and register definitions
-> I see the 2 bwmon instances actually lie on the path outside CPU SS towards DDR,
-> first one (bwmon4) is between the CPUSS and LLCC (system cache) and the second one
-> (bwmon5) between LLCC and DDR. So we should use the counters from bwmon4 to
-> scale the CPU-LLCC path (and not L3), on sc7280 that would mean splitting the
-> <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3> into
-> <&gem_noc MASTER_APPSS_PROC 3 &gem_noc SLAVE_LLCC 3> (voting based on the bwmon4 inputs)
-> and <&mc_virt MASTER_LLCC 3 &mc_virt SLAVE_EBI1 3> (voting based on the bwmon5 inputs)
-> and similar for sdm845 too.
+> >>I see above it says the RMP entry format isn't architectural; is this 'rmpupdate' structure? If not how is this going to get handled when we have a couple >of SNP capable CPUs with different layouts?
 > 
-> L3 should perhaps still be voted based on the cpu freq as done today.
+> >Architectural implies that it is defined in the APM and shouldn't change in such a way as to not be backward compatible. 
+> >I probably think the wording here should be architecture independent or more precisely platform independent.
+> 
+> Some more clarity on this: 
+> 
+> Actually, the PPR for family 19h Model 01h, Rev B1 defines the RMP entry format as below:
+> 
+> 2.1.4.2 RMP Entry Format
+> Architecturally the format of RMP entries are not specified in APM. In order to assist software, the following table specifies select portions of the RMP entry format for this specific product. Each RMP entry is 16B in size and is formatted as follows. Software should not rely on any field definitions not specified in this table and the format of an RMP entry may change in future processors. 
+> 
+> Architectural implies that it is defined in the APM and shouldn't change in such a way as to not be backward compatible. So non-architectural in this context means that it is only defined in our PPR.
+> 
+> So actually this RPM entry definition is platform dependent and will need to be changed for different AMD processors and that change has to be handled correspondingly in the dump_rmpentry() code. 
 
-This would mean that original bandwidth values (800 - 7216 MB/s) were
-correct. However we have still your observation that bwmon kicks in very
-fast and my measurements that sampled bwmon data shows bandwidth ~20000
-MB/s.
+You'll need a way to make that fail cleanly when run on a newer CPU
+with different layout, and a way to build kernels that can handle
+more than one layout.
 
+Dave
 
-Best regards,
-Krzysztof
+> Thanks,
+> Ashish
+> 
+-- 
+Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
+

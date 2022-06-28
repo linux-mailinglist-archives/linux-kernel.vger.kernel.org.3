@@ -2,57 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D5D55D2C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 786C155E0BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343994AbiF1I2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 04:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
+        id S245195AbiF1I2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 04:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343982AbiF1I1l (ORCPT
+        with ESMTP id S1344015AbiF1I1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 04:27:41 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2793F0C;
-        Tue, 28 Jun 2022 01:27:39 -0700 (PDT)
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LXHkl0stbz6GDGM;
-        Tue, 28 Jun 2022 16:26:55 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 28 Jun 2022 10:27:37 +0200
-Received: from [10.126.174.22] (10.126.174.22) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 28 Jun 2022 09:27:36 +0100
-Message-ID: <b530d4ac-2d7b-0989-c5da-6b6351a0a68f@huawei.com>
-Date:   Tue, 28 Jun 2022 09:27:37 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v2 0/6] blk-mq: Add a flag for reserved requests series
-To:     <axboe@kernel.dk>
-CC:     <linux-doc@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
-        <linux-s390@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <mpi3mr-linuxdrv.pdl@broadcom.com>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <nbd@other.debian.org>,
-        <damien.lemoal@opensource.wdc.com>, <jejb@linux.ibm.com>,
-        <hch@lst.de>, <martin.petersen@oracle.com>, <kartilak@cisco.com>,
-        <bvanassche@acm.org>, <satishkh@cisco.com>, <hare@suse.de>,
-        <sebaddel@cisco.com>
-References: <1655810143-67784-1-git-send-email-john.garry@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <1655810143-67784-1-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.174.22]
-X-ClientProxiedBy: lhreml726-chm.china.huawei.com (10.201.108.77) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        Tue, 28 Jun 2022 04:27:48 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6B35FA5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:27:47 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id jh14so10436989plb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:27:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=7VhI4uV7Lz+ufbvONj+FhRzkoi1GG7X2XmgVe2YYPGA=;
+        b=SJisHhGGPZGxc9IF/aBYFWosdJ6yDA8l8niRm1E1AFy9FPGtfDCPrKUVmTcwZ7yp4K
+         sd3ellhkQ14xJ6vfFGwVsTmHDERE+FVuWLMHrKTp2+RFrxwCGbRXXEZf4nkQBU7zb/pt
+         wSW1ylNAmWyQGP4MQM88qpPviXw9jUrNrW2vzT21ac5CH8ry1lwCDSJBHmBR0CZt5QOx
+         Ht/WoLRUBaaPMj1Gdd8U4I94GPtPQdysm1OiAigfCNawCKK6iYD63d9UdHKPDoUSd8el
+         BQTYBRVKITT1OFQcm+zIUHOm2SLgpuEylSEDaF7+K8JwbRgr71MocD6VpCXiYf2cQcV/
+         O8wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=7VhI4uV7Lz+ufbvONj+FhRzkoi1GG7X2XmgVe2YYPGA=;
+        b=dqqqnfuYux02+pfnWHziz/NpREPRcxMcqgpdRdQ1JP9+Z5NSPPUg1reiGGB2Z/UwOS
+         u40lLwhC57uXlTLS/FC6bgSNm+O9Ev0n12YAYRhIkVcot2bDddjgsEENliR4Du1W2ddp
+         m2ujaLcm7G9MbKW72qKgPYymlUahZoNJ05GDbY14ZMD4h2Cxjb4B9xZ9yYshhtUbBgFq
+         v8Mg9L1CSdpgPl/nIj3P0SPiJfxbwC9oqfb5ioC31vNoZTDESpacJERLbCXvh4Gvk6NK
+         dDH7A4ir9VqFEp1qmaVtssblLpNP1sTJZjzwMMWTYaeatnsT90ZU6RQ4JDY9WYdLz1U9
+         1nTQ==
+X-Gm-Message-State: AJIora+k+zHfGA+Ex8dQLt9/2zh7GiVCgjYqzmyv9xbNCke9VXNGHgT4
+        pIXJazsli19YTO3n3oKJY/A=
+X-Google-Smtp-Source: AGRyM1uXQjIkhKm4Gl1Uct9nuONWq71XvxjUpP2XeeFIcIf2bu1icL+jBSuKWFxXbdP9wbg3aSr1/g==
+X-Received: by 2002:a17:90b:1d06:b0:1ec:cd94:539b with SMTP id on6-20020a17090b1d0600b001eccd94539bmr20129991pjb.215.1656404867267;
+        Tue, 28 Jun 2022 01:27:47 -0700 (PDT)
+Received: from desktop-hypoxic.kamiya.io ([42.120.103.58])
+        by smtp.gmail.com with ESMTPSA id x2-20020a170902b40200b001675d843332sm8599262plr.63.2022.06.28.01.27.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 01:27:45 -0700 (PDT)
+From:   Yangxi Xiang <xyangxi5@gmail.com>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>,
+        Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        nick black <dankamongmen@gmail.com>
+Subject: Re: [PATCH] vt: fix memory overlapping when deleting chars in the buffer
+Date:   Tue, 28 Jun 2022 16:27:40 +0800
+Message-Id: <20220628082740.4685-1-xyangxi5@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <10b4e5f7-95b9-38e6-bcd5-1132d595301c@kernel.org>
+References: <10b4e5f7-95b9-38e6-bcd5-1132d595301c@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,73 +71,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2022 12:15, John Garry wrote:
+> Why not to use memmove in both cases? I.e. simply switch scr_memcpyw to
+> scr_memmovew?
 
-Hi Jens,
+Both of them works, and I pick one of them.
 
-about this series, would you be ok to pick this up for merging? Do you 
-find the changes acceptable?
-
-Thanks,
-John
-
-> In [0] I included "blk-mq: Add a flag for reserved requests" to identify
-> if a request is 'reserved' for special handling. Doing this is easier than
-> passing a 'reserved' arg to the blk_mq_ops callbacks. Indeed, only 1x
-> timeout implementation or blk-mq iter function actually uses the
-> 'reserved' arg (or 3x if you count SCSI core and FNIC SCSI driver). So
-> this series drops the 'reserved' arg for these timeout and iter functions.
-> Christoph suggested that I try to upstream now.
-> 
-> Differences to v1:
-> - Use "scsi_timeout" as name for SCSI timeout function and update docs
-> - Add RB tags (thanks!)
-> - Split out patch to drop local variables for 'reserved', as requested by
->    Bart
-> 
-> Based on following:
-> 6dbcddf6e76b (block/for-5.20/block) block: bfq: Fix kernel-doc headers
-> 
-> [0] https://lore.kernel.org/linux-scsi/1654770559-101375-1-git-send-email-john.garry@huawei.com/T/#m22aa9f89e55835edc2e650d43f7e3219a3a1a324
-> 
-> John Garry (6):
->    scsi: core: Remove reserved request time-out handling
->    blk-mq: Add a flag for reserved requests
->    blk-mq: Drop blk_mq_ops.timeout 'reserved' arg
->    scsi: fnic: Drop reserved request handling
->    blk-mq: Drop 'reserved' arg of busy_tag_iter_fn
->    blk-mq: Drop local variable for reserved tag
-> 
->   Documentation/scsi/scsi_eh.rst          |  3 +--
->   Documentation/scsi/scsi_mid_low_api.rst |  2 +-
->   block/blk-mq-debugfs.c                  |  2 +-
->   block/blk-mq-tag.c                      | 13 +++++--------
->   block/blk-mq.c                          | 22 +++++++++++++---------
->   block/bsg-lib.c                         |  2 +-
->   drivers/block/mtip32xx/mtip32xx.c       | 11 +++++------
->   drivers/block/nbd.c                     |  5 ++---
->   drivers/block/null_blk/main.c           |  2 +-
->   drivers/infiniband/ulp/srp/ib_srp.c     |  3 +--
->   drivers/mmc/core/queue.c                |  3 +--
->   drivers/nvme/host/apple.c               |  3 +--
->   drivers/nvme/host/core.c                |  2 +-
->   drivers/nvme/host/fc.c                  |  6 ++----
->   drivers/nvme/host/nvme.h                |  2 +-
->   drivers/nvme/host/pci.c                 |  2 +-
->   drivers/nvme/host/rdma.c                |  3 +--
->   drivers/nvme/host/tcp.c                 |  3 +--
->   drivers/s390/block/dasd.c               |  2 +-
->   drivers/s390/block/dasd_int.h           |  2 +-
->   drivers/scsi/aacraid/comminit.c         |  2 +-
->   drivers/scsi/aacraid/linit.c            |  2 +-
->   drivers/scsi/fnic/fnic_scsi.c           | 14 ++++----------
->   drivers/scsi/hosts.c                    | 14 ++++++--------
->   drivers/scsi/mpi3mr/mpi3mr_os.c         | 16 ++++------------
->   drivers/scsi/scsi_error.c               |  6 +++---
->   drivers/scsi/scsi_lib.c                 |  8 --------
->   drivers/scsi/scsi_priv.h                |  2 +-
->   include/linux/blk-mq.h                  | 10 ++++++++--
->   include/scsi/scsi_host.h                |  2 +-
->   30 files changed, 71 insertions(+), 98 deletions(-)
-> 
-
+Yangxi Xiang

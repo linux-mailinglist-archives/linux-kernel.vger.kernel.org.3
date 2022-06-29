@@ -2,325 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9330555F6B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 08:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 448CF55F6CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 08:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232180AbiF2Gfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 02:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
+        id S231657AbiF2GiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 02:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbiF2Gfi (ORCPT
+        with ESMTP id S229820AbiF2GiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 02:35:38 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABFA2C13D
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 23:35:36 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id z19so20732762edb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 23:35:36 -0700 (PDT)
+        Wed, 29 Jun 2022 02:38:03 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29292C665;
+        Tue, 28 Jun 2022 23:38:01 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id b23so17637345ljh.7;
+        Tue, 28 Jun 2022 23:38:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kBQFkusmcz/SMOWRD7R4YKEzcrVSUMw7+0eTSwhhg8c=;
-        b=yFSGXOTThJGqGcl5Aqt8nukaqco/J/Pgq3+2L3gVKGxN1VDwiq1x4Up7LSaYhkD/TC
-         SCJNYdoD9W+xphqJ8K1JVRWSKGoSzf5V5h0ZAW2Je8pKFCX3qeNQzWGohjrSoeB7aDVr
-         5/1tbL02NJvJ5Or5SZsksmHCm7C5Ddp7tlwkMS9uZqM3Mh/jbnmdrFItF+nUUubxsan6
-         LqcSGLbEXPYtw0t7M0BDt4cglwyGnZit3M4g/J/OmreW3aLwm8N8n+B54EZff+XF3+QX
-         bo1yDSUHmJUZvDjm4nIEM5+98AdTJiFyH1Qhlts1LRsMVtxeZ92Bmj6+itR7oX5Bs20p
-         WH9Q==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=nnOTox5xsHiWzAGCsiPV6eENWcvEEbExyPCpV/8TRrE=;
+        b=hi9TVREEFJhioMHXYKEwEGN3XUJoFvY2atW0DzLGYFMLfxiWmG4CIusbzUUxKIrIYK
+         iJLsDaVTV30nKEqJQIG00edL8Lhqj1asAS23eqWZl8pPA4gspTS2xrNPkF83BG8QR86T
+         RETFHGnLqWds0ApBaiqsEfw82vqG9jIA5+dv9JhRZsvhp6VjhOlmMRNzSnWTlSif5oz5
+         F/YEJxHQk7s1bE44bNAy43peDQeUw/qCPiAgagtfl9jkVOxEUxnRiMk5jZZ9y+S8+aWp
+         jR0OVak6hUVR59m27sDCYAwj/y6YLgNceMdOuCq5ZA0cGBBpc47+FsouqEJxTcI7TaiN
+         bVSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kBQFkusmcz/SMOWRD7R4YKEzcrVSUMw7+0eTSwhhg8c=;
-        b=7g4aDn7grh4i+awcO5L6oduC7UNxTFKX/u2sECG4R5H0DiExs50FMbmwz2pcnF7e1S
-         3GCxVevod67c/HViJrBQRRTx0Hdx/JP41yhbUWq1KcXKwuGxfusr4hrEM/L4K7NpxmIJ
-         lIvCmVTrMfTJexmxscXh0/HqVla29G69FU7oea0kTXXuJC+AAhJS3GYNs2aPCab1oAMZ
-         nNXMOt8xqCN7Ef5iIJZuxVomY7ygtT2yx5pbSdmtdqsNl8gd2dJJW6U5USlhAWCVnCBy
-         vuFnrDqB7512AJMflBNSsKR2HUl3UP6E6/WhcPCGWYudkYECaSJIFObmKwT15p82mMM4
-         eSMw==
-X-Gm-Message-State: AJIora90uf0eKC1yUkWkNIVO7DdoYPECNSE7x437aSCyt1q9iwlt6VOV
-        dls7whivDsSNNcV6O37emVbK4g==
-X-Google-Smtp-Source: AGRyM1vnwG7UM1ZvSadQ2cbuw8dyvte78Wi8y82ra2acHs2+T3hSNHgNjjf/JkSlE3T81fgpoeGeJw==
-X-Received: by 2002:a05:6402:2404:b0:437:d11f:b9c7 with SMTP id t4-20020a056402240400b00437d11fb9c7mr2203046eda.176.1656484534706;
-        Tue, 28 Jun 2022 23:35:34 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id y20-20020a17090629d400b00704cf66d415sm7325538eje.13.2022.06.28.23.35.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 23:35:34 -0700 (PDT)
-Message-ID: <07d2cbc3-07e2-85f4-1739-ffbe57d65519@linaro.org>
-Date:   Wed, 29 Jun 2022 08:35:32 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nnOTox5xsHiWzAGCsiPV6eENWcvEEbExyPCpV/8TRrE=;
+        b=WsX0elyWctMwHPWbcR7nrI8xQW+F6noD1OrKW0Xz2SO5JuEW2jz3Z90RGfB9ckUG3O
+         oq1C5qF0DHzGeECFew6OWrPq1HF5zjOx0h6sZ8/GizJMrxkX9Js49bRBp5Fqulm9DEA9
+         WM8Jtf5UN9xNNYsS4bq0eUI3IghUTFgGBTUXlvVf/jz+AnfG/ay2NpoDfdu7XhQMq9ts
+         22tCM384L/bvYgHrZo7onmA2/8QFnWLTgEdfCO1iHFU0ZSnwn+GtThlJuXXYTAhuarmf
+         vVYgwAIiIqXhrt8Dii5+P7lGuPpODrgU1nvBLPl9UndZdZJ2yiBUnnWC2VrirbOPHGIz
+         qdYg==
+X-Gm-Message-State: AJIora+PwwSsNO7WB1xlhFpIvHBCIdIJMkA93uZptMh1QNtg2/6YBzrK
+        WRILkM9c7mKCfWT64z7hcoPnAcxLSSEmmsYZ4AHBQ1FJ00XM+A==
+X-Google-Smtp-Source: AGRyM1vXhgTnAtT8hombv+/cyQvKFQC5aIHo6cIsnDS15Jt2xaiFSxW9tmA7A/EZuioP6n0bfGHnuaJ8eK+XfXy/QIc=
+X-Received: by 2002:a2e:9191:0:b0:25a:8858:f60d with SMTP id
+ f17-20020a2e9191000000b0025a8858f60dmr793067ljg.423.1656484679779; Tue, 28
+ Jun 2022 23:37:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V3 06/11] arm64: tegra: Add P2U and PCIe controller nodes
- to Tegra234 DT
-Content-Language: en-US
-To:     Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com
-Cc:     kishon@ti.com, vkoul@kernel.org, kw@linux.com,
-        p.zabel@pengutronix.de, mperttunen@nvidia.com,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com
-References: <20220629060435.25297-1-vidyas@nvidia.com>
- <20220629060435.25297-7-vidyas@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220629060435.25297-7-vidyas@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220628133742.91966-1-guomengqi3@huawei.com>
+In-Reply-To: <20220628133742.91966-1-guomengqi3@huawei.com>
+From:   Alex Shi <seakeel@gmail.com>
+Date:   Wed, 29 Jun 2022 14:37:22 +0800
+Message-ID: <CAJy-AmnAw2-CHWZsHR18N9_5wgAm47HTOfFXL34ZoBisPCY7nw@mail.gmail.com>
+Subject: Re: [PATCH -next] docs/zh_CN: add vm transhuge translation
+To:     Guo Mengqi <guomengqi3@huawei.com>
+Cc:     Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>,
+        Jonathan Corbet <corbet@lwn.net>, "Wu X.C." <bobwxc@email.cn>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, xuqiang36@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/06/2022 08:04, Vidya Sagar wrote:
-> Add P2U (PIPE to UPHY) and PCIe controller nodes to device tree.
-> The Tegra234 SoC contains 10 PCIe controllers and 24 P2U instances
-> grouped into three different PHY bricks namely High-Speed IO (HSIO-8 P2Us)
-> NVIDIA High Speed (NVHS-8 P2Us) and Gigabit Ethernet (GBE-8 P2Us)
-> respectively.
-> 
-> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> ---
-> V3:
-> * Added entries for all controllers that can operate in EndPoint mode
-> 
-> V2:
-> * Added 'iommu-map', 'iommu-map-mask' and 'dma-coherent' entries for each
->   PCIe controller node
-> 
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi | 935 +++++++++++++++++++++++
->  1 file changed, 935 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-> index 2ae2f11f289c..062417e3ede5 100644
-> --- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-> +++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-> @@ -998,6 +998,198 @@
->  			status = "okay";
->  		};
->  
-> +		p2u_hsio_0: phy@3e00000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03e00000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_hsio_1: phy@3e10000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03e10000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_hsio_2: phy@3e20000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03e20000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_hsio_3: phy@3e30000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03e30000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_hsio_4: phy@3e40000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03e40000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_hsio_5: phy@3e50000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03e50000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_hsio_6: phy@3e60000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03e60000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_hsio_7: phy@3e70000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03e70000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_nvhs_0: phy@3e90000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03e90000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_nvhs_1: phy@3ea0000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03ea0000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_nvhs_2: phy@3eb0000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03eb0000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_nvhs_3: phy@3ec0000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03ec0000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_nvhs_4: phy@3ed0000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03ed0000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_nvhs_5: phy@3ee0000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03ee0000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_nvhs_6: phy@3ef0000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03ef0000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_nvhs_7: phy@3f00000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03f00000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_gbe_0: phy@3f20000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03f20000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_gbe_1: phy@3f30000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03f30000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_gbe_2: phy@3f40000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03f40000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_gbe_3: phy@3f50000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03f50000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_gbe_4: phy@3f60000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03f60000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_gbe_5: phy@3f70000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03f70000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_gbe_6: phy@3f80000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03f80000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
-> +		p2u_gbe_7: phy@3f90000 {
-> +			compatible = "nvidia,tegra234-p2u";
-> +			reg = <0x03f90000 0x10000>;
-> +			reg-names = "ctl";
-> +
-> +			#phy-cells = <0>;
-> +		};
-> +
->  		hsp_aon: hsp@c150000 {
->  			compatible = "nvidia,tegra234-hsp", "nvidia,tegra194-hsp";
->  			reg = <0x0c150000 0x90000>;
-> @@ -1384,6 +1576,749 @@
->  		status = "okay";
->  	};
->  
-> +	pcie@140a0000 {
-> +		compatible = "nvidia,tegra234-pcie";
-> +		power-domains = <&bpmp TEGRA234_POWER_DOMAIN_PCIEX4CA>;
-> +		reg = <0x00 0x140a0000 0x0 0x00020000>, /* appl registers (128K)      */
-> +		      <0x00 0x2a000000 0x0 0x00040000>, /* configuration space (256K) */
-> +		      <0x00 0x2a040000 0x0 0x00040000>, /* iATU_DMA reg space (256K)  */
-> +		      <0x00 0x2a080000 0x0 0x00040000>; /* DBI reg space (256K)       */
-> +		reg-names = "appl", "config", "atu_dma", "dbi";
-> +
-> +		status = "disabled";
-
-Status goes to the end, not somewhere in the middle of properties.
-
-
-Best regards,
-Krzysztof
+T24gVHVlLCBKdW4gMjgsIDIwMjIgYXQgOTo0MyBQTSBHdW8gTWVuZ3FpIDxndW9tZW5ncWkzQGh1
+YXdlaS5jb20+IHdyb3RlOg0KPg0KPiBUcmFuc2xhdGUgLi4uL3ZtL3RyYW5zaHVnZS5yc3QgaW50
+byBDaGluZXNlLg0KPg0KPiBTaWduZWQtb2ZmLWJ5OiBHdW8gTWVuZ3FpIDxndW9tZW5ncWkzQGh1
+YXdlaS5jb20+DQo+IC0tLQ0KPiAgRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04vdm0v
+aW5kZXgucnN0IHwgICAyICstDQo+ICAuLi4vdHJhbnNsYXRpb25zL3poX0NOL3ZtL3RyYW5zaHVn
+ZS5yc3QgICAgICAgfCAxNTEgKysrKysrKysrKysrKysrKysrDQo+ICAyIGZpbGVzIGNoYW5nZWQs
+IDE1MiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQg
+RG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04vdm0vdHJhbnNodWdlLnJzdA0KPg0KPiBk
+aWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04vdm0vaW5kZXgucnN0
+IGIvRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04vdm0vaW5kZXgucnN0DQo+IGluZGV4
+IGM3N2E1NjU1Mzg0NS4uMmQ4MmIxNWIyNzJiIDEwMDY0NA0KPiAtLS0gYS9Eb2N1bWVudGF0aW9u
+L3RyYW5zbGF0aW9ucy96aF9DTi92bS9pbmRleC5yc3QNCj4gKysrIGIvRG9jdW1lbnRhdGlvbi90
+cmFuc2xhdGlvbnMvemhfQ04vdm0vaW5kZXgucnN0DQo+IEBAIC01OSwxMSArNTksMTEgQEAgTGlu
+dXjlhoXlrZjnrqHnkIbmlofmoaMNCj4gICAgIHZtYWxsb2NlZC1rZXJuZWwtc3RhY2tzDQo+ICAg
+ICB6M2ZvbGQNCj4gICAgIHpzbWFsbG9jDQo+ICsgICB0cmFuc2h1Z2UNCj4NCj4gIFRPRE9MSVNU
+Og0KPiAgKiBhcmNoX3BndGFibGVfaGVscGVycw0KPiAgKiBmcmVlX3BhZ2VfcmVwb3J0aW5nDQo+
+ICAqIGh1Z2V0bGJmc19yZXNlcnYNCj4gICogc2x1Yg0KPiAtKiB0cmFuc2h1Z2UNCj4gICogdW5l
+dmljdGFibGUtbHJ1DQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy96
+aF9DTi92bS90cmFuc2h1Z2UucnN0IGIvRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04v
+dm0vdHJhbnNodWdlLnJzdA0KPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiBpbmRleCAwMDAwMDAw
+MDAwMDAuLmE3YmVkOGIxM2E0Nw0KPiAtLS0gL2Rldi9udWxsDQo+ICsrKyBiL0RvY3VtZW50YXRp
+b24vdHJhbnNsYXRpb25zL3poX0NOL3ZtL3RyYW5zaHVnZS5yc3QNCj4gQEAgLTAsMCArMSwxNTEg
+QEANCj4gKy4uIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+ICsuLiBpbmNsdWRl
+OjogLi4vZGlzY2xhaW1lci16aF9DTi5yc3QNCj4gKw0KPiArOk9yaWdpbmFsOiBEb2N1bWVudGF0
+aW9uL3ZtL3RyYW5zaHVnZS5yc3QNCj4gKw0KPiArOue/u+ivkToNCj4gKw0KPiArIOmDreaipueQ
+qiBHdW8gTWVuZ3FpIDxndW9tZW5ncWkzQGh1YXdlaS5jb20+DQo+ICsNCj4gKzrmoKHor5E6DQo+
+ICsNCj4gKz09PT09PT09PT09PT09DQo+ICvpgI/mmI7lpKfpobXmnLrliLYNCj4gKz09PT09PT09
+PT09PT09DQo+ICsNCj4gK+acrOaWh+aho+aPj+i/sOmAj+aYjuWkp+mhte+8iFRIUO+8ieeahOiu
+vuiuoeeQhuW/te+8jOS7peWPiuWug+aYr+WmguS9leS4juWGheWtmOeuoeeQhuezu+e7n+WFtuS7
+lumDqOWIhuS6pOS6kueahOOAgg0KPiArDQo+ICvorr7orqHljp/liJkNCj4gKz09PT09PT09DQo+
+ICsNCj4gKy0g4oCc5LyY6ZuFZmFsbGJhY2vigJ3vvJrmnInkupttbee7hOS7tuS4jeS6huino+mA
+j+aYjuWkp+mhteeahOWtmOWcqO+8jOWug+S7rOeahOWbnumAgOaWueazleaYr+WwhlBNROmhteih
+qOmhuQ0KDQoiZmFsbGJhY2siIGNvdWxkIGJlIHRyYW5zbGF0ZWQgYXMgJ+WbnumAgCcgaGVyZS4N
+Cg0KPiArICDmi4bliIbmiJBQVEXpobXooajpobnjgILlv4XopoHml7bov5jpnIDopoHmi4bliIbp
+gI/mmI7lpKfpobXjgILov5nmoLflsLHlj6/ku6XlnKjluLjop4TlpKflsI/nmoTpobXmiJbpobXo
+oajpobnkuIoNCj4gKyAg57un57ut5bel5L2c44CCDQo+ICsNCj4gKy0g5aaC5p6c5YaF5a2Y56KO
+54mH5YyW5a+86Ie05aSn6aG15YiG6YWN5aSx6LSl77yM5YiZ5YiG6YWN5bi46KeE6aG15L2c5Li6
+5pu/5Luj5pS+5YWl5Y6fdm1h5Lit77yM5q2k5pyf6Ze05LiN5bqUDQo+ICsgIOS6p+eUn+S7u+S9
+leWksei0peaIluaYjuaYvuW7tui/n++8jOS4jeimgeW8lei1t+eUqOaIt+aAgeeahOazqOaEj+OA
+gg0KPiArDQo+ICstIOWmguaenOS4gOS6m+i/m+eoi+mAgOWHuuWQjumHiuaUvuS6huepuuS9meea
+hOWkp+mhte+8iOS4jeiuuuWcqOS8meS8tOezu+e7n+i/mOaYr+WcqFZN77yJ77yM55Sx5bi46KeE
+6aG15pSv5oyB55qEDQo+ICsgIGd1ZXN054mp55CG5YaF5a2Y5bqU6K+l6Ieq5Yqo6YeN5paw55Sz
+6K+35Li65aSn6aG144CCKOmAmui/h2todWdlcGFnZWTov5vnqIspDQo+ICsNCj4gKy0g6YCP5piO
+5aSn6aG15LiN6ZyA6KaB6aKE55WZ5YaF5a2Y77yM6ICM5piv5bC95Y+v6IO95L2/55So5bey57uP
+5a2Y5Zyo55qE5aSn6aG144CC77yI5ZSv5Li66YG/5YWN5LiN5Y+v56e75Yqo55qE6aG1DQo+ICsg
+IOWwhuaVtOS4quWGheWtmOeijueJh+WMlu+8jOWUr+S4gOWPr+iDveeahOmihOeVmeaYr+WcqGtl
+cm5lbGNvcmU955qE6K6+572u5Lit44CC5LiN6L+H6L+Z5Liq6LCD5pW05bm25LiN5LuFDQo+ICsg
+IOmSiOWvuemAj+aYjuWkp+mhte+8jOiAjOWvueWGheaguOS4reaJgOacieWKqOaAgeeahOWkmue6
+p+mhtemdoueUs+ivt+mDvemAmueUqOOAgu+8iQ0KPiArDQo+ICtnZXRfdXNlcl9wYWdlc+WSjGZv
+bGxvd19wYWdlDQo+ICs9PT09PT09PT09PT09PT09PT09PT09PT09PT0NCj4gKw0KPiAr5LiN6K66
+5a+55Y2V5Liq5aSn6aG16L+Y5pivaHVnZXRsYmZz77yM5L2/55SoZ2V0X3VzZXJfcGFnZXPlkoxm
+b2xsb3dfcGFnZeaXtu+8jOi/lOWbnueahOS8muaYr+mmlumhteaIlg0KPiAr5bC+6aG144CC5aSn
+5aSa5pWw5oOF5Ya15LiL6LCD55SoZ2V0X3VzZXJfcGFnZeWKn+iDveeahOS6uuS4jeWFs+W/g+mh
+teeahOWkp+Wwj++8jOWPquWFs+W/g+mhteeahOecn+WunueJqeeQhg0KPiAr5Zyw5Z2A5Lul5Y+K
+5pqC5pe255qEcGlu6aG177yM5aW95ZyoSS9P57uT5p2f5ZCO5bCG6aG16YeK5pS+44CC5L2G5Zyo
+6amx5Yqo5Lit77yM5Zyo5p+Q5Lqb5oOF5Ya15LiL5pyJ5Y+v6IO96K6/6ZeuDQoNCidwaW4nIGNv
+dWxkIGJlIHRyYW5zbGF0ZWQgYXMg5Zu65a6aIGhlcmUuDQoNCj4gK+WwvumhteeahHBhZ2Vfc3Ry
+dWN077yI5aaC5qOA5p+lcGFnZS0+bWFwcGluZ+Wtl+aute+8ie+8jOi/meaXtuW6lOivpei9rOiA
+jOajgOafpemmlumhteOAguS4gOaXpummlumhteaIluiAhQ0KPiAr5bC+6aG16KKr5byV55So77yM
+5aSn6aG15bCx5LiN6IO95YaN6KKr5ouG5YiG5LqG44CCDQo+ICsNCj4gKy4uIG5vdGU6Og0KPiAr
+ICAg5Lul5LiK6ZmQ5Yi25LiN5piv6ZKI5a+5R1VQIEFQSeaWsOWinu+8jOiAjOaYr+S4uuS6huS4
+juWcqGh1Z2V0bGJmc+S4reS/neaMgeS4gOiHtOOAgui/meagt+WmguaenOmpseWKqA0KPiArICAg
+6IO95ZyoaHVnZXRsYmZz5Lit5L2/55SoR1VQ77yM5bCx6IO95aSf5YiH5o2i5Yiw6YCP5piO5aSn
+6aG15py65Yi25pSv5oyB55qER1VQ44CCDQo+ICsNCj4gK+S8mOmbhWZhbGxiYWNrDQo+ICs9PT09
+PT09PT09PT0NCj4gKw0KPiAr5Li65p+l6aG16KGo5rWB56iL5aKe5Yqg5aSn6aG15pSv5oyB5Y+q
+6ZyA5re75Yqgc3BsaXRfaHVnZV9wbWQodm1hLCBwbWQsDQo+ICthZGRyKeWNs+WPr+OAguWFtuS4
+rXBtZOS4unBtZF9vZmZzZXTov5Tlm57lgLzjgILopoHkuLrku6PnoIHmt7vliqDpgI/mmI7lpKfp
+obXmlK/mjIHlvojnroDljZXvvIzmkJzntKINCj4gKyJwbWRfb2Zmc2V0IuW5tuWwhnNwbGl0X2h1
+Z2VfcG1k5re75Yqg5Yiw5omA5pyJ6L+U5Zue55qEcG1k5ZCO6Z2i44CC6L+Z55+t55+t5LiA6KGM
+55qEZmFsbGJhY2vlh73mlbANCj4gK+W+iOW3p+Wmme+8jOS4uuaIkeS7rOecgeWOu+S6humineWk
+lueahOmAgumFjeS7o+egge+8iOmAmuW4uOS8muW+iOmVv+aIluiAheW+iOWkjeadgu+8ieOAgg0K
+PiArDQo+ICvlpoLmnpzkvaDpnIDopoHlnKjmsqHmnInpobXooajnmoTmg4XlhrXkuIvlpITnkIbk
+uIDkuKrlpKfpobXvvIzlj6/ku6Xkvb/nlKhzcGxpdF9odWdlX3BhZ2UocGFnZSnmiorlroPmi4bl
+iIYNCj4gK+aIkOWwj+mhteOAgmxpbnV4IFZN5bCx5piv6YCa6L+H6L+Z56eN5pa55byP5bCG5aSn
+6aG15o2i5Ye644CC5aaC5p6c6aG16Z2i6KKrcGlu5L2P5LqG77yMc3BsaXRfaHVnZV9wYWdlDQo+
+ICvlsLHkvJrlpLHotKXjgIINCj4gKw0KPiAr5L6L5a2Q77ya5re75Yqg5LiA6KGM5Luj56CB5L2/
+bXJlbWFwLmPmlK/mjIHpgI/mmI7lpKfpobU6Og0KPiArDQo+ICsgICAgICAgIGRpZmYgLS1naXQg
+YS9tbS9tcmVtYXAuYyBiL21tL21yZW1hcC5jDQo+ICsgICAgICAgIC0tLSBhL21tL21yZW1hcC5j
+DQo+ICsgICAgICAgICsrKyBiL21tL21yZW1hcC5jDQo+ICsgICAgICAgIEBAIC00MSw2ICs0MSw3
+IEBAIHN0YXRpYyBwbWRfdCAqZ2V0X29sZF9wbWQoc3RydWN0IG1tX3N0cnUNCj4gKyAgICAgICAg
+ICAgICAgICByZXR1cm4gTlVMTDsNCj4gKw0KPiArICAgICAgICAgICAgICAgIHBtZCA9IHBtZF9v
+ZmZzZXQocHVkLCBhZGRyKTsNCj4gKyAgICAgICAgKyAgICAgICBzcGxpdF9odWdlX3BtZCh2bWEs
+IHBtZCwgYWRkcik7DQo+ICsgICAgICAgICAgICAgICAgaWYgKHBtZF9ub25lX29yX2NsZWFyX2Jh
+ZChwbWQpKQ0KPiArICAgICAgICAgICAgICAgICAgICByZXR1cm4gTlVMTDsNCj4gKw0KPiAr5aSn
+6aG15pSv5oyB5Lit55qE6ZSB5L2/55SoDQo+ICs9PT09PT09PT09PT09PT09PT0NCj4gKw0KPiAr
+5oiR5Lus5biM5pyb5bC95Y+v6IO95aSa55qE5Luj56CB6IO95Y6f55Sf5pSv5oyB6YCP5piO5aSn
+6aG177yM5Zug5Li66LCD55Soc3BsaXRfaHVnZV9wYWdlKCnlkowNCj4gK3NwbGl0X2h1Z2VfcG1k
+KCnov5jmmK/mnInlvIDplIDnmoTjgIINCj4gKw0KPiAr6KaB6K6p5p+l6aG16KGo5pON5L2c5Y+Y
+5b6X6IO95aSE55CGaHVnZSBwbWTvvIzlj6rpnIDlr7lwbWRfb2Zmc2V06L+U5Zue55qEcG1k6LCD
+55SoDQo+ICtwbWRfdHJhbnNfaHVnZSgp44CC5LiA5a6a6KaB5oyB5pyJbW1hcF9sb2Nr6K+76ZSB
+77yM5Lul6YG/5YWNa2h1Z2VwYWdlZOWcqOatpOacn+mXtOeUs+ivt+aWsOeahA0KPiAr5aSn6aG1
+cG1k77yIa2h1Z2VwYWdlZCBjb2xsYXBzZV9odWdlX3BhZ2XkvJrmjIHmnIltbWFwX2xvY2vlhpnp
+lIHogIzpnZ5hbm9uX3ZtYSBsb2Nr77yJ44CCDQo+ICvlpoLmnpxwbWRfdHJhbnNfaHVnZei/lOWb
+nmZhbHNl77yM6YKj5bCx5Zue5Yiw5Y6f5p2l55qE5rWB56iL44CC5aaC5p6ccG1kX3RyYW5zX2h1
+Z2Xov5Tlm550cnVl77yMDQoNCidmYWxzZScgY291bGQgYmUgdHJhbnNsYXRlZCBhcyDlgYcsICd0
+cnVlJyBpcyDnnJ8uDQoNCj4gK+WwsemcgOimgeWFiOaMgeaciemhteihqOmUgShwbWRfbG9jaygp
+Ke+8jOeEtuWQjuWGjeiwg+S4gOasoXBtZF90cmFuc19odWdlLiDmjIHpobXooajplIHmmK/kuLrk
+uobpmLLmraINCj4gK+Wkp+mhtXBtZOiiq+i9rOaNouaIkOWwj+mhte+8iHNwbGl0X2h1Z2VfcG1k
+5Y+v5Lul6Lef5p+l6aG16KGo5pON5L2c5ZCM5pe26L+b6KGM77yJ44CC5aaC5p6c56ys5LqM5qyh
+DQo+ICtwbWRfdHJhbnNfaHVnZei/lOWbnmZhbHNlLOmCo+WwsemHiuaUvumhteihqOmUge+8jOS+
+neeEtuWbnuWIsOWOn+aciea1geeoi+OAguWmguaenOi/lOWbnnRydWXvvIzlsLHlj6/ku6UNCj4g
+K+e7p+e7reWkhOeQhmh1Z2UgcG1k5ZKMaHVnZXBhZ2XkuobjgILlpITnkIblrozmr5XvvIzlho3p
+h4rmlL7pobXooajplIHjgIINCj4gKw0KPiAr5byV55So6K6h5pWw5ZKM6YCP5piO5aSn6aG1DQo+
+ICs9PT09PT09PT09PT09PT09PT0NCj4gKw0KPiArVEhQ55qE6K6h5pWw6Lef5YW25LuW5aSN5ZCI
+6aG155qE6K6h5pWw5aSn6Ie055u45ZCM77yaDQo+ICsNCj4gKyAtIGdldF9wYWdlKCkvcHV0X3Bh
+Z2UoKeWSjEdVUOmDveWcqOmmlumhteS4iui/m+ihjOiuoeaVsO+8iOS/ruaUuWhlYWQgcGFnZS0+
+X3JlZmNvdW5077yJDQo+ICsNCj4gKyAtIOWwvumhteeahF9yZWZjb3VudOawuOi/nOaYrzAuIGdl
+dF9wYWdlX3VubGVzc196ZXJvKCnmsLjov5zml6Dms5VnZXTliLDlsL7pobXjgIINCj4gKw0KPiAr
+IC0gbWFwL3VubWFw54m55a6aUFRFIGVudHJ55pe277yM5aKe5YeP55qE5piv5aSN5ZCI6aG15Lit
+55u45bqU5a2Q6aG155qEX21hcGNvdW50Lg0KPiArDQo+ICsgLSBtYXAvdW5tYXDmlbTkuKrlpI3l
+kIjpobXml7bvvIzlop7lh4/nmoTmmK9jb21wb3VuZF9tYXBjb3VudOWxnuaAp+OAguivpeWxnuaA
+p+S/neWtmOWcqOesrOS4gOS4qg0KPiArICAg5bC+6aG15Lit44CC5a+55LqO5paH5Lu25Lit55qE
+5aSn6aG177yM6L+Y6KaB5aKe5Yqg5omA5pyJ5a2Q6aG15Lit55qEX21hcGNvdW5077yM6L+Z5qC3
+5piv5Li65LqG5Zyo5qOA5rWLDQo+ICsgICDlrZDpobXnmoTop6PmmKDlsITml7bkuI3pnIDogIPo
+mZHnq57kuonpl67popjjgIINCj4gKw0KPiArUGFnZURvdWJsZU1hcCgpIOihqOaYjuWkp+mhtSAq
+5Y+v6IO9KiDooqvmmKDlsITkuLrkuoZQVEUuDQo+ICsNCj4gK+WvueWMv+WQjemhte+8jFBhZ2VE
+b3VibGVNYXAoKeS5n+ihqOekuuaJgOacieWtkOmhteeahF9tYXBjb3VudOmDveWBj+enu+S6hjEu
+DQo+ICvlnKjpobXooqvlkIzml7bmmKDlsITkuLrkuoZQTUTlkoxQVEXnmoTmg4XlhrXkuIvvvIzo
+v5nkuKrpop3lpJbnmoTlvJXnlKjlj6/ku6Xpgb/lhY3lrZDpobXop6PmmKDlsITml7bnmoTnq57k
+uonjgIINCj4gKw0KPiAr6L+Z5Liq5LyY5YyW5Lmf5Y+v5Lul6L+96Liq5q+P5Liq5a2Q6aG1bWFw
+Y291bnTmiYDluKbmnaXnmoTmgKfog73lvIDplIDjgILlj6bkuIDnp43op6PlhrPmlrnms5XmmK/l
+nKjmr4/mrKENCj4gK21hcC91bm1hcOaVtOS4quWkjeWQiOmhteaXtuabtOaUueaJgOacieWtkOmh
+teeahF9tYXBjb3VudC4NCj4gKw0KPiAr5a+55LqO5Yy/5ZCN6aG177yM5aaC5p6c6aG16Z2i55qE
+UE1E5Zyo6aaW5qyh6KKr5ouG5YiG5pe25ZCM5pe26L+Y5YW35pyJUE1E5pig5bCE77yM5YiZ6K6+
+572uUEdfZG91YmxlX21hcDsNCj4gK+W9k2NvbXBvdW5kX21hcGNvdW505YC86ZmN5Li6MOaXtu+8
+jOWPlua2iOiuvue9ruOAgg0KPiArDQo+ICvlr7nkuo7mmKDlsITliLDmlofku7bnmoTpobXvvIzl
+nKjlhbbpppbmrKHmmKDlsIRQVEXml7bvvIzorr7nva5QR19kb3VibGVfbWFwOyDlnKjpobXpnaLk
+u47pobXnvJPlrZgNCj4gK3BhZ2UgY2FjaGXkuK3np7vpmaTml7bvvIzlj5bmtojorr7nva7jgIIN
+Cj4gKw0KPiArc3BsaXRfaHVnZV9wYWdl5Lit77yM5Zyo5riF6ZmkcGFnZSBzdHJ1Y3TkuK3miYDm
+nIlQR19oZWFkL3RhaWzkvY3kuYvliY3vvIzpnIDopoHlhYjlsIbpppbpobXkuK3nmoQNCj4gK+W8
+leeUqOiuoeaVsHJlZmNvdW505YiG5Y+R5Yiw5omA5pyJ5YW25LuW5bC+6aG15Lit44CC6aG16KGo
+6aG5UFRF5Y2g55So55qE5byV55So6K6h5pWw5b6I5aW95aSE55CG77yM5L2G5Ymp5LiL55qEDQo+
+ICvlvJXnlKjorqHmlbDmnaXmupDpmr7ku6Xnoa7lrprvvIjlpoLpgJrov4dnZXRfdXNlcl9wYWdl
+c+eahHBpbumhte+8ieOAguWmguaenOWkp+mhteiiq3BpbuS9j++8jA0KPiArc3BsaXRfaHVnZV9w
+YWdlKCnkvJrlpLHotKXjgILpobXnmoTlvJXnlKjorqHmlbDlv4XpobvnrYnkuo7miYDmnInlrZDp
+obVtYXBjb3VudOS5i+WSjOWGjeWKoOS4gO+8iOWboOS4ug0KPiArc3BsaXRfaHVnZV9wYWdl55qE
+6LCD55So6ICF5Lmf5b+F6aG75a+56aaW6aG15oyB5pyJ5LiA5Liq5byV55So77yJ44CCDQo+ICsN
+Cj4gK+WvueWMv+WQjemhte+8jHNwbGl0X2h1Z2VfcGFnZeeUqOmhteihqOmhuei/geenu++8iG1p
+Z3JhdGlvbg0KPiArZW50cmllc++8ieS/neaMgeadpXBhZ2UtPl9yZWZjb3VudOWSjHBhZ2UtPl9t
+YXBjb3VudOeos+WumuOAguWvueaWh+S7tumhte+8jOebtOaOpeino+aYoOWwhOWwseWlveOAgg0K
+PiArDQo+ICvov5nlpZfmnLrliLblr7nniannkIblhoXlrZjmiavmj4/vvIhwaHlzaWNhbCBtZW1v
+cnkgc2Nhbm5lcnPvvInkuZ/lronlhajvvIxzY2FubmVy5ZSv5LiA5ZCI5rOV5byV55So6aG1DQo+
+ICvnmoTpgJTlvoTlsLHmmK9nZXRfcGFnZV91bmxlc3NfemVybygpLg0KPiArDQo+ICvmsqHosINh
+dG9taWNfYWRkKCnml7bvvIzmiYDmnInlsL7pobXnmoRfcmVmY291bnTpg73kuLowLiDov5nml7Zz
+Y2FubmVy5peg5rOV6I635Y+W5bC+6aG155qE5byV55So44CCDQo+ICvosIPkuoZhdG9taWNfYWRk
+KCnlkI7vvIzmiJHku6zkuZ/kuI3lnKjkuY7pobXnmoRfcmVmY291bnTmmK/lpJrlsJHkuobjgILl
+j6ropoHnn6XpgZPlupTor6Xku47pppbpobXnmoTlvJXnlKgNCj4gK+iuoeaVsOWHj+WOu+WkmuWw
+keWNs+WPr+OAgg0KPiArDQo+ICvlr7npppbpobXov5vooYxnZXRfcGFnZV91bmxlc3NfemVybygp
+5piv5Y+v5Lul5oiQ5Yqf55qE44CC5q2k5pe25byV55So6K6h5pWw55qE5YaN5YiG6YWN6Z2e5bi4
+5piO5LqG77yaDQo+ICvlvJXnlKjorqHmlbDlsIbkvJrnlZnlnKjpppbpobXkuK3jgIINCj4gKw0K
+PiArc3BsaXRfaHVnZV9wbWQoKeWvueW8leeUqOiuoeaVsOayoeacieS7u+S9lemZkOWItu+8jOWc
+qOS7u+S9leaXtuWAmemDveWPr+S7peaLhuWIhlBNRO+8jOiAjOS4lOawuOi/nOS4jeS8mg0KPiAr
+5aSx6LSl44CCDQo+ICsNCj4gK+WxgOmDqHVubWFw5ZKMZGVmZXJyZWRfc3BsaXRfaHVnZV9wYWdl
+KCnlh73mlbANCj4gKz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0K
+PiArDQo+ICvpgI/mmI7lpKfpobXpgJrov4dtdW5tYXAoKeaIluWFtuS7luaWueW8j+ino+aYoOWw
+hOaXtu+8jOW5tuS4jeS8mueri+WNs+mHiuaUvuWGheWtmOOAguWcqHBhZ2VfcmVtb3ZlX3JtYXAo
+KQ0KPiAr5Lit5qOA5p+l6YCP5piO5aSn6aG155qE5p+Q5Liq5a2Q6aG15piv5ZCm5bey57uP6L+Y
+5Zyo5L2/55So77yM5bm25bCG6YCP5piO5aSn6aG15Yqg5YWl5LiA5Liq6aKE5aSH6Zif5YiX77yM
+5b2T5YaF5a2YDQoNCiflt7Lnu4/ov5jlnKgnIGR1cGxpY2F0ZSBtZWFuaW5nLCBsZWF2ZSBvbmUg
+aXMgZmluZS4NCg0KVGhhbmtzDQpBbGV4DQo+ICvkvb/nlKjpnIDmsYLlj5jlpKfml7bvvIzmiorp
+gI/mmI7lpKfpobXmi4bliIbvvIzph4rmlL7lt7Lnu4/kuI3nlKjnmoTlrZDpobXjgIINCj4gKw0K
+PiAr5aaC5p6c5qOA5rWL5Yiw5bGA6YOodW5tYXDvvIznlLHkuo7lpITlnKjplIHkuK3vvIzml6Dm
+s5Xmi4bpobXjgILogIzkuJTlnKjlvojlpJrmg4XlhrXkuIvvvIzpgI/mmI7lpKfpobXkvJrot6hW
+TUEsDQo+ICvov5nml7bkvJrlnKhleGl0KDIp5Lit6L+b6KGM5bGA6YOodW5tYXDvvIzov5nml7bm
+i4bpobXmlYjmnpzpgILlvpflhbblj43jgIINCj4gKw0KPiArZGVmZXJyZWRfc3BsaXRfaHVnZV9w
+YWdl5Ye95pWw5bCx5piv55So5p2l6L+b6KGM5LiK5paH5omA6K+055qE5bCG6aG15o6S6Zif5Lul
+6aKE5aSH5ZCO57ut55qE5ouG5YiG44CC55yf5q2jDQo+ICvnmoTmi4bpobXmk43kvZzmmK/pgJro
+v4flhoXlrZjljovlipvlr7zoh7TnmoRzaHJpbmtlcuWHveaVsOadpeinpuWPkeOAgg0KPiArDQo+
+IC0tDQo+IDIuMTcuMQ0KPg0K

@@ -2,273 +2,340 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5E655FAAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C3255FAA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232641AbiF2IfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 04:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
+        id S232574AbiF2Ie5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 04:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232513AbiF2IfC (ORCPT
+        with ESMTP id S232283AbiF2Iey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 04:35:02 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 29 Jun 2022 01:35:00 PDT
-Received: from esa5.fujitsucc.c3s2.iphmx.com (esa5.fujitsucc.c3s2.iphmx.com [68.232.159.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B8C3B57A
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 01:35:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
-  t=1656491700; x=1688027700;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=21ggC7PcCiZ7nBDyJAkDi30A3uC7KouQZmiJKeHyycs=;
-  b=egm3MVj8TDRYkJHk9oIiJ9yIJmVoCBLYUeCOAgH3J0g3O6OUIGIAcBtV
-   ZGKM6qUJS+juooPXxCcwesWTSDVxOX0j+CXfC6o+C0nCjJlTPLbMTNlcW
-   IV3czDogd58XCO3CtX10s3yA/aP4QfaZm5eSxYgYIPvRq9XaZ3aF7vBDG
-   4qyUepCW4Y/RHDHZgEujMjnahuI+GoESbZHuXs7LbEvKhLmiMFe7onTrL
-   hkKsE9SHEfNiM20zN5FAtReyW+KEkzfgS364seO9a/2Bepp/Gd++V1SQ2
-   o2cu/aX/b51mJCE0Sn0pnPN2nqL9/bquxOaMCZSqjhraFL8GUMaI8qWvk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="59351735"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650898800"; 
-   d="scan'208";a="59351735"
-Received: from mail-tycjpn01lp2171.outbound.protection.outlook.com (HELO JPN01-TYC-obe.outbound.protection.outlook.com) ([104.47.23.171])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 17:33:50 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EPPQCglOo61p+MirYlv2QDDV7nxdOCDg/1ruTKFqNDAsBUaWWyJ1s7Tl4+75OSQcc8ogTDeir8sYv3cjWKbm+lUJGUEiAItJqBf89Gkux3l2FRA7Wz7U6aFpfBH1IiPD5y6dtNGdXh0jh8SwcoTD6FW7HHD64vfMyKfNbuRNLZPiBmBAPP2WgQzq/55bvz3Ilr6pvr1WzKIErtZugIjzuitoyV2kusmu2pSEqVgvSPVUCNij846OKYUUKr2Tl5g8QUrIEK6QwM1ks/kWUVt4gWK0Kn1b2ztzzoxYbb/HVciurduxXmPL/z6O/9ZgI1K4THIsyRGDEP6KzAc5WKXpqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iseMb2k9PvxKNT/Iz7ph7mhqBgQPuqfINTBXPTTgkHI=;
- b=m9Xa9tXVMJXkbutviLXLHdrCm0vwgiQfi5qOAxR7sepAIdwVZYBl/81ddK6KPtYA21mAQ3VLUtE67fUB8oxIAHlhIYlL1/FcP0fcOB8OBq/1OMIzSUNPewWCjw31pk5oGM6NybsoO4FNkh2io1crFTEDDmFkBZ8/pLW//xj3o7KCNrLxLsdxIeLoYvwxQiNEcESEHI7Yx4adglJDkz5xn+9IFh/sMy/D77WP9iH/+e9e5Nemv8AZfYjj4g1bAmiIFwRTK+1YYsGiAkFD3RSnAxzi24JYarl4U0ZV4UzkbzC2xxw5ZGE3Hlxz5tloWSihwYpLf+L/YHgijSi3JynicQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
- dkim=pass header.d=fujitsu.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iseMb2k9PvxKNT/Iz7ph7mhqBgQPuqfINTBXPTTgkHI=;
- b=e8GcF3t00+9i0QX4XdgNSOmqp+C4isbVKmLfqXghvQZ7ZHrkuNG8uErjFIqQtgo4kkQto2++oYWGwmjb6vXZtEGa45p4ERvblO7z626tQY1k06mADyiskquVpDMhalThEwQiEn31KaISLKdpxflHE5kxy9jBWwf2aSP+J74gouE=
-Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com (2603:1096:402:3e::12)
- by TYAPR01MB5577.jpnprd01.prod.outlook.com (2603:1096:404:8055::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Wed, 29 Jun
- 2022 08:33:44 +0000
-Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com
- ([fe80::cd21:d921:e755:ef70]) by TYAPR01MB6330.jpnprd01.prod.outlook.com
- ([fe80::cd21:d921:e755:ef70%9]) with mapi id 15.20.5373.018; Wed, 29 Jun 2022
- 08:33:44 +0000
-From:   "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>
-To:     'James Morse' <james.morse@arm.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        "lcherian@marvell.com" <lcherian@marvell.com>,
-        "bobo.shaobowang@huawei.com" <bobo.shaobowang@huawei.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Xin Hao <xhao@linux.alibaba.com>,
-        "xingxin.hx@openanolis.org" <xingxin.hx@openanolis.org>,
-        "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>
-Subject: RE: [PATCH v5 04/21] x86/resctrl: Group struct rdt_hw_domain cleanup
-Thread-Topic: [PATCH v5 04/21] x86/resctrl: Group struct rdt_hw_domain cleanup
-Thread-Index: AQHYhle68z3EpKIpt0Wg+v62Ec3kEK1mDBuA
-Date:   Wed, 29 Jun 2022 08:33:44 +0000
-Message-ID: <TYAPR01MB6330E0E18CF4A229B38511648BBB9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-References: <20220622164629.20795-1-james.morse@arm.com>
- <20220622164629.20795-5-james.morse@arm.com>
-In-Reply-To: <20220622164629.20795-5-james.morse@arm.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Enabled=true;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SetDate=2022-06-29T07:46:52Z;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Method=Standard;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Name=FUJITSU-RESTRICTED?;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SiteId=a19f121d-81e1-4858-a9d8-736e267fd4c7;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ActionId=73785fe8-245b-479f-82ec-3507e24a95ef;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ContentBits=0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fujitsu.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 056c40b2-b8e4-4bdd-3f6d-08da59aa1464
-x-ms-traffictypediagnostic: TYAPR01MB5577:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QHwrZW9Vq/6jHh+q8kaqbJfoAUMYMt/BzeWrsDnslUr9EWpKRpEFCcrGskXqYEvptUW7wcFxJ5UeWweiIENvnYHcxjTA34hG9uf60CCWfnBJzbTSjSe0i7g109snN4Sw5uDvGNniGzgisKpECv1ptHa69zGC4OQT6Q9ReyMmOj45S2oh5+9HFKJORBzYeN4px8jwbpoQX0nmPkEdiIW4CWhjM8MbwbQyc9cPVMKCFnZwH09ezLhk4w4nm+pkGmXdyGtkmJX5e/DITzSNp8/iPDVmVm7S7t0u9SJ2jAyrhFd2yYICcV0LUeH+aEgmMoGaSpDmCu9O6sb7iIcPLS/8aqVVVgi7PBjaoILBumQFaajQYobltvVhzLA+QngcT1HnSMRDTAu3wzXPpZAmnTlpJ4NTbLSzMcnGZiGrO6S07e1ABK4kcXjs2jnAt7w3QJ6VHHYyIuBHRsXfwx7GeA69oqutY5FpziAA8B1eEyI7fk9MOh1QhfltTJRZP6WYSV+rQxg4jJaHzBoOW8hHt3pfmemaWy0LWDKO3RCh1/c3FFuC4JzJ7At6u1ACRnpqHTZJUv2EDDdtkVfr9DmbIx2mSc4VkGQHwaOcm7lXYgB1/UZJo2676n0geNm5IzPGgtlcXeIryvSrFMcv649agHZ7GKPnjqY2Gyhjbs8aVuGYAx+AysmOO+32OYyjxQMWvKNJ6b73I/Y5zQAiCs2uJNvY2vV8Qc5xNq1fQzP9AdwdGj0a5IpRRRrON0cJqiMBdz0UCZJPKnX6mP2EprL/XntouJNAVezlnCyunfARPYIvZNo=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB6330.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(396003)(346002)(39860400002)(366004)(110136005)(5660300002)(38100700002)(33656002)(2906002)(41300700001)(82960400001)(186003)(54906003)(85182001)(316002)(8676002)(66446008)(26005)(52536014)(83380400001)(86362001)(4326008)(71200400001)(76116006)(66946007)(6506007)(9686003)(64756008)(7416002)(8936002)(478600001)(66556008)(38070700005)(66476007)(122000001)(7696005)(55016003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?YTcvb21GZUFBYVEzSGIyYWUwczZPamlSRWNNRktjZmU4SzE5TENkajA3?=
- =?iso-2022-jp?B?eHhTNXYzbzY2ZlJtRUZsRTU5MnhPZVBWQVFrN3dwRFBzSjR2aDZxRHNw?=
- =?iso-2022-jp?B?aDlmYnhidDVvenNjckE0WFJlTWR5M3ZaOTEvYmV4OXhFR0hLMXkvSVg4?=
- =?iso-2022-jp?B?dkU3bkFEOVdsWWpHUlFUQ0lwSnpsdkZTVHhzSHM3YzArMmdxVDhReGtx?=
- =?iso-2022-jp?B?YnRtdmR1VXRqZzY5WDBQRXNhaE9KNUxXTWIvTFE0bW1nRFZYYnNHVXNL?=
- =?iso-2022-jp?B?Q3M3U3FuSkdhVng1ZFprNFpUdDF6OUFhWkZRNGdVS3BiQ24yZjdjVm56?=
- =?iso-2022-jp?B?V050NDhJMWRMVVhZMitkZG45MzAvYkZ5ZVRCMXpOeXVuN01YT1dTcVBW?=
- =?iso-2022-jp?B?WU1XNHptd2FMNDdKZXAxUzRuVEFLdEh5RU5MeWxiWit1YUNjVVNPY05B?=
- =?iso-2022-jp?B?RkdFcmU3Y0ZlcUg0S2pTbTVSMWh0d2JEUUxxRkFXOTRmRXJVcDNWS0gz?=
- =?iso-2022-jp?B?V1lmY0hpQXdCUnpZUURmYkQ1UE5YWEFnUmczZFFyTG1WNG5uZkhVUXpM?=
- =?iso-2022-jp?B?OUI4K2ZUcWxwQUp6ek5uWUZRWWVmbGxaNlVWT3k4UzVjOS9SSTkzMmwr?=
- =?iso-2022-jp?B?YTFYTVFEY21MTVl3TzZKRk5WSE1UV3FaTWN4U0NUU0x6Q2RMMy9DR081?=
- =?iso-2022-jp?B?SFRSSzd2RlhEblFvZTF0cnAyeWhnNWVRTFJHM0JTSHprQjRzTWVBTWhF?=
- =?iso-2022-jp?B?WGVhQ1Iva0ovc1d6MmcwMHhMayt2bDVpRm9heGNaVVROMFFzQjA0d3hI?=
- =?iso-2022-jp?B?a3pNYUgvckpDODJrZHl2VXVYdzRUM09lbUxSL0JyZklTVmgvT2NrQUY1?=
- =?iso-2022-jp?B?eGRzaFVtZGxCYTVlWUNBMDk4VDg3dkZpWlk0eGIzSG8rWmJsZlVXOWxH?=
- =?iso-2022-jp?B?UEtzWGlGc1lKaVdxdVhCa2dnWjRCem43Slh5ZGNqZGVKU3JGQWx0VkhM?=
- =?iso-2022-jp?B?RnYzVTdQdTB6WXV0S3cxNjZZYzh6a2llNFNFdUJqV2tJWEFmblk3eURa?=
- =?iso-2022-jp?B?NHNKQ20yWHZvNTFXZDRFV0pOdTRueXBEUkw5RUp5U0drUE95aU5xeEtP?=
- =?iso-2022-jp?B?c1NNTW5XZUQwWlJZck5kYWxxQVp5eHVJRExhTkttSHA5d0srR2hUdHBs?=
- =?iso-2022-jp?B?WmxVaHlxZHN5cWszb3RnYXc1bTdUUlNMMklxWEcwTUswRUlJNklCLzRT?=
- =?iso-2022-jp?B?MTFFeXAzUWc1RndNV20zVnd5ekVhK0Y5R0JSMHEraTlvSVhkaFd3T01o?=
- =?iso-2022-jp?B?U2VTamNuVU4rbVVxOGc0Q1RENFdSUk5rcHJ0RVhVSWw1N2dEZGtrUHV6?=
- =?iso-2022-jp?B?c0tHemJLNnRGbW5FTy9vWGJLNVI3bW1yd3VTa3ZZekJIVUZIbTQzUlhL?=
- =?iso-2022-jp?B?MWsxZC91UFQyMm5vcDNkZTI5UTJWYlRVeFRzQWNKSXAybitBTXEzbGZo?=
- =?iso-2022-jp?B?aXZWK0diUzZ4VGVnejd2ZnFqaUZ2WThDU3NIc3RmRE5hWGkwUmxjZW93?=
- =?iso-2022-jp?B?VGxSOGdRSFJRa0paN3VCelJYcU42VDYrK09BZzBJb1ZHaGFiMmpZNVoy?=
- =?iso-2022-jp?B?RGNudnMxYnc1WlNrYlhReTR5SWYyMWVReUhrbzRzeG5lRzRyNXg1Yy9S?=
- =?iso-2022-jp?B?cTJrYTV0NlFQRFZoRE5aK0p6YmE3Slp6TWJlNStoU0VrWHA4Zmpzait6?=
- =?iso-2022-jp?B?WDRBVGoxVTdYV2pGc1RhVE9kQUlZanZRS3p1KzNiTHA3SjRsN0R2czJD?=
- =?iso-2022-jp?B?NmE1ZndPS1dDd3RPalk4Q24yNmNDak9jUGhTbnJGYXZzMTZNcS96YnZm?=
- =?iso-2022-jp?B?YTNTaTdoMk1rU1dueThKQnRyaEpDZjJITGF3eHRmY3pxTnZTc3ZyUEx0?=
- =?iso-2022-jp?B?dFVTOGdzOWFvamNyZ2UvQ0ZDRXlKVkxHQjk5UnJjd2RFMnpvbDlyZ1VU?=
- =?iso-2022-jp?B?M1kyMFdvS3QzQ0xneVVzd0ovdC9OSlJxdWljS0RDQ2lXcXp3ekk5Y2hY?=
- =?iso-2022-jp?B?L2NVVG5Tdk9leERzUEZpT0lVenluVFZrSW1RRERRR3FCK3ovUGFaWncx?=
- =?iso-2022-jp?B?VGhTY1ZNOTdlaW11c0QyWDV4WTJJald5b1pWelQ5ZHQrSmFHMDIrNkUz?=
- =?iso-2022-jp?B?Z2QybXFid3hnRTJsSDhYOW5Sdkp1KzlINjdpTFBjcWY5aGJ2dmpXczdV?=
- =?iso-2022-jp?B?VUgvbzQ3TFFMMjBIT3ZuVXpLQWx4UnVLNFA0ajFCNWZQcGNzRno5N0Fv?=
- =?iso-2022-jp?B?RDlLcDY4aFRramlpaEw2VzNXcUZKTjNPNWc9PQ==?=
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 29 Jun 2022 04:34:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96B053B54D
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 01:34:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656491692;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uQ1F1gvPgdv/PjO5a7Us1uAB+fd+j8i7Rmby0EI/UmM=;
+        b=B82/j7kF9ioT6K+yosCDR7Q65TMfACqVVHy+VMGoMLkbRg5o7R+nXm2+y8vX1koK9bf8dH
+        dkWthPIG2o28/mSXS4j92ws5HFa/e0RiyJAYXqSWCbwJ7Pe1VYtvLdxza57NB4es5J9oH5
+        tYENmNVdfRpO2Xs2OiVxtzT2tKUfNT0=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-600-eqy0LxKMMOevYpVCrgRlZg-1; Wed, 29 Jun 2022 04:34:50 -0400
+X-MC-Unique: eqy0LxKMMOevYpVCrgRlZg-1
+Received: by mail-lf1-f72.google.com with SMTP id e8-20020ac24e08000000b0047fad5770d2so7483253lfr.17
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 01:34:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uQ1F1gvPgdv/PjO5a7Us1uAB+fd+j8i7Rmby0EI/UmM=;
+        b=FJXZAQeX7rI/eI1XjwslWzb3GS1qHt65eZYJdy4zeWcPVQ+/CjpEBAXoHzG7us/FlV
+         mpButaMmtr3xE1wd+91f3JoAiodZukFKAW1fMalOhBIavuuAknv8x2uXjgL5cfC2TrZA
+         YtpDfUWMP24AG8kICiKIxa1dSuCjxiA1Dyznml3neBJBHwqfNtbBLziu52LtMrs9MLA3
+         d7/rqYhyLusIowgaAEbIQN6IE1oLzocu7yIAbQI17MwLZ7yTtrTIE4FnhT8yUDJCsUL5
+         Hki5vbrytkRU56z5qt89QCxEfekJz+pYxUGYmDkm+ToTOXf5z62FxfrK15ENhd4047c7
+         hIng==
+X-Gm-Message-State: AJIora8eGV+Ipi+h77kLwDkqgnlt9Hk2jCyMakt8OReUHRZki01HVvcg
+        /+hvCDpZ8L8ZL1ArNICbBF1Ud1Efd0KVFW6yDm7dtoSIuAHbBQBoGFXzaec6VBpXunXIzXCCMYx
+        z4+86QhfGS19yxlP5Ufeaz5yNCGmr9YIkHzKIMUhA
+X-Received: by 2002:a2e:aaa5:0:b0:25b:ae57:4ad7 with SMTP id bj37-20020a2eaaa5000000b0025bae574ad7mr1062688ljb.323.1656491688554;
+        Wed, 29 Jun 2022 01:34:48 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tj3mTezqE26Ub1hg4KnGKyN1R4dLBdYBw/oW4sihfiyNn6+28TEvxAhIEfmZcYsBQyr9V7tEc2W8R79JvvvZI=
+X-Received: by 2002:a2e:aaa5:0:b0:25b:ae57:4ad7 with SMTP id
+ bj37-20020a2eaaa5000000b0025bae574ad7mr1062675ljb.323.1656491688283; Wed, 29
+ Jun 2022 01:34:48 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: fujitsu.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYAPR01MB6330.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 056c40b2-b8e4-4bdd-3f6d-08da59aa1464
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2022 08:33:44.7148
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7ks6QKfBVlrYrjjhjgEKCMZRwUnaQIwKg2D251iX6sf4Y4IY7DZcdsHIAt2pgSYUiCBh6VgDoW15DKdEXO4iq/lqQ3qE+Jw7Ntrf4RrtPxM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB5577
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <CACGkMEuurobpUWmDL8zmZ6T6Ygc0OEMx6vx2EDCSoGNnZQ0r-w@mail.gmail.com>
+ <20220627024049-mutt-send-email-mst@kernel.org> <CACGkMEvrDXDN7FH1vKoYCob2rkxUsctE_=g61kzHSZ8tNNr6vA@mail.gmail.com>
+ <20220627053820-mutt-send-email-mst@kernel.org> <CACGkMEvcs+9_SHmO1s3nyzgU7oq7jhU2gircVVR3KDsGDikh5Q@mail.gmail.com>
+ <20220628004614-mutt-send-email-mst@kernel.org> <CACGkMEsC4A+3WejLSOZoH3enXtai=+JyRNbxcpzK4vODYzhaFw@mail.gmail.com>
+ <CACGkMEvu0D0XD7udz0ebVjNM0h5+K9Rjd-5ed=PY_+-aduzG2g@mail.gmail.com>
+ <20220629022223-mutt-send-email-mst@kernel.org> <CACGkMEuwvzkbPUSFueCOjit7pRJ81v3-W3SZD+7jQJN8btEFdg@mail.gmail.com>
+ <20220629030600-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220629030600-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 29 Jun 2022 16:34:36 +0800
+Message-ID: <CACGkMEvnUj622FyROUftifSB47wytPg0YAdVO7fdRQmCE+WuBg@mail.gmail.com>
+Subject: Re: [PATCH V3] virtio: disable notification hardening by default
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        kvm <kvm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Ben Hutchings <ben@decadent.org.uk>,
+        David Hildenbrand <david@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+On Wed, Jun 29, 2022 at 3:15 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Wed, Jun 29, 2022 at 03:02:21PM +0800, Jason Wang wrote:
+> > On Wed, Jun 29, 2022 at 2:31 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > >
+> > > On Wed, Jun 29, 2022 at 12:07:11PM +0800, Jason Wang wrote:
+> > > > On Tue, Jun 28, 2022 at 2:17 PM Jason Wang <jasowang@redhat.com> wrote:
+> > > > >
+> > > > > On Tue, Jun 28, 2022 at 1:00 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > >
+> > > > > > On Tue, Jun 28, 2022 at 11:49:12AM +0800, Jason Wang wrote:
+> > > > > > > > Heh. Yea sure. But things work fine for people. What is the chance
+> > > > > > > > your review found and fixed all driver bugs?
+> > > > > > >
+> > > > > > > I don't/can't audit all bugs but the race between open/close against
+> > > > > > > ready/reset. It looks to me a good chance to fix them all but if you
+> > > > > > > think differently, let me know
+> > > > > > >
+> > > > > > > > After two attempts
+> > > > > > > > I don't feel like hoping audit will fix all bugs.
+> > > > > > >
+> > > > > > > I've started the auditing and have 15+ patches in the queue. (only
+> > > > > > > covers bluetooth, console, pmem, virtio-net and caif). Spotting the
+> > > > > > > issue is not hard but the testing, It would take at least the time of
+> > > > > > > one release to finalize I guess.
+> > > > > >
+> > > > > > Absolutely. So I am looking for a way to implement hardening that does
+> > > > > > not break existing drivers.
+> > > > >
+> > > > > I totally agree with you to seek a way without bothering the drivers.
+> > > > > Just wonder if this is possbile.
+> > > > >
+> > > > > >
+> > > > > >
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > The reason config was kind of easy is that config interrupt is rarely
+> > > > > > > > > > vital for device function so arbitrarily deferring that does not lead to
+> > > > > > > > > > deadlocks - what you are trying to do with VQ interrupts is
+> > > > > > > > > > fundamentally different. Things are especially bad if we just drop
+> > > > > > > > > > an interrupt but deferring can lead to problems too.
+> > > > > > > > >
+> > > > > > > > > I'm not sure I see the difference, disable_irq() stuffs also delay the
+> > > > > > > > > interrupt processing until enable_irq().
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > Absolutely. I am not at all sure disable_irq fixes all problems.
+> > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > Consider as an example
+> > > > > > > > > >     virtio-net: fix race between ndo_open() and virtio_device_ready()
+> > > > > > > > > > if you just defer vq interrupts you get deadlocks.
+> > > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > I don't see a deadlock here, maybe you can show more detail on this?
+> > > > > > > >
+> > > > > > > > What I mean is this: if we revert the above commit, things still
+> > > > > > > > work (out of spec, but still). If we revert and defer interrupts until
+> > > > > > > > device ready then ndo_open that triggers before device ready deadlocks.
+> > > > > > >
+> > > > > > > Ok, I guess you meant on a hypervisor that is strictly written with spec.
+> > > > > >
+> > > > > > I mean on hypervisor that starts processing queues after getting a kick
+> > > > > > even without DRIVER_OK.
+> > > > >
+> > > > > Oh right.
+> > > > >
+> > > > > >
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > So, thinking about all this, how about a simple per vq flag meaning
+> > > > > > > > > > "this vq was kicked since reset"?
+> > > > > > > > >
+> > > > > > > > > And ignore the notification if vq is not kicked? It sounds like the
+> > > > > > > > > callback needs to be synchronized with the kick.
+> > > > > > > >
+> > > > > > > > Note we only need to synchronize it when it changes, which is
+> > > > > > > > only during initialization and reset.
+> > > > > > >
+> > > > > > > Yes.
+> > > > > > >
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > If driver does not kick then it's not ready to get callbacks, right?
+> > > > > > > > > >
+> > > > > > > > > > Sounds quite clean, but we need to think through memory ordering
+> > > > > > > > > > concerns - I guess it's only when we change the value so
+> > > > > > > > > >         if (!vq->kicked) {
+> > > > > > > > > >                 vq->kicked = true;
+> > > > > > > > > >                 mb();
+> > > > > > > > > >         }
+> > > > > > > > > >
+> > > > > > > > > > will do the trick, right?
+> > > > > > > > >
+> > > > > > > > > There's no much difference with the existing approach:
+> > > > > > > > >
+> > > > > > > > > 1) your proposal implicitly makes callbacks ready in virtqueue_kick()
+> > > > > > > > > 2) my proposal explicitly makes callbacks ready via virtio_device_ready()
+> > > > > > > > >
+> > > > > > > > > Both require careful auditing of all the existing drivers to make sure
+> > > > > > > > > no kick before DRIVER_OK.
+> > > > > > > >
+> > > > > > > > Jason, kick before DRIVER_OK is out of spec, sure. But it is unrelated
+> > > > > > > > to hardening
+> > > > > > >
+> > > > > > > Yes but with your proposal, it seems to couple kick with DRIVER_OK somehow.
+> > > > > >
+> > > > > > I don't see how - my proposal ignores DRIVER_OK issues.
+> > > > >
+> > > > > Yes, what I meant is, in your proposal, the first kick after rest is a
+> > > > > hint that the driver is ok (but actually it could not).
+> > > > >
+> > > > > >
+> > > > > > > > and in absence of config interrupts is generally easily
+> > > > > > > > fixed just by sticking virtio_device_ready early in initialization.
+> > > > > > >
+> > > > > > > So if the kick is done before the subsystem registration, there's
+> > > > > > > still a window in the middle (assuming we stick virtio_device_ready()
+> > > > > > > early):
+> > > > > > >
+> > > > > > > virtio_device_ready()
+> > > > > > > virtqueue_kick()
+> > > > > > > /* the window */
+> > > > > > > subsystem_registration()
+> > > > > >
+> > > > > > Absolutely, however, I do not think we really have many such drivers
+> > > > > > since this has been known as a wrong thing to do since the beginning.
+> > > > > > Want to try to find any?
+> > > > >
+> > > > > Yes, let me try and update.
+> > > >
+> > > > This is basically the device that have an RX queue, so I've found the
+> > > > following drivers:
+> > > >
+> > > > scmi, mac80211_hwsim, vsock, bt, balloon.
+> > >
+> > > Looked and I don't see it yet. Let's consider
+> > > ./net/vmw_vsock/virtio_transport.c for example. Assuming we block
+> > > callbacks until the first kick, what is the issue with probe exactly?
+> >
+> > We need to make sure the callback can survive when it runs before sub
+> > system registration.
+>
+> With my proposal no - only if we also kick before registration.
+> So I do not see the issue yet.
+>
+> Consider ./net/vmw_vsock/virtio_transport.c
+>
+> kicks: virtio_transport_send_pkt_work,
+> virtio_vsock_rx_fill, virtio_vsock_event_fill
+>
+> which of these triggers before we are ready to
+> handle callbacks?
 
-> domain_add_cpu() and domain_remove_cpu() need to kfree() the child arrays
-> that were allocated by domain_setup_ctrlval().
->=20
-> As this memory is moved around, and new arrays are created, adjusting the
-> error handling cleanup code becomes noisier.
->=20
-> To simplify this, move all the kfree() calls into a domain_free() helper.
-> This depends on struct rdt_hw_domain being kzalloc()d, allowing it to
-> unconditionally kfree() all the child arrays.
->=20
-> Reviewed-by: Jamie Iles <quic_jiles@quicinc.com>
-> Tested-by: Xin Hao <xhao@linux.alibaba.com>
-> Reviewed-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
-> Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
-> Tested-by: Cristian Marussi <cristian.marussi@arm.com>
-> Signed-off-by: James Morse <james.morse@arm.com>
-> ---
-> Changes since v2:
->  * Made domain_free() static.
->=20
-> Changes since v1:
->  * This patch is new
-> ---
->  arch/x86/kernel/cpu/resctrl/core.c | 17 ++++++++++-------
->  1 file changed, 10 insertions(+), 7 deletions(-)
->=20
-> diff --git a/arch/x86/kernel/cpu/resctrl/core.c
-> b/arch/x86/kernel/cpu/resctrl/core.c
-> index 25f30148478b..e37889f7a1a5 100644
-> --- a/arch/x86/kernel/cpu/resctrl/core.c
-> +++ b/arch/x86/kernel/cpu/resctrl/core.c
-> @@ -414,6 +414,13 @@ void setup_default_ctrlval(struct rdt_resource *r, u=
-32
-> *dc, u32 *dm)
->  	}
->  }
->=20
-> +static void domain_free(struct rdt_hw_domain *hw_dom) {
-> +	kfree(hw_dom->ctrl_val);
-> +	kfree(hw_dom->mbps_val);
-> +	kfree(hw_dom);
-> +}
-> +
->  static int domain_setup_ctrlval(struct rdt_resource *r, struct rdt_domai=
-n *d)  {
->  	struct rdt_hw_resource *hw_res =3D resctrl_to_arch_res(r); @@ -488,7
-> +495,7 @@ static void domain_add_cpu(int cpu, struct rdt_resource *r)
->  	rdt_domain_reconfigure_cdp(r);
->=20
->  	if (r->alloc_capable && domain_setup_ctrlval(r, d)) {
-> -		kfree(hw_dom);
-> +		domain_free(hw_dom);
+So:
 
-domain_free(hw_dom) is executed when fails allocated hw_dom->ctrl_val=20
-by kmalloc_array() in domain_setup_ctrlval(r, d),=20
-but hw_dom->ctrl_val is freed in domain_free(hw_dom).
+virtio_vsock_vqs_init()
+    virtio_device_ready()
+    virtio_vsock_rx_fill() /* kick there */
+rcu_assign_pointer(the_virtio_vsock, vsock)
 
-Also, hw_dom->mbps_val is not allocated at this time,
-but it is freed in domain_free(hw_dom).
+It means at least virtio_vsock_rx_done()/virtio_vsock_workqueue needs
+to survive. I don't say it has a bug but we do need to audit the code
+in this case. The implication is: the virtqueue callback should be
+written with no assumption that the driver has registered in the
+subsystem. We don't or can't assume all drivers are written in this
+way.
 
-In addition=1B$B!$=1B(BI tested this patch series on Intel(R) Xeon(R) Gold =
-6254 CPU with resctrl selftest.
-It is no problem.
+>
+>
+> > >
+> > >
+> > > > >
+> > > > > >I couldn't ... except maybe bluetooth
+> > > > > > but that's just maintainer nacking fixes saying he'll fix it
+> > > > > > his way ...
+> > > > > >
+> > > > > > > And during remove(), we get another window:
+> > > > > > >
+> > > > > > > subsysrem_unregistration()
+> > > > > > > /* the window */
+> > > > > > > virtio_device_reset()
+> > > > > >
+> > > > > > Same here.
+> > > >
+> > > > Basically for the drivers that set driver_ok before registration,
+> > >
+> > > I don't see what does driver_ok have to do with it.
+> >
+> > I meant for those driver, in probe they do()
+> >
+> > virtio_device_ready()
+> > subsystem_register()
+> >
+> > In remove() they do
+> >
+> > subsystem_unregister()
+> > virtio_device_reset()
+> >
+> > for symmetry
+>
+> Let's leave remove alone for now. I am close to 100% sure we have *lots*
+> of issues around it, but while probe is unavoidable remove can be
+> avoided by blocking hotplug.
 
-Best regards,
-Shaopeng
->  		return;
->  	}
->=20
-> @@ -497,9 +504,7 @@ static void domain_add_cpu(int cpu, struct rdt_resour=
-ce
-> *r)
->  	err =3D resctrl_online_domain(r, d);
->  	if (err) {
->  		list_del(&d->list);
-> -		kfree(hw_dom->ctrl_val);
-> -		kfree(hw_dom->mbps_val);
-> -		kfree(hw_dom);
-> +		domain_free(hw_dom);
->  	}
->  }
->=20
-> @@ -547,12 +552,10 @@ static void domain_remove_cpu(int cpu, struct
-> rdt_resource *r)
->  		if (d->plr)
->  			d->plr->d =3D NULL;
->=20
-> -		kfree(hw_dom->ctrl_val);
-> -		kfree(hw_dom->mbps_val);
->  		bitmap_free(d->rmid_busy_llc);
->  		kfree(d->mbm_total);
->  		kfree(d->mbm_local);
-> -		kfree(hw_dom);
-> +		domain_free(hw_dom);
->  		return;
->  	}
->=20
-> --
-> 2.30.2
+Unbind can trigger this path as well.
+
+>
+>
+> > >
+> > > > so
+> > > > we have a lot:
+> > > >
+> > > > blk, net, mac80211_hwsim, scsi, vsock, bt, crypto, gpio, gpu, i2c,
+> > > > iommu, caif, pmem, input, mem
+> > > >
+> > > > So I think there's no easy way to harden the notification without
+> > > > auditing the driver one by one (especially considering the driver may
+> > > > use bh or workqueue). The problem is the notification hardening
+> > > > depends on a correct or race-free probe/remove. So we need to fix the
+> > > > issues in probe/remove then do the hardening on the notification.
+> > > >
+> > > > Thanks
+> > >
+> > > So if drivers kick but are not ready to get callbacks then let's fix
+> > > that first of all, these are racy with existing qemu even ignoring
+> > > spec compliance.
+> >
+> > Yes, (the patches I've posted so far exist even with a well-behaved device).
+> >
+> > Thanks
+>
+> patches you posted deal with DRIVER_OK spec compliance.
+> I do not see patches for kicks before callbacks are ready to run.
+
+Yes.
+
+Thanks
+
+>
+> > >
+> > >
+> > > --
+> > > MST
+> > >
+>
 

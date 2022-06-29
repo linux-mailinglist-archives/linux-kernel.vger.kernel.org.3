@@ -2,129 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0943C55F56A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 06:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC5055F570
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 06:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbiF2ExN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 00:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57126 "EHLO
+        id S230327AbiF2Ey6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 00:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiF2ExL (ORCPT
+        with ESMTP id S229475AbiF2Eyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 00:53:11 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B29F3A;
-        Tue, 28 Jun 2022 21:53:07 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id e63so14202776pgc.5;
-        Tue, 28 Jun 2022 21:53:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=vvrW+kUlTZ7MKpOPos9PlIMBtA7/T3veu3b/qNQ3HBk=;
-        b=RWls3DRvSuIvp4MMFexG8NTzv3f1yWJIbObXr8wAJtU1b77K3wjS3hgzGiIV9baW5W
-         g0jeNMYYxJ9WUnguMI0eghGrDXzZiJ2NkOdu5oHzaxhR6TfDkHu/lejMNdAmg9ICpPYM
-         mmxwiGbUbFKadjN9UsyUopgydT5mMlfE2aMZMbghSYeCvnwOkXcj2u92diZ2bgvvS5qr
-         /WNZQrj5JgLoB9vvsr0fQO5Cgc6ipOZ2xmg5fS/GMT0GrSPh4yHjHocFnetz1bEmRTIC
-         ixEjpBMmmmQahyDb+kutGg2JVBqLkKbyZYYtsW1YTR7hcx84OpvCevyaH03iM+ZAApe7
-         PUqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=vvrW+kUlTZ7MKpOPos9PlIMBtA7/T3veu3b/qNQ3HBk=;
-        b=x5Vpt6m2Z+olqKQ6f8awRBhaMnGRgJsMoFICNb3mQClN6OqoACNcZDa8/sgnWQgvFo
-         mOu7cyPxxbPbFfP4FEJTNBr+BWTZV8jX52//JAWUq48OVOCh3RHjy6qvx05D0K5J1WiQ
-         kIYZt0WN0+onxffk6dlD3rIIptnHi+5i4NJa5HG+YnrieBz4E+fGJbtO4LjD0AI8rnS5
-         /2naKZU2GpI3+Jd5KxlV8sbrBcG1C1o+nTf9g4eIZ7CrTV2E7W65m80jPl0dkYff9KmM
-         EuI5jGBk0Ngr/Ne+0VUTtQC987dvB6RezD+rnKXHG4D3y23gYYsGKCt2af8jhdZwl7KI
-         BJAQ==
-X-Gm-Message-State: AJIora/jPIuGbAnDtRnFN9ZhWLOoyy0AUNIz9nuGh94Gzj4Rn+Kv58Jt
-        1dZxzgpJrXVj6dy7vdhlKeTwhGbI3uX5Ew==
-X-Google-Smtp-Source: AGRyM1tnQGZi67BTH5gEF2rN33/J4Y2Hvf2lwTTX4fq//ZWPUQYRzpCWWL/0D6hWTbaGZsbsk0j0ag==
-X-Received: by 2002:a63:8b43:0:b0:40d:1da6:948e with SMTP id j64-20020a638b43000000b0040d1da6948emr1372257pge.355.1656478386887;
-        Tue, 28 Jun 2022 21:53:06 -0700 (PDT)
-Received: from MBP ([39.170.101.209])
-        by smtp.gmail.com with ESMTPSA id ip11-20020a17090b314b00b001ec84b0f199sm4990001pjb.1.2022.06.28.21.53.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 21:53:06 -0700 (PDT)
-References: <20220628152429.286-1-schspa@gmail.com>
- <20220628095013.266d4a40.alex.williamson@redhat.com>
- <87ilokbx12.fsf@redhat.com>
-User-agent: mu4e 1.6.10; emacs 27.2
-From:   Schspa Shi <schspa@gmail.com>
-To:     Cornelia Huck <cohuck@redhat.com>
-Cc:     Alex Williamson <alex.williamson@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] vfio: Clear the caps->buf to NULL after free
-Date:   Wed, 29 Jun 2022 12:51:51 +0800
-In-reply-to: <87ilokbx12.fsf@redhat.com>
-Message-ID: <m2h744rryw.fsf@gmail.com>
+        Wed, 29 Jun 2022 00:54:55 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34141165BB;
+        Tue, 28 Jun 2022 21:54:48 -0700 (PDT)
+X-UUID: 249f1d6a89144764b965b93fc9ef0a55-20220629
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:1b9d52b0-fbe2-4d78-8438-ac87ad9fd276,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:87442a2,CLOUDID:f45eeb62-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 249f1d6a89144764b965b93fc9ef0a55-20220629
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 54832002; Wed, 29 Jun 2022 12:54:46 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 29 Jun 2022 12:54:44 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 29 Jun 2022 12:54:44 +0800
+Message-ID: <795ff1c78743f2345c9036b1b96966d238be0482.camel@mediatek.com>
+Subject: Re: [PATCH v12 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 29 Jun 2022 12:54:44 +0800
+In-Reply-To: <20220627080341.5087-6-rex-bc.chen@mediatek.com>
+References: <20220627080341.5087-1-rex-bc.chen@mediatek.com>
+         <20220627080341.5087-6-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Bo-Chen:
 
-Cornelia Huck <cohuck@redhat.com> writes:
+On Mon, 2022-06-27 at 16:03 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a embedded displayport driver for the MediaTek mt8195
+> SoC.
+> 
+> It supports the MT8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jitao shi <jitao.shi@mediatek.com>
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
 
-> On Tue, Jun 28 2022, Alex Williamson 
-> <alex.williamson@redhat.com> wrote:
->
->> On Tue, 28 Jun 2022 23:24:29 +0800
->> Schspa Shi <schspa@gmail.com> wrote:
->>
->>> API vfio_info_cap_add will free caps->buf, clear it to NULL 
->>> after
->>> free.
->>
->> Should this be something like:
->>
->>     On buffer resize failure, vfio_info_cap_add() will free the 
->>     buffer,
->>     report zero for the size, and return -ENOMEM.  As 
->>     additional
->>     hardening, also clear the buffer pointer to prevent any 
->>     chance of a
->>     double free.
->
-> I like that better. With that,
->
-> Reviewed-by: Cornelia Huck <cohuck@redhat.com>
->
+[snip]
 
-I have send a V3 patch for this comment change, please review it.
+> +
+> +static void mtk_dp_setup_tu(struct mtk_dp *mtk_dp)
+> +{
+> +	u32 sram_read_start = MTK_DP_TBC_BUF_READ_START_ADDR;
 
->>
->> Thanks,
->> Alex
->>  
->>> Signed-off-by: Schspa Shi <schspa@gmail.com>
->>> ---
->>>  drivers/vfio/vfio.c | 1 +
->>>  1 file changed, 1 insertion(+)
->>> 
->>> diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
->>> index 61e71c1154be..a0fb93866f61 100644
->>> --- a/drivers/vfio/vfio.c
->>> +++ b/drivers/vfio/vfio.c
->>> @@ -1812,6 +1812,7 @@ struct vfio_info_cap_header 
->>> *vfio_info_cap_add(struct vfio_info_cap *caps,
->>>  	buf = krealloc(caps->buf, caps->size + size, GFP_KERNEL);
->>>  	if (!buf) {
->>>  		kfree(caps->buf);
->>> +		caps->buf = NULL;
->>>  		caps->size = 0;
->>>  		return ERR_PTR(-ENOMEM);
->>>  	}
+This initial value is redundant. So remove this initial value.
 
--- 
-BRs
-Schspa Shi
+> +
+> +	if (mtk_dp->train_info.lane_count > 0) {
+
+This checking would always be true.
+This function would be called after training success, so mtk_dp-
+>train_info.lane_count would be greater than 0.
+So remove this checking.
+
+Regards,
+CK
+
+> +		sram_read_start = min_t(u32,
+> +					MTK_DP_TBC_BUF_READ_START_ADDR,
+> +					mtk_dp->info.timings.vm.hactive 
+> /
+> +					mtk_dp->train_info.lane_count /
+> +					MTK_DP_4P1T / MTK_DP_HDE /
+> MTK_DP_PIX_PER_ADDR);
+> +		mtk_dp_set_sram_read_start(mtk_dp, sram_read_start);
+> +	}
+> +
+> +	mtk_dp_setup_encoder(mtk_dp);
+> +}
+> +
+

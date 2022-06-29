@@ -2,55 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD02560A8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F90560A8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbiF2Toy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 15:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
+        id S231251AbiF2Toq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 15:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbiF2Tow (ORCPT
+        with ESMTP id S229864AbiF2Too (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 15:44:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2EC122A94F
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 12:44:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F4A51480;
-        Wed, 29 Jun 2022 12:44:51 -0700 (PDT)
-Received: from bogus (unknown [10.57.39.193])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5D0A83F792;
-        Wed, 29 Jun 2022 12:44:48 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 20:43:37 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Conor.Dooley@microchip.com
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        atishp@atishpatra.org, atishp@rivosinc.com,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        wangqing@vivo.com, robh+dt@kernel.org, rafael@kernel.org,
-        ionela.voinescu@arm.com, pierre.gondois@arm.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, gshan@redhat.com,
-        Valentina.FernandezAlanis@microchip.com
-Subject: Re: [PATCH v5 09/19] arch_topology: Use the last level cache
- information from the cacheinfo
-Message-ID: <20220629194337.3cmrqed2xbalihif@bogus>
-References: <20220627165047.336669-1-sudeep.holla@arm.com>
- <20220627165047.336669-10-sudeep.holla@arm.com>
- <bb124e47-f866-e39e-0f76-dc468ce384c6@microchip.com>
- <3656a067-cc3f-fd5b-e339-5925a856cce1@microchip.com>
- <20220629184708.x5exgjoy4sblyqml@bogus>
- <88ef07ea-fbde-b997-6c0c-99f5fb7be201@microchip.com>
- <20220629191250.mg3dybgl6hnlnqee@bogus>
- <f569aff9-fbe1-66f1-d308-cec428aa5886@microchip.com>
+        Wed, 29 Jun 2022 15:44:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019E1255B4;
+        Wed, 29 Jun 2022 12:44:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0C1EB826BA;
+        Wed, 29 Jun 2022 19:44:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88BB8C34114;
+        Wed, 29 Jun 2022 19:44:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656531881;
+        bh=zcGOsPeA4W/M19Cgq+IwJ/rAzjsEafamsLVcy7I5yLQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cPWGo7pLf0mgj/MNOxCOX27vIibuw8MAfmAJGIPv9XA9WtnMF6wC5ApvhPADMtQIT
+         q6tiqC2dOi7OySO8mwFMx0iHgrAggfdzVxRCeAdaNutMWVbj7oiMveT/d9rkvhrkw1
+         1Ll7kkDmOwtrK3BMYVa+1jNisHMsVVult2XM9mj1T8XWwHu4EiMrVRCzbKSMl3JR6S
+         XuUF3eznTOr6zK6XyPE5dI0nRHESP6AEQl11at1U9hddcXNTnXFbIbRba+rG9y+bsq
+         pens3xirkM/Vq9F2yCQ/qHSMxXKCqHa0wZ6scAPpA6r30VkWa8tccw5w14QmasyBe9
+         QWrhyxI4DqVvQ==
+Date:   Wed, 29 Jun 2022 21:44:37 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Alain Volmat <alain.volmat@foss.st.com>, mark.rutland@arm.com,
+        pierre-yves.mordret@foss.st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
+Subject: Re: [PATCH 1/4] dt-bindings: i2c: st,stm32-i2c: don't mandate a
+ reset line
+Message-ID: <YryrpbBKsAKcL865@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Alain Volmat <alain.volmat@foss.st.com>, mark.rutland@arm.com,
+        pierre-yves.mordret@foss.st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
+References: <20220620105405.145959-1-alain.volmat@foss.st.com>
+ <20220620105405.145959-2-alain.volmat@foss.st.com>
+ <20220628134115.GA345270-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ekIVSbt5ZRWqdhEl"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f569aff9-fbe1-66f1-d308-cec428aa5886@microchip.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220628134115.GA345270-robh@kernel.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,104 +72,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 07:25:41PM +0000, Conor.Dooley@microchip.com wrote:
-> 
-> 
-> On 29/06/2022 20:12, Sudeep Holla wrote:
-> > On Wed, Jun 29, 2022 at 06:56:29PM +0000, Conor.Dooley@microchip.com wrote:
-> >> On 29/06/2022 19:47, Sudeep Holla wrote:
-> >>> On Wed, Jun 29, 2022 at 06:18:25PM +0000, Conor.Dooley@microchip.com wrote:
-> >>>> On 29/06/2022 18:49, Conor.Dooley@microchip.com wrote:
-> >>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >>>>>
-> >>>>> On 27/06/2022 17:50, Sudeep Holla wrote:
-> >>>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >>>>>>
-> >>>>>> The cacheinfo is now initialised early along with the CPU topology
-> >>>>>> initialisation. Instead of relying on the LLC ID information parsed
-> >>>>>> separately only with ACPI PPTT elsewhere, migrate to use the similar
-> >>>>>> information from the cacheinfo.
-> >>>>>>
-> >>>>>> This is generic for both DT and ACPI systems. The ACPI LLC ID information
-> >>>>>> parsed separately can now be removed from arch specific code.
-> >>>>>
-> >>>>> Hey Sudeep,
-> >>>>> I bisected broken boot on PolarFire SoC to this patch in next-20220629 :/
-> >>>>> I suspect the issue is a missing "next-level-cache" in the the dt:
-> >>>>> arch/riscv/boot/dts/microchip/mpfs.dtsi
-> >>>
-> >>> Good that I included this in -next, I had not received any feedback from
-> >>> RISC-V even after 5 iterations.
-> >>
-> >> I'll be honest, I saw the titles and CC list and made some incorrect
-> >> assumptions as to whether looking at it was worthwhile! I am not at
-> >> this all too long and what is/isn't important to look at often is not
-> >> obvious to me.
-> > 
-> > No worries, that's why I thought better to include in -next to get some
-> > attention and I did get it this time, hurray! 😄
-> > 
-> >> But hey, our CI boots -next every day for a reason ;)
-> >>
-> > 
-> > Good to know and that is really great. Anyways let me know if the diff I sent
-> > helps. I strongly suspect that is the reason, but I may be wrong.
-> 
-> Aye, I'll get back to you on that one in a moment or two
->
 
-Sure, take your time.
+--ekIVSbt5ZRWqdhEl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > 
-> >>> I also see this DTS is very odd. It also
-> >>> states CPU0 doesn't have L1-D$ while the other 4 CPUs have L1-D$. Is that
-> >>> a mistake or is it the reality ?
-> >>
-> >> AFAIK, reality. It's the same for the SiFive fu540 (with which this shares
-> >> a core complex. See page 12:
-> >> https://static.dev.sifive.com/FU540-C000-v1.0.pdf
-> >>
-> >>> Another breakage in userspace cacheinfo
-> >>> sysfs entry of cpu0 has both I$ and D$.
-> >>
-> >> Could you clarify what this means please?
-> > 
-> > Ignore me if the cpu0 really doesn't have L1-D$. However the userspace
-> > sysfs cacheinfo is incomplete without linking L2, so it can be considered
-> > as wrong info presented to the user.
-> 
-> Yeah, I'll send a patch hooking up the L2.
-> It wasn't in the initial fu540 dtsi so I guess it was added after the
-> initial dts for my stuff was created based on that.
->
+On Tue, Jun 28, 2022 at 07:41:15AM -0600, Rob Herring wrote:
+> On Mon, Jun 20, 2022 at 12:54:02PM +0200, Alain Volmat wrote:
+> > Update the dt-bindings of the i2c-stm32 drivers to avoid the
+> > needs for a reset property in the device-tree.
+>=20
+> That is clear from the diff, but why. Some chips don't have a reset?=20
+> If so, this should be combined with patch 2 as part of changes needed=20
+> for a new version.
 
-Thanks!
+What do you mean? Patches 1+2 should be squashed together? I can do this
+when applying. Or do you mean something else?
 
-> > 
-> > Check /sys/devices/system/cpu/cpu<n>/cache/index<i>/*.
-> > L2 won't be present there as the link with next-level-cache is missing.
-> > So userspace can interpret this as absence of L2.
-> > 
-> 
-> # cat /sys/devices/system/cpu/cpu0/cache/index0/
-> coherency_line_size    shared_cpu_list        type
-> level                  shared_cpu_map         uevent
-> number_of_sets         size                   ways_of_associativity
-> # ls /sys/devices/system/cpu/cpu0/cache/
-> index0  index1  uevent
-> # cat /sys/devices/system/cpu/cpu0/cache/index0/level 
-> 1
-> # cat /sys/devices/system/cpu/cpu0/cache/index1/level 
-> 1
->
-Ideally there must /sys/devices/system/cpu/cpu*/cache/index2/level
-which reads 2 once you link it in the DT.
+>=20
+> >=20
+> > Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+> > ---
+> >  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 1 -
+> >  1 file changed, 1 deletion(-)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/=
+Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+> > index dccbb18b6dc0..8879144fbbfb 100644
+> > --- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+> > +++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+> > @@ -94,7 +94,6 @@ required:
+> >    - compatible
+> >    - reg
+> >    - interrupts
+> > -  - resets
+> >    - clocks
+> > =20
+> >  unevaluatedProperties: false
+> > --=20
+> > 2.25.1
+> >=20
+> >=20
 
-> cpu0 is /not/ the one with only instruction cache, that is not
-> running Linux.
+--ekIVSbt5ZRWqdhEl
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Ah, so there Linux runs only on cpu 1-4 ?
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Regards,
-Sudeep
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmK8q6QACgkQFA3kzBSg
+Kba/dw/9HiqC7hJIBjmzkeSy2RQELIZxZbWbGpNm2r2PFwEhYqgVfFYAXgAm+YB7
+zXYq6y1hi+DdkIInEftxL6y32UoEJ5Lh4BKBgPskMOyb/3/sdtZAc/FGUMBAhOXy
+pgtnuoYhDYTXL9ztsyzzML1pfm/tjgQPItYdByQWFOYpDh5mIQeGrwbFZhSfoQRQ
+Jo9MKsOdRr0OoGpmP4001aIjWRzU8v8tqqKi+C5JyBqQFZH8bvNg8j8CDZro+hCk
+8M4g4ri23oxozlJ4ZUiWga9U5uBuVThfAlbHuT8nnvZQWJYhpNHjFiG3W+Qt1JiF
+DeEEPKEA8fvbMdK5Wv0dSDbMBdAYvabiTVmLzPolcEiHcHkdMMfxLc6QVnmKD1l+
+g392htFKjRQgMbzDWnDbuELiIVksqhyGeJZAvYqO2igbvncsrGNCs/sVu7vg5Mrk
+ySfMvobGm1RRbcz8CUVFd6Xmb+C4EOHY6WzVW6bPlkoiJZzm602C8a0lODXg03YG
+gYZH4odaoPbYaOrC56DriIxtZpSsr6+LHns6GQyU0B+RlPnYd0X5VQOiXI7Z6MSd
+I3DXom1RV0uUiK8jpy0Upiv/PnEk/soU4mc1SNypY9BLnP1Oy78mhxpPuzVF8Sso
+xGgKBPJYlJKKo72hqTwyOvIPEjfMgAmxUiy6o8izpq2WIvG9Tvc=
+=aKQP
+-----END PGP SIGNATURE-----
+
+--ekIVSbt5ZRWqdhEl--

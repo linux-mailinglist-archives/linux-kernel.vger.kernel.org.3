@@ -2,119 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D71E6560A1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EAFA560A29
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbiF2TO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 15:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
+        id S230511AbiF2TPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 15:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiF2TOt (ORCPT
+        with ESMTP id S229546AbiF2TPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 15:14:49 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BFE3CA5D
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 12:14:46 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id q18-20020a9d7c92000000b00616b27cda7cso11287785otn.9
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 12:14:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eRvm4rDKmcEwBbyuwqdiLOYlQxia+jN6V897QRefdLU=;
-        b=L4InWoTsn6Ktys0sawYAPemhPMW/VXMH5wMvdPN/pkmSDn9hNd7667tes6wDEswIyP
-         APqL7zS9gB4bGUDGZJ4BTHZjwb24nmkF77U9ur/1eAmk3ka4AV6Akj8p7P8nayFiIQNj
-         +fYNFjAl6TgVnSN0TFfMd6aNcukgKZHrtFZylwK9uTS+Swc1wkr56lRppUhpgv9yBlzz
-         A03B+r2BtlQEzo9LQ3T/Gq9YDZvxTQ5+yGJkL9lmgueicuJvP2HO9PODecXYsmbsM63l
-         GFfuHqyNm/3kmoJiyjrgupP6mhAWMJ760UTt0uVgaPcJSEPqbSTnn+4jk6hQcL74A1HM
-         qVlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eRvm4rDKmcEwBbyuwqdiLOYlQxia+jN6V897QRefdLU=;
-        b=Ah9nUDLymfCuun2By7+LP3XxuyrUQUTKYTsqpQK19CmLHWA8aZic3BgATXWZPTKicK
-         d/tG/qoW+HGQWCp/ZOJFHHV7zsB6Z0eHkm7h830u1dtRMMCHy37EqsMpt6R8lxcV65an
-         9Wa8r5H3BP29MVi9L7LjThBKjwiIF1JVA87KErvaWHZabayah4IhUl3yrdPm8n0b5e4l
-         zqyWAGLUHMEUqWEXYhxBnkNqKu5xkGhpRdh88ftfeKdIYoQ4ey4okB6T/KWkQ/Hvr8us
-         DSn5fLFOyNSfX7wl7a3AhvBOiG/ty8gQudAzb2BPEJ/qZJHnz99cdoxJCHxd/KahXdSn
-         0nNA==
-X-Gm-Message-State: AJIora+pPW5QRRiWDKzgYavjlHnKXz4wVG6t22cKuF93QXl4oCRM0P3F
-        Ih61Opo4ClCXoDaOeVRUkK8Erg==
-X-Google-Smtp-Source: AGRyM1szpNbg71NbMlEOjlyo2a2vZG7dvYgtoZ+JqfGK1PvPW4R6BGZcZ87hUHjQLSpaX5EOLTHiCg==
-X-Received: by 2002:a9d:bf6:0:b0:616:d0fe:8b7b with SMTP id 109-20020a9d0bf6000000b00616d0fe8b7bmr2248941oth.19.1656530086223;
-        Wed, 29 Jun 2022 12:14:46 -0700 (PDT)
-Received: from eze-laptop ([190.190.187.68])
-        by smtp.gmail.com with ESMTPSA id z23-20020a544597000000b003342a70fd59sm8874989oib.10.2022.06.29.12.14.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 12:14:45 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 16:14:40 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     p.zabel@pengutronix.de, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, benjamin.gaignard@collabora.com,
-        nicolas.dufresne@collabora.com, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v2 5/7] media: hantro: postproc: Properly calculate
- chroma offset
-Message-ID: <YrykoFpa5RvZV60V@eze-laptop>
-References: <20220616202513.351039-1-jernej.skrabec@gmail.com>
- <20220616202513.351039-6-jernej.skrabec@gmail.com>
+        Wed, 29 Jun 2022 15:15:15 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1ABDE3CA7C;
+        Wed, 29 Jun 2022 12:15:14 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 123D21480;
+        Wed, 29 Jun 2022 12:15:14 -0700 (PDT)
+Received: from [10.57.85.71] (unknown [10.57.85.71])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6188D3F792;
+        Wed, 29 Jun 2022 12:15:10 -0700 (PDT)
+Message-ID: <7f0673e1-433b-65fb-1d2b-c3e4adeebf87@arm.com>
+Date:   Wed, 29 Jun 2022 20:15:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616202513.351039-6-jernej.skrabec@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v7 08/21] iommu/dma: support PCI P2PDMA pages in dma-iommu
+ map_sg
+Content-Language: en-GB
+To:     Logan Gunthorpe <logang@deltatee.com>,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org
+Cc:     Minturn Dave B <dave.b.minturn@intel.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Stephen Bates <sbates@raithlin.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Xiong Jianxin <jianxin.xiong@intel.com>
+References: <20220615161233.17527-1-logang@deltatee.com>
+ <20220615161233.17527-9-logang@deltatee.com>
+ <feecc6fe-a16e-11f2-33c8-3de7c96b9ad5@arm.com>
+ <f56181fb-7035-a775-22b1-77f97d6ec52c@deltatee.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <f56181fb-7035-a775-22b1-77f97d6ec52c@deltatee.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jernej,
-
-On Thu, Jun 16, 2022 at 10:25:11PM +0200, Jernej Skrabec wrote:
-> Currently chroma offset calculation assumes only 1 byte per luma, with
-> no consideration for stride.
+On 2022-06-29 16:57, Logan Gunthorpe wrote:
 > 
-> Take necessary information from destination pixel format which makes
-> calculation completely universal.
 > 
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> 
+> On 2022-06-29 06:07, Robin Murphy wrote:
+>> On 2022-06-15 17:12, Logan Gunthorpe wrote:
+>>> When a PCI P2PDMA page is seen, set the IOVA length of the segment
+>>> to zero so that it is not mapped into the IOVA. Then, in finalise_sg(),
+>>> apply the appropriate bus address to the segment. The IOVA is not
+>>> created if the scatterlist only consists of P2PDMA pages.
+>>>
+>>> A P2PDMA page may have three possible outcomes when being mapped:
+>>>     1) If the data path between the two devices doesn't go through
+>>>        the root port, then it should be mapped with a PCI bus address
+>>>     2) If the data path goes through the host bridge, it should be mapped
+>>>        normally with an IOMMU IOVA.
+>>>     3) It is not possible for the two devices to communicate and thus
+>>>        the mapping operation should fail (and it will return -EREMOTEIO).
+>>>
+>>> Similar to dma-direct, the sg_dma_mark_pci_p2pdma() flag is used to
+>>> indicate bus address segments. On unmap, P2PDMA segments are skipped
+>>> over when determining the start and end IOVA addresses.
+>>>
+>>> With this change, the flags variable in the dma_map_ops is set to
+>>> DMA_F_PCI_P2PDMA_SUPPORTED to indicate support for P2PDMA pages.
+>>>
+>>> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+>>> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+>>> ---
+>>>    drivers/iommu/dma-iommu.c | 68 +++++++++++++++++++++++++++++++++++----
+>>>    1 file changed, 61 insertions(+), 7 deletions(-)
+>>>
+>>> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+>>> index f90251572a5d..b01ca0c6a7ab 100644
+>>> --- a/drivers/iommu/dma-iommu.c
+>>> +++ b/drivers/iommu/dma-iommu.c
+>>> @@ -21,6 +21,7 @@
+>>>    #include <linux/iova.h>
+>>>    #include <linux/irq.h>
+>>>    #include <linux/list_sort.h>
+>>> +#include <linux/memremap.h>
+>>>    #include <linux/mm.h>
+>>>    #include <linux/mutex.h>
+>>>    #include <linux/pci.h>
+>>> @@ -1062,6 +1063,16 @@ static int __finalise_sg(struct device *dev,
+>>> struct scatterlist *sg, int nents,
+>>>            sg_dma_address(s) = DMA_MAPPING_ERROR;
+>>>            sg_dma_len(s) = 0;
+>>>    +        if (is_pci_p2pdma_page(sg_page(s)) && !s_iova_len) {
+>>
+>> Logically, should we not be able to use sg_is_dma_bus_address() here? I
+>> think it should be feasible, and simpler, to prepare the p2p segments
+>> up-front, such that at this point all we need to do is restore the
+>> original length (if even that, see below).
+> 
+> Per my previous email, no, because sg_is_dma_bus_address() is not set
+> yet and not meant to tell you something about the page. That flag will
+> be set below by pci_p2pdma_map_bus_segment() and then checkd in
+> iommu_dma_unmap_sg() to determine if the dma_address in the segment
+> needs to be unmapped.
 
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+I know it's not set yet as-is; I'm suggesting things should be 
+restructured so that it *would be*. In the logical design of this code, 
+the DMA addresses are effectively determined in iommu_dma_map_sg(), and 
+__finalise_sg() merely converts them from a relative to an absolute form 
+(along with undoing the other trickery). Thus the call to 
+pci_p2pdma_map_bus_segment() absolutely belongs in the main 
+iommu_map_sg() loop.
+
+>>> +            if (i > 0)
+>>> +                cur = sg_next(cur);
+>>> +
+>>> +            pci_p2pdma_map_bus_segment(s, cur);
+>>> +            count++;
+>>> +            cur_len = 0;
+>>> +            continue;
+>>> +        }
+>>> +
+>>>            /*
+>>>             * Now fill in the real DMA data. If...
+>>>             * - there is a valid output segment to append to
+>>> @@ -1158,6 +1169,8 @@ static int iommu_dma_map_sg(struct device *dev,
+>>> struct scatterlist *sg,
+>>>        struct iova_domain *iovad = &cookie->iovad;
+>>>        struct scatterlist *s, *prev = NULL;
+>>>        int prot = dma_info_to_prot(dir, dev_is_dma_coherent(dev), attrs);
+>>> +    struct dev_pagemap *pgmap = NULL;
+>>> +    enum pci_p2pdma_map_type map_type;
+>>>        dma_addr_t iova;
+>>>        size_t iova_len = 0;
+>>>        unsigned long mask = dma_get_seg_boundary(dev);
+>>> @@ -1193,6 +1206,35 @@ static int iommu_dma_map_sg(struct device *dev,
+>>> struct scatterlist *sg,
+>>>            s_length = iova_align(iovad, s_length + s_iova_off);
+>>>            s->length = s_length;
+>>>    +        if (is_pci_p2pdma_page(sg_page(s))) {
+>>> +            if (sg_page(s)->pgmap != pgmap) {
+>>> +                pgmap = sg_page(s)->pgmap;
+>>> +                map_type = pci_p2pdma_map_type(pgmap, dev);
+>>> +            }
+>>
+>> There's a definite code smell here, but per above and below I think we
+>> *should* actually call the new helper instead of copy-pasting half of it.
+> 
+> 
+>>
+>>> +
+>>> +            switch (map_type) {
+>>> +            case PCI_P2PDMA_MAP_BUS_ADDR:
+>>> +                /*
+>>> +                 * A zero length will be ignored by
+>>> +                 * iommu_map_sg() and then can be detected
+>>
+>> If that is required behaviour then it needs an explicit check in
+>> iommu_map_sg() to guarantee (and document) it. It's only by chance that
+>> __iommu_map() happens to return success for size == 0 *if* all the other
+>> arguments still line up, which is a far cry from a safe no-op.
+> 
+> What should such a check look like? I could certainly add some comments
+> to iommu_map_sg(), but I don't see what the code would need to check for...
+
+I'd say a check for zero-length segments would look like "if (sg->length 
+== 0)", most likely with a "continue;" on the following line.
+
+>> However, rather than play yet more silly tricks, I think it would make
+>> even more sense to make iommu_map_sg() properly aware and able to skip
+>> direct p2p segments on its own. Once it becomes normal to pass mixed
+>> scatterlists around, it's only a matter of time until one ends up being
+>> handed to a driver which manages its own IOMMU domain, and then what?
+> 
+> I suppose we can add another call to is_pci_p2pdma_page() inside
+> iommu_map_sg() if you think that is cleaner. Seems like more work on the
+> fast path to me, but I'm not opposed to it.
+
+I was thinking more of sg_is_dma_bus_address() but admittedly under my 
+initial misapprehension of that. I suppose there's still a tenuous 
+argument that even though we're not actually consuming sg_dma_address() 
+at that point, if a segment *has* been earmarked for direct p2p, then 
+skipping it rather than mapping it at the root complex TA that's 
+probably never going to see those transactions might seem the more 
+logical choice.
+
+However it's all a bit hypothetical, and not significantly cleaner than 
+a zero-size special case, so I'm not particularly tied to the idea either.
+
+>>> +                 * in __finalise_sg() to actually map the
+>>> +                 * bus address.
+>>> +                 */
+>>> +                s->length = 0;
+>>> +                continue;
+>>> +            case PCI_P2PDMA_MAP_THRU_HOST_BRIDGE:
+>>> +                /*
+>>> +                 * Mapping through host bridge should be
+>>> +                 * mapped with regular IOVAs, thus we
+>>> +                 * do nothing here and continue below.
+>>> +                 */
+>>> +                break;
+>>> +            default:
+>>> +                ret = -EREMOTEIO;
+>>> +                goto out_restore_sg;
+>>> +            }
+>>> +        }
+>>> +
+>>>            /*
+>>>             * Due to the alignment of our single IOVA allocation, we can
+>>>             * depend on these assumptions about the segment boundary mask:
+>>> @@ -1215,6 +1257,9 @@ static int iommu_dma_map_sg(struct device *dev,
+>>> struct scatterlist *sg,
+>>>            prev = s;
+>>>        }
+>>>    +    if (!iova_len)
+>>> +        return __finalise_sg(dev, sg, nents, 0);
+>>> +
+>>>        iova = iommu_dma_alloc_iova(domain, iova_len, dma_get_mask(dev),
+>>> dev);
+>>>        if (!iova) {
+>>>            ret = -ENOMEM;
+>>> @@ -1236,7 +1281,7 @@ static int iommu_dma_map_sg(struct device *dev,
+>>> struct scatterlist *sg,
+>>>    out_restore_sg:
+>>>        __invalidate_sg(sg, nents);
+>>>    out:
+>>> -    if (ret != -ENOMEM)
+>>> +    if (ret != -ENOMEM && ret != -EREMOTEIO)
+>>>            return -EINVAL;
+>>>        return ret;
+>>>    }
+>>> @@ -1244,7 +1289,7 @@ static int iommu_dma_map_sg(struct device *dev,
+>>> struct scatterlist *sg,
+>>>    static void iommu_dma_unmap_sg(struct device *dev, struct
+>>> scatterlist *sg,
+>>>            int nents, enum dma_data_direction dir, unsigned long attrs)
+>>>    {
+>>> -    dma_addr_t start, end;
+>>> +    dma_addr_t end, start = DMA_MAPPING_ERROR;
+>>
+>> There are several things I don't like about this logic, I'd rather have
+>> "end = 0" here...
+> 
+> Ok, I think that should work.
+> 
+>>>        struct scatterlist *tmp;
+>>>        int i;
+>>>    @@ -1260,14 +1305,22 @@ static void iommu_dma_unmap_sg(struct device
+>>> *dev, struct scatterlist *sg,
+>>>         * The scatterlist segments are mapped into a single
+>>>         * contiguous IOVA allocation, so this is incredibly easy.
+>>>         */
+>>
+>> [ This comment rather stops being true :( ]
+> 
+> Not exactly. Sure there are some segments in the SGL that have bus
+> addresses, but all the regular IOVAs still have a single contiguous
+> allocation and only require one call to  __iommu_dma_unmap(). The only
+> trick issues is finding the first and last actual IOVA SG to get the range.
+
+"The scatterlist segments" means all of them, including any p2p ones 
+which are demonstrably not mapped into anything. The extra logic 
+required to skip non-mapped p2p segments goes beyond "incredibly easy". 
+If there's one thing I *do* definitely understand, it's my own comments ;)
 
 Thanks,
-Ezequiel
+Robin.
 
-> ---
->  drivers/staging/media/hantro/hantro_postproc.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/staging/media/hantro/hantro_postproc.c b/drivers/staging/media/hantro/hantro_postproc.c
-> index 8933b4af73ed..a0928c508434 100644
-> --- a/drivers/staging/media/hantro/hantro_postproc.c
-> +++ b/drivers/staging/media/hantro/hantro_postproc.c
-> @@ -113,12 +113,14 @@ static void hantro_postproc_g2_enable(struct hantro_ctx *ctx)
->  {
->  	struct hantro_dev *vpu = ctx->dev;
->  	struct vb2_v4l2_buffer *dst_buf;
-> -	size_t chroma_offset = ctx->dst_fmt.width * ctx->dst_fmt.height;
->  	int down_scale = down_scale_factor(ctx);
-> +	size_t chroma_offset;
->  	dma_addr_t dst_dma;
->  
->  	dst_buf = hantro_get_dst_buf(ctx);
->  	dst_dma = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0);
-> +	chroma_offset = ctx->dst_fmt.plane_fmt[0].bytesperline *
-> +			ctx->dst_fmt.height;
->  
->  	if (down_scale) {
->  		hantro_reg_write(vpu, &g2_down_scale_e, 1);
-> -- 
-> 2.36.1
+>>
+>>> -    start = sg_dma_address(sg);
+>>> -    for_each_sg(sg_next(sg), tmp, nents - 1, i) {
+>>
+>> ...then generalise the first-element special case here into a dedicated
+>> "walk to the first non-p2p element" loop...
 > 
+> Ok, I'll see what I can do for that.
+> 
+> Logan

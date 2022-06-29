@@ -2,83 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B209A55F319
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA42F55F33C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbiF2CFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 22:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
+        id S229903AbiF2CK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 22:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbiF2CFQ (ORCPT
+        with ESMTP id S231281AbiF2CKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 22:05:16 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74865313B6;
-        Tue, 28 Jun 2022 19:05:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656468315; x=1688004315;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oEv43ZklnInyeYG0C+sgV1T7PE3bi9pBSUOvJ2667rQ=;
-  b=ELaes25dUQXmdJC5/gRhlctVKCColhq4Ng8icKyApFcdrOQYS5lrJPKH
-   FRICR5A+uaZ2VA9iV+SIYINddOpS9CxA0j9x5qbaGPjsuNiGWZy8+iPHK
-   cOeZ8KvdNVqA6mdQsf+P7VDu1zOCYdB4sBLUfZDLVyL/MBAmh8wIWTR0e
-   7BgHsQl4Xn6+/pJpUFI39QhN7sZHLV55ChikvCAt2e3wXj2QcoHD964CG
-   Xc7qCuexyOdUkDpPqVFBR4Gv0Aic8arXSDGGYsrR60plVFXn1YA2i33SP
-   5l+AhBwbfJzF4S36hV2FJ7yzuBqFcHG0MHvp8SbvkDsydg4xgiO92HlWS
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="270660468"
-X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="270660468"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 19:05:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="647171135"
-Received: from leirao-pc.bj.intel.com ([10.238.156.101])
-  by fmsmga008.fm.intel.com with ESMTP; 28 Jun 2022 19:05:01 -0700
-From:   Lei Rao <lei.rao@intel.com>
-To:     alex.williamson@redhat.com, cohuck@redhat.com,
-        kevin.tian@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Lei Rao <lei.rao@intel.com>
-Subject: [PATCH] vfio: Fix memory leaks in vfio_create_group()
-Date:   Wed, 29 Jun 2022 10:05:00 +0800
-Message-Id: <20220629020500.878300-1-lei.rao@intel.com>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 28 Jun 2022 22:10:10 -0400
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BC22ED46;
+        Tue, 28 Jun 2022 19:10:06 -0700 (PDT)
+Received: by mail-il1-f173.google.com with SMTP id 9so9375639ill.5;
+        Tue, 28 Jun 2022 19:10:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=akCaK7/6hiO9qiDqUC6BjphM3QTCscKxuIGksCMRv4Q=;
+        b=qw7QGmRtknT8SHk4/fjSpan3+R2RdbsAn3+a6UmKweoDKdHuU+8KLOy3Ot+hJ8w/iy
+         3zChQgqhWh3o+jWY4kPsmfTQ9+ys2BZBw7KHrVgMJgjeoFJqRVqUiDsaEx4zwaK2Hgek
+         JYyiNhdt/ok56z4G/T7ViDNxpJrvfj9z0HrSKcvXKVGyqIjSmSA6KUmIkyqrplDdwYeQ
+         /tsTRGN7UJBjgBOrGDUozmO1Th0rNFeFwVfVI+9to/jNKAFgk2vuLMge52gVEyiqFrD6
+         I2t/M4/o4Q6+QQvDIJ9kRxMX+3MhrkoRT28Q0AWBhxukXFmD1Cc7NOcWyEj01iS/CZpt
+         sOYQ==
+X-Gm-Message-State: AJIora8Zf+CRohPEPWe9EI7I5V7paPM2LwagUp0XrDX4FNIyu1g/GCAc
+        SlvgApfbOHHYcbIK59A2pg==
+X-Google-Smtp-Source: AGRyM1s+vAu0J3FAxJurSCzpU4DCe5h38yk8r+xC7m9WUBJ56dufRl4BRYIH390A+L4jw+4zToyPjA==
+X-Received: by 2002:a05:6e02:216b:b0:2da:c09b:179f with SMTP id s11-20020a056e02216b00b002dac09b179fmr659560ilv.0.1656468605851;
+        Tue, 28 Jun 2022 19:10:05 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id w18-20020a92c892000000b002d909e3d89esm6515075ilo.60.2022.06.28.19.10.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 19:10:05 -0700 (PDT)
+Received: (nullmailer pid 1403684 invoked by uid 1000);
+        Wed, 29 Jun 2022 02:09:39 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     devicetree@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-phy@lists.infradead.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20220628221404.1444200-2-sean.anderson@seco.com>
+References: <20220628221404.1444200-1-sean.anderson@seco.com> <20220628221404.1444200-2-sean.anderson@seco.com>
+Subject: Re: [PATCH net-next v2 01/35] dt-bindings: phy: Add QorIQ SerDes binding
+Date:   Tue, 28 Jun 2022 20:09:39 -0600
+Message-Id: <1656468579.935954.1403683.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If an error occurs after vfio_group_alloc(), we need to release the
-group.
+On Tue, 28 Jun 2022 18:13:30 -0400, Sean Anderson wrote:
+> This adds a binding for the SerDes module found on QorIQ processors. The
+> phy reference has two cells, one for the first lane and one for the
+> last. This should allow for good support of multi-lane protocols when
+> (if) they are added. There is no protocol option, because the driver is
+> designed to be able to completely reconfigure lanes at runtime.
+> Generally, the phy consumer can select the appropriate protocol using
+> set_mode. For the most part there is only one protocol controller
+> (consumer) per lane/protocol combination. The exception to this is the
+> B4860 processor, which has some lanes which can be connected to
+> multiple MACs. For that processor, I anticipate the easiest way to
+> resolve this will be to add an additional cell with a "protocol
+> controller instance" property.
+> 
+> Each serdes has a unique set of supported protocols (and lanes). The
+> support matrix is stored in the driver and is selected based on the
+> compatible string. It is anticipated that a new compatible string will
+> need to be added for each serdes on each SoC that drivers support is
+> added for. There is no "generic" compatible string for this reason.
+> 
+> There are two PLLs, each of which can be used as the master clock for
+> each lane. Each PLL has its own reference. For the moment they are
+> required, because it simplifies the driver implementation. Absent
+> reference clocks can be modeled by a fixed-clock with a rate of 0.
+> 
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> ---
+> 
+> Changes in v2:
+> - Add #clock-cells. This will allow using assigned-clocks* to configure
+>   the PLLs.
+> - Allow a value of 1 for phy-cells. This allows for compatibility with
+>   the similar (but according to Ioana Ciornei different enough) lynx-28g
+>   binding.
+> - Document phy cells in the description
+> - Document the structure of the compatible strings
+> - Fix example binding having too many cells in regs
+> - Move compatible first
+> - Refer to the device in the documentation, rather than the binding
+> - Remove minItems
+> - Rename to fsl,lynx-10g.yaml
+> - Use list for clock-names
+> 
+>  .../devicetree/bindings/phy/fsl,lynx-10g.yaml | 93 +++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/fsl,lynx-10g.yaml
+> 
 
-Signed-off-by: Lei Rao <lei.rao@intel.com>
----
- drivers/vfio/vfio.c | 1 +
- 1 file changed, 1 insertion(+)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
-index 61e71c1154be..2460aec44a6d 100644
---- a/drivers/vfio/vfio.c
-+++ b/drivers/vfio/vfio.c
-@@ -414,6 +414,7 @@ static struct vfio_group *vfio_create_group(struct iommu_group *iommu_group,
- 	mutex_unlock(&vfio.group_lock);
- err_put:
- 	put_device(&group->dev);
-+	vfio_group_release(&group->dev);
- 	return ret;
- }
- 
--- 
-2.32.0
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml: patternProperties:^thermistor@:properties:adi,excitation-current-nanoamp: '$ref' should not be valid under {'const': '$ref'}
+	hint: Standard unit suffix properties don't need a type $ref
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml: ignoring, error in schema: patternProperties: ^thermistor@: properties: adi,excitation-current-nanoamp
+Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.example.dtb:0:0: /example-0/spi/ltc2983@0: failed to match any schema with compatible: ['adi,ltc2983']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

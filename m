@@ -2,60 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2ADB55F9B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50DA955F9AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232524AbiF2HxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 03:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
+        id S232705AbiF2HxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 03:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231908AbiF2HxF (ORCPT
+        with ESMTP id S231512AbiF2HxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 03:53:05 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C1F3BA62
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656489172; x=1688025172;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=fc35XuZz/9Gx99pSbeu+hwj5fehuTAJJn+R2oU8DQJo=;
-  b=LRCQsRggFCN3j3gr4BYMBUXYICLA2E7GaBX4xJrsDvY0dgrPKOpKrIQ9
-   1bM23z8XieiNb3T/LeSEfyIe+hmov9OUxYtO25hQTNRV+Bv2O/BIFmI6L
-   2XVloWj1LTl722Bd9ZJ+jWtuWu/641zcQy7Usnl7n/7vWEMF37IwUe6HQ
-   1/3N47c8Z8stao/JTZUKHOyJVl9mob4+emlsiwtN5StfsOU6ViVyZs/wa
-   RIWOZcMn506Ldn3cl1lWaIz8lpgl/My00oVoYef6Fs8Ko5FbKvTvucwVr
-   GLGzEEAndXqt56HB4oWpMum1kouRmRrbPoAm/Eiy8E1R7ZDVbwKi+gBZe
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="281990363"
-X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="281990363"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 00:52:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="733082557"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Jun 2022 00:52:51 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o6SVG-000B04-Oc;
-        Wed, 29 Jun 2022 07:52:50 +0000
-Date:   Wed, 29 Jun 2022 15:52:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:for-next/fam0-uapi] BUILD SUCCESS
- 94dfc73e7cf4a31da66b8843f0b9283ddd6b8381
-Message-ID: <62bc04cb.p9IURTMWTmNDwXdR%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 29 Jun 2022 03:53:08 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294C53983E
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:52:55 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id z41so2451656ede.1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:52:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=teySt0pfe1Fl6EJ0ZuEY5uNGoMIrDwOQRCk/lxEIa6o=;
+        b=K64DhEKw+AgSltwOxeQ0c8C2FCcOksM+do+eTV2cix59m6OCYKyc+vihLA6PvjPt5w
+         ykY1AAZVLxLoAZaR5ANvBE7mLZIjHIRqZnAsj4yrdwi+4qGGDUOF0ITL7XXWIAtVIZHN
+         G2NzNZEGMlHSvs50P0UP6jQNtgYxAtlOMV2babYIvwCUWqWMGa/nmhqDQgpm7Pm9zfgv
+         JMRZg5pCWXmqINVYZNiZ+MJPj521yLOf+3LWNrE4TTLoNblS50LpH3uQq22PqOEiiGBd
+         OcwkZBk4Z8XweCXaFuXSPj5c+aEaDZwTYN2Wi9VwCq0cTJZFTR/kcQaAy9UAFvbTTsWJ
+         u24g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=teySt0pfe1Fl6EJ0ZuEY5uNGoMIrDwOQRCk/lxEIa6o=;
+        b=YhZDOu41tY6XWSmFSX/MEdBjlj4dLqS9rsLNGNTQzgsjFu1LRPD9XGqg/lM41lJFSD
+         oWFLt9RjTFO7q1W0XXvsNh0dqsCS7NPZM238bCiE9wIiQVIsVnB7jaK35n129K8Yg/Nm
+         3EeSd6ZnnJLPp+iDAb2CblN6tJ9jrRoP191Pe9BTAqndBndNUDaPXPLdoBGYyw49aq7F
+         lBfxZFiApzs30UCVEMvgC3RbJjtmwsfPJjvv9VciAlSbsO568ewiQRKSAA8Y/4rXJ8vC
+         eKl0uhzi3LSYrMWdiuGze+/d/xagU64TV9C2x7VnAfDlAI+dHpi9bncwdFvTnnBeYLwL
+         fCpQ==
+X-Gm-Message-State: AJIora9+/zQap5tWfv1OQxUoH76REkN+E2DF1XI8RhcDYon3Ur8qHzMI
+        BmiybGfvp2YsznshZiXd172r9g==
+X-Google-Smtp-Source: AGRyM1ve+eWHy1pLQJ5e60zFGg+uYODIvAuCqfuQnHIBJbRUTWOoZhbqbgueEeoU9X5EA5kdTqKv8g==
+X-Received: by 2002:aa7:cb83:0:b0:435:9170:8e3b with SMTP id r3-20020aa7cb83000000b0043591708e3bmr2539172edt.144.1656489174232;
+        Wed, 29 Jun 2022 00:52:54 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id t2-20020a056402020200b00437db6acaeesm432173edv.95.2022.06.29.00.52.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 00:52:53 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v5 0/4] soc/arm64: qcom: Add initial version of bwmon
+Date:   Wed, 29 Jun 2022 09:52:46 +0200
+Message-Id: <20220629075250.17610-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,112 +74,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git for-next/fam0-uapi
-branch HEAD: 94dfc73e7cf4a31da66b8843f0b9283ddd6b8381  treewide: uapi: Replace zero-length arrays with flexible-array members
+Hi,
 
-elapsed time: 729m
+Changes since v4
+================
+1. Patch #1 (binding): Use qcom,msm8998-cpu-bwmon fallback compatible, only one
+   interconnect. Rename to qcom,msm8998-cpu-bwmon.yaml. This reflects
+   discussion with Bjorn, about the proper fallback compatible. Driver was
+   tested only on SDM845, so only that one compatible is actually implemented.
+   Keep the reviews/acks as the change is not significant.
+2. Patch #4 (DTS): Use qcom,msm8998-cpu-bwmon fallback compatible, only one
+   interconnect, use the LLCC bandwidth in OPP.
 
-configs tested: 91
-configs skipped: 3
+remove unused irq_enable (kbuild robot);
+Changes since v3
+================
+1. Patch #2 (bwmon): remove unused irq_enable (kbuild robot);
+   split bwmon_clear() into clearing counters and interrupts, so bwmon_start()
+   does not clear the counters twice.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Changes since v2
+================
+1. Spent a lot of time on benchmarking and learning the BWMON behavior.
+2. Drop PM/OPP patch - applied.
+3. Patch #1: drop opp-avg-kBps.
+4. Patch #2: Add several comments explaining pieces of code and BWMON, extend
+   commit msg with measurements, extend help message, add new #defines to document
+   some magic values, reorder bwmon clear/disable/enable operations to match
+   downstream source and document this with comments, fix unit count from 1 MB
+   to 65 kB.
+5. Patch #4: drop opp-avg-kBps.
+6. Add accumulated Rb tags.
 
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                 randconfig-c001-20220627
-i386                          randconfig-c001
-xtensa                  audio_kc705_defconfig
-sh                              ul2_defconfig
-powerpc                      ppc40x_defconfig
-arm                        realview_defconfig
-arm                            pleb_defconfig
-parisc64                            defconfig
-arm                          pxa910_defconfig
-i386                             alldefconfig
-powerpc                         ps3_defconfig
-m68k                        stmark2_defconfig
-arm                            mps2_defconfig
-arm                          simpad_defconfig
-sh                ecovec24-romimage_defconfig
-arm                        cerfcube_defconfig
-arc                    vdk_hs38_smp_defconfig
-powerpc                 mpc837x_mds_defconfig
-sh                           se7712_defconfig
-arm                      jornada720_defconfig
-ia64                         bigsur_defconfig
-arm                       aspeed_g5_defconfig
-sh                   sh7770_generic_defconfig
-arc                            hsdk_defconfig
-arm                         cm_x300_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-ia64                             allmodconfig
-x86_64               randconfig-k001-20220627
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64               randconfig-a014-20220627
-x86_64               randconfig-a012-20220627
-x86_64               randconfig-a011-20220627
-x86_64               randconfig-a013-20220627
-x86_64               randconfig-a015-20220627
-x86_64               randconfig-a016-20220627
-i386                 randconfig-a014-20220627
-i386                 randconfig-a011-20220627
-i386                 randconfig-a012-20220627
-i386                 randconfig-a015-20220627
-i386                 randconfig-a016-20220627
-i386                 randconfig-a013-20220627
-arc                  randconfig-r043-20220627
-s390                 randconfig-r044-20220627
-riscv                randconfig-r042-20220627
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                          rhel-8.3-func
+Changes since v1
+================
+1. Add defconfig change.
+2. Fix missing semicolon in MODULE_AUTHOR.
+3. Add original downstream (msm-4.9 tree) copyrights to the driver.
 
-clang tested configs:
-arm                      pxa255-idp_defconfig
-arm                            dove_defconfig
-arm                        neponset_defconfig
-x86_64                        randconfig-k001
-x86_64               randconfig-a004-20220627
-x86_64               randconfig-a006-20220627
-x86_64               randconfig-a001-20220627
-x86_64               randconfig-a005-20220627
-x86_64               randconfig-a002-20220627
-x86_64               randconfig-a003-20220627
-i386                 randconfig-a005-20220627
-i386                 randconfig-a001-20220627
-i386                 randconfig-a006-20220627
-i386                 randconfig-a004-20220627
-i386                 randconfig-a003-20220627
-i386                 randconfig-a002-20220627
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r041-20220627
-hexagon              randconfig-r045-20220627
+Description
+===========
+BWMON is a data bandwidth monitor providing throughput/bandwidth over certain
+interconnect links in a SoC.  It might be used to gather current bus usage and
+vote for interconnect bandwidth, thus adjusting the bus speed based on actual
+usage.
+
+The work is built on top of Thara Gopinath's patches with several cleanups,
+changes and simplifications.
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (4):
+  dt-bindings: interconnect: qcom,msm8998-cpu-bwmon: add BWMON device
+  soc: qcom: icc-bwmon: Add bandwidth monitoring driver
+  arm64: defconfig: enable Qualcomm Bandwidth Monitor
+  arm64: dts: qcom: sdm845: Add CPU BWMON
+
+ .../interconnect/qcom,msm8998-cpu-bwmon.yaml  |  80 ++++
+ MAINTAINERS                                   |   7 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  38 ++
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/soc/qcom/Kconfig                      |  15 +
+ drivers/soc/qcom/Makefile                     |   1 +
+ drivers/soc/qcom/icc-bwmon.c                  | 421 ++++++++++++++++++
+ 7 files changed, 563 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,msm8998-cpu-bwmon.yaml
+ create mode 100644 drivers/soc/qcom/icc-bwmon.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+

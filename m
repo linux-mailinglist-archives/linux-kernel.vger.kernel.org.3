@@ -2,62 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFBF8560A92
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4632E560A9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbiF2Tqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 15:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
+        id S231397AbiF2TsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 15:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiF2Tqg (ORCPT
+        with ESMTP id S231391AbiF2TsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 15:46:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E882137A82;
-        Wed, 29 Jun 2022 12:46:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9DF7B826BE;
-        Wed, 29 Jun 2022 19:46:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D50A9C34114;
-        Wed, 29 Jun 2022 19:46:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656531993;
-        bh=I3rRA2ivIk2lSakF7rm0zAlvjPJfLVr51rUs2HmOnfE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NptgRT1U3j1lvqVyA+erDG4RqOSE/A+Y48K25gloXmSMky7zZ1Al1NCrCW363wG8P
-         X+1oYkgOfmD884iexn9uX9ee8a0QmNurTrWHOMrL1lcZfoQLbw93OhftHrEAtEVwtg
-         p7imWVOtTkoyjJaZwgJ0dRVIipRcBGR+pWvGa33OlTv1DL7LhdI1x6dOeTMlFU7aKx
-         QTl9x3IM0FRrB83YAOudUOpyfx1o3GQqzBhlVDVjZdDpZU7CZBq0q70/2AfPeyf7k3
-         Xaz8dx7rUaTV8mfO6A0qW3YAUeiozxwIMm0mQ80iuFf52D5KCT1KfMFm6pZ0cI6097
-         24pcD2i4MiTiQ==
-Date:   Wed, 29 Jun 2022 21:46:29 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
-        andrew@sanpeople.com, mhoffman@lightlink.com, khali@linux-fr.org,
-        peda@axentia.se
-Subject: Re: [RESEND 0/3] i2c: at91: Fixes and updates
-Message-ID: <YrysFU0fP7X1wkBd@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
-        andrew@sanpeople.com, mhoffman@lightlink.com, khali@linux-fr.org,
-        peda@axentia.se
-References: <20220614101347.16910-1-codrin.ciubotariu@microchip.com>
+        Wed, 29 Jun 2022 15:48:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9266D80
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 12:48:08 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE7FA1480;
+        Wed, 29 Jun 2022 12:48:08 -0700 (PDT)
+Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.197.38])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 77FC23F792;
+        Wed, 29 Jun 2022 12:48:07 -0700 (PDT)
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Ingo Molnar <mingo@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Xuewen Yan <xuewen.yan94@gmail.com>,
+        Wei Wang <wvw@google.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        Hank <han.lin@mediatek.com>, Qais Yousef <qais.yousef@arm.com>
+Subject: [PATCH 4/7] sched/uclamp: Make select_idle_capacity() use util_fits_cpu()
+Date:   Wed, 29 Jun 2022 20:46:29 +0100
+Message-Id: <20220629194632.1117723-5-qais.yousef@arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220629194632.1117723-1-qais.yousef@arm.com>
+References: <20220629194632.1117723-1-qais.yousef@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PO1fX2YbNUKV/P3U"
-Content-Disposition: inline
-In-Reply-To: <20220614101347.16910-1-codrin.ciubotariu@microchip.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,49 +47,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use the new util_fits_cpu() to ensure migration margin and capacity
+pressure are taken into account correctly when uclamp is being used
+otherwise we will fail to consider CPUs as fitting in scenarios where
+they should.
 
---PO1fX2YbNUKV/P3U
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: b4c9c9f15649 ("sched/fair: Prefer prev cpu in asymmetric wakeup path")
+Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+---
+ kernel/sched/fair.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-On Tue, Jun 14, 2022 at 01:13:44PM +0300, Codrin Ciubotariu wrote:
-> Resend due to the fact that the i2c list no longer accepts replys on the
-> old patch-set. Comments not addressed yet.
->=20
-> The first patch is mostly a prerequisite for the second one. It only
-> moves the i2c_recover_bus() out of the actual transfer function. This
-> helps the second patch disable the controller before using GPIO
-> recovery. The second patch will keep the controller enabled when a
-> transfer occurs. Before using GPIO recovery, the controller must be
-> disabled, to ignore potential glitches. However, the controller must be
-> enabled for HW recovery (bus CLEAR command). The third and last patch
-> adds advanced digital filtering support for SAMA5D4. The TWI IP found in
-> SAMA5D4 supports advanced digital filtering, even if, at the moment of
-> this patch, the SAMA5D4 datasheet does not mention it.
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index c80c676ab1bc..db1fc6c1aa87 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6540,21 +6540,22 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+ static int
+ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+ {
+-	unsigned long task_util, best_cap = 0;
++	unsigned long task_util, util_min, util_max, best_cap = 0;
+ 	int cpu, best_cpu = -1;
+ 	struct cpumask *cpus;
+ 
+ 	cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
+ 	cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
+ 
+-	task_util = uclamp_task_util(p);
+-
++	task_util = task_util_est(p);
++	util_min = uclamp_eff_value(p, UCLAMP_MIN);
++	util_max = uclamp_eff_value(p, UCLAMP_MAX);
+ 	for_each_cpu_wrap(cpu, cpus, target) {
+ 		unsigned long cpu_cap = capacity_of(cpu);
+ 
+ 		if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
+ 			continue;
+-		if (fits_capacity(task_util, cpu_cap))
++		if (util_fits_cpu(task_util, util_min, util_max, cpu))
+ 			return cpu;
+ 
+ 		if (cpu_cap > best_cap) {
+-- 
+2.25.1
 
-So, can you guys read this mail? It should be possible somehow that I
-can read your remarks to my remarks, no?
-
-
---PO1fX2YbNUKV/P3U
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmK8rBUACgkQFA3kzBSg
-Kba4jQ//ZOvHvEFqvfQQSpnokDAdiAwhM5eD3J2oFwTCIQb9iCt0lVxXranvIHpX
-wxX06lTnl1drrUQdKanseT2hylhqPeam0pJi6LHi9Q1l9n0EHaPpctJJ46ovtXEG
-frGuV8tIHdr9/H7G/nW+PtJpDcSxpOmOR0KsLSVSTn6el7LOA8EjhOHMRCMBeFfg
-UeHnmfGCI5GZrGcFqkxHRX/CwFFZCAsCyW3+1Kkk/WMVK1ims8IZpgRD01mvQERf
-X4LbSexcyC702lvgyGGKNsph83J/qT3EAUHQvzc2+LtkmQkYk12yFXqzzI67QQDu
-uDd8w7qKi0/r56hXP9DSSoPDvzt1edj9xlj3jdaFQL/9lxlx4+OYeeAsaUo2qOJT
-wko7aadFMPG49N5Qp5s/Je0vu+uCf7rLg1J6WB/nSpVMuon/4dZEtP/QsBm86bi1
-WG/NdwJgxPOg8T/PnbILEaRzcvYCM8yVCn3O6WBt8h2NBrjykIp0A+baHBzuN+sF
-VGxYzlR7hDzzZOXz7PZoVxtt3nozGwmnknQyttRHGEiz6OrNqkZezykuU3mlzXhT
-ncRpLwHXWEt4idvFPM0gkUk8StWC/6puUNF5Doy9wmVliS+7d7PQ5VE1v0/2cQn2
-6pXGHbda705qIxBTZ9n1yIWqKtw1OIijv+CNNwkCOd8iQIxYFBk=
-=Pigm
------END PGP SIGNATURE-----
-
---PO1fX2YbNUKV/P3U--

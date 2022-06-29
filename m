@@ -2,232 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E63C355FFA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F4B55FFA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbiF2MSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 08:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
+        id S232793AbiF2MSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 08:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiF2MSp (ORCPT
+        with ESMTP id S230017AbiF2MSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 29 Jun 2022 08:18:45 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6891EECB
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 05:18:42 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25TC3XJj032380;
-        Wed, 29 Jun 2022 12:18:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=lwqjL+rTVMTV/YnIkpDWycZp39fG1HJxqZxK4n7g3uQ=;
- b=bFomUyV4QLfopuHJVW5HEv97d/sby4G1R+HBOplFF/OX5F8f5Lfi3qd9n7dnebpKaJzL
- dIndpQwfqI3VBOG+s/rgYbcJ+DL3sXnJ/AxnnX/S62E8q3LCz2DrlRCpPow6zhrG91pT
- 3b733DYBBdl6CbzjZIazYTsKyX/9dFqbhq7xdLqysC6YKp57AlBJOWUEgq0e39Ajk9b8
- mDngcpMu/zA2btw+G9uGbQD5UAYz/HEHK0BSUf8/0wDu6gWsF7rseO0j/2sxcgxE+TxB
- efPMi4NfUSktnXtZlG5P1FkLT28WG8tm4AJa7/rKkhMTk0FlB7gSg5MDB+wk7YE6a93K Pg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h0pdkgegv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Jun 2022 12:18:16 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25TC51VG009406;
-        Wed, 29 Jun 2022 12:18:15 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h0pdkgefy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Jun 2022 12:18:15 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25TC8FGJ003555;
-        Wed, 29 Jun 2022 12:18:13 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04fra.de.ibm.com with ESMTP id 3gwt094u37-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Jun 2022 12:18:13 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25TCIAKp21299524
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 29 Jun 2022 12:18:10 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1AFC811C04C;
-        Wed, 29 Jun 2022 12:18:10 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7E1AF11C04A;
-        Wed, 29 Jun 2022 12:18:09 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed, 29 Jun 2022 12:18:09 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Yu Zhao <yuzhao@google.com>, Juergen Gross <jgross@suse.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Andreas Krebbel <krebbel@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Thomas Huth <thuth@redhat.com>, richard.henderson@linaro.org,
-        qemu-devel@nongnu.org, qemu-s390x@nongnu.org
-Subject: Re: qemu-system-s390x hang in tcg
-References: <20220426150616.3937571-24-Liam.Howlett@oracle.com>
-        <20220428201947.GA1912192@roeck-us.net>
-        <20220429003841.cx7uenepca22qbdl@revolver>
-        <20220428181621.636487e753422ad0faf09bd6@linux-foundation.org>
-        <20220502001358.s2azy37zcc27vgdb@revolver>
-        <20220501172412.50268e7b217d0963293e7314@linux-foundation.org>
-        <Ym+v4lfU5IyxkGc4@osiris> <20220502133050.kuy2kjkzv6msokeb@revolver>
-        <YnAn3FI9aVCi/xKd@osiris> <YnGHJ7oroqF+v1u+@osiris>
-        <20220503215520.qpaukvjq55o7qwu3@revolver>
-        <60a3bc3f-5cd6-79ac-a7a8-4ecc3d7fd3db@linux.ibm.com>
-        <15f5f8d6-dc92-d491-d455-dd6b22b34bc3@redhat.com>
-        <yt9d5ykkhrvv.fsf_-_@linux.ibm.com> <87pmirj3aq.fsf@linaro.org>
-        <yt9dbkubhhna.fsf@linux.ibm.com>
-Date:   Wed, 29 Jun 2022 14:18:09 +0200
-In-Reply-To: <yt9dbkubhhna.fsf@linux.ibm.com> (Sven Schnelle's message of
-        "Wed, 29 Jun 2022 12:46:01 +0200")
-Message-ID: <yt9d7d4zhddq.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70095.outbound.protection.outlook.com [40.107.7.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7DAE2A;
+        Wed, 29 Jun 2022 05:18:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZBYkiwd/7Or1+CBmqrtqRPDAihzkrsHQq5lNm0vK+R17deW9nbX3MJIAhZEK7A99zctFeLU1gBUWJn8iP4R43YTAI8s9DKiKX6Xg2C95eJCO8nU7yKvB6dlryWA35b1xzOKgc+ta1Ay3pU/vvCslujNcfqHb4wXEHuekVGQyxs7qJ1KyUyrzUYsg4WCUJWFnBkzuZc3UCqQzP0voitY26Qkt685g065cMieNaNDTGPuElJAM64E+ejjmmeumYC2a2EvWb0KocOkPzBcT7DOnfyeQQ7z/GDaGhRJSV7ynJvo5W/gCQlJz+QZo2xVteCppwM1Yp4EkvZSSysaVWsnHig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hr75VPG5Qvuu0VtGDFq/5npsWmiQlLIRLzdoQqlSGx8=;
+ b=U2adlM98kcDJp6qXNa5VscfFmwS9wNPMsfZvl10LeMiGQ/+nk+OvuQSWr1DEHmRSLKoRbXXNxLrFRXxppEob4n1LYob75naaLv9zMeIVNu02tynlUKqSD7lbsdEiW5FNRF6XELoZdn1jBfFycrBygxicxoc3AImoSufWc9VZlu8gIHHLKXgtGJcK7cp9Hi/t5WVX7Teis08RnT65vbSddUQqZ2GIklLHQw47rKpLs1Xygt+4Kj2KG7Ozk41JHuiTM5qUN9Mn3RISTdK74+k8RZVO99QGq+j+sr1BQckHxhyP1ttxPIrPDnQz1HfioOZ90qgN6PDyB1Vp6dq8wtgWvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hr75VPG5Qvuu0VtGDFq/5npsWmiQlLIRLzdoQqlSGx8=;
+ b=Rtb7w/7e5cy+vBVLv9n+qOodwhKqX86hSowcJtFfxKjHtrMhdFQ4mgCp3z8U4hkxv6iXBuMkxoHZ/SDMtLujedjgRF80cpqfszm+k4ZGhAj42o5tSh/0o2xnk5L2YILX27K4PG3PFotuDJRSRfnLbXeEgoOCJVguF8Zg02PthZU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia.com;
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
+ by PR3PR07MB8242.eurprd07.prod.outlook.com (2603:10a6:102:179::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.11; Wed, 29 Jun
+ 2022 12:18:38 +0000
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::8885:ac49:4a47:2293]) by DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::8885:ac49:4a47:2293%9]) with mapi id 15.20.5395.014; Wed, 29 Jun 2022
+ 12:18:38 +0000
+Message-ID: <9d90d39c-c5ce-409b-9b87-71592dcca1cc@nokia.com>
+Date:   Wed, 29 Jun 2022 14:18:34 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 01/12] i2c: xiic: Add standard mode support for > 255 byte
+ read transfers
+Content-Language: en-US
+To:     Manikanta Guntupalli <manikanta.guntupalli@xilinx.com>,
+        michal.simek@xilinx.com, michal.simek@amd.com,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, git@amd.com
+Cc:     Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+References: <1656072327-13628-1-git-send-email-manikanta.guntupalli@xilinx.com>
+ <1656072327-13628-2-git-send-email-manikanta.guntupalli@xilinx.com>
+From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
+In-Reply-To: <1656072327-13628-2-git-send-email-manikanta.guntupalli@xilinx.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: HE1PR05CA0257.eurprd05.prod.outlook.com
+ (2603:10a6:3:fb::33) To DU2PR07MB8110.eurprd07.prod.outlook.com
+ (2603:10a6:10:239::15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 8AhSG-fhtXsT03k4RQQHlt278RxqkdfQ
-X-Proofpoint-GUID: cz-P2Qr80a7G7CgtNCMwmrsq8Y0a_bjz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-29_16,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 lowpriorityscore=0 bulkscore=0 mlxscore=0 malwarescore=0
- mlxlogscore=999 spamscore=0 priorityscore=1501 phishscore=0 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206290043
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3a0cb7db-fcae-4b78-e4b2-08da59c97f42
+X-MS-TrafficTypeDiagnostic: PR3PR07MB8242:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uCS0qA1DMtFybnUex9OB9pmiYgKHpSWAtp5y5GSe7VROPn6vNzvnEjHzPD8zm+K5mwwbzCXC5wIuqQuaPreg+xmeciZHjLlGiPOqVDm++k89C2CsOnCreGl6oxPN+ZqaQBd1TGOKpr9LLrXLFDehH5PuvEQJAiUie0S+MMMh33k5TMQgouL+SkOc4I4djmdr1/69vK1TFyo2JUAtkSOsCR1sMg9xGVmGHZFuiaPVM45jb2xxQGgHmDecGa+O7S4bi8aBCYD0tlJ8i5iDIugD3zSNIcD5Bk5xdI/W2FT9Krw++kUYE8Gjhv9QiQtPIzS/o973/mTJWkKpJDiwos7TcB/FbEh4b1GYFlHI1fXI40M5CrqZaEdYxTwYX2e+Q6/8Y7crnO2Gbf5/+MVca4JFr9AR8RVtG+jNlqS7IpZvtsFQ3VvYWg7FFW+nF/3ek+RMuIhqoS5KqrhCbZyJTPeqSrSryvkKjBbjEZwJHzTgtIi62J8yBEfQYvbf5h6qpkfj+uJ6yKaZcNrhi7d0jU1a7xjvj+LywohAhtBkXxkqwL3DcJBL0e9cGMRGwLgg2K5LlDuYMZdw8pZ22gyUU4cn2Q6qUMJqxOXcin0bnaBk3lMgsVhdeioGPxnc8CQ/lhndT/RY44vQ+bF6N92pLVbAAQDqsviNTifSJl95mkhpsogxw+v/YF/mYWjUS4M2P/CuhyPFMixIZ5VM3kSARTCkkdEdn3xHH+/+bhbvoO53T0Gr8oBbvqC+F3cbkwrruvQOKqAzTWZxjl3egrbpLdRqLS3skWsr+akYQQHH3qODEU+snStYkbG6Kq7dZzVTtZSc6DMuR9oTSuTaSr8kJBRiJQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(366004)(136003)(346002)(376002)(5660300002)(83380400001)(478600001)(82960400001)(36756003)(8936002)(2906002)(4326008)(6666004)(86362001)(31696002)(66476007)(66556008)(66946007)(6512007)(8676002)(26005)(41300700001)(38100700002)(6486002)(44832011)(31686004)(6506007)(186003)(2616005)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aElkT1NYdU9NTXNlOWc1bWZZU0loaUY0aDVQT0FibTFlbVJtK2tVTUhqbkN1?=
+ =?utf-8?B?SkVMaVk2Q0hzc2xZNjh2NVdnT2doK2JEL21nbWpJTzJNOHQrdlVwbU8wMFFs?=
+ =?utf-8?B?MTIraDRvV05XazczNWl3SHdYaDEzQllYZHdLRE5oYzBXZTNINSs0SGVtbWJM?=
+ =?utf-8?B?eUZpR1hKOXFrMExKMHFCNk1Dbnh4cUR2bEZEalUzL1I5MDFZMVNsYzI1RHh1?=
+ =?utf-8?B?bDFZbWNkTEI2WmRCYWZHUzZyNVJJWFRMbUtlU3U0WmxDTGt1Ulh1VHFtN0ho?=
+ =?utf-8?B?T1QrWTg5OUhNTHQzdHZreUZNaU1yZmVacXJJM2czVy8xanRNbk15N0M4UXdP?=
+ =?utf-8?B?eXM3RzU5UFJUMXFsTWp0ekZ5YkNJQmttb09BUVNxaHprOFkvUXV1aWtra3U2?=
+ =?utf-8?B?TmN4Um5rOVJGOVdpY3ZjTi9yTnFaZjdQYWtxWWcyVzBRemtydnBYMVgwaWlm?=
+ =?utf-8?B?UGlCT2lqUkMyN0M0ZUYzb0k4UENsNWVJN2ZGc21YSEQvaSs4cFhlTTd5UzZx?=
+ =?utf-8?B?eVk1bDhINmlHaExOU2ZHTjVDVExUY1lNaDUvQTVwZDV4WnFwQU5mTC9QemJK?=
+ =?utf-8?B?RU5IQXpUdi9KZ1J2MHpDM0N6ZlBvZlBnaXoxWUpqR2pjYUhUODN0Z1NKNEZo?=
+ =?utf-8?B?SjljZUVsbWRzOTFqZVE0cDgxcU1SWDBkN3RjczA4a29DVWFVMVhsNEl0YXAz?=
+ =?utf-8?B?elJzY3pWNGZLNkZuWFFNSnpJM3VTRVFXSVd1YWd6eWsvYW12MkZFN2FRQ1lJ?=
+ =?utf-8?B?ZzdpTFJWM0c0OTZva04yOEpodnhIQUsyVUpjRWZFamxlQm5iWnZiamlHaHFw?=
+ =?utf-8?B?b0EwSTA1K0xFQWhPNHZ6c2s1Z25KOERaUVZKcWZtazVRMjdrRytudkNUbC9C?=
+ =?utf-8?B?UFBaQ2pqTXFxckNweGh3WjNBcUZ6amU5dzlqYWczc1dXWGhmSlNMNytJTHdJ?=
+ =?utf-8?B?bDZEdTZJZVJNRDRFdVJ6M2xLaU9VV2l3NklHQ2IvRUwxUUdhdFVnelc3Y2s5?=
+ =?utf-8?B?Q3BRNVdyYUFkOWMycFpsN1dkTnVaOFVzU1Z4SEZqd2Q2TFk5a2huc3g0dVBT?=
+ =?utf-8?B?QStrUnpqR0hJdUZBdkFrVWdqaHNvamNyZmRta3NwanFzQ3NpYzhtWlBwNU1K?=
+ =?utf-8?B?dHlEdEphcmRDWG1nd3h3YysrYkhHaEx0eTAxWFExYW8wTEZnNXgxMTFlREhv?=
+ =?utf-8?B?R2VrZXg3aHZ6MFFUTmxUNmRSSktpdE9GSEd4Zm8zUko4NHBmZWNHQ3NhOFdu?=
+ =?utf-8?B?YkNUcURxcC9ma3R5U2p4V1JPYjFVdDRud0tVTnhNRmRlVlNsZ2ZFak1ybU1a?=
+ =?utf-8?B?LzEyMVdLRXlQMTRVUGFVOWw3RWlsbGNVdW02NCswRUdLM2NNZWd2TVBuMExE?=
+ =?utf-8?B?TkVHZ2xVaytQNGdTdytLdkhvRzVmdUdlTlZvNlJjNVdWbXg3WXUwWDBOTWFs?=
+ =?utf-8?B?bG1zT2twSEN3WWJ0ZndSVVNGbG8rMzNGWlc4L2J1RGplWVAyUjY3QUgwdkdz?=
+ =?utf-8?B?QTJhZlFpd25wSHEzUy9oOW1MMDBhZ2RyMU5PSElwcmZwWWlBMExxOEM1dG1X?=
+ =?utf-8?B?d3lCMWFMWVRCdmJ6eE0yMGhIdEUwY21PQzUxK0JjQUFneFVMMnlBWk8xYnEv?=
+ =?utf-8?B?UmI2SGxsMCtFRWZHbmU2emlISENVUUJJaEFRK2NFbjdzZmlvSnJianFqUTBq?=
+ =?utf-8?B?UnNPcFRLRlRscHNQOFNLTC9OSEdpaWVid09oZGNjeVIwM2xCaDVCTTNBNWkr?=
+ =?utf-8?B?TDNzZkhqMFA0Ri9nbEhLYll6cVYvU2R1NE5mc0lZdHB0NnJuajNnV0ZJTllC?=
+ =?utf-8?B?bDhucldGaHhIV2tsejRJNE9LVjhjMUlVTStJdklJSlk4Vk1BVDhtdGhxeU5Y?=
+ =?utf-8?B?VlY1c3A1ODFvcnRodlExb1Zma3pOZUNzcC9vemp2YVNFMURQWCswaEFLTFpK?=
+ =?utf-8?B?bEhHWlgraFhDdVZDMUJ6eU0xT3V6Lzlvb1ZjcUFmMk53anJWWFhBMUpiaVBs?=
+ =?utf-8?B?U2dkbEtqSVdDK3BRYzFZWExhem4yaVNGRVJybHl0a2RrYTc5dHhRWVUxdUN3?=
+ =?utf-8?B?WGFkUWowdGFZYzltekdFai84cjR4eHI3THQ3dmhQSUtLRmxIemlmSSs4eG8y?=
+ =?utf-8?B?NHI2YjlBSmo2MnQ0c1BSV200cnd5c2JXQVhlTnd0R2FGdC9BYjdJd3g2bk5x?=
+ =?utf-8?B?UkE9PQ==?=
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a0cb7db-fcae-4b78-e4b2-08da59c97f42
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2022 12:18:38.6610
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 36/DHD2K5S881/cLxrR1MG0zb7YEoqmcawxFbc/eWhzoQ/MVtmHw3szSE8E1i+bWeDK3LP5LOZlyhY9o3NqSstKhkHm7oh43j6j6NYS5yTo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR07MB8242
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,FORGED_SPF_HELO,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sven Schnelle <svens@linux.ibm.com> writes:
 
-> Alex Benn=C3=A9e <alex.bennee@linaro.org> writes:
->
->> Sven Schnelle <svens@linux.ibm.com> writes:
->>
->>> Hi,
->>>
->>> David Hildenbrand <david@redhat.com> writes:
->>>
->>>> On 04.05.22 09:37, Janosch Frank wrote:
->>>>> I had a short look yesterday and the boot usually hangs in the raid6=
-=20
->>>>> code. Disabling vector instructions didn't make a difference but a fe=
-w=20
->>>>> interruptions via GDB solve the problem for some reason.
->>>>>=20
->>>>> CCing David and Thomas for TCG
->>>>>=20
->>>>
->>>> I somehow recall that KASAN was always disabled under TCG, I might be
->>>> wrong (I thought we'd get a message early during boot that the HW
->>>> doesn't support KASAN).
->>>>
->>>> I recall that raid code is a heavy user of vector instructions.
->>>>
->>>> How can I reproduce? Compile upstream (or -next?) with kasan support a=
-nd
->>>> run it under TCG?
->>>
->>> I spent some time looking into this. It's usually hanging in
->>> s390vx8_gen_syndrome(). My first thought was that it is a problem with
->>> the VX instructions, but turned out that it hangs even if i remove all
->>> the code from s390vx8_gen_syndrome().
->>>
->>> Tracing the execution of TB's, i see that the generated code is always
->>> jumping between a few TB's, but never exiting the TB's to check for
->>> interrupts (i.e. return to cpu_tb_exec(). I only see calls to
->>> helper_lookup_tb_ptr to lookup the tb pointer for the next TB.
->>>
->>> The raid6 code is waiting for some time to expire by reading jiffies,
->>> but interrupts are never processed and therefore jiffies doesn't change.
->>> So the raid6 code hangs forever.
->>>
->>> As a test, i made a quick change to test:
->>>
->>> diff --git a/accel/tcg/cpu-exec.c b/accel/tcg/cpu-exec.c
->>> index c997c2e8e0..35819fd5a7 100644
->>> --- a/accel/tcg/cpu-exec.c
->>> +++ b/accel/tcg/cpu-exec.c
->>> @@ -319,7 +319,8 @@ const void *HELPER(lookup_tb_ptr)(CPUArchState *env)
->>>      cpu_get_tb_cpu_state(env, &pc, &cs_base, &flags);
->>>
->>>      cflags =3D curr_cflags(cpu);
->>> -    if (check_for_breakpoints(cpu, pc, &cflags)) {
->>> +    if (check_for_breakpoints(cpu, pc, &cflags) ||
->>> +        unlikely(qatomic_read(&cpu->interrupt_request))) {
->>>          cpu_loop_exit(cpu);
->>>      }
->>>
->>> And that makes the problem go away. But i'm not familiar with the TCG
->>> internals, so i can't say whether the generated code is incorrect or
->>> something else is wrong. I have tcg log files of a failing + working run
->>> if someone wants to take a look. They are rather large so i would have =
-to
->>> upload them somewhere.
->>
->> Whatever is setting cpu->interrupt_request should be calling
->> cpu_exit(cpu) which sets the exit flag which is checked at the start of
->> every TB execution (see gen_tb_start).
->
-> Thanks, that was very helpful. I added debugging and it turned out
-> that the TB is left because of a pending irq. The code then calls
-> s390_cpu_exec_interrupt:
->
-> bool s390_cpu_exec_interrupt(CPUState *cs, int interrupt_request)
-> {
->     if (interrupt_request & CPU_INTERRUPT_HARD) {
->         S390CPU *cpu =3D S390_CPU(cs);
->         CPUS390XState *env =3D &cpu->env;
->
->         if (env->ex_value) {
->             /* Execution of the target insn is indivisible from
->                the parent EXECUTE insn.  */
->             return false;
->         }
->         if (s390_cpu_has_int(cpu)) {
->             s390_cpu_do_interrupt(cs);
->             return true;
->         }
->         if (env->psw.mask & PSW_MASK_WAIT) {
->             /* Woken up because of a floating interrupt but it has already
->              * been delivered. Go back to sleep. */
->             cpu_interrupt(CPU(cpu), CPU_INTERRUPT_HALT);
->         }
->     }
->     return false;
-> }
->
-> Note the 'if (env->ex_value) { }' check. It looks like this function
-> just returns false in case tcg is executing an EX instruction. After
-> that the information that the TB should be exited because of an
-> interrupt is gone. So the TB's are never exited again, although the
-> interrupt wasn't handled. At least that's my assumption now, if i'm
-> wrong please tell me.
+W dniu 24.06.2022 o 14:05, Manikanta Guntupalli pisze:
+[...]
+> +static void xiic_std_fill_tx_fifo(struct xiic_i2c *i2c)
+> +{
+> +	u8 fifo_space = xiic_tx_fifo_space(i2c);
+> +	u16 data = 0;
+> +	int len = xiic_tx_space(i2c);
+> +
+> +	dev_dbg(i2c->adap.dev.parent, "%s entry, len: %d, fifo space: %d\n",
+> +		__func__, len, fifo_space);
+> +
+> +	if (len > fifo_space)
+> +		len = fifo_space;
+> +	else if (len && !(i2c->repeated_start))
+> +		len--;
+> +
+> +	while (len--) {
+> +		data = i2c->tx_msg->buf[i2c->tx_pos++];
+> +		xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET, data);
+> +	}
+> +}
+This function looks very similar to the original xiic_fill_tx_fifo. The
+only difference is that it does not decrease the len in case of
+repeated_start (btw, why?), and it does not set the DYN_STOP bit. But
+this could be done conditionally based on i2c->dynamic, instead. No need
+for this duplication, in my opinion.
+[...]
+> @@ -579,31 +681,99 @@ static int xiic_busy(struct xiic_i2c *i2c)
+>   static void xiic_start_recv(struct xiic_i2c *i2c)
+>   {
+>   	u16 rx_watermark;
+> +	u8 cr = 0, rfd_set = 0;
+>   	struct i2c_msg *msg = i2c->rx_msg = i2c->tx_msg;
+> +	unsigned long flags;
+>   
+> -	/* Clear and enable Rx full interrupt. */
+> -	xiic_irq_clr_en(i2c, XIIC_INTR_RX_FULL_MASK | XIIC_INTR_TX_ERROR_MASK);
+> +	dev_dbg(i2c->adap.dev.parent, "%s entry, ISR: 0x%x, CR: 0x%x\n",
+> +		__func__, xiic_getreg32(i2c, XIIC_IISR_OFFSET),
+> +		xiic_getreg8(i2c, XIIC_CR_REG_OFFSET));
+>   
+> -	/* we want to get all but last byte, because the TX_ERROR IRQ is used
+> -	 * to inidicate error ACK on the address, and negative ack on the last
+> -	 * received byte, so to not mix them receive all but last.
+> -	 * In the case where there is only one byte to receive
+> -	 * we can check if ERROR and RX full is set at the same time
+> -	 */
+> -	rx_watermark = msg->len;
+> -	if (rx_watermark > IIC_RX_FIFO_DEPTH)
+> -		rx_watermark = IIC_RX_FIFO_DEPTH;
+> -	xiic_setreg8(i2c, XIIC_RFD_REG_OFFSET, (u8)(rx_watermark - 1));
 
-Looking at the code i see CF_NOIRQ to prevent TB's from getting
-interrupted. But i only see that used in the core tcg code. Would
-that be a possibility, or is there something else/better?
+Do we really want to write 255 to RFD if msg->len == 0? That will set
+the compare value in the RX_FIFO_PIRQ register to max value (15) but I
+don't understand why we would like to do this.
+Also, bits 31:4 are reserved so I think we should not try to touch them.
 
-Sorry for the dumb questions, i'm not often working on qemu ;-)
+> +	/* Disable Tx interrupts */
+> +	xiic_irq_dis(i2c, XIIC_INTR_TX_HALF_MASK | XIIC_INTR_TX_EMPTY_MASK);
+>   
+> -	if (!(msg->flags & I2C_M_NOSTART))
+> -		/* write the address */
+> -		xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET,
+> -			i2c_8bit_addr_from_msg(msg) | XIIC_TX_DYN_START_MASK);
+>   
+> -	xiic_irq_clr_en(i2c, XIIC_INTR_BNB_MASK);
+> +	if (i2c->dynamic) {
+> +		u8 bytes;
+> +		u16 val;
+>   
+> -	xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET,
+> -		msg->len | ((i2c->nmsgs == 1) ? XIIC_TX_DYN_STOP_MASK : 0));
+> +		/* Clear and enable Rx full interrupt. */
+> +		xiic_irq_clr_en(i2c, XIIC_INTR_RX_FULL_MASK |
+> +				XIIC_INTR_TX_ERROR_MASK);
+> +
+> +		/*
+> +		 * We want to get all but last byte, because the TX_ERROR IRQ
+> +		 * is used to indicate error ACK on the address, and
+> +		 * negative ack on the last received byte, so to not mix
+> +		 * them receive all but last.
+> +		 * In the case where there is only one byte to receive
+> +		 * we can check if ERROR and RX full is set at the same time
+> +		 */
+> +		rx_watermark = msg->len;
+> +		bytes = min_t(u8, rx_watermark, IIC_RX_FIFO_DEPTH);
+> +		bytes--;
+Again, do we really want to write 255 to RFD if msg->len == 0?
+
+> +
+> +		xiic_setreg8(i2c, XIIC_RFD_REG_OFFSET, bytes);
+> +
+> +		local_irq_save(flags);
+> +		if (!(msg->flags & I2C_M_NOSTART))
+> +			/* write the address */
+> +			xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET,
+> +				      i2c_8bit_addr_from_msg(msg) |
+> +				      XIIC_TX_DYN_START_MASK);
+When reviewing this patch, I tried to understand how the controller
+knows if it should work in dynamic or in stanard mode. My understanding
+is that in order to start the dynamic mode logic, we have to set the
+DYN_START bit in the TX FIFO when we write an address there. Is this
+correct? But we don't do that if I2C_M_NOSTART flag is set so how is
+this supposed to work with this flag? I mean, does the controller really
+supports doing I2C_M_NOSTART in dynamic mode?
+
+Or does it support it at all? After all, when we skip this, we will
+still write to the TX_FIFO register 5 lines below. How is the controller
+supposed to know that the len that we write there is *not* actually an
+address?
+
+That being said, we do not annouce the I2C_FUNC_NOSTART support so maybe
+we should not care at all and just remove the code handling the
+I2C_M_NOSTART flag?
+> +
+> +		xiic_irq_clr_en(i2c, XIIC_INTR_BNB_MASK);
+> +
+> +		/* If last message, include dynamic stop bit with length */
+> +		val = (i2c->nmsgs == 1) ? XIIC_TX_DYN_STOP_MASK : 0;
+> +		val |= msg->len;
+> +
+> +		xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET, val);
+> +		local_irq_restore(flags);
+> +	} else {
+> +		cr = xiic_getreg8(i2c, XIIC_CR_REG_OFFSET);
+> +
+> +		/* Set Receive fifo depth */
+> +		rx_watermark = msg->len;
+> +		if (rx_watermark > IIC_RX_FIFO_DEPTH) {
+> +			rfd_set = IIC_RX_FIFO_DEPTH - 1;
+> +		} else if ((rx_watermark == 1) || (rx_watermark == 0)) {
+> +			rfd_set = rx_watermark - 1;
+Again, do we really want to write 255 to RFD if msg->len == 0?
+[...]
+
+Krzysztof

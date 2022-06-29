@@ -2,91 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD24F560C42
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 00:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C89D6560C46
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 00:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiF2W0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 18:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
+        id S230072AbiF2W1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 18:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiF2W0r (ORCPT
+        with ESMTP id S229966AbiF2W1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 18:26:47 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1443916D
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 15:26:46 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id r81-20020a1c4454000000b003a0297a61ddso491007wma.2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 15:26:46 -0700 (PDT)
+        Wed, 29 Jun 2022 18:27:45 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907DA393FD
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 15:27:44 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id p8so23560416oip.8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 15:27:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=84p0yb2pKb0/mlqhXXfPPXMLX3/ZN9/6y/XnIJNI1Kk=;
-        b=WL71/59quyzcZwTzbjYVhH5ZnVQDEcpcw7ItbNXzShOn/THC8wO8YUbOkC7/+RvKqd
-         zMa5eIP2AL9aRJ3CusxegyqJsSWM3Fiozd6GhJ+TIVqrZ1/KgTOr40oXmXWk5S//q3F5
-         SPD7nYA6UFrb21/NRTIo2qzZLFKxMzObtdh+i0yZFtLfL+6sEyr1lUg8oO/v3A7I9R1z
-         C4cJw/pN62tDh0RAGG8ffrNbX3Cj65jivvw1FmR4fnNJLQ9bWT5XdC6Pu41X7gchdIHm
-         i3dyaRwk7+WAbRd9JFWNp5aBUIVaYeNhepc5GmF6MHnFvMVhnoStcXWLumeijLd1FCVQ
-         8Thg==
+        bh=Ng/t2d/qzqjg5f87HKrQVLd4Y/9sxNRY/C0EI7Ml8dE=;
+        b=kSMy4+POZIfLq5+w6YmxCyMWnCS8C3Mt4MMhjMqXwrv6YoCSvS9D9M6EsnnlTHCwXg
+         WpsB41G0aP+1mpcUBlsDVrbw0fMWz+Vtv8sCHqkTZ3nUw6/Tb5t4Gi5e1gW78IZ4Srnx
+         ij6ANEQxs4JzTjmGk4DxHQT9H0Rvj6s2Mqdko6vWujTIAKTQdPRLzMzZ0e5nzWbUh7WR
+         0U6TOmvZn+NjpRywnZJDvXZFho+7h2SMTxdAaOQSr1Z9ks/zHrjiL2Q4Ay9eSWaNP70X
+         aUxCx9k7jjB64wr8LruCIUlU+dtv2EzVtu/C6stflSzpyD109LwXnG/PUKFkv0TqFD+R
+         hPrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=84p0yb2pKb0/mlqhXXfPPXMLX3/ZN9/6y/XnIJNI1Kk=;
-        b=cWqFPQLvManHs3ETykmPhqIuWnPmIvD44aAU/GADGxCHgb+xVyqN9hHf/gidA5vL4y
-         1GHs6yiba+eVtWOA7yCd1j/6kUaxattOVJ1ui7sdQAenb0rT6DKMS1GwOBcao6GroA/y
-         1+ATCWlVjHBpsn3nhAc5o9OrdeBmdzi66ZsffwWi3RUeVRh+pybVlkw+vVHpD9C3MVe4
-         AYtMkpoUoJtWy+D4s5J3T2DS/N6zYpv1z3F0spRM7iduzjWy6Dp7w33DiHA8EE31WcP/
-         mnvSSeuCxlCLU5j64CEXdheHteGcSep+ZoVYRjhHizRBqouZbg2krqNKUx18GdoMz9qc
-         U40w==
-X-Gm-Message-State: AJIora/YgAxnV4hB9zwzvwSKsDiIH0RB+f5Eycr+QUJ4Wz7K3nMSl+eH
-        un3hfi45lj2uFsc8coetEra4UTRcKl56vWYLe1pu8Q==
-X-Google-Smtp-Source: AGRyM1saKg+ielDtcLXxEB9pzGSzqFetxgZ4MJ0R9lsQ+QWXrQFJ1PPbu1xcp3shfOz8BNqDcnkw910kPR5ed0tYdAs=
-X-Received: by 2002:a05:600c:4081:b0:3a0:47c4:8dd0 with SMTP id
- k1-20020a05600c408100b003a047c48dd0mr5951181wmh.178.1656541604449; Wed, 29
- Jun 2022 15:26:44 -0700 (PDT)
+        bh=Ng/t2d/qzqjg5f87HKrQVLd4Y/9sxNRY/C0EI7Ml8dE=;
+        b=1U2FgDHdAPx8h3PbNwPMsWq1hixYXd59nQsGiqT6KyU2vtsf/DiPM31hvjO4aRNi9V
+         Fl1cy21nmZlox0uRFRacRIEFBke0utTlkRS0xc+UpRZMZVoSew23nj+O+g2xeTaQsnzU
+         98EXoAyXE0oYeVJcxkWzNIL/TMC7QskeSrcV64yYuHC15SaNeaa/FfDWRXE6RmE1FuQf
+         QJXSYqeiRgpX73JYA04d34JkVt6xCc7pEh0MqTYQXWemr0lmwptU8CrivP8SFcBKFQIv
+         WPQ+FiiXcXrHe6zgykIiHNm9shksB8mJBhxqckA+/sIDeHbV03w1C4J7jp4sZNdFP4M5
+         iSdQ==
+X-Gm-Message-State: AJIora+hyPj4KM9z/VSncQCrlfxxuhs3nriw/SOa7tCjQQ2rmaFb/jcP
+        RavdK1yEYY+kXCUx2uAFEcAmEpmJe6wawETduKgLsw==
+X-Google-Smtp-Source: AGRyM1sl8Uu5Y6pb7Dl4WPAxpFaszRjgSF59h8aOJ+5i3RM3dFYPgMIvv9fll/+t/oLDS23mv6D/L9U8smAMfkgSZ8Q=
+X-Received: by 2002:a05:6808:2124:b0:335:7483:f62d with SMTP id
+ r36-20020a056808212400b003357483f62dmr4581673oiw.112.1656541663655; Wed, 29
+ Jun 2022 15:27:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220629150102.1582425-2-hch@lst.de> <Yrx5Lt7jrk5BiHXx@zx2c4.com>
- <20220629161020.GA24891@lst.de> <Yrx6EVHtroXeEZGp@zx2c4.com>
- <20220629161527.GA24978@lst.de> <Yrx8/Fyx15CTi2zq@zx2c4.com>
- <20220629163007.GA25279@lst.de> <Yrx/8UOY+J8Ao3Bd@zx2c4.com>
- <YryNQvWGVwCjJYmB@zx2c4.com> <Yryic4YG9X2/DJiX@google.com> <Yry6XvOGge2xKx/n@zx2c4.com>
-In-Reply-To: <Yry6XvOGge2xKx/n@zx2c4.com>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Wed, 29 Jun 2022 15:26:33 -0700
-Message-ID: <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
-Subject: Re: [PATCH] remove CONFIG_ANDROID
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, rcu <rcu@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, sultan@kerneltoast.com,
-        android-kernel-team <android-kernel-team@google.com>,
-        John Stultz <jstultz@google.com>,
-        Saravana Kannan <saravanak@google.com>
+References: <20220627160440.31857-1-vkuznets@redhat.com> <CALMp9eQL2a+mStk-cLwVX6NVqwAso2UYxAO7UD=Xi2TSGwUM2A@mail.gmail.com>
+ <87y1xgubot.fsf@redhat.com> <CALMp9eSBLcvuNDquvSfUnaF3S3f4ZkzqDRSsz-v93ZeX=xnssg@mail.gmail.com>
+ <87letgu68x.fsf@redhat.com> <CALMp9eQ35g8GpwObYBJRxjuxZAC8P_HNMMaC0v0uZeC+pMeW_Q@mail.gmail.com>
+ <87czeru9cp.fsf@redhat.com>
+In-Reply-To: <87czeru9cp.fsf@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 29 Jun 2022 15:27:32 -0700
+Message-ID: <CALMp9eQ5Sqv3RP8kipSbpfnvef_Sc1xr1+g53fwr0a=bhzgAhg@mail.gmail.com>
+Subject: Re: [PATCH 00/14] KVM: nVMX: Use vmcs_config for setting up nested
+ VMX MSRs
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -99,52 +75,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 1:47 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> Hi Kalesh,
->
-> On Wed, Jun 29, 2022 at 12:05:23PM -0700, Kalesh Singh wrote:
-> > Thanks for raising this.
-> >
-> > Android no longer uses PM_AUTOSLEEP, is correct. libsuspend is
-> > also now deprecated. Android autosuspend is initiatiated from the
-> > userspace system suspend service [1].
-> >
-> > A runtime config sounds more reasonable since in the !PM_AUTOSLEEP
-> > case, it is userspace which decides the suspend policy.
-> >
-> > [1] https://cs.android.com/android/platform/superproject/+/bf3906ecb33c98ff8edd96c852b884dbccb73295:system/hardware/interfaces/suspend/1.0/default/SystemSuspend.cpp;l=265
->
-> Bingo, thanks for the pointer. So looking at this, I'm trying to tease
-> out some heuristic that wouldn't require any changes, but I don't really
-> see anything _too_ perfect. One fragment of an idea would be that the
-> kernel treats things in autosuspending mode if anybody is holding open a
-> fd to /sys/power/state. But I worry this would interact with
-> non-autosuspending userspaces that also hold open the file. So barring
-> that, I'm not quite sure.
->
-> If you also can't think of something, maybe we should talk about adding
-> something that requires code changes. In that line of thinking, how
-> would you feel about opening /sys/power/userspace_autosuspender and
-> keeping that fd open. Then the kernel API would have
-> `bool pm_has_userspace_autosuspender(void)` that code could check.
-> Alternatively, if you don't want refcounting fd semantics for that, just
-> writing a "1" into a similar file seems fine?
->
-> Any strong opinions about it? Personally it doesn't make much of a
-> difference to me. The important thing is just that it'd be something
-> you're willing to implement in that SystemSuspend.cpp file.
+On Wed, Jun 29, 2022 at 2:06 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
 
-Hi Jason,
-
-Thanks for taking a look. I'm concerned holding the sys/power/state
-open would have unintentional side effects. Adding the
-/sys/power/userspace_autosuspender seems more appropriate. We don't
-have a use case for the refcounting, so would prefer the simpler
-writing '0' / '1' to toggle semantics.
-
-Thanks,
-Kalesh
-
->
-> Jason
+> For PERF_GLOBAL_CTRL errata:
+> - We can move the filtering to vmx_vmexit_ctrl()/vmx_vmentry_ctrl()
+> preserving the status quo: KVM doesn't use the feature but it is exposed
+> to L1 hypervisor (and L1 hypervisor presumably has the same check and
+> doesn't use the feature. FWIW, the workaround was added in 2011 and the
+> erratas it references appeared in 2010, this means that the affected
+> CPUs are quite old, modern proprietary hypervisors won't likely boot
+> there).
+Sadly, Nehalem and Westmere are well-supported by KVM today, and we
+will probably still continue to support them for at least another
+decade. They both have EPT, unrestricted guest, and other VT-x2
+features that KVM still considers optional.

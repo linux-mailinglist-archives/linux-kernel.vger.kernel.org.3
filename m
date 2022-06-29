@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C38560BC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 23:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4882E560BD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 23:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbiF2Vf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 17:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
+        id S229748AbiF2Vfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 17:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbiF2VfY (ORCPT
+        with ESMTP id S229945AbiF2VfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 29 Jun 2022 17:35:24 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75623150E;
-        Wed, 29 Jun 2022 14:35:21 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id d2so23428995ejy.1;
-        Wed, 29 Jun 2022 14:35:21 -0700 (PDT)
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D229A3190D;
+        Wed, 29 Jun 2022 14:35:22 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id u12so35107367eja.8;
+        Wed, 29 Jun 2022 14:35:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9hFpT71w8Y8NFBACfpOSVZPBieVKM+1lN0Bhp8Mtmog=;
-        b=H6HWFiB6JDpuRFekKuj3enfoYHoGG3hh2lHBvMgE72/kEkTAXkW7fx9WhrLALCcE7t
-         M1bootZg9eWsWesjH/X6iq+6bQnJMBH+tM8aiTBaHX4qA8k7jyt8ISL/VnJEbnJWYR6Q
-         Wct98avi+zpjZQh4S4YyG+RkVECv/5mR3DIXDt9pkM5mtWXppq2w8rlGXr+Yb6B+qaSA
-         C2GAN+9nm6eKy7g6hJVsZmRmDcSTOBk5//Xp9qkdUM+sdhpjHrfWX/PFNosvuUwP4/is
-         fbMtqXo7VT4sNcbVL/OQuQsACLp+yYjDP7eESDkZ5MmHE+M56LW6RRwGIjeV4XY7tYj2
-         DmyA==
+        bh=A93wKO/uXTQv/8Lh6Y6CctCekOaGpcWQXQjkcifmHes=;
+        b=BK8Xcuk69Pi7Vcppuxoa+Xe5GLLxHngkMGUtbUTjq/tpvoIMfVnBJ3YUS2uHE0dNw3
+         BZEEy4xyp7PVyOvANndESZMvaT+Ki+DBIuljFgYfZRb2DDjfTzUAMFkFUPg2v9x8XorF
+         OHSi7vhRmbPEIRsnsQno9Lr/udNjW9Emk8dK8/Z/rrSycmP/QM0KW3IYRz6cOwTO5AYE
+         jmOHOQ9+FINk73uU/bOTMhn8FG5X4D8NiVMJ0IGxe0dHNT1l7HT/WZR8as5MZ/i5GUW6
+         52tgRhtL7xnZ1gpRRg4T8kGy62ljse0BY9R+UWDUX8ZbOBW+O4rB3A3WpToxDrhiQMjF
+         wh/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9hFpT71w8Y8NFBACfpOSVZPBieVKM+1lN0Bhp8Mtmog=;
-        b=tV/NcBZLE2UhR+ljz8L9VHP0f8tkgk+VGzrzfIeHDrScufl7VzoW23i3CAF7y0RhkF
-         i9nPm+Gx9rwxCyyCzy2tzgSdoNt4C4Nr9eZmJLEk+dBVGCJWrw6vitpPOD2YxVAZKCFt
-         jpKMdEnGfVRml+66YLW33NDpLbymcEx1DA4QD5tHjVfd/rlVOh3zwklvMFpheZOtuTp2
-         RND9FMAJ23SMI9Qs/tNbrAwyVAPXjylC7Vtgwr+Whqb8UGdG8+xvG2+XFsb9dL2I98YQ
-         RzIF7Xy1qSek5GvaxlNIGW1tAUb+hxNr6u7UQEPl0aujucLmBHbM8ia5JVFxCCljpBWV
-         Pu2g==
-X-Gm-Message-State: AJIora/ycFgZkXNYrTXVIQSdroMp2+emnH5Z4YbreHNIGsaKtex6H1he
-        wLW41iJCoer7eRtCwXewoec=
-X-Google-Smtp-Source: AGRyM1vmY4F3HF0zBUzjk7LEOZNPMtqy4zokl2BXrJnajDCerr9z5yokRpXpa+saTTZkiVB7rnBxoA==
-X-Received: by 2002:a17:907:7f90:b0:726:e8ed:3c28 with SMTP id qk16-20020a1709077f9000b00726e8ed3c28mr5521372ejc.63.1656538520504;
-        Wed, 29 Jun 2022 14:35:20 -0700 (PDT)
+        bh=A93wKO/uXTQv/8Lh6Y6CctCekOaGpcWQXQjkcifmHes=;
+        b=jmj49KrWqgD1snUww5vUc+kcoqbbX1knmsZVOt4Jz3oazdex+4/NpWMt+kDq+KhVwD
+         8Cr/LILa1YRYJbG28LnjJoj7JXDo8SJqNfUdauoL2RRSjwWUVxbSu14sMBGbehyaNt/T
+         wMb+kimARgZGXFhMa1b4qYZZyTcASUa8ZWMqJ+UWSRIHyObMQ3TntzDS3/xVgzVT4709
+         NTjRpGs1p3DjTog3cYknQOvM52LYomnuae+dNOWgjyq/Q7TTPoz2JBFqlavjqusD7J7S
+         B10Whna+lHdt9VAL0Bd2mTJfuo3sbxgF3k0fvTmqrr21YnbHPPPQ/vL80sppNMJ6bibB
+         61qA==
+X-Gm-Message-State: AJIora+OUBER1b3X6W7+pR+vHeDkgcRiwPwuhMXWmR9J1wLpUx4j8pog
+        U5JgAY2FBJyG/i8GtD42zAA=
+X-Google-Smtp-Source: AGRyM1tBntq0h6DliMrGtytOQadSYCkcjalAx1tGOtnkw69zz1fNwRpCsF5zmzmJHIhNklr2sSXAaA==
+X-Received: by 2002:a17:907:868c:b0:722:bc0b:500e with SMTP id qa12-20020a170907868c00b00722bc0b500emr5671151ejc.703.1656538521359;
+        Wed, 29 Jun 2022 14:35:21 -0700 (PDT)
 Received: from localhost.localdomain (dynamic-077-007-003-132.77.7.pool.telefonica.de. [77.7.3.132])
-        by smtp.googlemail.com with ESMTPSA id s7-20020a1709066c8700b0070c4abe4706sm8237889ejr.158.2022.06.29.14.35.19
+        by smtp.googlemail.com with ESMTPSA id s7-20020a1709066c8700b0070c4abe4706sm8237889ejr.158.2022.06.29.14.35.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 29 Jun 2022 14:35:20 -0700 (PDT)
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
@@ -54,9 +54,9 @@ Cc:     linux-kernel@vger.kernel.org, tlanger@maxlinear.com,
         rtanwar@maxlinear.com, miquel.raynal@bootlin.com, richard@nod.at,
         vigneshr@ti.com,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v2 1/8] dt-bindings: mtd: intel: lgm-nand: Fix compatible string
-Date:   Wed, 29 Jun 2022 23:35:01 +0200
-Message-Id: <20220629213508.1989600-2-martin.blumenstingl@googlemail.com>
+Subject: [PATCH v2 2/8] dt-bindings: mtd: intel: lgm-nand: Fix maximum chip select value
+Date:   Wed, 29 Jun 2022 23:35:02 +0200
+Message-Id: <20220629213508.1989600-3-martin.blumenstingl@googlemail.com>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220629213508.1989600-1-martin.blumenstingl@googlemail.com>
 References: <20220629213508.1989600-1-martin.blumenstingl@googlemail.com>
@@ -72,38 +72,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver which was added at the same time as the dt-bindings uses the
-compatible string "intel,lgm-ebunand". Use the same compatible string
-also in the dt-bindings.
+The Intel LGM NAND IP only supports two chip selects: There's only two
+CS and ADDR_SEL register sets. Fix the maximum allowed chip select value
+according to the dt-bindings.
 
 Fixes: 2f9cea8eae44f5 ("dt-bindings: mtd: Add Nand Flash Controller support for Intel LGM SoC")
 Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 ---
- Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
-index 30e0c66ab0eb..c45dd87fb5fd 100644
+index c45dd87fb5fd..af99b8f7c681 100644
 --- a/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
 +++ b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
-@@ -14,7 +14,7 @@ maintainers:
+@@ -51,7 +51,7 @@ patternProperties:
+     properties:
+       reg:
+         minimum: 0
+-        maximum: 7
++        maximum: 1
  
- properties:
-   compatible:
--    const: intel,lgm-nand
-+    const: intel,lgm-ebunand
+       nand-ecc-mode: true
  
-   reg:
-     maxItems: 6
-@@ -75,7 +75,7 @@ additionalProperties: false
- examples:
-   - |
-     nand-controller@e0f00000 {
--      compatible = "intel,lgm-nand";
-+      compatible = "intel,lgm-ebunand";
-       reg = <0xe0f00000 0x100>,
-             <0xe1000000 0x300>,
-             <0xe1400000 0x8000>,
 -- 
 2.37.0
 

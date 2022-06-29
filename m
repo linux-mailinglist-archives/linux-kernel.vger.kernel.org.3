@@ -2,145 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B47560C10
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 00:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 279B4560C1D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 00:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbiF2WBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 18:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
+        id S229699AbiF2WNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 18:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiF2WBT (ORCPT
+        with ESMTP id S229480AbiF2WNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 18:01:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F7E33349;
-        Wed, 29 Jun 2022 15:01:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7B796154F;
-        Wed, 29 Jun 2022 22:01:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD3CEC34114;
-        Wed, 29 Jun 2022 22:01:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656540077;
-        bh=mFbXz9vYObUL4T0NtvzA2Dv8lJdjYdzhwt+Di4Q9MlQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WSO5Hk87h6w+ubdc0VUZqD+oahL9CAWlLFFxJfjh+vUorOZuUVuItoIGHLt6AwKax
-         H0v+mD0V+A+e45u5r2lMGn805cKGE/OO1uN8XODokYjGO3XY1HrEbfZJf/oI3TIMjS
-         N/YHRdsz7cGEQZrDgrw+GfO2vb4qOfMkjrl/oLK2QXAYHCBbh+TmVIFAtPxx6AShyN
-         0yr5Hul6/mC1RQvAMScA9hoE1CAG201AmU5g92R+ogSETXOdtXrEmpQFS0bdGryqkg
-         yv/YxowpRK7ordXlYpB7pp+SOLTwkUX6zGHeEjzwgjzw+jVFPStAKH2yW9ISjdwDnb
-         ywagcVVaYgEcg==
-Date:   Thu, 30 Jun 2022 00:01:14 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, paulmck@kernel.org, rostedt@goodmis.org,
-        vineeth@bitbyteword.org
-Subject: Re: [PATCH v2 1/8] rcu: Introduce call_rcu_lazy() API implementation
-Message-ID: <20220629220114.GA2127569@lothringen>
-References: <20220622225102.2112026-1-joel@joelfernandes.org>
- <20220622225102.2112026-3-joel@joelfernandes.org>
- <20220629115349.GA2119930@lothringen>
- <Yry2PAc0KtkYW24A@google.com>
+        Wed, 29 Jun 2022 18:13:08 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFB6FE7;
+        Wed, 29 Jun 2022 15:13:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656540787; x=1688076787;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VilICLeXUNd8OwmOBx6vGqhpkzlcDny7Upfx8BWGH5A=;
+  b=A/phtUOlP0YocoudIZI1vIpniAVPDIwCqvDrTAHb5shAtZb2ZJI7ato9
+   yHJrKTwy/pFuc0KrBzhl9qRvH4SlCmlOF9/vN3lZV5gZtogpo++MijSKC
+   jNvxNzqyy5eY9AXPtv2oR41Dt7zz3DyC33DqQUuZUzZTyLdcxs6Yny2KQ
+   h4cCGX8sY5rpv6p5FBAPkIELvOiWcSJqHKPcLNCMKLScDRL6sFBSoR11Q
+   4IQVCFqJMGJABmz3giwbZzi0/kBNnBnOzZtGOG125t7z8wny8AzZMJRrF
+   5SzZVsoj9WcwdE3I00pZfKGC+0pdUdho+Kh7ZjYqt4Xig+HWbxn0jrI3N
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="262578990"
+X-IronPort-AV: E=Sophos;i="5.92,232,1650956400"; 
+   d="scan'208";a="262578990"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 15:13:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,232,1650956400"; 
+   d="scan'208";a="658734736"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP; 29 Jun 2022 15:13:07 -0700
+Received: from MeteorLakePO1.jf.intel.com (MeteorLakePO1.jf.intel.com [10.234.180.58])
+        by linux.intel.com (Postfix) with ESMTP id 15771580B55;
+        Wed, 29 Jun 2022 15:13:07 -0700 (PDT)
+From:   Gayatri Kammela <gayatri.kammela@linux.intel.com>
+To:     hdegoede@redhat.com
+Cc:     markgross@kernel.org, david.e.box@linux.intel.com,
+        srinivas.pandruvada@intel.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Gayatri Kammela <gayatri.kammela@linux.intel.com>
+Subject: [PATCH v1 0/4] Add Raptor Lake and PCI error recovery support
+Date:   Wed, 29 Jun 2022 15:13:30 -0700
+Message-Id: <20220629221334.434307-1-gayatri.kammela@linux.intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yry2PAc0KtkYW24A@google.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 08:29:48PM +0000, Joel Fernandes wrote:
-> On Wed, Jun 29, 2022 at 01:53:49PM +0200, Frederic Weisbecker wrote:
-> > On Wed, Jun 22, 2022 at 10:50:55PM +0000, Joel Fernandes (Google) wrote:
-> > > @@ -414,30 +427,37 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
-> > >  	}
-> > >  	WRITE_ONCE(rdp->nocb_nobypass_count, c);
-> > >  
-> > > -	// If there hasn't yet been all that many ->cblist enqueues
-> > > -	// this jiffy, tell the caller to enqueue onto ->cblist.  But flush
-> > > -	// ->nocb_bypass first.
-> > > -	if (rdp->nocb_nobypass_count < nocb_nobypass_lim_per_jiffy) {
-> > > +	// If caller passed a non-lazy CB and there hasn't yet been all that
-> > > +	// many ->cblist enqueues this jiffy, tell the caller to enqueue it
-> > > +	// onto ->cblist.  But flush ->nocb_bypass first. Also do so, if total
-> > > +	// number of CBs (lazy + non-lazy) grows too much.
-> > > +	//
-> > > +	// Note that if the bypass list has lazy CBs, and the main list is
-> > > +	// empty, and rhp happens to be non-lazy, then we end up flushing all
-> > > +	// the lazy CBs to the main list as well. That's the right thing to do,
-> > > +	// since we are kick-starting RCU GP processing anyway for the non-lazy
-> > > +	// one, we can just reuse that GP for the already queued-up lazy ones.
-> > > +	if ((rdp->nocb_nobypass_count < nocb_nobypass_lim_per_jiffy && !lazy) ||
-> > > +	    (lazy && n_lazy_cbs >= qhimark)) {
-> > >  		rcu_nocb_lock(rdp);
-> > >  		*was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
-> > >  		if (*was_alldone)
-> > >  			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
-> > > -					    TPS("FirstQ"));
-> > > -		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j));
-> > > +					    lazy ? TPS("FirstLazyQ") : TPS("FirstQ"));
-> > > +		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j, false));
-> > 
-> > That's outside the scope of this patchset but this makes me realize we
-> > unconditionally try to flush the bypass from call_rcu() fastpath, and
-> > therefore we unconditionally lock the bypass lock from call_rcu() fastpath.
-> > 
-> > It shouldn't be contended at this stage since we are holding the nocb_lock
-> > already, and only the local CPU can hold the nocb_bypass_lock without holding
-> > the nocb_lock. But still...
-> > 
-> > It looks safe to locklessly early check if (rcu_cblist_n_cbs(&rdp->nocb_bypass))
-> > before doing anything. Only the local CPU can enqueue to the bypass list.
-> > 
-> > Adding that to my TODO list...
-> > 
-> 
-> I am afraid I did not understand your comment. The bypass list lock is held
-> once we have decided to use the bypass list to queue something on to it.
-> 
-> The bypass flushing is also conditional on either the bypass cblist growing
-> too big or a jiffie elapsing since the first bypass queue.
-> 
-> So in both cases, acquiring the lock is conditional. What do you mean it is
-> unconditionally acquiring the bypass lock? Where?
+Hi,
 
-Just to make sure we are talking about the same thing, I'm referring to this
-path:
+This patch set adds Raptor Lake support as well as PCI error recovery
+support to PMT driver. It also has a rework patch and a fix for fixed
+region handling.
 
-	// If there hasn't yet been all that many ->cblist enqueues
-	// this jiffy, tell the caller to enqueue onto ->cblist.  But flush
-	// ->nocb_bypass first.
-	if (rdp->nocb_nobypass_count < nocb_nobypass_lim_per_jiffy) {
-		rcu_nocb_lock(rdp);
-		*was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
-		if (*was_alldone)
-			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
-					    TPS("FirstQ"));
-		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j));
-		WARN_ON_ONCE(rcu_cblist_n_cbs(&rdp->nocb_bypass));
-		return false; // Caller must enqueue the callback.
-	}
+Patch 1: Rework early hardware code
+Patch 2: Add support for Raptor Lake
+Patch 3: Fix fixed region handling
+Patch 4: Add PCI error recovery support to Intel PMT
 
-This is called whenever we decide not to queue to the bypass list because
-there is no flooding detected (rdp->nocb_nobypass_count hasn't reached
-nocb_nobypass_lim_per_jiffy for the current jiffy). I call this the fast path
-because this is what I would except in a normal load, as opposed to callbacks
-flooding.
+David E. Box (3):
+  platform/x86/intel/vsec: Rework early hardware code
+  platform/x86/intel/vsec: Add support for Raptor Lake
+  platform/x86/intel/pmt: telemetry: Fix fixed region handling
 
-And in this fastpath, the above rcu_nocb_flush_bypass() is unconditional.
+Gayatri Kammela (1):
+  platform/x86/intel/vsec: Add PCI error recovery support to Intel PMT
 
-> 
-> Thanks!
-> 
->  - Joel
-> 
+ drivers/platform/x86/intel/pmt/class.c     |  23 ++--
+ drivers/platform/x86/intel/pmt/telemetry.c |  18 ++-
+ drivers/platform/x86/intel/vsec.c          | 130 ++++++++++++++++-----
+ drivers/platform/x86/intel/vsec.h          |  11 +-
+ 4 files changed, 136 insertions(+), 46 deletions(-)
+
+
+base-commit: 03c765b0e3b4cb5063276b086c76f7a612856a9a
+-- 
+2.32.0

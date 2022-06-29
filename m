@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A5455FE28
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37AB555FE2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232476AbiF2LDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 07:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
+        id S232512AbiF2LDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 07:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232291AbiF2LDL (ORCPT
+        with ESMTP id S232870AbiF2LDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 07:03:11 -0400
+        Wed, 29 Jun 2022 07:03:12 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7570B4B7;
-        Wed, 29 Jun 2022 04:03:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8335BDEC1;
+        Wed, 29 Jun 2022 04:03:11 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4C4B96601923;
-        Wed, 29 Jun 2022 12:03:07 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E3103660191F;
+        Wed, 29 Jun 2022 12:03:08 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656500588;
-        bh=ed21MxQBys0eLKmWDwmejvGmdOdkFhFLW6SX1N40rec=;
+        s=mail; t=1656500590;
+        bh=BT65OyDGjZHfnPJN6pPcSg+obOGNKdBaP5fa9KY0GAg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hx+R+MEclKNptcvjZDcbfHpxukCIN652mulj8wN5bljGknIYFULKgWAOHkIC6A6DH
-         S6cRww2IvjLi0VPciN+RNQpyh0hDFzpEE3QHXe/Vn00A59HwEQiEeqEkBwPrMl+aRB
-         ezU4p0NbobrhPXnJZRKtg5dJmktoNMsLZc/vc8TAhLMQim6dgHF4CzyKH7dC/BvO0t
-         diVnmMirOJDyB8myLvPzOEMuUS/2dB5s7ExotSJZ2pIjxYgwl920L3MWBQdfJKUFlp
-         lLFDL+K6yd3JaWNU966B7ssokOd136prHOs+0G/9L0wdrmkD1aTNlFZwn9GuDHIXD8
-         I1fqYVk/ddQnQ==
+        b=fdXzzpMNrGYcp4s7UMUZDU7RfOAhPPS2QmGA8m/J85/xVrjVVTgDOaL/mfSvc2WwD
+         RVNi3FRfg4OAjvo8fwW3G6scVa5NWRdAiSvpj0C9hB03wXAjJWg8E7Vqiygd6nx1Uf
+         yRtj/5JvOFzNk4uUCKV6n0AibvRcHdllz4Z8gEWcL4TIyeGDF9Ht13hSG5B/TpTQ0M
+         F8qJl5/ORQImLa98drau+tIsrFGs/bvQEiMyLpLKP5l6MDxIsxVpDqedirJ4f2gBo/
+         LvQD73/ueb0kssKR1f8n0GCC94Gr5bWYvkZQ/arBXLvsRrIS5az5MS9wR/tNE8K1zB
+         ZneKGKavUHACg==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     robh+dt@kernel.org
@@ -50,9 +50,9 @@ Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
         martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
         phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
         kernel@collabora.com
-Subject: [PATCH v5 5/7] clk: mediatek: clk-apmixed: Remove unneeded __init annotation
-Date:   Wed, 29 Jun 2022 13:02:52 +0200
-Message-Id: <20220629110254.184213-6-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v5 6/7] clk: mediatek: Export required symbols to compile clk drivers as module
+Date:   Wed, 29 Jun 2022 13:02:53 +0200
+Message-Id: <20220629110254.184213-7-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220629110254.184213-1-angelogioacchino.delregno@collabora.com>
 References: <20220629110254.184213-1-angelogioacchino.delregno@collabora.com>
@@ -67,29 +67,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove an unneeded __init annotation from the declaration of function
-mtk_clk_register_ref2usb_tx(): this avoids section mismatch warnings
-during modpost phase when called from functions that have no such
-annotation (useful when clocks are platform drivers).
+In order to compile the clock drivers for various MediaTek SoCs as
+modules, it is necessary to export a few functions from the MediaTek
+specific clocks (and reset) libraries.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Miles Chen <miles.chen@mediatek.com>
 ---
- drivers/clk/mediatek/clk-apmixed.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/mediatek/clk-apmixed.c | 1 +
+ drivers/clk/mediatek/clk-cpumux.c  | 2 ++
+ drivers/clk/mediatek/clk-mtk.c     | 2 ++
+ drivers/clk/mediatek/reset.c       | 1 +
+ 4 files changed, 6 insertions(+)
 
 diff --git a/drivers/clk/mediatek/clk-apmixed.c b/drivers/clk/mediatek/clk-apmixed.c
-index fc3d4146f482..6b0ab0a346e8 100644
+index 6b0ab0a346e8..f126da693a7f 100644
 --- a/drivers/clk/mediatek/clk-apmixed.c
 +++ b/drivers/clk/mediatek/clk-apmixed.c
-@@ -70,7 +70,7 @@ static const struct clk_ops mtk_ref2usb_tx_ops = {
- 	.unprepare	= mtk_ref2usb_tx_unprepare,
- };
+@@ -98,5 +98,6 @@ struct clk_hw *mtk_clk_register_ref2usb_tx(const char *name,
  
--struct clk_hw * __init mtk_clk_register_ref2usb_tx(const char *name,
-+struct clk_hw *mtk_clk_register_ref2usb_tx(const char *name,
- 			const char *parent_name, void __iomem *reg)
+ 	return &tx->hw;
+ }
++EXPORT_SYMBOL_GPL(mtk_clk_register_ref2usb_tx);
+ 
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/clk/mediatek/clk-cpumux.c b/drivers/clk/mediatek/clk-cpumux.c
+index 2b5d48591738..25618eff6f2a 100644
+--- a/drivers/clk/mediatek/clk-cpumux.c
++++ b/drivers/clk/mediatek/clk-cpumux.c
+@@ -150,6 +150,7 @@ int mtk_clk_register_cpumuxes(struct device_node *node,
+ 
+ 	return PTR_ERR(hw);
+ }
++EXPORT_SYMBOL_GPL(mtk_clk_register_cpumuxes);
+ 
+ void mtk_clk_unregister_cpumuxes(const struct mtk_composite *clks, int num,
+ 				 struct clk_hw_onecell_data *clk_data)
+@@ -166,5 +167,6 @@ void mtk_clk_unregister_cpumuxes(const struct mtk_composite *clks, int num,
+ 		clk_data->hws[mux->id] = ERR_PTR(-ENOENT);
+ 	}
+ }
++EXPORT_SYMBOL_GPL(mtk_clk_unregister_cpumuxes);
+ 
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/clk/mediatek/clk-mtk.c b/drivers/clk/mediatek/clk-mtk.c
+index 05a188c62119..41e60a7e8ff9 100644
+--- a/drivers/clk/mediatek/clk-mtk.c
++++ b/drivers/clk/mediatek/clk-mtk.c
+@@ -459,6 +459,7 @@ int mtk_clk_simple_probe(struct platform_device *pdev)
+ 	mtk_free_clk_data(clk_data);
+ 	return r;
+ }
++EXPORT_SYMBOL_GPL(mtk_clk_simple_probe);
+ 
+ int mtk_clk_simple_remove(struct platform_device *pdev)
  {
- 	struct mtk_ref2usb_tx *tx;
+@@ -472,5 +473,6 @@ int mtk_clk_simple_remove(struct platform_device *pdev)
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(mtk_clk_simple_remove);
+ 
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/clk/mediatek/reset.c b/drivers/clk/mediatek/reset.c
+index 179505549a7c..290ceda84ce4 100644
+--- a/drivers/clk/mediatek/reset.c
++++ b/drivers/clk/mediatek/reset.c
+@@ -228,5 +228,6 @@ int mtk_register_reset_controller_with_dev(struct device *dev,
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(mtk_register_reset_controller_with_dev);
+ 
+ MODULE_LICENSE("GPL");
 -- 
 2.35.1
 

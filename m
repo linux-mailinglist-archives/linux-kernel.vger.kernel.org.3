@@ -2,49 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E805560952
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA90C56095D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiF2Snb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 14:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
+        id S230449AbiF2Som (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 14:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiF2Sna (ORCPT
+        with ESMTP id S230323AbiF2Soj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 14:43:30 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AC11248D4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:43:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 492F11480;
-        Wed, 29 Jun 2022 11:43:30 -0700 (PDT)
-Received: from bogus (unknown [10.57.39.193])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D24E43F5A1;
-        Wed, 29 Jun 2022 11:43:27 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 19:42:17 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Conor.Dooley@microchip.com
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        atishp@atishpatra.org, atishp@rivosinc.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        wangqing@vivo.com, robh+dt@kernel.org, rafael@kernel.org,
-        ionela.voinescu@arm.com, pierre.gondois@arm.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, gshan@redhat.com,
-        Valentina.FernandezAlanis@microchip.com
-Subject: Re: [PATCH v5 09/19] arch_topology: Use the last level cache
- information from the cacheinfo
-Message-ID: <20220629184217.krzt6l7qadymbj6h@bogus>
-References: <20220627165047.336669-1-sudeep.holla@arm.com>
- <20220627165047.336669-10-sudeep.holla@arm.com>
- <bb124e47-f866-e39e-0f76-dc468ce384c6@microchip.com>
- <3656a067-cc3f-fd5b-e339-5925a856cce1@microchip.com>
+        Wed, 29 Jun 2022 14:44:39 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F1B24BE7
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:44:37 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id o19-20020a05600c4fd300b003a0489f414cso175309wmq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:44:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ujlFidKBYN3+gnt+1Wkvol7kmUwt+TJSsn/V9xvehgY=;
+        b=FOsaCOs4FhntcBVLVzvRAs2gDZxoyx3YHWEOhRh45yswt/+jKUwE/J0wNxaZ37V6Uc
+         zuxSruVBSYWJDtgARcDoe5RocT823Ey0njk5JlleU3d0qYwcgqh6fodDsvAnnvbvV7Rm
+         PY3MlPeU1iH3j3/ZPjhi8DaO/OfWsUbzBea7z+PFQC921e9IBleQBh66fo7u2hKhyarj
+         5uvUGrXTVCRqFYQUTptcKkWgRxYwWQNU4qoXt5ehOXJMh8e1gGppyJaQ2eRKydUR+3Ht
+         l5p4BtxvL9zi+7zSv32N5RRgYtbMdTeb2fbubnUmSY4CPVXLHJ7NbZqjxV/soVbvVz+r
+         yCJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ujlFidKBYN3+gnt+1Wkvol7kmUwt+TJSsn/V9xvehgY=;
+        b=pHUf2qe79eNBT+lPrqFCpk+jLXwfQEuFYElM8AGgA9Eh7o21f+lXZyd1Y//Xjrck7F
+         JgkYJBPLUoBBmcJ+24mQtoqc0aOB6MF0l7C1n+lZ2qn4PrFTbniifSpbv92rlZr7YgjQ
+         itEGwrZ8EaF4Ip6YFLsmmHIgqx8BDKBnuUPC84zHiKdufwiI+5oqmkd4oxm/JtWJ/8WD
+         YwmyxD/48tfa74NNmzVPA2kwfi7U2NSN760lRY6m/fjzP+gUuqTV56Md8wOOKpoSKwWR
+         F3oIRBTux3Eliw/bt5ipUIEVApaTwilWs+z7KHtOXYlfZSSnplTEOeCIB3hYwSjFcp/6
+         W/1g==
+X-Gm-Message-State: AJIora8HhVVRAHpeaXfMhZRL/rbawcpMsyAq56HcmLuZItB3HaViI+e+
+        9uJeK+Mw9QlwAU1pdXYWlhaTTQ==
+X-Google-Smtp-Source: AGRyM1vkI72xwUrVzdm01K07LqtX2m50dz3LRYbM6zcBvoybVSkmTwAhtiBUgec39zvaIkLF0EZJrg==
+X-Received: by 2002:a05:600c:3516:b0:39c:8091:31b6 with SMTP id h22-20020a05600c351600b0039c809131b6mr7587210wmq.164.1656528276189;
+        Wed, 29 Jun 2022 11:44:36 -0700 (PDT)
+Received: from henark71.. ([51.37.234.167])
+        by smtp.gmail.com with ESMTPSA id u23-20020a7bcb17000000b0039aef592ca0sm3834371wmj.35.2022.06.29.11.44.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 11:44:35 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v3 00/15] Canaan devicetree fixes
+Date:   Wed, 29 Jun 2022 19:43:29 +0100
+Message-Id: <20220629184343.3438856-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3656a067-cc3f-fd5b-e339-5925a856cce1@microchip.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,33 +92,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 06:18:25PM +0000, Conor.Dooley@microchip.com wrote:
-> 
-> No, no it doesn't. Not sure what I was thinking there.
-> Prob tested that on the the last commit that bisect tested
-> rather than the one it pointed out the problem was with.
-> 
-> Either way, boot is broken in -next.
->
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Can you check if the below fixes the issue ? Assuming presenting L1 as
-LLC might be causing issue.
+Hey all,
+This series should rid us of dtbs_check errors for the RISC-V Canaan k210
+based boards. To make keeping it that way a little easier, I changed the
+Canaan devicetree Makefile so that it would build all of the devicetrees
+in the directory if SOC_CANAAN.
 
-Regards,
-Sudeep
+I *DO NOT* have any Canaan hardware so I have not tested any of this in
+action. Since I sent v1, I tried to buy some since it's cheap - but could
+out of the limited stockists none seemed to want to deliver to Ireland :(
+I based the series on next-20220617.
 
--->8
-diff --git i/drivers/base/cacheinfo.c w/drivers/base/cacheinfo.c
-index 167abfa6f37d..a691317f7fdd 100644
---- i/drivers/base/cacheinfo.c
-+++ w/drivers/base/cacheinfo.c
-@@ -60,7 +60,8 @@ bool last_level_cache_is_valid(unsigned int cpu)
+Thanks,
+Conor.
 
-        llc = per_cpu_cacheinfo_idx(cpu, cache_leaves(cpu) - 1);
+Changes since v2:
+- i2s: added clocks maxItems
+- dma: unconditionally extended the interrupts & dropped canaan
+  compatible
+- timer: as per Sergey, split the timer dts nodes in 2 & drop the
+  binding patch
+- ili9341: add a canaan specific compatible to the binding and dts
 
--       return (llc->attributes & CACHE_ID) || !!llc->fw_token;
-+       return (llc->type == CACHE_TYPE_UNIFIED) &&
-+              ((llc->attributes & CACHE_ID) || !!llc->fw_token);
+Changes since v1:
+- I added a new dt node & compatible for the SRAM memory controller due
+  Damien's wish to preserve the inter-op with U-Boot.
+- The dw-apb-ssi binding now uses the default rx/tx widths
+- A new patch fixes bus {ranges,reg} warnings
+- Rearranged the patches in a slightly more logical order
 
- }
+Conor Dooley (15):
+  dt-bindings: display: convert ilitek,ili9341.txt to dt-schema
+  dt-bindings: display: ili9341: document canaan kd233's lcd
+  ASoC: dt-bindings: convert designware-i2s to dt-schema
+  spi: dt-bindings: dw-apb-ssi: update spi-{r,t}x-bus-width
+  dt-bindings: dma: dw-axi-dmac: extend the number of interrupts
+  dt-bindings: memory-controllers: add canaan k210 sram controller
+  riscv: dts: canaan: fix the k210's memory node
+  riscv: dts: canaan: fix the k210's timer nodes
+  riscv: dts: canaan: fix mmc node names
+  riscv: dts: canaan: fix kd233 display spi frequency
+  riscv: dts: canaan: use custom compatible for k210 i2s
+  riscv: dts: canaan: remove spi-max-frequency from controllers
+  riscv: dts: canaan: fix bus {ranges,reg} warnings
+  riscv: dts: canaan: add specific compatible for kd233's LCD
+  riscv: dts: canaan: build all devicetress if SOC_CANAAN
+
+ .../bindings/display/ilitek,ili9341.txt       | 27 ------
+ .../display/panel/ilitek,ili9341.yaml         | 49 +++++++---
+ .../bindings/dma/snps,dw-axi-dmac.yaml        |  4 +-
+ .../memory-controllers/canaan,k210-sram.yaml  | 52 ++++++++++
+ .../bindings/sound/designware-i2s.txt         | 35 -------
+ .../bindings/sound/snps,designware-i2s.yaml   | 94 +++++++++++++++++++
+ .../bindings/spi/snps,dw-apb-ssi.yaml         |  6 --
+ arch/riscv/boot/dts/canaan/Makefile           | 10 +-
+ arch/riscv/boot/dts/canaan/canaan_kd233.dts   |  6 +-
+ arch/riscv/boot/dts/canaan/k210.dtsi          | 76 ++++++++++-----
+ .../riscv/boot/dts/canaan/sipeed_maix_bit.dts |  2 +-
+ .../boot/dts/canaan/sipeed_maix_dock.dts      |  2 +-
+ arch/riscv/boot/dts/canaan/sipeed_maix_go.dts |  2 +-
+ .../boot/dts/canaan/sipeed_maixduino.dts      |  2 +-
+ 14 files changed, 253 insertions(+), 114 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/ilitek,ili9341.txt
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/canaan,k210-sram.yaml
+ delete mode 100644 Documentation/devicetree/bindings/sound/designware-i2s.txt
+ create mode 100644 Documentation/devicetree/bindings/sound/snps,designware-i2s.yaml
+
+
+base-commit: 07dc787be2316e243a16a33d0a9b734cd9365bd3
+-- 
+2.36.1
 

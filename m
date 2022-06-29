@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C346555FA24
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A863955FA1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232118AbiF2IEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 04:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
+        id S232362AbiF2IEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 04:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231864AbiF2ID4 (ORCPT
+        with ESMTP id S231553AbiF2IEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 04:03:56 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24DD39B85
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 01:03:54 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 9so14587288pgd.7
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 01:03:54 -0700 (PDT)
+        Wed, 29 Jun 2022 04:04:36 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9899A3B3F6
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 01:04:29 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id jh14so13391823plb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 01:04:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=kYKmRwqhkod5kWIfzS16sS6jaDGBM3foLD2Ky8UkHos=;
-        b=cvTkmfHi796POn8CJZVh8BuxQwCNHiL3lhRSUhCOi/iv8SBNkEjDUwW4bPCRwPQn2T
-         78pmahWeeTSLx9N8hoYKAFzkZ06RUSRYZKtuOJJQ6OcBO/9FvozCxrj7AraN/NoC9Ugn
-         Y8+1EFUP24BNpDYGjvcxFLYXVBUf7tkUheYHE=
+        bh=tphUaJRWmGfbf+rcQQvvdTAaHw/IgKryhTSbMG303fk=;
+        b=kbp3SymyDcrr+av2CLzAaJ76U24aRBFW6qsAWMQJGR2htBnuWGvLCgalt6z/9/NmEc
+         NYAfdcJUNOfMQCpCkh4e9mKK6tdsIRgQA3MxiqiHyNqa8GjPRZJajLDPkoWHecHitd0N
+         Xx9kXZJ5tjyhVlfINrOFta2j0NZ+Epkj0WilE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=kYKmRwqhkod5kWIfzS16sS6jaDGBM3foLD2Ky8UkHos=;
-        b=QvegphI1o4LMZeaCSXmSNoonfG48TYfITRBwc1of8uIjmYqi4FzmEziG8R1OqNe269
-         wd/cteU+rEY0WLQlEQ4e4M3PONmnDTQfnpiXKP1V8tqMGcI5h+ncj3mGb0qMXS/VdJ+V
-         d9eMMfCxumW1tOWfC2Q6JhDo4LiRU3CTmLkaj4maAZr9AdtpuHIhgMn01Wm31dEgh4uq
-         tEBNz97sNMgZzf3g7YeM2BK8AeUFD/JevTACG6jU+W0UaA2CaNkJfMxY+o2YuKkkj5PB
-         QkErqVPqPnr7DwwobswJeHDgTLSeZnNwWsVPyLmzqyRXeL+UGsUipYnk9Sl15aQwIX0R
-         4duA==
-X-Gm-Message-State: AJIora9LSxNxhQ/eOoY+wQD5cCyKX+gIiNxA/UX/Ll0hxjUNmRYCt7rJ
-        zjjsgG78s/wmacg48NIzOrVVgg==
-X-Google-Smtp-Source: AGRyM1uLKuVxfxJVTSk72PzpYK6KFIsep162OacqzigSpO++IFBp3TTs/nUxCAA0MTJPJWRHyAz0Dw==
-X-Received: by 2002:a05:6a00:c91:b0:525:8c3f:269 with SMTP id a17-20020a056a000c9100b005258c3f0269mr9140613pfv.66.1656489834468;
-        Wed, 29 Jun 2022 01:03:54 -0700 (PDT)
+        bh=tphUaJRWmGfbf+rcQQvvdTAaHw/IgKryhTSbMG303fk=;
+        b=G2qbyuiVOCjMNtxz9ZExzukiPxDZYirNdxMl3VYsv0S9H4boej0J4g/IXa+HMr7PMw
+         URGXhbGzu3MANcuqK+rXVh5HkivF20lO7Qo7AX5fXmNXbjpoRQGrhY+Sv6jAK9vc+Six
+         U2WcqzjB5BcVfuzFo71yKDm+9SP0m9yUzku3crpQnqJaXB02jckq7uQ4xx/0R/9vKQ6i
+         7Y0psrxFK4AOlvt8RXPZShPvtx+gVdJmnUTFLOe5CFmWCyz3ZLIzv9AobVWDdu/S/nc7
+         n21O63rYCIHmtYyMvnZMadjCvQW1SCZ6L96h5o7ap2X8JD1sfwa92ftM4qYI3PuSu1DU
+         r3BQ==
+X-Gm-Message-State: AJIora/m/ApEERQ7iz+w8+oTMPCTd61hAyxxag2TBpj6o8a9S6MVQqY5
+        ewVocscfgvaQnmCUV8fsgA/k6LGswSrfbg==
+X-Google-Smtp-Source: AGRyM1vD7+R3YGDCxJmwjPFiWHdqVH/Qs7cs5QFTjqLhaftK9VZtL0He5C1/fsJNXhqqZ4K3pDox+A==
+X-Received: by 2002:a17:902:7481:b0:16b:7a53:3b4c with SMTP id h1-20020a170902748100b0016b7a533b4cmr8071158pll.54.1656489869151;
+        Wed, 29 Jun 2022 01:04:29 -0700 (PDT)
 Received: from judyhsiao0523.c.googlers.com.com (0.223.81.34.bc.googleusercontent.com. [34.81.223.0])
-        by smtp.gmail.com with ESMTPSA id h18-20020a170902f7d200b001624cd63bbbsm10676727plw.133.2022.06.29.01.03.52
+        by smtp.gmail.com with ESMTPSA id 11-20020a63164b000000b0040d4c8e335csm10579256pgw.75.2022.06.29.01.04.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 01:03:54 -0700 (PDT)
+        Wed, 29 Jun 2022 01:04:28 -0700 (PDT)
 From:   Judy Hsiao <judyhsiao@chromium.org>
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     Liam Girdwood <lgirdwood@gmail.com>,
@@ -56,9 +56,9 @@ Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
         Judy Hsiao <judyhsiao@chromium.org>
-Subject: [PATCH v1] ASoC: rockchip: i2s: Fix the debug level on missing pinctrl
-Date:   Wed, 29 Jun 2022 08:03:45 +0000
-Message-Id: <20220629080345.2427872-1-judyhsiao@chromium.org>
+Subject: [PATCH v1 1/2] ASoC: rockchip: i2s: Remove unwanted dma settings in rockchip_i2s_probe
+Date:   Wed, 29 Jun 2022 08:04:21 +0000
+Message-Id: <20220629080421.2427933-1-judyhsiao@chromium.org>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,27 +72,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use dev_dbg on missing i2s->pinctrl as the pinctrl property is optional.
+Remove the unwanted dma settings in rockchip_i2s_probe.
 
 Fixes: 44f362c2cc6d ("ASoC: rockchip: i2s: switch BCLK to GPIO")
 Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
 ---
- sound/soc/rockchip/rockchip_i2s.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/rockchip/rockchip_i2s.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
 diff --git a/sound/soc/rockchip/rockchip_i2s.c b/sound/soc/rockchip/rockchip_i2s.c
-index 285b6455be28..f783994cc16a 100644
+index 0ed01624a2db..285b6455be28 100644
 --- a/sound/soc/rockchip/rockchip_i2s.c
 +++ b/sound/soc/rockchip/rockchip_i2s.c
-@@ -812,7 +812,7 @@ static int rockchip_i2s_probe(struct platform_device *pdev)
- 			}
- 		}
- 	} else {
--		dev_err(&pdev->dev, "failed to find i2s pinctrl\n");
-+		dev_dbg(&pdev->dev, "failed to find i2s pinctrl\n");
- 	}
+@@ -817,14 +817,6 @@ static int rockchip_i2s_probe(struct platform_device *pdev)
  
  	i2s_pinctrl_select_bclk_off(i2s);
+ 
+-	i2s->playback_dma_data.addr = res->start + I2S_TXDR;
+-	i2s->playback_dma_data.addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
+-	i2s->playback_dma_data.maxburst = 4;
+-
+-	i2s->capture_dma_data.addr = res->start + I2S_RXDR;
+-	i2s->capture_dma_data.addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
+-	i2s->capture_dma_data.maxburst = 4;
+-
+ 	dev_set_drvdata(&pdev->dev, i2s);
+ 
+ 	pm_runtime_enable(&pdev->dev);
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

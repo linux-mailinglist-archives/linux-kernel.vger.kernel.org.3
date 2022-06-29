@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9558756050F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63B9560516
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233222AbiF2P7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 11:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
+        id S234149AbiF2QAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 12:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiF2P7K (ORCPT
+        with ESMTP id S229982AbiF2QAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 11:59:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670EE1BE8C
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 08:59:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 29 Jun 2022 12:00:05 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115341BEA5;
+        Wed, 29 Jun 2022 09:00:04 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBFA961892
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 15:59:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A471AC34114;
-        Wed, 29 Jun 2022 15:59:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656518348;
-        bh=vkCMRqaCWUx4F0m0dc0QUXqxBSA2sPUMQx/IJbseS2s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=toanYwsEgQT1GQBCfgkgpOloQvb0+sOkiUXC5hGJ9PXvaVxKVSIk/boRFelncp4cn
-         XxinNnjJS/1IDML3UkqDQ2/h+bssAeGimUdAtByN10tW+o9CJ6nHBfsvsfg19Jsf3a
-         nQf06malJlk2TZKpNtqWWiZ98OOxymBWHg/ajc3fOmmPsYQCyZ0rK4y9JyyRVjBwAr
-         +s/rwFP4uduBXrl2H/2ORHYoDOPaZp5EjVkZtm0aEPhB7C5BNwNU5EvScNj9Fyxerw
-         OSNkGvcxnALbfmPan+VVYgvYH0MGSSlnImRZOjg5cKUIDLLDVj1FJnnTktwRxL0HUe
-         TDuBDGc4JJcMg==
-Date:   Wed, 29 Jun 2022 16:59:03 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Ivan T. Ivanov" <iivanov@suse.de>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] arm64: Add initial set of stack unwinder self tests
-Message-ID: <Yrx2xwbYMfcl8Qok@sirena.org.uk>
-References: <20220624141000.88120-1-iivanov@suse.de>
- <20220624141000.88120-2-iivanov@suse.de>
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 88F06660191F;
+        Wed, 29 Jun 2022 17:00:00 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656518402;
+        bh=5jzvCGoUrHrL5/yJf6+vhjz74pv3DFTUx5ZwFy+A7lE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VOBtIa4ti0aCegzf39rysZ4fDCzi3EmDzqdPU9xjnlfjx99gJ81qXdysK3qxh+3pN
+         QnN//y85NmTQf455lS05Nn7IcXaHbaxPDD8sm4I+b2tPWA8NhDS6wW3l6dK/EIaXEA
+         dAzXaf8mqiy6czNH8y/Au/dJPnibIcI9T8sFvsSU2Py4vi3/bv1UpDuvcNIxxoqL7Q
+         npBsJixzWFH29p37i0gmdRKfyroLZwYvDVJp6kvzIhTeqsSbLb8SEwUl8OLQ1srHdy
+         55ewnKYjM1h6cEZOqiajM3ItlHLIVF5B8SL+O2rF60B5PM3RfIXysf5kZn7t/tPD8b
+         h8Z7HI0jab0sQ==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luca Weiss <luca@z3ntu.xyz>, Maxim Kutnij <gtk3@inbox.ru>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Shih <sam.shih@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v4 00/19] Introduce support for MediaTek MT8192 Google Chromebooks
+Date:   Wed, 29 Jun 2022 11:59:37 -0400
+Message-Id: <20220629155956.1138955-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="OcGioRICVq9yfSBj"
-Content-Disposition: inline
-In-Reply-To: <20220624141000.88120-2-iivanov@suse.de>
-X-Cookie: Booths for two or more.
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,65 +67,67 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---OcGioRICVq9yfSBj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series introduces Devicetrees for the MT8192-based Asurada platform
+as well as Asurada Spherion and Asurada Hayato boards.
 
-On Fri, Jun 24, 2022 at 05:10:00PM +0300, Ivan T. Ivanov wrote:
-> Add kunit tests for obvious cases where stack unwind could be needed.
-> Like these:
->=20
->  * Unwind a separate task
->  * Unwind starting from caller
->  * Unwind from irq context
->  * Unwind from kprobe handler called via ftrace
->  * Unwind from ftrace handler
->  * Unwind through kretprobed function
->  * Unwind from kretprobe handler
->=20
-> Tests are completely based on code used in s390 unwinder tests.
-> Cases which where not relevant to aarch64 where removed and
-> some places where adjusted to address aarch64 specifics.
+Support for the boards is added to the extent that is currently enabled
+in the mt8192.dtsi, and using only properties already merged in the
+dt-bindings, as to not add any dependencies to this series.
 
-I think this would be a bit easier to digest if it were a series which
-builds things up with the test cases in individual patches, or at least
-things like ftrace and kprobes split out a bit more, rather than every
-single test all at once.  I've got a few *very* superficial comments
-below, I think the code is fine but there's several moving pieces to
-check.
+This series was peer-reviewed internally before submission.
 
-> +/*
-> + * Calls test_arch_stack_walk() which is handy wrapper of aarch64 unwind
-> + * functionality, and verifies that the result contains unwindme_func2
-> + *followed by unwindme_func1.
+Series tested on next-20220629.
 
-Missing space.
+v3: https://lore.kernel.org/all/20220512205602.158273-1-nfraprado@collabora.com/
+v2: https://lore.kernel.org/all/20220505194550.3094656-1-nfraprado@collabora.com/
+v1: https://lore.kernel.org/all/20220316151327.564214-1-nfraprado@collabora.com/
 
-> +	ret =3D register_ftrace_function(fops);
-> +	if (!ret) {
-> +		ret =3D test_unwind_ftraced_func(u);
-> +		unregister_ftrace_function(fops);
-> +	} else {
-> +		kunit_err(current_test,
-> +			  "failed to register ftrace handler (%d)\n", ret);
-> +	}
+Changes in v4:
+- Added patches 17-19 enabling MMC, SCP and SPI NOR flash
+- Switched mediatek,drive-strength-adv for drive-strength-microamp
+- Switched mediatek,pull-up-adv for bias-pull-up
+- Updated Vgpu minimum voltage to appropriate value
 
-Shouldn't we return an error here?
+Changes in v3:
+- Renamed regulator nodes to be generic
+- Fixed keyboard layout for Hayato
 
---OcGioRICVq9yfSBj
-Content-Type: application/pgp-signature; name="signature.asc"
+Changes in v2:
+- Added patches 1-2 for Mediatek board dt-bindings
+- Added patches 13-16 enabling hardware for Asurada that has since been
+  enabled on mt8192.dtsi
 
------BEGIN PGP SIGNATURE-----
+Nícolas F. R. A. Prado (19):
+  dt-bindings: arm64: dts: mediatek: Add mt8192-asurada-spherion
+  dt-bindings: arm64: dts: mediatek: Add mt8192-asurada-hayato
+  arm64: dts: mediatek: Introduce MT8192-based Asurada board family
+  arm64: dts: mediatek: asurada: Document GPIO names
+  arm64: dts: mediatek: asurada: Add system-wide power supplies
+  arm64: dts: mediatek: asurada: Enable and configure I2C and SPI busses
+  arm64: dts: mediatek: asurada: Add ChromeOS EC
+  arm64: dts: mediatek: asurada: Add keyboard mapping for the top row
+  arm64: dts: mediatek: asurada: Add Cr50 TPM
+  arm64: dts: mediatek: asurada: Add Elan eKTH3000 I2C trackpad
+  arm64: dts: mediatek: asurada: Add I2C touchscreen
+  arm64: dts: mediatek: spherion: Add keyboard backlight
+  arm64: dts: mediatek: asurada: Enable XHCI
+  arm64: dts: mediatek: asurada: Enable PCIe and add WiFi
+  arm64: dts: mediatek: asurada: Add MT6359 PMIC
+  arm64: dts: mediatek: asurada: Add SPMI regulators
+  arm64: dts: mediatek: asurada: Enable MMC
+  arm64: dts: mediatek: asurada: Enable SCP
+  arm64: dts: mediatek: asurada: Add SPI NOR flash memory
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK8dsYACgkQJNaLcl1U
-h9C6Egf9GSle5eDoCuHiH/eFkHYYrFpZpnWzgNctALXJSONbkHnpSlnIyL4T6hzX
-XoYDY3/6N0WdvTS2bJX5HY29zpxHMT+4GILMsW8z3pBcd5QskK0fP37/xR8F34Bf
-/YHcW0mBh868LtHg6mdhPpWGQDOemt+BgB7oR+Uy68XxCP4BBZj1dsJuZIzxpu/E
-GUhh6t4zWGrP3gr51ZxsqCpcnun4NjyGHrDlliNApLItPpr7wLWrQ3ZdUzbFMjLg
-I7C5sRk5yV+xgnYRrYW3ZFrLuOoXsEf+aR95yguthYa4UG4VU+lll4ZAXObQbqH/
-aZZZepN0KJE/dl/bd1Tx4N2GN7anNA==
-=XUtp
------END PGP SIGNATURE-----
+ .../devicetree/bindings/arm/mediatek.yaml     |  13 +
+ arch/arm64/boot/dts/mediatek/Makefile         |   2 +
+ .../dts/mediatek/mt8192-asurada-hayato-r1.dts |  47 +
+ .../mediatek/mt8192-asurada-spherion-r0.dts   |  62 ++
+ .../boot/dts/mediatek/mt8192-asurada.dtsi     | 959 ++++++++++++++++++
+ 5 files changed, 1083 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion-r0.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
 
---OcGioRICVq9yfSBj--
+-- 
+2.36.1
+

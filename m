@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8EA55F995
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5B155F997
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232505AbiF2HwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 03:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
+        id S232503AbiF2HwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 03:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbiF2HwE (ORCPT
+        with ESMTP id S230514AbiF2HwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 03:52:04 -0400
+        Wed, 29 Jun 2022 03:52:11 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A1A38DBE
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:52:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2593969A
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:52:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656489123; x=1688025123;
+  t=1656489125; x=1688025125;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7xJG/RHuTiPYTwDACaNvM5KqLLJ+9JGGZJR7/2WHQCo=;
-  b=ZSn1Dz1lpgaC7QzAOqYYfcd7ppTcHnENZH8+piLDu7MK+nh7c9IqoAnB
-   12FRp5ihcXFdseWMtheQ8gE6bPHwpgB/DuRnJDAQVwjt8a1QvRsLc87C9
-   Kv6BbOUAk8wQr5qnK8QeI5APrx7J2PPx+4oeDISz4ot808AvZmwesq22i
-   eI/RFuwXhdJN1frNxx5HZPfbpZAwHJZz6u/6DegEKp8bwNUM33+zX8W50
-   PVMKihYA54Zkfrc7gpKWMGRHTtXgwZ5yeJoqRTbQh9QFsiOgKU22WXz5q
-   PDyM7E02F+ffogbC8rhresprUtKurRnq37VxB9pIQ0PL9EthZ/sg270a+
+  bh=4dG8u4WuqlreDbxvltEqLapsgzPYKKWe1Wl/fUnZ9aQ=;
+  b=D8PQMHv4ZvAd5XBnhYu8EABnsbxJpfhTkDnTWmSZaWbidYTewv9Wcc62
+   3OJedp6NoHlwyAYRnq5uS2zs6SvqzUU5I6pistr0kfw2hdm0qWqlIg9Sa
+   McSTKMoMQku85YtY57imMnwQ0JrR8Y60TNXHkSgqCgY14q+bKs2gwKjdE
+   RpdKCS3yMPQz+OFVFl07F8G1sLM8T4zXqsxsJi3VSZIrDMk4kcegWgKIw
+   lgThQXNp2FVW3WwLg+YRoUsKZHUUZ794OCHggYvKXxKomUdPJOSt5rYWu
+   +31SrQ0C6cZOPwKy2XSoPxu2fwKW23aUBZ6nJzLN4nwvcoSR+af2u7SxT
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="270719406"
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="270719430"
 X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="270719406"
+   d="scan'208";a="270719430"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 00:52:03 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 00:52:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="588209637"
+   d="scan'208";a="588209662"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga007.jf.intel.com with ESMTP; 29 Jun 2022 00:52:00 -0700
+  by orsmga007.jf.intel.com with ESMTP; 29 Jun 2022 00:52:03 -0700
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     iommu@lists.linux-foundation.org, iommu@lists.linux.dev
 Cc:     Kevin Tian <kevin.tian@intel.com>, Ashok Raj <ashok.raj@intel.com>,
         Liu Yi L <yi.l.liu@intel.com>,
         Jacob jun Pan <jacob.jun.pan@intel.com>,
         linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v3 05/11] iommu/vt-d: Replace spin_lock_irqsave() with spin_lock()
-Date:   Wed, 29 Jun 2022 15:47:19 +0800
-Message-Id: <20220629074725.2331441-6-baolu.lu@linux.intel.com>
+Subject: [PATCH v3 06/11] iommu/vt-d: Acquiring lock in domain ID allocation helpers
+Date:   Wed, 29 Jun 2022 15:47:20 +0800
+Message-Id: <20220629074725.2331441-7-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220629074725.2331441-1-baolu.lu@linux.intel.com>
 References: <20220629074725.2331441-1-baolu.lu@linux.intel.com>
@@ -62,185 +62,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The iommu->lock is used to protect changes in root/context/pasid tables
-and domain ID allocation. There's no use case to change these resources
-in any interrupt context. Therefore, it's unnecessary to disable the
-interrupts when the spinlock is held.
+The iommu->lock is used to protect the per-IOMMU domain ID resource.
+Moving the lock into the ID alloc/free helpers makes the code more
+compact. At the same time, the device_domain_lock is irrelevant to
+the domain ID resource, remove its assertion as well.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 ---
- drivers/iommu/intel/debugfs.c |  6 ++----
- drivers/iommu/intel/iommu.c   | 26 +++++++++++---------------
- drivers/iommu/intel/svm.c     |  6 +++---
- 3 files changed, 16 insertions(+), 22 deletions(-)
+ drivers/iommu/intel/iommu.c | 24 +++++++++---------------
+ 1 file changed, 9 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/iommu/intel/debugfs.c b/drivers/iommu/intel/debugfs.c
-index 6e1a3f88abc8..1f925285104e 100644
---- a/drivers/iommu/intel/debugfs.c
-+++ b/drivers/iommu/intel/debugfs.c
-@@ -263,10 +263,9 @@ static void ctx_tbl_walk(struct seq_file *m, struct intel_iommu *iommu, u16 bus)
- 
- static void root_tbl_walk(struct seq_file *m, struct intel_iommu *iommu)
- {
--	unsigned long flags;
- 	u16 bus;
- 
--	spin_lock_irqsave(&iommu->lock, flags);
-+	spin_lock(&iommu->lock);
- 	seq_printf(m, "IOMMU %s: Root Table Address: 0x%llx\n", iommu->name,
- 		   (u64)virt_to_phys(iommu->root_entry));
- 	seq_puts(m, "B.D.F\tRoot_entry\t\t\t\tContext_entry\t\t\t\tPASID\tPASID_table_entry\n");
-@@ -278,8 +277,7 @@ static void root_tbl_walk(struct seq_file *m, struct intel_iommu *iommu)
- 	 */
- 	for (bus = 0; bus < 256; bus++)
- 		ctx_tbl_walk(m, iommu, bus);
--
--	spin_unlock_irqrestore(&iommu->lock, flags);
-+	spin_unlock(&iommu->lock);
- }
- 
- static int dmar_translation_struct_show(struct seq_file *m, void *unused)
 diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index ff49c9460ede..a81bdddf1091 100644
+index a81bdddf1091..5681b8ef11f1 100644
 --- a/drivers/iommu/intel/iommu.c
 +++ b/drivers/iommu/intel/iommu.c
-@@ -797,13 +797,12 @@ static int device_context_mapped(struct intel_iommu *iommu, u8 bus, u8 devfn)
- {
- 	struct context_entry *context;
- 	int ret = 0;
--	unsigned long flags;
- 
--	spin_lock_irqsave(&iommu->lock, flags);
-+	spin_lock(&iommu->lock);
- 	context = iommu_context_addr(iommu, bus, devfn, 0);
- 	if (context)
- 		ret = context_present(context);
--	spin_unlock_irqrestore(&iommu->lock, flags);
-+	spin_unlock(&iommu->lock);
- 	return ret;
+@@ -1781,16 +1781,13 @@ static struct dmar_domain *alloc_domain(unsigned int type)
+ 	return domain;
  }
  
-@@ -2296,16 +2295,15 @@ static void domain_context_clear_one(struct device_domain_info *info, u8 bus, u8
+-/* Must be called with iommu->lock */
+ static int domain_attach_iommu(struct dmar_domain *domain,
+ 			       struct intel_iommu *iommu)
  {
- 	struct intel_iommu *iommu = info->iommu;
- 	struct context_entry *context;
--	unsigned long flags;
- 	u16 did_old;
+ 	unsigned long ndomains;
+-	int num;
+-
+-	assert_spin_locked(&device_domain_lock);
+-	assert_spin_locked(&iommu->lock);
++	int num, ret = 0;
  
- 	if (!iommu)
- 		return;
- 
--	spin_lock_irqsave(&iommu->lock, flags);
 +	spin_lock(&iommu->lock);
- 	context = iommu_context_addr(iommu, bus, devfn, 0);
- 	if (!context) {
--		spin_unlock_irqrestore(&iommu->lock, flags);
-+		spin_unlock(&iommu->lock);
- 		return;
- 	}
- 
-@@ -2320,7 +2318,7 @@ static void domain_context_clear_one(struct device_domain_info *info, u8 bus, u8
- 
- 	context_clear_entry(context);
- 	__iommu_flush_cache(iommu, context, sizeof(*context));
--	spin_unlock_irqrestore(&iommu->lock, flags);
-+	spin_unlock(&iommu->lock);
- 	iommu->flush.flush_context(iommu,
- 				   did_old,
- 				   (((u16)bus) << 8) | devfn,
-@@ -2499,7 +2497,7 @@ static int domain_add_dev_info(struct dmar_domain *domain, struct device *dev)
+ 	domain->iommu_refcnt[iommu->seq_id] += 1;
+ 	if (domain->iommu_refcnt[iommu->seq_id] == 1) {
+ 		ndomains = cap_ndoms(iommu->cap);
+@@ -1799,7 +1796,8 @@ static int domain_attach_iommu(struct dmar_domain *domain,
+ 		if (num >= ndomains) {
+ 			pr_err("%s: No free domain ids\n", iommu->name);
+ 			domain->iommu_refcnt[iommu->seq_id] -= 1;
+-			return -ENOSPC;
++			ret = -ENOSPC;
++			goto out_unlock;
  		}
  
- 		/* Setup the PASID entry for requests without PASID: */
--		spin_lock_irqsave(&iommu->lock, flags);
-+		spin_lock(&iommu->lock);
- 		if (hw_pass_through && domain_type_is_si(domain))
- 			ret = intel_pasid_setup_pass_through(iommu, domain,
- 					dev, PASID_RID2PASID);
-@@ -2509,7 +2507,7 @@ static int domain_add_dev_info(struct dmar_domain *domain, struct device *dev)
- 		else
- 			ret = intel_pasid_setup_second_level(iommu, domain,
- 					dev, PASID_RID2PASID);
--		spin_unlock_irqrestore(&iommu->lock, flags);
-+		spin_unlock(&iommu->lock);
- 		if (ret) {
- 			dev_err(dev, "Setup RID2PASID failed\n");
- 			dmar_remove_one_dev_info(dev);
-@@ -2777,7 +2775,6 @@ static int copy_translation_tables(struct intel_iommu *iommu)
- 	struct root_entry *old_rt;
- 	phys_addr_t old_rt_phys;
- 	int ctxt_table_entries;
--	unsigned long flags;
- 	u64 rtaddr_reg;
- 	int bus, ret;
- 	bool new_ext, ext;
-@@ -2820,7 +2817,7 @@ static int copy_translation_tables(struct intel_iommu *iommu)
- 		}
+ 		set_bit(num, iommu->domain_ids);
+@@ -1808,7 +1806,9 @@ static int domain_attach_iommu(struct dmar_domain *domain,
+ 		domain_update_iommu_cap(domain);
  	}
  
--	spin_lock_irqsave(&iommu->lock, flags);
-+	spin_lock(&iommu->lock);
- 
- 	/* Context tables are copied, now write them to the root_entry table */
- 	for (bus = 0; bus < 256; bus++) {
-@@ -2839,7 +2836,7 @@ static int copy_translation_tables(struct intel_iommu *iommu)
- 		iommu->root_entry[bus].hi = val;
- 	}
- 
--	spin_unlock_irqrestore(&iommu->lock, flags);
+-	return 0;
++out_unlock:
 +	spin_unlock(&iommu->lock);
++	return ret;
+ }
  
- 	kfree(ctxt_tbls);
- 
-@@ -4166,7 +4163,6 @@ static void __dmar_remove_one_dev_info(struct device_domain_info *info)
+ static void domain_detach_iommu(struct dmar_domain *domain,
+@@ -1816,9 +1816,7 @@ static void domain_detach_iommu(struct dmar_domain *domain,
  {
- 	struct dmar_domain *domain;
- 	struct intel_iommu *iommu;
--	unsigned long flags;
+ 	int num;
  
- 	assert_spin_locked(&device_domain_lock);
+-	assert_spin_locked(&device_domain_lock);
+-	assert_spin_locked(&iommu->lock);
+-
++	spin_lock(&iommu->lock);
+ 	domain->iommu_refcnt[iommu->seq_id] -= 1;
+ 	if (domain->iommu_refcnt[iommu->seq_id] == 0) {
+ 		num = domain->iommu_did[iommu->seq_id];
+@@ -1826,6 +1824,7 @@ static void domain_detach_iommu(struct dmar_domain *domain,
+ 		domain_update_iommu_cap(domain);
+ 		domain->iommu_did[iommu->seq_id] = 0;
+ 	}
++	spin_unlock(&iommu->lock);
+ }
  
-@@ -4188,9 +4184,9 @@ static void __dmar_remove_one_dev_info(struct device_domain_info *info)
+ static inline int guestwidth_to_adjustwidth(int gaw)
+@@ -2477,9 +2476,7 @@ static int domain_add_dev_info(struct dmar_domain *domain, struct device *dev)
+ 
+ 	spin_lock_irqsave(&device_domain_lock, flags);
+ 	info->domain = domain;
+-	spin_lock(&iommu->lock);
+ 	ret = domain_attach_iommu(domain, iommu);
+-	spin_unlock(&iommu->lock);
+ 	if (ret) {
+ 		spin_unlock_irqrestore(&device_domain_lock, flags);
+ 		return ret;
+@@ -4183,10 +4180,7 @@ static void __dmar_remove_one_dev_info(struct device_domain_info *info)
+ 	}
  
  	list_del(&info->link);
- 
--	spin_lock_irqsave(&iommu->lock, flags);
-+	spin_lock(&iommu->lock);
+-
+-	spin_lock(&iommu->lock);
  	domain_detach_iommu(domain, iommu);
--	spin_unlock_irqrestore(&iommu->lock, flags);
-+	spin_unlock(&iommu->lock);
+-	spin_unlock(&iommu->lock);
  }
  
  static void dmar_remove_one_dev_info(struct device *dev)
-diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-index 580713aa9e07..82288a50660d 100644
---- a/drivers/iommu/intel/svm.c
-+++ b/drivers/iommu/intel/svm.c
-@@ -328,9 +328,9 @@ static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
- 					   unsigned int flags)
- {
- 	struct device_domain_info *info = dev_iommu_priv_get(dev);
--	unsigned long iflags, sflags;
- 	struct intel_svm_dev *sdev;
- 	struct intel_svm *svm;
-+	unsigned long sflags;
- 	int ret = 0;
- 
- 	svm = pasid_private_find(mm->pasid);
-@@ -394,10 +394,10 @@ static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
- 	sflags = (flags & SVM_FLAG_SUPERVISOR_MODE) ?
- 			PASID_FLAG_SUPERVISOR_MODE : 0;
- 	sflags |= cpu_feature_enabled(X86_FEATURE_LA57) ? PASID_FLAG_FL5LP : 0;
--	spin_lock_irqsave(&iommu->lock, iflags);
-+	spin_lock(&iommu->lock);
- 	ret = intel_pasid_setup_first_level(iommu, dev, mm->pgd, mm->pasid,
- 					    FLPT_DEFAULT_DID, sflags);
--	spin_unlock_irqrestore(&iommu->lock, iflags);
-+	spin_unlock(&iommu->lock);
- 
- 	if (ret)
- 		goto free_sdev;
 -- 
 2.25.1
 

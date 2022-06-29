@@ -2,119 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761FA55FB33
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788B755FB39
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232591AbiF2I6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 04:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
+        id S232636AbiF2I7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 04:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232767AbiF2I6t (ORCPT
+        with ESMTP id S232356AbiF2I7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 04:58:49 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404781C91B;
-        Wed, 29 Jun 2022 01:58:43 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id fd6so21218664edb.5;
-        Wed, 29 Jun 2022 01:58:43 -0700 (PDT)
+        Wed, 29 Jun 2022 04:59:44 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EE924956;
+        Wed, 29 Jun 2022 01:59:43 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id g26so31171455ejb.5;
+        Wed, 29 Jun 2022 01:59:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r++121sbLgXWyC87t6HhBYGjFC1OZo7m/Al81TbSLAc=;
-        b=QRckV6V4u2oiBdEL0UBUoDQqliBh7zDWCo7k1wV03x1E23P11wbDeU1C05lwfZlo7U
-         LS+eADyHaw9InWhCnF/7orpv+hOmwZAOR6FUSY7KN9zvf8S+nx0qNzodpfbGArqJzex6
-         BmGLDdZrXozYghL4CSdujGNIKFF5x3xfGQarw24QAtndrBGt/4CyrPusRrD5cGMnV82R
-         Ctr1zok0+gHGhnUpNKHnXamxIHOcNfsMC758001icFlfMLfMm+jhN2k4Kyx2QCybyWWG
-         r2bc3KP926tzQLNJZS3tETF5L4vlpvYabcqn2Ez5OkrjqnoV4tJwPSodC5ynDlKv3ERf
-         l45A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Ey+1hPLWMzu03pOiFsT4/+TTM+sA5fHRsZxt3a18l5I=;
+        b=ITFrgF4tOWPEhvarmRB5prRer9hEUz+UyNGFHcwfTGVb8Iu9ut4cyieJU0oum2eSvM
+         Z7BNbjCLM32ciGEqgOGAt7TvZQjazxOM+YygBbgwnjhjYYYJ2Wx9VoLysU1iJ94izIR6
+         Bxw0IUWp6KLy/n7RGqg926kFq6jj29j3PJaXlUIotrrJ61Xf5csNYpp03WfWmkS0xDco
+         G9WP5jKLZnsQRv3rm4KWk2n9Hu+SwCfuT700IElUw1emp0EzBS9CIQIZm++CAZOvUm+f
+         CJWFt8Y0z0e5g5Jv90vt0p3lNiwAnXhlj5S9VWNfWOVvsoIO4LRu6jEhJxjB2suMC1Vh
+         9Meg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r++121sbLgXWyC87t6HhBYGjFC1OZo7m/Al81TbSLAc=;
-        b=7Po6aogJcZlnLkXxpDwkC2Gd1TEKZpJCDSfHwEydGCzDkXlt6+5s3xmvjjMtAFHqbl
-         YBACdYJpCBecHIAF5QBuvCJDokR2t0V1XUycFoaoSdCvRWOaUtfk0NZT9pTnOONnd2BL
-         juqvLNaBuQSkaP0XeTJtqFLWkWZahjMkejhD3cVOtXitsRA/Q8gOpDj66bt2YgsFwiOt
-         96LkbsTgaDIpT6ebAwY4lRynWrYiE2HMY2sSDmi5W5c9Idw2O36peOQICR0tCfjU6qbm
-         W73GT+CWFxVtIdfcHKpvUuzeKlIaIUzrWNSGX89EAa1MQiD/ePSbcjAebin/ie4beasr
-         LcDg==
-X-Gm-Message-State: AJIora8r+AOLdeIU7h928vVIgo9h7QwDnBZM/DHBzld4+lTLedejsx2T
-        bVQfgr27C2Sf5NNJ+oiG5hI=
-X-Google-Smtp-Source: AGRyM1tAyTjbfqt55MKCcHD0WymqazhAWk4ybuv3YQ8j6WxGsH0iTFjyiTpmDaLtRbAiv1DK0y0lbQ==
-X-Received: by 2002:a05:6402:4387:b0:435:94c6:716d with SMTP id o7-20020a056402438700b0043594c6716dmr2837654edc.298.1656493121725;
-        Wed, 29 Jun 2022 01:58:41 -0700 (PDT)
-Received: from localhost.localdomain (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
-        by smtp.gmail.com with ESMTPSA id a18-20020a170906671200b00718e4e64b7bsm7489740ejp.79.2022.06.29.01.58.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 01:58:39 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH] ixgbe: Use kmap_local_page in ixgbe_check_lbtest_frame()
-Date:   Wed, 29 Jun 2022 10:58:36 +0200
-Message-Id: <20220629085836.18042-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Ey+1hPLWMzu03pOiFsT4/+TTM+sA5fHRsZxt3a18l5I=;
+        b=RgxoT/J5sEJb500PAC9PnD7wGOeECmuR0QB+uN80CALXWxDGSJRaY7i+w7KPl/UuE2
+         XDj5fk0F7RPaPiTNq0/szGD/CBU2dMDP8v/RfYOI4bmrS0IEwllxv8dVNiJHHOXkmF+/
+         dpHdWMZql5KGSR7MypGhNCdr1q/2weh+X2l9mAP9AzFUYnFul5afgPT9TLM4XBbu4hAk
+         rvpZfBmVZT5s2atBimiM8a6YSHkPuHCXTukews7lq+88vCMkkeTqdZC1wvlNADiT4i0w
+         BUDCC9u2b8x2MeFw6+3Zf1BZgHYpZafd/C6iCq4XHbTXUjQYvmQM7ZuwIkUOc18nTHKs
+         HEoQ==
+X-Gm-Message-State: AJIora/G6GuOY8cekN6tMJbHOEHqxwy+yI8UURBvFgToH2Pjp+/ZoY+I
+        HAvj9tmwsgdc8mTfzJiVnNoTwle1I5ftsPccOM4=
+X-Google-Smtp-Source: AGRyM1tS17F0rorf47vhU8c0TPDYGRUlrVAu3BBSUv1DO0tbWiOYhXEPu0at2UeRXUwCcE+w/UrNYs+A6K2xfqP0bo4=
+X-Received: by 2002:a17:907:72d0:b0:726:ec43:9bb with SMTP id
+ du16-20020a17090772d000b00726ec4309bbmr2032289ejc.533.1656493181431; Wed, 29
+ Jun 2022 01:59:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1656469212-12717-1-git-send-email-u0084500@gmail.com>
+ <1656469212-12717-2-git-send-email-u0084500@gmail.com> <bc6f42d9-f821-ad0c-85c8-b4a4d2146485@linaro.org>
+In-Reply-To: <bc6f42d9-f821-ad0c-85c8-b4a4d2146485@linaro.org>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Wed, 29 Jun 2022 16:59:30 +0800
+Message-ID: <CADiBU39TPVhDgZkv27mzWNMD5EVOg_jFq=_mFLa6tPZ6EwjT3g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: iio: adc: Add rtq6056 adc support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        cy_huang <cy_huang@richtek.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of kmap() is being deprecated in favor of kmap_local_page().
-
-With kmap_local_page(), the mapping is per thread, CPU local and not
-globally visible. Furthermore, the mapping can be acquired from any context
-(including interrupts).
-
-Therefore, use kmap_local_page() in ixgbe_check_lbtest_frame() because
-this mapping is per thread, CPU local, and not globally visible.
-
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
-index 628d0eb0599f..e64d40482bfd 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
-@@ -1966,14 +1966,14 @@ static bool ixgbe_check_lbtest_frame(struct ixgbe_rx_buffer *rx_buffer,
- 
- 	frame_size >>= 1;
- 
--	data = kmap(rx_buffer->page) + rx_buffer->page_offset;
-+	data = kmap_local_page(rx_buffer->page) + rx_buffer->page_offset;
- 
- 	if (data[3] != 0xFF ||
- 	    data[frame_size + 10] != 0xBE ||
- 	    data[frame_size + 12] != 0xAF)
- 		match = false;
- 
--	kunmap(rx_buffer->page);
-+	kunmap_local(data);
- 
- 	return match;
- }
--- 
-2.36.1
-
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
+=B46=E6=9C=8829=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=884:25=E5=AF=AB=
+=E9=81=93=EF=BC=9A
+>
+> On 29/06/2022 04:20, cy_huang wrote:
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > Add the documentation for Richtek rtq6056.
+> >
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > ---
+> > Since v2
+> > - Change the resistor property name to be generic 'shunt-resistor-micro=
+-ohms'.
+> >
+> > ---
+> >  .../bindings/iio/adc/richtek,rtq6056.yaml          | 56 ++++++++++++++=
+++++++++
+> >  1 file changed, 56 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/iio/adc/richtek,r=
+tq6056.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/iio/adc/richtek,rtq6056.=
+yaml b/Documentation/devicetree/bindings/iio/adc/richtek,rtq6056.yaml
+> > new file mode 100644
+> > index 00000000..fe45d8b
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/iio/adc/richtek,rtq6056.yaml
+> > @@ -0,0 +1,56 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/iio/adc/richtek,rtq6056.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: RTQ6056 Bi-Directional Current and Power Monitor with 16-bit AD=
+C
+> > +
+> > +maintainers:
+> > +  - ChiYuan Huang <cy_huang@richtek.com>
+> > +
+> > +description: |
+> > +  The RTQ6056 is a high accuracy current-sense monitor with I2C and SM=
+Bus
+> > +  interface, and the device provides full information for system by re=
+ading
+> > +  out the loading current and power.
+> > +
+> > +  The device monitors both of the drops across sense resistor and the =
+BUS
+> > +  voltage, converts into the current in amperes, and power in watts th=
+rough
+> > +  internal analog-to-digital converter ADC. The programmable calibrati=
+on,
+> > +  adjustable conversion time, and averaging function are also built in=
+ for
+> > +  more design flexibility.
+> > +
+> > +  Datasheet is available at
+> > +  https://www.richtek.com/assets/product_file/RTQ6056/DSQ6056-00.pdf
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: richtek,rtq6056
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  "#io-channel-cells":
+> > +    const: 1
+> > +
+> > +  shunt-resistor-micro-ohms:
+> > +    description: Shunt IN+/IN- sensing node resistor
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - "#io-channel-cells"
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    i2c {
+> > +      #address-cells =3D <1>;
+> > +      #size-cells =3D <0>;
+> > +      rtq6056@40 {
+>
+> This was not fixed.
+>
+Sorry, too many changes to check. I really forgot it.
+>
+> Best regards,
+> Krzysztof

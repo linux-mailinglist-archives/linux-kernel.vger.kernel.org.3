@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 127C0560C23
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 00:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF60560C26
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 00:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbiF2WNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 18:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
+        id S229916AbiF2WNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 18:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiF2WNP (ORCPT
+        with ESMTP id S229875AbiF2WNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 18:13:15 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E1917596;
-        Wed, 29 Jun 2022 15:13:14 -0700 (PDT)
+        Wed, 29 Jun 2022 18:13:17 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197341AD8D;
+        Wed, 29 Jun 2022 15:13:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656540794; x=1688076794;
+  t=1656540796; x=1688076796;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=14mMpm5JYU/oBxBuvhMONX4zD6TFyEpEz0kKpej+uHk=;
-  b=BJCLgQByb2cZ+Y/N54mHW1WXM0lUa7IoYS5JXi2QP7A7QIzIWnPSQHvD
-   Z4xgpap01jvkJdpiyy5LRzociHOVnR4Ba30fqXmBMhd8C7X4NNlJyhpRA
-   0hjAr0lwY2/GMfgzAqti5qsILXFc/YF5P3lNVgPpX5yG6SAqxNvIpRLZM
-   D5mmzSi6Zo3L0UQsmiR/q21kWkrsbT9u/HTo0xDami5Z+B2pWwOjFKpGj
-   BgMTQX04v1ltEJQXg1zj6zfe1lWf3flj7ZTEBym/kQrwU1H45/ss2paYN
-   VwO41k2JxOO31zsUtoS4BzyoXEXfO2A7B9fkM51+AzNLaZk6NbV2nX9SS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="279720018"
+  bh=hM5yXBlOkkU9tdnWE+P4k5x9ZayD+DfNzsincX9Nu0w=;
+  b=drd5NDyRHSHo5ftdsGWskL04jyJv8G9mYp564kJn8VbmHExRjR7QXwoO
+   qaT68OxScZKXpjN74WQfVtaxWOra6PIWLEU//oH3hYSqooCY6V54MKTIr
+   HE6repRIbu9P2txHN6ooSgkbD+fWN+xpH+/TcKW3ycHcImRGRjkLRr3DA
+   UQcrExX453IvfxEJiOrRlPSJGBN9wTGtKlEX108Vg2A078WGnFZycROHY
+   M0TEqmlvkj1hM01acoYUPdfmW5Ovm2OTnb3VAYCOsJQ8a1Laabs0xilLt
+   DPGXuUWHAVVjHdqaMd2AabJ0rfgrjFOsmzA/BtVWzmWfvCmWKX2KNu1ow
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="346165664"
 X-IronPort-AV: E=Sophos;i="5.92,232,1650956400"; 
-   d="scan'208";a="279720018"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 15:13:13 -0700
+   d="scan'208";a="346165664"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 15:13:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,232,1650956400"; 
-   d="scan'208";a="733357311"
+   d="scan'208";a="917782995"
 Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Jun 2022 15:13:13 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 29 Jun 2022 15:13:15 -0700
 Received: from MeteorLakePO1.jf.intel.com (MeteorLakePO1.jf.intel.com [10.234.180.58])
-        by linux.intel.com (Postfix) with ESMTP id 94195580B55;
-        Wed, 29 Jun 2022 15:13:13 -0700 (PDT)
+        by linux.intel.com (Postfix) with ESMTP id 313B9580AB4;
+        Wed, 29 Jun 2022 15:13:15 -0700 (PDT)
 From:   Gayatri Kammela <gayatri.kammela@linux.intel.com>
 To:     hdegoede@redhat.com
 Cc:     markgross@kernel.org, david.e.box@linux.intel.com,
         srinivas.pandruvada@intel.com, platform-driver-x86@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Gayatri Kammela <gayatri.kammela@linux.intel.com>
-Subject: [PATCH v1 3/4] platform/x86/intel/pmt: telemetry: Fix fixed region handling
-Date:   Wed, 29 Jun 2022 15:13:33 -0700
-Message-Id: <20220629221334.434307-4-gayatri.kammela@linux.intel.com>
+        Gayatri Kammela <gayatri.kammela@linux.intel.com>,
+        David E Box <david.e.box@intel.com>
+Subject: [PATCH v1 4/4] platform/x86/intel/vsec: Add PCI error recovery support to Intel PMT
+Date:   Wed, 29 Jun 2022 15:13:34 -0700
+Message-Id: <20220629221334.434307-5-gayatri.kammela@linux.intel.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220629221334.434307-1-gayatri.kammela@linux.intel.com>
 References: <20220629221334.434307-1-gayatri.kammela@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,61 +66,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "David E. Box" <david.e.box@linux.intel.com>
-
-Use the telem_type and the fixed block guid to determine if an entry is a
-fixed region. For certain platforms we don't support this.
+Add PCI error recovery support for Intel PMT driver to recover
+from PCI fatal errors
 
 Cc: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+Cc: David E Box <david.e.box@intel.com>
 Signed-off-by: Gayatri Kammela <gayatri.kammela@linux.intel.com>
 ---
- drivers/platform/x86/intel/pmt/telemetry.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ drivers/platform/x86/intel/vsec.c | 82 ++++++++++++++++++++++++++++++-
+ 1 file changed, 80 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/platform/x86/intel/pmt/telemetry.c b/drivers/platform/x86/intel/pmt/telemetry.c
-index f73ecfd4a309..5e4009c05ecf 100644
---- a/drivers/platform/x86/intel/pmt/telemetry.c
-+++ b/drivers/platform/x86/intel/pmt/telemetry.c
-@@ -23,12 +23,19 @@
- #define TELEM_GUID_OFFSET	0x4
- #define TELEM_BASE_OFFSET	0x8
- #define TELEM_ACCESS(v)		((v) & GENMASK(3, 0))
-+#define TELEM_TYPE(v)		(((v) & GENMASK(7, 4)) >> 4)
- /* size is in bytes */
- #define TELEM_SIZE(v)		(((v) & GENMASK(27, 12)) >> 10)
+diff --git a/drivers/platform/x86/intel/vsec.c b/drivers/platform/x86/intel/vsec.c
+index 9368a3d587ab..544493ae85b7 100644
+--- a/drivers/platform/x86/intel/vsec.c
++++ b/drivers/platform/x86/intel/vsec.c
+@@ -15,6 +15,7 @@
  
- /* Used by client hardware to identify a fixed telemetry entry*/
- #define TELEM_CLIENT_FIXED_BLOCK_GUID	0x10000000
+ #include <linux/auxiliary_bus.h>
+ #include <linux/bits.h>
++#include <linux/delay.h>
+ #include <linux/kernel.h>
+ #include <linux/idr.h>
+ #include <linux/module.h>
+@@ -30,9 +31,13 @@
+ #define INTEL_DVSEC_TABLE_BAR(x)	((x) & GENMASK(2, 0))
+ #define INTEL_DVSEC_TABLE_OFFSET(x)	((x) & GENMASK(31, 3))
+ #define TABLE_OFFSET_SHIFT		3
++#define PMT_XA_START			0
++#define PMT_XA_MAX			INT_MAX
++#define PMT_XA_LIMIT			XA_LIMIT(PMT_XA_START, PMT_XA_MAX)
  
-+enum telem_type {
-+	TELEM_TYPE_PUNIT = 0,
-+	TELEM_TYPE_CRASHLOG,
-+	TELEM_TYPE_PUNIT_FIXED,
-+};
-+
- struct pmt_telem_priv {
- 	int				num_entries;
- 	struct intel_pmt_entry		entry[];
-@@ -39,10 +46,15 @@ static bool pmt_telem_region_overlaps(struct intel_pmt_entry *entry,
+ static DEFINE_IDA(intel_vsec_ida);
+ static DEFINE_IDA(intel_vsec_sdsi_ida);
++static DEFINE_XARRAY_ALLOC(auxdev_array);
+ 
+ /**
+  * struct intel_vsec_header - Common fields of Intel VSEC and DVSEC registers.
+@@ -132,7 +137,7 @@ static int intel_vsec_add_aux(struct pci_dev *pdev, struct intel_vsec_device *in
+ 			      const char *name)
  {
- 	u32 guid = readl(entry->disc_table + TELEM_GUID_OFFSET);
+ 	struct auxiliary_device *auxdev = &intel_vsec_dev->auxdev;
+-	int ret;
++	int ret, id;
  
--	if (guid != TELEM_CLIENT_FIXED_BLOCK_GUID)
--		return false;
-+	if (intel_pmt_is_early_client_hw(dev)) {
-+		u32 type = TELEM_TYPE(readl(entry->disc_table));
+ 	ret = ida_alloc(intel_vsec_dev->ida, GFP_KERNEL);
+ 	if (ret < 0) {
+@@ -159,7 +164,18 @@ static int intel_vsec_add_aux(struct pci_dev *pdev, struct intel_vsec_device *in
+ 		return ret;
+ 	}
+ 
+-	return devm_add_action_or_reset(&pdev->dev, intel_vsec_remove_aux, auxdev);
++	ret = devm_add_action_or_reset(&pdev->dev, intel_vsec_remove_aux,
++				       auxdev);
++	if (ret < 0)
++		return ret;
 +
-+		if ((type == TELEM_TYPE_PUNIT_FIXED) ||
-+		    (guid == TELEM_CLIENT_FIXED_BLOCK_GUID))
-+			return true;
-+	}
- 
--	return intel_pmt_is_early_client_hw(dev);
-+	return false;
++	/* Add auxdev to list */
++	ret = xa_alloc(&auxdev_array, &id, intel_vsec_dev, PMT_XA_LIMIT,
++		       GFP_KERNEL);
++	if (ret)
++		return ret;
++
++	return 0;
  }
  
- static int pmt_telem_header_decode(struct intel_pmt_entry *entry,
+ static int intel_vsec_add_dev(struct pci_dev *pdev, struct intel_vsec_header *header,
+@@ -345,6 +361,7 @@ static int intel_vsec_pci_probe(struct pci_dev *pdev, const struct pci_device_id
+ 	if (ret)
+ 		return ret;
+ 
++	pci_save_state(pdev);
+ 	info = (struct intel_vsec_platform_info *)id->driver_data;
+ 	if (!info)
+ 		return -EINVAL;
+@@ -406,10 +423,71 @@ static const struct pci_device_id intel_vsec_pci_ids[] = {
+ };
+ MODULE_DEVICE_TABLE(pci, intel_vsec_pci_ids);
+ 
++static pci_ers_result_t intel_vsec_pci_error_detected(struct pci_dev *pdev,
++						      pci_channel_state_t state)
++{
++	pci_channel_state_t status = PCI_ERS_RESULT_NEED_RESET;
++
++	dev_info(&pdev->dev, "PCI error detected, state %d", state);
++
++	if (state == pci_channel_io_perm_failure)
++		status = PCI_ERS_RESULT_DISCONNECT;
++	else
++		pci_disable_device(pdev);
++
++	return status;
++}
++
++static pci_ers_result_t intel_vsec_pci_slot_reset(struct pci_dev *pdev)
++{
++	struct intel_vsec_device *intel_vsec_dev;
++	pci_channel_state_t status = PCI_ERS_RESULT_DISCONNECT;
++	const struct pci_device_id *pci_dev_id;
++	unsigned long index;
++
++	dev_info(&pdev->dev, "Resetting PCI slot\n");
++
++	msleep(2000);
++	if (pci_enable_device(pdev)) {
++		dev_info(&pdev->dev,
++			 "Failed to re-enable PCI device after reset.\n");
++		goto out;
++	}
++
++	status =  PCI_ERS_RESULT_RECOVERED;
++
++	xa_for_each(&auxdev_array, index, intel_vsec_dev) {
++		/* check if pdev doesn't match */
++		if (pdev != intel_vsec_dev->pcidev)
++			continue;
++		devm_release_action(&pdev->dev, intel_vsec_remove_aux,
++				    &intel_vsec_dev->auxdev);
++	}
++	pci_disable_device(pdev);
++	pci_restore_state(pdev);
++	pci_dev_id = pci_match_id(intel_vsec_pci_ids, pdev);
++	intel_vsec_pci_probe(pdev, pci_dev_id);
++
++out:
++	return status;
++}
++
++void intel_vsec_pci_resume(struct pci_dev *pdev)
++{
++	dev_info(&pdev->dev, "Done resuming PCI device\n");
++}
++
++const struct pci_error_handlers intel_vsec_pci_err_handlers = {
++	.error_detected = intel_vsec_pci_error_detected,
++	.slot_reset = intel_vsec_pci_slot_reset,
++	.resume = intel_vsec_pci_resume,
++};
++
+ static struct pci_driver intel_vsec_pci_driver = {
+ 	.name = "intel_vsec",
+ 	.id_table = intel_vsec_pci_ids,
+ 	.probe = intel_vsec_pci_probe,
++	.err_handler = &intel_vsec_pci_err_handlers,
+ };
+ module_pci_driver(intel_vsec_pci_driver);
+ 
 -- 
 2.32.0
 

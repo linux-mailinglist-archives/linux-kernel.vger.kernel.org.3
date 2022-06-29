@@ -2,98 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5A755FEDC
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6CD55FEFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbiF2LlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 07:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
+        id S233160AbiF2LmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 07:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231370AbiF2Lk6 (ORCPT
+        with ESMTP id S230383AbiF2LmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 07:40:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0FA3EF34;
-        Wed, 29 Jun 2022 04:40:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D5E661ABC;
-        Wed, 29 Jun 2022 11:40:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3387C34114;
-        Wed, 29 Jun 2022 11:40:55 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="pDxtBw6x"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656502854;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CNxXkwtze2gyLyEUtULoRKSzgQuTYXqXAG+m5bX1wsI=;
-        b=pDxtBw6xdDJL3Wa1muwS6frh5fa39fWvP1sX7oh3mCLRkLoOl2XjXA+cp2DpJTNsvwGsZz
-        1yMqbTi4b/x+ACmJf7e4LY6rncjYZqf9x4DmGI4niqt7DWHdaPHhzADF5LN1K1uCQ38Hdq
-        cmbD5/dY4xsGS8ueptBPRhqTI31Jrbk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 30260718 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 29 Jun 2022 11:40:54 +0000 (UTC)
-Date:   Wed, 29 Jun 2022 13:40:52 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        Gregory Erwin <gregerwin256@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Rui Salvaterra <rsalvaterra@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v7] ath9k: let sleep be interrupted when unregistering
- hwrng
-Message-ID: <Yrw6RDvSly6Zstb8@zx2c4.com>
-References: <20220628151840.867592-1-Jason@zx2c4.com>
- <87pmirakke.fsf@toke.dk>
+        Wed, 29 Jun 2022 07:42:15 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EE13F331;
+        Wed, 29 Jun 2022 04:42:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656502934; x=1688038934;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=PLZy6FdtWTJaBvqj0/Wf7kuuinfelYGkxatNVzCgqcU=;
+  b=lqUhrVno6mhftZZcVGHTkA3xpaA50B5UgmbOJ2SqgVeYFLD9O85sJNzE
+   6E6kuC9FSNSkd7K8IPaKLaQIS71BlthIje1iyowFAYCAsDwie+Z+JeOBi
+   4/RmDAFz5R1gIodN7Ru8TlPqdpUCiu0Vxz3RMYb9FWQUkPWwH4uHj3nlg
+   Izbki0BgXFS9tO+QVrWFkUddFV2ofAiKikM6Z+o6eP6noZznGRd1nZMQO
+   oLnoPJrb9y7z0GlOP1P7Qjd71IfJ9OiIUwGxEuOfn8R1CgWG+7ieo0RRK
+   bFKzeMTsxoBvVYYizZHtvqiF4Ki8kiHvGe9N+qLic44t/1kIxSRyhj2/4
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="307502280"
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="307502280"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 04:42:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="595206522"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 29 Jun 2022 04:41:53 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 50F0F109; Wed, 29 Jun 2022 14:41:59 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rob Herring <robh@kernel.org>,
+        Frank Rowand <frank.rowand@sony.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/1] of: unittest: Switch to use fwnode instead of of_node
+Date:   Wed, 29 Jun 2022 14:41:56 +0300
+Message-Id: <20220629114156.6001-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <87pmirakke.fsf@toke.dk>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Toke,
+GPIO library now accepts fwnode as a firmware node, so
+switch the module to use it.
 
-On Wed, Jun 29, 2022 at 11:24:49AM +0200, Toke Høiland-Jørgensen wrote:
-> > +			wait = !(filp->f_flags & O_NONBLOCK);
-> > +			if (wait && cmpxchg(&current_waiting_reader, NULL, current) != NULL) {
-> > +				err = -EINTR;
-> > +				goto out_unlock_reading;
-> > +			}
-> >  			bytes_read = rng_get_data(rng, rng_buffer,
-> > -				rng_buffer_size(),
-> > -				!(filp->f_flags & O_NONBLOCK));
-> > +				rng_buffer_size(), wait);
-> > +			if (wait && cmpxchg(&current_waiting_reader, current, NULL) != current)
-> > +				synchronize_rcu();
-> 
-> So this synchronize_rcu() is to ensure the hwrng_unregister() thread has
-> exited the rcu_read_lock() section below? Isn't that a bit... creative...
-> use of RCU? :)
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: fixed parameter in debug message as well
+ drivers/of/unittest.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-It's to handle the extreeeeemely unlikely race in which
-hwrng_unregister() does its xchg, and then the thread calling
-rng_dev_read() entirely exits. In practice, the only way I'm able to
-trigger this race is by synthetically adding `msleep()` in the right
-spot. But anyway, for that reason, it's only synchronized if that second
-cmpxchg indicates that indeed the value was changed out from under us.
+diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+index 7f6bba18c515..5a842dfc27e8 100644
+--- a/drivers/of/unittest.c
++++ b/drivers/of/unittest.c
+@@ -1602,7 +1602,7 @@ static int unittest_gpio_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, devptr);
+ 
+-	devptr->chip.of_node = pdev->dev.of_node;
++	devptr->chip.fwnode = dev_fwnode(&pdev->dev);
+ 	devptr->chip.label = "of-unittest-gpio";
+ 	devptr->chip.base = -1; /* dynamic allocation */
+ 	devptr->chip.ngpio = 5;
+@@ -1611,7 +1611,7 @@ static int unittest_gpio_probe(struct platform_device *pdev)
+ 	ret = gpiochip_add_data(&devptr->chip, NULL);
+ 
+ 	unittest(!ret,
+-		 "gpiochip_add_data() for node @%pOF failed, ret = %d\n", devptr->chip.of_node, ret);
++		 "gpiochip_add_data() for node @%pfw failed, ret = %d\n", devptr->chip.fwnode, ret);
+ 
+ 	if (!ret)
+ 		unittest_gpio_probe_pass_count++;
+-- 
+2.35.1
 
-> Also, synchronize_rcu() can potentially take a while on a busy system,
-> is it OK to call it while holding the mutex?
-
-The reading mutex won't be usable by anything anyway at this point, so I
-don't think it matters.
-
-Jason

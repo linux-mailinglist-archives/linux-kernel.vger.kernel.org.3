@@ -2,94 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B63F5560A4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8083560A53
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiF2T3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 15:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
+        id S230073AbiF2Tb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 15:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiF2T3D (ORCPT
+        with ESMTP id S229460AbiF2Tb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 15:29:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D4310A7;
-        Wed, 29 Jun 2022 12:29:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50B01B824F3;
-        Wed, 29 Jun 2022 19:29:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56023C34114;
-        Wed, 29 Jun 2022 19:28:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656530939;
-        bh=K06Oo7hqUeLYaNucOdTDB8gKJH0ahLyqJbNtJFxKJ3s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VFjogmOW7gfBRZqg74qIWzu3qHPmENOKtkzL/h3pZYXQiA1f9AKnzLfzhd6m4QS8O
-         od+Zg8wX1Rw57CgyYoV98jTqGCzVfE9CKPB5hM9DXAl3om28uDhbuefIIAjSn1Ba5y
-         apaYmvAMsEvDE9pe9kUxj+t4UgKkL/Lzi5n8cv33hWoADUB3+7G7rshoLc//kujXJv
-         IuVjWCNAWHR9+8jPJMQTxlEnUnNAx5+33dXXf0ov7/z2w8AVnLZY3ci3RMRypUsKsh
-         j4+RoYbfmhxEg5Awck2auRQ9GbOOJr9TL6nBnKa7hHKK6/9zJX89NjYGiBEhwUD+vL
-         K1ZJolelBC42w==
-Date:   Wed, 29 Jun 2022 21:28:48 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Zhipeng Wang <zhipeng.wang_1@nxp.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: core: Disable i2c_generic_scl_recovery callback
- checks with CFI
-Message-ID: <Yryn8PdQIH7RaUwO@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Zhipeng Wang <zhipeng.wang_1@nxp.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220628024155.2135990-1-zhipeng.wang_1@nxp.com>
+        Wed, 29 Jun 2022 15:31:56 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AE31402F;
+        Wed, 29 Jun 2022 12:31:56 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id x1-20020a17090abc8100b001ec7f8a51f5so503288pjr.0;
+        Wed, 29 Jun 2022 12:31:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=jYmbPjWKjblF3Fbvn5D7snSMKd9hjTzx+uVhX6b92oQ=;
+        b=WH87GyqrupEFl05RzR4g5wzqLrb890Xo8u9ZNHJ+AIX97hcciUZdOgIZh87YWgdQm0
+         T2o5WE4L2Qbac+DFg5E/EwuT79dqm9+s4L4DneL4z9jVaXvIFBmQXtm+MffVl+vsW0fT
+         GRZibCs5H1LHbC9jHG/kCbpEJDupJt+lkWm/Yt8CqUoqKSCEov33m4PTef3JaQktE9Ry
+         bpq8BYomvObC5cozfUf74rY9ULK7lyoMUS7myK+0wAHxRDt7Jn6GsAvHs3kO01swdmYE
+         BqS9mqbRfyj/ufRA0x27ojiBczoUah5EHkhAlwhQKEasbjg9OssuCpOr9XvmOhAzD96t
+         lxAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jYmbPjWKjblF3Fbvn5D7snSMKd9hjTzx+uVhX6b92oQ=;
+        b=kun8BiiQl1XwT2pJbfCMqCWaBAlc9JghbUq3aQAa7Ein+kSkcwb7FzeAAvLTyv+rx1
+         pFy7yDCuQMW+UXWuaO94qnPpojCATzRBmTdkWJHpgCUGNiNFIWZI1GUTXo/87vg8YPoA
+         uW3zACnS7uHywHwaBiDQWdj278H+HZnXOiC7+EqdshjPAKIB7m1juWE855q0eSYswVDG
+         321PTUvdHbszgGkhNm1aobge+DX18tYZw1ZXMdTiRaJ3M0boL5V8KuKUbCIFt+ElUuO/
+         6VZnuFAdc1iaZi9zNXUwy4qvQe5LGnfG/PgMyAnjM3JDRyFvsG6BGs+BmZIxSY66Lx5L
+         ht0A==
+X-Gm-Message-State: AJIora/QflLzaMypjI5YwPdF8A3nwNH4Qf4yZyv5m82eNFPkFjZaQkUf
+        FStyv5hg624g6vcXv6J+wjk=
+X-Google-Smtp-Source: AGRyM1tDIKZpKQtLvsksnXuYUjag9Ap7LacWq35dvAXGQC0NZYh/aOQJoGkWbDlEwanzGB/U/NGszA==
+X-Received: by 2002:a17:90b:4c86:b0:1ec:cc0f:32da with SMTP id my6-20020a17090b4c8600b001eccc0f32damr7507818pjb.66.1656531115687;
+        Wed, 29 Jun 2022 12:31:55 -0700 (PDT)
+Received: from [172.30.1.37] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id a8-20020a656048000000b003db7de758besm11796699pgp.5.2022.06.29.12.31.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 12:31:55 -0700 (PDT)
+Message-ID: <b6abe557-029d-cf2b-db79-40630fafb5f1@gmail.com>
+Date:   Thu, 30 Jun 2022 04:31:50 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="N97gfHEXjnT999XI"
-Content-Disposition: inline
-In-Reply-To: <20220628024155.2135990-1-zhipeng.wang_1@nxp.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 08/22] devfreq: shut up kernel-doc warnings
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <cover.1656409369.git.mchehab@kernel.org>
+ <6a15081e17d78e914526c315d5bb53ea575edf90.1656409369.git.mchehab@kernel.org>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <6a15081e17d78e914526c315d5bb53ea575edf90.1656409369.git.mchehab@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 22. 6. 28. 18:46, Mauro Carvalho Chehab wrote:
+> There are 4 warnings there:
+> 	drivers/devfreq/devfreq.c:707: warning: Function parameter or member 'val' not described in 'qos_min_notifier_call'
+> 	drivers/devfreq/devfreq.c:707: warning: Function parameter or member 'ptr' not described in 'qos_min_notifier_call'
+> 	drivers/devfreq/devfreq.c:717: warning: Function parameter or member 'val' not described in 'qos_max_notifier_call'
+> 	drivers/devfreq/devfreq.c:717: warning: Function parameter or member 'ptr' not described in 'qos_max_notifier_call'
+> 
+> It turns that neither val nor ptr are actually used on those
+> function, so document as such.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+> 
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH 00/22] at: https://lore.kernel.org/all/cover.1656409369.git.mchehab@kernel.org/
+> 
+>  drivers/devfreq/devfreq.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 01474daf4548..3020855d8400 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -700,6 +700,8 @@ static int qos_notifier_call(struct devfreq *devfreq)
+>  /**
+>   * qos_min_notifier_call() - Callback for QoS min_freq changes.
+>   * @nb:		Should be devfreq->nb_min
+> + * @val:	not used
+> + * @ptr:	not used
+>   */
+>  static int qos_min_notifier_call(struct notifier_block *nb,
+>  					 unsigned long val, void *ptr)
+> @@ -710,6 +712,8 @@ static int qos_min_notifier_call(struct notifier_block *nb,
+>  /**
+>   * qos_max_notifier_call() - Callback for QoS max_freq changes.
+>   * @nb:		Should be devfreq->nb_max
+> + * @val:	not used
+> + * @ptr:	not used
+>   */
+>  static int qos_max_notifier_call(struct notifier_block *nb,
+>  					 unsigned long val, void *ptr)
 
---N97gfHEXjnT999XI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied it. Thanks.
 
-On Tue, Jun 28, 2022 at 10:41:55AM +0800, Zhipeng Wang wrote:
-> CONFIG_CFI_CLANG breaks cross-module function address equality, which
-> breaks i2c_generic_scl_recovery as it compares a locally taken function
-> address to a one passed from a different module. Remove these sanity
-> checks for now.
-
-Can't we better fix a) the code or b) CFI?
-
-
---N97gfHEXjnT999XI
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmK8p+wACgkQFA3kzBSg
-KbYPCw/+IKsMGObtIb4+5Ua7dqCt2Hitz100em1m7cYyvUGZEpM20A8j39uNsisy
-MSAIyDGZxSg6FVrO5To5HQrmhqX2rUeO494ZwhSgKrPPkh62PhQoF6CgBK/nQf6L
-SQCmlq4pLeb3J+0SmHXGi4sfc0HimiHCtLAulNeifS4vBTu6EA/SMjPPoxDuLgrq
-pvkLF7mOn0qkPP4e0bof2xOJ6naxlSevsWrEO1hZemlxcVORPXg4l79epGxMTm0g
-aTa08oyZb2tImoW/16yejhUemYVWtHb7iOWYQ39xxziii2DYYQCR6WaMILJPJyou
-4jppurTkt+tsXvtbOhcZU8ROtw2Q9IbwaAxRpQ7jiWjYklGVwlT8W3Nw6WMUyqN9
-NuncNapTv+TzoglreYZj4hncBgr5Or8wyDb/LgQ+MiJ/yAbR2SFhRTR0rZi3OPU+
-36JHs34xPoJuTukHJrM3tORop2oKuFw2f4hVqZLxVIOD+LXDpdvtTGwp+KdI3mUr
-8sBl+DFYEZ/3fzHW1Fxd+sJiU6kpuYMGT1Pjzgsf90M1RhefNeZRr4ufi3adnb/B
-DBoQdCBKa5VUWBQjDD6nATTa9lzqoKRRVhWt4FB79mOxICp23Fidvi9+WUQUR1ui
-ZvYW8bQGG4H96+pDiHmIdxpO5uRyvlg7Y446e5RM0Z19FS4EQxg=
-=rZbm
------END PGP SIGNATURE-----
-
---N97gfHEXjnT999XI--
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi

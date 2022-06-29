@@ -2,149 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 654C65607F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 19:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2345607FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 19:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbiF2R4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 13:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
+        id S231879AbiF2R5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 13:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231803AbiF2R4w (ORCPT
+        with ESMTP id S231856AbiF2R5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 13:56:52 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F284924F38
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 10:56:49 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id ge10so34132559ejb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 10:56:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=QEpNBgWA7DRhjOO34rOQbdqFQ1nBsqCeu75uc4Igg6w=;
-        b=twqjMZOblDHbP5Z3l420BkFOUPMQlQUxyJNW+943GGuxU5Rwhv3m7bZt7UkROj/R2s
-         Sim9Usj6cVmIs3szgG4cgKxuOKetQ5jhQTFyalFnl8shkqFEvqNogG8Yv+cliT8IEGse
-         X8jIl7rUFww74t456+GoXbnLDN+08Uxda9Iv80Yyy2nIkLrVnejQI/AdIM9vRf5yWyPZ
-         ZJ3F5BWBtfLveytYxhDTcS9T6+afxqKyctpWBcdobNTM/PXy5DqYRMNGFZPYB8biVDVR
-         mPBsOJAFSTkLeyyDiW2Cc0cgx1Lp8YsBLAtoGwn4Ab5gulYdZ0rPrbbrcm2p+2dSY5Gm
-         uHRQ==
+        Wed, 29 Jun 2022 13:57:01 -0400
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0241330561;
+        Wed, 29 Jun 2022 10:57:00 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-3137316bb69so155521347b3.10;
+        Wed, 29 Jun 2022 10:56:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QEpNBgWA7DRhjOO34rOQbdqFQ1nBsqCeu75uc4Igg6w=;
-        b=GezL9oazrnkXMA6EGmV4gOyrIgaXP6OKI1H2Cp59xAFin/iZLnaz2ygzLUkhSuBh8u
-         HMY+Z2thN8yrCGRQpzhf7fGJcPrKobzb2x21UZjPJWNMw4AAZxMD5YLZz0Ut7UjtP4Dl
-         Dy8X7oDbNxrIZ0WxirCyy+2xrQ90GwUJ0WtApWHMif4xtBXUpBhAbeH8Uu/KYcxqnXhh
-         XaWuyjql+l2M8UNz01uvB50aaip3nu7ccYV4tEa5VpThFNYKeXrkIkzkMEyY8gmUCNev
-         vsS4FXdGC6tsgNcTOFlaHsh18oOzz98gur0547PWN0gVllq0o56+Mh83Ase0+2Ls4xqd
-         QZmA==
-X-Gm-Message-State: AJIora8qzTpdKT/NtLZDQtNiHCkVR6Tw7JP7/dY3SLiCJZfBvgd882Vb
-        8q9L52F9ODASnqhOuRR2YqoQ0w==
-X-Google-Smtp-Source: AGRyM1vP4xkE/Wge4HBy97Ies2gvawYtrDpCJvhIS6J7ZdtVB01q/aC0J6BgLRHrMfDfp+UXXiUqiQ==
-X-Received: by 2002:a17:907:97c9:b0:726:b4f8:f675 with SMTP id js9-20020a17090797c900b00726b4f8f675mr4583269ejc.427.1656525408480;
-        Wed, 29 Jun 2022 10:56:48 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id d25-20020a50fe99000000b004355998ec1asm11589476edt.14.2022.06.29.10.56.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 10:56:47 -0700 (PDT)
-Message-ID: <724de6df-d9a8-ad10-fbf8-860a6309513d@linaro.org>
-Date:   Wed, 29 Jun 2022 19:56:46 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LH2Yp0O/98KyfDQYebyfrOTqhKJqAyqJfrsNaCmqdGc=;
+        b=7b3ZlqG6LY2d0waZKsXp66Bwq1U9A07QRgrMdEfxgb0dCcTNBIc+IDnPQ1l/A/3PEx
+         LvLTvIcjJPFiLkoh04P+5dtwfX8ZwvN72AxRfk9MH29ChWL5x8WQStvh/FzpwlzMoOQ6
+         QrMW7UWDWHCbFdLhyef9ENddkrogCMVZOc6GJ2OLzXykSi1sjsBHlCCM47RBsIwIJ+7a
+         TAesgFzfdK8N5Q93k9C/cMMPbIifEtcI9EpILRdNmBCvWfwsJpo+NjPvGZJ1/LGIfNP4
+         hIMECUK6EnQKdprxal5NI+lFAHpXVW47AYGe/2sUlRzpGQC1JuuOa0+YGNiPOB7EUmQR
+         0aqg==
+X-Gm-Message-State: AJIora93djCT0KWejQ54DVtX+9ry7fX2I8G+i+p4rsnX5EnSBlnfw5qU
+        BDJgs9DfZE+G3ApiCvEnsz9yXvxz8ln4aTacp0c=
+X-Google-Smtp-Source: AGRyM1ti5TBf5g1kWbCdir04ld9vdzUoLq18CT9Z9Qyw37ZvnKqPyfJzSGrwXyCc5ziK0uZMrO3OjD6BGFhSV499nSI=
+X-Received: by 2002:a0d:d811:0:b0:31b:ddc4:c0ac with SMTP id
+ a17-20020a0dd811000000b0031bddc4c0acmr5350460ywe.149.1656525419226; Wed, 29
+ Jun 2022 10:56:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 04/14] dt-bindings: nvmem: Add fsl,scu-ocotp yaml file
-Content-Language: en-US
-To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Liu Ying <victor.liu@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
- <20220629164414.301813-5-viorel.suman@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220629164414.301813-5-viorel.suman@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <YqpX9npa/wR7mafR@agluck-desk3.sc.intel.com> <20220622170906.33759-1-tony.luck@intel.com>
+In-Reply-To: <20220622170906.33759-1-tony.luck@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 29 Jun 2022 19:56:48 +0200
+Message-ID: <CAJZ5v0jBN7-fkP_WB4CDg5UALn+GeY5i8gxM3FwrpKdM-m93rg@mail.gmail.com>
+Subject: Re: [PATCH] ACPI/APEI: Better fix to avoid spamming the console with
+ old error logs
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Darren Hart <darren@os.amperecomputing.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Doug Rady <dcrady@os.amperecomputing.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
-> From: Abel Vesa <abel.vesa@nxp.com>
-> 
-> In order to replace the fsl,scu txt file from bindings/arm/freescale,
-> we need to split it between the right subsystems. This patch documents
-> separately the 'ocotp' child node of the SCU main node.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+On Wed, Jun 22, 2022 at 7:09 PM Tony Luck <tony.luck@intel.com> wrote:
+>
+> The fix in commit 3f8dec116210 ("ACPI/APEI: Limit printable size of BERT
+> table data") does not work as intended on systems where the BIOS has a
+> fixed size block of memory for the BERT table, relying on s/w to quit
+> when it finds a record with estatus->block_status == 0. On these systems
+> all errors are suppressed because the check:
+>
+>         if (region_len < ACPI_BERT_PRINT_MAX_LEN)
+>
+> always fails.
+>
+> New scheme skips individual CPER records that are too large, and also
+> limits the total number of records that will be printed to 5.
+>
+> Fixes: 3f8dec116210 ("ACPI/APEI: Limit printable size of BERT table data")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Tony Luck <tony.luck@intel.com>
 > ---
->  .../bindings/nvmem/fsl,scu-ocotp.yaml         | 57 +++++++++++++++++++
->  1 file changed, 57 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml b/Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml
-> new file mode 100644
-> index 000000000000..a8972acb1b01
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml
-> @@ -0,0 +1,57 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/nvmem/fsl,scu-ocotp.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>
+> Now in PATCH format with a real commit comment. This version fixes
+> the issues seen by Intel's validation team.
+>
+>  drivers/acpi/apei/bert.c | 31 +++++++++++++++++++++++--------
+>  1 file changed, 23 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/acpi/apei/bert.c b/drivers/acpi/apei/bert.c
+> index 598fd19b65fa..45973aa6e06d 100644
+> --- a/drivers/acpi/apei/bert.c
+> +++ b/drivers/acpi/apei/bert.c
+> @@ -29,16 +29,26 @@
+>
+>  #undef pr_fmt
+>  #define pr_fmt(fmt) "BERT: " fmt
 > +
-> +title: i.MX SCU Client Device Node - OCOTP bindings based on SCU Message Protocol
+> +#define ACPI_BERT_PRINT_MAX_RECORDS 5
+>  #define ACPI_BERT_PRINT_MAX_LEN 1024
+>
+>  static int bert_disable;
+>
+> +/*
+> + * Print "all" the error records in the BERT table, but avoid huge spam to
+> + * the console if the BIOS included oversize records, or too many records.
+> + * Skipping some records here does not lose anything because the full
+> + * data is available to user tools in:
+> + *     /sys/firmware/acpi/tables/data/BERT
+> + */
+>  static void __init bert_print_all(struct acpi_bert_region *region,
+>                                   unsigned int region_len)
+>  {
+>         struct acpi_hest_generic_status *estatus =
+>                 (struct acpi_hest_generic_status *)region;
+>         int remain = region_len;
+> +       int printed = 0, skipped = 0;
+>         u32 estatus_len;
+>
+>         while (remain >= sizeof(struct acpi_bert_region)) {
+> @@ -46,24 +56,26 @@ static void __init bert_print_all(struct acpi_bert_region *region,
+>                 if (remain < estatus_len) {
+>                         pr_err(FW_BUG "Truncated status block (length: %u).\n",
+>                                estatus_len);
+> -                       return;
+> +                       break;
+>                 }
+>
+>                 /* No more error records. */
+>                 if (!estatus->block_status)
+> -                       return;
+> +                       break;
+>
+>                 if (cper_estatus_check(estatus)) {
+>                         pr_err(FW_BUG "Invalid error record.\n");
+> -                       return;
+> +                       break;
+>                 }
+>
+> -               pr_info_once("Error records from previous boot:\n");
+> -               if (region_len < ACPI_BERT_PRINT_MAX_LEN)
+> +               if (estatus_len < ACPI_BERT_PRINT_MAX_LEN &&
+> +                   printed < ACPI_BERT_PRINT_MAX_RECORDS) {
+> +                       pr_info_once("Error records from previous boot:\n");
+>                         cper_estatus_print(KERN_INFO HW_ERR, estatus);
+> -               else
+> -                       pr_info_once("Max print length exceeded, table data is available at:\n"
+> -                                    "/sys/firmware/acpi/tables/data/BERT");
+> +                       printed++;
+> +               } else {
+> +                       skipped++;
+> +               }
+>
+>                 /*
+>                  * Because the boot error source is "one-time polled" type,
+> @@ -75,6 +87,9 @@ static void __init bert_print_all(struct acpi_bert_region *region,
+>                 estatus = (void *)estatus + estatus_len;
+>                 remain -= estatus_len;
+>         }
 > +
-> +maintainers:
-> +  - Dong Aisheng <aisheng.dong@nxp.com>
-> +
-> +description: i.MX SCU Client Device Node
-> +  Client nodes are maintained as children of the relevant IMX-SCU device node.
-> +  Detailed bindings are described in bindings/nvmem/nvmem.txt
-> +
-> +allOf:
-> +  - $ref: "nvmem.yaml#"
+> +       if (skipped)
+> +               pr_info(HW_ERR "Skipped %d error records\n", skipped);
+>  }
+>
+>  static int __init setup_bert_disable(char *str)
+> --
 
-Actually, you do not need the quotes here at all.
-
-Best regards,
-Krzysztof
+Applied as 5.20 material, thanks!

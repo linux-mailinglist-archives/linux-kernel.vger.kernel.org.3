@@ -2,94 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3BB155F984
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C2CE55F99A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbiF2HrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 03:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
+        id S231465AbiF2Hv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 03:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbiF2HrN (ORCPT
+        with ESMTP id S230514AbiF2Hvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 03:47:13 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF8B387BC;
-        Wed, 29 Jun 2022 00:47:13 -0700 (PDT)
+        Wed, 29 Jun 2022 03:51:55 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606E125C57
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:51:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656488833; x=1688024833;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=YlxnPim1rzCpKPXxIWvBT1D3S+eCXzSTNnLPZpAqKlo=;
-  b=WQ1+7UJGyviFymRBoXU44d29vBnpbAMezoreIjRmaG7z13553RJP30bO
-   IkYAuzuG8+m924muhoQajI2wmYLKmmKPT4oBTjci/K5FdlFqTnphT7ajl
-   RWM9FNGn1KGHMmzsY+wXYyBLCrjPPLAhBvbN4JLXib7yDvD7RcQlO/s2W
-   PH2BR4WsKFKAeUhnGXOWO7/75mIn6pxp8bKbUgsthH1573A34sapTbylL
-   OqXs5FDiumMhXZUUck6XlsgXteRainWcGK/n982Mo+XTtPtrfM5WMI1tJ
-   yhC32rt5lysU5cXKV05t2Ssm3Hzt/qiBRHUvvmHxXp3pneU/XHwZDNgsT
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="345947818"
+  t=1656489112; x=1688025112;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nv6IKg36g4e5eVCX/5L0FmvRD5dFbZMAXtl/6cXjhDk=;
+  b=AfDhXHFBBwxjJLvPx4aElSXSJofRRicj5q2otTWTvVlTYEfJ/FykhO0S
+   C8P7ybhfP9W1QjKN0PRXckf8HmiOztB/l6lK9bqVeFI4XlFvZN7AcEEmR
+   Vl0f8cwz0IrNnFuLZw32baK9ZlGxPpUl+0RJj+fqxKIhPSAJJ7g+ySiz7
+   /zSFAYLt7Xc3OxTK93nlTa40ALv4rFjM6x94wTpL3N8Eh5yoxpP2yKLm6
+   cUU7cjpLr3lLywZwFEm7H+bw6kGqc+1APAkmgbDhX16+PcudUN8W1FhZ9
+   jks1NRetvBDbwrUhNYkLbGnHUhCkmn3ZGNDw9hB1kM9tM04mQb3oiS3EU
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="270719356"
 X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="345947818"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 00:47:12 -0700
+   d="scan'208";a="270719356"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 00:51:51 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="647274534"
-Received: from dsummer-mobl.ger.corp.intel.com ([10.252.38.121])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 00:47:10 -0700
-Date:   Wed, 29 Jun 2022 10:47:09 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/4] serial: 8250_dw: Rename offset to reg_offset
-In-Reply-To: <YrtxxqnQ5fZKsUoY@smile.fi.intel.com>
-Message-ID: <c2959ca9-5817-f843-4a9b-95c8ffad9fca@linux.intel.com>
-References: <20220628134234.53771-1-ilpo.jarvinen@linux.intel.com> <20220628134234.53771-3-ilpo.jarvinen@linux.intel.com> <YrtxxqnQ5fZKsUoY@smile.fi.intel.com>
+   d="scan'208";a="588209571"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by orsmga007.jf.intel.com with ESMTP; 29 Jun 2022 00:51:49 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     iommu@lists.linux-foundation.org, iommu@lists.linux.dev
+Cc:     Kevin Tian <kevin.tian@intel.com>, Ashok Raj <ashok.raj@intel.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH v3 00/11] iommu/vt-d: Optimize the use of locks
+Date:   Wed, 29 Jun 2022 15:47:14 +0800
+Message-Id: <20220629074725.2331441-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1978143705-1656488381=:1529"
-Content-ID: <18fa9f5-b66c-b74c-961-a42059e76af4@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi folks,
 
---8323329-1978143705-1656488381=:1529
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <7d32f42a-d1be-fb57-f8d4-f5e92a82a942@linux.intel.com>
+This series tries to optimize the uses of two locks in the Intel IOMMU
+driver:
 
-On Wed, 29 Jun 2022, Andy Shevchenko wrote:
+- The intel_iommu::lock is used to protect the IOMMU resources shared by
+  devices. They include the IOMMU root and context tables, the pasid
+  tables and the domain IDs.
+- The global device_domain_lock is used to protect the global and the
+  per-domain device tracking lists.
 
-> On Tue, Jun 28, 2022 at 04:42:32PM +0300, Ilpo Järvinen wrote:
-> > Get 'offset' variable out of the way of parameter named 'offset',
-> > rename it to 'reg_offset'. This is very short lived change as
-> > reg_offset is going to be soon removed.
-> 
-> I'm not sure why this change then even needed...
+The optimization includes:
 
-I could either:
-    1) create one large patch doing many thing (2+3 or 2+3+4)
- or
-    2) add the 'offset' parameter with some other name first and rename it 
-       to its final name after local var 'offset' is eliminated by patch 4
- or
-    3) rename local var 'offset' first out of the way so that I can add 
-       'offset' parameter in patch 3 (=this patch)
+- Remove the unnecessary global device tracking list;
+- Remove unnecessary locking;
+- Reduce the scope of the lock as much as possible, that is, use the
+  lock only where necessary;
+- The global lock is transformed into a local lock to improve the
+  efficiency.
 
-If I just drop patch 2 and only do 3, it won't build because 'offset' 
-variable appears twice (as arg and local var).
+This series is also available on github:
+https://github.com/LuBaolu/intel-iommu/commits/intel-iommu-lock-optimization-v3
+
+Your comments and suggestions are very appreciated.
+
+Best regards,
+baolu
+
+Change log:
+
+v3:
+ - Split reduction of lock ranges from changing irqsave.
+   https://lore.kernel.org/linux-iommu/BN9PR11MB52760A3D7C6BF1AF9C9D34658CAA9@BN9PR11MB5276.namprd11.prod.outlook.com/
+ - Fully initialize the dev_info before adding it to the list.
+   https://lore.kernel.org/linux-iommu/BN9PR11MB52764D7CD86448C5E4EB46668CAA9@BN9PR11MB5276.namprd11.prod.outlook.com/
+ - Various code and comments refinement.
+
+v2:
+ - https://lore.kernel.org/linux-iommu/20220614025137.1632762-1-baolu.lu@linux.intel.com/
+ - Split the lock-free page walk issue into a new patch:
+   https://lore.kernel.org/linux-iommu/20220609070811.902868-1-baolu.lu@linux.intel.com/
+ - Drop the conversion from spinlock to mutex and make this series
+   cleanup purpose only.
+ - Address several comments received during v1 review.
+
+v1:
+ - https://lore.kernel.org/linux-iommu/20220527063019.3112905-1-baolu.lu@linux.intel.com/
+ - Initial post.
+
+Lu Baolu (11):
+  iommu/vt-d: debugfs: Remove device_domain_lock usage
+  iommu/vt-d: Remove clearing translation data in disable_dmar_iommu()
+  iommu/vt-d: Use pci_get_domain_bus_and_slot() in pgtable_walk()
+  iommu/vt-d: Unnecessary spinlock for root table alloc and free
+  iommu/vt-d: Replace spin_lock_irqsave() with spin_lock()
+  iommu/vt-d: Acquiring lock in domain ID allocation helpers
+  iommu/vt-d: Acquiring lock in pasid manipulation helpers
+  iommu/vt-d: Check device list of domain in domain free path
+  iommu/vt-d: Fold __dmar_remove_one_dev_info() into its caller
+  iommu/vt-d: Use device_domain_lock accurately
+  iommu/vt-d: Convert global spinlock into per domain lock
+
+ drivers/iommu/intel/iommu.h   |   3 +-
+ drivers/iommu/intel/pasid.h   |   1 +
+ drivers/iommu/intel/debugfs.c |  49 ++++---
+ drivers/iommu/intel/iommu.c   | 248 ++++++++++------------------------
+ drivers/iommu/intel/pasid.c   | 103 +++++++-------
+ drivers/iommu/intel/svm.c     |   5 +-
+ 6 files changed, 164 insertions(+), 245 deletions(-)
 
 -- 
- i.
---8323329-1978143705-1656488381=:1529--
+2.25.1
+

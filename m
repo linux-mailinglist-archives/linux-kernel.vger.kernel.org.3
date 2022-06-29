@@ -2,94 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9596B55FE5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F7D55FE61
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiF2LSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 07:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53708 "EHLO
+        id S231217AbiF2LVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 07:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiF2LSr (ORCPT
+        with ESMTP id S229643AbiF2LU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 07:18:47 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28B721244
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 04:18:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1656501525; x=1688037525;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8DEsZcP8wnNuDkDTsKoZkNehiHn9QvzTdKDqdcGcm/U=;
-  b=UFC4BFlUXAeChi4Q6b1fovr9DRzbk65XrP5NTFUYMypwA7wG2PPBCPCd
-   vgs2Zg9UNyWwCosW2U+asV3VJXLqIYC+a7QPlvGM2OLDAWYL+ijKNJWyT
-   AX9RLKIJ3DeOO+h8p33a/amPUEp0noEBduk80JIBu55OGspB9HXiRH2fQ
-   5exo7FzvzjzH0qQH6UG6NMoL4JvEZYaMk9z4ebXJufKbpn932EK0lb4Rd
-   avRkz3mRSZuKChnxE/KLIdpSrP3etpoM5soizegTw9pybGXHtH/mc5f1e
-   q6L2LiDpFkkwQCWBlVBqsJMSOIswGq75OtkDsm+nk6HQy9nxDRn6c9VNB
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.92,231,1650902400"; 
-   d="scan'208";a="203051772"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 29 Jun 2022 19:18:43 +0800
-IronPort-SDR: rgj8N5KJHh5t2dLf18UqO56/fiHCLj6R+A1ePOPSYVJWnJacsDrBZGwwrQfy38Ar+hgd9iKEVb
- umBjJ2psRaco9eA+maqaGxft+pjhnUyHhwweJymgeS43n8uu0vnvARfHEkBk2TJ9iSjVZEaSlj
- RBijUXGSpBX/ynH77JRZEZ+I7TLfAfO3CDLwmsygcPIUgAM+vBDz4EkkvnnRsePcu3vKbSW4Ir
- 4bi8ECzJWj8/E/trxkJPC2QMwVSv4B6Q9+AaoaGdWCDva8/TGEWShJysi2Wd2/d0RmEFCXXJiH
- k4NcCZek2kpWBYFBYniur5Jn
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Jun 2022 03:36:22 -0700
-IronPort-SDR: ZulOvm7cYqhqkdCfznEaEXHg1YCidxdP1CGmQLVgp/sfB4AwD4a4unfTZGz/sv3OZFlWFqw5K/
- Fu1xQWA5e36bHM/4QfKyG+XJjuY6s+40aZWPkVYHMW1HQvvpopvkdl5iVRY9Jg5SQP5GUfmm9n
- G3N1c23hFaJ+2xyuVGT+Mr0XCEbZP5Y8Iq/YFa7lbp4TSPwNk/IfDDTovjBaaU/pfNX7XyBYxO
- /bHd9dw2tmISXcMrf7Nf5tFJ19+FeIpppUI1LyTlKKEvSP2oM79PLv5uQq3YSDafD0f9TATTxK
- kqQ=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Jun 2022 04:18:42 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LXzVV5BqYz1Rwnm
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 04:18:42 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1656501522; x=1659093523; bh=8DEsZcP8wnNuDkDTsKoZkNehiHn9QvzTdKD
-        qdcGcm/U=; b=JWDF71mJGb2IWvw1oNKGVMrot3qC8Q0V70BLGPr+42MHvIeqKez
-        utVbe6sM3GczzDvhOj/XV1Lvdd9A5voKMbCAr/+qWRUNHLTH9tujow6Wv/+SIhf+
-        +JnrHBwZykNYo9Sz4/oIsBWrSZJ9joy5gzXkfSn1h3Emr8gacYoPteLuZISjfsVa
-        bwySsHOjqPLn2afj+z8KqXCR61BLd2r3Ryk/RPhvCGRVVhuOrlCxV8XjMeplMpr2
-        QLA+Iz3J0gx0Mhsp7R9WaCbuSrVo/GkuEmBkhrBc7+5ahtUmAPfe8uOEkEec5X3P
-        CuR2KSvz5oMjpS9Jrawl4lXr5F9hAiJrD7w==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 7rFINyPJl0Ds for <linux-kernel@vger.kernel.org>;
-        Wed, 29 Jun 2022 04:18:42 -0700 (PDT)
-Received: from [10.225.163.99] (unknown [10.225.163.99])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LXzVT42sjz1RtVk;
-        Wed, 29 Jun 2022 04:18:41 -0700 (PDT)
-Message-ID: <8227ef6a-665f-d16c-e5e4-6e04e2e6ee45@opensource.wdc.com>
-Date:   Wed, 29 Jun 2022 20:18:40 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] ata: pata_cs5535: Fix W=1 warnings
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, s.shtylyov@omp.ru
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1656494324-101603-1-git-send-email-john.garry@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <1656494324-101603-1-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Wed, 29 Jun 2022 07:20:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5C52125B
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 04:20:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2E1D618EC
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:20:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36DECC34114;
+        Wed, 29 Jun 2022 11:20:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656501657;
+        bh=x8Xzeeau+b8tuLOfoKtCLO5qclR2tEIEL8IK0AoFjhU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BkvMcV2SuNo7AejY0FpWA6JbRlGE3nAeUuseDIbKgVDuubwdeA/Y0ApetZatmNdPX
+         2MUk07IcjbMMrhiyfd7ngr248uCvUfPAovwDjv6MMmxsK0hSJ6+wq5a3nvL6yr36c2
+         ls1GQMLpMaiUH1wVVkNBgJp6go9/vPEzpBEerKiUKu5Go9oGNeqtuoI7vtkYeNXNBF
+         bM3X/h8Okbu+XGbyZ3c3P8MIZwnP+dalSSQD/IlGDNvsJZqg/sUJOhb93c11dX8vBr
+         x7cOxm+VkgbecoVdaWTEfh+9HD2nwI+SG5xTjDuvQANAGXAku63z37wQIeXjDAUIOm
+         9aGO7qeuPj3YA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o6Vkd-00437W-7P;
+        Wed, 29 Jun 2022 12:20:55 +0100
+Date:   Wed, 29 Jun 2022 12:20:54 +0100
+Message-ID: <87v8sj1zs9.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V13 06/13] irqchip/loongson-pch-pic: Add ACPI init support
+In-Reply-To: <1656329997-20524-7-git-send-email-lvjianmin@loongson.cn>
+References: <1656329997-20524-1-git-send-email-lvjianmin@loongson.cn>
+        <1656329997-20524-7-git-send-email-lvjianmin@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,63 +70,408 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/29/22 18:18, John Garry wrote:
-> x86_64 allmodconfig build with W=3D1 gives these warnings:
->=20
-> drivers/ata/pata_cs5535.c: In function =E2=80=98cs5535_set_piomode=E2=80=
-=99:
-> drivers/ata/pata_cs5535.c:93:11: error: variable =E2=80=98dummy=E2=80=99=
- set but not used [-Werror=3Dunused-but-set-variable]
->   u32 reg, dummy;
->            ^~~~~
-> drivers/ata/pata_cs5535.c: In function =E2=80=98cs5535_set_dmamode=E2=80=
-=99:
-> drivers/ata/pata_cs5535.c:132:11: error: variable =E2=80=98dummy=E2=80=99=
- set but not used [-Werror=3Dunused-but-set-variable]
->   u32 reg, dummy;
->            ^~~~~
-> cc1: all warnings being treated as errors
->=20
-> Mark variables 'dummy' as "maybe unused" as they are only ever written =
-in
-> rdmsr() calls.
->=20
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+On Mon, 27 Jun 2022 12:39:50 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> 
+> From: Huacai Chen <chenhuacai@loongson.cn>
+> 
+> We are preparing to add new Loongson (based on LoongArch, not compatible
+> with old MIPS-based Loongson) support. LoongArch use ACPI other than DT
+> as its boot protocol, so add ACPI init support.
 
-Updated for-5.20. Thanks !
+Drop this paragraph.
 
+> 
+> PCH-PIC/PCH-MSI stands for "Interrupt Controller" that described in
+> Section 5 of "Loongson 7A1000 Bridge User Manual". For more information
+> please refer Documentation/loongarch/irq-chip-model.rst.
+> 
+> For systems with two chipsets, there are two related pch irqdomains,
+> each of which has the same node id as its parent irqdomain. So we
+> defined a structure to mantain the relation of node and it's parent
+> irqdomain.
+> 
+> struct acpi_vector_group {
+>         int node;
+>         struct irq_domain *parent;
+> };
+> 
+> The parent irqdomain will be set for node id in parent irqdomain driver
+> before pch irqdomain is created.
+> 
+> Co-developed-by: Jianmin Lv <lvjianmin@loongson.cn>
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 > ---
-> Differences to v1:
-> - Add RB tag (thanks!)
-> - Fix commit message
->=20
-> diff --git a/drivers/ata/pata_cs5535.c b/drivers/ata/pata_cs5535.c
-> index 6725931f3c35..c2c3238ff84b 100644
-> --- a/drivers/ata/pata_cs5535.c
-> +++ b/drivers/ata/pata_cs5535.c
-> @@ -90,7 +90,7 @@ static void cs5535_set_piomode(struct ata_port *ap, s=
-truct ata_device *adev)
->  	static const u16 pio_cmd_timings[5] =3D {
->  		0xF7F4, 0x53F3, 0x13F1, 0x5131, 0x1131
->  	};
-> -	u32 reg, dummy;
-> +	u32 reg, __maybe_unused dummy;
->  	struct ata_device *pair =3D ata_dev_pair(adev);
-> =20
->  	int mode =3D adev->pio_mode - XFER_PIO_0;
-> @@ -129,7 +129,7 @@ static void cs5535_set_dmamode(struct ata_port *ap,=
- struct ata_device *adev)
->  	static const u32 mwdma_timings[3] =3D {
->  		0x7F0FFFF3, 0x7F035352, 0x7F024241
->  	};
-> -	u32 reg, dummy;
-> +	u32 reg, __maybe_unused dummy;
->  	int mode =3D adev->dma_mode;
-> =20
->  	rdmsr(ATAC_CH0D0_DMA + 2 * adev->devno, reg, dummy);
+>  arch/loongarch/include/asm/irq.h       |  11 +-
+>  arch/loongarch/kernel/irq.c            |   2 +-
+>  drivers/irqchip/irq-loongson-pch-pic.c | 200 ++++++++++++++++++++++++++++-----
+>  3 files changed, 179 insertions(+), 34 deletions(-)
+> 
+> diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
+> index 48c0ce4..a444dc6 100644
+> --- a/arch/loongarch/include/asm/irq.h
+> +++ b/arch/loongarch/include/asm/irq.h
+> @@ -48,6 +48,12 @@ static inline bool on_irq_stack(int cpu, unsigned long sp)
+>  #define MAX_IO_PICS 2
+>  #define NR_IRQS	(64 + (256 * MAX_IO_PICS))
+>  
+> +struct acpi_vector_group {
+> +	int node;
+> +	struct irq_domain *parent;
+> +};
+> +extern struct acpi_vector_group pch_group[MAX_IO_PICS];
+> +
+>  #define CORES_PER_EIO_NODE	4
+>  
+>  #define LOONGSON_CPU_UART0_VEC		10 /* CPU UART0 */
+> @@ -108,8 +114,7 @@ int pch_lpc_acpi_init(struct irq_domain *parent,
+>  					struct acpi_madt_lpc_pic *acpi_pchlpc);
+>  struct irq_domain *pch_msi_acpi_init(struct irq_domain *parent,
+>  					struct acpi_madt_msi_pic *acpi_pchmsi);
+> -struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
+> -					struct acpi_madt_bio_pic *acpi_pchpic);
+> +int find_pch_pic(u32 gsi);
+>  
+>  extern struct acpi_madt_lio_pic *acpi_liointc;
+>  extern struct acpi_madt_eio_pic *acpi_eiointc[MAX_IO_PICS];
+> @@ -123,7 +128,7 @@ struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
+>  extern struct irq_domain *liointc_domain;
+>  extern struct fwnode_handle *pch_lpc_handle;
+>  extern struct irq_domain *pch_msi_domain[MAX_IO_PICS];
+> -extern struct irq_domain *pch_pic_domain[MAX_IO_PICS];
+> +extern struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
+>  
+>  extern irqreturn_t loongson3_ipi_interrupt(int irq, void *dev);
+>  
+> diff --git a/arch/loongarch/kernel/irq.c b/arch/loongarch/kernel/irq.c
+> index 07d6059..f2115be 100644
+> --- a/arch/loongarch/kernel/irq.c
+> +++ b/arch/loongarch/kernel/irq.c
+> @@ -28,7 +28,7 @@
+>  struct irq_domain *cpu_domain;
+>  struct irq_domain *liointc_domain;
+>  struct irq_domain *pch_msi_domain[MAX_IO_PICS];
+> -struct irq_domain *pch_pic_domain[MAX_IO_PICS];
+> +struct acpi_vector_group pch_group[MAX_IO_PICS];
+>  
+>  /*
+>   * 'what should we do if we get a hw irq event on an illegal vector'.
+> diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
+> index a4eb8a2..170a5b9 100644
+> --- a/drivers/irqchip/irq-loongson-pch-pic.c
+> +++ b/drivers/irqchip/irq-loongson-pch-pic.c
+> @@ -33,13 +33,40 @@
+>  #define PIC_REG_IDX(irq_id)	((irq_id) / PIC_COUNT_PER_REG)
+>  #define PIC_REG_BIT(irq_id)	((irq_id) % PIC_COUNT_PER_REG)
+>  
+> +static int nr_pics;
+> +
+>  struct pch_pic {
+>  	void __iomem		*base;
+>  	struct irq_domain	*pic_domain;
+> +	struct fwnode_handle	*domain_handle;
+>  	u32			ht_vec_base;
+>  	raw_spinlock_t		pic_lock;
+> +	u32			gsi_end;
+> +	u32			gsi_base;
+>  };
+>  
+> +static struct pch_pic *pch_pic_priv[2];
 
+Why 2? Is that related to MAX_IO_PICS being 2?
 
---=20
-Damien Le Moal
-Western Digital Research
+> +struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
+> +
+> +int find_pch_pic(u32 gsi)
+> +{
+> +	int i;
+> +
+> +	/* Find the PCH_PIC that manages this GSI. */
+> +	for (i = 0; i < MAX_IO_PICS; i++) {
+> +		struct pch_pic *priv = pch_pic_priv[i];
+> +
+> +		if (!priv)
+> +			return -1;
+> +
+> +		if (gsi >= priv->gsi_base && gsi <= priv->gsi_end)
+> +			return i;
+> +	}
+> +
+> +	pr_err("ERROR: Unable to locate PCH_PIC for GSI %d\n", gsi);
+> +	return -1;
+> +}
+> +
+>  static void pch_pic_bitset(struct pch_pic *priv, int offset, int bit)
+>  {
+>  	u32 reg;
+> @@ -139,6 +166,24 @@ static void pch_pic_ack_irq(struct irq_data *d)
+>  	.irq_set_type		= pch_pic_set_type,
+>  };
+>  
+> +static int pch_pic_domain_translate(struct irq_domain *d,
+> +					struct irq_fwspec *fwspec,
+> +					unsigned long *hwirq,
+> +					unsigned int *type)
+> +{
+> +	struct pch_pic *priv = d->host_data;
+> +	struct device_node *of_node = to_of_node(fwspec->fwnode);
+> +
+> +	if (fwspec->param_count < 1)
+> +		return -EINVAL;
+> +	if (of_node)
+> +		*hwirq += priv->ht_vec_base;
+> +	else
+> +		*hwirq = fwspec->param[0] - priv->gsi_base;
+> +	*type = IRQ_TYPE_NONE;
+
+Have you tested this on MIPS HW? This looks like a regression on the
+OF path, as it used irq_domain_translate_twocell().
+
+> +
+> +	return 0;
+> +}
+>  static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
+>  			      unsigned int nr_irqs, void *arg)
+>  {
+> @@ -149,13 +194,13 @@ static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
+>  	struct irq_fwspec parent_fwspec;
+>  	struct pch_pic *priv = domain->host_data;
+>  
+> -	err = irq_domain_translate_twocell(domain, fwspec, &hwirq, &type);
+> +	err = pch_pic_domain_translate(domain, fwspec, &hwirq, &type);
+>  	if (err)
+>  		return err;
+>  
+>  	parent_fwspec.fwnode = domain->parent->fwnode;
+>  	parent_fwspec.param_count = 1;
+> -	parent_fwspec.param[0] = hwirq + priv->ht_vec_base;
+> +	parent_fwspec.param[0] = hwirq;
+>  
+>  	err = irq_domain_alloc_irqs_parent(domain, virq, 1, &parent_fwspec);
+>  	if (err)
+> @@ -170,7 +215,7 @@ static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
+>  }
+>  
+>  static const struct irq_domain_ops pch_pic_domain_ops = {
+> -	.translate	= irq_domain_translate_twocell,
+> +	.translate	= pch_pic_domain_translate,
+>  	.alloc		= pch_pic_alloc,
+>  	.free		= irq_domain_free_irqs_parent,
+>  };
+> @@ -180,7 +225,7 @@ static void pch_pic_reset(struct pch_pic *priv)
+>  	int i;
+>  
+>  	for (i = 0; i < PIC_COUNT; i++) {
+> -		/* Write vectored ID */
+> +		/* Write vector ID */
+>  		writeb(priv->ht_vec_base + i, priv->base + PCH_INT_HTVEC(i));
+>  		/* Hardcode route to HT0 Lo */
+>  		writeb(1, priv->base + PCH_INT_ROUTE(i));
+> @@ -198,50 +243,41 @@ static void pch_pic_reset(struct pch_pic *priv)
+>  	}
+>  }
+>  
+> -static int pch_pic_of_init(struct device_node *node,
+> -				struct device_node *parent)
+> +static int pch_pic_init(phys_addr_t addr, unsigned long size, int vec_base,
+> +			struct irq_domain *parent_domain, struct fwnode_handle *domain_handle,
+> +			u32 gsi_base)
+>  {
+> +	int vec_count;
+>  	struct pch_pic *priv;
+> -	struct irq_domain *parent_domain;
+> -	int err;
+>  
+>  	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+>  	if (!priv)
+>  		return -ENOMEM;
+>  
+>  	raw_spin_lock_init(&priv->pic_lock);
+> -	priv->base = of_iomap(node, 0);
+> -	if (!priv->base) {
+> -		err = -ENOMEM;
+> +	priv->base = ioremap(addr, size);
+> +	if (!priv->base)
+>  		goto free_priv;
+> -	}
+>  
+> -	parent_domain = irq_find_host(parent);
+> -	if (!parent_domain) {
+> -		pr_err("Failed to find the parent domain\n");
+> -		err = -ENXIO;
+> -		goto iounmap_base;
+> -	}
+> +	priv->domain_handle = domain_handle;
+>  
+> -	if (of_property_read_u32(node, "loongson,pic-base-vec",
+> -				&priv->ht_vec_base)) {
+> -		pr_err("Failed to determine pic-base-vec\n");
+> -		err = -EINVAL;
+> -		goto iounmap_base;
+> -	}
+> +	priv->ht_vec_base = vec_base;
+
+Why isn't this pre-filled on the OF path as it isn't relevant to ACPI?
+
+> +	vec_count = ((readq(priv->base) >> 48) & 0xff) + 1;
+
+Is that valid on the old HW?
+
+> +	priv->gsi_base = gsi_base;
+
+Why isn't this pre-filled on the ACPI path as it isn't relevant to OF?
+
+> +	priv->gsi_end = gsi_base + vec_count - 1;
+
+I don't think this needs to be ACPI specific. Just track the vector
+count, which applies to both ACPI and DT.
+
+>
+>  	priv->pic_domain = irq_domain_create_hierarchy(parent_domain, 0,
+> -						       PIC_COUNT,
+> -						       of_node_to_fwnode(node),
+> -						       &pch_pic_domain_ops,
+> -						       priv);
+> +						vec_count, priv->domain_handle,
+> +						&pch_pic_domain_ops, priv);
+> +
+>  	if (!priv->pic_domain) {
+>  		pr_err("Failed to create IRQ domain\n");
+> -		err = -ENOMEM;
+>  		goto iounmap_base;
+>  	}
+>  
+>  	pch_pic_reset(priv);
+> +	pch_pic_handle[nr_pics] = domain_handle;
+> +	pch_pic_priv[nr_pics++] = priv;
+>  
+>  	return 0;
+>  
+> @@ -250,7 +286,111 @@ static int pch_pic_of_init(struct device_node *node,
+>  free_priv:
+>  	kfree(priv);
+>  
+> -	return err;
+> +	return -EINVAL;
+> +}
+> +
+> +#ifdef CONFIG_OF
+> +
+> +static int pch_pic_of_init(struct device_node *node,
+> +				struct device_node *parent)
+> +{
+> +	int err, vec_base;
+> +	struct resource res;
+> +	struct irq_domain *parent_domain;
+> +
+> +	if (of_address_to_resource(node, 0, &res))
+> +		return -EINVAL;
+> +
+> +	parent_domain = irq_find_host(parent);
+> +	if (!parent_domain) {
+> +		pr_err("Failed to find the parent domain\n");
+> +		return -ENXIO;
+> +	}
+> +
+> +	if (of_property_read_u32(node, "loongson,pic-base-vec", &vec_base)) {
+> +		pr_err("Failed to determine pic-base-vec\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	err = pch_pic_init(res.start, resource_size(&res), vec_base,
+> +				parent_domain, of_node_to_fwnode(node), 0);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	return 0;
+>  }
+>  
+>  IRQCHIP_DECLARE(pch_pic, "loongson,pch-pic-1.0", pch_pic_of_init);
+> +
+> +#endif
+> +
+> +#ifdef CONFIG_ACPI
+> +static int __init
+> +lpcintc_parse_madt(union acpi_subtable_headers *header,
+> +		       const unsigned long end)
+> +{
+> +	struct acpi_madt_lpc_pic *lpcintc_entry = (struct acpi_madt_lpc_pic *)header;
+> +
+> +	return pch_lpc_acpi_init(pch_pic_priv[0]->pic_domain, lpcintc_entry);
+> +}
+> +
+> +static int __init acpi_cascade_irqdomain_init(void)
+> +{
+> +	acpi_table_parse_madt(ACPI_MADT_TYPE_LPC_PIC,
+> +			      lpcintc_parse_madt, 0);
+> +	return 0;
+> +}
+
+Missing blank line between functions
+
+> +int __init pch_pic_init_irqdomain(struct irq_domain *parent,
+> +					struct acpi_madt_bio_pic *acpi_pchpic)
+> +{
+> +	int ret, vec_base;
+> +	struct fwnode_handle *domain_handle;
+> +
+> +	if (!acpi_pchpic)
+> +		return -EINVAL;
+> +
+> +	vec_base = acpi_pchpic->gsi_base - GSI_MIN_PCH_IRQ;
+> +
+> +	domain_handle = irq_domain_alloc_fwnode((phys_addr_t *)acpi_pchpic);
+> +	if (!domain_handle) {
+> +		pr_err("Unable to allocate domain handle\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	ret = pch_pic_init(acpi_pchpic->address, acpi_pchpic->size,
+> +				vec_base, parent, domain_handle, acpi_pchpic->gsi_base);
+> +	if (ret == 0 && acpi_pchpic->id == 0)
+> +		acpi_cascade_irqdomain_init();
+> +
+> +	return ret;
+> +}
+> +
+> +struct irq_domain *acpi_get_pch_parent(int node)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < MAX_IO_PICS; i++) {
+> +		if (node == pch_group[i].node)
+> +			return pch_group[i].parent;
+> +	}
+> +	return NULL;
+> +}
+> +
+> +static int __init pchintc_parse_madt(union acpi_subtable_headers *header,
+> +		       const unsigned long end)
+> +{
+> +	struct acpi_madt_bio_pic *pch_pic_entry = (struct acpi_madt_bio_pic *)header;
+> +
+> +	return pch_pic_init_irqdomain(acpi_get_pch_parent((pch_pic_entry->address >> 44) & 0xf),
+> +										pch_pic_entry);
+> +}
+> +
+> +static int __init pch_pic_acpi_init(void)
+> +{
+> +	acpi_table_parse_madt(ACPI_MADT_TYPE_BIO_PIC,
+
+Where is this defined? It only appears in the documentation, and
+nowhere else...
+
+> +			      pchintc_parse_madt, 0);
+> +
+> +	return 0;
+> +}
+> +early_initcall(pch_pic_acpi_init);
+
+Why can't you use IRQCHIP_ACPI_DECLARE here? This is terribly fragile,
+and will eventually break. I really don't want to rely on this.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

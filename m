@@ -2,129 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B595D55F316
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B209A55F319
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiF2CDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 22:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
+        id S230373AbiF2CFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 22:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiF2CDL (ORCPT
+        with ESMTP id S230282AbiF2CFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 22:03:11 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829CD62E2;
-        Tue, 28 Jun 2022 19:03:09 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id bx13so8467871ljb.1;
-        Tue, 28 Jun 2022 19:03:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ExQ+cUMd6CKqjpDycA1VWArMZGHVO2kBf1mIyUSWUMI=;
-        b=PT+1enTwylQGJttgLNm/f+y6PAAMxPLFoJ1bLOMr3qqI4ehPAJREIYE5NU8jIDhouR
-         blRn2vppeXauVZ2BUvRg3gJzOr0ig1+ZXp7eVHsVUL5oEXxCaGOAyG0V+bupXo+kxqG4
-         XZSupZY80F05DJ05xU6DjnrfhH+LvgfwnxR/reYQLC8KCMrmczzUuAbQ6nmKPXfCpN0j
-         lpZXPPMAafRyHbCR3NDNwCCVas6PwiwrJ3n9yXR942PdJIZmGnd93Kvr8FZgaWhbR/cz
-         MVkFy0ZcRj0Ky+IT/o4nQImqGf5oomlJv2fqfWbgeBKi774voWNQ1l8tN5yRIRbmAswi
-         3PHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ExQ+cUMd6CKqjpDycA1VWArMZGHVO2kBf1mIyUSWUMI=;
-        b=oOQdAzkwz/1BmWsfXBTusu5JiZwPGSOSw1ulgOX6/YlLM1pt/HcMrw4jGHpMawpK/d
-         7YLLwCSCsCF9BeljUObv2m3HVJSsFVVDJl2ZJ3xloy1oba14+dnWys7D9FC8iQA7LWiq
-         lpN+tJrmYZR8kV7JJnldQOdLOj4uR6hbDdPj75k9bHu6W8kPer24ty2GRmEdFhFMrSSG
-         cEsYZlNhr2A6qbollLJP7zm/WahW2z8HY8M5F8Kf9OAru1eIZpT4v9y5GUlKJQuobsf4
-         IjaFKgMOt6TVyRaslbd9QUtecbTNs6uVR7P9mZmztiDE19c2nQ6ADuiU7yAV1hRi/H5g
-         nM2g==
-X-Gm-Message-State: AJIora/UMrxCHDha5Gj2siKObFgxXVbPR3y3j0T6JFVX5g5OWUkvFSot
-        06XpgJXPNfW07rczt5F71wtBMhgE5rK7ew==
-X-Google-Smtp-Source: AGRyM1tZFTVZHjJqttARLkObnCqgS1L27IoScDHQowiwij0Z6kABr9KhfJ75bKeAppYfU99m1gaN/A==
-X-Received: by 2002:a2e:aa0e:0:b0:25a:891f:d9bb with SMTP id bf14-20020a2eaa0e000000b0025a891fd9bbmr400225ljb.343.1656468187927;
-        Tue, 28 Jun 2022 19:03:07 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id v8-20020ac258e8000000b0047f6d20e424sm2408218lfo.55.2022.06.28.19.03.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 19:03:07 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 05:03:05 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v5 11/18] PCI: dwc: Organize local variables usage
-Message-ID: <20220629020305.wspbv6fhluoyklum@mobilestation>
-References: <20220624143428.8334-12-Sergey.Semin@baikalelectronics.ru>
- <20220628233327.GA1879296@bhelgaas>
+        Tue, 28 Jun 2022 22:05:16 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74865313B6;
+        Tue, 28 Jun 2022 19:05:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656468315; x=1688004315;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oEv43ZklnInyeYG0C+sgV1T7PE3bi9pBSUOvJ2667rQ=;
+  b=ELaes25dUQXmdJC5/gRhlctVKCColhq4Ng8icKyApFcdrOQYS5lrJPKH
+   FRICR5A+uaZ2VA9iV+SIYINddOpS9CxA0j9x5qbaGPjsuNiGWZy8+iPHK
+   cOeZ8KvdNVqA6mdQsf+P7VDu1zOCYdB4sBLUfZDLVyL/MBAmh8wIWTR0e
+   7BgHsQl4Xn6+/pJpUFI39QhN7sZHLV55ChikvCAt2e3wXj2QcoHD964CG
+   Xc7qCuexyOdUkDpPqVFBR4Gv0Aic8arXSDGGYsrR60plVFXn1YA2i33SP
+   5l+AhBwbfJzF4S36hV2FJ7yzuBqFcHG0MHvp8SbvkDsydg4xgiO92HlWS
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="270660468"
+X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
+   d="scan'208";a="270660468"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 19:05:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
+   d="scan'208";a="647171135"
+Received: from leirao-pc.bj.intel.com ([10.238.156.101])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Jun 2022 19:05:01 -0700
+From:   Lei Rao <lei.rao@intel.com>
+To:     alex.williamson@redhat.com, cohuck@redhat.com,
+        kevin.tian@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Lei Rao <lei.rao@intel.com>
+Subject: [PATCH] vfio: Fix memory leaks in vfio_create_group()
+Date:   Wed, 29 Jun 2022 10:05:00 +0800
+Message-Id: <20220629020500.878300-1-lei.rao@intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220628233327.GA1879296@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 06:33:27PM -0500, Bjorn Helgaas wrote:
-> On Fri, Jun 24, 2022 at 05:34:21PM +0300, Serge Semin wrote:
-> > There are several places in the common DW PCIe code with incoherent local
-> > variables usage: a variable is defined and initialized with a structure
-> > field, but the structure pointer is de-referenced to access that field
-> > anyway; the local variable is defined and initialized but either used just
-> > once or not used afterwards in the main part of the subsequent method.
-> > It's mainly concerns the pcie_port.dev field. Let's fix that in the
-> > relevant places.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > 
-> > ---
-> > 
-> > Changelog v4:
-> > - This is a new patch created on the v4 lap of the series.
-> > ---
-> >  drivers/pci/controller/dwc/pcie-designware-host.c | 12 ++++++------
-> >  drivers/pci/controller/dwc/pcie-designware.c      |  8 +++-----
-> >  2 files changed, 9 insertions(+), 11 deletions(-)
-> 
-> > @@ -633,7 +633,7 @@ void dw_pcie_setup_rc(struct pcie_port *pp)
-> >  		}
-> >  
-> >  		if (pci->num_ob_windows <= atu_idx)
-> > -			dev_warn(pci->dev, "Resources exceed number of ATU entries (%d)\n",
-> > +			dev_warn(dev, "Resources exceed number of ATU entries (%d)\n",
-> 
+If an error occurs after vfio_group_alloc(), we need to release the
+group.
 
-> I dropped this hunk because of this:
-> 
->   drivers/pci/controller/dwc/pcie-designware-host.c:634:13: error: ‘dev’ undeclared (first use in this function); did you mean ‘cdev’?
->     634 |    dev_warn(dev, "Resources exceed number of ATU entries (%d)\n",
-> 
+Signed-off-by: Lei Rao <lei.rao@intel.com>
+---
+ drivers/vfio/vfio.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Right. It must have been fixed by the auto-merging procedure of my
-local working git-dir. Thanks.
+diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
+index 61e71c1154be..2460aec44a6d 100644
+--- a/drivers/vfio/vfio.c
++++ b/drivers/vfio/vfio.c
+@@ -414,6 +414,7 @@ static struct vfio_group *vfio_create_group(struct iommu_group *iommu_group,
+ 	mutex_unlock(&vfio.group_lock);
+ err_put:
+ 	put_device(&group->dev);
++	vfio_group_release(&group->dev);
+ 	return ret;
+ }
+ 
+-- 
+2.32.0
 
--Sergey
-
-> >  				 pci->num_ob_windows);
-> >  	}
-> >  

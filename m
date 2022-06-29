@@ -2,118 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F1055FDC5
+	by mail.lfdr.de (Postfix) with ESMTP id D106E55FDC6
 	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbiF2Ksk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 06:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
+        id S232477AbiF2KtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 06:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiF2Ksh (ORCPT
+        with ESMTP id S230523AbiF2KtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 06:48:37 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBC01A38F;
-        Wed, 29 Jun 2022 03:48:35 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id r18so13733357edb.9;
-        Wed, 29 Jun 2022 03:48:35 -0700 (PDT)
+        Wed, 29 Jun 2022 06:49:22 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1B71A38F
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:49:21 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id fw3so4088103ejc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:49:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6LFOwjQrAynhPJz9w2u2YY2RBLCZh4UAS01+RkIiElc=;
-        b=dneHmp6YA1cG3nYmf9UuYKaCuH1hXRFEWx3WTF2ty6a9myUn2eqF9gjXMlXa3La8Gg
-         VC10gpLljqL1ooesc7h7mKvbpvw4hc0lzOguyePMZbTAyJTeHzCIAYaTqUgGd1r8dhWT
-         Kndakzd/rpUwN2ODtK1/UwYdfjYTxOAn92w7+RI4Jxk5julwlXtzRS2sN7B4ZSqOO3pW
-         Ad01BneYF9sAorQLTi1e/j4zfnLe5AfFh1bTHXZmNZ03jidbaYrl0VVPJ58gUFWJSZmh
-         EVlxxoxeco5L7nxDkaUNIzOcKfke+Px3y6xgv/EbCA8o+qxDRs6mco8veT05duUJs/VP
-         Ld6w==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=baA9UVReBlJ4gVnrDyz4dAqxk2LXffGXuw2131Io+Xs=;
+        b=Xbs715B9STAbNQ0EwSFISsyIdQQ4LuTgVzpCuaPuzRZ4m129IjIXf3DRAPdaKEjYsm
+         JIDFhlVnAbe1RyL7xEGFf2fItbxHRPeukYBYU4T+tuhdZLbATg7v8I2CUi+0O/Am7saX
+         XhNmxqPoqylhbQXtRiAuTcwCT1Ko3vKEDfZEDmSYJxOozzEZXjKJnk89SV2ybwzFvPgq
+         lJknVRn4ZcMadGp5TOdSX8xfdhP1eLe6psqov8T/avJbEqdHGsNsEMkI1C4Qj2yF6quf
+         dqeyvpks+jdVhLSMPh7rL3I8KGA5fTDRhqCnCvfLKpt/synchRPUtJFNRQBF8WJLrxaW
+         k3NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6LFOwjQrAynhPJz9w2u2YY2RBLCZh4UAS01+RkIiElc=;
-        b=483vX/mcDokS7K+QrlS8wR2Kp77L3k5pmGGXGoEUcSazs+LBmexxVAzGxnaSUJK050
-         QfY+PoA49mhl0QPCEapE3jLynM/ZPVgae82V/G4IKhVyX42JR5fqCBF8T6OZr/+1/Rgi
-         iohpr2lt+IDDHdaouz8+5f41ucHpuo+4u86OxKPWjbwO8Oklsl2xDR2mo9h/W4rXnTqM
-         p/Gzgzc3YSyGsCxrUwzQZtR6UbAEyei/U0xtvWkeuBdzn29xx+UngVJgZyugQi7GPGt5
-         mfjjGd9/T8ttke4s1rxmXnPwp+6b9Jsxlf+QAaKNPkHPmIt8PO7luJ/vGfJn43M75K1q
-         PxGA==
-X-Gm-Message-State: AJIora/0FnAYK0aOrYAjQ9x1C/xQyGn9ZFA8SUMboIGySIKqsKW3eqxx
-        iRj+oR+FVn68Rh3kHewmT/otSK/XLUT6hA==
-X-Google-Smtp-Source: AGRyM1vFiCAQXNLCOYQ/qrf/5NU8lfqplEuPbV4uIYv41Kuoos1HAZTnu7lkf/zQzOzHzELE8gkdpQ==
-X-Received: by 2002:a05:6402:3682:b0:435:b12e:57cd with SMTP id ej2-20020a056402368200b00435b12e57cdmr3396614edb.381.1656499714338;
-        Wed, 29 Jun 2022 03:48:34 -0700 (PDT)
-Received: from sakura.myxoz.lan (195-198-44-182-no2390.tbcn.telia.com. [195.198.44.182])
-        by smtp.gmail.com with ESMTPSA id l2-20020a170906078200b006fe89cafc42sm7676800ejc.172.2022.06.29.03.48.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 03:48:33 -0700 (PDT)
-From:   Miko Larsson <mikoxyzzz@gmail.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     arnd@arndb.de, bigeasy@linutronix.de, chris@chrisdown.name,
-        dmitry.torokhov@gmail.com, gustavoars@kernel.org,
-        john.ogness@linutronix.de, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, oleksandr@redhat.com,
-        quic_eberman@quicinc.com, seanjc@google.com, tglx@linutronix.de,
-        vbabka@suse.cz, x86@kernel.org, linux-snps-arc@lists.infradead.org,
-        Vineet Gupta <vgupta@kernel.org>
-Subject: Re: [PATCH] kbuild: drop support for CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3
-Date:   Wed, 29 Jun 2022 12:48:45 +0200
-Message-ID: <2842572.mvXUDI8C0e@sakura.myxoz.lan>
-In-Reply-To: <20220628210407.3343118-1-ndesaulniers@google.com>
-References: <CA+55aFz2sNBbZyg-_i8_Ldr2e8o9dfvdSfHHuRzVtP2VMAUWPg@mail.gmail.com> <20220628210407.3343118-1-ndesaulniers@google.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=baA9UVReBlJ4gVnrDyz4dAqxk2LXffGXuw2131Io+Xs=;
+        b=tpmiyMC/l5vCYF2xRyye7QwKIO3hlRDGvAEI2yxMYSXAPpqPlx9vt3l0eggDs+F4+T
+         EWVukYFdCutUuRFTg/A69hE4IE0hlhPFfSLo9ITdfTRgGpwGBWtczcsDdt7t9SpN5xPb
+         3JRg4SSetwec4rknI5RrgHcMWZW3IGUDeUpndhvl73HB6NZ9cf+gX1SJiwBQ7wDbMGjy
+         mPEG4voyyZQKEq3QfMWg/synYsvvoYKyxw2uKK6kkzp8Sg3R3PHLIn2pLZ915j2PqXTL
+         CXm8s4AF+1SttkVvGP2nBM+g6B2y3lkiip1cRU2BBbijfz1H7WSMAxbfIVRlrPHy0dxP
+         oGWw==
+X-Gm-Message-State: AJIora+X8ttoopMWqAGtWuWmRYBd4yVvp6i6LtAYccYnnatT6ajO+n3w
+        TgBi/IL6OHIPY0+KEBodQtYrfw==
+X-Google-Smtp-Source: AGRyM1sBR1woO9PSRLRDGfi43ztmS22+sCcHwwD1BkKikBN/g7jU5/KGldrmQEy3hRirXoLPpmSyag==
+X-Received: by 2002:a17:907:2814:b0:72a:3758:e948 with SMTP id eb20-20020a170907281400b0072a3758e948mr1713964ejc.8.1656499760309;
+        Wed, 29 Jun 2022 03:49:20 -0700 (PDT)
+Received: from [192.168.0.184] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id q18-20020a17090609b200b006feaa22e367sm7527140eje.165.2022.06.29.03.49.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 03:49:19 -0700 (PDT)
+Message-ID: <51748cbc-e895-13cc-6b8e-8c62b211aa4e@linaro.org>
+Date:   Wed, 29 Jun 2022 12:49:18 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 3/7] dt-bindings: reset: Add bindings for MT6795 Helio
+ X10 reset controllers
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, robh+dt@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        y.oudjana@protonmail.com, jason-jh.lin@mediatek.com,
+        ck.hu@mediatek.com, fparent@baylibre.com, rex-bc.chen@mediatek.com,
+        tinghan.shen@mediatek.com, chun-jie.chen@mediatek.com,
+        weiyi.lu@mediatek.com, ikjn@chromium.org, miles.chen@mediatek.com,
+        sam.shih@mediatek.com, wenst@chromium.org,
+        bgolaszewski@baylibre.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
+        kernel@collabora.com, Rob Herring <robh@kernel.org>
+References: <20220627085632.23797-1-angelogioacchino.delregno@collabora.com>
+ <20220627085632.23797-4-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220627085632.23797-4-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday, 28 June 2022 23:04:07 CEST Nick Desaulniers wrote:
-> The difference in most compilers between `-O3` and `-O2` is mostly down
-> to whether loops with statically determinable trip counts are fully
-> unrolled vs unrolled to a multiple of SIMD width.
+On 27/06/2022 10:56, AngeloGioacchino Del Regno wrote:
+> Add the reset controller bindings for MT6795.
 > 
-> This patch is effectively a revert of
-> commit 15f5db60a137 ("kbuild,arc: add
-> CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3 for ARC") without re-adding
-> ARCH_CFLAGS
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> ---
+>  include/dt-bindings/reset/mt6795-resets.h | 50 +++++++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+>  create mode 100644 include/dt-bindings/reset/mt6795-resets.h
 > 
-> Ever since
-> commit cfdbc2e16e65 ("ARC: Build system: Makefiles, Kconfig, Linker
-> script")
-> ARC has been built with -O3, though the reason for doing so was not
-> specified in inline comments or the commit message. This commit does not
-> re-add -O3 to arch/arc/Makefile.
-> 
-> Folks looking to experiment with `-O3` (or any compiler flag for that
-> matter) may pass them along to the command line invocation of make:
-> 
-> $ make KCFLAGS=-O3
-> 
-> Code that looks to re-add an explicit Kconfig option for `-O3` should
-> provide:
-> 1. A rigorous and reproducible performance profile of a reasonable
->    userspace workload that demonstrates a hot loop in the kernel that
->    would benefit from `-O3` over `-O2`.
-> 2. Disassembly of said loop body before and after.
-> 3. Provides stats on terms of increase in file size.
-> 
+> diff --git a/include/dt-bindings/reset/mt6795-resets.h b/include/dt-bindings/reset/mt6795-resets.h
+> new file mode 100644
+> index 000000000000..0a6514884eae
+> --- /dev/null
+> +++ b/include/dt-bindings/reset/mt6795-resets.h
 
-Might be worth cleaning up the rest of the kernel of instances of -O3,
-too. -O3 used to build lz4 and mips vdso, for instance. Might be a bit
-of a digression, though
-
---
-~miko
+You still need vendor prefix.
 
 
+Best regards,
+Krzysztof

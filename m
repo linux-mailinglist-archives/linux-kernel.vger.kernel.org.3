@@ -2,96 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5B55600CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C2A5600DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbiF2NGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 09:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
+        id S233674AbiF2NGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 09:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233585AbiF2NGJ (ORCPT
+        with ESMTP id S233646AbiF2NGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 09:06:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82693206D
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 06:06:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7440BB82341
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 13:06:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FDCCC34114;
-        Wed, 29 Jun 2022 13:05:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656507961;
-        bh=G1RHu+MQpFit+ddCR7nyFYmDlIv0wOv1rNdxkGGY0uE=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=kUeRI/gV6BNLHSRypWDCSHu4puVrewJKBHcepAS55RmuxVBIe4AgMt8VnnJKY3gs2
-         MhxOc51Cb4YRW9iA10aqzPt6DY3QHiP7MfDxXtYlqv+HOyebdCIPfVM8k5d0gjYYqY
-         ZiDTwYk8wQg4ulw6gQeqKqvZZRNOLtGn914rTl5w182Hk+e32uwGl/zgItQKjioxGa
-         23ZEC4PUEiFGe3gNeKzH2XBhab4s1RhiXt8qc4LGyEkdY0qM9/TOPRVSGMFqiEEkaT
-         ezLUvyr0xpj7zYbXs4/9qHkmTYo4xzdl9TvjwpG/vzD8vVdPGKWcvu5pAWFZJm+h1A
-         +n8AzKbjiw8wA==
-From:   Mark Brown <broonie@kernel.org>
-To:     ckeepax@opensource.cirrus.com
-Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-In-Reply-To: <20220628153409.3266932-1-ckeepax@opensource.cirrus.com>
-References: <20220628153409.3266932-1-ckeepax@opensource.cirrus.com>
-Subject: Re: [PATCH 1/4] ASoC: wm5102: Fix event generation for output compensation
-Message-Id: <165650795982.1089020.5711367681769613096.b4-ty@kernel.org>
-Date:   Wed, 29 Jun 2022 14:05:59 +0100
+        Wed, 29 Jun 2022 09:06:20 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A696D34BA6;
+        Wed, 29 Jun 2022 06:06:18 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 641811C0C05; Wed, 29 Jun 2022 15:06:17 +0200 (CEST)
+Date:   Wed, 29 Jun 2022 15:06:17 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Liang He <windhl@126.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        yangtiezhu@loongson.cn, linux-mips@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 4.9 11/13] mips/pic32/pic32mzda: Fix refcount
+ leak bugs
+Message-ID: <20220629130617.GE13395@duo.ucw.cz>
+References: <20220628022657.597208-1-sashal@kernel.org>
+ <20220628022657.597208-11-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="X3gaHHMYHkYqP6yf"
+Content-Disposition: inline
+In-Reply-To: <20220628022657.597208-11-sashal@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Jun 2022 16:34:06 +0100, Charles Keepax wrote:
-> The output compensation controls always returns zero regardless of if
-> the control value was updated. This results in missing notifications
-> to user-space of the control change. Update the handling to return 1
-> when the value is changed.
-> 
-> 
 
-Applied to
+--X3gaHHMYHkYqP6yf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+Hi!
 
-Thanks!
+> From: Liang He <windhl@126.com>
+>=20
+> [ Upstream commit eb9e9bc4fa5fb489c92ec588b3fb35f042ba6d86 ]
+>=20
+> of_find_matching_node(), of_find_compatible_node() and
+> of_find_node_by_path() will return node pointers with refcout
+> incremented. We should call of_node_put() when they are not
+> used anymore.
 
-[1/4] ASoC: wm5102: Fix event generation for output compensation
-      commit: cb41d454b2478a98c831f14e656a34c21418e241
-[2/4] ASoC: wm8998: Fix event generation for input mux
-      commit: a83f511909217a1c2b971a509c992b6327bb18e7
-[3/4] ASoC: cs47l92: Fix event generation for OUT1 demux
-      commit: 2d81cca17329dece1c4f37d1de271bc967439327
-[4/4] ASoC: arizona: Update arizona_aif_cfg_changed to use RX_BCLK_RATE
-      commit: 6f04f1bfe9a4adf750c816f6094878222e496d0e
+It looks like this may introduces an use-after-free bug:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+> +++ b/arch/mips/pic32/pic32mzda/init.c
+> @@ -131,13 +131,18 @@ static int __init pic32_of_prepare_platform_data(st=
+ruct of_dev_auxdata *lookup)
+>  		np =3D of_find_compatible_node(NULL, NULL, lookup->compatible);
+>  		if (np) {
+>  			lookup->name =3D (char *)np->name;
+> -			if (lookup->phys_addr)
+> +			if (lookup->phys_addr) {
+> +				of_node_put(np);
+>  				continue;
+> +			}
+>  			if (!of_address_to_resource(np, 0, &res))
+>  				lookup->phys_addr =3D res.start;
+> +			of_node_put(np);
+>  		}
+>  	}
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+lookup->name now contains pointer taken from np->name, but we did
+put() on the np. What guarantees np->name is not freed?
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Best regards,
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+--X3gaHHMYHkYqP6yf
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Mark
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYrxOSQAKCRAw5/Bqldv6
+8sEMAJ9Wi5qZTh56Crna6boxGUkle0M5/QCgsd1WeGfdmFHYdY1YLbCN29nJ5yA=
+=mGn2
+-----END PGP SIGNATURE-----
+
+--X3gaHHMYHkYqP6yf--

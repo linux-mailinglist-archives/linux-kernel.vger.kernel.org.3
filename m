@@ -2,103 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5283A55F247
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 02:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B22F355F253
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 02:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiF2AO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 20:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
+        id S229776AbiF2AXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 20:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiF2AOx (ORCPT
+        with ESMTP id S229483AbiF2AXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 20:14:53 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6C522516;
-        Tue, 28 Jun 2022 17:14:52 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id o18so12546375plg.2;
-        Tue, 28 Jun 2022 17:14:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=05ASLe35KlS/635AYkr9ttdQBevoBXGVkR7t9AbxzS8=;
-        b=dzzx4WtXS/WkHpvykE0Ug4pI7IQoDYpxYcwT22eGTgXydtRyVau06KToMULz4WZ85p
-         grc9sV1BmBI096bjPV6AYIg+FD5hBe5gj3092gLAqIoDR6Usno3qkCUxW0him8f4Kt+7
-         5Uf02V1S6CU9QXgRzjHroyahVKDiR/lHNsV044fz9JWOwGa1zg1AbzobwrAmZjbW8zFF
-         NJWZj5bNSbN92/C5/1fpmT4IbOePFpLv8AN2psJq3YvTqAwnlZ6jrlyHQy1YHFlzFM4V
-         6GGIoWoQqCmV+YlWQVYdo/a8/uHvejllTjqLg43Sy9OxgGuiI2LvtGtvLWOWEwxpHjVI
-         SvDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=05ASLe35KlS/635AYkr9ttdQBevoBXGVkR7t9AbxzS8=;
-        b=Vehktr0tLQ/RatkkMM7U7Ezp4A+PPnWPsGkhNKzqPNYTLYGCS7kgvqjJpmsA/mT7Zj
-         yuvSRCJdX0rZ8jf8bltL227l5vJ5TnKH3BQLN2o9JdXK6z45ItHIN9QIlh8poaVXVOly
-         LVfiDLKolykD+2394olkL8jBGXg/xczVDuQQqDzvgULle9V5d1O8q3IFOqpf4pDJGAvf
-         uneGraK+opAVRalhv+KFTUXaNcaRz1rdaOiy6BDwk/F1u/KWbSHluPh4mn1bi2p4gOrh
-         wf/VWgnZJ4l9pPskCDuV+LM2Qmp82QXwiHAvt0hW8NMHH0IO9O+QFRWdNeSrSjhMX/gF
-         kFuw==
-X-Gm-Message-State: AJIora9K8YNA9F+SXHUMwVRNw/fqek8+4LScMtZBjYoRbWtTgOHTJ8xC
-        bBLhSUjNLmVTB2HYDqVKA0A=
-X-Google-Smtp-Source: AGRyM1s6BvhKknOd3DGT0QQr5uB83fgcSZ645ndGItCzAFy4UPsuv2Gt9Oy4n8CrGTj/IyliMMkT6Q==
-X-Received: by 2002:a17:903:240e:b0:168:ea13:f9e0 with SMTP id e14-20020a170903240e00b00168ea13f9e0mr7684101plo.6.1656461692074;
-        Tue, 28 Jun 2022 17:14:52 -0700 (PDT)
-Received: from ?IPV6:2001:df0:0:200c:75aa:d6ca:4354:6033? ([2001:df0:0:200c:75aa:d6ca:4354:6033])
-        by smtp.gmail.com with ESMTPSA id c13-20020a170902c1cd00b0016a276aada7sm9950167plc.20.2022.06.28.17.14.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 17:14:51 -0700 (PDT)
-Message-ID: <2402062b-aae6-a247-06a8-3775c2909bdb@gmail.com>
-Date:   Wed, 29 Jun 2022 12:14:42 +1200
+        Tue, 28 Jun 2022 20:23:31 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DB41AF39;
+        Tue, 28 Jun 2022 17:23:26 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LXhyN1FFhz4xD9;
+        Wed, 29 Jun 2022 10:23:23 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1656462204;
+        bh=sCA8sdGdi8D7HK/qLBQbMyrc5P/ekYEHXdkbiKXKcIg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=eX7Rzs+w/JnqPWtnZutim4URBsD/y3wGBWCsFmb3pxU2RDhvaj28MY5CXodSzm4Sh
+         r/c/K6O2fcQFBMZAB444PVI+ydGJ3Tlbrc2cFs9IaRHUHwW2DERjCn5J0KOMcHxyAN
+         oukMvD3PyM3817E55qWxs27U0cnEhRPU2vWtq31un6IozNdITwVP0SOBnb+Noy8gX8
+         zMvkOqH95AG9etvyPgTzvhr/nZzLuNJ0SgbPhk9zSgQhZipiyXYRifxB3u5is0O4N+
+         7TOjV77oLw9+y+L9w8QWy/3ufHnasc2iOz1Jt2jJIl+Iynq32JsKyLUxpSkSYCqqt6
+         9MIPdqGs6xQww==
+Date:   Wed, 29 Jun 2022 10:23:04 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the pm tree
+Message-ID: <20220629102304.6d924362@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 3/3] arch/*/: remove CONFIG_VIRT_TO_BUS
-Content-Language: en-US
-From:   Michael Schmitz <schmitzmic@gmail.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        scsi <linux-scsi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        Khalid Aziz <khalid@gonehiking.org>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Matt Wang <wwentao@vmware.com>,
-        Miquel van Smoorenburg <mikevs@xs4all.net>,
-        Mark Salyzyn <salyzyn@android.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Denis Efremov <efremov@linux.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-References: <20220617125750.728590-1-arnd@kernel.org>
- <20220617125750.728590-4-arnd@kernel.org>
- <6ba86afe-bf9f-1aca-7af1-d0d348d75ffc@gmail.com>
- <CAMuHMdVewn0OYA9oJfStk0-+vCKAUou+4Mvd5H2kmrSks1p5jg@mail.gmail.com>
- <b4e5a1c9-e375-63fb-ec7c-abb7384a6d59@gmail.com>
- <9289fd82-285c-035f-5355-4d70ce4f87b0@gmail.com>
- <CAMuHMdXUihTPD9A9hs__Xr2ErfOqkZ5KgCHqm+9HvRf39uS5kA@mail.gmail.com>
- <c30bc9b6-6ccd-8856-dc6b-4e16450dad6f@gmail.com>
- <CAK8P3a1rxEVwVF5U-PO6pQkfURU5Tro1Qp8SPUfHEV9jjWOmCQ@mail.gmail.com>
- <9f812d3d-0fcd-46e6-6d7e-6d4bf66f24ab@gmail.com>
- <fc47e8da-81d3-e563-0a17-4eb23db015cc@acm.org>
- <859c2adc-d3cb-64e8-faba-06e1ac5eddaf@gmail.com>
-In-Reply-To: <859c2adc-d3cb-64e8-faba-06e1ac5eddaf@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/LbU_JmBcLFP5PSw8U38wYDV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,26 +50,856 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bart,
+--Sig_/LbU_JmBcLFP5PSw8U38wYDV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 29/06/22 12:01, Michael Schmitz wrote:
->
->> An example of a user space application that passes an SG I/O data 
->> buffer to the kernel that is aligned to a four byte boundary but not 
->> to an eight byte boundary if the -s (scattered) command line option 
->> is used: 
->> https://github.com/osandov/blktests/blob/master/src/discontiguous-io.cpp
->
-> Thanks - four byte alignment actually wouldn't be an issue for me. 
-> It's two byte or smaller that would trip up the SCSI DMA.
->
-> While I'm sure such an even more pathological test case could be 
-> written, I was rather worried about st.c and sr.c input ...
-Nevermind - I just see m68k defines ARCH_DMA_MINALIGN to be four bytes. 
-Should be safe for all that matters, then.
+Hi all,
 
+After merging the pm tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
+
+In file included from include/linux/list.h:5,
+                 from include/linux/kobject.h:19,
+                 from include/linux/of.h:17,
+                 from include/linux/irqdomain.h:35,
+                 from include/linux/acpi.h:13,
+                 from drivers/bus/hisi_lpc.c:9:
+drivers/bus/hisi_lpc.c: In function 'hisi_lpc_acpi_remove':
+drivers/bus/hisi_lpc.c:488:41: error: 'struct acpi_device' has no member na=
+med 'children'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |                                         ^~
+include/linux/container_of.h:18:33: note: in definition of macro 'container=
+_of'
+   18 |         void *__mptr =3D (void *)(ptr);                            =
+       \
+      |                                 ^~~
+include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+  531 |         list_entry((ptr)->next, type, member)
+      |         ^~~~~~~~~~
+include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
+  674 |         for (pos =3D list_first_entry(head, typeof(*pos), member); =
+       \
+      |                    ^~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_en=
+try'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |         ^~~~~~~~~~~~~~~~~~~
+In file included from include/linux/bits.h:22,
+                 from include/linux/ioport.h:13,
+                 from include/linux/acpi.h:12,
+                 from drivers/bus/hisi_lpc.c:9:
+drivers/bus/hisi_lpc.c:488:41: error: 'struct acpi_device' has no member na=
+med 'children'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |                                         ^~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
+rt'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |         ^~~~~~~~~~~~~
+include/linux/container_of.h:19:23: note: in expansion of macro '__same_typ=
+e'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |                       ^~~~~~~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+  531 |         list_entry((ptr)->next, type, member)
+      |         ^~~~~~~~~~
+include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
+  674 |         for (pos =3D list_first_entry(head, typeof(*pos), member); =
+       \
+      |                    ^~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_en=
+try'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |         ^~~~~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member na=
+med 'node'; did you mean 'fwnode'?
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |                                                     ^~~~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
+rt'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |         ^~~~~~~~~~~~~
+include/linux/container_of.h:19:23: note: in expansion of macro '__same_typ=
+e'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |                       ^~~~~~~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+  531 |         list_entry((ptr)->next, type, member)
+      |         ^~~~~~~~~~
+include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
+  674 |         for (pos =3D list_first_entry(head, typeof(*pos), member); =
+       \
+      |                    ^~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_en=
+try'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |         ^~~~~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:41: error: 'struct acpi_device' has no member na=
+med 'children'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |                                         ^~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
+rt'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |         ^~~~~~~~~~~~~
+include/linux/container_of.h:20:23: note: in expansion of macro '__same_typ=
+e'
+   20 |                       __same_type(*(ptr), void),                   =
+     \
+      |                       ^~~~~~~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+  531 |         list_entry((ptr)->next, type, member)
+      |         ^~~~~~~~~~
+include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
+  674 |         for (pos =3D list_first_entry(head, typeof(*pos), member); =
+       \
+      |                    ^~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_en=
+try'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |         ^~~~~~~~~~~~~~~~~~~
+include/linux/compiler_types.h:293:27: error: expression in static assertio=
+n is not an integer
+  293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), t=
+ypeof(b))
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
+rt'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |         ^~~~~~~~~~~~~
+include/linux/container_of.h:19:23: note: in expansion of macro '__same_typ=
+e'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |                       ^~~~~~~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+  531 |         list_entry((ptr)->next, type, member)
+      |         ^~~~~~~~~~
+include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
+  674 |         for (pos =3D list_first_entry(head, typeof(*pos), member); =
+       \
+      |                    ^~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_en=
+try'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |         ^~~~~~~~~~~~~~~~~~~
+In file included from include/uapi/linux/posix_types.h:5,
+                 from include/uapi/linux/types.h:14,
+                 from include/linux/types.h:6,
+                 from include/linux/kasan-checks.h:5,
+                 from include/asm-generic/rwonce.h:26,
+                 from ./arch/x86/include/generated/asm/rwonce.h:1,
+                 from include/linux/compiler.h:248,
+                 from include/linux/build_bug.h:5,
+                 from include/linux/bits.h:22,
+                 from include/linux/ioport.h:13,
+                 from include/linux/acpi.h:12,
+                 from drivers/bus/hisi_lpc.c:9:
+drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member na=
+med 'node'; did you mean 'fwnode'?
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |                                                     ^~~~
+include/linux/stddef.h:16:58: note: in definition of macro 'offsetof'
+   16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+      |                                                          ^~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+  531 |         list_entry((ptr)->next, type, member)
+      |         ^~~~~~~~~~
+include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
+  674 |         for (pos =3D list_first_entry(head, typeof(*pos), member); =
+       \
+      |                    ^~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_en=
+try'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |         ^~~~~~~~~~~~~~~~~~~
+In file included from include/linux/kobject.h:19,
+                 from include/linux/of.h:17,
+                 from include/linux/irqdomain.h:35,
+                 from include/linux/acpi.h:13,
+                 from drivers/bus/hisi_lpc.c:9:
+drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member na=
+med 'node'; did you mean 'fwnode'?
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |                                                     ^~~~
+include/linux/list.h:665:16: note: in definition of macro 'list_entry_is_he=
+ad'
+  665 |         (&pos->member =3D=3D (head))
+      |                ^~~~~~
+drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_en=
+try'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |         ^~~~~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:41: error: 'struct acpi_device' has no member na=
+med 'children'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |                                         ^~
+include/linux/list.h:665:27: note: in definition of macro 'list_entry_is_he=
+ad'
+  665 |         (&pos->member =3D=3D (head))
+      |                           ^~~~
+drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_en=
+try'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |         ^~~~~~~~~~~~~~~~~~~
+In file included from include/linux/list.h:5,
+                 from include/linux/kobject.h:19,
+                 from include/linux/of.h:17,
+                 from include/linux/irqdomain.h:35,
+                 from include/linux/acpi.h:13,
+                 from drivers/bus/hisi_lpc.c:9:
+drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member na=
+med 'node'; did you mean 'fwnode'?
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |                                                     ^~~~
+include/linux/container_of.h:18:33: note: in definition of macro 'container=
+_of'
+   18 |         void *__mptr =3D (void *)(ptr);                            =
+       \
+      |                                 ^~~
+include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+  564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+      |         ^~~~~~~~~~
+include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
+  676 |              pos =3D list_next_entry(pos, member))
+      |                    ^~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_en=
+try'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |         ^~~~~~~~~~~~~~~~~~~
+In file included from include/linux/bits.h:22,
+                 from include/linux/ioport.h:13,
+                 from include/linux/acpi.h:12,
+                 from drivers/bus/hisi_lpc.c:9:
+drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member na=
+med 'node'; did you mean 'fwnode'?
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |                                                     ^~~~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
+rt'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |         ^~~~~~~~~~~~~
+include/linux/container_of.h:19:23: note: in expansion of macro '__same_typ=
+e'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |                       ^~~~~~~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+  564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+      |         ^~~~~~~~~~
+include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
+  676 |              pos =3D list_next_entry(pos, member))
+      |                    ^~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_en=
+try'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |         ^~~~~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member na=
+med 'node'; did you mean 'fwnode'?
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |                                                     ^~~~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
+rt'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |         ^~~~~~~~~~~~~
+include/linux/container_of.h:19:23: note: in expansion of macro '__same_typ=
+e'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |                       ^~~~~~~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+  564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+      |         ^~~~~~~~~~
+include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
+  676 |              pos =3D list_next_entry(pos, member))
+      |                    ^~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_en=
+try'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |         ^~~~~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member na=
+med 'node'; did you mean 'fwnode'?
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |                                                     ^~~~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
+rt'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |         ^~~~~~~~~~~~~
+include/linux/container_of.h:20:23: note: in expansion of macro '__same_typ=
+e'
+   20 |                       __same_type(*(ptr), void),                   =
+     \
+      |                       ^~~~~~~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+  564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+      |         ^~~~~~~~~~
+include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
+  676 |              pos =3D list_next_entry(pos, member))
+      |                    ^~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_en=
+try'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |         ^~~~~~~~~~~~~~~~~~~
+include/linux/compiler_types.h:293:27: error: expression in static assertio=
+n is not an integer
+  293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), t=
+ypeof(b))
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
+rt'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |         ^~~~~~~~~~~~~
+include/linux/container_of.h:19:23: note: in expansion of macro '__same_typ=
+e'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |                       ^~~~~~~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+  564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+      |         ^~~~~~~~~~
+include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
+  676 |              pos =3D list_next_entry(pos, member))
+      |                    ^~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_en=
+try'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |         ^~~~~~~~~~~~~~~~~~~
+In file included from include/uapi/linux/posix_types.h:5,
+                 from include/uapi/linux/types.h:14,
+                 from include/linux/types.h:6,
+                 from include/linux/kasan-checks.h:5,
+                 from include/asm-generic/rwonce.h:26,
+                 from ./arch/x86/include/generated/asm/rwonce.h:1,
+                 from include/linux/compiler.h:248,
+                 from include/linux/build_bug.h:5,
+                 from include/linux/bits.h:22,
+                 from include/linux/ioport.h:13,
+                 from include/linux/acpi.h:12,
+                 from drivers/bus/hisi_lpc.c:9:
+drivers/bus/hisi_lpc.c:488:53: error: 'struct acpi_device' has no member na=
+med 'node'; did you mean 'fwnode'?
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |                                                     ^~~~
+include/linux/stddef.h:16:58: note: in definition of macro 'offsetof'
+   16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+      |                                                          ^~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+  564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+      |         ^~~~~~~~~~
+include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
+  676 |              pos =3D list_next_entry(pos, member))
+      |                    ^~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:488:9: note: in expansion of macro 'list_for_each_en=
+try'
+  488 |         list_for_each_entry(child, &adev->children, node)
+      |         ^~~~~~~~~~~~~~~~~~~
+In file included from include/linux/list.h:5,
+                 from include/linux/kobject.h:19,
+                 from include/linux/of.h:17,
+                 from include/linux/irqdomain.h:35,
+                 from include/linux/acpi.h:13,
+                 from drivers/bus/hisi_lpc.c:9:
+drivers/bus/hisi_lpc.c: In function 'hisi_lpc_acpi_probe':
+drivers/bus/hisi_lpc.c:509:41: error: 'struct acpi_device' has no member na=
+med 'children'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |                                         ^~
+include/linux/container_of.h:18:33: note: in definition of macro 'container=
+_of'
+   18 |         void *__mptr =3D (void *)(ptr);                            =
+       \
+      |                                 ^~~
+include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+  531 |         list_entry((ptr)->next, type, member)
+      |         ^~~~~~~~~~
+include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
+  674 |         for (pos =3D list_first_entry(head, typeof(*pos), member); =
+       \
+      |                    ^~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_en=
+try'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |         ^~~~~~~~~~~~~~~~~~~
+In file included from include/linux/bits.h:22,
+                 from include/linux/ioport.h:13,
+                 from include/linux/acpi.h:12,
+                 from drivers/bus/hisi_lpc.c:9:
+drivers/bus/hisi_lpc.c:509:41: error: 'struct acpi_device' has no member na=
+med 'children'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |                                         ^~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
+rt'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |         ^~~~~~~~~~~~~
+include/linux/container_of.h:19:23: note: in expansion of macro '__same_typ=
+e'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |                       ^~~~~~~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+  531 |         list_entry((ptr)->next, type, member)
+      |         ^~~~~~~~~~
+include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
+  674 |         for (pos =3D list_first_entry(head, typeof(*pos), member); =
+       \
+      |                    ^~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_en=
+try'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |         ^~~~~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:53: error: 'struct acpi_device' has no member na=
+med 'node'; did you mean 'fwnode'?
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |                                                     ^~~~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
+rt'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |         ^~~~~~~~~~~~~
+include/linux/container_of.h:19:23: note: in expansion of macro '__same_typ=
+e'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |                       ^~~~~~~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+  531 |         list_entry((ptr)->next, type, member)
+      |         ^~~~~~~~~~
+include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
+  674 |         for (pos =3D list_first_entry(head, typeof(*pos), member); =
+       \
+      |                    ^~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_en=
+try'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |         ^~~~~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:41: error: 'struct acpi_device' has no member na=
+med 'children'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |                                         ^~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
+rt'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |         ^~~~~~~~~~~~~
+include/linux/container_of.h:20:23: note: in expansion of macro '__same_typ=
+e'
+   20 |                       __same_type(*(ptr), void),                   =
+     \
+      |                       ^~~~~~~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+  531 |         list_entry((ptr)->next, type, member)
+      |         ^~~~~~~~~~
+include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
+  674 |         for (pos =3D list_first_entry(head, typeof(*pos), member); =
+       \
+      |                    ^~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_en=
+try'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |         ^~~~~~~~~~~~~~~~~~~
+include/linux/compiler_types.h:293:27: error: expression in static assertio=
+n is not an integer
+  293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), t=
+ypeof(b))
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
+rt'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |         ^~~~~~~~~~~~~
+include/linux/container_of.h:19:23: note: in expansion of macro '__same_typ=
+e'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |                       ^~~~~~~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+  531 |         list_entry((ptr)->next, type, member)
+      |         ^~~~~~~~~~
+include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
+  674 |         for (pos =3D list_first_entry(head, typeof(*pos), member); =
+       \
+      |                    ^~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_en=
+try'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |         ^~~~~~~~~~~~~~~~~~~
+In file included from include/uapi/linux/posix_types.h:5,
+                 from include/uapi/linux/types.h:14,
+                 from include/linux/types.h:6,
+                 from include/linux/kasan-checks.h:5,
+                 from include/asm-generic/rwonce.h:26,
+                 from ./arch/x86/include/generated/asm/rwonce.h:1,
+                 from include/linux/compiler.h:248,
+                 from include/linux/build_bug.h:5,
+                 from include/linux/bits.h:22,
+                 from include/linux/ioport.h:13,
+                 from include/linux/acpi.h:12,
+                 from drivers/bus/hisi_lpc.c:9:
+drivers/bus/hisi_lpc.c:509:53: error: 'struct acpi_device' has no member na=
+med 'node'; did you mean 'fwnode'?
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |                                                     ^~~~
+include/linux/stddef.h:16:58: note: in definition of macro 'offsetof'
+   16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+      |                                                          ^~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+  531 |         list_entry((ptr)->next, type, member)
+      |         ^~~~~~~~~~
+include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
+  674 |         for (pos =3D list_first_entry(head, typeof(*pos), member); =
+       \
+      |                    ^~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_en=
+try'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |         ^~~~~~~~~~~~~~~~~~~
+In file included from include/linux/kobject.h:19,
+                 from include/linux/of.h:17,
+                 from include/linux/irqdomain.h:35,
+                 from include/linux/acpi.h:13,
+                 from drivers/bus/hisi_lpc.c:9:
+drivers/bus/hisi_lpc.c:509:53: error: 'struct acpi_device' has no member na=
+med 'node'; did you mean 'fwnode'?
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |                                                     ^~~~
+include/linux/list.h:665:16: note: in definition of macro 'list_entry_is_he=
+ad'
+  665 |         (&pos->member =3D=3D (head))
+      |                ^~~~~~
+drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_en=
+try'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |         ^~~~~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:41: error: 'struct acpi_device' has no member na=
+med 'children'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |                                         ^~
+include/linux/list.h:665:27: note: in definition of macro 'list_entry_is_he=
+ad'
+  665 |         (&pos->member =3D=3D (head))
+      |                           ^~~~
+drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_en=
+try'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |         ^~~~~~~~~~~~~~~~~~~
+In file included from include/linux/list.h:5,
+                 from include/linux/kobject.h:19,
+                 from include/linux/of.h:17,
+                 from include/linux/irqdomain.h:35,
+                 from include/linux/acpi.h:13,
+                 from drivers/bus/hisi_lpc.c:9:
+drivers/bus/hisi_lpc.c:509:53: error: 'struct acpi_device' has no member na=
+med 'node'; did you mean 'fwnode'?
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |                                                     ^~~~
+include/linux/container_of.h:18:33: note: in definition of macro 'container=
+_of'
+   18 |         void *__mptr =3D (void *)(ptr);                            =
+       \
+      |                                 ^~~
+include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+  564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+      |         ^~~~~~~~~~
+include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
+  676 |              pos =3D list_next_entry(pos, member))
+      |                    ^~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_en=
+try'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |         ^~~~~~~~~~~~~~~~~~~
+In file included from include/linux/bits.h:22,
+                 from include/linux/ioport.h:13,
+                 from include/linux/acpi.h:12,
+                 from drivers/bus/hisi_lpc.c:9:
+drivers/bus/hisi_lpc.c:509:53: error: 'struct acpi_device' has no member na=
+med 'node'; did you mean 'fwnode'?
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |                                                     ^~~~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
+rt'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |         ^~~~~~~~~~~~~
+include/linux/container_of.h:19:23: note: in expansion of macro '__same_typ=
+e'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |                       ^~~~~~~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+  564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+      |         ^~~~~~~~~~
+include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
+  676 |              pos =3D list_next_entry(pos, member))
+      |                    ^~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_en=
+try'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |         ^~~~~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:53: error: 'struct acpi_device' has no member na=
+med 'node'; did you mean 'fwnode'?
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |                                                     ^~~~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
+rt'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |         ^~~~~~~~~~~~~
+include/linux/container_of.h:19:23: note: in expansion of macro '__same_typ=
+e'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |                       ^~~~~~~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+  564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+      |         ^~~~~~~~~~
+include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
+  676 |              pos =3D list_next_entry(pos, member))
+      |                    ^~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_en=
+try'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |         ^~~~~~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:53: error: 'struct acpi_device' has no member na=
+med 'node'; did you mean 'fwnode'?
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |                                                     ^~~~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
+rt'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |         ^~~~~~~~~~~~~
+include/linux/container_of.h:20:23: note: in expansion of macro '__same_typ=
+e'
+   20 |                       __same_type(*(ptr), void),                   =
+     \
+      |                       ^~~~~~~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+  564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+      |         ^~~~~~~~~~
+include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
+  676 |              pos =3D list_next_entry(pos, member))
+      |                    ^~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_en=
+try'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |         ^~~~~~~~~~~~~~~~~~~
+include/linux/compiler_types.h:293:27: error: expression in static assertio=
+n is not an integer
+  293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), t=
+ypeof(b))
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
+ert'
+   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
+rt'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |         ^~~~~~~~~~~~~
+include/linux/container_of.h:19:23: note: in expansion of macro '__same_typ=
+e'
+   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
+     \
+      |                       ^~~~~~~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+  564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+      |         ^~~~~~~~~~
+include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
+  676 |              pos =3D list_next_entry(pos, member))
+      |                    ^~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_en=
+try'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |         ^~~~~~~~~~~~~~~~~~~
+In file included from include/uapi/linux/posix_types.h:5,
+                 from include/uapi/linux/types.h:14,
+                 from include/linux/types.h:6,
+                 from include/linux/kasan-checks.h:5,
+                 from include/asm-generic/rwonce.h:26,
+                 from ./arch/x86/include/generated/asm/rwonce.h:1,
+                 from include/linux/compiler.h:248,
+                 from include/linux/build_bug.h:5,
+                 from include/linux/bits.h:22,
+                 from include/linux/ioport.h:13,
+                 from include/linux/acpi.h:12,
+                 from drivers/bus/hisi_lpc.c:9:
+drivers/bus/hisi_lpc.c:509:53: error: 'struct acpi_device' has no member na=
+med 'node'; did you mean 'fwnode'?
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |                                                     ^~~~
+include/linux/stddef.h:16:58: note: in definition of macro 'offsetof'
+   16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+      |                                                          ^~~~~~
+include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+  520 |         container_of(ptr, type, member)
+      |         ^~~~~~~~~~~~
+include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+  564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+      |         ^~~~~~~~~~
+include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
+  676 |              pos =3D list_next_entry(pos, member))
+      |                    ^~~~~~~~~~~~~~~
+drivers/bus/hisi_lpc.c:509:9: note: in expansion of macro 'list_for_each_en=
+try'
+  509 |         list_for_each_entry(child, &adev->children, node) {
+      |         ^~~~~~~~~~~~~~~~~~~
+
+Caused by commit
+
+  647590eb6f34 ("ACPI: bus: Drop unused list heads from struct acpi_device")
+
+I have used the pm tree from next-20220628 for today.
+
+--=20
 Cheers,
+Stephen Rothwell
 
-     Michael
+--Sig_/LbU_JmBcLFP5PSw8U38wYDV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK7m2gACgkQAVBC80lX
+0Gz0SAf/fM3wXGLVN+al7K/b/xHc1dghQws9beNASMuerrlYZFlU4rx5MSn1lQN+
+rP2VfUEdp27EpR+VTA476sCzkVfw69I6SZ/irqDEPOJzPcyQF66/DM8KwaCGWj+Y
+WsKnMZkCR+uH4JauJr+TIpGkn6MWwBeSyXCd8LB8PMPKiPMruBFVRk4KWF6fmpTY
+1WzaLrp4ohzKIiptdcNLlyWmGk7S6r2QvxWuqHAoDBg470Q1zm3Ir3Ks+t5wnbnx
+qg/6K5oIvPO2vllris6xLlqHM6/E0lFrRunD9Y04xrYyJnzPCgQsrDNrNefJg0oa
+S55YEJso141CkANTNngG3WCMFTx7kw==
+=DEJC
+-----END PGP SIGNATURE-----
+
+--Sig_/LbU_JmBcLFP5PSw8U38wYDV--

@@ -2,107 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C83F56055B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F48B560559
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbiF2QGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 12:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
+        id S234230AbiF2QGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 12:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233829AbiF2QGM (ORCPT
+        with ESMTP id S234023AbiF2QGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 12:06:12 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F926396;
-        Wed, 29 Jun 2022 09:06:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=7Il3Zmz7S/H0NpQetmZjc06R/zh7uKcDBAajLC9gk7k=; b=nQI+rf6typETAhwsXDC03rqH1s
-        V164Y6PeH/wetb3LsK1Agsg11/TBxGJrqtz9PS3ZCkdd8xr4Tq3i6g50Fh8k7KpOVCJf71tRgxbIH
-        njTbD+6wn0OaEcJplIK7kNG6yhTWpzvNbrG4L/3iG+OAOYrLdNmjf+5QpEyqcx7jaj/nE8Z8TguZc
-        jVHgBb1v3Ga3S+jBuSfll3H9aSztuVx1Un8QlkO5yuAX5Saz9FlonIBzN4iJ0dd8BEbHTqvsVvRi1
-        T3g4LOg96bAhr2/nF2mMRWewmYCIhMV+dOlF5CozLQiN2Y1LRjq0qQmuCMGhP54hZ4GTTGSsVNp3Y
-        Ww9rCnag==;
-Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1o6aCX-002SQa-6C; Wed, 29 Jun 2022 10:06:02 -0600
-Message-ID: <7da06e08-7dd1-f37c-4382-bc59a1b1e819@deltatee.com>
-Date:   Wed, 29 Jun 2022 10:06:00 -0600
+        Wed, 29 Jun 2022 12:06:20 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FBFBF6F;
+        Wed, 29 Jun 2022 09:06:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656518779; x=1688054779;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MyVcJwpKkoHPhWd05QkSO/zGE66w2VkCpP77v7bD+Uw=;
+  b=hl7knr8NSJnY+co0qvGcIqILusaZ6X9kz6Hu79OdruEt2mGR+9s+RJvw
+   4CBNsOt9VerWH7boxL8+TPtpXKBueoV7ohE1wJFQcQxJ8sQT0gzbAf9E2
+   +SlbyEv385Zz8pKoEcSK/cUDnG+UteP784YOj5iCmLH9dXY4yVsNdDfOH
+   k9P903q1s5mNT65esEUgHxz3WI9ZLuizS+2DpWC58hFX/SMmRq13DLIn/
+   2qaiw+j8P6ZT74zY4haJftFDrI/q5esdcCAEtY85jTwMixkWFT4aGKVkG
+   v7Kd/Q05YKEgQZUXN3oJ3gs5NsQntvPiLnbA7Lh9GmWvLi2o4VSEb9xrI
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="265107558"
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="265107558"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 09:06:18 -0700
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="717881129"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 09:06:15 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o6aCi-000xsY-Q6;
+        Wed, 29 Jun 2022 19:06:12 +0300
+Date:   Wed, 29 Jun 2022 19:06:12 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rob Herring <robh@kernel.org>,
+        Frank Rowand <frank.rowand@sony.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH v2 1/1] of: unittest: Switch to use fwnode instead of
+ of_node
+Message-ID: <Yrx4dBmilHKsESl3@smile.fi.intel.com>
+References: <20220629114156.6001-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-CA
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        Stephen Bates <sbates@raithlin.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>
-References: <20220615161233.17527-1-logang@deltatee.com>
- <20220615161233.17527-17-logang@deltatee.com> <20220629064629.GC17576@lst.de>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <20220629064629.GC17576@lst.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 24.64.144.200
-X-SA-Exim-Rcpt-To: hch@lst.de, linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, iommu@lists.linux-foundation.org, sbates@raithlin.com, dan.j.williams@intel.com, jgg@ziepe.ca, christian.koenig@amd.com, jhubbard@nvidia.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, dave.b.minturn@intel.com, jason@jlekstrand.net, dave.hansen@linux.intel.com, jianxin.xiong@intel.com, helgaas@kernel.org, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, rcampbell@nvidia.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220629114156.6001-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH v7 16/21] block: add check when merging zone device pages
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 29, 2022 at 02:41:56PM +0300, Andy Shevchenko wrote:
+> GPIO library now accepts fwnode as a firmware node, so
+> switch the module to use it.
+
+Sorry for a spam, here is v3 of this series, this one shouldn't be considered.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-
-On 2022-06-29 00:46, Christoph Hellwig wrote:
-> On Wed, Jun 15, 2022 at 10:12:28AM -0600, Logan Gunthorpe wrote:
->> Consecutive zone device pages should not be merged into the same sgl
->> or bvec segment with other types of pages or if they belong to different
->> pgmaps. Otherwise getting the pgmap of a given segment is not possible
->> without scanning the entire segment. This helper returns true either if
->> both pages are not zone device pages or both pages are zone device
->> pages with the same pgmap.
->>
->> Add a helper to determine if zone device pages are mergeable and use
->> this helper in page_is_mergeable().
-> 
-> Any reason not to simply set REQ_NOMERGE for these requests?  We
-> can't merge for passthrough requests anyway, and genrally don't merge
-> for direct I/O either, so adding all this overhead seems a bit pointless.
-
-Hmm, I suppose we could also ensure that REQ_NOMERGE is set in a bio
-before setting FOLL_PCI_P2PDMA in bio_map_user_iov() and
-__bio_iov_iter_get_pages(). Assuming it's always set for any direct I/O.
-
-I'll look into it.
-
-Logan

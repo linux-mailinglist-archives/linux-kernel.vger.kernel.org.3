@@ -2,118 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3DF755F5E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 07:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 911EC55F5E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 07:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbiF2F4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 01:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
+        id S230408AbiF2F5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 01:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiF2F4W (ORCPT
+        with ESMTP id S230399AbiF2F5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 01:56:22 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B0D17584;
-        Tue, 28 Jun 2022 22:56:22 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id r1so13098601plo.10;
-        Tue, 28 Jun 2022 22:56:22 -0700 (PDT)
+        Wed, 29 Jun 2022 01:57:45 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A06317584
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 22:57:44 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id fi2so30302666ejb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 22:57:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zysuHUP/InQT5Fi1lB0z6tjNnC0mTo16xnyZM6YuAJw=;
-        b=QK/5e2zQieB6A4dmexNIProsq3M79RKCnmora4GTRtVMPjkkvv3D4aT204RFEfBWx4
-         nId2C5ed5MHevimldiWc6Cjde/EbequTigTeiNKdBodzJkUX9bD3ohxdMQnuIO16C92c
-         cp955TzJcSZV4gQvc+gd9U7cL8BLf4+2kKrf4Hte3bACe8eIPTlrlIg7Ph1vWkIcuXDl
-         fIr+vIWPAyjVLyKVR71SZZjibIWSUNaAIDtHoXjlHTCVYvRZ/udaUv5cKICLS4WUOmEz
-         Y+mN1BV0/tn9BU7nWku0MgYLRIP8nEaeWD2bIzk+D5O6mxgA5I1AkhOhyH6BrtTW/hZb
-         a6bA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1WfdVfNcXkp3OxFuJuEQhMM39v5eC68bY2ADm6rLKI0=;
+        b=JkUoMSVHOd8FXIU1nP7mHg39NA+HAkmXOBLZHIkIRWjuF2QXpez6vuJMIWGUWFHEby
+         5o4bGCiXixkuKlUlu2olkq0QLN2UOIntPX6lG3+7PbXV+avqVfJ253cahNkw20GGXPeA
+         MHvSKO3EVsTxg+HQtXEwBaZzsvry24d4BvkcEdAr5jVs9aGqW6Xuvyy663JNPBbkngxL
+         ek6xf1/RqwKb2cDwtZy8lrOxsp43tHw2dRO21IpABqGEytjhcHxUraOi/YMWnoRgDrmq
+         fIbCX7sv+Ga3+sPyzf/OYbX6uTY+nt3ooO/FRKAj9IUFTzcd83VY9OMyTF/rzwkUp2rw
+         iYkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=zysuHUP/InQT5Fi1lB0z6tjNnC0mTo16xnyZM6YuAJw=;
-        b=Vpa/dVT6+Z17dQBwAOiWJrWzaasz6hjgbl9mL3sF/73Maz/oRONlycL+NFRMt/Jooj
-         uT2tJO42ntlu/OtzM4YfBQlB8BWzfguLIZ1mowZ7lhdB1/a28VBXcXoekgdPnp4wr1uU
-         sqpU0i3O6ypYI/aRvbni691G0Nd7QLJS0GgKhExti27YVq0e9m7wiZt6D/cURrZEAntz
-         3wRy2c4KXDW7ZXD6iOtsylHQYWDTCQYFudzTqdijSKuJcrzi4sOjhO6Kohr6FIJH9+yz
-         hW2a1e8Q7KM7sYRmnSbGlXzpHw1povQea0jH3giOgGVUpy153PN8KMVt4wClSUQof4ko
-         71+w==
-X-Gm-Message-State: AJIora9v1HBaSbtEz8WnJgSMT6irHVXXbzSyLltzMDzYARDEeKJLmR1S
-        j0XbhHgsDLV4mGcVp00A49E=
-X-Google-Smtp-Source: AGRyM1tXAC4bhW6xMpfXOnI72qyaFcpjuVyN0Ilx++e7/GU7Zz0+Z6//cTeok3vV2AY7ITsad9MSHg==
-X-Received: by 2002:a17:90b:4ac7:b0:1ed:21e8:ddb2 with SMTP id mh7-20020a17090b4ac700b001ed21e8ddb2mr1929375pjb.93.1656482181452;
-        Tue, 28 Jun 2022 22:56:21 -0700 (PDT)
-Received: from sebin-inspiron.bbrouter ([103.160.194.58])
-        by smtp.gmail.com with ESMTPSA id p12-20020aa79e8c000000b0050dc7628162sm10587451pfq.60.2022.06.28.22.56.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 22:56:20 -0700 (PDT)
-From:   SebinSebastian <mailmesebin00@gmail.com>
-Cc:     mailmesebin00@gmail.com, skhan@linuxfoundation.org,
-        Neal Liu <neal_liu@aspeedtech.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        bh=1WfdVfNcXkp3OxFuJuEQhMM39v5eC68bY2ADm6rLKI0=;
+        b=zPHv27uopo+JusJNSko3UutXFTf9m1B79XUVnBtNCZ2G6IzXrLKIbvaQqEWeM4HFF6
+         H9qZQ0Fv6HYxHynVnPVORGGcok2lKHP2xy7UPydtyf1O6haiwgEGozgfsMj09uJ3acFI
+         4ofM9ck0BEl6SK0JEJxXEO5j/Rnn6JefVbRPESqNgozIQHHjx7sZuhWmPMzDJ1kzsNvw
+         GyaClk/hvWZx/WJzzDXUC4hD7iD4JHnPGeLKv66JUuGfidkMsJ2lcHO2oPfXUG9f14AV
+         lIYUO3dPRlLgcPsZDbXVGNa1UPisp1rmDNBwGfdkYG6MtnUEeN3GYuyxO5WEz93yC//o
+         VeBg==
+X-Gm-Message-State: AJIora88KYF+XimP9u20c6ruZvdY6lHpt3c0ol7TDMiag89GdaxSRhJJ
+        8iigblCImrtu67m8Bf4f+Qc5EQ==
+X-Google-Smtp-Source: AGRyM1tKY3/ufkVIb0NqXcBrOPVDKBLhqSVvGuyqn+dsBxeoxntoXm1sQv41p5v8Kn71T36sBhLAmA==
+X-Received: by 2002:a17:907:7213:b0:726:9f27:8fc8 with SMTP id dr19-20020a170907721300b007269f278fc8mr1551543ejc.523.1656482262769;
+        Tue, 28 Jun 2022 22:57:42 -0700 (PDT)
+Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id d20-20020aa7ce14000000b00435d4179bbdsm10892308edv.4.2022.06.28.22.57.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 22:57:42 -0700 (PDT)
+Message-ID: <b70e06e7-81fc-dfc1-f9c5-f83cb4a18293@linaro.org>
+Date:   Wed, 29 Jun 2022 07:57:40 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 2/5] dt-bindings: clock: Add AST2500/AST2600 HACE reset
+ definition
+Content-Language: en-US
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Joel Stanley <joel@jms.id.au>,
         Andrew Jeffery <andrew@aj.id.au>,
-        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH-next] usb: gadget: dereference before null check
-Date:   Wed, 29 Jun 2022 11:26:05 +0530
-Message-Id: <20220629055605.102425-1-mailmesebin00@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Dhananjay Phadke <dhphadke@microsoft.com>,
+        Johnny Huang <johnny_huang@aspeedtech.com>
+Cc:     linux-aspeed@lists.ozlabs.org, linux-crypto@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com
+References: <20220629032008.1579899-1-neal_liu@aspeedtech.com>
+ <20220629032008.1579899-3-neal_liu@aspeedtech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220629032008.1579899-3-neal_liu@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sebin Sebastian <mailmesebin00@gmail.com>
+On 29/06/2022 05:20, Neal Liu wrote:
+> Add HACE reset bit definition for AST2500/AST2600.
+> 
+> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+> Signed-off-by: Johnny Huang <johnny_huang@aspeedtech.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  include/dt-bindings/clock/aspeed-clock.h  | 3 ++-
+>  include/dt-bindings/clock/ast2600-clock.h | 1 +
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/dt-bindings/clock/aspeed-clock.h b/include/dt-bindings/clock/aspeed-clock.h
+> index 9ff4f6e4558c..6e040f7c3426 100644
+> --- a/include/dt-bindings/clock/aspeed-clock.h
+> +++ b/include/dt-bindings/clock/aspeed-clock.h
+> @@ -46,11 +46,12 @@
+>  #define ASPEED_RESET_MCTP		1
+>  #define ASPEED_RESET_ADC		2
+>  #define ASPEED_RESET_JTAG_MASTER	3
+> -#define ASPEED_RESET_MIC		4
+> +#define ASPEED_RESET_HACE		4
 
-Fix coverity warning dereferencing before null check. _ep and desc is
-deferenced on all paths until the check for null. Move the
-initilizations after the check for null.
-Coverity issue: 1518209
+I did not ack such change. This is a significant change from previous
+version, invalidating my previous ack.
 
-Signed-off-by: Sebin Sebastian <mailmesebin00@gmail.com>
----
- drivers/usb/gadget/udc/aspeed_udc.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+This breaks the ABI, so NAK without proper explanation why ABI break is
+accepted.
 
-diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
-index d75a4e070bf7..4f158030e2cc 100644
---- a/drivers/usb/gadget/udc/aspeed_udc.c
-+++ b/drivers/usb/gadget/udc/aspeed_udc.c
-@@ -341,10 +341,6 @@ static void ast_udc_stop_activity(struct ast_udc_dev *udc)
- static int ast_udc_ep_enable(struct usb_ep *_ep,
- 			     const struct usb_endpoint_descriptor *desc)
- {
--	u16 maxpacket = usb_endpoint_maxp(desc);
--	struct ast_udc_ep *ep = to_ast_ep(_ep);
--	struct ast_udc_dev *udc = ep->udc;
--	u8 epnum = usb_endpoint_num(desc);
- 	unsigned long flags;
- 	u32 ep_conf = 0;
- 	u8 dir_in;
-@@ -355,6 +351,12 @@ static int ast_udc_ep_enable(struct usb_ep *_ep,
- 		EP_DBG(ep, "Failed, invalid EP enable param\n");
- 		return -EINVAL;
- 	}
-+
-+	u16 maxpacket = usb_endpoint_maxp(desc);
-+	struct ast_udc_ep *ep = to_ast_ep(_ep);
-+	struct ast_udc_dev *udc = ep->udc;
-+	u8 epnum = usb_endpoint_num(desc);
-+
- 
- 	if (!udc->driver) {
- 		EP_DBG(ep, "bogus device state\n");
--- 
-2.34.1
+>  #define ASPEED_RESET_PWM		5
+>  #define ASPEED_RESET_PECI		6
+>  #define ASPEED_RESET_I2C		7
+>  #define ASPEED_RESET_AHB		8
+>  #define ASPEED_RESET_CRT1		9
+> +#define ASPEED_RESET_MIC		18
+>  
+>  #endif
+> diff --git a/include/dt-bindings/clock/ast2600-clock.h b/include/dt-bindings/clock/ast2600-clock.h
+> index 62b9520a00fd..d8b0db2f7a7d 100644
+> --- a/include/dt-bindings/clock/ast2600-clock.h
+> +++ b/include/dt-bindings/clock/ast2600-clock.h
+> @@ -111,6 +111,7 @@
+>  #define ASPEED_RESET_PCIE_RC_O		19
+>  #define ASPEED_RESET_PCIE_RC_OEN	18
+>  #define ASPEED_RESET_PCI_DP		5
+> +#define ASPEED_RESET_HACE		4
+>  #define ASPEED_RESET_AHB		1
+>  #define ASPEED_RESET_SDRAM		0
+>  
 
+
+Best regards,
+Krzysztof

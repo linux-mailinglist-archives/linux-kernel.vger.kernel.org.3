@@ -2,286 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD0755FEA9
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A90AF55FE9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbiF2Lat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 07:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
+        id S232869AbiF2LaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 07:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232875AbiF2LaS (ORCPT
+        with ESMTP id S232761AbiF2L3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 07:30:18 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451633EAB8
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 04:30:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656502214; x=1688038214;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CJZp0Ai058gciwAgk4vcNvOCE9MCURSm+pmkb2cRzrE=;
-  b=ASUjwbMlvlHCSZzxVY69zKLomXIw4GI7Rl260/rjSzq2wscgMnTde9t3
-   RFq008TPjCWFhueBoSIYsERm1o2rCD5ohsgitDhput/ReddR4PQEWn+Bn
-   dj8OJVwrIibREfuYYLJWV/37HjZhyPtTRgwiWJRY+bMaMOj9Q0pKvZmDY
-   XoWFmzqBGyksss//pFMfqeQLrRILethPmSU9VoSN83kGix9ecOv6QkW0G
-   +Oi5qlBY3MyK3Kb3DDmij0co3KhUeMBOwYjbnBXvVKYgGRSf8fjHjB2Uu
-   kiF9+yyJPgX2aeFtpszBC1tEDxZ1KaY+UOHEWo+kcFAN62TRPSqEz0iu4
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="368319379"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="368319379"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 04:30:14 -0700
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="647353459"
-Received: from sannilnx.jer.intel.com ([10.12.26.157])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 04:30:10 -0700
-From:   Alexander Usyskin <alexander.usyskin@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Tomas Winkler <tomas.winkler@intel.com>,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Alan Previn <alan.previn.teres.alexis@intel.com>
-Subject: [PATCH v4 14/14] drm/i915/gsc: allocate extended operational memory in LMEM
-Date:   Wed, 29 Jun 2022 14:29:13 +0300
-Message-Id: <20220629112913.1210933-15-alexander.usyskin@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220629112913.1210933-1-alexander.usyskin@intel.com>
-References: <20220629112913.1210933-1-alexander.usyskin@intel.com>
+        Wed, 29 Jun 2022 07:29:49 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2074.outbound.protection.outlook.com [40.107.92.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE873EA9A;
+        Wed, 29 Jun 2022 04:29:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VHcG5f7ncf6dO9ZLmOlceN8UW5wf+DFDfHDIm2XaM+pkCusaULgZLfkGhw3C3idUdu+BMkRL0+kwnoiW9G+/mPtfv32lRywUW86ZBos7WwYd5x6uJ3xXj28h4+cPW/K1mz7cTaMBBcV8Sa9M5kVRSkRjFGEA5FCBspTwOgzWdVq3xWNLYWRpDduo52rJq6uYdTWfthqCyx062Qwb2qwlZD3fhlokopEH9m1Q1DI/2+rOB/i4SDxWlB1UU5043P5btvRBAyG3OEksJPUC60SNjQPUIUPXcsSCY4DhJRwWATbdu81Ng6RGJhlCapK9QJo7Av3LnA+ywI+8jHgJh3g7Lg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zvowT1nkISA8FeUAsBCVG5rbTr96MJp5e/PD1zhDr/k=;
+ b=ER6gjmWs2YUmxelOaN9idP0RtXOQ1VfwO42SGUYqeUEIxr/vSujxCc6bf+0yCZXuLvzRxDrsBUihDHzznNU3uEnV5Q/Lz0BJw9eEHI4tZygPF0Tds/sblTjgIDXaZB5OhFV4khDPifBI8f+8SNUOY5W4t7pJaL7hbFBwsdhCtrBbiATs8w21BLldOJzaEvsGsayed1gNBlEZc/vhG+N0w+T+2jOe4T7EAaSoF/peJKhjp01fSCrfYdQv1bW41prD7IvirLewEVQCpqdLqgr0hYyUB419XFxc6OE34Uj3kfoR+UrkMc5OcGns3bZwxQybJy9WnqebPJeOYyx/0kXbtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zvowT1nkISA8FeUAsBCVG5rbTr96MJp5e/PD1zhDr/k=;
+ b=LSjY2GSQirjcgCgKGFxpPqL8frt0PGXEeFZAhObv2KokPkP7RyJIz9S6uBZSoGNs09doyVZsAyCH0arT5crnAG5arhH8W1f427lTtHKumFq9Cn79W8wwbpiNu6WoclJ81WITRUUJyoEQeKZz2MBKCgEGTP4ustBoGTVR5cWCm7s=
+Received: from DM6PR11CA0072.namprd11.prod.outlook.com (2603:10b6:5:14c::49)
+ by MN2PR12MB3821.namprd12.prod.outlook.com (2603:10b6:208:16f::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Wed, 29 Jun
+ 2022 11:29:44 +0000
+Received: from DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:14c:cafe::df) by DM6PR11CA0072.outlook.office365.com
+ (2603:10b6:5:14c::49) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17 via Frontend
+ Transport; Wed, 29 Jun 2022 11:29:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT003.mail.protection.outlook.com (10.13.173.162) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5373.15 via Frontend Transport; Wed, 29 Jun 2022 11:29:39 +0000
+Received: from [10.254.241.52] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 29 Jun
+ 2022 06:29:34 -0500
+Message-ID: <92e215f2-afb3-1d43-dd21-9206176b4263@amd.com>
+Date:   Wed, 29 Jun 2022 13:29:31 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 3/4] dt-bindings: misc: tmr-inject: Add device-tree
+ binding for TMR Inject
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <michal.simek@xilinx.com>, <derek.kiernan@xilinx.com>,
+        <dragan.cvetic@xilinx.com>, <arnd@arndb.de>,
+        <gregkh@linuxfoundation.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <git@amd.com>, <git@xilinx.com>
+References: <20220628054338.1631516-1-appana.durga.rao@xilinx.com>
+ <20220628054338.1631516-4-appana.durga.rao@xilinx.com>
+ <1ba34d2b-113f-360e-bdd1-ab440bc456df@linaro.org>
+From:   Michal Simek <michal.simek@amd.com>
+In-Reply-To: <1ba34d2b-113f-360e-bdd1-ab440bc456df@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b04e427b-0a5e-477e-6d0c-08da59c2a77f
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3821:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?eFNRbUFseEFJYUMrMG84eFJJTUExSGR6RUtwT3FHa1ZRbkxPRU9JaUFHZEJR?=
+ =?utf-8?B?eWRWWDFwOEpEK2FVdFcrcFVwV3FKR1RiTWphM0wxQkE4bEhsaWdDR25PcnJJ?=
+ =?utf-8?B?Nk4yNEhyMm5UTzRWOHRvN2dkMWU2Ym9FZy91QjNiVjJtWkpwZkF2NlVrVXlW?=
+ =?utf-8?B?bXhRS2loUGtLQ0RQRk0wN0ZidmlzMDBYYW80bTk2RXhEM3ZpenIya2NsNHZ1?=
+ =?utf-8?B?dmx1MGFyODF5SVYrOVhDMnpjR2crem8yZDg2RC8wZ213K0FHclJYd1U1ODF1?=
+ =?utf-8?B?MTJSMXY2QVIzUVd5emFTN2JFNTZnNFFwVTZuYUNjWitrSFBzaHZHSWtGVFk4?=
+ =?utf-8?B?NTZvZU1ZYXl4UTJhS0YwRTRJTUVQM3VjeUN5Rk45VVFuTVRwWlhNZDhqVVF3?=
+ =?utf-8?B?QmhxVVJwOW9ubDFGRWllTS9Ka0hwY2ZiR1JhaFAveFZGc0pwelRrMHMwUnlD?=
+ =?utf-8?B?NVJqQjVkV3pxS1pQWHR4RHBFUzhtN0Z0d1lxbnQ5VkdyMzhHc2hXcDJHT2FV?=
+ =?utf-8?B?SHVabFJZaVlISXdDbndWV0k2RExVeStWcVBJdXduN2R0MEVXQ0cwUjdTaEJQ?=
+ =?utf-8?B?S0JrRGttRDVEblo2N1UvR1JVT25XMVByb1pvdFlpUEdZeFl0Qm5aV0YrNEJM?=
+ =?utf-8?B?dVFIZ2Nxb2REVTJVNHIwYVZ0b2hkb1FNYlI3VDBIbjk5REw5MVZGMS9tcy9N?=
+ =?utf-8?B?dlh1SXZ2TVUxOXVjekxwd2lXRGlGVzdkZGZKQ2lLV2ZRUURYNzFYRk1rQ04z?=
+ =?utf-8?B?c0NpZW5UdXdSR09zOEVhbUpnaDJScFBmQWVwNXI2VWpCYTk0aUJncDZVRVY1?=
+ =?utf-8?B?ZENkaGRSZmYrLzErUGVmYlNKV0N2TnVPWlRpMWFCVnFFaUFCZGZWQVFrT1lq?=
+ =?utf-8?B?a2tnRVF3S25kSHVZUVVXTm1yM2NIbkxNbGQwMWcrbmhvUTErMGxwVEVCSTF1?=
+ =?utf-8?B?UWhTNE1Oc05xRnZ5MkZBaGJKbkliVUVyL2w4S2U3czhBd1hESXk1OVJFdmpY?=
+ =?utf-8?B?WWhFanN5UlBCWkN5QTlvRWlKa3hNNVNoVnl2ekFCL0cxekRRQlprQ29OS0Yr?=
+ =?utf-8?B?ZGdad3p5aGorZVR3d3psZFdkRVB0WmVFSHMrajZkT21XTmgvSnhadFcxemFn?=
+ =?utf-8?B?TWhuS3l3NGhDb1Ixc1hYQ2RPM3FNcTZkWERIWXlheXlzSU9WTEFiL2J1UCtr?=
+ =?utf-8?B?MUZzYmxRdERnTjU3RW5xeHhlQ3hVVWZObXFHYUdZTUpFMXplYUg1YWdwVVlB?=
+ =?utf-8?B?MEhEaFhpalh5cE05K2xlQTB1WTIyb2gyNTVLK0N4Z3NveVVnZz09?=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(39860400002)(136003)(396003)(46966006)(36840700001)(40470700004)(31686004)(5660300002)(36860700001)(316002)(40460700003)(8936002)(86362001)(6666004)(83380400001)(40480700001)(921005)(2906002)(82310400005)(44832011)(36756003)(31696002)(41300700001)(966005)(8676002)(81166007)(336012)(426003)(70586007)(2616005)(70206006)(107886003)(47076005)(356005)(82740400003)(4326008)(53546011)(478600001)(26005)(16576012)(54906003)(16526019)(186003)(110136005)(43740500002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2022 11:29:39.4082
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b04e427b-0a5e-477e-6d0c-08da59c2a77f
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3821
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tomas Winkler <tomas.winkler@intel.com>
 
-GSC requires more operational memory than available on chip.
-Reserve 4M of LMEM for GSC operation. The memory is provided to the
-GSC as struct resource to the auxiliary data of the child device.
 
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
-Signed-off-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-Cc: Alan Previn <alan.previn.teres.alexis@intel.com>
----
- drivers/gpu/drm/i915/gt/intel_gsc.c | 92 ++++++++++++++++++++++++++---
- drivers/gpu/drm/i915/gt/intel_gsc.h |  3 +
- 2 files changed, 88 insertions(+), 7 deletions(-)
+On 6/29/22 12:08, Krzysztof Kozlowski wrote:
+> On 28/06/2022 07:43, Appana Durga Kedareswara rao wrote:
+>> This commit adds documentation for Triple Modular Redundancy (TMR)
+> 
+> No "This commit"
+> 
+> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+> 
+>> Inject IP.
+>>
+>> Signed-off-by: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
+>> ---
+>>   .../bindings/misc/xlnx,tmr-inject.yaml        | 47 +++++++++++++++++++
+>>   1 file changed, 47 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/misc/xlnx,tmr-inject.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/misc/xlnx,tmr-inject.yaml b/Documentation/devicetree/bindings/misc/xlnx,tmr-inject.yaml
+>> new file mode 100644
+>> index 000000000000..4daf9539000b
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/misc/xlnx,tmr-inject.yaml
+>> @@ -0,0 +1,47 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/misc/xlnx,tmr-inject.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Xilinx TMR Inject Device Tree Bindings
+> 
+> Same comments.
+> 
+>> +
+>> +maintainers:
+>> +  - Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
+>> +
+>> +description: |
+>> +  The Triple Modular Redundancy(TMR) Inject core provides functional fault
+>> +  injection by changing selected MicroBlaze instructions, which provides the
+>> +  possibility to verify that the TMR subsystem error detection and fault
+>> +  recovery logic is working properly.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - xlnx,tmr-inject-1.0
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  xlnx,magic:
+>> +    minimum: 0
+>> +    maximum: 255
+>> +    description: |
+>> +      Magic number used when injecting faults. The fault inject write data least
+>> +      significant byte (bits 7:0) must match this number to have any effect.
+> 
+> And why exactly register value is a property of DT?
+> 
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - xlnx,magic
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    tmr-inject@44a30000 {
+> 
+> fault-inject?
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.c b/drivers/gpu/drm/i915/gt/intel_gsc.c
-index bfc307e49bf9..4d87519d5773 100644
---- a/drivers/gpu/drm/i915/gt/intel_gsc.c
-+++ b/drivers/gpu/drm/i915/gt/intel_gsc.c
-@@ -7,6 +7,7 @@
- #include <linux/mei_aux.h>
- #include "i915_drv.h"
- #include "i915_reg.h"
-+#include "gem/i915_gem_region.h"
- #include "gt/intel_gsc.h"
- #include "gt/intel_gt.h"
- 
-@@ -36,12 +37,68 @@ static int gsc_irq_init(int irq)
- 	return irq_set_chip_data(irq, NULL);
- }
- 
-+static int
-+gsc_ext_om_alloc(struct intel_gsc *gsc, struct intel_gsc_intf *intf, size_t size)
-+{
-+	struct intel_gt *gt = gsc_to_gt(gsc);
-+	struct drm_i915_gem_object *obj;
-+	void *vaddr;
-+	int err;
-+
-+	obj = i915_gem_object_create_lmem(gt->i915, size, I915_BO_ALLOC_CONTIGUOUS);
-+	if (IS_ERR(obj)) {
-+		drm_err(&gt->i915->drm, "Failed to allocate gsc memory\n");
-+		return PTR_ERR(obj);
-+	}
-+
-+	err = i915_gem_object_pin_pages_unlocked(obj);
-+	if (err) {
-+		drm_err(&gt->i915->drm, "Failed to pin pages for gsc memory\n");
-+		goto out_put;
-+	}
-+
-+	vaddr = i915_gem_object_pin_map_unlocked(obj, i915_coherent_map_type(gt->i915, obj, true));
-+	if (IS_ERR(vaddr)) {
-+		err = PTR_ERR(vaddr);
-+		drm_err(&gt->i915->drm, "Failed to map gsc memory\n");
-+		goto out_unpin;
-+	}
-+
-+	memset(vaddr, 0, obj->base.size);
-+
-+	i915_gem_object_unpin_map(obj);
-+
-+	intf->gem_obj = obj;
-+
-+	return 0;
-+
-+out_unpin:
-+	i915_gem_object_unpin_pages(obj);
-+out_put:
-+	i915_gem_object_put(obj);
-+	return err;
-+}
-+
-+static void gsc_ext_om_destroy(struct intel_gsc_intf *intf)
-+{
-+	struct drm_i915_gem_object *obj = fetch_and_zero(&intf->gem_obj);
-+
-+	if (!obj)
-+		return;
-+
-+	if (i915_gem_object_has_pinned_pages(obj))
-+		i915_gem_object_unpin_pages(obj);
-+
-+	i915_gem_object_put(obj);
-+}
-+
- struct gsc_def {
- 	const char *name;
- 	unsigned long bar;
- 	size_t bar_size;
- 	bool use_polling;
- 	bool slow_fw;
-+	size_t lmem_size;
- };
- 
- /* gsc resources and definitions (HECI1 and HECI2) */
-@@ -74,6 +131,7 @@ static const struct gsc_def gsc_def_dg2[] = {
- 		.name = "mei-gsc",
- 		.bar = DG2_GSC_HECI1_BASE,
- 		.bar_size = GSC_BAR_LENGTH,
-+		.lmem_size = SZ_4M,
- 	},
- 	{
- 		.name = "mei-gscfi",
-@@ -90,26 +148,33 @@ static void gsc_release_dev(struct device *dev)
- 	kfree(adev);
- }
- 
--static void gsc_destroy_one(struct intel_gsc_intf *intf)
-+static void gsc_destroy_one(struct drm_i915_private *i915,
-+				  struct intel_gsc *gsc, unsigned int intf_id)
- {
-+	struct intel_gsc_intf *intf = &gsc->intf[intf_id];
-+
- 	if (intf->adev) {
- 		auxiliary_device_delete(&intf->adev->aux_dev);
- 		auxiliary_device_uninit(&intf->adev->aux_dev);
- 		intf->adev = NULL;
- 	}
-+
- 	if (intf->irq >= 0)
- 		irq_free_desc(intf->irq);
- 	intf->irq = -1;
-+
-+	gsc_ext_om_destroy(intf);
- }
- 
- static void gsc_init_one(struct drm_i915_private *i915,
--			 struct intel_gsc_intf *intf,
--			 unsigned int intf_id)
-+			       struct intel_gsc *gsc,
-+			       unsigned int intf_id)
- {
- 	struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
- 	struct mei_aux_device *adev;
- 	struct auxiliary_device *aux_dev;
- 	const struct gsc_def *def;
-+	struct intel_gsc_intf *intf = &gsc->intf[intf_id];
- 	int ret;
- 
- 	intf->irq = -1;
-@@ -141,7 +206,7 @@ static void gsc_init_one(struct drm_i915_private *i915,
- 	intf->irq = irq_alloc_desc(0);
- 	if (intf->irq < 0) {
- 		drm_err(&i915->drm, "gsc irq error %d\n", intf->irq);
--		return;
-+		goto fail;
- 	}
- 
- 	ret = gsc_irq_init(intf->irq);
-@@ -155,6 +220,19 @@ static void gsc_init_one(struct drm_i915_private *i915,
- 	if (!adev)
- 		goto fail;
- 
-+	if (def->lmem_size) {
-+		dev_dbg(&pdev->dev, "setting up GSC lmem\n");
-+
-+		if (gsc_ext_om_alloc(gsc, intf, def->lmem_size)) {
-+			dev_err(&pdev->dev, "setting up gsc extended operational memory failed\n");
-+			kfree(adev);
-+			goto fail;
-+		}
-+
-+		adev->ext_op_mem.start = i915_gem_object_get_dma_address(intf->gem_obj, 0);
-+		adev->ext_op_mem.end = adev->ext_op_mem.start + def->lmem_size;
-+	}
-+
- 	adev->irq = intf->irq;
- 	adev->bar.parent = &pdev->resource[0];
- 	adev->bar.start = def->bar + pdev->resource[0].start;
-@@ -188,7 +266,7 @@ static void gsc_init_one(struct drm_i915_private *i915,
- 
- 	return;
- fail:
--	gsc_destroy_one(intf);
-+	gsc_destroy_one(i915, gsc, intf->id);
- }
- 
- static void gsc_irq_handler(struct intel_gt *gt, unsigned int intf_id)
-@@ -229,7 +307,7 @@ void intel_gsc_init(struct intel_gsc *gsc, struct drm_i915_private *i915)
- 		return;
- 
- 	for (i = 0; i < INTEL_GSC_NUM_INTERFACES; i++)
--		gsc_init_one(i915, &gsc->intf[i], i);
-+		gsc_init_one(i915, gsc, i);
- }
- 
- void intel_gsc_fini(struct intel_gsc *gsc)
-@@ -241,5 +319,5 @@ void intel_gsc_fini(struct intel_gsc *gsc)
- 		return;
- 
- 	for (i = 0; i < INTEL_GSC_NUM_INTERFACES; i++)
--		gsc_destroy_one(&gsc->intf[i]);
-+		gsc_destroy_one(gt->i915, gsc, i);
- }
-diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.h b/drivers/gpu/drm/i915/gt/intel_gsc.h
-index 68582f912b21..fcac1775e9c3 100644
---- a/drivers/gpu/drm/i915/gt/intel_gsc.h
-+++ b/drivers/gpu/drm/i915/gt/intel_gsc.h
-@@ -20,11 +20,14 @@ struct mei_aux_device;
- 
- /**
-  * struct intel_gsc - graphics security controller
-+ *
-+ * @gem_obj: scratch memory GSC operations
-  * @intf : gsc interface
-  */
- struct intel_gsc {
- 	struct intel_gsc_intf {
- 		struct mei_aux_device *adev;
-+		struct drm_i915_gem_object *gem_obj;
- 		int irq;
- 		unsigned int id;
- 	} intf[INTEL_GSC_NUM_INTERFACES];
--- 
-2.34.1
+no problem with it but I think it would be good to extend 2.2.2 chapter in 
+devicetree specification with these generic names.
 
+Thanks,
+Michal

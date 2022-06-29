@@ -2,149 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DB455F5DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 07:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3DF755F5E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 07:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbiF2FzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 01:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
+        id S230274AbiF2F4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 01:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiF2FzM (ORCPT
+        with ESMTP id S229621AbiF2F4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 01:55:12 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF8E140EE
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 22:55:11 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id m14so13122073plg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 22:55:11 -0700 (PDT)
+        Wed, 29 Jun 2022 01:56:22 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B0D17584;
+        Tue, 28 Jun 2022 22:56:22 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id r1so13098601plo.10;
+        Tue, 28 Jun 2022 22:56:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=94SNj+bfUaqeA4+uNDnU29zDWORUfea9gHEDob5a9do=;
-        b=q9JXdbLNWvzcTKItVrJEAKSJqXSdpJuMcVam/iQ19oILMIUql+ezlVs/Ba+iRVfZ1C
-         UvdBtOdFUjOjf8D5JP4HcCZWynYHFhK2WnG1rMfMKN/gcNpp3HyPMOkayfhk0taORRpn
-         Mw3Xe+AvOwjybK3xY9sJQt8/Mlnxp1uei//koBq0iiJlDJH20LhHIXIrzyjp8VrdtSgG
-         8yVZu8aBRFZye3oUqp4ZTwtlfunYXsimPwhXxHHR+xP/oj06+ihqF2avPf+KSSLUqiDZ
-         q/mGcI1e4jzCPlcASOr6mfmrPgWRJrw4ykN3P4C1gnKiQY5BSktUM2HKbNrdTU5xFMpP
-         1YFA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zysuHUP/InQT5Fi1lB0z6tjNnC0mTo16xnyZM6YuAJw=;
+        b=QK/5e2zQieB6A4dmexNIProsq3M79RKCnmora4GTRtVMPjkkvv3D4aT204RFEfBWx4
+         nId2C5ed5MHevimldiWc6Cjde/EbequTigTeiNKdBodzJkUX9bD3ohxdMQnuIO16C92c
+         cp955TzJcSZV4gQvc+gd9U7cL8BLf4+2kKrf4Hte3bACe8eIPTlrlIg7Ph1vWkIcuXDl
+         fIr+vIWPAyjVLyKVR71SZZjibIWSUNaAIDtHoXjlHTCVYvRZ/udaUv5cKICLS4WUOmEz
+         Y+mN1BV0/tn9BU7nWku0MgYLRIP8nEaeWD2bIzk+D5O6mxgA5I1AkhOhyH6BrtTW/hZb
+         a6bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=94SNj+bfUaqeA4+uNDnU29zDWORUfea9gHEDob5a9do=;
-        b=SupdWxuMRLPf38epQZNt7Rjtv7EiudXGiYc+OZjVvulZnshVlym6KqhjrXIFWHl2Vb
-         ovv4H0OM14sX9mml6B+iRKp4JG65fzsnbj+1/kuoVSE+V1qvyUNlK9XQJwTR/Gy7dKFl
-         T4xe248CU/ff+NmWO5VDUxdVUWd5t+wyuajTKONIEo+Pmhm9PeLhNwV+xl+ih3kP1va4
-         zXsW+6ps8pMN31KDqMhL6kOpvHqAjsRg2D8KXLdoOhbhqOgjtohz65PXDqie/3MIs18u
-         DudJTLg5vrMW8FnSDa+OG6Hrul7Olrh8uRDrhq2BWtcRh7sPZxlYjyOhGuN4aTZ42SG6
-         GzMQ==
-X-Gm-Message-State: AJIora/Jr/L5WYA+EMOyuHGdIETeomG/hc7ZhZ3HsKtfmYPFTYuqA4fd
-        sylTtaZmH96ybQDJcTMB9o4Lig==
-X-Google-Smtp-Source: AGRyM1sA/8PT0iAe0wBxu1s9us+UTFRVCahSkFBCCP9Ke8ZrHP2Wudr+UDZH2uuxiNicrLlILN5qfw==
-X-Received: by 2002:a17:902:f091:b0:16a:7e5:494f with SMTP id p17-20020a170902f09100b0016a07e5494fmr7332311pla.34.1656482111399;
-        Tue, 28 Jun 2022 22:55:11 -0700 (PDT)
-Received: from localhost ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id g38-20020a635226000000b0040cb1f55391sm10267815pgb.2.2022.06.28.22.55.10
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zysuHUP/InQT5Fi1lB0z6tjNnC0mTo16xnyZM6YuAJw=;
+        b=Vpa/dVT6+Z17dQBwAOiWJrWzaasz6hjgbl9mL3sF/73Maz/oRONlycL+NFRMt/Jooj
+         uT2tJO42ntlu/OtzM4YfBQlB8BWzfguLIZ1mowZ7lhdB1/a28VBXcXoekgdPnp4wr1uU
+         sqpU0i3O6ypYI/aRvbni691G0Nd7QLJS0GgKhExti27YVq0e9m7wiZt6D/cURrZEAntz
+         3wRy2c4KXDW7ZXD6iOtsylHQYWDTCQYFudzTqdijSKuJcrzi4sOjhO6Kohr6FIJH9+yz
+         hW2a1e8Q7KM7sYRmnSbGlXzpHw1povQea0jH3giOgGVUpy153PN8KMVt4wClSUQof4ko
+         71+w==
+X-Gm-Message-State: AJIora9v1HBaSbtEz8WnJgSMT6irHVXXbzSyLltzMDzYARDEeKJLmR1S
+        j0XbhHgsDLV4mGcVp00A49E=
+X-Google-Smtp-Source: AGRyM1tXAC4bhW6xMpfXOnI72qyaFcpjuVyN0Ilx++e7/GU7Zz0+Z6//cTeok3vV2AY7ITsad9MSHg==
+X-Received: by 2002:a17:90b:4ac7:b0:1ed:21e8:ddb2 with SMTP id mh7-20020a17090b4ac700b001ed21e8ddb2mr1929375pjb.93.1656482181452;
+        Tue, 28 Jun 2022 22:56:21 -0700 (PDT)
+Received: from sebin-inspiron.bbrouter ([103.160.194.58])
+        by smtp.gmail.com with ESMTPSA id p12-20020aa79e8c000000b0050dc7628162sm10587451pfq.60.2022.06.28.22.56.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 22:55:11 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 13:55:07 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     david@redhat.com, akpm@linux-foundation.org, corbet@lwn.net,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, duanxiongchun@bytedance.com
-Subject: Re: [PATCH v2 6/8] mm: hugetlb_vmemmap: improve hugetlb_vmemmap code
- readability
-Message-ID: <YrvpOxjHmLpH+LtM@FVFYT0MHHV2J.usts.net>
-References: <20220628092235.91270-1-songmuchun@bytedance.com>
- <20220628092235.91270-7-songmuchun@bytedance.com>
- <YrubeXg8tSxJeGxj@monkey>
+        Tue, 28 Jun 2022 22:56:20 -0700 (PDT)
+From:   SebinSebastian <mailmesebin00@gmail.com>
+Cc:     mailmesebin00@gmail.com, skhan@linuxfoundation.org,
+        Neal Liu <neal_liu@aspeedtech.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH-next] usb: gadget: dereference before null check
+Date:   Wed, 29 Jun 2022 11:26:05 +0530
+Message-Id: <20220629055605.102425-1-mailmesebin00@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrubeXg8tSxJeGxj@monkey>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 05:23:21PM -0700, Mike Kravetz wrote:
-> On 06/28/22 17:22, Muchun Song wrote:
-> > There is a discussion about the name of hugetlb_vmemmap_alloc/free in
-> > thread [1].  The suggestion suggested by David is rename "alloc/free"
-> > to "optimize/restore" to make functionalities clearer to users,
-> > "optimize" means the function will optimize vmemmap pages, while
-> > "restore" means restoring its vmemmap pages discared before. This
-> > commit does this.
-> > 
-> > Another discussion is the confusion RESERVE_VMEMMAP_NR isn't used
-> > explicitly for vmemmap_addr but implicitly for vmemmap_end in
-> > hugetlb_vmemmap_alloc/free.  David suggested we can compute what
-> > hugetlb_vmemmap_init() does now at runtime.  We do not need to worry
-> > for the overhead of computing at runtime since the calculation is
-> > simple enough and those functions are not in a hot path.  This commit
-> > has the following improvements:
-> > 
-> >   1) The function suffixed name ("optimize/restore") is more expressive.
-> >   2) The logic becomes less weird in hugetlb_vmemmap_optimize/restore().
-> >   3) The hugetlb_vmemmap_init() does not need to be exported anymore.
-> >   4) A ->optimize_vmemmap_pages field in struct hstate is killed.
-> >   5) There is only one place where checks is_power_of_2(sizeof(struct
-> >      page)) instead of two places.
-> >   6) Add more comments for hugetlb_vmemmap_optimize/restore().
-> >   7) For external users, hugetlb_optimize_vmemmap_pages() is used for
-> >      detecting if the HugeTLB's vmemmap pages is optimizable originally.
-> >      In this commit, it is killed and we introduce a new helper
-> >      hugetlb_vmemmap_optimizable() to replace it.  The name is more
-> >      expressive.
-> > 
-> > Link: https://lore.kernel.org/all/20220404074652.68024-2-songmuchun@bytedance.com/ [1]
-> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > ---
-> >  include/linux/hugetlb.h |   7 +--
-> >  include/linux/sysctl.h  |   4 ++
-> >  mm/hugetlb.c            |  15 ++---
-> >  mm/hugetlb_vmemmap.c    | 143 ++++++++++++++++++++----------------------------
-> >  mm/hugetlb_vmemmap.h    |  41 +++++++++-----
-> >  5 files changed, 102 insertions(+), 108 deletions(-)
-> 
-> Thanks!  I like the removal of hugetlb_vmemmap_init and printing directly
-> from report_hugepages.  Still need to look at your your command parsing
-> patches.
->
+From: Sebin Sebastian <mailmesebin00@gmail.com>
 
-Thanks Mike. I am also trying to think about if it is easy to split the
-command parsing patch to some small patches for easily reviewing.
+Fix coverity warning dereferencing before null check. _ep and desc is
+deferenced on all paths until the check for null. Move the
+initilizations after the check for null.
+Coverity issue: 1518209
+
+Signed-off-by: Sebin Sebastian <mailmesebin00@gmail.com>
+---
+ drivers/usb/gadget/udc/aspeed_udc.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+index d75a4e070bf7..4f158030e2cc 100644
+--- a/drivers/usb/gadget/udc/aspeed_udc.c
++++ b/drivers/usb/gadget/udc/aspeed_udc.c
+@@ -341,10 +341,6 @@ static void ast_udc_stop_activity(struct ast_udc_dev *udc)
+ static int ast_udc_ep_enable(struct usb_ep *_ep,
+ 			     const struct usb_endpoint_descriptor *desc)
+ {
+-	u16 maxpacket = usb_endpoint_maxp(desc);
+-	struct ast_udc_ep *ep = to_ast_ep(_ep);
+-	struct ast_udc_dev *udc = ep->udc;
+-	u8 epnum = usb_endpoint_num(desc);
+ 	unsigned long flags;
+ 	u32 ep_conf = 0;
+ 	u8 dir_in;
+@@ -355,6 +351,12 @@ static int ast_udc_ep_enable(struct usb_ep *_ep,
+ 		EP_DBG(ep, "Failed, invalid EP enable param\n");
+ 		return -EINVAL;
+ 	}
++
++	u16 maxpacket = usb_endpoint_maxp(desc);
++	struct ast_udc_ep *ep = to_ast_ep(_ep);
++	struct ast_udc_dev *udc = ep->udc;
++	u8 epnum = usb_endpoint_num(desc);
++
  
-> > @@ -3191,8 +3191,10 @@ static void __init report_hugepages(void)
-> >  		char buf[32];
-> >  
-> >  		string_get_size(huge_page_size(h), 1, STRING_UNITS_2, buf, 32);
-> > -		pr_info("HugeTLB registered %s page size, pre-allocated %ld pages\n",
-> > +		pr_info("HugeTLB: registered %s page size, pre-allocated %ld pages\n",
-> >  			buf, h->free_huge_pages);
-> > +		pr_info("HugeTLB: %d KiB vmemmap can be freed for a %s page\n",
-> > +			hugetlb_vmemmap_optimizable_size(h) / SZ_1K, buf);
-> >  	}
-> >  }
-> 
-> My first thought was "Why report vmemmap freed pages if not enabled?".
-> However, since it can be enabled at runtime it is best always print.
->
+ 	if (!udc->driver) {
+ 		EP_DBG(ep, "bogus device state\n");
+-- 
+2.34.1
 
-That's what I thought.
-
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
->
-
-Thanks.
- 
-> -- 
-> Mike Kravetz
-> 

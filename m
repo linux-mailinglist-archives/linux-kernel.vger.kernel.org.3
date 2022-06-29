@@ -2,195 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E34E356039B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E04DF56046F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233679AbiF2OuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 10:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
+        id S233933AbiF2PXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 11:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbiF2OuN (ORCPT
+        with ESMTP id S229778AbiF2PXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 10:50:13 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512821CFE6;
-        Wed, 29 Jun 2022 07:50:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=S3ju5Nr7hfd110iZmCLv9+gZbDbPEjWtum1B8GQGywA=; b=JG3jkP5Vv9Jim6Yb4RJlAq1uGD
-        3iBb15pzuTWKpyaU6yeJT0oBIMMv92MtP73oxfJcRyF5x1DsurCHy7GXVe57VO4/odKav7KKvOLyH
-        Dq/OdFTasqachW8KWVoy7njWx1JMoNeEFv18ogkZcZjyjNRgEpHRcd9qXIekW5OPnU789Ep2J/3c4
-        jo2PSV3Xg0CG376aUh2TsrOzr1X9l9mqYjjfgwUbUm8oBBn1lJZbqJzRd3yGTO0WhoDRVC2ioBDVp
-        KsJAfHmzSKVBEkujLqfY4NcU2sxad2hvYD0lqZ/DlGCnqRLeQg1t7k3/LGFG5YCUlTu99V1mAC4vR
-        IrzsOMnA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33102)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1o6Z11-0003IC-E3; Wed, 29 Jun 2022 15:50:03 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1o6Z0z-0005vu-EK; Wed, 29 Jun 2022 15:50:01 +0100
-Date:   Wed, 29 Jun 2022 15:50:01 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH net-next v2 02/35] dt-bindings: net: Convert FMan MAC
- bindings to yaml
-Message-ID: <YrxmmSXdKb3pD/Nv@shell.armlinux.org.uk>
-References: <20220628221404.1444200-1-sean.anderson@seco.com>
- <20220628221404.1444200-3-sean.anderson@seco.com>
+        Wed, 29 Jun 2022 11:23:20 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C6CA44C
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 08:23:19 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id v14so22989879wra.5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 08:23:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version:content-transfer-encoding;
+        bh=E8dLril/sPEIKP4uoSQRUctLF1kHauClBO1fRvFZs6M=;
+        b=S1sh9U6PVDe+Fmvx6KxW/5tkKg2vVShLUzbCF65HnaD0v14693sxNQCMZYtLfbTc15
+         zUm5vuapUjne3EvgB1GQk72B2/ZD1fRnzZdYKFt/g4gWsJwM+jfwYsYn1RMWEZZJq/Pk
+         pYnop5Jo4N7nKz7dQhNjloPCewcWSFCn8WJJXoXu7KyVYiPn/MRX+O0b4uaYxeImA+f+
+         W/deD+MRX9MgVl0O/eRQOhSvKW4bC8G9bSY/vgeW2k/+6alBvtuoFAM0Aj12Qk7JMKpC
+         eJ4es7WQwDbnKF7t1MzyRiO2sfJU6riDzo7GvTwYAonldmKb+R/FfixGLvg4Qh6ccOmj
+         B0JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version:content-transfer-encoding;
+        bh=E8dLril/sPEIKP4uoSQRUctLF1kHauClBO1fRvFZs6M=;
+        b=C7e20/+Ojz4/KFjrNpDU1r0ebPtE0qzBTW45Y2oFDDqNvziKYOI6A/VH9jHKwuiSWP
+         aL+LWKcmXkOHfqd71/XRvY1x8Uvvm6CXT+/wsH6/0o62TAbm3WhcXQ+CikrNM5JH8EX3
+         UK9b83oTREp7Dmrww7B78oQlqVf3jxGyC1Juw0jUXOdwvOMxtA6Z+XbqsAXRzZDmwzdQ
+         k8WyAyxnmE2nMRqf5K46rEzyp8H+FlpR3HMBb49WiVYb0XwrbkDd0dg8n5prNshr7E7t
+         YyhGASS1kliJQnPVygNfM7RuEwClP3xJnoPBJy+n0mfVO2I50w7HIxHmCwDoivxeaeos
+         Ml2w==
+X-Gm-Message-State: AJIora/J04O+OddazlsQAlKwoGA8r2wtu3SHLCoXOzJieGdQdeljL1LD
+        8Gjps6ogsUAWPqLfebESRXO9Nw==
+X-Google-Smtp-Source: AGRyM1vhi0GQF8IFjF2fgeTa5JS18xUprpYxhjeuK8Y92lrIegtSvJjuOeTARxIpIjG7hroKViZ1qg==
+X-Received: by 2002:a05:6000:144a:b0:21b:c9bc:ec87 with SMTP id v10-20020a056000144a00b0021bc9bcec87mr3916725wrx.178.1656516198020;
+        Wed, 29 Jun 2022 08:23:18 -0700 (PDT)
+Received: from zen.linaroharston ([51.148.130.216])
+        by smtp.gmail.com with ESMTPSA id bg11-20020a05600c3c8b00b003a04a9504b0sm4717677wmb.40.2022.06.29.08.23.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 08:23:15 -0700 (PDT)
+Received: from zen (localhost [127.0.0.1])
+        by zen.linaroharston (Postfix) with ESMTP id BE4491FFB7;
+        Wed, 29 Jun 2022 16:23:14 +0100 (BST)
+References: <20220426150616.3937571-24-Liam.Howlett@oracle.com>
+ <20220428201947.GA1912192@roeck-us.net>
+ <20220429003841.cx7uenepca22qbdl@revolver>
+ <20220428181621.636487e753422ad0faf09bd6@linux-foundation.org>
+ <20220502001358.s2azy37zcc27vgdb@revolver>
+ <20220501172412.50268e7b217d0963293e7314@linux-foundation.org>
+ <Ym+v4lfU5IyxkGc4@osiris> <20220502133050.kuy2kjkzv6msokeb@revolver>
+ <YnAn3FI9aVCi/xKd@osiris> <YnGHJ7oroqF+v1u+@osiris>
+ <20220503215520.qpaukvjq55o7qwu3@revolver>
+ <60a3bc3f-5cd6-79ac-a7a8-4ecc3d7fd3db@linux.ibm.com>
+ <15f5f8d6-dc92-d491-d455-dd6b22b34bc3@redhat.com>
+ <yt9d5ykkhrvv.fsf_-_@linux.ibm.com> <87pmirj3aq.fsf@linaro.org>
+ <yt9dbkubhhna.fsf@linux.ibm.com> <yt9d7d4zhddq.fsf@linux.ibm.com>
+User-agent: mu4e 1.7.27; emacs 28.1.50
+From:   Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Yu Zhao <yuzhao@google.com>, Juergen Gross <jgross@suse.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Andreas Krebbel <krebbel@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Thomas Huth <thuth@redhat.com>, richard.henderson@linaro.org,
+        qemu-devel@nongnu.org, qemu-s390x@nongnu.org
+Subject: Re: qemu-system-s390x hang in tcg
+Date:   Wed, 29 Jun 2022 15:52:17 +0100
+In-reply-to: <yt9d7d4zhddq.fsf@linux.ibm.com>
+Message-ID: <87v8sjh4t9.fsf@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628221404.1444200-3-sean.anderson@seco.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 06:13:31PM -0400, Sean Anderson wrote:
-> This converts the MAC portion of the FMan MAC bindings to yaml.
-> 
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> ---
-> 
-> Changes in v2:
-> - New
-> 
->  .../bindings/net/fsl,fman-dtsec.yaml          | 144 ++++++++++++++++++
->  .../devicetree/bindings/net/fsl-fman.txt      | 128 +---------------
->  2 files changed, 145 insertions(+), 127 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/net/fsl,fman-dtsec.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/fsl,fman-dtsec.yaml b/Documentation/devicetree/bindings/net/fsl,fman-dtsec.yaml
-> new file mode 100644
-> index 000000000000..809df1589f20
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/fsl,fman-dtsec.yaml
-> @@ -0,0 +1,144 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/fsl,fman-dtsec.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NXP FMan MAC
-> +
-> +maintainers:
-> +  - Madalin Bucur <madalin.bucur@nxp.com>
-> +
-> +description: |
-> +  Each FMan has several MACs, each implementing an Ethernet interface. Earlier
-> +  versions of FMan used the Datapath Three Speed Ethernet Controller (dTSEC) for
-> +  10/100/1000 MBit/s speeds, and the 10-Gigabit Ethernet Media Access Controller
-> +  (10GEC) for 10 Gbit/s speeds. Later versions of FMan use the Multirate
-> +  Ethernet Media Access Controller (mEMAC) to handle all speeds.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - fsl,fman-dtsec
-> +      - fsl,fman-xgec
-> +      - fsl,fman-memac
-> +
-> +  cell-index:
-> +    maximum: 64
-> +    description: |
-> +      FManV2:
-> +      register[bit]           MAC             cell-index
-> +      ============================================================
-> +      FM_EPI[16]              XGEC            8
-> +      FM_EPI[16+n]            dTSECn          n-1
-> +      FM_NPI[11+n]            dTSECn          n-1
-> +              n = 1,..,5
-> +
-> +      FManV3:
-> +      register[bit]           MAC             cell-index
-> +      ============================================================
-> +      FM_EPI[16+n]            mEMACn          n-1
-> +      FM_EPI[25]              mEMAC10         9
-> +
-> +      FM_NPI[11+n]            mEMACn          n-1
-> +      FM_NPI[10]              mEMAC10         9
-> +      FM_NPI[11]              mEMAC9          8
-> +              n = 1,..8
-> +
-> +      FM_EPI and FM_NPI are located in the FMan memory map.
-> +
-> +      2. SoC registers:
-> +
-> +      - P2041, P3041, P4080 P5020, P5040:
-> +      register[bit]           FMan            MAC             cell
-> +                              Unit                            index
-> +      ============================================================
-> +      DCFG_DEVDISR2[7]        1               XGEC            8
-> +      DCFG_DEVDISR2[7+n]      1               dTSECn          n-1
-> +      DCFG_DEVDISR2[15]       2               XGEC            8
-> +      DCFG_DEVDISR2[15+n]     2               dTSECn          n-1
-> +              n = 1,..5
-> +
-> +      - T1040, T2080, T4240, B4860:
-> +      register[bit]                   FMan    MAC             cell
-> +                                      Unit                    index
-> +      ============================================================
-> +      DCFG_CCSR_DEVDISR2[n-1]         1       mEMACn          n-1
-> +      DCFG_CCSR_DEVDISR2[11+n]        2       mEMACn          n-1
-> +              n = 1,..6,9,10
-> +
-> +      EVDISR, DCFG_DEVDISR2 and DCFG_CCSR_DEVDISR2 are located in
-> +      the specific SoC "Device Configuration/Pin Control" Memory
-> +      Map.
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  fsl,fman-ports:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    maxItems: 2
-> +    description: |
-> +      An array of two references: the first is the FMan RX port and the second
-> +      is the TX port used by this MAC.
-> +
-> +  ptp-timer:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: A reference to the IEEE1588 timer
-> +
-> +  pcsphy-handle:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: A reference to the PCS (typically found on the SerDes)
 
-This description includes ethernet-controller.yaml, which contains:
+Sven Schnelle <svens@linux.ibm.com> writes:
 
-  pcs-handle:
-    $ref: /schemas/types.yaml#/definitions/phandle
-    description:
-      Specifies a reference to a node representing a PCS PHY device on a MDIO
-      bus to link with an external PHY (phy-handle) if exists.
+> Sven Schnelle <svens@linux.ibm.com> writes:
+>
+>> Alex Benn=C3=A9e <alex.bennee@linaro.org> writes:
+>>
+>>> Sven Schnelle <svens@linux.ibm.com> writes:
+>>>
+>>>> Hi,
+>>>>
+>>>> David Hildenbrand <david@redhat.com> writes:
+>>>>
+>>>>> On 04.05.22 09:37, Janosch Frank wrote:
+>>>>>> I had a short look yesterday and the boot usually hangs in the raid6=
+=20
+>>>>>> code. Disabling vector instructions didn't make a difference but a f=
+ew=20
+>>>>>> interruptions via GDB solve the problem for some reason.
+>>>>>>=20
+>>>>>> CCing David and Thomas for TCG
+>>>>>>=20
+>>>>>
+>>>>> I somehow recall that KASAN was always disabled under TCG, I might be
+>>>>> wrong (I thought we'd get a message early during boot that the HW
+>>>>> doesn't support KASAN).
+>>>>>
+>>>>> I recall that raid code is a heavy user of vector instructions.
+>>>>>
+>>>>> How can I reproduce? Compile upstream (or -next?) with kasan support =
+and
+>>>>> run it under TCG?
+>>>>
+>>>> I spent some time looking into this. It's usually hanging in
+>>>> s390vx8_gen_syndrome(). My first thought was that it is a problem with
+>>>> the VX instructions, but turned out that it hangs even if i remove all
+>>>> the code from s390vx8_gen_syndrome().
+>>>>
+>>>> Tracing the execution of TB's, i see that the generated code is always
+>>>> jumping between a few TB's, but never exiting the TB's to check for
+>>>> interrupts (i.e. return to cpu_tb_exec(). I only see calls to
+>>>> helper_lookup_tb_ptr to lookup the tb pointer for the next TB.
+>>>>
+>>>> The raid6 code is waiting for some time to expire by reading jiffies,
+>>>> but interrupts are never processed and therefore jiffies doesn't chang=
+e.
+>>>> So the raid6 code hangs forever.
+>>>>
+>>>> As a test, i made a quick change to test:
+>>>>
+>>>> diff --git a/accel/tcg/cpu-exec.c b/accel/tcg/cpu-exec.c
+>>>> index c997c2e8e0..35819fd5a7 100644
+>>>> --- a/accel/tcg/cpu-exec.c
+>>>> +++ b/accel/tcg/cpu-exec.c
+>>>> @@ -319,7 +319,8 @@ const void *HELPER(lookup_tb_ptr)(CPUArchState *en=
+v)
+>>>>      cpu_get_tb_cpu_state(env, &pc, &cs_base, &flags);
+>>>>
+>>>>      cflags =3D curr_cflags(cpu);
+>>>> -    if (check_for_breakpoints(cpu, pc, &cflags)) {
+>>>> +    if (check_for_breakpoints(cpu, pc, &cflags) ||
+>>>> +        unlikely(qatomic_read(&cpu->interrupt_request))) {
+>>>>          cpu_loop_exit(cpu);
+>>>>      }
+>>>>
+>>>> And that makes the problem go away. But i'm not familiar with the TCG
+>>>> internals, so i can't say whether the generated code is incorrect or
+>>>> something else is wrong. I have tcg log files of a failing + working r=
+un
+>>>> if someone wants to take a look. They are rather large so i would have=
+ to
+>>>> upload them somewhere.
+>>>
+>>> Whatever is setting cpu->interrupt_request should be calling
+>>> cpu_exit(cpu) which sets the exit flag which is checked at the start of
+>>> every TB execution (see gen_tb_start).
+>>
+>> Thanks, that was very helpful. I added debugging and it turned out
+>> that the TB is left because of a pending irq. The code then calls
+>> s390_cpu_exec_interrupt:
+>>
+>> bool s390_cpu_exec_interrupt(CPUState *cs, int interrupt_request)
+>> {
+>>     if (interrupt_request & CPU_INTERRUPT_HARD) {
+>>         S390CPU *cpu =3D S390_CPU(cs);
+>>         CPUS390XState *env =3D &cpu->env;
+>>
+>>         if (env->ex_value) {
+>>             /* Execution of the target insn is indivisible from
+>>                the parent EXECUTE insn.  */
+>>             return false;
+>>         }
+>>         if (s390_cpu_has_int(cpu)) {
+>>             s390_cpu_do_interrupt(cs);
+>>             return true;
+>>         }
+>>         if (env->psw.mask & PSW_MASK_WAIT) {
+>>             /* Woken up because of a floating interrupt but it has alrea=
+dy
+>>              * been delivered. Go back to sleep. */
+>>             cpu_interrupt(CPU(cpu), CPU_INTERRUPT_HALT);
+>>         }
+>>     }
+>>     return false;
+>> }
+>>
+>> Note the 'if (env->ex_value) { }' check. It looks like this function
+>> just returns false in case tcg is executing an EX instruction. After
+>> that the information that the TB should be exited because of an
+>> interrupt is gone. So the TB's are never exited again, although the
+>> interrupt wasn't handled. At least that's my assumption now, if i'm
+>> wrong please tell me.
+>
+> Looking at the code i see CF_NOIRQ to prevent TB's from getting
+> interrupted. But i only see that used in the core tcg code. Would
+> that be a possibility, or is there something else/better?
 
-Is there a reason why a custom property is needed rather than using the
-pcs-handle property already provided by the ethernet-controller DT
-description?
+Yes CF_NOIRQ is exactly the compiler flag you would use to prevent a
+block from exiting early when you absolutely want to execute the next
+block. We currently only use it from core code to deal with icount
+related things but I can see it's use here. I would probably still wrap
+it in a common function in cpu-exec-common.c I'm unsure of the exact
+semantics for s390 so I will defer to Richard and others but something
+like (untested):
 
-Thanks.
+/*
+ * Ensure the next N instructions are not interrupted by IRQ checks.
+ */
+void cpu_loop_exit_unint(CPUState *cpu, uintptr_t pc, int len)
+{
+    if (pc) {
+        cpu_restore_state(cpu, pc, true);
+    }
+    cpu->cflags_next_tb =3D len | CF_LAST_IO | CF_NOIRQ | curr_cflags(cpu);
+    cpu_loop_exit(cpu);
+}
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+And then in HELPER(ex) you can end the helper with:
+
+void HELPER(ex)(CPUS390XState *env, uint32_t ilen, uint64_t r1, uint64_t ad=
+dr)
+{
+   ...
+
+    /*
+     * We must execute the next instruction exclusively so exit the loop
+     * and trigger a NOIRQ TB which won't check for an interrupt until
+     * it finishes executing.
+     */
+    cpu_loop_exit_unint(cpu, 0, 1);
+}
+
+Some notes:
+
+ * Take care to ensure the CPU state is synchronised
+
+  Which means the helper cannot use the flags
+  TCG_CALL_NO_(READ_GLOBALS|WRITE_GLOBALS|SIDE_EFFECTS). And you you
+  will to make sure you write the current PC in the tcg gen code in
+  op_ex()
+
+ * I think the env->ex_value can be removed after this
+
+ * We will actually exit the execution loop (via a sigjmp) but the IRQ
+   check in cpu_handle_interrupt() will be skipped due to the custom
+   flags. When the next block is looked up (or generated) it will be
+   entered but then immediately exit
+
+ * I think even a branch to self should work because the second
+   iteration will be interuptable
+
+> Sorry for the dumb questions, i'm not often working on qemu ;-)
+
+There are no dumb questions, just opportunities for better documentation ;-)
+
+--=20
+Alex Benn=C3=A9e

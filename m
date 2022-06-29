@@ -2,258 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 159D1560B3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 22:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF3C560B40
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 22:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbiF2Un2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 16:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
+        id S231394AbiF2Urn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 16:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiF2UnZ (ORCPT
+        with ESMTP id S231349AbiF2Urm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 16:43:25 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D84D21825
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 13:43:24 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id r20so24206925wra.1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 13:43:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=jK9//luGxpfbLffwOAXZvUD0KZmVzGC+4VJ1Mf8Ewyg=;
-        b=k5WSowoVnLxuxKjSPP3cp1XzTEAHY3y45UhQuF8UEDAyCTaVCqG/CT+GI0HDpCJiRr
-         qY92QFJIvnA+icgYFsho+2NHk8VIu8knAAsA4n5acDav+H8Bx/JChuc9/xU2pHxunkqn
-         Xa7V6+8eHKvHEzuihehfP5VnTNMUxG2sVEkn+lldtmnf/cCTkXjtmmUEqEhHB1ghA1+P
-         XiNUznA+U4VlknZfH43Wecpj/M1WX+pi8c7VlQcttS6Tn+4WR79rWAWtr3AWhjkWvAlB
-         8c14CN87gcOsljgVtquohoB6BqLa9yxRumbngWbW4Zv5Aafipq5gZb9HHF5pygsGcTHe
-         sV5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=jK9//luGxpfbLffwOAXZvUD0KZmVzGC+4VJ1Mf8Ewyg=;
-        b=F/R7pQXR/O5pM+xNMmDIWKXdFECmBvZuiW2xvsdmeSjqhmZaEmmGIgOg9Wiey4FSgH
-         vVpzC9haTx6m7oXcnS1NLVQdAdXx+x15TmiNrgut9Y8oryWMt3PQppuWuucq1c5FKEf3
-         yUb26xDgr/R8p3s1vYuU/1RYl/6hMZwxL+8sHZOit+OoZQjwdtw8bgafvaJrHavRYbeg
-         Nif5V08EaDjOYXFviK8vXLgD2dQgmTmuVddiik0Zo+2TgnLEKJla7WbhBghybtAk4Xna
-         FtSKS+VsH9RNJJdr0fzp/oiS2Xgh8RX/fy1ontOYoN9pQCVahBEVB98khhYnHmF0pa21
-         oPxQ==
-X-Gm-Message-State: AJIora//MAyh52ga/ysUcTBUTyBvxU2/7R4hl486IkGTCtYiIp163s1L
-        NtuSIjAwQ0EtRXWWvBDMA9tdujwyPLrU6MvyMJZG9g==
-X-Google-Smtp-Source: AGRyM1sdZpRIIt8pzdPqsysENF0+n2K+v1kR9bTNvP8/I1WmweNa1mfdcg2Fg6hW5XcLplZP4kyRd9qLNe68d2DEstQ=
-X-Received: by 2002:a5d:52c6:0:b0:21b:9f39:78de with SMTP id
- r6-20020a5d52c6000000b0021b9f3978demr5179522wrv.699.1656535402268; Wed, 29
- Jun 2022 13:43:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220623220613.3014268-1-kaleshsingh@google.com>
- <20220623220613.3014268-2-kaleshsingh@google.com> <Yrrrz7MxMu8OoEPU@bfoster>
- <CAC_TJvejs5gbggC1hekyjUNctC_8+3FmVn0B7zAZox2+MkEjaA@mail.gmail.com> <YrxEUbDkYLE6XF6x@bfoster>
-In-Reply-To: <YrxEUbDkYLE6XF6x@bfoster>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Wed, 29 Jun 2022 13:43:11 -0700
-Message-ID: <CAC_TJvcRd7=9xGXP5-t8v3g5iFWtYANpGA-nTqaGZBVTwa=07w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] procfs: Add 'size' to /proc/<pid>/fdinfo/
-To:     Brian Foster <bfoster@redhat.com>
-Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        David.Laight@aculab.com, Ioannis Ilkos <ilkos@google.com>,
-        "T.J. Mercier" <tjmercier@google.com>,
+        Wed, 29 Jun 2022 16:47:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC38E22535;
+        Wed, 29 Jun 2022 13:47:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AD9960C2C;
+        Wed, 29 Jun 2022 20:47:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 997C4C34114;
+        Wed, 29 Jun 2022 20:47:33 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="PIocfaGZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1656535651;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nvJ3fw5U4MW8nxM8aCE1R+6sT2AFWOEF89xbodNQ+Ms=;
+        b=PIocfaGZVNfSYsleBvWLhO5VJ+LmKrkUG0h5bDnae9hr+edK+R47EppxiopYDLw5kbSCAX
+        eQK5Gw+P8AHe6C3tjz8QTOM+/lZgOrILQvf6fogiJXsrsiozuZkMVdJxFrZ5pMok7P2rLE
+        r74GkuVYo0ZepToWUldrCEjQsXH8o8Q=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 019e7d6b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 29 Jun 2022 20:47:31 +0000 (UTC)
+Date:   Wed, 29 Jun 2022 22:47:26 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
         Suren Baghdasaryan <surenb@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Theodore Ts'o <tytso@mit.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        sultan@kerneltoast.com
+Subject: Re: [PATCH] remove CONFIG_ANDROID
+Message-ID: <Yry6XvOGge2xKx/n@zx2c4.com>
+References: <20220629150102.1582425-2-hch@lst.de>
+ <Yrx5Lt7jrk5BiHXx@zx2c4.com>
+ <20220629161020.GA24891@lst.de>
+ <Yrx6EVHtroXeEZGp@zx2c4.com>
+ <20220629161527.GA24978@lst.de>
+ <Yrx8/Fyx15CTi2zq@zx2c4.com>
+ <20220629163007.GA25279@lst.de>
+ <Yrx/8UOY+J8Ao3Bd@zx2c4.com>
+ <YryNQvWGVwCjJYmB@zx2c4.com>
+ <Yryic4YG9X2/DJiX@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yryic4YG9X2/DJiX@google.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 5:23 AM Brian Foster <bfoster@redhat.com> wrote:
->
-> On Tue, Jun 28, 2022 at 03:38:02PM -0700, Kalesh Singh wrote:
-> > On Tue, Jun 28, 2022 at 4:54 AM Brian Foster <bfoster@redhat.com> wrote=
-:
-> > >
-> > > On Thu, Jun 23, 2022 at 03:06:06PM -0700, Kalesh Singh wrote:
-> > > > To be able to account the amount of memory a process is keeping pin=
-ned
-> > > > by open file descriptors add a 'size' field to fdinfo output.
-> > > >
-> > > > dmabufs fds already expose a 'size' field for this reason, remove t=
-his
-> > > > and make it a common field for all fds. This allows tracking of
-> > > > other types of memory (e.g. memfd and ashmem in Android).
-> > > >
-> > > > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> > > > Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
-> > > > ---
-> > > >
-> > > > Changes in v2:
-> > > >   - Add Christian's Reviewed-by
-> > > >
-> > > > Changes from rfc:
-> > > >   - Split adding 'size' and 'path' into a separate patches, per Chr=
-istian
-> > > >   - Split fdinfo seq_printf into separate lines, per Christian
-> > > >   - Fix indentation (use tabs) in documentaion, per Randy
-> > > >
-> > > >  Documentation/filesystems/proc.rst | 12 ++++++++++--
-> > > >  drivers/dma-buf/dma-buf.c          |  1 -
-> > > >  fs/proc/fd.c                       |  9 +++++----
-> > > >  3 files changed, 15 insertions(+), 7 deletions(-)
-> > > >
-> ...
-> > >
-> > > Also not sure if it matters that much for your use case, but somethin=
-g
-> > > worth noting at least with shmem is that one can do something like:
-> > >
-> > > # cat /proc/meminfo | grep Shmem:
-> > > Shmem:               764 kB
-> > > # xfs_io -fc "falloc -k 0 10m" ./file
-> > > # ls -alh file
-> > > -rw-------. 1 root root 0 Jun 28 07:22 file
-> > > # stat file
-> > >   File: file
-> > >   Size: 0               Blocks: 20480      IO Block: 4096   regular e=
-mpty file
-> > > # cat /proc/meminfo | grep Shmem:
-> > > Shmem:             11004 kB
-> > >
-> > > ... where the resulting memory usage isn't reflected in i_size (but i=
-s
-> > > is in i_blocks/bytes).
-> >
-> > I tried a similar experiment a few times, but I don't see the same
-> > results. In my case, there is not any change in shmem. IIUC the
-> > fallocate is allocating the disk space not shared memory.
-> >
->
-> Sorry, it was implied in my previous test was that I was running against
-> tmpfs. So regardless of fs, the fallocate keep_size semantics shown in
-> both cases is as expected: the underlying blocks are allocated and the
-> inode size is unchanged.
->
-> What wasn't totally clear to me when I read this patch was 1. whether
-> tmpfs refers to Shmem and 2. whether tmpfs allowed this sort of
-> operation. The test above seems to confirm both, however, right? E.g., a
-> more detailed example:
->
-> # mount | grep /tmp
-> tmpfs on /tmp type tmpfs (rw,nosuid,nodev,seclabel,nr_inodes=3D1048576,in=
-ode64)
-> # cat /proc/meminfo | grep Shmem:
-> Shmem:              5300 kB
-> # xfs_io -fc "falloc -k 0 1g" /tmp/file
-> # stat /tmp/file
->   File: /tmp/file
->   Size: 0               Blocks: 2097152    IO Block: 4096   regular empty=
- file
-> Device: 22h/34d Inode: 45          Links: 1
-> Access: (0600/-rw-------)  Uid: (    0/    root)   Gid: (    0/    root)
-> Context: unconfined_u:object_r:user_tmp_t:s0
-> Access: 2022-06-29 08:04:01.301307154 -0400
-> Modify: 2022-06-29 08:04:01.301307154 -0400
-> Change: 2022-06-29 08:04:01.451312834 -0400
->  Birth: 2022-06-29 08:04:01.301307154 -0400
-> # cat /proc/meminfo | grep Shmem:
-> Shmem:           1053876 kB
-> # rm -f /tmp/file
-> # cat /proc/meminfo | grep Shmem:
-> Shmem:              5300 kB
->
-> So clearly this impacts Shmem.. was your test run against tmpfs or some
-> other (disk based) fs?
+Hi Kalesh,
 
-Hi Brian,
+On Wed, Jun 29, 2022 at 12:05:23PM -0700, Kalesh Singh wrote:
+> Thanks for raising this.
+> 
+> Android no longer uses PM_AUTOSLEEP, is correct. libsuspend is
+> also now deprecated. Android autosuspend is initiatiated from the
+> userspace system suspend service [1].
+> 
+> A runtime config sounds more reasonable since in the !PM_AUTOSLEEP
+> case, it is userspace which decides the suspend policy.
+> 
+> [1] https://cs.android.com/android/platform/superproject/+/bf3906ecb33c98ff8edd96c852b884dbccb73295:system/hardware/interfaces/suspend/1.0/default/SystemSuspend.cpp;l=265
 
-Thanks for clarifying. My issue was tmpfs not mounted at /tmp in my system:
+Bingo, thanks for the pointer. So looking at this, I'm trying to tease
+out some heuristic that wouldn't require any changes, but I don't really
+see anything _too_ perfect. One fragment of an idea would be that the
+kernel treats things in autosuspending mode if anybody is holding open a
+fd to /sys/power/state. But I worry this would interact with
+non-autosuspending userspaces that also hold open the file. So barring
+that, I'm not quite sure.
 
-=3D=3D> meminfo.start <=3D=3D
-Shmem:               572 kB
-=3D=3D> meminfo.stop <=3D=3D
-Shmem:             51688 kB
+If you also can't think of something, maybe we should talk about adding
+something that requires code changes. In that line of thinking, how
+would you feel about opening /sys/power/userspace_autosuspender and
+keeping that fd open. Then the kernel API would have
+`bool pm_has_userspace_autosuspender(void)` that code could check.
+Alternatively, if you don't want refcounting fd semantics for that, just
+writing a "1" into a similar file seems fine?
 
->
-> FWIW, I don't have any objection to exposing inode size if it's commonly
-> useful information. My feedback was more just an fyi that i_size doesn't
-> necessarily reflect underlying space consumption (whether it's memory or
-> disk space) in more generic cases, because it sounds like that is really
-> what you're after here. The opposite example to the above would be
-> something like an 'xfs_io -fc "truncate 1t" /tmp/file', which shows a
-> 1TB inode size with zero additional shmem usage.
+Any strong opinions about it? Personally it doesn't make much of a
+difference to me. The important thing is just that it'd be something
+you're willing to implement in that SystemSuspend.cpp file.
 
-From these cases, it seems the more generic way to do this is by
-calculating the actual size consumed using the blocks. (i_blocks *
-512). So in the latter example  'xfs_io -fc "truncate 1t" /tmp/file'
-the size consumed would be zero. Let me know if it sounds ok to you
-and I can repost the updated version.
-
-Thanks,
-Kalesh
-
->
-> Brian
->
-> > cat /proc/meminfo > meminfo.start
-> > xfs_io -fc "falloc -k 0 50m" ./xfs_file
-> > cat /proc/meminfo > meminfo.stop
-> > tail -n +1 meminfo.st* | grep -i '=3D=3D\|Shmem:'
-> >
-> > =3D=3D> meminfo.start <=3D=3D
-> > Shmem:               484 kB
-> > =3D=3D> meminfo.stop <=3D=3D
-> > Shmem:               484 kB
-> >
-> > ls -lh xfs_file
-> > -rw------- 1 root root 0 Jun 28 15:12 xfs_file
-> >
-> > stat xfs_file
-> >   File: xfs_file
-> >   Size: 0               Blocks: 102400     IO Block: 4096   regular emp=
-ty file
-> >
-> > Thanks,
-> > Kalesh
-> >
-> > >
-> > > Brian
-> > >
-> > > >
-> > > >       /* show_fd_locks() never deferences files so a stale value is=
- safe */
-> > > >       show_fd_locks(m, file, files);
-> > > > --
-> > > > 2.37.0.rc0.161.g10f37bed90-goog
-> > > >
-> > >
-> >
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+Jason

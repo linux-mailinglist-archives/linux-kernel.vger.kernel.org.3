@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C525F55FC89
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C5E55FC76
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233057AbiF2JoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 05:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
+        id S233073AbiF2JoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 05:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232626AbiF2JoF (ORCPT
+        with ESMTP id S232934AbiF2JoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 05:44:05 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B2D3B02F;
-        Wed, 29 Jun 2022 02:44:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=hTOUDEg4blfwUlQNzGC/+sYc9DIP+OWNGDmymLRC7EI=; b=oTtVDKJbUIdpUWfW1bnc8xR6ec
-        IQsR3eTeNU6Zbl+LYfRtyMQL3pokuL+xCLGbDuQAWiwQUTh19A4NTHOmvlJrzEfX2Mv9D2Ol7FiLC
-        cW5q6tGh2WxS294PooM7CRGLaiBoOjtQnuMePLUBIHhz5cJUau2kWWDAXAXjZh/GbsYfWd2bzJ3tY
-        lN4nk6aCAkF9p2QUzPJewP3Zg7X0ryCT0P+Am2CnTaZS/i1x142TSgFTE6FASGpsO2prQJzglA0fL
-        8y1JD/AIoevunjSjKb6edLa1ZY3lyuxIL7Pg6EPgpIc+LErA2oqtFB9w3wNiPGewhZcnUQWmmgmkC
-        Iy1IjcDQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33088)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1o6UEm-0002mh-RT; Wed, 29 Jun 2022 10:43:56 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1o6UEk-0005kp-FV; Wed, 29 Jun 2022 10:43:54 +0100
-Date:   Wed, 29 Jun 2022 10:43:54 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v3] net: sfp: fix memory leak in sfp_probe()
-Message-ID: <Yrwe2oWk/lXkZQgL@shell.armlinux.org.uk>
-References: <20220629075550.2152003-1-niejianglei2021@163.com>
+        Wed, 29 Jun 2022 05:44:17 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC97F3BBF0;
+        Wed, 29 Jun 2022 02:44:16 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id C32D31E80D11;
+        Wed, 29 Jun 2022 17:43:04 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 0WurLbxwHkwr; Wed, 29 Jun 2022 17:43:02 +0800 (CST)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        (Authenticated sender: jiaming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 7E7951E80CDC;
+        Wed, 29 Jun 2022 17:43:01 +0800 (CST)
+From:   Zhang Jiaming <jiaming@nfschina.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        ilpo.jarvinen@linux.intel.com, andy.shevchenko@gmail.com
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, renyu@nfschina.com,
+        Zhang Jiaming <jiaming@nfschina.com>
+Subject: [PATCH] serial: Fix spelling mistake
+Date:   Wed, 29 Jun 2022 17:44:11 +0800
+Message-Id: <20220629094411.39066-1-jiaming@nfschina.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629075550.2152003-1-niejianglei2021@163.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 03:55:50PM +0800, Jianglei Nie wrote:
-> sfp_probe() allocates a memory chunk from sfp with sfp_alloc(). When
-> devm_add_action() fails, sfp is not freed, which leads to a memory leak.
-> 
-> We should use devm_add_action_or_reset() instead of devm_add_action().
-> 
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Change 'timeing' to 'timing'.
+Change 'Characteres' to 'Characters'.
 
-Thanks!
+Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+---
+ drivers/tty/serial/8250/8250_port.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index fdf21de74e90..a7ed5012b90e 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1510,7 +1510,7 @@ static inline void __stop_tx(struct uart_8250_port *p)
+ 		if (!(lsr & UART_LSR_THRE))
+ 			return;
+ 		/*
+-		 * To provide required timeing and allow FIFO transfer,
++		 * To provide required timing and allow FIFO transfer,
+ 		 * __stop_tx_rs485() must be called only when both FIFO and
+ 		 * shift register are empty. The device driver should either
+ 		 * enable interrupt on TEMT or set UART_CAP_NOTEMT that will
+@@ -2796,7 +2796,7 @@ serial8250_do_set_termios(struct uart_port *port, struct ktermios *termios,
+ 		port->read_status_mask |= UART_LSR_BI;
+ 
+ 	/*
+-	 * Characteres to ignore
++	 * Characters to ignore
+ 	 */
+ 	port->ignore_status_mask = 0;
+ 	if (termios->c_iflag & IGNPAR)
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.34.1
+

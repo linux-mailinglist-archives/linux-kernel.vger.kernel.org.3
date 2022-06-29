@@ -2,193 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F36556056A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5E656056E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233488AbiF2QIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 12:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
+        id S231777AbiF2QIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 12:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbiF2QIC (ORCPT
+        with ESMTP id S229584AbiF2QIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 12:08:02 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FB2AE69;
-        Wed, 29 Jun 2022 09:08:00 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id D94BD240002;
-        Wed, 29 Jun 2022 16:07:57 +0000 (UTC)
-Date:   Wed, 29 Jun 2022 18:07:56 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        quentin.schulz@theobroma-systems.com,
-        Daniel Scally <djrscally@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/6] media: ov5693: move hw cfg functions into
- ov5693_hwcfg
-Message-ID: <20220629160756.s6vh7r3uqj62oaqd@uno.localdomain>
-References: <20220629152933.422990-1-tommaso.merciai@amarulasolutions.com>
- <20220629152933.422990-5-tommaso.merciai@amarulasolutions.com>
+        Wed, 29 Jun 2022 12:08:42 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36019A45B
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 09:08:41 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id k20so1477905edj.13
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 09:08:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Os4mayMMpFsaTesvNE1De3rTgq6xRWw/qV7BZPpOtpk=;
+        b=WKBtC/f/OZCaP/FFnlHcOyXMiWjUU7ynF9xFnSGYbWvYA/X2Ax01CmrgO82VoImDvh
+         X6nmUOcLu5gKe4FtBVG+K8vhI82rRrROpHqYLC06NPtTZeImiePzTylR71l1sfllzP/6
+         UQBikD4IORsuI4Y/FcT9ULSZA2hI2EQYkZ0Ac=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Os4mayMMpFsaTesvNE1De3rTgq6xRWw/qV7BZPpOtpk=;
+        b=zSSbjypFg4+tG3xlOwhyZpuGCXcGQvHWxifeaabGVDzV1kQfCSGS5D+WJLGboqj3bT
+         MJEPofs9nD5yDNMul2ihik8aJEekS9AuOAV4Uk66vjEGqVz1LUGt6FdME1DNKc30UYqL
+         7bmM1hUtZMC4j+4EtQ43yH0tW/ecb8KZGnTtI1i6RmmdfNO2ProGeILdRUgo1WhqLJ4O
+         ETMBUaeIoqxX+OiaLgsVxPo9Z519rffVNkEoH2UNcSCw6HVr+6NhbUU45u6mKBos9lhP
+         e4/tN6CdZc3hY/txwhJelT9mvWyEVklowtslSJRcGbb85SAyAchWuhKr4lWPE6UjjZAO
+         HKMA==
+X-Gm-Message-State: AJIora8Dsac3bys3KBXvCypOnwVo/pvO01OXufCxaC+u3S0MHfFTvrdB
+        /2Bq9Rhl3eDXkkJJX303lM91UdSZKpaO/fYP
+X-Google-Smtp-Source: AGRyM1tMaVXyZb4mKVzWTq7lXzRSEnVEWe+sAD/+UkCb/4yk4hlein69EsgCKQd5t1v9ZR0EGJt7SA==
+X-Received: by 2002:a05:6402:3587:b0:435:b9a1:d5c5 with SMTP id y7-20020a056402358700b00435b9a1d5c5mr5232561edc.219.1656518919592;
+        Wed, 29 Jun 2022 09:08:39 -0700 (PDT)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
+        by smtp.gmail.com with ESMTPSA id p19-20020aa7cc93000000b0042bdb6a3602sm11407084edt.69.2022.06.29.09.08.37
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 09:08:38 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id c130-20020a1c3588000000b0039c6fd897b4so11710191wma.4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 09:08:37 -0700 (PDT)
+X-Received: by 2002:a05:600c:4ecc:b0:3a1:68bf:d17a with SMTP id
+ g12-20020a05600c4ecc00b003a168bfd17amr4140154wmq.154.1656518917270; Wed, 29
+ Jun 2022 09:08:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220629152933.422990-5-tommaso.merciai@amarulasolutions.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YrLtpixBqWDmZT/V@debian> <CAHk-=wiN1ujyVTgyt1GuZiyWAPfpLwwg-FY1V-J56saMyiA1Lg@mail.gmail.com>
+ <YrMu5bdhkPzkxv/X@dev-arch.thelio-3990X> <CAHk-=wjTS9OJzggD8=tqtj0DoRCKhjjhpYWoB=bPQAv3QMa+eA@mail.gmail.com>
+ <YrNQrPNF/XfriP99@debian> <CAHk-=wjje8UdsQ_mjGVF4Bc_TcjAWRgOps7E_Cytg4xTbXfyig@mail.gmail.com>
+ <CAKwvOdmQKo4tZRLWxK2tTvd+OEtUmKJM7XiijLAF8JWMeUzFMA@mail.gmail.com>
+ <CAKwvOdnfRnqBF8exO-Y1ooX=67TrO_8fSzgZwvUtidN_P31hzw@mail.gmail.com> <20220628224255.w4lmzalkx3qejuyg@treble>
+In-Reply-To: <20220628224255.w4lmzalkx3qejuyg@treble>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 29 Jun 2022 09:08:20 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wivq+i2-xp3WagixzQMBXaD4etMDmiTp5f-mgsfwOjxtA@mail.gmail.com>
+Message-ID: <CAHk-=wivq+i2-xp3WagixzQMBXaD4etMDmiTp5f-mgsfwOjxtA@mail.gmail.com>
+Subject: Re: mainline build failure due to 281d0c962752 ("fortify: Add Clang support")
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tommaso,
-
-On Wed, Jun 29, 2022 at 05:29:31PM +0200, Tommaso Merciai wrote:
-> Move hw configuration functions into ov5693_hwcfg. This is done to
-> separate the code that handle the hw cfg from probe in a clean way.
-> Add also support to get clock from "clock-frequency" fwnode in
-> ov5675_hwcfg function
-
-Why ? :)
-
-What about:
-
-"Add support for ACPI-based platforms that specify the clock frequency by
-using the "clock-frequency" property instead of specifying a clock
-provider reference."
-
+On Tue, Jun 28, 2022 at 3:43 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
 >
-> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> So, something like this:
 
-Not on this patch, but it seems you have not collected the tags
-received on the previous version of the series.
+No, clang should just be fixed.
 
-> ---
-> Changes since v2:
->  - Fix commit body as suggested by Sakari, Jacopo
->  - Add details to commit body as suggested Jacopo
->  - Move ov5693_check_hwcfg into ov5693_hwcfg
->  - Fix xvclk_rate position as suggested Jacopo
+These UBSAN reports should usually be WARN_ON_ONCE.
 
-Also fixed a bug it seems :)
+It's all the same issues we've had before: causing a panic will just
+kill the machine, and gets us fewer reports.
 
->
->  drivers/media/i2c/ov5693.c | 57 +++++++++++++++++++++++---------------
->  1 file changed, 34 insertions(+), 23 deletions(-)
->
-> diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
-> index d2adc5513a21..3c805a5a5181 100644
-> --- a/drivers/media/i2c/ov5693.c
-> +++ b/drivers/media/i2c/ov5693.c
-> @@ -1339,16 +1339,48 @@ static int ov5693_get_regulators(struct ov5693_device *ov5693)
->  				       ov5693->supplies);
->  }
->
-> -static int ov5693_check_hwcfg(struct ov5693_device *ov5693)
-> +static int ov5693_hwcfg(struct ov5693_device *ov5693)
->  {
->  	struct fwnode_handle *fwnode = dev_fwnode(ov5693->dev);
->  	struct v4l2_fwnode_endpoint bus_cfg = {
->  		.bus_type = V4L2_MBUS_CSI2_DPHY,
->  	};
->  	struct fwnode_handle *endpoint;
-> +	u32 xvclk_rate;
->  	unsigned int i;
->  	int ret;
->
-> +	ov5693->xvclk = devm_clk_get_optional(ov5693->dev, "xvclk");
-> +	if (IS_ERR(ov5693->xvclk))
-> +		return dev_err_probe(ov5693->dev, PTR_ERR(ov5693->xvclk),
-> +				     "failed to get xvclk: %ld\n",
-> +				     PTR_ERR(ov5693->xvclk));
-> +
-> +	if (ov5693->xvclk) {
-> +		xvclk_rate = clk_get_rate(ov5693->xvclk);
-> +	} else {
-> +		ret = fwnode_property_read_u32(fwnode, "clock-frequency",
-> +					       &xvclk_rate);
-> +
-> +		if (ret) {
-> +			dev_err(ov5693->dev, "can't get clock frequency");
-> +			return ret;
-> +		}
-> +	}
+Now, UBSAN is something that presumably normal people don't actually
+run on real hardware, so it's probably less of a deal than some. But
+hey, maybe somebody wants to actually run an UBSAN kernel on a real
+load with a full accelerated graphical UI and real drivers: a panic
+may end up killing the kernel, and there you sit, with a dead machine
+and no idea what went wrong.
 
-This now looks good to me, thanks!
+So the whole "panic if UBSAN reports something" is COMPLETE GARBAGE.
+It actually makes the whole point of running UBSAN go away. You *lose*
+coverage.
 
-> +
-> +	if (xvclk_rate != OV5693_XVCLK_FREQ)
-> +		dev_warn(ov5693->dev, "Found clk freq %u, expected %u\n",
-> +			 xvclk_rate, OV5693_XVCLK_FREQ);
-> +
-> +	ret = ov5693_configure_gpios(ov5693);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ov5693_get_regulators(ov5693);
-> +	if (ret)
-> +		return dev_err_probe(ov5693->dev, ret,
-> +				     "Error fetching regulators\n");
-> +
->  	endpoint = fwnode_graph_get_next_endpoint(fwnode, NULL);
->  	if (!endpoint)
->  		return -EPROBE_DEFER; /* Could be provided by cio2-bridge */
-> @@ -1390,7 +1422,6 @@ static int ov5693_check_hwcfg(struct ov5693_device *ov5693)
->  static int ov5693_probe(struct i2c_client *client)
->  {
->  	struct ov5693_device *ov5693;
-> -	u32 xvclk_rate;
->  	int ret = 0;
+So please don't make the kernel worse because clang got something like
+this wrong.
 
-No need for ret to be intialized, but it was already like this...
+Just fix clang.
 
-The patch itself looks good
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+And fix your mindset.
 
-Thanks
-  j
-
->
->  	ov5693 = devm_kzalloc(&client->dev, sizeof(*ov5693), GFP_KERNEL);
-> @@ -1400,7 +1431,7 @@ static int ov5693_probe(struct i2c_client *client)
->  	ov5693->client = client;
->  	ov5693->dev = &client->dev;
->
-> -	ret = ov5693_check_hwcfg(ov5693);
-> +	ret = ov5693_hwcfg(ov5693);
->  	if (ret)
->  		return ret;
->
-> @@ -1408,26 +1439,6 @@ static int ov5693_probe(struct i2c_client *client)
->
->  	v4l2_i2c_subdev_init(&ov5693->sd, client, &ov5693_ops);
->
-> -	ov5693->xvclk = devm_clk_get(&client->dev, "xvclk");
-> -	if (IS_ERR(ov5693->xvclk)) {
-> -		dev_err(&client->dev, "Error getting clock\n");
-> -		return PTR_ERR(ov5693->xvclk);
-> -	}
-> -
-> -	xvclk_rate = clk_get_rate(ov5693->xvclk);
-> -	if (xvclk_rate != OV5693_XVCLK_FREQ)
-> -		dev_warn(&client->dev, "Found clk freq %u, expected %u\n",
-> -			 xvclk_rate, OV5693_XVCLK_FREQ);
-> -
-> -	ret = ov5693_configure_gpios(ov5693);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = ov5693_get_regulators(ov5693);
-> -	if (ret)
-> -		return dev_err_probe(&client->dev, ret,
-> -				     "Error fetching regulators\n");
-> -
->  	ov5693->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
->  	ov5693->pad.flags = MEDIA_PAD_FL_SOURCE;
->  	ov5693->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-> --
-> 2.25.1
->
+                  Linus

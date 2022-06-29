@@ -2,134 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAC055F55E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 06:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCED655F55C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 06:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbiF2Elw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 00:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
+        id S230128AbiF2El6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 00:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiF2Elu (ORCPT
+        with ESMTP id S229511AbiF2El5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 00:41:50 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9A82CDF0;
-        Tue, 28 Jun 2022 21:41:49 -0700 (PDT)
-X-UUID: bfa30ba3cc7345c9989fac580893baa9-20220629
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:0c867c88-9af2-4629-adfd-0035ee76b800,OB:0,LO
-        B:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.7,REQID:0c867c88-9af2-4629-adfd-0035ee76b800,OB:0,LOB:
-        10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:87442a2,CLOUDID:0b13eb62-0b3f-4b2c-b3a6-ed5c044366a0,C
-        OID:4675debb0dcf,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: bfa30ba3cc7345c9989fac580893baa9-20220629
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 832169266; Wed, 29 Jun 2022 12:41:45 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 29 Jun 2022 12:41:43 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 29 Jun 2022 12:41:43 +0800
-Message-ID: <bf7204dadbf3377e2ad1e798e9434fe00176bb34.camel@mediatek.com>
-Subject: Re: [PATCH v12 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 29 Jun 2022 12:41:43 +0800
-In-Reply-To: <20220627080341.5087-6-rex-bc.chen@mediatek.com>
-References: <20220627080341.5087-1-rex-bc.chen@mediatek.com>
-         <20220627080341.5087-6-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 29 Jun 2022 00:41:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0487E2DD41;
+        Tue, 28 Jun 2022 21:41:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9533F614AB;
+        Wed, 29 Jun 2022 04:41:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5B2EC341D6;
+        Wed, 29 Jun 2022 04:41:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656477715;
+        bh=SKheZhOtanqimoodeIxEPN/eASL6ywrxq9K+7ilwvjM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EE2kabxz7MN3nGdI8d36x98bJEZKQj9JPmFDtWuY+LBCRmp697lMY87WR7mg7GtDA
+         0BBqpt8CeXgsDTycW6UtJeph1zUtVBsiNgi1tyNRn5j+asLCA/zkKDLke5qlgVKPCq
+         MZiNWLwAZ97+6YJtYnmd+znX8SzT8dlHE57k5ixZthyqK8DpXbMgDxx2MBDOIhFgUT
+         pNDsUSVFgTrigkFIpC/X/f6Z/V8R1kNdpofkHDp3FuMzmYq6UtGauj4S196pcMiZzU
+         3Pvtm17zGOst3t/wCJ87VKgQCQDZUE6zn0jjbxCsxFGhWGI2xCYDLZeFwUFc76OMFo
+         rTG1hlmPaYaug==
+Date:   Tue, 28 Jun 2022 21:41:53 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Mike Rapoport <rppt@kernel.org>,
+        Axel Rasmussen <axelrasmussen@google.com>
+Cc:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+9bd2b7adbd34b30b87e4@syzkaller.appspotmail.com>,
+        willy@infradead.org
+Subject: Re: [syzbot] BUG: unable to handle kernel paging request in
+ truncate_inode_partial_folio
+Message-ID: <YrvYEdTNWcvhIE7U@sol.localdomain>
+References: <000000000000f94c4805e289fc47@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000f94c4805e289fc47@google.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
-
-On Mon, 2022-06-27 at 16:03 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On Tue, Jun 28, 2022 at 03:59:26PM -0700, syzbot wrote:
+> Hello,
 > 
-> This patch adds a embedded displayport driver for the MediaTek mt8195
-> SoC.
+> syzbot found the following issue on:
 > 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
+> HEAD commit:    941e3e791269 Merge tag 'for_linus' of git://git.kernel.org..
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=1670ded4080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=833001d0819ddbc9
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9bd2b7adbd34b30b87e4
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=140f9ba8080000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15495188080000
 > 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+9bd2b7adbd34b30b87e4@syzkaller.appspotmail.com
 > 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
+> BUG: unable to handle page fault for address: ffff888021f7e005
+> #PF: supervisor write access in kernel mode
+> #PF: error_code(0x0002) - not-present page
+> PGD 11401067 P4D 11401067 PUD 11402067 PMD 21f7d063 PTE 800fffffde081060
+> Oops: 0002 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 3761 Comm: syz-executor281 Not tainted 5.19.0-rc4-syzkaller-00014-g941e3e791269 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:memset_erms+0x9/0x10 arch/x86/lib/memset_64.S:64
+> Code: c1 e9 03 40 0f b6 f6 48 b8 01 01 01 01 01 01 01 01 48 0f af c6 f3 48 ab 89 d1 f3 aa 4c 89 c8 c3 90 49 89 f9 40 88 f0 48 89 d1 <f3> aa 4c 89 c8 c3 90 49 89 fa 40 0f b6 ce 48 b8 01 01 01 01 01 01
+> RSP: 0018:ffffc9000329fa90 EFLAGS: 00010202
+> RAX: 0000000000000000 RBX: 0000000000001000 RCX: 0000000000000ffb
+> RDX: 0000000000000ffb RSI: 0000000000000000 RDI: ffff888021f7e005
+> RBP: ffffea000087df80 R08: 0000000000000001 R09: ffff888021f7e005
+> R10: ffffed10043efdff R11: 0000000000000000 R12: 0000000000000005
+> R13: 0000000000000000 R14: 0000000000001000 R15: 0000000000000ffb
+> FS:  00007fb29d8b2700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffff888021f7e005 CR3: 0000000026e7b000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  zero_user_segments include/linux/highmem.h:272 [inline]
+>  folio_zero_range include/linux/highmem.h:428 [inline]
+>  truncate_inode_partial_folio+0x76a/0xdf0 mm/truncate.c:237
+>  truncate_inode_pages_range+0x83b/0x1530 mm/truncate.c:381
+>  truncate_inode_pages mm/truncate.c:452 [inline]
+>  truncate_pagecache+0x63/0x90 mm/truncate.c:753
+>  simple_setattr+0xed/0x110 fs/libfs.c:535
+>  secretmem_setattr+0xae/0xf0 mm/secretmem.c:170
+>  notify_change+0xb8c/0x12b0 fs/attr.c:424
+>  do_truncate+0x13c/0x200 fs/open.c:65
+>  do_sys_ftruncate+0x536/0x730 fs/open.c:193
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> RIP: 0033:0x7fb29d900899
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007fb29d8b2318 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
+> RAX: ffffffffffffffda RBX: 00007fb29d988408 RCX: 00007fb29d900899
+> RDX: 00007fb29d900899 RSI: 0000000000000005 RDI: 0000000000000003
+> RBP: 00007fb29d988400 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb29d98840c
+> R13: 00007ffca01a23bf R14: 00007fb29d8b2400 R15: 0000000000022000
+>  </TASK>
+> Modules linked in:
+> CR2: ffff888021f7e005
+> ---[ end trace 0000000000000000 ]---
 
-[snip]
+I think this is a bug in memfd_secret.  secretmem_setattr() can race with a page
+being faulted in by secretmem_fault().  Specifically, a page can be faulted in
+after secretmem_setattr() has set i_size but before it zeroes out the partial
+page past i_size.  memfd_secret pages aren't mapped in the kernel direct map, so
+the crash occurs when the kernel tries to zero out the partial page.
 
-> +
-> +static void mtk_dp_calculate_pixrate(struct mtk_dp *mtk_dp)
-> +{
-> +	u8 target_frame_rate = 60;
-> +	u32 target_pixel_clk;
-> +	struct drm_display_mode mode;
-> +	struct mtk_dp_timings *timings = &mtk_dp->info.timings;
-> +
-> +	drm_display_mode_from_videomode(&timings->vm, &mode);
-> +
-> +	if (mtk_dp->info.timings.frame_rate > 0) {
-> +		target_frame_rate = mtk_dp->info.timings.frame_rate;
-> +		target_pixel_clk = mode.htotal * mode.vtotal *
-> +				   target_frame_rate;
+I don't know what the best solution is -- maybe a rw_semaphore protecting
+secretmem_fault() and secretmem_setattr()?  Or perhaps secretmem_setattr()
+should avoid the call to truncate_setsize() by not using simple_setattr(), given
+that secretmem_setattr() only supports the size going from zero to nonzero.
 
-target_pixel_clk is not used in other place, so remove it.
+The following commit tried to fix a similar bug, but it wasn't enough:
 
-Regards,
-CK
+	commit f9b141f93659e09a52e28791ccbaf69c273b8e92
+	Author: Axel Rasmussen <axelrasmussen@google.com>
+	Date:   Thu Apr 14 19:13:31 2022 -0700
 
-> +	} else {
-> +		target_pixel_clk = mode.htotal * mode.vtotal *
-> +				   target_frame_rate;
-> +	}
-> +}
-> +
+	    mm/secretmem: fix panic when growing a memfd_secret
 
+
+Here's a simplified reproducer.  Note, for memfd_secret to be supported, the
+kernel config must contain CONFIG_SECRETMEM=y and the kernel command line must
+contain secretmem.enable=1.
+
+#include <pthread.h>
+#include <setjmp.h>
+#include <signal.h>
+#include <sys/mman.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+
+static volatile int fd;
+static jmp_buf jump_buf;
+
+static void *truncate_thread(void *arg)
+{
+	for (;;)
+		ftruncate(fd, 1000);
+}
+
+static void handle_sigbus(int sig)
+{
+	longjmp(jump_buf, 1);
+}
+
+int main(void)
+{
+	struct sigaction act = {
+		.sa_handler = handle_sigbus,
+		.sa_flags = SA_NODEFER,
+	};
+	pthread_t t;
+	void *addr;
+
+	sigaction(SIGBUS, &act, NULL);
+
+	pthread_create(&t, NULL, truncate_thread, NULL);
+	for (;;) {
+		fd = syscall(__NR_memfd_secret, 0);
+		addr = mmap(NULL, 8192, PROT_WRITE, MAP_SHARED, fd, 0);
+		if (setjmp(jump_buf) == 0)
+			*(unsigned int *)addr = 0;
+		munmap(addr, 8192);
+		close(fd);
+	}
+}

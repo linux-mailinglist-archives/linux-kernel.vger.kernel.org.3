@@ -2,55 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E45655F5CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 07:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0BC55F5CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 07:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbiF2Fkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 01:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58312 "EHLO
+        id S230130AbiF2Fq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 01:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiF2Fkc (ORCPT
+        with ESMTP id S229475AbiF2Fq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 01:40:32 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FD224F0D;
-        Tue, 28 Jun 2022 22:40:31 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 1586067373; Wed, 29 Jun 2022 07:40:28 +0200 (CEST)
-Date:   Wed, 29 Jun 2022 07:40:27 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     John Garry <john.garry@huawei.com>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>, hch@lst.de,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, iommu@lists.linux-foundation.org,
-        iommu@lists.linux.dev, linux-scsi@vger.kernel.org,
-        linuxarm@huawei.com, joro@8bytes.org, will@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        m.szyprowski@samsung.com, robin.murphy@arm.com
-Subject: Re: [PATCH v4 5/5] libata-scsi: Cap ata_device->max_sectors
- according to shost->max_sectors
-Message-ID: <20220629054027.GB16297@lst.de>
-References: <1656343521-62897-1-git-send-email-john.garry@huawei.com> <1656343521-62897-6-git-send-email-john.garry@huawei.com> <b69c6112-98b7-3890-9d11-bb321a7c877a@opensource.wdc.com> <6619638c-52e8-cb67-c56c-9c9d38c18161@huawei.com> <ba59a0da-a982-e3eb-1cb7-6e60f80fd319@opensource.wdc.com> <38ae1cc8-1411-bb54-e082-0f7b91cb9e63@huawei.com>
+        Wed, 29 Jun 2022 01:46:58 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3F9A2A253;
+        Tue, 28 Jun 2022 22:46:56 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id DB1B31E80D11;
+        Wed, 29 Jun 2022 13:45:44 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id p620UYKZsPNG; Wed, 29 Jun 2022 13:45:42 +0800 (CST)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        (Authenticated sender: jiaming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id DD9D91E80CDC;
+        Wed, 29 Jun 2022 13:45:41 +0800 (CST)
+From:   Zhang Jiaming <jiaming@nfschina.com>
+To:     jikos@kernel.org, benjamin.tissoires@redhat.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, renyu@nfschina.com,
+        Zhang Jiaming <jiaming@nfschina.com>
+Subject: [PATCH] HID: Fix a spelling mistake
+Date:   Wed, 29 Jun 2022 13:46:24 +0800
+Message-Id: <20220629054624.21330-1-jiaming@nfschina.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <38ae1cc8-1411-bb54-e082-0f7b91cb9e63@huawei.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 12:33:58PM +0100, John Garry wrote:
-> Well Christoph originally offered to take this series via the dma-mapping 
-> tree.
->
-> @Christoph, is that still ok with you? If so, would you rather I send this 
-> libata patch separately?
+Change 'accross' to 'across'.
 
-The offer still stands, and I don't really care where the libata
-patch is routed.  Just tell me what you prefer.
+Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+---
+ drivers/hid/hid-appleir.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hid/hid-appleir.c b/drivers/hid/hid-appleir.c
+index 8deded185725..d84d69e52c15 100644
+--- a/drivers/hid/hid-appleir.c
++++ b/drivers/hid/hid-appleir.c
+@@ -117,7 +117,7 @@ struct appleir {
+ static int get_key(int data)
+ {
+ 	/*
+-	 * The key is coded accross bits 2..9:
++	 * The key is coded across bits 2..9:
+ 	 *
+ 	 * 0x00 or 0x01 (        )	key:  0		-> KEY_RESERVED
+ 	 * 0x02 or 0x03 (  menu  )	key:  1		-> KEY_MENU
+-- 
+2.34.1
+

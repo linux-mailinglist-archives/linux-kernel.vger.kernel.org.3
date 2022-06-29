@@ -2,296 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F7525604C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8A65604C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233604AbiF2PhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 11:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
+        id S233997AbiF2Phw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 11:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233431AbiF2PhR (ORCPT
+        with ESMTP id S232027AbiF2Phv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 11:37:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A567D3818C;
-        Wed, 29 Jun 2022 08:37:16 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 77912660191F;
-        Wed, 29 Jun 2022 16:37:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656517034;
-        bh=1Pml/+GQJj4lTb2xPQ0+gCn/RVoDC41JqJVlxNLfVxo=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=B3/RM3PEkye7m5Y/h1xpmK8qc29lWEwJZDqUZ3nhRHJCpKiBjJssAA+FAvvdQje6s
-         HjxiCC63nZzrRa9gCBTDrySHD8HvZihxqpl1i2Kvq0m/Upr68gGgDjO/ThrBZ9JTmO
-         riEK8uxzf7gaLI41+gxjnKhjzQjCrJayortxfHr/p1YHPgzIDakAANA6BqQ+IzjSu3
-         BWx5nXh5dp4av6t+I97TW8jW52cLWa1Uyr3sns6C1OSSCi+KRuuPttrciZaZJC/wK4
-         7IbTM2Um5ACfxcaGD13njMWeGZxub0CGTuhRFw3/OpwBJ331E8XLTyqBt4NgqYxTmP
-         bFPkjf43jAajQ==
-Message-ID: <f66a02b6-5e2d-5e28-8c92-0a76d53269f7@collabora.com>
-Date:   Wed, 29 Jun 2022 18:37:10 +0300
+        Wed, 29 Jun 2022 11:37:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7FA35DF1;
+        Wed, 29 Jun 2022 08:37:50 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25TFME8n018538;
+        Wed, 29 Jun 2022 15:37:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=gCllJp/av1A6ZU7E969OL9N50tPZz7C4Q38xnV/jwn8=;
+ b=MwWj9WcU5SbDBpfvMLlAniuKFJlKAv9D9zdfsCNM+YOt/CAHjChhsG6xP/ryTn9+gcQE
+ JB0Ol2SY6lkn3V2qPxZ95oumbOa5c2xBO0FvvmPzUS6c0GWtpKl0qniT6z1wx/r2YMRS
+ /XTJ9abOV4Zt44XSDOnBCfWFInuO3OD84jtvqVTyHk1vWtNnjElsr6cGmVe1SXohyHJe
+ 6f1Wxd48JhBdxqwUNZSRVVlP8Jva6TMi0rgGLYgh9IRPwY+hA8WdkMk3/2B+K+YbVPqH
+ 8LAd3dwa1+dbTw1T+y+U5BDqtaVco9Xft+7kgO84Y0kDKQkqa3DMd6Br6GP7OBEoISK0 Pg== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h0sarrmg6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Jun 2022 15:37:48 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25TFaJct025865;
+        Wed, 29 Jun 2022 15:37:46 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3gwt0951u0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Jun 2022 15:37:46 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25TFbnF331064364
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 29 Jun 2022 15:37:49 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 94EEB4C040;
+        Wed, 29 Jun 2022 15:37:42 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3992C4C044;
+        Wed, 29 Jun 2022 15:37:42 +0000 (GMT)
+Received: from a46lp73.lnxne.boe (unknown [9.152.108.100])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 29 Jun 2022 15:37:42 +0000 (GMT)
+From:   Steffen Eiden <seiden@linux.ibm.com>
+To:     Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     nrb@linux.ibm.com
+Subject: [RFC PATCH] s390: Autoload uvdevice module based on CPU feature
+Date:   Wed, 29 Jun 2022 17:37:41 +0200
+Message-Id: <20220629153741.195789-1-seiden@linux.ibm.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v1] media: videobuf2: Allow applications customize data
- offsets of capture buffers
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Boris Brezillon <bbrezillon@collabora.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Laura Nao <laura.nao@collabora.com>
-References: <20220322132329.6527-1-dmitry.osipenko@collabora.com>
- <a7c858461b99de2d4afad22d888acc3a74850240.camel@ndufresne.ca>
- <9ec970d6-ea09-802c-419b-b2ef26800990@collabora.com>
- <5be83f0b343c04d877a2c2d805fb5f71ca9973b1.camel@ndufresne.ca>
- <fe24d151-6097-aa8e-7691-5e4d81fa42c6@collabora.com>
- <f80128c50d3dacff0af70bd88521abae42476f85.camel@ndufresne.ca>
- <1c1fda82-334a-04ec-fc2e-d1ea2da466e9@xs4all.nl>
- <11bd51f2-ca35-4e01-95e9-ad35b37f26d8@collabora.com>
-In-Reply-To: <11bd51f2-ca35-4e01-95e9-ad35b37f26d8@collabora.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: pJ64-rQTM0yw2XlnM4ICE4faMVNyowst
+X-Proofpoint-GUID: pJ64-rQTM0yw2XlnM4ICE4faMVNyowst
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-29_17,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxlogscore=999
+ malwarescore=0 impostorscore=0 phishscore=0 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 suspectscore=0 mlxscore=0 bulkscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206290056
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+With this patch the uvdevice will be automatically loaded when the
+facility 158 is present. This is accomplished by using
+``module_cpu_feature_match`` and adding HWCAP_UV
+connected to to facility 158.
 
-On 5/19/22 13:22, Dmitry Osipenko wrote:
-...
->> On 3/25/22 13:32, Nicolas Dufresne wrote:
->>> Le jeudi 24 mars 2022 à 21:20 +0300, Dmitry Osipenko a écrit :
->>>> The root of the problem is that DRM UAPI is more flexible and allows to
->>>> customize offsets for both S/MPLANEs, while V4L doesn't allow to do it
->>>> at all. I'm exploring all the potential options, so far neither of the
->>>> proposed variants is ideal.
->>>
->>> In GStreamer kmssink, the way DRM is used, is that if you have 2 planes in your
->>> pixel format, but only received 1 DMABuf, we will pass this DMABuf twice (well
->>> GEM handles, but twice), with appropriate offset.
->>>
->>> With this in mind, the idea for V4L2 could be to always resort to MPLANE for
->>> this purpose. The tricky part for userland is that it needs to know the dual
->>> pixel format and map that accordingly. That is a bit difficult and this is
->>> something Helen was trying to address with the v4l2_buffer_ext (that and
->>> allowing space to store DRM Modifiers in the future).
->>
->> FYI: here is Helen's last patch series. Since Helen is no longer active in
->> the media subsystem, someone else who is sufficiently motivated would have to
->> take over.
->>
->> https://patchwork.linuxtv.org/project/linux-media/cover/20210114180738.1758707-1-helen.koike@collabora.com/
->>
->> I'm not enthusiastic about messing with data_offset: it was - in hindsight - a
->> bad idea.
-> 
-> I'm aware of the Helen's work. To me the addition of the new IOCTLs that
-> partially duplicate the older ones doesn't feel like the best approach.
-> But since you're good with it, then I'll try to refresh the Helen's work
-> for 5.20 and we'll see where it will go.
-> 
-
-Hello Hans,
-
-I'm having hard time convincing myself that the addition of the new IOCTLs is the right approach for us. Helen was adding the new QBUF IOCTLs that supposed to:
-
-1. Support DRM modifiers.
-2. Support per-plane dma-buf offsets.
-3. Support new features that "are good to have", like 64bit timestamp and unified multi/single planar formats. 
-
-The idea of using DRM modifiers is obsoleted now. Mixing DRM with V4L will be a mess and nobody really needs that feature anymore because there are not that many compressed framebuffer formats needed by V4L drivers.
-
-The dma-buf offsets is the main thing that is really wanted by multiple users and we can support it by extending the current UAPI, which should be the best option IMO. It will be simple to implement and doesn't require much changes form the existing applications.
-
-If we will ever really need to introduce a brand new UAPI, then I think it should be covering more things like deprecating the creation of multiple buffers at once, making buffers independent and reusable, ability to destroy buffer and etc. This will be a lot of work that doesn't worth the effort today since everybody in userspace already adapted to the current state of V4L.
-
-I typed another variant of the patch that extends the struct v4l2_plane with the new buffer offset field and curious what you're thinking about it. It works fine by replacing the data_offset with the new buf_offset in the Tegra decoder driver since it already supports the data_offset which was previously unused because initially I thought that it was about buffer offsets when implemented V4L support for the Tegra driver. If we will agree on this approach then RKISP and MTK should be the next drivers that may get support for the dma-buf offsets.
-
-Or maybe you have good arguments for the addition of new IOCTLs? Other ideas?
-
-Here is the patch in question:
-
---- >8 ---
-
-Subject: [PATCH] media: videobuf2: Introduce new buf_offset field for dma-buf
- memory planes
-
-Add new optional buf_offset field to struct v4l2_plane of the videdev2
-UAPI and support it in the V4L2 core. This new field designates the offset
-from the start of a memory plane's dma-buf.
-
-The primary user of this new field are downstream software stacks that
-transition to upstream kernel. ChromeOS is one of those stacks and Android
-might be the other. The downstream kernel fork of ChromeOS re-uses the
-data_offset field for the dma-buf offsets, but data_offset has a different
-meaning, and thus, this approach isn't acceptable for the upstream. The
-reason why it's needed by ChromeOS is the integration with GPU subsystem
-that uses DRM. In some cases there is disagreement between V4L and DRM
-drivers on the memory plane offsets, which is difficult to resolve without
-overriding the offsets in V4L.
-
-Since not all drivers will support the new buf_offset, the new capability
-flag "supports_mem_plane_offset" is added to the struct vb2_queue. Drivers
-supporting dma-buf offsets will have to explicitly enable the new capability.
-
-The buf_offset field is meant to be application-specific because there is
-no generic way for conveying the h/w requirements to userspace in V4L.
-
-Note that only drivers can validate the dma-buf offsets properly because
-of the different h/w alignment requirements. Hence we can't support the
-dma-buf offsets handling in the V4L core and it needs to be done within
-drivers in the buf_prepare() callback of the vb2_ops.
-
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
 ---
- drivers/media/common/videobuf2/videobuf2-core.c |  2 ++
- drivers/media/common/videobuf2/videobuf2-v4l2.c | 10 ++++++++++
- include/media/videobuf2-core.h                  |  6 ++++++
- include/uapi/linux/videodev2.h                  |  5 ++++-
- 4 files changed, 22 insertions(+), 1 deletion(-)
+ arch/s390/include/asm/elf.h  | 2 ++
+ arch/s390/kernel/processor.c | 5 +++++
+ drivers/s390/char/uvdevice.c | 5 ++---
+ 3 files changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index b203c1e26353..431fe1c8578c 100644
---- a/drivers/media/common/videobuf2/videobuf2-core.c
-+++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -1278,6 +1278,7 @@ static int __prepare_dmabuf(struct vb2_buffer *vb)
- 		vb->planes[plane].bytesused = 0;
- 		vb->planes[plane].length = 0;
- 		vb->planes[plane].m.fd = 0;
-+		vb->planes[plane].buf_offset = 0;
- 		vb->planes[plane].data_offset = 0;
+diff --git a/arch/s390/include/asm/elf.h b/arch/s390/include/asm/elf.h
+index 70a30ae258b7..3a5e89ce4fd0 100644
+--- a/arch/s390/include/asm/elf.h
++++ b/arch/s390/include/asm/elf.h
+@@ -115,6 +115,7 @@ enum {
+ 	HWCAP_NR_NNPA		= 20,
+ 	HWCAP_NR_PCI_MIO	= 21,
+ 	HWCAP_NR_SIE		= 22,
++	HWCAP_NR_UV		= 23,
+ 	HWCAP_NR_MAX
+ };
  
- 		/* Acquire each plane's memory */
-@@ -1323,6 +1324,7 @@ static int __prepare_dmabuf(struct vb2_buffer *vb)
- 		vb->planes[plane].bytesused = planes[plane].bytesused;
- 		vb->planes[plane].length = planes[plane].length;
- 		vb->planes[plane].m.fd = planes[plane].m.fd;
-+		vb->planes[plane].buf_offset = planes[plane].buf_offset;
- 		vb->planes[plane].data_offset = planes[plane].data_offset;
- 	}
+@@ -142,6 +143,7 @@ enum {
+ #define HWCAP_NNPA		BIT(HWCAP_NR_NNPA)
+ #define HWCAP_PCI_MIO		BIT(HWCAP_NR_PCI_MIO)
+ #define HWCAP_SIE		BIT(HWCAP_NR_SIE)
++#define HWCAP_UV		BIT(HWCAP_NR_UV)
  
-diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-index 075d24ebf44c..e79c8ec03d00 100644
---- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
-+++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-@@ -219,6 +219,13 @@ static int vb2_fill_vb2_v4l2_buffer(struct vb2_buffer *vb, struct v4l2_buffer *b
- 					b->m.planes[plane].m.fd;
- 				planes[plane].length =
- 					b->m.planes[plane].length;
-+				planes[plane].buf_offset =
-+					b->m.planes[plane].buf_offset;
+ /*
+  * These are used to set parameters in the core dumps.
+diff --git a/arch/s390/kernel/processor.c b/arch/s390/kernel/processor.c
+index aa0e0e7fc773..3ca528cb3819 100644
+--- a/arch/s390/kernel/processor.c
++++ b/arch/s390/kernel/processor.c
+@@ -141,6 +141,7 @@ static void show_cpu_summary(struct seq_file *m, void *v)
+ 		[HWCAP_NR_NNPA]		= "nnpa",
+ 		[HWCAP_NR_PCI_MIO]	= "pcimio",
+ 		[HWCAP_NR_SIE]		= "sie",
++		[HWCAP_NR_UV]		= "uv",
+ 	};
+ 	int i, cpu;
+ 
+@@ -249,6 +250,10 @@ static int __init setup_hwcaps(void)
+ 	if (sclp.has_sief2)
+ 		elf_hwcap |= HWCAP_SIE;
+ 
++	/* IBM Secure Execution (Ultravisor) support */
++	if (test_facility(158)) {
++		elf_hwcap |= HWCAP_UV;
 +
-+				if (planes[plane].buf_offset && !q->supports_mem_plane_offset) {
-+					dprintk(q, 1, "dma-buf offset unsupported by the queue\n");
-+					return -EINVAL;
-+				}
- 			}
- 			break;
- 		default:
-@@ -294,6 +301,7 @@ static int vb2_fill_vb2_v4l2_buffer(struct vb2_buffer *vb, struct v4l2_buffer *b
- 			break;
- 		}
- 
-+		planes[0].buf_offset = 0;
- 		planes[0].data_offset = 0;
- 		if (V4L2_TYPE_IS_OUTPUT(b->type)) {
- 			if (b->bytesused == 0)
-@@ -528,6 +536,7 @@ static void __fill_v4l2_buffer(struct vb2_buffer *vb, void *pb)
- 				pdst->m.userptr = psrc->m.userptr;
- 			else if (q->memory == VB2_MEMORY_DMABUF)
- 				pdst->m.fd = psrc->m.fd;
-+			pdst->buf_offset = psrc->buf_offset;
- 			pdst->data_offset = psrc->data_offset;
- 			memset(pdst->reserved, 0, sizeof(pdst->reserved));
- 		}
-@@ -612,6 +621,7 @@ static int __fill_vb2_buffer(struct vb2_buffer *vb, struct vb2_plane *planes)
- 			planes[plane].length = vbuf->planes[plane].length;
- 		}
- 		planes[plane].bytesused = vbuf->planes[plane].bytesused;
-+		planes[plane].buf_offset = vbuf->planes[plane].buf_offset;
- 		planes[plane].data_offset = vbuf->planes[plane].data_offset;
- 	}
  	return 0;
-diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
-index 5468b633b9d2..195381837a41 100644
---- a/include/media/videobuf2-core.h
-+++ b/include/media/videobuf2-core.h
-@@ -171,6 +171,8 @@ struct vb2_mem_ops {
-  *		descriptor associated with this plane.
-  * @data_offset:	offset in the plane to the start of data; usually 0,
-  *		unless there is a header in front of the data.
-+ * @buf_offset:	offset in the memory buffer to the start of plane; always 0
-+ *		for non-dmabuf buffers.
-  *
-  * Should contain enough information to be able to cover all the fields
-  * of &struct v4l2_plane at videodev2.h.
-@@ -188,6 +190,7 @@ struct vb2_plane {
- 		int		fd;
- 	} m;
- 	unsigned int		data_offset;
-+	unsigned int		buf_offset;
- };
+ }
+ arch_initcall(setup_hwcaps);
+diff --git a/drivers/s390/char/uvdevice.c b/drivers/s390/char/uvdevice.c
+index 66505d7166a6..fddbfc1e27a2 100644
+--- a/drivers/s390/char/uvdevice.c
++++ b/drivers/s390/char/uvdevice.c
+@@ -27,6 +27,7 @@
+ #include <linux/stddef.h>
+ #include <linux/vmalloc.h>
+ #include <linux/slab.h>
++#include <linux/cpufeature.h>
  
- /**
-@@ -506,6 +509,8 @@ struct vb2_buf_ops {
-  *		->finish().
-  * @non_coherent_mem: when set queue will attempt to allocate buffers using
-  *		non-coherent memory.
-+ * @supports_mem_plane_offset: when set, a non-zero buf_offset is allowed
-+ *		for dma-buf memory planes.
-  * @lock:	pointer to a mutex that protects the &struct vb2_queue. The
-  *		driver can set this to a mutex to let the v4l2 core serialize
-  *		the queuing ioctls. If the driver wants to handle locking
-@@ -586,6 +591,7 @@ struct vb2_queue {
- 	unsigned int			uses_requests:1;
- 	unsigned int			allow_cache_hints:1;
- 	unsigned int			non_coherent_mem:1;
-+	unsigned int			supports_mem_plane_offset:1;
+ #include <asm/uvdevice.h>
+ #include <asm/uv.h>
+@@ -244,12 +245,10 @@ static void __exit uvio_dev_exit(void)
  
- 	struct mutex			*lock;
- 	void				*owner;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 5311ac4fde35..caf33fe0ae79 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -996,6 +996,8 @@ struct v4l2_requestbuffers {
-  * @m:			union of @mem_offset, @userptr and @fd
-  * @data_offset:	offset in the plane to the start of data; usually 0,
-  *			unless there is a header in front of the data
-+ * @buf_offset		offset in the memory buffer to the start of plane;
-+ *			always 0 for non-dmabuf buffers
-  * @reserved:		drivers and applications must zero this array
-  *
-  * Multi-planar buffers consist of one or more planes, e.g. an YCbCr buffer
-@@ -1012,7 +1014,8 @@ struct v4l2_plane {
- 		__s32		fd;
- 	} m;
- 	__u32			data_offset;
--	__u32			reserved[11];
-+	__u32			buf_offset;
-+	__u32			reserved[7];
- };
+ static int __init uvio_dev_init(void)
+ {
+-	if (!test_facility(158))
+-		return -ENXIO;
+ 	return misc_register(&uvio_dev_miscdev);
+ }
  
- /**
+-module_init(uvio_dev_init);
++module_cpu_feature_match(UV, uvio_dev_init);
+ module_exit(uvio_dev_exit);
+ 
+ MODULE_AUTHOR("IBM Corporation");
 -- 
-2.36.1
+2.35.3
+

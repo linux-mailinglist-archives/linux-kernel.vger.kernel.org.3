@@ -2,110 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07CB556039E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E34E356039B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233683AbiF2Osh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 10:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
+        id S233679AbiF2OuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 10:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233679AbiF2Osd (ORCPT
+        with ESMTP id S231345AbiF2OuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 10:48:33 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866E4B7E0
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 07:48:31 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id u8-20020a056e021a4800b002d3a5419d1bso9077338ilv.12
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 07:48:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=piY2rqjjpLSURcBVOJ67ylQE4JJjSD/EdRDbwcjkkEw=;
-        b=wes0nqUn0IG/p6RU51Uba/Th4pOF+owjChHaoj+Zwgp5JOqbJ5Gj4kdAU/zzkxlt2r
-         Un/KrMqytK7DtX032CV7lMAmssvXb9SkzeYUwZG9/6dxAZq44ZX/K+lOxVSYQ6LD5FtB
-         q+N6RYgOSpu82epGBREm55qVBe4vpsKbIMhH6gSp9iTckeUfp74EkJRU0BrWlR8uw8Te
-         xzq4X9Rj/AYqLC4Kv6AyHmoJB1VoS+hYtjJCvACHskHWBnPeX34OX5MradZEaNlOaNVT
-         mTxsgAeW4PNG8PnFd7klso4o5CH2oSIiMb0z8+dBIPG4HQqTnvPmVV6TYCwIYQG/eKtX
-         L08Q==
-X-Gm-Message-State: AJIora93AJvshU0FGQRSyFkBp09/DNwxeH6E5IUTMdEuhFfSMo+aynO0
-        VducjP+einne+/aXZkE3krGj9QOH4No9S1/Z38DAyI6haUxB
-X-Google-Smtp-Source: AGRyM1sUZ9tCojVibTV7y72NWNfIQpGOeRuHkb2gvuxp3tttZu+oPGZn5RsZrt2EH9ny3swAAA0KvfrzRFhuhwRVzPQt0CMJrniG
+        Wed, 29 Jun 2022 10:50:13 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512821CFE6;
+        Wed, 29 Jun 2022 07:50:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=S3ju5Nr7hfd110iZmCLv9+gZbDbPEjWtum1B8GQGywA=; b=JG3jkP5Vv9Jim6Yb4RJlAq1uGD
+        3iBb15pzuTWKpyaU6yeJT0oBIMMv92MtP73oxfJcRyF5x1DsurCHy7GXVe57VO4/odKav7KKvOLyH
+        Dq/OdFTasqachW8KWVoy7njWx1JMoNeEFv18ogkZcZjyjNRgEpHRcd9qXIekW5OPnU789Ep2J/3c4
+        jo2PSV3Xg0CG376aUh2TsrOzr1X9l9mqYjjfgwUbUm8oBBn1lJZbqJzRd3yGTO0WhoDRVC2ioBDVp
+        KsJAfHmzSKVBEkujLqfY4NcU2sxad2hvYD0lqZ/DlGCnqRLeQg1t7k3/LGFG5YCUlTu99V1mAC4vR
+        IrzsOMnA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33102)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1o6Z11-0003IC-E3; Wed, 29 Jun 2022 15:50:03 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1o6Z0z-0005vu-EK; Wed, 29 Jun 2022 15:50:01 +0100
+Date:   Wed, 29 Jun 2022 15:50:01 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v2 02/35] dt-bindings: net: Convert FMan MAC
+ bindings to yaml
+Message-ID: <YrxmmSXdKb3pD/Nv@shell.armlinux.org.uk>
+References: <20220628221404.1444200-1-sean.anderson@seco.com>
+ <20220628221404.1444200-3-sean.anderson@seco.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:dc4:b0:33c:c2c5:50ab with SMTP id
- m4-20020a0566380dc400b0033cc2c550abmr2093334jaj.26.1656514110924; Wed, 29 Jun
- 2022 07:48:30 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 07:48:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000025abbc05e2973f52@google.com>
-Subject: [syzbot] linux-next boot error: WARNING in blk_mq_release
-From:   syzbot <syzbot+7582a7c7cf0affa6c9be@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220628221404.1444200-3-sean.anderson@seco.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Jun 28, 2022 at 06:13:31PM -0400, Sean Anderson wrote:
+> This converts the MAC portion of the FMan MAC bindings to yaml.
+> 
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> ---
+> 
+> Changes in v2:
+> - New
+> 
+>  .../bindings/net/fsl,fman-dtsec.yaml          | 144 ++++++++++++++++++
+>  .../devicetree/bindings/net/fsl-fman.txt      | 128 +---------------
+>  2 files changed, 145 insertions(+), 127 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/fsl,fman-dtsec.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/fsl,fman-dtsec.yaml b/Documentation/devicetree/bindings/net/fsl,fman-dtsec.yaml
+> new file mode 100644
+> index 000000000000..809df1589f20
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/fsl,fman-dtsec.yaml
+> @@ -0,0 +1,144 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/fsl,fman-dtsec.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP FMan MAC
+> +
+> +maintainers:
+> +  - Madalin Bucur <madalin.bucur@nxp.com>
+> +
+> +description: |
+> +  Each FMan has several MACs, each implementing an Ethernet interface. Earlier
+> +  versions of FMan used the Datapath Three Speed Ethernet Controller (dTSEC) for
+> +  10/100/1000 MBit/s speeds, and the 10-Gigabit Ethernet Media Access Controller
+> +  (10GEC) for 10 Gbit/s speeds. Later versions of FMan use the Multirate
+> +  Ethernet Media Access Controller (mEMAC) to handle all speeds.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - fsl,fman-dtsec
+> +      - fsl,fman-xgec
+> +      - fsl,fman-memac
+> +
+> +  cell-index:
+> +    maximum: 64
+> +    description: |
+> +      FManV2:
+> +      register[bit]           MAC             cell-index
+> +      ============================================================
+> +      FM_EPI[16]              XGEC            8
+> +      FM_EPI[16+n]            dTSECn          n-1
+> +      FM_NPI[11+n]            dTSECn          n-1
+> +              n = 1,..,5
+> +
+> +      FManV3:
+> +      register[bit]           MAC             cell-index
+> +      ============================================================
+> +      FM_EPI[16+n]            mEMACn          n-1
+> +      FM_EPI[25]              mEMAC10         9
+> +
+> +      FM_NPI[11+n]            mEMACn          n-1
+> +      FM_NPI[10]              mEMAC10         9
+> +      FM_NPI[11]              mEMAC9          8
+> +              n = 1,..8
+> +
+> +      FM_EPI and FM_NPI are located in the FMan memory map.
+> +
+> +      2. SoC registers:
+> +
+> +      - P2041, P3041, P4080 P5020, P5040:
+> +      register[bit]           FMan            MAC             cell
+> +                              Unit                            index
+> +      ============================================================
+> +      DCFG_DEVDISR2[7]        1               XGEC            8
+> +      DCFG_DEVDISR2[7+n]      1               dTSECn          n-1
+> +      DCFG_DEVDISR2[15]       2               XGEC            8
+> +      DCFG_DEVDISR2[15+n]     2               dTSECn          n-1
+> +              n = 1,..5
+> +
+> +      - T1040, T2080, T4240, B4860:
+> +      register[bit]                   FMan    MAC             cell
+> +                                      Unit                    index
+> +      ============================================================
+> +      DCFG_CCSR_DEVDISR2[n-1]         1       mEMACn          n-1
+> +      DCFG_CCSR_DEVDISR2[11+n]        2       mEMACn          n-1
+> +              n = 1,..6,9,10
+> +
+> +      EVDISR, DCFG_DEVDISR2 and DCFG_CCSR_DEVDISR2 are located in
+> +      the specific SoC "Device Configuration/Pin Control" Memory
+> +      Map.
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  fsl,fman-ports:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    maxItems: 2
+> +    description: |
+> +      An array of two references: the first is the FMan RX port and the second
+> +      is the TX port used by this MAC.
+> +
+> +  ptp-timer:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: A reference to the IEEE1588 timer
+> +
+> +  pcsphy-handle:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: A reference to the PCS (typically found on the SerDes)
 
-syzbot found the following issue on:
+This description includes ethernet-controller.yaml, which contains:
 
-HEAD commit:    c4ef528bd006 Add linux-next specific files for 20220629
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=115f9f4c080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=39ac31f5c81daa7c
-dashboard link: https://syzkaller.appspot.com/bug?extid=7582a7c7cf0affa6c9be
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+  pcs-handle:
+    $ref: /schemas/types.yaml#/definitions/phandle
+    description:
+      Specifies a reference to a node representing a PCS PHY device on a MDIO
+      bus to link with an external PHY (phy-handle) if exists.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7582a7c7cf0affa6c9be@syzkaller.appspotmail.com
+Is there a reason why a custom property is needed rather than using the
+pcs-handle property already provided by the ethernet-controller DT
+description?
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 2226 at block/blk-mq.c:3876 blk_mq_release+0xf8/0x3e0 block/blk-mq.c:3876
-Modules linked in:
-CPU: 0 PID: 2226 Comm: kworker/0:3 Not tainted 5.19.0-rc4-next-20220629-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events blkg_free_workfn
-RIP: 0010:blk_mq_release+0xf8/0x3e0 block/blk-mq.c:3876
-Code: fd 4c 8d a3 a8 02 00 00 4c 89 e0 48 c1 e8 03 80 3c 28 00 0f 85 14 02 00 00 48 8b 83 a8 02 00 00 49 39 c4 75 b1 e8 28 af 97 fd <0f> 0b eb a8 e8 1f af 97 fd 48 8b 44 24 10 48 05 38 05 00 00 48 89
-RSP: 0000:ffffc90009837ba0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff88801bd5c000 RCX: 0000000000000000
-RDX: ffff888024193a80 RSI: ffffffff83e307e8 RDI: 0000000000000000
-RBP: dffffc0000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000001 R12: ffff88801bd5c2a8
-R13: ffff88801d898190 R14: ffff88801d898048 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000ba8e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- blk_release_queue+0x15b/0x280 block/blk-sysfs.c:782
- kobject_cleanup lib/kobject.c:673 [inline]
- kobject_release lib/kobject.c:704 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x1be/0x4c0 lib/kobject.c:721
- blkg_free_workfn+0x128/0x210 block/blk-cgroup.c:96
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
- </TASK>
+Thanks.
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

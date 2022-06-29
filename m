@@ -2,83 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A90A55FE47
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910E355FE4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbiF2LMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 07:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
+        id S231985AbiF2LOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 07:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiF2LMn (ORCPT
+        with ESMTP id S231626AbiF2LN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 07:12:43 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AB6366AC
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 04:12:41 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id q6so31778810eji.13
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 04:12:40 -0700 (PDT)
+        Wed, 29 Jun 2022 07:13:57 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A463E0F7
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 04:13:56 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id fw3so4213830ejc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 04:13:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZklBbrhWeRu7F0FN0Aat62/hrdRJUTCtSkFm/hGOW5k=;
-        b=Cn585zu3809Rjl4M/+WAgSXANgY9EbR6kBiumg85SPIlAFcp2ij9ntr7mWL+wma/Oh
-         xXudPLJponuwkVBdm8CrU7H9IzMb8oRoeS+Frzi1yT1RvMofP0FgwTCn2JvUdez3GKCA
-         2O++VwJNa3uaaMZZdor2aoP0ayFFqYKbaUab2mqH2+kRRweYywTidyl3+g9bRtiIzMDe
-         a6Iu0JEPBZnPEARMY6JaS+uzcTT5jxphvnqyaJHkPrQ6VY07IoMVtcAsgs1yHz2/Kexv
-         d7m2dut6jAWbcPaqcx/aQppAFTGVSa8ue73kHVkRud5H9d3/DNt+RX9ViNIwLUwYZ/Yi
-         npHA==
+        bh=UhmgpOcezzyFajwTFaNzK7CkQEDuKl2reo2f9k791Ls=;
+        b=EPawy1i0Li88//He37rCi9is/lItqMERZZbwYPZER6pZyrNX1juDwsn0d9v+DtYeJB
+         LtMWBTswmNJ3hGiDDFMzXS1KU6olLcQLOpUJdrsDWRCDEZz2ai44lcCgMcxwhNcqfXBD
+         90ebxDEMsWs87RNeelHOwJeNgXOK9+T6kKjAQallgo/4U5JIJgCSv+aaTHjivaYSlJ21
+         jtGeq6KYeRslLak4eN/lP0CRGSwmjOUDi03hv3BGQ8+jx1GtZFKYpH+mAlDZUVF5NfSy
+         tO55q9QZUUxLAxySfmJCB/L3U07Z/k3fByuK0Q/DHBH9J2Y5+1os8ojHMFa9kLtBNaQs
+         ykpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ZklBbrhWeRu7F0FN0Aat62/hrdRJUTCtSkFm/hGOW5k=;
-        b=tdcGT6M0EDmAlBjBFRzFl2DKUQCuNjIgsoDpfB6joK/eamdPrkHPF9Kmn87xlnZdxN
-         Xvgt305yGMNZWG+2LykWa1BWxhOYuYc0OcMtdbG3jdChEZTSKWFpUDVlB/X4bc1VqUnd
-         +eTdrJGIWApnqtWiLQGp1Be0iz2BJCSSSzLC58WxdC6rWLEo1FgMVqR1P0I1QOjanxBf
-         RWuzPWzUQPNuZzsSDnukEVio/8rOn0KE0cWW7slIAY5U1Krae208b693ib+KqQ+/RbTb
-         y6BcHsg6d1pZm2IMwRA4LZsrkkZjoi4lSa6hzgb4vu54VhCIKBuXBg66n63yrAVteNz8
-         4K+A==
-X-Gm-Message-State: AJIora8skdUBEfWL7d3rmrTnmBr4jd6o0j72ebGV175r1hXoaAw56KSY
-        ZymAFXBILkfZudoZXyYhKO/0NA==
-X-Google-Smtp-Source: AGRyM1scRNZiTlfpuZxRNQgJz5mgfY4et1r59dsU2jOJq3RWl2MpKqBbzxXhl1VxC9ZRgy+vujVKEw==
-X-Received: by 2002:a17:906:6448:b0:723:2e05:af41 with SMTP id l8-20020a170906644800b007232e05af41mr2735760ejn.423.1656501159622;
-        Wed, 29 Jun 2022 04:12:39 -0700 (PDT)
+        bh=UhmgpOcezzyFajwTFaNzK7CkQEDuKl2reo2f9k791Ls=;
+        b=qGbAzd/8UlxJ6jZxrwVOczRMh2ciYa5FU5PXEkRINbDR/2HjfiMPpcS6nLurnbescf
+         fr24xyjBOjFBNnPcrLdYi+p3CLXIlDN0Q7wDoi8B9mhnVB3+wqu5xAymdqu+L/OQwlwh
+         6uEp+H147BzR/HotG6P51CXIVhgo2npAXwu9n9hH84MJcN05+huNw9clFxfD+BpvvhPk
+         REy5K6oANUcijkoYplaiplgzmShc45f/EZNc44MjFiw94qvq+K/5U4IuBhwFgThBqGNN
+         Bzu0Wuwh68VzzFHpP9b1A67IpoYebmxYr059PmOkEKGYqUhQrTD4ixe1bue+ZOTdket9
+         zMKw==
+X-Gm-Message-State: AJIora8SXP1ZGLWVMCfLiu8rd19BTL1YW4IXb8tcyUZabMJLPfW2zLZ4
+        oaKEwcX8fv+Ok1GSSTK4g6ot0g==
+X-Google-Smtp-Source: AGRyM1unLZatMNde2GWDa2eWPWHi6q6KWw4D80BqHxdj1KohpSJH6cPJnOOKCZG5LBUtQr/6jbO1Qg==
+X-Received: by 2002:a17:906:284c:b0:727:3773:1a53 with SMTP id s12-20020a170906284c00b0072737731a53mr2710286ejc.765.1656501234848;
+        Wed, 29 Jun 2022 04:13:54 -0700 (PDT)
 Received: from [192.168.0.184] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id s1-20020aa7c541000000b004357171dcccsm11162081edr.12.2022.06.29.04.12.38
+        by smtp.gmail.com with ESMTPSA id ov24-20020a170906fc1800b006f3ef214d9fsm7552947ejb.5.2022.06.29.04.13.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 04:12:38 -0700 (PDT)
-Message-ID: <3ad4876b-1efa-c4c4-2139-3823cf80ff68@linaro.org>
-Date:   Wed, 29 Jun 2022 13:12:37 +0200
+        Wed, 29 Jun 2022 04:13:54 -0700 (PDT)
+Message-ID: <be1abd3a-5aa7-ec9c-5be7-e3c6bbd08979@linaro.org>
+Date:   Wed, 29 Jun 2022 13:13:53 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v3 2/4] dt-bindings: arm: msm: Convert kpss-acc driver
- Documentation to yaml
+Subject: Re: [PATCH v6 2/5] dt-bindings: clock: Add AST2500/AST2600 HACE reset
+ definition
 Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>
-References: <20220628184137.21678-1-ansuelsmth@gmail.com>
- <20220628184137.21678-3-ansuelsmth@gmail.com>
- <e625e2c9-7321-51fa-b9bb-40ed9742ffcc@linaro.org>
- <62bc2c1d.1c69fb81.09d2.e244@mx.google.com>
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Dhananjay Phadke <dhphadke@microsoft.com>,
+        Johnny Huang <johnny_huang@aspeedtech.com>
+Cc:     linux-aspeed@lists.ozlabs.org, linux-crypto@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com
+References: <20220629094426.1930589-1-neal_liu@aspeedtech.com>
+ <20220629094426.1930589-3-neal_liu@aspeedtech.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <62bc2c1d.1c69fb81.09d2.e244@mx.google.com>
+In-Reply-To: <20220629094426.1930589-3-neal_liu@aspeedtech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,41 +88,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/06/2022 12:40, Christian Marangi wrote:
-> On Wed, Jun 29, 2022 at 08:14:12AM +0200, Krzysztof Kozlowski wrote:
->> On 28/06/2022 20:41, Christian Marangi wrote:
->>> Convert kpss-acc driver Documentation to yaml.
->>> The original Documentation was wrong all along. Fix it while we are
->>> converting it.
->>> The example was wrong as kpss-acc-v2 should only expose the regs but we
->>> don't have any driver that expose additional clocks. The kpss-acc driver
->>> is only specific to v1. For this exact reason, limit all the additional
->>> bindings (clocks, clock-names, clock-output-names and #clock-cells) to
->>> v1 and also flag that these bindings should NOT be used for v2.
->>>
->>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
->>> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
->>
->> This is still not fixed and not tested. Since 4 versions of this
->> patchset (previously was part of other set).
->>
->> I retract my review. Please test the bindings.
->>
->> Best regards,
->> Krzysztof
+On 29/06/2022 11:44, Neal Liu wrote:
+> Add HACE reset bit definition for AST2500/AST2600.
 > 
-> Thing is that I tested them and on my side I don't have such errors.
+> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+> Signed-off-by: Johnny Huang <johnny_huang@aspeedtech.com>
+> ---
+>  include/dt-bindings/clock/aspeed-clock.h  | 1 +
+>  include/dt-bindings/clock/ast2600-clock.h | 1 +
+>  2 files changed, 2 insertions(+)
 
-Then maybe update your dtschema because I can easily see them.
 
-> 
-> I'm using the linux-next branch. Should I use something else that have
-> newer schema files?
-> 
-> Also on other patch there are some error reported that are unrelated to
-> my change and that looks strange.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-The other might be not be relevant, but this one is real and reproducible.
 
 Best regards,
 Krzysztof

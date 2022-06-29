@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5566C55FB91
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E5755FB8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232558AbiF2JOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 05:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
+        id S232707AbiF2JPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 05:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiF2JO2 (ORCPT
+        with ESMTP id S232646AbiF2JPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 05:14:28 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A69927B36
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 02:14:27 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id v9so5835912wrp.7
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 02:14:27 -0700 (PDT)
+        Wed, 29 Jun 2022 05:15:19 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDDE329819
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 02:15:17 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id pk21so31318635ejb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 02:15:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=amarulasolutions.com; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=U+mKfaGXoONCznFgzmYIZny9AKkMWKoWt6b7S8f60RM=;
-        b=fEDY3d9nvND9FB+yUl1AlWKqmdRimCwOi50i1qa9A3DKppiVdL0evazSl+CYovnpPb
-         +xe7MhtHEIdRd/hU3l/ogn7sAWDlJUBLc392CjdJtrSQfAf0m+yIkjQ5Ga6atX/HRS7q
-         yWgmVnPRgemnHBcUGxlhsY3DN9UnUcJt1/h9p3fpOkxCpxOj0Ckew4iqSSylcCqnElDa
-         AVau4GSEu7q/4s2ZTilxBRERa7+HplvcEVjMmlivdXoSG5lnUC7moEqfpj1JhEbdYSXx
-         6MUxFw9BPh4JT9OYAiLOGKncNm/n7RARaGhuCY/YcqnhEA2h4qe0OikedNdDbvVg1I8b
-         JqNg==
+        bh=L7wjVzwYiQNNDss7ZeyhgJmoh/+dTEb2fLiC8HBD/kk=;
+        b=bt1EKqzTrBt5h8uv3/tx1sCxbmzEk6oLQ3N+mybSM2M5wIY8sV+dJdem2fNUDAl6bX
+         9hUoGAaWDyNgrQyjCNTjMvNhLXjRzPTJ13QO2L9UB9tWN3kMqJY6Okc2EwPM8kxeoM47
+         oKknoyLf5gF7OzH8/0dPuGMt+YcBOYKEnYwCc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=U+mKfaGXoONCznFgzmYIZny9AKkMWKoWt6b7S8f60RM=;
-        b=CYXWKz5gBuX96xIjFg5BmoT4JgpRk6xJ7LBG1XXFU1JA5Vo+xQs8isY0YMOIE8huzK
-         7H/3Gw02fN6gRHNeVwVAAb9z2MUJ+qFjNdIrO3ax1GYgdKXCbTF4xPf04UyHJ0azlWpG
-         zXdvjTTsfHbLmlw3JtPYtjPWiiFbljHaEXamL+RSch12LIvd65QCBVVoVFEy2OLJDdIZ
-         iYF8kX/rf9JaJ7KwQFO9P9de+XobGWVUbZy4oLI3TSnE47LzaGO1MFn9LvzgNJNdlhDv
-         QV3JQ2MjgLXSLEFFCHnwzqZpFY1L3uoUa3Ff/8x0qdAG/j5wQfG+wdeEumna90q5UDIo
-         Ljcg==
-X-Gm-Message-State: AJIora8Fie6supqqY0Rpa2P0sAuj1pybmLN2U4PLfV6XNMT7DvZuaueg
-        o0l7hC4oDmhCH0Ga4KG9CbgLjg==
-X-Google-Smtp-Source: AGRyM1uss6yL9ryGiFhRNXcrE8eBDDu99NbY6sECQMgnEwKtRLT98HuE31fmJMfucgcPw940Fu+20A==
-X-Received: by 2002:a5d:4352:0:b0:213:4910:6616 with SMTP id u18-20020a5d4352000000b0021349106616mr2022060wrr.226.1656494065746;
-        Wed, 29 Jun 2022 02:14:25 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id z18-20020a05600c0a1200b0039c45fc58c4sm2440202wmp.21.2022.06.29.02.14.24
+        bh=L7wjVzwYiQNNDss7ZeyhgJmoh/+dTEb2fLiC8HBD/kk=;
+        b=5JOkBpi+PV1LootwKLUVXlnb1H16LVGa1WMveDwbv6gBu8Big5qkIotfU+krGZbYsg
+         2pEl1MwH9Mq6RXeusPBjSVhVgHO6rROWpeRqSFaRPq86irqhNqOBRbIxtYeY4+1JVQvw
+         iwqyJg1f6e0UhsJECnTDSdPcKYPgxhP+ytVHKXf4aCGnLm8LOocj3TfZVCWAo3JNGDLb
+         PTd6oHU4fP9ND1//xnNdQf0V2AGnES8NQBYeAVX3DwOErUE8lS72N4mK724OIiP7N6ha
+         ernQ6BFkpL/yzt6uC0IT7bXUn31Ckg6GArkJq+DNSP4ZgBuzAjrvqBAP/qYUCn13Ip90
+         HkPw==
+X-Gm-Message-State: AJIora9Qj6gxiJCF1NHvhEJEHJSEBQbkgHXS73UdTHzTsGEelsLWNJgL
+        HCZdTlqD7Ar+QB6LPvI2sgluGw==
+X-Google-Smtp-Source: AGRyM1tke9XKBdzZQLV5gX3xfKF5wJ/OjBVDZjKsRrNDkB5m8P24fXXPItsPsDZxmwic52HeVrjdMQ==
+X-Received: by 2002:a17:906:2bda:b0:726:3b59:3ea9 with SMTP id n26-20020a1709062bda00b007263b593ea9mr2217117ejg.43.1656494116450;
+        Wed, 29 Jun 2022 02:15:16 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-58-216.cust.vodafonedsl.it. [188.217.58.216])
+        by smtp.gmail.com with ESMTPSA id r1-20020aa7cb81000000b004357b717a96sm10977159edt.85.2022.06.29.02.15.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 02:14:25 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 10:14:01 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Eric Auger <eric.auger@redhat.com>
-Cc:     eric.auger.pro@gmail.com, jroedel@suse.de,
-        linux-acpi@vger.kernel.org, iommu@lists.linux-foundation.org,
-        rafael@kernel.org, lenb@kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev
-Subject: Re: [PATCH] ACPI: VIOT: Fix ACS setup
-Message-ID: <YrwX2U48HOC+UF07@myrica>
-References: <20220627125534.1035912-1-eric.auger@redhat.com>
+        Wed, 29 Jun 2022 02:15:16 -0700 (PDT)
+Date:   Wed, 29 Jun 2022 11:15:14 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Daniel Scally <djrscally@gmail.com>, linuxfancy@googlegroups.com,
+        linux-amarula@amarulasolutions.com,
+        quentin.schulz@theobroma-systems.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/7] media: ov5693: move hw cfg functions into
+ ov5693_check_hwcfg
+Message-ID: <20220629091514.GB381128@tom-ThinkPad-T14s-Gen-2i>
+References: <20220627150453.220292-1-tommaso.merciai@amarulasolutions.com>
+ <20220627150453.220292-5-tommaso.merciai@amarulasolutions.com>
+ <20220629081635.zvdj6pzodg4rhrdf@uno.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220627125534.1035912-1-eric.auger@redhat.com>
+In-Reply-To: <20220629081635.zvdj6pzodg4rhrdf@uno.localdomain>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -72,125 +73,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+Hi Jacopo,
 
-On Mon, Jun 27, 2022 at 02:55:34PM +0200, Eric Auger wrote:
-> Currently acpi_viot_init() gets called after the pci
-> device has been scanned and pci_enable_acs() has been called.
-> So pci_request_acs() fails to be taken into account leading
-> to wrong single iommu group topologies when dealing with
-> multi-function root ports for instance.
+On Wed, Jun 29, 2022 at 10:16:35AM +0200, Jacopo Mondi wrote:
+> Hi Tommaso,
 > 
-> We cannot simply move the acpi_viot_init() earlier, similarly
-> as the IORT init because the VIOT parsing relies on the pci
-> scan. However we can detect VIOT is present earlier and in
-> such a case, request ACS. Introduce a new acpi_viot_early_init()
-> routine that allows to call pci_request_acs() before the scan.
+> On Mon, Jun 27, 2022 at 05:04:50PM +0200, Tommaso Merciai wrote:
+> > Move hw configuration functions into ov5693_check_hwcfg. This is done to
+> > separe the code that handle the hw cfg from probe in a clean way
 > 
-> Fixes: 3cf485540e7b ("ACPI: Add driver for the VIOT table")
-> Signed-off-by: Eric Auger <eric.auger@redhat.com>
-> Reported-by: Jin Liu <jinl@redhat.com>
-
-Thanks for the fix, the patch makes sense and fixes the issue.
-
-I wondered whether we should keep the logic where we only request ACS if
-an IOMMU is found to manage a PCI range, but I can't see any harm in
-requesting it regardless (plus there is a precedent with AMD IOMMU).
-I could imagine some VMM wanting to only put an IOMMU in front of its MMIO
-devices and leave PCI to roam free, but that seems like a stretch.
-
-There is another issue with the existing code, though: we can't call
-pci_request_acs() when CONFIG_PCI is disabled because no stub is defined.
-Could you wrap the call in an #ifdef?
-
-> ---
->  drivers/acpi/bus.c        |  1 +
->  drivers/acpi/viot.c       | 23 +++++++++++++++++------
->  include/linux/acpi_viot.h |  2 ++
->  3 files changed, 20 insertions(+), 6 deletions(-)
+> s/separe/separate/
 > 
-> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-> index 86fa61a21826..906ad8153fd9 100644
-> --- a/drivers/acpi/bus.c
-> +++ b/drivers/acpi/bus.c
-> @@ -1400,6 +1400,7 @@ static int __init acpi_init(void)
->  
->  	pci_mmcfg_late_init();
->  	acpi_iort_init();
-> +	acpi_viot_early_init();
->  	acpi_hest_init();
->  	acpi_ghes_init();
->  	acpi_scan_init();
-> diff --git a/drivers/acpi/viot.c b/drivers/acpi/viot.c
-> index d2256326c73a..3c1be123e4d6 100644
-> --- a/drivers/acpi/viot.c
-> +++ b/drivers/acpi/viot.c
-> @@ -248,6 +248,23 @@ static int __init viot_parse_node(const struct acpi_viot_header *hdr)
->  	return ret;
->  }
->  
-> +/**
-> + * acpi_viot_early_init - Test the presence of VIOT and enable ACS
-> + *
-> + * If the VIOT does exist, ACS must be enabled. This cannot be
-> + * done in acpi_viot_init() which is called after the bus scan
-> + */
-> +void __init acpi_viot_early_init(void)
-> +{
-> +	acpi_status status;
-> +	struct acpi_table_header *hdr;
-> +
-> +	status = acpi_get_table(ACPI_SIG_VIOT, 0, &hdr);
-> +	if (!ACPI_FAILURE(status))
-> +		pci_request_acs();
-> +	acpi_put_table(hdr);
+> You also seem to change the logic of the clk handling, please mention
+> this in the commit message, otherwise one could be fooled into
+> thinking you're only moving code around with no functional changes...
 
-I'd rather not call acpi_put_table() in case of failure. I know it is
-handled but it looks fragile and I couldn't find any other user of
-acpi_get_table() doing this.
+Right. I'll add some comments on support to get clock-frequency using
+fwnode_property_read_u32 in v3
 
-> +}
-> +
->  /**
->   * acpi_viot_init - Parse the VIOT table
->   *
-> @@ -319,12 +336,6 @@ static int viot_pci_dev_iommu_init(struct pci_dev *pdev, u16 dev_id, void *data)
->  			epid = ((domain_nr - ep->segment_start) << 16) +
->  				dev_id - ep->bdf_start + ep->endpoint_id;
->  
-> -			/*
-> -			 * If we found a PCI range managed by the viommu, we're
-> -			 * the one that has to request ACS.
-> -			 */
-> -			pci_request_acs();
-> -
->  			return viot_dev_iommu_init(&pdev->dev, ep->viommu,
->  						   epid);
->  		}
-> diff --git a/include/linux/acpi_viot.h b/include/linux/acpi_viot.h
-> index 1eb8ee5b0e5f..e58d60f8ff2e 100644
-> --- a/include/linux/acpi_viot.h
-> +++ b/include/linux/acpi_viot.h
-> @@ -6,10 +6,12 @@
->  #include <linux/acpi.h>
->  
->  #ifdef CONFIG_ACPI_VIOT
-> +void __init acpi_viot_early_init(void);
->  void __init acpi_viot_init(void);
->  int viot_iommu_configure(struct device *dev);
->  #else
->  static inline void acpi_viot_init(void) {}
-> +static inline void acpi_viot_early_init(void) {}
+> 
+> >
+> > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> > ---
+> >  drivers/media/i2c/ov5693.c | 53 +++++++++++++++++++++++---------------
+> >  1 file changed, 32 insertions(+), 21 deletions(-)
+> >
+> > diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
+> > index d2adc5513a21..d5a934ace597 100644
+> > --- a/drivers/media/i2c/ov5693.c
+> > +++ b/drivers/media/i2c/ov5693.c
+> > @@ -1348,6 +1348,38 @@ static int ov5693_check_hwcfg(struct ov5693_device *ov5693)
+> >  	struct fwnode_handle *endpoint;
+> >  	unsigned int i;
+> >  	int ret;
+> > +	u32 xvclk_rate;
+> 
+> nit: move it up to maintain reverse-xmas-tree order (I know, it's an
+> annoying comment, but since variables are already declared in this order..)
 
-nit: different declaration order
+No problem :)
+I'll do it in v3.
+
+> 
+> > +
+> > +	ov5693->xvclk = devm_clk_get(ov5693->dev, "xvclk");
+> 
+> Isn't this broken ?
+> 
+> if you use ov5693->xvclk to identify the ACPI vs OF use case shouldn't
+> you use the get_optionl() version ? Otherwise in the ACPI case you will have
+> -ENOENT if there's not 'xvclk' property and bail out.
+
+You are right, devm_clk_get_optional is the correct way.
 
 Thanks,
-Jean
+Tommaso
 
-
->  static inline int viot_iommu_configure(struct device *dev)
->  {
->  	return -ENODEV;
-> -- 
-> 2.35.3
 > 
+> Unless my understanding is wrong on ACPI we have "clock-frequency" and
+> on OF "xvclk" with an "assigned-clock-rates",
+> 
+> Dan you upstreamed this driver and I assume it was tested on ACPI ?
+> Can you clarify how this worked for you, as it seems the original code
+> wanted a mandatory "xvclk" ? Are there ACPI tables with an actual
+> 'xvclk' property ?
+> 
+> > +	if (IS_ERR(ov5693->xvclk))
+> > +		return dev_err_probe(ov5693->dev, PTR_ERR(ov5693->xvclk),
+> > +				     "failed to get xvclk: %ld\n",
+> > +				     PTR_ERR(ov5693->xvclk));
+> > +
+> > +	if (ov5693->xvclk) {
+> > +		xvclk_rate = clk_get_rate(ov5693->xvclk);
+> > +	} else {
+> > +		ret = fwnode_property_read_u32(fwnode, "clock-frequency",
+> > +					       &xvclk_rate);
+> > +
+> > +		if (ret) {
+> > +			dev_err(ov5693->dev, "can't get clock frequency");
+> > +			return ret;
+> > +		}
+> > +	}
+> > +
+> > +	if (xvclk_rate != OV5693_XVCLK_FREQ)
+> > +		dev_warn(ov5693->dev, "Found clk freq %u, expected %u\n",
+> > +			 xvclk_rate, OV5693_XVCLK_FREQ);
+> > +
+> > +	ret = ov5693_configure_gpios(ov5693);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	ret = ov5693_get_regulators(ov5693);
+> > +	if (ret)
+> > +		return dev_err_probe(ov5693->dev, ret,
+> > +				     "Error fetching regulators\n");
+> >
+> >  	endpoint = fwnode_graph_get_next_endpoint(fwnode, NULL);
+> >  	if (!endpoint)
+> > @@ -1390,7 +1422,6 @@ static int ov5693_check_hwcfg(struct ov5693_device *ov5693)
+> >  static int ov5693_probe(struct i2c_client *client)
+> >  {
+> >  	struct ov5693_device *ov5693;
+> > -	u32 xvclk_rate;
+> >  	int ret = 0;
+> >
+> >  	ov5693 = devm_kzalloc(&client->dev, sizeof(*ov5693), GFP_KERNEL);
+> > @@ -1408,26 +1439,6 @@ static int ov5693_probe(struct i2c_client *client)
+> >
+> >  	v4l2_i2c_subdev_init(&ov5693->sd, client, &ov5693_ops);
+> >
+> > -	ov5693->xvclk = devm_clk_get(&client->dev, "xvclk");
+> > -	if (IS_ERR(ov5693->xvclk)) {
+> > -		dev_err(&client->dev, "Error getting clock\n");
+> > -		return PTR_ERR(ov5693->xvclk);
+> > -	}
+> > -
+> > -	xvclk_rate = clk_get_rate(ov5693->xvclk);
+> > -	if (xvclk_rate != OV5693_XVCLK_FREQ)
+> > -		dev_warn(&client->dev, "Found clk freq %u, expected %u\n",
+> > -			 xvclk_rate, OV5693_XVCLK_FREQ);
+> > -
+> > -	ret = ov5693_configure_gpios(ov5693);
+> > -	if (ret)
+> > -		return ret;
+> > -
+> > -	ret = ov5693_get_regulators(ov5693);
+> > -	if (ret)
+> > -		return dev_err_probe(&client->dev, ret,
+> > -				     "Error fetching regulators\n");
+> > -
+> >  	ov5693->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+> >  	ov5693->pad.flags = MEDIA_PAD_FL_SOURCE;
+> >  	ov5693->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+> > --
+> > 2.25.1
+> >
+
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com

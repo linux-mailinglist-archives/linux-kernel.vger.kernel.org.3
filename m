@@ -2,215 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF60560C26
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 00:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F014D560C34
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 00:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiF2WNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 18:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
+        id S229715AbiF2WPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 18:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiF2WNR (ORCPT
+        with ESMTP id S229975AbiF2WPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 18:13:17 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197341AD8D;
-        Wed, 29 Jun 2022 15:13:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656540796; x=1688076796;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hM5yXBlOkkU9tdnWE+P4k5x9ZayD+DfNzsincX9Nu0w=;
-  b=drd5NDyRHSHo5ftdsGWskL04jyJv8G9mYp564kJn8VbmHExRjR7QXwoO
-   qaT68OxScZKXpjN74WQfVtaxWOra6PIWLEU//oH3hYSqooCY6V54MKTIr
-   HE6repRIbu9P2txHN6ooSgkbD+fWN+xpH+/TcKW3ycHcImRGRjkLRr3DA
-   UQcrExX453IvfxEJiOrRlPSJGBN9wTGtKlEX108Vg2A078WGnFZycROHY
-   M0TEqmlvkj1hM01acoYUPdfmW5Ovm2OTnb3VAYCOsJQ8a1Laabs0xilLt
-   DPGXuUWHAVVjHdqaMd2AabJ0rfgrjFOsmzA/BtVWzmWfvCmWKX2KNu1ow
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="346165664"
-X-IronPort-AV: E=Sophos;i="5.92,232,1650956400"; 
-   d="scan'208";a="346165664"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 15:13:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,232,1650956400"; 
-   d="scan'208";a="917782995"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Jun 2022 15:13:15 -0700
-Received: from MeteorLakePO1.jf.intel.com (MeteorLakePO1.jf.intel.com [10.234.180.58])
-        by linux.intel.com (Postfix) with ESMTP id 313B9580AB4;
-        Wed, 29 Jun 2022 15:13:15 -0700 (PDT)
-From:   Gayatri Kammela <gayatri.kammela@linux.intel.com>
-To:     hdegoede@redhat.com
-Cc:     markgross@kernel.org, david.e.box@linux.intel.com,
-        srinivas.pandruvada@intel.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Gayatri Kammela <gayatri.kammela@linux.intel.com>,
-        David E Box <david.e.box@intel.com>
-Subject: [PATCH v1 4/4] platform/x86/intel/vsec: Add PCI error recovery support to Intel PMT
-Date:   Wed, 29 Jun 2022 15:13:34 -0700
-Message-Id: <20220629221334.434307-5-gayatri.kammela@linux.intel.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220629221334.434307-1-gayatri.kammela@linux.intel.com>
-References: <20220629221334.434307-1-gayatri.kammela@linux.intel.com>
+        Wed, 29 Jun 2022 18:15:22 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D81344FB
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 15:15:20 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id i126so3082279oih.4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 15:15:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=mVoh40gI4rO7l5P610TuxYrPnSY080uxRzgBN6iYHPw=;
+        b=J1EwYJaAuhZYWSzaIMQPrFvichlEBV0wEJXVGgxiGkfuiW+LSAUKhLXvFor3y/gY1I
+         g3G55YwwfAtYsFNCQU8luQfEzkAkaPjhdlG7yLKWNA4GRVnA32+sM/PnVfP6m/I2yL3N
+         QBDpAhJJfkc47+mpEs2pdgJjynB//53l3WQeM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=mVoh40gI4rO7l5P610TuxYrPnSY080uxRzgBN6iYHPw=;
+        b=nyFChINbBxW4Uzjx3yZ/mk7M+tPU7enNLEDhw8wr8KduQz3ybZi5115gwrYBiOK+7u
+         mCF/aLW4Y/oN96Ab5uL0HfiiY+HmWWx90inxErsIsgWIpD7mh7QtWFPIkzAsAS9ihMve
+         xBiAspKOVvLtZHLOq0XqCqGrYD68vo3uMNZ+IVSdWkHv1IYFjJuMvMbESYZZbXF3/pyM
+         WNKGKXX6E7466oAMV3wq4tlKJZlyrsRs2qjiMFHRxrRLwHIEJ6mfDFTKluXD0ad8T93i
+         fvzL02oXwHdowNU2e7GiKC0pqFtI8QAQvkXp7/oIo6RIv6kK+cQHMxkDj/gFG5V8uwMF
+         s0RA==
+X-Gm-Message-State: AJIora/BpsWS+5hvkiIxnowXUWGrIC2yRSGUg6IsGo44snU4v4eV7UVt
+        zRPX6lqa5xueqQKgOGP09qnOJfhF9p8V99KFS2PePg==
+X-Google-Smtp-Source: AGRyM1tbuJ+dTBm80e52XefpYch+GdMWbSr4bA36AZQ68tY4ma07ZyFuFFne+0loAcndzlIIccRQmt/8JirxK9nrK/k=
+X-Received: by 2002:a05:6808:171c:b0:334:9342:63ef with SMTP id
+ bc28-20020a056808171c00b00334934263efmr3625283oib.63.1656540920035; Wed, 29
+ Jun 2022 15:15:20 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 29 Jun 2022 15:15:19 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
+References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+ <YpkRDi2m7cLaKYEf@google.com> <Yp5nf2w8uVZ38/XZ@google.com>
+ <Yqd9IHQEj3Ex+FcF@google.com> <YqjLHyUVEjf7I3MI@google.com>
+ <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com> <YqtlRQOwb3t6Xtd0@google.com>
+ <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com> <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
+ <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 29 Jun 2022 15:15:19 -0700
+Message-ID: <CAE-0n50PGw_XSZ0-iV7gem6+-LENoq6ZVOwX3f+0XjkrHg-rLw@mail.gmail.com>
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from system suspend
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_vpulyala@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add PCI error recovery support for Intel PMT driver to recover
-from PCI fatal errors
+Quoting Pavan Kondeti (2022-06-27 22:31:48)
+> On Mon, Jun 27, 2022 at 01:02:49PM -0700, Stephen Boyd wrote:
+> > Quoting Pavan Kondeti (2022-06-20 01:54:15)
+> > >
+> > > Would like to hear other people thoughts on this.
+> > >
+> >
+> > I'm not following very closely but it sounds like a problem that may be
+> > solved by using the component driver code (see
+> > include/linux/component.h). That would let you move anything that needs
+> > to be done once the child devices probe to the aggregate driver 'bind'
+> > function (see struct component_master_ops::bind).
+>
+> Thanks Stephen for letting us know about the component device framework.
+>
+> IIUC,
+>
+> - dwc3-qcom (parent of the dwc3 core) registers as a component master by
+> calling component_master_add_with_match() before calling
+> of_platform_populate(). The match callback could be as simple as comparing
+> the device against our child device.
+>
+> - The dwc3 core (child) at the end of its probe can add as a component by calling
+> component_add().
+>
+> - The above triggers the component_master_ops::bind callback implemented in
+>   dwc3-qcom driver which signals that we are good to go.
+>
+> - The dwc-qcom can call component_bind_all() to finish the formality i.e
+>   telling the dwc3 core that we are good to go.
+>
+> Is my understanding correct? This is what we are looking for i.e a way for
+> the child device(s) to signal the parent when the former is bounded.
 
-Cc: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
-Cc: David E Box <david.e.box@intel.com>
-Signed-off-by: Gayatri Kammela <gayatri.kammela@linux.intel.com>
----
- drivers/platform/x86/intel/vsec.c | 82 ++++++++++++++++++++++++++++++-
- 1 file changed, 80 insertions(+), 2 deletions(-)
+Sounds about right to me.
 
-diff --git a/drivers/platform/x86/intel/vsec.c b/drivers/platform/x86/intel/vsec.c
-index 9368a3d587ab..544493ae85b7 100644
---- a/drivers/platform/x86/intel/vsec.c
-+++ b/drivers/platform/x86/intel/vsec.c
-@@ -15,6 +15,7 @@
- 
- #include <linux/auxiliary_bus.h>
- #include <linux/bits.h>
-+#include <linux/delay.h>
- #include <linux/kernel.h>
- #include <linux/idr.h>
- #include <linux/module.h>
-@@ -30,9 +31,13 @@
- #define INTEL_DVSEC_TABLE_BAR(x)	((x) & GENMASK(2, 0))
- #define INTEL_DVSEC_TABLE_OFFSET(x)	((x) & GENMASK(31, 3))
- #define TABLE_OFFSET_SHIFT		3
-+#define PMT_XA_START			0
-+#define PMT_XA_MAX			INT_MAX
-+#define PMT_XA_LIMIT			XA_LIMIT(PMT_XA_START, PMT_XA_MAX)
- 
- static DEFINE_IDA(intel_vsec_ida);
- static DEFINE_IDA(intel_vsec_sdsi_ida);
-+static DEFINE_XARRAY_ALLOC(auxdev_array);
- 
- /**
-  * struct intel_vsec_header - Common fields of Intel VSEC and DVSEC registers.
-@@ -132,7 +137,7 @@ static int intel_vsec_add_aux(struct pci_dev *pdev, struct intel_vsec_device *in
- 			      const char *name)
- {
- 	struct auxiliary_device *auxdev = &intel_vsec_dev->auxdev;
--	int ret;
-+	int ret, id;
- 
- 	ret = ida_alloc(intel_vsec_dev->ida, GFP_KERNEL);
- 	if (ret < 0) {
-@@ -159,7 +164,18 @@ static int intel_vsec_add_aux(struct pci_dev *pdev, struct intel_vsec_device *in
- 		return ret;
- 	}
- 
--	return devm_add_action_or_reset(&pdev->dev, intel_vsec_remove_aux, auxdev);
-+	ret = devm_add_action_or_reset(&pdev->dev, intel_vsec_remove_aux,
-+				       auxdev);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Add auxdev to list */
-+	ret = xa_alloc(&auxdev_array, &id, intel_vsec_dev, PMT_XA_LIMIT,
-+		       GFP_KERNEL);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
- }
- 
- static int intel_vsec_add_dev(struct pci_dev *pdev, struct intel_vsec_header *header,
-@@ -345,6 +361,7 @@ static int intel_vsec_pci_probe(struct pci_dev *pdev, const struct pci_device_id
- 	if (ret)
- 		return ret;
- 
-+	pci_save_state(pdev);
- 	info = (struct intel_vsec_platform_info *)id->driver_data;
- 	if (!info)
- 		return -EINVAL;
-@@ -406,10 +423,71 @@ static const struct pci_device_id intel_vsec_pci_ids[] = {
- };
- MODULE_DEVICE_TABLE(pci, intel_vsec_pci_ids);
- 
-+static pci_ers_result_t intel_vsec_pci_error_detected(struct pci_dev *pdev,
-+						      pci_channel_state_t state)
-+{
-+	pci_channel_state_t status = PCI_ERS_RESULT_NEED_RESET;
-+
-+	dev_info(&pdev->dev, "PCI error detected, state %d", state);
-+
-+	if (state == pci_channel_io_perm_failure)
-+		status = PCI_ERS_RESULT_DISCONNECT;
-+	else
-+		pci_disable_device(pdev);
-+
-+	return status;
-+}
-+
-+static pci_ers_result_t intel_vsec_pci_slot_reset(struct pci_dev *pdev)
-+{
-+	struct intel_vsec_device *intel_vsec_dev;
-+	pci_channel_state_t status = PCI_ERS_RESULT_DISCONNECT;
-+	const struct pci_device_id *pci_dev_id;
-+	unsigned long index;
-+
-+	dev_info(&pdev->dev, "Resetting PCI slot\n");
-+
-+	msleep(2000);
-+	if (pci_enable_device(pdev)) {
-+		dev_info(&pdev->dev,
-+			 "Failed to re-enable PCI device after reset.\n");
-+		goto out;
-+	}
-+
-+	status =  PCI_ERS_RESULT_RECOVERED;
-+
-+	xa_for_each(&auxdev_array, index, intel_vsec_dev) {
-+		/* check if pdev doesn't match */
-+		if (pdev != intel_vsec_dev->pcidev)
-+			continue;
-+		devm_release_action(&pdev->dev, intel_vsec_remove_aux,
-+				    &intel_vsec_dev->auxdev);
-+	}
-+	pci_disable_device(pdev);
-+	pci_restore_state(pdev);
-+	pci_dev_id = pci_match_id(intel_vsec_pci_ids, pdev);
-+	intel_vsec_pci_probe(pdev, pci_dev_id);
-+
-+out:
-+	return status;
-+}
-+
-+void intel_vsec_pci_resume(struct pci_dev *pdev)
-+{
-+	dev_info(&pdev->dev, "Done resuming PCI device\n");
-+}
-+
-+const struct pci_error_handlers intel_vsec_pci_err_handlers = {
-+	.error_detected = intel_vsec_pci_error_detected,
-+	.slot_reset = intel_vsec_pci_slot_reset,
-+	.resume = intel_vsec_pci_resume,
-+};
-+
- static struct pci_driver intel_vsec_pci_driver = {
- 	.name = "intel_vsec",
- 	.id_table = intel_vsec_pci_ids,
- 	.probe = intel_vsec_pci_probe,
-+	.err_handler = &intel_vsec_pci_err_handlers,
- };
- module_pci_driver(intel_vsec_pci_driver);
- 
--- 
-2.32.0
+>
+> Also what happens when the child device probe fails for any reason. i.e
+> component_add() would never be called so the master driver i.e dwc3-qcom would
+> wait indefinitely. May be it needs to implement a timeout or runtime suspend
+> etc should take care of keeping the resoures in suspend state.
 
+When the child fails probe, it should return -EPROBE_DEFER if probe
+needs to be deferred. Then the driver will attempt probe at a later
+time. If probe fails without defer then it will never work and dwc3-qcom
+will wait indefinitely. Not much we can do in that situation.
+
+dwc3-qcom should wait for dwc3 core to call component_add() and then do
+whatever needs to be done once the dwc3 core is registered in the
+dwc3-qcom bind callback. Honestly this may all be a little overkill if
+there's only two drivers here, dwc3-qcom and dwc3 core. It could
+probably just be some callback from dwc3 core at the end of probe that
+calls some function in dwc3-qcom.

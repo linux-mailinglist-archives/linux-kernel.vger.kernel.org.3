@@ -2,56 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 639FD55F4EF
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2FF55F4EE
 	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 06:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbiF2EKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 00:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
+        id S231284AbiF2EKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 00:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiF2EKS (ORCPT
+        with ESMTP id S231142AbiF2EKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 00:10:18 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9EF220C5;
-        Tue, 28 Jun 2022 21:10:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A91A8CE220D;
-        Wed, 29 Jun 2022 04:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B7582C341CD;
-        Wed, 29 Jun 2022 04:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656475813;
-        bh=+lrPPePihGOQSBmRtOjtdtauhhMK3bc2RbQmmsKN20A=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=RfEcZGJm/n1H3whit5kajmz4nGPVQFR+zAbnjtNlh0PuKvYDy1ssmTfeP/okKExlt
-         mUz4XE2Z3ox+SHokqbTbmuLwLQeBZs5qV+0wKHgYG4/wmwclSRTK2zi6ZNUUCD8Dif
-         bpt9o2bq9cM7rwBfiTksnWQ3ucFgg1DPv6jdwYU5VR2I3SFow2ZKG/RIycNHSCHEWk
-         fc7okke3bX70WBMkZUQs1b36RMRL9/KajTyxZ/HUQmWKtAoIYDMyGtuC65W5bmwFXt
-         Iru5oSKNLk4scO66nbWwndITzDgn+U2b3RSsPjgpIsivpXqr+mmnNzzO01huy0gwBv
-         E/sZQhJXpV1Ig==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 908E4E49BBA;
-        Wed, 29 Jun 2022 04:10:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 29 Jun 2022 00:10:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F11E3631A
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 21:10:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656475847;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bg6heNJXq50eL6WsFIMxRV6MiBd1t5LqWZMr8mmOcec=;
+        b=TCpZHVJ3ivj+IeKzkj7z6dLwyDYdKVZlzNdadB+WYozqswSUtzFHJ/F03HwVh2G70l776L
+        noCUqHaTWHPev4GirHSFxeyMO100ViHkNuYZ+9hla9Vj9iIhavilwu8uqBXYylNPCQGtyQ
+        O1i2RdeHqyDhaa5ykdvvzn033UfCVl8=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-513-sgAEGjAlMMORqk1g9Nzraw-1; Wed, 29 Jun 2022 00:10:45 -0400
+X-MC-Unique: sgAEGjAlMMORqk1g9Nzraw-1
+Received: by mail-lf1-f70.google.com with SMTP id o7-20020a056512230700b004810a865709so4832209lfu.3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 21:10:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=bg6heNJXq50eL6WsFIMxRV6MiBd1t5LqWZMr8mmOcec=;
+        b=kvf5LqQJzgD+F4I/XhphJv5kcGB8OAQUTLAITNUv60L5z9ZYApv32nEh4m4RgNNdzP
+         xWPo32lyhOCXxZl2S5thIRQloap4tChlzAJSSVjftrVHcEvBFUGpEtes1s8RvXHZeGo8
+         8c6qvgagePwXDKxucDsG5RSH9NPzXCcYZz5Q/C4kW9fEDXoHJLezHGzpLKAuFgfrr2N8
+         xKpsF+YRGyjjqpnca5yqGmmesE7G8ZNsa/gO2mEk4Rdk+W5siq27IaMavHIT/SIYW6D+
+         +8Rvudp5PXgF/daDUXbfLeruI2V+76vEuBG0vyN9krNKnHTsHp55GKKwslP/Y6jDsOce
+         6JGg==
+X-Gm-Message-State: AJIora9/Qdq+wgAQQIOqjUlSSuNcE0KLizTcyMYwIqxwiQhjvpP4usJ3
+        yieJYfr/gQWUlDNu/O5ClbYpt//3wxM0oFiI8tN6t9YkZvRXURght/o6zyU8odXu7nXN+p+Joa+
+        s1Gdd0RutVVHng5k2zwzNWOvkc2+7lJS+7KH7sR5C
+X-Received: by 2002:a05:651c:1610:b0:25a:75fa:f9cc with SMTP id f16-20020a05651c161000b0025a75faf9ccmr615145ljq.243.1656475843851;
+        Tue, 28 Jun 2022 21:10:43 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tsRfqKSJ5WREAe866tYR2Av6sXWiFQwf7Na0t+bQDdXFNQBHVv7PWUm2aQHXPC9OFidZUGp5C/19n3ZUbyfXY=
+X-Received: by 2002:a05:651c:1610:b0:25a:75fa:f9cc with SMTP id
+ f16-20020a05651c161000b0025a75faf9ccmr615131ljq.243.1656475843670; Tue, 28
+ Jun 2022 21:10:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] ipv6/sit: fix ipip6_tunnel_get_prl return value
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165647581358.19740.5854557950098797693.git-patchwork-notify@kernel.org>
-Date:   Wed, 29 Jun 2022 04:10:13 +0000
-References: <20220628035030.1039171-1-zys.zljxml@gmail.com>
-In-Reply-To: <20220628035030.1039171-1-zys.zljxml@gmail.com>
-To:     Katrin Jo <zys.zljxml@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
-        davem@davemloft.net, edumazet@google.com, eric.dumazet@gmail.com,
-        pabeni@redhat.com, katrinzhou@tencent.com
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220623160738.632852-1-eperezma@redhat.com> <20220623160738.632852-2-eperezma@redhat.com>
+In-Reply-To: <20220623160738.632852-2-eperezma@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 29 Jun 2022 12:10:32 +0800
+Message-ID: <CACGkMEv+yFLCzo-K7eSaVPJqLCa5SxfVCmB=piQ3+6R3=oDz-w@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] vdpa: Add suspend operation
+To:     =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        kvm <kvm@vger.kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>,
+        Parav Pandit <parav@nvidia.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Cindy Lu <lulu@redhat.com>,
+        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        "Uminski, Piotr" <Piotr.Uminski@intel.com>,
+        habetsm.xilinx@gmail.com, "Dawar, Gautam" <gautam.dawar@amd.com>,
+        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        Laurent Vivier <lvivier@redhat.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Dinan Gunawardena <dinang@xilinx.com>,
+        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
+        Martin Porter <martinpo@xilinx.com>,
+        Eli Cohen <elic@nvidia.com>, ecree.xilinx@gmail.com,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Harpreet Singh Anand <hanand@xilinx.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Zhang Min <zhang.min9@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,30 +97,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Fri, Jun 24, 2022 at 12:07 AM Eugenio P=C3=A9rez <eperezma@redhat.com> w=
+rote:
+>
+> This operation is optional: It it's not implemented, backend feature bit
+> will not be exposed.
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+A question, do we allow suspending a device without DRIVER_OK?
 
-On Tue, 28 Jun 2022 11:50:30 +0800 you wrote:
-> From: katrinzhou <katrinzhou@tencent.com>
-> 
-> When kcalloc fails, ipip6_tunnel_get_prl() should return -ENOMEM.
-> Move the position of label "out" to return correctly.
-> 
-> Addresses-Coverity: ("Unused value")
-> Fixes: 300aaeeaab5f ("[IPV6] SIT: Add SIOCGETPRL ioctl to get/dump PRL.")
-> Signed-off-by: katrinzhou <katrinzhou@tencent.com>
-> 
-> [...]
+Thanks
 
-Here is the summary with links:
-  - [v3] ipv6/sit: fix ipip6_tunnel_get_prl return value
-    https://git.kernel.org/netdev/net/c/adabdd8f6aca
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+>
+> Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> ---
+>  include/linux/vdpa.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+> index 7b4a13d3bd91..d282f464d2f1 100644
+> --- a/include/linux/vdpa.h
+> +++ b/include/linux/vdpa.h
+> @@ -218,6 +218,9 @@ struct vdpa_map_file {
+>   * @reset:                     Reset device
+>   *                             @vdev: vdpa device
+>   *                             Returns integer: success (0) or error (< =
+0)
+> + * @suspend:                   Suspend or resume the device (optional)
+> + *                             @vdev: vdpa device
+> + *                             Returns integer: success (0) or error (< =
+0)
+>   * @get_config_size:           Get the size of the configuration space i=
+ncludes
+>   *                             fields that are conditional on feature bi=
+ts.
+>   *                             @vdev: vdpa device
+> @@ -319,6 +322,7 @@ struct vdpa_config_ops {
+>         u8 (*get_status)(struct vdpa_device *vdev);
+>         void (*set_status)(struct vdpa_device *vdev, u8 status);
+>         int (*reset)(struct vdpa_device *vdev);
+> +       int (*suspend)(struct vdpa_device *vdev);
+>         size_t (*get_config_size)(struct vdpa_device *vdev);
+>         void (*get_config)(struct vdpa_device *vdev, unsigned int offset,
+>                            void *buf, unsigned int len);
+> --
+> 2.31.1
+>
 

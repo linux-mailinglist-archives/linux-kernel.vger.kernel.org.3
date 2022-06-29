@@ -2,168 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068BD560280
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35CBA5602A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbiF2OXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 10:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
+        id S231631AbiF2OZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 10:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbiF2OXr (ORCPT
+        with ESMTP id S229862AbiF2OZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 10:23:47 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B842019A;
-        Wed, 29 Jun 2022 07:23:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656512626; x=1688048626;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=VZ40xQw0fMQsaP9afTcE5BSHMDKFla4/EFEXM7mjbWU=;
-  b=TKsJ3vJ6LMlJ5Ypf/NO8OGsf3O0G+h5pQZsohnVYGxagmWk/TtYBsTHd
-   Scsp5HZ6WPD4FUfdYUxbfRDr4dMOtGq5KAJ7E2h5Ne6fu0jx1bwGB6Jdh
-   vVSae3CX9BDBgsUwBOj85laitAaUQd8aD+LdGzWgHfhnpV1NTFpyHzYd+
-   8yx1uSqltflxRZF1InzHcBiM8lcyIc4E35d9kFTNFe6pTdwiYlLuU4FVn
-   aCUCjnSMr0Bc4oQr4ntHQoGdItp9SQZSfMK10s1Nb53Kp92NTjRf/lXoI
-   9L2H0OZogVOXitY3QJj75WFETkjOwhxRbjH5SRBAZ7LBQ2dJZj53i4YJI
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="262447052"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="262447052"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 07:23:46 -0700
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="617588085"
-Received: from staibmic-mobl1.amr.corp.intel.com (HELO [10.209.67.166]) ([10.209.67.166])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 07:23:45 -0700
-Message-ID: <a2277c2f-91a1-871f-08f1-42950bca53b3@intel.com>
-Date:   Wed, 29 Jun 2022 07:22:34 -0700
+        Wed, 29 Jun 2022 10:25:39 -0400
+Received: from smtpbg.qq.com (unknown [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2E324967;
+        Wed, 29 Jun 2022 07:25:33 -0700 (PDT)
+X-QQ-mid: bizesmtp80t1656512707t4q4eqwx
+Received: from localhost.localdomain ( [182.148.13.66])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 29 Jun 2022 22:25:04 +0800 (CST)
+X-QQ-SSF: 0100000000200060C000C00A0000000
+X-QQ-FEAT: TwPVgCEnUPnJO5LRHT5GJze7vZ8UMdtnokyDiXgpBnFr3S8dIu5E6zQolWsMZ
+        R9RQhNdONWtFEZCORBctel/rSVnKlNE4CRFpY4nGmY/2YK1PYQeJ+JfeRnZIWAY0K6/tgI1
+        HcVdFe/Ttv0O9PZ+GZXVeC1KaU4TnWoGCpFk1/yeV1wTVxVFaxOx/rA7GDn6uTE6xV3b4XW
+        Wy7kKctW33NRgf/StvjuAt2d4S/5q5P1UXnU+djjkv79v3/38G34xoI3f5zVFf8qE/BYaZB
+        gjfR4F29/GgEr1u9CVklgTVmfQhhAWJyQt2gKk18GWfaQDHreAj3S6hTqZRFxc0/DGUKBNG
+        C/Q0a/BgEGT2M8XOvs=
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] intel/igc:fix repeated words in comments
+Date:   Wed, 29 Jun 2022 22:24:57 +0800
+Message-Id: <20220629142457.16887-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5 04/22] x86/virt/tdx: Prevent ACPI CPU hotplug and ACPI
- memory hotplug
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com, thomas.lendacky@amd.com,
-        Tianyu.Lan@microsoft.com
-References: <cover.1655894131.git.kai.huang@intel.com>
- <3a1c9807d8c140bdd550cd5736664f86782cca64.1655894131.git.kai.huang@intel.com>
- <20220624014112.GA15566@gao-cwp>
- <951da5eeb4214521635602ce3564246ad49018f5.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <951da5eeb4214521635602ce3564246ad49018f5.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/22 04:21, Kai Huang wrote:
-> Personally I don't quite like this way.  To me having separate function for host
-> and guest is more clear and more flexible.  And I don't think having
-> #ifdef/endif has any problem.  I would like to leave to maintainers.
+Delete the redundant word 'frames'.
 
-It has problems.
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/net/ethernet/intel/igc/igc_mac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Let's go through some of them.  First, this:
+diff --git a/drivers/net/ethernet/intel/igc/igc_mac.c b/drivers/net/ethernet/intel/igc/igc_mac.c
+index 67b8ffd21d8a..a5c4b19d71a2 100644
+--- a/drivers/net/ethernet/intel/igc/igc_mac.c
++++ b/drivers/net/ethernet/intel/igc/igc_mac.c
+@@ -193,7 +193,7 @@ s32 igc_force_mac_fc(struct igc_hw *hw)
+ 	 *      1:  Rx flow control is enabled (we can receive pause
+ 	 *          frames but not send pause frames).
+ 	 *      2:  Tx flow control is enabled (we can send pause frames
+-	 *          frames but we do not receive pause frames).
++	 *          but we do not receive pause frames).
+ 	 *      3:  Both Rx and TX flow control (symmetric) is enabled.
+ 	 *  other:  No other values should be possible at this point.
+ 	 */
+-- 
+2.36.1
 
-> +#ifdef CONFIG_INTEL_TDX_HOST
-> +static bool intel_tdx_host_has(enum cc_attr attr)
-> +{
-> +	switch (attr) {
-> +	case CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED:
-> +	case CC_ATTR_ACPI_MEMORY_HOTPLUG_DISABLED:
-> +		return true;
-> +	default:
-> +		return false;
-> +	}
-> +}
-> +#endif
-
-What does that #ifdef get us?  I suspect you're back to trying to
-silence compiler warnings with #ifdefs.  The compiler *knows* that it's
-only used in this file.  It's also used all of once.  If you make it
-'static inline', you'll likely get the same code generation, no
-warnings, and don't need an #ifdef.
-
-The other option is to totally lean on the compiler to figure things
-out.  Compile this program, then disassemble it and see what main() does.
-
-static void func(void)
-{
-	printf("I am func()\n");
-}
-
-void main(int argc, char **argv)
-{
-	if (0)
-		func();
-}
-
-Then, do:
-
--	if (0)
-+	if (argc)
-
-and run it again.  What changed in the disassembly?
-
-> +static bool intel_cc_platform_has(enum cc_attr attr)
-> +{
-> +#ifdef CONFIG_INTEL_TDX_GUEST
-> +	if (boot_cpu_has(X86_FEATURE_TDX_GUEST))
-> +		return intel_tdx_guest_has(attr);
-> +#endif
-
-Make this check cpu_feature_enabled(X86_FEATURE_TDX_GUEST).  That has an
-#ifdef built in to it.  That gets rid of this #ifdef.  You have
-
-> +#ifdef CONFIG_INTEL_TDX_HOST
-> +	if (platform_tdx_enabled())
-> +		return intel_tdx_host_has(attr);
-> +#endif
-> +	return false;
-> +}
-
-Now, let's turn our attention to platform_tdx_enabled().  Here's its
-stub and declaration:
-
-> +#ifdef CONFIG_INTEL_TDX_HOST
-> +bool platform_tdx_enabled(void);
-> +#else  /* !CONFIG_INTEL_TDX_HOST */
-> +static inline bool platform_tdx_enabled(void) { return false; }
-> +#endif /* CONFIG_INTEL_TDX_HOST */
-
-It already has an #ifdef CONFIG_INTEL_TDX_HOST, so that #ifdef can just
-go away.
-
-Kai, the reason that we have the rule that Yuan cited:
-
-> "Wherever possible, don't use preprocessor conditionals (#if, #ifdef) in .c"
-> From Documentation/process/coding-style.rst, 21) Conditional Compilation.
-
-is not because there are *ZERO* #ifdefs in .c files.  It's because
-#ifdefs in .c files hurt readability and are usually avoidable.  How do
-you avoid them?  Well, you take a moment and look at the code and see
-how other folks have made it readable.  It takes refactoring of code to
-banish #ifdefs to headers or replace them with compiler constructs so
-that the compiler can do the work behind the scenes.
-
-Kai, could you please take the information I gave you in this message
-and try to apply it across this series?  Heck, can you please take it
-and use it to review others' code to make sure they don't encounter the
-same pitfalls?

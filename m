@@ -2,133 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA81C55F44C
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 05:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC2555F274
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 02:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiF2Dpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 23:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
+        id S230009AbiF2Aew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 20:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiF2Dpj (ORCPT
+        with ESMTP id S229489AbiF2Aeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 23:45:39 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AF017E33;
-        Tue, 28 Jun 2022 20:45:38 -0700 (PDT)
-X-UUID: 39b93c53ef7e412f860efe34d9938852-20220629
-X-Spam-Fingerprint: 0
-X-GW-Reason: 11109
-X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HNeS6uumcgOimgeWuoeaguA==
-X-Content-Feature: ica/max.line-size 73
-        audit/email.address 1
-        dict/adv 1
-        dict/contack 1
-        dict/job 1
-        dict/notice 1
-        dict/operate 1
-        dict/time 1
-        meta/cnt.alert 1
-X-CPASD-INFO: 98e5361e75aa41c9ab3a1a3410923128@goifVWBoX5VjVaOtg3Suc4GTY5FhjVO
-        Dc2pZYmFhXliVgnxsTWBnX1OEgnBQYl5dZFZ3dG9RYmBgYlB_i4Jyj1RgXmCCVHSTgHtyhWVhZg==
-X-CLOUD-ID: 98e5361e75aa41c9ab3a1a3410923128
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:182.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:195.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:2,DUF:128,ACD:2,DCD:2,SL:0,EISP:0,AG:0,CFC:0.512,CFSR:0.049,UAT:0,RAF:0
-        ,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,EAF:
-        0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 39b93c53ef7e412f860efe34d9938852-20220629
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 39b93c53ef7e412f860efe34d9938852-20220629
-X-User: xiongxin@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <xiongxin@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 588509231; Wed, 29 Jun 2022 08:34:18 +0800
-From:   xiongxin <xiongxin@kylinos.cn>
-To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiongxin@kylinos.cn
-Subject: [PATCH -next 2/2] PM: suspend: advanced pm_wakeup_clear() for normal suspend/hibernate
-Date:   Wed, 29 Jun 2022 08:33:38 +0800
-Message-Id: <20220629003338.299195-3-xiongxin@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220629003338.299195-1-xiongxin@kylinos.cn>
-References: <20220629003338.299195-1-xiongxin@kylinos.cn>
+        Tue, 28 Jun 2022 20:34:50 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D96B2FE71
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 17:34:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656462890; x=1687998890;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gu2ji86KwLEp3cWwdUufrgM6jQM+uMNiTRLYjZQ+/Ho=;
+  b=Y0/5bg+vWuvG/VHatUNqKiYkI0uPghuMGcIYyv5fAv3jwegE58LJDhPt
+   nvebq8jMx2DFH4J4/NmpxzTVegxF9By+L4ShcPph4LQe6zw221q6OVf/x
+   UsWY99Kk1Bt5WEHl4nnh4ocKK+2HiFkuAvEmeyv7y4ORT51BNTFM451yY
+   fR1clzN5iUkZm4LuJ1+rntLUZ7yUNtdHVlEuC/Wm4rciBk4v1/vp1qE2O
+   FF7wBTR0EHhHeSlGeV3qd1WzOOFjrRhAr2D/hDq8sHw9rz2kFX+KhBAMQ
+   gYxETna0rVMnQTqLHACSNfvuGXQKXXC5Zkl5CsE5Nhq69eRO1+gmCrHk4
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="282977919"
+X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
+   d="scan'208";a="282977919"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 17:34:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
+   d="scan'208";a="647145078"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Jun 2022 17:34:46 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 3B9CACE; Wed, 29 Jun 2022 03:34:52 +0300 (EEST)
+Date:   Wed, 29 Jun 2022 03:34:52 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv3 4/8] x86/mm: Handle LAM on context switch
+Message-ID: <20220629003452.37yojljbcl7jjgu5@black.fi.intel.com>
+References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
+ <20220610143527.22974-5-kirill.shutemov@linux.intel.com>
+ <9efc4129-e82b-740f-3d6d-67f1468879bb@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        RCVD_IN_PBL,RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9efc4129-e82b-740f-3d6d-67f1468879bb@kernel.org>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pm_wakeup_clear() will clear the wakeup source, which can ensure that it
-is not disturbed by useless wakeup signals when doing suspend/hibernate;
+On Tue, Jun 28, 2022 at 04:33:21PM -0700, Andy Lutomirski wrote:
+> On 6/10/22 07:35, Kirill A. Shutemov wrote:
+> > Linear Address Masking mode for userspace pointers encoded in CR3 bits.
+> > The mode is selected per-thread. Add new thread features indicate that the
+> > thread has Linear Address Masking enabled.
+> > 
+> > switch_mm_irqs_off() now respects these flags and constructs CR3
+> > accordingly.
+> > 
+> > The active LAM mode gets recorded in the tlb_state.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > ---
+> >   arch/x86/include/asm/mmu.h         |  1 +
+> >   arch/x86/include/asm/mmu_context.h | 24 ++++++++++++
+> >   arch/x86/include/asm/tlbflush.h    |  3 ++
+> >   arch/x86/mm/tlb.c                  | 62 ++++++++++++++++++++++--------
+> >   4 files changed, 75 insertions(+), 15 deletions(-)
+> > 
+> > diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
+> > index 5d7494631ea9..d150e92163b6 100644
+> > --- a/arch/x86/include/asm/mmu.h
+> > +++ b/arch/x86/include/asm/mmu.h
+> > @@ -40,6 +40,7 @@ typedef struct {
+> >   #ifdef CONFIG_X86_64
+> >   	unsigned short flags;
+> > +	u64 lam_cr3_mask;
+> >   #endif
+> >   	struct mutex lock;
+> > diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
+> > index b8d40ddeab00..e6eac047c728 100644
+> > --- a/arch/x86/include/asm/mmu_context.h
+> > +++ b/arch/x86/include/asm/mmu_context.h
+> > @@ -91,6 +91,29 @@ static inline void switch_ldt(struct mm_struct *prev, struct mm_struct *next)
+> >   }
+> >   #endif
+> > +#ifdef CONFIG_X86_64
+> > +static inline u64 mm_cr3_lam_mask(struct mm_struct *mm)
+> > +{
+> > +	return mm->context.lam_cr3_mask;
+> > +}
+> > +
+> > +static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
+> > +{
+> > +	mm->context.lam_cr3_mask = oldmm->context.lam_cr3_mask;
+> > +}
+> > +
+> > +#else
+> > +
+> > +static inline u64 mm_cr3_lam_mask(struct mm_struct *mm)
+> > +{
+> > +	return 0;
+> > +}
+> > +
+> > +static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
+> > +{
+> > +}
+> > +#endif
+> 
+> Do we really need the ifdeffery here?  I see no real harm in having the
+> field exist on 32-bit -- we don't care much about performance for 32-bit
+> kernels.
 
-At the beginning of the suspend/hibernate process, the notifier
-mechanism is used to notify other device drivers. This action is
-time-consuming (second-level time-consuming). If the process fails due
-to the received wakeup signal during the execution of these functions,
-it can better improve the experience of failing suspend/hibernate
-returns;
+The waste doesn't feel right to me. I would rather keep it.
 
-Therefore, it is recommended here that for the suspend/hibernate process
-normally called from /sys/power/state, the pm_wakeup_clear() function
-should be brought before the notifier call; for the freeze_process()
-function called from other places, the original logic is kept;
+But sure I can do this if needed.
 
-The pm_suspend_target_state variable is used here to identify whether the
-suspend process is going normally.
+> > -	if (real_prev == next) {
+> > +	if (real_prev == next && prev_lam == new_lam) {
+> >   		VM_WARN_ON(this_cpu_read(cpu_tlbstate.ctxs[prev_asid].ctx_id) !=
+> >   			   next->context.ctx_id);
+> 
+> This looks wrong to me.  If we change threads within the same mm but lam
+> changes (which is certainly possible by a race if nothing else) then this
+> will go down the "we really are changing mms" path, not the "we're not
+> changing but we might need to flush something" path.
 
-Signed-off-by: xiongxin <xiongxin@kylinos.cn>
----
- kernel/power/process.c | 5 ++++-
- kernel/power/suspend.c | 6 ++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+If LAM gets enabled we must write CR3 with the new LAM mode. Without the
+change real_prev == next case will not do this for !was_lazy case.
 
-diff --git a/kernel/power/process.c b/kernel/power/process.c
-index 3068601e585a..3fde0240b3d1 100644
---- a/kernel/power/process.c
-+++ b/kernel/power/process.c
-@@ -131,7 +131,10 @@ int freeze_processes(void)
- 	if (!pm_freezing)
- 		atomic_inc(&system_freezing_cnt);
- 
--	pm_wakeup_clear(0);
-+	if (pm_suspend_target_state != PM_SUSPEND_ON)
-+		pm_wakeup_clear(1);
-+	else
-+		pm_wakeup_clear(0);
- 	pr_info("Freezing user space processes ... ");
- 	pm_freezing = true;
- 	error = try_to_freeze_tasks(true);
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index c754b084ec03..f4259f6c1cc2 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -569,6 +569,12 @@ static int enter_state(suspend_state_t state)
- 	 * performed from the /sys/power/state entry.
- 	 */
- 	pm_suspend_target_state = state;
-+	/*
-+	 * Put pm_wakeup_clear() before the notifier notification chain to
-+	 * optimize in the suspend process, the wakeup signal can interrupt
-+	 * the suspend in advance and fail to return.
-+	 */
-+	pm_wakeup_clear(0);
- 
- 	if (sync_on_suspend_enabled) {
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
+Note that currently enabling LAM is done by setting LAM mode in the mmu
+context and doing switch_mm(current->mm, current->mm, current), so it is
+very important case.
+
 -- 
-2.25.1
-
-
-No virus found
-		Checked by Hillstone Network AntiVirus
+ Kirill A. Shutemov

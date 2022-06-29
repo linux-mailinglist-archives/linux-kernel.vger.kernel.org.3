@@ -2,269 +2,376 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318A1560BEE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 23:46:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21660560C01
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 23:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbiF2VqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 17:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
+        id S230382AbiF2V6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 17:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiF2Vp7 (ORCPT
+        with ESMTP id S229540AbiF2V63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 17:45:59 -0400
-Received: from mx0b-002c1b01.pphosted.com (mx0b-002c1b01.pphosted.com [148.163.155.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD3F3818E
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 14:45:58 -0700 (PDT)
-Received: from pps.filterd (m0127842.ppops.net [127.0.0.1])
-        by mx0b-002c1b01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25TKE5WN019836;
-        Wed, 29 Jun 2022 14:45:49 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint20171006;
- bh=USP19LHszUv1P5my3ZYL/ih38aARFpwKKz40F/UVtQ4=;
- b=Ws2DE0p5GzhxC3VCMRll27vdT6bk/LvApuSvZkMAbIKDaCAmYwWL/JWm5ld/55P+4XKP
- 5bCu0h+3q1K7NTVZ35htr0akRlLVzfdLCBfVu8gNE9zbRGeIzijel+529ByUyL3AZbxA
- C/0GofLwgm/xVjR863mPFwY1jMwK1RqIBUdDErcducHvA4S0n0LFs26c3+Wd+bMX8c5S
- BTlOJKCSZHMe4lJaYX+T8WOxY+EO5X5Z1oojPNGQklBb0lG+bv/N5rAioK2zKk0YkO/F
- KSulnnglExVTMH9fnI3KfiKRQSRJ8ymb0gpx71+HshKc/79lyexklNxt2VhtITgQFZnw Cg== 
-Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2042.outbound.protection.outlook.com [104.47.73.42])
-        by mx0b-002c1b01.pphosted.com (PPS) with ESMTPS id 3gx1pfssyq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Jun 2022 14:45:49 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KZIM5xmRD5Gwpi9CG3i3wbuob5V612xxb1y8cwCbQwZgK4u0sT19A9uzKhZTuBpQMxqTMlUXJg9QOin7ckB4f59YVDB45eSyxfyC6QOpv+Av9713qUUh0c5ihYZF1FnN/ZRjbZvOQHRMr3VXNENJOVs82NFiYEUB3i6JbIc6Dc++AaPuhW+aQbCldANVD7wjpUOvy+KGyFKW4Y+yZhwW9MI3lVTEJcWklrQUDhm3FfQwN07KRxasLfkx6UUEhoWEvoabqSD1/qUniD1zXg6SY6gaAzGtis9IyO8IIdm7lHlw/nQ/6NQWn08JFhpyrk75ARLfC4FwWmLhDaoVvx/frA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=USP19LHszUv1P5my3ZYL/ih38aARFpwKKz40F/UVtQ4=;
- b=MLs2L/iy+xHWKuwto+6mB5WS09OLxRt3MBZG9tip4GI2XX4xeXbadPOG5MujokCAKskIwmPZ6EJvW5KNACG400Mx5x83v5JtF0P86U5qgD/MNDiWLOnrymkgyd+ylpvoGoa1pN1vtgt21rM8Q2dWTo8us9AQv8q1C1XBpRpJSlNhejwqaN93Al7gf5IBX1DJZVmxE+/Fij6rRidvyoCS+Zo42kJoaVbygzLCkGkUPtWBGKIUrCc11/+HZlxg3q5+15DrYtXP1frZuYgWlIiE/72sjhFKueLj6dIltgPO57Odrka1Azz4z0cJEXx9pCqCxRDsJgpknd1wCLd5BO2G+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
- dkim=pass header.d=nutanix.com; arc=none
-Received: from BYAPR02MB4488.namprd02.prod.outlook.com (2603:10b6:a03:57::28)
- by DM6PR02MB4667.namprd02.prod.outlook.com (2603:10b6:5:11::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Wed, 29 Jun
- 2022 21:45:47 +0000
-Received: from BYAPR02MB4488.namprd02.prod.outlook.com
- ([fe80::c17a:381f:c32f:5a54]) by BYAPR02MB4488.namprd02.prod.outlook.com
- ([fe80::c17a:381f:c32f:5a54%4]) with mapi id 15.20.5395.014; Wed, 29 Jun 2022
- 21:45:47 +0000
-From:   David Chen <david.chen@nutanix.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Zhang Qiao <zhangqiao22@huawei.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: RE: Perf regression from scheduler load_balance rework in 5.5?
-Thread-Topic: Perf regression from scheduler load_balance rework in 5.5?
-Thread-Index: AdiHOIYtzTENFRVgRIe5P/iKHm6ZzgAawpAAAAo/poAAkh48AAB7FG/Q
-Date:   Wed, 29 Jun 2022 21:45:46 +0000
-Message-ID: <BYAPR02MB44881D68479406679935EDAA94BB9@BYAPR02MB4488.namprd02.prod.outlook.com>
-References: <BYAPR02MB4488F89EC5DB73D1FEAE9B4594B59@BYAPR02MB4488.namprd02.prod.outlook.com>
- <CAKfTPtA7wJBROfRkSQV7FzWaWqoaQjSO7iyqBt6AgGsv2OsNSw@mail.gmail.com>
- <409fc8d0-119a-3358-0fc5-99a786a9564a@huawei.com>
- <20220627105954.GA7670@vingu-book>
-In-Reply-To: <20220627105954.GA7670@vingu-book>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 304e3397-b6dd-4c03-22f6-08da5a18b9d0
-x-ms-traffictypediagnostic: DM6PR02MB4667:EE_
-x-proofpoint-crosstenant: true
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: f5CVGi9sjx9EZry74PN1YNxz2u8KKfJ7nc1NH2Jf/8bPe77MyOAN8WUzBIfyEql57bqEPtLAY7BY0QBld2muvSAwv/631dEm+mYFuRuYwlWQkDAmTfzNdiGEgyCOfVhdCj10DHyJLTxk38dY8VK5gel0iq2+B24v4lEU/ee8WbY6pnOjo0gOYMumhMKXWEU/zR/kUIu4ZxXH8VN9UPrh+FXyKBpteCg4xilR13XCU8DOUreKq7kLC8SUxZekhpp9hiNTbi/kwSj2pfEgrpvpqpR0VKyWaT61ZbcdEM1WtUwjWW/N+NmfnU5MXfCtmimzcEWkJt99ktrqGbO9fTodH34Br+kCNC4iZ+pPlR66sp6Gdhi7YiuIaI+EdbGmtgRkGICLfx/SwZ3kF/uk5e8wkDozT11Qv3IN38aGICQPYAj+cQ5syaPflupCp4AnT6zVn15F942vZBCpzKq0F4yL5NIvE5PiBX+tKGT3BqsXgTZFr9O57lHN+7HpsyA6Kulz9PardHSqIi5EChZACYcBaNaLUV8zNRd+4oKebQ+BHUb6hS1cT+2Bk5tfndZKieXKIeUroeaZ0q6zSR3PrQs8u4UKiphx6ryVyR0hjaaFijgVgplDfmjbmol4Av8pztah+courSMKsnU3jVc2X7wVSZ+EytVtjbD7ZMAK93ZCAmMHS0ueNxo5XCq6WrNswmf6iF05f4svynmRHTB5GiqH+3poDFznqu8QMubUHR4P/BLe+1EZ2iXttSyhMFH89BX8faYElI+1HObY3IjXaE3nGz6lTr/WI8kracQBHOai2Qc=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR02MB4488.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(39860400002)(136003)(346002)(376002)(396003)(4326008)(64756008)(8676002)(66476007)(53546011)(66574015)(8936002)(66556008)(26005)(9686003)(66446008)(7696005)(38070700005)(52536014)(38100700002)(33656002)(66946007)(83380400001)(122000001)(5660300002)(71200400001)(186003)(316002)(54906003)(86362001)(110136005)(55016003)(76116006)(2906002)(478600001)(41300700001)(6506007)(44832011);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YnhjRVpnTnVFQVEyNVNPc2FTS0ZKRkJwbjdERHd2VVJYWVV1UWpzbnMvL2Zr?=
- =?utf-8?B?TlU1bENEMStuZUpJWjhsWS9aZWJpRGJlTHlKR1F1Mms2VXhvTEo1em1mWFU3?=
- =?utf-8?B?bUhLRllKd3NyZmNQN1dLMWh1VnBnREV3ckx6RENPNlpxcDQrQ2xtTkRFSGMr?=
- =?utf-8?B?S2lDRkJCVTEyZDl2R0lXbGtGQVRWTXhjZ0ovT05IL3VmZU5CMVZ4cTlwUXJr?=
- =?utf-8?B?ZHo2cUFsNGJBeElEWUVwN250S1YzdEpTUWJIN1FBS2prTEJTZkEyUUhldVBq?=
- =?utf-8?B?c2lVUE1QWWFUajVYdVl4TlpWZWFTeDY1SXAvMU4yM0FHVTFUWTZ4Uk1hdU1X?=
- =?utf-8?B?Z1ZQWndqdXpzT3RBVWp0Y0U1bWxNQXl1clBtNndUbTVUT1hBWGFIVDJpOFJ6?=
- =?utf-8?B?N0JHb2xwRjlDanl2d05OWGZHUXlPVW83Z2hJLy9wTm5Sc2JNa0VGUmszN3Rj?=
- =?utf-8?B?MjNJSFQ4SlZiUkNUd0dPZGhYeTZOQnBtV2ZpS1hMVlExQWFxRGRQWVpjV3JV?=
- =?utf-8?B?RlhOd1Y5NDhZdkh4UDlicW16WHJrOGowUFRHbmFUZWw0U095V0RweXM2bE5F?=
- =?utf-8?B?YkI5MytNMTFsOXUrYVY5a1RDbVV5RkF5UXViNXNGdmozajVIVkVBQ1BSZVVD?=
- =?utf-8?B?VE9DSTBoeFBxTC93RnhQWlZFNVBzVG01TGVQK1YweFJNUGgra3lSQ2hTZG5Y?=
- =?utf-8?B?R3E2UHF0VThnZ25mUGFQc0Zpa1ZrOUU3SDR3c0l6aEVHVmw5VGIxcTJyRnFH?=
- =?utf-8?B?NWFEYTE2aG90R2FEeEdSYndHUXdpbWU5aWRhTXZOOXRWcGZjckNkWUFScnJU?=
- =?utf-8?B?WlF3ZVljR2o3WTExck5JeXJiVDkvMllNRUJGamV4bWJJQmxzeDJTd1FRbmVI?=
- =?utf-8?B?WDlreFR2L1FmNmdkcHBZMS9HdDlYRFRYUHlEZjZiaTc0ZFJaRzBCQ3V2S2dl?=
- =?utf-8?B?SmVXSGFvQk1TQkgxU2dsOVZEcnc2UkRuUTd0bmYrUGhhL1FzdGhPM1E5dlBs?=
- =?utf-8?B?eFlXcW5CR0tSQ2Jya3VoRzJWTDlEODQ0VDdDT0dCNlZZYWN5QWxNOHhLT0di?=
- =?utf-8?B?dlZTaXdNRnNKc1JJd2ozQWpNaGZ3RUoyRStDZjUvUmh5UkpFRDZvUTJIWHVY?=
- =?utf-8?B?cVcrd3dnUUNla0ZQUlRYRUVDeVZTNnAwa0ZTRWpUZE43Sy95RjRUODRzZC9O?=
- =?utf-8?B?WVNyN3c3cFFCR0lyb2N2eXVQNS84N1VsRnc3Y1FQSXJUTUR3MzhjLzB3RzJl?=
- =?utf-8?B?VXQ0SmxudTdoZmR5SkNtNlBqeU5FbXNSbXRXa216L1BPS2s2aVJCbFNZb3Fm?=
- =?utf-8?B?Mnp6R2FJNG8rZ0hmNmNUUEljeFp5K0FNdVlaSm1oME1UdFRhR2NIT2tyUEtl?=
- =?utf-8?B?cVJtTkhRRTN0QnFoMFpqWE9zc3FjbzNwMmFHa2pJRk1sdHU4RzFDZnJlTmRs?=
- =?utf-8?B?SSszVS9Qd01MZkEwZUFNbzdocTcvVFFOSVh0Unp3TEFyZTRNMlpJK0tsMjg1?=
- =?utf-8?B?cUU0LzFrVXFMMk9XUTBIV0NvVXpUbnFrdzl2SE5YTElpbVRwSWxUck9JQ2wv?=
- =?utf-8?B?UVNTZjBrTkhKbWp0eUJSbGtFcWVTY21IMmxHb29tWkFZTE9PQ1BsaURqUUN2?=
- =?utf-8?B?TjVxVUczKzBvM3NoUWN2MGx2M1A2R1VkZW1NdHBFc2granl1T3VUdHYvbnI2?=
- =?utf-8?B?RTBtK2NtRGpRQnBNeEx6TGhiU1c1Rm1PbnNRMmRhemsvemp3KzBRRkt1dE9r?=
- =?utf-8?B?VDIxVUZQckNJTEIwZXhKN1g2QzlWOXFML1M2TEViSkQ2eHMxTmVlZGxSeWVZ?=
- =?utf-8?B?Y2J2QzVsOHdaRjY1d0ZHV0dnd0o1WFFnektUeU53VGdSdC9KWXc4d0gyL0ky?=
- =?utf-8?B?TW9DdEJCM2l6NGJBV09tMmZheWZIc1FlYTgwamdYYWoxSmlXUnJMM09VYkpz?=
- =?utf-8?B?cEkyRnliWXVkdGRJWUdmSkVUVXFCUnNreStvcU1LTStvLytVejRheDJTbEN1?=
- =?utf-8?B?Uk9vaXN6OWZjb1NkNThxMTk3ZHJuaWFQSmNDMVhPOXRpaHBqMzZ6cS9FbjFW?=
- =?utf-8?B?UFFXYnQ1MTJCeHFJOUp0eHZqeDNwaEhNbHYxMVdGODFDSXBYbFovd3Bob0pm?=
- =?utf-8?Q?dIH6gBhM0iLI0mAMPXzd0JXb7?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 29 Jun 2022 17:58:29 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8FA714D1A
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 14:58:27 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-101b4f9e825so23285470fac.5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 14:58:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=QHiM66D3M2tpDcYMSSpjLBMHEzCkbRn+H9VYDFcjiT8=;
+        b=T3/L7xfXl/BV+/qp3+kcvf1bnriI/OW03MnpfNHHuAbDHSZQsZr8tY32ZfO/Djk4s7
+         GsAWC5dbGtpl9NMQopKbaEfwsqlTZfy1DofpOLPas5qsVuu/tAdslByLG4ctgV+DBoKN
+         p6SkCyRE3YlbvmZchOxNnyBQek+gpjFFaNbCI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=QHiM66D3M2tpDcYMSSpjLBMHEzCkbRn+H9VYDFcjiT8=;
+        b=4z1Tus2lIQZV4tczSiWmEhF1/Z2BJN5Wg7HfoWUjVTQBnpmeTlKm21zxZNwB5IKiox
+         WbfZQdAXzbHpHmISSoVc0DouMeXrzyH0m23JcDH2tzz/KFXd+L1MoxoFVuQV7fHJ6Wne
+         TaYvCn8FBHSFLp6ZEZrihWq894YgKDZOsYrK6+/XCdFC+Ocy0hVOvQJ61PVYgqV1Gc0u
+         Yv3xNkqjB318PUS8oNO13JxB0is1YpP9BVTui/quIBxhT2ok63iKAYvxBMwpLwcifHKU
+         rmyoknZyjuQa/3HqsCq4bXpYoeeLwXpIc2NRemkUfzxW6AWG9avKoSktFbwwt8B8HSOu
+         /NXQ==
+X-Gm-Message-State: AJIora8fC5j0dto5dh+dhLPw8Max8VZqghDWx3aX/VZQJJnnqGdXZkmL
+        9Adtei7U1tTmLJ9Kak9PXiq0Lw65kqNZWWpzUSuf1Q==
+X-Google-Smtp-Source: AGRyM1voWxorwNlr4+6PVRAFOXGgMhzrQC0t2Ey2i93QF32C3J6M09MBh4ktpy4po0N/vKrgO+AO4yP4oVZjaFELLvc=
+X-Received: by 2002:a05:6870:b627:b0:102:f25:a460 with SMTP id
+ cm39-20020a056870b62700b001020f25a460mr3272546oab.193.1656539907115; Wed, 29
+ Jun 2022 14:58:27 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 29 Jun 2022 16:58:26 -0500
 MIME-Version: 1.0
-X-OriginatorOrg: nutanix.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR02MB4488.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 304e3397-b6dd-4c03-22f6-08da5a18b9d0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2022 21:45:46.9174
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: bb047546-786f-4de1-bd75-24e5b6f79043
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xN9m2sZe3X7NI+iKoCWQa9CIaZuG0yytwHMO+Rh9SraWGdfnzZCB0hcox+nseVOK1jIUhit55QCiXFtkez0gsw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB4667
-X-Proofpoint-GUID: YxnaMimd4TkHKaANhBKnob5xSSkynJGg
-X-Proofpoint-ORIG-GUID: YxnaMimd4TkHKaANhBKnob5xSSkynJGg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-29_22,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Reason: safe
+In-Reply-To: <CAL_Jsq+C04RXLtm6Ac85Ru3EGwJbqV_UD3_dDWVrKvFSvdm7Ng@mail.gmail.com>
+References: <20220622173605.1168416-1-pmalani@chromium.org>
+ <20220622173605.1168416-2-pmalani@chromium.org> <20220627210407.GA2905757-robh@kernel.org>
+ <CACeCKackdbDZrk5fk7qyMwSdTdzyTS=m1vHPFnQOj672W=2nOA@mail.gmail.com>
+ <20220628182336.GA711518-robh@kernel.org> <CAEXTbpex9nxP-nyPWvSBchAW4j3C4MZfVHTb=5X0iSLY1bSAKg@mail.gmail.com>
+ <CAEXTbpf_jxK-R5aA81FCbpAH4bChA2B9+8qExZUbA7Y+Ort=Gg@mail.gmail.com> <CAL_Jsq+C04RXLtm6Ac85Ru3EGwJbqV_UD3_dDWVrKvFSvdm7Ng@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 29 Jun 2022 16:58:26 -0500
+Message-ID: <CAE-0n53ers881LOTCEmKDDxJQt+5vvXJSURs=o6TcOiR5m_EAw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
+To:     Pin-yen Lin <treapking@chromium.org>, Rob Herring <robh@kernel.org>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogVmluY2VudCBHdWl0dG90
-IDx2aW5jZW50Lmd1aXR0b3RAbGluYXJvLm9yZz4NCj4gU2VudDogTW9uZGF5LCBKdW5lIDI3LCAy
-MDIyIDQ6MDAgQU0NCj4gVG86IFpoYW5nIFFpYW8gPHpoYW5ncWlhbzIyQGh1YXdlaS5jb20+DQo+
-IENjOiBEYXZpZCBDaGVuIDxkYXZpZC5jaGVuQG51dGFuaXguY29tPjsgbGludXgta2VybmVsQHZn
-ZXIua2VybmVsLm9yZzsgSW5nbyBNb2xuYXIgPG1pbmdvQHJlZGhhdC5jb20+DQo+IFN1YmplY3Q6
-IFJlOiBQZXJmIHJlZ3Jlc3Npb24gZnJvbSBzY2hlZHVsZXIgbG9hZF9iYWxhbmNlIHJld29yayBp
-biA1LjU/DQo+IA0KPiBIaSwNCj4gDQo+IExlIHZlbmRyZWRpIDI0IGp1aW4gMjAyMiDDoCAyMTox
-NjowNSAoKzA4MDApLCBaaGFuZyBRaWFvIGEgw6ljcml0IDoNCj4gPg0KPiA+IEhpLA0KPiA+IOWc
-qCAyMDIyLzYvMjQgMTY6MjIsIFZpbmNlbnQgR3VpdHRvdCDlhpnpgZM6DQo+ID4gPiBPbiBUaHUs
-IDIzIEp1biAyMDIyIGF0IDIxOjUwLCBEYXZpZCBDaGVuIDxkYXZpZC5jaGVuQG51dGFuaXguY29t
-PiB3cm90ZToNCj4gPiA+Pg0KPiA+ID4+IEhpLA0KPiA+ID4+DQo+ID4gPj4gSSdtIHdvcmtpbmcg
-b24gdXBncmFkaW5nIG91ciBrZXJuZWwgZnJvbSA0LjE0IHRvIDUuMTANCj4gPiA+PiBIb3dldmVy
-LCBJJ20gc2VlaW5nIHBlcmZvcm1hbmNlIHJlZ3Jlc3Npb24gd2hlbiBkb2luZyByYW5kIHJlYWQg
-ZnJvbSB3aW5kb3dzIGNsaWVudCB0aHJvdWdoIHNtYmQNCj4gPiA+PiB3aXRoIGEgd2VsbCBjYWNo
-ZWQgZmlsZS4NCj4gPiA+Pg0KPiA+ID4+IE9uZSB0aGluZyBJIG5vdGljZWQgaXMgdGhhdCBvbiB0
-aGUgbmV3IGtlcm5lbCwgdGhlIHNtYmQgdGhyZWFkIGRvaW5nIHNvY2tldCBJL08gdGVuZHMgdG8g
-c3RheSBvbg0KPiA+ID4+IHRoZSBzYW1lIGNwdSBjb3JlIGFzIHRoZSBuZXRfcnggc29mdGlycSwg
-d2hlcmUgYXMgaW4gdGhlIG9sZCBrZXJuZWwgaXQgdGVuZHMgdG8gYmUgbW92ZWQgYXJvdW5kDQo+
-ID4gPj4gbW9yZSByYW5kb21seS4gQW5kIHdoZW4gdGhleSBhcmUgb24gdGhlIHNhbWUgY3B1LCBp
-dCB0ZW5kcyB0byBzYXR1cmF0ZSB0aGUgY3B1IG1vcmUgYW5kIGNhdXNlcw0KPiA+ID4+IHBlcmZv
-cm1hbmNlIHRvIGRyb3AuDQo+ID4gPj4NCj4gPiA+PiBGb3IgZXhhbXBsZSwgaGVyZSdzIHRoZSBk
-dXJhdGlvbiAobnMpIHRoZSB0aHJlYWQgc3BlbmQgb24gZWFjaCBjcHUgSSBjYXB0dXJlZCB1c2lu
-ZyBicGZ0cmFjZQ0KPiA+ID4+IE9uIDQuMTQ6DQo+ID4gPj4gQGNwdXRpbWVbN106IDIwNzQxNDU4
-MzgyDQo+ID4gPj4gQGNwdXRpbWVbMF06IDI1MjE5Mjg1MDA1DQo+ID4gPj4gQGNwdXRpbWVbNl06
-IDMwODkyNDE4NDQxDQo+ID4gPj4gQGNwdXRpbWVbNV06IDMxMDMyNDA0NjEzDQo+ID4gPj4gQGNw
-dXRpbWVbM106IDMzNTExMzI0NjkxDQo+ID4gPj4gQGNwdXRpbWVbMV06IDM1NTY0MTc0NTYyDQo+
-ID4gPj4gQGNwdXRpbWVbNF06IDM5MzEzNDIxOTY1DQo+ID4gPj4gQGNwdXRpbWVbMl06IDU1Nzc5
-ODExOTA5IChuZXRfcnggY3B1KQ0KPiA+ID4+DQo+ID4gPj4gT24gNS4xMDoNCj4gPiA+PiBAY3B1
-dGltZVszXTogMjE1MDU1NDgyMw0KPiA+ID4+IEBjcHV0aW1lWzVdOiAzMjk0Mjc2NjI2DQo+ID4g
-Pj4gQGNwdXRpbWVbN106IDQyNzc4OTA0NDgNCj4gPiA+PiBAY3B1dGltZVs0XTogNTA5NDU4NjAw
-Mw0KPiA+ID4+IEBjcHV0aW1lWzFdOiA2MDU4MTY4MjkxDQo+ID4gPj4gQGNwdXRpbWVbMF06IDE0
-Njg4MDkzNDQxDQo+ID4gPj4gQGNwdXRpbWVbNl06IDE3NTc4MjI5NTMzDQo+ID4gPj4gQGNwdXRp
-bWVbMl06IDIyMzQ3MzQwMDQxMSAobmV0X3J4IGNwdSkNCj4gPiA+Pg0KPiA+ID4+IEkgYWxzbyB0
-cmllZCBzZXR0aW5nIHRoZSBjcHUgYWZmaW5pdHkgb2YgdGhlIHNtYmQgdGhyZWFkIGF3YXkgZnJv
-bSB0aGUgbmV0X3J4IGNwdSBhbmQgaW5kZWVkIHRoYXQNCj4gPiA+PiBzZWVtcyB0byBicmluZyB0
-aGUgcGVyZiBvbiBwYXIgd2l0aCBvbGQga2VybmVsLg0KPiA+DQo+ID4gSSBvYnNlcnZlZCB0aGUg
-c2FtZSBwcm9ibGVtIGZvciB0aGUgcGFzdCB0d28gd2Vla3MuDQo+ID4NCj4gPiA+Pg0KPiA+ID4+
-IEkgbm90aWNlZCB0aGF0IHRoZXJlJ3Mgc2NoZWR1bGVyIGxvYWRfYmFsYW5jZSByZXdvcmsgaW4g
-NS41LCBzbyBJIGRpZCB0aGUgdGVzdCBvbiA1LjQgYW5kIDUuNSBhbmQNCj4gPiA+PiBpdCBkaWQg
-c2hvdyB0aGUgYmVoYXZpb3IgY2hhbmdlZCBiZXR3ZWVuIDUuNCBhbmQgNS41Lg0KPiA+ID4NCj4g
-PiA+IEhhdmUgeW91IHRlc3RlZCB2NS4xOCA/IHNldmVyYWwgaW1wcm92ZW1lbnRzIGhhcHBlbmVk
-IHNpbmNlIHY1LjUNCj4gPiA+DQo+ID4gPj4NCj4gPiA+PiBBbnlvbmUga25vdyBob3cgdG8gd29y
-ayBhcm91bmQgdGhpcz8NCj4gPiA+DQo+ID4gPiBIYXZlIHlvdSBlbmFibGVkIElSUV9USU1FX0FD
-Q09VTlRJTkcgPw0KPiA+DQo+ID4NCj4gPiBDT05GSUdfSVJRX1RJTUVfQUNDT1VOVElORz15Lg0K
-PiA+DQo+ID4gPg0KPiA+ID4gV2hlbiB0aGUgdGltZSBzcGVudCB1bmRlciBpbnRlcnJ1cHQgYmVj
-b21lcyBzaWduaWZpY2FudCwgc2NoZWR1bGVyDQo+ID4gPiBtaWdyYXRlIHRhc2sgb24gYW5vdGhl
-ciBjcHUNCj4gPg0KPiA+DQo+ID4gTXkgYm9hcmQgaGFzIHR3byBjcHVzLCBhbmQgaSB1c2VkIGlw
-ZXJmMyB0byB0ZXN0IHVwbG9hZCBiYW5kd2lkdGjvvIx0aGVuIEkgc2F3IHRoZSBzYW1lIHNpdHVh
-dGlvbu+8jA0KPiA+IHRoZSBpcGVyZjMgdGhyZWFkIHJ1biBvbiB0aGUgc2FtZSBjcHUgYXMgdGhl
-IE5FVF9SWCBzb2Z0aXJxLg0KPiA+DQo+ID4gQWZ0ZXIgZGVidWcgaW4gZmluZF9idXNpZXN0X2dy
-b3VwKCksIGkgbm90aWNlZCB3aGVuIHRoZSBjcHUoZW52LT5pZGxlIGlzIENQVV9JRExFIG9yIENQ
-VV9ORVdMWV9JRExFKSB0cnkgdG8gcHVsbCB0YXNrLA0KPiA+IHRoZSBidXNpZXN0LT5ncm91cF90
-eXBlID09IGdyb3VwX2Z1bGx5X2J1c3ksIGJ1c2llc3QtPnN1bV9oX25yX3J1bm5pbmcgPT0gMSwg
-bG9jYWwtPmdyb3VwX3R5cGU9PWdyb3VwX2hhc19zcGFyZSwNCj4gPiBhbmQgdGhlIGxvYWRiYWxh
-bmNlIHdpbGwgZmFpbGVkIGF0IGZpbmRfYnVzaWVzdF9ncm91cCgpLCBhcyBmb2xsb3dzOg0KPiA+
-DQo+ID4gZmluZF9idXNpZXN0X2dyb3VwKCk6DQo+ID4gICAgIC4uLg0KPiA+ICAgICBpZiAoYnVz
-aWVzdC0+Z3JvdXBfdHlwZSAhPSBncm91cF9vdmVybG9hZGVkKSB7DQo+ID4gCS4uLi4NCj4gPiAJ
-aWYgKGJ1c2llc3QtPnN1bV9oX25yX3J1bm5pbmcgPT0gMSkNCj4gPiAJCWdvdG8gb3V0X2JhbGFu
-Y2VkOyAgICAgLS0tLT4gbG9hZGJhbGFuY2Ugd2lsbCByZXR1cm5lZCBhdCBoZXJlLg0KPiANCj4g
-WWVzLCB5b3UncmUgcmlnaHQsIHdlIGZpbHRlciBzdWNoIGNhc2UuIENvdWxkIHlvdSB0cnkgdGhl
-IHBhdGNoIGJlbG93ID8NCj4gSSB1c2UgdGhlIG1pc2ZpdCB0YXNrIHN0YXRlIHRvIGRldGVjdCBj
-cHUgd2l0aCByZWR1Y2VkIGNhcGFjaXR5IGFuZCBtaWdyYXRlX2xvYWQNCj4gdG8gY2hlY2sgaWYg
-aXQgd29ydGggbWlncmF0aW9uIHRoZSB0YXNrIG9uIHRoZSBkc3QgY3B1Lg0KPiANCj4gZGlmZiAt
-LWdpdCBhL2tlcm5lbC9zY2hlZC9mYWlyLmMgYi9rZXJuZWwvc2NoZWQvZmFpci5jDQo+IGluZGV4
-IDY3NzVhMTE3ZjNjMS4uMDEzZGNkOTc0NzJiIDEwMDY0NA0KPiAtLS0gYS9rZXJuZWwvc2NoZWQv
-ZmFpci5jDQo+ICsrKyBiL2tlcm5lbC9zY2hlZC9mYWlyLmMNCj4gQEAgLTg3NTcsMTEgKzg3NTcs
-MTkgQEAgc3RhdGljIGlubGluZSB2b2lkIHVwZGF0ZV9zZ19sYl9zdGF0cyhzdHJ1Y3QgbGJfZW52
-ICplbnYsDQo+ICAgICAgICAgICAgICAgICBpZiAobG9jYWxfZ3JvdXApDQo+ICAgICAgICAgICAg
-ICAgICAgICAgICAgIGNvbnRpbnVlOw0KPiANCj4gLSAgICAgICAgICAgICAgIC8qIENoZWNrIGZv
-ciBhIG1pc2ZpdCB0YXNrIG9uIHRoZSBjcHUgKi8NCj4gLSAgICAgICAgICAgICAgIGlmIChlbnYt
-PnNkLT5mbGFncyAmIFNEX0FTWU1fQ1BVQ0FQQUNJVFkgJiYNCj4gLSAgICAgICAgICAgICAgICAg
-ICBzZ3MtPmdyb3VwX21pc2ZpdF90YXNrX2xvYWQgPCBycS0+bWlzZml0X3Rhc2tfbG9hZCkgew0K
-PiAtICAgICAgICAgICAgICAgICAgICAgICBzZ3MtPmdyb3VwX21pc2ZpdF90YXNrX2xvYWQgPSBy
-cS0+bWlzZml0X3Rhc2tfbG9hZDsNCj4gLSAgICAgICAgICAgICAgICAgICAgICAgKnNnX3N0YXR1
-cyB8PSBTR19PVkVSTE9BRDsNCj4gKyAgICAgICAgICAgICAgIGlmIChlbnYtPnNkLT5mbGFncyAm
-IFNEX0FTWU1fQ1BVQ0FQQUNJVFkpIHsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgLyogQ2hl
-Y2sgZm9yIGEgbWlzZml0IHRhc2sgb24gdGhlIGNwdSAqLw0KPiArICAgICAgICAgICAgICAgICAg
-ICAgICBpZiAoc2dzLT5ncm91cF9taXNmaXRfdGFza19sb2FkIDwgcnEtPm1pc2ZpdF90YXNrX2xv
-YWQpIHsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzZ3MtPmdyb3VwX21pc2Zp
-dF90YXNrX2xvYWQgPSBycS0+bWlzZml0X3Rhc2tfbG9hZDsNCj4gKyAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAqc2dfc3RhdHVzIHw9IFNHX09WRVJMT0FEOw0KPiArICAgICAgICAgICAg
-ICAgICAgICAgICB9DQo+ICsgICAgICAgICAgICAgICAgfSBlbHNlIGlmICgoZW52LT5pZGxlICE9
-IENQVV9OT1RfSURMRSkgJiYNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgIChncm91cC0+
-Z3JvdXBfd2VpZ2h0ID09IDEpICYmDQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAocnEt
-PmNmcy5oX25yX3J1bm5pbmcgPT0gMSkgJiYNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAg
-IGNoZWNrX2NwdV9jYXBhY2l0eShycSwgZW52LT5zZCkgJiYNCj4gKyAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIChzZ3MtPmdyb3VwX21pc2ZpdF90YXNrX2xvYWQgPCBjcHVfbG9hZChycSkpKSB7
-DQo+ICsgICAgICAgICAgICAgICAgICAgICAgIC8qIENoZWNrIGZvciBhIHRhc2sgcnVubmluZyBv
-biBhIENQVSB3aXRoIHJlZHVjZWQgY2FwYWNpdHkgKi8NCj4gKyAgICAgICAgICAgICAgICAgICAg
-ICAgc2dzLT5ncm91cF9taXNmaXRfdGFza19sb2FkID0gY3B1X2xvYWQocnEpOw0KPiAgICAgICAg
-ICAgICAgICAgfQ0KPiAgICAgICAgIH0NCj4gDQo+IEBAIC04ODE0LDcgKzg4MjIsOCBAQCBzdGF0
-aWMgYm9vbCB1cGRhdGVfc2RfcGlja19idXNpZXN0KHN0cnVjdCBsYl9lbnYgKmVudiwNCj4gICAg
-ICAgICAgKiBDUFVzIGluIHRoZSBncm91cCBzaG91bGQgZWl0aGVyIGJlIHBvc3NpYmxlIHRvIHJl
-c29sdmUNCj4gICAgICAgICAgKiBpbnRlcm5hbGx5IG9yIGJlIGNvdmVyZWQgYnkgYXZnX2xvYWQg
-aW1iYWxhbmNlIChldmVudHVhbGx5KS4NCj4gICAgICAgICAgKi8NCj4gLSAgICAgICBpZiAoc2dz
-LT5ncm91cF90eXBlID09IGdyb3VwX21pc2ZpdF90YXNrICYmDQo+ICsgICAgICAgaWYgKChlbnYt
-PnNkLT5mbGFncyAmIFNEX0FTWU1fQ1BVQ0FQQUNJVFkpICYmDQo+ICsgICAgICAgICAgIChzZ3Mt
-Pmdyb3VwX3R5cGUgPT0gZ3JvdXBfbWlzZml0X3Rhc2spICYmDQo+ICAgICAgICAgICAgICghY2Fw
-YWNpdHlfZ3JlYXRlcihjYXBhY2l0eV9vZihlbnYtPmRzdF9jcHUpLCBzZy0+c2djLT5tYXhfY2Fw
-YWNpdHkpIHx8DQo+ICAgICAgICAgICAgICBzZHMtPmxvY2FsX3N0YXQuZ3JvdXBfdHlwZSAhPSBn
-cm91cF9oYXNfc3BhcmUpKQ0KPiAgICAgICAgICAgICAgICAgcmV0dXJuIGZhbHNlOw0KPiBAQCAt
-OTM2MCw5ICs5MzY5LDE1IEBAIHN0YXRpYyBpbmxpbmUgdm9pZCBjYWxjdWxhdGVfaW1iYWxhbmNl
-KHN0cnVjdCBsYl9lbnYgKmVudiwgc3RydWN0IHNkX2xiX3N0YXRzICpzDQo+ICAgICAgICAgYnVz
-aWVzdCA9ICZzZHMtPmJ1c2llc3Rfc3RhdDsNCj4gDQo+ICAgICAgICAgaWYgKGJ1c2llc3QtPmdy
-b3VwX3R5cGUgPT0gZ3JvdXBfbWlzZml0X3Rhc2spIHsNCj4gLSAgICAgICAgICAgICAgIC8qIFNl
-dCBpbWJhbGFuY2UgdG8gYWxsb3cgbWlzZml0IHRhc2tzIHRvIGJlIGJhbGFuY2VkLiAqLw0KPiAt
-ICAgICAgICAgICAgICAgZW52LT5taWdyYXRpb25fdHlwZSA9IG1pZ3JhdGVfbWlzZml0Ow0KPiAt
-ICAgICAgICAgICAgICAgZW52LT5pbWJhbGFuY2UgPSAxOw0KPiArICAgICAgICAgICAgICAgaWYg
-KGVudi0+c2QtPmZsYWdzICYgU0RfQVNZTV9DUFVDQVBBQ0lUWSkgew0KPiArICAgICAgICAgICAg
-ICAgICAgICAgICAvKiBTZXQgaW1iYWxhbmNlIHRvIGFsbG93IG1pc2ZpdCB0YXNrcyB0byBiZSBi
-YWxhbmNlZC4gKi8NCj4gKyAgICAgICAgICAgICAgICAgICAgICAgZW52LT5taWdyYXRpb25fdHlw
-ZSA9IG1pZ3JhdGVfbWlzZml0Ow0KPiArICAgICAgICAgICAgICAgICAgICAgICBlbnYtPmltYmFs
-YW5jZSA9IDE7DQo+ICsgICAgICAgICAgICAgICB9IGVsc2Ugew0KPiArICAgICAgICAgICAgICAg
-ICAgICAgICAvKiBTZXQgZ3JvdXAgb3ZlcmxvYWRlZCBhcyBvbmUgY3B1IGhhcyByZWR1Y2VkIGNh
-cGFjaXR5ICovDQo+ICsgICAgICAgICAgICAgICAgICAgICAgIGVudi0+bWlncmF0aW9uX3R5cGUg
-PSBtaWdyYXRlX2xvYWQ7DQo+ICsgICAgICAgICAgICAgICAgICAgICAgIGVudi0+aW1iYWxhbmNl
-ID0gYnVzaWVzdC0+Z3JvdXBfbWlzZml0X3Rhc2tfbG9hZDsNCj4gKyAgICAgICAgICAgICAgIH0N
-Cj4gICAgICAgICAgICAgICAgIHJldHVybjsNCj4gICAgICAgICB9DQo+IA0KPiANCj4gPiAuLi4u
-DQo+ID4NCj4gPg0KPiA+IFRoYW5rcywNCj4gPiBRaWFvDQo+ID4NCj4gPg0KPiA+ID4gVmluY2Vu
-dD4+DQo+ID4gPj4gVGhhbmtzLA0KPiA+ID4+IERhdmlkDQo+ID4gPiAuDQo+ID4gPg0KDQpIaSwN
-Cg0KSSBhcHBsaWVkIHRoZSBwYXRjaCBvbiB0b3Agb2YgNS4xMCBhbmQgYWxzbyBlbmFibGVkIENP
-TkZJR19JUlFfVElNRV9BQ0NPVU5USU5HLg0KQW5kIGl0IGRpZCBmaXggdGhlIGlzc3VlIEkgaGFk
-Lg0KDQpUaGFua3MsDQpEYXZpZA0K
+Quoting Rob Herring (2022-06-29 10:58:52)
+> On Wed, Jun 29, 2022 at 9:01 AM Pin-yen Lin <treapking@chromium.org> wrote:
+> > >
+> > > Yes it6505 is just a protocol converter. But in our use case, the output DP
+> > > lines are connected to the Type-C ports and the chip has to know which
+> > > port has DP Alt mode enabled. Does this justify a child node here?
+> > >
+> > > Does it make more sense if we we eliminate the usb-switch node here
+> > > and list the ports in the top level?
+>
+> In the it6505 node? No, the it6505 h/w knows nothing about Type-C
+> switching so neither should its binding.
+>
+> What device controls the switching in this case? Again, block diagrams
+> please if you want advice on what the binding should look like.
+
+My understanding is there are 4 DP lanes on it6505 and two lanes are
+connected to one usb-c-connector and the other two lanes are connected
+to a different usb-c-connector. The IT6505 driver will send DP out on
+the associated two DP lanes depending on which usb-c-connector has DP
+pins assigned by the typec manager.
+
+        					     +-------+
+        					     |       |
+          +--------+                            /----+ usb-c |
+          | IT6505 |                           / /---+       |
+          |        +------------ lane 0 ------/ /    |       |
+          |        +------------ lane 1 -------/     +-------+
+ DPI -----+        |
+          |        |                                 +-------+
+          |        |                                 |       |
+          |        +------------ lane 2 -------------+ usb-c |
+          |        +------------ lane 3 -------------+       |
+          |        |                                 |       |
+          +--------+                                 +-------+
+
+The bridge is a mux that steers DP to one or the other usb-c-connector
+based on what the typec manager decides.
+
+I would expect this to be described with the existing port binding in
+the it6505 node. The binding would need to be extended to describe the
+output side.
+
+        bridge@5c {
+            compatible = "ite,it6505";
+	    ...
+
+            ports {
+                #address-cells = <1>;
+                #size-cells = <0>;
+
+                port@0 {
+                    reg = <0>;
+                    it6505_in: endpoint {
+                        remote-endpoint = <&dpi_out>;
+                    };
+                };
+
+                port@1 {
+                    #address-cells = <1>;
+                    #size-cells = <0>;
+                    reg = <1>;
+
+                    it6505_out_lanes_01: endpoint@0 {
+                        reg = <0>
+                        data-lanes = <0 1>;
+                        remote-endpoint = <&typec0>;
+                    };
+
+                    it6505_out_lanes_23: endpoint@1 {
+                        reg = <1>
+                        data-lanes = <2 3>;
+                        remote-endpoint = <&typec1>;
+                    };
+                };
+            };
+        };
+
+        usb-c-connector {
+            compatible = "usb-c-connector";
+            ....
+            ports {
+                #address-cells = <1>;
+                #size-cells = <0>;
+
+                port@1 {
+                    reg = <1>;
+                    typec0: endpoint {
+                        remote-endpoint = <&it6505_out_lanes_01>;
+                    };
+                };
+            };
+        };
+
+Note: port@1 in usb-c-connector above is for superspeed lines, which
+technically DP reuses. But we can also shove USB3 superspeed lines over
+the other two superspeed pins in the usb-c-connector pinout. Probably
+port@1 should have two endpoints so we can connect usb superspeed lines
+there in addition to DP lines.
+
+Another use case would be to have the IT6505 send 4 lanes of DP to a
+dp-connector. Or send one lane of DP to 4 dp-connectors? Sounds awful but
+possible if this bridge can drive one lane DP out on any DP output lane.
+
+        bridge@5c {
+            compatible = "ite,it6505";
+	    ...
+
+            ports {
+                #address-cells = <1>;
+                #size-cells = <0>;
+
+                port@0 {
+                    reg = <0>;
+                    it6505_in: endpoint {
+                        remote-endpoint = <&dpi_out>;
+                    };
+                };
+
+                port@1 {
+                    #address-cells = <1>;
+                    #size-cells = <0>;
+                    reg = <1>;
+
+                    it6505_out_lane_0: endpoint@0 {
+                        reg = <0>
+                        data-lanes = <0>;
+                        remote-endpoint = <&dp0>;
+                    };
+
+                    it6505_out_lane_1: endpoint@1 {
+                        reg = <1>
+                        data-lanes = <1>;
+                        remote-endpoint = <&dp1>;
+                    };
+
+                    it6505_out_lane_2: endpoint@2 {
+                        reg = <2>
+                        data-lanes = <2>;
+                        remote-endpoint = <&dp1>;
+                    };
+
+                    it6505_out_lane_3: endpoint@3 {
+                        reg = <3>
+                        data-lanes = <3>;
+                        remote-endpoint = <&dp1>;
+                    };
+                };
+            };
+        };
+
+
+Or we could send 4 lanes of DP to a typec redriver that's controlled by
+firmware outside of the kernel where the redriver takes in 4 lanes DP
+and USB3 and muxes USB or USB+DP or just DP.
+
+        bridge@5c {
+            compatible = "ite,it6505";
+	    ...
+
+            ports {
+                #address-cells = <1>;
+                #size-cells = <0>;
+
+                port@0 {
+                    reg = <0>;
+                    it6505_in: endpoint {
+                        remote-endpoint = <&dpi_out>;
+                    };
+                };
+
+                port@1 {
+                    #address-cells = <1>;
+                    #size-cells = <0>;
+                    reg = <1>;
+
+                    it6505_out: endpoint@0 {
+                        reg = <0>
+                        data-lanes = <0 1 2 3>;
+                        remote-endpoint = <&cros_ec_typec_dp_in>;
+                    };
+                };
+            };
+        };
+
+	cros_ec@0 {
+	    compatible = "google,cros-ec-spi";
+	    ...
+
+	    cros_ec_typec: typec {
+	         compatible = "google,cros-ec-typec";
+		 ports {
+                     #address-cells = <1>;
+                     #size-cells = <0>;
+
+                     port@0 {
+		         cros_ec_typec_dp_in: endpoint {
+			     remote-endpoint = <&it6505_out>;
+			 };
+                     };
+		 };
+	    };
+	};
+
+In this case we would want to have cros_ec_typec describe some sort of
+input graph binding to accept DP. I imagine the EC as a dp-bridge in
+this scenario, where it takes in DP and muxes it along with USB onto a
+usb-c-connector. If the EC is managing multiple usb-c-connectors then
+the typec framework may need help determining which port DP is going to,
+especially in the case that two DP bridges are used and they're both
+sent to the EC so that the EC can mux them onto a usb-c-connector along
+with USB.
+
+(I can draw more block diagrams if you prefer)
+
+>
+> > > > > > If the child node represents what the output is connected to (like a
+> > > > > > bus), then yes that is a pattern we have used.
+> > > > >
+> > > > > For the anx7625 case, the child node does represent what the output is connected
+> > > > > to (the usb-c-connector via the switch). Does that not qualify? Or do you mean
+> > > > > the child node should be a usb-c-connector itself?
+> > > > >
+> > > > > > For example, a panel
+> > > > > > represented as child node of a display controller. However, that only
+> > > > > > works for simple cases, and is a pattern we have gotten away from in
+> > > > > > favor of using the graph binding.
+> > > > >
+> > > > > The child node will still use a OF graph binding to connect to the
+> > > > > usb-c-connector.
+> > > > > Is that insufficient to consider a child node usage here?
+> > > > > By "using the graph binding", do you mean "only use the top-level ports" ?
+> > > > > I'm trying to clarify this, so that it will inform future versions and patches.
+> > > >
+> > > > What I want to see is block diagrams of possible h/w with different
+> > > > scenarios and then what the binding looks like in those cases. The
+> > > > switching/muxing could be in the SoC, a bridge chip, a Type C
+> > > > controller, a standalone mux chip, or ????. If you want a somewhat
+> > > > genericish binding, then you need to consider all of these.
+> >
+> > Then, is it suitable to put the switch binding into the drivers own bindings
+> > (i.e., the bindings for it6505 and anx7625), and introduce some helper
+> > functions to eliminate the duplication in the code?
+>
+> Only for h/w devices that have switch h/w.
+>
+> > Though we will have two similar bindings in two drivers with this approach.
+>
+> While the anx7625 driver having Type-C awareness makes sense given it
+> has a switch and a type-C controller, that doesn't make sense for
+> it6505 (and every other bridge driver that's just providing DP
+> output).
+>
+
+I don't see the benefit to making a genericish binding for typec
+switches, even if the hardware has typec awareness like anx7625. It
+looks like the graph binding can already handle what we need. By putting
+it in the top-level ports node we have one way to describe the
+input/output of the device instead of describing it in the top-level in
+the display connector case and the child typec switch node in the usb c
+connector case.
+
+I think the difficulty comes from the combinatorial explosion of
+possible configurations. As evidenced here, hardware engineers can take
+a DP bridge and use it as a DP mux as long as the bridge has lane
+control. Or they can take a device like anx7625 and ignore the USB
+aspect and use the internal crosspoint switch as a DP mux. The anx7625
+part could be a MIPI-to-DP display bridge plus mux that is connected to
+two dp-connectors, in which case typec isn't even involved, but we could
+mux between two dp connectors.
+
+Also, the typec framework would like to simply walk the graph from the
+usb-c-connector looking for nodes that have 'mode-switch' or
+'orientation-switch' properties and treat those devices as the typec
+switches for the connector. This means that we have to add these typec
+properties like 'mode-switch' to something like the IT6505 bridge
+binding, which is a little awkward. I wonder if those properties aren't
+really required. Would it be sufficient if the framework could walk the
+graph and look for registered typec switches in the kernel that have a
+matching of_node?

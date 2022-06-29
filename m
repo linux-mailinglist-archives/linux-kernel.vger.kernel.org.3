@@ -2,59 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BE455F372
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:45:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5BE55F373
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbiF2Cee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 22:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
+        id S230139AbiF2CmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 22:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiF2Ced (ORCPT
+        with ESMTP id S229568AbiF2CmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 22:34:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DF4183AF;
-        Tue, 28 Jun 2022 19:34:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DC508B82040;
-        Wed, 29 Jun 2022 02:34:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 531C8C341C8;
-        Wed, 29 Jun 2022 02:34:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656470069;
-        bh=juL1y1N9G1MajC5lcjvHICIzZE9cBhf0A0KZ54WUcmw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WMz2Ne532W+E8mDvGlVkMMin9+0J5modUQ121kVBHKaWV5FvhKwuKrO/5Fo/d8IH6
-         HM3Vvd854on4IwQ4KFrmPFljy1izUbxlSmDKhrq70hDppGE39a2pLPDrwy7J5GTnsf
-         6gUmxhqEKmjXsSHUT1q8HVzw6nt8GTxqmMfHOzSKpt2Iw8ph6VudXW/YMXH4DttbK3
-         YxJtJkUZIQlxa9aXNanFcDxqUt1XMXEqMrK1OZ7OFGMstGdAgTl93YddQO2sxv3vzy
-         aOTmQ1JTzK9zbrl3S7coCxmhStBq3hDWy2aDS2pmo1VPoSSkHJewbCKSuR9G7xyKCw
-         xV+WHRyMo/9yw==
-Date:   Wed, 29 Jun 2022 05:34:26 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH 04/22] x86/sgx: fix kernel-doc markups
-Message-ID: <Yru6Muchc93ovhNa@kernel.org>
-References: <cover.1656409369.git.mchehab@kernel.org>
- <49f0900ca467867917182a4428b731e55608ca67.1656409369.git.mchehab@kernel.org>
+        Tue, 28 Jun 2022 22:42:16 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B3C71FCD9;
+        Tue, 28 Jun 2022 19:42:14 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 7E9661E80D11;
+        Wed, 29 Jun 2022 10:41:05 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id KkPVWUOZtBJR; Wed, 29 Jun 2022 10:41:02 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id A51DF1E80CDC;
+        Wed, 29 Jun 2022 10:41:02 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     skhan@linuxfoundation.org
+Cc:     kunyu@nfschina.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org
+Subject: Re: [PATCH] tools: Strong conversion of void type pointer could be removed
+Date:   Wed, 29 Jun 2022 10:42:06 +0800
+Message-Id: <20220629024207.6523-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+In-Reply-To: <9b587975-db5b-c7bf-eb8f-bd6e5c3d9f54@linuxfoundation.org>
+References: <9b587975-db5b-c7bf-eb8f-bd6e5c3d9f54@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <49f0900ca467867917182a4428b731e55608ca67.1656409369.git.mchehab@kernel.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,77 +48,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 10:46:08AM +0100, Mauro Carvalho Chehab wrote:
-> There are a couple typos there, violating kernel-doc syntax.
-> 
-> Also, on a function typedef, the register snapshots aren't
-> documented.
-> 
-> This should fix those warnings:
-> 
-> 	arch/x86/include/uapi/asm/sgx.h:19: warning: Enum value 'SGX_PAGE_MEASURE' not described in enum 'sgx_page_flags'
-> 	arch/x86/include/uapi/asm/sgx.h:97: warning: Function parameter or member 'rdi' not described in 'sgx_enclave_user_handler_t'
-> 	arch/x86/include/uapi/asm/sgx.h:97: warning: Function parameter or member 'rsi' not described in 'sgx_enclave_user_handler_t'
-> 	arch/x86/include/uapi/asm/sgx.h:97: warning: Function parameter or member 'rdx' not described in 'sgx_enclave_user_handler_t'
-> 	arch/x86/include/uapi/asm/sgx.h:97: warning: Function parameter or member 'rsp' not described in 'sgx_enclave_user_handler_t'
-> 	arch/x86/include/uapi/asm/sgx.h:97: warning: Function parameter or member 'r8' not described in 'sgx_enclave_user_handler_t'
-> 	arch/x86/include/uapi/asm/sgx.h:97: warning: Function parameter or member 'r9' not described in 'sgx_enclave_user_handler_t'
-> 	arch/x86/include/uapi/asm/sgx.h:124: warning: Function parameter or member 'reserved' not described in 'sgx_enclave_run'
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH 00/22] at: https://lore.kernel.org/all/cover.1656409369.git.mchehab@kernel.org/
-> 
->  arch/x86/include/uapi/asm/sgx.h | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/include/uapi/asm/sgx.h b/arch/x86/include/uapi/asm/sgx.h
-> index f4b81587e90b..e0e6a3ebc941 100644
-> --- a/arch/x86/include/uapi/asm/sgx.h
-> +++ b/arch/x86/include/uapi/asm/sgx.h
-> @@ -10,7 +10,7 @@
->  
->  /**
->   * enum sgx_page_flags - page control flags
-> - * %SGX_PAGE_MEASURE:	Measure the page contents with a sequence of
-> + * @SGX_PAGE_MEASURE:	Measure the page contents with a sequence of
->   *			ENCLS[EEXTEND] operations.
->   */
->  enum sgx_page_flags {
-> @@ -81,6 +81,12 @@ struct sgx_enclave_run;
->  /**
->   * typedef sgx_enclave_user_handler_t - Exit handler function accepted by
->   *					__vdso_sgx_enter_enclave()
-> + * @rdi:	snapshot of DI register at enclave exit
-> + * @rsi:	snapshot of SI register at enclave exit
-> + * @rdx:	snapshot of DX register at enclave exit
-> + * @rsp:	snapshot of SP register at enclave exit
-> + * @r8:		snapshot of R8 register at enclave exit
-> + * @r9:		snapshot of R9 register at enclave exit
->   * @run:	The run instance given by the caller
->   *
->   * The register parameters contain the snapshot of their values at enclave
-> @@ -104,7 +110,7 @@ typedef int (*sgx_enclave_user_handler_t)(long rdi, long rsi, long rdx,
->   * @exception_addr:		The address that triggered the exception
->   * @user_handler:		User provided callback run on exception
->   * @user_data:			Data passed to the user handler
-> - * @reserved			Reserved for future extensions
-> + * @reserved:			Reserved for future extensions
->   *
->   * If @user_handler is provided, the handler will be invoked on all return paths
->   * of the normal flow.  The user handler may transfer control, e.g. via a
-> -- 
-> 2.36.1
-> 
 
-I guess this also needs:
+Hi Shuah, now I can't paste the test code, so I could write a demo and paste it:
 
-Fixes: 3fa97bf00126 ("Documentation/x86: Document SGX kernel architecture")
 
-Other than that,
+-------------source---------------
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+#include <stdio.h>
+#include <stdlib.h>
 
-BR, Jarkko
+struct ucontext {
+	struct ucontext         *uc_link;
+	unsigned long           uc_flags;
+	sigset_t                uc_sigmask;
+	struct ucontext         *uc_mcontext;
+};
+typedef struct ucontext ucontext_t;
+
+void sigsegv(void *ctx_void)
+{
+	ucontext_t *ctx = (ucontext_t*)ctx_void;
+	ucontext_t *ctx2 = (int *)ctx_void;
+	ucontext_t *ctx3 = ctx_void;
+	printf("ctx:%p, ctx2:%p, ctx3:%p.\n", ctx, ctx2, ctx3);
+}
+
+int main() {
+	ucontext_t *test = malloc(sizeof(ucontext_t));
+	sigsegv(test);
+	return 0;
+}
+
+--------------------------------------
+
+The result is CTX: 0x563D96CE5010, CTX2:0x563D96CE5010, CTx3:0x563D96CE5010.
+Now force ucontext_t and int pointers are the same as the addresses obtained without forced conversion.
+
+Now I'll paste the assembly code for them:
+
+
+|0x700 <sigsegv>         push   %rbp                                                  │
+│0x701 <sigsegv+1>       mov    %rsp,%rbp                                             │
+│0x704 <sigsegv+4>       sub    $0x30,%rsp                                            │
+│0x708 <sigsegv+8>       mov    %rdi,-0x28(%rbp)                                      │
+│0x70c <sigsegv+12>      mov    -0x28(%rbp),%rax                                      │
+│0x710 <sigsegv+16>      mov    %rax,-0x8(%rbp)                                       │
+│0x714 <sigsegv+20>      mov    -0x28(%rbp),%rax                                      │
+│0x718 <sigsegv+24>      mov    %rax,-0x10(%rbp)                                      │
+│0x71c <sigsegv+28>      mov    -0x28(%rbp),%rax                                      │
+│0x720 <sigsegv+32>      mov    %rax,-0x18(%rbp)                                      │
+│0x724 <sigsegv+36>      mov    -0x18(%rbp),%rcx                                      │
+│0x728 <sigsegv+40>      mov    -0x10(%rbp),%rdx                                      │
+│0x72c <sigsegv+44>      mov    -0x8(%rbp),%rax                                       │
+│0x730 <sigsegv+48>      mov    %rax,%rsi                                             │
+│0x733 <sigsegv+51>      lea    0xba(%rip),%rdi        # 0x7f4                        │
+│0x73a <sigsegv+58>      mov    $0x0,%eax                                             │
+│0x73f <sigsegv+63>      callq  0x5a0 <printf@plt>                                    │
+│0x744 <sigsegv+68>      nop                                                          │
+│0x745 <sigsegv+69>      leaveq                                                       │
+│0x746 <sigsegv+70>      retq
+

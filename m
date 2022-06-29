@@ -2,73 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1E155FDE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B768255FDD9
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233381AbiF2Kwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 06:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
+        id S233401AbiF2KxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 06:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233437AbiF2Kw1 (ORCPT
+        with ESMTP id S233437AbiF2Kw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 06:52:27 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A49C3E0C0
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:52:26 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id 72-20020a9d064e000000b00616c2a174bcso7705708otn.8
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:52:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=zwr+gvqINn5s/ZV6IyRPgfhaWD9WdQkp9Eb4Seu1lr8=;
-        b=PN9QB48v3Ij66lJ5qvk3yfmi7ld8AqAMKXIsERdymFnqu7FsO5XySGVcKH/9WDxz3A
-         /mVqiw65Bp9U7TztqaQDi3VlyiX3PZJnFC05GLwn90FpoKu/D/oFcwRqo5NDGb8uhD4O
-         VSY/72DU9yomviC0a3cuH/OUFSoExQFjJTMS2t6LnAgMDEfYwLc3iEh+jpCpKXcKkU/B
-         vP15rWxyy8CzM/p7vrRdJTkFXusW95db+DWyKD/DueTqzwqACgDvDB/0g+17op9SHGiB
-         msCnwcLsrlho8bwabP6LurOeP3bgyEo0vnbAOjV6PNCjoFVxf8tpqMnY4wjueZ75m25D
-         Q2Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=zwr+gvqINn5s/ZV6IyRPgfhaWD9WdQkp9Eb4Seu1lr8=;
-        b=4k/d8gVTgZoB/ENWKZxPODY+COkS/YdxlAmT1V+U6qgYpKTMI2tFbRm+KG79qBIlU1
-         6ZSbngmSdWb+j4cWd6EmIfQaehz22+9uVd7AZTdCGu4vd4jSxL/efUxXQW4F4yi1GqNP
-         +VxbTm/hX7J/GMq4rjIN/87OuHNDXJBgXLf0X2vpuCxFGzyvrNzJIrZfVWBa75wbPMbX
-         8u/ZmjTGffOGRseE52Rzgks/kbTS9kv/1Jz480NoTx/uZz2C/GIOpff5ZtSWtzG41Nxx
-         t1fx9XGOpbh2iAOhK3EeMVc07wKoQWCSQDUyKZr/Ludycg2SdPaD86QyUG2BfFbdx5Rh
-         JbVQ==
-X-Gm-Message-State: AJIora+GT0OUoKGNgQxhPdZM/yDZyzj8+DCie7dmJVoVtb5CKUtmQ2zG
-        kMjbcqZ73oZTArhv4OpPWspCK1AVVsudkCTXJ7E=
-X-Google-Smtp-Source: AGRyM1vPhc1NlSd86iBqbYi0+6Hp7fSuXTSRXKkvOE858j8t83nZT7hjncCkNvIzjVpZNLTn6Yo0CUr0vMyyOq/vlPY=
-X-Received: by 2002:a05:6830:438a:b0:616:f238:1562 with SMTP id
- s10-20020a056830438a00b00616f2381562mr1182445otv.111.1656499945255; Wed, 29
- Jun 2022 03:52:25 -0700 (PDT)
+        Wed, 29 Jun 2022 06:52:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0C03E5D0;
+        Wed, 29 Jun 2022 03:52:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6746E615ED;
+        Wed, 29 Jun 2022 10:52:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89FCFC34114;
+        Wed, 29 Jun 2022 10:52:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656499976;
+        bh=sg27Qejbc/ohUawR6PaI/MniA6EncYUbuLuyuLXhuF8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H0dLfikeIz5rLcYUFW94uZ4KMkchhrg9MFa4hRi2hyXUpKS3R1iZJWSHB8mCpOEej
+         CKzooaLKtgCtXPPdgIHqUGBz1lT3OTOn9eI4+ORnAVYgrTOzwJn5Ll3rcV6y6TUSRG
+         Uva/NUDQgocya4TKi+a34O2Hd7DpSymkXQaawe2w=
+Date:   Wed, 29 Jun 2022 12:52:52 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com, Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH 5.15 000/135] 5.15.51-rc1 review
+Message-ID: <YrwvBCFAVibGVdav@kroah.com>
+References: <20220627111938.151743692@linuxfoundation.org>
+ <Yrp3q1gpvfUm8QIP@debian.me>
 MIME-Version: 1.0
-Received: by 2002:a05:6830:1e0a:0:0:0:0 with HTTP; Wed, 29 Jun 2022 03:52:24
- -0700 (PDT)
-Reply-To: dravasmit09@yahoo.com
-From:   Dr Ava Smith <misslidko01@gmail.com>
-Date:   Wed, 29 Jun 2022 10:52:24 +0000
-Message-ID: <CADmtpXnagXBpxBRtQ_q0tNhAzYtC0gaJS=dFcFSnnMjsC2t-HA@mail.gmail.com>
-Subject: Hello Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yrp3q1gpvfUm8QIP@debian.me>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+On Tue, Jun 28, 2022 at 10:38:19AM +0700, Bagas Sanjaya wrote:
+> On Mon, Jun 27, 2022 at 01:20:07PM +0200, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.15.51 release.
+> > There are 135 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> 
+> Successfully cross-compiled for arm (multi_v7_defconfig, GCC 12.1.0,
+> armv7 with neon FPU) and arm64 (bcm2711_defconfig, GCC 12.1.0).
+> 
+> But I see a warning on arm64 build:
+> 
+>   CC [M]  drivers/staging/r8188eu/core/rtw_br_ext.o
+>   CC [M]  net/batman-adv/tvlv.o
+> In function '__nat25_add_pppoe_tag',
+>     inlined from 'nat25_db_handle' at drivers/staging/r8188eu/core/rtw_br_ext.c:520:11:
+> drivers/staging/r8188eu/core/rtw_br_ext.c:83:9: warning: 'memcpy' reading between 2052 and 9220 bytes from a region of size 40 [-Wstringop-overread]
+>    83 |         memcpy((unsigned char *)ph->tag, tag, data_len);
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/staging/r8188eu/core/rtw_br_ext.c: In function 'nat25_db_handle':
+> drivers/staging/r8188eu/core/rtw_br_ext.c:489:63: note: source object 'tag_buf' of size 40
+>   489 |                                                 unsigned char tag_buf[40];
+>       |                                                               ^~~~~~~
+> 
+> Introduced by commit 15865124feed88 ("staging: r8188eu: introduce new core dir
+> for RTL8188eu driver").
+
+That is due to gcc-12 stuff.
+
+thanks for testing.
+
+thanks,
+
+greg k-h

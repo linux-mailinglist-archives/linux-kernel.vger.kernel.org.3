@@ -2,60 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7855607F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 19:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5245560878
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbiF2R5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 13:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
+        id S232693AbiF2SEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 14:04:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231938AbiF2R5M (ORCPT
+        with ESMTP id S232261AbiF2SEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 13:57:12 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE4A3981D
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 10:57:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656525428; x=1688061428;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8Z8d+vB+c+oayRdApzeWjdqIaMdxqCy+aayzn7wVe34=;
-  b=dxnB2NYDNhbmwwP6E5UNGvPrCGRUYJkU/U0NysusoWf6bTuQOb4f5hdD
-   cuOsagveOiX/mpDjTwX69DDbNZQt/SUPSgzeiBqPLMBGjn3wuQPQlB90V
-   9T6yNoENsJRSMt0CGUrRX+rZOZcHX46I3dP7sx9ZQnle6E0jsckTvnOk5
-   O2tyVkABAoSF1uv2fYkqz1SIUL9GvNipxcv/k+C7KTW0QeqdKwyIyaNWf
-   azKX0suePAz+AaEzA10sqp2kq0J5vBtI4XHVbXiKfE9yCL17XfsaMO4RK
-   TcyNmSwGpJA7syey0XN6U1saJ1dJOhUC7u/YJM0iuGdCYm9LzFGiHTgWu
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="265139674"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="265139674"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 10:57:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="917698336"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Jun 2022 10:57:06 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o6bw1-000BOM-QL;
-        Wed, 29 Jun 2022 17:57:05 +0000
-Date:   Thu, 30 Jun 2022 01:56:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: drivers/gpu/drm/kmb/kmb_dsi.c:812:2: warning: unused function
- 'set_test_mode_src_osc_freq_target_low_bits'
-Message-ID: <202206300147.qdDDrtfw-lkp@intel.com>
+        Wed, 29 Jun 2022 14:04:11 -0400
+Received: from mail-oi1-x261.google.com (mail-oi1-x261.google.com [IPv6:2607:f8b0:4864:20::261])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120533DA64
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:03:25 -0700 (PDT)
+Received: by mail-oi1-x261.google.com with SMTP id be10so22687824oib.7
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:03:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:dkim-signature:mime-version:references
+         :in-reply-to:from:date:message-id:subject:to:cc;
+        bh=vWAvCTXesH+isNf+UwxdBMtz/4FeAjZHg/p3iLUXfgQ=;
+        b=woZWpO5Re+79NV1w17mvC8k7h+8QvCBWtj6GWaAr1QyDl8PYFk0JstSlnZrJz29eDp
+         5cMHrDO9Col1RYp6wcqx/plb7Sv5h66iWYh8nkACMf4cxvgMO1pCLAFD4zK8com153YV
+         EegEiJ9CX4KTn3zK41CapaAhl1z1ueC7OSm3sKnQtMx4Q6HVKaXsxAvYRM/CsRItPaRG
+         yfElydT6/BGujKoxmAywc0anCfiLSJ2b2gtsIaak2PrjGywPhIyHzd7e1L2hbSYY6wpF
+         tXOyi2EKSI4SMYX0fxtSEkg/cEZocDCxfpXkCgJOOLo/yaZHpVytaNz4UOtxo/F5z1xI
+         N+4Q==
+X-Gm-Message-State: AJIora+QH+1K6gy20qONi91XE2e3MmNHsw7AIkaxPcrYYapWpJytB0CL
+        6cEufnyjnvUtPK4c6gjsGUiES4TJB1K+MVNhnMP4u7iifcr22Q==
+X-Google-Smtp-Source: AGRyM1uf25w7rWHCZMCrXtFJaM29Vlkt8C+MjbJobAfyTk56ZEgSXmdP1wyhs7235fMBYXkt7mDcvz3jHRjH
+X-Received: by 2002:a05:6808:1385:b0:335:1ce5:4e15 with SMTP id c5-20020a056808138500b003351ce54e15mr10427oiw.264.1656525804342;
+        Wed, 29 Jun 2022 11:03:24 -0700 (PDT)
+Received: from riotgames.com ([163.116.128.204])
+        by smtp-relay.gmail.com with ESMTPS id f11-20020a056870210b00b001048618752esm2111241oae.49.2022.06.29.11.03.24
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 11:03:24 -0700 (PDT)
+X-Relaying-Domain: riotgames.com
+Received: by mail-pg1-f198.google.com with SMTP id t142-20020a635f94000000b0040d27168bf7so8538518pgb.20
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:03:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riotgames.com; s=riotgames;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vWAvCTXesH+isNf+UwxdBMtz/4FeAjZHg/p3iLUXfgQ=;
+        b=FXoN8kTInIqbo9CRQIb0XtiKLzn/NKB5O3+yfpRUBkI0xloe63Jdn91IOtRFGEnZtM
+         9Yejh2eo3zarDK+cWonwdxlQtKKemLbxP4QIPHOUpF04UJehhZoQYhlyOkq8WnsRxQqr
+         tw+0RNF7Lq04wtzRi//x+1sxIg8FFavqqLfAY=
+X-Received: by 2002:a05:6214:21ec:b0:470:3f54:e846 with SMTP id p12-20020a05621421ec00b004703f54e846mr7713523qvj.58.1656525387603;
+        Wed, 29 Jun 2022 10:56:27 -0700 (PDT)
+X-Received: by 2002:a05:6214:21ec:b0:470:3f54:e846 with SMTP id
+ p12-20020a05621421ec00b004703f54e846mr7713495qvj.58.1656525387268; Wed, 29
+ Jun 2022 10:56:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220628194812.1453059-1-alexandr.lobakin@intel.com> <62bbedf07f44a_2181420830@john.notmuch>
+In-Reply-To: <62bbedf07f44a_2181420830@john.notmuch>
+From:   Zvi Effron <zeffron@riotgames.com>
+Date:   Wed, 29 Jun 2022 10:56:16 -0700
+Message-ID: <CAC1LvL0kTesx8bpL3GWe2Q60uT2WthO5dHX7h7bd-UOGOne_Zg@mail.gmail.com>
+Subject: Re: [xdp-hints] Re: [PATCH RFC bpf-next 00/52] bpf, xdp: introduce
+ and use Generic Hints/metadata
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Toke Hoiland-Jorgensen <toke@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xdp-hints@xdp-project.net
+Content-Type: text/plain; charset="UTF-8"
+x-netskope-inspected: true
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,88 +97,219 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Tue, Jun 28, 2022 at 11:15 PM John Fastabend
+<john.fastabend@gmail.com> wrote:
+>
+> Alexander Lobakin wrote:
+> > This RFC is to give the whole picture. It will most likely be split
+> > onto several series, maybe even merge cycles. See the "table of
+> > contents" below.
+>
+> Even for RFC its a bit much. Probably improve the summary
+> message here as well I'm still not clear on the overall
+> architecture so not sure I want to dig into patches.
+>
+> >
+> > The series adds ability to pass different frame
+> > details/parameters/parameters used by most of NICs and the kernel
+> > stack (in skbs), not essential, but highly wanted, such as:
+> >
+> > * checksum value, status (Rx) or command (Tx);
+> > * hash value and type/level (Rx);
+> > * queue number (Rx);
+> > * timestamps;
+> > * and so on.
+> >
+> > As XDP structures used to represent frames are as small as possible
+> > and must stay like that, it is done by using the already existing
+> > concept of metadata, i.e. some space right before a frame where BPF
+> > programs can put arbitrary data.
+>
+> OK so you stick attributes in the metadata. You can do this without
+> touching anything but your driver today. Why not push a patch to
+> ice to start doing this? People could start using it today and put
+> it in some feature flag.
+>
+> I get everyone wants some grand theory around this but again one
+> patch would do it and your customers could start using it. Show
+> a benchmark with 20% speedup or whatever with small XDP prog
+> update and you win.
+>
+> >
+> > Now, a NIC driver, or even a SmartNIC itself, can put those params
+> > there in a well-defined format. The format is fixed, but can be of
+> > several different types represented by structures, which definitions
+> > are available to the kernel, BPF programs and the userland.
+>
+> I don't think in general the format needs to be fixed.
+>
+> > It is fixed due to it being almost a UAPI, and the exact format can
+> > be determined by reading the last 10 bytes of metadata. They contain
+> > a 2-byte magic ID to not confuse it with a non-compatible meta and
+> > a 8-byte combined BTF ID + type ID: the ID of the BTF where this
+> > structure is defined and the ID of that definition inside that BTF.
+> > Users can obtain BTF IDs by structure types using helpers available
+> > in the kernel, BPF (written by the CO-RE/verifier) and the userland
+> > (libbpf -> kernel call) and then rely on those ID when reading data
+> > to make sure whether they support it and what to do with it.
+> > Why separate magic and ID? The idea is to make different formats
+> > always contain the basic/"generic" structure embedded at the end.
+> > This way we can still benefit in purely generic consumers (like
+> > cpumap) while providing some "extra" data to those who support it.
+>
+> I don't follow this. If you have a struct in your driver name it
+> something obvious, ice_xdp_metadata. If I understand things
+> correctly just dump the BTF for the driver, extract the
+> struct and done you can use CO-RE reads. For the 'fixed' case
+> this looks easy. And I don't think you even need a patch for this.
+>
+> >
+> > The enablement of this feature is controlled on attaching/replacing
+> > XDP program on an interface with two new parameters: that combined
+> > BTF+type ID and metadata threshold.
+> > The threshold specifies the minimum frame size which a driver (or
+> > NIC) should start composing metadata from. It is introduced instead
+> > of just false/true flag due to that often it's not worth it to spend
+> > cycles to fetch all that data for such small frames: let's say, it
+> > can be even faster to just calculate checksums for them on CPU
+> > rather than touch non-coherent DMA zone. Simple XDP_DROP case loses
+> > 15 Mpps on 64 byte frames with enabled metadata, threshold can help
+> > mitigate that.
+>
+> I would put this in the bonus category. Can you do the simple thing
+> above without these extra bits and then add them later. Just
+> pick some overly conservative threshold to start with.
+>
+> >
+> > The RFC can be divided into 8 parts:
+>
+> I'm missing something why not do the simplest bit of work and
+> get this running in ice with a few smallish driver updates
+> so we can all see it. No need for so many patches.
+>
+> >
+> > 01-04: BTF ID hacking: here Larysa provides BPF programs with not
+> > only type ID, but the ID of the BTF as well by using the
+> > unused upper 32 bits.
+> > 05-10: this provides in-kernel mechanisms for taking ID and
+> > threshold from the userspace and passing it to the drivers.
+> > 11-18: provides libbpf API to be able to specify those params from
+> > the userspace, plus some small selftest to verify that both
+> > the kernel and the userspace parts work.
+> > 19-29: here the actual structure is defined, then the in-kernel
+> > helpers and finally here comes the first consumer: function
+> > used to convert &xdp_frame to &sk_buff now will be trying
+> > to parse metadata. The affected users are cpumap and veth.
+> > 30-36: here I try to benefit from the metadata in cpumap even more
+> > by switching it to GRO. Now that we have checksums from NIC
+> > available... but even with no meta it gives some fair
+> > improvements.
+> > 37-43: enabling building generic metadata on Generic/skb path. Since
+> > skbs already have all those fields, it's not a problem to do
+> > this in here, plus allows to benefit from it on interfaces
+> > not supporting meta yet.
+> > 44-47: ice driver part, including enabling prog hot-swap;
+> > 48-52: adds a complex selftest to verify everything works. Can be
+> > used as a sample as well, showing how to work with metadata
+> > in BPF programs and how to configure it from the userspace.
+> >
+> > Please refer to the actual commit messages where some precise
+> > implementation details might be explained.
+> > Nearly 20 of 52 are various cleanups and prereqs, as usually.
+> >
+> > Perf figures were taken on cpumap redirect from the ice interface
+> > (driver-side XDP), redirecting the traffic within the same node.
+> >
+> > Frame size / 64/42 128/20 256/8 512/4 1024/2 1532/1
+> > thread num
+>
+> You'll have to remind me whats the production use case for
+> cpu_map on a modern nic or even smart nic? Why are you not
+> just using a hardware queues and redirecting to the right
+> queues in hardware to start with?
+>
+> Also my understanding is if you do XDP_PASS up the stack
+> the skb is built with all the normal good stuff from hw
+> descriptor. Sorry going to need some extra context here
+> to understand.
+>
+> Could you do a benchmark for AF_XDP I thought this was
+> the troublesome use case where the user space ring lost
+> the hardware info e.g. timestamps and checksum values.
+>
+> >
+> > meta off 30022 31350 21993 12144 6374 3610
+> > meta on 33059 28502 21503 12146 6380 3610
+> > GRO meta off 30020 31822 21970 12145 6384 3610
+> > GRO meta on 34736 28848 21566 12144 6381 3610
+> >
+> > Yes, redirect between the nodes plays awfully with the metadata
+> > composed by the driver:
+>
+> Many production use case use XDP exactly for this. If it
+> slows this basic use case down its going to be very hard
+> to use in many environments. Likely it wont be used.
+>
+> >
+> > meta off 21449 18078 16897 11820 6383 3610
+> > meta on 16956 19004 14337 8228 5683 2822
+> > GRO meta off 22539 19129 16304 11659 6381 3592
+> > GRO meta on 17047 20366 15435 8878 5600 2753
+>
+> Do you have hardware that can write the data into the
+> metadata region so you don't do it in software? Seems
+> like it should be doable without much trouble and would
+> make this more viable.
+>
+> >
+> > Questions still open:
+> >
+> > * the actual generic structure: it must have all the fields used
+> > oftenly and by the majority of NICs. It can always be expanded
+> > later on (note that the structure grows to the left), but the
+> > less often UAPI is modified, the better (less compat pain);
+>
+> I don't believe a generic structure is needed.
+>
+> > * ability to specify the exact fields to fill by the driver, e.g.
+> > flags bitmap passed from the userspace. In theory it can be more
+> > optimal to not spend cycles on data we don't need, but at the
+> > same time increases the complexity of the whole concept (e.g. it
+> > will be more problematic to unify drivers' routines for collecting
+> > data from descriptors to metadata and to skbs);
+> > * there was an idea to be able to specify from the userspace the
+> > desired cacheline offset, so that [the wanted fields of] metadata
+> > and the packet headers would lay in the same CL. Can't be
+> > implemented in Generic/skb XDP and ice has some troubles with it
+> > too;
+> > * lacks AF_XDP/XSk perf numbers and different other scenarios in
+> > general, is the current implementation optimal for them?
+>
+> AF_XDP is the primary use case from my understanding.
+>
 
-First bad commit (maybe != root cause):
+AF_XDP is a use case, and might be the primary, but we work with pure XDP and
+have been waiting for the ability to take advantage of the hardware checksums
+for years. It would be a very large performance boost for us (in theory) as
+we're currently having to verify the checksums ourselves in software, and
+recompute them on modifications (since we can't use hardware TX checksums).
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d9b2ba67917c18822c6a09af41c32fa161f1606b
-commit: ade896460e4a62f5e4a892a98d254937f6f5b64c drm: DRM_KMB_DISPLAY should depend on ARCH_KEEMBAY
-date:   1 year, 8 months ago
-config: mips-randconfig-r016-20220629 (https://download.01.org/0day-ci/archive/20220630/202206300147.qdDDrtfw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ade896460e4a62f5e4a892a98d254937f6f5b64c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ade896460e4a62f5e4a892a98d254937f6f5b64c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/kmb/ drivers/net/ethernet/mellanox/mlxsw/ drivers/scsi/ufs/ drivers/staging/ fs/xfs/
+Also, if I understand correctly, if the functionality is available to pure XDP,
+AF_XDP could benefit from it by having the XDP program that redirects to AF_XDP
+copy it into metadata where AF_XDP can find it because of the user defined
+contract between the XDP program and the userspace program? (Not as efficient,
+obviously, and duplicative, but would work, I think.)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/kmb/kmb_dsi.c:812:2: warning: unused function 'set_test_mode_src_osc_freq_target_low_bits'
-   set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi
-   ^
->> drivers/gpu/drm/kmb/kmb_dsi.c:824:2: warning: unused function 'set_test_mode_src_osc_freq_target_hi_bits'
-   set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi
-   ^
-   fatal error: error in backend: Nested variants found in inline asm string: '.if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/barrier.h", .line = 16, $); 0x00 ) != -1)) : $))) ) && ( (1 << 0) ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif'
-   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
-   Target: mipsel-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-a774ba7f60/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch drivers fs include kernel mm nr_bisected scripts source usr
-
-
-vim +/set_test_mode_src_osc_freq_target_low_bits +812 drivers/gpu/drm/kmb/kmb_dsi.c
-
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  810  
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  811  static inline void
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04 @812  	set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi *kmb_dsi,
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  813  						   u32 dphy_no,
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  814  						   u32 freq)
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  815  {
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  816  	/* Typical rise/fall time=166, refer Table 1207 databook,
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  817  	 * sr_osc_freq_target[7:0]
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  818  	 */
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  819  	test_mode_send(kmb_dsi, dphy_no, TEST_CODE_SLEW_RATE_DDL_CYCLES,
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  820  		       (freq & 0x7f));
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  821  }
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  822  
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  823  static inline void
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04 @824  	set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi *kmb_dsi,
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  825  						  u32 dphy_no,
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  826  						  u32 freq)
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  827  {
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  828  	u32 data;
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  829  
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  830  	/* Flag this as high nibble */
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  831  	data = ((freq >> 6) & 0x1f) | (1 << 7);
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  832  
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  833  	/* Typical rise/fall time=166, refer Table 1207 databook,
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  834  	 * sr_osc_freq_target[11:7]
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  835  	 */
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  836  	test_mode_send(kmb_dsi, dphy_no, TEST_CODE_SLEW_RATE_DDL_CYCLES, data);
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  837  }
-98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  838  
-
-:::::: The code at line 812 was first introduced by commit
-:::::: 98521f4d4b4cb265374a4b1e13b41287a1960243 drm/kmb: Mipi DSI part of the display driver
-
-:::::: TO: Anitha Chrisanthus <anitha.chrisanthus@intel.com>
-:::::: CC: Sam Ravnborg <sam@ravnborg.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> > * metadata threshold and everything else present in this
+> > implementation.
+>
+> I really think your asking questions that are two or three
+> jumps away. Why not do the simplest bit first and kick
+> the driver with an on/off switch into this mode. But
+> I don't understand this cpumap use case so maybe explain
+> that first.
+>
+> And sorry didn't even look at your 50+ patches. Figure lets
+> get agreement on the goal first.
+>
+> .John

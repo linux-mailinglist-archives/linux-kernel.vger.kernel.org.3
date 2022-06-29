@@ -2,170 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A89D560A98
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F6B560A9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiF2Trl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 15:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
+        id S231293AbiF2Trm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 15:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiF2Tri (ORCPT
+        with ESMTP id S229952AbiF2Trj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 15:47:38 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2086.outbound.protection.outlook.com [40.107.244.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E363A1AD;
-        Wed, 29 Jun 2022 12:47:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f0PJX5RBvOQJXizsm7XXk5ibev9vGSpfBPSn4WdyVa5ghrFuCQFae5qTXcaCWk6xS50Ef/p/HkBXOBmsVjA7GSq0W2eq+KIuffcDoaZoYolI1NDr0MvrSTY053ipmO2PVyyaaQXT4tavqhKI9CHxoCfkCFGy1kOcBBhGf6n9MtJ35ko4u5+I5Ax4ujWkOxP2zwAK7PD70e+7Qkjg0pPHFXmnMGt6NqUdYsNVr1EQLipy5WBUC7Hn0pt3XBrNzCLDZrPmLyXF0lsq+nfhUqZ5qepSUqM2y9ZuOorMdihawoNmQC/FMYyD5SO3kuu1KkcN3SYX8phA+obprcgkMPlQ3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4t2tMU26BQlyqKCQrdW0JpcVFyJO+mK2EE2oPATlIlA=;
- b=jpTRnHFVFndMxq3v3N/DsLcCopksASQG2tSes+XRlcpr3NnnfzOmb6ARuSVY9cqWty9YxbYZLjlUNDIb3fjuGcpXqA8rs/QTcVC+at7FX8scfWeM0owd1Rv9bWAlOeBQAdLcPg76BIHX1Lm2aqbErpTuH+foXu0ybORfWxub6Ynj1vC8FTN5WxuuY61N9xEpF01IqOLXZAxHxd2gIRiGQBUeNK41aompUfEUYfS1nRlQS7BbdjadblK0joCyscNYO4f6zPBw9Pyt5QRgDjDbuWnJJxd5zNlZ6AVCuB44s74ojp9iQFAufp49AubKBO+hVh2beXmWSHg+TGTjAijR8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=rosenzweig.io smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4t2tMU26BQlyqKCQrdW0JpcVFyJO+mK2EE2oPATlIlA=;
- b=kbSpzWzRS1YUALOvepkAP54VOl8DFy3BXMyZtvElr0/sgXBKuvsoovdvw/j7z29Xy+8+zNA+uGQYhodL2XVyI/k4D33mMLIxVZcaQgU4SLywxUt8qaAE6D7UOxG0834eE3JdNBZm6kevU3BXtq1ZZSbCH4bSjRSXp0SvgJRCM0gMqwHd96XA+jrHf46f7zrbcfupeajYgYobAVhrbTvQvzSMqjx6tgaVqvsxapPmh5R4roDsl93Fv0LZc93VithZBkTENvMgwrkCzuGlAro2zxj3BQOrCLWE3ZQKDuFyEQ6JE5jO3Q5sw43iYRuHskEmbwN/+/FJ0a7wg7foxqnOAg==
-Received: from DS7PR03CA0055.namprd03.prod.outlook.com (2603:10b6:5:3b5::30)
- by BL1PR12MB5221.namprd12.prod.outlook.com (2603:10b6:208:30b::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Wed, 29 Jun
- 2022 19:47:35 +0000
-Received: from DM6NAM11FT049.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b5:cafe::74) by DS7PR03CA0055.outlook.office365.com
- (2603:10b6:5:3b5::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17 via Frontend
- Transport; Wed, 29 Jun 2022 19:47:35 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.234) by
- DM6NAM11FT049.mail.protection.outlook.com (10.13.172.188) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5373.15 via Frontend Transport; Wed, 29 Jun 2022 19:47:34 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 29 Jun
- 2022 19:47:34 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 29 Jun
- 2022 12:47:33 -0700
-Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com (10.129.68.7)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26 via Frontend
- Transport; Wed, 29 Jun 2022 12:47:31 -0700
-Date:   Wed, 29 Jun 2022 12:47:30 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Yong Wu <yong.wu@mediatek.com>
-CC:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "jordan@cosmicpenguin.net" <jordan@cosmicpenguin.net>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "alyssa@rosenzweig.io" <alyssa@rosenzweig.io>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "zhang.lyra@gmail.com" <zhang.lyra@gmail.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "yangyingliang@huawei.com" <yangyingliang@huawei.com>,
-        "orsonzhai@gmail.com" <orsonzhai@gmail.com>,
-        "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "marcan@marcan.st" <marcan@marcan.st>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "baolin.wang7@gmail.com" <baolin.wang7@gmail.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>
-Subject: Re: [PATCH v3 1/5] iommu: Return -EMEDIUMTYPE for incompatible
- domain and device/group
-Message-ID: <YrysUpY4mdzA0h76@Asurada-Nvidia>
-References: <20220623200029.26007-1-nicolinc@nvidia.com>
- <20220623200029.26007-2-nicolinc@nvidia.com>
- <270eec00-8aee-2288-4069-d604e6da2925@linux.intel.com>
- <YrUk8IINqDEZLfIa@Asurada-Nvidia>
- <8a5e9c81ab1487154828af3ca21e62e39bcce18c.camel@mediatek.com>
- <BN9PR11MB527629DEF740C909A7B7BEB38CB49@BN9PR11MB5276.namprd11.prod.outlook.com>
- <19cfb1b85a347c70c6b0937bbbca4a176a724454.camel@mediatek.com>
- <20220624181943.GV4147@nvidia.com>
+        Wed, 29 Jun 2022 15:47:39 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8A13D1C4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 12:47:38 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id c137so12868483qkg.5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 12:47:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zvL6K4ApubN7CXJXMHMI39STdbXUc+m2xA0jmMG/9F0=;
+        b=UUNLLc317PpAN5hJCv1pP4lv9hlV84Pj1PJHCy41a5D2iqT6lke4aCL3Q27vbE7gG2
+         qaHd5uZJ26Uysi2JBEmsoBTol2GbrzQLfUL/wePlXwWSruJEvM1/0ZvQHCL96jqBtcqK
+         33Y6dsPdrxgfZTiAJbwMSFFxhYnssSigOvQGU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zvL6K4ApubN7CXJXMHMI39STdbXUc+m2xA0jmMG/9F0=;
+        b=YsOqOxtPQ6xDhSKQWk4QpgbYSQbuJrkNJZ4srs9kN3JnWYqecLmX5Sapqvhhm8Ontq
+         O2PvtMuz5ce3OvZOZONNkG+qmL6REMSwX7bZnSl5htTOHLfKbpg9x9EnSmkj0qW5s9c+
+         JVxtoBKlalt35pkhQXm00FEEQn2jpYhCrnB2DVnc6iSK8nrmdm8PmqC/T73Ka0GqY2Ug
+         ugLPMtiPKvwEWalHlPBuNrfcE8S26Ljp1zwUojzeSTYt0VCyz2mL4B8OUdlaTo56mqV8
+         ja/VKaX2/sSubexQXzRq62S20q/0DtPbolgQXHlSW+u+t6eMDe1o9aHJhJ5qKQis6nX5
+         3QBg==
+X-Gm-Message-State: AJIora+mhYP0WbWo7X6CYhF2cizMWDQl1S6OA8035HWv1f5YWOMqMXPD
+        pS+QUfKSITo6hVEQeVJ8+LW1Cw==
+X-Google-Smtp-Source: AGRyM1vZHzCEiCphgOajMwlX+lbKTAIWT9TNdifdzuhH8f922mX0lD6uU/U/m4bzCFlOc0vakN1jaQ==
+X-Received: by 2002:a05:620a:2807:b0:6a6:6ef1:fb9d with SMTP id f7-20020a05620a280700b006a66ef1fb9dmr3575735qkp.146.1656532057649;
+        Wed, 29 Jun 2022 12:47:37 -0700 (PDT)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id bt5-20020ac86905000000b0031bf68f502esm2488452qtb.59.2022.06.29.12.47.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 12:47:37 -0700 (PDT)
+Date:   Wed, 29 Jun 2022 19:47:36 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu <rcu@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, vineeth@bitbyteword.org
+Subject: Re: [PATCH v2 8/8] rcu/kfree: Fix kfree_rcu_shrink_count() return
+ value
+Message-ID: <YrysWAx/rMbBF5iY@google.com>
+References: <20220622225102.2112026-1-joel@joelfernandes.org>
+ <20220622225102.2112026-10-joel@joelfernandes.org>
+ <Yrn9a5pOvhvL/eZj@pc638.lan>
+ <20220627205907.GM1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YroelcGVNhQj91ab@google.com>
+ <20220627214359.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YrsyrmDbfnkpfDEP@google.com>
+ <CAEXW_YRQiuvsy1FsMNWG7wd9ah_gfgcOUAeNzA-QbmDcACa+Uw@mail.gmail.com>
+ <20220629165627.GI1790663@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220624181943.GV4147@nvidia.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8d217259-e4d1-4143-1a2e-08da5a0836ac
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5221:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tial0svSqsOBWr4UrH8SCwFIjyQnY3PhwdCieiCRyW+x6vi6nufunUUzfl8XQu8vEaRhJjGBAe4pGe+ZKAfR+B3ov2ln3fdvF0zUhQDAoDJZAm1CfwEJ2JURkCkbc2Q478avagu2XGxhl64JAxb8w+lDpT8aK3PHZ/LfhjAQoqrimWhE2UhfvN24fwDp23yFkeRn+H/kaZ79l4vS2s8AbT/vCOT6O3Jvk0Y6HEcDPlc0VC6l3C/01Q3BPHx0oPlI9KDRXO4pMSE5pvnkF8RmYHIfIISfgUWB7nsuhuzHWuBojcb6rsblTsRxNH0Fp1lK17/I1anKUpXUNmyOKW9OIHIg6Evd4yVFb5DvzvcQ7xaMbss+QpYJQv6oOxwC2QmSNsH3x7ybT5PNdcUMxSMpFf4zX6htMZ77H6It2PS0ueapWuyq+3vJ4+5Vvc0gB2Dxly6eOldTjlwgi/Q6YcJlwHTiIyOpua7KNiNJVOCZn9jas+cQTv46a0febV9sve/Z4MeylJc2s4MbOkEL367bIRjRTbdXy7qmC/y8a8Cn4dagtC3VPlg34Nnm4aD6dWo+5U36sBQOe8N1UVpIdYcZu8eZJ4WIEdJA0ok2GiIdHvicgQbnlGX56hNp4gCurZw+0FZ3KS9CcnYyVuWGMg7oi7o3i4b/FV+KaivcYLJXFieb2yCtFDXk0UOIkhe4saVqE0wh44G0seXU9OKYk+fij1dEt11l7/CKpaRSkWBojSOF+IOwWIih6hk4tDde2pb/MaCPEwtaJFvcdYb2jrqQXLv8ADvPXts+hOQmbXpusmZeVStCPYWHCV9iSMXicf0t5CiYmppSKIA/rg0RSoztiw==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(136003)(39860400002)(396003)(46966006)(40470700004)(36840700001)(8676002)(70206006)(70586007)(4326008)(9686003)(36860700001)(7416002)(41300700001)(478600001)(26005)(86362001)(40480700001)(82740400003)(40460700003)(6916009)(186003)(81166007)(55016003)(8936002)(356005)(47076005)(82310400005)(33716001)(2906002)(336012)(54906003)(316002)(426003)(7406005)(5660300002)(83380400001)(4744005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2022 19:47:34.8739
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d217259-e4d1-4143-1a2e-08da5a0836ac
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT049.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5221
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220629165627.GI1790663@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 03:19:43PM -0300, Jason Gunthorpe wrote:
-> On Fri, Jun 24, 2022 at 06:35:49PM +0800, Yong Wu wrote:
-> 
-> > > > It's not used in VFIO context. "return 0" just satisfy the iommu
-> > > > framework to go ahead. and yes, here we only allow the shared
-> > > > "mapping-domain" (All the devices share a domain created
-> > > > internally).
-> 
-> What part of the iommu framework is trying to attach a domain and
-> wants to see success when the domain was not actually attached ?
-> 
-> > > What prevent this driver from being used in VFIO context?
+On Wed, Jun 29, 2022 at 09:56:27AM -0700, Paul E. McKenney wrote:
+> On Tue, Jun 28, 2022 at 05:13:21PM -0400, Joel Fernandes wrote:
+> > On Tue, Jun 28, 2022 at 12:56 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+> > >
+> > > On Mon, Jun 27, 2022 at 02:43:59PM -0700, Paul E. McKenney wrote:
+> > > > On Mon, Jun 27, 2022 at 09:18:13PM +0000, Joel Fernandes wrote:
+> > > > > On Mon, Jun 27, 2022 at 01:59:07PM -0700, Paul E. McKenney wrote:
+> > > > > > On Mon, Jun 27, 2022 at 08:56:43PM +0200, Uladzislau Rezki wrote:
+> > > > > > > > As per the comments in include/linux/shrinker.h, .count_objects callback
+> > > > > > > > should return the number of freeable items, but if there are no objects
+> > > > > > > > to free, SHRINK_EMPTY should be returned. The only time 0 is returned
+> > > > > > > > should be when we are unable to determine the number of objects, or the
+> > > > > > > > cache should be skipped for another reason.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > > > > > > ---
+> > > > > > > >  kernel/rcu/tree.c | 2 +-
+> > > > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > > > >
+> > > > > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > > > > > > index 711679d10cbb..935788e8d2d7 100644
+> > > > > > > > --- a/kernel/rcu/tree.c
+> > > > > > > > +++ b/kernel/rcu/tree.c
+> > > > > > > > @@ -3722,7 +3722,7 @@ kfree_rcu_shrink_count(struct shrinker *shrink, struct shrink_control *sc)
+> > > > > > > >               atomic_set(&krcp->backoff_page_cache_fill, 1);
+> > > > > > > >       }
+> > > > > > > >
+> > > > > > > > -     return count;
+> > > > > > > > +     return count == 0 ? SHRINK_EMPTY : count;
+> > > > > > > >  }
+> > > > > > > >
+> > > > > > > >  static unsigned long
+> > > > > > > > --
+> > > > > > > > 2.37.0.rc0.104.g0611611a94-goog
+> > > > > > > >
+> > > > > > > Looks good to me!
+> > > > > > >
+> > > > > > > Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > > > >
+> > > > > > Now that you mention it, this does look independent of the rest of
+> > > > > > the series.  I have pulled it in with Uladzislau's Reviewed-by.
+> > > > >
+> > > > > Thanks Paul and Vlad!
+> > > > >
+> > > > > Paul, apologies for being quiet. I have been working on the series and the
+> > > > > review comments carefully. I appreciate your help with this work.
+> > > >
+> > > > Not a problem.  After all, this stuff is changing some of the trickier
+> > > > parts of RCU.  We must therefore assume that some significant time and
+> > > > effort will be required to get it right.
+> > >
+> > > To your point about trickier parts of RCU, the v2 series though I tested it
+> > > before submitting is now giving me strange results with rcuscale. Sometimes
+> > > laziness does not seem to be in effect (as pointed out by rcuscale), other
+> > > times I am seeing stalls.
+> > >
+> > > So I have to carefully look through all of this again. I am not sure why I
+> > > was not seeing these issues with the exact same code before (frustrated).
 > > 
-> > Nothing prevent this. Just I didn't test.
+> > Looks like I found at least 3 bugs in my v2 series which testing
+> > picked up now. RCU-lazy was being too lazy or not too lazy. Now tests
+> > pass, so its progress but does beg for more testing:
 > 
-> This is why it is wrong to return success here.
+> It is entirely possible that call_rcu_lazy() needs its own special
+> purpose tests.  This might be a separate test parallel to the test for
+> kfree_rcu() in kernel/rcu/rcuscale.c, for example.
 
-Hi Yong, would you or someone you know be able to confirm whether
-this "return 0" is still a must or not?
+I see, perhaps I can add a 'lazy' flag to rcutorture as well, so it uses
+call_rcu_lazy() for its async RCU invocations?
 
-Considering that it's an old 32-bit platform for MTK, if it would
-take time to do so, I'd like to drop the change in MTK driver and
-note in commit log for you or other MTK folks to change in future.
+> For but one example, you might need to do bunch of call_rcu_lazy()
+> invocations, then keep the kernel completely quiet for long enough to
+> let the timer fire, and without anything else happening.
 
-Thanks
-Nic
+Yes, I sort of do that in rcuscale. There is a flood of call_rcu_lazy() due
+to the FS code doing it. And, the timer does fire at the right time. I then
+measure the time to make sure the timing matches, that's how I found the bugs
+I earlier mentioned.
+
+You had mentioned something like for testing earlier, I thought of trying it
+out:
+
+	It also helps to make rcutorture help you out if you have not
+	already done so.  For example, providing some facility to allow
+	rcu_torture_fwd_prog_cr() to flood with call_rcu_lazy() instead of and
+	in addition to call_rcu().
+
+
+thanks,
+
+ - Joel
+
+
+> 
+> 							Thanx, Paul
+> 
+> > On top of v2 series:
+> > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> > index c06a96b6a18a..7021ee05155d 100644
+> > --- a/kernel/rcu/tree_nocb.h
+> > +++ b/kernel/rcu/tree_nocb.h
+> > @@ -292,7 +292,8 @@ static void wake_nocb_gp_defer(struct rcu_data
+> > *rdp, int waketype,
+> >          */
+> >         switch (waketype) {
+> >                 case RCU_NOCB_WAKE_LAZY:
+> > -                       mod_jif = jiffies_till_flush;
+> > +                       if (rdp->nocb_defer_wakeup != RCU_NOCB_WAKE_LAZY)
+> > +                               mod_jif = jiffies_till_flush;
+> >                         break;
+> > 
+> >                 case RCU_NOCB_WAKE_BYPASS:
+> > @@ -714,13 +715,13 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+> >                 bypass_ncbs = rcu_cblist_n_cbs(&rdp->nocb_bypass);
+> >                 lazy_ncbs = rcu_cblist_n_lazy_cbs(&rdp->nocb_bypass);
+> >                 if (lazy_ncbs &&
+> > -                   (time_after(j, READ_ONCE(rdp->nocb_bypass_first) +
+> > LAZY_FLUSH_JIFFIES) ||
+> > +                   (time_after(j, READ_ONCE(rdp->nocb_bypass_first) +
+> > jiffies_till_flush) ||
+> >                      bypass_ncbs > qhimark)) {
+> >                         // Bypass full or old, so flush it.
+> >                         (void)rcu_nocb_try_flush_bypass(rdp, j);
+> >                         bypass_ncbs = rcu_cblist_n_cbs(&rdp->nocb_bypass);
+> >                         lazy_ncbs = rcu_cblist_n_lazy_cbs(&rdp->nocb_bypass);
+> > -               } else if (bypass_ncbs &&
+> > +               } else if (bypass_ncbs && (lazy_ncbs != bypass_ncbs) &&
+> >                     (time_after(j, READ_ONCE(rdp->nocb_bypass_first) + 1) ||
+> >                      bypass_ncbs > 2 * qhimark)) {
+> >                         // Bypass full or old, so flush it.

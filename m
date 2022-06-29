@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 514FF5606CA
+	by mail.lfdr.de (Postfix) with ESMTP id 991FC5606CB
 	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbiF2Q4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 12:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
+        id S231163AbiF2Q45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 12:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiF2Q4n (ORCPT
+        with ESMTP id S230447AbiF2Q4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 12:56:43 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D442250C;
-        Wed, 29 Jun 2022 09:56:42 -0700 (PDT)
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LY6xl5sYcz6H6rt;
-        Thu, 30 Jun 2022 00:54:19 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 29 Jun 2022 18:56:40 +0200
-Received: from [10.195.244.164] (10.195.244.164) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 29 Jun 2022 17:56:39 +0100
-Message-ID: <26fb5fec-500d-61c2-f009-556c5f7e86e6@huawei.com>
-Date:   Wed, 29 Jun 2022 17:56:40 +0100
+        Wed, 29 Jun 2022 12:56:55 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4209D25588;
+        Wed, 29 Jun 2022 09:56:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9EB7DCE25C4;
+        Wed, 29 Jun 2022 16:56:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13837C341CB;
+        Wed, 29 Jun 2022 16:56:45 +0000 (UTC)
+Date:   Wed, 29 Jun 2022 12:56:43 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?UTF-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] remove CONFIG_ANDROID
+Message-ID: <20220629125643.393df70d@gandalf.local.home>
+In-Reply-To: <20220629164543.GA25672@lst.de>
+References: <20220629150102.1582425-1-hch@lst.de>
+        <20220629150102.1582425-2-hch@lst.de>
+        <Yrx5Lt7jrk5BiHXx@zx2c4.com>
+        <20220629161020.GA24891@lst.de>
+        <Yrx6EVHtroXeEZGp@zx2c4.com>
+        <20220629161527.GA24978@lst.de>
+        <Yrx8/Fyx15CTi2zq@zx2c4.com>
+        <20220629163007.GA25279@lst.de>
+        <Yrx/8UOY+J8Ao3Bd@zx2c4.com>
+        <20220629164543.GA25672@lst.de>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v6 2/4] perf jevents: Add python converter script
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        "Felix Fietkau" <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
-        Like Xu <likexu@tencent.com>, <linux-kernel@vger.kernel.org>,
-        <linux-perf-users@vger.kernel.org>,
-        Nick Forrington <nick.forrington@arm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <ananth.narayan@amd.com>, <ravi.bangoria@amd.com>,
-        <santosh.shukla@amd.com>, <sandipan.das@amd.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Kshipra Bopardikar <kshipra.bopardikar@intel.com>
-CC:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <rogers.email@gmail.com>,
-        Thomas Richter <tmricht@linux.ibm.com>
-References: <20220627025744.106527-1-irogers@google.com>
- <20220627025744.106527-3-irogers@google.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220627025744.106527-3-irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.244.164]
-X-ClientProxiedBy: lhreml710-chm.china.huawei.com (10.201.108.61) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,39 +75,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2022 03:57, Ian Rogers wrote:
-> +
-> +    def unit_to_pmu(unit: str) -> str:
-> +      """Convert a JSON Unit to Linux PMU name."""
-> +      if not unit:
-> +        return None
-> +      # Comment brought over from jevents.c:
-> +      # it's not realistic to keep adding these, we need something more scalable ...
 
-Since we're converting to python it might be a good idea to consider 
-this - ever have an ideas on something better?
+[ Note, I'm not on the Android team and my response has nothing to do with
+  my employer. I would say the same thing with my previous employer. ]
 
-Thanks,
-John
+On Wed, 29 Jun 2022 18:45:43 +0200
+Christoph Hellwig <hch@lst.de> wrote:
 
-> +      table = {
-> +          'CBO': 'uncore_cbox',
-> +          'QPI LL': 'uncore_qpi',
-> +          'SBO': 'uncore_sbox',
-> +          'iMPH-U': 'uncore_arb',
-> +          'CPU-M-CF': 'cpum_cf',
-> +          'CPU-M-SF': 'cpum_sf',
-> +          'UPI LL': 'uncore_upi',
-> +          'hisi_sicl,cpa': 'hisi_sicl,cpa',
-> +          'hisi_sccl,ddrc': 'hisi_sccl,ddrc',
-> +          'hisi_sccl,hha': 'hisi_sccl,hha',
-> +          'hisi_sccl,l3c': 'hisi_sccl,l3c',
-> +          'imx8_ddr': 'imx8_ddr',
-> +          'L3PMC': 'amd_l3',
-> +          'DFPMC': 'amd_df',
-> +          'cpu_core': 'cpu_core',
-> +          'cpu_atom': 'cpu_atom',
-> +      }
-> +      return table[unit] if unit in table else f'uncore_{unit.lower()}'
-> +
+> On Wed, Jun 29, 2022 at 06:38:09PM +0200, Jason A. Donenfeld wrote:
+> > On the technical topic, an Android developer friend following this
+> > thread just pointed out to me that Android doesn't use PM_AUTOSLEEP and
+> > just has userspace causing suspend frequently. So by his rough
+> > estimation your patch actually *will* break Android devices. Zoinks.
+> > Maybe he's right, maybe he's not -- I don't know -- but you should
+> > probably look into this if you want this patch to land without breakage.  
+> 
+> And it will also "break" anyone else doing frequent suspends from
+> userspace, as that behavior is still in no way related to
+> CONFIG_ANDROID.
 
+Should there then be a CONFIG_FREQUENT_SUSPENDS ?
+
+That is, if you have system where you know that there will be a lot of
+frequent suspends coming from user space, then you would enable it.
+
+I agree, calling this ANDROID is not related to the functionality change.
+But if there was a config that was related, would that be acceptable?
+
+Then it would not just be Android that could enabled this change, but any
+other system that is doing frequent suspends?
+
+-- Steve

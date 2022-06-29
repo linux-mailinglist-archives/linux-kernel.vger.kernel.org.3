@@ -2,106 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB41055FCD0
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 391EA55FCD6
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232675AbiF2KDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 06:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
+        id S230368AbiF2KFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 06:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiF2KDo (ORCPT
+        with ESMTP id S230525AbiF2KFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 06:03:44 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27043D1DB
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:03:43 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id p14so14636084pfh.6
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:03:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=v+1Kh9yXYSF/SSlAxUUF7lfd7AbotnJ6XEUP9Y2jqwE=;
-        b=bT696kWD335zwtQvW47vd4+mT5xdlttfcuP/cfCSLGtb7YgSROS2L7ffdCL6lmeT9X
-         hLO4kCeKrh9RhaoNZxg6Eb6G+AeKxnOiLYRUTEAnkTGswpNC6vnrXR6z0mf+a5G3eiBo
-         qz29lWEkYZ+jCGe3KfM0543mgg0fJH1DNS32yfChg36ESaebBkp+5PiUj4TLvqXaNtAB
-         hFiO0kxoSePedtkr8Bj6ref1wJrQW2YrtDSKlp8QvVVMHgn0EQdjXFyD+DRBJhVULj3G
-         3PMAGlJ4zKL0SJ3SmGf40soyRQiN8+kQzPniaDWJ4WGCcVg5SX+5l2znBCumkn7e5N/I
-         ggLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=v+1Kh9yXYSF/SSlAxUUF7lfd7AbotnJ6XEUP9Y2jqwE=;
-        b=m71tDpWzZGfsFAIBMSVxWVOHm/mtRZ2pwANjgbd46fYDzhkDpr5NMO3Q6OXuqtsUEB
-         5QRaqIT3Db6Ktg02UPaF9EIGxAYY4xJH1F22BiKqMWeQF6QXRb+1ry/NalWTmgt1qnma
-         3HCzCPhpeQQKbSbMnxDuiFduV18ItgjMkwxBJjyotTusDNW1AuCOUBXPLQ2y4RmDdR2t
-         JV+Tjm5m+jqKXfCvcgzwlBSnzZpxBClQLLBZA0HirnCOyy6wSigqHK0YUoqSVhyRXkzz
-         ZCcCAS5VgzJU5X1g6H4NnA1xWd/6fTy65cdYnOPlp/ZECCvws0BqVhl4Y12/92gYqwVd
-         e8Vg==
-X-Gm-Message-State: AJIora87gVop1nMsP0RhqyCfn7sAAS1BAzfGydKhUGvGETrtVpKrAfU9
-        ari0a5/tlri4q+WjFimyf3yeMw==
-X-Google-Smtp-Source: AGRyM1sTw4UxgBgSUAtM/Ce+HiXo5qoS5Rt9oKfdvJ/YFT4je9ZLNVgxqIQyVnyMl/m9dosjMIfh0g==
-X-Received: by 2002:a62:7b95:0:b0:525:8304:2f16 with SMTP id w143-20020a627b95000000b0052583042f16mr8194428pfc.33.1656497023394;
-        Wed, 29 Jun 2022 03:03:43 -0700 (PDT)
-Received: from C02F63J9MD6R.bytedance.net ([61.120.150.74])
-        by smtp.gmail.com with ESMTPSA id u5-20020a17090a1f0500b001ed1444df67sm1696872pja.6.2022.06.29.03.03.38
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 Jun 2022 03:03:42 -0700 (PDT)
-From:   Zhuo Chen <chenzhuo.1@bytedance.com>
-To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, intel-wired-lan@lists.osuosl.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhuo Chen <chenzhuo.1@bytedance.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Sen Wang <wangsen.harry@bytedance.com>,
-        Wenliang Wang <wangwenliang.1995@bytedance.com>
-Subject: [PATCH] ice: Remove pci_aer_clear_nonfatal_status() call
-Date:   Wed, 29 Jun 2022 18:03:34 +0800
-Message-Id: <20220629100334.60710-1-chenzhuo.1@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        Wed, 29 Jun 2022 06:05:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5C8A3DA4D
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:05:12 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CBC81152B;
+        Wed, 29 Jun 2022 03:05:12 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id ADF763F792;
+        Wed, 29 Jun 2022 03:05:11 -0700 (PDT)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        cristian.marussi@arm.com,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        etienne.carriere@linaro.org
+Cc:     Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH] scmi/optee: fix response size warning
+Date:   Wed, 29 Jun 2022 11:05:06 +0100
+Message-Id: <165649686859.1115844.6856307867092196404.b4-ty@arm.com>
+X-Mailer: git-send-email 2.37.0
+In-Reply-To: <20220624074549.3298-1-vincent.guittot@linaro.org>
+References: <20220624074549.3298-1-vincent.guittot@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After 62b36c3 ("PCI/AER: Remove pci_cleanup_aer_uncorrect_error_status()
-calls"), Calls to pci_cleanup_aer_uncorrect_error_status() have already
-been removed. But in 5995b6d pci_cleanup_aer_uncorrect_error_status was
-used again, so remove it in this patch.
+On Fri, 24 Jun 2022 09:45:49 +0200, Vincent Guittot wrote:
+> Some protocols check the response size with the expected value but optee
+> shared memory doesn't return such size whereas it is available in the
+> optee output buffer.
+> 
+> As an example, the base protocol compares the response size with the
+> expected result when requesting the list of protocol which triggers a
+> warning with optee shared memory:
+> 
+> [...]
 
-Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
-Cc: Muchun Song <songmuchun@bytedance.com>
-Cc: Sen Wang <wangsen.harry@bytedance.com>
-Cc: Wenliang Wang <wangwenliang.1995@bytedance.com>
----
- drivers/net/ethernet/intel/ice/ice_main.c | 6 ------
- 1 file changed, 6 deletions(-)
+Applied to sudeep.holla/linux (for-next/juno), thanks!
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index c1ac2f746714..6bf6d8b5a967 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -5313,12 +5313,6 @@ static pci_ers_result_t ice_pci_err_slot_reset(struct pci_dev *pdev)
- 			result = PCI_ERS_RESULT_DISCONNECT;
- 	}
- 
--	err = pci_aer_clear_nonfatal_status(pdev);
--	if (err)
--		dev_dbg(&pdev->dev, "pci_aer_clear_nonfatal_status() failed, error %d\n",
--			err);
--		/* non-fatal, continue */
--
- 	return result;
- }
- 
--- 
-2.20.1
+[1/1] scmi/optee: fix response size warning
+      https://git.kernel.org/sudeep.holla/c/75c8f430d8
+
+--
+Regards,
+Sudeep
 

@@ -2,97 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C4F55FBC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:22:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BD955FBC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231815AbiF2JVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 05:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
+        id S232716AbiF2JV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 05:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232389AbiF2JVe (ORCPT
+        with ESMTP id S232696AbiF2JVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 05:21:34 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190D2369CF
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 02:21:33 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id z7so21266838edm.13
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 02:21:33 -0700 (PDT)
+        Wed, 29 Jun 2022 05:21:55 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665FE369D0;
+        Wed, 29 Jun 2022 02:21:52 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id n10so8124786qkn.10;
+        Wed, 29 Jun 2022 02:21:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=pnMRKilWNlAu7873VFaFlK0hNBIHlTBOyKkOKC5rhcg=;
-        b=RHgCCOWVYiUr4mFZYHlJl3xoQlwmsZleH4Rn+4lQHL85R+wedzxgBEXinM7ZKrpNxp
-         S1J64FLsZQj11uL1G8rrUKj5ghgyZGUlWfyaknhgHYS19sokZlSbH+bTM2j0EbstjXVA
-         7NmYWYAj8+hH51Lxp2/mXT1th0tyyI7tC+HvHe7s8BSD+c3NRr31vHNu03lBlDBljFEE
-         VYjGfvEgvXBlvfBkxBGkJl4hjC6xfDlxa1oZdxGUt0DVXArRebuD+OYXrCRHoekuAb45
-         ZHWHsk7lOMSKQKDhL3ZWuacU3f1NFVxqxX+1afaYYdfKxLnf+hVxeOaNUje9ncqkNKnn
-         dMAw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=xyKbiBGwe12VV4+hIYZhHutByUcZnqEu2BFeb6ToEVc=;
+        b=Ru4+mVFxOSkJ7OAFQ3tloi+JJTVyK6/e8NHNSXgkYVnfAnpZbGlH720kSMNkKOVNoP
+         3Nf4ML7iI3+jAkW8vmuq23ATUDiO3PWYg/Vh23hSlsSHBeWY6MhQACDOkYrFr/lOW8Qj
+         7YqBUk5cH6Ml4/AkHJLtDBakAc9A9jIap8JlgdNpZPDxnzdalgk2PN5Wie44gGvUj3dD
+         JhTuI+9FDaY/iuse7Xs07LBLHCDBSaFcvp5KhkqCJt/jwT1AhgO6PQ2oThQdwLEJN5ni
+         +vSUgmu1TF/OarZedRIndxHmBWYxfjqyr9fnJnmS/ugldZU2Vl1lwGhWAUVl8C1rFhg4
+         KX6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pnMRKilWNlAu7873VFaFlK0hNBIHlTBOyKkOKC5rhcg=;
-        b=aBR0ADRocGOV0u+4VU0N2H0s0u8HMJ4uSxxPmk8tOARDEzbT/RyzasMSwv5Wng+Jgk
-         TFL6e26TlEQ7g5nOZXSxf4xO2U7ZGmKg9wDtI8fT88JRksegONsZzLjerOcWG/30C+Cy
-         F7bEcQaKA3OtIef57m+zvnybXeYMTUhQ0D01YjKleroZOTNoW1FDvfJoGOCE0w6CQzcy
-         sFPP/rOa1aBMh3jQriscPu9v8PYpm8MPEuF01xg6zSd7cw94kxAdEX0ABnP2yDUCmNAM
-         XdATF4oyANVlAQ3u6kCer2uAMlZN+JOtagOdNEb7mEs7CjX/oNmOBGVu0uIzotjfcE1K
-         R6FA==
-X-Gm-Message-State: AJIora/SnpHG/MDePg8w6puYDqgz3ahtw+ztJFW/7eyFWUsHndW3fpZG
-        F5k1fWCW9cNyztNSPHHOmz+9NA==
-X-Google-Smtp-Source: AGRyM1uhhoawHmkEy8UOafBQlOcWUDgmphxib0zUjuNZ/HcZ5Eu7QMkJt4f6rtk8lrnS8fgVD513fw==
-X-Received: by 2002:a50:ce4a:0:b0:435:c543:87e8 with SMTP id k10-20020a50ce4a000000b00435c54387e8mr2886466edj.295.1656494491708;
-        Wed, 29 Jun 2022 02:21:31 -0700 (PDT)
-Received: from [192.168.0.183] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id i21-20020a508715000000b004357558a243sm11077558edb.55.2022.06.29.02.21.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 02:21:30 -0700 (PDT)
-Message-ID: <33def8ba-2ca3-c2a3-57ff-9b20dbc2337c@linaro.org>
-Date:   Wed, 29 Jun 2022 11:21:29 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=xyKbiBGwe12VV4+hIYZhHutByUcZnqEu2BFeb6ToEVc=;
+        b=piDf4eSaRELe9V51n0kAbVRfEHfr3X9KYN3W8IkDrOU5SzP9ENRzrHqc1BXj10Q0Gm
+         xITQ8wAWufpMfk+TubnZShMntDh14vm4cq3YFIRg8dEb2MgBEiudeUclCOQKSOvhd3MJ
+         GcXnSdAfjMv/AyyqlwDzqQ8DfA70Hh5ckwCX/+so13DGRjLrGyrHYINK+EG0I+QtEQuf
+         ji5A8AO/1fXY0a64RivKpkYXKxXZHhk/PYJX4XX7u5jtl35HDRKKN9nEYS7clRYLQkvx
+         ZEdiSHrYGs+dYLBExU+qz81gagWTbq1e+BgEncVdyrATsJCSlUUCB9DpHI7gjBMRLOhC
+         GYNg==
+X-Gm-Message-State: AJIora/DjjtyoENp4B7qhYqLela/4dAyceKaBI7Zl8xak7+valqLScb3
+        TwV4BUfMct2fO9H3sZWakipiI9Z92pDKpsS85m4=
+X-Google-Smtp-Source: AGRyM1uSJPl40kSPwFIPa9wBNkco+vAkh6Zme01ouImI9Tnrlo2A3m6pVGIB9ptmIFV7EyqMJf7DSjFQQ8WmaPi1MQ8=
+X-Received: by 2002:a05:620a:1a28:b0:6b1:4d4d:c7c3 with SMTP id
+ bk40-20020a05620a1a2800b006b14d4dc7c3mr435716qkb.522.1656494511367; Wed, 29
+ Jun 2022 02:21:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 2/2] NFC: nxp-nci: don't print header length mismatch
- on i2c error
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     =?UTF-8?Q?Cl=c3=a9ment_Perrochaud?= <clement.perrochaud@nxp.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220627170643.98239-1-michael@walle.cc>
- <20220627170643.98239-2-michael@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220627170643.98239-2-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220624104420.257368-1-robimarko@gmail.com>
+In-Reply-To: <20220624104420.257368-1-robimarko@gmail.com>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Wed, 29 Jun 2022 11:21:40 +0200
+Message-ID: <CAOX2RU5iou-N2N0N9bMD49AufXMe04U84DNARGfJzUX2CdFzrQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] PCI: qcom: Move IPQ8074 DBI register accesses
+ after phy_power_on()
+To:     Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        lpieralisi@kernel.org, Rob Herring <robh@kernel.org>, kw@linux.com,
+        Bjorn Helgaas <bhelgaas@google.com>, p.zabel@pengutronix.de,
+        jingoohan1@gmail.com, linux-pci@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        johan+linaro@kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2022 19:06, Michael Walle wrote:
-> Don't print a misleading header length mismatch error if the i2c call
-> returns an error. Instead just return the error code without any error
-> message.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+On Fri, 24 Jun 2022 at 12:44, Robert Marko <robimarko@gmail.com> wrote:
+>
+> Currently the Gen2 port in IPQ8074 will cause the system to hang as it
+> accesses DBI registers in qcom_pcie_init_2_3_3(), and those are only
+> accesible after phy_power_on().
+>
+> Move the DBI read/writes to a new qcom_pcie_post_init_2_3_3(), which is
+> executed after phy_power_on().
+>
+> Fixes: a0fd361db8e5 ("PCI: dwc: Move "dbi", "dbi2", and "addr_space" resource setup into common code")
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+Hi,
+Bjorn, is there something else I need to fixup?
+
+Regards,
+Robert
 > ---
-> changes since v1:
->  - reworded commit message
->  - removed fixes tag
->  - removed nfc_err() call, as it is done elsewhere in this driver
->  - nxp_nci_i2c_fw_read() has the same issue. also handle it there
-> 
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+> Changes in v4:
+> * Correct title and description
+>
+> Changes in v3:
+> * Make sure it applies onto 5.19-rc3
+> * Update the commit description to make it clear this only affects the
+> Gen2 port
+>
+> Changes in v2:
+> * Rebase onto next-20220621
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom.c | 48 +++++++++++++++-----------
+>  1 file changed, 28 insertions(+), 20 deletions(-)
+>
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index a1f1aca2fb59..24708d5d817d 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -1061,9 +1061,7 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+>         struct qcom_pcie_resources_2_3_3 *res = &pcie->res.v2_3_3;
+>         struct dw_pcie *pci = pcie->pci;
+>         struct device *dev = pci->dev;
+> -       u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+>         int i, ret;
+> -       u32 val;
+>
+>         for (i = 0; i < ARRAY_SIZE(res->rst); i++) {
+>                 ret = reset_control_assert(res->rst[i]);
+> @@ -1120,6 +1118,33 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+>                 goto err_clk_aux;
+>         }
+>
+> +       return 0;
+> +
+> +err_clk_aux:
+> +       clk_disable_unprepare(res->ahb_clk);
+> +err_clk_ahb:
+> +       clk_disable_unprepare(res->axi_s_clk);
+> +err_clk_axi_s:
+> +       clk_disable_unprepare(res->axi_m_clk);
+> +err_clk_axi_m:
+> +       clk_disable_unprepare(res->iface);
+> +err_clk_iface:
+> +       /*
+> +        * Not checking for failure, will anyway return
+> +        * the original failure in 'ret'.
+> +        */
+> +       for (i = 0; i < ARRAY_SIZE(res->rst); i++)
+> +               reset_control_assert(res->rst[i]);
+> +
+> +       return ret;
+> +}
+> +
+> +static int qcom_pcie_post_init_2_3_3(struct qcom_pcie *pcie)
+> +{
+> +       struct dw_pcie *pci = pcie->pci;
+> +       u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> +       u32 val;
+> +
+>         writel(SLV_ADDR_SPACE_SZ,
+>                 pcie->parf + PCIE20_v3_PARF_SLV_ADDR_SPACE_SIZE);
+>
+> @@ -1147,24 +1172,6 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+>                 PCI_EXP_DEVCTL2);
+>
+>         return 0;
+> -
+> -err_clk_aux:
+> -       clk_disable_unprepare(res->ahb_clk);
+> -err_clk_ahb:
+> -       clk_disable_unprepare(res->axi_s_clk);
+> -err_clk_axi_s:
+> -       clk_disable_unprepare(res->axi_m_clk);
+> -err_clk_axi_m:
+> -       clk_disable_unprepare(res->iface);
+> -err_clk_iface:
+> -       /*
+> -        * Not checking for failure, will anyway return
+> -        * the original failure in 'ret'.
+> -        */
+> -       for (i = 0; i < ARRAY_SIZE(res->rst); i++)
+> -               reset_control_assert(res->rst[i]);
+> -
+> -       return ret;
+>  }
+>
+>  static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+> @@ -1596,6 +1603,7 @@ static const struct qcom_pcie_ops ops_2_4_0 = {
+>  static const struct qcom_pcie_ops ops_2_3_3 = {
+>         .get_resources = qcom_pcie_get_resources_2_3_3,
+>         .init = qcom_pcie_init_2_3_3,
+> +       .post_init = qcom_pcie_post_init_2_3_3,
+>         .deinit = qcom_pcie_deinit_2_3_3,
+>         .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+>  };
+> --
+> 2.36.1
+>

@@ -2,124 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C5555FE37
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A90A55FE47
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231955AbiF2LHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 07:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
+        id S231401AbiF2LMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 07:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231787AbiF2LHb (ORCPT
+        with ESMTP id S229952AbiF2LMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 07:07:31 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 006983D482
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 04:07:29 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 98138152B;
-        Wed, 29 Jun 2022 04:07:29 -0700 (PDT)
-Received: from [10.1.196.218] (eglon.cambridge.arm.com [10.1.196.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 21A483F66F;
-        Wed, 29 Jun 2022 04:07:27 -0700 (PDT)
-Subject: Re: [PATCH v5 04/21] x86/resctrl: Group struct rdt_hw_domain cleanup
-To:     "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        "lcherian@marvell.com" <lcherian@marvell.com>,
-        "bobo.shaobowang@huawei.com" <bobo.shaobowang@huawei.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Xin Hao <xhao@linux.alibaba.com>,
-        "xingxin.hx@openanolis.org" <xingxin.hx@openanolis.org>,
-        "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>
-References: <20220622164629.20795-1-james.morse@arm.com>
- <20220622164629.20795-5-james.morse@arm.com>
- <TYAPR01MB6330E0E18CF4A229B38511648BBB9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <4ae1e6d4-89c9-ee6a-f74f-73fa84b406e5@arm.com>
-Date:   Wed, 29 Jun 2022 12:07:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 29 Jun 2022 07:12:43 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AB6366AC
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 04:12:41 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id q6so31778810eji.13
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 04:12:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZklBbrhWeRu7F0FN0Aat62/hrdRJUTCtSkFm/hGOW5k=;
+        b=Cn585zu3809Rjl4M/+WAgSXANgY9EbR6kBiumg85SPIlAFcp2ij9ntr7mWL+wma/Oh
+         xXudPLJponuwkVBdm8CrU7H9IzMb8oRoeS+Frzi1yT1RvMofP0FgwTCn2JvUdez3GKCA
+         2O++VwJNa3uaaMZZdor2aoP0ayFFqYKbaUab2mqH2+kRRweYywTidyl3+g9bRtiIzMDe
+         a6Iu0JEPBZnPEARMY6JaS+uzcTT5jxphvnqyaJHkPrQ6VY07IoMVtcAsgs1yHz2/Kexv
+         d7m2dut6jAWbcPaqcx/aQppAFTGVSa8ue73kHVkRud5H9d3/DNt+RX9ViNIwLUwYZ/Yi
+         npHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZklBbrhWeRu7F0FN0Aat62/hrdRJUTCtSkFm/hGOW5k=;
+        b=tdcGT6M0EDmAlBjBFRzFl2DKUQCuNjIgsoDpfB6joK/eamdPrkHPF9Kmn87xlnZdxN
+         Xvgt305yGMNZWG+2LykWa1BWxhOYuYc0OcMtdbG3jdChEZTSKWFpUDVlB/X4bc1VqUnd
+         +eTdrJGIWApnqtWiLQGp1Be0iz2BJCSSSzLC58WxdC6rWLEo1FgMVqR1P0I1QOjanxBf
+         RWuzPWzUQPNuZzsSDnukEVio/8rOn0KE0cWW7slIAY5U1Krae208b693ib+KqQ+/RbTb
+         y6BcHsg6d1pZm2IMwRA4LZsrkkZjoi4lSa6hzgb4vu54VhCIKBuXBg66n63yrAVteNz8
+         4K+A==
+X-Gm-Message-State: AJIora8skdUBEfWL7d3rmrTnmBr4jd6o0j72ebGV175r1hXoaAw56KSY
+        ZymAFXBILkfZudoZXyYhKO/0NA==
+X-Google-Smtp-Source: AGRyM1scRNZiTlfpuZxRNQgJz5mgfY4et1r59dsU2jOJq3RWl2MpKqBbzxXhl1VxC9ZRgy+vujVKEw==
+X-Received: by 2002:a17:906:6448:b0:723:2e05:af41 with SMTP id l8-20020a170906644800b007232e05af41mr2735760ejn.423.1656501159622;
+        Wed, 29 Jun 2022 04:12:39 -0700 (PDT)
+Received: from [192.168.0.184] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id s1-20020aa7c541000000b004357171dcccsm11162081edr.12.2022.06.29.04.12.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 04:12:38 -0700 (PDT)
+Message-ID: <3ad4876b-1efa-c4c4-2139-3823cf80ff68@linaro.org>
+Date:   Wed, 29 Jun 2022 13:12:37 +0200
 MIME-Version: 1.0
-In-Reply-To: <TYAPR01MB6330E0E18CF4A229B38511648BBB9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=iso-2022-jp
-Content-Language: en-GB
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 2/4] dt-bindings: arm: msm: Convert kpss-acc driver
+ Documentation to yaml
+Content-Language: en-US
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
+References: <20220628184137.21678-1-ansuelsmth@gmail.com>
+ <20220628184137.21678-3-ansuelsmth@gmail.com>
+ <e625e2c9-7321-51fa-b9bb-40ed9742ffcc@linaro.org>
+ <62bc2c1d.1c69fb81.09d2.e244@mx.google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <62bc2c1d.1c69fb81.09d2.e244@mx.google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shaopeng,
-
-On 29/06/2022 09:33, tan.shaopeng@fujitsu.com wrote:
->> domain_add_cpu() and domain_remove_cpu() need to kfree() the child arrays
->> that were allocated by domain_setup_ctrlval().
+On 29/06/2022 12:40, Christian Marangi wrote:
+> On Wed, Jun 29, 2022 at 08:14:12AM +0200, Krzysztof Kozlowski wrote:
+>> On 28/06/2022 20:41, Christian Marangi wrote:
+>>> Convert kpss-acc driver Documentation to yaml.
+>>> The original Documentation was wrong all along. Fix it while we are
+>>> converting it.
+>>> The example was wrong as kpss-acc-v2 should only expose the regs but we
+>>> don't have any driver that expose additional clocks. The kpss-acc driver
+>>> is only specific to v1. For this exact reason, limit all the additional
+>>> bindings (clocks, clock-names, clock-output-names and #clock-cells) to
+>>> v1 and also flag that these bindings should NOT be used for v2.
+>>>
+>>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+>>> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 >>
->> As this memory is moved around, and new arrays are created, adjusting the
->> error handling cleanup code becomes noisier.
+>> This is still not fixed and not tested. Since 4 versions of this
+>> patchset (previously was part of other set).
 >>
->> To simplify this, move all the kfree() calls into a domain_free() helper.
->> This depends on struct rdt_hw_domain being kzalloc()d, allowing it to
->> unconditionally kfree() all the child arrays.
-
->> diff --git a/arch/x86/kernel/cpu/resctrl/core.c
->> b/arch/x86/kernel/cpu/resctrl/core.c
->> index 25f30148478b..e37889f7a1a5 100644
->> --- a/arch/x86/kernel/cpu/resctrl/core.c
->> +++ b/arch/x86/kernel/cpu/resctrl/core.c
->> @@ -414,6 +414,13 @@ void setup_default_ctrlval(struct rdt_resource *r, u32
->> *dc, u32 *dm)
->>  	}
->>  }
+>> I retract my review. Please test the bindings.
 >>
->> +static void domain_free(struct rdt_hw_domain *hw_dom) {
->> +	kfree(hw_dom->ctrl_val);
->> +	kfree(hw_dom->mbps_val);
->> +	kfree(hw_dom);
->> +}
->> +
->>  static int domain_setup_ctrlval(struct rdt_resource *r, struct rdt_domain *d)  {
->>  	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r); @@ -488,7
->> +495,7 @@ static void domain_add_cpu(int cpu, struct rdt_resource *r)
->>  	rdt_domain_reconfigure_cdp(r);
->>
->>  	if (r->alloc_capable && domain_setup_ctrlval(r, d)) {
->> -		kfree(hw_dom);
->> +		domain_free(hw_dom);
-
-> domain_free(hw_dom) is executed when fails allocated hw_dom->ctrl_val 
-> by kmalloc_array() in domain_setup_ctrlval(r, d), 
-> but hw_dom->ctrl_val is freed in domain_free(hw_dom).
+>> Best regards,
+>> Krzysztof
 > 
-> Also, hw_dom->mbps_val is not allocated at this time,
-> but it is freed in domain_free(hw_dom).
+> Thing is that I tested them and on my side I don't have such errors.
 
-Yes, this is deliberate. These cases end up doing:
-|	kfree(NULL);
-which is harmless. kfree() checks for a NULL argument and does nothing.
+Then maybe update your dtschema because I can easily see them.
 
-The alternative would be to spread the cleanup all over the place, so it only calls
-kfree() on something that has been allocated - this would be more complex and easier to
-miss something.
+> 
+> I'm using the linux-next branch. Should I use something else that have
+> newer schema files?
+> 
+> Also on other patch there are some error reported that are unrelated to
+> my change and that looks strange.
 
+The other might be not be relevant, but this one is real and reproducible.
 
-> In addition，I tested this patch series on Intel(R) Xeon(R) Gold 6254 CPU with resctrl selftest.
-> It is no problem.
-
-Thanks!
-
-James
+Best regards,
+Krzysztof

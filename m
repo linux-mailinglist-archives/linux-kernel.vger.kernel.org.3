@@ -2,74 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F3A55F4F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 06:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 303DB55F50B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 06:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbiF2EM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 00:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
+        id S230489AbiF2EQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 00:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbiF2EMH (ORCPT
+        with ESMTP id S229625AbiF2EQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 00:12:07 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E453668B
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 21:12:01 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-101ec2d6087so19846233fac.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 21:12:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tAP+PbL6RNJrAZQ1kiclVlJ2gWoxZ/c6e85jdKH8/TE=;
-        b=yvp9C27Hoo/Fx0DgAXVVxmPOuaYx9wHUfAYyx8EpCbHvfZr9Na+pB/B3F73hdE+Wf/
-         0j+HwM+gQBcNFsh2QZkxGRTxxvr/OSipBusyxZIvCbudnTOor417TRiAoTM7bVc2WLdv
-         Quc48PKceQOa8dplnuK4zAP74RCWxxAt4hTgechnk1xtHCLiwbo+LSeRc1JYN/nYyfs0
-         Vrw8ll0LwIVCj+x1tBXQLL5Bmqz9aV4oM4yqAtyEvERlBY8YhoTmEeCrl35MPNBmw7Iv
-         mYrWAoNkJeRKjV9Xh3GE6DOG/UcfZ+up51g3fLEE+ql3NGHAtk7OdWx99jJ8jGB5L6pG
-         wjQA==
+        Wed, 29 Jun 2022 00:16:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9493CC34
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 21:16:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656476177;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PtwcZuLsTm8Dg1uSD41ajc7r0fnpDwfXXB+rZRvhTko=;
+        b=NGEG36ikpiamtpCHP8JqEmdlDcN37BWqo3yz0oKlfDtt7aZnW3sNdYZmnzDfRXHnTzzfZX
+        6XGyC76OalpGTt5aucKspeelNvry5f415L7k6uiolWivG+31mo1mValcG88NmWGRMgKJPm
+        zUa3hEtUlaHSA6OrjFBhsRjBmqiHi0g=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-505-lulO-6U0OAiZZF77VqWpfw-1; Wed, 29 Jun 2022 00:16:08 -0400
+X-MC-Unique: lulO-6U0OAiZZF77VqWpfw-1
+Received: by mail-lj1-f200.google.com with SMTP id g25-20020a2e9e59000000b0025baf0470feso1519365ljk.8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 21:16:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tAP+PbL6RNJrAZQ1kiclVlJ2gWoxZ/c6e85jdKH8/TE=;
-        b=mHSAUTIUrTuQCQhxfttBHNw0XtQBGwlMg62GRLCFoYR5NThpqiol7QICy8zwmrMi0y
-         NLn+06LGVb9SQPbvz2sU3RqjZT6byzK3X8zE7THYgoeRyldY3kEhngXX1+Lxcii+iJs4
-         6LRSbIWSXLXekWvQ9msYFbA2nsGY4P7scIDc0BJ4ZJxlbrcwKd7o7lHwQuwsDYnw7uNT
-         tGDQKVhdvCKljURz1u+wOhcaL9dz5snMZ11jmaoQ7j327bfymY8XSAVX9iEX+D6DaxxZ
-         QBoTdjr+ERrRsr2BQBq+IT5/nk3cXbm+JyIoCI5BYCoexb8UuWmndmo2d+QaSVDnNLcx
-         92Bg==
-X-Gm-Message-State: AJIora9kTtJqOv5mtsPcCT/J+Tj8GPkHRo1ncYe+DE18eiPbtpC0ZGqq
-        WamgkoamB9ofDi92mW57gFH2YQ==
-X-Google-Smtp-Source: AGRyM1sx0/VeCvaIjTAwxOXXo+F987H+tSuTQq4hsJCE4fD93cTh9In8MJq7cH/4ZTHmecg7wRyZ2g==
-X-Received: by 2002:a05:6870:350:b0:e2:6f65:b91f with SMTP id n16-20020a056870035000b000e26f65b91fmr1902292oaf.192.1656475920752;
-        Tue, 28 Jun 2022 21:12:00 -0700 (PDT)
-Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id p12-20020a9d4e0c000000b00616ec82b29bsm1578692otf.35.2022.06.28.21.11.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 21:11:59 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Johan Hovold <johan@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v3 5/5] arm64: dts: qcom: add SA8540P and ADP
-Date:   Tue, 28 Jun 2022 21:14:38 -0700
-Message-Id: <20220629041438.1352536-6-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220629041438.1352536-1-bjorn.andersson@linaro.org>
-References: <20220629041438.1352536-1-bjorn.andersson@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PtwcZuLsTm8Dg1uSD41ajc7r0fnpDwfXXB+rZRvhTko=;
+        b=qdSvYTJ0TWUDvdF4kUJKqL0gKx/+T2zelSWv7tEJ3hYuiR8Srmp8c/sqzUgwMoCvi3
+         TQe0aC8NNeXEqoiS/WcoP8doPCJcxAdpA3Eiwo8SMz97XbA1OLki0CZdkXOoICjuM46P
+         4LMeVDmqFT3FXrNhKb/wlKXO6cC/uqErtUQtDh8nbEeYaaak2nYKrLf60tl2VN0PawqO
+         mtBMUNNW/d//AyzgL2K8zSfO9yUf1fD9xeqD24TMKtTuBf/b16msJLDFGp2ZVpw/12fy
+         H0l66ZnsXRtdmA7H9g7TQgy6VA+u0sZ27VazyEz0k2B5ApRlkvM3giSwfqeNlDGKraY0
+         jVAw==
+X-Gm-Message-State: AJIora8WF9zx+Gc14uJW1jdmX5MERgz/gABWzbJuSpSMo400vBCYw4V+
+        ZcqlB1iTiZRUpS5JcyJZtwjKVYQSxSlv3uM8qc1g+i8YwFyYiOMMZPULIf80XBlFT8BHIeaO9lo
+        wcZHG30je4IG1A9LyjryXmAi0P23JKxpgfmaYbxFd
+X-Received: by 2002:a05:6512:22c3:b0:47f:704b:3820 with SMTP id g3-20020a05651222c300b0047f704b3820mr752411lfu.411.1656476166629;
+        Tue, 28 Jun 2022 21:16:06 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1upMFAw7enEFnGLqSFGGLIxAK2UAfb9LAQXHDG8zw5aYCyUArCflbvxul/RikhyXAcaaorbxWBe3MU1XUQAnHc=
+X-Received: by 2002:a05:6512:22c3:b0:47f:704b:3820 with SMTP id
+ g3-20020a05651222c300b0047f704b3820mr752395lfu.411.1656476166417; Tue, 28 Jun
+ 2022 21:16:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220623160738.632852-1-eperezma@redhat.com> <20220623160738.632852-4-eperezma@redhat.com>
+In-Reply-To: <20220623160738.632852-4-eperezma@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 29 Jun 2022 12:15:55 +0800
+Message-ID: <CACGkMEt6YQvtyYwkYVxmZ01pZJK9PMFM2oPTVttPZ_kZDY-9Jw@mail.gmail.com>
+Subject: Re: [PATCH v6 3/4] vhost-vdpa: uAPI to suspend the device
+To:     =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        kvm <kvm@vger.kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>,
+        Parav Pandit <parav@nvidia.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Cindy Lu <lulu@redhat.com>,
+        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        "Uminski, Piotr" <Piotr.Uminski@intel.com>,
+        habetsm.xilinx@gmail.com, "Dawar, Gautam" <gautam.dawar@amd.com>,
+        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        Laurent Vivier <lvivier@redhat.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Dinan Gunawardena <dinang@xilinx.com>,
+        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
+        Martin Porter <martinpo@xilinx.com>,
+        Eli Cohen <elic@nvidia.com>, ecree.xilinx@gmail.com,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Harpreet Singh Anand <hanand@xilinx.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Zhang Min <zhang.min9@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,601 +97,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce the Qualcomm SA8540P automotive platform and the SA8295P ADP
-development board.
+On Fri, Jun 24, 2022 at 12:08 AM Eugenio P=C3=A9rez <eperezma@redhat.com> w=
+rote:
+>
+> The ioctl adds support for suspending the device from userspace.
+>
+> This is a must before getting virtqueue indexes (base) for live migration=
+,
+> since the device could modify them after userland gets them. There are
+> individual ways to perform that action for some devices
+> (VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no
+> way to perform it for any vhost device (and, in particular, vhost-vdpa).
+>
+> After a successful return of the ioctl call the device must not process
+> more virtqueue descriptors. The device can answer to read or writes of
+> config fields as if it were not suspended. In particular, writing to
+> "queue_enable" with a value of 1 will not make the device start
+> processing buffers of the virtqueue.
+>
+> Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> ---
+>  drivers/vhost/vdpa.c       | 19 +++++++++++++++++++
+>  include/uapi/linux/vhost.h | 14 ++++++++++++++
+>  2 files changed, 33 insertions(+)
+>
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index 3d636e192061..7fa671ac4bdf 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -478,6 +478,22 @@ static long vhost_vdpa_get_vqs_count(struct vhost_vd=
+pa *v, u32 __user *argp)
+>         return 0;
+>  }
+>
+> +/* After a successful return of ioctl the device must not process more
+> + * virtqueue descriptors. The device can answer to read or writes of con=
+fig
+> + * fields as if it were not suspended. In particular, writing to "queue_=
+enable"
+> + * with a value of 1 will not make the device start processing buffers.
+> + */
+> +static long vhost_vdpa_suspend(struct vhost_vdpa *v)
+> +{
+> +       struct vdpa_device *vdpa =3D v->vdpa;
+> +       const struct vdpa_config_ops *ops =3D vdpa->config;
+> +
+> +       if (!ops->suspend)
+> +               return -EOPNOTSUPP;
+> +
+> +       return ops->suspend(vdpa);
+> +}
+> +
+>  static long vhost_vdpa_vring_ioctl(struct vhost_vdpa *v, unsigned int cm=
+d,
+>                                    void __user *argp)
+>  {
+> @@ -654,6 +670,9 @@ static long vhost_vdpa_unlocked_ioctl(struct file *fi=
+lep,
+>         case VHOST_VDPA_GET_VQS_COUNT:
+>                 r =3D vhost_vdpa_get_vqs_count(v, argp);
+>                 break;
+> +       case VHOST_VDPA_SUSPEND:
+> +               r =3D vhost_vdpa_suspend(v);
+> +               break;
+>         default:
+>                 r =3D vhost_dev_ioctl(&v->vdev, cmd, argp);
+>                 if (r =3D=3D -ENOIOCTLCMD)
+> diff --git a/include/uapi/linux/vhost.h b/include/uapi/linux/vhost.h
+> index cab645d4a645..6d9f45163155 100644
+> --- a/include/uapi/linux/vhost.h
+> +++ b/include/uapi/linux/vhost.h
+> @@ -171,4 +171,18 @@
+>  #define VHOST_VDPA_SET_GROUP_ASID      _IOW(VHOST_VIRTIO, 0x7C, \
+>                                              struct vhost_vring_state)
+>
+> +/* Suspend or resume a device so it does not process virtqueue requests =
+anymore
+> + *
+> + * After the return of ioctl with suspend !=3D 0, the device must finish=
+ any
+> + * pending operations like in flight requests.
 
-The SA8540P and SC8280XP are fairly similar, so the SA8540P is built
-ontop of the SC8280XP dtsi to reduce duplication. As more advanced
-features are integrated this might be re-evaluated.
+I'm not sure we should mandate the flush here. This probably blocks us
+from adding inflight descriptor reporting in the future.
 
-This initial contribution supports SMP, CPUFreq, cluster idle, UFS, RPMh
-regulators, debug UART, PMICs, remoteprocs (NSPs crashes shortly after
-booting) and USB.
+Thanks
 
-The SA8295P ADP contains four PM8450 PMICs, which according to their
-revid are compatible with PM8150. They are defined within the ADP for
-now, to avoid creating additional .dtsi files for PM8150 with just
-addresses changed - and to allow using the labels from the schematics.
-
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
----
-
-Changes since v2:
-- Sorted "status" property last throughout the patch
-- Dropped empty reserved-memory node
-- Dropped multiport vbus-enable pinctrl states for now
-
- arch/arm64/boot/dts/qcom/Makefile        |   1 +
- arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 406 +++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sa8540p.dtsi    | 133 ++++++++
- 3 files changed, 540 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sa8295p-adp.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sa8540p.dtsi
-
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index ceeae094a59f..2f416b84b71c 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -52,6 +52,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-1000.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-4000.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sa8155p-adp.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sa8295p-adp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-idp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1-lte.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-new file mode 100644
-index 000000000000..d4baa2460e4a
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-@@ -0,0 +1,406 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2022, Linaro Limited
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-+#include <dt-bindings/spmi/spmi.h>
-+
-+#include "sa8540p.dtsi"
-+
-+/ {
-+	model = "Qualcomm SA8295P ADP";
-+	compatible = "qcom,sa8295p-adp", "qcom,sa8540p";
-+
-+	aliases {
-+		serial0 = &qup2_uart17;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+};
-+
-+&apps_rsc {
-+	pmm8540-a-regulators {
-+		compatible = "qcom,pm8150-rpmh-regulators";
-+		qcom,pmic-id = "a";
-+
-+		vreg_l3a: ldo3 {
-+			regulator-name = "vreg_l3a";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1208000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l5a: ldo5 {
-+			regulator-name = "vreg_l5a";
-+			regulator-min-microvolt = <912000>;
-+			regulator-max-microvolt = <912000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l7a: ldo7 {
-+			regulator-name = "vreg_l7a";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l13a: ldo13 {
-+			regulator-name = "vreg_l13a";
-+			regulator-min-microvolt = <3072000>;
-+			regulator-max-microvolt = <3072000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+	};
-+
-+	pmm8540-c-regulators {
-+		compatible = "qcom,pm8150-rpmh-regulators";
-+		qcom,pmic-id = "c";
-+
-+		vreg_l1c: ldo1 {
-+			regulator-name = "vreg_l1c";
-+			regulator-min-microvolt = <912000>;
-+			regulator-max-microvolt = <912000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l2c: ldo2 {
-+			regulator-name = "vreg_l2c";
-+			regulator-min-microvolt = <3072000>;
-+			regulator-max-microvolt = <3072000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l3c: ldo3 {
-+			regulator-name = "vreg_l3c";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l4c: ldo4 {
-+			regulator-name = "vreg_l4c";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1208000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l6c: ldo6 {
-+			regulator-name = "vreg_l6c";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l7c: ldo7 {
-+			regulator-name = "vreg_l7c";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l10c: ldo10 {
-+			regulator-name = "vreg_l10c";
-+			regulator-min-microvolt = <2504000>;
-+			regulator-max-microvolt = <2504000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l17c: ldo17 {
-+			regulator-name = "vreg_l17c";
-+			regulator-min-microvolt = <2504000>;
-+			regulator-max-microvolt = <2504000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+	};
-+
-+	pmm8540-g-regulators {
-+		compatible = "qcom,pm8150-rpmh-regulators";
-+		qcom,pmic-id = "g";
-+
-+		vreg_l3g: ldo3 {
-+			regulator-name = "vreg_l3g";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l7g: ldo7 {
-+			regulator-name = "vreg_l7g";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l8g: ldo8 {
-+			regulator-name = "vreg_l8g";
-+			regulator-min-microvolt = <880000>;
-+			regulator-max-microvolt = <880000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+	};
-+};
-+
-+&qup2 {
-+	status = "okay";
-+};
-+
-+&qup2_uart17 {
-+	compatible = "qcom,geni-debug-uart";
-+	status = "okay";
-+};
-+
-+&remoteproc_adsp {
-+	firmware-name = "qcom/sa8540p/adsp.mbn";
-+	status = "okay";
-+};
-+
-+&remoteproc_nsp0 {
-+	firmware-name = "qcom/sa8540p/cdsp.mbn";
-+	status = "okay";
-+};
-+
-+&remoteproc_nsp1 {
-+	firmware-name = "qcom/sa8540p/cdsp1.mbn";
-+	status = "okay";
-+};
-+
-+&spmi_bus {
-+	pm8450a: pmic@0 {
-+		compatible = "qcom,pm8150", "qcom,spmi-pmic";
-+		reg = <0x0 SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		pm8450a_gpios: gpio@c000 {
-+			compatible = "qcom,pm8150-gpio";
-+			reg = <0xc000>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
-+	pm8450c: pmic@4 {
-+		compatible = "qcom,pm8150", "qcom,spmi-pmic";
-+		reg = <0x4 SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		pm8450c_gpios: gpio@c000 {
-+			compatible = "qcom,pm8150-gpio";
-+			reg = <0xc000>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
-+	pm8450e: pmic@8 {
-+		compatible = "qcom,pm8150", "qcom,spmi-pmic";
-+		reg = <0x8 SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		pm8450e_gpios: gpio@c000 {
-+			compatible = "qcom,pm8150-gpio";
-+			reg = <0xc000>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
-+	pm8450g: pmic@c {
-+		compatible = "qcom,pm8150", "qcom,spmi-pmic";
-+		reg = <0xc SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		pm8450g_gpios: gpio@c000 {
-+			compatible = "qcom,pm8150-gpio";
-+			reg = <0xc000>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+};
-+
-+&ufs_mem_hc {
-+	reset-gpios = <&tlmm 228 GPIO_ACTIVE_LOW>;
-+
-+	vcc-supply = <&vreg_l17c>;
-+	vcc-max-microamp = <800000>;
-+	vccq-supply = <&vreg_l6c>;
-+	vccq-max-microamp = <900000>;
-+
-+	status = "okay";
-+};
-+
-+&ufs_mem_phy {
-+	vdda-phy-supply = <&vreg_l8g>;
-+	vdda-pll-supply = <&vreg_l3g>;
-+
-+	status = "okay";
-+};
-+
-+&ufs_card_hc {
-+	reset-gpios = <&tlmm 229 GPIO_ACTIVE_LOW>;
-+
-+	vcc-supply = <&vreg_l10c>;
-+	vcc-max-microamp = <800000>;
-+	vccq-supply = <&vreg_l3c>;
-+	vccq-max-microamp = <900000>;
-+
-+	status = "okay";
-+};
-+
-+&ufs_card_phy {
-+	vdda-phy-supply = <&vreg_l8g>;
-+	vdda-pll-supply = <&vreg_l3g>;
-+
-+	status = "okay";
-+};
-+
-+&usb_0 {
-+	status = "okay";
-+};
-+
-+&usb_0_dwc3 {
-+	/* TODO: Define USB-C connector properly */
-+	dr_mode = "peripheral";
-+};
-+
-+&usb_0_hsphy {
-+	vdda-pll-supply = <&vreg_l5a>;
-+	vdda18-supply = <&vreg_l7a>;
-+	vdda33-supply = <&vreg_l13a>;
-+
-+	status = "okay";
-+};
-+
-+&usb_0_qmpphy {
-+	vdda-phy-supply = <&vreg_l3a>;
-+	vdda-pll-supply = <&vreg_l5a>;
-+
-+	status = "okay";
-+};
-+
-+&usb_1 {
-+	status = "okay";
-+};
-+
-+&usb_1_dwc3 {
-+	/* TODO: Define USB-C connector properly */
-+	dr_mode = "host";
-+};
-+
-+&usb_1_hsphy {
-+	vdda-pll-supply = <&vreg_l1c>;
-+	vdda18-supply = <&vreg_l7c>;
-+	vdda33-supply = <&vreg_l2c>;
-+
-+	status = "okay";
-+};
-+
-+&usb_1_qmpphy {
-+	vdda-phy-supply = <&vreg_l4c>;
-+	vdda-pll-supply = <&vreg_l1c>;
-+
-+	status = "okay";
-+};
-+
-+&usb_2_hsphy0 {
-+	vdda-pll-supply = <&vreg_l5a>;
-+	vdda18-supply = <&vreg_l7g>;
-+	vdda33-supply = <&vreg_l13a>;
-+
-+	status = "okay";
-+};
-+
-+&usb_2_hsphy1 {
-+	vdda-pll-supply = <&vreg_l5a>;
-+	vdda18-supply = <&vreg_l7g>;
-+	vdda33-supply = <&vreg_l13a>;
-+
-+	status = "okay";
-+};
-+
-+&usb_2_hsphy2 {
-+	vdda-pll-supply = <&vreg_l5a>;
-+	vdda18-supply = <&vreg_l7g>;
-+	vdda33-supply = <&vreg_l13a>;
-+
-+	status = "okay";
-+};
-+
-+&usb_2_hsphy3 {
-+	vdda-pll-supply = <&vreg_l5a>;
-+	vdda18-supply = <&vreg_l7g>;
-+	vdda33-supply = <&vreg_l13a>;
-+
-+	status = "okay";
-+};
-+
-+&usb_2_qmpphy0 {
-+	vdda-phy-supply = <&vreg_l3a>;
-+	vdda-pll-supply = <&vreg_l5a>;
-+
-+	status = "okay";
-+};
-+
-+&usb_2_qmpphy1 {
-+	vdda-phy-supply = <&vreg_l3a>;
-+	vdda-pll-supply = <&vreg_l5a>;
-+
-+	status = "okay";
-+};
-+
-+&xo_board_clk {
-+	clock-frequency = <38400000>;
-+};
-+
-+/* PINCTRL */
-+&pm8450c_gpios {
-+	usb2_en_state: usb2-en-state {
-+		pins = "gpio9";
-+		function = "normal";
-+		output-high;
-+		power-source = <0>;
-+	};
-+};
-+
-+&pm8450e_gpios {
-+	usb3_en_state: usb3-en-state {
-+		pins = "gpio5";
-+		function = "normal";
-+		output-high;
-+		power-source = <0>;
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sa8540p.dtsi b/arch/arm64/boot/dts/qcom/sa8540p.dtsi
-new file mode 100644
-index 000000000000..8ea2886fbab2
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sa8540p.dtsi
-@@ -0,0 +1,133 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2022, Linaro Limited
-+ */
-+
-+#include "sc8280xp.dtsi"
-+
-+/delete-node/ &cpu0_opp_table;
-+/delete-node/ &cpu4_opp_table;
-+
-+/ {
-+	cpu0_opp_table: cpu0-opp-table {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		opp-403200000 {
-+			opp-hz = /bits/ 64 <403200000>;
-+		};
-+		opp-499200000 {
-+			opp-hz = /bits/ 64 <499200000>;
-+		};
-+		opp-595200000 {
-+			opp-hz = /bits/ 64 <595200000>;
-+		};
-+		opp-710400000 {
-+			opp-hz = /bits/ 64 <710400000>;
-+		};
-+		opp-806400000 {
-+			opp-hz = /bits/ 64 <806400000>;
-+		};
-+		opp-902400000 {
-+			opp-hz = /bits/ 64 <902400000>;
-+		};
-+		opp-1017600000 {
-+			opp-hz = /bits/ 64 <1017600000>;
-+		};
-+		opp-1113600000 {
-+			opp-hz = /bits/ 64 <1113600000>;
-+		};
-+		opp-1209600000 {
-+			opp-hz = /bits/ 64 <1209600000>;
-+		};
-+		opp-1324800000 {
-+			opp-hz = /bits/ 64 <1324800000>;
-+		};
-+		opp-1440000000 {
-+			opp-hz = /bits/ 64 <1440000000>;
-+		};
-+		opp-1555200000 {
-+			opp-hz = /bits/ 64 <1555200000>;
-+		};
-+		opp-1670400000 {
-+			opp-hz = /bits/ 64 <1670400000>;
-+		};
-+		opp-1785600000 {
-+			opp-hz = /bits/ 64 <1785600000>;
-+		};
-+		opp-1881600000 {
-+			opp-hz = /bits/ 64 <1881600000>;
-+		};
-+		opp-2016000000 {
-+			opp-hz = /bits/ 64 <2016000000>;
-+		};
-+		opp-2131200000 {
-+			opp-hz = /bits/ 64 <2131200000>;
-+		};
-+		opp-2246400000 {
-+			opp-hz = /bits/ 64 <2246400000>;
-+		};
-+	};
-+
-+	cpu4_opp_table: cpu4-opp-table {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		opp-825600000 {
-+			opp-hz = /bits/ 64 <825600000>;
-+		};
-+		opp-940800000 {
-+			opp-hz = /bits/ 64 <940800000>;
-+		};
-+		opp-1056000000 {
-+			opp-hz = /bits/ 64 <1056000000>;
-+		};
-+		opp-1171200000 {
-+			opp-hz = /bits/ 64 <1171200000>;
-+		};
-+		opp-1286400000 {
-+			opp-hz = /bits/ 64 <1286400000>;
-+		};
-+		opp-1401600000 {
-+			opp-hz = /bits/ 64 <1401600000>;
-+		};
-+		opp-1516800000 {
-+			opp-hz = /bits/ 64 <1516800000>;
-+		};
-+		opp-1632000000 {
-+			opp-hz = /bits/ 64 <1632000000>;
-+		};
-+		opp-1747200000 {
-+			opp-hz = /bits/ 64 <1747200000>;
-+		};
-+		opp-1862400000 {
-+			opp-hz = /bits/ 64 <1862400000>;
-+		};
-+		opp-1977600000 {
-+			opp-hz = /bits/ 64 <1977600000>;
-+		};
-+		opp-2073600000 {
-+			opp-hz = /bits/ 64 <2073600000>;
-+		};
-+		opp-2169600000 {
-+			opp-hz = /bits/ 64 <2169600000>;
-+		};
-+		opp-2284800000 {
-+			opp-hz = /bits/ 64 <2284800000>;
-+		};
-+		opp-2380800000 {
-+			opp-hz = /bits/ 64 <2380800000>;
-+		};
-+		opp-2496000000 {
-+			opp-hz = /bits/ 64 <2496000000>;
-+		};
-+		opp-2592000000 {
-+			opp-hz = /bits/ 64 <2592000000>;
-+		};
-+	};
-+};
-+
-+&rpmhpd {
-+	compatible = "qcom,sa8540p-rpmhpd";
-+};
--- 
-2.35.1
+It must also preserve all the
+> + * necessary state (the virtqueue vring base plus the possible device sp=
+ecific
+> + * states) that is required for restoring in the future. The device must=
+ not
+> + * change its configuration after that point.
+> + *
+> + * After the return of ioctl with suspend =3D=3D 0, the device can conti=
+nue
+> + * processing buffers as long as typical conditions are met (vq is enabl=
+ed,
+> + * DRIVER_OK status bit is enabled, etc).
+> + */
+> +#define VHOST_VDPA_SUSPEND             _IOW(VHOST_VIRTIO, 0x7D, int)
+> +
+>  #endif
+> --
+> 2.31.1
+>
 

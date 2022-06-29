@@ -2,103 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 691AA560888
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9509056088C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232654AbiF2SEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 14:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
+        id S229849AbiF2SFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 14:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232533AbiF2SDt (ORCPT
+        with ESMTP id S232327AbiF2SE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 14:03:49 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB11437A22
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:03:21 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id d2so22426444ejy.1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:03:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=EF+4vVSu0Ak1EZxpXNfRVufy8G3AP8/4t8MYyPUNltA=;
-        b=qNMlZFjto8WW4D+zIbCEQRp1WueqNb3qJL71sznhlSuk5jpwSgWjmvDD0kGh7UzKvP
-         KRPIYQ/bNOE2Pme8lPtKe5UdlMVFsoB6fADpqkY/Zq2yyQjN4HeZwaKleFSPP7LhdISh
-         q9Q+pv+euqXm6pMMJowrdAxJUB9P8Iwolkl0dxF/4cn2+GXjJICaMrwgkw5ccriOAGZF
-         p/QHmjJTvdWdcgyjNouAjp/+K8Ti6GImpz0LUZaVYh3OUkAixP6xYdoD4n4d8c7wpa1g
-         zxvD9t73cHnYCcWgU1TnGLZBeBb+pp67VMyy9lrDf27p2IaIeSslWNaeh4Y8xZ3j8OiG
-         7vqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=EF+4vVSu0Ak1EZxpXNfRVufy8G3AP8/4t8MYyPUNltA=;
-        b=lngonNIo1SDexTbT0IbSj6YKAPvKnHCSQ/oJwRkRr8nGITMKNMqoeGzSYYd0gLO2Pg
-         G9J+B9pCoSlofEhqK6zDIYBph6EwjLcfMiKSLv4qpUR+bO3NoRdQrq7s/WxHmegAw25b
-         9qlGkYq1UUfmmv7yiz+0WylFr5A3n7Wyn+TxFeI/xoUVXXMplsVoKKcwMH/nbiHhjMlg
-         mSP6YpD74uoSyc/pKpprBSHH822EjjsSIhA68NYp3uc86reRMUhqfT+oUDOqBc21Ki3g
-         PJf1DSJW3ny5E/RNV4ErFFP2onPlg/tfWLA8LZfE3ltLm0eFSg9sBm/qgPiQTEoL7qmj
-         weKA==
-X-Gm-Message-State: AJIora/J3guaz1hq+Hp6w0WkAXIa35AN+wKqHso8Kz9UKhe4C1rzwg1c
-        GrvR7MwTrKbIAMm2hc2Ebfx/gw==
-X-Google-Smtp-Source: AGRyM1voypfDnC3goXLyoV1lstNYX1G0AB6nAChz47TdKqz6nnI934lH4zhYtOaEu8xtpGlXs4MNzw==
-X-Received: by 2002:a17:907:7f05:b0:726:9770:77d6 with SMTP id qf5-20020a1709077f0500b00726977077d6mr4580557ejc.464.1656525800225;
-        Wed, 29 Jun 2022 11:03:20 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id b12-20020a05640202cc00b004335e08d6c9sm11781609edx.33.2022.06.29.11.03.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 11:03:19 -0700 (PDT)
-Message-ID: <85b3fcbf-abe4-56b7-323b-f303eb458592@linaro.org>
-Date:   Wed, 29 Jun 2022 20:03:17 +0200
+        Wed, 29 Jun 2022 14:04:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF333FBFE;
+        Wed, 29 Jun 2022 11:03:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD35F61EF5;
+        Wed, 29 Jun 2022 18:03:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25845C341CE;
+        Wed, 29 Jun 2022 18:03:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656525835;
+        bh=X0lazoB/Z2MYUFHBDjBytVc24hgG/ZXx4i5otGwBfoA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H4IkTUxrQFu5SHS5PzCTCg6LwFu3XOeHjWU9b6CAk0quliFmv60Qa2ariCBLyRkft
+         +QTuSoGhm0ItBd5Y0fLUZxee+gBOS1lYyo2aUlWr3Q8IgDhNLf87WqljhT/otFdqjo
+         FvhbI4dxyI7VZnTFhUXc4ygcYdlnjVn1JeVdFbEx4QeBWmysbIGHAZ5QidjGPgbiya
+         eS7kqhkaNGFDxG4/wDnBx5fjlPcZfeK3VfL1heosKkJnuUR8ZFl8nlJdX56HAllBgu
+         t5P5g70lNCKb4MGGoP1ZxPVRCBLtRg9+utzWDq78odTzxxI/EEVBeef2BLm0IbYHBM
+         n4wWkmFlVDDRQ==
+Date:   Wed, 29 Jun 2022 19:03:47 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        live-patching@vger.kernel.org, jpoimboe@kernel.org,
+        peterz@infradead.org, catalin.marinas@arm.com, will@kernel.org,
+        masahiroy@kernel.org, michal.lkml@markovi.net,
+        ndesaulniers@google.com, mark.rutland@arm.com,
+        pasha.tatashin@soleen.com, rmk+kernel@armlinux.org.uk,
+        madvenka@linux.microsoft.com, christophe.leroy@csgroup.eu,
+        daniel.thompson@linaro.org
+Subject: Re: [PATCH v6 22/33] arm64: efi-header: Mark efi header as data
+Message-ID: <YryUAwncG4HxYj16@sirena.org.uk>
+References: <20220623014917.199563-1-chenzhongjin@huawei.com>
+ <20220623014917.199563-23-chenzhongjin@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 14/14] dt-bindings: arm: freescale: Remove fsl,scu txt
- file
-Content-Language: en-US
-To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Liu Ying <victor.liu@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
- <20220629164414.301813-15-viorel.suman@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220629164414.301813-15-viorel.suman@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/+zerKURaNsufg6f"
+Content-Disposition: inline
+In-Reply-To: <20220623014917.199563-23-chenzhongjin@huawei.com>
+X-Cookie: Booths for two or more.
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -107,24 +65,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
-> From: Abel Vesa <abel.vesa@nxp.com>
-> 
-> Now that all the child nodes have been properly documented in the
-> yaml files, within their proper subystems, we can drop the fsl,scu.txt.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
-> ---
->  .../bindings/arm/freescale/fsl,scu.txt        | 271 ------------------
->  1 file changed, 271 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-> 
 
-This cannot be separate patch. Conversion is add+remove in one commit,
-so even if you remove everything in one patch, it should be then
-squashed into patch #9. Anyway, I think better approach is to remove
-gradually, so each piece is removed in each converted part.
+--/+zerKURaNsufg6f
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+On Thu, Jun 23, 2022 at 09:49:06AM +0800, Chen Zhongjin wrote:
+> This file only contains a set of constants forming the efi header.
+>=20
+> Make the constants part of a data symbol.
+
+Reviewed-by: Mark Brown <broonie@kernel.org>
+
+--/+zerKURaNsufg6f
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK8lAIACgkQJNaLcl1U
+h9DPEwf9HDG0IEnpXpPCsIe7firj70KJ0V4dHDhlPkEtzQBmCkYZaFZeKRYuwn3M
+/BExp1Vfbc7ZEtyJrJ0Eli9tfs7nGbtC5glpAUUfmEq7ON7zPSk1n6PPs96AcVas
+baEDSryZwzdp1TCUM5wNAu/SbiYrij1vk/ZKcgFP34DH9/4azPrDe8mDtSlNlgjd
+0XQX1wmDnz1vR2LpvRczLNoecUrDcMA5xcC1wKybdVGQfAR7bTob34b3VNisnfJw
+mBNKrPsfVtpWDISKvrK1Uqk2WUgUr6y2gPG8kg9Y4+JbOUaoJIsf1kSomQjMcC6T
+gloXVcN87nUaYA8CfQcfAvkOb3HeJg==
+=MLL2
+-----END PGP SIGNATURE-----
+
+--/+zerKURaNsufg6f--

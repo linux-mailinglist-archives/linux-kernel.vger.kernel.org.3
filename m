@@ -2,43 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CBF255F634
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 08:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79FB55F63D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 08:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbiF2GIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 02:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44680 "EHLO
+        id S231406AbiF2GJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 02:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbiF2GHs (ORCPT
+        with ESMTP id S231858AbiF2GIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 02:07:48 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E16862F034
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 23:07:34 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 222F61E80D11;
-        Wed, 29 Jun 2022 14:06:24 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id R_X_whhPI2Pt; Wed, 29 Jun 2022 14:06:21 +0800 (CST)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        (Authenticated sender: jiaming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id CEE431E80CDC;
-        Wed, 29 Jun 2022 14:06:20 +0800 (CST)
-From:   Zhang Jiaming <jiaming@nfschina.com>
-To:     lpieralisi@kernel.org, pali@kernel.org, tglx@linutronix.de,
-        gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, liqiong@nfschina.com,
-        renyu@nfschina.com, Zhang Jiaming <jiaming@nfschina.com>
-Subject: [PATCH] bus: mvebu-mbus: Fix spelling mistake
-Date:   Wed, 29 Jun 2022 14:07:16 +0800
-Message-Id: <20220629060716.22310-1-jiaming@nfschina.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 29 Jun 2022 02:08:35 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B811E3C5;
+        Tue, 28 Jun 2022 23:08:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9A1E0CE2303;
+        Wed, 29 Jun 2022 06:08:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B49F0C34114;
+        Wed, 29 Jun 2022 06:08:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656482910;
+        bh=vJY9q7y2S/D/f1k4JQ1UNKjNcETLJ7Ea5lvJFwixXcM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t+n+4qZ8lVWLh0wsCMRqutBzJ3k8I0W8IaAYmRwFM0J6WXFwdIkM8Oy6j72kkB5uJ
+         7hII79WIDEVmACHyzWjlXxpMCZChGpCQf4bnwcAeyS1Pa3WUqz8iW7RQzrVDC7qadP
+         9RP4J1KYG+HrtyKj2/y0LecLOIsT5drXFKhEXMuk=
+Date:   Wed, 29 Jun 2022 08:08:27 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     linux-serial@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        jirislaby@kernel.org, miquel.raynal@bootlin.com,
+        phil.edworthy@renesas.com, kernel@esmil.dk,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] Revert "serial: 8250: dw: Move the USR register to
+ pdata"
+Message-ID: <YrvsW7RmHRr5zbS3@kroah.com>
+References: <20220629000232.3440704-1-jeremy.linton@arm.com>
+ <20220629000232.3440704-2-jeremy.linton@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220629000232.3440704-2-jeremy.linton@arm.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,38 +55,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change 'informations' to 'information'.
-Change 'accross' to 'across'.
+On Tue, Jun 28, 2022 at 07:02:31PM -0500, Jeremy Linton wrote:
+> pdata is only setup by DT machines, leaving ACPI machines
+> with null pdata. Since I don't know the exact mapping of
+> ACPI ID's to dw 8250 variations I can't add pdata to them
+> without possibly breaking something. As such the simplest
+> fix here is probably just to revert this commit.
+> 
+> This reverts commit ffd381445eac2aa624e49bab5a811451e8351008.
+> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
 
-Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
----
- drivers/bus/mvebu-mbus.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Didn't checkpatch complain that you need a blank line before your
+signed-off-by line?
 
-diff --git a/drivers/bus/mvebu-mbus.c b/drivers/bus/mvebu-mbus.c
-index a6ec0566db12..5dc2669432ba 100644
---- a/drivers/bus/mvebu-mbus.c
-+++ b/drivers/bus/mvebu-mbus.c
-@@ -22,8 +22,8 @@
-  *
-  * - Reads out the SDRAM address decoding windows at initialization
-  *   time, and fills the mvebu_mbus_dram_info structure with these
-- *   informations. The exported function mv_mbus_dram_info() allow
-- *   device drivers to get those informations related to the SDRAM
-+ *   information. The exported function mv_mbus_dram_info() allow
-+ *   device drivers to get those information related to the SDRAM
-  *   address decoding windows. This is because devices also have their
-  *   own windows (configured through registers that are part of each
-  *   device register space), and therefore the drivers for Marvell
-@@ -120,7 +120,7 @@ struct mvebu_mbus_soc_data {
- };
- 
- /*
-- * Used to store the state of one MBus window accross suspend/resume.
-+ * Used to store the state of one MBus window across suspend/resume.
-  */
- struct mvebu_mbus_win_data {
- 	u32 ctrl;
--- 
-2.34.1
+thanks,
 
+greg k-h

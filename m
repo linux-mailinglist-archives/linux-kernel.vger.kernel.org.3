@@ -2,144 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C03E560CF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 01:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EFBC560CF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 01:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbiF2XEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 19:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
+        id S231181AbiF2XGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 19:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiF2XED (ORCPT
+        with ESMTP id S229460AbiF2XGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 19:04:03 -0400
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253FA1DA7F
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 16:04:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1656543841; x=1688079841;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ptrmLR99DmPF+HuZkx+sytXL0IpohrYTge6kXuvw7is=;
-  b=Wi49BNtnBrlddGK7V3DVLlR2IIrnviTVS2fDK9EBCTFnDEayNagMxxUn
-   XlqrJbM/sC8wBk71D3Go9j+SM+vBuglsBukSgNtlr0c9nNT4IKeU5dyUZ
-   qMEHJvOnnY6klGjpmVCjTpctGL83RGBOYyM9PxjKj29EHAUkVNsT+9aN2
-   XW5B1ZcQEkPzxBHzQFbvJrwpvU0nIRfFcN32MpvNcvGpiHec62aFAWVVS
-   vYHAXsFCR4g7dy9t8ZO3YGccFVI6YjKfPS7lgIOBml3cE8P/2PJSUAZEY
-   BVA+xFi9n/xCwVYHuhPpTn3yrBC9KpYBgZUDYHG+SxDwrxzRzKCG4qPft
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.92,232,1650902400"; 
-   d="scan'208";a="308757729"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 30 Jun 2022 07:04:00 +0800
-IronPort-SDR: 0848zM7eVcrVz3FXwyH6A/zJEqKyyKmdbmoRm+F0W6vZogU34p4WVkdG4MnlR3FtyW5nS2U17b
- 4Mb6rEM7OTYZ4dIw2K+/S41eIkUPlWR/0xdvzPE3q5UzuAnFDzA/xyvXcZkxuu9VQJxsWV4W4j
- YWjps3UGlDLguQhCrm1NTcn6XqjF5VX6h68lhdXwXIVTEFPJIJW8o7PejRF3m3UK26dZJwVgj3
- MyTir6WJ1GlvGQ+n/m0nZuoKr3CKNBqRiTjw2Zp1itKboLIsr/2qg1UH5VFSO8BsX1P9J/xoSr
- XhTm89BcqyADKRk4XdoiBrvv
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Jun 2022 15:21:38 -0700
-IronPort-SDR: YvHmEM916nhzL4pxUvcq5SdNUcdaPbIOuVTiGsO+2m8ET+D3616cEcg+NMerZndT0CbI3ekjiP
- +bCg18V142IoPDvtMiBTMQ1X5wpCb6YFj3GKAqvjvJe4KDRBVo1TyWjUmZmWbY7aiLzZ0Z9Dd5
- R63MOC9RIUmHcAcU94OqCuhQY5zqtpg+Hw8gkZHeTvssFDM8FfbLixrk4G+YaJ5AOK7eLqyPNA
- SBWZZxcf7OjqrperH7dgf0L6CFYejSCaKDHxLoE99W4iS2KUVLOF5sFAY/DvuAUNTN5Of3OCSf
- ePM=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Jun 2022 16:04:00 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LYH8J1tdbz1Rwnl
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 16:04:00 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1656543839; x=1659135840; bh=ptrmLR99DmPF+HuZkx+sytXL0IpohrYTge6
-        kXuvw7is=; b=O0UEptYFIHQ2xrlcdooiCDQC+bLGyPQ8V0TOJAZfEsIF5Idr1KC
-        hePTwDcjoYED3X0mAKifiixDGVaaY39gL3YGagavf1b7NcJvReo6g0BqBUbIHxs8
-        vE1HEA0I04aw0+ndOqCXtlzv19ab3mtbSAS9CziyAJAmBQ0vZYBrTDsXTg0DI+Z4
-        6OXmSh+Fmyj/ydn2/oaHFzU9XqnBIoLj11uGwnOEhv9Vxn73CM+lvCP+OnfWr1UE
-        QA1zMeZ8pBTXhIFSyYkip+aVq8n/RrVrjxpkMo11E5kB/7umgmwqKEkFYzsgstHs
-        mf1wz0gyRw4ln5GxbS2lhXOGIvHHUgtxLKQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id BM0R-z62-DVd for <linux-kernel@vger.kernel.org>;
-        Wed, 29 Jun 2022 16:03:59 -0700 (PDT)
-Received: from [10.225.163.102] (unknown [10.225.163.102])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LYH8H0Jy2z1RtVk;
-        Wed, 29 Jun 2022 16:03:58 -0700 (PDT)
-Message-ID: <9448ff77-9b0e-95fd-1366-a5103fdb3ea0@opensource.wdc.com>
-Date:   Thu, 30 Jun 2022 08:03:57 +0900
+        Wed, 29 Jun 2022 19:06:10 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBF11DA7F;
+        Wed, 29 Jun 2022 16:06:08 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 97A3B660177B;
+        Thu, 30 Jun 2022 00:06:04 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656543967;
+        bh=MHzNXwrpamEQJfSn517DbHauHiLavqph9+6FDdh8cW0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=R3tBCTFOx5La3aI3IuCM416s6ri/Rh+h8/CoISbxHReBFWX7oD8ghFIqxKIheLH5w
+         K/nf9MDe20o+qs6uI9V4q7kgllcSj0UFzIr7895NwJrkgQscojZeKpuMoIZ/sXAhJ/
+         ByY76oOA2S/Qn7NuU44zmtC8ngpXqT/Sk6mv6EXPgD3t0Yu7tgBa91vpQ3RjptNtcQ
+         8wCG1+oVsnGfEAp76m0cvoIjw+tsFZcA1BMMt46ZPsluMUFRdOJVorWacWuPAU7oSR
+         BcNWnLcHirxsy7f3PCwGEKwWPOZCORt9oP3UUBVzLpplCao7w54md/Ljni//qJgOjB
+         FFn9vf973GUvQ==
+Message-ID: <467a1cee-ba8c-98f3-0398-2a7a5a90b5c3@collabora.com>
+Date:   Thu, 30 Jun 2022 02:06:01 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH] ata: pata_cs5535: Fix W=1 warnings
+Subject: Re: [PATCH v6 02/22] drm/gem: Move mapping of imported dma-bufs to
+ drm_gem_mmap_obj()
 Content-Language: en-US
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        John Garry <john.garry@huawei.com>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1656335540-50293-1-git-send-email-john.garry@huawei.com>
- <69ed5587-52fd-4171-b97f-091df8b377c6@opensource.wdc.com>
- <9caef01c-b601-c19f-10eb-720e8d7b35dc@omp.ru>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <9caef01c-b601-c19f-10eb-720e8d7b35dc@omp.ru>
+To:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>
+Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        linaro-mm-sig@lists.linaro.org, amd-gfx@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
+        kernel@collabora.com, linux-media@vger.kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+References: <20220526235040.678984-1-dmitry.osipenko@collabora.com>
+ <20220526235040.678984-3-dmitry.osipenko@collabora.com>
+ <b8271f0c-d6a3-4194-1959-e112859756a3@shipmail.org>
+ <c0273ac2-c87c-2612-03d4-dc52510b22f7@collabora.com>
+ <b4086751-9bff-ea5e-93fc-ce2c513b129b@shipmail.org>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <b4086751-9bff-ea5e-93fc-ce2c513b129b@shipmail.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/29/22 22:32, Sergey Shtylyov wrote:
-> On 6/29/22 4:51 AM, Damien Le Moal wrote:
->=20
->>> x86_64 allmodconfig build with W=3D1 gives these warnings:
+On 6/29/22 11:43, Thomas Hellström (Intel) wrote:
+> 
+> On 6/29/22 10:22, Dmitry Osipenko wrote:
+>> On 6/29/22 09:40, Thomas Hellström (Intel) wrote:
+>>> On 5/27/22 01:50, Dmitry Osipenko wrote:
+>>>> Drivers that use drm_gem_mmap() and drm_gem_mmap_obj() helpers don't
+>>>> handle imported dma-bufs properly, which results in mapping of
+>>>> something
+>>>> else than the imported dma-buf. For example, on NVIDIA Tegra we get a
+>>>> hard
+>>>> lockup when userspace writes to the memory mapping of a dma-buf that
+>>>> was
+>>>> imported into Tegra's DRM GEM.
+>>>>
+>>>> To fix this bug, move mapping of imported dma-bufs to
+>>>> drm_gem_mmap_obj().
+>>>> Now mmaping of imported dma-bufs works properly for all DRM drivers.
+>>> Same comment about Fixes: as in patch 1,
+>>>> Cc: stable@vger.kernel.org
+>>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>>> ---
+>>>>    drivers/gpu/drm/drm_gem.c              | 3 +++
+>>>>    drivers/gpu/drm/drm_gem_shmem_helper.c | 9 ---------
+>>>>    drivers/gpu/drm/tegra/gem.c            | 4 ++++
+>>>>    3 files changed, 7 insertions(+), 9 deletions(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+>>>> index 86d670c71286..7c0b025508e4 100644
+>>>> --- a/drivers/gpu/drm/drm_gem.c
+>>>> +++ b/drivers/gpu/drm/drm_gem.c
+>>>> @@ -1038,6 +1038,9 @@ int drm_gem_mmap_obj(struct drm_gem_object *obj,
+>>>> unsigned long obj_size,
+>>>>        if (obj_size < vma->vm_end - vma->vm_start)
+>>>>            return -EINVAL;
+>>>>    +    if (obj->import_attach)
+>>>> +        return dma_buf_mmap(obj->dma_buf, vma, 0);
+>>> If we start enabling mmaping of imported dma-bufs on a majority of
+>>> drivers in this way, how do we ensure that user-space is not blindly
+>>> using the object mmap without calling the needed DMA_BUF_IOCTL_SYNC
+>>> which is needed before and after cpu access of mmap'ed dma-bufs?
 >>>
->>> drivers/ata/pata_cs5535.c: In function =E2=80=98cs5535_set_piomode=E2=
-=80=99:
->>> drivers/ata/pata_cs5535.c:93:11: error: variable =E2=80=98dummy=E2=80=
-=99 set but not used [-Werror=3Dunused-but-set-variable]
->>>   u32 reg, dummy;
->>>            ^~~~~
->>> drivers/ata/pata_cs5535.c: In function =E2=80=98cs5535_set_dmamode=E2=
-=80=99:
->>> drivers/ata/pata_cs5535.c:132:11: error: variable =E2=80=98dummy=E2=80=
-=99 set but not used [-Werror=3Dunused-but-set-variable]
->>>   u32 reg, dummy;
->>>            ^~~~~
->>> cc1: all warnings being treated as errors
->>>
->>> Mark variables 'dummy' as "maybe unused" to satisfy when rdmsr() is
->>> stubbed, which is the same as what we already do in pata_cs5536.c .
->>>
->>> Signed-off-by: John Garry <john.garry@huawei.com>
+>>> I was under the impression (admittedly without looking) that the few
+>>> drivers that actually called into dma_buf_mmap() had some private
+>>> user-mode driver code in place that ensured this happened.
+>> Since it's a userspace who does the mapping, then it should be a
+>> responsibility of userspace to do all the necessary syncing.
+> 
+> Sure, but nothing prohibits user-space to ignore the syncing thinking
+> "It works anyway", testing those drivers where the syncing is a NOP. And
+> when a driver that finally needs syncing is tested it's too late to fix
+> all broken user-space.
+> 
+>>   I'm not
+>> sure whether anyone in userspace really needs to map imported dma-bufs
+>> in practice. Nevertheless, this use-case is broken and should be fixed
+>> by either allowing to do the mapping or prohibiting it.
 >>
->> Applied to for-5.20. Thanks !
->=20
->    Why not to 5.19? The warnings are fatal as can be seen from the comm=
-it log...
+> Then I'd vote for prohibiting it, at least for now. And for the future
+> moving forward we could perhaps revisit the dma-buf need for syncing,
+> requiring those drivers that actually need it to implement emulated
+> coherent memory which can be done not too inefficiently (vmwgfx being
+> one example).
 
-This is only a compile warning and nobody complained, not even the 0-day
-bot/linux-next builds, and for years... Most definitely not an urgent fix=
-.
+Alright, I'll change it to prohibit the mapping. This indeed should be a
+better option.
 
-But yeah, sure, can do 5.19 fixes too.
-
->=20
-> MBR, Sergey
->=20
-
-
---=20
-Damien Le Moal
-Western Digital Research
+-- 
+Best regards,
+Dmitry

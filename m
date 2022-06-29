@@ -2,96 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CF855F39A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F26C55F3A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbiF2CxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 22:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56382 "EHLO
+        id S229760AbiF2C4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 22:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiF2Cw6 (ORCPT
+        with ESMTP id S229623AbiF2C4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 22:52:58 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F6A33E2E
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 19:52:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656471170; x=1688007170;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Peyu7ZRX4ch03zpq+DdistMLsdoqCn76LTkgdA3JSNw=;
-  b=RHZPofeqvlxxw4P3JvS6+oSeG1qr5WTbIeHt68MPbbmiABVl7/QzgC0s
-   I3J+hz0qNPYCXnvgbJRS1NS5hmfRfZwks7jm2YwPvqZtqKg2GkxmUYpnl
-   Eb0MvT1uO7PhPJKIV0KKpkFVMdoJh02FO5T/Ht5JKXqZN7jpVHhRzTpNf
-   MvXwpEicnBUWp+ibf5LGeYQVDXa3oGZBb0Q69180cPeedNFhL4v66Dppr
-   YDmaUgcjmJxnnKBjiCgWpCRAICLqpdNCQdapf9eI0kkFBQQo4BzR8kjLL
-   ygUPihxKup30r1kgjYILkfeb76KmQ1t7OWvqG12+XGBn8VL0gTKUPuDRg
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="281938887"
-X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="281938887"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 19:52:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="693377988"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 28 Jun 2022 19:52:45 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o6Noq-000Aqc-QG;
-        Wed, 29 Jun 2022 02:52:44 +0000
-Date:   Wed, 29 Jun 2022 10:52:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jonathan McDowell <noodles@fb.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@suse.de>, Mimi Zohar <zohar@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>
-Subject: [tip:x86/kdump 1/1] WARNING: modpost: vmlinux.o(.text+0x1e7210c):
- Section mismatch in reference from the function ima_free_kexec_buffer() to
- the function .meminit.text:memblock_phys_free()
-Message-ID: <202206291039.yGgljGbx-lkp@intel.com>
+        Tue, 28 Jun 2022 22:56:08 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A6C11A25
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 19:56:03 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LXmJx5pyqzkX2q;
+        Wed, 29 Jun 2022 10:54:41 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 29 Jun 2022 10:56:01 +0800
+Subject: Re: [PATCH -next] mm/memory-failure: fix redefinition of
+ mf_generic_kill_procs
+To:     Zheng Bin <zhengbin13@huawei.com>, <naoya.horiguchi@nec.com>,
+        <akpm@linux-foundation.org>
+CC:     <gaochao49@huawei.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220628112143.1170473-1-zhengbin13@huawei.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <3e3691cc-c29e-78be-eeff-56ecb6753182@huawei.com>
+Date:   Wed, 29 Jun 2022 10:56:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220628112143.1170473-1-zhengbin13@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/kdump
-head:   69243968bd526641e549ed231c750ce92e3eeb35
-commit: 69243968bd526641e549ed231c750ce92e3eeb35 [1/1] x86/kexec: Carry forward IMA measurement log on kexec
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220629/202206291039.yGgljGbx-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project df18167ac56d05f2ab55f9d874aee7ab6d5bc9a2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=69243968bd526641e549ed231c750ce92e3eeb35
-        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-        git fetch --no-tags tip x86/kdump
-        git checkout 69243968bd526641e549ed231c750ce92e3eeb35
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On 2022/6/28 19:21, Zheng Bin wrote:
+> If CONFIG_HUGETLB_PAGE=n, building fails:
+> 
+> mm/memory-failure.c:1805:19: error: redefinition of ‘mf_generic_kill_procs’
+>  static inline int mf_generic_kill_procs(unsigned long long pfn, int flags,
+>                    ^~~~~~~~~~~~~~~~~~~~~
+> mm/memory-failure.c:1564:12: note: previous definition of ‘mf_generic_kill_procs’ was here
+>  static int mf_generic_kill_procs(unsigned long long pfn, int flags,
+> 
+> This patch fixes that.
+> 
+> Fixes: 4184e8d7d056 ("mm-factor-helpers-for-memory_failure_dev_pagemap-fix")
+> Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for fixing this. mf_generic_kill_procs shouldn't depend on CONFIG_HUGETLB_PAGE.
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
 
->> WARNING: modpost: vmlinux.o(.text+0x1e7210c): Section mismatch in reference from the function ima_free_kexec_buffer() to the function .meminit.text:memblock_phys_free()
-The function ima_free_kexec_buffer() references
-the function __meminit memblock_phys_free().
-This is often because ima_free_kexec_buffer lacks a __meminit
-annotation or the annotation of memblock_phys_free is wrong.
+BTW: It seems there is a mess between CONFIG_HUGETLB_PAGE and CONFIG_FS_DAX. It's better
+to fix it later.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  mm/memory-failure.c | 7 -------
+>  1 file changed, 7 deletions(-)
+> 
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 001fead45f30..c9931c676335 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -1801,13 +1801,6 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+>  }
+> 
+>  #else
+> -
+> -static inline int mf_generic_kill_procs(unsigned long long pfn, int flags,
+> -					struct dev_pagemap *pgmap)
+> -{
+> -	return 0;
+> -}
+> -
+>  static inline int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb)
+>  {
+>  	return 0;
+> --
+> 2.31.1
+> 
+> .
+> 
+

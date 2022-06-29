@@ -2,115 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFCC5604A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3E95604AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234289AbiF2Pab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 11:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43088 "EHLO
+        id S233197AbiF2PcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 11:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233142AbiF2PaS (ORCPT
+        with ESMTP id S231622AbiF2PcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 11:30:18 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B6837A3C;
-        Wed, 29 Jun 2022 08:30:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656516617; x=1688052617;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=SJ3zrtAdiRXrExOHH4PA7vzVduYFYbuyAhmqGXy7Ux8=;
-  b=OMSifA62VOW+m83eB4idCvxhNIPy2Na8lQxFCjGC+Cxs3pb/JL+qdWl8
-   4b8TFY0Iv6OdkNWyLDPK03X52nsy0Taen+1TmLkMZIQiR4Tgqp3H7BI/k
-   NvIOYS6IPmmQp1LgvATsSUmsSm1kOXR8cmWnpeDEhpFx1O8KDyYXZdj6B
-   7kDi4FvPlwApvYrqRliSJDiXs3PaIDgbgkHyR6MkfpOWmHDrTu6LbfLLX
-   uzdNZy7bfXxkPF9Gxg/BA5dkvoTDohDEnUcQv6lTkHHCxoQl6caEUfuTG
-   Bagnqz9TMSWxmPiTAWt9PIyUdsMB2N6eBawndOzXGrzzk1zJCvbmt39No
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="368372952"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="368372952"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 08:30:16 -0700
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="595274517"
-Received: from maurocar-mobl2.ger.corp.intel.com (HELO maurocar-mobl2) ([10.249.42.133])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 08:30:10 -0700
-Date:   Wed, 29 Jun 2022 17:30:07 +0200
-From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Andi Shyti <andi.shyti@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chris Wilson <chris.p.wilson@intel.com>,
-        Fei Yang <fei.yang@intel.com>,
-        Thomas Hellstrom <thomas.hellstrom@intel.com>,
-        Bruce Chang <yu.bruce.chang@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        John Harrison <John.C.Harrison@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>,
-        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Mika Kuoppala <mika.kuoppala@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        stable@vger.kernel.org,
-        Thomas =?UTF-8?B?SGVs?= =?UTF-8?B?bHN0csO2bQ==?= 
-        <thomas.hellstrom@linux.intel.com>
-Subject: Re: [PATCH 5/6] drm/i915/gt: Serialize GRDOM access between
- multiple engine resets
-Message-ID: <20220629172955.64ffb5c3@maurocar-mobl2>
-In-Reply-To: <d79492ad-b99a-f9a9-f64a-52b94db68a3b@linux.intel.com>
-References: <cover.1655306128.git.mchehab@kernel.org>
-        <5ee647f243a774927ec328bfca8212abc4957909.1655306128.git.mchehab@kernel.org>
-        <YrRLyg1IJoZpVGfg@intel.intel>
-        <160e613f-a0a8-18ff-5d4b-249d4280caa8@linux.intel.com>
-        <20220627110056.6dfa4f9b@maurocar-mobl2>
-        <d79492ad-b99a-f9a9-f64a-52b94db68a3b@linux.intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Wed, 29 Jun 2022 11:32:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3512CCA6;
+        Wed, 29 Jun 2022 08:32:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CBFD0B81DDF;
+        Wed, 29 Jun 2022 15:32:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FBC7C34114;
+        Wed, 29 Jun 2022 15:32:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656516726;
+        bh=C7giPN+qsPnR9juAKxwWkHDcLBswzBs0OgjSrpVwzJM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m4SjOqpF8ZT7iAgy0s1lC3NNsCXzJ8S9sUOuNZA92qEM8N9RMAmSBsGPTYBu+EfUB
+         BSYHByKEldQ6oPwFq9X2oJCeS7TMof7aLFWv+B3rk7NNQwwCsVTNdcFTbpbcj2FnxG
+         1nPOMWngZjlptmzFRjVNQ9ENdZG5/nRHVZ/TCaWo=
+Date:   Wed, 29 Jun 2022 17:31:57 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sebin Sebastian <mailmesebin00@gmail.com>
+Cc:     Neal Liu <neal_liu@aspeedtech.com>,
+        Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] usb: gadget: dereference before null check
+Message-ID: <Yrxwbb/TbFmYdga/@kroah.com>
+References: <20220629080726.107297-1-mailmesebin00@gmail.com>
+ <YrwMJ+3mdFO2Lpm0@kroah.com>
+ <YrxCP4EE2jhUm8e+@sebin-inspiron>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrxCP4EE2jhUm8e+@sebin-inspiron>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Jun 2022 16:49:23 +0100
-Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
-
->.. which for me means a different patch 1, followed by patch 6 (moved 
-> to be patch 2) would be ideal stable material.
+On Wed, Jun 29, 2022 at 05:44:55PM +0530, Sebin Sebastian wrote:
+> On Wed, Jun 29, 2022 at 10:24:07AM +0200, Greg Kroah-Hartman wrote:
+> > On Wed, Jun 29, 2022 at 01:37:25PM +0530, SebinSebastian wrote:
+> > > Fix coverity warning dereferencing before null check. _ep and desc is
+> > > dereferenced on all paths until the check for null. Move the
+> > > initializations after the check for null.
+> > > Coverity issue: 1518209
+> > > 
+> > > Signed-off-by: SebinSebastian <mailmesebin00@gmail.com>
+> > > ---
+> > >  drivers/usb/gadget/udc/aspeed_udc.c | 9 +++++----
+> > >  1 file changed, 5 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+> > > index d75a4e070bf7..96f8193fca15 100644
+> > > --- a/drivers/usb/gadget/udc/aspeed_udc.c
+> > > +++ b/drivers/usb/gadget/udc/aspeed_udc.c
+> > > @@ -341,10 +341,6 @@ static void ast_udc_stop_activity(struct ast_udc_dev *udc)
+> > >  static int ast_udc_ep_enable(struct usb_ep *_ep,
+> > >  			     const struct usb_endpoint_descriptor *desc)
+> > >  {
+> > > -	u16 maxpacket = usb_endpoint_maxp(desc);
+> > > -	struct ast_udc_ep *ep = to_ast_ep(_ep);
+> > > -	struct ast_udc_dev *udc = ep->udc;
+> > > -	u8 epnum = usb_endpoint_num(desc);
+> > >  	unsigned long flags;
+> > >  	u32 ep_conf = 0;
+> > >  	u8 dir_in;
+> > > @@ -356,6 +352,11 @@ static int ast_udc_ep_enable(struct usb_ep *_ep,
+> > >  		return -EINVAL;
+> > >  	}
+> > > 
+> > > +	u16 maxpacket = usb_endpoint_maxp(desc);
+> > > +	struct ast_udc_ep *ep = to_ast_ep(_ep);
+> > > +	struct ast_udc_dev *udc = ep->udc;
+> > > +	u8 epnum = usb_endpoint_num(desc);
+> > > +
+> > >  	if (!udc->driver) {
+> > >  		EP_DBG(ep, "bogus device state\n");
+> > >  		return -ESHUTDOWN;
+> > > --
+> > > 2.34.1
+> > > 
+> > 
+> > Hi,
+> > 
+> > This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+> > a patch that has triggered this response.  He used to manually respond
+> > to these common problems, but in order to save his sanity (he kept
+> > writing the same thing over and over, yet to different people), I was
+> > created.  Hopefully you will not take offence and will fix the problem
+> > in your patch and resubmit it so that it can be accepted into the Linux
+> > kernel tree.
+> > 
+> > You are receiving this message because of the following common error(s)
+> > as indicated below:
+> > 
+> > - Your patch breaks the build.
+> > 
+> > - Your patch contains warnings and/or errors noticed by the
+> >   scripts/checkpatch.pl tool.
+> > 
+> > - This looks like a new version of a previously submitted patch, but you
+> >   did not list below the --- line any changes from the previous version.
+> >   Please read the section entitled "The canonical patch format" in the
+> >   kernel file, Documentation/SubmittingPatches for what needs to be done
+> >   here to properly describe this.
+> > 
+> > If you wish to discuss this problem further, or you have questions about
+> > how to resolve this issue, please feel free to respond to this email and
+> > Greg will reply once he has dug out from the pending patches received
+> > from other developers.
+> > 
+> > thanks,
+> > 
+> > greg k-h's patch email bot
 > 
-> Then we have the current patch 2 which is open/unknown (to me at least).
-> 
-> And the rest seem like optimisations which shouldn't be tagged as fixes.
-> 
-> Apart from patch 5 which should be cc: stable, but no fixes as agreed.
-> 
-> Could you please double check if what I am suggesting here is feasible 
-> to implement and if it is just send those minimal patches out alone?
+> I am sorry to keep on bothering with this incorrect patches. I am
+> running the checkpatch script everytime before I sent any patches. It is
+> not showing any warnings or errors. Is it because of my name that my
+> patches are getting rejected? I can see a space missing.
 
-Tested and porting just those 3 patches are enough to fix the Broadwell
-bug.
+Did you test build your patch?  If not, why not?
 
-So, I submitted a v2 of this series with just those. They all need to
-be backported to stable.
+thanks,
 
-I still think that other TLB patches are needed/desired upstream, but
-I'll submit them on a separate series. Let's fix the regression first ;-)
-
-Regards,
-Mauro
+greg k-h

@@ -2,125 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B6C5609D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0165609E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbiF2S4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 14:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
+        id S229777AbiF2S67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 14:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbiF2S4w (ORCPT
+        with ESMTP id S229513AbiF2S65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 14:56:52 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4C73586B
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:56:50 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1048b8a38bbso22610370fac.12
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5p870x4sNIuh+XUc5mOSvBDrkyHrhB4Hd3tt75IAjfA=;
-        b=UUooucx0ccngcWB8VSsOa2u/k1LGuqvJP+libwKuXia3x3OyoLVO44bFMx/uxUeanz
-         ZUGraFLwk5TmFGNbtWP/mAjU0r+M+xxAv8+3fm6gbEaSHM4pTKUad1dndi0LrotCdd9m
-         AohEFOPScHRcLu0EqYCrgvdZoh4Eajoc76Rgvgvu+CacPIGaFGhbX5ScFozpyiK2lBu8
-         Wo01f3UwDb89mDvvGDR1zsx1iAvTYSZ7IjFrBtCNHA3QnAWNZuH2Ic1JV7dycIrhvC9J
-         DCdMC6O/GGc1BygckQugPSiphL5P0cy3GAuJ7onw6ljJ70mg6RiiaCiOv601U5i5pNNe
-         cFsg==
+        Wed, 29 Jun 2022 14:58:57 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74CB193D7
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:58:56 -0700 (PDT)
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D2A2F402BE
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 18:58:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1656529134;
+        bh=6iYWf/YeOTRqNm7ox36J45/MeTPZORHOToEf2PQ9E2U=;
+        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+         Content-Type:Date:Message-ID;
+        b=Zj8MdDqyNBoAdzpQ/WOmv5qf6IRfFzl8o45kyOxg/5FwW2+vYs0tQyLnbzTWtgxJY
+         pwHuxaVkch1EGhxKlggDykhALLxrxC5Js4gDmCN4oSv/eusu/BrPWkTsYyTWY38+KX
+         ldMmXz0+gY6RrNkSMWj9VS8ycIFD0IoIEYKTYx8pFq4QjumI+paCaIJNIZ+Bz3txZN
+         Ow+vYyLSScMsE62/IzwJwDrSXu4QglzS6IwYjFhQ790ZZXLLnevtNbujkyQNaQlMcp
+         S2TuTSvBvrKDVkbTCqlPpyXomop7VfLLJaGCebELTdXHFz+BqTns+03vwdiA4bIAog
+         lsIBuRzOMP4ag==
+Received: by mail-pg1-f200.google.com with SMTP id h190-20020a636cc7000000b003fd5d5452cfso8473888pgc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:58:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5p870x4sNIuh+XUc5mOSvBDrkyHrhB4Hd3tt75IAjfA=;
-        b=VAqccKf1oHK0pigzJoeqs5tocw/gsYn6NjiyqxYLNc3EokB0AMonMgwK9j9V+0xBBx
-         fvzx2ZUuNb9bjySeIpRiq3emIFXbQFeJHre57N1/vuIO4zkkIZAY14UIMm+N3Z58BQOW
-         X31gVwXM/MgoRDKXASV8qYtuJxEwWsGZG/03cDMLlbRFFVRdLabbv2wrCl5uYHKyfu7V
-         4bPBSuKtUX1Kgk/v1CBHLDN4A4h7JSVtKpA/HvTINTNPiwdv8c4REuTf0voRm3IdB5pX
-         96+z35iBmwjnQznxuaziBZfDgAqKG+yJGjv/TX3uUGr1N7wTz6o3g1Z7qUY0O/7BEubJ
-         Gxdg==
-X-Gm-Message-State: AJIora+hOHplRCX9vvbNuydS79ip6Nuq4ErsDwNaajMxVoScuozf0i4v
-        xs75AMNW+TgJkdWBz3D16Or3M3vpz882C7eYCFF7iQ==
-X-Google-Smtp-Source: AGRyM1sSX+/x4ZUI5F+rgABEpZPnoRUQplDBXBh1k9TvYrHW5wV7Zl0uk9sDKEVl9e7TqEKOK5sbutSFxpkYXpkjUIc=
-X-Received: by 2002:a05:6870:c596:b0:101:6409:ae62 with SMTP id
- ba22-20020a056870c59600b001016409ae62mr3941507oab.112.1656529010120; Wed, 29
- Jun 2022 11:56:50 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
+         :comments:mime-version:content-id:content-transfer-encoding:date
+         :message-id;
+        bh=6iYWf/YeOTRqNm7ox36J45/MeTPZORHOToEf2PQ9E2U=;
+        b=QQQjiKodKiuwUqytoHFIcC9QZwteg8IndwSCVueKXAn8PMiqvD2kWvInPBf+VgzgdU
+         cbJN1qL1hzqB5h/bLafmZraZ5bDWbvkVpzA61kK1KPegtKHRowE7fq/r9iqpSgAST66R
+         /xE8HiQdN7Z41fruIoGl+u+fM7zb/mMoAupmh4SeMvhzE2HI2kCHbK1NDWNS2mhxhC6Q
+         xNy08xrEwrl1bT6g9x1oqy03Po83fVCz3oywI1n6iAs0z7t/3J2UPpj7lIDGcRBUXPre
+         I4/kp6JnWzTJhQ3ua+fvyizmZ51TlDgS5ZUZo/no/tMnoKMr1HYk9GTUG0KSnNhb8zfC
+         Xh8g==
+X-Gm-Message-State: AJIora8G1/XfCktkgLgvzlIIPULU5LOz55A0qO7t6Fd39jba8tsyfbvS
+        Am3B11z9l+iMBkb1/AaGjPPvlOsCA2HtWWp5BwTCOdbZqbZCGb+ShlAGoyT6yuP74MOl/NE6cuO
+        uthDOGF1lR2AXc5lDn7ipFHgaDNUuRaZftwz/3Fkgxw==
+X-Received: by 2002:a63:b444:0:b0:40c:f936:a21a with SMTP id n4-20020a63b444000000b0040cf936a21amr4253158pgu.37.1656529133588;
+        Wed, 29 Jun 2022 11:58:53 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tLJjDVD1ffdKoE/azFr6/Om005ry1/h8AruJFOA0Km4PLUHHmf5L3eOWe6UOaAws8/1LvWRQ==
+X-Received: by 2002:a63:b444:0:b0:40c:f936:a21a with SMTP id n4-20020a63b444000000b0040cf936a21amr4253141pgu.37.1656529133314;
+        Wed, 29 Jun 2022 11:58:53 -0700 (PDT)
+Received: from famine.localdomain ([50.125.80.157])
+        by smtp.gmail.com with ESMTPSA id c20-20020a17090aa61400b001ec84049064sm2514341pjq.41.2022.06.29.11.58.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 29 Jun 2022 11:58:52 -0700 (PDT)
+Received: by famine.localdomain (Postfix, from userid 1000)
+        id 3BCB062730; Wed, 29 Jun 2022 11:58:52 -0700 (PDT)
+Received: from famine (localhost [127.0.0.1])
+        by famine.localdomain (Postfix) with ESMTP id 34767A1777;
+        Wed, 29 Jun 2022 11:58:52 -0700 (PDT)
+From:   Jay Vosburgh <jay.vosburgh@canonical.com>
+To:     Yevhen Orlov <yevhen.orlov@plvision.eu>
+cc:     netdev@vger.kernel.org,
+        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
+        Taras Chornyi <taras.chornyi@plvision.eu>,
+        Mickey Rachamim <mickeyr@marvell.com>,
+        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
+        Maksym Glubokiy <maksym.glubokiy@plvision.eu>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net: bonding: fix use-after-free after 802.3ad slave unbind
+In-reply-to: <20220629012914.361-1-yevhen.orlov@plvision.eu>
+References: <20220629012914.361-1-yevhen.orlov@plvision.eu>
+Comments: In-reply-to Yevhen Orlov <yevhen.orlov@plvision.eu>
+   message dated "Wed, 29 Jun 2022 04:29:14 +0300."
+X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
 MIME-Version: 1.0
-References: <20220629150625.238286-1-vkuznets@redhat.com> <20220629150625.238286-17-vkuznets@redhat.com>
-In-Reply-To: <20220629150625.238286-17-vkuznets@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 29 Jun 2022 11:56:38 -0700
-Message-ID: <CALMp9eS_iAijAk4pdK1tjLbRp3XH-PhR1mX4gaSXztWPXJpfkA@mail.gmail.com>
-Subject: Re: [PATCH v2 16/28] KVM: VMX: Tweak the special handling of
- SECONDARY_EXEC_ENCLS_EXITING in setup_vmcs_config()
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <30285.1656529132.1@famine>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 29 Jun 2022 11:58:52 -0700
+Message-ID: <30286.1656529132@famine>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
->
-> SECONDARY_EXEC_ENCLS_EXITING is conditionally added to the 'optional'
-> checklist in setup_vmcs_config() but there's little value in doing so.
-> First, as the control is optional, we can always check for its
-> presence, no harm done. Second, the only real value cpu_has_sgx() check
-> gives is that on the CPUs which support SECONDARY_EXEC_ENCLS_EXITING but
-> don't support SGX, the control is not getting enabled. It's highly unlikely
-> such CPUs exist but it's possible that some hypervisors expose broken vCPU
-> models.
->
-> Preserve cpu_has_sgx() check but filter the result of adjust_vmx_controls()
-> instead of the input.
->
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 89a3bbafa5af..e32d91006b80 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -2528,9 +2528,9 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
->                         SECONDARY_EXEC_PT_CONCEAL_VMX |
->                         SECONDARY_EXEC_ENABLE_VMFUNC |
->                         SECONDARY_EXEC_BUS_LOCK_DETECTION |
-> -                       SECONDARY_EXEC_NOTIFY_VM_EXITING;
-> -               if (cpu_has_sgx())
-> -                       opt2 |= SECONDARY_EXEC_ENCLS_EXITING;
-> +                       SECONDARY_EXEC_NOTIFY_VM_EXITING |
-> +                       SECONDARY_EXEC_ENCLS_EXITING;
-> +
->                 if (adjust_vmx_controls(min2, opt2,
->                                         MSR_IA32_VMX_PROCBASED_CTLS2,
->                                         &_cpu_based_2nd_exec_control) < 0)
-> @@ -2577,6 +2577,9 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
->                 vmx_cap->vpid = 0;
->         }
->
-> +       if (!cpu_has_sgx())
-> +               _cpu_based_2nd_exec_control &= ~SECONDARY_EXEC_ENCLS_EXITING;
+Yevhen Orlov <yevhen.orlov@plvision.eu> wrote:
 
-NYC, but why is there a leading underscore here?
+>commit 0622cab0341c ("bonding: fix 802.3ad aggregator reselection"),
+>resolve case, when there is several aggregation groups in the same bond.
+>bond_3ad_unbind_slave will invalidate (clear) aggregator when
+>__agg_active_ports return zero. So, ad_clear_agg can be executed even, wh=
+en
+>num_of_ports!=3D0. Than bond_3ad_unbind_slave can be executed again for,
+>previously cleared aggregator. NOTE: at this time bond_3ad_unbind_slave
+>will not update slave ports list, because lag_ports=3D=3DNULL. So, here w=
+e
+>got slave ports, pointing to freed aggregator memory.
+>
+>Fix with checking actual number of ports in group (as was before
+>commit 0622cab0341c ("bonding: fix 802.3ad aggregator reselection") ),
+>before ad_clear_agg().
 
->         if (_cpu_based_exec_control & CPU_BASED_ACTIVATE_TERTIARY_CONTROLS) {
->                 u64 opt3 = TERTIARY_EXEC_IPI_VIRT;
+	To be clear, what it looks like is going on is that, after
+0622cab0341c, we're getting to this point with an aggregator that
+contains the port being removed and a non-zero number of inactive ports.
+The extant logic is for the "old way" (no inactive ports in an agg), and
+presumes that if __agg_active_ports() =3D=3D 0 then the agg is empty, whic=
+h
+isn't a safe assumption in the current code.
+
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+
+	-J
+
+>The KASAN logs are as follows:
 >
-> --
-> 2.35.3
+>[  767.617392] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>[  767.630776] BUG: KASAN: use-after-free in bond_3ad_state_machine_handl=
+er+0x13dc/0x1470
+>[  767.638764] Read of size 2 at addr ffff00011ba9d430 by task kworker/u8=
+:7/767
+>[  767.647361] CPU: 3 PID: 767 Comm: kworker/u8:7 Tainted: G           O =
+5.15.11 #15
+>[  767.655329] Hardware name: DNI AmazonGo1 A7040 board (DT)
+>[  767.660760] Workqueue: lacp_1 bond_3ad_state_machine_handler
+>[  767.666468] Call trace:
+>[  767.668930]  dump_backtrace+0x0/0x2d0
+>[  767.672625]  show_stack+0x24/0x30
+>[  767.675965]  dump_stack_lvl+0x68/0x84
+>[  767.679659]  print_address_description.constprop.0+0x74/0x2b8
+>[  767.685451]  kasan_report+0x1f0/0x260
+>[  767.689148]  __asan_load2+0x94/0xd0
+>[  767.692667]  bond_3ad_state_machine_handler+0x13dc/0x1470
 >
-Reviewed-by: Jim Mattson <jmattson@google.com>
+>Fixes: 0622cab0341c ("bonding: fix 802.3ad aggregator reselection")
+>Co-developed-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
+>Signed-off-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
+>Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
+>---
+> drivers/net/bonding/bond_3ad.c | 3 ++-
+> 1 file changed, 2 insertions(+), 1 deletion(-)
+>
+>diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3a=
+d.c
+>index a86b1f71762e..d7fb33c078e8 100644
+>--- a/drivers/net/bonding/bond_3ad.c
+>+++ b/drivers/net/bonding/bond_3ad.c
+>@@ -2228,7 +2228,8 @@ void bond_3ad_unbind_slave(struct slave *slave)
+> 				temp_aggregator->num_of_ports--;
+> 				if (__agg_active_ports(temp_aggregator) =3D=3D 0) {
+> 					select_new_active_agg =3D temp_aggregator->is_active;
+>-					ad_clear_agg(temp_aggregator);
+>+					if (temp_aggregator->num_of_ports =3D=3D 0)
+>+						ad_clear_agg(temp_aggregator);
+> 					if (select_new_active_agg) {
+> 						slave_info(bond->dev, slave->dev, "Removing an active aggregator\n=
+");
+> 						/* select new active aggregator */
+>-- =
+
+>2.17.1
+>

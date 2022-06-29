@@ -2,129 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC335607E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 19:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C905607E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 19:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbiF2Ry7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 13:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
+        id S231523AbiF2Rzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 13:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbiF2Ryw (ORCPT
+        with ESMTP id S231166AbiF2Rzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 13:54:52 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC35F248D2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 10:54:50 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id n8so9310570eda.0
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 10:54:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=lL8EpxBr19NArvK4AEsRyIynXTspHW/eotdbJscrOhI=;
-        b=NY+vW52EuYiK7NXq+baMr5irPJc+p0bsNlTBNCiquzBZVewrkoC1hPbUVm8V92Wvxd
-         sfFdQv0QDqvGE47jx10nW06sCbCIqaonUvhd4twYf/AuXa86IlefyQcn2R0ENkxBTcch
-         K7eFIyX49uaEsR2YZJZlwOKzu4hpc6QyhjgJC1I2f2zTVxBIoiQihWRRvaMjSQXeI0zu
-         5WucY63Lf3nOVHTfQmVs4IUKhoHZYNxHB6hLr9orMBWtvsLx6tzFlBAWW0OCzsvn1LI8
-         rKMFX95Xbx5knuDtC38PhXG9AD9cdGZAsKUHObkjQyMSfJJ3E3GbqYgmSDpOdTMPpC5x
-         DrEQ==
+        Wed, 29 Jun 2022 13:55:46 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14AF323BD9;
+        Wed, 29 Jun 2022 10:55:45 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id cs6so25971685qvb.6;
+        Wed, 29 Jun 2022 10:55:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lL8EpxBr19NArvK4AEsRyIynXTspHW/eotdbJscrOhI=;
-        b=v5gqFTw1YwM86lW/rTAl1SuPP5hbboRr0QaA9+jy/2pLY1vrfc0V4++ItaII6y8FVG
-         V4OHq7ifGrXxjn/bCUIBhRsbzZYTSyhWUC+xTfxOP8/w18qZsy4sIFoxpNqhBqFqRv3S
-         1SiMR5VMRG7hifZ6HRP71AykJa/kImHGDssjM9nrQPe7gzB0uj8gBqcytDJ/4KTGO7IM
-         66q+390jJsFbpNCZ7XlRdt+4BVEhSz1cL5hqsTqRTV/BST+1G/laE9LWsZ1tx2Uyua8P
-         wNUgvkMYS6jpsqQWAVRdxNV9BfFTHS/rgb6/GEgQZxmOegyxdyOInNIp6MH7QjZoqutA
-         jKhQ==
-X-Gm-Message-State: AJIora/fp13RulKm6RtISE1brWQ/jFnC8Tl4QTjmIDkKLR2dFAAFF2UE
-        XI0NXA/bS1Ktuvdd3bMUtdxwnw==
-X-Google-Smtp-Source: AGRyM1tznzR5SLJwpDbAfB4r8bj4JU4rX7RmAZdnMd//ppTFcsHXaZB3z2MJgtXtPwjGqfy8yIMmsA==
-X-Received: by 2002:a05:6402:158e:b0:435:7d0f:ac85 with SMTP id c14-20020a056402158e00b004357d0fac85mr5788373edv.93.1656525289448;
-        Wed, 29 Jun 2022 10:54:49 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id z4-20020a1709060f0400b00722f069fd40sm7930242eji.159.2022.06.29.10.54.47
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DzOAMNLdQF+lhggmTo9ureVMvFbgR7MbeRD6xA099wQ=;
+        b=RQ5ve8rD2CSP+lq/zP7sX6+sMTfpHKydrqpsLR91hASgv48dmeXuSZrek2stgXVoaE
+         Xz5deSr0sIg5ssWLmlbNRGsA7UG+n/iYx92UaEVTC6XPvOYko7ZS3GROItBwOFW7cpAk
+         zY/bCsgOmn/Npnz6NL9QLeI3fbOxo/ykThUIFqd00jp0+z1Ozwm4Gmbyj9XRAiu26/xs
+         YENaIsVaOrew+tY97KZ0L1Awelraewu97Vgh4gQED2mo/saYEof7d1mI0FXe5p+iNE/8
+         k3UdPSJYmFfVa+XGc6II+zrF3L5mya3p7NbHsiaV7/9KKRL3z1TVf+uk7I/eobNkTpQ8
+         TCSg==
+X-Gm-Message-State: AJIora+hWQxgWSCghZEI5vcyCrn1iljydO7pZRQ/kvtbHzP/+zrBi07S
+        4KGOUd6utEKjqReA/uHlh9fB2xv6CTLDTQ==
+X-Google-Smtp-Source: AGRyM1szfC+7q6BSm4EXfix5vjvMSSYC5joOJWqmTV2MHUz5I62bT2Av6GyVoMnupTT+9f8Mfdqlxg==
+X-Received: by 2002:ac8:7f46:0:b0:305:139:fcfb with SMTP id g6-20020ac87f46000000b003050139fcfbmr3643365qtk.648.1656525344078;
+        Wed, 29 Jun 2022 10:55:44 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id u13-20020a05620a0c4d00b006a71398f06fsm14092019qki.32.2022.06.29.10.55.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 10:54:48 -0700 (PDT)
-Message-ID: <745091fe-dcf7-cdde-3b81-f3ea516bd9fb@linaro.org>
-Date:   Wed, 29 Jun 2022 19:54:46 +0200
+        Wed, 29 Jun 2022 10:55:43 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id v38so18615854ybi.3;
+        Wed, 29 Jun 2022 10:55:43 -0700 (PDT)
+X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
+ bu5-20020a056902090500b0064a2089f487mr4890186ybb.202.1656525342858; Wed, 29
+ Jun 2022 10:55:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 03/14] dt-bindings: input: Add fsl,scu-key yaml file
-Content-Language: en-US
-To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Liu Ying <victor.liu@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
- <20220629164414.301813-4-viorel.suman@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220629164414.301813-4-viorel.suman@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <cover.1656341824.git.geert+renesas@glider.be> <2fd9b9e3f60fe555d9dcad499c90e3ec869aa96e.1656341824.git.geert+renesas@glider.be>
+ <c65d6a94-b5c2-e2e4-6fdb-b7982d291e01@linaro.org>
+In-Reply-To: <c65d6a94-b5c2-e2e4-6fdb-b7982d291e01@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 29 Jun 2022 19:55:31 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW=s42sfFwimizTsNjyKue+W9NasTOG0jgjkgkoKv3wfw@mail.gmail.com>
+Message-ID: <CAMuHMdW=s42sfFwimizTsNjyKue+W9NasTOG0jgjkgkoKv3wfw@mail.gmail.com>
+Subject: Re: [PATCH 5/7] memory: renesas-rpc-if: Move resource acquisition to .probe()
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mark Brown <broonie@kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
-> From: Abel Vesa <abel.vesa@nxp.com>
-> 
-> In order to replace the fsl,scu txt file from bindings/arm/freescale,
-> we need to split it between the right subsystems. This patch documents
-> separately the 'keys' child node of the SCU main node.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
-> ---
->  .../bindings/input/fsl,scu-key.yaml           | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/input/fsl,scu-key.yaml
-> 
+Hi Krzysztof,
 
-Assuming all patches are taken independently:
+On Wed, Jun 29, 2022 at 7:44 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 27/06/2022 17:31, Geert Uytterhoeven wrote:
+> > While the acquired resources are tied to the lifetime of the RPC-IF core
+> > device (through the use of managed resource functions), the actual
+> > resource acquisition is triggered from the HyperBus and SPI child
+> > drivers.  Due to this mismatch, unbinding and rebinding the child
+> > drivers manually fails with -EBUSY:
+> >
+> >     # echo rpc-if-hyperflash > /sys/bus/platform/drivers/rpc-if-hyperflash/unbind
+> >     # echo rpc-if-hyperflash > /sys/bus/platform/drivers/rpc-if-hyperflash/bind
+> >     rpc-if ee200000.spi: can't request region for resource [mem 0xee200000-0xee2001ff]
+> >     rpc-if-hyperflash: probe of rpc-if-hyperflash failed with error -16
+> >
+> > Fix this by moving all resource acquisition to the core driver's probe
+> > routine.
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> This looks like a fix, so how about putting it as first in the series,
+> so backporting is easy/automatic?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Unfortunately that is not as simple as it sounds, as this really
+depends on patch 4.
+I agree patches 1-3 could be moved later, if you think it is worthwhile.
 
+> Plus a fixes tag?
 
-Best regards,
-Krzysztof
+It's been like that since forever.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

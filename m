@@ -2,207 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6AF5608CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2FF45608D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbiF2SOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 14:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57122 "EHLO
+        id S231357AbiF2SOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 14:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbiF2SOK (ORCPT
+        with ESMTP id S229513AbiF2SOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 14:14:10 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2042.outbound.protection.outlook.com [40.107.244.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D262F388;
-        Wed, 29 Jun 2022 11:14:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YowDV8ozKBJftdUN91Z06JgYhkX/OYBRKeZEiuhHpQiWEOawfZIoOANOHm4GwJjDVJGfAQ+G6YWOupPGj6d5ex7J4qOBldYNC5YRSFRU80zrTQ4O0rrMx0IXsOCZkHTcJVOjrqAq61qwPGGGvBUSUK+s02CJcBaos+TcaoyeNcEFJ1WAHlYI5zldItOIMXPgAPMdwWidJ6EGGvV/+/TO7LbQn0CG+jrrBgQn+Ozg8Iq/KhOjkbgNQ5IFTsJWUcbRboVvio6dtUUXKKdMgzA0ZddngSIDx8I3+LgTaEILuuo5Q65/b5cuCj9OZAWqIiWQARzsYFvsvx+Sr4s9u6iP/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1L8mMvX+7ycTBgkBMqN497C5vu+/J23Pf1RQSwTKIlo=;
- b=L2YLzVm2mWRK085H4QNoqy8fD/N3CLsH9EAYUnQJOY4T2TvRWwc9lmz17Zk35SxTRIsP0cs+fcMNJmm9Dq+eRFd74iTFzZsvW78eeL63jKkxv1x3/0jJtV/me1NIDBiqmbWUfz8Rv+xqBt98tacJ94VnWT0Jna24x05XbeQvOq6SqeNogtL/L860gB9yZCP6HNJjK9X05UbEycu0fFqK8SmjYpJtp4qZhY+6xpdUyOlsmC93DBjBqYg4U6RMV1s7mGmnmG4JRfimZttDPcN4YrkbvzVQpTF+IEPIBoTg3kRb1tE9Mwp0cmcYjguKUpDjr4Qr3to4sgO4LnL4fErW6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1L8mMvX+7ycTBgkBMqN497C5vu+/J23Pf1RQSwTKIlo=;
- b=GdQutGsF2xdH8nD/XY9dXThgFBkmBzn4glk9g11TCwHxHoPNu84O04HboaVKv10IyT0lVEWw8zd6shXHN2A1ClANLXZ1VeM2d8ByXl4DSGnFE2DXvCwq8NMHRihvtfJAFVRi93kkm14bBIoECNY8ZyznL8iMxRmtd+dmGJ9WMc4=
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
- by SN1PR12MB2573.namprd12.prod.outlook.com (2603:10b6:802:2b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Wed, 29 Jun
- 2022 18:14:05 +0000
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::8953:6baa:97bb:a15d]) by SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::8953:6baa:97bb:a15d%7]) with mapi id 15.20.5395.014; Wed, 29 Jun 2022
- 18:14:05 +0000
-From:   "Kalra, Ashish" <Ashish.Kalra@amd.com>
-To:     Peter Gonda <pgonda@google.com>
-CC:     the arch/x86 maintainers <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Alper Gun <alpergun@google.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: RE: [PATCH Part2 v6 26/49] KVM: SVM: Add KVM_SEV_SNP_LAUNCH_UPDATE
- command
-Thread-Topic: [PATCH Part2 v6 26/49] KVM: SVM: Add KVM_SEV_SNP_LAUNCH_UPDATE
- command
-Thread-Index: AQHYh9dobrA/tNMTEkWfixyjU6IYYa1msGbw
-Date:   Wed, 29 Jun 2022 18:14:05 +0000
-Message-ID: <SN6PR12MB2767A2C2DE2AD9E4F764CAFD8EBB9@SN6PR12MB2767.namprd12.prod.outlook.com>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <fdf036c1e2fdf770da8238b31056206be08a7c1b.1655761627.git.ashish.kalra@amd.com>
- <CAMkAt6o2cQPAAzYK31myzBQWckUSQWVOOV2+-5VpnTym-wN7sA@mail.gmail.com>
-In-Reply-To: <CAMkAt6o2cQPAAzYK31myzBQWckUSQWVOOV2+-5VpnTym-wN7sA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-06-29T17:45:44Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=ef421864-6c47-4782-9282-98ed775b15ea;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-06-29T18:14:03Z
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 07d01f16-d348-4eeb-8c6d-9236031b9c65
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1cdf840f-76b7-4721-da07-08da59fb2731
-x-ms-traffictypediagnostic: SN1PR12MB2573:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: N4bRUshCTuEQtx/Du3bx4JomvphcNQrjS5x0PVQ0JcBNxEcbUOUGquq7NhsAiyKTcG8LCZcW81HOsXkayStyYeZAvFz4m8kSBAA0Ug36swx0Tz1/WdoXWzuDuYVmef0kOxgxpdue6r2Y0mpIX60Y4sAW3wx/pdxg+TAC8HtdlJ5SuzEdFS+YtfuxYSx+outWo/9Ot5b7KgUZJHnfmGU7Bg+z+GO94TldUkCdbeIZJDQBpJPwsJjF5AHYcIDAXcjnLchxzNWaJQURx5td5o+AB35p6lfDBoQsMXcI3odMdw5ZoEdvdQtOzLM+uTx9Zyq0FVu0NTIS1Sn9QTzA/XV0UM+JZVjxEquReJ7IK0gOBFqOGips2sY05kCB80Xoj6kzcea0DVsZQsuEQfzgYA4b6qfNhyZKMsdjIMGU+2Up7KZ9ZRIqDKeEJIApyy95h1UmsjDQwFt89XDJ5FoQwGt1BwftuSeNE1nkMHHYGe3pb17msxB9JExFTZ1WeIln/MZZCA+YWmfXG/foWcYVoPq6Hh86RgEdFQiwt0/PzA77vyzcj0LJ8Y/QdQ7MLPScYA5Vj7feXPRtFaM5Dr7z635jLTwFUH/9cDSCg5dAnOGnZb2n7IcSqQawuzqj82MCPsP3XMw4IyrbrRcPqTaR7vQgOf0xv8ZlXMtjg+HJnVtDspHoFlFSNY1481FdnbA9D7djpM8y8Xa19UhfzSjZj5o7tbr1lMAwNpjRvdGkB3aOp2yZCQsQOedOLicjRDCarlsdAWcnPRUzgpvpd/hOHvJ00muqZPRkAlRPohQ/P+KeKos=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(376002)(136003)(396003)(346002)(39860400002)(26005)(8936002)(66556008)(9686003)(66446008)(6506007)(186003)(71200400001)(76116006)(8676002)(83380400001)(41300700001)(7696005)(33656002)(86362001)(55016003)(66946007)(4326008)(38100700002)(54906003)(64756008)(38070700005)(478600001)(66476007)(6916009)(52536014)(5660300002)(7406005)(316002)(7416002)(2906002)(122000001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QXBVZUhSOHQydWI3allRNmVaNDdlTzArS3pXV1N6aUZ5YzVxNExIT3JmS2xS?=
- =?utf-8?B?WHdUZUczcjJwYlRvRlExa25EUTdiemlsVUkvVHQyK3hjWGtTL3N4bi9zVzZw?=
- =?utf-8?B?UHQwb24rdkw5bUQxNERFdEUvSUxsQVRVazRSemhsVTZBV21GTmFJcGRlRGNo?=
- =?utf-8?B?VVlGOTc5SU9BNjlWV1hxalYzWkh5enZnaHU2cmgvd1hsWjNQQmtPdk1EVGZI?=
- =?utf-8?B?REY2RFF0dGNDRm5GTktqMllicWVaWG45cjBSMTNzajVXb2s5MkpwQWNLdGwy?=
- =?utf-8?B?UVRXOXZoSVFXdmhUMzRhVWhrcUFEcVJHQVkyT1AxbHloRm9HK3FnNCtlN2hG?=
- =?utf-8?B?eEdzbXF3TFFNU2JSaHJEWkVTaEl5QUdyL0RzOXVuTU1wZEUyVHZ1djdtUmp2?=
- =?utf-8?B?Ujl4WmhvLzVZSEF6THFLdmdMdmF2aTZlbVBEeWYzbnJJR0JjVk5HQjhxYmZ6?=
- =?utf-8?B?Um50M2d4ODBHWG91QjdpU0VHbURYYVM0NnFkUFRmd2pZNEsrMGRTS0lnSlJ6?=
- =?utf-8?B?ZkZ5N0d3RG5SaUNiQUpVZkd0VmlZb1IzSW1ucFBnczhmVHBqM0JQQks1STNE?=
- =?utf-8?B?SXpsbDJ4UTlmMkhWUWhwR3YrUTR2eElTSnFaRlZEbFB6bEhGOTMwbU43WEFv?=
- =?utf-8?B?dU5GdFRSQ3VQcG8zU1VEUndjZE1RVFZDaTdkRUUzK0d2Rlo4ZDV5UUtwaS83?=
- =?utf-8?B?QzVIcVNOcVAzeTdkWXZWUEF6dDdUY0MzZUVPUFNteUVucGo5eTY1V2RWUjJy?=
- =?utf-8?B?WThaakxmZFhadzV4S09nWUZ3a0pzOTBTbFV6WEwxelV6MWlnTXlTQ2VVZE9z?=
- =?utf-8?B?RTZHOFpPcWlaOHpyc3NOUnl1aFFZdnkvSTNTcENwMm14cmp3WjkyM21xSVhi?=
- =?utf-8?B?MHlVNzlwSjd0WWpWdkNISXAvcktsRFVuc2IyTTRYS1NoTTY1TlpobWNpWjc1?=
- =?utf-8?B?Y08yL21FN0dUQ21GakthTDNnRUpFNzJ4MmVXN0ZYN2VKcGROSStUWEhNTnhp?=
- =?utf-8?B?d2FlL1BLWmYxMEY0MFNGM3JBZ3YvTjAzTnc0ZmxEYldpWWFlQVQzK3ozc3VU?=
- =?utf-8?B?cjE4aEFUeE1PdzIzZkorN1ExOHhRVkFmSW1rOXlnR1p6bXNQZmxkYlhGdGtv?=
- =?utf-8?B?ak85L0UwZGRzbVA5RTJwNGpBM1lkVlQrcVNGVHp2czExczdXSlFhTkhpVzBS?=
- =?utf-8?B?QXNkZmZ5R2lCSVU5YUYyVDlGU1RMZHdLSTBTaVNEdzdvRmVDUFdXQ3liR3Bs?=
- =?utf-8?B?REpBSVA4aWdxT1Zrd0V2R2JUQnlTVWYzZzcrUDdaS2RtUXlPNlVGclRYQ083?=
- =?utf-8?B?QW4xQXF3SzlMbWhicmQrMVBlc2tQS0RDWEpVcGZDRDFDd3F3NkdhMy9SK1Zj?=
- =?utf-8?B?TklvWmhPUmk1YlU1VUlzb2lTSUp3T2hjV0NIaFNldEt0V0NheG1wMWJ3WGNr?=
- =?utf-8?B?Y3IvSVVuTEhTMUdHZ0Z6VzdZb0Z4dkJVL3VoSXV2c0VLaDBHNVVLZkFxbHZt?=
- =?utf-8?B?dnhNZit6UmhiV1NoeWxvMnBCRWFocW5XMWdVdVl5ay8wem1xdEZad010TXJC?=
- =?utf-8?B?Y2FhMUhuU0xuVEJRY1N2cHIyVUJBV0ZTR2V6NkJVZmJEaEl4TFdWVXlyamdm?=
- =?utf-8?B?Z0cyVmNTUjArUmx2MFJaNzlXbW83OEpWTno4SFd1SWFlaHlIbHMyd0Z4UEVQ?=
- =?utf-8?B?RjdwdTdzNXNnTFJRWStLYVd4ZHpNY0xRdDZ0L1NtZ1pvekFiRmE1czN0UzZK?=
- =?utf-8?B?RjkrN01qMW5SdGRVZnZlcUJ4M01Rc1FjMVBNSlNXaUlwVlJLc21mZGs5RGFM?=
- =?utf-8?B?N3dyQlFnZXZDRDZkeWFiTWQxNjJLUi95VVhpWURjK1VsVXQrYmxsWnBYRHI5?=
- =?utf-8?B?WjZTTndQZE9Lbm5ROXExcjBIK2hrRG0zcWlPcmZDWDc1eUtFN1R5MnpJak56?=
- =?utf-8?B?RWNEVmRFL2RCeU1vSmRpZ0l2d3lLcjlhMUNMa0lCdVVXcW4wMWRXTDdPcHMr?=
- =?utf-8?B?ZFdpREhFWXRLUC9oSGJnWmZzOHhBS1Z0aDJmMFJ0Q1F3SzQzZHVJOXhjb1dB?=
- =?utf-8?B?SGtJWk1hWk1XM3QveVBueG1qYXFsV2M3SE1mcjhpeVNmY0EzUmVVT3VBdW84?=
- =?utf-8?Q?JLqg=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 29 Jun 2022 14:14:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9E2B2F388
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:14:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656526480;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ifz9v9KEaa+b7vWFXvzOX9Kld7QOZaISqlDQ5NcG7dY=;
+        b=WLAiNr2ijthsU0Z9FmcXCCXCtSzBnAR63KD9bo0PTeiqiMDObB+PKYTBmuzVcLq9qXeloB
+        vh6JZ0Mk6xKXkAj1fXEfKroDMMRT3AZblfSpvpp/9CJ6MzRj83iDYFP0bg98feV8Pl5FCa
+        nrJEjUb2wOpybhRLxm5KapflTcT66fM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-214-Q9ZVg3DtMwaEzhu2DogUrA-1; Wed, 29 Jun 2022 14:14:37 -0400
+X-MC-Unique: Q9ZVg3DtMwaEzhu2DogUrA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 31575802A5E;
+        Wed, 29 Jun 2022 18:14:37 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.33.30])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1757341638B;
+        Wed, 29 Jun 2022 18:14:37 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id C76E2220463; Wed, 29 Jun 2022 14:14:36 -0400 (EDT)
+Date:   Wed, 29 Jun 2022 14:14:36 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Cc:     miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xieyongji@bytedance.com,
+        fam.zheng@bytedance.com, Miklos Szeredi <mszeredi@redhat.com>
+Subject: Re: [PATCH] fuse: writeback_cache consistency enhancement
+ (writeback_cache_v2)
+Message-ID: <YryWjGe6MgBmSkhO@redhat.com>
+References: <20220624055825.29183-1-zhangjiachen.jaycee@bytedance.com>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1cdf840f-76b7-4721-da07-08da59fb2731
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2022 18:14:05.4963
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7ZOqQL2NJgbNurzZ6uAdNMBTvvQ7iJHtnbv9GO+x+NR/DWZUWAJ6h28koEL0D/wdtsm+mCMj83J9Yg1WOw+ptA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2573
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220624055825.29183-1-zhangjiachen.jaycee@bytedance.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W1B1YmxpY10NCg0KPj4gK3N0YXRpYyBpbmxpbmUgdm9pZCBzbnBfbGVha19wYWdlcyh1NjQgcGZu
-LCBlbnVtIHBnX2xldmVsIGxldmVsKSB7DQo+PiArICAgICAgIHVuc2lnbmVkIGludCBucGFnZXMg
-PSBwYWdlX2xldmVsX3NpemUobGV2ZWwpID4+IFBBR0VfU0hJRlQ7DQo+PiArDQo+PiArICAgICAg
-IFdBUk4oMSwgInBzYyBmYWlsZWQgcGZuIDB4JWxseCBwYWdlcyAlZCAobGVha2luZylcbiIsIHBm
-biwgDQo+PiArIG5wYWdlcyk7DQo+PiArDQo+PiArICAgICAgIHdoaWxlIChucGFnZXMpIHsNCj4+
-ICsgICAgICAgICAgICAgICBtZW1vcnlfZmFpbHVyZShwZm4sIDApOw0KPj4gKyAgICAgICAgICAg
-ICAgIGR1bXBfcm1wZW50cnkocGZuKTsNCj4+ICsgICAgICAgICAgICAgICBucGFnZXMtLTsNCj4+
-ICsgICAgICAgICAgICAgICBwZm4rKzsNCj4+ICsgICAgICAgfQ0KPj4gK30NCg0KPlNob3VsZCB0
-aGlzIGJlIGRlZHVwbGljYXRlZCB3aXRoIHRoZSBzbnBfbGVha19wYWdlcygpIGluICJjcnlwdG86
-IGNjcDoNCj5IYW5kbGUgdGhlIGxlZ2FjeSBUTVIgYWxsb2NhdGlvbiB3aGVuIFNOUCBpcyBlbmFi
-bGVkIiA/DQoNClllcywgcHJvYmFibHkgc2hvdWxkLg0KDQo+PiArc3RhdGljIGJvb2wgaXNfaHZh
-X3JlZ2lzdGVyZWQoc3RydWN0IGt2bSAqa3ZtLCBodmFfdCBodmEsIHNpemVfdCBsZW4pIA0KPj4g
-K3sNCj4+ICsgICAgICAgc3RydWN0IGt2bV9zZXZfaW5mbyAqc2V2ID0gJnRvX2t2bV9zdm0oa3Zt
-KS0+c2V2X2luZm87DQo+PiArICAgICAgIHN0cnVjdCBsaXN0X2hlYWQgKmhlYWQgPSAmc2V2LT5y
-ZWdpb25zX2xpc3Q7DQo+PiArICAgICAgIHN0cnVjdCBlbmNfcmVnaW9uICppOw0KPj4gKw0KPj4g
-KyAgICAgICBsb2NrZGVwX2Fzc2VydF9oZWxkKCZrdm0tPmxvY2spOw0KPj4gKw0KPj4gKyAgICAg
-ICBsaXN0X2Zvcl9lYWNoX2VudHJ5KGksIGhlYWQsIGxpc3QpIHsNCj4+ICsgICAgICAgICAgICAg
-ICB1NjQgc3RhcnQgPSBpLT51YWRkcjsNCj4+ICsgICAgICAgICAgICAgICB1NjQgZW5kID0gc3Rh
-cnQgKyBpLT5zaXplOw0KPj4gKw0KPj4gKyAgICAgICAgICAgICAgIGlmIChzdGFydCA8PSBodmEg
-JiYgZW5kID49IChodmEgKyBsZW4pKQ0KPj4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJu
-IHRydWU7DQo+PiArICAgICAgIH0NCg0KPkdpdmVuIHRoYXQgdXNlcnNhcGNlIGNvdWxkIGxvYWQg
-c2V2LT5yZWdpb25zX2xpc3Qgd2l0aCBhbnkgIyBvZiBhbnkgc2l6ZWQgcmVnaW9ucy4gU2hvdWxk
-IHdlIGFkZCBhICBjb25kX3Jlc2NoZWQoKSBsaWtlIGluIHNldl92bV9kZXN0cm95KCk/DQoNCkFj
-dHVhbGx5LCBpc19odmFfcmVnaXN0ZXJlZCgpIGlzIGFsc28gY2FsbGVkIGZyb20gUFNDIGhhbmRs
-ZXIgd2l0aCBrdm0tPmxvY2sgbXV0ZXggaGVsZC4gRXZlbiB0aG91Z2ggaXQgaXMgYSBtdXRleCwg
-SSBhbSBub3QgcmVhbGx5IHN1cmUgaWYNCml0IGlzIGEgZ29vZCBpZGVhIHRvIGRvIGNvbmRfcmVz
-Y2hlZCgpIHdpdGggdGhlIGt2bS0+bG9jayBtdXRleCBoZWxkID8NCg0KPj4gK2VfdW5waW46DQo+
-PiArICAgICAgIC8qIENvbnRlbnQgb2YgbWVtb3J5IGlzIHVwZGF0ZWQsIG1hcmsgcGFnZXMgZGly
-dHkgKi8NCj4+ICsgICAgICAgZm9yIChpID0gMDsgaSA8IG47IGkrKykgew0KDQo+U2luY2UgfG58
-IGlzIG5vdCBvbmx5IGEgbG9vcCB2YXJpYWJsZSBidXQgYWN0dWFsbHkgY2FycmllcyB0aGUgbnVt
-YmVyIG9mIHByaXZhdGUgcGFnZXMgb3ZlciB0byBlX3VucGluIGNhbiB3ZSB1c2UgYSBtb3JlIGRl
-c2NyaXB0aXZlIG5hbWU/DQo+SG93IGFib3V0IHNvbWV0aGluZyBsaWtlICducHJpdmF0ZV9wYWdl
-cyc/DQoNClllcy4NCg0KVGhhbmtzLA0KQXNoaXNoDQo=
+On Fri, Jun 24, 2022 at 01:58:25PM +0800, Jiachen Zhang wrote:
+> Some users may want both the high performance of the writeback_cahe mode and
+> a little bit more consistency among FUSE mounts. In the current writeback
+> mode implementation, users of one FUSE mount can never see the file
+> expansion done by other FUSE mounts.
+> 
+> Based on the suggested writeback V2 patch in the upstream mailing-list [1],
+> this commit allows the cmtime and size to be updated from server in
+> writeback mode. Compared with the writeback V2 patch in [1], this commit has
+> several differences:
+> 
+>     1. Ensure c/mtime are not updated from kernel to server. IOW, the cmtime
+>     generated by kernel are just temporary values that are never flushed to
+>     server, and they can also be updated by the official server cmtime when
+>     the writeback cache is clean.
+
+Can this give the appearance of time going backwards. If file server
+is getting time stamps from another remote filesystem (say NFS), it
+is possible that client and server clocks are not in sync. So for 
+a stat() might return temporary value of c/mtime from local kernel and
+once it gets udpated, it returns a time which might be behind previous
+time. Sounds like trouble to me.
+
+This can happen more often on virtiofs (even without a remote filesystem
+being involved).
+
+> 
+>     2. Skip mtime-based revalidation when fc->auto_inval_data is set with
+>     fc->writeback_cache_v2. Because the kernel-generated temporary cmtime
+>     are likely not equal to the offical server cmtime.
+> 
+>     3. If any page is ever flushed to the server during FUSE_GETATTR
+>     handling on fuse server, even if the cache is clean when
+>     fuse_change_attributes() checks, we should not update the i_size. This
+>     is because the FUSE_GETATTR may get a staled size before the FUSE_WRITE
+>     request changes server inode size. This commit ensures this by
+>     increasing attr_version after writeback for writeback_cache_v2. In that
+>     case, we should also ensure the ordering of the attr_version updating
+>     and the fi->writepages RB-tree updating. So that if a fuse page
+>     writeback ever happens during fuse_change_attributes(), either the
+>     fi->writepages is not empty, or the attr_version is increased. So we
+>     never mistakenly update a stale file size from server to kernel.
+> 
+> With this patch, writeback mode can consider the server c/mtime as the
+> official one. When inode attr is timeout or invalidated, kernel has chance
+> to see size and c/mtime modified by others.
+> 
+> Together with another patch [2], a FUSE daemon is able to implement
+> close-to-open (CTO) consistency like what is done in NFS clients.
+
+If your goal is to implement NFS style CTO with writeback cache mode, then
+is it not enough to query and udpate attributes at file open time. Instead
+of worrying about also updating attrs while file is open (and cache is
+clean). Updating attrs when cache is clean, is non-deterministic anyway,
+so I don't see how it can be very useful for applications.
+
+Thanks
+Vivek
+
+
+> 
+> [1] https://lore.kernel.org/linux-fsdevel/Ymfu8fGbfYi4FxQ4@miu.piliscsaba.redhat.com
+> [2] https://lore.kernel.org/linux-fsdevel/20220608104202.19461-1-zhangjiachen.jaycee@bytedance.com/
+> 
+> Suggested-by: Miklos Szeredi <mszeredi@redhat.com>
+> Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+> ---
+>  fs/fuse/file.c            | 17 +++++++++++++++
+>  fs/fuse/fuse_i.h          |  3 +++
+>  fs/fuse/inode.c           | 44 +++++++++++++++++++++++++++++++++++++--
+>  include/uapi/linux/fuse.h |  5 +++++
+>  4 files changed, 67 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+> index 9b64e2ff1c96..35bdc7af8468 100644
+> --- a/fs/fuse/file.c
+> +++ b/fs/fuse/file.c
+> @@ -1829,6 +1829,15 @@ static void fuse_writepage_end(struct fuse_mount *fm, struct fuse_args *args,
+>  		 */
+>  		fuse_send_writepage(fm, next, inarg->offset + inarg->size);
+>  	}
+> +
+> +	if (fc->writeback_cache_v2)
+> +		fi->attr_version = atomic64_inc_return(&fc->attr_version);
+> +	/*
+> +	 * Ensure attr_version increases before the page is move out of the
+> +	 * writepages rb-tree.
+> +	 */
+> +	smp_mb();
+> +
+>  	fi->writectr--;
+>  	fuse_writepage_finish(fm, wpa);
+>  	spin_unlock(&fi->lock);
+> @@ -1858,10 +1867,18 @@ static struct fuse_file *fuse_write_file_get(struct fuse_inode *fi)
+>  
+>  int fuse_write_inode(struct inode *inode, struct writeback_control *wbc)
+>  {
+> +	struct fuse_conn *fc = get_fuse_conn(inode);
+>  	struct fuse_inode *fi = get_fuse_inode(inode);
+>  	struct fuse_file *ff;
+>  	int err;
+>  
+> +	/*
+> +	 * Kernel c/mtime should not be updated to the server in the
+> +	 * writeback_cache_v2 mode as server c/mtime are official.
+> +	 */
+> +	if (fc->writeback_cache_v2)
+> +		return 0;
+> +
+>  	/*
+>  	 * Inode is always written before the last reference is dropped and
+>  	 * hence this should not be reached from reclaim.
+> diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
+> index 488b460e046f..47de36146fb8 100644
+> --- a/fs/fuse/fuse_i.h
+> +++ b/fs/fuse/fuse_i.h
+> @@ -654,6 +654,9 @@ struct fuse_conn {
+>  	/* show legacy mount options */
+>  	unsigned int legacy_opts_show:1;
+>  
+> +	/* Improved writeback cache policy */
+> +	unsigned writeback_cache_v2:1;
+> +
+>  	/*
+>  	 * fs kills suid/sgid/cap on write/chown/trunc. suid is killed on
+>  	 * write/trunc only if caller did not have CAP_FSETID.  sgid is killed
+> diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
+> index 8c0665c5dff8..2d5fa82b08b6 100644
+> --- a/fs/fuse/inode.c
+> +++ b/fs/fuse/inode.c
+> @@ -237,14 +237,41 @@ void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
+>  	u32 cache_mask;
+>  	loff_t oldsize;
+>  	struct timespec64 old_mtime;
+> +	bool try_wb_update = false;
+> +
+> +	if (fc->writeback_cache_v2 && S_ISREG(inode->i_mode)) {
+> +		inode_lock(inode);
+> +		try_wb_update = true;
+> +	}
+>  
+>  	spin_lock(&fi->lock);
+>  	/*
+>  	 * In case of writeback_cache enabled, writes update mtime, ctime and
+>  	 * may update i_size.  In these cases trust the cached value in the
+>  	 * inode.
+> +	 *
+> +	 * In writeback_cache_v2 mode, if all the following conditions are met,
+> +	 * then we allow the attributes to be refreshed:
+> +	 *
+> +	 * - inode is not in the process of being written (I_SYNC)
+> +	 * - inode has no dirty pages (I_DIRTY_PAGES)
+> +	 * - inode data-related attributes are clean (I_DIRTY_DATASYNC)
+> +	 * - inode does not have any page writeback in progress
+> +	 *
+> +	 * Note: checking PAGECACHE_TAG_WRITEBACK is not sufficient in fuse,
+> +	 * since inode can appear to have no PageWriteback pages, yet still have
+> +	 * outstanding write request.
+>  	 */
+>  	cache_mask = fuse_get_cache_mask(inode);
+> +	if (try_wb_update && !(inode->i_state & (I_DIRTY_PAGES | I_SYNC |
+> +	    I_DIRTY_DATASYNC)) && RB_EMPTY_ROOT(&fi->writepages))
+> +		cache_mask &= ~(STATX_MTIME | STATX_CTIME | STATX_SIZE);
+> +	/*
+> +	 * Ensure the ordering of cleanness checking and following attr_version
+> +	 * comparison.
+> +	 */
+> +	smp_mb();
+> +
+>  	if (cache_mask & STATX_SIZE)
+>  		attr->size = i_size_read(inode);
+>  
+> @@ -283,7 +310,13 @@ void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
+>  			truncate_pagecache(inode, attr->size);
+>  			if (!fc->explicit_inval_data)
+>  				inval = true;
+> -		} else if (fc->auto_inval_data) {
+> +		} else if (!fc->writeback_cache_v2 && fc->auto_inval_data) {
+> +			/*
+> +			 * When fc->writeback_cache_v2 is set, the old_mtime
+> +			 * can be generated by kernel and must not equal to
+> +			 * new_mtime generated by server. So skip in such
+> +			 * case.
+> +			 */
+>  			struct timespec64 new_mtime = {
+>  				.tv_sec = attr->mtime,
+>  				.tv_nsec = attr->mtimensec,
+> @@ -303,6 +336,9 @@ void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
+>  
+>  	if (IS_ENABLED(CONFIG_FUSE_DAX))
+>  		fuse_dax_dontcache(inode, attr->flags);
+> +
+> +	if (try_wb_update)
+> +		inode_unlock(inode);
+>  }
+>  
+>  static void fuse_init_inode(struct inode *inode, struct fuse_attr *attr)
+> @@ -1153,6 +1189,10 @@ static void process_init_reply(struct fuse_mount *fm, struct fuse_args *args,
+>  				fc->async_dio = 1;
+>  			if (flags & FUSE_WRITEBACK_CACHE)
+>  				fc->writeback_cache = 1;
+> +			if (flags & FUSE_WRITEBACK_CACHE_V2) {
+> +				fc->writeback_cache = 1;
+> +				fc->writeback_cache_v2 = 1;
+> +			}
+>  			if (flags & FUSE_PARALLEL_DIROPS)
+>  				fc->parallel_dirops = 1;
+>  			if (flags & FUSE_HANDLE_KILLPRIV)
+> @@ -1234,7 +1274,7 @@ void fuse_send_init(struct fuse_mount *fm)
+>  		FUSE_ABORT_ERROR | FUSE_MAX_PAGES | FUSE_CACHE_SYMLINKS |
+>  		FUSE_NO_OPENDIR_SUPPORT | FUSE_EXPLICIT_INVAL_DATA |
+>  		FUSE_HANDLE_KILLPRIV_V2 | FUSE_SETXATTR_EXT | FUSE_INIT_EXT |
+> -		FUSE_SECURITY_CTX;
+> +		FUSE_SECURITY_CTX | FUSE_WRITEBACK_CACHE_V2;
+>  #ifdef CONFIG_FUSE_DAX
+>  	if (fm->fc->dax)
+>  		flags |= FUSE_MAP_ALIGNMENT;
+> diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
+> index d6ccee961891..b474763bcf59 100644
+> --- a/include/uapi/linux/fuse.h
+> +++ b/include/uapi/linux/fuse.h
+> @@ -194,6 +194,7 @@
+>   *  - add FUSE_SECURITY_CTX init flag
+>   *  - add security context to create, mkdir, symlink, and mknod requests
+>   *  - add FUSE_HAS_INODE_DAX, FUSE_ATTR_DAX
+> + *  - add FUSE_WRITEBACK_CACHE_V2 init flag
+>   */
+>  
+>  #ifndef _LINUX_FUSE_H
+> @@ -353,6 +354,9 @@ struct fuse_file_lock {
+>   * FUSE_SECURITY_CTX:	add security context to create, mkdir, symlink, and
+>   *			mknod
+>   * FUSE_HAS_INODE_DAX:  use per inode DAX
+> + * FUSE_WRITEBACK_CACHE_V2:
+> + *			allow time/size to be refreshed if no pending write
+> + *			c/mtime not updated from kernel to server
+>   */
+>  #define FUSE_ASYNC_READ		(1 << 0)
+>  #define FUSE_POSIX_LOCKS	(1 << 1)
+> @@ -389,6 +393,7 @@ struct fuse_file_lock {
+>  /* bits 32..63 get shifted down 32 bits into the flags2 field */
+>  #define FUSE_SECURITY_CTX	(1ULL << 32)
+>  #define FUSE_HAS_INODE_DAX	(1ULL << 33)
+> +#define FUSE_WRITEBACK_CACHE_V2	(1ULL << 34)
+>  
+>  /**
+>   * CUSE INIT request/reply flags
+> -- 
+> 2.20.1
+> 
+

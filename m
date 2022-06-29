@@ -2,402 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D8A55FDF7
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E03C855FDFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbiF2K5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 06:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
+        id S233446AbiF2K5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 06:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiF2K5N (ORCPT
+        with ESMTP id S232539AbiF2K5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 06:57:13 -0400
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3863B29B
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:57:10 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.186.194])
-        by xavier.telenet-ops.be with bizsmtp
-        id oyx02700b4C55Sk01yx0FS; Wed, 29 Jun 2022 12:57:08 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1o6VNT-001IKo-VH; Wed, 29 Jun 2022 12:56:59 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1o6VNT-005lOL-EE; Wed, 29 Jun 2022 12:56:59 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Tomi Valkeinen <tomba@kernel.org>
-Cc:     Helge Deller <deller@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH] drm/fb-helper: Remove helpers to change frame buffer config
-Date:   Wed, 29 Jun 2022 12:56:58 +0200
-Message-Id: <20220629105658.1373770-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 29 Jun 2022 06:57:43 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD223B01A
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:57:42 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id l2so14156056pjf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:57:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=KgfgG3PfRIgE5HTrPFX0mX8z0Duoae13hcb6dz1y3jo=;
+        b=bqAzKNlwcwGXLMCWV9yPg4atbapezZLTr+wtexhZGmMayzArJ4W3G4XCffvc78LONZ
+         EBPueFqzqAgoJZVfUiTZfZ51W2fQSDrierSe/StR81UUo1TIn4bcFsrcvdSUTz8IKwjH
+         4c36WxrmaKf+jGmSpMQ8lm6vseDr5+cvO67r+bV8nXYkmAwNzFNofsxCJ9VXXSn8jeyn
+         0Uf7KDlHkwBwGtW1t1AvZGj9f818RcmiWWUtN07xP5D8ZukwHS0FNWsqUIuv8D91YDnw
+         r0gJvLeeL+b8AVUnsJcL3O1VvfhSsmPbFbYQT2yJiOjgd8IGWa+fa7xngH/OhAPqax7/
+         kNKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=KgfgG3PfRIgE5HTrPFX0mX8z0Duoae13hcb6dz1y3jo=;
+        b=HWj4XWtEcoRqiL0iY7VvMR+Pt6umjaMOkm+DVKZueBsr42+FnxlUfD0yaEQDJJceKl
+         rW4TaFWvs8ZBTsn7LF04OcTNgePnC8WK7MJOmgjUGO+hrA3SVxAKFfO720ozrmA+G5QS
+         vYJPQfZhUy/fUvS9KEOzR1ffl8JtOqqUsbzqY/yYDj84VEQ3zC0E0ZMg+PjtN5Mhz83S
+         9d1Sy302WjCndZ2mhBhTLccV8fmehxnSokvHl4n/1jQscnI4PTVM5a1u2g9iFRxFJxFG
+         YyPwHADqTkc1zaz/fxVW1cqK+hHciP5gPORHDo2+08Dtrn29YM+bX8nUtmAYIO5HRwnR
+         1Jew==
+X-Gm-Message-State: AJIora8v9IyywXcRzviBkdr6FRUNi0v14uuk9klPdZQ9NL9Up52FQ9GR
+        h0Z/wOwbk6kPrOYomFhWfSsmNAehrdvng5KZoxQ=
+X-Google-Smtp-Source: AGRyM1tDSO6qmh9uYxWXwlKWdwo6tcu0/+wv1TLJnbGR9etzEDPvyAlLuR2Z+kkp5HdOFGLlt0fdfvhtf4C0w+tssGE=
+X-Received: by 2002:a17:90a:780c:b0:1ec:d94b:2f93 with SMTP id
+ w12-20020a17090a780c00b001ecd94b2f93mr3192228pjk.233.1656500262409; Wed, 29
+ Jun 2022 03:57:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Received: by 2002:a05:7022:2210:b0:41:ede4:4cbe with HTTP; Wed, 29 Jun 2022
+ 03:57:41 -0700 (PDT)
+From:   Mr Cheng Dasha Lee <mrs.aishagadhafi@gmail.com>
+Date:   Wed, 29 Jun 2022 12:57:41 +0200
+Message-ID: <CA+rtw+OKfYRxtde3N86PSGQ99kO4J4za0BxngV7CFZZjiM5CsA@mail.gmail.com>
+Subject: GREETINGS,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,HK_SCAM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,T_MONEY_PERCENT,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:102a listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrs.aishagadhafi[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 HK_SCAM No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.6 URG_BIZ Contains urgent matter
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.4 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DRM fbdev emulation layer does not support pushing back
-changes to fb_var_screeninfo to KMS.
+Greetings,
 
-However, drm_fb_helper still implements the fb_ops.fb_check_var() and
-fb_ops.fb_set_par() callbacks, but the former fails to validate various
-parameters passed from userspace.  Hence unsanitized and possible
-invaled values are passed up through the fbdev, fbcon, and console
-stack, which has become an endless source of security issues reported
-against fbdev.
+Assalam alaikum,
+I have a proposal for you, however is not mandatory nor will I in any
+manner compel you to honor against your will. I am Mr Cheng Dasha Lee,I am in
+partnership with former executive director of Arab Tunisian Bank here
+in Tunisia;
 
-Fix this by not populating the fb_ops.fb_check_var() and
-fb_ops.fb_set_par() callbacks, as there is no point in providing them if
-the frame buffer config cannot be changed anyway.  This makes the fbdev
-core aware that making changes to the frame buffer config is not
-supported, so it will always return the current config.
+I retired A year and 7 months ago after putting in 28 years of
+meticulous service. During myhip days with Arab Tunisian Bank, I was the
+personal account officer and one of the financial advisers to Mr. Zine
+Al-Abidine Ben Ali the past Tunisian President in self exile at Saudi
+Arabia. During his tryer period he instructed me to move all his
+investment in my care which consists of US$115M and 767KG of gold out
+of the Gulf States for safe keeping; and that I successfully did by
+moving US$50M to Madrid Spain, US$50M to Dubai United Arab Emirate,
+US$15M to Burkina Faso and the 767KG of gold to Accra Ghana in West
+Africa as an anonymous deposits, so that the funds will in no way to
+be traced to him. He has instructed me to find an investor who would
+stand as the beneficiary of the fund and the gold; and claim it for
+further investment.
 
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
----
-The only remaining DRM driver that implements fb_ops.fb_check_var() is
-also broken, as it fails to validate various parameters passed from
-userspace.  So vmw_fb_check_var() should either be fixed, or removed.
----
- drivers/gpu/drm/drm_fb_helper.c            | 180 ++-------------------
- drivers/gpu/drm/i915/display/intel_fbdev.c |  15 --
- drivers/gpu/drm/omapdrm/omap_fbdev.c       |   2 -
- include/drm/drm_fb_helper.h                |  16 --
- 4 files changed, 13 insertions(+), 200 deletions(-)
+Consequent upon the above, my proposal is that I would like you as a
+foreigner to stand in as the beneficiary of this fund and the gold
+which I have successfully moved outside the country and provide an
+account overseas where this said fund will be transferred into. It is
+a careful network and my voluntary retirement from the Arab Tunisian
+Bank is to ensure a hitch-free operation as all modalities for you to
+stand as beneficiary and owner of the deposits has been perfected by
+me. Mr. Zine al-Abidine Ben Ali will offer you 20% of the total
+investment if you can be the investor and claim this deposits in Spain
+and Burkina Faso as the beneficiary.
 
-diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
-index 2d4cee6a10ffffe7..1041a11c410d7967 100644
---- a/drivers/gpu/drm/drm_fb_helper.c
-+++ b/drivers/gpu/drm/drm_fb_helper.c
-@@ -228,9 +228,18 @@ int drm_fb_helper_debug_leave(struct fb_info *info)
- }
- EXPORT_SYMBOL(drm_fb_helper_debug_leave);
- 
--static int
--__drm_fb_helper_restore_fbdev_mode_unlocked(struct drm_fb_helper *fb_helper,
--					    bool force)
-+/**
-+ * drm_fb_helper_restore_fbdev_mode_unlocked - restore fbdev configuration
-+ * @fb_helper: driver-allocated fbdev helper, can be NULL
-+ *
-+ * This should be called from driver's drm &drm_driver.lastclose callback
-+ * when implementing an fbcon on top of kms using this helper. This ensures that
-+ * the user isn't greeted with a black screen when e.g. X dies.
-+ *
-+ * RETURNS:
-+ * Zero if everything went ok, negative error code otherwise.
-+ */
-+int drm_fb_helper_restore_fbdev_mode_unlocked(struct drm_fb_helper *fb_helper)
- {
- 	bool do_delayed;
- 	int ret;
-@@ -242,16 +251,7 @@ __drm_fb_helper_restore_fbdev_mode_unlocked(struct drm_fb_helper *fb_helper,
- 		return 0;
- 
- 	mutex_lock(&fb_helper->lock);
--	if (force) {
--		/*
--		 * Yes this is the _locked version which expects the master lock
--		 * to be held. But for forced restores we're intentionally
--		 * racing here, see drm_fb_helper_set_par().
--		 */
--		ret = drm_client_modeset_commit_locked(&fb_helper->client);
--	} else {
--		ret = drm_client_modeset_commit(&fb_helper->client);
--	}
-+	ret = drm_client_modeset_commit(&fb_helper->client);
- 
- 	do_delayed = fb_helper->delayed_hotplug;
- 	if (do_delayed)
-@@ -263,22 +263,6 @@ __drm_fb_helper_restore_fbdev_mode_unlocked(struct drm_fb_helper *fb_helper,
- 
- 	return ret;
- }
--
--/**
-- * drm_fb_helper_restore_fbdev_mode_unlocked - restore fbdev configuration
-- * @fb_helper: driver-allocated fbdev helper, can be NULL
-- *
-- * This should be called from driver's drm &drm_driver.lastclose callback
-- * when implementing an fbcon on top of kms using this helper. This ensures that
-- * the user isn't greeted with a black screen when e.g. X dies.
-- *
-- * RETURNS:
-- * Zero if everything went ok, negative error code otherwise.
-- */
--int drm_fb_helper_restore_fbdev_mode_unlocked(struct drm_fb_helper *fb_helper)
--{
--	return __drm_fb_helper_restore_fbdev_mode_unlocked(fb_helper, false);
--}
- EXPORT_SYMBOL(drm_fb_helper_restore_fbdev_mode_unlocked);
- 
- #ifdef CONFIG_MAGIC_SYSRQ
-@@ -1254,25 +1238,6 @@ int drm_fb_helper_ioctl(struct fb_info *info, unsigned int cmd,
- }
- EXPORT_SYMBOL(drm_fb_helper_ioctl);
- 
--static bool drm_fb_pixel_format_equal(const struct fb_var_screeninfo *var_1,
--				      const struct fb_var_screeninfo *var_2)
--{
--	return var_1->bits_per_pixel == var_2->bits_per_pixel &&
--	       var_1->grayscale == var_2->grayscale &&
--	       var_1->red.offset == var_2->red.offset &&
--	       var_1->red.length == var_2->red.length &&
--	       var_1->red.msb_right == var_2->red.msb_right &&
--	       var_1->green.offset == var_2->green.offset &&
--	       var_1->green.length == var_2->green.length &&
--	       var_1->green.msb_right == var_2->green.msb_right &&
--	       var_1->blue.offset == var_2->blue.offset &&
--	       var_1->blue.length == var_2->blue.length &&
--	       var_1->blue.msb_right == var_2->blue.msb_right &&
--	       var_1->transp.offset == var_2->transp.offset &&
--	       var_1->transp.length == var_2->transp.length &&
--	       var_1->transp.msb_right == var_2->transp.msb_right;
--}
--
- static void drm_fb_helper_fill_pixel_fmt(struct fb_var_screeninfo *var,
- 					 u8 depth)
- {
-@@ -1331,123 +1296,6 @@ static void drm_fb_helper_fill_pixel_fmt(struct fb_var_screeninfo *var,
- 	}
- }
- 
--/**
-- * drm_fb_helper_check_var - implementation for &fb_ops.fb_check_var
-- * @var: screeninfo to check
-- * @info: fbdev registered by the helper
-- */
--int drm_fb_helper_check_var(struct fb_var_screeninfo *var,
--			    struct fb_info *info)
--{
--	struct drm_fb_helper *fb_helper = info->par;
--	struct drm_framebuffer *fb = fb_helper->fb;
--	struct drm_device *dev = fb_helper->dev;
--
--	if (in_dbg_master())
--		return -EINVAL;
--
--	if (var->pixclock != 0) {
--		drm_dbg_kms(dev, "fbdev emulation doesn't support changing the pixel clock, value of pixclock is ignored\n");
--		var->pixclock = 0;
--	}
--
--	if ((drm_format_info_block_width(fb->format, 0) > 1) ||
--	    (drm_format_info_block_height(fb->format, 0) > 1))
--		return -EINVAL;
--
--	/*
--	 * Changes struct fb_var_screeninfo are currently not pushed back
--	 * to KMS, hence fail if different settings are requested.
--	 */
--	if (var->bits_per_pixel > fb->format->cpp[0] * 8 ||
--	    var->xres > fb->width || var->yres > fb->height ||
--	    var->xres_virtual > fb->width || var->yres_virtual > fb->height) {
--		drm_dbg_kms(dev, "fb requested width/height/bpp can't fit in current fb "
--			  "request %dx%d-%d (virtual %dx%d) > %dx%d-%d\n",
--			  var->xres, var->yres, var->bits_per_pixel,
--			  var->xres_virtual, var->yres_virtual,
--			  fb->width, fb->height, fb->format->cpp[0] * 8);
--		return -EINVAL;
--	}
--
--	/*
--	 * Workaround for SDL 1.2, which is known to be setting all pixel format
--	 * fields values to zero in some cases. We treat this situation as a
--	 * kind of "use some reasonable autodetected values".
--	 */
--	if (!var->red.offset     && !var->green.offset    &&
--	    !var->blue.offset    && !var->transp.offset   &&
--	    !var->red.length     && !var->green.length    &&
--	    !var->blue.length    && !var->transp.length   &&
--	    !var->red.msb_right  && !var->green.msb_right &&
--	    !var->blue.msb_right && !var->transp.msb_right) {
--		drm_fb_helper_fill_pixel_fmt(var, fb->format->depth);
--	}
--
--	/*
--	 * Likewise, bits_per_pixel should be rounded up to a supported value.
--	 */
--	var->bits_per_pixel = fb->format->cpp[0] * 8;
--
--	/*
--	 * drm fbdev emulation doesn't support changing the pixel format at all,
--	 * so reject all pixel format changing requests.
--	 */
--	if (!drm_fb_pixel_format_equal(var, &info->var)) {
--		drm_dbg_kms(dev, "fbdev emulation doesn't support changing the pixel format\n");
--		return -EINVAL;
--	}
--
--	return 0;
--}
--EXPORT_SYMBOL(drm_fb_helper_check_var);
--
--/**
-- * drm_fb_helper_set_par - implementation for &fb_ops.fb_set_par
-- * @info: fbdev registered by the helper
-- *
-- * This will let fbcon do the mode init and is called at initialization time by
-- * the fbdev core when registering the driver, and later on through the hotplug
-- * callback.
-- */
--int drm_fb_helper_set_par(struct fb_info *info)
--{
--	struct drm_fb_helper *fb_helper = info->par;
--	struct fb_var_screeninfo *var = &info->var;
--	bool force;
--
--	if (oops_in_progress)
--		return -EBUSY;
--
--	if (var->pixclock != 0) {
--		drm_err(fb_helper->dev, "PIXEL CLOCK SET\n");
--		return -EINVAL;
--	}
--
--	/*
--	 * Normally we want to make sure that a kms master takes precedence over
--	 * fbdev, to avoid fbdev flickering and occasionally stealing the
--	 * display status. But Xorg first sets the vt back to text mode using
--	 * the KDSET IOCTL with KD_TEXT, and only after that drops the master
--	 * status when exiting.
--	 *
--	 * In the past this was caught by drm_fb_helper_lastclose(), but on
--	 * modern systems where logind always keeps a drm fd open to orchestrate
--	 * the vt switching, this doesn't work.
--	 *
--	 * To not break the userspace ABI we have this special case here, which
--	 * is only used for the above case. Everything else uses the normal
--	 * commit function, which ensures that we never steal the display from
--	 * an active drm master.
--	 */
--	force = var->activate & FB_ACTIVATE_KD_TEXT;
--
--	__drm_fb_helper_restore_fbdev_mode_unlocked(fb_helper, force);
--
--	return 0;
--}
--EXPORT_SYMBOL(drm_fb_helper_set_par);
--
- static void pan_set(struct drm_fb_helper *fb_helper, int x, int y)
- {
- 	struct drm_mode_set *mode_set;
-@@ -2028,8 +1876,6 @@ int drm_fb_helper_hotplug_event(struct drm_fb_helper *fb_helper)
- 	drm_setup_crtcs_fb(fb_helper);
- 	mutex_unlock(&fb_helper->lock);
- 
--	drm_fb_helper_set_par(fb_helper->fbdev);
--
- 	return 0;
- }
- EXPORT_SYMBOL(drm_fb_helper_hotplug_event);
-diff --git a/drivers/gpu/drm/i915/display/intel_fbdev.c b/drivers/gpu/drm/i915/display/intel_fbdev.c
-index 221336178991f04f..26dbe9487c79ae1b 100644
---- a/drivers/gpu/drm/i915/display/intel_fbdev.c
-+++ b/drivers/gpu/drm/i915/display/intel_fbdev.c
-@@ -77,20 +77,6 @@ static void intel_fbdev_invalidate(struct intel_fbdev *ifbdev)
- 	intel_frontbuffer_invalidate(to_frontbuffer(ifbdev), ORIGIN_CPU);
- }
- 
--static int intel_fbdev_set_par(struct fb_info *info)
--{
--	struct drm_fb_helper *fb_helper = info->par;
--	struct intel_fbdev *ifbdev =
--		container_of(fb_helper, struct intel_fbdev, helper);
--	int ret;
--
--	ret = drm_fb_helper_set_par(info);
--	if (ret == 0)
--		intel_fbdev_invalidate(ifbdev);
--
--	return ret;
--}
--
- static int intel_fbdev_blank(int blank, struct fb_info *info)
- {
- 	struct drm_fb_helper *fb_helper = info->par;
-@@ -123,7 +109,6 @@ static int intel_fbdev_pan_display(struct fb_var_screeninfo *var,
- static const struct fb_ops intelfb_ops = {
- 	.owner = THIS_MODULE,
- 	DRM_FB_HELPER_DEFAULT_OPS,
--	.fb_set_par = intel_fbdev_set_par,
- 	.fb_fillrect = drm_fb_helper_cfb_fillrect,
- 	.fb_copyarea = drm_fb_helper_cfb_copyarea,
- 	.fb_imageblit = drm_fb_helper_cfb_imageblit,
-diff --git a/drivers/gpu/drm/omapdrm/omap_fbdev.c b/drivers/gpu/drm/omapdrm/omap_fbdev.c
-index 40706c5aad7b5c9b..2df8875baaca10b6 100644
---- a/drivers/gpu/drm/omapdrm/omap_fbdev.c
-+++ b/drivers/gpu/drm/omapdrm/omap_fbdev.c
-@@ -74,8 +74,6 @@ static int omap_fbdev_pan_display(struct fb_var_screeninfo *var,
- static const struct fb_ops omap_fb_ops = {
- 	.owner = THIS_MODULE,
- 
--	.fb_check_var	= drm_fb_helper_check_var,
--	.fb_set_par	= drm_fb_helper_set_par,
- 	.fb_setcmap	= drm_fb_helper_setcmap,
- 	.fb_blank	= drm_fb_helper_blank,
- 	.fb_pan_display = omap_fbdev_pan_display,
-diff --git a/include/drm/drm_fb_helper.h b/include/drm/drm_fb_helper.h
-index 329607ca65c06684..19b40adc156295a1 100644
---- a/include/drm/drm_fb_helper.h
-+++ b/include/drm/drm_fb_helper.h
-@@ -200,8 +200,6 @@ drm_fb_helper_from_client(struct drm_client_dev *client)
-  * functions. To be used in struct fb_ops of drm drivers.
-  */
- #define DRM_FB_HELPER_DEFAULT_OPS \
--	.fb_check_var	= drm_fb_helper_check_var, \
--	.fb_set_par	= drm_fb_helper_set_par, \
- 	.fb_setcmap	= drm_fb_helper_setcmap, \
- 	.fb_blank	= drm_fb_helper_blank, \
- 	.fb_pan_display	= drm_fb_helper_pan_display, \
-@@ -217,9 +215,6 @@ void drm_fb_helper_fini(struct drm_fb_helper *helper);
- int drm_fb_helper_blank(int blank, struct fb_info *info);
- int drm_fb_helper_pan_display(struct fb_var_screeninfo *var,
- 			      struct fb_info *info);
--int drm_fb_helper_set_par(struct fb_info *info);
--int drm_fb_helper_check_var(struct fb_var_screeninfo *var,
--			    struct fb_info *info);
- 
- int drm_fb_helper_restore_fbdev_mode_unlocked(struct drm_fb_helper *fb_helper);
- 
-@@ -303,17 +298,6 @@ static inline int drm_fb_helper_pan_display(struct fb_var_screeninfo *var,
- 	return 0;
- }
- 
--static inline int drm_fb_helper_set_par(struct fb_info *info)
--{
--	return 0;
--}
--
--static inline int drm_fb_helper_check_var(struct fb_var_screeninfo *var,
--					  struct fb_info *info)
--{
--	return 0;
--}
--
- static inline int
- drm_fb_helper_restore_fbdev_mode_unlocked(struct drm_fb_helper *fb_helper)
- {
--- 
-2.25.1
 
+Now my questions are:-
+
+1. Can you handle this transaction?
+2. Can I give you this trust?
+
+Consider this and get back to me as soon as possible so that I can
+give you more details regarding this transaction. Finally, it is my
+humble request that the information as contained herein be accorded
+the necessary attention, urgency as well as the secrecy it deserves
+I expect your urgent response if you can handle this project.
+
+Respectfully yours,
+From:Mr Cheng Dasha Lee.

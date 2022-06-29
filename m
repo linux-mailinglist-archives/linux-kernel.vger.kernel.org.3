@@ -2,144 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A2FF55F4EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 06:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C6255F4FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 06:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbiF2EKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 00:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
+        id S229715AbiF2ENK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 00:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiF2EKu (ORCPT
+        with ESMTP id S231744AbiF2EM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 00:10:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F11E3631A
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 21:10:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656475847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bg6heNJXq50eL6WsFIMxRV6MiBd1t5LqWZMr8mmOcec=;
-        b=TCpZHVJ3ivj+IeKzkj7z6dLwyDYdKVZlzNdadB+WYozqswSUtzFHJ/F03HwVh2G70l776L
-        noCUqHaTWHPev4GirHSFxeyMO100ViHkNuYZ+9hla9Vj9iIhavilwu8uqBXYylNPCQGtyQ
-        O1i2RdeHqyDhaa5ykdvvzn033UfCVl8=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-513-sgAEGjAlMMORqk1g9Nzraw-1; Wed, 29 Jun 2022 00:10:45 -0400
-X-MC-Unique: sgAEGjAlMMORqk1g9Nzraw-1
-Received: by mail-lf1-f70.google.com with SMTP id o7-20020a056512230700b004810a865709so4832209lfu.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 21:10:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bg6heNJXq50eL6WsFIMxRV6MiBd1t5LqWZMr8mmOcec=;
-        b=kvf5LqQJzgD+F4I/XhphJv5kcGB8OAQUTLAITNUv60L5z9ZYApv32nEh4m4RgNNdzP
-         xWPo32lyhOCXxZl2S5thIRQloap4tChlzAJSSVjftrVHcEvBFUGpEtes1s8RvXHZeGo8
-         8c6qvgagePwXDKxucDsG5RSH9NPzXCcYZz5Q/C4kW9fEDXoHJLezHGzpLKAuFgfrr2N8
-         xKpsF+YRGyjjqpnca5yqGmmesE7G8ZNsa/gO2mEk4Rdk+W5siq27IaMavHIT/SIYW6D+
-         +8Rvudp5PXgF/daDUXbfLeruI2V+76vEuBG0vyN9krNKnHTsHp55GKKwslP/Y6jDsOce
-         6JGg==
-X-Gm-Message-State: AJIora9/Qdq+wgAQQIOqjUlSSuNcE0KLizTcyMYwIqxwiQhjvpP4usJ3
-        yieJYfr/gQWUlDNu/O5ClbYpt//3wxM0oFiI8tN6t9YkZvRXURght/o6zyU8odXu7nXN+p+Joa+
-        s1Gdd0RutVVHng5k2zwzNWOvkc2+7lJS+7KH7sR5C
-X-Received: by 2002:a05:651c:1610:b0:25a:75fa:f9cc with SMTP id f16-20020a05651c161000b0025a75faf9ccmr615145ljq.243.1656475843851;
-        Tue, 28 Jun 2022 21:10:43 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tsRfqKSJ5WREAe866tYR2Av6sXWiFQwf7Na0t+bQDdXFNQBHVv7PWUm2aQHXPC9OFidZUGp5C/19n3ZUbyfXY=
-X-Received: by 2002:a05:651c:1610:b0:25a:75fa:f9cc with SMTP id
- f16-20020a05651c161000b0025a75faf9ccmr615131ljq.243.1656475843670; Tue, 28
- Jun 2022 21:10:43 -0700 (PDT)
+        Wed, 29 Jun 2022 00:12:57 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842EC396B8;
+        Tue, 28 Jun 2022 21:12:28 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R631e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VHm8czW_1656475943;
+Received: from 30.240.101.24(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VHm8czW_1656475943)
+          by smtp.aliyun-inc.com;
+          Wed, 29 Jun 2022 12:12:24 +0800
+Message-ID: <be004040-a17b-bddb-b56d-eb569658f7a9@linux.alibaba.com>
+Date:   Wed, 29 Jun 2022 12:12:22 +0800
 MIME-Version: 1.0
-References: <20220623160738.632852-1-eperezma@redhat.com> <20220623160738.632852-2-eperezma@redhat.com>
-In-Reply-To: <20220623160738.632852-2-eperezma@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 29 Jun 2022 12:10:32 +0800
-Message-ID: <CACGkMEv+yFLCzo-K7eSaVPJqLCa5SxfVCmB=piQ3+6R3=oDz-w@mail.gmail.com>
-Subject: Re: [PATCH v6 1/4] vdpa: Add suspend operation
-To:     =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>
-Cc:     netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        kvm <kvm@vger.kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Cindy Lu <lulu@redhat.com>,
-        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        "Uminski, Piotr" <Piotr.Uminski@intel.com>,
-        habetsm.xilinx@gmail.com, "Dawar, Gautam" <gautam.dawar@amd.com>,
-        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        Laurent Vivier <lvivier@redhat.com>,
-        Longpeng <longpeng2@huawei.com>,
-        Dinan Gunawardena <dinang@xilinx.com>,
-        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
-        Martin Porter <martinpo@xilinx.com>,
-        Eli Cohen <elic@nvidia.com>, ecree.xilinx@gmail.com,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Harpreet Singh Anand <hanand@xilinx.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Zhang Min <zhang.min9@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH v4 2/2 RESEND] pkcs7: support EC-RDSA/streebog in
+ SignerInfo
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Elvira Khabirova <e.khabirova@omp.ru>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220627092142.21095-1-tianjia.zhang@linux.alibaba.com>
+ <20220627092142.21095-3-tianjia.zhang@linux.alibaba.com>
+ <Yru5Xao3LSB0cChI@kernel.org>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <Yru5Xao3LSB0cChI@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 12:07 AM Eugenio P=C3=A9rez <eperezma@redhat.com> w=
-rote:
->
-> This operation is optional: It it's not implemented, backend feature bit
-> will not be exposed.
+Hi Jarkko,
 
-A question, do we allow suspending a device without DRIVER_OK?
+On 6/29/22 10:31 AM, Jarkko Sakkinen wrote:
+> On Mon, Jun 27, 2022 at 05:21:42PM +0800, Tianjia Zhang wrote:
+>> From: Elvira Khabirova <e.khabirova@omp.ru>
+>>
+>> Allow using EC-RDSA/streebog in pkcs7 certificates in a similar way
+>> to how it's done in the x509 parser.
+>>
+>> This is needed e.g. for loading kernel modules signed with EC-RDSA.
+>>
+>> Signed-off-by: Elvira Khabirova <e.khabirova@omp.ru>
+>> Reviewed-by: Vitaly Chikunov <vt@altlinux.org>
+>> Reviewed-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+>> ---
+>>   crypto/asymmetric_keys/pkcs7_parser.c | 11 +++++++++++
+>>   1 file changed, 11 insertions(+)
+>>
+>> diff --git a/crypto/asymmetric_keys/pkcs7_parser.c b/crypto/asymmetric_keys/pkcs7_parser.c
+>> index 24e2e4a6d842..277482bb1777 100644
+>> --- a/crypto/asymmetric_keys/pkcs7_parser.c
+>> +++ b/crypto/asymmetric_keys/pkcs7_parser.c
+>> @@ -251,6 +251,12 @@ int pkcs7_sig_note_digest_algo(void *context, size_t hdrlen,
+>>   	case OID_sm3:
+>>   		ctx->sinfo->sig->hash_algo = "sm3";
+>>   		break;
+>> +	case OID_gost2012Digest256:
+>> +		ctx->sinfo->sig->hash_algo = "streebog256";
+>> +		break;
+>> +	case OID_gost2012Digest512:
+>> +		ctx->sinfo->sig->hash_algo = "streebog512";
+>> +		break;
+>>   	default:
+>>   		printk("Unsupported digest algo: %u\n", ctx->last_oid);
+>>   		return -ENOPKG;
+>> @@ -284,6 +290,11 @@ int pkcs7_sig_note_pkey_algo(void *context, size_t hdrlen,
+>>   		ctx->sinfo->sig->pkey_algo = "sm2";
+>>   		ctx->sinfo->sig->encoding = "raw";
+>>   		break;
+>> +	case OID_gost2012PKey256:
+>> +	case OID_gost2012PKey512:
+>> +		ctx->sinfo->sig->pkey_algo = "ecrdsa";
+>> +		ctx->sinfo->sig->encoding = "raw";
+>> +		break;
+>>   	default:
+>>   		printk("Unsupported pkey algo: %u\n", ctx->last_oid);
+>>   		return -ENOPKG;
+>> -- 
+>> 2.24.3 (Apple Git-128)
+>>
+> 
+> Please, check:
+> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+> 
+> BR, Jarkko
 
-Thanks
+Great work, thanks.
 
->
-> Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> ---
->  include/linux/vdpa.h | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
-> index 7b4a13d3bd91..d282f464d2f1 100644
-> --- a/include/linux/vdpa.h
-> +++ b/include/linux/vdpa.h
-> @@ -218,6 +218,9 @@ struct vdpa_map_file {
->   * @reset:                     Reset device
->   *                             @vdev: vdpa device
->   *                             Returns integer: success (0) or error (< =
-0)
-> + * @suspend:                   Suspend or resume the device (optional)
-> + *                             @vdev: vdpa device
-> + *                             Returns integer: success (0) or error (< =
-0)
->   * @get_config_size:           Get the size of the configuration space i=
-ncludes
->   *                             fields that are conditional on feature bi=
-ts.
->   *                             @vdev: vdpa device
-> @@ -319,6 +322,7 @@ struct vdpa_config_ops {
->         u8 (*get_status)(struct vdpa_device *vdev);
->         void (*set_status)(struct vdpa_device *vdev, u8 status);
->         int (*reset)(struct vdpa_device *vdev);
-> +       int (*suspend)(struct vdpa_device *vdev);
->         size_t (*get_config_size)(struct vdpa_device *vdev);
->         void (*get_config)(struct vdpa_device *vdev, unsigned int offset,
->                            void *buf, unsigned int len);
-> --
-> 2.31.1
->
-
+Best regards,
+Tianjia

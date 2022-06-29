@@ -2,130 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5F6560851
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB4C560846
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbiF2SCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 14:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
+        id S232191AbiF2SCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 14:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiF2SCK (ORCPT
+        with ESMTP id S229874AbiF2SCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 14:02:10 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41FB3BFA8
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:02:05 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id cf14so23288172edb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:02:05 -0700 (PDT)
+        Wed, 29 Jun 2022 14:02:40 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2DDFCF;
+        Wed, 29 Jun 2022 11:02:39 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id b2so7815999plx.7;
+        Wed, 29 Jun 2022 11:02:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=Vy6YZpnkzYfP1Q8nBBgWLbumgUQv6/LinbPlxyazuoo=;
-        b=UCWvk7H+g0XiRFlK9hdJh9sPXIDO8O/ApGthzVO9MKQVTyKIFNiYrcYH4J7FI2vgQR
-         o8XmheSJxow3U7EVL9L23lr0fJZp+oU88zYGvq1ItRE3F0tcnjDCthkdGXi66xrrzVUt
-         Ydtua9WSucxWaQxzLmDaPxJ7/SpSUQoozGq7kUN4wYtrD408iEmlWQOsNm5imiuzoWwb
-         gLBWtosNGa2k2nSxi1pcht1Nn/xNnZnPnI9SAU1FVtVv5RiXoSV7lC8j0Lb+P550mvAg
-         WSmXXvNdeX6myqBugyWKQXSkH60/vsqBcq2JM46POrRpXbUFsP/JGBCn3xhPph8rL09n
-         e3GQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OeT2ITrjmuVxlcpJzzC4BUYFkEFLXsguD1Lu33hDD8A=;
+        b=PPaFWkYUAhPqssi/bSgVMVOJGJonL2COt9o59m5Hi/6thI4htaY8Zdw/dFbmNn0n3Y
+         n9KPJuvlpK9+TsAf4xnv0KUFLNASjmo9SBYG5+s3wHtsDfLiAz7uD5qNpcLTYF60/XWK
+         BnpJZaFimUbWD5715dqYmpjUaDt39f4qQ8VY6Zi/0Xh/UFHN15KxMWZlFD2z5HevaWM1
+         hG9z1suQpmPRDi3ZPV9diKxKPgPVajJlO55/sV8ltH+IOFn/7eCPuXX7CYVv9nes0JHQ
+         iZPww5SxtpMh2jTSC54QCiemWSTR7U/ZDmvS0if5YwpLqKXTky/wpRABfNzXPU8gDtRW
+         WRHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Vy6YZpnkzYfP1Q8nBBgWLbumgUQv6/LinbPlxyazuoo=;
-        b=gI5rNyJAuuYEykmYCbl0M8RBgLZthvquKCCiXc7q18pF1gSouX5HTQOj+C/ZGwMDH5
-         EtBuosepf6Vr9OJ/SGLsgw+ZWET512zIyUNBEBRxwBrl4DvgBU28B1TOMK4mS5KMC70S
-         /XGkjtnF1w2yRqpcUlGAqkdfLROJfHowa/a1mrPSWJxkfXqRMz+PEN9Kof+63NSsZn3t
-         QzMVqGl5m+rNDQLrISlaPd9wlnHIKoZjXC496zVmPkNpc2rg0+AK9ArrQnp36zr8BrTR
-         KC6oPk5Rg5KdJBPuOtLi0ndPx0aT1sZZKgvihgS6ApziagM5Tjde0t5VEd5Cz4vccgIN
-         AHGw==
-X-Gm-Message-State: AJIora/xCRnlWKpmQsn7C7X0sCwOQImXW7xd7rX32IBPCoClEyuqXGG6
-        sQuoa2j4HUvP0Av7QyRvhXCKGGbyl0/leA==
-X-Google-Smtp-Source: AGRyM1tMjPgShNrBmV+R7vaqyVYgBWJyRtjHKG3YppCjb+zLtBpcofZ9J/j3kYUUSJryx95/wur18Q==
-X-Received: by 2002:a05:6402:f1f:b0:437:6c2d:677a with SMTP id i31-20020a0564020f1f00b004376c2d677amr5969545eda.269.1656525724486;
-        Wed, 29 Jun 2022 11:02:04 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id f19-20020a170906825300b0071160715917sm7944933ejx.223.2022.06.29.11.02.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 11:02:03 -0700 (PDT)
-Message-ID: <7fbb2d33-2dab-4350-0ec4-ca8c88896523@linaro.org>
-Date:   Wed, 29 Jun 2022 20:02:02 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 09/14] dt-bindings: firmware: Add fsl,scu yaml file
-Content-Language: en-US
-To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
+        bh=OeT2ITrjmuVxlcpJzzC4BUYFkEFLXsguD1Lu33hDD8A=;
+        b=3a7AjgPemzTCC0O4wkaX1xSSX14aWKfZwVjPQDvgUWLc8gDOUUzhML+7MkvtK9Xi0r
+         6cRHGqjAPvImG0E9vsr/Eaht/eE2IMC+kPswfuSvAwOWt3R43I5nOfrL1wCV3e3aAkGS
+         Xm9fo8hmVIyHIDeF2j1VuoGzC7c43zdfV2Pu4wxjND18l3WQx5nwGtntcSqap98crFrl
+         HQguLtgVZtZrTkMpfWwDh7GY/I9SZzZXpLnbWBf4edAZxATgpoh0yYNY4IGWBOFg3Tu8
+         LMXnRE1LXKh83XdED5xHqnPM9mgVr9Wv6KzAc9FpdixDxH/jhaax95A2HfeicEt0plED
+         qAEg==
+X-Gm-Message-State: AJIora+ckWvbUAy2gUcmfan1iaLAJvTI+CBOVezktsPzAkZzwa8DR7Ca
+        r5ekd/iWAMPqe2wj/nSSopHY6weTboM=
+X-Google-Smtp-Source: AGRyM1vlpn9VfkHdI1GSkmUIdEu8Va4vyYc4mICOFLm2qyu6WECUH/zTfRBEKfnpd7iO8mD0eGfT8Q==
+X-Received: by 2002:a17:90a:c4f:b0:1df:a178:897f with SMTP id u15-20020a17090a0c4f00b001dfa178897fmr5155617pje.19.1656525758913;
+        Wed, 29 Jun 2022 11:02:38 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id s7-20020a17090302c700b00168e83eda56sm11736371plk.3.2022.06.29.11.02.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 11:02:38 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     stable@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Tony Lindgren <tony@atomide.com>,
+        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Liu Ying <victor.liu@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
- <20220629164414.301813-10-viorel.suman@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220629164414.301813-10-viorel.suman@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Andre Przywara <andre.przywara@arm.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jian Cai <caij2003@gmail.com>,
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM PORT),
+        linux-kernel@vger.kernel.org (open list),
+        linux-crypto@vger.kernel.org (open list:CRYPTO API),
+        linux-omap@vger.kernel.org (open list:OMAP2+ SUPPORT),
+        clang-built-linux@googlegroups.com (open list:CLANG/LLVM BUILD SUPPORT),
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH stable 5.4 00/11] ARM 32-bit build with Clang IAS
+Date:   Wed, 29 Jun 2022 11:02:16 -0700
+Message-Id: <20220629180227.3408104-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
-> From: Abel Vesa <abel.vesa@nxp.com>
-> 
-> In order to replace the fsl,scu txt file from bindings/arm/freescale,
-> we need to split it between the right subsystems. This patch adds the
-> fsl,scu.yaml in the firmware bindings folder. This one is only for
-> the main SCU node. The old txt file will be removed only after all
-> the child nodes have been properly switch to yaml.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
-> ---
->  .../devicetree/bindings/firmware/fsl,scu.yaml | 160 ++++++++++++++++++
->  1 file changed, 160 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/firmware/fsl,scu.yaml
-> 
+Hi,
 
-This depends on all other previous patches, so it cannot go
-independently. Therefore I expect that everything will be going through
-one tree thus removal of TXT hunks should happen gradually.
+This patch series is a collection of clean cherry picks into the 5.4
+kernel allowing us to use the Clang integrated assembler to build the
+ARM 32-bit kernel.
 
-Best regards,
-Krzysztof
+This is useful in order to have proper build and runtime coverage of the
+stable kernel(s).
+
+Ard Biesheuvel (3):
+  crypto: arm/sha256-neon - avoid ADRL pseudo instruction
+  crypto: arm/sha512-neon - avoid ADRL pseudo instruction
+  crypto: arm - use Kconfig based compiler checks for crypto opcodes
+
+Jian Cai (2):
+  ARM: 8971/1: replace the sole use of a symbol with its definition
+  ARM: 9029/1: Make iwmmxt.S support Clang's integrated assembler
+
+Nick Desaulniers (1):
+  ARM: 8933/1: replace Sun/Solaris style flag on section directive
+
+Stefan Agner (5):
+  ARM: 8989/1: use .fpu assembler directives instead of assembler
+    arguments
+  ARM: 8990/1: use VFP assembler mnemonics in register load/store macros
+  ARM: 8929/1: use APSR_nzcv instead of r15 as mrc operand
+  ARM: OMAP2+: drop unnecessary adrl
+  crypto: arm/ghash-ce - define fpu before fpu registers are referenced
+
+ arch/arm/boot/bootp/init.S            |  2 +-
+ arch/arm/boot/compressed/big-endian.S |  2 +-
+ arch/arm/boot/compressed/head.S       |  4 +-
+ arch/arm/boot/compressed/piggy.S      |  2 +-
+ arch/arm/crypto/Kconfig               | 14 +++--
+ arch/arm/crypto/Makefile              | 32 ++--------
+ arch/arm/crypto/crct10dif-ce-core.S   |  2 +-
+ arch/arm/crypto/ghash-ce-core.S       |  4 +-
+ arch/arm/crypto/sha1-ce-core.S        |  1 +
+ arch/arm/crypto/sha2-ce-core.S        |  1 +
+ arch/arm/crypto/sha256-armv4.pl       |  4 +-
+ arch/arm/crypto/sha256-core.S_shipped |  4 +-
+ arch/arm/crypto/sha512-armv4.pl       |  4 +-
+ arch/arm/crypto/sha512-core.S_shipped |  4 +-
+ arch/arm/include/asm/assembler.h      |  3 +-
+ arch/arm/include/asm/vfpmacros.h      | 19 +++---
+ arch/arm/kernel/iwmmxt.S              | 89 ++++++++++++++-------------
+ arch/arm/kernel/iwmmxt.h              | 47 ++++++++++++++
+ arch/arm/mach-omap2/sleep34xx.S       |  2 +-
+ arch/arm/mm/proc-arm1020.S            |  2 +-
+ arch/arm/mm/proc-arm1020e.S           |  2 +-
+ arch/arm/mm/proc-arm1022.S            |  2 +-
+ arch/arm/mm/proc-arm1026.S            |  6 +-
+ arch/arm/mm/proc-arm720.S             |  2 +-
+ arch/arm/mm/proc-arm740.S             |  2 +-
+ arch/arm/mm/proc-arm7tdmi.S           |  2 +-
+ arch/arm/mm/proc-arm920.S             |  2 +-
+ arch/arm/mm/proc-arm922.S             |  2 +-
+ arch/arm/mm/proc-arm925.S             |  2 +-
+ arch/arm/mm/proc-arm926.S             |  6 +-
+ arch/arm/mm/proc-arm940.S             |  2 +-
+ arch/arm/mm/proc-arm946.S             |  2 +-
+ arch/arm/mm/proc-arm9tdmi.S           |  2 +-
+ arch/arm/mm/proc-fa526.S              |  2 +-
+ arch/arm/mm/proc-feroceon.S           |  2 +-
+ arch/arm/mm/proc-mohawk.S             |  2 +-
+ arch/arm/mm/proc-sa110.S              |  2 +-
+ arch/arm/mm/proc-sa1100.S             |  2 +-
+ arch/arm/mm/proc-v6.S                 |  2 +-
+ arch/arm/mm/proc-v7.S                 |  2 +-
+ arch/arm/mm/proc-v7m.S                |  4 +-
+ arch/arm/mm/proc-xsc3.S               |  2 +-
+ arch/arm/mm/proc-xscale.S             |  2 +-
+ arch/arm/vfp/Makefile                 |  2 -
+ arch/arm/vfp/vfphw.S                  | 30 ++++++---
+ 45 files changed, 187 insertions(+), 143 deletions(-)
+ create mode 100644 arch/arm/kernel/iwmmxt.h
+
+-- 
+2.25.1
+

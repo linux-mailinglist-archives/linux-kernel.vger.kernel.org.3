@@ -2,179 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB33855F349
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D7F55F34E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiF2CN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 22:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
+        id S230432AbiF2CRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 22:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiF2CN1 (ORCPT
+        with ESMTP id S230342AbiF2CRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 22:13:27 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38630F5BB;
-        Tue, 28 Jun 2022 19:13:16 -0700 (PDT)
-X-UUID: 3bb42ca9036f4d1d938a9a2a23169fb1-20220629
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:cf3a56db-bb7b-470a-8d8d-537b2efe5a3d,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:87442a2,CLOUDID:83a6e662-0b3f-4b2c-b3a6-ed5c044366a0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 3bb42ca9036f4d1d938a9a2a23169fb1-20220629
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 960008906; Wed, 29 Jun 2022 10:13:09 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 29 Jun 2022 10:13:07 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 29 Jun 2022 10:13:07 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Felipe Balbi <balbi@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Pavel Hofman <pavel.hofman@ivitera.com>,
-        "Julian Scheel" <julian@jusst.de>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        "Chunfeng Yun" <chunfeng.yun@mediatek.com>,
-        Yunhao Tian <t123yh.xyz@gmail.com>,
-        xin lin <xin.lin@mediatek.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v2] usb: gadget: f_uac1: add interface association descriptor
-Date:   Wed, 29 Jun 2022 10:13:04 +0800
-Message-ID: <20220629021304.21725-1-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 28 Jun 2022 22:17:35 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B870117AA8
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 19:17:34 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LXlTJ4yGDz9stC;
+        Wed, 29 Jun 2022 10:16:52 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 29 Jun 2022 10:17:32 +0800
+Subject: Re: [PATCH v2 04/16] mm/huge_memory: use helper touch_pud in
+ huge_pud_set_accessed
+To:     Muchun Song <songmuchun@bytedance.com>
+CC:     <akpm@linux-foundation.org>, <shy828301@gmail.com>,
+        <willy@infradead.org>, <zokeefe@google.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220628132835.8925-1-linmiaohe@huawei.com>
+ <20220628132835.8925-5-linmiaohe@huawei.com>
+ <YrsXTMKqXcuMzRpF@FVFYT0MHHV2J.googleapis.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <086bac6c-3c99-0667-d301-2839122b89bf@huawei.com>
+Date:   Wed, 29 Jun 2022 10:17:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YrsXTMKqXcuMzRpF@FVFYT0MHHV2J.googleapis.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xin lin <xin.lin@mediatek.com>
+On 2022/6/28 22:59, Muchun Song wrote:
+> On Tue, Jun 28, 2022 at 09:28:23PM +0800, Miaohe Lin wrote:
+>> Use helper touch_pud to set pud accessed to simplify the code and improve
+>> the readability. No functional change intended.
+>>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> ---
+>>  mm/huge_memory.c | 16 ++++------------
+>>  1 file changed, 4 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>> index f7164ef8b6e3..d55d5efa06c8 100644
+>> --- a/mm/huge_memory.c
+>> +++ b/mm/huge_memory.c
+>> @@ -1284,15 +1284,15 @@ int copy_huge_pmd(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+>>  
+>>  #ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
+>>  static void touch_pud(struct vm_area_struct *vma, unsigned long addr,
+>> -		pud_t *pud, int flags)
+>> +		      pud_t *pud, bool write)
+> 
+> You have change the last parameter. Have you forgotten to update its user
+> of follow_devmap_pud()?
 
-When we want to use a composite device that supports UVC, UAC1 and
-ADB at the same time, encounter that UAC1 can't work when connected
-to windows 10 system.
-From the online documents of microsoft, "overview of enumeration of
-interface collections on usb composite devices", it recommends that
-vendors use IADs (interface association descriptor) to define
-interface collections.
-After addding IAD, we can fix the issue.
+My bad. I was overloaded yesterday. Thanks for catching this!
+Will change it in next version.
 
-Signed-off-by: xin lin <xin.lin@mediatek.com>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v2: modify commit log suggested by Greg
----
- drivers/usb/gadget/function/f_uac1.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
-
-diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-index 6f0e1d803dc2..8390207bc513 100644
---- a/drivers/usb/gadget/function/f_uac1.c
-+++ b/drivers/usb/gadget/function/f_uac1.c
-@@ -71,6 +71,17 @@ static inline struct f_uac1_opts *g_audio_to_uac1_opts(struct g_audio *audio)
-  * ALSA_Playback -> IT_3 -> OT_4 -> USB-IN
-  */
- 
-+static struct usb_interface_assoc_descriptor iad_desc = {
-+	.bLength = sizeof(iad_desc),
-+	.bDescriptorType = USB_DT_INTERFACE_ASSOCIATION,
-+
-+	.bFirstInterface = 0,
-+	.bInterfaceCount = 3,
-+	.bFunctionClass = USB_CLASS_AUDIO,
-+	.bFunctionSubClass = 0,
-+	.bFunctionProtocol = UAC_VERSION_1,
-+};
-+
- /* B.3.1  Standard AC Interface Descriptor */
- static struct usb_interface_descriptor ac_interface_desc = {
- 	.bLength =		USB_DT_INTERFACE_SIZE,
-@@ -259,6 +270,7 @@ static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
- };
- 
- static struct usb_descriptor_header *f_audio_desc[] = {
-+	(struct usb_descriptor_header *)&iad_desc,
- 	(struct usb_descriptor_header *)&ac_interface_desc,
- 	(struct usb_descriptor_header *)&ac_header_desc,
- 
-@@ -293,6 +305,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
- };
- 
- enum {
-+	STR_ASSOC,
- 	STR_AC_IF,
- 	STR_USB_OUT_IT,
- 	STR_USB_OUT_IT_CH_NAMES,
-@@ -310,6 +323,7 @@ enum {
- 
- static struct usb_string strings_uac1[] = {
- 	/* [STR_AC_IF].s = DYNAMIC, */
-+	[STR_ASSOC].s = "Source/Sink",
- 	[STR_USB_OUT_IT].s = "Playback Input terminal",
- 	[STR_USB_OUT_IT_CH_NAMES].s = "Playback Channels",
- 	[STR_IO_OUT_OT].s = "Playback Output terminal",
-@@ -1058,6 +1072,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
- 	as_out_header_desc.bTerminalLink = usb_out_it_desc.bTerminalID;
- 	as_in_header_desc.bTerminalLink = usb_in_ot_desc.bTerminalID;
- 
-+	iad_desc.bInterfaceCount = 1;
- 	ac_header_desc->wTotalLength = cpu_to_le16(ac_header_desc->bLength);
- 
- 	if (EPIN_EN(opts)) {
-@@ -1068,6 +1083,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
- 		if (FUIN_EN(opts))
- 			len += in_feature_unit_desc->bLength;
- 		ac_header_desc->wTotalLength = cpu_to_le16(len);
-+		iad_desc.bInterfaceCount++;
- 	}
- 	if (EPOUT_EN(opts)) {
- 		u16 len = le16_to_cpu(ac_header_desc->wTotalLength);
-@@ -1077,9 +1093,11 @@ static void setup_descriptor(struct f_uac1_opts *opts)
- 		if (FUOUT_EN(opts))
- 			len += out_feature_unit_desc->bLength;
- 		ac_header_desc->wTotalLength = cpu_to_le16(len);
-+		iad_desc.bInterfaceCount++;
- 	}
- 
- 	i = 0;
-+	f_audio_desc[i++] = USBDHDR(&iad_desc);
- 	f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
- 	f_audio_desc[i++] = USBDHDR(ac_header_desc);
- 
-@@ -1217,6 +1235,7 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- 		}
- 	}
- 
-+	iad_desc.iFunction = us[STR_ASSOC].id;
- 	ac_interface_desc.iInterface = us[STR_AC_IF].id;
- 	usb_out_it_desc.iTerminal = us[STR_USB_OUT_IT].id;
- 	usb_out_it_desc.iChannelNames = us[STR_USB_OUT_IT_CH_NAMES].id;
-@@ -1302,6 +1321,8 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- 	status = usb_interface_id(c, f);
- 	if (status < 0)
- 		goto err_free_fu;
-+
-+	iad_desc.bFirstInterface = status;
- 	ac_interface_desc.bInterfaceNumber = status;
- 	uac1->ac_intf = status;
- 	uac1->ac_alt = 0;
--- 
-2.18.0
+> 
+> Thanks.
+> 
+>>  {
+>>  	pud_t _pud;
+>>  
+>>  	_pud = pud_mkyoung(*pud);
+>> -	if (flags & FOLL_WRITE)
+>> +	if (write)
+>>  		_pud = pud_mkdirty(_pud);
+>>  	if (pudp_set_access_flags(vma, addr & HPAGE_PUD_MASK,
+>> -				pud, _pud, flags & FOLL_WRITE))
+>> +				  pud, _pud, write))
+>>  		update_mmu_cache_pud(vma, addr, pud);
+>>  }
+>>  
+>> @@ -1384,21 +1384,13 @@ int copy_huge_pud(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+>>  
+>>  void huge_pud_set_accessed(struct vm_fault *vmf, pud_t orig_pud)
+>>  {
+>> -	pud_t entry;
+>> -	unsigned long haddr;
+>>  	bool write = vmf->flags & FAULT_FLAG_WRITE;
+>>  
+>>  	vmf->ptl = pud_lock(vmf->vma->vm_mm, vmf->pud);
+>>  	if (unlikely(!pud_same(*vmf->pud, orig_pud)))
+>>  		goto unlock;
+>>  
+>> -	entry = pud_mkyoung(orig_pud);
+>> -	if (write)
+>> -		entry = pud_mkdirty(entry);
+>> -	haddr = vmf->address & HPAGE_PUD_MASK;
+>> -	if (pudp_set_access_flags(vmf->vma, haddr, vmf->pud, entry, write))
+>> -		update_mmu_cache_pud(vmf->vma, vmf->address, vmf->pud);
+>> -
+>> +	touch_pud(vmf->vma, vmf->address, vmf->pud, write);
+>>  unlock:
+>>  	spin_unlock(vmf->ptl);
+>>  }
+>> -- 
+>> 2.23.0
+>>
+>>
+> .
+> 
 

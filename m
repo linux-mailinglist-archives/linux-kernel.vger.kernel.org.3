@@ -2,59 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C4B55F334
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB3B55F346
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbiF2CJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 22:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
+        id S230362AbiF2CMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 22:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbiF2CJr (ORCPT
+        with ESMTP id S230016AbiF2CMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 22:09:47 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538602CE38;
-        Tue, 28 Jun 2022 19:09:46 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id h85so14683077iof.4;
-        Tue, 28 Jun 2022 19:09:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=JARNJ/aUAAWYF8Kp9K5vhEa9VQqjpKlqU+P1/PZeinw=;
-        b=m5tH2CVBLf67LXgaKfGIzaRr0/Sg/Usy2R+Xwglpjc5ezzlUm5ERzaO4VM9A7jpkcQ
-         rp1lvPx9iy1OAaErBthIswwJnUhUvT4m7hv5J1rvdMDQDGXD/XgDrX7XPHnzMgh6cnXn
-         F9XqKE5BdI+6FT8Po8DOh73eFhr9/uio7wTpFin3ErJ+JGuf7zQsDkn+bn1sUUu+A88s
-         qDafDYhBSTbg5HESvlbJ73A8HIk8VPu1GsQ1B8kY++wSthKFtOaaKp184hng0V7XQSeR
-         fXANRyHr0mOwPTuFEgPrheYa3oDBYClNk8/M4Z1m9ZWkYpvmKWZIew9WMjQCjpscvesV
-         xN6Q==
-X-Gm-Message-State: AJIora+PIZ4wSQ2WfuzdM+laKIs0HfY4ituSVlsUn1REV2FZztbsCqmS
-        vyUvcVSvIlkAPxu6ze2uEg==
-X-Google-Smtp-Source: AGRyM1slPM29QAD/Q6rfKGUPHPz46pGl5j8ASLSRBWb17aap3g6ZtMAMFFX/FUCNsC04wBp4fZMJAw==
-X-Received: by 2002:a6b:7a46:0:b0:675:7cc7:516b with SMTP id k6-20020a6b7a46000000b006757cc7516bmr546965iop.43.1656468585563;
-        Tue, 28 Jun 2022 19:09:45 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id y7-20020a5d94c7000000b006752c67c7c3sm4738029ior.19.2022.06.28.19.09.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 19:09:45 -0700 (PDT)
-Received: (nullmailer pid 1403672 invoked by uid 1000);
-        Wed, 29 Jun 2022 02:09:39 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Vincent Knecht <vincent.knecht@mailoo.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org
-In-Reply-To: <20220628182147.2837180-2-vincent.knecht@mailoo.org>
-References: <20220628182147.2837180-1-vincent.knecht@mailoo.org> <20220628182147.2837180-2-vincent.knecht@mailoo.org>
-Subject: Re: [PATCH v1 RESEND 1/7] dt-bindings: leds: Convert is31fl319x to dtschema
-Date:   Tue, 28 Jun 2022 20:09:39 -0600
-Message-Id: <1656468579.884791.1403671.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Tue, 28 Jun 2022 22:12:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA26A2CE38;
+        Tue, 28 Jun 2022 19:12:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 555B461CF6;
+        Wed, 29 Jun 2022 02:12:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4246C341CF;
+        Wed, 29 Jun 2022 02:12:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656468751;
+        bh=kBeb5Uw/j5cdFGYwRHmMmUlZSMwzxwbpxsSpXCSep3M=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LjRWHp6YutpgDlkEoNZbTlTjpLtq3ctkRx2/BPSkYoTyqPyf1vbeUkRYl7aVXaLFe
+         nkWK5TljCMJa6ImUJ1mG1/WmeUeaW/s/tRLT1FL5iYuedBygOX5fPBg+AzMAnBAG12
+         JVyQGg0Bvm+JvD4/sOfYmzZGdiUKi9JSh5eVPII9OKI9eLWFgVdfaFj3vuWsifYHy2
+         6vakrGMTWnYcu6Iv66KFV8qNGEpfG8OFb6v2iielwim9MEUxzmj2b5/hNEbuffPbOd
+         +KkqEsQWl+sa0AuPmlfnCyVtIIHoxeDZw5VqT44eybVBx0+t0OJ3NG+/kR1gIQ/J8C
+         Q0ySNX33MLQSw==
+Received: by mail-vk1-f172.google.com with SMTP id 15so6809250vko.13;
+        Tue, 28 Jun 2022 19:12:31 -0700 (PDT)
+X-Gm-Message-State: AJIora9fVa1wkGlU1cAD4HD9y3WB2percLKUTeKNTaf+PncQicUUIvPH
+        Kk0UiccDWQroqRty5eT+HkeeGTQMpGDiEtgv9XY=
+X-Google-Smtp-Source: AGRyM1sDRJWKc6dWVeHElvUlboqPwiwJz5m7zwHa5t+QSM5ZMx0nyhJAV632XFc2O2XkuEmomXUFDLniU28YR8W/XHg=
+X-Received: by 2002:ac5:cdcc:0:b0:36c:547d:d9c4 with SMTP id
+ u12-20020ac5cdcc000000b0036c547dd9c4mr3761818vkn.2.1656468750514; Tue, 28 Jun
+ 2022 19:12:30 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220628081707.1997728-1-guoren@kernel.org> <20220628081707.1997728-2-guoren@kernel.org>
+ <218522c9-97b9-7659-ce31-2dbc4b0c6a60@redhat.com>
+In-Reply-To: <218522c9-97b9-7659-ce31-2dbc4b0c6a60@redhat.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 29 Jun 2022 10:12:19 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRBoAZzjWGJ0zAxv0eqBB-G=V3QHmp6+jXyznmuY6LhCQ@mail.gmail.com>
+Message-ID: <CAJF2gTRBoAZzjWGJ0zAxv0eqBB-G=V3QHmp6+jXyznmuY6LhCQ@mail.gmail.com>
+Subject: Re: [PATCH V7 1/5] asm-generic: ticket-lock: Remove unnecessary atomic_read
+To:     Waiman Long <longman@redhat.com>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,43 +70,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Jun 2022 20:21:39 +0200, Vincent Knecht wrote:
-> Convert leds-is31fl319x.txt to dtschema.
-> Set license to the one recommended by DT project.
-> 
-> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
-> ---
->  .../bindings/leds/issi,is31fl319x.yaml        | 113 ++++++++++++++++++
->  .../bindings/leds/leds-is31fl319x.txt         |  61 ----------
->  2 files changed, 113 insertions(+), 61 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
->  delete mode 100644 Documentation/devicetree/bindings/leds/leds-is31fl319x.txt
-> 
+On Wed, Jun 29, 2022 at 2:06 AM Waiman Long <longman@redhat.com> wrote:
+>
+> On 6/28/22 04:17, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Remove unnecessary atomic_read in arch_spin_value_unlocked(lock),
+> > because the value has been in lock. This patch could prevent
+> > arch_spin_value_unlocked contend spin_lock data again.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> > ---
+> >   include/asm-generic/spinlock.h | 4 +++-
+> >   1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
+> > index fdfebcb050f4..f1e4fa100f5a 100644
+> > --- a/include/asm-generic/spinlock.h
+> > +++ b/include/asm-generic/spinlock.h
+> > @@ -84,7 +84,9 @@ static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
+> >
+> >   static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+> >   {
+> > -     return !arch_spin_is_locked(&lock);
+> > +     u32 val = lock.counter;
+> > +
+> > +     return ((val >> 16) == (val & 0xffff));
+> >   }
+> >
+> >   #include <asm/qrwlock.h>
+>
+> lockref.c is the only current user of arch_spin_value_unlocked(). This
+> change is probably OK with this particular use case. Do you have any
+> performance data about the improvement due to this change?
+I don't have performance data and I just check the asm code, previous
+version has an additional unnecessary atomic_read.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+About this point, we've talked before, but I & palmer missed that
+point when we pick peter's patch again.
+https://lore.kernel.org/linux-riscv/YHbmXXvuG442ZDfN@hirez.programming.kicks-ass.net/
+----
+> > +static __always_inline int ticket_value_unlocked(arch_spinlock_t lock)
+> > +{
+> > +       return !ticket_is_locked(&lock);
+> Are you sure to let ticket_is_locked->atomic_read(lock) again, the
+> lock has contained all information?
+>
+> return lock.tickets.owner == lock.tickets.next;
 
-yamllint warnings/errors:
+Yeah, I wrote then the wrong way around. Couldn't be bothered to go back
+when I figured it out.
+---
+It's just a small typo.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml: patternProperties:^thermistor@:properties:adi,excitation-current-nanoamp: '$ref' should not be valid under {'const': '$ref'}
-	hint: Standard unit suffix properties don't need a type $ref
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml: ignoring, error in schema: patternProperties: ^thermistor@: properties: adi,excitation-current-nanoamp
-Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.example.dtb:0:0: /example-0/spi/ltc2983@0: failed to match any schema with compatible: ['adi,ltc2983']
 
-doc reference errors (make refcheckdocs):
+>
+> You may have to document that we have to revisit that if another use
+> case shows up.
+>
+> Cheers,
+> Longman
+>
 
-See https://patchwork.ozlabs.org/patch/
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+--
+Best Regards
+ Guo Ren
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+ML: https://lore.kernel.org/linux-csky/

@@ -2,143 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34269560926
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EC956092B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231817AbiF2Saa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 14:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43548 "EHLO
+        id S231504AbiF2Sb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 14:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231195AbiF2Sa3 (ORCPT
+        with ESMTP id S229849AbiF2Sb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 14:30:29 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120051.outbound.protection.outlook.com [40.107.12.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CD031925
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:30:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ul/Q+lu+v6uBZRONkvx1HnT76txjWqFMc1Si1DN2+alZA+MaCn6eexUuUS6Iw54YiRH6eHUrE4FVh9fknl4X3yjeHnhKvdknWM2S1PUD4yaEUq5u1+xDQO7qHdFB8bnOzSu8yFkCTvLdyzfPnw/yNDEhBHIF0DdSWFNh6DpcNr1RAimxu8908omTd2pkRI4Ltb+Icvl6gZiyuDf+kBEyKoFIN89455NgjdLnQ0tSAX6Mar2WsflUneGsk9YzNl//umiv2FhOiPPLdwnMiw/ve6Uzxf1y7UuEUYkDZVgJmROOwhZF6OLd+8eJZUhv7cABaevNXeGeZO4PCH7hE6nNdw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5R/K+KmEXx+fKBDJuVv8iYltGqMPesLo4tLY3NM8P2U=;
- b=I6WBkhjbVBYnUwKFk5lvyjxAjPQU+ETwNm1aC4RJFpx5Cr4W7WRqT4TqcPDJcHWvAhs/1fxby4gcggbsScPzTgqLaVbzfMEBQoyIAofhTppvFuZ4ZZ4HvQxM2nWOG1OqRxUxnVdNfFnBZATfjTyLvXchWNZ6Sizd7gDbcCoY+6TcYqCbOuNg2Te2f+Y4VA5ThUTwW8utZk1pe4pWW2/0DrhSjvl5g14B0dFLV2LFCBciZ8u1datQEPJ4wOH7YxHR3S/oBR8/TOy2hBpNK5QxpeoudysI387P0Tkq384F37t9hJ/Z0BxeU2cIdZgJTNIJ20iMN80B5BxJheGy4wlfvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5R/K+KmEXx+fKBDJuVv8iYltGqMPesLo4tLY3NM8P2U=;
- b=Y8xQ0q4BcklLRPggfvFOwe9bGQ/Mvau6TdpynU92DouJP+Oy4/rSygnip4V6z5oZU/jrqlsx0LFxSr1uX/dU0x2LMvYiF4bNu0XrM2W5ELi3OSMZIzmVi+Ix8nMj24GUa8NDxN/N+/aaBEihQnBkTJyEvdRCMJa7xqfQYAIZPaOE+THHOneDvwM8wEvlJr2/vmr/QRlxOgV9RY6vYEUGL+XLBsQJ/dcSe/gAInktKVRorwO906gY+1c4OIQCNmibNKxr0usFR8bUKjdkLBaewBPnEIswPHMasdSJGWjzC05E0WflwZbM1VYv2lHUBYlAkxU/NU9jrY8KaHG8nGvdqA==
-Received: from MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:3d::7) by
- PR0P264MB1660.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:166::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5373.18; Wed, 29 Jun 2022 18:30:24 +0000
-Received: from MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM
- ([fe80::958f:a26:4984:ffd7]) by MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM
- ([fe80::958f:a26:4984:ffd7%7]) with mapi id 15.20.5373.018; Wed, 29 Jun 2022
- 18:30:23 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Sathvika Vasireddy <sv@linux.vnet.ibm.com>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-CC:     "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [RFC PATCH v3 11/12] powerpc: Remove unreachable() from WARN_ON()
-Thread-Topic: [RFC PATCH v3 11/12] powerpc: Remove unreachable() from
- WARN_ON()
-Thread-Index: AQHYh/kBfzKOa0yAB0m8i9v+dp1MAq1frsEAgAO4OwCAA1WnAA==
-Date:   Wed, 29 Jun 2022 18:30:23 +0000
-Message-ID: <cce19b1c-449a-f306-533a-9edc855049aa@csgroup.eu>
-References: <20220624183238.388144-1-sv@linux.ibm.com>
- <20220624183238.388144-12-sv@linux.ibm.com>
- <70b6d08d-aced-7f4e-b958-a3c7ae1a9319@csgroup.eu>
- <92eae2ef-f9b6-019a-5a8e-728cdd9bbbc0@linux.vnet.ibm.com>
-In-Reply-To: <92eae2ef-f9b6-019a-5a8e-728cdd9bbbc0@linux.vnet.ibm.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 44417575-acf0-4079-dd52-08da59fd6e57
-x-ms-traffictypediagnostic: PR0P264MB1660:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QSMh/p2dKfGGWgNR+vb+O3M4suJsGCzigVUSCTLml04IyWtCwMeupCR6RGB1eLQ/ewAyg3WLwilJFYpjlBDgc25G2xj6KVeUtv63TKpbCFYDBcK/9FP6bPB6Oi0R0UfH3Ft0zJKvJYI9Zjcv5yhqSUr7uaPPFasBLIjDLiaarySam/DMLW72M99morENrYpo2XqwZu+93sttv/rfqK/N4xuiup9ixtHT6sA5Pv1DZoU2FIGKCgbhfoStgyeBrf/FpsWGR79trMTVZbzAYENJsLXbzx14CfnvLisnCGS6pLzY3rTkHKBFlwPUQeblnNgfHiaLE4y0FDDv6V3h7KtqXJM+Wqo0QoCpgrQWvu3ILFvUsYx84DkbxmdyZwcHTzLSlkW9i/z/TJeGAOQeIW9PXP6J0tjTe5zgfObsUFdZu60AP5uQ8rcreKKwMMpIhAhB2GoehBcKWocWE/GIN8Tt3HD1sKeO/B7V0BKuvT9RrMSl3ckk62dT08xAKV1MR8kisIXFNNZ/pZulmtK1nM+M6lAgTBG5wwa1OshvJobWqpJpd0dA2ZjVZfX6/dWf/793tBLIacw+OzwxETbMMhJ+4sAq4GSF7MmIuwI1n/MCfmEP7fNiwChbU8HL3/kd06tR1QvkVNPBC+ekLr1fJwuvA2vOxhThDoilQSu44lhmJJP/df9uWhWGJCVV9dUQcNBPiAeiROxHSXLT5S2f4DtDrXLrNd2jjZgiDtQE2ywKW1ie3TZvkVLnzySpE9bC+pxDHZfPByJ/iewTPSEQPTIqOTqQwmlRj359vXruUHkNufGKd4zllZp8fyo2+BHKdu2jUKDSFZdBnZilGkioXiT9CzfXs9AsfRIIhwqR7TnSCZZoUD5AiiYeacbxRRJ+Lgw/7b13ihJNxdUYfBlu3eT4Rw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(366004)(376002)(396003)(346002)(2906002)(91956017)(64756008)(66476007)(4326008)(5660300002)(86362001)(478600001)(31696002)(8676002)(66946007)(7416002)(122000001)(38100700002)(66446008)(66556008)(8936002)(6506007)(41300700001)(76116006)(38070700005)(966005)(6512007)(316002)(54906003)(71200400001)(53546011)(6486002)(186003)(83380400001)(31686004)(66574015)(36756003)(2616005)(26005)(110136005)(44832011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dHgrN3F1SlBIL2F5RkYwTDlSYkVVaEpram8yZWlnK1c4Z3Ftd1l6NTdTN2hG?=
- =?utf-8?B?NnY1QWJueUhLcGZhRFFDK2V4VTZBRWF6ZGF6Z3JqRkIyd2xGQ1prK3VSMGsr?=
- =?utf-8?B?ZlFjb1hpZ3FyRDd2YTRzc0x4WFMyRGFNQTZGcVRHaWx4akkyaVdSU2RsVFVu?=
- =?utf-8?B?eS9iMm9CcWUyckJ2ZDM0ZEJybUlraFpEUjZIR2NTK3EwSTJJb0pHZ2JpSGR1?=
- =?utf-8?B?TzVXNnRHSHVrMmtBbmlIT0VMYURZeEdWS0o3bENaTkNUUktXblFSdEY1NWpP?=
- =?utf-8?B?VFpPTFA4eUlJL0M3ejdLV3o4dXBXaWNXUTdWS1BSN1RXQWFMeVdDY3pRRGIr?=
- =?utf-8?B?VVUrTGJveFU3a2NVQk9EbEQxOHlnZURXTHpDUnZFUndKbHBzOHBMdXVMeGVE?=
- =?utf-8?B?ek5NR25zZTdTaEZYOUhsUHE5QVE3VVp2SzBPelB0YVJMNU94VGthSzArY1VI?=
- =?utf-8?B?azA5UzlrZjhYZHZXZDUxU3JINllMTWc3cWNFeklzbjExTjE4WWJkMm5mZGgr?=
- =?utf-8?B?dDdMdVczU0JpUWJOenczL0lKRDdhdy9SUlBaOXdpREhsRHU4eUJBK3hTSWdU?=
- =?utf-8?B?UEYyV3VadHJKSEd2c3ZPMVgvUGxLTS9ZWUFpNmVaMjJtTUNydXBlTXd4b255?=
- =?utf-8?B?c1hyMVdCVnE3YmJyL1ZQN1VUUjhSRm9GRVdsZUx4UlhVKzllWkFoVFRhM0w5?=
- =?utf-8?B?blZSRCs1ajBWbkw3QnMrcENMWVdwbnkwbG9FTU9MbGlhRjgvOW9jdm9hcnI1?=
- =?utf-8?B?TjVUZ3lrV0xzSktETEVseGRHZW5yVlBDQXZ4VDdiaFNvNVkrVHlaMmsvcFpS?=
- =?utf-8?B?TTZMQ2phb2puYzN5dHRjZFVlZVoxRGExU3VOcjhZc0U2Uk02bGpSS2lmMllD?=
- =?utf-8?B?bjJhNUxiQjlpcEVORiszZ1VRNkE0bFZvSWNOaTc1VXdYeVJuZDJIMERzdkFD?=
- =?utf-8?B?WStaajRnWTgyTVRFMWlTZEhzbE4yRkx2NkdQemIxaFBaMVhMclltQTU0RGlH?=
- =?utf-8?B?aUtMUWpxazd5U1BuTlFrMW1uQi8ydVVUS1V4YTV2VVVQdlRCektsaTJSRnZj?=
- =?utf-8?B?M0plbmwwRng3REZSTnl3bDFVMmxnMm4venlDeWYxK2FrUFZmT0o3M3Fjb3R4?=
- =?utf-8?B?VjFwN0dhbkVRVnJhNjFxdmpuQTBDNW1wN3lReVN6ZmRPbTZUVEtTWXFPN0JE?=
- =?utf-8?B?Umc3UWlWZm9HZ0t2TnJ3b0lhR1BEQ0pvNDJBeldvT0t4VUZySWpFOXowNjl0?=
- =?utf-8?B?R3c1WTJjT3BQYk9TWlEvUjg2ay9HZmdpZU9zeFhIb1RWSFJkQUZTZXR5YW9l?=
- =?utf-8?B?YWRmbTFyWXJncnFwN0xnZlpYLzVON1pYM2c3NGMxNDkrcGw4Z3ZFTEtiSkxz?=
- =?utf-8?B?clROUE5vNUZDNzZyYTJuamg3QURSd0JVMFllTUpNZENqaXlMUUorNGJxNFJC?=
- =?utf-8?B?V3B4ZVRsd1R1RTh0NkFaU2xUcWZHV2hobEJJWUplZW9URnVWczI5OFBzQXZq?=
- =?utf-8?B?aVEyMlN4NWthTFh2c3MyRjhLL1Q1NjVLdFdHTE4zNlJnOWpOdnhXS2ljeUJp?=
- =?utf-8?B?OWZoOG5ITllZaVJYNGJSR3RmZ2g2QVQ4dEZMb3IzRExWeGVqR3ZSWGNhRktU?=
- =?utf-8?B?TXJGMWViV1FENmVlZVhETUIrRkF4d2l0RFM0WW1XRkUxYjlvbHZHLzY4ODNo?=
- =?utf-8?B?ejkreGljMkJ6M0lFZFRlOU5MTkJleVU5NitReGZvaDlRSlloaks5Ym1ZbTZF?=
- =?utf-8?B?dkRoWGRQN2MrcXY0eEhjeEl3ZDErYlRoTUFLR0F6VTVvTVpWVWZsYnowdzFn?=
- =?utf-8?B?WlNxNG5Gbzc2bW5QRDFodkZ4aVF1V2xwVUlZREsrY1V0M3dNaU9yWUUwbkJF?=
- =?utf-8?B?YlZpZTdtSVRiSGRLTytJcG1PYVlQeDBNcGJOUXhTSUpoUzh3WUZ6M0RvT0ds?=
- =?utf-8?B?bVhNTVNpSnNpRkhieWhVSFh0cE9qN3dhcGVNc1NkdzB0K2tPMDVEcXFOT3k4?=
- =?utf-8?B?VUk0NzgwWkNIUDJob3QvZ3hrQVZtSGNWaHNZL2hjc3lxR1hpcG4zVElYUlB4?=
- =?utf-8?B?SHF3WVpQU1hJcUVPSXYwRWJiRkdaUUxSaTdoY2pWWTVHWFUzdmJBZ1QrNVdo?=
- =?utf-8?B?UUVMbnRSSXZWRHZCRi85WW5QaWlwMlRSYnQ1VURqQmNkUFUvVDBVQ2VaeGdm?=
- =?utf-8?Q?CF9dC0/rwQCYUoRs+gJkjQQ=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AEB29F2EC542F841B7E728744FF26E9A@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Wed, 29 Jun 2022 14:31:26 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F82E39BA9
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:31:22 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id l2so15279640pjf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:31:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CDVfXBpAEBDJhGnhPCn04tt9xzUzeJTGIg9aUNRDKi0=;
+        b=HJqE+gA5xUv3V1M4HPXDech2JSWzcTlmPCUOkS55QSUuy9lQpIRLChvr6pqrzQh7d8
+         /qvUro79JuQekFvc9KkMLhVNtW8T+ReDU4VeuFWOwy5qkr47QQ71TqHuCT7exSGXAN4E
+         ljXDJoU8viQ5uheFnUXzocJW41t5x/ngrkvjUkAvPRgxNELnQmzMugY/EX/oZhLMXshL
+         rWcVdqqGQzn6n0s0UpjdCvrHr8EQXMUk+trMq2cTCWzF29T+Ob9eAWLBFl/vlBSAe2vR
+         A5LCJ3bmNDOpnbcsB86myd2lJuZDk4fL1Hc4RTXX59QkMBtOn07Y5Y+L1U0f8e88ZqX4
+         cM3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CDVfXBpAEBDJhGnhPCn04tt9xzUzeJTGIg9aUNRDKi0=;
+        b=qDTTI5cNTLW+m6cXUfGDGXTxZbStr3sWpyqpqZtLtJiOKkcmgtTsSDE9cejw3dZnlH
+         2Oswh5XS8eftsv/wWkJ8YpSG3WQE0FnWz55jxzp3ja/6esG/nqP9hvz97ZdYUsjRF7rZ
+         DgNb+99R6gKuUEliGpBbBbQMDJUmw84zZnNgyAEJ84b8ZWyOYQ6mkAYDZeSGux4w6emc
+         O42gBzP+ErrF4ZD0HH80tiX44EsFqzsugm2RAPEAOYwOVBYFu0V4aftdDQLMXKiW+md8
+         e4ota5QTsoLChos/RGDKleGCBsYlWYsfdTrG+TYORk1rGh17eeKesmV9FqATL6rnTCLy
+         9HJg==
+X-Gm-Message-State: AJIora+DSzcC3WaxE56Eh54KnWVqMFqalPvKJzfgMV6B1jJkgZMIbi8B
+        vZlVjmgpqQ3GGdik6tvJP2+gqliRJsyih1YAP+B8bQ==
+X-Google-Smtp-Source: AGRyM1uCe+PfnmbjIgGgKt2vuyMWuT6tPF7Y5tVX5Jwk2bZodZxvORXSCjXUiuS4zBCwNglBiAUxq8mse2sfN+aE+v8=
+X-Received: by 2002:a17:903:2281:b0:16a:674e:8949 with SMTP id
+ b1-20020a170903228100b0016a674e8949mr11785575plh.49.1656527481228; Wed, 29
+ Jun 2022 11:31:21 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 44417575-acf0-4079-dd52-08da59fd6e57
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2022 18:30:23.8571
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hVBGnTGc3k6k0dTqn42Eju7ib5zUlsDcS5v5eAgEOSBPG0Jf0+E1LMu+BucBUWOU1BE5fRHXI7IBFM3FPJCr8McJglEbgT/1YZykXM2W1wA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB1660
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220624173656.2033256-1-jthoughton@google.com>
+ <CAHS8izPnJd5EQjUi9cOk=03u3X1rk0PexTQZi+bEE4VMtFfksQ@mail.gmail.com>
+ <CADrL8HWse7-=1Z=1_d8szwdkhFH1t8L4pOBO7E7yxgCYF-gc8w@mail.gmail.com>
+ <CAHS8izNSsEW88Q=ozcC2rbnmvcX3zOL-qkFTPgn=M6S1R5t=Yw@mail.gmail.com> <YrtAyUSbtCLwCFxC@work-vm>
+In-Reply-To: <YrtAyUSbtCLwCFxC@work-vm>
+From:   James Houghton <jthoughton@google.com>
+Date:   Wed, 29 Jun 2022 11:31:10 -0700
+Message-ID: <CADrL8HXeLTiTP0cvq7DY8R0JkQT6gdz=gq06jarhBqyPHDfmzw@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/26] hugetlb: Introduce HugeTLB high-granularity mapping
+To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+Cc:     Mina Almasry <almasrymina@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Jue Wang <juew@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -146,103 +78,237 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgU2F0aHZpa2EsDQoNCkFkZGluZyBBUk0gcGVvcGxlIGFzIHRoZXkgc2VlbSB0byBmYWNlIHRo
-ZSBzYW1lIGtpbmQgb2YgcHJvYmxlbSAoc2VlIA0KaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9y
-Zy9wcm9qZWN0L2xpbnV4LWtidWlsZC9wYXRjaC8yMDIyMDYyMzAxNDkxNy4xOTk1NjMtMzMtY2hl
-bnpob25namluQGh1YXdlaS5jb20vKQ0KDQpMZSAyNy8wNi8yMDIyIMOgIDE3OjM1LCBTYXRodmlr
-YSBWYXNpcmVkZHkgYSDDqWNyaXTCoDoNCj4gDQo+IE9uIDI1LzA2LzIyIDEyOjE2LCBDaHJpc3Rv
-cGhlIExlcm95IHdyb3RlOg0KPj4NCj4+IExlIDI0LzA2LzIwMjIgw6AgMjA6MzIsIFNhdGh2aWth
-IFZhc2lyZWRkeSBhIMOpY3JpdMKgOg0KPj4+IG9ianRvb2wgaXMgdGhyb3dpbmcgKnVuYW5ub3Rh
-dGVkIGludHJhLWZ1bmN0aW9uIGNhbGwqDQo+Pj4gd2FybmluZ3Mgd2l0aCBhIGZldyBpbnN0cnVj
-dGlvbnMgdGhhdCBhcmUgbWFya2VkDQo+Pj4gdW5yZWFjaGFibGUuIFJlbW92ZSB1bnJlYWNoYWJs
-ZSgpIGZyb20gV0FSTl9PTigpDQo+Pj4gdG8gZml4IHRoZXNlIHdhcm5pbmdzLCBhcyB0aGUgY29k
-ZWdlbiByZW1haW5zIHNhbWUNCj4+PiB3aXRoIGFuZCB3aXRob3V0IHVucmVhY2hhYmxlKCkgaW4g
-V0FSTl9PTigpLg0KPj4gRGlkIHlvdSB0cnkgdGhlIHR3byBleGVtcGxlcyBkZXNjcmliZWQgaW4g
-Y29tbWl0IDFlNjg4ZGQyYTNkNg0KPj4gKCJwb3dlcnBjL2J1ZzogUHJvdmlkZSBiZXR0ZXIgZmxl
-eGliaWxpdHkgdG8gV0FSTl9PTi9fX1dBUk5fRkxBR1MoKSB3aXRoDQo+PiBhc20gZ290byIpID8N
-Cj4+DQo+PiBXaXRob3V0IHlvdXIgcGF0Y2g6DQo+Pg0KPj4gMDAwMDA2NDAgPHRlc3Q+Og0KPj4g
-wqDCoCA2NDA6wqDCoMKgIDgxIDIzIDAwIDg0wqDCoMKgwqAgbHd6wqDCoMKgwqAgcjksMTMyKHIz
-KQ0KPj4gwqDCoCA2NDQ6wqDCoMKgIDcxIDI5IDQwIDAwwqDCoMKgwqAgYW5kaS7CoMKgIHI5LHI5
-LDE2Mzg0DQo+PiDCoMKgIDY0ODrCoMKgwqAgNDAgODIgMDAgMGPCoMKgwqDCoCBibmXCoMKgwqDC
-oCA2NTQgPHRlc3QrMHgxND4NCj4+IMKgwqAgNjRjOsKgwqDCoCA4MCA2MyAwMCAwY8KgwqDCoMKg
-IGx3esKgwqDCoMKgIHIzLDEyKHIzKQ0KPj4gwqDCoCA2NTA6wqDCoMKgIDRlIDgwIDAwIDIwwqDC
-oMKgwqAgYmxyDQo+PiDCoMKgIDY1NDrCoMKgwqAgMGYgZTAgMDAgMDDCoMKgwqDCoCB0d3VpwqDC
-oMKgIHIwLDANCj4+DQo+PiAwMDAwMDY1OCA8dGVzdDl3PjoNCj4+IMKgwqAgNjU4OsKgwqDCoCAy
-YyAwNCAwMCAwMMKgwqDCoMKgIGNtcHdpwqDCoCByNCwwDQo+PiDCoMKgIDY1YzrCoMKgwqAgNDEg
-ODIgMDAgMGPCoMKgwqDCoCBiZXHCoMKgwqDCoCA2NjggPHRlc3Q5dysweDEwPg0KPj4gwqDCoCA2
-NjA6wqDCoMKgIDdjIDYzIDIzIDk2wqDCoMKgwqAgZGl2d3XCoMKgIHIzLHIzLHI0DQo+PiDCoMKg
-IDY2NDrCoMKgwqAgNGUgODAgMDAgMjDCoMKgwqDCoCBibHINCj4+IMKgwqAgNjY4OsKgwqDCoCAw
-ZiBlMCAwMCAwMMKgwqDCoMKgIHR3dWnCoMKgwqAgcjAsMA0KPj4gwqDCoCA2NmM6wqDCoMKgIDM4
-IDYwIDAwIDAwwqDCoMKgwqAgbGnCoMKgwqDCoMKgIHIzLDANCj4+IMKgwqAgNjcwOsKgwqDCoCA0
-ZSA4MCAwMCAyMMKgwqDCoMKgIGJscg0KPj4NCj4+DQo+PiBXaXRoIHlvdXIgcGF0Y2g6DQo+Pg0K
-Pj4gMDAwMDA2NDAgPHRlc3Q+Og0KPj4gwqDCoCA2NDA6wqDCoMKgIDgxIDIzIDAwIDg0wqDCoMKg
-wqAgbHd6wqDCoMKgwqAgcjksMTMyKHIzKQ0KPj4gwqDCoCA2NDQ6wqDCoMKgIDcxIDI5IDQwIDAw
-wqDCoMKgwqAgYW5kaS7CoMKgIHI5LHI5LDE2Mzg0DQo+PiDCoMKgIDY0ODrCoMKgwqAgNDAgODIg
-MDAgMGPCoMKgwqDCoCBibmXCoMKgwqDCoCA2NTQgPHRlc3QrMHgxND4NCj4+IMKgwqAgNjRjOsKg
-wqDCoCA4MCA2MyAwMCAwY8KgwqDCoMKgIGx3esKgwqDCoMKgIHIzLDEyKHIzKQ0KPj4gwqDCoCA2
-NTA6wqDCoMKgIDRlIDgwIDAwIDIwwqDCoMKgwqAgYmxyDQo+PiDCoMKgIDY1NDrCoMKgwqAgMGYg
-ZTAgMDAgMDDCoMKgwqDCoCB0d3VpwqDCoMKgIHIwLDANCj4+IMKgwqAgNjU4OsKgwqDCoCA0YiBm
-ZiBmZiBmNMKgwqDCoMKgIGLCoMKgwqDCoMKgwqAgNjRjIDx0ZXN0KzB4Yz7CoMKgwqDCoMKgwqDC
-oCA8PT0NCj4+DQo+PiAwMDAwMDY1YyA8dGVzdDl3PjoNCj4+IMKgwqAgNjVjOsKgwqDCoCAyYyAw
-NCAwMCAwMMKgwqDCoMKgIGNtcHdpwqDCoCByNCwwDQo+PiDCoMKgIDY2MDrCoMKgwqAgNDEgODIg
-MDAgMGPCoMKgwqDCoCBiZXHCoMKgwqDCoCA2NmMgPHRlc3Q5dysweDEwPg0KPj4gwqDCoCA2NjQ6
-wqDCoMKgIDdjIDYzIDIzIDk2wqDCoMKgwqAgZGl2d3XCoMKgIHIzLHIzLHI0DQo+PiDCoMKgIDY2
-ODrCoMKgwqAgNGUgODAgMDAgMjDCoMKgwqDCoCBibHINCj4+IMKgwqAgNjZjOsKgwqDCoCAwZiBl
-MCAwMCAwMMKgwqDCoMKgIHR3dWnCoMKgwqAgcjAsMA0KPj4gwqDCoCA2NzA6wqDCoMKgIDM4IDYw
-IDAwIDAwwqDCoMKgwqAgbGnCoMKgwqDCoMKgIHIzLDDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDw9
-PQ0KPj4gwqDCoCA2NzQ6wqDCoMKgIDRlIDgwIDAwIDIwwqDCoMKgwqAgYmxywqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIDw9PQ0KPj4gwqDCoCA2Nzg6wqDCoMKgIDM4IDYwIDAwIDAwwqDC
-oMKgwqAgbGnCoMKgwqDCoMKgIHIzLDANCj4+IMKgwqAgNjdjOsKgwqDCoCA0ZSA4MCAwMCAyMMKg
-wqDCoMKgIGJscg0KPj4NCj4gVGhlIGJ1aWx0aW4gdmFyaWFudCBvZiB1bnJlYWNoYWJsZSAoX19i
-dWlsdGluX3VucmVhY2hhYmxlKCkpIHdvcmtzLg0KPiANCj4gSG93IGFib3V0IHVzaW5nIHRoYXQg
-aW5zdGVhZCBvZiB1bnJlYWNoYWJsZSgpID8NCj4gDQo+IA0KDQpJbiBmYWN0IHRoZSBwcm9ibGVt
-IGNvbWVzIGZyb20gdGhlIG1hY3JvIGFubm90YXRlX3VucmVhY2hhYmxlKCkgd2hpY2ggaXMgDQpj
-YWxsZWQgYnkgdW5yZWFjaGFibGUoKSBiZWZvcmUgY2FsbGluZyBfX2J1aWxkX3VucmVhY2hhYmxl
-KCkuDQoNClNlZW1zIGxpa2UgdGhpcyBtYWNybyBhZGRzIChhZnRlciB0aGUgdW5jb25kaXRpb25h
-bCB0cmFwIHR3dWkpIGEgY2FsbCB0byANCmFuIGVtcHR5IGZ1bmN0aW9uIHdob3NlIGFkZHJlc3Mg
-aXMgbGlzdGVkIGluIHNlY3Rpb24gLmRpc2NhcmQudW5yZWFjaGFibGUNCg0KICAgICAxYzc4OiAg
-ICAgICAwMCAwMCBlMCAwZiAgICAgdHd1aSAgICByMCwwDQogICAgIDFjN2M6ICAgICAgIDU1IGU3
-IGZmIDRiICAgICBibCAgICAgIDNkMCANCjxxZGlzY19yb290X3NsZWVwaW5nX2xvY2sucGFydC4w
-Pg0KDQoNClJFTE9DQVRJT04gUkVDT1JEUyBGT1IgWy5kaXNjYXJkLnVucmVhY2hhYmxlXToNCk9G
-RlNFVCAgICAgICAgICAgVFlQRSAgICAgICAgICAgICAgVkFMVUUNCjAwMDAwMDAwMDAwMDAwMDAg
-Ul9QUEM2NF9SRUwzMiAgICAgLnRleHQrMHgwMDAwMDAwMDAwMDAwM2QwDQoNClRoZSBwcm9ibGVt
-IGlzIHRoYXQgdGhhdCBmdW5jdGlvbiBoYXMgc2l6ZSAwOg0KDQowMDAwMDAwMDAwMDAwM2QwIGwg
-ICAgIEYgLnRleHQJMDAwMDAwMDAwMDAwMDAwMCANCnFkaXNjX3Jvb3Rfc2xlZXBpbmdfbG9jay5w
-YXJ0LjANCg0KDQpBbmQgb2JqdG9vbCBpcyBub3QgcHJlcGFyZWQgZm9yIGEgZnVuY3Rpb24gd2l0
-aCBzaXplIDAuDQoNCg0KVGhlIGZvbGxvd2luZyBjaGFuZ2VzIHRvIG9ianRvb2wgc2VlbSB0byBm
-aXggdGhlIHByb2JsZW0sIG1vc3Qgd2FybmluZyANCmFyZSBnb25lIHdpdGggdGhhdCBjaGFuZ2Uu
-DQoNCmRpZmYgLS1naXQgYS90b29scy9vYmp0b29sL2VsZi5jIGIvdG9vbHMvb2JqdG9vbC9lbGYu
-Yw0KaW5kZXggNjMyMThmNTc5OWMyLi4zN2MwYTI2OGI3ZWEgMTAwNjQ0DQotLS0gYS90b29scy9v
-Ymp0b29sL2VsZi5jDQorKysgYi90b29scy9vYmp0b29sL2VsZi5jDQpAQCAtNzcsNiArNzcsOCBA
-QCBzdGF0aWMgaW50IHN5bWJvbF9ieV9vZmZzZXQoY29uc3Qgdm9pZCAqa2V5LCBjb25zdCANCnN0
-cnVjdCByYl9ub2RlICpub2RlKQ0KDQogIAlpZiAoKm8gPCBzLT5vZmZzZXQpDQogIAkJcmV0dXJu
-IC0xOw0KKwlpZiAoKm8gPT0gcy0+b2Zmc2V0ICYmICFzLT5sZW4pDQorCQlyZXR1cm4gMDsNCiAg
-CWlmICgqbyA+PSBzLT5vZmZzZXQgKyBzLT5sZW4pDQogIAkJcmV0dXJuIDE7DQoNCkBAIC00MDAs
-NyArNDAyLDcgQEAgc3RhdGljIHZvaWQgZWxmX2FkZF9zeW1ib2woc3RydWN0IGVsZiAqZWxmLCBz
-dHJ1Y3QgDQpzeW1ib2wgKnN5bSkNCiAgCSAqIERvbid0IHN0b3JlIGVtcHR5IFNUVF9OT1RZUEUg
-c3ltYm9scyBpbiB0aGUgcmJ0cmVlLiAgVGhleQ0KICAJICogY2FuIGV4aXN0IHdpdGhpbiBhIGZ1
-bmN0aW9uLCBjb25mdXNpbmcgdGhlIHNvcnRpbmcuDQogIAkgKi8NCi0JaWYgKCFzeW0tPmxlbikN
-CisJaWYgKHN5bS0+dHlwZSA9PSBTVFRfTk9UWVBFICYmICFzeW0tPmxlbikNCiAgCQlyYl9lcmFz
-ZSgmc3ltLT5ub2RlLCAmc3ltLT5zZWMtPnN5bWJvbF90cmVlKTsNCiAgfQ0KDQotLS0NCg0KSSBh
-bHNvIGhhZCBvYmp0b29sIHJ1bm5pbmcgZm9yIGV2ZXIgb24gDQphcmNoL3Bvd2VycGMvc3lzZGV2
-L3hpY3MvaWNwLWh2Lm8sIHdoaWNoIEkgZml4ZWQgd2l0aCB0aGUgYmVsb3cgaGFjazoNCg0KZGlm
-ZiAtLWdpdCBhL3Rvb2xzL29ianRvb2wvY2hlY2suYyBiL3Rvb2xzL29ianRvb2wvY2hlY2suYw0K
-aW5kZXggNTFiNmRjZWM4ZDZhLi5lZjIzMDNhZDYzODEgMTAwNjQ0DQotLS0gYS90b29scy9vYmp0
-b29sL2NoZWNrLmMNCisrKyBiL3Rvb2xzL29ianRvb2wvY2hlY2suYw0KQEAgLTUyOSw3ICs1Mjks
-NyBAQCBzdGF0aWMgc3RydWN0IGluc3RydWN0aW9uICpmaW5kX2xhc3RfaW5zbihzdHJ1Y3QgDQpv
-Ymp0b29sX2ZpbGUgKmZpbGUsDQogIAl1bnNpZ25lZCBpbnQgb2Zmc2V0Ow0KICAJdW5zaWduZWQg
-aW50IGVuZCA9IChzZWMtPnNoLnNoX3NpemUgPiAxMCkgPyBzZWMtPnNoLnNoX3NpemUgLSAxMCA6
-IDA7DQoNCi0JZm9yIChvZmZzZXQgPSBzZWMtPnNoLnNoX3NpemUgLSAxOyBvZmZzZXQgPj0gZW5k
-ICYmICFpbnNuOyBvZmZzZXQtLSkNCisJZm9yIChvZmZzZXQgPSBzZWMtPnNoLnNoX3NpemUgLSAx
-OyBvZmZzZXQgJiYgb2Zmc2V0ID49IGVuZCAmJiAhaW5zbjsgDQpvZmZzZXQtLSkNCiAgCQlpbnNu
-ID0gZmluZF9pbnNuKGZpbGUsIHNlYywgb2Zmc2V0KTsNCg0KICAJcmV0dXJuIGluc247DQotLS0N
-Cg0KTm93IEkgb25seSBoYXZlIHRoZSBmb2xsb3dpbmcgdHdvIHdhcm5pbmdzOg0KDQphcmNoL3Bv
-d2VycGMvc3lzZGV2L3hpY3MvaWNwLWh2Lm86IHdhcm5pbmc6IG9ianRvb2w6IGNhbid0IGZpbmQg
-DQp1bnJlYWNoYWJsZSBpbnNuIGF0IC50ZXh0LnVubGlrZWx5KzB4MA0KZHJpdmVycy9jcnlwdG8v
-dm14L2Flc3A4LXBwYy5vOiB3YXJuaW5nOiBvYmp0b29sOiANCmFlc19wOF9zZXRfZW5jcnlwdF9r
-ZXkrMHg0NDogdW5hbm5vdGF0ZWQgaW50cmEtZnVuY3Rpb24gY2FsbA0KDQpUaGUgZmlyc3Qgb25l
-IGlzIGxpbmtlZCB0byB0aGUgaW5maW5pdGUgbG9vcCBJIGhhY2tlZC4gU28gSSBub3cgaGF2ZSB0
-byANCnVuZGVyc3RhbmQgd2hhdCB0aGUgcHJvYmxlbSByZWFsbHkgaXMuDQoNClRoZSBzZWNvbmQg
-b25lIGlzIGFuIGFzc2VtYmx5IGZpbGUgYWVzcDgtcHBjLlMgd2hpY2ggbGFja3MgdGhlIGNoYW5n
-ZXMgDQp5b3UgZGlkIGluIG90aGVyIGFzc2VtYmx5IGZpbGVzIGluIHBhdGNoIDEyLg0KDQpDaHJp
-c3RvcGhl
+On Tue, Jun 28, 2022 at 10:56 AM Dr. David Alan Gilbert
+<dgilbert@redhat.com> wrote:
+>
+> * Mina Almasry (almasrymina@google.com) wrote:
+> > On Mon, Jun 27, 2022 at 9:27 AM James Houghton <jthoughton@google.com> wrote:
+> > >
+> > > On Fri, Jun 24, 2022 at 11:41 AM Mina Almasry <almasrymina@google.com> wrote:
+> > > >
+> > > > On Fri, Jun 24, 2022 at 10:37 AM James Houghton <jthoughton@google.com> wrote:
+> > > > >
+> > > > > [trimmed...]
+> > > > > ---- Userspace API ----
+> > > > >
+> > > > > This patch series introduces a single way to take advantage of
+> > > > > high-granularity mapping: via UFFDIO_CONTINUE. UFFDIO_CONTINUE allows
+> > > > > userspace to resolve MINOR page faults on shared VMAs.
+> > > > >
+> > > > > To collapse a HugeTLB address range that has been mapped with several
+> > > > > UFFDIO_CONTINUE operations, userspace can issue MADV_COLLAPSE. We expect
+> > > > > userspace to know when all pages (that they care about) have been fetched.
+> > > > >
+> > > >
+> > > > Thanks James! Cover letter looks good. A few questions:
+> > > >
+> > > > Why not have the kernel collapse the hugepage once all the 4K pages
+> > > > have been fetched automatically? It would remove the need for a new
+> > > > userspace API, and AFACT there aren't really any cases where it is
+> > > > beneficial to have a hugepage sharded into 4K mappings when those
+> > > > mappings can be collapsed.
+> > >
+> > > The reason that we don't automatically collapse mappings is because it
+> > > would take additional complexity, and it is less flexible. Consider
+> > > the case of 1G pages on x86: currently, userspace can collapse the
+> > > whole page when it's all ready, but they can also choose to collapse a
+> > > 2M piece of it. On architectures with more supported hugepage sizes
+> > > (e.g., arm64), userspace has even more possibilities for when to
+> > > collapse. This likely further complicates a potential
+> > > automatic-collapse solution. Userspace may also want to collapse the
+> > > mapping for an entire hugepage without completely mapping the hugepage
+> > > first (this would also be possible by issuing UFFDIO_CONTINUE on all
+> > > the holes, though).
+> > >
+> >
+> > To be honest I'm don't think I'm a fan of this. I don't think this
+> > saves complexity, but rather pushes it to the userspace. I.e. the
+> > userspace now must track which regions are faulted in and which are
+> > not to call MADV_COLLAPSE at the right time. Also, if the userspace
+> > gets it wrong it may accidentally not call MADV_COLLAPSE (and not get
+> > any hugepages) or call MADV_COLLAPSE too early and have to deal with a
+> > storm of maybe hundreds of minor faults at once which may take too
+> > long to resolve and may impact guest stability, yes?
+>
+> I think it depends on whether the userspace is already holding bitmaps
+> and data structures to let it know when the right time to call collapse
+> is; if it already has to do all that book keeping for it's own postcopy
+> or whatever process, then getting userspace to call it is easy.
+> (I don't know the answer to whether it does have!)
+
+Userspace generally has a lot of information about which pages have
+been UFFDIO_CONTINUE'd, but they may not have the information (say,
+some atomic count per hpage) to tell them exactly when to collapse.
+
+I think it's worth discussing the tmpfs/THP case right now, too. Right
+now, after userfaultfd post-copy, all THPs we have will all be
+PTE-mapped. To deal with this, we need to use Zach's MADV_COLLAPSE to
+collapse the mappings to PMD mappings (we don't want to wait for
+khugepaged to happen upon them -- we want good performance ASAP :)).
+In fact, IIUC, khugepaged actually won't collapse these *ever* right
+now. I suppose we could enlighten tmpfs's UFFDIO_CONTINUE to
+automatically collapse too (thus avoiding the need for MADV_COLLAPSE),
+but that could be complicated/unwanted (if that is something we might
+want, maybe we should have a separate discussion).
+
+So, as it stands today, we intend to use MADV_COLLAPSE explicitly in
+the tmpfs case as soon as it is supported, and so it follows that it's
+ok to require userspace to do the same thing for HugeTLBFS-backed
+memory.
+
+>
+> Dave
+>
+> > For these reasons I think automatic collapsing is something that will
+> > eventually be implemented by us or someone else, and at that point
+> > MADV_COLLAPSE for hugetlb memory will become obsolete; i.e. this patch
+> > is adding a userspace API that will probably need to be maintained for
+> > perpetuity but actually is likely going to be going obsolete "soon".
+> > For this reason I had hoped that automatic collapsing would come with
+> > V1.
+
+Small, unimportant clarification: the API, as described here, won't be
+*completely* meaningless if we end up implementing automatic
+collapsing :) It still has the effect of not requiring other
+UFFDIO_CONTINUE operations to be done for the collapsed region.
+
+> >
+> > I wonder if we can have a very simple first try at automatic
+> > collapsing for V1? I.e., can we support collapsing to the hstate size
+> > and only that? So 4K pages can only be either collapsed to 2MB or 1G
+> > on x86 depending on the hstate size. I think this may be not too
+> > difficult to implement: we can have a counter similar to mapcount that
+> > tracks how many of the subpages are mapped (subpage_mapcount). Once
+> > all the subpages are mapped (the counter reaches a certain value),
+> > trigger collapsing similar to hstate size MADV_COLLAPSE.
+> >
+
+In my estimation, to implement automatic collapsing, for one VMA, we
+will need a per-hstate count, where when the count reaches the maximum
+number, we collapse automatically to the next most optimal size. So if
+we finish filling in enough PTEs for a CONT_PTE, we will collapse to a
+CONT_PTE. If we finish filling up CONT_PTEs to a PMD, then collapse to
+a PMD.
+
+If you are suggesting to only collapse to the hstate size at the end,
+then we lose flexibility.
+
+> > I gather that no one else reviewing this has raised this issue thus
+> > far so it might not be a big deal and I will continue to review the
+> > RFC, but I had hoped for automatic collapsing myself for the reasons
+> > above.
+
+Thanks for the thorough review, Mina. :)
+
+> >
+> > > >
+> > > > > ---- HugeTLB Changes ----
+> > > > >
+> > > > > - Mapcount
+> > > > > The way mapcount is handled is different from the way that it was handled
+> > > > > before. If the PUD for a hugepage is not none, a hugepage's mapcount will
+> > > > > be increased. This scheme means that, for hugepages that aren't mapped at
+> > > > > high granularity, their mapcounts will remain the same as what they would
+> > > > > have been pre-HGM.
+> > > > >
+> > > >
+> > > > Sorry, I didn't quite follow this. It says mapcount is handled
+> > > > differently, but the same if the page is not mapped at high
+> > > > granularity. Can you elaborate on how the mapcount handling will be
+> > > > different when the page is mapped at high granularity?
+> > >
+> > > I guess I didn't phrase this very well. For the sake of simplicity,
+> > > consider 1G pages on x86, typically mapped with leaf-level PUDs.
+> > > Previously, there were two possibilities for how a hugepage was
+> > > mapped, either it was (1) completely mapped (PUD is present and a
+> > > leaf), or (2) it wasn't mapped (PUD is none). Now we have a third
+> > > case, where the PUD is not none but also not a leaf (this usually
+> > > means that the page is partially mapped). We handle this case as if
+> > > the whole page was mapped. That is, if we partially map a hugepage
+> > > that was previously unmapped (making the PUD point to PMDs), we
+> > > increment its mapcount, and if we completely unmap a partially mapped
+> > > hugepage (making the PUD none), we decrement its mapcount. If we
+> > > collapse a non-leaf PUD to a leaf PUD, we don't change mapcount.
+> > >
+> > > It is possible for a PUD to be present and not a leaf (mapcount has
+> > > been incremented) but for the page to still be unmapped: if the PMDs
+> > > (or PTEs) underneath are all none. This case is atypical, and as of
+> > > this RFC (without bestowing MADV_DONTNEED with HGM flexibility), I
+> > > think it would be very difficult to get this to happen.
+> > >
+> >
+> > Thank you for the detailed explanation. Please add it to the cover letter.
+> >
+> > I wonder the case "PUD present but all the PMD are none": is that a
+> > bug? I don't understand the usefulness of that. Not a comment on this
+> > patch but rather a curiosity.
+> >
+> > > >
+> > > > > - Page table walking and manipulation
+> > > > > A new function, hugetlb_walk_to, handles walking HugeTLB page tables for
+> > > > > high-granularity mappings. Eventually, it's possible to merge
+> > > > > hugetlb_walk_to with huge_pte_offset and huge_pte_alloc.
+> > > > >
+> > > > > We keep track of HugeTLB page table entries with a new struct, hugetlb_pte.
+> > > > > This is because we generally need to know the "size" of a PTE (previously
+> > > > > always just huge_page_size(hstate)).
+> > > > >
+> > > > > For every page table manipulation function that has a huge version (e.g.
+> > > > > huge_ptep_get and ptep_get), there is a wrapper for it (e.g.
+> > > > > hugetlb_ptep_get).  The correct version is used depending on if a HugeTLB
+> > > > > PTE really is "huge".
+> > > > >
+> > > > > - Synchronization
+> > > > > For existing bits of HugeTLB, synchronization is unchanged. For splitting
+> > > > > and collapsing HugeTLB PTEs, we require that the i_mmap_rw_sem is held for
+> > > > > writing, and for doing high-granularity page table walks, we require it to
+> > > > > be held for reading.
+> > > > >
+> > > > > ---- Limitations & Future Changes ----
+> > > > >
+> > > > > This patch series only implements high-granularity mapping for VM_SHARED
+> > > > > VMAs.  I intend to implement enough HGM to support 4K unmapping for memory
+> > > > > failure recovery for both shared and private mappings.
+> > > > >
+> > > > > The memory failure use case poses its own challenges that can be
+> > > > > addressed, but I will do so in a separate RFC.
+> > > > >
+> > > > > Performance has not been heavily scrutinized with this patch series. There
+> > > > > are places where lock contention can significantly reduce performance. This
+> > > > > will be addressed later.
+> > > > >
+> > > > > The patch series, as it stands right now, is compatible with the VMEMMAP
+> > > > > page struct optimization[3], as we do not need to modify data contained
+> > > > > in the subpage page structs.
+> > > > >
+> > > > > Other omissions:
+> > > > >  - Compatibility with userfaultfd write-protect (will be included in v1).
+> > > > >  - Support for mremap() (will be included in v1). This looks a lot like
+> > > > >    the support we have for fork().
+> > > > >  - Documentation changes (will be included in v1).
+> > > > >  - Completely ignores PMD sharing and hugepage migration (will be included
+> > > > >    in v1).
+> > > > >  - Implementations for architectures that don't use GENERAL_HUGETLB other
+> > > > >    than arm64.
+> > > > >
+> > > > > ---- Patch Breakdown ----
+> > > > >
+> > > > > Patch 1     - Preliminary changes
+> > > > > Patch 2-10  - HugeTLB HGM core changes
+> > > > > Patch 11-13 - HugeTLB HGM page table walking functionality
+> > > > > Patch 14-19 - HugeTLB HGM compatibility with other bits
+> > > > > Patch 20-23 - Userfaultfd and collapse changes
+> > > > > Patch 24-26 - arm64 support and selftests
+> > > > >
+> > > > > [1] This used to be called HugeTLB double mapping, a bad and confusing
+> > > > >     name. "High-granularity mapping" is not a great name either. I am open
+> > > > >     to better names.
+> > > >
+> > > > I would drop 1 extra word and do "granular mapping", as in the mapping
+> > > > is more granular than what it normally is (2MB/1G, etc).
+> > >
+> > > Noted. :)
+> >
+> --
+> Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
+>

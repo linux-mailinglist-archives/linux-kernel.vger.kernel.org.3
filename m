@@ -2,95 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710565604F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F00B5604FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234299AbiF2Pwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 11:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
+        id S234365AbiF2P4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 11:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231848AbiF2Pww (ORCPT
+        with ESMTP id S234319AbiF2Pz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 11:52:52 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008711FCF6;
-        Wed, 29 Jun 2022 08:52:50 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id z191so16398488iof.6;
-        Wed, 29 Jun 2022 08:52:50 -0700 (PDT)
+        Wed, 29 Jun 2022 11:55:59 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C99532ED0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 08:54:11 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id 93-20020a9d02e6000000b0060c252ee7a4so12445765otl.13
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 08:54:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=m3srbM8QGWrZhwGq/B370AsvjDk8BediS0HIOgFCe3E=;
-        b=TEqaPH+b8J+kXTgX6LEBz8BN99Q66IkyfTj6NQf26Ir9KFKzJZQhZNNYMMGqRDSXRo
-         7G8RPAE3Ivq80Rkwp/+ZUB/616P7/Lyl6qshrI567HvQ9t6/P6X0G1jLWZWUOjIkoWSt
-         cWz4d4UdzcRBwtU09wfItyTJ5bA1klYc7TJ6RafHaP3Yo88QQKuHk1zI/qe3q/vWt9au
-         LlVlhUhn+6HuKRK3wVWiMaHNlFbychaZJGtyZvVICV8gpj2/STktb0MXl1ilulpiV/Zf
-         ZL+ykSxuyluILTFp3WJD6ZM2Ux79vUgPcg9FYBVp7HCc9nzlsTEp25Ooc7reCsJUgvA9
-         j6vg==
+        bh=wppJ1Xi9dp/XM1RYCI8T+RPxiJi55yrrwF7uPJ88vYY=;
+        b=ljfIWcgstfH2Zow9D78srtl5TlKQaF3Odas98MmJPghYHLul9m9fkV5X/cA9pK6sdY
+         t4sFXKffXz6qRfs2dVp1jjRqFiN8NvpCh8GwZj16rS8zV8elQ29yzuS0a9zzoifid5Su
+         7zfoG68yq1RpuCe4PmoXEJ+OtFOpXndvAgC9tqGV92G28fSLFlsefVJtNRgVZEm9Geaj
+         pukOHUgedP9lZpweBr9oNNsLz+zoo6oFTY9tfsqnV1ckztKTsxgX+PbbLeoSopdIUJxt
+         NuMc762ChiUSK9bRjXZy1/mJVRMFdLoD6JAE50o3W09licFetwOK1TJYqZummZXC75Hn
+         nuSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=m3srbM8QGWrZhwGq/B370AsvjDk8BediS0HIOgFCe3E=;
-        b=s8Q/WrTy4eqEd8IQXefqdG41wyUCi3GwTfmdbhrbSobmP1tJa+iWD/3SYMOWDyYKOp
-         w8iYQWO4FzfA9yaSI7VJkgbs3r60Hye5O5yaDBEZWCQqXDLHu7tqTvhAq5hFNST/D7LB
-         cvG1vSbiLMngasYrt5AX5khoNFG07K5OuBXZELvb8fF07TBFsC2zP6IQqMeT3DvmyOqW
-         3n/3IvUysZvE76z9ogRd6uq1vU36ylHdYytywv77E4zm/GxhBLOj8DGP7yfY2gbCuCX7
-         kCz+jMnN7AzpFOopcUIpXY1/ryWyt8qror351X0QrrYMN/HVprhhpIs4Ree7bmXZHIHx
-         QoLg==
-X-Gm-Message-State: AJIora87TtyL/O9LGmeqZCyfpwQc9YVz2Q6zhOZHtOowdtin0049ZqLG
-        4k1sY3f5aQ2UmT1OVq4wirNrMuInWJNJkiMjCf4=
-X-Google-Smtp-Source: AGRyM1t+rE4Wwngtg5YS4SsXmN+Nyw4Tu9pZHHDpNjJP8e9iQDVbLMC6ySWAMXPj73PzqGNOmA4LXfYcAJyLHSyBKfs=
-X-Received: by 2002:a05:6638:14c7:b0:33c:c6ff:4d74 with SMTP id
- l7-20020a05663814c700b0033cc6ff4d74mr2346897jak.254.1656517968775; Wed, 29
- Jun 2022 08:52:48 -0700 (PDT)
+        bh=wppJ1Xi9dp/XM1RYCI8T+RPxiJi55yrrwF7uPJ88vYY=;
+        b=i+Z7xWJoEgFcjvWw40dBtQFbAblEf6/LlDYDH9hTHunUW9vPoM9DnGP6JDDeLa2Fmx
+         pi0Qwu/ZvXU4xf9EGm/gNvqEmDFMe6yBYIXTFBBwDcCM7Ps9YGN46b+ek+nuYoKMWSX0
+         jDZXll0IB2Qcgq9WhZUkfB6uVknxj4VmYpnI3uExwBUfbwIlRihLtH4obFeVbCg32Qte
+         EGU72yGy/qIeJ8+oFnF7KMBNpJO39nNoQlLnHB0TCMb96DBkqSlx2V6vpICN7WNdOwSR
+         C//5QExGzoZ8ZMsvlEWjVPWw20yyd14/PB8pGJAKZWlXmKXab2s6H4Qxzwcu6nRBHoAd
+         aVvQ==
+X-Gm-Message-State: AJIora9tJW/eXYnTlW/l+mIEthPxt/qGxliOXqTl2UVEqldiXWJMmNiE
+        pF/cCEmWW3g2/A6tvaykZg/i1o1xpHPnP0LwbmjZgg==
+X-Google-Smtp-Source: AGRyM1suBIKukGEfynK8ruxVmG8/NzX2Z4AK7JUWDTRMa7jYYKmZownBvHcrZDqI2C/fWjs+qTbS4xj6uEP6BVHjp/Y=
+X-Received: by 2002:a05:6830:1d5b:b0:616:de98:2556 with SMTP id
+ p27-20020a0568301d5b00b00616de982556mr1856682oth.367.1656518050146; Wed, 29
+ Jun 2022 08:54:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220623115631.22209-1-peterwu.pub@gmail.com> <20220623115631.22209-12-peterwu.pub@gmail.com>
- <CAHp75Vf2UAVgWS1nu8iwNjESWHQGOMWcNMUFShZ8Q_Qp3fssdQ@mail.gmail.com>
-In-Reply-To: <CAHp75Vf2UAVgWS1nu8iwNjESWHQGOMWcNMUFShZ8Q_Qp3fssdQ@mail.gmail.com>
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-Date:   Wed, 29 Jun 2022 23:52:33 +0800
-Message-ID: <CABtFH5J8GVXQMKmsUs2HfjV-p_rx4gLdCTKsDP_aCJWzE4AVeQ@mail.gmail.com>
-Subject: Re: [PATCH v3 11/14] power: supply: mt6370: Add Mediatek MT6370
- charger driver
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
+References: <20220614204730.3359543-1-seanjc@google.com> <7e05e0befa13af05f1e5f0fd8658bc4e7bdf764f.camel@redhat.com>
+In-Reply-To: <7e05e0befa13af05f1e5f0fd8658bc4e7bdf764f.camel@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 29 Jun 2022 08:53:58 -0700
+Message-ID: <CALMp9eQQROfYW7tNPaYCL5umjDr5ntsXuQ3BmorD8BWQiUGjdw@mail.gmail.com>
+Subject: Re: [PATCH v2 00/21] KVM: x86: Event/exception fixes and cleanups
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
+        Peter Shier <pshier@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,529 +73,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
-
-Sorry for the late reply, I have some questions to ask you below. Thanks!
-
-Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B46=E6=9C=
-=8824=E6=97=A5 =E9=80=B1=E4=BA=94 =E5=87=8C=E6=99=A82:56=E5=AF=AB=E9=81=93=
-=EF=BC=9A
+On Wed, Jun 29, 2022 at 4:17 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
 >
-> On Thu, Jun 23, 2022 at 2:00 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+> On Tue, 2022-06-14 at 20:47 +0000, Sean Christopherson wrote:
+> > The main goal of this series is to fix KVM's longstanding bug of not
+> > honoring L1's exception intercepts wants when handling an exception tha=
+t
+> > occurs during delivery of a different exception.  E.g. if L0 and L1 are
+> > using shadow paging, and L2 hits a #PF, and then hits another #PF while
+> > vectoring the first #PF due to _L1_ not having a shadow page for the ID=
+T,
+> > KVM needs to check L1's intercepts before morphing the #PF =3D> #PF =3D=
+> #DF
+> > so that the #PF is routed to L1, not injected into L2 as a #DF.
 > >
-> > From: ChiaEn Wu <chiaen_wu@richtek.com>
+> > nVMX has hacked around the bug for years by overriding the #PF injector
+> > for shadow paging to go straight to VM-Exit, and nSVM has started doing
+> > the same.  The hacks mostly work, but they're incomplete, confusing, an=
+d
+> > lead to other hacky code, e.g. bailing from the emulator because #PF
+> > injection forced a VM-Exit and suddenly KVM is back in L1.
 > >
-> > Add Mediatek MT6370 charger driver.
+> > Everything leading up to that are related fixes and cleanups I encounte=
+red
+> > along the way; some through code inspection, some through tests.
+> >
+> > v2:
+> >   - Rebased to kvm/queue (commit 8baacf67c76c) + selftests CPUID
+> >     overhaul.
+> >     https://lore.kernel.org/all/20220614200707.3315957-1-seanjc@google.=
+com
+> >   - Treat KVM_REQ_TRIPLE_FAULT as a pending exception.
+> >
+> > v1: https://lore.kernel.org/all/20220311032801.3467418-1-seanjc@google.=
+com
+> >
+> > Sean Christopherson (21):
+> >   KVM: nVMX: Unconditionally purge queued/injected events on nested
+> >     "exit"
+> >   KVM: VMX: Drop bits 31:16 when shoving exception error code into VMCS
+> >   KVM: x86: Don't check for code breakpoints when emulating on exceptio=
+n
+> >   KVM: nVMX: Treat General Detect #DB (DR7.GD=3D1) as fault-like
+> >   KVM: nVMX: Prioritize TSS T-flag #DBs over Monitor Trap Flag
+> >   KVM: x86: Treat #DBs from the emulator as fault-like (code and
+> >     DR7.GD=3D1)
+> >   KVM: x86: Use DR7_GD macro instead of open coding check in emulator
+> >   KVM: nVMX: Ignore SIPI that arrives in L2 when vCPU is not in WFS
+> >   KVM: nVMX: Unconditionally clear mtf_pending on nested VM-Exit
+> >   KVM: VMX: Inject #PF on ENCLS as "emulated" #PF
+> >   KVM: x86: Rename kvm_x86_ops.queue_exception to inject_exception
+> >   KVM: x86: Make kvm_queued_exception a properly named, visible struct
+> >   KVM: x86: Formalize blocking of nested pending exceptions
+> >   KVM: x86: Use kvm_queue_exception_e() to queue #DF
+> >   KVM: x86: Hoist nested event checks above event injection logic
+> >   KVM: x86: Evaluate ability to inject SMI/NMI/IRQ after potential
+> >     VM-Exit
+> >   KVM: x86: Morph pending exceptions to pending VM-Exits at queue time
+> >   KVM: x86: Treat pending TRIPLE_FAULT requests as pending exceptions
+> >   KVM: VMX: Update MTF and ICEBP comments to document KVM's subtle
+> >     behavior
+> >   KVM: selftests: Use uapi header to get VMX and SVM exit reasons/codes
+> >   KVM: selftests: Add an x86-only test to verify nested exception
+> >     queueing
+> >
+> >  arch/x86/include/asm/kvm-x86-ops.h            |   2 +-
+> >  arch/x86/include/asm/kvm_host.h               |  35 +-
+> >  arch/x86/kvm/emulate.c                        |   3 +-
+> >  arch/x86/kvm/svm/nested.c                     | 102 ++---
+> >  arch/x86/kvm/svm/svm.c                        |  18 +-
+> >  arch/x86/kvm/vmx/nested.c                     | 319 +++++++++-----
+> >  arch/x86/kvm/vmx/sgx.c                        |   2 +-
+> >  arch/x86/kvm/vmx/vmx.c                        |  53 ++-
+> >  arch/x86/kvm/x86.c                            | 404 +++++++++++-------
+> >  arch/x86/kvm/x86.h                            |  11 +-
+> >  tools/testing/selftests/kvm/.gitignore        |   1 +
+> >  tools/testing/selftests/kvm/Makefile          |   1 +
+> >  .../selftests/kvm/include/x86_64/svm_util.h   |   7 +-
+> >  .../selftests/kvm/include/x86_64/vmx.h        |  51 +--
+> >  .../kvm/x86_64/nested_exceptions_test.c       | 295 +++++++++++++
+> >  15 files changed, 886 insertions(+), 418 deletions(-)
+> >  create mode 100644 tools/testing/selftests/kvm/x86_64/nested_exception=
+s_test.c
+> >
+> >
+> > base-commit: 816967202161955f398ce379f9cbbedcb1eb03cb
 >
-> ...
->
-> > +config CHARGER_MT6370
-> > +       tristate "Mediatek MT6370 Charger Driver"
-> > +       depends on MFD_MT6370
-> > +       depends on REGULATOR
-> > +       select LINEAR_RANGES
-> > +       help
-> > +         Say Y here to enable MT6370 Charger Part.
-> > +         The device supports High-Accuracy Voltage/Current Regulation,
-> > +         Average Input Current Regulation, Battery Temperature Sensing=
-,
-> > +         Over-Temperature Protection, DPDM Detection for BC1.2.
->
-> Module name?
->
-> ...
->
-> > +#include <dt-bindings/iio/adc/mediatek,mt6370_adc.h>
->
-> This usually goes after linux/*
->
-> > +#include <linux/atomic.h>
-> > +#include <linux/bitfield.h>
-> > +#include <linux/bits.h>
-> > +#include <linux/gpio/consumer.h>
-> > +#include <linux/iio/consumer.h>
-> > +#include <linux/init.h>
-> > +#include <linux/interrupt.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
->
-> > +#include <linux/of.h>
+> Hi Sean and everyone!
 >
 >
-> > +#include <linux/platform_device.h>
-> > +#include <linux/power_supply.h>
-> > +#include <linux/regmap.h>
-> > +#include <linux/regulator/driver.h>
-> > +#include <linux/workqueue.h>
+> Before I continue reviewing the patch series, I would like you to check i=
+f
+> I understand the monitor trap/pending debug exception/event injection
+> logic on VMX correctly. I was looking at the spec for several hours and I=
+ still have more
+> questions that answers about it.
 >
-> ...
+> So let me state what I understand:
 >
-> > +#define MT6370_MIVR_IBUS_TH            100000          /* 100 mA */
+> 1. Event injection (aka eventinj in SVM terms):
 >
-> Instead of comment, add proper units.
+>   (VM_ENTRY_INTR_INFO_FIELD/VM_ENTRY_EXCEPTION_ERROR_CODE/VM_ENTRY_INSTRU=
+CTION_LEN)
 >
-> ...
+>   If I understand correctly all event injections types just like on SVM j=
+ust inject,
+>   and never create something pending, and/or drop the injection if event =
+is not allowed
+>   (like if EFLAGS.IF is 0). VMX might have some checks that could fail VM=
+ entry,
+>   if for example you try to inject type 0 (hardware interrupt) and EFLAGS=
+.IF is 0,
+>   I haven't checked this)
 >
-> > +       MT6370_USB_STAT_DCP,
-> > +       MT6370_USB_STAT_CDP,
-> > +       MT6370_USB_STAT_MAX,
+>   All event injections happen right away, don't deliver any payload (like=
+ DR6), etc.
 >
-> No comma for a terminator line.
+>   Injection types 4/5/6, do the same as injection types 0/2/3 but in addi=
+tion to that,
+>   type 4/6 do a DPL check in IDT, and also these types can promote the RI=
+P prior
+>   to pushing it to the exception stack using VM_ENTRY_INSTRUCTION_LEN to =
+be consistent
+>   with cases when these trap like events are intercepted, where the inter=
+ception happens
+>   on the start of the instruction despite exceptions being trap-like.
 >
-> ...
 >
-> > +static inline u32 mt6370_chg_val_to_reg(const struct mt6370_chg_range =
-*range,
-> > +                                       u32 val)
-> > +static inline u32 mt6370_chg_reg_to_val(const struct mt6370_chg_range =
-*range,
-> > +                                       u8 reg)
+> 2. #DB is the only trap like exception that can be pending for one more i=
+nstruction
+>    if MOV SS shadow is on (any other cases?).
+>    (AMD just ignores the whole thing, rightfully)
 >
-> I'm wondering if you can use the
-> https://elixir.bootlin.com/linux/v5.19-rc3/source/include/linux/linear_ra=
-nge.h
-> APIs.
+>    That is why we have the GUEST_PENDING_DBG_EXCEPTIONS vmcs field.
+>    I understand that it will be written by CPU in case we have VM exit at=
+ the moment
+>    where #DB is already pending but not yet delivered.
+>
+>    That field can also be (sadly) used to "inject" #DB to the guest, if t=
+he hypervisor sets it,
+>    and this #DB will actually update DR6 and such, and might be delayed/l=
+ost.
+>
+>
+> 3. Facts about MTF:
+>
+>    * MTF as a feature is basically 'single step the guest by generating M=
+TF VM exits after each executed
+>      instruction', and is enabled in primary execution controls.
+>
+>    * MTF is also an 'event', and it can be injected separately by the hyp=
+ervisor with event type 7,
+>      and that has no connection to the 'feature', although usually this i=
+njection will be useful
+>      when the hypervisor does some kind of re-injection, triggered by the=
+ actual MTF feature.
+>
+>    * MTF event can be lost, if higher priority VM exit happens, this is w=
+hy the SDM says about 'pending MTF',
+>      which means that MTF vmexit should happen unless something else prev=
+ents it and/or higher priority VM exit
+>      overrides it.
+>
+>    * MTF event is raised (when the primary execution controls bit is enab=
+led) when:
+>
+>         - after an injected (vectored), aka eventinj/VM_ENTRY_INTR_INFO_F=
+IELD, done updating the guest state
+>           (that is stack was switched, stuff was pushed to new exception =
+stack, RIP updated to the handler)
+>           I am not 100% sure about this but this seems to be what PRM imp=
+lies:
+>
+>           "If the =E2=80=9Cmonitor trap flag=E2=80=9D VM-execution contro=
+l is 1 and VM entry is injecting a vectored event (see Section
+>           26.6.1), an MTF VM exit is pending on the instruction boundary =
+before the first instruction following the
+>           VM entry."
+>
+>         - If an interrupt and or #DB exception happens prior to executing=
+ first instruction of the guest,
+>           then once again MTF will happen on first instruction of the exc=
+eption/interrupt handler
+>
+>           "If the =E2=80=9Cmonitor trap flag=E2=80=9D VM-execution contro=
+l is 1, VM entry is not injecting an event, and a pending event
+>           (e.g., debug exception or interrupt) is delivered before an ins=
+truction can execute, an MTF VM exit is pending
+>           on the instruction boundary following delivery of the event (or=
+ any nested exception)."
+>
+>           That means that #DB has higher priority that MTF, but not speci=
+fied if fault DB or trap DB
+>
+>         - If instruction causes exception, once again, on first instructi=
+on of the exception handler MTF will happen.
+>
+>         - Otherwise after an instruction (or REP iteration) retires.
+>
+>
+> If you have more facts about MTF and related stuff and/or if I made a mis=
+take in the above, I am all ears to listen!
 
-Thanks for your helpful comments!
-I will refine it in the next patch!
+Here's a comprehensive spreadsheet on virtualizing MTF, compiled by
+Peter Shier. (Just in case anyone is interested in *truly*
+virtualizing the feature under KVM, rather than just setting a
+VM-execution control bit in vmcs02 and calling it done.)
 
->
-> ...
->
-> > +       int ret =3D 0;
->
-> This seems a redundant assignment, see below.
->
-> > +       rcfg->ena_gpiod =3D fwnode_gpiod_get_index(of_fwnode_handle(of)=
-,
-> > +                                                "enable", 0,
->
-> For index =3D=3D 0 don't use _index API.
->
-> > +                                                GPIOD_OUT_LOW |
-> > +                                                GPIOD_FLAGS_BIT_NONEXC=
-LUSIVE,
-> > +                                                rdesc->name);
-> > +       if (IS_ERR(rcfg->ena_gpiod)) {
-> > +               dev_err(priv->dev, "Failed to requeset OTG EN Pin\n");
->
-> request
->
-> > +               rcfg->ena_gpiod =3D NULL;
->
-> So, use _optional and return any errors you got.
-
-These days, I tried to use various APIs in <gpio/consumer.h>, and also
-try to use _optional APIs.
-But my OTG regulator node is a child node of the charger node, like below.
----------------------------------------------------------------------------=
--
-// copy-paste from our mfd dt-binding example
-        charger {
-          compatible =3D "mediatek,mt6370-charger";
-          interrupts =3D <48>, <68>, <6>;
-          interrupt-names =3D "attach_i", "uvp_d_evt", "mivr";
-          io-channels =3D <&mt6370_adc MT6370_CHAN_IBUS>;
-
-          mt6370_otg_vbus: usb-otg-vbus-regulator {
-            regulator-name =3D "mt6370-usb-otg-vbus";
-            regulator-min-microvolt =3D <4350000>;
-            regulator-max-microvolt =3D <5800000>;
-            regulator-min-microamp =3D <500000>;
-            regulator-max-microamp =3D <3000000>;
-          };
-        };
----------------------------------------------------------------------------=
--
-Hence, if I use _optional APIs, it will always get NULL.
-And, If I use 'gpiod_get_from_of_node' here, this API will only parse
-the 'enable' property, not 'enable-gpio' or 'enable-gpios', we need to
-add the '-gpio' suffix before we use this API.
-
-Only 'fwnode_gpiod_get_index' can match this case. Although fwnode
-parsing is not preferred, 'of_parse_cb' already can guarantee the
-callback will only be used by the regulator of_node parsing.
-
->
-> > +       } else {
-> > +               val =3D MT6370_OPA_MODE_MASK | MT6370_OTG_PIN_EN_MASK;
-> > +               ret =3D regmap_update_bits(priv->regmap, MT6370_REG_CHG=
-_CTRL1,
-> > +                                        val, val);
-> > +               if (ret)
-> > +                       dev_err(priv->dev, "Failed to set otg bits\n");
-> > +       }
->
-> ...
->
-> > +       irq_num =3D platform_get_irq_byname(pdev, irq_name);
->
-> > +
->
-> Unwanted blank line.
->
-> > +       if (irq_num < 0) {
->
-> > +               dev_err(priv->dev, "Failed to get platform resource\n")=
-;
->
-> Isn't it printed by the call?
->
-> > +       } else {
-> > +               if (en)
-> > +                       enable_irq(irq_num);
-> > +               else
-> > +                       disable_irq_nosync(irq_num);
-> > +       }
->
-> ...
->
-> > +toggle_cfo_exit:
->
-> The useless label.
->
-> > +       return ret;
-> > +}
->
-> ...
->
-> > +       ret =3D mt6370_chg_get_online(priv, val);
-> > +       if (!val->intval) {
->
-> No error check?
-
-I replace "mt6370_chg_get_online()" with "power_supply_get_property()"
-and add some error check.
-Could it meet your expectations??
-
->
-> > +               val->intval =3D POWER_SUPPLY_STATUS_DISCHARGING;
-> > +               return 0;
-> > +       }
->
-> ...
->
-> > +static int mt6370_chg_set_online(struct mt6370_priv *priv,
-> > +                                const union power_supply_propval *val)
-> > +{
-> > +       int attach;
-> > +       u32 pwr_rdy =3D !!val->intval;
-> > +
-> > +       mutex_lock(&priv->attach_lock);
-> > +       attach =3D atomic_read(&priv->attach);
-> > +       if (pwr_rdy =3D=3D !!attach) {
-> > +               dev_err(priv->dev, "pwr_rdy is same(%d)\n", pwr_rdy);
-> > +               mutex_unlock(&priv->attach_lock);
-> > +               return 0;
-> > +       }
-> > +
-> > +       atomic_set(&priv->attach, pwr_rdy);
-> > +       mutex_unlock(&priv->attach_lock);
-> > +
-> > +       if (!queue_work(priv->wq, &priv->bc12_work))
-> > +               dev_err(priv->dev, "bc12 work has already queued\n");
-> > +
-> > +       return 0;
->
-> > +
->
-> Unwanted blank line.
->
-> > +}
->
-> > +static int mt6370_chg_get_property(struct power_supply *psy,
-> > +                                  enum power_supply_property psp,
-> > +                                  union power_supply_propval *val)
-> > +{
-> > +       struct mt6370_priv *priv =3D power_supply_get_drvdata(psy);
-> > +       int ret =3D 0;
-> > +
-> > +       switch (psp) {
-> > +       case POWER_SUPPLY_PROP_ONLINE:
-> > +               ret =3D mt6370_chg_get_online(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_STATUS:
-> > +               ret =3D mt6370_chg_get_status(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_CHARGE_TYPE:
-> > +               ret =3D mt6370_chg_get_charge_type(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
-> > +               ret =3D mt6370_chg_get_ichg(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
-> > +               ret =3D mt6370_chg_get_max_ichg(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
-> > +               ret =3D mt6370_chg_get_cv(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
-> > +               ret =3D mt6370_chg_get_max_cv(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-> > +               ret =3D mt6370_chg_get_aicr(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
-> > +               ret =3D mt6370_chg_get_mivr(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
-> > +               ret =3D mt6370_chg_get_iprechg(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
-> > +               ret =3D mt6370_chg_get_ieoc(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_TYPE:
-> > +               val->intval =3D priv->psy_desc->type;
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_USB_TYPE:
-> > +               val->intval =3D priv->psy_usb_type;
-> > +               break;
-> > +       default:
-> > +               ret =3D -EINVAL;
-> > +               break;
-> > +       }
-> > +
-> > +       return ret;
->
-> In all cases, return directly.
->
-> > +}
->
-> ...
->
-> > +       switch (psp) {
-> > +       case POWER_SUPPLY_PROP_ONLINE:
-> > +               ret =3D mt6370_chg_set_online(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
-> > +               ret =3D mt6370_chg_set_ichg(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
-> > +               ret =3D mt6370_chg_set_cv(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-> > +               ret =3D mt6370_chg_set_aicr(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
-> > +               ret =3D mt6370_chg_set_mivr(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
-> > +               ret =3D mt6370_chg_set_iprechg(priv, val);
-> > +               break;
-> > +       case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
-> > +               ret =3D mt6370_chg_set_ieoc(priv, val);
-> > +               break;
-> > +       default:
-> > +               ret =3D -EINVAL;
-> > +       }
-> > +       return ret;
->
-> As per above.
->
-> ...
->
-> > +       for (i =3D 0; i < F_MAX; i++) {
-> > +               priv->rmap_fields[i] =3D devm_regmap_field_alloc(priv->=
-dev,
-> > +                                                              priv->re=
-gmap,
-> > +                                                              fds[i].f=
-ield);
-> > +               if (IS_ERR(priv->rmap_fields[i])) {
-> > +                       dev_err(priv->dev,
-> > +                               "Failed to allocate regmap field [%s]\n=
-",
-> > +                               fds[i].name);
-> > +                       return PTR_ERR(priv->rmap_fields[i]);
->
-> return dev_err_probe();
->
-> > +               }
-> > +       }
->
-> ...
->
-> > +       mutex_init(&priv->attach_lock);
-> > +       atomic_set(&priv->attach, 0);
->
-> Why not atomic_init() ?
-> But yeah, usage of it and other locking mechanisms in this driver are
-> questionable.
-
-I will refine it in the next patch!
-
->
-> ...
->
-> > +       /* ICHG/IEOC Workaroud, ICHG can not be set less than 900mA */
->
-> Workaround
->
-> ...
->
-> > +       return IS_ERR(priv->rdev) ? PTR_ERR(priv->rdev) : 0;
->
-> PTR_ERR_OR_ZERO()
->
-> ...
->
-> > +               .of_node =3D priv->dev->of_node,
->
-> dev_of_node() ?
->
-> > +       };
-> > +
-> > +       priv->psy_desc =3D &mt6370_chg_psy_desc;
-> > +       priv->psy_desc->name =3D dev_name(priv->dev);
-> > +       priv->psy =3D devm_power_supply_register(priv->dev, priv->psy_d=
-esc, &cfg);
-> > +
-> > +       return IS_ERR(priv->psy) ? PTR_ERR(priv->psy) : 0;
->
-> PTR_ERR_OR_ZERO()
->
-> > +}
->
-> ...
->
-> > +static irqreturn_t mt6370_attach_i_handler(int irq, void *data)
-> > +{
-> > +       struct mt6370_priv *priv =3D data;
-> > +       u32 otg_en;
-> > +       int ret;
-> > +
-> > +       /* Check in otg mode or not */
-> > +       ret =3D mt6370_chg_field_get(priv, F_BOOST_STAT, &otg_en);
-> > +       if (ret < 0) {
-> > +               dev_err(priv->dev, "failed to get otg state\n");
-> > +               return IRQ_HANDLED;
->
-> Handled error?
->
-> > +       }
-> > +
-> > +       if (otg_en)
-> > +               return IRQ_HANDLED;
->
-> > +       mutex_lock(&priv->attach_lock);
-> > +       atomic_set(&priv->attach, MT6370_ATTACH_STAT_ATTACH_BC12_DONE);
-> > +       mutex_unlock(&priv->attach_lock);
->
-> Mutex around atomic?! It's interesting...
-
-I will revise it in the next patch.
-
->
-> > +       if (!queue_work(priv->wq, &priv->bc12_work))
-> > +               dev_err(priv->dev, "bc12 work has already queued\n");
-> > +
-> > +       return IRQ_HANDLED;
-> > +}
->
-> ...
->
-> > +       for (i =3D 0; i < ARRAY_SIZE(mt6370_chg_irqs); i++) {
-> > +               ret =3D platform_get_irq_byname(to_platform_device(priv=
-->dev),
-> > +                                             mt6370_chg_irqs[i].name);
-> > +               if (ret < 0) {
-> > +                       dev_err(priv->dev, "Failed to get irq %s\n",
-> > +                               mt6370_chg_irqs[i].name);
->
-> Isn't the same printed by the above call?
-
-well... yes they are similar, I will remove one of them in the next patch.
-
->
-> > +                       return ret;
-> > +               }
-> > +
-> > +               ret =3D devm_request_threaded_irq(priv->dev, ret, NULL,
-> > +                                               mt6370_chg_irqs[i].hand=
-ler,
-> > +                                               IRQF_TRIGGER_FALLING,
-> > +                                               dev_name(priv->dev),
-> > +                                               priv);
-> > +
-> > +               if (ret < 0) {
-> > +                       dev_err(priv->dev, "Failed to request irq %s\n"=
-,
-> > +                               mt6370_chg_irqs[i].name);
-> > +                       return ret;
->
-> return dev_err_probe();
->
-> > +               }
-> > +       }
->
-> ...
->
-> > +static int mt6370_chg_probe(struct platform_device *pdev)
-> > +{
->
->
-> Use return dev_err_probe(...); pattern.
->
-> > +probe_out:
-> > +       destroy_workqueue(priv->wq);
-> > +       mutex_destroy(&priv->attach_lock);
->
-> I don't see clearly the initialization of these in the ->probe().
-> Besides that, does destroy_workque() synchronize the actual queue(s)?
->
-> Mixing devm_ and non-devm_ may lead to a wrong release order that's
-> why it is better to see allocating and destroying resources in one
-> function (they may be wrapped, but should be both of them, seems like
-> you have done it only for the first parts).
-
-OK, I will try to revise these in the next patch!
-
->
-> > +       return ret;
-> > +}
->
-> ...
->
-> > +static int mt6370_chg_remove(struct platform_device *pdev)
-> > +{
-> > +       struct mt6370_priv *priv =3D platform_get_drvdata(pdev);
-> > +
-> > +       if (priv) {
->
-> Can you describe when this condition can be false?
-
-well... I will remove it in the next patch, sorry for making this
-stupid mistake...
-
->
-> > +               mt6370_chg_enable_irq(priv, "mivr", false);
-> > +               cancel_delayed_work_sync(&priv->mivr_dwork);
-> > +               destroy_workqueue(priv->wq);
-> > +               mutex_destroy(&priv->attach_lock);
-> > +       }
-> > +
-> > +       return 0;
-> > +}
->
-> ...
->
-> > +static struct platform_driver mt6370_chg_driver =3D {
-> > +       .probe =3D mt6370_chg_probe,
-> > +       .remove =3D mt6370_chg_remove,
-> > +       .driver =3D {
-> > +               .name =3D "mt6370-charger",
-> > +               .of_match_table =3D of_match_ptr(mt6370_chg_of_match),
->
-> No good use of of_match_ptr(), please drop it.
->
-> > +       },
-> > +};
->
-> --
-> With Best Regards,
-> Andy Shevchenko
-
-Thanks for your review!
-
-Best regards,
-ChiaEn Wu
+https://docs.google.com/spreadsheets/d/e/2PACX-1vQYP3PgY_JT42zQaR8uMp4U5LCe=
+y0qSlvMb80MLwjw-kkgfr31HqLSqAOGtdZ56aU2YdVTvfkruhuon/pubhtml

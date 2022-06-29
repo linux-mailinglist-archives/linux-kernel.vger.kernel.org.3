@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A72560204
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE21560209
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233148AbiF2ODR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 10:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58808 "EHLO
+        id S233225AbiF2ODP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 10:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233203AbiF2ODO (ORCPT
+        with ESMTP id S233081AbiF2ODM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 10:03:14 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3F67679
+        Wed, 29 Jun 2022 10:03:12 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5942C640A
         for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 07:03:09 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id u12so32757751eja.8
+Received: by mail-ej1-x62e.google.com with SMTP id u12so32757672eja.8
         for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 07:03:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=X21RDYcZyPdAdSSiWnF38ilXDUTAkDc85p4urcENWOs=;
-        b=zp6x20OMhnXPHzNNi8WXugTMQFDEqCtld64Is1YD14JQCItQk0qaYwSpD1zeZmO/I8
-         JAn4GAgxjF8nFRDdIP2xbh0uvfE6wa7w+sVJK0IYyM6Qon7wsewcSuTMpXS6grEENUuN
-         2sjKO2jNlLLJlPyw2lmQv6YAx0oZrDL1pJels5dy2jy8xSAoHvKwYmCvMYX5UFmUxutN
-         Dw3BPl8BD99rKr5Dkz5RInSpxo55gFMUql9l4hDDPxF3KLe54xNhT03VZhL3ypi0L8an
-         eAOLZqhsA/+wNgGGEXH5My3uVM/1A7Zh+G97JQmTZ654pB613w5h0CkjgVuJ/YNmI5qf
-         sV3g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=WoV4pas84c7AMle4/cOCqX9GxEkhRyeiQnd4AgtTb4M=;
+        b=nBxPgnptDg1TDKkHwk9owzFTTn+EAgl050PaJcrBtU2U2LZyXX9+wqNTfjhhHY83vk
+         O67kySTQ/Yrh7un5++SeFAKWkT9UOb4Lu81dC/TFDBocO9nww4QhAzPj4AmYxoKQZdwu
+         q7BABzVKeH/yYhkhD7ecjRPfddU3qVgI4zSvvC30I+Si1p9S17kzj7Uc+p0NX06wTIhu
+         E2PR2QHYKIkCBJ3m769D65wbmf4i+2GTd/CqA/cxHIRirMBufIq2fVMoF+Rxw4NA1lOh
+         +iOqHqYT2aoBKOyYLZoKXAmMh1qn2V9vy9yODYM+tXswFoOQGdieUwOSo4sbBfGlTIkI
+         c7hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=X21RDYcZyPdAdSSiWnF38ilXDUTAkDc85p4urcENWOs=;
-        b=ehTp4ldyloBjUJu4Uz95nj5Dx3qmEnmLixOQbhna4T1IGGh6dTokmOGunodKRGUspg
-         arJneyBSOlUgUyWKi2dE4iOBxAVz2De+FoZG1YQfvueeyipFEhQcJw5NmqNH2Dz3lko8
-         /wNaNmYpYqtVHn2dPz536we4JKJ0a+bThlg7ENlighF89VNl/dHMdVysB7nDIWv+MFxA
-         JQ5QkPe2yJJSlFjXrop/WimyGPEuLd7HZtEM+qpgoSZPsWiSAFAg2HB+lk+Y9UxY4dHr
-         uGn0NPaKAfaf2dTbruK6NTXQRjtfOrWqXoW8nn0/jbuUXgzz0lQbMpCjMA6bIprQm4kt
-         fbXQ==
-X-Gm-Message-State: AJIora8KunZq4S6LCmpeJzNjpLEAMTZ6AgvxKULoa3gyFNEiCcoDOVIF
-        9Wg/8V0lNYA2fTnX327NrEKhLQ==
-X-Google-Smtp-Source: AGRyM1vfBpeK5a2y8Ai17mRG/zLK0C47Ezcpl3fOTQHlpYcTCUwBcZxJdjE29jGIN0w0jpEOhFnqJg==
-X-Received: by 2002:a17:906:9245:b0:726:3b57:1046 with SMTP id c5-20020a170906924500b007263b571046mr3576647ejx.221.1656511386646;
-        Wed, 29 Jun 2022 07:03:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=WoV4pas84c7AMle4/cOCqX9GxEkhRyeiQnd4AgtTb4M=;
+        b=RnA3A1YXRIMtM/WgzYSIJtlAsathK6cnK52LEZsvYt7inxaYAXFf7rXQsbA2nzkcNN
+         +KX9m6bb1vihdV7QtGS6G33jsxWro97I52YrwUka1ntvDOoGvgJk+LhfcHDdvD8b44Zq
+         YSUVXmXOcyEOBsvecSrwpai4lYEPtTqNlIOnJT9dhnJIzSLkQHmmkf/kq3RKVaI97vW+
+         zClwI6t3sEfSzwhRrRmDNXakPSUhDNj0peVOimTvW1Cs0KTah7d+dbgClT24qLb0ZYFF
+         aMYbdPPoilCtHuhSI7a+90bsxv8nm9a8rIGKHQleBWm4fBJ8GRIttxwrR32LpisBLTe/
+         +5Ag==
+X-Gm-Message-State: AJIora/UAZodrhuLD7x8+GDsO1MoQS6fUg+/Re0KNYtJvi+e2t9GrM5L
+        0HU/3q03SGnJgRSXDWfI+27c2A==
+X-Google-Smtp-Source: AGRyM1uvkOOqFbqUM+RY5yAkCvI7aTyYIjvcaD/nQFO+hMzkTRB08YDr0vO9O9sQVR8XaZTy9l5zVQ==
+X-Received: by 2002:a17:907:75f9:b0:72a:38f3:f0b5 with SMTP id jz25-20020a17090775f900b0072a38f3f0b5mr2321627ejc.549.1656511387925;
+        Wed, 29 Jun 2022 07:03:07 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id f9-20020a17090660c900b007262a5e2204sm7739260ejk.153.2022.06.29.07.03.05
+        by smtp.gmail.com with ESMTPSA id f9-20020a17090660c900b007262a5e2204sm7739260ejk.153.2022.06.29.07.03.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 07:03:05 -0700 (PDT)
+        Wed, 29 Jun 2022 07:03:07 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -58,11 +58,14 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>
-Subject: [PATCH v6 0/4] soc/arm64: qcom: Add initial version of bwmon
-Date:   Wed, 29 Jun 2022 16:02:58 +0200
-Message-Id: <20220629140302.236715-1-krzysztof.kozlowski@linaro.org>
+Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v6 1/4] dt-bindings: interconnect: qcom,msm8998-cpu-bwmon: add BWMON device
+Date:   Wed, 29 Jun 2022 16:02:59 +0200
+Message-Id: <20220629140302.236715-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220629140302.236715-1-krzysztof.kozlowski@linaro.org>
+References: <20220629140302.236715-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,82 +78,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Add bindings for the Qualcomm Bandwidth Monitor device providing
+performance data on interconnects.  The bindings describe only BWMON CPU
+(version 4), e.g. the instance which appeared for the first on Qualcomm
+MSM8998 SoC and is also used on SDM845.  This BWMON device sits between
+CPU and Last Level Cache Controller.
 
-Changes since v5
-================
-1. Rename compatible (and files) to qcom,msm8998-llcc-bwmon as Rajendra suggested.
-   Keep the reviews/acks as the change is not significant.
-2. Update comment in DTS, update description in bindings and in Kconfig.
-
-Changes since v4
-================
-1. Patch #1 (binding): Use qcom,msm8998-cpu-bwmon fallback compatible, only one
-   interconnect. Rename to qcom,msm8998-cpu-bwmon.yaml. This reflects
-   discussion with Bjorn, about the proper fallback compatible. Driver was
-   tested only on SDM845, so only that one compatible is actually implemented.
-   Keep the reviews/acks as the change is not significant.
-2. Patch #4 (DTS): Use qcom,msm8998-cpu-bwmon fallback compatible, only one
-   interconnect, use the LLCC bandwidth in OPP.
-
-remove unused irq_enable (kbuild robot);
-Changes since v3
-================
-1. Patch #2 (bwmon): remove unused irq_enable (kbuild robot);
-   split bwmon_clear() into clearing counters and interrupts, so bwmon_start()
-   does not clear the counters twice.
-
-Changes since v2
-================
-1. Spent a lot of time on benchmarking and learning the BWMON behavior.
-2. Drop PM/OPP patch - applied.
-3. Patch #1: drop opp-avg-kBps.
-4. Patch #2: Add several comments explaining pieces of code and BWMON, extend
-   commit msg with measurements, extend help message, add new #defines to document
-   some magic values, reorder bwmon clear/disable/enable operations to match
-   downstream source and document this with comments, fix unit count from 1 MB
-   to 65 kB.
-5. Patch #4: drop opp-avg-kBps.
-6. Add accumulated Rb tags.
-
-Changes since v1
-================
-1. Add defconfig change.
-2. Fix missing semicolon in MODULE_AUTHOR.
-3. Add original downstream (msm-4.9 tree) copyrights to the driver.
-
-Description
-===========
-BWMON is a data bandwidth monitor providing throughput/bandwidth over certain
-interconnect links in a SoC.  It might be used to gather current bus usage and
-vote for interconnect bandwidth, thus adjusting the bus speed based on actual
-usage.
-
-The work is built on top of Thara Gopinath's patches with several cleanups,
-changes and simplifications.
-
-Cc: Rajendra Nayak <quic_rjendra@quicinc.com>
-
-Best regards,
-Krzysztof
-
-Krzysztof Kozlowski (4):
-  dt-bindings: interconnect: qcom,msm8998-cpu-bwmon: add BWMON device
-  soc: qcom: icc-bwmon: Add bandwidth monitoring driver
-  arm64: defconfig: enable Qualcomm Bandwidth Monitor
-  arm64: dts: qcom: sdm845: Add CPU BWMON
-
- .../interconnect/qcom,msm8998-llcc-bwmon.yaml |  85 ++++
- MAINTAINERS                                   |   7 +
- arch/arm64/boot/dts/qcom/sdm845.dtsi          |  37 ++
- arch/arm64/configs/defconfig                  |   1 +
- drivers/soc/qcom/Kconfig                      |  15 +
- drivers/soc/qcom/Makefile                     |   1 +
- drivers/soc/qcom/icc-bwmon.c                  | 421 ++++++++++++++++++
- 7 files changed, 567 insertions(+)
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Georgi Djakov <djakov@kernel.org>
+---
+ .../interconnect/qcom,msm8998-llcc-bwmon.yaml | 85 +++++++++++++++++++
+ 1 file changed, 85 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,msm8998-llcc-bwmon.yaml
- create mode 100644 drivers/soc/qcom/icc-bwmon.c
 
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-llcc-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-llcc-bwmon.yaml
+new file mode 100644
+index 000000000000..76e09658d615
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-llcc-bwmon.yaml
+@@ -0,0 +1,85 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interconnect/qcom,msm8998-llcc-bwmon.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Interconnect Bandwidth Monitor
++
++maintainers:
++  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
++
++description: |
++  Bandwidth Monitor measures current throughput on buses between various NoC
++  fabrics and provides information when it crosses configured thresholds.
++
++  Certain SoCs might have more than one Bandwidth Monitors, for example on SDM845::
++   - Measuring the bandwidth between CPUs and Last Level Cache Controller -
++     called LLCC BWMON,
++   - Measuring the bandwidth between Last Level Cache Controller and memory (DDR).
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - qcom,sdm845-llcc-bwmon
++          - const: qcom,msm8998-llcc-bwmon
++      - const: qcom,msm8998-llcc-bwmon       # BWMON v4
++
++  interconnects:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  operating-points-v2: true
++  opp-table: true
++
++  reg:
++    # BWMON v4 (currently described) and BWMON v5 use one register address
++    # space.  BWMON v2 uses two register spaces - not yet described.
++    maxItems: 1
++
++required:
++  - compatible
++  - interconnects
++  - interrupts
++  - operating-points-v2
++  - opp-table
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interconnect/qcom,sdm845.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    pmu@1436400 {
++        compatible = "qcom,sdm845-llcc-bwmon", "qcom,msm8998-llcc-bwmon";
++        reg = <0x01436400 0x600>;
++        interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
++        interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_LLCC 3>;
++
++        operating-points-v2 = <&llcc_bwmon_opp_table>;
++
++        llcc_bwmon_opp_table: opp-table {
++            compatible = "operating-points-v2";
++            opp-0 {
++                opp-peak-kBps = <4800000>;
++            };
++            opp-1 {
++                opp-peak-kBps = <9216000>;
++            };
++            opp-2 {
++                opp-peak-kBps = <15052800>;
++            };
++            opp-3 {
++                opp-peak-kBps = <20889600>;
++            };
++            opp-4 {
++                opp-peak-kBps = <25497600>;
++            };
++        };
++    };
 -- 
 2.34.1
 

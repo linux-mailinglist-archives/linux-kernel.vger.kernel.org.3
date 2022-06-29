@@ -2,264 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D032A55F7DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C0855F86D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbiF2HGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 03:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
+        id S233020AbiF2HEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 03:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbiF2HFt (ORCPT
+        with ESMTP id S232983AbiF2HEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 03:05:49 -0400
-X-Greylist: delayed 150 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 29 Jun 2022 00:04:03 PDT
-Received: from cmx-alt-rgout003.mx-altice.prod.cloud.synchronoss.net (cmx-alt-rgout003.mx-altice.prod.cloud.synchronoss.net [65.20.48.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4AC0377CE
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:04:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suddenlinkmail.com; s=dkim-001; t=1656486243; 
-        bh=k3GZPqmqqDjq762E9ENa9fRMaSUa3/4fmyOC+AYO65Y=;
-        h=Content-Type:Message-ID:Date:MIME-Version:To:From:Subject;
-        b=iUPX3sqLgzwGJsIh/a+SEEXApCVRaDlaXm73+CFaYPcEuUNAFgAMwyAYPsV0RQ1bgx7CLdchIi03n2FJ6PFiN2xxfniW68ITfe6F3bgLsw2Za+2/izcvKfW6sAY9Q8CwAYZEtYlBFFWFeOIcf3ByXlqKjuZz4BRG2Up2lPaiQa6lLWLxrT3wRg/xfovyJKJDLvbtAkD+pM/5zjQRi5fyEyzw1kP/AYH5NsUc4460jntekkORk/+VT6M4KUTfs9YVuq93/kAIk5TzfScOKRDDLGRwyica60A7lHZ7+4hdhumzt1rHl2XrTtrhjnGajK1feYl8YibUYrcXEft+1j42bw==
-X-RG-VS-CS: commercial-dirty
-X-RG-VS-SC: 107
-X-RG-VS: Suspect
-X-Originating-IP: [66.76.46.195]
-X-RG-Env-Sender: drankinatty@suddenlinkmail.com
-X-RG-Rigid: 62B1A656013F4B63
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvfedrudegkedguddugecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucetnffvkfevgfgfufdpggftfghnshhusghstghrihgsvgdpqfgfvfenuceurghilhhouhhtmecufedttdenuceurggutfgvphhuthdqffhomhgrihhnucdluddtjedmnecujfgurheptgfkffggfgfvhffuohfpsehmtderredtfeejnecuhfhrohhmpedfffgrvhhiugcuvedrucftrghnkhhinhdfuceoughrrghnkhhinhgrthhthiesshhuugguvghnlhhinhhkmhgrihhlrdgtohhmqeenucggtffrrghtthgvrhhnpeehteehvdeiteffhfdvtefhkeffudeuheejgfelkeetuedttefgvdejudfgteduudenucffohhmrghinhepfhhrvggvuggvshhkthhophdrohhrghdprghrtghhlhhinhhugidrohhrghenucfkphepieeirdejiedrgeeirdduleehnecuuegrugftvghpuhhtffhomhgrihhnpehsuhguuggvnhhlihhnkhhmrghilhdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedriedruddtgegnpdhinhgvthepieeirdejiedrgeeirdduleehpdhmrghilhhfrhhomhepughrrghnkhhinhgrthhthiesshhuugguvghnlhhinhhkmhgrihhlrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-RazorGate-Vade-Verdict: spam 107
-X-RazorGate-Vade-Classification: commercial-dirty
-Received: from [192.168.6.104] (66.76.46.195) by cmx-alt-rgout003.mx-altice.prod.cloud.synchronoss.net (5.8.807.04) (authenticated as drankinatty@suddenlinkmail.com)
-        id 62B1A656013F4B63 for linux-kernel@vger.kernel.org; Wed, 29 Jun 2022 07:01:32 +0000
-Content-Type: multipart/mixed; boundary="------------0cWz90enQgBH9CiuvT25DDyM"
-Message-ID: <a8bce489-8ccc-aa95-3de6-f854e03ad557@suddenlinkmail.com>
-Date:   Wed, 29 Jun 2022 02:01:26 -0500
+        Wed, 29 Jun 2022 03:04:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B82F3DDFE
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:02:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656486156;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zdxtwKfDBaNyVyUEwFBhab9Yx2tZ8QjJF8+weaWqn/c=;
+        b=ToTgXsZS671YGgIzo+dcwgyXjCHiPS+ugvC+cbTvhnwvAGl+DpoCnYKBp/5Fr1vWgYf27B
+        oepz9xz9Sga5A3LWz4y/cu4Zbw3GJzNqTBZF09G3gZz7aEIoA4dLYeqaix2OhaPEzx90ad
+        9S4WNyiOYuprCJwU2FZNqtUojhF4tW0=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-63-3WrwMTWVM6-PrPxHFDOAcA-1; Wed, 29 Jun 2022 03:02:34 -0400
+X-MC-Unique: 3WrwMTWVM6-PrPxHFDOAcA-1
+Received: by mail-lj1-f198.google.com with SMTP id m8-20020a2eb6c8000000b0025aa0530107so1977439ljo.6
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:02:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zdxtwKfDBaNyVyUEwFBhab9Yx2tZ8QjJF8+weaWqn/c=;
+        b=6HVtSXDxfuYS7BFjVnsxHw7lRGZJiGlcTIsRYudyarxlGq/FkZRPHHpdXSlnS4BWIF
+         TLmLnH38jTQt643kPeRPeMC08IvPpcA9Q0SMSfkhd1UkfRRJ8Q9U85PpizznuFG8IgIy
+         Tf9YJKQVnQUXLpdDOW7qeRR1bgIqSFJ5bOIOv54e9VCD+4Pm7NiCsGnlxBtm+8ox6KEz
+         hZ0ionpORSjyeMP30/GfR7mtt9RHd5JXLFREZmfewQAbYug9e520r99IwDZAAjdTJngO
+         DXqRmSS/h6p7g4kWyeE+xfiRNaBAgdEW5y7aA0PjNda2aWsmHbZpDs7VTrAmUVl61ILl
+         UA7Q==
+X-Gm-Message-State: AJIora+68wA/nZJpGbFNaKlSTLkEikPfepdopKkV1oj/VMv5uCFViO9H
+        ORSVFj3fQgcvvM1TrX7lReNdHcokPKUF01l/CFHhPbVZTw3egceuT0XjN0gxfb+oYJLeOk4k5Kx
+        OJiLPX5tvdO1F/3QLoLT98wktbJ66LisCAyrx1Z/G
+X-Received: by 2002:a05:6512:3b8e:b0:481:1a75:452 with SMTP id g14-20020a0565123b8e00b004811a750452mr1169818lfv.238.1656486152746;
+        Wed, 29 Jun 2022 00:02:32 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vZYVJ8dgXlanmZRZNWXGOSQQbcBOcd+zGkkbRwdd51E4HcAcZqeVTN0dNu7SJ0sT6bRyeXCFd1XSnk5op1enA=
+X-Received: by 2002:a05:6512:3b8e:b0:481:1a75:452 with SMTP id
+ g14-20020a0565123b8e00b004811a750452mr1169793lfv.238.1656486152366; Wed, 29
+ Jun 2022 00:02:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     kernel <linux-kernel@vger.kernel.org>
-From:   "David C. Rankin" <drankinatty@suddenlinkmail.com>
-Subject: amdgpu - BUG: kernel NULL pointer dereference, address:
- 0000000000000000
-Organization: Rankin Law Firm, PLLC
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <CACGkMEtJY2ioD0L8ifTrCPatG6-NqQ01V=d2L1FeoweKV74LaA@mail.gmail.com>
+ <20220624022622-mutt-send-email-mst@kernel.org> <CACGkMEuurobpUWmDL8zmZ6T6Ygc0OEMx6vx2EDCSoGNnZQ0r-w@mail.gmail.com>
+ <20220627024049-mutt-send-email-mst@kernel.org> <CACGkMEvrDXDN7FH1vKoYCob2rkxUsctE_=g61kzHSZ8tNNr6vA@mail.gmail.com>
+ <20220627053820-mutt-send-email-mst@kernel.org> <CACGkMEvcs+9_SHmO1s3nyzgU7oq7jhU2gircVVR3KDsGDikh5Q@mail.gmail.com>
+ <20220628004614-mutt-send-email-mst@kernel.org> <CACGkMEsC4A+3WejLSOZoH3enXtai=+JyRNbxcpzK4vODYzhaFw@mail.gmail.com>
+ <CACGkMEvu0D0XD7udz0ebVjNM0h5+K9Rjd-5ed=PY_+-aduzG2g@mail.gmail.com> <20220629022223-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220629022223-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 29 Jun 2022 15:02:21 +0800
+Message-ID: <CACGkMEuwvzkbPUSFueCOjit7pRJ81v3-W3SZD+7jQJN8btEFdg@mail.gmail.com>
+Subject: Re: [PATCH V3] virtio: disable notification hardening by default
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        kvm <kvm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Ben Hutchings <ben@decadent.org.uk>,
+        David Hildenbrand <david@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------0cWz90enQgBH9CiuvT25DDyM
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Wed, Jun 29, 2022 at 2:31 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Wed, Jun 29, 2022 at 12:07:11PM +0800, Jason Wang wrote:
+> > On Tue, Jun 28, 2022 at 2:17 PM Jason Wang <jasowang@redhat.com> wrote:
+> > >
+> > > On Tue, Jun 28, 2022 at 1:00 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > >
+> > > > On Tue, Jun 28, 2022 at 11:49:12AM +0800, Jason Wang wrote:
+> > > > > > Heh. Yea sure. But things work fine for people. What is the chance
+> > > > > > your review found and fixed all driver bugs?
+> > > > >
+> > > > > I don't/can't audit all bugs but the race between open/close against
+> > > > > ready/reset. It looks to me a good chance to fix them all but if you
+> > > > > think differently, let me know
+> > > > >
+> > > > > > After two attempts
+> > > > > > I don't feel like hoping audit will fix all bugs.
+> > > > >
+> > > > > I've started the auditing and have 15+ patches in the queue. (only
+> > > > > covers bluetooth, console, pmem, virtio-net and caif). Spotting the
+> > > > > issue is not hard but the testing, It would take at least the time of
+> > > > > one release to finalize I guess.
+> > > >
+> > > > Absolutely. So I am looking for a way to implement hardening that does
+> > > > not break existing drivers.
+> > >
+> > > I totally agree with you to seek a way without bothering the drivers.
+> > > Just wonder if this is possbile.
+> > >
+> > > >
+> > > >
+> > > > > >
+> > > > > >
+> > > > > > > >
+> > > > > > > > The reason config was kind of easy is that config interrupt is rarely
+> > > > > > > > vital for device function so arbitrarily deferring that does not lead to
+> > > > > > > > deadlocks - what you are trying to do with VQ interrupts is
+> > > > > > > > fundamentally different. Things are especially bad if we just drop
+> > > > > > > > an interrupt but deferring can lead to problems too.
+> > > > > > >
+> > > > > > > I'm not sure I see the difference, disable_irq() stuffs also delay the
+> > > > > > > interrupt processing until enable_irq().
+> > > > > >
+> > > > > >
+> > > > > > Absolutely. I am not at all sure disable_irq fixes all problems.
+> > > > > >
+> > > > > > > >
+> > > > > > > > Consider as an example
+> > > > > > > >     virtio-net: fix race between ndo_open() and virtio_device_ready()
+> > > > > > > > if you just defer vq interrupts you get deadlocks.
+> > > > > > > >
+> > > > > > > >
+> > > > > > >
+> > > > > > > I don't see a deadlock here, maybe you can show more detail on this?
+> > > > > >
+> > > > > > What I mean is this: if we revert the above commit, things still
+> > > > > > work (out of spec, but still). If we revert and defer interrupts until
+> > > > > > device ready then ndo_open that triggers before device ready deadlocks.
+> > > > >
+> > > > > Ok, I guess you meant on a hypervisor that is strictly written with spec.
+> > > >
+> > > > I mean on hypervisor that starts processing queues after getting a kick
+> > > > even without DRIVER_OK.
+> > >
+> > > Oh right.
+> > >
+> > > >
+> > > > > >
+> > > > > >
+> > > > > > > >
+> > > > > > > > So, thinking about all this, how about a simple per vq flag meaning
+> > > > > > > > "this vq was kicked since reset"?
+> > > > > > >
+> > > > > > > And ignore the notification if vq is not kicked? It sounds like the
+> > > > > > > callback needs to be synchronized with the kick.
+> > > > > >
+> > > > > > Note we only need to synchronize it when it changes, which is
+> > > > > > only during initialization and reset.
+> > > > >
+> > > > > Yes.
+> > > > >
+> > > > > >
+> > > > > >
+> > > > > > > >
+> > > > > > > > If driver does not kick then it's not ready to get callbacks, right?
+> > > > > > > >
+> > > > > > > > Sounds quite clean, but we need to think through memory ordering
+> > > > > > > > concerns - I guess it's only when we change the value so
+> > > > > > > >         if (!vq->kicked) {
+> > > > > > > >                 vq->kicked = true;
+> > > > > > > >                 mb();
+> > > > > > > >         }
+> > > > > > > >
+> > > > > > > > will do the trick, right?
+> > > > > > >
+> > > > > > > There's no much difference with the existing approach:
+> > > > > > >
+> > > > > > > 1) your proposal implicitly makes callbacks ready in virtqueue_kick()
+> > > > > > > 2) my proposal explicitly makes callbacks ready via virtio_device_ready()
+> > > > > > >
+> > > > > > > Both require careful auditing of all the existing drivers to make sure
+> > > > > > > no kick before DRIVER_OK.
+> > > > > >
+> > > > > > Jason, kick before DRIVER_OK is out of spec, sure. But it is unrelated
+> > > > > > to hardening
+> > > > >
+> > > > > Yes but with your proposal, it seems to couple kick with DRIVER_OK somehow.
+> > > >
+> > > > I don't see how - my proposal ignores DRIVER_OK issues.
+> > >
+> > > Yes, what I meant is, in your proposal, the first kick after rest is a
+> > > hint that the driver is ok (but actually it could not).
+> > >
+> > > >
+> > > > > > and in absence of config interrupts is generally easily
+> > > > > > fixed just by sticking virtio_device_ready early in initialization.
+> > > > >
+> > > > > So if the kick is done before the subsystem registration, there's
+> > > > > still a window in the middle (assuming we stick virtio_device_ready()
+> > > > > early):
+> > > > >
+> > > > > virtio_device_ready()
+> > > > > virtqueue_kick()
+> > > > > /* the window */
+> > > > > subsystem_registration()
+> > > >
+> > > > Absolutely, however, I do not think we really have many such drivers
+> > > > since this has been known as a wrong thing to do since the beginning.
+> > > > Want to try to find any?
+> > >
+> > > Yes, let me try and update.
+> >
+> > This is basically the device that have an RX queue, so I've found the
+> > following drivers:
+> >
+> > scmi, mac80211_hwsim, vsock, bt, balloon.
+>
+> Looked and I don't see it yet. Let's consider
+> ./net/vmw_vsock/virtio_transport.c for example. Assuming we block
+> callbacks until the first kick, what is the issue with probe exactly?
 
-All,
+We need to make sure the callback can survive when it runs before sub
+system registration.
 
-   There appears to be a bug (regression maybe?) in the amdgpu driver 
-resulting in a Fatal error during GPU init. This began with the 5.17 kernel 
-and is still present in the current 5.18 kernel. However, the 
-effect/consequence on the kernel due to the NULL pointer dereference seems to 
-be getting worse and not causes the machine to hang at the end of the shutdown 
-procedure. (tough for boxes that are remote adminned).
+>
+>
+> > >
+> > > >I couldn't ... except maybe bluetooth
+> > > > but that's just maintainer nacking fixes saying he'll fix it
+> > > > his way ...
+> > > >
+> > > > > And during remove(), we get another window:
+> > > > >
+> > > > > subsysrem_unregistration()
+> > > > > /* the window */
+> > > > > virtio_device_reset()
+> > > >
+> > > > Same here.
+> >
+> > Basically for the drivers that set driver_ok before registration,
+>
+> I don't see what does driver_ok have to do with it.
 
-I have two servers with old AMD cards that have this exact problem. lspci -v 
-(as user) reports the card as:
+I meant for those driver, in probe they do()
 
-01:00.1 Display controller: Advanced Micro Devices, Inc. [AMD/ATI] RV370 
-[Radeon X300 SE]
-         Subsystem: Advanced Micro Devices, Inc. [AMD/ATI] Device 0f03
-         Flags: fast devsel, NUMA node 0
-         Memory at fea20000 (32-bit, non-prefetchable) [size=64K]
-         Capabilities: <access denied>
-         Kernel modules: amdgpu
+virtio_device_ready()
+subsystem_register()
 
-The host is:
+In remove() they do
 
-Host: valkyrie Kernel: 5.18.7-arch1-1 arch: x86_64 bits: 64 compiler: gcc
-     v: 12.1.0 parameters: BOOT_IMAGE=/vmlinuz-linux
-     root=UUID=515ef9dc-769f-4548-9a08-3a92fa83d86b rw iommu=soft
-     amd_iommu_dump= quiet audit=0
-   Console: pty pts/0 DM: LightDM v: 1.30.0 Distro: Arch Linux
+subsystem_unregister()
+virtio_device_reset()
 
-Machine:
-   Type: Desktop Mobo: Gigabyte model: 990FXA-UD3 v: x.x serial: N/A
-     BIOS: American Megatrends v: F3 date: 05/28/2015
+for symmetry
 
-Memory:
-   RAM: total: 31.31 GiB used: 1012.9 MiB (3.2%)
+>
+> > so
+> > we have a lot:
+> >
+> > blk, net, mac80211_hwsim, scsi, vsock, bt, crypto, gpio, gpu, i2c,
+> > iommu, caif, pmem, input, mem
+> >
+> > So I think there's no easy way to harden the notification without
+> > auditing the driver one by one (especially considering the driver may
+> > use bh or workqueue). The problem is the notification hardening
+> > depends on a correct or race-free probe/remove. So we need to fix the
+> > issues in probe/remove then do the hardening on the notification.
+> >
+> > Thanks
+>
+> So if drivers kick but are not ready to get callbacks then let's fix
+> that first of all, these are racy with existing qemu even ignoring
+> spec compliance.
 
-CPU:
-   Info: model: AMD FX-8350 socket: AM3 bits: 64 type: MT MCP arch: Piledriver
-     built: 2012-13 process: GF 32nm family: 0x15 (21) model-id: 2 stepping: 0
-     microcode: 0x6000852
+Yes, (the patches I've posted so far exist even with a well-behaved device).
 
-Graphics:
-   Device-1: AMD RV370 [Radeon X300] driver: radeon v: kernel
-     alternate: amdgpu arch: Rage 9 code: R360-R400 process: TSMC 110nm
-     built: 2003-08 pcie: gen: 1 speed: 2.5 GT/s lanes: 16 ports:
-     active: DVI-I-1 empty: SVIDEO-1 bus-ID: 01:00.0 chip-ID: 1002:5b60
-     class-ID: 0300
+Thanks
 
-The NULL pointer dereference occurs during GPU init of the card. These cards 
-are fanless and specifically chosen for that. They are used in server installs 
-and have been flawless for years. If it was just one card acting up, I could 
-see it may be a card problem, but I have two identical servers setup with this 
-card and both show the exact same "BUG: kernel NULL pointer dereference":
+>
+>
+> --
+> MST
+>
 
-[    9.660937] [drm] amdgpu kernel modesetting enabled.
-[    9.661025] amdgpu: CRAT table not found
-[    9.661028] amdgpu: Virtual CRAT table created for CPU
-[    9.661040] amdgpu: Topology: Add CPU node
-[    9.661296] [drm] initializing kernel modesetting (IP DISCOVERY 
-0x1002:0x5B70 0x1002:0x0F03 0x00).
-[    9.661302] amdgpu 0000:01:00.1: amdgpu: Trusted Memory Zone (TMZ) feature 
-disabled as experimental (default)
-[    9.661305] amdgpu 0000:01:00.1: amdgpu: Fatal error during GPU init
-[    9.661318] amdgpu: probe of 0000:01:00.1 failed with error -12
-[    9.661338] BUG: kernel NULL pointer dereference, address: 0000000000000000
-
-Full dmesg output for this with backtrace is attached.
-
-Bugs related to this problem are open with freedesktop, and with Archinux.
-
-https://gitlab.freedesktop.org/drm/amd/-/issues/2070
-
-and
-
-https://bugs.archlinux.org/task/74346#comment209209
-
-Are those the proper locations for the bug report or does a kernel bug also 
-need to be opened to track the issue? Let me know there and let me know if you 
-need any further information from the machines and I'm happy to get it.
-
--- 
-David C. Rankin, J.D.,P.E.
---------------0cWz90enQgBH9CiuvT25DDyM
-Content-Type: text/plain; charset=UTF-8; name="amdgpu_dmesg_NULL-pointer.txt"
-Content-Disposition: attachment; filename="amdgpu_dmesg_NULL-pointer.txt"
-Content-Transfer-Encoding: base64
-
-WyAgICA5LjY2MDkzN10gW2RybV0gYW1kZ3B1IGtlcm5lbCBtb2Rlc2V0dGluZyBlbmFibGVk
-LgpbICAgIDkuNjYxMDI1XSBhbWRncHU6IENSQVQgdGFibGUgbm90IGZvdW5kClsgICAgOS42
-NjEwMjhdIGFtZGdwdTogVmlydHVhbCBDUkFUIHRhYmxlIGNyZWF0ZWQgZm9yIENQVQpbICAg
-IDkuNjYxMDQwXSBhbWRncHU6IFRvcG9sb2d5OiBBZGQgQ1BVIG5vZGUKWyAgICA5LjY2MTI5
-Nl0gW2RybV0gaW5pdGlhbGl6aW5nIGtlcm5lbCBtb2Rlc2V0dGluZyAoSVAgRElTQ09WRVJZ
-IDB4MTAwMjoweDVCNzAgMHgxMDAyOjB4MEYwMyAweDAwKS4KWyAgICA5LjY2MTMwMl0gYW1k
-Z3B1IDAwMDA6MDE6MDAuMTogYW1kZ3B1OiBUcnVzdGVkIE1lbW9yeSBab25lIChUTVopIGZl
-YXR1cmUgZGlzYWJsZWQgYXMgZXhwZXJpbWVudGFsIChkZWZhdWx0KQpbICAgIDkuNjYxMzA1
-XSBhbWRncHUgMDAwMDowMTowMC4xOiBhbWRncHU6IEZhdGFsIGVycm9yIGR1cmluZyBHUFUg
-aW5pdApbICAgIDkuNjYxMzE4XSBhbWRncHU6IHByb2JlIG9mIDAwMDA6MDE6MDAuMSBmYWls
-ZWQgd2l0aCBlcnJvciAtMTIKWyAgICA5LjY2MTMzOF0gQlVHOiBrZXJuZWwgTlVMTCBwb2lu
-dGVyIGRlcmVmZXJlbmNlLCBhZGRyZXNzOiAwMDAwMDAwMDAwMDAwMDAwClsgICAgOS42NjEz
-ODRdICNQRjogc3VwZXJ2aXNvciB3cml0ZSBhY2Nlc3MgaW4ga2VybmVsIG1vZGUKWyAgICA5
-LjY2MTQxMV0gI1BGOiBlcnJvcl9jb2RlKDB4MDAwMikgLSBub3QtcHJlc2VudCBwYWdlClsg
-ICAgOS42NjE0NDBdIFBHRCAwIFA0RCAwClsgICAgOS42NjE0NTRdIE9vcHM6IDAwMDIgWyMx
-XSBQUkVFTVBUIFNNUCBOT1BUSQpbICAgIDkuNjYxNDc5XSBDUFU6IDMgUElEOiAzNTggQ29t
-bTogc3lzdGVtZC11ZGV2ZCBUYWludGVkOiBHICAgICAgICAgICBPRSAgICAgNS4xOC43LWFy
-Y2gxLTEgIzEgYjM2MWY4NDVhMDBhNDM2OWUzCjA3OWMxMzkzNzhiY2JjNWIxMzFkNDkKWyAg
-ICA5LjY2MTU0M10gSGFyZHdhcmUgbmFtZTogR2lnYWJ5dGUgVGVjaG5vbG9neSBDby4sIEx0
-ZC4gVG8gYmUgZmlsbGVkIGJ5IE8uRS5NLi85OTBGWEEtVUQzLCBCSU9TIEYzIDA1LzI4LzIw
-MTUKWyAgICA5LjY2MTU5NV0gUklQOiAwMDEwOmFtZGdwdV9kZXZpY2VfZmluaV9zdysweDJh
-NC8weDM5MCBbYW1kZ3B1XQpbICAgIDkuNjYyMDIwXSBDb2RlOiA4MiAwMCAwMCAwMCA0OCA4
-OSBkZiBlOCBkYSBhMiAwNCAwMCA0OCA4MyBiYiBlOCA1ZiAwMCAwMCAwMCA3NCAwOCA0OCA4
-OSBkZiBlOCA2OCA0MiAwNCAwMCA0OCA4CmIgYmIgZjAgNzQgMDEgMDAgYjggZmYgZmYgZmYg
-ZmYgPGYwPiAwZiBjMSAwNyA4MyBmOCAwMSA3NCA0YyA4NSBjMCAwZiA4ZSBjMyAwMCAwMCAw
-MCA0OCBjNyA4MyBmMCA3NApbICAgIDkuNjYyMTIwXSBSU1A6IDAwMTg6ZmZmZmJhMGVjMGUx
-N2IyOCBFRkxBR1M6IDAwMDEwMjQ2ClsgICAgOS42NjIxNDldIFJBWDogMDAwMDAwMDBmZmZm
-ZmZmZiBSQlg6IGZmZmY5YzMxYzNlMDAwMDAgUkNYOiAwMDAwMDAwMDAwMDAwMDAwClsgICAg
-OS42NjIxODldIFJEWDogMDAwMDAwMDAwMDAzMDVjMCBSU0k6IDAwMDAwMDAwMDAwMDAwMDAg
-UkRJOiAwMDAwMDAwMDAwMDAwMDAwClsgICAgOS42NjIyMjZdIFJCUDogZmZmZjljMzFjM2Uw
-MDAxMCBSMDg6IGZmZmZiYTBlYzBlMTdiYTggUjA5OiBmZmZmOWMzMWMwMWNkOWQwClsgICAg
-OS42NjIyNjddIFIxMDogMDAwMDAwMDAwMDAwMDAyYSBSMTE6IGZmZmY5YzMxYzVkM2M2ZDgg
-UjEyOiBmZmZmYmEwZWMwZTE3YmE4ClsgICAgOS42NjIzMDVdIFIxMzogZmZmZjljMzFjMTA1
-NjBkMCBSMTQ6IGZmZmY5YzMxYzEwNTYzNzQgUjE1OiBmZmZmYmEwZWMwZTE3ZGIwClsgICAg
-OS42NjIzNDRdIEZTOiAgMDAwMDdmZWJhYzRiNjA4MCgwMDAwKSBHUzpmZmZmOWMzOGJlY2Mw
-MDAwKDAwMDApIGtubEdTOjAwMDAwMDAwMDAwMDAwMDAKWyAgICA5LjY2MjQxMl0gQ1M6ICAw
-MDEwIERTOiAwMDAwIEVTOiAwMDAwIENSMDogMDAwMDAwMDA4MDA1MDAzMwpbICAgIDkuNjYy
-NDQzXSBDUjI6IDAwMDAwMDAwMDAwMDAwMDAgQ1IzOiAwMDAwMDAwMTA2YjJhMDAwIENSNDog
-MDAwMDAwMDAwMDA0MDZlMApbICAgIDkuNjYyNDgyXSBDYWxsIFRyYWNlOgpbICAgIDkuNjYy
-NDk4XSAgPFRBU0s+ClsgICAgOS42NjI1MTJdICBhbWRncHVfZHJpdmVyX3JlbGVhc2Vfa21z
-KzB4MTYvMHgzMCBbYW1kZ3B1IDRjNTYzMjZjNjUzZGEwNWRkODA5YTQyNDc3MjA3MTAzMDZm
-Y2YwZmJdClsgICAgOS42NjI4ODddICBkZXZtX2RybV9kZXZfaW5pdF9yZWxlYXNlKzB4NDMv
-MHg2MApbICAgIDkuNjYyOTE1XSAgcmVsZWFzZV9ub2RlcysweDM4LzB4YjAKWyAgICA5LjY2
-MjkzOF0gIGRldnJlc19yZWxlYXNlX2FsbCsweDhjLzB4YzAKWyAgICA5LjY2Mjk2Ml0gIGRl
-dmljZV91bmJpbmRfY2xlYW51cCsweGUvMHg3MApbICAgIDkuNjYyOTg4XSAgcmVhbGx5X3By
-b2JlKzB4MTQzLzB4MzcwClsgICAgOS42NjMwMTJdICBfX2RyaXZlcl9wcm9iZV9kZXZpY2Ur
-MHhmYy8weDE3MApbICAgIDkuNjYzMDM2XSAgZHJpdmVyX3Byb2JlX2RldmljZSsweDFmLzB4
-OTAKWyAgICA5LjY2MzA2MF0gIF9fZHJpdmVyX2F0dGFjaCsweGJmLzB4MWEwClsgICAgOS42
-NjMwODRdICA/IF9fZGV2aWNlX2F0dGFjaF9kcml2ZXIrMHhlMC8weGUwClsgICAgOS42NjMx
-MTNdICBidXNfZm9yX2VhY2hfZGV2KzB4ODcvMHhkMApbICAgIDkuNjYzMTM2XSAgYnVzX2Fk
-ZF9kcml2ZXIrMHgxNWQvMHgyMDAKWyAgICA5LjY2MzE1OF0gIGRyaXZlcl9yZWdpc3Rlcisw
-eDhkLzB4ZTAKWyAgICA5LjY2MzE4MV0gID8gMHhmZmZmZmZmZmMwYmFhMDAwClsgICAgOS42
-NjMyMDFdICBkb19vbmVfaW5pdGNhbGwrMHg1ZC8weDIyMApbICAgIDkuNjYzMjI4XSAgZG9f
-aW5pdF9tb2R1bGUrMHg0YS8weDI0MApbICAgIDkuNjYzMjUxXSAgX19kb19zeXNfaW5pdF9t
-b2R1bGUrMHgxMzgvMHgxYjAKWyAgICA5LjY2MzI4MF0gIGRvX3N5c2NhbGxfNjQrMHg1Zi8w
-eDkwClsgICAgOS42NjMzMDJdICA/IF9fdm1fbXVubWFwKzB4OTAvMHgxMTAKWyAgICA5LjY2
-MzMyNF0gID8gc3lzY2FsbF9leGl0X3RvX3VzZXJfbW9kZSsweDI2LzB4NTAKWyAgICA5LjY2
-MzM1MV0gID8gX194NjRfc3lzX211bm1hcCsweDFiLzB4MjAKWyAgICA5LjY2MzM1MV0gID8g
-X194NjRfc3lzX211bm1hcCsweDFiLzB4MjAKWyAgICA5LjY2MzM3NV0gID8gZG9fc3lzY2Fs
-bF82NCsweDZiLzB4OTAKWyAgICA5LjY2MzQwMF0gID8gc3lzY2FsbF9leGl0X3RvX3VzZXJf
-bW9kZSsweDI2LzB4NTAKWyAgICA5LjY2MzQyOF0gID8gZG9fc3lzY2FsbF82NCsweDZiLzB4
-OTAKWyAgICA5LjY2MzQ1NV0gID8gZXhjX3BhZ2VfZmF1bHQrMHg3NC8weDE3MApbICAgIDku
-NjYzNDg0XSAgZW50cnlfU1lTQ0FMTF82NF9hZnRlcl9od2ZyYW1lKzB4NDQvMHhhZQpbICAg
-IDkuNjYzNTE4XSBSSVA6IDAwMzM6MHg3ZmViYWJkMTI5OWUKWyAgICA5LjY2MzU0M10gQ29k
-ZTogNDggOGIgMGQgZmQgYTMgMGUgMDAgZjcgZDggNjQgODkgMDEgNDggODMgYzggZmYgYzMg
-NjYgMmUgMGYgMWYgODQgMDAgMDAgMDAgMDAgMDAgOTAgZjMgMGYgMWUgZmEgNDkgODkgY2Eg
-YjggYWYgMDAgMDAgMDAgMGYgMDUgPDQ4PiAzZCAwMSBmMCBmZiBmZiA3MyAwMSBjMyA0OCA4
-YiAwZCBjYSBhMyAwZSAwMCBmNyBkOCA2NCA4OSAwMSA0OApbICAgIDkuNjYzNjczXSBSU1A6
-IDAwMmI6MDAwMDdmZmVlNzJmYTY1OCBFRkxBR1M6IDAwMDAwMjQ2IE9SSUdfUkFYOiAwMDAw
-MDAwMDAwMDAwMGFmClsgICAgOS42NjM3NDddIFJBWDogZmZmZmZmZmZmZmZmZmZkYSBSQlg6
-IDAwMDA1NjMyZDA4MGNjMDAgUkNYOiAwMDAwN2ZlYmFiZDEyOTllClsgICAgOS42NjM4MDRd
-IFJEWDogMDAwMDdmZWJhYzRjYTMyYyBSU0k6IDAwMDAwMDAwMDEwZThlYmUgUkRJOiAwMDAw
-N2ZlYmE4YjgzMDEwClsgICAgOS42NjM4NDJdIFJCUDogMDAwMDdmZWJhOGI4MzAxMCBSMDg6
-IDAwMDAwMDAwMDAyNjEwMDAgUjA5OiA4NWViY2E3N2MyYjJhZTYzClsgICAgOS42NjM4Nzld
-IFIxMDogMDAwMDAwMDAwMDAzNTcyMSBSMTE6IDAwMDAwMDAwMDAwMDAyNDYgUjEyOiAwMDAw
-N2ZlYmFjNGNhMzJjClsgICAgOS42NjM5MThdIFIxMzogMDAwMDU2MzJkMDgwOGExMCBSMTQ6
-IDAwMDA1NjMyZDA4MGNjMDAgUjE1OiAwMDAwNTYzMmQwODEyMzEwClsgICAgOS42NjM5NThd
-ICA8L1RBU0s+ClsgICAgOS42NjM5NjldIE1vZHVsZXMgbGlua2VkIGluOiBjY3Agc25kX2hk
-YV9jb2RlY19yZWFsdGVrIGFtZGdwdSgrKSBzbmRfaGRhX2NvZGVjX2dlbmVyaWMgcm5nX2Nv
-cmUgbGVkdHJpZ19hdWRpbyBzbmRfaGRhX2ludGVsIHNuZF9pbnRlbF9kc3BjZmcga3ZtIHNu
-ZF9pbnRlbF9zZHdfYWNwaSBpcnFieXBhc3Mgc25kX2hkYV9jb2RlYyBzbmRfaGRhX2NvcmUg
-c25kX2h3ZGVwIGNyY3QxMGRpZl9wY2xtdWwgc25kX3BjbSBjcmMzMl9wY2xtdWwgZ2hhc2hf
-Y2xtdWxuaV9pbnRlbCBzbmRfdGltZXIgc25kIGFlc25pX2ludGVsIG1vdXNlZGV2IHI4MTY5
-IG14bV93bWkgc3A1MTAwX3RjbyBzb3VuZGNvcmUgcmFkZW9uIGdwdV9zY2hlZCBjcnlwdG9f
-c2ltZCByZWFsdGVrIGZhbTE1aF9wb3dlciBwY3Nwa3IgaTJjX3BpaXg0IGNyeXB0ZCBtZGlv
-X2RldnJlcyBrMTB0ZW1wIGRybV90dG1faGVscGVyIGxpYnBoeSB0dG0gd21pIGRybV9kcF9o
-ZWxwZXIgbWFjX2hpZCBhY3BpX2NwdWZyZXEgdmJveG5ldGZsdChPRSkgdmJveG5ldGFkcChP
-RSkgdmJveGRydihPRSkgZG1fbXVsdGlwYXRoIGRtX21vZCBzZyBjcnlwdG9fdXNlciBmdXNl
-IGJwZl9wcmVsb2FkIGlwX3RhYmxlcyB4X3RhYmxlcyBleHQ0IGNyYzMyY19nZW5lcmljIGNy
-YzE2IG1iY2FjaGUgamJkMiBzcl9tb2QgY2Ryb20gc2VyaW9fcmF3IGF0YV9nZW5lcmljIGF0
-a2JkIHJhaWQxIGZpcmV3aXJlX29oY2kgcGF0YV9hY3BpIHVhcyBsaWJwczIgbWRfbW9kIHZp
-dmFsZGlfZm1hcCBjcmMzMmNfaW50ZWwgZmlyZXdpcmVfY29yZSB1c2Jfc3RvcmFnZSBjcmNf
-aXR1X3QgcGF0YV9hdGlpeHAgeGhjaV9wY2kgaTgwNDIgeGhjaV9wY2lfcmVuZXNhcyBzZXJp
-byB1c2JoaWQKWyAgICA5LjY2Nzg1MF0gQ1IyOiAwMDAwMDAwMDAwMDAwMDAwClsgICAgOS42
-Njk2MTJdIC0tLVsgZW5kIHRyYWNlIDAwMDAwMDAwMDAwMDAwMDAgXS0tLQpbICAgIDkuNjcx
-MzcwXSBSSVA6IDAwMTA6YW1kZ3B1X2RldmljZV9maW5pX3N3KzB4MmE0LzB4MzkwIFthbWRn
-cHVdClsgICAgOS42NzM1NzddIENvZGU6IDgyIDAwIDAwIDAwIDQ4IDg5IGRmIGU4IGRhIGEy
-IDA0IDAwIDQ4IDgzIGJiIGU4IDVmIDAwIDAwIDAwIDc0IDA4IDQ4IDg5IGRmIGU4IDY4IDQy
-IDA0IDAwIDQ4IDhiIGJiIGYwIDc0IDAxIDAwIGI4IGZmIGZmIGZmIGZmIDxmMD4gMGYgYzEg
-MDcgODMgZjggMDEgNzQgNGMgODUgYzAgMGYgOGUgYzMgMDAgMDAgMDAgNDggYzcgODMgZjAg
-NzQKWyAgICA5LjY3NzE4NF0gUlNQOiAwMDE4OmZmZmZiYTBlYzBlMTdiMjggRUZMQUdTOiAw
-MDAxMDI0NgpbICAgIDkuNjc4OTc5XSBSQVg6IDAwMDAwMDAwZmZmZmZmZmYgUkJYOiBmZmZm
-OWMzMWMzZTAwMDAwIFJDWDogMDAwMDAwMDAwMDAwMDAwMApbICAgIDkuNjgwNzc0XSBSRFg6
-IDAwMDAwMDAwMDAwMzA1YzAgUlNJOiAwMDAwMDAwMDAwMDAwMDAwIFJESTogMDAwMDAwMDAw
-MDAwMDAwMApbICAgIDkuNjgyNTQ1XSBSQlA6IGZmZmY5YzMxYzNlMDAwMTAgUjA4OiBmZmZm
-YmEwZWMwZTE3YmE4IFIwOTogZmZmZjljMzFjMDFjZDlkMApbICAgIDkuNjg0MjU2XSBSMTA6
-IDAwMDAwMDAwMDAwMDAwMmEgUjExOiBmZmZmOWMzMWM1ZDNjNmQ4IFIxMjogZmZmZmJhMGVj
-MGUxN2JhOApbICAgIDkuNjg1OTgwXSBSMTM6IGZmZmY5YzMxYzEwNTYwZDAgUjE0OiBmZmZm
-OWMzMWMxMDU2Mzc0IFIxNTogZmZmZmJhMGVjMGUxN2RiMApbICAgIDkuNjg3NjYxXSBGUzog
-IDAwMDA3ZmViYWM0YjYwODAoMDAwMCkgR1M6ZmZmZjljMzhiZWNjMDAwMCgwMDAwKSBrbmxH
-UzowMDAwMDAwMDAwMDAwMDAwClsgICAgOS42ODkzOTRdIENTOiAgMDAxMCBEUzogMDAwMCBF
-UzogMDAwMCBDUjA6IDAwMDAwMDAwODAwNTAwMzMKWyAgICA5LjY5MTA5NV0gQ1IyOiAwMDAw
-MDAwMDAwMDAwMDAwIENSMzogMDAwMDAwMDEwNmIyYTAwMCBDUjQ6IDAwMDAwMDAwMDAwNDA2
-ZTAKWyAgICA5LjY5NTY5OF0gU1ZNOiBUU0Mgc2NhbGluZyBzdXBwb3J0ZWQKWyAgICA5LjY5
-NzM4OF0ga3ZtOiBOZXN0ZWQgVmlydHVhbGl6YXRpb24gZW5hYmxlZApbICAgIDkuNjk5MTMy
-XSBTVk06IGt2bTogTmVzdGVkIFBhZ2luZyBlbmFibGVkClsgICAgOS43MDA4MTZdIFNWTTog
-TEJSIHZpcnR1YWxpemF0aW9uIHN1cHBvcnRlZApbICAgIDkuNzYzODUyXSBNQ0U6IEluLWtl
-cm5lbCBNQ0UgZGVjb2RpbmcgZW5hYmxlZC4KCg==
-
---------------0cWz90enQgBH9CiuvT25DDyM--

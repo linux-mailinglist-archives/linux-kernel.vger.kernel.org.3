@@ -2,154 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386995603CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75A9F5603D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbiF2PFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 11:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
+        id S233354AbiF2PGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 11:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiF2PE6 (ORCPT
+        with ESMTP id S232156AbiF2PGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 11:04:58 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579F59FE7
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 08:04:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656515097; x=1688051097;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7eAnJIHWyOFB5EOuayi5Sk5n3trLR8ejcLuLMPW2Au0=;
-  b=MKxuzWhxczlzZhJoEQSylIhxiofo0UGOkd4szXMfElA2S0ohsZQISntG
-   py2YJY8VZ56tvGLus2sbvH4OK2M0wKu6c5pknbccveSdjTDe3ssYaBdot
-   3EarIHWYdZIwLCYuBEEk2Uut9KXjpDGwEedhtE7Tmkt5LmYlN6GhhoF+S
-   xJzB/tBXIY9gquKsrWMNOIEfxKgj7tc1NgmjpgvzYfvO9A/94Q9rYtFKk
-   krqsKTPvNUrpsf6YHcmvt3sRncBpnMaFnINpejgjWMMKvcaXDwJIX3vJN
-   qfy8+SIfILcIcDoH4oSyrbVs7A80Ev8Amx6eh+MsLrk8QcDtXmwfQGfWa
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="282788409"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="282788409"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 08:04:30 -0700
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="917633192"
-Received: from jwacker-mobl.amr.corp.intel.com (HELO [10.213.178.109]) ([10.213.178.109])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 08:04:29 -0700
-Message-ID: <352fac7e-597c-84af-d33b-bdff0e2acdb6@linux.intel.com>
-Date:   Wed, 29 Jun 2022 10:03:02 -0500
+        Wed, 29 Jun 2022 11:06:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3141512762
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 08:06:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656515192;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rVgaRC1iHp+TixDi6SmECfMb1vkUScvqSyrOozckYA8=;
+        b=c2JvxTPOpH0/EG76RE8PvHG/SnsCsh5edWUkxgitBBuuQu4SV63/U13XnULJwTQE1eripW
+        VABa9uO/99VD8iSfXTY2UUCssJ188Pzr17UCxqb3vbw0i8MaZ7InDxDm2W4jXmwteoyCp+
+        Wp+Ftr3mdFzPVVvecttyTpeMUxh33/o=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-306-wJTPDIUQMzivuzqhkwJ-wA-1; Wed, 29 Jun 2022 11:06:29 -0400
+X-MC-Unique: wJTPDIUQMzivuzqhkwJ-wA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 593781C0898F;
+        Wed, 29 Jun 2022 15:06:28 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.192.126])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A347040EC002;
+        Wed, 29 Jun 2022 15:06:26 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/28] KVM: VMX: Support TscScaling and EnclsExitingBitmap with eVMCS + use vmcs_config for L1 VMX MSRs
+Date:   Wed, 29 Jun 2022 17:05:57 +0200
+Message-Id: <20220629150625.238286-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.10.0
-Subject: Re: [PATCH 2/4] ASoC: codecs: add wsa883x amplifier support
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        broonie@kernel.org
-Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, tiwai@suse.com
-References: <20220629090644.67982-1-srinivas.kandagatla@linaro.org>
- <20220629090644.67982-3-srinivas.kandagatla@linaro.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220629090644.67982-3-srinivas.kandagatla@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series combines previously sent:
+- "[PATCH 00/11] KVM: VMX: Support TscScaling and EnclsExitingBitmap
+ with eVMCS" 
+(https://lore.kernel.org/kvm/20220621155830.60115-1-vkuznets@redhat.com/)
+and 
+- "[PATCH 00/14] KVM: nVMX: Use vmcs_config for setting up nested VMX MSRs"
+(https://lore.kernel.org/kvm/20220627160440.31857-1-vkuznets@redhat.com/)
 
-> +/* 4 ports */
-> +static struct sdw_dpn_prop wsa_sink_dpn_prop[WSA883X_MAX_SWR_PORTS] = {
-> +	{
-> +		/* DAC */
-> +		.num = 1,
-> +		.type = SDW_DPN_SIMPLE,
-> +		.min_ch = 1,
-> +		.max_ch = 1,
-> +		.simple_ch_prep_sm = true,
-> +		.read_only_wordlength = true,
-> +	}, {
+this is done to address Jim's concern that any changes to L1 VMX control
+MSRs will inevitably break live migration. This version should not produce
+changes.
 
-nit-pick: it's unusual to see such opening brackets for structure
-initialization, usually there are on a new line.
+Original description:
 
-> +		/* COMP */
-> +		.num = 2,
-> +		.type = SDW_DPN_SIMPLE,
-> +		.min_ch = 1,
-> +		.max_ch = 1,
-> +		.simple_ch_prep_sm = true,
-> +		.read_only_wordlength = true,
-> +	}, {
-> +		/* BOOST */
-> +		.num = 3,
-> +		.type = SDW_DPN_SIMPLE,
-> +		.min_ch = 1,
-> +		.max_ch = 1,
-> +		.simple_ch_prep_sm = true,
-> +		.read_only_wordlength = true,
-> +	}, {
-> +		/* VISENSE */
-> +		.num = 4,
-> +		.type = SDW_DPN_SIMPLE,
-> +		.min_ch = 1,
-> +		.max_ch = 1,
-> +		.simple_ch_prep_sm = true,
-> +		.read_only_wordlength = true,
-> +	}
-> +};
+Enlightened VMCS v1 definition was updates to include fields for the
+following features:
+    - PerfGlobalCtrl
+    - EnclsExitingBitmap
+    - TSC scaling
+    - GuestLbrCtl
+    - CET
+    - SSP
 
-> +static int wsa883x_update_status(struct sdw_slave *slave,
-> +				 enum sdw_slave_status status)
-> +{
-> +	struct wsa883x_priv *wsa883x = dev_get_drvdata(&slave->dev);
-> +
-> +	if (status == SDW_SLAVE_ATTACHED && slave->dev_num > 0)
+Add support for EnclsExitingBitmap and TSC scaling to KVM. PerfGlobalCtrl 
+doesn't work correctly with Win11, don't enable it yet. SSP, CET and 
+GuestLbrCtl are not currently supported by KVM.
 
-do you actually need to test if slave->dev_num is > 0?
+Note: adding new field for KVM on Hyper-V case is easy but adding them to
+Hyper-V on KVM requires some work to not break live migration as we never
+expected this to happen without eVMCS version update. The series introduces
+new KVM_CAP_HYPERV_ENLIGHTENED_VMCS2 capability and a notion of KVM 
+internal 'Enlightened VMCS revision'.
 
-if I look at drivers/soundwire/bus.c, update_status cannot really be
-invoked with dev_num == 0.
+While on it, implement Sean's idea to use vmcs_config for setting up
+L1 VMX control MSRs instead of re-reading host MSRs.
 
-> +		wsa883x_init(wsa883x);
-> +
-> +	return 0;
-> +}
-> +
+Sean Christopherson (1):
+  KVM: VMX: Clear controls obsoleted by EPT at runtime, not setup
 
-> +static int __maybe_unused wsa883x_runtime_resume(struct device *dev)
-> +{
-> +	struct sdw_slave *slave = dev_to_sdw_dev(dev);
-> +	struct regmap *regmap = dev_get_regmap(dev, NULL);
-> +	struct wsa883x_priv *wsa883x = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	ret = regulator_enable(wsa883x->vdd);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to enable vdd regulator (%d)\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	gpiod_direction_output(wsa883x->sd_n, 1);
-> +
-> +	wait_for_completion_timeout(&slave->initialization_complete,
-> +				    msecs_to_jiffies(WSA883X_PROBE_TIMEOUT));
+Vitaly Kuznetsov (27):
+  KVM: x86: hyper-v: Expose access to debug MSRs in the partition
+    privilege flags
+  x86/hyperv: Fix 'struct hv_enlightened_vmcs' definition
+  x86/hyperv: Update 'struct hv_enlightened_vmcs' definition
+  KVM: VMX: Define VMCS-to-EVMCS conversion for the new fields
+  KVM: nVMX: Support several new fields in eVMCSv1
+  KVM: nVMX: Introduce KVM_CAP_HYPERV_ENLIGHTENED_VMCS2
+  KVM: selftests: Switch to KVM_CAP_HYPERV_ENLIGHTENED_VMCS2
+  KVM: VMX: Support TSC scaling with enlightened VMCS
+  KVM: selftests: Add ENCLS_EXITING_BITMAP{,HIGH} VMCS fields
+  KVM: selftests: Switch to updated eVMCSv1 definition
+  KVM: selftests: Enable TSC scaling in evmcs selftest
+  KVM: VMX: Enable VM_{EXIT,ENTRY}_LOAD_IA32_PERF_GLOBAL_CTRL for KVM on
+    Hyper-V
+  KVM: VMX: Get rid of eVMCS specific VMX controls sanitization
+  KVM: VMX: Check VM_ENTRY_IA32E_MODE in setup_vmcs_config()
+  KVM: VMX: Check CPU_BASED_{INTR,NMI}_WINDOW_EXITING in
+    setup_vmcs_config()
+  KVM: VMX: Tweak the special handling of SECONDARY_EXEC_ENCLS_EXITING
+    in setup_vmcs_config()
+  KVM: VMX: Extend VMX controls macro shenanigans
+  KVM: VMX: Move CPU_BASED_CR8_{LOAD,STORE}_EXITING filtering out of
+    setup_vmcs_config()
+  KVM: VMX: Add missing VMEXIT controls to vmcs_config
+  KVM: VMX: Add missing VMENTRY controls to vmcs_config
+  KVM: VMX: Add missing CPU based VM execution controls to vmcs_config
+  KVM: VMX: Move LOAD_IA32_PERF_GLOBAL_CTRL errata handling out of
+    setup_vmcs_config()
+  KVM: nVMX: Use sanitized allowed-1 bits for VMX control MSRs
+  KVM: VMX: Store required-1 VMX controls in vmcs_config
+  KVM: nVMX: Use sanitized required-1 bits for VMX control MSRs
+  KVM: VMX: Cache MSR_IA32_VMX_MISC in vmcs_config
+  KVM: nVMX: Use cached host MSR_IA32_VMX_MISC value for setting up
+    nested MSR
 
-check for success? You don't want to enable regmap sync below if the
-device never successfully attached and initialized.
+ Documentation/virt/kvm/api.rst                |  43 ++-
+ arch/x86/include/asm/hyperv-tlfs.h            |  19 +-
+ arch/x86/include/asm/kvm_host.h               |   2 +-
+ arch/x86/kvm/hyperv.c                         |   1 +
+ arch/x86/kvm/vmx/capabilities.h               |  16 +-
+ arch/x86/kvm/vmx/evmcs.c                      | 135 ++++++---
+ arch/x86/kvm/vmx/evmcs.h                      |  34 ++-
+ arch/x86/kvm/vmx/nested.c                     |  80 ++++--
+ arch/x86/kvm/vmx/nested.h                     |   2 +-
+ arch/x86/kvm/vmx/vmx.c                        | 269 +++++++++---------
+ arch/x86/kvm/vmx/vmx.h                        | 133 ++++++++-
+ arch/x86/kvm/x86.c                            |  15 +-
+ include/asm-generic/hyperv-tlfs.h             |   2 +
+ include/uapi/linux/kvm.h                      |   3 +-
+ .../selftests/kvm/include/kvm_util_base.h     |   8 +
+ .../selftests/kvm/include/x86_64/evmcs.h      |  46 ++-
+ .../selftests/kvm/include/x86_64/vmx.h        |   2 +
+ tools/testing/selftests/kvm/lib/x86_64/vmx.c  |   5 +-
+ .../testing/selftests/kvm/x86_64/evmcs_test.c |  33 ++-
+ .../selftests/kvm/x86_64/hyperv_cpuid.c       |   2 +-
+ .../kvm/x86_64/vmx_set_nested_state_test.c    |   2 +-
+ 21 files changed, 597 insertions(+), 255 deletions(-)
 
-> +
-> +	usleep_range(20000, 20010);
-> +	regcache_cache_only(regmap, false);
-> +	regcache_sync(regmap);
-> +
-> +	return 0;
-> +}
+-- 
+2.35.3
 

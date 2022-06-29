@@ -2,88 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66300560B1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 22:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA53560B03
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 22:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbiF2UgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 16:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+        id S230197AbiF2U2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 16:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiF2UgI (ORCPT
+        with ESMTP id S229635AbiF2U2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 16:36:08 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 733CA313BD;
-        Wed, 29 Jun 2022 13:36:06 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 25TKS467028346;
-        Wed, 29 Jun 2022 15:28:04 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 25TKS1wF028345;
-        Wed, 29 Jun 2022 15:28:01 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Wed, 29 Jun 2022 15:28:01 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Ash Logan <ash@heyquark.com>, krzysztof.kozlowski+dt@linaro.org,
-        paulus@samba.org, mpe@ellerman.id.au, christophe.leroy@csgroup.eu,
-        robh+dt@kernel.org, benh@kernel.crashing.org,
-        devicetree@vger.kernel.org, linkmauve@linkmauve.fr,
-        linux-kernel@vger.kernel.org, rw-r-r-0644@protonmail.com,
-        joel@jms.id.au, linuxppc-dev@lists.ozlabs.org, j.ne@posteo.net
-Subject: Re: [PATCH v3 02/12] powerpc: wiiu: device tree
-Message-ID: <20220629202800.GJ25951@gate.crashing.org>
-References: <20220622131037.57604-1-ash@heyquark.com> <20220628133144.142185-1-ash@heyquark.com> <20220628133144.142185-3-ash@heyquark.com> <c760e444-57c3-0e1a-0e4d-f79d6ae9867a@linaro.org> <20220629161302.GG25951@gate.crashing.org> <908e7555-0090-84fe-4227-d6b349de1394@linaro.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <908e7555-0090-84fe-4227-d6b349de1394@linaro.org>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 29 Jun 2022 16:28:35 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675AC14D38
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 13:28:34 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id i126so2737538oih.4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 13:28:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KimsAoqWoBrckvrcWpjK4MOnhaDZP2RBKEz3EuP/iv0=;
+        b=QHei7/5WL4hfbeuAzCg4LaoNAqlQ2HGQMzjAP0kBgkQJ5H5joM7A64WoPajiwd+Nx+
+         s8o6ZDbyUw3coAAFdaWkwagdkTSSy1V8gYj4lxaqO5xIl/hMMi+/fHzAC9NonvcY3W1f
+         2gqs9vB5JhKGTIuVKeWbwQZm+OsR+mz+BNOj2QNi1zChQxJmCUPTSe8nuZ2yQMuVFm1o
+         +0/vMxfMP4wnXc8B7vxMS7GzZ9xZyhUZGsX9znUXgHwJ2xuNicMKx/yljOJGxVFX2rl3
+         0r6zYQ2nC6gKwjNIGKM2m2qvFc3EVDsP6dvht4lpI0Z1w9EcKX74Huo1hSapRM2+8xFX
+         7sWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KimsAoqWoBrckvrcWpjK4MOnhaDZP2RBKEz3EuP/iv0=;
+        b=1jYPsLbJgCHOXPErSq0qzGd2sz5CaHVj4u3Gk82JFad2QIPgOkxdfar2ONDWAU1soG
+         s13ZVRiMYyPElt6LCPiUpoWbTl+ev2Zptncf+1H+3Yd378I6wzFyYVBshEU0eznndBKt
+         rd3A2GhS0dB80dCz2ImwsFAgrRNgVfjdwRjCUi0cDLnNLTk8jfp14Sc6BD2IA2H/2N59
+         Yr1CD3ez2FG8Twn/eSnqpYeIPD04vtQz2b/69W34Ic5jZlriCAgM9ofIQUep0ciHDKMe
+         +w4fQiM8jpsqsCpO7IdnxWtyT4OSSCy3AHaijUMTZ2RIvEfsNSr8SRW6VnD+RsoSlJM8
+         3/dA==
+X-Gm-Message-State: AJIora90lvdxXXRr8KOAAHY1KSl3RQ42UBigMiGY3aDnhNrtGIX2HZiQ
+        4nomyBhSzqfyQzWzQH4tmd4e2UU6dGJ1RTv9A/V4YA==
+X-Google-Smtp-Source: AGRyM1u0hjO1hiivU9zp5lyMVFAHT9bs3enwDIbNjIaz38j/SCm8ezqQYsGur2WDnSfxG9bJLrv+n90SrLQNKQ6uMrQ=
+X-Received: by 2002:a05:6808:2124:b0:335:7483:f62d with SMTP id
+ r36-20020a056808212400b003357483f62dmr4297123oiw.112.1656534513612; Wed, 29
+ Jun 2022 13:28:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220629150625.238286-1-vkuznets@redhat.com> <20220629150625.238286-15-vkuznets@redhat.com>
+In-Reply-To: <20220629150625.238286-15-vkuznets@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 29 Jun 2022 13:28:22 -0700
+Message-ID: <CALMp9eRZAJ3srAtEXFy2nZ4ms9xPz=Zqi6B=tXo9_kHRLvoAMg@mail.gmail.com>
+Subject: Re: [PATCH v2 14/28] KVM: VMX: Check VM_ENTRY_IA32E_MODE in setup_vmcs_config()
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 08:13:13PM +0200, Krzysztof Kozlowski wrote:
-> On 29/06/2022 18:13, Segher Boessenkool wrote:
-> > On Wed, Jun 29, 2022 at 11:58:18AM +0200, Krzysztof Kozlowski wrote:
-> >>> +		/* TODO: Add SMP */
-> >>> +		PowerPC,espresso@0 {
-> >>
-> >> Node name should be generic, so "cpu". Unless something needs the
-> >> specific node name?
-> > 
-> > This is how most other PowerPC firmwares do it.  The PowerPC processor
-> > binding is older than the generic naming practice, so CPU nodes have
-> > device_type "cpu" instead.  
-> 
-> ePAPR 1.0 from 2008 explicitly asks for generic node names. So 4 years
-> before Nintento Wii U. Maybe earlier ePAPR-s were also asking for this,
-> no clue, don't have them.
+On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+>
+> VM_ENTRY_IA32E_MODE control is toggled dynamically by vmx_set_efer()
+> and setup_vmcs_config() doesn't check its existence. On the contrary,
+> nested_vmx_setup_ctls_msrs() doesn set it on x86_64. Add the missing
+> check and filter the bit out in vmx_vmentry_ctrl().
+>
+> No (real) functional change intended as all existing CPUs supporting
+> long mode and VMX are supposed to have it.
+>
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/vmx/vmx.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 83feb70d44a9..da8bbba38d0e 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -2610,6 +2610,9 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+>                 _pin_based_exec_control &= ~PIN_BASED_POSTED_INTR;
+>
+>         min = VM_ENTRY_LOAD_DEBUG_CONTROLS;
+> +#ifdef CONFIG_X86_64
+> +       min |= VM_ENTRY_IA32E_MODE;
+> +#endif
+>         opt = VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL |
+>               VM_ENTRY_LOAD_IA32_PAT |
+>               VM_ENTRY_LOAD_IA32_EFER |
+> @@ -4242,9 +4245,15 @@ static u32 vmx_vmentry_ctrl(void)
+>         if (vmx_pt_mode_is_system())
+>                 vmentry_ctrl &= ~(VM_ENTRY_PT_CONCEAL_PIP |
+>                                   VM_ENTRY_LOAD_IA32_RTIT_CTL);
+> -       /* Loading of EFER and PERF_GLOBAL_CTRL are toggled dynamically */
+> -       return vmentry_ctrl &
+> -               ~(VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL | VM_ENTRY_LOAD_IA32_EFER);
+> +       /*
+> +        * Loading of EFER, VM_ENTRY_IA32E_MODE, and PERF_GLOBAL_CTRL
+> +        * are toggled dynamically.
+> +        */
+Nit: Previously, this could be read as "loading of (EFER and
+PERF_GLOBAL_CTRL)." Since "loading" doesn't apply to IA32e mode,
+you've lost "loading" of PERF_GLOBAL_CONTROL. Also, why drop the
+VM_ENTRY prefix from the MSRs and not from IA32e mode?
+Perhaps:
 
-The majority of PowerPC 750 systems long predate that.  Many *current*
-systems implement the PowerPC Processor Binding, too (not the epapr
-thing, which is incompatible with the older standards!)
+/*
+ * IA32e mode, and loading of EFER and PERF_GLOBAL_CTRL are toggled dynamically.
+ */
 
-> > There is no added value in generic naming for CPU nodes anyway, since
-> > you just find them as the children of the "/cpus" node :-)
-> 
-> There is because you might have there caches. It also makes code easier
-> to read.
-
-In the processor binding the cache nodes were subnodes of cpu nodes or
-other cache nodes.  But in some server products you can have cache that
-is enabled while the corresponding core is disabled; and also, not all
-cache belongs to only one higher level anyway.  This was modelled pretty
-uncleanly, yup (cleaner would have been to have a /caches node as well
-as /cpus, for example).
-
-But on 750 you just have "l2-cache" subnodes, and all nodes in /cpus are
-CPUs :-)
-
-
-Segher
+> +       vmentry_ctrl &= ~(VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL |
+> +                         VM_ENTRY_LOAD_IA32_EFER |
+> +                         VM_ENTRY_IA32E_MODE);
+> +
+> +       return vmentry_ctrl;
+>  }
+>
+>  static u32 vmx_vmexit_ctrl(void)
+> --
+> 2.35.3
+>
+Reviewed-by: Jim Mattson <jmattson@google.com>

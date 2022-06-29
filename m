@@ -2,65 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7450855F3AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 05:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EE155F3B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 05:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbiF2DCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 23:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36854 "EHLO
+        id S229949AbiF2DIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 23:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbiF2DCt (ORCPT
+        with ESMTP id S229455AbiF2DIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 23:02:49 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A57326F0
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 20:02:49 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id m14-20020a17090a668e00b001ee6ece8368so8644817pjj.3
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 20:02:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fK+F1u9+R3REeVl0kt+G63d+2/3HR03h+p6LZBEkA/Y=;
-        b=lhJYJIxJeBxCVZn0m1eQwAN9git5rHLIK+iQxEvSUSMjeNDO9QIjA2j1nSTCZenY8H
-         XbePQ6iu2/ULvSHxwtmnZtR4m3zBdT3dKjL/mm2W57AxFI8SzMVijOjSAwUAlJafzc56
-         z1JAgTncAo+SZOfhfS7H5WyhF4ZieleY9g56qDuGH7WHBk85YJn5xRyTGlc5r93ibaNi
-         beXvhRHnRwpRnv/GXyjAXUh2Qad3ggjbkCfTzJS0samn+i/TM+dBzcJs79Qa8d0EDDQZ
-         DWy1r7EPtosH/iOT+pIDbAP9PazMGukwRCekQ6RCMc1dAiBFbzAQfsrQsvqclaZHVBq5
-         cKUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fK+F1u9+R3REeVl0kt+G63d+2/3HR03h+p6LZBEkA/Y=;
-        b=zATuU3QX8gnnSNVkg5Qn5jRaQLHfswbQJaB9uhakx51D0ltqL7+smQ8wSpEmpZ7lng
-         XcbqSIOTzk28EoLzN7hni6DvZEjU8YOYORDNyzazGFEH2LJnzCwaMajSOPP+seJNPB2P
-         sapTH4DAXH57R+1XBS0OsXPaZY3+JFQukMG1b8hKUYPWXlsfTsDstf6jJRwECjXDiqFH
-         UxJdF1HzNT01BXNvnP7dqjfTmPxWIW2mxBQLImEAc+OSuxaSt5GdfH+xtBDsXIYNwuRj
-         smS8xfCc4xRXw2f9gCr+75uBYNo8SzO/8slcE6+uUBqmgOjbwASNMBauYZfYTKftNy1b
-         fwoA==
-X-Gm-Message-State: AJIora+HJj30RnAvpulslrjdR+4OxTxWwMZBCqwvxO9HZHuciNx0kPYs
-        WfE9J6iAY3sVLMaS1YMNUTMuIa2C7kg=
-X-Google-Smtp-Source: AGRyM1u0wyhhV8Tj6BcuTGK3K6B2oQmfH2LBfJbboD67qApOw0Q2KjoNW+ixdImBlST0v/YICznxLQ==
-X-Received: by 2002:a17:90b:1210:b0:1ec:7f2e:4218 with SMTP id gl16-20020a17090b121000b001ec7f2e4218mr1321075pjb.69.1656471768659;
-        Tue, 28 Jun 2022 20:02:48 -0700 (PDT)
-Received: from C02FG34WMD6R.bytedance.net ([61.120.150.69])
-        by smtp.gmail.com with ESMTPSA id y67-20020a626446000000b0051bd9981cacsm10163436pfb.123.2022.06.28.20.02.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 20:02:48 -0700 (PDT)
-From:   wuchi <wuchi.zero@gmail.com>
-To:     maorg@nvidia.com, ming.lei@redhat.com, hch@lst.de,
-        akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] lib/scatterlist: use matched parameter type when call __sg_free_table
-Date:   Wed, 29 Jun 2022 11:02:41 +0800
-Message-Id: <20220629030241.84559-1-wuchi.zero@gmail.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Tue, 28 Jun 2022 23:08:49 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B9EE1101E0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 20:08:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 78D9B152B;
+        Tue, 28 Jun 2022 20:08:47 -0700 (PDT)
+Received: from [10.162.41.8] (unknown [10.162.41.8])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1EBA83F5A1;
+        Tue, 28 Jun 2022 20:08:43 -0700 (PDT)
+Message-ID: <1a29ad01-92b0-ed4f-55d6-f2a94d610ab1@arm.com>
+Date:   Wed, 29 Jun 2022 08:38:40 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v5] memblock,arm64: Expand the static memblock memory
+ table
+Content-Language: en-US
+To:     Zhou Guanghui <zhouguanghui1@huawei.com>,
+        akpm@linux-foundation.org, rppt@kernel.org, will@kernel.org,
+        darren@os.amperecomputing.com
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, xuqiang36@huawei.com
+References: <20220615102742.96450-1-zhouguanghui1@huawei.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220615102742.96450-1-zhouguanghui1@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,39 +48,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit <4635873c561a> (scsi: lib/sg_pool.c: improve APIs for
-allocating sg pool) had change @(bool)skip_first_chunk of
-__sg_free_table to @(unsigned int)nents_first_chunk, so use unsigend
-int type instead of bool type (false -> 0) when call the function in
-sg_free_append_table and sg_free_table.
 
-Signed-off-by: wuchi <wuchi.zero@gmail.com>
----
- lib/scatterlist.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/lib/scatterlist.c b/lib/scatterlist.c
-index d5e82e4a57ad..c8c3d675845c 100644
---- a/lib/scatterlist.c
-+++ b/lib/scatterlist.c
-@@ -240,7 +240,7 @@ EXPORT_SYMBOL(__sg_free_table);
-  **/
- void sg_free_append_table(struct sg_append_table *table)
- {
--	__sg_free_table(&table->sgt, SG_MAX_SINGLE_ALLOC, false, sg_kfree,
-+	__sg_free_table(&table->sgt, SG_MAX_SINGLE_ALLOC, 0, sg_kfree,
- 			table->total_nents);
- }
- EXPORT_SYMBOL(sg_free_append_table);
-@@ -253,7 +253,7 @@ EXPORT_SYMBOL(sg_free_append_table);
-  **/
- void sg_free_table(struct sg_table *table)
- {
--	__sg_free_table(table, SG_MAX_SINGLE_ALLOC, false, sg_kfree,
-+	__sg_free_table(table, SG_MAX_SINGLE_ALLOC, 0, sg_kfree,
- 			table->orig_nents);
- }
- EXPORT_SYMBOL(sg_free_table);
--- 
-2.20.1
+On 6/15/22 15:57, Zhou Guanghui wrote:
+> In a system(Huawei Ascend ARM64 SoC) using HBM, a multi-bit ECC error
+> occurs, and the BIOS will mark the corresponding area (for example, 2 MB)
+> as unusable. When the system restarts next time, these areas are not
+> reported or reported as EFI_UNUSABLE_MEMORY. Both cases lead to an
+> increase in the number of memblocks, whereas EFI_UNUSABLE_MEMORY
+> leads to a larger number of memblocks.
+> 
+> For example, if the EFI_UNUSABLE_MEMORY type is reported:
+> ...
+> memory[0x92]    [0x0000200834a00000-0x0000200835bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
+> memory[0x93]    [0x0000200835c00000-0x0000200835dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+> memory[0x94]    [0x0000200835e00000-0x00002008367fffff], 0x0000000000a00000 bytes on node 7 flags: 0x0
+> memory[0x95]    [0x0000200836800000-0x00002008369fffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+> memory[0x96]    [0x0000200836a00000-0x0000200837bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
+> memory[0x97]    [0x0000200837c00000-0x0000200837dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+> memory[0x98]    [0x0000200837e00000-0x000020087fffffff], 0x0000000048200000 bytes on node 7 flags: 0x0
+> memory[0x99]    [0x0000200880000000-0x0000200bcfffffff], 0x0000000350000000 bytes on node 6 flags: 0x0
+> memory[0x9a]    [0x0000200bd0000000-0x0000200bd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+> memory[0x9b]    [0x0000200bd0200000-0x0000200bd07fffff], 0x0000000000600000 bytes on node 6 flags: 0x0
+> memory[0x9c]    [0x0000200bd0800000-0x0000200bd09fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+> memory[0x9d]    [0x0000200bd0a00000-0x0000200fcfffffff], 0x00000003ff600000 bytes on node 6 flags: 0x0
+> memory[0x9e]    [0x0000200fd0000000-0x0000200fd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+> memory[0x9f]    [0x0000200fd0200000-0x0000200fffffffff], 0x000000002fe00000 bytes on node 6 flags: 0x0
+> ...
+> 
+> The EFI memory map is parsed to construct the memblock arrays before
+> the memblock arrays can be resized. As the result, memory regions
+> beyond INIT_MEMBLOCK_REGIONS are lost.
+> 
+> Add a new macro INIT_MEMBLOCK_MEMORY_REGTIONS to replace
+> INIT_MEMBLOCK_REGTIONS to define the size of the static memblock.memory
+> array.
+> 
+> Allow overriding memblock.memory array size with architecture defined
+> INIT_MEMBLOCK_MEMORY_REGIONS and make arm64 to set
+> INIT_MEMBLOCK_MEMORY_REGIONS to 1024 when CONFIG_EFI is enabled.
+> 
+> Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+> Tested-by: Darren Hart <darren@os.amperecomputing.com>
 
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+
+> ---
+>  arch/arm64/include/asm/memory.h |  9 +++++++++
+>  mm/memblock.c                   | 14 +++++++++-----
+>  2 files changed, 18 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+> index 0af70d9abede..ce8614fa376a 100644
+> --- a/arch/arm64/include/asm/memory.h
+> +++ b/arch/arm64/include/asm/memory.h
+> @@ -364,6 +364,15 @@ void dump_mem_limit(void);
+>  # define INIT_MEMBLOCK_RESERVED_REGIONS	(INIT_MEMBLOCK_REGIONS + NR_CPUS + 1)
+>  #endif
+>  
+> +/*
+> + * memory regions which marked with flag MEMBLOCK_NOMAP(for example, the memory
+> + * of the EFI_UNUSABLE_MEMORY type) may divide a continuous memory block into
+> + * multiple parts. As a result, the number of memory regions is large.
+> + */
+> +#ifdef CONFIG_EFI
+> +#define INIT_MEMBLOCK_MEMORY_REGIONS	(INIT_MEMBLOCK_REGIONS * 8)
+> +#endif
+> +
+>  #include <asm-generic/memory_model.h>
+>  
+>  #endif /* __ASM_MEMORY_H */
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index e4f03a6e8e56..7c63571a69d7 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -29,6 +29,10 @@
+>  # define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
+>  #endif
+>  
+> +#ifndef INIT_MEMBLOCK_MEMORY_REGIONS
+> +#define INIT_MEMBLOCK_MEMORY_REGIONS		INIT_MEMBLOCK_REGIONS
+> +#endif
+> +
+>  /**
+>   * DOC: memblock overview
+>   *
+> @@ -55,9 +59,9 @@
+>   * the allocator metadata. The "memory" and "reserved" types are nicely
+>   * wrapped with struct memblock. This structure is statically
+>   * initialized at build time. The region arrays are initially sized to
+> - * %INIT_MEMBLOCK_REGIONS for "memory" and %INIT_MEMBLOCK_RESERVED_REGIONS
+> - * for "reserved". The region array for "physmem" is initially sized to
+> - * %INIT_PHYSMEM_REGIONS.
+> + * %INIT_MEMBLOCK_MEMORY_REGIONS for "memory" and
+> + * %INIT_MEMBLOCK_RESERVED_REGIONS for "reserved". The region array
+> + * for "physmem" is initially sized to %INIT_PHYSMEM_REGIONS.
+>   * The memblock_allow_resize() enables automatic resizing of the region
+>   * arrays during addition of new regions. This feature should be used
+>   * with care so that memory allocated for the region array will not
+> @@ -102,7 +106,7 @@ unsigned long min_low_pfn;
+>  unsigned long max_pfn;
+>  unsigned long long max_possible_pfn;
+>  
+> -static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_REGIONS] __initdata_memblock;
+> +static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_MEMORY_REGIONS] __initdata_memblock;
+>  static struct memblock_region memblock_reserved_init_regions[INIT_MEMBLOCK_RESERVED_REGIONS] __initdata_memblock;
+>  #ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+>  static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS];
+> @@ -111,7 +115,7 @@ static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS
+>  struct memblock memblock __initdata_memblock = {
+>  	.memory.regions		= memblock_memory_init_regions,
+>  	.memory.cnt		= 1,	/* empty dummy entry */
+> -	.memory.max		= INIT_MEMBLOCK_REGIONS,
+> +	.memory.max		= INIT_MEMBLOCK_MEMORY_REGIONS,
+>  	.memory.name		= "memory",
+>  
+>  	.reserved.regions	= memblock_reserved_init_regions,

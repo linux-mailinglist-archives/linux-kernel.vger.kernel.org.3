@@ -2,117 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6F455F41A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 05:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4351B55F421
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 05:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbiF2DYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 23:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        id S231131AbiF2DZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 23:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbiF2DYQ (ORCPT
+        with ESMTP id S231670AbiF2DYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 23:24:16 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32111D8;
-        Tue, 28 Jun 2022 20:24:05 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id h9-20020a17090a648900b001ecb8596e43so14674240pjj.5;
-        Tue, 28 Jun 2022 20:24:05 -0700 (PDT)
+        Tue, 28 Jun 2022 23:24:48 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5610B9FDD
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 20:24:47 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id k129so7103430wme.0
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 20:24:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Fj7BbdljqsoGparCST0EyCcPUKNtLNBlk+LCRCpdJLw=;
-        b=oFx79pTDKe/0K4DzWTg5WbhaY9GMAgsDaFSkH6r1vPW1HFdOJXqGQ5UZxgywHDM3Ir
-         0equTGt8PyPlERIlnTf5/BcxXxzGITpucSE2VIl8CV1o9ehzFCMhzuOGmi45/AK6qG76
-         /8w9TpCEjcwZrf18xju/rDZxtqGU8P6zQ25P+y1i5vCqEbFPPa98WvDxnH8cFtX3sIwJ
-         junUVkx5AYbgAFw0eC61vARiqpw1IzYsntMTivQEIBdgIUJa+1mBXf7au2lMkxwOomRF
-         Tq177jWJbMD53EgF/Vw9Bn+IKNlGCEHOCstQTlq+u9cuVkwNV5MjGVV2oNYBWWI67o+0
-         Kprw==
+        h=message-id:date:mime-version:user-agent:content-language:to:from
+         :subject:content-transfer-encoding;
+        bh=KE6saxt65ck9oabiR4Byg56CPLhDkMes8ZUAXrMKBkw=;
+        b=NKW2ys7nbTvoxjDGsLq5OvosNQoYDwBGQju0Py6a7fUEZKrJ8+yirikFWnIB8Njh01
+         MlMbG87lC7yxkVTQ0jqd6TFNxLWqfv4LAG8CtjHSei9lfD1laxhkNtSU65HSgIpCg/aN
+         qiqa0Mh7iPS11kcs9OoQyY/V81lZF/wShcyWC3PDntEXbH8GiK9U4POFSduLRc5afU0q
+         IWfpLbg9Basr8MSDn9U5Uw4r5hzqpdZKJkjaMA0Vp72Ptx/kX0nn3E/4ddvpsn+C3D7p
+         s4YKaYaxF+H5v0WxLlCVQL6fDfhV4Dkj8VKepz6Y54Gn//Hsq9zpewyLy5/RWjgjr85k
+         Pygg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Fj7BbdljqsoGparCST0EyCcPUKNtLNBlk+LCRCpdJLw=;
-        b=oXJlEWr9GORBnTsXKEBiPrTqXFmJCmxnu7Eo/itHVD/+d2QUCErNnoFyEEHD7Awpxd
-         X9TDcjBEeJqDOZ4b9mHB0EZzkkwaWSfy5wEgTb80yGw+xSpQyjs4sQ3aYFlvrb8eoCad
-         vkr6ZQUdt6PJz6i3XIwBvf0/Tv4YchtzS84riNvnquk7d8VL8etOhqXhDSqAVfAfjWF7
-         q1yTgemMYx5XBdK4fAY7n9Egu3tZMM1sLyXueNBnNgeMpDMZi+SXaX5p87Ly+W+xvUpr
-         asNXkkjYPrAUHA7GXXV4L/WprbOomuAK11H2VPyhlyZROLOJKoD5uaeQtZrPSE5eAU8P
-         +pHw==
-X-Gm-Message-State: AJIora/k8F4rc5Gm/NSxX7x+P6nAq2G1WPW/RjzZYOWwIhVq/ilMxMLm
-        5ZeL2xU9DHpIJqvbZ9Usm0M=
-X-Google-Smtp-Source: AGRyM1vsi7CgNn+hm6JA8nRBvn1UfsHiN+DuVQjG+D41n++oNdHScStsgrICm72S8/mDUKvSMDDq4A==
-X-Received: by 2002:a17:902:a701:b0:16a:65b:f9f1 with SMTP id w1-20020a170902a70100b0016a065bf9f1mr8387462plq.73.1656473045455;
-        Tue, 28 Jun 2022 20:24:05 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-13.three.co.id. [180.214.232.13])
-        by smtp.gmail.com with ESMTPSA id p9-20020a1709026b8900b0016372486febsm10011584plk.297.2022.06.28.20.24.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 20:24:04 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id E4C29103832; Wed, 29 Jun 2022 10:23:59 +0700 (WIB)
-Date:   Wed, 29 Jun 2022 10:23:58 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Alexander Potapenko <glider@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Marco Elver <elver@google.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        kasan-dev@googlegroups.com, linaro-mm-sig@lists.linaro.org,
-        linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mm@kvack.org,
-        linux-pm@vger.kernel.org, linux-sgx@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 00/22] Fix kernel-doc warnings at linux-next
-Message-ID: <YrvFzoH61feRFoxV@debian.me>
-References: <cover.1656409369.git.mchehab@kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:from:subject:content-transfer-encoding;
+        bh=KE6saxt65ck9oabiR4Byg56CPLhDkMes8ZUAXrMKBkw=;
+        b=NAPSOjw0F7djP0nH0fefbRsA27NE7hTRH5FumKuaznblkdLYUgUWW8EL1WO+NDSjeE
+         7GpCOifbRocjp1vOhwwSBrHB2YKoVLCBdL2bjmmwogHw0+7/Hs7xakLxAYWE4lp/T+sa
+         JyAqOfShuqpOpy/1+fNst0gC8SfiIcNJmiZ6p+4ABcC7l37sx0FvLYnH4rPH9QJwDgrq
+         8wHUIq9tdUgbRopW6SoS/2iHdycABjbzbxDUWQBI5sXFeXo8mmWKWr0wgI0VDafpsmcH
+         O4LA8zoKMpgf1yGMHcXSWW6+ewaulyCTYm87Hx+y6EzhSwQdupmxqJCEUPjuBauWnerv
+         tHzg==
+X-Gm-Message-State: AJIora/z3JtEnDrZu0KuQraSB8PTnwn1FmF5z87eWNi/xxUqW650uwX2
+        4TUdNI4d6PyiCRS0XSPva7MSByYg6Zg=
+X-Google-Smtp-Source: AGRyM1vXy3K9NH/YPghiAE0s9tqKrUXTFm9gASlyzWQlE9b1oCmdDZ/DdjfwKMDNAEzHQ+uIKrw5FA==
+X-Received: by 2002:a05:600c:509:b0:3a0:45d9:43e7 with SMTP id i9-20020a05600c050900b003a045d943e7mr1102970wmc.176.1656473085951;
+        Tue, 28 Jun 2022 20:24:45 -0700 (PDT)
+Received: from ?IPV6:2001:8a0:6cc5:7e01:9a40:bbff:fe12:c8fd? ([2001:8a0:6cc5:7e01:9a40:bbff:fe12:c8fd])
+        by smtp.gmail.com with ESMTPSA id z9-20020adfec89000000b0021b89f8662esm14941495wrn.13.2022.06.28.20.24.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 20:24:45 -0700 (PDT)
+Message-ID: <75d51749-06d1-d2b3-8a22-ae72546a72c1@gmail.com>
+Date:   Wed, 29 Jun 2022 04:24:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <cover.1656409369.git.mchehab@kernel.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+From:   =?UTF-8?Q?Andr=c3=a9_Coelho?= <andrealbergaria@gmail.com>
+Subject: bits
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 10:46:04AM +0100, Mauro Carvalho Chehab wrote:
-> As we're currently discussing about making kernel-doc issues fatal when
-> CONFIG_WERROR is enable, let's fix all 60 kernel-doc warnings 
-> inside linux-next:
-> 
+Is it possible that , the bits used by computers, are used as 
+represention of what we want?
 
-To be fair, besides triggering error on kernel-doc warnings, Sphinx
-warnings should also be errors on CONFIG_WERROR.
 
--- 
-An old man doll... just what I always wanted! - Clara
+for example ..suppose arbitrary bits
+
+
+100111111 ---> this correspond to mov 10,$eax
+
+
+101111101 -> another instruction like xgh $eax,$ebx
+
+
+like the bits are a representation of what we want?
+
+
+andre  coelho
+
+
+i want to get cc of answer to this
+

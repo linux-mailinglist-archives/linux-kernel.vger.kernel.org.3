@@ -2,67 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB3B55F346
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB33855F349
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbiF2CMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 22:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
+        id S230422AbiF2CN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 22:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbiF2CMd (ORCPT
+        with ESMTP id S230083AbiF2CN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 22:12:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA26A2CE38;
-        Tue, 28 Jun 2022 19:12:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 555B461CF6;
-        Wed, 29 Jun 2022 02:12:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4246C341CF;
-        Wed, 29 Jun 2022 02:12:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656468751;
-        bh=kBeb5Uw/j5cdFGYwRHmMmUlZSMwzxwbpxsSpXCSep3M=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LjRWHp6YutpgDlkEoNZbTlTjpLtq3ctkRx2/BPSkYoTyqPyf1vbeUkRYl7aVXaLFe
-         nkWK5TljCMJa6ImUJ1mG1/WmeUeaW/s/tRLT1FL5iYuedBygOX5fPBg+AzMAnBAG12
-         JVyQGg0Bvm+JvD4/sOfYmzZGdiUKi9JSh5eVPII9OKI9eLWFgVdfaFj3vuWsifYHy2
-         6vakrGMTWnYcu6Iv66KFV8qNGEpfG8OFb6v2iielwim9MEUxzmj2b5/hNEbuffPbOd
-         +KkqEsQWl+sa0AuPmlfnCyVtIIHoxeDZw5VqT44eybVBx0+t0OJ3NG+/kR1gIQ/J8C
-         Q0ySNX33MLQSw==
-Received: by mail-vk1-f172.google.com with SMTP id 15so6809250vko.13;
-        Tue, 28 Jun 2022 19:12:31 -0700 (PDT)
-X-Gm-Message-State: AJIora9fVa1wkGlU1cAD4HD9y3WB2percLKUTeKNTaf+PncQicUUIvPH
-        Kk0UiccDWQroqRty5eT+HkeeGTQMpGDiEtgv9XY=
-X-Google-Smtp-Source: AGRyM1sDRJWKc6dWVeHElvUlboqPwiwJz5m7zwHa5t+QSM5ZMx0nyhJAV632XFc2O2XkuEmomXUFDLniU28YR8W/XHg=
-X-Received: by 2002:ac5:cdcc:0:b0:36c:547d:d9c4 with SMTP id
- u12-20020ac5cdcc000000b0036c547dd9c4mr3761818vkn.2.1656468750514; Tue, 28 Jun
- 2022 19:12:30 -0700 (PDT)
+        Tue, 28 Jun 2022 22:13:27 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38630F5BB;
+        Tue, 28 Jun 2022 19:13:16 -0700 (PDT)
+X-UUID: 3bb42ca9036f4d1d938a9a2a23169fb1-20220629
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:cf3a56db-bb7b-470a-8d8d-537b2efe5a3d,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:87442a2,CLOUDID:83a6e662-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 3bb42ca9036f4d1d938a9a2a23169fb1-20220629
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 960008906; Wed, 29 Jun 2022 10:13:09 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 29 Jun 2022 10:13:07 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 29 Jun 2022 10:13:07 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Felipe Balbi <balbi@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Pavel Hofman <pavel.hofman@ivitera.com>,
+        "Julian Scheel" <julian@jusst.de>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        "Chunfeng Yun" <chunfeng.yun@mediatek.com>,
+        Yunhao Tian <t123yh.xyz@gmail.com>,
+        xin lin <xin.lin@mediatek.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v2] usb: gadget: f_uac1: add interface association descriptor
+Date:   Wed, 29 Jun 2022 10:13:04 +0800
+Message-ID: <20220629021304.21725-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220628081707.1997728-1-guoren@kernel.org> <20220628081707.1997728-2-guoren@kernel.org>
- <218522c9-97b9-7659-ce31-2dbc4b0c6a60@redhat.com>
-In-Reply-To: <218522c9-97b9-7659-ce31-2dbc4b0c6a60@redhat.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 29 Jun 2022 10:12:19 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRBoAZzjWGJ0zAxv0eqBB-G=V3QHmp6+jXyznmuY6LhCQ@mail.gmail.com>
-Message-ID: <CAJF2gTRBoAZzjWGJ0zAxv0eqBB-G=V3QHmp6+jXyznmuY6LhCQ@mail.gmail.com>
-Subject: Re: [PATCH V7 1/5] asm-generic: ticket-lock: Remove unnecessary atomic_read
-To:     Waiman Long <longman@redhat.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,75 +65,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 2:06 AM Waiman Long <longman@redhat.com> wrote:
->
-> On 6/28/22 04:17, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Remove unnecessary atomic_read in arch_spin_value_unlocked(lock),
-> > because the value has been in lock. This patch could prevent
-> > arch_spin_value_unlocked contend spin_lock data again.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Palmer Dabbelt <palmer@rivosinc.com>
-> > ---
-> >   include/asm-generic/spinlock.h | 4 +++-
-> >   1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
-> > index fdfebcb050f4..f1e4fa100f5a 100644
-> > --- a/include/asm-generic/spinlock.h
-> > +++ b/include/asm-generic/spinlock.h
-> > @@ -84,7 +84,9 @@ static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
-> >
-> >   static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
-> >   {
-> > -     return !arch_spin_is_locked(&lock);
-> > +     u32 val = lock.counter;
-> > +
-> > +     return ((val >> 16) == (val & 0xffff));
-> >   }
-> >
-> >   #include <asm/qrwlock.h>
->
-> lockref.c is the only current user of arch_spin_value_unlocked(). This
-> change is probably OK with this particular use case. Do you have any
-> performance data about the improvement due to this change?
-I don't have performance data and I just check the asm code, previous
-version has an additional unnecessary atomic_read.
+From: xin lin <xin.lin@mediatek.com>
 
-About this point, we've talked before, but I & palmer missed that
-point when we pick peter's patch again.
-https://lore.kernel.org/linux-riscv/YHbmXXvuG442ZDfN@hirez.programming.kicks-ass.net/
-----
-> > +static __always_inline int ticket_value_unlocked(arch_spinlock_t lock)
-> > +{
-> > +       return !ticket_is_locked(&lock);
-> Are you sure to let ticket_is_locked->atomic_read(lock) again, the
-> lock has contained all information?
->
-> return lock.tickets.owner == lock.tickets.next;
+When we want to use a composite device that supports UVC, UAC1 and
+ADB at the same time, encounter that UAC1 can't work when connected
+to windows 10 system.
+From the online documents of microsoft, "overview of enumeration of
+interface collections on usb composite devices", it recommends that
+vendors use IADs (interface association descriptor) to define
+interface collections.
+After addding IAD, we can fix the issue.
 
-Yeah, I wrote then the wrong way around. Couldn't be bothered to go back
-when I figured it out.
+Signed-off-by: xin lin <xin.lin@mediatek.com>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
-It's just a small typo.
+v2: modify commit log suggested by Greg
+---
+ drivers/usb/gadget/function/f_uac1.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
+diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
+index 6f0e1d803dc2..8390207bc513 100644
+--- a/drivers/usb/gadget/function/f_uac1.c
++++ b/drivers/usb/gadget/function/f_uac1.c
+@@ -71,6 +71,17 @@ static inline struct f_uac1_opts *g_audio_to_uac1_opts(struct g_audio *audio)
+  * ALSA_Playback -> IT_3 -> OT_4 -> USB-IN
+  */
+ 
++static struct usb_interface_assoc_descriptor iad_desc = {
++	.bLength = sizeof(iad_desc),
++	.bDescriptorType = USB_DT_INTERFACE_ASSOCIATION,
++
++	.bFirstInterface = 0,
++	.bInterfaceCount = 3,
++	.bFunctionClass = USB_CLASS_AUDIO,
++	.bFunctionSubClass = 0,
++	.bFunctionProtocol = UAC_VERSION_1,
++};
++
+ /* B.3.1  Standard AC Interface Descriptor */
+ static struct usb_interface_descriptor ac_interface_desc = {
+ 	.bLength =		USB_DT_INTERFACE_SIZE,
+@@ -259,6 +270,7 @@ static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
+ };
+ 
+ static struct usb_descriptor_header *f_audio_desc[] = {
++	(struct usb_descriptor_header *)&iad_desc,
+ 	(struct usb_descriptor_header *)&ac_interface_desc,
+ 	(struct usb_descriptor_header *)&ac_header_desc,
+ 
+@@ -293,6 +305,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
+ };
+ 
+ enum {
++	STR_ASSOC,
+ 	STR_AC_IF,
+ 	STR_USB_OUT_IT,
+ 	STR_USB_OUT_IT_CH_NAMES,
+@@ -310,6 +323,7 @@ enum {
+ 
+ static struct usb_string strings_uac1[] = {
+ 	/* [STR_AC_IF].s = DYNAMIC, */
++	[STR_ASSOC].s = "Source/Sink",
+ 	[STR_USB_OUT_IT].s = "Playback Input terminal",
+ 	[STR_USB_OUT_IT_CH_NAMES].s = "Playback Channels",
+ 	[STR_IO_OUT_OT].s = "Playback Output terminal",
+@@ -1058,6 +1072,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+ 	as_out_header_desc.bTerminalLink = usb_out_it_desc.bTerminalID;
+ 	as_in_header_desc.bTerminalLink = usb_in_ot_desc.bTerminalID;
+ 
++	iad_desc.bInterfaceCount = 1;
+ 	ac_header_desc->wTotalLength = cpu_to_le16(ac_header_desc->bLength);
+ 
+ 	if (EPIN_EN(opts)) {
+@@ -1068,6 +1083,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+ 		if (FUIN_EN(opts))
+ 			len += in_feature_unit_desc->bLength;
+ 		ac_header_desc->wTotalLength = cpu_to_le16(len);
++		iad_desc.bInterfaceCount++;
+ 	}
+ 	if (EPOUT_EN(opts)) {
+ 		u16 len = le16_to_cpu(ac_header_desc->wTotalLength);
+@@ -1077,9 +1093,11 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+ 		if (FUOUT_EN(opts))
+ 			len += out_feature_unit_desc->bLength;
+ 		ac_header_desc->wTotalLength = cpu_to_le16(len);
++		iad_desc.bInterfaceCount++;
+ 	}
+ 
+ 	i = 0;
++	f_audio_desc[i++] = USBDHDR(&iad_desc);
+ 	f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
+ 	f_audio_desc[i++] = USBDHDR(ac_header_desc);
+ 
+@@ -1217,6 +1235,7 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 		}
+ 	}
+ 
++	iad_desc.iFunction = us[STR_ASSOC].id;
+ 	ac_interface_desc.iInterface = us[STR_AC_IF].id;
+ 	usb_out_it_desc.iTerminal = us[STR_USB_OUT_IT].id;
+ 	usb_out_it_desc.iChannelNames = us[STR_USB_OUT_IT_CH_NAMES].id;
+@@ -1302,6 +1321,8 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 	status = usb_interface_id(c, f);
+ 	if (status < 0)
+ 		goto err_free_fu;
++
++	iad_desc.bFirstInterface = status;
+ 	ac_interface_desc.bInterfaceNumber = status;
+ 	uac1->ac_intf = status;
+ 	uac1->ac_alt = 0;
+-- 
+2.18.0
 
->
-> You may have to document that we have to revisit that if another use
-> case shows up.
->
-> Cheers,
-> Longman
->
-
-
---
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/

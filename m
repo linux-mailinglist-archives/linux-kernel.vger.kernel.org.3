@@ -2,68 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4130C55F58F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 07:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A89555F59F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 07:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbiF2FLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 01:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40958 "EHLO
+        id S230520AbiF2FSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 01:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbiF2FLm (ORCPT
+        with ESMTP id S229576AbiF2FSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 01:11:42 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290B82ED7D;
-        Tue, 28 Jun 2022 22:11:40 -0700 (PDT)
-X-UUID: 9a1486d20bb3489990da920137bdb134-20220629
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:2071d344-248b-4313-a445-cbe165339b19,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:87442a2,CLOUDID:a65e0e86-57f0-47ca-ba27-fe8c57fbf305,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 9a1486d20bb3489990da920137bdb134-20220629
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 358576716; Wed, 29 Jun 2022 13:11:35 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 29 Jun 2022 13:11:34 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 29 Jun 2022 13:11:33 +0800
-Message-ID: <9c9e8e796abd339fe755cfa33ea14d137fd51257.camel@mediatek.com>
-Subject: Re: [PATCH v12 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 29 Jun 2022 13:11:33 +0800
-In-Reply-To: <20220627080341.5087-6-rex-bc.chen@mediatek.com>
-References: <20220627080341.5087-1-rex-bc.chen@mediatek.com>
-         <20220627080341.5087-6-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        Wed, 29 Jun 2022 01:18:49 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6393123F;
+        Tue, 28 Jun 2022 22:18:47 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0VHm9GRb_1656479900;
+Received: from localhost(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VHm9GRb_1656479900)
+          by smtp.aliyun-inc.com;
+          Wed, 29 Jun 2022 13:18:43 +0800
+From:   Liu Song <liusong@linux.alibaba.com>
+To:     axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] blk-mq: set BLK_MQ_S_STOPPED first to avoid unexpected queue work
+Date:   Wed, 29 Jun 2022 13:18:20 +0800
+Message-Id: <1656479900-58719-1-git-send-email-liusong@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,63 +36,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
+From: Liu Song <liusong@linux.alibaba.com>
 
-On Mon, 2022-06-27 at 16:03 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This patch adds a embedded displayport driver for the MediaTek mt8195
-> SoC.
-> 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
+In "__blk_mq_delay_run_hw_queue", BLK_MQ_S_STOPPED is checked first,
+and then queue work, but in "blk_mq_stop_hw_queue", execute cancel
+work first and then set BLK_MQ_S_STOPPED, so there is a risk of
+queue work after setting BLK_MQ_S_STOPPED, which can be solved by
+adjusting the order.
 
-[snip]
+Signed-off-by: Liu Song <liusong@linux.alibaba.com>
+---
+ block/blk-mq.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> +
-> +static int link_rate_to_mb_per_s(struct mtk_dp *mtk_dp, u32
-> linkrate)
-> +{
-> +	switch (linkrate) {
-> +	case DP_LINK_BW_1_62:
-> +		return 1620;
-> +	case DP_LINK_BW_2_7:
-> +		return 2700;
-> +	case DP_LINK_BW_5_4:
-> +		return 5400;
-> +	case DP_LINK_BW_8_1:
-> +		return 8100;
-> +	default:
-> +		drm_err(mtk_dp->drm_dev,
-> +			"Implementation error, unknown linkrate %d\n",
-> +			linkrate);
-> +		return -EINVAL;
-> +	}
-> +}
-
-It looks like this function is equal to drm_dp_bw_code_to_link_rate(),
-so remove this function and use drm_dp_bw_code_to_link_rate().
-
-Regards,
-CK
-
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 93d9d60..865915e 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -2258,9 +2258,9 @@ bool blk_mq_queue_stopped(struct request_queue *q)
+  */
+ void blk_mq_stop_hw_queue(struct blk_mq_hw_ctx *hctx)
+ {
+-	cancel_delayed_work(&hctx->run_work);
+-
+ 	set_bit(BLK_MQ_S_STOPPED, &hctx->state);
++
++	cancel_delayed_work(&hctx->run_work);
+ }
+ EXPORT_SYMBOL(blk_mq_stop_hw_queue);
+ 
+-- 
+1.8.3.1
 

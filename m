@@ -2,200 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E755B5603BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BED5603C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233736AbiF2PBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 11:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35284 "EHLO
+        id S233471AbiF2PBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 11:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232012AbiF2PBa (ORCPT
+        with ESMTP id S232618AbiF2PBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 11:01:30 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2372A22B0A;
-        Wed, 29 Jun 2022 08:01:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=Q2BfGExYn9U8rc83KVNyv5vSdkzYMQ0Jg4fv+0NUVZA=; b=k1aAftu1e5qJZGp5/rD6jUOdy1
-        2UKY1XQrv+O1S9wqYrvGaYjIu7bYi1b5W7yfPwAw1xvKnICMv4iHchcpYaTWSDZCzlU1D/Xa3RcPt
-        T85IPso5YuHFVnAoGyzyZ/nrmu52lHlCzYtHp6b2VsLrMf0Tmx43svgYfc6MZuf2rz1BUadEeMQNp
-        6X9uT5FCKr5OL9VtmYeGImuEmDBJauas0susmshk1SywkiFo0Co542trG8zi5slYZHlxTfF2RgC5l
-        FGQiv46GQ/jgUHfF6fxpkxjGleTaKETXgtqMCY59OnQIpRTX2Ep2hYPpxG2hDXQu7L+epiJ4shk9e
-        LZboSPxA==;
-Received: from [2001:4bb8:199:3788:eb09:6317:6452:5395] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o6ZBk-00CcgS-BX; Wed, 29 Jun 2022 15:01:08 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     =?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
-        rcu@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH] remove CONFIG_ANDROID
-Date:   Wed, 29 Jun 2022 17:01:02 +0200
-Message-Id: <20220629150102.1582425-2-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220629150102.1582425-1-hch@lst.de>
-References: <20220629150102.1582425-1-hch@lst.de>
+        Wed, 29 Jun 2022 11:01:50 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4042A25C7A;
+        Wed, 29 Jun 2022 08:01:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656514907; x=1688050907;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AFnpmXUgV9Lobv665HMdU2c+9Hcf3GrmG4/61iUM2Rc=;
+  b=KU09C2pYpASOHrpzAYPa2SrEksyyHuLqo0/7amnDZQW1lK1ZS63MPeW1
+   UEjRBR745sj+epv2rQcOhpIf+Tgv2d4u4OZH6zxyklpDmJQQV95NB/VTz
+   q5US1oL0WPATJNZl0nAFAsai0mHNRs3vUSJxy84f2H/vmT0BmX3GMxTA+
+   kSh0wMM3Wac4gAhD8hk6Vmw9EHNcbIQCDSdLxNeDZAq+h1zdAvuAzmRLG
+   U9KWeg5jj1zjbtWcgH6UrG9YoUrVYOeRFmL3YLxipwFKPYS5Zr78fAAlj
+   DAZUrXmrJWVxptAuc4B5CR/DdR8HjvPVZSQgbM8mv4xE/0lyn5h84t04S
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="180037379"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Jun 2022 08:01:45 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 29 Jun 2022 08:01:43 -0700
+Received: from [10.12.73.52] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Wed, 29 Jun 2022 08:01:40 -0700
+Message-ID: <f641fd0e-2da2-112e-f2fb-f5d89af00587@microchip.com>
+Date:   Wed, 29 Jun 2022 17:01:39 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] dt-bindings: spi: convert spi_atmel to json-schema
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sergiu Moga <sergiu.moga@microchip.com>, <broonie@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>
+CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <claudiu.beznea@microchip.com>,
+        <alexandre.belloni@bootlin.com>,
+        <Kavyasree.Kotagiri@microchip.com>, <UNGLinuxDriver@microchip.com>
+References: <20220629125804.137099-1-sergiu.moga@microchip.com>
+ <a2422718-2ec4-dbad-0245-1d78dbb39f25@linaro.org>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <a2422718-2ec4-dbad-0245-1d78dbb39f25@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ANDROID config symbol is only used to guard the binder config
-symbol and to inject completely random config changes.  Remove it
-as it is obviously a bad idea.
+Sergiu,
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- drivers/Makefile                                    | 2 +-
- drivers/android/Kconfig                             | 9 ---------
- drivers/char/random.c                               | 3 +--
- drivers/net/wireguard/device.c                      | 2 +-
- kernel/configs/android-base.config                  | 1 -
- kernel/rcu/Kconfig.debug                            | 3 +--
- tools/testing/selftests/filesystems/binderfs/config | 1 -
- tools/testing/selftests/sync/config                 | 1 -
- 8 files changed, 4 insertions(+), 18 deletions(-)
+On 29/06/2022 at 15:23, Krzysztof Kozlowski wrote:
+>> +title: Atmel SPI device
+>> +
+>> +maintainers:
+>> +  - Mark Brown<broonie@kernel.org>
+> This should be rather someone from Microchip.
 
-diff --git a/drivers/Makefile b/drivers/Makefile
-index 9a30842b22c54..123dce2867583 100644
---- a/drivers/Makefile
-+++ b/drivers/Makefile
-@@ -176,7 +176,7 @@ obj-$(CONFIG_USB4)		+= thunderbolt/
- obj-$(CONFIG_CORESIGHT)		+= hwtracing/coresight/
- obj-y				+= hwtracing/intel_th/
- obj-$(CONFIG_STM)		+= hwtracing/stm/
--obj-$(CONFIG_ANDROID)		+= android/
-+obj-y				+= android/
- obj-$(CONFIG_NVMEM)		+= nvmem/
- obj-$(CONFIG_FPGA)		+= fpga/
- obj-$(CONFIG_FSI)		+= fsi/
-diff --git a/drivers/android/Kconfig b/drivers/android/Kconfig
-index 53b22e26266c3..07aa8ae0a058c 100644
---- a/drivers/android/Kconfig
-+++ b/drivers/android/Kconfig
-@@ -1,13 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- menu "Android"
- 
--config ANDROID
--	bool "Android Drivers"
--	help
--	  Enable support for various drivers needed on the Android platform
--
--if ANDROID
--
- config ANDROID_BINDER_IPC
- 	bool "Android Binder IPC Driver"
- 	depends on MMU
-@@ -54,6 +47,4 @@ config ANDROID_BINDER_IPC_SELFTEST
- 	  exhaustively with combinations of various buffer sizes and
- 	  alignments.
- 
--endif # if ANDROID
--
- endmenu
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index e3dd1dd3dd226..f35ad1a9dff3e 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -755,8 +755,7 @@ static int random_pm_notification(struct notifier_block *nb, unsigned long actio
- 	spin_unlock_irqrestore(&input_pool.lock, flags);
- 
- 	if (crng_ready() && (action == PM_RESTORE_PREPARE ||
--	    (action == PM_POST_SUSPEND &&
--	     !IS_ENABLED(CONFIG_PM_AUTOSLEEP) && !IS_ENABLED(CONFIG_ANDROID)))) {
-+	    (action == PM_POST_SUSPEND && !IS_ENABLED(CONFIG_PM_AUTOSLEEP)))) {
- 		crng_reseed();
- 		pr_notice("crng reseeded on system resumption\n");
- 	}
-diff --git a/drivers/net/wireguard/device.c b/drivers/net/wireguard/device.c
-index aa9a7a5970fda..de1cc03f7ee86 100644
---- a/drivers/net/wireguard/device.c
-+++ b/drivers/net/wireguard/device.c
-@@ -69,7 +69,7 @@ static int wg_pm_notification(struct notifier_block *nb, unsigned long action, v
- 	 * its normal operation rather than as a somewhat rare event, then we
- 	 * don't actually want to clear keys.
- 	 */
--	if (IS_ENABLED(CONFIG_PM_AUTOSLEEP) || IS_ENABLED(CONFIG_ANDROID))
-+	if (IS_ENABLED(CONFIG_PM_AUTOSLEEP))
- 		return 0;
- 
- 	if (action != PM_HIBERNATION_PREPARE && action != PM_SUSPEND_PREPARE)
-diff --git a/kernel/configs/android-base.config b/kernel/configs/android-base.config
-index eb701b2ac72ff..44b0f0146a3fc 100644
---- a/kernel/configs/android-base.config
-+++ b/kernel/configs/android-base.config
-@@ -7,7 +7,6 @@
- # CONFIG_OABI_COMPAT is not set
- # CONFIG_SYSVIPC is not set
- # CONFIG_USELIB is not set
--CONFIG_ANDROID=y
- CONFIG_ANDROID_BINDER_IPC=y
- CONFIG_ANDROID_BINDER_DEVICES=binder,hwbinder,vndbinder
- CONFIG_ANDROID_LOW_MEMORY_KILLER=y
-diff --git a/kernel/rcu/Kconfig.debug b/kernel/rcu/Kconfig.debug
-index 9b64e55d4f615..e875f4f889656 100644
---- a/kernel/rcu/Kconfig.debug
-+++ b/kernel/rcu/Kconfig.debug
-@@ -86,8 +86,7 @@ config RCU_EXP_CPU_STALL_TIMEOUT
- 	int "Expedited RCU CPU stall timeout in milliseconds"
- 	depends on RCU_STALL_COMMON
- 	range 0 21000
--	default 20 if ANDROID
--	default 0 if !ANDROID
-+	default 0
- 	help
- 	  If a given expedited RCU grace period extends more than the
- 	  specified number of milliseconds, a CPU stall warning is printed.
-diff --git a/tools/testing/selftests/filesystems/binderfs/config b/tools/testing/selftests/filesystems/binderfs/config
-index 02dd6cc9cf992..7b4fc6ee62057 100644
---- a/tools/testing/selftests/filesystems/binderfs/config
-+++ b/tools/testing/selftests/filesystems/binderfs/config
-@@ -1,3 +1,2 @@
--CONFIG_ANDROID=y
- CONFIG_ANDROID_BINDERFS=y
- CONFIG_ANDROID_BINDER_IPC=y
-diff --git a/tools/testing/selftests/sync/config b/tools/testing/selftests/sync/config
-index 47ff5afc37271..64c60f38b4464 100644
---- a/tools/testing/selftests/sync/config
-+++ b/tools/testing/selftests/sync/config
-@@ -1,3 +1,2 @@
- CONFIG_STAGING=y
--CONFIG_ANDROID=y
- CONFIG_SW_SYNC=y
+Tudor Ambarus <tudor.ambarus@microchip.com> is our maintainer for SPI 
+controller, sorry for not having advised you internally about this ;-)
+
+Best regards,
+   Nicolas
+
 -- 
-2.30.2
-
+Nicolas Ferre

@@ -2,85 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911EC55F5E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 07:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A218F55F5EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 07:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiF2F5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 01:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
+        id S230399AbiF2F6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 01:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbiF2F5p (ORCPT
+        with ESMTP id S229789AbiF2F63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 01:57:45 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A06317584
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 22:57:44 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id fi2so30302666ejb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 22:57:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1WfdVfNcXkp3OxFuJuEQhMM39v5eC68bY2ADm6rLKI0=;
-        b=JkUoMSVHOd8FXIU1nP7mHg39NA+HAkmXOBLZHIkIRWjuF2QXpez6vuJMIWGUWFHEby
-         5o4bGCiXixkuKlUlu2olkq0QLN2UOIntPX6lG3+7PbXV+avqVfJ253cahNkw20GGXPeA
-         MHvSKO3EVsTxg+HQtXEwBaZzsvry24d4BvkcEdAr5jVs9aGqW6Xuvyy663JNPBbkngxL
-         ek6xf1/RqwKb2cDwtZy8lrOxsp43tHw2dRO21IpABqGEytjhcHxUraOi/YMWnoRgDrmq
-         fIbCX7sv+Ga3+sPyzf/OYbX6uTY+nt3ooO/FRKAj9IUFTzcd83VY9OMyTF/rzwkUp2rw
-         iYkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1WfdVfNcXkp3OxFuJuEQhMM39v5eC68bY2ADm6rLKI0=;
-        b=zPHv27uopo+JusJNSko3UutXFTf9m1B79XUVnBtNCZ2G6IzXrLKIbvaQqEWeM4HFF6
-         H9qZQ0Fv6HYxHynVnPVORGGcok2lKHP2xy7UPydtyf1O6haiwgEGozgfsMj09uJ3acFI
-         4ofM9ck0BEl6SK0JEJxXEO5j/Rnn6JefVbRPESqNgozIQHHjx7sZuhWmPMzDJ1kzsNvw
-         GyaClk/hvWZx/WJzzDXUC4hD7iD4JHnPGeLKv66JUuGfidkMsJ2lcHO2oPfXUG9f14AV
-         lIYUO3dPRlLgcPsZDbXVGNa1UPisp1rmDNBwGfdkYG6MtnUEeN3GYuyxO5WEz93yC//o
-         VeBg==
-X-Gm-Message-State: AJIora88KYF+XimP9u20c6ruZvdY6lHpt3c0ol7TDMiag89GdaxSRhJJ
-        8iigblCImrtu67m8Bf4f+Qc5EQ==
-X-Google-Smtp-Source: AGRyM1tKY3/ufkVIb0NqXcBrOPVDKBLhqSVvGuyqn+dsBxeoxntoXm1sQv41p5v8Kn71T36sBhLAmA==
-X-Received: by 2002:a17:907:7213:b0:726:9f27:8fc8 with SMTP id dr19-20020a170907721300b007269f278fc8mr1551543ejc.523.1656482262769;
-        Tue, 28 Jun 2022 22:57:42 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id d20-20020aa7ce14000000b00435d4179bbdsm10892308edv.4.2022.06.28.22.57.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 22:57:42 -0700 (PDT)
-Message-ID: <b70e06e7-81fc-dfc1-f9c5-f83cb4a18293@linaro.org>
-Date:   Wed, 29 Jun 2022 07:57:40 +0200
+        Wed, 29 Jun 2022 01:58:29 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D20140DE
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 22:58:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1656482306; x=1688018306;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=S274m18N48qoB/3JOPWD2zir1wX7NK811KrJ3AY/WxM=;
+  b=BTXXQSWyDe6HvkXj5H+CWe6mw5b6X3XoqYP04XWL6+hgUWkcCIAIuiOo
+   dxzuPvw8srKtU3jgFgjdafBmRrHli2VH+/EKoW+TDhHVU9wPlKRC5jwZl
+   QYci6P8GjpB/p2DVYdcmXTItFoBHaHiUtSsEPKGyvjEVJRZOBI9Xsxi46
+   KjiylMq9C4suoMa4CiS6shSbWAbfDlFSTrBpvmlZUjlVdr2M2mF1xsW0Z
+   Fgek63YdZtuFL2eyhc7qgaIfe2B1H/1NZnIb1Hb98LnxydRk6Os3sy39W
+   htMVcQjwaKKnKn9MsunMvAkg5goRe46pZ4wsx8bvAU0/Jf23Pa3++rl/e
+   w==;
+X-IronPort-AV: E=Sophos;i="5.92,230,1650902400"; 
+   d="scan'208";a="209228639"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 29 Jun 2022 13:58:24 +0800
+IronPort-SDR: pfNitHk2Ba/oe7yeo6MV1ZZiTJL6Gl/6+JY+Rz6tF7IsBJusHtkNYZtPW2eIpbmgJBXQVYZ6M7
+ KDjE543QGhLxBdC1wh/He57VNyPewJSw0vsU4+EdtGPFJT0B68X1CZV09LmyL5yiudqeK3gjCC
+ miUAKofJdXY4qiK3GglijZNi7YMAN21ZWNKXtEjKGE1wox0rOdJ2TLjtTdw934UysLar4lhNl0
+ ELOT8AmKaqtxMKFdaYYsFqVP69Ys1gbZGtFUA6O5Gnywg+xBO6k7nWBUAkbr24Mx+NQ9Xrt4rq
+ uoRDW1+AFSmc4x0FQpbR9NF6
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Jun 2022 22:16:04 -0700
+IronPort-SDR: fG9I2kGB99m9wIQ7nifELVSwG83tOrimFpkbr1yQtuGY8I3Y7iDkhexyK016G8CMMkoVOSLgtx
+ /y/DMV/5NzB0+Zgu3mVdxknkzQRFjKLlBtegfiJ/xygqs7l3Ndsvq3cZE5XUbJu/iyMEGYV7Ec
+ yMHPH47WC7STxjRKtR3RWir1hNZ8l9NKzge/dSYUjNcXCdSvRJaCyicDKmdJS7EsNeF4SAQKpf
+ G4zj7MLrhmerwMeVFc/oSIFLa5iNYbRUiDH93yOrRiz3VtZcqGpd0L+MW2ZSLw08CyulorB4LE
+ SOc=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Jun 2022 22:58:26 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LXrNw6z9Qz1Rwnx
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 22:58:24 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1656482304; x=1659074305; bh=S274m18N48qoB/3JOPWD2zir1wX7NK811Kr
+        J3AY/WxM=; b=rZSIxcVazCAwPnit7YiDg5OgUpZgn7oq63L8f4Mx5qqJilG9g8G
+        wV5uGQC6JZ3YwlD5RcmYm+uC8m3errnlZAgp6o7+Qhr7ybMyItuZdVnuPUQq8QEd
+        alfGKsPbawfDl8vhSXqv7ElY5MHblK270Sv+iK4DJTeh1yOW4yY6pE1FPc0SsVS3
+        eEbW6uvondPnaorxx3Tv8sUCSOfC7y2rkIguFVW4kiJALFQpstNM3YhM+lm0p4Sk
+        NjgP4mO0z1H7lo92riFs/zobGTmMpBKf5xdH7qdMRzGY7ovcG58VHmy0idD2F4km
+        cXLdBqiqjM+YDQfvAyxED73TZ7AcaTKdhxg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Ccf8HqPExFq3 for <linux-kernel@vger.kernel.org>;
+        Tue, 28 Jun 2022 22:58:24 -0700 (PDT)
+Received: from [10.225.163.99] (unknown [10.225.163.99])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LXrNt01D4z1RtVk;
+        Tue, 28 Jun 2022 22:58:21 -0700 (PDT)
+Message-ID: <da7027d9-bd81-cfb0-f70e-2405f40023fa@opensource.wdc.com>
+Date:   Wed, 29 Jun 2022 14:58:20 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v5 2/5] dt-bindings: clock: Add AST2500/AST2600 HACE reset
- definition
+Subject: Re: [PATCH v4 5/5] libata-scsi: Cap ata_device->max_sectors according
+ to shost->max_sectors
 Content-Language: en-US
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Dhananjay Phadke <dhphadke@microsoft.com>,
-        Johnny Huang <johnny_huang@aspeedtech.com>
-Cc:     linux-aspeed@lists.ozlabs.org, linux-crypto@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com
-References: <20220629032008.1579899-1-neal_liu@aspeedtech.com>
- <20220629032008.1579899-3-neal_liu@aspeedtech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220629032008.1579899-3-neal_liu@aspeedtech.com>
+To:     Christoph Hellwig <hch@lst.de>, John Garry <john.garry@huawei.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, iommu@lists.linux-foundation.org,
+        iommu@lists.linux.dev, linux-scsi@vger.kernel.org,
+        linuxarm@huawei.com, joro@8bytes.org, will@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        m.szyprowski@samsung.com, robin.murphy@arm.com
+References: <1656343521-62897-1-git-send-email-john.garry@huawei.com>
+ <1656343521-62897-6-git-send-email-john.garry@huawei.com>
+ <b69c6112-98b7-3890-9d11-bb321a7c877a@opensource.wdc.com>
+ <6619638c-52e8-cb67-c56c-9c9d38c18161@huawei.com>
+ <ba59a0da-a982-e3eb-1cb7-6e60f80fd319@opensource.wdc.com>
+ <38ae1cc8-1411-bb54-e082-0f7b91cb9e63@huawei.com>
+ <20220629054027.GB16297@lst.de>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220629054027.GB16297@lst.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,55 +109,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/06/2022 05:20, Neal Liu wrote:
-> Add HACE reset bit definition for AST2500/AST2600.
+On 6/29/22 14:40, Christoph Hellwig wrote:
+> On Tue, Jun 28, 2022 at 12:33:58PM +0100, John Garry wrote:
+>> Well Christoph originally offered to take this series via the dma-mapping 
+>> tree.
+>>
+>> @Christoph, is that still ok with you? If so, would you rather I send this 
+>> libata patch separately?
 > 
-> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> Signed-off-by: Johnny Huang <johnny_huang@aspeedtech.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  include/dt-bindings/clock/aspeed-clock.h  | 3 ++-
->  include/dt-bindings/clock/ast2600-clock.h | 1 +
->  2 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/dt-bindings/clock/aspeed-clock.h b/include/dt-bindings/clock/aspeed-clock.h
-> index 9ff4f6e4558c..6e040f7c3426 100644
-> --- a/include/dt-bindings/clock/aspeed-clock.h
-> +++ b/include/dt-bindings/clock/aspeed-clock.h
-> @@ -46,11 +46,12 @@
->  #define ASPEED_RESET_MCTP		1
->  #define ASPEED_RESET_ADC		2
->  #define ASPEED_RESET_JTAG_MASTER	3
-> -#define ASPEED_RESET_MIC		4
-> +#define ASPEED_RESET_HACE		4
+> The offer still stands, and I don't really care where the libata
+> patch is routed.  Just tell me what you prefer.
 
-I did not ack such change. This is a significant change from previous
-version, invalidating my previous ack.
+If it is 100% independent from the other patches, I can take it.
+Otherwise, feel free to take it !
 
-This breaks the ABI, so NAK without proper explanation why ABI break is
-accepted.
-
->  #define ASPEED_RESET_PWM		5
->  #define ASPEED_RESET_PECI		6
->  #define ASPEED_RESET_I2C		7
->  #define ASPEED_RESET_AHB		8
->  #define ASPEED_RESET_CRT1		9
-> +#define ASPEED_RESET_MIC		18
->  
->  #endif
-> diff --git a/include/dt-bindings/clock/ast2600-clock.h b/include/dt-bindings/clock/ast2600-clock.h
-> index 62b9520a00fd..d8b0db2f7a7d 100644
-> --- a/include/dt-bindings/clock/ast2600-clock.h
-> +++ b/include/dt-bindings/clock/ast2600-clock.h
-> @@ -111,6 +111,7 @@
->  #define ASPEED_RESET_PCIE_RC_O		19
->  #define ASPEED_RESET_PCIE_RC_OEN	18
->  #define ASPEED_RESET_PCI_DP		5
-> +#define ASPEED_RESET_HACE		4
->  #define ASPEED_RESET_AHB		1
->  #define ASPEED_RESET_SDRAM		0
->  
-
-
-Best regards,
-Krzysztof
+-- 
+Damien Le Moal
+Western Digital Research

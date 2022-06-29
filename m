@@ -2,313 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84EC956092B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D98B56092D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231504AbiF2Sb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 14:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44662 "EHLO
+        id S229796AbiF2SdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 14:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiF2Sb0 (ORCPT
+        with ESMTP id S229622AbiF2SdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 14:31:26 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F82E39BA9
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:31:22 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id l2so15279640pjf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:31:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CDVfXBpAEBDJhGnhPCn04tt9xzUzeJTGIg9aUNRDKi0=;
-        b=HJqE+gA5xUv3V1M4HPXDech2JSWzcTlmPCUOkS55QSUuy9lQpIRLChvr6pqrzQh7d8
-         /qvUro79JuQekFvc9KkMLhVNtW8T+ReDU4VeuFWOwy5qkr47QQ71TqHuCT7exSGXAN4E
-         ljXDJoU8viQ5uheFnUXzocJW41t5x/ngrkvjUkAvPRgxNELnQmzMugY/EX/oZhLMXshL
-         rWcVdqqGQzn6n0s0UpjdCvrHr8EQXMUk+trMq2cTCWzF29T+Ob9eAWLBFl/vlBSAe2vR
-         A5LCJ3bmNDOpnbcsB86myd2lJuZDk4fL1Hc4RTXX59QkMBtOn07Y5Y+L1U0f8e88ZqX4
-         cM3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CDVfXBpAEBDJhGnhPCn04tt9xzUzeJTGIg9aUNRDKi0=;
-        b=qDTTI5cNTLW+m6cXUfGDGXTxZbStr3sWpyqpqZtLtJiOKkcmgtTsSDE9cejw3dZnlH
-         2Oswh5XS8eftsv/wWkJ8YpSG3WQE0FnWz55jxzp3ja/6esG/nqP9hvz97ZdYUsjRF7rZ
-         DgNb+99R6gKuUEliGpBbBbQMDJUmw84zZnNgyAEJ84b8ZWyOYQ6mkAYDZeSGux4w6emc
-         O42gBzP+ErrF4ZD0HH80tiX44EsFqzsugm2RAPEAOYwOVBYFu0V4aftdDQLMXKiW+md8
-         e4ota5QTsoLChos/RGDKleGCBsYlWYsfdTrG+TYORk1rGh17eeKesmV9FqATL6rnTCLy
-         9HJg==
-X-Gm-Message-State: AJIora+DSzcC3WaxE56Eh54KnWVqMFqalPvKJzfgMV6B1jJkgZMIbi8B
-        vZlVjmgpqQ3GGdik6tvJP2+gqliRJsyih1YAP+B8bQ==
-X-Google-Smtp-Source: AGRyM1uCe+PfnmbjIgGgKt2vuyMWuT6tPF7Y5tVX5Jwk2bZodZxvORXSCjXUiuS4zBCwNglBiAUxq8mse2sfN+aE+v8=
-X-Received: by 2002:a17:903:2281:b0:16a:674e:8949 with SMTP id
- b1-20020a170903228100b0016a674e8949mr11785575plh.49.1656527481228; Wed, 29
- Jun 2022 11:31:21 -0700 (PDT)
+        Wed, 29 Jun 2022 14:33:11 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C24FE37;
+        Wed, 29 Jun 2022 11:33:08 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 83A546601924;
+        Wed, 29 Jun 2022 19:33:05 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656527586;
+        bh=WuNMVIGOiyEfowmdUtnRiKPqHJ3DnKhHEh/sOJWLGXU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bY6qjrFcZCMspcpD67cEJT7XVoBQ4J0zuGuTKSEBCkscGD6x/PdIaqXcPDwcgGlGt
+         WsxLq69xRthjlekHu/lO33JgXBeF1MM2yQNWDOxavPcHB9QYaKu4oHRnPEyr06viG4
+         lrOhWVJ/TrQoa+foBHAYhrknrVCStcizZLrlclSmPjZf8dZzk+P1OlGFuLcN7k6LX5
+         8yMFQnGW3s/143t4pMOJIvxL9wUYLGK9/benH8Y2UbNyWgQIESwcPxn0puKrlLW17O
+         gNPSQ0jKeCGCUXe/8dKpcrEuDTDtsMQ5gupbOlstPuninDb8iJAimrFT8dKvLk+NHW
+         cVLSV/u7Hffeg==
+Message-ID: <c6f100e4-8a35-ebf0-f833-06ff0d8a2fb6@collabora.com>
+Date:   Wed, 29 Jun 2022 21:33:02 +0300
 MIME-Version: 1.0
-References: <20220624173656.2033256-1-jthoughton@google.com>
- <CAHS8izPnJd5EQjUi9cOk=03u3X1rk0PexTQZi+bEE4VMtFfksQ@mail.gmail.com>
- <CADrL8HWse7-=1Z=1_d8szwdkhFH1t8L4pOBO7E7yxgCYF-gc8w@mail.gmail.com>
- <CAHS8izNSsEW88Q=ozcC2rbnmvcX3zOL-qkFTPgn=M6S1R5t=Yw@mail.gmail.com> <YrtAyUSbtCLwCFxC@work-vm>
-In-Reply-To: <YrtAyUSbtCLwCFxC@work-vm>
-From:   James Houghton <jthoughton@google.com>
-Date:   Wed, 29 Jun 2022 11:31:10 -0700
-Message-ID: <CADrL8HXeLTiTP0cvq7DY8R0JkQT6gdz=gq06jarhBqyPHDfmzw@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/26] hugetlb: Introduce HugeTLB high-granularity mapping
-To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Jue Wang <juew@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
+Content-Language: en-US
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <cover.1654849214.git.viresh.kumar@linaro.org>
+ <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
+ <55623c12-dda3-613f-5bc9-80b3b6fec5f9@nvidia.com>
+ <20220622141511.yzg5itkdwirpavfj@vireshk-i7>
+ <40e616eb-22f9-19c2-8d77-20cd3c7c518b@nvidia.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <40e616eb-22f9-19c2-8d77-20cd3c7c518b@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 10:56 AM Dr. David Alan Gilbert
-<dgilbert@redhat.com> wrote:
->
-> * Mina Almasry (almasrymina@google.com) wrote:
-> > On Mon, Jun 27, 2022 at 9:27 AM James Houghton <jthoughton@google.com> wrote:
-> > >
-> > > On Fri, Jun 24, 2022 at 11:41 AM Mina Almasry <almasrymina@google.com> wrote:
-> > > >
-> > > > On Fri, Jun 24, 2022 at 10:37 AM James Houghton <jthoughton@google.com> wrote:
-> > > > >
-> > > > > [trimmed...]
-> > > > > ---- Userspace API ----
-> > > > >
-> > > > > This patch series introduces a single way to take advantage of
-> > > > > high-granularity mapping: via UFFDIO_CONTINUE. UFFDIO_CONTINUE allows
-> > > > > userspace to resolve MINOR page faults on shared VMAs.
-> > > > >
-> > > > > To collapse a HugeTLB address range that has been mapped with several
-> > > > > UFFDIO_CONTINUE operations, userspace can issue MADV_COLLAPSE. We expect
-> > > > > userspace to know when all pages (that they care about) have been fetched.
-> > > > >
-> > > >
-> > > > Thanks James! Cover letter looks good. A few questions:
-> > > >
-> > > > Why not have the kernel collapse the hugepage once all the 4K pages
-> > > > have been fetched automatically? It would remove the need for a new
-> > > > userspace API, and AFACT there aren't really any cases where it is
-> > > > beneficial to have a hugepage sharded into 4K mappings when those
-> > > > mappings can be collapsed.
-> > >
-> > > The reason that we don't automatically collapse mappings is because it
-> > > would take additional complexity, and it is less flexible. Consider
-> > > the case of 1G pages on x86: currently, userspace can collapse the
-> > > whole page when it's all ready, but they can also choose to collapse a
-> > > 2M piece of it. On architectures with more supported hugepage sizes
-> > > (e.g., arm64), userspace has even more possibilities for when to
-> > > collapse. This likely further complicates a potential
-> > > automatic-collapse solution. Userspace may also want to collapse the
-> > > mapping for an entire hugepage without completely mapping the hugepage
-> > > first (this would also be possible by issuing UFFDIO_CONTINUE on all
-> > > the holes, though).
-> > >
-> >
-> > To be honest I'm don't think I'm a fan of this. I don't think this
-> > saves complexity, but rather pushes it to the userspace. I.e. the
-> > userspace now must track which regions are faulted in and which are
-> > not to call MADV_COLLAPSE at the right time. Also, if the userspace
-> > gets it wrong it may accidentally not call MADV_COLLAPSE (and not get
-> > any hugepages) or call MADV_COLLAPSE too early and have to deal with a
-> > storm of maybe hundreds of minor faults at once which may take too
-> > long to resolve and may impact guest stability, yes?
->
-> I think it depends on whether the userspace is already holding bitmaps
-> and data structures to let it know when the right time to call collapse
-> is; if it already has to do all that book keeping for it's own postcopy
-> or whatever process, then getting userspace to call it is easy.
-> (I don't know the answer to whether it does have!)
+On 6/22/22 18:27, Jon Hunter wrote:
+> 
+> 
+> On 22/06/2022 15:15, Viresh Kumar wrote:
+>> On 22-06-22, 14:47, Jon Hunter wrote:
+>>> I am seeing the following panic on -next and bisect is point to
+>>> this commit ...
+>>>
+>>> [    2.145604] 8<--- cut here ---
+>>> [    2.145615] Unable to handle kernel NULL pointer dereference at
+>>> virtual address 00000000
+>>> [    2.145625] [00000000] *pgd=00000000
+>>> [    2.145647] Internal error: Oops: 80000005 [#1] PREEMPT SMP ARM
+>>> [    2.145660] Modules linked in:
+>>> [    2.145671] CPU: 1 PID: 35 Comm: kworker/u8:1 Not tainted
+>>> 5.19.0-rc3-next-20220622-gf739bc2a47f6 #1
+>>> [    2.145688] Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+>>> [    2.145697] Workqueue: events_unbound deferred_probe_work_func
+>>> [    2.145740] PC is at 0x0
+>>> [    2.145750] LR is at _set_opp+0x194/0x380
+>>> [    2.145779] pc : [<00000000>]    lr : [<c086b578>]    psr: 20000013
+>>> [    2.145789] sp : f08f1c80  ip : c152cb40  fp : c264c040
+>>> [    2.145798] r10: 00000000  r9 : c152cb40  r8 : c16f3010
+>>> [    2.145806] r7 : c264c034  r6 : 00000000  r5 : c265d800  r4 :
+>>> c264c000
+>>> [    2.145815] r3 : 00000000  r2 : c265d800  r1 : c264c000  r0 :
+>>> c16f3010
+>>> [    2.145825] Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM 
+>>> Segment none
+>>> [    2.145840] Control: 10c5387d  Table: 8000404a  DAC: 00000051
+>>> [    2.145847] Register r0 information: slab kmalloc-1k start
+>>> c16f3000 pointer offset 16 size 1024
+>>> [    2.145883] Register r1 information: slab kmalloc-256 start
+>>> c264c000 pointer offset 0 size 256
+>>> [    2.145914] Register r2 information: slab kmalloc-128 start
+>>> c265d800 pointer offset 0 size 128
+>>> [    2.145942] Register r3 information: NULL pointer
+>>> [    2.145955] Register r4 information: slab kmalloc-256 start
+>>> c264c000 pointer offset 0 size 256
+>>> [    2.145983] Register r5 information: slab kmalloc-128 start
+>>> c265d800 pointer offset 0 size 128
+>>> [    2.146012] Register r6 information: NULL pointer
+>>> [    2.146023] Register r7 information: slab kmalloc-256 start
+>>> c264c000 pointer offset 52 size 256
+>>> [    2.146052] Register r8 information: slab kmalloc-1k start
+>>> c16f3000 pointer offset 16 size 1024
+>>> [    2.146081] Register r9 information: slab task_struct start
+>>> c152cb40 pointer offset 0
+>>> [    2.146105] Register r10 information: NULL pointer
+>>> [    2.146116] Register r11 information: slab kmalloc-256 start
+>>> c264c000 pointer offset 64 size 256
+>>> [    2.146146] Register r12 information: slab task_struct start
+>>> c152cb40 pointer offset 0
+>>> [    2.348527] Process kworker/u8:1 (pid: 35, stack limit = 0x(ptrval))
+>>> [    2.354896] Stack: (0xf08f1c80 to 0xf08f2000)
+>>> [    2.359273] 1c80: 00000001 c0868db0 00000000 7a13d783 c152cb40
+>>> c264c000 c16f3010 c265d800
+>>> [    2.367471] 1ca0: c2661c40 00000001 c2661c40 00000001 c2661c40
+>>> c086b8e8 00000000 7a13d783
+>>> [    2.375666] 1cc0: c12ea5a0 c265d800 000f4240 c058cfcc ef7dddec
+>>> 000f4240 00000000 c2661e88
+>>> [    2.383861] 1ce0: 000f4240 000f4240 c2661e98 c068d238 00000000
+>>> c2665e00 000f4240 000f4240
+>>> [    2.392056] 1d00: c2666258 00000000 c2666000 00000001 c2661c40
+>>> c068d15c 00000000 c2666000
+>>> [    2.400253] 1d20: c16fd140 00000000 c16fd140 00000000 00000000
+>>> c16b78b8 c16b5e00 c068d2d8
+>>> [    2.408450] 1d40: c16b7810 c26661d8 c2666000 c068ed98 c2663d00
+>>> c2663d00 00000000 c086914c
+>>> [    2.416647] 1d60: c2663d00 c16b7810 c068ebec c16b7894 00000004
+>>> c0174868 00000000 c16b78b8
+>>> [    2.424843] 1d80: c16b5e00 c0684630 c16b7810 c068ebec 00000000
+>>> 00000004 c0174868 c152cb40
+>>> [    2.433041] 1da0: c16b78b8 c0684794 c16b7810 c068ebec 00000000
+>>> c068506c 00000a00 c265e040
+>>> [    2.441237] 1dc0: c0f5bdd4 00000004 00000000 7a13d783 00000000
+>>> c16b7810 c16b7894 00000004
+>>> [    2.449434] 1de0: 60000013 00000000 c265e10c c265e154 00000000
+>>> c06854c4 c265e040 c16b7800
+>>> [    2.457629] 1e00: c16b7810 c152cb40 00000000 c05e42b0 00000001
+>>> 00000000 ffffffff 00000000
+>>> [    2.465824] 1e20: c16b7810 ff8067a4 01000000 7a13d783 c16b7810
+>>> c16b7810 00000000 c12f7700
+>>> [    2.474020] 1e40: 00000000 00000001 c1367c20 c140f00d c1405800
+>>> c067a668 c16b7810 00000000
+>>> [    2.482214] 1e60: c12f7700 c0678280 c16b7810 c12f7700 c16b7810
+>>> 00000017 00000001 c06784e4
+>>> [    2.490411] 1e80: c13b6754 f08f1ee4 c16b7810 c0678574 c12f7700
+>>> f08f1ee4 c16b7810 c152cb40
+>>> [    2.498609] 1ea0: 00000001 c06788bc 00000000 f08f1ee4 c0678834
+>>> c067675c c1367c20 c14b4e70
+>>> [    2.506804] 1ec0: c1ea60b8 7a13d783 c16b7810 c16b7810 c152cb40
+>>> c16b7854 c12fa050 c067810c
+>>> [    2.515001] 1ee0: c1400000 c16b7810 00000001 7a13d783 c16b7810
+>>> c16b7810 c12fa2f0 c12fa050
+>>> [    2.523197] 1f00: 00000000 c0677410 c16b7810 c12fa038 c12fa038
+>>> c06778d0 c12fa06c c176a180
+>>> [    2.531394] 1f20: c1405800 c140f000 00000000 c013dd2c c152cb40
+>>> c1405800 c1203d40 c176a180
+>>> [    2.539592] 1f40: c1405800 c140581c c1203d40 c176a198 00000088
+>>> c1367177 c1405800 c013e2a4
+>>> [    2.547790] 1f60: c0f07434 00000000 f08f1f7c c176f7c0 c152cb40
+>>> c013e064 c176a180 c176f640
+>>> [    2.555984] 1f80: f0831eb4 00000000 00000000 c01459b4 c176f7c0
+>>> c01458ac 00000000 00000000
+>>> [    2.564180] 1fa0: 00000000 00000000 00000000 c01001a8 00000000
+>>> 00000000 00000000 00000000
+>>> [    2.572373] 1fc0: 00000000 00000000 00000000 00000000 00000000
+>>> 00000000 00000000 00000000
+>>> [    2.580569] 1fe0: 00000000 00000000 00000000 00000000 00000013
+>>> 00000000 00000000 00000000
+>>> [    2.588768]  _set_opp from dev_pm_opp_set_opp+0x38/0x78
+>>> [    2.594038]  dev_pm_opp_set_opp from
+>>> tegra_pmc_core_pd_set_performance_state+0x44/0xb0
+>>> [    2.602010]  tegra_pmc_core_pd_set_performance_state from
+>>> _genpd_set_performance_state+0x180/0x1d0
+>>> [    2.611018]  _genpd_set_performance_state from
+>>> _genpd_set_performance_state+0xa4/0x1d0
+>>> [    2.618972]  _genpd_set_performance_state from
+>>> genpd_set_performance_state+0x50/0x7c
+>>> [    2.626752]  genpd_set_performance_state from
+>>> genpd_runtime_resume+0x1ac/0x25c
+>>> [    2.634016]  genpd_runtime_resume from __rpm_callback+0x38/0x14c
+>>> [    2.640073]  __rpm_callback from rpm_callback+0x50/0x54
+>>> [    2.645335]  rpm_callback from rpm_resume+0x394/0x7a0
+>>> [    2.650424]  rpm_resume from __pm_runtime_resume+0x4c/0x64
+>>> [    2.655947]  __pm_runtime_resume from host1x_probe+0x29c/0x654
+>>> [    2.661824]  host1x_probe from platform_probe+0x5c/0xb8
+>>> [    2.667080]  platform_probe from really_probe+0xc8/0x2a8
+>>> [    2.672433]  really_probe from __driver_probe_device+0x84/0xe4
+>>> [    2.678308]  __driver_probe_device from driver_probe_device+0x30/0xd0
+>>> [    2.684789]  driver_probe_device from
+>>> __device_attach_driver+0x88/0xb4
+>>> [    2.691350]  __device_attach_driver from bus_for_each_drv+0x54/0xb4
+>>> [    2.697647]  bus_for_each_drv from __device_attach+0xf0/0x194
+>>> [    2.703430]  __device_attach from bus_probe_device+0x84/0x8c
+>>> [    2.709129]  bus_probe_device from deferred_probe_work_func+0x7c/0xa8
+>>> [    2.715608]  deferred_probe_work_func from
+>>> process_one_work+0x214/0x54c
+>>> [    2.722269]  process_one_work from worker_thread+0x240/0x508
+>>> [    2.727960]  worker_thread from kthread+0x108/0x124
+>>> [    2.732872]  kthread from ret_from_fork+0x14/0x2c
+>>> [    2.737602] Exception stack(0xf08f1fb0 to 0xf08f1ff8)
+>>> [    2.742669] 1fa0:                                     00000000
+>>> 00000000 00000000 00000000
+>>> [    2.750865] 1fc0: 00000000 00000000 00000000 00000000 00000000
+>>> 00000000 00000000 00000000
+>>> [    2.759061] 1fe0: 00000000 00000000 00000000 00000000 00000013
+>>> 00000000
+>>> [    2.765690] Code: bad PC value
+>>> [    2.768990] ---[ end trace 0000000000000000 ]---
+>>>
+>>>
+>>> Let me know if you have any thoughts.
+>>
+>> Maybe I understand what's going on here now, Dmitry too reported this
+>> yesterday,
+>> cc'd. Does below fix it for you ?
+>>
+>> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+>> index 2c1ae1286376..a7c7f6f40a7e 100644
+>> --- a/drivers/opp/core.c
+>> +++ b/drivers/opp/core.c
+>> @@ -1120,9 +1120,11 @@ static int _set_opp(struct device *dev, struct
+>> opp_table *opp_table,
+>>                  }
+>>          }
+>>
+>> -       ret = opp_table->config_clks(dev, opp_table, opp, clk_data,
+>> scaling_down);
+>> -       if (ret)
+>> -               return ret;
+>> +       if (opp_table->config_clks) {
+>> +               ret = opp_table->config_clks(dev, opp_table, opp,
+>> clk_data, scaling_down);
+>> +               if (ret)
+>> +                       return ret;
+>> +       }
+>>
+>>          /* Scaling down? Configure required OPPs after frequency */
+>>          if (scaling_down) {
+>>
+> 
+> 
+> Yes that fixes it thanks!
+> 
+> Tested-by: Jon Hunter <jonathanh@nvidia.com>
 
-Userspace generally has a lot of information about which pages have
-been UFFDIO_CONTINUE'd, but they may not have the information (say,
-some atomic count per hpage) to tell them exactly when to collapse.
+Hi Viresh,
 
-I think it's worth discussing the tmpfs/THP case right now, too. Right
-now, after userfaultfd post-copy, all THPs we have will all be
-PTE-mapped. To deal with this, we need to use Zach's MADV_COLLAPSE to
-collapse the mappings to PMD mappings (we don't want to wait for
-khugepaged to happen upon them -- we want good performance ASAP :)).
-In fact, IIUC, khugepaged actually won't collapse these *ever* right
-now. I suppose we could enlighten tmpfs's UFFDIO_CONTINUE to
-automatically collapse too (thus avoiding the need for MADV_COLLAPSE),
-but that could be complicated/unwanted (if that is something we might
-want, maybe we should have a separate discussion).
+Today I noticed that tegra30-devfreq driver now fails to probe because
+dev_pm_opp_find_freq_ceil() fails with -ERANGE. This patch is guilty for
+that. Could you please take a look?
 
-So, as it stands today, we intend to use MADV_COLLAPSE explicitly in
-the tmpfs case as soon as it is supported, and so it follows that it's
-ok to require userspace to do the same thing for HugeTLBFS-backed
-memory.
-
->
-> Dave
->
-> > For these reasons I think automatic collapsing is something that will
-> > eventually be implemented by us or someone else, and at that point
-> > MADV_COLLAPSE for hugetlb memory will become obsolete; i.e. this patch
-> > is adding a userspace API that will probably need to be maintained for
-> > perpetuity but actually is likely going to be going obsolete "soon".
-> > For this reason I had hoped that automatic collapsing would come with
-> > V1.
-
-Small, unimportant clarification: the API, as described here, won't be
-*completely* meaningless if we end up implementing automatic
-collapsing :) It still has the effect of not requiring other
-UFFDIO_CONTINUE operations to be done for the collapsed region.
-
-> >
-> > I wonder if we can have a very simple first try at automatic
-> > collapsing for V1? I.e., can we support collapsing to the hstate size
-> > and only that? So 4K pages can only be either collapsed to 2MB or 1G
-> > on x86 depending on the hstate size. I think this may be not too
-> > difficult to implement: we can have a counter similar to mapcount that
-> > tracks how many of the subpages are mapped (subpage_mapcount). Once
-> > all the subpages are mapped (the counter reaches a certain value),
-> > trigger collapsing similar to hstate size MADV_COLLAPSE.
-> >
-
-In my estimation, to implement automatic collapsing, for one VMA, we
-will need a per-hstate count, where when the count reaches the maximum
-number, we collapse automatically to the next most optimal size. So if
-we finish filling in enough PTEs for a CONT_PTE, we will collapse to a
-CONT_PTE. If we finish filling up CONT_PTEs to a PMD, then collapse to
-a PMD.
-
-If you are suggesting to only collapse to the hstate size at the end,
-then we lose flexibility.
-
-> > I gather that no one else reviewing this has raised this issue thus
-> > far so it might not be a big deal and I will continue to review the
-> > RFC, but I had hoped for automatic collapsing myself for the reasons
-> > above.
-
-Thanks for the thorough review, Mina. :)
-
-> >
-> > > >
-> > > > > ---- HugeTLB Changes ----
-> > > > >
-> > > > > - Mapcount
-> > > > > The way mapcount is handled is different from the way that it was handled
-> > > > > before. If the PUD for a hugepage is not none, a hugepage's mapcount will
-> > > > > be increased. This scheme means that, for hugepages that aren't mapped at
-> > > > > high granularity, their mapcounts will remain the same as what they would
-> > > > > have been pre-HGM.
-> > > > >
-> > > >
-> > > > Sorry, I didn't quite follow this. It says mapcount is handled
-> > > > differently, but the same if the page is not mapped at high
-> > > > granularity. Can you elaborate on how the mapcount handling will be
-> > > > different when the page is mapped at high granularity?
-> > >
-> > > I guess I didn't phrase this very well. For the sake of simplicity,
-> > > consider 1G pages on x86, typically mapped with leaf-level PUDs.
-> > > Previously, there were two possibilities for how a hugepage was
-> > > mapped, either it was (1) completely mapped (PUD is present and a
-> > > leaf), or (2) it wasn't mapped (PUD is none). Now we have a third
-> > > case, where the PUD is not none but also not a leaf (this usually
-> > > means that the page is partially mapped). We handle this case as if
-> > > the whole page was mapped. That is, if we partially map a hugepage
-> > > that was previously unmapped (making the PUD point to PMDs), we
-> > > increment its mapcount, and if we completely unmap a partially mapped
-> > > hugepage (making the PUD none), we decrement its mapcount. If we
-> > > collapse a non-leaf PUD to a leaf PUD, we don't change mapcount.
-> > >
-> > > It is possible for a PUD to be present and not a leaf (mapcount has
-> > > been incremented) but for the page to still be unmapped: if the PMDs
-> > > (or PTEs) underneath are all none. This case is atypical, and as of
-> > > this RFC (without bestowing MADV_DONTNEED with HGM flexibility), I
-> > > think it would be very difficult to get this to happen.
-> > >
-> >
-> > Thank you for the detailed explanation. Please add it to the cover letter.
-> >
-> > I wonder the case "PUD present but all the PMD are none": is that a
-> > bug? I don't understand the usefulness of that. Not a comment on this
-> > patch but rather a curiosity.
-> >
-> > > >
-> > > > > - Page table walking and manipulation
-> > > > > A new function, hugetlb_walk_to, handles walking HugeTLB page tables for
-> > > > > high-granularity mappings. Eventually, it's possible to merge
-> > > > > hugetlb_walk_to with huge_pte_offset and huge_pte_alloc.
-> > > > >
-> > > > > We keep track of HugeTLB page table entries with a new struct, hugetlb_pte.
-> > > > > This is because we generally need to know the "size" of a PTE (previously
-> > > > > always just huge_page_size(hstate)).
-> > > > >
-> > > > > For every page table manipulation function that has a huge version (e.g.
-> > > > > huge_ptep_get and ptep_get), there is a wrapper for it (e.g.
-> > > > > hugetlb_ptep_get).  The correct version is used depending on if a HugeTLB
-> > > > > PTE really is "huge".
-> > > > >
-> > > > > - Synchronization
-> > > > > For existing bits of HugeTLB, synchronization is unchanged. For splitting
-> > > > > and collapsing HugeTLB PTEs, we require that the i_mmap_rw_sem is held for
-> > > > > writing, and for doing high-granularity page table walks, we require it to
-> > > > > be held for reading.
-> > > > >
-> > > > > ---- Limitations & Future Changes ----
-> > > > >
-> > > > > This patch series only implements high-granularity mapping for VM_SHARED
-> > > > > VMAs.  I intend to implement enough HGM to support 4K unmapping for memory
-> > > > > failure recovery for both shared and private mappings.
-> > > > >
-> > > > > The memory failure use case poses its own challenges that can be
-> > > > > addressed, but I will do so in a separate RFC.
-> > > > >
-> > > > > Performance has not been heavily scrutinized with this patch series. There
-> > > > > are places where lock contention can significantly reduce performance. This
-> > > > > will be addressed later.
-> > > > >
-> > > > > The patch series, as it stands right now, is compatible with the VMEMMAP
-> > > > > page struct optimization[3], as we do not need to modify data contained
-> > > > > in the subpage page structs.
-> > > > >
-> > > > > Other omissions:
-> > > > >  - Compatibility with userfaultfd write-protect (will be included in v1).
-> > > > >  - Support for mremap() (will be included in v1). This looks a lot like
-> > > > >    the support we have for fork().
-> > > > >  - Documentation changes (will be included in v1).
-> > > > >  - Completely ignores PMD sharing and hugepage migration (will be included
-> > > > >    in v1).
-> > > > >  - Implementations for architectures that don't use GENERAL_HUGETLB other
-> > > > >    than arm64.
-> > > > >
-> > > > > ---- Patch Breakdown ----
-> > > > >
-> > > > > Patch 1     - Preliminary changes
-> > > > > Patch 2-10  - HugeTLB HGM core changes
-> > > > > Patch 11-13 - HugeTLB HGM page table walking functionality
-> > > > > Patch 14-19 - HugeTLB HGM compatibility with other bits
-> > > > > Patch 20-23 - Userfaultfd and collapse changes
-> > > > > Patch 24-26 - arm64 support and selftests
-> > > > >
-> > > > > [1] This used to be called HugeTLB double mapping, a bad and confusing
-> > > > >     name. "High-granularity mapping" is not a great name either. I am open
-> > > > >     to better names.
-> > > >
-> > > > I would drop 1 extra word and do "granular mapping", as in the mapping
-> > > > is more granular than what it normally is (2MB/1G, etc).
-> > >
-> > > Noted. :)
-> >
-> --
-> Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
->
+-- 
+Best regards,
+Dmitry

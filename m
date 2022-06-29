@@ -2,94 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B3E560D36
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 01:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1637C560D8E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 01:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbiF2X2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 19:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
+        id S231939AbiF2XeJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Jun 2022 19:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiF2X1j (ORCPT
+        with ESMTP id S231919AbiF2Xdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 19:27:39 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C789F26546;
-        Wed, 29 Jun 2022 16:27:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656545247;
-        bh=trJhlzE+9h7nejkPPDRUJXRB5bu1x2yTJPTeKLNCj6w=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ZJfr34/M7u05kxJerTQq/7yMBUHy75csgDCyOplAhX2i9/PW8SWuhB8TPUAX1hvAI
-         wiAbEPmy6L/sG1Yi9Wvo3Oebaid7cfpJKN/UUn8aDBqahcK6ZTUDfbuLq2/xRx21ZE
-         2kxrWEPihk4EA43ufBDHy8eBeA8HiEoibkYQkkkI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([46.223.3.23]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mq2j2-1nKixY457C-00n7un; Thu, 30
- Jun 2022 01:27:27 +0200
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
-Cc:     stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        l.sanfilippo@kunbus.com, LinoSanfilippo@gmx.de, lukas@wunner.de,
-        p.rosenberger@kunbus.com
-Subject: [PATCH v7 10/10] tpm, tpm_tis: Enable interrupt test
-Date:   Thu, 30 Jun 2022 01:26:53 +0200
-Message-Id: <20220629232653.1306735-11-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220629232653.1306735-1-LinoSanfilippo@gmx.de>
-References: <20220629232653.1306735-1-LinoSanfilippo@gmx.de>
+        Wed, 29 Jun 2022 19:33:42 -0400
+Received: from mailsnd3.chol.com (mailsnd5.chollian.net [203.252.1.139])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 514D67654
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 16:33:26 -0700 (PDT)
+Received: (qmail 5332 invoked from network); Thu, 30 Jun 2022 08:27:32 +0900 (KST)
+message-id: <1656545252.5332@chol.com>
+Received: from [45.137.22.86] (45.137.22.86)
+  by mailsnd5.chol.com with ESMTP;
+ Thu, 30 Jun 2022 08:27:31 +0900 (KST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:wD89YvMA7Ghz21K7RCd1iGNpk5t5Qtb8lm2ALSnWhZzJkJD+cMW
- SPNERSZsdCRFDxdzyS4/CstbmOXywFpk2oG3UeQ9fEFX3bESMfr4Nm/puceFN3H83gKREFq
- I6kaAD2jKwIfWaeB9lXMXmUv3YWGB/6R6QZrXIqBwH8dcKx0jmvQ2ExnWvrbQ5OokPpyn33
- cPw6JYgfSctF9C51icMCw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3aAohqBAv5Y=:LDpEX1KrDh/NMyxlHknzpI
- aLk2uxA8LH54kya7/5t7LsrdH6sKMjSz7T1ewILGcxNaD9VKeWhmYiHLNOve4ryICDf+HczIp
- qByFA7esuGjqtnkDPvFJ2KZ+gMroFqnV3ROVC3WD2tl0ur39Xweq45ukpdceTdEHR8YH/XUBE
- hpLF9fh4l8Y7G5tGK7Ck2YkwmMaVNQEb+hXmVJNUiW06O8VCVEaw5xYGyyJKEH7yyERb9ecVm
- MWXC3xV7BVozO9u2STXZSf1CUVU9M+T9CRG9c4Jug3pHbRaTCC4ycXRlXNfSx5Al8CGpvT1e3
- O6CMneZxRcStklvtsG+4c8/XMZTFPHLWkto6Cknoec9mVUX3/FW+bIgpMuXvlRP3NlumRuc2r
- PZqJVV1aZC79oYSLqsl4CwS3uZ7lGDPL5ppL/B66GLeEiQNrkjwphEO+jVNxOf2lvwH3wmLpp
- 9LvNDi0J53VON8ZNWwpK4MNknGWtQkckAt7t5y4lFgewLEXcZinPWQMj6zR3Am1XUOnsPNsah
- 8U78JGXjWe5vKhMv0vyOmiFU51o6jwaUCBMpLbCd+/XBtv6Sb7/AH0geNOzJ5hHqaISZdOgmu
- RfcC035Bp+0CX3HHWhaXM2GNF/2paoAXHtHgt6ntPwfs0K5i9jPwxrqkcbRhx22OX3NWk1YXz
- ld1bu/CF0E46YYt0KqaKK73t4wI5sm3YVO3Y0aIs8WsJs7Qlvvz6fps99kFM/zs10iTFMNKdD
- iQ+TswGONBYF9nZ0ttkySNEy4ciDUUJHEsB4GOlu809y/VmdkjooLnuqTtQfXZJvGBU5kSVT9
- J7bfvMXzdLCR/5BwWpoQZjx4FAf3z3bhckzNIiq4bNo7RKxdBSRmmtB/y7mtJ5zrgR2r1VcBi
- bKz+1H+R1gI+Dv/oOKDn3u0S0ZO0c4hK1GY10yx47fqdCJRUAqfhdT3bFBv2cxuphkYa8qk4U
- hRZf7VsUIxfOEg+ul9A0rZepitwD3KR20zGVd+ZH9+6cBfX84aIYnMLf7gZqa8wHm6QuGTYvj
- 6DzOFBY940x/r9QFNO4OEXPXj/HnYB0vQCTcX6YY+SFsnHb2dYp5c4TAMZ3RLd1h2B5hw3WUp
- iT1U5ckAsJBIt/MUguD45uggXYXU52WlALqdZd76MZBuZiN8t3NQz4tSg==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: BUSINESS PATNERSHIP PROPOSAL
+To:     Recipients <m92138465602166@chol.com>
+From:   "MR NICOLAS THOMAS" <m92138465602166@chol.com>
+Date:   Thu, 30 Jun 2022 01:28:42 +0200
+Reply-To: nicolasthomas@zohomail.eu
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
+        BAYES_50,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,HK_NAME_MR_MRS,LOTS_OF_MONEY,
+        MILLION_USD,MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_LOW,RCVD_IN_SBL,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_SCC_BODY_TEXT_LINE,UPPERCASE_75_100 autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.7 RCVD_IN_DNSWL_LOW RBL: Sender listed at https://www.dnswl.org/,
+        *       low trust
+        *      [203.252.1.139 listed in list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FROM_LOCAL_HEX From: localpart has long hexadecimal sequence
+        *  0.0 FROM_LOCAL_DIGITS From: localpart has long digit sequence
+        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
+        *      [45.137.22.86 listed in zen.spamhaus.org]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [203.252.1.139 listed in bl.score.senderscore.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 MILLION_USD BODY: Talks about millions of dollars
+        *  1.0 HK_NAME_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 MSGID_FROM_MTA_HEADER Message-Id was added by a relay
+        *  0.0 UPPERCASE_75_100 message body is 75-100% uppercase
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KClRoZSB0ZXN0
-IGZvciBpbnRlcnJ1cHRzIGluIHRwbV90aXNfc2VuZCgpIGlzIHNraXBwZWQgaWYgdGhlIGZsYWcK
-VFBNX0NISVBfRkxBR19JUlEgaXMgbm90IHNldC4gU2luY2UgdGhlIGN1cnJlbnQgY29kZSBuZXZl
-ciBzZXRzIHRoZSBmbGFnCmluaXRpYWxseSB0aGUgdGVzdCBpcyBuZXZlciBleGVjdXRlZC4KCkZp
-eCB0aGlzIGJ5IHNldHRpbmcgdGhlIGZsYWcgaW4gdHBtX3Rpc19nZW5faW50ZXJydXB0KCkgcmln
-aHQgYWZ0ZXIKaW50ZXJydXB0cyBoYXZlIGJlZW4gZW5hYmxlZCBhbmQgYmVmb3JlIHRoZSB0ZXN0
-IGlzIGV4ZWN1dGVkLgoKU2lnbmVkLW9mZi1ieTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlw
-cG9Aa3VuYnVzLmNvbT4KVGVzdGVkLWJ5OiBNaWNoYWVsIE5pZXfDtmhuZXIgPGxpbnV4QG1uaWV3
-b2VobmVyLmRlPgotLS0KIGRyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19jb3JlLmMgfCA1ICsrKysr
-CiAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9j
-aGFyL3RwbS90cG1fdGlzX2NvcmUuYyBiL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19jb3JlLmMK
-aW5kZXggMzA3YTdhM2E1NWM2Li5lMDg4OWMxNTI5MDkgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvY2hh
-ci90cG0vdHBtX3Rpc19jb3JlLmMKKysrIGIvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2NvcmUu
-YwpAQCAtNzgyLDExICs3ODIsMTYgQEAgc3RhdGljIGludCB0cG1fdGlzX2dlbl9pbnRlcnJ1cHQo
-c3RydWN0IHRwbV9jaGlwICpjaGlwKQogCWlmIChyZXQgPCAwKQogCQlyZXR1cm4gcmV0OwogCisJ
-Y2hpcC0+ZmxhZ3MgfD0gVFBNX0NISVBfRkxBR19JUlE7CisKIAlpZiAoY2hpcC0+ZmxhZ3MgJiBU
-UE1fQ0hJUF9GTEFHX1RQTTIpCiAJCXJldCA9IHRwbTJfZ2V0X3RwbV9wdChjaGlwLCAweDEwMCwg
-JmNhcDIsIGRlc2MpOwogCWVsc2UKIAkJcmV0ID0gdHBtMV9nZXRjYXAoY2hpcCwgVFBNX0NBUF9Q
-Uk9QX1RJU19USU1FT1VULCAmY2FwLCBkZXNjLCAwKTsKIAorCWlmIChyZXQpCisJCWNoaXAtPmZs
-YWdzICY9IH5UUE1fQ0hJUF9GTEFHX0lSUTsKKwogCXRwbV90aXNfcmVsZWFzZV9sb2NhbGl0eShj
-aGlwLCAwKTsKIAogCXJldHVybiByZXQ7Ci0tIAoyLjI1LjEKCg==
+
+GREETINGS FROM MR NICOLAS!
+
+WE CAN GO INTO PARTNERSHIP TOGETHER ON THIS DEAL, LET ME FIRST INTRODUCE MYSELF TO YOU PROPERLY, MY NAME IS MR NICOLAS THOMAS, I'M A FUND PORTFOLIO MANAGER TO MR. DMITRY RYBOLOVLEV A RUSSIAN BILLIONAIRE AND PRESIDENT OF MONACO'S FOOTBALL CLUB (AS MONACO).
+
+DUE TO THE ONGOING PAPER LEAK CRISIS IN PANAMA, WHICH WAS BROUGHT UP BY MOSSACK FONSECA LAW FIRM, MY CLIENT WOULD LIKE TO MOVE OUT PART OF HIS FUNDS IN THE SUM OF ($300,000,000.00) THREE HUNDRED MILLION UNITED STATES DOLLARS FROM AN OFFSHORE BANK IN PANAMA. FOR SAFEKEEPING AND INVESTMENT PURPOSES.
+
+IF INTERESTED, KINDLY GET BACK FOR MORE DETAILS VIA EMAIL; nicolasthomas@zohomail.eu
+
+THANKS AND BEST REGARDS,
+
+NICOLAS THOMAS

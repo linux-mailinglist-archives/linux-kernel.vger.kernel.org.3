@@ -2,71 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FCE55FD72
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D4555FD75
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233175AbiF2KhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 06:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
+        id S232911AbiF2Kh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 06:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiF2KhS (ORCPT
+        with ESMTP id S231431AbiF2Kh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 06:37:18 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050F83E0D3
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:37:18 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id ge10so31682833ejb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:37:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2PLSan2OyFD3C0VPj63Fz6myEBk+Vbaa6VJQ9ANnEas=;
-        b=UxJo9ozF3/CeGKF2ChdoWPqjX9OKm5SFdmD8/EoepDqf7UQl2ec7izk1OEqrHFoEo1
-         s3/Q53xmmjqy5Us+xtJNOMHKDpgXCX12otf3IHHsa+dFg3ZqQAC6mrQpFYcVF8cJyL4T
-         AgRBj4L1NpgDM2455cVdYmzAEt3zZ4QGVTyhubnvtLkssy8k+Q8WNc6BuUhsctBFZw49
-         mfvstZazL0mgdJ7ItiwF4cGddIl/4bEDS4lF7cZ2VYqRvqldJiywqEN9A/tCTsdrTl6S
-         yXzqa+Tyjp4Y9E95tCefWDwIRWJRrIJfe40PIzRH5SpcuPK9UvS/XcRk5JpDpTKY+Bqn
-         HCyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2PLSan2OyFD3C0VPj63Fz6myEBk+Vbaa6VJQ9ANnEas=;
-        b=2dWkEyaAXsZ2t6Mf6eUTJgeJybZc0B0rLBypUJBJRABe6lcjiK7uN6I68DTtp2yDWn
-         0+SxjlOi3htn8TON10kuoZ8HZ9quItYXKifbQF4/lKZ6qFxJkkZ0k6cNLsU2y7z18O8R
-         UBJg0Sx9l/zghvrq1hOnnjlMdMkJdmdP56EJYgjuqM7Q2P8/XdqaPGTtEC3nNPTBJBwR
-         zTaBhbSteeezTGWBf+16+WbQafnNnqCAd7pg/Gg/h2XDQW/ci1yJ8PJy1sF9WufKmsG0
-         luYvqiUjzpJLIOhU+0IwgnBa43SkuSVf4REYadWRuOxwof6R0634bVG9q3g8oFc0KO2E
-         0opQ==
-X-Gm-Message-State: AJIora8GY4lATPYPYowZZ7U593QKtXPUWB5/j4WS5j3VySumQtQM9CR2
-        C7tEeE0DBVxZzBDzXdrrEYIyHg==
-X-Google-Smtp-Source: AGRyM1vgCuE18ifvWqla2d2oJ85tPHHMpN/mhtzcqDs24N5WbM2ExYJwWvf9GA8LS68pv2VM3WsGXA==
-X-Received: by 2002:a17:907:2d8a:b0:722:e35b:695 with SMTP id gt10-20020a1709072d8a00b00722e35b0695mr2646070ejc.470.1656499036586;
-        Wed, 29 Jun 2022 03:37:16 -0700 (PDT)
-Received: from [192.168.0.184] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id o16-20020aa7d3d0000000b00437ce7fe1a0sm1244540edr.8.2022.06.29.03.37.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 03:37:16 -0700 (PDT)
-Message-ID: <8b7ff51e-40ae-cefb-3df6-74abd33f277f@linaro.org>
-Date:   Wed, 29 Jun 2022 12:37:15 +0200
+        Wed, 29 Jun 2022 06:37:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52253E0E8;
+        Wed, 29 Jun 2022 03:37:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48F8D60E96;
+        Wed, 29 Jun 2022 10:37:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9AEAC34114;
+        Wed, 29 Jun 2022 10:37:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656499074;
+        bh=NBWbrjWKhIsl/d/4tqSoGWJc9m+TIA0ZojUt4mMAaFM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MU4PBiNZw1Jj0IXdHMvobaUSXdmz3IuGBebYF1L5eLnlluL9KupehlQdyS4lsv2K8
+         sm8gf7qK/UM5VtD+qKQgTbVDMjlf9eE5gK4gSuJota4EI0TW+kFNvYiXG/JlUL1y1m
+         zPE3HO/SocI9nJBLyCW2RRpA6xljpu2PkmeLHa4xaHwNC6F47F+i7qd1gaonbgZOqP
+         xEhWDw6gc6WERoTeJhZzznvmJPKDyu4WL9cFetIMS2Ovfu+rb5nyjOAHkxAh0Duowe
+         6sLWvUBuaSxy2s8UsxNpwmerqfh+zhFUsbVE5HNScScY4BgkF1sTTIW6EYRA8j98bc
+         1kP1ospiz8S1A==
+Date:   Wed, 29 Jun 2022 16:07:47 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Hemant Kumar <quic_hemantk@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Loic Poulain <loic.poulain@linaro.org>, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] bus: mhi: host: pci_generic: Add another Foxconn T99W175
+Message-ID: <20220629103747.GA21691@thinkpad>
+References: <20220627170717.2252335-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] docs: dt: writing-bindings: Update URL to DT schemas
-Content-Language: en-US
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220627223950.35748-1-paul@crapouillou.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220627223950.35748-1-paul@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220627170717.2252335-1-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,17 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/06/2022 00:39, Paul Cercueil wrote:
-> The previous URL was giving a 404 error.
+On Mon, Jun 27, 2022 at 10:07:17AM -0700, Bjorn Andersson wrote:
+> The Foxconn e0c3 device identifies itself as a T99W175 X55, add support
+> for this to the pci_generic driver.
 > 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+Applied to mhi-next!
+
+Thanks,
+Mani
+
 > ---
->  Documentation/devicetree/bindings/writing-bindings.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/bus/mhi/host/pci_generic.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+> index 57d5f611a979..bf82d90f9ca9 100644
+> --- a/drivers/bus/mhi/host/pci_generic.c
+> +++ b/drivers/bus/mhi/host/pci_generic.c
+> @@ -571,6 +571,9 @@ static const struct pci_device_id mhi_pci_id_table[] = {
+>  	/* T99W175 (sdx55), Based on Qualcomm new baseline */
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0bf),
+>  		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx55_info },
+> +	/* T99W175 (sdx55) */
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0c3),
+> +		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx55_info },
+>  	/* T99W368 (sdx65) */
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0d8),
+>  		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx65_info },
+> -- 
+> 2.35.1
 > 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+-- 
+மணிவண்ணன் சதாசிவம்

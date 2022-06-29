@@ -2,162 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1015604DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D75A55604DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234263AbiF2PmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 11:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
+        id S234022AbiF2Prh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 11:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233941AbiF2PmP (ORCPT
+        with ESMTP id S232131AbiF2Prf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 11:42:15 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C562CCB3;
-        Wed, 29 Jun 2022 08:42:14 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id l6so14464319plg.11;
-        Wed, 29 Jun 2022 08:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PRCJMAl9ZNLoVnPNV8HMGzRaHKIYDVWSPhvooPOy6DI=;
-        b=NiILxxt7TAQ04yKYdK7wM6rBnIDUIrrEdPVYf7ZipeLpkR8p+HLYNR+xEWrtOadrYZ
-         GC6o1Ze7NXZJY0pYEeUqMXOcHtob1WD3y4Jz6t34NPNlQsXIjGj/llIE0EAHGaeEXUFp
-         0ROHyPsRXJFOWLg9sO/lK9IUprsFX5m9dGD33EG9OmF+yVghkg8NfVmX8iOKcS5H7YQ+
-         XY27LlMtTivEowTZhhRskXTWWAcDpFViqip33C/4bAxYR3O5N0i7AqPy7fGYfcb5uvfA
-         i7Epjkd8B4uNFyaXS9mSNs7/OyURAfjZmTAZlp+27+uM1ct3hFr6pucxD8ojuYq7N/hF
-         EqDg==
+        Wed, 29 Jun 2022 11:47:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 112A1AE63
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 08:47:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656517654;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=U8Ds3TbgTN/BrvT8Bwf0Lryi8VbFB5ioWWlf5jjfYQo=;
+        b=D8c8PakH6L0C4svJ1dKfkTLCpxDoimpziNrXoY5P/0+TpdArUkUT8Q2VW3nepErlQfSuQP
+        eorQRih/AMrwUr8yDjNycqLxamzQqS/ZfNmu8pRYFmFZ/yWUfSjt3n4cnBbUwQVp67SvNr
+        zO3463NmHnTmHv6NBr1rBa+EEc/LQTg=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-250-6nKNKTbhPcyIm0slaLu9TQ-1; Wed, 29 Jun 2022 11:47:32 -0400
+X-MC-Unique: 6nKNKTbhPcyIm0slaLu9TQ-1
+Received: by mail-il1-f198.google.com with SMTP id i8-20020a056e020d8800b002d931252904so9237510ilj.23
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 08:47:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=PRCJMAl9ZNLoVnPNV8HMGzRaHKIYDVWSPhvooPOy6DI=;
-        b=kF3+Ru+qiKjaWNmIvGm8s4k5Zq1cVX2F7xBobQg3BlvltFvTZzkRfRHr92hrejz7Gp
-         Qii9BkmfzCxtlLNlLobLbqpNkBTTd3MGkZMIF6mAiitUBb8UMsq+OJCiniy5SCn6ddD3
-         A8qcXrx2j8qsvN1RfbpZhkPxp/dyHkKvk6JM+pr3BKnGyFehmsOjjC9jWGWU/a4X6ZKF
-         p2tV3nHcWq48sPZ8D3/rzYeI4o1WvrK/NQTwpb2gt5oE+WJ9q9tq9mL19CUKN14WgxNo
-         tctLmHxAds0Xo3jJVUBZ24QCA7vH0CMiedrojB0ygFR0fL/zoE4YTs6lsYufF2Tt2kFb
-         qXPg==
-X-Gm-Message-State: AJIora9oZpA/fwZMgfy9zwakP/FNur84gclSlh7SJFenZD2m7468sCfT
-        HMdrv53w8MHZtYRxzAoXmjRofpIClNE=
-X-Google-Smtp-Source: AGRyM1sJMLTeRpcboSggEajkrdbV/zFqV4my8lideOrK0J2JBEs6b/rg3y1gjMEagKzBQ5ZKNCg89Q==
-X-Received: by 2002:a17:90b:4b42:b0:1ed:f6f:ff2 with SMTP id mi2-20020a17090b4b4200b001ed0f6f0ff2mr6672395pjb.131.1656517333711;
-        Wed, 29 Jun 2022 08:42:13 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 1-20020a620501000000b00527d84dfa42sm2653412pff.167.2022.06.29.08.42.11
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U8Ds3TbgTN/BrvT8Bwf0Lryi8VbFB5ioWWlf5jjfYQo=;
+        b=rPp2c7/2Uh5tT5gEP5A1mhRkGlrI1B9pL0VMF9FNswIlRjT57ttjMJP8DOw2/WByZh
+         NFAm+/8MU8ipL+Q/iI5KOMbUPvmLuMFXWxYtdcXJs5Xg8oRdmGmf5uqj3Ewc+BnF130U
+         07bZGwpURW9YVnQqMN/YBKGEohdCXbKFOPB9ZTchB01Ee8KDKqV9J3Dxe+SVoP3rcnCZ
+         kxkbGuxbTzuISsKsDFzPdwoEbfnb2gm3+DCylLDyBUbVuIM3TxMGwrBR4yBfH8Y2AKfH
+         ZGZA4KOYiYXYljuAO75EpWsWMSd6BWmaUPG5USwCH9guRLFMjA8kyIw/FLNCpf44r7Ez
+         NJFg==
+X-Gm-Message-State: AJIora/s0V7Up2Bo3Dl/MgHU4ULZpjGKMeB6o1198VclGUpbwT+Fmf50
+        NXGWsXBkaeSdig0IzSHQtKxrlOBPA8ZX+6kvwLbzjbBzXZtkotpI6XhRRUYrWLtaoTuNl7MTQTs
+        UFKQE1VjivjBrjdL0Pe/klhT6
+X-Received: by 2002:a05:6602:2cce:b0:675:544e:da0b with SMTP id j14-20020a0566022cce00b00675544eda0bmr1865125iow.123.1656517652112;
+        Wed, 29 Jun 2022 08:47:32 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uu/XLV/wT9doTP58QoaWMZhzxtKJWV9+WuLdJ85w0ChD+SfmtkCnXBya/7EZkV1EBDilbTMQ==
+X-Received: by 2002:a05:6602:2cce:b0:675:544e:da0b with SMTP id j14-20020a0566022cce00b00675544eda0bmr1865111iow.123.1656517651766;
+        Wed, 29 Jun 2022 08:47:31 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id a22-20020a027356000000b00331cfbce17csm7439570jae.100.2022.06.29.08.47.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 08:42:12 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Subject: [PATCH] hwmon: (lm90) Use worker for alarm notifications
-Date:   Wed, 29 Jun 2022 08:42:10 -0700
-Message-Id: <20220629154210.2389765-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.35.1
+        Wed, 29 Jun 2022 08:47:30 -0700 (PDT)
+Date:   Wed, 29 Jun 2022 11:47:29 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH 1/4] mm/gup: Add FOLL_INTERRUPTIBLE
+Message-ID: <Yrx0ETyb2kk4fO4M@xz-m1.local>
+References: <20220622213656.81546-1-peterx@redhat.com>
+ <20220622213656.81546-2-peterx@redhat.com>
+ <c196a140-6ee4-850c-004a-9c9d1ff1faa6@nvidia.com>
+ <YrtXGf20oa5eYgIU@xz-m1.local>
+ <16c181d3-09ef-ace4-c910-0a13fc245e48@nvidia.com>
+ <YruBzuJf9s/Nmr6W@xz-m1.local>
+ <177284f9-416d-c142-a826-e9a497751fca@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <177284f9-416d-c142-a826-e9a497751fca@nvidia.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reporting alarms using hwmon_notify_event() may result in a callback
-from the thermal subsystem. This means that such notifications must
-not hold the update lock to avoid a deadlock. To avoid this situation,
-use a worker to handle notifications.
+On Tue, Jun 28, 2022 at 05:31:43PM -0700, John Hubbard wrote:
+> On 6/28/22 15:33, Peter Xu wrote:
+> > > The key point is the connection between "locked" and killable. If the comment
+> > > explained why "locked" means "killable", that would help clear this up. The
+> > > NOWAIT sentence is also confusing to me, and adding "mostly NOWAIT" does not
+> > > clear it up either... :)
+> > 
+> > Sorry to have a comment that makes it feels confusing.  I tried to
+> > explicitly put the comment to be after setting FAULT_FLAG_KILLABLE but
+> > obviously I didn't do my job well..
+> > 
+> > Maybe that NOWAIT thing adds more complexity but not even necessary.
+> > 
+> > Would below one more acceptable?
+> > 
+> > 		/*
+> > 		 * We'll only be able to respond to signals when "locked !=
+> > 		 * NULL".  When with it, we'll always respond to SIGKILL
+> > 		 * (as implied by FAULT_FLAG_KILLABLE above), and we'll
+> > 		 * respond to non-fatal signals only if the GUP user has
+> > 		 * specified FOLL_INTERRUPTIBLE.
+> > 		 */
+> 
+> 
+> It looks like part of this comment is trying to document a pre-existing
+> concept, which is that faultin_page() only ever sets FAULT_FLAG_KILLABLE
+> if locked != NULL.
 
-Reported-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Fixes: e182cf579f0f ("hwmon: (lm90) Rework alarm/status handling")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-Dmitry,
+I'd say that's not what I wanted to comment.. I wanted to express that
+INTERRUPTIBLE should rely on KILLABLE, that's also why I put the comment to
+be after KILLABLE, not before.  IMHO it makes sense already to have
+"interruptible" only if "killable", no matter what's the pre-requisite for
+KILLABLE (in this case it's having "locked" being non-null).
 
-can you give this patch a try in your system ?
+> The problem I am (personally) having is that I don't yet understand why
+> or how those are connected: what is it about having locked non-NULL that
+> means the process is killable? (Can you explain why that is?)
+
+Firstly RETRY_KILLABLE relies on ALLOW_RETRY, because if we don't allow
+retry at all it means we'll never wait in handle_mm_fault() anyway, then no
+need to worry on being interrupted by any kind of signal (fatal or not).
+
+Then if we allow retry, we need some way to know "whether mmap_sem is
+released or not" during the process for the caller (because the caller
+cannot see VM_FAULT_RETRY).  That's why we added "locked" parameter, so
+that we can set *locked=false to tell the caller we have released mmap_sem.
+
+I think that's why we have "locked" defined as "we allow this page fault
+request to retry and wait, during wait we can always allow fatal signals".
+I think that's defined throughout the gup call interfaces too, and
+faultin_page() is the last step to talk to handle_mm_fault().
+
+To make this whole picture complete, NOWAIT is another thing that relies on
+ALLOW_RETRY but just to tell "oh please never release the mmap_sem at all".
+For example, when we want to make sure no vma will be released after
+faultin_page() returned.
+
+> 
+> If that were clear, I think I could suggest a good comment wording.
+
+IMHO it's a little bit weird to explain "locked" here, especially after
+KILLABLE is set, that's why I didn't try to mention "locked" in my 2nd
+attempt.  There are some comments for "locked" above the definition of
+faultin_page(), I think that'll be a nicer place to enrich explanations for
+"locked", and it seems even more suitable as a separate patch?
 
 Thanks,
-Guenter
 
- drivers/hwmon/lm90.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index 9d878163a1f2..03d07da8c2dc 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -693,6 +693,7 @@ struct lm90_data {
- 	struct hwmon_chip_info chip;
- 	struct mutex update_lock;
- 	struct delayed_work alert_work;
-+	struct work_struct report_work;
- 	bool valid;		/* true if register values are valid */
- 	bool alarms_valid;	/* true if status register values are valid */
- 	unsigned long last_updated; /* in jiffies */
-@@ -1043,13 +1044,18 @@ static int lm90_update_limits(struct device *dev)
- 	return 0;
- }
- 
--static void lm90_report_alarms(struct device *dev, struct lm90_data *data)
-+static void lm90_report_alarms(struct work_struct *work)
- {
--	u16 cleared_alarms = data->reported_alarms & ~data->current_alarms;
--	u16 new_alarms = data->current_alarms & ~data->reported_alarms;
-+	struct lm90_data *data = container_of(work, struct lm90_data, report_work);
-+	u16 cleared_alarms, new_alarms, current_alarms;
- 	struct device *hwmon_dev = data->hwmon_dev;
-+	struct device *dev = &data->client->dev;
- 	int st, st2;
- 
-+	current_alarms = data->current_alarms;
-+	cleared_alarms = data->reported_alarms & ~current_alarms;
-+	new_alarms = current_alarms & ~data->reported_alarms;
-+
- 	if (!cleared_alarms && !new_alarms)
- 		return;
- 
-@@ -1101,7 +1107,7 @@ static void lm90_report_alarms(struct device *dev, struct lm90_data *data)
- 	if (st2 & MAX6696_STATUS2_R2OT2)
- 		hwmon_notify_event(hwmon_dev, hwmon_temp, hwmon_temp_emergency_alarm, 2);
- 
--	data->reported_alarms = data->current_alarms;
-+	data->reported_alarms = current_alarms;
- }
- 
- static int lm90_update_alarms_locked(struct lm90_data *data, bool force)
-@@ -1143,7 +1149,7 @@ static int lm90_update_alarms_locked(struct lm90_data *data, bool force)
- 			(data->config & 0x80);
- 
- 		if (force || check_enable)
--			lm90_report_alarms(&client->dev, data);
-+			schedule_work(&data->report_work);
- 
- 		/*
- 		 * Re-enable ALERT# output if it was originally enabled, relevant
-@@ -2552,6 +2558,7 @@ static void lm90_restore_conf(void *_data)
- 	struct i2c_client *client = data->client;
- 
- 	cancel_delayed_work_sync(&data->alert_work);
-+	cancel_work_sync(&data->report_work);
- 
- 	/* Restore initial configuration */
- 	if (data->flags & LM90_HAVE_CONVRATE)
-@@ -2769,6 +2776,7 @@ static int lm90_probe(struct i2c_client *client)
- 	i2c_set_clientdata(client, data);
- 	mutex_init(&data->update_lock);
- 	INIT_DELAYED_WORK(&data->alert_work, lm90_alert_work);
-+	INIT_WORK(&data->report_work, lm90_report_alarms);
- 
- 	/* Set the device type */
- 	if (client->dev.of_node)
 -- 
-2.35.1
+Peter Xu
 

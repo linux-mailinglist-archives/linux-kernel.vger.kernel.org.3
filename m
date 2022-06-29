@@ -2,59 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929E756020E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB66D5601E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233673AbiF2OFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 10:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
+        id S233723AbiF2OF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 10:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233548AbiF2OFg (ORCPT
+        with ESMTP id S233548AbiF2OF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 10:05:36 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82AA25E84;
-        Wed, 29 Jun 2022 07:05:33 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        Wed, 29 Jun 2022 10:05:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981A12A703;
+        Wed, 29 Jun 2022 07:05:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 18A3683E68;
-        Wed, 29 Jun 2022 16:05:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1656511531;
-        bh=q4IDYnA9mxoplu3bplri3eeAY5ZA7+1eLbTSPgMevoI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aRJCyz0zDIey+e3ztF33FIuC3qX94K+rn93BEyCItkZvrX56uTpLdUEDZh9E7IXxr
-         ++lZEHPnp/PdqPOF0Ss9iehlxcMAmkFI8934idqKKA9agj/6ercFLwnQp2n6RTFeW9
-         pR3BSz2mhCv3aWRcRiylJA9m72RClfkP9028MNlr7MX+F6vkD1oYdtGfny1ukRgl0l
-         zKgNiU3N7OBOjUWVAG7ED2iPPKM0zJPgU27vsuQNsfVLlcHu76S47WuK9JnD0lSUPr
-         oAygKVccoGfq3cvDBBQIETE7LqLRwBobKmdBWUQ+b6FsSFrUpKhEXh0CpYsjQ8UMYU
-         kRN/ulW6ar7iA==
-Message-ID: <80c524c3-8c31-346d-2691-48f93fa6001f@denx.de>
-Date:   Wed, 29 Jun 2022 16:05:30 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3443361EAC;
+        Wed, 29 Jun 2022 14:05:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1F6FC34114;
+        Wed, 29 Jun 2022 14:05:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656511551;
+        bh=UTir4jvtX/Wc9f3wx5siduKUlp1IwFcyfl2zQub0Q54=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Dw1yUl6jJ7er1GoSbOqDxte5EKisctjZQcPmXUyqaQH1bY7xwW7YnFOeaq4U0mXSp
+         G4I02MyNDCl5svJ8CsA9h+q4xVSspolwODPkBvv6QiqTjmAcIkoxPgkE3gfqHs/kt6
+         WSHUJe0BTgDxI5Zvhlo/3ht1+i59FPyJmi1vYLZgznseboWsYn47Dt0RuZU6sSTK8j
+         zFsA9Kxmiil2q3OQTReiEEclNgQADZkTo5hHJjE/ge6bJJ1Mecto2cBwmFsbxetqvk
+         onok6aZT3wRCZHuOHZYOgAmeNkMharNuGXM1s9R/Q03NaQx7C1ca9wU8wj5PM8wgKn
+         px5Etqg2jrL7w==
+From:   Mark Brown <broonie@kernel.org>
+To:     alsa-devel@alsa-project.org, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, shengjiu.wang@nxp.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+Cc:     shengjiu.wang@gmail.com
+In-Reply-To: <1655980125-24141-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1655980125-24141-1-git-send-email-shengjiu.wang@nxp.com>
+Subject: Re: [PATCH] ASoC: dt-bindings: fsl,micfil: Convert format to json-schema
+Message-Id: <165651154969.1437597.15028170773257315286.b4-ty@kernel.org>
+Date:   Wed, 29 Jun 2022 15:05:49 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 03/10] i2c: xiic: Switch to Xiic standard mode for
- i2c-read
-Content-Language: en-US
-To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>,
-        Raviteja Narayanam <raviteja.narayanam@xilinx.com>,
-        linux-i2c@vger.kernel.org, michal.simek@xilinx.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com, joe@perches.com
-References: <20210626102806.15402-1-raviteja.narayanam@xilinx.com>
- <20210626102806.15402-4-raviteja.narayanam@xilinx.com>
- <ad7626bd-bcbb-48fc-5e32-bc95fafcb917@nokia.com>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <ad7626bd-bcbb-48fc-5e32-bc95fafcb917@nokia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,40 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/29/22 14:47, Krzysztof Adamski wrote:
-> W dniu 26.06.2021 o 12:27, Raviteja Narayanam pisze:
->> Xilinx I2C IP has two modes of operation, both of which implement
->> I2C transactions. The only difference from sw perspective is the
->> programming sequence for these modes.
->> Dynamic mode  -> Simple to program, less number of steps in sequence.
->> Standard mode -> Gives flexibility, more number of steps in sequence.
->>
->> In dynamic mode, during the i2c-read transactions, if there is a
->> delay(> 200us) between the register writes (address & byte count),
->> read transaction fails. On a system with load, this scenario is
->> occurring frequently.
->> To avoid this, switch to standard mode if there is a read request.
->>
->> Added a quirk to identify the IP version effected by this and follow
->> the standard mode.
->>
->> Signed-off-by: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+On Thu, 23 Jun 2022 18:28:45 +0800, Shengjiu Wang wrote:
+> Convert the NXP MICFIL binding to DT schema format using json-schema.
 > 
-> [...]
 > 
-> If those two modes only differ in software complexity but we are not
-> able to support only the simpler one and we have support for the more
-> complicated (standard mode) anyways, we know that standard mode
-> can handle or the cases while dynamic mode cannot, we also know that
-> dynamic mode is broken on some versions of the core, why do we actually
-> keep support for dynamic mode?
 
-If I recall it right, the dynamic mode was supposed to handle transfers 
-longer than 255 Bytes, which the core cannot do in Standard mode. It is 
-needed e.g. by Atmel MXT touch controller. I spent a lot of time 
-debugging the race conditions in the XIIC, which I ultimately fixed (the 
-patches are upstream), but the long transfers I rather fixed in the MXT 
-driver instead.
+Applied to
 
-I also recall there was supposed to be some update for the XIIC core 
-coming with newer vivado, but I might be wrong about that.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: dt-bindings: fsl,micfil: Convert format to json-schema
+      commit: 02d91fe47100a29a79fcb8798e45c22591ca852d
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

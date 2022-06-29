@@ -2,220 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8C855FC77
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1035455FC73
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233105AbiF2Js0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 05:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
+        id S233111AbiF2Jsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 05:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232989AbiF2JrM (ORCPT
+        with ESMTP id S233027AbiF2Jsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 05:47:12 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EE13D1DB;
-        Wed, 29 Jun 2022 02:47:04 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id l11so26905078ybu.13;
-        Wed, 29 Jun 2022 02:47:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EmOXlCPF2PKnBhpQ/luPJrSUkqjOxGD13NDVBnopNTk=;
-        b=oDeMmnlCMTQvwXgm78D0pQRHhja+Ivd+N2hnel6/zhLoaRW5etlOls2REHUUBBbxiU
-         6l5jO+KyaLfcVkIx9mK5+THqtbCE14MXYjrmFL3sq/H+6dwhLMQO80vCeAz+zoyQ6tD4
-         /sWVN2VSVQiH58CXv/s/btxvwH9NpB+wLdHCiYrGdZSp1lqQHEe94WrDw6VCsh/tiS7K
-         NipsDv97v242DKFzN3XNuoV1K7QUj6cBVQ6l3X+zme3htAyNlxEQ1M0ZiBiezEgSY5kH
-         I2NkpkIjtahsqUm+/nZluwhgZxbvHL7ojm2Waao7yrYgQ7tZmB7WJKTeQ2RkU+nrkOtf
-         Fcpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EmOXlCPF2PKnBhpQ/luPJrSUkqjOxGD13NDVBnopNTk=;
-        b=mEmVMWfrJlomOm5nVbd/vyNgJbv6FhC1fgEmrGzCFHyiGgVhLUye642z3x21X5H10U
-         sZDO4UdjAP8In/iSjLxZyNG92tsPExX2Rifhh0Fwej0ve0qq5Wh4OhXgBK72m7LMr+4t
-         Om5JeRxanN9pfmWp6xnQzeUeLwYXDlzQzOPwmmh6sMN2qfDO/XLm3DhtuhDPTjcfOLwO
-         L/Rp+X5Jvx2DjT+detlAbcMQGHL2Au7DsgFWgRnl9wZ6+Y2EH4KLixN72LQG1GGM5l3/
-         EmxZowcX7VS0MxTenqitrBmmzKWshaZipAGqCMoLYwpNbiOvAgtL3ItNt3FX3AEYTf1u
-         2iLA==
-X-Gm-Message-State: AJIora8QpoDmEAt8Wn/5cVyg5sq1oyZ+YrgFdfIV7tbVxZXHTZB8mX33
-        CI2LmQb3GYJIzrULqbk1wVtevqig2Vp8mdjcMpALsaKsyTmq+zIQlto=
-X-Google-Smtp-Source: AGRyM1sCbYX6F5EQnDbOdSwxx4LX2Emni3Xa+5wghs4B8uexCocrG6wMB0Y10Gvfw6NCcvdJhV5sqqKPrCnk4EpsKxM=
-X-Received: by 2002:a25:3383:0:b0:66b:6205:1583 with SMTP id
- z125-20020a253383000000b0066b62051583mr2289015ybz.387.1656496023486; Wed, 29
- Jun 2022 02:47:03 -0700 (PDT)
+        Wed, 29 Jun 2022 05:48:46 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AD03D1D7;
+        Wed, 29 Jun 2022 02:48:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656496125; x=1688032125;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kR520z9Moq5dCNqgaHhzTffg8JxRytrsfPcAIOtwgTE=;
+  b=iuy2Oc59R3Z5Thts1yxX9y/5DH0xiWyLPRX9nQHI+cM1cJM9O88loWYP
+   l6a28CwwKBowY2tbY0N98EuGJ0a6u0XoWdVA2hbUI0s3jE6OSz8zK1p4T
+   pAiQZ87uEtbDfzNJByTttNWb0MV7UKf5iUpjgEwHvW1TYLSqFZrsthDwg
+   tAswB5PEksuOFljFDqE+BTdmgyeq0BhtlCm6ZIKE8idsNwyvlXXE1qjCF
+   uQegklAY4DRk7YkHp7ZhmCfBZIVll9FZvEvGgD9qLCSYR/D96bfDpvMec
+   9+j+ab0aHXxozUN83B+qdvSsseBH0IzPAhvL4Tq9CVJwD58zKdXIgyGMU
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="262395191"
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="262395191"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 02:48:45 -0700
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="647322406"
+Received: from dsummer-mobl.ger.corp.intel.com ([10.252.38.121])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 02:48:43 -0700
+Date:   Wed, 29 Jun 2022 12:48:41 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Tony Lindgren <tony@atomide.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] serial: 8250: Fix PM usage_count for console handover
+Message-ID: <b4f428e9-491f-daf2-2232-819928dc276e@linux.intel.com>
 MIME-Version: 1.0
-References: <20220629021304.21725-1-chunfeng.yun@mediatek.com>
-In-Reply-To: <20220629021304.21725-1-chunfeng.yun@mediatek.com>
-From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Date:   Wed, 29 Jun 2022 12:46:51 +0300
-Message-ID: <CAB=otbQ3L0G6NYvFwBe268auGG3iS6shk9z+SpgKrkLthn-qGg@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: gadget: f_uac1: add interface association descriptor
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Pavel Hofman <pavel.hofman@ivitera.com>,
-        Julian Scheel <julian@jusst.de>,
-        Yunhao Tian <t123yh.xyz@gmail.com>,
-        xin lin <xin.lin@mediatek.com>,
-        Linux USB <linux-usb@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1304406510-1656496125=:1529"
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- On Wed, Jun 29, 2022 at 5:13 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
->
-> From: xin lin <xin.lin@mediatek.com>
->
-> When we want to use a composite device that supports UVC, UAC1 and
-> ADB at the same time, encounter that UAC1 can't work when connected
-> to windows 10 system.
-> From the online documents of microsoft, "overview of enumeration of
-> interface collections on usb composite devices", it recommends that
-> vendors use IADs (interface association descriptor) to define
-> interface collections.
-> After addding IAD, we can fix the issue.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-It is incorrect to add Interface Association Descriptor to the UAC1 function.
-The UAC1 specification was developed much earlier than IAD was invented, and it
-implements this functionality in another way - by describing number of
-associated
-interfaces and interface numbers on Class-Specific AC Interface
-Descriptor level;
-see *bInCollection* and *baInterfaceNr* fields of UAC1 Class-Specific
-AC Interface
-Header Descriptor in 4.3.2 section of UAC1 specification.
+--8323329-1304406510-1656496125=:1529
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 
-This is already implemented in f_uac1.c (see where *bInCollection* and
-*baInterfaceNr*
-are updated), along with support of dynamic capture/playback endpoints
-enablement.
-Adding IAD to the UAC1 driver is duplicating that functionality and
-isn't supported
-by UAC1 spec.
+When console is enabled, univ8250_console_setup() calls
+serial8250_console_setup() before .dev is set to uart_port. Therefore,
+it will not call pm_runtime_get_sync(). Later, when the actual driver
+is going to take over univ8250_console_exit() is called. As .dev is
+already set, serial8250_console_exit() makes pm_runtime_put_sync() call
+with usage count being zero triggering PM usage count warning
+(extra debug for univ8250_console_setup(), univ8250_console_exit(), and
+serial8250_register_ports()):
 
-On the other hand, the USB orgcommittee switched the approach of
-interface collection
-definition from a class-specific descriptors level to IAD in the UAC2 spec.
-So why not use UAC2 function for the same purpose, it already has IAD
-implemented
-and is supported by Win10?
+[    0.068987] univ8250_console_setup ttyS0 nodev
+[    0.499670] printk: console [ttyS0] enabled
+[    0.717955] printk: console [ttyS0] printing thread started
+[    1.960163] serial8250_register_ports assigned dev for ttyS0
+[    1.976830] printk: console [ttyS0] disabled
+[    1.976888] printk: console [ttyS0] printing thread stopped
+[    1.977073] univ8250_console_exit ttyS0 usage:0
+[    1.977075] serial8250 serial8250: Runtime PM usage count underflow!
+[    1.977429] dw-apb-uart.6: ttyS0 at MMIO 0x4010006000 (irq = 33, base_baud = 115200) is a 16550A
+[    1.977812] univ8250_console_setup ttyS0 usage:2
+[    1.978167] printk: console [ttyS0] printing thread started
+[    1.978203] printk: console [ttyS0] enabled
 
-Thanks,
-Ruslan
+To fix the issue, call pm_runtime_get_sync() in
+serial8250_register_ports() as soon as .dev is set for an uart_port
+if it has console enabled.
 
->
-> Signed-off-by: xin lin <xin.lin@mediatek.com>
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> v2: modify commit log suggested by Greg
-> ---
->  drivers/usb/gadget/function/f_uac1.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->
-> diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-> index 6f0e1d803dc2..8390207bc513 100644
-> --- a/drivers/usb/gadget/function/f_uac1.c
-> +++ b/drivers/usb/gadget/function/f_uac1.c
-> @@ -71,6 +71,17 @@ static inline struct f_uac1_opts *g_audio_to_uac1_opts(struct g_audio *audio)
->   * ALSA_Playback -> IT_3 -> OT_4 -> USB-IN
->   */
->
-> +static struct usb_interface_assoc_descriptor iad_desc = {
-> +       .bLength = sizeof(iad_desc),
-> +       .bDescriptorType = USB_DT_INTERFACE_ASSOCIATION,
-> +
-> +       .bFirstInterface = 0,
-> +       .bInterfaceCount = 3,
-> +       .bFunctionClass = USB_CLASS_AUDIO,
-> +       .bFunctionSubClass = 0,
-> +       .bFunctionProtocol = UAC_VERSION_1,
-> +};
-> +
->  /* B.3.1  Standard AC Interface Descriptor */
->  static struct usb_interface_descriptor ac_interface_desc = {
->         .bLength =              USB_DT_INTERFACE_SIZE,
-> @@ -259,6 +270,7 @@ static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
->  };
->
->  static struct usb_descriptor_header *f_audio_desc[] = {
-> +       (struct usb_descriptor_header *)&iad_desc,
->         (struct usb_descriptor_header *)&ac_interface_desc,
->         (struct usb_descriptor_header *)&ac_header_desc,
->
-> @@ -293,6 +305,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
->  };
->
->  enum {
-> +       STR_ASSOC,
->         STR_AC_IF,
->         STR_USB_OUT_IT,
->         STR_USB_OUT_IT_CH_NAMES,
-> @@ -310,6 +323,7 @@ enum {
->
->  static struct usb_string strings_uac1[] = {
->         /* [STR_AC_IF].s = DYNAMIC, */
-> +       [STR_ASSOC].s = "Source/Sink",
->         [STR_USB_OUT_IT].s = "Playback Input terminal",
->         [STR_USB_OUT_IT_CH_NAMES].s = "Playback Channels",
->         [STR_IO_OUT_OT].s = "Playback Output terminal",
-> @@ -1058,6 +1072,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
->         as_out_header_desc.bTerminalLink = usb_out_it_desc.bTerminalID;
->         as_in_header_desc.bTerminalLink = usb_in_ot_desc.bTerminalID;
->
-> +       iad_desc.bInterfaceCount = 1;
->         ac_header_desc->wTotalLength = cpu_to_le16(ac_header_desc->bLength);
->
->         if (EPIN_EN(opts)) {
-> @@ -1068,6 +1083,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
->                 if (FUIN_EN(opts))
->                         len += in_feature_unit_desc->bLength;
->                 ac_header_desc->wTotalLength = cpu_to_le16(len);
-> +               iad_desc.bInterfaceCount++;
->         }
->         if (EPOUT_EN(opts)) {
->                 u16 len = le16_to_cpu(ac_header_desc->wTotalLength);
-> @@ -1077,9 +1093,11 @@ static void setup_descriptor(struct f_uac1_opts *opts)
->                 if (FUOUT_EN(opts))
->                         len += out_feature_unit_desc->bLength;
->                 ac_header_desc->wTotalLength = cpu_to_le16(len);
-> +               iad_desc.bInterfaceCount++;
->         }
->
->         i = 0;
-> +       f_audio_desc[i++] = USBDHDR(&iad_desc);
->         f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
->         f_audio_desc[i++] = USBDHDR(ac_header_desc);
->
-> @@ -1217,6 +1235,7 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
->                 }
->         }
->
-> +       iad_desc.iFunction = us[STR_ASSOC].id;
->         ac_interface_desc.iInterface = us[STR_AC_IF].id;
->         usb_out_it_desc.iTerminal = us[STR_USB_OUT_IT].id;
->         usb_out_it_desc.iChannelNames = us[STR_USB_OUT_IT_CH_NAMES].id;
-> @@ -1302,6 +1321,8 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
->         status = usb_interface_id(c, f);
->         if (status < 0)
->                 goto err_free_fu;
-> +
-> +       iad_desc.bFirstInterface = status;
->         ac_interface_desc.bInterfaceNumber = status;
->         uac1->ac_intf = status;
->         uac1->ac_alt = 0;
-> --
-> 2.18.0
->
+This problem became apparent only recently because 82586a721595 ("PM:
+runtime: Avoid device usage count underflows") added the warning
+printout. I confirmed this problem also occurs with v5.18 (w/o the
+warning printout, obviously).
+
+Fixes: bedb404e91bb ("serial: 8250_port: Don't use power management for kernel console")
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Tony Lindgren <tony@atomide.com>
+Tested-by: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
+---
+v2:
+- Remove reference to reverted printk kthreads from the changelog
+- Collect rev/tested-bys
+
+ drivers/tty/serial/8250/8250_core.c | 4 ++++
+ drivers/tty/serial/serial_core.c    | 5 -----
+ include/linux/serial_core.h         | 5 +++++
+ 3 files changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
+index 57e86133af4f..2e83e7367441 100644
+--- a/drivers/tty/serial/8250/8250_core.c
++++ b/drivers/tty/serial/8250/8250_core.c
+@@ -23,6 +23,7 @@
+ #include <linux/sysrq.h>
+ #include <linux/delay.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
+ #include <linux/tty.h>
+ #include <linux/ratelimit.h>
+ #include <linux/tty_flip.h>
+@@ -558,6 +559,9 @@ serial8250_register_ports(struct uart_driver *drv, struct device *dev)
+ 
+ 		up->port.dev = dev;
+ 
++		if (uart_console_enabled(&up->port))
++			pm_runtime_get_sync(up->port.dev);
++
+ 		serial8250_apply_quirks(up);
+ 		uart_add_one_port(drv, &up->port);
+ 	}
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 85ef7ef00b82..3161445504bc 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -2024,11 +2024,6 @@ static int uart_proc_show(struct seq_file *m, void *v)
+ }
+ #endif
+ 
+-static inline bool uart_console_enabled(struct uart_port *port)
+-{
+-	return uart_console(port) && (port->cons->flags & CON_ENABLED);
+-}
+-
+ static void uart_port_spin_lock_init(struct uart_port *port)
+ {
+ 	spin_lock_init(&port->lock);
+diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+index b7b86ee3cb12..9d8aa139b175 100644
+--- a/include/linux/serial_core.h
++++ b/include/linux/serial_core.h
+@@ -404,6 +404,11 @@ static const bool earlycon_acpi_spcr_enable EARLYCON_USED_OR_UNUSED;
+ static inline int setup_earlycon(char *buf) { return 0; }
+ #endif
+ 
++static inline bool uart_console_enabled(struct uart_port *port)
++{
++	return uart_console(port) && (port->cons->flags & CON_ENABLED);
++}
++
+ struct uart_port *uart_get_console(struct uart_port *ports, int nr,
+ 				   struct console *c);
+ int uart_parse_earlycon(char *p, unsigned char *iotype, resource_size_t *addr,
+
+-- 
+tg: (f287f971e256..) fix/console-usage_count (depends on: tty-next)
+--8323329-1304406510-1656496125=:1529--

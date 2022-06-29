@@ -2,69 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A89555F59F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 07:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D527555F5A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 07:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbiF2FSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 01:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46496 "EHLO
+        id S231326AbiF2FUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 01:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiF2FSt (ORCPT
+        with ESMTP id S231161AbiF2FUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 01:18:49 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6393123F;
-        Tue, 28 Jun 2022 22:18:47 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0VHm9GRb_1656479900;
-Received: from localhost(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VHm9GRb_1656479900)
-          by smtp.aliyun-inc.com;
-          Wed, 29 Jun 2022 13:18:43 +0800
-From:   Liu Song <liusong@linux.alibaba.com>
-To:     axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] blk-mq: set BLK_MQ_S_STOPPED first to avoid unexpected queue work
-Date:   Wed, 29 Jun 2022 13:18:20 +0800
-Message-Id: <1656479900-58719-1-git-send-email-liusong@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 29 Jun 2022 01:20:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4473F31340;
+        Tue, 28 Jun 2022 22:20:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C30EB821C2;
+        Wed, 29 Jun 2022 05:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9E33EC341CA;
+        Wed, 29 Jun 2022 05:20:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656480013;
+        bh=wVaA/zaGrgkeDZVTa1fVbkBtdiqSj69Zp6MvjMQn6+g=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=c6mTJFvA9MsqU9eOMb/sRIeBu/O0UGiwWKV+YjsOiAo+123DvyBiPYtCRAAd6PVo1
+         zvOerCGLy+q6mlW2PqNvw3Ocd+1ymArOaYOJZbWnh+3E26D1AL32DgIOqR9XlK2V5O
+         WqTw2ebp/NuZghwiBxlsZqla1VyNB910H29Mkod06fqWjPMPy8P0jgW+AqBXWOGw3Q
+         f1vS1C5J2s4//Dad30ec0iGADomGCMq0d6vs/SSVUylUKHPzLwFB8/1L4IjPfUgv0a
+         4/SSPbVQ7YggTRdiahntf1D9KjsRIJK1WfOrnivmi6rGxMaZMhi7bBPXZDVh1fDU2U
+         5ieRjgzbt8XvQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7CB1FE49BBA;
+        Wed, 29 Jun 2022 05:20:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] net: mptcp: fix some spelling mistake in mptcp
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165648001350.19091.5869614487710926226.git-patchwork-notify@kernel.org>
+Date:   Wed, 29 Jun 2022 05:20:13 +0000
+References: <20220627121626.1595732-1-imagedong@tencent.com>
+In-Reply-To: <20220627121626.1595732-1-imagedong@tencent.com>
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     kuba@kernel.org, mathew.j.martineau@linux.intel.com,
+        matthieu.baerts@tessares.net, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+        imagedong@tencent.com
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Song <liusong@linux.alibaba.com>
+Hello:
 
-In "__blk_mq_delay_run_hw_queue", BLK_MQ_S_STOPPED is checked first,
-and then queue work, but in "blk_mq_stop_hw_queue", execute cancel
-work first and then set BLK_MQ_S_STOPPED, so there is a risk of
-queue work after setting BLK_MQ_S_STOPPED, which can be solved by
-adjusting the order.
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Signed-off-by: Liu Song <liusong@linux.alibaba.com>
----
- block/blk-mq.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Mon, 27 Jun 2022 20:16:25 +0800 you wrote:
+> From: Menglong Dong <imagedong@tencent.com>
+> 
+> codespell finds some spelling mistake in mptcp:
+> 
+> net/mptcp/subflow.c:1624: interaces ==> interfaces
+> net/mptcp/pm_netlink.c:1130: regarless ==> regardless
+> 
+> [...]
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 93d9d60..865915e 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -2258,9 +2258,9 @@ bool blk_mq_queue_stopped(struct request_queue *q)
-  */
- void blk_mq_stop_hw_queue(struct blk_mq_hw_ctx *hctx)
- {
--	cancel_delayed_work(&hctx->run_work);
--
- 	set_bit(BLK_MQ_S_STOPPED, &hctx->state);
-+
-+	cancel_delayed_work(&hctx->run_work);
- }
- EXPORT_SYMBOL(blk_mq_stop_hw_queue);
- 
+Here is the summary with links:
+  - [net-next] net: mptcp: fix some spelling mistake in mptcp
+    https://git.kernel.org/netdev/net-next/c/d640516a65d8
+
+You are awesome, thank you!
 -- 
-1.8.3.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

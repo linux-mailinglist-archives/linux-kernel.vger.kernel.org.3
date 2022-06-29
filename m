@@ -2,114 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9325C560BBF
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 23:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF044560BC3
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 23:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiF2VdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 17:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
+        id S230194AbiF2Vf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 17:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiF2VdK (ORCPT
+        with ESMTP id S229575AbiF2VfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 17:33:10 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1691102E;
-        Wed, 29 Jun 2022 14:33:08 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 145so2421121pga.12;
-        Wed, 29 Jun 2022 14:33:08 -0700 (PDT)
+        Wed, 29 Jun 2022 17:35:22 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1600F31361;
+        Wed, 29 Jun 2022 14:35:21 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id n8so10036687eda.0;
+        Wed, 29 Jun 2022 14:35:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=P2HquEVtI+pw57E6S5i14/TATcUTeLRqaqJNNbt7nE0=;
-        b=CeVJygw/0cgsj7YHNS4X+1qw464Ewte+SybrmPFUSN450ZagwqipfmRtK0X2k8H9xY
-         QYkX7ftvy3KaR9CSIO2HftOREwGS3n7gaWivdN9jfFyZejnMw0bWB0ANjLJU2DNoCFHv
-         54h928XSvgR3GV6ZFAt1OlsYtzL2qMyqDdO/DKBK+Ywr5cW8hgnDwb9/YpS4m5J26pT4
-         HvVNI2o8efGYg1R/SaNDYRXRaI3TmmeRdD/uylI4qmh00KEnx9pUyGVBhwh1bTkwhod/
-         Lwr7N1CcfaWGYpLir9nUPRIuLS8yA3mnUgr0B/G8f02E+oIDPBnraVgk83e4PsHQ1V0/
-         OC0w==
+        d=googlemail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LiKkW3yHrZaOOcbsnGJ7HkRfakbETu6k5duCEkXFxQA=;
+        b=CUuuBdlRNPLWLJMR1JLJq4smnvGh0RJx2mmdis0JaP8rYXin3oTnaKbbUmYPwOorkh
+         KwovYJAhc9vh6+GSEc0XLl5wwxhDV86OjhbOfVXkQPhwWLbk3BQ2y1z444ozVPuIO5Bo
+         ogZSK/GoxYxCLOL74AO/dHaXWp0u80R4TzE7R57rq8R/a2y8T990ZQ9mFUp1QCH6Jthq
+         7qM/Im8WsK4S/kWeJQmVtgyhOnXd6bbfLYzqQ0dQFN9d9e+k55ZVBNEK1+6TVHnArCCd
+         +jFydRDsbiejk2rqysJ0o1z17SVIpMVAh2JwJsD2NHvT1yc6eFmXhE6aSAr7sWNScM0O
+         hDeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=P2HquEVtI+pw57E6S5i14/TATcUTeLRqaqJNNbt7nE0=;
-        b=FYmVCteErxzEZP8gI1rhi5R3Hs/i+KgPVfdTt7CaVaCkVukLv991/o/iNBnAqJ79AW
-         jwdU/B8Hp9A9MuT4y9vbb7DeIPbfVZnGkPZzC8GkWc2FEYRWV9l/4cCLlB97vZztSgop
-         j7ZswejvqNcjYFb2KR2rsw6hS324e9gzMhbe3YiuHrZ53XXJah/aYyMTa68raOQGlu7f
-         CzrIfyGpIfoMZ+h6ArkxqFR/F/8j+Ya1jPqXlUxW+jyugLrS9Qk3m1UquJVzhG+mMlce
-         Lv3d9VwXQYzRqvjG9gkZ0eGe5+k78zLsQkJYazk3tv4nPn8yK8dqISZjMh9Z6C16jSfc
-         ECRA==
-X-Gm-Message-State: AJIora8/TyQ+2kOxVUwEkKat2KhI0inCaA6UlKrvpdHY6FkYcUDKpEJv
-        zhCprrD4ypmcN7G7yzOUyyA=
-X-Google-Smtp-Source: AGRyM1ucrUKB6ebsaq/gmawyS9muFOGtlInub9/s2LxqaW7A+prAT68k/ANdVjAqG528BJQuSA3DUw==
-X-Received: by 2002:a05:6a00:b45:b0:525:7ad2:91a7 with SMTP id p5-20020a056a000b4500b005257ad291a7mr11974724pfo.22.1656538388446;
-        Wed, 29 Jun 2022 14:33:08 -0700 (PDT)
-Received: from [172.30.1.37] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id i1-20020a625401000000b00527dba9e37bsm2675845pfb.73.2022.06.29.14.33.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 14:33:07 -0700 (PDT)
-Message-ID: <6256a27e-58fc-1c72-be93-f203feb79b0a@gmail.com>
-Date:   Thu, 30 Jun 2022 06:33:04 +0900
+        bh=LiKkW3yHrZaOOcbsnGJ7HkRfakbETu6k5duCEkXFxQA=;
+        b=TkgYp1rtutTsM0LrZh8SCtql7HYCbgP+zDKCkgOwpaEoTDMTr+DGQqhoeFMRzmJKPT
+         2qWIsjF2u6igcljhx3luStUnz+ElMo9gdIEz7sR7X3mISV42ZFaw1TLe2RIk/cGibm83
+         dLz2xUjha7voUAjzfQqDoZKmiYoYTGI6wWpS7uJeHPWg3QGJRQqFC7MtzDKyncaMT3W3
+         I8RW+NgmEWL9sIjczMjZzxTSQFsVOjnuGNmODrjcIPU4u352ODt0JqA5HnQbdpO3UpRS
+         LqG3B5o/ipLr0mlzhMt8nX4ugHRVK5ILynadjPCHY99rS85TUOksflz5dfUmyTPfEKvu
+         3mgQ==
+X-Gm-Message-State: AJIora8VCUGKCP9tRO+KFDpb5hwFFdeRbrxLd1lLC0XCZYZ6sYPuFm/0
+        hQoC/iFfKjM80HAqMtgRYoc=
+X-Google-Smtp-Source: AGRyM1tAIMpGgefHqFCQRWYzZ9NqwtuvUALqqzBrXrxab6zN2iTDYh/IcdKg27jf4rqdsxg3qkPAWw==
+X-Received: by 2002:a05:6402:2684:b0:435:afac:3670 with SMTP id w4-20020a056402268400b00435afac3670mr7434140edd.262.1656538519427;
+        Wed, 29 Jun 2022 14:35:19 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-077-007-003-132.77.7.pool.telefonica.de. [77.7.3.132])
+        by smtp.googlemail.com with ESMTPSA id s7-20020a1709066c8700b0070c4abe4706sm8237889ejr.158.2022.06.29.14.35.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 14:35:18 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tlanger@maxlinear.com,
+        rtanwar@maxlinear.com, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v2 0/8] intel-nand-controller: Fixes, cleanups and questions
+Date:   Wed, 29 Jun 2022 23:35:00 +0200
+Message-Id: <20220629213508.1989600-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] PM / devfreq: Fix kernel warning with cpufreq passive
- register fail
-Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Saravana Kannan <skannan@codeaurora.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220619222939.32029-1-ansuelsmth@gmail.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20220619222939.32029-1-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22. 6. 20. 07:29, Christian Marangi wrote:
-> Remove cpufreq_passive_unregister_notifier from
-> cpufreq_passive_register_notifier in case of error as devfreq core
-> already call unregister on GOV_START fail.
-> 
-> This fix the kernel always printing a WARN on governor PROBE_DEFER as
-> cpufreq_passive_unregister_notifier is called two times and return
-> error on the second call as the cpufreq is already unregistered.
-> 
-> Fixes: a03dacb0316f ("PM / devfreq: Add cpu based scaling support to passive governor")
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->  drivers/devfreq/governor_passive.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
-> index 72c67979ebe1..8055801cf182 100644
-> --- a/drivers/devfreq/governor_passive.c
-> +++ b/drivers/devfreq/governor_passive.c
-> @@ -336,7 +336,6 @@ static int cpufreq_passive_register_notifier(struct devfreq *devfreq)
->  err_put_policy:
->  	cpufreq_cpu_put(policy);
->  err:
-> -	WARN_ON(cpufreq_passive_unregister_notifier(devfreq));
->  
->  	return ret;
->  }
+Hello,
 
-Applied. Thanks.
+I am trying to replace the xway_nand driver (which is still using the
+legacy NAND API) with the intel-nand-controller driver. The Intel LGM
+IP (for which intel-nand-controller was implemented) uses a newer
+version of the EBU NAND and HSNAND IP found in Lantiq XWAY SoCs. The
+most notable change is the addition of HSNAND Intel LGM SoCs (it's not
+clear to me if/which Lantiq SoCs also have this DMA engine).
+
+While testing my changes on a Lantiq xRX200 SoC I came across some
+issues with the intel-nand-controller driver. The problems I found are:
+1) Mismatch between dt-bindings and driver implementation (compatible
+   string, patch #1 and patch #4) and hardware capabilities (number of
+   CS lines, patch #1).
+2) The driver reads the CS (chip select) line from the NAND controller's
+   reg property. In the dt-bindings example this is 0xe0f00000. Instead
+   it must be read from the NAND chip (child node).
+3) A few smaller code cleanups to make the driver easier to understand
+   (patches #5 to #8)
+4) I tried to understand the timing parameter calculation code but found
+   that it probably doesn't work on the Intel LGM SoCs either. The
+   dt-bindings example use clock ID 125 which is LGM_GCLK_EBU. So far
+   this is fine because EBU is the actual IP block for the NAND
+   interface. However, drivers/clk/x86/clk-lgm.c defines this clock as
+   a gate without a parent, so it's rate (as read by Linux) is always 0.
+   The intel-nand-controller driver then tries to calculate:
+     rate = clk_get_rate(ctrl->clk) / HZ_PER_MHZ
+   (rate will be 0 because clk_get_rate() returns 0) and then:
+     DIV_ROUND_UP(USEC_PER_SEC, rate)
+   (this then tries to divide by zero)
+
+For me to move forward with the transition from xway_nand to the
+intel-nand-controller driver I to understand a few more details:
+- Who from Maxlinear (who took over Intel's AnyWAN division, which
+  previously worked on the drivers for the Intel LGM SoCs) can send a
+  patch to correct the LGM_GCLK_EBU clock rate in
+  drivers/clk/x86/clk-lgm.c? Or is LGM dead and the various drivers
+  should be removed instead?
+- Who from Maxlinear can provide insights into which clock is connected
+  to the EBU NAND controller on Lantiq XWAY (Danube, xRX100, xRX200,
+  xRX300) SoCs as well as newer GRX350/GRX550 SoCs so that I can make
+  the intel-nand-controller work without hardcoded timing settings on
+  the XWAY SoCs?
+
+Due to the severity of issues 2) and 4) above I am targeting linux-next
+with this series. In my opinion there's no point in backporting these
+fixes to a driver which has been broken since it was upstreamed.
+
+Changes since v1 from [0]:
+- Thanks to Miguel for confirming that the reg property of the NAND chip
+  is the chip select number of the NAND controller. I removed a question
+  about this from the cover-letter.
+- Fixed accidental $id change in patch #1 which fixes a binding error
+  reported by Rob's bot
+- Dropped RFC status
+
+
+Best regards,
+Martin
+
+
+[0] https://lore.kernel.org/linux-mtd/20220628163850.17c56935@xps-13/T/#m4b2b6e1c970adf074a17ab9568637aff90e6ca36
+
+
+Martin Blumenstingl (8):
+  dt-bindings: mtd: intel: lgm-nand: Fix compatible string
+  dt-bindings: mtd: intel: lgm-nand: Fix maximum chip select value
+  mtd: rawnand: intel: Read the chip-select line from the correct OF
+    node
+  mtd: rawnand: intel: Remove undocumented compatible string
+  mtd: rawnand: intel: Don't re-define NAND_DATA_IFACE_CHECK_ONLY
+  mtd: rawnand: intel: Remove unused nand_pa member from ebu_nand_cs
+  mtd: rawnand: intel: Remove unused clk_rate member from struct
+    ebu_nand
+  mtd: rawnand: intel: Use devm_platform_ioremap_resource_byname()
+
+ .../bindings/mtd/intel,lgm-nand.yaml          |  6 ++--
+ drivers/mtd/nand/raw/intel-nand-controller.c  | 28 +++++++++----------
+ 2 files changed, 16 insertions(+), 18 deletions(-)
 
 -- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+2.37.0
+

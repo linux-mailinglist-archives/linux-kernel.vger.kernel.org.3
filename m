@@ -2,104 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F1D56006F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D87B560090
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233098AbiF2MzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 08:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
+        id S233485AbiF2Mzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 08:55:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232912AbiF2MzQ (ORCPT
+        with ESMTP id S232193AbiF2Mzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 08:55:16 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524FB2CCA4;
-        Wed, 29 Jun 2022 05:55:14 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 68f160c69678c1a0; Wed, 29 Jun 2022 14:55:12 +0200
-Received: from kreacher.localnet (unknown [213.134.175.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 29 Jun 2022 08:55:52 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CF02E9E0;
+        Wed, 29 Jun 2022 05:55:51 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 02DCA66C9F4;
-        Wed, 29 Jun 2022 14:55:11 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        john.garry@huawei.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] hisi_lpc: Use acpi_dev_for_each_child()
-Date:   Wed, 29 Jun 2022 14:55:11 +0200
-Message-ID: <12026357.O9o76ZdvQC@kreacher>
+        by ms.lwn.net (Postfix) with ESMTPSA id 3D6114FA;
+        Wed, 29 Jun 2022 12:55:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3D6114FA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1656507351; bh=XJl5q3/vT6FIjNUi1Eb8cZqtdz9msa9ZVePJ+Srhbno=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=g8zXpRz7bRSHh2wpmCa3bR+TZv80X7ujemiyJ30PgS4KXcMl5z63hNUSVC80KcyoD
+         +MeF/mYx4AwKhljGaEeMCKdGLc+6q2dpN2QdpK7B4MuW77e6yOuPAHcVnHv+depega
+         5hSKpLBzEY5p8wfepa2FoRKW1zERC2coUEcK2UmjxjNG8WswAamtiYUy8cPTP38QHU
+         hISEGvAgIDdYUE7CGy/uJhPMQN98AQKR3O+05oJiAVtTPi5J3nM0jNTAKv01sPP/Aw
+         aViVFbyBLygEtnHcqhys8P1jO0ojWDPFjSFEZ3gxs26BDLaoUaSU2tNCE9w9gf1vqO
+         MvLLtSdVmGD8A==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     David Gow <davidgow@google.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v2] Documentation: kunit: Cleanup run_wrapper, fix x-ref
+In-Reply-To: <CABVgOSkybS55KynNvSA-B=2Lemwe-iTOwZ55BO4PwaECokizTw@mail.gmail.com>
+References: <20220626101553.1885428-1-davidgow@google.com>
+ <20220629040605.2395481-1-davidgow@google.com>
+ <321d069a-0db3-6abd-c25e-4da46f361bd7@gmail.com>
+ <CABVgOSkybS55KynNvSA-B=2Lemwe-iTOwZ55BO4PwaECokizTw@mail.gmail.com>
+Date:   Wed, 29 Jun 2022 06:55:50 -0600
+Message-ID: <87tu83tyqx.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.175.150
-X-CLIENT-HOSTNAME: 213.134.175.150
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudegledgheejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppedvudefrddufeegrddujeehrdduhedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudejhedrudehtddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepjhhohhhnrdhgrghrrhihsehhuhgrfigvihdr
- tghomhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+David Gow <davidgow@google.com> writes:
 
-Instead of walking the list of children of an ACPI device directly,
-use acpi_dev_for_each_child() to carry out an action for all of
-the given ACPI device's children.
+> Thanks. The rest of this document is using "we" rather than "you", so
+> I used "we'll" for consistency. If "you" is preferred generally, it'd
+> be best to change it throughout the document (probably in a separate
+> patch).
 
-This will help to eliminate the children list head from struct
-acpi_device as it is redundant and it is used in questionable ways
-in some places (in particular, locking is needed for walking the
-list pointed to it safely, but it is often missing).
+Nobody has ever tried to articulate a wider policy on first or
+second-person usage for kernel docs, so far as I know, and I think
+that's just fine.  We have far bigger things to worry about before we
+get concerned about consistency at that level.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/bus/hisi_lpc.c |   12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+Thanks,
 
-Index: linux-pm/drivers/bus/hisi_lpc.c
-===================================================================
---- linux-pm.orig/drivers/bus/hisi_lpc.c
-+++ linux-pm/drivers/bus/hisi_lpc.c
-@@ -471,6 +471,12 @@ static int hisi_lpc_acpi_remove_subdev(s
- 	return 0;
- }
- 
-+static int hisi_lpc_acpi_clear_enumerated(struct acpi_device *adev, void *not_used)
-+{
-+	acpi_device_clear_enumerated(adev);
-+	return 0;
-+}
-+
- struct hisi_lpc_acpi_cell {
- 	const char *hid;
- 	const char *name;
-@@ -480,13 +486,11 @@ struct hisi_lpc_acpi_cell {
- 
- static void hisi_lpc_acpi_remove(struct device *hostdev)
- {
--	struct acpi_device *adev = ACPI_COMPANION(hostdev);
- 	struct acpi_device *child;
- 
- 	device_for_each_child(hostdev, NULL, hisi_lpc_acpi_remove_subdev);
--
--	list_for_each_entry(child, &adev->children, node)
--		acpi_device_clear_enumerated(child);
-+	acpi_dev_for_each_child(ACPI_COMPANION(hostdev),
-+				hisi_lpc_acpi_clear_enumerated, NULL);
- }
- 
- /*
-
-
-
+jon

@@ -2,143 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC60655F9A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 806C355F9B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232760AbiF2Hxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 03:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
+        id S232227AbiF2HzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 03:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232675AbiF2HxP (ORCPT
+        with ESMTP id S231629AbiF2HzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 03:53:15 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9843B554
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:53:02 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id eq6so20968845edb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:53:02 -0700 (PDT)
+        Wed, 29 Jun 2022 03:55:20 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3376525F9;
+        Wed, 29 Jun 2022 00:55:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wfc98UIdtcTx3Uk4wA7IydSC5XqKZoBwf1qoiSGq7iA=;
-        b=I2OK1McGbJoBW21ZZeM4sydqnxk1iFbRCGkI6B363FKEW1FIlXSshq4qaP2D7pvPDw
-         1G18YVReHPvzbZSLXEW2RH9dg6IdzjUC+1u3f1/hNRJNNlVuThDvrxvjbwFvZXi2sVD5
-         peCT3dZD6c2lI3aGEc9U8744hIe+u+Vb/U0Q4o7s0CyLRJHQtJmrHf+Av5OaBHIoE/QX
-         VqM6LPRtHlz78oms7iX3isNg0ZgbqizAuUeu6KeEvwOWSuiEeSQErdqtSi1vgplh6Z0s
-         1D79/zo52w4GN9eMnr/HhGbWv8oFi7VWLDGvXtmLySCgKR2M2RmmJUdYVOgLc6k8prjR
-         QZYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wfc98UIdtcTx3Uk4wA7IydSC5XqKZoBwf1qoiSGq7iA=;
-        b=noQH4+aCDRvnDfdgKJqoIfG9vzP+VtgFYp4Zj0Jq/HnscE+bDmTbtDRCkBc1I3nKq5
-         8ik27GiuDzEvy1gPs1e7Fa1cnQ8DcVydustRqvybqHBvB7cvHgVwG8yjLxDvaCD5XIbv
-         0klCSg4vcGxlH92k4bPdU0+KPJuKZZDbnulp3ncCsgIK5T7rVNByU6FvNm6Wzw/Ca3rD
-         pvZuCiePBUHSwCVS0UIAcwXtuvVLNuBW/ThgS1cNbeeUmHWDUdgzo5sAliLfi5QwCW5A
-         JzSU+FVCMzg5EYKNQMMxdhC/UQAg/erdBxd+MrVh13mhDpfJcke/9vHGimRIcyHurbyw
-         eVLw==
-X-Gm-Message-State: AJIora8vU/dUl9aqciB/lgs3tJeruLdGILtza3sIu5JXATukfqucTlsP
-        ja2qIRE2ul3f3KytIhHE4nA5eA==
-X-Google-Smtp-Source: AGRyM1um2rliocS+nP8zYQiLFTaGyhO3zUYztQsruEO8RAF5jxnR5TWfwm/XUIood6h0BQlrMa5vhg==
-X-Received: by 2002:a05:6402:43c7:b0:435:8a92:e8d0 with SMTP id p7-20020a05640243c700b004358a92e8d0mr2517359edc.174.1656489181164;
-        Wed, 29 Jun 2022 00:53:01 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id t2-20020a056402020200b00437db6acaeesm432173edv.95.2022.06.29.00.52.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 00:53:00 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Thara Gopinath <thara.gopinath@gmail.com>
-Subject: [PATCH v5 4/4] arm64: dts: qcom: sdm845: Add CPU BWMON
-Date:   Wed, 29 Jun 2022 09:52:50 +0200
-Message-Id: <20220629075250.17610-5-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220629075250.17610-1-krzysztof.kozlowski@linaro.org>
-References: <20220629075250.17610-1-krzysztof.kozlowski@linaro.org>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656489314; x=1688025314;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=QH2e8YbYNE2n6mUVI4ZdSzcrVKNaUgrSOCe7/29sjP4=;
+  b=xpT/4lKUXX4wZrNtLbRIH8COCJ0/LlbXf/L66UAPAnbEjRA2RGC7JrOa
+   3nYDeWXlCH54mtkwqmRZITNQOmOt1sTNGoOsafDFSUJiKEC9pIDUsK47U
+   ++uwAE3zZrFQMqlDTszKSPmRcGfznPVw4FsAngeWSxiH6+6ZPKpZUTTl5
+   M=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 29 Jun 2022 00:55:13 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 00:55:12 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 29 Jun 2022 00:55:12 -0700
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 29 Jun 2022 00:55:05 -0700
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, Linus Walleij <linus.walleij@linaro.org>,
+        <linux-gpio@vger.kernel.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v2] pinctrl: qcom: sc7280: Fix compile bug
+Date:   Wed, 29 Jun 2022 13:24:50 +0530
+Message-ID: <1656489290-20881-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device node for CPU-memory BWMON device (bandwidth monitoring) on
-SDM845 measuring bandwidth between CPU (gladiator_noc) and Last Level
-Cache (memnoc).  Usage of this BWMON allows to remove fixed bandwidth
-votes from cpufreq (CPU nodes) thus achieve high memory throughput even
-with lower CPU frequencies.
+Fix the compilation error, caused by updating constant variable.
+Hence remove redundant constant variable, which is no more useful
+as per new design.
 
-Co-developed-by: Thara Gopinath <thara.gopinath@gmail.com>
-Signed-off-by: Thara Gopinath <thara.gopinath@gmail.com>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The issue is due to some unstaged changes. Fix it up.
+
+Fixes: 36fe26843d6d ("pinctrl: qcom: sc7280: Add clock optional check for ADSP bypass targets")
+
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 ---
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 38 ++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+Changes Since V1:
+    -- Fix typo errors in commit message.
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 83e8b63f0910..e0f088996390 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -2026,6 +2026,44 @@ llcc: system-cache-controller@1100000 {
- 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
- 		};
+ drivers/pinctrl/qcom/pinctrl-lpass-lpi.c | 5 +----
+ drivers/pinctrl/qcom/pinctrl-lpass-lpi.h | 1 -
+ 2 files changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+index b5d1b99..e97ce45 100644
+--- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
++++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+@@ -388,9 +388,6 @@ int lpi_pinctrl_probe(struct platform_device *pdev)
+ 	pctrl->data = data;
+ 	pctrl->dev = &pdev->dev;
  
-+		pmu@1436400 {
-+			compatible = "qcom,sdm845-cpu-bwmon", "qcom,msm8998-cpu-bwmon";
-+			reg = <0 0x01436400 0 0x600>;
-+			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-+			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_LLCC 3>;
-+
-+			operating-points-v2 = <&cpu_bwmon_opp_table>;
-+
-+			cpu_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				/*
-+				 * The interconnect paths bandwidths taken from
-+				 * cpu4_opp_table bandwidth.
-+				 * They also match different tables from
-+				 * msm-4.9 downstream kernel:
-+				 *  - the OSM L3 from bandwidth table of
-+				 *    qcom,cpu4-l3lat-mon (qcom,core-dev-table);
-+				 *    bus width: 16 bytes;
-+				 */
-+				opp-0 {
-+					opp-peak-kBps = <4800000>;
-+				};
-+				opp-1 {
-+					opp-peak-kBps = <9216000>;
-+				};
-+				opp-2 {
-+					opp-peak-kBps = <15052800>;
-+				};
-+				opp-3 {
-+					opp-peak-kBps = <20889600>;
-+				};
-+				opp-4 {
-+					opp-peak-kBps = <25497600>;
-+				};
-+			};
-+		};
-+
- 		pcie0: pci@1c00000 {
- 			compatible = "qcom,pcie-sdm845";
- 			reg = <0 0x01c00000 0 0x2000>,
+-	data->is_clk_optional = of_property_read_bool(dev->of_node,
+-						      "qcom,adsp-bypass-mode");
+-
+ 	pctrl->clks[0].id = "core";
+ 	pctrl->clks[1].id = "audio";
+ 
+@@ -404,7 +401,7 @@ int lpi_pinctrl_probe(struct platform_device *pdev)
+ 		return dev_err_probe(dev, PTR_ERR(pctrl->slew_base),
+ 				     "Slew resource not provided\n");
+ 
+-	if (data->is_clk_optional)
++	if (of_property_read_bool(dev->of_node, "qcom,adsp-bypass-mode"))
+ 		ret = devm_clk_bulk_get_optional(dev, MAX_LPI_NUM_CLKS, pctrl->clks);
+ 	else
+ 		ret = devm_clk_bulk_get(dev, MAX_LPI_NUM_CLKS, pctrl->clks);
+diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
+index 759d5d8..afbac2a 100644
+--- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
++++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
+@@ -77,7 +77,6 @@ struct lpi_pinctrl_variant_data {
+ 	int ngroups;
+ 	const struct lpi_function *functions;
+ 	int nfunctions;
+-	bool is_clk_optional;
+ };
+ 
+ int lpi_pinctrl_probe(struct platform_device *pdev);
 -- 
-2.34.1
+2.7.4
 

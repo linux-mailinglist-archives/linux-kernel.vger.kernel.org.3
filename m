@@ -2,88 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A7B55FC7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828F255FCB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:59:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233276AbiF2JxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 05:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
+        id S233110AbiF2J5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 05:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233321AbiF2JxL (ORCPT
+        with ESMTP id S230191AbiF2J5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 05:53:11 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3181B2C1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 02:53:06 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id i64so14600707pfc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 02:53:06 -0700 (PDT)
+        Wed, 29 Jun 2022 05:57:10 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A933DA4A;
+        Wed, 29 Jun 2022 02:57:08 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id q6so31397131eji.13;
+        Wed, 29 Jun 2022 02:57:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KP3fUTyMybxgWttXPM/YRNz1NTtNbAM0PqEpXEZLz7c=;
-        b=ntA7j9Cl/DWRky+1M/dkgSnk36GNGlzhY2GKWi1LRGfbKwwXWq+zu1HdLsfanp1a6x
-         FHxTUbZBzP+PtS4V2EZrTOeBn2jUS4SX9s1w9HQFHiZqwLvzZg+WPs1A6VHw9bKqNXQx
-         8Mp4kIFmfOwv8IxTeaz+ufoIv61CTt5r52dIfwAqdj5gJMSMrUGtKCg9QTOlfkFfM/Ye
-         uXO1jA8w7RVFtuEDATSc4DKy2Wz3I6wjkDXiwfgxnFPJPz8QlofbWrkLkuHX7OjYaJTy
-         oh5i+VMyMeoq1iOgGEtNmSqEvszJTMEG7ftA1sH7Tbz8zT3vpaKWIJjhTa959Fk7hkJ4
-         U6+g==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=I5MLR9GaHt+gcljbfrFjnCSWyn1j6/a5Hr7Xlh2aaN0=;
+        b=buJxgv5Q73bxHOIBmNPHFEGhV8WPj3dtmmyuGDGyrfj60FcAPVugXG7vA6AMEP08TG
+         BmCZ/AWtbXajkUKw8LFLaEzzNbJadQYgX10xDr+2Ts1QijKexaikeB3KzW/kvChGgvG6
+         +8P60fkmFbHgI0KrY0qMP38wqEqXscApe4aLQhh+Rfl//YcZaa+cq2WuskIRQfbfcRzs
+         oY0VlJDZs2K2y7ldi0s25g/HbvXoIKeakJIy9/qoKavN7mcbJdHORxtVacyT9pL01AjE
+         txzLdLA7ja22x2BySScPzN0TccRkN2h/Nlrf9RhL3KKgjKn/HvY79N2oW9n9BzbgDuKd
+         AHIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KP3fUTyMybxgWttXPM/YRNz1NTtNbAM0PqEpXEZLz7c=;
-        b=1+ULQHDZCQEHBryDql2XYpGQnQryRhGsG6xqKohm5p7twDm3FzBevR1bHCquKEJjww
-         hztfXmf4yhuyZg0GAJaCpvKHNUV2ubySl9j0LffDy/HuVDfjXcsD8jg6G5FOhtVUl3br
-         igN78AAp8sCcnRd7j2QHgibuYBesdu8utaURt5Nyvf1/WW8ddhwFTC9+nBTO9Nd/UFLZ
-         wMBENDQxYPXN8ZPzmR3OLoB1HgRf5+579wS0MRq2ZvJLyQgHDXcZ1Kgy3xG2HNpCPfrz
-         nXMN+FxdpCDpz0gZRnBjxhOQKiO3gk5FXcvdlZLVLgkWwstpY5PC7Z6HqEZIDak55ZrM
-         EjJg==
-X-Gm-Message-State: AJIora/37/+z0oLjqo7pt/nDtqL0G+8t1GWqkkqBrxzCs7jumeZSEwAu
-        /WVIcFa3t/dwSsMi42WfsMpqYA==
-X-Google-Smtp-Source: AGRyM1trCTcCPBGGjudqgt9dfnfvoaMrWKGbiucA9M7RkpihgFrxiiiyoBP+0Cw4+jlVF4BRJmG0eg==
-X-Received: by 2002:a63:6943:0:b0:40c:3020:d0b with SMTP id e64-20020a636943000000b0040c30200d0bmr2333956pgc.34.1656496385621;
-        Wed, 29 Jun 2022 02:53:05 -0700 (PDT)
-Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id h24-20020a635318000000b0040dffa7e3d7sm5417918pgb.16.2022.06.29.02.53.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 02:53:05 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 15:23:02 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-pm@vger.kernel.org, daniel.lezcano@linaro.org,
-        amitk@kernel.org, rui.zhang@intel.com, rafael@kernel.org,
-        dietmar.eggemann@arm.com, nm@ti.com, sboyd@kernel.org,
-        sudeep.holla@arm.com, cristian.marussi@arm.com,
-        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] Energy Model power in micro-Watts and SCMI v3.1
- alignment
-Message-ID: <20220629095302.bi3xx6yicsnjeff7@vireshk-i7>
-References: <20220622145802.13032-1-lukasz.luba@arm.com>
- <be793e51-0d89-7afd-e122-ec929a1130e9@arm.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=I5MLR9GaHt+gcljbfrFjnCSWyn1j6/a5Hr7Xlh2aaN0=;
+        b=rwpKMjOvXLg0t7Kmy6nJJe5gxctW9ERMdD/n0mwiZwfca4Zg9wZtVJVFgys6ZrKmL2
+         pWGdkfV5HtqYttJuqDlFqlL9zIXmPRhlpoR4SXVKWPCrhy3nF3VSlQ8Ht0riD1QFNGJ7
+         QaerGSubOWKJ+Wgca768ODKe90yVtrNnDQ1PpouUgtMkSTNpt9pxmtOBqQ1tAoQFdtWt
+         vNmsbv0UgcVNsU3W/n6uh2H7hvvOWnuwDe9Z2QsaQDhV9qBySJHs4lRhEOP4sTd974ly
+         iDZBbCTA2YmDyOitoXTaBWZRaGbH0yznsPVloSVaV+HfCf9jL5xC1E8LStUuR4P2qTTE
+         FIiA==
+X-Gm-Message-State: AJIora8r7mZTU23KgcQ6l+gWwHKaPoj/2BdnVfY44MYpX7CbiRZrMEx0
+        9eSBgaeMKpgAE2E3/WPecnU=
+X-Google-Smtp-Source: AGRyM1sLHXMDnL3au3JQFE0erjRHq0Qa86eTDi9YJaFWZ6OgnuQ+sso80Ks6wPODn/9/SsTbaCI5+Q==
+X-Received: by 2002:a17:906:f84:b0:711:eda5:db31 with SMTP id q4-20020a1709060f8400b00711eda5db31mr2395073ejj.397.1656496627005;
+        Wed, 29 Jun 2022 02:57:07 -0700 (PDT)
+Received: from [192.168.8.198] (188.28.125.106.threembb.co.uk. [188.28.125.106])
+        by smtp.gmail.com with ESMTPSA id i21-20020a17090639d500b006fe98fb9523sm7602335eje.129.2022.06.29.02.57.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 02:57:06 -0700 (PDT)
+Message-ID: <56631a36-fec8-9c41-712b-195ad7e4cb9f@gmail.com>
+Date:   Wed, 29 Jun 2022 10:53:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <be793e51-0d89-7afd-e122-ec929a1130e9@arm.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC net-next v3 23/29] io_uring: allow to pass addr into sendzc
+Content-Language: en-US
+To:     Stefan Metzmacher <metze@samba.org>, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Jens Axboe <axboe@kernel.dk>, kernel-team@fb.com
+References: <cover.1653992701.git.asml.silence@gmail.com>
+ <228d4841af5eeb9a4b73955136559f18cb7e43a0.1653992701.git.asml.silence@gmail.com>
+ <cccec667-d762-9bfd-f5a5-1c9fb46df5af@samba.org>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <cccec667-d762-9bfd-f5a5-1c9fb46df5af@samba.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29-06-22, 10:49, Lukasz Luba wrote:
-> I would like to move forward with the micro-Watts in
-> the Energy Model. We have feedback from our partners
-> that this is a limitation. Also, as you can see
-> this uW is part of the new SCMI spec, which we
-> have support on our roadmap.
+On 6/29/22 08:42, Stefan Metzmacher wrote:
+> 
+> Hi Pavel,
+> 
+>> +    if (zc->addr) {
+>> +        ret = move_addr_to_kernel(zc->addr, zc->addr_len, &address);
+>> +        if (unlikely(ret < 0))
+>> +            return ret;
+>> +        msg.msg_name = (struct sockaddr *)&address;
+>> +        msg.msg_namelen = zc->addr_len;
+>> +    }
+>> +
+> 
+> Given that this fills in msg almost completely can we also have
+> a version of SENDMSGZC, it would be very useful to also allow
+> msg_control to be passed and as well as an iovec.
+> 
+> Would that be possible?
 
-Should I pick them and merge via PM tree ?
+Right, I left it to follow ups as the series is already too long.
+
+fwiw, I'm going to also add addr to IORING_OP_SEND.
+
+
+> Do I understand it correctly, that the reason for the new opcode is,
+> that IO_OP_SEND would already work with existing MSG_ZEROCOPY behavior, together
+> with the recvmsg based completion?
+
+Right, it should work with MSG_ZEROCOPY, but with a different notification
+semantics, would need recvmsg from error queues, and with performance
+implications.
+
+
+> In addition I wondering if a completion based on msg_iocb->ki_complete() (indicated by EIOCBQUEUED)
+> what have also worked, just deferring the whole sendmsg operation until all buffers are no longer used.
+> That way it would be possible to buffers are acked by the remote end when it comes back to the application
+> layer.
+
+There is msg_iocb, but it's mostly unused by protocols, IIRC apart
+from crypto sockets. And then we'd need to repeat the path of
+ubuf_info to handle stuff like skb splitting and perhaps also
+changing rules for ->ki_complete
+
+
+> I'm also wondering if the ki_complete() based approach should always be provided to sock_sendmsg()
+> triggered by io_uring (independend of the new zerocopy stuff), it would basically work very simular to
+> the uring_cmd() completions, which are able to handle both true async operation indicated by EIOCBQUEUED
+> as well as EAGAIN triggered path via io-wq.
+
+Would be even more similar to how we has always been doing
+read/write, and rw requests do pass in a msg_iocb, but again,
+it's largely ignored internally.
 
 -- 
-viresh
+Pavel Begunkov

@@ -2,95 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D2C55F35C
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CBCC55F366
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbiF2CYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 22:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
+        id S229825AbiF2C1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 22:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiF2CY2 (ORCPT
+        with ESMTP id S229633AbiF2C1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 22:24:28 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7141B19032;
-        Tue, 28 Jun 2022 19:24:27 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id d5so12710445plo.12;
-        Tue, 28 Jun 2022 19:24:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XronN2ttC9hE2J8XSodjjpTCowak0GAjvewu6UouE5Q=;
-        b=opww4e0yGVRW3kT67WPEhJPT+egMpmLsqVmdKkNPaGKNVMFMyZeFNfv71MTzRIMtmG
-         lEMikol2A1f46bm5tKHzKHZuEKUa/5TxheOX4V0g+MUJB838hqS+Q5CeQE2qoFBRkIs/
-         MR0OTsbLArBg5T93sjP82iUrjdusbF+lcfw4En7Of/248Eq6vlDA7Fn0aTVbLQ+HWIEt
-         q9gTMm7hY1/lc6aHiOLzVGSTQp1JbRURHUwENu6HPvVNJg1FskmAVNYkX8r8oRkKHeff
-         rr/4JdRa7AV4iXt0EWlB2wcKejGjNAEKbYFC9DXSF8AASAdwbV/cVX21bPb7QjRLC+24
-         r6WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XronN2ttC9hE2J8XSodjjpTCowak0GAjvewu6UouE5Q=;
-        b=q30vC2IqXy3K3OFenf6LhDmxoWi5A2t061BCXh3m6NBCRYV8sXDhxyPNzxZNb04fNO
-         Q/QoYEd9lOjzvVKUCo6AbRSrg6QxC/5G1KvE5Vq3gbfMeFCMewXER0E1nftla8ryGJkw
-         xN/Y6GZO0JsziY3eQYEXKSDdm2uD2f3t+uV1l61OcwkmIZOPzWkz5U3mv72WZnBkFKnC
-         bS3aMf3aZi1w5VhdxhuF5X4MDn2JBLhOFxry5hzuCCuEKTkDsXTuUNxvkoslcC/ZuQjh
-         4pfHBZdsaZLwdVn8n4cCnYyFBf1Purmy6rhNlYOVNxXcmyURxl6Utffu5pUvwqSRoAk+
-         VsCA==
-X-Gm-Message-State: AJIora8cOGhMpIg9hoA7lxFUJcXmjekE4Tr3i46smVpOQpe/XwsqVXPS
-        hk+EePhLwxKYxXfl/RQwJOE=
-X-Google-Smtp-Source: AGRyM1ubzs/qg25uzX1LqVU4AnLG8ovqES0gsw7/dOT1GKpiQ6VvrupmLv75XqHK8Ox5Uyo01QLDiw==
-X-Received: by 2002:a17:902:9f97:b0:16a:9b9:fb63 with SMTP id g23-20020a1709029f9700b0016a09b9fb63mr6923905plq.7.1656469467027;
-        Tue, 28 Jun 2022 19:24:27 -0700 (PDT)
-Received: from localhost.localdomain ([103.84.139.165])
-        by smtp.gmail.com with ESMTPSA id l189-20020a6225c6000000b005255263a864sm10180598pfl.169.2022.06.28.19.24.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 19:24:26 -0700 (PDT)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     jmaloy@redhat.com, ying.xue@windriver.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        erik.hugne@ericsson.com, tgraf@suug.ch
-Cc:     netdev@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH] net: tipc: fix possible refcount leak in tipc_sk_create()
-Date:   Wed, 29 Jun 2022 10:24:02 +0800
-Message-Id: <20220629022402.10841-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 28 Jun 2022 22:27:18 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351AF1A385;
+        Tue, 28 Jun 2022 19:27:17 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 40F883200905;
+        Tue, 28 Jun 2022 22:27:14 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 28 Jun 2022 22:27:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1656469633; x=
+        1656556033; bh=RezzKQz5lCHiF85I1womsS66xU9W7I5xMpCJe6Reo0Q=; b=r
+        tA5QkwwPaOJHCryzlW7yMURGrR4xbEWjEEuvvB9tkbE+8i/uAt0g+TFVAglDD6YE
+        rI2vzWjFDNb06sHh0Ym+TJbtJxJstax3owmPe7IW5r/svaInj/xgbu4qita684UZ
+        X8i18zvOl/QNB6CqoYO0xdn5Iq4Ekgtbn6uk2N3PE9Lu46ptN1JzjCDEmZPT1L5F
+        efcY3IXXIiPSfcw8MqsEcnB944W74FyL+/HPmBd8rP+YTlxHw6PltlMP40f5pWO1
+        yUNZEWJBcKV98K4KLYFGIihfeGDqlhUXbIhXFNek4bfFa6Uc9uYx92Ovme0lAe3L
+        GfvJe7Xg5+0mkAlpnmQCQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656469633; x=
+        1656556033; bh=RezzKQz5lCHiF85I1womsS66xU9W7I5xMpCJe6Reo0Q=; b=w
+        kw2P3jrLEKEuonZbPOIfF9RYg5jyk/qy5JBEV804zPeivGWmCjsE3q8BgMzD+o7/
+        0o4OHvHqwUaV4QVJ38KWDpiZKssE/Gir86O5beLk67WGW63UEBMsfcUAldP/a+8u
+        yU3/SKpRilxUps7gpWRKilDv7WTcO5+MICFsHPVl9lsj//j2GszbbRPVGsOF/7N6
+        A2zgFJtua8KwlFcJ/9WK9H/iwucbYflDvlYXjgjq95IOy46AFGTHuuddeCIXk8x/
+        qbsYHSliluEvX4jx4jMkyKFIKu+77CQc3/Ox0mQeYXGWEt3nFWdLEhjSF9il/ERS
+        br2rA7rPB9/IfiRL8cbQg==
+X-ME-Sender: <xms:gbi7YspBxefnNoz9en_O90ic7KNi3oQVzArzqEe9cTWo720GvkPxQQ>
+    <xme:gbi7YiqbRgI_WWRk7q1BmXfaehLTv_l3DsUFKEKli2LUUde7bx-HeSGfpogCQO2G7
+    OBG2Sce1KqP13qckg>
+X-ME-Received: <xmr:gbi7YhMlkNXtTZ14Dc5opIlrazRNH0pUuYT4zvdO30svOKHvoQ6q7st3kYoBuCoXI7Ta8t23rHXb5s9y47iRI5MXTq00cG2bBN3dBQ9jwhw71GU3D1-nunu1vw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudegkedgheejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeelteejffdvgeehkedtkeevueeuteffteffhedufeeujedvudef
+    udetieeijeevleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhl
+    rghnugdrohhrgh
+X-ME-Proxy: <xmx:gbi7Yj5HFlxN08pkH_od1MMSIW0iJCUKUH0Bcpd6ruAL9dODVyOPlg>
+    <xmx:gbi7Yr7N6eb5hmW8rVc96n3d8TmxrwCL2dX4gre8h6Ok5nmj2t2zpg>
+    <xmx:gbi7Yjjqc1A2hSUT2pKUdlgEtiycT1RoaACXQiHrH05m_NLrM6gOWg>
+    <xmx:gbi7YuZDlSLKer43a1_VRpPX_HOgXUQakUJxFxpmJFaDYOyh0w71eQ>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 28 Jun 2022 22:27:12 -0400 (EDT)
+Subject: Re: [PATCH v2 2/4] mfd: axp20x: Add AXP221/AXP223/AXP809 GPIO cells
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-kernel@vger.kernel.org
+References: <20220621034224.38995-1-samuel@sholland.org>
+ <20220621034224.38995-3-samuel@sholland.org>
+ <CACRpkdaxodnaJsKfFMvYHWtPwZyACiec4iX3ZXSBL5Ptfa6mRg@mail.gmail.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <ffe66c81-9a2c-e2b3-ad9c-ad46824fe76e@sholland.org>
+Date:   Tue, 28 Jun 2022 21:26:58 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CACRpkdaxodnaJsKfFMvYHWtPwZyACiec4iX3ZXSBL5Ptfa6mRg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sk need to be free when tipc_sk_insert fails. While tipc_sk_insert is hard
-to fail, it's better to fix this.
+On 6/28/22 9:03 AM, Linus Walleij wrote:
+> On Tue, Jun 21, 2022 at 5:42 AM Samuel Holland <samuel@sholland.org> wrote:
+> 
+>> These PMICs all contain a compatible GPIO controller.
+>>
+>> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> 
+> If I can get Lee's ACK on this patch I suppose I can apply patches
+> 1-3 to the pin control tree?
 
-Fixes: 07f6c4bc048a ("tipc: convert tipc reference table to use generic rhashtable")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
----
- net/tipc/socket.c | 1 +
- 1 file changed, 1 insertion(+)
+Looks like he already applied v1 of this patch (which was identical):
 
-diff --git a/net/tipc/socket.c b/net/tipc/socket.c
-index 17f8c523e33b..43509c7e90fc 100644
---- a/net/tipc/socket.c
-+++ b/net/tipc/socket.c
-@@ -502,6 +502,7 @@ static int tipc_sk_create(struct net *net, struct socket *sock,
- 	sock_init_data(sock, sk);
- 	tipc_set_sk_state(sk, TIPC_OPEN);
- 	if (tipc_sk_insert(tsk)) {
-+		sk_free(sk);
- 		pr_warn("Socket create failed; port number exhausted\n");
- 		return -EINVAL;
- 	}
--- 
-2.25.1
+https://lore.kernel.org/lkml/YrnZof9lwsIQCqu7@google.com/
 
+Regards,
+Samuel

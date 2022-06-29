@@ -2,133 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4813A55F303
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 03:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C869455F306
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 03:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbiF2B5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 21:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
+        id S230099AbiF2B64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 21:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbiF2B52 (ORCPT
+        with ESMTP id S229511AbiF2B6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 21:57:28 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156FF2E090
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 18:57:27 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id lw20so29597644ejb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 18:57:27 -0700 (PDT)
+        Tue, 28 Jun 2022 21:58:54 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9B21F607
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 18:58:50 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id t21so13686229pfq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 18:58:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KjnDuNtpSD7eZexVYfmSL1k8PwdI9ho0cW38MmOj+E8=;
-        b=UJ9GnuwqCrZfdS3YduhfsbMWGCPCx3Ssr9rzEW80E44bzl1qukWK1/gctHw5AvJ9hY
-         eTALDhTpslk86KYclJAVnpI4z5rNNrhnVCDBRSnRqjCXAEY2//bzMOHnHWsCZClR3XKw
-         WQcHR6TtE1VgEvFLKVehYLl9gQHxaoPJPNM/kNKepZcRs9DKxu+mtO9Z6r55C0YbxYYh
-         ifac+bwB4wXl4ImhU4dKy8TDAn9qCvWGU9Q4LunPHqUPZSHjlAOojbdMOc5cEH7N79ho
-         x+5ro1hZeXcKCfCddPuDOiq0dypr2bg3117ibNndAvWOYs5gGON3aXlAPshMj1NrZui3
-         7PSw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l2cjPj2rGQYi4IE2tVl3hOTOPJB5V96R0meZ4b9cHtY=;
+        b=q6v56ze5/ph7rfOuScMbsXs4S2SoZHwR7bh2WYvbZEC4a3gm1agQiwIpGjf3UbOhPc
+         CMMDKc/wAnSRbVye633p7+ZrOK1RknUTdV28iRiWMV/xNnkWdhGF6nwT2W9Y3zN3VM39
+         37meV/f0e4GbWWKqX4DayXOQaUhFWRDExPb/3nnxnJfDBAIXCdupnouyl2bsUCCqjegV
+         ASZPZQQaUmAp0NQMZgwe8z+NgcAPeL6Be/Dv8FMtSSUCcLDPkcS87IZF7HUFn2oHR9pb
+         RmEDmmerhjfj7ozsMLHwc3y1QTT450m9iHt+W76pvdWEVbuIhPT0kp1Agd71pmGbC0vm
+         Oyfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KjnDuNtpSD7eZexVYfmSL1k8PwdI9ho0cW38MmOj+E8=;
-        b=7RKgouff1e8aMFMBdCZLUiW3s5MJD2pYUX61gC6ClZreEAOdweZD5pByroDR3EbklJ
-         jHy6RE0tj8KxCtgUEfl7nBlTenm5KTSWBCV9mP0hesGbA7T48V4PF4XzOCKm930Z1U7K
-         8hbtLh+AGtpAKdhY7UdTxQHj/DbtNKIc8nCEfgKwxZQUPfCA9+ma7UjNv/YlRx2kQpWc
-         6Xh7uG/n/KZ3AdtpqjUYa+WmgSd/xPvDs9cK5NPUPjk2/YnBm4XUq9731M2AXdGgmCVx
-         MxN1c8ZaWg/5WdPZ6KHX55w/ZG5WmfUCp9KK7JW5mBBcfh3Ya6YPRrZC5L9WdS972sKA
-         7NAQ==
-X-Gm-Message-State: AJIora8S+T4nFoJGTfyAfZoqJLuTSP7hYeiic8TjItRp4IGcDkNB/h5Z
-        lJ/lX+syeyXpkD8g7DNMmsK5i6u4dqKsUBC588Y=
-X-Google-Smtp-Source: AGRyM1tuMLXxLNkEoh6G8ObRG/eaf7ivhKlsB652e3VHUvJp/djX5DGU72F2kJcjVmVWw/EfQt2A1nMx9Ofwym/m/0Y=
-X-Received: by 2002:a17:907:6e1a:b0:726:9f52:bafc with SMTP id
- sd26-20020a1709076e1a00b007269f52bafcmr922509ejc.413.1656467845654; Tue, 28
- Jun 2022 18:57:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l2cjPj2rGQYi4IE2tVl3hOTOPJB5V96R0meZ4b9cHtY=;
+        b=2b/eEnqPn3Lhy+e5m19nz3i9VFWNaCVLitRylDa+/10ADQkIZNRvCEZU2eh42/UvDw
+         p8cMdS92dsRQUK3wqysaTQdKVaUPVnKcC9Tt33v7EmtNlIRisSAsDoRmnl9Sd7BF3P6G
+         WCRecOxFv5v3OJdr2mEZNlcXcWXB9N9id+KHs/e/TaJTPHKZ2kdAXLhPUyVlGa+635uX
+         0pB2/IasGEqdrkVucrZYsO/+C4fo/gBRYG/nQ+iLat7hkXcrAFhVVDKOjUmYpjgormJ+
+         JqcHe30eUbk2dMsa2sBCxcVfFSYU1G+AhD6EfGDe+1CbXwIDqXODfC7+2yfRF0ZzuNnj
+         C1kw==
+X-Gm-Message-State: AJIora/UL3m+6aqTaFTBXHbVvMThEFRcPbIYIy7AmYRDiy3497KgpPK6
+        k0wO6ZyZqhWHh86n3Rws1dwAKw==
+X-Google-Smtp-Source: AGRyM1vMw39HmKM14XX+Qo7MOVdGShw02oI13NchFH/A/DNJlm+gFcsXirL/oKAKqzvzQUfrAIWcdA==
+X-Received: by 2002:a63:f24d:0:b0:40d:ed5f:1729 with SMTP id d13-20020a63f24d000000b0040ded5f1729mr861219pgk.338.1656467929749;
+        Tue, 28 Jun 2022 18:58:49 -0700 (PDT)
+Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.230])
+        by smtp.gmail.com with ESMTPSA id f5-20020aa79d85000000b005187431876fsm10135114pfq.180.2022.06.28.18.58.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 18:58:49 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com
+Cc:     linux-kernel@vger.kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH v5] sched/fair: combine detach into dequeue when migrating task
+Date:   Wed, 29 Jun 2022 09:58:34 +0800
+Message-Id: <20220629015834.98407-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220628055949.566089-1-dzm91@hust.edu.cn> <CAHc6FU4PR9hwBY1NxdyAMAAh4rY+KHvO26PTSsDBXJ=yHK2msQ@mail.gmail.com>
- <CAD-N9QXikfrnjD-4a8pnLYUFfcm0LdpBaXjO4=CXU5MNS-jvSQ@mail.gmail.com>
-In-Reply-To: <CAD-N9QXikfrnjD-4a8pnLYUFfcm0LdpBaXjO4=CXU5MNS-jvSQ@mail.gmail.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Wed, 29 Jun 2022 09:56:44 +0800
-Message-ID: <CAD-N9QX_3PeTYA3-+zJLG4LM3Gst2B2bOEg9fEVXDTx+aYPtwg@mail.gmail.com>
-Subject: Re: [PATCH] gfs2: fix overread in the strlcpy of init_names
-To:     Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Steven Whitehouse <swhiteho@redhat.com>,
-        Jean Delvare <khali@linux-fr.org>,
-        syzkaller <syzkaller@googlegroups.com>,
-        cluster-devel <cluster-devel@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 9:33 AM Dongliang Mu <mudongliangabcd@gmail.com> wrote:
->
-> On Tue, Jun 28, 2022 at 8:06 PM Andreas Gruenbacher <agruenba@redhat.com> wrote:
-> >
-> > Dongliang Mu,
-> >
-> > On Tue, Jun 28, 2022 at 8:10 AM Dongliang Mu <dzm91@hust.edu.cn> wrote:
-> > > From: Dongliang Mu <mudongliangabcd@gmail.com>
-> > >
-> > > In init_names, strlcpy will overread the src string as the src string is
-> > > less than GFS2_FSNAME_LEN(256).
-> > >
-> > > Fix this by modifying strlcpy back to snprintf, reverting
-> > > the commit 00377d8e3842.
-> >
-> > ... if the source string isn't NULL-terminated. But in that case, the
-> > code will still do the same thing with this patch. In other words,
-> > this doesn't fix anything. So let's check for NULL termination
-> > instead.
->
-> Partially yes. Even if the source string is NULL-terminated, strlcpy
-> will invoke memcpy to overread the adjacent memory of source string as
-> the specified length is longer than source string.
+When we are migrating task out of the CPU, we can combine detach and
+propagation into dequeue_entity() to save the detach_entity_cfs_rq()
+in migrate_task_rq_fair().
 
-The above statement is incorrect after I double check the
-implementation of strlcpy.
+This optimization is like combining DO_ATTACH in the enqueue_entity()
+when migrating task to the CPU.
 
-The correct fix should be NULL-termination check of src string.
+So we don't have to traverse the CFS tree extra time to do the
+detach_entity_cfs_rq() -> propagate_entity_cfs_rq() call, which
+wouldn't be called anymore with this patch's change.
 
->
-> >
-> > Thanks,
-> > Andreas
-> >
-> > > Fixes: 00377d8e3842 ("[GFS2] Prefer strlcpy() over snprintf()")
-> > > Reported-by: syzkaller <syzkaller@googlegroups.com>
-> > > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> > > ---
-> > >  fs/gfs2/ops_fstype.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/fs/gfs2/ops_fstype.c b/fs/gfs2/ops_fstype.c
-> > > index c9b423c874a3..ee29b50d39b9 100644
-> > > --- a/fs/gfs2/ops_fstype.c
-> > > +++ b/fs/gfs2/ops_fstype.c
-> > > @@ -383,8 +383,8 @@ static int init_names(struct gfs2_sbd *sdp, int silent)
-> > >         if (!table[0])
-> > >                 table = sdp->sd_vfs->s_id;
-> > >
-> > > -       strlcpy(sdp->sd_proto_name, proto, GFS2_FSNAME_LEN);
-> > > -       strlcpy(sdp->sd_table_name, table, GFS2_FSNAME_LEN);
-> > > +       snprintf(sdp->sd_proto_name, GFS2_FSNAME_LEN, "%s", proto);
-> > > +       snprintf(sdp->sd_table_name, GFS2_FSNAME_LEN, "%s", table);
-> > >
-> > >         table = sdp->sd_table_name;
-> > >         while ((table = strchr(table, '/')))
-> > > --
-> > > 2.35.1
-> > >
-> >
+detach_task()
+  deactivate_task()
+    dequeue_task_fair()
+      for_each_sched_entity(se)
+        dequeue_entity()
+          update_load_avg() /* (1) */
+            detach_entity_load_avg()
+
+  set_task_cpu()
+    migrate_task_rq_fair()
+      detach_entity_cfs_rq() /* (2) */
+        update_load_avg();
+        detach_entity_load_avg();
+        propagate_entity_cfs_rq();
+          for_each_sched_entity()
+            update_load_avg()
+
+This patch save the detach_entity_cfs_rq() called in (2) by doing
+the detach_entity_load_avg() for a CPU migrating task inside (1)
+(the task being the first se in the loop)
+
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+---
+v5:
+ - improve the commit message suggested by Vincent.
+
+v4:
+ - change the commit message a little.
+ - remove the forward declaration of detach_entity_cfs_rq()
+ - remove verbose comments in code.
+
+v3:
+ - change to use task_on_rq_migrating() and put Dietmar's much clearer
+   description in the commit message. Thanks!
+
+v2:
+ - fix !CONFIG_SMP build error
+---
+ kernel/sched/fair.c | 30 +++++++++++++++++-------------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 8bed75757e65..31d53c11e244 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3931,6 +3931,7 @@ static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+ #define UPDATE_TG	0x1
+ #define SKIP_AGE_LOAD	0x2
+ #define DO_ATTACH	0x4
++#define DO_DETACH	0x8
+ 
+ /* Update task and its cfs_rq load average */
+ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+@@ -3948,7 +3949,14 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+ 	decayed  = update_cfs_rq_load_avg(now, cfs_rq);
+ 	decayed |= propagate_entity_load_avg(se);
+ 
+-	if (!se->avg.last_update_time && (flags & DO_ATTACH)) {
++	if (flags & DO_DETACH) {
++		/*
++		 * DO_DETACH means we're here from dequeue_entity()
++		 * and we are migrating task out of the CPU.
++		 */
++		detach_entity_load_avg(cfs_rq, se);
++		update_tg_load_avg(cfs_rq);
++	} else if (!se->avg.last_update_time && (flags & DO_ATTACH)) {
+ 
+ 		/*
+ 		 * DO_ATTACH means we're here from enqueue_entity().
+@@ -4241,6 +4249,7 @@ static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
+ #define UPDATE_TG	0x0
+ #define SKIP_AGE_LOAD	0x0
+ #define DO_ATTACH	0x0
++#define DO_DETACH	0x0
+ 
+ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int not_used1)
+ {
+@@ -4460,6 +4469,11 @@ static __always_inline void return_cfs_rq_runtime(struct cfs_rq *cfs_rq);
+ static void
+ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+ {
++	int action = UPDATE_TG;
++
++	if (entity_is_task(se) && task_on_rq_migrating(task_of(se)))
++		action |= DO_DETACH;
++
+ 	/*
+ 	 * Update run-time statistics of the 'current'.
+ 	 */
+@@ -4473,7 +4487,7 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+ 	 *   - For group entity, update its weight to reflect the new share
+ 	 *     of its group cfs_rq.
+ 	 */
+-	update_load_avg(cfs_rq, se, UPDATE_TG);
++	update_load_avg(cfs_rq, se, action);
+ 	se_update_runnable(se);
+ 
+ 	update_stats_dequeue_fair(cfs_rq, se, flags);
+@@ -6938,8 +6952,6 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
+ 	return new_cpu;
+ }
+ 
+-static void detach_entity_cfs_rq(struct sched_entity *se);
+-
+ /*
+  * Called immediately before a task is migrated to a new CPU; task_cpu(p) and
+  * cfs_rq_of(p) references at time of call are still valid and identify the
+@@ -6973,15 +6985,7 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+ 		se->vruntime -= min_vruntime;
+ 	}
+ 
+-	if (p->on_rq == TASK_ON_RQ_MIGRATING) {
+-		/*
+-		 * In case of TASK_ON_RQ_MIGRATING we in fact hold the 'old'
+-		 * rq->lock and can modify state directly.
+-		 */
+-		lockdep_assert_rq_held(task_rq(p));
+-		detach_entity_cfs_rq(&p->se);
+-
+-	} else {
++	if (!task_on_rq_migrating(p)) {
+ 		/*
+ 		 * We are supposed to update the task to "current" time, then
+ 		 * its up to date and ready to go to new CPU/cfs_rq. But we
+-- 
+2.36.1
+

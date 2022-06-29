@@ -2,99 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B4855F88D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C27E55F895
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbiF2HNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 03:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
+        id S230188AbiF2HPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 03:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiF2HNr (ORCPT
+        with ESMTP id S229789AbiF2HPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 03:13:47 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758F7326E9;
-        Wed, 29 Jun 2022 00:13:45 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LXt3q40F8z4xNm;
-        Wed, 29 Jun 2022 17:13:43 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1656486823;
-        bh=b3IocXqxeZMPv/2DWEOClO6ETBKjJomsFK+gSpWHbRs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Uj/nK39+yHiyf93iRWaRjSaswQuylka73WYpkUYU1EMDj8rDZpND8Mwx7KVUGmEWX
-         kbFQlX6C9u56N+pxKDPm09I065KJZDOUo5RvFqb53I3CP1UwEx2Wa9DSv5DFbkQg8w
-         kTkTDC4sq9p3t6P8WJMjFJuS2MZm/PlOgN6Qmgmpt5lkhYu93F10cap3OGW22vb+t/
-         rC8qocdQL/MPmEtbWyvCfCj6YT2sSnm0JUXQ37Yij5PkoEdicPMLh43cGs1FzajkAV
-         kio07lk+t6WLO2AlsH+BDL2814LwW1L3R7c88yBZDiUpknvgdqFFObLBhYHFxMbJIe
-         BlKKdX7V3qR+w==
-Date:   Wed, 29 Jun 2022 17:13:41 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the pinctrl tree
-Message-ID: <20220629171341.5b9b5269@canb.auug.org.au>
+        Wed, 29 Jun 2022 03:15:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB8FE32EDF
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:15:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656486917;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yxaIGjt/4YMOZg4WjQlEh9o2Sctvt7eqfm3ZD+2F0lo=;
+        b=fS4xt6XCF11EyeQOu+yMa9oYFqml0DPZmVC8zwNqBnS8abi9bjwXrJjbh6sdB1voI7SrKv
+        gSXOxnerdPjpmDvI2jOEw4kP/qyoLKZjhkmwbhsTqn5n4LpruAV+z8M7Tui18oYy050nyt
+        4C9kBgNNCkqryMYkRAtCEuYzYVKn2p0=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-581-LYFFA_l8N5C33ZnP6gNUfA-1; Wed, 29 Jun 2022 03:15:16 -0400
+X-MC-Unique: LYFFA_l8N5C33ZnP6gNUfA-1
+Received: by mail-wm1-f71.google.com with SMTP id 83-20020a1c0256000000b003a03f8cc1acso721430wmc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:15:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yxaIGjt/4YMOZg4WjQlEh9o2Sctvt7eqfm3ZD+2F0lo=;
+        b=MnC50U+RGGApLMjH1ww3TpksVfmxycFD3UpeNigZrYy3+M03M5yNwwH2YKl0g6ayIc
+         ZQGWtxn/TzWX67zUAfHPJO1hjk+MSG40jwCBh0nX+VLi6rM3vuEDMg0W59WhRWxRnRne
+         T3vGkkTU3vuFfPxN7jQb/zmn7/rSLLtLDBsFp4EhpGhxbY28ETj92qx5llkyq7+wfUdq
+         wbTRaYr17AJYdNyD4PK9xioHjr6xBDIWK2O+eteO6thku+7kGhhvT7i5BOd5Cpl88Mxw
+         SOpJyZGDmQToF3aB9zVIpLUokl/3Tg1NymifTa1nENX7Fc2fZqfarud+bTgwP5L/W4u0
+         UjlA==
+X-Gm-Message-State: AJIora8HdFU6HMhdZRWSTre9hYqIbZ1X2oRNkkaavfaJlqdOhs7z2RuN
+        xYaYjhynpVAPsPDtwJ8OxYLji5iWK20m6P9QBhHPLvqojLtr1C1d90isUt684X997uul+J6YtKv
+        sdKOKNlWKMerKzbOp/DwZdyjl
+X-Received: by 2002:a05:600c:3542:b0:3a1:6855:1153 with SMTP id i2-20020a05600c354200b003a168551153mr1702715wmq.121.1656486915127;
+        Wed, 29 Jun 2022 00:15:15 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tpClGQvlBrnG+3cY/I3Shi+z3wdCHGxIqznCCwszS9iYsWm4igce/0pKeAuj4JN2pzhuyLJw==
+X-Received: by 2002:a05:600c:3542:b0:3a1:6855:1153 with SMTP id i2-20020a05600c354200b003a168551153mr1702662wmq.121.1656486914525;
+        Wed, 29 Jun 2022 00:15:14 -0700 (PDT)
+Received: from redhat.com ([2.52.23.204])
+        by smtp.gmail.com with ESMTPSA id h13-20020adff4cd000000b002103aebe8absm15585352wrp.93.2022.06.29.00.15.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 00:15:14 -0700 (PDT)
+Date:   Wed, 29 Jun 2022 03:15:09 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        kvm <kvm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Ben Hutchings <ben@decadent.org.uk>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH V3] virtio: disable notification hardening by default
+Message-ID: <20220629030600-mutt-send-email-mst@kernel.org>
+References: <CACGkMEuurobpUWmDL8zmZ6T6Ygc0OEMx6vx2EDCSoGNnZQ0r-w@mail.gmail.com>
+ <20220627024049-mutt-send-email-mst@kernel.org>
+ <CACGkMEvrDXDN7FH1vKoYCob2rkxUsctE_=g61kzHSZ8tNNr6vA@mail.gmail.com>
+ <20220627053820-mutt-send-email-mst@kernel.org>
+ <CACGkMEvcs+9_SHmO1s3nyzgU7oq7jhU2gircVVR3KDsGDikh5Q@mail.gmail.com>
+ <20220628004614-mutt-send-email-mst@kernel.org>
+ <CACGkMEsC4A+3WejLSOZoH3enXtai=+JyRNbxcpzK4vODYzhaFw@mail.gmail.com>
+ <CACGkMEvu0D0XD7udz0ebVjNM0h5+K9Rjd-5ed=PY_+-aduzG2g@mail.gmail.com>
+ <20220629022223-mutt-send-email-mst@kernel.org>
+ <CACGkMEuwvzkbPUSFueCOjit7pRJ81v3-W3SZD+7jQJN8btEFdg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SvXwb=6Qai0oe304PJJsOWe";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEuwvzkbPUSFueCOjit7pRJ81v3-W3SZD+7jQJN8btEFdg@mail.gmail.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/SvXwb=6Qai0oe304PJJsOWe
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jun 29, 2022 at 03:02:21PM +0800, Jason Wang wrote:
+> On Wed, Jun 29, 2022 at 2:31 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Wed, Jun 29, 2022 at 12:07:11PM +0800, Jason Wang wrote:
+> > > On Tue, Jun 28, 2022 at 2:17 PM Jason Wang <jasowang@redhat.com> wrote:
+> > > >
+> > > > On Tue, Jun 28, 2022 at 1:00 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > >
+> > > > > On Tue, Jun 28, 2022 at 11:49:12AM +0800, Jason Wang wrote:
+> > > > > > > Heh. Yea sure. But things work fine for people. What is the chance
+> > > > > > > your review found and fixed all driver bugs?
+> > > > > >
+> > > > > > I don't/can't audit all bugs but the race between open/close against
+> > > > > > ready/reset. It looks to me a good chance to fix them all but if you
+> > > > > > think differently, let me know
+> > > > > >
+> > > > > > > After two attempts
+> > > > > > > I don't feel like hoping audit will fix all bugs.
+> > > > > >
+> > > > > > I've started the auditing and have 15+ patches in the queue. (only
+> > > > > > covers bluetooth, console, pmem, virtio-net and caif). Spotting the
+> > > > > > issue is not hard but the testing, It would take at least the time of
+> > > > > > one release to finalize I guess.
+> > > > >
+> > > > > Absolutely. So I am looking for a way to implement hardening that does
+> > > > > not break existing drivers.
+> > > >
+> > > > I totally agree with you to seek a way without bothering the drivers.
+> > > > Just wonder if this is possbile.
+> > > >
+> > > > >
+> > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > > > >
+> > > > > > > > > The reason config was kind of easy is that config interrupt is rarely
+> > > > > > > > > vital for device function so arbitrarily deferring that does not lead to
+> > > > > > > > > deadlocks - what you are trying to do with VQ interrupts is
+> > > > > > > > > fundamentally different. Things are especially bad if we just drop
+> > > > > > > > > an interrupt but deferring can lead to problems too.
+> > > > > > > >
+> > > > > > > > I'm not sure I see the difference, disable_irq() stuffs also delay the
+> > > > > > > > interrupt processing until enable_irq().
+> > > > > > >
+> > > > > > >
+> > > > > > > Absolutely. I am not at all sure disable_irq fixes all problems.
+> > > > > > >
+> > > > > > > > >
+> > > > > > > > > Consider as an example
+> > > > > > > > >     virtio-net: fix race between ndo_open() and virtio_device_ready()
+> > > > > > > > > if you just defer vq interrupts you get deadlocks.
+> > > > > > > > >
+> > > > > > > > >
+> > > > > > > >
+> > > > > > > > I don't see a deadlock here, maybe you can show more detail on this?
+> > > > > > >
+> > > > > > > What I mean is this: if we revert the above commit, things still
+> > > > > > > work (out of spec, but still). If we revert and defer interrupts until
+> > > > > > > device ready then ndo_open that triggers before device ready deadlocks.
+> > > > > >
+> > > > > > Ok, I guess you meant on a hypervisor that is strictly written with spec.
+> > > > >
+> > > > > I mean on hypervisor that starts processing queues after getting a kick
+> > > > > even without DRIVER_OK.
+> > > >
+> > > > Oh right.
+> > > >
+> > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > > > >
+> > > > > > > > > So, thinking about all this, how about a simple per vq flag meaning
+> > > > > > > > > "this vq was kicked since reset"?
+> > > > > > > >
+> > > > > > > > And ignore the notification if vq is not kicked? It sounds like the
+> > > > > > > > callback needs to be synchronized with the kick.
+> > > > > > >
+> > > > > > > Note we only need to synchronize it when it changes, which is
+> > > > > > > only during initialization and reset.
+> > > > > >
+> > > > > > Yes.
+> > > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > > > >
+> > > > > > > > > If driver does not kick then it's not ready to get callbacks, right?
+> > > > > > > > >
+> > > > > > > > > Sounds quite clean, but we need to think through memory ordering
+> > > > > > > > > concerns - I guess it's only when we change the value so
+> > > > > > > > >         if (!vq->kicked) {
+> > > > > > > > >                 vq->kicked = true;
+> > > > > > > > >                 mb();
+> > > > > > > > >         }
+> > > > > > > > >
+> > > > > > > > > will do the trick, right?
+> > > > > > > >
+> > > > > > > > There's no much difference with the existing approach:
+> > > > > > > >
+> > > > > > > > 1) your proposal implicitly makes callbacks ready in virtqueue_kick()
+> > > > > > > > 2) my proposal explicitly makes callbacks ready via virtio_device_ready()
+> > > > > > > >
+> > > > > > > > Both require careful auditing of all the existing drivers to make sure
+> > > > > > > > no kick before DRIVER_OK.
+> > > > > > >
+> > > > > > > Jason, kick before DRIVER_OK is out of spec, sure. But it is unrelated
+> > > > > > > to hardening
+> > > > > >
+> > > > > > Yes but with your proposal, it seems to couple kick with DRIVER_OK somehow.
+> > > > >
+> > > > > I don't see how - my proposal ignores DRIVER_OK issues.
+> > > >
+> > > > Yes, what I meant is, in your proposal, the first kick after rest is a
+> > > > hint that the driver is ok (but actually it could not).
+> > > >
+> > > > >
+> > > > > > > and in absence of config interrupts is generally easily
+> > > > > > > fixed just by sticking virtio_device_ready early in initialization.
+> > > > > >
+> > > > > > So if the kick is done before the subsystem registration, there's
+> > > > > > still a window in the middle (assuming we stick virtio_device_ready()
+> > > > > > early):
+> > > > > >
+> > > > > > virtio_device_ready()
+> > > > > > virtqueue_kick()
+> > > > > > /* the window */
+> > > > > > subsystem_registration()
+> > > > >
+> > > > > Absolutely, however, I do not think we really have many such drivers
+> > > > > since this has been known as a wrong thing to do since the beginning.
+> > > > > Want to try to find any?
+> > > >
+> > > > Yes, let me try and update.
+> > >
+> > > This is basically the device that have an RX queue, so I've found the
+> > > following drivers:
+> > >
+> > > scmi, mac80211_hwsim, vsock, bt, balloon.
+> >
+> > Looked and I don't see it yet. Let's consider
+> > ./net/vmw_vsock/virtio_transport.c for example. Assuming we block
+> > callbacks until the first kick, what is the issue with probe exactly?
+> 
+> We need to make sure the callback can survive when it runs before sub
+> system registration.
 
-Hi all,
+With my proposal no - only if we also kick before registration.
+So I do not see the issue yet.
 
-After merging the pinctrl tree, today's linux-next build (arm64 defconig)
-failed like this:
+Consider ./net/vmw_vsock/virtio_transport.c
 
-drivers/pinctrl/qcom/pinctrl-lpass-lpi.c: In function 'lpi_pinctrl_probe':
-drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:391:31: error: assignment of membe=
-r 'is_clk_optional' in read-only object
-  391 |         data->is_clk_optional =3D of_property_read_bool(dev->of_nod=
-e,
-      |                               ^
+kicks: virtio_transport_send_pkt_work,
+virtio_vsock_rx_fill, virtio_vsock_event_fill
 
-Caused by commit
+which of these triggers before we are ready to
+handle callbacks?
 
-  36fe26843d6d ("pinctrl: qcom: sc7280: Add clock optional check for ADSP b=
-ypass targets")
 
-I am beginning to wonder if this commit has ever even been compile
-tested :-(
+> >
+> >
+> > > >
+> > > > >I couldn't ... except maybe bluetooth
+> > > > > but that's just maintainer nacking fixes saying he'll fix it
+> > > > > his way ...
+> > > > >
+> > > > > > And during remove(), we get another window:
+> > > > > >
+> > > > > > subsysrem_unregistration()
+> > > > > > /* the window */
+> > > > > > virtio_device_reset()
+> > > > >
+> > > > > Same here.
+> > >
+> > > Basically for the drivers that set driver_ok before registration,
+> >
+> > I don't see what does driver_ok have to do with it.
+> 
+> I meant for those driver, in probe they do()
+> 
+> virtio_device_ready()
+> subsystem_register()
+> 
+> In remove() they do
+> 
+> subsystem_unregister()
+> virtio_device_reset()
+> 
+> for symmetry
 
-I have reverted that commit (and its follow up fix) for today.
+Let's leave remove alone for now. I am close to 100% sure we have *lots*
+of issues around it, but while probe is unavoidable remove can be
+avoided by blocking hotplug.
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/SvXwb=6Qai0oe304PJJsOWe
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+> >
+> > > so
+> > > we have a lot:
+> > >
+> > > blk, net, mac80211_hwsim, scsi, vsock, bt, crypto, gpio, gpu, i2c,
+> > > iommu, caif, pmem, input, mem
+> > >
+> > > So I think there's no easy way to harden the notification without
+> > > auditing the driver one by one (especially considering the driver may
+> > > use bh or workqueue). The problem is the notification hardening
+> > > depends on a correct or race-free probe/remove. So we need to fix the
+> > > issues in probe/remove then do the hardening on the notification.
+> > >
+> > > Thanks
+> >
+> > So if drivers kick but are not ready to get callbacks then let's fix
+> > that first of all, these are racy with existing qemu even ignoring
+> > spec compliance.
+> 
+> Yes, (the patches I've posted so far exist even with a well-behaved device).
+> 
+> Thanks
 
------BEGIN PGP SIGNATURE-----
+patches you posted deal with DRIVER_OK spec compliance.
+I do not see patches for kicks before callbacks are ready to run.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK7+6UACgkQAVBC80lX
-0GxPVQf9Hcicv7JJcH6aPQrx8ZrBYOMtsFV+9GLnDMHmLJUWwKaaEx7dOLqPzbvH
-mW0+/rpoY06CZuNBPiW2u/bUEQ5vmzcv4OE+SsFaHRYZAQyBQdN5soHYoeks+gub
-hkwGIsgWV5c7otHQRvS530X9ZgCj794oLZOi3XlNwUbWM8kCId7JFzgU/E0uM2mg
-Mp2xHRd4LST9Tqkj8O5wre7ZYw2ull41ZH9FJUMhWqmD+x0bVC4pSiSz4o61oAs7
-7f5fmIZy7fdE5I/LxZzZ3q1hcRo3qtFO/5O3qAam0WOfntpcCUkA1ojA+tERTGdN
-2kMiltoZp+qxL+6IIUY8Z6B3q9zrlQ==
-=XYDC
------END PGP SIGNATURE-----
+> >
+> >
+> > --
+> > MST
+> >
 
---Sig_/SvXwb=6Qai0oe304PJJsOWe--

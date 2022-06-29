@@ -2,70 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52ED155FAB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE18E55FAB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232805AbiF2Igd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 04:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
+        id S231770AbiF2Ihh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 04:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232625AbiF2Iga (ORCPT
+        with ESMTP id S232912AbiF2Ihb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 04:36:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCFA43C70D
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 01:36:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656491787;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bet7RPOPoI6qEqFJfuyVXTSgqEPE876J831j55LAYEI=;
-        b=TP9G4S9cVQnQXnflZcr5ee9IIdzz/Jf15dIMeN0J24CztXr6Cd3ig3W7hwx3sHcl7aiAZ+
-        /ZGlh/3jF3+O0YgiXvsImzKbV2VBrmpJqmbMNLddkcT17WHXg/zDr7odOiijhEXlJW80vY
-        1LHo003+Gt5kq+7t7e1vuMPglhoMKEI=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-159-zfOTH2W5M4K-h5FzuSKRZQ-1; Wed, 29 Jun 2022 04:36:26 -0400
-X-MC-Unique: zfOTH2W5M4K-h5FzuSKRZQ-1
-Received: by mail-lf1-f71.google.com with SMTP id r28-20020ac25c1c000000b004809e9d21e5so6187638lfp.18
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 01:36:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Bet7RPOPoI6qEqFJfuyVXTSgqEPE876J831j55LAYEI=;
-        b=4vhfbuHnZPV9n9eBhcC0EPFQhSYbmQR5wIvkm7FyYprfBRWGgHlo20KEybwYnRFToC
-         l5JdB0yQPg3wuMvsNryQUQ79pONcb/TwAByHgTnGLPM0xVB4a7YD1448to0pJfmeq3WC
-         gnhJ3yK+hv4zXZrMdNKfxba+oWMThIv0aqBjbdUU688GiQ1Jo5lbw31OPR6rM3nZddvs
-         jO+Z/9z6ADawSWdz1QIJsvXkMLxpc0UgAONHldLtamUdvYRaByCIdRjbW6w/BBsyxewN
-         F11GnaC5pc/tl0/GRKYbmuOSYVQbW33r5ZBgMtfdKxTgEohDKkj49TtyeDTj16BxEbwy
-         KVFQ==
-X-Gm-Message-State: AJIora+I7DQRtHOH4ZOPsAPYwXOr5tt9sHkI6AoOAQAKknJYoWnKGMoa
-        pxuDrnVfon84J+vtf108rQALPC05+HL+6yCw0hBwd6ytJHGTk1oTemPNSi8nRRg5fxr3qZ7ExwD
-        PESx81lCpQwDvkyz0Fe2TCXhtOFJt2USJ5K8hp1Tn
-X-Received: by 2002:a05:651c:895:b0:250:c5ec:bc89 with SMTP id d21-20020a05651c089500b00250c5ecbc89mr1000414ljq.251.1656491784163;
-        Wed, 29 Jun 2022 01:36:24 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vBelXp7oblduZwmkq8dd6rRu3tkscsPBwJaVedQQ56Gmdo+PJ5Ijy22sPBo/8FbgLCMMKyAjmHBfc3NkfgJ8g=
-X-Received: by 2002:a05:651c:895:b0:250:c5ec:bc89 with SMTP id
- d21-20020a05651c089500b00250c5ecbc89mr1000402ljq.251.1656491783902; Wed, 29
- Jun 2022 01:36:23 -0700 (PDT)
+        Wed, 29 Jun 2022 04:37:31 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345F93C721
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 01:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656491851; x=1688027851;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=AyjMVTaQTJCbb9rBYdh6t7GNExFz5BIYwoEuevlJ+Cg=;
+  b=ZltiPlY0wyup6akN1PbwUcV73Z8qcTyPtGb/Dq5sePRAPmWsJWqC0TSe
+   70w760zXpkfBMWR4rn2qryI+mcrYxsqIU5+p9mRvPYEHiHA//Wp/Zgy1j
+   vBxxSUULKGNQPaMEQ2jmNh9j2Exb40OKag1SdSWbRh+lsutaao9sgC7Qj
+   GKDyccW65Dgo5o7aFaNsdKHHBHTsSwbtdmxCHM337mnyALPs34M9B7SM1
+   1iso9TcNRECR28AvRwpzsGCyZ6ocrV0pJy9Q3wrQVrv6iO6JdDpSh3sCE
+   TJc52XR5+5vZOIMxIjdphJtL62tnQZrJYFQ1zTAyOfc4s41fBNWerUc9x
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="283066558"
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="283066558"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 01:37:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="588228562"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga007.jf.intel.com with ESMTP; 29 Jun 2022 01:37:14 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 29 Jun 2022 01:37:13 -0700
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15]) by
+ ORSMSX602.amr.corp.intel.com ([10.22.229.15]) with mapi id 15.01.2308.027;
+ Wed, 29 Jun 2022 01:37:13 -0700
+From:   "Winkler, Tomas" <tomas.winkler@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Usyskin, Alexander" <alexander.usyskin@intel.com>
+CC:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Tvrtko Ursulin" <tvrtko.ursulin@linux.intel.com>,
+        "Lubart, Vitaly" <vitaly.lubart@intel.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v3 13/14] mei: debugfs: add pxp mode to devstate in
+ debugfs
+Thread-Topic: [PATCH v3 13/14] mei: debugfs: add pxp mode to devstate in
+ debugfs
+Thread-Index: AQHYii6cshzBS1Jzdke8w99Tn+SqLa1mD+iw
+Date:   Wed, 29 Jun 2022 08:37:13 +0000
+Message-ID: <c23228be48c0416fbec7937c6008a204@intel.com>
+References: <20220619133721.523546-1-alexander.usyskin@intel.com>
+ <20220619133721.523546-14-alexander.usyskin@intel.com>
+ <Yrm4aZa4y6nwJBva@kroah.com>
+In-Reply-To: <Yrm4aZa4y6nwJBva@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.500.17
+x-originating-ip: [10.184.70.1]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20220628090324.62219-1-jasowang@redhat.com> <20220629032106-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220629032106-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 29 Jun 2022 16:36:12 +0800
-Message-ID: <CACGkMEutEYHf8kO_6gpk5BrMAndJPd8wDAPG2_Z9pxSiXXNDCw@mail.gmail.com>
-Subject: Re: [PATCH] virtio-net: fix the race between refill work and close
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,175 +89,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 3:29 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Tue, Jun 28, 2022 at 05:03:24PM +0800, Jason Wang wrote:
-> > We try using cancel_delayed_work_sync() to prevent the work from
-> > enabling NAPI. This is insufficient since we don't disable the the
-> > source the scheduling
->
-> can't parse this sentence
-
-I actually meant "we don't disable the source of the refill work scheduling".
-
->
-> > of the refill work. This means an NAPI
->
-> what do you mean "an NAPI"? a NAPI poll callback?
-
-Yes.
-
->
-> > after
-> > cancel_delayed_work_sync() can schedule the refill work then can
-> > re-enable the NAPI that leads to use-after-free [1].
+>=20
+> On Sun, Jun 19, 2022 at 04:37:20PM +0300, Alexander Usyskin wrote:
+> > From: Tomas Winkler <tomas.winkler@intel.com>
 > >
-> > Since the work can enable NAPI, we can't simply disable NAPI before
-> > calling cancel_delayed_work_sync(). So fix this by introducing a
-> > dedicated boolean to control whether or not the work could be
-> > scheduled from NAPI.
-> >
-> > [1]
-> > ==================================================================
-> > BUG: KASAN: use-after-free in refill_work+0x43/0xd4
-> > Read of size 2 at addr ffff88810562c92e by task kworker/2:1/42
-> >
-> > CPU: 2 PID: 42 Comm: kworker/2:1 Not tainted 5.19.0-rc1+ #480
-> > Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> > Workqueue: events refill_work
-> > Call Trace:
-> >  <TASK>
-> >  dump_stack_lvl+0x34/0x44
-> >  print_report.cold+0xbb/0x6ac
-> >  ? _printk+0xad/0xde
-> >  ? refill_work+0x43/0xd4
-> >  kasan_report+0xa8/0x130
-> >  ? refill_work+0x43/0xd4
-> >  refill_work+0x43/0xd4
-> >  process_one_work+0x43d/0x780
-> >  worker_thread+0x2a0/0x6f0
-> >  ? process_one_work+0x780/0x780
-> >  kthread+0x167/0x1a0
-> >  ? kthread_exit+0x50/0x50
-> >  ret_from_fork+0x22/0x30
-> >  </TASK>
-> > ...
-> >
-> > Fixes: b2baed69e605c ("virtio_net: set/cancel work on ndo_open/ndo_stop")
-> > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > CC: Vitaly Lubart <vitaly.lubart@intel.com>
+> > Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+>=20
+> We can not take patches without any changelog text, you know this :(
+
+Okay, will add some more info.=20
+>=20
 > > ---
-> >  drivers/net/virtio_net.c | 38 ++++++++++++++++++++++++++++++++++++--
-> >  1 file changed, 36 insertions(+), 2 deletions(-)
+> >  drivers/misc/mei/debugfs.c | 17 +++++++++++++++++
+> >  1 file changed, 17 insertions(+)
 > >
-> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > index db05b5e930be..21bf1e5c81ef 100644
-> > --- a/drivers/net/virtio_net.c
-> > +++ b/drivers/net/virtio_net.c
-> > @@ -251,6 +251,12 @@ struct virtnet_info {
-> >       /* Does the affinity hint is set for virtqueues? */
-> >       bool affinity_hint_set;
+> > diff --git a/drivers/misc/mei/debugfs.c b/drivers/misc/mei/debugfs.c
+> > index 1ce61e9e24fc..4074fec866a6 100644
+> > --- a/drivers/misc/mei/debugfs.c
+> > +++ b/drivers/misc/mei/debugfs.c
+> > @@ -86,6 +86,20 @@ static int mei_dbgfs_active_show(struct seq_file
+> > *m, void *unused)  }  DEFINE_SHOW_ATTRIBUTE(mei_dbgfs_active);
 > >
-> > +     /* Is refill work enabled? */
-> > +     bool refill_work_enabled;
-> > +
-> > +     /* The lock to synchronize the access to refill_work_enabled */
-> > +     spinlock_t refill_lock;
-> > +
-> >       /* CPU hotplug instances for online & dead */
-> >       struct hlist_node node;
-> >       struct hlist_node node_dead;
-> > @@ -348,6 +354,20 @@ static struct page *get_a_page(struct receive_queue *rq, gfp_t gfp_mask)
-> >       return p;
-> >  }
-> >
-> > +static void enable_refill_work(struct virtnet_info *vi)
-> > +{
-> > +     spin_lock(&vi->refill_lock);
-> > +     vi->refill_work_enabled = true;
-> > +     spin_unlock(&vi->refill_lock);
-> > +}
-> > +
-> > +static void disable_refill_work(struct virtnet_info *vi)
-> > +{
-> > +     spin_lock(&vi->refill_lock);
-> > +     vi->refill_work_enabled = false;
-> > +     spin_unlock(&vi->refill_lock);
-> > +}
-> > +
-> >  static void virtqueue_napi_schedule(struct napi_struct *napi,
-> >                                   struct virtqueue *vq)
-> >  {
-> > @@ -1527,8 +1547,12 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
-> >       }
-> >
-> >       if (rq->vq->num_free > min((unsigned int)budget, virtqueue_get_vring_size(rq->vq)) / 2) {
-> > -             if (!try_fill_recv(vi, rq, GFP_ATOMIC))
-> > -                     schedule_delayed_work(&vi->refill, 0);
-> > +             if (!try_fill_recv(vi, rq, GFP_ATOMIC)) {
-> > +                     spin_lock(&vi->refill_lock);
-> > +                     if (vi->refill_work_enabled)
-> > +                             schedule_delayed_work(&vi->refill, 0);
-> > +                     spin_unlock(&vi->refill_lock);
-> > +             }
-> >       }
-> >
-> >       u64_stats_update_begin(&rq->stats.syncp);
-> > @@ -1651,6 +1675,8 @@ static int virtnet_open(struct net_device *dev)
-> >       struct virtnet_info *vi = netdev_priv(dev);
-> >       int i, err;
-> >
-> > +     enable_refill_work(vi);
-> > +
-> >       for (i = 0; i < vi->max_queue_pairs; i++) {
-> >               if (i < vi->curr_queue_pairs)
-> >                       /* Make sure we have some buffers: if oom use wq. */
-> > @@ -2033,6 +2059,8 @@ static int virtnet_close(struct net_device *dev)
-> >       struct virtnet_info *vi = netdev_priv(dev);
-> >       int i;
-> >
-> > +     /* Make sure NAPI doesn't schedule refill work */
-> > +     disable_refill_work(vi);
-> >       /* Make sure refill_work doesn't re-enable napi! */
-> >       cancel_delayed_work_sync(&vi->refill);
-> >
-> > @@ -2776,6 +2804,9 @@ static void virtnet_freeze_down(struct virtio_device *vdev)
-> >       netif_tx_lock_bh(vi->dev);
-> >       netif_device_detach(vi->dev);
-> >       netif_tx_unlock_bh(vi->dev);
-> > +     /* Make sure NAPI doesn't schedule refill work */
-> > +     disable_refill_work(vi);
-> > +     /* Make sure refill_work doesn't re-enable napi! */
-> >       cancel_delayed_work_sync(&vi->refill);
-> >
-> >       if (netif_running(vi->dev)) {
-> > @@ -2799,6 +2830,8 @@ static int virtnet_restore_up(struct virtio_device *vdev)
-> >
-> >       virtio_device_ready(vdev);
-> >
-> > +     enable_refill_work(vi);
-> > +
-> >       if (netif_running(vi->dev)) {
-> >               for (i = 0; i < vi->curr_queue_pairs; i++)
-> >                       if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
-> > @@ -3548,6 +3581,7 @@ static int virtnet_probe(struct virtio_device *vdev)
-> >       vdev->priv = vi;
-> >
-> >       INIT_WORK(&vi->config_work, virtnet_config_changed_work);
-> > +     spin_lock_init(&vi->refill_lock);
-> >
-> >       /* If we can receive ANY GSO packets, we must allocate large ones. */
-> >       if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
->
->
-> Can't say I love all the extra state but oh well.
+> > +static const char *mei_dev_pxp_mode_str(enum mei_dev_pxp_mode
+> state)
+> > +{ #define MEI_PXP_MODE(state) case MEI_DEV_PXP_##state: return
+> #state
+> > +	switch (state) {
+> > +	MEI_PXP_MODE(DEFAULT);
+> > +	MEI_PXP_MODE(INIT);
+> > +	MEI_PXP_MODE(SETUP);
+> > +	MEI_PXP_MODE(READY);
+>=20
+> Just spell out the case and return lines, don't create macros for no good
+> reason please.
 
-I couldn't find a better way. The tricky part is that NAPI and refill
-can schedule each other so we need a third state.
+We use those print macros paradigm consistently int the code, the macro has=
+ a very limited scope.
+We are aware of wrong sides of macros but this just little of synthetic sug=
+ar  no some wild usage.
+We believe it helps readability, and it keeps the code consistent.
+
+Other usages:
+
+hbm.c:#define MEI_HBM_STATUS(status) case MEI_HBMS_##status: return #status
+hbm.c:#define MEI_CL_CS(status) case MEI_CL_CONN_##status: return #status
+hbm.c:#define MEI_HBM_STATE(state) case MEI_HBM_##state: return #state
+init.c:#define MEI_DEV_STATE(state) case MEI_DEV_##state: return #state
+init.c:#define MEI_PG_STATE(state) case MEI_PG_##state: return #state
+
 
 Thanks
-
->
-> > --
-> > 2.25.1
->
+Tomas
 

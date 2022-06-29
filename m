@@ -2,99 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9E755FB96
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A4055FB9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbiF2JQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 05:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
+        id S230365AbiF2JR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 05:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiF2JQV (ORCPT
+        with ESMTP id S232208AbiF2JRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 05:16:21 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD4B2C660;
-        Wed, 29 Jun 2022 02:16:20 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 45647C0013;
-        Wed, 29 Jun 2022 09:16:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656494178;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jkmESM416SslUHNUzzLOc5OQPCjAoAiRojL4STsH4VU=;
-        b=fNliQTwONPTuoMJsnDb9UahqAmJ3jHbaFFsB4wuOrAHVu8bPD7mzobr9c1X+n3dfttWfWk
-        y/zfYDyx5s1xMMTmASN31l8o/z78PFoClLu8foJwMG3TD49WI2a4N2N5mzSKX8M7V4VExB
-        9OqVQKKyp6a6Iq341OZ+dZwPhEjaAkU0Zcbo1h/roWVKB56Bg7mGoNg0ZyeA0gb53RJUf3
-        DfekaSnXgs8EyVHBZwo8oRdKf/CVg+iZp/Ht4UY25q9qU1nBo2MZUj9xc9sMeCLYyXDIFr
-        EqzvDxqPGhtW/srfnejWTX08tgf4kftNwcQSw5gvOM4ipQG5MO/ZWiKqnYeSGg==
-Date:   Wed, 29 Jun 2022 11:15:30 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>, <olteanv@gmail.com>,
-        <f.fainelli@gmail.com>, <davem@davemloft.net>
-Subject: Re: [PATCH -next v2] net: pcs-rzn1-miic: fix return value check in
- miic_probe()
-Message-ID: <20220629111530.3b74c014@fixe.home>
-In-Reply-To: <20220628131259.3109124-1-yangyingliang@huawei.com>
-References: <20220628131259.3109124-1-yangyingliang@huawei.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Wed, 29 Jun 2022 05:17:25 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49BD2CDCE
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 02:17:23 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id f190so8653281wma.5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 02:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q1VS4ZR2kVMuM2BPvqXZE8kitmI8cxAl7zyv/R4Rp1g=;
+        b=iErPEykS+awt1rQO9zFz1unwsp7n+QkqXRfHMKqOHEVZJ8N1+UCwe+dhajv0gjWob/
+         7KtDraQdL4hfrWXCpYjIzAKF/2Z2XWE1MKvAoWZehqZEDtBCAT3QajB0KSh0bnYoStR7
+         aKBYjA7PJyn6UgerZ7MAXojqTxjcsJ0bEE8PLurhgmsWjyrrmIVYyHaz6zG0Ov+pr1pD
+         TOwGazP5csB1VJF2/Z/ds+ib9aki2627sN22Ubp21GW2F/WPYQP+ocpzMQnzV18+ueb0
+         AM97aMLOGThXqa0vROhkKxbTwJPCQ1Dm71HJJb6OO8oiNKV7Q+VV1MAcy9Ajb2NBzKMa
+         vSvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q1VS4ZR2kVMuM2BPvqXZE8kitmI8cxAl7zyv/R4Rp1g=;
+        b=l2QgXZkKAEwWMMie2c6esY9YFZYCyWCaJwVU/v6MZIsdLYmR65bKkBD5p9ouKV2tZX
+         3oapnowI8xMcXAlOJG0cN+B1U1vXS+AfFDQja39JEulGlrk14haB5/5jmsj7iTLztM9c
+         FiAfT+FCEV1FNucjlmWt9KIOEWu01EDpDeyzCqKRxRyc29I+UC3LovMil6/a0vNdvq2z
+         gpazhpz3jSohuCi4HLc516BvxXr+7ytEtIFXcxZgw7eSkVb6ib5WYXZOWw50D1J5yEUD
+         cuNS6QmPGNa4HZt9XlcBirAFv8YtEwpcoYei8jPbCH+aXIR3Go+hVo+OqhUFDdY0iDkE
+         1NRg==
+X-Gm-Message-State: AJIora+K/1Zf8z1PZq0YGHk5zlk5cMT51oe7XUShczJmytaYsTPPGEcl
+        Bhrz7u3EaQtAIjMJBi4VbEPeng==
+X-Google-Smtp-Source: AGRyM1sVTNmfbruTJVZq71LNhDx/tYBuCAzb0/8zfTDBny0VdrsOoKltMvLwIRXvZDPHRPMC7aIFVA==
+X-Received: by 2002:a05:600c:2055:b0:3a0:4605:df1a with SMTP id p21-20020a05600c205500b003a04605df1amr4519587wmg.75.1656494242443;
+        Wed, 29 Jun 2022 02:17:22 -0700 (PDT)
+Received: from srini-hackbase.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id t18-20020a05600c199200b003a03a8475bfsm2896443wmq.16.2022.06.29.02.17.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 02:17:21 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     bjorn.andersson@linaro.org, linus.walleij@linaro.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 0/2] pinctrl: add support for SM8450 LPASS LPI pinctrl
+Date:   Wed, 29 Jun 2022 10:17:14 +0100
+Message-Id: <20220629091716.68771-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, 28 Jun 2022 21:12:59 +0800,
-Yang Yingliang <yangyingliang@huawei.com> a =C3=A9crit :
+This patchset adds pinctrl driver to support pin configuration for LPASS
+(Low Power Audio SubSystem) LPI (Low Power Island) pinctrl on SM8450.
+    
+This IP is an additional pin control block for Audio Pins on top the
+existing SoC Top level pin-controller.
+    
+Tested this on SM8450 MTP
 
-> On failure, devm_platform_ioremap_resource() returns a ERR_PTR() value
-> and not NULL. Fix return value checking by using IS_ERR() and return
-> PTR_ERR() as error value.
->=20
-> Fixes: 7dc54d3b8d91 ("net: pcs: add Renesas MII converter driver")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
-> v2:
->   change commit message as Cl=C3=A9ment suggested.
-> ---
->  drivers/net/pcs/pcs-rzn1-miic.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/net/pcs/pcs-rzn1-miic.c b/drivers/net/pcs/pcs-rzn1-m=
-iic.c
-> index 8f5e910f443d..d896961e48cc 100644
-> --- a/drivers/net/pcs/pcs-rzn1-miic.c
-> +++ b/drivers/net/pcs/pcs-rzn1-miic.c
-> @@ -461,8 +461,8 @@ static int miic_probe(struct platform_device *pdev)
->  	spin_lock_init(&miic->lock);
->  	miic->dev =3D dev;
->  	miic->base =3D devm_platform_ioremap_resource(pdev, 0);
-> -	if (!miic->base)
-> -		return -EINVAL;
-> +	if (IS_ERR(miic->base))
-> +		return PTR_ERR(miic->base);
-> =20
->  	ret =3D devm_pm_runtime_enable(dev);
->  	if (ret < 0)
+Thanks,
+Srini
 
-LGTM, thanks.
+Srinivas Kandagatla (2):
+  dt-bindings: pinctrl: qcom: Add sm8450 lpass lpi pinctrl bindings
+  pinctrl: qcom: Add sm8450 lpass lpi pinctrl driver
 
-Reviewed-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
+ .../qcom,sm8450-lpass-lpi-pinctrl.yaml        | 138 ++++++++++
+ drivers/pinctrl/qcom/Kconfig                  |   9 +
+ drivers/pinctrl/qcom/Makefile                 |   1 +
+ .../pinctrl/qcom/pinctrl-sm8450-lpass-lpi.c   | 240 ++++++++++++++++++
+ 4 files changed, 388 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sm8450-lpass-lpi-pinctrl.yaml
+ create mode 100644 drivers/pinctrl/qcom/pinctrl-sm8450-lpass-lpi.c
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+-- 
+2.25.1
+

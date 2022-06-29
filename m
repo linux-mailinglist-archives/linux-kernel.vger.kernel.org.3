@@ -2,129 +2,350 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2DE25606B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA665606BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbiF2QxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 12:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
+        id S231558AbiF2Qx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 12:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbiF2Qwg (ORCPT
+        with ESMTP id S229582AbiF2QxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 12:52:36 -0400
-Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4244013F81;
-        Wed, 29 Jun 2022 09:52:33 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id A8CD6121B70;
-        Wed, 29 Jun 2022 16:52:29 +0000 (UTC)
-Received: from pdx1-sub0-mail-a288.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id E3364121691;
-        Wed, 29 Jun 2022 16:52:28 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1656521549; a=rsa-sha256;
-        cv=none;
-        b=463jQEBgMFV74iEN+TnjsqGLipT5PWEq525tmOOCXli2QbepPoKWvKoguaEQfzeijCtpMs
-        W0Y97rPbnNRm5r68xkw/uDqYRtflxSW4NoRTk6daRuCoMasw/okGBZzKsPuY2U446Pmfuk
-        Tw+3Ir/hZn0iLQjoetTKNhnkSG0/izN1BgwDhJVVxSqZsXG0qzKYONLsPTlNHhozGO9XH5
-        P40XbXUC0RgHfVa70kpC6k+O+dYjNKtw/5K4C7G5jRWfZPyPfD73wUggz8cOy9YswZxBf1
-        oNpEcjot3rpRasydqHE6CJZssYNhy+Q3oXSH+myVm++K71/uWbeT8ae6u5Vr9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1656521549;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=iOLcV9f/LV1oZPOPbY/80a03Bs1TUR8dCN1QpbUZqE4=;
-        b=dwekxzYpGBHTWMNG8EsSYmZe8KeQDDal4JrGNI/IFmUff19uLy00pgxROV5In2U1C/GEKG
-        vW/lDEU/6eBJy2J7FgVHjmliwPdedvin/wuWEmWcnVmmAS+TXARWXRWd1FScS2aQwWnqP5
-        bvM1oLVtJeJJBOAQA4TVTKAW94yEbWaUl2TI5Yd+z21iX2FzquRO8t5VCL9tLAooAeL/Il
-        iMztYVsJsVYVRlLPrVNog+PKnoSYORgu0BhF+Y/sTh3r8ZQz/cI4t42ToqLtNatIvi4w7M
-        RAVhEMYYzT1xaYDnMJebVqas9hj6AYLXPFmMpoIDUzVlzGUqU0NaVhIob0LZpA==
-ARC-Authentication-Results: i=1;
-        rspamd-674ffb986c-2d48t;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Callous-Imminent: 6e03671f47e34c0e_1656521549255_4186424639
-X-MC-Loop-Signature: 1656521549255:876281039
-X-MC-Ingress-Time: 1656521549255
-Received: from pdx1-sub0-mail-a288.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.105.211.156 (trex/6.7.1);
-        Wed, 29 Jun 2022 16:52:29 +0000
-Received: from offworld.. (unknown [104.36.31.105])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a288.dreamhost.com (Postfix) with ESMTPSA id 4LY6vb1v0Mz7x;
-        Wed, 29 Jun 2022 09:52:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1656521547;
-        bh=iOLcV9f/LV1oZPOPbY/80a03Bs1TUR8dCN1QpbUZqE4=;
-        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=Qs9PUCo0Ba8JnusPwvxhulDhgUiFOQeIQlDDOqOC0cHYanyxV8pF3NLeAJ6HkOmcM
-         NidJ1XacUTDGLg1uu5zHFr+1cA6/bmm3C50yjkhEabttoRpZw/NDyCrIbovX/kNEBz
-         1cD2irnktQAi+tqIfLWLd9Kat1Dc5pplWNPfsqG2IB5nvApM9+/4yafe4iK1ENWM9b
-         SesoAI85karEbRoWBM2R/WUxWA6L4GM0iefSj94ufexpxdimVcFcMfboYNG5XCO/Qb
-         lZ9MgJABkn1jtadlQwlLWOY+Uw8QeT8e8UwSRvFrSvG+ljbS3WymUMJWOn0dlCgjd7
-         +zOIrHsoJnqgA==
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     syzbot+ce3408364c4a234dd90c@syzkaller.appspotmail.com
-Cc:     aldas60@gmail.com, gregkh@linuxfoundation.org,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
-        nathan@kernel.org, syzkaller-bugs@googlegroups.com,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: [PATCH] staging/wlan-ng: get the correct struct hfa384x in work callback
-Date:   Wed, 29 Jun 2022 09:52:25 -0700
-Message-Id: <20220629165225.3436822-1-dave@stgolabs.net>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <000000000000e3fc8905e2608d4f@google.com>
-References: <000000000000e3fc8905e2608d4f@google.com>
+        Wed, 29 Jun 2022 12:53:20 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556251581C;
+        Wed, 29 Jun 2022 09:53:19 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id i15so29104833ybp.1;
+        Wed, 29 Jun 2022 09:53:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cN6Ljuohbb0Vlk0TDH1NJISR1t0bRPA1FSG4C0YqDUA=;
+        b=N5uTEytaB9WsY6gMNqB565XhMDaoCLGL4/JNjTFhLEzsW5SzfXWHF0dv69k/4Xxees
+         i0VqH1e6N4EfInUPA7NBxk8M3dHWZ8ZNK78ibGn2ywK6VeRSFhNHBM9FZanDesoUiUDT
+         uWyrmG3FKjbBFc29gxxbvS7psV0P5yocjAL56BojvuITsw2KCR6up70yjsocxi5bF6pj
+         8icxdH/K8kedLZaG64E0AEdEPlnbB+8LlOxnF+/PQpC7KSAoGzTQwY4yq6aCPLVPrpFA
+         rKbObRE0gNyz++XIVkFH5sKCAWOHInVZ5dtcsxaPGZc6o6cgWxn0HPHKbQclP58mVcuj
+         inuw==
+X-Gm-Message-State: AJIora9k4FVCq8+k1uASwxrwfsN/udhJZJqJoj10U/eUJdbwF1Ek8FTD
+        0LUylemCqfvWixOxdW1hsiQYvE+mpdxZSzTB6xNV9FO5
+X-Google-Smtp-Source: AGRyM1t3o9GsoqPByrdcwwMReVyOghctXRZ85jfyKlh8iiyQixMj21AmpSZwxGzKdeoP+bInImchsDTHeYc9Yc5KQTk=
+X-Received: by 2002:a25:664f:0:b0:66c:d0f4:36cc with SMTP id
+ z15-20020a25664f000000b0066cd0f436ccmr4277441ybm.482.1656521598411; Wed, 29
+ Jun 2022 09:53:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <TYWP286MB2601965DDE4D251807F70415B1AF9@TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM>
+ <871qvnpro3.fsf@stealth>
+In-Reply-To: <871qvnpro3.fsf@stealth>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 29 Jun 2022 18:53:07 +0200
+Message-ID: <CAJZ5v0gbqxWjJjEJWJUt3HCMARtaewewNSHuD1zjoxOUeE89Rg@mail.gmail.com>
+Subject: Re: [PATCH v3] ACPI: Split out processor thermal register from ACPI PSS
+To:     Punit Agrawal <punit.agrawal@bytedance.com>,
+        Riwen Lu <luriwen@hotmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Robert Moore <robert.moore@intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        Riwen Lu <luriwen@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hfa384x_usbctlx_completion_task() is bogusly using the reaper BH when
-in fact this is the completion_bh. This was reflected when trying
-to acquire the hw->ctlxq.lock and getting a failed lockdep class
-initialized to it.
+On Fri, Jun 17, 2022 at 11:26 AM Punit Agrawal
+<punit.agrawal@bytedance.com> wrote:
+>
+> Riwen Lu <luriwen@hotmail.com> writes:
+>
+> > From: Riwen Lu <luriwen@kylinos.cn>
+> >
+> > Commit 239708a3af44 ("ACPI: Split out ACPI PSS from ACPI Processor
+> > driver"), moves processor thermal registration to acpi_pss_perf_init(),
+> > which doesn't get executed if ACPI_CPU_FREQ_PSS is not enabled.
+> >
+> > As ARM64 supports P-states using CPPC, it should be possible to also
+> > support processor passive cooling even if PSS is not enabled. Split
+> > out the processor thermal cooling register from ACPI PSS to support
+> > this, and move it into a separate function in processor_thermal.c.
+> >
+> > Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
+> >
+> > ---
+> > v1 -> v2:
+> >  - Reword the commit message.
+> >  - Update the signature of acpi_pss_perf_init() to void, and remove the
+> >    acpi_device parameter.
+> >  - Move the processor thermal register/remove into a separate function in
+> >    processor_thermal.c.
+> >
+> > v2 -> v3:
+> >  - Remove the "pr" NULL check in processor thermal init/exit fuction.
+> >  - Pass the acpi_device into processor thermal init/exit, and remove the
+> >    convert in it.
+> > ---
+> >  drivers/acpi/Kconfig             |  2 +-
+> >  drivers/acpi/Makefile            |  5 +--
+> >  drivers/acpi/processor_driver.c  | 72 ++++----------------------------
+> >  drivers/acpi/processor_thermal.c | 54 ++++++++++++++++++++++++
+> >  include/acpi/processor.h         |  8 +++-
+> >  5 files changed, 71 insertions(+), 70 deletions(-)
+> >
+> > diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+> > index 1e34f846508f..2457ade3f82d 100644
+> > --- a/drivers/acpi/Kconfig
+> > +++ b/drivers/acpi/Kconfig
+> > @@ -255,7 +255,6 @@ config ACPI_DOCK
+> >
+> >  config ACPI_CPU_FREQ_PSS
+> >       bool
+> > -     select THERMAL
+> >
+> >  config ACPI_PROCESSOR_CSTATE
+> >       def_bool y
+> > @@ -287,6 +286,7 @@ config ACPI_PROCESSOR
+> >       depends on X86 || IA64 || ARM64 || LOONGARCH
+> >       select ACPI_PROCESSOR_IDLE
+> >       select ACPI_CPU_FREQ_PSS if X86 || IA64 || LOONGARCH
+> > +     select THERMAL
+> >       default y
+> >       help
+> >         This driver adds support for the ACPI Processor package. It is required
+> > diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
+> > index b5a8d3e00a52..0002eecbf870 100644
+> > --- a/drivers/acpi/Makefile
+> > +++ b/drivers/acpi/Makefile
+> > @@ -109,10 +109,9 @@ obj-$(CONFIG_ACPI_PPTT)  += pptt.o
+> >  obj-$(CONFIG_ACPI_PFRUT)     += pfr_update.o pfr_telemetry.o
+> >
+> >  # processor has its own "processor." module_param namespace
+> > -processor-y                  := processor_driver.o
+> > +processor-y                  := processor_driver.o processor_thermal.o
+> >  processor-$(CONFIG_ACPI_PROCESSOR_IDLE) += processor_idle.o
+> > -processor-$(CONFIG_ACPI_CPU_FREQ_PSS)        += processor_throttling.o       \
+> > -     processor_thermal.o
+> > +processor-$(CONFIG_ACPI_CPU_FREQ_PSS)        += processor_throttling.o
+> >  processor-$(CONFIG_CPU_FREQ) += processor_perflib.o
+> >
+> >  obj-$(CONFIG_ACPI_PROCESSOR_AGGREGATOR) += acpi_pad.o
+> > diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_driver.c
+> > index 368a9edefd0c..1278969eec1f 100644
+> > --- a/drivers/acpi/processor_driver.c
+> > +++ b/drivers/acpi/processor_driver.c
+> > @@ -139,75 +139,17 @@ static int acpi_soft_cpu_dead(unsigned int cpu)
+> >  }
+> >
+> >  #ifdef CONFIG_ACPI_CPU_FREQ_PSS
+> > -static int acpi_pss_perf_init(struct acpi_processor *pr,
+> > -             struct acpi_device *device)
+> > +static void acpi_pss_perf_init(struct acpi_processor *pr)
+> >  {
+> > -     int result = 0;
+> > -
+> >       acpi_processor_ppc_has_changed(pr, 0);
+> >
+> >       acpi_processor_get_throttling_info(pr);
+> >
+> >       if (pr->flags.throttling)
+> >               pr->flags.limit = 1;
+> > -
+> > -     pr->cdev = thermal_cooling_device_register("Processor", device,
+> > -                                                &processor_cooling_ops);
+> > -     if (IS_ERR(pr->cdev)) {
+> > -             result = PTR_ERR(pr->cdev);
+> > -             return result;
+> > -     }
+> > -
+> > -     dev_dbg(&device->dev, "registered as cooling_device%d\n",
+> > -             pr->cdev->id);
+> > -
+> > -     result = sysfs_create_link(&device->dev.kobj,
+> > -                                &pr->cdev->device.kobj,
+> > -                                "thermal_cooling");
+> > -     if (result) {
+> > -             dev_err(&device->dev,
+> > -                     "Failed to create sysfs link 'thermal_cooling'\n");
+> > -             goto err_thermal_unregister;
+> > -     }
+> > -
+> > -     result = sysfs_create_link(&pr->cdev->device.kobj,
+> > -                                &device->dev.kobj,
+> > -                                "device");
+> > -     if (result) {
+> > -             dev_err(&pr->cdev->device,
+> > -                     "Failed to create sysfs link 'device'\n");
+> > -             goto err_remove_sysfs_thermal;
+> > -     }
+> > -
+> > -     return 0;
+> > -
+> > - err_remove_sysfs_thermal:
+> > -     sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
+> > - err_thermal_unregister:
+> > -     thermal_cooling_device_unregister(pr->cdev);
+> > -
+> > -     return result;
+> > -}
+> > -
+> > -static void acpi_pss_perf_exit(struct acpi_processor *pr,
+> > -             struct acpi_device *device)
+> > -{
+> > -     if (pr->cdev) {
+> > -             sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
+> > -             sysfs_remove_link(&pr->cdev->device.kobj, "device");
+> > -             thermal_cooling_device_unregister(pr->cdev);
+> > -             pr->cdev = NULL;
+> > -     }
+> >  }
+> >  #else
+> > -static inline int acpi_pss_perf_init(struct acpi_processor *pr,
+> > -             struct acpi_device *device)
+> > -{
+> > -     return 0;
+> > -}
+> > -
+> > -static inline void acpi_pss_perf_exit(struct acpi_processor *pr,
+> > -             struct acpi_device *device) {}
+> > +static inline void acpi_pss_perf_init(struct acpi_processor *pr) {}
+> >  #endif /* CONFIG_ACPI_CPU_FREQ_PSS */
+> >
+> >  static int __acpi_processor_start(struct acpi_device *device)
+> > @@ -229,7 +171,9 @@ static int __acpi_processor_start(struct acpi_device *device)
+> >       if (!cpuidle_get_driver() || cpuidle_get_driver() == &acpi_idle_driver)
+> >               acpi_processor_power_init(pr);
+> >
+> > -     result = acpi_pss_perf_init(pr, device);
+> > +     acpi_pss_perf_init(pr);
+> > +
+> > +     result = acpi_processor_thermal_init(pr, device);
+> >       if (result)
+> >               goto err_power_exit;
+> >
+> > @@ -239,7 +183,7 @@ static int __acpi_processor_start(struct acpi_device *device)
+> >               return 0;
+> >
+> >       result = -ENODEV;
+> > -     acpi_pss_perf_exit(pr, device);
+> > +     acpi_processor_thermal_exit(pr, device);
+> >
+> >  err_power_exit:
+> >       acpi_processor_power_exit(pr);
+> > @@ -277,10 +221,10 @@ static int acpi_processor_stop(struct device *dev)
+> >               return 0;
+> >       acpi_processor_power_exit(pr);
+> >
+> > -     acpi_pss_perf_exit(pr, device);
+> > -
+> >       acpi_cppc_processor_exit(pr);
+> >
+> > +     acpi_processor_thermal_exit(pr, device);
+> > +
+> >       return 0;
+> >  }
+> >
+> > diff --git a/drivers/acpi/processor_thermal.c b/drivers/acpi/processor_thermal.c
+> > index d8b2dfcd59b5..db6ac540e924 100644
+> > --- a/drivers/acpi/processor_thermal.c
+> > +++ b/drivers/acpi/processor_thermal.c
+> > @@ -266,3 +266,57 @@ const struct thermal_cooling_device_ops processor_cooling_ops = {
+> >       .get_cur_state = processor_get_cur_state,
+> >       .set_cur_state = processor_set_cur_state,
+> >  };
+> > +
+> > +int acpi_processor_thermal_init(struct acpi_processor *pr,
+> > +                             struct acpi_device *device)
+> > +{
+> > +     int result = 0;
+> > +
+> > +     pr->cdev = thermal_cooling_device_register("Processor", device,
+> > +                                                &processor_cooling_ops);
+> > +     if (IS_ERR(pr->cdev)) {
+> > +             result = PTR_ERR(pr->cdev);
+> > +             return result;
+> > +     }
+> > +
+> > +     dev_dbg(&device->dev, "registered as cooling_device%d\n",
+> > +             pr->cdev->id);
+> > +
+> > +     result = sysfs_create_link(&device->dev.kobj,
+> > +                                &pr->cdev->device.kobj,
+> > +                                "thermal_cooling");
+> > +     if (result) {
+> > +             dev_err(&device->dev,
+> > +                     "Failed to create sysfs link 'thermal_cooling'\n");
+> > +             goto err_thermal_unregister;
+> > +     }
+> > +
+> > +     result = sysfs_create_link(&pr->cdev->device.kobj,
+> > +                                &device->dev.kobj,
+> > +                                "device");
+> > +     if (result) {
+> > +             dev_err(&pr->cdev->device,
+> > +                     "Failed to create sysfs link 'device'\n");
+> > +             goto err_remove_sysfs_thermal;
+> > +     }
+> > +
+> > +     return 0;
+> > +
+> > +err_remove_sysfs_thermal:
+> > +     sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
+> > +err_thermal_unregister:
+> > +     thermal_cooling_device_unregister(pr->cdev);
+> > +
+> > +     return result;
+> > +}
+> > +
+> > +void acpi_processor_thermal_exit(struct acpi_processor *pr,
+> > +                              struct acpi_device *device)
+> > +{
+> > +     if (pr->cdev) {
+> > +             sysfs_remove_link(&device->dev.kobj, "thermal_cooling");
+> > +             sysfs_remove_link(&pr->cdev->device.kobj, "device");
+> > +             thermal_cooling_device_unregister(pr->cdev);
+> > +             pr->cdev = NULL;
+> > +     }
+> > +}
+> > diff --git a/include/acpi/processor.h b/include/acpi/processor.h
+> > index 194027371928..ba1e3ed98d3d 100644
+> > --- a/include/acpi/processor.h
+> > +++ b/include/acpi/processor.h
+> > @@ -442,8 +442,12 @@ static inline int acpi_processor_hotplug(struct acpi_processor *pr)
+> >
+> >  /* in processor_thermal.c */
+> >  int acpi_processor_get_limit_info(struct acpi_processor *pr);
+> > +int acpi_processor_thermal_init(struct acpi_processor *pr,
+> > +                             struct acpi_device *device);
+> > +void acpi_processor_thermal_exit(struct acpi_processor *pr,
+> > +                              struct acpi_device *device);
+> >  extern const struct thermal_cooling_device_ops processor_cooling_ops;
+> > -#if defined(CONFIG_ACPI_CPU_FREQ_PSS) & defined(CONFIG_CPU_FREQ)
+> > +#ifdef CONFIG_CPU_FREQ
+> >  void acpi_thermal_cpufreq_init(struct cpufreq_policy *policy);
+> >  void acpi_thermal_cpufreq_exit(struct cpufreq_policy *policy);
+> >  #else
+> > @@ -455,6 +459,6 @@ static inline void acpi_thermal_cpufreq_exit(struct cpufreq_policy *policy)
+> >  {
+> >       return;
+> >  }
+> > -#endif       /* CONFIG_ACPI_CPU_FREQ_PSS */
+> > +#endif       /* CONFIG_CPU_FREQ */
+> >
+> >  #endif
+>
+> Thanks for updating the patch.
+>
+> FWIW,
+>
+> Reviewed-by: Punit Agrawal <punit.agrawal@bytedance.com>
 
-Reported-by: syzbot+ce3408364c4a234dd90c@syzkaller.appspotmail.com
-Fixes: 9442e81d7e7 (staging/wlan-ng, prism2usb: replace completion_bh tasklet with work)
-Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
----
- drivers/staging/wlan-ng/hfa384x_usb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/staging/wlan-ng/hfa384x_usb.c b/drivers/staging/wlan-ng/hfa384x_usb.c
-index 33844526c797..02fdef7a16c8 100644
---- a/drivers/staging/wlan-ng/hfa384x_usb.c
-+++ b/drivers/staging/wlan-ng/hfa384x_usb.c
-@@ -2632,7 +2632,7 @@ static void hfa384x_usbctlx_reaper_task(struct work_struct *work)
-  */
- static void hfa384x_usbctlx_completion_task(struct work_struct *work)
- {
--	struct hfa384x *hw = container_of(work, struct hfa384x, reaper_bh);
-+	struct hfa384x *hw = container_of(work, struct hfa384x, completion_bh);
- 	struct hfa384x_usbctlx *ctlx, *temp;
- 	unsigned long flags;
- 
--- 
-2.36.1
-
+Applied as 5.20 material under edited subject, thanks!

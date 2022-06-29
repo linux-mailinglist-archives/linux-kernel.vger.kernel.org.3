@@ -2,100 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2AE0560694
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1D15606A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231872AbiF2Qs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 12:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
+        id S230351AbiF2QsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 12:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbiF2QrD (ORCPT
+        with ESMTP id S231635AbiF2Qrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 12:47:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB99F3EF0B;
-        Wed, 29 Jun 2022 09:46:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDD10B825D1;
-        Wed, 29 Jun 2022 16:46:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D23CC341C8;
-        Wed, 29 Jun 2022 16:45:56 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="TsNOHWCg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656521154;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ASD5b//5M4+dV962dXEVwT1+SJjjwZxEO+zUhq2xQMw=;
-        b=TsNOHWCgRMiDrTOulOzTvSrO3bQgTMHaZPGpMk5oCNYQA4X8w1nLmBPjFAgdX2USwOw6XD
-        MMs5WA1OlKuNdVRVopg7Lgn6u/JgJbuYIAEBTk/elR0847C2e8cAFmHCj0+8ZnvdGisK/r
-        Svr5ztsAKQDXuTJjwF/4bMdgYmibOAw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d04e828e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 29 Jun 2022 16:45:54 +0000 (UTC)
-Date:   Wed, 29 Jun 2022 18:45:48 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
-        rcu@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        sultan@kerneltoast.com
-Subject: Re: [PATCH] remove CONFIG_ANDROID
-Message-ID: <YryBvAvhnyZ4mZKD@zx2c4.com>
-References: <20220629150102.1582425-1-hch@lst.de>
- <20220629150102.1582425-2-hch@lst.de>
- <Yrx5Lt7jrk5BiHXx@zx2c4.com>
- <20220629161020.GA24891@lst.de>
- <Yrx6EVHtroXeEZGp@zx2c4.com>
- <20220629161527.GA24978@lst.de>
- <20220629163444.GG1790663@paulmck-ThinkPad-P17-Gen-1>
- <20220629163701.GA25519@lst.de>
+        Wed, 29 Jun 2022 12:47:39 -0400
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D7C403CD;
+        Wed, 29 Jun 2022 09:46:31 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-3176b6ed923so153640057b3.11;
+        Wed, 29 Jun 2022 09:46:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pLmQ2/PpMURJRvT1ORVunkJnyaJ/GzRD3j6L0P/2GnY=;
+        b=3lkqcb6lghMUlsGlQnWsiv26aaFwqtSYyW2q8vkFp70P4p3IFnHV76eZ8dkS5IyaKX
+         5EWI5jkHnKGBad2JO3MPULGWjB9D0PkWofchMNZB1bKOUXSiMs1pogrl/t12IdbdWpCT
+         Om2ATCtIHLID/K6Ju4AQpN4elHhJiV0dCTbSuGa25wlJR+XIYGW8u8vFzRAJ3ABiSEaY
+         a+UuMxhjYPHFS1c8xq5LR0tgEOHznLGmV34aGBl/tgx9bWQxgZ8DKPrRg5xzN/qG8S6T
+         mK1ecvu8TMKiSAawHU8wtwmN9jLRyiQMv9EMDsnoVDyB7Xd5wmJcyhFB+/FEKIb7E0zd
+         uSBA==
+X-Gm-Message-State: AJIora8ZZO2A7N0e8Rr8Nt/jU1ZXtDaazomtBbT/2XUoLlJPcv0WiI2+
+        lvr76fZzCrq8KfXl0MK6kkOBwE3EtUU5lt31E0/LPSaA
+X-Google-Smtp-Source: AGRyM1seQ7wW9lsNtM8Ksd1jOhz/rzH/yLDZVybzo/TA+W9KNKBKo04hfXn0LC3tv1juOctP1/C8oW2TBgnygHKe8pg=
+X-Received: by 2002:a0d:d086:0:b0:31b:d0b2:e11f with SMTP id
+ s128-20020a0dd086000000b0031bd0b2e11fmr4744401ywd.515.1656521186449; Wed, 29
+ Jun 2022 09:46:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220629163701.GA25519@lst.de>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <TYWP286MB2601F3FF324862A2E81FA70CB1AB9@TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM>
+In-Reply-To: <TYWP286MB2601F3FF324862A2E81FA70CB1AB9@TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 29 Jun 2022 18:46:15 +0200
+Message-ID: <CAJZ5v0iYWQteOOi+Q2Z=vDyKMk3Rm27f+ufkT2FRrmS-o==PEg@mail.gmail.com>
+Subject: Re: [PATCH v1] ACPI: Make acpi video driver available on !X86
+To:     Riwen Lu <luriwen@hotmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Riwen Lu <luriwen@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 06:37:01PM +0200, Christoph Hellwig wrote:
-> be a policy set somewhere either in the kernel or fed into the kernel
-> by userspace.  Then we can key it off that, and I suspect it is
-> probably going to be a runtime variable and not a config option.
+On Mon, Jun 13, 2022 at 11:34 AM Riwen Lu <luriwen@hotmail.com> wrote:
+>
+> From: Riwen Lu <luriwen@kylinos.cn>
+>
+> ACPI video device can also be found in arm64 laptops, so drop the
+> Kconfig dependency on X86 for ACPI_VIDEO.
+>
+> Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
+> ---
+>  drivers/acpi/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+> index 1e34f846508f..a25c36e0c863 100644
+> --- a/drivers/acpi/Kconfig
+> +++ b/drivers/acpi/Kconfig
+> @@ -210,7 +210,7 @@ config ACPI_TINY_POWER_BUTTON_SIGNAL
+>
+>  config ACPI_VIDEO
+>         tristate "Video"
+> -       depends on X86 && BACKLIGHT_CLASS_DEVICE
+> +       depends on BACKLIGHT_CLASS_DEVICE
+>         depends on INPUT
+>         select THERMAL
+>         help
+> --
 
-Right, this would be a good way of addressing it.
-
-Maybe some Android people on the list have a good idea off hand of what
-Android uses at runtime to control this, and how it'd be accessible in
-the kernel?
-
-Jason
+Applied as 5.20 material, thanks!

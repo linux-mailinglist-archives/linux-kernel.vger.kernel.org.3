@@ -2,139 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318B5560A31
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85FAB560A33
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiF2TUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 15:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
+        id S229582AbiF2TUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 15:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiF2TUE (ORCPT
+        with ESMTP id S229774AbiF2TUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 15:20:04 -0400
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56751EC72
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 12:20:02 -0700 (PDT)
-Received: by mail-oo1-xc29.google.com with SMTP id v33-20020a4a9764000000b0035f814bb06eso3297650ooi.11
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 12:20:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4IY1+lAO4Posxki4A8hl3XkQpihB9YLZGIPFUTvwakM=;
-        b=HYC4tZgofx/ozc5CMWDl+alXct7+6S+dQxMbkS7lfomOQqvqi3SXQLiewlzmyuDFi5
-         ahx6zd6QAWXzcAEyFdYv66RwYSGLUvergaae5ybUbKeDqvz2CTX/Ndc2OtlXbRWc4j5d
-         eeThbp/RaKvtBFN77MLPcUoSKe1H+Y6dnOd2QkkNDEZ2Rp8amwyvNtOkWJeCLdR0vYB0
-         dEHtmnqS4gFz4Atb5iAdYKjUblRRjPvf9dIO4R9l/6lcxRptDU3VE5h2HomzueMyU4fO
-         JIsE0TZOIHbQhl1l90yKlRQBW0qFzpa9rHVJqX2ghHY5pdpLQNdx9Ir79BVx0iBXdc7H
-         zBLA==
+        Wed, 29 Jun 2022 15:20:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8C902EA23
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 12:20:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656530449;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=tFVPrpGIRVp0BLeI5a57lLi4ssxUxyA/yiqhXka4Vkw=;
+        b=AU+w6iKf/BqViXJ7ajCMFlFHaVNYD1997hTFHIL0gsq/pPZ96hVAf13V9GgR6srVoBV4Fo
+        JI4HsTaJY7B3DeIU/B+EPZWRd7uoHjmeUYkCPaU0HPL7CbM+CEZ7iBeIZei5tDECIfPZkV
+        laakHI4ZsRgRo6nzTBS3dDcN7kkNWpE=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-135-e353LCIqMhG0nDURcQUNpA-1; Wed, 29 Jun 2022 15:20:48 -0400
+X-MC-Unique: e353LCIqMhG0nDURcQUNpA-1
+Received: by mail-qk1-f198.google.com with SMTP id k190-20020a37bac7000000b006af6d953751so4282839qkf.13
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 12:20:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4IY1+lAO4Posxki4A8hl3XkQpihB9YLZGIPFUTvwakM=;
-        b=RtO5/KISp3JtjNPkFTulfAWR5964ps+4QuFLnqvQTvkqkdeWV4lkcP91ktG9HVhWKH
-         rOIuDwPK9gPoa0ke5gu5eUOyU/4kBXiITbIvKlZ06nGJdZG/PEcy7BZ/CgoHleJlFXoG
-         yLkf695C5piYJUXTGW+9/L7awdiBmOHsor6sB5gaxENjizUhsUG8gltsKtgzhOjhZ7vK
-         FCopbzukAa7rKkSSprJVXH3AI586P/915qT2gG6vICW15u5rjkHoebuehosqq/pGpn3U
-         HFG1K+X6r4Xg1Pl1CELDYF/DRXmRH4NzN8ojIbvuu0F9HF6nAzW2eVwTBxUbN3CIqgPL
-         85aQ==
-X-Gm-Message-State: AJIora9Z9EtrX6Q52qQaAp2yE4vSSVZIf/BcPtUg7UDpK5WQ4DWIizF1
-        tGyzoCQSkAnv6hz7FypplbmtJA==
-X-Google-Smtp-Source: AGRyM1szB2I5u75eF35Z9NNIRvSjg69yLzAkkdRofmHhMutfeUDBCRnOFjwrl8GRyQF4pR5pXgXnRg==
-X-Received: by 2002:a4a:2cc1:0:b0:425:8f67:36f5 with SMTP id o184-20020a4a2cc1000000b004258f6736f5mr2137665ooo.16.1656530402190;
-        Wed, 29 Jun 2022 12:20:02 -0700 (PDT)
-Received: from eze-laptop ([190.190.187.68])
-        by smtp.gmail.com with ESMTPSA id y19-20020a9d7153000000b00612e4267634sm10092952otj.18.2022.06.29.12.19.58
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tFVPrpGIRVp0BLeI5a57lLi4ssxUxyA/yiqhXka4Vkw=;
+        b=SvNoQN+6GGp5SLm0CMkTqdhMcNKjkqrGTGPHYRRKVLVXJvO/Q8ykdYVdjkRk2ciDZ1
+         SUR4zWaYley+XVrKr/rP5v3TrIKT4nn8cCwPdJDpRa0AUg313ScFjv3+NHhfhH4ruAAQ
+         ou9WmK0EJQyiRkWF5MvjqpPu6q9EX4a3Fdu2EoJ+h4CzCHhaMAkzBTY3ncPkvWpBKtQU
+         OFNNxa8enudVrboZlHCbUAugCPAdkuckqgZfLnM5RHpa9XbGKJsU2/LiixBzgK3+yYnm
+         RM1vGpHOlK6Gx83g3T2qD3FIDRKVRXtoDx0bLx1qRT/2O66HUXa1SyCXd5RutScE5QcZ
+         uC2w==
+X-Gm-Message-State: AJIora99Ff3eBxIc6YRH60AR2xHQtQEQtU4PY09KDYb2DuYrEITQegIv
+        1zIxyd+2GTzJsfnbqYyg0vnplpM848n98K7/UzXurk6FoYz3bbIxGxZHJnXVcEvZeBUHBZbp/ww
+        csi394gV/9veOyKoCKyZO88b5
+X-Received: by 2002:a05:6214:2506:b0:470:2c9c:65fa with SMTP id gf6-20020a056214250600b004702c9c65famr9081615qvb.117.1656530448109;
+        Wed, 29 Jun 2022 12:20:48 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1u7udpbNcAAWo11I4FvtiEedeJXmYlurqXYJJkBdgJwBA1JJcxCuhkzAYOxK490sBhH4dUtfg==
+X-Received: by 2002:a05:6214:2506:b0:470:2c9c:65fa with SMTP id gf6-20020a056214250600b004702c9c65famr9081595qvb.117.1656530447839;
+        Wed, 29 Jun 2022 12:20:47 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id r4-20020ac84244000000b00317ca023e33sm10799903qtm.80.2022.06.29.12.20.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 12:20:01 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 16:19:55 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     p.zabel@pengutronix.de, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, benjamin.gaignard@collabora.com,
-        nicolas.dufresne@collabora.com, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v2 7/7] media: hantro: sunxi: Enable 10-bit decoding
-Message-ID: <Yryl24uu0CMKpFgQ@eze-laptop>
-References: <20220616202513.351039-1-jernej.skrabec@gmail.com>
- <20220616202513.351039-8-jernej.skrabec@gmail.com>
+        Wed, 29 Jun 2022 12:20:47 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     sre@kernel.org, asmaa@nvidia.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] power: reset: pwr-mlxbf: change rst_pwr_hid and low_pwr_hid from global to local variables
+Date:   Wed, 29 Jun 2022 15:20:45 -0400
+Message-Id: <20220629192045.4107237-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616202513.351039-8-jernej.skrabec@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jernej,
+sparse reports
+drivers/power/reset/pwr-mlxbf.c:19:12: warning: symbol 'rst_pwr_hid' was not declared. Should it be static?
+drivers/power/reset/pwr-mlxbf.c:20:12: warning: symbol 'low_pwr_hid' was not declared. Should it be static?
 
-On Thu, Jun 16, 2022 at 10:25:13PM +0200, Jernej Skrabec wrote:
-> Now that infrastructure for 10-bit decoding exists, enable it for
-> Allwinner H6.
-> 
+Both rst_pwr_hid and low_pwr_hid are only used in a single function
+so they should be local variables.
 
-I don't have this hardware, but the patch seems OK.
+Fixes: a4c0094fcf76 ("power: reset: pwr-mlxbf: add BlueField SoC power control driver")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/power/reset/pwr-mlxbf.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+diff --git a/drivers/power/reset/pwr-mlxbf.c b/drivers/power/reset/pwr-mlxbf.c
+index 1c4904c0e1f5..12dedf841a44 100644
+--- a/drivers/power/reset/pwr-mlxbf.c
++++ b/drivers/power/reset/pwr-mlxbf.c
+@@ -16,9 +16,6 @@
+ #include <linux/reboot.h>
+ #include <linux/types.h>
+ 
+-const char *rst_pwr_hid = "MLNXBF24";
+-const char *low_pwr_hid = "MLNXBF29";
+-
+ struct pwr_mlxbf {
+ 	struct work_struct send_work;
+ 	const char *hid;
+@@ -31,6 +28,8 @@ static void pwr_mlxbf_send_work(struct work_struct *work)
+ 
+ static irqreturn_t pwr_mlxbf_irq(int irq, void *ptr)
+ {
++	const char *rst_pwr_hid = "MLNXBF24";
++	const char *low_pwr_hid = "MLNXBF29";
+ 	struct pwr_mlxbf *priv = ptr;
+ 
+ 	if (!strncmp(priv->hid, rst_pwr_hid, 8))
+-- 
+2.27.0
 
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> ---
->  drivers/staging/media/hantro/sunxi_vpu_hw.c | 27 +++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/drivers/staging/media/hantro/sunxi_vpu_hw.c b/drivers/staging/media/hantro/sunxi_vpu_hw.c
-> index fbeac81e59e1..02ce8b064a8f 100644
-> --- a/drivers/staging/media/hantro/sunxi_vpu_hw.c
-> +++ b/drivers/staging/media/hantro/sunxi_vpu_hw.c
-> @@ -23,12 +23,39 @@ static const struct hantro_fmt sunxi_vpu_postproc_fmts[] = {
->  			.step_height = 32,
->  		},
->  	},
-> +	{
-> +		.fourcc = V4L2_PIX_FMT_P010,
-> +		.codec_mode = HANTRO_MODE_NONE,
-> +		.postprocessed = true,
-> +		.frmsize = {
-> +			.min_width = FMT_MIN_WIDTH,
-> +			.max_width = FMT_UHD_WIDTH,
-> +			.step_width = 32,
-> +			.min_height = FMT_MIN_HEIGHT,
-> +			.max_height = FMT_UHD_HEIGHT,
-> +			.step_height = 32,
-> +		},
-> +	},
->  };
->  
->  static const struct hantro_fmt sunxi_vpu_dec_fmts[] = {
->  	{
->  		.fourcc = V4L2_PIX_FMT_NV12_4L4,
->  		.codec_mode = HANTRO_MODE_NONE,
-> +		.match_depth = true,
-> +		.frmsize = {
-> +			.min_width = FMT_MIN_WIDTH,
-> +			.max_width = FMT_UHD_WIDTH,
-> +			.step_width = 32,
-> +			.min_height = FMT_MIN_HEIGHT,
-> +			.max_height = FMT_UHD_HEIGHT,
-> +			.step_height = 32,
-> +		},
-> +	},
-> +	{
-> +		.fourcc = V4L2_PIX_FMT_P010_4L4,
-> +		.codec_mode = HANTRO_MODE_NONE,
-> +		.match_depth = true,
->  		.frmsize = {
->  			.min_width = FMT_MIN_WIDTH,
->  			.max_width = FMT_UHD_WIDTH,
-> -- 
-> 2.36.1
-> 

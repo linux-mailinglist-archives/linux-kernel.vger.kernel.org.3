@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0DAC5601EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E905601F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233556AbiF2OEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 10:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
+        id S233473AbiF2OFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 10:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbiF2OEt (ORCPT
+        with ESMTP id S230281AbiF2OFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 10:04:49 -0400
-Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B73F2529E;
-        Wed, 29 Jun 2022 07:04:43 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1656511447t5k5iapr
-Received: from localhost.localdomain ( [182.148.13.66])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 29 Jun 2022 22:03:59 +0800 (CST)
-X-QQ-SSF: 0100000000200060C000C00A0000000
-X-QQ-FEAT: 3uawQE1sH+2MKe39u4T+sQMZuK7zrFp2/8EpLwS4FOyKK8QBIIkGb6ZhK+FVV
-        VyvUFiDUrUD9efbZQkW8A5KeW2IFH5aZ6ngwzVCnB01UMfdV5m/hc86xqccf1l6vVrf89ZZ
-        +RSSwjwNh+s9N0/B1X+GgyGcH3e1cFoa+gnDD9pNO7hM9HqE3X7XDSiY2ZRTlqhlRblhLil
-        s4hjRGc13E23C50JsrnZwA/e6LKZd4OUDlN5U6x0ADvPxvt2EK9em5AoUYBXVgTjYVjp3pL
-        MM2Ub6HzZLpa6ysLB1+5+OHBu/0DlBpkX7PHD0Yvt1m00rHpPaqwfW2+5oHqFubGPw2eBxr
-        arUS3qO
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] intel/iavf:fix repeated words in comments
-Date:   Wed, 29 Jun 2022 22:03:52 +0800
-Message-Id: <20220629140352.51610-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 29 Jun 2022 10:05:33 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE73D2A251;
+        Wed, 29 Jun 2022 07:05:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AdnOUixFaogrIHpTOlzBgm/evJyLH1AoH6sNGHs7rbw=; b=qmpdXaujtrOzhGFxHHFi13Bm1J
+        gCSK8vuAHJjN+MEZ6dknO6RyA2A4rowbq52NOjL0ixWi6EHF5CcNomLJsrvDzy070xpeb+dLUwAuX
+        anrkbObQPDTcRpTvJOHClFyrhy2O565MHOyNkUP5BioQ9ARaoqZQv9fKUFcHtkW5KBxDvGw01suxN
+        WSl2EXInD8ayYEhgbP5c8hLQ6eIHaqkqkdary0J2Y5WrQW5kV1Ag7B27ckzI6ENiq18aRzSPvM8iJ
+        ik4F+h1SzY475L2QXGEW+6hMSgDDsaIOdTEsHACLzHLCMY2M5X+9UKfDYKkRuMriM1IgWHbeQGbO3
+        LZ96O5AA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o6YJN-00CNma-5V; Wed, 29 Jun 2022 14:04:57 +0000
+Date:   Wed, 29 Jun 2022 07:04:57 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     corbet@lwn.net, rafael@kernel.org, len.brown@intel.com,
+        pavel@ucw.cz, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        paulmck@kernel.org, akpm@linux-foundation.org,
+        keescook@chromium.org, songmuchun@bytedance.com,
+        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
+        michael.h.kelley@microsoft.com, kys@microsoft.com,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        vkuznets@redhat.com, wei.liu@kernel.org, parri.andrea@gmail.com,
+        thomas.lendacky@amd.com, linux-hyperv@vger.kernel.org,
+        kirill.shutemov@intel.com, andi.kleen@intel.com,
+        Andi Kleen <ak@linux.intel.com>
+Subject: Re: [PATCH 2/2] x86/ACPI: Set swiotlb area according to the number
+ of lapic entry in MADT
+Message-ID: <YrxcCZKvFYjxLf9n@infradead.org>
+References: <20220627153150.106995-1-ltykernel@gmail.com>
+ <20220627153150.106995-3-ltykernel@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,RCVD_IN_VALIDITY_RPBL,
-        RDNS_DYNAMIC,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220627153150.106995-3-ltykernel@gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'a'.
+On Mon, Jun 27, 2022 at 11:31:50AM -0400, Tianyu Lan wrote:
+> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+> 
+> When initialize swiotlb bounce buffer, smp_init() has not been
+> called and cpu number can not be got from num_online_cpus().
+> Use the number of lapic entry to set swiotlb area number and
+> keep swiotlb area number equal to cpu number on the x86 platform.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/net/ethernet/intel/iavf/iavf_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index 7dfcf78b57fb..548302b1cb8d 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -4162,7 +4162,7 @@ static netdev_features_t iavf_features_check(struct sk_buff *skb,
- 	}
- 
- 	/* No need to validate L4LEN as TCP is the only protocol with a
--	 * a flexible value and we support all possible values supported
-+	 * flexible value and we support all possible values supported
- 	 * by TCP, which is at most 15 dwords
- 	 */
- 
--- 
-2.36.1
-
+Can we reorder that initialization?  Because I really hate having
+to have an arch hook in every architecture.

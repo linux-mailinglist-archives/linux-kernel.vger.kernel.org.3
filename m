@@ -2,57 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B72F656015D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 322EF56017B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232506AbiF2Nej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 09:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
+        id S233866AbiF2Nhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 09:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiF2Nee (ORCPT
+        with ESMTP id S233853AbiF2Nhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 09:34:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341DC18346;
-        Wed, 29 Jun 2022 06:34:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2DE5B8249E;
-        Wed, 29 Jun 2022 13:34:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFE45C34114;
-        Wed, 29 Jun 2022 13:34:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656509670;
-        bh=gj+vg2IVeXjYKBJmnL54JfVG6X8RSjznQuc6WRpzK+U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J23XU6m4mCLml/4II2XqMUkJvgZHELWAcMhBn8hHkfAVKiqSf9FF5nOQzZbB19E2q
-         u7MkydnzsF1zZ8NxFDLman6F5vzyx+/lpQGXt2DYQhk3zFFHeSl5I+vGLduavORgTJ
-         swI+E6rsKnqXPA57oV5RVjp9+g9DSyvpyPgZx9XmzkqmnQwneJB9GdP2eMnAvtbyEe
-         xjLQ+yfjOmGhbhE3SO7yQbLatzfa8aJ8jPyiHKTnfJuwkGd+aL3OY1F83K+0cXQtUy
-         wfiBYQNTaGJpH0HOshwKIVbruWtCXTD8h+wwsuvodXS9z2UIXZ3xuhKkqtYZW68idQ
-         m9v15P/BwSA5g==
-Date:   Wed, 29 Jun 2022 21:34:24 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Li Yang <leoyang.li@nxp.com>, linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Walle <michael@walle.cc>, Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v3 6/9] ARM: dts: layerscape: Add SFP binding for TA 2.1
- devices
-Message-ID: <20220629133424.GN819983@dragon>
-References: <20220428181703.2194171-1-sean.anderson@seco.com>
- <20220428181703.2194171-7-sean.anderson@seco.com>
+        Wed, 29 Jun 2022 09:37:35 -0400
+Received: from smtpbg.qq.com (unknown [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED6931529;
+        Wed, 29 Jun 2022 06:37:30 -0700 (PDT)
+X-QQ-mid: bizesmtp81t1656509824tvs0y8f4
+Received: from localhost.localdomain ( [182.148.13.66])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 29 Jun 2022 21:37:00 +0800 (CST)
+X-QQ-SSF: 0100000000200060C000C00A0000000
+X-QQ-FEAT: 3uawQE1sH+3ZQG+P4dpIlTThLsViaVNLrg63S+DmjqidZwD1nNStyHd9TKyYQ
+        yy9OBnVc9ztDf1IC9Xnu6b6p/Z0Q8gSdTDc/AyPJkrCZFOPRGvbjwGFa1nb/ahHvfFmmPDa
+        k8PAw1glZTverFLoXbQKeS+wwBLDCs7M4qwbx+mmzcE6vT7IxVXWngW5+R2QprxQeHEUPWP
+        9gmaSiQQJZH5n4eLQUZQYTnlD+OR4sDWkgOLIbDSTquiFwDpO5630upvOo0rz6wCl46YJ1u
+        0lGEmYYf3v3+udaH4Xfx788uKTzN5uD05D3+75gW3ZKtuj2wtd6+FPvXLOX0nIGWB85QASV
+        5oa1UdD
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] intel/fm10k:fix repeated words in comments
+Date:   Wed, 29 Jun 2022 21:36:54 +0800
+Message-Id: <20220629133654.42134-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220428181703.2194171-7-sean.anderson@seco.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,103 +50,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 02:17:00PM -0400, Sean Anderson wrote:
-> This adds an appropriate SFP binding for Trust Architecture 2.1 devices.
-> 
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> ---
-> 
-> (no changes since v1)
-> 
->  arch/arm/boot/dts/ls1021a.dtsi                 | 7 +++++++
+Delete the redundant word 'the'.
+Delete the redundant word 'by'.
+Delete the redundant word 'a'.
 
-Separate patches for arm and arm64 DTS, please.
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/net/ethernet/intel/fm10k/fm10k_mbx.c | 2 +-
+ drivers/net/ethernet/intel/fm10k/fm10k_tlv.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Also prefix arm patches like 'ARM: dts: ...', while 'arm64: dts: ...'
-for arm64 ones.
+diff --git a/drivers/net/ethernet/intel/fm10k/fm10k_mbx.c b/drivers/net/ethernet/intel/fm10k/fm10k_mbx.c
+index 30ca9ee1900b..c499b62b49b1 100644
+--- a/drivers/net/ethernet/intel/fm10k/fm10k_mbx.c
++++ b/drivers/net/ethernet/intel/fm10k/fm10k_mbx.c
+@@ -809,7 +809,7 @@ static s32 fm10k_mbx_read(struct fm10k_hw *hw, struct fm10k_mbx_info *mbx)
+  *  @hw: pointer to hardware structure
+  *  @mbx: pointer to mailbox
+  *
+- *  This function copies the message from the the message array to mbmem
++ *  This function copies the message from the message array to mbmem
+  **/
+ static void fm10k_mbx_write(struct fm10k_hw *hw, struct fm10k_mbx_info *mbx)
+ {
+diff --git a/drivers/net/ethernet/intel/fm10k/fm10k_tlv.c b/drivers/net/ethernet/intel/fm10k/fm10k_tlv.c
+index f6d56867f857..75cbdf2dbbe3 100644
+--- a/drivers/net/ethernet/intel/fm10k/fm10k_tlv.c
++++ b/drivers/net/ethernet/intel/fm10k/fm10k_tlv.c
+@@ -78,7 +78,7 @@ static s32 fm10k_tlv_attr_put_null_string(u32 *msg, u16 attr_id,
+  *  @string: Pointer to location of destination string
+  *
+  *  This function pulls the string back out of the attribute and will place
+- *  it in the array pointed by by string.  It will return success if provided
++ *  it in the array pointed by string.  It will return success if provided
+  *  with a valid pointers.
+  **/
+ static s32 fm10k_tlv_attr_get_null_string(u32 *attr, unsigned char *string)
+@@ -584,7 +584,7 @@ s32 fm10k_tlv_msg_parse(struct fm10k_hw *hw, u32 *msg,
+  *  @mbx: Unused mailbox pointer
+  *
+  *  This function is a default handler for unrecognized messages.  At a
+- *  a minimum it just indicates that the message requested was
++ *  minimum it just indicates that the message requested was
+  *  unimplemented.
+  **/
+ s32 fm10k_tlv_msg_error(struct fm10k_hw __always_unused *hw,
+-- 
+2.36.1
 
-Shawn
-
->  arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi | 8 ++++++++
->  arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi | 8 ++++++++
->  arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi | 8 ++++++++
->  4 files changed, 31 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/ls1021a.dtsi b/arch/arm/boot/dts/ls1021a.dtsi
-> index 2e69d6eab4d1..c1e94a317cba 100644
-> --- a/arch/arm/boot/dts/ls1021a.dtsi
-> +++ b/arch/arm/boot/dts/ls1021a.dtsi
-> @@ -129,6 +129,13 @@ ifc: ifc@1530000 {
->  			status = "disabled";
->  		};
->  
-> +		sfp: efuse@1e80000 {
-> +			compatible = "fsl,ls1021a-sfp";
-> +			reg = <0x0 0x1e80000 0x0 0x10000>;
-> +			clocks = <&clockgen 4 3>;
-> +			clock-names = "sfp";
-> +		};
-> +
->  		dcfg: dcfg@1ee0000 {
->  			compatible = "fsl,ls1021a-dcfg", "syscon";
->  			reg = <0x0 0x1ee0000 0x0 0x1000>;
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
-> index 50a72cda4727..47ce525e0a72 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
-> @@ -271,6 +271,14 @@ rtic_d: rtic-d@60 {
->  			};
->  		};
->  
-> +		sfp: efuse@1e80000 {
-> +			compatible = "fsl,ls1021a-sfp";
-> +			reg = <0x0 0x1e80000 0x0 0x10000>;
-> +			clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL
-> +					    QORIQ_CLK_PLL_DIV(4)>;
-> +			clock-names = "sfp";
-> +		};
-> +
->  		sec_mon: sec_mon@1e90000 {
->  			compatible = "fsl,sec-v5.4-mon", "fsl,sec-v5.0-mon",
->  				     "fsl,sec-v4.0-mon";
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
-> index 35d1939e690b..b0ab0b19de7e 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
-> @@ -383,6 +383,14 @@ sec_jr3: jr@40000 {
->  			};
->  		};
->  
-> +		sfp: efuse@1e80000 {
-> +			compatible = "fsl,ls1021a-sfp";
-> +			reg = <0x0 0x1e80000 0x0 0x10000>;
-> +			clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL
-> +					    QORIQ_CLK_PLL_DIV(4)>;
-> +			clock-names = "sfp";
-> +		};
-> +
->  		dcfg: dcfg@1ee0000 {
->  			compatible = "fsl,ls1043a-dcfg", "syscon";
->  			reg = <0x0 0x1ee0000 0x0 0x10000>;
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-> index 4e7bd04d9798..c30056afc02a 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-> @@ -413,6 +413,14 @@ bportals: bman-portals@508000000 {
->  			ranges = <0x0 0x5 0x08000000 0x8000000>;
->  		};
->  
-> +		sfp: efuse@1e80000 {
-> +			compatible = "fsl,ls1021a-sfp";
-> +			reg = <0x0 0x1e80000 0x0 0x10000>;
-> +			clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL
-> +					    QORIQ_CLK_PLL_DIV(4)>;
-> +			clock-names = "sfp";
-> +		};
-> +
->  		dcfg: dcfg@1ee0000 {
->  			compatible = "fsl,ls1046a-dcfg", "syscon";
->  			reg = <0x0 0x1ee0000 0x0 0x1000>;
-> -- 
-> 2.35.1.1320.gc452695387.dirty
-> 

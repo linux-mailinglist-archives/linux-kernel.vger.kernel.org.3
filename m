@@ -2,148 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F3D560186
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB16560159
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233812AbiF2Njm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 09:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
+        id S232238AbiF2Nd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 09:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231933AbiF2Njj (ORCPT
+        with ESMTP id S231658AbiF2Nd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 09:39:39 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4361D15FE1;
-        Wed, 29 Jun 2022 06:39:38 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LY2cG4lNsz9sx7;
-        Wed, 29 Jun 2022 21:38:54 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+        Wed, 29 Jun 2022 09:33:57 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F0F63C5;
+        Wed, 29 Jun 2022 06:33:56 -0700 (PDT)
+Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LY2Pq2q0Cz687SB;
+        Wed, 29 Jun 2022 21:29:51 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 29 Jun 2022 21:39:35 +0800
-Received: from localhost.localdomain (10.67.165.24) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
+ 15.1.2375.24; Wed, 29 Jun 2022 15:33:54 +0200
+Received: from [10.195.245.77] (10.195.245.77) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 29 Jun 2022 21:39:34 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <jbrouer@redhat.com>, <hawk@kernel.org>, <brouer@redhat.com>,
-        <ilias.apalodimas@linaro.org>, <davem@davemloft.net>,
-        <kuba@kernel.org>, <edumazet@google.com>, <pabeni@redhat.com>
-CC:     <lorenzo@kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
-        <chenhao288@hisilicon.com>
-Subject: [PATCH net-next v2] net: page_pool: optimize page pool page allocation in NUMA scenario
-Date:   Wed, 29 Jun 2022 21:33:05 +0800
-Message-ID: <20220629133305.15012-1-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.33.0
+ 15.1.2375.24; Wed, 29 Jun 2022 14:33:52 +0100
+Message-ID: <c57b353f-1325-4c90-f455-e53693ba585d@huawei.com>
+Date:   Wed, 29 Jun 2022 14:33:54 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600016.china.huawei.com (7.193.23.20)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] hisi_lpc: Use acpi_dev_for_each_child()
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <12026357.O9o76ZdvQC@kreacher>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <12026357.O9o76ZdvQC@kreacher>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.195.245.77]
+X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jie Wang <wangjie125@huawei.com>
+On 29/06/2022 13:55, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Instead of walking the list of children of an ACPI device directly,
+> use acpi_dev_for_each_child() to carry out an action for all of
+> the given ACPI device's children.
+> 
+> This will help to eliminate the children list head from struct
+> acpi_device as it is redundant and it is used in questionable ways
+> in some places (in particular, locking is needed for walking the
+> list pointed to it safely, but it is often missing).
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Currently NIC packet receiving performance based on page pool deteriorates
-occasionally. To analysis the causes of this problem page allocation stats
-are collected. Here are the stats when NIC rx performance deteriorates:
+Hi Rafael,
 
-bandwidth(Gbits/s)		16.8		6.91
-rx_pp_alloc_fast		13794308	21141869
-rx_pp_alloc_slow		108625		166481
-rx_pp_alloc_slow_h		0		0
-rx_pp_alloc_empty		8192		8192
-rx_pp_alloc_refill		0		0
-rx_pp_alloc_waive		100433		158289
-rx_pp_recycle_cached		0		0
-rx_pp_recycle_cache_full	0		0
-rx_pp_recycle_ring		362400		420281
-rx_pp_recycle_ring_full		6064893		9709724
-rx_pp_recycle_released_ref	0		0
+> ---
+>   drivers/bus/hisi_lpc.c |   12 ++++++++----
+>   1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> Index: linux-pm/drivers/bus/hisi_lpc.c
+> ===================================================================
+> --- linux-pm.orig/drivers/bus/hisi_lpc.c
+> +++ linux-pm/drivers/bus/hisi_lpc.c
+> @@ -471,6 +471,12 @@ static int hisi_lpc_acpi_remove_subdev(s
+>   	return 0;
+>   }
+>   
+> +static int hisi_lpc_acpi_clear_enumerated(struct acpi_device *adev, void *not_used)
+> +{
+> +	acpi_device_clear_enumerated(adev);
+> +	return 0;
+> +}
+> +
+>   struct hisi_lpc_acpi_cell {
+>   	const char *hid;
+>   	const char *name;
+> @@ -480,13 +486,11 @@ struct hisi_lpc_acpi_cell {
+>   
+>   static void hisi_lpc_acpi_remove(struct device *hostdev)
+>   {
+> -	struct acpi_device *adev = ACPI_COMPANION(hostdev);
+>   	struct acpi_device *child;
+>   
+I got this warn:
 
-The rx_pp_alloc_waive count indicates that a large number of pages' numa
-node are inconsistent with the NIC device numa node. Therefore these pages
-can't be reused by the page pool. As a result, many new pages would be
-allocated by __page_pool_alloc_pages_slow which is time consuming. This
-causes the NIC rx performance fluctuations.
+drivers/bus/hisi_lpc.c: In function ‘hisi_lpc_acpi_remove’:
+drivers/bus/hisi_lpc.c:489:22: warning: unused variable ‘child’ 
+[-Wunused-variable]
+  489 |  struct acpi_device *child;
+      |                      ^~~~~
+  CC      drivers/bus/brcmstb_gisb.
 
-The main reason of huge numa mismatch pages in page pool is that page pool
-uses alloc_pages_bulk_array to allocate original pages. This function is
-not suitable for page allocation in NUMA scenario. So this patch uses
-alloc_pages_bulk_array_node which has a NUMA id input parameter to ensure
-the NUMA consistent between NIC device and allocated pages.
+With that fixed:
 
-Repeated NIC rx performance tests are performed 40 times. NIC rx bandwidth
-is higher and more stable compared to the datas above. Here are three test
-stats, the rx_pp_alloc_waive count is zero and rx_pp_alloc_slow which
-indicates pages allocated from slow patch is relatively low.
+Acked-by: John Garry <john.garry@huawei.com>
 
-bandwidth(Gbits/s)		93		93.9		93.8
-rx_pp_alloc_fast		60066264	61266386	60938254
-rx_pp_alloc_slow		16512		16517		16539
-rx_pp_alloc_slow_ho		0		0		0
-rx_pp_alloc_empty		16512		16517		16539
-rx_pp_alloc_refill		473841		481910		481585
-rx_pp_alloc_waive		0		0		0
-rx_pp_recycle_cached		0		0		0
-rx_pp_recycle_cache_full	0		0		0
-rx_pp_recycle_ring		29754145	30358243	30194023
-rx_pp_recycle_ring_full		0		0		0
-rx_pp_recycle_released_ref	0		0		0
+Can you route this through one of your trees?
 
-Signed-off-by: Jie Wang <wangjie125@huawei.com>
----
-v1->v2:
-1, Remove two inappropriate comments.
-2, Use NUMA_NO_NODE instead of numa_mem_id() for code maintenance.
----
- net/core/page_pool.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+>   	device_for_each_child(hostdev, NULL, hisi_lpc_acpi_remove_subdev);
+> -
+> -	list_for_each_entry(child, &adev->children, node)
+> -		acpi_device_clear_enumerated(child);
+> +	acpi_dev_for_each_child(ACPI_COMPANION(hostdev),
+> +				hisi_lpc_acpi_clear_enumerated, NULL);
+>   }
+>   
+>   /*
+> 
+> 
+> 
 
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index f18e6e771993..64cb2c617de8 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -377,6 +377,7 @@ static struct page *__page_pool_alloc_pages_slow(struct page_pool *pool,
- 	unsigned int pp_order = pool->p.order;
- 	struct page *page;
- 	int i, nr_pages;
-+	int pref_nid; /* preferred NUMA node */
- 
- 	/* Don't support bulk alloc for high-order pages */
- 	if (unlikely(pp_order))
-@@ -386,10 +387,18 @@ static struct page *__page_pool_alloc_pages_slow(struct page_pool *pool,
- 	if (unlikely(pool->alloc.count > 0))
- 		return pool->alloc.cache[--pool->alloc.count];
- 
-+#ifdef CONFIG_NUMA
-+	pref_nid = (pool->p.nid == NUMA_NO_NODE) ? numa_mem_id() : pool->p.nid;
-+#else
-+	/* Ignore pool->p.nid setting if !CONFIG_NUMA */
-+	pref_nid = NUMA_NO_NODE;
-+#endif
-+
- 	/* Mark empty alloc.cache slots "empty" for alloc_pages_bulk_array */
- 	memset(&pool->alloc.cache, 0, sizeof(void *) * bulk);
- 
--	nr_pages = alloc_pages_bulk_array(gfp, bulk, pool->alloc.cache);
-+	nr_pages = alloc_pages_bulk_array_node(gfp, pref_nid, bulk,
-+					       pool->alloc.cache);
- 	if (unlikely(!nr_pages))
- 		return NULL;
- 
--- 
-2.33.0
+BTW, I don't know why I ever added a remove method for this driver 
+instead of just setting suppress_bind_attrs....
 
+Thanks,
+John

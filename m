@@ -2,82 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE2D55FF49
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F98B55FF75
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbiF2MMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 08:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
+        id S232331AbiF2MOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 08:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiF2MMd (ORCPT
+        with ESMTP id S229737AbiF2MOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 08:12:33 -0400
-X-Greylist: delayed 241 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 29 Jun 2022 05:12:32 PDT
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E2B3B3F9;
-        Wed, 29 Jun 2022 05:12:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1656504731; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=PGK/k9DeAdxOtwaTL/Ud+3uQ4Q+GGYlfiEYU7tvaIdpH0HgYd18h/U4BPUy2a1X/BTvVX+0Re+6i0KL8M+mptABBTC9TAKqGIEa88fdcxgSVd82I+693RbzLHKmur39aNxfYu5LBNu922V+EkH5cP9FGvnee6CObGNPVMwYPksQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1656504731; h=Content-Type:Content-Transfer-Encoding:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=7Nlg+/A/2lG7nPrwCN9OcJJY+B+CLo/eWqxjs4IwRvk=; 
-        b=bLWrd8ZFSymnFvnBMogKwxmaM2t90gywSpTObFBzNgJlHdmUOqSc1srfQkKZA5nEHuHkc/ssjNXcxVuS59QaWr9DXToMvQ565+mPPhApYS1YwHFdAMdpM8ziz9KEY15TrZp6F4FCpK5PQM52jiLYAa+4+Ky18kGSDkOJ2W475no=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1656504731;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
-        bh=7Nlg+/A/2lG7nPrwCN9OcJJY+B+CLo/eWqxjs4IwRvk=;
-        b=SO/kyUlNlVYkl9JJB8ag+o5yHnDYD5i65OTv9i3S/z2DTnU5wCe6nAsOrlXV8Mlq
-        J2tHohR+IX4gQWKvIgKjPiXUkUDNVTQg6xAuLaW/Z3XZLRQJuhGl7KHVonRv0L5qHPe
-        d6L/blNyZCKH+dL14HyDzVRYooB3QlxJugCC4dMU=
-Received: from [10.10.10.122] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1656504730341712.7546788738672; Wed, 29 Jun 2022 05:12:10 -0700 (PDT)
-Message-ID: <e20a43f7-ed3e-83ef-a863-43cb11535ec2@arinc9.com>
-Date:   Wed, 29 Jun 2022 15:12:05 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/2] MIPS: dts: align gpio-key node names with dtschema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rahul Bedarkar <rahulbedarkar89@gmail.com>,
+        Wed, 29 Jun 2022 08:14:12 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BA1201A5;
+        Wed, 29 Jun 2022 05:14:06 -0700 (PDT)
+X-UUID: 2dc5e5d0ef3c4777add5d762ec2e4d14-20220629
+X-CID-P-RULE: Spam_GS6885AD
+X-CID-O-INFO: VERSION:1.1.7,REQID:ea7fbd43-62ff-4d56-9781-a58d36bad87e,OB:0,LO
+        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS6885AD,
+        ACTION:quarantine,TS:120
+X-CID-INFO: VERSION:1.1.7,REQID:ea7fbd43-62ff-4d56-9781-a58d36bad87e,OB:0,LOB:
+        0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:120
+X-CID-META: VersionHash:87442a2,CLOUDID:dbfdf662-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:6a36ff17ddd9,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 2dc5e5d0ef3c4777add5d762ec2e4d14-20220629
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1935654312; Wed, 29 Jun 2022 20:14:01 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 29 Jun 2022 20:14:00 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Wed, 29 Jun 2022 20:14:00 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220624170740.66271-1-krzysztof.kozlowski@linaro.org>
- <20220624170740.66271-2-krzysztof.kozlowski@linaro.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20220624170740.66271-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH 0/5] Complete driver nodes for MT8192 SoC
+Date:   Wed, 29 Jun 2022 20:13:53 +0800
+Message-ID: <20220629121358.19458-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        RDNS_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.06.2022 20:07, Krzysztof Kozlowski wrote:
-> The node names should be generic and DT schema expects certain pattern
-> (e.g. with key/button/switch).
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This series are based on matthias.bgg/linux.git, for-next
 
-Acked-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Also need to reference below PATCH for dsi in chunkuang.hu/linux.git
+dt-bindings: display: mediatek: dsi: Convert dsi_dtbinding to .yaml
 
-Cheers.
-Arınç
+Allen-KH Cheng (5):
+  arm64: dts: mt8192: Add pwm node
+  arm64: dts: mt8192: Add mipi_tx node
+  arm64: dts: mt8192: Add display nodes
+  arm64: dts: mt8192: Add dsi node
+  arm64: dts: mt8192: Add vcodec lat and core nodes
+
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi | 235 +++++++++++++++++++++++
+ 1 file changed, 235 insertions(+)
+
+-- 
+2.18.0
+

@@ -2,97 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A60D55F2AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 03:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDC055F2B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 03:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbiF2BPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 21:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
+        id S229619AbiF2BRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 21:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiF2BPA (ORCPT
+        with ESMTP id S229504AbiF2BRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 21:15:00 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EBC22BD6
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 18:14:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1656465299; x=1688001299;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AYc1C7eAxiSsjnqUN0DfBfGp3xXz3pkgOLsc25aNAnI=;
-  b=XzUi4qerupP5mc5cAeD6+DbOmhHTU/v5ELbeEZSjijLe+t6i3IxP6F69
-   HThxXnad5DF0fsUn5uNoicZ8pqyJGa1/Cos8o4wjXGUdCPfZ2GKsmbwA9
-   kBDP0rDlecq+uXBGwICgZxIk56d4THbjqV52VQIL+rdq+4okHmjGjun+c
-   RYH45HWzD2D+KLUcHy9xKwwpVPhQEyuf4psfth/2VLPQeVJa0L5Dw99bs
-   8uuMoXKn3PubTIWsAIaYi06MR0Wa+7I8CEOSTikBZAvnXQY563RdVRGCb
-   8+PfJz6/DPzqcjrvVJCcKp+WE3e5bJ+lHSg+jgFHVXq/JPn6vwEp1mCIs
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.92,230,1650902400"; 
-   d="scan'208";a="209212492"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 29 Jun 2022 09:14:54 +0800
-IronPort-SDR: j3CXdZLrCBLS9ICP40rBNtfRjhdL8HhwqBnLForRWQXHb+AbIIVb5u1QfdRSLOwWIBtVTeGmmq
- LpsBETUudFivZmIwixnU3q4rAC1t4U1GETXJUoTBn4qcLJ1LtANuP2/m6lzvCAROfwdXl1oyM7
- FPL/v53HSJbWTjM78fHbtt96a07mCrsqSJQ7ZoNMJQFmgpClyNtUy47nir4wALeNf6zp/3xF3Y
- C54IsTMPjORG+UoCi80nquUcTuV5batKstAQSV36pChPY4VtMgyHUcVMjztNbQ7ZXpEqRW2PWN
- hBuaA95uMbrUryn9HuERa78x
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Jun 2022 17:37:16 -0700
-IronPort-SDR: sjE6FRkllAT5bsZH6LBrxsCRBNPjB4ujitYNXnObmF3khzrBToBbzjKF7LDK6H/zsUSG883414
- xthAtKKYlCLbvUD35eQb0n9CiOiGgTuSsszUZkJNJg55yt/J1OrMJTuRjSs0YFsLDzWMqLkwV7
- 4ZAsFRjbqUSS1iMRQTouJL9LgMjWcgrxK64QPfQKNz6LAz2d9iRCJdtOm8aIP+Rsk08njfzhtI
- TgS5slc8P0SyYge/mF1MRwq7NN65984XQ5TCI/wHYstcDREM3lM+sSo/BcTvYpyxuQFOgHdhgw
- jHE=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Jun 2022 18:14:57 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LXk5q5v7nz1Rwnl
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 18:14:55 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1656465295; x=1659057296; bh=AYc1C7eAxiSsjnqUN0DfBfGp3xXz3pkgOLs
-        c25aNAnI=; b=L+6U2OIAVD0dFDb0iy7lxvcqo3tUox6FvfgHf7QQNcBCRFrDd0n
-        wohPyiEeCAMGb+PZXUd63cDeaipUrfLckDK+ULIIjKxMqxBA/KJv1MbvfXe5T95W
-        a9OJohnTf2PIhLgKoqn6+UOzZnpgQz6yVrVqn3wA2z+rGVvxE0KgUgTUKzWfmXRq
-        I/yeTq24PFuQfBIfXM2ZRZKJiz/aVwfFvvVNqideW3tR7WcFf1pw73FjYybJQIuz
-        fwhnuyG8M9kf9zrg2wS24fVqUWyhsv80qKzUjpKFvr4oNsi+sAKCl6Jxa9U9/vqB
-        XUfO998RBhxIiM8ufMhIZVNacfogOyScx4g==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id YeoX_yndRDPw for <linux-kernel@vger.kernel.org>;
-        Tue, 28 Jun 2022 18:14:55 -0700 (PDT)
-Received: from [10.225.163.99] (unknown [10.225.163.99])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LXk5p2XxVz1RtVk;
-        Tue, 28 Jun 2022 18:14:54 -0700 (PDT)
-Message-ID: <9fd807fd-f019-4ad2-7f4f-6746e05098bf@opensource.wdc.com>
-Date:   Wed, 29 Jun 2022 10:14:52 +0900
+        Tue, 28 Jun 2022 21:17:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A582CC86;
+        Tue, 28 Jun 2022 18:17:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0621861C47;
+        Wed, 29 Jun 2022 01:17:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60024C341CC;
+        Wed, 29 Jun 2022 01:17:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656465462;
+        bh=qwLxFYOuowxIe8KZeDT2ewzdtv2FMZ3tEfCQjPwD+r0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=EDAetCCmvnZHcxyz0H1XLFh0XtVkVcZUDpSkexY/oY3ava9yp5Y9OFaWYO/z7bC3t
+         goxVcYCawDgwDstnfUtkNRo0ZCKZNcSSD2YcLOoZ3PzVZAh8qA10coEWDEmipjlbMa
+         Ftlct2aG7fLfKxDGAXd+AEg03+fDA39hLgyeEaOfpJjY91lSJ7zX7zvecJf/DYivTb
+         0q42U1H4PL13VVSfvOk++cKE4iNXJTFKzA2yQCflUTODj6KySNelHBdnwQ7tKOprD/
+         nTse+T9QdSXfi0hArQgygf1rC5fabJud30KQTLjg8Nae/hwm2Mp4e7+F1DLL7gKZKf
+         KqPjafRUm1odA==
+Received: by mail-ua1-f51.google.com with SMTP id k19so5191535uap.7;
+        Tue, 28 Jun 2022 18:17:42 -0700 (PDT)
+X-Gm-Message-State: AJIora8VFaX025N90t8OuW/vSzT8tZyyc7NMSJ64WrDe1Jjq3t01H+mi
+        +VySTDm+TAS0L1gDHyJdNprCh+CTiJu8a3ungCY=
+X-Google-Smtp-Source: AGRyM1st40hCRJVtOkY/GgEh2hf0RL+nbenkSflSWZSZDWsDeubLW9YCT+HEpSzX2QJvuFM4OduPHYtkSBkJGtts9uQ=
+X-Received: by 2002:ab0:6704:0:b0:37c:c743:eebe with SMTP id
+ q4-20020ab06704000000b0037cc743eebemr257481uam.84.1656465461345; Tue, 28 Jun
+ 2022 18:17:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] ata: pata_cs5535: Fix W=1 warnings
-Content-Language: en-US
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        John Garry <john.garry@huawei.com>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1656335540-50293-1-git-send-email-john.garry@huawei.com>
- <16f727b8-c3b0-c828-0c5b-6728a6e7934f@opensource.wdc.com>
- <9044b81f-76db-75de-db74-f45d6e5ea71e@omp.ru>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <9044b81f-76db-75de-db74-f45d6e5ea71e@omp.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220628081707.1997728-1-guoren@kernel.org> <20220628081707.1997728-5-guoren@kernel.org>
+ <09abc75e-2ffb-1ab5-d0fc-1c15c943948d@redhat.com>
+In-Reply-To: <09abc75e-2ffb-1ab5-d0fc-1c15c943948d@redhat.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 29 Jun 2022 09:17:30 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQZzOtOsq0DV48Gi76UtBSa+vdY7dLZmoPD_OFUZ0Wbrg@mail.gmail.com>
+Message-ID: <CAJF2gTQZzOtOsq0DV48Gi76UtBSa+vdY7dLZmoPD_OFUZ0Wbrg@mail.gmail.com>
+Subject: Re: [PATCH V7 4/5] asm-generic: spinlock: Add combo spinlock (ticket
+ & queued)
+To:     Waiman Long <longman@redhat.com>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,55 +71,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/22 19:05, Sergey Shtylyov wrote:
-> Hello!
->=20
-> On 6/28/22 11:59 AM, Damien Le Moal wrote:
-> [...]
->>> x86_64 allmodconfig build with W=3D1 gives these warnings:
->>>
->>> drivers/ata/pata_cs5535.c: In function =E2=80=98cs5535_set_piomode=E2=
-=80=99:
->>> drivers/ata/pata_cs5535.c:93:11: error: variable =E2=80=98dummy=E2=80=
-=99 set but not used [-Werror=3Dunused-but-set-variable]
->>>   u32 reg, dummy;
->>>            ^~~~~
->>> drivers/ata/pata_cs5535.c: In function =E2=80=98cs5535_set_dmamode=E2=
-=80=99:
->>> drivers/ata/pata_cs5535.c:132:11: error: variable =E2=80=98dummy=E2=80=
-=99 set but not used [-Werror=3Dunused-but-set-variable]
->>>   u32 reg, dummy;
->>>            ^~~~~
->>> cc1: all warnings being treated as errors
->>>
->>> Mark variables 'dummy' as "maybe unused" to satisfy when rdmsr() is
->>> stubbed, which is the same as what we already do in pata_cs5536.c .
->>>
->>> Signed-off-by: John Garry <john.garry@huawei.com>
->=20
->=20
-> Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->=20
->> Looks good, but I wonder why I am not getting this warning. I always d=
-o
->> W=3D1 and C=3D1 builds. I tried allmodconfig now and I am not getting =
-the
->> warning...
->=20
->    I can confirm the (fatal) warnings with RedHat gcc 10.3.1... but som=
-ehow they only
-> occur on x86_64 with allmodconfig indeed (which is strange)...
+On Wed, Jun 29, 2022 at 2:13 AM Waiman Long <longman@redhat.com> wrote:
+>
+> On 6/28/22 04:17, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Some architecture has a flexible requirement on the type of spinlock.
+> > Some LL/SC architectures of ISA don't force micro-arch to give a strong
+> > forward guarantee. Thus different kinds of memory model micro-arch would
+> > come out in one ISA. The ticket lock is suitable for exclusive monitor
+> > designed LL/SC micro-arch with limited cores and "!NUMA". The
+> > queue-spinlock could deal with NUMA/large-scale scenarios with a strong
+> > forward guarantee designed LL/SC micro-arch.
+> >
+> > So, make the spinlock a combo with feature.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> > ---
+> >   include/asm-generic/spinlock.h | 43 ++++++++++++++++++++++++++++++++--
+> >   kernel/locking/qspinlock.c     |  2 ++
+> >   2 files changed, 43 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
+> > index f41dc7c2b900..a9b43089bf99 100644
+> > --- a/include/asm-generic/spinlock.h
+> > +++ b/include/asm-generic/spinlock.h
+> > @@ -28,34 +28,73 @@
+> >   #define __ASM_GENERIC_SPINLOCK_H
+> >
+> >   #include <asm-generic/ticket_spinlock.h>
+> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> > +#include <linux/jump_label.h>
+> > +#include <asm-generic/qspinlock.h>
+> > +
+> > +DECLARE_STATIC_KEY_TRUE(use_qspinlock_key);
+> > +#endif
+> > +
+> > +#undef arch_spin_is_locked
+> > +#undef arch_spin_is_contended
+> > +#undef arch_spin_value_unlocked
+> > +#undef arch_spin_lock
+> > +#undef arch_spin_trylock
+> > +#undef arch_spin_unlock
+> >
+> >   static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
+> >   {
+> > -     ticket_spin_lock(lock);
+> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> > +     if (static_branch_likely(&use_qspinlock_key))
+> > +             queued_spin_lock(lock);
+> > +     else
+> > +#endif
+> > +             ticket_spin_lock(lock);
+> >   }
+>
+> Why do you use a static key to control whether to use qspinlock or
+> ticket lock? In the next patch, you have
+>
+> +#if !defined(CONFIG_NUMA) && defined(CONFIG_QUEUED_SPINLOCKS)
+> +       static_branch_disable(&use_qspinlock_key);
+> +#endif
+>
+> So the current config setting determines if qspinlock will be used, not
+> some boot time parameter that user needs to specify. This patch will
+> just add useless code to lock/unlock sites. I don't see any benefit of
+> doing that.
+This is a startup patch for riscv. next, we could let vendors make choices.
+I'm not sure they like cmdline or vendor-specific errata style.
 
-Compiling on x86_64 with allmodconfig with gcc 12 and sparse-0.6.4-2
-(Fedora 36) does not give the warning... Weird.
+Eventually, we would let one riscv Image support all machines, some
+use ticket-lock, and some use qspinlock.
 
->=20
-> [...]
->=20
-> MBR, Sergey
->=20
+>
+> Cheers,
+> Longman
+>
 
 
---=20
-Damien Le Moal
-Western Digital Research
+
+--
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

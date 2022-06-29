@@ -2,212 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A7D560A28
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61B5560A2E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbiF2TPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 15:15:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
+        id S230250AbiF2TRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 15:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbiF2TP2 (ORCPT
+        with ESMTP id S229821AbiF2TRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 15:15:28 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4551B3E0DA;
-        Wed, 29 Jun 2022 12:15:25 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id b26so11508315wrc.2;
-        Wed, 29 Jun 2022 12:15:25 -0700 (PDT)
+        Wed, 29 Jun 2022 15:17:40 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5083C72A
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 12:17:39 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-f2a4c51c45so22719552fac.9
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 12:17:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QDVDv5ON0BAYjfNDlZsK6wYaSg+H5s61kzv7l/vdIy0=;
-        b=PpnhDeUukAyhD8rnUye13ZPxwiu+Oswze9+LqxoOyZ7FlMJHSHiEPoQq8ksfpGvO8d
-         I0tsfja49ZQ83RpEh8p8pz2ZG9RzVEhm4NSY3u4RHLOcyFVB9LGz9aMcPqcvdmSEJDQu
-         VTgVB0+NwRtQlf6Flv2B+FWuHH4HiLh7Znmnv6uZKV59i7Td/Bixsmi/gOiFc8pAc2fk
-         rWIRhpaJJKmrBACMsO8EnQgSbXJ8+YMONI4dANCN/fPtRJkOTGg3v9DAwlry1rXP5YEH
-         NeOkX8B/M0DwA+sRI4CtROBnrb9fjWoWqA2P/c4rdOymKHPCfOsqy+s7lDIoif45jOeg
-         hJVA==
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=o/jwDiSinXrZOl+AEZjENE1aXxHwuHlOc6Yz74KbYe0=;
+        b=JhdB2BWMAi71kcD+c+7SIRFoBiHS6KZWlMNs8nE2JqKY9mTy+LMUKNGK6hA37tCcur
+         3ihy3S0zD4ttDFVRVGcRYlgpAQxEJacZYkJ/wx6wXApOJgnEySeGr+h4cHZq1fHfTvwn
+         oQ15u7ydaB0/VrxUkP7JIrv4B6SQCIfxCOiySaf5MFNFaRUFUX2GWn5vcLfYfeCrJBG3
+         cOcN2K6do9JMJkXPyGf5BCKo2Tdhhn6aTazrQ+981pV/Z1n8WKzmiw6Z2M9jtW06chIe
+         Xo85QNzBDp4TE82AvhjeJAgjK0ukkf9kKJjpf/wQhLhRiOxOdIdoGie5zYZEDxV8OEzp
+         LAuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QDVDv5ON0BAYjfNDlZsK6wYaSg+H5s61kzv7l/vdIy0=;
-        b=2m5NJbntClWruw+aLdbUiTXZvmTp56Web5PcYSqULlTLD5IzVXZCUG4+iMhit+iTkE
-         5QfVw1O8/dD/z/7CGKHAey09L4fdQYm8b5Cj6ehLOrP1s4SiB4bfetX4MHEoA0YBs/LU
-         aoz5xaRfEbybzq3v2xju2p8nEJEco2yMtPVPq4jBt3kuTPZ/YnxG2/jDzq/JaiWtN9YS
-         5ovS+AObfPn4DK2X5d1k0qe7A/qfhG5jDTjhe+RPFYIUTWJxz03CoT1HgqGDJsptDkfO
-         coWXuDFO0NVU02uQw4wL5ABdj84aizs/aYuhKmIJE+/nJSF7AP+jzVGvCUalphoaQ0U9
-         dUGA==
-X-Gm-Message-State: AJIora875LYKVvPgd/sdCdymahMpyQdlffdmfG25eoBisvPHEJHy/Vam
-        k427jxcMzoYBFDU3Zco1we0=
-X-Google-Smtp-Source: AGRyM1sSZ4x6MUSrqrVMuLIcli30IU+QUFZEsAE3fl4Es1rqa14rtQFbO3ota/6pLd0nXXIrOHxR9w==
-X-Received: by 2002:adf:f245:0:b0:21b:c705:8b1 with SMTP id b5-20020adff245000000b0021bc70508b1mr4600636wrp.282.1656530123696;
-        Wed, 29 Jun 2022 12:15:23 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id e2-20020adfdbc2000000b0021b9f126fd3sm17770742wrj.14.2022.06.29.12.15.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 12:15:23 -0700 (PDT)
-Message-ID: <243b32ba-b338-a3a9-cf78-5e668b7a6d19@gmail.com>
-Date:   Wed, 29 Jun 2022 21:15:19 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=o/jwDiSinXrZOl+AEZjENE1aXxHwuHlOc6Yz74KbYe0=;
+        b=IybX7i00hrdzVFk9Ra6E5h78Kv+jcrbIxqqnZ35n4weH/t2O/HfD84Tyew9FFKaoBD
+         rKN+s6K4RXuakqbgO4iwB5nx4Q/ic8whqPT4uuZYCmJn21zYJ/iFxTwr3MGc2KpdRudm
+         /0BZBfJr1uEbY4FSCIzmRjmF3dEXRqpyvH26zK998g0OIJTEIAzehjgq0hBI70x9fPXh
+         VVyPnLIvm0Sq/W13SrVZon+Z8oR3m/B1Hm4K0w/tV2I43SuvRmUQd6JJD/suG3UtEmcb
+         WPJuwgXK7fxUW4AEmbJIZfGsHRUyJjTgrNNNPkyiytdMJUuEfM4WD4hYIUVnnxhs1mXF
+         hHAA==
+X-Gm-Message-State: AJIora87mmbQ7CD6l2t9jCXmSgs1VaZjB2igmOlqKSbL2t5W+omPwkx8
+        8uqGpixL7gE0viCamBaP6uJ+aA==
+X-Google-Smtp-Source: AGRyM1ud70v6ZQx2pnfpvswry6jTmrDjH3dXCQpTFuuOtuEaCYXzyLQ8lVwOmnjRqh/VOA9wD9nKyg==
+X-Received: by 2002:a05:6870:c1c1:b0:ee:5c83:7be7 with SMTP id i1-20020a056870c1c100b000ee5c837be7mr2968439oad.53.1656530258908;
+        Wed, 29 Jun 2022 12:17:38 -0700 (PDT)
+Received: from eze-laptop ([190.190.187.68])
+        by smtp.gmail.com with ESMTPSA id r10-20020a056808210a00b00325cda1ff8esm9021967oiw.13.2022.06.29.12.17.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 12:17:38 -0700 (PDT)
+Date:   Wed, 29 Jun 2022 16:17:32 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     p.zabel@pengutronix.de, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl, benjamin.gaignard@collabora.com,
+        nicolas.dufresne@collabora.com, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v2 6/7] media: hantro: Store VP9 bit depth in context
+Message-ID: <YrylTP7c8q7vZGam@eze-laptop>
+References: <20220616202513.351039-1-jernej.skrabec@gmail.com>
+ <20220616202513.351039-7-jernej.skrabec@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] ACPI: VIOT: Fix ACS setup
-Content-Language: en-US
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Eric Auger <eric.auger@redhat.com>
-Cc:     jroedel@suse.de, linux-acpi@vger.kernel.org,
-        iommu@lists.linux-foundation.org, rafael@kernel.org,
-        lenb@kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev
-References: <20220627125534.1035912-1-eric.auger@redhat.com>
- <YrwX2U48HOC+UF07@myrica>
-From:   Eric Auger <eric.auger.pro@gmail.com>
-In-Reply-To: <YrwX2U48HOC+UF07@myrica>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616202513.351039-7-jernej.skrabec@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean
+Hi Jernej,
 
-On 6/29/22 11:14, Jean-Philippe Brucker wrote:
-> Hi Eric,
+On Thu, Jun 16, 2022 at 10:25:12PM +0200, Jernej Skrabec wrote:
+> Now that we have proper infrastructure for postprocessing 10-bit
+> formats, store VP9 bit depth in context.
 > 
-> On Mon, Jun 27, 2022 at 02:55:34PM +0200, Eric Auger wrote:
->> Currently acpi_viot_init() gets called after the pci
->> device has been scanned and pci_enable_acs() has been called.
->> So pci_request_acs() fails to be taken into account leading
->> to wrong single iommu group topologies when dealing with
->> multi-function root ports for instance.
->>
->> We cannot simply move the acpi_viot_init() earlier, similarly
->> as the IORT init because the VIOT parsing relies on the pci
->> scan. However we can detect VIOT is present earlier and in
->> such a case, request ACS. Introduce a new acpi_viot_early_init()
->> routine that allows to call pci_request_acs() before the scan.
->>
->> Fixes: 3cf485540e7b ("ACPI: Add driver for the VIOT table")
->> Signed-off-by: Eric Auger <eric.auger@redhat.com>
->> Reported-by: Jin Liu <jinl@redhat.com>
-> 
-> Thanks for the fix, the patch makes sense and fixes the issue.
-> 
-> I wondered whether we should keep the logic where we only request ACS if
-> an IOMMU is found to manage a PCI range, but I can't see any harm in
-> requesting it regardless (plus there is a precedent with AMD IOMMU).
-Yes that's what I saw too
-> I could imagine some VMM wanting to only put an IOMMU in front of its MMIO
-> devices and leave PCI to roam free, but that seems like a stretch.
-> 
-> There is another issue with the existing code, though: we can't call
-> pci_request_acs() when CONFIG_PCI is disabled because no stub is defined.
-> Could you wrap the call in an #ifdef?
-sure
-> 
->> ---
->>  drivers/acpi/bus.c        |  1 +
->>  drivers/acpi/viot.c       | 23 +++++++++++++++++------
->>  include/linux/acpi_viot.h |  2 ++
->>  3 files changed, 20 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
->> index 86fa61a21826..906ad8153fd9 100644
->> --- a/drivers/acpi/bus.c
->> +++ b/drivers/acpi/bus.c
->> @@ -1400,6 +1400,7 @@ static int __init acpi_init(void)
->>  
->>  	pci_mmcfg_late_init();
->>  	acpi_iort_init();
->> +	acpi_viot_early_init();
->>  	acpi_hest_init();
->>  	acpi_ghes_init();
->>  	acpi_scan_init();
->> diff --git a/drivers/acpi/viot.c b/drivers/acpi/viot.c
->> index d2256326c73a..3c1be123e4d6 100644
->> --- a/drivers/acpi/viot.c
->> +++ b/drivers/acpi/viot.c
->> @@ -248,6 +248,23 @@ static int __init viot_parse_node(const struct acpi_viot_header *hdr)
->>  	return ret;
->>  }
->>  
->> +/**
->> + * acpi_viot_early_init - Test the presence of VIOT and enable ACS
->> + *
->> + * If the VIOT does exist, ACS must be enabled. This cannot be
->> + * done in acpi_viot_init() which is called after the bus scan
->> + */
->> +void __init acpi_viot_early_init(void)
->> +{
->> +	acpi_status status;
->> +	struct acpi_table_header *hdr;
->> +
->> +	status = acpi_get_table(ACPI_SIG_VIOT, 0, &hdr);
->> +	if (!ACPI_FAILURE(status))
->> +		pci_request_acs();
->> +	acpi_put_table(hdr);
-> 
-> I'd rather not call acpi_put_table() in case of failure. I know it is
-> handled but it looks fragile and I couldn't find any other user of
-> acpi_get_table() doing this.
-OK
-> 
->> +}
->> +
->>  /**
->>   * acpi_viot_init - Parse the VIOT table
->>   *
->> @@ -319,12 +336,6 @@ static int viot_pci_dev_iommu_init(struct pci_dev *pdev, u16 dev_id, void *data)
->>  			epid = ((domain_nr - ep->segment_start) << 16) +
->>  				dev_id - ep->bdf_start + ep->endpoint_id;
->>  
->> -			/*
->> -			 * If we found a PCI range managed by the viommu, we're
->> -			 * the one that has to request ACS.
->> -			 */
->> -			pci_request_acs();
->> -
->>  			return viot_dev_iommu_init(&pdev->dev, ep->viommu,
->>  						   epid);
->>  		}
->> diff --git a/include/linux/acpi_viot.h b/include/linux/acpi_viot.h
->> index 1eb8ee5b0e5f..e58d60f8ff2e 100644
->> --- a/include/linux/acpi_viot.h
->> +++ b/include/linux/acpi_viot.h
->> @@ -6,10 +6,12 @@
->>  #include <linux/acpi.h>
->>  
->>  #ifdef CONFIG_ACPI_VIOT
->> +void __init acpi_viot_early_init(void);
->>  void __init acpi_viot_init(void);
->>  int viot_iommu_configure(struct device *dev);
->>  #else
->>  static inline void acpi_viot_init(void) {}
->> +static inline void acpi_viot_early_init(void) {}
-> 
-> nit: different declaration order
-OK
+> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Thanks
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-Eric
+Thanks,
+Ezequiel
+
+> ---
+>  drivers/staging/media/hantro/hantro_drv.c | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
 > 
-> Thanks,
-> Jean
+> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+> index 01d33dcb0467..afddf7ac0731 100644
+> --- a/drivers/staging/media/hantro/hantro_drv.c
+> +++ b/drivers/staging/media/hantro/hantro_drv.c
+> @@ -324,6 +324,24 @@ static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
+>  	return 0;
+>  }
+>  
+> +static int hantro_vp9_s_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +	struct hantro_ctx *ctx;
+> +
+> +	ctx = container_of(ctrl->handler,
+> +			   struct hantro_ctx, ctrl_handler);
+> +
+> +	switch (ctrl->id) {
+> +	case V4L2_CID_STATELESS_VP9_FRAME:
+> +		ctx->bit_depth = ctrl->p_new.p_vp9_frame->bit_depth;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
+>  	.try_ctrl = hantro_try_ctrl,
+>  };
+> @@ -336,6 +354,10 @@ static const struct v4l2_ctrl_ops hantro_hevc_ctrl_ops = {
+>  	.s_ctrl = hantro_hevc_s_ctrl,
+>  };
+>  
+> +static const struct v4l2_ctrl_ops hantro_vp9_ctrl_ops = {
+> +	.s_ctrl = hantro_vp9_s_ctrl,
+> +};
+> +
+>  #define HANTRO_JPEG_ACTIVE_MARKERS	(V4L2_JPEG_ACTIVE_MARKER_APP0 | \
+>  					 V4L2_JPEG_ACTIVE_MARKER_COM | \
+>  					 V4L2_JPEG_ACTIVE_MARKER_DQT | \
+> @@ -503,6 +525,7 @@ static const struct hantro_ctrl controls[] = {
+>  		.codec = HANTRO_VP9_DECODER,
+>  		.cfg = {
+>  			.id = V4L2_CID_STATELESS_VP9_FRAME,
+> +			.ops = &hantro_vp9_ctrl_ops,
+>  		},
+>  	}, {
+>  		.codec = HANTRO_VP9_DECODER,
+> -- 
+> 2.36.1
 > 
-> 
->>  static inline int viot_iommu_configure(struct device *dev)
->>  {
->>  	return -ENODEV;
->> -- 
->> 2.35.3
->>

@@ -2,92 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 424D755FB11
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE0355FB19
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiF2Iwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 04:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
+        id S231959AbiF2Iyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 04:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiF2Iwt (ORCPT
+        with ESMTP id S231453AbiF2Iyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 04:52:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73CB53CFEE
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 01:52:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656492766;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tjHgFOOMuwf6AeuJnxaWU75Wb4tjTVtbPHKN66dUZeM=;
-        b=SejwiNU6/ldjq8ODuv4TePqwzD6DDkhtnd2fA3i8nKWH1aaRR7CBe/sRWEda4MUK1gRrE4
-        kIpU7PQoqdjovYS9Dx2i7JhH+SX7XAwxUyks92OkrtrKTG9w2ldD63Hpe+Vw+QH+qUTEgQ
-        8NkYRHLkf2gKNlKecSFY0Y0oDl7jlHc=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-481-9redxSHqPxSbG8kQqQJuzA-1; Wed, 29 Jun 2022 04:52:45 -0400
-X-MC-Unique: 9redxSHqPxSbG8kQqQJuzA-1
-Received: by mail-wr1-f70.google.com with SMTP id o1-20020adfba01000000b0021b90bd28d2so2201566wrg.14
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 01:52:44 -0700 (PDT)
+        Wed, 29 Jun 2022 04:54:46 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815903D1C7
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 01:54:43 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id mf9so31268811ejb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 01:54:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sh+b35XXQ2jbAkb1ALpB14fahCKOjIDGbp7tSsTdQWI=;
+        b=lZy3TdnmPg2NNe6J4qdSlZnevP/8LrZ4cEb1SQakbkHGd8QUuuAqYqUSe1ajuRB1Pc
+         DfI6RJ9CtzpntjX4noklP/hj0VWn+aAekYl02t2wRLqsTByum4xytbBS5oQDcFC1fI+V
+         NQmowN6Pbc+t42BRM3QAINOIQIWw+XqtSa3vs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tjHgFOOMuwf6AeuJnxaWU75Wb4tjTVtbPHKN66dUZeM=;
-        b=dOTcwxJQdGBeaD5SrI3aWRKdtbsAiFxKzO+QDjpuyoEuAQa0c+TtJdZdsEw4fgCMBH
-         TxfthsAf38OLIEPdBKkha3+iGz7EmSWnDUwEECLWcwswIijMVfow/HMQ3N1yS5EJxI8Q
-         p5WrdPrmwW/A7Fg7495JkQ5xJXdDmJkOWInsNNOO6h++VeW21e7guU3nO43BJIdUhYOD
-         4Hqw+lqcDXCqK97e9KEMny9FdvnToRV8ck5X2oozwHUDUqMNndQp3RRGQrmvyz0RUyHT
-         TYy78oyNd7N3WphQVS1arXw6CRc5Ntp0P6jV8y6O8dDkDMx/SVqs/KYDeGXG26jorWpg
-         jmyg==
-X-Gm-Message-State: AJIora8y26P6/f6iZC0JkJ4zbCDk/j2WUTsH4pvN1qVFH4g7KHbeZnMO
-        2jTTcjUuHCgw5Mc+Hu+AMJ6hnfw8AxPo87gXl6ae06ctzgaPdW54fS3UMhxLlYr+JHipbDke5C9
-        mCerIfRV1mNLdXNMcsjJbGHUx
-X-Received: by 2002:adf:d1e9:0:b0:21b:c8f8:3c16 with SMTP id g9-20020adfd1e9000000b0021bc8f83c16mr1873033wrd.659.1656492763815;
-        Wed, 29 Jun 2022 01:52:43 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tnrgKv64tg1zyPl055DmvcOx5lZT7xnZAKvFjKTcNvVC5btuOpowGMnA/4sz0hlWnQATLe7A==
-X-Received: by 2002:adf:d1e9:0:b0:21b:c8f8:3c16 with SMTP id g9-20020adfd1e9000000b0021bc8f83c16mr1873015wrd.659.1656492763509;
-        Wed, 29 Jun 2022 01:52:43 -0700 (PDT)
-Received: from redhat.com ([2.52.23.204])
-        by smtp.gmail.com with ESMTPSA id l20-20020a05600c4f1400b003a02b9c47e4sm2953183wmq.27.2022.06.29.01.52.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 01:52:42 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 04:52:37 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        kvm <kvm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Ben Hutchings <ben@decadent.org.uk>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH V3] virtio: disable notification hardening by default
-Message-ID: <20220629044514-mutt-send-email-mst@kernel.org>
-References: <CACGkMEvrDXDN7FH1vKoYCob2rkxUsctE_=g61kzHSZ8tNNr6vA@mail.gmail.com>
- <20220627053820-mutt-send-email-mst@kernel.org>
- <CACGkMEvcs+9_SHmO1s3nyzgU7oq7jhU2gircVVR3KDsGDikh5Q@mail.gmail.com>
- <20220628004614-mutt-send-email-mst@kernel.org>
- <CACGkMEsC4A+3WejLSOZoH3enXtai=+JyRNbxcpzK4vODYzhaFw@mail.gmail.com>
- <CACGkMEvu0D0XD7udz0ebVjNM0h5+K9Rjd-5ed=PY_+-aduzG2g@mail.gmail.com>
- <20220629022223-mutt-send-email-mst@kernel.org>
- <CACGkMEuwvzkbPUSFueCOjit7pRJ81v3-W3SZD+7jQJN8btEFdg@mail.gmail.com>
- <20220629030600-mutt-send-email-mst@kernel.org>
- <CACGkMEvnUj622FyROUftifSB47wytPg0YAdVO7fdRQmCE+WuBg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sh+b35XXQ2jbAkb1ALpB14fahCKOjIDGbp7tSsTdQWI=;
+        b=xgnEaXnUyX81cZPuDvdvf4MzRLuyu7Ej8BSUMbEoFnwR9x4RAz/UDeh7iBu9hfbKHu
+         LtNDf1mfzmjbp26LM4lXaa1b7o6FWzsn6PiaXrLSZp5KcBx9/jI03YojCzgvzfbtNhqY
+         2tZ/f403fdwsdg7raWSpcg3kVaojsmJERA/DcMlty2Lod/uV1N+JwQyez0fhL7LYlBFQ
+         Z+UmR3hsJ3dQVvgqBOyXZpOV8rZcdBHLdt9QaamyzdPnzgf33jYRxruL/xSm4BoxiX4U
+         9M8aa3YRa6IJUzUELJ5iiVnKKl6Wjv0XXv0BP/E0Ksiud2mDaTykjNrBmN3VVqXzD/zF
+         VLpA==
+X-Gm-Message-State: AJIora9layRCI42JNkmQPUwkGZ5b36xSc/PgJ2D0xPFfjEgOq49IxEXP
+        T50/Uenm4rnJdZx1stJMV6Vf40vKw+4/ndmF7nQJ/w==
+X-Google-Smtp-Source: AGRyM1siGSU06j0D3br553VCQ+qVC09vr2dXCVCPXf1Ua7vk/CwZOv8utL6KOQYRg+gxgX1VJambvvbGO5m7HTMCtkw=
+X-Received: by 2002:a17:906:58c7:b0:722:f4bf:cb75 with SMTP id
+ e7-20020a17090658c700b00722f4bfcb75mr2257332ejs.450.1656492881842; Wed, 29
+ Jun 2022 01:54:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACGkMEvnUj622FyROUftifSB47wytPg0YAdVO7fdRQmCE+WuBg@mail.gmail.com>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220612135414.3003-1-johnson.wang@mediatek.com>
+ <20220612135414.3003-3-johnson.wang@mediatek.com> <ca4b9a0e-b1ca-6861-e4c0-30a8c8a5c99c@collabora.com>
+ <9addc9fb0c949e921f915fcf128783393214bfde.camel@mediatek.com> <30e07350-ff56-a361-121e-3cb3a27643a1@collabora.com>
+In-Reply-To: <30e07350-ff56-a361-121e-3cb3a27643a1@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Wed, 29 Jun 2022 16:54:30 +0800
+Message-ID: <CAGXv+5F3YK51eL60-SD6pfW90xSZYoVvLXvbQ1oq+8zQmfkKwA@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] clk: mediatek: Add frequency hopping support
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Edward-JW Yang <edward-jw.yang@mediatek.com>,
+        =?UTF-8?B?Sm9obnNvbiBXYW5nICjnjovogZbpkasp?= 
+        <Johnson.Wang@mediatek.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        yu-chang.wang@mediatek.com, kuan-hsin.lee@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,265 +82,496 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 04:34:36PM +0800, Jason Wang wrote:
-> On Wed, Jun 29, 2022 at 3:15 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+On Tue, Jun 28, 2022 at 6:09 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 24/06/22 09:12, Edward-JW Yang ha scritto:
+> > Hi AngeloGioacchino,
 > >
-> > On Wed, Jun 29, 2022 at 03:02:21PM +0800, Jason Wang wrote:
-> > > On Wed, Jun 29, 2022 at 2:31 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > >
-> > > > On Wed, Jun 29, 2022 at 12:07:11PM +0800, Jason Wang wrote:
-> > > > > On Tue, Jun 28, 2022 at 2:17 PM Jason Wang <jasowang@redhat.com> wrote:
-> > > > > >
-> > > > > > On Tue, Jun 28, 2022 at 1:00 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > > >
-> > > > > > > On Tue, Jun 28, 2022 at 11:49:12AM +0800, Jason Wang wrote:
-> > > > > > > > > Heh. Yea sure. But things work fine for people. What is the chance
-> > > > > > > > > your review found and fixed all driver bugs?
-> > > > > > > >
-> > > > > > > > I don't/can't audit all bugs but the race between open/close against
-> > > > > > > > ready/reset. It looks to me a good chance to fix them all but if you
-> > > > > > > > think differently, let me know
-> > > > > > > >
-> > > > > > > > > After two attempts
-> > > > > > > > > I don't feel like hoping audit will fix all bugs.
-> > > > > > > >
-> > > > > > > > I've started the auditing and have 15+ patches in the queue. (only
-> > > > > > > > covers bluetooth, console, pmem, virtio-net and caif). Spotting the
-> > > > > > > > issue is not hard but the testing, It would take at least the time of
-> > > > > > > > one release to finalize I guess.
-> > > > > > >
-> > > > > > > Absolutely. So I am looking for a way to implement hardening that does
-> > > > > > > not break existing drivers.
-> > > > > >
-> > > > > > I totally agree with you to seek a way without bothering the drivers.
-> > > > > > Just wonder if this is possbile.
-> > > > > >
-> > > > > > >
-> > > > > > >
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > > >
-> > > > > > > > > > > The reason config was kind of easy is that config interrupt is rarely
-> > > > > > > > > > > vital for device function so arbitrarily deferring that does not lead to
-> > > > > > > > > > > deadlocks - what you are trying to do with VQ interrupts is
-> > > > > > > > > > > fundamentally different. Things are especially bad if we just drop
-> > > > > > > > > > > an interrupt but deferring can lead to problems too.
-> > > > > > > > > >
-> > > > > > > > > > I'm not sure I see the difference, disable_irq() stuffs also delay the
-> > > > > > > > > > interrupt processing until enable_irq().
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > Absolutely. I am not at all sure disable_irq fixes all problems.
-> > > > > > > > >
-> > > > > > > > > > >
-> > > > > > > > > > > Consider as an example
-> > > > > > > > > > >     virtio-net: fix race between ndo_open() and virtio_device_ready()
-> > > > > > > > > > > if you just defer vq interrupts you get deadlocks.
-> > > > > > > > > > >
-> > > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > I don't see a deadlock here, maybe you can show more detail on this?
-> > > > > > > > >
-> > > > > > > > > What I mean is this: if we revert the above commit, things still
-> > > > > > > > > work (out of spec, but still). If we revert and defer interrupts until
-> > > > > > > > > device ready then ndo_open that triggers before device ready deadlocks.
-> > > > > > > >
-> > > > > > > > Ok, I guess you meant on a hypervisor that is strictly written with spec.
-> > > > > > >
-> > > > > > > I mean on hypervisor that starts processing queues after getting a kick
-> > > > > > > even without DRIVER_OK.
-> > > > > >
-> > > > > > Oh right.
-> > > > > >
-> > > > > > >
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > > >
-> > > > > > > > > > > So, thinking about all this, how about a simple per vq flag meaning
-> > > > > > > > > > > "this vq was kicked since reset"?
-> > > > > > > > > >
-> > > > > > > > > > And ignore the notification if vq is not kicked? It sounds like the
-> > > > > > > > > > callback needs to be synchronized with the kick.
-> > > > > > > > >
-> > > > > > > > > Note we only need to synchronize it when it changes, which is
-> > > > > > > > > only during initialization and reset.
-> > > > > > > >
-> > > > > > > > Yes.
-> > > > > > > >
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > > >
-> > > > > > > > > > > If driver does not kick then it's not ready to get callbacks, right?
-> > > > > > > > > > >
-> > > > > > > > > > > Sounds quite clean, but we need to think through memory ordering
-> > > > > > > > > > > concerns - I guess it's only when we change the value so
-> > > > > > > > > > >         if (!vq->kicked) {
-> > > > > > > > > > >                 vq->kicked = true;
-> > > > > > > > > > >                 mb();
-> > > > > > > > > > >         }
-> > > > > > > > > > >
-> > > > > > > > > > > will do the trick, right?
-> > > > > > > > > >
-> > > > > > > > > > There's no much difference with the existing approach:
-> > > > > > > > > >
-> > > > > > > > > > 1) your proposal implicitly makes callbacks ready in virtqueue_kick()
-> > > > > > > > > > 2) my proposal explicitly makes callbacks ready via virtio_device_ready()
-> > > > > > > > > >
-> > > > > > > > > > Both require careful auditing of all the existing drivers to make sure
-> > > > > > > > > > no kick before DRIVER_OK.
-> > > > > > > > >
-> > > > > > > > > Jason, kick before DRIVER_OK is out of spec, sure. But it is unrelated
-> > > > > > > > > to hardening
-> > > > > > > >
-> > > > > > > > Yes but with your proposal, it seems to couple kick with DRIVER_OK somehow.
-> > > > > > >
-> > > > > > > I don't see how - my proposal ignores DRIVER_OK issues.
-> > > > > >
-> > > > > > Yes, what I meant is, in your proposal, the first kick after rest is a
-> > > > > > hint that the driver is ok (but actually it could not).
-> > > > > >
-> > > > > > >
-> > > > > > > > > and in absence of config interrupts is generally easily
-> > > > > > > > > fixed just by sticking virtio_device_ready early in initialization.
-> > > > > > > >
-> > > > > > > > So if the kick is done before the subsystem registration, there's
-> > > > > > > > still a window in the middle (assuming we stick virtio_device_ready()
-> > > > > > > > early):
-> > > > > > > >
-> > > > > > > > virtio_device_ready()
-> > > > > > > > virtqueue_kick()
-> > > > > > > > /* the window */
-> > > > > > > > subsystem_registration()
-> > > > > > >
-> > > > > > > Absolutely, however, I do not think we really have many such drivers
-> > > > > > > since this has been known as a wrong thing to do since the beginning.
-> > > > > > > Want to try to find any?
-> > > > > >
-> > > > > > Yes, let me try and update.
-> > > > >
-> > > > > This is basically the device that have an RX queue, so I've found the
-> > > > > following drivers:
-> > > > >
-> > > > > scmi, mac80211_hwsim, vsock, bt, balloon.
-> > > >
-> > > > Looked and I don't see it yet. Let's consider
-> > > > ./net/vmw_vsock/virtio_transport.c for example. Assuming we block
-> > > > callbacks until the first kick, what is the issue with probe exactly?
-> > >
-> > > We need to make sure the callback can survive when it runs before sub
-> > > system registration.
+> > Thanks for all the advices.
 > >
-> > With my proposal no - only if we also kick before registration.
-> > So I do not see the issue yet.
+> > On Mon, 2022-06-13 at 17:43 +0800, AngeloGioacchino Del Regno wrote:
+> >> Il 12/06/22 15:54, Johnson Wang ha scritto:
+> >>> Add frequency hopping support and spread spectrum clocking
+> >>> control for MT8186.
+> >>>
+> >>> Signed-off-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
+> >>> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> >>
+> >> Before going on with the review, there's one important consideration:
+> >> the Frequency Hopping control is related to PLLs only (so, no other clock
+> >> types get in the mix).
+> >>
+> >> Checking the code, the *main* thing that we do here is initializing the
+> >> FHCTL by setting some registers, and we're performing the actual frequency
+> >> hopping operation in clk-pll, which is right but, at this point, I think
+> >> that the best way to proceed is to add the "FHCTL superpowers" to clk-pll
+> >> itself, instead of adding multiple new files and devicetree bindings that
+> >> are specific to the FHCTL itself.
+> >>
+> >> This would mean that the `fh-id` and `perms` params that you're setting in
+> >> the devicetree get transferred to clk-mt8186 (and hardcoded there), as to
+> >> extend the PLL declarations to include these two: that will also simplify
+> >> the driver so that you won't have to match names here and there.
+> >>
+> >> Just an example:
+> >>
+> >>      PLL(CLK_APMIXED_CCIPLL, "ccipll", 0x0224, 0x0230, 0,
+> >>
+> >>          PLL_AO, 0, 22, 0x0228, 24, 0, 0, 0, 0x0228, 2, FHCTL_PERM_DBG_DUMP),
+> >>
+> >> Besides, there are another couple of reasons why you should do that instead,
+> >> of which:
+> >>    - The devicetree should be "generic enough", we shall not see the direct value
+> >>      to write to the registers in there (yet, perms assigns exactly that)
+> >>    - These values won't change on a per-device basis, I believe? They're SoC-related,
+> >>      not board-related, right?
+> >>
+> >> In case they're board related (and/or related to TZ permissions), we can always add
+> >> a bool property to the apmixedsys to advertise that board X needs to use an
+> >> alternative permission (ex.: `mediatek,secure-fhctl`).
 > >
-> > Consider ./net/vmw_vsock/virtio_transport.c
+> > I think we should remain clk-fhctl files because FHCTL is a independent HW and is
+> > not a necessary component of clk-pll.
+>
+> I know what FHCTL is, but thank you anyway for the explanation, that's appreciated.
+> In any case, this not being a *mandatory* component doesn't mean that when it is
+> enabled it's not changing the way we manage the PLLs..........
+>
+> > Frequency hopping function from FHCTL is not used to replace original flow of
+> > set_rate in clk-pll. They are two different ways to change PLL's frequency. The
+>
+> I disagree: when we want to use FHCTL, we effectively hand-over PLL control from
+> APMIXEDSYS to the Frequency Hopping controller - and we're effectively replacing
+> the set_rate() logic of clk-pll.
+>
+> > current set_rate method in clk-pll changes PLL register setting directly. Another
+> > way uses FHCTL to change PLL rate.
+>
+> ...and of course, if we change that, we're effectively mutating the functionality
+> of the MediaTek clk-pll driver and please understand that seeing a clear mutation
+> in that driver is a bit more human-readable.
+>
+> Besides, this makes me think about one question: is there any instance in which,
+> when FHCTL rate setting fails, we fall back to direct register writes?
+>
+> I don't think that this is feasible because we have a register in FHCTL that
+> effectively hands over control to it, so direct register writes should not work
+> when the PLL is not under APMIXEDSYS control, but I'm asking just to be extremely
+> sure that my understanding is right.
+>
+> > We will set some PLL's frequency be controlled
+> > by clk-pll and some are controlled by FHCTL.
+>
+> Another question: is this also changing on a per-board basis?
+>
+> (note: the pll names in the example are random and not specific to anything)
+>
+> Example: board A wants FHCTL on MMPLL, TVDPLL, MPLL, but *shall not* hand over
+>                   NNAPLL, MFGPLL
+>           board B wants FHCTL on NNAPLL, TVDPLL but *shall not* hand over MMPLL
+>
+> Granted that the two A, B boards are using the same SoC, can that ever happen?
+>
+> > And use `perms` param to decide
+> > whether a PLL is using FHCTL to change its frequency.
+>
+> The perms param seems to be about:
+>   * Enabling debug (but you're not providing any way to actually use debugging
+>     features, so what's the point?)
+>   * Handing over PLL control to FHCTL for hopping (can be as well done with
+>     simply using a different .set_rate() callback instead of a flag)
+>   * Enabling/disabling Spread Spectrum Clocking (and I think that this is a
+>     legit use for flags, but if it's just one flag, you can as well use a
+>     bool and manage this with a devicetree param like "enable-ssc")
+>
+> That said, I think that the current way of enabling the FHCTL is more complicated
+> than how it should really be.
+>
 > >
-> > kicks: virtio_transport_send_pkt_work,
-> > virtio_vsock_rx_fill, virtio_vsock_event_fill
+> > FHCTL has another function called SSC(spread spectrum clocking) which is used to
+> > solve PLL de-sense problem. De-sense problem is board-related so we introduce a
+> > `ssc-rate` param in the devicetree to decide whether SSC is enabled and how many
+> > rate should be set. Mixing SSC function into clk-pll may cause clk-pll more
+> > complex.
 > >
-> > which of these triggers before we are ready to
-> > handle callbacks?
-> 
-> So:
-> 
-> virtio_vsock_vqs_init()
->     virtio_device_ready()
->     virtio_vsock_rx_fill() /* kick there */
-> rcu_assign_pointer(the_virtio_vsock, vsock)
-> 
-> It means at least virtio_vsock_rx_done()/virtio_vsock_workqueue needs
-> to survive. I don't say it has a bug but we do need to audit the code
-> in this case. The implication is: the virtqueue callback should be
-> written with no assumption that the driver has registered in the
-> subsystem. We don't or can't assume all drivers are written in this
-> way.
+>
+> Thing is, I don't get why you think that adding SSC to clk-pll would complicate it
+> so much... it's really just a few register writes and nothing else, so I really
+> don't see where the problem is, here.
+>
+> Another issue is that this driver may be largely incomplete, so perhaps I can't
+> really see the complications you're talking about? Is this the case?
+>
+> Regarding keeping the FHCTL code in separated files, that's fine, but I would still
+> integrate it tightly in clk-pll and its registration flow, because - yes, this is
+> for sure not mandatory, but the main parameters are constant, they never change for
+> a specific PLL, as they're register offsets, bits and masks (which, again, will
+> never change as long as we're using the same SoC).
+>
+> >>
+> >> In any case, to speed up development (I believe that transferring this in clk-pll
+> >> means that the code will still be more or less the same), I've performed a review
+> >> on the code; check below.
+> >>
+> >>> ---
+> >>>    drivers/clk/mediatek/Kconfig          |   8 +
+> >>>    drivers/clk/mediatek/Makefile         |   2 +
+> >>>    drivers/clk/mediatek/clk-fhctl-ap.c   | 347 ++++++++++++++++++++++++++
+> >>>    drivers/clk/mediatek/clk-fhctl-pll.c  | 209 ++++++++++++++++
+> >>>    drivers/clk/mediatek/clk-fhctl-pll.h  |  74 ++++++
+> >>>    drivers/clk/mediatek/clk-fhctl-util.h |  24 ++
+> >>>    drivers/clk/mediatek/clk-fhctl.c      | 191 ++++++++++++++
+> >>>    drivers/clk/mediatek/clk-fhctl.h      |  45 ++++
+> >>>    drivers/clk/mediatek/clk-pll.c        |   5 +-
+> >>>    drivers/clk/mediatek/clk-pll.h        |   5 +
+> >>>    10 files changed, 909 insertions(+), 1 deletion(-)
+> >>>    create mode 100644 drivers/clk/mediatek/clk-fhctl-ap.c
+> >>>    create mode 100644 drivers/clk/mediatek/clk-fhctl-pll.c
+> >>>    create mode 100644 drivers/clk/mediatek/clk-fhctl-pll.h
+> >>>    create mode 100644 drivers/clk/mediatek/clk-fhctl-util.h
+> >>>    create mode 100644 drivers/clk/mediatek/clk-fhctl.c
+> >>>    create mode 100644 drivers/clk/mediatek/clk-fhctl.h
+> >>>
+> >>> diff --git a/drivers/clk/mediatek/Kconfig b/drivers/clk/mediatek/Kconfig
+> >>> index d5936cfb3bee..fd887c537a91 100644
+> >>> --- a/drivers/clk/mediatek/Kconfig
+> >>> +++ b/drivers/clk/mediatek/Kconfig
+> >>> @@ -622,4 +622,12 @@ config COMMON_CLK_MT8516_AUDSYS
+> >>>     help
+> >>>       This driver supports MediaTek MT8516 audsys clocks.
+> >>>
+> >>> +config COMMON_CLK_MTK_FREQ_HOPPING
+> >>> +   tristate "MediaTek frequency hopping driver"
+> >>
+> >> If this goes inside of clk-pll, this configuration option can be safely removed.
+> >
+> > I think we should keep this for clk-fhctl* files.
+> >
+> >>
+> >>> +   depends on ARCH_MEDIATEK || COMPILE_TEST
+> >>> +   select COMMON_CLK_MEDIATEK
+> >>> +   help
+> >>> +     This driver supports frequency hopping and spread spectrum clocking
+> >>> +     control for some MediaTek SoCs.
+> >>> +
+> >>>    endmenu
+> >>> diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
+> >>> index caf2ce93d666..3c0e9bd3978b 100644
+> >>> --- a/drivers/clk/mediatek/Makefile
+> >>> +++ b/drivers/clk/mediatek/Makefile
+> >>> @@ -99,3 +99,5 @@ obj-$(CONFIG_COMMON_CLK_MT8195) += clk-mt8195-apmixedsys.o clk-mt8195-topckgen.o
+> >>>                                clk-mt8195-apusys_pll.o
+> >>>    obj-$(CONFIG_COMMON_CLK_MT8516) += clk-mt8516.o
+> >>>    obj-$(CONFIG_COMMON_CLK_MT8516_AUDSYS) += clk-mt8516-aud.o
+> >>> +obj-$(CONFIG_COMMON_CLK_MTK_FREQ_HOPPING) += fhctl.o
+> >>> +fhctl-objs += clk-fhctl.o clk-fhctl-ap.o clk-fhctl-pll.o
+> >>> diff --git a/drivers/clk/mediatek/clk-fhctl-ap.c b/drivers/clk/mediatek/clk-fhctl-ap.c
+> >>> new file mode 100644
+> >>> index 000000000000..9e3226a9c1ca
+> >>> --- /dev/null
+> >>> +++ b/drivers/clk/mediatek/clk-fhctl-ap.c
+> >>> @@ -0,0 +1,347 @@
+> >>> +// SPDX-License-Identifier: GPL-2.0
+> >>> +/*
+> >>> + * Copyright (c) 2022 MediaTek Inc.
+> >>> + */
+> >>> +
+> >>> +#include <linux/device.h>
+> >>> +#include <linux/module.h>
+> >>> +#include <linux/of.h>
+> >>> +#include <linux/of_address.h>
+> >>> +#include <linux/of_device.h>
+> >>> +#include <linux/platform_device.h>
+> >>> +#include <linux/string.h>
+> >>> +#include <linux/slab.h>
+> >>> +#include "clk-fhctl.h"
+> >>> +#include "clk-fhctl-pll.h"
+> >>> +#include "clk-fhctl-util.h"
+> >>> +
+> >>> +#define FHCTL_TARGET FHCTL_AP
+> >>> +
+> >>> +#define PERCENT_TO_DDSLMT(dds, percent_m10) \
+> >>> +   ((((dds) * (percent_m10)) >> 5) / 100)
+> >>> +
+> >>> +struct fh_ap_match {
+> >>> +   char *name;
+> >>> +   struct fh_hdlr *hdlr;
+> >>> +   int (*init)(struct pll_dts *array, struct fh_ap_match *match);
+> >>> +};
+> >>> +
+> >>> +struct hdlr_data {
+> >>> +   struct pll_dts *array;
+> >>> +   struct fh_pll_domain *domain;
+> >>> +   spinlock_t *lock;
+> >>> +};
+> >>> +
+> >>> +static int fhctl_set_ssc_regs(struct fh_pll_regs *regs,
+> >>> +                         struct fh_pll_data *data,
+> >>> +                         int fh_id, int rate)
+> >>> +{
+> >>> +   unsigned int updnlmt_val;
+> >>> +
+> >>> +   if (rate > 0) {
+> >>> +           fh_set_field(regs->reg_cfg, data->frddsx_en, 0);
+> >>> +           fh_set_field(regs->reg_cfg, data->sfstrx_en, 0);
+> >>> +           fh_set_field(regs->reg_cfg, data->fhctlx_en, 0);
+> >>
+> >> Are all of these writes to be performed with a barrier?
+> >> Can't we use writel_relaxed() for some, with a "final" writel() where ordering
+> >> *really* matters?
+> >
+> > Do this mean use writel_relaxed() on the first two and writel() on the thrid?
+> >
+>
+> If it's important that the hardware has frddsx_en, sfstrx_en, fhctlx_en *before*
+> programming df_val/dt_val, then yes.... otherwise, just use writel_relaxed()
+> everywhere until the last write has to happen.
+>
+> writel_relaxed(something,       a)
+> writel_relaxed(something_else,  b)
+> writel_relaxed(something_more,  a)
+> writel_relaxed(another_one,     c)
+> writel_relaxed(blah,            b)
+> writel(reg_cfg,                 X)
+>
+> ....but having a second look at it, this doesn't make a lot of sense because you
+> are anyway performing multiple writes to the same `reg_cfg`, so I think that you
+> can as well aggregate the writes in one and reduce the barriers like that, so
 
+Writes to the same endpoint are always ordered. The barrier gives you
+ordering against writes to memory _only_.
 
-I thought you said you audited code and found bugs.
+MMIO addresses are mapped as Device-nGnRE. nR specifically means
+non-reordering.
 
-My claim is that simply because qemu starts processing
-packets immediately upon kick, if bugs like this
-existed we would have noticed by now.
+If you want to make sure writes hit the hardware, instead of getting
+queued up in the interconnects, you need to read back the register
+from the hardware.
 
-In this case the_virtio_vsock is used for xmit things,
-callbacks do not seem to use it at all.
+For reference, see this talk: https://youtu.be/i6DayghhA8Q
+Note: I banged my head against this more than a couple times.
 
-> >
-> >
-> > > >
-> > > >
-> > > > > >
-> > > > > > >I couldn't ... except maybe bluetooth
-> > > > > > > but that's just maintainer nacking fixes saying he'll fix it
-> > > > > > > his way ...
-> > > > > > >
-> > > > > > > > And during remove(), we get another window:
-> > > > > > > >
-> > > > > > > > subsysrem_unregistration()
-> > > > > > > > /* the window */
-> > > > > > > > virtio_device_reset()
-> > > > > > >
-> > > > > > > Same here.
-> > > > >
-> > > > > Basically for the drivers that set driver_ok before registration,
-> > > >
-> > > > I don't see what does driver_ok have to do with it.
-> > >
-> > > I meant for those driver, in probe they do()
-> > >
-> > > virtio_device_ready()
-> > > subsystem_register()
-> > >
-> > > In remove() they do
-> > >
-> > > subsystem_unregister()
-> > > virtio_device_reset()
-> > >
-> > > for symmetry
-> >
-> > Let's leave remove alone for now. I am close to 100% sure we have *lots*
-> > of issues around it, but while probe is unavoidable remove can be
-> > avoided by blocking hotplug.
-> 
-> Unbind can trigger this path as well.
-> 
-> >
-> >
-> > > >
-> > > > > so
-> > > > > we have a lot:
-> > > > >
-> > > > > blk, net, mac80211_hwsim, scsi, vsock, bt, crypto, gpio, gpu, i2c,
-> > > > > iommu, caif, pmem, input, mem
-> > > > >
-> > > > > So I think there's no easy way to harden the notification without
-> > > > > auditing the driver one by one (especially considering the driver may
-> > > > > use bh or workqueue). The problem is the notification hardening
-> > > > > depends on a correct or race-free probe/remove. So we need to fix the
-> > > > > issues in probe/remove then do the hardening on the notification.
-> > > > >
-> > > > > Thanks
-> > > >
-> > > > So if drivers kick but are not ready to get callbacks then let's fix
-> > > > that first of all, these are racy with existing qemu even ignoring
-> > > > spec compliance.
-> > >
-> > > Yes, (the patches I've posted so far exist even with a well-behaved device).
-> > >
-> > > Thanks
-> >
-> > patches you posted deal with DRIVER_OK spec compliance.
-> > I do not see patches for kicks before callbacks are ready to run.
-> 
-> Yes.
-> 
-> Thanks
-> 
-> >
-> > > >
-> > > >
-> > > > --
-> > > > MST
-> > > >
-> >
+ChenYu
 
+> we'd have something like:
+>
+>
+> u32 pcw_val, val;
+>
+> /* Important: This assumes that the contents of reg_cfg never change during the
+>     execution of this programming sequence. */
+> val = readl_relaxed(regs->reg_cfg);
+> pcw_val = readl_relaxed(regs->reg_con_pcw) & data->dds_mask;
+>
+> /* Pause/disable Frequency Hopping controller for reconfiguration */
+>
+>
+> /* P.S.: can't we use FHCTLx_PAUSE instead of turning off?? */
+>
+>
+>
+> /* SSC: Disable free-run mode */
+> val &= ~data->frddsx_en;
+>
+> /* Disable Soft-start mode */
+> val &= ~data->sfstrx_en;
+>
+> /* Disable Frequency Hopping controller */
+> val &= ~data->fhctlx_en;
+>
+> writel(val, regs->reg_cfg);
+>
+> /* **** warning: I'm covering only the enablement flow, not the disablement **** */
+>
+> /* SSC Slope: Set delta frequency, delta time (df/dt) */
+> val |= data->df_val & data->msk_frddsx_dys;
+> val |= data->dt_val & data->msk_frddsx_dts;
+>
+> /* is it important to write these before DDS?
+>   * no -> writel_relaxed; yes -> writel
+>   */
+> writel_relaxed(val, regs->reg_cfg);
+>
+> /* Update PLL Toggle value */
+> writel_relaxed(pcw_val | data->tgl_org, regs->reg_dds);
+>
+> /* SSC Swing: Calculate upper/lower limits */
+> updnlmt_val = PERCENT_TO_DDSLMT((readl_relaxed(regs->reg_dds) & data->dds_mask),
+>                                 rate << data->updnlmt_shft);
+> writel_relaxed(updnlmt_val, regs->reg_updnlmt);
+>
+> /* Hand over PLL control to FHCTL */
+> fh_set_field(regs->reg_hp_en, BIT(fh_id), 1);
+>
+> /* Re-Enable SSC and Hopping control */
+> val |= data->frddsx_en | data->fhctlx_en;
+> writel(val, data->reg_cfg);
+>
+>
+> Roughly, that's the idea.
+> Also, keep in mind that aggregating the writes when possible is already
+> improving the flow... relaxing R/W is another improvement though... but
+> beware that technically this is important only in performance paths (so
+> if this function gets called only very few times in a kernel life, it's
+> not really important to use _relaxed accessors).
+>
+> Besides... I don't *really* like seeing the fh_{set, get}_field helpers...
+> they're confusing at best, and open-coding the R/W makes you able to
+> aggregate fields in one write without impacting on human readability.
+>
+>
+> >>
+> >> Also, at least these three field settings are common between (rate > 0) and
+> >> (rate <= 0), so they can go outside of the conditional.
+> >
+> > OK, we will move them to outside of conditional. Thanks.
+> >
+> >>
+> >>> +
+> >>> +           /* Set the relative parameter registers (dt/df/upbnd/downbnd) */
+> >>> +           fh_set_field(regs->reg_cfg, data->msk_frddsx_dys, data->df_val);
+> >>> +           fh_set_field(regs->reg_cfg, data->msk_frddsx_dts, data->dt_val);
+> >>> +
+> >>> +           writel((readl(regs->reg_con_pcw) & data->dds_mask) |
+> >>> +                   data->tgl_org, regs->reg_dds);
+> >>> +
+> >>> +           /* Calculate UPDNLMT */
+> >>> +           updnlmt_val = PERCENT_TO_DDSLMT((readl(regs->reg_dds) &
+> >>> +                                            data->dds_mask), rate) <<
+> >>> +                                            data->updnlmt_shft;
+> >>> +
+> >>> +           writel(updnlmt_val, regs->reg_updnlmt);
+> >>> +
+> >>> +           fh_set_field(regs->reg_hp_en, BIT(fh_id), 1);
+> >>> +
+> >>> +           /* Enable SSC */
+> >>> +           fh_set_field(regs->reg_cfg, data->frddsx_en, 1);
+> >>> +           /* Enable Hopping control */
+> >>> +           fh_set_field(regs->reg_cfg, data->fhctlx_en, 1);
+> >>> +
+> >>> +   } else {
+> >>> +           fh_set_field(regs->reg_cfg, data->frddsx_en, 0);
+> >>> +           fh_set_field(regs->reg_cfg, data->sfstrx_en, 0);
+> >>> +           fh_set_field(regs->reg_cfg, data->fhctlx_en, 0);
+> >>> +
+> >>> +           /* Switch to APMIXEDSYS control */
+> >>> +           fh_set_field(regs->reg_hp_en, BIT(fh_id), 0);
+> >>> +
+> >>> +           /* Wait for DDS to be stable */
+> >>> +           udelay(30);
+> >>> +   }
+> >>> +
+> >>> +   return 0;
+> >>> +}
+> >>> +
+> >>> +static int hopping_hw_flow(void *priv_data, char *domain_name, int fh_id,
+> >>> +                      unsigned int new_dds, int postdiv)
+> >>> +{
+> >>> +   struct fh_pll_domain *domain;
+> >>> +   struct fh_pll_regs *regs;
+> >>> +   struct fh_pll_data *data;
+> >>> +   unsigned int dds_mask;
+> >>> +   unsigned int mon_dds = 0;
+> >>> +   int ret = 0;
+> >>> +   unsigned int con_pcw_tmp;
+> >>> +   struct hdlr_data *d = (struct hdlr_data *)priv_data;
+> >>> +   struct pll_dts *array = d->array;
+> >>> +
+> >>> +   domain = d->domain;
+> >>> +   regs = &domain->regs[fh_id];
+> >>> +   data = &domain->data[fh_id];
+> >>> +   dds_mask = data->dds_mask;
+> >>
+> >> Just perform these assignments in the variable declarations... with some
+> >> reordering as well, and drop the zero assignment to ret.
+> >>
+> >> In few words:
+> >>
+> >>      struct hdlr_data *d = (struct hdlr_data *)priv_data;
+> >>
+> >>      struct fh_pll_domain *domain = d->domain;
+> >>
+> >>      struct fh_pll_regs *regs = &domain->regs[fh_id];
+> >>
+> >>      struct fh_pll_data *data = &domain->data[fh_id];
+> >>
+> >>      struct pll_dts *array = d->array;
+> >>
+> >>      u32 con_pcw_tmp, dds_mask;
+> >>
+> >>      u32 mon_dds = 0;
+> >>
+> >>      int ret;
+> >>
+> >> This comment is valid for some other functions as well - I won't repeat
+> >> this for every instance... :-)
+> >
+> > OK, we will merge them. Thanks.
+> >
+> >>
+> >>> +
+> >>> +   if (array->ssc_rate)
+> >>> +           fhctl_set_ssc_regs(regs, data, fh_id, 0);
+> >>> +
+> >>> +   writel((readl(regs->reg_con_pcw) & dds_mask) |
+> >>> +           data->tgl_org, regs->reg_dds);
+> >>> +
+> >>> +   fh_set_field(regs->reg_cfg, data->sfstrx_en, 1);
+> >>> +   fh_set_field(regs->reg_cfg, data->fhctlx_en, 1);
+> >>> +   writel(data->slope0_value, regs->reg_slope0);
+> >>> +   writel(data->slope1_value, regs->reg_slope1);
+> >>> +
+> >>> +   fh_set_field(regs->reg_hp_en, BIT(fh_id), 1);
+> >>> +   writel((new_dds) | (data->dvfs_tri), regs->reg_dvfs);
+> >>> +
+> >>> +   /* Wait 1000 us until DDS stable */
+> >>> +   ret = readl_poll_timeout_atomic(regs->reg_mon, mon_dds,
+> >>> +                           (mon_dds & dds_mask) == new_dds, 10, 1000);
+> >>
+> >> Why are you writing to CON_PCW even when this returns en error?
+> >> Please add a comment explaining the reasons.
+> >
+> > Oh, we will add a warning log and dump HW register when this returns an error
+> > The reg_mon is a register reflects the current frequency rate. So, it's fine to
+> > write the current rate back to CON_PCW. We will also add a comment on it. Thanks
+> >
+> >>
+> >>> +
+> >>> +   con_pcw_tmp = readl(regs->reg_con_pcw) & (~dds_mask);
+> >>> +   con_pcw_tmp = (con_pcw_tmp | (readl(regs->reg_mon) & dds_mask) |
+> >>> +                  data->pcwchg);
+> >>> +
+> >>> +   writel(con_pcw_tmp, regs->reg_con_pcw);
+> >>> +
+> >>> +   fh_set_field(regs->reg_hp_en, BIT(fh_id), 0);
+> >>> +
+> >>> +   if (array->ssc_rate)
+> >>> +           fhctl_set_ssc_regs(regs, data, fh_id, array->ssc_rate);
+> >>> +
+> >>> +   return ret;
+> >>> +}
+> >>> +
+> >>> +static unsigned int __get_postdiv(struct fh_pll_regs *regs,
+> >>> +                             struct fh_pll_data *data)
+> >>> +{
+> >>> +   unsigned int regval;
+> >>> +
+> >>> +   regval = (readl(regs->reg_con_postdiv) & data->postdiv_mask)
+> >>> +             >> data->postdiv_offset;
+> >>> +
+> >>> +   return data->postdiv_table[regval];
+> >>
+> >> Can we instead simply reuse `struct clk_div_table` from clk-provider.h?
+> >
+> > "postdiv" is part of setting in PCW_CON, not a individual clk divider. I think
+> > it's not suitable to use `struct clk_div_table` here.
+> >
+>
+> Uhm, I don't think that `struct clk_div_table` is tied to individual clk dividers
+> in its definition... I mean, it shouldn't be a problem to reuse it in this case...
+> The advantage of it is that we are able to set a clear idx<->divider relation.
+>
+> Anyway, if you have strong feelings about not using clk_div_table, it's ok,
+> unless anyone else has considerations about that.
+>

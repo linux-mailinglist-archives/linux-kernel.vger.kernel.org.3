@@ -2,128 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0CDF55FED1
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE2055FED4
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbiF2LjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 07:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
+        id S231800AbiF2LkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 07:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233185AbiF2LjC (ORCPT
+        with ESMTP id S233262AbiF2Ljw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 07:39:02 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AEE423EF34;
-        Wed, 29 Jun 2022 04:39:01 -0700 (PDT)
-Received: from [192.168.87.140] (unknown [50.47.106.71])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 740FA20CDF40;
-        Wed, 29 Jun 2022 04:39:00 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 740FA20CDF40
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1656502741;
-        bh=nMMncbj7PcZxuOTOGA9EBSFftECnVGmkQTDJvUjK8Ao=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CnfkjBSoe3VldwsxCa2rq1Jsqah/UaFoJnxR/eoaDuoljMrz6XIsBxzffBHx2LRBt
-         XbrRVRxkOlcRfKCLcL2Ngr1c0z9lARuha1sRI0C/ZOJ7SeCOdjDvRHqYaSPkISxdGG
-         c0XNzOpralATM0laJNwInmCQPg89bNR4IXsEXTxQ=
-Message-ID: <74981148-70ab-059b-6e77-b88ea908e703@linux.microsoft.com>
-Date:   Wed, 29 Jun 2022 04:39:00 -0700
+        Wed, 29 Jun 2022 07:39:52 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2047.outbound.protection.outlook.com [40.107.92.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5C13F88C;
+        Wed, 29 Jun 2022 04:39:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fsfzFdRTy6Rhjyxq9/X8t97B46wO553PKl3XWCj9AuwQfjx/8hoJytg6JwWU40r5ECgGphwFW/T6ilc3jRA32zFBDsGy+NHufvG2SkaJvqEAs/S7Y6+aw4I8cyTopEjA6eYlTE0G1cnKadUUbB11pA28ZcpFxHQCyq7/K0oO6TXud25kGx6/NL8Gt/WOqEb5XZM3sWvJPwz4zMJzBQJoc1D7Ob5hMM+zJgfPfCNt+uQ7lexs4kZC5Wgftr+gFB0V8WJOsNiZpGRFnAz7IW6zRDx+g0WJjf0tDggqzYoPzXbNKpQtmVM+s0IwdvPUGVkc3siN+/wgDSxxs5wZqvrmmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=I+RWI71Io5EC9LL2RW5+LRa+ILIbLMliFEHC2BMjJWY=;
+ b=LOvtiz19HLBnFl/PQEY7Qw6/VnzbbzCLou/mB3cvPWv8Aw2eOTUsclt2/VT7wMMKMXNYFQezQX7EBWX1FcI074G584AIkeX4KdvDuSateiOXil4dizlD1Im8izLvaAFbggWJTsEmm+ge5fcOPra9bh90DQmt+o7xGC+eQbsPpkdoDXr9wp/BIaNaYNWRUsKJTkG8+/u8qBQS+mdygqRqiCR8i+zUySo/hnaK5jmRrb8XgpWJmx1vHk71wm8MV50PKbbr2LpbafHGmiTvoU2kSswn/xJlKcAJoKUvbdkjrWTCNLeehMPc7FG+lzbnS7D8bUlsFF2Z8ylumogiH9T9Ig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=nokia.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I+RWI71Io5EC9LL2RW5+LRa+ILIbLMliFEHC2BMjJWY=;
+ b=Hfs8B81JHG08dk5/6FN8GtzvSsc8TIzxdJnsTxUz0Sj6cf+qnxAGXQeA78MBaYf59te155uoje8czxMXTPMMPfrIujDQIerQsV+KOl5xX0chd/CL4uC1IZ+Tdpcwtme5DG7hSOgwcejxylkk55wHcHLc8C98ICLYCXvPqZld6v0=
+Received: from BN6PR1201CA0011.namprd12.prod.outlook.com
+ (2603:10b6:405:4c::21) by MN2PR12MB3358.namprd12.prod.outlook.com
+ (2603:10b6:208:d2::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Wed, 29 Jun
+ 2022 11:39:48 +0000
+Received: from BN8NAM11FT004.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:405:4c:cafe::ab) by BN6PR1201CA0011.outlook.office365.com
+ (2603:10b6:405:4c::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17 via Frontend
+ Transport; Wed, 29 Jun 2022 11:39:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT004.mail.protection.outlook.com (10.13.176.164) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5373.15 via Frontend Transport; Wed, 29 Jun 2022 11:39:48 +0000
+Received: from [10.254.241.52] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 29 Jun
+ 2022 06:39:15 -0500
+Message-ID: <27c88580-51bb-7813-c29f-b8a3faaaa294@amd.com>
+Date:   Wed, 29 Jun 2022 13:39:09 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v5 2/5] dt-bindings: clock: Add AST2500/AST2600 HACE reset
- definition
+Subject: Re: [PATCH v2 02/10] i2c: xiic: Add standard mode support for > 255
+ byte read transfers
 Content-Language: en-US
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Johnny Huang <johnny_huang@aspeedtech.com>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220629032008.1579899-1-neal_liu@aspeedtech.com>
- <20220629032008.1579899-3-neal_liu@aspeedtech.com>
- <b70e06e7-81fc-dfc1-f9c5-f83cb4a18293@linaro.org>
- <HK0PR06MB32025ACEE605D1016DD3B99D80BB9@HK0PR06MB3202.apcprd06.prod.outlook.com>
- <409af908-5e03-8df7-fcd5-7fab75cdfb34@linaro.org>
- <HK0PR06MB32021F63833C4C482CC616D580BB9@HK0PR06MB3202.apcprd06.prod.outlook.com>
-From:   Dhananjay Phadke <dphadke@linux.microsoft.com>
-In-Reply-To: <HK0PR06MB32021F63833C4C482CC616D580BB9@HK0PR06MB3202.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>,
+        Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+CC:     <linux-i2c@vger.kernel.org>, <michal.simek@xilinx.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <git@xilinx.com>, <marex@denx.de>,
+        <joe@perches.com>
+References: <20210626102806.15402-1-raviteja.narayanam@xilinx.com>
+ <20210626102806.15402-3-raviteja.narayanam@xilinx.com>
+ <c8d4faf1-5f0c-4adb-e52a-92d46179ffa4@nokia.com>
+From:   Michal Simek <michal.simek@amd.com>
+In-Reply-To: <c8d4faf1-5f0c-4adb-e52a-92d46179ffa4@nokia.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 313a1bdb-36ed-444d-e730-08da59c4129d
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3358:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 90CNg2LiTRRgtpT4NyD+bgKAFj7lo+VEIrcXsuIlu0bHcM/fcwRiHLCgZUYCU5yf7LaSwKKbH3rRF0dwMJbnrAC/Zp2owJf1S8VQj4yZrlPpjzdj6f8miakxfamOAhTxmd5uDeitsfEL0MMnqv4moD10TQ5R+z8n/v+AxZKKVSSywkgMLmGC/cYI8UdKtKObJ55wLlojQtK6YZUL/pKtZdblOm4wSkBc35H2TRmaHMJfg/Ll+EGZXnmE1siCxAXpeTSiEPjU6WDiyk3ABKetlN1uoD9HkrqMYsRjt7k93Pq34xS/OEqLbHaxhdm4W46KmzjtWPMbj8vEdoyZanZjTSlXdtQNrV9/piOemBy/r6GvoUcjX330/fZNUPplKkwPkIylpggCR7xUlfSuodYTjNgxvrBQbSX/V4gjhfZBQPZolGyznAjyzUu5/NOEtbn7I83F9qdSIT6q0OTPkRujT5xCxr5dxVfTE3sfHGQjd9NyotJSJDGMpKazV+8u9iqf6IueHfb/5kFLVNa3OQU3JB0Nt17fpVJnEfWeGOAewLz3SlCYm507GG2Kof4gJgxB4bJIvLy98lGNpzWDHs6JzatfQOG3xb0pImTFW19fjTeAWFK71jKCPcaO5/p/0eFoofuQlH/PYFMQWhpdjGsylR94CE8Q1RLBNlKFLeUSEutq93xM/5841yMeqTFDRj+G2iC3AkE55AoMuJ5yu7hIU/fxrUmDJt5FB4sPt+HRlvYZf8y3d7esohwmS3UZJUKSsp2Y3+eEY+ewdSpnZVZ/tX5pespsD6ySTqa0Xw+1wWlOMPozWnL0stAq0UjQDQod8q1ERIsqI9u7XOioPvabz3T7gQ8ucuvTxjv8o/cBx0preXf77lj9MJxBrGg2/Brwe458Cy8s9caTB2tagfCSZQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(346002)(376002)(396003)(40470700004)(46966006)(36840700001)(81166007)(426003)(6666004)(41300700001)(53546011)(356005)(336012)(31696002)(186003)(26005)(16526019)(2616005)(36860700001)(70586007)(47076005)(82740400003)(82310400005)(83380400001)(4744005)(40460700003)(8936002)(16576012)(44832011)(2906002)(31686004)(36756003)(40480700001)(5660300002)(54906003)(4326008)(316002)(110136005)(8676002)(296002)(478600001)(70206006)(86362001)(966005)(43740500002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2022 11:39:48.6521
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 313a1bdb-36ed-444d-e730-08da59c4129d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT004.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3358
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/29/2022 1:49 AM, Neal Liu wrote:
-[...]
->>>>> diff --git a/include/dt-bindings/clock/aspeed-clock.h
->>>>> b/include/dt-bindings/clock/aspeed-clock.h
->>>>> index 9ff4f6e4558c..6e040f7c3426 100644
->>>>> --- a/include/dt-bindings/clock/aspeed-clock.h
->>>>> +++ b/include/dt-bindings/clock/aspeed-clock.h
->>>>> @@ -46,11 +46,12 @@
->>>>>   #define ASPEED_RESET_MCTP		1
->>>>>   #define ASPEED_RESET_ADC		2
->>>>>   #define ASPEED_RESET_JTAG_MASTER	3
->>>>> -#define ASPEED_RESET_MIC		4
->>>>> +#define ASPEED_RESET_HACE		4
->>>>
->>>> I did not ack such change. This is a significant change from previous
->>>> version, invalidating my previous ack.
->>>>
->>>> This breaks the ABI, so NAK without proper explanation why ABI break
->>>> is accepted.
->>>
->>> I changed the original define (MIC) into different value (see below diff), and
->> add a new define for HACE.
->>> How does that break the ABI? I'll be appreciated if you can explain it more
->> details.
->>> And sorry for not remove ack with new change.
->>
->> Yes, this breaks ABI. Previously the ASPEED_RESET_MIC define had value of 4,
->> now it has value of something else.
+Hi,
+
+On 6/29/22 13:02, Krzysztof Adamski wrote:
 > 
-> Got your point. I'll re-define HACE without modifying ABI.
-> Thanks for your suggestion.
+> Hi,
 > 
+> I know this patch is quite old but we need the smbus_block_read
+> functionality, which depends on this one, so I would really like this to
+> be merged. See my comments below.
 
-As per HW manuals, new def is correct for AST2500, but not for AST2400.
+Please try this series and let us know if it is working for you or not.
 
-AST2500:
-SCU04[4] = HACE
-SCU04[18] = MIC
+https://lore.kernel.org/all/1656072327-13628-1-git-send-email-manikanta.guntupalli@xilinx.com/
 
-AST2400:
-SCU04[4] = MIC
-SCU04[18] = HACE
-
-The header file is shared between AST2400 and AST2500 (aspeed-g4.dtsi
-and aspeed-g5.dtsi), which needs to be split into separate header files
-given the collision.
-
-Also, It will be better to split AST2500 and AST2600 changes in separate
-patches.
-
-Regards,
-Dhananjay
-
+Thanks,
+Michal

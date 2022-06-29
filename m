@@ -2,66 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8039355FA7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA01F55FA80
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232577AbiF2IZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 04:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
+        id S232579AbiF2IZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 04:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232572AbiF2IZ1 (ORCPT
+        with ESMTP id S232549AbiF2IZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 04:25:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9D93BFA0;
-        Wed, 29 Jun 2022 01:25:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 29 Jun 2022 04:25:24 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51153BFAC;
+        Wed, 29 Jun 2022 01:25:23 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 480A161D69;
-        Wed, 29 Jun 2022 08:25:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45557C34114;
-        Wed, 29 Jun 2022 08:25:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656491123;
-        bh=/fEG8o56X8CR58XzBeCiViZTlPIDG3OwyZ/UgWpIrp4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=reDPLsOiXwvihxd/6ECgf2vvHyj/Nwb1s+ziqvznumgQi/VuGApy87VcgXSm6Do2C
-         04vvU3b7Uj+PDspM0Xp8mnDSroRyA6VF9Ml5PJqFvB0Z0Zs95x+IXtqOnSL63qkHtx
-         5o89CGLH2HZWj/NZcg5zYmVZUTTcu+QY3ab6mTpo=
-Date:   Wed, 29 Jun 2022 10:25:19 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jari Ruusu <jariruusu@protonmail.com>
-Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: linux-5.10.127 modpost warning
-Message-ID: <YrwMbylQNI7XqJte@kroah.com>
-References: <B9ViOjUL7reNao5fkvKkt4S91RPpLSuY6lGtyNIFW4WCgET8Z5Y_9-Y7O1GuZJ9FJFk7QouCfASA1ogdd-xaSVQNtR9RN2r2kFD7zu9vbMw=@protonmail.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4CF0666018F4;
+        Wed, 29 Jun 2022 09:25:22 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656491122;
+        bh=0EEMo713xuhiHvrr74nGxbYhhEiW7g5+BgdFVNHIrR8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jKXRgLt656eTCfQq+Ge4efTa5Ejo/MfX5HM57WKCAjr4Pmw2RD1GATn2B89wVW7S/
+         z2Q1Xp21o/eaVOC9jU2TDQWxa1hmRoIEy7Di7DHrYQ+pFtLMJQygDA0538Qvnz/Lmh
+         Ewz1phtFGFO+WdgNmh6C/+0vclKcVqPc6YshCQqxQsmcz9KyxL5h25eqVdIR8yo9Lj
+         J+GashTxqS5bmzrz3jby0xCVAFM0eR4M7ERFj02iDlUX8qC7CmMSVjf1BujyndIx/c
+         G9Jl2bzwKDfI6+BxsO0gsxtmzSf4PzhvX/MB75GwtPPvfiNd+SctVUNXk3HFrwTdsO
+         g+V1i0t498vIQ==
+Message-ID: <cc55775b-5e9e-ac92-581a-ff8defdf11f8@collabora.com>
+Date:   Wed, 29 Jun 2022 10:25:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <B9ViOjUL7reNao5fkvKkt4S91RPpLSuY6lGtyNIFW4WCgET8Z5Y_9-Y7O1GuZJ9FJFk7QouCfASA1ogdd-xaSVQNtR9RN2r2kFD7zu9vbMw=@protonmail.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 3/8] watchdog: mtk_wdt: Remove #ifdef guards for PM
+ related functions
+Content-Language: en-US
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220628193449.160585-1-paul@crapouillou.net>
+ <20220628193449.160585-4-paul@crapouillou.net>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220628193449.160585-4-paul@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 08:18:04AM +0000, Jari Ruusu wrote:
-> This shows up when building linux-5.10.127
+Il 28/06/22 21:34, Paul Cercueil ha scritto:
+> Use the new DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros to
+> handle the .suspend/.resume callbacks.
 > 
->   LD      vmlinux.o
->   MODPOST vmlinux.symvers
-> WARNING: modpost: vmlinux.o(___ksymtab+drm_fb_helper_modinit+0x0): Section mismatch in reference from the variable __ksymtab_drm_fb_helper_modinit to the function .init.text:drm_fb_helper_modinit()
-> The symbol drm_fb_helper_modinit is exported and annotated __init
-> Fix this by removing the __init annotation of drm_fb_helper_modinit or drop the export.
+> These macros allow the suspend and resume functions to be automatically
+> dropped by the compiler when CONFIG_SUSPEND is disabled, without having
+> to use #ifdef guards. Not using #ifdef guards means that the code is
+> always compiled independently of any Kconfig option, and thanks to that
+> bugs and regressions are easier to catch.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-mediatek@lists.infradead.org
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Known issue, see the stable list, I'll be fixing this up for the next
-release, thanks.
-
-greg k-h
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>

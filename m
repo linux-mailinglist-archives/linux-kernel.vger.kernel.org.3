@@ -2,231 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73ED555FCFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A04755FD01
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233274AbiF2KRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 06:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
+        id S230389AbiF2KTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 06:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiF2KRr (ORCPT
+        with ESMTP id S230017AbiF2KTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 06:17:47 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB642CE3F;
-        Wed, 29 Jun 2022 03:17:46 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id a15so14630298pfv.13;
-        Wed, 29 Jun 2022 03:17:46 -0700 (PDT)
+        Wed, 29 Jun 2022 06:19:44 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4352BB37
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:19:43 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id d2so19859571ejy.1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:19:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xyEiHigKzx4VUsyVHUqj++7h/bAeyOOrhTGKC4bujf8=;
-        b=ge3sSf4NWvgXrngzOZofKGy/PEzQBAwi3PMW7LLMkaWomoCRFxXSHl8OEN7hbMQdQF
-         UoKBK65vL4Zu5yTJcwpgfJIIfJi/Vlt1V5Qz4ecj4WfXLPeycgM6hmxd4ldMw34N0SDZ
-         Xyg3LexweXbFfHsVhRv3LZSIpRp4zwpspPjH4HlYRxzNnzqHO6YuogQHLvrNaCzhdt32
-         LQgCp4iPhVRqkx6rlBRhAzTEfG7um/nzBILSNjxVVnM1bVqcY8+OdeEE0xp+ML9Q+drb
-         avyNoAQWKcaItUpny/OfF5Elkhct5Y7Pmi9tKc/m+0E/MV0yEvwVRjMftOZ+jgHstpH/
-         OCIA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1UldF0e+qJzCUv0ebE2gILAibPvmQ5TmWWnAkcNFdt4=;
+        b=1bvDBEPk3nP4RzWNOkUaZKlS6hAz5XeGNEepl9k9gLZ0PT+BRuY/ef30s6JawvNUfU
+         TxB1GH/Mn638pTIqP1JPX+jWz5zL+IaRIq2h/SRw1XJFhLW3dHMXYUEtv9brLwNgNjg4
+         mrF9cWYvMVFM8R/C/L4w25n6eSBUFLAJoaF98uRno+fW7xN5Me/1bBPdbmv2WswKqRT8
+         91odyb6/3BOJ06pADQXyX5kZi2OheimXxXkfmYKpYq9k69dc5jzknmcIh3vAAKzoaE+f
+         aMIDKynwO93w8yEkYrqfI5V1pTexcLNUK4NdwLlJL+iSnQiycDUlzOhf5SxWgFV58tPw
+         qtxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xyEiHigKzx4VUsyVHUqj++7h/bAeyOOrhTGKC4bujf8=;
-        b=w1GCptPM/Rm5GPn4rzuPcIC/vRNoQcg0vamOKVafLhoK6bG6tRKhFsvhXFvOVjNi9d
-         w9QBr/bXsBiA+s5JT+XUOFxeOXNdlliYBcAt6PKZsLeq1BLDSjrJKywRZ35OGSMf5YcK
-         Iz1zjO0GuJ9R2bCQI8zVXBnxpUmD8SXWJTIzBX6oT8hlWhR29MDz/gjd900o6FLg4oOz
-         lTmxQrgto1cuFc9OBmQYb9H8CEHBgoBmzkdYT3FJRbbpuxMrC19eO71JHHrPVZqakrkP
-         DWKXcgrQVIWk8RjDUWy0VggFb4mLYHg46iP2x1gHMjLIaUhPmwe/MUqdXqFsQyUWPBK3
-         zXxQ==
-X-Gm-Message-State: AJIora/YhzFqdm8RO53+vwO09shUoMLMO8mNr2WGX1Vo9yAenKkVYBU9
-        7yhKTGfPG+wUT0PAQ5xY0Po=
-X-Google-Smtp-Source: AGRyM1s6jizcY8Lc+dyBW04lMaaLWwllQ2r1AXYoVlNVy8Aev6olTAF0IK2AxWcXumezGPYn70isIQ==
-X-Received: by 2002:a63:6ac3:0:b0:411:4aa9:9034 with SMTP id f186-20020a636ac3000000b004114aa99034mr2431769pgc.94.1656497866240;
-        Wed, 29 Jun 2022 03:17:46 -0700 (PDT)
-Received: from localhost (fmdmzpr02-ext.fm.intel.com. [192.55.54.37])
-        by smtp.gmail.com with ESMTPSA id ms9-20020a17090b234900b001ec7c8919f0sm1678613pjb.23.2022.06.29.03.17.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 03:17:45 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 03:17:44 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Sagi Shahar <sagis@google.com>
-Cc:     "Yamahata, Isaku" <isaku.yamahata@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [RFC PATCH v6 093/104] KVM: TDX: Handle TDX PV MMIO hypercall
-Message-ID: <20220629101744.GB882746@ls.amr.corp.intel.com>
-References: <cover.1651774250.git.isaku.yamahata@intel.com>
- <ea5e6a1fc740cfe69167c8713b63fdb952a98e8b.1651774251.git.isaku.yamahata@intel.com>
- <CAAhR5DGHhPagnaiC=Bn9v0qhNQ5N9HjsrDyQkv4dtui7dfMAbA@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1UldF0e+qJzCUv0ebE2gILAibPvmQ5TmWWnAkcNFdt4=;
+        b=H5arMJWBJIHWTo5axYvcsQVoiypDTo+dAZL1eDWL77Jsj2gUZVnK07JUuTwiudUhbC
+         4KzBw/9cc+zF0ICawsRX7iETVFzPexXRZS96SoQbjVXtaitMgLfC5/1gSYlFtHjwSBes
+         SNRlQbyqqOWkBN0WKKkyZh7d8wzWzhJbL8OJZ3bdShVQ2d1+/yINI6iAANU1MD0Z+HEl
+         6rgi3O3HHTVpHufGh3z8vY/pCequT7VAl+efgn7EYA8zqQQaunADP1AwrO6HnBnVAaRG
+         YKrssucK8X2sWBYKKbWbqpvrgxcav0Ay5OyHbLy10UmxOwulEnHCGkcY2/VCHa3D3zBP
+         2QBg==
+X-Gm-Message-State: AJIora9iDgW2YzlYexWNh8YMIT7e7jROzDfHVr7E43IWUJbDHQwf1gez
+        PHHSLZ5V7B0BAQ7ufjz1coBWqvYvlWsr8Doyftg8
+X-Google-Smtp-Source: AGRyM1sRBC0/qHrzfO5XUsgULVqTxGGCmYLAoedTByRp6eZvVAkGI4P74Vm8ysvMefGyyYSQfwHbHa3BkIgQCZy8wb0=
+X-Received: by 2002:a17:907:3f0a:b0:726:324c:5bc2 with SMTP id
+ hq10-20020a1709073f0a00b00726324c5bc2mr2770697ejc.32.1656497981640; Wed, 29
+ Jun 2022 03:19:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAAhR5DGHhPagnaiC=Bn9v0qhNQ5N9HjsrDyQkv4dtui7dfMAbA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220629082541.118-1-xieyongji@bytedance.com> <20220629082541.118-6-xieyongji@bytedance.com>
+ <20220629043539-mutt-send-email-mst@kernel.org> <CACycT3sAcH-b40hORjSOQb67jZ0Fd-fxdzmZNwt=4iZdX6gLeA@mail.gmail.com>
+ <20220629055241-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220629055241-mutt-send-email-mst@kernel.org>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Wed, 29 Jun 2022 18:19:31 +0800
+Message-ID: <CACycT3vaNLYRid5SsT11LuVCaGXbBfV=q7c7SUp1+r9BcRpwkw@mail.gmail.com>
+Subject: Re: [PATCH 5/6] vduse: Support registering userspace memory for IOTLB
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Liu Xiaodong <xiaodong.liu@intel.com>,
+        Maxime Coquelin <maxime.coquelin@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        songmuchun@bytedance.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 11:08:16AM -0700,
-Sagi Shahar <sagis@google.com> wrote:
+On Wed, Jun 29, 2022 at 5:54 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Wed, Jun 29, 2022 at 05:26:04PM +0800, Yongji Xie wrote:
+> > On Wed, Jun 29, 2022 at 4:43 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > >
+> > > On Wed, Jun 29, 2022 at 04:25:40PM +0800, Xie Yongji wrote:
+> > > > Introduce two ioctls: VDUSE_IOTLB_REG_UMEM and
+> > > > VDUSE_IOTLB_DEREG_UMEM to support registering
+> > > > and de-registering userspace memory for IOTLB
+> > > > in virtio-vdpa case.
+> > > >
+> > > > Now it only supports registering userspace memory
+> > > > for IOTLB as bounce buffer.
+> > > >
+> > > > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+> > > > ---
+> > > >  drivers/vdpa/vdpa_user/vduse_dev.c | 138 +++++++++++++++++++++++++++++
+> > > >  include/uapi/linux/vduse.h         |  28 ++++++
+> > > >  2 files changed, 166 insertions(+)
+> > > >
+> > > > diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+> > > > index c47a5d9765cf..7b2ea7612da9 100644
+> > > > --- a/drivers/vdpa/vdpa_user/vduse_dev.c
+> > > > +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+> > > > @@ -21,6 +21,7 @@
+> > > >  #include <linux/uio.h>
+> > > >  #include <linux/vdpa.h>
+> > > >  #include <linux/nospec.h>
+> > > > +#include <linux/sched/mm.h>
+> > > >  #include <uapi/linux/vduse.h>
+> > > >  #include <uapi/linux/vdpa.h>
+> > > >  #include <uapi/linux/virtio_config.h>
+> > > > @@ -64,6 +65,13 @@ struct vduse_vdpa {
+> > > >       struct vduse_dev *dev;
+> > > >  };
+> > > >
+> > > > +struct vduse_iotlb_mem {
+> > > > +     unsigned long iova;
+> > > > +     unsigned long npages;
+> > > > +     struct page **pages;
+> > > > +     struct mm_struct *mm;
+> > > > +};
+> > > > +
+> > > >  struct vduse_dev {
+> > > >       struct vduse_vdpa *vdev;
+> > > >       struct device *dev;
+> > > > @@ -95,6 +103,8 @@ struct vduse_dev {
+> > > >       u8 status;
+> > > >       u32 vq_num;
+> > > >       u32 vq_align;
+> > > > +     struct vduse_iotlb_mem *iotlb_mem;
+> > > > +     struct mutex mem_lock;
+> > > >  };
+> > > >
+> > > >  struct vduse_dev_msg {
+> > > > @@ -917,6 +927,100 @@ static int vduse_dev_queue_irq_work(struct vduse_dev *dev,
+> > > >       return ret;
+> > > >  }
+> > > >
+> > > > +static int vduse_dev_dereg_iotlb_mem(struct vduse_dev *dev,
+> > > > +                                  u64 iova, u64 size)
+> > > > +{
+> > > > +     int ret;
+> > > > +
+> > > > +     mutex_lock(&dev->mem_lock);
+> > > > +     ret = -ENOENT;
+> > > > +     if (!dev->iotlb_mem)
+> > > > +             goto unlock;
+> > > > +
+> > > > +     ret = -EINVAL;
+> > > > +     if (dev->iotlb_mem->iova != iova || size != dev->domain->bounce_size)
+> > > > +             goto unlock;
+> > > > +
+> > > > +     vduse_domain_remove_user_bounce_pages(dev->domain);
+> > > > +     unpin_user_pages(dev->iotlb_mem->pages, dev->iotlb_mem->npages);
+> > >
+> > > I notice you don't mark the pages dirty. This is going to be a problem.
+> > >
+> >
+> > Thanks for pointing out this, I will use unpin_user_pages_dirty_lock() instead.
+> >
+> > > > +     atomic64_sub(dev->iotlb_mem->npages, &dev->iotlb_mem->mm->pinned_vm);
+> > > > +     mmdrop(dev->iotlb_mem->mm);
+> > > > +     vfree(dev->iotlb_mem->pages);
+> > > > +     kfree(dev->iotlb_mem);
+> > > > +     dev->iotlb_mem = NULL;
+> > > > +     ret = 0;
+> > > > +unlock:
+> > > > +     mutex_unlock(&dev->mem_lock);
+> > > > +     return ret;
+> > > > +}
+> > > > +
+> > > > +static int vduse_dev_reg_iotlb_mem(struct vduse_dev *dev,
+> > > > +                                u64 iova, u64 uaddr, u64 size)
+> > > > +{
+> > > > +     struct page **page_list = NULL;
+> > > > +     struct vduse_iotlb_mem *mem = NULL;
+> > > > +     long pinned = 0;
+> > > > +     unsigned long npages, lock_limit;
+> > > > +     int ret;
+> > > > +
+> > > > +     if (size != dev->domain->bounce_size ||
+> > > > +         iova != 0 || uaddr & ~PAGE_MASK)
+> > > > +             return -EINVAL;
+> > > > +
+> > > > +     mutex_lock(&dev->mem_lock);
+> > > > +     ret = -EEXIST;
+> > > > +     if (dev->iotlb_mem)
+> > > > +             goto unlock;
+> > > > +
+> > > > +     ret = -ENOMEM;
+> > > > +     npages = size >> PAGE_SHIFT;
+> > > > +     page_list = vmalloc(array_size(npages,
+> > > > +                         sizeof(struct page *)));
+> > >
+> > > Is this basically trying to do a vmalloc with userspace-controlled size?
+> > > That's an easy DOS vector.
+> > >
+> >
+> > We already checked the size before. The size must equal to (64MB >>
+> > PAGE_SHIFT) now.
+>
+> That's not a small amount. Can this be accounted e.g. through cgroups at least?
+>
 
-> On Thu, May 5, 2022 at 11:16 AM <isaku.yamahata@intel.com> wrote:
-> >
-> > From: Sean Christopherson <sean.j.christopherson@intel.com>
-> >
-> > Export kvm_io_bus_read and kvm_mmio tracepoint and wire up TDX PV MMIO
-> > hypercall to the KVM backend functions.
-> >
-> > kvm_io_bus_read/write() searches KVM device emulated in kernel of the given
-> > MMIO address and emulates the MMIO.  As TDX PV MMIO also needs it, export
-> > kvm_io_bus_read().  kvm_io_bus_write() is already exported.  TDX PV MMIO
-> > emulates some of MMIO itself.  To add trace point consistently with x86
-> > kvm, export kvm_mmio tracepoint.
-> >
-> > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> > Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
-> > ---
-> >  arch/x86/kvm/vmx/tdx.c | 114 +++++++++++++++++++++++++++++++++++++++++
-> >  arch/x86/kvm/x86.c     |   1 +
-> >  virt/kvm/kvm_main.c    |   2 +
-> >  3 files changed, 117 insertions(+)
-> >
-> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> > index ee0cf5336ade..6ab4a52fc9e9 100644
-> > --- a/arch/x86/kvm/vmx/tdx.c
-> > +++ b/arch/x86/kvm/vmx/tdx.c
-> > @@ -1057,6 +1057,118 @@ static int tdx_emulate_io(struct kvm_vcpu *vcpu)
-> >         return ret;
-> >  }
-> >
-> > +static int tdx_complete_mmio(struct kvm_vcpu *vcpu)
-> > +{
-> > +       unsigned long val = 0;
-> > +       gpa_t gpa;
-> > +       int size;
-> > +
-> > +       WARN_ON(vcpu->mmio_needed != 1);
-> > +       vcpu->mmio_needed = 0;
-> > +
-> > +       if (!vcpu->mmio_is_write) {
-> > +               gpa = vcpu->mmio_fragments[0].gpa;
-> > +               size = vcpu->mmio_fragments[0].len;
-> > +
-> > +               memcpy(&val, vcpu->run->mmio.data, size);
-> > +               tdvmcall_set_return_val(vcpu, val);
-> > +               trace_kvm_mmio(KVM_TRACE_MMIO_READ, size, gpa, &val);
-> > +       }
-> > +       return 1;
-> > +}
-> > +
-> > +static inline int tdx_mmio_write(struct kvm_vcpu *vcpu, gpa_t gpa, int size,
-> > +                                unsigned long val)
-> > +{
-> > +       if (kvm_iodevice_write(vcpu, &vcpu->arch.apic->dev, gpa, size, &val) &&
-> > +           kvm_io_bus_write(vcpu, KVM_MMIO_BUS, gpa, size, &val))
-> > +               return -EOPNOTSUPP;
-> > +
-> > +       trace_kvm_mmio(KVM_TRACE_MMIO_WRITE, size, gpa, &val);
-> > +       return 0;
-> > +}
-> > +
-> > +static inline int tdx_mmio_read(struct kvm_vcpu *vcpu, gpa_t gpa, int size)
-> > +{
-> > +       unsigned long val;
-> > +
-> > +       if (kvm_iodevice_read(vcpu, &vcpu->arch.apic->dev, gpa, size, &val) &&
-> > +           kvm_io_bus_read(vcpu, KVM_MMIO_BUS, gpa, size, &val))
-> > +               return -EOPNOTSUPP;
-> > +
-> > +       tdvmcall_set_return_val(vcpu, val);
-> > +       trace_kvm_mmio(KVM_TRACE_MMIO_READ, size, gpa, &val);
-> > +       return 0;
-> > +}
-> > +
-> > +static int tdx_emulate_mmio(struct kvm_vcpu *vcpu)
-> > +{
-> > +       struct kvm_memory_slot *slot;
-> > +       int size, write, r;
-> > +       unsigned long val;
-> > +       gpa_t gpa;
-> > +
-> > +       WARN_ON(vcpu->mmio_needed);
-> > +
-> > +       size = tdvmcall_a0_read(vcpu);
-> > +       write = tdvmcall_a1_read(vcpu);
-> > +       gpa = tdvmcall_a2_read(vcpu);
-> > +       val = write ? tdvmcall_a3_read(vcpu) : 0;
-> > +
-> > +       if (size != 1 && size != 2 && size != 4 && size != 8)
-> > +               goto error;
-> > +       if (write != 0 && write != 1)
-> > +               goto error;
-> > +
-> > +       /* Strip the shared bit, allow MMIO with and without it set. */
-> > +       gpa = gpa & ~gfn_to_gpa(kvm_gfn_shared_mask(vcpu->kvm));
-> > +
-> > +       if (size > 8u || ((gpa + size - 1) ^ gpa) & PAGE_MASK)
-> > +               goto error;
-> > +
-> > +       slot = kvm_vcpu_gfn_to_memslot(vcpu, gpa_to_gfn(gpa));
-> > +       if (slot && !(slot->flags & KVM_MEMSLOT_INVALID))
-> > +               goto error;
-> > +
-> > +       if (!kvm_io_bus_write(vcpu, KVM_FAST_MMIO_BUS, gpa, 0, NULL)) {
-> > +               trace_kvm_fast_mmio(gpa);
-> > +               return 1;
-> > +       }
-> > +
-> > +       if (write)
-> > +               r = tdx_mmio_write(vcpu, gpa, size, val);
-> > +       else
-> > +               r = tdx_mmio_read(vcpu, gpa, size);
-> > +       if (!r) {
-> > +               /* Kernel completed device emulation. */
-> > +               tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_SUCCESS);
-> > +               return 1;
-> > +       }
-> > +
-> > +       /* Request the device emulation to userspace device model. */
-> > +       vcpu->mmio_needed = 1;
-> > +       vcpu->mmio_is_write = write;
-> > +       vcpu->arch.complete_userspace_io = tdx_complete_mmio;
-> > +
-> > +       vcpu->run->mmio.phys_addr = gpa;
-> > +       vcpu->run->mmio.len = size;
-> > +       vcpu->run->mmio.is_write = write;
-> > +       vcpu->run->exit_reason = KVM_EXIT_MMIO;
-> > +
-> > +       if (write) {
-> > +               memcpy(vcpu->run->mmio.data, &val, size);
-> > +       } else {
-> > +               vcpu->mmio_fragments[0].gpa = gpa;
-> > +               vcpu->mmio_fragments[0].len = size;
-> > +               trace_kvm_mmio(KVM_TRACE_MMIO_READ_UNSATISFIED, size, gpa, NULL);
-> > +       }
-> > +       return 0;
-> > +
-> > +error:
-> > +       tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_SUCCESS);
-> 
-> We should return an error code here.
+Make sense, will use __vmalloc(__GFP_ACCOUNT) instead.
 
-Yes, I'll fix it as follows. Thanks for catching it.
+> > > > +     mem = kzalloc(sizeof(*mem), GFP_KERNEL);
+> > > > +     if (!page_list || !mem)
+> > > > +             goto unlock;
+> > > > +
+> > > > +     mmap_read_lock(current->mm);
+> > > > +
+> > > > +     lock_limit = PFN_DOWN(rlimit(RLIMIT_MEMLOCK));
+> > > > +     if (npages + atomic64_read(&current->mm->pinned_vm) > lock_limit)
+> > > > +             goto out;
+> > > > +
+> > > > +     pinned = pin_user_pages(uaddr, npages, FOLL_LONGTERM | FOLL_WRITE,
+> > > > +                             page_list, NULL);
+> > > > +     if (pinned != npages) {
+> > > > +             ret = pinned < 0 ? pinned : -ENOMEM;
+> > > > +             goto out;
+> > > > +     }
+> > >
+> > >
+> > > This is a popular approach but it's problematic if multiple
+> > > devices try to pin the same page.
+> >
+> > Do you mean the data would be corrupted if multiple devices use the
+> > same page as bounce buffer? This is indeed a problem.
+>
+> No i mean you decrement the lock twice. Question is can two bounce
+> buffers share a page?
+>
 
- error:
--       tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_SUCCESS);
-+       tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_INVALID_OPERAND);
-        return 1;
- }
+I think we can't. I will find a way to prevent it.
 
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Thanks,
+Yongji

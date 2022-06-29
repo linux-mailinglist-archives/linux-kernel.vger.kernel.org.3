@@ -2,87 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C590755FD4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0840155FD38
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232999AbiF2K3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 06:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
+        id S233342AbiF2K36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 06:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbiF2K3h (ORCPT
+        with ESMTP id S230315AbiF2K34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 06:29:37 -0400
-Received: from smtp14.infineon.com (smtp14.infineon.com [IPv6:2a00:18f0:1e00:4::6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDEE3DDCB;
-        Wed, 29 Jun 2022 03:29:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1656498576; x=1688034576;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6z7jW+xFVUIPRN6xY5/GMDD9lYAIYUh7aTFgycfE2KY=;
-  b=lLUEJcdx8FMANgi1s+66u7P8P+CawWgZtu7A0vOwMoYjq45TcoGLv6NS
-   VXdo6QjrOp7To9u1SBbdOOqAFBUnZ+Sz1CJaeZK+ToG7Q2i7ZJuYSd3dZ
-   g9Ot7jZW0NiIVQfXR1JYCrbxbzZ++HaYf5WTwXMH31ewXfOG7TBXRRjCg
-   o=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="128909583"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650924000"; 
-   d="scan'208";a="128909583"
-Received: from unknown (HELO mucxv001.muc.infineon.com) ([172.23.11.16])
-  by smtp14.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 12:29:33 +0200
-Received: from MUCSE803.infineon.com (MUCSE803.infineon.com [172.23.29.29])
+        Wed, 29 Jun 2022 06:29:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14492621;
+        Wed, 29 Jun 2022 03:29:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mucxv001.muc.infineon.com (Postfix) with ESMTPS;
-        Wed, 29 Jun 2022 12:29:33 +0200 (CEST)
-Received: from MUCSE807.infineon.com (172.23.29.33) by MUCSE803.infineon.com
- (172.23.29.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 29 Jun
- 2022 12:29:33 +0200
-Received: from [10.160.193.107] (172.23.8.247) by MUCSE807.infineon.com
- (172.23.29.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 29 Jun
- 2022 12:29:32 +0200
-Message-ID: <174363bc-e8e5-debd-f8f6-a252d2bbddb9@infineon.com>
-Date:   Wed, 29 Jun 2022 12:29:31 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/4] dt-bindings: net: broadcom-bluetooth: Add CYW55572 DT
- binding
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
-        <linux-bluetooth@vger.kernel.org>
-References: <cover.1655723462.git.hakan.jansson@infineon.com>
- <acd9e85b1ba82875e83ca68ae2aa62d828bfdfa3.1655723462.git.hakan.jansson@infineon.com>
- <2c753258-b68e-b2ad-c4cc-f0a437769bc2@linaro.org>
- <cb973352-36f9-8d70-95ac-5b63a566422c@infineon.com>
- <20220627173436.GA2616639-robh@kernel.org>
- <6e3a557a-fb0e-3b28-68f2-32804b071cfb@infineon.com>
- <20220628224110.GD963202-robh@kernel.org>
-From:   Hakan Jansson <hakan.jansson@infineon.com>
-In-Reply-To: <20220628224110.GD963202-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE813.infineon.com (172.23.29.39) To
- MUCSE807.infineon.com (172.23.29.33)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74AADB8227D;
+        Wed, 29 Jun 2022 10:29:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E71AC34114;
+        Wed, 29 Jun 2022 10:29:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656498593;
+        bh=6t4Qww5gQL2dPbX3lWrf1eT1qNVh0NYZw5CcQii/4dM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nvDqmPQ6eBKyTUKtozYUlsMzXrump4i5EVvFFIkTkP4/jSoJzd2ro8PLYBFW362Mj
+         09dLnzVJ1RBJIqoRvakCpzH7jvr2a3OYquFglJCocMOwPRxfXkZIO4Jj7d4RAWO1vY
+         LDKGc4+cPyW1yZ159pyhUr3Gxa+30RByCwS+FI8+9+n+xUuM1z5uAQ2eAJqgPaXuFM
+         uyQ175SDqmHxSNcDppdDbIFGv20UX1/gQbmiLW0m4f92bY0OOCprHBsNzQgLjQg3+x
+         LoqmwaPmDGkJLxdhgkeXsgvBwGSJJeJLo+yQupwk03grJMn5nSqh302TLrLAqd/ihr
+         UfpW+K4y5g1pw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o6UxC-0042RV-W7;
+        Wed, 29 Jun 2022 11:29:51 +0100
+Date:   Wed, 29 Jun 2022 11:29:50 +0100
+Message-ID: <8735fn3gpt.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Oliver Upton <oupton@google.com>, Huang@google.com,
+        Shaoqin <shaoqin.huang@intel.com>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v6 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary page table uses.
+In-Reply-To: <20220628220938.3657876-2-yosryahmed@google.com>
+References: <20220628220938.3657876-1-yosryahmed@google.com>
+        <20220628220938.3657876-2-yosryahmed@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: yosryahmed@google.com, tj@kernel.org, hannes@cmpxchg.org, lizefan.x@bytedance.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, akpm@linux-foundation.org, mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com, oupton@google.com, Huang@google.com, shaoqin.huang@intel.com, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org, linux-mm@kvack.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,69 +85,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/29/2022 12:41 AM, Rob Herring wrote:
-> On Tue, Jun 28, 2022 at 04:03:57PM +0200, Hakan Jansson wrote:
->> Hi Rob,
->>
->> On 6/27/2022 7:34 PM, Rob Herring wrote:
->>> On Mon, Jun 20, 2022 at 04:06:25PM +0200, Hakan Jansson wrote:
->>>> Hi Krzysztof,
->>>>
->>>> Thanks for replying.
->>>>
->>>> On 6/20/2022 2:32 PM, Krzysztof Kozlowski wrote:
->>>>>> CYW55572 is a Wi-Fi + Bluetooth combo device from Infineon.
->>>>>> Extend the binding with its DT compatible.
->>>>>>
->>>>>> Signed-off-by: Hakan Jansson <hakan.jansson@infineon.com>
->>>>>> ---
->>>>>>     Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml | 1 +
->>>>>>     1 file changed, 1 insertion(+)
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
->>>>>> index df59575840fe..71fe9b17f8f1 100644
->>>>>> --- a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
->>>>>> +++ b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
->>>>>> @@ -24,6 +24,7 @@ properties:
->>>>>>           - brcm,bcm43540-bt
->>>>>>           - brcm,bcm4335a0
->>>>>>           - brcm,bcm4349-bt
->>>>>> +      - infineon,cyw55572-bt
->>>>> Patch is okay, but just to be sure - is it entirely different device
->>>>> from Infineon or some variant of Broadcom block?
->>>> CYW55572 is a new device from Infineon. It is not the same as any Broadcom
->>>> device.
->>>>
->>>>>     Are all existing
->>>>> properties applicable to it as well?
->>>> Yes, all existing properties are applicable.
->>> Including 'brcm,bt-pcm-int-params'?
->> Yes, 'brcm,bt-pcm-int-params' is also applicable to CYW55572.
->>
->>> I don't see a BT reset signal
->>> either, but maybe that's not pinned out in the AzureWave module which
->>> was the only documentation details I could find[1].
->> That's correct, CYW55572 does not have a BT reset signal. Most of the
->> existing listed compatible devices does not seem to have a BT reset signal
->> either so I think this is in line with the intention of the existing
->> document and driver implementation.
->>
->>> I think a separate doc will be better as it can be more precise as to
->>> what's allowed or not. It's fine to reuse the same property names
->>> though.
->> I don't really see anything besides the optional BT reset property that
->> would be changed in a separate doc.  As a separate doc would mean a
->> duplication of data that would need to be maintained in two more or less
->> identical docs, perhaps it would be better to modify the existing doc to
->> clarify for which compatible devices that the BT reset property applies?
->> (Which I believe are only these three: bcm20702a1, bcm4329-bt and
->> bcm4330-bt)
-> Okay, I guess this is fine in the same doc. Any conditionals to tighten
-> up the constraints would be welcome.
->
-> Rob
+On Tue, 28 Jun 2022 23:09:35 +0100,
+Yosry Ahmed <yosryahmed@google.com> wrote:
+> 
+> We keep track of several kernel memory stats (total kernel memory, page
+> tables, stack, vmalloc, etc) on multiple levels (global, per-node,
+> per-memcg, etc). These stats give insights to users to how much memory
+> is used by the kernel and for what purposes.
+> 
+> Currently, memory used by kvm mmu is not accounted in any of those
+> kernel memory stats. This patch series accounts the memory pages
+> used by KVM for page tables in those stats in a new
+> NR_SECONDARY_PAGETABLE stat. This stat can be later extended to account
+> for other types of secondary pages tables (e.g. iommu page tables).
+> 
+> KVM has a decent number of large allocations that aren't for page
+> tables, but for most of them, the number/size of those allocations
+> scales linearly with either the number of vCPUs or the amount of memory
+> assigned to the VM. KVM's secondary page table allocations do not scale
+> linearly, especially when nested virtualization is in use.
+> 
+> From a KVM perspective, NR_SECONDARY_PAGETABLE will scale with KVM's
+> per-VM pages_{4k,2m,1g} stats unless the guest is doing something
+> bizarre (e.g. accessing only 4kb chunks of 2mb pages so that KVM is
+> forced to allocate a large number of page tables even though the guest
+> isn't accessing that much memory). However, someone would need to either
+> understand how KVM works to make that connection, or know (or be told) to
+> go look at KVM's stats if they're running VMs to better decipher the stats.
+> 
+> Furthermore, having NR_PAGETABLE side-by-side with NR_SECONDARY_PAGETABLE
+> is informative. For example, when backing a VM with THP vs. HugeTLB,
+> NR_SECONDARY_PAGETABLE is roughly the same, but NR_PAGETABLE is an order
+> of magnitude higher with THP. So having this stat will at the very least
+> prove to be useful for understanding tradeoffs between VM backing types,
+> and likely even steer folks towards potential optimizations.
+> 
+> The original discussion with more details about the rationale:
+> https://lore.kernel.org/all/87ilqoi77b.wl-maz@kernel.org
+> 
+> This stat will be used by subsequent patches to count KVM mmu
+> memory usage.
+> 
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> Acked-by: Shakeel Butt <shakeelb@google.com>
 
-Ok, I'll add a patch with conditionals and resubmit a new rev of the 
-patch series.
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-/Håkan
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

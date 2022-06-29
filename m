@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1396E560150
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C93560155
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233820AbiF2NcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 09:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
+        id S233844AbiF2Ncb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 09:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiF2NcH (ORCPT
+        with ESMTP id S233794AbiF2Nc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 09:32:07 -0400
-Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F82237034;
-        Wed, 29 Jun 2022 06:32:02 -0700 (PDT)
-X-QQ-mid: bizesmtp79t1656509476tvvsidqs
-Received: from localhost.localdomain ( [182.148.13.66])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 29 Jun 2022 21:31:14 +0800 (CST)
-X-QQ-SSF: 0100000000200060C000B00A0000000
-X-QQ-FEAT: 1XNERxhHvDkrposPQr1R9uI+G46sLpNhx7g2/nAcD2JgwXoFIB6qmrUCtgDBK
-        bSSrDdzaR7ncxD9lnDnRIKtbRR1AoCWlULtBM//uuIV0cEJB46Yi1w6aVCPSYP23T+C2Zb/
-        TKQt+W3oMnZfY5ERe13/7O8rB2dR8SNgxk/Tf+Gcu7bccOpJZKFG7LrXTejybK8Xx8ZlAy+
-        lqoeytznuYD2y0vKTfZ6N/KylLcr4dwm+ERycsEpDDO3MElhhro7nFsaa5AyPaG5tgYnLAe
-        XPCmGr8Lj1dBfa7/dr7naKJoYvai2U9ICBv1X8uEaa0udpGlm3kyfRLeTposrbDwPpwK5/t
-        SSuXLOh
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] intel/e1000e:fix repeated words in comments
-Date:   Wed, 29 Jun 2022 21:31:07 +0800
-Message-Id: <20220629133107.36642-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 29 Jun 2022 09:32:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9527137034;
+        Wed, 29 Jun 2022 06:32:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C88A61E42;
+        Wed, 29 Jun 2022 13:32:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B123EC34114;
+        Wed, 29 Jun 2022 13:32:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656509543;
+        bh=yP8qpZ4TtrwMBByHlseY6Kg6bXnoBDLJlgjU0ALhTQg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HIcmpT1FNHXgBpPbWK0t4a/WjZL6F0bjx6+yXPkp801OOWSkReBxnNGYWH1kxEVVR
+         C+YcsUjca6lIRq6bXHhbx+rnZwg7xYNgkeHovYfs6g0mTu5VqvDgraTqWJvyGfAWlG
+         6dM8mKgd1NXVklYuuqDt/Sz6+59Wquu9cjiouIil5kUCq+MkCjlKEPMnLNdkhbkyWo
+         R+8hYtg2iKxHhmhs2EM8LTCMAgiOcJEX+7srUuHQK3Byl5cHWbIB3cJWIYbpeXxxrk
+         1QIK6JA/Qa8Bx0Ni8vf+124WppFr529dgeeh8lBKFavLY3nYAxVT065RjmgJHGBmP9
+         1x2Ld6aBoGsgw==
+Date:   Wed, 29 Jun 2022 21:32:17 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Sean Anderson <sean.anderson@seco.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Li Yang <leoyang.li@nxp.com>, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3 5/9] arm64: dts: ls1028a: Update SFP binding to
+ include clock
+Message-ID: <20220629133217.GM819983@dragon>
+References: <20220428181703.2194171-1-sean.anderson@seco.com>
+ <20220428181703.2194171-6-sean.anderson@seco.com>
+ <548f2e576a4c299a1139eadb30ca4e67@walle.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,RCVD_IN_VALIDITY_RPBL,
-        RDNS_DYNAMIC,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <548f2e576a4c299a1139eadb30ca4e67@walle.cc>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'frames'.
+On Tue, May 03, 2022 at 03:47:51PM +0200, Michael Walle wrote:
+> Am 2022-04-28 20:16, schrieb Sean Anderson:
+> > The clocks property is now mandatory. Add it.
+> > 
+> > Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> > Reviewed-by: Michael Walle <michael@walle.cc>
+> 
+> Fixes: eba5bea8f37f ("arm64: dts: ls1028a: add efuse node")
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/net/ethernet/intel/e1000e/mac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/intel/e1000e/mac.c b/drivers/net/ethernet/intel/e1000e/mac.c
-index 51512a73fdd0..5df7ad93f3d7 100644
---- a/drivers/net/ethernet/intel/e1000e/mac.c
-+++ b/drivers/net/ethernet/intel/e1000e/mac.c
-@@ -957,7 +957,7 @@ s32 e1000e_force_mac_fc(struct e1000_hw *hw)
- 	 *      1:  Rx flow control is enabled (we can receive pause
- 	 *          frames but not send pause frames).
- 	 *      2:  Tx flow control is enabled (we can send pause frames
--	 *          frames but we do not receive pause frames).
-+	 *          but we do not receive pause frames).
- 	 *      3:  Both Rx and Tx flow control (symmetric) is enabled.
- 	 *  other:  No other values should be possible at this point.
- 	 */
--- 
-2.36.1
-
+Applied, thanks!

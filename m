@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B7E560A9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:48:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0EA560AA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbiF2TsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 15:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52066 "EHLO
+        id S231361AbiF2TsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 15:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiF2Tr7 (ORCPT
+        with ESMTP id S229480AbiF2TsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 15:47:59 -0400
+        Wed, 29 Jun 2022 15:48:03 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 198F53D1F3
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 12:47:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94AC43A1AD
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 12:48:01 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F185E14BF;
-        Wed, 29 Jun 2022 12:47:57 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9B95D1480;
+        Wed, 29 Jun 2022 12:48:01 -0700 (PDT)
 Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.197.38])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7AFEC3F792;
-        Wed, 29 Jun 2022 12:47:56 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0792B3F792;
+        Wed, 29 Jun 2022 12:47:59 -0700 (PDT)
 From:   Qais Yousef <qais.yousef@arm.com>
 To:     Ingo Molnar <mingo@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
@@ -30,9 +30,9 @@ Cc:     linux-kernel@vger.kernel.org, Xuewen Yan <xuewen.yan94@gmail.com>,
         Wei Wang <wvw@google.com>,
         Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
         Hank <han.lin@mediatek.com>, Qais Yousef <qais.yousef@arm.com>
-Subject: [PATCH 1/7] sched/uclamp: Fix relationship between uclamp and migration margin
-Date:   Wed, 29 Jun 2022 20:46:26 +0100
-Message-Id: <20220629194632.1117723-2-qais.yousef@arm.com>
+Subject: [PATCH 2/7] sched/uclamp: Make task_fits_capacity() use util_fits_cpu()
+Date:   Wed, 29 Jun 2022 20:46:27 +0100
+Message-Id: <20220629194632.1117723-3-qais.yousef@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220629194632.1117723-1-qais.yousef@arm.com>
 References: <20220629194632.1117723-1-qais.yousef@arm.com>
@@ -47,182 +47,295 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fits_capacity() verifies that a util is within 20% margin of the
-capacity of a CPU, which is an attempt to speed up upmigration.
+So that the new uclamp rules in regard to migration margin and capacity
+pressure are taken into account correctly.
 
-But when uclamp is used, this 20% margin is problematic because for
-example if a task is boosted to 1024, then it will not fit on any CPU
-according to fits_capacity() logic.
+To cater for update_sg_wakeup_stats() user, we add new
+{min,max}_capacity_cpu to struct sched_group_capacity since
+util_fits_cpu() takes the cpu rather than capacity as an argument.
 
-Or if a task is boosted to capacity_orig_of(medium_cpu). The task will
-end up on big instead on the desired medium CPU.
+This includes updating capacity_greater() definition to take cpu as an
+argument instead of capacity.
 
-Similar corner cases exist for uclamp and usage of capacity_of().
-Slightest irq pressure on biggest CPU for example will make a 1024
-boosted task look like it can't fit.
-
-What we really want is for uclamp comparisons to ignore the migration
-margin and capacity pressure, yet retain them for when checking the
-_actual_ util signal.
-
-For example, task p:
-
-	p->util_avg = 300
-	p->uclamp[UCLAMP_MIN] = 1024
-
-Will fit a big CPU. But
-
-	p->util_avg = 900
-	p->uclamp[UCLAMP_MIN] = 1024
-
-will not, this should trigger overutilized state because the big CPU is
-now *actually* being saturated.
-
-Similar reasoning applies to capping tasks with UCLAMP_MAX. For example:
-
-	p->util_avg = 1024
-	p->uclamp[UCLAMP_MAX] = capacity_orig_of(medium_cpu)
-
-Should fit the task on medium cpus without triggering overutilized
-state.
-
-Inlined comments expand more on desired behavior in more scenarios.
-
-Introduce new util_fits_cpu() function which encapsulates the new logic.
-The new function is not used anywhere yet, but will be used to update
-various users of fits_capacity() in later patches.
-
-Fixes: af24bde8df202 ("sched/uclamp: Add uclamp support to energy_compute()")
+Fixes: a7008c07a568 ("sched/fair: Make task_fits_capacity() consider uclamp restrictions")
 Signed-off-by: Qais Yousef <qais.yousef@arm.com>
 ---
- kernel/sched/fair.c | 114 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 114 insertions(+)
+ kernel/sched/fair.c     | 67 ++++++++++++++++++++++++++---------------
+ kernel/sched/sched.h    | 13 ++++++--
+ kernel/sched/topology.c | 18 ++++++-----
+ 3 files changed, 64 insertions(+), 34 deletions(-)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index f80ae86bb404..5eecae32a0f6 100644
+index 5eecae32a0f6..313437bea5a2 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -4203,6 +4203,120 @@ static inline void util_est_update(struct cfs_rq *cfs_rq,
- 	trace_sched_util_est_se_tp(&p->se);
+@@ -160,7 +160,7 @@ int __weak arch_asym_cpu_priority(int cpu)
+  *
+  * (default: ~5%)
+  */
+-#define capacity_greater(cap1, cap2) ((cap1) * 1024 > (cap2) * 1078)
++#define capacity_greater(cpu1, cpu2) ((capacity_of(cpu1)) * 1024 > (capacity_of(cpu2)) * 1078)
+ #endif
+ 
+ #ifdef CONFIG_CFS_BANDWIDTH
+@@ -4317,10 +4317,12 @@ static inline int util_fits_cpu(unsigned long util,
+ 	return fits;
  }
  
-+static inline int util_fits_cpu(unsigned long util,
-+				unsigned long uclamp_min,
-+				unsigned long uclamp_max,
-+				int cpu)
+-static inline int task_fits_capacity(struct task_struct *p,
+-				     unsigned long capacity)
++static inline int task_fits_cpu(struct task_struct *p, int cpu)
+ {
+-	return fits_capacity(uclamp_task_util(p), capacity);
++	unsigned long uclamp_min = uclamp_eff_value(p, UCLAMP_MIN);
++	unsigned long uclamp_max = uclamp_eff_value(p, UCLAMP_MAX);
++	unsigned long util = task_util_est(p);
++	return util_fits_cpu(util, uclamp_min, uclamp_max, cpu);
+ }
+ 
+ static inline void update_misfit_status(struct task_struct *p, struct rq *rq)
+@@ -4333,7 +4335,7 @@ static inline void update_misfit_status(struct task_struct *p, struct rq *rq)
+ 		return;
+ 	}
+ 
+-	if (task_fits_capacity(p, capacity_of(cpu_of(rq)))) {
++	if (task_fits_cpu(p, cpu_of(rq))) {
+ 		rq->misfit_task_load = 0;
+ 		return;
+ 	}
+@@ -8104,7 +8106,7 @@ static int detach_tasks(struct lb_env *env)
+ 
+ 		case migrate_misfit:
+ 			/* This is not a misfit task */
+-			if (task_fits_capacity(p, capacity_of(env->src_cpu)))
++			if (task_fits_cpu(p, env->src_cpu))
+ 				goto next;
+ 
+ 			env->imbalance = 0;
+@@ -8502,15 +8504,16 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
+ 	trace_sched_cpu_capacity_tp(cpu_rq(cpu));
+ 
+ 	sdg->sgc->capacity = capacity;
+-	sdg->sgc->min_capacity = capacity;
+-	sdg->sgc->max_capacity = capacity;
++	sdg->sgc->min_capacity_cpu = cpu;
++	sdg->sgc->max_capacity_cpu = cpu;
+ }
+ 
+ void update_group_capacity(struct sched_domain *sd, int cpu)
+ {
+-	struct sched_domain *child = sd->child;
+ 	struct sched_group *group, *sdg = sd->groups;
+-	unsigned long capacity, min_capacity, max_capacity;
++	struct sched_domain *child = sd->child;
++	int min_capacity_cpu, max_capacity_cpu;
++	unsigned long capacity;
+ 	unsigned long interval;
+ 
+ 	interval = msecs_to_jiffies(sd->balance_interval);
+@@ -8523,8 +8526,7 @@ void update_group_capacity(struct sched_domain *sd, int cpu)
+ 	}
+ 
+ 	capacity = 0;
+-	min_capacity = ULONG_MAX;
+-	max_capacity = 0;
++	min_capacity_cpu = max_capacity_cpu = cpu;
+ 
+ 	if (child->flags & SD_OVERLAP) {
+ 		/*
+@@ -8536,29 +8538,44 @@ void update_group_capacity(struct sched_domain *sd, int cpu)
+ 			unsigned long cpu_cap = capacity_of(cpu);
+ 
+ 			capacity += cpu_cap;
+-			min_capacity = min(cpu_cap, min_capacity);
+-			max_capacity = max(cpu_cap, max_capacity);
++			if (cpu_cap < capacity_of(min_capacity_cpu))
++				min_capacity_cpu = cpu;
++
++			if (cpu_cap > capacity_of(max_capacity_cpu))
++				max_capacity_cpu = cpu;
+ 		}
+ 	} else  {
+ 		/*
+ 		 * !SD_OVERLAP domains can assume that child groups
+ 		 * span the current group.
+ 		 */
++		unsigned long min_capacity = ULONG_MAX;
++		unsigned long max_capacity = 0;
+ 
+ 		group = child->groups;
+ 		do {
+ 			struct sched_group_capacity *sgc = group->sgc;
++			unsigned long cpu_cap_min = capacity_of(sgc->min_capacity_cpu);
++			unsigned long cpu_cap_max = capacity_of(sgc->max_capacity_cpu);
+ 
+ 			capacity += sgc->capacity;
+-			min_capacity = min(sgc->min_capacity, min_capacity);
+-			max_capacity = max(sgc->max_capacity, max_capacity);
++			if (cpu_cap_min < min_capacity) {
++				min_capacity = cpu_cap_min;
++				min_capacity_cpu = sgc->min_capacity_cpu;
++			}
++
++			if (cpu_cap_max > max_capacity) {
++				max_capacity = cpu_cap_max;
++				max_capacity_cpu = sgc->max_capacity_cpu;
++			}
++
+ 			group = group->next;
+ 		} while (group != child->groups);
+ 	}
+ 
+ 	sdg->sgc->capacity = capacity;
+-	sdg->sgc->min_capacity = min_capacity;
+-	sdg->sgc->max_capacity = max_capacity;
++	sdg->sgc->min_capacity_cpu = min_capacity_cpu;
++	sdg->sgc->max_capacity_cpu = max_capacity_cpu;
+ }
+ 
+ /*
+@@ -8902,7 +8919,7 @@ static bool update_sd_pick_busiest(struct lb_env *env,
+ 	 * internally or be covered by avg_load imbalance (eventually).
+ 	 */
+ 	if (sgs->group_type == group_misfit_task &&
+-	    (!capacity_greater(capacity_of(env->dst_cpu), sg->sgc->max_capacity) ||
++	    (!capacity_greater(env->dst_cpu, sg->sgc->max_capacity_cpu) ||
+ 	     sds->local_stat.group_type != group_has_spare))
+ 		return false;
+ 
+@@ -8986,7 +9003,7 @@ static bool update_sd_pick_busiest(struct lb_env *env,
+ 	 */
+ 	if ((env->sd->flags & SD_ASYM_CPUCAPACITY) &&
+ 	    (sgs->group_type <= group_fully_busy) &&
+-	    (capacity_greater(sg->sgc->min_capacity, capacity_of(env->dst_cpu))))
++	    (capacity_greater(sg->sgc->min_capacity_cpu, env->dst_cpu)))
+ 		return false;
+ 
+ 	return true;
+@@ -9108,7 +9125,7 @@ static inline void update_sg_wakeup_stats(struct sched_domain *sd,
+ 
+ 	/* Check if task fits in the group */
+ 	if (sd->flags & SD_ASYM_CPUCAPACITY &&
+-	    !task_fits_capacity(p, group->sgc->max_capacity)) {
++	    !task_fits_cpu(p, group->sgc->max_capacity_cpu)) {
+ 		sgs->group_misfit_task_load = 1;
+ 	}
+ 
+@@ -9159,7 +9176,8 @@ static bool update_pick_idlest(struct sched_group *idlest,
+ 
+ 	case group_misfit_task:
+ 		/* Select group with the highest max capacity */
+-		if (idlest->sgc->max_capacity >= group->sgc->max_capacity)
++		if (capacity_of(idlest->sgc->max_capacity_cpu) >=
++		    capacity_of(group->sgc->max_capacity_cpu))
+ 			return false;
+ 		break;
+ 
+@@ -9290,7 +9308,8 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+ 
+ 	case group_misfit_task:
+ 		/* Select group with the highest max capacity */
+-		if (local->sgc->max_capacity >= idlest->sgc->max_capacity)
++		if (capacity_of(local->sgc->max_capacity_cpu) >=
++		    capacity_of(idlest->sgc->max_capacity_cpu))
+ 			return NULL;
+ 		break;
+ 
+@@ -9860,7 +9879,7 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+ 		 * average load.
+ 		 */
+ 		if (env->sd->flags & SD_ASYM_CPUCAPACITY &&
+-		    !capacity_greater(capacity_of(env->dst_cpu), capacity) &&
++		    !capacity_greater(env->dst_cpu, i) &&
+ 		    nr_running == 1)
+ 			continue;
+ 
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 02c970501295..9599d2eea3e7 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1766,8 +1766,8 @@ struct sched_group_capacity {
+ 	 * for a single CPU.
+ 	 */
+ 	unsigned long		capacity;
+-	unsigned long		min_capacity;		/* Min per-CPU capacity in group */
+-	unsigned long		max_capacity;		/* Max per-CPU capacity in group */
++	int			min_capacity_cpu;
++	int			max_capacity_cpu;
+ 	unsigned long		next_update;
+ 	int			imbalance;		/* XXX unrelated to capacity but shared group state */
+ 
+@@ -2988,6 +2988,15 @@ static inline bool uclamp_is_used(void)
+ 	return static_branch_likely(&sched_uclamp_used);
+ }
+ #else /* CONFIG_UCLAMP_TASK */
++static inline unsigned long uclamp_eff_value(struct task_struct *p,
++					     enum uclamp_id clamp_id)
 +{
-+	unsigned long capacity = capacity_of(cpu);
-+	unsigned long capacity_orig;
-+	bool fits, max_capacity;
-+	bool uclamp_max_fits;
++	if (clamp_id == UCLAMP_MIN)
++		return 0;
 +
-+	/*
-+	 * Check if the real util fits without any uclamp boost/cap applied.
-+	 */
-+	fits = fits_capacity(util, capacity);
-+
-+	if (!uclamp_is_used())
-+		return fits;
-+
-+	/*
-+	 * We must use capacity_orig_of() for comparing against uclamp_min and
-+	 * uclamp_max. We only care about capacity pressure (by using
-+	 * capacity_of()) for comparing against the real util.
-+	 *
-+	 * If a task is boosted to 1024 for example, we don't want a tiny
-+	 * pressure to skew the check whether it fits a CPU or not.
-+	 *
-+	 * Similarly if a task is capped to capacity_orig_of(little_cpu), it
-+	 * should fit a little cpu even if there's some pressure.
-+	 *
-+	 * Known limitation is when thermal pressure is severe to the point
-+	 * where we have capacity inversion. We don't cater for that as the
-+	 * system performance will already be impacted severely.
-+	 */
-+	capacity_orig = capacity_orig_of(cpu);
-+
-+	/*
-+	 * We want to force a task to fit a cpu as implied by uclamp_max.
-+	 * But we do have some corner cases to cater for..
-+	 *
-+	 *
-+	 *                                 C=z
-+	 *   |                             ___
-+	 *   |                  C=y       |   |
-+	 *   |_ _ _ _ _ _ _ _ _ ___ _ _ _ | _ | _ _ _ _ _  uclamp_max
-+	 *   |      C=x        |   |      |   |
-+	 *   |      ___        |   |      |   |
-+	 *   |     |   |       |   |      |   |    (util somewhere in this region)
-+	 *   |     |   |       |   |      |   |
-+	 *   |     |   |       |   |      |   |
-+	 *   +----------------------------------------
-+	 *         cpu0        cpu1       cpu2
-+	 *
-+	 *   In the above example if a task is capped to a specific performance
-+	 *   point, y, then when:
-+	 *
-+	 *   * util = 80% of x then it does not fit on cpu0 and should migrate
-+	 *     to cpu1
-+	 *   * util = 80% of y then it is forced to fit on cpu1 to honour
-+	 *     uclamp_max request.
-+	 *
-+	 *   which is what we're enforcing here. A task always fits if
-+	 *   uclamp_max <= capacity_orig. But when uclamp_max > capacity_orig,
-+	 *   the normal upmigration rules should withhold still.
-+	 *
-+	 *   Only exception is when we are on max capacity, then we need to be
-+	 *   careful not to block overutilized state. This is so because:
-+	 *
-+	 *     1. There's no concept of capping at max_capacity! We can't go
-+	 *        beyond this performance level anyway.
-+	 *     2. The system is being saturated when we're operating near
-+	 *        max_capacity, it doesn't make sense to block overutilized.
-+	 */
-+	max_capacity = (capacity_orig == SCHED_CAPACITY_SCALE) && (uclamp_max == SCHED_CAPACITY_SCALE);
-+	uclamp_max_fits = !max_capacity && (uclamp_max <= capacity_orig);
-+	fits = fits || uclamp_max_fits;
-+
-+	/*
-+	 *
-+	 *                                 C=z
-+	 *   |                             ___       (region a, capped, util >= uclamp_max)
-+	 *   |                  C=y       |   |
-+	 *   |_ _ _ _ _ _ _ _ _ ___ _ _ _ | _ | _ _ _ _ _ uclamp_max
-+	 *   |      C=x        |   |      |   |
-+	 *   |      ___        |   |      |   |      (region b, uclamp_min <= util <= uclamp_max)
-+	 *   |_ _ _|_ _|_ _ _ _| _ | _ _ _| _ | _ _ _ _ _ uclamp_min
-+	 *   |     |   |       |   |      |   |
-+	 *   |     |   |       |   |      |   |      (region c, boosted, util < uclamp_min)
-+	 *   +----------------------------------------
-+	 *         cpu0        cpu1       cpu2
-+	 *
-+	 * a) If util > uclamp_max, then we're capped, we don't care about
-+	 *    actual fitness value here. We only care if uclamp_max fits
-+	 *    capacity without taking margin/pressure into account.
-+	 *    See comment above.
-+	 *
-+	 * b) If uclamp_min <= util <= uclamp_max, then the normal
-+	 *    fits_capacity() rules apply. Except we need to ensure that we
-+	 *    enforce we remain within uclamp_max, see comment above.
-+	 *
-+	 * c) If util < uclamp_min, then we are boosted. Same as (b) but we
-+	 *    need to take into account the boosted value fits the CPU without
-+	 *    taking margin/pressure into account.
-+	 *
-+	 * Cases (a) and (b) are handled in the 'fits' variable already. We
-+	 * just need to consider an extra check for case (c) after ensuring we
-+	 * handle the case uclamp_min > uclamp_max.
-+	 */
-+	uclamp_min = min(uclamp_min, uclamp_max);
-+	if (util < uclamp_min)
-+		fits = fits && (uclamp_min <= capacity_orig);
-+
-+	return fits;
++	return SCHED_CAPACITY_SCALE;
 +}
 +
- static inline int task_fits_capacity(struct task_struct *p,
- 				     unsigned long capacity)
+ static inline
+ unsigned long uclamp_rq_util_with(struct rq *rq, unsigned long util,
+ 				  struct task_struct *p)
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index 8739c2a5a54e..25e6a346ad70 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -979,8 +979,8 @@ static void init_overlap_sched_group(struct sched_domain *sd,
+ 	 */
+ 	sg_span = sched_group_span(sg);
+ 	sg->sgc->capacity = SCHED_CAPACITY_SCALE * cpumask_weight(sg_span);
+-	sg->sgc->min_capacity = SCHED_CAPACITY_SCALE;
+-	sg->sgc->max_capacity = SCHED_CAPACITY_SCALE;
++	sg->sgc->min_capacity_cpu = cpumask_first(sg_span);
++	sg->sgc->max_capacity_cpu = cpumask_first(sg_span);
+ }
+ 
+ static struct sched_domain *
+@@ -1178,6 +1178,7 @@ static struct sched_group *get_group(int cpu, struct sd_data *sdd)
  {
+ 	struct sched_domain *sd = *per_cpu_ptr(sdd->sd, cpu);
+ 	struct sched_domain *child = sd->child;
++	struct cpumask *sg_span;
+ 	struct sched_group *sg;
+ 	bool already_visited;
+ 
+@@ -1186,6 +1187,7 @@ static struct sched_group *get_group(int cpu, struct sd_data *sdd)
+ 
+ 	sg = *per_cpu_ptr(sdd->sg, cpu);
+ 	sg->sgc = *per_cpu_ptr(sdd->sgc, cpu);
++	sg_span = sched_group_span(sg);
+ 
+ 	/* Increase refcounts for claim_allocations: */
+ 	already_visited = atomic_inc_return(&sg->ref) > 1;
+@@ -1197,17 +1199,17 @@ static struct sched_group *get_group(int cpu, struct sd_data *sdd)
+ 		return sg;
+ 
+ 	if (child) {
+-		cpumask_copy(sched_group_span(sg), sched_domain_span(child));
+-		cpumask_copy(group_balance_mask(sg), sched_group_span(sg));
++		cpumask_copy(sg_span, sched_domain_span(child));
++		cpumask_copy(group_balance_mask(sg), sg_span);
+ 		sg->flags = child->flags;
+ 	} else {
+-		cpumask_set_cpu(cpu, sched_group_span(sg));
++		cpumask_set_cpu(cpu, sg_span);
+ 		cpumask_set_cpu(cpu, group_balance_mask(sg));
+ 	}
+ 
+-	sg->sgc->capacity = SCHED_CAPACITY_SCALE * cpumask_weight(sched_group_span(sg));
+-	sg->sgc->min_capacity = SCHED_CAPACITY_SCALE;
+-	sg->sgc->max_capacity = SCHED_CAPACITY_SCALE;
++	sg->sgc->capacity = SCHED_CAPACITY_SCALE * cpumask_weight(sg_span);
++	sg->sgc->min_capacity_cpu = cpumask_first(sg_span);
++	sg->sgc->max_capacity_cpu = cpumask_first(sg_span);
+ 
+ 	return sg;
+ }
 -- 
 2.25.1
 

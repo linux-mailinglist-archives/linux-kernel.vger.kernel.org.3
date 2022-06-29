@@ -2,163 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01083560D16
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 01:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A07560D19
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 01:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbiF2XSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 19:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
+        id S230112AbiF2XUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 19:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbiF2XSk (ORCPT
+        with ESMTP id S229798AbiF2XUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 19:18:40 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6314220D3
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 16:18:37 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id g20-20020a17090a579400b001ed52939d72so976504pji.4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 16:18:37 -0700 (PDT)
+        Wed, 29 Jun 2022 19:20:07 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8FA220D3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 16:20:05 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id g39-20020a05600c4ca700b003a03ac7d540so540373wmp.3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 16:20:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WCZ9XmbAa/JAaxeY8vzw1f1J/PDv98SAx+RwG4qaGQk=;
-        b=C1KyJQUYnz02b4RXDHNAvvaFDVfmkjh0FZyapJ//Hk32EKNpWSoI4dsCbp7qtx/HjF
-         fGtYM34+ke+USyOn/O4kr7ePGw/Glq/xc89kSuVYmAq63cNR3Vn4PXOKbwUAvn4JONuI
-         ANuXFQp1YAvtghzJEQO/Dawt3234kthqcqYGcDAETkcjDUlo5sEIgqK5D7JG8Qpb7ITq
-         wX28a0JIk34aRJnrulRoqMNR4ASTf4mdFG4Vm7PO/SV8+IZwHCnvMc9lMEEXjJuiFMeA
-         YEmDFNaPZpAoLmLagn16yb8qoR0rseYVni/T4dNThyT0l4vdf+51+B9pC1PpXBwVmiG7
-         vy/g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+sgKiiXbPvFwyYU8o7PbhLKBAM5khScy7fiUEj1PWbo=;
+        b=ZS8pZ8AkCzaaVPMBMBlNMb7xmEcWyThMpKD4H9SxTn4aRlFL+W90lgmPz6YW6AqbTK
+         az6lnnWR+9t97ButIT3JuiD5TuQ7VjYn19RAuDFGSrHNamK8if1SUysJ+ITjgK4tSHJi
+         1GSlaNpR1IgPbvhoKBLigo1nSTHF/oMFj+7QVBiS93FHum9BPPx/cfy13jaj0mmZeBSe
+         zOm9tqbWAwZ4ITlZMiIu/xcywPZWzBgma5twMf0dYBrIKBpvzJZOBsCw5XLqURKl6bVk
+         JotXGD0fZz41OwPVNs1Q4qsbZYKIXdP64yXX0zAAeM5jRRvpwsRCJIO3yodRkRyxWVwV
+         Ta6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WCZ9XmbAa/JAaxeY8vzw1f1J/PDv98SAx+RwG4qaGQk=;
-        b=b+sMFAau/vDVGOKlamX9J5YvtWqMije6XiKGwalggRczHmUQzBM7/0vlkKumRr1bBI
-         ZSyiuePkv1PlRyd5ScEogB6GkyIF8Z/NseoZd3JGgDeict6EHMfnh/3rUnzzdArubq/w
-         eKbkjJyUIPFmQoeXYA6NgWmphCTOBvDB4gUPkBYgygnOP73A91MoKDgVytewsXa2AYLL
-         E0jybeXTlZ+vE+R3EGXgWfKXHxk9I44h3PQYUUZMTmT25v4Jro5y4Xq6ouQiE60PFK1W
-         YlNVMb/oVYNzEYjtjHmtVOmdlCVCYOyer2jon7m8qArr0RI5INnZHfmr2mEkVjkxsUJa
-         gfyg==
-X-Gm-Message-State: AJIora9OoVKcUJ3t6HsZVRL6R/i7vzUEYE0aOM53ZceBISCw4dQY8JPk
-        5hMMG928nUIRIzuS3Mby6Hblyg==
-X-Google-Smtp-Source: AGRyM1sSEsY/MmnYvfXLmBXPUMl+8nOa0/dAqS9qoVWFguDNOEdCu3wU0KNwoxXIKifvIu3ekKqGIg==
-X-Received: by 2002:a17:90a:5509:b0:1ec:caf4:b327 with SMTP id b9-20020a17090a550900b001eccaf4b327mr8333381pji.129.1656544717040;
-        Wed, 29 Jun 2022 16:18:37 -0700 (PDT)
-Received: from google.com (249.189.233.35.bc.googleusercontent.com. [35.233.189.249])
-        by smtp.gmail.com with ESMTPSA id p26-20020a634f5a000000b0040dfb0857a0sm6688974pgl.78.2022.06.29.16.18.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 16:18:36 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 23:18:33 +0000
-From:   William McVicker <willmcvicker@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     stable@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        kernel-team@android.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH 4.19 v1 1/2] hwmon: Introduce
- hwmon_device_register_for_thermal
-Message-ID: <YrzdyUm/xlJPldwP@google.com>
-References: <20220629225843.332453-1-willmcvicker@google.com>
- <20220629225843.332453-2-willmcvicker@google.com>
- <d4a85598-af50-541a-9632-8d0343e8082d@roeck-us.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+sgKiiXbPvFwyYU8o7PbhLKBAM5khScy7fiUEj1PWbo=;
+        b=ocl/IWKaoRT59PBQ9xw7PywJhzTvcSwer0mSLYd7iqVSFtcV2hBBpwNPk/R6GocoKt
+         8koBp/GynRluwiZ6ILDXc++UsUGP2nNeFIph4ZTEC7YEGtBFNHF52dddg/bHYEsyRp21
+         EtLuRR7R1DXAJctlUNqrYXhxaTBWGJ7dnZjD7r8W9Zbaexpzwx1pLttJkCqVnV7rLOk0
+         C2cvXqaA0v8K+8pM4t9t79pFvV5NkNTcifAKcQE8A08nXbiJCUmCqbgGAQ0V1PhI9L7o
+         VAd8GmWsF4QrhhEvzc4yU0O0wSE+KAoxd7Tjvr+1T6kdLAYe9rg4I96afu2ZRA41xIAJ
+         KIjA==
+X-Gm-Message-State: AJIora9jMyztO8uqd87Dm5qkktFcGs+IUtk9bgQH7fpuGX1fXCO6NvID
+        5uVG0gAWw+2YOaqv75vEyLR/bevctJMIuv8cH98RFw==
+X-Google-Smtp-Source: AGRyM1sfkNAdLMD1HYwGLNTvaIF0Dst/TgdO4rRRnXhlJE6YhvrqSGBP68be1nutxJacar9qONmUp2Galr2SkNF40y4=
+X-Received: by 2002:a05:600c:4081:b0:3a0:47c4:8dd0 with SMTP id
+ k1-20020a05600c408100b003a047c48dd0mr6134358wmh.178.1656544804063; Wed, 29
+ Jun 2022 16:20:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d4a85598-af50-541a-9632-8d0343e8082d@roeck-us.net>
-X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+References: <20220629161020.GA24891@lst.de> <Yrx6EVHtroXeEZGp@zx2c4.com>
+ <20220629161527.GA24978@lst.de> <Yrx8/Fyx15CTi2zq@zx2c4.com>
+ <20220629163007.GA25279@lst.de> <Yrx/8UOY+J8Ao3Bd@zx2c4.com>
+ <YryNQvWGVwCjJYmB@zx2c4.com> <Yryic4YG9X2/DJiX@google.com>
+ <Yry6XvOGge2xKx/n@zx2c4.com> <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
+ <YrzaCRl9rwy9DgOC@zx2c4.com>
+In-Reply-To: <YrzaCRl9rwy9DgOC@zx2c4.com>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Wed, 29 Jun 2022 16:19:52 -0700
+Message-ID: <CAC_TJvcEzp+zQp50wtj4=7b6vEObpJCQYLaTLhHJCxFdk3TgPg@mail.gmail.com>
+Subject: Re: [PATCH] remove CONFIG_ANDROID
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, rcu <rcu@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, sultan@kerneltoast.com,
+        android-kernel-team <android-kernel-team@google.com>,
+        John Stultz <jstultz@google.com>,
+        Saravana Kannan <saravanak@google.com>, rafael@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
-        version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/29/2022, Guenter Roeck wrote:
-> On 6/29/22 15:58, Will McVicker wrote:
-> > From: Guenter Roeck <linux@roeck-us.net>
-> > 
-> > [ upstream commit e5d21072054fbadf41cd56062a3a14e447e8c22b ]
-> > 
-> > The thermal subsystem registers a hwmon driver without providing
-> > chip or sysfs group information. This is for legacy reasons and
-> > would be difficult to change. At the same time, we want to enforce
-> > that chip information is provided when registering a hwmon device
-> > using hwmon_device_register_with_info(). To enable this, introduce
-> > a special API for use only by the thermal subsystem.
-> > 
-> > Acked-by: Rafael J . Wysocki <rafael@kernel.org>
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> NACK. The patch introducing the problem needs to be reverted.
+On Wed, Jun 29, 2022 at 4:02 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Hi Kalesh,
+>
+> On Wed, Jun 29, 2022 at 03:26:33PM -0700, Kalesh Singh wrote:
+> > Thanks for taking a look. I'm concerned holding the sys/power/state
+> > open would have unintentional side effects. Adding the
+> > /sys/power/userspace_autosuspender seems more appropriate. We don't
+> > have a use case for the refcounting, so would prefer the simpler
+> > writing '0' / '1' to toggle semantics.
+>
+> Alright. So I've cooked you up some code that you can submit, since I
+> assume based on Christoph's bristliness that he won't do so. The below
+> adds /sys/power/pm_userspace_autosleeper, which you can write a 0 or a 1
+> into, and fixes up wireguard and random.c to use it. The code is
+> untested, but should generally be the correct thing, I think.
+>
+> So in order of operations:
+>
+> 1. You write a patch for SystemSuspend.cpp and post it on Gerrit.
+>
+> 2. You take the diff below, clean it up or bikeshed the naming a bit or
+>    do whatever there, and submit it to Rafael's PM tree, including as a
+>    `Link: ...` this thread and the Gerrit link.
+>
+> 3. When/if Rafael accepts the patch, you submit the Gerrit CL.
+>
+> 4. When both have landed, Christoph moves forward with his
+>    CONFIG_ANDROID removal.
+>
+> Does that seem like a reasonable way forward?
 
-I'm fine with that as well. I've already verified that fixes the issue. I'll go
-ahead and send the revert.
+Sounds like a plan. I'll clean up and repost your patch once the
+Gerrit change is ready.
 
 Thanks,
-Will
-
-> 
-> Guenter
-> 
-> > ---
-> >   drivers/hwmon/hwmon.c | 25 +++++++++++++++++++++++++
-> >   include/linux/hwmon.h |  3 +++
-> >   2 files changed, 28 insertions(+)
-> > 
-> > diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> > index c4051a3e63c2..412a5e39fc14 100644
-> > --- a/drivers/hwmon/hwmon.c
-> > +++ b/drivers/hwmon/hwmon.c
-> > @@ -725,6 +725,31 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
-> >   }
-> >   EXPORT_SYMBOL_GPL(hwmon_device_register_with_info);
-> > +/**
-> > + * hwmon_device_register_for_thermal - register hwmon device for thermal subsystem
-> > + * @dev: the parent device
-> > + * @name: hwmon name attribute
-> > + * @drvdata: driver data to attach to created device
-> > + *
-> > + * The use of this function is restricted. It is provided for legacy reasons
-> > + * and must only be called from the thermal subsystem.
-> > + *
-> > + * hwmon_device_unregister() must be called when the device is no
-> > + * longer needed.
-> > + *
-> > + * Returns the pointer to the new device.
-> > + */
-> > +struct device *
-> > +hwmon_device_register_for_thermal(struct device *dev, const char *name,
-> > +				  void *drvdata)
-> > +{
-> > +	if (!name || !dev)
-> > +		return ERR_PTR(-EINVAL);
-> > +
-> > +	return __hwmon_device_register(dev, name, drvdata, NULL, NULL);
-> > +}
-> > +EXPORT_SYMBOL_GPL(hwmon_device_register_for_thermal);
-> > +
-> >   /**
-> >    * hwmon_device_register - register w/ hwmon
-> >    * @dev: the device to register
-> > diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-> > index 8fde789f2eff..5ff3db6eb9f1 100644
-> > --- a/include/linux/hwmon.h
-> > +++ b/include/linux/hwmon.h
-> > @@ -390,6 +390,9 @@ hwmon_device_register_with_info(struct device *dev,
-> >   				const struct hwmon_chip_info *info,
-> >   				const struct attribute_group **extra_groups);
-> >   struct device *
-> > +hwmon_device_register_for_thermal(struct device *dev, const char *name,
-> > +				  void *drvdata);
-> > +struct device *
-> >   devm_hwmon_device_register_with_info(struct device *dev,
-> >   				const char *name, void *drvdata,
-> >   				const struct hwmon_chip_info *info,
-> 
+Kalesh
+>
+> Jason
+>
+> diff --git a/drivers/char/random.c b/drivers/char/random.c
+> index e3dd1dd3dd22..c25e3be10d9c 100644
+> --- a/drivers/char/random.c
+> +++ b/drivers/char/random.c
+> @@ -756,7 +756,7 @@ static int random_pm_notification(struct notifier_block *nb, unsigned long actio
+>
+>         if (crng_ready() && (action == PM_RESTORE_PREPARE ||
+>             (action == PM_POST_SUSPEND &&
+> -            !IS_ENABLED(CONFIG_PM_AUTOSLEEP) && !IS_ENABLED(CONFIG_ANDROID)))) {
+> +            !IS_ENABLED(CONFIG_PM_AUTOSLEEP) && !pm_userspace_autosleeper_enabled))) {
+>                 crng_reseed();
+>                 pr_notice("crng reseeded on system resumption\n");
+>         }
+> diff --git a/drivers/net/wireguard/device.c b/drivers/net/wireguard/device.c
+> index aa9a7a5970fd..1983e0fadb6e 100644
+> --- a/drivers/net/wireguard/device.c
+> +++ b/drivers/net/wireguard/device.c
+> @@ -69,7 +69,7 @@ static int wg_pm_notification(struct notifier_block *nb, unsigned long action, v
+>          * its normal operation rather than as a somewhat rare event, then we
+>          * don't actually want to clear keys.
+>          */
+> -       if (IS_ENABLED(CONFIG_PM_AUTOSLEEP) || IS_ENABLED(CONFIG_ANDROID))
+> +       if (IS_ENABLED(CONFIG_PM_AUTOSLEEP) || pm_userspace_autosleeper_enabled)
+>                 return 0;
+>
+>         if (action != PM_HIBERNATION_PREPARE && action != PM_SUSPEND_PREPARE)
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index 70f2921e2e70..0acff26f87b4 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -498,6 +498,7 @@ extern void ksys_sync_helper(void);
+>  /* drivers/base/power/wakeup.c */
+>  extern bool events_check_enabled;
+>  extern suspend_state_t pm_suspend_target_state;
+> +extern bool pm_userspace_autosleeper_enabled;
+>
+>  extern bool pm_wakeup_pending(void);
+>  extern void pm_system_wakeup(void);
+> @@ -537,6 +538,8 @@ static inline void pm_system_irq_wakeup(unsigned int irq_number) {}
+>  static inline void lock_system_sleep(void) {}
+>  static inline void unlock_system_sleep(void) {}
+>
+> +#define pm_userspace_autosleeper_enabled (false)
+> +
+>  #endif /* !CONFIG_PM_SLEEP */
+>
+>  #ifdef CONFIG_PM_SLEEP_DEBUG
+> diff --git a/kernel/power/main.c b/kernel/power/main.c
+> index e3694034b753..08f32a281010 100644
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -120,6 +120,23 @@ static ssize_t pm_async_store(struct kobject *kobj, struct kobj_attribute *attr,
+>
+>  power_attr(pm_async);
+>
+> +bool pm_userspace_autosleeper_enabled;
+> +
+> +static ssize_t pm_userspace_autosleeper_show(struct kobject *kobj,
+> +                               struct kobj_attribute *attr, char *buf)
+> +{
+> +       return sprintf(buf, "%d\n", pm_userspace_autosleeper_enabled);
+> +}
+> +
+> +static ssize_t pm_userspace_autosleeper_store(struct kobject *kobj,
+> +                                   struct kobj_attribute *attr,
+> +                                   const char *buf, size_t n)
+> +{
+> +       return kstrtobool(buf, &pm_userspace_autosleeper_enabled);
+> +}
+> +
+> +power_attr(pm_userspace_autosleeper);
+> +
+>  #ifdef CONFIG_SUSPEND
+>  static ssize_t mem_sleep_show(struct kobject *kobj, struct kobj_attribute *attr,
+>                               char *buf)
+> @@ -869,6 +886,7 @@ static struct attribute * g[] = {
+>  #ifdef CONFIG_PM_SLEEP
+>         &pm_async_attr.attr,
+>         &wakeup_count_attr.attr,
+> +       &pm_userspace_autosleeper.attr,
+>  #ifdef CONFIG_SUSPEND
+>         &mem_sleep_attr.attr,
+>         &sync_on_suspend_attr.attr,
+>

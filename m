@@ -2,243 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C531655F2DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 03:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F52755F2E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 03:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiF2BiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 21:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
+        id S230024AbiF2Bin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 21:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbiF2BiB (ORCPT
+        with ESMTP id S229475AbiF2Bim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 21:38:01 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B50C25C7C
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 18:38:00 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id d129so13839739pgc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 18:38:00 -0700 (PDT)
+        Tue, 28 Jun 2022 21:38:42 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE022253A;
+        Tue, 28 Jun 2022 18:38:40 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id a2so25381746lfg.5;
+        Tue, 28 Jun 2022 18:38:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=B/rmAtCN4xhbTruy/kKzU4deS9vyR1apssQp48swO/Y=;
-        b=F4AZdi3dufqhHtQjbsJ5UQrxRzPn3OOEbVc6Pg6yoKHZpURIcImvG+ZzmA8gkeJSBd
-         FvncbqzlLAmer5vo/FWVthpOJ2il60DlLJq8ruVneUSkEkiN42CosPh8fnMIumxYEqUy
-         BZheZ0JDvffliA3ORDaIE2poYmLQQmEvLyrnAHnzpaBUogVvZatGacEPLeQ4ZDyegyCU
-         JnoYhB2DSa1tsES8S5NotwVaiL+hTIXu4VRq4i2Rac5EgJjzPbKa0KX6ZHfrau3mb8Hb
-         h5cCVIgOHZlSQRx9IRF+yFZ7FzMdIHmkZe1BGCUq9Tc2mYdc+rNQzK+OCFmpfAsLKk7I
-         IW6A==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Eonjr0R2gJ4d+xqZQdJN+tFnlG8Bv2N89tocGdDg4co=;
+        b=CEedd4KawuwG3Z1YZRU9mXIDBQ1zsG1LrrGYDu62dYG5MnpbveLHcQzizCfBuhrbgR
+         StaOVLkHSuyYYoMfl+c4/SVXVZhxScT35t0eHqRiTbKacJhZSWOIv8/0owaUTtL1eSQy
+         xrax/6z7eqSS39lH58BZx4tI1bWOTmxSzerPYHGDqrSRW1ddV98coy0Dq2URENEfSf1Z
+         9wuLkJgGdqsTajQk3TFXzcEp/gdjneLObRRSYn4wKpe5Z8d2j5Z4b1r3MF9GBV46yf3e
+         rAcEZXr/F8p76U0AqMYXporkh3jywDAkLxh6CVrQ7MIXag411oaq7hbU9qFWzzWOSjXF
+         a/DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=B/rmAtCN4xhbTruy/kKzU4deS9vyR1apssQp48swO/Y=;
-        b=kReHT4OU0eO1Bf2BoiHQqXF/hPHuaOOPFdt3kPMzmQFo9qEu49yU8ki1qS1GObUlrJ
-         zjTf2jwpmX9Six8kuV4RO8vePDXdNJD6Q0KX2tTZOmK1E7Wp3P+pL9LtyS+DYxOARzT8
-         yMCx4KcQV7fJT1HjkzDZTa+b3GhTzS5f55lKi59S7FytECfvLrHiS/LuzMJTPLTNzdCP
-         y4xSBBKmGXtYuATY7E3xHrIl2cP1sBtJ2WBTJBYkIc021tvbWN62AyH+8sro3u3/TFhH
-         bopcfKIKhw1cKybuS0CS9vTS+R7DCQA+4+usjFiXoamgNkKrzmZSRduCx7dkY1Ybh5N+
-         YOzQ==
-X-Gm-Message-State: AJIora+iJpunlQ3r7dkffbSu94bsZ5PiIwj8MiimQNpZmvw8WwdePly7
-        weRVNAPJK+P9HMfin4kvVrk3pMu7e2HA7biy
-X-Google-Smtp-Source: AGRyM1t3bagrQ1MWzv+FaiEOYOQSnQwYY8FXj9+z+0EJgaseNI/LAMhT3HsxtFxRK5YemPbYejQUXQ==
-X-Received: by 2002:a63:2a4f:0:b0:40d:997:557f with SMTP id q76-20020a632a4f000000b0040d0997557fmr815282pgq.42.1656466679422;
-        Tue, 28 Jun 2022 18:37:59 -0700 (PDT)
-Received: from [10.70.253.98] ([139.177.225.230])
-        by smtp.gmail.com with ESMTPSA id q13-20020aa7960d000000b00525161431f5sm10080427pfg.36.2022.06.28.18.37.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 18:37:59 -0700 (PDT)
-Message-ID: <3c0a8ef1-6450-4eb0-edb4-c7cd31790a85@bytedance.com>
-Date:   Wed, 29 Jun 2022 09:37:54 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Eonjr0R2gJ4d+xqZQdJN+tFnlG8Bv2N89tocGdDg4co=;
+        b=6j5uiUlZ+DVbjIpO5daPLCXzLQQWJqirUrR6XjkNgoUs9SfqtViZtrtu9cz1B2cNvs
+         aOFLz1VDIWBCKDMM9I+0h5LbNhKqjQHM/sQr9fZKbYFYTgrY/Fp2ESIyMUmYuUs+AlF2
+         aWm34p1KbmNKfEVnPXXWqO9YeWu4t3ydlgoRBiRNRR1iGZnASwCoHm7TB4gt/NNS08Vh
+         X59rQO3Rb+9JlLTpIo5Ixk8ZyU87JcAUv6tE2WmsNpMkK89tn5WOJ/2HBm3QvuSxDycc
+         blfbxXWMhJAQAoqtYYzQl/qBqtK2dJy9yDO0SBHWzuBsqIoDIh7zp9Mpn+LMPnsshhqc
+         Z//Q==
+X-Gm-Message-State: AJIora/rc8IBtxfFOEX/W9bdqtMwsqdRQ9ntH7aeIJZPI3xLr0xlqACi
+        sidBF0DMD//iwRwpYRxigNQ=
+X-Google-Smtp-Source: AGRyM1vCh7h+F+PkIIZymSQsxvwBlXlgfzG2FjrtO2VihiHhJ+EQ85Y0uGT49pSGf/eH2CmyqMf2DQ==
+X-Received: by 2002:a05:6512:39d1:b0:47f:6152:8e4 with SMTP id k17-20020a05651239d100b0047f615208e4mr447127lfu.461.1656466719086;
+        Tue, 28 Jun 2022 18:38:39 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id e16-20020a196910000000b0047f6ab55fdbsm2389288lfc.267.2022.06.28.18.38.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 18:38:38 -0700 (PDT)
+Date:   Wed, 29 Jun 2022 04:38:36 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v5 00/18] PCI: dwc: Various fixes and cleanups
+Message-ID: <20220629013836.r55ldp7s7v7acsbs@mobilestation>
+References: <20220624143428.8334-1-Sergey.Semin@baikalelectronics.ru>
+ <20220628233527.GA1883848@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [External] Re: [PATCH v4] sched/fair: combine detach into dequeue
- when migrating task
-Content-Language: en-US
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
-References: <20220620133608.78498-1-zhouchengming@bytedance.com>
- <CAKfTPtAUrR97jmifveYCUxmaKJ_95v+N_3DDPVdMnBwrgFdRCw@mail.gmail.com>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <CAKfTPtAUrR97jmifveYCUxmaKJ_95v+N_3DDPVdMnBwrgFdRCw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220628233527.GA1883848@bhelgaas>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, thanks for your review.
-
-On 2022/6/28 23:26, Vincent Guittot wrote:
-> On Mon, 20 Jun 2022 at 15:36, Chengming Zhou
-> <zhouchengming@bytedance.com> wrote:
->>
->> When we are migrating task out of the CPU, we can combine detach and
->> propagation into dequeue_entity() to save the detach_entity_cfs_rq()
->> -> propagate_entity_cfs_rq() call in detach_entity_cfs_rq() in
->> migrate_task_rq_fair().
->>
->> This optimization is like combining DO_ATTACH in the enqueue_entity()
->> when migrating task to the CPU.
->> -> propagate_entity_cfs_rq() call in detach_entity_cfs_rq() in
->> migrate_task_rq_fair().
->>
->>
->> So we don't have to traverse the CFS tree extra time to do the
->> detach_entity_cfs_rq() -> propagate_entity_cfs_rq() call, which
->> wouldn't be called anymore with this patch's change.
->>
->> Copied from Dietmar's much clearer comment:
+On Tue, Jun 28, 2022 at 06:35:27PM -0500, Bjorn Helgaas wrote:
+> On Fri, Jun 24, 2022 at 05:34:10PM +0300, Serge Semin wrote:
+> > This patchset is a first one in the series created in the framework of
+> > my Baikal-T1 PCIe/eDMA-related work:
+> > 
+> > [1: In-progress v5] PCI: dwc: Various fixes and cleanups
+> > Link: ---you are looking at it---
+> > [2: In-progress v3] PCI: dwc: Add hw version and dma-ranges support
+> > Link: https://lore.kernel.org/linux-pci/20220610084444.14549-1-Sergey.Semin@baikalelectronics.ru/
+> > [3: In-progress v3] PCI: dwc: Add generic resources and Baikal-T1 support
+> > Link: https://lore.kernel.org/linux-pci/20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru/
+> > [4: In-progress v3] dmaengine: dw-edma: Add RP/EP local DMA support
+> > Link: https://lore.kernel.org/linux-pci/20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru/
+> > 
+> > Note it is very recommended to merge the patchsets in the same order as
+> > they are placed in the list above in order to prevent possible merge
+> > conflicts. Nothing prevents them from being reviewed synchronously though.
+> > Any tests are very welcome!
+> > 
+> > As it can be easily inferred from the patchset title, this series is about
+> > the DW PCIe Root Port/Endpoint driver fixes and the code cleanups, where
+> > fixes come before the cleanup patches. The patchset starts with adding the
+> > stop_link() platform-specific method invocation in case of the PCIe host
+> > probe procedure errors. It has been missing in the cleanup-on-error path
+> > of the DW PCIe Host initialization method. After that the unrolled CSRs
+> > layout is added to the iATU disable procedure. In third the disable iATU
+> > procedure is fixed to be called only for the internal ATU as being
+> > specific for the internal ATU implementation. Then the outbound iATU
+> > extended region setup procedure is fixed to have the INCREASE_REGION_SIZE
+> > flag set based on the limit-address - not the region size one. The last
+> > but not least the CDM-check enabling procedure is fixed to be independent
+> > from the non-related num_lanes field state.
+> > 
+> > Afterwards there is a series of cleanups. It concerns the changes like
+> > adding braces to the multi-line if-else constructions, trailing new-lines
+> > to the print format-string, dropping unnecessary version checking, and
+> > various code simplifications and optimizations.
+> > 
+> > New features like adding two-level DT bindings abstraction, adding better
+> > structured IP-core version interface, adding iATU regions size detection
+> > and the PCIe regions verification procedure, adding dma-ranges support,
+> > introducing a set of generic platform clocks and resets and finally adding
+> > Baikal-T1 PCIe interface support will be submitted in the next part of the
+> > series.
+> > 
+> > Link: https://lore.kernel.org/linux-pci/20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru/
+> > Changelog v2:
+> > - Fix the end address of the example in the patch log with
+> >   the INCREASE_REGION_SIZE flag usage fixup. It should be
+> >   0x1000FFFF and not 0x0000FFFF (@Manivannan).
+> > - Add the cleanup-on-error path to the dw_pcie_ep_init() function.
+> >   (@Manivannan)
+> > 
+> > Link: https://lore.kernel.org/linux-pci/20220503212300.30105-1-Sergey.Semin@baikalelectronics.ru/
+> > Changelog v3:
+> > - Convert region variable type to u32 in order to fix the implicit type
+> >   conversion peculiarity. (@kbot)
+> > - Rebase onto v5.18-rc6.
+> > 
+> > Link: https://lore.kernel.org/linux-pci/20220517125058.18488-1-Sergey.Semin@baikalelectronics.ru/
+> > Changelog v4:
+> > - Move the patch "PCI: dwc: Deallocate EPC memory on EP init error" to
+> >   being applied before the cleanup patches.
+> > - Add a new fixes patch: "PCI: dwc: Enable CDM-check independently from
+> >   the num_lanes value".
+> > - Add a new cleanup patch: "PCI: dwc: Organize local variables usage".
+> > - Add a new cleanup patch: "PCI: dwc: Re-use local pointer to the
+> >   resource data".
+> > - Add a new cleanup patch: "PCI: dwc: Add start_link/stop_link inliners".
+> > - Add a new cleanup patch: "PCI: dwc: Move io_cfg_atu_shared to the Root
+> >   Port descriptor".
+> > - Add a new cleanup patch: "PCI: dwc: Add dw_ prefix to the pcie_port
+> >   structure name".
+> > - Drop the patch "PCI: dwc: Don't use generic IO-ops for DBI-space
+> >   access". (@Rob)
+> > - Drop Manivannan tested tag from the changed patches.
+> > - Rebase onto v5.18.
+> > 
+> > Link: https://lore.kernel.org/linux-pci/20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru/
+> > Changelog v5:
+> > - Just resend the series.
+> > - Rebase onto v5.19-rcX.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+> > Cc: Jingoo Han <jingoohan1@gmail.com>
+> > Cc: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+> > Cc: "Krzysztof Wilczyński" <kw@linux.com>
+> > Cc: Frank Li <Frank.Li@nxp.com>
+> > Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > Cc: linux-pci@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
 > 
-> Although It's nice to keep the author of a comment, it should not be
-> part of the commit message.
 
-Ok, I will delete this.
+> I applied these to pci/ctrl/dwc-fixes for now.  We'll have some tweaks
+> (to merge with previous dwc changes, if nothing else), but I pushed
+> this interim version 
 
-> 
->> detach_task()
->>   deactivate_task()
->>     dequeue_task_fair()
->>       for_each_sched_entity(se)
->>         dequeue_entity()
->>           update_load_avg()   /* (1) */
->               detach_entity_load_avg()
-> 
->> set_task_cpu()
->>  migrate_task_rq_fair()
->>    detach_entity_cfs_rq() /* (2) */
->        update_load_avg();
->        detach_entity_load_avg();
->        propagate_entity_cfs_rq();
->          for_each_sched_entity()
->            update_load_avg()
-> 
-> Could you add the full call stack so we can see more easily the extra
-> loop that is saved
+I've got three more DW PCIe+eDMA based patchsets to review and merge in.
+As I noted in the cover letter and graphically represented here:
+Link: https://lore.kernel.org/linux-pci/20220616152048.gcqacgs2ed66vsl4@mobilestation/
+the last series depends on the previous changes and the changes
+introduced by Frank Li. The Frank' work has been merged in into the
+branch 'pci/edma' of your repo. Could you please move my patchset(s)
+there too in order to avoid merge conflicts in future?
 
-Good advice, I will add it.
+> since I'll be on vacation for a week or so.
+> 
+
+* Sigh... I have a feeling one more merge window will pass with
+my patchsets hanging out in limbo.
+
+> Looks like some nice fixes and cleanups, thank you!
 
 Thanks.
 
->>
->> This patch save the propagate_entity_cfs_rq(&p->se) call from (2)
->> by doing the detach_entity_load_avg(), update_tg_load_avg() for
->> a migrating task inside (1) (the task being the first se in the loop)
->>
->> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+-Sergey
+
 > 
-> Apart the small nit above:
-> 
-> Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-> 
->> ---
->> v4:
->>  - change the commit message a little.
->>  - remove the forward declaration of detach_entity_cfs_rq()
->>  - remove verbose comments in code.
->>
->> v3:
->>  - change to use task_on_rq_migrating() and put Dietmar's much clearer
->>    description in the commit message. Thanks!
->>
->> v2:
->>  - fix !CONFIG_SMP build error
->> ---
->>  kernel/sched/fair.c | 30 +++++++++++++++++-------------
->>  1 file changed, 17 insertions(+), 13 deletions(-)
->>
->> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->> index 8bed75757e65..31d53c11e244 100644
->> --- a/kernel/sched/fair.c
->> +++ b/kernel/sched/fair.c
->> @@ -3931,6 +3931,7 @@ static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
->>  #define UPDATE_TG      0x1
->>  #define SKIP_AGE_LOAD  0x2
->>  #define DO_ATTACH      0x4
->> +#define DO_DETACH      0x8
->>
->>  /* Update task and its cfs_rq load average */
->>  static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
->> @@ -3948,7 +3949,14 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
->>         decayed  = update_cfs_rq_load_avg(now, cfs_rq);
->>         decayed |= propagate_entity_load_avg(se);
->>
->> -       if (!se->avg.last_update_time && (flags & DO_ATTACH)) {
->> +       if (flags & DO_DETACH) {
->> +               /*
->> +                * DO_DETACH means we're here from dequeue_entity()
->> +                * and we are migrating task out of the CPU.
->> +                */
->> +               detach_entity_load_avg(cfs_rq, se);
->> +               update_tg_load_avg(cfs_rq);
->> +       } else if (!se->avg.last_update_time && (flags & DO_ATTACH)) {
->>
->>                 /*
->>                  * DO_ATTACH means we're here from enqueue_entity().
->> @@ -4241,6 +4249,7 @@ static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
->>  #define UPDATE_TG      0x0
->>  #define SKIP_AGE_LOAD  0x0
->>  #define DO_ATTACH      0x0
->> +#define DO_DETACH      0x0
->>
->>  static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int not_used1)
->>  {
->> @@ -4460,6 +4469,11 @@ static __always_inline void return_cfs_rq_runtime(struct cfs_rq *cfs_rq);
->>  static void
->>  dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
->>  {
->> +       int action = UPDATE_TG;
->> +
->> +       if (entity_is_task(se) && task_on_rq_migrating(task_of(se)))
->> +               action |= DO_DETACH;
->> +
->>         /*
->>          * Update run-time statistics of the 'current'.
->>          */
->> @@ -4473,7 +4487,7 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
->>          *   - For group entity, update its weight to reflect the new share
->>          *     of its group cfs_rq.
->>          */
->> -       update_load_avg(cfs_rq, se, UPDATE_TG);
->> +       update_load_avg(cfs_rq, se, action);
->>         se_update_runnable(se);
->>
->>         update_stats_dequeue_fair(cfs_rq, se, flags);
->> @@ -6938,8 +6952,6 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
->>         return new_cpu;
->>  }
->>
->> -static void detach_entity_cfs_rq(struct sched_entity *se);
->> -
->>  /*
->>   * Called immediately before a task is migrated to a new CPU; task_cpu(p) and
->>   * cfs_rq_of(p) references at time of call are still valid and identify the
->> @@ -6973,15 +6985,7 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
->>                 se->vruntime -= min_vruntime;
->>         }
->>
->> -       if (p->on_rq == TASK_ON_RQ_MIGRATING) {
->> -               /*
->> -                * In case of TASK_ON_RQ_MIGRATING we in fact hold the 'old'
->> -                * rq->lock and can modify state directly.
->> -                */
->> -               lockdep_assert_rq_held(task_rq(p));
->> -               detach_entity_cfs_rq(&p->se);
->> -
->> -       } else {
->> +       if (!task_on_rq_migrating(p)) {
->>                 /*
->>                  * We are supposed to update the task to "current" time, then
->>                  * its up to date and ready to go to new CPU/cfs_rq. But we
->> --
->> 2.36.1
->>
+> > Serge Semin (18):
+> >   PCI: dwc: Stop link in the host init error and de-initialization
+> >   PCI: dwc: Add unroll iATU space support to the regions disable method
+> >   PCI: dwc: Disable outbound windows for controllers with iATU
+> >   PCI: dwc: Set INCREASE_REGION_SIZE flag based on limit address
+> >   PCI: dwc: Deallocate EPC memory on EP init error
+> >   PCI: dwc: Enable CDM-check independently from the num_lanes value
+> >   PCI: dwc: Add braces to the multi-line if-else statements
+> >   PCI: dwc: Add trailing new-line literals to the log messages
+> >   PCI: dwc: Discard IP-core version checking on unrolled iATU detection
+> >   PCI: dwc: Convert Link-up status method to using dw_pcie_readl_dbi()
+> >   PCI: dwc: Organize local variables usage
+> >   PCI: dwc: Re-use local pointer to the resource data
+> >   PCI: dwc: Add start_link/stop_link inliners
+> >   PCI: dwc: Move io_cfg_atu_shared to the Root Port descriptor
+> >   PCI: dwc: Add dw_ prefix to the pcie_port structure name
+> >   PCI: dwc-plat: Simplify the probe method return value handling
+> >   PCI: dwc-plat: Discard unused regmap pointer
+> >   PCI: dwc-plat: Drop dw_plat_pcie_of_match forward declaration
+> > 
+> >  drivers/pci/controller/dwc/pci-dra7xx.c       |  12 +--
+> >  drivers/pci/controller/dwc/pci-exynos.c       |   6 +-
+> >  drivers/pci/controller/dwc/pci-imx6.c         |   6 +-
+> >  drivers/pci/controller/dwc/pci-keystone.c     |  20 ++--
+> >  .../pci/controller/dwc/pci-layerscape-ep.c    |  12 ---
+> >  drivers/pci/controller/dwc/pci-layerscape.c   |   2 +-
+> >  drivers/pci/controller/dwc/pci-meson.c        |   2 +-
+> >  drivers/pci/controller/dwc/pcie-al.c          |   6 +-
+> >  drivers/pci/controller/dwc/pcie-armada8k.c    |   4 +-
+> >  drivers/pci/controller/dwc/pcie-artpec6.c     |   4 +-
+> >  .../pci/controller/dwc/pcie-designware-ep.c   |  30 ++++--
+> >  .../pci/controller/dwc/pcie-designware-host.c | 102 ++++++++++--------
+> >  .../pci/controller/dwc/pcie-designware-plat.c |  25 ++---
+> >  drivers/pci/controller/dwc/pcie-designware.c  |  72 +++++++------
+> >  drivers/pci/controller/dwc/pcie-designware.h  |  46 +++++---
+> >  drivers/pci/controller/dwc/pcie-dw-rockchip.c |   4 +-
+> >  drivers/pci/controller/dwc/pcie-fu740.c       |   2 +-
+> >  drivers/pci/controller/dwc/pcie-histb.c       |  10 +-
+> >  drivers/pci/controller/dwc/pcie-intel-gw.c    |   6 +-
+> >  drivers/pci/controller/dwc/pcie-keembay.c     |   4 +-
+> >  drivers/pci/controller/dwc/pcie-kirin.c       |   2 +-
+> >  drivers/pci/controller/dwc/pcie-qcom.c        |   4 +-
+> >  drivers/pci/controller/dwc/pcie-spear13xx.c   |   6 +-
+> >  drivers/pci/controller/dwc/pcie-tegra194.c    |  22 ++--
+> >  drivers/pci/controller/dwc/pcie-uniphier.c    |  10 +-
+> >  drivers/pci/controller/dwc/pcie-visconti.c    |   6 +-
+> >  26 files changed, 224 insertions(+), 201 deletions(-)
+> > 
+> > -- 
+> > 2.35.1
+> > 

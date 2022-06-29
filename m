@@ -2,95 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB889560380
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8C8560385
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233761AbiF2OnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 10:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
+        id S232883AbiF2OoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 10:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233719AbiF2OnK (ORCPT
+        with ESMTP id S232039AbiF2OoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 10:43:10 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0745E3B3CA;
-        Wed, 29 Jun 2022 07:43:07 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id 9so15522185pgd.7;
-        Wed, 29 Jun 2022 07:43:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vU9PWXYSCVwK2HD98Bi9RXzfkNEc3MlCdXuIzL8BLjM=;
-        b=kV6S0dTR7qBF+hKPQ4ZyGIcqI/5ELsMXybZok4HWcmFXwY6P6QV4iPlXVSLEPRaGH/
-         Iig55w+hsRJAHCFCrBJAILTTA+vKZKvTNJYKLnEm/WKetu74Wcfv5uSOHO7bwL4Xj94w
-         MdUpmSNHIfPjReEJDpXlqxM8RQH4+NmoT2JZYHKSKXWVpzYx6XKPZjGxRAmA5b7V2M39
-         DhfrUP/FUcM4HAvEAkeRNBKfSo9+nOv57NvwpCDPA8in/8KLRayUVAlQVH93YwYKm+k4
-         SOlaf+srh5BWUw5z1WZDVle+XnGifU9ofYhZ71JAPRl5yi9S6n6bYv06fKt+qmFWJ34I
-         uung==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vU9PWXYSCVwK2HD98Bi9RXzfkNEc3MlCdXuIzL8BLjM=;
-        b=RVyJ634VQeRpYzlHmVtKkA8CB+b9AfxoZ9cPvbcyS2b59Q6/2Rk23E+Zbl3gYVqXys
-         1pcKCA1LN7N3uvlECRRq6s54/v/D1OILI0thf+BrEX6EZjxZFNM2+84aCuYovgSI6UTh
-         ow+PBBznYScTCYbJoZ6rlqYLwmMyBpwBekMhACfr6e46Dk/RQjdH9BeOmMywfdBaUCYS
-         p19UM3tpZ+QLSYstTL141yiBxImI3IIP08rt/psafVm14qOjP2XSfYifXcKSYgj2CnH+
-         vDGMI9AZgJdp5wCXV9Z0niAi/6IA8B/fT2bFEcJSN+ACWN+xX4GzxQ2wq6sxXljW7Nm+
-         Pn9A==
-X-Gm-Message-State: AJIora8TydAOlSBX2wU7owaLYmhJAMqOlBDeD6EiJ302eWl1geO/Nlq5
-        bpQcwbk8OuvJMpJQ5l4EQJ8=
-X-Google-Smtp-Source: AGRyM1tTC4orWU2Ewm4QQZVIWuJehACk8lYduRmIED3i2KCEQFlwCQ+ueZSQPJe2kj+JW1Ga4eOuXw==
-X-Received: by 2002:a05:6a00:16c7:b0:520:6ede:2539 with SMTP id l7-20020a056a0016c700b005206ede2539mr10524571pfc.46.1656513787518;
-        Wed, 29 Jun 2022 07:43:07 -0700 (PDT)
-Received: from KORANTLI-MB0.tencent.com ([203.205.141.11])
-        by smtp.gmail.com with ESMTPSA id cq13-20020a17090af98d00b001eeeb40092fsm2224281pjb.21.2022.06.29.07.43.04
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 29 Jun 2022 07:43:07 -0700 (PDT)
-From:   korantwork@gmail.com
-To:     axboe@kernel.dk, asml.silence@gmail.com
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xinghui Li <korantli@tencent.com>
-Subject: [PATCH] io_uring: fix a typo in comment
-Date:   Wed, 29 Jun 2022 22:43:01 +0800
-Message-Id: <20220629144301.9308-1-korantwork@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 29 Jun 2022 10:44:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451F01C933;
+        Wed, 29 Jun 2022 07:44:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D870D61F1F;
+        Wed, 29 Jun 2022 14:44:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42B5DC341CD;
+        Wed, 29 Jun 2022 14:44:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656513845;
+        bh=nOwZTusFcv/EYtDIjBSt3qVjRLnbfqmzjz/wxrw87gM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TCNfSU7xjjstRbo0Q57fM/83aVIGLEYh+Q9N3hjAPaEtHn8ewt9g8OX6jBMrq2sb7
+         fBh5mAT9sT7A1QqH2S7fAP/4pf61BgvasAm89O2QiQZRbrjQ/+SnHFFENlfH2DgTxK
+         BNobPrvWPd6N4y/sxCi2nuPfoRRGBwzqBA92Z4G3StqIQeEnBMNT1lXWgUC+PfCP6k
+         CFd/08r9NoFcPidNFCkPypsBqas5RnyLYpYL7JK5pDJjHZcLBMjFOvV7qpRuXqfKCJ
+         WxnRW1Gd+fbgGkdRaCICMiKIcBnQb3YnOKPFos+3IMTEMazaThsDnJrTYdfDbPRpTP
+         pXjwCcP6i+IQg==
+Received: by mail-vs1-f50.google.com with SMTP id o190so15410811vsc.5;
+        Wed, 29 Jun 2022 07:44:05 -0700 (PDT)
+X-Gm-Message-State: AJIora9styVjgAQ27a65CTtRYHdRyNp32uP2pNphf3nLjAIyAMbpXM7H
+        qGxgSnVcCkH53zsEldVXsSNej+9EkwQOt5fqbA==
+X-Google-Smtp-Source: AGRyM1v+y9DrAuOxQEZVR1hAanT0MwRi2QARCd9KFYqN6aXvz6C8qa122ImM5AlzqKYTYGlyVhZXbxHailnnstV8yYQ=
+X-Received: by 2002:a67:e407:0:b0:354:3d39:e0e7 with SMTP id
+ d7-20020a67e407000000b003543d39e0e7mr4552526vsf.0.1656513844236; Wed, 29 Jun
+ 2022 07:44:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220610213308.2288094-1-robh@kernel.org> <20220628201438.GC694214-robh@kernel.org>
+ <CAL_JsqJbZOAMPJDt3ha=rLw0tFuLJ57ZyaCeBJZfEqCHVbtSnw@mail.gmail.com> <20220629090956.muoonqm3okw5reiu@bogus>
+In-Reply-To: <20220629090956.muoonqm3okw5reiu@bogus>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 29 Jun 2022 08:43:53 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+1bpiuFiffXbq0KS8Uo8afT-_rX-jUVPqgoJd+gVLFwg@mail.gmail.com>
+Message-ID: <CAL_Jsq+1bpiuFiffXbq0KS8Uo8afT-_rX-jUVPqgoJd+gVLFwg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: arm/juno: Drop erroneous 'mbox-name' property
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Liviu Dudau <liviu.dudau@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xinghui Li <korantli@tencent.com>
+On Wed, Jun 29, 2022 at 3:11 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> On Tue, Jun 28, 2022 at 03:03:03PM -0600, Rob Herring wrote:
+> > On Tue, Jun 28, 2022 at 2:14 PM Rob Herring <robh@kernel.org> wrote:
+> > >
+> > > On Fri, Jun 10, 2022 at 03:33:07PM -0600, Rob Herring wrote:
+> > > > The 'mbox-name' property in the Juno mailbox node is undocumented and
+> > > > unused. It's the consumer side of the mailbox binding that have
+> > > > 'mbox-names' properties.
+> > > >
+> > > > Signed-off-by: Rob Herring <robh@kernel.org>
+> > > > ---
+> > > >  arch/arm64/boot/dts/arm/juno-scmi.dtsi | 1 -
+> > > >  1 file changed, 1 deletion(-)
+> > >
+> > > Ping!
+> >
+> > Sorry, I see this was applied. I need to figure out why 'lei' misses
+> > emails sometimes.
+>
+> Yes I did apply this and another patch IIRC.
+>
+> Sorry for naive question what is 'lei' ?
 
-fix a typo in comment in io_allocate_scq_urings.
-sane -> same.
+Part of public-inbox which is what lore is:
 
-Signed-off-by: Xinghui Li <korantli@tencent.com>
----
- fs/io_uring.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://people.kernel.org/monsieuricon/lore-lei-part-1-getting-started
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index d3ee4fc532fa..af17adf3fa79 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -12284,7 +12284,7 @@ static __cold int io_allocate_scq_urings(struct io_ring_ctx *ctx,
- 	struct io_rings *rings;
- 	size_t size, sq_array_offset;
- 
--	/* make sure these are sane, as we already accounted them */
-+	/* make sure these are same, as we already accounted them */
- 	ctx->sq_entries = p->sq_entries;
- 	ctx->cq_entries = p->cq_entries;
- 
--- 
-2.36.1
-
+Rob

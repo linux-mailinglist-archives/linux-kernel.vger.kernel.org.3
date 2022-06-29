@@ -2,86 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C52B560944
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A322560948
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbiF2Shf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 14:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
+        id S230209AbiF2SiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 14:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbiF2Sh0 (ORCPT
+        with ESMTP id S230188AbiF2SiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 14:37:26 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6423B57D
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:37:25 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id t26-20020a9d775a000000b006168f7563daso12826479otl.2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:37:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PaRp7sZ9pT6Fzdv3ZScb3FYkSVAIhU7p3YcLa6CAkcA=;
-        b=Ni0aNaonaAvtN8XBj3KHLXAe5Ml+1uTgE5dkIpCjjpyHkADS7VIc9iV2hfkoT5wn02
-         WwclfjXNFqcKh1tLNDsviVvyTGydXpGg/9XX4ddJfMNWi2q+cQI85VUFYv2zZOj4J1BW
-         LrfBIfDt+/GbxG8GuWVRDNLy4GBhr9IHDnuOC7bChrGWbB9k+GW8hsgMARQor5D1lM9L
-         D93WUgpmCTJeMlVs3GWwNlUShAQgA+jtq7ZKeoWUXFoBF4CdG1+v6TjaBdncJbQDNi8w
-         cWN7UqTmj28XvzC3INxW0piHnK+xHOVM+2yYw2OakH6Xd9Syzk2WJpZ1CN5OBEKcT/7G
-         0IPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PaRp7sZ9pT6Fzdv3ZScb3FYkSVAIhU7p3YcLa6CAkcA=;
-        b=0UKFr5qB54Bxoenj5GpXpVW6pudl8DHXgMiUgJahZMpEr3bLbr1HvlN2DvzHVX0Q+v
-         +FHfhYu5OEhIrw+IL2uO+2NYUEs0AwxPq3KxwD/lofI6gQguf1yp18JIasctGU4Qruv1
-         fQtDTDk+gdrvQt5mx6z8DJ+IiC6wyTGa5MNiDtfMIvRriZtwtyEZ7f6+j91IcfYwC24M
-         JxEWiAo+SusFrepcv29IgyuKgY415/e2f1rkAW3w4tBH0SM1GjLRfQcQjy8BCbQR02Xr
-         T/1I5WIySERKY14LfBVR1MHGblRBxCCQ69l/xtpQuBbRhhW778Js81gwTJnwXVTnqJj8
-         2s/Q==
-X-Gm-Message-State: AJIora/MYGhH4D/EP/mUf5kfk4RtxRiWm3ifUXYwS3ZbQr8Dn3LPfiR6
-        VNdOBwHFhAnNjFvsTlpnFk3eIoMPcWryPNI45nLkLg==
-X-Google-Smtp-Source: AGRyM1uwmRwJtBJbAjDBszCqW/QovNsVpnMcD6vb39n9hiioGfwdFOA4bNnvWRWv81jMrK5m4kMcmXq+ObZ8Y3GFQvc=
-X-Received: by 2002:a05:6830:1d5b:b0:616:de98:2556 with SMTP id
- p27-20020a0568301d5b00b00616de982556mr2213754oth.367.1656527845061; Wed, 29
- Jun 2022 11:37:25 -0700 (PDT)
+        Wed, 29 Jun 2022 14:38:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD12060F2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:38:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656527885;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=laiHwYBOCth2i0A5JbbncZyIzYtItqNL4bYMuFHKB3Y=;
+        b=Qk8k2K+No0XeLXC37dj98B0QnqbH3T6OcOYhs13J0Xv+cVHHLxMfg12GE6+FCDlKv92FnU
+        9GTeiGY9eB+MKFu1LqSy1IWCTw2qKmigmAIjuki0Dd5NY/By+QOMA3XMjYL6pAEAJ75P+J
+        3+/2rebYC/z9suhbo5LJ9CfGQtAfiEI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-487-R1ZtqqtHPwOJWrgVlCmmKA-1; Wed, 29 Jun 2022 14:37:57 -0400
+X-MC-Unique: R1ZtqqtHPwOJWrgVlCmmKA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 20E8089C7DC;
+        Wed, 29 Jun 2022 18:37:57 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.33.30])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 097662166B26;
+        Wed, 29 Jun 2022 18:37:57 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id BB9B4220463; Wed, 29 Jun 2022 14:37:56 -0400 (EDT)
+Date:   Wed, 29 Jun 2022 14:37:56 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        xieyongji@bytedance.com, fam.zheng@bytedance.com,
+        Miklos Szeredi <mszeredi@redhat.com>
+Subject: Re: [PATCH] fuse: writeback_cache consistency enhancement
+ (writeback_cache_v2)
+Message-ID: <YrycBC8Kn3S/kxQP@redhat.com>
+References: <20220624055825.29183-1-zhangjiachen.jaycee@bytedance.com>
+ <CAOQ4uxjbU27gSbhndxA_ABchfv1X7Steoggto_o-Wc=5shfS7Q@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220629150625.238286-1-vkuznets@redhat.com> <20220629150625.238286-29-vkuznets@redhat.com>
-In-Reply-To: <20220629150625.238286-29-vkuznets@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 29 Jun 2022 11:37:14 -0700
-Message-ID: <CALMp9eRCbgYVGtAwpDWhytQSjeGeAOuqKZXVg3RpV92uKV5u0A@mail.gmail.com>
-Subject: Re: [PATCH v2 28/28] KVM: nVMX: Use cached host MSR_IA32_VMX_MISC
- value for setting up nested MSR
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOQ4uxjbU27gSbhndxA_ABchfv1X7Steoggto_o-Wc=5shfS7Q@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
->
-> vmcs_config has cased host MSR_IA32_VMX_MISC value, use it for setting
-> up nested MSR_IA32_VMX_MISC in nested_vmx_setup_ctls_msrs() and avoid the
-> redundant rdmsr().
->
-> No (real) functional change intended.
+On Tue, Jun 28, 2022 at 01:09:56PM +0300, Amir Goldstein wrote:
+> On Fri, Jun 24, 2022 at 9:03 AM Jiachen Zhang
+> <zhangjiachen.jaycee@bytedance.com> wrote:
+> >
+> > Some users may want both the high performance of the writeback_cahe mode and
+> > a little bit more consistency among FUSE mounts. In the current writeback
+> > mode implementation, users of one FUSE mount can never see the file
+> > expansion done by other FUSE mounts.
+> >
+> > Based on the suggested writeback V2 patch in the upstream mailing-list [1],
+> > this commit allows the cmtime and size to be updated from server in
+> > writeback mode. Compared with the writeback V2 patch in [1], this commit has
+> > several differences:
+> >
+> >     1. Ensure c/mtime are not updated from kernel to server. IOW, the cmtime
+> >     generated by kernel are just temporary values that are never flushed to
+> >     server, and they can also be updated by the official server cmtime when
+> >     the writeback cache is clean.
+> >
+> >     2. Skip mtime-based revalidation when fc->auto_inval_data is set with
+> >     fc->writeback_cache_v2. Because the kernel-generated temporary cmtime
+> >     are likely not equal to the offical server cmtime.
+> >
+> >     3. If any page is ever flushed to the server during FUSE_GETATTR
+> >     handling on fuse server, even if the cache is clean when
+> >     fuse_change_attributes() checks, we should not update the i_size. This
+> >     is because the FUSE_GETATTR may get a staled size before the FUSE_WRITE
+> >     request changes server inode size. This commit ensures this by
+> >     increasing attr_version after writeback for writeback_cache_v2. In that
+> >     case, we should also ensure the ordering of the attr_version updating
+> >     and the fi->writepages RB-tree updating. So that if a fuse page
+> >     writeback ever happens during fuse_change_attributes(), either the
+> >     fi->writepages is not empty, or the attr_version is increased. So we
+> >     never mistakenly update a stale file size from server to kernel.
+> >
+> > With this patch, writeback mode can consider the server c/mtime as the
+> > official one. When inode attr is timeout or invalidated, kernel has chance
+> > to see size and c/mtime modified by others.
+> >
+> > Together with another patch [2], a FUSE daemon is able to implement
+> > close-to-open (CTO) consistency like what is done in NFS clients.
+> >
+> > [1] https://lore.kernel.org/linux-fsdevel/Ymfu8fGbfYi4FxQ4@miu.piliscsaba.redhat.com
+> > [2] https://lore.kernel.org/linux-fsdevel/20220608104202.19461-1-zhangjiachen.jaycee@bytedance.com/
+> >
+> > Suggested-by: Miklos Szeredi <mszeredi@redhat.com>
+> > Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+> > ---
+> >  fs/fuse/file.c            | 17 +++++++++++++++
+> >  fs/fuse/fuse_i.h          |  3 +++
+> >  fs/fuse/inode.c           | 44 +++++++++++++++++++++++++++++++++++++--
+> >  include/uapi/linux/fuse.h |  5 +++++
+> >  4 files changed, 67 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+> > index 9b64e2ff1c96..35bdc7af8468 100644
+> > --- a/fs/fuse/file.c
+> > +++ b/fs/fuse/file.c
+> > @@ -1829,6 +1829,15 @@ static void fuse_writepage_end(struct fuse_mount *fm, struct fuse_args *args,
+> >                  */
+> >                 fuse_send_writepage(fm, next, inarg->offset + inarg->size);
+> >         }
+> > +
+> > +       if (fc->writeback_cache_v2)
+> > +               fi->attr_version = atomic64_inc_return(&fc->attr_version);
+> > +       /*
+> > +        * Ensure attr_version increases before the page is move out of the
+> > +        * writepages rb-tree.
+> > +        */
+> > +       smp_mb();
+> > +
+> >         fi->writectr--;
+> >         fuse_writepage_finish(fm, wpa);
+> >         spin_unlock(&fi->lock);
+> > @@ -1858,10 +1867,18 @@ static struct fuse_file *fuse_write_file_get(struct fuse_inode *fi)
+> >
+> >  int fuse_write_inode(struct inode *inode, struct writeback_control *wbc)
+> >  {
+> > +       struct fuse_conn *fc = get_fuse_conn(inode);
+> >         struct fuse_inode *fi = get_fuse_inode(inode);
+> >         struct fuse_file *ff;
+> >         int err;
+> >
+> > +       /*
+> > +        * Kernel c/mtime should not be updated to the server in the
+> > +        * writeback_cache_v2 mode as server c/mtime are official.
+> > +        */
+> > +       if (fc->writeback_cache_v2)
+> > +               return 0;
+> > +
+> >         /*
+> >          * Inode is always written before the last reference is dropped and
+> >          * hence this should not be reached from reclaim.
+> > diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
+> > index 488b460e046f..47de36146fb8 100644
+> > --- a/fs/fuse/fuse_i.h
+> > +++ b/fs/fuse/fuse_i.h
+> > @@ -654,6 +654,9 @@ struct fuse_conn {
+> >         /* show legacy mount options */
+> >         unsigned int legacy_opts_show:1;
+> >
+> > +       /* Improved writeback cache policy */
+> > +       unsigned writeback_cache_v2:1;
+> > +
+> 
+> Seeing that writeback_cache_v2 depends on writeback_cache
+> I wonder whether that will not be better represented as:
+> 
+>         /** write-back cache policy (default is write-through) */
+> -       unsigned writeback_cache:1;
+> +      unsigned writeback_cache:2;
+> 
+> 
+> Looking at the recently added handle_killpriv_v2, I also wonder
+> if that would not have been better.
+> 
+> Vivek,
+> is handle_killpriv_v2 really independent of handle_killpriv?
+> Seeing test like these worry me as they are inviting bugs:
+> 
+>                 if (!fc->handle_killpriv && !fc->handle_killpriv_v2) {
 
-Just imaginary functional change? :-)
+Hi Amir,
 
->
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Reviewed-by: Jim Mattson <jmattson@google.com>
+IIRC, yes, handle_killpriv_v2 and handle_killpriv are independent.
+
+Above check is doing a GETATTR request to server to get latest mode,
+only if none of handle_killpriv and and handle_killpriv_v2 are enabled.
+If any one of these is enabled, we skip fuse_do_getattr() and reset
+ATTR_MODE and expect server to clear suid/sgid bits.
+
+handle_killpriv was not enough, so I added handle_killpriv_v2 and
+even enabled it by default in virtiofsd. Later there came reports that
+some of the xfstests failed where suid/sgid was not cleared on server.
+I had tried to debug it and it was some issue in underlying ext4/xfs
+filesystem. I could not pursue it further at the time. I should probably
+get back to it. My temporary solution was to disable killpriv_v2 in
+virtiofsd.
+
+Havind said that, I feel there are too many corner cases w.r.t suid/sgid
+clearing. And it probably is a good idea that client sends a setattr
+request with ATTR_MODE set. While it is racy but it can be more correct.
+Otherwise it is easy to miss some code path somewhere where assumptions
+are not correct and we did not clear suid/sgid as expected.
+
+Thanks
+Vivek
+

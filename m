@@ -2,130 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E10E560484
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 568BD56048B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbiF2PZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 11:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
+        id S234116AbiF2P1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 11:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234042AbiF2PZe (ORCPT
+        with ESMTP id S234199AbiF2P12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 11:25:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC732F3A4;
-        Wed, 29 Jun 2022 08:25:33 -0700 (PDT)
+        Wed, 29 Jun 2022 11:27:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B062E9FB;
+        Wed, 29 Jun 2022 08:27:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C044DB8253F;
-        Wed, 29 Jun 2022 15:25:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F761C34114;
-        Wed, 29 Jun 2022 15:25:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656516330;
-        bh=WfCqVL/HkSy9hkFb7D4vO+nAC41+jUaURlFZDbgG3v4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IRx39RV40TrGV8qKo3powlOOuJ+tBL7T9QXd+/oSz3zRcIFKlEshJoKdCH4iOYjv1
-         0iTPGzr+8Absf0vnUJCvFw8jTiCy3t2Z6490sH6TOO8Jw48hv6p+9nJOpailhc4EjM
-         YixY6a7BVJO5imxUkRYh5MHuv1mictKpOYg8OFMxNf5SpeX/smRY0X7Vh5lF18pM8h
-         OUASz1u7dWfJ2OvuRKS80bNkX/+HtGEodiw5gk+cxXCXG4+4FimqlraqpPaoHtcPSz
-         /HCuNIZ5KYFYCKo7wCDK4Qi7YgZaKujpcK3Jnt0mxRsinZi5h2WBxq8ZldFQ2swy9P
-         BbkmMNBJS+zag==
-Received: from mchehab by mail.kernel.org with local (Exim 4.95)
-        (envelope-from <mchehab@kernel.org>)
-        id 1o6ZZH-005hFO-PX;
-        Wed, 29 Jun 2022 16:25:27 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Chris Wilson <chris.p.wilson@intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Andi Shyti <andi.shyti@intel.com>
-Subject: [PATCH v2 3/3] drm/i915/gt: Serialize TLB invalidates with GT resets
-Date:   Wed, 29 Jun 2022 16:25:26 +0100
-Message-Id: <de312b133227e0a6ad41f465b3a51573cc054b88.1656516220.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1656516220.git.mchehab@kernel.org>
-References: <cover.1656516220.git.mchehab@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8318360B27;
+        Wed, 29 Jun 2022 15:27:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C40D8C34114;
+        Wed, 29 Jun 2022 15:27:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656516446;
+        bh=C7+n2xJegL9gjAWfn0gYV9ETANtGcmZOAauecDXXpMw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aVw2/8ykosIBTI15WhKjsfTHLa4ELBMBAvMHusrYnbWqsGUNPq8/vue9Obr7k+OM8
+         Z03VBpUkdJ7I1gr3zda5pP9qLy1TMznbkAdEhlbV6odBTWoBQwdYxktyo7b5PaqqiM
+         rura0NjwXFAj8QrHwXNjNOllKwxPlM5m6o4pk3R8=
+Date:   Wed, 29 Jun 2022 17:27:21 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] remove CONFIG_ANDROID
+Message-ID: <YrxvWT/aeQnwEv52@kroah.com>
+References: <20220629150102.1582425-1-hch@lst.de>
+ <20220629150102.1582425-2-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220629150102.1582425-2-hch@lst.de>
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Wilson <chris.p.wilson@intel.com>
+On Wed, Jun 29, 2022 at 05:01:02PM +0200, Christoph Hellwig wrote:
+> The ANDROID config symbol is only used to guard the binder config
+> symbol and to inject completely random config changes.  Remove it
+> as it is obviously a bad idea.
 
-Avoid trying to invalidate the TLB in the middle of performing an
-engine reset, as this may result in the reset timing out. Currently,
-the TLB invalidate is only serialised by its own mutex, forgoing the
-uncore lock, but we can take the uncore->lock as well to serialise
-the mmio access, thereby serialising with the GDRST.
+Ick, rcu and random driver changes?  That's not ok, I'll go queue this
+up, if Android devices need to make these core changes, they can do that
+in their kernel or submit a patch that makes sense for everyone.
 
-Tested on a NUC5i7RYB, BIOS RYBDWi35.86A.0380.2019.0517.1530 with
-i915 selftest/hangcheck.
+Also, one meta-comment:
 
-Cc: stable@vger.kernel.org
-Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
-Reported-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Tested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
-Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-Reviewed-by: Andi Shyti <andi.shyti@intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
+>  kernel/configs/android-base.config                  | 1 -
 
-See [PATCH v2 0/3] at: https://lore.kernel.org/all/cover.1656516220.git.mchehab@kernel.org/
+This whole file can be deleted now, with the way Android kernels are now
+being managed it makes no sense anymore.  I'll write up a patch to do
+that later tonight.
 
- drivers/gpu/drm/i915/gt/intel_gt.c | 4 ++++
- 1 file changed, 4 insertions(+)
+thanks,
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
-index 30c60cd960e8..7e57a90b4095 100644
---- a/drivers/gpu/drm/i915/gt/intel_gt.c
-+++ b/drivers/gpu/drm/i915/gt/intel_gt.c
-@@ -952,6 +952,8 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
- 	mutex_lock(&gt->tlb_invalidate_lock);
- 	intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
- 
-+	spin_lock_irq(&uncore->lock); /* seralise invalidate with GT reset */
-+
- 	awake = 0;
- 	for_each_engine(engine, gt, id) {
- 		struct reg_and_bit rb;
-@@ -967,6 +969,8 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
- 		awake |= engine->mask;
- 	}
- 
-+	spin_unlock_irq(&uncore->lock);
-+
- 	for_each_engine_masked(engine, gt, awake, tmp) {
- 		struct reg_and_bit rb;
- 
--- 
-2.36.1
-
+greg k-h

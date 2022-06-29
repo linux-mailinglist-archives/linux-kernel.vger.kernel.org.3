@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA17B560319
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 499B656031B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbiF2Oef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 10:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
+        id S233139AbiF2Oem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 10:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiF2Oec (ORCPT
+        with ESMTP id S232106AbiF2Oeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 10:34:32 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB762FE75
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 07:34:32 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id o16so22815097wra.4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 07:34:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=YwMx0K+gB3HnfOSE/DE2vrY/Xv/2KVNuV7bbWiBmaZ0=;
-        b=t9d7mxbayU9fIxs7aB/naMkZBP7l+LB6KH3Q7/svGPGRxMZ7Dfi+ksGvt+svcEOlNT
-         kxG6N2ARP+ITeZ6J1JBJ9/jhyZktQLeQ/e+AHtAQWcwLm46OY7hwoCme3NGIsfwP2Tb+
-         UVDVvExHIadq/M8Ml4it499RACT/BvAMnRgsH35czmZ/nzFsyF20f//qRm40DeYXNtvN
-         Z+FMjR7wkLHSyS5w9xicqOiW19If5WT5qx8sLDn8HDncWudbKR7RpU7+WhpN4smdMbs0
-         V23Fya+2wFTStvRB0Sr3SSmjOhn/c+0IAUc+WhABtlBC0f39l6FZZqb+VHWpts3z3afv
-         OoSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=YwMx0K+gB3HnfOSE/DE2vrY/Xv/2KVNuV7bbWiBmaZ0=;
-        b=RsEZRIiVcEh7nOsgReRWErsChK4/f4uSQY3DTYn/rzIq32G2iu5rZ+0CP8m3rEhljM
-         ZqBIfBZIJ0E8zK/E9OD7Ak8Fq1aCUw/AwolH/SoJoVZn44gTzI+GqK5wljKBl8kMHoWM
-         dOSr+1IBE4ltz+lcXDKn9TV0o5eplENJKI5nyz3/fxRESAb8v9VPNcG0gW8EtnHuMEXP
-         4s9ai+WnVVF9EARYjA53txJDjgQACmDaudEcyVbLJIC5dhpGDPXn0Rtfk29L5vPic761
-         torYghfPWu8YevB4Ol9OoW6lBAT8x0xQUGKBGghtGHlybn+szjqBVNl4w22eiLEKo80Q
-         V0MQ==
-X-Gm-Message-State: AJIora+W/hXWLNIR0JINEIbIAOxTsL/XxS6/PnjFsDY0e3peHQ0lVQcI
-        Z1N4WxwreVSy6S6PIVK2kKFnCC6mD7bedw==
-X-Google-Smtp-Source: AGRyM1umikRDYY2EzECrH+k3F0zE2vjjXOiJXU4UF3+4icuztKJspdIa5ONAJkbyUybgCAUsSFH+Ng==
-X-Received: by 2002:adf:d1ca:0:b0:21b:a858:3698 with SMTP id b10-20020adfd1ca000000b0021ba8583698mr3532556wrd.172.1656513270704;
-        Wed, 29 Jun 2022 07:34:30 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id i4-20020a05600c354400b0039c5328ad92sm3599133wmq.41.2022.06.29.07.34.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 07:34:29 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 15:34:27 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Andy Shevchenko <andy@kernel.org>
-Subject: Re: [PATCH v1 01/11] mfd: intel_soc_pmic_bxtwc: Don't shadow error
- codes in show()/store()
-Message-ID: <Yrxi8xKjVXsckrWX@google.com>
-References: <20220616165823.4919-1-andriy.shevchenko@linux.intel.com>
- <Yrlyw1eMFy4kd0JB@google.com>
- <YrrNxEIMuYLpzCd1@smile.fi.intel.com>
- <YrrOHtDjI+P6Iq0r@google.com>
- <YrraKMemrHImty7s@smile.fi.intel.com>
+        Wed, 29 Jun 2022 10:34:37 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D1330F50;
+        Wed, 29 Jun 2022 07:34:36 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 5AF5C84494;
+        Wed, 29 Jun 2022 16:34:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1656513274;
+        bh=/Fd+eJIPYTYUSe4sDxSud4LH/iglwDgSy2LCtvqC2x4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WjALHu6SDZ7B1zMuUWgkLoh2SRn2U8aOqLpHgyo0sJF8iu0gQkAIXJ/UkcRGjK51P
+         B8FEYTJJMbZLHrb2XSd/KnnGaiZTIhg4Lov1ii8dv5TjfYpNMkJOpY0hUsstcvDhrF
+         dy4ujebJ83wdFQJZXidSrc8HdJsLeKAEzY+YCcfuZWOmy2+GxwPnt2jjeml2bXF3nm
+         UzUOADWlknJJNmMTjwPjhJO2DKlfTw/1OasRpipVULUcpxw/wPoLBZRPW8ZZgchLFd
+         sBbFnMevUeBHd59By+jB6PxP2WHijXprbFphz0j6zEZKKCY2zsoW71FTRQsA1jymfH
+         oMiP9nhCNjKJg==
+Message-ID: <49884f95-5d22-ad65-6ea2-69b0277b096a@denx.de>
+Date:   Wed, 29 Jun 2022 16:34:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 03/10] i2c: xiic: Switch to Xiic standard mode for
+ i2c-read
+Content-Language: en-US
+To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>,
+        Raviteja Narayanam <raviteja.narayanam@xilinx.com>,
+        linux-i2c@vger.kernel.org, michal.simek@xilinx.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        git@xilinx.com, joe@perches.com
+References: <20210626102806.15402-1-raviteja.narayanam@xilinx.com>
+ <20210626102806.15402-4-raviteja.narayanam@xilinx.com>
+ <ad7626bd-bcbb-48fc-5e32-bc95fafcb917@nokia.com>
+ <80c524c3-8c31-346d-2691-48f93fa6001f@denx.de>
+ <6cf9647e-10dd-8523-962d-a7c40b532fe2@nokia.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <6cf9647e-10dd-8523-962d-a7c40b532fe2@nokia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YrraKMemrHImty7s@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,38 +65,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Jun 2022, Andy Shevchenko wrote:
-
-> On Tue, Jun 28, 2022 at 10:47:10AM +0100, Lee Jones wrote:
-> > On Tue, 28 Jun 2022, Andy Shevchenko wrote:
-> > > On Mon, Jun 27, 2022 at 10:05:07AM +0100, Lee Jones wrote:
-> > > > On Thu, 16 Jun 2022, Andy Shevchenko wrote:
+On 6/29/22 16:09, Krzysztof Adamski wrote:
+> Hi Marek,
 > 
-> ...
+> W dniu 29.06.2022 o 16:05, Marek Vasut pisze:
+>>> [...]
+>>>
+>>> If those two modes only differ in software complexity but we are not
+>>> able to support only the simpler one and we have support for the more
+>>> complicated (standard mode) anyways, we know that standard mode
+>>> can handle or the cases while dynamic mode cannot, we also know that
+>>> dynamic mode is broken on some versions of the core, why do we actually
+>>> keep support for dynamic mode?
+>>
+>> If I recall it right, the dynamic mode was supposed to handle 
+>> transfers longer than 255 Bytes, which the core cannot do in Standard 
+>> mode. It is needed e.g. by Atmel MXT touch controller. I spent a lot 
+>> of time debugging the race conditions in the XIIC, which I ultimately 
+>> fixed (the patches are upstream), but the long transfers I rather 
+>> fixed in the MXT driver instead.
+>>
+>> I also recall there was supposed to be some update for the XIIC core 
+>> coming with newer vivado, but I might be wrong about that.
 > 
-> > > > > +	ret = kstrtoul(buf, 0, &bxtwc_reg_addr);
-> > > > > +	if (ret) {
-> > > > >  		dev_err(dev, "Invalid register address\n");
-> > > > 
-> > > > Is that really what failure means, on every failure?
-> > > > 
-> > > >   "Returns 0 on success, -ERANGE on overflow and -EINVAL on parsing
-> > > >    error."
-> > > 
-> > > As far as I can see in either case the address is invalid.
-> > > Basically we may drop this confusing error message here, if
-> > > this what you prefer.
-> > 
-> > Your call.  I just wanted you to consider it for a moment.
-> 
-> Userspace will print an error based on the error code, so
-> I would rather remove _this_ message since it doesn't add
-> value, esp. when we could have -ERANGE.
+> It seems to be the other way around - dynamic mode is limited to 255 
+> bytes - when you trigger dynamic mode you first write the address of the 
+> slave to the FIFO, then you write the length as one byte so you can't 
+> request more than 255 bytes. So *standard* mode is used for those 
+> messages. In other words - dynamic mode is the one that is more limited 
+> - everything that you can do in dynamic mode you can also do in standard 
+> mode. So why don't we use standard mode always for everything?
 
-Works for me.
+Sigh, it's been a year since I looked into this, sorry.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+One of the modes is maybe not supported on all the XIIC core instances ?

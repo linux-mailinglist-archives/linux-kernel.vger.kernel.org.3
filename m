@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0815608F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:21:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D2D5608FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbiF2SUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 14:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35362 "EHLO
+        id S229920AbiF2SXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 14:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiF2SUo (ORCPT
+        with ESMTP id S229564AbiF2SXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 14:20:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3430518346;
-        Wed, 29 Jun 2022 11:20:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2C2BB825D5;
-        Wed, 29 Jun 2022 18:20:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CF68C341C8;
-        Wed, 29 Jun 2022 18:20:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656526840;
-        bh=nqSjfUA+dAlFCv0ZmKlAaLfQaMfV+8ezW1LJols1QmI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lzO9y7zH2weaXPqzPTfVxv9v/dgk8YFAbETnafA7dcsvYugkUndxTfWbimV4oJ9Q4
-         IVs3Hei0d9svIuhhcp5Y4StutrXxYbqWPC4Dz35Fu4miJxY+W3rvdMumwhjRtdEZiY
-         IQlAIPz7x+aoJodUIY1hGLKJ7WpCPq6jnNY1J5gM+4cmKrhRQphxbId50N3EpCMpOi
-         Zx3etyFzG2e3dOQZhaPFO1FID9+jzKMdpUJIUQE7VJMrNUoCbjJOlNU65xkLsGsFs2
-         iUpzvtZMX7PRST2eHbNwM8E0mnOqoBVH7/DM7a3CdEzME4DD/2W00igPsPBDS5ZViJ
-         rJzII8ANN6wGw==
-Date:   Wed, 29 Jun 2022 19:20:33 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        live-patching@vger.kernel.org, jpoimboe@kernel.org,
-        peterz@infradead.org, catalin.marinas@arm.com, will@kernel.org,
-        masahiroy@kernel.org, michal.lkml@markovi.net,
-        ndesaulniers@google.com, mark.rutland@arm.com,
-        pasha.tatashin@soleen.com, rmk+kernel@armlinux.org.uk,
-        madvenka@linux.microsoft.com, christophe.leroy@csgroup.eu,
-        daniel.thompson@linaro.org
-Subject: Re: [PATCH v6 25/33] arm64: crypto: Mark constant as data
-Message-ID: <YryX8YuklTNOxHLQ@sirena.org.uk>
-References: <20220623014917.199563-1-chenzhongjin@huawei.com>
- <20220623014917.199563-26-chenzhongjin@huawei.com>
+        Wed, 29 Jun 2022 14:23:38 -0400
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6F7255AB;
+        Wed, 29 Jun 2022 11:23:36 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id d5so14832172plo.12;
+        Wed, 29 Jun 2022 11:23:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PZ7JUKiuVG800mwXq+md9lqBB2yZefg/Lo7AxgMd90w=;
+        b=kBKHF9JhHlIaow3V2mR0POOGYhAUQya2KMaoksU/eDmAi6on/pE4GT4ZWytexJ9mBA
+         tP1jwfbYWlcWIN/LRS720SnQsjIKaKJC9JuHHq9hJup7rB5wJsBRx7e+xLGrrX3X1D2b
+         LMHzRqXJmGAPp/Liez2t8UkCDmyC41DENIGGRlBSo9xe+1nH/cBTiMnB2/vhYJ8EjjI3
+         RkaUsJIefSKAbJttMblMK7Gd2wD/Dp9FTqsn7qp0+oQtp8hyD1nfKY6XB9Xd9wUabyjW
+         bQnoFIOMxSWfOYmvl93mZG6BaZs2Af1JEr4b2ZhpGxfEALbnM030vbnbf/oMHu6OojXZ
+         EL5w==
+X-Gm-Message-State: AJIora9GbMD/E2JABcjHqKa2wEsVstNWQjL+AeNZ2d17XYUQi9B/ORGr
+        +A3EokifN+CJDbzxFFZJqek=
+X-Google-Smtp-Source: AGRyM1tSqbps2Q68p3GwM75jHEAbwvy4y5MYIXhYDE8wt/zgPNVVJJpl3DuGUj9f/8lpcsibsysXog==
+X-Received: by 2002:a17:902:f708:b0:153:839f:bf2c with SMTP id h8-20020a170902f70800b00153839fbf2cmr11488760plo.113.1656527015458;
+        Wed, 29 Jun 2022 11:23:35 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:e57f:78b4:1672:b207? ([2620:15c:211:201:e57f:78b4:1672:b207])
+        by smtp.gmail.com with ESMTPSA id h6-20020aa796c6000000b00522c8fb04adsm12363086pfq.176.2022.06.29.11.23.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 11:23:34 -0700 (PDT)
+Message-ID: <28db81c5-27d3-7b83-5021-4507b4dd118a@acm.org>
+Date:   Wed, 29 Jun 2022 11:23:33 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u/A/Sno6bNlTKyUB"
-Content-Disposition: inline
-In-Reply-To: <20220623014917.199563-26-chenzhongjin@huawei.com>
-X-Cookie: Booths for two or more.
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] blk-mq: set BLK_MQ_S_STOPPED first to avoid unexpected
+ queue work
+Content-Language: en-US
+To:     Liu Song <liusong@linux.alibaba.com>, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1656479900-58719-1-git-send-email-liusong@linux.alibaba.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <1656479900-58719-1-git-send-email-liusong@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,35 +64,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/28/22 22:18, Liu Song wrote:
+> From: Liu Song <liusong@linux.alibaba.com>
+> 
+> In "__blk_mq_delay_run_hw_queue", BLK_MQ_S_STOPPED is checked first,
+> and then queue work, but in "blk_mq_stop_hw_queue", execute cancel
+> work first and then set BLK_MQ_S_STOPPED, so there is a risk of
+> queue work after setting BLK_MQ_S_STOPPED, which can be solved by
+> adjusting the order.
+> 
+> Signed-off-by: Liu Song <liusong@linux.alibaba.com>
+> ---
+>   block/blk-mq.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/block/blk-mq.c b/block/blk-mq.c
+> index 93d9d60..865915e 100644
+> --- a/block/blk-mq.c
+> +++ b/block/blk-mq.c
+> @@ -2258,9 +2258,9 @@ bool blk_mq_queue_stopped(struct request_queue *q)
+>    */
+>   void blk_mq_stop_hw_queue(struct blk_mq_hw_ctx *hctx)
+>   {
+> -	cancel_delayed_work(&hctx->run_work);
+> -
+>   	set_bit(BLK_MQ_S_STOPPED, &hctx->state);
+> +
+> +	cancel_delayed_work(&hctx->run_work);
+>   }
+>   EXPORT_SYMBOL(blk_mq_stop_hw_queue);
 
---u/A/Sno6bNlTKyUB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+What made you come up with this patch? Source code reading or something
+else? Please mention this in the patch description.
 
-On Thu, Jun 23, 2022 at 09:49:09AM +0800, Chen Zhongjin wrote:
-> Use SYM_DATA_* macros to annotate data bytes in the middle of .text
-> sections.
->=20
-> For local symbols, ".L" prefix needs to be dropped as the assembler
-> exclude the symbols from the .o symbol table, making objtool unable
-> to see them.
+Regarding the above patch, I don't think this patch fixes the existing
+race between blk_mq_stop_hw_queue() and __blk_mq_delay_run_hw_queue(),
+not even if cancel_delayed_work_sync() would be used.
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+The comment block above blk_mq_stop_hw_queue() clearly mentions that it
+is not guaranteed that this function stops dispatching of requests
+immediately. So why bother about fixing the existing race conditions that
+do not affect what is guaranteed by blk_mq_stop_hw_queue()?
 
---u/A/Sno6bNlTKyUB
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks,
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK8l/AACgkQJNaLcl1U
-h9D5Pgf7B/qfGxLr9uSqDv8qyhbmyiDLJ2+YriTI2XDfxjIfIzQQ4Lt2OJ9Dl5G7
-pVJbkoLdC55nSb6tJLEfo6tYc5I0G2w0td71/S6QdS/wzF5YnV1ozxIlGKtfYrCp
-TPIJdmEKMS4pRfQ7y7sZ8avQutX0FqBek8SmXq/3/3mEmIFugCksFJ9hcrEwEyfS
-1TN9uG3QFIsLzGbBPk79XVgaZtXJYKpzaI+TfVDhed+JDLH+dgrZ5OcTZALUGkE3
-Ce+IRnLuLOAem14V32LufZG4/Hoaiguxtq2UoY2dAb1fUff9kaGZmSFmTjyQPakJ
-6C5y+X+n2vyUP503CA6vUVnKgIV52Q==
-=BxDC
------END PGP SIGNATURE-----
-
---u/A/Sno6bNlTKyUB--
+Bart.

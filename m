@@ -2,58 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298AC55F47E
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 05:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E93355F48A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 05:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbiF2Du3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 23:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
+        id S229900AbiF2Dvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 23:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbiF2Du0 (ORCPT
+        with ESMTP id S229977AbiF2Dvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 23:50:26 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DCE51F601;
-        Tue, 28 Jun 2022 20:50:23 -0700 (PDT)
-Received: from [192.168.100.8] (unknown [112.20.112.134])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxH9j0y7tiv_1iAA--.10274S3;
-        Wed, 29 Jun 2022 11:50:13 +0800 (CST)
-Message-ID: <6d2fc64c-afbf-5a26-6970-d880d8b32868@loongson.cn>
-Date:   Wed, 29 Jun 2022 11:50:11 +0800
+        Tue, 28 Jun 2022 23:51:32 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F7721246;
+        Tue, 28 Jun 2022 20:51:30 -0700 (PDT)
+X-UUID: 1d64b464cc424b43b8463d9e17a7516b-20220629
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:f3a6d0ec-03cd-469f-ba75-57c8a5738483,OB:10,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:45
+X-CID-INFO: VERSION:1.1.7,REQID:f3a6d0ec-03cd-469f-ba75-57c8a5738483,OB:10,LOB
+        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:45
+X-CID-META: VersionHash:87442a2,CLOUDID:964b0c86-57f0-47ca-ba27-fe8c57fbf305,C
+        OID:9ab0d72c7f79,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 1d64b464cc424b43b8463d9e17a7516b-20220629
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1645961264; Wed, 29 Jun 2022 11:51:25 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 29 Jun 2022 11:51:24 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 29 Jun 2022 11:51:24 +0800
+Message-ID: <fcb60f65a30721970b7647633feea4f1df1bf774.camel@mediatek.com>
+Subject: Re: [PATCH v12 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 29 Jun 2022 11:51:24 +0800
+In-Reply-To: <20220627080341.5087-6-rex-bc.chen@mediatek.com>
+References: <20220627080341.5087-1-rex-bc.chen@mediatek.com>
+         <20220627080341.5087-6-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH -next] docs/zh_CN: add vm transhuge translation
-To:     Guo Mengqi <guomengqi3@huawei.com>, alexs@kernel.org,
-        corbet@lwn.net, bobwxc@email.cn, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yizhou.tang@shopee.com,
-        Binbin Zhou <zhoubinbin@loongson.cn>
-Cc:     xuqiang36@huawei.com
-References: <20220628133742.91966-1-guomengqi3@huawei.com>
-From:   YanTeng Si <siyanteng@loongson.cn>
-In-Reply-To: <20220628133742.91966-1-guomengqi3@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxH9j0y7tiv_1iAA--.10274S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3Kr1fuF13Gr4rJFy8Jr4xJFb_yoWkXw18pF
-        ykKr97t3W8Ar909rySka1UCF18Ar48Ga1kKry8KasxJrnrtrW7KanFk3WUJws7Wr1ayrZ8
-        XF409r9ayFZ0gFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
-        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
-        67vIY487MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAI
-        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
-        73UjIFyTuYvjfUYnYwUUUUU
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,250 +74,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mengqi
+Hi, Bo-Chen:
 
-在 2022/6/28 21:37, Guo Mengqi 写道:
-> Translate .../vm/transhuge.rst into Chinese.
->
-> Signed-off-by: Guo Mengqi <guomengqi3@huawei.com>
+On Mon, 2022-06-27 at 16:03 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a embedded displayport driver for the MediaTek mt8195
+> SoC.
+> 
+> It supports the MT8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jitao shi <jitao.shi@mediatek.com>
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 > ---
->   Documentation/translations/zh_CN/vm/index.rst |   2 +-
->   .../translations/zh_CN/vm/transhuge.rst       | 151 ++++++++++++++++++
->   2 files changed, 152 insertions(+), 1 deletion(-)
->   create mode 100644 Documentation/translations/zh_CN/vm/transhuge.rst
 
-When I apply your patch（next-tree）, git complains:
-
-Applying: docs/zh_CN: add vm transhuge translation
-
-error: Documentation/translations/zh_CN/vm/index.rst: does not exist in 
-index
-.git/rebase-apply/patch:180: new blank line at EOF.
-+
-Patch failed at 0001 docs/zh_CN: add vm transhuge translation
->
-> diff --git a/Documentation/translations/zh_CN/vm/index.rst b/Documentation/translations/zh_CN/vm/index.rst
-> index c77a56553845..2d82b15b272b 100644
-> --- a/Documentation/translations/zh_CN/vm/index.rst
-> +++ b/Documentation/translations/zh_CN/vm/index.rst
-> @@ -59,11 +59,11 @@ Linux内存管理文档
->      vmalloced-kernel-stacks
->      z3fold
->      zsmalloc
-> +   transhuge
->   
->   TODOLIST:
->   * arch_pgtable_helpers
->   * free_page_reporting
->   * hugetlbfs_reserv
->   * slub
-> -* transhuge
->   * unevictable-lru
-> diff --git a/Documentation/translations/zh_CN/vm/transhuge.rst b/Documentation/translations/zh_CN/vm/transhuge.rst
-> new file mode 100644
-> index 000000000000..a7bed8b13a47
-> --- /dev/null
-> +++ b/Documentation/translations/zh_CN/vm/transhuge.rst
-> @@ -0,0 +1,151 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +.. include:: ../disclaimer-zh_CN.rst
-> +
-> +:Original: Documentation/vm/transhuge.rst
-> +
-> +:翻译:
-> +
-> + 郭梦琪 Guo Mengqi <guomengqi3@huawei.com>
-> +
-> +:校译:
-> +
-> +==============
-> +透明大页机制
-
-huge 巨大
-
-large 大
-
-
-so 大页 -> 巨页
-
-> +==============
-> +
-> +本文档描述透明大页（THP）的设计理念，以及它是如何与内存管理系统其他部分交互的。
-
-以及它是如何与内存管理系统的其他部分交互的
+[snip]
 
 > +
-> +设计原则
-> +========
+> +static irqreturn_t mtk_dp_hpd_event_thread(int hpd, void *dev)
+> +{
+> +	struct mtk_dp *mtk_dp = dev;
+> +	u8 buf[DP_RECEIVER_CAP_SIZE] = {};
 > +
-> +- “优雅fallback”：有些mm组件不了解透明大页的存在，它们的回退方法是将PMD页表项
-> +  拆分成PTE页表项。必要时还需要拆分透明大页。这样就可以在常规大小的页或页表项上
-> +  继续工作。
+> +	if (mtk_dp->train_info.cable_state_change) {
+> +		mtk_dp->train_info.cable_state_change = false;
 > +
-> +- 如果内存碎片化导致大页分配失败，则分配常规页作为替代放入原vma中，此期间不应
-> +  产生任何失败或明显延迟，不要引起用户态的注意。
+> +		mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+> +				   DP_PWR_STATE_BANDGAP_TPLL_LANE,
+> +				   DP_PWR_STATE_MASK);
+> +		drm_dp_read_dpcd_caps(&mtk_dp->aux, buf);
+> +		mtk_dp->train_info.link_rate =
+> +			min_t(int, mtk_dp->max_linkrate,
+> +			      buf[mtk_dp->max_linkrate]);
+> +		mtk_dp->train_info.lane_count =
+> +			min_t(int, mtk_dp->max_lanes,
+> +			      drm_dp_max_lane_count(buf));
 
-How about
+If the state_change is unplug, why do you modify link_rate and
+lane_count?
+If the state_change is plug, there is a training flow to decide
+link_rate and lane_count. I think the training flow is correct and any
+modification here is redundant.
 
-此期间不会产生任何失败或明显延迟，也不会引起用户态的注意。
+Regards,
+CK
 
+> +	}
 > +
-> +- 如果一些进程退出后释放了空余的大页（不论在伙伴系统还是在VM），由常规页支持的
-空余 -> 空闲 or 可用
-> +  guest物理内存应该自动重新申请为大页。(通过khugepaged进程)
+> +	if (mtk_dp->train_info.irq_sta.hpd_inerrupt) {
+> +		dev_dbg(mtk_dp->dev, "MTK_DP_HPD_INTERRUPT\n");
+> +		mtk_dp->train_info.irq_sta.hpd_inerrupt = false;
+> +		mtk_dp_hpd_sink_event(mtk_dp);
+> +	}
 > +
-> +- 透明大页不需要预留内存，而是尽可能使用已经存在的大页。（唯为避免不可移动的页
-del 唯
-> +  将整个内存碎片化，唯一可能的预留是在kernelcore=的设置中。不过这个调整并不仅
-> +  针对透明大页，而对内核中所有动态的多级页面申请都通用。）
-都适用 or 对xxxxx页面申请通用。
+> +	return IRQ_HANDLED;
+> +}
 > +
-> +get_user_pages和follow_page
-> +===========================
-> +
-> +不论对单个大页还是hugetlbfs，使用get_user_pages和follow_page时，返回的会是首页或
-
-使用get_user_pages(GUP)
-
-> +尾页。大多数情况下调用get_user_page功能的人不关心页的大小，只关心页的真实物理
-
-调用GUP功能
-
-> +地址以及暂时的pin页，好在I/O结束后将页释放。但在驱动中，在某些情况下有可能访问
-> +尾页的page_struct（如检查page->mapping字段），这时应该转而检查首页。一旦首页或者
-> +尾页被引用，大页就不能再被拆分了。
-> +
-> +.. note::
-> +   以上限制不是针对GUP API新增，而是为了与在hugetlbfs中保持一致。这样如果驱动
-> +   能在hugetlbfs中使用GUP，就能够切换到透明大页机制支持的GUP。
-> +
-> +优雅fallback
-> +============
-> +
-> +为查页表流程增加大页支持只需添加split_huge_pmd(vma, pmd,
-> +addr)即可。其中pmd为pmd_offset返回值。要为代码添加透明大页支持很简单，搜索
-> +"pmd_offset"并将split_huge_pmd添加到所有返回的pmd后面。这短短一行的fallback函数
-> +很巧妙，为我们省去了额外的适配代码（通常会很长或者很复杂）。
-> +
-> +如果你需要在没有页表的情况下处理一个大页，可以使用split_huge_page(page)把它拆分
-> +成小页。linux VM就是通过这种方式将大页换出。如果页面被pin住了，split_huge_page
-> +就会失败。
-> +
-> +例子：添加一行代码使mremap.c支持透明大页::
-> +
-> +        diff --git a/mm/mremap.c b/mm/mremap.c
-> +        --- a/mm/mremap.c
-> +        +++ b/mm/mremap.c
-> +        @@ -41,6 +41,7 @@ static pmd_t *get_old_pmd(struct mm_stru
-> +                return NULL;
-> +
-> +                pmd = pmd_offset(pud, addr);
-> +        +       split_huge_pmd(vma, pmd, addr);
-> +                if (pmd_none_or_clear_bad(pmd))
-> +                    return NULL;
-> +
-> +大页支持中的锁使用
-> +==================
-> +
-> +我们希望尽可能多的代码能原生支持透明大页，因为调用split_huge_page()和
-> +split_huge_pmd()还是有开销的。
-> +
-> +要让查页表操作变得能处理huge pmd，只需对pmd_offset返回的pmd调用
-> +pmd_trans_huge()。一定要持有mmap_lock读锁，以避免khugepaged在此期间申请新的
-> +大页pmd（khugepaged collapse_huge_page会持有mmap_lock写锁而非anon_vma lock）。
-> +如果pmd_trans_huge返回false，那就回到原来的流程。如果pmd_trans_huge返回true，
-> +就需要先持有页表锁(pmd_lock())，然后再调一次pmd_trans_huge. 持页表锁是为了防止
-> +大页pmd被转换成小页（split_huge_pmd可以跟查页表操作同时进行）。如果第二次
-> +pmd_trans_huge返回false,那就释放页表锁，依然回到原有流程。如果返回true，就可以
-> +继续处理huge pmd和hugepage了。处理完毕，再释放页表锁。
-> +
-> +引用计数和透明大页
-> +==================
-> +
-> +THP的计数跟其他复合页的计数大致相同：
-> +
-> + - get_page()/put_page()和GUP都在首页上进行计数（修改head page->_refcount）
-> +
-> + - 尾页的_refcount永远是0. get_page_unless_zero()永远无法get到尾页。
-> +
-> + - map/unmap特定PTE entry时，增减的是复合页中相应子页的_mapcount.
-> +
-> + - map/unmap整个复合页时，增减的是compound_mapcount属性。该属性保存在第一个
-> +   尾页中。对于文件中的大页，还要增加所有子页中的_mapcount，这样是为了在检测
-> +   子页的解映射时不需考虑竞争问题。
-map/unmap： Either you don't translate, or you translate them all.
-> +
-> +PageDoubleMap() 表明大页 *可能* 被映射为了PTE.
-> +
-> +对匿名页，PageDoubleMap()也表示所有子页的_mapcount都偏移了1.
-> +在页被同时映射为了PMD和PTE的情况下，这个额外的引用可以避免子页解映射时的竞争。
-> +
-> +这个优化也可以追踪每个子页mapcount所带来的性能开销。另一种解决方法是在每次
-> +map/unmap整个复合页时更改所有子页的_mapcount.
-> +
-> +对于匿名页，如果页面的PMD在首次被拆分时同时还具有PMD映射，则设置PG_double_map;
-> +当compound_mapcount值降为0时，取消设置。
-> +
-> +对于映射到文件的页，在其首次映射PTE时，设置PG_double_map; 在页面从页缓存
-> +page cache中移除时，取消设置。
-页缓存 == page cache
-> +
-> +split_huge_page中，在清除page struct中所有PG_head/tail位之前，需要先将首页中的
-> +引用计数refcount分发到所有其他尾页中。页表项PTE占用的引用计数很好处理，但剩下的
-> +引用计数来源难以确定（如通过get_user_pages的pin页）。如果大页被pin住，
-> +split_huge_page()会失败。页的引用计数必须等于所有子页mapcount之和再加一（因为
-> +split_huge_page的调用者也必须对首页持有一个引用）。
-> +
-> +对匿名页，split_huge_page用页表项迁移（migration
-> +entries）保持来page->_refcount和page->_mapcount稳定。对文件页，直接解映射就好。
-
-保持来 -> 来保持
-
-> +
-> +这套机制对物理内存扫描（physical memory scanners）也安全，scanner唯一合法引用页
-> +的途径就是get_page_unless_zero().
-> +
-> +没调atomic_add()时，所有尾页的_refcount都为0. 这时scanner无法获取尾页的引用。
-> +调了atomic_add()后，我们也不在乎页的_refcount是多少了。只要知道应该从首页的引用
-> +计数减去多少即可。
-> +
-> +对首页进行get_page_unless_zero()是可以成功的。此时引用计数的再分配非常明了：
-> +引用计数将会留在首页中。
-> +
-> +split_huge_pmd()对引用计数没有任何限制，在任何时候都可以拆分PMD，而且永远不会
-> +失败。
-> +
-> +局部unmap和deferred_split_huge_page()函数
-> +==========================================
-> +
-> +透明大页通过munmap()或其他方式解映射时，并不会立即释放内存。在page_remove_rmap()
-> +中检查透明大页的某个子页是否已经还在使用，并将透明大页加入一个预备队列，当内存
-> +使用需求变大时，把透明大页拆分，释放已经不用的子页。
-> +
-> +如果检测到局部unmap，由于处在锁中，无法拆页。而且在很多情况下，透明大页会跨VMA,
-> +这时会在exit(2)中进行局部unmap，这时拆页效果适得其反。
-
-由于xxxxx而且xxxxxx所以xxxxxxx
-
-这时 is used too much
-
-
-> +
-> +deferred_split_huge_page函数就是用来进行上文所说的将页排队以预备后续的拆分。真正
-> +的拆页操作是通过内存压力导致的shrinker函数来触发。
-
-shrinker接口
-
-> +
-
-CC Yizhou
-
-CC Binbin
-
-
-I like your way of translating docs, good job!
-
-
-Thanks，
-Yanteng
 

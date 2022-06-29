@@ -2,137 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F90560A8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2354560A90
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 21:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbiF2Toq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 15:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
+        id S231317AbiF2Tpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 15:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiF2Too (ORCPT
+        with ESMTP id S230281AbiF2Tpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 15:44:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019E1255B4;
-        Wed, 29 Jun 2022 12:44:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0C1EB826BA;
-        Wed, 29 Jun 2022 19:44:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88BB8C34114;
-        Wed, 29 Jun 2022 19:44:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656531881;
-        bh=zcGOsPeA4W/M19Cgq+IwJ/rAzjsEafamsLVcy7I5yLQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cPWGo7pLf0mgj/MNOxCOX27vIibuw8MAfmAJGIPv9XA9WtnMF6wC5ApvhPADMtQIT
-         q6tiqC2dOi7OySO8mwFMx0iHgrAggfdzVxRCeAdaNutMWVbj7oiMveT/d9rkvhrkw1
-         1Ll7kkDmOwtrK3BMYVa+1jNisHMsVVult2XM9mj1T8XWwHu4EiMrVRCzbKSMl3JR6S
-         XuUF3eznTOr6zK6XyPE5dI0nRHESP6AEQl11at1U9hddcXNTnXFbIbRba+rG9y+bsq
-         pens3xirkM/Vq9F2yCQ/qHSMxXKCqHa0wZ6scAPpA6r30VkWa8tccw5w14QmasyBe9
-         QWrhyxI4DqVvQ==
-Date:   Wed, 29 Jun 2022 21:44:37 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Alain Volmat <alain.volmat@foss.st.com>, mark.rutland@arm.com,
-        pierre-yves.mordret@foss.st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-Subject: Re: [PATCH 1/4] dt-bindings: i2c: st,stm32-i2c: don't mandate a
- reset line
-Message-ID: <YryrpbBKsAKcL865@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Alain Volmat <alain.volmat@foss.st.com>, mark.rutland@arm.com,
-        pierre-yves.mordret@foss.st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-References: <20220620105405.145959-1-alain.volmat@foss.st.com>
- <20220620105405.145959-2-alain.volmat@foss.st.com>
- <20220628134115.GA345270-robh@kernel.org>
+        Wed, 29 Jun 2022 15:45:30 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C1D25C46;
+        Wed, 29 Jun 2022 12:45:30 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id x138so13366158pfc.3;
+        Wed, 29 Jun 2022 12:45:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zX93b4uo7r2zzM20H0vNMZpGBveIXWgxPACeOg4RsOo=;
+        b=oi24oy8pB5I5ioF84ISCdNpuTo7TCnpI6ZmcooU6WiEr8PStnOU7pOwqXU/KD3DCvw
+         onhUjkKKusDKbSWuLaHrRe5QZv+lsQTR+rbd0O2w7eExewrDZQjg8WVpRvUXtUtwo8i0
+         NvrHU6UuipcewkCfCCZZEJiSuFgjDhxlduRkQ4Nzub9aZhjDdmPqVjgGqtWRKyAjj6ZG
+         MgdZzudjoS4/q+yUhfw6sRst7Hy3oiCKD9ifiZ2a6dLienB+uwlxubFG/IzfGbRKUMag
+         wa6ceJcYw/RLdZpbARhWKZWe6VnL06G6eJPcUqxmeYyMuQuF15mD4HKTkOdSVlN7wxhV
+         ZjhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zX93b4uo7r2zzM20H0vNMZpGBveIXWgxPACeOg4RsOo=;
+        b=r5WohLB1NZ2fwPPHrQGLwWpJFf9fYGo9lTHn6zyvleYpP/Gw0UhpeTbHpLltL27EsF
+         MqdewiSGqtsrOHvXGrLpShJonlw8ClnKEc1orh1ufTODTiK3DeGlwiD4pugBLdNz5LEY
+         5qCZeevXUIeWhzwbs+GHVOh3kl6yBl8ITYojwd3mlN8KKuZro8OP7t+UH+iNS0v1W8O5
+         GhD/fvcUQ0E9Tce5/L92odX41sBsTMQfZoJZzUA1HZgytgWaGUsTpE6BgaY+eCd6uw8W
+         J7BbsIf367DWw9IKRg/lv46Z60OtSH2nvswuiD9SNxWpHVE6ju3h112/zLFKWum6R4/x
+         FTuQ==
+X-Gm-Message-State: AJIora9YQeSNgEEKML3rUthYhEV8DClAFDDyOAcLKDHgmrRHw79rmyMM
+        oMJgPGPz66JnPhllIXCKdl0=
+X-Google-Smtp-Source: AGRyM1vhnun+Dx/Iat4x3HGNWqaZwBKHI4Xr3keeaJWM7+Gp+HWhYaNAyqHh7y97JFLA0sm9Wf6etg==
+X-Received: by 2002:a63:242:0:b0:401:b84a:6008 with SMTP id 63-20020a630242000000b00401b84a6008mr4183776pgc.100.1656531929988;
+        Wed, 29 Jun 2022 12:45:29 -0700 (PDT)
+Received: from [172.30.1.37] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id c15-20020a170902c2cf00b0016a268563ecsm11867517pla.23.2022.06.29.12.45.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 12:45:29 -0700 (PDT)
+Message-ID: <2e9d3702-595d-20e3-9e8c-c9723384b3a9@gmail.com>
+Date:   Thu, 30 Jun 2022 04:45:24 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ekIVSbt5ZRWqdhEl"
-Content-Disposition: inline
-In-Reply-To: <20220628134115.GA345270-robh@kernel.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] PM / devfreq: imx-bus: use NULL to pass a null pointer
+ rather than zero
+Content-Language: en-US
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220623180054.79687-1-colin.i.king@gmail.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20220623180054.79687-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 22. 6. 24. 03:00, Colin Ian King wrote:
+> The 3rd argument to the function of_get_property is a pointer and it is
+> being passed using 0. Use NULL instead.
+> 
+> Cleans up sparse warning:
+> warning: Using plain integer as NULL pointer
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/devfreq/imx-bus.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/devfreq/imx-bus.c b/drivers/devfreq/imx-bus.c
+> index f3f6e25053ed..f87067fc574d 100644
+> --- a/drivers/devfreq/imx-bus.c
+> +++ b/drivers/devfreq/imx-bus.c
+> @@ -59,7 +59,7 @@ static int imx_bus_init_icc(struct device *dev)
+>  	struct imx_bus *priv = dev_get_drvdata(dev);
+>  	const char *icc_driver_name;
+>  
+> -	if (!of_get_property(dev->of_node, "#interconnect-cells", 0))
+> +	if (!of_get_property(dev->of_node, "#interconnect-cells", NULL))
+>  		return 0;
+>  	if (!IS_ENABLED(CONFIG_INTERCONNECT_IMX)) {
+>  		dev_warn(dev, "imx interconnect drivers disabled\n");
 
---ekIVSbt5ZRWqdhEl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied it. Thanks.
 
-On Tue, Jun 28, 2022 at 07:41:15AM -0600, Rob Herring wrote:
-> On Mon, Jun 20, 2022 at 12:54:02PM +0200, Alain Volmat wrote:
-> > Update the dt-bindings of the i2c-stm32 drivers to avoid the
-> > needs for a reset property in the device-tree.
->=20
-> That is clear from the diff, but why. Some chips don't have a reset?=20
-> If so, this should be combined with patch 2 as part of changes needed=20
-> for a new version.
-
-What do you mean? Patches 1+2 should be squashed together? I can do this
-when applying. Or do you mean something else?
-
->=20
-> >=20
-> > Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-> > ---
-> >  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 1 -
-> >  1 file changed, 1 deletion(-)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/=
-Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-> > index dccbb18b6dc0..8879144fbbfb 100644
-> > --- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-> > +++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-> > @@ -94,7 +94,6 @@ required:
-> >    - compatible
-> >    - reg
-> >    - interrupts
-> > -  - resets
-> >    - clocks
-> > =20
-> >  unevaluatedProperties: false
-> > --=20
-> > 2.25.1
-> >=20
-> >=20
-
---ekIVSbt5ZRWqdhEl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmK8q6QACgkQFA3kzBSg
-Kba/dw/9HiqC7hJIBjmzkeSy2RQELIZxZbWbGpNm2r2PFwEhYqgVfFYAXgAm+YB7
-zXYq6y1hi+DdkIInEftxL6y32UoEJ5Lh4BKBgPskMOyb/3/sdtZAc/FGUMBAhOXy
-pgtnuoYhDYTXL9ztsyzzML1pfm/tjgQPItYdByQWFOYpDh5mIQeGrwbFZhSfoQRQ
-Jo9MKsOdRr0OoGpmP4001aIjWRzU8v8tqqKi+C5JyBqQFZH8bvNg8j8CDZro+hCk
-8M4g4ri23oxozlJ4ZUiWga9U5uBuVThfAlbHuT8nnvZQWJYhpNHjFiG3W+Qt1JiF
-DeEEPKEA8fvbMdK5Wv0dSDbMBdAYvabiTVmLzPolcEiHcHkdMMfxLc6QVnmKD1l+
-g392htFKjRQgMbzDWnDbuELiIVksqhyGeJZAvYqO2igbvncsrGNCs/sVu7vg5Mrk
-ySfMvobGm1RRbcz8CUVFd6Xmb+C4EOHY6WzVW6bPlkoiJZzm602C8a0lODXg03YG
-gYZH4odaoPbYaOrC56DriIxtZpSsr6+LHns6GQyU0B+RlPnYd0X5VQOiXI7Z6MSd
-I3DXom1RV0uUiK8jpy0Upiv/PnEk/soU4mc1SNypY9BLnP1Oy78mhxpPuzVF8Sso
-xGgKBPJYlJKKo72hqTwyOvIPEjfMgAmxUiy6o8izpq2WIvG9Tvc=
-=aKQP
------END PGP SIGNATURE-----
-
---ekIVSbt5ZRWqdhEl--
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi

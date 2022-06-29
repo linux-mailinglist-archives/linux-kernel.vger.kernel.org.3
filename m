@@ -2,195 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A9955FCE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7F555FCEC
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbiF2KMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 06:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
+        id S233113AbiF2KOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 06:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiF2KMj (ORCPT
+        with ESMTP id S230071AbiF2KOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 06:12:39 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43AF23BE6
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:12:37 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id pk21so31609977ejb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:12:37 -0700 (PDT)
+        Wed, 29 Jun 2022 06:14:01 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB7027CC8;
+        Wed, 29 Jun 2022 03:14:00 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id r1so13652506plo.10;
+        Wed, 29 Jun 2022 03:14:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=UQVs/vk3TXmyqHO0m20AymMZtMAnKjYQ1g4TBF6/kA4=;
-        b=tnbsHSwQFfXRfiqLQMLSrwpXtVEZKHjoZImczR4HSgCINnV15+SS3BgKi+MZ9GTu91
-         PwIy2TldEysT/aS+k6lpU5zR2HABIBWqHgagH8Dua908aU7MLwwpdtw8dlg9wHFlF8I7
-         E0OyC++4PcPlsKCYhvi92uu3JJEzJEeNyAaO54vjoOP/ERc+XrTTDrhxhi9rBIj4qYKg
-         jQqIiPMSGudU0xbc/8xyxGtCrCfNqZjLa7Jf2iVuxGs27tsnfFcH9RZq00A4Kkpm85P+
-         nqn1rQnACnMurA89newiVOdC6RJH2z7xdzXMhtaYI1TIC9IB4bPAJ7iZxFhOXAOySxXV
-         D2WA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6ssz5ul1QxHBEW/Ftglcn8GTDr/5c5SXlVf5jD8qbcI=;
+        b=ZYguFwcPfSq5u/hXIoSPbB1Ol/IScrgaK3FjTkLwDq0acReFAxkJeMo4JrHaifPiGj
+         Bz3WuHNNoLatTdI71hec5BhL6ZgnvCef1xDf9rTVAVeI6fcDl7cdbt6uAjyl8wudTaVu
+         EmYHL6lL9+Z9oRupRrVQ59IB3HOwY3NpgMymkj06yj9LhCbF0smqNs0XEI9LfCxBdYwJ
+         ycjbCm1MB8/pqVoHouPsn0f1SzBjG6a+PJhnkABM8WQ2JZx7+KU0v3uevO+pNWLYQoN6
+         Q2tZYIDSIjb0uGE1naGei0Wkxz51EDgHeaqJWfnW86eQAnUzfxyufa2G5PDXK+IA7zaC
+         qH7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UQVs/vk3TXmyqHO0m20AymMZtMAnKjYQ1g4TBF6/kA4=;
-        b=7PxaKv2GAKu2Xvd8PKDi14xu26AT/XGwj3N3Felo/n+vHTtJ1SdrpA3KRboGs9bpgr
-         dcoVXKHiXQWcnrz3eQCRv7XjG6aT2KdfGQ5M0qijPNQmxKE6zA/2DpiXqDn/jY0I8i8A
-         YTeAezmKPSzIRa/9KBM0YQpTmNXS3WbYCDD90ZBANQmH2i0C4XWPu37GQggD8aikqHQ5
-         2NRkyau7qCg5nhsNJuI7PU3IQg1QoeV/Jp04XHhbV68xA3JWod+vYWPdn/BC6esABSCa
-         k8tKAa2RBwzgf+Pc5FfwBGfk9qoMHeKRMzjsALHGtwU3D9EJctwBm+f1+qHaWdj8xvaO
-         /Nbg==
-X-Gm-Message-State: AJIora8Jj0ToK3+cmr6wfrAudgqqiguxldw6udw13/jMKxfVivEx49zR
-        3ban5GSeyvNnZoq10qxItKAbo200A3oOVw==
-X-Google-Smtp-Source: AGRyM1sjvx1wOPMp+bijYxCAGUlWcQdG9iZUFcyc5CG2oi0K7eSi07C87KiYcu9D21TT+wr8/GSRfA==
-X-Received: by 2002:a17:906:5305:b0:712:388c:2bf5 with SMTP id h5-20020a170906530500b00712388c2bf5mr2513089ejo.559.1656497556306;
-        Wed, 29 Jun 2022 03:12:36 -0700 (PDT)
-Received: from [192.168.0.183] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g5-20020a17090613c500b00722fb3c99bcsm7531482ejc.203.2022.06.29.03.12.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 03:12:35 -0700 (PDT)
-Message-ID: <f2b16788-32bd-a487-4087-66d876247fdb@linaro.org>
-Date:   Wed, 29 Jun 2022 12:12:29 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6ssz5ul1QxHBEW/Ftglcn8GTDr/5c5SXlVf5jD8qbcI=;
+        b=ILtyQoWE2bprn071/hYxDWN2K6lBQI30Y8pMsnljVcWuyxrLvQ9bbuoo8iAyaDG8/z
+         MDeD2QAF7rFHHNrzeP0hpSS+UgDM+rf4trg/TcMFEEJF2btu8pSdOBMNquakgoEWBZcO
+         iLvNse5us4k5IQc4WsqmPsy4FpWAgIdDW/BZ7enA4Z4wlo9ekZ6uvj4hLN2XDH+XZaFX
+         jgPw+ssEl0hBEwoBhwsgS+LKaYGmnnweGcGOieFfmvsvaW2Ia1Px+CHFyESnLQkv9hyB
+         1y7BEteAIvsjKv/6Bz+cB3xbSouP0bRPPnYY4c5GCjBrcIy3NaI/DyVfQG/I69jw4Juu
+         S3+Q==
+X-Gm-Message-State: AJIora9/fb0o05t/yMQHIdrS94UsCwMAlupBoDCDHKoXDQKRx3QPBbmr
+        t1yn/5+NRd93EIDaBUprdv0=
+X-Google-Smtp-Source: AGRyM1uOV3bmitBLA+3fOBVJSOzewdGKIGu4RWQco3/TjeOfMdPvDvjvcLUFquhpOBzcbmUVghMSrQ==
+X-Received: by 2002:a17:903:2cb:b0:14f:4fb6:2fb0 with SMTP id s11-20020a17090302cb00b0014f4fb62fb0mr9698257plk.172.1656497639008;
+        Wed, 29 Jun 2022 03:13:59 -0700 (PDT)
+Received: from localhost (fmdmzpr02-ext.fm.intel.com. [192.55.54.37])
+        by smtp.gmail.com with ESMTPSA id h24-20020a635318000000b0040dffa7e3d7sm5460901pgb.16.2022.06.29.03.13.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 03:13:57 -0700 (PDT)
+Date:   Wed, 29 Jun 2022 03:13:56 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Sagi Shahar <sagis@google.com>
+Cc:     "Yamahata, Isaku" <isaku.yamahata@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [RFC PATCH v6 090/104] KVM: TDX: Handle TDX PV CPUID hypercall
+Message-ID: <20220629101356.GA882746@ls.amr.corp.intel.com>
+References: <cover.1651774250.git.isaku.yamahata@intel.com>
+ <98939c0ec83a109c8f49045e82096d6cdd5dafa3.1651774251.git.isaku.yamahata@intel.com>
+ <CAAhR5DHPk2no0PVFX6P1NnZdwtVccjmdn4RLg4wKSmfpjD6Qkg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v12 2/3] dt-bindings: usb: Add analogix anx7411 PD binding
-Content-Language: en-US
-To:     Xin Ji <xji@analogixsemi.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, Rob Herring <robh@kernel.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220628044843.2257885-1-xji@analogixsemi.com>
- <20220628044843.2257885-2-xji@analogixsemi.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220628044843.2257885-2-xji@analogixsemi.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAAhR5DHPk2no0PVFX6P1NnZdwtVccjmdn4RLg4wKSmfpjD6Qkg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/06/2022 06:48, Xin Ji wrote:
-> Add analogix PD chip anx7411 device binding
+On Tue, Jun 14, 2022 at 11:15:00AM -0700,
+Sagi Shahar <sagis@google.com> wrote:
+
+> On Thu, May 5, 2022 at 11:16 AM <isaku.yamahata@intel.com> wrote:
+> >
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> >
+> > Wire up TDX PV CPUID hypercall to the KVM backend function.
+> >
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > ---
+> >  arch/x86/kvm/vmx/tdx.c | 22 ++++++++++++++++++++++
+> >  1 file changed, 22 insertions(+)
+> >
+> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> > index 9c712f661a7c..c7cdfee397ec 100644
+> > --- a/arch/x86/kvm/vmx/tdx.c
+> > +++ b/arch/x86/kvm/vmx/tdx.c
+> > @@ -946,12 +946,34 @@ static int tdx_emulate_vmcall(struct kvm_vcpu *vcpu)
+> >         return 1;
+> >  }
+> >
+> > +static int tdx_emulate_cpuid(struct kvm_vcpu *vcpu)
+> > +{
+> > +       u32 eax, ebx, ecx, edx;
+> > +
+> > +       /* EAX and ECX for cpuid is stored in R12 and R13. */
+> > +       eax = tdvmcall_a0_read(vcpu);
+> > +       ecx = tdvmcall_a1_read(vcpu);
+> > +
+> > +       kvm_cpuid(vcpu, &eax, &ebx, &ecx, &edx, true);
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> ---
->  .../bindings/usb/analogix,anx7411.yaml        | 76 +++++++++++++++++++
->  1 file changed, 76 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+> According to the GHCI spec section 3.6
+> (TDG.VP.VMCALL<Instruction.CPUID>) we should return
+> VMCALL_INVALID_OPERAND if an invalid CPUID is requested.
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
-> new file mode 100644
-> index 000000000000..c5c6d5a9dc17
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
-> @@ -0,0 +1,76 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/analogix,anx7411.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> kvm_cpuid already returns false in this case so we should use that
+> return value to set the tdvmcall return code in case of invalid leaf.
 
-Drop the quotes from both places.
+Based on CPUID instruction, cpuid results in #UD when lock prefix is used or
+earlier CPU that doesn't support cpuid instruction.
+So I'm not sure what CPUID input result in INVALID_OPERAND error.
+Does the following make sense for you?
 
-> +
-> +title: Analogix ANX7411 Type-C controller bindings
-> +
-> +maintainers:
-> +  - Xin Ji <xji@analogixsemi.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - analogix,anx7411
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  connector:
-> +    type: object
-> +
-> +    allOf:
-> +      - $ref: ../connector/usb-connector.yaml
+--- a/arch/x86/kvm/vmx/tdx.c
++++ b/arch/x86/kvm/vmx/tdx.c
+@@ -1347,7 +1347,7 @@ static int tdx_emulate_cpuid(struct kvm_vcpu *vcpu)
+        eax = tdvmcall_a0_read(vcpu);
+        ecx = tdvmcall_a1_read(vcpu);
 
-additionalProperties: false
-(on the level of allOf)
+-       kvm_cpuid(vcpu, &eax, &ebx, &ecx, &edx, true);
++       kvm_cpuid(vcpu, &eax, &ebx, &ecx, &edx, false);
 
-> +
-> +    properties:
-> +      compatible:
-> +        const: usb-c-connector
-> +
-> +      power-role: true
-> +
-> +      data-role: true
-> +
-> +      try-power-role: true
-> +
-> +    required:
-> +      - compatible
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - connector
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c1 {
+        tdvmcall_a0_write(vcpu, eax);
+        tdvmcall_a1_write(vcpu, ebx);
 
-"i2c"
+thanks,
 
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        typec: anx7411@2C {
-
-generic node name, so maybe usb-typec?
-
-If fixed, keep Rob's Rb comment.
-
-> +            compatible = "analogix,anx7411";
-> +            reg = <0x2C>;
-> +            interrupts = <8 IRQ_TYPE_EDGE_FALLING>;
-> +            interrupt-parent = <&gpio0>;
-> +
-> +            typec_con: connector {
-> +                compatible = "usb-c-connector";
-> +                power-role = "dual";
-> +                data-role = "dual";
-> +                try-power-role = "source";
-> +
-> +                port {
-
-I think usb-c-connector requires "ports" node, doesn't it?
-
-> +                    typec_con_ep: endpoint {
-> +                        remote-endpoint = <&usbotg_hs_ep>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +    };
-> +...
-
-
-Best regards,
-Krzysztof
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>

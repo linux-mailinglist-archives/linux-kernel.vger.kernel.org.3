@@ -2,110 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC83B560CE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 01:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BFF560CEA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 01:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiF2XAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 19:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
+        id S230426AbiF2XCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 19:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiF2W7p (ORCPT
+        with ESMTP id S229699AbiF2XCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 18:59:45 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9514091D
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 15:58:55 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id u6-20020a17090a1d4600b001ec8200fe70so403575pju.1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 15:58:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=bg9ioyZvi3pggVC6pmrxVE3PJI7RkTo447asQNSDMCo=;
-        b=XOgKAp54Uomy/MmM0rVyzKaifQUFQpoD1t30MT8UmSk4KOHvi9VYQBtLOKeJ3qoCT6
-         wKGwjYZo3g/dGbJKaFBT0jIkbA+P95nNjL2xa4BsbkANz7tvu+bPqV5M8zspj86R+6Pi
-         MDg5CsnBjFcma+9cvcJBzeQsANG9udxS/lKWSY08OdTFEmDpkxrpjs5t3nG/ldOT7AGM
-         7hzpNc6DEU9m08IurlitD8wgQ25ff1MNozL2+BK/fRrn3NUTBMXMlKIb3EbzbNi+qb06
-         MXSZ/NUMCzRQbU0iubhU+b7vDdg89J0/lN9T+uF2q0aPOpHKL4BzM0lhzoXcqTuaIp3O
-         yiJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=bg9ioyZvi3pggVC6pmrxVE3PJI7RkTo447asQNSDMCo=;
-        b=TwyH6dTAzjoo35rZVCGmWaofkKuJhtAT0WtjnF4fmhERRkEuWSjhbKYwnHSWZCEitz
-         XUfcPV7DaQXsYbP9kaEDjk2lzN9JCaFFSS0OIoznGwUFQz8ZOU8lWCiJ7B9chOwefyiI
-         e8k4z58c1xEXE/bNF7ZKsaXDIs9rxGG5+55+9K5ivb6rWzPeYi5x+eibiM2F98GhqH6f
-         /iQ23sNuYpQFYbe2zoGjTK1y9giyc/EHbdfv0a3AbtJkhEv8j/xD3ye4oB9PATPNtZlT
-         7ClxiYzHif2jqKjZHCig+fhUIgTFV0+KZW2WkPtvGkPNhoM769RDCT7uG2FwH+YeUKoG
-         oQYQ==
-X-Gm-Message-State: AJIora+peUoywLOsXFuG3ukMIqGaULGxHfpAS4wfl/gxYXZzPTXI3GVJ
-        LdydCt6rFfKA4d92EcsjNxFc3gjLlE9LfvPidY0=
-X-Google-Smtp-Source: AGRyM1uFrWDjwr0dMIMwLT0wv42PT1NVpnfJp0c1gw3lcilw2C0s09prA0+AV6JbWt+Dgn5xul4w0FlFmXjKuEaI700=
-X-Received: from willmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:2dd0])
- (user=willmcvicker job=sendgmr) by 2002:a17:90a:3e04:b0:1ee:e899:4eb6 with
- SMTP id j4-20020a17090a3e0400b001eee8994eb6mr8179267pjc.187.1656543534620;
- Wed, 29 Jun 2022 15:58:54 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 22:58:42 +0000
-In-Reply-To: <20220629225843.332453-1-willmcvicker@google.com>
-Message-Id: <20220629225843.332453-3-willmcvicker@google.com>
-Mime-Version: 1.0
-References: <20220629225843.332453-1-willmcvicker@google.com>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH 4.19 v1 2/2] thermal/drivers/thermal_hwmon: Use hwmon_device_register_for_thermal()
-From:   Will McVicker <willmcvicker@google.com>
-To:     stable@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     kernel-team@android.com, Will McVicker <willmcvicker@google.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>
+        Wed, 29 Jun 2022 19:02:38 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72D8103;
+        Wed, 29 Jun 2022 16:02:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656543757; x=1688079757;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=3LwbZC6SpyOpkEwBO5bm7kbaT9CNgLksFlrTWyOhb6A=;
+  b=kYUwK18WcFKdbNonoZYwY7V2IHWHMHU7oIJtYlDnp8CUMsUj9Whit/cL
+   r0lMYfclfJt6nG1pJFN5fgS9JyZ9jSN0szQ6Dl8A+r77hYx5SpJmkHMfv
+   OhSgxReMnxhbHIv2QDDIo3KYlOyaabD5jcwqTpsLtnIRdpjbspai5N8zU
+   73INQm8ZDfXhHl+lxGLbQBUiW8k4hawmv05RvCX+wuEm6WDIBtBSeIWRq
+   aV1qBwhE/QGI+FhGFHRRzxLFkoAI+IqP/ZldqruMQ14RLL+Yjpd045mZc
+   twKgKph2RgYvNc9Oi4qIDY+ZD+SsHOZZNzUKgzrKrdZUGFXLOpkBtPFmJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="368500691"
+X-IronPort-AV: E=Sophos;i="5.92,232,1650956400"; 
+   d="scan'208";a="368500691"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 16:02:37 -0700
+X-IronPort-AV: E=Sophos;i="5.92,232,1650956400"; 
+   d="scan'208";a="647619213"
+Received: from zhihuich-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.49.124])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 16:02:33 -0700
+Message-ID: <292182cbe779aade47580ac23dc304856619c799.camel@intel.com>
+Subject: Re: [PATCH v5 04/22] x86/virt/tdx: Prevent ACPI CPU hotplug and
+ ACPI memory hotplug
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, Chao Gao <chao.gao@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com, thomas.lendacky@amd.com,
+        Tianyu.Lan@microsoft.com
+Date:   Thu, 30 Jun 2022 11:02:31 +1200
+In-Reply-To: <a2277c2f-91a1-871f-08f1-42950bca53b3@intel.com>
+References: <cover.1655894131.git.kai.huang@intel.com>
+         <3a1c9807d8c140bdd550cd5736664f86782cca64.1655894131.git.kai.huang@intel.com>
+         <20220624014112.GA15566@gao-cwp>
+         <951da5eeb4214521635602ce3564246ad49018f5.camel@intel.com>
+         <a2277c2f-91a1-871f-08f1-42950bca53b3@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+On Wed, 2022-06-29 at 07:22 -0700, Dave Hansen wrote:
+> On 6/24/22 04:21, Kai Huang wrote:
+> > Personally I don't quite like this way.  To me having separate function=
+ for host
+> > and guest is more clear and more flexible.  And I don't think having
+> > #ifdef/endif has any problem.  I would like to leave to maintainers.
+>=20
+> It has problems.
+>=20
+> Let's go through some of them.  First, this:
+>=20
+> > +#ifdef CONFIG_INTEL_TDX_HOST
+> > +static bool intel_tdx_host_has(enum cc_attr attr)
+> > +{
+> > +	switch (attr) {
+> > +	case CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED:
+> > +	case CC_ATTR_ACPI_MEMORY_HOTPLUG_DISABLED:
+> > +		return true;
+> > +	default:
+> > +		return false;
+> > +	}
+> > +}
+> > +#endif
+>=20
+> What does that #ifdef get us?  I suspect you're back to trying to
+> silence compiler warnings with #ifdefs.  The compiler *knows* that it's
+> only used in this file.  It's also used all of once.  If you make it
+> 'static inline', you'll likely get the same code generation, no
+> warnings, and don't need an #ifdef.
 
-[ upstream commit 87743bcf08072b3e1952a0bf5524b2833e667b4c ]
+The purpose is not to avoid warning, but to make intel_cc_platform_has(enum
+cc_attr attr) simple that when neither TDX host and TDX guest code is turne=
+d on,
+it can be simple:
 
-The thermal subsystem registers a hwmon device without providing chip
-information or sysfs attribute groups. While undesirable, it would be
-difficult to change. On the other side, it abuses the
-hwmon_device_register_with_info API by not providing that information.
-Use new API specifically created for the thermal subsystem instead to
-let us enforce the 'chip' parameter for other callers of
-hwmon_device_register_with_info().
+	static bool  intel_cc_platform_has(enum cc_attr attr)
+	{
+		return false;
+	}
 
-Acked-by: Rafael J . Wysocki <rafael@kernel.org>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/thermal/thermal_hwmon.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+So I don't need to depend on how internal functions are implemented in the
+header files and I don't need to guess how does compiler generate code.
 
-diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
-index dd5d8ee37928..b3b229421936 100644
---- a/drivers/thermal/thermal_hwmon.c
-+++ b/drivers/thermal/thermal_hwmon.c
-@@ -147,8 +147,8 @@ int thermal_add_hwmon_sysfs(struct thermal_zone_device *tz)
- 	INIT_LIST_HEAD(&hwmon->tz_list);
- 	strlcpy(hwmon->type, tz->type, THERMAL_NAME_LENGTH);
- 	strreplace(hwmon->type, '-', '_');
--	hwmon->device = hwmon_device_register_with_info(&tz->device, hwmon->type,
--							hwmon, NULL, NULL);
-+	hwmon->device = hwmon_device_register_for_thermal(&tz->device,
-+							  hwmon->type, hwmon);
- 	if (IS_ERR(hwmon->device)) {
- 		result = PTR_ERR(hwmon->device);
- 		goto free_mem;
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+And also because I personally believe it doesn't hurt readability.=20
+
+>=20
+> The other option is to totally lean on the compiler to figure things
+> out.  Compile this program, then disassemble it and see what main() does.
+>=20
+> static void func(void)
+> {
+> 	printf("I am func()\n");
+> }
+>=20
+> void main(int argc, char **argv)
+> {
+> 	if (0)
+> 		func();
+> }
+>=20
+> Then, do:
+>=20
+> -	if (0)
+> +	if (argc)
+>=20
+> and run it again.  What changed in the disassembly?
+
+You mean compile it again?  I have to confess I never tried and don't know.=
+=20
+I'll try when I got some spare time.  Thanks for the info.
+
+>=20
+> > +static bool intel_cc_platform_has(enum cc_attr attr)
+> > +{
+> > +#ifdef CONFIG_INTEL_TDX_GUEST
+> > +	if (boot_cpu_has(X86_FEATURE_TDX_GUEST))
+> > +		return intel_tdx_guest_has(attr);
+> > +#endif
+>=20
+> Make this check cpu_feature_enabled(X86_FEATURE_TDX_GUEST).  That has an
+> #ifdef built in to it.  That gets rid of this #ifdef.  You have
+>=20
+> > +#ifdef CONFIG_INTEL_TDX_HOST
+> > +	if (platform_tdx_enabled())
+> > +		return intel_tdx_host_has(attr);
+> > +#endif
+> > +	return false;
+> > +}
+>=20
+> Now, let's turn our attention to platform_tdx_enabled().  Here's its
+> stub and declaration:
+>=20
+> > +#ifdef CONFIG_INTEL_TDX_HOST
+> > +bool platform_tdx_enabled(void);
+> > +#else  /* !CONFIG_INTEL_TDX_HOST */
+> > +static inline bool platform_tdx_enabled(void) { return false; }
+> > +#endif /* CONFIG_INTEL_TDX_HOST */
+>=20
+> It already has an #ifdef CONFIG_INTEL_TDX_HOST, so that #ifdef can just
+> go away.
+>=20
+> Kai, the reason that we have the rule that Yuan cited:
+>=20
+> > "Wherever possible, don't use preprocessor conditionals (#if, #ifdef) i=
+n .c"
+> > From Documentation/process/coding-style.rst, 21) Conditional Compilatio=
+n.
+>=20
+> is not because there are *ZERO* #ifdefs in .c files.  It's because
+> #ifdefs in .c files hurt readability and are usually avoidable.  How do
+> you avoid them?  Well, you take a moment and look at the code and see
+> how other folks have made it readable.  It takes refactoring of code to
+> banish #ifdefs to headers or replace them with compiler constructs so
+> that the compiler can do the work behind the scenes.
+
+Yes I understand the purpose of this rule. Thanks for explaining.
+=20
+>=20
+> Kai, could you please take the information I gave you in this message
+> and try to apply it across this series?  Heck, can you please take it
+> and use it to review others' code to make sure they don't encounter the
+> same pitfalls?
+
+Thanks for the tip.  Will do.
+
+Btw this patch is the only one in this series that has this #ifdef problem,=
+ and
+it will be gone in next version based on feedbacks that I received.  But I'=
+ll
+check again.
+
+--=20
+Thanks,
+-Kai
+
 

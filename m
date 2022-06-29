@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A3C56042A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBEC356040A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233990AbiF2PMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 11:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
+        id S234287AbiF2PMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 11:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234164AbiF2PMF (ORCPT
+        with ESMTP id S233776AbiF2PMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 29 Jun 2022 11:12:05 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F48A3EF06
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D45C3EF10
         for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 08:10:30 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id s1so22927080wra.9
+Received: by mail-wm1-x333.google.com with SMTP id m6-20020a05600c3b0600b003a0489f412cso888513wms.1
         for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 08:10:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q3ZYq3bcsj/UjtaD25DcyTAm2D/1RmGVwIAKcRPY+eg=;
-        b=CmfYYcfr9K4XbkT5SOVFmJr3HuPO8kzgs7aT8gxU2yyEUPp6GOVCS8JG+2P3gzMlbj
-         yKeowkAkIbJykRtw72dw9FERYSt6OhnDV90lVoenDJ6YiMW27N0D3oCzJdSLLG33V9C1
-         wL6nDNlwM4meKfHLoGHjvaKpuzsQ88v+Qu7lYNugA3HQl5BIxNkR/fzCJDge2CCkLdJg
-         oRd6Ld+/46jhOoHppRz+S5f0j7K+V2Zq9ZeJsgKBNEKDiDYxRXSVqEyrxjjvQovJqeFm
-         GXVEdxkh3WDLpVa5h/tX89cGWi2oD86jhuiQIq7Ft6t/jCFpOSHR6nRELoiSIxGwQe8V
-         EeXg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=k/xWzWXDjwfHlllM6Hvtaj2XKm2chFd2jJ2ssW13thU=;
+        b=qsokU08JAvgideuDlR9em8hS0EkmPliIb05x2bqVwzfMJUXEcMybvE8u+D9fjuvrel
+         3QP+Zfdry1XM7qWyYh1zl7MuHNSyz91nmJf4hqVKCRw+dJ031mY8hDrkA82oAuuy8il7
+         fih/AQexicIQKz9WipwwHNAaBGpZrOHEaMVPVJUjEpz85Wk/4YYFHBBENSu662mFOkrN
+         BrYhMS/zOn+luxiZSNjz4us5OdpFp23sLI+h4I9mtioJ+WYgB/aoGxHUjHuuvZAhOqqW
+         ba9htJQvX6bRUfjigXVSQP3ftiXSqWGJT6OlyTAAayxCEGFUb6ZWnVss1/8dSkOIVNv/
+         aXew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q3ZYq3bcsj/UjtaD25DcyTAm2D/1RmGVwIAKcRPY+eg=;
-        b=C1TlKOlqi1s5/+s9E8Q36Oydyfxy1yWF0TkYzerwiCWTllGtHxxLy6rClpzBHp66dD
-         JP7msb35ugUoMeodkEiWQTcOdNMAbSyRjROjOUM+hzongPblK6nes7sSXRCF9eD0/gUg
-         Qk88VOuA4boKOEdoVJebc4tiTGx0eRxpBAbCi2KlSazG932gjxhqHdnH6WhfbGPsU81Y
-         Qxb6Ag4tGERoF2O7e3cy7xoSBqRCpVejw4Tx3oTte7Z38AbVZdJ5IW0krYbOOMw5TCz6
-         U0aXhPyCdXCevYQmah33cqI1KUmtf1lZ9DkzMcpHzHg9wv0tM0YKrQHrORGUVzeq5LXU
-         PF9g==
-X-Gm-Message-State: AJIora+RVE/Um4xHr0cNfWHHypuQz5xT4LPEMVmQSh3o8vXZEAMJ8mYp
-        9Cg18O7BFP2tTH3HXB3vOkOu9g==
-X-Google-Smtp-Source: AGRyM1vWMbd1NwnfZaHax5oHnxcFN5zGrIUsdhYd0b6WXkGuttwDKXF/INDjHiqVGqyNHSzC+DHU/g==
-X-Received: by 2002:a5d:604d:0:b0:21b:9b2c:be31 with SMTP id j13-20020a5d604d000000b0021b9b2cbe31mr3710411wrt.91.1656515427060;
-        Wed, 29 Jun 2022 08:10:27 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=k/xWzWXDjwfHlllM6Hvtaj2XKm2chFd2jJ2ssW13thU=;
+        b=TwSILV/tu7iZ+iNlx+kE6PEYdoqpD0ZTyKVT2TrmS5UdKdtKlS+frFrFmvUTL8A6yp
+         qZl9obXyK76ikOLCqCpBXmp/9g3PPXuizDsO9yBwN4UzDXnQjsTud/sMQzUz0lH2Gr/k
+         gj3dYIpvL5dYbUU48x+Ywf8YUi9YoGZafdwYpvsQ445jWtaox+yDQPbAnLolBVFxVw/N
+         XiLbxCuwbgytOx9kSj4p/HMBD8LG8KLiguIRcJ6V0VVWrQNwWv08/DlkKEDRn39l/B7z
+         84tZewgDC0k/bFmOdLqBiX53gnYqgQmz8yzKN/xz4Py4xVk7gDxjeJOuv7m21mzQd0Yy
+         zDlQ==
+X-Gm-Message-State: AJIora9nGIhYv+5FDCeqFPu77i1DPPpfhUhq24xRWwlllaaRG0Z5qoC/
+        k5KYHRbTXivn7l6+gPlM0PN3dA==
+X-Google-Smtp-Source: AGRyM1sC3dsIpYTDwO198OxJpK+5oBNuhHGguIKYVnPwaVxiGRjAVt7t7Cx8Bi4DEbZwA8B0MrKFlQ==
+X-Received: by 2002:a05:600c:509:b0:3a0:45d9:43e7 with SMTP id i9-20020a05600c050900b003a045d943e7mr4209360wmc.176.1656515428563;
+        Wed, 29 Jun 2022 08:10:28 -0700 (PDT)
 Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0a5500b0039c4d022a44sm3509029wmq.1.2022.06.29.08.10.25
+        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0a5500b0039c4d022a44sm3509029wmq.1.2022.06.29.08.10.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 08:10:26 -0700 (PDT)
+        Wed, 29 Jun 2022 08:10:27 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH 1/2] thermal/core: Use clamp() helper in the stepwise governor
-Date:   Wed, 29 Jun 2022 17:10:11 +0200
-Message-Id: <20220629151012.3115773-1-daniel.lezcano@linaro.org>
+Subject: [PATCH 2/2] thermal/core: Remove DROP_FULL and RAISE_FULL
+Date:   Wed, 29 Jun 2022 17:10:12 +0200
+Message-Id: <20220629151012.3115773-2-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220629151012.3115773-1-daniel.lezcano@linaro.org>
+References: <20220629151012.3115773-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,64 +71,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code is actually clampling the next cooling device state using the
-lowest and highest states of the thermal instance.
-
-That code can be replaced by the clamp() macro which does exactly the
-same. It results in a simpler routine to read.
+The trends DROP_FULL and RAISE_FULL are not used and were never used
+in the past AFAICT. Remove these conditions as they seems to not be
+handled anywhere.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/gov_step_wise.c | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
+ drivers/thermal/gov_step_wise.c | 11 -----------
+ include/linux/thermal.h         |  2 --
+ 2 files changed, 13 deletions(-)
 
 diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
-index 12acb12aac50..6efbfaf014da 100644
+index 6efbfaf014da..9729b46d0258 100644
 --- a/drivers/thermal/gov_step_wise.c
 +++ b/drivers/thermal/gov_step_wise.c
-@@ -11,6 +11,7 @@
-  */
- 
- #include <linux/thermal.h>
-+#include <linux/minmax.h>
- #include <trace/events/thermal.h>
- 
- #include "thermal_core.h"
-@@ -52,10 +53,7 @@ static unsigned long get_target_state(struct thermal_instance *instance,
- 
- 	if (!instance->initialized) {
- 		if (throttle) {
--			next_target = (cur_state + 1) >= instance->upper ?
--					instance->upper :
--					((cur_state + 1) < instance->lower ?
--					instance->lower : (cur_state + 1));
-+			next_target = clamp((cur_state + 1), instance->lower, instance->upper);
- 		} else {
- 			next_target = THERMAL_NO_TARGET;
- 		}
-@@ -66,10 +64,7 @@ static unsigned long get_target_state(struct thermal_instance *instance,
- 	switch (trend) {
- 	case THERMAL_TREND_RAISING:
- 		if (throttle) {
--			next_target = cur_state < instance->upper ?
--				    (cur_state + 1) : instance->upper;
--			if (next_target < instance->lower)
--				next_target = instance->lower;
-+			next_target = clamp((cur_state + 1), instance->lower, instance->upper);
+@@ -67,10 +67,6 @@ static unsigned long get_target_state(struct thermal_instance *instance,
+ 			next_target = clamp((cur_state + 1), instance->lower, instance->upper);
  		}
  		break;
- 	case THERMAL_TREND_RAISE_FULL:
-@@ -82,9 +77,7 @@ static unsigned long get_target_state(struct thermal_instance *instance,
- 				next_target = THERMAL_NO_TARGET;
- 		} else {
- 			if (!throttle) {
--				next_target = cur_state - 1;
--				if (next_target > instance->upper)
--					next_target = instance->upper;
-+				next_target = clamp((cur_state - 1), instance->lower, instance->upper);
+-	case THERMAL_TREND_RAISE_FULL:
+-		if (throttle)
+-			next_target = instance->upper;
+-		break;
+ 	case THERMAL_TREND_DROPPING:
+ 		if (cur_state <= instance->lower) {
+ 			if (!throttle)
+@@ -81,13 +77,6 @@ static unsigned long get_target_state(struct thermal_instance *instance,
  			}
  		}
  		break;
+-	case THERMAL_TREND_DROP_FULL:
+-		if (cur_state == instance->lower) {
+-			if (!throttle)
+-				next_target = THERMAL_NO_TARGET;
+-		} else
+-			next_target = instance->lower;
+-		break;
+ 	default:
+ 		break;
+ 	}
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 522c9180a08d..c8528bb6c01c 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -41,8 +41,6 @@ enum thermal_trend {
+ 	THERMAL_TREND_STABLE, /* temperature is stable */
+ 	THERMAL_TREND_RAISING, /* temperature is raising */
+ 	THERMAL_TREND_DROPPING, /* temperature is dropping */
+-	THERMAL_TREND_RAISE_FULL, /* apply highest cooling action */
+-	THERMAL_TREND_DROP_FULL, /* apply lowest cooling action */
+ };
+ 
+ /* Thermal notification reason */
 -- 
 2.25.1
 

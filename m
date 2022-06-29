@@ -2,78 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C83A5600C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 310D45600CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233665AbiF2NEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 09:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36524 "EHLO
+        id S233710AbiF2NHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 09:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233567AbiF2NEc (ORCPT
+        with ESMTP id S233693AbiF2NHJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 09:04:32 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A559A1D0E2;
-        Wed, 29 Jun 2022 06:04:31 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 7510C1C0BCD; Wed, 29 Jun 2022 15:04:30 +0200 (CEST)
-Date:   Wed, 29 Jun 2022 15:04:30 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Yihao Han <hanyihao@vivo.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH AUTOSEL 4.9 08/13] video: fbdev: simplefb: Check before
- clk_put() not needed
-Message-ID: <20220629130430.GD13395@duo.ucw.cz>
-References: <20220628022657.597208-1-sashal@kernel.org>
- <20220628022657.597208-8-sashal@kernel.org>
+        Wed, 29 Jun 2022 09:07:09 -0400
+Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874C62B1AB;
+        Wed, 29 Jun 2022 06:07:05 -0700 (PDT)
+Received: from xenbits.xenproject.org ([104.239.192.120])
+        by mail.xenproject.org with esmtp (Exim 4.92)
+        (envelope-from <pdurrant@amazon.com>)
+        id 1o6XOw-00033l-V4; Wed, 29 Jun 2022 13:06:38 +0000
+Received: from 54-240-197-231.amazon.com ([54.240.197.231] helo=debian.cbg12.amazon.com)
+        by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <pdurrant@amazon.com>)
+        id 1o6XOw-0003LW-Ia; Wed, 29 Jun 2022 13:06:38 +0000
+From:   Paul Durrant <pdurrant@amazon.com>
+To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Paul Durrant <pdurrant@amazon.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH v5] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info) sub-leaves, if present
+Date:   Wed, 29 Jun 2022 14:05:13 +0100
+Message-Id: <20220629130514.15780-1-pdurrant@amazon.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="osDK9TLjxFScVI/L"
-Content-Disposition: inline
-In-Reply-To: <20220628022657.597208-8-sashal@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_ADSP_ALL,
+        RCVD_IN_DNSWL_MED,SPF_FAIL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The scaling information in subleaf 1 should match the values set by KVM in
+the 'vcpu_info' sub-structure 'time_info' (a.k.a. pvclock_vcpu_time_info)
+which is shared with the guest, but is not directly available to the VMM.
+The offset values are not set since a TSC offset is already applied.
+The TSC frequency should also be set in sub-leaf 2.
 
---osDK9TLjxFScVI/L
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Paul Durrant <pdurrant@amazon.com>
+---
+Cc: David Woodhouse <dwmw2@infradead.org>
 
-Hi!
+v5:
+ - Drop the caching of the CPUID entry pointers and only update the
+   sub-leaves if the CPU frequency has actually changed
 
-> [ Upstream commit 5491424d17bdeb7b7852a59367858251783f8398 ]
->=20
-> clk_put() already checks the clk ptr using !clk and IS_ERR()
-> so there is no need to check it again before calling it.
+v4:
+ - Update commit comment
 
-Nice cleanup, but not a bugfix; we don't need it in -stable.
+v3:
+ - Add leaf limit check in kvm_xen_set_cpuid()
 
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+v2:
+ - Make sure sub-leaf pointers are NULLed if the time leaf is removed
+---
+ arch/x86/include/asm/kvm_host.h |  1 +
+ arch/x86/kvm/cpuid.c            |  2 ++
+ arch/x86/kvm/x86.c              |  1 +
+ arch/x86/kvm/xen.c              | 51 +++++++++++++++++++++++++++++++++
+ arch/x86/kvm/xen.h              | 10 +++++++
+ 5 files changed, 65 insertions(+)
 
---osDK9TLjxFScVI/L
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 88a3026ee163..abb0a39f60eb 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -638,6 +638,7 @@ struct kvm_vcpu_xen {
+ 	struct hrtimer timer;
+ 	int poll_evtchn;
+ 	struct timer_list poll_timer;
++	u32 cpuid_tsc_info;
+ };
+ 
+ struct kvm_vcpu_arch {
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index d47222ab8e6e..544d0f823ee5 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -25,6 +25,7 @@
+ #include "mmu.h"
+ #include "trace.h"
+ #include "pmu.h"
++#include "xen.h"
+ 
+ /*
+  * Unlike "struct cpuinfo_x86.x86_capability", kvm_cpu_caps doesn't need to be
+@@ -310,6 +311,7 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+ 	    __cr4_reserved_bits(guest_cpuid_has, vcpu);
+ 
+ 	kvm_hv_set_cpuid(vcpu);
++	kvm_xen_after_set_cpuid(vcpu);
+ 
+ 	/* Invoke the vendor callback only after the above state is updated. */
+ 	static_call(kvm_x86_vcpu_after_set_cpuid)(vcpu);
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 031678eff28e..29ed665c51db 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -3110,6 +3110,7 @@ static int kvm_guest_time_update(struct kvm_vcpu *v)
+ 				   &vcpu->hv_clock.tsc_shift,
+ 				   &vcpu->hv_clock.tsc_to_system_mul);
+ 		vcpu->hw_tsc_khz = tgt_tsc_khz;
++		kvm_xen_setup_tsc_info(v);
+ 	}
+ 
+ 	vcpu->hv_clock.tsc_timestamp = tsc_timestamp;
+diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+index 610beba35907..c84424d5c8b6 100644
+--- a/arch/x86/kvm/xen.c
++++ b/arch/x86/kvm/xen.c
+@@ -10,6 +10,9 @@
+ #include "xen.h"
+ #include "hyperv.h"
+ #include "lapic.h"
++#include "cpuid.h"
++
++#include <asm/xen/cpuid.h>
+ 
+ #include <linux/eventfd.h>
+ #include <linux/kvm_host.h>
+@@ -1855,3 +1858,51 @@ void kvm_xen_destroy_vm(struct kvm *kvm)
+ 	if (kvm->arch.xen_hvm_config.msr)
+ 		static_branch_slow_dec_deferred(&kvm_xen_enabled);
+ }
++
++void kvm_xen_after_set_cpuid(struct kvm_vcpu *vcpu)
++{
++	u32 base = 0;
++	u32 limit;
++	u32 function;
++
++	vcpu->arch.xen.cpuid_tsc_info = 0;
++
++	for_each_possible_hypervisor_cpuid_base(function) {
++		struct kvm_cpuid_entry2 *entry = kvm_find_cpuid_entry(vcpu, function, 0);
++
++		if (entry &&
++		    entry->ebx == XEN_CPUID_SIGNATURE_EBX &&
++		    entry->ecx == XEN_CPUID_SIGNATURE_ECX &&
++		    entry->edx == XEN_CPUID_SIGNATURE_EDX) {
++			base = function;
++			limit = entry->eax;
++			break;
++		}
++	}
++	if (!base)
++		return;
++
++	function = base | XEN_CPUID_LEAF(3);
++	if (function > limit)
++		return;
++
++	vcpu->arch.xen.cpuid_tsc_info = function;
++}
++
++void kvm_xen_setup_tsc_info(struct kvm_vcpu *vcpu)
++{
++	struct kvm_cpuid_entry2 *entry;
++
++	if (!vcpu->arch.xen.cpuid_tsc_info)
++		return;
++
++	entry = kvm_find_cpuid_entry(vcpu, vcpu->arch.xen.cpuid_tsc_info, 1);
++	if (entry) {
++		entry->ecx = vcpu->arch.hv_clock.tsc_to_system_mul;
++		entry->edx = vcpu->arch.hv_clock.tsc_shift;
++	}
++
++	entry = kvm_find_cpuid_entry(vcpu, vcpu->arch.xen.cpuid_tsc_info, 2);
++	if (entry)
++		entry->eax = vcpu->arch.hw_tsc_khz;
++}
+diff --git a/arch/x86/kvm/xen.h b/arch/x86/kvm/xen.h
+index 532a535a9e99..b2ca434431d6 100644
+--- a/arch/x86/kvm/xen.h
++++ b/arch/x86/kvm/xen.h
+@@ -32,6 +32,8 @@ int kvm_xen_set_evtchn_fast(struct kvm_xen_evtchn *xe,
+ int kvm_xen_setup_evtchn(struct kvm *kvm,
+ 			 struct kvm_kernel_irq_routing_entry *e,
+ 			 const struct kvm_irq_routing_entry *ue);
++void kvm_xen_after_set_cpuid(struct kvm_vcpu *vcpu);
++void kvm_xen_setup_tsc_info(struct kvm_vcpu *vcpu);
+ 
+ static inline bool kvm_xen_msr_enabled(struct kvm *kvm)
+ {
+@@ -135,6 +137,14 @@ static inline bool kvm_xen_timer_enabled(struct kvm_vcpu *vcpu)
+ {
+ 	return false;
+ }
++
++static inline void kvm_xen_after_set_cpuid(struct kvm_vcpu *vcpu)
++{
++}
++
++static inline void kvm_xen_setup_tsc_info(struct kvm_vcpu *vcpu)
++{
++}
+ #endif
+ 
+ int kvm_xen_hypercall(struct kvm_vcpu *vcpu);
+-- 
+2.20.1
 
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYrxN3gAKCRAw5/Bqldv6
-8l0vAJ4hi7VBDbsObGLei7MhiNZd1W/QkwCbBN5YwMYoM34CeEw8AVL19VF1JNk=
-=oYg7
------END PGP SIGNATURE-----
-
---osDK9TLjxFScVI/L--

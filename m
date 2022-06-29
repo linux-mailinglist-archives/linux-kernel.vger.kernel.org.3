@@ -2,168 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF624560CC1
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 00:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3669560CD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 00:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbiF2WzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 18:55:01 -0400
+        id S231624AbiF2W5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 18:57:19 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbiF2Wyh (ORCPT
+        with ESMTP id S231334AbiF2W4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 18:54:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878873FDB3
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 15:54:05 -0700 (PDT)
-Received: from [192.168.1.90] (unknown [188.24.177.228])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BBCD26601933;
-        Wed, 29 Jun 2022 23:54:02 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656543243;
-        bh=NPpKl2bppLzLhD0GjNYn7KYiv5/qMiG43eoBG7+S+ZI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YUltykbyQlXRz6QyDjVK4cKpJIBgOmnE2pzt9ruem/bO/Xv0nTfYjRKbqBXgz0Rpb
-         DOyVwslbRCYiRg//Au2SL27jD9qlaPxSrUQCzeufO8UWY2uJMNiW2kScSlOHObL6uQ
-         VDUnEvOjphdPrzOF7k6j6BVA8wklDZpBbuQi85qCY353f1mBJHXeEeDiNF0WNR0MIy
-         JtZusP9qddOmBK6T+SSYggkXNm+QrQVaJAPWicZIKP37Le9xui+V1RQDs2p/WldVBe
-         dzx0Ez8Ke7dL3kueutpJFn5o7/YuNHTy5A6dIQc5LQ/JOZyMKNMMzmt+EK1v0T1t8i
-         khPqrL3F50CuQ==
-Message-ID: <b1b5666a-67a7-469c-d6c7-e585cf59c632@collabora.com>
-Date:   Thu, 30 Jun 2022 01:54:00 +0300
+        Wed, 29 Jun 2022 18:56:02 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7CAB40905
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 15:55:23 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id o19so24058377ybg.2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 15:55:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y5ZTGoJWK8uoT//Ot+7y7C0qNgpOLHB415dUDB/bM2E=;
+        b=V3LS6TmSOlPaVFdCJ0BuXUrJbm9ByWprG9K7HC9tmT10nT8kfB2ueJ5fw4gRIIgxsi
+         hjQth58XT0ZxT0rxLmC8XnJOOZcs0sOOmkAhVhQjxsBBiXzh28ez6t7aGFLuC4jmRjdN
+         rqWdKH92Zyx+IbHkg8Og4+2IlarHko6eURmHQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y5ZTGoJWK8uoT//Ot+7y7C0qNgpOLHB415dUDB/bM2E=;
+        b=g1cScuYu079NXloboxo7utrWyUa50xSnUGvLBaR2Big33pLQTlsNob9VEimWPnv7ab
+         NOurGmftCnLH9uUWlQoc5WgvlASFnvoRydi6OMms6Zv/Xd2Np4P4uXux908Yaa4xGfI5
+         f1/AXrQ9IU8RcZUvGiEtk0MClzqSKFmL8CwmCXYa2e0BrZzXR5PJbfgjjFXz8AX810dc
+         XsVZN7HUhHUYtT8h+nW2OaKJky9Y1PQFpTPPkJVz1gxaYnQVJZqUAMZDdQ0p4r5WwbFE
+         E0n5z8Jnm/Yc758WCV2N0bhBAVL8YcRGHVfcGv6Rd0V6uKgNTx+qVidztOHMA4QU/Itm
+         hqgg==
+X-Gm-Message-State: AJIora/WbMSAgOoLJZtea1mxntOV7b9w43VAAcyiRIScYmc0RozMplHj
+        NLA1YJGDuiZeLdlkV8mj8Z1+fZI7Q8biQ6ICniy2Zg==
+X-Google-Smtp-Source: AGRyM1vYoOdLWULQbH68SDkQmn0KXQiOTLkNIVGkUaz44XEXYq1Av98xn5aI+4eBZ+6aEtA9QjkYgcCPn8rqByb70u4=
+X-Received: by 2002:a25:bcc:0:b0:66c:b80a:2d5 with SMTP id 195-20020a250bcc000000b0066cb80a02d5mr6437342ybl.196.1656543322872;
+ Wed, 29 Jun 2022 15:55:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] scripts/tags.sh: Include tools directory in tags
- generation
-Content-Language: en-US
-To:     Vipin Sharma <vipinsh@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>, rkovhaev@gmail.com,
-        zackary.liu.pro@gmail.com, ripxorip@gmail.com,
-        masahiroy@kernel.org, xujialu@vimux.org,
-        "drjones@redhat.com" <drjones@redhat.com>
-Cc:     dmatlack@google.com, linux-kernel@vger.kernel.org
-References: <20220618005457.2379324-1-vipinsh@google.com>
- <CAHVum0euKMV+rCLXMQ4NuDAqowyeCkO1LheSafR2tm=R4aUfJw@mail.gmail.com>
- <YrqaKpdVDl8DBl4g@kroah.com>
- <CAHVum0f=_7kh_OrOqiTH=UZuvr3ZbxNcZeUSbT66x5r0q2XEgQ@mail.gmail.com>
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <CAHVum0f=_7kh_OrOqiTH=UZuvr3ZbxNcZeUSbT66x5r0q2XEgQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220622173605.1168416-1-pmalani@chromium.org>
+ <20220622173605.1168416-2-pmalani@chromium.org> <20220627210407.GA2905757-robh@kernel.org>
+ <CACeCKackdbDZrk5fk7qyMwSdTdzyTS=m1vHPFnQOj672W=2nOA@mail.gmail.com>
+ <20220628182336.GA711518-robh@kernel.org> <CAEXTbpex9nxP-nyPWvSBchAW4j3C4MZfVHTb=5X0iSLY1bSAKg@mail.gmail.com>
+ <CAEXTbpf_jxK-R5aA81FCbpAH4bChA2B9+8qExZUbA7Y+Ort=Gg@mail.gmail.com>
+ <CAL_Jsq+C04RXLtm6Ac85Ru3EGwJbqV_UD3_dDWVrKvFSvdm7Ng@mail.gmail.com> <CAE-0n53ers881LOTCEmKDDxJQt+5vvXJSURs=o6TcOiR5m_EAw@mail.gmail.com>
+In-Reply-To: <CAE-0n53ers881LOTCEmKDDxJQt+5vvXJSURs=o6TcOiR5m_EAw@mail.gmail.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Wed, 29 Jun 2022 15:55:10 -0700
+Message-ID: <CACeCKacJnnk4_dXEX7XiboOWrYpfAcE=ukP63agVAYUxWR9Vbg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Pin-yen Lin <treapking@chromium.org>,
+        Rob Herring <robh@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 29, 2022 at 2:58 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> > What device controls the switching in this case? Again, block diagrams
+> > please if you want advice on what the binding should look like.
+>
+> My understanding is there are 4 DP lanes on it6505 and two lanes are
+> connected to one usb-c-connector and the other two lanes are connected
+> to a different usb-c-connector. The IT6505 driver will send DP out on
+> the associated two DP lanes depending on which usb-c-connector has DP
+> pins assigned by the typec manager.
+>
+>                                                      +-------+
+>                                                      |       |
+>           +--------+                            /----+ usb-c |
+>           | IT6505 |                           / /---+       |
+>           |        +------------ lane 0 ------/ /    |       |
+>           |        +------------ lane 1 -------/     +-------+
+>  DPI -----+        |
+>           |        |                                 +-------+
+>           |        |                                 |       |
+>           |        +------------ lane 2 -------------+ usb-c |
+>           |        +------------ lane 3 -------------+       |
+>           |        |                                 |       |
+>           +--------+                                 +-------+
+>
+> The bridge is a mux that steers DP to one or the other usb-c-connector
+> based on what the typec manager decides.
+>
+> I would expect this to be described with the existing port binding in
+> the it6505 node. The binding would need to be extended to describe the
+> output side.
+>
+>         bridge@5c {
+>             compatible = "ite,it6505";
 
-On 6/30/22 01:18, Vipin Sharma wrote:
-> On Mon, Jun 27, 2022 at 11:05 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->>
->> On Mon, Jun 27, 2022 at 10:47:35AM -0700, Vipin Sharma wrote:
->>> On Fri, Jun 17, 2022 at 5:55 PM Vipin Sharma <vipinsh@google.com> wrote:
->>>>
->>>> Add tools directory in generating tags and quiet the "No such file or
->>>> directory" warnings.
->>>>
->>>> It reverts the changes introduced in commit 162343a876f1
->>>> ("scripts/tags.sh: exclude tools directory from tags generation") while
->>>> maintainig the original intent of the patch to get rid of the warnings.
->>>> This allows the root level cscope files to include tools source code
->>>> besides kernel and a single place to browse the code for both.
->>>>
->>>> Signed-off-by: Vipin Sharma <vipinsh@google.com>
->>>> ---
->>>>
->>>> I have found myself many times to browse tools and other part of the
->>>> kernel code together. Excluding tools from the root level cscope makes
->>>> it difficult to efficiently move between files and find user api
->>>> definitions.
->>>>
->>>> Root cause of these warning is due to generated .cmd files which use
->>>> relative paths in some files, I am not sure how to make them absolute
->>>> file paths which can satisfy realpath warnings. Also, not sure if those
->>>> warnings are helpful and should be kept. Passing "-q" to realpath seems
->>>> easier solution. Please, let me know if there is a better alternative.
->>>>
->>>> Thanks
->>>>
->>>>   scripts/tags.sh | 9 +--------
->>>>   1 file changed, 1 insertion(+), 8 deletions(-)
->>>>
->>>> diff --git a/scripts/tags.sh b/scripts/tags.sh
->>>> index 01fab3d4f90b5..e137cf15aae9d 100755
->>>> --- a/scripts/tags.sh
->>>> +++ b/scripts/tags.sh
->>>> @@ -25,13 +25,6 @@ else
->>>>          tree=${srctree}/
->>>>   fi
->>>>
->>>> -# ignore userspace tools
->>>> -if [ -n "$COMPILED_SOURCE" ]; then
->>>> -       ignore="$ignore ( -path ./tools ) -prune -o"
->>>> -else
->>>> -       ignore="$ignore ( -path ${tree}tools ) -prune -o"
->>>> -fi
->>>> -
->>>>   # Detect if ALLSOURCE_ARCHS is set. If not, we assume SRCARCH
->>>>   if [ "${ALLSOURCE_ARCHS}" = "" ]; then
->>>>          ALLSOURCE_ARCHS=${SRCARCH}
->>>> @@ -100,7 +93,7 @@ all_compiled_sources()
->>>>                  find $ignore -name "*.cmd" -exec \
->>>>                          grep -Poh '(?(?=^source_.* \K).*|(?=^  \K\S).*(?= \\))' {} \+ |
->>>>                  awk '!a[$0]++'
->>>> -       } | xargs realpath -es $([ -z "$KBUILD_ABS_SRCTREE" ] && echo --relative-to=.) |
->>>> +       } | xargs realpath -esq $([ -z "$KBUILD_ABS_SRCTREE" ] && echo --relative-to=.) |
->>>>          sort -u
->>>>   }
->>>>
->>>> --
->>>> 2.37.0.rc0.104.g0611611a94-goog
->>>>
->>>
->>> Hi Greg,
->>>
->>> Any update on the patch?
->>
->> Nope!
->>
->> I don't really think we should add back in the tools to this, as if you
->> want to search them, then can't you just generate the needed tags for
->> the tools directory?
->>
-> 
-> Some folders in the tools directory do provide cscope rules. However,
-> those tags can only be used when I open the vim in those directories.
-> For example, if I am writing a KVM selftest and I want to explore code
-> related to certain ioctl in kernel as well as some code in KVM
-> selftest library, I cannot use two cscope files (one in the kernel
-> root dir and another in tools/testing/selftests/kvm) in a single VIM
-> instance. It starts having issues with the file paths. If the root
-> level cscope file includes tools directory then all of the tags will
-> be at one place and makes it very easy to browse tools code along with
-> the rest of the kernel.
-> 
->> But as I don't even use this script ever, it feels odd for me to be the
->> one "owning" it, so it would be great if others could chime in who
->> actually use it.
->>
+We'll need a top level "mode-switch" property here.
+>             ...
+>
+>             ports {
+>                 #address-cells = <1>;
+>                 #size-cells = <0>;
+>
+>                 port@0 {
+>                     reg = <0>;
+>                     it6505_in: endpoint {
+>                         remote-endpoint = <&dpi_out>;
+>                     };
+>                 };
+>
+>                 port@1 {
+>                     #address-cells = <1>;
+>                     #size-cells = <0>;
+>                     reg = <1>;
+>
+>                     it6505_out_lanes_01: endpoint@0 {
+>                         reg = <0>
+>                         data-lanes = <0 1>;
+>                         remote-endpoint = <&typec0>;
+>                     };
+>
+>                     it6505_out_lanes_23: endpoint@1 {
+>                         reg = <1>
+>                         data-lanes = <2 3>;
+>                         remote-endpoint = <&typec1>;
+>                     };
+>                 };
+>             };
+>         };
+>
+>         usb-c-connector {
+>             compatible = "usb-c-connector";
+>             ....
+>             ports {
+>                 #address-cells = <1>;
+>                 #size-cells = <0>;
+>
+>                 port@1 {
+>                     reg = <1>;
+>                     typec0: endpoint {
+>                         remote-endpoint = <&it6505_out_lanes_01>;
+>                     };
+>                 };
+>             };
+>         };
 
-Since the tools directory has been excluded just to get rid of those 
-warnings, I think there is no obvious reason to not add it back - at 
-least the use case described above is perfectly valid.
+We can adopt this binding, but from what I gathered in this thread, that
+shouldn't be done, because IT6505 isn't meant to be aware of Type-C
+connections at all.
 
-> I have added some folks in this email who have touched this script
-> file in the last couple of years or use cscope, hopefully they can
-> chime in.
-> 
-> Thanks
-> Vipin
+>
+> I don't see the benefit to making a genericish binding for typec
+> switches, even if the hardware has typec awareness like anx7625. It
+> looks like the graph binding can already handle what we need. By putting
+> it in the top-level ports node we have one way to describe the
+> input/output of the device instead of describing it in the top-level in
+> the display connector case and the child typec switch node in the usb c
+> connector case.
+
+Ack, I'll drop the generic binding for future revisions.
+
+>
+> I think the difficulty comes from the combinatorial explosion of
+> possible configurations. As evidenced here, hardware engineers can take
+> a DP bridge and use it as a DP mux as long as the bridge has lane
+> control. Or they can take a device like anx7625 and ignore the USB
+> aspect and use the internal crosspoint switch as a DP mux. The anx7625
+> part could be a MIPI-to-DP display bridge plus mux that is connected to
+> two dp-connectors, in which case typec isn't even involved, but we could
+> mux between two dp connectors.
+
+Each containing a single DP lane, right?
+I think that will not be a valid configuration, since there is only 1 HPD
+pin (so it's assuming both DP lanes go to the same DP sink).
+
+But yes, your larger point is valid: h/w engineers can repurpose these
+bridges in ways the datasheet doesn't originally anticipate.
+
+>
+> Also, the typec framework would like to simply walk the graph from the
+> usb-c-connector looking for nodes that have 'mode-switch' or
+> 'orientation-switch' properties and treat those devices as the typec
+> switches for the connector. This means that we have to add these typec
+> properties like 'mode-switch' to something like the IT6505 bridge
+> binding, which is a little awkward. I wonder if those properties aren't
+> really required. Would it be sufficient if the framework could walk the
+> graph and look for registered typec switches in the kernel that have a
+> matching of_node?
+
+My interpretation of the current mode-switch search code [1] is that
+a top level property of "mode-switch" is required.
+
+[1] https://elixir.bootlin.com/linux/v5.19-rc4/source/drivers/usb/typec/mux.c#L347

@@ -2,64 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 541E555FB8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52F255FB86
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbiF2JOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 05:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
+        id S232184AbiF2JNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 05:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiF2JOA (ORCPT
+        with ESMTP id S229772AbiF2JN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 05:14:00 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D356720F46;
-        Wed, 29 Jun 2022 02:13:57 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id AF7EA24000A;
-        Wed, 29 Jun 2022 09:13:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656494036;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=rDHvQvZTZ+R6+aUdOzyCj3VSYkqM3jPLAofXVQtDdKs=;
-        b=bydiXHqeu+ipQRkYLeFH2JmHxjH2WIGFKp3qA2p8qTs6a7F26ADptQeOoLq2C0Fpn6/OsY
-        RH/OZ56cmcDgYw3ABqTGhrukKF/i70oh7D2Qe54WuPO/M1hGw41LBL/j36W/ixGKt7mLGx
-        M4S3FMhE4QvMqyi5rMGcfDcTa/U2nSxTE2G1W570/nsTzP9XBnJ1SDQIizh+1WIabXS4sC
-        wkPDB1ZWxn1S9Lq9B/xveASOcGrUVdEH5ymjgnQcX7Dl/lAMR1oyoRl/0Waiq9pPvp32gZ
-        7yb621L4HpCDyzIVlZfIxTJqoXcIZx/oWa6hQTZDxv1l2yHkMluV2KTcOzSwnQ==
-From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>
-Subject: [PATCH net-next] dt-bindings: net: dsa: renesas,rzn1-a5psw: add interrupts description
-Date:   Wed, 29 Jun 2022 11:13:04 +0200
-Message-Id: <20220629091305.125291-1-clement.leger@bootlin.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 29 Jun 2022 05:13:28 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9F927B0E;
+        Wed, 29 Jun 2022 02:13:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656494008; x=1688030008;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=zOHATe1LWt9PXvV1uvutZ31aBHVhiH/1Whjdlp8A67Q=;
+  b=kXOlX4aJ9fhJs3QvQyg23Ee0m0uR6FNjeIAVVNRTe4bkOZWKFe/QQGFs
+   m4uswRTtCuviAySOght8nGyqr4xOICO8JvqkxlEQRN9Tgwq0SwcjLuExd
+   diynBMiBB3zSfmvzPkAyBDxu9eLpjMID2F2Z6+en9nr4Oxps6eqwFhZ/p
+   dMJmQfBTfNwwYHM8WHcZ7E1qJeOC/751QOL4leZ4QwXF/2mLGpTF5Jnxd
+   U2LcS4b9jlxRKTDg0kFQI5qeAiHZynRmJBnc8jJueOg75q3TWezxPDJSN
+   Prbrrd+rQsRKaIDJCL/VPRfDD7bB/OGjFmZAM/hrZSvnpjPOEL4DEgy16
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="270744415"
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="270744415"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 02:13:27 -0700
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="917533030"
+Received: from gregantx-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.119.76])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 02:13:23 -0700
+Message-ID: <3ec0ce3857dbcad8706ae0690d66b54a478c9769.camel@intel.com>
+Subject: Re: [PATCH v5 03/22] cc_platform: Add new attribute to prevent ACPI
+ memory hotplug
+From:   Kai Huang <kai.huang@intel.com>
+To:     Igor Mammedov <imammedo@redhat.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kvm-devel <kvm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Len Brown <len.brown@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        isaku.yamahata@intel.com, Tom Lendacky <thomas.lendacky@amd.com>
+Date:   Wed, 29 Jun 2022 21:13:21 +1200
+In-Reply-To: <20220629104850.07559fee@redhat.com>
+References: <cover.1655894131.git.kai.huang@intel.com>
+         <87dc19c47bad73509359c8e1e3a81d51d1681e4c.1655894131.git.kai.huang@intel.com>
+         <CAJZ5v0jEJNdmkidvcOiRn+OVt01D5095t+nyXaJHKsqEAOvcBQ@mail.gmail.com>
+         <20220628140112.661154cf@redhat.com>
+         <ceb320a00eebd29d2031b94b6123ff31ba74c313.camel@intel.com>
+         <20220629104850.07559fee@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,62 +82,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe the switch interrupts (dlr, switch, prp, hub, pattern) which
-are connected to the GIC.
+On Wed, 2022-06-29 at 10:48 +0200, Igor Mammedov wrote:
+> > Hi Rafael,=C2=A0 Igor,
+> >=20
+> > On my test machine, the acpi_memory_device_add() is not called for syst=
+em
+> > memory.=C2=A0 It probably because my machine doesn't have memory device=
+ in ACPI.
+> >=20
+> > I don't know whether we can have any memory device in ACPI if such memo=
+ry is
+> > present during boot?=C2=A0 Any comments here?
+>=20
+> I don't see anything in ACPI spec that forbids memory device being presen=
+t at
+> boot.
+> Such memory may also be present in E820, but in QEMU is not done as linux=
+ used
+> to
+> online all E820 memory as normal which breaks hotplug. And I don't know i=
+f it
+> still true.
+>=20
+> Also NVDIMMs also use memory device, so they may be affected by this patc=
+h as
+> well.
 
-Signed-off-by: Clément Léger <clement.leger@bootlin.com>
----
- .../bindings/net/dsa/renesas,rzn1-a5psw.yaml  | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+AFAICT NVDIMM uses different device ID so won't be impacted.  But right the=
+re's
+no specification around "whether firmware will create ACPI memory device fo=
+r
+boot-time present memory", so I guess we need to treat it is possible.  So =
+I
+agree having the check at the beginning of acpi_memory_device_add() looks
+incorrect. =20
 
-diff --git a/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
-index 103b1ef5af1b..51f274c16ed1 100644
---- a/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
-+++ b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
-@@ -26,6 +26,22 @@ properties:
-   reg:
-     maxItems: 1
- 
-+  interrupts:
-+    items:
-+      - description: DLR interrupt
-+      - description: Switch interrupt
-+      - description: PRP interrupt
-+      - description: Integrated HUB module interrupt
-+      - description: RX Pattern interrupt
-+
-+  interrupts-names:
-+    items:
-+      - const: dlr
-+      - const: switch
-+      - const: prp
-+      - const: hub
-+      - const: ptrn
-+
-   power-domains:
-     maxItems: 1
- 
-@@ -76,6 +92,7 @@ examples:
-   - |
-     #include <dt-bindings/gpio/gpio.h>
-     #include <dt-bindings/clock/r9a06g032-sysctrl.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
- 
-     switch@44050000 {
-         compatible = "renesas,r9a06g032-a5psw", "renesas,rzn1-a5psw";
-@@ -83,6 +100,12 @@ examples:
-         clocks = <&sysctrl R9A06G032_HCLK_SWITCH>, <&sysctrl R9A06G032_CLK_SWITCH>;
-         clock-names = "hclk", "clk";
-         power-domains = <&sysctrl>;
-+        interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
-+        interrupts-name = "dlr", "switch", "prp", "hub", "ptrn";
- 
-         dsa,member = <0 0>;
- 
--- 
-2.36.1
+Also as Christoph commented I'll give up introducing new CC attribute.
+
+>=20
+> >=20
+> > And CC_ATTR_ACPI_MEMORY_HOTPLUG_DISABLED is only true on TDX bare-metal
+> > system,
+> > but cannot be true in Qemu guest.=C2=A0 But yes if this flag ever becom=
+es true in
+>=20
+> that's temporary, once TDX support lands in KVM/QEMU, this patch will sil=
+ently
+> break usecase.
+
+I don't think so.  KVM/Qemu won't expose TDX to guest, so this code won't b=
+e
+true in guest.
+
+--=20
+Thanks,
+-Kai
+
 

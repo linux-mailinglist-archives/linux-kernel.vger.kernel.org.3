@@ -2,174 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF449560B62
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 23:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65639560B64
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 23:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbiF2VGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 17:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
+        id S230347AbiF2VH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 17:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiF2VGx (ORCPT
+        with ESMTP id S230267AbiF2VHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 17:06:53 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF0E3FBF0;
-        Wed, 29 Jun 2022 14:06:51 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id dw10-20020a17090b094a00b001ed00a16eb4so700682pjb.2;
-        Wed, 29 Jun 2022 14:06:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8p+JOQ19xWokrdD2iUophisiJ9mD6MuQuzslw5aPPt8=;
-        b=pBDhbsa65pfboiBYSIPpuk5KeIXyy0CQwKFEJmWAxZi2DC419WqJc0EL/OQYVNSaQl
-         yKjLEf/pFzk45D9E7KNeB4dnQXjiBvD8UxBN31ZoFpf9/lH/Jgq1r4YxOoN6tncKFzYI
-         NzxYHA0UCTUAIW2ULluh+3s2lqPBpt8hB84OacsdqUXwz8XphTIzOeCUYrR4fiqXEbUA
-         zfTtNFhGVEy3TXntUEu6Xrfab9eP65FLmP15nS6c8uNuioDmDv3AtIyHz8Zs4KWrmdC2
-         M0CwsJh2UfSEOs7LBhI1eOYvFiAhwHnF2UQWktnMsjKgDpOc2Folx0VSewBYKJHOFcvD
-         MnOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=8p+JOQ19xWokrdD2iUophisiJ9mD6MuQuzslw5aPPt8=;
-        b=Gro5dPtQZuwVI0VmD2xbxN663JhcEjnfBPmXTzrBRxSsZ+aYUA8cjzeXIahufbDt4P
-         OELqP8pBPvuoWvRex+e8PeA6JVrqlGwpIMaNrNldGWP/DO2Emg4m9wdQSkoaNoMTFy8R
-         nSNXC9rhMXE43msXCNqVkOMqdJq/OegrQ2Kyqk1vEZmzDcJaqmLeVPNabrgCsdK6uZN0
-         3YyRbl3vPHwrZ46Peqv5I31mO+ajtnLYAwQMsTErU94STXXSDyO6upgo31cQpUxYlJg/
-         Mh+dVuhMrHxM6g4iM9UTLWbQLOWgF33SOQ3yw3UwsdcwL4wBky8F6C25QI1nMj4RZ1XV
-         OXtA==
-X-Gm-Message-State: AJIora/e73RwLM4As/lhqzkpoYGcOrz/T3l5I+YHifcIAxa/IlAaufLG
-        ocZJ3FcS4TxL+tnFr0yL6VG5YvvJ0R0=
-X-Google-Smtp-Source: AGRyM1s+IVwYUeIRlFUjDSpO5yq9/VlA/lFPZa6AvW0otsJCgzZyLyBPKOeccAiaY/j4LdhIZUmESQ==
-X-Received: by 2002:a17:90a:31c1:b0:1ec:729f:36b7 with SMTP id j1-20020a17090a31c100b001ec729f36b7mr7669431pjf.123.1656536811190;
-        Wed, 29 Jun 2022 14:06:51 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s37-20020a056a0017a500b0052513b5d078sm11984154pfg.31.2022.06.29.14.06.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 14:06:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 29 Jun 2022 14:06:49 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Michael Carns <mike@carns.com>, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add support for Maximus XI Hero
-Message-ID: <20220629210649.GA3936933@roeck-us.net>
-References: <20220627225437.87462-1-eugene.shalygin@gmail.com>
+        Wed, 29 Jun 2022 17:07:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246553FBF6;
+        Wed, 29 Jun 2022 14:07:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADE4AB82739;
+        Wed, 29 Jun 2022 21:07:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 502CBC34114;
+        Wed, 29 Jun 2022 21:07:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656536841;
+        bh=y79DeHyZr4VVCR4Ra2O/fykhYEKWsU0vQWQ2Dig3C+s=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=JBbRhDBctQyouV2LLQ+p1iyD44QBE+kNxfCdizi27F5nFxqQ8i/WvmW6eMeVNEuZG
+         rLUfEgTys8e0OEu5JjQoBdjannYm7pFVEstaxJgkC8UEdNh7J0H/6TvAmvxNbSre8r
+         kov04iI1MFgmu4U7dyC0qMJgZkKhUxDK1a+4TUpVaSDwwqqS71X2k4ba30BQp17NpK
+         ngOgySxlMWU+xGM2c9qVWuAzCpwSrkpZ8PqzFs6C+mY/MqKLG9wOvTkKwqP7d3H89S
+         AchfU/F2q7MwAW1Xp8vrQq9cvTDXaVGAP/gzkKRgE0BlPyp8zxg6t+uKleuiiRfk21
+         hC2Sa7QzN1OYg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id DC2795C0E5F; Wed, 29 Jun 2022 14:07:20 -0700 (PDT)
+Date:   Wed, 29 Jun 2022 14:07:20 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu <rcu@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, vineeth@bitbyteword.org
+Subject: Re: [PATCH v2 8/8] rcu/kfree: Fix kfree_rcu_shrink_count() return
+ value
+Message-ID: <20220629210720.GO1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220622225102.2112026-1-joel@joelfernandes.org>
+ <20220622225102.2112026-10-joel@joelfernandes.org>
+ <Yrn9a5pOvhvL/eZj@pc638.lan>
+ <20220627205907.GM1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YroelcGVNhQj91ab@google.com>
+ <20220627214359.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YrsyrmDbfnkpfDEP@google.com>
+ <CAEXW_YRQiuvsy1FsMNWG7wd9ah_gfgcOUAeNzA-QbmDcACa+Uw@mail.gmail.com>
+ <20220629165627.GI1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YrysWAx/rMbBF5iY@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220627225437.87462-1-eugene.shalygin@gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <YrysWAx/rMbBF5iY@google.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 12:54:36AM +0200, Eugene Shalygin wrote:
-> From: Michael Carns <mike@carns.com>
+On Wed, Jun 29, 2022 at 07:47:36PM +0000, Joel Fernandes wrote:
+> On Wed, Jun 29, 2022 at 09:56:27AM -0700, Paul E. McKenney wrote:
+> > On Tue, Jun 28, 2022 at 05:13:21PM -0400, Joel Fernandes wrote:
+> > > On Tue, Jun 28, 2022 at 12:56 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+> > > >
+> > > > On Mon, Jun 27, 2022 at 02:43:59PM -0700, Paul E. McKenney wrote:
+> > > > > On Mon, Jun 27, 2022 at 09:18:13PM +0000, Joel Fernandes wrote:
+> > > > > > On Mon, Jun 27, 2022 at 01:59:07PM -0700, Paul E. McKenney wrote:
+> > > > > > > On Mon, Jun 27, 2022 at 08:56:43PM +0200, Uladzislau Rezki wrote:
+> > > > > > > > > As per the comments in include/linux/shrinker.h, .count_objects callback
+> > > > > > > > > should return the number of freeable items, but if there are no objects
+> > > > > > > > > to free, SHRINK_EMPTY should be returned. The only time 0 is returned
+> > > > > > > > > should be when we are unable to determine the number of objects, or the
+> > > > > > > > > cache should be skipped for another reason.
+> > > > > > > > >
+> > > > > > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > > > > > > > ---
+> > > > > > > > >  kernel/rcu/tree.c | 2 +-
+> > > > > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > > > > >
+> > > > > > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > > > > > > > index 711679d10cbb..935788e8d2d7 100644
+> > > > > > > > > --- a/kernel/rcu/tree.c
+> > > > > > > > > +++ b/kernel/rcu/tree.c
+> > > > > > > > > @@ -3722,7 +3722,7 @@ kfree_rcu_shrink_count(struct shrinker *shrink, struct shrink_control *sc)
+> > > > > > > > >               atomic_set(&krcp->backoff_page_cache_fill, 1);
+> > > > > > > > >       }
+> > > > > > > > >
+> > > > > > > > > -     return count;
+> > > > > > > > > +     return count == 0 ? SHRINK_EMPTY : count;
+> > > > > > > > >  }
+> > > > > > > > >
+> > > > > > > > >  static unsigned long
+> > > > > > > > > --
+> > > > > > > > > 2.37.0.rc0.104.g0611611a94-goog
+> > > > > > > > >
+> > > > > > > > Looks good to me!
+> > > > > > > >
+> > > > > > > > Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > > > > >
+> > > > > > > Now that you mention it, this does look independent of the rest of
+> > > > > > > the series.  I have pulled it in with Uladzislau's Reviewed-by.
+> > > > > >
+> > > > > > Thanks Paul and Vlad!
+> > > > > >
+> > > > > > Paul, apologies for being quiet. I have been working on the series and the
+> > > > > > review comments carefully. I appreciate your help with this work.
+> > > > >
+> > > > > Not a problem.  After all, this stuff is changing some of the trickier
+> > > > > parts of RCU.  We must therefore assume that some significant time and
+> > > > > effort will be required to get it right.
+> > > >
+> > > > To your point about trickier parts of RCU, the v2 series though I tested it
+> > > > before submitting is now giving me strange results with rcuscale. Sometimes
+> > > > laziness does not seem to be in effect (as pointed out by rcuscale), other
+> > > > times I am seeing stalls.
+> > > >
+> > > > So I have to carefully look through all of this again. I am not sure why I
+> > > > was not seeing these issues with the exact same code before (frustrated).
+> > > 
+> > > Looks like I found at least 3 bugs in my v2 series which testing
+> > > picked up now. RCU-lazy was being too lazy or not too lazy. Now tests
+> > > pass, so its progress but does beg for more testing:
+> > 
+> > It is entirely possible that call_rcu_lazy() needs its own special
+> > purpose tests.  This might be a separate test parallel to the test for
+> > kfree_rcu() in kernel/rcu/rcuscale.c, for example.
 > 
-> Add definitions for ROG MAXIMUS XI HERO and ROG MAXIMUS XI HERO (WI-FI)
-> boards.
+> I see, perhaps I can add a 'lazy' flag to rcutorture as well, so it uses
+> call_rcu_lazy() for its async RCU invocations?
+
+That will be tricky because of rcutorture's timeliness expectations.
+
+Maybe a self-invoking lazy callback initiated by rcu_torture_fakewriter()
+that prints a line about its statistics at shutdown time?  At a minimum,
+the number of times that it was invoked.  Better would be to print one
+line summarizing stats for all of them.
+
+The main thing that could be detected from this is a callback being
+stranded.  Given that rcutorture enqueues non-lazy callbacks like a
+drunken sailor, they won't end up being all that lazy.
+
+> > For but one example, you might need to do bunch of call_rcu_lazy()
+> > invocations, then keep the kernel completely quiet for long enough to
+> > let the timer fire, and without anything else happening.
 > 
-> Signed-off-by: Michael Carns <mike@carns.com>
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-
-Applied to hwmon-next.
-
-Thanks,
-Guenter
-
-> ---
->  Documentation/hwmon/asus_ec_sensors.rst |  2 ++
->  drivers/hwmon/asus-ec-sensors.c         | 36 +++++++++++++++++++++++++
->  2 files changed, 38 insertions(+)
+> Yes, I sort of do that in rcuscale. There is a flood of call_rcu_lazy() due
+> to the FS code doing it. And, the timer does fire at the right time. I then
+> measure the time to make sure the timing matches, that's how I found the bugs
+> I earlier mentioned.
 > 
-> diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-> index 00d8c46ef9e0..1e40c123db77 100644
-> --- a/Documentation/hwmon/asus_ec_sensors.rst
-> +++ b/Documentation/hwmon/asus_ec_sensors.rst
-> @@ -13,6 +13,8 @@ Supported boards:
->   * ROG CROSSHAIR VIII FORMULA
->   * ROG CROSSHAIR VIII HERO
->   * ROG CROSSHAIR VIII IMPACT
-> + * ROG MAXIMUS XI HERO
-> + * ROG MAXIMUS XI HERO (WI-FI)
->   * ROG STRIX B550-E GAMING
->   * ROG STRIX B550-I GAMING
->   * ROG STRIX X570-E GAMING
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-> index 19d3ca71b360..625c2baa35ec 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
-> @@ -141,6 +141,7 @@ enum board_family {
->  	family_unknown,
->  	family_amd_400_series,
->  	family_amd_500_series,
-> +	family_intel_300_series,
->  	family_intel_600_series
->  };
->  
-> @@ -200,6 +201,26 @@ static const struct ec_sensor_info sensors_family_amd_500[] = {
->  		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
->  };
->  
-> +static const struct ec_sensor_info sensors_family_intel_300[] = {
-> +	[ec_sensor_temp_chipset] =
-> +		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
-> +	[ec_sensor_temp_cpu] = EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b),
-> +	[ec_sensor_temp_mb] =
-> +		EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c),
-> +	[ec_sensor_temp_t_sensor] =
-> +		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-> +	[ec_sensor_temp_vrm] = EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
-> +	[ec_sensor_fan_cpu_opt] =
-> +		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
-> +	[ec_sensor_fan_vrm_hs] = EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2),
-> +	[ec_sensor_fan_water_flow] =
-> +		EC_SENSOR("Water_Flow", hwmon_fan, 2, 0x00, 0xbc),
-> +	[ec_sensor_temp_water_in] =
-> +		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
-> +	[ec_sensor_temp_water_out] =
-> +		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
-> +};
-> +
->  static const struct ec_sensor_info sensors_family_intel_600[] = {
->  	[ec_sensor_temp_t_sensor] =
->  		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-> @@ -281,6 +302,18 @@ static const struct ec_board_info board_info[] = {
->  		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
->  		.family = family_amd_500_series,
->  	},
-> +	{
-> +		.board_names = {
-> +			"ROG MAXIMUS XI HERO",
-> +			"ROG MAXIMUS XI HERO (WI-FI)",
-> +		},
-> +		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> +			SENSOR_TEMP_T_SENSOR |
-> +			SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-> +			SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW,
-> +		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-> +		.family = family_intel_300_series,
-> +	},
->  	{
->  		.board_names = {"ROG CROSSHAIR VIII IMPACT"},
->  		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> @@ -814,6 +847,9 @@ static int __init asus_ec_probe(struct platform_device *pdev)
->  	case family_amd_500_series:
->  		ec_data->sensors_info = sensors_family_amd_500;
->  		break;
-> +	case family_intel_300_series:
-> +		ec_data->sensors_info = sensors_family_intel_300;
-> +		break;
->  	case family_intel_600_series:
->  		ec_data->sensors_info = sensors_family_intel_600;
->  		break;
+> You had mentioned something like for testing earlier, I thought of trying it
+> out:
+> 
+> 	It also helps to make rcutorture help you out if you have not
+> 	already done so.  For example, providing some facility to allow
+> 	rcu_torture_fwd_prog_cr() to flood with call_rcu_lazy() instead of and
+> 	in addition to call_rcu().
+
+Sounds good!
+
+							Thanx, Paul
+
+> thanks,
+> 
+>  - Joel
+> 
+> 
+> > 
+> > 							Thanx, Paul
+> > 
+> > > On top of v2 series:
+> > > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> > > index c06a96b6a18a..7021ee05155d 100644
+> > > --- a/kernel/rcu/tree_nocb.h
+> > > +++ b/kernel/rcu/tree_nocb.h
+> > > @@ -292,7 +292,8 @@ static void wake_nocb_gp_defer(struct rcu_data
+> > > *rdp, int waketype,
+> > >          */
+> > >         switch (waketype) {
+> > >                 case RCU_NOCB_WAKE_LAZY:
+> > > -                       mod_jif = jiffies_till_flush;
+> > > +                       if (rdp->nocb_defer_wakeup != RCU_NOCB_WAKE_LAZY)
+> > > +                               mod_jif = jiffies_till_flush;
+> > >                         break;
+> > > 
+> > >                 case RCU_NOCB_WAKE_BYPASS:
+> > > @@ -714,13 +715,13 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+> > >                 bypass_ncbs = rcu_cblist_n_cbs(&rdp->nocb_bypass);
+> > >                 lazy_ncbs = rcu_cblist_n_lazy_cbs(&rdp->nocb_bypass);
+> > >                 if (lazy_ncbs &&
+> > > -                   (time_after(j, READ_ONCE(rdp->nocb_bypass_first) +
+> > > LAZY_FLUSH_JIFFIES) ||
+> > > +                   (time_after(j, READ_ONCE(rdp->nocb_bypass_first) +
+> > > jiffies_till_flush) ||
+> > >                      bypass_ncbs > qhimark)) {
+> > >                         // Bypass full or old, so flush it.
+> > >                         (void)rcu_nocb_try_flush_bypass(rdp, j);
+> > >                         bypass_ncbs = rcu_cblist_n_cbs(&rdp->nocb_bypass);
+> > >                         lazy_ncbs = rcu_cblist_n_lazy_cbs(&rdp->nocb_bypass);
+> > > -               } else if (bypass_ncbs &&
+> > > +               } else if (bypass_ncbs && (lazy_ncbs != bypass_ncbs) &&
+> > >                     (time_after(j, READ_ONCE(rdp->nocb_bypass_first) + 1) ||
+> > >                      bypass_ncbs > 2 * qhimark)) {
+> > >                         // Bypass full or old, so flush it.

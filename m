@@ -2,92 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54EC95601BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF317560135
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbiF2Nxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 09:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53642 "EHLO
+        id S233813AbiF2NX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 09:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbiF2Nxj (ORCPT
+        with ESMTP id S232167AbiF2NX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 09:53:39 -0400
-X-Greylist: delayed 1811 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 29 Jun 2022 06:53:37 PDT
-Received: from m1564.mail.126.com (m1564.mail.126.com [220.181.15.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABE491A836;
-        Wed, 29 Jun 2022 06:53:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=FJN4I
-        IbVkQdw9+cImUILX4gQzGLXp9vFfQmdhbPysgE=; b=dVoaWrZh4suHy0tJGo7kI
-        PpzTqENRgd/LVSYfzLNomZ0Npj+5E6W6nrXZ0AiMlWQ4kf8E+aU4mSLy0UaIvZPO
-        ucJNjdC9t+2PFaFDS/PIfTqmsFym0QT5nRlc43+mYg5KUVJvyzlqLXjinaeLf4rf
-        M+zk2809E6eLGyLH/c+dHA=
-Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr64
- (Coremail) ; Wed, 29 Jun 2022 21:23:01 +0800 (CST)
-X-Originating-IP: [124.16.139.61]
-Date:   Wed, 29 Jun 2022 21:23:01 +0800 (CST)
-From:   "Liang He" <windhl@126.com>
-To:     "Pavel Machek" <pavel@denx.de>
-Cc:     "Sasha Levin" <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        yangtiezhu@loongson.cn, linux-mips@vger.kernel.org
-Subject: Re:Re: [PATCH AUTOSEL 4.9 11/13] mips/pic32/pic32mzda: Fix refcount
- leak bugs
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <20220629130617.GE13395@duo.ucw.cz>
-References: <20220628022657.597208-1-sashal@kernel.org>
- <20220628022657.597208-11-sashal@kernel.org>
- <20220629130617.GE13395@duo.ucw.cz>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Wed, 29 Jun 2022 09:23:56 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D25621812
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 06:23:55 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id g26so32564189ejb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 06:23:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=bTc+9vraxg+Jp5bKZOKnmt3sZm7i9sLfDA3h0E40ZE0=;
+        b=kuTZc/BMdKAqCExUt2A8qTipZw8vfXBlk3C1NkvhN1p+yEqZmGRE8a1vRdzbc9HFHw
+         sJgEJreP4zorhl7lPCqvI4GvePU7NY9g3Q43XF2R6PBKJq074n7/I59hGjoGUHCDwSN/
+         rfAN3r9Ca8oan4l+NphL4xHs+QVMSBYWtqXWY5lHjakGRYWpFPX5iq0K/Oa/So+G7ihV
+         dnzn3CEbyb/ECUR/BsKu2rXe+Oc6DXNOB/+wGb4ld0OzLSbl6ipOXyIkekI+eKDJTvNW
+         D7WECRmatbLhomSFBeMGgEFnd+JYg7eX/itdHpvb/EmeDTUYbeMfGGFzcWK6vFgtb1bK
+         LCPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bTc+9vraxg+Jp5bKZOKnmt3sZm7i9sLfDA3h0E40ZE0=;
+        b=IbciwgtuzyeO+sPwbk1sW0FbdZcWnaPWsItOwvn+f6JaWAhq4pIgQPTxesQpZK9e2H
+         OhaMn3+3uRlqFhBzGF1XXx57K5sx+knMkw5RjpJYXNtwN63d4AB25rQb1NaKe+dm5vvo
+         fIt1T+K3w8bfxExcvqg6LOvfZZW8TGYms6WyvfijCAmXEtDeX1XnqCXnK3ftfTeJdquY
+         Zr6XCbQl7cpwCIP2ivQGCvfdbn1w1IwfX5XhLJGDGyCF00zQysn6qLzVWxKdKdRulTWG
+         VjwtkMlkdXFjzp2qXruZvxMEiRa2VMt9cWwNMLqTkMoJAhqwr3pMbj5AGsD9TqdpnF/w
+         vEjg==
+X-Gm-Message-State: AJIora+EQC8VqcjYkXjLJ7sLvpU74lNmfATD4IXxlRWS343YzewvjqTy
+        TLnEqNSmRFQh0zUcYIKuuuuJQg==
+X-Google-Smtp-Source: AGRyM1v11VnSNbZ6+il0NcaTX8oa+GpOwQoB5uOk6h/4PSodDcPkMaY3ClrXxIlnVUVvaEiCBXZdvQ==
+X-Received: by 2002:a17:906:58cf:b0:722:e4e1:c174 with SMTP id e15-20020a17090658cf00b00722e4e1c174mr3326097ejs.85.1656509034201;
+        Wed, 29 Jun 2022 06:23:54 -0700 (PDT)
+Received: from [192.168.0.185] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id i25-20020a056402055900b00435681476c7sm11456559edx.10.2022.06.29.06.23.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 06:23:53 -0700 (PDT)
+Message-ID: <a2422718-2ec4-dbad-0245-1d78dbb39f25@linaro.org>
+Date:   Wed, 29 Jun 2022 15:23:52 +0200
 MIME-Version: 1.0
-Message-ID: <120f6850.7be3.181afa11f50.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: QMqowAAnL3M2UrxiBCNCAA--.29325W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGg4vF1-HZZ+vqAAAsJ
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] dt-bindings: spi: convert spi_atmel to json-schema
+Content-Language: en-US
+To:     Sergiu Moga <sergiu.moga@microchip.com>, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Kavyasree.Kotagiri@microchip.com, UNGLinuxDriver@microchip.com
+References: <20220629125804.137099-1-sergiu.moga@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220629125804.137099-1-sergiu.moga@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKCkF0IDIwMjItMDYtMjkgMjE6MDY6MTcsICJQYXZlbCBNYWNoZWsiIDxwYXZlbEBkZW54LmRl
-PiB3cm90ZToKPkhpIQo+Cj4+IEZyb206IExpYW5nIEhlIDx3aW5kaGxAMTI2LmNvbT4KPj4gCj4+
-IFsgVXBzdHJlYW0gY29tbWl0IGViOWU5YmM0ZmE1ZmI0ODljOTJlYzU4OGIzZmIzNWYwNDJiYTZk
-ODYgXQo+PiAKPj4gb2ZfZmluZF9tYXRjaGluZ19ub2RlKCksIG9mX2ZpbmRfY29tcGF0aWJsZV9u
-b2RlKCkgYW5kCj4+IG9mX2ZpbmRfbm9kZV9ieV9wYXRoKCkgd2lsbCByZXR1cm4gbm9kZSBwb2lu
-dGVycyB3aXRoIHJlZmNvdXQKPj4gaW5jcmVtZW50ZWQuIFdlIHNob3VsZCBjYWxsIG9mX25vZGVf
-cHV0KCkgd2hlbiB0aGV5IGFyZSBub3QKPj4gdXNlZCBhbnltb3JlLgo+Cj5JdCBsb29rcyBsaWtl
-IHRoaXMgbWF5IGludHJvZHVjZXMgYW4gdXNlLWFmdGVyLWZyZWUgYnVnOgo+Cj4+ICsrKyBiL2Fy
-Y2gvbWlwcy9waWMzMi9waWMzMm16ZGEvaW5pdC5jCj4+IEBAIC0xMzEsMTMgKzEzMSwxOCBAQCBz
-dGF0aWMgaW50IF9faW5pdCBwaWMzMl9vZl9wcmVwYXJlX3BsYXRmb3JtX2RhdGEoc3RydWN0IG9m
-X2Rldl9hdXhkYXRhICpsb29rdXApCj4+ICAJCW5wID0gb2ZfZmluZF9jb21wYXRpYmxlX25vZGUo
-TlVMTCwgTlVMTCwgbG9va3VwLT5jb21wYXRpYmxlKTsKPj4gIAkJaWYgKG5wKSB7Cj4+ICAJCQls
-b29rdXAtPm5hbWUgPSAoY2hhciAqKW5wLT5uYW1lOwo+PiAtCQkJaWYgKGxvb2t1cC0+cGh5c19h
-ZGRyKQo+PiArCQkJaWYgKGxvb2t1cC0+cGh5c19hZGRyKSB7Cj4+ICsJCQkJb2Zfbm9kZV9wdXQo
-bnApOwo+PiAgCQkJCWNvbnRpbnVlOwo+PiArCQkJfQo+PiAgCQkJaWYgKCFvZl9hZGRyZXNzX3Rv
-X3Jlc291cmNlKG5wLCAwLCAmcmVzKSkKPj4gIAkJCQlsb29rdXAtPnBoeXNfYWRkciA9IHJlcy5z
-dGFydDsKPj4gKwkJCW9mX25vZGVfcHV0KG5wKTsKPj4gIAkJfQo+PiAgCX0KPgo+bG9va3VwLT5u
-YW1lIG5vdyBjb250YWlucyBwb2ludGVyIHRha2VuIGZyb20gbnAtPm5hbWUsIGJ1dCB3ZSBkaWQK
-PnB1dCgpIG9uIHRoZSBucC4gV2hhdCBndWFyYW50ZWVzIG5wLT5uYW1lIGlzIG5vdCBmcmVlZD8K
-Pgo+QmVzdCByZWdhcmRzLAo+CQkJCQkJCQlQYXZlbAoKSGksIFBhdmVsLgoKVGhhbmtzIGZvciB5
-b3UgdG8gcmV2aWV3IHRoaXMgcGF0Y2hlZCBjb2RlLgoKSW4gZmFjdCwgdGhlIHxQVVR8IG9uICdu
-cCcgd2lsbCBub3QgbGVhZCB0byB0aGUgfEZSRUV8LgpGaXJzdCwgYmVmb3JlIGNhbGxpbmcgb2Zf
-ZmluZF9jb21wYXRpYmxlX25vZGUoKSwgdGhlIHRhcmdldCBvYmplY3QncyByZWZjb3VudCBtdXN0
-IGJlID49IDEsIGFzIHRoZSBvYmplY3QgaXMgYWxpdmUuClRoZW4sIGFmdGVyIGNhbGxpbmcgb2Zf
-ZmluZF9jb21wYXRpYmxlX25vZGUoKSwgaXRzIHJlZmNvdW50IG11c3QgYmUgPj0yLgpTbywgYWZ0
-ZXIgY2FsbGluZyBvZl9ub2RlX3B1dChucCksIGl0cyByZWZjb3VudCBtdXN0IGJlIHN0aWxsID49
-MS4KCkluIGZhY3QsIHRoZXNlIHxQVVR8cyBhcmUganVzdCB1c2VkIHRvIGtlZXAgcmVmY291bnQg
-YmFsYW5jZSBmb3IgdGhlIHxHRVR8IGluIG9mX2ZpbmRfY29tcGF0aWJsZV9ub2RlKCkuCgpJZiB0
-aGVyZSBpcyBhbnl0aGluZyB3cm9uZywgcGxlYXNlIGNvcnJlY3QgbWUuCgpUaGFucyB2ZXJ5IG11
-Y2ggdG8gcmV2aWV3IG15IHBhdGNoIGNvZGUuCgpMaWFuZwoKPi0tIAo+REVOWCBTb2Z0d2FyZSBF
-bmdpbmVlcmluZyBHbWJILCAgICAgIE1hbmFnaW5nIERpcmVjdG9yOiBXb2xmZ2FuZyBEZW5rCj5I
-UkIgMTY1MjM1IE11bmljaCwgT2ZmaWNlOiBLaXJjaGVuc3RyLjUsIEQtODIxOTQgR3JvZWJlbnpl
-bGwsIEdlcm1hbnkK
+On 29/06/2022 14:58, Sergiu Moga wrote:
+> Convert SPI binding for Atmel/Microchip SoCs to Device Tree Schema
+> format.
+> 
+> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+> ---
+>  .../devicetree/bindings/spi/atmel,spi.yaml    | 82 +++++++++++++++++++
+>  .../devicetree/bindings/spi/spi_atmel.txt     | 36 --------
+>  2 files changed, 82 insertions(+), 36 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/atmel,spi.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi_atmel.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/atmel,spi.yaml b/Documentation/devicetree/bindings/spi/atmel,spi.yaml
+> new file mode 100644
+> index 000000000000..751618a47235
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/atmel,spi.yaml
+> @@ -0,0 +1,82 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/atmel,spi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Atmel SPI device
+> +
+> +maintainers:
+> +  - Mark Brown <broonie@kernel.org>
+
+This should be rather someone from Microchip.
+
+> +
+> +allOf:
+> +  - $ref: "spi-controller.yaml#"
+
+No need for quotes.
+
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: atmel,at91rm9200-spi
+> +      - items:
+
+These are not items, just single entry. Should be combined with above
+and made an 'enum'.
+
+> +          - const: microchip,sam9x60-spi
+> +      - items:
+> +          - const: microchip,sam9x60-spi
+> +          - const: atmel,at91rm9200-spi
+
+This is wrong. Either this is a fallback or it is not. It's not the
+Schroedinger's cat... Maybe your DTS are wrong.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  cs-gpios: true
+
+No need, coming from spi-controller.yaml.
+
+> +
+> +  clock-names:
+> +    description:
+> +      Tuple listing input clock names, "spi_clk" is a required element.
+
+Skip description.
+
+> +    contains:
+> +      const: spi_clk
+> +    additionalItems: true
+
+no additionalItems.
+
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  atmel,fifo-size:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      Maximum number of data the RX and TX FIFOs can store for FIFO
+> +      capable SPI controllers.
+
+minimum and maximum for values, if it is known.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clock-names
+> +  - clocks
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    spi1: spi@fffcc000 {
+> +        compatible = "atmel,at91rm9200-spi";
+> +        reg = <0xfffcc000 0x4000>;
+> +        interrupts = <13 IRQ_TYPE_LEVEL_HIGH 5>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        clocks = <&spi1_clk>;
+> +        clock-names = "spi_clk", "str2";
+
+This does not make really sense. You have one clock.
+
+> +        cs-gpios = <&pioB 3 GPIO_ACTIVE_HIGH>;
+> +        atmel,fifo-size = <32>;
+> +
+> +        mmc@0 {
+> +            compatible = "mmc-spi-slot";
+> +            reg = <0>;
+> +            gpios = <&pioC 4 GPIO_ACTIVE_HIGH>;    /* CD */
+> +            spi-max-frequency = <25000000>;
+> +        };
+
+
+Best regards,
+Krzysztof

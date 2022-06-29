@@ -2,88 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE3F5603B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A5D5603BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232821AbiF2PA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 11:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
+        id S233632AbiF2PBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 11:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232772AbiF2PA2 (ORCPT
+        with ESMTP id S232772AbiF2PBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 11:00:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C833D1EAC5;
-        Wed, 29 Jun 2022 08:00:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A4BFB824F6;
-        Wed, 29 Jun 2022 15:00:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECDF3C34114;
-        Wed, 29 Jun 2022 15:00:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656514825;
-        bh=C99oNYplt1WvYeLmndjR6iicXGPvkgfMnkOoPBfW4/I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nGmcLvwbijS2KPQumHseuOPhSqO1YMl1BcDwtmKkgJSaPZcQKn32Gn2Cjtvt/Zvjq
-         qNbZXxCeptg8Hlwi9wGYTD5tOJuKS7o/YgdFx9WRS74YEFdvfz31x+bpWw10Q//OEW
-         I42QcXHM5mvQPh4rIqVgDZqBKJEf4vDCcUpKCv7d88JZZnnNDEMJlFzloe9QG/iikx
-         hRQZkOwMKOycuIeOk7ZBjvtOB7BnQE5xlD6pN4q/x59Ipw+Jlo34A1R1cjEQtNTAB4
-         8NQwJdWZWX0r3ycvK0GM0d1ewI86lr/uAjvmF4iFcblBrbudcS16YOPp+jcqoBVuJb
-         fdgmcTkN4rlhg==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1o6ZB0-0046Na-LB;
-        Wed, 29 Jun 2022 16:00:22 +0100
+        Wed, 29 Jun 2022 11:01:09 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56A81EAF4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 08:01:05 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id b26so10510981wrc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 08:01:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=BFTLOzROIiPqmhqAxyhqbA3c4cCfg2+85Lj08j7lKrc=;
+        b=KSZCIsiOiM5lSrD/SN2KobYz6mYvLmSMkmIYAm6jJkx0besT50xI2w+S/fmkjIc5Lt
+         CiENPRHqyHQnjG2/XUvVms/IdIjuXzpiz279AxabuBLqetXpajQmuQgYJYEvWegsAq7m
+         g0N0kPNt3eOX0cgC7K0dpvGCTGIkeo0W03voU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BFTLOzROIiPqmhqAxyhqbA3c4cCfg2+85Lj08j7lKrc=;
+        b=o5b/ZOhRkEB9PO404lx92AT6cfCDnLy4eI00t8sm0xC9AuTdRb2yMmK3uZkRaDW/DH
+         Ov3SIUpRERICbmL+h1wI+ZZ6pySnBP1S1p8uN8LVbpRTYvYBLOEO17MC0z3dEObHqyGK
+         bUJeytBZJEyD5W4EbdeQYTJC+5zsCK0t2g8aWqnIuTUy+n3esHmAgDgA9Zn5f2minp1g
+         NK0EWWsOfVdy1A29om+z4saDMnCxtbQ/e1VYkQxGsrIczjn/pctVG4PDh1lskKXV8dkA
+         Td8DbBIeWj+qxDXUqrKJ2sxlwkvGahu7HK8fCJVSY+WTscGnoyCjcUoU5FqmFjYgOtSO
+         nNug==
+X-Gm-Message-State: AJIora8RPSR/MroQM5h/rJP7ZwRECMhW1zGN0iTJ0+6/fMdi2411p5qh
+        VFSsRDz0VWVAeK5nPFBToQhMAlktsxHXRlsdpHqU5w==
+X-Google-Smtp-Source: AGRyM1sfGDisJPMkurvd0csySTU2fbtpR7bD1RXmyKvioUnsN/Dz9FmiK+aIh31YNygfWB8TUXd60BEck363CaWXJJY=
+X-Received: by 2002:a05:6000:1245:b0:21b:83b2:191c with SMTP id
+ j5-20020a056000124500b0021b83b2191cmr3611692wrx.493.1656514864306; Wed, 29
+ Jun 2022 08:01:04 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Wed, 29 Jun 2022 16:00:22 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
+References: <20220622173605.1168416-1-pmalani@chromium.org>
+ <20220622173605.1168416-2-pmalani@chromium.org> <20220627210407.GA2905757-robh@kernel.org>
+ <CACeCKackdbDZrk5fk7qyMwSdTdzyTS=m1vHPFnQOj672W=2nOA@mail.gmail.com>
+ <20220628182336.GA711518-robh@kernel.org> <CAEXTbpex9nxP-nyPWvSBchAW4j3C4MZfVHTb=5X0iSLY1bSAKg@mail.gmail.com>
+In-Reply-To: <CAEXTbpex9nxP-nyPWvSBchAW4j3C4MZfVHTb=5X0iSLY1bSAKg@mail.gmail.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Wed, 29 Jun 2022 23:00:53 +0800
+Message-ID: <CAEXTbpf_jxK-R5aA81FCbpAH4bChA2B9+8qExZUbA7Y+Ort=Gg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
+To:     Rob Herring <robh@kernel.org>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, swboyd@chromium.org,
+        heikki.krogerus@linux.intel.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH v2 2/2] irqchip/sifive-plic: Add support for Renesas
- RZ/Five SoC
-In-Reply-To: <20220629134147.GA16868@duo.ucw.cz>
-References: <20220626004326.8548-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220626004326.8548-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <87wnd3erab.wl-maz@kernel.org>
- <CA+V-a8tcxj_N0sBHhgAZAN8WSJ12JnDzAvUUnCXto3wHLqNVwg@mail.gmail.com>
- <87v8snehwi.wl-maz@kernel.org>
- <CAMuHMdVt9FjCtvMgJcCh=g2b+8b-fgabGbOLDcXNrrPMpC+3jQ@mail.gmail.com>
- <CA+V-a8uLzLJ=wB6oUu0b2oZO=FPSCTSrqb=3m9=BJxATFKmjMw@mail.gmail.com>
- <CAMuHMdUWC_7MPnP6LcOqi96FAhrAENC4iwtv2ksZVnvR8BC4ww@mail.gmail.com>
- <0fdbfdd0ee1c7ca39f8d3e2f86af1194@kernel.org>
- <CA+V-a8u8X+bne_a3LY13zGTKr-hOWhm=R9gGX1JyE8PzWRNXpQ@mail.gmail.com>
- <20220629134147.GA16868@duo.ucw.cz>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <632a70d4d9b434cb126cecb015c69797@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: pavel@ucw.cz, prabhakar.csengg@gmail.com, geert@linux-m68k.org, prabhakar.mahadev-lad.rj@bp.renesas.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, sagar.kadam@sifive.com, palmer@dabbelt.com, paul.walmsley@sifive.com, linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, geert+renesas@glider.be, linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, biju.das.jz@bp.renesas.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,41 +93,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-29 14:41, Pavel Machek wrote:
-> Hi!
-> 
->> > >> +#define PLIC_QUIRK_EDGE_INTERRUPT      BIT(0)
->> > >>
->> > >>  struct plic_priv {
->> > >>         struct cpumask lmask;
->> > >>         struct irq_domain *irqdomain;
->> > >>         void __iomem *regs;
->> > >> +       u32 plic_quirks;
->> > >>  };
->> > >>
->> > >> What about something like above?
->> > >
->> > > LGTM.
->> > >
->> > > Marc suggested to make this unsigned long, but TBH, that won't make
->> > > much of a difference.  PLICs are present on RV32 SoCs, too, so you
->> > > cannot rely on having more than 32 bits anyway.
->> >
->> > But it will make a difference on a 64bit platform, as we want to
->> > use test_bit() and co to check for features.
->> >
->> Ok will change that to unsigned long and use the test_bit/set_bit 
->> instead.
-> 
-> Is there good enough reason for that? test_bit/... are when you need
-> atomicity, and that's not the case here. Plain old & ... should be
-> enough.
+On Wed, Jun 29, 2022 at 10:33 PM Pin-yen Lin <treapking@chromium.org> wrote=
+:
+>
+> On Wed, Jun 29, 2022 at 2:23 AM Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Mon, Jun 27, 2022 at 02:43:39PM -0700, Prashant Malani wrote:
+> > > Hello Rob,
+> > >
+> > > On Mon, Jun 27, 2022 at 2:04 PM Rob Herring <robh@kernel.org> wrote:
+> > > >
+> > > > On Wed, Jun 22, 2022 at 05:34:30PM +0000, Prashant Malani wrote:
+> > > > > Introduce a binding which represents a component that can control=
+ the
+> > > > > routing of USB Type-C data lines as well as address data line
+> > > > > orientation (based on CC lines' orientation).
+> > > > >
+> > > > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > > > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregn=
+o@collabora.com>
+> > > > > Reviewed-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com=
+>
+> > > > > Tested-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> > > > > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> > > > > ---
+> > > > >
+> > > > > Changes since v4:
+> > > > > - Added Reviewed-by tags.
+> > > > > - Patch moved to 1/9 position (since Patch v4 1/7 and 2/7 were
+> > > > >   applied to usb-next)
+> > > > >
+> > > > > Changes since v3:
+> > > > > - No changes.
+> > > > >
+> > > > > Changes since v2:
+> > > > > - Added Reviewed-by and Tested-by tags.
+> > > > >
+> > > > > Changes since v1:
+> > > > > - Removed "items" from compatible.
+> > > > > - Fixed indentation in example.
+> > > > >
+> > > > >  .../devicetree/bindings/usb/typec-switch.yaml | 74 +++++++++++++=
+++++++
+> > > > >  1 file changed, 74 insertions(+)
+> > > > >  create mode 100644 Documentation/devicetree/bindings/usb/typec-s=
+witch.yaml
+> > > > >
+> > > > > diff --git a/Documentation/devicetree/bindings/usb/typec-switch.y=
+aml b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> > > > > new file mode 100644
+> > > > > index 000000000000..78b0190c8543
+> > > > > --- /dev/null
+> > > > > +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> > > > > @@ -0,0 +1,74 @@
+> > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > > +%YAML 1.2
+> > > > > +---
+> > > > > +$id: http://devicetree.org/schemas/usb/typec-switch.yaml#
+> > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > > +
+> > > > > +title: USB Type-C Switch
+> > > > > +
+> > > > > +maintainers:
+> > > > > +  - Prashant Malani <pmalani@chromium.org>
+> > > > > +
+> > > > > +description:
+> > > > > +  A USB Type-C switch represents a component which routes USB Ty=
+pe-C data
+> > > > > +  lines to various protocol host controllers (e.g USB, VESA Disp=
+layPort,
+> > > > > +  Thunderbolt etc.) depending on which mode the Type-C port, por=
+t partner
+> > > > > +  and cable are operating in. It can also modify lane routing ba=
+sed on
+> > > > > +  the orientation of a connected Type-C peripheral.
+> > > > > +
+> > > > > +properties:
+> > > > > +  compatible:
+> > > > > +    const: typec-switch
+> > > > > +
+> > > > > +  mode-switch:
+> > > > > +    type: boolean
+> > > > > +    description: Specify that this switch can handle alternate m=
+ode switching.
+> > > > > +
+> > > > > +  orientation-switch:
+> > > > > +    type: boolean
+> > > > > +    description: Specify that this switch can handle orientation=
+ switching.
+> > > > > +
+> > > > > +  ports:
+> > > > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > > > +    description: OF graph binding modelling data lines to the Ty=
+pe-C switch.
+> > > > > +
+> > > > > +    properties:
+> > > > > +      port@0:
+> > > > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > > > +        description: Link between the switch and a Type-C connec=
+tor.
+> > > > > +
+> > > > > +    required:
+> > > > > +      - port@0
+> > > > > +
+> > > > > +required:
+> > > > > +  - compatible
+> > > > > +  - ports
+> > > > > +
+> > > > > +anyOf:
+> > > > > +  - required:
+> > > > > +      - mode-switch
+> > > > > +  - required:
+> > > > > +      - orientation-switch
+> > > > > +
+> > > > > +additionalProperties: true
+> > > > > +
+> > > > > +examples:
+> > > > > +  - |
+> > > > > +    drm-bridge {
+> > > > > +        usb-switch {
+> > > > > +            compatible =3D "typec-switch";
+> > > >
+> > > > Unless this child is supposed to represent what the parent output i=
+s
+> > > > connected to, this is just wrong as, at least for the it6505 chip, =
+it
+> > > > doesn't know anything about Type-C functionality. The bridge is
+> > > > just a protocol converter AFAICT.
+> > >
+> > > I'll let Pin-Yen comment on the specifics of the it6505 chip.
+> >
+> > We're all waiting...
+>
+> Yes it6505 is just a protocol converter. But in our use case, the output =
+DP
+> lines are connected to the Type-C ports and the chip has to know which
+> port has DP Alt mode enabled. Does this justify a child node here?
+>
+> Does it make more sense if we we eliminate the usb-switch node here
+> and list the ports in the top level?
+> >
+> > > > If the child node represents what the output is connected to (like =
+a
+> > > > bus), then yes that is a pattern we have used.
+> > >
+> > > For the anx7625 case, the child node does represent what the output i=
+s connected
+> > > to (the usb-c-connector via the switch). Does that not qualify? Or do=
+ you mean
+> > > the child node should be a usb-c-connector itself?
+> > >
+> > > > For example, a panel
+> > > > represented as child node of a display controller. However, that on=
+ly
+> > > > works for simple cases, and is a pattern we have gotten away from i=
+n
+> > > > favor of using the graph binding.
+> > >
+> > > The child node will still use a OF graph binding to connect to the
+> > > usb-c-connector.
+> > > Is that insufficient to consider a child node usage here?
+> > > By "using the graph binding", do you mean "only use the top-level por=
+ts" ?
+> > > I'm trying to clarify this, so that it will inform future versions an=
+d patches.
+> >
+> > What I want to see is block diagrams of possible h/w with different
+> > scenarios and then what the binding looks like in those cases. The
+> > switching/muxing could be in the SoC, a bridge chip, a Type C
+> > controller, a standalone mux chip, or ????. If you want a somewhat
+> > genericish binding, then you need to consider all of these.
 
-On any save architecture, '&' and test_bit() are the same thing.
-Only RMW operations require atomicity.
+Then, is it suitable to put the switch binding into the drivers own binding=
+s
+(i.e., the bindings for it6505 and anx7625), and introduce some helper
+functions to eliminate the duplication in the code?
+Though we will have two similar bindings in two drivers with this approach.
 
-'unsigned long' is is.
-
-         M.
--- 
-Jazz is not dead. It just smells funny...
+> >
+> > I don't really have the b/w to work thru all this (and switch/mux is
+> > just one part of dealing with Type-C). This is just one of about a
+> > hundred patches I get to review a week.
+> >
+> > Rob

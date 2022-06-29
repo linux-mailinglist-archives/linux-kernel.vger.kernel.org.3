@@ -2,83 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE1955FA36
+	by mail.lfdr.de (Postfix) with ESMTP id D626255FA37
 	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232690AbiF2IRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 04:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
+        id S232320AbiF2ISQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 04:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiF2IRr (ORCPT
+        with ESMTP id S229772AbiF2ISO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 04:17:47 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7723BBC8;
-        Wed, 29 Jun 2022 01:17:46 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 981CD240006;
-        Wed, 29 Jun 2022 08:17:42 +0000 (UTC)
-Date:   Wed, 29 Jun 2022 10:17:41 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        quentin.schulz@theobroma-systems.com,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/7] media: ov5693: add ov5693_of_match, dts support
-Message-ID: <20220629081741.mmgqr756i57y544x@uno.localdomain>
-References: <20220627150453.220292-1-tommaso.merciai@amarulasolutions.com>
- <20220627150453.220292-7-tommaso.merciai@amarulasolutions.com>
+        Wed, 29 Jun 2022 04:18:14 -0400
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E436360;
+        Wed, 29 Jun 2022 01:18:13 -0700 (PDT)
+Date:   Wed, 29 Jun 2022 08:18:04 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1656490689; x=1656749889;
+        bh=deP7GyXC9ZxqfXEwFpsGYTw5aRq5KASPRxGk3xoBFW0=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:Feedback-ID:From:To:
+         Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID;
+        b=X340piRB8ju8NyA3rXUUUfd5isroFkdGe9CndDe6KCMKho9Aw/iVxdsmEL9ViEyqR
+         y7Skte++X7O0cjcgDE+FTxYx/BQy9ZaHQf57DSrWFSCAsK5r/akUxlRId7O4UVfbg2
+         Fa7QAYqrlkOUST/yMP7nfkk8AKVhS8aelHiFiavTCokC9QnX7Gedj3Mrt8wrPwJcMp
+         F28RVx9WRurUj2bI9acKcLBola59rNK3uNtlhXnN4lPq5TYDxxZKC5pJd4uafEXvRi
+         bBLBc3lwn3ogTC/HHcaMbC4C5CFd+10lvRuRb1Jcs4zIrhmqM3oU8G4F96eKLzhl1E
+         2EHPAEiDFIMmA==
+To:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From:   Jari Ruusu <jariruusu@protonmail.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>
+Reply-To: Jari Ruusu <jariruusu@protonmail.com>
+Subject: linux-5.10.127 modpost warning
+Message-ID: <B9ViOjUL7reNao5fkvKkt4S91RPpLSuY6lGtyNIFW4WCgET8Z5Y_9-Y7O1GuZJ9FJFk7QouCfASA1ogdd-xaSVQNtR9RN2r2kFD7zu9vbMw=@protonmail.com>
+Feedback-ID: 22639318:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220627150453.220292-7-tommaso.merciai@amarulasolutions.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tommaso,
+This shows up when building linux-5.10.127
 
-On Mon, Jun 27, 2022 at 05:04:52PM +0200, Tommaso Merciai wrote:
-> Add ov5693_of_match. Device tree support
->
-> Reviewed-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+  LD      vmlinux.o
+  MODPOST vmlinux.symvers
+WARNING: modpost: vmlinux.o(___ksymtab+drm_fb_helper_modinit+0x0): Section =
+mismatch in reference from the variable __ksymtab_drm_fb_helper_modinit to =
+the function .init.text:drm_fb_helper_modinit()
+The symbol drm_fb_helper_modinit is exported and annotated __init
+Fix this by removing the __init annotation of drm_fb_helper_modinit or drop=
+ the export.
 
-Missing Signed-off-by
+--
+Jari Ruusu=C2=A0 4096R/8132F189 12D6 4C3A DCDA 0AA4 27BD=C2=A0 ACDF F073 3C=
+80 8132 F189
 
-> ---
->  drivers/media/i2c/ov5693.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
-> index 273caef467fe..0854226dc140 100644
-> --- a/drivers/media/i2c/ov5693.c
-> +++ b/drivers/media/i2c/ov5693.c
-> @@ -1532,10 +1532,17 @@ static const struct acpi_device_id ov5693_acpi_match[] = {
->  };
->  MODULE_DEVICE_TABLE(acpi, ov5693_acpi_match);
->
-> +static const struct of_device_id ov5693_of_match[] = {
-> +	{ .compatible = "ovti,ov5693", },
-> +	{ /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, ov5693_of_match);
-> +
->  static struct i2c_driver ov5693_driver = {
->  	.driver = {
->  		.name = "ov5693",
->  		.acpi_match_table = ov5693_acpi_match,
-> +		.of_match_table = ov5693_of_match,
->  		.pm = &ov5693_pm_ops,
->  	},
->  	.probe_new = ov5693_probe,
-> --
-> 2.25.1
->

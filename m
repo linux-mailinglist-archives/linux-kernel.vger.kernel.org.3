@@ -2,56 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C0755FEF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB32755FED9
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233161AbiF2LjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 07:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44784 "EHLO
+        id S233201AbiF2LjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 07:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233036AbiF2Li4 (ORCPT
+        with ESMTP id S233169AbiF2LjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 07:38:56 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530733DA61
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 04:38:54 -0700 (PDT)
+        Wed, 29 Jun 2022 07:39:01 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CAB3EAA2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 04:38:58 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0C1A120011;
-        Wed, 29 Jun 2022 11:38:51 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id B97C91C0007;
+        Wed, 29 Jun 2022 11:38:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656502733;
+        t=1656502737;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ypnc5OCq23W0X4HdDWD6sZsKnrlByxC02RY//sNedVs=;
-        b=X1vQlrOvXJDpNI6XfdM+GtyRvgSIw61K7DDPASriWUtJ2tlh8DCi0yDCCDRPiVgvqMF7Af
-        aHRYBDzGTECHHLmDfkSP9KYDDZQmAc/y6ZJ7+aslz96wSWRIuMWVLAImxp8H3VsISFEaru
-        xH4SVC3t3AfO5PZKjvyYSQtKNf000O5KFXx7LZSCN9NB6ki7bLAxQ8AcyYtgNI2s8tUbaQ
-        R2OX7tJXVSQE2F0C09HiHeye9rJr9MK90Hneb4ikCOuR6D0jUfIGJTYeAg656XdPdudTXA
-        UglVjRtjfKu0RTr2eLVQMplwDI0izDojom/f0EGyQXAqsP0Kj+SP6jeOqQ7w5A==
+        bh=MzDaS83uRvN7N2712p5p6kNZK0guhzhsJz4z5vTBUnI=;
+        b=kqOt8I4U1SxqkuWTomp/zztwci316/QgGWxEBeTRPSTMiPX/wBWekh0krNzGxOuMvORZ4L
+        P3l9LN654tz9Q9IH2KGiv4+JNA2u+i2b49F+0XpI5zYqoP0JEvyYfexbXxZ5YPImlA7Wvk
+        q7CKzA9b9uLl2CVmrRzClewX1XJ9ONN7KqHeafhVXaoAGjHql8525xn4ma+K2yRT7YqOIN
+        dESv5cMTaOUSv+Q9GO8Pkm+VZxZoo0YvmQRs441V2jEWy8+QxDBuBG/PMKeD/LRWeKfE2A
+        JN0qwMm1ummEPsj0vdDWd3dAiJYtUJqcsSPDo+Irj/Gd9B6quMVf1Mzkjknk/w==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?utf-8?b?77+9ZWNraQ==?= <rafal@milecki.pl>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/3] dt-bindings: mtd: partitions: support label/name only partition
-Date:   Wed, 29 Jun 2022 13:38:51 +0200
-Message-Id: <20220629113851.283725-1-miquel.raynal@bootlin.com>
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        miquel.raynal@bootlin.com, nagasure@xilinx.com, vigneshr@ti.com
+Cc:     boris.brezillon@collabora.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, git@amd.com, richard@nod.at,
+        amit.kumar-mahapatra@amd.com, Olga Kitaina <okitain@gmail.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] mtd: rawnand: arasan: Fix clock rate in NV-DDR
+Date:   Wed, 29 Jun 2022 13:38:55 +0200
+Message-Id: <20220629113855.283760-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220622010628.30414-2-ansuelsmth@gmail.com>
+In-Reply-To: <20220628154824.12222-3-amit.kumar-mahapatra@xilinx.com>
 References: 
 MIME-Version: 1.0
 X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'118f3fbe517f49e17877f34fd677f7374970d92e'
+X-linux-mtd-patch-commit: b'e16eceea863b417fd328588b1be1a79de0bc937f'
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -63,27 +57,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-22 at 01:06:26 UTC, Christian Marangi wrote:
-> Document new partition nodes that declare only the label/name instead
-> of the reg used to provide an OF node for partition registred at runtime
-> by parsers. This is required for nvmem system to declare and detect
-> nvmem-cells.
+On Tue, 2022-06-28 at 15:48:24 UTC, Amit Kumar Mahapatra wrote:
+> From: Olga Kitaina <okitain@gmail.com>
 > 
-> With these special partitions, the reg / offset is not required and a
-> 'partition-' prefix is needed.
-> The node name with the 'partition-' prefix stripped, is used to match
-> the partition allocated by the parser at runtime and the parser will
-> provide reg and offset of the mtd.
-> If the partition to match contains invalid char for a node name, the
-> label binding can be used to declare the partition name.
+> According to the Arasan NAND controller spec, the flash clock rate for SDR
+> must be <= 100 MHz, while for NV-DDR it must be the same as the rate of the
+> CLK line for the mode. The driver previously always set 100 MHz for NV-DDR,
+> which would result in incorrect behavior for NV-DDR modes 0-4.
 > 
-> NVMEM will use the data from the parser and provide the NVMEM cells
-> declared in the DTS, "connecting" the dynamic partition with a
-> static declaration of cells in them.
+> The appropriate clock rate can be calculated from the NV-DDR timing
+> parameters as 1/tCK, or for rates measured in picoseconds,
+> 10^12 / nand_nvddr_timings->tCK_min.
 > 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Fixes: 197b88fecc50 ("mtd: rawnand: arasan: Add new Arasan NAND controller")
+> CC: stable@vger.kernel.org # 5.8+
+> Signed-off-by: Olga Kitaina <okitain@gmail.com>
+> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
 
 Miquel

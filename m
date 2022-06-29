@@ -2,79 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC70555FEC3
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EFC655FEE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233254AbiF2Lhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 07:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
+        id S232814AbiF2Lim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 07:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233247AbiF2Lho (ORCPT
+        with ESMTP id S230383AbiF2Lij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 07:37:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE09F5AB;
-        Wed, 29 Jun 2022 04:37:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31CE0B82345;
-        Wed, 29 Jun 2022 11:37:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DBA4C34114;
-        Wed, 29 Jun 2022 11:37:39 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="cZhq/OuP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656502658;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QAjoM4HFvDC4AUWHFkNt5DqEZCGtJ6lX6TQh5DuzJHU=;
-        b=cZhq/OuPcYXw5B+rU4i2lkOMkeIr2dIYaWG5ve3Y++QasYq/tzRyYVrRSloT4wqhPC7sev
-        MXsigzWShH+Fl7/hjlr3ANGSU6bt5auZioxAeTU5xoPaB394gLyUKlXfdQ7f5ODKkJt2KC
-        szxM6/sHltM+4+DaEi/IE6q/UatohGc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 9f784858 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 29 Jun 2022 11:37:37 +0000 (UTC)
-Date:   Wed, 29 Jun 2022 13:37:35 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Gregory Erwin <gregerwin256@gmail.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Rui Salvaterra <rsalvaterra@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v7] ath9k: let sleep be interrupted when unregistering
- hwrng
-Message-ID: <Yrw5f8GN2fh2orid@zx2c4.com>
-References: <20220628151840.867592-1-Jason@zx2c4.com>
- <CAO+Okf56VAqKt5a6OoGUnMAoMsbQoBd7V_tcLf9yuqheWKH1SA@mail.gmail.com>
+        Wed, 29 Jun 2022 07:38:39 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2B332076;
+        Wed, 29 Jun 2022 04:38:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656502718; x=1688038718;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jvQQGBLtP2lMYjK15fTYrTMQlaw8xtvzDZjwyhz2efQ=;
+  b=csmzP7C/q9as80NazEbKJsSOl5rL4eYUlBADXbYRA+7tbi0sKRjTKEWr
+   3tlul+aMWJCIsGhcfYsDhwxVuGqOZIGp+4xxSWd2RqEpgr41ykIYee31u
+   8anMHa2WCg6sAVL98SQXjtsi45ZrFRlJrUExwVWQ3EPlLuISjTvCCmPTj
+   2iy9OkzryugCZdxXfN8+ag88ltSziAr7viBrlCSSRaWzrCk/0GjnT69c6
+   nmfzOawgUfVT/dDfCPm/OezWLspac9/Cho+diXqe3p7e28g9lSA1zbbCV
+   Y9f8FUoK06/wBOZTwFBwU3pVXVUuDHO2fX5lBqKIwKQFzdrbNBiTkiuVP
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="283103045"
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="283103045"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 04:38:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="623279570"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 29 Jun 2022 04:38:35 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 88935F1; Wed, 29 Jun 2022 14:38:41 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rob Herring <robh@kernel.org>,
+        Frank Rowand <frank.rowand@sony.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] of: unittest: Switch to use fwnode instead of of_node
+Date:   Wed, 29 Jun 2022 14:38:39 +0300
+Message-Id: <20220629113839.4604-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAO+Okf56VAqKt5a6OoGUnMAoMsbQoBd7V_tcLf9yuqheWKH1SA@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gregory,
+GPIO library now accepts fwnode as a firmware node, so
+switch the module to use it.
 
-On Tue, Jun 28, 2022 at 08:41:44PM -0700, Gregory Erwin wrote:
-> Hmm, set_notify_signal() calls wake_up_state() in kernel/sched/core.c, which
-> is not currently exported. Only by including EXPORT_SYMBOL(wake_up_state) and
-> rebuilding vmlinux was I able to build rng-core.ko and load it successfully.
-> 
-> That said, this patch allows 'ip link set wlan0 down' to wake a blocked process
-> reading from /dev/hwrng, eliminating the delay as described. I'll give my
-> sign-off with the EXPORT_SYMBOL sorted out.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/of/unittest.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for testing, and thanks for the note about EXPORT_SYMBOL(). I'll
-send a v+1 with that fixed. And then it sounds like this patch finally
-addresses all the issues you were seeing. Pfiew!
+diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+index 7f6bba18c515..03052ffb16e2 100644
+--- a/drivers/of/unittest.c
++++ b/drivers/of/unittest.c
+@@ -1602,7 +1602,7 @@ static int unittest_gpio_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, devptr);
+ 
+-	devptr->chip.of_node = pdev->dev.of_node;
++	devptr->chip.fwnode = dev_fwnode(&pdev->dev);
+ 	devptr->chip.label = "of-unittest-gpio";
+ 	devptr->chip.base = -1; /* dynamic allocation */
+ 	devptr->chip.ngpio = 5;
+-- 
+2.35.1
 
-Jason

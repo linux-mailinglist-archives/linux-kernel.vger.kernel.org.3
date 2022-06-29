@@ -2,217 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A322560948
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BD156094E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbiF2SiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 14:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
+        id S230188AbiF2SmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 14:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbiF2SiI (ORCPT
+        with ESMTP id S229480AbiF2SmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 14:38:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD12060F2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:38:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656527885;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=laiHwYBOCth2i0A5JbbncZyIzYtItqNL4bYMuFHKB3Y=;
-        b=Qk8k2K+No0XeLXC37dj98B0QnqbH3T6OcOYhs13J0Xv+cVHHLxMfg12GE6+FCDlKv92FnU
-        9GTeiGY9eB+MKFu1LqSy1IWCTw2qKmigmAIjuki0Dd5NY/By+QOMA3XMjYL6pAEAJ75P+J
-        3+/2rebYC/z9suhbo5LJ9CfGQtAfiEI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-487-R1ZtqqtHPwOJWrgVlCmmKA-1; Wed, 29 Jun 2022 14:37:57 -0400
-X-MC-Unique: R1ZtqqtHPwOJWrgVlCmmKA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 20E8089C7DC;
-        Wed, 29 Jun 2022 18:37:57 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.22.33.30])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 097662166B26;
-        Wed, 29 Jun 2022 18:37:57 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id BB9B4220463; Wed, 29 Jun 2022 14:37:56 -0400 (EDT)
-Date:   Wed, 29 Jun 2022 14:37:56 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        xieyongji@bytedance.com, fam.zheng@bytedance.com,
-        Miklos Szeredi <mszeredi@redhat.com>
-Subject: Re: [PATCH] fuse: writeback_cache consistency enhancement
- (writeback_cache_v2)
-Message-ID: <YrycBC8Kn3S/kxQP@redhat.com>
-References: <20220624055825.29183-1-zhangjiachen.jaycee@bytedance.com>
- <CAOQ4uxjbU27gSbhndxA_ABchfv1X7Steoggto_o-Wc=5shfS7Q@mail.gmail.com>
+        Wed, 29 Jun 2022 14:42:06 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A9D29827;
+        Wed, 29 Jun 2022 11:42:04 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id d5so29545964yba.5;
+        Wed, 29 Jun 2022 11:42:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=niDepKniCB5d3I07y4zpYfnckX8GQNMPL/217Nk44uM=;
+        b=364Lo2zzksxZUBSXzgrA+UfG7auHtNmoAZcSnFq8vTie+mrlVHVOEYS6DLv3zkRk3R
+         1wstW/FG9jnhBZlhibDelgcvyqCRPO8KQ0KKEEpkW7bnDHxsP3s8jnUF0JU88JkB7z6B
+         TCDM0Fh4RYYlbXPJHQ+LPSaok8H6OGmDo/ZMJ+bNCz1vyEfWSHuvclQrrVWPs+5uwBy+
+         mgtRcd0CU7SEjaT3MHShhiq6rJqHnth8kv/tvdgUbFLx6s62pzHtLrTNCjzxiJp4Eino
+         dikTAlfY/riGRTRPYfNXqhXd/ZuJnSaKlLIP4HLWkRt5+j/6fejwWkX4Kl1vx0H5wvlP
+         nw1g==
+X-Gm-Message-State: AJIora8UNbTa4dp76VvM3MYGq7h+oFhitZkgjJQgRAWwcAeI2yQ8S35j
+        r803I0KPIS/psry5R9lPOuPIFpCCJ0JOwz/tVPoH5yMD
+X-Google-Smtp-Source: AGRyM1u2pV3v9yOzU1KyjK6E4kduzKglliClPmQ+ZLhcYXW9iky+twdm/TvRio6H/u+xzywgKaQSQ0Em3pryU+SuJwk=
+X-Received: by 2002:a25:5d8:0:b0:66c:dbd1:b2bb with SMTP id
+ 207-20020a2505d8000000b0066cdbd1b2bbmr4996934ybf.81.1656528124098; Wed, 29
+ Jun 2022 11:42:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOQ4uxjbU27gSbhndxA_ABchfv1X7Steoggto_o-Wc=5shfS7Q@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220627165832.10246-1-mario.limonciello@amd.com>
+In-Reply-To: <20220627165832.10246-1-mario.limonciello@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 29 Jun 2022 20:41:53 +0200
+Message-ID: <CAJZ5v0g2qfA00=ukatTxSXPnoOaquwvn8tk0oNHaY-0F7ODZQw@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: CPPC: Don't require _OSC if X86_FEATURE_CPPC is supported
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Perry Yuan <perry.yuan@amd.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 01:09:56PM +0300, Amir Goldstein wrote:
-> On Fri, Jun 24, 2022 at 9:03 AM Jiachen Zhang
-> <zhangjiachen.jaycee@bytedance.com> wrote:
-> >
-> > Some users may want both the high performance of the writeback_cahe mode and
-> > a little bit more consistency among FUSE mounts. In the current writeback
-> > mode implementation, users of one FUSE mount can never see the file
-> > expansion done by other FUSE mounts.
-> >
-> > Based on the suggested writeback V2 patch in the upstream mailing-list [1],
-> > this commit allows the cmtime and size to be updated from server in
-> > writeback mode. Compared with the writeback V2 patch in [1], this commit has
-> > several differences:
-> >
-> >     1. Ensure c/mtime are not updated from kernel to server. IOW, the cmtime
-> >     generated by kernel are just temporary values that are never flushed to
-> >     server, and they can also be updated by the official server cmtime when
-> >     the writeback cache is clean.
-> >
-> >     2. Skip mtime-based revalidation when fc->auto_inval_data is set with
-> >     fc->writeback_cache_v2. Because the kernel-generated temporary cmtime
-> >     are likely not equal to the offical server cmtime.
-> >
-> >     3. If any page is ever flushed to the server during FUSE_GETATTR
-> >     handling on fuse server, even if the cache is clean when
-> >     fuse_change_attributes() checks, we should not update the i_size. This
-> >     is because the FUSE_GETATTR may get a staled size before the FUSE_WRITE
-> >     request changes server inode size. This commit ensures this by
-> >     increasing attr_version after writeback for writeback_cache_v2. In that
-> >     case, we should also ensure the ordering of the attr_version updating
-> >     and the fi->writepages RB-tree updating. So that if a fuse page
-> >     writeback ever happens during fuse_change_attributes(), either the
-> >     fi->writepages is not empty, or the attr_version is increased. So we
-> >     never mistakenly update a stale file size from server to kernel.
-> >
-> > With this patch, writeback mode can consider the server c/mtime as the
-> > official one. When inode attr is timeout or invalidated, kernel has chance
-> > to see size and c/mtime modified by others.
-> >
-> > Together with another patch [2], a FUSE daemon is able to implement
-> > close-to-open (CTO) consistency like what is done in NFS clients.
-> >
-> > [1] https://lore.kernel.org/linux-fsdevel/Ymfu8fGbfYi4FxQ4@miu.piliscsaba.redhat.com
-> > [2] https://lore.kernel.org/linux-fsdevel/20220608104202.19461-1-zhangjiachen.jaycee@bytedance.com/
-> >
-> > Suggested-by: Miklos Szeredi <mszeredi@redhat.com>
-> > Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-> > ---
-> >  fs/fuse/file.c            | 17 +++++++++++++++
-> >  fs/fuse/fuse_i.h          |  3 +++
-> >  fs/fuse/inode.c           | 44 +++++++++++++++++++++++++++++++++++++--
-> >  include/uapi/linux/fuse.h |  5 +++++
-> >  4 files changed, 67 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-> > index 9b64e2ff1c96..35bdc7af8468 100644
-> > --- a/fs/fuse/file.c
-> > +++ b/fs/fuse/file.c
-> > @@ -1829,6 +1829,15 @@ static void fuse_writepage_end(struct fuse_mount *fm, struct fuse_args *args,
-> >                  */
-> >                 fuse_send_writepage(fm, next, inarg->offset + inarg->size);
-> >         }
-> > +
-> > +       if (fc->writeback_cache_v2)
-> > +               fi->attr_version = atomic64_inc_return(&fc->attr_version);
-> > +       /*
-> > +        * Ensure attr_version increases before the page is move out of the
-> > +        * writepages rb-tree.
-> > +        */
-> > +       smp_mb();
-> > +
-> >         fi->writectr--;
-> >         fuse_writepage_finish(fm, wpa);
-> >         spin_unlock(&fi->lock);
-> > @@ -1858,10 +1867,18 @@ static struct fuse_file *fuse_write_file_get(struct fuse_inode *fi)
-> >
-> >  int fuse_write_inode(struct inode *inode, struct writeback_control *wbc)
-> >  {
-> > +       struct fuse_conn *fc = get_fuse_conn(inode);
-> >         struct fuse_inode *fi = get_fuse_inode(inode);
-> >         struct fuse_file *ff;
-> >         int err;
-> >
-> > +       /*
-> > +        * Kernel c/mtime should not be updated to the server in the
-> > +        * writeback_cache_v2 mode as server c/mtime are official.
-> > +        */
-> > +       if (fc->writeback_cache_v2)
-> > +               return 0;
-> > +
-> >         /*
-> >          * Inode is always written before the last reference is dropped and
-> >          * hence this should not be reached from reclaim.
-> > diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-> > index 488b460e046f..47de36146fb8 100644
-> > --- a/fs/fuse/fuse_i.h
-> > +++ b/fs/fuse/fuse_i.h
-> > @@ -654,6 +654,9 @@ struct fuse_conn {
-> >         /* show legacy mount options */
-> >         unsigned int legacy_opts_show:1;
-> >
-> > +       /* Improved writeback cache policy */
-> > +       unsigned writeback_cache_v2:1;
-> > +
-> 
-> Seeing that writeback_cache_v2 depends on writeback_cache
-> I wonder whether that will not be better represented as:
-> 
->         /** write-back cache policy (default is write-through) */
-> -       unsigned writeback_cache:1;
-> +      unsigned writeback_cache:2;
-> 
-> 
-> Looking at the recently added handle_killpriv_v2, I also wonder
-> if that would not have been better.
-> 
-> Vivek,
-> is handle_killpriv_v2 really independent of handle_killpriv?
-> Seeing test like these worry me as they are inviting bugs:
-> 
->                 if (!fc->handle_killpriv && !fc->handle_killpriv_v2) {
+On Mon, Jun 27, 2022 at 6:58 PM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> commit 72f2ecb7ece7 ("ACPI: bus: Set CPPC _OSC bits for all and
+> when CPPC_LIB is supported") added support for claiming to
+> support CPPC in _OSC on non-Intel platforms.
+>
+> This unfortunately caused a regression on a vartiety of AMD
+> platforms in the field because a number of AMD platforms don't set
+> the `_OSC` bit 5 or 6 to indicate CPPC or CPPC v2 support.
+>
+> As these AMD platforms already claim CPPC support via `X86_FEATURE_CPPC`,
+> use this enable this feature rather than requiring the `_OSC`.
+>
+> Fixes: 72f2ecb7ece7 ("Set CPPC _OSC bits for all and when CPPC_LIB is supported")
+> Reported-by: Perry Yuan <perry.yuan@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/acpi/cppc_acpi.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> index 903528f7e187..5463e6309b9a 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -629,6 +629,15 @@ static bool is_cppc_supported(int revision, int num_ent)
+>                 return false;
+>         }
+>
+> +       if (osc_sb_cppc_not_supported) {
+> +               pr_debug("Firmware missing _OSC support\n");
+> +#ifdef CONFIG_X86
+> +               return boot_cpu_has(X86_FEATURE_CPPC);
+> +#else
+> +               return false;
+> +#endif
 
-Hi Amir,
+What about doing
 
-IIRC, yes, handle_killpriv_v2 and handle_killpriv are independent.
+if (osc_sb_cppc_not_supported) {
+        pr_debug("Firmware missing _OSC support\n");
+        return IS_ENABLED(CONFIG_X86) && boot_cpu_has(X86_FEATURE_CPPC);
+}
 
-Above check is doing a GETATTR request to server to get latest mode,
-only if none of handle_killpriv and and handle_killpriv_v2 are enabled.
-If any one of these is enabled, we skip fuse_do_getattr() and reset
-ATTR_MODE and expect server to clear suid/sgid bits.
+instead for the sake of reducing #ifdeffery?
 
-handle_killpriv was not enough, so I added handle_killpriv_v2 and
-even enabled it by default in virtiofsd. Later there came reports that
-some of the xfstests failed where suid/sgid was not cleared on server.
-I had tried to debug it and it was some issue in underlying ext4/xfs
-filesystem. I could not pursue it further at the time. I should probably
-get back to it. My temporary solution was to disable killpriv_v2 in
-virtiofsd.
+Also, this is somewhat risky, because even if the given processor has
+X86_FEATURE_CPPC set, the platform may still not want to expose CPPC
+through ACPI.  How's that going to work after this change?
 
-Havind said that, I feel there are too many corner cases w.r.t suid/sgid
-clearing. And it probably is a good idea that client sends a setattr
-request with ATTR_MODE set. While it is racy but it can be more correct.
-Otherwise it is easy to miss some code path somewhere where assumptions
-are not correct and we did not clear suid/sgid as expected.
 
-Thanks
-Vivek
-
+> +       }
+> +
+>         return true;
+>  }
+>
+> @@ -684,9 +693,6 @@ int acpi_cppc_processor_probe(struct acpi_processor *pr)
+>         acpi_status status;
+>         int ret = -ENODATA;
+>
+> -       if (osc_sb_cppc_not_supported)
+> -               return -ENODEV;
+> -
+>         /* Parse the ACPI _CPC table for this CPU. */
+>         status = acpi_evaluate_object_typed(handle, "_CPC", NULL, &output,
+>                         ACPI_TYPE_PACKAGE);
+> --
+> 2.34.1
+>

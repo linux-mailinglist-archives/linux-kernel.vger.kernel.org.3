@@ -2,119 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F3156000B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9698A560007
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbiF2Mfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 08:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
+        id S233329AbiF2Mg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 08:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232367AbiF2Mft (ORCPT
+        with ESMTP id S231887AbiF2MgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 08:35:49 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB5D29C9A
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 05:35:47 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id q6so32217386eji.13
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 05:35:47 -0700 (PDT)
+        Wed, 29 Jun 2022 08:36:25 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C4928714;
+        Wed, 29 Jun 2022 05:36:24 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id i205-20020a1c3bd6000000b003a03567d5e9so112274wma.1;
+        Wed, 29 Jun 2022 05:36:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Q8pCybxjWozGkg4XkxF8hCsdW8FgZKjWDEioFfT4qAc=;
-        b=lci++Zen0Iac6DnB8ntK2Y4eGEo+IF3ekd+ab/O8WDauLz4PrhJTqEv6Vk9qLMFruS
-         crrxNjPD8t08uTn8wxxzlgVw2wJlYtgPQBnFmdJ7LC0mC706lmEwpasVczB4BTfc71EQ
-         rYe6CoWvhSanvSRdOSNLRSqr8RcdyM+jGT1oX68C9qkezsFz80L8MQ8xK/EMtN7vmxUd
-         AOWY8Ly/n/gMxgTekdcxrErLkE/4l6mKITxr8zx45+iUA/3knVFG1xRzXKc4UA3Jj0Kq
-         fSB7/p5pcwWyfmcecNBa9Ujkf3Zr43209mEshZwTyYmHHtVMlGanVEPF7BLxd9hO7/4q
-         m7pg==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=DT+Hg4MXkKGN3iF9yrZOwKd7X9E+dCZfidIy8wnPVhs=;
+        b=F8o1gvCHUO0AaSUw95FBfODVx1rKjGucblSlLnK9kzaYfE4z45hG7/Q/0KjOurXk7k
+         Z70esZYM27OhUOpxpekDkWnIItmpXDhFpQWwzMoeE0IBXwAC9ybEhCSq8q93QYitDjWK
+         zgR4KYeevxyii1mwwruDTmr820y2WMFmVm43a6vTqkK1gI+CHQR0yidq+jmyqYIuY7nz
+         8cRigmOgNQB5dVOh5+9QQPMh60cfzuHbfmuguEKDD5O8fBQ7MrH/cWNHZsYfGhbh3owv
+         bEtgGvWqCJDRDrN2FskGip5MmzN9dyyDEw8ezYCegOSw94JvExbdz76QyIJ+Dbr2kKkA
+         jneA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Q8pCybxjWozGkg4XkxF8hCsdW8FgZKjWDEioFfT4qAc=;
-        b=AfNOJjXXsLSRatG6oXdW5FTbeareTrMd45qbp0kfmmtuvrFsUMyyDNxBEkVCCM5k3C
-         OfOjjK9d3H8XijmxTx4tU24JXhTRFrTDYmSrLDBgiiKtev1yfPiw0HNh6ktKr+wnxnd7
-         Hp3wagk/kknQ0rkcqLehPg52Ywhya43HM8gMT+VM0/UTDHD6XvZtakpx0m3Wq+nRkHX+
-         uX+BNbD6+Duwy18etNDWqzgW/9CeGDf3Cuha8nA+KJ4lXgqgEsO8H4fJCCkuoGzYTnFi
-         z5WQr0pgz3tUykJ1vmNvKIt5M1K+GyeJpAxTkG4A0F9oSxoIuKIW8OsbzhVZm0wbwFD4
-         5S3g==
-X-Gm-Message-State: AJIora97BYJ9gBxYwEqykEUU6i3UbxeO5QdKmMb3TxftN3Lzgfaj3+xp
-        K6tYga9E3QFfbBbIkKzu3jRtYw==
-X-Google-Smtp-Source: AGRyM1u943KaJE2gtYoBez8mvmZ6nHvpsrQFytNjdq485fL9iLkWdn0J4ZOz5mVQgQLA3S/z6G6xqw==
-X-Received: by 2002:a17:906:b782:b0:726:f979:7adb with SMTP id dt2-20020a170906b78200b00726f9797adbmr3014643ejb.498.1656506146499;
-        Wed, 29 Jun 2022 05:35:46 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id s2-20020a1709062ec200b006f4cb79d9a8sm7769345eji.75.2022.06.29.05.35.45
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=DT+Hg4MXkKGN3iF9yrZOwKd7X9E+dCZfidIy8wnPVhs=;
+        b=Br3tCtxtUcLj53gRoQLh9UYTjaZcv56TsRBCsl6eX2b9IVhLWK6TfCQ/PYO39WAYn4
+         b7GBRnid+5OdS7EMKor2XFtKyvbhdgdrTBZ0l9IA2wu+3K4xnIfEZNC01acm1QOI65qr
+         8EIXikUGUfqplGRB0ePy6onoPTisk8RDyMMvV04QuAyi7qkLIEOG8bDb9oBqVES8tu7L
+         ki/WFEdk1p3cvyieu0KE7pefEffUGf75CMdYy+MDfsCzbdTVj5HscsX6tdiPK1vGyH5x
+         xOCG2PHEH8oaU7c0xSSftAYcWJ5gr13ftUZt2D8bAyGVP8pSThdE1xLWAC7RqfiW9Hrw
+         yrNQ==
+X-Gm-Message-State: AJIora+CWEnzLwYasI8V9I/l11qyOt3BxmEjZux+HsdJs2IDIZXFb/3I
+        uxiA9w8eI24P/+oMEJSj7iQ=
+X-Google-Smtp-Source: AGRyM1tT3S6YJDUvU9N/m4Ujal72KTiL/+4qd507Qh2/vNqbs55SHP32TF7gvAP8aAEBEsqXzAaQ6g==
+X-Received: by 2002:a7b:c003:0:b0:39c:5642:e415 with SMTP id c3-20020a7bc003000000b0039c5642e415mr5312894wmb.111.1656506183225;
+        Wed, 29 Jun 2022 05:36:23 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id e9-20020a5d4e89000000b0021a3a87fda9sm16658872wru.47.2022.06.29.05.36.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 05:35:45 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
+        Wed, 29 Jun 2022 05:36:22 -0700 (PDT)
+Date:   Wed, 29 Jun 2022 14:36:20 +0200
+From:   Corentin Labbe <clabbe.montjoie@gmail.com>
+To:     Neal Liu <neal_liu@aspeedtech.com>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Dhananjay Phadke <dhphadke@microsoft.com>,
+        Johnny Huang <johnny_huang@aspeedtech.com>,
+        linux-aspeed@lists.ozlabs.org, linux-crypto@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: soc: samsung: s5pv210-chipid: add S5PV210 ChipID
-Date:   Wed, 29 Jun 2022 14:35:43 +0200
-Message-Id: <20220629123543.94515-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com
+Subject: Re: [PATCH v6 1/5] crypto: aspeed: Add HACE hash driver
+Message-ID: <YrxHRMoMYW+QDSnd@Red>
+References: <20220629094426.1930589-1-neal_liu@aspeedtech.com>
+ <20220629094426.1930589-2-neal_liu@aspeedtech.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220629094426.1930589-2-neal_liu@aspeedtech.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings for the S5PV210 ChipID block.
+Le Wed, Jun 29, 2022 at 05:44:22PM +0800, Neal Liu a écrit :
+> Hash and Crypto Engine (HACE) is designed to accelerate the
+> throughput of hash data digest, encryption, and decryption.
+> 
+> Basically, HACE can be divided into two independently engines
+> - Hash Engine and Crypto Engine. This patch aims to add HACE
+> hash engine driver for hash accelerator.
+> 
+> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+> Signed-off-by: Johnny Huang <johnny_huang@aspeedtech.com>
+> ---
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/soc/samsung/s5pv210-chipid.yaml  | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/soc/samsung/s5pv210-chipid.yaml
+Hello
 
-diff --git a/Documentation/devicetree/bindings/soc/samsung/s5pv210-chipid.yaml b/Documentation/devicetree/bindings/soc/samsung/s5pv210-chipid.yaml
-new file mode 100644
-index 000000000000..7c3f4ec47f7e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/samsung/s5pv210-chipid.yaml
-@@ -0,0 +1,30 @@
-+# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/samsung/s5pv210-chipid.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Samsung S5PV210 SoC series Chipid driver
-+
-+maintainers:
-+  - Krzysztof Kozlowski <krzk@kernel.org>
-+
-+properties:
-+  compatible:
-+    const: samsung,s5pv210-chipid
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    chipid@e0000000 {
-+        compatible = "samsung,s5pv210-chipid";
-+        reg = <0xe0000000 0x1000>;
-+    };
--- 
-2.34.1
+I have some minor comments below.
 
+> +++ b/drivers/crypto/aspeed/aspeed-hace-hash.c
+> @@ -0,0 +1,1428 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Copyright (c) 2021 Aspeed Technology Inc.
+> + */
+> +
+> +#include "aspeed-hace.h"
+> +
+> +#ifdef ASPEED_AHASH_DEBUG
+> +#define AHASH_DBG(h, fmt, ...)	\
+> +	dev_dbg((h)->dev, "%s() " fmt, __func__, ##__VA_ARGS__)
+> +#else
+> +#define AHASH_DBG(h, fmt, ...)	\
+> +	((void)(h))
+> +#endif
+
+Hello why not direclty use dev_dbg ?
+You will still need something to do to enable dev_dbg, so why force to add the need to re-compile it with ASPEED_AHASH_DEBUG ?
+
+
+[...]
+
+> +	if (dma_mapping_error(hace_dev->dev, rctx->digest_dma_addr)) {
+> +		dev_warn(hace_dev->dev, "dma_map() rctx digest error\n");
+> +		return -ENOMEM;
+> +	}
+
+An error displayed as warning.
+
+[...]
+> +	if (!sg_len) {
+> +		dev_warn(hace_dev->dev, "dma_map_sg() src error\n");
+
+Same here. In fact you have lot of error displayed as warning in the driver.
+
+[...]
+> +/* Weak function for HACE hash */
+> +void __weak aspeed_register_hace_hash_algs(struct aspeed_hace_dev *hace_dev)
+> +{
+> +	pr_warn("%s: Not supported yet\n", __func__);
+> +}
+> +
+> +void __weak aspeed_unregister_hace_hash_algs(struct aspeed_hace_dev *hace_dev)
+> +{
+> +	pr_warn("%s: Not supported yet\n", __func__);
+> +}
+
+Why not use dev_warn ?
+
+
+[...]
+
+> +struct aspeed_sg_list {
+> +	u32 len;
+> +	u32 phy_addr;
+> +};
+
+Since it is a descriptor where all member are written with cpu_to_le32(), it should be __le32.
+
+Regards

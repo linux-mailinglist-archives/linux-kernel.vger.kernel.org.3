@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D4A560546
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34353560530
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232800AbiF2QAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 12:00:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40224 "EHLO
+        id S234415AbiF2QAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 12:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234238AbiF2QAP (ORCPT
+        with ESMTP id S234323AbiF2QAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 12:00:15 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CF21D33B;
-        Wed, 29 Jun 2022 09:00:13 -0700 (PDT)
+        Wed, 29 Jun 2022 12:00:16 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89F81D0F9;
+        Wed, 29 Jun 2022 09:00:14 -0700 (PDT)
 Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2D6E96601967;
-        Wed, 29 Jun 2022 17:00:11 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9A53D660196F;
+        Wed, 29 Jun 2022 17:00:12 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656518412;
-        bh=RMpC7msGnNKAM7uk86ht5QA2izSfq/gh610fxQejVhw=;
+        s=mail; t=1656518413;
+        bh=epxNQMkBnhZkdWrXfvSSypucC3opbqyFCBxYcCzKHGg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bs0N+97WYD/VZ1ms59+wyryFPnLK72LcqPhyBx3T/gSa9LC8svbQftcYEo37GGW80
-         efuaw1RDu1bPwZeGTN1E2a4i8Y3KicXyXa5gltDGQDp/yETI6e2KnQ1pI0wJHPoFFh
-         dXxslJw+XPlPRFE392+X1Nq6UtQdk7o/47mjZFWBUdxul0gz5Wv1bGKbpP4M+vjrtK
-         n/6l1tJPg+fT+SdyvVlb/2vbGPCtAHdYvUu6cTDHR88WC2KX26XoHdKP5+jpz1Iw/l
-         indPvI3L4Ala69UDD8hCi7LX/xKRRBpjQqg1t3CYRfj6DIKQpfUB2+pnjsciYx4lOb
-         RGi8d9TplkEdw==
+        b=QPo0pCyMxI/iLHaKwWcVnw3c7woXm5YVQokd2ave3flD/4QZs1fWWNqU9oC/wiEkD
+         gRW6nvkuGQTcacYGdI/6cuDAacCFUg5Lkf5XxE46PJzFpB3fIv3FKVjxOjLgi/Qblb
+         LLc9JmHabKXntX1mAcxNEXNtY6zr5pG2Ru3IcKBJqjSJFWmdZM+R07OgcltUcNd6Ul
+         sXMI4MWvSoD+fXM9OCghYO87R3iZ3uMkxVYxPpp860xB6p1pyA1mf2QQxpCGt/B0MO
+         21BFq8FqzHsabenQvn58ExHaAh+15UEy9c3sup7GQr+fpjZfaXQ8xZ+B7MVoSIBj55
+         yHzzfv+aZ/W9A==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>
@@ -44,9 +44,9 @@ Cc:     AngeloGioacchino Del Regno
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH v4 06/19] arm64: dts: mediatek: asurada: Enable and configure I2C and SPI busses
-Date:   Wed, 29 Jun 2022 11:59:43 -0400
-Message-Id: <20220629155956.1138955-7-nfraprado@collabora.com>
+Subject: [PATCH v4 07/19] arm64: dts: mediatek: asurada: Add ChromeOS EC
+Date:   Wed, 29 Jun 2022 11:59:44 -0400
+Message-Id: <20220629155956.1138955-8-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220629155956.1138955-1-nfraprado@collabora.com>
 References: <20220629155956.1138955-1-nfraprado@collabora.com>
@@ -62,9 +62,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Asurada platform has five I2C controllers and two SPI controllers
-that are used. In preparation for enabling the devices connected to
-these controllers, enable and configure their busses.
+Add support for the ChromeOS Embedded Controller present on the Asurada
+platform. It is connected through the SPI1 bus and offers several
+functionalities: base detection, PWM controller, I2C tunneling,
+regulators, Type-C connector management, keyboard and Smart Battery
+Metrics (SBS).
 
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
@@ -72,157 +74,115 @@ Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 
 ---
 
-Changes in v4:
-- Switched mediatek,drive-strength-adv for drive-strength-microamp
-- Switched mediatek,pull-up-adv for bias-pull-up
+(no changes since v2)
 
- .../boot/dts/mediatek/mt8192-asurada.dtsi     | 126 ++++++++++++++++++
- 1 file changed, 126 insertions(+)
+Changes in v2:
+- Renamed PWM subnode to avoid dt-binding warning (ec-pwm -> pwm)
+
+ .../boot/dts/mediatek/mt8192-asurada.dtsi     | 79 +++++++++++++++++++
+ 1 file changed, 79 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-index ca55dd095e80..72dc974fe6fc 100644
+index 72dc974fe6fc..07405dea4d9d 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-@@ -85,6 +85,47 @@ ppvar_sys: regulator-var-sys {
- 	};
- };
- 
-+&i2c0 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c0_pins>;
-+};
-+
-+&i2c1 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c1_pins>;
-+};
-+
-+&i2c2 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+	clock-stretch-ns = <12600>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c2_pins>;
-+};
-+
-+&i2c3 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c3_pins>;
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c7_pins>;
-+};
-+
- &pio {
- 	/* 220 lines */
- 	gpio-line-names = "I2S_DP_LRCK",
-@@ -311,6 +352,91 @@ &pio {
- 			  "AUD_DAT_MOSI1",
+@@ -353,6 +353,14 @@ &pio {
  			  "AUD_DAT_MISO0",
  			  "AUD_DAT_MISO1";
-+
-+	i2c0_pins: i2c0-default-pins {
-+		pins-bus {
-+			pinmux = <PINMUX_GPIO204__FUNC_SCL0>,
-+				 <PINMUX_GPIO205__FUNC_SDA0>;
-+			bias-pull-up = <MTK_PULL_SET_RSEL_011>;
-+			drive-strength-microamp = <1000>;
+ 
++	cros_ec_int: cros-ec-irq-default-pins {
++		pins-ec-ap-int-odl {
++			pinmux = <PINMUX_GPIO5__FUNC_GPIO5>;
++			input-enable;
++			bias-pull-up;
 +		};
 +	};
 +
-+	i2c1_pins: i2c1-default-pins {
-+		pins-bus {
-+			pinmux = <PINMUX_GPIO118__FUNC_SCL1>,
-+				 <PINMUX_GPIO119__FUNC_SDA1>;
-+			bias-pull-up = <MTK_PULL_SET_RSEL_011>;
-+			drive-strength-microamp = <1000>;
+ 	i2c0_pins: i2c0-default-pins {
+ 		pins-bus {
+ 			pinmux = <PINMUX_GPIO204__FUNC_SCL0>,
+@@ -428,6 +436,74 @@ &spi1 {
+ 	mediatek,pad-select = <0>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&spi1_pins>;
++
++	cros_ec: ec@0 {
++		compatible = "google,cros-ec-spi";
++		reg = <0>;
++		interrupts-extended = <&pio 5 IRQ_TYPE_LEVEL_LOW>;
++		spi-max-frequency = <3000000>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&cros_ec_int>;
++
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		base_detection: cbas {
++			compatible = "google,cros-cbas";
++		};
++
++		cros_ec_pwm: pwm {
++			compatible = "google,cros-ec-pwm";
++			#pwm-cells = <1>;
++
++			status = "disabled";
++		};
++
++		i2c_tunnel: i2c-tunnel {
++			compatible = "google,cros-ec-i2c-tunnel";
++			google,remote-bus = <0>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		mt6360_ldo3_reg: regulator@0 {
++			compatible = "google,cros-ec-regulator";
++			reg = <0>;
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <3300000>;
++		};
++
++		mt6360_ldo5_reg: regulator@1 {
++			compatible = "google,cros-ec-regulator";
++			reg = <1>;
++			regulator-min-microvolt = <3300000>;
++			regulator-max-microvolt = <3300000>;
++		};
++
++		typec {
++			compatible = "google,cros-ec-typec";
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			usb_c0: connector@0 {
++				compatible = "usb-c-connector";
++				reg = <0>;
++				label = "left";
++				power-role = "dual";
++				data-role = "host";
++				try-power-role = "source";
++			};
++
++			usb_c1: connector@1 {
++				compatible = "usb-c-connector";
++				reg = <1>;
++				label = "right";
++				power-role = "dual";
++				data-role = "host";
++				try-power-role = "source";
++			};
 +		};
 +	};
-+
-+	i2c2_pins: i2c2-default-pins {
-+		pins-bus {
-+			pinmux = <PINMUX_GPIO141__FUNC_SCL2>,
-+				 <PINMUX_GPIO142__FUNC_SDA2>;
-+			bias-pull-up = <MTK_PULL_SET_RSEL_011>;
-+		};
-+	};
-+
-+	i2c3_pins: i2c3-default-pins {
-+		pins-bus {
-+			pinmux = <PINMUX_GPIO160__FUNC_SCL3>,
-+				 <PINMUX_GPIO161__FUNC_SDA3>;
-+			bias-disable;
-+			drive-strength-microamp = <1000>;
-+		};
-+	};
-+
-+	i2c7_pins: i2c7-default-pins {
-+		pins-bus {
-+			pinmux = <PINMUX_GPIO124__FUNC_SCL7>,
-+				 <PINMUX_GPIO125__FUNC_SDA7>;
-+			bias-disable;
-+			drive-strength-microamp = <1000>;
-+		};
-+	};
-+
-+	spi1_pins: spi1-default-pins {
-+		pins-cs-mosi-clk {
-+			pinmux = <PINMUX_GPIO157__FUNC_SPI1_A_CSB>,
-+				 <PINMUX_GPIO159__FUNC_SPI1_A_MO>,
-+				 <PINMUX_GPIO156__FUNC_SPI1_A_CLK>;
-+			bias-disable;
-+		};
-+
-+		pins-miso {
-+			pinmux = <PINMUX_GPIO158__FUNC_SPI1_A_MI>;
-+			bias-pull-down;
-+		};
-+	};
-+
-+	spi5_pins: spi5-default-pins {
-+		pins-bus {
-+			pinmux = <PINMUX_GPIO38__FUNC_SPI5_A_MI>,
-+				 <PINMUX_GPIO37__FUNC_GPIO37>,
-+				 <PINMUX_GPIO39__FUNC_SPI5_A_MO>,
-+				 <PINMUX_GPIO36__FUNC_SPI5_A_CLK>;
-+			bias-disable;
-+		};
-+	};
-+};
-+
-+&spi1 {
-+	status = "okay";
-+
-+	mediatek,pad-select = <0>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spi1_pins>;
-+};
-+
-+&spi5 {
-+	status = "okay";
-+
-+	cs-gpios = <&pio 37 GPIO_ACTIVE_LOW>;
-+	mediatek,pad-select = <0>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spi5_pins>;
  };
  
+ &spi5 {
+@@ -442,3 +518,6 @@ &spi5 {
  &uart0 {
+ 	status = "okay";
+ };
++
++#include <arm/cros-ec-keyboard.dtsi>
++#include <arm/cros-ec-sbs.dtsi>
 -- 
 2.36.1
 

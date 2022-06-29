@@ -2,96 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2521E56036B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D5A56037B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233571AbiF2OoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 10:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
+        id S233592AbiF2Ook (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 10:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232039AbiF2OoI (ORCPT
+        with ESMTP id S232039AbiF2Ooi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 10:44:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162FF1EACF
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 07:44:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5ECD61F7B
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 14:44:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6D60C341C8;
-        Wed, 29 Jun 2022 14:44:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656513847;
-        bh=1YEn9fvXA0PLaCeoqu7cVXgKLU0IspUKNzvH94ZGFcA=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=jIi/PbGgjxbjjmIrmYItwU6UIjRm3l7P9KTz5fa0HFljbhEe50lOtYBiQFeLqg1SC
-         MNcUha72VzGtPftRqhlvRiCgZ5bA96J3H8v73Y9+r82lqFT6UHNAyxsbyEh2+WdeU9
-         O4rlpUye7jQ2CB7TQHZuvhEPVmJWc4WyD2TH3Gr9rUD6D5a4nm1P7jwSbKM7XfCWBF
-         EEtcr7a7lY3B2FCQ6ROdrIdZFfd46/8hXrtbASCnYQ9akEBNgUTjX5vmh7KerEBjoP
-         q8Noc92Q0bohMO/ftW6ObCnxBcABp4hDUKOjPAhnWOqvXhJgLqIOeZ6z0wrnMbtHMU
-         4t5AwHZSeOBGA==
-From:   Mark Brown <broonie@kernel.org>
-To:     srinivas.kandagatla@linaro.org
-Cc:     lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220629090644.67982-1-srinivas.kandagatla@linaro.org>
-References: <20220629090644.67982-1-srinivas.kandagatla@linaro.org>
-Subject: Re: (subset) [PATCH 0/4] ASoC: codecs: add WSA883x support
-Message-Id: <165651384559.1635179.5697660258524985288.b4-ty@kernel.org>
-Date:   Wed, 29 Jun 2022 15:44:05 +0100
+        Wed, 29 Jun 2022 10:44:38 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C89924967;
+        Wed, 29 Jun 2022 07:44:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=AEQBYydBwT3iVN4z4kFDQZdStP+6c3zXJmeQHUsEWdw=; b=XEVclGnSPiDmLmyaGijJL9luEx
+        nSzGs2czy+W7cE956DazxAWblRW9u1/VXWvTrZ+KtcFvJXpk1QBGzoS6VuMK3UmbxjY+sfFRSEqiZ
+        c6fdYfLgXC4zciaZWd6uez0VwVOe9wHMwJoI4KPUKuar6g2FS6dFTCnksWl1CrgRl0mHl3hb5CK9/
+        1qVfox3ZjWlMjwUmw6KXS+xbbVjuEabhsEGNJYXSupLxMD0+MuzSZceSiW56stHcxEjT5qNTRBkwb
+        ltLGcbPf7L4jYsCg0Qjv4wp7N/T9vHPO1MdVsZFcSjr8pmDiFyYppXQlFYtA1i7p7q0cuI/CPYRLF
+        RPUZs+FQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33100)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1o6Yvd-0003Hf-S6; Wed, 29 Jun 2022 15:44:29 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1o6Yvb-0005vm-IK; Wed, 29 Jun 2022 15:44:27 +0100
+Date:   Wed, 29 Jun 2022 15:44:27 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 31/35] [RFT] net: dpaa: Convert to phylink
+Message-ID: <YrxlS7wvgUtg9+y0@shell.armlinux.org.uk>
+References: <20220628221404.1444200-1-sean.anderson@seco.com>
+ <20220628221404.1444200-32-sean.anderson@seco.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220628221404.1444200-32-sean.anderson@seco.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Jun 2022 10:06:40 +0100, Srinivas Kandagatla wrote:
-> This patchset adds support for WSA883x smart speaker amplifier codec
-> connected via SoundWire. This codec also has a temperature sensor used
-> for speaker protection, support for this is not added yet.
-> 
-> Most of the code is derived from Qualcomm downstream msm-5.10 kernel.
-> Thanks to Patrick Lai's Team.
-> 
-> [...]
+On Tue, Jun 28, 2022 at 06:14:00PM -0400, Sean Anderson wrote:
+> +static void dtsec_mac_config(struct phylink_config *config, unsigned int mode,
+> +			     const struct phylink_link_state *state)
+> +{
+> +	struct mac_device *mac_dev = fman_config_to_mac(config);
+> +	struct dtsec_regs __iomem *regs = mac_dev->fman_mac->regs;
+> +	u32 tmp;
+> +
+> +	switch (state->interface) {
+> +	case PHY_INTERFACE_MODE_RMII:
+> +		tmp = DTSEC_ECNTRL_RMM;
+> +		break;
+> +	case PHY_INTERFACE_MODE_RGMII:
+> +	case PHY_INTERFACE_MODE_RGMII_ID:
+> +	case PHY_INTERFACE_MODE_RGMII_RXID:
+> +	case PHY_INTERFACE_MODE_RGMII_TXID:
+> +		tmp = DTSEC_ECNTRL_GMIIM | DTSEC_ECNTRL_RPM;
+> +		break;
+> +	case PHY_INTERFACE_MODE_SGMII:
+> +	case PHY_INTERFACE_MODE_1000BASEX:
+> +	case PHY_INTERFACE_MODE_2500BASEX:
+> +		tmp = DTSEC_ECNTRL_TBIM | DTSEC_ECNTRL_SGMIIM;
+> +		break;
+> +	default:
+> +		dev_warn(mac_dev->dev, "cannot configure dTSEC for %s\n",
+> +			 phy_modes(state->interface));
+> +	}
+> +
+> +	if (state->speed == SPEED_100)
+> +		tmp |= DTSEC_ECNTRL_R100M;
 
-Applied to
+Please do not refer to state->speed here, it is meaningless. What are
+you trying to achieve here?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+It looks like the old dtsec_adjust_link() used to set/clear this when
+the link comes up - so can it be moved to dtsec_link_up() ?
 
-Thanks!
+Thanks.
 
-[1/4] ASoC: dt-bindings: Add WSA883x bindings
-      commit: 16e2f8a4e9d5e4c7653ee774d9377d602070b16e
-[2/4] ASoC: codecs: add wsa883x amplifier support
-      commit: 43b8c7dc85a14f36048a27bb6c627fd49144a8d1
-[4/4] MAINTAINERS: add ASoC Qualcomm codecs
-      commit: a7b028e4252bc1e8b5646657fd45a68792826c23
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

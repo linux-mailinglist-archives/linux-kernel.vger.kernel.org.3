@@ -2,145 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B97855FFD9
+	by mail.lfdr.de (Postfix) with ESMTP id 42EE255FFD8
 	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233109AbiF2MZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 08:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59112 "EHLO
+        id S232832AbiF2M0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 08:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231811AbiF2MZa (ORCPT
+        with ESMTP id S230071AbiF2M0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 08:25:30 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2133.outbound.protection.outlook.com [40.107.22.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37755338BC;
-        Wed, 29 Jun 2022 05:25:30 -0700 (PDT)
+        Wed, 29 Jun 2022 08:26:35 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2048.outbound.protection.outlook.com [40.107.20.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21ED535A96;
+        Wed, 29 Jun 2022 05:26:34 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KNPPZY71tRZ2FE20YA/IEgCbjlyQq0pJ/A9F2TGvy9cRxWAwlX3gNM6c833nfPugMyrhjZHJDQbvmfhIRZk3r0LJmpy70Ek6rvOksxm2ojqUzXlmbDhXttkhx2hh+Hwd+C26I1vWOCIVR+gs3akWX+bWdpHcaLiljita6pz+POANNsdklw3qG+7+hOZ1/HbC/Ke2OMEQxEisAjoqGWWkmSVpsTzAgS1pHoJW0iwp9mflUMhjI+3aTL95dIf5fej7ntX7/17tfmqURq74yiLyxCBUTqoXexnDcW4hWEQ8IzZfFXqYvNCOk87h5ALPsHfp3H4Xm3ic5PPug1GeHBgc5A==
+ b=fPWsB6p+6w5t8/XpxK/Hs+YJA6SE7k2XbSPQDwL5GzjrmF/RLlIKWc6j8y6xuyIWA3+/2F7M3aSw2T3BKaoBDTwIxKwbhrfRYufs28KYNDdn0nLuLJJwoGdAkAIESEJuth/k4GnlUBZea/g8j/lS4vPGR0YTmtRS8wzhlM3kuR276qwvgPIyQ/5rHgQSrF8o1QIU6BDRei/eFe2pvjR3XsLlyRmfpmi9sJZdF73xtssE/Zz+71mAw5OfPdd9jcdkfYdQJh8XYS8Sw0U2PIRY+Mi9aVSjN+y14HUEkYY7CcyExq22hzyN96/gEUcJHcn49Ql7haOcWwDDOMKLIKOReg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bVLUbERcuxL8VQkG1d3Fqzzwouh7FCCJFD+rbjGf/xA=;
- b=QI+n9J6jrHF3qGw7ZciMiEN1zBCz8lgca2a7YvaUS/regQiS4bVDCed34TmcS1UnB6l45Mblhdf9xoT7aNQm9XJOUTLjvA0mzvsEBFsufVuTctZ+AnevjpX/tj2gzNIxQq5TX0GnKv0G3gF1MglwShm0qRN7jDmXI0+KsZgJzWR0tSPT/GZwsjXUYMcbvzFO3Q28wr1acNh1aNDGIQQR6CeIYdWHGMG+FDgJvafotjQq+lXvGDg7rw0pAXQquCFxhm+LMFBhJEbxThwkWY4+8uEIHo0wPSNYLRA4V4qTkoJiEBCuMRSs8vPZBRoltgf5ZkFvfqtQsECwI9NPqBH5sA==
+ bh=EfA1i+LRu4VG9I3meOb4tv5VKkJ6Nhg/KS+9Sgke6qo=;
+ b=fvbsge1JFKbgyvV8VlB3oJumou/g5vrmcakkAlcgj/K4XkNikTTrWyyOfTllxOA2cSTmPOWpOvdgZBQ7CvdFfsnoNIBrC3K8R81uqgom80ov9FFrrD74lTY2UX6m+2nEPqDVdHWxE5i/LkzVkgpRdT/Vc59duIRKT9Xl33IOyB2G6zqf+pAqcwH66nTmpJWDfBeCgtK8In6s7aDfN8MA/wa/tZuVNxc3Kt3Zv+3QWNEtLfRHeCqO64Uw1mm14NMjUejotRb1FKcI5BAgnbwduF8kqqaLRlt45Z7Q5nJoia0eftXDljM3qGvMEzuh8w8cLCxXNUxqKx+wLz7CZLzATg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bVLUbERcuxL8VQkG1d3Fqzzwouh7FCCJFD+rbjGf/xA=;
- b=aRCfMP49Tt+AbI00/6OvCHcTe4t1FdyNoI7FEGBINuTVspoyj2utmFWn/SeC+6+8VmCboOoVMvrtoFCdMtFBD7XMdMkFxNMCag39zKtLwY03kJ8KpQ4bvldcGxluR2zwp3tBBgxogLQS4/I6f8Bf6+EglntDKDbmd2VxlDb/D/Y=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia.com;
-Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
- by VI1PR0702MB3808.eurprd07.prod.outlook.com (2603:10a6:803:4::28) with
+ bh=EfA1i+LRu4VG9I3meOb4tv5VKkJ6Nhg/KS+9Sgke6qo=;
+ b=bJ76hl2kLyNrDAECzh7DJDPvzHlqin8R7J0McqAuuF1tbmemFxatInAZWkJ/QD4Ba2fSVze3nyKoJp4r0KqEvPQ9LlUXnFTHKDVW8+g+rv7qjCBRiQ0UnmsQO8av6SDPADRfQQoYbGPDpJvTqydoUNYIYiA5cW2+ZRluV17wEUI=
+Received: from AM0PR04MB5121.eurprd04.prod.outlook.com (2603:10a6:208:c1::16)
+ by AM0PR04MB6033.eurprd04.prod.outlook.com (2603:10a6:208:13b::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.11; Wed, 29 Jun
- 2022 12:25:27 +0000
-Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
- ([fe80::8885:ac49:4a47:2293]) by DU2PR07MB8110.eurprd07.prod.outlook.com
- ([fe80::8885:ac49:4a47:2293%9]) with mapi id 15.20.5395.014; Wed, 29 Jun 2022
- 12:25:27 +0000
-Message-ID: <7a41766b-3009-caba-e473-9035b44b1b06@nokia.com>
-Date:   Wed, 29 Jun 2022 14:25:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 06/12] i2c: xiic: Add smbus_block_read functionality
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Wed, 29 Jun
+ 2022 12:26:32 +0000
+Received: from AM0PR04MB5121.eurprd04.prod.outlook.com
+ ([fe80::5c17:601f:ac4f:ebfd]) by AM0PR04MB5121.eurprd04.prod.outlook.com
+ ([fe80::5c17:601f:ac4f:ebfd%6]) with mapi id 15.20.5373.018; Wed, 29 Jun 2022
+ 12:26:31 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>
+Subject: Re: [PATCH net-next v2 0/7] net: lan966x: Add lag support
+Thread-Topic: [PATCH net-next v2 0/7] net: lan966x: Add lag support
+Thread-Index: AQHYimHdDTDh5jwai02cndkVFmS37q1mUicA
+Date:   Wed, 29 Jun 2022 12:26:31 +0000
+Message-ID: <20220629122630.qd7nsqmkxoshovhc@skbuf>
+References: <20220627201330.45219-1-horatiu.vultur@microchip.com>
+In-Reply-To: <20220627201330.45219-1-horatiu.vultur@microchip.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Manikanta Guntupalli <manikanta.guntupalli@xilinx.com>,
-        michal.simek@xilinx.com, michal.simek@amd.com,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, git@amd.com
-Cc:     Raviteja Narayanam <raviteja.narayanam@xilinx.com>
-References: <1656072327-13628-1-git-send-email-manikanta.guntupalli@xilinx.com>
- <1656072327-13628-7-git-send-email-manikanta.guntupalli@xilinx.com>
-From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
-In-Reply-To: <1656072327-13628-7-git-send-email-manikanta.guntupalli@xilinx.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: HE1PR05CA0250.eurprd05.prod.outlook.com
- (2603:10a6:3:fb::26) To DU2PR07MB8110.eurprd07.prod.outlook.com
- (2603:10a6:10:239::15)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5b77fbbd-7a8b-4184-2321-08da59ca996d
+x-ms-traffictypediagnostic: AM0PR04MB6033:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: N/P+v7QOFzjYovbn6pYMY+jE3/sm7h9+JugNBgAyjDiarktk7km+0zoHsuJhj/v2iadXJyAgAjBLvRSuWBhvrozhJtma4J9gQ8XhYC1wIRkfQCadcs9zzIrDirUGAGme8VutTZbOXvvoU9q797oUfj9SeI0L60Bp58h+M8dt9KlFnZkAJD2j5AxyF1jWycYBawnQ7Y3yj6aeleQQsAZI8zm3yvf8nyG4HCU5/UpNUSErtdtWaoJRMsVWMN9P0AH8CaqqJLVXhy+VfhWM1kIKZ//UPyeVoijVDWz/JB4DdtPO4bLQv/bL6CBWLrUH8e6uOQgjSrhnXvYFuNfCCtiI3ZPJbUwl+ZuRa1J179Si6ofihuhf3hnQAy9Po/GMESM2OcKhiqhjvRLyoWAuFVrpPqSs1mnDjixXIqlj/Cb9SpfDZbxbcFgvrjJakcvhuFMUUnfblVXDwim5Ph3LRj5y5T2FXPJcItkqEqPF8nSmHIEKard0m5XyHho9l5aglNhoF0tPoXMuMoz5PC0knoFt+cpY3+j27lpHl+j8wOg+VtxsBoqsO9WuR+WPPKWmQRwWcsVkHcjJ1Xjp6PYk23D/uatolsMhiwyYUHYecF0s/PPNRqd07u2Qn/rfkrNVyvXJ9852q0RMGRPPBocNP8RTXBlL9nKKYiCEDoeZGu01w6y50u/2uv85+J9q4RrsuNRpMDTIa5T8qnGVqVkhkwrgmkFYU3qxJOVQSe+lUcit2RyaVbXYW7Ld4emkiio4iyw77L3b/mJNRa+dZ/i/GDI2Q349j1OYR8zVMMfsb6QOnik=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB5121.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(346002)(396003)(366004)(39860400002)(376002)(136003)(26005)(86362001)(6512007)(6506007)(9686003)(66946007)(71200400001)(8676002)(38070700005)(66446008)(66476007)(4326008)(64756008)(76116006)(6486002)(83380400001)(8936002)(1076003)(33716001)(44832011)(66556008)(478600001)(6916009)(5660300002)(54906003)(122000001)(38100700002)(41300700001)(2906002)(186003)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?K85pBCrai1wmxR44GwwgrvWToVQoHTnDOIYbB66h32LX+nPPvua+s2CyZIM4?=
+ =?us-ascii?Q?WidJ/E2m1/wO9zPK3F2ly6sU2A2SJxdj+3GJ0MDB5yQndCVjSAH425I3cKdU?=
+ =?us-ascii?Q?YY4wiNH3LOvKatJ/OSxQljs8Z0/gh7Lxc/tzB/e8gg3MBYd0qYY2vT8gN6mJ?=
+ =?us-ascii?Q?8k9eXdWEhHYdOJxlsvZEKq21PykbaUCCFDbIKtdXA+Dyutn2rSTxf9flgGmt?=
+ =?us-ascii?Q?OUp7pk2GZVZy8UuDqzG893kbwBX+mybbqxBpQzVWvFDZX4UGS29DLX21iDdi?=
+ =?us-ascii?Q?blqX+tgyM4yWEyEb67rickBDnqdasjaxrpxQClVuzyPbRhFGfTGj+7D8AF4i?=
+ =?us-ascii?Q?JBrwL8SwckYf0EJLtyzxGIaaA+wWmSNf1nwt1aXjnsZPN3Ew2gMHzFmr8K2G?=
+ =?us-ascii?Q?fViXZqq/FqyshOQp8uI/26NLiHpJUgbgEh/ArQrf42sBOc7PyeVov0Kf1XYZ?=
+ =?us-ascii?Q?YcS34Pp/z48V6h/LlD5XG/tRsKtGeoG9V8HbG0h6mSOdZ/DUzDq1Tkd7YIl3?=
+ =?us-ascii?Q?F5AnxxMDaDJtEj83Rsdn2tZhyCsYgD0O9CweXX5SuuLlmgBqLN5tHctNRn6X?=
+ =?us-ascii?Q?Q2IyxAmwM9OfoNyN0CsAvGnKajwRNu/BgqXXmbzHHt7RdUHTLsxw2hn1rAcI?=
+ =?us-ascii?Q?+ahMcTs7/GALHYiT3a0vv0ZKBZc1/euSUcEcsU++1Y2sVnWH8qsTHO83NfBr?=
+ =?us-ascii?Q?HvRM4mpPjxyUm6EbtP9jlBHTw11wo5kWrgS23SnilYyo2dP/k+W0c7UNH4Ej?=
+ =?us-ascii?Q?YnrdtEw/HTK9DQXKZqyCLnIncvvUkUd6NHEDhrw+J39+uJyJiRV+hpWKJk/V?=
+ =?us-ascii?Q?eMd7kYyrNvvPKFMty5ZWGE9UWxmo3hoXIASK9Lx/0yjEIBWy/t0CTOs8EVsr?=
+ =?us-ascii?Q?GC0PDSth6aaXHkYYSFqpV7DxM4epo0KH/7ECsmaY/1gv1ib/3BX3qUxMamIW?=
+ =?us-ascii?Q?aSrUuUEGSUjYxFQN3nwKCpRN2LxNyMmEYHZ1zliuIZ/kXhVX9wj/qkCO0VHX?=
+ =?us-ascii?Q?hEAsh/itOZw2B7EKRNXlSTQRDXKRdM/phgbGl6GiDcOYb4onnpbSVMV1ylzh?=
+ =?us-ascii?Q?0d9PEiusguHPSrdIsBZH4n4zhhQkeSVNByla5hdusN0w4JUF5hUvoSIJd/YZ?=
+ =?us-ascii?Q?wnoqceR7QRAkFXTu9IMibhE9aJUrxDs6r/Mk84Olm2t13BGEGVV62pRjZKrP?=
+ =?us-ascii?Q?UrstZwRqAjyerhwcgYbi+430IKSlgfHrXj0/f2RYuuS6+YF40bIG1NyYzLCz?=
+ =?us-ascii?Q?ew/PuvNd08O51lcIamtudo/EutYDazyBVlnhsLsnj1n4zE8C1wKOinXKCpRO?=
+ =?us-ascii?Q?Y5/wnsnZqFRJPiFqzgPJQBPiaz8ZtPwgCLS2Bf/62weF6EG4sUlPlA40QodE?=
+ =?us-ascii?Q?na//exlEv9SipLYt4MLBqgD40zp5W3lrE3FDQc2JPq1BZD528Fn7ctTmj45+?=
+ =?us-ascii?Q?NqcIMXFCgeLHiL35WYL7s7u7on1sz7/ZGE8n8uH7UrFQxoMz2IEui9yo4YyR?=
+ =?us-ascii?Q?Viq/w7QiveSF0XaDFQvQTT1XKNg/hvn/wr0LeSnEsa42idId/6fK+QXf2qBN?=
+ =?us-ascii?Q?g4vEJtFWZqvLpKJ1TucehT+IR/8TyXEkwKipr9SYL0kFLLZCZG7HVZ1JAq4B?=
+ =?us-ascii?Q?gA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <9EC444AAB4EA6E4FABFBE2E9A36355ED@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 819c81e6-43e7-47ad-781c-08da59ca72d8
-X-MS-TrafficTypeDiagnostic: VI1PR0702MB3808:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gy/8oXQxeholCiRB6et8ukjSaRt4NLIMR3VUq5M6rI/JGCfve6XfUmjyJOysB3Nf8ycFBsCcHERHh8SwpL0Y3JkbEhfVNiroC5HjbgHoCq8e+brIjJph6XRA9+A+NgbtZos8uHaQQYUl3XzHha5OQQSVY7yzMLuXdraRuzapetr1uBGCGuO5KQ66q3ep7zfDpnYM8hwFhpNMefgmyxVpr8a7DwFwFFtikH8aq9S7ddwKm4nrDEqkY7Qo20DMWk4VybbRm7yDu0MxE81QV8YaSiAamr10sLXaZXFEnjHrHCGqv2uYEN/Z0dWGdxbrTdnHQSaIDIORagoqEz8OzY3QJF2iD/fiGPRdrEwZtCfXEDGKwfeQDKcgVE7NJYEgkXkJXJcC1FVcuEmr9/eZmVyDDhrfulZYpUW5pyOfVEQx0PtUm2L1n0GnpvzXnjiZOD2IwLWEdUaT4G/TKGDECizDM8OjZ+5vfpQwOV8OKysulR0n7YSAAe260x9oOqEPW2qLDv45EWkfDKR6MFegfm4OdirzxiUjWFR9numupgPf8G53mMOgFeL2eIasNFLK7+zpX1MKMIcur3YdcNYZ7u7JoMKNFVa5tESJnK8065sbURrL3SkLRha8OPMMMcnF3K/cmBmLhPaETqLWrZZsYn2foHgOz8Zl5wGvmB24bMW2EymsEsIU9rksqZEaQO/8sUwNpyhNItvx66SbGxSzES/LiP2IBMWhr3V5/F3vjCACAR+KHvOQE2SX+CKRBRXdOhMUtVErK9F/X0xC6ocwFCQA0Gk9dtPrbDNAycW9GZVM55tg3fen1tT72w7O8YIisHgtgJZ6ACkB9mteD9+YBSOvyYHpVuh+bgzSeHHHSP7w8IDtf99pkJa5vRJVdbwrb8hW
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(39860400002)(366004)(396003)(346002)(8936002)(6486002)(31696002)(2906002)(86362001)(478600001)(66946007)(4326008)(66476007)(38100700002)(66556008)(82960400001)(8676002)(44832011)(5660300002)(316002)(186003)(4744005)(26005)(6512007)(31686004)(2616005)(36756003)(41300700001)(6506007)(83380400001)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RklBdkZxNWhBWXRuVnZqN1VzUWdjMUEvZEtSVy9TcVdqYTBZSnpPdkVCM1Zj?=
- =?utf-8?B?ZGNIK3ZZZ01Ka3l1ZjVSZDRMMXl0ampSMWNSQ3RyT3NVK2tKQklsTGxlazhE?=
- =?utf-8?B?SjJGeThxU1pzTlU3Z3Y0QkpRZG1OZW1WcTM5NVhVUmk5VDhubHhxTGNsZmcx?=
- =?utf-8?B?TU01YThmbkdhaktaMXh1Z1B5bDZnSjVOSGpBaTZNY05VQXVFenVnMnJLY2dU?=
- =?utf-8?B?UEJLWVN5cEdEaUNGcGNVQmUvaFNnVUJMZDRLdHZ0K2hhMFVYQ3pvMGhvMU9m?=
- =?utf-8?B?UURqZlZOSlFkdFJkd1diMXI1RXlpS1RkQVg0Rmw2dWc4TGg2S2N5MDkrazln?=
- =?utf-8?B?NTRiUG43SGVlRlhRWDFDSUUrZFptWGFRNnVRMmVWdjBiblpvUzNnZVkvelhM?=
- =?utf-8?B?cVhtSUx6NXdpTVNJbS92YW1XTUs4MXdONElid20xRzRWcXRFOUViOGZTVTIz?=
- =?utf-8?B?bFd0Y3huMHR3bnJXQTZWQ1JLY1FrQm05NlRsa293NE1YYzA5ajIvWEViVVVi?=
- =?utf-8?B?Q01CeFJpS2xyT3kyaWFKRUtMdVkydTc1SVZsL0x6MEN0SHBpRk8xSnVrTGlU?=
- =?utf-8?B?MzYxSklRcSt5UzByYk1yT2g2bGZJN1VxdUUrVkcwWmI4ODNnRnF6azgzSWdT?=
- =?utf-8?B?RVErajJtZE5OMTkwUkhUZUZNb2krOW5ZZVZjMEFnMW44L3FIUWpEWDNsRk9I?=
- =?utf-8?B?TFU1Nno5RGVZY2NwaTRaYWNCeEJqMzVpcW9jTWxMTCs1azZKeWEweUFaTW01?=
- =?utf-8?B?UkRCOS9sMCtVUUtRUWc5MmR4a2JBcjhIZStlNklDYnU5RDk5WVd1NGRJdGJU?=
- =?utf-8?B?Ri9PSXdRWUNtUTlGWlF1eWVxWUE3R1pyMDdMVE9aQ3hlenRMM0tzRUFKQnBD?=
- =?utf-8?B?a0NMWU9WNkpPUFNZSENVYU1jR3RFRzBsQ1R4SHI5VnJQUGdPYURnNm5kdTN5?=
- =?utf-8?B?R29nbjkrVTZ0VW11OWg3SWozaGlyREgvQWg0MGFKaHZiNFFHZnFnNkE1YVlp?=
- =?utf-8?B?VFYrejFlc0MyajJXQnVSTEpXR3M1OTF4cmtpZDB6cFEwQnBkTUNuRUtwUnJL?=
- =?utf-8?B?WU9zVFRpN2NtczZwbWY2K3ByNC9Yb1NHajFvV014L28vV2JXWjhsR1F6OU13?=
- =?utf-8?B?TFJjQThyK3BLSzRXNC9uR0dCZFBRZm4rdXZOTVV3SmdDeENrVWhpZGJXL0xK?=
- =?utf-8?B?Wm8zcU90QmU2elRXc0ZkS0lUb2I0ZDF3bTNXelJXMXdiWDlNYzhLaHR4eFBm?=
- =?utf-8?B?TjJsM2RtWVJJRmlaSSs0aWVCenpYdmMwNlBXMVpaNVlzb2RZYTRRdVdqbXJv?=
- =?utf-8?B?T3FxWVNMQkVyOG1GUytNSVk3dEl6czkwS0xHY0NBNnFUckhJUDhXd1VTNnFM?=
- =?utf-8?B?S3RUM2xlZXl3YXhyc1dkTWFJbFFZdFVLWFl4Z1NXNFNqcVZaQXJxUWNpKzFN?=
- =?utf-8?B?MFBTZysraC80SDdDL2E2SXAvVUFsNzd4cFIwVXBFM1JTdUZZa1QvZVpBTUdV?=
- =?utf-8?B?QXBsWVZvRjJ2TUtVMEN1M0VRUTVGU2Y0Q0Q0OVF5YVVDd0Zaek9lTVB2VGFG?=
- =?utf-8?B?LzlCZURBL3FlK2hRMHdDQ2RkRmF1Z3ZrbFVPc0lDaUd1V1ArRFVSeFBSNlhZ?=
- =?utf-8?B?bFBCVnRtT0R2OFZFeHNVSEpTUzNjcVhUdzhVamx4QmNWbGR4YUJZZUNWdzEw?=
- =?utf-8?B?akZwQ0NQcjZnd1JiRXM0OEJLOXRyNGp3ejFZZ0g2TU94ME1TY3pLVkdPbkNJ?=
- =?utf-8?B?dTZIQUVRakNvMTVyb24rUmxoczJhNnlyNXZrQWpmRXk1QWZINk1LQWRkZTVB?=
- =?utf-8?B?UCt4MHV1dHQ0UXBFbk5tbjZZOFplbjNuQnpHTHppNGNlN2JobmFvcjkvOGVk?=
- =?utf-8?B?VzRhbXFRT3J6STBKNk9WekUyZGg1TG1tbHVsT3BlSGdVVTNSenZabzNKYUVZ?=
- =?utf-8?B?ZUJGWDM4NEdVUjBqQ0Fvbm5PK2V3c2oyZGRveURkQ3N6TThXY3g0K1NuNmN2?=
- =?utf-8?B?RG0wMTJOMzFJeWtIUTFKTEhTSm5xOEhobnFDdzNxUjJCRVFhQVBBT0t4L3hh?=
- =?utf-8?B?NkJNL3RqMkxIVjVTbjlaMEc4ZExPaHRrbjdDbGREU0FzTTZFbG5ZRWtsNkE2?=
- =?utf-8?B?RjdocU5DUkw2Z0Z6M296dU0yRFVvN1VkTGkzckNIaW5Td3E3NkRHeWtHUXM2?=
- =?utf-8?B?cUE9PQ==?=
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 819c81e6-43e7-47ad-781c-08da59ca72d8
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2022 12:25:27.3276
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB5121.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b77fbbd-7a8b-4184-2321-08da59ca996d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2022 12:26:31.8366
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4TG85oCmKs0V4AohNmHzFS+qmGz9agoICpKNnW/4FQ+myEbbMll0ReZ1OKEh9kvjs7DVjQCOQ8/AaLfrT6D/w0EebCxT1LaAojMwDajWICQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0702MB3808
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,FORGED_SPF_HELO,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Xh0B6bkz1onzvEtvWU6C7kydYp95jJxMXje1OKFo7y9XLABfczJaORf8FiluPwwBFDDU11iBtDRoNnLdDGZpyQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6033
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W dniu 24.06.2022 o 14:05, Manikanta Guntupalli pisze:
-> From: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
->
-> smbus_block_read is added to xiic driver to read from few sensors
-> which support this command. Since the number of bytes to read is not
-> known prior to transfer, we are using xiic standard mode for low level
-> control of IP.
->
-> Signed-off-by: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
-> Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@xilinx.com>
+Hi Horatiu,
 
-I have successfully tested the patches from this series up until this 
-one so:
+On Mon, Jun 27, 2022 at 10:13:23PM +0200, Horatiu Vultur wrote:
+> Add lag support for lan966x.
+> First 4 patches don't do any changes to the current behaviour, they
+> just prepare for lag support. While the rest is to add the lag support.
+>=20
+> v1->v2:
+> - fix the LAG PGIDs when ports go down, in this way is not
+>   needed anymore the last patch of the series.
+>=20
+> Horatiu Vultur (7):
+>   net: lan966x: Add reqisters used to configure lag interfaces
+>   net: lan966x: Split lan966x_fdb_event_work
+>   net: lan966x: Expose lan966x_switchdev_nb and
+>     lan966x_switchdev_blocking_nb
+>   net: lan966x: Extend lan966x_foreign_bridging_check
+>   net: lan966x: Add lag support for lan966x.
+>   net: lan966x: Extend FDB to support also lag
+>   net: lan966x: Extend MAC to support also lag interfaces.
+>=20
+>  .../net/ethernet/microchip/lan966x/Makefile   |   2 +-
+>  .../ethernet/microchip/lan966x/lan966x_fdb.c  | 153 ++++++---
+>  .../ethernet/microchip/lan966x/lan966x_lag.c  | 322 ++++++++++++++++++
+>  .../ethernet/microchip/lan966x/lan966x_mac.c  |  66 +++-
+>  .../ethernet/microchip/lan966x/lan966x_main.h |  41 +++
+>  .../ethernet/microchip/lan966x/lan966x_regs.h |  45 +++
+>  .../microchip/lan966x/lan966x_switchdev.c     | 115 +++++--
+>  7 files changed, 654 insertions(+), 90 deletions(-)
+>  create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_lag.c
+>=20
+> --=20
+> 2.33.0
+>
 
-Tested-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+I've downloaded and applied your patches and I have some general feedback.
+Some of it relates to changes which were not made and hence I couldn't
+have commented on the patches themselves, so I'm posting it here.
+
+1. switchdev_bridge_port_offload() returns an error code if object
+replay failed, or if it couldn't get the port parent id, or if the user
+tries to join a lan966x port and a port belonging to another switchdev
+driver to the same LAG. It would be good to propagate this error and not
+ignore it.
+
+Side note: maybe this could help to eliminate the extra logic you need
+to add to lan966x_foreign_bridging_check().
+
+2. lan966x_foreign_dev_check() seems wrong/misunderstood. Currently it
+reports that a LAG upper is a foreign interface (unoffloaded). In turn,
+this makes switchdev_lower_dev_find() not find any lan966x interface
+beneath a LAG, and hence, __switchdev_handle_fdb_event_to_device() would
+not recurse to the lan966x "dev" below a LAG when the "orig_dev" of an
+FDB event is the bridge itself. Otherwise said, if you have no direct
+lan966x port under a bridge, but just bridge -> LAG -> lan966x, you will
+miss all local (host-filtered) FDB event notifications that you should
+otherwise learn towards the CPU.
+
+3. The implementation of lan966x_lag_mac_add_entry(), with that first
+call to lan966x_mac_del_entry(), seems a hack. Why do you need to do
+that?
+
+4. The handling of lan966x->mac_lock seems wrong in general, not just
+particular to this patch set. In particular, it appears to protect too
+little in lan966x_mac_add_entry(), i.e. just the list_add_tail.
+This makes it possible for lan966x_mac_lookup and lan966x_mac_learn to
+be concurrent with lan966x_mac_del_entry(). In turn, this appears bad
+first and foremost for the hardware access interface, since the MAC
+table access is indirect, and if you allow multiple threads to
+concurrently call lan966x_mac_select(), change the command in
+ANA_MACACCESS, and poll for command completion, things will go sideways
+very quickly (one command will inadvertently poll for the completion of
+another, which inadvertently operates on the row/column selected by yet
+a third command, all that due to improper serialization).
+
+5. There is a race between lan966x_fdb_lag_event_work() calling
+lan966x_lag_first_port(), and lan966x_lag_port_leave() changing
+port->bond =3D NULL. Specifically, when a lan966x port leaves a LAG, there
+might still be deferred FDB events (add or del) which are still pending.
+There exists a dead time during which you will ignore these, because you
+think that the first lan966x LAG port isn't the first lan966x LAG port,
+which will lead to a desynchronization between the bridge FDB and the
+hardware FDB.
+
+In DSA we solved this by flushing lan966x->fdb_work inside
+lan966x_port_prechangeupper() on leave. This waits for the pending
+events to finish, and the bridge will not emit further events.
+It's important to do this in prechangeupper() rather than in
+changeupper() because switchdev_handle_fdb_event_to_device() needs the
+upper/lower relationship to still exist to function properly, and in
+changeupper() it has already been destroyed.
+
+Side note: if you flush lan966x->fdb_work, then you have an upper bound
+for how long can lan966x_fdb_event_work be deferred. Specifically, you
+can remove the dev_hold() and dev_put() calls, since it surely can't be
+deferred until after the netdev is unregistered. The bounding event is
+much quicker - the lan966x port leaves the LAG.
+
+6. You are missing LAG FDB migration logic in lan966x_lag_port_join().
+Specifically, you assume that the lan966x_lag_first_port() will never
+change, probably because you just make the switch ports join the LAG in
+the order 1, 2, 3. But they can also join in the order 3, 2, 1.=

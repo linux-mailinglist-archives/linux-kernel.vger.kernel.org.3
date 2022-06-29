@@ -2,234 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFB255FFD2
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B97855FFD9
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbiF2MX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 08:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
+        id S233109AbiF2MZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 08:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232970AbiF2MXx (ORCPT
+        with ESMTP id S231811AbiF2MZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 08:23:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 077B231DCD
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 05:23:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656505431;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EYDBXIB3xoIWC8aCI7RzeLW7qStzkUrLkNcQjH128XA=;
-        b=AjmeGh54ohC+B1d1Oaph0T5hVlPOXMM0wUoOuogkzluu6wRroIX6sCmtMsfBxSIrhO73A6
-        KG6XWRIZVRmGJWZAQygZGBypC7No8YfqZtQ8Kd4g/updeZUNcvOtAzE8a1qKceFR4EOqmd
-        ZMQDKIN1MLAd+pYOUtwY8hQPX7/tdsI=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-332-TquuEDWRPN2geFYlboZq9Q-1; Wed, 29 Jun 2022 08:23:50 -0400
-X-MC-Unique: TquuEDWRPN2geFYlboZq9Q-1
-Received: by mail-qk1-f197.google.com with SMTP id q184-20020a378ec1000000b006b14460be35so1286811qkd.22
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 05:23:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=EYDBXIB3xoIWC8aCI7RzeLW7qStzkUrLkNcQjH128XA=;
-        b=gyy3Kwsjnpbw5P0Ur99u4eLTlfxd+ohtXPB4gIaCivoiRnf0IlukFikY/z/nDa0mRp
-         jE7pBMasqAfLAJCwGKGw/dRcfvTEWD4TP44nUCCBLJP5f9vufi3hfUPf+4z8uKVqt2Mb
-         OCxU7NM6ippyPK1BPXvRbrcxAbFdFEGlsbL+XNaKl5dJrJk1diod3TJE5R2TDc+bIpA9
-         FLOLXY5eCf5f5LpbdfqKKsozTV6IRgDQYfq7GHLqpNpSZ3NJRRWukm3m8Xl8XIiDlQZN
-         wRiMDJPhxf8WAoJRAXYLX+5CbLxalBB0cxImIL9gHmYcXbBeKhxLcFPMQ8n9AA81Jqip
-         uwFw==
-X-Gm-Message-State: AJIora/P9Ib5BvYpDDEuUwo6p9QnsZnIQG1inS7gWg7Ex6FYh+MyiWPa
-        05ufZ0vwNbSQY8c5IMHgrRNDmqlihTbddeuW9NgXRq9PP1uPlGOWc8SUW+CFko7p1psNSSV+y0f
-        DhHYTmbFR6qJEHNLaoZ6SRXl1
-X-Received: by 2002:a05:6214:268d:b0:472:aaf1:5f27 with SMTP id gm13-20020a056214268d00b00472aaf15f27mr694645qvb.110.1656505429148;
-        Wed, 29 Jun 2022 05:23:49 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1u3h0V3fdhVV+HucGS5oArvomDWB3I4qcdeLL7MDHAtkOnDR5VNPMUAvyAUfaXGCeU2LIejWA==
-X-Received: by 2002:a05:6214:268d:b0:472:aaf1:5f27 with SMTP id gm13-20020a056214268d00b00472aaf15f27mr694617qvb.110.1656505428790;
-        Wed, 29 Jun 2022 05:23:48 -0700 (PDT)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id v123-20020a379381000000b006a6c230f5e0sm4399269qkd.31.2022.06.29.05.23.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 05:23:48 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 08:23:45 -0400
-From:   Brian Foster <bfoster@redhat.com>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        David.Laight@aculab.com, Ioannis Ilkos <ilkos@google.com>,
-        "T.J. Mercier" <tjmercier@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-Subject: Re: [PATCH v2 1/2] procfs: Add 'size' to /proc/<pid>/fdinfo/
-Message-ID: <YrxEUbDkYLE6XF6x@bfoster>
-References: <20220623220613.3014268-1-kaleshsingh@google.com>
- <20220623220613.3014268-2-kaleshsingh@google.com>
- <Yrrrz7MxMu8OoEPU@bfoster>
- <CAC_TJvejs5gbggC1hekyjUNctC_8+3FmVn0B7zAZox2+MkEjaA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        Wed, 29 Jun 2022 08:25:30 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2133.outbound.protection.outlook.com [40.107.22.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37755338BC;
+        Wed, 29 Jun 2022 05:25:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KNPPZY71tRZ2FE20YA/IEgCbjlyQq0pJ/A9F2TGvy9cRxWAwlX3gNM6c833nfPugMyrhjZHJDQbvmfhIRZk3r0LJmpy70Ek6rvOksxm2ojqUzXlmbDhXttkhx2hh+Hwd+C26I1vWOCIVR+gs3akWX+bWdpHcaLiljita6pz+POANNsdklw3qG+7+hOZ1/HbC/Ke2OMEQxEisAjoqGWWkmSVpsTzAgS1pHoJW0iwp9mflUMhjI+3aTL95dIf5fej7ntX7/17tfmqURq74yiLyxCBUTqoXexnDcW4hWEQ8IzZfFXqYvNCOk87h5ALPsHfp3H4Xm3ic5PPug1GeHBgc5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bVLUbERcuxL8VQkG1d3Fqzzwouh7FCCJFD+rbjGf/xA=;
+ b=QI+n9J6jrHF3qGw7ZciMiEN1zBCz8lgca2a7YvaUS/regQiS4bVDCed34TmcS1UnB6l45Mblhdf9xoT7aNQm9XJOUTLjvA0mzvsEBFsufVuTctZ+AnevjpX/tj2gzNIxQq5TX0GnKv0G3gF1MglwShm0qRN7jDmXI0+KsZgJzWR0tSPT/GZwsjXUYMcbvzFO3Q28wr1acNh1aNDGIQQR6CeIYdWHGMG+FDgJvafotjQq+lXvGDg7rw0pAXQquCFxhm+LMFBhJEbxThwkWY4+8uEIHo0wPSNYLRA4V4qTkoJiEBCuMRSs8vPZBRoltgf5ZkFvfqtQsECwI9NPqBH5sA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bVLUbERcuxL8VQkG1d3Fqzzwouh7FCCJFD+rbjGf/xA=;
+ b=aRCfMP49Tt+AbI00/6OvCHcTe4t1FdyNoI7FEGBINuTVspoyj2utmFWn/SeC+6+8VmCboOoVMvrtoFCdMtFBD7XMdMkFxNMCag39zKtLwY03kJ8KpQ4bvldcGxluR2zwp3tBBgxogLQS4/I6f8Bf6+EglntDKDbmd2VxlDb/D/Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia.com;
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
+ by VI1PR0702MB3808.eurprd07.prod.outlook.com (2603:10a6:803:4::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.11; Wed, 29 Jun
+ 2022 12:25:27 +0000
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::8885:ac49:4a47:2293]) by DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::8885:ac49:4a47:2293%9]) with mapi id 15.20.5395.014; Wed, 29 Jun 2022
+ 12:25:27 +0000
+Message-ID: <7a41766b-3009-caba-e473-9035b44b1b06@nokia.com>
+Date:   Wed, 29 Jun 2022 14:25:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 06/12] i2c: xiic: Add smbus_block_read functionality
+Content-Language: en-US
+To:     Manikanta Guntupalli <manikanta.guntupalli@xilinx.com>,
+        michal.simek@xilinx.com, michal.simek@amd.com,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, git@amd.com
+Cc:     Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+References: <1656072327-13628-1-git-send-email-manikanta.guntupalli@xilinx.com>
+ <1656072327-13628-7-git-send-email-manikanta.guntupalli@xilinx.com>
+From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
+In-Reply-To: <1656072327-13628-7-git-send-email-manikanta.guntupalli@xilinx.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAC_TJvejs5gbggC1hekyjUNctC_8+3FmVn0B7zAZox2+MkEjaA@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: HE1PR05CA0250.eurprd05.prod.outlook.com
+ (2603:10a6:3:fb::26) To DU2PR07MB8110.eurprd07.prod.outlook.com
+ (2603:10a6:10:239::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 819c81e6-43e7-47ad-781c-08da59ca72d8
+X-MS-TrafficTypeDiagnostic: VI1PR0702MB3808:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gy/8oXQxeholCiRB6et8ukjSaRt4NLIMR3VUq5M6rI/JGCfve6XfUmjyJOysB3Nf8ycFBsCcHERHh8SwpL0Y3JkbEhfVNiroC5HjbgHoCq8e+brIjJph6XRA9+A+NgbtZos8uHaQQYUl3XzHha5OQQSVY7yzMLuXdraRuzapetr1uBGCGuO5KQ66q3ep7zfDpnYM8hwFhpNMefgmyxVpr8a7DwFwFFtikH8aq9S7ddwKm4nrDEqkY7Qo20DMWk4VybbRm7yDu0MxE81QV8YaSiAamr10sLXaZXFEnjHrHCGqv2uYEN/Z0dWGdxbrTdnHQSaIDIORagoqEz8OzY3QJF2iD/fiGPRdrEwZtCfXEDGKwfeQDKcgVE7NJYEgkXkJXJcC1FVcuEmr9/eZmVyDDhrfulZYpUW5pyOfVEQx0PtUm2L1n0GnpvzXnjiZOD2IwLWEdUaT4G/TKGDECizDM8OjZ+5vfpQwOV8OKysulR0n7YSAAe260x9oOqEPW2qLDv45EWkfDKR6MFegfm4OdirzxiUjWFR9numupgPf8G53mMOgFeL2eIasNFLK7+zpX1MKMIcur3YdcNYZ7u7JoMKNFVa5tESJnK8065sbURrL3SkLRha8OPMMMcnF3K/cmBmLhPaETqLWrZZsYn2foHgOz8Zl5wGvmB24bMW2EymsEsIU9rksqZEaQO/8sUwNpyhNItvx66SbGxSzES/LiP2IBMWhr3V5/F3vjCACAR+KHvOQE2SX+CKRBRXdOhMUtVErK9F/X0xC6ocwFCQA0Gk9dtPrbDNAycW9GZVM55tg3fen1tT72w7O8YIisHgtgJZ6ACkB9mteD9+YBSOvyYHpVuh+bgzSeHHHSP7w8IDtf99pkJa5vRJVdbwrb8hW
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(39860400002)(366004)(396003)(346002)(8936002)(6486002)(31696002)(2906002)(86362001)(478600001)(66946007)(4326008)(66476007)(38100700002)(66556008)(82960400001)(8676002)(44832011)(5660300002)(316002)(186003)(4744005)(26005)(6512007)(31686004)(2616005)(36756003)(41300700001)(6506007)(83380400001)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RklBdkZxNWhBWXRuVnZqN1VzUWdjMUEvZEtSVy9TcVdqYTBZSnpPdkVCM1Zj?=
+ =?utf-8?B?ZGNIK3ZZZ01Ka3l1ZjVSZDRMMXl0ampSMWNSQ3RyT3NVK2tKQklsTGxlazhE?=
+ =?utf-8?B?SjJGeThxU1pzTlU3Z3Y0QkpRZG1OZW1WcTM5NVhVUmk5VDhubHhxTGNsZmcx?=
+ =?utf-8?B?TU01YThmbkdhaktaMXh1Z1B5bDZnSjVOSGpBaTZNY05VQXVFenVnMnJLY2dU?=
+ =?utf-8?B?UEJLWVN5cEdEaUNGcGNVQmUvaFNnVUJMZDRLdHZ0K2hhMFVYQ3pvMGhvMU9m?=
+ =?utf-8?B?UURqZlZOSlFkdFJkd1diMXI1RXlpS1RkQVg0Rmw2dWc4TGg2S2N5MDkrazln?=
+ =?utf-8?B?NTRiUG43SGVlRlhRWDFDSUUrZFptWGFRNnVRMmVWdjBiblpvUzNnZVkvelhM?=
+ =?utf-8?B?cVhtSUx6NXdpTVNJbS92YW1XTUs4MXdONElid20xRzRWcXRFOUViOGZTVTIz?=
+ =?utf-8?B?bFd0Y3huMHR3bnJXQTZWQ1JLY1FrQm05NlRsa293NE1YYzA5ajIvWEViVVVi?=
+ =?utf-8?B?Q01CeFJpS2xyT3kyaWFKRUtMdVkydTc1SVZsL0x6MEN0SHBpRk8xSnVrTGlU?=
+ =?utf-8?B?MzYxSklRcSt5UzByYk1yT2g2bGZJN1VxdUUrVkcwWmI4ODNnRnF6azgzSWdT?=
+ =?utf-8?B?RVErajJtZE5OMTkwUkhUZUZNb2krOW5ZZVZjMEFnMW44L3FIUWpEWDNsRk9I?=
+ =?utf-8?B?TFU1Nno5RGVZY2NwaTRaYWNCeEJqMzVpcW9jTWxMTCs1azZKeWEweUFaTW01?=
+ =?utf-8?B?UkRCOS9sMCtVUUtRUWc5MmR4a2JBcjhIZStlNklDYnU5RDk5WVd1NGRJdGJU?=
+ =?utf-8?B?Ri9PSXdRWUNtUTlGWlF1eWVxWUE3R1pyMDdMVE9aQ3hlenRMM0tzRUFKQnBD?=
+ =?utf-8?B?a0NMWU9WNkpPUFNZSENVYU1jR3RFRzBsQ1R4SHI5VnJQUGdPYURnNm5kdTN5?=
+ =?utf-8?B?R29nbjkrVTZ0VW11OWg3SWozaGlyREgvQWg0MGFKaHZiNFFHZnFnNkE1YVlp?=
+ =?utf-8?B?VFYrejFlc0MyajJXQnVSTEpXR3M1OTF4cmtpZDB6cFEwQnBkTUNuRUtwUnJL?=
+ =?utf-8?B?WU9zVFRpN2NtczZwbWY2K3ByNC9Yb1NHajFvV014L28vV2JXWjhsR1F6OU13?=
+ =?utf-8?B?TFJjQThyK3BLSzRXNC9uR0dCZFBRZm4rdXZOTVV3SmdDeENrVWhpZGJXL0xK?=
+ =?utf-8?B?Wm8zcU90QmU2elRXc0ZkS0lUb2I0ZDF3bTNXelJXMXdiWDlNYzhLaHR4eFBm?=
+ =?utf-8?B?TjJsM2RtWVJJRmlaSSs0aWVCenpYdmMwNlBXMVpaNVlzb2RZYTRRdVdqbXJv?=
+ =?utf-8?B?T3FxWVNMQkVyOG1GUytNSVk3dEl6czkwS0xHY0NBNnFUckhJUDhXd1VTNnFM?=
+ =?utf-8?B?S3RUM2xlZXl3YXhyc1dkTWFJbFFZdFVLWFl4Z1NXNFNqcVZaQXJxUWNpKzFN?=
+ =?utf-8?B?MFBTZysraC80SDdDL2E2SXAvVUFsNzd4cFIwVXBFM1JTdUZZa1QvZVpBTUdV?=
+ =?utf-8?B?QXBsWVZvRjJ2TUtVMEN1M0VRUTVGU2Y0Q0Q0OVF5YVVDd0Zaek9lTVB2VGFG?=
+ =?utf-8?B?LzlCZURBL3FlK2hRMHdDQ2RkRmF1Z3ZrbFVPc0lDaUd1V1ArRFVSeFBSNlhZ?=
+ =?utf-8?B?bFBCVnRtT0R2OFZFeHNVSEpTUzNjcVhUdzhVamx4QmNWbGR4YUJZZUNWdzEw?=
+ =?utf-8?B?akZwQ0NQcjZnd1JiRXM0OEJLOXRyNGp3ejFZZ0g2TU94ME1TY3pLVkdPbkNJ?=
+ =?utf-8?B?dTZIQUVRakNvMTVyb24rUmxoczJhNnlyNXZrQWpmRXk1QWZINk1LQWRkZTVB?=
+ =?utf-8?B?UCt4MHV1dHQ0UXBFbk5tbjZZOFplbjNuQnpHTHppNGNlN2JobmFvcjkvOGVk?=
+ =?utf-8?B?VzRhbXFRT3J6STBKNk9WekUyZGg1TG1tbHVsT3BlSGdVVTNSenZabzNKYUVZ?=
+ =?utf-8?B?ZUJGWDM4NEdVUjBqQ0Fvbm5PK2V3c2oyZGRveURkQ3N6TThXY3g0K1NuNmN2?=
+ =?utf-8?B?RG0wMTJOMzFJeWtIUTFKTEhTSm5xOEhobnFDdzNxUjJCRVFhQVBBT0t4L3hh?=
+ =?utf-8?B?NkJNL3RqMkxIVjVTbjlaMEc4ZExPaHRrbjdDbGREU0FzTTZFbG5ZRWtsNkE2?=
+ =?utf-8?B?RjdocU5DUkw2Z0Z6M296dU0yRFVvN1VkTGkzckNIaW5Td3E3NkRHeWtHUXM2?=
+ =?utf-8?B?cUE9PQ==?=
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 819c81e6-43e7-47ad-781c-08da59ca72d8
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2022 12:25:27.3276
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4TG85oCmKs0V4AohNmHzFS+qmGz9agoICpKNnW/4FQ+myEbbMll0ReZ1OKEh9kvjs7DVjQCOQ8/AaLfrT6D/w0EebCxT1LaAojMwDajWICQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0702MB3808
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,FORGED_SPF_HELO,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 03:38:02PM -0700, Kalesh Singh wrote:
-> On Tue, Jun 28, 2022 at 4:54 AM Brian Foster <bfoster@redhat.com> wrote:
-> >
-> > On Thu, Jun 23, 2022 at 03:06:06PM -0700, Kalesh Singh wrote:
-> > > To be able to account the amount of memory a process is keeping pinned
-> > > by open file descriptors add a 'size' field to fdinfo output.
-> > >
-> > > dmabufs fds already expose a 'size' field for this reason, remove this
-> > > and make it a common field for all fds. This allows tracking of
-> > > other types of memory (e.g. memfd and ashmem in Android).
-> > >
-> > > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> > > Reviewed-by: Christian König <christian.koenig@amd.com>
-> > > ---
-> > >
-> > > Changes in v2:
-> > >   - Add Christian's Reviewed-by
-> > >
-> > > Changes from rfc:
-> > >   - Split adding 'size' and 'path' into a separate patches, per Christian
-> > >   - Split fdinfo seq_printf into separate lines, per Christian
-> > >   - Fix indentation (use tabs) in documentaion, per Randy
-> > >
-> > >  Documentation/filesystems/proc.rst | 12 ++++++++++--
-> > >  drivers/dma-buf/dma-buf.c          |  1 -
-> > >  fs/proc/fd.c                       |  9 +++++----
-> > >  3 files changed, 15 insertions(+), 7 deletions(-)
-> > >
-...
-> >
-> > Also not sure if it matters that much for your use case, but something
-> > worth noting at least with shmem is that one can do something like:
-> >
-> > # cat /proc/meminfo | grep Shmem:
-> > Shmem:               764 kB
-> > # xfs_io -fc "falloc -k 0 10m" ./file
-> > # ls -alh file
-> > -rw-------. 1 root root 0 Jun 28 07:22 file
-> > # stat file
-> >   File: file
-> >   Size: 0               Blocks: 20480      IO Block: 4096   regular empty file
-> > # cat /proc/meminfo | grep Shmem:
-> > Shmem:             11004 kB
-> >
-> > ... where the resulting memory usage isn't reflected in i_size (but is
-> > is in i_blocks/bytes).
-> 
-> I tried a similar experiment a few times, but I don't see the same
-> results. In my case, there is not any change in shmem. IIUC the
-> fallocate is allocating the disk space not shared memory.
-> 
+W dniu 24.06.2022 oÂ 14:05, Manikanta Guntupalli pisze:
+> From: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+>
+> smbus_block_read is added to xiic driver to read from few sensors
+> which support this command. Since the number of bytes to read is not
+> known prior to transfer, we are using xiic standard mode for low level
+> control of IP.
+>
+> Signed-off-by: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+> Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@xilinx.com>
 
-Sorry, it was implied in my previous test was that I was running against
-tmpfs. So regardless of fs, the fallocate keep_size semantics shown in
-both cases is as expected: the underlying blocks are allocated and the
-inode size is unchanged.
+I have successfully tested the patches from this series up until this 
+one so:
 
-What wasn't totally clear to me when I read this patch was 1. whether
-tmpfs refers to Shmem and 2. whether tmpfs allowed this sort of
-operation. The test above seems to confirm both, however, right? E.g., a
-more detailed example:
-
-# mount | grep /tmp
-tmpfs on /tmp type tmpfs (rw,nosuid,nodev,seclabel,nr_inodes=1048576,inode64)
-# cat /proc/meminfo | grep Shmem:
-Shmem:              5300 kB
-# xfs_io -fc "falloc -k 0 1g" /tmp/file
-# stat /tmp/file 
-  File: /tmp/file
-  Size: 0               Blocks: 2097152    IO Block: 4096   regular empty file
-Device: 22h/34d Inode: 45          Links: 1
-Access: (0600/-rw-------)  Uid: (    0/    root)   Gid: (    0/    root)
-Context: unconfined_u:object_r:user_tmp_t:s0
-Access: 2022-06-29 08:04:01.301307154 -0400
-Modify: 2022-06-29 08:04:01.301307154 -0400
-Change: 2022-06-29 08:04:01.451312834 -0400
- Birth: 2022-06-29 08:04:01.301307154 -0400
-# cat /proc/meminfo | grep Shmem:
-Shmem:           1053876 kB
-# rm -f /tmp/file 
-# cat /proc/meminfo | grep Shmem:
-Shmem:              5300 kB
-
-So clearly this impacts Shmem.. was your test run against tmpfs or some
-other (disk based) fs?
-
-FWIW, I don't have any objection to exposing inode size if it's commonly
-useful information. My feedback was more just an fyi that i_size doesn't
-necessarily reflect underlying space consumption (whether it's memory or
-disk space) in more generic cases, because it sounds like that is really
-what you're after here. The opposite example to the above would be
-something like an 'xfs_io -fc "truncate 1t" /tmp/file', which shows a
-1TB inode size with zero additional shmem usage.
-
-Brian
-
-> cat /proc/meminfo > meminfo.start
-> xfs_io -fc "falloc -k 0 50m" ./xfs_file
-> cat /proc/meminfo > meminfo.stop
-> tail -n +1 meminfo.st* | grep -i '==\|Shmem:'
-> 
-> ==> meminfo.start <==
-> Shmem:               484 kB
-> ==> meminfo.stop <==
-> Shmem:               484 kB
-> 
-> ls -lh xfs_file
-> -rw------- 1 root root 0 Jun 28 15:12 xfs_file
-> 
-> stat xfs_file
->   File: xfs_file
->   Size: 0               Blocks: 102400     IO Block: 4096   regular empty file
-> 
-> Thanks,
-> Kalesh
-> 
-> >
-> > Brian
-> >
-> > >
-> > >       /* show_fd_locks() never deferences files so a stale value is safe */
-> > >       show_fd_locks(m, file, files);
-> > > --
-> > > 2.37.0.rc0.161.g10f37bed90-goog
-> > >
-> >
-> 
-
+Tested-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>

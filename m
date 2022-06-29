@@ -2,34 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6158755F502
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 06:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D2E55F50C
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 06:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbiF2ERJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 00:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
+        id S231529AbiF2ERN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 00:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbiF2ERG (ORCPT
+        with ESMTP id S229625AbiF2ERG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 29 Jun 2022 00:17:06 -0400
-X-Greylist: delayed 1798 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Jun 2022 21:17:02 PDT
 Received: from mg.sunplus.com (mswedge1.sunplus.com [60.248.182.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADA4E20BE8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD9361FCCB;
         Tue, 28 Jun 2022 21:17:02 -0700 (PDT)
 X-MailGates: (compute_score:DELIVER,40,3)
-Received: from 172.17.9.202
-        by mg01.sunplus.com with MailGates ESMTP Server V5.0(2567:0:AUTH_RELAY)
-        (envelope-from <lh.Kuo@sunplus.com>); Wed, 29 Jun 2022 11:31:10 +0800 (CST)
+Received: from 172.17.9.112
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(2574:0:AUTH_RELAY)
+        (envelope-from <lh.Kuo@sunplus.com>); Wed, 29 Jun 2022 11:31:55 +0800 (CST)
 Received: from sphcmbx01.sunplus.com.tw (172.17.9.202) by
- sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Wed, 29 Jun 2022 11:31:09 +0800
+ sphcmbx02.sunplus.com.tw (172.17.9.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.32; Wed, 29 Jun 2022 11:31:49 +0800
 Received: from sphcmbx01.sunplus.com.tw ([fe80::bdb5:968f:d409:32d1]) by
  sphcmbx01.sunplus.com.tw ([fe80::bdb5:968f:d409:32d1%14]) with mapi id
- 15.00.1497.033; Wed, 29 Jun 2022 11:31:09 +0800
+ 15.00.1497.033; Wed, 29 Jun 2022 11:31:49 +0800
 From:   =?utf-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
+To:     Randy Dunlap <rdunlap@infradead.org>,
         =?utf-8?B?6YOt5Yqb6LGq?= <lhjeff911@gmail.com>,
+        "krzk@kernel.org" <krzk@kernel.org>,
         "rafael@kernel.org" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         "amitk@kernel.org" <amitk@kernel.org>,
@@ -40,13 +39,12 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: RE: [PATCH v9 1/2] thermal: Add thermal driver for Sunplus
 Thread-Topic: [PATCH v9 1/2] thermal: Add thermal driver for Sunplus
-Thread-Index: AQHYfGnSmcz0ONeaZ065CGG9qHLjyK1Hct0AgAB4UYCAHe07gA==
-Date:   Wed, 29 Jun 2022 03:31:08 +0000
-Message-ID: <1eeaba5aeacc4f9e951e8845f15d5c64@sphcmbx01.sunplus.com.tw>
+Thread-Index: AQHYfGnSmcz0ONeaZ065CGG9qHLjyK1Hct0AgB5lyhA=
+Date:   Wed, 29 Jun 2022 03:31:48 +0000
+Message-ID: <254b6c711c9a464cb23d1eb5957a6af9@sphcmbx01.sunplus.com.tw>
 References: <CAGcXWkzJwOPXfE6ESAtwBbe7W-UkApKosKUy=UBRh0kmi-Bc2Q@mail.gmail.com>
  <395072af-3349-cead-fe07-62d3d758d635@infradead.org>
- <e68724b0-4a9f-f564-c833-befd6c3515fb@linaro.org>
-In-Reply-To: <e68724b0-4a9f-f564-c833-befd6c3515fb@linaro.org>
+In-Reply-To: <395072af-3349-cead-fe07-62d3d758d635@infradead.org>
 Accept-Language: zh-TW, en-US
 Content-Language: zh-TW
 X-MS-Has-Attach: 
@@ -67,34 +65,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 SSdtIHNvcnJ5IGZvciB0aGUgd3JvbmcgaW5kZW50YXRpb24gcHJvYmxlbSwgaXQgd2FzIGNhdXNl
 ZCBieSBhIHdyb25nIHNldHRpbmcgaW4gdGhlIG1haWwgc2VydmVyLkkgd2lsbCBmaXggaXQgaW4g
-dGhlIG5leHQgcGF0Y2guDQoNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9t
-OiBLcnp5c3p0b2YgS296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+DQo+
-IFNlbnQ6IEZyaWRheSwgSnVuZSAxMCwgMjAyMiA2OjMwIFBNDQo+IFRvOiBSYW5keSBEdW5sYXAg
-PHJkdW5sYXBAaW5mcmFkZWFkLm9yZz47IOmDreWKm+ixqiA8bGhqZWZmOTExQGdtYWlsLmNvbT47
-IHJhZmFlbEBrZXJuZWwub3JnOw0KPiBEYW5pZWwgTGV6Y2FubyA8ZGFuaWVsLmxlemNhbm9AbGlu
-YXJvLm9yZz47IGFtaXRrQGtlcm5lbC5vcmc7IHJ1aS56aGFuZ0BpbnRlbC5jb207DQo+IHJvYmgr
-ZHRAa2VybmVsLm9yZzsgbGludXgtcG1Admdlci5rZXJuZWwub3JnOyBkZXZpY2V0cmVlQHZnZXIu
-a2VybmVsLm9yZzsNCj4gbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiBDYzogTGggS3Vv
-IOmDreWKm+ixqiA8bGguS3VvQHN1bnBsdXMuY29tPjsgV2VsbHMgTHUg5ZGC6Iqz6aiwIDx3ZWxs
-cy5sdUBzdW5wbHVzLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2OSAxLzJdIHRoZXJtYWw6
-IEFkZCB0aGVybWFsIGRyaXZlciBmb3IgU3VucGx1cw0KPiANCj4gT24gMTAvMDYvMjAyMiAwNTox
-OSwgUmFuZHkgRHVubGFwIHdyb3RlOg0KPiA+IEhpLS0NCj4gPg0KPiA+IE9uIDYvOS8yMiAxODoz
-Miwg6YOt5Yqb6LGqIHdyb3RlOg0KPiA+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90aGVybWFsL0tj
-b25maWcgYi9kcml2ZXJzL3RoZXJtYWwvS2NvbmZpZyBpbmRleA0KPiA+PiAwZTVjYzk0Li5jODVl
-NjY4IDEwMDY0NA0KPiA+PiAtLS0gYS9kcml2ZXJzL3RoZXJtYWwvS2NvbmZpZw0KPiA+PiArKysg
-Yi9kcml2ZXJzL3RoZXJtYWwvS2NvbmZpZw0KPiA+PiBAQCAtNTA0LDQgKzUwNCwxNCBAQCBjb25m
-aWcgS0hBREFTX01DVV9GQU5fVEhFUk1BTA0KPiA+PiAgICAgSWYgeW91IHNheSB5ZXMgaGVyZSB5
-b3UgZ2V0IHN1cHBvcnQgZm9yIHRoZSBGQU4gY29udHJvbGxlZA0KPiA+PiAgICAgYnkgdGhlIE1p
-Y3JvY29udHJvbGxlciBmb3VuZCBvbiB0aGUgS2hhZGFzIFZJTSBib2FyZHMuDQo+ID4+DQo+ID4+
-ICtjb25maWcgU1VOUExVU19USEVSTUFMDQo+ID4+ICsgdHJpc3RhdGUgIlN1bnBsdXMgdGhlcm1h
-bCBkcml2ZXJzIg0KPiA+PiArIGRlcGVuZHMgb24gU09DX1NQNzAyMSB8fCBDT01QSUxFX1RFU1Qg
-IGhlbHANCj4gPj4gKyAgIFRoaXMgZW5hYmxlIHRoZSBTdW5wbHVzIFNQNzAyMSB0aGVybWFsIGRy
-aXZlciwgd2hpY2ggc3VwcG9ydHMgdGhlIHByaW1pdGl2ZQ0KPiA+PiArICAgdGVtcGVyYXR1cmUg
-c2Vuc29yIGVtYmVkZGVkIGluIFN1bnBsdXMgU1A3MDIxIFNvQy4NCj4gPj4gKw0KPiA+PiArICAg
-SWYgeW91IGhhdmUgYSBTdW5wbHVzIFNQNzAyMSBwbGF0Zm9ybSBzYXkgWSBoZXJlIGFuZCBlbmFi
-bGUgdGhpcyBvcHRpb24NCj4gPj4gKyAgIHRvIGhhdmUgc3VwcG9ydCBmb3IgdGhlcm1hbCBtYW5h
-Z2VtZW50DQo+ID4NCj4gPiBFbmQgdGhlIHNlbnRlbmNlIGFib3ZlIHdpdGggYSBwZXJpb2QgKCcu
-JykuDQo+ID4NCj4gPiBBbmQgdGhlIGluZGVudGF0aW9uIGhlcmUgaXMgYWxsIG1lc3NlZCB1cC4N
-Cj4gPiBTZWUgRG9jdW1lbnRhdGlvbi9wcm9jZXNzL2NvZGluZy1zdHlsZS5yc3Q6DQo+ID4NCj4g
-DQo+IEl0J3Mgbm90IG9ubHkgdGhpcyBvbmUuIEVudGlyZSBmaWxlIGhhcyB3cm9uZyBpbmRlbnRh
-dGlvbi4NCj4gDQo+IEJlc3QgcmVnYXJkcywNCj4gS3J6eXN6dG9mDQo=
+dGhlIG5leHQgcGF0Y2guDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTog
+UmFuZHkgRHVubGFwIDxyZHVubGFwQGluZnJhZGVhZC5vcmc+DQo+IFNlbnQ6IEZyaWRheSwgSnVu
+ZSAxMCwgMjAyMiAxMToyMCBBTQ0KPiBUbzog6YOt5Yqb6LGqIDxsaGplZmY5MTFAZ21haWwuY29t
+Pjsga3J6a0BrZXJuZWwub3JnOyByYWZhZWxAa2VybmVsLm9yZzsgRGFuaWVsIExlemNhbm8NCj4g
+PGRhbmllbC5sZXpjYW5vQGxpbmFyby5vcmc+OyBhbWl0a0BrZXJuZWwub3JnOyBydWkuemhhbmdA
+aW50ZWwuY29tOyByb2JoK2R0QGtlcm5lbC5vcmc7DQo+IGxpbnV4LXBtQHZnZXIua2VybmVsLm9y
+ZzsgZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5v
+cmcNCj4gQ2M6IExoIEt1byDpg63lipvosaogPGxoLkt1b0BzdW5wbHVzLmNvbT47IFdlbGxzIEx1
+IOWRguiKs+mosCA8d2VsbHMubHVAc3VucGx1cy5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0gg
+djkgMS8yXSB0aGVybWFsOiBBZGQgdGhlcm1hbCBkcml2ZXIgZm9yIFN1bnBsdXMNCj4gDQo+IEhp
+LS0NCj4gDQo+IE9uIDYvOS8yMiAxODozMiwg6YOt5Yqb6LGqIHdyb3RlOg0KPiA+IGRpZmYgLS1n
+aXQgYS9kcml2ZXJzL3RoZXJtYWwvS2NvbmZpZyBiL2RyaXZlcnMvdGhlcm1hbC9LY29uZmlnIGlu
+ZGV4DQo+ID4gMGU1Y2M5NC4uYzg1ZTY2OCAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3RoZXJt
+YWwvS2NvbmZpZw0KPiA+ICsrKyBiL2RyaXZlcnMvdGhlcm1hbC9LY29uZmlnDQo+ID4gQEAgLTUw
+NCw0ICs1MDQsMTQgQEAgY29uZmlnIEtIQURBU19NQ1VfRkFOX1RIRVJNQUwNCj4gPiAgICAgSWYg
+eW91IHNheSB5ZXMgaGVyZSB5b3UgZ2V0IHN1cHBvcnQgZm9yIHRoZSBGQU4gY29udHJvbGxlZA0K
+PiA+ICAgICBieSB0aGUgTWljcm9jb250cm9sbGVyIGZvdW5kIG9uIHRoZSBLaGFkYXMgVklNIGJv
+YXJkcy4NCj4gPg0KPiA+ICtjb25maWcgU1VOUExVU19USEVSTUFMDQo+ID4gKyB0cmlzdGF0ZSAi
+U3VucGx1cyB0aGVybWFsIGRyaXZlcnMiDQo+ID4gKyBkZXBlbmRzIG9uIFNPQ19TUDcwMjEgfHwg
+Q09NUElMRV9URVNUICBoZWxwDQo+ID4gKyAgIFRoaXMgZW5hYmxlIHRoZSBTdW5wbHVzIFNQNzAy
+MSB0aGVybWFsIGRyaXZlciwgd2hpY2ggc3VwcG9ydHMgdGhlIHByaW1pdGl2ZQ0KPiA+ICsgICB0
+ZW1wZXJhdHVyZSBzZW5zb3IgZW1iZWRkZWQgaW4gU3VucGx1cyBTUDcwMjEgU29DLg0KPiA+ICsN
+Cj4gPiArICAgSWYgeW91IGhhdmUgYSBTdW5wbHVzIFNQNzAyMSBwbGF0Zm9ybSBzYXkgWSBoZXJl
+IGFuZCBlbmFibGUgdGhpcyBvcHRpb24NCj4gPiArICAgdG8gaGF2ZSBzdXBwb3J0IGZvciB0aGVy
+bWFsIG1hbmFnZW1lbnQNCj4gDQo+IEVuZCB0aGUgc2VudGVuY2UgYWJvdmUgd2l0aCBhIHBlcmlv
+ZCAoJy4nKS4NCj4gDQo+IEFuZCB0aGUgaW5kZW50YXRpb24gaGVyZSBpcyBhbGwgbWVzc2VkIHVw
+Lg0KPiBTZWUgRG9jdW1lbnRhdGlvbi9wcm9jZXNzL2NvZGluZy1zdHlsZS5yc3Q6DQo+IA0KPiAx
+MCkgS2NvbmZpZyBjb25maWd1cmF0aW9uIGZpbGVzDQo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0NCj4gDQo+IEZvciBhbGwgb2YgdGhlIEtjb25maWcqIGNvbmZpZ3VyYXRpb24gZmls
+ZXMgdGhyb3VnaG91dCB0aGUgc291cmNlIHRyZWUsIHRoZSBpbmRlbnRhdGlvbiBpcyBzb21ld2hh
+dA0KPiBkaWZmZXJlbnQuICBMaW5lcyB1bmRlciBhIGBgY29uZmlnYGAgZGVmaW5pdGlvbiBhcmUg
+aW5kZW50ZWQgd2l0aCBvbmUgdGFiLCB3aGlsZSBoZWxwIHRleHQgaXMgaW5kZW50ZWQgYW4NCj4g
+YWRkaXRpb25hbCB0d28gc3BhY2VzLg0KPiANCj4gDQo+ID4gKw0KPiA+ICBlbmRpZg0KPiANCj4g
+LS0NCj4gflJhbmR5DQo=

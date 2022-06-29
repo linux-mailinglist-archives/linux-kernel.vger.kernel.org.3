@@ -2,101 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1569A55FF04
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC2355FF0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbiF2Lte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 07:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
+        id S233165AbiF2LuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 07:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiF2Ltc (ORCPT
+        with ESMTP id S231504AbiF2LuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 07:49:32 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62D2E36B66;
-        Wed, 29 Jun 2022 04:49:32 -0700 (PDT)
-Received: from [192.168.87.140] (unknown [50.47.106.71])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9735720CDF3E;
-        Wed, 29 Jun 2022 04:49:31 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9735720CDF3E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1656503372;
-        bh=AEyPLBYYSo/wX4+qiUmPddKmayPPSCumjui9dS8KgUE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fC6LK0gvTlLyx/plpmWv8fA+3Nq/iABKGRS+dnEFFUFKbYvYaQ/i58EaXwy4tkSBT
-         zy03y+sF/qzjd5obPYh0s2pEMeeZxpIGYKvWgq/AsgGE4RT1xJnepTDI0XcMnK9IXA
-         5sn2XHuPJM3OozemERefqT9c0gmkcz/a9c+I9wdM=
-Message-ID: <c24d0e6d-d9ba-68c5-b1c8-13ad31d39ec8@linux.microsoft.com>
-Date:   Wed, 29 Jun 2022 04:49:32 -0700
+        Wed, 29 Jun 2022 07:50:08 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2053A36B66;
+        Wed, 29 Jun 2022 04:50:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656503408; x=1688039408;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=U1TxebG8ojat2OTnFTUhfRC0os6Prlnrnawal3DhOKU=;
+  b=kdiYYIrtTJKOD3GPRHEaaJT3Vzccmg001Vol7LJ3RIXHd9W2YUZN42Qh
+   u7iZvBTlWTMr4X1H3NXJHpmoeFT9qWSLkDe2BHpWaxj1lfdEuUKiDT9nX
+   ML+YfbeYh9atBkCc/uffjfUoVFW0datzPJzb6uQ9J6Kj/0AbeltUism/T
+   AXHqz79QIoZeu33rrS6k4NYuFHkgbc+EFfYkN12yD6mEpD3Ff3O+6kLT4
+   ehj0PMJcaJ/SeP8DVueuNYQ5mE7652b8PBtvIYGuDeTv3C/v4fZpamUdP
+   U2izJ7yhK68SHKtImnUsDSLKNcj7VqMndjgbK7ABYNC/Cas3y+NOV4eMO
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="343698695"
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="343698695"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 04:50:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="717792732"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 29 Jun 2022 04:50:05 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 2507A109; Wed, 29 Jun 2022 14:50:11 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rob Herring <robh@kernel.org>,
+        Frank Rowand <frank.rowand@sony.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v3 1/2] of: unittest: Switch to use fwnode instead of of_node
+Date:   Wed, 29 Jun 2022 14:50:09 +0300
+Message-Id: <20220629115010.10538-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 2/5] dt-bindings: clock: Add AST2500/AST2600 HACE reset
- definition
-Content-Language: en-US
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Dhananjay Phadke <dhphadke@microsoft.com>,
-        Johnny Huang <johnny_huang@aspeedtech.com>
-Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        BMC-SW@aspeedtech.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220629094426.1930589-1-neal_liu@aspeedtech.com>
- <20220629094426.1930589-3-neal_liu@aspeedtech.com>
-From:   Dhananjay Phadke <dphadke@linux.microsoft.com>
-In-Reply-To: <20220629094426.1930589-3-neal_liu@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/29/2022 2:44 AM, Neal Liu wrote:
-> Add HACE reset bit definition for AST2500/AST2600.
-> 
-> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> Signed-off-by: Johnny Huang <johnny_huang@aspeedtech.com>
-> ---
->   include/dt-bindings/clock/aspeed-clock.h  | 1 +
->   include/dt-bindings/clock/ast2600-clock.h | 1 +
->   2 files changed, 2 insertions(+)
-> 
-> diff --git a/include/dt-bindings/clock/aspeed-clock.h b/include/dt-bindings/clock/aspeed-clock.h
-> index 9ff4f6e4558c..06d568382c77 100644
-> --- a/include/dt-bindings/clock/aspeed-clock.h
-> +++ b/include/dt-bindings/clock/aspeed-clock.h
-> @@ -52,5 +52,6 @@
->   #define ASPEED_RESET_I2C		7
->   #define ASPEED_RESET_AHB		8
->   #define ASPEED_RESET_CRT1		9
-> +#define ASPEED_RESET_HACE		10
+GPIO library now accepts fwnode as a firmware node, so
+switch the module to use it.
 
-NAK.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v3: no changes
+ drivers/of/unittest.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I replied to older v5 of this patch, but this v6 also looks incorrect
-as per HW manual.
+diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+index 7f6bba18c515..5a842dfc27e8 100644
+--- a/drivers/of/unittest.c
++++ b/drivers/of/unittest.c
+@@ -1602,7 +1602,7 @@ static int unittest_gpio_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, devptr);
+ 
+-	devptr->chip.of_node = pdev->dev.of_node;
++	devptr->chip.fwnode = dev_fwnode(&pdev->dev);
+ 	devptr->chip.label = "of-unittest-gpio";
+ 	devptr->chip.base = -1; /* dynamic allocation */
+ 	devptr->chip.ngpio = 5;
+@@ -1611,7 +1611,7 @@ static int unittest_gpio_probe(struct platform_device *pdev)
+ 	ret = gpiochip_add_data(&devptr->chip, NULL);
+ 
+ 	unittest(!ret,
+-		 "gpiochip_add_data() for node @%pOF failed, ret = %d\n", devptr->chip.of_node, ret);
++		 "gpiochip_add_data() for node @%pfw failed, ret = %d\n", devptr->chip.fwnode, ret);
+ 
+ 	if (!ret)
+ 		unittest_gpio_probe_pass_count++;
+-- 
+2.35.1
 
-https://lore.kernel.org/linux-arm-kernel/20220629032008.1579899-1-neal_liu@aspeedtech.com/T/#m000bd3388b3e41117aa0eef10bf6f8a6a3a85cce
-
-For both AST2400 and AST2500:
-SCU04[10] = PECI.
-
-It will be best to refactor/split aspeed-clock.h into separate files.
-
-Regards,
-Dhananjay

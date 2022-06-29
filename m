@@ -2,130 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076CF5605DC
+	by mail.lfdr.de (Postfix) with ESMTP id C39A95605DE
 	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiF2Q3L convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Jun 2022 12:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
+        id S231444AbiF2QaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 12:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbiF2Q3I (ORCPT
+        with ESMTP id S230080AbiF2QaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 12:29:08 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7435C275DE
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 09:29:07 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o6aYg-00071l-0G; Wed, 29 Jun 2022 18:28:54 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o6aYb-003QpM-5u; Wed, 29 Jun 2022 18:28:52 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o6aYe-000Dhz-4j; Wed, 29 Jun 2022 18:28:52 +0200
-Message-ID: <f51a6ccda0f7b4596406789fa73e1bdad85186bc.camel@pengutronix.de>
-Subject: Re: [PATCH v6 2/5] irqchip: Add RZ/G2L IA55 Interrupt Controller
- driver
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Date:   Wed, 29 Jun 2022 18:28:52 +0200
-In-Reply-To: <20220625200600.7582-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20220625200600.7582-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-         <20220625200600.7582-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Wed, 29 Jun 2022 12:30:14 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0BD2AC6B;
+        Wed, 29 Jun 2022 09:30:13 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 2CFB668AA6; Wed, 29 Jun 2022 18:30:08 +0200 (CEST)
+Date:   Wed, 29 Jun 2022 18:30:07 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] remove CONFIG_ANDROID
+Message-ID: <20220629163007.GA25279@lst.de>
+References: <20220629150102.1582425-1-hch@lst.de> <20220629150102.1582425-2-hch@lst.de> <Yrx5Lt7jrk5BiHXx@zx2c4.com> <20220629161020.GA24891@lst.de> <Yrx6EVHtroXeEZGp@zx2c4.com> <20220629161527.GA24978@lst.de> <Yrx8/Fyx15CTi2zq@zx2c4.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yrx8/Fyx15CTi2zq@zx2c4.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sa, 2022-06-25 at 21:05 +0100, Lad Prabhakar wrote:
-> Add a driver for the Renesas RZ/G2L Interrupt Controller.
-> 
-> This supports external pins being used as interrupts. It supports
-> one line for NMI, 8 external pins and 32 GPIO pins (out of 123)
-> to be used as IRQ lines.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  drivers/irqchip/Kconfig             |   8 +
->  drivers/irqchip/Makefile            |   1 +
->  drivers/irqchip/irq-renesas-rzg2l.c | 393 ++++++++++++++++++++++++++++
->  3 files changed, 402 insertions(+)
->  create mode 100644 drivers/irqchip/irq-renesas-rzg2l.c
-> 
-[...]
-> diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchip/irq-renesas-rzg2l.c
-> new file mode 100644
-> index 000000000000..cc16fcf2bbc6
-> --- /dev/null
-> +++ b/drivers/irqchip/irq-renesas-rzg2l.c
-> @@ -0,0 +1,393 @@
-[...]
-> +static int rzg2l_irqc_init(struct device_node *node, struct device_node *parent)
-> +{
-> +	struct irq_domain *irq_domain, *parent_domain;
-> +	struct platform_device *pdev;
-> +	struct reset_control *resetn;
-> +	struct rzg2l_irqc_priv *priv;
-> +	int ret;
-> +
-> +	pdev = of_find_device_by_node(node);
-> +	if (!pdev)
-> +		return -ENODEV;
-> +
-> +	parent_domain = irq_find_host(parent);
-> +	if (!parent_domain) {
-> +		dev_err(&pdev->dev, "cannot find parent domain\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->base = devm_of_iomap(&pdev->dev, pdev->dev.of_node, 0, NULL);
-> +	if (IS_ERR(priv->base))
-> +		return PTR_ERR(priv->base);
-> +
-> +	ret = rzg2l_irqc_parse_interrupts(priv, node);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "cannot parse interrupts: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	resetn = devm_reset_control_get_exclusive_by_index(&pdev->dev, 0);
+On Wed, Jun 29, 2022 at 06:25:32PM +0200, Jason A. Donenfeld wrote:
+> Anyway, instead of the slow drip of "facts" and ≤three sentence emails,
+> can you just write up a paragraph that indicates this is safe to do (for
+> both (1) and (2)) in your v+1?
 
-Why is this by index? I'd expect
-
-	resetn = devm_reset_control_get_exclusive(&pdev->dev, NULL);
-
-should work just as well?
-
-regards
-Philipp
+Why would I care?  If your config wakeups up so often that you need
+special casing find a way to deal with it.  In the upstream kernel
+CONFIG_ANDROID is a very strong indicator for a desktop kernel as
+that is much more common than someone actually running upstream Linux
+on one of the very few Android devices actually fully supported by
+upstream Linux.

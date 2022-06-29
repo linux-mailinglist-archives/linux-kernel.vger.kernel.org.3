@@ -2,116 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 060BC55F980
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3BB155F984
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232473AbiF2HpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 03:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
+        id S232447AbiF2HrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 03:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232208AbiF2HpU (ORCPT
+        with ESMTP id S231194AbiF2HrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 03:45:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186DC381A1;
-        Wed, 29 Jun 2022 00:45:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B891FB821E9;
-        Wed, 29 Jun 2022 07:45:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60AA3C34114;
-        Wed, 29 Jun 2022 07:45:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656488717;
-        bh=KPsgs8cYmzbFpz1SwOImxvV/uU9kcBZIAD+8codpXLQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ImpbNVd+JxaeZ8Tnquye4c9vziA7b9nPF959oSBvvWhMB7SILDNMvwuSCoZtzLNLQ
-         JzFAT1CGfatpQsg6lIsQdb1BZii5Eb+HWI1CLi4JJ1+TKDoCAql3e3twWRzn0gVCg3
-         j8D44U/P4FHxzeYZlUN9VPqYISWI6XI6YKYtzkAbvMb59wKxterFwWJNTI4zLBvIen
-         JqT9belF7T5+nTAb948LtUSroPwjI6oaBsPyUs/wsEbbF3CrKF49YLyPfVrL9ItGvh
-         /Bt7HkhP9LXXnM5oEcRDBF3NUR0wOkXb/FjwzFt1mBxADIXV83hPoTwDmwwn8A5ZZo
-         jb2xHFqIYIdZQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o6SNq-00014n-PL; Wed, 29 Jun 2022 09:45:10 +0200
-Date:   Wed, 29 Jun 2022 09:45:10 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: add SA8540P and ADP
-Message-ID: <YrwDBpvW4PIWRQ4X@hovoldconsulting.com>
-References: <20220629041438.1352536-1-bjorn.andersson@linaro.org>
- <20220629041438.1352536-6-bjorn.andersson@linaro.org>
+        Wed, 29 Jun 2022 03:47:13 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF8B387BC;
+        Wed, 29 Jun 2022 00:47:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656488833; x=1688024833;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=YlxnPim1rzCpKPXxIWvBT1D3S+eCXzSTNnLPZpAqKlo=;
+  b=WQ1+7UJGyviFymRBoXU44d29vBnpbAMezoreIjRmaG7z13553RJP30bO
+   IkYAuzuG8+m924muhoQajI2wmYLKmmKPT4oBTjci/K5FdlFqTnphT7ajl
+   RWM9FNGn1KGHMmzsY+wXYyBLCrjPPLAhBvbN4JLXib7yDvD7RcQlO/s2W
+   PH2BR4WsKFKAeUhnGXOWO7/75mIn6pxp8bKbUgsthH1573A34sapTbylL
+   OqXs5FDiumMhXZUUck6XlsgXteRainWcGK/n982Mo+XTtPtrfM5WMI1tJ
+   yhC32rt5lysU5cXKV05t2Ssm3Hzt/qiBRHUvvmHxXp3pneU/XHwZDNgsT
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="345947818"
+X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
+   d="scan'208";a="345947818"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 00:47:12 -0700
+X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
+   d="scan'208";a="647274534"
+Received: from dsummer-mobl.ger.corp.intel.com ([10.252.38.121])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 00:47:10 -0700
+Date:   Wed, 29 Jun 2022 10:47:09 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+cc:     linux-serial <linux-serial@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/4] serial: 8250_dw: Rename offset to reg_offset
+In-Reply-To: <YrtxxqnQ5fZKsUoY@smile.fi.intel.com>
+Message-ID: <c2959ca9-5817-f843-4a9b-95c8ffad9fca@linux.intel.com>
+References: <20220628134234.53771-1-ilpo.jarvinen@linux.intel.com> <20220628134234.53771-3-ilpo.jarvinen@linux.intel.com> <YrtxxqnQ5fZKsUoY@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629041438.1352536-6-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-1978143705-1656488381=:1529"
+Content-ID: <18fa9f5-b66c-b74c-961-a42059e76af4@linux.intel.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 09:14:38PM -0700, Bjorn Andersson wrote:
-> Introduce the Qualcomm SA8540P automotive platform and the SA8295P ADP
-> development board.
-> 
-> The SA8540P and SC8280XP are fairly similar, so the SA8540P is built
-> ontop of the SC8280XP dtsi to reduce duplication. As more advanced
-> features are integrated this might be re-evaluated.
-> 
-> This initial contribution supports SMP, CPUFreq, cluster idle, UFS, RPMh
-> regulators, debug UART, PMICs, remoteprocs (NSPs crashes shortly after
-> booting) and USB.
-> 
-> The SA8295P ADP contains four PM8450 PMICs, which according to their
-> revid are compatible with PM8150. They are defined within the ADP for
-> now, to avoid creating additional .dtsi files for PM8150 with just
-> addresses changed - and to allow using the labels from the schematics.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
-> 
-> Changes since v2:
-> - Sorted "status" property last throughout the patch
-> - Dropped empty reserved-memory node
-> - Dropped multiport vbus-enable pinctrl states for now
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-> +/* PINCTRL */
-> +&pm8450c_gpios {
-> +	usb2_en_state: usb2-en-state {
-> +		pins = "gpio9";
-> +		function = "normal";
-> +		output-high;
-> +		power-source = <0>;
-> +	};
-> +};
-> +
-> +&pm8450e_gpios {
-> +	usb3_en_state: usb3-en-state {
-> +		pins = "gpio5";
-> +		function = "normal";
-> +		output-high;
-> +		power-source = <0>;
-> +	};
-> +};
+--8323329-1978143705-1656488381=:1529
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <7d32f42a-d1be-fb57-f8d4-f5e92a82a942@linux.intel.com>
 
-You forgot to remove these two when you removed the other multiport
-vbus-enable states.
+On Wed, 29 Jun 2022, Andy Shevchenko wrote:
 
-Looks good otherwise.
+> On Tue, Jun 28, 2022 at 04:42:32PM +0300, Ilpo Järvinen wrote:
+> > Get 'offset' variable out of the way of parameter named 'offset',
+> > rename it to 'reg_offset'. This is very short lived change as
+> > reg_offset is going to be soon removed.
+> 
+> I'm not sure why this change then even needed...
 
-Johan
+I could either:
+    1) create one large patch doing many thing (2+3 or 2+3+4)
+ or
+    2) add the 'offset' parameter with some other name first and rename it 
+       to its final name after local var 'offset' is eliminated by patch 4
+ or
+    3) rename local var 'offset' first out of the way so that I can add 
+       'offset' parameter in patch 3 (=this patch)
+
+If I just drop patch 2 and only do 3, it won't build because 'offset' 
+variable appears twice (as arg and local var).
+
+-- 
+ i.
+--8323329-1978143705-1656488381=:1529--

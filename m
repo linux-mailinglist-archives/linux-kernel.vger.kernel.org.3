@@ -2,100 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB69560725
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 19:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93645560727
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 19:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbiF2ROl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 13:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57608 "EHLO
+        id S229715AbiF2RO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 13:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiF2ROj (ORCPT
+        with ESMTP id S230301AbiF2RO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 13:14:39 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377D03C706;
-        Wed, 29 Jun 2022 10:14:38 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id r20so23478626wra.1;
-        Wed, 29 Jun 2022 10:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=QtkOAm0FQLhRgm9nQIcdvq/G+pjTMw1++vcyZDrhmCY=;
-        b=qNeOuwYwu8CSAclcMtI0eB4EyowiRSGhu/GjxlWeh6+xNjCSTzlc0UjUNepKIAdiqs
-         4A+DQe5VXZ0zghAi8AphvoK9Db//FTr3MD56CZ7FG+Vhvh3Tu4Hgb8+JEdeL8ky8IM7e
-         6DBYY37p14oePiNVP7vXutAASoUg/HQQcDCECFIFweDQabA0LXWz4pknxGP2l/c6lRzN
-         GVLvUdaE3HUpg5uDOXCHJJAx2razHNkL+pF0x5ZKrHX75/eUaoXLuqVKTM8+8sjphr8z
-         t2EgrHI4vurdlXVKPR8R4X2Y0wVdOzlUgkfAf6H1tT1vnFaCw/CTIKs77cxgAxjJz3jI
-         jnVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=QtkOAm0FQLhRgm9nQIcdvq/G+pjTMw1++vcyZDrhmCY=;
-        b=09elqe3BuRXtt7ZNVP2iZnU9DY4hX+joCNDCY82QzrhU1d5FHVd+dGMVY5fESfUBk0
-         5nlInFEb4iooWumNtuXmefUwa1V0FtGK6UiMeh9jksBLLKrnGBfLxQbKE+ziU2SAqwhc
-         xwUDB0oRdL/Jsm6JYjdAsGSb20csTaiNrDxmuCJ135jrSAQxcWGG6ordCNr7/7NhngZ/
-         IBKS62bRu7r6fdOpS0UhK5+0fuNU+Bf5N+wKPppHBZS+99DUkFpFk8gISBHq4S5MxOrV
-         OCnZewOC3EXS6YKpc9xR4vuOj2cVtsBIy6gvhtQwyAByZ80teYoS7TYf69tnSBuqzX5P
-         7b/g==
-X-Gm-Message-State: AJIora/VCXw4r2gQ6ekNyQb7GsTGEcNBzHwdud5oAp3yuY4zOZd5Uns/
-        N9DTi3wOjS4XhxLMl1I42pl51ok9lMp0fE+Brw==
-X-Google-Smtp-Source: AGRyM1tIRAchdw3GOYBjxXnXREzBWUO8obItkKRDgyPyadqp50TYce8Wl312TzI0qDl6L/q9Bs7y1g==
-X-Received: by 2002:a5d:6487:0:b0:21b:983c:5508 with SMTP id o7-20020a5d6487000000b0021b983c5508mr4197505wri.185.1656522876148;
-        Wed, 29 Jun 2022 10:14:36 -0700 (PDT)
-Received: from playground (host-78-146-72-11.as13285.net. [78.146.72.11])
-        by smtp.gmail.com with ESMTPSA id d11-20020a5d6dcb000000b0020e6ce4dabdsm16636281wrz.103.2022.06.29.10.14.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 10:14:35 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 18:14:30 +0100
-From:   Jules Irenge <jbi.octave@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH 1/2] btf: Fix required space error
-Message-ID: <YryIdu0jdTF+fIiW@playground>
+        Wed, 29 Jun 2022 13:14:57 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A4E3C710;
+        Wed, 29 Jun 2022 10:14:54 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25TGv3Ea032114;
+        Wed, 29 Jun 2022 17:14:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=9WOghiGYjmTOE9cfm27FAgUV1NRqxvLgAiknvneQ3DQ=;
+ b=aeOP5NpD4lWxt2YjPH1qcfdYIb0q6B7oQ9UD3SSdBm5XmRqtWMAmNySf0gtU9a34IMBX
+ Q0yKdi6yPFNhM7ZCT0woLd/NpTlgHAmvNW1kpzMcAUH+JKvhnhtXxPYS8QkC5xJirzRa
+ yhvIZcze1x66YPkjLsbX0x+9Yl6CAtXm3vV7wSIyHA52BnhysWm5TAFZsVT5yr7abYF2
+ N7hLMqAG3t4kueAg9vGwcuLFu0U97r9FRaQVUCCe3d5day/G+KljVQVTeB1A4VOxV6R6
+ hokYZKaLMJUlM+tKET/UkGVgAyIhfsXT6dW5bpwjkVkmh98qbGwpUrwszsdeA2MstEDg iw== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h0tnj0pr8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Jun 2022 17:14:51 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25TH6FZg019425;
+        Wed, 29 Jun 2022 17:14:49 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04fra.de.ibm.com with ESMTP id 3gwt095468-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Jun 2022 17:14:49 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25THEkap21561740
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 29 Jun 2022 17:14:46 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 53D2F11C050;
+        Wed, 29 Jun 2022 17:14:46 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E360311C04A;
+        Wed, 29 Jun 2022 17:14:45 +0000 (GMT)
+Received: from osiris (unknown [9.145.11.87])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed, 29 Jun 2022 17:14:45 +0000 (GMT)
+Date:   Wed, 29 Jun 2022 19:14:44 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Steffen Eiden <seiden@linux.ibm.com>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, nrb@linux.ibm.com
+Subject: Re: [RFC PATCH] s390: Autoload uvdevice module based on CPU feature
+Message-ID: <YryIhAN7qd4isgc6@osiris>
+References: <20220629153741.195789-1-seiden@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220629153741.195789-1-seiden@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pe7o9eHQz2WHNlAQFgs_pTXeNLxAndKE
+X-Proofpoint-ORIG-GUID: pe7o9eHQz2WHNlAQFgs_pTXeNLxAndKE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-29_18,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ priorityscore=1501 malwarescore=0 adultscore=0 clxscore=1011 mlxscore=0
+ suspectscore=0 lowpriorityscore=0 mlxlogscore=564 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206290062
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes error reported ny Checkpatch at bpf_log()
+On Wed, Jun 29, 2022 at 05:37:41PM +0200, Steffen Eiden wrote:
+> With this patch the uvdevice will be automatically loaded when the
+> facility 158 is present. This is accomplished by using
+> ``module_cpu_feature_match`` and adding HWCAP_UV
+> connected to to facility 158.
+> 
+> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
+> ---
+>  arch/s390/include/asm/elf.h  | 2 ++
+>  arch/s390/kernel/processor.c | 5 +++++
+>  drivers/s390/char/uvdevice.c | 5 ++---
+>  3 files changed, 9 insertions(+), 3 deletions(-)
 
-ERROR: space required after that , ctx:VxV
-Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
----
- kernel/bpf/btf.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Please split this into two patches: one which adds the hwcap bit, and
+one which makes use of it.
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 2e2066d6af94..1bc496162572 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -5454,7 +5454,9 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
- 
- 		if (ctx_arg_info->offset == off) {
- 			if (!ctx_arg_info->btf_id) {
--				bpf_log(log,"invalid btf_id for context argument offset %u\n", off);
-+				bpf_log(log,
-+					"invalid btf_id for context argument offset %u\n",
-+					off);
- 				return false;
- 			}
- 
--- 
-2.36.1
+Also please make sure the subject contains (nearly) always a
+component, which would be "s390/hwcaps: ..." in this case.
 
+> +	/* IBM Secure Execution (Ultravisor) support */
+> +	if (test_facility(158)) {
+> +		elf_hwcap |= HWCAP_UV;
+
+Just keep the comment short like all other one and take the PoP as
+reference. I would have expected something like:
+"ultravisor-call (secure execution)"
+
+Besides that, everything looks ok as far as I can tell.

@@ -2,51 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7F6355FB51
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D931B55FB5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbiF2JGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 05:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
+        id S231724AbiF2JHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 05:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbiF2JGK (ORCPT
+        with ESMTP id S231217AbiF2JHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 05:06:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FDE2654C;
-        Wed, 29 Jun 2022 02:06:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1A6661DE3;
-        Wed, 29 Jun 2022 09:06:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE516C34114;
-        Wed, 29 Jun 2022 09:06:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656493568;
-        bh=x2GCzecskcLtSCWQXoaVv3Na56ClXU+Y0k0Qh8E4oQ4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yvcAQrUYxKTNfIijL+ZbK08cAl5Ovfrl56tfBMJUV5aP+95TFNneNQFG2uM9frr6Q
-         f/NiB9B06ERHDYY4a7PtkKmS3mLJLn+PNDGHfgQqWK+WxYgwXx6SwcBDpVgVF65zJt
-         a013zE2RiSg82j4zz7P6Rse4H/JNl6MmT9ljsYzk=
-Date:   Wed, 29 Jun 2022 11:06:05 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Davidlohr Bueso <dave@stgolabs.net>
-Cc:     syzbot <syzbot+ce3408364c4a234dd90c@syzkaller.appspotmail.com>,
-        aldas60@gmail.com, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, nathan@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING: locking bug in hfa384x_usbctlx_completion_task
-Message-ID: <YrwV/bQBFg3lTFky@kroah.com>
-References: <000000000000e3fc8905e2608d4f@google.com>
- <20220627170838.y7kbvazgpd52xd6d@offworld>
+        Wed, 29 Jun 2022 05:07:12 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F371F2AC49
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 02:07:05 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id t17-20020a1c7711000000b003a0434b0af7so6602512wmi.0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 02:07:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FUi18BfABJfFdfrTy/zmZdsKXzzTHRjYZn6DAYr2OpM=;
+        b=SbqRZ2lGoBj4MFROYCQz/qjnA+OfVT1NoH4TCsIICdxIY3XDK0tLMdH6vOxYVAiKEg
+         t4f0CnvkczgFg+Y89hiBtWjI9lfG4lqTu0GHPFY8e1YHjSzOVDDNuvBcxYmNhv2pUVlt
+         VEeBCpZjEy5hW0ImOSRG6M44PUYsxVJGN44H/C8IpUY2tZryK98kM8XzzHxMXFIiPlB4
+         AxAULWW5UTYg7GaO0HtefCtiaqgRqE5ZPLjZBXK1fkJ3b711dfSYrZsmp+nlnfCr1nE1
+         vqIHo7RWSv0qL6t1aYoQjLgq71ZOe4JeDSpARgiYArkzZrQd11BY3Z579lFfAk/hNtxD
+         DKSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FUi18BfABJfFdfrTy/zmZdsKXzzTHRjYZn6DAYr2OpM=;
+        b=6h/sBNFpXk3qfWeKn0O0UAXY6RcKpg83fEQovAW28Pv+Jw0IsvMsotIxFs0bdlYA6W
+         KALPZ4gjbsXgPQDhgZZzE0EeDKV9WtR3W4QAOQWZDoR64sA8H5IW7VVNuDTaLFRH7GjL
+         G0iiq/nwtr5BeuXZOsVoBH/XgsSXsoYvlBn98+HBg5qEKN3WDpc4IKJSLmzM+8coXvTJ
+         LkZ8WLwuvXg0au4D7rKAjCtxjwgTvbMgPzY/D64W934JTL/9l7TztI3mNyOUYAHQg9Tc
+         DI7JV2VV18dHW7Px0doKkEFy0X8n4D7oeMdlsVDAu8DEkWpzijEn1tSA55evdAudjjAl
+         W7IQ==
+X-Gm-Message-State: AJIora/9ronNRfupDbzicJpPUe/lnwuSlBZlPyV69u8N77cz6Uq9nvrz
+        FAQQHK7YLiEQ60oBpOONW4QC7Q==
+X-Google-Smtp-Source: AGRyM1tzLUjJTsjzxmN9nAUGOrChMCfCFRxIO+WCDnxX53yn2Of1UbeD0rdgyezMd7l2GLDtoswLaQ==
+X-Received: by 2002:a05:600c:4e8f:b0:39c:89dd:ae3b with SMTP id f15-20020a05600c4e8f00b0039c89ddae3bmr2472844wmq.200.1656493624411;
+        Wed, 29 Jun 2022 02:07:04 -0700 (PDT)
+Received: from srini-hackbase.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id e12-20020a5d530c000000b002185d79dc7fsm15993341wrv.75.2022.06.29.02.07.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 02:07:03 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 0/4] ASoC: codecs: add WSA883x support
+Date:   Wed, 29 Jun 2022 10:06:40 +0100
+Message-Id: <20220629090644.67982-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627170838.y7kbvazgpd52xd6d@offworld>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,42 +69,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 10:08:38AM -0700, Davidlohr Bueso wrote:
-> It's nice to see this sort of stuff actually tested :)
-> 
-> On Sun, 26 Jun 2022, syzbot wrote:
-> 
-> > ------------[ cut here ]------------
-> > DEBUG_LOCKS_WARN_ON(1)
-> > WARNING: CPU: 1 PID: 21 at kernel/locking/lockdep.c:231 hlock_class kernel/locking/lockdep.c:231 [inline]
-> > WARNING: CPU: 1 PID: 21 at kernel/locking/lockdep.c:231 hlock_class kernel/locking/lockdep.c:220 [inline]
-> > WARNING: CPU: 1 PID: 21 at kernel/locking/lockdep.c:231 check_wait_context kernel/locking/lockdep.c:4727 [inline]
-> > WARNING: CPU: 1 PID: 21 at kernel/locking/lockdep.c:231 __lock_acquire+0x1356/0x5660 kernel/locking/lockdep.c:5003
-> > Modules linked in:
-> > CPU: 1 PID: 21 Comm: kworker/1:0 Not tainted 5.19.0-rc3-syzkaller-00071-g105f3fd2f789 #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > Workqueue: events hfa384x_usbctlx_completion_task
-> 
-> Sorry about that, the below should fix it. Thanks.
-> 
-> ---8<-------------------------------
-> From: Davidlohr Bueso <dave@stgolabs.net>
-> Subject: [PATCH] staging/wlan-ng: get the correct struct hfa384x in work callback
-> 
-> hfa384x_usbctlx_completion_task() is bogusly using the reaper BH when
-> in fact this is the completion_bh. This was reflected when trying
-> to acquire the hw->ctlxq.lock and getting a failed lockdep class
-> initialized to it.
-> 
-> Reported-by: syzbot+ce3408364c4a234dd90c@syzkaller.appspotmail.com
-> Fixes: 9442e81d7e7 (staging/wlan-ng, prism2usb: replace completion_bh tasklet with work)
-> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
-> ---
->  drivers/staging/wlan-ng/hfa384x_usb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+This patchset adds support for WSA883x smart speaker amplifier codec
+connected via SoundWire. This codec also has a temperature sensor used
+for speaker protection, support for this is not added yet.
 
-Can you submit this properly so that I can accept it?
+Most of the code is derived from Qualcomm downstream msm-5.10 kernel.
+Thanks to Patrick Lai's Team.
 
-thanks,
+This codec is tested on SM8450 MTP.
 
-greg k-h
+Thanks,
+Srini
+
+Srinivas Kandagatla (4):
+  ASoC: dt-bindings: Add WSA883x bindings
+  ASoC: codecs: add wsa883x amplifier support
+  ASoC: codecs: wsa883x: add control, dapm widgets and map
+  MAINTAINERS: add ASoC Qualcomm codecs
+
+ .../bindings/sound/qcom,wsa883x.yaml          |   74 +
+ MAINTAINERS                                   |    4 +
+ sound/soc/codecs/Kconfig                      |   10 +
+ sound/soc/codecs/Makefile                     |    2 +
+ sound/soc/codecs/wsa883x.c                    | 1498 +++++++++++++++++
+ 5 files changed, 1588 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/qcom,wsa883x.yaml
+ create mode 100644 sound/soc/codecs/wsa883x.c
+
+-- 
+2.25.1
+

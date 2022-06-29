@@ -2,238 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB615560C68
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 00:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF36560C6F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 00:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiF2WkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 18:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
+        id S230080AbiF2Wl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 18:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiF2Wjn (ORCPT
+        with ESMTP id S229876AbiF2Wlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 18:39:43 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5774A1EC75;
-        Wed, 29 Jun 2022 15:38:28 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id fd6so24145121edb.5;
-        Wed, 29 Jun 2022 15:38:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yXdOmJeXHtaZlahxIBSXtvIP/nraTJVi+AA0cztm3iQ=;
-        b=n14f71DGBmg1G3uvuy+2WWM6dDXlbGzVXqPOaaM2KA0u81twHq40wXsHaNmk6JPWQl
-         Cm8g9Y+pK6UuIVCeq6TKK94ZtbmNA4tqnX5ZSvOwG3xpC9uJ0MbN5WbwOpBPYRcokcA2
-         Qn/64T9ZTlWTTdVEu7GNWYT3B9bYDNcF938fVVEz9wXvSj5ptTbvaLc8yMd7xS64acz3
-         JRp5jxmCg4SucJEmIv54aEElhCw9GuNWiTgxRMETUfIWmsBWRBPzx7P4vAQ7C7x7gaR1
-         193FyvtYoWRDa1v2dfxjDV+nRCB48QSv+auxMsyL3xDZ90q8OkJ0RKTGmWRP9GCglwNb
-         GgSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yXdOmJeXHtaZlahxIBSXtvIP/nraTJVi+AA0cztm3iQ=;
-        b=AOTvkkPCpDImgDEAWc3O+pUsofft0jGeiRJdr9k4rw74oemacQhNg9xxkDpqIKTXFm
-         P8ixBrYcAQJwXVD3K94dsoVjjNU0DeISpLYhGLGWxlKKayAmqlTsKs+BQPOvLtqbt7b5
-         MZ1UXwkEnHL6Sjn4ms8NDMk3ly9fJTwXHr5NNdDDS4SPxWL7QOZZ1UkgrKUn2Adb+iMG
-         iMvtnFdN5eWgkFwERW+MRUfEhPsLaP8485nn3eMoLfrqeWqseBzDTUk/wQxH82tdpryQ
-         98Sm1DU6jyep2rI3nwvdJfwHa/9RBvP2qo7XUyt4f4eHaZS8saCshCf9TpaPawopn3M1
-         YWJg==
-X-Gm-Message-State: AJIora9oL37ndt9gn6uMpUlc9OYX3mnBtXq4eZ3ooC6ZJ1ZY8Cwvt41Q
-        VpPeDJYsRvKxwqq+yYZd1iE=
-X-Google-Smtp-Source: AGRyM1tuKp0bukz+WEUON3F84eO2LuBvaY1XhLAn/zV+EyA81FQBLL0gtFV1FaDkRTjcILR+VJIbRw==
-X-Received: by 2002:a05:6402:350a:b0:435:df44:30aa with SMTP id b10-20020a056402350a00b00435df4430aamr7056022edd.403.1656542306768;
-        Wed, 29 Jun 2022 15:38:26 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id y21-20020a170906559500b00726dbb16b8dsm2518982ejp.65.2022.06.29.15.38.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 15:38:26 -0700 (PDT)
-Message-ID: <62bcd462.1c69fb81.c8b67.4c9f@mx.google.com>
-X-Google-Original-Message-ID: <YrzUYKmATOSq2Y9A@Ansuel-xps.>
-Date:   Thu, 30 Jun 2022 00:38:24 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Subject: Re: [PATCH v4 2/5] dt-bindings: arm: msm: Convert kpss-acc driver
- Documentation to yaml
-References: <20220629121441.6552-1-ansuelsmth@gmail.com>
- <20220629121441.6552-3-ansuelsmth@gmail.com>
- <1656542219.655280.1042481.nullmailer@robh.at.kernel.org>
+        Wed, 29 Jun 2022 18:41:55 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBA3DF70;
+        Wed, 29 Jun 2022 15:41:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=yVJkquctrxAoNz8gXWxalQPFR+kficMZVVuKxSIBo/w=; b=cX1QqveBfo+xPu7dGHmrnO0J7K
+        qJxZ/4a3qviR2YsYxAl441tnDslX7UZLKVNl7dECkLbDJBrODx24Z1FZZ2YR0gfK4Qx5bFxKsdnV+
+        ayp9miFGsznMYxLuJT8qz8m4U8lbLvb0m6Ihhj5N+dY9xmE7ZIBt8+8ePCpdzZ/dd2H7pg8bVqEIL
+        vOvuRL9kWAgEKZ7udv7uSElDfsGN0ygRfue2iteXV1Evx26BlZvoCj9t2OzZA3JRHuGstDkn2hrBY
+        PycWefQB0v5JZG34eFp4p3I7HwaoFTdQBv3Qpo6sU7xpIDA51IeoXpZk0+KoB2vKszKIczOjopgNy
+        fM05bfoA==;
+Received: from s0106ac1f6bb1ecac.cg.shawcable.net ([70.73.163.230] helo=[192.168.11.155])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1o6gNZ-002ZYA-Ie; Wed, 29 Jun 2022 16:41:50 -0600
+Message-ID: <626de61d-e85e-bc9f-9e3d-836a408c859f@deltatee.com>
+Date:   Wed, 29 Jun 2022 16:41:42 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1656542219.655280.1042481.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-mm@kvack.org,
+        iommu@lists.linux-foundation.org
+Cc:     Minturn Dave B <dave.b.minturn@intel.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Stephen Bates <sbates@raithlin.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Xiong Jianxin <jianxin.xiong@intel.com>
+References: <20220615161233.17527-1-logang@deltatee.com>
+ <20220615161233.17527-9-logang@deltatee.com>
+ <feecc6fe-a16e-11f2-33c8-3de7c96b9ad5@arm.com>
+ <f56181fb-7035-a775-22b1-77f97d6ec52c@deltatee.com>
+ <7f0673e1-433b-65fb-1d2b-c3e4adeebf87@arm.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <7f0673e1-433b-65fb-1d2b-c3e4adeebf87@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 70.73.163.230
+X-SA-Exim-Rcpt-To: robin.murphy@arm.com, linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, iommu@lists.linux-foundation.org, dave.b.minturn@intel.com, martin.oliveira@eideticom.com, rcampbell@nvidia.com, jgg@nvidia.com, jhubbard@nvidia.com, dave.hansen@linux.intel.com, willy@infradead.org, christian.koenig@amd.com, jgg@ziepe.ca, ckulkarnilinux@gmail.com, jason@jlekstrand.net, daniel.vetter@ffwll.ch, helgaas@kernel.org, dan.j.williams@intel.com, sbates@raithlin.com, ira.weiny@intel.com, hch@lst.de, jianxin.xiong@intel.com
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH v7 08/21] iommu/dma: support PCI P2PDMA pages in dma-iommu
+ map_sg
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 04:36:59PM -0600, Rob Herring wrote:
-> On Wed, 29 Jun 2022 14:14:38 +0200, Christian Marangi wrote:
-> > Convert kpss-acc driver Documentation to yaml.
-> > The original Documentation was wrong all along. Fix it while we are
-> > converting it.
-> > The example was wrong as kpss-acc-v2 should only expose the regs but we
-> > don't have any driver that expose additional clocks. The kpss-acc driver
-> > is only specific to v1. For this exact reason, limit all the additional
-> > bindings (clocks, clock-names, clock-output-names and #clock-cells) to
-> > v1 and also flag that these bindings should NOT be used for v2.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> >  .../bindings/arm/msm/qcom,kpss-acc.txt        | 49 ----------
-> >  .../bindings/arm/msm/qcom,kpss-acc.yaml       | 93 +++++++++++++++++++
-> >  2 files changed, 93 insertions(+), 49 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
-> >  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.yaml
-> > 
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/
-> 
-> 
-> clock-controller@2088000: '#clock-cells' is a required property
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
-> 	arch/arm/boot/dts/qcom-msm8960-cdp.dtb
-> 
-> clock-controller@2088000: 'clock-names' is a required property
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
-> 	arch/arm/boot/dts/qcom-msm8960-cdp.dtb
-> 
-> clock-controller@2088000: 'clock-output-names' is a required property
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
-> 	arch/arm/boot/dts/qcom-msm8960-cdp.dtb
-> 
-> clock-controller@2088000: 'clocks' is a required property
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
-> 	arch/arm/boot/dts/qcom-msm8960-cdp.dtb
-> 
-> clock-controller@2098000: '#clock-cells' is a required property
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
-> 	arch/arm/boot/dts/qcom-msm8960-cdp.dtb
-> 
-> clock-controller@2098000: 'clock-names' is a required property
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
-> 	arch/arm/boot/dts/qcom-msm8960-cdp.dtb
-> 
-> clock-controller@2098000: 'clock-output-names' is a required property
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
-> 	arch/arm/boot/dts/qcom-msm8960-cdp.dtb
-> 
-> clock-controller@2098000: 'clocks' is a required property
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
-> 	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
-> 	arch/arm/boot/dts/qcom-msm8960-cdp.dtb
-> 
-> clock-controller@20a8000: '#clock-cells' is a required property
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 
-> clock-controller@20a8000: 'clock-names' is a required property
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 
-> clock-controller@20a8000: 'clock-output-names' is a required property
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 
-> clock-controller@20a8000: 'clocks' is a required property
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 
-> clock-controller@20b8000: '#clock-cells' is a required property
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 
-> clock-controller@20b8000: 'clock-names' is a required property
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 
-> clock-controller@20b8000: 'clock-output-names' is a required property
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 
-> clock-controller@20b8000: 'clocks' is a required property
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 
 
-(fixed in the last 2 commit of this series)
 
--- 
-	Ansuel
+On 2022-06-29 13:15, Robin Murphy wrote:
+> On 2022-06-29 16:57, Logan Gunthorpe wrote:
+>>
+>>
+>>
+>> On 2022-06-29 06:07, Robin Murphy wrote:
+>>> On 2022-06-15 17:12, Logan Gunthorpe wrote:
+>>>> When a PCI P2PDMA page is seen, set the IOVA length of the segment
+>>>> to zero so that it is not mapped into the IOVA. Then, in finalise_sg(),
+>>>> apply the appropriate bus address to the segment. The IOVA is not
+>>>> created if the scatterlist only consists of P2PDMA pages.
+>>>>
+>>>> A P2PDMA page may have three possible outcomes when being mapped:
+>>>>     1) If the data path between the two devices doesn't go through
+>>>>        the root port, then it should be mapped with a PCI bus address
+>>>>     2) If the data path goes through the host bridge, it should be
+>>>> mapped
+>>>>        normally with an IOMMU IOVA.
+>>>>     3) It is not possible for the two devices to communicate and thus
+>>>>        the mapping operation should fail (and it will return
+>>>> -EREMOTEIO).
+>>>>
+>>>> Similar to dma-direct, the sg_dma_mark_pci_p2pdma() flag is used to
+>>>> indicate bus address segments. On unmap, P2PDMA segments are skipped
+>>>> over when determining the start and end IOVA addresses.
+>>>>
+>>>> With this change, the flags variable in the dma_map_ops is set to
+>>>> DMA_F_PCI_P2PDMA_SUPPORTED to indicate support for P2PDMA pages.
+>>>>
+>>>> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+>>>> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+>>>> ---
+>>>>    drivers/iommu/dma-iommu.c | 68
+>>>> +++++++++++++++++++++++++++++++++++----
+>>>>    1 file changed, 61 insertions(+), 7 deletions(-)
+>>>>
+>>>> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+>>>> index f90251572a5d..b01ca0c6a7ab 100644
+>>>> --- a/drivers/iommu/dma-iommu.c
+>>>> +++ b/drivers/iommu/dma-iommu.c
+>>>> @@ -21,6 +21,7 @@
+>>>>    #include <linux/iova.h>
+>>>>    #include <linux/irq.h>
+>>>>    #include <linux/list_sort.h>
+>>>> +#include <linux/memremap.h>
+>>>>    #include <linux/mm.h>
+>>>>    #include <linux/mutex.h>
+>>>>    #include <linux/pci.h>
+>>>> @@ -1062,6 +1063,16 @@ static int __finalise_sg(struct device *dev,
+>>>> struct scatterlist *sg, int nents,
+>>>>            sg_dma_address(s) = DMA_MAPPING_ERROR;
+>>>>            sg_dma_len(s) = 0;
+>>>>    +        if (is_pci_p2pdma_page(sg_page(s)) && !s_iova_len) {
+>>>
+>>> Logically, should we not be able to use sg_is_dma_bus_address() here? I
+>>> think it should be feasible, and simpler, to prepare the p2p segments
+>>> up-front, such that at this point all we need to do is restore the
+>>> original length (if even that, see below).
+>>
+>> Per my previous email, no, because sg_is_dma_bus_address() is not set
+>> yet and not meant to tell you something about the page. That flag will
+>> be set below by pci_p2pdma_map_bus_segment() and then checkd in
+>> iommu_dma_unmap_sg() to determine if the dma_address in the segment
+>> needs to be unmapped.
+> 
+> I know it's not set yet as-is; I'm suggesting things should be
+> restructured so that it *would be*. In the logical design of this code,
+> the DMA addresses are effectively determined in iommu_dma_map_sg(), and
+> __finalise_sg() merely converts them from a relative to an absolute form
+> (along with undoing the other trickery). Thus the call to
+> pci_p2pdma_map_bus_segment() absolutely belongs in the main
+> iommu_map_sg() loop.
+
+I don't see how that can work: __finalise_sg() does more than convert
+them from relative to absolute, it also figures out which SG entry will
+contain which dma_address segment. Which segment a P2PDMA address needs
+to be programmed into depends on the how 'cur' is calculated which in
+turn depends on things like seg_mask and max_len. This calculation is
+not done in iommu_dma_map_sg() so I don't see how there's any hope of
+assigning the bus address for the P2P segments in that function.
+
+If there's a way to restructure things so that's possible that I'm not
+seeing, I'm open to it but it's certainly not immediately obvious.
+
+>>>> +
+>>>> +            switch (map_type) {
+>>>> +            case PCI_P2PDMA_MAP_BUS_ADDR:
+>>>> +                /*
+>>>> +                 * A zero length will be ignored by
+>>>> +                 * iommu_map_sg() and then can be detected
+>>>
+>>> If that is required behaviour then it needs an explicit check in
+>>> iommu_map_sg() to guarantee (and document) it. It's only by chance that
+>>> __iommu_map() happens to return success for size == 0 *if* all the other
+>>> arguments still line up, which is a far cry from a safe no-op.
+>>
+>> What should such a check look like? I could certainly add some comments
+>> to iommu_map_sg(), but I don't see what the code would need to check
+>> for...
+> 
+> I'd say a check for zero-length segments would look like "if (sg->length
+> == 0)", most likely with a "continue;" on the following line.
+
+Oh, that's pretty simple to add. Will change.
+
+>>> However, rather than play yet more silly tricks, I think it would make
+>>> even more sense to make iommu_map_sg() properly aware and able to skip
+>>> direct p2p segments on its own. Once it becomes normal to pass mixed
+>>> scatterlists around, it's only a matter of time until one ends up being
+>>> handed to a driver which manages its own IOMMU domain, and then what?
+>>
+>> I suppose we can add another call to is_pci_p2pdma_page() inside
+>> iommu_map_sg() if you think that is cleaner. Seems like more work on the
+>> fast path to me, but I'm not opposed to it.
+> 
+> I was thinking more of sg_is_dma_bus_address() but admittedly under my
+> initial misapprehension of that. I suppose there's still a tenuous
+> argument that even though we're not actually consuming sg_dma_address()
+> at that point, if a segment *has* been earmarked for direct p2p, then
+> skipping it rather than mapping it at the root complex TA that's
+> probably never going to see those transactions might seem the more
+> logical choice.
+> 
+> However it's all a bit hypothetical, and not significantly cleaner than
+> a zero-size special case, so I'm not particularly tied to the idea either.
+
+Yeah, looking at it closer, I can't see how to get rid of the zero size
+special case without doing the whole pci_p2pdma_map_type() calculation
+twice which we really want to avoid.
+
+Logan

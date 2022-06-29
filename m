@@ -2,92 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12C355F696
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 08:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1CA755F6AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 08:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbiF2GbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 02:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
+        id S231932AbiF2Gc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 02:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiF2GbP (ORCPT
+        with ESMTP id S231722AbiF2Gc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 02:31:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E8FD28E10
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 23:31:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656484273;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=I+9RF1q6D/YnV5nX1dRXvF5cHfzPeG8DFYB/pyH/RHQ=;
-        b=IxZyt3GxVy0nYYFsur7j+23T2I8DRhfjzu/PA08cGkAysn5axhZlir+jkdYJrdAVn8/O1L
-        2qBRSLbGQlnv3rFeI3IXJySE/CItgBUgjJzWqUvqvUFZwcPGrz9AgJymhU/vFy/KgfemPg
-        peDjC00KKiYT2j9ZO7hmLdkBlhSJLgQ=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-204-PBur1dQQOciLzUoCJTSS-Q-1; Wed, 29 Jun 2022 02:31:11 -0400
-X-MC-Unique: PBur1dQQOciLzUoCJTSS-Q-1
-Received: by mail-wr1-f72.google.com with SMTP id u9-20020adfa189000000b0021b8b3c8f74so2091320wru.12
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 23:31:11 -0700 (PDT)
+        Wed, 29 Jun 2022 02:32:27 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E352AC78
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 23:32:25 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id pk21so30536150ejb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 23:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zS77KaVQIZjDtcQtlQ4PMGjH8fLTAFXlNerKkkUUDRE=;
+        b=L6KqQoQigrDtQLYm9a9rDV5XCTOmGJdU+i+sLSBAwuuKkYMtVycFv9vnHoZr6oJCve
+         2Q0UFt1o1ZyYwGMuz4NkYXc+Oo+fCO1U/v8BCpdOu+h4Wkq+lXIOGO1GxAhipuBJ3zqo
+         VJtY5B2FSRDIx8MLnt4xSZzsP6pVzAEEksJRraiJMeTuXyDr0Ci06Axe13zvokvoK6UL
+         /xqvwIM8FkB9X45QtAc5Vbe5oFwI2nCZI52uEhWTylW37jwqKeADtN8bCOYwyPB/kvYJ
+         uSsorotIURg8Uh10tIfw3K70gKecHWJi5d05//xwNHh6cOaJxAchKdSuCK7dMmalRUp/
+         7cCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=I+9RF1q6D/YnV5nX1dRXvF5cHfzPeG8DFYB/pyH/RHQ=;
-        b=x3/G60iX/Fvora1PmylVsNJ16KYm5OfFCuRBSTI9PvCQoVBVPD11W45eOWBuFO5ZdR
-         e7gzf5sehJJN6GfqQcpkRD8pss6J5caqc14nZ78rSs8/B50EGLNaORopZeDupCGK9eRX
-         5y+Nx5Gjw/LZxzaqNPjUKgjE4iQjM1wNb9DGty2aSCEZ3sKKRuLeuvM7Dpj4ys2R1ymv
-         iiv0uBk9G9pjHpeXLexC19FpOgt/q+jT1egU4Wxx+LgPuHO16Y283Cy6rhiSPNNRh9Sz
-         2+lfR8tITbrWacAtAvRuSrq8WDIYUVK6Bgx5kQ9rOxPnIpp6u2ES2d+u31mcJ/n3/ZZC
-         WZFQ==
-X-Gm-Message-State: AJIora/xWDQ79umMAMj30rgN7ZoYKP6psAbFPESye/eiZlTgyr51tNlj
-        HpdYTMtu1zll1CdkdoVJJQ4pRBI7mMPDglbfwWSVFnIl7dNatkKQWiwHdxxBNwNijtbkar3eM53
-        9Q2a09o0/FQWjCmslheTF0veu
-X-Received: by 2002:adf:ea09:0:b0:21d:2245:ab84 with SMTP id q9-20020adfea09000000b0021d2245ab84mr1359556wrm.542.1656484270142;
-        Tue, 28 Jun 2022 23:31:10 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1swmf1jxmlPCLuJbv6FmUELagisBcAc6WrE9BmWf7vexeigm9UUyTGKSYWbKyWsf7t3JFfr6Q==
-X-Received: by 2002:adf:ea09:0:b0:21d:2245:ab84 with SMTP id q9-20020adfea09000000b0021d2245ab84mr1359515wrm.542.1656484269797;
-        Tue, 28 Jun 2022 23:31:09 -0700 (PDT)
-Received: from redhat.com ([2.52.23.204])
-        by smtp.gmail.com with ESMTPSA id o18-20020a05600c379200b003a033177655sm1853981wmr.29.2022.06.28.23.31.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 23:31:09 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 02:31:04 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        kvm <kvm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Ben Hutchings <ben@decadent.org.uk>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH V3] virtio: disable notification hardening by default
-Message-ID: <20220629022223-mutt-send-email-mst@kernel.org>
-References: <CACGkMEtJY2ioD0L8ifTrCPatG6-NqQ01V=d2L1FeoweKV74LaA@mail.gmail.com>
- <20220624022622-mutt-send-email-mst@kernel.org>
- <CACGkMEuurobpUWmDL8zmZ6T6Ygc0OEMx6vx2EDCSoGNnZQ0r-w@mail.gmail.com>
- <20220627024049-mutt-send-email-mst@kernel.org>
- <CACGkMEvrDXDN7FH1vKoYCob2rkxUsctE_=g61kzHSZ8tNNr6vA@mail.gmail.com>
- <20220627053820-mutt-send-email-mst@kernel.org>
- <CACGkMEvcs+9_SHmO1s3nyzgU7oq7jhU2gircVVR3KDsGDikh5Q@mail.gmail.com>
- <20220628004614-mutt-send-email-mst@kernel.org>
- <CACGkMEsC4A+3WejLSOZoH3enXtai=+JyRNbxcpzK4vODYzhaFw@mail.gmail.com>
- <CACGkMEvu0D0XD7udz0ebVjNM0h5+K9Rjd-5ed=PY_+-aduzG2g@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zS77KaVQIZjDtcQtlQ4PMGjH8fLTAFXlNerKkkUUDRE=;
+        b=3Cyku3GFr4t9o7R1HgVZxq02zxpQyzB0PrzDp7TQwIdhY++pgfTi8bjwp49kquqprv
+         7Sd0Q/Wdk9ODr46+YDXQkt6VMU8EcrceZD1gsOcIexQu9Fu1tueKzF5DXgrqwaxZ2CHS
+         iGeIJSy/ys49n64S+7iK/XCNiKz6+ZYD+FZ4/FPQbz8xco8X1YdxioPYbaxGkNFosqSL
+         RN4dlAkwthH/EwOWB9S9METckKIhmaRBds4rJCV4OmPXTQtfs8wDJPuY1RmCRTrKIxw1
+         6Jq/w4W8A9FLK62GzY53fiGjB2DGoDv09/khvkDRjWxdNQPT91rbzwJQcugBdBBxF1T7
+         8miQ==
+X-Gm-Message-State: AJIora9vzQf3eeoPaoKbqeFGy/b/iz7SQre2jWeLqPfFBMRu8eT4yGwV
+        +2EoNu7x3lFrEUJ/7kQlfboZmHEB6RaJeA==
+X-Google-Smtp-Source: AGRyM1ujoPALE1gsZbOIqyN3wkUg+o/zzUIS8sbVUm6YipH4Ynb6EP2Yiji4sZbXIpzsWECboDd0qg==
+X-Received: by 2002:a17:906:7482:b0:722:ea8f:3a12 with SMTP id e2-20020a170906748200b00722ea8f3a12mr1797580ejl.220.1656484344347;
+        Tue, 28 Jun 2022 23:32:24 -0700 (PDT)
+Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id r21-20020a1709067fd500b007025015599bsm7224211ejs.214.2022.06.28.23.32.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 23:32:23 -0700 (PDT)
+Message-ID: <a4e1765a-8768-8e1d-9556-34644fcce101@linaro.org>
+Date:   Wed, 29 Jun 2022 08:32:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACGkMEvu0D0XD7udz0ebVjNM0h5+K9Rjd-5ed=PY_+-aduzG2g@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH V3 03/11] dt-bindings: PCI: tegra234: Add schema for
+ tegra234 rootport mode
+Content-Language: en-US
+To:     Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com
+Cc:     kishon@ti.com, vkoul@kernel.org, kw@linux.com,
+        p.zabel@pengutronix.de, mperttunen@nvidia.com,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com
+References: <20220629060435.25297-1-vidyas@nvidia.com>
+ <20220629060435.25297-4-vidyas@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220629060435.25297-4-vidyas@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,182 +82,253 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 12:07:11PM +0800, Jason Wang wrote:
-> On Tue, Jun 28, 2022 at 2:17 PM Jason Wang <jasowang@redhat.com> wrote:
-> >
-> > On Tue, Jun 28, 2022 at 1:00 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > >
-> > > On Tue, Jun 28, 2022 at 11:49:12AM +0800, Jason Wang wrote:
-> > > > > Heh. Yea sure. But things work fine for people. What is the chance
-> > > > > your review found and fixed all driver bugs?
-> > > >
-> > > > I don't/can't audit all bugs but the race between open/close against
-> > > > ready/reset. It looks to me a good chance to fix them all but if you
-> > > > think differently, let me know
-> > > >
-> > > > > After two attempts
-> > > > > I don't feel like hoping audit will fix all bugs.
-> > > >
-> > > > I've started the auditing and have 15+ patches in the queue. (only
-> > > > covers bluetooth, console, pmem, virtio-net and caif). Spotting the
-> > > > issue is not hard but the testing, It would take at least the time of
-> > > > one release to finalize I guess.
-> > >
-> > > Absolutely. So I am looking for a way to implement hardening that does
-> > > not break existing drivers.
-> >
-> > I totally agree with you to seek a way without bothering the drivers.
-> > Just wonder if this is possbile.
-> >
-> > >
-> > >
-> > > > >
-> > > > >
-> > > > > > >
-> > > > > > > The reason config was kind of easy is that config interrupt is rarely
-> > > > > > > vital for device function so arbitrarily deferring that does not lead to
-> > > > > > > deadlocks - what you are trying to do with VQ interrupts is
-> > > > > > > fundamentally different. Things are especially bad if we just drop
-> > > > > > > an interrupt but deferring can lead to problems too.
-> > > > > >
-> > > > > > I'm not sure I see the difference, disable_irq() stuffs also delay the
-> > > > > > interrupt processing until enable_irq().
-> > > > >
-> > > > >
-> > > > > Absolutely. I am not at all sure disable_irq fixes all problems.
-> > > > >
-> > > > > > >
-> > > > > > > Consider as an example
-> > > > > > >     virtio-net: fix race between ndo_open() and virtio_device_ready()
-> > > > > > > if you just defer vq interrupts you get deadlocks.
-> > > > > > >
-> > > > > > >
-> > > > > >
-> > > > > > I don't see a deadlock here, maybe you can show more detail on this?
-> > > > >
-> > > > > What I mean is this: if we revert the above commit, things still
-> > > > > work (out of spec, but still). If we revert and defer interrupts until
-> > > > > device ready then ndo_open that triggers before device ready deadlocks.
-> > > >
-> > > > Ok, I guess you meant on a hypervisor that is strictly written with spec.
-> > >
-> > > I mean on hypervisor that starts processing queues after getting a kick
-> > > even without DRIVER_OK.
-> >
-> > Oh right.
-> >
-> > >
-> > > > >
-> > > > >
-> > > > > > >
-> > > > > > > So, thinking about all this, how about a simple per vq flag meaning
-> > > > > > > "this vq was kicked since reset"?
-> > > > > >
-> > > > > > And ignore the notification if vq is not kicked? It sounds like the
-> > > > > > callback needs to be synchronized with the kick.
-> > > > >
-> > > > > Note we only need to synchronize it when it changes, which is
-> > > > > only during initialization and reset.
-> > > >
-> > > > Yes.
-> > > >
-> > > > >
-> > > > >
-> > > > > > >
-> > > > > > > If driver does not kick then it's not ready to get callbacks, right?
-> > > > > > >
-> > > > > > > Sounds quite clean, but we need to think through memory ordering
-> > > > > > > concerns - I guess it's only when we change the value so
-> > > > > > >         if (!vq->kicked) {
-> > > > > > >                 vq->kicked = true;
-> > > > > > >                 mb();
-> > > > > > >         }
-> > > > > > >
-> > > > > > > will do the trick, right?
-> > > > > >
-> > > > > > There's no much difference with the existing approach:
-> > > > > >
-> > > > > > 1) your proposal implicitly makes callbacks ready in virtqueue_kick()
-> > > > > > 2) my proposal explicitly makes callbacks ready via virtio_device_ready()
-> > > > > >
-> > > > > > Both require careful auditing of all the existing drivers to make sure
-> > > > > > no kick before DRIVER_OK.
-> > > > >
-> > > > > Jason, kick before DRIVER_OK is out of spec, sure. But it is unrelated
-> > > > > to hardening
-> > > >
-> > > > Yes but with your proposal, it seems to couple kick with DRIVER_OK somehow.
-> > >
-> > > I don't see how - my proposal ignores DRIVER_OK issues.
-> >
-> > Yes, what I meant is, in your proposal, the first kick after rest is a
-> > hint that the driver is ok (but actually it could not).
-> >
-> > >
-> > > > > and in absence of config interrupts is generally easily
-> > > > > fixed just by sticking virtio_device_ready early in initialization.
-> > > >
-> > > > So if the kick is done before the subsystem registration, there's
-> > > > still a window in the middle (assuming we stick virtio_device_ready()
-> > > > early):
-> > > >
-> > > > virtio_device_ready()
-> > > > virtqueue_kick()
-> > > > /* the window */
-> > > > subsystem_registration()
-> > >
-> > > Absolutely, however, I do not think we really have many such drivers
-> > > since this has been known as a wrong thing to do since the beginning.
-> > > Want to try to find any?
-> >
-> > Yes, let me try and update.
+On 29/06/2022 08:04, Vidya Sagar wrote:
+> Add support for PCIe controllers that operate in the rootport mode
+> in tegra234 chipset.
 > 
-> This is basically the device that have an RX queue, so I've found the
-> following drivers:
+> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> ---
+> V3:
+> * New patch in this series
 > 
-> scmi, mac80211_hwsim, vsock, bt, balloon.
-
-Looked and I don't see it yet. Let's consider
-./net/vmw_vsock/virtio_transport.c for example. Assuming we block
-callbacks until the first kick, what is the issue with probe exactly?
-
-
-> >
-> > >I couldn't ... except maybe bluetooth
-> > > but that's just maintainer nacking fixes saying he'll fix it
-> > > his way ...
-> > >
-> > > > And during remove(), we get another window:
-> > > >
-> > > > subsysrem_unregistration()
-> > > > /* the window */
-> > > > virtio_device_reset()
-> > >
-> > > Same here.
+>  .../bindings/pci/nvidia,tegra194-pcie.yaml    | 151 +++++++++++++++++-
+>  1 file changed, 146 insertions(+), 5 deletions(-)
 > 
-> Basically for the drivers that set driver_ok before registration,
+> diff --git a/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.yaml b/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.yaml
+> index 4a49dddf33bb..ede53baa1d71 100644
+> --- a/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie.yaml
+> @@ -22,6 +22,7 @@ properties:
+>    compatible:
+>      enum:
+>        - nvidia,tegra194-pcie
+> +      - nvidia,tegra234-pcie
+>  
+>    reg:
+>      items:
+> @@ -82,6 +83,8 @@ properties:
+>        name for the PCIe controller. Following are the specifiers for the different PCIe
+>        controllers:
+>  
+> +      Tegra194
+> +
+>          - TEGRA194_POWER_DOMAIN_PCIEX8B: C0
+>          - TEGRA194_POWER_DOMAIN_PCIEX1A: C1
+>          - TEGRA194_POWER_DOMAIN_PCIEX1A: C2
+> @@ -91,6 +94,22 @@ properties:
+>  
+>        these specifiers are defined in "include/dt-bindings/power/tegra194-powergate.h" file.
+>  
+> +      Tegra234
+> +
+> +        - TEGRA234_POWER_DOMAIN_PCIEX4BA: C0
+> +        - TEGRA234_POWER_DOMAIN_PCIEX1A : C1
+> +        - TEGRA234_POWER_DOMAIN_PCIEX1A : C2
+> +        - TEGRA234_POWER_DOMAIN_PCIEX1A : C3
+> +        - TEGRA234_POWER_DOMAIN_PCIEX4BB: C4
+> +        - TEGRA234_POWER_DOMAIN_PCIEX8A : C5
+> +        - TEGRA234_POWER_DOMAIN_PCIEX4A : C6
+> +        - TEGRA234_POWER_DOMAIN_PCIEX8B : C7
+> +        - TEGRA234_POWER_DOMAIN_PCIEX4CA: C8
+> +        - TEGRA234_POWER_DOMAIN_PCIEX4CB: C9
+> +        - TEGRA234_POWER_DOMAIN_PCIEX4CC: C10
 
-I don't see what does driver_ok have to do with it.
+Why duplicating header?
 
-> so
-> we have a lot:
-> 
-> blk, net, mac80211_hwsim, scsi, vsock, bt, crypto, gpio, gpu, i2c,
-> iommu, caif, pmem, input, mem
-> 
-> So I think there's no easy way to harden the notification without
-> auditing the driver one by one (especially considering the driver may
-> use bh or workqueue). The problem is the notification hardening
-> depends on a correct or race-free probe/remove. So we need to fix the
-> issues in probe/remove then do the hardening on the notification.
-> 
-> Thanks
+> +
+> +      these specifiers are defined in "include/dt-bindings/power/tegra234-powergate.h" file.
+> +
+>    interconnects:
+>      items:
+>        - description: memory read client
+> @@ -112,17 +131,30 @@ properties:
+>        Must contain a pair of phandle to BPMP controller node followed by controller ID. Following
+>        are the controller IDs for each controller:
+>  
+> +      Tegra194
+> +
+>          0: C0
+>          1: C1
+>          2: C2
+>          3: C3
+>          4: C4
+>          5: C5
+> -    items:
+> -      - items:
+> -          - minimum: 0
+> -            maximum: 0xffffffff
+> -          - enum: [ 0, 1, 2, 3, 4, 5 ]
+> +
+> +      Tegra234
+> +
+> +        0 : C0
+> +        1 : C1
+> +        2 : C2
+> +        3 : C3
+> +        4 : C4
+> +        5 : C5
+> +        6 : C6
+> +        7 : C7
+> +        8 : C8
+> +        9 : C9
+> +        10: C10
+> +
+> +      Platform constraints are described later
+>  
+>    nvidia,update-fc-fixup:
+>      description: |
+> @@ -131,6 +163,8 @@ properties:
+>        enabling root port to exchange optimum number of FC (Flow Control) credits with downstream
+>        devices:
+>  
+> +      NOTE:- This is applicable only for Tegra194.
+> +
 
-So if drivers kick but are not ready to get callbacks then let's fix
-that first of all, these are racy with existing qemu even ignoring
-spec compliance.
+Then make it false in other variants in allOf:if:then
+
+>          1. If C0/C4/C5 run at x1/x2 link widths (irrespective of speed and MPS)
+>          2. If C0/C1/C2/C3/C4/C5 operate at their respective max link widths and
+>            a) speed is Gen-2 and MPS is 256B
+> @@ -159,10 +193,56 @@ properties:
+>      description: A phandle to the regulator node that supplies 12V to the slot if the platform has
+>        one such slot. (Ex:- x16 slot owned by C5 controller in p2972-0000 platform).
+>  
+> +  nvidia,enable-srns:
+> +    description: |
+> +      This boolean property needs to be present if the controller is configured
+
+Remove "This boolean property needs to be present" and instead describe
+the feature behind, e.g. "Configure the controller to operate in SRNS
+......".
+
+There is no need to make descriptions longer than necessary.
 
 
--- 
-MST
+> +      to operate in SRNS (Separate Reference Clocks with No Spread-Spectrum Clocking).
+> +      NOTE:- This is applicable only for Tegra234.
 
+Make it false on other variants (allOf:if:then)
+
+> +
+
+No need for such blank lines.
+
+> +    $ref: /schemas/types.yaml#/definitions/flag
+
+type: boolean (the same in your patch #2)
+
+> +
+> +  nvidia,enable-ext-refclk:
+> +    description: |
+> +      This boolean property needs to be present if the controller is configured
+> +      to use the reference clocking coming in from an external clock source instead of
+> +      using the internal clock source.
+> +
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +
+>  allOf:
+>    - $ref: "/schemas/pci/pci-bus.yaml#"
+>    - $ref: "/schemas/pci/snps,dw-pcie.yaml#"
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - nvidia,tegra194-pcie
+> +    then:
+> +      properties:
+> +        nvidia,bpmp:
+> +          items:
+> +            - items:
+> +                - minimum: 0
+> +                  maximum: 0xffffffff
+> +                - enum: [ 0, 1, 2, 3, 4, 5 ]
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - nvidia,tegra234-pcie
+> +    then:
+> +      properties:
+> +        nvidia,bpmp:
+> +          items:
+> +            - items:
+> +                - minimum: 0
+> +                  maximum: 0xffffffff
+> +                - enum: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+> +
+>  unevaluatedProperties: false
+>  
+>  required:
+> @@ -252,3 +332,64 @@ examples:
+>              phy-names = "p2u-0", "p2u-1", "p2u-2", "p2u-3";
+>          };
+>      };
+> +
+> +  - |
+> +    #include <dt-bindings/clock/tegra234-clock.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/power/tegra234-powergate.h>
+> +    #include <dt-bindings/reset/tegra234-reset.h>
+> +
+> +    bus@0 {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +        ranges = <0x0 0x0 0x0 0x8 0x0>;
+> +
+> +        pcie@14160000 {
+> +            compatible = "nvidia,tegra234-pcie";
+> +            power-domains = <&bpmp TEGRA234_POWER_DOMAIN_PCIEX4BB>;
+> +            reg = <0x00 0x14160000 0x0 0x00020000>, /* appl registers (128K)      */
+> +                  <0x00 0x36000000 0x0 0x00040000>, /* configuration space (256K) */
+> +                  <0x00 0x36040000 0x0 0x00040000>, /* iATU_DMA reg space (256K)  */
+> +                  <0x00 0x36080000 0x0 0x00040000>; /* DBI reg space (256K)       */
+> +            reg-names = "appl", "config", "atu_dma", "dbi";
+> +
+> +            #address-cells = <3>;
+> +            #size-cells = <2>;
+> +            device_type = "pci";
+> +            num-lanes = <4>;
+> +            num-viewport = <8>;
+> +            linux,pci-domain = <4>;
+> +
+> +            clocks = <&bpmp TEGRA234_CLK_PEX0_C4_CORE>;
+> +            clock-names = "core";
+> +
+> +            resets = <&bpmp TEGRA234_RESET_PEX0_CORE_4_APB>,
+> +                     <&bpmp TEGRA234_RESET_PEX0_CORE_4>;
+> +            reset-names = "apb", "core";
+> +
+> +            interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>, /* controller interrupt */
+> +                         <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>; /* MSI interrupt */
+> +            interrupt-names = "intr", "msi";
+> +
+> +            #interrupt-cells = <1>;
+> +            interrupt-map-mask = <0 0 0 0>;
+> +            interrupt-map = <0 0 0 0 &gic GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +            nvidia,bpmp = <&bpmp 4>;
+> +
+> +            nvidia,aspm-cmrt-us = <60>;
+> +            nvidia,aspm-pwr-on-t-us = <20>;
+> +            nvidia,aspm-l0s-entrance-latency-us = <3>;
+> +
+> +            bus-range = <0x0 0xff>;
+> +            ranges = <0x43000000 0x21 0x40000000 0x21 0x40000000 0x2 0xe8000000>, /* prefetchable */
+> +                     <0x02000000 0x0  0x40000000 0x24 0x28000000 0x0 0x08000000>, /* non-prefetchable */
+> +                     <0x01000000 0x0  0x36100000 0x00 0x36100000 0x0 0x00100000>; /* downstream I/O */
+> +
+> +            vddio-pex-ctl-supply = <&p3701_vdd_AO_1v8>;
+> +
+> +            phys = <&p2u_hsio_4>, <&p2u_hsio_5>, <&p2u_hsio_6>,
+> +                   <&p2u_hsio_7>;
+> +            phy-names = "p2u-0", "p2u-1", "p2u-2", "p2u-3";
+> +        };
+> +    };
+
+
+Best regards,
+Krzysztof

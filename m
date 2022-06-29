@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D41745600EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C495600DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233747AbiF2NIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 09:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
+        id S233715AbiF2NIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 09:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233782AbiF2NHy (ORCPT
+        with ESMTP id S233790AbiF2NHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 09:07:54 -0400
+        Wed, 29 Jun 2022 09:07:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA12739142
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 06:07:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB7739BAE
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 06:07:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40F60619A5
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 13:07:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 567C5C341C8;
-        Wed, 29 Jun 2022 13:07:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C41661DFD
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 13:07:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E926BC34114;
+        Wed, 29 Jun 2022 13:07:22 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Ig3for1w"
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GGQZiZRq"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656508038;
+        t=1656508041;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+MjWEDD0Vbjy/MpGepsgXwf37S0M+lmoyQbFZkjNh8M=;
-        b=Ig3for1wzmoXCBSAKsKTLVi9llOnU+QS1bDNGSljddSXC0waibKwF9j1WLtDSvREhPXhFf
-        SYs2P8nIGr2skgftXTA9pxuFBleufTOXPnZdf9x2IHHWfn6f0AgbKA7VzvcljN74IQtv0F
-        I9XEOrK1I/rSqd0503v/A825gW5AP8w=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a00055b1 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 29 Jun 2022 13:07:18 +0000 (UTC)
+        bh=tt6O9oFpgSW1be2gi+tkV3zV3GgcM4jVqfcAvlW31+g=;
+        b=GGQZiZRqndPmOSUe39Om8ZAl5KPNn8plE38hWfuS3k5+k98Ilsbgm6vVlbMLTto+rUDOqe
+        WipsReO+D1MtXrj5cNyB5XOhyH5qFzK19HEtdmhtpftruho0OCRObCdgQIEKOBWSXvUTuq
+        n8c3UWClj+XOQC2fkSJZ6NcE8qo4TRI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id cf6b3aac (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 29 Jun 2022 13:07:21 +0000 (UTC)
 From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
 To:     linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH v3 5/7] fs: remove no_llseek
-Date:   Wed, 29 Jun 2022 15:07:00 +0200
-Message-Id: <20220629130702.954310-6-Jason@zx2c4.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Subject: [PATCH v3 6/7] dma-buf: remove useless FMODE_LSEEK flag
+Date:   Wed, 29 Jun 2022 15:07:01 +0200
+Message-Id: <20220629130702.954310-7-Jason@zx2c4.com>
 In-Reply-To: <20220629130702.954310-1-Jason@zx2c4.com>
 References: <20220629130702.954310-1-Jason@zx2c4.com>
 MIME-Version: 1.0
@@ -56,63 +58,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that all callers of ->llseek are going through vfs_llseek(), we
-don't gain anything by keeping no_llseek around. Nothing compares it or
-calls it.
+This is already set by anon_inode_getfile(), since dma_buf_fops has
+non-NULL ->llseek, so we don't need to set it here too.
 
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Acked-by: Sumit Semwal <sumit.semwal@linaro.org>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- fs/read_write.c    | 17 +++--------------
- include/linux/fs.h |  1 -
- 2 files changed, 3 insertions(+), 15 deletions(-)
+ drivers/dma-buf/dma-buf.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/fs/read_write.c b/fs/read_write.c
-index b1b1cdfee9d3..69cd8d72d91e 100644
---- a/fs/read_write.c
-+++ b/fs/read_write.c
-@@ -227,12 +227,6 @@ loff_t noop_llseek(struct file *file, loff_t offset, int whence)
- }
- EXPORT_SYMBOL(noop_llseek);
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index 32f55640890c..3f08e0b960ec 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -549,7 +549,6 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
+ 		goto err_dmabuf;
+ 	}
  
--loff_t no_llseek(struct file *file, loff_t offset, int whence)
--{
--	return -ESPIPE;
--}
--EXPORT_SYMBOL(no_llseek);
--
- loff_t default_llseek(struct file *file, loff_t offset, int whence)
- {
- 	struct inode *inode = file_inode(file);
-@@ -290,14 +284,9 @@ EXPORT_SYMBOL(default_llseek);
+-	file->f_mode |= FMODE_LSEEK;
+ 	dmabuf->file = file;
  
- loff_t vfs_llseek(struct file *file, loff_t offset, int whence)
- {
--	loff_t (*fn)(struct file *, loff_t, int);
--
--	fn = no_llseek;
--	if (file->f_mode & FMODE_LSEEK) {
--		if (file->f_op->llseek)
--			fn = file->f_op->llseek;
--	}
--	return fn(file, offset, whence);
-+	if (!(file->f_mode & FMODE_LSEEK) || !file->f_op->llseek)
-+		return -ESPIPE;
-+	return file->f_op->llseek(file, offset, whence);
- }
- EXPORT_SYMBOL(vfs_llseek);
- 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 9ad5e3520fae..0cb5a1706e1f 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -3022,7 +3022,6 @@ extern long do_splice_direct(struct file *in, loff_t *ppos, struct file *out,
- extern void
- file_ra_state_init(struct file_ra_state *ra, struct address_space *mapping);
- extern loff_t noop_llseek(struct file *file, loff_t offset, int whence);
--extern loff_t no_llseek(struct file *file, loff_t offset, int whence);
- extern loff_t vfs_setpos(struct file *file, loff_t offset, loff_t maxsize);
- extern loff_t generic_file_llseek(struct file *file, loff_t offset, int whence);
- extern loff_t generic_file_llseek_size(struct file *file, loff_t offset,
+ 	mutex_init(&dmabuf->lock);
 -- 
 2.35.1
 

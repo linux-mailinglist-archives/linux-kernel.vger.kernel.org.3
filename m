@@ -2,74 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF44256008A
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F1D56006F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiF2Mzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 08:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
+        id S233098AbiF2MzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 08:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232912AbiF2MzZ (ORCPT
+        with ESMTP id S232912AbiF2MzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 08:55:25 -0400
-X-Greylist: delayed 16340 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 29 Jun 2022 05:55:19 PDT
-Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1C92CDF5;
-        Wed, 29 Jun 2022 05:55:19 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1656507291tfsra6c3
-Received: from localhost.localdomain ( [182.148.13.66])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 29 Jun 2022 20:54:48 +0800 (CST)
-X-QQ-SSF: 0100000000200060C000C00A0000000
-X-QQ-FEAT: xoS364mEyr00dFkTgfgNEjTaoF4BmwMd0CJyYGBO7nG8ghAnd04j3/n2cv+cO
-        +wrHSkmNl3aNXNDMUN9e99ldFJgDUvmcmwIum6NyP7X+i7FA2jTKQgYpOj1j2xucTNyzgq9
-        vJ+a+sqnYHuHkHuVwBM+t0a84XnxTAmTKfj5HULnf06+gYoYZcSdnwY4mNWYeRGnM8A8GCc
-        vh/IbEXoGhH0LRkuVKYm3yPADPKbfXfhn0qV5DS6pd0H9QfkVKG8lMCOfIoAJLxSsgiXlAs
-        zymwHrzeUglHsXnFQiGDwlavaWfVsO1+oTK+ZcFZZc+n+R+qtGp6p4X6mipXeSaZV2tMPN1
-        npWneCq5Y4KttdBBdg=
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     pantelis.antoniou@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] freescale/fs_enet:fix repeated words in comments
-Date:   Wed, 29 Jun 2022 20:54:41 +0800
-Message-Id: <20220629125441.62420-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 29 Jun 2022 08:55:16 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524FB2CCA4;
+        Wed, 29 Jun 2022 05:55:14 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 68f160c69678c1a0; Wed, 29 Jun 2022 14:55:12 +0200
+Received: from kreacher.localnet (unknown [213.134.175.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 02DCA66C9F4;
+        Wed, 29 Jun 2022 14:55:11 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        john.garry@huawei.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] hisi_lpc: Use acpi_dev_for_each_child()
+Date:   Wed, 29 Jun 2022 14:55:11 +0200
+Message-ID: <12026357.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.175.150
+X-CLIENT-HOSTNAME: 213.134.175.150
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudegledgheejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppedvudefrddufeegrddujeehrdduhedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudejhedrudehtddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepjhhohhhnrdhgrghrrhihsehhuhgrfigvihdr
+ tghomhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'a'.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+Instead of walking the list of children of an ACPI device directly,
+use acpi_dev_for_each_child() to carry out an action for all of
+the given ACPI device's children.
+
+This will help to eliminate the children list head from struct
+acpi_device as it is redundant and it is used in questionable ways
+in some places (in particular, locking is needed for walking the
+list pointed to it safely, but it is often missing).
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/net/ethernet/freescale/fs_enet/fs_enet.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/bus/hisi_lpc.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/freescale/fs_enet/fs_enet.h b/drivers/net/ethernet/freescale/fs_enet/fs_enet.h
-index 5ff2634bee2f..cb419aef8d1b 100644
---- a/drivers/net/ethernet/freescale/fs_enet/fs_enet.h
-+++ b/drivers/net/ethernet/freescale/fs_enet/fs_enet.h
-@@ -201,7 +201,7 @@ void fs_enet_platform_cleanup(void);
+Index: linux-pm/drivers/bus/hisi_lpc.c
+===================================================================
+--- linux-pm.orig/drivers/bus/hisi_lpc.c
++++ linux-pm/drivers/bus/hisi_lpc.c
+@@ -471,6 +471,12 @@ static int hisi_lpc_acpi_remove_subdev(s
+ 	return 0;
+ }
  
- /* access macros */
- #if defined(CONFIG_CPM1)
--/* for a a CPM1 __raw_xxx's are sufficient */
-+/* for a CPM1 __raw_xxx's are sufficient */
- #define __cbd_out32(addr, x)	__raw_writel(x, addr)
- #define __cbd_out16(addr, x)	__raw_writew(x, addr)
- #define __cbd_in32(addr)	__raw_readl(addr)
--- 
-2.36.1
++static int hisi_lpc_acpi_clear_enumerated(struct acpi_device *adev, void *not_used)
++{
++	acpi_device_clear_enumerated(adev);
++	return 0;
++}
++
+ struct hisi_lpc_acpi_cell {
+ 	const char *hid;
+ 	const char *name;
+@@ -480,13 +486,11 @@ struct hisi_lpc_acpi_cell {
+ 
+ static void hisi_lpc_acpi_remove(struct device *hostdev)
+ {
+-	struct acpi_device *adev = ACPI_COMPANION(hostdev);
+ 	struct acpi_device *child;
+ 
+ 	device_for_each_child(hostdev, NULL, hisi_lpc_acpi_remove_subdev);
+-
+-	list_for_each_entry(child, &adev->children, node)
+-		acpi_device_clear_enumerated(child);
++	acpi_dev_for_each_child(ACPI_COMPANION(hostdev),
++				hisi_lpc_acpi_clear_enumerated, NULL);
+ }
+ 
+ /*
+
+
 

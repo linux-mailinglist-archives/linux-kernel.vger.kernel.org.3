@@ -2,151 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECACE55FAB1
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52ED155FAB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232771AbiF2Ig1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 04:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
+        id S232805AbiF2Igd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 04:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbiF2IgX (ORCPT
+        with ESMTP id S232625AbiF2Iga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 04:36:23 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75463C705;
-        Wed, 29 Jun 2022 01:36:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656491782; x=1688027782;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/tpHLNK39bZmEplNDXU1bTXTKX1BV6N9O59YCs9I+Jo=;
-  b=Msn9efjYVKFCl0bXyS0Drt5cYr2IINCUZoaBzqhck1oUen2RqQLpcf4f
-   W38Ie6HM6lGwzCYugUMgKjnHXp4kqAXrdKFTyYpz1NvfOTD9hKUvlgcsa
-   LS9o/oYnJax4rd+ws25CuaBMxEqy7RdMwtX/RAgaLFqadJK7fOLAEEoeo
-   QQc0XzeplXOxamhIXVuea/Qxwww4qmMs6prWvg0o7zjBjzrFt7CUVBrdQ
-   z1dyZlqeDmIwA0bGIifluhelFSZx2NSSeWREGAW+KwQ5mtUbAitn27iZ9
-   rGfbghQ7uNuz/iLJDUr417Oc4k6Df1fcV1+kXl+jjy84Kh/eA7dpcTmyd
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="282005990"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="282005990"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 01:36:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="590616731"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by orsmga002.jf.intel.com with ESMTP; 29 Jun 2022 01:35:56 -0700
-Date:   Wed, 29 Jun 2022 16:35:55 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     Chao Gao <chao.gao@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, seanjc@google.com, pbonzini@redhat.com,
-        dave.hansen@intel.com, len.brown@intel.com, tony.luck@intel.com,
-        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
-        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com, thomas.lendacky@amd.com,
-        Tianyu.Lan@microsoft.com
-Subject: Re: [PATCH v5 04/22] x86/virt/tdx: Prevent ACPI CPU hotplug and ACPI
- memory hotplug
-Message-ID: <20220629083555.wre7uab6schvifkg@yy-desk-7060>
-References: <cover.1655894131.git.kai.huang@intel.com>
- <3a1c9807d8c140bdd550cd5736664f86782cca64.1655894131.git.kai.huang@intel.com>
- <20220624014112.GA15566@gao-cwp>
- <951da5eeb4214521635602ce3564246ad49018f5.camel@intel.com>
+        Wed, 29 Jun 2022 04:36:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCFA43C70D
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 01:36:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656491787;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bet7RPOPoI6qEqFJfuyVXTSgqEPE876J831j55LAYEI=;
+        b=TP9G4S9cVQnQXnflZcr5ee9IIdzz/Jf15dIMeN0J24CztXr6Cd3ig3W7hwx3sHcl7aiAZ+
+        /ZGlh/3jF3+O0YgiXvsImzKbV2VBrmpJqmbMNLddkcT17WHXg/zDr7odOiijhEXlJW80vY
+        1LHo003+Gt5kq+7t7e1vuMPglhoMKEI=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-159-zfOTH2W5M4K-h5FzuSKRZQ-1; Wed, 29 Jun 2022 04:36:26 -0400
+X-MC-Unique: zfOTH2W5M4K-h5FzuSKRZQ-1
+Received: by mail-lf1-f71.google.com with SMTP id r28-20020ac25c1c000000b004809e9d21e5so6187638lfp.18
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 01:36:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Bet7RPOPoI6qEqFJfuyVXTSgqEPE876J831j55LAYEI=;
+        b=4vhfbuHnZPV9n9eBhcC0EPFQhSYbmQR5wIvkm7FyYprfBRWGgHlo20KEybwYnRFToC
+         l5JdB0yQPg3wuMvsNryQUQ79pONcb/TwAByHgTnGLPM0xVB4a7YD1448to0pJfmeq3WC
+         gnhJ3yK+hv4zXZrMdNKfxba+oWMThIv0aqBjbdUU688GiQ1Jo5lbw31OPR6rM3nZddvs
+         jO+Z/9z6ADawSWdz1QIJsvXkMLxpc0UgAONHldLtamUdvYRaByCIdRjbW6w/BBsyxewN
+         F11GnaC5pc/tl0/GRKYbmuOSYVQbW33r5ZBgMtfdKxTgEohDKkj49TtyeDTj16BxEbwy
+         KVFQ==
+X-Gm-Message-State: AJIora+I7DQRtHOH4ZOPsAPYwXOr5tt9sHkI6AoOAQAKknJYoWnKGMoa
+        pxuDrnVfon84J+vtf108rQALPC05+HL+6yCw0hBwd6ytJHGTk1oTemPNSi8nRRg5fxr3qZ7ExwD
+        PESx81lCpQwDvkyz0Fe2TCXhtOFJt2USJ5K8hp1Tn
+X-Received: by 2002:a05:651c:895:b0:250:c5ec:bc89 with SMTP id d21-20020a05651c089500b00250c5ecbc89mr1000414ljq.251.1656491784163;
+        Wed, 29 Jun 2022 01:36:24 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vBelXp7oblduZwmkq8dd6rRu3tkscsPBwJaVedQQ56Gmdo+PJ5Ijy22sPBo/8FbgLCMMKyAjmHBfc3NkfgJ8g=
+X-Received: by 2002:a05:651c:895:b0:250:c5ec:bc89 with SMTP id
+ d21-20020a05651c089500b00250c5ecbc89mr1000402ljq.251.1656491783902; Wed, 29
+ Jun 2022 01:36:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <951da5eeb4214521635602ce3564246ad49018f5.camel@intel.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220628090324.62219-1-jasowang@redhat.com> <20220629032106-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220629032106-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 29 Jun 2022 16:36:12 +0800
+Message-ID: <CACGkMEutEYHf8kO_6gpk5BrMAndJPd8wDAPG2_Z9pxSiXXNDCw@mail.gmail.com>
+Subject: Re: [PATCH] virtio-net: fix the race between refill work and close
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 11:21:59PM +1200, Kai Huang wrote:
-> On Fri, 2022-06-24 at 09:41 +0800, Chao Gao wrote:
-> > On Wed, Jun 22, 2022 at 11:16:07PM +1200, Kai Huang wrote:
-> > > -static bool intel_cc_platform_has(enum cc_attr attr)
-> > > +#ifdef CONFIG_INTEL_TDX_GUEST
-> > > +static bool intel_tdx_guest_has(enum cc_attr attr)
-> > > {
-> > > 	switch (attr) {
-> > > 	case CC_ATTR_GUEST_UNROLL_STRING_IO:
-> > > @@ -28,6 +31,33 @@ static bool intel_cc_platform_has(enum cc_attr attr)
-> > > 		return false;
-> > > 	}
-> > > }
-> > > +#endif
-> > > +
-> > > +#ifdef CONFIG_INTEL_TDX_HOST
-> > > +static bool intel_tdx_host_has(enum cc_attr attr)
-> > > +{
-> > > +	switch (attr) {
-> > > +	case CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED:
-> > > +	case CC_ATTR_ACPI_MEMORY_HOTPLUG_DISABLED:
-> > > +		return true;
-> > > +	default:
-> > > +		return false;
-> > > +	}
-> > > +}
-> > > +#endif
-> > > +
-> > > +static bool intel_cc_platform_has(enum cc_attr attr)
-> > > +{
-> > > +#ifdef CONFIG_INTEL_TDX_GUEST
-> > > +	if (boot_cpu_has(X86_FEATURE_TDX_GUEST))
-> > > +		return intel_tdx_guest_has(attr);
-> > > +#endif
-> > > +#ifdef CONFIG_INTEL_TDX_HOST
-> > > +	if (platform_tdx_enabled())
-> > > +		return intel_tdx_host_has(attr);
-> > > +#endif
-> > > +	return false;
-> > > +}
-> >
-> > how about:
-> >
-> > static bool intel_cc_platform_has(enum cc_attr attr)
-> > {
-> > 	switch (attr) {
-> > 	/* attributes applied to TDX guest only */
-> > 	case CC_ATTR_GUEST_UNROLL_STRING_IO:
-> > 	...
-> > 		return boot_cpu_has(X86_FEATURE_TDX_GUEST);
-> >
-> > 	/* attributes applied to TDX host only */
-> > 	case CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED:
-> > 	case CC_ATTR_ACPI_MEMORY_HOTPLUG_DISABLED:
-> > 		return platform_tdx_enabled();
-> >
-> > 	default:
-> > 		return false;
-> > 	}
-> > }
-> >
-> > so that we can get rid of #ifdef/endif.
+On Wed, Jun 29, 2022 at 3:29 PM Michael S. Tsirkin <mst@redhat.com> wrote:
 >
-> Personally I don't quite like this way.  To me having separate function for host
-> and guest is more clear and more flexible.  And I don't think having
-> #ifdef/endif has any problem.  I would like to leave to maintainers.
+> On Tue, Jun 28, 2022 at 05:03:24PM +0800, Jason Wang wrote:
+> > We try using cancel_delayed_work_sync() to prevent the work from
+> > enabling NAPI. This is insufficient since we don't disable the the
+> > source the scheduling
+>
+> can't parse this sentence
 
-I see below statement, for you reference:
-
-"Wherever possible, don't use preprocessor conditionals (#if, #ifdef) in .c"
-From Documentation/process/coding-style.rst, 21) Conditional Compilation.
+I actually meant "we don't disable the source of the refill work scheduling".
 
 >
-> --
-> Thanks,
-> -Kai
+> > of the refill work. This means an NAPI
+>
+> what do you mean "an NAPI"? a NAPI poll callback?
+
+Yes.
+
+>
+> > after
+> > cancel_delayed_work_sync() can schedule the refill work then can
+> > re-enable the NAPI that leads to use-after-free [1].
+> >
+> > Since the work can enable NAPI, we can't simply disable NAPI before
+> > calling cancel_delayed_work_sync(). So fix this by introducing a
+> > dedicated boolean to control whether or not the work could be
+> > scheduled from NAPI.
+> >
+> > [1]
+> > ==================================================================
+> > BUG: KASAN: use-after-free in refill_work+0x43/0xd4
+> > Read of size 2 at addr ffff88810562c92e by task kworker/2:1/42
+> >
+> > CPU: 2 PID: 42 Comm: kworker/2:1 Not tainted 5.19.0-rc1+ #480
+> > Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> > Workqueue: events refill_work
+> > Call Trace:
+> >  <TASK>
+> >  dump_stack_lvl+0x34/0x44
+> >  print_report.cold+0xbb/0x6ac
+> >  ? _printk+0xad/0xde
+> >  ? refill_work+0x43/0xd4
+> >  kasan_report+0xa8/0x130
+> >  ? refill_work+0x43/0xd4
+> >  refill_work+0x43/0xd4
+> >  process_one_work+0x43d/0x780
+> >  worker_thread+0x2a0/0x6f0
+> >  ? process_one_work+0x780/0x780
+> >  kthread+0x167/0x1a0
+> >  ? kthread_exit+0x50/0x50
+> >  ret_from_fork+0x22/0x30
+> >  </TASK>
+> > ...
+> >
+> > Fixes: b2baed69e605c ("virtio_net: set/cancel work on ndo_open/ndo_stop")
+> > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > ---
+> >  drivers/net/virtio_net.c | 38 ++++++++++++++++++++++++++++++++++++--
+> >  1 file changed, 36 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > index db05b5e930be..21bf1e5c81ef 100644
+> > --- a/drivers/net/virtio_net.c
+> > +++ b/drivers/net/virtio_net.c
+> > @@ -251,6 +251,12 @@ struct virtnet_info {
+> >       /* Does the affinity hint is set for virtqueues? */
+> >       bool affinity_hint_set;
+> >
+> > +     /* Is refill work enabled? */
+> > +     bool refill_work_enabled;
+> > +
+> > +     /* The lock to synchronize the access to refill_work_enabled */
+> > +     spinlock_t refill_lock;
+> > +
+> >       /* CPU hotplug instances for online & dead */
+> >       struct hlist_node node;
+> >       struct hlist_node node_dead;
+> > @@ -348,6 +354,20 @@ static struct page *get_a_page(struct receive_queue *rq, gfp_t gfp_mask)
+> >       return p;
+> >  }
+> >
+> > +static void enable_refill_work(struct virtnet_info *vi)
+> > +{
+> > +     spin_lock(&vi->refill_lock);
+> > +     vi->refill_work_enabled = true;
+> > +     spin_unlock(&vi->refill_lock);
+> > +}
+> > +
+> > +static void disable_refill_work(struct virtnet_info *vi)
+> > +{
+> > +     spin_lock(&vi->refill_lock);
+> > +     vi->refill_work_enabled = false;
+> > +     spin_unlock(&vi->refill_lock);
+> > +}
+> > +
+> >  static void virtqueue_napi_schedule(struct napi_struct *napi,
+> >                                   struct virtqueue *vq)
+> >  {
+> > @@ -1527,8 +1547,12 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
+> >       }
+> >
+> >       if (rq->vq->num_free > min((unsigned int)budget, virtqueue_get_vring_size(rq->vq)) / 2) {
+> > -             if (!try_fill_recv(vi, rq, GFP_ATOMIC))
+> > -                     schedule_delayed_work(&vi->refill, 0);
+> > +             if (!try_fill_recv(vi, rq, GFP_ATOMIC)) {
+> > +                     spin_lock(&vi->refill_lock);
+> > +                     if (vi->refill_work_enabled)
+> > +                             schedule_delayed_work(&vi->refill, 0);
+> > +                     spin_unlock(&vi->refill_lock);
+> > +             }
+> >       }
+> >
+> >       u64_stats_update_begin(&rq->stats.syncp);
+> > @@ -1651,6 +1675,8 @@ static int virtnet_open(struct net_device *dev)
+> >       struct virtnet_info *vi = netdev_priv(dev);
+> >       int i, err;
+> >
+> > +     enable_refill_work(vi);
+> > +
+> >       for (i = 0; i < vi->max_queue_pairs; i++) {
+> >               if (i < vi->curr_queue_pairs)
+> >                       /* Make sure we have some buffers: if oom use wq. */
+> > @@ -2033,6 +2059,8 @@ static int virtnet_close(struct net_device *dev)
+> >       struct virtnet_info *vi = netdev_priv(dev);
+> >       int i;
+> >
+> > +     /* Make sure NAPI doesn't schedule refill work */
+> > +     disable_refill_work(vi);
+> >       /* Make sure refill_work doesn't re-enable napi! */
+> >       cancel_delayed_work_sync(&vi->refill);
+> >
+> > @@ -2776,6 +2804,9 @@ static void virtnet_freeze_down(struct virtio_device *vdev)
+> >       netif_tx_lock_bh(vi->dev);
+> >       netif_device_detach(vi->dev);
+> >       netif_tx_unlock_bh(vi->dev);
+> > +     /* Make sure NAPI doesn't schedule refill work */
+> > +     disable_refill_work(vi);
+> > +     /* Make sure refill_work doesn't re-enable napi! */
+> >       cancel_delayed_work_sync(&vi->refill);
+> >
+> >       if (netif_running(vi->dev)) {
+> > @@ -2799,6 +2830,8 @@ static int virtnet_restore_up(struct virtio_device *vdev)
+> >
+> >       virtio_device_ready(vdev);
+> >
+> > +     enable_refill_work(vi);
+> > +
+> >       if (netif_running(vi->dev)) {
+> >               for (i = 0; i < vi->curr_queue_pairs; i++)
+> >                       if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
+> > @@ -3548,6 +3581,7 @@ static int virtnet_probe(struct virtio_device *vdev)
+> >       vdev->priv = vi;
+> >
+> >       INIT_WORK(&vi->config_work, virtnet_config_changed_work);
+> > +     spin_lock_init(&vi->refill_lock);
+> >
+> >       /* If we can receive ANY GSO packets, we must allocate large ones. */
+> >       if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
 >
 >
+> Can't say I love all the extra state but oh well.
+
+I couldn't find a better way. The tricky part is that NAPI and refill
+can schedule each other so we need a third state.
+
+Thanks
+
+>
+> > --
+> > 2.25.1
+>
+

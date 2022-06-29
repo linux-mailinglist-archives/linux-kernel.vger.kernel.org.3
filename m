@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADCE560B72
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 23:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4BBE560B6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 23:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiF2VOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 17:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
+        id S229690AbiF2VOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 17:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiF2VOe (ORCPT
+        with ESMTP id S229460AbiF2VOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 17:14:34 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906B43EA81;
-        Wed, 29 Jun 2022 14:14:33 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id h187so28030320ybg.0;
-        Wed, 29 Jun 2022 14:14:33 -0700 (PDT)
+        Wed, 29 Jun 2022 17:14:11 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA60D3E0E7
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 14:14:10 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 9so16485427pgd.7
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 14:14:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=h7xwnj6Omy1Mv9voGpoMY3zpjYfFQMfuRepOySAIgS4=;
-        b=WfS71ZTiSnDX1aATjVreV1HbNo091JyEfm8QJh627lY6noiQ8XgjGFnLiRn9CKxe8l
-         3BTo0O466GNfluf5WWv1v1iAK9yc4GIYah+3R/eIHpHNqheMQAqLLzttLdPej13V0AmK
-         ej3F2alPtB3s683ANgVdCwLSQa2oUT8Kyz3X8pw++RfbMs3LSkofjPu45cR6FeHj4tPy
-         XYUipf7Y6G23xtXmpUECgC1cKLLo78J/+9UY0DcI46wzi0/0IBQmFFPcYpYAWpB5zYlE
-         cGHCyUQGs7henjYR2UIPWRUCDOnpKpjQS/2UcZszIZxOXfdeRP14RHPr12O0abTieM3U
-         dNxg==
+        bh=Uh5xB0eDoFAz75o4tEx7nxB4dG+eqxB73XoQEAhQu6A=;
+        b=crIQSuiZpHpWVDRlRRZXxBzT9JT3p3a8YFeHlfLQBrFx8IG/tKYIGd07JELJEaGSRS
+         KuT+mw7ONtKjF604oFmyEMQ6ReoHe4i4Ka8QFTFNyTt62BgSipnUTrJyAa6QG16BCTAD
+         ShCdyTQ0brFHFSbCVtx/Crx4cLKrJpRzfz5dm42Yqr5oFA1K2rdv4PZ1cSj0O6pyUsnK
+         gSkXccS2D6HUAJK1lXJ9PXQAj+WEFGG+IvPFdzmkhNm7iC3CmrCYC/udS7ZKCmFiQdoB
+         amvNhT5D0VjI9PetR3eUtS+LYOSzKnTAKp2BNOfuWmmp6Y4gQXIg2Wznw8pX89ijySk5
+         ALxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=h7xwnj6Omy1Mv9voGpoMY3zpjYfFQMfuRepOySAIgS4=;
-        b=Y16ehhWTUymGOuP2Gi8cTi5DsYyGMQv76wlvw15994U1jfjLd4xVN4FBbVpXA/bNN5
-         6DzRWJNfQQSNVNf5YFaLaVo6S+Dl9kSR4HEAh5o0l5Stno3mSi4YrgZgsGm5Nu0M19Vn
-         a/jtKdW9N3hM8HNNuM1HBSMUswJ7BXaMF5WksANbKT6dtEDID7iMIE1WAk7Y4gH7NqYf
-         MIK20wBwp4UF/XNIqRR7k/PJVy69KtTS4PZYmiyTUhIOZ20QRY4bUcRlw4hY+b23pHuL
-         y5bu1+sXWrkTZaKXvWhz7+5dcxLl+eUcKP47EnBWWl8AsWLp1jeSjiQTFlLaQyAY2W2m
-         UrVQ==
-X-Gm-Message-State: AJIora96iavGZuEcLWd38oyNpq1iF3JvIjLDnw6LtDShKEUZYQ6uC3cv
-        2N9z/5z7xzFqRuwCm8bb8bhFNVxBqr3j6FzTRPk=
-X-Google-Smtp-Source: AGRyM1tK7/ApIWaYffqYFe+Z8/VUynQyRB3OyvTpRk1OQdz+7Fuc/c5lCrTUxZyH4pGW8DucwBeGOVY6wEjL7FAo6pw=
-X-Received: by 2002:a05:6902:1549:b0:66d:5f76:27ba with SMTP id
- r9-20020a056902154900b0066d5f7627bamr5395898ybu.385.1656537272682; Wed, 29
- Jun 2022 14:14:32 -0700 (PDT)
+        bh=Uh5xB0eDoFAz75o4tEx7nxB4dG+eqxB73XoQEAhQu6A=;
+        b=ew4xo0SiKRjs0Iy1Eat+ONtBcfUabJotKjC13pgxGt3beQO7q2JPQ6vvsoZ3/f4Sn4
+         FAL60BhLWNb2/Zsq0WBmpyDCUeIOLoluf/PZyepRSrapUgYreu0YzPfmT0a8yIw5cJcw
+         kaQoKKW6UqXpnEFsAHG+J8xY5bOHOas+jS4dPFlWi5JjltcAxUg1RQPWEJuD8pVM6iXQ
+         i43ZGqMmL9RVPHVaa/rqAbDxgqAlbtnRRnS5M8QQpBKmw5tdG1TwhuZldwiir2F/L+b4
+         sLr2yVayqXg5BE5XsPgDOhmjumC+J7JHhO+LVuKqPevo3zuw9CUDtUq7Dws+EMfF5f7i
+         PSmA==
+X-Gm-Message-State: AJIora/sO09GLIsRHDd6YdretZOPhgznDTZ7goyjkaVfjWvfuevETsFU
+        slHtkp00mjMCno0Ro4pCoDrN2FD7FfSOg1+gcB7gew==
+X-Google-Smtp-Source: AGRyM1uYeRRrdzUbp+gG7X9xLJ2MtyiEEEaMkRn8o4AAmM6FY0HO4D109cCv1EAmZY9enbk7JlwYwjzbLJq2JUwnKNM=
+X-Received: by 2002:a63:5d21:0:b0:40d:d9fd:7254 with SMTP id
+ r33-20020a635d21000000b0040dd9fd7254mr4593326pgb.353.1656537250098; Wed, 29
+ Jun 2022 14:14:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com> <20220629143046.213584-13-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220629143046.213584-13-aidanmacdonald.0x0@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 29 Jun 2022 23:13:55 +0200
-Message-ID: <CAHp75Vduv_fN=2DKbOwReRoPeAYjGqSANT7UhDaRifUJ4zf5XQ@mail.gmail.com>
-Subject: Re: [PATCH v4 12/15] pinctrl: Add AXP192 pin control driver
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>, quic_gurus@quicinc.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Michael Walle <michael@walle.cc>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+References: <20220624173656.2033256-1-jthoughton@google.com>
+ <20220624173656.2033256-3-jthoughton@google.com> <Yrn6DfTINknKNS04@monkey>
+ <CADrL8HUD14o6XybhYDdozAUkJ4Zt6nE8=dm-_osKg2CmvOFzHg@mail.gmail.com>
+ <YrvzlTU2z8/IrEuK@FVFYT0MHHV2J.usts.net> <Yry+uxxA2/wsK8G9@monkey>
+In-Reply-To: <Yry+uxxA2/wsK8G9@monkey>
+From:   James Houghton <jthoughton@google.com>
+Date:   Wed, 29 Jun 2022 14:13:58 -0700
+Message-ID: <CADrL8HVEKzUf2LYL2SeUS7fiHOPtvVJseZKqJpyqt9jBAKuO6g@mail.gmail.com>
+Subject: Re: [RFC PATCH 02/26] hugetlb: sort hstates in hugetlb_init_hstates
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Jue Wang <juew@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,67 +78,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 4:30 PM Aidan MacDonald
-<aidanmacdonald.0x0@gmail.com> wrote:
+On Wed, Jun 29, 2022 at 2:06 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
 >
-> The AXP192 PMIC's GPIO registers are much different from the GPIO
-> registers of the AXP20x and AXP813 PMICs supported by the existing
-> pinctrl-axp209 driver. It makes more sense to add a new driver for
-> the AXP192, rather than add support in the existing axp20x driver.
+> On 06/29/22 14:39, Muchun Song wrote:
+> > On Tue, Jun 28, 2022 at 08:40:27AM -0700, James Houghton wrote:
+> > > On Mon, Jun 27, 2022 at 11:42 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+> > > >
+> > > > On 06/24/22 17:36, James Houghton wrote:
+> > > > > When using HugeTLB high-granularity mapping, we need to go through the
+> > > > > supported hugepage sizes in decreasing order so that we pick the largest
+> > > > > size that works. Consider the case where we're faulting in a 1G hugepage
+> > > > > for the first time: we want hugetlb_fault/hugetlb_no_page to map it with
+> > > > > a PUD. By going through the sizes in decreasing order, we will find that
+> > > > > PUD_SIZE works before finding out that PMD_SIZE or PAGE_SIZE work too.
+> > > > >
+> > > >
+> > > > This may/will cause problems for gigantic hugetlb pages allocated at boot
+> > > > time.  See alloc_bootmem_huge_page() where a pointer to the associated hstate
+> > > > is encoded within the allocated hugetlb page.  These pages are added to
+> > > > hugetlb pools by the routine gather_bootmem_prealloc() which uses the saved
+> > > > hstate to add prep the gigantic page and add to the correct pool.  Currently,
+> > > > gather_bootmem_prealloc is called after hugetlb_init_hstates.  So, changing
+> > > > hstate order will cause errors.
+> > > >
+> > > > I do not see any reason why we could not call gather_bootmem_prealloc before
+> > > > hugetlb_init_hstates to avoid this issue.
+> > >
+> > > Thanks for catching this, Mike. Your suggestion certainly seems to
+> > > work, but it also seems kind of error prone. I'll have to look at the
+> > > code more closely, but maybe it would be better if I just maintained a
+> > > separate `struct hstate *sorted_hstate_ptrs[]`, where the original
+> >
+> > I don't think this is a good idea.  If you really rely on the order of
+> > the initialization in this patch.  The easier solution is changing
+> > huge_bootmem_page->hstate to huge_bootmem_page->hugepagesz. Then we
+> > can use size_to_hstate(huge_bootmem_page->hugepagesz) in
+> > gather_bootmem_prealloc().
+> >
 >
-> The pinctrl-axp192 driver is considerably more flexible in terms of
-> register layout and should be able to support other X-Powers PMICs.
-> Interrupts and pull down resistor configuration are supported too.
+> That is a much better solution.  Thanks Muchun!
 
-...
+Indeed. Thank you, Muchun. :)
 
-> +config PINCTRL_AXP192
-> +       tristate "X-Powers AXP192 PMIC pinctrl and GPIO Support"
-> +       depends on MFD_AXP20X
-> +       select PINMUX
-> +       select GENERIC_PINCONF
-> +       select GPIOLIB
-> +       help
-> +         AXP PMICs provide multiple GPIOs that can be muxed for different
-> +         functions. This driver bundles a pinctrl driver to select the function
-> +         muxing and a GPIO driver to handle the GPIO when the GPIO function is
-> +         selected.
-> +         Say Y to enable pinctrl and GPIO support for the AXP192 PMIC.
-
-What will be the module name if compiled as a module?
-
-...
-
-> +/**
-> + * struct axp192_pctl_function - describes a function that GPIOs may have
-> + *
-> + * @name: Function name
-> + * @muxvals: Mux values used for selecting this function, one per GPIO.
-> + *           The i'th element corresponds to the i'th GPIO and is written
-> + *           to the GPIO's control register field to select this function.
-> + *           U8_MAX indicates that the pin does not support this function.
-> + * @groups: Array of @ngroups groups listing pins supporting this function.
-> + * @ngroups: Number of pin groups.
-> + */
-> +struct axp192_pctl_function {
-> +       const char              *name;
-> +       /* Mux value written to the control register to select the function (-1 if unsupported) */
-> +       const u8                *muxvals;
-> +       const char * const      *groups;
-> +       unsigned int            ngroups;
-> +};
-
-Can it be replaced by struct function_desc?
-https://elixir.bootlin.com/linux/latest/source/drivers/pinctrl/pinmux.h#L130
-
-...
-
-> +       ret = devm_gpiochip_add_data(dev, &pctl->chip, pctl);
-> +       if (ret)
-> +               dev_err_probe(dev, ret, "Failed to register GPIO chip\n");
-
-Missed return.
-
--- 
-With Best Regards,
-Andy Shevchenko
+>
+> --
+> Mike Kravetz

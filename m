@@ -2,88 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F6F5603CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 386995603CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233541AbiF2PCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 11:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
+        id S232419AbiF2PFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 11:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbiF2PCv (ORCPT
+        with ESMTP id S230263AbiF2PE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 11:02:51 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2704525280
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 08:02:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Yj19dHn+0JPxtmJoU7+beQ32yhgR5L1tVwNWJFwVA+k=; b=BxwxfdkiTSsmAbf43BF+dePH/x
-        xWOxxBLrYRgVSUvSmy9/AMgOP+9jcWTbXAkv9tKtxNsKPQhwjhAPlbuNa9YxR/Pl6DSafRhJBKv4L
-        SzBCCzjlqsnguL1roqjsm5C2dJoZG7ShGhTqNW5JpfLsT9kcUgHEqyJhgde8+cacCojLycA7rlzM5
-        N9BA627gjB/z+/jSAqNoFrNZ+HEuPWtnDkUpO76+cMn0XLhd0GCQdCybNF0b0K5B6mTnbnFRSB5pI
-        UmzuX+Zn/EysKRf4tGngaONOMnhQnPM8oanQWkn8P6NwU/mtwmVpsrj3I78ufye5AEqt99Ivofl0n
-        abyiZ/kw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o6ZDC-00Ccys-4v; Wed, 29 Jun 2022 15:02:38 +0000
-Message-ID: <b42c5d4f-5e9c-8f35-798e-b5ac2ad730a6@infradead.org>
-Date:   Wed, 29 Jun 2022 08:02:36 -0700
+        Wed, 29 Jun 2022 11:04:58 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579F59FE7
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 08:04:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656515097; x=1688051097;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7eAnJIHWyOFB5EOuayi5Sk5n3trLR8ejcLuLMPW2Au0=;
+  b=MKxuzWhxczlzZhJoEQSylIhxiofo0UGOkd4szXMfElA2S0ohsZQISntG
+   py2YJY8VZ56tvGLus2sbvH4OK2M0wKu6c5pknbccveSdjTDe3ssYaBdot
+   3EarIHWYdZIwLCYuBEEk2Uut9KXjpDGwEedhtE7Tmkt5LmYlN6GhhoF+S
+   xJzB/tBXIY9gquKsrWMNOIEfxKgj7tc1NgmjpgvzYfvO9A/94Q9rYtFKk
+   krqsKTPvNUrpsf6YHcmvt3sRncBpnMaFnINpejgjWMMKvcaXDwJIX3vJN
+   qfy8+SIfILcIcDoH4oSyrbVs7A80Ev8Amx6eh+MsLrk8QcDtXmwfQGfWa
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="282788409"
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="282788409"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 08:04:30 -0700
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="917633192"
+Received: from jwacker-mobl.amr.corp.intel.com (HELO [10.213.178.109]) ([10.213.178.109])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 08:04:29 -0700
+Message-ID: <352fac7e-597c-84af-d33b-bdff0e2acdb6@linux.intel.com>
+Date:   Wed, 29 Jun 2022 10:03:02 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] UAPI: fix a spelling mistake
+ Firefox/91.0 Thunderbird/91.10.0
+Subject: Re: [PATCH 2/4] ASoC: codecs: add wsa883x amplifier support
 Content-Language: en-US
-To:     Zhang Jiaming <jiaming@nfschina.com>, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        liqiong@nfschina.com, renyu@nfschina.com
-References: <20220629062717.23027-1-jiaming@nfschina.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220629062717.23027-1-jiaming@nfschina.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, tiwai@suse.com
+References: <20220629090644.67982-1-srinivas.kandagatla@linaro.org>
+ <20220629090644.67982-3-srinivas.kandagatla@linaro.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220629090644.67982-3-srinivas.kandagatla@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
 
-On 6/28/22 23:27, Zhang Jiaming wrote:
-> Change 'informations' to 'information'.
-> 
-> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
-> ---
->  arch/powerpc/include/uapi/asm/bootx.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/powerpc/include/uapi/asm/bootx.h b/arch/powerpc/include/uapi/asm/bootx.h
-> index 6728c7e24e58..eb0769e50e93 100644
-> --- a/arch/powerpc/include/uapi/asm/bootx.h
-> +++ b/arch/powerpc/include/uapi/asm/bootx.h
-> @@ -60,7 +60,7 @@ typedef struct boot_info_map_entry
->  } boot_info_map_entry_t;
->  
->  
-> -/* Here are the boot informations that are passed to the bootstrap
-> +/* Here are the boot information that are passed to the bootstrap
+> +/* 4 ports */
+> +static struct sdw_dpn_prop wsa_sink_dpn_prop[WSA883X_MAX_SWR_PORTS] = {
+> +	{
+> +		/* DAC */
+> +		.num = 1,
+> +		.type = SDW_DPN_SIMPLE,
+> +		.min_ch = 1,
+> +		.max_ch = 1,
+> +		.simple_ch_prep_sm = true,
+> +		.read_only_wordlength = true,
+> +	}, {
 
-I would say:
+nit-pick: it's unusual to see such opening brackets for structure
+initialization, usually there are on a new line.
 
-/* Here is the boot information that is passed to the bootstrap.
+> +		/* COMP */
+> +		.num = 2,
+> +		.type = SDW_DPN_SIMPLE,
+> +		.min_ch = 1,
+> +		.max_ch = 1,
+> +		.simple_ch_prep_sm = true,
+> +		.read_only_wordlength = true,
+> +	}, {
+> +		/* BOOST */
+> +		.num = 3,
+> +		.type = SDW_DPN_SIMPLE,
+> +		.min_ch = 1,
+> +		.max_ch = 1,
+> +		.simple_ch_prep_sm = true,
+> +		.read_only_wordlength = true,
+> +	}, {
+> +		/* VISENSE */
+> +		.num = 4,
+> +		.type = SDW_DPN_SIMPLE,
+> +		.min_ch = 1,
+> +		.max_ch = 1,
+> +		.simple_ch_prep_sm = true,
+> +		.read_only_wordlength = true,
+> +	}
+> +};
 
-I.e., use "is" instead of "are" and add a period at the end.
+> +static int wsa883x_update_status(struct sdw_slave *slave,
+> +				 enum sdw_slave_status status)
+> +{
+> +	struct wsa883x_priv *wsa883x = dev_get_drvdata(&slave->dev);
+> +
+> +	if (status == SDW_SLAVE_ATTACHED && slave->dev_num > 0)
 
->   * Note that the kernel arguments and the device tree are appended
->   * at the end of this structure. */
->  typedef struct boot_infos
+do you actually need to test if slave->dev_num is > 0?
 
--- 
-~Randy
+if I look at drivers/soundwire/bus.c, update_status cannot really be
+invoked with dev_num == 0.
+
+> +		wsa883x_init(wsa883x);
+> +
+> +	return 0;
+> +}
+> +
+
+> +static int __maybe_unused wsa883x_runtime_resume(struct device *dev)
+> +{
+> +	struct sdw_slave *slave = dev_to_sdw_dev(dev);
+> +	struct regmap *regmap = dev_get_regmap(dev, NULL);
+> +	struct wsa883x_priv *wsa883x = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	ret = regulator_enable(wsa883x->vdd);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to enable vdd regulator (%d)\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	gpiod_direction_output(wsa883x->sd_n, 1);
+> +
+> +	wait_for_completion_timeout(&slave->initialization_complete,
+> +				    msecs_to_jiffies(WSA883X_PROBE_TIMEOUT));
+
+check for success? You don't want to enable regmap sync below if the
+device never successfully attached and initialized.
+
+> +
+> +	usleep_range(20000, 20010);
+> +	regcache_cache_only(regmap, false);
+> +	regcache_sync(regmap);
+> +
+> +	return 0;
+> +}
+

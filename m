@@ -2,133 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBE855F448
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 05:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1DE655F2B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 03:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiF2Dpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 23:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
+        id S229867AbiF2BPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 21:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiF2Dpn (ORCPT
+        with ESMTP id S229717AbiF2BPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 23:45:43 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8D418343;
-        Tue, 28 Jun 2022 20:45:41 -0700 (PDT)
-X-UUID: 78fabd2e204b48a492c26a37b27e5e8d-20220629
-X-Spam-Fingerprint: 0
-X-GW-Reason: 13103
-X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HNeS6uumcgOimgeWuoeaguA==
-X-Content-Feature: ica/max.line-size 73
-        audit/email.address 1
-        dict/adv 1
-        dict/contack 1
-        dict/job 1
-        dict/notice 1
-        dict/operate 1
-        dict/time 1
-        meta/cnt.alert 1
-X-CPASD-INFO: 79a2431c46c548daab49de3fa2ab5c91@gImbUmFlX5NgVqWBg3uvm4GTZGmUkVO
-        1o2yBlGOTZVGVgnxsTWBnX1OEgnBQYl5dZFZ3dG9RYmBgYlB_i4Jyj1RiXmCCVHSTgHlzgWRiYw==
-X-CLOUD-ID: 79a2431c46c548daab49de3fa2ab5c91
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:2.0,URL:-5,TVAL:182.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:195.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:2.0,CFOB:2.0,SPC:0,SIG:-
-        5,AUF:6,DUF:133,ACD:2,DCD:2,SL:0,EISP:0,AG:0,CFC:0.512,CFSR:0.049,UAT:0,RAF:0
-        ,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,EAF:
-        0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 78fabd2e204b48a492c26a37b27e5e8d-20220629
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 78fabd2e204b48a492c26a37b27e5e8d-20220629
-X-User: xiongxin@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <xiongxin@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 596082055; Wed, 29 Jun 2022 09:12:15 +0800
-From:   xiongxin <xiongxin@kylinos.cn>
-To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        xiongxin@kylinos.cn, luriwen@kylinos.cn
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH -next 2/2] PM: suspend: advanced pm_wakeup_clear() for normal suspend/hibernate
-Date:   Wed, 29 Jun 2022 09:11:46 +0800
-Message-Id: <20220629011146.299521-3-xiongxin@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220629011146.299521-1-xiongxin@kylinos.cn>
-References: <20220629011146.299521-1-xiongxin@kylinos.cn>
+        Tue, 28 Jun 2022 21:15:34 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8104A28E1A
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 18:15:33 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LXk500rRXzkWvG;
+        Wed, 29 Jun 2022 09:14:12 +0800 (CST)
+Received: from huawei.com (10.67.174.53) by kwepemi500012.china.huawei.com
+ (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 29 Jun
+ 2022 09:15:31 +0800
+From:   Liao Chang <liaochang1@huawei.com>
+To:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <mhiramat@kernel.org>,
+        <rostedt@goodmis.org>, <liaochang1@huawei.com>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] riscv/kprobes: allocate detour buffer from module area
+Date:   Wed, 29 Jun 2022 09:13:17 +0800
+Message-ID: <20220629011317.259986-1-liaochang1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        RCVD_IN_PBL,RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.53]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pm_wakeup_clear() will clear the wakeup source, which can ensure that it
-is not disturbed by useless wakeup signals when doing suspend/hibernate;
+To address the limitation of PC-relative branch instruction
+on riscv architecture, detour buffer slot is allocated from
+a area, the distance of which from kernel should be less than 4GB.
 
-At the beginning of the suspend/hibernate process, the notifier
-mechanism is used to notify other device drivers. This action is
-time-consuming (second-level time-consuming). If the process fails due
-to the received wakeup signal during the execution of these functions,
-it can better improve the experience of failing suspend/hibernate
-returns;
+For the time being, Modules region always live before the kernel.
+But Vmalloc region reside far away from kernel, the distance is
+half of the kernel address space.
 
-Therefore, it is recommended here that for the suspend/hibernate process
-normally called from /sys/power/state, the pm_wakeup_clear() function
-should be brought before the notifier call; for the freeze_process()
-function called from other places, the original logic is kept;
-
-The pm_suspend_target_state variable is used here to identify whether the
-suspend process is going normally.
-
-Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+Signed-off-by: Liao Chang <liaochang1@huawei.com>
 ---
- kernel/power/process.c | 5 ++++-
- kernel/power/suspend.c | 6 ++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ arch/riscv/kernel/probes/kprobes.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/kernel/power/process.c b/kernel/power/process.c
-index 3068601e585a..3fde0240b3d1 100644
---- a/kernel/power/process.c
-+++ b/kernel/power/process.c
-@@ -131,7 +131,10 @@ int freeze_processes(void)
- 	if (!pm_freezing)
- 		atomic_inc(&system_freezing_cnt);
+diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
+index e6e950b7cf32..bc027a663b17 100644
+--- a/arch/riscv/kernel/probes/kprobes.c
++++ b/arch/riscv/kernel/probes/kprobes.c
+@@ -6,12 +6,14 @@
+ #include <linux/extable.h>
+ #include <linux/slab.h>
+ #include <linux/stop_machine.h>
++#include <linux/moduleloader.h>
+ #include <asm/ptrace.h>
+ #include <linux/uaccess.h>
+ #include <asm/sections.h>
+ #include <asm/cacheflush.h>
+ #include <asm/bug.h>
+ #include <asm/patch.h>
++#include <asm/set_memory.h>
  
--	pm_wakeup_clear(0);
-+	if (pm_suspend_target_state != PM_SUSPEND_ON)
-+		pm_wakeup_clear(1);
-+	else
-+		pm_wakeup_clear(0);
- 	pr_info("Freezing user space processes ... ");
- 	pm_freezing = true;
- 	error = try_to_freeze_tasks(true);
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index c754b084ec03..f4259f6c1cc2 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -569,6 +569,12 @@ static int enter_state(suspend_state_t state)
- 	 * performed from the /sys/power/state entry.
- 	 */
- 	pm_suspend_target_state = state;
+ #include "decode-insn.h"
+ 
+@@ -86,10 +88,28 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
+ #ifdef CONFIG_MMU
+ void *alloc_insn_page(void)
+ {
++#if defined(CONFIG_MODULES) && defined(CONFIG_64BIT)
++	void *page;
++
++	page = module_alloc(PAGE_SIZE);
++	if (!page)
++		return NULL;
++
++	set_vm_flush_reset_perms(page);
 +	/*
-+	 * Put pm_wakeup_clear() before the notifier notification chain to
-+	 * optimize in the suspend process, the wakeup signal can interrupt
-+	 * the suspend in advance and fail to return.
++	 * First make the page read-only, and only then make it executable to
++	 * prevent it from being W+X in between.
 +	 */
-+	pm_wakeup_clear(0);
++	set_memory_ro((unsigned long)page, 1);
++	set_memory_x((unsigned long)page, 1);
++
++	return page;
++#else
+ 	return  __vmalloc_node_range(PAGE_SIZE, 1, VMALLOC_START, VMALLOC_END,
+ 				     GFP_KERNEL, PAGE_KERNEL_READ_EXEC,
+ 				     VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
+ 				     __builtin_return_address(0));
++#endif
+ }
+ #endif
  
- 	if (sync_on_suspend_enabled) {
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
 -- 
-2.25.1
+2.17.1
 
-
-No virus found
-		Checked by Hillstone Network AntiVirus

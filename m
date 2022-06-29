@@ -2,63 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EFC655FEE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46CFA55FEE7
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232814AbiF2Lim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 07:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
+        id S232974AbiF2Liu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 07:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbiF2Lij (ORCPT
+        with ESMTP id S231422AbiF2Lis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 07:38:39 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2B332076;
-        Wed, 29 Jun 2022 04:38:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656502718; x=1688038718;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jvQQGBLtP2lMYjK15fTYrTMQlaw8xtvzDZjwyhz2efQ=;
-  b=csmzP7C/q9as80NazEbKJsSOl5rL4eYUlBADXbYRA+7tbi0sKRjTKEWr
-   3tlul+aMWJCIsGhcfYsDhwxVuGqOZIGp+4xxSWd2RqEpgr41ykIYee31u
-   8anMHa2WCg6sAVL98SQXjtsi45ZrFRlJrUExwVWQ3EPlLuISjTvCCmPTj
-   2iy9OkzryugCZdxXfN8+ag88ltSziAr7viBrlCSSRaWzrCk/0GjnT69c6
-   nmfzOawgUfVT/dDfCPm/OezWLspac9/Cho+diXqe3p7e28g9lSA1zbbCV
-   Y9f8FUoK06/wBOZTwFBwU3pVXVUuDHO2fX5lBqKIwKQFzdrbNBiTkiuVP
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="283103045"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="283103045"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 04:38:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="623279570"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 29 Jun 2022 04:38:35 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 88935F1; Wed, 29 Jun 2022 14:38:41 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Rob Herring <robh@kernel.org>,
-        Frank Rowand <frank.rowand@sony.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] of: unittest: Switch to use fwnode instead of of_node
-Date:   Wed, 29 Jun 2022 14:38:39 +0300
-Message-Id: <20220629113839.4604-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 29 Jun 2022 07:38:48 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB3738BE;
+        Wed, 29 Jun 2022 04:38:47 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4A0C42000E;
+        Wed, 29 Jun 2022 11:38:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656502725;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IQXoqYCgE7EIU42/zVADHV9fDPsxC+PutcvlEANepEU=;
+        b=SfTLG3E+wEsfzL0Rw0KxGQptxA0ZkMjSeOj50QLWd1IHA+fIQpXH6hqJNcnj4/GdTBfrBY
+        rElrXwP3avkncWwuTdDQ/yeJ/hunIJBcNv26lnzjwXQV0qwLA/+p2C66Hx58UWGePGKQFg
+        0I/BJvEhy4VCR0NqNVFikj3gkWHpGEOz5/q4Y/LhrU6BjUHmpxH4AdXzHZQunHiOTArtgD
+        hi3KgDoFywlbdS3APWu2bt6ckhN9s1AS4GnrCll6c+0GI7Lj/0jMe66kiCnWRF7SksOh9I
+        ZlNragQsLwETXTzc60g2FHYlUbYaROG5YzpKXbSKN4jZ4u6JJCiyg239mnAIUQ==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?utf-8?b?77+9ZWNraQ==?= <rafal@milecki.pl>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 3/3] mtd: core: introduce of support for dynamic partitions
+Date:   Wed, 29 Jun 2022 13:38:43 +0200
+Message-Id: <20220629113843.283665-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220622010628.30414-4-ansuelsmth@gmail.com>
+References: 
 MIME-Version: 1.0
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'ad9b10d1eaada169bd764abcab58f08538877e26'
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,27 +63,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GPIO library now accepts fwnode as a firmware node, so
-switch the module to use it.
+On Wed, 2022-06-22 at 01:06:28 UTC, Christian Marangi wrote:
+> We have many parser that register mtd partitions at runtime. One example
+> is the cmdlinepart or the smem-part parser where the compatible is defined
+> in the dts and the partitions gets detected and registered by the
+> parser. This is problematic for the NVMEM subsystem that requires an OF
+> node to detect NVMEM cells.
+> 
+> To fix this problem, introduce an additional logic that will try to
+> assign an OF node to the MTD if declared.
+> 
+> On MTD addition, it will be checked if the MTD has an OF node and if
+> not declared will check if a partition with the same label / node name is
+> declared in DTS. If an exact match is found, the partition dynamically
+> allocated by the parser will have a connected OF node.
+> 
+> The NVMEM subsystem will detect the OF node and register any NVMEM cells
+> declared statically in the DTS.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/of/unittest.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 
-diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-index 7f6bba18c515..03052ffb16e2 100644
---- a/drivers/of/unittest.c
-+++ b/drivers/of/unittest.c
-@@ -1602,7 +1602,7 @@ static int unittest_gpio_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, devptr);
- 
--	devptr->chip.of_node = pdev->dev.of_node;
-+	devptr->chip.fwnode = dev_fwnode(&pdev->dev);
- 	devptr->chip.label = "of-unittest-gpio";
- 	devptr->chip.base = -1; /* dynamic allocation */
- 	devptr->chip.ngpio = 5;
--- 
-2.35.1
-
+Miquel

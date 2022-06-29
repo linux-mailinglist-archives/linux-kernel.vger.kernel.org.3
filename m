@@ -2,102 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F26C55F3A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 04:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D52A755F3AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 05:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiF2C4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 22:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
+        id S229736AbiF2DA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 23:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiF2C4I (ORCPT
+        with ESMTP id S229678AbiF2DAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 22:56:08 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A6C11A25
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 19:56:03 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LXmJx5pyqzkX2q;
-        Wed, 29 Jun 2022 10:54:41 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 29 Jun 2022 10:56:01 +0800
-Subject: Re: [PATCH -next] mm/memory-failure: fix redefinition of
- mf_generic_kill_procs
-To:     Zheng Bin <zhengbin13@huawei.com>, <naoya.horiguchi@nec.com>,
-        <akpm@linux-foundation.org>
-CC:     <gaochao49@huawei.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220628112143.1170473-1-zhengbin13@huawei.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <3e3691cc-c29e-78be-eeff-56ecb6753182@huawei.com>
-Date:   Wed, 29 Jun 2022 10:56:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <20220628112143.1170473-1-zhengbin13@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 28 Jun 2022 23:00:24 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00E2B326FC
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 20:00:19 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 5C0E51E80D11;
+        Wed, 29 Jun 2022 10:59:10 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id DvUDxdxctZQ3; Wed, 29 Jun 2022 10:59:07 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id AB85A1E80CDC;
+        Wed, 29 Jun 2022 10:59:07 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     rostedt@goodmis.org, mingo@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Li kunyu <kunyu@nfschina.com>
+Subject: [PATCH] trace: atomic64_read(&ioc->vtime_rate) is assigned an extra semicolon
+Date:   Wed, 29 Jun 2022 11:00:13 +0800
+Message-Id: <20220629030013.10362-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/28 19:21, Zheng Bin wrote:
-> If CONFIG_HUGETLB_PAGE=n, building fails:
-> 
-> mm/memory-failure.c:1805:19: error: redefinition of ‘mf_generic_kill_procs’
->  static inline int mf_generic_kill_procs(unsigned long long pfn, int flags,
->                    ^~~~~~~~~~~~~~~~~~~~~
-> mm/memory-failure.c:1564:12: note: previous definition of ‘mf_generic_kill_procs’ was here
->  static int mf_generic_kill_procs(unsigned long long pfn, int flags,
-> 
-> This patch fixes that.
-> 
-> Fixes: 4184e8d7d056 ("mm-factor-helpers-for-memory_failure_dev_pagemap-fix")
-> Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
+I think this semicolon could be deleted.
 
-Thanks for fixing this. mf_generic_kill_procs shouldn't depend on CONFIG_HUGETLB_PAGE.
+Signed-off-by: Li kunyu <kunyu@nfschina.com>
+---
+ include/trace/events/iocost.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-
-BTW: It seems there is a mess between CONFIG_HUGETLB_PAGE and CONFIG_FS_DAX. It's better
-to fix it later.
-
-> ---
->  mm/memory-failure.c | 7 -------
->  1 file changed, 7 deletions(-)
-> 
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index 001fead45f30..c9931c676335 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -1801,13 +1801,6 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
->  }
-> 
->  #else
-> -
-> -static inline int mf_generic_kill_procs(unsigned long long pfn, int flags,
-> -					struct dev_pagemap *pgmap)
-> -{
-> -	return 0;
-> -}
-> -
->  static inline int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb)
->  {
->  	return 0;
-> --
-> 2.31.1
-> 
-> .
-> 
+diff --git a/include/trace/events/iocost.h b/include/trace/events/iocost.h
+index e282ce02fa2d..6d1626e7a4ce 100644
+--- a/include/trace/events/iocost.h
++++ b/include/trace/events/iocost.h
+@@ -160,7 +160,7 @@ TRACE_EVENT(iocost_ioc_vrate_adj,
+ 
+ 	TP_fast_assign(
+ 		__assign_str(devname, ioc_name(ioc));
+-		__entry->old_vrate = atomic64_read(&ioc->vtime_rate);;
++		__entry->old_vrate = atomic64_read(&ioc->vtime_rate);
+ 		__entry->new_vrate = new_vrate;
+ 		__entry->busy_level = ioc->busy_level;
+ 		__entry->read_missed_ppm = missed_ppm[READ];
+-- 
+2.18.2
 

@@ -2,60 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D5A56037B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A85560392
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 16:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbiF2Ook (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 10:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
+        id S233444AbiF2OqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 10:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232039AbiF2Ooi (ORCPT
+        with ESMTP id S232618AbiF2OqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 10:44:38 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C89924967;
-        Wed, 29 Jun 2022 07:44:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=AEQBYydBwT3iVN4z4kFDQZdStP+6c3zXJmeQHUsEWdw=; b=XEVclGnSPiDmLmyaGijJL9luEx
-        nSzGs2czy+W7cE956DazxAWblRW9u1/VXWvTrZ+KtcFvJXpk1QBGzoS6VuMK3UmbxjY+sfFRSEqiZ
-        c6fdYfLgXC4zciaZWd6uez0VwVOe9wHMwJoI4KPUKuar6g2FS6dFTCnksWl1CrgRl0mHl3hb5CK9/
-        1qVfox3ZjWlMjwUmw6KXS+xbbVjuEabhsEGNJYXSupLxMD0+MuzSZceSiW56stHcxEjT5qNTRBkwb
-        ltLGcbPf7L4jYsCg0Qjv4wp7N/T9vHPO1MdVsZFcSjr8pmDiFyYppXQlFYtA1i7p7q0cuI/CPYRLF
-        RPUZs+FQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33100)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1o6Yvd-0003Hf-S6; Wed, 29 Jun 2022 15:44:29 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1o6Yvb-0005vm-IK; Wed, 29 Jun 2022 15:44:27 +0100
-Date:   Wed, 29 Jun 2022 15:44:27 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 31/35] [RFT] net: dpaa: Convert to phylink
-Message-ID: <YrxlS7wvgUtg9+y0@shell.armlinux.org.uk>
-References: <20220628221404.1444200-1-sean.anderson@seco.com>
- <20220628221404.1444200-32-sean.anderson@seco.com>
+        Wed, 29 Jun 2022 10:46:14 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C1432047
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 07:46:13 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id g7so10869931pjj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 07:46:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=eL3eeC0Iob2m/nwMP0RJ7jXcLHDbzdzqLETnK8JIhg8=;
+        b=wn1IOiIdLB96SV/KFiypk3XqUMeDeWe89LZppFNyPQACPUd7wQhLebIRJyETZvVibd
+         4apEyr2vHax4+WUMR42l1c60+TGZQLoXBmzDvlVogi1qy/Y82yN4v5fZ0Lm6XwWbX4tL
+         WFXcR28zqN/+eRq2l4UUzb84RJlqydnCekMqV/bGwYL4RRx58m4UP9qEO1QAmi+vJPdM
+         cSS74j8ICMUat9OTrpacztZ0yhV2XnNk7V50XedxZ7i+mYrSeTrc51S5WR/WdZSwgYI+
+         tyJZmZyKsCYt8gbd16qRWPX8hkXdsGHOEhNb4+h6Gamvmxnw4L4UjOJfCuCIKJsAo8oq
+         lIkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eL3eeC0Iob2m/nwMP0RJ7jXcLHDbzdzqLETnK8JIhg8=;
+        b=tR8TjsUjJcCOXomvp0IdjATHn3hRgP+ElS9U9l75DQ3qWPDx9k+/wBT87uQrEY0lil
+         UJtm/0ZxCtbVc4qvsWl6qpKez74UwW/edCidOfyup1+j5S173hSlLOPsAXG7WSgenIds
+         fJLIoJGdLlSlcONAeYaZhlXxvxI8ayucxNSJdLX27ME/hBxxxRkHjBJbGSbboDk3vGpE
+         AmV/DlNh6cVQonlKCrqOXpOHfrh/OJE75i/2KXZg4Gm+3BRsfQNusk1qCEEDI8CAnfmp
+         djG432rDCkGhIM81y7DTDYJyCFBRXCkHLKfv3Go9I5C9REcExdxPkrOaVwAFP3iJ0FXL
+         IQyA==
+X-Gm-Message-State: AJIora80humhq8sPBOpV3V9SYPQYLm/JSZXzO58OvWDspuAbOhad6xoz
+        ljL7VbTfb1QDutKMZn7ZhTw0pg==
+X-Google-Smtp-Source: AGRyM1txT+ZrMJMVvS17lAeyoRx8ZbEgcY9VSKMzGxNQfGMabIPYccYJ3vWeq2XeiFbRWpBUViDJ+A==
+X-Received: by 2002:a17:90a:68cf:b0:1ee:db09:739b with SMTP id q15-20020a17090a68cf00b001eedb09739bmr4177688pjj.179.1656513972832;
+        Wed, 29 Jun 2022 07:46:12 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id mn9-20020a17090b188900b001ec9d45776bsm2238350pjb.42.2022.06.29.07.46.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 07:46:12 -0700 (PDT)
+Message-ID: <4768f72e-6c23-b2ac-d446-b69ded9c19a1@kernel.dk>
+Date:   Wed, 29 Jun 2022 08:46:11 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628221404.1444200-32-sean.anderson@seco.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] io_uring: fix a typo in comment
+Content-Language: en-US
+To:     korantwork@gmail.com, asml.silence@gmail.com
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xinghui Li <korantli@tencent.com>
+References: <20220629144301.9308-1-korantwork@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220629144301.9308-1-korantwork@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,45 +73,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 06:14:00PM -0400, Sean Anderson wrote:
-> +static void dtsec_mac_config(struct phylink_config *config, unsigned int mode,
-> +			     const struct phylink_link_state *state)
-> +{
-> +	struct mac_device *mac_dev = fman_config_to_mac(config);
-> +	struct dtsec_regs __iomem *regs = mac_dev->fman_mac->regs;
-> +	u32 tmp;
-> +
-> +	switch (state->interface) {
-> +	case PHY_INTERFACE_MODE_RMII:
-> +		tmp = DTSEC_ECNTRL_RMM;
-> +		break;
-> +	case PHY_INTERFACE_MODE_RGMII:
-> +	case PHY_INTERFACE_MODE_RGMII_ID:
-> +	case PHY_INTERFACE_MODE_RGMII_RXID:
-> +	case PHY_INTERFACE_MODE_RGMII_TXID:
-> +		tmp = DTSEC_ECNTRL_GMIIM | DTSEC_ECNTRL_RPM;
-> +		break;
-> +	case PHY_INTERFACE_MODE_SGMII:
-> +	case PHY_INTERFACE_MODE_1000BASEX:
-> +	case PHY_INTERFACE_MODE_2500BASEX:
-> +		tmp = DTSEC_ECNTRL_TBIM | DTSEC_ECNTRL_SGMIIM;
-> +		break;
-> +	default:
-> +		dev_warn(mac_dev->dev, "cannot configure dTSEC for %s\n",
-> +			 phy_modes(state->interface));
-> +	}
-> +
-> +	if (state->speed == SPEED_100)
-> +		tmp |= DTSEC_ECNTRL_R100M;
+On 6/29/22 8:43 AM, korantwork@gmail.com wrote:
+> From: Xinghui Li <korantli@tencent.com>
+> 
+> fix a typo in comment in io_allocate_scq_urings.
+> sane -> same.
+> 
+> Signed-off-by: Xinghui Li <korantli@tencent.com>
+> ---
+>  fs/io_uring.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index d3ee4fc532fa..af17adf3fa79 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -12284,7 +12284,7 @@ static __cold int io_allocate_scq_urings(struct io_ring_ctx *ctx,
+>  	struct io_rings *rings;
+>  	size_t size, sq_array_offset;
+>  
+> -	/* make sure these are sane, as we already accounted them */
+> +	/* make sure these are same, as we already accounted them */
+>  	ctx->sq_entries = p->sq_entries;
+>  	ctx->cq_entries = p->cq_entries;
 
-Please do not refer to state->speed here, it is meaningless. What are
-you trying to achieve here?
+That's not really a typo, though I can see why you'd think so. It's
+trying to say that we need to ensure that the ctx entries are sane,
+as they have already been accounted. This means that if we teardown
+past this point, they need to be assigned (eg sane) so that we undo
+that accounting appropriately.
 
-It looks like the old dtsec_adjust_link() used to set/clear this when
-the link comes up - so can it be moved to dtsec_link_up() ?
-
-Thanks.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Jens Axboe
+

@@ -2,160 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0FB55FF39
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 033F555FFD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiF2MIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 08:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38910 "EHLO
+        id S230209AbiF2MXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 08:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiF2MII (ORCPT
+        with ESMTP id S231313AbiF2MXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 08:08:08 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60122.outbound.protection.outlook.com [40.107.6.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A40EC47;
-        Wed, 29 Jun 2022 05:08:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ifWn/YazSc1d9tHn9eWj5uoscRAHRSxQpfr/Q8LGDgD0NceE8VqE/Lym/+I5/hbWqJ4euuqH6wWjZqRgkpmtiwEsHIkV9rkkPKeeeWAHGY1XTUVhYhRIfM8LqeqGpaj0tE17jHTVfjV6vjdxtYvuGV0FzxO6iTRn/+VWMT9GyFQp/mvDyaHwmZ/WpQLYl5HzmSrOBpcm1QCDcL05UHHlNXI/R8Sdf2bdoew9Rrm04xhEOE6PG9DTUFgkLLbcpVFGSVu73AsVclW22IAJWeuc/NZXGbB6SLsxUV5Q8K1bz0wRmUIq4t0bZYG3lQh2v+jt7pdx4dMnumMJV1Z5j6vD+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gTviOZgaJwdx+fR8uDMSgbjYqB3wGZaJg4EUbsVWbHw=;
- b=c6QarNmZGhHfJXc5q+kDavS/T8eKiwLa4ebVyRDCZLfoKiHIpidq3recAoSv7aqxiZFhrA+tN4Cnym3/M86esWGcz4kbZ/J9jAN8M1WsTl16i3bJiXIjp65WbnB9sXaGIH/Sy3Yllv7mDvnvKe3j7iPDBNF6FkM31tNPpIM5Zf8PdtuXPjVD7kIsDekNyuJ45xVu0EctRtLbZm/BJl/xSnF2g3k87qJ1/Qp9xPUTP16dHGXHKFVLWXr7HAavUgPl5H4x5QJidyIDDfShsO29z2/iuKmXC16SLkjXIkAyiZMlhfm4D2SNXyAVamVtvD1oPdqj4GB2GSF454FmR5UuJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gTviOZgaJwdx+fR8uDMSgbjYqB3wGZaJg4EUbsVWbHw=;
- b=tJjkrzwq7xfgEJyJY8abRz/b+ec+H/8xCjVyyfzw57gQwqfPfFutZOkoThVb29aoDdvL0nCzxdGCKJ7bLdob7Riq3M5F5QuAs4Qmqyesb+Z6OOLFp1VIMAvcEN21mtypRZ1Yq4SoO13EJzHmvA2R/u7N0SYvRyJLub4aRD++cJc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia.com;
-Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
- by VI1PR07MB5742.eurprd07.prod.outlook.com (2603:10a6:803:98::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Wed, 29 Jun
- 2022 12:08:04 +0000
-Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
- ([fe80::8885:ac49:4a47:2293]) by DU2PR07MB8110.eurprd07.prod.outlook.com
- ([fe80::8885:ac49:4a47:2293%9]) with mapi id 15.20.5395.014; Wed, 29 Jun 2022
- 12:08:04 +0000
-Message-ID: <0c252770-f06f-0bd8-79b0-af637ef27cc4@nokia.com>
-Date:   Wed, 29 Jun 2022 14:07:59 +0200
+        Wed, 29 Jun 2022 08:23:45 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFF931DDB
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 05:23:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1656504487; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=bua+jMImc+TrGG0k/DW7Zq89Q5FV+VyVHYSwXyKURgqVoSC0qaDuogK7LVxo78yA54N13uUsblx2Ut+N9SKkkvmdfU2NjVtmP1y3QZM2BfXyyFrRlKAUQ+m6CjRD22o/kt2cv3V9u7fdYOj+NpeR2qNouqDjjXLPOVrBe9XQqhI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1656504487; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=ukTu6MJ3bj33YMWpWKj7wdJBBihYnF+q/gqNaxzzG7Y=; 
+        b=MMNhmEY57rRPUGHyB/05wbKu1+gJbL33o4erNLvIPQDHvKaE8YycxN0vR5QFu6HVY3GKkJuJBNSyELEUHTkE3f+y9AV0ABmSjAmX9COQ3iqCPMSmUPWWEs7jfW9VrmuaTTs8qTph3KEF4bEmNfN7PmH9W0tvk2rhGpZ9uBKW1Ws=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1656504487;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=ukTu6MJ3bj33YMWpWKj7wdJBBihYnF+q/gqNaxzzG7Y=;
+        b=ghUSA36wtapzBy8Ahob4QwwwNxMkjs5/rn9kxrFi/6Mqubh+NUZCvIkQ0Gf1kq7B
+        N4RRX9/wPr6mvTrhXSQO0jgRxIVdHIhvu3vJdrTvPbLiDLK34BOs41HOOelmcojyHJ3
+        MncuyWPK7yoNTLtDf7zfVRTpYAHsllnL5zvd3byE=
+Received: from [10.10.10.122] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1656504486014929.4381961201594; Wed, 29 Jun 2022 05:08:06 -0700 (PDT)
+Message-ID: <3394a6fa-dc55-bf5d-c06e-ddf70d95c26b@arinc9.com>
+Date:   Wed, 29 Jun 2022 15:08:01 +0300
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 02/10] i2c: xiic: Add standard mode support for > 255
- byte read transfers
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/2] MIPS: dts: correct gpio-keys names and properties
 Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>,
-        Raviteja Narayanam <raviteja.narayanam@xilinx.com>
-Cc:     linux-i2c@vger.kernel.org, michal.simek@xilinx.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com, marex@denx.de, joe@perches.com
-References: <20210626102806.15402-1-raviteja.narayanam@xilinx.com>
- <20210626102806.15402-3-raviteja.narayanam@xilinx.com>
- <c8d4faf1-5f0c-4adb-e52a-92d46179ffa4@nokia.com>
- <27c88580-51bb-7813-c29f-b8a3faaaa294@amd.com>
-From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
-In-Reply-To: <27c88580-51bb-7813-c29f-b8a3faaaa294@amd.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>
+Cc:     Rahul Bedarkar <rahulbedarkar89@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220624170740.66271-1-krzysztof.kozlowski@linaro.org>
+ <ZVVZDR.R2QT2GMTT9WS1@crapouillou.net>
+ <89b6a40b-eb6b-eba5-78c3-6b5f35bed717@linaro.org>
+ <EXU1ER.FH53VZXY9EYP3@crapouillou.net>
+ <cc81b6ae-c1c1-78ec-b4e2-e165dcd5015b@linaro.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <cc81b6ae-c1c1-78ec-b4e2-e165dcd5015b@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: HE1PR05CA0246.eurprd05.prod.outlook.com
- (2603:10a6:3:fb::22) To DU2PR07MB8110.eurprd07.prod.outlook.com
- (2603:10a6:10:239::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cdf05492-7d4b-450c-2e43-08da59c804ce
-X-MS-TrafficTypeDiagnostic: VI1PR07MB5742:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0HxJrUSeC6iMbf7MlgRoxfj8jreZ1rL5GurtlHBXtgHutgqufmikB3xy9I4ZnU1vRXo9puYhr1+cJv1Kcs5mo/okxaMoAUXdRzh9fnf4JJbKK8yBCO58b7mguhm2YhlsV5MXcbAlRPND8W27JAuV336Kd2msz/Atksl4zJnEWk9fX75CeKY7Xp4F4OYumlHMmmTZSOFSC7QOAlFplQ1Tr/suoh42z8L1G4M6AwJiSuVAzP5/gvgHVWUzmwTd8vA1wZZjs7kyAa4K5qL3X+CVYA3IjHgcMlClwsA76ztMoYfhrIpjOxO/RfJiczbTeN6+UnaG3naIUKOeYIOtRJXEoYAnRJl8wRCzHQDvK7zAEblpIyNEmZY09GIIz6RN9z8m8ZshIgCUmL4QVphA4fbU4A0ZVPGoPpRbMWPivGVELUCkwuTuBtDNXVGv3ICe/Za+yoiLpr/s+ftOjkdgT3nav/qJIXPMwDXQc+C4nEPSUlYMnF/J44lEWRTm+VVbfl22xxHo/ZxW8uKXMTVeIq+VsZxwRpyN1mZV9fQL5YalJrosSnzOtzMQD82pGDPrpHzMEwBSbdcXm2Uu9kN9VpRjEFSawAvvqooaWuW3eyFO/8+tN3w4s9zswUQZzVnGW2jYUgoLPKlEgvzJlJsNda0r+ySR3Is2bqerLlpJINN8FlB0OIPlWtzESn0EJISBh9SrAJADzAQxHh/POFIACiIvy2/SrIem66ILQ5yCURyDVTllCJuxkqtlHgx8C8nvefMSzzfv5n5DN14THMwKgFq8WQiqi7hr9RLJjGZHuo+0OZ3tTzNF/Qe5ANON58hx1Dxl9RdW+2csIO+MMm9NPZHTDDJyKVbXSTgGA8JIJK/KyCA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(366004)(136003)(396003)(39860400002)(4744005)(44832011)(5660300002)(966005)(8936002)(82960400001)(478600001)(6486002)(186003)(83380400001)(2616005)(6506007)(6666004)(41300700001)(2906002)(26005)(6512007)(53546011)(86362001)(31696002)(36756003)(316002)(8676002)(66556008)(110136005)(66946007)(66476007)(38100700002)(31686004)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UTFPeUlDdWVJTGQybXBWUnZ3dE44NVl5blBGS3RVWnFJbm85YjdxTWY2cm9S?=
- =?utf-8?B?MS8vK0VhejQvNi9Id3plQWQybmFicFR3QU1LVkNzYjFnN1JzRGRUTGZHTVFG?=
- =?utf-8?B?b09RdWQwQWdzbEMyN3o1Slc1djBNZmRPOVEyVkRzSlJ0d3VVQ3B1aTVOUENq?=
- =?utf-8?B?akR2TlM2RVZkSkVMalVoRGVLR0U5dmFyWWdtVTU2Ry9WR0hTbU4yK3NsOG1U?=
- =?utf-8?B?UE5laWJjQk9nMVJBYkgwaTVpeUtvM0RHSm1kUXlYUW51bkNlN3REaFRjaE96?=
- =?utf-8?B?U1F1K2w3ZnVzSWFhOHJrMFRjU1ZQbkhNTkxKZnZWbitJZlNQc2pPa2h3YUNH?=
- =?utf-8?B?alNobHYrYS9seWpNR2VoSTd2TmY0UHF2QkpsWmo1MzREeW85aDdwWmhETDlj?=
- =?utf-8?B?YWNwM2RCNVlscWFYY3JLVHV3dW1jZENDV2YxSHFTNmk1R1FwVHZaS2toelYv?=
- =?utf-8?B?MTRqRm5DVm52aUwzd2lNK29DNnExR1BVbVlNUkxlT2FjQll3UWQ3ZmsvWTNz?=
- =?utf-8?B?eXMzU1lOWlZKTEl5NGtoeHVQNC84cUdVbEF5c0pqVTZteXh3TmFvVnZjd0RI?=
- =?utf-8?B?TnVsdU9TdzdZbGRzeGFESlhwbUpEb1hYV01TbWRBa3NkVzhneUNPeEpUekM0?=
- =?utf-8?B?QzJkUXlXTHRVNW12UkJBQVJ5Y3BXN29aR3JkQUkwYzc3ZlMraVpiY3N5YUg2?=
- =?utf-8?B?QUVudzMyenVvTmtaVVkzV09ISDZXQkhkMkc3SHVkcW9kc2RFZ2toU1pJSDZW?=
- =?utf-8?B?dGwwc2dGVENkMGp6eXRmUTBIRE5LaDFHWHdabHJ6SWNlUGVRN2QvR0RBcXl1?=
- =?utf-8?B?U3ZUeDdyR3BILzZwcUdGanZ6cFFSZVVIZ2drbmVYUnorN1EweThrVEdEblBF?=
- =?utf-8?B?bDhtUWZDais1RVpBbTZBLzMzYXVwTDRPR1NRbTBLcVZJWUNseUZDSm5xYzlv?=
- =?utf-8?B?QUdDVDBPVFZybEF2SDNoTzRCZkhFckNpUG9FM0wxZ3R1dHVyQlZFeTBIdmtV?=
- =?utf-8?B?cUY3aWkrMndPKzdlbFduTHRYZldUTUtndExET2xDYTdJTnVYN2FoeWt2ckhk?=
- =?utf-8?B?cS90YnlHYWl1R3gzclIyT2cyREFrb3M1VkYzcUVkUmQ3OXlKTS9VVHFwOHkx?=
- =?utf-8?B?K0trTTZaU1k2Qm9kWEt6REJwamZKNXFVQmJOMUxSM3dTeCtWY2JpenRtV3Ji?=
- =?utf-8?B?b1I5YmYwU3cxQnNuQVVsUWhYbFZNckRNZGpCdDNsNi8wRFNScUo2Z1dJNXdT?=
- =?utf-8?B?SGwzbFRNeUkvSXpNOHkrQmpoYWlyL09ack1waHFjMHAzTHBsMVUwbzhCRkdR?=
- =?utf-8?B?NW1LU05TMW4vNkdUeFFyQjFUczJMRks0VDgzVjBXa2dTTkFpa1NtLzJ1OEta?=
- =?utf-8?B?aE5OdGluNVlJSHp3aG51QmtLamNnazJxQXpTQ1BZZ1o5MTlQZnRpOG84cEVJ?=
- =?utf-8?B?MVdTRUFQbzFHUU1xWFBucmZkeVdMcEFZcVZBa3gwT2FKYUh3UlJMWkc0bnpw?=
- =?utf-8?B?emxPTER4aGwyaCtSMU10ZnUxLzJXeHJKZWtOZ3JPa3ZNRGJsQUFIQ2FVSlFK?=
- =?utf-8?B?dXp5cnNEaWxhMXB3NVA0UFYxK1orNGhUVm1iNHBZQ0ZONUlwVVFpZCtWTy9p?=
- =?utf-8?B?eXVKcHc0c2lHdjlxSnJEVVpMNzVqdmhBYVJUNUNCQUxqQkFLZjFHbFFJL3FS?=
- =?utf-8?B?bGREdEplVG1QeDVmbE8rd3NzVVpxZDU0V05pWXpIWk0xZmtDSkhsR3FzaXRV?=
- =?utf-8?B?Rm4yNlJzQmdxdGlueTFFaFRjTVhWMGQwNUU4dUVhNHcvWG5teXdZRkg4Tkxo?=
- =?utf-8?B?aFRBRmEzazR3OUVlbktKM2VBQ0p4NnlhQk9mREN6clBadmRwbFVUc01aVFlE?=
- =?utf-8?B?Nkd5NS96MldqQlVQdjZGUmlpTkdobG8yckVQSDl5ZFh5UExhK0p3MDhoOXpn?=
- =?utf-8?B?YWYxdW94N3FoMUxLYStNRVhabHllSkZTY2pTeVpQRzZZMjVNd284eEI3OEd0?=
- =?utf-8?B?czdWcmw3QlNtbExOTnRxeUFvRmI1b1pWME9iVVIrRUhncjIvVVlEMVdPMXBM?=
- =?utf-8?B?YmtSUTN1NGZvQXpRcTRBbXplQ0hEd3ZnWHUzSlRDc0VYeU14TURNZC84R2xm?=
- =?utf-8?B?WGVCTTIvak5WcnlHUFRkRmN3NVR0VEV0S1grdktaMFVBSWVtbDFSTjlWWnhR?=
- =?utf-8?B?dnc9PQ==?=
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cdf05492-7d4b-450c-2e43-08da59c804ce
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2022 12:08:04.1547
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: djAqJ857To9JbJMCzmJunkzFy2UqC6GlN81W4kBKX+FCM1TMoXHaZuiQHHH8RL14bMwDTTQpzLaFxWA43VnsMQPobHlb3wigA7ptW2ztOyk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR07MB5742
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,FORGED_SPF_HELO,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
-
-I did not realize there is a v3 to that, sorry. I have tested those 
-patches untill the "Add smbus_block_read functionality" patch and it 
-seems to be working fine for me. I will move my comments to this thread 
-instead.
-
-Krzysztof
-
-W dniu 29.06.2022 o 13:39, Michal Simek pisze:
-> Hi,
->
-> On 6/29/22 13:02, Krzysztof Adamski wrote:
+On 25.06.2022 23:25, Krzysztof Kozlowski wrote:
+> On 25/06/2022 22:15, Paul Cercueil wrote:
+>> Hi Krzysztof,
 >>
->> Hi,
+>> Le sam., juin 25 2022 at 21:58:08 +0200, Krzysztof Kozlowski
+>> <krzysztof.kozlowski@linaro.org> a écrit :
+>>> On 24/06/2022 20:40, Paul Cercueil wrote:
+>>>>   Hi Krzysztof,
+>>>>
+>>>>   Le ven., juin 24 2022 at 19:07:39 +0200, Krzysztof Kozlowski
+>>>>   <krzysztof.kozlowski@linaro.org> a écrit :
+>>>>>   gpio-keys children do not use unit addresses.
+>>>>>
+>>>>>   Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>>>
+>>>>>   ---
+>>>>>
+>>>>>   See:
+>>>>>   
+>>>>> https://lore.kernel.org/all/20220616005224.18391-1-krzysztof.kozlowski@linaro.org/
+>>>>>   ---
+>>>>>    arch/mips/boot/dts/img/pistachio_marduk.dts   |  4 +--
+>>>>>    arch/mips/boot/dts/ingenic/gcw0.dts           | 31
+>>>>>   +++++++++----------
+>>>>>    arch/mips/boot/dts/ingenic/rs90.dts           | 18 +++++------
+>>>>>    arch/mips/boot/dts/pic32/pic32mzda_sk.dts     |  9 ++----
+>>>>>    .../boot/dts/qca/ar9132_tl_wr1043nd_v1.dts    |  6 ++--
+>>>>>    arch/mips/boot/dts/qca/ar9331_dpt_module.dts  |  4 +--
+>>>>>    .../mips/boot/dts/qca/ar9331_dragino_ms14.dts |  6 ++--
+>>>>>    arch/mips/boot/dts/qca/ar9331_omega.dts       |  4 +--
+>>>>>    .../qca/ar9331_openembed_som9331_board.dts    |  4 +--
+>>>>>    arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts   |  8 ++---
+>>>>>    10 files changed, 37 insertions(+), 57 deletions(-)
+>>>>>
+>>>>>   diff --git a/arch/mips/boot/dts/img/pistachio_marduk.dts
+>>>>>   b/arch/mips/boot/dts/img/pistachio_marduk.dts
+>>>>>   index a8708783f04b..a8da2f992b1a 100644
+>>>>>   --- a/arch/mips/boot/dts/img/pistachio_marduk.dts
+>>>>>   +++ b/arch/mips/boot/dts/img/pistachio_marduk.dts
+>>>>>   @@ -59,12 +59,12 @@ led-1 {
+>>>>>
+>>>>>    	keys {
+>>>>>    		compatible = "gpio-keys";
+>>>>>   -		button@1 {
+>>>>>   +		button-1 {
+>>>>>    			label = "Button 1";
+>>>>>    			linux,code = <0x101>; /* BTN_1 */
+>>>>>    			gpios = <&gpio3 6 GPIO_ACTIVE_LOW>;
+>>>>>    		};
+>>>>>   -		button@2 {
+>>>>>   +		button-2 {
+>>>>>    			label = "Button 2";
+>>>>>    			linux,code = <0x102>; /* BTN_2 */
+>>>>>    			gpios = <&gpio2 14 GPIO_ACTIVE_LOW>;
+>>>>>   diff --git a/arch/mips/boot/dts/ingenic/gcw0.dts
+>>>>>   b/arch/mips/boot/dts/ingenic/gcw0.dts
+>>>>>   index 4abb0318416c..5d33f26fd28c 100644
+>>>>>   --- a/arch/mips/boot/dts/ingenic/gcw0.dts
+>>>>>   +++ b/arch/mips/boot/dts/ingenic/gcw0.dts
+>>>>>   @@ -130,89 +130,86 @@ backlight: backlight {
+>>>>>
+>>>>>    	gpio-keys {
+>>>>>    		compatible = "gpio-keys";
+>>>>>   -		#address-cells = <1>;
+>>>>>   -		#size-cells = <0>;
+>>>>
+>>>>   Are you sure you can remove these?
+>>>
+>>> Yes, from DT spec point of view, DT bindings and Linux implementation.
+>>> However this particular change was not tested, except building.
+>>>
+>>>>
+>>>>   Looking at paragraph 2.3.5 of the DT spec, I would think they have
+>>>> to
+>>>>   stay (although with #address-cells = <0>).
+>>>
+>>> The paragraph 2.3.5 says nothing about regular properties (which can
+>>> be
+>>> also child nodes). It says about children of a bus, right? It's not
+>>> related here, it's not a bus.
 >>
->> I know this patch is quite old but we need the smbus_block_read
->> functionality, which depends on this one, so I would really like this to
->> be merged. See my comments below.
->
-> Please try this series and let us know if it is working for you or not.
->
-> https://lore.kernel.org/all/1656072327-13628-1-git-send-email-manikanta.guntupalli@xilinx.com/ 
->
->
-> Thanks,
-> Michal
+>> I quote:
+>> "A DTSpec-compliant boot program shall supply #address-cells and
+>> #size-cells on all nodes that have children."
+> 
+> And paragraph 2.2.3 says:
+> "A unit address may be omitted if the full path to the node is unambiguous."
+> 
+> You have address/size cells for nodes with children having unit
+> addresses. If they don't unit addresses, you don't add address/size
+> cells (with some exceptions).
+> 
+> The paragraph 2.3.5 mentions "child device nodes" and these properties
+> are not devices, although I agree that DT spec here is actually confusing.
+> 
+>>
+>> The gpio-keys node has children nodes, therefore it should have
+>> #address-cells and #size-cells, there's no room for interpretation here.
+>>
+>>> Second, why exactly this one gpio-keys node is different than all
+>>> other
+>>> gpio-keys everywhere and than bindings? Why this one has to be
+>>> incompatible/wrong according to bindings (which do not allow
+>>> address-cells and nodes with unit addresses)?
+>>
+>> Nothing is different. I'm just stating that your proposed fix is
+>> invalid if we want to enforce compliance with the DT spec.
+> 
+> In such case, we rather enforce the compliance with the bindings.
+> 
+> Best regards,
+> Krzysztof
+
+I recall them to be unnecessary as well. I have a patch of mine applied 
+identical to this:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=8c9f00d4b05134164e462f27b21c8295255ffa64
+
+Also, I don't see any warnings with this patch applied:
+
+$ ARCH=mips CROSS_COMPILE=mipsel-linux-gnu- make clean dtbs -j$(nproc)
+   SYNC    include/config/auto.conf.cmd
+   HOSTCC  scripts/basic/fixdep
+   HOSTCC  scripts/kconfig/conf.o
+   HOSTCC  scripts/kconfig/confdata.o
+   HOSTCC  scripts/kconfig/expr.o
+   LEX     scripts/kconfig/lexer.lex.c
+   YACC    scripts/kconfig/parser.tab.[ch]
+   HOSTCC  scripts/kconfig/menu.o
+   HOSTCC  scripts/kconfig/preprocess.o
+   HOSTCC  scripts/kconfig/symbol.o
+   HOSTCC  scripts/kconfig/util.o
+   HOSTCC  scripts/kconfig/lexer.lex.o
+   HOSTCC  scripts/kconfig/parser.tab.o
+   HOSTLD  scripts/kconfig/conf
+   HOSTCC  scripts/dtc/dtc.o
+   HOSTCC  scripts/dtc/flattree.o
+   HOSTCC  scripts/dtc/fstree.o
+   HOSTCC  scripts/dtc/data.o
+   HOSTCC  scripts/dtc/livetree.o
+   HOSTCC  scripts/dtc/treesource.o
+   HOSTCC  scripts/dtc/srcpos.o
+   HOSTCC  scripts/dtc/checks.o
+   HOSTCC  scripts/dtc/util.o
+   LEX     scripts/dtc/dtc-lexer.lex.c
+   YACC    scripts/dtc/dtc-parser.tab.[ch]
+   HOSTCC  scripts/dtc/libfdt/fdt.o
+   HOSTCC  scripts/dtc/libfdt/fdt_ro.o
+   HOSTCC  scripts/dtc/libfdt/fdt_wip.o
+   HOSTCC  scripts/dtc/libfdt/fdt_sw.o
+   HOSTCC  scripts/dtc/libfdt/fdt_rw.o
+   HOSTCC  scripts/dtc/libfdt/fdt_strerror.o
+   HOSTCC  scripts/dtc/libfdt/fdt_empty_tree.o
+   HOSTCC  scripts/dtc/libfdt/fdt_addresses.o
+   HOSTCC  scripts/dtc/libfdt/fdt_overlay.o
+   HOSTCC  scripts/dtc/fdtoverlay.o
+   HOSTCC  scripts/dtc/dtc-lexer.lex.o
+   HOSTCC  scripts/dtc/dtc-parser.tab.o
+   HOSTLD  scripts/dtc/fdtoverlay
+   HOSTLD  scripts/dtc/dtc
+   DTC     arch/mips/boot/dts/ingenic/gcw0.dtb
+
+Have my acked-by.
+
+Acked-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+
+Arınç

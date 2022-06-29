@@ -2,128 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05AA55FFC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD17255FFCF
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233069AbiF2MXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 08:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
+        id S232572AbiF2MXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 08:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbiF2MXi (ORCPT
+        with ESMTP id S233324AbiF2MXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 08:23:38 -0400
+        Wed, 29 Jun 2022 08:23:18 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 982651EB
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 05:23:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A292A340E0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 05:23:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656505415;
+        s=mimecast20190719; t=1656505395;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=D4xckCgJ4Bw0w9xbbVbINWepGBRVBzb5aJNwu4HG9GY=;
-        b=MUk4+8DZ9vaOOyJG99XLyLqnjld4/nDfTKuEyCLRTHP0VjM+huhaKtytZL3ysf5AXqRN2k
-        FnhiPjxCidfbmDi5ut1qst96dSyfvGQsQv1tW+iSRhD6pQD0Fuj4sdrRWfYXWBCfM2Mtrz
-        hxLyWVUwU+nUfVaIuAKNG+r2H59y+BA=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=bjB8BWfKUGEVoS354QTL3ZLESIpcbjTDuUnp9doERGM=;
+        b=SEFgsmJgWYOjF2PieN413jJWQO4gsQdLKgJDIOFdQRGe/g0dsS5OkJxNNzFMmtf4s6Yj6K
+        anI1/l3XSmVVuwoK/FF2ksklIVdZy/IgA9hGdXCaIFZPQ0SPHGz7k1tJdwLjGKeTitp2hu
+        ErGu/1kU4pVlpT8U0Cd/ibeVFu4sMoA=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-468-cCEXTSNGMhKkmNAUso5MSQ-1; Wed, 29 Jun 2022 08:23:27 -0400
-X-MC-Unique: cCEXTSNGMhKkmNAUso5MSQ-1
-Received: by mail-wr1-f69.google.com with SMTP id e5-20020adff345000000b0021b9f00e882so2358855wrp.6
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 05:23:26 -0700 (PDT)
+ us-mta-152-ZGBOQceuN5Cy_EuN_pW3cw-1; Wed, 29 Jun 2022 08:23:14 -0400
+X-MC-Unique: ZGBOQceuN5Cy_EuN_pW3cw-1
+Received: by mail-qv1-f72.google.com with SMTP id ls8-20020a0562145f8800b0047078180732so15099691qvb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 05:23:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=D4xckCgJ4Bw0w9xbbVbINWepGBRVBzb5aJNwu4HG9GY=;
-        b=efwEq4f+XtJBdgHkEM5uNk8ohNXZO4K19QwaQbDeu7Oh8aGDJmA7nN170RkWerbQpK
-         yelgib6HCwPWuhjxqRXEvB2n6UyKxg06w/RMXEJzIsd1/y7PcFsrpLmBdL6g7qUgBpRy
-         d1MY692ck/IG8aVZW32SpULtXcA2LC1TllDkrb6IWU+E+HmNoarAkyaVTknWat2dQdZ3
-         jxn/8LnqHddG7b7g2Y3JAsACR5oQr5aLZ7Zbw5sv88vJcLrgp81pEu7ZpnCQLzpdse5b
-         HPWMIuFt6tBvgORLGvUnSOY1tCP3P0RdScXITth8XCFTCllAYEZM9K+Lu2UOHMkGgyy7
-         oqOw==
-X-Gm-Message-State: AJIora8B7/7HHYYj/ISELjX+sIjT+IrWFazAFJ6t0g33bOS+FOwmUFm0
-        SmnPuqRdb+1dhp9OrgBce8HNokRcF0L9dwQ/vcVunnyJsDfheGZmzo9ZRMF2O2oBx+dhRas3qFV
-        ywY1x19CRc8cR2LauFs5EocOd
-X-Received: by 2002:a05:6000:1281:b0:21b:9c01:df79 with SMTP id f1-20020a056000128100b0021b9c01df79mr2793340wrx.563.1656505405847;
-        Wed, 29 Jun 2022 05:23:25 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v9pJO/EqSfuHhWYEuTzIM+Ml0Cf5xYU+IXYXEoEGJo5PASFAvTCOcpNz8z35DuzQpGGt5rXw==
-X-Received: by 2002:a05:6000:1281:b0:21b:9c01:df79 with SMTP id f1-20020a056000128100b0021b9c01df79mr2793306wrx.563.1656505405591;
-        Wed, 29 Jun 2022 05:23:25 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id o12-20020a1c750c000000b003a04b248896sm2888552wmc.35.2022.06.29.05.23.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 05:23:24 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        linux-rt-users@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <jlelli@redhat.com>,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vivek Goyal <vgoyal@redhat.com>
-Subject: Re: [PATCH v2] panic, kexec: Make __crash_kexec() NMI safe
-In-Reply-To: <20220629115539.GB12720@pathway.suse.cz>
-References: <20220620111520.1039685-1-vschneid@redhat.com>
- <87r13c7jyp.fsf@email.froward.int.ebiederm.org>
- <xhsmhpmiu5lch.mognet@vschneid.remote.csb>
- <xhsmhmtdw66cr.mognet@vschneid.remote.csb>
- <20220629115539.GB12720@pathway.suse.cz>
-Date:   Wed, 29 Jun 2022 13:23:08 +0100
-Message-ID: <xhsmhk08z64lv.mognet@vschneid.remote.csb>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=bjB8BWfKUGEVoS354QTL3ZLESIpcbjTDuUnp9doERGM=;
+        b=YsNoIq3x9BTDURA3LiJg9quh/M255AqfVJSTfBMvvJQsIn3vGNGV6+0HYiCWX/4h9v
+         XlgbbXOwXK+gDczchX4LUZ/tjCVmJ2Yuu/GBJJUlaCS8MJ00v2JTKvEdDTfKcwodwMEW
+         Jo7E76lZ+UqcmlYUNSNtb+vwhFfQGqYUpnESgwpzz+DLeHEZpktpjL9EHextXvUOplNH
+         JgHnceeRjYjZYjoM826FSGnVsVNR2OK0QTTMbkuZxKG1fo/eHJF2TXDy32xqwMWBwZV3
+         n3s19rvkBu3x+EsMcTbJhl9VneHuTvbFf+9JZOrb50QDpg+rTwXR1otrP2bQbSiE5+qg
+         uVdQ==
+X-Gm-Message-State: AJIora/V3GLsJJKblYJOptl/FaUkaMHmj5aaaCtAzc/wQQSRjftyB6U5
+        R2IbCyF9bwjjfCQNm/gwY7F8g1ERvRYUGuSCEBHk3ebax8p99tCv8NqFxX1m+/PJ15MSNdh8HI8
+        lAfcgPERUe5lh6i44s+P4bVNZ
+X-Received: by 2002:a37:2d46:0:b0:6af:9d9:e0d1 with SMTP id t67-20020a372d46000000b006af09d9e0d1mr1734540qkh.398.1656505393783;
+        Wed, 29 Jun 2022 05:23:13 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uZFGyQB5h0m5/rDcrwgHjPqEQPMbvBifJKvUDl6CcWxfXv9cg0yaXC/avzoRxmO8XKQx1cJA==
+X-Received: by 2002:a37:2d46:0:b0:6af:9d9:e0d1 with SMTP id t67-20020a372d46000000b006af09d9e0d1mr1734515qkh.398.1656505393477;
+        Wed, 29 Jun 2022 05:23:13 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id o16-20020a05620a2a1000b006a68fdc2d18sm8740492qkp.130.2022.06.29.05.23.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 05:23:13 -0700 (PDT)
+Subject: Re: [PATCH] misc: Fix a typo
+To:     Zhang Jiaming <jiaming@nfschina.com>, arnd@arndb.de,
+        gregkh@linuxfoundation.org
+Cc:     kai.heng.feng@canonical.com, christophe.jaillet@wanadoo.fr,
+        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
+        renyu@nfschina.com
+References: <20220629091011.36187-1-jiaming@nfschina.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <c8a45d98-ed21-17fd-6a5a-1f2ae5302137@redhat.com>
+Date:   Wed, 29 Jun 2022 05:23:10 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20220629091011.36187-1-jiaming@nfschina.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/06/22 13:55, Petr Mladek wrote:
-> On Tue 2022-06-28 18:33:08, Valentin Schneider wrote:
->>
->> 8c5a1cf0ad3a ("kexec: use a mutex for locking rather than xchg()") was
->> straightforward enough because it turned
->>
->>         if (xchg(&lock, 1))
->>                 return -EBUSY;
->>
->> into
->>
->>         if (!mutex_trylock(&lock))
->>                 return -EBUSY;
->>
->> Now, most of the kexec_mutex uses are trylocks, except for:
->> - crash_get_memory_size()
->> - crash_shrink_memory()
->>
->> I really don't want to go down the route of turning those into cmpxchg
->> try-loops, would it be acceptable to make those use trylocks (i.e. return
->> -EBUSY if the cmpxchg fails)?
->
-> IMHO, -EBUSY is acceptable for both crash_get_memory_size()
-> and crash_shrink_memory(). They are used in the sysfs interface.
->
->> Otherwise, we keep the mutexes for functions like those which go nowhere
->> near an NMI.
->
-> If we go this way then I would hide the locking into some wrappers,
-> like crash_kexec_trylock()/unlock() that would do both mutex
-> and xchg. The xchg part might be hidden in a separate wrapper
-> __crash_kexec_trylock()/unlock() or
-> crash_kexec_atomic_trylock()/unlock().
->
 
-Makes sense, thanks. I've started playing with the trylock/-EBUSY approach,
-I'll toss it out if I don't end up hating it.
-
-> Best Regards,
-> Petr
+On 6/29/22 2:10 AM, Zhang Jiaming wrote:
+> Change 'timout' to 'timeout'.
+>
+> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+> ---
+>   drivers/misc/cardreader/rtsx_pcr.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/misc/cardreader/rtsx_pcr.c b/drivers/misc/cardreader/rtsx_pcr.c
+> index 2a2619e3c72c..c42dd837bd4c 100644
+> --- a/drivers/misc/cardreader/rtsx_pcr.c
+> +++ b/drivers/misc/cardreader/rtsx_pcr.c
+> @@ -131,7 +131,7 @@ static void rtsx_comm_pm_full_on(struct rtsx_pcr *pcr)
+>   
+>   	rtsx_disable_aspm(pcr);
+>   
+> -	/* Fixes DMA transfer timout issue after disabling ASPM on RTS5260 */
+> +	/* Fixes DMA transfer timeout issue after disabling ASPM on RTS5260 */
+>   	msleep(1);
+>   
+>   	if (option->ltr_enabled)
+Reviewed-by: Tom Rix <trix@redhat.com>
 

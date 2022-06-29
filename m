@@ -2,61 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B713560803
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 19:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F33DA56080F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 19:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231985AbiF2R6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 13:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
+        id S232082AbiF2R6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 13:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbiF2R5v (ORCPT
+        with ESMTP id S232198AbiF2R61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 13:57:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BDA93D1EE
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 10:57:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656525467;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2krJSuSiEumelFOTMQcJWqcDoHYb7CaBZGf+45J6mwU=;
-        b=EWU/quKmzoyra5MPAbLv7UxYbr2PBxzSu26tFQKpKGvAbvs+/q85F5IoamQHf4cl0GkPhV
-        3GTbXPi54z4ofFMdsedRQspNVNnYIU9CEC3K03sKXV5vcp6Rlpk/iRfu999/lBG9qzciLS
-        O6PFwqpct9mrf28WiOfaxfypvn3TxKs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-261-cjZVf6v7P469qWkp_1gAqA-1; Wed, 29 Jun 2022 13:57:44 -0400
-X-MC-Unique: cjZVf6v7P469qWkp_1gAqA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7CE9581D9DA;
-        Wed, 29 Jun 2022 17:57:43 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.22.33.30])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4F6B12026D07;
-        Wed, 29 Jun 2022 17:57:43 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id CB8FD220463; Wed, 29 Jun 2022 13:57:42 -0400 (EDT)
-Date:   Wed, 29 Jun 2022 13:57:42 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Cc:     miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xieyongji@bytedance.com,
-        fam.zheng@bytedance.com, Miklos Szeredi <mszeredi@redhat.com>
-Subject: Re: [PATCH] fuse: writeback_cache consistency enhancement
- (writeback_cache_v2)
-Message-ID: <YrySlhapXqHX4/1P@redhat.com>
-References: <20220624055825.29183-1-zhangjiachen.jaycee@bytedance.com>
+        Wed, 29 Jun 2022 13:58:27 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2285A12ABF
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 10:58:21 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id o25so1676975ejm.3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 10:58:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=TO3Gnama9Pcg2SO6IJJkDI3yQUm4nzzhBUaaJ+8u4m4=;
+        b=U8P7GVcN+mATksB0WZAJBG7FkirhJVc/r4XngwH4+Rwlp/CzQUDTIxArRCnf9ypdWX
+         Co0dkneIn9UEGH4ZQBLz9BT8WJ8+R7q2L9DDQFwbiqbcTUMfsnlB8M4/9M5a3gBVVLrY
+         mMrGrpayYYOco0L2HjOuwJlI16VbMSZ9JC9pLZAwvOLq+u+qfrOihjvbmV3Bi5LNjAre
+         DwKTjYEwyfloNuIwtu0w7ObutFzBca500iyf0oTxLyhaTxT3ozVUzWgJejS0ydHY6L4j
+         mmZ/Wcvk6WTTJyQdlGItRoda+2+ECGHS9P8AFRgcBwGQ4K1kmga/XpbD43MZ6fdODgv/
+         8BaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TO3Gnama9Pcg2SO6IJJkDI3yQUm4nzzhBUaaJ+8u4m4=;
+        b=GS1r8xseF1sE0MMzUxjRR02fwMQEHSKJnl9i5SIUyavGXKO/TzY1CZ/TqT0Xr7UZDI
+         MVGkCmgm/YM0eZrdUbUfko8rbELXMXw5KjdYG+FHsdb3nAqin5JTafRoX6yDJgZBq7pz
+         4YoAbGMx2CMNCZO8bT8nU95wwzwNj92AhU0+nfrYQVtV4IsqR7yqgzCMY3Vt2ox8t4pg
+         cU7KUMwYfjDYTt1MDol3tLOI99AbD/mpYfGPD5tBy7qvTl3wT7M/uV3USS14kDkXgIjC
+         KEXdVJBwpJ2yNEgJBOx95lxHlGeXa29lHHfeA8Ot5A3tlJ9rt6bnMIGFMFu8W0fYfaJt
+         ox0A==
+X-Gm-Message-State: AJIora+MSCPyzVKyvu+9TOiT2m6TzvehxDWtLAqEw5uBBGRbIVdp3jnO
+        m57gnddt6AVaNuajQoP1hFxFzg==
+X-Google-Smtp-Source: AGRyM1v+gAf4AWv37It7Rky/E4URQVzb6RJirGLCOYcVKDVk8+2jdsLHkGdkPyRS78jkOTTaGVKnpQ==
+X-Received: by 2002:a17:906:5d0d:b0:726:be8f:becc with SMTP id g13-20020a1709065d0d00b00726be8fbeccmr4459339ejt.323.1656525500445;
+        Wed, 29 Jun 2022 10:58:20 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id lu4-20020a170906fac400b006fec69696a0sm7884910ejb.220.2022.06.29.10.58.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 10:58:19 -0700 (PDT)
+Message-ID: <ba3289b0-6c1f-6601-9f91-3f9e727459e5@linaro.org>
+Date:   Wed, 29 Jun 2022 19:58:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220624055825.29183-1-zhangjiachen.jaycee@bytedance.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v6 06/14] dt-bindings: rtc: Add fsl,scu-rtc yaml file
+Content-Language: en-US
+To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
+ <20220629164414.301813-7-viorel.suman@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220629164414.301813-7-viorel.suman@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,249 +106,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 01:58:25PM +0800, Jiachen Zhang wrote:
-> Some users may want both the high performance of the writeback_cahe mode and
-> a little bit more consistency among FUSE mounts. In the current writeback
-> mode implementation, users of one FUSE mount can never see the file
-> expansion done by other FUSE mounts.
+On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
+> From: Abel Vesa <abel.vesa@nxp.com>
 > 
-> Based on the suggested writeback V2 patch in the upstream mailing-list [1],
-> this commit allows the cmtime and size to be updated from server in
-> writeback mode. Compared with the writeback V2 patch in [1], this commit has
-> several differences:
+> In order to replace the fsl,scu txt file from bindings/arm/freescale,
+> we need to split it between the right subsystems. This patch documents
+> separately the 'rtc' child node of the SCU main node.
 > 
->     1. Ensure c/mtime are not updated from kernel to server. IOW, the cmtime
->     generated by kernel are just temporary values that are never flushed to
->     server, and they can also be updated by the official server cmtime when
->     the writeback cache is clean.
-> 
->     2. Skip mtime-based revalidation when fc->auto_inval_data is set with
->     fc->writeback_cache_v2. Because the kernel-generated temporary cmtime
->     are likely not equal to the offical server cmtime.
-
-We have a init flag to negotiate FUSE_AUTO_INVAL_DATA to enable/disable
-fc->auto_inval_data. So should it be filesystem's (user space) responsibility
-to not use FUSE_AUTO_INVAL_DATA when using FUSE_WRITEBACK_CACHE. I mean,
-otherwise it is confusing. On one hand filesystem is using FUSE_AUTO_INVAL_DATA
-but it silently is ingored by kernel because FUSE_WRITEBACK_CACHE is
-being used as well.
-
-will it make more sense to just document it and let filesystem authors
-enable options carefully.
-
-BTW, this probably should be a separate patch in the patch series anyway
-with proper explanation.
-
-Thanks
-Vivek
-
-> 
->     3. If any page is ever flushed to the server during FUSE_GETATTR
->     handling on fuse server, even if the cache is clean when
->     fuse_change_attributes() checks, we should not update the i_size. This
->     is because the FUSE_GETATTR may get a staled size before the FUSE_WRITE
->     request changes server inode size. This commit ensures this by
->     increasing attr_version after writeback for writeback_cache_v2. In that
->     case, we should also ensure the ordering of the attr_version updating
->     and the fi->writepages RB-tree updating. So that if a fuse page
->     writeback ever happens during fuse_change_attributes(), either the
->     fi->writepages is not empty, or the attr_version is increased. So we
->     never mistakenly update a stale file size from server to kernel.
-> 
-> With this patch, writeback mode can consider the server c/mtime as the
-> official one. When inode attr is timeout or invalidated, kernel has chance
-> to see size and c/mtime modified by others.
-> 
-> Together with another patch [2], a FUSE daemon is able to implement
-> close-to-open (CTO) consistency like what is done in NFS clients.
-> 
-> [1] https://lore.kernel.org/linux-fsdevel/Ymfu8fGbfYi4FxQ4@miu.piliscsaba.redhat.com
-> [2] https://lore.kernel.org/linux-fsdevel/20220608104202.19461-1-zhangjiachen.jaycee@bytedance.com/
-> 
-> Suggested-by: Miklos Szeredi <mszeredi@redhat.com>
-> Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
 > ---
->  fs/fuse/file.c            | 17 +++++++++++++++
->  fs/fuse/fuse_i.h          |  3 +++
->  fs/fuse/inode.c           | 44 +++++++++++++++++++++++++++++++++++++--
->  include/uapi/linux/fuse.h |  5 +++++
->  4 files changed, 67 insertions(+), 2 deletions(-)
+>  .../devicetree/bindings/rtc/fsl,scu-rtc.yaml  | 31 +++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml
 > 
-> diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-> index 9b64e2ff1c96..35bdc7af8468 100644
-> --- a/fs/fuse/file.c
-> +++ b/fs/fuse/file.c
-> @@ -1829,6 +1829,15 @@ static void fuse_writepage_end(struct fuse_mount *fm, struct fuse_args *args,
->  		 */
->  		fuse_send_writepage(fm, next, inarg->offset + inarg->size);
->  	}
+> diff --git a/Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml b/Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml
+> new file mode 100644
+> index 000000000000..940588e278fb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml
+> @@ -0,0 +1,31 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/fsl,scu-rtc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	if (fc->writeback_cache_v2)
-> +		fi->attr_version = atomic64_inc_return(&fc->attr_version);
-> +	/*
-> +	 * Ensure attr_version increases before the page is move out of the
-> +	 * writepages rb-tree.
-> +	 */
-> +	smp_mb();
+> +title: i.MX SCU Client Device Node - RTC bindings based on SCU Message Protocol
 > +
->  	fi->writectr--;
->  	fuse_writepage_finish(fm, wpa);
->  	spin_unlock(&fi->lock);
-> @@ -1858,10 +1867,18 @@ static struct fuse_file *fuse_write_file_get(struct fuse_inode *fi)
->  
->  int fuse_write_inode(struct inode *inode, struct writeback_control *wbc)
->  {
-> +	struct fuse_conn *fc = get_fuse_conn(inode);
->  	struct fuse_inode *fi = get_fuse_inode(inode);
->  	struct fuse_file *ff;
->  	int err;
->  
-> +	/*
-> +	 * Kernel c/mtime should not be updated to the server in the
-> +	 * writeback_cache_v2 mode as server c/mtime are official.
-> +	 */
-> +	if (fc->writeback_cache_v2)
-> +		return 0;
+> +maintainers:
+> +  - Dong Aisheng <aisheng.dong@nxp.com>
 > +
->  	/*
->  	 * Inode is always written before the last reference is dropped and
->  	 * hence this should not be reached from reclaim.
-> diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-> index 488b460e046f..47de36146fb8 100644
-> --- a/fs/fuse/fuse_i.h
-> +++ b/fs/fuse/fuse_i.h
-> @@ -654,6 +654,9 @@ struct fuse_conn {
->  	/* show legacy mount options */
->  	unsigned int legacy_opts_show:1;
->  
-> +	/* Improved writeback cache policy */
-> +	unsigned writeback_cache_v2:1;
+> +description: i.MX SCU Client Device Node
+> +  Client nodes are maintained as children of the relevant IMX-SCU device node.
 > +
->  	/*
->  	 * fs kills suid/sgid/cap on write/chown/trunc. suid is killed on
->  	 * write/trunc only if caller did not have CAP_FSETID.  sgid is killed
-> diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-> index 8c0665c5dff8..2d5fa82b08b6 100644
-> --- a/fs/fuse/inode.c
-> +++ b/fs/fuse/inode.c
-> @@ -237,14 +237,41 @@ void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
->  	u32 cache_mask;
->  	loff_t oldsize;
->  	struct timespec64 old_mtime;
-> +	bool try_wb_update = false;
-> +
-> +	if (fc->writeback_cache_v2 && S_ISREG(inode->i_mode)) {
-> +		inode_lock(inode);
-> +		try_wb_update = true;
-> +	}
->  
->  	spin_lock(&fi->lock);
->  	/*
->  	 * In case of writeback_cache enabled, writes update mtime, ctime and
->  	 * may update i_size.  In these cases trust the cached value in the
->  	 * inode.
-> +	 *
-> +	 * In writeback_cache_v2 mode, if all the following conditions are met,
-> +	 * then we allow the attributes to be refreshed:
-> +	 *
-> +	 * - inode is not in the process of being written (I_SYNC)
-> +	 * - inode has no dirty pages (I_DIRTY_PAGES)
-> +	 * - inode data-related attributes are clean (I_DIRTY_DATASYNC)
-> +	 * - inode does not have any page writeback in progress
-> +	 *
-> +	 * Note: checking PAGECACHE_TAG_WRITEBACK is not sufficient in fuse,
-> +	 * since inode can appear to have no PageWriteback pages, yet still have
-> +	 * outstanding write request.
->  	 */
->  	cache_mask = fuse_get_cache_mask(inode);
-> +	if (try_wb_update && !(inode->i_state & (I_DIRTY_PAGES | I_SYNC |
-> +	    I_DIRTY_DATASYNC)) && RB_EMPTY_ROOT(&fi->writepages))
-> +		cache_mask &= ~(STATX_MTIME | STATX_CTIME | STATX_SIZE);
-> +	/*
-> +	 * Ensure the ordering of cleanness checking and following attr_version
-> +	 * comparison.
-> +	 */
-> +	smp_mb();
-> +
->  	if (cache_mask & STATX_SIZE)
->  		attr->size = i_size_read(inode);
->  
-> @@ -283,7 +310,13 @@ void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
->  			truncate_pagecache(inode, attr->size);
->  			if (!fc->explicit_inval_data)
->  				inval = true;
-> -		} else if (fc->auto_inval_data) {
-> +		} else if (!fc->writeback_cache_v2 && fc->auto_inval_data) {
-> +			/*
-> +			 * When fc->writeback_cache_v2 is set, the old_mtime
-> +			 * can be generated by kernel and must not equal to
-> +			 * new_mtime generated by server. So skip in such
-> +			 * case.
-> +			 */
->  			struct timespec64 new_mtime = {
->  				.tv_sec = attr->mtime,
->  				.tv_nsec = attr->mtimensec,
-> @@ -303,6 +336,9 @@ void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
->  
->  	if (IS_ENABLED(CONFIG_FUSE_DAX))
->  		fuse_dax_dontcache(inode, attr->flags);
-> +
-> +	if (try_wb_update)
-> +		inode_unlock(inode);
->  }
->  
->  static void fuse_init_inode(struct inode *inode, struct fuse_attr *attr)
-> @@ -1153,6 +1189,10 @@ static void process_init_reply(struct fuse_mount *fm, struct fuse_args *args,
->  				fc->async_dio = 1;
->  			if (flags & FUSE_WRITEBACK_CACHE)
->  				fc->writeback_cache = 1;
-> +			if (flags & FUSE_WRITEBACK_CACHE_V2) {
-> +				fc->writeback_cache = 1;
-> +				fc->writeback_cache_v2 = 1;
-> +			}
->  			if (flags & FUSE_PARALLEL_DIROPS)
->  				fc->parallel_dirops = 1;
->  			if (flags & FUSE_HANDLE_KILLPRIV)
-> @@ -1234,7 +1274,7 @@ void fuse_send_init(struct fuse_mount *fm)
->  		FUSE_ABORT_ERROR | FUSE_MAX_PAGES | FUSE_CACHE_SYMLINKS |
->  		FUSE_NO_OPENDIR_SUPPORT | FUSE_EXPLICIT_INVAL_DATA |
->  		FUSE_HANDLE_KILLPRIV_V2 | FUSE_SETXATTR_EXT | FUSE_INIT_EXT |
-> -		FUSE_SECURITY_CTX;
-> +		FUSE_SECURITY_CTX | FUSE_WRITEBACK_CACHE_V2;
->  #ifdef CONFIG_FUSE_DAX
->  	if (fm->fc->dax)
->  		flags |= FUSE_MAP_ALIGNMENT;
-> diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
-> index d6ccee961891..b474763bcf59 100644
-> --- a/include/uapi/linux/fuse.h
-> +++ b/include/uapi/linux/fuse.h
-> @@ -194,6 +194,7 @@
->   *  - add FUSE_SECURITY_CTX init flag
->   *  - add security context to create, mkdir, symlink, and mknod requests
->   *  - add FUSE_HAS_INODE_DAX, FUSE_ATTR_DAX
-> + *  - add FUSE_WRITEBACK_CACHE_V2 init flag
->   */
->  
->  #ifndef _LINUX_FUSE_H
-> @@ -353,6 +354,9 @@ struct fuse_file_lock {
->   * FUSE_SECURITY_CTX:	add security context to create, mkdir, symlink, and
->   *			mknod
->   * FUSE_HAS_INODE_DAX:  use per inode DAX
-> + * FUSE_WRITEBACK_CACHE_V2:
-> + *			allow time/size to be refreshed if no pending write
-> + *			c/mtime not updated from kernel to server
->   */
->  #define FUSE_ASYNC_READ		(1 << 0)
->  #define FUSE_POSIX_LOCKS	(1 << 1)
-> @@ -389,6 +393,7 @@ struct fuse_file_lock {
->  /* bits 32..63 get shifted down 32 bits into the flags2 field */
->  #define FUSE_SECURITY_CTX	(1ULL << 32)
->  #define FUSE_HAS_INODE_DAX	(1ULL << 33)
-> +#define FUSE_WRITEBACK_CACHE_V2	(1ULL << 34)
->  
->  /**
->   * CUSE INIT request/reply flags
-> -- 
-> 2.20.1
-> 
+> +allOf:
+> +  - $ref: "rtc.yaml#"
 
+No need for quotes.
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof

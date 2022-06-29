@@ -2,91 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D430F56060B
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB41560610
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiF2Qm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 12:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
+        id S230076AbiF2Qng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 12:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiF2QmZ (ORCPT
+        with ESMTP id S229641AbiF2Qnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 12:42:25 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B36D344FD
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 09:42:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656520944; x=1688056944;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bPbOCi835UprKA879XALTFC2A2QiLkA5fYyV2bRf1II=;
-  b=lub3RWKe2Y8XhgtDP4qmJFFhlAlORdWfTJIL5FBTyH2bqTFvvFDafIXc
-   GtBEo6InGmEVnnZZudD49hEIfxN02pWJUIyD4dzwSAWE3xct9bwq2356t
-   Snm1D55I7QT2etJHCwHOVvUS4zRW985/wY+XOsR9oN+Izoq+ovn3UKfg7
-   UXw08e1VbLBG7wDrkBubIt9XGKsosYIFKUu5GwHTx4wleSGA1ZAHHjb7E
-   Z/SWECqZZLKr6AhWDKnIQcxWcitPFOtX4XyvIJ7VoyOyGLfpU0oT0uvu2
-   O2SNa/NHGiL+NMpdc52HGsOrx3jKNERxc53tj6tKwxVItnXrYntAaXzLu
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="307579803"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="307579803"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 09:42:24 -0700
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="917668632"
-Received: from jwacker-mobl.amr.corp.intel.com (HELO [10.213.178.109]) ([10.213.178.109])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 09:42:23 -0700
-Message-ID: <57c8a55a-ba27-0b53-e957-657386034e52@linux.intel.com>
-Date:   Wed, 29 Jun 2022 11:42:22 -0500
+        Wed, 29 Jun 2022 12:43:33 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3763205ED
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 09:43:31 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id m184so9719551wme.1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 09:43:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uyNdAiqX42nvqZ9JWQ/ZZaNT635XeywxS5XfMuA1CNA=;
+        b=opEEI8h3+r0PCqDkmte4H0kX0dHSW0KHKiFIN9QkbQDYyw9MZk+K4YkwZZpBiNBh5o
+         PHZ00wpnpy09QVuA596YHI1IXuFiGKStIGwr355sBtLqirvwyu+X+pzoba8Hvl4CeSRA
+         951rV2x5tz49mFgmEZagaOIQnxeC4i8gdj/ncHjPxVj5ni2WdWP19l3dcdTgAVeh9NPn
+         KWshRxNd3Tv9VpnUv4FcBVmyHC4rXb/yTMURlMZNdKCCiE7mkMm1GktD2EkgvU4BLw7M
+         M1SCUkOyRIzFw7gmJnN5el0E6eFz9I1sVr3cLEt/TDOEOnh6RFLIhD9R3JEx/fNOqD++
+         0Dvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uyNdAiqX42nvqZ9JWQ/ZZaNT635XeywxS5XfMuA1CNA=;
+        b=IJBXxy1YnPhgToS8XiN8RdX+fASzOusHmPa9YYTj2v/a/8s3wZ47wQ8u8nX6Cl3zG8
+         S+PJZqPMShkOag0YmOvbDzsXRXax9YYdTUFn/rNVpm37Xmt7Pka53RPfT4RvPi/r4DOP
+         2twNEYZt/dSNlo6ZCON7SynBQeXZJHmN0hxo5t77W6bd2TeNa09w811Pcg64VYhrXf4+
+         AJPWjgesSxLJmXPWC2jTZv3GoKt3hB/czPmOEaJGZoA2V8PeJd+SksrVTdeKrc3ieJmm
+         TrfEeHe1bPGqZ4dNiG/Do773UZbaBKBSi1LCPxsip7Ox32ODA9FQTcxVV30j2HrCMZBs
+         yvxQ==
+X-Gm-Message-State: AJIora8n3TfhKOkSeX6DkrqASZsw9Y+BKzd/H5nIdb6qrrE505fGmar6
+        Wjlsid4GQ81YuA210VZdG96oyuKZ7i1J12uc+SY4Og==
+X-Google-Smtp-Source: AGRyM1tzVMu+TvVRluK/L7Osh8Zh1JGst4FUzpq7H+X2NAYP7sSYq8BO0Hw75njUXs/skzfjKMMdQXFX07FY1+vv1dA=
+X-Received: by 2002:a05:600c:4e4c:b0:3a0:53a2:48b5 with SMTP id
+ e12-20020a05600c4e4c00b003a053a248b5mr4628041wmq.174.1656521010316; Wed, 29
+ Jun 2022 09:43:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.10.0
-Subject: Re: [PATCH 2/4] ASoC: codecs: add wsa883x amplifier support
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        broonie@kernel.org
-Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, tiwai@suse.com
-References: <20220629090644.67982-1-srinivas.kandagatla@linaro.org>
- <20220629090644.67982-3-srinivas.kandagatla@linaro.org>
- <352fac7e-597c-84af-d33b-bdff0e2acdb6@linux.intel.com>
- <c12b67b3-2024-2133-9fdb-3d90410a4501@linaro.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <c12b67b3-2024-2133-9fdb-3d90410a4501@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220629112717.125927-1-jolsa@kernel.org>
+In-Reply-To: <20220629112717.125927-1-jolsa@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 29 Jun 2022 09:43:17 -0700
+Message-ID: <CAP-5=fWm5uZYrxakCZuJtWgVFChNje2SpPgDXD+Xs=XnmB2dzA@mail.gmail.com>
+Subject: Re: [PATCH] perf tools: Convert legacy map definition to BTF-defined
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 29, 2022 at 4:27 AM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> The libbpf is switching off support for legacy map definitions [1],
+> which will break the perf llvm tests.
+>
+> Moving the base source map definition to BTF-defined, so we need
+> to use -g compile option for to add debug/BTF info.
+>
+> [1] https://lore.kernel.org/bpf/20220627211527.2245459-1-andrii@kernel.org/
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  tools/perf/tests/bpf-script-example.c | 15 +++++++++------
+>  tools/perf/util/llvm-utils.c          |  2 +-
+>  2 files changed, 10 insertions(+), 7 deletions(-)
+>
+> diff --git a/tools/perf/tests/bpf-script-example.c b/tools/perf/tests/bpf-script-example.c
+> index ab4b98b3165d..065a4ac5d8e5 100644
+> --- a/tools/perf/tests/bpf-script-example.c
+> +++ b/tools/perf/tests/bpf-script-example.c
+> @@ -24,13 +24,16 @@ struct bpf_map_def {
+>         unsigned int max_entries;
+>  };
+>
+> +#define __uint(name, val) int (*name)[val]
+> +#define __type(name, val) typeof(val) *name
 
->>> +static int wsa883x_update_status(struct sdw_slave *slave,
->>> +                 enum sdw_slave_status status)
->>> +{
->>> +    struct wsa883x_priv *wsa883x = dev_get_drvdata(&slave->dev);
->>> +
->>> +    if (status == SDW_SLAVE_ATTACHED && slave->dev_num > 0)
->>
->> do you actually need to test if slave->dev_num is > 0?
->>
-> Few years back I think it was you who asked me to add this check.. :-)
-> 
-> https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2073074.html
+This is probably worth a comment, reading it hurts :-) I expect that
+libbpf provides a definition that the rest of the world uses.
 
-Oops!
+Fwiw, the pre bpf counters BPF in perf needs a good overhaul. Arnaldo
+mentioned switching perf trace's BPF to use BPF skeletons in another
+post. The tests we have on event filters are flaky. One fewer bpf.h in
+the world seems like a service to humanity (I'm looking at you
+tools/perf/include/bpf/bpf.h).
 
-My comment was valid in general but at the bus level. With the benefit
-of hindsight, I don't think this comment is valid in this callback.
+Thanks,
+Ian
 
-update_status is either called with UNATTACHED, or with ATTACHED/ALERT
-after programming dev_num to a value > 0.
-
-It's not wrong to leave the code as is, but it's likely to be an
-always-true condition.
+> +
+>  #define SEC(NAME) __attribute__((section(NAME), used))
+> -struct bpf_map_def SEC("maps") flip_table = {
+> -       .type = BPF_MAP_TYPE_ARRAY,
+> -       .key_size = sizeof(int),
+> -       .value_size = sizeof(int),
+> -       .max_entries = 1,
+> -};
+> +struct {
+> +       __uint(type, BPF_MAP_TYPE_ARRAY);
+> +       __uint(max_entries, 1);
+> +       __type(key, int);
+> +       __type(value, int);
+> +} flip_table SEC(".maps");
+>
+>  SEC("func=do_epoll_wait")
+>  int bpf_func__SyS_epoll_pwait(void *ctx)
+> diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
+> index 96c8ef60f4f8..2dc797007419 100644
+> --- a/tools/perf/util/llvm-utils.c
+> +++ b/tools/perf/util/llvm-utils.c
+> @@ -25,7 +25,7 @@
+>                 "$CLANG_OPTIONS $PERF_BPF_INC_OPTIONS $KERNEL_INC_OPTIONS " \
+>                 "-Wno-unused-value -Wno-pointer-sign "          \
+>                 "-working-directory $WORKING_DIR "              \
+> -               "-c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -O2 -o - $LLVM_OPTIONS_PIPE"
+> +               "-c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -g -O2 -o - $LLVM_OPTIONS_PIPE"
+>
+>  struct llvm_param llvm_param = {
+>         .clang_path = "clang",
+> --
+> 2.35.3
+>

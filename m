@@ -2,116 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C1F5606C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 514FF5606CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbiF2Q4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 12:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41458 "EHLO
+        id S230099AbiF2Q4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 12:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiF2Q4u (ORCPT
+        with ESMTP id S229575AbiF2Q4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 12:56:50 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED602250C;
-        Wed, 29 Jun 2022 09:56:49 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-3177f4ce3e2so154175987b3.5;
-        Wed, 29 Jun 2022 09:56:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZkIej0UJ7PuUWn58IixeF0LRQS/u6RyIKeOWZv4NbdA=;
-        b=GVKIIolGRvve74I/JsxWr1PGQWrExf52MGc8FdFocUJlSUjaw//POtC98qtHGUCdkP
-         BkHALIAtdDOZnyQpvTpQvjJTPDYmaNvskNwxegc/36shoy5MecAVku0fdLUJqvLOG1DL
-         w2QtF6LBAkOGI71M7aVF40qTBSE1ko3i9DBXAq2BpjJ5lXMkr+OrlMK2s2CjUpcjYqOn
-         7u3f5VSWw4JMfs1b+57T8LN0I/M4YxTWOiNHkgzlSXehtTFoRd8HrtGMmWnqyOg4q/Dk
-         BqOr+NUd903AtwllTSvPCyTp26CEOh3LijwL8M4A8cJVuKTcSnw1CdXUlApfbkDy+mNo
-         jlBw==
-X-Gm-Message-State: AJIora+epWyJeq18l0nzioaBfWteAZscjLUsCR0/N1SBdDUeT4Eux650
-        fY3hU5UbI04VZcc+/pWtXUAqFe7L1GAvam0fF7AmcN44
-X-Google-Smtp-Source: AGRyM1s2CbxkModmI/0O7hOvmw6DE7xd5G7FVUCy9hKt/wft6RsAcDx/TDDEpy8faKzufOPehWVJII78xYd5Usg/KAk=
-X-Received: by 2002:a0d:d811:0:b0:31b:ddc4:c0ac with SMTP id
- a17-20020a0dd811000000b0031bddc4c0acmr5025839ywe.149.1656521808695; Wed, 29
- Jun 2022 09:56:48 -0700 (PDT)
+        Wed, 29 Jun 2022 12:56:43 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D442250C;
+        Wed, 29 Jun 2022 09:56:42 -0700 (PDT)
+Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LY6xl5sYcz6H6rt;
+        Thu, 30 Jun 2022 00:54:19 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 29 Jun 2022 18:56:40 +0200
+Received: from [10.195.244.164] (10.195.244.164) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 29 Jun 2022 17:56:39 +0100
+Message-ID: <26fb5fec-500d-61c2-f009-556c5f7e86e6@huawei.com>
+Date:   Wed, 29 Jun 2022 17:56:40 +0100
 MIME-Version: 1.0
-References: <20220617025152.1908638-1-luriwen@hotmail.com> <TYWP286MB2601A75D517AE71EE569CE15B1AF9@TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM>
- <87v8szoccp.fsf@stealth>
-In-Reply-To: <87v8szoccp.fsf@stealth>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 29 Jun 2022 18:56:37 +0200
-Message-ID: <CAJZ5v0gAJSfWmEJjawSHWnYB-rsBxcMyUQjAf4F3jpMhnjx+-Q@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPI/processor: Remove unused function acpi_processor_get_limit_info()
-To:     Punit Agrawal <punit.agrawal@bytedance.com>
-Cc:     Riwen Lu <luriwen@hotmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Robert Moore <robert.moore@intel.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Riwen Lu <luriwen@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v6 2/4] perf jevents: Add python converter script
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        "Felix Fietkau" <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
+        Like Xu <likexu@tencent.com>, <linux-kernel@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>,
+        Nick Forrington <nick.forrington@arm.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <ananth.narayan@amd.com>, <ravi.bangoria@amd.com>,
+        <santosh.shukla@amd.com>, <sandipan.das@amd.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Kshipra Bopardikar <kshipra.bopardikar@intel.com>
+CC:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <rogers.email@gmail.com>,
+        Thomas Richter <tmricht@linux.ibm.com>
+References: <20220627025744.106527-1-irogers@google.com>
+ <20220627025744.106527-3-irogers@google.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220627025744.106527-3-irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.195.244.164]
+X-ClientProxiedBy: lhreml710-chm.china.huawei.com (10.201.108.61) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 11:42 AM Punit Agrawal
-<punit.agrawal@bytedance.com> wrote:
->
-> Riwen Lu <luriwen@hotmail.com> writes:
->
-> > From: Riwen Lu <luriwen@kylinos.cn>
-> >
-> > Commit 22e7551eb6fd ("ACPI / processor: Remove acpi_processor_get_limit_info()"),
-> > left behind this, remove it.
-> >
-> > Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
-> >
-> > ---
-> > v1 -> v2:
-> >  - Make this patch base on ("ACPI: Split out processor thermal register
-> >    from ACPI PSS").
->
-> For such changes, it is better to send all the related patches as a
-> series so it's easy to see the dependencies . In a series the easy /
-> obvious fixes should be earlier so it's easier for them to be merged
-> while the more significant changes are still being discussed.
->
-> Hopefully in this case Rafael too agrees with the dependency patch -
-> otherwise, it's just extra churn on the lists.
->
-> But don't resend just yet - give some time for others to add their
-> feedback.
->
-> > ---
-> >  include/acpi/processor.h | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/include/acpi/processor.h b/include/acpi/processor.h
-> > index ba1e3ed98d3d..9fa49686957a 100644
-> > --- a/include/acpi/processor.h
-> > +++ b/include/acpi/processor.h
-> > @@ -441,7 +441,6 @@ static inline int acpi_processor_hotplug(struct acpi_processor *pr)
-> >  #endif /* CONFIG_ACPI_PROCESSOR_IDLE */
-> >
-> >  /* in processor_thermal.c */
-> > -int acpi_processor_get_limit_info(struct acpi_processor *pr);
-> >  int acpi_processor_thermal_init(struct acpi_processor *pr,
-> >                               struct acpi_device *device);
-> >  void acpi_processor_thermal_exit(struct acpi_processor *pr,
->
-> Fwiw,
->
-> Reviewed-by: Punit Agrawal <punit.agrawal@bytedance.com>
+On 27/06/2022 03:57, Ian Rogers wrote:
+> +
+> +    def unit_to_pmu(unit: str) -> str:
+> +      """Convert a JSON Unit to Linux PMU name."""
+> +      if not unit:
+> +        return None
+> +      # Comment brought over from jevents.c:
+> +      # it's not realistic to keep adding these, we need something more scalable ...
 
-Applied as 5.20 material with some edits in the subject and changelog.
+Since we're converting to python it might be a good idea to consider 
+this - ever have an ideas on something better?
 
-Thanks!
+Thanks,
+John
+
+> +      table = {
+> +          'CBO': 'uncore_cbox',
+> +          'QPI LL': 'uncore_qpi',
+> +          'SBO': 'uncore_sbox',
+> +          'iMPH-U': 'uncore_arb',
+> +          'CPU-M-CF': 'cpum_cf',
+> +          'CPU-M-SF': 'cpum_sf',
+> +          'UPI LL': 'uncore_upi',
+> +          'hisi_sicl,cpa': 'hisi_sicl,cpa',
+> +          'hisi_sccl,ddrc': 'hisi_sccl,ddrc',
+> +          'hisi_sccl,hha': 'hisi_sccl,hha',
+> +          'hisi_sccl,l3c': 'hisi_sccl,l3c',
+> +          'imx8_ddr': 'imx8_ddr',
+> +          'L3PMC': 'amd_l3',
+> +          'DFPMC': 'amd_df',
+> +          'cpu_core': 'cpu_core',
+> +          'cpu_atom': 'cpu_atom',
+> +      }
+> +      return table[unit] if unit in table else f'uncore_{unit.lower()}'
+> +
+

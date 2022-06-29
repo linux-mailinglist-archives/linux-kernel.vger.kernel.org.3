@@ -2,44 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56E755F92D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5235355F907
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbiF2Hhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 03:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
+        id S231923AbiF2H3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 03:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232228AbiF2HhY (ORCPT
+        with ESMTP id S231931AbiF2H3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 03:37:24 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8A1A35DF2;
-        Wed, 29 Jun 2022 00:37:23 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 80AA81E80D50;
-        Wed, 29 Jun 2022 15:36:12 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 9S0AHZ_YARYC; Wed, 29 Jun 2022 15:36:09 +0800 (CST)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        (Authenticated sender: jiaming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 4DD621E80D11;
-        Wed, 29 Jun 2022 15:36:09 +0800 (CST)
-From:   Zhang Jiaming <jiaming@nfschina.com>
-To:     ebiederm@xmission.com, keescook@chromium.org,
-        viro@zeniv.linux.org.uk
-Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
-        renyu@nfschina.com, Zhang Jiaming <jiaming@nfschina.com>
-Subject: [PATCH] exec: Fix a spelling mistake
-Date:   Wed, 29 Jun 2022 15:29:32 +0800
-Message-Id: <20220629072932.27506-1-jiaming@nfschina.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 29 Jun 2022 03:29:37 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6368F248C0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:29:36 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-101b4f9e825so20318311fac.5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:29:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=QZQW7+X7qAeWQ0JA11J+Y8+6HrDMvj4CxUzkjuBhZk4=;
+        b=cVHuYXoUBBcO77yyhDnn9dRsLS4jjH7jJT7wBlYKn1PkKTKNe3bZHOH6+8Iz3fG+1s
+         6qvW56SRXka8ShlfNVZhhy9EhuAwPIQBwY0aS6tcz4GMKflhio6xYYKNoesvFk6SOqqu
+         U91f8Mzs5sZidos4K4DovB9CapAukJ/QfoGS8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=QZQW7+X7qAeWQ0JA11J+Y8+6HrDMvj4CxUzkjuBhZk4=;
+        b=MIPYQm/a8NiFZTBPbAOd5XxpAAwKbfTyrW2n4uEbtpQlfS7EUf81YDVwB+fL4QyANH
+         ODnMFfDAhcxYd+OYkMPoV3Xiq0lJeHskrH2Kbed5AURiUN+yPM4m8KEvKUrctq2IAgOv
+         6wJZWDXaWEU8mdC48M2zg3G2HHJjmkPZIVAy2FVAU2o6gP7cOR2S+wP7Cj/4ed2p4J5W
+         ixrzqkwKbd8paLUlv/mIIQhO7YPDL1PiE+F3nNr8hMHIxZSdVJWXmjQ6PbnqOnBYOt0I
+         0jXRAZfSgRfqAvBedsMDviqbUPjuE+H6URf3k0m+5WAW89nWYon5sSm46xLOwhyySDFt
+         sP/A==
+X-Gm-Message-State: AJIora93lLYKmO5UJwhoJSeHcMXLF7qi2FQ0dh9Jil/z/QBd9vMysXMA
+        DBdvYDgvK51uVIE4vxTlJipEDdubKK2YGMv6q2QdtQ==
+X-Google-Smtp-Source: AGRyM1vaywAXGT5aAjMk6AmlxtgNGPiL57UiTFsOz2mBPdyZOB/WeFYD1oj5i+TmFEv+OrgHcLCr65PRFFZJmJ+4AQU=
+X-Received: by 2002:a05:6870:b381:b0:fe:2004:b3b5 with SMTP id
+ w1-20020a056870b38100b000fe2004b3b5mr1151175oap.63.1656487775750; Wed, 29 Jun
+ 2022 00:29:35 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 29 Jun 2022 02:29:35 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220627215720.GA3004792-robh@kernel.org>
+References: <20220614195144.2794796-1-swboyd@chromium.org> <20220614195144.2794796-3-swboyd@chromium.org>
+ <CAD=FV=UU-AENyChCvVAKH709E4hFtgo4Txa8zFDY=JM1UifA0g@mail.gmail.com> <20220627215720.GA3004792-robh@kernel.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 29 Jun 2022 02:29:35 -0500
+Message-ID: <CAE-0n53SJbnvyCXhgVWATSs0pKwGqNj9AeVLfNfUUvzR-UxRuA@mail.gmail.com>
+Subject: Re: [PATCH v6 2/2] dt-bindings: cros-ec: Add ChromeOS fingerprint binding
+To:     Doug Anderson <dianders@chromium.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+        Guenter Roeck <groeck@chromium.org>,
+        Craig Hesling <hesling@chromium.org>,
+        Tom Hughes <tomhughes@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,26 +77,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change 'wont't' to 'won't'.
+Quoting Rob Herring (2022-06-27 14:57:20)
+>
+> If we were starting from scratch, I would say you should just drop
+> 'google,cros-ec-spi' from this binding. But I guess you want to preserve
+> compatibility here. In that case, I think all this should be added to
+> the existing doc with an if/then schema for conditional parts. That also
+> avoids defining the common properties twice or moving them to a common,
+> shared schema.
+>
 
-Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
----
- fs/exec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/exec.c b/fs/exec.c
-index 96b9847fca99..5f0656e10b5d 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1156,7 +1156,7 @@ static int de_thread(struct task_struct *tsk)
- 		/*
- 		 * We are going to release_task()->ptrace_unlink() silently,
- 		 * the tracer can sleep in do_wait(). EXIT_DEAD guarantees
--		 * the tracer wont't block again waiting for this thread.
-+		 * the tracer won't block again waiting for this thread.
- 		 */
- 		if (unlikely(leader->ptrace))
- 			__wake_up_parent(leader, leader->parent);
--- 
-2.34.1
-
+I had it all combined in a previous version. Let me see if I can merge
+the two together (again) and fix the bugs.

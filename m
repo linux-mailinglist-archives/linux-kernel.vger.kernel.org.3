@@ -2,119 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABBF55F2AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 03:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1850955F2AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 03:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiF2BLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 21:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
+        id S230005AbiF2BLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 21:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiF2BLA (ORCPT
+        with ESMTP id S229868AbiF2BLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 21:11:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AA226138;
-        Tue, 28 Jun 2022 18:10:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0BADB81E0A;
-        Wed, 29 Jun 2022 01:10:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16829C341C8;
-        Wed, 29 Jun 2022 01:10:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656465057;
-        bh=K3eCd7hCm8MhP8o3l+4ySC/WrN2F82RoNmx18R2IK8A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=jZDcZmVZJzRaR8ixnK53OJdcmu7QYO4Os9OVfswG1aysoK+oyMnVt5oGWjynbPRxz
-         2WmA7j5tqklZGtXBzuUd0DbrpddJ4vjCJuWnucrycL3GBEe/pFnerKDx6C0zBhO6ne
-         ha3SrlL9Q0eK/HK2mxF8D6L0h2JGGVmvSG6nRsZuHTAmSIMmTWrSJu5nM6EllIQXKG
-         TXByYp89JmdD8EC92e/4y4Xvg2VmQEFIV5JzC/vDzZ2ojo3lEscSA9aSzMcZSm0HWn
-         Dn+ydymXwjCESKyMpzHXbWVQnlBtfxIMXhJ/TO24euy8cVSiiwyNZKpFglHHO1QYlD
-         qssHj3AsSEdzQ==
-Date:   Tue, 28 Jun 2022 20:10:55 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     ira.weiny@intel.com
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lukas Wunner <lukas@wunner.de>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-Subject: Re: [PATCH V12 5/9] driver-core: Introduce BIN_ATTR_ADMIN_{RO,RW}
-Message-ID: <20220629011055.GA1890289@bhelgaas>
+        Tue, 28 Jun 2022 21:11:19 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7082729801
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 18:11:17 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id n185so8357684wmn.4
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 18:11:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FADPujuaz1aLOqCIx4QABl+puLiLB9in9PVa2M8nz6c=;
+        b=Ee/Mn6fupFOx1RsAsUTfLTo83y2nDuwz/vZQlJrcy+MQKrDDeGu4XxxFCT2yOGhCC6
+         Bw2SI4DAj91L4IxN4wQtfwJLO4udddz3ZWW9AHN1Ch3KnDz2jaIrV91FX+fZV1ysbQAe
+         W8BvkymGEOrFsHoRJ50tgVxCE0fd0vBd8zUF2ephMjQwJDkYa50Yo89IROL988qAnXk1
+         jTEub7BcOWdXc6ytsq93cIH+lLLDDZLY/TwEPmjC5VHaAahijj1+uqHzPqLOibL7nxTr
+         At60zaJigpgP++fb9tOSs7AtCIi9AYTRVVWXjtldywo5mIVFS+tdwHddadA8T1FRCTPa
+         UJ1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FADPujuaz1aLOqCIx4QABl+puLiLB9in9PVa2M8nz6c=;
+        b=gTYY/awrbyEZkgQd4ZavuI8JDaHdyBOu7RDIIHUKJDwvzTeJ/WS2OOi+zy5SrzYsjC
+         jp6aqxn+nta/+J+k9G+wZm59eNscmh//V9qKV67TiRSOvfN+98zfDTUVKohGnnVJpHsH
+         GxzHHDD/baVyD9vWCBrSTZ1RBRmoqzqRITTRIoIr/fqsGufjijUGukTiSHNRCiWBJZDp
+         gk6PN0t1qDuZX7tEi7QcI368I6NDIdTsAfPz72vwm0QWBWV2xYCJZedmOjPLe8v9cQBM
+         6O+q6tn8V30YYkT/1zZEUnEpr8L8aNIYbODl4m+Vrz8CicCRMg112HF56m2SxSEu++5E
+         tOEA==
+X-Gm-Message-State: AJIora89GcdYLd4dxOKwAt4htMCx5j2sR2HqbtxpcBCxrlnajdNlN37+
+        vofDFtDdgRsX6meJUslv3/cGgxJIBizx9Xx1iPobJQ==
+X-Google-Smtp-Source: AGRyM1tuvXQVwBWgmZgIpprStMeRA8F9duhl/iDK2nFekqHL9I5MmARUZ32KFLWdGW/lfSZYoj0Ixjf3b83Cb63U9IA=
+X-Received: by 2002:a05:600c:3ace:b0:3a0:4ea4:5f77 with SMTP id
+ d14-20020a05600c3ace00b003a04ea45f77mr686836wms.57.1656465075814; Tue, 28 Jun
+ 2022 18:11:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628041527.742333-6-ira.weiny@intel.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220619120451.95251-1-wuyun.abel@bytedance.com>
+ <20220619120451.95251-6-wuyun.abel@bytedance.com> <CABk29NtsTgJT1c-Vg6B5dgYbi+nHEDk2vsBRzRowCXiOPT2qnA@mail.gmail.com>
+ <c353f360-e630-ea29-2045-1a9f005d033d@bytedance.com>
+In-Reply-To: <c353f360-e630-ea29-2045-1a9f005d033d@bytedance.com>
+From:   Josh Don <joshdon@google.com>
+Date:   Tue, 28 Jun 2022 18:11:04 -0700
+Message-ID: <CABk29NuSONYdmLqUDbJKQfwF3tf1Uv3Yy+WbHkh_gY5FXti1cA@mail.gmail.com>
+Subject: Re: [PATCH v4 5/7] sched/fair: skip SIS domain search if fully busy
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Chen Yu <yu.c.chen@intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Krzysztof]
+On Mon, Jun 27, 2022 at 11:53 PM Abel Wu <wuyun.abel@bytedance.com> wrote:
+>
+> >>
+> >> -static inline bool test_idle_cores(int cpu)
+> >> +static inline enum sd_state sd_get_state(int cpu)
+> >>   {
+> >>          struct sched_domain_shared *sds;
+> >>
+> >>          sds = rcu_dereference(per_cpu(sd_llc_shared, cpu));
+> >>          if (sds)
+> >> -               return READ_ONCE(sds->has_idle_cores);
+> >> +               return READ_ONCE(sds->state);
+> >>
+> >> -       return false;
+> >> +       return sd_has_icpus;
+> >> +}
+> >
+> > Why is default not sd_is_busy?
+>
+> The state of sd_is_busy will prevent us from searching the LLC. By
+> design, both sd_has_icores and sd_is_busy indicate deterministic
+> status: has idle cores / no idle cpu exists. While sd_has_icpus is
+> not deterministic, it means there could be unoccupied cpus.
+>
+> The naming seems misleading, it would be nice to have other options.
 
-On Mon, Jun 27, 2022 at 09:15:23PM -0700, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> Many binary attributes need to limit access to CAP_SYS_ADMIN only; ie
-> many binary attributes specify is_visible with 0400 or 0600.
-> 
-> Make setting the permissions of such attributes more explicit by
-> defining BIN_ATTR_ADMIN_{RO,RW}.
-> 
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+sd_has_icores isn't deterministic; when the last fully idle core gets
+an occupied sibling, it will take until the next select_idle_cpu() to
+mark the state as sd_has_icpus instead.
 
-FWIW, this looks a lot like this previous patch:
-  https://lore.kernel.org/all/20210416205856.3234481-7-kw@linux.com/
+A comment here and also at the enum definitions would be helpful I think.
 
-> ---
-> Changes from V11:
-> 	New Patch
-> ---
->  include/linux/sysfs.h | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/include/linux/sysfs.h b/include/linux/sysfs.h
-> index e3f1e8ac1f85..fd3fe5c8c17f 100644
-> --- a/include/linux/sysfs.h
-> +++ b/include/linux/sysfs.h
-> @@ -235,6 +235,22 @@ struct bin_attribute bin_attr_##_name = __BIN_ATTR_WO(_name, _size)
->  #define BIN_ATTR_RW(_name, _size)					\
->  struct bin_attribute bin_attr_##_name = __BIN_ATTR_RW(_name, _size)
->  
-> +
-> +#define __BIN_ATTR_ADMIN_RO(_name, _size) {					\
-> +	.attr	= { .name = __stringify(_name), .mode = 0400 },		\
-> +	.read	= _name##_read,						\
-> +	.size	= _size,						\
-> +}
-> +
-> +#define __BIN_ATTR_ADMIN_RW(_name, _size)					\
-> +	__BIN_ATTR(_name, 0600, _name##_read, _name##_write, _size)
-> +
-> +#define BIN_ATTR_ADMIN_RO(_name, _size)					\
-> +struct bin_attribute bin_attr_##_name = __BIN_ATTR_ADMIN_RO(_name, _size)
-> +
-> +#define BIN_ATTR_ADMIN_RW(_name, _size)					\
-> +struct bin_attribute bin_attr_##_name = __BIN_ATTR_ADMIN_RW(_name, _size)
-> +
->  struct sysfs_ops {
->  	ssize_t	(*show)(struct kobject *, struct attribute *, char *);
->  	ssize_t	(*store)(struct kobject *, struct attribute *, const char *, size_t);
-> -- 
-> 2.35.3
-> 
+> >
+> >> +
+> >> +static inline void set_idle_cores(int cpu, int idle)
+> >
+> > nit: Slightly confusing to call the param 'idle', since in the case it
+> > is false we still mark icpus. Consider possibly 'core_idle'.
+>
+> What about changing the param 'cpu' to 'core'?
+
+I think keeping it as "cpu" is fine, since as "core" that would imply
+some per-core state (when we're still setting this per-cpu).
+
+> >>          for_each_cpu_and(i, sched_group_span(group), env->cpus) {
+> >>                  struct rq *rq = cpu_rq(i);
+> >> @@ -8692,6 +8740,9 @@ static inline void update_sg_lb_stats(struct lb_env *env,
+> >>                  nr_running = rq->nr_running;
+> >>                  sgs->sum_nr_running += nr_running;
+> >>
+> >> +               if (update_core)
+> >> +                       sd_classify(sds, rq);
+> >> +
+> >>                  if (nr_running > 1)
+> >>                          *sg_status |= SG_OVERLOAD;
+> >>
+> >> @@ -9220,6 +9271,12 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+> >>          return idlest;
+> >>   }
+> >>
+> >> +static void sd_update_state(struct lb_env *env, struct sd_lb_stats *sds)
+> >> +{
+> >> +       if (sds->sd_state == sd_has_icpus && !test_idle_cpus(env->dst_cpu))
+> >> +               set_idle_cpus(env->dst_cpu, true);
+> >> +}
+> >
+> > We're only setting state to has_icpus here in sd_update_state. That
+> > doesn't feel good enough, since we're only updating state for
+> > env->dst_cpu; all the other per-cpu state will remain stale (ie.
+> > falsely sd_is_busy).
+>
+> It's LLC-wide shared :)
+
+Oh wow, yea that's the thing I missed... Thanks.
+
+> > I think you also want a case in __update_idle_core() to call
+> > set_idle_cores(core, 0) in the case where we have a non-idle sibling,
+> > since we want to at least mark has_icpus even if the entire core isn't
+> > idle.
+
+More specifically, in the __update_idle_core() function, if the
+sibling is still busy and the sd_state is sd_is_busy, we should
+instead mark it as sd_has_icpus, since the current cpu is guaranteed
+to be going idle.
+
+Additionally, to be consistent with what we're calling "idle"
+elsewhere, I think you mean to have __update_idle_core() check either
+available_idle_cpu() or sched_idle_cpu()?

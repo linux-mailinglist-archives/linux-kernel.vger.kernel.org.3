@@ -2,46 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A14755F406
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 05:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A17455F417
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 05:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbiF2DWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 23:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50236 "EHLO
+        id S231548AbiF2DW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 23:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiF2DW3 (ORCPT
+        with ESMTP id S231482AbiF2DWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 23:22:29 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F1CDAD;
-        Tue, 28 Jun 2022 20:22:26 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R681e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VHlnta._1656472943;
-Received: from 30.97.57.27(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VHlnta._1656472943)
-          by smtp.aliyun-inc.com;
-          Wed, 29 Jun 2022 11:22:24 +0800
-Message-ID: <fada5140-077e-6904-f9b6-c7bfba7779eb@linux.alibaba.com>
-Date:   Wed, 29 Jun 2022 11:22:23 +0800
+        Tue, 28 Jun 2022 23:22:47 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61719581
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 20:22:43 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LXmtd1M5bzhYWQ;
+        Wed, 29 Jun 2022 11:20:25 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 29 Jun 2022 11:22:41 +0800
+CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <bristot@redhat.com>,
+        <prime.zeng@huawei.com>, <jonathan.cameron@huawei.com>,
+        <ego@linux.vnet.ibm.com>, <srikar@linux.vnet.ibm.com>,
+        <linuxarm@huawei.com>, <21cnbao@gmail.com>,
+        <guodong.xu@linaro.org>, <hesham.almatary@huawei.com>,
+        <john.garry@huawei.com>, <shenyang39@huawei.com>,
+        <feng.tang@intel.com>
+Subject: Re: [PATCH v4 1/2] sched: Add per_cpu cluster domain info and
+ cpus_share_resources API
+To:     K Prateek Nayak <kprateek.nayak@amd.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Yicong Yang <yangyicong@hisilicon.com>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <juri.lelli@redhat.com>,
+        <vincent.guittot@linaro.org>, <gautham.shenoy@amd.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220609120622.47724-1-yangyicong@hisilicon.com>
+ <20220609120622.47724-2-yangyicong@hisilicon.com>
+ <e000b124-afd4-28e1-fde2-393b0e38ce19@amd.com>
+ <81fbcadb-a58d-2cef-9c05-154555ec1d68@huawei.com>
+ <6bf4f032-7d07-d4a4-4f5a-28f3871131c0@amd.com>
+ <b87ddfd7a8dd418edfcdbad22a4fc1e9ef03109a.camel@linux.intel.com>
+ <5638aed5-bbd0-a74e-759f-0de51e3651f7@amd.com>
+ <cf13647f-6bb6-34d5-c6b6-41a7500a9612@bytedance.com>
+ <3db2443d-3c30-703d-d4c1-b184eccbf3b5@amd.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <1f3158f3-9c17-d229-2b28-e2e60b3a5db5@huawei.com>
+Date:   Wed, 29 Jun 2022 11:22:40 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [RFC] libubd: library for ubd(userspace block driver based on
- io_uring passthrough)
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-block@vger.kernel.org, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        joseph.qi@linux.alibaba.com
-References: <fd926012-6845-05e4-077b-6c8cfbf3d3cc@linux.alibaba.com>
- <YrnMwgW7TemVdbXv@T590>
-From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-In-Reply-To: <YrnMwgW7TemVdbXv@T590>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+In-Reply-To: <3db2443d-3c30-703d-d4c1-b184eccbf3b5@amd.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,295 +71,362 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ming,
-
-On 2022/6/27 23:29, Ming Lei wrote:
-> Hi Ziyang,
+On 2022/6/28 19:55, K Prateek Nayak wrote:
+> Hello Abel,
 > 
-> On Mon, Jun 27, 2022 at 04:20:55PM +0800, Ziyang Zhang wrote:
->> Hi Ming,
+> Thank you for looking into this issue.
+> 
+> tl;dr
+> 
+> We have found two variables that need to be
+> co-located on the same cache line to restore tbench
+> performance.
+> 
+> As this issue is unrelated to the functionality of
+> the patch, it should not hold this patch series from
+> landing given the performance improvements seen on
+> systems with CPU clusters.
+> 
+> The results of our analysis are discussed in
+> detail below.
+> 
+> On 6/20/2022 7:07 PM, Abel Wu wrote:
 >>
->> We are learning your ubd code and developing a library: libubd for ubd.
->> This article explains why we need libubd and how we design it.
+>> On 6/20/22 7:20 PM, K Prateek Nayak Wrote:
+>>> Hello Tim,
+>>>
+>>> Thank you for looking into this.
+>>>
+>>> On 6/17/2022 10:20 PM, Tim Chen wrote:
+>>>> On Fri, 2022-06-17 at 17:50 +0530, K Prateek Nayak wrote:
+>>>>>
+>>>>>
+>>>>> -- 
+>>>>> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+>>>>> index e9f3dc6dcbf4..97a3895416ab 100644
+>>>>> --- a/kernel/sched/sched.h
+>>>>> +++ b/kernel/sched/sched.h
+>>>>> @@ -1750,12 +1750,12 @@ static inline struct sched_domain *lowest_flag_domain(int cpu, int flag)
+>>>>>       return sd;
+>>>>>   }
+>>>>>   +DECLARE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
+>>>>> +DECLARE_PER_CPU(int, sd_share_id);
+>>>>>   DECLARE_PER_CPU(struct sched_domain __rcu *, sd_llc);
+>>>>>   DECLARE_PER_CPU(int, sd_llc_size);
+>>>>>   DECLARE_PER_CPU(int, sd_llc_id);
+>>>>> -DECLARE_PER_CPU(int, sd_share_id);
+>>>>>   DECLARE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
+>>>>> -DECLARE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
+>>>>>   DECLARE_PER_CPU(struct sched_domain __rcu *, sd_numa);
+>>>>>   DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
+>>>>>   DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
+>>>>> -- 
+>>>>>
+>>>>> The System-map of each kernel is as follows:
+>>>>>
+>>>>> - On "tip"
+>>>>>
+>>>>> 0000000000020518 D sd_asym_cpucapacity
+>>>>> 0000000000020520 D sd_asym_packing
+>>>>> 0000000000020528 D sd_numa
+>>>>> 0000000000020530 D sd_llc_shared
+>>>>> 0000000000020538 D sd_llc_id
+>>>>> 000000000002053c D sd_llc_size
+>>>>> -------------------------------------------- 64B Cacheline Boundary
+>>>>> 0000000000020540 D sd_llc
+>>>>>
+>>>>> - On "tip + Patch 1 only" and "tip + both patches"
+>>>>>
+>>>>> 0000000000020518 D sd_asym_cpucapacity
+>>>>> 0000000000020520 D sd_asym_packing
+>>>>> 0000000000020528 D sd_numa
+>>>>> 0000000000020530 D sd_cluster     <-----
+>>>>> 0000000000020538 D sd_llc_shared
+>>>>> -------------------------------------------- 64B Cacheline Boundary
+>>>>> 0000000000020540 D sd_share_id    <-----
+>>>>> 0000000000020544 D sd_llc_id
+>>>>> 0000000000020548 D sd_llc_size
+>>>>> 0000000000020550 D sd_llc
+>>>>>
+>>>>>
+>>>>> - On "tip + both patches (Move declaration to top)"
+>>>>>
+>>>>> 0000000000020518 D sd_asym_cpucapacity
+>>>>> 0000000000020520 D sd_asym_packing
+>>>>> 0000000000020528 D sd_numa
+>>>>> 0000000000020530 D sd_llc_shared
+>>>>> 0000000000020538 D sd_llc_id
+>>>>> 000000000002053c D sd_llc_size
+>>>>> -------------------------------------------- 64B Cacheline Boundary
+>>>>> 0000000000020540 D sd_llc
+>>>>
+>>>> Wonder if it will help to try keep sd_llc and sd_llc_size into the same
+>>>> cache line.  They are both used in the wake up path.
+>>>
+>>> We are still evaluating keeping which set of variables on the same
+>>> cache line will provide the best results.
+>>>
+>>> I would have expected the two kernel variants - "tip" and the
+>>> "tip + both patches (Move declaration to top)" - to give similar results
+>>> as their System map for all the old variables remain the same and the
+>>> addition of "sd_share_id" and "sd_cluster: fit in the gap after "sd_llc".
+>>> However, now we see a regression for higher number of client.
+>>>
+>>> This probably hints that access to "sd_cluster" variable in Patch 2 and
+>>> bringing in the extra cache line could be responsible for the regression
+>>> we see with "tip + both patches (Move declaration to top)"
+>>>
+>>>>
+>>>>
+>>>>> 0000000000020548 D sd_share_id    <-----
+>>>>> 0000000000020550 D sd_cluster     <-----
+>>>>>
+>>>>>> Or change the layout a bit to see if there's any difference,
+>>>>>> like:
+>>>>>>
+>>>>>>   DEFINE_PER_CPU(struct sched_domain __rcu *, sd_llc);
+>>>>>>   DEFINE_PER_CPU(int, sd_llc_size);
+>>>>>>   DEFINE_PER_CPU(int, sd_llc_id);
+>>>>>>   DEFINE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
+>>>>>> +DEFINE_PER_CPU(int, sd_share_id);
+>>>>>> +DEFINE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
+>>>>>>   DEFINE_PER_CPU(struct sched_domain __rcu *, sd_numa);
+>>>>>>   DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
+>>>>>>
+>>>>>> I need to further look into it and have some tests on a SMT machine. Would you mind to share
+>>>>>> the kernel config as well? I'd like to compare the config as well.
+>>>>>
+>>>>> I've attached the kernel config used to build the test kernel
+>>>>> to this mail.
+>>>>>
+>>>>>> Thanks,
+>>>>>> Yicong
+>>>>>
+>>>>> We are trying to debug the issue using perf and find an optimal
+>>>>> arrangement of the per cpu declarations to get the relevant data
+>>>>> used in the wakeup path on the same 64B cache line.
+>>>>
+>>>> A check of perf c2c profile difference between tip and the move new declarations to
+>>>> the top case could be useful.  It may give some additional clues of possibel
+>>>> false sharing issues.
+>>>
+>>> Thank you for the suggestion. We are currently looking at perf counter
+>>> data to see how the cache efficiency has changed between the two kernels.
+>>> We suspect that the need for the data in the other cache line too in the
+>>> wakeup path is resulting in higher cache misses in the levels closer to
+>>> the core.
+>>>
+>>> I don't think it is a false sharing problem as these per CPU data are
+>>> set when the system first boots up and will only be change again during
+>>> a CPU hotplug operation. However, it might be beneficial to see the c2c
+>>> profile if perf counters don't indicate anything out of the ordinary.
+>>>
 >>
->> Related threads:
->> (1) https://lore.kernel.org/all/Yk%2Fn7UtGK1vVGFX0@T590/
->> (2) https://lore.kernel.org/all/YnDhorlKgOKiWkiz@T590/
->> (3) https://lore.kernel.org/all/20220509092312.254354-1-ming.lei@redhat.com/
->> (4) https://lore.kernel.org/all/20220517055358.3164431-1-ming.lei@redhat.com/
+>> Would it be possible if any other frequent-written variables share
+>> same cacheline with these per-cpu data causing false sharing? 
+> 
+> This indeed seems to be the case. I'll leave the
+> detailed analysis below.
+> 
+
+The percpu variables seems won't be affected by the non-percpu variables as the
+percpu section is already cacheline aligned. arm64's vmlinux.ld.S shows
+PERCPU_SECTION(L1_CACHE_BYTES).
+
+>> What
+>> about making all these sd_* data DEFINE_PER_CPU_READ_MOSTLY?
 >>
->>
->> Userspace block driver(ubd)[1], based on io_uring passthrough,
->> allows users to define their own backend storage in userspace
->> and provides block devices such as /dev/ubdbX.
->> Ming Lei has provided kernel driver code: ubd_drv.c[2]
->> and userspace code: ubdsrv[3].
->>
->> ubd_drv.c simply passes all blk-mq IO requests
->> to ubdsrv through io_uring sqes/cqes. We think the kernel code
->> is pretty well-designed.
->>
->> ubdsrv is implemented by a single daemon
->> and target(backend) IO handling(null_tgt and loop_tgt) 
->> is embedded in the daemon. 
->> While trying ubdsrv, we find ubdsrv is hard to be used 
->> by our backend.
 > 
-> ubd is supposed to provide one generic framework for user space block
-> driver, and it can be used for doing lots of fun/useful thing.
+> Making all the sd_* variables DEFINE_PER_CPU_READ_MOSTLY or
+> placing all the sd_* variables on the same cache line doesn't
+> help the regression. In fact, it makes it worse.
 > 
-> If I understand correctly, this isn't same with your use case:
+> Following are the results on different test kernels:
+> tip				- 5.19.0-rc2 tip
+> 				  (commit: f3dd3f674555 "sched: Remove the limitation of WF_ON_CPU on wakelist if wakee cpu is idle")
+> cluster				- tip + both the patches of the series
+> Patch1				- tip + only Patch 1
+> align_first (Patch 1) 		- tip + only Patch 1 + all sd_* variables in same cache line
+> per_cpu_aigned_struct (Patch 1) - tip + only Patch 1 + all sd_* variables part of a per_cpu struct which is cacheline aligned
 > 
-> 1) your user space block driver isn't generic, and should be dedicated
-> for Alibaba's uses
+> Clients:       tip                    cluster                 Patch1             align_first (Patch 1)       per_cpu_aigned_struct (Patch 1)
+>     8    3263.81 (0.00 pct)      3086.81 (-5.42 pct)     3018.63 (-7.51 pct)     2993.65 (-8.27 pct)         1728.89 (-47.02 pct)
+>    16    6011.19 (0.00 pct)      5360.28 (-10.82 pct)    4869.26 (-18.99 pct)    4820.18 (-19.81 pct)        3840.64 (-36.10 pct)
+>    32    12058.31 (0.00 pct)     8769.08 (-27.27 pct)    8159.60 (-32.33 pct)    7868.82 (-34.74 pct)        7130.19 (-40.86 pct)
+>    64    21258.21 (0.00 pct)     19021.09 (-10.52 pct)   13161.92 (-38.08 pct)   12327.86 (-42.00 pct)       12572.70 (-40.85 pct)
 > 
-> 2) your case has been there for long time, and you want to switch from other
-> approach(maybe tcmu) to ubd given ubd has better performance.
+> Following is the system map for the kernel variant "align_first (Patch 1)":
+> 
+> --
+> 00000000000204c0 d sugov_cpu
+>  ------------------------------------------------ 20500 (Cache Line Start)
+> 0000000000020508 d root_cpuacct_cpuusage
+> 0000000000020510 D cpufreq_update_util_data
+>  ------------------------------------------------ 20540 (Cache Line Start)
+> 0000000000020540 D sd_asym_cpucapacity                  
+> 0000000000020548 D sd_asym_packing                      
+> 0000000000020550 D sd_numa                              
+> 0000000000020558 D sd_cluster                           
+> 0000000000020560 D sd_llc_shared                        
+> 0000000000020568 D sd_share_id                          
+> 000000000002056c D sd_llc_id                            
+> 0000000000020570 D sd_llc_size                          
+> 0000000000020578 D sd_llc                               
+>  ------------------------------------------------ 20580 (Cache Line Start)
+> 0000000000020580 d wake_up_klogd_work
+> 00000000000205a0 d printk_pending
+> 00000000000205a4 d printk_count_nmi
+> 00000000000205a5 d printk_count
+> 00000000000205a8 d printk_context
+>  ------------------------------------------------ 205c0 (Cache Line Start)
+> 00000000000205c0 d rcu_tasks_trace__percpu
+> --
+> 
+> At this point it was clear that one or more sd_* variable needs
+> to be co-located with the per CPU variables in cache line starting
+> at 20540. We began moving variable out of the cache line one by one
+> to see which variable makes the difference as we found out that as
+> long as root_cpuacct_cpuusage and sd_llc_id are on the same cache
+> line, the results were equivalent of what we saw on the tip. As both
+> the variables seem to be accesses very frequently, access to one will
+> prime the cache line containing the other variable as well leading to
+> better cache efficiency.
+> 
+> Placing root_cpuacct_cpuusage, sd_llc_id, sd_share_id, sd_llc_shared
+> and sd_cluster on the same cache line, the results are as follows:
+> 
+> Kernel versions:
+> tip					- 5.19.0-rc2 tip
+> cluster					- tip + both the patches of the series
+> cluster (Custom Layout)			- tip + both the patches of the series + reworked system map
+> cluster (Custom Layout) + SIS_UTIL	- cluster (Custom Layout) + v4 of SIS_UTIL patchset by Chenyu
+> 					  (https://lore.kernel.org/lkml/20220612163428.849378-1-yu.c.chen@intel.com/)
+> 
+> Clients:      tip                     cluster          cluster (Custom Layout)       cluster (Custom Layout)
+>                                                                                             + SIS Util
+>     1    444.41 (0.00 pct)       439.27 (-1.15 pct)      438.06 (-1.42 pct)             447.75 (0.75 pct)
+>     2    879.23 (0.00 pct)       831.49 (-5.42 pct)      846.98 (-3.66 pct)             871.64 (-0.86 pct)
+>     4    1648.83 (0.00 pct)      1608.07 (-2.47 pct)     1621.38 (-1.66 pct)            1656.34 (0.45 pct)
+>     8    3263.81 (0.00 pct)      3086.81 (-5.42 pct)     3103.40 (-4.91 pct)     *      3227.88 (-1.10 pct)
+>    16    6011.19 (0.00 pct)      5360.28 (-10.82 pct)    5838.04 (-2.88 pct)            6232.92 (3.68 pct)
+>    32    12058.31 (0.00 pct)     8769.08 (-27.27 pct)    11577.73 (-3.98 pct)           11774.10 (-2.35 pct)
+>    64    21258.21 (0.00 pct)     19021.09 (-10.52 pct)   19563.57 (-7.97 pct)    *      22044.93 (3.70 pct)
+>   128    30795.27 (0.00 pct)     30861.34 (0.21 pct)     31705.47 (2.95 pct)            28986.14 (-5.87 pct)    *
+>   256    25138.43 (0.00 pct)     24711.90 (-1.69 pct)    23929.42 (-4.80 pct)    *      43984.52 (74.96 pct)    [Known to be unstable without SIS_UTIL]
+>   512    51287.93 (0.00 pct)     51855.55 (1.10 pct)     52278.33 (1.93 pct)            51511.51 (0.43 pct)
+>  1024    53176.97 (0.00 pct)     52554.55 (-1.17 pct)    52995.27 (-0.34 pct)           52807.04 (-0.69 pct)
+> 
+> Chenyu's SIS_UTIL patch was merged today in the tip
+> (commit: 70fb5ccf2ebb "sched/fair: Introduce SIS_UTIL to search idle CPU based on sum of util_avg")
+> and seems to bring back performance to the same level
+> as seen on the tip used during our testing.
+> 
+> The system map of the tested configuration labelled "Custom Layout"
+> is as follows:
+> 
+> --
+> 00000000000204c0 d sugov_cpu
+>  ------------------------------------------------ 20500 (Cache Line Start)
+> 0000000000020508 d root_cpuacct_cpuusage
+> 0000000000020510 D cpufreq_update_util_data
+> 0000000000020518 D sd_llc_id
+> 000000000002051c D sd_share_id
+> 0000000000020520 D sd_llc_shared
+> 0000000000020528 D sd_cluster
+> 0000000000020530 D sd_asym_cpucapacity
+> 0000000000020538 D sd_asym_packing
+>  ------------------------------------------------ 20540 (Cache Line Start)
+> 0000000000020540 D sd_numa
+> 0000000000020548 D sd_llc_size
+> 0000000000020550 D sd_llc
+> 0000000000020560 d wake_up_klogd_work
+>  ------------------------------------------------ 20580 (Cache Line Start)
+> 0000000000020580 d printk_pending
+> 0000000000020584 d printk_count_nmi
+> 0000000000020585 d printk_count
+> 0000000000020588 d printk_context
+>  ------------------------------------------------ 205c0 (Cache Line Start)
+> 00000000000205c0 d rcu_tasks_trace__percpu
+> --
 > 
 
-Yes, you are correct :)
-The idea of design libubd is actually from libtcmu.
+Thanks for the data. It looks sufficient to illustrate the issue. I'm still a little curious that
+is it specific on Zen 3? Since I cannot get the Zen 3 machine so I tried to reproduce this on the a
+AMD 7742 (2 x 64C/128T) and an Intel 6148 (2 x 40C/80T) machine with your config based on tip/sche/core
+of commit f3dd3f674555 "sched: Remove the limitation of WF_ON_CPU on wakelist if wakee cpu is idle".
+With cluster's percpu definition patch(the worst case) the root_cpuacct_cpuusage and sd_llc_id are
+separated but make little difference to the tbench.
 
-We do have some userspace storage system as the IO handling backend, 
-and we need ubd to provide block drivers such as /dev/ubdbX for up layer client apps.
+For 7742 with NPS = 1:					
+	tip/sched/core				tip/sched/core-cls-percpu				
+threads	iter-1	iter-2	iter-3	avg		iter-1	iter-2	iter-3	avg	
+1	287.254	285.252	288.29	286.93		288.105	285.884	286.164	286.72   (-0.075%)
+2	573.623	570.326	573.67	572.54		577.242	574.257	575.611	575.70   (0.553%)
+4	1140.01	1135.54	1137.9	1137.82		1153.45	1146.66	1149.8	1149.97  (1.068%)
+8	2232.73	2228.71	2237.47	2232.97		2280.83	2291.94	2287.55	2286.77  (2.409%)
+16	4510.65	4465.2	4522.22	4499.36		4551.19	4573.85	4575.78	4566.94  (1.502%)
+32	8432.43	8542.35	8404.7	8459.83		8627.4	8712.29	8764.53	8701.41  (2.856%)
+64	16404.2	16464.7	15686.4	16185.10	15878.3	15638.3	15735.6	15750.73 (-2.684%)
+128	23327.6	22767.4	21017.3	22370.77	23774.9	23733.2	21744.9	23084.33 (3.190%)
+
+layout of core-cls-percpu:
+0000000000020508 d root_cpuacct_cpuusage
+0000000000020510 D cpufreq_update_util_data
+0000000000020518 D sd_asym_cpucapacity
+0000000000020520 D sd_asym_packing
+0000000000020528 D sd_numa
+0000000000020530 D sd_cluster
+0000000000020538 D sd_llc_shared
+---------------------------------boundary
+0000000000020540 D sd_share_id
+0000000000020544 D sd_llc_id
+0000000000020548 D sd_llc_size
+0000000000020550 D sd_llc
+
+For 6148 with SNC disabled:
+         tip/sched/core       tip/sched/core-cls-percpu
+1        314.44 (   0.00%)      316.68 *   0.71%*
+2        630.22 (   0.00%)      633.84 *   0.57%*
+4       1260.70 (   0.00%)     1267.32 *   0.52%*
+8       2475.31 (   0.00%)     2485.94 *   0.43%*
+16      4684.03 (   0.00%)     4682.21 *  -0.04%*
+32      7496.28 (   0.00%)     7360.41 *  -1.81%*
+64      7981.56 (   0.00%)     7851.73 *  -1.63%*
+128    15359.81 (   0.00%)    15255.68 *  -0.68%*
+256    15104.31 (   0.00%)    15253.85 *   0.99%*
+320    15146.47 (   0.00%)    15151.39 *   0.03%*
+
+layout of core-cls-percpu:
+0000000000020508 d root_cpuacct_cpuusage
+0000000000020510 D cpufreq_update_util_data
+0000000000020518 D sd_asym_cpucapacity
+0000000000020520 D sd_asym_packing
+0000000000020528 D sd_numa
+0000000000020530 D sd_cluster
+0000000000020538 D sd_llc_shared
+---------------------------------boundary
+0000000000020540 D sd_share_id
+0000000000020544 D sd_llc_id
+0000000000020548 D sd_llc_size
+0000000000020550 D sd_llc
 
 
-I think your motivation is that provides a complete user block driver to users
-and they DO NOT change any code.
-Users DO change their code using libubd for embedding libubd into the backend.
-
-
->> First is description of our backend:
->>
->> (1) a distributing system sends/receives IO requests 
->>     through network.
->>
->> (2) The system use RPC calls among hundreds of
->>      storage servers and RPC calls are associated with data buffers
->>      allocated from a memory pool.
->>
->> (3) On each server for each device(/dev/vdX), our backend runs
->>      many threads to handle IO requests and manage the device. 
->>
->> Second are reasons why ubdsrv is hard to use for us:
->>
->> (1) ubdsrv requires the target(backend) issues IO requests
->>     to the io_uring provided by ubdsrv but our backend 
->>     uses something like RPC and does not support io_uring.
+> The System-map is however dependent on multiple factors
+> such as config options enabled, etc. which can change from
+> build to build.
+> Finding a permanent solution to the issue might take
+> some more time.
 > 
-> As one generic framework, the io command has to be io_uring
-> passthrough, and the io doesn't have to be handled by io_uring.
-
-Yes, our backend define its own communicating method.
-
+> Meanwhile, as this is an issue unrelated to the
+> functionality of this patch, it should not block
+> the landing of this patch series.
+> Thank you everyone for your pointers and patience
+> during this debug.
 > 
-> But IMO io_uring is much more efficient, so I'd try to make async io
-> (io uring) as the 1st citizen in the framework, especially for new
-> driver.
-> 
-> But it can support other way really, such as use io_uring with eventfd,
-> the other userspace context can handle io, then wake up io_uring context
-> via eventfd. You may not use io_uring for handling io, but you still
-> need to communicate with the context for handling io_uring passthrough
-> command, and one mechanism(such as eventfd) has to be there for the
-> communication.
+> Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
 
-Ok, eventfd may be helpful. 
-If you read my API, you may find ubdlib_complete_io_request().
-I think the backend io worker thread can call this function to tell the 
-ubd queue thread(the io_uring context in it) to commit the IO.
+Thanks. Then I'll respin the patch.
 
+Regards,
+Yicong
 
-
-> 
->>
->> (2) ubdsrv forks a daemon and it takes over everything.
->>     Users should type "list/stop/del" ctrl-commands to interact with
->>     the daemon. It is inconvenient for our backend
->>     because it has threads(from a C++ thread library) running inside.
-> 
-> No, list/stop/del won't interact with the daemon, and the per-queue
-> pthread is only handling IO commands(io_uring passthrough) and IO request.
-> 
-
-
-Sorry I made a mistake.
-
-I mean from user's view, 
-he has to type list/del/stop from cmdlind to control the daemon.
-(I know the control flow is cmdline-->ubd_drv.c-->ubdsrv daemon).
-
-This is a little weird if we try to make a ubd library.
-So I actually provides APIs in libubd for users to do these list/del/stop works.
-
-
->>
->> (3) ubdsrv PRE-allocates internal data buffers for each ubd device.
->>     The data flow is:
->>     bio vectors <-1-> ubdsrv data buffer <-2-> backend buffer(our RPC buffer).
->>     Since ubdsrv does not export its internal data buffer to backend,
->>     the second copy is unavoidable. 
->>     PRE-allocating data buffer may not be a good idea for wasting memory
->>     if there are hundreds of ubd devices(/dev/ubdbX).
-> 
-> The preallocation is just virtual memory, which is cheap and not pinned, but
-> ubdsrv does support buffer provided by io command, see:
-> 
-> https://github.com/ming1/linux/commit/0a964a1700e11ba50227b6d633edf233bdd8a07d
-
-Actually I discussed on the design of pre-allocation in your RFC patch for ubd_drv
-but you did not reply :)
-
-I paste it here:
-
-"I am worried about the fixed-size(size is max io size, 256KiB) pre-allocated data buffers in UBDSRV
-may consume too much memory. Do you mean these pages can be reclaimed by sth like madvise()?
-If (1)swap is not set and (2)madvise() is not called, these pages may not be reclaimed."
-
-I observed that your ubdsrv use posix_memalign() to pre-allocate data buffers, 
-and I have already noticed the memory cost while testing your ubdsrv with hundreds of /dev/ubdbX.
-
-Another IMPORTANT problem is your commit:
-https://github.com/ming1/linux/commit/0a964a1700e11ba50227b6d633edf233bdd8a07d
-may be not helpful for WRITE requests if I understand correctly.
-
-Consider this data flow:
-
-1. ubdsrv commits an IO req(req1, a READ req).
-
-2. ubdsrv issues a sqe(UBD_IO_COMMIT_AND_FETCH_REQ), and sets io->addr to addr1.
-   addr1 is the addr of buffer user passed.
-   
-
-3. ubd gets the sqe and commits req1, sets io->addr to addr1.
-
-4. ubd gets IO req(req2, a WRITE req) from blk-mq(queue_rq) and commit a cqe.
-
-5. ubd copys data to be written from biovec to addr1 in a task_work.
-
-6. ubdsrv gets the cqe and tell the IO target to handle req2.
-
-7. IO target handles req2. It is a WRITE req so target issues a io_uring write
-   cmd(with buffer set to addr1).
-
-
-
-The problem happens in 5). You cannot know the actual data_len of an blk-mq req
-until you get one in queue_rq. So length of addr1 may be less than data_len.
-> 
->>
->> To better use ubd in more complicated scenarios, we have developed libubd.
->> It does not assume implementation of backend and can be embedded into it.
->> We refer to the code structure of tcmu-runner[4], 
->> which includes a library(libtcmu) for users 
->> to embed tcmu-runner inside backend's code. 
->> It:
->>
->> (1) Does not fork/pthread_create but embedded in backend's threads
-> 
-> That is because your backend may not use io_uring, I guess.
-> 
-> But it is pretty easy to move the decision of creating pthread to target
-> code, which can be done in the interface of .prepare_target().
-
-I think the library should not create any thread if we want a libubd.
-
-> 
->>
->> (2) Provides libubd APIs for backend to add/delete ubd devices 
->>     and fetch/commit IO requests
-> 
-> The above could be the main job of libubd.
-
-indeed.
-
-> 
->>
->> (3) simply passes backend-provided data buffers to ubd_drv.c in kernel,
->>     since the backend actually has no knowledge 
->>     on incoming data size until it gets an IO descriptor.
-> 
-> I can understand your requirement, not look at your code yet, but libubd
-> should be pretty thin from function viewpoint, and there are lots of common
-> things to abstract/share among all drivers, please see recent ubdsrv change:
-> 
-> https://github.com/ming1/ubdsrv/commits/master
-> 
-> in which:
-> 	- coroutine is added for handling target io
-> 	- the target interface(ubdsrv_tgt_type) has been cleaned/improved for
-> 	supporting complicated target
-> 	- c++ support
-
-Yes, I have read your coroutine code but I am not an expert of C++ 20.:(
-I think it is actually target(backend) design and ubd should not assume 
-how the backend handle IOs. 
-
-The work ubd in userspace has to be done is:
-
-1) give some IO descriptors to backend, such as ubd_get_io_requests()
-
-2) get IO completion form backend, such as ubd_complete_io_requests()
-
-
-
-> 
-> IMO, libubd isn't worth of one freshly new project, and it could be integrated
-> into ubdsrv easily. The potential users could be existed usersapce
-> block driver projects.
-
-Yes, so many userspace storage systems can use ubd!
-You may look at tcmu-runner. It:
-
-1) provides a library(libtcmu.c) for those who have a existing backend.
-
-2) provides a runner(main.c in tcmu-runner) like your ubdsrv 
-   for those who just want to run it. 
-   And the runner is build on top of libtcmu.
-
-> 
-> If you don't object, I am happy to co-work with you to add the support
-> for libubd in ubdsrv, then we can avoid to invent a wheel
-
-+1 :)
-
-> 
->>
->> Note: 
->>
->> (1) libubd is just a POC demo and is not stick to the principles of
->>     designing a library and we are still developing it now...
->>
->> (2) The repo[5] including some useful examples using libubd. 
->>
->> (3) We modify the kernel part: ubd_drv.c and 
->>     it[6] is against Ming Lei's newest branch[2]
->>     because we forked our branch from his early branch
->>     (v5.17-ubd-dev).
-> 
-> Please look at the following tree for ubd driver:
-> 
-> https://github.com/ming1/linux/tree/my_for-5.19-ubd-devel_v3
-> 
-> in which most of your change should have been there already.
-> 
-> I will post v3 soon, please feel free to review after it is out and
-> see if it is fine for you.
-
-Yes, I have read your newest branch.
-You use some task_work() functions in ubd_drv.c 
-for error-handling such as aborting IO.
-
-But I find they are too complicated to understand 
-and it's hard to write libubd code in this branch.
-
-So I choose your first(easiest to understand)
-version: v5.17-ubd-dev.
-
-Thanks,
-Zhang.
-
-> 
-> 
-> Thanks,
-> Ming

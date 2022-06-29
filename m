@@ -2,92 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84844560818
+	by mail.lfdr.de (Postfix) with ESMTP id CC923560819
 	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 19:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232058AbiF2R7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 13:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
+        id S231670AbiF2R73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 13:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231720AbiF2R7K (ORCPT
+        with ESMTP id S232101AbiF2R7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 13:59:10 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E58335
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 10:59:08 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id t16so26048173qvh.1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 10:59:08 -0700 (PDT)
+        Wed, 29 Jun 2022 13:59:24 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E74D6C
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 10:59:14 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id z19so23237806edb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 10:59:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ngWx43aEx+7T9A14R2LGOmGQG6CiD1NPE7ELlQTW2Yo=;
-        b=SKmcghAf6nlxb3TYM9q+L2K6WvoAOg3jhiALBKso44zP0sXfB8bfiUedLcgKzgwJgh
-         iTJCket4ICkaBkiO0QMT6a7oZweniTqMyqfh5UKIWBSdtteoys0WU0gLpwmQxcuZ4T0C
-         B5EZV3F+pSyyuE/TubvDD1bjbB6DXWKJyou3V2eDANW0FMx1qb5IymBGqRBGbaBO/qpz
-         ziWT+UQffo2LDKQOaJhYTyVo3/P9yrGTwX9E3INhoqRXiDqc6Jau79+OQONuVBZZne7a
-         MzNQ3dTgqHtk/dbWQmfNzsZcoGEiW6sxYQ0kC+3zRe5EegJZ5dxZXRpFz6xNN0CByfx0
-         8ESA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=qLQoQNqzIX44NBq4eyXo8pb4zSiHlNiTFmIzQcS3Dno=;
+        b=Mz1L28ohTu6cZ91xNTXSq6PQXSe7pEV86eueM3ccaMT7npnybQ7OsqG1zzkrZrtTjt
+         YE9c+/tj9f5cATNFEOVPBbAqsw8RQ9FqxRQ055C8kabY1gNvzoLjKFoBMExzsgsZGBQs
+         NMByrjLnhXz3SydxjsxGlhms159RezTVkwPw75noYwsyVgI69gnBHfbMsxoL487g9ooH
+         Wcw/cX/cHNB89dZ7+9rmtLaYwoO/wVt012A7vW9Q0D2YDfdtYpUZPtP9McRMCBL40+DB
+         is/IojyBhL5bugopD4xcTvondIPaL15gMOgS1WWrtAEDtgxH84bWShukCjqMwI64ug+q
+         4NkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ngWx43aEx+7T9A14R2LGOmGQG6CiD1NPE7ELlQTW2Yo=;
-        b=j4hAKGerX6Vda0llVG3FBTQUpE4m9xGkzJJludp0EgQQ2VWMB8/qfO/5E/5YBZYpQc
-         XXdiOiIyEXGkE89ZoFDvoPmIRF9Kuer3VlL06W0FwiX71DpmcfpKyPY9YbMGkvopsZZu
-         gjrV0sCzxMl9YqbJf/5mNEZrx8ojdejY2CxygFf/e3ZhQ7bJcz1saA+kG1g0y4rUsjFG
-         TBOZTomK4oDQHqzr4jDkqAQQbjLzEKn5NRybhTkNThJ7jaUdePm8op4jXpPkIcEa8WCb
-         5vXgnccXx529sdJo57gLCJhiH+wB8iFDcZ09hHfwlcZEPFFuii8G0Cs4I3+LANuor0hv
-         PDwQ==
-X-Gm-Message-State: AJIora/3ZcTErbasb4k6DQsFkcRiE4h/RtARtUPdEF7+FgSufsZ6XTXm
-        JrIqPnYWR/m3M043iqaFNvw+Ww==
-X-Google-Smtp-Source: AGRyM1tbrZ7P9r+hmIBmAW2EDXMkZbkavnNkEyNTe14M5A9CnmgPVypEPOrPgPFspFUz9zUokVYXKQ==
-X-Received: by 2002:a05:6214:ac2:b0:46e:7e2a:ada with SMTP id g2-20020a0562140ac200b0046e7e2a0adamr8831887qvi.81.1656525547889;
-        Wed, 29 Jun 2022 10:59:07 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id c13-20020a05620a164d00b006a6a4b43c01sm12832373qko.38.2022.06.29.10.59.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 10:59:07 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1o6bxy-003bBJ-Q7; Wed, 29 Jun 2022 14:59:06 -0300
-Date:   Wed, 29 Jun 2022 14:59:06 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-mm@kvack.org,
-        iommu@lists.linux-foundation.org,
-        Stephen Bates <sbates@raithlin.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v7 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
-Message-ID: <20220629175906.GU23621@ziepe.ca>
-References: <20220615161233.17527-1-logang@deltatee.com>
- <20220615161233.17527-21-logang@deltatee.com>
- <20220629064854.GD17576@lst.de>
- <99242789-66a6-bbd2-b56a-e47891f4522e@deltatee.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qLQoQNqzIX44NBq4eyXo8pb4zSiHlNiTFmIzQcS3Dno=;
+        b=YkLBemCc5B9pMlePXMZcUpL8ar3rqVbGa6qZs0nfA6Ab0uyOWM20mzntotkVIyasYV
+         oyL5My6ePQs240zEWXtVHKOFc3HuwvBjwlI2ukdw9XEaTkrALAwvX5vcS8LOotyA16it
+         hK694mCthjNtFLCoFrqwvpkq95neTOhM1Xd8iR1eYkyIauVp8ev1AOZjeuivlnxGK4W1
+         VYlcU8Veh/V5CEXZyxKcXf8m/PcA6zWfGTEJcIM9N73GbyGPTDyjZzijqKJfDAPSdk8Z
+         a9RuLAWGpCJxlXPs5mBQECB7Wh3ec8VAVWx/vf2emgE+Wk+XnFcSJ0OoA+bBxesvEbkR
+         YEFQ==
+X-Gm-Message-State: AJIora/MAQ8EcoykRjT+YNLD53kgflk4bc7KM/czuBk+DhmvEi63am0M
+        PgS4QV+e1YmyVN+qtt+bdtSWJw==
+X-Google-Smtp-Source: AGRyM1t97qwz1beIrGRPTxbppC20aUggb1YzhT36TA5Umo2qx6ih3V8+jwWRhbMZVzIExLz3IbVmrA==
+X-Received: by 2002:a05:6402:d05:b0:425:b7ab:776e with SMTP id eb5-20020a0564020d0500b00425b7ab776emr5998674edb.142.1656525552801;
+        Wed, 29 Jun 2022 10:59:12 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id bo5-20020a170906d04500b006ff0fe78cb7sm7981879ejb.133.2022.06.29.10.59.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 10:59:12 -0700 (PDT)
+Message-ID: <7560d60d-b4bb-6fcd-bfac-e9f4da911561@linaro.org>
+Date:   Wed, 29 Jun 2022 19:59:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <99242789-66a6-bbd2-b56a-e47891f4522e@deltatee.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v6 07/14] dt-bindings: thermal: Add fsl,scu-thermal yaml
+ file
+Content-Language: en-US
+To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
+ <20220629164414.301813-8-viorel.suman@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220629164414.301813-8-viorel.suman@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -96,45 +107,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 10:00:09AM -0600, Logan Gunthorpe wrote:
+On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
+> From: Abel Vesa <abel.vesa@nxp.com>
 > 
+> In order to replace the fsl,scu txt file from bindings/arm/freescale,
+> we need to split it between the right subsystems. This patch documents
+> separately the 'thermal' child node of the SCU main node.
 > 
-> 
-> On 2022-06-29 00:48, Christoph Hellwig wrote:
-> > On Wed, Jun 15, 2022 at 10:12:32AM -0600, Logan Gunthorpe wrote:
-> >> A pseudo mount is used to allocate an inode for each PCI device. The
-> >> inode's address_space is used in the file doing the mmap so that all
-> >> VMAs are collected and can be unmapped if the PCI device is unbound.
-> >> After unmapping, the VMAs are iterated through and their pages are
-> >> put so the device can continue to be unbound. An active flag is used
-> >> to signal to VMAs not to allocate any further P2P memory once the
-> >> removal process starts. The flag is synchronized with concurrent
-> >> access with an RCU lock.
-> > 
-> > Can't we come up with a way of doing this without all the pseudo-fs
-> > garbagage?  I really hate all the overhead for that in the next
-> > nvme patch as well.
-> 
-> I assume you still want to be able to unmap the VMAs on unbind and not
-> just hang?
-> 
-> I'll see if I can come up with something to do the a similar thing using
-> vm_private data or some such.
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+> ---
 
-I've tried in the past, this is not a good idea. There is no way to
-handle failures when a VMA is dup'd and if you rely on private_data
-you almost certainly have to alloc here.
+Assuming all patches are taken independently:
 
-Then there is the issue of making the locking work on invalidation
-which is crazy ugly.
 
-> I was not a fan of the extra code for this either, but I was given to
-> understand that it was the standard way to collect and cleanup VMAs.
 
-Christoph you tried tried to clean it once globally, what happened to
-that?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-All that is needed here is a way to get a unique inode for the PCI
-memory.
 
-Jason
+Best regards,
+Krzysztof

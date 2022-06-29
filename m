@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F89B55F655
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 08:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CB355F65D
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 08:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbiF2GMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 02:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53186 "EHLO
+        id S231772AbiF2GNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 02:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiF2GMr (ORCPT
+        with ESMTP id S231778AbiF2GNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 02:12:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6BF1C113;
-        Tue, 28 Jun 2022 23:12:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3288BB821B8;
-        Wed, 29 Jun 2022 06:12:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 717C6C34114;
-        Wed, 29 Jun 2022 06:12:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656483164;
-        bh=jIm0tqTKNujOuxUdc0RFZZRNQYUYfjBOZqjmatJ9GSE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MMiSB/S9B3aBzQlxpEkdtaOKo9of17fVDjPTaEFFhd0tmo6ZgixTuwbYk/17l5XQX
-         g7GBPj8zQN5FyT6iRkyjO+wW5H/P9mnWsCrrmnsAcj2Kup8PLSify+gFJMZMnnwUow
-         BkJnX83zkHvXXG19UCDvowCTIe9X3tF4Pfx4wGPc=
-Date:   Wed, 29 Jun 2022 08:12:41 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ajay Kaher <akaher@vmware.com>
-Cc:     bhelgaas@google.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        rostedt@goodmis.org, namit@vmware.com, srivatsab@vmware.com,
-        srivatsa@csail.mit.edu, amakhalov@vmware.com, anishs@vmware.com,
-        vsirnapalli@vmware.com, er.ajay.kaher@gmail.com
-Subject: Re: [PATCH] MMIO should have more priority then IO
-Message-ID: <YrvtWVqj/w8V5nIJ@kroah.com>
-References: <1656433761-9163-1-git-send-email-akaher@vmware.com>
+        Wed, 29 Jun 2022 02:13:07 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CD1B92
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 23:13:06 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id a11so17596273ljb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 23:13:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tXBEMcYdLbL7j0CBnFEQrI7j8CDRw/szwLk4z5HVwIU=;
+        b=6xIoLTbTENo5N5hHKjhjfiPk6YpVnyqcLFcwoVzvW3j8d4aWTu8RxffBad1YuW22ZQ
+         B7JUZzvMlY3hMEVofUyVtHBYlj7NYSiQSjSmRtHMHwYaGzHsaqvwDqH4SBVu0eg2wt1p
+         09spkd8NH3luZDqG7H3iAwgS+g1MUQ3GRFz+F1gyrPFJjm6z7aaVcn7gc2MOrFB/p6kF
+         JajynDxOhztcu9FGmfWos5JDk1HGKQ0g4bqDoY+ExizDNO0aXZPzeg0b1uGZ74fHWMX+
+         +J+20MEXlTNZIPQhPd4BwwqzofH2gf1h83iJVr7esOJIGCDxJ6fleBsVho2LMH/DFy0V
+         agWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tXBEMcYdLbL7j0CBnFEQrI7j8CDRw/szwLk4z5HVwIU=;
+        b=UuVjeLCNr1Vpj0ybloTVN6tHpKTi6sDnvilrtH30nmVRH5Vs1a2H0brV0oeJJ9zIrN
+         1p6gZxYy8mM4M9myPSeBHFNjsZX+bDHijDhHhlrhJolewS4qwkkNHflI30Vn/Xl0ZzYS
+         9m8XrHEzftQuJ+22NeRfsvgF/vu5yJLD23zoxWfbWJyjHfy2odqRtRsQF4NmpqViWhcp
+         jKO9mgRiNgN0P72OBivLSjUoZDTUi+eIqmH7orBCbsAHRlubA8EG00nzr7EcaMpIYoI9
+         PfyNW0sOwc+58DHInXwnToQOaUmipj6OIvP4zWGDWai7t4c1r0N58zydBd7UY2wQmB07
+         E+DQ==
+X-Gm-Message-State: AJIora9gbvx9YkfIdW2SIhORoVscudJZ2CBQFb9ekzguvHH2qSiAQeYI
+        8rAUEImwhJZRIbXGoIs+fde3ig==
+X-Google-Smtp-Source: AGRyM1uz1PB+XkmMF33YPm/T9ikaMMh3hNuHzNz1feoMJukKhHNlhRxnBXWZVy0f0Esc50JJckDEkA==
+X-Received: by 2002:a2e:a707:0:b0:25a:7709:d8ce with SMTP id s7-20020a2ea707000000b0025a7709d8cemr849124lje.362.1656483184254;
+        Tue, 28 Jun 2022 23:13:04 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.129])
+        by smtp.gmail.com with ESMTPSA id z9-20020a0565120c0900b0047f66471224sm2475170lfu.222.2022.06.28.23.13.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 23:13:03 -0700 (PDT)
+Message-ID: <525a3eea-8431-64ad-e464-5503f3297722@openvz.org>
+Date:   Wed, 29 Jun 2022 09:13:02 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1656433761-9163-1-git-send-email-akaher@vmware.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH cgroup] cgroup: set the correct return code if hierarchy
+ limits are reached
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
+References: <186d5b5b-a082-3814-9963-bf57dfe08511@openvz.org>
+ <d8a9e9c6-856e-1502-95ac-abf9700ff568@openvz.org> <YrpO9CUDt8hpUprr@castle>
+ <17916824-ba97-68ba-8166-9402d5f4440c@openvz.org>
+ <20220628091648.GA12249@blackbody.suse.cz> <YrrIWe/nn5hoVyu9@mtj.duckdns.org>
+From:   Vasily Averin <vvs@openvz.org>
+In-Reply-To: <YrrIWe/nn5hoVyu9@mtj.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 09:59:21PM +0530, Ajay Kaher wrote:
-> Port IO instructions (PIO) are less efficient than MMIO (memory
-> mapped I/O). They require twice as many PCI accesses and PIO
-> instructions are serializing. As a result, MMIO should be preferred
-> when possible over PIO.
+On 6/28/22 12:22, Tejun Heo wrote:
+> On Tue, Jun 28, 2022 at 11:16:48AM +0200, Michal Koutný wrote:
+>> The mkdir(2) manpage doesn't list EAGAIN at all. ENOSPC makes better
+>> sense here. (And I suspect the dependency on this particular value won't
+>> be very wide spread.)
 > 
-> Bare metal test result
-> 1 million reads using raw_pci_read() took:
-> PIO: 0.433153 Sec.
-> MMIO: 0.268792 Sec.
+> Given how we use these system calls as triggers for random kernel
+> operations, I don't think adhering to posix standard is necessary or
+> possible. Using an error code which isn't listed in the man page isn't
+> particularly high in the list of discrepancies.
 > 
-> Virtual Machine test result
-> 1 hundred thousand reads using raw_pci_read() took:
-> PIO: 12.809 Sec.
-> MMIO: took 8.517 Sec.
-> 
-> Signed-off-by: Ajay Kaher <akaher@vmware.com>
-> ---
->  arch/x86/pci/common.c          |  8 ++++----
->  1 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/pci/common.c b/arch/x86/pci/common.c
-> index 3507f456f..0b3383d9c 100644
-> --- a/arch/x86/pci/common.c
-> +++ b/arch/x86/pci/common.c
-> @@ -40,20 +40,20 @@ const struct pci_raw_ops *__read_mostly raw_pci_ext_ops;
->  int raw_pci_read(unsigned int domain, unsigned int bus, unsigned int devfn,
->  						int reg, int len, u32 *val)
->  {
-> +	if (raw_pci_ext_ops)
-> +		return raw_pci_ext_ops->read(domain, bus, devfn, reg, len, val);
->  	if (domain == 0 && reg < 256 && raw_pci_ops)
->  		return raw_pci_ops->read(domain, bus, devfn, reg, len, val);
-> -	if (raw_pci_ext_ops)
-> -		return raw_pci_ext_ops->read(domain, bus, devfn, reg, len, val);
->  	return -EINVAL;
->  }
->  
->  int raw_pci_write(unsigned int domain, unsigned int bus, unsigned int devfn,
->  						int reg, int len, u32 val)
->  {
-> +	if (raw_pci_ext_ops)
-> +		return raw_pci_ext_ops->write(domain, bus, devfn, reg, len, val);
->  	if (domain == 0 && reg < 256 && raw_pci_ops)
->  		return raw_pci_ops->write(domain, bus, devfn, reg, len, val);
-> -	if (raw_pci_ext_ops)
-> -		return raw_pci_ext_ops->write(domain, bus, devfn, reg, len, val);
->  	return -EINVAL;
->  }
->  
-> -- 
-> 2.30.0
-> 
+> Again, I'm not against changing it but I'd like to see better
+> rationales. On one side, we have "it's been this way for a long time
+> and there's nothing particularly broken about it". I'm not sure the
+> arguments we have for the other side is strong enough yet.
 
-<formletter>
+I would like to recall this patch.
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
+I experimented on fedora36 node with LXC and centos stream 9 container.
+and I did not noticed any critical systemd troubles with original -EAGAIN.
+When cgroup's limit is reached systemd cannot start new services, 
+for example lxc-attach generates following output:
 
-</formletter>
+[root@fc34-vvs ~]# lxc-attach c9s
+lxc-attach: c9s: cgroups/cgfsng.c: cgroup_attach_leaf: 2084 Resource temporarily unavailable - Failed to create leaf cgroup ".lxc"
+lxc-attach: c9s: cgroups/cgfsng.c: __cgroup_attach_many: 3517 Resource temporarily unavailable - Failed to attach to cgroup fd 11
+lxc-attach: c9s: attach.c: lxc_attach: 1679 Resource temporarily unavailable - Failed to attach cgroup
+lxc-attach: c9s: attach.c: do_attach: 1237 No data available - Failed to receive lsm label fd
+lxc-attach: c9s: attach.c: do_attach: 1375 Failed to attach to container
+
+I did not found any loop in userspace caused by EAGAIN.
+Messages looks unclear, however situation with the patched kernel is not much better:
+
+[root@fc34-vvs ~]# lxc-attach c9s
+lxc-attach: c9s: cgroups/cgfsng.c: cgroup_attach_leaf: 2084 No space left on device - Failed to create leaf cgroup ".lxc"
+lxc-attach: c9s: cgroups/cgfsng.c: __cgroup_attach_many: 3517 No space left on device - Failed to attach to cgroup fd 11
+lxc-attach: c9s: attach.c: lxc_attach: 1679 No space left on device - Failed to attach cgroup
+lxc-attach: c9s: attach.c: do_attach: 1237 No data available - Failed to receive lsm label fd
+lxc-attach: c9s: attach.c: do_attach: 1375 Failed to attach to container
+
+Thank you,
+	Vasily Averin

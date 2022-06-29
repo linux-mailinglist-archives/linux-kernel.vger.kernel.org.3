@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C125601C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DD65601C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232492AbiF2NzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 09:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
+        id S232790AbiF2Nzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 09:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232099AbiF2NzL (ORCPT
+        with ESMTP id S232638AbiF2Nze (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 09:55:11 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2047.outbound.protection.outlook.com [40.107.223.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7881AD8A
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 06:55:08 -0700 (PDT)
+        Wed, 29 Jun 2022 09:55:34 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2067.outbound.protection.outlook.com [40.107.237.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E001AD9F
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 06:55:33 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eNB7muVPw4I0UuNhIjfixU2nwGkS2VxOESxYBDlx8tmehJyI624PccMeucC/K7yI+UDaW7QGyXYF657IRfJBVNFQ9TTT/SO33qitDI/ylKX4rebu2/jfMKTygb4UXpCV+aciLcg72mVmHn4AsT2VbKXVyNdMBo2RsZ4oCo3F+IeF96NBqYb2bcjgMIIrYgclLbszEd53p+qV4KYgzdwZErkJmjukHSC72J9gqpmNwqKYFLj8Q4hoIHV/uU/bAD9/ejkmrXrTNUWZLQ4uZiNazdzCnVFT6iz3I2HoWsfgxzxOZZ2ovA4hMU5Gyyd/s3Fm6GCz2u3n3iD9UnTq3dLLcg==
+ b=jNx9gs0RhqD5GJhQ8RkjLVdgWkMDHsnl/aiXOqI+2IZC/rUJLGAIBQ/9qP0eH71cYuWOeQM7E5sHZlNZi9tImLaj7QqeZLUeK0w3wpZ0p3XRgPHsKMqSg2EVAop6JxUeGIm8YRrzcnAJlIBS+JeJcZjw5gJ60k8htPXRc6FAnql9jmFHfCvk9rnGV4/MX2CDZcOIOfenPlZK+K2b8D0yWb8dtZa/6RhrQyUfGrAf3ouDeX1Enj0dos4RCoyx59jMfwYm7vMgYKHMrdFCDEtUdFjB+snyMWdEpbaDU55ce2qY/XB4XylSbaa+Vg9dhrmccdG24apI80uLwke+uSz7UQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=afaMTYxn6b7zYOA9v6tKgtU/gh+nPo8T+O5aupbQKxE=;
- b=A6iAe/Eycw+WpKB0f7t3aDDg4aoiurQaMc9Dx/rl4M101PeOq2YK2UNdZkUeh8XFK+kFCsbU40EGUf8pPtNkwFT93UTYMF/sr3ZPSZa4F6vT/Rd50IKZUUMnByDmT7WzbFzDzBKoKyXAQIBkKrP5m1K89qZ7Qs5Ob+i9wgw/8+97JPOm1SlZvCmezYUeDawsueqzwjM1c5MUHKrjTmQEXN4GT3xo+jnzSs1VqtBWEeAjXbQCxxN5LXaQ35SaGBQXt4PwHEUCbQD0D66b0j5bDpUHLBiFE4b0WC07dkqP3ULL/zT9J4gAZjyGfK0BSq9FeqJs+hm5runkhfWH5xc1pg==
+ bh=/4wDekqf1SSQODQ+6Uue5WCaUxVuXa/gUWARyBE4r/o=;
+ b=hZdH6+ns8tmhoj8D4INUsbPiWuNhOuYJeZkHCSxiqf1yzav9T5CBAYoSDHaD2Dc4iIW8iHN4U5XKzI6zDoqnvKZX6v2qQ+3SNaKksXEzB8Bv/hNhdraHoU1SYG7SdAOmJ581x1n+HkL9KvAOjTKAaSsTZSFuOwOO+NfZZBF+2grELTi1uUcGj2gHLLd1s5NtDYzTgH2r/kzmesXSn5CpNCLtLXSfvJ0GVhWsbD07y6JeJ7LOtCgCa6cX9LC6j/pGGNIQ6QkZFbJ3S/fIeip6quWFb8epollovmBwVyEKTHD+gOTxx6t7KELDJF6htCQustQbqi9owVwI+MKY9nsiUg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=nec.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=afaMTYxn6b7zYOA9v6tKgtU/gh+nPo8T+O5aupbQKxE=;
- b=xFjXM0h9f56SkxsXr3hHLkN63isaDjSbHAxxmhsIdkPGXAdaahgKjiQo4tby9lKGKOg85cvbZcuA8WiXVgvp4uxUH0M5X39ZpL/oZgt2OHn33SnKE6kNiASXkhWEz3ptZ7f5eHE9wMG+I07LIuLBTAkzs9L/od3AUvPkMH4uLh0=
-Received: from BN9P220CA0029.NAMP220.PROD.OUTLOOK.COM (2603:10b6:408:13e::34)
- by DM6PR12MB5517.namprd12.prod.outlook.com (2603:10b6:5:1be::8) with
+ bh=/4wDekqf1SSQODQ+6Uue5WCaUxVuXa/gUWARyBE4r/o=;
+ b=LbwKO6WkT6ZrOvVwzCHPNPiZ43WDKSFIUAdJOb36WTdlJwcOfV/BvOfPNnzK2iCYzvbfPTNlinFsytvfAPEyaCiE+ayqSic0KJDq04I7WSOzNJuWrfTfGG09P11WB+zb2lloy+8kI85wxKoKVtp8427SM7g/aQInF+4df9GjUs0=
+Received: from BN9PR03CA0402.namprd03.prod.outlook.com (2603:10b6:408:111::17)
+ by BN6PR12MB1378.namprd12.prod.outlook.com (2603:10b6:404:1e::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Wed, 29 Jun
- 2022 13:55:06 +0000
-Received: from BN8NAM11FT052.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13e:cafe::a5) by BN9P220CA0029.outlook.office365.com
- (2603:10b6:408:13e::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Wed, 29 Jun
+ 2022 13:55:30 +0000
+Received: from BN8NAM11FT011.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:111:cafe::8f) by BN9PR03CA0402.outlook.office365.com
+ (2603:10b6:408:111::17) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14 via Frontend
- Transport; Wed, 29 Jun 2022 13:55:06 +0000
+ Transport; Wed, 29 Jun 2022 13:55:30 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,55 +47,52 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT052.mail.protection.outlook.com (10.13.177.210) with Microsoft SMTP
+ BN8NAM11FT011.mail.protection.outlook.com (10.13.176.140) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5373.15 via Frontend Transport; Wed, 29 Jun 2022 13:55:06 +0000
+ 15.20.5373.15 via Frontend Transport; Wed, 29 Jun 2022 13:55:30 +0000
 Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 29 Jun
- 2022 08:55:01 -0500
-Date:   Wed, 29 Jun 2022 08:52:54 -0500
+ 2022 08:55:29 -0500
+Date:   Wed, 29 Jun 2022 08:54:41 -0500
 From:   Michael Roth <michael.roth@amd.com>
 To:     NOMURA =?utf-8?B?SlVOSUNISSjph47mnZHjgIDmt7PkuIAp?= 
         <junichi.nomura@nec.com>
-CC:     Borislav Petkov <bp@alien8.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, "bp@suse.de" <bp@suse.de>
 Subject: Re: [Regression v5.19-rc1] crash kexec fails to boot the 2nd kernel
  (Re: [PATCH v12 38/46] x86/sev: Add SEV-SNP feature detection/setup)
-Message-ID: <20220629135254.cicvyp5clm4s4n35@amd.com>
+Message-ID: <20220629135441.7w4ptweifvfyw5rc@amd.com>
 References: <TYCPR01MB694815CD815E98945F63C99183B49@TYCPR01MB6948.jpnprd01.prod.outlook.com>
  <20220629004114.zn5rurrmqdkiceun@amd.com>
  <OSZPR01MB6953EEF3F8E63330547E031183BB9@OSZPR01MB6953.jpnprd01.prod.outlook.com>
- <YrwLS8qRDhjmeD5Z@zn.tnic>
- <TYCPR01MB6948029FAACBC313063EE49283BB9@TYCPR01MB6948.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <TYCPR01MB6948029FAACBC313063EE49283BB9@TYCPR01MB6948.jpnprd01.prod.outlook.com>
+In-Reply-To: <OSZPR01MB6953EEF3F8E63330547E031183BB9@OSZPR01MB6953.jpnprd01.prod.outlook.com>
 X-Originating-IP: [10.180.168.240]
 X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 64ae7be6-6094-4606-ce86-08da59d6f8f7
-X-MS-TrafficTypeDiagnostic: DM6PR12MB5517:EE_
+X-MS-Office365-Filtering-Correlation-Id: faf4d4f2-5893-46d7-1bff-08da59d7079d
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1378:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jObw54JnncEg+Gjh4RYpMbQrL/xJpST3wUI7r5WLOHVS3gIRfeQaG32R3DUFrLAu5pLmSkjF16EZ3ew2ArnFxWx7ObjOgSBLmYeGhBMx9fOjJ0VJoR8Awh8RYdU5c7L70BvX9G4TDSlXZrTHAJpzgdq21NcI6pqFjC9ljs/sRhF/Z1x65Ch2aiMNn9NHgF1j9uKMYHJ9WibcZroLCelEvHD1Cd5N2Yf25xo8pCv9cOfYlNAkIeOjTu/ebIqYdV/TF7sSOy/v45uGWJcTiw28jfeyIgGjNKB17A56/0p1B8n9imNQmT035tr1xHDmVXnmEFiLCNlx7gK2dqtBEFA5hE5/ZvZXSB7q2zHrOSO1kWUnrZR1COPNVK2cf6ITgmQN6eTpUFy4z2ZAnCZ8CBqyifxMQtNu+A6LcIpCqUjuBmBDj8gKQR5os//f7JNWMU8xdMUU8sfVsaFQOPlLqjx92E+IQSbYPcgwI0p5fbJ/7Upl/09CRXJ7Bpi1UxaZVdYJDJale//QomXYnJ/6CCb808rypg+gNfFD9hm8ZfUSrrVkULSaMVxPEiPPo4DmUCWvSKxIBzuYiPvBsRaWZL70aAdslLBjCyMRLp1rOniUokYHz7MmV5KqBtPOAqtNt+6i6aHhehO+J1R16f+hYzXVUlkOke+IGL5abXHdnTNoFLH6Gqz/5jp47hqNv+Y1FLVD/eUmOSmecl5AE1z53QM79xo5U5GxaKcLL1UCAxuOyLY6f5TbkSK5Oy3+AvxiURlVZ6w/kTfKBv4m+rv+c/ilnzrByPzZyqhM2qVvSn78SnnQG2VKxC9L7L2z8rp+0qWm2ZTNk8j8/+eGzD9MbDkHXQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(346002)(39860400002)(376002)(40470700004)(46966006)(36840700001)(82310400005)(186003)(47076005)(81166007)(36756003)(2906002)(8936002)(356005)(5660300002)(16526019)(83380400001)(6862004)(54906003)(316002)(336012)(2616005)(1076003)(426003)(86362001)(36860700001)(70586007)(70206006)(44832011)(8676002)(4326008)(40480700001)(82740400003)(40460700003)(6666004)(26005)(478600001)(41300700001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: +BzjQC3StD3sxjat+xQIU75uqjx3Q1B/6aSBea0CzSyfnItcfCo85nvRkFIPolS7IPC2+MWBGVkz7KcsQCtR9dudu6IyeKFVPIPWmqKgYMmywV1c3IJ5sz8OwCR9ig1ZmvJqu0+dXQeM0+YDWm2nbAaZF1GUlY3xIUy98m4N4Um72XMXYEfq32XiyGw6QLqwo1n9ckhZql68NIUW5YcyUolqHe3PB09r9dKAlGL9WEM8nRsf6VmCz8jZIVhaDMwjINWFDL9THH8Hzz9IPIsF+N7WluWeC7gGhS5cfUpPBxvUwTJE6gHJcb1WhEY8/k37WQ9zSbuPWZ0DwlhiHevDijW4qC9ojonrv5sVu/WP9W4A84Ny0NorH/Bg9+vGKmtJ7Rjk/s9dkjBpxvkaJYiLubSm+c1HudAl0urA1K2Tr1+uPdo3Iv+UEMF9d6RqWs5MoDfR94arRjceYdxuwcVHoPl2fgZtRECqGnlfBC6Wdf08pWq8ZRtYGX6IkUwpdPaoos26mqxLeTlgIqK0JqRTJNA6I4c1x5HMixAm/Tbqy+l8DJJkPvr/cMXIFJ6QpholfGM8tcUZJ1e50dOQ60xwBANZ2cmF++gLLXVTv8mF2msTC5o+7emjcS/8KfAeG2R10afxcolpPYXthHDDSsH3vINugz12gjxD5SZ7VJE2m5lIEUIeLkmn+A9/Ff3vy4CYtSGrc+EhJlm57SorU3l10sOp6uYu7wJwRAN/4ycPJuuFlcOrneSYlUOg4nsAczLTnA7I3GtlX0MIXiBL3Xe82FFNXnNinY96mkEPieADXpvxHJMwV0HE7X5n7SuKEEm+61MYTRx9AEz7OqIEsII5Kg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(396003)(346002)(376002)(40470700004)(46966006)(36840700001)(44832011)(6862004)(26005)(8936002)(5660300002)(70206006)(70586007)(8676002)(54906003)(316002)(4326008)(86362001)(82740400003)(81166007)(6666004)(478600001)(356005)(16526019)(82310400005)(2616005)(40480700001)(186003)(1076003)(83380400001)(336012)(40460700003)(36756003)(36860700001)(47076005)(426003)(2906002)(41300700001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2022 13:55:06.0584
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2022 13:55:30.6299
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64ae7be6-6094-4606-ce86-08da59d6f8f7
+X-MS-Exchange-CrossTenant-Network-Message-Id: faf4d4f2-5893-46d7-1bff-08da59d7079d
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT052.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT011.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB5517
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1378
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -106,59 +103,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 11:06:00AM +0000, NOMURA JUNICHI(野村 淳一) wrote:
-> From: Borislav Petkov <bp@alien8.de>
-> > I still think the proper fix is to not execute that cc blob code on
-> > anything but AMD...
+On Wed, Jun 29, 2022 at 07:38:09AM +0000, NOMURA JUNICHI(野村 淳一) wrote:
+> From: Michael Roth <michael.roth@amd.com>
+> > Thanks for the debug info. I haven't been able to reproduce this on the
+> > Milan or Cascade Lake systems I've tried, with kexec -l/-p, and well as
+> > with/without -s, so there may be something hardware/environment-specific
+> > going on here, so I could really use your help to test possible fixes.
 > 
-> That will solve my case but I'm afraid there may be people with AMD who
-> hits the same problem.
+> Sure.  Thank you for trying to reproduce the problem.
+> 
+> > > Other places that parses setup_data uses early_memremap() before
+> > > accessing the data (e.g. parse_setup_data()).  I wonder if the lack of
+> > > remapping causes the problem but find_cc_blob is too early in the
+> > > boot process for early_memremap to work.
+> > 
+> > I think this might be the case. Prior to early_memremap() being
+> > available, we need to rely on the initialize identity map set up by the
+> > decompression kernel. It has some stuff to add mappings for boot_params
+> > and whatnot, but I don't see where boot_params->hdr.setup_data is
+> > handled.
+> > 
+> > If you use kexec -s to force kexec_file_load, then the kernel sets it up
+> > so that boot_params->hdr.setup_data points to some memory just after
+> > boot_params, and boot/compressed uses 2M pages in its identity map, so
+> > that generally ends up handling the whole range.
+> > 
+> > But if you use kexec's default kexec_load functionality, setup_data might
+> > be allocated elsewhere, so in that case we might need explicit mapping. I
+> > noticed on my systems boot_params->hdr.setup_data seems to generally end
+> > up at 0x100000 for some reason, and maybe that addr just happens to
+> > get mapped for other reasons so I don't end up hitting the crash.
+> > 
+> > Could you give it a shot with the kexec -s flag and so if that works?
+> 
+> Your explanation makes a lot of sense.  I could successfully boot the 2nd
+> kernel if "kexec -s" is used.
 
-Yah, I'd mentioned to Boris that I was only able to reproduce it on
-baremetal Intel system, but that ended up being an unrelated issue due
-to having KASAN enabled in my config (which seems to break kexec for me).
-
-But the issue you're seeing I haven't been able to reproduce, and I'm
-not sure what is needed to get it to reproduce, but it might not be
-Intel-only.
+Thanks for trying these, that's good to know.
 
 > 
-> Isn't it possible for boot loaders to pass cc_blob_address via boot_params?
-> Information included in struct cc_setup_data is just 'u32 cc_blob_address'
-> and it seems struct boot_params already has a place reserved for it.
+> > If so, can you apply the below potential fix, and retry your original
+> > reproducer?
+> 
+> I tried your potential fix but it didn't work...  The symptom was same
+> as before.
 
-We were trying to avoid exposing cc_blob_address to boot loaders
-directly, since linux boot protocol seems to prefer the setup_data entry
-for new parameters.
+Sorry, I just noticed I had a typo in that patch which made it a no-op
+effectively. Can you give this a shot?
 
-The reason the kernel uses boot_params->cc_blob_address internally is
-because boot/compressed has all the helpers for early EFI parsing, and will
-have already checked for the cc blob and cached it there, so the runtime
-kernel just uses that instead of trying to introduce all the early EFI
-parsing code into early boot and redo'ing all the parsing that
-boot/compressed has already done.
+diff --git a/arch/x86/boot/compressed/ident_map_64.c b/arch/x86/boot/compressed/ident_map_64.c
+index 44c350d627c7..b97b81d3697d 100644
+--- a/arch/x86/boot/compressed/ident_map_64.c
++++ b/arch/x86/boot/compressed/ident_map_64.c
+@@ -110,6 +110,7 @@ void kernel_add_identity_map(unsigned long start, unsigned long end)
+ void initialize_identity_maps(void *rmode)
+ {
+        unsigned long cmdline;
++       struct setup_data *sd;
 
-So the runtime kernel relies on boot/compressed for handling EFI, and
-simply uses boot_params to pass that on to runtime kernel.
+        /* Exclude the encryption mask from __PHYSICAL_MASK */
+        physical_mask &= ~sme_me_mask;
+@@ -163,6 +164,12 @@ void initialize_identity_maps(void *rmode)
+        cmdline = get_cmd_line_ptr();
+        kernel_add_identity_map(cmdline, cmdline + COMMAND_LINE_SIZE);
 
-But it has its own handling for cc_blob passed via setup_data entry,
-because that entry point is meant for boot loaders / VMMs that use stuff
-like CONFIG_PVH to jump directly into decompressed kernel: those are the
-cases where we'd expect cc blob via setup_data entry. But this is a
-critical thing to support right now, and if we can't find a proper fix
-we can simply disable this patch and not check for setup_data entry in
-runtime kernel.
++       sd = (struct setup_data *)boot_params->hdr.setup_data;
++       while (sd) {
++               kernel_add_identity_map((unsigned long)sd, (unsigned long)(sd + sizeof(*sd) + sd->len));
++               sd = (struct setup_data *)sd->next;
++       }
++
+        sev_prep_identity_maps(top_level_pgt);
 
-But I think we might still be able to fix this properly, I had a typo
-in my early patch which would be worth try, and might avoid future
-issues with other early setup_data access in the future code. I
-responded there with an updated patch.
-
--Mike
+        /* Load the new page-table. */
 
 > 
 > -- 
 > Jun'ichi Nomura, NEC Corporation / NEC Solution Innovators, Ltd.
-> 
 
 

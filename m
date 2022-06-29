@@ -2,108 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C072F56014F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:33:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F3D560186
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233857AbiF2Nce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 09:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
+        id S233812AbiF2Njm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 09:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233838AbiF2Nca (ORCPT
+        with ESMTP id S231933AbiF2Njj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 09:32:30 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9133937034;
-        Wed, 29 Jun 2022 06:32:26 -0700 (PDT)
-Received: from [192.168.1.103] (31.173.80.151) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Wed, 29 Jun
- 2022 16:32:17 +0300
-Subject: Re: [PATCH] ata: pata_cs5535: Fix W=1 warnings
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        John Garry <john.garry@huawei.com>
-CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1656335540-50293-1-git-send-email-john.garry@huawei.com>
- <69ed5587-52fd-4171-b97f-091df8b377c6@opensource.wdc.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <9caef01c-b601-c19f-10eb-720e8d7b35dc@omp.ru>
-Date:   Wed, 29 Jun 2022 16:32:17 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 29 Jun 2022 09:39:39 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4361D15FE1;
+        Wed, 29 Jun 2022 06:39:38 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LY2cG4lNsz9sx7;
+        Wed, 29 Jun 2022 21:38:54 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 29 Jun 2022 21:39:35 +0800
+Received: from localhost.localdomain (10.67.165.24) by
+ kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 29 Jun 2022 21:39:34 +0800
+From:   Guangbin Huang <huangguangbin2@huawei.com>
+To:     <jbrouer@redhat.com>, <hawk@kernel.org>, <brouer@redhat.com>,
+        <ilias.apalodimas@linaro.org>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <edumazet@google.com>, <pabeni@redhat.com>
+CC:     <lorenzo@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
+        <chenhao288@hisilicon.com>
+Subject: [PATCH net-next v2] net: page_pool: optimize page pool page allocation in NUMA scenario
+Date:   Wed, 29 Jun 2022 21:33:05 +0800
+Message-ID: <20220629133305.15012-1-huangguangbin2@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <69ed5587-52fd-4171-b97f-091df8b377c6@opensource.wdc.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [31.173.80.151]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 06/29/2022 13:15:36
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 171437 [Jun 29 2022]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 491 491 a718ef6dc942138335b0bcd7ab07f27b5c06005e
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_arrow_text}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.80.151 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.80.151
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 06/29/2022 13:19:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 6/29/2022 10:47:00 AM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600016.china.huawei.com (7.193.23.20)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/29/22 4:51 AM, Damien Le Moal wrote:
+From: Jie Wang <wangjie125@huawei.com>
 
->> x86_64 allmodconfig build with W=1 gives these warnings:
->>
->> drivers/ata/pata_cs5535.c: In function ‘cs5535_set_piomode’:
->> drivers/ata/pata_cs5535.c:93:11: error: variable ‘dummy’ set but not used [-Werror=unused-but-set-variable]
->>   u32 reg, dummy;
->>            ^~~~~
->> drivers/ata/pata_cs5535.c: In function ‘cs5535_set_dmamode’:
->> drivers/ata/pata_cs5535.c:132:11: error: variable ‘dummy’ set but not used [-Werror=unused-but-set-variable]
->>   u32 reg, dummy;
->>            ^~~~~
->> cc1: all warnings being treated as errors
->>
->> Mark variables 'dummy' as "maybe unused" to satisfy when rdmsr() is
->> stubbed, which is the same as what we already do in pata_cs5536.c .
->>
->> Signed-off-by: John Garry <john.garry@huawei.com>
-> 
-> Applied to for-5.20. Thanks !
+Currently NIC packet receiving performance based on page pool deteriorates
+occasionally. To analysis the causes of this problem page allocation stats
+are collected. Here are the stats when NIC rx performance deteriorates:
 
-   Why not to 5.19? The warnings are fatal as can be seen from the commit log...
+bandwidth(Gbits/s)		16.8		6.91
+rx_pp_alloc_fast		13794308	21141869
+rx_pp_alloc_slow		108625		166481
+rx_pp_alloc_slow_h		0		0
+rx_pp_alloc_empty		8192		8192
+rx_pp_alloc_refill		0		0
+rx_pp_alloc_waive		100433		158289
+rx_pp_recycle_cached		0		0
+rx_pp_recycle_cache_full	0		0
+rx_pp_recycle_ring		362400		420281
+rx_pp_recycle_ring_full		6064893		9709724
+rx_pp_recycle_released_ref	0		0
 
-MBR, Sergey
+The rx_pp_alloc_waive count indicates that a large number of pages' numa
+node are inconsistent with the NIC device numa node. Therefore these pages
+can't be reused by the page pool. As a result, many new pages would be
+allocated by __page_pool_alloc_pages_slow which is time consuming. This
+causes the NIC rx performance fluctuations.
+
+The main reason of huge numa mismatch pages in page pool is that page pool
+uses alloc_pages_bulk_array to allocate original pages. This function is
+not suitable for page allocation in NUMA scenario. So this patch uses
+alloc_pages_bulk_array_node which has a NUMA id input parameter to ensure
+the NUMA consistent between NIC device and allocated pages.
+
+Repeated NIC rx performance tests are performed 40 times. NIC rx bandwidth
+is higher and more stable compared to the datas above. Here are three test
+stats, the rx_pp_alloc_waive count is zero and rx_pp_alloc_slow which
+indicates pages allocated from slow patch is relatively low.
+
+bandwidth(Gbits/s)		93		93.9		93.8
+rx_pp_alloc_fast		60066264	61266386	60938254
+rx_pp_alloc_slow		16512		16517		16539
+rx_pp_alloc_slow_ho		0		0		0
+rx_pp_alloc_empty		16512		16517		16539
+rx_pp_alloc_refill		473841		481910		481585
+rx_pp_alloc_waive		0		0		0
+rx_pp_recycle_cached		0		0		0
+rx_pp_recycle_cache_full	0		0		0
+rx_pp_recycle_ring		29754145	30358243	30194023
+rx_pp_recycle_ring_full		0		0		0
+rx_pp_recycle_released_ref	0		0		0
+
+Signed-off-by: Jie Wang <wangjie125@huawei.com>
+---
+v1->v2:
+1, Remove two inappropriate comments.
+2, Use NUMA_NO_NODE instead of numa_mem_id() for code maintenance.
+---
+ net/core/page_pool.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index f18e6e771993..64cb2c617de8 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -377,6 +377,7 @@ static struct page *__page_pool_alloc_pages_slow(struct page_pool *pool,
+ 	unsigned int pp_order = pool->p.order;
+ 	struct page *page;
+ 	int i, nr_pages;
++	int pref_nid; /* preferred NUMA node */
+ 
+ 	/* Don't support bulk alloc for high-order pages */
+ 	if (unlikely(pp_order))
+@@ -386,10 +387,18 @@ static struct page *__page_pool_alloc_pages_slow(struct page_pool *pool,
+ 	if (unlikely(pool->alloc.count > 0))
+ 		return pool->alloc.cache[--pool->alloc.count];
+ 
++#ifdef CONFIG_NUMA
++	pref_nid = (pool->p.nid == NUMA_NO_NODE) ? numa_mem_id() : pool->p.nid;
++#else
++	/* Ignore pool->p.nid setting if !CONFIG_NUMA */
++	pref_nid = NUMA_NO_NODE;
++#endif
++
+ 	/* Mark empty alloc.cache slots "empty" for alloc_pages_bulk_array */
+ 	memset(&pool->alloc.cache, 0, sizeof(void *) * bulk);
+ 
+-	nr_pages = alloc_pages_bulk_array(gfp, bulk, pool->alloc.cache);
++	nr_pages = alloc_pages_bulk_array_node(gfp, pref_nid, bulk,
++					       pool->alloc.cache);
+ 	if (unlikely(!nr_pages))
+ 		return NULL;
+ 
+-- 
+2.33.0
 

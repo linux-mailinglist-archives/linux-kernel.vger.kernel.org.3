@@ -2,90 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CB755F8BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4C855F8D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231865AbiF2HWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 03:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
+        id S231858AbiF2HYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 03:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231559AbiF2HWm (ORCPT
+        with ESMTP id S231775AbiF2HYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 03:22:42 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C7833EA4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:22:41 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id w193so20474920oie.5
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:22:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to;
-        bh=TvfrSXu4f0TU8sJk8nHVngOGB75STSEGTvK6rVGCRBo=;
-        b=KSYNVPp/M+aBIfHacFqj11Sm5k23Er/fz5hD79lvLg2qAdMiNwn7Ieu7YNV90mA70F
-         daalhEZkwB6Apo4Ai71cvL4evznxFuW7QZ/jnNWgrXANheLoBxRLyN5sSUQiVHgCv9HR
-         97v9IV3l+QYGVehGdIPIXHssVTk8Z6wn9878g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to;
-        bh=TvfrSXu4f0TU8sJk8nHVngOGB75STSEGTvK6rVGCRBo=;
-        b=t0wXehYAgsJE/H4NJuCc7Vd7uq2tFuEDuxHu7yqyKy3Izf0kZSZdXLDxoRqedpGCvJ
-         6klohcrNP8L3H5RB+tNVGXh3gM3BwVvysf2gf4qCFXiWc8MvA/ws6hbOfkhtXZYznZrN
-         Y2vE1qk0KKUty2w3Iln8xd1vubGMvIeT5hZm24cnXpSXE2cEJ6Cqw7Sppzwcb4JwCpig
-         xnmSkoZRJhol3TNZoXDE/vSdnlIuszvUc8GPuQ4WscH/4oy+qU/tWZVY6GMhkOO7Ipmx
-         BbgJbNVKGVR4fPLc3roWAM4UHNabVJvPQYtD399XmbX+eBj51crCOjP3lwpSWRXx3UJv
-         RqSg==
-X-Gm-Message-State: AJIora8tn6wpxnD5DcRz2b5qOuQlEMSktrMrAgr+UtT6Tc9bFEROAI66
-        YL5h2myHzx1HKkxnVaG6Gd8GU4PiUdkH/SDTrbbztg==
-X-Google-Smtp-Source: AGRyM1v4WSDbVO+K2+4kAKFrYZQtpAn74YXqFxA1mnEY/IT8bcyyhmbIZcF9WfGx+sYO6Yz4yLIx2Fc2KzL9daEEeyw=
-X-Received: by 2002:a05:6808:171c:b0:334:9342:63ef with SMTP id
- bc28-20020a056808171c00b00334934263efmr1192888oib.63.1656487360982; Wed, 29
- Jun 2022 00:22:40 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 29 Jun 2022 02:22:40 -0500
+        Wed, 29 Jun 2022 03:24:08 -0400
+Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3891B1928E
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=krvw6
+        qwr/IZNtIPW1oz/T//NVChJsEDf0J7wBQxN9uo=; b=ifrxMVQy2hSFHVZnDqlcU
+        a0bNEtGYsLueeADGVR+YCCDTxYJvCpdmGo3UJKNpKyzrg83tzf6z+D36NK5HcSrv
+        YXaOF0z1Tf0cLLGdM484sieT2yi5nZmNGCHeBCLew0l9XblYlc4uLLN7Ob7LdJri
+        BxvwGblQhUiXUrkjmJJZ+E=
+Received: from localhost.localdomain (unknown [123.112.69.106])
+        by smtp1 (Coremail) with SMTP id GdxpCgCXgqPW_btiXNRwLg--.54145S4;
+        Wed, 29 Jun 2022 15:23:47 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     dan.j.williams@intel.com, vishal.l.verma@intel.com,
+        dave.jiang@intel.com, fenghua.yu@intel.com,
+        ravi.v.shankar@intel.com
+Cc:     nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH] =?UTF-8?q?=EF=BB=BFdax:=20Fix=20potential=20uaf=20in=20?= =?UTF-8?q?=5F=5Fdax=5Fpmem=5Fprobe()?=
+Date:   Wed, 29 Jun 2022 15:22:59 +0800
+Message-Id: <20220629072259.2150978-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <1656484485-23350-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1656484485-23350-1-git-send-email-quic_srivasam@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 29 Jun 2022 02:22:40 -0500
-Message-ID: <CAE-0n50XpUfe9LQ0UByRXeWVcHjzXTmSb+Lf5m87pJmhjA0wVg@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: qcom: sc7280: Fix compile bug
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, alsa-devel@alsa-project.org,
-        bgoswami@quicinc.com, bjorn.andersson@linaro.org,
-        broonie@kernel.org, devicetree@vger.kernel.org,
-        judyhsiao@chromium.org, lgirdwood@gmail.com,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, perex@perex.cz,
-        quic_plai@quicinc.com, quic_rohkumar@quicinc.com,
-        robh+dt@kernel.org, srinivas.kandagatla@linaro.org, tiwai@suse.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GdxpCgCXgqPW_btiXNRwLg--.54145S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7CFykXrWktw4rKw18CFyxAFb_yoW8ZF18p3
+        y5XFyUurWDAr1Uur43Aws3uFyrZa1ktw4rCr4xuw47u345Z34xA3y8Xa4jya47K3yxAr1U
+        X3Wjqw1xu3y7uF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRIks9UUUUU=
+X-Originating-IP: [123.112.69.106]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiFQMvjF5mLh+DBgAAs5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Srinivasa Rao Mandadapu (2022-06-28 23:34:45)
-> Fix the compilation error, caused by updtating constant variable.
+__dax_pmem_probe() allocates a memory chunk from dax_region with
+alloc_dax_region(). alloc_dax_region() increases the refcount for
+dax_region and uses devm_add_action_or_reset() to make the parent
+dev manage the dax_region. The dax_region will be used if the parent
+dev is destroyed.
 
-s/updtating/updating/
+Then the function calls devm_create_dev_dax() to make child dev_dax
+instances own the lifetime of the dax_region. devm_create_dev_dax()
+calls devm_add_action_or_reset(dax_region->dev, unregister_dev_dax, dev);
+to make the child dev_dax manage the dax_region and register the destroy
+function "unregister_dev_dax".The devm_create_dev_dax() increases the
+refcount for dax_region when the function is successfully executed. But
+when some error occurs, devm_create_dev_dax() may return ERR_PTR before
+increasing the refcount for dax_region. In these cases, the call for
+dax_region_put() will decrease the ref count for dax_region and trigger
+dax_region_free(), which will execute kfree(dax_region).
 
-> Hence remove redundant constant variable, which is no more useful
-> as per new design.
->
-> The issue is due to some unstaged changes. Fix it up.
->
-> Fixes: 36fe26843d6d ("pinctrl: qcom: sc7280: Add clock optional check for ADSP bypass targets")
->
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> ---
+When the parent dev is destroyed, the registered destroy function
+"unregister_dev_dax" will be triggered and calls dax_region_free(), which
+will use the freed dax_region, leading to a use after free bug.
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+We should check the return value of devm_create_dev_dax(). If it returns
+ERR_PTR, we should return this function with ERR_PTR.
+
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+---
+ drivers/dax/pmem.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/dax/pmem.c b/drivers/dax/pmem.c
+index f050ea78bb83..d5c8bd546ee9 100644
+--- a/drivers/dax/pmem.c
++++ b/drivers/dax/pmem.c
+@@ -66,6 +66,8 @@ static struct dev_dax *__dax_pmem_probe(struct device *dev)
+ 		.size = range_len(&range),
+ 	};
+ 	dev_dax = devm_create_dev_dax(&data);
++	if (IS_ERR(dev_dax))
++		return ERR_PTR((dev_dax);
+ 
+ 	/* child dev_dax instances now own the lifetime of the dax_region */
+ 	dax_region_put(dax_region);
+-- 
+2.25.1
+

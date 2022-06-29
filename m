@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4BBE560B6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 23:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0069F560B73
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 23:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbiF2VOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 17:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
+        id S230041AbiF2VOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 17:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiF2VOL (ORCPT
+        with ESMTP id S229784AbiF2VOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 17:14:11 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA60D3E0E7
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 14:14:10 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 9so16485427pgd.7
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 14:14:10 -0700 (PDT)
+        Wed, 29 Jun 2022 17:14:53 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4D43EA99
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 14:14:52 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3177608c4a5so137253537b3.14
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 14:14:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Uh5xB0eDoFAz75o4tEx7nxB4dG+eqxB73XoQEAhQu6A=;
-        b=crIQSuiZpHpWVDRlRRZXxBzT9JT3p3a8YFeHlfLQBrFx8IG/tKYIGd07JELJEaGSRS
-         KuT+mw7ONtKjF604oFmyEMQ6ReoHe4i4Ka8QFTFNyTt62BgSipnUTrJyAa6QG16BCTAD
-         ShCdyTQ0brFHFSbCVtx/Crx4cLKrJpRzfz5dm42Yqr5oFA1K2rdv4PZ1cSj0O6pyUsnK
-         gSkXccS2D6HUAJK1lXJ9PXQAj+WEFGG+IvPFdzmkhNm7iC3CmrCYC/udS7ZKCmFiQdoB
-         amvNhT5D0VjI9PetR3eUtS+LYOSzKnTAKp2BNOfuWmmp6Y4gQXIg2Wznw8pX89ijySk5
-         ALxA==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=JkyjHjPdtkclm0+uDLujhsk5SWKIJ65+tfNQvDnfTDg=;
+        b=la00TFKPKdX5y6e/J4PidIx0KvRtla/rNZDlcJotoF/aRdBrzZBAMTYq93AHmjkOvH
+         yZLO2RPbXfQbLfBLviw1JJvsQMgMfxVttdm4edh/ycjDF2V4G+p/4E03fyN9MhoRkjT8
+         YMDlKOixsrqB819E25xpVfpA4h+Xma9K7pLnbNO4YNHqs3Iux9CT2tY7ay/TBvKafFlM
+         /idWaFGi352lCoKMIMlRCvnZ7ZqxOYIkx56kCIZmCQZQ2wIGZ0qMDOhqg2hL+oBk6db0
+         KJ/nziNfEMZJd1SM2VX2XT5OmFiNDPfXczYFYiZnLRfXeozylL9N0HzKiPtK0sQUnUxw
+         Xp9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Uh5xB0eDoFAz75o4tEx7nxB4dG+eqxB73XoQEAhQu6A=;
-        b=ew4xo0SiKRjs0Iy1Eat+ONtBcfUabJotKjC13pgxGt3beQO7q2JPQ6vvsoZ3/f4Sn4
-         FAL60BhLWNb2/Zsq0WBmpyDCUeIOLoluf/PZyepRSrapUgYreu0YzPfmT0a8yIw5cJcw
-         kaQoKKW6UqXpnEFsAHG+J8xY5bOHOas+jS4dPFlWi5JjltcAxUg1RQPWEJuD8pVM6iXQ
-         i43ZGqMmL9RVPHVaa/rqAbDxgqAlbtnRRnS5M8QQpBKmw5tdG1TwhuZldwiir2F/L+b4
-         sLr2yVayqXg5BE5XsPgDOhmjumC+J7JHhO+LVuKqPevo3zuw9CUDtUq7Dws+EMfF5f7i
-         PSmA==
-X-Gm-Message-State: AJIora/sO09GLIsRHDd6YdretZOPhgznDTZ7goyjkaVfjWvfuevETsFU
-        slHtkp00mjMCno0Ro4pCoDrN2FD7FfSOg1+gcB7gew==
-X-Google-Smtp-Source: AGRyM1uYeRRrdzUbp+gG7X9xLJ2MtyiEEEaMkRn8o4AAmM6FY0HO4D109cCv1EAmZY9enbk7JlwYwjzbLJq2JUwnKNM=
-X-Received: by 2002:a63:5d21:0:b0:40d:d9fd:7254 with SMTP id
- r33-20020a635d21000000b0040dd9fd7254mr4593326pgb.353.1656537250098; Wed, 29
- Jun 2022 14:14:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220624173656.2033256-1-jthoughton@google.com>
- <20220624173656.2033256-3-jthoughton@google.com> <Yrn6DfTINknKNS04@monkey>
- <CADrL8HUD14o6XybhYDdozAUkJ4Zt6nE8=dm-_osKg2CmvOFzHg@mail.gmail.com>
- <YrvzlTU2z8/IrEuK@FVFYT0MHHV2J.usts.net> <Yry+uxxA2/wsK8G9@monkey>
-In-Reply-To: <Yry+uxxA2/wsK8G9@monkey>
-From:   James Houghton <jthoughton@google.com>
-Date:   Wed, 29 Jun 2022 14:13:58 -0700
-Message-ID: <CADrL8HVEKzUf2LYL2SeUS7fiHOPtvVJseZKqJpyqt9jBAKuO6g@mail.gmail.com>
-Subject: Re: [RFC PATCH 02/26] hugetlb: sort hstates in hugetlb_init_hstates
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Jue Wang <juew@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=JkyjHjPdtkclm0+uDLujhsk5SWKIJ65+tfNQvDnfTDg=;
+        b=ia6OLiWEKBTDANeW6jqFOfvDd2ofxsVQZa/SwZQp032QF6Dh1llnrttwRw+MLgiieh
+         q7KBZy9tWf9BD+FG5UQ1bxwYdcvclC0cXiklJbSHOCQw5Oo6ohY0O0QPBxdyTLvKkg47
+         g4HdF/1pfO5Gx4f2x9rRWDnb4iLnzmR1m1wF05egDgM8veOEJpUv2hKhbnmkOQqibPHA
+         dxyIaB8aTbIHtPXr/V3iURpMYjuFIYk4kVOxbMXibZ5UZT4Wb6pbVnDe2xc+NMHOthP/
+         eH0Jfa0WR6siSSoDMnVa28FJibo+Heznf6euDTloEQvnhLKoaeYaRtG4ZaFaSI6aQl11
+         FszQ==
+X-Gm-Message-State: AJIora8X4R8f6sPFxh2KWhjUZoTl3Ckh2X2y6Fq7bGvoh1CeTpUd2SX6
+        5RD3Ot8CdF53I/GyirAoR0AgVMV6lx3B
+X-Google-Smtp-Source: AGRyM1tq830+v7T5vpblx3/ckdnFNfLn5FkjO8ydOgqBW70ycsN8PoLDnY0vk1vG+764DD6lrzOZ1qzuWG7F
+X-Received: from joshdon.svl.corp.google.com ([2620:15c:2cd:202:4585:eb52:4688:ecde])
+ (user=joshdon job=sendgmr) by 2002:a81:5002:0:b0:317:b1c4:e10b with SMTP id
+ e2-20020a815002000000b00317b1c4e10bmr6313678ywb.120.1656537291845; Wed, 29
+ Jun 2022 14:14:51 -0700 (PDT)
+Date:   Wed, 29 Jun 2022 14:14:26 -0700
+Message-Id: <20220629211426.3329954-1-joshdon@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v4] sched/core: add forced idle accounting for cgroups
+From:   Josh Don <joshdon@google.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Tejun Heo <tj@kernel.org>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Cruz Zhao <CruzZhao@linux.alibaba.com>,
+        Josh Don <joshdon@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,48 +74,218 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 2:06 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
->
-> On 06/29/22 14:39, Muchun Song wrote:
-> > On Tue, Jun 28, 2022 at 08:40:27AM -0700, James Houghton wrote:
-> > > On Mon, Jun 27, 2022 at 11:42 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
-> > > >
-> > > > On 06/24/22 17:36, James Houghton wrote:
-> > > > > When using HugeTLB high-granularity mapping, we need to go through the
-> > > > > supported hugepage sizes in decreasing order so that we pick the largest
-> > > > > size that works. Consider the case where we're faulting in a 1G hugepage
-> > > > > for the first time: we want hugetlb_fault/hugetlb_no_page to map it with
-> > > > > a PUD. By going through the sizes in decreasing order, we will find that
-> > > > > PUD_SIZE works before finding out that PMD_SIZE or PAGE_SIZE work too.
-> > > > >
-> > > >
-> > > > This may/will cause problems for gigantic hugetlb pages allocated at boot
-> > > > time.  See alloc_bootmem_huge_page() where a pointer to the associated hstate
-> > > > is encoded within the allocated hugetlb page.  These pages are added to
-> > > > hugetlb pools by the routine gather_bootmem_prealloc() which uses the saved
-> > > > hstate to add prep the gigantic page and add to the correct pool.  Currently,
-> > > > gather_bootmem_prealloc is called after hugetlb_init_hstates.  So, changing
-> > > > hstate order will cause errors.
-> > > >
-> > > > I do not see any reason why we could not call gather_bootmem_prealloc before
-> > > > hugetlb_init_hstates to avoid this issue.
-> > >
-> > > Thanks for catching this, Mike. Your suggestion certainly seems to
-> > > work, but it also seems kind of error prone. I'll have to look at the
-> > > code more closely, but maybe it would be better if I just maintained a
-> > > separate `struct hstate *sorted_hstate_ptrs[]`, where the original
-> >
-> > I don't think this is a good idea.  If you really rely on the order of
-> > the initialization in this patch.  The easier solution is changing
-> > huge_bootmem_page->hstate to huge_bootmem_page->hugepagesz. Then we
-> > can use size_to_hstate(huge_bootmem_page->hugepagesz) in
-> > gather_bootmem_prealloc().
-> >
->
-> That is a much better solution.  Thanks Muchun!
+4feee7d1260 previously added per-task forced idle accounting. This patch
+extends this to also include cgroups.
 
-Indeed. Thank you, Muchun. :)
+rstat is used for cgroup accounting, except for the root, which uses
+kcpustat in order to bypass the need for doing an rstat flush when
+reading root stats.
 
->
-> --
-> Mike Kravetz
+Only cgroup v2 is supported. Similar to the task accounting, the cgroup
+accounting requires that schedstats is enabled.
+
+Signed-off-by: Josh Don <joshdon@google.com>
+Acked-by: Tejun Heo <tj@kernel.org>
+---
+v4: Replace 'forceidle_usec' with 'core_sched.force_idle_usec'
+v3: Fix build error, and revert back to  __schedstat_*
+v2: Per Tejun's suggestion, move the forceidle stat to cgroup_base_stat
+directly.
+ include/linux/cgroup-defs.h |  4 ++++
+ include/linux/kernel_stat.h |  7 ++++++
+ kernel/cgroup/rstat.c       | 44 ++++++++++++++++++++++++++++++++-----
+ kernel/sched/core_sched.c   |  6 ++++-
+ kernel/sched/cputime.c      | 15 +++++++++++++
+ 5 files changed, 69 insertions(+), 7 deletions(-)
+
+diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+index 1bfcfb1af352..025fd0e84a31 100644
+--- a/include/linux/cgroup-defs.h
++++ b/include/linux/cgroup-defs.h
+@@ -287,6 +287,10 @@ struct css_set {
+ 
+ struct cgroup_base_stat {
+ 	struct task_cputime cputime;
++
++#ifdef CONFIG_SCHED_CORE
++	u64 forceidle_sum;
++#endif
+ };
+ 
+ /*
+diff --git a/include/linux/kernel_stat.h b/include/linux/kernel_stat.h
+index 69ae6b278464..ddb5a358fd82 100644
+--- a/include/linux/kernel_stat.h
++++ b/include/linux/kernel_stat.h
+@@ -28,6 +28,9 @@ enum cpu_usage_stat {
+ 	CPUTIME_STEAL,
+ 	CPUTIME_GUEST,
+ 	CPUTIME_GUEST_NICE,
++#ifdef CONFIG_SCHED_CORE
++	CPUTIME_FORCEIDLE,
++#endif
+ 	NR_STATS,
+ };
+ 
+@@ -115,4 +118,8 @@ extern void account_process_tick(struct task_struct *, int user);
+ 
+ extern void account_idle_ticks(unsigned long ticks);
+ 
++#ifdef CONFIG_SCHED_CORE
++extern void __account_forceidle_time(struct task_struct *tsk, u64 delta);
++#endif
++
+ #endif /* _LINUX_KERNEL_STAT_H */
+diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+index 24b5c2ab5598..feb59380c896 100644
+--- a/kernel/cgroup/rstat.c
++++ b/kernel/cgroup/rstat.c
+@@ -310,6 +310,9 @@ static void cgroup_base_stat_add(struct cgroup_base_stat *dst_bstat,
+ 	dst_bstat->cputime.utime += src_bstat->cputime.utime;
+ 	dst_bstat->cputime.stime += src_bstat->cputime.stime;
+ 	dst_bstat->cputime.sum_exec_runtime += src_bstat->cputime.sum_exec_runtime;
++#ifdef CONFIG_SCHED_CORE
++	dst_bstat->forceidle_sum += src_bstat->forceidle_sum;
++#endif
+ }
+ 
+ static void cgroup_base_stat_sub(struct cgroup_base_stat *dst_bstat,
+@@ -318,6 +321,9 @@ static void cgroup_base_stat_sub(struct cgroup_base_stat *dst_bstat,
+ 	dst_bstat->cputime.utime -= src_bstat->cputime.utime;
+ 	dst_bstat->cputime.stime -= src_bstat->cputime.stime;
+ 	dst_bstat->cputime.sum_exec_runtime -= src_bstat->cputime.sum_exec_runtime;
++#ifdef CONFIG_SCHED_CORE
++	dst_bstat->forceidle_sum -= src_bstat->forceidle_sum;
++#endif
+ }
+ 
+ static void cgroup_base_stat_flush(struct cgroup *cgrp, int cpu)
+@@ -398,6 +404,11 @@ void __cgroup_account_cputime_field(struct cgroup *cgrp,
+ 	case CPUTIME_SOFTIRQ:
+ 		rstatc->bstat.cputime.stime += delta_exec;
+ 		break;
++#ifdef CONFIG_SCHED_CORE
++	case CPUTIME_FORCEIDLE:
++		rstatc->bstat.forceidle_sum += delta_exec;
++		break;
++#endif
+ 	default:
+ 		break;
+ 	}
+@@ -411,8 +422,9 @@ void __cgroup_account_cputime_field(struct cgroup *cgrp,
+  * with how it is done by __cgroup_account_cputime_field for each bit of
+  * cpu time attributed to a cgroup.
+  */
+-static void root_cgroup_cputime(struct task_cputime *cputime)
++static void root_cgroup_cputime(struct cgroup_base_stat *bstat)
+ {
++	struct task_cputime *cputime = &bstat->cputime;
+ 	int i;
+ 
+ 	cputime->stime = 0;
+@@ -438,6 +450,10 @@ static void root_cgroup_cputime(struct task_cputime *cputime)
+ 		cputime->sum_exec_runtime += user;
+ 		cputime->sum_exec_runtime += sys;
+ 		cputime->sum_exec_runtime += cpustat[CPUTIME_STEAL];
++
++#ifdef CONFIG_SCHED_CORE
++		bstat->forceidle_sum += cpustat[CPUTIME_FORCEIDLE];
++#endif
+ 	}
+ }
+ 
+@@ -445,27 +461,43 @@ void cgroup_base_stat_cputime_show(struct seq_file *seq)
+ {
+ 	struct cgroup *cgrp = seq_css(seq)->cgroup;
+ 	u64 usage, utime, stime;
+-	struct task_cputime cputime;
++	struct cgroup_base_stat bstat;
++#ifdef CONFIG_SCHED_CORE
++	u64 forceidle_time;
++#endif
+ 
+ 	if (cgroup_parent(cgrp)) {
+ 		cgroup_rstat_flush_hold(cgrp);
+ 		usage = cgrp->bstat.cputime.sum_exec_runtime;
+ 		cputime_adjust(&cgrp->bstat.cputime, &cgrp->prev_cputime,
+ 			       &utime, &stime);
++#ifdef CONFIG_SCHED_CORE
++		forceidle_time = cgrp->bstat.forceidle_sum;
++#endif
+ 		cgroup_rstat_flush_release();
+ 	} else {
+-		root_cgroup_cputime(&cputime);
+-		usage = cputime.sum_exec_runtime;
+-		utime = cputime.utime;
+-		stime = cputime.stime;
++		root_cgroup_cputime(&bstat);
++		usage = bstat.cputime.sum_exec_runtime;
++		utime = bstat.cputime.utime;
++		stime = bstat.cputime.stime;
++#ifdef CONFIG_SCHED_CORE
++		forceidle_time = bstat.forceidle_sum;
++#endif
+ 	}
+ 
+ 	do_div(usage, NSEC_PER_USEC);
+ 	do_div(utime, NSEC_PER_USEC);
+ 	do_div(stime, NSEC_PER_USEC);
++#ifdef CONFIG_SCHED_CORE
++	do_div(forceidle_time, NSEC_PER_USEC);
++#endif
+ 
+ 	seq_printf(seq, "usage_usec %llu\n"
+ 		   "user_usec %llu\n"
+ 		   "system_usec %llu\n",
+ 		   usage, utime, stime);
++
++#ifdef CONFIG_SCHED_CORE
++	seq_printf(seq, "core_sched.force_idle_usec %llu\n", forceidle_time);
++#endif
+ }
+diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
+index 38a2cec21014..5103502da7ba 100644
+--- a/kernel/sched/core_sched.c
++++ b/kernel/sched/core_sched.c
+@@ -277,7 +277,11 @@ void __sched_core_account_forceidle(struct rq *rq)
+ 		if (p == rq_i->idle)
+ 			continue;
+ 
+-		__schedstat_add(p->stats.core_forceidle_sum, delta);
++		/*
++		 * Note: this will account forceidle to the current cpu, even
++		 * if it comes from our SMT sibling.
++		 */
++		__account_forceidle_time(p, delta);
+ 	}
+ }
+ 
+diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
+index 78a233d43757..95fc77853743 100644
+--- a/kernel/sched/cputime.c
++++ b/kernel/sched/cputime.c
+@@ -226,6 +226,21 @@ void account_idle_time(u64 cputime)
+ 		cpustat[CPUTIME_IDLE] += cputime;
+ }
+ 
++
++#ifdef CONFIG_SCHED_CORE
++/*
++ * Account for forceidle time due to core scheduling.
++ *
++ * REQUIRES: schedstat is enabled.
++ */
++void __account_forceidle_time(struct task_struct *p, u64 delta)
++{
++	__schedstat_add(p->stats.core_forceidle_sum, delta);
++
++	task_group_account_field(p, CPUTIME_FORCEIDLE, delta);
++}
++#endif
++
+ /*
+  * When a guest is interrupted for a longer amount of time, missed clock
+  * ticks are not redelivered later. Due to that, this function may on
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
+

@@ -2,225 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1644B56085D
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 691AA560888
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 20:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbiF2SDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 14:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
+        id S232654AbiF2SEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 14:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232231AbiF2SCo (ORCPT
+        with ESMTP id S232533AbiF2SDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 14:02:44 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E3D83A735;
-        Wed, 29 Jun 2022 11:02:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E21051480;
-        Wed, 29 Jun 2022 11:02:42 -0700 (PDT)
-Received: from [10.57.85.71] (unknown [10.57.85.71])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 050C53F5A1;
-        Wed, 29 Jun 2022 11:02:37 -0700 (PDT)
-Message-ID: <d84a0498-3b7f-3d38-2bfd-9a175db4002a@arm.com>
-Date:   Wed, 29 Jun 2022 19:02:33 +0100
+        Wed, 29 Jun 2022 14:03:49 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB11437A22
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:03:21 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id d2so22426444ejy.1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 11:03:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=EF+4vVSu0Ak1EZxpXNfRVufy8G3AP8/4t8MYyPUNltA=;
+        b=qNMlZFjto8WW4D+zIbCEQRp1WueqNb3qJL71sznhlSuk5jpwSgWjmvDD0kGh7UzKvP
+         KRPIYQ/bNOE2Pme8lPtKe5UdlMVFsoB6fADpqkY/Zq2yyQjN4HeZwaKleFSPP7LhdISh
+         q9Q+pv+euqXm6pMMJowrdAxJUB9P8Iwolkl0dxF/4cn2+GXjJICaMrwgkw5ccriOAGZF
+         p/QHmjJTvdWdcgyjNouAjp/+K8Ti6GImpz0LUZaVYh3OUkAixP6xYdoD4n4d8c7wpa1g
+         zxvD9t73cHnYCcWgU1TnGLZBeBb+pp67VMyy9lrDf27p2IaIeSslWNaeh4Y8xZ3j8OiG
+         7vqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EF+4vVSu0Ak1EZxpXNfRVufy8G3AP8/4t8MYyPUNltA=;
+        b=lngonNIo1SDexTbT0IbSj6YKAPvKnHCSQ/oJwRkRr8nGITMKNMqoeGzSYYd0gLO2Pg
+         G9J+B9pCoSlofEhqK6zDIYBph6EwjLcfMiKSLv4qpUR+bO3NoRdQrq7s/WxHmegAw25b
+         9qlGkYq1UUfmmv7yiz+0WylFr5A3n7Wyn+TxFeI/xoUVXXMplsVoKKcwMH/nbiHhjMlg
+         mSP6YpD74uoSyc/pKpprBSHH822EjjsSIhA68NYp3uc86reRMUhqfT+oUDOqBc21Ki3g
+         PJf1DSJW3ny5E/RNV4ErFFP2onPlg/tfWLA8LZfE3ltLm0eFSg9sBm/qgPiQTEoL7qmj
+         weKA==
+X-Gm-Message-State: AJIora/J3guaz1hq+Hp6w0WkAXIa35AN+wKqHso8Kz9UKhe4C1rzwg1c
+        GrvR7MwTrKbIAMm2hc2Ebfx/gw==
+X-Google-Smtp-Source: AGRyM1voypfDnC3goXLyoV1lstNYX1G0AB6nAChz47TdKqz6nnI934lH4zhYtOaEu8xtpGlXs4MNzw==
+X-Received: by 2002:a17:907:7f05:b0:726:9770:77d6 with SMTP id qf5-20020a1709077f0500b00726977077d6mr4580557ejc.464.1656525800225;
+        Wed, 29 Jun 2022 11:03:20 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id b12-20020a05640202cc00b004335e08d6c9sm11781609edx.33.2022.06.29.11.03.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 11:03:19 -0700 (PDT)
+Message-ID: <85b3fcbf-abe4-56b7-323b-f303eb458592@linaro.org>
+Date:   Wed, 29 Jun 2022 20:03:17 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v7 01/21] lib/scatterlist: add flag for indicating P2PDMA
- segments in an SGL
-Content-Language: en-GB
-To:     Logan Gunthorpe <logang@deltatee.com>,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org
-Cc:     Stephen Bates <sbates@raithlin.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>
-References: <20220615161233.17527-1-logang@deltatee.com>
- <20220615161233.17527-2-logang@deltatee.com>
- <b56d9b93-c59f-5764-e599-d9718edb42d3@arm.com>
- <c42b5ee3-5d4f-7e44-8885-26b8417208ae@deltatee.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <c42b5ee3-5d4f-7e44-8885-26b8417208ae@deltatee.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v6 14/14] dt-bindings: arm: freescale: Remove fsl,scu txt
+ file
+Content-Language: en-US
+To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
+ <20220629164414.301813-15-viorel.suman@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220629164414.301813-15-viorel.suman@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-29 16:39, Logan Gunthorpe wrote:
+On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
+> From: Abel Vesa <abel.vesa@nxp.com>
 > 
+> Now that all the child nodes have been properly documented in the
+> yaml files, within their proper subystems, we can drop the fsl,scu.txt.
 > 
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+> ---
+>  .../bindings/arm/freescale/fsl,scu.txt        | 271 ------------------
+>  1 file changed, 271 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
 > 
-> On 2022-06-29 03:05, Robin Murphy wrote:
->> On 2022-06-15 17:12, Logan Gunthorpe wrote:
->>> Make use of the third free LSB in scatterlist's page_link on 64bit
->>> systems.
->>>
->>> The extra bit will be used by dma_[un]map_sg_p2pdma() to determine when a
->>> given SGL segments dma_address points to a PCI bus address.
->>> dma_unmap_sg_p2pdma() will need to perform different cleanup when a
->>> segment is marked as a bus address.
->>>
->>> The new bit will only be used when CONFIG_PCI_P2PDMA is set; this means
->>> PCI P2PDMA will require CONFIG_64BIT. This should be acceptable as the
->>> majority of P2PDMA use cases are restricted to newer root complexes and
->>> roughly require the extra address space for memory BARs used in the
->>> transactions.
->>>
->>> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
->>> Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
->>> ---
->>>    drivers/pci/Kconfig         |  5 +++++
->>>    include/linux/scatterlist.h | 44 ++++++++++++++++++++++++++++++++++++-
->>>    2 files changed, 48 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
->>> index 133c73207782..5cc7cba1941f 100644
->>> --- a/drivers/pci/Kconfig
->>> +++ b/drivers/pci/Kconfig
->>> @@ -164,6 +164,11 @@ config PCI_PASID
->>>    config PCI_P2PDMA
->>>        bool "PCI peer-to-peer transfer support"
->>>        depends on ZONE_DEVICE
->>> +    #
->>> +    # The need for the scatterlist DMA bus address flag means PCI P2PDMA
->>> +    # requires 64bit
->>> +    #
->>> +    depends on 64BIT
->>>        select GENERIC_ALLOCATOR
->>>        help
->>>          Enableѕ drivers to do PCI peer-to-peer transactions to and from
->>> diff --git a/include/linux/scatterlist.h b/include/linux/scatterlist.h
->>> index 7ff9d6386c12..6561ca8aead8 100644
->>> --- a/include/linux/scatterlist.h
->>> +++ b/include/linux/scatterlist.h
->>> @@ -64,12 +64,24 @@ struct sg_append_table {
->>>    #define SG_CHAIN    0x01UL
->>>    #define SG_END        0x02UL
->>>    +/*
->>> + * bit 2 is the third free bit in the page_link on 64bit systems which
->>> + * is used by dma_unmap_sg() to determine if the dma_address is a
->>> + * bus address when doing P2PDMA.
->>> + */
->>> +#ifdef CONFIG_PCI_P2PDMA
->>> +#define SG_DMA_BUS_ADDRESS    0x04UL
->>> +static_assert(__alignof__(struct page) >= 8);
->>> +#else
->>> +#define SG_DMA_BUS_ADDRESS    0x00UL
->>> +#endif
->>> +
->>>    /*
->>>     * We overload the LSB of the page pointer to indicate whether it's
->>>     * a valid sg entry, or whether it points to the start of a new
->>> scatterlist.
->>>     * Those low bits are there for everyone! (thanks mason :-)
->>>     */
->>> -#define SG_PAGE_LINK_MASK (SG_CHAIN | SG_END)
->>> +#define SG_PAGE_LINK_MASK (SG_CHAIN | SG_END | SG_DMA_BUS_ADDRESS)
->>>      static inline unsigned int __sg_flags(struct scatterlist *sg)
->>>    {
->>> @@ -91,6 +103,11 @@ static inline bool sg_is_last(struct scatterlist *sg)
->>>        return __sg_flags(sg) & SG_END;
->>>    }
->>>    +static inline bool sg_is_dma_bus_address(struct scatterlist *sg)
->>> +{
->>> +    return __sg_flags(sg) & SG_DMA_BUS_ADDRESS;
->>> +}
->>> +
->>>    /**
->>>     * sg_assign_page - Assign a given page to an SG entry
->>>     * @sg:            SG entry
->>> @@ -245,6 +262,31 @@ static inline void sg_unmark_end(struct
->>> scatterlist *sg)
->>>        sg->page_link &= ~SG_END;
->>>    }
->>>    +/**
->>> + * sg_dma_mark_bus address - Mark the scatterlist entry as a bus address
->>> + * @sg:         SG entryScatterlist
->>
->> entryScatterlist?
->>
->>> + *
->>> + * Description:
->>> + *   Marks the passed in sg entry to indicate that the dma_address is
->>> + *   a bus address and doesn't need to be unmapped.
->>> + **/
->>> +static inline void sg_dma_mark_bus_address(struct scatterlist *sg)
->>> +{
->>> +    sg->page_link |= SG_DMA_BUS_ADDRESS;
->>> +}
->>> +
->>> +/**
->>> + * sg_unmark_pci_p2pdma - Unmark the scatterlist entry as a bus address
->>> + * @sg:         SG entryScatterlist
->>> + *
->>> + * Description:
->>> + *   Clears the bus address mark.
->>> + **/
->>> +static inline void sg_dma_unmark_bus_address(struct scatterlist *sg)
->>> +{
->>> +    sg->page_link &= ~SG_DMA_BUS_ADDRESS;
->>> +}
->>
->> Does this serve any useful purpose? If a page is determined to be device
->> memory, it's not going to suddenly stop being device memory, and if the
->> underlying sg is recycled to point elsewhere then sg_assign_page() will
->> still (correctly) clear this flag anyway. Trying to reason about this
->> beyond superficial API symmetry - i.e. why exactly would a caller need
->> to call it, and what would the implications be of failing to do so -
->> seems to lead straight to confusion.
->>
->> In fact I'd be inclined to have sg_assign_page() be responsible for
->> setting the flag automatically as well, and thus not need
->> sg_dma_mark_bus_address() either, however I can see the argument for
->> doing it this way round to not entangle the APIs too much, so I don't
->> have any great objection to that.
-> 
-> Yes, I think you misunderstand what this is for. The SG_DMA_BUS_ADDDRESS
-> flag doesn't mark the segment for the page, but for the dma address. It
-> cannot be set in sg_assign_page() seeing it's not a property of the page
-> but a property of the dma_address in the sgl.
-> 
-> It's not meant for use by regular SG users, it's only meant for use
-> inside DMA mapping implementations. The purpose is to know whether a
-> given dma_address in the SGL is a bus address or regular memory because
-> the two different types must be unmapped differently. We can't rely on
-> the page because, as you know, many dma_map_sg() the dma_address entry
-> in the sgl does not map to the same memory as the page. Or to put it
-> another way: is_pci_p2pdma_page(sg->page) does not imply that
-> sg->dma_address points to a bus address.
-> 
-> Does that make sense?
 
-Ah, you're quite right, in trying to take in the whole series at once 
-first thing in the morning I did fail to properly grasp that detail, so 
-indeed the sg_assign_page() thing couldn't possibly work, but as I said 
-that's fine anyway. I still think the lifecycle management is a bit off 
-though - equivalently, a bus address doesn't stop being a bus address, 
-so it would seem appropriate to update this flag appropriately whenever 
-sg_dma_address() is assigned to, and not when it isn't.
+This cannot be separate patch. Conversion is add+remove in one commit,
+so even if you remove everything in one patch, it should be then
+squashed into patch #9. Anyway, I think better approach is to remove
+gradually, so each piece is removed in each converted part.
 
-Thanks,
-Robin.
+Best regards,
+Krzysztof

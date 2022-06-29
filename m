@@ -2,102 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 228D7560765
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 19:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 286DA56076B
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 19:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbiF2RdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 13:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
+        id S231243AbiF2RfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 13:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiF2RdE (ORCPT
+        with ESMTP id S229617AbiF2RfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 13:33:04 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1D93C73B;
-        Wed, 29 Jun 2022 10:33:01 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 293FC3D7;
-        Wed, 29 Jun 2022 19:32:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1656523979;
-        bh=Bz+fn/nhW/HeNRPw/laOwYHfB9cQJCj7oVKsDW89m34=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VERPl+T+Zv2xZi1ia04OnQXFfPB7Y0t/Z05jadMvstQPmFPB78HjazkKDztBN7bLT
-         h5t5rVOIBjsgc09ajwsyg7atynSewIQlpW3SNMt/SDyLKru4dK0a0uG4b2Hi9lkp09
-         z8B3wBAWCv0lFE9+b7LU1mi/DCgXGHrdTtkYKu2U=
-Date:   Wed, 29 Jun 2022 20:32:39 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Lucas Stach <l.stach@pengutronix.de>
-Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        abel.vesa@nxp.com, abailon@baylibre.com, marex@denx.de,
-        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
-        aford173@gmail.com, kernel@pengutronix.de,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, abelvesa@kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V2 7/9] interconnect: imx: set of_node for interconnect
- provider
-Message-ID: <YryMt4CfQNkIHwiV@pendragon.ideasonboard.com>
-References: <20220616073320.2203000-1-peng.fan@oss.nxp.com>
- <20220616073320.2203000-8-peng.fan@oss.nxp.com>
- <3c773637f626877832041d3065f387261ba70816.camel@pengutronix.de>
+        Wed, 29 Jun 2022 13:35:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10A3286EF;
+        Wed, 29 Jun 2022 10:35:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BF4B61E63;
+        Wed, 29 Jun 2022 17:35:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3B1BC34114;
+        Wed, 29 Jun 2022 17:35:08 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="AucPVFO5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1656524107;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YuSrb83T/sew09oEwC4jqlwmFmsN3/eWbuM4rfaIxQ8=;
+        b=AucPVFO5o+D4xprp0cAdeMfdNNJ1IjiF4Z5ekpcwdbgxZHUbVXYx1VdkDXXP8xhdN00dQY
+        p5Jk5fgzTPbwdXuMmla6Aiz90j+J9qkxtwHezru0nrhRBlygn2Nu0us7NC5/Vdmerd3vKF
+        J13IU9BNrAfLdi4ASZ/bwCwZD5mTEOg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f38fdb15 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 29 Jun 2022 17:35:06 +0000 (UTC)
+Date:   Wed, 29 Jun 2022 19:34:58 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        sultan@kerneltoast.com
+Subject: Re: [PATCH] remove CONFIG_ANDROID
+Message-ID: <YryNQvWGVwCjJYmB@zx2c4.com>
+References: <20220629150102.1582425-1-hch@lst.de>
+ <20220629150102.1582425-2-hch@lst.de>
+ <Yrx5Lt7jrk5BiHXx@zx2c4.com>
+ <20220629161020.GA24891@lst.de>
+ <Yrx6EVHtroXeEZGp@zx2c4.com>
+ <20220629161527.GA24978@lst.de>
+ <Yrx8/Fyx15CTi2zq@zx2c4.com>
+ <20220629163007.GA25279@lst.de>
+ <Yrx/8UOY+J8Ao3Bd@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3c773637f626877832041d3065f387261ba70816.camel@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yrx/8UOY+J8Ao3Bd@zx2c4.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 05:08:58PM +0200, Lucas Stach wrote:
-> Am Donnerstag, dem 16.06.2022 um 15:33 +0800 schrieb Peng Fan (OSS):
-> > From: Peng Fan <peng.fan@nxp.com>
-> > 
-> > The provider device is created using platform_device_register_data in
-> > imx-bus driver, which not has of_node. With of_node set, it will be
-> > easy to support QoS settings.
-> > 
-> That's a bit dangerous, as sharing a of_node between two devices can
-> lead to some reference counting issues IIRC, but then I also don't see
-> a good way to do this any differently.
-> 
-> Regards,
-> Lucas
-> 
-> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > ---
-> >  drivers/interconnect/imx/imx.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/imx.c
-> > index 1f16eedea21c..78557fe6da2c 100644
-> > --- a/drivers/interconnect/imx/imx.c
-> > +++ b/drivers/interconnect/imx/imx.c
-> > @@ -264,6 +264,7 @@ int imx_icc_register(struct platform_device *pdev,
-> >  	provider->xlate = of_icc_xlate_onecell;
-> >  	provider->data = data;
-> >  	provider->dev = dev->parent;
-> > +	provider->dev->of_node = dev->parent->of_node;
+On Wed, Jun 29, 2022 at 06:38:09PM +0200, Jason A. Donenfeld wrote:
+> On the technical topic, an Android developer friend following this
+> thread just pointed out to me that Android doesn't use PM_AUTOSLEEP and
+> just has userspace causing suspend frequently. So by his rough
+> estimation your patch actually *will* break Android devices. Zoinks.
+> Maybe he's right, maybe he's not -- I don't know -- but you should
+> probably look into this if you want this patch to land without breakage.
 
-Due to the previous line, provider->dev is equal to dev->parent, so
-doesn't this essentially do
+More details: https://cs.android.com/android/platform/superproject/+/master:system/core/libsuspend/autosuspend_wakeup_count.cpp;bpv=1;bpt=1;l=52?q=%22%2Fsys%2Fpower%2Fstate%22&start=51&gsn=sys_power_state&gs=kythe%3A%2F%2Fandroid.googlesource.com%2Fplatform%2Fsuperproject%3Flang%3Dc%252B%252B%3Fpath%3Dsystem%2Fcore%2Flibsuspend%2Fautosuspend_wakeup_count.cpp%23ftWlDJuOhS_2fn3Ri7rClxA30blj_idGgT12aoUHd1o
 
-	dev->parent->of_node = dev->parent->of_node;
+So indeed it looks like it's userspace controlled. If you want this to
+be a runtime, rather than a compiletime, switch, maybe
+autosuspend_init() of that file could write to a sysctl.
 
-which is a no-op ?
+Who at Google "owns" that code? Can somebody CC them in?
 
-> >  	platform_set_drvdata(pdev, imx_provider);
-> >  
-> >  	ret = icc_provider_add(provider);
-
--- 
-Regards,
-
-Laurent Pinchart
+Jason

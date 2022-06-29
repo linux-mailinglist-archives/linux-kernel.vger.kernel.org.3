@@ -2,134 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA53560B03
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 22:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A078560B0F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 22:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbiF2U2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 16:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
+        id S230449AbiF2UbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 16:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiF2U2f (ORCPT
+        with ESMTP id S229615AbiF2UbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 16:28:35 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675AC14D38
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 13:28:34 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id i126so2737538oih.4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 13:28:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KimsAoqWoBrckvrcWpjK4MOnhaDZP2RBKEz3EuP/iv0=;
-        b=QHei7/5WL4hfbeuAzCg4LaoNAqlQ2HGQMzjAP0kBgkQJ5H5joM7A64WoPajiwd+Nx+
-         s8o6ZDbyUw3coAAFdaWkwagdkTSSy1V8gYj4lxaqO5xIl/hMMi+/fHzAC9NonvcY3W1f
-         2gqs9vB5JhKGTIuVKeWbwQZm+OsR+mz+BNOj2QNi1zChQxJmCUPTSe8nuZ2yQMuVFm1o
-         +0/vMxfMP4wnXc8B7vxMS7GzZ9xZyhUZGsX9znUXgHwJ2xuNicMKx/yljOJGxVFX2rl3
-         0r6zYQ2nC6gKwjNIGKM2m2qvFc3EVDsP6dvht4lpI0Z1w9EcKX74Huo1hSapRM2+8xFX
-         7sWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KimsAoqWoBrckvrcWpjK4MOnhaDZP2RBKEz3EuP/iv0=;
-        b=1jYPsLbJgCHOXPErSq0qzGd2sz5CaHVj4u3Gk82JFad2QIPgOkxdfar2ONDWAU1soG
-         s13ZVRiMYyPElt6LCPiUpoWbTl+ev2Zptncf+1H+3Yd378I6wzFyYVBshEU0eznndBKt
-         rd3A2GhS0dB80dCz2ImwsFAgrRNgVfjdwRjCUi0cDLnNLTk8jfp14Sc6BD2IA2H/2N59
-         Yr1CD3ez2FG8Twn/eSnqpYeIPD04vtQz2b/69W34Ic5jZlriCAgM9ofIQUep0ciHDKMe
-         +w4fQiM8jpsqsCpO7IdnxWtyT4OSSCy3AHaijUMTZ2RIvEfsNSr8SRW6VnD+RsoSlJM8
-         3/dA==
-X-Gm-Message-State: AJIora90lvdxXXRr8KOAAHY1KSl3RQ42UBigMiGY3aDnhNrtGIX2HZiQ
-        4nomyBhSzqfyQzWzQH4tmd4e2UU6dGJ1RTv9A/V4YA==
-X-Google-Smtp-Source: AGRyM1u0hjO1hiivU9zp5lyMVFAHT9bs3enwDIbNjIaz38j/SCm8ezqQYsGur2WDnSfxG9bJLrv+n90SrLQNKQ6uMrQ=
-X-Received: by 2002:a05:6808:2124:b0:335:7483:f62d with SMTP id
- r36-20020a056808212400b003357483f62dmr4297123oiw.112.1656534513612; Wed, 29
- Jun 2022 13:28:33 -0700 (PDT)
+        Wed, 29 Jun 2022 16:31:04 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6085934BA1;
+        Wed, 29 Jun 2022 13:31:03 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25TKKxe4012483;
+        Wed, 29 Jun 2022 20:30:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Pj0bPZ/Lp9qBnUf08mWpe+cFqgQb1bLxM1/+EpPGJ9E=;
+ b=BHsxpdr3fGeP3domTIqa/nQNCXCqkU5gd+OFh+qw/UkMiyMHx0TNa8XANp0OJPVMKu0w
+ 1nUPZW3ZukGSIy56Vw/MKWW4Vk2GBdojUKHGvhk54DV5w+lFfWKl5SFanI8teOSEp9BY
+ Xk/pkRtOG20MnfECZ3EHODCFWbD/dMEa4/y3f6O1pO6AECRfBus2GcSSRavCD2Yuihih
+ JPqhodH7wA7X19MkFfnqKSAnhxEPOVZhb5k5OdSX/kivvmEYXej50EqtfjGcU2shE8uL
+ URm2vANahEfKyCbWeZ1nENssx9LuJDF3Pr2X6n5Q0aE3OQJ1TI0LjEMDaUN5PZPgoacd Aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h0wpk0865-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Jun 2022 20:30:58 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25TKLbTq014021;
+        Wed, 29 Jun 2022 20:30:58 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h0wpk084r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Jun 2022 20:30:58 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25TKM1s0025507;
+        Wed, 29 Jun 2022 20:30:25 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma03wdc.us.ibm.com with ESMTP id 3gwt09udw4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Jun 2022 20:30:25 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25TKUPYw64422394
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 29 Jun 2022 20:30:25 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2A12B112061;
+        Wed, 29 Jun 2022 20:30:25 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 28A8F112063;
+        Wed, 29 Jun 2022 20:30:23 +0000 (GMT)
+Received: from [9.211.37.55] (unknown [9.211.37.55])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 29 Jun 2022 20:30:22 +0000 (GMT)
+Message-ID: <f916f306-acff-3537-1bcc-9f19c4794e81@linux.ibm.com>
+Date:   Wed, 29 Jun 2022 22:29:47 +0200
 MIME-Version: 1.0
-References: <20220629150625.238286-1-vkuznets@redhat.com> <20220629150625.238286-15-vkuznets@redhat.com>
-In-Reply-To: <20220629150625.238286-15-vkuznets@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 29 Jun 2022 13:28:22 -0700
-Message-ID: <CALMp9eRZAJ3srAtEXFy2nZ4ms9xPz=Zqi6B=tXo9_kHRLvoAMg@mail.gmail.com>
-Subject: Re: [PATCH v2 14/28] KVM: VMX: Check VM_ENTRY_IA32E_MODE in setup_vmcs_config()
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH net-next v2] net/smc: align the connect behaviour with TCP
+To:     guangguan.wang@linux.alibaba.com
+Cc:     Karsten Graul <kgraul@linux.ibm.com>, liuyacan@corp.netease.com,
+        davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com
+References: <26d43c65-1f23-5b83-6377-3327854387c4@linux.ibm.com>
+ <20220524125725.951315-1-liuyacan@corp.netease.com>
+ <3bb9366d-f271-a603-a280-b70ae2d59c00@linux.ibm.com>
+From:   Wenjia Zhang <wenjia@linux.ibm.com>
+In-Reply-To: <3bb9366d-f271-a603-a280-b70ae2d59c00@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: h3K-yAZgwBhezQ-hJPPy0ieO-hN4Xv9s
+X-Proofpoint-ORIG-GUID: cjKtaRJ5iqGOuLbpQ0HBNA74ZxX3_IAx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-29_21,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 spamscore=0 clxscore=1015 mlxscore=0 impostorscore=0
+ malwarescore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
+ adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206290070
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
->
-> VM_ENTRY_IA32E_MODE control is toggled dynamically by vmx_set_efer()
-> and setup_vmcs_config() doesn't check its existence. On the contrary,
-> nested_vmx_setup_ctls_msrs() doesn set it on x86_64. Add the missing
-> check and filter the bit out in vmx_vmentry_ctrl().
->
-> No (real) functional change intended as all existing CPUs supporting
-> long mode and VMX are supposed to have it.
->
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 83feb70d44a9..da8bbba38d0e 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -2610,6 +2610,9 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
->                 _pin_based_exec_control &= ~PIN_BASED_POSTED_INTR;
->
->         min = VM_ENTRY_LOAD_DEBUG_CONTROLS;
-> +#ifdef CONFIG_X86_64
-> +       min |= VM_ENTRY_IA32E_MODE;
-> +#endif
->         opt = VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL |
->               VM_ENTRY_LOAD_IA32_PAT |
->               VM_ENTRY_LOAD_IA32_EFER |
-> @@ -4242,9 +4245,15 @@ static u32 vmx_vmentry_ctrl(void)
->         if (vmx_pt_mode_is_system())
->                 vmentry_ctrl &= ~(VM_ENTRY_PT_CONCEAL_PIP |
->                                   VM_ENTRY_LOAD_IA32_RTIT_CTL);
-> -       /* Loading of EFER and PERF_GLOBAL_CTRL are toggled dynamically */
-> -       return vmentry_ctrl &
-> -               ~(VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL | VM_ENTRY_LOAD_IA32_EFER);
-> +       /*
-> +        * Loading of EFER, VM_ENTRY_IA32E_MODE, and PERF_GLOBAL_CTRL
-> +        * are toggled dynamically.
-> +        */
-Nit: Previously, this could be read as "loading of (EFER and
-PERF_GLOBAL_CTRL)." Since "loading" doesn't apply to IA32e mode,
-you've lost "loading" of PERF_GLOBAL_CONTROL. Also, why drop the
-VM_ENTRY prefix from the MSRs and not from IA32e mode?
-Perhaps:
 
-/*
- * IA32e mode, and loading of EFER and PERF_GLOBAL_CTRL are toggled dynamically.
- */
 
-> +       vmentry_ctrl &= ~(VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL |
-> +                         VM_ENTRY_LOAD_IA32_EFER |
-> +                         VM_ENTRY_IA32E_MODE);
-> +
-> +       return vmentry_ctrl;
->  }
->
->  static u32 vmx_vmexit_ctrl(void)
-> --
-> 2.35.3
->
-Reviewed-by: Jim Mattson <jmattson@google.com>
+On 24.05.22 15:05, Karsten Graul wrote:
+> On 24/05/2022 14:57, liuyacan@corp.netease.com wrote:
+>>>>
+>>>>
+>>>> On 2022/5/23 20:24, Karsten Graul wrote:
+>>>>> On 13/05/2022 04:24, Guangguan Wang wrote:
+>>>>>> Connect with O_NONBLOCK will not be completed immediately
+>>>>>> and returns -EINPROGRESS. It is possible to use selector/poll
+>>>>>> for completion by selecting the socket for writing. After select
+>>>>>> indicates writability, a second connect function call will return
+>>>>>> 0 to indicate connected successfully as TCP does, but smc returns
+>>>>>> -EISCONN. Use socket state for smc to indicate connect state, which
+>>>>>> can help smc aligning the connect behaviour with TCP.
+>>>>>>
+>>>>>> Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
+>>>>>> Acked-by: Karsten Graul <kgraul@linux.ibm.com>
+>>>>>> ---
+>>>>>>   net/smc/af_smc.c | 50 ++++++++++++++++++++++++++++++++++++++++++++----
+>>>>>>   1 file changed, 46 insertions(+), 4 deletions(-)
+>>>>>>
+>>>>>> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+>>>>>> index fce16b9d6e1a..5f70642a8044 100644
+>>>>>> --- a/net/smc/af_smc.c
+>>>>>> +++ b/net/smc/af_smc.c
+>>>>>> @@ -1544,9 +1544,29 @@ static int smc_connect(struct socket *sock, struct sockaddr *addr,
+>>>>>>   		goto out_err;
+>>>>>>   
+>>>>>>   	lock_sock(sk);
+>>>>>> +	switch (sock->state) {
+>>>>>> +	default:
+>>>>>> +		rc = -EINVAL;
+>>>>>> +		goto out;
+>>>>>> +	case SS_CONNECTED:
+>>>>>> +		rc = sk->sk_state == SMC_ACTIVE ? -EISCONN : -EINVAL;
+>>>>>> +		goto out;
+>>>>>> +	case SS_CONNECTING:
+>>>>>> +		if (sk->sk_state == SMC_ACTIVE)
+>>>>>> +			goto connected;
+>>>>>
+>>>>> I stumbled over this when thinking about the fallback processing. If for whatever reason
+>>>>> fallback==true during smc_connect(), the "if (smc->use_fallback)" below would set sock->state
+>>>>> to e.g. SS_CONNECTED. But in the fallback case sk_state keeps SMC_INIT. So during the next call
+>>>>> the SS_CONNECTING case above would break because sk_state in NOT SMC_ACTIVE, and we would end
+>>>>> up calling kernel_connect() again. Which seems to be no problem when kernel_connect() returns
+>>>>> -EISCONN and we return this to the caller. But is this how it should work, or does it work by chance?
+>>>>>
+>>>>
+>>>> Since the sk_state keeps SMC_INIT and does not correctly indicate the state of clcsock, it should end
+>>>> up calling kernel_connect() again to get the actual connection state of clcsock.
+>>>>
+>>>> And I'm sorry there is a problem that if sock->state==SS_CONNECTED and sk_state==SMC_INIT, further call
+>>>> of smc_connect will return -EINVAL where -EISCONN is preferred.
+>>>> The steps to reproduce:
+>>>> 1）switch fallback before connect, such as setsockopt TCP_FASTOPEN
+>>>> 2）connect with noblocking and returns -EINPROGRESS. (sock->state changes to SS_CONNECTING)
+>>>> 3) end up calling connect with noblocking again and returns 0. (kernel_connect() returns 0 and sock->state changes to
+>>>>     SS_CONNECTED but sk->sk_state stays SMC_INIT)
+>>>> 4) call connect again, maybe by mistake, will return -EINVAL, but -EISCONN is preferred.
+>>>>
+>>>> What do you think about if we synchronize the sk_state to SMC_ACTIVE instead of keeping SMC_INIT when clcsock
+>>>> connected successfully in fallback case described above.
+>>>>
+>>>> ...
+>>>
+>>> I start thinking that the fix in 86434744 introduced a problem. Before that fix a connect with
+>>> fallback always reached __smc_connect() and on top of that function in case of fallback
+>>> smc_connect_fallback() is called, which itself sets sk_state to SMC_ACTIVE.
+>>>
+>>> 86434744 removed that code path and I wonder what it actually fixed, because at this time the
+>>> fallback check in __smc_connect() was already present.
+>>>
+>>> Without that "goto out;" the state would be set correctly in smc_connect_fallback(), and the
+>>> socket close processing would work as expected.
+>>
+>> I think it is OK without that "goto out;". And I guess the purpose of "goto out;" is to avoid calling __smc_connect(),
+>> because it is impossible to establish an rdma channel at this time.
+> 
+> Yes that was the purpose, but this disabled all the extra processing that should be done
+> for fallback sockets during connect().
+> 
+Since Karsten's suggestion, we didn't hear from you any more. We just 
+want to know:
+
+- What do you think about the commit (86434744)? Could it be the trigger 
+of the problem you met?
+
+- Have you ever tried to just remove the following lines from 
+smc_connection(), and check if your scenario could run correctly?
+
+       if (smc->use_fallback)
+               goto out;
+
+In our opinion, we don't see the necessity of the patch, if partly 
+reverting the commit (86434744) could solve the problem.

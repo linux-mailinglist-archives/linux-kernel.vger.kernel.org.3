@@ -2,112 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A964E560523
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C85E560531
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234440AbiF2QAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 12:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
+        id S233015AbiF2QCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 12:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234239AbiF2QAQ (ORCPT
+        with ESMTP id S234085AbiF2QCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 12:00:16 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58B11E3C1;
-        Wed, 29 Jun 2022 09:00:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=DB/o3OL3a8p7Pc5UauzdC49YqSJaVUxyZzB2ozvl7YI=; b=iZsQhnlbpW9sXN/GJaS3jAMw+w
-        8mn6izIwy085ybj1EKwF9DeEsOt9qyrlLxTvp+P9EVdEEjbQUwL5dVFTMDhjOaBp5PaGks7Gp0vTL
-        Pz4wv3iQN06W33bmzngimPEHWIwXW/s9XuLr428TJq/t9Jpay97zThl6gUaoJoo9UCQ2zqUNOyzir
-        HCs15GX4eR/A0kDWtJ7SaGXsATfCWkaQvG0flWXjWzNvEQkpGnbcu6afAc4ry10M/XvkH8tpuj6H7
-        pV0F7DMjJNZAL9ALRpJtO4Tl1f8+YWZ+iaFmr74pOp+DJyj7fvd7YDPPvJ3gnFshVDAC+8VlO6cQM
-        jCOY9fhQ==;
-Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1o6a6s-002RzJ-UG; Wed, 29 Jun 2022 10:00:11 -0600
-Message-ID: <99242789-66a6-bbd2-b56a-e47891f4522e@deltatee.com>
-Date:   Wed, 29 Jun 2022 10:00:09 -0600
+        Wed, 29 Jun 2022 12:02:07 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149D93D1F0;
+        Wed, 29 Jun 2022 09:01:38 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id ab44a7ba5fefe840; Wed, 29 Jun 2022 18:01:36 +0200
+Received: from kreacher.localnet (unknown [213.134.175.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id E2A5A66C9F3;
+        Wed, 29 Jun 2022 18:01:35 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Peter Wang <peter.wang@mediatek.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] PM-runtime: Check supplier_preactivated before release supplier
+Date:   Wed, 29 Jun 2022 18:01:35 +0200
+Message-ID: <12028598.O9o76ZdvQC@kreacher>
+In-Reply-To: <CAJZ5v0gTpv2gt_Gm9rUd+8Jmp4=ij2=J20o7qO0sC-hm=w3=_A@mail.gmail.com>
+References: <20220613120755.14306-1-peter.wang@mediatek.com> <b55d5691-0b2d-56bb-26ff-dcac56770611@mediatek.com> <CAJZ5v0gTpv2gt_Gm9rUd+8Jmp4=ij2=J20o7qO0sC-hm=w3=_A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-CA
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        Stephen Bates <sbates@raithlin.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20220615161233.17527-1-logang@deltatee.com>
- <20220615161233.17527-21-logang@deltatee.com> <20220629064854.GD17576@lst.de>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <20220629064854.GD17576@lst.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 24.64.144.200
-X-SA-Exim-Rcpt-To: hch@lst.de, linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, iommu@lists.linux-foundation.org, sbates@raithlin.com, dan.j.williams@intel.com, jgg@ziepe.ca, christian.koenig@amd.com, jhubbard@nvidia.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, dave.b.minturn@intel.com, jason@jlekstrand.net, dave.hansen@linux.intel.com, jianxin.xiong@intel.com, helgaas@kernel.org, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, rcampbell@nvidia.com, bhelgaas@google.com
-X-SA-Exim-Mail-From: logang@deltatee.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.175.150
+X-CLIENT-HOSTNAME: 213.134.175.150
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudegledgleehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudefrddufeegrddujeehrdduhedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudejhedrudehtddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehpvghtvghrrdifrghnghesmhgvughirghtvghkrdgtohhmpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhig
+ qdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-Subject: Re: [PATCH v7 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[Add CCs to linix-pm, LKML and Greg]
 
-
-
-On 2022-06-29 00:48, Christoph Hellwig wrote:
-> On Wed, Jun 15, 2022 at 10:12:32AM -0600, Logan Gunthorpe wrote:
->> A pseudo mount is used to allocate an inode for each PCI device. The
->> inode's address_space is used in the file doing the mmap so that all
->> VMAs are collected and can be unmapped if the PCI device is unbound.
->> After unmapping, the VMAs are iterated through and their pages are
->> put so the device can continue to be unbound. An active flag is used
->> to signal to VMAs not to allocate any further P2P memory once the
->> removal process starts. The flag is synchronized with concurrent
->> access with an RCU lock.
+On Wednesday, June 29, 2022 5:32:00 PM CEST Rafael J. Wysocki wrote:
+> On Wed, Jun 29, 2022 at 4:47 PM Peter Wang <peter.wang@mediatek.com> wrote:
+> >
+> >
+> > On 6/29/22 9:22 PM, Rafael J. Wysocki wrote:
+> > > On Wed, Jun 29, 2022 at 5:02 AM Peter Wang <peter.wang@mediatek.com> wrote:
+> > >>
+> > >> On 6/28/22 11:54 PM, Rafael J. Wysocki wrote:
+> > >>> On Tue, Jun 28, 2022 at 3:53 AM Peter Wang <peter.wang@mediatek.com> wrote:
+> > >>>> On 6/28/22 3:00 AM, Rafael J. Wysocki wrote:
+> > >>>>> On Mon, Jun 13, 2022 at 2:08 PM <peter.wang@mediatek.com> wrote:
+> > >>>>>> From: Peter Wang <peter.wang@mediatek.com>
+> > >>>>>>
+> > >>>>>> With divice link of DL_FLAG_PM_RUNTIME, if consumer call pm_runtime_get_suppliers
+> > >>>>>> to prevent supplier enter suspend, pm_runtime_release_supplier should
+> > >>>>>> check supplier_preactivated before let supplier enter suspend.
+> > >>>>> Why?
+> > >>>> because supplier_preactivated is true means supplier cannot enter
+> > >>>> suspend, right?
+> > >>> No, it doesn't mean that.
+> > >> Hi Rafael,
+> > >>
+> > >> if supplier_preactivated is true, means someone call
+> > >> pm_runtime_get_suppliers and
+> > >> before pm_runtime_put_suppliers right? This section suppliers should not
+> > >> enter suspend.
+> > > No, this is not how this is expected to work.
+> > >
+> > > First off, the only caller of pm_runtime_get_suppliers() and
+> > > pm_runtime_put_suppliers() is __driver_probe_device().  Really nobody
+> > > else has any business that would require calling them.
+> > Hi Rafael,
+> >
+> > Yes, you are right!
+> > __driver_probe_device the only one use and just because
+> > __driver_probe_device use
+> > pm_runtime_get_suppliers cause problem.
+> >
+> >
+> > > Second, the role of pm_runtime_get_suppliers() is to "preactivate" the
+> > > suppliers before running probe for a consumer device and the role of
+> >
+> > the role of pm_runtime_get_suppliers() is to "preactivate" the suppliers,
+> > but suppliers may suspend immediately after preactivate right?
+> > Here is just this case. this is first racing point.
+> > Thread A: pm_runtime_get_suppliers                -> __driver_probe_device
+> > Thread B: pm_runtime_release_supplier
+> > Thread A: Run with supplier not preactivate      -> __driver_probe_device
+> >
+> > > pm_runtime_put_suppliers() is to do the cleanup in case the device is
+> > > left in suspend after probing.
+> > >
+> > > IOW, pm_runtime_get_suppliers() is to ensure that the suppliers will
+> > > be active until the probe callback takes over and the rest depends on
+> > > that callback.
+> >
+> > The problem of this racing will finally let consumer is active but
+> > supplier is suspended.
 > 
-> Can't we come up with a way of doing this without all the pseudo-fs
-> garbagage?  I really hate all the overhead for that in the next
-> nvme patch as well.
+> So it would be better to send a bug report regarding this.
+> 
+> > The link relation is broken.
+> > I know you may curious how it happened? right?
+> > Honestly, I am not sure, but I think the second racing point
+> > is rpm_get_suppliers and pm_runtime_put_suppliers(release rpm_active).
+> 
+> I'm not sure what you mean by "the racing point".
+> 
+> Yes, these functions can run concurrently.
+> 
+> > So, I try to fix the first racing point and the problem is gone.
+> > It is full meet expect, and the pm runtime will work smoothly after
+> > __driver_probe_device done.
+> 
+> I'm almost sure that there is at least one scenario that would be
+> broken by this change.
 
-I assume you still want to be able to unmap the VMAs on unbind and not
-just hang?
+That said, the code in there may be a bit overdesigned.
 
-I'll see if I can come up with something to do the a similar thing using
-vm_private data or some such.
+Does the patch below help?
 
-I was not a fan of the extra code for this either, but I was given to
-understand that it was the standard way to collect and cleanup VMAs.
+---
+ drivers/base/power/runtime.c |   14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
-Thanks for the reviews,
+Index: linux-pm/drivers/base/power/runtime.c
+===================================================================
+--- linux-pm.orig/drivers/base/power/runtime.c
++++ linux-pm/drivers/base/power/runtime.c
+@@ -1768,7 +1768,6 @@ void pm_runtime_get_suppliers(struct dev
+ 		if (link->flags & DL_FLAG_PM_RUNTIME) {
+ 			link->supplier_preactivated = true;
+ 			pm_runtime_get_sync(link->supplier);
+-			refcount_inc(&link->rpm_active);
+ 		}
+ 
+ 	device_links_read_unlock(idx);
+@@ -1788,19 +1787,8 @@ void pm_runtime_put_suppliers(struct dev
+ 	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
+ 				device_links_read_lock_held())
+ 		if (link->supplier_preactivated) {
+-			bool put;
+-
+ 			link->supplier_preactivated = false;
+-
+-			spin_lock_irq(&dev->power.lock);
+-
+-			put = pm_runtime_status_suspended(dev) &&
+-			      refcount_dec_not_one(&link->rpm_active);
+-
+-			spin_unlock_irq(&dev->power.lock);
+-
+-			if (put)
+-				pm_runtime_put(link->supplier);
++			pm_runtime_put(link->supplier);
+ 		}
+ 
+ 	device_links_read_unlock(idx);
 
-Logan
+
+

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA0F56018F
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C9D560195
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 15:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233678AbiF2Nly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 09:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43790 "EHLO
+        id S233688AbiF2Nmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 09:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiF2Nlv (ORCPT
+        with ESMTP id S232080AbiF2Nms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 09:41:51 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87BD1E3E2;
-        Wed, 29 Jun 2022 06:41:49 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 43DAA1C0B8F; Wed, 29 Jun 2022 15:41:48 +0200 (CEST)
-Date:   Wed, 29 Jun 2022 15:41:47 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH v2 2/2] irqchip/sifive-plic: Add support for Renesas
- RZ/Five SoC
-Message-ID: <20220629134147.GA16868@duo.ucw.cz>
-References: <20220626004326.8548-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220626004326.8548-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <87wnd3erab.wl-maz@kernel.org>
- <CA+V-a8tcxj_N0sBHhgAZAN8WSJ12JnDzAvUUnCXto3wHLqNVwg@mail.gmail.com>
- <87v8snehwi.wl-maz@kernel.org>
- <CAMuHMdVt9FjCtvMgJcCh=g2b+8b-fgabGbOLDcXNrrPMpC+3jQ@mail.gmail.com>
- <CA+V-a8uLzLJ=wB6oUu0b2oZO=FPSCTSrqb=3m9=BJxATFKmjMw@mail.gmail.com>
- <CAMuHMdUWC_7MPnP6LcOqi96FAhrAENC4iwtv2ksZVnvR8BC4ww@mail.gmail.com>
- <0fdbfdd0ee1c7ca39f8d3e2f86af1194@kernel.org>
- <CA+V-a8u8X+bne_a3LY13zGTKr-hOWhm=R9gGX1JyE8PzWRNXpQ@mail.gmail.com>
+        Wed, 29 Jun 2022 09:42:48 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7A6165AA;
+        Wed, 29 Jun 2022 06:42:47 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3AA3C66018E6;
+        Wed, 29 Jun 2022 14:42:45 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656510165;
+        bh=yZfjVxY6+YXqMfBxFuUmxRr5cT0DDLUiTsXg6Wh0k2g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZjsqCrRocInx8/7JVJzW/PWjNnbzcMcStAQJbMxb34J/jG+0YN1VArupFBp05E5EP
+         6BrWQJ3/gecrZof+ZCYEXiLg8v2ZZhsvuQoddMAirjRawu+qfW2qOCmroViDaXb/GJ
+         LxxZs6hoCe3gKNVfQb9qeN2Xj/MFuOyqf4w9HGrWWeK//DDiOI9XCgEOy3fwrp7IhI
+         w4WVANEauc6olby+Ftsnim/FoMDj5lpbLax40AevKHdfOcQRhDV9tlUlb9FMltELcn
+         asGqEYBHtoyeKgLdZ4gHWnyGySIcxZdKKU0UuYx+DhVwQEIVpLdxzxxbkk/OwQM0Vt
+         Jlt95gJ5Bi5Fw==
+Message-ID: <730f334e-c10d-8f8b-94e6-b66a56e03320@collabora.com>
+Date:   Wed, 29 Jun 2022 15:42:42 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="zYM0uCDKw75PZbzx"
-Content-Disposition: inline
-In-Reply-To: <CA+V-a8u8X+bne_a3LY13zGTKr-hOWhm=R9gGX1JyE8PzWRNXpQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 4/5] arm64: dts: mt8192: Add dsi node
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>
+References: <20220629121358.19458-1-allen-kh.cheng@mediatek.com>
+ <20220629121358.19458-5-allen-kh.cheng@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220629121358.19458-5-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,53 +64,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 29/06/22 14:13, Allen-KH Cheng ha scritto:
+> Add dsi ndoe for mt8192 SoC.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 18 ++++++++++++++++++
+>   1 file changed, 18 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> index 26d01544b4ea..72af328126de 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> @@ -1334,6 +1334,24 @@
+>   			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0xe000 0x1000>;
+>   		};
+>   
+> +		dsi0: dsi@14010000 {
+> +			compatible = "mediatek,mt8183-dsi";
+> +			reg = <0 0x14010000 0 0x1000>;
+> +			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			mediatek,syscon-dsi = <&mmsys 0x140>;
+> +			clocks = <&mmsys CLK_MM_DSI0>,
+> +				 <&mmsys CLK_MM_DSI_DSI0>,
+> +				 <&mipi_tx0>;
+> +			clock-names = "engine", "digital", "hs";
+> +			phys = <&mipi_tx0>;
+> +			phy-names = "dphy";
 
---zYM0uCDKw75PZbzx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+resets = <&mmsys MT8192_MMSYS_SW0_RST_B_DISP_DSI0>;
 
-Hi!
+^^^ This is missing, please add it and resend :-)
 
-> > >> +#define PLIC_QUIRK_EDGE_INTERRUPT      BIT(0)
-> > >>
-> > >>  struct plic_priv {
-> > >>         struct cpumask lmask;
-> > >>         struct irq_domain *irqdomain;
-> > >>         void __iomem *regs;
-> > >> +       u32 plic_quirks;
-> > >>  };
-> > >>
-> > >> What about something like above?
-> > >
-> > > LGTM.
-> > >
-> > > Marc suggested to make this unsigned long, but TBH, that won't make
-> > > much of a difference.  PLICs are present on RV32 SoCs, too, so you
-> > > cannot rely on having more than 32 bits anyway.
-> >
-> > But it will make a difference on a 64bit platform, as we want to
-> > use test_bit() and co to check for features.
-> >
-> Ok will change that to unsigned long and use the test_bit/set_bit instead.
+> +			status = "disabled";
+> +
+> +			port {
+> +				dsi_out: endpoint { };
+> +			};
+> +		};
+> +
+>   		ovl_2l2: ovl@14014000 {
+>   			compatible = "mediatek,mt8192-disp-ovl-2l";
+>   			reg = <0 0x14014000 0 0x1000>;
 
-Is there good enough reason for that? test_bit/... are when you need
-atomicity, and that's not the case here. Plain old & ... should be
-enough.
 
-Best regards,
-								Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---zYM0uCDKw75PZbzx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYrxWmwAKCRAw5/Bqldv6
-8l9XAJ9PDnKunqrF+aGJXyJ5p6LANeuPPQCbB6eNJLatSurZL6FSw4K9O5lrN+I=
-=Ha9n
------END PGP SIGNATURE-----
-
---zYM0uCDKw75PZbzx--

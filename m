@@ -2,115 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED7455F8D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84CB755F8BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbiF2HXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 03:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
+        id S231865AbiF2HWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 03:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbiF2HXG (ORCPT
+        with ESMTP id S231559AbiF2HWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 03:23:06 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5C0222;
-        Wed, 29 Jun 2022 00:23:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=udw9lHGmzoAvFePyLCTqIKD8e/mAeVeJzVZcMu5/Lq4=; b=j+WgdvbgwVAiXYEKAtG4WPjD0X
-        46phVxCdZseTfn5Sqq8rzFUj9MHWNX27GVEfZiR0NHLIGG84wfxUcMdEybxgfTXszXBobgLYgcyNU
-        TK+U5pj9jP0tFtlxOEx/8NavELJT8zKDhgCEVxFpIERWhb+Oq7yvGRDDwejQbKGTS8Pc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1o6S23-008gOb-QH; Wed, 29 Jun 2022 09:22:39 +0200
-Date:   Wed, 29 Jun 2022 09:22:39 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Thomas Gleixner <tglx@linutronix.de>, netdev@vger.kernel.org,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
-        Andre Edich <andre.edich@microchip.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Gabriel Hojda <ghojda@yo2urs.ro>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Ferry Toth <fntoth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH net v4] net: phy: Don't trigger state machine while in
- suspend
-Message-ID: <Yrv9v/uiZ/uMvtR3@lunn.ch>
-References: <b7f386d04e9b5b0e2738f0125743e30676f309ef.1656410895.git.lukas@wunner.de>
+        Wed, 29 Jun 2022 03:22:42 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C7833EA4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:22:41 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id w193so20474920oie.5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 00:22:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to;
+        bh=TvfrSXu4f0TU8sJk8nHVngOGB75STSEGTvK6rVGCRBo=;
+        b=KSYNVPp/M+aBIfHacFqj11Sm5k23Er/fz5hD79lvLg2qAdMiNwn7Ieu7YNV90mA70F
+         daalhEZkwB6Apo4Ai71cvL4evznxFuW7QZ/jnNWgrXANheLoBxRLyN5sSUQiVHgCv9HR
+         97v9IV3l+QYGVehGdIPIXHssVTk8Z6wn9878g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to;
+        bh=TvfrSXu4f0TU8sJk8nHVngOGB75STSEGTvK6rVGCRBo=;
+        b=t0wXehYAgsJE/H4NJuCc7Vd7uq2tFuEDuxHu7yqyKy3Izf0kZSZdXLDxoRqedpGCvJ
+         6klohcrNP8L3H5RB+tNVGXh3gM3BwVvysf2gf4qCFXiWc8MvA/ws6hbOfkhtXZYznZrN
+         Y2vE1qk0KKUty2w3Iln8xd1vubGMvIeT5hZm24cnXpSXE2cEJ6Cqw7Sppzwcb4JwCpig
+         xnmSkoZRJhol3TNZoXDE/vSdnlIuszvUc8GPuQ4WscH/4oy+qU/tWZVY6GMhkOO7Ipmx
+         BbgJbNVKGVR4fPLc3roWAM4UHNabVJvPQYtD399XmbX+eBj51crCOjP3lwpSWRXx3UJv
+         RqSg==
+X-Gm-Message-State: AJIora8tn6wpxnD5DcRz2b5qOuQlEMSktrMrAgr+UtT6Tc9bFEROAI66
+        YL5h2myHzx1HKkxnVaG6Gd8GU4PiUdkH/SDTrbbztg==
+X-Google-Smtp-Source: AGRyM1v4WSDbVO+K2+4kAKFrYZQtpAn74YXqFxA1mnEY/IT8bcyyhmbIZcF9WfGx+sYO6Yz4yLIx2Fc2KzL9daEEeyw=
+X-Received: by 2002:a05:6808:171c:b0:334:9342:63ef with SMTP id
+ bc28-20020a056808171c00b00334934263efmr1192888oib.63.1656487360982; Wed, 29
+ Jun 2022 00:22:40 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 29 Jun 2022 02:22:40 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b7f386d04e9b5b0e2738f0125743e30676f309ef.1656410895.git.lukas@wunner.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1656484485-23350-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1656484485-23350-1-git-send-email-quic_srivasam@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 29 Jun 2022 02:22:40 -0500
+Message-ID: <CAE-0n50XpUfe9LQ0UByRXeWVcHjzXTmSb+Lf5m87pJmhjA0wVg@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: qcom: sc7280: Fix compile bug
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, alsa-devel@alsa-project.org,
+        bgoswami@quicinc.com, bjorn.andersson@linaro.org,
+        broonie@kernel.org, devicetree@vger.kernel.org,
+        judyhsiao@chromium.org, lgirdwood@gmail.com,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, perex@perex.cz,
+        quic_plai@quicinc.com, quic_rohkumar@quicinc.com,
+        robh+dt@kernel.org, srinivas.kandagatla@linaro.org, tiwai@suse.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 12:15:08PM +0200, Lukas Wunner wrote:
-> Upon system sleep, mdio_bus_phy_suspend() stops the phy_state_machine(),
-> but subsequent interrupts may retrigger it:
-> 
-> They may have been left enabled to facilitate wakeup and are not
-> quiesced until the ->suspend_noirq() phase.  Unwanted interrupts may
-> hence occur between mdio_bus_phy_suspend() and dpm_suspend_noirq(),
-> as well as between dpm_resume_noirq() and mdio_bus_phy_resume().
-> 
-> Retriggering the phy_state_machine() through an interrupt is not only
-> undesirable for the reason given in mdio_bus_phy_suspend() (freezing it
-> midway with phydev->lock held), but also because the PHY may be
-> inaccessible after it's suspended:  Accesses to USB-attached PHYs are
-> blocked once usb_suspend_both() clears the can_submit flag and PHYs on
-> PCI network cards may become inaccessible upon suspend as well.
-> 
-> Amend phy_interrupt() to avoid triggering the state machine if the PHY
-> is suspended.  Signal wakeup instead if the attached net_device or its
-> parent has been configured as a wakeup source.  (Those conditions are
-> identical to mdio_bus_phy_may_suspend().)  Postpone handling of the
-> interrupt until the PHY has resumed.
-> 
-> Before stopping the phy_state_machine() in mdio_bus_phy_suspend(),
-> wait for a concurrent phy_interrupt() to run to completion.  That is
-> necessary because phy_interrupt() may have checked the PHY's suspend
-> status before the system sleep transition commenced and it may thus
-> retrigger the state machine after it was stopped.
-> 
-> Likewise, after re-enabling interrupt handling in mdio_bus_phy_resume(),
-> wait for a concurrent phy_interrupt() to complete to ensure that
-> interrupts which it postponed are properly rerun.
-> 
-> The issue was exposed by commit 1ce8b37241ed ("usbnet: smsc95xx: Forward
-> PHY interrupts to PHY driver to avoid polling"), but has existed since
-> forever.
-> 
-> Fixes: 541cd3ee00a4 ("phylib: Fix deadlock on resume")
-> Link: https://lore.kernel.org/netdev/a5315a8a-32c2-962f-f696-de9a26d30091@samsung.com/
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: stable@vger.kernel.org # v2.6.33+
+Quoting Srinivasa Rao Mandadapu (2022-06-28 23:34:45)
+> Fix the compilation error, caused by updtating constant variable.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+s/updtating/updating/
 
-    Andrew
+> Hence remove redundant constant variable, which is no more useful
+> as per new design.
+>
+> The issue is due to some unstaged changes. Fix it up.
+>
+> Fixes: 36fe26843d6d ("pinctrl: qcom: sc7280: Add clock optional check for ADSP bypass targets")
+>
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> ---
+
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

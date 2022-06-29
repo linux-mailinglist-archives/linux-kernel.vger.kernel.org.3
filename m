@@ -2,66 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B8855FA64
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E81155FA5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbiF2IYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 04:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
+        id S230054AbiF2IYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 04:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231811AbiF2IYT (ORCPT
+        with ESMTP id S231801AbiF2IYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 04:24:19 -0400
+        Wed, 29 Jun 2022 04:24:15 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9533BBFB;
-        Wed, 29 Jun 2022 01:24:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10103BF83;
+        Wed, 29 Jun 2022 01:24:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B6E5B8213E;
-        Wed, 29 Jun 2022 08:24:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B9C7C341CD;
-        Wed, 29 Jun 2022 08:24:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656491056;
-        bh=Pd/spSg+y88wI0co/eA7QGJBokO/5IsoxHQjfzfNeNQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SO6r41zu5WHMzyprs15T8STTIn1h61qoaP6FWzWM7MI+nHRgMR72CY6Rnfo7T6+H9
-         dpG47nKcdqumO2iOKZPUwv7rNugQ9GA24SMp3ZmL1VG+UrwRIMM2oU4IxYjhIBbZFZ
-         a2uYU8/jIopWKJN/+93ubw97TxMgGJM9dX3HJqA9YMcZXxgLba7DTuHt7YfqrxUAi5
-         sWnCjZG7C/yGWXyquaHs8TjsWm8DyhkmCKBw+kHRj8afWwZFF35di58yC/edyFhV0S
-         nAUHwMe/l0BBVHnHAmq4ecoGz4snrqX3nckBuyFQXgXe+rcdMVZQy7Z6y0WtVixyO0
-         /RzkvCZEr/HXg==
-Received: by mail-ua1-f52.google.com with SMTP id p19so5466667uam.4;
-        Wed, 29 Jun 2022 01:24:15 -0700 (PDT)
-X-Gm-Message-State: AJIora/8v+v0JZe+rBbtJiGHuiQs0X2FriX1Tog6XxylP4IYrMEoKHMw
-        nGXntFIDfsBBEdO69POpwLJ36PGZ437GhFmId6s=
-X-Google-Smtp-Source: AGRyM1s0lSpAvkZFNGtXOSIIAgmco0eMrVwqMgEgvH2vWSidbf8ha7cbiRkvf3Y/sQ9onF8WNaDUfMl/uj71l3N1hZE=
-X-Received: by 2002:a9f:23c2:0:b0:365:958:e807 with SMTP id
- 60-20020a9f23c2000000b003650958e807mr598894uao.114.1656491054985; Wed, 29 Jun
- 2022 01:24:14 -0700 (PDT)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AEF50B8219E;
+        Wed, 29 Jun 2022 08:24:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3E87C34114;
+        Wed, 29 Jun 2022 08:24:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656491051;
+        bh=oNFvciFtBXFVvkTYaTZDy44e9cB6/PJkGktJZOcWT3I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wF89c+l/CdVkTKtsn81Bnd/q3QFN086ZA19R/1Hm8HuXbuJWKQ9kyB5fK1rwkqpSG
+         T7APdqXPWeJJC8+gT+EpgjqGt634cFs7K9ct96yBeotcIxoASABP9z5LbzD58C7HZE
+         bZ7j1C7QWyG7TRsK8DlozAhZtsU7WBsqAgGAZKYA=
+Date:   Wed, 29 Jun 2022 10:24:07 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     SebinSebastian <mailmesebin00@gmail.com>
+Cc:     Neal Liu <neal_liu@aspeedtech.com>,
+        Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] usb: gadget: dereference before null check
+Message-ID: <YrwMJ+3mdFO2Lpm0@kroah.com>
+References: <20220629080726.107297-1-mailmesebin00@gmail.com>
 MIME-Version: 1.0
-References: <20220628081707.1997728-1-guoren@kernel.org> <20220628081707.1997728-5-guoren@kernel.org>
- <09abc75e-2ffb-1ab5-d0fc-1c15c943948d@redhat.com> <CAJF2gTQZzOtOsq0DV48Gi76UtBSa+vdY7dLZmoPD_OFUZ0Wbrg@mail.gmail.com>
- <5166750c-3dc6-9b09-4a1e-cd53141cdde8@redhat.com> <CAK8P3a2jQ+UQ54=QcpyVt91vXRyZrvUtOygFYOHWTBzse3q3rg@mail.gmail.com>
-In-Reply-To: <CAK8P3a2jQ+UQ54=QcpyVt91vXRyZrvUtOygFYOHWTBzse3q3rg@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 29 Jun 2022 16:24:03 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTtKiMZJLWBEcRz-4CmNojH0cOgpUYGupLyCXXFjQD_FQ@mail.gmail.com>
-Message-ID: <CAJF2gTTtKiMZJLWBEcRz-4CmNojH0cOgpUYGupLyCXXFjQD_FQ@mail.gmail.com>
-Subject: Re: [PATCH V7 4/5] asm-generic: spinlock: Add combo spinlock (ticket
- & queued)
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Waiman Long <longman@redhat.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220629080726.107297-1-mailmesebin00@gmail.com>
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -72,60 +54,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 3:09 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Jun 29, 2022 at 3:34 AM Waiman Long <longman@redhat.com> wrote:
-> > On 6/28/22 21:17, Guo Ren wrote:
-> > > On Wed, Jun 29, 2022 at 2:13 AM Waiman Long <longman@redhat.com> wrote:
-> > >> On 6/28/22 04:17, guoren@kernel.org wrote:
-> > >>
-> > >> So the current config setting determines if qspinlock will be used, not
-> > >> some boot time parameter that user needs to specify. This patch will
-> > >> just add useless code to lock/unlock sites. I don't see any benefit of
-> > >> doing that.
-> > > This is a startup patch for riscv. next, we could let vendors make choices.
-> > > I'm not sure they like cmdline or vendor-specific errata style.
-> > >
-> > > Eventually, we would let one riscv Image support all machines, some
-> > > use ticket-lock, and some use qspinlock.
-> >
-> > OK. Maybe you can postpone this combo spinlock until there is a good use
-> > case for it. Upstream usually don't accept patches that have no good use
-> > case yet.
->
-> I think the usecase on risc-v is this: there are cases where the qspinlock
-> is preferred for performance reasons, but there are also CPU cores on
-> which it is not safe to use. risc-v like most modern architectures has a
-> strict rule about being able to build kernels that work on all machines,
-> so without something like this, it would not be able to use qspinlock at all.
->
-> On the other hand, I don't really like the idea of putting the static-key
-> wrapper into the asm-generic header. Especially the ticket spinlock
-> implementation should be simple and not depend on jump labels.
-If CONFIG_ARCH_USE_QUEUED_SPINLOCKS is not enabled, the patch still
-will keep the ticket-lock simple without jump labels.
+On Wed, Jun 29, 2022 at 01:37:25PM +0530, SebinSebastian wrote:
+> Fix coverity warning dereferencing before null check. _ep and desc is
+> dereferenced on all paths until the check for null. Move the
+> initializations after the check for null.
+> Coverity issue: 1518209
+> 
+> Signed-off-by: SebinSebastian <mailmesebin00@gmail.com>
+> ---
+>  drivers/usb/gadget/udc/aspeed_udc.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+> index d75a4e070bf7..96f8193fca15 100644
+> --- a/drivers/usb/gadget/udc/aspeed_udc.c
+> +++ b/drivers/usb/gadget/udc/aspeed_udc.c
+> @@ -341,10 +341,6 @@ static void ast_udc_stop_activity(struct ast_udc_dev *udc)
+>  static int ast_udc_ep_enable(struct usb_ep *_ep,
+>  			     const struct usb_endpoint_descriptor *desc)
+>  {
+> -	u16 maxpacket = usb_endpoint_maxp(desc);
+> -	struct ast_udc_ep *ep = to_ast_ep(_ep);
+> -	struct ast_udc_dev *udc = ep->udc;
+> -	u8 epnum = usb_endpoint_num(desc);
+>  	unsigned long flags;
+>  	u32 ep_conf = 0;
+>  	u8 dir_in;
+> @@ -356,6 +352,11 @@ static int ast_udc_ep_enable(struct usb_ep *_ep,
+>  		return -EINVAL;
+>  	}
+> 
+> +	u16 maxpacket = usb_endpoint_maxp(desc);
+> +	struct ast_udc_ep *ep = to_ast_ep(_ep);
+> +	struct ast_udc_dev *udc = ep->udc;
+> +	u8 epnum = usb_endpoint_num(desc);
+> +
+>  	if (!udc->driver) {
+>  		EP_DBG(ep, "bogus device state\n");
+>  		return -ESHUTDOWN;
+> --
+> 2.34.1
+> 
 
->
-> From looking at the header file dependencies on arm64, I know that
-> putting jump labels into core infrastructure like the arch_spin_lock()
-> makes a big mess of indirect includes and measurably slows down
-> the kernel build.
-arm64 needn't combo spinlock, it could use pure qspinlock with keeping
-current header files included.
+Hi,
 
->
-> I think this can still be done in the riscv asm/spinlock.h header with
-> minimal impact on the asm-generic file if the riscv maintainers see
-> a significant enough advantage, but I don't want it in the common code.
-Yes, it could. I agree with using combo spinlock only with riscv.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
->
->         Arnd
+You are receiving this message because of the following common error(s)
+as indicated below:
 
+- Your patch breaks the build.
 
+- Your patch contains warnings and/or errors noticed by the
+  scripts/checkpatch.pl tool.
 
--- 
-Best Regards
- Guo Ren
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
 
-ML: https://lore.kernel.org/linux-csky/
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

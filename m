@@ -2,107 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03FB55F4C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 06:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB7755F4CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 06:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbiF2EAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 00:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
+        id S231396AbiF2EAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 00:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbiF2EAM (ORCPT
+        with ESMTP id S231281AbiF2EAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 00:00:12 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2B438BC4;
-        Tue, 28 Jun 2022 21:00:00 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LXnlV5BjRz9sxD;
-        Wed, 29 Jun 2022 11:59:18 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 29 Jun 2022 11:59:59 +0800
-Subject: Re: [PATCH -next] evm: Use IS_ENABLED to initialize .enabled
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Eric Biggers <ebiggers@kernel.org>
-CC:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        <dmitry.kasatkin@gmail.com>, <jmorris@namei.org>,
-        <serge@hallyn.com>, <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220606101042.89638-1-xiujianfeng@huawei.com>
- <64511312-df94-c40b-689c-5fc3823e91f5@pengutronix.de>
- <812c4ee9-56f7-900a-df48-f3ca3e15542f@huawei.com>
- <5d0c291bb4a674a6733a18f9eb67cf40193732f4.camel@linux.ibm.com>
- <YrJ7x3kCTy3ZutZ/@sol.localdomain>
- <38fd40d03b030f9a60afe4445ddc0daca220e449.camel@linux.ibm.com>
-From:   xiujianfeng <xiujianfeng@huawei.com>
-Message-ID: <99d2b96e-c1bc-52f9-c52b-f7577f9011b3@huawei.com>
-Date:   Wed, 29 Jun 2022 11:59:58 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Wed, 29 Jun 2022 00:00:15 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299993193B;
+        Tue, 28 Jun 2022 21:00:11 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id w19-20020a17090a8a1300b001ec79064d8dso18026498pjn.2;
+        Tue, 28 Jun 2022 21:00:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=k7DngibUnT+ItaNOgowcLkkewFPcMFOrPMA2cD6INTw=;
+        b=MUc5knluDO9nLpuqEDeF91dvitB/m2ZFo9RUzw52yszxX1R9gCFgs1SMwjb0KVeoXv
+         bd9gbtoD0QqZZj7aPL3lp/EJXmo5jXIyqiBb7jwE6EylL9Ar6WxgQFlTWJdvE0WdznOp
+         kzGq+dOQETlJyjWiErZ+5xdl5izjt5cvHsRUKs9nm6qKh5t98PpNSkGQiQNp211O555c
+         bSVoHDBc8BkBJVUdj14/+i/h1C5CtGs6PmThhQgiWMY0XXjXVL2MtwMTLUnPMmQtDTWQ
+         hnKY3wTmH1LJq7D0fV4ukOE7CHOPa8IdIMA/k3i3PtDL6AlTM3QyQ1+x6WR5dmVS/MS8
+         l4bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=k7DngibUnT+ItaNOgowcLkkewFPcMFOrPMA2cD6INTw=;
+        b=kdyrwgqlHROizFiu6+tVdo2UL2jp+/evwXBXfShZbF2WacP0QFAHsnN4jEZHfsvLp6
+         NgQ9rOG/yXZrSRCyO/WTarN6FSi7ARS1lZu2VBNkskgHprYrecTt1WoWSPzIXFP7ZArm
+         ctLKMmqVAktjOqzgkF4UZabLfxIugfV3gZ6xBTQaO915t0nkaP778QAF1eHSL1E3KkDI
+         N2iqI1LYlCmw9A265hs+M4U4QTdOc5sbyaVECkPjNrDoPGcVs0e0Q1LosVpiiyPYCS4m
+         iov0lNJ3reM7ePXsFDqi4YIoeevR85blfPqOfvSbdngD/k6oiEWUsCHznlKUfNIa3Pe0
+         iBQQ==
+X-Gm-Message-State: AJIora/1c26lVEetSHvXGMIaLXp2ZT8YHEgwR/vufg/Z7WzcgkUOdl1R
+        eFHVwNp0Qcpv2Wql8TXcRBw=
+X-Google-Smtp-Source: AGRyM1vGPFqOHcf5q4Ku3swiOuWMjQNzbUmYnUzh8IgDNQQEvWGFFpxL+yylnXbFSlH9sA1Ox/jGBA==
+X-Received: by 2002:a17:902:ccc4:b0:156:5d37:b42f with SMTP id z4-20020a170902ccc400b001565d37b42fmr7027326ple.157.1656475210689;
+        Tue, 28 Jun 2022 21:00:10 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-13.three.co.id. [180.214.232.13])
+        by smtp.gmail.com with ESMTPSA id ca27-20020a056a00419b00b00525133f98adsm10456763pfb.146.2022.06.28.21.00.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 21:00:09 -0700 (PDT)
+Message-ID: <9f2760f9-5778-b600-0709-a354062c677d@gmail.com>
+Date:   Wed, 29 Jun 2022 11:00:04 +0700
 MIME-Version: 1.0
-In-Reply-To: <38fd40d03b030f9a60afe4445ddc0daca220e449.camel@linux.ibm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 5.10 1/3] commit 5d6651fe8583 ("rtw88: 8821c: support RFE
+ type2 wifi NIC")
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Meng Tang <tangmeng@uniontech.com>
+Cc:     stable@vger.kernel.org, tony0620emma@gmail.com,
+        kvalo@codeaurora.org, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guo-Feng Fan <vincent_fann@realtek.com>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+References: <20220628133046.2474-1-tangmeng@uniontech.com>
+ <YrsSJLqq/ZoKw8MP@kroah.com> <YrsSNGN6fDMtGufl@kroah.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <YrsSNGN6fDMtGufl@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2022/6/27 0:13, Mimi Zohar 写道:
-> On Tue, 2022-06-21 at 19:17 -0700, Eric Biggers wrote:
->> On Tue, Jun 21, 2022 at 10:03:39AM -0400, Mimi Zohar wrote:
->>> On Tue, 2022-06-21 at 18:58 +0800, xiujianfeng wrote:
->>>> Hi, Ahmad
->>>>
->>>> 在 2022/6/7 14:06, Ahmad Fatoum 写道:
->>>>> On 06.06.22 12:10, Xiu Jianfeng wrote:
->>>>>> Use IS_ENABLED(CONFIG_XXX) instead of #ifdef/#endif statements to
->>>>>> initialize .enabled, minor simplicity improvement.
->>> The difference between using ifdef's and IS_ENABLED is when the
->>> decision is made - build time, run time.   Please update the patch
->>> description providing an explanation for needing to make the decision
->>> at run time.
+On 6/28/22 21:37, Greg KH wrote:
+> On Tue, Jun 28, 2022 at 04:37:24PM +0200, Greg KH wrote:
+>> On Tue, Jun 28, 2022 at 09:30:44PM +0800, Meng Tang wrote:
+>>> From: Guo-Feng Fan <vincent_fann@realtek.com>
 >>>
->>> thanks,
->> IS_ENABLED() is a compile time constant.  So the patch looks fine to me.
-> Thanks, Eric, for the clarification.
->
-> As LSMs are only builtin, why the need for using IS_ENABLED as opposed
-> to IS_BUILTIN?
->
-> #define IS_ENABLED(option) __or(IS_BUILTIN(option), IS_MODULE(option))
->
-> thanks,
+>>> RFE type2 is a new NIC which has one RF antenna shares with BT.
+>>> Update phy parameter to verstion V57 to allow initial procedure
+>>> to load extra AGC table for sharing antenna NIC.
+>>>
+>>> Signed-off-by: Guo-Feng Fan <vincent_fann@realtek.com>
+>>> Signed-off-by: Ping-Ke Shih <pkshih@realtek.com>
+>>> Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>>> Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+>>> Link: https://lore.kernel.org/r/20210202055012.8296-4-pkshih@realtek.com
+>>> Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+>>> ---
+>>>  drivers/net/wireless/realtek/rtw88/main.c     |   2 +
+>>>  drivers/net/wireless/realtek/rtw88/main.h     |   7 +
+>>>  drivers/net/wireless/realtek/rtw88/rtw8821c.c |  47 +++
+>>>  drivers/net/wireless/realtek/rtw88/rtw8821c.h |  14 +
+>>>  .../wireless/realtek/rtw88/rtw8821c_table.c   | 397 ++++++++++++++++++
+>>>  .../wireless/realtek/rtw88/rtw8821c_table.h   |   1 +
+>>>  6 files changed, 468 insertions(+)
+>>>
+>>
+>> <formletter>
+>>
+>> This is not the correct way to submit patches for inclusion in the
+>> stable kernel tree.  Please read:
+>>     https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+>> for how to do this properly.
+>>
+>> </formletter>
+> 
+> Sorry, no, this is all good, my fault.
 
-I think IS_ENALBED() is a bit more generic, maybe. here is another 
-example in rcutorture.c
+Hi Greg,
 
-which uses IS_ENABLED() to initialize the member in structure:
+The problem here is patch title. If this is indeed a backport, the patch
+title should be same as in the mainline. Also, mainline (upstream)
+commit should be noted in the backport.
 
-static struct rcu_torture_ops rcu_ops = {
-
-...
-
-.can_boost = IS_ENABLED(CONFIG_RCU_BOOST),
-
-...
-
-};
-
-Do you want me to change IS_ENABLED() to IS_BUILTIN()?
-
->
-> Mimi
->
-> .
+-- 
+An old man doll... just what I always wanted! - Clara

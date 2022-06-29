@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0069F560B73
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 23:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9C3560B78
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 23:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiF2VOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 17:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
+        id S230149AbiF2VPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 17:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbiF2VOx (ORCPT
+        with ESMTP id S229784AbiF2VP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 17:14:53 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4D43EA99
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 14:14:52 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3177608c4a5so137253537b3.14
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 14:14:52 -0700 (PDT)
+        Wed, 29 Jun 2022 17:15:28 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E920E3EA80;
+        Wed, 29 Jun 2022 14:15:27 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-317741c86fdso160920067b3.2;
+        Wed, 29 Jun 2022 14:15:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=JkyjHjPdtkclm0+uDLujhsk5SWKIJ65+tfNQvDnfTDg=;
-        b=la00TFKPKdX5y6e/J4PidIx0KvRtla/rNZDlcJotoF/aRdBrzZBAMTYq93AHmjkOvH
-         yZLO2RPbXfQbLfBLviw1JJvsQMgMfxVttdm4edh/ycjDF2V4G+p/4E03fyN9MhoRkjT8
-         YMDlKOixsrqB819E25xpVfpA4h+Xma9K7pLnbNO4YNHqs3Iux9CT2tY7ay/TBvKafFlM
-         /idWaFGi352lCoKMIMlRCvnZ7ZqxOYIkx56kCIZmCQZQ2wIGZ0qMDOhqg2hL+oBk6db0
-         KJ/nziNfEMZJd1SM2VX2XT5OmFiNDPfXczYFYiZnLRfXeozylL9N0HzKiPtK0sQUnUxw
-         Xp9w==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VQm/Y0pRhZo0EQ3hGxGXsSwZ7m4Ckh1ldpjFHGlQngM=;
+        b=RKGKxa+RvT3LNthm+jbo2945D36VjmFCeZDQz7wa+r3im7uo76EeA1vonXqshC9wEZ
+         ts05NmsnVEfq1AvDJX2gydJgnHhyjACZ2w+UB0YrLg6v0WiayzT071jUSP8KdP29mHGf
+         tt/jpfr5yCP0Zq/TIUwm+V2UE5In4HUir4zwCN7M6lmuSjqgYqAJZOa0Acouu5QwNAYM
+         wZ+NCoK9G1a+QQgyM+P0LpmEYZO8xJ+QDUq+LZp8Y0VRCwPg5ZKlfybI1KrjduRBYqCz
+         x840nHc2PsKPUvB4+h5X0hwVwlbgjwgXwL+BfI4gQkf5zInEnEIWJX79657jUjA5ytcO
+         oMqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=JkyjHjPdtkclm0+uDLujhsk5SWKIJ65+tfNQvDnfTDg=;
-        b=ia6OLiWEKBTDANeW6jqFOfvDd2ofxsVQZa/SwZQp032QF6Dh1llnrttwRw+MLgiieh
-         q7KBZy9tWf9BD+FG5UQ1bxwYdcvclC0cXiklJbSHOCQw5Oo6ohY0O0QPBxdyTLvKkg47
-         g4HdF/1pfO5Gx4f2x9rRWDnb4iLnzmR1m1wF05egDgM8veOEJpUv2hKhbnmkOQqibPHA
-         dxyIaB8aTbIHtPXr/V3iURpMYjuFIYk4kVOxbMXibZ5UZT4Wb6pbVnDe2xc+NMHOthP/
-         eH0Jfa0WR6siSSoDMnVa28FJibo+Heznf6euDTloEQvnhLKoaeYaRtG4ZaFaSI6aQl11
-         FszQ==
-X-Gm-Message-State: AJIora8X4R8f6sPFxh2KWhjUZoTl3Ckh2X2y6Fq7bGvoh1CeTpUd2SX6
-        5RD3Ot8CdF53I/GyirAoR0AgVMV6lx3B
-X-Google-Smtp-Source: AGRyM1tq830+v7T5vpblx3/ckdnFNfLn5FkjO8ydOgqBW70ycsN8PoLDnY0vk1vG+764DD6lrzOZ1qzuWG7F
-X-Received: from joshdon.svl.corp.google.com ([2620:15c:2cd:202:4585:eb52:4688:ecde])
- (user=joshdon job=sendgmr) by 2002:a81:5002:0:b0:317:b1c4:e10b with SMTP id
- e2-20020a815002000000b00317b1c4e10bmr6313678ywb.120.1656537291845; Wed, 29
- Jun 2022 14:14:51 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 14:14:26 -0700
-Message-Id: <20220629211426.3329954-1-joshdon@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v4] sched/core: add forced idle accounting for cgroups
-From:   Josh Don <joshdon@google.com>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Tejun Heo <tj@kernel.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Cruz Zhao <CruzZhao@linux.alibaba.com>,
-        Josh Don <joshdon@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VQm/Y0pRhZo0EQ3hGxGXsSwZ7m4Ckh1ldpjFHGlQngM=;
+        b=UgCa17LNlKU19R6QlL8JNl5gtax2X9Jjqkt1MF3LhTtFpFtVTLxxI8WT5YJLM+QxaJ
+         os8AZA52b11Y1GHJ6oMd9Zf79VBXUt1ZWRYj7xeFev3l1GYg6aoz0KDOYQ0SGYAc4nKZ
+         tVqnl3BPzgtvVyBTDykYV6aiTJI/xQNfcMOFZ3nVF+Xaq4zrVX60r2WPhxtlOzDCnt1q
+         DME8Hv0vUQWP/L58BwDa+1UdDVqssI2MGcz5hgZuTJA+rwJZx5+nZ9kHa2Kz2dmLX21/
+         odB0n1K6bMf0/uyKpmb173e8BeELJYp0loiCn21hlR1VUCB0orrRDAGG2JfBy3NAyVTc
+         A2zA==
+X-Gm-Message-State: AJIora/GfpqmL7sfjFIwGm8j+2sRfLX3d/xmteBqXyEsbXzhxNix8sVu
+        64+onibjOOASqYpuy9nqdvwm29uhu7Hu6hxJtfY=
+X-Google-Smtp-Source: AGRyM1vjTl+ZTBxNHWU7Y+SKVUM+7l7LoPrU/pxB0LB56DuBzTjfBNb4B6t6o1yh5uYgXRiLqzSki4Kio/rVHJpTbdI=
+X-Received: by 2002:a81:6fd7:0:b0:317:964a:c7a4 with SMTP id
+ k206-20020a816fd7000000b00317964ac7a4mr6476899ywc.131.1656537327032; Wed, 29
+ Jun 2022 14:15:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 29 Jun 2022 23:14:49 +0200
+Message-ID: <CAHp75Vc=PWXauEKDNX+vmqv=oO1LDv8-GgU3OFZXjf8yJrG8wA@mail.gmail.com>
+Subject: Re: [PATCH v4 00/15] Add support for AXP192 PMIC
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>, quic_gurus@quicinc.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Michael Walle <michael@walle.cc>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,218 +83,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-4feee7d1260 previously added per-task forced idle accounting. This patch
-extends this to also include cgroups.
+On Wed, Jun 29, 2022 at 4:29 PM Aidan MacDonald
+<aidanmacdonald.0x0@gmail.com> wrote:
+>
+> Changes in v4:
+>
+> * Drop regmap-irq patches and rebase on top of the regmap-irq
+>   refactoring series[1], which implements the same functionality.
+> * Reorder mfd_cells, putting one-line entries at the bottom.
+> * Fix incorrect example in axp192-gpio device tree bindings.
+> * Perform adc_en2 flag -> adc_en2_mask conversion in axp20x_adc
+>   as a separate patch.
+> * Simplify axp192_usb_power_set_current_max().
+> * Drop unneeded OF dependency in pin control driver, and document
+>   tables used for describing register layouts.
+> * Various style fixups suggested by Andy Shevchenko.
 
-rstat is used for cgroup accounting, except for the root, which uses
-kcpustat in order to bypass the need for doing an rstat flush when
-reading root stats.
 
-Only cgroup v2 is supported. Similar to the task accounting, the cgroup
-accounting requires that schedstats is enabled.
+For patches 6-11
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Signed-off-by: Josh Don <joshdon@google.com>
-Acked-by: Tejun Heo <tj@kernel.org>
----
-v4: Replace 'forceidle_usec' with 'core_sched.force_idle_usec'
-v3: Fix build error, and revert back to  __schedstat_*
-v2: Per Tejun's suggestion, move the forceidle stat to cgroup_base_stat
-directly.
- include/linux/cgroup-defs.h |  4 ++++
- include/linux/kernel_stat.h |  7 ++++++
- kernel/cgroup/rstat.c       | 44 ++++++++++++++++++++++++++++++++-----
- kernel/sched/core_sched.c   |  6 ++++-
- kernel/sched/cputime.c      | 15 +++++++++++++
- 5 files changed, 69 insertions(+), 7 deletions(-)
+> [1]: https://lore.kernel.org/lkml/20220623211420.918875-1-aidanmacdonald.0x0@gmail.com/
+>
+> Changes in v3:
+>
+> * Update pinctrl driver to address Andy Shevchenko's review comments
+>   from v1, and fix a few other issues.
+> * Add gpio-ranges property and example snippet to gpio DT bindings.
+> * Update commit message of patch 01/16 to point out that all register
+>   addresses are obtained using sub_irq_reg().
+> * Document ccc_table in axp20x_battery. Also update commit message to
+>   note a small fix that is part of that patch.
+> * Drop axp20x_adc consolidation patch in favor of using separate adc_raw
+>   functions. It's a minor code size optimization that may not be worth
+>   the effort due to implementation complexity.
+> * Use the FIELD_GET macro in axp20x_adc to further clarify intent.
+> * Fix a typo in the regulator driver where an AXP20X regulator ID was
+>   mistakenly used instead of an AXP192 regulator ID. Also carry over
+>   an Acked-by: tag from v1. Hope that's okay.
+> * Accumulate Acked-by: tags from v1 on DT patches.
+> * Accumulate Acked-by: tags from v2.
+>
+> Note that regmap maintainer Mark Brown has said the first two patches to
+> regmap-irq aren't suitable for inclusion into the kernel in their current
+> state. I'm including them for v3 so the series remains testable.
+>
+> Changes in v2:
+>
+> * Do a little cleanup of axp20x_adc suggested by Jonathan Cameron
+> * Consolidate ADC read functions in axp20x_adc
+> * Drop the axp192's read_label callback in axp20x_adc
+> * Clean up the axp192-gpio dt bindings
+> * Rewrite a problematic bit of code in axp20x_usb_power reported
+>   by kernel test robot
+> * Support AXP192 in axp20x_battery
+> * Split up regmap-irq changes to two separate patches
+>
+> Cover letter from v1:
+>
+> Hi all,
+>
+> This patch series adds support for the X-Powers AXP192 PMIC to the
+> AXP20x driver framework.
+>
+> The first patch is a small change to regmap-irq to support the AXP192's
+> unusual IRQ register layout. It isn't possible to include all of the
+> IRQ registers in one regmap-irq chip without this.
+>
+> The rest of the changes are pretty straightforward, I think the only
+> notable parts are the axp20x_adc driver where there seems to be some
+> opportunities for code reuse (the axp192 is nearly a duplicate of the
+> axp20x) and the addition of a new pinctrl driver for the axp192, since
+> the axp20x pinctrl driver was not very easy to adapt.
+>
+> Aidan MacDonald (15):
+>   dt-bindings: mfd: add bindings for AXP192 MFD device
+>   dt-bindings: iio: adc: axp209: Add AXP192 compatible
+>   dt-bindings: power: supply: axp20x: Add AXP192 compatible
+>   dt-bindings: gpio: Add AXP192 GPIO bindings
+>   dt-bindings: power: axp20x-battery: Add AXP192 compatible
+>   mfd: axp20x: Add support for AXP192
+>   regulator: axp20x: Add support for AXP192
+>   iio: adc: axp20x_adc: Minor code cleanups
+>   iio: adc: axp20x_adc: Replace adc_en2 flag with adc_en2_mask field
+>   iio: adc: axp20x_adc: Add support for AXP192
+>   power: supply: axp20x_usb_power: Add support for AXP192
+>   pinctrl: Add AXP192 pin control driver
+>   power: axp20x_battery: Add constant charge current table
+>   power: axp20x_battery: Support battery status without fuel gauge
+>   power: axp20x_battery: Add support for AXP192
+>
+>  .../bindings/gpio/x-powers,axp192-gpio.yaml   |  68 ++
+>  .../bindings/iio/adc/x-powers,axp209-adc.yaml |  18 +
+>  .../bindings/mfd/x-powers,axp152.yaml         |   1 +
+>  .../x-powers,axp20x-battery-power-supply.yaml |   1 +
+>  .../x-powers,axp20x-usb-power-supply.yaml     |   1 +
+>  drivers/iio/adc/axp20x_adc.c                  | 356 +++++++++--
+>  drivers/mfd/axp20x-i2c.c                      |   2 +
+>  drivers/mfd/axp20x.c                          | 152 +++++
+>  drivers/pinctrl/Kconfig                       |  13 +
+>  drivers/pinctrl/Makefile                      |   1 +
+>  drivers/pinctrl/pinctrl-axp192.c              | 598 ++++++++++++++++++
+>  drivers/power/supply/axp20x_battery.c         | 142 ++++-
+>  drivers/power/supply/axp20x_usb_power.c       |  84 ++-
+>  drivers/regulator/axp20x-regulator.c          | 100 ++-
+>  include/linux/mfd/axp20x.h                    |  84 +++
+>  15 files changed, 1547 insertions(+), 74 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
+>  create mode 100644 drivers/pinctrl/pinctrl-axp192.c
+>
+> --
+> 2.35.1
+>
 
-diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
-index 1bfcfb1af352..025fd0e84a31 100644
---- a/include/linux/cgroup-defs.h
-+++ b/include/linux/cgroup-defs.h
-@@ -287,6 +287,10 @@ struct css_set {
- 
- struct cgroup_base_stat {
- 	struct task_cputime cputime;
-+
-+#ifdef CONFIG_SCHED_CORE
-+	u64 forceidle_sum;
-+#endif
- };
- 
- /*
-diff --git a/include/linux/kernel_stat.h b/include/linux/kernel_stat.h
-index 69ae6b278464..ddb5a358fd82 100644
---- a/include/linux/kernel_stat.h
-+++ b/include/linux/kernel_stat.h
-@@ -28,6 +28,9 @@ enum cpu_usage_stat {
- 	CPUTIME_STEAL,
- 	CPUTIME_GUEST,
- 	CPUTIME_GUEST_NICE,
-+#ifdef CONFIG_SCHED_CORE
-+	CPUTIME_FORCEIDLE,
-+#endif
- 	NR_STATS,
- };
- 
-@@ -115,4 +118,8 @@ extern void account_process_tick(struct task_struct *, int user);
- 
- extern void account_idle_ticks(unsigned long ticks);
- 
-+#ifdef CONFIG_SCHED_CORE
-+extern void __account_forceidle_time(struct task_struct *tsk, u64 delta);
-+#endif
-+
- #endif /* _LINUX_KERNEL_STAT_H */
-diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
-index 24b5c2ab5598..feb59380c896 100644
---- a/kernel/cgroup/rstat.c
-+++ b/kernel/cgroup/rstat.c
-@@ -310,6 +310,9 @@ static void cgroup_base_stat_add(struct cgroup_base_stat *dst_bstat,
- 	dst_bstat->cputime.utime += src_bstat->cputime.utime;
- 	dst_bstat->cputime.stime += src_bstat->cputime.stime;
- 	dst_bstat->cputime.sum_exec_runtime += src_bstat->cputime.sum_exec_runtime;
-+#ifdef CONFIG_SCHED_CORE
-+	dst_bstat->forceidle_sum += src_bstat->forceidle_sum;
-+#endif
- }
- 
- static void cgroup_base_stat_sub(struct cgroup_base_stat *dst_bstat,
-@@ -318,6 +321,9 @@ static void cgroup_base_stat_sub(struct cgroup_base_stat *dst_bstat,
- 	dst_bstat->cputime.utime -= src_bstat->cputime.utime;
- 	dst_bstat->cputime.stime -= src_bstat->cputime.stime;
- 	dst_bstat->cputime.sum_exec_runtime -= src_bstat->cputime.sum_exec_runtime;
-+#ifdef CONFIG_SCHED_CORE
-+	dst_bstat->forceidle_sum -= src_bstat->forceidle_sum;
-+#endif
- }
- 
- static void cgroup_base_stat_flush(struct cgroup *cgrp, int cpu)
-@@ -398,6 +404,11 @@ void __cgroup_account_cputime_field(struct cgroup *cgrp,
- 	case CPUTIME_SOFTIRQ:
- 		rstatc->bstat.cputime.stime += delta_exec;
- 		break;
-+#ifdef CONFIG_SCHED_CORE
-+	case CPUTIME_FORCEIDLE:
-+		rstatc->bstat.forceidle_sum += delta_exec;
-+		break;
-+#endif
- 	default:
- 		break;
- 	}
-@@ -411,8 +422,9 @@ void __cgroup_account_cputime_field(struct cgroup *cgrp,
-  * with how it is done by __cgroup_account_cputime_field for each bit of
-  * cpu time attributed to a cgroup.
-  */
--static void root_cgroup_cputime(struct task_cputime *cputime)
-+static void root_cgroup_cputime(struct cgroup_base_stat *bstat)
- {
-+	struct task_cputime *cputime = &bstat->cputime;
- 	int i;
- 
- 	cputime->stime = 0;
-@@ -438,6 +450,10 @@ static void root_cgroup_cputime(struct task_cputime *cputime)
- 		cputime->sum_exec_runtime += user;
- 		cputime->sum_exec_runtime += sys;
- 		cputime->sum_exec_runtime += cpustat[CPUTIME_STEAL];
-+
-+#ifdef CONFIG_SCHED_CORE
-+		bstat->forceidle_sum += cpustat[CPUTIME_FORCEIDLE];
-+#endif
- 	}
- }
- 
-@@ -445,27 +461,43 @@ void cgroup_base_stat_cputime_show(struct seq_file *seq)
- {
- 	struct cgroup *cgrp = seq_css(seq)->cgroup;
- 	u64 usage, utime, stime;
--	struct task_cputime cputime;
-+	struct cgroup_base_stat bstat;
-+#ifdef CONFIG_SCHED_CORE
-+	u64 forceidle_time;
-+#endif
- 
- 	if (cgroup_parent(cgrp)) {
- 		cgroup_rstat_flush_hold(cgrp);
- 		usage = cgrp->bstat.cputime.sum_exec_runtime;
- 		cputime_adjust(&cgrp->bstat.cputime, &cgrp->prev_cputime,
- 			       &utime, &stime);
-+#ifdef CONFIG_SCHED_CORE
-+		forceidle_time = cgrp->bstat.forceidle_sum;
-+#endif
- 		cgroup_rstat_flush_release();
- 	} else {
--		root_cgroup_cputime(&cputime);
--		usage = cputime.sum_exec_runtime;
--		utime = cputime.utime;
--		stime = cputime.stime;
-+		root_cgroup_cputime(&bstat);
-+		usage = bstat.cputime.sum_exec_runtime;
-+		utime = bstat.cputime.utime;
-+		stime = bstat.cputime.stime;
-+#ifdef CONFIG_SCHED_CORE
-+		forceidle_time = bstat.forceidle_sum;
-+#endif
- 	}
- 
- 	do_div(usage, NSEC_PER_USEC);
- 	do_div(utime, NSEC_PER_USEC);
- 	do_div(stime, NSEC_PER_USEC);
-+#ifdef CONFIG_SCHED_CORE
-+	do_div(forceidle_time, NSEC_PER_USEC);
-+#endif
- 
- 	seq_printf(seq, "usage_usec %llu\n"
- 		   "user_usec %llu\n"
- 		   "system_usec %llu\n",
- 		   usage, utime, stime);
-+
-+#ifdef CONFIG_SCHED_CORE
-+	seq_printf(seq, "core_sched.force_idle_usec %llu\n", forceidle_time);
-+#endif
- }
-diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
-index 38a2cec21014..5103502da7ba 100644
---- a/kernel/sched/core_sched.c
-+++ b/kernel/sched/core_sched.c
-@@ -277,7 +277,11 @@ void __sched_core_account_forceidle(struct rq *rq)
- 		if (p == rq_i->idle)
- 			continue;
- 
--		__schedstat_add(p->stats.core_forceidle_sum, delta);
-+		/*
-+		 * Note: this will account forceidle to the current cpu, even
-+		 * if it comes from our SMT sibling.
-+		 */
-+		__account_forceidle_time(p, delta);
- 	}
- }
- 
-diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
-index 78a233d43757..95fc77853743 100644
---- a/kernel/sched/cputime.c
-+++ b/kernel/sched/cputime.c
-@@ -226,6 +226,21 @@ void account_idle_time(u64 cputime)
- 		cpustat[CPUTIME_IDLE] += cputime;
- }
- 
-+
-+#ifdef CONFIG_SCHED_CORE
-+/*
-+ * Account for forceidle time due to core scheduling.
-+ *
-+ * REQUIRES: schedstat is enabled.
-+ */
-+void __account_forceidle_time(struct task_struct *p, u64 delta)
-+{
-+	__schedstat_add(p->stats.core_forceidle_sum, delta);
-+
-+	task_group_account_field(p, CPUTIME_FORCEIDLE, delta);
-+}
-+#endif
-+
- /*
-  * When a guest is interrupted for a longer amount of time, missed clock
-  * ticks are not redelivered later. Due to that, this function may on
+
 -- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+With Best Regards,
+Andy Shevchenko

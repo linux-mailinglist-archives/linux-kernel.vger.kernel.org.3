@@ -2,98 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C675605AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74BD456058A
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 18:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbiF2QVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 12:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
+        id S233913AbiF2QNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 12:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiF2QVQ (ORCPT
+        with ESMTP id S233863AbiF2QNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 12:21:16 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB37A34BB9;
-        Wed, 29 Jun 2022 09:21:15 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 25TGD56V017150;
-        Wed, 29 Jun 2022 11:13:05 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 25TGD3U2017144;
-        Wed, 29 Jun 2022 11:13:03 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Wed, 29 Jun 2022 11:13:03 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Ash Logan <ash@heyquark.com>, krzysztof.kozlowski+dt@linaro.org,
-        paulus@samba.org, mpe@ellerman.id.au, christophe.leroy@csgroup.eu,
-        robh+dt@kernel.org, benh@kernel.crashing.org,
-        devicetree@vger.kernel.org, linkmauve@linkmauve.fr,
-        linux-kernel@vger.kernel.org, rw-r-r-0644@protonmail.com,
-        joel@jms.id.au, linuxppc-dev@lists.ozlabs.org, j.ne@posteo.net
-Subject: Re: [PATCH v3 02/12] powerpc: wiiu: device tree
-Message-ID: <20220629161302.GG25951@gate.crashing.org>
-References: <20220622131037.57604-1-ash@heyquark.com> <20220628133144.142185-1-ash@heyquark.com> <20220628133144.142185-3-ash@heyquark.com> <c760e444-57c3-0e1a-0e4d-f79d6ae9867a@linaro.org>
-Mime-Version: 1.0
+        Wed, 29 Jun 2022 12:13:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15019252B3;
+        Wed, 29 Jun 2022 09:13:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A706D61BC4;
+        Wed, 29 Jun 2022 16:13:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63F62C341C8;
+        Wed, 29 Jun 2022 16:13:15 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Q9vbz+5x"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1656519194;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2cfMwnhft1D4xbZ2Z+S26lAEbUfjwtP9hJSq4aVEMEo=;
+        b=Q9vbz+5xTJpIE1kbDcyI9KjWcNalvFQOVBP04lCLuY5xRgte1A+L0BbZHiOE8jVaF9kZ4t
+        TkwR/Ux00q/HJqcQAgb3AaVXb7QqYGrMSOLx1ipYqOW7yhiufJnibUDiX9/4+RkdIv26Ab
+        71ULea8RqRJbCpCUVX7f/y6+ZlB7q+U=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 35771d53 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 29 Jun 2022 16:13:13 +0000 (UTC)
+Date:   Wed, 29 Jun 2022 18:13:05 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] remove CONFIG_ANDROID
+Message-ID: <Yrx6EVHtroXeEZGp@zx2c4.com>
+References: <20220629150102.1582425-1-hch@lst.de>
+ <20220629150102.1582425-2-hch@lst.de>
+ <Yrx5Lt7jrk5BiHXx@zx2c4.com>
+ <20220629161020.GA24891@lst.de>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c760e444-57c3-0e1a-0e4d-f79d6ae9867a@linaro.org>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220629161020.GA24891@lst.de>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 11:58:18AM +0200, Krzysztof Kozlowski wrote:
-> On 28/06/2022 15:31, Ash Logan wrote:
-> > +	model = "nintendo,wiiu";
+On Wed, Jun 29, 2022 at 06:10:20PM +0200, Christoph Hellwig wrote:
+> On Wed, Jun 29, 2022 at 06:09:18PM +0200, Jason A. Donenfeld wrote:
+> > CONFIG_ANDROID is used here for a reason. As somebody suggested in
+> > another thread of which you were a participant, it acts as a proxy for
+> > "probably running on Android hardware",
 > 
-> It's not compatible, but user-visible string, e.g. "Nintendo Wii U"
+> No, it does not in any way.
 
-The "model" property in OF is documented as:
+Good! It sounds like you're starting to develop opinions on the matter.
+Please weave these into some analysis of the issue and put this in your
+v2 patch. To be clear, the thing I care about is that this won't make
+the behavior worse for any kernels. If you feel like you've got that
+covered, say why in your patch, and then it's fine by me.
 
----
-“model”                                                                S
-Standard property name to define a manufacturer’s model number.
-
-prop-encoded-array:
-  Text string, encoded with encode-string.
-A manufacturer-dependent string that generally specifies the model name
-and number (including revision level) for this device. The format of the
-text string is arbitrary, although in conventional usage the string
-begins with the name of the device’s manufacturer as with the “name”
-property.
-Although there is no standard interpretation for the value of the
-“model” property, a specific device driver might use it to learn, for
-instance, the revision level of its particular device.
-
-See also: property, model.
-
-Used as: " XYZCO,1416-02" encode-string " model" property
----
-
-> > +	cpus {
-> > +		#address-cells = <1>;
-> > +		#size-cells = <0>;
-> > +
-> > +		/* TODO: Add SMP */
-> > +		PowerPC,espresso@0 {
-> 
-> Node name should be generic, so "cpu". Unless something needs the
-> specific node name?
-
-This is how most other PowerPC firmwares do it.  The PowerPC processor
-binding is older than the generic naming practice, so CPU nodes have
-device_type "cpu" instead.  This is a required property btw, with that
-value.  (There is no requirement on the names of the CPU nodes).
-
-There is no added value in generic naming for CPU nodes anyway, since
-you just find them as the children of the "/cpus" node :-)
-
-
-Segher
+Jason

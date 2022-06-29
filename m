@@ -2,149 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8CB55F970
+	by mail.lfdr.de (Postfix) with ESMTP id 9452855F971
 	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 09:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232459AbiF2HnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 03:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
+        id S232326AbiF2Hne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 03:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232208AbiF2HnO (ORCPT
+        with ESMTP id S232042AbiF2Hnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 03:43:14 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66BA2FF;
-        Wed, 29 Jun 2022 00:43:11 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 22BC4FF809;
-        Wed, 29 Jun 2022 07:43:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656488590;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=23qNxy3T8AhqxBTiU/5Y9Q/cjusuzwicAS7sUOTqSdA=;
-        b=LapURRYasHGXqYMr6kj8vjOKc7d0TaHdAf004eEwg/IZ5+koA4RmY4W1KoiVotDBVh9TPB
-        nHvZZmLDoOOt8xfyO2AKJUFQYml/6cVTj9N7gvqg7xaqBxHB4SHpTQQOyYAVB3e+vNwfi9
-        IE73WVA00PBNuXa4e/UWCbe1fJlRT62XcZwQ/RukzgKCZ4shhBUcOA7xbA+BA2/8aeJjdg
-        Z0Q2dPAs/+c1b8ovcdysCEuB/nSmy9WDNKbCU8Ai69TfRygUzXDtrwrK1p7FGxNJ0sdmYf
-        bjoUYLVR57pMvxfK+LQNOMscPDuZqAMt3xKfajI9jVOqH3ZpO3b2ND1NtHt67Q==
-Date:   Wed, 29 Jun 2022 09:43:08 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Jeremy Linton <jeremy.linton@arm.com>
-Cc:     linux-serial@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        phil.edworthy@renesas.com, kernel@esmil.dk,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] BUG, more dw8259 ACPI crashes
-Message-ID: <20220629094308.237105a6@xps-13>
-In-Reply-To: <20220629000232.3440704-1-jeremy.linton@arm.com>
-References: <20220629000232.3440704-1-jeremy.linton@arm.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 29 Jun 2022 03:43:32 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272D02A413;
+        Wed, 29 Jun 2022 00:43:31 -0700 (PDT)
+Received: from fraeml708-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LXtgT3zScz6H7fy;
+        Wed, 29 Jun 2022 15:41:09 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml708-chm.china.huawei.com (10.206.15.36) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 29 Jun 2022 09:43:29 +0200
+Received: from [10.195.245.77] (10.195.245.77) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 29 Jun 2022 08:43:28 +0100
+Message-ID: <65e05dd1-8e92-5f6b-d68e-72987fcebf59@huawei.com>
+Date:   Wed, 29 Jun 2022 08:43:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v4 5/5] libata-scsi: Cap ata_device->max_sectors according
+ to shost->max_sectors
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Christoph Hellwig <hch@lst.de>
+CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
+        <iommu@lists.linux.dev>, <linux-scsi@vger.kernel.org>,
+        <linuxarm@huawei.com>, <joro@8bytes.org>, <will@kernel.org>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <m.szyprowski@samsung.com>, <robin.murphy@arm.com>
+References: <1656343521-62897-1-git-send-email-john.garry@huawei.com>
+ <1656343521-62897-6-git-send-email-john.garry@huawei.com>
+ <b69c6112-98b7-3890-9d11-bb321a7c877a@opensource.wdc.com>
+ <6619638c-52e8-cb67-c56c-9c9d38c18161@huawei.com>
+ <ba59a0da-a982-e3eb-1cb7-6e60f80fd319@opensource.wdc.com>
+ <38ae1cc8-1411-bb54-e082-0f7b91cb9e63@huawei.com>
+ <20220629054027.GB16297@lst.de>
+ <da7027d9-bd81-cfb0-f70e-2405f40023fa@opensource.wdc.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <da7027d9-bd81-cfb0-f70e-2405f40023fa@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.195.245.77]
+X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeremy,
+On 29/06/2022 06:58, Damien Le Moal wrote:
+> On 6/29/22 14:40, Christoph Hellwig wrote:
+>> On Tue, Jun 28, 2022 at 12:33:58PM +0100, John Garry wrote:
+>>> Well Christoph originally offered to take this series via the dma-mapping
+>>> tree.
+>>>
+>>> @Christoph, is that still ok with you? If so, would you rather I send this
+>>> libata patch separately?
+>>
+>> The offer still stands, and I don't really care where the libata
+>> patch is routed.  Just tell me what you prefer.
 
-jeremy.linton@arm.com wrote on Tue, 28 Jun 2022 19:02:30 -0500:
+Cheers.
 
-> 5.19rc4 crashes with:
->=20
-> [    4.441703] Internal error: Oops: 96000004 [#1] SMP
-> [    4.446601] Modules linked in:
-> [    4.449668] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-0.rc4.33.=
-fc37.aarch64 #1
-> [    4.457532] Hardware name: Marvell                         Armada 7k/8=
-k Family Board      /Armada 7k/8k Family Board      , BIOS EDK II Jun  4 20=
-19
-> [    4.470800] pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYP=
-E=3D--)
-> [    4.477791] pc : dw8250_handle_irq+0x58/0x190
-> [    4.482170] lr : dw8250_handle_irq+0x38/0x190
-> [    4.486544] sp : ffff800008003e40
-> [    4.489869] x29: ffff800008003e40 x28: ffffbe13be183980 x27: 00000000b=
-46bd3d0
-> [    4.497036] x26: ffffbe13bdbc3008 x25: ffff6f1447910f80 x24: ffff6f144=
-7910f94
-> [    4.504204] x23: 0000000000000012 x22: ffff6f144218fc80 x21: 000000000=
-0000000
-> [    4.511372] x20: 0000000000000007 x19: ffffbe13be7628d0 x18: ffff80000=
-918b528
-> [    4.518540] x17: ffffb103c0343000 x16: ffff800008004000 x15: 000000000=
-0004000
-> [    4.525706] x14: 0000000000000000 x13: 0000000000000030 x12: 010101010=
-1010101
-> [    4.532872] x11: ffffbe13be16f6d8 x10: 0000000000001d90 x9 : ffffbe13b=
-c6b4f0c
-> [    4.540040] x8 : ffffbe13be185770 x7 : 0000000000000000 x6 : 000000002=
-96b5f4a
-> [    4.547206] x5 : 00ffffffffffffff x4 : 0000000000010002 x3 : ffffbe13b=
-e7628d0
-> [    4.554373] x2 : 0000000000000007 x1 : 0000000000000000 x0 : 000000000=
-0000000
-> [    4.561539] Call trace:
-> [    4.563994]  dw8250_handle_irq+0x58/0x190
-> [    4.568020]  serial8250_interrupt+0x68/0x140
-> [    4.572307]  __handle_irq_event_percpu+0x68/0x230
-> [    4.577034]  handle_irq_event+0x58/0x120
-> [    4.580973]  handle_fasteoi_irq+0xcc/0x1c4
-> [    4.585086]  generic_handle_domain_irq+0x38/0x50
-> [    4.589723]  gic_handle_irq+0x50/0xe0
-> [    4.593399]  call_on_irq_stack+0x2c/0x38
-> [    4.597338]  do_interrupt_handler+0xdc/0xe0
-> [    4.601539]  el1_interrupt+0x34/0x70
-> [    4.605131]  el1h_64_irq_handler+0x18/0x24
-> [    4.609244]  el1h_64_irq+0x68/0x6c
-> [    4.612658]  arch_cpu_idle+0x18/0x2c
-> [    4.616246]  default_idle_call+0x34/0x18c
-> [    4.620273]  cpuidle_idle_call+0x154/0x1a0
-> [    4.624388]  do_idle+0xa4/0xf4
-> [    4.627455]  cpu_startup_entry+0x34/0x3c
-> [    4.631394]  kernel_init+0x0/0x150
-> [    4.634808]  arch_post_acpi_subsys_init+0x0/0x30
-> [    4.639445]  start_kernel+0x474/0x490
-> [    4.643121]  __primary_switched+0xc0/0xc8
-> [    4.647148] Code: 7100305f 1a9f17f5 f100003f 7a400aa4 (b9400817)=20
-> [    4.653267] ---[ end trace 0000000000000000 ]---
->=20
-> On an ACPI enabled Mcbin. This is again the result
-> of the pdata information not being available on an
-> ACPI machine. But since there are multiple commits
-> I've broken this into to fixes. The first
-> simply reverts the USR register change because it
-> should be functionality transparent and I don't
-> have a good way to tie ACPI ids to the hardware
-> and the second fixes the later patch which uses it
-> in the interrupt handler.
+> 
+> If it is 100% independent from the other patches, I can take it.
+> Otherwise, feel free to take it !
+> 
 
-Sorry for the breakage, the move of the USR register to pdata is not
-really necessary anyway, it came up rather late in the review process,
-and the other fix lgtm, so:
+I'll just keep the all together - it's easier in case I need to change 
+anything.
 
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
->=20
-> Jeremy Linton (2):
->   Revert "serial: 8250: dw: Move the USR register to pdata"
->   serial: 8250: dw: Fix NULL pointer dereference
->=20
->  drivers/tty/serial/8250/8250_dw.c    | 14 +++++++-------
->  drivers/tty/serial/8250/8250_dwlib.h |  2 +-
->  2 files changed, 8 insertions(+), 8 deletions(-)
->=20
-
-
-Thanks,
-Miqu=C3=A8l
+Thanks!

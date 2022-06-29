@@ -2,255 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D42E56000A
+	by mail.lfdr.de (Postfix) with ESMTP id C5F3156000B
 	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 14:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233141AbiF2Me2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 08:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36568 "EHLO
+        id S233159AbiF2Mfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 08:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231551AbiF2Me0 (ORCPT
+        with ESMTP id S232367AbiF2Mft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 08:34:26 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B94A255A0
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 05:34:24 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id r20so22272263wra.1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 05:34:24 -0700 (PDT)
+        Wed, 29 Jun 2022 08:35:49 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB5D29C9A
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 05:35:47 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id q6so32217386eji.13
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 05:35:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RMd3beZelLDV4ezdXlil9kUUgFUc4WQ7K60RuFKw/HY=;
-        b=HFmBaReI/awGH6JxHKqA0o52Y+nCod1lVVxfWiH3shSbFiyHLla0MRYnSnu4q5JFrb
-         pbesCQB/VAWWKhlG44+uPHWsAK8kVQwBzQKG2iqOxe0+hvAJ3XrzG+QosKPe2++K2ic9
-         x6jQrhQpOyizj2mujtCW7y7EZcvF14yE5o4JLM1mO0UU2x0+JKcgqxlIaN+n5s9ldGd+
-         58rB9NtKG/Xcbc6qzcki4hpQhA2IJOBs0vj5LGuwCa6lBtNVuBkP+sfAb56SRs+q3TNN
-         cYRCEV6z3ob5N4N0KzC+mlEQuemepjFmB+rKy9LXsHry+gvAQxHAx+rILCbMkFcm6XmT
-         B/tw==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q8pCybxjWozGkg4XkxF8hCsdW8FgZKjWDEioFfT4qAc=;
+        b=lci++Zen0Iac6DnB8ntK2Y4eGEo+IF3ekd+ab/O8WDauLz4PrhJTqEv6Vk9qLMFruS
+         crrxNjPD8t08uTn8wxxzlgVw2wJlYtgPQBnFmdJ7LC0mC706lmEwpasVczB4BTfc71EQ
+         rYe6CoWvhSanvSRdOSNLRSqr8RcdyM+jGT1oX68C9qkezsFz80L8MQ8xK/EMtN7vmxUd
+         AOWY8Ly/n/gMxgTekdcxrErLkE/4l6mKITxr8zx45+iUA/3knVFG1xRzXKc4UA3Jj0Kq
+         fSB7/p5pcwWyfmcecNBa9Ujkf3Zr43209mEshZwTyYmHHtVMlGanVEPF7BLxd9hO7/4q
+         m7pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RMd3beZelLDV4ezdXlil9kUUgFUc4WQ7K60RuFKw/HY=;
-        b=HbElC6HY36KVIzWdZb9B2QTzmyOBDhWKe7p4lyO3izllRfjn/m/2VeclFg0jfFNfml
-         iKs7I0JCuqiDRxrFMkCoIWYr13ZPwllAhnro65OPbQXamOpcFXcdkYi/XduN+3Eloxdg
-         BfGkSQR3u9+OF6wkwBdATcBbbK0/tdfdjVJak1oXIxj/UE5e9dmWx9ryoL/V0ry4q96r
-         +inAT7Vjv8X4Um5hS/48RnUn3zhtUIt8SWXcswjsNw24ahN0GVBUcfWVb6Mgtvw++7Qa
-         I9BOOKIX4xO6PYAojCK5NxIkEsyYeqvikvtpbMmutyki+T3uSPPEg05kPS+p5EnDS7mK
-         iImQ==
-X-Gm-Message-State: AJIora/mIvfzzbLB/ty3SnDmwWw5jW2bulJ/qv6iVs7jynsbLnFGAaUJ
-        kEwziz9d6MJQhDgyMzYzYxjF/urunteBe7L0Rg4O5g==
-X-Google-Smtp-Source: AGRyM1vHzEYK7IrZRPnLMo7jwGLEHZdyKlPQc/XxGbF7tfOWTgbjqH9u+T/F4WwdgU+B5/nG0P1vjFNjGYxAy24rfgc=
-X-Received: by 2002:a5d:4532:0:b0:21b:ab1e:e9fa with SMTP id
- j18-20020a5d4532000000b0021bab1ee9famr2902041wra.214.1656506062697; Wed, 29
- Jun 2022 05:34:22 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q8pCybxjWozGkg4XkxF8hCsdW8FgZKjWDEioFfT4qAc=;
+        b=AfNOJjXXsLSRatG6oXdW5FTbeareTrMd45qbp0kfmmtuvrFsUMyyDNxBEkVCCM5k3C
+         OfOjjK9d3H8XijmxTx4tU24JXhTRFrTDYmSrLDBgiiKtev1yfPiw0HNh6ktKr+wnxnd7
+         Hp3wagk/kknQ0rkcqLehPg52Ywhya43HM8gMT+VM0/UTDHD6XvZtakpx0m3Wq+nRkHX+
+         uX+BNbD6+Duwy18etNDWqzgW/9CeGDf3Cuha8nA+KJ4lXgqgEsO8H4fJCCkuoGzYTnFi
+         z5WQr0pgz3tUykJ1vmNvKIt5M1K+GyeJpAxTkG4A0F9oSxoIuKIW8OsbzhVZm0wbwFD4
+         5S3g==
+X-Gm-Message-State: AJIora97BYJ9gBxYwEqykEUU6i3UbxeO5QdKmMb3TxftN3Lzgfaj3+xp
+        K6tYga9E3QFfbBbIkKzu3jRtYw==
+X-Google-Smtp-Source: AGRyM1u943KaJE2gtYoBez8mvmZ6nHvpsrQFytNjdq485fL9iLkWdn0J4ZOz5mVQgQLA3S/z6G6xqw==
+X-Received: by 2002:a17:906:b782:b0:726:f979:7adb with SMTP id dt2-20020a170906b78200b00726f9797adbmr3014643ejb.498.1656506146499;
+        Wed, 29 Jun 2022 05:35:46 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id s2-20020a1709062ec200b006f4cb79d9a8sm7769345eji.75.2022.06.29.05.35.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 05:35:45 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: soc: samsung: s5pv210-chipid: add S5PV210 ChipID
+Date:   Wed, 29 Jun 2022 14:35:43 +0200
+Message-Id: <20220629123543.94515-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220622192710.2547152-1-pbonzini@redhat.com> <20220622192710.2547152-22-pbonzini@redhat.com>
-In-Reply-To: <20220622192710.2547152-22-pbonzini@redhat.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Wed, 29 Jun 2022 18:04:12 +0530
-Message-ID: <CAAhSdy0iVQH__-nD6-ioGSDbAaCaeMxbBp2+-06=wJjDOcxPOQ@mail.gmail.com>
-Subject: Re: [PATCH v7 21/23] KVM: Allow for different capacities in
- kvm_mmu_memory_cache structs
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        KVM General <kvm@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        David Matlack <dmatlack@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 12:57 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> From: David Matlack <dmatlack@google.com>
->
-> Allow the capacity of the kvm_mmu_memory_cache struct to be chosen at
-> declaration time rather than being fixed for all declarations. This will
-> be used in a follow-up commit to declare an cache in x86 with a capacity
-> of 512+ objects without having to increase the capacity of all caches in
-> KVM.
->
-> This change requires each cache now specify its capacity at runtime,
-> since the cache struct itself no longer has a fixed capacity known at
-> compile time. To protect against someone accidentally defining a
-> kvm_mmu_memory_cache struct directly (without the extra storage), this
-> commit includes a WARN_ON() in kvm_mmu_topup_memory_cache().
->
-> In order to support different capacities, this commit changes the
-> objects pointer array to be dynamically allocated the first time the
-> cache is topped-up.
->
-> While here, opportunistically clean up the stack-allocated
-> kvm_mmu_memory_cache structs in riscv and arm64 to use designated
-> initializers.
->
-> No functional change intended.
->
-> Reviewed-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> Message-Id: <20220516232138.1783324-22-dmatlack@google.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Add bindings for the S5PV210 ChipID block.
 
-For KVM RISC-V
-Reviewed-by: Anup Patel <anup@brainfault.org>
-Tested-by: Anup Patel <anup@brainfault.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/soc/samsung/s5pv210-chipid.yaml  | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/samsung/s5pv210-chipid.yaml
 
-Regards,
-Anup
+diff --git a/Documentation/devicetree/bindings/soc/samsung/s5pv210-chipid.yaml b/Documentation/devicetree/bindings/soc/samsung/s5pv210-chipid.yaml
+new file mode 100644
+index 000000000000..7c3f4ec47f7e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/samsung/s5pv210-chipid.yaml
+@@ -0,0 +1,30 @@
++# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/soc/samsung/s5pv210-chipid.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Samsung S5PV210 SoC series Chipid driver
++
++maintainers:
++  - Krzysztof Kozlowski <krzk@kernel.org>
++
++properties:
++  compatible:
++    const: samsung,s5pv210-chipid
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    chipid@e0000000 {
++        compatible = "samsung,s5pv210-chipid";
++        reg = <0xe0000000 0x1000>;
++    };
+-- 
+2.34.1
 
-> ---
->  arch/arm64/kvm/mmu.c      |  2 +-
->  arch/riscv/kvm/mmu.c      |  5 +----
->  include/linux/kvm_host.h  |  1 +
->  include/linux/kvm_types.h |  6 +++++-
->  virt/kvm/kvm_main.c       | 33 ++++++++++++++++++++++++++++++---
->  5 files changed, 38 insertions(+), 9 deletions(-)
->
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index f5651a05b6a8..87f1cd0df36e 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -786,7 +786,7 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
->  {
->         phys_addr_t addr;
->         int ret = 0;
-> -       struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-> +       struct kvm_mmu_memory_cache cache = { .gfp_zero = __GFP_ZERO };
->         struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
->         enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
->                                      KVM_PGTABLE_PROT_R |
-> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> index 1c00695ebee7..081f8d2b9cf3 100644
-> --- a/arch/riscv/kvm/mmu.c
-> +++ b/arch/riscv/kvm/mmu.c
-> @@ -350,10 +350,7 @@ static int gstage_ioremap(struct kvm *kvm, gpa_t gpa, phys_addr_t hpa,
->         int ret = 0;
->         unsigned long pfn;
->         phys_addr_t addr, end;
-> -       struct kvm_mmu_memory_cache pcache;
-> -
-> -       memset(&pcache, 0, sizeof(pcache));
-> -       pcache.gfp_zero = __GFP_ZERO;
-> +       struct kvm_mmu_memory_cache pcache = { .gfp_zero = __GFP_ZERO };
->
->         end = (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
->         pfn = __phys_to_pfn(hpa);
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index a2bbdf3ab086..3554e48406e4 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1356,6 +1356,7 @@ void kvm_flush_remote_tlbs(struct kvm *kvm);
->
->  #ifdef KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE
->  int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min);
-> +int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min);
->  int kvm_mmu_memory_cache_nr_free_objects(struct kvm_mmu_memory_cache *mc);
->  void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc);
->  void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
-> diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
-> index f328a01db4fe..4d933518060f 100644
-> --- a/include/linux/kvm_types.h
-> +++ b/include/linux/kvm_types.h
-> @@ -85,12 +85,16 @@ struct gfn_to_pfn_cache {
->   * MMU flows is problematic, as is triggering reclaim, I/O, etc... while
->   * holding MMU locks.  Note, these caches act more like prefetch buffers than
->   * classical caches, i.e. objects are not returned to the cache on being freed.
-> + *
-> + * The @capacity field and @objects array are lazily initialized when the cache
-> + * is topped up (__kvm_mmu_topup_memory_cache()).
->   */
->  struct kvm_mmu_memory_cache {
->         int nobjs;
->         gfp_t gfp_zero;
->         struct kmem_cache *kmem_cache;
-> -       void *objects[KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE];
-> +       int capacity;
-> +       void **objects;
->  };
->  #endif
->
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 5b8ae83e09d7..45188d11812c 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -396,14 +396,31 @@ static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
->                 return (void *)__get_free_page(gfp_flags);
->  }
->
-> -int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
-> +int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min)
->  {
-> +       gfp_t gfp = GFP_KERNEL_ACCOUNT;
->         void *obj;
->
->         if (mc->nobjs >= min)
->                 return 0;
-> -       while (mc->nobjs < ARRAY_SIZE(mc->objects)) {
-> -               obj = mmu_memory_cache_alloc_obj(mc, GFP_KERNEL_ACCOUNT);
-> +
-> +       if (unlikely(!mc->objects)) {
-> +               if (WARN_ON_ONCE(!capacity))
-> +                       return -EIO;
-> +
-> +               mc->objects = kvmalloc_array(sizeof(void *), capacity, gfp);
-> +               if (!mc->objects)
-> +                       return -ENOMEM;
-> +
-> +               mc->capacity = capacity;
-> +       }
-> +
-> +       /* It is illegal to request a different capacity across topups. */
-> +       if (WARN_ON_ONCE(mc->capacity != capacity))
-> +               return -EIO;
-> +
-> +       while (mc->nobjs < mc->capacity) {
-> +               obj = mmu_memory_cache_alloc_obj(mc, gfp);
->                 if (!obj)
->                         return mc->nobjs >= min ? 0 : -ENOMEM;
->                 mc->objects[mc->nobjs++] = obj;
-> @@ -411,6 +428,11 @@ int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
->         return 0;
->  }
->
-> +int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
-> +{
-> +       return __kvm_mmu_topup_memory_cache(mc, KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE, min);
-> +}
-> +
->  int kvm_mmu_memory_cache_nr_free_objects(struct kvm_mmu_memory_cache *mc)
->  {
->         return mc->nobjs;
-> @@ -424,6 +446,11 @@ void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc)
->                 else
->                         free_page((unsigned long)mc->objects[--mc->nobjs]);
->         }
-> +
-> +       kvfree(mc->objects);
-> +
-> +       mc->objects = NULL;
-> +       mc->capacity = 0;
->  }
->
->  void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc)
-> --
-> 2.31.1
->
->

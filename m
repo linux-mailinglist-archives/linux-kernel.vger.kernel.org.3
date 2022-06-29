@@ -2,117 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 063D655FA0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F1855FA01
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 10:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiF2IIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 04:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
+        id S232740AbiF2IHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 04:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbiF2IH5 (ORCPT
+        with ESMTP id S232088AbiF2IHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 04:07:57 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791C53BA5D;
-        Wed, 29 Jun 2022 01:07:56 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id q18so13348717pld.13;
-        Wed, 29 Jun 2022 01:07:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=26ZIBRUEZIPtCeugGBeQrsgT3aaPi/jFrSW3XtqmO4E=;
-        b=LD2k1fnO3PEvw5iSj+odGBaj3uUJ/1bZXafHiHJr8dwAQMh7HAro80QefSH/JLvsY/
-         9sVfjCsCTwTv1NgQt+NxnMlz9HWC6fsejYqt30mAbe9+ExgjCwO4Kmmak2r5UC6RsJCL
-         8KKLQeTQjogfO0ePGfWqS0wNbZHCQq3mmG1tZQTkntPEPx2ch1LPrxVCROG63Rv0w/Xf
-         56VD/0HfdhM9EPbPE2o0Qjsrjh4U6qLgIYafgkpLjc5IWUESAZS4q5EPhmJhUoR7Af1I
-         5UrMChIu5XMEHhzVLRVqnYjj24lrm6dtT1PU81wYmPPhJ09bYSI1o61PDN2VphUf/6lI
-         EQWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=26ZIBRUEZIPtCeugGBeQrsgT3aaPi/jFrSW3XtqmO4E=;
-        b=NDG4hEKsFpIk6twQf8NdMRFiSfAFbQlqMq1bjIVflbuuVJcDZGzH6mhn5dSQfBu82g
-         n3XTH91X2qX3D0KYda1UUDoRrakEWZX8on6RSVQszN9SgToZpvvjgMrqwwSRltPkA3qh
-         Sy94EJ4WW03Ln9EoR4exiRxuLQs7Y6qXY0BVnjVrnDJ82PQxMDkRxxrFHHAg5/zq4eem
-         cm44ldW1U8QiBfvDAb3k0KdHvf3yF9KECWoWFaS0Vlygufx0d3YAiTn98wMKU9Ck45RT
-         BWhU44Guci3bdetfwHB31n74kCWWXX4uSEbI5Taojks1EAPo9lPiwBJGSgK50GDHKrJK
-         YLvA==
-X-Gm-Message-State: AJIora/t4DTEghgjSji2n9eD/ylNuLPj/t0zphrzVzXSOpicGyW93+fL
-        KF9pBOd//hiwHMn7y1PqUW0=
-X-Google-Smtp-Source: AGRyM1tilyHqgJTXrJU1LG7dIY6Y7oBwOtiPbyUrYr/8vnrGlc6jHnz2pPhlEKAouHlMINKMc7UTTw==
-X-Received: by 2002:a17:90b:4b8c:b0:1ec:c7b8:7cb9 with SMTP id lr12-20020a17090b4b8c00b001ecc7b87cb9mr4345566pjb.86.1656490075939;
-        Wed, 29 Jun 2022 01:07:55 -0700 (PDT)
-Received: from sebin-inspiron.bbrouter ([103.160.233.84])
-        by smtp.gmail.com with ESMTPSA id kk2-20020a17090b4a0200b001cd4989febcsm1398292pjb.8.2022.06.29.01.07.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 01:07:55 -0700 (PDT)
-From:   SebinSebastian <mailmesebin00@gmail.com>
-Cc:     mailmesebin00@gmail.com, skhan@linuxfoundation.org,
-        Neal Liu <neal_liu@aspeedtech.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH -next] usb: gadget: dereference before null check
-Date:   Wed, 29 Jun 2022 13:37:25 +0530
-Message-Id: <20220629080726.107297-1-mailmesebin00@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 29 Jun 2022 04:07:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85213B574;
+        Wed, 29 Jun 2022 01:07:36 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 79B8D66015AE;
+        Wed, 29 Jun 2022 09:07:34 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656490055;
+        bh=2x7JJI7Gpw9v/avN+IvIawiJAZWgc780v4UFmC7WN1M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KIpXSyrfyDOlg0nVmlbqYjC3ymVb5Sap7cwjq6Udb6iHNuvrq9iIMOa/2ca4p4V/5
+         P/kJAMUJa/ciPMEkWhzKE30x2Zz9KoSJXwZFAa9Aq6AsRxgQZQpsmgNT2zKWSAObba
+         vJMVJVOh+/82uJjnZ1HBPPjeNIcBIR7X5qXvMCq1GXYCvOOdFgcAYuPRFnxN7oVa0f
+         yVQiDkg+yDZ3JPMRaB3cnTWx47bg8fBBB2zx9aMQijBlEXSK9iiEGRx/Emi09q2BGT
+         BUXkBXOxHvhjq0d4HQoopaqO0/2SXdiKbvCSZ4DcIvUnXlkJLboMNEEKkg4HQYXGWF
+         mvqB6VSuVbclg==
+Message-ID: <4329eb0e-eb4b-f0d2-358f-e1d15a9c49de@collabora.com>
+Date:   Wed, 29 Jun 2022 10:07:31 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] usb: gadget: f_uac1: add interface association
+ descriptor
+Content-Language: en-US
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Pavel Hofman <pavel.hofman@ivitera.com>,
+        Julian Scheel <julian@jusst.de>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Yunhao Tian <t123yh.xyz@gmail.com>,
+        xin lin <xin.lin@mediatek.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220629021304.21725-1-chunfeng.yun@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220629021304.21725-1-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix coverity warning dereferencing before null check. _ep and desc is
-dereferenced on all paths until the check for null. Move the
-initializations after the check for null.
-Coverity issue: 1518209
+Il 29/06/22 04:13, Chunfeng Yun ha scritto:
+> From: xin lin <xin.lin@mediatek.com>
+> 
+> When we want to use a composite device that supports UVC, UAC1 and
+> ADB at the same time, encounter that UAC1 can't work when connected
+> to windows 10 system.
+> from the online documents of microsoft, "overview of enumeration of
+> interface collections on usb composite devices", it recommends that
+> vendors use IADs (interface association descriptor) to define
+> interface collections.
+> After addding IAD, we can fix the issue.
+> 
+> Signed-off-by: xin lin <xin.lin@mediatek.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-Signed-off-by: SebinSebastian <mailmesebin00@gmail.com>
----
- drivers/usb/gadget/udc/aspeed_udc.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
-index d75a4e070bf7..96f8193fca15 100644
---- a/drivers/usb/gadget/udc/aspeed_udc.c
-+++ b/drivers/usb/gadget/udc/aspeed_udc.c
-@@ -341,10 +341,6 @@ static void ast_udc_stop_activity(struct ast_udc_dev *udc)
- static int ast_udc_ep_enable(struct usb_ep *_ep,
- 			     const struct usb_endpoint_descriptor *desc)
- {
--	u16 maxpacket = usb_endpoint_maxp(desc);
--	struct ast_udc_ep *ep = to_ast_ep(_ep);
--	struct ast_udc_dev *udc = ep->udc;
--	u8 epnum = usb_endpoint_num(desc);
- 	unsigned long flags;
- 	u32 ep_conf = 0;
- 	u8 dir_in;
-@@ -356,6 +352,11 @@ static int ast_udc_ep_enable(struct usb_ep *_ep,
- 		return -EINVAL;
- 	}
-
-+	u16 maxpacket = usb_endpoint_maxp(desc);
-+	struct ast_udc_ep *ep = to_ast_ep(_ep);
-+	struct ast_udc_dev *udc = ep->udc;
-+	u8 epnum = usb_endpoint_num(desc);
-+
- 	if (!udc->driver) {
- 		EP_DBG(ep, "bogus device state\n");
- 		return -ESHUTDOWN;
---
-2.34.1
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 

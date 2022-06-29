@@ -2,52 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9618C55FDFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CCE55FE02
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233452AbiF2K6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 06:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
+        id S233455AbiF2K7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 06:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232129AbiF2K6M (ORCPT
+        with ESMTP id S233453AbiF2K7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 06:58:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9F5A457
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:58:11 -0700 (PDT)
+        Wed, 29 Jun 2022 06:59:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325593E0E5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:59:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1659461598
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 10:58:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17563C341C8;
-        Wed, 29 Jun 2022 10:58:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9007CB81F00
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 10:59:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10E97C34114;
+        Wed, 29 Jun 2022 10:59:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656500290;
-        bh=eXMXjPQfilPFIwhMFsvO2FusOcPMUkuU5iKTUzRj1Gs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pC5lR2Xq8G7+eSWtXv114v1+OI+V22onDAF6LMXnLy5l3VLJfxohL89vQrGR6d18r
-         c9iZrVl1vHPW0WB/M/xkn4LIL9bv64Ehpkr2Sp+YhYuWLG54ZOH0CFrAiG9aGHHDqf
-         j1OLs7lrRng03znvWjGA7YnrtRC00+SXDALKHiUmphI04hh6ZC3QLIbtK0K4N31euq
-         qqmHmjVUnlduGgZ9I/ZRCyd8f1quQOnYHHM0Uw6rv9QF98c59XLY84rKur0zypAvSK
-         CZtu6rB1VH6KVSYINoS0xKW1HKNK0o5JvKB2vWV8w6C+KM2Q2B9lOZTYBTiG5P3rGd
-         Bozvd8HlW49gA==
-Date:   Wed, 29 Jun 2022 11:58:05 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] ASoC: codecs: wsa883x: add control, dapm widgets and
- map
-Message-ID: <YrwwPbm0sL1RGwjO@sirena.org.uk>
-References: <20220629090644.67982-1-srinivas.kandagatla@linaro.org>
- <20220629090644.67982-4-srinivas.kandagatla@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gcLfZaC9ZTnbhhTf"
-Content-Disposition: inline
-In-Reply-To: <20220629090644.67982-4-srinivas.kandagatla@linaro.org>
-X-Cookie: Booths for two or more.
+        s=k20201202; t=1656500341;
+        bh=sQufmCz5FhplH4cuoGsepfj3uW9p51dBjPkETSTm9t8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LSvHg7H56wNozRjkmzoGm2fiZW2JLil7UKerWhjBvJqwg6+Z6RnzjOdtdx35PWCfG
+         cyLahYh7OIV31q8XJJ4XBMkpE2Emb1gMAXS+jtdPUQItrfBomKoCPb/kzxLrw1K078
+         0/v31grCir72SvKHO15jRZHHrJiqr6Ma8O6vsseXC32AqirS52QNZr6vkqBkP0LpOd
+         kruILHZpn1AjKRkiDg+BAMjrI1FlfL5Oc0UT0iBhwp0P7rtdRPMAz922dfkNXNS+I1
+         TXM60WTUIjV3KYq7c+3YL+BWTfMAbtRFGoPeOP+w989NkXDdjp9wW54pWR0/TbC4KW
+         4suR4vHCkIBaQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o6VPO-0042rk-R0;
+        Wed, 29 Jun 2022 11:58:59 +0100
+Date:   Wed, 29 Jun 2022 11:58:58 +0100
+Message-ID: <87wncz20st.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V13 05/13] irqchip: Add Loongson PCH LPC controller support
+In-Reply-To: <1656329997-20524-6-git-send-email-lvjianmin@loongson.cn>
+References: <1656329997-20524-1-git-send-email-lvjianmin@loongson.cn>
+        <1656329997-20524-6-git-send-email-lvjianmin@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,65 +70,330 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---gcLfZaC9ZTnbhhTf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Wed, Jun 29, 2022 at 10:06:43AM +0100, Srinivas Kandagatla wrote:
-
-> +static int wsa_dev_mode_put(struct snd_kcontrol *kcontrol,
-> +			    struct snd_ctl_elem_value *ucontrol)
-> +{
-> +	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
-> +	struct wsa883x_priv *wsa883x = snd_soc_component_get_drvdata(component);
+On Mon, 27 Jun 2022 12:39:49 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> 
+> From: Huacai Chen <chenhuacai@loongson.cn>
+> 
+> PCH-LPC stands for "LPC Interrupts" that described in Section 24.3 of
+> "Loongson 7A1000 Bridge User Manual". For more information please refer
+> Documentation/loongarch/irq-chip-model.rst.
+> 
+> Co-developed-by: Jianmin Lv <lvjianmin@loongson.cn>
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  arch/loongarch/include/asm/irq.h       |   4 +-
+>  arch/loongarch/kernel/irq.c            |   1 -
+>  drivers/irqchip/Kconfig                |   8 ++
+>  drivers/irqchip/Makefile               |   1 +
+>  drivers/irqchip/irq-loongson-pch-lpc.c | 203 +++++++++++++++++++++++++++++++++
+>  5 files changed, 214 insertions(+), 3 deletions(-)
+>  create mode 100644 drivers/irqchip/irq-loongson-pch-lpc.c
+> 
+> diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
+> index ace3ea6..48c0ce4 100644
+> --- a/arch/loongarch/include/asm/irq.h
+> +++ b/arch/loongarch/include/asm/irq.h
+> @@ -104,7 +104,7 @@ struct irq_domain *eiointc_acpi_init(struct irq_domain *parent,
+>  
+>  struct irq_domain *htvec_acpi_init(struct irq_domain *parent,
+>  					struct acpi_madt_ht_pic *acpi_htvec);
+> -struct irq_domain *pch_lpc_acpi_init(struct irq_domain *parent,
+> +int pch_lpc_acpi_init(struct irq_domain *parent,
+>  					struct acpi_madt_lpc_pic *acpi_pchlpc);
+>  struct irq_domain *pch_msi_acpi_init(struct irq_domain *parent,
+>  					struct acpi_madt_msi_pic *acpi_pchmsi);
+> @@ -121,7 +121,7 @@ struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
+>  
+>  extern struct irq_domain *cpu_domain;
+>  extern struct irq_domain *liointc_domain;
+> -extern struct irq_domain *pch_lpc_domain;
+> +extern struct fwnode_handle *pch_lpc_handle;
+>  extern struct irq_domain *pch_msi_domain[MAX_IO_PICS];
+>  extern struct irq_domain *pch_pic_domain[MAX_IO_PICS];
+>  
+> diff --git a/arch/loongarch/kernel/irq.c b/arch/loongarch/kernel/irq.c
+> index b34b8d7..07d6059 100644
+> --- a/arch/loongarch/kernel/irq.c
+> +++ b/arch/loongarch/kernel/irq.c
+> @@ -27,7 +27,6 @@
+>  
+>  struct irq_domain *cpu_domain;
+>  struct irq_domain *liointc_domain;
+> -struct irq_domain *pch_lpc_domain;
+>  struct irq_domain *pch_msi_domain[MAX_IO_PICS];
+>  struct irq_domain *pch_pic_domain[MAX_IO_PICS];
+>  
+> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> index 1f23a6b..c1d527f 100644
+> --- a/drivers/irqchip/Kconfig
+> +++ b/drivers/irqchip/Kconfig
+> @@ -591,6 +591,14 @@ config LOONGSON_PCH_MSI
+>  	help
+>  	  Support for the Loongson PCH MSI Controller.
+>  
+> +config LOONGSON_PCH_LPC
+> +	bool "Loongson PCH LPC Controller"
+> +	depends on MACH_LOONGSON64
+> +	default (MACH_LOONGSON64 && LOONGARCH)
+> +	select IRQ_DOMAIN_HIERARCHY
+> +	help
+> +	  Support for the Loongson PCH LPC Controller.
 > +
-> +	if (wsa883x->dev_mode == ucontrol->value.enumerated.item[0])
+>  config MST_IRQ
+>  	bool "MStar Interrupt Controller"
+>  	depends on ARCH_MEDIATEK || ARCH_MSTARV7 || COMPILE_TEST
+> diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
+> index 5b67450..242b8b3 100644
+> --- a/drivers/irqchip/Makefile
+> +++ b/drivers/irqchip/Makefile
+> @@ -108,6 +108,7 @@ obj-$(CONFIG_LOONGSON_HTPIC)		+= irq-loongson-htpic.o
+>  obj-$(CONFIG_LOONGSON_HTVEC)		+= irq-loongson-htvec.o
+>  obj-$(CONFIG_LOONGSON_PCH_PIC)		+= irq-loongson-pch-pic.o
+>  obj-$(CONFIG_LOONGSON_PCH_MSI)		+= irq-loongson-pch-msi.o
+> +obj-$(CONFIG_LOONGSON_PCH_LPC)		+= irq-loongson-pch-lpc.o
+>  obj-$(CONFIG_MST_IRQ)			+= irq-mst-intc.o
+>  obj-$(CONFIG_SL28CPLD_INTC)		+= irq-sl28cpld.o
+>  obj-$(CONFIG_MACH_REALTEK_RTL)		+= irq-realtek-rtl.o
+> diff --git a/drivers/irqchip/irq-loongson-pch-lpc.c b/drivers/irqchip/irq-loongson-pch-lpc.c
+> new file mode 100644
+> index 0000000..7e4d89a
+> --- /dev/null
+> +++ b/drivers/irqchip/irq-loongson-pch-lpc.c
+> @@ -0,0 +1,203 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Loongson LPC Interrupt Controller support
+> + *
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +
+> +#define pr_fmt(fmt) "lpc: " fmt
+> +
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqchip.h>
+> +#include <linux/irqchip/chained_irq.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/kernel.h>
+> +
+> +/* Registers */
+> +#define LPC_INT_CTL		0x00
+> +#define LPC_INT_ENA		0x04
+> +#define LPC_INT_STS		0x08
+> +#define LPC_INT_CLR		0x0c
+> +#define LPC_INT_POL		0x10
+> +#define LPC_COUNT		16
+> +
+> +struct pch_lpc {
+> +	void __iomem		*base;
+> +	struct irq_domain	*lpc_domain;
+> +	raw_spinlock_t		lpc_lock;
+> +	u32			saved_reg_ctl;
+> +	u32			saved_reg_ena;
+> +	u32			saved_reg_pol;
+> +};
+> +
+> +struct fwnode_handle *pch_lpc_handle;
+> +
+> +static void ack_lpc_irq(struct irq_data *d)
+> +{
+> +	unsigned long flags;
+> +	struct pch_lpc *priv = d->domain->host_data;
+> +
+> +	raw_spin_lock_irqsave(&priv->lpc_lock, flags);
+> +	writel(0x1 << d->hwirq, priv->base + LPC_INT_CLR);
+> +	raw_spin_unlock_irqrestore(&priv->lpc_lock, flags);
+> +}
+> +static void mask_lpc_irq(struct irq_data *d)
+> +{
+> +	unsigned long flags;
+> +	struct pch_lpc *priv = d->domain->host_data;
+> +
+> +	raw_spin_lock_irqsave(&priv->lpc_lock, flags);
+> +	writel(readl(priv->base + LPC_INT_ENA) & (~(0x1 << (d->hwirq))),
+> +			priv->base + LPC_INT_ENA);
+> +	raw_spin_unlock_irqrestore(&priv->lpc_lock, flags);
+> +}
+> +
+> +static void unmask_lpc_irq(struct irq_data *d)
+> +{
+> +	unsigned long flags;
+> +	struct pch_lpc *priv = d->domain->host_data;
+> +
+> +	raw_spin_lock_irqsave(&priv->lpc_lock, flags);
+> +	writel(readl(priv->base + LPC_INT_ENA) | (0x1 << (d->hwirq)),
+> +			priv->base + LPC_INT_ENA);
+> +	raw_spin_unlock_irqrestore(&priv->lpc_lock, flags);
+> +}
+> +
+> +static int lpc_set_type(struct irq_data *d, unsigned int type)
+> +{
+> +	u32 val;
+> +	u32 mask = 0x1 << (d->hwirq);
+> +	struct pch_lpc *priv = d->domain->host_data;
+> +
+> +	if (!(type & IRQ_TYPE_LEVEL_MASK))
 > +		return 0;
 > +
-> +	wsa883x->dev_mode = ucontrol->value.enumerated.item[0];
+> +	val = readl(priv->base + LPC_INT_POL);
+> +
+> +	if (type == IRQ_TYPE_LEVEL_HIGH)
+> +		val |= mask;
+> +	else
+> +		val &= ~mask;
+> +
+> +	writel(val, priv->base + LPC_INT_POL);
 > +
 > +	return 0;
 > +}
+> +
+> +static struct irq_chip pch_lpc_irq_chip = {
 
-This isn't returning 1 when the value changes so will miss generating
-events, please test the driver with mixer-test.
+Make this const.
 
-> +	switch (event) {
-> +	case SND_SOC_DAPM_POST_PMU:
-> +		if (wsa883x->dev_mode == RECEIVER) {
-> +			snd_soc_component_write_field(component, WSA883X_CDC_PATH_MODE,
-> +						      WSA883X_RXD_MODE_MASK,
-> +						      WSA883X_RXD_MODE_HIFI);
-> +			snd_soc_component_write_field(component, WSA883X_SPKR_PWM_CLK_CTL,
-> +						      WSA883X_SPKR_PWM_FREQ_SEL_MASK,
-> +						      WSA883X_SPKR_PWM_FREQ_F600KHZ);
-> +			snd_soc_component_write_field(component, WSA883X_DRE_CTL_0,
-> +						       WSA883X_DRE_PROG_DELAY_MASK, 0x0);
-> +		} else if (wsa883x->dev_mode == SPEAKER) {
+> +	.name			= "PCH LPC",
+> +	.irq_mask		= mask_lpc_irq,
+> +	.irq_unmask		= unmask_lpc_irq,
+> +	.irq_ack		= ack_lpc_irq,
+> +	.irq_set_type		= lpc_set_type,
 
-This looks like it'd be better written as a switch statement.
+nit: please use the same format for all callbacks: lpc_irq_OPERATION
+(lpc_irq_mask, lpc_irq_set_type...), which makes it much easier to
+read.
 
-> +static const struct snd_kcontrol_new wsa883x_snd_controls[] = {
-> +	SOC_SINGLE_RANGE_TLV("PA Gain", WSA883X_DRE_CTL_1, 1,
-> +			     0x0, 0x1f, 1, pa_gain),
+> +	.flags			= IRQCHIP_SKIP_SET_WAKE,
+> +};
+> +
+> +static void lpc_irq_dispatch(struct irq_desc *desc)
+> +{
+> +	u32 pending, bit, virq;
+> +	struct irq_chip *chip = irq_desc_get_chip(desc);
+> +	struct pch_lpc *priv = irq_desc_get_handler_data(desc);
+> +
+> +	chained_irq_enter(chip, desc);
+> +
+> +	pending = readl(priv->base + LPC_INT_ENA);
+> +	pending &= readl(priv->base + LPC_INT_STS);
+> +	if (!pending)
+> +		spurious_interrupt();
+> +
+> +	while (pending) {
+> +		bit = __ffs(pending);
+> +		virq = irq_linear_revmap(priv->lpc_domain, bit);
+> +
+> +		generic_handle_irq(bit);
 
-Volume controls should end in Volume, mixer-test should also have caught
-this.
+Replace the whole thing with a call to generic_handle_domain_irq(). No
+new code should ever have to use generic_handle_irq().
 
---gcLfZaC9ZTnbhhTf
-Content-Type: application/pgp-signature; name="signature.asc"
+> +		pending &= ~BIT(bit);
+> +	}
+> +	chained_irq_exit(chip, desc);
+> +}
+> +
+> +static int pch_lpc_map(struct irq_domain *d, unsigned int irq,
+> +			irq_hw_number_t hw)
+> +{
+> +	irq_set_chip_and_handler(irq, &pch_lpc_irq_chip, handle_level_irq);
+> +	return 0;
+> +}
+> +
+> +static const struct irq_domain_ops pch_lpc_domain_ops = {
+> +	.map 		= pch_lpc_map,
+> +	.translate	= irq_domain_translate_twocell,
+> +};
+> +
+> +static void pch_lpc_reset(struct pch_lpc *priv)
+> +{
+> +	/* Enable the LPC interrupt, bit31: en  bit30: edge */
+> +	writel(0x80000000, priv->base + LPC_INT_CTL);
 
------BEGIN PGP SIGNATURE-----
+Please don't hardcode numbers. Add the proper bit definitions.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK8MD0ACgkQJNaLcl1U
-h9BXjwf+MBbQuEiO10aKYLzGCSekPsbbLZ5nbdrQRJrPPHQBz7GZeCm94ocxTqW6
-urpKw5bfp4TZu28szf0jv2G/i6/pBDk+1gCbquKS//eps+rQyse3GmQ5Y/lV5lUT
-8EumngMnlYMHMrBNK2iHDoYNAtrT7dYnoy3EWuhK8nR8End9AaJtTeBBztRWYU8T
-SLvvPyzwBJd0gSSUzxnQG1IIHqfwLuDO/10fu2Y2Cv9DXhBAlNMivycxdy7UvmP0
-aiofhOWakZx8fBM7LwQlxZVw0YB5UQHUrMMOWn4injxV6Ko0Xgoafios15wPpAr9
-6JJlYCnoKRcGsjs4OAUYgwDMqRXuRg==
-=91P7
------END PGP SIGNATURE-----
+> +	writel(0, priv->base + LPC_INT_ENA);
+> +	/* Clear all 18-bit interrpt bit */
+> +	writel(0x3ffff, priv->base + LPC_INT_CLR);
 
---gcLfZaC9ZTnbhhTf--
+If that's just a mask, then use GENMASK(17, 0) instead.
+
+> +}
+> +
+> +static int pch_lpc_disabled(struct pch_lpc *priv)
+> +{
+> +	return (readl(priv->base + LPC_INT_ENA) == 0xffffffff) &&
+> +			(readl(priv->base + LPC_INT_STS) == 0xffffffff);
+> +}
+> +
+> +int __init pch_lpc_acpi_init(struct irq_domain *parent,
+> +					struct acpi_madt_lpc_pic *acpi_pchlpc)
+> +{
+> +	int parent_irq;
+> +	struct pch_lpc *priv;
+> +	struct irq_fwspec fwspec;
+> +	struct fwnode_handle *irq_handle;
+> +
+> +	if (!acpi_pchlpc)
+> +		return -EINVAL;
+> +
+> +	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	raw_spin_lock_init(&priv->lpc_lock);
+> +
+> +	priv->base = ioremap(acpi_pchlpc->address, acpi_pchlpc->size);
+> +	if (!priv->base)
+> +		goto free_priv;
+> +
+> +	if (pch_lpc_disabled(priv)) {
+> +		pr_err("Failed to get LPC status\n");
+> +		goto iounmap_base;
+> +	}
+> +
+> +	irq_handle = irq_domain_alloc_named_fwnode("lpcintc");
+> +	if (!irq_handle) {
+> +		pr_err("Unable to allocate domain handle\n");
+> +		goto iounmap_base;
+> +	}
+> +
+> +	priv->lpc_domain = irq_domain_create_linear(irq_handle, LPC_COUNT,
+> +					&pch_lpc_domain_ops, priv);
+> +	if (!priv->lpc_domain) {
+> +		pr_err("Failed to create IRQ domain\n");
+> +		goto iounmap_base;
+
+You also need to free the fwnode.
+
+> +	}
+> +	pch_lpc_reset(priv);
+> +
+> +	fwspec.fwnode = parent->fwnode;
+> +	fwspec.param[0] = acpi_pchlpc->cascade;
+> +	fwspec.param[1] = IRQ_TYPE_LEVEL_HIGH;
+> +	fwspec.param_count = 2;
+> +	parent_irq = irq_create_fwspec_mapping(&fwspec);
+> +	irq_set_chained_handler_and_data(parent_irq, lpc_irq_dispatch, priv);
+> +
+> +	pch_lpc_handle = irq_handle;
+> +	return 0;
+> +
+> +iounmap_base:
+> +	iounmap(priv->base);
+> +free_priv:
+> +	kfree(priv);
+> +
+> +	return -ENOMEM;
+> +}
+> -- 
+> 1.8.3.1
+> 
+> 
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

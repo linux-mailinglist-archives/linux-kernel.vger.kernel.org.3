@@ -2,59 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C781855FC38
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55DE155FC56
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 11:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232988AbiF2JkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 05:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52250 "EHLO
+        id S233001AbiF2JlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 05:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbiF2JkF (ORCPT
+        with ESMTP id S229824AbiF2JlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 05:40:05 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E3D35A92;
-        Wed, 29 Jun 2022 02:40:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656495605; x=1688031605;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=UvfKTTXIzcaGutYTfgsUtP7uWtw3jgtcsccJyaLDLuk=;
-  b=BijxxWGDyA/vsBYprVv5RV80pCG9qK4jh/WzPE1I+DeKA3qAV7o4bT+S
-   OlmDQPKq4NxCZ9cdbU10OOF5pzd3g9o3paph5+jtwE1Gdeu0Euz4jRfZM
-   5lrfq7iyTQsn00AOs9pWCy6TIkxK+WKEt7C9FqG7LOz7edgy7wqA6z4mJ
-   wQe5Yp77Wo6IrTh2uePugADrmnNvNPr/mtbV8tLWfLnfro6ddVPsrZBIK
-   cpAKBAElUuxEVjSqTmwSJNHXUwfL/fYFzP+xOoE/uONPapzFAuoMtQ6NB
-   G5tTIYeM2gMQHGM4t7B/aMzHsiqKg5HOzbNwvTyMhFk41+ZGlReVtyhqk
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="283081451"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="283081451"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 02:40:04 -0700
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="595172772"
-Received: from dsummer-mobl.ger.corp.intel.com ([10.252.38.121])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 02:40:02 -0700
-Date:   Wed, 29 Jun 2022 12:40:01 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
+        Wed, 29 Jun 2022 05:41:20 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0C6039825;
+        Wed, 29 Jun 2022 02:41:19 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 9BC6380CD;
+        Wed, 29 Jun 2022 09:36:04 +0000 (UTC)
+Date:   Wed, 29 Jun 2022 12:41:17 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/4] serial: 8250_dw: Rework ->serial_out() LCR write
- retry logic
-In-Reply-To: <CAHp75VevfptcsTTkFvCRsJRxuKX6aJ2zQ5LyH0O8wP+aB4xXHw@mail.gmail.com>
-Message-ID: <bc54d67-e573-9ecc-1650-7e7fc35f7897@linux.intel.com>
-References: <20220628134234.53771-1-ilpo.jarvinen@linux.intel.com> <20220628134234.53771-5-ilpo.jarvinen@linux.intel.com> <CAHp75Vf36sFqX1SL4Sjz6ZgNXP41Nom0Q1s6Psgv9WMFkKtGtg@mail.gmail.com> <29b084c-183b-4a84-2376-2c88eff7d5a@linux.intel.com>
- <CAHp75VevfptcsTTkFvCRsJRxuKX6aJ2zQ5LyH0O8wP+aB4xXHw@mail.gmail.com>
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] serial: 8250: Fix PM usage_count for console handover
+Message-ID: <YrwePdVzSYDygdVA@atomide.com>
+References: <20220628165834.63044-1-ilpo.jarvinen@linux.intel.com>
+ <YrtvOSrrSLGX/coS@smile.fi.intel.com>
+ <YrwZkTcU9IyY2DhN@atomide.com>
+ <5548afe5-20aa-9066-37e7-a3b2b26872e1@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1893331349-1656495604=:1529"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5548afe5-20aa-9066-37e7-a3b2b26872e1@linux.intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,55 +46,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1893331349-1656495604=:1529
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Wed, 29 Jun 2022, Andy Shevchenko wrote:
-
-> On Wed, Jun 29, 2022 at 10:47 AM Ilpo Järvinen
-> <ilpo.jarvinen@linux.intel.com> wrote:
-> > On Tue, 28 Jun 2022, Andy Shevchenko wrote:
-> > > On Tue, Jun 28, 2022 at 3:43 PM Ilpo Järvinen
-> > > <ilpo.jarvinen@linux.intel.com> wrote:
-> > > >
-> > > > Currently dw8250_verify_write() (was dw8250_check_lcr()) nullifies the
-> > > > benefit from differentiated ->serial_out() by having big if tree to
-> > > > select correct write type.
-> > > >
-> > > > Rework the logic such that the LCR write can be retried within the
-> > > > relevant ->serial_out() handler:
-> > > >   1. Move retries counter on the caller level and pass as pointer to
-> > > >      dw8250_verify_write()
-> > > >   2. Make dw8250_verify_write() return bool
-> > > >   3. Retry the write on caller level (if needed)
-> > >
-> > > I'm wondering if it's possible to utilize one of iopoll.h macro here
-> > > instead of copying retries and that not-so-obvious IO poll write.
-> >
-> > Eh, are you suggesting I should do write as a side-effect inside one of
-> > the iopoll.h macros? Because those available seem to only read?
-> >
-> > Or should I create another macro there which writes too?
+* Ilpo Järvinen <ilpo.jarvinen@linux.intel.com> [220629 09:26]:
+> On Wed, 29 Jun 2022, Tony Lindgren wrote:
 > 
-> It seems to me that it would be a macro on top of iopoll's one which
-> will take an op read and op write arguments depending on the case.
+> > * Andy Shevchenko <andriy.shevchenko@linux.intel.com> [220628 21:09]:
+> > > On Tue, Jun 28, 2022 at 07:58:34PM +0300, Ilpo Järvinen wrote:
+> > > > When console is enabled, univ8250_console_setup() calls
+> > > > serial8250_console_setup() before .dev is set to uart_port. Therefore,
+> > > > it will not call pm_runtime_get_sync(). Later, when the actual driver
+> > > > is going to take over univ8250_console_exit() is called. As .dev is
+> > > > already set, serial8250_console_exit() makes pm_runtime_put_sync() call
+> > > > with usage count being zero triggering PM usage count warning
+> > > > (extra debug for univ8250_console_setup(), univ8250_console_exit(), and
+> > > > serial8250_register_ports()):
+> > 
+> > Hmm so serial8250_console_setup() calls pm_runtime_get_sync() if dev
+> > exists..
+> > 
+> > > > diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
+> > > > index 57e86133af4f..2e83e7367441 100644
+> > > > --- a/drivers/tty/serial/8250/8250_core.c
+> > > > +++ b/drivers/tty/serial/8250/8250_core.c
+> > > > @@ -23,6 +23,7 @@
+> > > >  #include <linux/sysrq.h>
+> > > >  #include <linux/delay.h>
+> > > >  #include <linux/platform_device.h>
+> > > > +#include <linux/pm_runtime.h>
+> > > >  #include <linux/tty.h>
+> > > >  #include <linux/ratelimit.h>
+> > > >  #include <linux/tty_flip.h>
+> > > > @@ -558,6 +559,9 @@ serial8250_register_ports(struct uart_driver *drv, struct device *dev)
+> > > >  
+> > > >  		up->port.dev = dev;
+> > > >  
+> > > > +		if (uart_console_enabled(&up->port))
+> > > > +			pm_runtime_get_sync(up->port.dev);
+> > > > +
+> > > >  		serial8250_apply_quirks(up);
+> > > >  		uart_add_one_port(drv, &up->port);
+> > > >  	}
+> > 
+> > ..and now we also call it here. Are there now cases where pm_runtime_get_sync()
+> > gets called twice potentially or does uart_console_enabled() ensure that is
+> > not the case already?
+> 
+> The code in serial8250_register_ports() right before that context block is 
+> this:
+> 
+> 		if (up->port.dev)
+> 			continue;
+> 
+> If serial8250_console_setup() already saw .dev != NULL, we take that 
+> continue and pm_runtime_get_sync() will not get called again here.
 
-The thing is those iopoll macros don't return until the timeout is 
-exhausted so I don't think I can reuse them easily for this task ("on top 
-of iopoll's one")? That is, w/o some major side-effect hack (which is 
-IMHO a no-go).
+OK thanks. Looks good to me:
 
--- 
- i.
-
-> Note, for that special case you would need a custom write op instead
-> of simple __raw_writeq().
->
-> Try and if it looks better, convert, otherwise it would be nice to
-> hear why it won't fly in your opinion.
-
---8323329-1893331349-1656495604=:1529--
+Reviewed-by: Tony Lindgren <tony@atomide.com>
+Tested-by: Tony Lindgren <tony@atomide.com>

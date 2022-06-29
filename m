@@ -2,64 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6C655FE59
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9596B55FE5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 13:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiF2LRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 07:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51906 "EHLO
+        id S229677AbiF2LSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 07:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiF2LRC (ORCPT
+        with ESMTP id S229696AbiF2LSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 07:17:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C1D43E5D8
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 04:17:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656501420;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FXLoEvEnMaWJAAWZz9xO07LVm1h+eXNsfUhntDr1uvU=;
-        b=YK7J05fO0kxhjjjbG2NRBXm1E0qcoVSdCwWgrYN1ftJt5tHVoYfBFzqSd3QPgemGogvTx4
-        TmrEIYRLxY5RE6lWOFjbt1KsJK5hh94yMvrbu1tsTyZoB8MM83vAisZebDhVJHCR62FxS0
-        QoNV6oQgR52/zF4d1NXoSOGaKuPOp38=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-604-nMBH4o-SM9mnV5zZMfqJTQ-1; Wed, 29 Jun 2022 07:16:56 -0400
-X-MC-Unique: nMBH4o-SM9mnV5zZMfqJTQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 681BD100EDD5;
-        Wed, 29 Jun 2022 11:16:56 +0000 (UTC)
-Received: from starship (unknown [10.40.194.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E1C541121314;
-        Wed, 29 Jun 2022 11:16:53 +0000 (UTC)
-Message-ID: <7e05e0befa13af05f1e5f0fd8658bc4e7bdf764f.camel@redhat.com>
-Subject: Re: [PATCH v2 00/21] KVM: x86: Event/exception fixes and cleanups
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
-        Peter Shier <pshier@google.com>
-Date:   Wed, 29 Jun 2022 14:16:52 +0300
-In-Reply-To: <20220614204730.3359543-1-seanjc@google.com>
-References: <20220614204730.3359543-1-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 29 Jun 2022 07:18:47 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28B721244
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 04:18:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1656501525; x=1688037525;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8DEsZcP8wnNuDkDTsKoZkNehiHn9QvzTdKDqdcGcm/U=;
+  b=UFC4BFlUXAeChi4Q6b1fovr9DRzbk65XrP5NTFUYMypwA7wG2PPBCPCd
+   vgs2Zg9UNyWwCosW2U+asV3VJXLqIYC+a7QPlvGM2OLDAWYL+ijKNJWyT
+   AX9RLKIJ3DeOO+h8p33a/amPUEp0noEBduk80JIBu55OGspB9HXiRH2fQ
+   5exo7FzvzjzH0qQH6UG6NMoL4JvEZYaMk9z4ebXJufKbpn932EK0lb4Rd
+   avRkz3mRSZuKChnxE/KLIdpSrP3etpoM5soizegTw9pybGXHtH/mc5f1e
+   q6L2LiDpFkkwQCWBlVBqsJMSOIswGq75OtkDsm+nk6HQy9nxDRn6c9VNB
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.92,231,1650902400"; 
+   d="scan'208";a="203051772"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 29 Jun 2022 19:18:43 +0800
+IronPort-SDR: rgj8N5KJHh5t2dLf18UqO56/fiHCLj6R+A1ePOPSYVJWnJacsDrBZGwwrQfy38Ar+hgd9iKEVb
+ umBjJ2psRaco9eA+maqaGxft+pjhnUyHhwweJymgeS43n8uu0vnvARfHEkBk2TJ9iSjVZEaSlj
+ RBijUXGSpBX/ynH77JRZEZ+I7TLfAfO3CDLwmsygcPIUgAM+vBDz4EkkvnnRsePcu3vKbSW4Ir
+ 4bi8ECzJWj8/E/trxkJPC2QMwVSv4B6Q9+AaoaGdWCDva8/TGEWShJysi2Wd2/d0RmEFCXXJiH
+ k4NcCZek2kpWBYFBYniur5Jn
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Jun 2022 03:36:22 -0700
+IronPort-SDR: ZulOvm7cYqhqkdCfznEaEXHg1YCidxdP1CGmQLVgp/sfB4AwD4a4unfTZGz/sv3OZFlWFqw5K/
+ Fu1xQWA5e36bHM/4QfKyG+XJjuY6s+40aZWPkVYHMW1HQvvpopvkdl5iVRY9Jg5SQP5GUfmm9n
+ G3N1c23hFaJ+2xyuVGT+Mr0XCEbZP5Y8Iq/YFa7lbp4TSPwNk/IfDDTovjBaaU/pfNX7XyBYxO
+ /bHd9dw2tmISXcMrf7Nf5tFJ19+FeIpppUI1LyTlKKEvSP2oM79PLv5uQq3YSDafD0f9TATTxK
+ kqQ=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Jun 2022 04:18:42 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LXzVV5BqYz1Rwnm
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 04:18:42 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1656501522; x=1659093523; bh=8DEsZcP8wnNuDkDTsKoZkNehiHn9QvzTdKD
+        qdcGcm/U=; b=JWDF71mJGb2IWvw1oNKGVMrot3qC8Q0V70BLGPr+42MHvIeqKez
+        utVbe6sM3GczzDvhOj/XV1Lvdd9A5voKMbCAr/+qWRUNHLTH9tujow6Wv/+SIhf+
+        +JnrHBwZykNYo9Sz4/oIsBWrSZJ9joy5gzXkfSn1h3Emr8gacYoPteLuZISjfsVa
+        bwySsHOjqPLn2afj+z8KqXCR61BLd2r3Ryk/RPhvCGRVVhuOrlCxV8XjMeplMpr2
+        QLA+Iz3J0gx0Mhsp7R9WaCbuSrVo/GkuEmBkhrBc7+5ahtUmAPfe8uOEkEec5X3P
+        CuR2KSvz5oMjpS9Jrawl4lXr5F9hAiJrD7w==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 7rFINyPJl0Ds for <linux-kernel@vger.kernel.org>;
+        Wed, 29 Jun 2022 04:18:42 -0700 (PDT)
+Received: from [10.225.163.99] (unknown [10.225.163.99])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LXzVT42sjz1RtVk;
+        Wed, 29 Jun 2022 04:18:41 -0700 (PDT)
+Message-ID: <8227ef6a-665f-d16c-e5e4-6e04e2e6ee45@opensource.wdc.com>
+Date:   Wed, 29 Jun 2022 20:18:40 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] ata: pata_cs5535: Fix W=1 warnings
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, s.shtylyov@omp.ru
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1656494324-101603-1-git-send-email-john.garry@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <1656494324-101603-1-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,161 +97,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-14 at 20:47 +0000, Sean Christopherson wrote:
-> The main goal of this series is to fix KVM's longstanding bug of not
-> honoring L1's exception intercepts wants when handling an exception that
-> occurs during delivery of a different exception.  E.g. if L0 and L1 are
-> using shadow paging, and L2 hits a #PF, and then hits another #PF while
-> vectoring the first #PF due to _L1_ not having a shadow page for the IDT,
-> KVM needs to check L1's intercepts before morphing the #PF => #PF => #DF
-> so that the #PF is routed to L1, not injected into L2 as a #DF.
-> 
-> nVMX has hacked around the bug for years by overriding the #PF injector
-> for shadow paging to go straight to VM-Exit, and nSVM has started doing
-> the same.  The hacks mostly work, but they're incomplete, confusing, and
-> lead to other hacky code, e.g. bailing from the emulator because #PF
-> injection forced a VM-Exit and suddenly KVM is back in L1.
-> 
-> Everything leading up to that are related fixes and cleanups I encountered
-> along the way; some through code inspection, some through tests.
-> 
-> v2:
->   - Rebased to kvm/queue (commit 8baacf67c76c) + selftests CPUID
->     overhaul.
->     https://lore.kernel.org/all/20220614200707.3315957-1-seanjc@google.com
->   - Treat KVM_REQ_TRIPLE_FAULT as a pending exception.
-> 
-> v1: https://lore.kernel.org/all/20220311032801.3467418-1-seanjc@google.com
-> 
-> Sean Christopherson (21):
->   KVM: nVMX: Unconditionally purge queued/injected events on nested
->     "exit"
->   KVM: VMX: Drop bits 31:16 when shoving exception error code into VMCS
->   KVM: x86: Don't check for code breakpoints when emulating on exception
->   KVM: nVMX: Treat General Detect #DB (DR7.GD=1) as fault-like
->   KVM: nVMX: Prioritize TSS T-flag #DBs over Monitor Trap Flag
->   KVM: x86: Treat #DBs from the emulator as fault-like (code and
->     DR7.GD=1)
->   KVM: x86: Use DR7_GD macro instead of open coding check in emulator
->   KVM: nVMX: Ignore SIPI that arrives in L2 when vCPU is not in WFS
->   KVM: nVMX: Unconditionally clear mtf_pending on nested VM-Exit
->   KVM: VMX: Inject #PF on ENCLS as "emulated" #PF
->   KVM: x86: Rename kvm_x86_ops.queue_exception to inject_exception
->   KVM: x86: Make kvm_queued_exception a properly named, visible struct
->   KVM: x86: Formalize blocking of nested pending exceptions
->   KVM: x86: Use kvm_queue_exception_e() to queue #DF
->   KVM: x86: Hoist nested event checks above event injection logic
->   KVM: x86: Evaluate ability to inject SMI/NMI/IRQ after potential
->     VM-Exit
->   KVM: x86: Morph pending exceptions to pending VM-Exits at queue time
->   KVM: x86: Treat pending TRIPLE_FAULT requests as pending exceptions
->   KVM: VMX: Update MTF and ICEBP comments to document KVM's subtle
->     behavior
->   KVM: selftests: Use uapi header to get VMX and SVM exit reasons/codes
->   KVM: selftests: Add an x86-only test to verify nested exception
->     queueing
-> 
->  arch/x86/include/asm/kvm-x86-ops.h            |   2 +-
->  arch/x86/include/asm/kvm_host.h               |  35 +-
->  arch/x86/kvm/emulate.c                        |   3 +-
->  arch/x86/kvm/svm/nested.c                     | 102 ++---
->  arch/x86/kvm/svm/svm.c                        |  18 +-
->  arch/x86/kvm/vmx/nested.c                     | 319 +++++++++-----
->  arch/x86/kvm/vmx/sgx.c                        |   2 +-
->  arch/x86/kvm/vmx/vmx.c                        |  53 ++-
->  arch/x86/kvm/x86.c                            | 404 +++++++++++-------
->  arch/x86/kvm/x86.h                            |  11 +-
->  tools/testing/selftests/kvm/.gitignore        |   1 +
->  tools/testing/selftests/kvm/Makefile          |   1 +
->  .../selftests/kvm/include/x86_64/svm_util.h   |   7 +-
->  .../selftests/kvm/include/x86_64/vmx.h        |  51 +--
->  .../kvm/x86_64/nested_exceptions_test.c       | 295 +++++++++++++
->  15 files changed, 886 insertions(+), 418 deletions(-)
->  create mode 100644 tools/testing/selftests/kvm/x86_64/nested_exceptions_test.c
-> 
-> 
-> base-commit: 816967202161955f398ce379f9cbbedcb1eb03cb
+On 6/29/22 18:18, John Garry wrote:
+> x86_64 allmodconfig build with W=3D1 gives these warnings:
+>=20
+> drivers/ata/pata_cs5535.c: In function =E2=80=98cs5535_set_piomode=E2=80=
+=99:
+> drivers/ata/pata_cs5535.c:93:11: error: variable =E2=80=98dummy=E2=80=99=
+ set but not used [-Werror=3Dunused-but-set-variable]
+>   u32 reg, dummy;
+>            ^~~~~
+> drivers/ata/pata_cs5535.c: In function =E2=80=98cs5535_set_dmamode=E2=80=
+=99:
+> drivers/ata/pata_cs5535.c:132:11: error: variable =E2=80=98dummy=E2=80=99=
+ set but not used [-Werror=3Dunused-but-set-variable]
+>   u32 reg, dummy;
+>            ^~~~~
+> cc1: all warnings being treated as errors
+>=20
+> Mark variables 'dummy' as "maybe unused" as they are only ever written =
+in
+> rdmsr() calls.
+>=20
+> Signed-off-by: John Garry <john.garry@huawei.com>
+> Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-Hi Sean and everyone!
- 
- 
-Before I continue reviewing the patch series, I would like you to check if
-I understand the monitor trap/pending debug exception/event injection
-logic on VMX correctly. I was looking at the spec for several hours and I still have more
-questions that answers about it.
- 
-So let me state what I understand:
- 
-1. Event injection (aka eventinj in SVM terms):
- 
-  (VM_ENTRY_INTR_INFO_FIELD/VM_ENTRY_EXCEPTION_ERROR_CODE/VM_ENTRY_INSTRUCTION_LEN)
- 
-  If I understand correctly all event injections types just like on SVM just inject,
-  and never create something pending, and/or drop the injection if event is not allowed
-  (like if EFLAGS.IF is 0). VMX might have some checks that could fail VM entry,
-  if for example you try to inject type 0 (hardware interrupt) and EFLAGS.IF is 0,
-  I haven't checked this)
- 
-  All event injections happen right away, don't deliver any payload (like DR6), etc.
- 
-  Injection types 4/5/6, do the same as injection types 0/2/3 but in addition to that,
-  type 4/6 do a DPL check in IDT, and also these types can promote the RIP prior
-  to pushing it to the exception stack using VM_ENTRY_INSTRUCTION_LEN to be consistent
-  with cases when these trap like events are intercepted, where the interception happens
-  on the start of the instruction despite exceptions being trap-like.
- 
- 
-2. #DB is the only trap like exception that can be pending for one more instruction
-   if MOV SS shadow is on (any other cases?).
-   (AMD just ignores the whole thing, rightfully)
- 
-   That is why we have the GUEST_PENDING_DBG_EXCEPTIONS vmcs field.
-   I understand that it will be written by CPU in case we have VM exit at the moment
-   where #DB is already pending but not yet delivered.
- 
-   That field can also be (sadly) used to "inject" #DB to the guest, if the hypervisor sets it,
-   and this #DB will actually update DR6 and such, and might be delayed/lost.
- 
- 
-3. Facts about MTF:
- 
-   * MTF as a feature is basically 'single step the guest by generating MTF VM exits after each executed
-     instruction', and is enabled in primary execution controls.
- 
-   * MTF is also an 'event', and it can be injected separately by the hypervisor with event type 7,
-     and that has no connection to the 'feature', although usually this injection will be useful
-     when the hypervisor does some kind of re-injection, triggered by the actual MTF feature.
- 
-   * MTF event can be lost, if higher priority VM exit happens, this is why the SDM says about 'pending MTF',
-     which means that MTF vmexit should happen unless something else prevents it and/or higher priority VM exit
-     overrides it.
- 
-   * MTF event is raised (when the primary execution controls bit is enabled) when:
- 
-	- after an injected (vectored), aka eventinj/VM_ENTRY_INTR_INFO_FIELD, done updating the guest state
-	  (that is stack was switched, stuff was pushed to new exception stack, RIP updated to the handler)
-	  I am not 100% sure about this but this seems to be what PRM implies:
- 
-	  "If the “monitor trap flag” VM-execution control is 1 and VM entry is injecting a vectored event (see Section
-	  26.6.1), an MTF VM exit is pending on the instruction boundary before the first instruction following the
-	  VM entry."
- 
-	- If an interrupt and or #DB exception happens prior to executing first instruction of the guest,
-	  then once again MTF will happen on first instruction of the exception/interrupt handler
- 
-	  "If the “monitor trap flag” VM-execution control is 1, VM entry is not injecting an event, and a pending event
-	  (e.g., debug exception or interrupt) is delivered before an instruction can execute, an MTF VM exit is pending
-	  on the instruction boundary following delivery of the event (or any nested exception)."
- 
-	  That means that #DB has higher priority that MTF, but not specified if fault DB or trap DB
- 
-	- If instruction causes exception, once again, on first instruction of the exception handler MTF will happen.
- 
-	- Otherwise after an instruction (or REP iteration) retires.
- 
+Updated for-5.20. Thanks !
 
-If you have more facts about MTF and related stuff and/or if I made a mistake in the above, I am all ears to listen!
+> ---
+> Differences to v1:
+> - Add RB tag (thanks!)
+> - Fix commit message
+>=20
+> diff --git a/drivers/ata/pata_cs5535.c b/drivers/ata/pata_cs5535.c
+> index 6725931f3c35..c2c3238ff84b 100644
+> --- a/drivers/ata/pata_cs5535.c
+> +++ b/drivers/ata/pata_cs5535.c
+> @@ -90,7 +90,7 @@ static void cs5535_set_piomode(struct ata_port *ap, s=
+truct ata_device *adev)
+>  	static const u16 pio_cmd_timings[5] =3D {
+>  		0xF7F4, 0x53F3, 0x13F1, 0x5131, 0x1131
+>  	};
+> -	u32 reg, dummy;
+> +	u32 reg, __maybe_unused dummy;
+>  	struct ata_device *pair =3D ata_dev_pair(adev);
+> =20
+>  	int mode =3D adev->pio_mode - XFER_PIO_0;
+> @@ -129,7 +129,7 @@ static void cs5535_set_dmamode(struct ata_port *ap,=
+ struct ata_device *adev)
+>  	static const u32 mwdma_timings[3] =3D {
+>  		0x7F0FFFF3, 0x7F035352, 0x7F024241
+>  	};
+> -	u32 reg, dummy;
+> +	u32 reg, __maybe_unused dummy;
+>  	int mode =3D adev->dma_mode;
+> =20
+>  	rdmsr(ATAC_CH0D0_DMA + 2 * adev->devno, reg, dummy);
 
-Best regards,
-	Maxim Levitsky
 
+--=20
+Damien Le Moal
+Western Digital Research

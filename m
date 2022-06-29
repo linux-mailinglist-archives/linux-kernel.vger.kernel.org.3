@@ -2,90 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 558D855FD48
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:33:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6181755FD2F
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 12:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233421AbiF2KbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 06:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40662 "EHLO
+        id S233376AbiF2Kdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 06:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233389AbiF2Ka7 (ORCPT
+        with ESMTP id S230306AbiF2Kdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 06:30:59 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A465C3DDD8
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:30:57 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id fi2so31610222ejb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 03:30:57 -0700 (PDT)
+        Wed, 29 Jun 2022 06:33:42 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AA03DDF4;
+        Wed, 29 Jun 2022 03:33:41 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-317741c86fdso143669137b3.2;
+        Wed, 29 Jun 2022 03:33:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AKUBDZoE/jvXM2oq8qe7PZHH+/UTyEsmP4FXnOhfAlU=;
-        b=ZRXo/mzIwR4NbglFfMzMKqwfK/xTZxfEsZO10kcCW22biN5F930DKToHUO+2ckttkj
-         9EMLOKq/8ELduHQr+tDpCKoLJgh3w6vXB85mhD3/CX4vCxMCI4qTXw4eNHg9kHrpfX0x
-         NXWCDcGBrhkQ5ZzTLUruHvztzjzHQqGN9fldjzF+r3ZdZbnoiWBNxqaJ3eL7UjlqQEWr
-         /XWWd2W2xv4T7JVs0wzrXT9XMK+adcZ0HC/aGqVt7AtRqZpBMT0GH4QtcdHw5FIk6y/k
-         q0dz6pSLFCTBlyxSQ+uua7/Fl4zonstATCEhOpcAmX6f8/sFBNuwZFUiwwXLghAkk2md
-         X22Q==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NRhacHIsBtjxM7X8b/Y77EWA4SvV29qbpKUzdiT7Nps=;
+        b=SOSJ11HTtCKA+05RBX8lwKSzhLxDw30icbQGCg0hF35/mzgg5mdtyCMKXtTt8GR9FG
+         tQNF95wcAV/OUo1JHBGvTGoJRVXbPGtYiff0Ize4M5W6CUdsSmLh1fNMElJfg+kaSdcp
+         VpKoQmkIEZbyo/wb4NblrX30YrWq9RZHUyLxX1H76rVG+Y4RJXsqrndsqItd1jHF/9YY
+         lwHzCkBwj4KRBqxShg1n9sPehembFqEUdbcBtJDMhOzJrZeJIKrmIz4sRzm01zy5fZes
+         1u1QmbNBd0hh4HTCEIziWoLM6OuNLazZzvu3Tz6hLk8YYiVufFg2aufVVVO+7x+GWml8
+         mt6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AKUBDZoE/jvXM2oq8qe7PZHH+/UTyEsmP4FXnOhfAlU=;
-        b=z8qHC2ORLPXorEO8NP5qZ76votfNdsRcufTSQ47yVCExZgrOcko+4X+58CARpqtRhv
-         eLff29WU5+pgMALaxGyn1Va3jvT345CjeKVZcvAibhArRI86fy3Q4BPO4NJFvk7BvAQv
-         Y4ZV2SLDyW1TyO35Bh4RK1oFH9NT3gcyGq8pNWhRv7thFzS6JcG9A9fO2tuUxmkeKfUL
-         lEonYl2//PV0G/2wU9IAVu0MBjJqK25CVDY/498pYrGPqC4mShFueb7zT7pcPeX9XOwg
-         asLc0yVn1Eg5k9hlSuVWxET7bJXbZ5PVTho2VXlvwAuGQWIno6rYqz/SeCiKUjbsaYD9
-         zgFw==
-X-Gm-Message-State: AJIora95glaXlCu/uObSxFSdJYY29iuLSjQZjoWcQLIUPx0Bv0YdE03E
-        I6jG4GarwFCWu4xia5XqasaMQA==
-X-Google-Smtp-Source: AGRyM1vR9Bfc4Cn78gAiU5c5r+g5latY1NcXNJRE71q/O+RjUbLzca9egV2jhf6YZ4IqQ90HkFrG1Q==
-X-Received: by 2002:a17:907:1b06:b0:6fe:b48d:801f with SMTP id mp6-20020a1709071b0600b006feb48d801fmr2572523ejc.322.1656498656240;
-        Wed, 29 Jun 2022 03:30:56 -0700 (PDT)
-Received: from [192.168.0.184] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g5-20020a17090613c500b00722fb3c99bcsm7550249ejc.203.2022.06.29.03.30.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 03:30:55 -0700 (PDT)
-Message-ID: <de5a9756-50d6-2a09-d357-6e419b57dd5e@linaro.org>
-Date:   Wed, 29 Jun 2022 12:30:54 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NRhacHIsBtjxM7X8b/Y77EWA4SvV29qbpKUzdiT7Nps=;
+        b=dAON/asQl13yGAooRo3tru0bomevFeKMJS0DPwISZDhXfLeO8B3vdDnDhEgMLVDkZY
+         a6x/TTME0GWTuYf2AvxQ/el4fRNyLEk1vPHOhizR5ZDMLYxatrJKhDEb54GZ+4iFqZEf
+         Vi67bwbgBWIbpHS70+B8BiyT6vf2pyGgL92tmZa51d130aRbhZhUHecsNMQpLO5t6xot
+         06bmmHGyCXdJzfatYhF0JJ2f8Vz/XJf+6cLAcxkLvPWmQcHe+vPxCuAJxOTwg20KOIN8
+         YPDG3zcU/0mwzeXr/DYN9cwUwYYnyul1uZU1hyyxv58he/H7QnTRcWzvW6notwj3nn8W
+         Xb7Q==
+X-Gm-Message-State: AJIora9pGSOyqTVBsixCpzA4XGW1MW2Ae/i943TDrY7Mp9NJyR2ufRWO
+        BCoz/ccThqZlShEpUN/cVWXYyT3N+IAG7455IXQ=
+X-Google-Smtp-Source: AGRyM1vUkWMpL1rGvX+OSpGjnuzVANaL9TbvLn6cXUcqb1L6uzXeJR2J7xO6IbJawzbz46pdBqrRZIud1RVr7z2y9ZI=
+X-Received: by 2002:a81:1889:0:b0:317:987b:8e82 with SMTP id
+ 131-20020a811889000000b00317987b8e82mr2950353ywy.185.1656498821110; Wed, 29
+ Jun 2022 03:33:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3] ASoC: dt-bindings: fsl,micfil: Convert format to
- json-schema
-Content-Language: en-US
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     shengjiu.wang@gmail.com
-References: <1656386005-29376-1-git-send-email-shengjiu.wang@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1656386005-29376-1-git-send-email-shengjiu.wang@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220628193906.36350-1-andriy.shevchenko@linux.intel.com>
+ <20220628193906.36350-3-andriy.shevchenko@linux.intel.com>
+ <SJ0PR03MB6253C3D92FFF37717D48C7618EBB9@SJ0PR03MB6253.namprd03.prod.outlook.com>
+ <CAHp75VfR6XwW1HZDKoxhxs0i9R6s=uim1-dTtwJeXrA9AGWGQA@mail.gmail.com> <PH0PR03MB67861277E1AE456A316DFFEB99BB9@PH0PR03MB6786.namprd03.prod.outlook.com>
+In-Reply-To: <PH0PR03MB67861277E1AE456A316DFFEB99BB9@PH0PR03MB6786.namprd03.prod.outlook.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 29 Jun 2022 12:33:03 +0200
+Message-ID: <CAHp75VfeZ9jbWvFwL+Sae0h8DG36GeV4PKtskVQe10hpWGf28w@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] gpio: adp5588: sort header inclusion alphabetically
+To:     "Sa, Nuno" <Nuno.Sa@analog.com>
+Cc:     "Hennerich, Michael" <Michael.Hennerich@analog.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/06/2022 05:13, Shengjiu Wang wrote:
-> Convert the NXP MICFIL binding to DT schema format using json-schema.
-> 
-> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-> ---
+On Wed, Jun 29, 2022 at 12:10 PM Sa, Nuno <Nuno.Sa@analog.com> wrote:
+> > From: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > Sent: Wednesday, June 29, 2022 12:00 PM
+> > On Wed, Jun 29, 2022 at 10:50 AM Hennerich, Michael
+> > <Michael.Hennerich@analog.com> wrote:
+> > > > -----Original Message-----
+> > > > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > Sent: Dienstag, 28. Juni 2022 21:39
 
+...
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > > Sort header inclusion alphabetically.
+> > >
+> > > Thanks for the patches, they look good.
+> > > However, Nuno is currently working on getting the irqchip support
+> > into the
+> > > adp5588 input driver. In his patch series this driver is going away.
+> > >
+> > > https://urldefense.com/v3/__https://lore.kernel.org/linux-
+> > input/YpMCh1Xje*jsny8j@google.com/__;Kw!!A3Ni8CS0y2Y!_Cb1uAs
+> > D-
+> > Z6iz_zSDfrd5Va6zLmdoxjv1vLYWQGHDOqYniaXVVHl3Ou2lOUQIjwhSN
+> > Ku2aZkYrOb8xMi2cZtfmsv$
+> >
+> > While that work is ongoing, and most likely won't make v5.20-rc1, for
+> > the v5.20-rc1 I think my patches are good to go to avoid a bad (or
+> > rather very old) example on how to do GPIO drivers. What do you
+> > think?
+>
+> Just as note, If nothing unexpected happens, I'm planning in sending this
+> out today. If you still think this makes sense, fine by me. It's a very minimal
+> change that won't give much pain to deal with...
 
+Ah, Okay, I was thinking about a week or two from now. Let's see how
+it will go and let Linus decide how to proceed.
 
-Best regards,
-Krzysztof
+-- 
+With Best Regards,
+Andy Shevchenko

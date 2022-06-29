@@ -2,90 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BED5603C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A798E5603C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 29 Jun 2022 17:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233471AbiF2PBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 11:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
+        id S233782AbiF2PCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 11:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232618AbiF2PBu (ORCPT
+        with ESMTP id S231531AbiF2PCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 11:01:50 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4042A25C7A;
-        Wed, 29 Jun 2022 08:01:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1656514907; x=1688050907;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AFnpmXUgV9Lobv665HMdU2c+9Hcf3GrmG4/61iUM2Rc=;
-  b=KU09C2pYpASOHrpzAYPa2SrEksyyHuLqo0/7amnDZQW1lK1ZS63MPeW1
-   UEjRBR745sj+epv2rQcOhpIf+Tgv2d4u4OZH6zxyklpDmJQQV95NB/VTz
-   q5US1oL0WPATJNZl0nAFAsai0mHNRs3vUSJxy84f2H/vmT0BmX3GMxTA+
-   kSh0wMM3Wac4gAhD8hk6Vmw9EHNcbIQCDSdLxNeDZAq+h1zdAvuAzmRLG
-   U9KWeg5jj1zjbtWcgH6UrG9YoUrVYOeRFmL3YLxipwFKPYS5Zr78fAAlj
-   DAZUrXmrJWVxptAuc4B5CR/DdR8HjvPVZSQgbM8mv4xE/0lyn5h84t04S
-   g==;
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="180037379"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Jun 2022 08:01:45 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 29 Jun 2022 08:01:43 -0700
-Received: from [10.12.73.52] (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Wed, 29 Jun 2022 08:01:40 -0700
-Message-ID: <f641fd0e-2da2-112e-f2fb-f5d89af00587@microchip.com>
-Date:   Wed, 29 Jun 2022 17:01:39 +0200
+        Wed, 29 Jun 2022 11:02:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F31E1E3EC
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 08:02:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 154F3B824F6
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 15:02:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DE84C341C8;
+        Wed, 29 Jun 2022 15:02:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656514948;
+        bh=YrW0MclUMyY6HcWXjSnuuUFbvlixqKQGRTLyrIyuaNw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pv37R9NP3xjH54c2qAdGqhH0HdmWOME93RcwiKVRzc5Fp9XVH7wL8ynWDb03uSjhz
+         OTSpIzqZGIpqPRHSEqyv66o679VemE0pL06v/QS6jLnbua/06ux9/QArO7nAOa6W6H
+         nQ+PThkNL2P6Y28zO5td1v+t4zqssiWFPqQowauXh1u28O9eiLj1hXtL71IhgmbtW4
+         /dr/7MpJbYA49tTmBqB+dD8uBrOo0Vfsz1l9hs0zcxn5swV9xkvs6rhNq5Dr61Q/zj
+         FaYmXsLr/Ikz23Afr8paaprehEjSfytBYI4yD+xkEwpphAPnZM5xq50A/3dw8CY42y
+         WyLeDh1+Iqglw==
+Date:   Wed, 29 Jun 2022 16:02:24 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ASoC: codecs: wsa883x: add control, dapm widgets and
+ map
+Message-ID: <YrxpgF2B5W7fyYVy@sirena.org.uk>
+References: <20220629145831.77868-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] dt-bindings: spi: convert spi_atmel to json-schema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sergiu Moga <sergiu.moga@microchip.com>, <broonie@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>
-CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <claudiu.beznea@microchip.com>,
-        <alexandre.belloni@bootlin.com>,
-        <Kavyasree.Kotagiri@microchip.com>, <UNGLinuxDriver@microchip.com>
-References: <20220629125804.137099-1-sergiu.moga@microchip.com>
- <a2422718-2ec4-dbad-0245-1d78dbb39f25@linaro.org>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <a2422718-2ec4-dbad-0245-1d78dbb39f25@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CQe+J6NOIs3++col"
+Content-Disposition: inline
+In-Reply-To: <20220629145831.77868-1-srinivas.kandagatla@linaro.org>
+X-Cookie: Booths for two or more.
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sergiu,
 
-On 29/06/2022 at 15:23, Krzysztof Kozlowski wrote:
->> +title: Atmel SPI device
->> +
->> +maintainers:
->> +  - Mark Brown<broonie@kernel.org>
-> This should be rather someone from Microchip.
+--CQe+J6NOIs3++col
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Tudor Ambarus <tudor.ambarus@microchip.com> is our maintainer for SPI 
-controller, sorry for not having advised you internally about this ;-)
+On Wed, Jun 29, 2022 at 03:58:31PM +0100, Srinivas Kandagatla wrote:
 
-Best regards,
-   Nicolas
+> +static const char * const wsa_dev_mode_text[] = {
+> +	"speaker", "receiver", "ultrasound"
 
--- 
-Nicolas Ferre
+Idiomatically these would be capitalised ("Speaker" and so on).  Sorry,
+didn't notice on v1.  Otherwise this looks good.
+
+--CQe+J6NOIs3++col
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK8aX8ACgkQJNaLcl1U
+h9B68Af+OSwqjG2mYULXNLPfUr5eNb4DI+Y6bHPZFcuyEnRugPAEnGTHmOSj1ysS
+q2GQrCsTJTm8dByTkopi1uIHgetJIy9vb7rItZqE2GK8BHb3Ne2KUxKL3XkX7g5C
++OSchkZVjHjDuwJ4NPmTLWUrpFbQcMrCnrM3+pWhFNqLE69mg8DioAaer1wWjBEd
+E+6piqi8E1AyQlV+sOGe94sUXWVP/REM6wEKOKd90SMXSs87XYLbOb179k6YkSyy
+iO2qgO1aif6QYJcNm4NdprDvwnXEEcP6s/PAqsEfqoQ8mggt0EHfBRZ4ri0Cn8mz
+DETkg0CsWMM8gEHA16POeG5NImOVOw==
+=jykd
+-----END PGP SIGNATURE-----
+
+--CQe+J6NOIs3++col--

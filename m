@@ -2,220 +2,419 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F048C562591
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990B7562596
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237679AbiF3VuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 17:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        id S237609AbiF3VwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 17:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233523AbiF3VuV (ORCPT
+        with ESMTP id S232633AbiF3Vv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 17:50:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEAB4F195;
-        Thu, 30 Jun 2022 14:50:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3DC7EB82D63;
-        Thu, 30 Jun 2022 21:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2E89C34115;
-        Thu, 30 Jun 2022 21:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656625817;
-        bh=wfSJGrMKqxvbLYGQU0nsffNjn4KCaA4buDdhPQhY4To=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GPhm8uZPGces1RaLtCvMMal0vcmz7t6lR/r2s9/1IMzG3MIwvr7913wKO1JO1MuID
-         Nt57MbT4Jgf6ZcoEeOjnqRrCSVNJLAl1EOffpfBw5Z+yQSAD/VcbAwXr1OKlucX5Vw
-         yKMyKCjF07kdXOEswr6FXnCXAeGQ6lNcXc2NBu8m2/CLYXY1LEuh5zFzO8rwmE8b5Q
-         Zcgj1JucApy7H7ux4Yj724RHb+fjOBUR6rS2yqG3YxAaafj+qXERMji6I9Pub0OAeq
-         G6Nwd5qybMnEfzmhr4ImxffUDjQ5QDJlzEU7TvkVeZrGLLvZDwWR4BxAKTts+1qBCM
-         uLfdZKFwPB8bg==
-Date:   Thu, 30 Jun 2022 14:50:16 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org,
-        aneesh.kumar@linux.ibm.com, arnd@arndb.de, 21cnbao@gmail.com,
-        corbet@lwn.net, dave.hansen@linux.intel.com, david@redhat.com,
-        ebiederm@xmission.com, hagen@jauu.net, jack@suse.cz,
-        keescook@chromium.org, kirill@shutemov.name, kucharsk@gmail.com,
-        linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        longpeng2@huawei.com, luto@kernel.org, markhemm@googlemail.com,
-        pcc@google.com, rppt@kernel.org, sieberf@amazon.com,
-        sjpark@amazon.de, surenb@google.com, tst@schoebel-theuer.de,
-        yzaikin@google.com
-Subject: Re: [PATCH v2 7/9] mm/mshare: Add unlink and munmap support
-Message-ID: <Yr4amM9d6HpwH5BW@magnolia>
-References: <cover.1656531090.git.khalid.aziz@oracle.com>
- <1b0a0e8c9558766f13a64ae93092eb8c9ea7965d.1656531090.git.khalid.aziz@oracle.com>
+        Thu, 30 Jun 2022 17:51:58 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6462653EDF;
+        Thu, 30 Jun 2022 14:51:56 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id lw20so624739ejb.4;
+        Thu, 30 Jun 2022 14:51:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=fQmj+4djLot+BM5Xbe38Wuy8twk3q3PYBp8tjTSzigE=;
+        b=ZLB9PXX6uec4fPzZ5iTzenYJb0Se6cd2kCW1sLfxUiPLEdXo6a81ZEjsgrvT6fjJJh
+         sMrvcW/mbR8DdOXi/ojKdurVDDOVyILKUYcnBxH0VG3vO70uuID5oGdhIPn+OeXcjfIw
+         HAhixcDD1Or1O75E0KXKKvg9F5P2MSp+tNt57opuGERsAvmBw5wnAHa9nHgeTbsmYghC
+         HOWZAlQV09dieahKLMPc3scGFNmzIzJ/Rk4KHcVdKjYUsOdB+onkaoBM2J0m/m9zlRvW
+         NcAERwkdrpDQMxnL3vBwECyCYoey7DdWafuPpJTU7MmllKJ0qnwYIdOFPVZZJM0NVfw/
+         H9mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=fQmj+4djLot+BM5Xbe38Wuy8twk3q3PYBp8tjTSzigE=;
+        b=rVTRU4QKx+IHe/RtB8Vedx+gqwQN2tXK0oVye0cT2x5AlwL/poXcrusOxSQGnrsewh
+         HrPJdcbagsLMEr9QTzFahitdOaEGLahuhv0sZ9HEClrEN6ZQejXnNYVRq1jHiQZK5aeP
+         6QlRt05ZMKO2FQWrUqDeqA1oU6PUFoTXQ9lm1QRmEcpO5Awvs4IaFAKdR/Tvl5b7vRDg
+         wpJY6AsrwqnXxvU4GdW2eX5O01zGRhVzRv87bKjjQPopHstrwW+gGln7FFNRdTjp6zJ/
+         txAzvnCeKmbGsRKfRzICDyNsENWB54skOhRsG5o7CULbQ9MyEYQ4nsHatIE7U0LP/qsG
+         OAuQ==
+X-Gm-Message-State: AJIora/NwlgdQDt2hR8AL3ffUwy/lTCeFLpe3Kt7GtwXCJfbdpE4rkgY
+        26aARzvFIK/aHmFt7pQsMchanJQ1wCV+Nkt6/S4=
+X-Google-Smtp-Source: AGRyM1tSzuf1xl1y5rqKFB3IS0uPOh82cYjTgc58Y6wJ2mM8wLbRvO8B8/gL9ygbj9EezWS07u0EHPc667jYM01goKI=
+X-Received: by 2002:a17:906:a3ca:b0:726:2bd2:87bc with SMTP id
+ ca10-20020a170906a3ca00b007262bd287bcmr10947112ejb.226.1656625914877; Thu, 30
+ Jun 2022 14:51:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1b0a0e8c9558766f13a64ae93092eb8c9ea7965d.1656531090.git.khalid.aziz@oracle.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220609062412.3950380-1-james.hilliard1@gmail.com>
+ <CAEf4BzbL8ivLH=HZDFTNyCTFjhWrWLcY3K34Ef+q4Pr+oDe_Gw@mail.gmail.com>
+ <CADvTj4opMh978fMBV7cH89wbS1N_PK31AybZJ5NUacnp4kBeqg@mail.gmail.com>
+ <CAEf4BzbkckyfKuhu9CV9wofCHeYa83NnfQNeK82pXLe-s8zhxA@mail.gmail.com> <CADvTj4q5BtrhUwvxdke0NFDRBh1bUzPRd4iGoGvt_HaDp2V7MQ@mail.gmail.com>
+In-Reply-To: <CADvTj4q5BtrhUwvxdke0NFDRBh1bUzPRd4iGoGvt_HaDp2V7MQ@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 30 Jun 2022 14:51:43 -0700
+Message-ID: <CAEf4BzZkSXLqFz4Cjx4_Z_0sxBBSd-SEhT8u+3EZVccqH7qXkg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] libbpf: fix broken gcc SEC pragma macro
+To:     James Hilliard <james.hilliard1@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 04:53:58PM -0600, Khalid Aziz wrote:
-> Number of mappings of an mshare region should be tracked so it can
-> be removed when there are no more references to it and associated
-> file has been deleted. This add code to support the unlink operation
-> for associated file, remove the mshare region on file deletion if
-> refcount goes to zero, add munmap operation to maintain refcount
-> to mshare region and remove it on last munmap if file has been
-> deleted.
-> 
-> Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
-> ---
->  mm/mshare.c | 64 ++++++++++++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 63 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/mshare.c b/mm/mshare.c
-> index 088a6cab1e93..90ce0564a138 100644
-> --- a/mm/mshare.c
-> +++ b/mm/mshare.c
-> @@ -29,6 +29,7 @@ static struct super_block *msharefs_sb;
->  struct mshare_data {
->  	struct mm_struct *mm;
->  	refcount_t refcnt;
-> +	int deleted;
->  	struct mshare_info *minfo;
->  };
->  
-> @@ -48,6 +49,7 @@ msharefs_read(struct kiocb *iocb, struct iov_iter *iov)
->  	size_t ret;
->  	struct mshare_info m_info;
->  
-> +	mmap_read_lock(info->mm);
->  	if (info->minfo != NULL) {
->  		m_info.start = info->minfo->start;
->  		m_info.size = info->minfo->size;
-> @@ -55,18 +57,42 @@ msharefs_read(struct kiocb *iocb, struct iov_iter *iov)
->  		m_info.start = 0;
->  		m_info.size = 0;
->  	}
-> +	mmap_read_unlock(info->mm);
->  	ret = copy_to_iter(&m_info, sizeof(m_info), iov);
->  	if (!ret)
->  		return -EFAULT;
->  	return ret;
->  }
->  
-> +static void
-> +msharefs_close(struct vm_area_struct *vma)
-> +{
-> +	struct mshare_data *info = vma->vm_private_data;
-> +
-> +	if (refcount_dec_and_test(&info->refcnt)) {
-> +		mmap_read_lock(info->mm);
-> +		if (info->deleted) {
-> +			mmap_read_unlock(info->mm);
-> +			mmput(info->mm);
-> +			kfree(info->minfo);
-> +			kfree(info);
+On Mon, Jun 27, 2022 at 9:43 PM James Hilliard
+<james.hilliard1@gmail.com> wrote:
+>
+> On Mon, Jun 27, 2022 at 5:16 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Thu, Jun 9, 2022 at 4:27 PM James Hilliard <james.hilliard1@gmail.co=
+m> wrote:
+> > >
+> > > On Thu, Jun 9, 2022 at 12:13 PM Andrii Nakryiko
+> > > <andrii.nakryiko@gmail.com> wrote:
+> > > >
+> > > > On Wed, Jun 8, 2022 at 11:24 PM James Hilliard
+> > > > <james.hilliard1@gmail.com> wrote:
+> > > > >
+> > > > > It seems the gcc preprocessor breaks unless pragmas are wrapped
+> > > > > individually inside macros when surrounding __attribute__.
+> > > > >
+> > > > > Fixes errors like:
+> > > > > error: expected identifier or '(' before '#pragma'
+> > > > >   106 | SEC("cgroup/bind6")
+> > > > >       | ^~~
+> > > > >
+> > > > > error: expected '=3D', ',', ';', 'asm' or '__attribute__' before =
+'#pragma'
+> > > > >   114 | char _license[] SEC("license") =3D "GPL";
+> > > > >       | ^~~
+> > > > >
+> > > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > > > > ---
+> > > > > Changes v2 -> v3:
+> > > > >   - just fix SEC pragma
+> > > > > Changes v1 -> v2:
+> > > > >   - replace typeof with __typeof__ instead of changing pragma mac=
+ros
+> > > > > ---
+> > > > >  tools/lib/bpf/bpf_helpers.h | 7 ++++---
+> > > > >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > > > >
+> > > > > diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_help=
+ers.h
+> > > > > index fb04eaf367f1..66d23c47c206 100644
+> > > > > --- a/tools/lib/bpf/bpf_helpers.h
+> > > > > +++ b/tools/lib/bpf/bpf_helpers.h
+> > > > > @@ -22,11 +22,12 @@
+> > > > >   * To allow use of SEC() with externs (e.g., for extern .maps de=
+clarations),
+> > > > >   * make sure __attribute__((unused)) doesn't trigger compilation=
+ warning.
+> > > > >   */
+> > > > > +#define DO_PRAGMA(x) _Pragma(#x)
+> > > > >  #define SEC(name) \
+> > > > > -       _Pragma("GCC diagnostic push")                           =
+           \
+> > > > > -       _Pragma("GCC diagnostic ignored \"-Wignored-attributes\""=
+)          \
+> > > > > +       DO_PRAGMA("GCC diagnostic push")                         =
+           \
+> > > > > +       DO_PRAGMA("GCC diagnostic ignored \"-Wignored-attributes\=
+"")        \
+> > > > >         __attribute__((section(name), used))                     =
+           \
+> > > > > -       _Pragma("GCC diagnostic pop")                            =
+           \
+> > > > > +       DO_PRAGMA("GCC diagnostic pop")                          =
+           \
+> > > > >
+> > > >
+> > > > I'm not going to accept this unless I can repro it in the first pla=
+ce.
+> > > > Using -std=3Dc17 doesn't trigger such issue. Please provide the rep=
+ro
+> > > > first. Building systemd is not a repro, unfortunately. Please try t=
+o
+> > > > do it based on libbpf-bootstrap ([0])
+> > > >
+> > > >   [0] https://github.com/libbpf/libbpf-bootstrap
+> > >
+> > > Seems to reproduce just fine already there with:
+> > > https://github.com/libbpf/libbpf-bootstrap/blob/31face36d469a0e3e4c4a=
+c1cafc66747d3150930/examples/c/minimal.bpf.c
+> > >
+> > > See here:
+> > > $ /home/buildroot/buildroot/output/per-package/libbpf/host/bin/bpf-gc=
+c
+> > > -Winline -O2 -mframe-limit=3D32767 -mco-re -gbtf -std=3Dgnu17 -v
+> > > -D__x86_64__ -mlittle-endian -I
+> > > /home/buildroot/buildroot/output/per-package/libbpf/host/x86_64-build=
+root-linux-gnu/sysroot/usr/include
+> > > minimal.bpf.c -o minimal.bpf.o
+> > > Using built-in specs.
+> > > COLLECT_GCC=3D/home/buildroot/buildroot/output/per-package/libbpf/hos=
+t/bin/bpf-gcc.br_real
+> > > COLLECT_LTO_WRAPPER=3D/home/buildroot/buildroot/output/per-package/li=
+bbpf/host/bin/../libexec/gcc/bpf-buildroot-none/12.1.0/lto-wrapper
+> > > Target: bpf-buildroot-none
+> > > Configured with: ./configure
+> > > --prefix=3D/home/buildroot/buildroot/output/per-package/host-gcc-bpf/=
+host
+> > > --sysconfdir=3D/home/buildroot/buildroot/output/per-package/host-gcc-=
+bpf/host/etc
+> > > --localstatedir=3D/home/buildroot/buildroot/output/per-package/host-g=
+cc-bpf/host/var
+> > > --enable-shared --disable-static --disable-gtk-doc
+> > > --disable-gtk-doc-html --disable-doc --disable-docs
+> > > --disable-documentation --disable-debug --with-xmlto=3Dno --with-fop=
+=3Dno
+> > > --disable-nls --disable-dependency-tracking
+> > > --target=3Dbpf-buildroot-none
+> > > --prefix=3D/home/buildroot/buildroot/output/per-package/host-gcc-bpf/=
+host
+> > > --sysconfdir=3D/home/buildroot/buildroot/output/per-package/host-gcc-=
+bpf/host/etc
+> > > --enable-languages=3Dc --with-gnu-ld --enable-static
+> > > --disable-decimal-float --disable-gcov --disable-libssp
+> > > --disable-multilib --disable-shared
+> > > --with-gmp=3D/home/buildroot/buildroot/output/per-package/host-gcc-bp=
+f/host
+> > > --with-mpc=3D/home/buildroot/buildroot/output/per-package/host-gcc-bp=
+f/host
+> > > --with-mpfr=3D/home/buildroot/buildroot/output/per-package/host-gcc-b=
+pf/host
+> > > --with-pkgversion=3D'Buildroot 2022.05-118-ge052166011-dirty'
+> > > --with-bugurl=3Dhttp://bugs.buildroot.net/ --without-zstd --without-i=
+sl
+> > > --without-cloog
+> > > Thread model: single
+> > > Supported LTO compression algorithms: zlib
+> > > gcc version 12.1.0 (Buildroot 2022.05-118-ge052166011-dirty)
+> > > COLLECT_GCC_OPTIONS=3D'--sysroot=3D/home/buildroot/buildroot/output/p=
+er-package/libbpf/host/x86_64-buildroot-linux-gnu/sysroot'
+> > > '-Winline' '-O2' '-mframe-limit=3D32767' '-mco-re' '-gbtf' '-std=3Dgn=
+u17'
+> > > '-v' '-D' '__x86_64__' '-mlittle-endian' '-I'
+> > > '/home/buildroot/buildroot/output/per-package/libbpf/host/x86_64-buil=
+droot-linux-gnu/sysroot/usr/include'
+> > > '-o' 'minimal.bpf.o' '-dumpdir' 'minimal.bpf.o-'
+> > >  /home/buildroot/buildroot/output/per-package/libbpf/host/bin/../libe=
+xec/gcc/bpf-buildroot-none/12.1.0/cc1
+> > > -quiet -v -I /home/buildroot/buildroot/output/per-package/libbpf/host=
+/x86_64-buildroot-linux-gnu/sysroot/usr/include
+> > > -iprefix /home/buildroot/buildroot/output/per-package/libbpf/host/bin=
+/../lib/gcc/bpf-buildroot-none/12.1.0/
+> > > -isysroot /home/buildroot/buildroot/output/per-package/libbpf/host/x8=
+6_64-buildroot-linux-gnu/sysroot
+> > > -D __x86_64__ minimal.bpf.c -quiet -dumpdir minimal.bpf.o- -dumpbase
+> > > minimal.bpf.c -dumpbase-ext .c -mframe-limit=3D32767 -mco-re
+> > > -mlittle-endian -gbtf -O2 -Winline -std=3Dgnu17 -version -o
+> > > /tmp/cct4AXvg.s
+> > > GNU C17 (Buildroot 2022.05-118-ge052166011-dirty) version 12.1.0
+> > > (bpf-buildroot-none)
+> > >     compiled by GNU C version 12.1.0, GMP version 6.2.1, MPFR version
+> > > 4.1.0, MPC version 1.2.1, isl version none
+> > > GGC heuristics: --param ggc-min-expand=3D100 --param ggc-min-heapsize=
+=3D131072
+> > > ignoring nonexistent directory
+> > > "/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/=
+gcc/bpf-buildroot-none/12.1.0/../../../../bpf-buildroot-none/sys-include"
+> > > ignoring nonexistent directory
+> > > "/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/=
+gcc/bpf-buildroot-none/12.1.0/../../../../bpf-buildroot-none/include"
+> > > ignoring duplicate directory
+> > > "/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/=
+gcc/../../lib/gcc/bpf-buildroot-none/12.1.0/include"
+> > > ignoring duplicate directory
+> > > "/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/=
+gcc/../../lib/gcc/bpf-buildroot-none/12.1.0/include-fixed"
+> > > ignoring nonexistent directory
+> > > "/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/=
+gcc/../../lib/gcc/bpf-buildroot-none/12.1.0/../../../../bpf-buildroot-none/=
+sys-include"
+> > > ignoring nonexistent directory
+> > > "/home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/=
+gcc/../../lib/gcc/bpf-buildroot-none/12.1.0/../../../../bpf-buildroot-none/=
+include"
+> > > #include "..." search starts here:
+> > > #include <...> search starts here:
+> > >  /home/buildroot/buildroot/output/per-package/libbpf/host/x86_64-buil=
+droot-linux-gnu/sysroot/usr/include
+> > >  /home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/=
+gcc/bpf-buildroot-none/12.1.0/include
+> > >  /home/buildroot/buildroot/output/per-package/libbpf/host/bin/../lib/=
+gcc/bpf-buildroot-none/12.1.0/include-fixed
+> > > End of search list.
+> > > GNU C17 (Buildroot 2022.05-118-ge052166011-dirty) version 12.1.0
+> > > (bpf-buildroot-none)
+> > >     compiled by GNU C version 12.1.0, GMP version 6.2.1, MPFR version
+> > > 4.1.0, MPC version 1.2.1, isl version none
+> > > GGC heuristics: --param ggc-min-expand=3D100 --param ggc-min-heapsize=
+=3D131072
+> > > Compiler executable checksum: 9bf241ca1a2dd4ffd7652c5e247c9be8
+> > > minimal.bpf.c:6:1: error: expected '=3D', ',', ';', 'asm' or
+> > > '__attribute__' before '#pragma'
+> > >     6 | char LICENSE[] SEC("license") =3D "Dual BSD/GPL";
+> > >       | ^~~
+> > > minimal.bpf.c:6:1: error: expected identifier or '(' before '#pragma'
+> > > minimal.bpf.c:10:1: error: expected identifier or '(' before '#pragma=
+'
+> > >    10 | SEC("tp/syscalls/sys_enter_write")
+> > >       | ^~~
+> >
+> > So this is a bug (hard to call this a feature) in gcc (not even
+> > bpf-gcc, I could repro with a simple gcc). Is there a bug reported for
+> > this somewhere? Are GCC folks aware and working on the fix?
+>
+> Yeah, saw a few issues that looked relevant:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D55578
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D90400
+>
+> >
+> > What's curious is that the only thing that allows to bypass this is
+> > adding #x in macro, having #define DO_PRAGMA(x) _Pragma(x) doesn't
+> > help.
+> >
+> > So ideally GCC can fix this?
+>
+> From the reported issues...it doesn't sound like a fix is going to be
+> coming all that
+> soon in GCC.
+>
+> > But either way your patch as is
+> > erroneously passing extra quoted strings to _Pragma().
+>
+> I recall the extra quotes were needed to make this work, does it work for=
+ you
+> without them?
+>
+> >
+> > I'm pondering whether it's just cleaner to define SEC() without
+> > pragmas for GCC? It will only cause compiler warning about unnecessary
+> > unused attribute for extern *variable* declarations, which are very
+> > rare. Instead of relying on this quirky "fix" approach. Ideally,
+> > though, GCC just fixes _Pragma() handling, of course.
+>
+> I mean, as long as this workaround is reliable I'd say using it is the
+> best option
+> for backwards compatibility, especially since it's only needed in one pla=
+ce from
+> the looks of it.
 
-Aren't filesystems supposed to take care of disposing of the file data
-in destroy_inode?  IIRC struct inode doesn't go away until all fds are
-closed, mappings are torn down, and there are no more references from
-dentries.  I could be misremembering since it's been a few months since
-I went looking at the (VFS) inode lifecycle.
+Is it reliable, though? Adding those quotes breaks Clang (I checked)
+and it doesn't work as expected with GCC as well. It stops complaining
+about #pragma, but it also doesn't push -Wignored-attributes. Here's
+the test:
 
-> +		} else {
-> +			mmap_read_unlock(info->mm);
-> +		}
-> +	}
-> +}
-> +
-> +static const struct vm_operations_struct msharefs_vm_ops = {
-> +	.close	= msharefs_close,
-> +};
-> +
->  static int
->  msharefs_mmap(struct file *file, struct vm_area_struct *vma)
->  {
->  	struct mshare_data *info = file->private_data;
->  	struct mm_struct *mm = info->mm;
->  
-> +	mmap_write_lock(mm);
->  	/*
->  	 * If this mshare region has been set up once already, bail out
->  	 */
-> @@ -80,10 +106,14 @@ msharefs_mmap(struct file *file, struct vm_area_struct *vma)
->  	mm->task_size = vma->vm_end - vma->vm_start;
->  	if (!mm->task_size)
->  		mm->task_size--;
-> +	mmap_write_unlock(mm);
->  	info->minfo->start = mm->mmap_base;
->  	info->minfo->size = mm->task_size;
-> +	info->deleted = 0;
-> +	refcount_inc(&info->refcnt);
->  	vma->vm_flags |= VM_SHARED_PT;
->  	vma->vm_private_data = info;
-> +	vma->vm_ops = &msharefs_vm_ops;
->  	return 0;
->  }
->  
-> @@ -240,6 +270,38 @@ msharefs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
->  	return ret;
->  }
->  
-> +static int
-> +msharefs_unlink(struct inode *dir, struct dentry *dentry)
-> +{
-> +	struct inode *inode = d_inode(dentry);
-> +	struct mshare_data *info = inode->i_private;
-> +
-> +	/*
-> +	 * Unmap the mshare region if it is still mapped in
-> +	 */
-> +	vm_munmap(info->minfo->start, info->minfo->size);
-> +
-> +	/*
-> +	 * Mark msharefs file for deletion so it can not be opened
-> +	 * and used for mshare mappings any more
-> +	 */
-> +	simple_unlink(dir, dentry);
-> +	mmap_write_lock(info->mm);
-> +	info->deleted = 1;
-> +	mmap_write_unlock(info->mm);
+#define DO_PRAGMA(x) _Pragma(#x)
 
-What if the file is hardlinked?
+#define SEC(name) \
+       DO_PRAGMA("GCC diagnostic push")                                    =
+\
+       DO_PRAGMA("GCC diagnostic ignored \"-Wignored-attributes\"")        =
+\
+        __attribute__((section(name), used))                               =
+\
+       DO_PRAGMA("GCC diagnostic pop")                                     =
+\
 
---D
+extern int something SEC("whatever");
 
-> +
-> +	/*
-> +	 * Is this the last reference? If so, delete mshare region and
-> +	 * remove the file
-> +	 */
-> +	if (!refcount_dec_and_test(&info->refcnt)) {
-> +		mmput(info->mm);
-> +		kfree(info->minfo);
-> +		kfree(info);
-> +	}
-> +	return 0;
-> +}
-> +
->  static const struct inode_operations msharefs_file_inode_ops = {
->  	.setattr	= simple_setattr,
->  	.getattr	= simple_getattr,
-> @@ -248,7 +310,7 @@ static const struct inode_operations msharefs_dir_inode_ops = {
->  	.create		= msharefs_create,
->  	.lookup		= simple_lookup,
->  	.link		= simple_link,
-> -	.unlink		= simple_unlink,
-> +	.unlink		= msharefs_unlink,
->  	.mkdir		= msharefs_mkdir,
->  	.rmdir		= simple_rmdir,
->  	.mknod		= msharefs_mknod,
-> -- 
-> 2.32.0
-> 
+int main()
+{
+        return something;
+}
+
+
+Used like this you get same warning:
+
+$ cc test.c
+test.c:10:1: warning: =E2=80=98used=E2=80=99 attribute ignored [-Wattribute=
+s]
+   10 | extern int something SEC("whatever");
+      | ^~~~~~
+
+Removing quotes fixes Clang (linker error is expected)
+
+$ clang test.c
+/opt/rh/gcc-toolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../=
+bin/ld:
+/tmp/test-4eec0b.o: in function `main':
+test.c:(.text+0xe): undefined reference to `something'
+
+But we get back to the original problem with GCC:
+
+$ cc test.c
+test.c:10:1: error: expected =E2=80=98=3D=E2=80=99, =E2=80=98,=E2=80=99, =
+=E2=80=98;=E2=80=99, =E2=80=98asm=E2=80=99 or =E2=80=98__attribute__=E2=80=
+=99
+before =E2=80=98#pragma=E2=80=99
+   10 | extern int something SEC("whatever");
+      | ^~~
+test.c:10:1: error: expected identifier or =E2=80=98(=E2=80=99 before =E2=
+=80=98#pragma=E2=80=99
+test.c: In function =E2=80=98main=E2=80=99:
+test.c:14:16: error: =E2=80=98something=E2=80=99 undeclared (first use in t=
+his function)
+   14 |         return something;
+      |                ^~~~~~~~~
+
+
+So the best way forward I can propose for you is this:
+
+
+#if __GNUC__ && !__clang__
+
+#define SEC(name) __attribute__((section(name), used))
+
+#else
+
+#define SEC(name) \
+        _Pragma("GCC diagnostic push")                                     =
+ \
+        _Pragma("GCC diagnostic ignored \"-Wignored-attributes\"")         =
+ \
+        __attribute__((section(name), used))                               =
+ \
+        _Pragma("GCC diagnostic pop")                                      =
+ \
+
+#endif
+
+extern int something SEC("whatever");
+
+int main()
+{
+        return something;
+}
+
+
+With some comments explaining how broken GCC is w.r.t. _Pragma. And
+just live with compiler warning about used if used with externs.
+
+
+>
+> >
+> > >
+> > > >
+> > > > >  /* Avoid 'linux/stddef.h' definition of '__always_inline'. */
+> > > > >  #undef __always_inline
+> > > > > --
+> > > > > 2.25.1
+> > > > >

@@ -2,105 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6618A562702
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 043FC562704
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbiF3XV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 19:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
+        id S232422AbiF3X0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 19:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiF3XVz (ORCPT
+        with ESMTP id S231553AbiF3X0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 19:21:55 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B26559255;
-        Thu, 30 Jun 2022 16:21:53 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id n12so877147pfq.0;
-        Thu, 30 Jun 2022 16:21:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=4fwRruBH61EbutyJBh3f6DOQd9ertsIzMrVniuscmw0=;
-        b=Lo13YwMcypIrm7RVyO1ZiITAdFwfYQI85MCzyAEu7lpvhtHcI3oMrf2ivyIfV7xA1k
-         BX7FxP2foLMm5odq0M2DzWPOQ/4gCanIm/QXND9e4NzoyYAcOeZH46xKH31eKEUaAa6x
-         B847hfjs234ErnOhwakAuz9PQgbcGRANyHFLoOzEG2lDH27SZDOSmb1xG29yfqoq+4M5
-         b7Ry0zjPfTmF5UnosGNAM0sddFAAubfoJTwaKXaxIkM1yB3rlurUNupwmtmCUTcmQiH8
-         RnraOSQcmEOFeeXfxL6g4TeHpgl+o14vzeeb1EyS5hXeW2wXgdELkYPV4YOsn3c95p8C
-         ysqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4fwRruBH61EbutyJBh3f6DOQd9ertsIzMrVniuscmw0=;
-        b=Gtl5URSfO0Ktj2mkf0rvdhuyiXDrF3C/yt1N64CcRzwM8fIK2GpS0UpcgglmznRibt
-         WyAyH0Ljh3wzxszvEaDDCcadN34D1o1Vw2AnZJF5b6vCatG4TYfiFViV5dH3H3SZJYWJ
-         /ONviO+k3IGtIsowYuEcQBRd6rXPwT52BkQ24CM1VaoVe8it4VecOygqwZFothFkf4oz
-         QM+D+GhxgBmos+L3pt4Dxoh9ssx5EBtTHdnm/IejAVKBGjR/o/kUt0hSCRWbegXk+X+S
-         nTCz/5JpL/fMfipWf2u65MoM6kQEiQI1v5Jx2CGgbezTu3P72qgcYZAPMfBfd6th+BF0
-         mJpw==
-X-Gm-Message-State: AJIora+4Tcl7XcWhbJ1vYQxc38TvRZtpK9l9Ah2X9qhzQ+Ns3Pyg+zxr
-        IoJISOLUZQzZso7OmKmoUUU=
-X-Google-Smtp-Source: AGRyM1vlGXSOmdxpAUzCunPvcbte4At4Sx1yPPcdqYLGItVQGCkSDVDVeNTOiwj1LIAFa/i+1CXLdQ==
-X-Received: by 2002:a63:f413:0:b0:40d:ba87:53f8 with SMTP id g19-20020a63f413000000b0040dba8753f8mr9736805pgi.193.1656631312602;
-        Thu, 30 Jun 2022 16:21:52 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id f8-20020a170902ab8800b0016a0bf0ce2esm14078877plr.92.2022.06.30.16.21.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 16:21:52 -0700 (PDT)
-Message-ID: <73867ea2-9db4-4e52-62d5-be37c1fb171c@gmail.com>
-Date:   Thu, 30 Jun 2022 16:21:50 -0700
+        Thu, 30 Jun 2022 19:26:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218D94476D;
+        Thu, 30 Jun 2022 16:26:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE784B82D3D;
+        Thu, 30 Jun 2022 23:26:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91681C341DA;
+        Thu, 30 Jun 2022 23:26:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656631595;
+        bh=ocxWtABVoequW5YNJWHtxjCAN6pvUTRglOmXliA+RpI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Qi98AIkpiogBRU1SIQ0tRIDCbTH3aUhLmIwceSXkScDwXJRgoZSsHLUvO4xn/Aaco
+         jUeeJ1bfKaPPoD5NhRVnYvDv7ZJXteCeyyAcTVk2eHussC2U0xAsQizgRBBb0q143b
+         FegjCvwcXeJGM0D9K4OwnWTFftyuJNqy/fsRt4PTeKXuJzs2BuvZWQf47mcHBJ2zFS
+         QiVBk+IwIKPPurNp4TBJXnbB2mxb/ZoerePEqqTYli4zzKaVWaF/7nbwI+VJW9Rn0M
+         rjJI0pOTvoDA8U1DSfb8VACgJqhFmYGFBJhUpERO6ZqZ0i2uiu9/r5+1gdHldP6Y7H
+         ugsbpRRMOTwdQ==
+Received: by mail-ua1-f49.google.com with SMTP id l7so242492ual.9;
+        Thu, 30 Jun 2022 16:26:35 -0700 (PDT)
+X-Gm-Message-State: AJIora/ff47zuqJIg9g5I/iw+cAn4HD1zgN6N1goCfyDEo1vU6k982DW
+        TG+3LJD4XguuAcgLL0Z71mDMCAsyg8wDV6xX1w==
+X-Google-Smtp-Source: AGRyM1uzRDE+5OSb/zj34pnreLyYTDG7fKIijDdSX9upnNZPRoBKS78Ucyprll5y2N89WsffxoVjZnek2U5JH0kmp0E=
+X-Received: by 2002:ab0:244f:0:b0:37f:2985:e620 with SMTP id
+ g15-20020ab0244f000000b0037f2985e620mr6853095uan.36.1656631594258; Thu, 30
+ Jun 2022 16:26:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.15 00/28] 5.15.52-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220630133232.926711493@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220630133232.926711493@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220601070707.3946847-1-saravanak@google.com>
+ <20220601070707.3946847-2-saravanak@google.com> <YrFzK6EiVvXmzVG6@atomide.com>
+ <CAGETcx_1USPRbFKV5j00qkQ-QXJkp7=FAfnFcfiNnM4J5KF1cQ@mail.gmail.com>
+ <YrKhkmj3jCQA39X/@atomide.com> <CAGETcx_11wO-HkZ2QsBF8o1+L9L3Xe1QBQ_GzegwozxAx1i0jg@mail.gmail.com>
+ <YrQP3OZbe8aCQxKU@atomide.com> <CAGETcx9aFBzMcuOiTAEy5SJyWw3UfajZ8DVQfW2DGmzzDabZVg@mail.gmail.com>
+ <Yrlz/P6Un2fACG98@atomide.com> <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
+In-Reply-To: <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 30 Jun 2022 17:26:22 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJd3J6k6pRar7CkHVaaPbY7jqvzAePd8rVDisRV-dLLtg@mail.gmail.com>
+Message-ID: <CAL_JsqJd3J6k6pRar7CkHVaaPbY7jqvzAePd8rVDisRV-dLLtg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 30, 2022 at 5:11 PM Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Mon, Jun 27, 2022 at 2:10 AM Tony Lindgren <tony@atomide.com> wrote:
+> >
+> > * Saravana Kannan <saravanak@google.com> [220623 08:17]:
+> > > On Thu, Jun 23, 2022 at 12:01 AM Tony Lindgren <tony@atomide.com> wrote:
+> > > >
+> > > > * Saravana Kannan <saravanak@google.com> [220622 19:05]:
+> > > > > On Tue, Jun 21, 2022 at 9:59 PM Tony Lindgren <tony@atomide.com> wrote:
+> > > > > > This issue is no directly related fw_devlink. It is a side effect of
+> > > > > > removing driver_deferred_probe_check_state(). We no longer return
+> > > > > > -EPROBE_DEFER at the end of driver_deferred_probe_check_state().
+> > > > >
+> > > > > Yes, I understand the issue. But driver_deferred_probe_check_state()
+> > > > > was deleted because fw_devlink=on should have short circuited the
+> > > > > probe attempt with an  -EPROBE_DEFER before reaching the bus/driver
+> > > > > probe function and hitting this -ENOENT failure. That's why I was
+> > > > > asking the other questions.
+> > > >
+> > > > OK. So where is the -EPROBE_DEFER supposed to happen without
+> > > > driver_deferred_probe_check_state() then?
+> > >
+> > > device_links_check_suppliers() call inside really_probe() would short
+> > > circuit and return an -EPROBE_DEFER if the device links are created as
+> > > expected.
+> >
+> > OK
+> >
+> > > > Hmm so I'm not seeing any supplier for the top level ocp device in
+> > > > the booting case without your patches. I see the suppliers for the
+> > > > ocp child device instances only.
+> > >
+> > > Hmmm... this is strange (that the device link isn't there), but this
+> > > is what I suspected.
+> >
+> > Yup, maybe it's because of the supplier being a device in the child
+> > interconnect for the ocp.
+>
+> Ugh... yeah, this is why the normal (not SYNC_STATE_ONLY) device link
+> isn't being created.
+>
+> So the aggregated view is something like (I had to set tabs = 4 space
+> to fit it within 80 cols):
+>
+>     ocp: ocp {         <========================= Consumer
+>         compatible = "simple-pm-bus";
+>         power-domains = <&prm_per>; <=========== Supplier ref
+>
+>                 l4_wkup: interconnect@44c00000 {
+>             compatible = "ti,am33xx-l4-wkup", "simple-pm-bus";
+>
+>             segment@200000 {  /* 0x44e00000 */
+>                 compatible = "simple-pm-bus";
+>
+>                 target-module@0 { /* 0x44e00000, ap 8 58.0 */
+>                     compatible = "ti,sysc-omap4", "ti,sysc";
+>
+>                     prcm: prcm@0 {
+>                         compatible = "ti,am3-prcm", "simple-bus";
+>
+>                         prm_per: prm@c00 { <========= Actual Supplier
+>                             compatible = "ti,am3-prm-inst", "ti,omap-prm-inst";
+>                         };
+>                     };
+>                 };
+>             };
+>         };
+>     };
+>
+> The power-domain supplier is the great-great-great-grand-child of the
+> consumer. It's not clear to me how this is valid. What does it even
+> mean?
+>
+> Rob, is this considered a valid DT?
 
+Valid DT for broken h/w.
 
-On 6/30/2022 6:46 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.52 release.
-> There are 28 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.52-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+So the domain must be default on and then simple-pm-bus is going to
+hold a reference to the domain preventing it from ever getting powered
+off and things seem to work. Except what happens during suspend?
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Rob

@@ -2,384 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5EA56263E
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 00:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDFC562647
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 00:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbiF3WuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 18:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
+        id S230402AbiF3WyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 18:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiF3WuG (ORCPT
+        with ESMTP id S229449AbiF3WyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 18:50:06 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851BE4F66F;
-        Thu, 30 Jun 2022 15:50:05 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25UM4IWx021945;
-        Thu, 30 Jun 2022 22:49:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=4oz0ACPtn54DN46/4lS2fJaFMmQ6BZOChxtds3UUtxQ=;
- b=yA4Nr6IhbW5KaePMVbyrb8m5XJqjooXuYLrufmz1KjL5YmnlLwLH3D/SdJ3GjQGHYZIi
- 8mV2nA3UxxJ94ITq7mDQR7PvSGGHJrOW3VFIvppd0y0DfJS1A7czG7cYvI3JvlEFRcHG
- pJaWZFmwtqSpZTBHDtT6Aiat95n8r0aWCPnonZ7VF/dxvV9dzuR5YjkKkqF9f4fJNEWP
- D+K+YkDzFrnk0NPX4RnMdLnzFDHRu97UqCNRtBxCm8g9CE5l6s5FH7C4rEs2uyzcWbHm
- M7vOP9BcB/XLzWmkMzEcDglLVLNT5WsmdJWTEhVjtu/gzJXiVM+l3jQBORTbxAEreqyR 0g== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gws52nqx3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 Jun 2022 22:49:21 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25UMfmWL001367;
-        Thu, 30 Jun 2022 22:49:20 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2100.outbound.protection.outlook.com [104.47.58.100])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gwrt44u8j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 Jun 2022 22:49:19 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CkWdD98g7fSQwCuAbg7dXMGGvX3bF5Tbi/Wu1aqDyijSPrUckBoJwffUSyPzpNRB8YTnmiPi6NVnf3KDZT0iSyxMjMJXrX7Qu0H+HB0WWnfiBrKz5SHWnjJthHOZ70SbidHsPH3yN9tmYPYxq9xPg7p5EojPRojuzX27xtBZzoUSjk9YTFmNf4V9NlovWB7aX9TkDQz+yxjyP7dVaQHeYpTeJnVYt4ZdoN/3taK6AQMOSbedA3ezJ2iHXitlO3TFqdy24cMKivFnp9geMN9bcjCMXBern/gZqC2fBpYRglzKV8dE7Dy+KMjV6ksvZlB+h+ieb350xnMQgKGCPmXU1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4oz0ACPtn54DN46/4lS2fJaFMmQ6BZOChxtds3UUtxQ=;
- b=BAmlrB4pKqBS3kIB5DgKzGDLBh6JZN2M2vTl8/qw3Fq78cyP7Rkq5EPFkmpWjyyJBHNfaFirAJuNQ3p/QI7wji8WHYkzWbQdDGM8h7J2Dy19z5ANFv7BoRgZSJT3v6rBpexGESJsFoTrrmiPL+kEJQPbOgf9EUAxGuPk/v0fINfTwoaT2/fSrLqrfGlYrYafe3csHLfAoZcB2qrdgdXDSLKqgoAzrXgwhse2r0KTMmgxP8D/CQvpYG44E6CbM5A/Rb28aN0lj1B8S5eGEQ9+xRL6oO/0rF6QYRthZwoElMm1IHCQqXMVz0xTC9mXyxNwxtQVuNfq0FBQd6dLtK4x/w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 30 Jun 2022 18:54:00 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0E451B0E;
+        Thu, 30 Jun 2022 15:54:00 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id g7so887350pjj.2;
+        Thu, 30 Jun 2022 15:54:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4oz0ACPtn54DN46/4lS2fJaFMmQ6BZOChxtds3UUtxQ=;
- b=V0cuiIPN/XbC0KrtSA9m5LZkbdS06GTDpsaaRaioO3jmu/uMsmPRkpo3PrGL/DfBQPem1CuP7YeqahtLWOcFdmYRnMf7KYJobQKF+/p/FQzMintc1JsVVxlsvn8q9jlMMCTRPLzFak/RekojkI65KMS4kjFWwtGTHzIiLPcKAzw=
-Received: from BN8PR10MB3220.namprd10.prod.outlook.com (2603:10b6:408:c8::18)
- by CY4PR10MB2023.namprd10.prod.outlook.com (2603:10b6:903:127::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Thu, 30 Jun
- 2022 22:49:17 +0000
-Received: from BN8PR10MB3220.namprd10.prod.outlook.com
- ([fe80::28d2:e82b:afa1:bbc2]) by BN8PR10MB3220.namprd10.prod.outlook.com
- ([fe80::28d2:e82b:afa1:bbc2%3]) with mapi id 15.20.5373.022; Thu, 30 Jun 2022
- 22:49:17 +0000
-Message-ID: <7f4952e4-fa62-8b62-dcae-c7bd3cb060e1@oracle.com>
-Date:   Thu, 30 Jun 2022 16:49:12 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 3/9] mm/mshare: make msharefs writable and support
- directories
-Content-Language: en-US
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     akpm@linux-foundation.org, willy@infradead.org,
-        aneesh.kumar@linux.ibm.com, arnd@arndb.de, 21cnbao@gmail.com,
-        corbet@lwn.net, dave.hansen@linux.intel.com, david@redhat.com,
-        ebiederm@xmission.com, hagen@jauu.net, jack@suse.cz,
-        keescook@chromium.org, kirill@shutemov.name, kucharsk@gmail.com,
-        linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        longpeng2@huawei.com, luto@kernel.org, markhemm@googlemail.com,
-        pcc@google.com, rppt@kernel.org, sieberf@amazon.com,
-        sjpark@amazon.de, surenb@google.com, tst@schoebel-theuer.de,
-        yzaikin@google.com
-References: <cover.1656531090.git.khalid.aziz@oracle.com>
- <397ad80630444b90877625a1e94dd81392fc678e.1656531090.git.khalid.aziz@oracle.com>
- <Yr4W6W1i0WOY6zag@magnolia>
-From:   Khalid Aziz <khalid.aziz@oracle.com>
-In-Reply-To: <Yr4W6W1i0WOY6zag@magnolia>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0097.namprd05.prod.outlook.com
- (2603:10b6:a03:334::12) To BN8PR10MB3220.namprd10.prod.outlook.com
- (2603:10b6:408:c8::18)
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ywGXGSeAdHaxOG0hHw1tcJMSEkflmye5hh+2B4JWTp0=;
+        b=mNLr4nkPZCDYuI2fSYGchP6gg6SX6mc4w6ytuuvcRaoApa6emQ7mzzj6Thc0PX2xjP
+         5T20a8tNMdamJX78/HhIM+zs5fa6Sf4Z3eSCkhjArJSzl6mCGuicVAyrUpiIxC3WXyla
+         HRNIlPRXxR1PaF6qZe2t4b/ZgygdqNI/KLflZGCJFfRCZnVIXU+74OCV19a4/JeCs8AF
+         uWx7283rnfiPKAB/NTQLC0CPPqMpQ6uQSHJH/TCadJV/frfEIidBAI/UqsA5oRhHb8et
+         R/8g3HAEmIz0tlGqHjiFSQxNcyvAgyO9T0QcwI+OTs0N8iGMSFt58HKXjRM6EDmaepP0
+         0hVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=ywGXGSeAdHaxOG0hHw1tcJMSEkflmye5hh+2B4JWTp0=;
+        b=LWpo20NQ4u8HJjhqsNX/m8BCFOhT7fc7fAwI5PaGZSQ+Uh8EGdsGqpDI63Brms9q2I
+         q8fh/S6jE85Cw0cf+uV1MrTFDVJXLI3FwGXvRSpDsI9oNMr/UPUvNXXX4gd4DivQL5vI
+         HVOfCHTXeMZ4A25QbzLSMjLE2nh1WDDIByXRUYBXDNQYCmXeC+ex/z8HZsEuFKigyYdc
+         kNdVceB4dXqxbQjrdKjbKz5pTeAF8za6baGzp3RxikTvXZsTtyCPi3+nqZoA0dmC/ZJJ
+         8VvbVOFC9uh4bUCf021k/vbXL8/40zxJmTv1lVZMmF3cBnAHNxrIdx3j3pJdM6BZ76Zh
+         mAug==
+X-Gm-Message-State: AJIora8mRIUbchF1oKXLuSwYLjAnoY+lJZjFf/H+fX1m/z/3y8Rl1SW8
+        +4aH3NHOap3nGlfbHbLIKyA=
+X-Google-Smtp-Source: AGRyM1vTcdnL+mv4xgwGoljun+ricETJIRKKHlIxUwZckSI+Q7oNOn3fqJfsc769rfCzEoAYnKiIRw==
+X-Received: by 2002:a17:902:da87:b0:16a:54e1:3426 with SMTP id j7-20020a170902da8700b0016a54e13426mr16388696plx.157.1656629639274;
+        Thu, 30 Jun 2022 15:53:59 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:4f4a])
+        by smtp.gmail.com with ESMTPSA id 11-20020a63164b000000b0040d4c8e335csm13848116pgw.75.2022.06.30.15.53.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 15:53:58 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 1 Jul 2022 07:53:55 +0900
+From:   Tejun Heo <tj@kernel.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v11 7/8] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <Yr4pgxUTmg+UN35F@mtj.duckdns.org>
+References: <YqYnQ4U4t6j/3UaL@slm.duckdns.org>
+ <404171dc-0da3-21f2-5003-9718f875e967@redhat.com>
+ <YqarMyNo9oHxhZFh@slm.duckdns.org>
+ <20220613142452.GB6910@blackbody.suse.cz>
+ <YqdzuSQuAeiPXQvy@slm.duckdns.org>
+ <20220613175548.GB21665@blackbody.suse.cz>
+ <Yqd7WMFj6AEyV3Cy@slm.duckdns.org>
+ <20220614115345.GA6771@blackbody.suse.cz>
+ <YroApRMPV/6zO5I8@mtj.duckdns.org>
+ <20220630143211.GA22105@blackbody.suse.cz>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 26d03de6-d550-4a02-9595-08da5aeac31e
-X-MS-TrafficTypeDiagnostic: CY4PR10MB2023:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zN/BxhNKDaztyUgK8T+A2lNhF4yvIdzRREpmNK6e9l6tDVa5qxlurDOV7HZgF3JYvwSwIJlqFsdIo9dRMCFRFT0IrOleQF9HP8DbpUlkMjkSGf4QQzXVfOzjD9TTrB4RFQSn4iQVIT/8EtA733kPXLtm+sPcIBuJeJzW59wNsYn1iSm3YzySFAfs8rqjoz9nsiXlDUrVtgZzfwUxr+zZVgJCnyXe17fwAqTqqhtbcmfM54zzwIdZ6Zj3FYSdintFu5taU5TZQGYsT6V+EnQn8fZN6ReHPJDMzBgvEsiQviovDcJSVAnUG9ozRV4X1g9rT2Sv4pPEmag3sayxPHPTrLOSZvSsa78RxHC2XyKSTYy7gNLO8hZiC3pqVDUXLg7xQ34v7icTPVxdEu8c+cvcA7UuJ0vUGs7Ly9UwnK3Hl5QW58mI4mMmuJa04rhw8p6wBWeXjti/9jX5YHPj1N5DwYd8gBIWN6+JjwrHEwGBswRb22YGSwmUDokcNgEf6rYpg/HtUIeWDMiTXak0G2aOtjhiDkfQdxETFYchRA7zUbe8TfTFSr/d8ITczGQJ3lv5sQolOU3XI8/NL1iuRbAdZsX8jDeqYFN+a3Ta/sDKCxB4IsqIHHrlEeD/qQhe6M+Pl0N+tNRBAgUkpxvRI7izXQYF1+pObCbJpdpyI0tOw5JNRsbKwChVIne+dOZ9s4RF9HMUrqOeZEcey20PwYdK/n0bc3ohZBQD9TIPlK0wTdipANXwGcgfUeTCpYWndaFTm9UyI1eAZP702OmDNU1HJNVApqICpf7KObH4zauKEz054pOq4GmmpsNU7i7OnDe20OP999WrRM3GueuXDvRBYQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR10MB3220.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(376002)(396003)(136003)(346002)(366004)(66556008)(2906002)(6666004)(53546011)(86362001)(7416002)(8676002)(6506007)(478600001)(31696002)(6486002)(4326008)(66946007)(41300700001)(44832011)(8936002)(5660300002)(66476007)(38100700002)(31686004)(6916009)(6512007)(83380400001)(186003)(2616005)(36756003)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WXBXMXBDU2NMTkRYTHRMbkZndkhRR2pha2JnYVkzR3c3cXU2c25OMFpHNEIz?=
- =?utf-8?B?Q1dkTytSckpzRkFOdUt3UVU3TU8yODN0WEhldEt4SkJDc2VzMHFuSVBuMHp5?=
- =?utf-8?B?QUl5NHpITlpzZTZzTEExZlpENzNsK2JteDl6bE1lZjd5TlJwaHZtOEUxRTBV?=
- =?utf-8?B?MVlOMTZCNjBpUFN5N0JIcFlNMHpCeW9GUE9wZ3Y0aXlrcU1zL3FTdkdMd05V?=
- =?utf-8?B?ZE1tampDZHc3b1NweXQ3NzdLK2NSVjRRTW9JakJ0MURleTdQSDlLem1GSFox?=
- =?utf-8?B?VHdnWjBHTFFDMGxKdWxOMTdJVDIzcFBNd1MrSkEycjdtY2d5NkZhZGJ5eTg5?=
- =?utf-8?B?MHc4VHpudlFBbTk5T09wMTRYQzBieDk2cDRKdTArZVpVUktIZW9RRktoTTNi?=
- =?utf-8?B?K0duamFrSEpwZXl6Ump6bTdYbHFHYnhUK3N2bU5FQmNkVGZ1OTkwZnc2YkpM?=
- =?utf-8?B?YXRGZ3A5UTU2amxZb2NlQ0g5KzNKRVQ4b3FUU0NBa1lZenRKaHU5TnJqVGl5?=
- =?utf-8?B?enhJZ1dkNWRRVk9OMldlRmplYWxHK2ZoZXBqQW5yNjAvZzhGMCtBRTlDS0xk?=
- =?utf-8?B?RDVlamY2eDdYdy91YWNIVlhhTjVKNWpQQnI5cUV1bnkweTZJc2dvcUFMR2pW?=
- =?utf-8?B?UnM3UDV5ZlJ2ZWxtMENqejR4SEtiWGtnQmV4SEFMN0dLN0RJcWRRSGNheVMz?=
- =?utf-8?B?MFBBMVZvZDc1TFdSWDFCYkluQzJoQ21QUWE4RzJ6bldXWkFNT29sbERiTTNx?=
- =?utf-8?B?UVJYVGIzeW5ETG9sUTdja1hWRi91V0ZQQ0s1SGRyTFU3dE14THQyQXdGR2FP?=
- =?utf-8?B?T1pvRG1Jc251SGVNZFNYLzd3bE9aalJaSXJqMHQreFd5SmZBemo0OEVhME5E?=
- =?utf-8?B?Vkd1QnZQMWphZ3VhUFMrUEU2c3Yrb0lhUFhvWjF2ZmZRQXZTVlNweWRtYUM3?=
- =?utf-8?B?VDMxYUtGOGRER05tL0VWZ2dIdTdNMkFJc1VKajE0NS8wYWIvdEc5cEwwVHJy?=
- =?utf-8?B?ZkpLM3lxVUYzL3NJMlRlTXF2cHNwanhsenhKWnNPYnRaV2gzY1RtTzR6V0V1?=
- =?utf-8?B?VkxrOWpXeW9mOGpkRmVUN2x2cWszOTNZbzVaZmI3WDNzd3pFV0J1M3VWZE95?=
- =?utf-8?B?QWpxZitUbiswcGJXNWNEcjJQanN5Y3U0ZFhYeUNFcTlvcUtyd0ZwN1RhellO?=
- =?utf-8?B?WDRnL1gwNWRmTlNMZnZjK0NFMHlWaWZITStDeGNIT00wZ3ZDQU55b0hrcXpj?=
- =?utf-8?B?cmJ6Y0hXL0ZYUHlLSG9mRnlRczFNdC9JSFFRWmdSNE5aU2ZJc2dUcllCZVpm?=
- =?utf-8?B?VzBDNW42eUU1SzZhdW1LSlg4cGExRmxoY25UOFJHRmV6aGxNSDFuSXpHM0tD?=
- =?utf-8?B?enpQbXFhbVhSdnNmOThqT3Q1R0JoaW10Uzl6V2l6V0doanQrQ2o1RGlpTVU3?=
- =?utf-8?B?dUZwU3g0R21qbWNOUzhiOU5pVnRpUGY1YVdQVjJmQ1JaT3BLRk16VEtCaitL?=
- =?utf-8?B?Wnl2dk9nN2RhZWR2cVJOR0pjL292QTQ1QmtFeFQ0WUFlMTczNmE5czIxa1Vt?=
- =?utf-8?B?RW1KOFpxdEk0THJuWmFZajVVMDFNb0hNYXp6dzFEdkluT2lBYWZlVE1DemRB?=
- =?utf-8?B?dVl3WUFGSXU5Mkt6UndEaWdSSlJrRmY1R3A0RjRBSkRFMkl2ay9OamRoRlpj?=
- =?utf-8?B?QW5BN2JZaCs4ZHpzT0J5ZWVvS0dtZHI5clErTkUrQ3BLR3FPODd5aFBaZDlv?=
- =?utf-8?B?WS9rZzkzdW4vRnd1SVJtcDRaQU5kbU1XUVVTVTc5dkJ3TFRnUk1MUCtvcGU3?=
- =?utf-8?B?aGc5cU1SdThnUHdDME05UDJ1dUc5U0pTR3BnbGJCZ3d3RUorZGVsTlV5eWU2?=
- =?utf-8?B?cTRZVHZUUHZ3Q1o1WG9tcGlGaXF3WXJmRitCRFlyMkcvRnl5MVFlSHkrSmpv?=
- =?utf-8?B?cUI5ZTdvRHRkcmU4dFNYTXJJRlU1aDZ4US9tZ1RZdWE4bW5NSEdwRWswcGhr?=
- =?utf-8?B?K2MydVFjVnh1cmpDVlRrOElSZjZ0M1pUY0RYN0pmVTc1MjBLRGJVK0wxY1ps?=
- =?utf-8?B?TnF1QmhhSkdhdTJZS2xSTjF1TE5kSkRpQVFhczhRNlFldE10V1dKdlFaQUpE?=
- =?utf-8?B?UE5Da1NlZ25aVU95VWVIbzBXM2JqcHdweUcxL3VLeWt2MDlFbm1yeC8wTHdT?=
- =?utf-8?B?bkVKdmNSRmUxTVFidmlWMlQ3ZDhvMUl4a05BRFZjL3hqSm9KT3ZlQXZHL1Nm?=
- =?utf-8?B?S0MrbU1XMisvb1dSWXJ5Q0lNWFBBPT0=?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 26d03de6-d550-4a02-9595-08da5aeac31e
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR10MB3220.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 22:49:17.0942
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7leJWvmIc8whdf6RkTxcRTcno2s9XZI5lnlx3C56oOfC/xirP8t26gn4R1FrlDMq5MIiBk1eJNyVvN146amSMA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB2023
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
- definitions=2022-06-30_14:2022-06-28,2022-06-30 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 bulkscore=0
- phishscore=0 mlxlogscore=999 adultscore=0 mlxscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206300087
-X-Proofpoint-ORIG-GUID: 2cNxlfClVqHeL35ciimXZ240Ri_ln6QX
-X-Proofpoint-GUID: 2cNxlfClVqHeL35ciimXZ240Ri_ln6QX
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220630143211.GA22105@blackbody.suse.cz>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/30/22 15:34, Darrick J. Wong wrote:
-> On Wed, Jun 29, 2022 at 04:53:54PM -0600, Khalid Aziz wrote:
->> Make msharefs filesystem writable and allow creating directories
->> to support better access control to mshare'd regions defined in
->> msharefs.
->>
->> Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
->> ---
->>   mm/mshare.c | 195 +++++++++++++++++++++++++++++++++++++++++++++++++---
->>   1 file changed, 186 insertions(+), 9 deletions(-)
->>
->> diff --git a/mm/mshare.c b/mm/mshare.c
->> index 3e448e11c742..2d5924d39221 100644
->> --- a/mm/mshare.c
->> +++ b/mm/mshare.c
->> @@ -21,11 +21,21 @@
->>   #include <linux/fileattr.h>
->>   #include <uapi/linux/magic.h>
->>   #include <uapi/linux/limits.h>
->> +#include <uapi/linux/mman.h>
->>   
->>   static struct super_block *msharefs_sb;
->>   
->> +static const struct inode_operations msharefs_dir_inode_ops;
->> +static const struct inode_operations msharefs_file_inode_ops;
->> +
->> +static int
->> +msharefs_open(struct inode *inode, struct file *file)
->> +{
->> +	return simple_open(inode, file);
->> +}
->> +
->>   static const struct file_operations msharefs_file_operations = {
->> -	.open		= simple_open,
->> +	.open		= msharefs_open,
->>   	.llseek		= no_llseek,
->>   };
->>   
->> @@ -42,6 +52,113 @@ msharefs_d_hash(const struct dentry *dentry, struct qstr *qstr)
->>   	return 0;
->>   }
->>   
->> +static struct dentry
->> +*msharefs_alloc_dentry(struct dentry *parent, const char *name)
->> +{
->> +	struct dentry *d;
->> +	struct qstr q;
->> +	int err;
->> +
->> +	q.name = name;
->> +	q.len = strlen(name);
->> +
->> +	err = msharefs_d_hash(parent, &q);
->> +	if (err)
->> +		return ERR_PTR(err);
->> +
->> +	d = d_alloc(parent, &q);
->> +	if (d)
->> +		return d;
->> +
->> +	return ERR_PTR(-ENOMEM);
->> +}
->> +
->> +static struct inode
->> +*msharefs_get_inode(struct super_block *sb, const struct inode *dir,
->> +			umode_t mode)
->> +{
->> +	struct inode *inode = new_inode(sb);
->> +
->> +	if (inode) {
-> 
-> Not sure why you wouldn't go with the less-indently version:
-> 
-> 	if (!inode)
-> 		return ERR_PTR(-ENOMEM);
-> 
-> 	inode->i_ino = get_next_ino();
-> 	<etc>
-> 
+Hello,
 
-Yeah, good idea. I will change it.
-
->> +		inode->i_ino = get_next_ino();
->> +		inode_init_owner(&init_user_ns, inode, dir, mode);
->> +
->> +		inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
->> +
->> +		switch (mode & S_IFMT) {
+On Thu, Jun 30, 2022 at 04:32:11PM +0200, Michal Koutný wrote:
+> file				owner
+> parent/				user (mkdir)
+> `- cpuset.cpus			root
+> `- cpuset.cpus.partition	root	(P)
+> `- child_1/			user
+>   ` cpuset.cpus			user	(*)
+> `- child_2/			user
+>   ` cpuset.cpus			user	(*)
 > 
-> Shouldn't we set the mode somewhere?
-
-mode is passed in as parameter to msharefs_get_inode() which uses this value to determine its actions.
-
+> The writes to child cpuset.cpus may/may not invalidate parent's (P)
+> partition validity (whether a cpu is left to it to host possible tasks).
+> child_1 vs child_2 overlap affects only whether the children cgroups are
+> a valid partition.
 > 
->> +		case S_IFREG:
->> +			inode->i_op = &msharefs_file_inode_ops;
->> +			inode->i_fop = &msharefs_file_operations;
->> +			break;
->> +		case S_IFDIR:
->> +			inode->i_op = &msharefs_dir_inode_ops;
->> +			inode->i_fop = &simple_dir_operations;
->> +			inc_nlink(inode);
->> +			break;
->> +		case S_IFLNK:
->> +			inode->i_op = &page_symlink_inode_operations;
->> +			break;
->> +		default:
->> +			discard_new_inode(inode);
->> +			inode = NULL;
->> +			break;
->> +		}
->> +	}
->> +
->> +	return inode;
->> +}
->> +
->> +static int
->> +msharefs_mknod(struct user_namespace *mnt_userns, struct inode *dir,
->> +		struct dentry *dentry, umode_t mode, dev_t dev)
->> +{
->> +	struct inode *inode;
->> +	int err = 0;
->> +
->> +	inode = msharefs_get_inode(dir->i_sb, dir, mode);
->> +	if (IS_ERR(inode))
->> +		return PTR_ERR(inode);
+> I think you mean: writes to children cpuset.cpus should be allowed,
+> possible exclusivity violation should be reported in
+> parent/cpuset.cpus.partition.
+
+I see.
+
+> What I thought was OK: prevent (fail) writes to children cpuset.cpus
+> that'd violate the exclusivity (or would take the last cpu from parent
+> if it's necessary to host a task).
+> IMO, it's similar to failed writes to parent/cgroup.subtree_control in a
+> delegated subtree if the parent still has some tasks (that'd violate
+> internal node constraint).
 > 
-> ...and if @inode is NULL?
+> What I think might still be OK: allow writes to children cpuset.cpus
+> that violate exclusivity and report that in children's
+> cpuset.cpus.partition. Writes that'd take last cpu from parent should
+> still fail (similar to the failing subtree_control writes above).
 
-Oh right, IS_ERR() does not check for NULL value. I will add a check for that and return ENOMEM.
+Yeah, this one.
 
-> 
->> +
->> +	d_instantiate(dentry, inode);
->> +	dget(dentry);
->> +	dir->i_mtime = dir->i_ctime = current_time(dir);
->> +
->> +	return err;
->> +}
->> +
->> +static int
->> +msharefs_create(struct user_namespace *mnt_userns, struct inode *dir,
->> +		struct dentry *dentry, umode_t mode, bool excl)
->> +{
->> +	return msharefs_mknod(&init_user_ns, dir, dentry, mode | S_IFREG, 0);
->> +}
->> +
->> +static int
->> +msharefs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
->> +		struct dentry *dentry, umode_t mode)
->> +{
->> +	int ret = msharefs_mknod(&init_user_ns, dir, dentry, mode | S_IFDIR, 0);
->> +
->> +	if (!ret)
->> +		inc_nlink(dir);
->> +	return ret;
->> +}
->> +
->> +static const struct inode_operations msharefs_file_inode_ops = {
->> +	.setattr	= simple_setattr,
->> +	.getattr	= simple_getattr,
->> +};
->> +static const struct inode_operations msharefs_dir_inode_ops = {
->> +	.create		= msharefs_create,
->> +	.lookup		= simple_lookup,
->> +	.link		= simple_link,
->> +	.unlink		= simple_unlink,
->> +	.mkdir		= msharefs_mkdir,
->> +	.rmdir		= simple_rmdir,
->> +	.mknod		= msharefs_mknod,
->> +	.rename		= simple_rename,
->> +};
->> +
->>   static void
->>   mshare_evict_inode(struct inode *inode)
->>   {
->> @@ -58,7 +175,7 @@ mshare_info_read(struct file *file, char __user *buf, size_t nbytes,
->>   {
->>   	char s[80];
->>   
->> -	sprintf(s, "%ld", PGDIR_SIZE);
->> +	sprintf(s, "%ld\n", PGDIR_SIZE);
-> 
-> Changing this already?
+So, here, one important question is who owns cpuset.cpus.partition
+file - is it a konb which is owned by the parent like other resource
+control knobs including cpuset.cpus or is it a knob which is owned by
+the cgroup itself for selecting its own operation like cgroup.procs or
+cgroup.subtree_control.
 
-Possibly. There is one suggestion to change it to PMD and it might be a better choice.
+In the former case, the parent being able to say that "my children
+can't overlap" makes sense although I'm not a big fan of the current
+interface (again, who owns that knob?). In the latter case, it doesn't
+really make sense cuz it'd be declaring "I can't make my children
+overlap" - well, then, don't.
 
-> 
->>   	return simple_read_from_buffer(buf, nbytes, ppos, s, strlen(s));
->>   }
->>   
->> @@ -72,6 +189,38 @@ static const struct super_operations mshare_s_ops = {
->>   	.evict_inode = mshare_evict_inode,
->>   };
->>   
->> +static int
->> +prepopulate_files(struct super_block *s, struct inode *dir,
->> +			struct dentry *root, const struct tree_descr *files)
->> +{
->> +	int i;
->> +	struct inode *inode;
->> +	struct dentry *dentry;
->> +
->> +	for (i = 0; !files->name || files->name[0]; i++, files++) {
->> +		if (!files->name)
->> +			continue;
-> 
-> What ends the array?  NULL name or empty name?
-> Do we have to erase all of these when the fs gets unmounted?
+Thanks.
 
-This code is very similar to simple_fill_super() and I reused the code from there. inodes and dentries will need to be 
-erased on unmount through evict_inode.
-
-Thanks,
-Khalid
+-- 
+tejun

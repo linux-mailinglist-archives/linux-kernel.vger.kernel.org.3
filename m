@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F105613F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 971D35613E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233544AbiF3H7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
+        id S233631AbiF3H7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232959AbiF3H7J (ORCPT
+        with ESMTP id S233394AbiF3H7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:59:09 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A1C41319;
-        Thu, 30 Jun 2022 00:59:07 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-317a66d62dfso171009787b3.7;
-        Thu, 30 Jun 2022 00:59:07 -0700 (PDT)
+        Thu, 30 Jun 2022 03:59:23 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA1F41335;
+        Thu, 30 Jun 2022 00:59:22 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id v38so21636882ybi.3;
+        Thu, 30 Jun 2022 00:59:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Wzp+0Ca5DBgGqXHIatlXSPmTeEJ8VcvhTsReClfiz3I=;
-        b=fcJRnvlrEwLctduY40xOq44ATbs8o33Boc/pFvwq9Vzv/x0aI/7eBELkUaUY2YrHpa
-         cD9Gls4dh+70scT6EfgRKk9W9/FqbotPrdFRerYOzfp4AifNhx/dG3qZBjiIbWgNQOK7
-         kXwO9U7pp8/yuOuhuPXUADjZWkc6/3UzcWgOvYGTNrmhJ0NhEuAmhyyKnUyr+T+iIwuM
-         +e/YDBNUTquCR1TvLkQNbUIl97Q+A8UrVkJ0NoSrpE8XijNpJ6y397TMl0PqrWzZc/cA
-         mfwJQbHS5JPVGggYYlDHwLCggCfyTnJwgOV+LZ+HLY6JEhOQTy4/6NI41kOzBzGzCNhx
-         1+yQ==
+        bh=7MP5GHlDBz5qUBJM/rdPcagSQgWmgbugUAfn9X+EbPI=;
+        b=MvlmhMdvCX0fOp6/DkwVMF5vlZ0JpaTaTV49Il5G1LWGds8RQvBCoBc8cNJHicn1Fw
+         YO89CzXD79pwRqkGZxdopRhAPLk1V6gLgr+f6rYrXXCAV38/2BeUAUkmk3Q6F/LGFcm+
+         5X+/YS5nw57yG4+tW6qFekvP62Ccq5Nvd7qHsiTdLEZgS6nOznAVD4LMgbYE12QDP3oY
+         ZnXt2NopbzqYExnJ4GbFAQgBBnObf85yh1w7fFqdLDOhqeXs7jeG23WJdIPzdXvJ2bL1
+         jggesymAkqmlfFWN+Kkj6BzZfCwQS+lI5pFKzkOEiUGZkgHwk0KuiSA1Im1WD4qjt1By
+         eLfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Wzp+0Ca5DBgGqXHIatlXSPmTeEJ8VcvhTsReClfiz3I=;
-        b=OfA0OldPPRS1gTmg3T84DnxrcKh4F6jqG5Q5cSGggfRv8CI1+XOoZP+796BFkdO/oJ
-         C2pIO7jl2puigacGmpk/nTpHzw+RK/llA4br0sIqQGfBFnxp5FmfSdi5mOAmVnzXu0Ba
-         Z4K+InQ4b176FKDV7i54ld6//iZFFrKyrHn0vahzyNLYP6MCbrqbK52Ym76MeAuE9a7S
-         Wp6bFvm9ytWckvYg0eCpe563Q9/5TdIUWJBd+XeLlrYb5ECLFy1kCmTJicic1erUaI2R
-         7u9ELfMDfDEfFt2IDOH0ISuON0vPY4H8S9XybiOVn0prYswdT9y/NB+Qan7blxRhNX0U
-         N2PQ==
-X-Gm-Message-State: AJIora9vNl1hhn7RAZvE4YMsEPuTYq6h4C9cEL/bBMmT87iVFD6Odpx3
-        9QB/ZrUDJq+nPnv9chz4KdILAmzDNRfq3QlEyf4=
-X-Google-Smtp-Source: AGRyM1uW1tm4RgeNJdIpXjCO46GUp0F/56c9Nd32bamzq8p05fH4mWEnaDtnFVe/pVck0EFdNmmSic7VvYWEYfXw4lw=
-X-Received: by 2002:a81:2386:0:b0:317:6586:8901 with SMTP id
- j128-20020a812386000000b0031765868901mr8814171ywj.195.1656575946260; Thu, 30
- Jun 2022 00:59:06 -0700 (PDT)
+        bh=7MP5GHlDBz5qUBJM/rdPcagSQgWmgbugUAfn9X+EbPI=;
+        b=MK8SzpvPi6LY2gBqoeFzEPmotknFx5nJ5L5JFXiSo9uDQFEtl3wbFXfbPc0DU6TSHs
+         aAhTjhXLMagZZ0+LN2F0sohMUEKodZDWAWxHLmw1XrY++i3vQkKN77fqfxvvYsGxD7W+
+         9ZXe/ZJA0IpLpdrCKeouIWBVDqBOR0cCKISTrvCQ5rHRVGarsvMIPDm54dYoQNcJhqk2
+         IxjkFUiynP9tfEBqI6j72gkPWOjeygfb90yizNIL4mZ+j2jNlopfek7OqWnJ9FbA7vYJ
+         gmc1u3eq/q5icN9HNDF76LCY8q5AA7PkOyJ2JOXlGK0FKP7RCx/gI4R6YWaO/3iDMdKX
+         Rl8A==
+X-Gm-Message-State: AJIora9B70WPjcQ1jsHomWtXV3LCHoZDURwyzV+dct9fzohusq5yZ1Ts
+        IMLd3L6c0cdkrd9+wxa3jsePnCwHlPhR24eb2BA=
+X-Google-Smtp-Source: AGRyM1sAP6R80Xtpm32PldM6Znhs8CkaWqS6Pt4rrF++mtsTAQk1UqwTGr7FxwbV4MK5ygAuB+kSjKSIGST8/glMWt8=
+X-Received: by 2002:a25:ca0a:0:b0:66b:4e6c:e094 with SMTP id
+ a10-20020a25ca0a000000b0066b4e6ce094mr8543875ybg.296.1656575961813; Thu, 30
+ Jun 2022 00:59:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com> <20220629143046.213584-9-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220629143046.213584-9-aidanmacdonald.0x0@gmail.com>
+References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com> <20220629143046.213584-10-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220629143046.213584-10-aidanmacdonald.0x0@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 30 Jun 2022 09:58:26 +0200
-Message-ID: <CAHp75VfFSOp1eNVOwoW4S6Z84aR52uoGuSty_Dgbs97+h5sdrg@mail.gmail.com>
-Subject: Re: [PATCH v4 08/15] iio: adc: axp20x_adc: Minor code cleanups
+Date:   Thu, 30 Jun 2022 09:58:39 +0200
+Message-ID: <CAHp75VfHT_kNAySz2=i9+-reU=UOHuQ9cxTq_5+qUOmcMpQtrQ@mail.gmail.com>
+Subject: Re: [PATCH v4 09/15] iio: adc: axp20x_adc: Replace adc_en2 flag with
+ adc_en2_mask field
 To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
@@ -86,190 +87,90 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Wed, Jun 29, 2022 at 4:30 PM Aidan MacDonald
 <aidanmacdonald.0x0@gmail.com> wrote:
 >
-> The code may be clearer if parameters are not re-purposed to hold
-> temporary results like register values, so introduce local variables
-> as necessary to avoid that. Regroup macros based on chip type, and
-> use the FIELD_PREP() macro instead of a hand-rolled version.
+> The adc_en2 flag is essentially specific to axp20x-compatible devices
+> because it hardcodes register values. Replace it with a mask field
+> so the register value can be specified in device match data.
 
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-> Suggested-by: Jonathan Cameron <jic23@kernel.org>
-> Reviewed-by: Chen-Yu Tsai <wens@csie.org>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 > ---
->  drivers/iio/adc/axp20x_adc.c | 61 +++++++++++++++++++-----------------
->  1 file changed, 32 insertions(+), 29 deletions(-)
+>  drivers/iio/adc/axp20x_adc.c | 16 +++++++---------
+>  1 file changed, 7 insertions(+), 9 deletions(-)
 >
 > diff --git a/drivers/iio/adc/axp20x_adc.c b/drivers/iio/adc/axp20x_adc.c
-> index 53bf7d4899d2..ab25e6e1ff65 100644
+> index ab25e6e1ff65..75bda94dbce1 100644
 > --- a/drivers/iio/adc/axp20x_adc.c
 > +++ b/drivers/iio/adc/axp20x_adc.c
-> @@ -5,6 +5,7 @@
->   *     Quentin Schulz <quentin.schulz@free-electrons.com>
->   */
+> @@ -623,9 +623,9 @@ struct axp_data {
+>         int                             num_channels;
+>         struct iio_chan_spec const      *channels;
+>         unsigned long                   adc_en1_mask;
+> +       unsigned long                   adc_en2_mask;
+>         int                             (*adc_rate)(struct axp20x_adc_iio *info,
+>                                                     int rate);
+> -       bool                            adc_en2;
+>         struct iio_map                  *maps;
+>  };
 >
-> +#include <linux/bitfield.h>
->  #include <linux/completion.h>
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
-> @@ -22,20 +23,20 @@
->  #include <linux/mfd/axp20x.h>
+> @@ -634,8 +634,8 @@ static const struct axp_data axp20x_data = {
+>         .num_channels = ARRAY_SIZE(axp20x_adc_channels),
+>         .channels = axp20x_adc_channels,
+>         .adc_en1_mask = AXP20X_ADC_EN1_MASK,
+> +       .adc_en2_mask = AXP20X_ADC_EN2_MASK,
+>         .adc_rate = axp20x_adc_rate,
+> -       .adc_en2 = true,
+>         .maps = axp20x_maps,
+>  };
 >
->  #define AXP20X_ADC_EN1_MASK                    GENMASK(7, 0)
-> -
->  #define AXP20X_ADC_EN2_MASK                    (GENMASK(3, 2) | BIT(7))
-> +
->  #define AXP22X_ADC_EN1_MASK                    (GENMASK(7, 5) | BIT(0))
+> @@ -645,7 +645,6 @@ static const struct axp_data axp22x_data = {
+>         .channels = axp22x_adc_channels,
+>         .adc_en1_mask = AXP22X_ADC_EN1_MASK,
+>         .adc_rate = axp22x_adc_rate,
+> -       .adc_en2 = false,
+>         .maps = axp22x_maps,
+>  };
 >
->  #define AXP20X_GPIO10_IN_RANGE_GPIO0           BIT(0)
->  #define AXP20X_GPIO10_IN_RANGE_GPIO1           BIT(1)
-> -#define AXP20X_GPIO10_IN_RANGE_GPIO0_VAL(x)    ((x) & BIT(0))
-> -#define AXP20X_GPIO10_IN_RANGE_GPIO1_VAL(x)    (((x) & BIT(0)) << 1)
+> @@ -655,7 +654,6 @@ static const struct axp_data axp813_data = {
+>         .channels = axp813_adc_channels,
+>         .adc_en1_mask = AXP22X_ADC_EN1_MASK,
+>         .adc_rate = axp813_adc_rate,
+> -       .adc_en2 = false,
+>         .maps = axp22x_maps,
+>  };
 >
->  #define AXP20X_ADC_RATE_MASK                   GENMASK(7, 6)
-> -#define AXP813_V_I_ADC_RATE_MASK               GENMASK(5, 4)
-> -#define AXP813_ADC_RATE_MASK                   (AXP20X_ADC_RATE_MASK | AXP813_V_I_ADC_RATE_MASK)
->  #define AXP20X_ADC_RATE_HZ(x)                  ((ilog2((x) / 25) << 6) & AXP20X_ADC_RATE_MASK)
-> +
->  #define AXP22X_ADC_RATE_HZ(x)                  ((ilog2((x) / 100) << 6) & AXP20X_ADC_RATE_MASK)
-> +
-> +#define AXP813_V_I_ADC_RATE_MASK               GENMASK(5, 4)
-> +#define AXP813_ADC_RATE_MASK                   (AXP20X_ADC_RATE_MASK | AXP813_V_I_ADC_RATE_MASK)
->  #define AXP813_TS_GPIO0_ADC_RATE_HZ(x)         AXP20X_ADC_RATE_HZ(x)
->  #define AXP813_V_I_ADC_RATE_HZ(x)              ((ilog2((x) / 100) << 4) & AXP813_V_I_ADC_RATE_MASK)
->  #define AXP813_ADC_RATE_HZ(x)                  (AXP20X_ADC_RATE_HZ(x) | AXP813_V_I_ADC_RATE_HZ(x))
-> @@ -234,7 +235,7 @@ static int axp20x_adc_raw(struct iio_dev *indio_dev,
->                           struct iio_chan_spec const *chan, int *val)
->  {
->         struct axp20x_adc_iio *info = iio_priv(indio_dev);
-> -       int size = 12;
-> +       int ret, size;
+> @@ -713,10 +711,10 @@ static int axp20x_probe(struct platform_device *pdev)
+>         /* Enable the ADCs on IP */
+>         regmap_write(info->regmap, AXP20X_ADC_EN1, info->data->adc_en1_mask);
 >
->         /*
->          * N.B.:  Unlike the Chinese datasheets tell, the charging current is
-> @@ -246,10 +247,11 @@ static int axp20x_adc_raw(struct iio_dev *indio_dev,
->         else
->                 size = 12;
+> -       if (info->data->adc_en2)
+> -               /* Enable GPIO0/1 and internal temperature ADCs */
+> +       if (info->data->adc_en2_mask)
+>                 regmap_update_bits(info->regmap, AXP20X_ADC_EN2,
+> -                                  AXP20X_ADC_EN2_MASK, AXP20X_ADC_EN2_MASK);
+> +                                  info->data->adc_en2_mask,
+> +                                  info->data->adc_en2_mask);
 >
-> -       *val = axp20x_read_variable_width(info->regmap, chan->address, size);
-> -       if (*val < 0)
-> -               return *val;
-> +       ret = axp20x_read_variable_width(info->regmap, chan->address, size);
-> +       if (ret < 0)
-> +               return ret;
+>         /* Configure ADCs rate */
+>         info->data->adc_rate(info, 100);
+> @@ -741,7 +739,7 @@ static int axp20x_probe(struct platform_device *pdev)
+>  fail_map:
+>         regmap_write(info->regmap, AXP20X_ADC_EN1, 0);
 >
-> +       *val = ret;
->         return IIO_VAL_INT;
->  }
+> -       if (info->data->adc_en2)
+> +       if (info->data->adc_en2_mask)
+>                 regmap_write(info->regmap, AXP20X_ADC_EN2, 0);
 >
-> @@ -257,11 +259,13 @@ static int axp22x_adc_raw(struct iio_dev *indio_dev,
->                           struct iio_chan_spec const *chan, int *val)
->  {
->         struct axp20x_adc_iio *info = iio_priv(indio_dev);
-> +       int ret;
+>         return ret;
+> @@ -757,7 +755,7 @@ static int axp20x_remove(struct platform_device *pdev)
 >
-> -       *val = axp20x_read_variable_width(info->regmap, chan->address, 12);
-> -       if (*val < 0)
-> -               return *val;
-> +       ret = axp20x_read_variable_width(info->regmap, chan->address, 12);
-> +       if (ret < 0)
-> +               return ret;
+>         regmap_write(info->regmap, AXP20X_ADC_EN1, 0);
 >
-> +       *val = ret;
->         return IIO_VAL_INT;
->  }
+> -       if (info->data->adc_en2)
+> +       if (info->data->adc_en2_mask)
+>                 regmap_write(info->regmap, AXP20X_ADC_EN2, 0);
 >
-> @@ -269,11 +273,13 @@ static int axp813_adc_raw(struct iio_dev *indio_dev,
->                           struct iio_chan_spec const *chan, int *val)
->  {
->         struct axp20x_adc_iio *info = iio_priv(indio_dev);
-> +       int ret;
->
-> -       *val = axp20x_read_variable_width(info->regmap, chan->address, 12);
-> -       if (*val < 0)
-> -               return *val;
-> +       ret = axp20x_read_variable_width(info->regmap, chan->address, 12);
-> +       if (ret < 0)
-> +               return ret;
->
-> +       *val = ret;
->         return IIO_VAL_INT;
->  }
->
-> @@ -443,27 +449,27 @@ static int axp20x_adc_offset_voltage(struct iio_dev *indio_dev, int channel,
->                                      int *val)
->  {
->         struct axp20x_adc_iio *info = iio_priv(indio_dev);
-> +       unsigned int regval;
->         int ret;
->
-> -       ret = regmap_read(info->regmap, AXP20X_GPIO10_IN_RANGE, val);
-> +       ret = regmap_read(info->regmap, AXP20X_GPIO10_IN_RANGE, &regval);
->         if (ret < 0)
->                 return ret;
->
->         switch (channel) {
->         case AXP20X_GPIO0_V:
-> -               *val &= AXP20X_GPIO10_IN_RANGE_GPIO0;
-> +               regval = FIELD_GET(AXP20X_GPIO10_IN_RANGE_GPIO0, regval);
->                 break;
->
->         case AXP20X_GPIO1_V:
-> -               *val &= AXP20X_GPIO10_IN_RANGE_GPIO1;
-> +               regval = FIELD_GET(AXP20X_GPIO10_IN_RANGE_GPIO1, regval);
->                 break;
->
->         default:
->                 return -EINVAL;
->         }
->
-> -       *val = *val ? 700000 : 0;
-> -
-> +       *val = regval ? 700000 : 0;
->         return IIO_VAL_INT;
->  }
->
-> @@ -548,7 +554,7 @@ static int axp20x_write_raw(struct iio_dev *indio_dev,
->                             long mask)
->  {
->         struct axp20x_adc_iio *info = iio_priv(indio_dev);
-> -       unsigned int reg, regval;
-> +       unsigned int regmask, regval;
->
->         /*
->          * The AXP20X PMIC allows the user to choose between 0V and 0.7V offsets
-> @@ -560,25 +566,22 @@ static int axp20x_write_raw(struct iio_dev *indio_dev,
->         if (val != 0 && val != 700000)
->                 return -EINVAL;
->
-> -       val = val ? 1 : 0;
-> -
->         switch (chan->channel) {
->         case AXP20X_GPIO0_V:
-> -               reg = AXP20X_GPIO10_IN_RANGE_GPIO0;
-> -               regval = AXP20X_GPIO10_IN_RANGE_GPIO0_VAL(val);
-> +               regmask = AXP20X_GPIO10_IN_RANGE_GPIO0;
-> +               regval = FIELD_PREP(AXP20X_GPIO10_IN_RANGE_GPIO0, !!val);
->                 break;
->
->         case AXP20X_GPIO1_V:
-> -               reg = AXP20X_GPIO10_IN_RANGE_GPIO1;
-> -               regval = AXP20X_GPIO10_IN_RANGE_GPIO1_VAL(val);
-> +               regmask = AXP20X_GPIO10_IN_RANGE_GPIO1;
-> +               regval = FIELD_PREP(AXP20X_GPIO10_IN_RANGE_GPIO1, !!val);
->                 break;
->
->         default:
->                 return -EINVAL;
->         }
->
-> -       return regmap_update_bits(info->regmap, AXP20X_GPIO10_IN_RANGE, reg,
-> -                                 regval);
-> +       return regmap_update_bits(info->regmap, AXP20X_GPIO10_IN_RANGE, regmask, regval);
->  }
->
->  static const struct iio_info axp20x_adc_iio_info = {
+>         return 0;
 > --
 > 2.35.1
 >

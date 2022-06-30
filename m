@@ -2,155 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 988AB561E54
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED71561E63
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235181AbiF3Oop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53288 "EHLO
+        id S235334AbiF3OsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234685AbiF3Oom (ORCPT
+        with ESMTP id S232881AbiF3OsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:44:42 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2831AF25
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 07:44:41 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-31bf327d4b5so91990847b3.13
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 07:44:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fSGCf3INUeQnbAR4csX9+UIfMipKtpmqBXRf98s34f8=;
-        b=coTWYclPD0QG+vO946f3aUVHNcKK40/FozAR7d7FMaU9d0S9CaVHSPcYb/YSL6wwLB
-         LAMpeUzcB3kZHZlMEksl0lgUprkcJXK/HYpczYvTtKe9ivw3GlnUeTKg4tueLvPdd2Ys
-         +ZKdkU/8i2x24qgQtGpo7N9MCBLCTz9agXxmLHk1aw4Q3KPvPdqjUB7mUOqc8iEovn4s
-         eETT2QXBXm3YqIXn3owvzSxk1KxHKV7SV08dpyOEggDyOGgjGG1iB3vVOMMnKRJ1QJcA
-         0fmiHj34szI3fIPy0Omf95J1D13wlFs+jxjffMRhG4pqOUGL0/Y5QBlSwOfYdaWGg0c8
-         5WyA==
+        Thu, 30 Jun 2022 10:48:08 -0400
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4028AD78;
+        Thu, 30 Jun 2022 07:48:07 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-31bf3656517so90721917b3.12;
+        Thu, 30 Jun 2022 07:48:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fSGCf3INUeQnbAR4csX9+UIfMipKtpmqBXRf98s34f8=;
-        b=hqCv9bFbRUm62jjnXHE99JVsi/83qDNPdNtOHDOqq/vvz4aT2zrJfckqRSov5rh2M/
-         63hy9FOOM8yNezsFm483kn+maI053oxwUfvemy5GFkssxedQvNRqmVlwMtZsGlwUBcyH
-         YeuopTe5xaELJBGsHq55qVXVxK/BctnYHDRCEc8pjxJi0DWvXjL8jUd3BdeVInhNg3Dl
-         X6+lDG0iEaem9LkKzSkHbfL1bsZN2PtkBp4tedd9FUqLquyKQ18ixKjkI2/WkLCD/MPS
-         +3AllTy1CrG64P75xpN34bQOmw5WTd5h8lUfb/duvg/RTKP/H6/7aum2FrBF4DXhHmCz
-         5hdQ==
-X-Gm-Message-State: AJIora/cDBcGtRE8SC/HbZExhlTOcxfLNxSMdc5Y51yMXvYe23a4bPnA
-        UmVJ6fyxoLjBxzzYTX3obawWZG7gBUymb+jMxZ3i1A==
-X-Google-Smtp-Source: AGRyM1t880VoNLUhAwj4c99+ctmx94kBLtQF9aIQgPWyusdKcd0DtDU3GbomNulLgbn12p0J90POkb/NfLdhH6Zram0=
-X-Received: by 2002:a81:5c9:0:b0:317:b1a5:bf8b with SMTP id
- 192-20020a8105c9000000b00317b1a5bf8bmr10691972ywf.489.1656600280296; Thu, 30
- Jun 2022 07:44:40 -0700 (PDT)
+        bh=+qCSLXLpvZWhA8w54PN+yxH0ih122e6D4lPNgfVMEk8=;
+        b=gOLuUA56LveIk4khjUgs7/laAbEK4DLHG/zomJQMK0rQVfTafwXv+C+TI5vOxRpQhy
+         X8zCHje9VfffquyCPTJZ4VU85KbZroivSXILGAXii+r5BawoMidurZ2cfC8K9+SjJZJ7
+         XRiK87Ni0Pe3eVCudWpLoCQQt5AxdZUI7KGEsXQwjGJZ9MnRiKugKvqn102vUDGv8oy6
+         I+wbegWnJeYhzd8ZHyIY3jBNCXemPlVJi1xypOfPZva8UgfCthhisgJDgdHAzJ22hVRN
+         kxaJe/lu+on3VdX5QvQasvuw2d45ZqyR/VqnoJt68xwXxq6wVUTWYR0KqvgnLJkXzo+b
+         D0Ng==
+X-Gm-Message-State: AJIora85i0cBiHEvDuLt0sJ/t9jQioJ9AmGOcgGEbImh6qzJiDgPi/cs
+        56rf+3C4NKVyB791kYbdVKTxX76KbNXgoMzfhNrEj4Pg7ew=
+X-Google-Smtp-Source: AGRyM1vbXZPXCJEI/TXz4b9n6Rap9xzho44Fu1+ZkkX+tZch2UYULtFcCmECp0qJIJHAScn3GPJy4uUioz3LXfV7EWw=
+X-Received: by 2002:a0d:d086:0:b0:31b:d0b2:e11f with SMTP id
+ s128-20020a0dd086000000b0031bd0b2e11fmr10645242ywd.515.1656600486367; Thu, 30
+ Jun 2022 07:48:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220630143842.24906-1-duoming@zju.edu.cn>
-In-Reply-To: <20220630143842.24906-1-duoming@zju.edu.cn>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 30 Jun 2022 16:44:29 +0200
-Message-ID: <CANn89iLda2oxoPQaGd9r8frAaOu1LqxmWYm2O8W4HXaGRN8tcQ@mail.gmail.com>
-Subject: Re: [PATCH net] net: rose: fix UAF bug caused by rose_t0timer_expiry
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     linux-hams@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Ralf Baechle <ralf@linux-mips.org>
+References: <20220613120755.14306-1-peter.wang@mediatek.com>
+ <b55d5691-0b2d-56bb-26ff-dcac56770611@mediatek.com> <CAJZ5v0gTpv2gt_Gm9rUd+8Jmp4=ij2=J20o7qO0sC-hm=w3=_A@mail.gmail.com>
+ <12028598.O9o76ZdvQC@kreacher> <90b5f619-2dd6-817b-fe2d-f895be0b5b98@mediatek.com>
+In-Reply-To: <90b5f619-2dd6-817b-fe2d-f895be0b5b98@mediatek.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 30 Jun 2022 16:47:55 +0200
+Message-ID: <CAJZ5v0h8xNCV+1YwRA5wob6Vnvz8JFikv3pYMR_mUrXxzfc=tQ@mail.gmail.com>
+Subject: Re: [PATCH v1] PM-runtime: Check supplier_preactivated before release supplier
+To:     Peter Wang <peter.wang@mediatek.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 4:38 PM Duoming Zhou <duoming@zju.edu.cn> wrote:
+On Thu, Jun 30, 2022 at 4:26 PM Peter Wang <peter.wang@mediatek.com> wrote:
 >
-> There are UAF bugs caused by rose_t0timer_expiry(). The
-> root cause is that del_timer() could not stop the timer
-> handler that is running and there is no synchronization.
-> One of the race conditions is shown below:
 >
->     (thread 1)             |        (thread 2)
->                            | rose_device_event
->                            |   rose_rt_device_down
->                            |     rose_remove_neigh
-> rose_t0timer_expiry        |       rose_stop_t0timer(rose_neigh)
->   ...                      |         del_timer(&neigh->t0timer)
->                            |         kfree(rose_neigh) //[1]FREE
->   neigh->dce_mode //[2]USE |
+> On 6/30/22 12:01 AM, Rafael J. Wysocki wrote:
+> > [Add CCs to linix-pm, LKML and Greg]
+> >
+> > On Wednesday, June 29, 2022 5:32:00 PM CEST Rafael J. Wysocki wrote:
+> >> On Wed, Jun 29, 2022 at 4:47 PM Peter Wang <peter.wang@mediatek.com> wrote:
+> >>>
+> >>> On 6/29/22 9:22 PM, Rafael J. Wysocki wrote:
+> >>>> On Wed, Jun 29, 2022 at 5:02 AM Peter Wang <peter.wang@mediatek.com> wrote:
+> >>>>> On 6/28/22 11:54 PM, Rafael J. Wysocki wrote:
+> >>>>>> On Tue, Jun 28, 2022 at 3:53 AM Peter Wang <peter.wang@mediatek.com> wrote:
+> >>>>>>> On 6/28/22 3:00 AM, Rafael J. Wysocki wrote:
+> >>>>>>>> On Mon, Jun 13, 2022 at 2:08 PM <peter.wang@mediatek.com> wrote:
+> >>>>>>>>> From: Peter Wang <peter.wang@mediatek.com>
+> >>>>>>>>>
+> >>>>>>>>> With divice link of DL_FLAG_PM_RUNTIME, if consumer call pm_runtime_get_suppliers
+> >>>>>>>>> to prevent supplier enter suspend, pm_runtime_release_supplier should
+> >>>>>>>>> check supplier_preactivated before let supplier enter suspend.
+> >>>>>>>> Why?
+> >>>>>>> because supplier_preactivated is true means supplier cannot enter
+> >>>>>>> suspend, right?
+> >>>>>> No, it doesn't mean that.
+> >>>>> Hi Rafael,
+> >>>>>
+> >>>>> if supplier_preactivated is true, means someone call
+> >>>>> pm_runtime_get_suppliers and
+> >>>>> before pm_runtime_put_suppliers right? This section suppliers should not
+> >>>>> enter suspend.
+> >>>> No, this is not how this is expected to work.
+> >>>>
+> >>>> First off, the only caller of pm_runtime_get_suppliers() and
+> >>>> pm_runtime_put_suppliers() is __driver_probe_device().  Really nobody
+> >>>> else has any business that would require calling them.
+> >>> Hi Rafael,
+> >>>
+> >>> Yes, you are right!
+> >>> __driver_probe_device the only one use and just because
+> >>> __driver_probe_device use
+> >>> pm_runtime_get_suppliers cause problem.
+> >>>
+> >>>
+> >>>> Second, the role of pm_runtime_get_suppliers() is to "preactivate" the
+> >>>> suppliers before running probe for a consumer device and the role of
+> >>> the role of pm_runtime_get_suppliers() is to "preactivate" the suppliers,
+> >>> but suppliers may suspend immediately after preactivate right?
+> >>> Here is just this case. this is first racing point.
+> >>> Thread A: pm_runtime_get_suppliers                -> __driver_probe_device
+> >>> Thread B: pm_runtime_release_supplier
+> >>> Thread A: Run with supplier not preactivate      -> __driver_probe_device
+> >>>
+> >>>> pm_runtime_put_suppliers() is to do the cleanup in case the device is
+> >>>> left in suspend after probing.
+> >>>>
+> >>>> IOW, pm_runtime_get_suppliers() is to ensure that the suppliers will
+> >>>> be active until the probe callback takes over and the rest depends on
+> >>>> that callback.
+> >>> The problem of this racing will finally let consumer is active but
+> >>> supplier is suspended.
+> >> So it would be better to send a bug report regarding this.
+> >>
+> >>> The link relation is broken.
+> >>> I know you may curious how it happened? right?
+> >>> Honestly, I am not sure, but I think the second racing point
+> >>> is rpm_get_suppliers and pm_runtime_put_suppliers(release rpm_active).
+> >> I'm not sure what you mean by "the racing point".
+> >>
+> >> Yes, these functions can run concurrently.
+> >>
+> >>> So, I try to fix the first racing point and the problem is gone.
+> >>> It is full meet expect, and the pm runtime will work smoothly after
+> >>> __driver_probe_device done.
+> >> I'm almost sure that there is at least one scenario that would be
+> >> broken by this change.
+> > That said, the code in there may be a bit overdesigned.
+> >
+> > Does the patch below help?
+> >
+> > ---
+> >   drivers/base/power/runtime.c |   14 +-------------
+> >   1 file changed, 1 insertion(+), 13 deletions(-)
+> >
+> > Index: linux-pm/drivers/base/power/runtime.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/base/power/runtime.c
+> > +++ linux-pm/drivers/base/power/runtime.c
+> > @@ -1768,7 +1768,6 @@ void pm_runtime_get_suppliers(struct dev
+> >               if (link->flags & DL_FLAG_PM_RUNTIME) {
+> >                       link->supplier_preactivated = true;
+> >                       pm_runtime_get_sync(link->supplier);
+> > -                     refcount_inc(&link->rpm_active);
+> >               }
+> >
+> >       device_links_read_unlock(idx);
+> > @@ -1788,19 +1787,8 @@ void pm_runtime_put_suppliers(struct dev
+> >       list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
+> >                               device_links_read_lock_held())
+> >               if (link->supplier_preactivated) {
+> > -                     bool put;
+> > -
+> >                       link->supplier_preactivated = false;
+> > -
+> > -                     spin_lock_irq(&dev->power.lock);
+> > -
+> > -                     put = pm_runtime_status_suspended(dev) &&
+> > -                           refcount_dec_not_one(&link->rpm_active);
+> > -
+> > -                     spin_unlock_irq(&dev->power.lock);
+> > -
+> > -                     if (put)
+> > -                             pm_runtime_put(link->supplier);
+> > +                     pm_runtime_put(link->supplier);
+> >               }
+> >
+> >       device_links_read_unlock(idx);
 >
-> The rose_neigh is deallocated in position [1] and use in
-> position [2].
 >
-> The crash trace triggered by POC is like below:
+> Hi Rafael,
 >
-> BUG: KASAN: use-after-free in expire_timers+0x144/0x320
-> Write of size 8 at addr ffff888009b19658 by task swapper/0/0
-> ...
-> Call Trace:
->  <IRQ>
->  dump_stack_lvl+0xbf/0xee
->  print_address_description+0x7b/0x440
->  print_report+0x101/0x230
->  ? expire_timers+0x144/0x320
->  kasan_report+0xed/0x120
->  ? expire_timers+0x144/0x320
->  expire_timers+0x144/0x320
->  __run_timers+0x3ff/0x4d0
->  run_timer_softirq+0x41/0x80
->  __do_softirq+0x233/0x544
->  ...
->
-> This patch changes del_timer() in rose_stop_t0timer() and
-> rose_stop_ftimer() to del_timer_sync() in order that the
-> timer handler could be finished before the resources such as
-> rose_neigh and so on are deallocated. As a result, the UAF
-> bugs could be mitigated.
->
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-> ---
->  net/rose/rose_link.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/net/rose/rose_link.c b/net/rose/rose_link.c
-> index 8b96a56d3a4..9734d1264de 100644
-> --- a/net/rose/rose_link.c
-> +++ b/net/rose/rose_link.c
-> @@ -54,12 +54,12 @@ static void rose_start_t0timer(struct rose_neigh *neigh)
->
->  void rose_stop_ftimer(struct rose_neigh *neigh)
->  {
-> -       del_timer(&neigh->ftimer);
-> +       del_timer_sync(&neigh->ftimer);
->  }
+> I think this patch solve the rpm_active racing problem.
+> But it still have problem that
+> pm_runtime_get_suppliers call pm_runtime_get_sync(link->supplier)
+> and supplier could suspend immediately by other thread who call
+> pm_runtime_release_supplier.
 
-Are you sure this is safe ?
-
-del_timer_sync() could hang if the caller holds a lock that the timer
-function would need to acquire.
-
-
-
->
->  void rose_stop_t0timer(struct rose_neigh *neigh)
->  {
-> -       del_timer(&neigh->t0timer);
-> +       del_timer_sync(&neigh->t0timer);
->  }
-
-Same here, please explain why it is safe.
-
->
->  int rose_ftimer_running(struct rose_neigh *neigh)
-> --
-> 2.17.1
->
+No, it won't, because pm_runtime_release_supplier() won't drop the
+reference on the supplier taken by pm_runtime_get_suppliers(0 after
+the patch.

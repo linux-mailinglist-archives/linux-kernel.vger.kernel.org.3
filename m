@@ -2,373 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CBC95612E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2228A5612EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232925AbiF3HGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36568 "EHLO
+        id S232994AbiF3HIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbiF3HGp (ORCPT
+        with ESMTP id S232927AbiF3HIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:06:45 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D061B33E28
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:06:43 -0700 (PDT)
+        Thu, 30 Jun 2022 03:08:44 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E7B2DAB8
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:08:41 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id r20so25825532wra.1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:08:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656572803; x=1688108803;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=WPY9dYVBl0mq8BMo5NEkkZRetsLeWLBzzRUHBvC0SKs=;
-  b=wQACOb8m632qmldS6UGNP8tNe9L9g8OMp7G2yRcmV6nEetyAz9ixJwPf
-   pcGH9yHWqZUfLA9yvssc25yHEE+EwLpXYbRkeQtl9YQ/egvSLrxibjx4p
-   8mpyHQrgwphg+PU3qZ5wbYna5l9rloACePIYSZiAwhM9BgO0d5YFlINzO
-   s=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 30 Jun 2022 00:06:43 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 00:06:43 -0700
-Received: from [10.50.30.42] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 30 Jun
- 2022 00:06:37 -0700
-Message-ID: <6f1d2e1d-5f5f-1727-ec45-abeb4a104753@quicinc.com>
-Date:   Thu, 30 Jun 2022 12:36:35 +0530
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ayzM4tdWAxdTq2eOnCE6d3LLrIch4LIjhD1aFF0Ci5w=;
+        b=71/VDhbaQSupQXYHrFC/jsNZ3D60v/ZgSkvNe9aWH58blGUOZNhCiH9E0fnbWR3O+7
+         tGezD/f9rZHNYSaLwhAJDcgSe2tdFW/z8Ybll36I3xVXdH85VYnJZkWam5TM3XMr/Sac
+         wuUTnOaSiVTPitMCAKgNWhnB6V2VGAQOVEnoic1SzXHlOlrO9kaJ5HiRSCUzSjHo2kwV
+         f0iIjoEfsXdWcm9BLyMNWTAvOfPVSm2C9JXqV+LIJ36724Tw86uMuiJy8f0PAiHdIp0g
+         Ryqr7c8ufaryfqZNPFqYm37ZCBTN0yZmPr2pg5MVtJLPG9hKVt8QDTN8mnCyVfCV/fOt
+         rXKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ayzM4tdWAxdTq2eOnCE6d3LLrIch4LIjhD1aFF0Ci5w=;
+        b=S/0wZipmmFN64AjVU5sfMrzCfCO7ds8bwxT1gT6Q0lnxcwWXaXh2Oo+TFfiq6Jvirr
+         4/yo+CkG8Xym5ddWzL8DjqIraG/vHf8/+NXZ6Np76zNosocB/v9yaxXV06j1Za8RpQcR
+         D0gtzFqMsu17D5c9G+3zdUbsYJR3iBYQFzgbNJwNReIHS4NLKFSEM+1OXpCDbog/ONcd
+         UkyfpawdUK6Go8zUOWcGU6L3iAN0KKGs0HG+LizDQkpKue9+resgOBxmSEOs7K8Kwz5I
+         oFarwtjP027Kv+qiESc2VfvOOeDbTrAQZLSq5I/lejpNaARGpfISCxSST0F8cSNB1Wze
+         kqTw==
+X-Gm-Message-State: AJIora9Zg4Yyb9X8qjiAkJjtNsJqCaKQ2upKTPCD8M9SGuru2JBBwo03
+        i+WdcpaVEXoWPcWvQw9CekAWOQ==
+X-Google-Smtp-Source: AGRyM1uQlTw63DMb8FdmLCF0nOX+VkDo2Bx+oRykHs0C6C6jifuUrkDqjXKm/mEHjiF/Sc9XTsJUig==
+X-Received: by 2002:a5d:4b04:0:b0:21b:8640:273f with SMTP id v4-20020a5d4b04000000b0021b8640273fmr6917973wrq.195.1656572920550;
+        Thu, 30 Jun 2022 00:08:40 -0700 (PDT)
+Received: from localhost.localdomain (120.205.87.79.rev.sfr.net. [79.87.205.120])
+        by smtp.gmail.com with ESMTPSA id u23-20020a7bcb17000000b0039aef592ca0sm5397421wmj.35.2022.06.30.00.08.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 00:08:39 -0700 (PDT)
+From:   Julien Panis <jpanis@baylibre.com>
+To:     nm@ti.com, vigneshr@ti.com, kristo@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Julien Panis <jpanis@baylibre.com>
+Subject: [PATCH] arm64: dts: ti: k3-am62: add watchdog nodes
+Date:   Thu, 30 Jun 2022 09:08:26 +0200
+Message-Id: <20220630070826.11074-1-jpanis@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] srcu: Reduce blocking agressiveness of expedited grace
- periods further
-Content-Language: en-US
-To:     Zhangfei Gao <zhangfei.gao@linaro.org>, <paulmck@kernel.org>,
-        <frederic@kernel.org>, <josh@joshtriplett.org>,
-        <rostedt@goodmis.org>, <mathieu.desnoyers@efficios.com>,
-        <jiangshanlai@gmail.com>, <joel@joelfernandes.org>
-CC:     <linux-kernel@vger.kernel.org>, <boqun.feng@gmail.com>,
-        <urezki@gmail.com>, <shameerali.kolothum.thodi@huawei.com>,
-        <pbonzini@redhat.com>, <mtosatti@redhat.com>,
-        <eric.auger@redhat.com>, <chenxiang66@hisilicon.com>,
-        <maz@kernel.org>
-References: <20220630041201.18301-1-quic_neeraju@quicinc.com>
- <6c7abde7-da75-1145-2fd8-2f49372c39ad@linaro.org>
-From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
-In-Reply-To: <6c7abde7-da75-1145-2fd8-2f49372c39ad@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add nodes for watchdogs :
+- 5 in main domain
+- 1 in MCU domain
+- 1 in wakeup domain
 
+Signed-off-by: Julien Panis <jpanis@baylibre.com>
+---
+ arch/arm64/boot/dts/ti/k3-am62-main.dtsi   | 45 ++++++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi    |  9 +++++
+ arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi |  9 +++++
+ 3 files changed, 63 insertions(+)
 
-On 6/30/2022 12:04 PM, Zhangfei Gao wrote:
-> 
-> 
-> On 2022/6/30 下午12:12, Neeraj Upadhyay wrote:
->> Commit 640a7d37c3f4 ("srcu: Block less aggressively for expedited
->> grace periods") highlights a problem where aggressively blocking
->> SRCU expedited grace periods, as was introduced in commit
->> 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
->> from consuming CPU"), introduces ~2 minutes delay to the overall
->> ~3.5 minutes boot time, when starting VMs with "-bios QEMU_EFI.fd"
->> cmdline on qemu, which results in very high rate of memslots
->> add/remove, which causes > ~6000 synchronize_srcu() calls for
->> kvm->srcu SRCU instance.
->>
->> Below table captures the experiments done by Zhangfei Gao and Shameer
->> to measure the boottime impact with various values of non-sleeping
->> per phase counts, with HZ_250 and preemption enabled:
->>
->> +──────────────────────────+────────────────+
->> | SRCU_MAX_NODELAY_PHASE   | Boot time (s)  |
->> +──────────────────────────+────────────────+
->> | 100                      | 30.053         |
->> | 150                      | 25.151         |
->> | 200                      | 20.704         |
->> | 250                      | 15.748         |
->> | 500                      | 11.401         |
->> | 1000                     | 11.443         |
->> | 10000                    | 11.258         |
->> | 1000000                  | 11.154         |
->> +──────────────────────────+────────────────+
->>
->> Analysis on the experiment results showed improved boot time
->> with non blocking delays close to one jiffy duration. This
->> was also seen when number of per-phase iterations were scaled
->> to one jiffy.
->>
->> So, this change scales per-grace-period phase number of non-sleeping
->> polls, such that, non-sleeping polls are done for one jiffy. In addition
->> to this, srcu_get_delay() call in srcu_gp_end(), which is used to 
->> calculate
->> the delay used for scheduling callbacks, is replaced with the check for
->> expedited grace period. This is done, to schedule cbs for completed 
->> expedited
->> grace periods immediately, which results in improved boot time seen in
->> experiments.
->>
->> In addition to the changes to default per phase delays, this change
->> adds 3 new kernel parameters - srcutree.srcu_max_nodelay,
->> srcutree.srcu_max_nodelay_phase, srcutree.srcu_retry_check_delay.
->> This allows users to configure the srcu grace period scanning delays,
->> depending on their system configuration requirements.
->>
->> Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
->> Tested-by: Marc Zyngier <maz@kernel.org>
-> 
-> Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
+diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+index 5b2c210c592c..7202937618b7 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+@@ -572,4 +572,49 @@ main_mcan0: can@20701000 {
+ 		interrupt-names = "int0", "int1";
+ 		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
+ 	};
++
++	main_rti0: watchdog@e000000 {
++		compatible = "ti,j7-rti-wdt";
++		reg = <0x00 0x0e000000 0x00 0x100>;
++		clocks = <&k3_clks 125 0>;
++		power-domains = <&k3_pds 125 TI_SCI_PD_EXCLUSIVE>;
++		assigned-clocks = <&k3_clks 125 0>;
++		assigned-clock-parents = <&k3_clks 125 2>;
++	};
++
++	main_rti1: watchdog@e010000 {
++		compatible = "ti,j7-rti-wdt";
++		reg = <0x00 0x0e010000 0x00 0x100>;
++		clocks = <&k3_clks 126 0>;
++		power-domains = <&k3_pds 126 TI_SCI_PD_EXCLUSIVE>;
++		assigned-clocks = <&k3_clks 126 0>;
++		assigned-clock-parents = <&k3_clks 126 2>;
++	};
++
++	main_rti2: watchdog@e020000 {
++		compatible = "ti,j7-rti-wdt";
++		reg = <0x00 0x0e020000 0x00 0x100>;
++		clocks = <&k3_clks 127 0>;
++		power-domains = <&k3_pds 127 TI_SCI_PD_EXCLUSIVE>;
++		assigned-clocks = <&k3_clks 127 0>;
++		assigned-clock-parents = <&k3_clks 127 2>;
++	};
++
++	main_rti3: watchdog@e030000 {
++		compatible = "ti,j7-rti-wdt";
++		reg = <0x00 0x0e030000 0x00 0x100>;
++		clocks = <&k3_clks 128 0>;
++		power-domains = <&k3_pds 128 TI_SCI_PD_EXCLUSIVE>;
++		assigned-clocks = <&k3_clks 128 0>;
++		assigned-clock-parents = <&k3_clks 128 2>;
++	};
++
++	main_rti15: watchdog@e0f0000 {
++		compatible = "ti,j7-rti-wdt";
++		reg = <0x00 0x0e0f0000 0x00 0x100>;
++		clocks = <&k3_clks 130 0>;
++		power-domains = <&k3_pds 130 TI_SCI_PD_EXCLUSIVE>;
++		assigned-clocks = <&k3_clks 130 0>;
++		assigned-clock-parents = <&k3_clks 130 2>;
++	};
+ };
+diff --git a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
+index f56c803560f2..f82e94def774 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
+@@ -81,4 +81,13 @@ mcu_gpio0: gpio@4201000 {
+ 		clocks = <&k3_clks 79 0>;
+ 		clock-names = "gpio";
+ 	};
++
++	mcu_rti0: watchdog@4880000 {
++		compatible = "ti,j7-rti-wdt";
++		reg = <0x00 0x04880000 0x00 0x100>;
++		clocks = <&k3_clks 131 0>;
++		power-domains = <&k3_pds 131 TI_SCI_PD_EXCLUSIVE>;
++		assigned-clocks = <&k3_clks 131 0>;
++		assigned-clock-parents = <&k3_clks 131 2>;
++	};
+ };
+diff --git a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
+index 4090134676cf..3c95ac3a0dd5 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
+@@ -38,4 +38,13 @@ wkup_i2c0: i2c@2b200000 {
+ 		clocks = <&k3_clks 107 4>;
+ 		clock-names = "fck";
+ 	};
++
++	wkup_rti0: watchdog@2b000000 {
++		compatible = "ti,j7-rti-wdt";
++		reg = <0x00 0x2b000000 0x00 0x100>;
++		clocks = <&k3_clks 132 0>;
++		power-domains = <&k3_pds 132 TI_SCI_PD_EXCLUSIVE>;
++		assigned-clocks = <&k3_clks 132 0>;
++		assigned-clock-parents = <&k3_clks 132 2>;
++	};
+ };
+-- 
+2.25.1
 
-Thanks for sharing the test results!! will include your Tested-by tag in 
-next version.
-
-
-Thanks
-Neeraj
-
-> 
-> Test on arm64, defconfig(CONFIG_HZ_250=y)
-> qemu boot Image with -bios QEMU_EFI.fd
-> 
-> 
-> With this patch
-> real    0m9.739s
-> user    0m3.270s
-> sys    0m0.969s
-> 
-> 
-> Without this patch
-> real    2m40.361s
-> user    0m3.034s
-> sys    0m1.162s
-> 
-> 5.18-rc6
-> real    0m8.402s
-> user    0m3.015s
-> sys     0m1.102s
-> 
-> Thanks
-> 
->> ---
->>
->> Change in v2:
->>
->>    - Change srcu_max_nodelay default value to consider phase delay
->>      iterations
->>    - Apply Pauls' feedback
->>    - Add Marc's Tested-by
->>
->>   .../admin-guide/kernel-parameters.txt         | 18 ++++
->>   kernel/rcu/srcutree.c                         | 82 ++++++++++++++-----
->>   2 files changed, 81 insertions(+), 19 deletions(-)
->>
->> diff --git a/Documentation/admin-guide/kernel-parameters.txt 
->> b/Documentation/admin-guide/kernel-parameters.txt
->> index af647714c113..7e34086c64f5 100644
->> --- a/Documentation/admin-guide/kernel-parameters.txt
->> +++ b/Documentation/admin-guide/kernel-parameters.txt
->> @@ -5805,6 +5805,24 @@
->>               expediting.  Set to zero to disable automatic
->>               expediting.
->> +    srcutree.srcu_max_nodelay [KNL]
->> +            Specifies the number of no-delay instances
->> +            per jiffy for which the SRCU grace period
->> +            worker thread will be rescheduled with zero
->> +            delay. Beyond this limit, worker thread will
->> +            be rescheduled with a sleep delay of one jiffy.
->> +
->> +    srcutree.srcu_max_nodelay_phase [KNL]
->> +            Specifies the per-grace-period phase, number of
->> +            non-sleeping polls of readers. Beyond this limit,
->> +            grace period worker thread will be rescheduled
->> +            with a sleep delay of one jiffy, between each
->> +            rescan of the readers, for a grace period phase.
->> +
->> +    srcutree.srcu_retry_check_delay [KNL]
->> +            Specifies number of microseconds of non-sleeping
->> +            delay between each non-sleeping poll of readers.
->> +
->>       srcutree.small_contention_lim [KNL]
->>               Specifies the number of update-side contention
->>               events per jiffy will be tolerated before
->> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
->> index 0db7873f4e95..1c304fec89c0 100644
->> --- a/kernel/rcu/srcutree.c
->> +++ b/kernel/rcu/srcutree.c
->> @@ -511,10 +511,52 @@ static bool srcu_readers_active(struct 
->> srcu_struct *ssp)
->>       return sum;
->>   }
->> -#define SRCU_INTERVAL        1    // Base delay if no expedited GPs 
->> pending.
->> -#define SRCU_MAX_INTERVAL    10    // Maximum incremental delay from 
->> slow readers.
->> -#define SRCU_MAX_NODELAY_PHASE    3    // Maximum per-GP-phase 
->> consecutive no-delay instances.
->> -#define SRCU_MAX_NODELAY    100    // Maximum consecutive no-delay 
->> instances.
->> +/*
->> + * We use an adaptive strategy for synchronize_srcu() and especially for
->> + * synchronize_srcu_expedited().  We spin for a fixed time period
->> + * (defined below, boot time configurable) to allow SRCU readers to exit
->> + * their read-side critical sections.  If there are still some readers
->> + * after one jiffy, we repeatedly block for one jiffy time periods.
->> + * The blocking time is increased as the grace-period age increases,
->> + * with max blocking time capped at 10 jiffies.
->> + */
->> +#define SRCU_DEFAULT_RETRY_CHECK_DELAY        5
->> +
->> +static ulong srcu_retry_check_delay = SRCU_DEFAULT_RETRY_CHECK_DELAY;
->> +module_param(srcu_retry_check_delay, ulong, 0444);
->> +
->> +#define SRCU_INTERVAL        1        // Base delay if no expedited 
->> GPs pending.
->> +#define SRCU_MAX_INTERVAL    10        // Maximum incremental delay 
->> from slow readers.
->> +
->> +#define SRCU_DEFAULT_MAX_NODELAY_PHASE_LO    3UL    // Lowmark on 
->> default per-GP-phase
->> +                            // no-delay instances.
->> +#define SRCU_DEFAULT_MAX_NODELAY_PHASE_HI    1000UL    // Highmark on 
->> default per-GP-phase
->> +                            // no-delay instances.
->> +
->> +#define SRCU_UL_CLAMP_LO(val, low)    ((val) > (low) ? (val) : (low))
->> +#define SRCU_UL_CLAMP_HI(val, high)    ((val) < (high) ? (val) : (high))
->> +#define SRCU_UL_CLAMP(val, low, high)    
->> SRCU_UL_CLAMP_HI(SRCU_UL_CLAMP_LO((val), (low)), (high))
->> +// per-GP-phase no-delay instances adjusted to allow non-sleeping 
->> poll upto
->> +// one jiffies time duration. Mult by 2 is done to factor in the 
->> srcu_get_delay()
->> +// called from process_srcu().
->> +#define SRCU_DEFAULT_MAX_NODELAY_PHASE_ADJUSTED    \
->> +    (2UL * USEC_PER_SEC / HZ / SRCU_DEFAULT_RETRY_CHECK_DELAY)
->> +
->> +// Maximum per-GP-phase consecutive no-delay instances.
->> +#define SRCU_DEFAULT_MAX_NODELAY_PHASE    \
->> +    SRCU_UL_CLAMP(SRCU_DEFAULT_MAX_NODELAY_PHASE_ADJUSTED,    \
->> +              SRCU_DEFAULT_MAX_NODELAY_PHASE_LO,    \
->> +              SRCU_DEFAULT_MAX_NODELAY_PHASE_HI)
->> +
->> +static ulong srcu_max_nodelay_phase = SRCU_DEFAULT_MAX_NODELAY_PHASE;
->> +module_param(srcu_max_nodelay_phase, ulong, 0444);
->> +
->> +// Maximum consecutive no-delay instances.
->> +#define SRCU_DEFAULT_MAX_NODELAY    (SRCU_DEFAULT_MAX_NODELAY_PHASE > 
->> 100 ?    \
->> +                     SRCU_DEFAULT_MAX_NODELAY_PHASE : 100)
->> +
->> +static ulong srcu_max_nodelay = SRCU_DEFAULT_MAX_NODELAY;
->> +module_param(srcu_max_nodelay, ulong, 0444);
->>   /*
->>    * Return grace-period delay, zero if there are expedited grace
->> @@ -535,7 +577,7 @@ static unsigned long srcu_get_delay(struct 
->> srcu_struct *ssp)
->>               jbase += j - gpstart;
->>           if (!jbase) {
->>               WRITE_ONCE(ssp->srcu_n_exp_nodelay, 
->> READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
->> -            if (READ_ONCE(ssp->srcu_n_exp_nodelay) > 
->> SRCU_MAX_NODELAY_PHASE)
->> +            if (READ_ONCE(ssp->srcu_n_exp_nodelay) > 
->> srcu_max_nodelay_phase)
->>                   jbase = 1;
->>           }
->>       }
->> @@ -612,15 +654,6 @@ void __srcu_read_unlock(struct srcu_struct *ssp, 
->> int idx)
->>   }
->>   EXPORT_SYMBOL_GPL(__srcu_read_unlock);
->> -/*
->> - * We use an adaptive strategy for synchronize_srcu() and especially for
->> - * synchronize_srcu_expedited().  We spin for a fixed time period
->> - * (defined below) to allow SRCU readers to exit their read-side 
->> critical
->> - * sections.  If there are still some readers after a few microseconds,
->> - * we repeatedly block for 1-millisecond time periods.
->> - */
->> -#define SRCU_RETRY_CHECK_DELAY        5
->> -
->>   /*
->>    * Start an SRCU grace period.
->>    */
->> @@ -706,7 +739,7 @@ static void srcu_schedule_cbs_snp(struct 
->> srcu_struct *ssp, struct srcu_node *snp
->>    */
->>   static void srcu_gp_end(struct srcu_struct *ssp)
->>   {
->> -    unsigned long cbdelay;
->> +    unsigned long cbdelay = 1;
->>       bool cbs;
->>       bool last_lvl;
->>       int cpu;
->> @@ -726,7 +759,9 @@ static void srcu_gp_end(struct srcu_struct *ssp)
->>       spin_lock_irq_rcu_node(ssp);
->>       idx = rcu_seq_state(ssp->srcu_gp_seq);
->>       WARN_ON_ONCE(idx != SRCU_STATE_SCAN2);
->> -    cbdelay = !!srcu_get_delay(ssp);
->> +    if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq), 
->> READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
->> +        cbdelay = 0;
->> +
->>       WRITE_ONCE(ssp->srcu_last_gp_end, ktime_get_mono_fast_ns());
->>       rcu_seq_end(&ssp->srcu_gp_seq);
->>       gpseq = rcu_seq_current(&ssp->srcu_gp_seq);
->> @@ -927,12 +962,16 @@ static void srcu_funnel_gp_start(struct 
->> srcu_struct *ssp, struct srcu_data *sdp,
->>    */
->>   static bool try_check_zero(struct srcu_struct *ssp, int idx, int 
->> trycount)
->>   {
->> +    unsigned long curdelay;
->> +
->> +    curdelay = !srcu_get_delay(ssp);
->> +
->>       for (;;) {
->>           if (srcu_readers_active_idx_check(ssp, idx))
->>               return true;
->> -        if (--trycount + !srcu_get_delay(ssp) <= 0)
->> +        if ((--trycount + curdelay) <= 0)
->>               return false;
->> -        udelay(SRCU_RETRY_CHECK_DELAY);
->> +        udelay(srcu_retry_check_delay);
->>       }
->>   }
->> @@ -1588,7 +1627,7 @@ static void process_srcu(struct work_struct *work)
->>           j = jiffies;
->>           if (READ_ONCE(ssp->reschedule_jiffies) == j) {
->>               WRITE_ONCE(ssp->reschedule_count, 
->> READ_ONCE(ssp->reschedule_count) + 1);
->> -            if (READ_ONCE(ssp->reschedule_count) > SRCU_MAX_NODELAY)
->> +            if (READ_ONCE(ssp->reschedule_count) > srcu_max_nodelay)
->>                   curdelay = 1;
->>           } else {
->>               WRITE_ONCE(ssp->reschedule_count, 1);
->> @@ -1680,6 +1719,11 @@ static int __init srcu_bootup_announce(void)
->>       pr_info("Hierarchical SRCU implementation.\n");
->>       if (exp_holdoff != DEFAULT_SRCU_EXP_HOLDOFF)
->>           pr_info("\tNon-default auto-expedite holdoff of %lu ns.\n", 
->> exp_holdoff);
->> +    if (srcu_retry_check_delay != SRCU_DEFAULT_RETRY_CHECK_DELAY)
->> +        pr_info("\tNon-default retry check delay of %lu us.\n", 
->> srcu_retry_check_delay);
->> +    if (srcu_max_nodelay != SRCU_DEFAULT_MAX_NODELAY)
->> +        pr_info("\tNon-default max no-delay of %lu.\n", 
->> srcu_max_nodelay);
->> +    pr_info("\tMax phase no-delay instances is %lu.\n", 
->> srcu_max_nodelay_phase);
->>       return 0;
->>   }
->>   early_initcall(srcu_bootup_announce);
-> 

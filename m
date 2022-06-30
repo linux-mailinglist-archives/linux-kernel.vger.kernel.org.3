@@ -2,120 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 359DD561757
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 457CE56175A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234775AbiF3KKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 06:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
+        id S234800AbiF3KLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 06:11:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbiF3KK2 (ORCPT
+        with ESMTP id S234603AbiF3KLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 06:10:28 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B182D273;
-        Thu, 30 Jun 2022 03:10:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656583827; x=1688119827;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XzV8lb39RqU/gtzU+hmSRVGu76gzswS57eUcYcMU+Qs=;
-  b=HOGc3X8xeVZh6WkdnPNtYMDqFZ+uKYO34O77F0/UFVnVpPctzdsj0OVX
-   /ZJ4UymAqvO2zDiGSUNOH19ZGYWzdRxH8KtHU1GzhmzZWECOSbVfYGRgC
-   wFGwL4CnOI7TsRUESlF0CbATIwfeV13stui9dqRihtcwsEqZbx2Y8Kp0D
-   jIacfifir3O1avIrQ8Dneiriv3p/XM+pqfKk77yS7+l/SLwQMP5dto4bZ
-   azYv8Ph6zwGmGKIR+GNTkQKW9qbsE96+OoN4aJzBmqn7qiEAVtOJCNbWx
-   upBuH4r7i5xfsIYI4hSXFsSFAxar1WRKMxooY/0aCuYRtwEWGka5WmscM
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="265342094"
-X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
-   d="scan'208";a="265342094"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 03:10:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
-   d="scan'208";a="680918936"
-Received: from boxer.igk.intel.com (HELO boxer) ([10.102.20.173])
-  by FMSMGA003.fm.intel.com with ESMTP; 30 Jun 2022 03:10:23 -0700
-Date:   Thu, 30 Jun 2022 12:10:22 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>, alexanderduyck@fb.com
-Subject: Re: [PATCH] ixgbe: Use kmap_local_page in ixgbe_check_lbtest_frame()
-Message-ID: <Yr12jl1nEqqVI3TT@boxer>
-References: <20220629085836.18042-1-fmdefrancesco@gmail.com>
+        Thu, 30 Jun 2022 06:11:05 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CAC44765;
+        Thu, 30 Jun 2022 03:11:03 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id r81-20020a1c4454000000b003a0297a61ddso1364714wma.2;
+        Thu, 30 Jun 2022 03:11:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zVzVBpc51Y9uLu6xYb1G8geSUsvqr31CmHRYh6kJdeM=;
+        b=DFA3yU4qhejKdCMs4TdpjF2Aj0jooukDpX5TtP8A8Gc4xLcCd/Rc2fLf5eBOkqqUdP
+         g7mE69Fxe8kvgct2cW3EMYPN53rzfAd5DUF972twWYBNHUL2zftlefzZmFE49v4SzNSt
+         mzm2SYETieSzwRPtt89tIwbgKEaUtP4KBxiig46iXK2yzniWniWoVzqvN4Zr4JsNnf7f
+         4XZdsbBUMqBZQc9V6V0d7u2zZnmZ+Jv08FwQBAHuC1PwvlpGObIjwEPs0orAEc0ZHv9b
+         fvbk/yPop5tj34CFFdhgT9IkdExEkRDC6fx7zKh75bB7ASLw4TjtwuCC10QMGcghxGnQ
+         3Axg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zVzVBpc51Y9uLu6xYb1G8geSUsvqr31CmHRYh6kJdeM=;
+        b=AFk5JiaifhThv4oFm8n+T6nwhxhWsvYMMB6UjkBgGMvHYtDm0wxXN6V2KvA5exD9BK
+         JLfKHGoohA3gk+w0AQ6oTV2kw+ZQHZCjIe8jOEWugptwC4kkVn3LJJVij91cFS1dbwdV
+         6Vwq4QrayY+8CojASfSnEAbmLn6WtO4lk/a9/4f1aoyQxmMnIIgpbAI1oONm3zYAN2YH
+         7jMJmoCpllAosNpaWY4UqfQLwAZBQCRK2UuwCmCT+hnv5KmdGf3UrBKSnFEmbQ/QvWAj
+         jBdj202FvNYIbjxYoa5tPxSdSjdI6ifJyUI/YAGp9gy2Vllj8IxgbS9c7Rf5kMDlNgQJ
+         ASQA==
+X-Gm-Message-State: AJIora+uGr2EJBR26Z/j+QwWYfhZ0RUaiOS28k9UQR+81tV1g4SYWD0X
+        dw7f5pn2rqKJf07stjVf6B2xpjqFSUY=
+X-Google-Smtp-Source: AGRyM1u0YDvIyWjrWkHoZVEer/5LPtqoGNI6/VKPd3fOSaHcoI430uzZf+tlslgxXR/z3POMo6dKnA==
+X-Received: by 2002:a05:600c:4ecc:b0:3a1:68bf:d17a with SMTP id g12-20020a05600c4ecc00b003a168bfd17amr8719084wmq.154.1656583862544;
+        Thu, 30 Jun 2022 03:11:02 -0700 (PDT)
+Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
+        by smtp.gmail.com with ESMTPSA id j18-20020a05600c191200b003973ea7e725sm2910107wmq.0.2022.06.30.03.11.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 03:11:02 -0700 (PDT)
+Message-ID: <c219e966-d282-ed5a-a619-d33d99eee6ca@gmail.com>
+Date:   Thu, 30 Jun 2022 11:11:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629085836.18042-1-fmdefrancesco@gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 2/6] media: ov5693: add dvdd into ov5693_supply_names
+ array
+Content-Language: en-US
+To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
+        quentin.schulz@theobroma-systems.com,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220630074525.481790-1-tommaso.merciai@amarulasolutions.com>
+ <20220630074525.481790-3-tommaso.merciai@amarulasolutions.com>
+From:   Daniel Scally <djrscally@gmail.com>
+In-Reply-To: <20220630074525.481790-3-tommaso.merciai@amarulasolutions.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 10:58:36AM +0200, Fabio M. De Francesco wrote:
-> The use of kmap() is being deprecated in favor of kmap_local_page().
-> 
-> With kmap_local_page(), the mapping is per thread, CPU local and not
-> globally visible. Furthermore, the mapping can be acquired from any context
-> (including interrupts).
-> 
-> Therefore, use kmap_local_page() in ixgbe_check_lbtest_frame() because
-> this mapping is per thread, CPU local, and not globally visible.
+Hello
 
-Hi,
 
-I'd like to ask why kmap was there in the first place and not plain
-page_address() ?
+On 30/06/2022 08:45, Tommaso Merciai wrote:
+> Add missing "dvdd" (Digital circuit power) entry into ov5693_supply_names
+> array
+>
+> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 
-Alex?
 
-> 
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+Reviewed-by: Daniel Scally <djrscally@gmail.com>
+
 > ---
->  drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
-> index 628d0eb0599f..e64d40482bfd 100644
-> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
-> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
-> @@ -1966,14 +1966,14 @@ static bool ixgbe_check_lbtest_frame(struct ixgbe_rx_buffer *rx_buffer,
+> Changes since v3:
+>  - Add reviewed-by tag, suggested by Jacopo, Krzysztof
+>
+>  drivers/media/i2c/ov5693.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
+> index f410333c4c67..9e84468d920e 100644
+> --- a/drivers/media/i2c/ov5693.c
+> +++ b/drivers/media/i2c/ov5693.c
+> @@ -132,6 +132,7 @@
+>  static const char * const ov5693_supply_names[] = {
+>  	"avdd",		/* Analog power */
+>  	"dovdd",	/* Digital I/O power */
+> +	"dvdd",		/* Digital circuit power */
+>  };
 >  
->  	frame_size >>= 1;
->  
-> -	data = kmap(rx_buffer->page) + rx_buffer->page_offset;
-> +	data = kmap_local_page(rx_buffer->page) + rx_buffer->page_offset;
->  
->  	if (data[3] != 0xFF ||
->  	    data[frame_size + 10] != 0xBE ||
->  	    data[frame_size + 12] != 0xAF)
->  		match = false;
->  
-> -	kunmap(rx_buffer->page);
-> +	kunmap_local(data);
->  
->  	return match;
->  }
-> -- 
-> 2.36.1
-> 
+>  #define OV5693_NUM_SUPPLIES	ARRAY_SIZE(ov5693_supply_names)

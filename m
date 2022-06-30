@@ -2,237 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 214655616C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C1A5616CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233514AbiF3JtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 05:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
+        id S234286AbiF3JuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 05:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232240AbiF3JtR (ORCPT
+        with ESMTP id S229544AbiF3JuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 05:49:17 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6C821806;
-        Thu, 30 Jun 2022 02:49:15 -0700 (PDT)
-X-UUID: 49f567ac6ad94b268ee0de2cfb50cddd-20220630
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:3b63e07e-64ea-49a2-b57b-2f114e3f59e2,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:87442a2,CLOUDID:5dd13086-57f0-47ca-ba27-fe8c57fbf305,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 49f567ac6ad94b268ee0de2cfb50cddd-20220630
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <chui-hao.chiu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 708599843; Thu, 30 Jun 2022 17:49:12 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 30 Jun 2022 17:49:11 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 30 Jun 2022 17:49:10 +0800
-From:   Peter Chiu <chui-hao.chiu@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
+        Thu, 30 Jun 2022 05:50:10 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5945343399;
+        Thu, 30 Jun 2022 02:50:09 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (dkwl20tj04snw15cjtflt-3.rev.dnainternet.fi [IPv6:2001:14ba:4493:6f40:fec3:d72a:e447:8113])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 3197A1B00133;
+        Thu, 30 Jun 2022 12:50:06 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1656582606;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pSeIhViRCy+/xh4kXDryisAXOZaaJ4uKR122HsLjhdo=;
+        b=Qcb2SLALy7gcfDQ0E5276p+ZWRC5uOxajdTYmqBi2DeYeMCMekN6HcJ9bl0fdK+i8bXKF9
+        PGHqfOkTIEB0kK9f+HN3ulaaSIBDZu7lO+1tddPzcUWwqAUHnDs7jLlfGxfOP9gO8kc8Vw
+        SeAWP6oetewuCyA8VUC4J7QpSCdrEi+7rWKFz27v7Pk1U9DnRz9xVfNRRHRCLiwoaM3+Sx
+        u0z4sprFdYfldXz2c2gjkYLByPz6y9OgK+0ExToj+PbyLY+CLq0bSadOfj9ZDXKcGDrdFc
+        dzgxEocZPlYbIPliCETfG55h23pl02Pr8yDapuWJn13NCwPrhNeGmlEjoFpn4Q==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id C2FB2634C91;
+        Thu, 30 Jun 2022 12:50:05 +0300 (EEST)
+Date:   Thu, 30 Jun 2022 12:50:05 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
+        quentin.schulz@theobroma-systems.com,
+        Daniel Scally <djrscally@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <devicetree@vger.kernel.org>, Ryder Lee <ryder.Lee@mediatek.com>,
-        "Evelyn Tsai" <evelyn.tsai@mediatek.com>,
-        Sam Shih <sam.shih@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Peter Chiu <chui-hao.chiu@mediatek.com>
-Subject: [PATCH v4] arm64: dts: mt7986: add built-in Wi-Fi device nodes
-Date:   Thu, 30 Jun 2022 17:49:09 +0800
-Message-ID: <20220630094909.8014-1-chui-hao.chiu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 5/6] media: dt-bindings: ov5693: document YAML binding
+Message-ID: <Yr1xzeqW2p4jVDzS@valkosipuli.retiisi.eu>
+References: <20220630074525.481790-1-tommaso.merciai@amarulasolutions.com>
+ <20220630074525.481790-6-tommaso.merciai@amarulasolutions.com>
+ <167f09c1-795d-1471-20f7-9f4df29355ed@linaro.org>
+ <20220630090232.GC482517@tom-ThinkPad-T14s-Gen-2i>
+ <Yr1pD2U2ilXXXX+Q@valkosipuli.retiisi.eu>
+ <20220630091613.GD482517@tom-ThinkPad-T14s-Gen-2i>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220630091613.GD482517@tom-ThinkPad-T14s-Gen-2i>
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1656582606; a=rsa-sha256;
+        cv=none;
+        b=Nxfl1guUSYCp+iJrg20bZ7vZ7G6BnZoD2DdsyMV3+713PW+S+tfM83YfvE5rFN3VW8goG5
+        vCPm5WaHLS94A3XJHe+8H04vs6I6f4/wiX5V8OEU1X2QzMZFZS5y9YljIKwj+epm7oYIH3
+        REGxQVVuXylNEjmCouryie3T8Wmu3ORAX/i4MQZPcGqUsBcEO5XF5Dss0iQwvHnaAqR2ek
+        lxt0upMGkCaSBy+9Zqz24OTM+MgpeMzoMUWUuS8B59rheU0KG6YxlQmEAvHFPxtlssHUiG
+        +7QjcltE+g5TYvRqjNvE9qM043TuDWArB6/ipY3xt9jyqJ4D+jqmVOib64Kt/w==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1656582606;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pSeIhViRCy+/xh4kXDryisAXOZaaJ4uKR122HsLjhdo=;
+        b=oC8hbtP0h7ts7B3QcEY0qL8YFC6e6IYK8r2DjjVb8zrO3Cv++za6BYi6/Ts+c2Oi2Mp/J8
+        uejmiYxblvk+hz3mjdnHIJlzKAq2kJv7swqbsQFpkJ5tu/WUil5tNmFM6W8zWgSYfDrTAB
+        P/6c3k1LLVHqCI+xrniXmLt+mIjqf6BNgp23/xVkKfFP9s8JoIBqERU1ISF9h9AcT9QzPI
+        VofzvarmrKZ7HoeCGPY6mGrkKnG80m9zycw45YoABjAIY49VwI3UGkVIibYlpL4Tr01hr2
+        Mv97LqMlNi6QO7OoZyNcxiUS+ERmMx7J8cUrmgnLva5QDY6WNVw3sMuwQ+Gk/Q==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This enables built-in 802.11ax Wi-Fi support.
+Hi Tommaso,
 
-Reviewed-by: Sam Shih <sam.shih@mediatek.com>
-Reviewed-by: Ryder Lee <ryder.lee@mediatek.com>
-Signed-off-by: Peter Chiu <chui-hao.chiu@mediatek.com>
----
-v2: add clocks and clock-names.
-v3: rename wmac to wifi and change underscores to dash in node names.
-v4: rebase to the latest codebase.
----
- arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 41 +++++++++++++++++++
- arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 23 +++++++++++
- arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts | 43 ++++++++++++++++++++
- 3 files changed, 107 insertions(+)
+On Thu, Jun 30, 2022 at 11:16:13AM +0200, Tommaso Merciai wrote:
+> Hi Sakari,
+> 
+> On Thu, Jun 30, 2022 at 12:12:47PM +0300, Sakari Ailus wrote:
+> > On Thu, Jun 30, 2022 at 11:02:32AM +0200, Tommaso Merciai wrote:
+> > > On Thu, Jun 30, 2022 at 10:07:19AM +0200, Krzysztof Kozlowski wrote:
+> > > > On 30/06/2022 09:45, Tommaso Merciai wrote:
+> > > > > Add documentation of device tree in YAML schema for the OV5693
+> > > > > CMOS image sensor from Omnivision
+> > > > > 
+> > > > > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> > > > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > > > Reviewed-by: Sakari Ailus <sakari.ailus@iki.fi>
+> > > > 
+> > > > How Sakari's tag appeared here? There was no email from him.
+> > > 
+> > > Sakari made me some review on v2, but I think he forgot to add the mailing
+> > > list in cc. ( I suppose :) )
+> > > 
+> > > Let me know if I need to remove this.
+> > 
+> > You're only supposed to put these tags into patches if you get them in
+> > written form as part of the review, signalling acceptance of the patch in
+> > various forms. Just commenting a patch does not imply this.
+> > 
+> > Please also see Documentation/process/submitting-patches.rst for more
+> > information on how to use the tags.
+> 
+> Thanks for sharing this. My bad.
+> I remove your tags.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-index 882277a..28cd168 100644
---- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-@@ -115,6 +115,13 @@ &uart2 {
- 	status = "okay";
- };
- 
-+&wifi {
-+	status = "okay";
-+	pinctrl-names = "default", "dbdc";
-+	pinctrl-0 = <&wf_2g_5g_pins>;
-+	pinctrl-1 = <&wf_dbdc_pins>;
-+};
-+
- &pio {
- 	uart1_pins: uart1-pins {
- 		mux {
-@@ -129,4 +136,38 @@ mux {
- 			groups = "uart2";
- 		};
- 	};
-+
-+	wf_2g_5g_pins: wf-2g-5g-pins {
-+		mux {
-+			function = "wifi";
-+			groups = "wf_2g", "wf_5g";
-+		};
-+		conf {
-+			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
-+			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
-+			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
-+			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
-+			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
-+			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
-+			       "WF1_TOP_CLK", "WF1_TOP_DATA";
-+			drive-strength = <4>;
-+		};
-+	};
-+
-+	wf_dbdc_pins: wf-dbdc-pins {
-+		mux {
-+			function = "wifi";
-+			groups = "wf_dbdc";
-+		};
-+		conf {
-+			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
-+			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
-+			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
-+			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
-+			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
-+			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
-+			       "WF1_TOP_CLK", "WF1_TOP_DATA";
-+			drive-strength = <4>;
-+		};
-+	};
- };
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-index e3a407d..890ded0 100644
---- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-@@ -7,6 +7,7 @@
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/clock/mt7986-clk.h>
-+#include <dt-bindings/reset/mt7986-resets.h>
- 
- / {
- 	interrupt-parent = <&gic>;
-@@ -70,6 +71,11 @@ secmon_reserved: secmon@43000000 {
- 			reg = <0 0x43000000 0 0x30000>;
- 			no-map;
- 		};
-+
-+		wmcpu_emi: wmcpu-reserved@4fc00000 {
-+			no-map;
-+			reg = <0 0x4fc00000 0 0x00100000>;
-+		};
- 	};
- 
- 	timer {
-@@ -261,6 +267,23 @@ eth: ethernet@15100000 {
- 			#size-cells = <0>;
- 			status = "disabled";
- 		};
-+
-+		wifi: wifi@18000000 {
-+			compatible = "mediatek,mt7986-wmac";
-+			resets = <&watchdog MT7986_TOPRGU_CONSYS_SW_RST>;
-+			reset-names = "consys";
-+			clocks = <&topckgen CLK_TOP_CONN_MCUSYS_SEL>,
-+				 <&topckgen CLK_TOP_AP2CNN_HOST_SEL>;
-+			clock-names = "mcu", "ap2conn";
-+			reg = <0 0x18000000 0 0x1000000>,
-+			      <0 0x10003000 0 0x1000>,
-+			      <0 0x11d10000 0 0x1000>;
-+			interrupts = <GIC_SPI 213 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 214 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 215 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 216 IRQ_TYPE_LEVEL_HIGH>;
-+			memory-region = <&wmcpu_emi>;
-+		};
- 	};
- 
- };
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-index 0f49d57..7f21b10 100644
---- a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-@@ -98,3 +98,46 @@ fixed-link {
- 		};
- 	};
- };
-+
-+&wifi {
-+	status = "okay";
-+	pinctrl-names = "default", "dbdc";
-+	pinctrl-0 = <&wf_2g_5g_pins>;
-+	pinctrl-1 = <&wf_dbdc_pins>;
-+};
-+
-+&pio {
-+	wf_2g_5g_pins: wf-2g-5g-pins {
-+		mux {
-+			function = "wifi";
-+			groups = "wf_2g", "wf_5g";
-+		};
-+		conf {
-+			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
-+			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
-+			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
-+			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
-+			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
-+			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
-+			       "WF1_TOP_CLK", "WF1_TOP_DATA";
-+			drive-strength = <4>;
-+		};
-+	};
-+
-+	wf_dbdc_pins: wf-dbdc-pins {
-+		mux {
-+			function = "wifi";
-+			groups = "wf_dbdc";
-+		};
-+		conf {
-+			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
-+			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
-+			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
-+			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
-+			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
-+			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
-+			       "WF1_TOP_CLK", "WF1_TOP_DATA";
-+			drive-strength = <4>;
-+		};
-+	};
-+};
+The patches themselves seem fine. I'd just drop the 4th patch or at least
+come up with a better name for ov5693_hwcfg() --- you're acquiring
+resources there, and that generally fits well for probe. The code is fine
+already.
+
 -- 
-2.36.1
-
+Sakari Ailus

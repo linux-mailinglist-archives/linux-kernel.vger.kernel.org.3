@@ -2,60 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C349E5620CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 19:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE765620D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 19:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235486AbiF3REb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 13:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34428 "EHLO
+        id S236047AbiF3RGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 13:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbiF3RE3 (ORCPT
+        with ESMTP id S236030AbiF3RGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 13:04:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A12F9FF9;
-        Thu, 30 Jun 2022 10:04:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5CDD620F7;
-        Thu, 30 Jun 2022 17:04:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2705C34115;
-        Thu, 30 Jun 2022 17:04:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656608667;
-        bh=9xTkLvgI2j49cZwwhHy9LRORG3NfysC2tN2iVVZbtoY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r7iyBhtzWLJQUZm7drY70udlT/Dgm/rPn+6mGsNZC+R/SOFn73f+O8ANjsP7hCeMi
-         p8U0DbwIeQkyWeYC4vjV6ztUCeVE8xIFZ3pQFGSbW8YOfxH7gFnUs56d6YG0jKsc7r
-         8fHUp+qEkwrG1RD1JuApaLwyQPvuGoS2wH/fwo/8edZ6BrDLLNRPi/sDc8PTYz7oQS
-         69jnQ9Mg/TsMawN9EcLNmUzxOwuu50O1dPQVKGY2+LyiFtAl55GepALEEq+Xq/0rVX
-         FZnUetPQWveOQUZi/spoaQvkLHBjAVpD1oX37ScZwO919Qsbb6102Y008wrzjt0aQa
-         vwMUOgW07yjZA==
-Date:   Thu, 30 Jun 2022 20:04:12 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>, syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+9bd2b7adbd34b30b87e4@syzkaller.appspotmail.com>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [syzbot] BUG: unable to handle kernel paging request in
- truncate_inode_partial_folio
-Message-ID: <Yr3XjPs9WJU6DLU6@kernel.org>
-References: <000000000000f94c4805e289fc47@google.com>
- <YrvYEdTNWcvhIE7U@sol.localdomain>
- <CAJHvVcgoeKhqFTN5aGfQ53GbRDYJsfkRjeUM-yO5AROC0A8ekQ@mail.gmail.com>
- <Yr1jKwz2+SGxjcuW@kernel.org>
- <CAJHvVciyL0i-8HaAWSo9rvbJn-_yqhCmj2FEPhUU=7TdMnKrag@mail.gmail.com>
+        Thu, 30 Jun 2022 13:06:41 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8333B3E5FD
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:06:40 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id b12-20020a17090a6acc00b001ec2b181c98so3767375pjm.4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:06:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eAr7PQsxKeew00/CVr7ZzHucmGcjpALBBy+n+XFui6I=;
+        b=Fwuwe3ZO30tghfWbLzVhLTW/P804T2Iz/JWwmhIB0XzUV4tCO5Uy0L2KikEz2oooFz
+         hOR6Xk/OVmzbBBFFm7kfk/KAB/7BxuheUHQtleYNMVMkEpp33O5kjAbL3t9lGN9IfIGN
+         ctq1Ws8as/OXK1bwSua1Y6wC7GX1cUBXst0QkpET2rHi221GVeFqtFK3LtiVfDlUy12b
+         rVeoI9PeueFXnVBx3U5ip/zqlKSuY4kHNz4z/xLE1bOA7VNo1RPAS02cbgEhVTeRCXoW
+         wV1lft9xJZdMU9U+QbkE1JJaOydnZelnNI6qwx19uIbPyhWhP9XsUgCKEfvxEMsGpQDj
+         gxeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eAr7PQsxKeew00/CVr7ZzHucmGcjpALBBy+n+XFui6I=;
+        b=5KiKIWQS7/tQS+knHf5QugiZ2Bj2EdfIQ/5Wnse4Pb0ZrtdLhsAzlDzlzOG/bKkXpn
+         pRKV0aD7Y9Ok52OudcFi3718clbCCEB1RV+QZ2K8CdU7d77cGX0YDY0PkgaH9Vm7JIoT
+         CtYjP9nmNX39ijlcDY9dJgoYaFGn//+wnigp5CfG+gekOX+2wyY3280PfAEGft4AWr4M
+         qsRBlepYwgewzxC3e0OuQXv2LX7g7B0p3Xi2CWva73WXalNrJe39haf35ujXBM6gAdLe
+         qT/xXS/H3HYUhLgyi15NJC5bpPFg7zfUtvbhkym0j3URrXuNmOmfIYno7su8coKxD9fV
+         YK4w==
+X-Gm-Message-State: AJIora9vWkhWbw4bxcQzYgG5iaztSzH1PvDNT6i9SHUysw4pDAicWU6i
+        eOX9gqsZJlfi0Bh87aVftiurWA==
+X-Google-Smtp-Source: AGRyM1tQlkoaEbHG6+vV4lZEf6QKE6dhZv4RO/68eWlgyxt5ZkZDUlagQJLqtw41qfD37FBmZiz7QA==
+X-Received: by 2002:a17:902:e381:b0:16a:1b5d:5438 with SMTP id g1-20020a170902e38100b0016a1b5d5438mr16387906ple.147.1656608799905;
+        Thu, 30 Jun 2022 10:06:39 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id f24-20020a63f118000000b0040caab35e5bsm7580699pgi.89.2022.06.30.10.06.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 10:06:38 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 11:06:36 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-doc@vger.kernel.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh@kernel.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH next] Documentation: coresight: escape coresight bindings
+ file wildcard
+Message-ID: <20220630170636.GA2090408@p14s>
+References: <20220630101317.102680-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJHvVciyL0i-8HaAWSo9rvbJn-_yqhCmj2FEPhUU=7TdMnKrag@mail.gmail.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220630101317.102680-1-bagasdotme@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,78 +77,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 09:14:07AM -0700, Axel Rasmussen wrote:
-> On Thu, Jun 30, 2022 at 1:47 AM Mike Rapoport <rppt@kernel.org> wrote:
-> > On Wed, Jun 29, 2022 at 09:30:12AM -0700, Axel Rasmussen wrote:
-> > > On Tue, Jun 28, 2022 at 9:41 PM Eric Biggers <ebiggers@kernel.org> wrote:
-> > > > On Tue, Jun 28, 2022 at 03:59:26PM -0700, syzbot wrote:
-> > > > > Hello,
-> > > > >
-> > > > > syzbot found the following issue on:
-> > > > >
-> > > > > HEAD commit:    941e3e791269 Merge tag 'for_linus' of git://git.kernel.org..
-> > > > > git tree:       upstream
-> > > > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=1670ded4080000
-> > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=833001d0819ddbc9
-> > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=9bd2b7adbd34b30b87e4
-> > > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=140f9ba8080000
-> > > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15495188080000
-> > > > >
-> > > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > > Reported-by: syzbot+9bd2b7adbd34b30b87e4@syzkaller.appspotmail.com
-> > > > >
-> > > >
-> > > > I think this is a bug in memfd_secret.  secretmem_setattr() can race with a page
-> > > > being faulted in by secretmem_fault().  Specifically, a page can be faulted in
-> > > > after secretmem_setattr() has set i_size but before it zeroes out the partial
-> > > > page past i_size.  memfd_secret pages aren't mapped in the kernel direct map, so
-> > > > the crash occurs when the kernel tries to zero out the partial page.
-> > > >
-> > > > I don't know what the best solution is -- maybe a rw_semaphore protecting
-> > > > secretmem_fault() and secretmem_setattr()?  Or perhaps secretmem_setattr()
-> > > > should avoid the call to truncate_setsize() by not using simple_setattr(), given
-> > > > that secretmem_setattr() only supports the size going from zero to nonzero.
-> > >
-> > > From my perspective the rw_semaphore approach sounds reasonable.
-> > >
-> > > simple_setattr() and the functions it calls to do the actual work
-> > > isn't a tiny amount of code, it would be a shame to reimplement it in
-> > > secretmem.c.
-> > >
-> > > For the rwsem, I guess the idea is setattr will take it for write, and
-> > > fault will take it for read? Since setattr is a very infrequent
-> > > operation - a typical use case is you'd do it exactly once right after
-> > > opening the memfd_secret - this seems like it wouldn't make fault
-> > > significantly less performant. It's also a pretty small change I
-> > > think, just a few lines.
-> >
-> > Below is my take on adding a semaphore and making ->setattr() and ->fault()
-> > mutually exclusive. It's only lightly tested so I'd appreciate if Eric
-> > could give it a whirl.
-> >
-> > With addition of semaphore to secretmem_setattr() it seems we don't need
-> > special care for size changes, just calling simple_setattr() after taking
-> > the semaphore should be fine. Thoughts?
+On Thu, Jun 30, 2022 at 05:13:17PM +0700, Bagas Sanjaya wrote:
+> Stephen Rothwell reported htmldocs warning:
 > 
-> The patch below looks correct to me. I do think we still need the
-> check which prevents truncating a memfd_secret with an existing
-> nonzero size, though, because I think simple_setattr's way of doing
-> that still BUGs in a non-racy way (rwsem doesn't help with this). The
-> patch below keeps this, so maybe I'm just misinterpreting "we don't
-> need special care for size changes".
-
-It really was a question, because I was too lazy to dig into
-simple_setattr() and I know you investigated it :)
- 
-> I haven't booted+tested it, I'll leave that to Eric since he already
-> has a reproducer setup for this. But, for what it's worth, feel free
-> to take:
+> Documentation/trace/coresight/coresight.rst:133: WARNING: Inline emphasis start-string without end-string.
 > 
-> Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
+> The warning above is due to unescaped wildcard asterisk (*) on CoreSight
+> devicetree binding filename, which confuses Sphinx as emphasis instead.
+> 
+> Escape the wildcard to fix the warning.
+> 
+> Link: https://lore.kernel.org/linux-next/20220630173801.41bf22a2@canb.auug.org.au/
+> Fixes: 3c15fddf312120 ("dt-bindings: arm: Convert CoreSight bindings to DT schema")
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Mike Leach <mike.leach@linaro.org>
+> Cc: Leo Yan <leo.yan@linaro.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: coresight@lists.linaro.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-next@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  Documentation/trace/coresight/coresight.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
 
-Thanks!
+Applied.
 
--- 
-Sincerely yours,
-Mike.
+Thanks,
+Mathieu
+
+> diff --git a/Documentation/trace/coresight/coresight.rst b/Documentation/trace/coresight/coresight.rst
+> index 529b7c80e6f353..1644a0244ad10a 100644
+> --- a/Documentation/trace/coresight/coresight.rst
+> +++ b/Documentation/trace/coresight/coresight.rst
+> @@ -130,7 +130,7 @@ Misc:
+>  Device Tree Bindings
+>  --------------------
+>  
+> -See Documentation/devicetree/bindings/arm/arm,coresight-*.yaml for details.
+> +See Documentation/devicetree/bindings/arm/arm,coresight-\*.yaml for details.
+>  
+>  As of this writing drivers for ITM, STMs and CTIs are not provided but are
+>  expected to be added as the solution matures.
+> 
+> base-commit: 6cc11d2a1759275b856e464265823d94aabd5eaf
+> -- 
+> An old man doll... just what I always wanted! - Clara
+> 

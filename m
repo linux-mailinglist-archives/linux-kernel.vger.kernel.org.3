@@ -2,105 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC75F562779
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 283B456277B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbiF3X5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 19:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44032 "EHLO
+        id S230336AbiF3X6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 19:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233158AbiF3X5b (ORCPT
+        with ESMTP id S230008AbiF3X6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 19:57:31 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC2E5C963;
-        Thu, 30 Jun 2022 16:57:31 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id m14-20020a17090a668e00b001ee6ece8368so4762097pjj.3;
-        Thu, 30 Jun 2022 16:57:31 -0700 (PDT)
+        Thu, 30 Jun 2022 19:58:10 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A8D5C968
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:58:03 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id a39so606579ljq.11
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:58:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qcLhJvC+D5OYRf7ogI/k7y7Pg+pS0lzqiVdPO7nMHQI=;
-        b=O5z7gHCsEatU8qrG/83UTjMD8BAbJEAgOJe4wMok2mVEUqIe0Xa8VKhYLg3+vj+qvM
-         6qzoUXXI4+mnbtszs3xpekXAcFJ1DwVx4hfDRS6QV3OiqsPA2D24vKLHAdly5XO4U/sn
-         l9074KDxKsPA8M8LqqS5tAAPSQawui41HFSrOq98TolPcK7UGN6Tv9ELGKSW+aYMWAog
-         7UBTPmUAMfRQRUbWINV7jsrPfn+ShbkoYvMVU+0fGBENmxq9se9XFbG+iNOk106Z6Kw7
-         JusIzDa+iShlz1CTHQduWA3NLcLgHJo9Cla0Ktf4LhNq9hLgXkfe6Pe1e/E613M81psR
-         JT3g==
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=bwl9aYy0/sEYA6zVlqa63I8sJGvbXpz0nWprpUmHCn8=;
+        b=0RuKsA1tzfF8paPKbGQBBUxk95W958LHfzeBU2KnhDbhywqVNPHrzdLXYGyOyZQStm
+         nApR00nOLhfiv+zNb5NERqesnePI4J1iaoR0OOliWJCLZ+phTXOpZlocf7CW/OR23f8q
+         NPDW760dcuaTE4MupAoMTOCM1Zdt2XPj0PrT+QdwCR0dsCUmITHpb8zF2tg4EV0PYjsk
+         ZZsgp3+/HkomzNcHHBvHuWJj24FG6wkJhkemQB/ppjTuRRyDlUBisxBa1/tm2qirH4hf
+         YnfGBAMCXfZ+z2rTFbAA4xQDfBeiqWJPszzImU+79hkumvGPl7xLy0TRS4QYVV4iTQFl
+         CRdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
          :content-transfer-encoding;
-        bh=qcLhJvC+D5OYRf7ogI/k7y7Pg+pS0lzqiVdPO7nMHQI=;
-        b=XVLXpTcI37/staJ18g0B9Tr4epshmg2jVlHUSSMp2imSZ1r4kPSHVEKaCK+eKQJHiV
-         3Y5ecg3yYx8oTbowlS7kbs/9wrkE1noHYacZYaIvNzgyp2cL1XcLz7abV4raEYqqq1bt
-         QnnDRnA/nhImufXWPQHMfxdwhcHdBxAtoBjykaV6o9pz5TQGFYdUL6sKqdAR3zYFlq2q
-         fBE7OPewb5w80Lk0rcIXP1LF4APP390euqj8KwLc/vg5KqQ6vfZMqTwalnTgjfMkA4du
-         61ruvk0vV3R2MoohyZBc2K9ArHEyksH/yi9kda/ccmqSxWStfOEO1d1EqFKIgvjfQD+x
-         fDsg==
-X-Gm-Message-State: AJIora/XVn2nFGFJ3Ndv0eIKk+zTDnYDz7A69TbsLAMhIgS2GKtBmpGz
-        B9nZSkt6V2TupnQ2GjB/nQ4=
-X-Google-Smtp-Source: AGRyM1vfohPqMrsdhkq/NcfqV7O+aXYkH6To0fd/SdyqpzR6uskDP2U7u6zNEU6QugJM8EXLo/EqRw==
-X-Received: by 2002:a17:902:e74c:b0:16a:5b5c:dc4d with SMTP id p12-20020a170902e74c00b0016a5b5cdc4dmr17993862plf.123.1656633450709;
-        Thu, 30 Jun 2022 16:57:30 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id u17-20020a17090341d100b0016909678e2csm14165172ple.292.2022.06.30.16.57.29
+        bh=bwl9aYy0/sEYA6zVlqa63I8sJGvbXpz0nWprpUmHCn8=;
+        b=Tjzd85/i/uOLfay8a1focSRDcKFlyZENHBPlqF5kEgCHQBxDGpQ3czolvPBhfwFre/
+         CEuRMC7EiyZk6RdOiu3RI37eicznypHB3SJaeax67inPNvQUkhHpJY8uYYjpkJFjyWEQ
+         bankzRgwAs4Fi7jNpQeTTr/NNx1q8+ReP6w0B4E8O8bVEeG/hMjetpL8xWcZOtPaHf32
+         OAQlJpm99SaFzJkiGZGDw5dBKGm9uiHbx88DZ5mJdpJ/OJcpigk3otRrztezHJMfgTBI
+         /PeJFJigPfQIbaLyRhypXjzCfj3kDRpDewrtYryk8ycQ2+dRx9yCfnJCIfs6TlwkJ8Nb
+         ZNsw==
+X-Gm-Message-State: AJIora/5AlsQAJLHRPrMMuSow65pt/3MN4XPnA4Z61ajidbqVXNR4KR8
+        KFe4gt8upsQ+Q7IxIS+4mbri9g==
+X-Google-Smtp-Source: AGRyM1vTZKmK/iFhoqMLadC9vLAIC7Fwp2vwZn7Tg3D3aAWPdBdfQTBC4tCMCsjF2YHjCC9hsnrpYw==
+X-Received: by 2002:a2e:730f:0:b0:25b:e1e6:5fca with SMTP id o15-20020a2e730f000000b0025be1e65fcamr6614505ljc.437.1656633481697;
+        Thu, 30 Jun 2022 16:58:01 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.129])
+        by smtp.gmail.com with ESMTPSA id a8-20020a056512200800b0047255d210dcsm3347759lfb.11.2022.06.30.16.58.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 16:57:30 -0700 (PDT)
-Message-ID: <e53abf8e-8405-9049-08d3-c2651937e58f@gmail.com>
-Date:   Thu, 30 Jun 2022 16:57:28 -0700
+        Thu, 30 Jun 2022 16:58:01 -0700 (PDT)
+Message-ID: <2a18d823-1a60-977d-57e8-3d41bef74c0c@openvz.org>
+Date:   Fri, 1 Jul 2022 02:58:00 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 4.9 00/29] 4.9.321-rc1 review
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH v2] x86/fault: ignore RSVD flag in error code if P flag is 0
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        Konstantin Khorenko <khorenko@virtuozzo.com>,
+        steve.sipes@comandsolutions.com
+References: <3e39adad-3b1d-18c0-29d5-e0268c0fa083@intel.com>
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220630133231.200642128@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220630133231.200642128@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <3e39adad-3b1d-18c0-29d5-e0268c0fa083@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Several older Intel CPUs have this or a similar erratum.
+For instance, the "Intel Xeon Processor 5400 Series
+Specification Update" [1] has
 
+"AX74. Not-Present Page Faults May Set the RSVD Flag in the Error Code
 
-On 6/30/2022 6:46 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.321 release.
-> There are 29 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.321-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Problem:
+ An attempt to access a page that is not marked present causes
+ a page fault. Such a page fault delivers an error code in which
+ both the P flag (bit 0) and the RSVD flag (bit 3) are 0.
+ Due to this erratum, not-present page faults may deliver
+ an error code in which the P flag is 0 but the RSVD flag is 1.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Implication:
+ Software may erroneously infer that a page fault was due to
+ a reserved-bit violation when it was actually due to an attempt
+ to access a not-present page. Intel has not observed this erratum
+ with any commercially available software.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Workaround:
+ Page-fault handlers should ignore the RSVD flag in the error
+ code if the P flag is 0"
+
+This problem has been observed several times on several nodes using
+Intel Xeon E5450 processors. These nodes were crashed after
+"Bad pagetable: 000c" messages like this:
+
+Corrupted page table at address 7f62d5b48e68
+PGD 80000002e92bf067 PUD 1c99c5067 PMD 195015067 PTE 7fffffffb78b680
+Bad pagetable: 000c [#1] SMP
+
+Error code here is 0xc, it have set RSVD flag (bit 3), however P flag
+(bit 0) is clear.
+
+Let's follow the recommendations and ignore the RSVD flag in the cases
+described.
+
+Link: [1] https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/xeon-5400-spec-update.pdf
+Link: https://lore.kernel.org/all/aae9c7c6-989c-0261-470a-252537493b53@openvz.org
+Reported-by: Steve Sipes <steve.sipes@comandsolutions.com>
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+---
+v2: added original reporter
+    improved patch description, added link to CPU spec update
+---
+ arch/x86/mm/fault.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+index fe10c6d76bac..ffc6d6bd2a22 100644
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -1481,6 +1481,15 @@ handle_page_fault(struct pt_regs *regs, unsigned long error_code,
+ 	if (unlikely(kmmio_fault(regs, address)))
+ 		return;
+ 
++	/*
++	 * Some older Intel CPUs have errata
++	 * "Not-Present Page Faults May Set the RSVD Flag in the Error Code"
++	 * It is recommended to ignore the RSVD flag (bit 3) in the error code
++	 * if the P flag (bit 0) is 0.
++	 */
++	if (unlikely((error_code & X86_PF_RSVD) && !(error_code & X86_PF_PROT)))
++		error_code &= ~X86_PF_RSVD;
++
+ 	/* Was the fault on kernel-controlled part of the address space? */
+ 	if (unlikely(fault_in_kernel_space(address))) {
+ 		do_kern_addr_fault(regs, error_code, address);
 -- 
-Florian
+2.36.1
+

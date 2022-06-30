@@ -2,228 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F955625F9
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 00:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC575625FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 00:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiF3WVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 18:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
+        id S230504AbiF3WWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 18:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiF3WVN (ORCPT
+        with ESMTP id S229531AbiF3WWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 18:21:13 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D611A1039;
-        Thu, 30 Jun 2022 15:21:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656627672; x=1688163672;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=kib0vE1g7LZBYZxTPIIc66FkHoJyUZts/650CtJedJI=;
-  b=NyJAq71JeFa71UWuSOc/Ty4qQISCGlThbTG1iqwXEqHBM1/VuNihLqxM
-   nZyBlh/hRXN43I3n5jY7CRe+JumcWh788DJ4ZjbK6OEcbMtvboLzm1IOI
-   EeLkTeTii73znqVfatwABj8HKt15y9mtjJ2ayscwx+QCK9ySLDU2qvuWo
-   0yt9eFGR+pSAua14aMUs7XBI8Sc32U/MrjyzzXyGyPnhav+QFomyrYWU3
-   uNvFbOYSy2vpH9wgG209KxOCNmJFhlDRQ/m/9dxXE19f0H7ZxBgB83kih
-   UGn6G/hKslTDcejFa6a4hofIrHquPW5Jqko1UHHUH7zOYxLWFYEzMhI8l
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="346472874"
-X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
-   d="scan'208";a="346472874"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 15:21:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
-   d="scan'208";a="595995487"
-Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Jun 2022 15:21:11 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 30 Jun 2022 15:21:11 -0700
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 30 Jun 2022 15:21:11 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Thu, 30 Jun 2022 15:21:11 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.172)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Thu, 30 Jun 2022 15:21:09 -0700
+        Thu, 30 Jun 2022 18:22:04 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2077.outbound.protection.outlook.com [40.107.223.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C17B3A2;
+        Thu, 30 Jun 2022 15:22:03 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GKqvWTsEdauEQTRYoofDBqsIjwDO8Wz7R253sz4PJAUM65jDBb5Q90Ju+ce+v/6qQnq8stLEjDfNg/jYeRccAU68BqfEct+Ojw20s6xnDeA9kS4QWuQEeqVfKoDi7AF1xefP/wxC6XrwiGpOx1cQ8voa7pKsCOg3y9rZN5pX1wEWxukFQe6a1AuLqoTTv2MAZphw8s7L3sTn3wQMh1Dl3M0ACTq17Zfk5ZvlatcsvZ1HMN0pSgfsgsb8+EdYp4Buu9qAi59xPv7y99NWqqqMD32MPrbAlLQmJbz8cPGQEAwVqdXO0kkV54WPl2Ap8U92ea5StwNZYbp5VpFK3daU7g==
+ b=R1o6k544A11JQIULQrl3DckEqCaQA3hj76EyHnYr4tp9njCrVKf8dHbYrkXFHfM+LRus2qsboHt/6OuXjE+oGJy6vIzFwdvuc+BG00HmU93YzgSaAhA+hVZk3KQFfdVXT1FaCrPIaxWJ0ZWyd++Bd9jgvATmgL17d6sSAwy824r1NbFHedhmiAuf+btmCp4i4wk+Mng/FFzTGoUDhoW9+KbE1tszBMeqghIlxNA0oIV4p9cN2JjQEHx1+3XXzNleN621QGJKUK/rLGo+PPbWtxMxWfxqr7PcPm8iEUzYFFQLAeOpfCS9KsP+Mh+URmd1S2f+8m/snNFN7fJrfBGWNA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8C9txXgU4Y1Ry/+pZ1b0y+4os3PSHu7Dzj0H3rUoWdw=;
- b=mMmacTtoaZEBlMJddV8VNvUAYzRCOqCqJEW8jquxtqM1lPYYLsZxfLXgsCKA8ohgeaaK6zfOe1lx5Rynkigj1Tyvh8I6HPSthOQ7x+lFYa8p2fs3MdOFaQl0RoQ8jJE05cpuEjrkiUC6hCp5ZzdEQO82HKQWd9JdMUAHnAyhYg7JRJQgpifGLnAEoLLmjJ6CrFkyXs63kX/GiOcQoHM1d625iS48EApf8xtkdPHuY+FCGH+fpH4oEmx6AQ1v+9iSN8HRSsXgSOrQbZJjbEPkqyQv7bVU78dJB4+ndqg2SZtHXPFXswqVv1gtz75arl5pEal9cmbGnm37LHmrFSk/eg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6311.namprd11.prod.outlook.com (2603:10b6:8:a6::21) by
- PH0PR11MB5143.namprd11.prod.outlook.com (2603:10b6:510:3f::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5395.15; Thu, 30 Jun 2022 22:21:08 +0000
-Received: from DM4PR11MB6311.namprd11.prod.outlook.com
- ([fe80::e912:6a38:4502:f207]) by DM4PR11MB6311.namprd11.prod.outlook.com
- ([fe80::e912:6a38:4502:f207%5]) with mapi id 15.20.5395.014; Thu, 30 Jun 2022
- 22:21:08 +0000
-Date:   Thu, 30 Jun 2022 15:21:00 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-CC:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Chris Down <chris@chrisdown.name>,
-        Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
-        Nikolay Borisov <nborisov@suse.com>,
-        Gabriel Niebler <gniebler@suse.com>,
-        <linux-btrfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] btrfs: Convert zlib_decompress_bio() to use
- kmap_local_page()
-Message-ID: <Yr4hzN+BTeIQ6ruI@iweiny-desk3>
-References: <20220618091901.25034-1-fmdefrancesco@gmail.com>
+ bh=vDdvE/+qLXuAvKitUqu8CFVheNxtCtHZvfWwUHG1068=;
+ b=jHQjWnt3s50X0zoJWkbB04WeIXbUw9iSH6IBaRwJrgGTIAnG1IJYewCMhOIUBdsO1VnTXa0YsMUSIUNFqiggsCwNRCQYxPTA2wJ+fdzsoIs7OI9tv/CMYQW7fSSbztRPzpCF8c+0zZydgm9Sy6BZE64dYZXRXYFA/8RMcyFyRRwxx9rq5J49kRQG+/gZIgwhjIyH6Ep11iEmrSyaff7Hl4j2Rc/OJCu8q4gs+xl+SGAaG3Q1jhh0mTAVtJ2EExxgu40KXLE5njaOkB/fDdZEqwr3cxknN01hFxVWM0USf+/i35uLzunh2m6wZHCS1Z45iDe1uynWnbXSVaURYN6Icw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vDdvE/+qLXuAvKitUqu8CFVheNxtCtHZvfWwUHG1068=;
+ b=NPD+cmFuHwFd21SkLbknHj1F39ac/FNDuXtzhmvMBIDcI2yr+KJiLlWvrb29wc3om6Y6Q7N6qIJyRYFD/gTJnANwaic/U5hjhHwIVecVXSiWu36zgWNfdEKzBw7JXIwyCCmdG4+gABilVbl/m0HAst/eFZaK/LzmmzPCtJT4aiE=
+Received: from BN9P220CA0023.NAMP220.PROD.OUTLOOK.COM (2603:10b6:408:13e::28)
+ by DM6PR12MB4089.namprd12.prod.outlook.com (2603:10b6:5:213::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Thu, 30 Jun
+ 2022 22:22:00 +0000
+Received: from BN8NAM11FT040.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13e:cafe::62) by BN9P220CA0023.outlook.office365.com
+ (2603:10b6:408:13e::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15 via Frontend
+ Transport; Thu, 30 Jun 2022 22:22:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT040.mail.protection.outlook.com (10.13.177.166) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5395.14 via Frontend Transport; Thu, 30 Jun 2022 22:22:00 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 30 Jun
+ 2022 17:21:59 -0500
+Date:   Thu, 30 Jun 2022 17:21:40 -0500
+From:   Michael Roth <michael.roth@amd.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+CC:     Chao Peng <chao.p.peng@linux.intel.com>,
+        "Nikunj A. Dadhania" <nikunj@amd.com>,
+        kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-api@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <qemu-devel@nongnu.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Steven Price" <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Jun Nakajima" <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Andi Kleen" <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, <aarcange@redhat.com>,
+        <ddutile@redhat.com>, <dhildenb@redhat.com>,
+        "Quentin Perret" <qperret@google.com>, <mhocko@suse.com>
+Subject: Re: [PATCH v6 6/8] KVM: Handle page fault for private memory
+Message-ID: <20220630222140.of4md7bufd5jv5bh@amd.com>
+References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
+ <20220519153713.819591-7-chao.p.peng@linux.intel.com>
+ <b3ce0855-0e4b-782a-599c-26590df948dd@amd.com>
+ <20220624090246.GA2181919@chaop.bj.intel.com>
+ <CAGtprH82H_fjtRbL0KUxOkgOk4pgbaEbAydDYfZ0qxz41JCnAQ@mail.gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220618091901.25034-1-fmdefrancesco@gmail.com>
-X-ClientProxiedBy: SJ0PR13CA0102.namprd13.prod.outlook.com
- (2603:10b6:a03:2c5::17) To DM4PR11MB6311.namprd11.prod.outlook.com
- (2603:10b6:8:a6::21)
-MIME-Version: 1.0
+In-Reply-To: <CAGtprH82H_fjtRbL0KUxOkgOk4pgbaEbAydDYfZ0qxz41JCnAQ@mail.gmail.com>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2d9f6029-19d4-4fe6-0319-08da5ae6d45f
-X-MS-TrafficTypeDiagnostic: PH0PR11MB5143:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Office365-Filtering-Correlation-Id: d5fecce7-6f56-4080-cfa6-08da5ae6f3ae
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4089:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IJ6BV9hXQTfqp70UKGtSIFiR78k0K06HUpp3yqYW8cxUf3jxTF7rF/pFo4bbx/dB/83yKKUAxmQGnTc7usPeo9JxTqApFkhgUPQzMN9vPBlDPtlUQHKmDOaaA6yUkXpqX9BqFKEKaorflfccN2q9amTtWVyujkdndhc1AfUVlEFfiEROYSVfB5s8KKHHTK/22oNtsdKlEXKwwWFlATFSfCB0WaKWYXry11BzEGttpJaJgfDrcSfiRcJif90TE4F2MKzBbMpugiKnrLrY1AlhcbSXjozKLfpnK2p+bnjvlU1rRhRpO4ftkwBWCBjGDdqDe/0FQAqjf21Cy0I9hMAD9G2yUX6W8aewD34iqee3vH0i3A5mJOV/AvtSJCcXzuiwWSOdZTY9WAto+1BFaChr5mC94wiZqHDkwrwCl1jXO+uUbC3pCAALCOjNciD7Ka4eGH6qxmSO8dOPsYt/qgVvF6FGVLT0Sgo9mbto3YAQbXWtQhU7Rr8kuUmbMurM7WceQRxyjhfGEtHzNA/M1AzAsGn5afXpvnryK2ErlwgoYTnjNmGwaHxdNC/D1IgTP1Oqoih/LsWte6OVEtgdw6vg3ZncGy1L19GpT/PihyF7gkx5tRcjqouM5w+pKMqEPJnGcAaOb3JZbXzlKKrluiPIyn5mMaFBktjO/oPUwyXFMT1Ca/ELoYJOulJGklArfxPSS66y7MjyU6UVmILaU93rkfmvqpEVuSPx1FpdMOTQq1PgHXOm7bO0/rs6JdjbQty0tPeoYmzH+F0giDtenixdfGyT2gSYKBfhGSydRxybTz8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6311.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(39860400002)(396003)(376002)(136003)(346002)(366004)(82960400001)(33716001)(6512007)(54906003)(5660300002)(9686003)(6916009)(316002)(66556008)(7416002)(6666004)(41300700001)(86362001)(44832011)(6506007)(38100700002)(66946007)(8676002)(4326008)(66476007)(478600001)(186003)(2906002)(6486002)(83380400001)(8936002)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?c+VxntQCToMmK46WS2eX6XtGbTHNsgNonWEe9Y166tgB7R3bz/20zfUm92IJ?=
- =?us-ascii?Q?8/Nb+agbxxXjxBOZkWJtuXj5/kP40QbkyZN94uVmFZ7JgijyHSMfrHTWEQnM?=
- =?us-ascii?Q?A+1V0/9Mf7cabnp+otgj3Q42rUWR2AmVVtJubPzFeanEqrlWWlRmCZAWZdC5?=
- =?us-ascii?Q?CJTQiZGNxJUA/FtCrY4dSm0LAaegBPg2joeRk0K6irqegHAKmXou3s+WaClL?=
- =?us-ascii?Q?bAs28WpoOSbStgOS4n0dKIeCqPHvU59xrylIdQJ+5q5LqegzfkK30ILD4UNc?=
- =?us-ascii?Q?jYNHKqlyChzXipQr5HsrqQRzDxvCuGifTvNK22+PXVCFRHGreh418uT0fPY2?=
- =?us-ascii?Q?fcC1QoUGTJuR40PKqTQzg8H2caL1gSfVY7T+y5xW3OnRgQVoWGpB2kWr7L52?=
- =?us-ascii?Q?0tGPJcYH+IjMTjywm+Jdbc/mYcoXB1n38AedJhtpXrjh0wexg6kmjCCJSbtg?=
- =?us-ascii?Q?o5Y4smTM1DhGXM0bZqc5eQ3xwKv6JTHdeTAJICoZ9m0pIlB2tR3uv0o8/81r?=
- =?us-ascii?Q?+SvFHvNoUTIUEro5RlygqOP4QARhBiJaMtkJ32TyML1QLtFqWB8yJwCjVIg2?=
- =?us-ascii?Q?JP0PE+PISqHusuBJanVnn8V87+1PgJV5idUIDmQ7P/G6xnE/5sP+R0rS6+dN?=
- =?us-ascii?Q?aNJ++ItwX63eBwL17S5k36hdtVjvY6610w8brOpHzpgsjic6iGccDRrEzLIQ?=
- =?us-ascii?Q?to7b4igI5aBiH3SgM2DLA7gyp9AZojL1kQkRVtJ0kcEAse1HvRx0LJTa4JI5?=
- =?us-ascii?Q?/66D825NEVZY5rk3cRwERMkcs9Wo7KLu+PynnL/XcmDk0BmQJ0/Z9p8QaXNG?=
- =?us-ascii?Q?s6iXO4MFojhX1sHX+jPRSBHFuEsKa63wa9u+OIKebh3lDP6gOEOHP76jxA42?=
- =?us-ascii?Q?ZdQL3Vabmg5ij2PLRNcX60FI1UzSHyEZg1pO31dhc1ZRYu0hSBuX+A1lQZT5?=
- =?us-ascii?Q?9LrfrELDFFenPMGMLD1AX8DMblvFvIZE/aO4Cmb6vDPgWGHUyXmJkRntbEjT?=
- =?us-ascii?Q?U+N2K8NgXTHdiD6oZmTbePRQf+i5kNFQevPyxpgTIpyBFR6uBvgvTtJ4ZhU0?=
- =?us-ascii?Q?VMg/HCtk/xTkW8pTtDRG6vzxmzRnywFlll9Fmn6Mbi5fJq24ozdZuRH7vuGO?=
- =?us-ascii?Q?0uveA5ca8j1atvk6DL6tAwnx5jdhFnijCCv6i5x3chS7qeA5Nn7vqtGVMqyW?=
- =?us-ascii?Q?zjb5g7TyDlLhlJF4+/WYmKLDXBmiq5LaEDIw8khNB7uBuu6JIFXoQPygsXxr?=
- =?us-ascii?Q?G0m/HfLtrflKLom84Ov27ln+65msckB064H6TgI7h2bZhA3e5yK6WJwWT0Ry?=
- =?us-ascii?Q?eqizJhGAICqf6TDKZdI0Vo+tWBejpJDUeuwra61wJvEU+xCl3oJzSqftbf5z?=
- =?us-ascii?Q?W7W80blvtAfNTS6gQuuFi7/bIzVuGoBEJL3RM3WsbLb2Re7QQfUGdObbpiKd?=
- =?us-ascii?Q?UCU4gcNizsKexshgJGEiuK8/SFqFYGfKH8ezk2ghAe5wJNRW3+ND8NB24yjO?=
- =?us-ascii?Q?6Tz4hzKKA9DvOJX9yzivOcp8C/OBOvKZiNJA3D/2gD9jncZhRaUmOSpf9J+A?=
- =?us-ascii?Q?3ZCs1lUwvReyqRei39ti+Ru7zKuwmxAzhhn12vis6MLR3nS3CWrss+OX1SXW?=
- =?us-ascii?Q?8tsPk6wsfdbfWTcdIKdreXkhWMr+EAxrPLd0MxdKZihk?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d9f6029-19d4-4fe6-0319-08da5ae6d45f
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6311.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 22:21:07.9883
+X-Microsoft-Antispam-Message-Info: Z2QpwV8hL6dMAI9riXKR5ZLlDlOA+N4IsIvDs2cG6vwUsCuUwB5piVkHhPRMUmxec0BpSIf2dn+9teTt0w9OH7eK6lgym0sa479giZjgGKH9Qrc3UJeyIP1usR6VNKLvi8NS4G1hUUf1rhUuI8t656nXygxYdtPTNNOYTPs2VZxi6ltEeGyCv6FKyM2Vwh9YDkU/o+/fsustHg8MHhRyaEevWYAltL4dMC9iYIqELYfwMS+6QbFI0+aY98978dksFsFwTjCQ+tIlhNmeDKSUM6F/ZKTS74utfp1OEMsgRgBHAn97BGcE2hZ2ehAbMpjdF8Jar/uBUxpVh4hBNU20f2Fqo0alSHGJiKCqT9ceI4xFdaJHFbHi56mrDvWuoJsaR5WVVTvh4GUKNPJ/tS5uHUpI5XGxpMbpIcHSgAcQsiBKIJJxpmNlicGyiiPKQ1w+Kv6X6POJJOGjcCh+yFkwjs4Eos9ZL11Vsqkngkq8LIPoxE3yqpfCgUijxcWUlVRmiMbNc2/W7zj0EQF/ECZAsZkBNMKfrdqaTajRk05O94RZUb76PBS4X6eozgdc8FdZgrdMsCtx5dxUaB4yygv2/tguO40XaFCvv2hZETKfSntGepWrs+EvH95hC1aKWvsTdCq9IRFQpsJkq4FMB5DGslE6WCzjHRYhHFhv1dmFGh+EqmuySyMYLtQ2otbe/PbEGr7W/QwakdQO6peHt+qAkXVTc+SLYc498p9IB7+3+AG6H8xoXkQadJ4csHubsm6A+el1yw6PUdmOsL5KBii2gVrd90NFsn8sdMbn0dTabvjbiKxcbiErd4yKk4jrmTaho4/x7UYDiB5NiUGfnTpjD0MyF0I4xTqSeMNOzEFvCRLRZnT+qVef0Tj278fbgTu5
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(39860400002)(346002)(376002)(40470700004)(36840700001)(46966006)(40480700001)(356005)(6916009)(81166007)(336012)(1076003)(44832011)(316002)(36860700001)(40460700003)(36756003)(5660300002)(7416002)(82740400003)(41300700001)(70586007)(82310400005)(8676002)(966005)(70206006)(7406005)(4326008)(86362001)(16526019)(426003)(186003)(2616005)(2906002)(83380400001)(6666004)(8936002)(47076005)(478600001)(26005)(54906003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 22:22:00.2863
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jztU6jiWefZkjlXIeksbBIRqlbRBkX9+9rwtgMALldft+F7S7/opTDHkXLHHrg3KKAsU8PdvFuUFSHjuYzz0Sg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5143
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5fecce7-6f56-4080-cfa6-08da5ae6f3ae
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT040.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4089
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 18, 2022 at 11:19:01AM +0200, Fabio M. De Francesco wrote:
-> The use of kmap() is being deprecated in favor of kmap_local_page(). With
-> kmap_local_page(), the mapping is per thread, CPU local and not globally
-> visible.
+On Thu, Jun 30, 2022 at 12:14:13PM -0700, Vishal Annapurve wrote:
+> With transparent_hugepages=always setting I see issues with the
+> current implementation.
 > 
-> Therefore, use kmap_local_page() / kunmap_local() in zlib_decompress_bio()
-> because in this function the mappings are per thread and are not visible
-> in other contexts.
+> Scenario:
+> 1) Guest accesses a gfn range 0x800-0xa00 as private
+> 2) Guest calls mapgpa to convert the range 0x84d-0x86e as shared
+> 3) Guest tries to access recently converted memory as shared for the first time
+> Guest VM shutdown is observed after step 3 -> Guest is unable to
+> proceed further since somehow code section is not as expected
 > 
-> Tested with xfstests on QEMU + KVM 32-bits VM with 4GB of RAM and
-> HIGHMEM64G enabled. This patch passes 26/26 tests of group "compress".
+> Corresponding KVM trace logs after step 3:
+> VCPU-0-61883   [078] ..... 72276.115679: kvm_page_fault: address
+> 84d000 error_code 4
+> VCPU-0-61883   [078] ..... 72276.127005: kvm_mmu_spte_requested: gfn
+> 84d pfn 100b4a4d level 2
+> VCPU-0-61883   [078] ..... 72276.127008: kvm_tdp_mmu_spte_changed: as
+> id 0 gfn 800 level 2 old_spte 100b1b16827 new_spte 100b4a00ea7
+> VCPU-0-61883   [078] ..... 72276.127009: kvm_mmu_prepare_zap_page: sp
+> gen 0 gfn 800 l1 8-byte q0 direct wux nxe ad root 0 sync
+> VCPU-0-61883   [078] ..... 72276.127009: kvm_tdp_mmu_spte_changed: as
+> id 0 gfn 800 level 1 old_spte 1003eb27e67 new_spte 5a0
+> VCPU-0-61883   [078] ..... 72276.127010: kvm_tdp_mmu_spte_changed: as
+> id 0 gfn 801 level 1 old_spte 10056cc8e67 new_spte 5a0
+> VCPU-0-61883   [078] ..... 72276.127010: kvm_tdp_mmu_spte_changed: as
+> id 0 gfn 802 level 1 old_spte 10056fa2e67 new_spte 5a0
+> VCPU-0-61883   [078] ..... 72276.127010: kvm_tdp_mmu_spte_changed: as
+> id 0 gfn 803 level 1 old_spte 0 new_spte 5a0
+> ....
+>  VCPU-0-61883   [078] ..... 72276.127089: kvm_tdp_mmu_spte_changed: as
+> id 0 gfn 9ff level 1 old_spte 100a43f4e67 new_spte 5a0
+>  VCPU-0-61883   [078] ..... 72276.127090: kvm_mmu_set_spte: gfn 800
+> spte 100b4a00ea7 (rwxu) level 2 at 10052fa5020
+>  VCPU-0-61883   [078] ..... 72276.127091: kvm_fpu: unload
 > 
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Looks like with transparent huge pages enabled kvm tried to handle the
+> shared memory fault on 0x84d gfn by coalescing nearby 4K pages
+> to form a contiguous 2MB page mapping at gfn 0x800, since level 2 was
+> requested in kvm_mmu_spte_requested.
+> This caused the private memory contents from regions 0x800-0x84c and
+> 0x86e-0xa00 to get unmapped from the guest leading to guest vm
+> shutdown.
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Interesting... seems like that wouldn't be an issue for non-UPM SEV, since
+the private pages would still be mapped as part of that 2M mapping, and
+it's completely up to the guest as to whether it wants to access as
+private or shared. But for UPM it makes sense this would cause issues.
 
-> Reviewed-by: Qu Wenruo <wqu@suse.com>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
->  fs/btrfs/zlib.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
 > 
-> diff --git a/fs/btrfs/zlib.c b/fs/btrfs/zlib.c
-> index 2cd4f6fb1537..966e17cea981 100644
-> --- a/fs/btrfs/zlib.c
-> +++ b/fs/btrfs/zlib.c
-> @@ -284,7 +284,7 @@ int zlib_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
->  	unsigned long buf_start;
->  	struct page **pages_in = cb->compressed_pages;
->  
-> -	data_in = kmap(pages_in[page_in_index]);
-> +	data_in = kmap_local_page(pages_in[page_in_index]);
->  	workspace->strm.next_in = data_in;
->  	workspace->strm.avail_in = min_t(size_t, srclen, PAGE_SIZE);
->  	workspace->strm.total_in = 0;
-> @@ -306,7 +306,7 @@ int zlib_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
->  
->  	if (Z_OK != zlib_inflateInit2(&workspace->strm, wbits)) {
->  		pr_warn("BTRFS: inflateInit failed\n");
-> -		kunmap(pages_in[page_in_index]);
-> +		kunmap_local(data_in);
->  		return -EIO;
->  	}
->  	while (workspace->strm.total_in < srclen) {
-> @@ -333,13 +333,13 @@ int zlib_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
->  
->  		if (workspace->strm.avail_in == 0) {
->  			unsigned long tmp;
-> -			kunmap(pages_in[page_in_index]);
-> +			kunmap_local(data_in);
->  			page_in_index++;
->  			if (page_in_index >= total_pages_in) {
->  				data_in = NULL;
->  				break;
->  			}
-> -			data_in = kmap(pages_in[page_in_index]);
-> +			data_in = kmap_local_page(pages_in[page_in_index]);
->  			workspace->strm.next_in = data_in;
->  			tmp = srclen - workspace->strm.total_in;
->  			workspace->strm.avail_in = min(tmp, PAGE_SIZE);
-> @@ -352,7 +352,7 @@ int zlib_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
->  done:
->  	zlib_inflateEnd(&workspace->strm);
->  	if (data_in)
-> -		kunmap(pages_in[page_in_index]);
-> +		kunmap_local(data_in);
->  	if (!ret)
->  		zero_fill_bio(cb->orig_bio);
->  	return ret;
-> -- 
-> 2.36.1
+> Does getting the mapping level as per the fault access type help
+> address the above issue? Any such coalescing should not cross between
+> private to
+> shared or shared to private memory regions.
+
+Doesn't seem like changing the check to fault->is_private would help in
+your particular case, since the subsequent host_pfn_mapping_level() call
+only seems to limit the mapping level to whatever the mapping level is
+for the HVA in the host page table.
+
+Seems like with UPM we need some additional handling here that also
+checks that the entire 2M HVA range is backed by non-private memory.
+
+Non-UPM SNP hypervisor patches already have a similar hook added to
+host_pfn_mapping_level() which implements such a check via RMP table, so
+UPM might need something similar:
+
+  https://github.com/AMDESE/linux/commit/ae4475bc740eb0b9d031a76412b0117339794139
+
+-Mike
+
 > 
+> > > >     host_level = host_pfn_mapping_level(kvm, gfn, pfn, slot);
+> > > >     return min(host_level, max_level);
+> > > >  }
+> > >
+> 
+> Regards,
+> Vishal

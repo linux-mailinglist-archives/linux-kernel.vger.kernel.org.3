@@ -2,95 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65BE56257C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4AB562585
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbiF3VnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 17:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
+        id S236827AbiF3Vnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 17:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiF3VnI (ORCPT
+        with ESMTP id S231937AbiF3Vnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 17:43:08 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0160AB3E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 14:43:07 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-31780ad7535so6238957b3.8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 14:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dMHt42bJ1YlW7qsjn88JwOKrZtD6Yx+xury8B4lI9tk=;
-        b=QZX9HPFJkD9+fzjjZWsSCiOlE2J/2LsSXswBgBMfa0v9fHzcoWvnjb3VEHfacRDxYt
-         p83HHAoDzMPStKdrx0jpo73c8H8L9bqEGASwti9PF8dOP3fCoFE5oH/ju2WQmAQFEEIu
-         2Xz2bGf3ke5KIZ7wLDOHukz6+UP1FeL/mHrTRw4YBe0bei7LrMaWHv9MK4+4nSVTMqqG
-         ymgvGNvQO0Nd0WelNyhtBiIiaOFrQcB9iNsxPXb3n1Ms9Cifpj/jY5RcFc0VRFuYaxzm
-         5n57zZG1SqXMuAv13Cm4jvQDrnSDsKNEgKpD6Nce8ZdKUymPJnZdqir5kYHPe0ea6UPb
-         aTTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dMHt42bJ1YlW7qsjn88JwOKrZtD6Yx+xury8B4lI9tk=;
-        b=mzOD/MHWbDe94L0KnIbUB4RSOXttoAOmXnhZI8LKicT2eyoZFQohrWzUSVKq3bjNlj
-         RMDA+jbN8ZOBA1m7inKbuc2V0dvaqD3cKJbB+xdu7FBkeHUul/ltHRmiu3EmRHIO+nzh
-         8mFZazWgf9hRBBdooGQGuzwLzPiudfjTZrWRtQytgP985Bze2UViEEd/7Qm5TCJHmQg2
-         ek7CrgWmHFLeE+naV/Ff3CBwm7MBel9kj7HaLxSproIg+R0N6Hhn7G+/NpH6ONzfG1Zo
-         3jc4mzqn0ICdck3cqKygXHh3QWKAGT/ZhxVUn4fZVBRMRzC3a2EHMuBqYrJlhPLtVcad
-         eReQ==
-X-Gm-Message-State: AJIora9lTLG67uXfBtlHCYC/xtW+1a0OCXP+0sNeLus6BFAB8j352wz2
-        Uv3QGNpb1Gt+neZbOwlT4Qgo3g+9aOtpJ5V89NM=
-X-Google-Smtp-Source: AGRyM1t2UrK1hzV79ai9XXNCfm4iNtTsbANUmoYqfQmUHleEfY0pxh0cpqQXRU3xd7K+u5jePVWW1lw/QC+ZRlYpm3Q=
-X-Received: by 2002:a81:2386:0:b0:317:6586:8901 with SMTP id
- j128-20020a812386000000b0031765868901mr12916894ywj.195.1656625386155; Thu, 30
- Jun 2022 14:43:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220629235326.480858-1-justinstitt@google.com> <20220630195738.904505-1-justinstitt@google.com>
-In-Reply-To: <20220630195738.904505-1-justinstitt@google.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 30 Jun 2022 23:42:28 +0200
-Message-ID: <CAHp75VfYPfvcySRJboSO8YsXTfO61j7QM=mYrDDPJquRAwzw0A@mail.gmail.com>
-Subject: Re: [PATCH v2] lib/test_printf.c: fix clang -Wformat warnings
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, Andy Shevchenko <andy@kernel.org>
+        Thu, 30 Jun 2022 17:43:43 -0400
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EC153ECE;
+        Thu, 30 Jun 2022 14:43:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
+        t=1656625407; bh=kfSeJYHpcO+DQINDcQTze3o46t7att6FRDfo86mkGb0=;
+        h=X-EA-Auth:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
+         References:Content-Type:MIME-Version:Content-Transfer-Encoding;
+        b=e56yVha1FJK+4Mwia2qzYcWjNmN8rgjpauwgmzrC3iOtd2hrxNqRTOhTzBNPvVFFA
+         zTXGzXQZQyyH+igcF93SPGKv0RAEZ53zAIYtT9peidaU5ctZy9pweCRwwYVqSPH8Rf
+         fyQp69dT2g7jmyaDh0UcZTSCkc9yWwG76yDRSOqQ=
+Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
+        via [213.182.55.207]
+        Thu, 30 Jun 2022 23:43:27 +0200 (CEST)
+X-EA-Auth: R3mel8gQQlMckotIkNXG0Nwv57HB69aXmxYwEO0Dc9nBmk8Y9CpIZOrzkNX4BDt28//Fr3PvmcPPEcBEslUDPKjcy635HDgAePFG8IWvGwE=
+Message-ID: <dcd817c8a3852f3e6bad0c221a284fb3e69e1ca9.camel@mailoo.org>
+Subject: Re: [PATCH v1 RESEND 1/7] dt-bindings: leds: Convert is31fl319x to
+ dtschema
+From:   Vincent Knecht <vincent.knecht@mailoo.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
+        hns@goldelico.com
+Date:   Thu, 30 Jun 2022 23:43:26 +0200
+In-Reply-To: <20220630152806.GA2732671-robh@kernel.org>
+References: <20220628182147.2837180-1-vincent.knecht@mailoo.org>
+         <20220628182147.2837180-2-vincent.knecht@mailoo.org>
+         <1656468579.884791.1403671.nullmailer@robh.at.kernel.org>
+         <20220630152806.GA2732671-robh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 9:59 PM Justin Stitt <justinstitt@google.com> wrote:
->
-> changes from v1:
-> * moved NOWARN macro definition to a more appropriate location
-> * using __diag_ignore_all (thanks Nathan)
-> * using local scoping for code blocks instead of __VA_ARGS__ (thanks Nick)
-> * indented affected test cases (thanks Andy)
->
-> Suggested-by: Andy Shevchenko <andy@kernel.org>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+Le jeudi 30 juin 2022 =C3=A0 09:28 -0600, Rob Herring a =C3=A9crit=C2=A0:
+> On Tue, Jun 28, 2022 at 08:09:39PM -0600, Rob Herring wrote:
+> > On Tue, 28 Jun 2022 20:21:39 +0200, Vincent Knecht wrote:
+> > > Convert leds-is31fl319x.txt to dtschema.
+> > > Set license to the one recommended by DT project.
+>=20
+> Do you have permission to do so? The original .txt file is default GPL2=
+=20
+> and owned by H. Nikolaus Schaller.=20
 
-Somehow you replaced the commit message with a changelog. On top of
-that, I didn't suggest anything important here, so to me it is
-considered as a credit in the changelog (see previous sentence as
-well).
+No, sorry for the mistake.
+Adding to cc, which I forgot to do in the first place...
+For reference: https://lore.kernel.org/linux-leds/20220628182147.2837180-1-=
+vincent.knecht@mailoo.org/T/
 
--- 
-With Best Regards,
-Andy Shevchenko
+> > >=20
+> > > Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
+> > > ---
+> > > =C2=A0.../bindings/leds/issi,is31fl319x.yaml=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 | 113 ++++++++++++++++++
+> > > =C2=A0.../bindings/leds/leds-is31fl319x.txt=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 61 ----------
+> > > =C2=A02 files changed, 113 insertions(+), 61 deletions(-)
+> > > =C2=A0create mode 100644 Documentation/devicetree/bindings/leds/issi,=
+is31fl319x.yaml
+> > > =C2=A0delete mode 100644 Documentation/devicetree/bindings/leds/leds-=
+is31fl319x.txt
+> > >=20
+> >=20
+> > My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_chec=
+k'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> >=20
+> > yamllint warnings/errors:
+> >=20
+> > dtschema/dtc warnings/errors:
+> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/ii=
+o/temperature/adi,ltc2983.yaml:
+> > patternProperties:^thermistor@:properties:adi,excitation-current-nanoam=
+p: '$ref' should not be valid under {'const':
+> > '$ref'}
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0hint: Standard unit suf=
+fix properties don't need a type $ref
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0from schema $id: http:/=
+/devicetree.org/meta-schemas/core.yaml#
+> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/ii=
+o/temperature/adi,ltc2983.yaml: ignoring,
+> > error in schema: patternProperties: ^thermistor@: properties: adi,excit=
+ation-current-nanoamp
+> > Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.example.d=
+tb:0:0: /example-0/spi/ltc2983@0: failed to
+> > match any schema with compatible: ['adi,ltc2983']
+>=20
+> You can ignore this. The bot went amuck.
+>=20
+
+Ack... at least it respected the 3 Laws :-)
+
+
+

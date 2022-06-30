@@ -2,75 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C02BB5626AC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11EAE5626F3
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbiF3XS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 19:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39972 "EHLO
+        id S232798AbiF3XSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 19:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232672AbiF3XSW (ORCPT
+        with ESMTP id S232635AbiF3XSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 19:18:22 -0400
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6F8B05;
-        Thu, 30 Jun 2022 16:18:12 -0700 (PDT)
-Received: by mail-io1-f47.google.com with SMTP id d3so681082ioi.9;
-        Thu, 30 Jun 2022 16:18:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=9gNUQLHFQPHo0E6Bk43UyIkswDGTVgKImpHtKfx0xvg=;
-        b=k8FAvHCTXex7ryloSNa6RtOC1axvQQFUzg1rBPL5WVT21XDUP1KKbuGi/k6VzeEVJP
-         flx8Vc3aeyHY8qRXnCKK/SxAFKhKcvBOLXCyfLBbJhz0JqmeQlHlzM8E1IhL5I0O9DhD
-         qiygQ1gP5TW0xElpF+fpL48cVBPeGyKlXLsE/f4iQwfts/LWCoWyVWY+wRdDYHL/qeUQ
-         lhVsARKeoeTSk7MmCcE1U7CfQXiPoyGyp1qdCZMUxPo0G/r7RI83LJmo27TeiKVXEI7o
-         ap8vw1GnUqvn0ldsmr1alpRgJl8ewujy+UXF/AnkmrUfQe7+83mJoOQDE5NNBhb9ee4C
-         eS+g==
-X-Gm-Message-State: AJIora8E81FX8W3Nn/3jw2t+pHe/vuMVcUwUdVSIi1gOWSWCFeANaTZ5
-        LsC6pe+53Pptsoz1aK302g==
-X-Google-Smtp-Source: AGRyM1su16XuZ3P1C/gSpnPqv5Wj9auvAHesaclQYdz2S96RxT7/OA1S+mZcS20iiJlEwB9ke8UXdg==
-X-Received: by 2002:a05:6638:410e:b0:33c:d3b8:a4bd with SMTP id ay14-20020a056638410e00b0033cd3b8a4bdmr6441419jab.264.1656631091659;
-        Thu, 30 Jun 2022 16:18:11 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id s8-20020a92cb08000000b002d900368a19sm8478492ilo.22.2022.06.30.16.18.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 16:18:11 -0700 (PDT)
-Received: (nullmailer pid 3516208 invoked by uid 1000);
-        Thu, 30 Jun 2022 23:18:09 -0000
-Date:   Thu, 30 Jun 2022 17:18:09 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?77+977+977+9zrHvv70vVGl6ZW4gUGxhdGZvcm0gTGFiKFNSKS/vv73vvLo=?=
-         =?utf-8?B?77+977+977+977+9?= <inki.dae@samsung.com>
-Cc:     'Krzysztof Kozlowski' <krzysztof.kozlowski@linaro.org>,
-        'Seung-Woo Kim' <sw0312.kim@samsung.com>,
-        'Kyungmin Park' <kyungmin.park@samsung.com>,
-        'David Airlie' <airlied@linux.ie>,
-        'Daniel Vetter' <daniel@ffwll.ch>,
-        'Krzysztof Kozlowski' <krzysztof.kozlowski+dt@linaro.org>,
-        'Alim Akhtar' <alim.akhtar@samsung.com>,
-        'Kishon Vijay Abraham I' <kishon@ti.com>,
-        'Vinod Koul' <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-phy@lists.infradead.org
-Subject: Re: [PATCH 1/2] drm/exynos: MAINTAINERS: move Joonyoung Shim to
- credits
-Message-ID: <20220630231809.GA3514176-robh@kernel.org>
-References: <CGME20220626163558epcas1p3f525431b9fb237bd420ad1453daaf1ac@epcas1p3.samsung.com>
- <20220626163320.6393-1-krzysztof.kozlowski@linaro.org>
- <0de401d88c38$23aeb8e0$6b0c2aa0$@samsung.com>
+        Thu, 30 Jun 2022 19:18:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0933B1D;
+        Thu, 30 Jun 2022 16:18:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B083B82D20;
+        Thu, 30 Jun 2022 23:18:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7808C34115;
+        Thu, 30 Jun 2022 23:18:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656631125;
+        bh=Nr3CKmGZB57NzBUuiTYNFL4T5Qf4aowgFyby0BK2IJc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mvL3ra1E6zOFCz0vCFYOC1cqdlXPEV4+IlPdQHfHSv7NlIZXrklifGezzRJAYB6dr
+         fYT/69413+aon/O4NMD0K5izQs1i7c1QArWjfv6+e0NCw8d87cM/0T+hCayW/F21hX
+         YBE4peWDKa1RCW5zRzWkxvLrOTNIK0hACB74OZbYgJKEaU+8XgWNGxKJdUvHmhXR1y
+         gA3rCXE1LUfmlVdG4U+jGkhM06dHsbpOiXSOpX6WZIrT7Zq20kpXiyrL+NQcLWoA1+
+         OZUU5hegHNdWCgdfHz8Y7FJHo0sRQgHG1yWUXoY8Q4t+K/KMn2Gbny80yPQ9mU3gf0
+         r+4zmTzG/PyWQ==
+Date:   Fri, 1 Jul 2022 02:18:41 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
+        lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: Re: [PATCH v7 05/10] tpm, tpm_tis: Only handle supported interrupts
+Message-ID: <Yr4vUSrShAWntLeP@kernel.org>
+References: <20220629232653.1306735-1-LinoSanfilippo@gmx.de>
+ <20220629232653.1306735-6-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0de401d88c38$23aeb8e0$6b0c2aa0$@samsung.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220629232653.1306735-6-LinoSanfilippo@gmx.de>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,30 +57,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 01:16:14PM +0900, ���α�/Tizen Platform Lab(SR)/�Ｚ���� wrote:
+On Thu, Jun 30, 2022 at 01:26:48AM +0200, Lino Sanfilippo wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 > 
+> According to the TPM Interface Specification (TIS) support for "stsValid"
+> and "commandReady" interrupts is only optional.
+> This has to be taken into account when handling the interrupts in functions
+> like wait_for_tpm_stat(). To determine the supported interrupts use the
+> capability query.
 > 
-> > -----Original Message-----
-> > From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
-> > Sent: Monday, June 27, 2022 1:33 AM
-> > To: Inki Dae <inki.dae@samsung.com>; Seung-Woo Kim
-> > <sw0312.kim@samsung.com>; Kyungmin Park <kyungmin.park@samsung.com>; David
-> > Airlie <airlied@linux.ie>; Daniel Vetter <daniel@ffwll.ch>; Rob Herring
-> > <robh+dt@kernel.org>; Krzysztof Kozlowski
-> > <krzysztof.kozlowski+dt@linaro.org>; Alim Akhtar
-> <alim.akhtar@samsung.com>;
-> > Kishon Vijay Abraham I <kishon@ti.com>; Vinod Koul <vkoul@kernel.org>;
-> > linux-kernel@vger.kernel.org; dri-devel@lists.freedesktop.org;
-> > devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
-> > samsung-soc@vger.kernel.org; linux-phy@lists.infradead.org
-> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Subject: [PATCH 1/2] drm/exynos: MAINTAINERS: move Joonyoung Shim to
-> > credits
-> > 
-> > Emails to Joonyoung Shim bounce ("550 5.1.1 Recipient address rejected:
-> > User unknown"), so move him to credits file.
-> > 
+> Also adjust wait_for_tpm_stat() to only wait for interrupt reported status
+> changes. After that process all the remaining status changes by polling
+> the status register.
 > 
-> Applied.
+> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> Tested-by: Michael Niew??hner <linux@mniewoehner.de>
+> ---
+>  drivers/char/tpm/tpm_tis_core.c | 119 +++++++++++++++++++-------------
+>  drivers/char/tpm/tpm_tis_core.h |   1 +
+>  2 files changed, 72 insertions(+), 48 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index 09d8f04cbc81..c13599e94ab6 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -53,41 +53,63 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
+>  	long rc;
+>  	u8 status;
+>  	bool canceled = false;
+> +	u8 sts_mask = 0;
+> +	int ret = 0;
+>  
+>  	/* check current status */
+>  	status = chip->ops->status(chip);
+>  	if ((status & mask) == mask)
+>  		return 0;
+>  
+> -	stop = jiffies + timeout;
+> +	/* check which status changes can be handled by irqs */
+> +	if (priv->int_mask & TPM_INTF_STS_VALID_INT)
+> +		sts_mask |= TPM_STS_VALID;
+>  
+> -	if (chip->flags & TPM_CHIP_FLAG_IRQ) {
+> +	if (priv->int_mask & TPM_INTF_DATA_AVAIL_INT)
+> +		sts_mask |= TPM_STS_DATA_AVAIL;
+> +
+> +	if (priv->int_mask & TPM_INTF_CMD_READY_INT)
+> +		sts_mask |= TPM_STS_COMMAND_READY;
+> +
+> +	sts_mask &= mask;
+> +
+> +	stop = jiffies + timeout;
+> +	/* process status changes with irq support */
+> +	if (sts_mask) {
+> +		ret = -ETIME;
+>  again:
+>  		timeout = stop - jiffies;
+>  		if ((long)timeout <= 0)
+>  			return -ETIME;
+>  		rc = wait_event_interruptible_timeout(*queue,
+> -			wait_for_tpm_stat_cond(chip, mask, check_cancel,
+> +			wait_for_tpm_stat_cond(chip, sts_mask, check_cancel,
+>  					       &canceled),
+>  			timeout);
+>  		if (rc > 0) {
+>  			if (canceled)
+>  				return -ECANCELED;
+> -			return 0;
+> +			ret = 0;
+>  		}
+>  		if (rc == -ERESTARTSYS && freezing(current)) {
+>  			clear_thread_flag(TIF_SIGPENDING);
+>  			goto again;
+>  		}
+> -	} else {
+> -		do {
+> -			usleep_range(priv->timeout_min,
+> -				     priv->timeout_max);
+> -			status = chip->ops->status(chip);
+> -			if ((status & mask) == mask)
+> -				return 0;
+> -		} while (time_before(jiffies, stop));
+>  	}
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	mask &= ~sts_mask;
+> +	if (!mask) /* all done */
+> +		return 0;
+> +	/* process status changes without irq support */
+> +	do {
+> +		status = chip->ops->status(chip);
+> +		if ((status & mask) == mask)
+> +			return 0;
+> +		usleep_range(priv->timeout_min,
+> +			     priv->timeout_max);
+> +	} while (time_before(jiffies, stop));
+>  	return -ETIME;
+>  }
+>  
+> @@ -1007,8 +1029,39 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  	if (rc < 0)
+>  		goto out_err;
+>  
+> -	intmask |= TPM_INTF_CMD_READY_INT | TPM_INTF_LOCALITY_CHANGE_INT |
+> -		   TPM_INTF_DATA_AVAIL_INT | TPM_INTF_STS_VALID_INT;
+> +	/* Figure out the capabilities */
+> +	rc = tpm_tis_read32(priv, TPM_INTF_CAPS(priv->locality), &intfcaps);
+> +	if (rc < 0)
+> +		goto out_err;
+> +
+> +	dev_dbg(dev, "TPM interface capabilities (0x%x):\n",
+> +		intfcaps);
+> +	if (intfcaps & TPM_INTF_BURST_COUNT_STATIC)
+> +		dev_dbg(dev, "\tBurst Count Static\n");
+> +	if (intfcaps & TPM_INTF_CMD_READY_INT) {
+> +		intmask |= TPM_INTF_CMD_READY_INT;
+> +		dev_dbg(dev, "\tCommand Ready Int Support\n");
+> +	}
+> +	if (intfcaps & TPM_INTF_INT_EDGE_FALLING)
+> +		dev_dbg(dev, "\tInterrupt Edge Falling\n");
+> +	if (intfcaps & TPM_INTF_INT_EDGE_RISING)
+> +		dev_dbg(dev, "\tInterrupt Edge Rising\n");
+> +	if (intfcaps & TPM_INTF_INT_LEVEL_LOW)
+> +		dev_dbg(dev, "\tInterrupt Level Low\n");
+> +	if (intfcaps & TPM_INTF_INT_LEVEL_HIGH)
+> +		dev_dbg(dev, "\tInterrupt Level High\n");
+> +	if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT)
+> +		intmask |= TPM_INTF_LOCALITY_CHANGE_INT;
+> +		dev_dbg(dev, "\tLocality Change Int Support\n");
+> +	if (intfcaps & TPM_INTF_STS_VALID_INT) {
+> +		intmask |= TPM_INTF_STS_VALID_INT;
+> +		dev_dbg(dev, "\tSts Valid Int Support\n");
+> +	}
+> +	if (intfcaps & TPM_INTF_DATA_AVAIL_INT) {
+> +		intmask |= TPM_INTF_DATA_AVAIL_INT;
+> +		dev_dbg(dev, "\tData Avail Int Support\n");
+> +	}
+> +
+>  	intmask &= ~TPM_GLOBAL_INT_ENABLE;
+>  
+>  	rc = request_locality(chip, 0);
+> @@ -1042,32 +1095,6 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  		goto out_err;
+>  	}
+>  
+> -	/* Figure out the capabilities */
+> -	rc = tpm_tis_read32(priv, TPM_INTF_CAPS(priv->locality), &intfcaps);
+> -	if (rc < 0)
+> -		goto out_err;
+> -
+> -	dev_dbg(dev, "TPM interface capabilities (0x%x):\n",
+> -		intfcaps);
+> -	if (intfcaps & TPM_INTF_BURST_COUNT_STATIC)
+> -		dev_dbg(dev, "\tBurst Count Static\n");
+> -	if (intfcaps & TPM_INTF_CMD_READY_INT)
+> -		dev_dbg(dev, "\tCommand Ready Int Support\n");
+> -	if (intfcaps & TPM_INTF_INT_EDGE_FALLING)
+> -		dev_dbg(dev, "\tInterrupt Edge Falling\n");
+> -	if (intfcaps & TPM_INTF_INT_EDGE_RISING)
+> -		dev_dbg(dev, "\tInterrupt Edge Rising\n");
+> -	if (intfcaps & TPM_INTF_INT_LEVEL_LOW)
+> -		dev_dbg(dev, "\tInterrupt Level Low\n");
+> -	if (intfcaps & TPM_INTF_INT_LEVEL_HIGH)
+> -		dev_dbg(dev, "\tInterrupt Level High\n");
+> -	if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT)
+> -		dev_dbg(dev, "\tLocality Change Int Support\n");
+> -	if (intfcaps & TPM_INTF_STS_VALID_INT)
+> -		dev_dbg(dev, "\tSts Valid Int Support\n");
+> -	if (intfcaps & TPM_INTF_DATA_AVAIL_INT)
+> -		dev_dbg(dev, "\tData Avail Int Support\n");
+> -
+>  	/* INTERRUPT Setup */
+>  	init_waitqueue_head(&priv->read_queue);
+>  	init_waitqueue_head(&priv->int_queue);
+> @@ -1098,7 +1125,9 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  		else
+>  			tpm_tis_probe_irq(chip, intmask);
+>  
+> -		if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
+> +		if (chip->flags & TPM_CHIP_FLAG_IRQ) {
+> +			priv->int_mask = intmask;
+> +		} else {
+>  			dev_err(&chip->dev, FW_BUG
+>  					"TPM interrupt not working, polling instead\n");
+>  
+> @@ -1145,13 +1174,7 @@ static void tpm_tis_reenable_interrupts(struct tpm_chip *chip)
+>  	if (rc < 0)
+>  		goto out;
+>  
+> -	rc = tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+> -	if (rc < 0)
+> -		goto out;
+> -
+> -	intmask |= TPM_INTF_CMD_READY_INT
+> -	    | TPM_INTF_LOCALITY_CHANGE_INT | TPM_INTF_DATA_AVAIL_INT
+> -	    | TPM_INTF_STS_VALID_INT | TPM_GLOBAL_INT_ENABLE;
+> +	intmask = priv->int_mask | TPM_GLOBAL_INT_ENABLE;
+>  
+>  	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+>  
+> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+> index bf07379dea42..e005eb99480e 100644
+> --- a/drivers/char/tpm/tpm_tis_core.h
+> +++ b/drivers/char/tpm/tpm_tis_core.h
+> @@ -93,6 +93,7 @@ struct tpm_tis_data {
+>  	u16 manufacturer_id;
+>  	int locality;
+>  	int irq;
+> +	unsigned int int_mask;
+>  	unsigned long flags;
+>  	void __iomem *ilb_base_addr;
+>  	u16 clkrun_enabled;
+> -- 
+> 2.25.1
+> 
 
-Both patches or just this one?
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+BR, Jarkko

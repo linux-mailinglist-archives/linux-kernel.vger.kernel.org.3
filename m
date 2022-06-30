@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06EBA561D19
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78351561D23
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236555AbiF3OFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:05:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
+        id S236796AbiF3OJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236366AbiF3OFV (ORCPT
+        with ESMTP id S236960AbiF3OIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:05:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9622D6D579;
-        Thu, 30 Jun 2022 06:53:46 -0700 (PDT)
+        Thu, 30 Jun 2022 10:08:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D461076E9F;
+        Thu, 30 Jun 2022 06:54:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F197D6211C;
-        Thu, 30 Jun 2022 13:53:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 000D2C34115;
-        Thu, 30 Jun 2022 13:53:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5557862124;
+        Thu, 30 Jun 2022 13:54:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AB9BC34115;
+        Thu, 30 Jun 2022 13:54:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597218;
-        bh=u7NG5W9NkZZezN5CqzIE694Y6LT2P/Xt7C6EF0ew6ic=;
+        s=korg; t=1656597292;
+        bh=JQvFxHlyvg7oC1HqZzzyFGMHYaktl60NzjfZoKfqJ/I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KEmTyDE3ZeQPB5rCBXZF4l5ZcMD6EGOhSbXrly44eLZdL3VtrUErsGHwMuWC9y8KR
-         wiKkF5aaRxkYtksED1X8K8JqfnD+esqRp458uCnCRYwGKLz5fnYmLFi9YsQPnB5SUu
-         omQvOff/2TT/o8HwdHswb8omQMukMF6IYtYmD8I8=
+        b=RFj49F1EfDDffgsT/ymXpreYbWaeTjy4sgnCYC2DFRkRb9UwCuUIx4wcU12RVMhfa
+         0JzAtGzLQ/6V/6Gb3b8WtFFVCxdXvfjC57ZJ4G9NRe4VneJ6eXY7rUdu6+p0EDZYzD
+         FLU06q74344pnNLws+CeKxaIaAmR0RT30AokPFDA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: [PATCH 5.4 07/16] ARM: 8990/1: use VFP assembler mnemonics in register load/store macros
-Date:   Thu, 30 Jun 2022 15:47:01 +0200
-Message-Id: <20220630133231.156217239@linuxfoundation.org>
+        Brian Foster <bfoster@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Leah Rumancik <leah.rumancik@gmail.com>
+Subject: [PATCH 5.15 06/28] xfs: punch out data fork delalloc blocks on COW writeback failure
+Date:   Thu, 30 Jun 2022 15:47:02 +0200
+Message-Id: <20220630133233.113538634@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133230.936488203@linuxfoundation.org>
-References: <20220630133230.936488203@linuxfoundation.org>
+In-Reply-To: <20220630133232.926711493@linuxfoundation.org>
+References: <20220630133232.926711493@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,98 +55,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Agner <stefan@agner.ch>
+From: Brian Foster <bfoster@redhat.com>
 
-commit ee440336e5ef977c397afdb72cbf9c6b8effc8ea upstream
+[ Upstream commit 5ca5916b6bc93577c360c06cb7cdf71adb9b5faf ]
 
-The integrated assembler of Clang 10 and earlier do not allow to access
-the VFP registers through the coprocessor load/store instructions:
-<instantiation>:4:6: error: invalid operand for instruction
- LDC p11, cr0, [r10],#32*4 @ FLDMIAD r10!, {d0-d15}
-     ^
+If writeback I/O to a COW extent fails, the COW fork blocks are
+punched out and the data fork blocks left alone. It is possible for
+COW fork blocks to overlap non-shared data fork blocks (due to
+cowextsz hint prealloc), however, and writeback unconditionally maps
+to the COW fork whenever blocks exist at the corresponding offset of
+the page undergoing writeback. This means it's quite possible for a
+COW fork extent to overlap delalloc data fork blocks, writeback to
+convert and map to the COW fork blocks, writeback to fail, and
+finally for ioend completion to cancel the COW fork blocks and leave
+stale data fork delalloc blocks around in the inode. The blocks are
+effectively stale because writeback failure also discards dirty page
+state.
 
-This has been addressed with Clang 11 [0]. However, to support earlier
-versions of Clang and for better readability use of VFP assembler
-mnemonics still is preferred.
+If this occurs, it is likely to trigger assert failures, free space
+accounting corruption and failures in unrelated file operations. For
+example, a subsequent reflink attempt of the affected file to a new
+target file will trip over the stale delalloc in the source file and
+fail. Several of these issues are occasionally reproduced by
+generic/648, but are reproducible on demand with the right sequence
+of operations and timely I/O error injection.
 
-Replace the coprocessor load/store instructions with explicit assembler
-mnemonics to accessing the floating point coprocessor registers. Use
-assembler directives to select the appropriate FPU version.
+To fix this problem, update the ioend failure path to also punch out
+underlying data fork delalloc blocks on I/O error. This is analogous
+to the writeback submission failure path in xfs_discard_page() where
+we might fail to map data fork delalloc blocks and consistent with
+the successful COW writeback completion path, which is responsible
+for unmapping from the data fork and remapping in COW fork blocks.
 
-This allows to build these macros with GNU assembler as well as with
-Clang's built-in assembler.
-
-[0] https://reviews.llvm.org/D59733
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/905
-
-Signed-off-by: Stefan Agner <stefan@agner.ch>
-Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Fixes: 787eb485509f ("xfs: fix and streamline error handling in xfs_end_io")
+Signed-off-by: Brian Foster <bfoster@redhat.com>
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: Leah Rumancik <leah.rumancik@gmail.com>
+Acked-by: Darrick J. Wong <djwong@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/include/asm/vfpmacros.h |   19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ fs/xfs/xfs_aops.c |   15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
---- a/arch/arm/include/asm/vfpmacros.h
-+++ b/arch/arm/include/asm/vfpmacros.h
-@@ -19,23 +19,25 @@
+--- a/fs/xfs/xfs_aops.c
++++ b/fs/xfs/xfs_aops.c
+@@ -82,6 +82,7 @@ xfs_end_ioend(
+ 	struct iomap_ioend	*ioend)
+ {
+ 	struct xfs_inode	*ip = XFS_I(ioend->io_inode);
++	struct xfs_mount	*mp = ip->i_mount;
+ 	xfs_off_t		offset = ioend->io_offset;
+ 	size_t			size = ioend->io_size;
+ 	unsigned int		nofs_flag;
+@@ -97,18 +98,26 @@ xfs_end_ioend(
+ 	/*
+ 	 * Just clean up the in-memory structures if the fs has been shut down.
+ 	 */
+-	if (xfs_is_shutdown(ip->i_mount)) {
++	if (xfs_is_shutdown(mp)) {
+ 		error = -EIO;
+ 		goto done;
+ 	}
  
- 	@ read all the working registers back into the VFP
- 	.macro	VFPFLDMIA, base, tmp
-+	.fpu	vfpv2
- #if __LINUX_ARM_ARCH__ < 6
--	LDC	p11, cr0, [\base],#33*4		    @ FLDMIAX \base!, {d0-d15}
-+	fldmiax	\base!, {d0-d15}
- #else
--	LDC	p11, cr0, [\base],#32*4		    @ FLDMIAD \base!, {d0-d15}
-+	vldmia	\base!, {d0-d15}
- #endif
- #ifdef CONFIG_VFPv3
-+	.fpu	vfpv3
- #if __LINUX_ARM_ARCH__ <= 6
- 	ldr	\tmp, =elf_hwcap		    @ may not have MVFR regs
- 	ldr	\tmp, [\tmp, #0]
- 	tst	\tmp, #HWCAP_VFPD32
--	ldclne	p11, cr0, [\base],#32*4		    @ FLDMIAD \base!, {d16-d31}
-+	vldmiane \base!, {d16-d31}
- 	addeq	\base, \base, #32*4		    @ step over unused register space
- #else
- 	VFPFMRX	\tmp, MVFR0			    @ Media and VFP Feature Register 0
- 	and	\tmp, \tmp, #MVFR0_A_SIMD_MASK	    @ A_SIMD field
- 	cmp	\tmp, #2			    @ 32 x 64bit registers?
--	ldcleq	p11, cr0, [\base],#32*4		    @ FLDMIAD \base!, {d16-d31}
-+	vldmiaeq \base!, {d16-d31}
- 	addne	\base, \base, #32*4		    @ step over unused register space
- #endif
- #endif
-@@ -44,22 +46,23 @@
- 	@ write all the working registers out of the VFP
- 	.macro	VFPFSTMIA, base, tmp
- #if __LINUX_ARM_ARCH__ < 6
--	STC	p11, cr0, [\base],#33*4		    @ FSTMIAX \base!, {d0-d15}
-+	fstmiax	\base!, {d0-d15}
- #else
--	STC	p11, cr0, [\base],#32*4		    @ FSTMIAD \base!, {d0-d15}
-+	vstmia	\base!, {d0-d15}
- #endif
- #ifdef CONFIG_VFPv3
-+	.fpu	vfpv3
- #if __LINUX_ARM_ARCH__ <= 6
- 	ldr	\tmp, =elf_hwcap		    @ may not have MVFR regs
- 	ldr	\tmp, [\tmp, #0]
- 	tst	\tmp, #HWCAP_VFPD32
--	stclne	p11, cr0, [\base],#32*4		    @ FSTMIAD \base!, {d16-d31}
-+	vstmiane \base!, {d16-d31}
- 	addeq	\base, \base, #32*4		    @ step over unused register space
- #else
- 	VFPFMRX	\tmp, MVFR0			    @ Media and VFP Feature Register 0
- 	and	\tmp, \tmp, #MVFR0_A_SIMD_MASK	    @ A_SIMD field
- 	cmp	\tmp, #2			    @ 32 x 64bit registers?
--	stcleq	p11, cr0, [\base],#32*4		    @ FSTMIAD \base!, {d16-d31}
-+	vstmiaeq \base!, {d16-d31}
- 	addne	\base, \base, #32*4		    @ step over unused register space
- #endif
- #endif
+ 	/*
+-	 * Clean up any COW blocks on an I/O error.
++	 * Clean up all COW blocks and underlying data fork delalloc blocks on
++	 * I/O error. The delalloc punch is required because this ioend was
++	 * mapped to blocks in the COW fork and the associated pages are no
++	 * longer dirty. If we don't remove delalloc blocks here, they become
++	 * stale and can corrupt free space accounting on unmount.
+ 	 */
+ 	error = blk_status_to_errno(ioend->io_bio->bi_status);
+ 	if (unlikely(error)) {
+-		if (ioend->io_flags & IOMAP_F_SHARED)
++		if (ioend->io_flags & IOMAP_F_SHARED) {
+ 			xfs_reflink_cancel_cow_range(ip, offset, size, true);
++			xfs_bmap_punch_delalloc_range(ip,
++						      XFS_B_TO_FSBT(mp, offset),
++						      XFS_B_TO_FSB(mp, size));
++		}
+ 		goto done;
+ 	}
+ 
 
 

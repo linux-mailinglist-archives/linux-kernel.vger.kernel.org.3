@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB8256183F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F8E561814
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235294AbiF3Kgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 06:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
+        id S234420AbiF3Kgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 06:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235256AbiF3KgS (ORCPT
+        with ESMTP id S232938AbiF3KgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 30 Jun 2022 06:36:18 -0400
 Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9BA74F1B2;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6B1E4F1A9;
         Thu, 30 Jun 2022 03:36:16 -0700 (PDT)
-Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
-        by maillog.nuvoton.com (Postfix) with ESMTP id 63E6B1C81224;
+Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 5E55D1C81222;
         Thu, 30 Jun 2022 18:36:13 +0800 (CST)
-Received: from NTHCML01A.nuvoton.com (10.1.8.177) by NTHCCAS04.nuvoton.com
- (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 30
- Jun 2022 18:36:13 +0800
-Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCML01A.nuvoton.com
- (10.1.8.177) with Microsoft SMTP Server (version=TLS1_2,
+Received: from NTHCML01B.nuvoton.com (10.1.8.178) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Thu, 30 Jun
+ 2022 18:36:13 +0800
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCML01B.nuvoton.com
+ (10.1.8.178) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Thu, 30 Jun
  2022 18:36:12 +0800
 Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
  (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
  Transport; Thu, 30 Jun 2022 18:36:12 +0800
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id 11D1563A50; Thu, 30 Jun 2022 13:36:11 +0300 (IDT)
+        id 1F3C563A51; Thu, 30 Jun 2022 13:36:11 +0300 (IDT)
 From:   Tomer Maimon <tmaimon77@gmail.com>
 To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
         <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
@@ -50,10 +50,11 @@ CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-clk@vger.kernel.org>, <linux-serial@vger.kernel.org>,
         <linux-watchdog@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v6 08/17] reset: npcm: using syscon instead of device data
-Date:   Thu, 30 Jun 2022 13:35:57 +0300
-Message-ID: <20220630103606.83261-9-tmaimon77@gmail.com>
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v6 09/17] dt-bindings: reset: npcm: Add support for NPCM8XX
+Date:   Thu, 30 Jun 2022 13:35:58 +0300
+Message-ID: <20220630103606.83261-10-tmaimon77@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220630103606.83261-1-tmaimon77@gmail.com>
 References: <20220630103606.83261-1-tmaimon77@gmail.com>
@@ -71,54 +72,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using syscon device tree property instead of device data to handle the
-NPCM general control registers.
-
-In case the syscon not found the code still search for nuvoton,npcm750-gcr
-to support DTS backward compatibility.
+Add binding document and device tree binding constants for Nuvoton BMC
+NPCM8XX reset controller.
 
 Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/reset/reset-npcm.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+ .../devicetree/bindings/reset/nuvoton,npcm750-reset.yaml      | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/reset/reset-npcm.c b/drivers/reset/reset-npcm.c
-index 2ea4d3136e15..431ff2b602c5 100644
---- a/drivers/reset/reset-npcm.c
-+++ b/drivers/reset/reset-npcm.c
-@@ -138,8 +138,7 @@ static int npcm_reset_xlate(struct reset_controller_dev *rcdev,
- }
+diff --git a/Documentation/devicetree/bindings/reset/nuvoton,npcm750-reset.yaml b/Documentation/devicetree/bindings/reset/nuvoton,npcm750-reset.yaml
+index 43a6e77cbf4e..d82e65e37cc0 100644
+--- a/Documentation/devicetree/bindings/reset/nuvoton,npcm750-reset.yaml
++++ b/Documentation/devicetree/bindings/reset/nuvoton,npcm750-reset.yaml
+@@ -11,7 +11,9 @@ maintainers:
  
- static const struct of_device_id npcm_rc_match[] = {
--	{ .compatible = "nuvoton,npcm750-reset",
--		.data = (void *)"nuvoton,npcm750-gcr" },
-+	{ .compatible = "nuvoton,npcm750-reset"},
- 	{ }
- };
+ properties:
+   compatible:
+-    const: nuvoton,npcm750-reset
++    enum:
++      - nuvoton,npcm750-reset        # Poleg NPCM7XX SoC
++      - nuvoton,npcm845-reset        # Arbel NPCM8XX SoC
  
-@@ -155,15 +154,15 @@ static int npcm_usb_reset(struct platform_device *pdev, struct npcm_rc_data *rc)
- 	u32 ipsrst1_bits = 0;
- 	u32 ipsrst2_bits = NPCM_IPSRST2_USB_HOST;
- 	u32 ipsrst3_bits = 0;
--	const char *gcr_dt;
- 
--	gcr_dt = (const char *)
--	of_match_device(dev->driver->of_match_table, dev)->data;
--
--	gcr_regmap = syscon_regmap_lookup_by_compatible(gcr_dt);
-+	gcr_regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "nuvoton,sysgcr");
- 	if (IS_ERR(gcr_regmap)) {
--		dev_err(&pdev->dev, "Failed to find %s\n", gcr_dt);
--		return PTR_ERR(gcr_regmap);
-+		dev_warn(&pdev->dev, "Failed to find nuvoton,sysgcr search for nuvoton,npcm750-gcr for Poleg backward compatibility");
-+		gcr_regmap = syscon_regmap_lookup_by_compatible("nuvoton,npcm750-gcr");
-+		if (IS_ERR(gcr_regmap)) {
-+			dev_err(&pdev->dev, "Failed to find nuvoton,npcm750-gcr");
-+			return PTR_ERR(gcr_regmap);
-+		}
- 	}
- 
- 	/* checking which USB device is enabled */
+   reg:
+     maxItems: 1
 -- 
 2.33.0
 

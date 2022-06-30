@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457CE56175A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9069A561761
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234800AbiF3KLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 06:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
+        id S234909AbiF3KMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 06:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234603AbiF3KLF (ORCPT
+        with ESMTP id S234887AbiF3KMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 06:11:05 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CAC44765;
-        Thu, 30 Jun 2022 03:11:03 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id r81-20020a1c4454000000b003a0297a61ddso1364714wma.2;
-        Thu, 30 Jun 2022 03:11:03 -0700 (PDT)
+        Thu, 30 Jun 2022 06:12:36 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F464477E;
+        Thu, 30 Jun 2022 03:12:35 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id k7so2043210wrc.12;
+        Thu, 30 Jun 2022 03:12:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zVzVBpc51Y9uLu6xYb1G8geSUsvqr31CmHRYh6kJdeM=;
-        b=DFA3yU4qhejKdCMs4TdpjF2Aj0jooukDpX5TtP8A8Gc4xLcCd/Rc2fLf5eBOkqqUdP
-         g7mE69Fxe8kvgct2cW3EMYPN53rzfAd5DUF972twWYBNHUL2zftlefzZmFE49v4SzNSt
-         mzm2SYETieSzwRPtt89tIwbgKEaUtP4KBxiig46iXK2yzniWniWoVzqvN4Zr4JsNnf7f
-         4XZdsbBUMqBZQc9V6V0d7u2zZnmZ+Jv08FwQBAHuC1PwvlpGObIjwEPs0orAEc0ZHv9b
-         fvbk/yPop5tj34CFFdhgT9IkdExEkRDC6fx7zKh75bB7ASLw4TjtwuCC10QMGcghxGnQ
-         3Axg==
+        bh=yfRhc61AaTPZtvRzR5+PiNxgCQLaNl/GoBV3ZT0U/Kk=;
+        b=CgGSeJLtgWTyVFl5LsMtYnk3B70jFGkUfunpef5C3bazlwFaV4tdFXBcUtjODuTb97
+         Wqv4mzyTSpeNz/uYNG/HGKW1yyc9XoPHWF843v9Pn0RqlE5PrqtDyzW7loq8DUKhZXY6
+         vrHTEnVSMxUjvm/3dcVSpZLhHfz89YxjIiiRCR7WiTNR6M4gG4+aeS3WQjZ4ggGbsMJN
+         Uclu+2248rNdGNnpmovnZbE4Wt0zjBpd7WnxQ/zzMQmONRhQ0uLrWSUAZu/3xJ0xeTRr
+         4ghRhBOzrGcAPKDsVYyheX+dSWWcL8FZXfIovAGPNPOjRbGSBB9m6u+dTmxCsz41qaiN
+         SLMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=zVzVBpc51Y9uLu6xYb1G8geSUsvqr31CmHRYh6kJdeM=;
-        b=AFk5JiaifhThv4oFm8n+T6nwhxhWsvYMMB6UjkBgGMvHYtDm0wxXN6V2KvA5exD9BK
-         JLfKHGoohA3gk+w0AQ6oTV2kw+ZQHZCjIe8jOEWugptwC4kkVn3LJJVij91cFS1dbwdV
-         6Vwq4QrayY+8CojASfSnEAbmLn6WtO4lk/a9/4f1aoyQxmMnIIgpbAI1oONm3zYAN2YH
-         7jMJmoCpllAosNpaWY4UqfQLwAZBQCRK2UuwCmCT+hnv5KmdGf3UrBKSnFEmbQ/QvWAj
-         jBdj202FvNYIbjxYoa5tPxSdSjdI6ifJyUI/YAGp9gy2Vllj8IxgbS9c7Rf5kMDlNgQJ
-         ASQA==
-X-Gm-Message-State: AJIora+uGr2EJBR26Z/j+QwWYfhZ0RUaiOS28k9UQR+81tV1g4SYWD0X
-        dw7f5pn2rqKJf07stjVf6B2xpjqFSUY=
-X-Google-Smtp-Source: AGRyM1u0YDvIyWjrWkHoZVEer/5LPtqoGNI6/VKPd3fOSaHcoI430uzZf+tlslgxXR/z3POMo6dKnA==
-X-Received: by 2002:a05:600c:4ecc:b0:3a1:68bf:d17a with SMTP id g12-20020a05600c4ecc00b003a168bfd17amr8719084wmq.154.1656583862544;
-        Thu, 30 Jun 2022 03:11:02 -0700 (PDT)
+        bh=yfRhc61AaTPZtvRzR5+PiNxgCQLaNl/GoBV3ZT0U/Kk=;
+        b=VuDl56rCnhuT6Rq+Ll4SkbVqxFAxgi/8qwO73YdXVUiSLIJ0hU+GOxTfH4SXtFs9b6
+         EbmiabLewm5Sh4RICJ9H/P5mTAzYvknIfclzBtNmn8MtNXFhkqToiuhgJL/QmB4zuXE8
+         KSbGx5iKkOSTIveFKobmgw3neP4UZzk94pAxl83Di9F870YJBhCzWB8dXeDMJQ+EUhdT
+         m/LEmY6ooGeFl9c4b284fZd2WnUUzH13O8Vs6Wk2CECaqyHQJB/IslWZfqc72kIyQeOB
+         1UuDc/BNZeUqbjW5FfxBlHOTAv2+kfetNiDWnIUPQQAmQ+7kW6jpTfJ8NE7kGq9yrWNy
+         brdA==
+X-Gm-Message-State: AJIora8T4XajnWmmkfUkcMv0+4JvBdeBYkNKZo3s5xJaUJys7n+tbd+/
+        XxIIOsMTHXoxK/TQAO/9O4bTPovrtfQ=
+X-Google-Smtp-Source: AGRyM1vKNOKnLz3Q6RDe43DYq252Bjx/HQViG2Gr3/Qa7uxJ6oLQjXabb/BYvPemLRNNjZFVyF+DPw==
+X-Received: by 2002:a5d:6a03:0:b0:21b:9cc1:d5dd with SMTP id m3-20020a5d6a03000000b0021b9cc1d5ddmr7863856wru.450.1656583953814;
+        Thu, 30 Jun 2022 03:12:33 -0700 (PDT)
 Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id j18-20020a05600c191200b003973ea7e725sm2910107wmq.0.2022.06.30.03.11.01
+        by smtp.gmail.com with ESMTPSA id p12-20020adfcc8c000000b0020d0c9c95d3sm19522129wrj.77.2022.06.30.03.12.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 03:11:02 -0700 (PDT)
-Message-ID: <c219e966-d282-ed5a-a619-d33d99eee6ca@gmail.com>
-Date:   Thu, 30 Jun 2022 11:11:01 +0100
+        Thu, 30 Jun 2022 03:12:33 -0700 (PDT)
+Message-ID: <4ad28210-0827-c86e-b2a3-b7ed49a191d3@gmail.com>
+Date:   Thu, 30 Jun 2022 11:12:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v4 2/6] media: ov5693: add dvdd into ov5693_supply_names
- array
+Subject: Re: [PATCH v4 6/6] media: ov5693: add ov5693_of_match, dts support
 Content-Language: en-US
 To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
         quentin.schulz@theobroma-systems.com,
         Jacopo Mondi <jacopo@jmondi.org>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20220630074525.481790-1-tommaso.merciai@amarulasolutions.com>
- <20220630074525.481790-3-tommaso.merciai@amarulasolutions.com>
+ <20220630074525.481790-7-tommaso.merciai@amarulasolutions.com>
 From:   Daniel Scally <djrscally@gmail.com>
-In-Reply-To: <20220630074525.481790-3-tommaso.merciai@amarulasolutions.com>
+In-Reply-To: <20220630074525.481790-7-tommaso.merciai@amarulasolutions.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,33 +81,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello
 
-
 On 30/06/2022 08:45, Tommaso Merciai wrote:
-> Add missing "dvdd" (Digital circuit power) entry into ov5693_supply_names
-> array
+> Add ov5693_of_match. Device tree support
 >
 > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 > Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+> Reviewed-by: Sakari Ailus <sakari.ailus@iki.fi>
 
 
 Reviewed-by: Daniel Scally <djrscally@gmail.com>
 
 > ---
-> Changes since v3:
->  - Add reviewed-by tag, suggested by Jacopo, Krzysztof
+> Changes since v2:
+>  - Change patch order 7 -> 6 as suggested by Sakari
+>  - Add missing signed-off as suggested by Jacopo
 >
->  drivers/media/i2c/ov5693.c | 1 +
->  1 file changed, 1 insertion(+)
+> Changes since v3:
+>  - Add reviewed-by tags, suggested by Jacopo, Krzysztof
+>
+>  drivers/media/i2c/ov5693.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 >
 > diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
-> index f410333c4c67..9e84468d920e 100644
+> index 3c805a5a5181..5930207193c7 100644
 > --- a/drivers/media/i2c/ov5693.c
 > +++ b/drivers/media/i2c/ov5693.c
-> @@ -132,6 +132,7 @@
->  static const char * const ov5693_supply_names[] = {
->  	"avdd",		/* Analog power */
->  	"dovdd",	/* Digital I/O power */
-> +	"dvdd",		/* Digital circuit power */
+> @@ -1532,10 +1532,17 @@ static const struct acpi_device_id ov5693_acpi_match[] = {
 >  };
+>  MODULE_DEVICE_TABLE(acpi, ov5693_acpi_match);
 >  
->  #define OV5693_NUM_SUPPLIES	ARRAY_SIZE(ov5693_supply_names)
+> +static const struct of_device_id ov5693_of_match[] = {
+> +	{ .compatible = "ovti,ov5693", },
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, ov5693_of_match);
+> +
+>  static struct i2c_driver ov5693_driver = {
+>  	.driver = {
+>  		.name = "ov5693",
+>  		.acpi_match_table = ov5693_acpi_match,
+> +		.of_match_table = ov5693_of_match,
+>  		.pm = &ov5693_pm_ops,
+>  	},
+>  	.probe_new = ov5693_probe,

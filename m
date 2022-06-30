@@ -2,134 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08FD9562312
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 21:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA86562319
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 21:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236699AbiF3T0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 15:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
+        id S236845AbiF3T1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 15:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235540AbiF3T0Q (ORCPT
+        with ESMTP id S236748AbiF3T13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 15:26:16 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E365C42ED6;
-        Thu, 30 Jun 2022 12:26:15 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 68so244883pgb.10;
-        Thu, 30 Jun 2022 12:26:15 -0700 (PDT)
+        Thu, 30 Jun 2022 15:27:29 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B66F42ED6
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 12:27:28 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id mf9so87624ejb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 12:27:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=BGB9eQ8ZjliFMgcRVKHE6urD7afsm+Bb1aKDYwW5Jfo=;
-        b=iWoDQJ/dSdAde8AnIfDLxTdgiCOtOm+79LF23IYKQzTSvSChn0RKCEgkrj6yW/aq/L
-         Ng7bKjXng0gluiBq2N+qXVNpXYJtqS/oCtHvj7VFuOyHwQQMfGgLnLNQOCJAEJPkpiFz
-         k9OtgFn1UYqtdFU3SJ6Burv7HN7xACp19dipB8UXOnRrfrcJd6leCbIArojfXdQMEk7Y
-         dmdguQ+pTW3/V2p6m9x2fWOO9yUsbTxLRRBRVk14fYaRWck/UzINDGudetShPegD8vs/
-         9UYWZVqajm4CeiChNVdfJ+MpdaPqsySivwBLzVcXqDzRte+YXhoifrJyNvp0EqNB047u
-         BQTQ==
+        bh=feCBs3SZp7swfaMlUVIaixS6lb9azkfUPXOLn8L7U8A=;
+        b=aMGKhUPoRJzWDRYuTQbm/9jyUn+p8BPoZOJWBU3++bUqJqH0vW1slpEOm7yHfz9Sd4
+         sxgvPMLp/Yz/VGa5y57bhZx7zt30oEwx1Jyh1wyceW1uQ6sgu6njRnyWiy4p/xbxRX5v
+         heAA2d8+dzM3o7Nsj8Vfj5+08SwsUizGOCIpK89bExRclwnVZm2xBGlz5BPMzfha9Ma8
+         rB3i0iP4Mq8jwYQ136rDpC1sWOEcFB7mnzOo7xXlr0xmJVD/qekuHwAAyb288UmUKcT6
+         2ZMPB87DZgBWhF4Zc7NAlpv5CtxTmWxCT+xsg3/fdDcqzw11O+HMtvJRIyDVXNWs5wSG
+         5ERg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=BGB9eQ8ZjliFMgcRVKHE6urD7afsm+Bb1aKDYwW5Jfo=;
-        b=VMM2qeV4TeVh107oxSuXYoYtsQ3ynBjpvZcOBxdLW+Sy5Xi3bB0UJAHit02skzzcw+
-         cHQn14cnC1zL2i63e++5Stfq2ggzD8etgtMqjPwOKRnG0sTjLZ+OGCFsZBd2LHS/OZCz
-         z3CVXz3pdoPv7b3Vu2XQPdAwQAozlOZnz3HgmfMhgyEnsgeDJ4Ib/RMtK0uFZhgUvFVn
-         DyvWEBtQ69/DYw7uPGYPVEfwf9yHem6/AbjBAzsVGTZSwD0XNNOT5t7rK1Hh/oh++XYC
-         8Q51jIt1dOgNXCPhmPNpUNZ/g9c1pSbiOc8OhHKYAE8ylDk3JGWtUMXAGQk9+AKrmKSm
-         BSKg==
-X-Gm-Message-State: AJIora++omdqAHfpA/aT6Yl588oIjo02muae58iNp9g8Iy4g5ZMz0x8I
-        kPS4nA5ilZmHvu2pEPejzPw=
-X-Google-Smtp-Source: AGRyM1tk83J3rH/OFTSOHRQYyzuFUGQ/lxtqXLEqqvb1V70fRLzAxXraPK8BYuQ19iCr74oVBVR7bQ==
-X-Received: by 2002:a63:4a0b:0:b0:40d:d4c1:131f with SMTP id x11-20020a634a0b000000b0040dd4c1131fmr8603747pga.242.1656617175475;
-        Thu, 30 Jun 2022 12:26:15 -0700 (PDT)
-Received: from ?IPV6:2001:df0:0:200c:b411:35d2:9458:bbe5? ([2001:df0:0:200c:b411:35d2:9458:bbe5])
-        by smtp.gmail.com with ESMTPSA id c18-20020a621c12000000b0051bbd79fc9csm13969994pfc.57.2022.06.30.12.26.07
+        bh=feCBs3SZp7swfaMlUVIaixS6lb9azkfUPXOLn8L7U8A=;
+        b=OIPq0C00YxflAL0P/DH9uziFF7sC7PNn4aAm1OjnLvwMN3QM3RueZibr/7jjiLxgTH
+         N6bDtl1OpKUFvux+lkDTjcCfPW7UN9JAATrft7Pqo4RfxyWX2NbJlV2mdeBQzbi2PMmC
+         whrWq0XD6HFqflXG82Id8o42w9fCoZXryEVT35wK1Pu8DPGObwDpTdqQ795u+1ZiLe3S
+         ymxTGqpQcxgVkQfBeqRCZ9Kt7jxaycyjDNxX6nqdFRKKaYl1hX3B22dj5bSzL+ULWlXU
+         QMannLrI7vWIp1gOAMObzKL68rdzOvpTIkfZJ3VUtITtPaJnvsfbG8ErygY5GgH1BaNT
+         ut0w==
+X-Gm-Message-State: AJIora95ojEMhSJE6qc3wJsnYfPT/+8UvfnprW8wq5/LYJPHNtZ08NHo
+        r3KFGSJu1Qzd1xtlF4It9FiItBXr99F1MA==
+X-Google-Smtp-Source: AGRyM1uNlIf5G3X2BrYx8D1HZQ506BFUfDgJON3MXOC6l4sXTrpcRIRKPFWNdTESNlB1gMDmvXcXiQ==
+X-Received: by 2002:a17:906:730f:b0:726:ca34:e605 with SMTP id di15-20020a170906730f00b00726ca34e605mr10704263ejc.347.1656617246777;
+        Thu, 30 Jun 2022 12:27:26 -0700 (PDT)
+Received: from [192.168.0.190] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z7-20020a1709063ac700b0072321c99b78sm9368874ejd.57.2022.06.30.12.27.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 12:26:14 -0700 (PDT)
-Message-ID: <13e45965-4e55-11b1-bfdc-59efaad27464@gmail.com>
-Date:   Fri, 1 Jul 2022 07:26:05 +1200
+        Thu, 30 Jun 2022 12:27:26 -0700 (PDT)
+Message-ID: <51cb7b8b-9616-35b1-cd34-e054dd98369c@linaro.org>
+Date:   Thu, 30 Jun 2022 21:27:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 3/3] arch/*/: remove CONFIG_VIRT_TO_BUS
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] ARM: dts: imx6qdl-ts7970: Fix ngpio typo and count
 Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        scsi <linux-scsi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        Khalid Aziz <khalid@gonehiking.org>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Matt Wang <wwentao@vmware.com>,
-        Miquel van Smoorenburg <mikevs@xs4all.net>,
-        Mark Salyzyn <salyzyn@android.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Denis Efremov <efremov@linux.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-References: <20220617125750.728590-1-arnd@kernel.org>
- <20220617125750.728590-4-arnd@kernel.org>
- <6ba86afe-bf9f-1aca-7af1-d0d348d75ffc@gmail.com>
- <CAMuHMdVewn0OYA9oJfStk0-+vCKAUou+4Mvd5H2kmrSks1p5jg@mail.gmail.com>
- <b4e5a1c9-e375-63fb-ec7c-abb7384a6d59@gmail.com>
- <9289fd82-285c-035f-5355-4d70ce4f87b0@gmail.com>
- <CAK8P3a1ivqYB38c_QTjG8e85ZBnCB6HEa-6LR1HDc8shG1Pwmw@mail.gmail.com>
- <b1edec96-ccb2-49d6-323b-1abc0dc37a50@gmail.com>
- <YrvwZi9NQSpFjStX@infradead.org>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-In-Reply-To: <YrvwZi9NQSpFjStX@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     kris@embeddedTS.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Mark Featherston <mark@embeddedTS.com>
+References: <20220630182746.3813-1-kris@embeddedTS.com>
+ <1654112f-839f-1de2-0f00-fbf501824d6d@linaro.org>
+ <1656616263.4126.2.camel@embeddedTS.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1656616263.4126.2.camel@embeddedTS.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph,
+On 30/06/2022 21:11, Kris Bahnsen wrote:
+> On Thu, 2022-06-30 at 20:56 +0200, Krzysztof Kozlowski wrote:
+>> On 30/06/2022 20:27, Kris Bahnsen wrote:
+>>> Device-tree incorrectly used "ngpio" which caused the driver to
+>>> fallback to 32 ngpios.
+>>>
+>>> This platform has 62 GPIO registers.
+>>>
+>>> Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+>>> ---
+>>
+>>
+>> Ah and one more - for some reason you did not send it to maintainers, so
+>> patch will be most likely ignored. Please use scripts/get_maintainer.pl
+>> to CC relevant people.
+> 
+> I reviewed that output and erred on the side of not generating
+> too much noise and skipped folks/lists marked as general ARM/NXP
+> maintainers. I'll be sure to send to all in the future.
 
-On 29/06/22 18:25, Christoph Hellwig wrote:
-> On Wed, Jun 29, 2022 at 09:38:00AM +1200, Michael Schmitz wrote:
->> That's one of the 'liberties' I alluded to. The reason I left these in is
->> that I'm none too certain what device feature the DMA API uses to decide a
->> device isn't cache-coherent.
-> The DMA API does not look at device features at all.  It needs to be
-> told so by the platform code.  Once an architecture implements the
-> hooks to support non-coherent DMA all devices are treated as
-> non-coherent by default unless overriden by the architecture either
-> globally (using the global dma_default_coherent variable) or per-device
-> (using the dev->dma_coherent field, usually set by arch_setup_dma_ops).
-Haven't got any of that, so non-coherent DMA is all we can use (even 
-though some of the RAM used for bounce buffers may actually be coherent 
-due to the page table cache bits).
->
->> If it's dev->coherent_dma_mask, the way I set
->> up the device in the a3000 driver should leave the coherent mask unchanged.
->> For the Zorro drivers, devices are set up to use the same storage to store
->> normal and coherent masks - something we most likely want to change. I need
->> to think about the ramifications of that.
-> No, the coherent mask is slightly misnamed amd not actually related.
+For small patchsets usually entire output of get_maintainers.pl is
+correct. What's worth to skip are the entries coming from history
+(--no-git-fallback).
 
-Thanks, that had me confused.
-
-Cheers,
-
-     Michael
-
-
+Best regards,
+Krzysztof

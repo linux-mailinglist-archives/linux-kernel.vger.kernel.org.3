@@ -2,146 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D6E562159
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 19:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F5556215F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 19:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236495AbiF3RfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 13:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59100 "EHLO
+        id S236319AbiF3Rgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 13:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235954AbiF3RfK (ORCPT
+        with ESMTP id S236400AbiF3Rg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 13:35:10 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B140536141
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:35:07 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so112985fac.13
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:35:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TvnWQVWBqHCFvzeuhdV7clHAx5dh+MQYePzQD0+y7Uc=;
-        b=H+O2K3BiOmZ+iqTzP8zSGWs+YhD8kbBM9gCO4EZmWjmuqQ/9IIrumNFeCy//6VjU1w
-         yM6Q02DG/+NgZ80SHDKhMAbHXn9b6ohS/6PY13azn70NcyE6uqmHRstHJuNDoH3Un1Ph
-         37YXniXZA3pAShQCYFnsyRE26Im/37hnjk+v0HaZ7R9t7wEZ1G5eS9ISp7JgISS7I2hN
-         A9anibvuevrFfzTUSdar4tlT8kFla1X/nfr02qpm1Bj09lMFURTKRufmPUwlY2MjRZmy
-         KG++nNE8wBAwIkQMYixHiXkCRlaAb/+iz/QfRiAHDg4laMF0zX7xn13/RzBQnBHr9917
-         wDkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TvnWQVWBqHCFvzeuhdV7clHAx5dh+MQYePzQD0+y7Uc=;
-        b=WHumgiOey8w3oXxwQXpcH4WDXiz+NO06lrasEt83BJpiMtom5s675LW6YsanrUzpyL
-         nmV1OKPn6b/1Co3oWw99Wt+G97ENmBVpvwUQ7AGPiqoIexx7+qnvtvxKjn7BcF6V3vuB
-         gK9EkRBZVcVRMQy4fmoKCB+8ayHgCZGm45d1n1ZAEL73DisjQolie3N2CYvdbHeHhJNz
-         4m4sox5zinntoo3/XOT3R5EmpTeKvRL1BJjimAex4oIZpDU9KTciy5PeCQR19HqA2CQB
-         ErsGHuxug0Y4m79cm+jewJ3LBkF4sB9auK7cBKCk6nMQs/Qg+GkR7HEkDxg5TerxEvrt
-         6qcA==
-X-Gm-Message-State: AJIora9a+xnD2ZOX6R2l7nWjty4V0cE266gR2EGHSqx/szAPPsE8oAzD
-        U2SGjeTEalyf6Hqm15MFmzcPRw==
-X-Google-Smtp-Source: AGRyM1v7vHSixqg0jIsfWA3Xuzr25gaoV363cLZK0Dvg5ZZL2eE9La/e2ncLhw7ZXvNyB6nXsNZz3g==
-X-Received: by 2002:a05:6870:cd02:b0:108:a476:f2ac with SMTP id qk2-20020a056870cd0200b00108a476f2acmr7067746oab.184.1656610507002;
-        Thu, 30 Jun 2022 10:35:07 -0700 (PDT)
-Received: from eze-laptop ([190.190.187.68])
-        by smtp.gmail.com with ESMTPSA id o7-20020a056871078700b000e686d1386dsm14181497oap.7.2022.06.30.10.35.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 10:35:06 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 14:35:00 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com
-Subject: Re: [PATCH 4/7] media: hantro: postproc: Configure output regs to
- support 10bit
-Message-ID: <Yr3exPUv0OVKgwlk@eze-laptop>
-References: <20220617115802.396442-1-benjamin.gaignard@collabora.com>
- <20220617115802.396442-5-benjamin.gaignard@collabora.com>
+        Thu, 30 Jun 2022 13:36:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1FD093FBF9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:36:28 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B62B01063;
+        Thu, 30 Jun 2022 10:36:27 -0700 (PDT)
+Received: from bogus (unknown [10.57.39.193])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ADF4D3F792;
+        Thu, 30 Jun 2022 10:36:24 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 18:35:13 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Conor.Dooley@microchip.com
+Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        atishp@atishpatra.org, atishp@rivosinc.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        wangqing@vivo.com, robh+dt@kernel.org, rafael@kernel.org,
+        ionela.voinescu@arm.com, pierre.gondois@arm.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, gshan@redhat.com,
+        Valentina.FernandezAlanis@microchip.com
+Subject: Re: [PATCH v5 09/19] arch_topology: Use the last level cache
+ information from the cacheinfo
+Message-ID: <20220630173513.dyrrmjbpxzi3e6fe@bogus>
+References: <20220627165047.336669-10-sudeep.holla@arm.com>
+ <bb124e47-f866-e39e-0f76-dc468ce384c6@microchip.com>
+ <3656a067-cc3f-fd5b-e339-5925a856cce1@microchip.com>
+ <20220629184217.krzt6l7qadymbj6h@bogus>
+ <f1f4a30e-7a84-30e2-197c-4153b3e66b64@microchip.com>
+ <20220629195454.vbsjvcadmukiunt7@bogus>
+ <03433f57-04ed-44a9-a2f6-5577df94f11e@microchip.com>
+ <b2ab0ac1-bfef-5ba0-4ee5-15e604d8aa2e@microchip.com>
+ <20220630103958.tcear5oz3orsqwg6@bogus>
+ <9d9e80b8-17e2-b1d9-14fa-f1d8d7dfbd9a@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220617115802.396442-5-benjamin.gaignard@collabora.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <9d9e80b8-17e2-b1d9-14fa-f1d8d7dfbd9a@microchip.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
+On Thu, Jun 30, 2022 at 04:37:50PM +0000, Conor.Dooley@microchip.com wrote:
+> On 30/06/2022 11:39, Sudeep Holla wrote:
+> >
+> > I can't think of any reason for that to happen unless detect_cache_attributes
+> > is failing from init_cpu_topology and we are ignoring that.
+> >
+> > Are all RISC-V platforms failing on -next or is it just this platform ?
+>
+> I don't know. I only have SoCs with this core complex & one that does not
+> work with upstream. I can try my other board with this SoC - but I am on
+> leave at the moment w/ a computer or internet during the day so it may be
+> a few days before I can try it.
+>
 
-On Fri, Jun 17, 2022 at 01:57:59PM +0200, Benjamin Gaignard wrote:
-> Move output format setting in postproc and make sure that
-> 8/10bit configuration is correctly set.
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Sure, no worries.
 
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> However, Niklas Cassel has tried to use the Canaan K210 on next-20220630
+> but had issues with RCU stalling:
+> https://lore.kernel.org/linux-riscv/Yr3PKR0Uj1bE5Y6O@x1-carbon/T/#m52016996fcf5fa0501066d73352ed8e806803e06
+> Not going to claim any relation, but that's minus 1 to the platforms that
+> can be used to test this on upstream RISC-V.
+>
 
-Thanks,
-Ezequiel
+Ah OK, will check and ask full logs to see if there is any relation.
 
-> ---
->  drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 2 --
->  drivers/staging/media/hantro/hantro_postproc.c    | 7 ++++++-
->  2 files changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-> index 8407ad45b7b7..c929f2974a01 100644
-> --- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-> +++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-> @@ -167,8 +167,6 @@ static void set_params(struct hantro_ctx *ctx)
->  	hantro_reg_write(vpu, &g2_bit_depth_y_minus8, sps->bit_depth_luma_minus8);
->  	hantro_reg_write(vpu, &g2_bit_depth_c_minus8, sps->bit_depth_chroma_minus8);
->  
-> -	hantro_reg_write(vpu, &g2_output_8_bits, 0);
-> -
->  	hantro_reg_write(vpu, &g2_hdr_skip_length, compute_header_skip_lenght(ctx));
->  
->  	min_log2_cb_size = sps->log2_min_luma_coding_block_size_minus3 + 3;
-> diff --git a/drivers/staging/media/hantro/hantro_postproc.c b/drivers/staging/media/hantro/hantro_postproc.c
-> index a0928c508434..09d8cf942689 100644
-> --- a/drivers/staging/media/hantro/hantro_postproc.c
-> +++ b/drivers/staging/media/hantro/hantro_postproc.c
-> @@ -114,6 +114,7 @@ static void hantro_postproc_g2_enable(struct hantro_ctx *ctx)
->  	struct hantro_dev *vpu = ctx->dev;
->  	struct vb2_v4l2_buffer *dst_buf;
->  	int down_scale = down_scale_factor(ctx);
-> +	int out_depth;
->  	size_t chroma_offset;
->  	dma_addr_t dst_dma;
->  
-> @@ -132,8 +133,9 @@ static void hantro_postproc_g2_enable(struct hantro_ctx *ctx)
->  		hantro_write_addr(vpu, G2_RS_OUT_LUMA_ADDR, dst_dma);
->  		hantro_write_addr(vpu, G2_RS_OUT_CHROMA_ADDR, dst_dma + chroma_offset);
->  	}
-> +
-> +	out_depth = hantro_get_format_depth(ctx->dst_fmt.pixelformat);
->  	if (ctx->dev->variant->legacy_regs) {
-> -		int out_depth = hantro_get_format_depth(ctx->dst_fmt.pixelformat);
->  		u8 pp_shift = 0;
->  
->  		if (out_depth > 8)
-> @@ -141,6 +143,9 @@ static void hantro_postproc_g2_enable(struct hantro_ctx *ctx)
->  
->  		hantro_reg_write(ctx->dev, &g2_rs_out_bit_depth, out_depth);
->  		hantro_reg_write(ctx->dev, &g2_pp_pix_shift, pp_shift);
-> +	} else {
-> +		hantro_reg_write(vpu, &g2_output_8_bits, out_depth > 8 ? 0 : 1);
-> +		hantro_reg_write(vpu, &g2_output_format, out_depth > 8 ? 1 : 0);
->  	}
->  	hantro_reg_write(vpu, &g2_out_rs_e, 1);
->  }
-> -- 
-> 2.32.0
-> 
+> > We may have to try with some logs in detect_cache_attributes,
+> > last_level_cache_is_valid and last_level_cache_is_shared to check where it
+> > is going wrong.
+> >
+> > It must be crashing in smp_callin->update_siblings_masks->last_level_cache_is_shared
+>
+> Yeah, I was playing around last night for a while but didn't figure out the
+> root cause. I'll try again tonight.
+>
+
+OK, thanks for that. I tried qemu, but doesn't have any cache info in DT
+provided by qemu itself. The other sifive_u machine didn't work on qemu,
+only virt booted with mainline as well.
+
+> In the meantime, would you mind taking the patches out of -next?
+
+I don't want to take out as we will loose all the test coverage.
+I would like to know if any other RISC-V platform is affected or not
+before removing it.
+
+> FWIW I repro'd the failure on next-20220630.
+
+Yes, nothing has changed yet.
+
+--
+Regards,
+Sudeep

@@ -2,78 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4517D561A35
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7498D561A42
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233724AbiF3MU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 08:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
+        id S233935AbiF3MXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 08:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiF3MU4 (ORCPT
+        with ESMTP id S229964AbiF3MXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 08:20:56 -0400
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FF61FCE5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 05:20:55 -0700 (PDT)
-Received: by mail-oo1-xc2c.google.com with SMTP id v11-20020a4aa50b000000b00425a09bb69aso2526616ook.5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 05:20:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JUW4jEINb79G6fZ0psu80KzN+ByrVZtzYVyL3ZG8d6c=;
-        b=Fuqkt29l4izjw3eglRszJHoi91Vvjag/dTICHrTdpAVIpjz/jBKpFtnqUgrbsd87qt
-         2uLLVSaDmUcSlPFrIdn9w+dQdI7ScgpWwIY8pLJq8DFrfqXoExYxe5UrHWnjIEhEMNNk
-         7i03Et79pZitXulV8F5Tpyi4qAuaj2RFknak+BQ8X9mwVB/mGLiTc/J+qulYvIhtUpu/
-         x+34rTHO5hpltf3dyDzzvi4liRJu2dCipyshYx5HUGIEELctPc+pYPgMfMIDoB8AgiJK
-         +MUdlNlpHQ3x7td8GjJHPcHpwPnaj5m+OuWA18862gBHizX+oHX47HZpUfxUzyzB5nvH
-         ZWCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JUW4jEINb79G6fZ0psu80KzN+ByrVZtzYVyL3ZG8d6c=;
-        b=SHR1RnOBcu8SvOUyr03Ie7/IAxLNukydAvUAMMqX4Yejl/kWrcPlBMjT20+aFHzftK
-         1+QPBMZsVb0bjq14K2S0etmodaRL46mmyAwOL1iATcaCTdpmKXAg0e1atNiIGSnPHE7P
-         tGFxvbX80nEHbC8WzoIxexwqPJuJxRXiB2DXxx7l/9fxM1kwzjiGikaJyZ0odD+/q2/1
-         nlqGxoHA3X7+3m5BrOyBa8xKl1MbxphvDIA9foHIGlzB75jI5YIB1SCfohakQj1dF0Q/
-         inVTo7Z/wY9XRhmrtvrbUyjcpDnosh/2V0Sixmcpl13NP2wAg0CPM4gK0GPRKSKUxsDe
-         /MvQ==
-X-Gm-Message-State: AJIora9hJ4wzC5WdTqMRUe3+iLSNYT17GvPEgHQ6LdMX+WQuEMK4PevS
-        9W0sY+hMDDsZFPOvTlUEV/cAwCoArIyBFoEP337FAQ==
-X-Google-Smtp-Source: AGRyM1ugYwGf8QObcJFeoodBaF0ml7JBvXxTHg+CSp32AI+BET/209D3TiHBTGz48E8bksakxkhoF2Jp9f0XG6nLU24=
-X-Received: by 2002:a4a:e82b:0:b0:330:cee9:4a8a with SMTP id
- d11-20020a4ae82b000000b00330cee94a8amr3645347ood.31.1656591654007; Thu, 30
- Jun 2022 05:20:54 -0700 (PDT)
+        Thu, 30 Jun 2022 08:23:41 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A69128E3C;
+        Thu, 30 Jun 2022 05:23:41 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 879696601952;
+        Thu, 30 Jun 2022 13:23:38 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656591819;
+        bh=pRuI3oSvrHw82NBFcjDTrEAhu9UwJal4NerMnIQjBTM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eIfbfgMDXzw9VJ8gxnAYh+zc2D1jRwvoedENIECM7J6jAF935Hd3qKV/oMUB1PE7Q
+         myddxKhnwr0TW4ti4Fx6JY/zCvz3ajpZGqPsLCu+B7PX8a2ocv2poiu1rELkkOEdnP
+         53LyfflQ+jeM6Y6DmFLCi3j9wpjsueVqld0SKX2isDFs0N5W/sR0xbzRwgVWySi83d
+         DMsiA7AOuRvjXgzBFvLJweGyZyC5sGdDXQa6G3ON5FTsz6g1/m8jC1jF6Ms5C64V+d
+         W8d8pQ1Jq9+aK/Mnmfc9xzNyZkJT6T58UPzX+lnKS+nEgEJdLa2EC37o/xQr5Dawev
+         RmyRgwguExezw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     linus.walleij@linaro.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sean.wang@mediatek.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        nfraprado@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH] dt-bindings: pinctrl: mt8195: Fix name for mediatek,rsel-resistance-in-si-unit
+Date:   Thu, 30 Jun 2022 14:23:34 +0200
+Message-Id: <20220630122334.216903-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220614204730.3359543-1-seanjc@google.com> <7e05e0befa13af05f1e5f0fd8658bc4e7bdf764f.camel@redhat.com>
- <CALMp9eQQROfYW7tNPaYCL5umjDr5ntsXuQ3BmorD8BWQiUGjdw@mail.gmail.com> <e04341912abfa1590edd4ee7c33efde6e227b93f.camel@redhat.com>
-In-Reply-To: <e04341912abfa1590edd4ee7c33efde6e227b93f.camel@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Thu, 30 Jun 2022 05:20:43 -0700
-Message-ID: <CALMp9eQ3EvQJFfyg2VW3Bb3-W9XGWnhtaS9zLPT4354yhroC2g@mail.gmail.com>
-Subject: Re: [PATCH v2 00/21] KVM: x86: Event/exception fixes and cleanups
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
-        Peter Shier <pshier@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 1:24 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
+When this property was introduced, it contained underscores, but
+the actual code wants dashes.
 
-> Neither can I access this document sadly :(
-Try this one: https://docs.google.com/spreadsheets/d/1u6yjgj0Fshd31YKFJ524mwle7BhxB3yuEy9fhdSoh-0
+Change it from mediatek,rsel_resistance_in_si_unit to
+mediatek,rsel-resistance-in-si-unit.
+
+Fixes: 91e7edceda96 ("dt-bindings: pinctrl: mt8195: change pull up/down description")
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+
+Note: No devicetree uses this property as of now.
+      Even if any DT did, it wouldn't work, as the pinctrl code checks
+      for 'mediatek,rsel-resistance-in-si-unit'.
+
+ .../devicetree/bindings/pinctrl/pinctrl-mt8195.yaml    | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
+index 15989743afd2..b0fea44403e7 100644
+--- a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
+@@ -51,7 +51,7 @@ properties:
+     description: The interrupt outputs to sysirq.
+     maxItems: 1
+ 
+-  mediatek,rsel_resistance_in_si_unit:
++  mediatek,rsel-resistance-in-si-unit:
+     type: boolean
+     description: |
+       Identifying i2c pins pull up/down type which is RSEL. It can support
+@@ -144,7 +144,7 @@ patternProperties:
+               "MTK_PUPD_SET_R1R0_11" define in mt8195.
+               For pull down type is RSEL, it can add RSEL define & resistance
+               value(ohm) to set different resistance by identifying property
+-              "mediatek,rsel_resistance_in_si_unit".
++              "mediatek,rsel-resistance-in-si-unit".
+               It can support "MTK_PULL_SET_RSEL_000" & "MTK_PULL_SET_RSEL_001"
+               & "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011"
+               & "MTK_PULL_SET_RSEL_100" & "MTK_PULL_SET_RSEL_101"
+@@ -163,7 +163,7 @@ patternProperties:
+               };
+               An example of using si unit resistance value(ohm):
+               &pio {
+-                mediatek,rsel_resistance_in_si_unit;
++                mediatek,rsel-resistance-in-si-unit;
+               }
+               pincontroller {
+                 i2c0_pin {
+@@ -192,7 +192,7 @@ patternProperties:
+               "MTK_PUPD_SET_R1R0_11" define in mt8195.
+               For pull up type is RSEL, it can add RSEL define & resistance
+               value(ohm) to set different resistance by identifying property
+-              "mediatek,rsel_resistance_in_si_unit".
++              "mediatek,rsel-resistance-in-si-unit".
+               It can support "MTK_PULL_SET_RSEL_000" & "MTK_PULL_SET_RSEL_001"
+               & "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011"
+               & "MTK_PULL_SET_RSEL_100" & "MTK_PULL_SET_RSEL_101"
+@@ -211,7 +211,7 @@ patternProperties:
+               };
+               An example of using si unit resistance value(ohm):
+               &pio {
+-                mediatek,rsel_resistance_in_si_unit;
++                mediatek,rsel-resistance-in-si-unit;
+               }
+               pincontroller {
+                 i2c0-pins {
+-- 
+2.35.1
+

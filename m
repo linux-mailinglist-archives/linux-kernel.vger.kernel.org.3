@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E77561C9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88544561C51
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236163AbiF3OAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38182 "EHLO
+        id S235793AbiF3Nxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 09:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236090AbiF3N5j (ORCPT
+        with ESMTP id S235838AbiF3Nwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:57:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641D861D6F;
-        Thu, 30 Jun 2022 06:51:16 -0700 (PDT)
+        Thu, 30 Jun 2022 09:52:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2D14579D;
+        Thu, 30 Jun 2022 06:49:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9B8CB82AF6;
-        Thu, 30 Jun 2022 13:51:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D6F7C341D6;
-        Thu, 30 Jun 2022 13:51:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 477E26205D;
+        Thu, 30 Jun 2022 13:49:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C9C8C3411E;
+        Thu, 30 Jun 2022 13:49:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597072;
-        bh=xnmQMpJIViGdD4WvVxh9OnD/+EtuotNJ1bHlpdy3c5w=;
+        s=korg; t=1656596983;
+        bh=tQbpvtEvCBc44itrMEC0A4dvWcUm/1NCxpin/Lzp79o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K21P0NmlyQRYYMmzzRoWbu8YmUyVw4FVQIXTlqctP/USjEDkubihHMOzLVpOW7mFj
-         QkkfrVq3d97uzIgZrhCBsmV2olLN11KruD6FZw4gJidW2Q88ScOfLQZpQqAqbwJ54g
-         UPS3tt2reQdv2R61VPpJ74FG9ZldGlOXYYFS4vT8=
+        b=mxlSejOYVWVZ6MjwtbnPd1fi+PYDn0zzrbS2a2qBJxSmaVX7EdHBTeS0UFvty/XmI
+         oMVaw1TfNXLT7dyTSsTTAV8YvyTNFeGfv4AosIf+tgyK9mpuVHAsVNHIKV26gHwHqB
+         WM6+gQttotdZFkn6tA38+JOp+9XgBej6IN+WTrl0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Gurucharan <gurucharanx.g@intel.com>
-Subject: [PATCH 4.19 18/49] igb: Make DMA faster when CPU is active on the PCIe link
-Date:   Thu, 30 Jun 2022 15:46:31 +0200
-Message-Id: <20220630133234.443440651@linuxfoundation.org>
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH 4.14 21/35] xtensa: Fix refcount leak bug in time.c
+Date:   Thu, 30 Jun 2022 15:46:32 +0200
+Message-Id: <20220630133233.064006826@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133233.910803744@linuxfoundation.org>
-References: <20220630133233.910803744@linuxfoundation.org>
+In-Reply-To: <20220630133232.433955678@linuxfoundation.org>
+References: <20220630133232.433955678@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,83 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit 4e0effd9007ea0be31f7488611eb3824b4541554 ]
+commit a0117dc956429f2ede17b323046e1968d1849150 upstream.
 
-Intel I210 on some Intel Alder Lake platforms can only achieve ~750Mbps
-Tx speed via iperf. The RR2DCDELAY shows around 0x2xxx DMA delay, which
-will be significantly lower when 1) ASPM is disabled or 2) SoC package
-c-state stays above PC3. When the RR2DCDELAY is around 0x1xxx the Tx
-speed can reach to ~950Mbps.
+In calibrate_ccount(), of_find_compatible_node() will return a node
+pointer with refcount incremented. We should use of_node_put() when
+it is not used anymore.
 
-According to the I210 datasheet "8.26.1 PCIe Misc. Register - PCIEMISC",
-"DMA Idle Indication" doesn't seem to tie to DMA coalesce anymore, so
-set it to 1b for "DMA is considered idle when there is no Rx or Tx AND
-when there are no TLPs indicating that CPU is active detected on the
-PCIe link (such as the host executes CSR or Configuration register read
-or write operation)" and performing Tx should also fall under "active
-CPU on PCIe link" case.
-
-In addition to that, commit b6e0c419f040 ("igb: Move DMA Coalescing init
-code to separate function.") seems to wrongly changed from enabling
-E1000_PCIEMISC_LX_DECISION to disabling it, also fix that.
-
-Fixes: b6e0c419f040 ("igb: Move DMA Coalescing init code to separate function.")
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Link: https://lore.kernel.org/r/20220621221056.604304-1-anthony.l.nguyen@intel.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Liang He <windhl@126.com>
+Message-Id: <20220617124432.4049006-1-windhl@126.com>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/igb/igb_main.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ arch/xtensa/kernel/time.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index a93edd31011f..9f45ecd9e8e5 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -9444,11 +9444,10 @@ static void igb_init_dmac(struct igb_adapter *adapter, u32 pba)
- 	struct e1000_hw *hw = &adapter->hw;
- 	u32 dmac_thr;
- 	u16 hwm;
-+	u32 reg;
- 
- 	if (hw->mac.type > e1000_82580) {
- 		if (adapter->flags & IGB_FLAG_DMAC) {
--			u32 reg;
--
- 			/* force threshold to 0. */
- 			wr32(E1000_DMCTXTH, 0);
- 
-@@ -9481,7 +9480,6 @@ static void igb_init_dmac(struct igb_adapter *adapter, u32 pba)
- 			/* Disable BMC-to-OS Watchdog Enable */
- 			if (hw->mac.type != e1000_i354)
- 				reg &= ~E1000_DMACR_DC_BMC2OSW_EN;
--
- 			wr32(E1000_DMACR, reg);
- 
- 			/* no lower threshold to disable
-@@ -9498,12 +9496,12 @@ static void igb_init_dmac(struct igb_adapter *adapter, u32 pba)
- 			 */
- 			wr32(E1000_DMCTXTH, (IGB_MIN_TXPBSIZE -
- 			     (IGB_TX_BUF_4096 + adapter->max_frame_size)) >> 6);
-+		}
- 
--			/* make low power state decision controlled
--			 * by DMA coal
--			 */
-+		if (hw->mac.type >= e1000_i210 ||
-+		    (adapter->flags & IGB_FLAG_DMAC)) {
- 			reg = rd32(E1000_PCIEMISC);
--			reg &= ~E1000_PCIEMISC_LX_DECISION;
-+			reg |= E1000_PCIEMISC_LX_DECISION;
- 			wr32(E1000_PCIEMISC, reg);
- 		} /* endif adapter->dmac is not disabled */
- 	} else if (hw->mac.type == e1000_82580) {
--- 
-2.35.1
-
+--- a/arch/xtensa/kernel/time.c
++++ b/arch/xtensa/kernel/time.c
+@@ -146,6 +146,7 @@ static void __init calibrate_ccount(void
+ 	cpu = of_find_compatible_node(NULL, NULL, "cdns,xtensa-cpu");
+ 	if (cpu) {
+ 		clk = of_clk_get(cpu, 0);
++		of_node_put(cpu);
+ 		if (!IS_ERR(clk)) {
+ 			ccount_freq = clk_get_rate(clk);
+ 			return;
 
 

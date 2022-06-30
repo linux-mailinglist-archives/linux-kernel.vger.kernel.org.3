@@ -2,65 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F525618C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8517F5618C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234421AbiF3LKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 07:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S234446AbiF3LKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 07:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiF3LKP (ORCPT
+        with ESMTP id S234426AbiF3LKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 07:10:15 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7D9457B4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 04:10:13 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id d17so21109712wrc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 04:10:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jamieiles.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rCzYJxLU9wcyLu+uhOEd7PVf6eOKzZ5fBAU0Uureukc=;
-        b=G1GMK8L3SefrT8qZ1K3pfa3DKIc1iPfzXRDO7+lZPmgVaJwPIFNt3kPsk9cdcR3MRC
-         l+A0xkoKCIDx1QXnzWe3TnVnTXGDwIQyVKjsCZiuYGipnf+k/4f7shIhB7GHTjA42DrH
-         tZwCpdG5ntb4Z/oqtxwZQtuUAVI0IyHICTb2t+rNaXwv082lhGIm9c5watfNZFZyT222
-         JsokI2s+Hx89P+uP44RV/W97d9LPVsOESOMJJB0Crx9OGRJ4x51X5kCe0gwhgGvCqUhz
-         HIzsN1Q+idBBTdergimDvEpsWIm6EPgvczDpLzT6d1K9BZPOT1y8h3co+CjBzjjY5ddF
-         gBqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rCzYJxLU9wcyLu+uhOEd7PVf6eOKzZ5fBAU0Uureukc=;
-        b=ZoPAm9wIHcaUhSloopM3dyUpIhXRq36jteAblolWFJbNWj5p9n0i6mYRWjfD+hcqbn
-         NM1PXAYlFkIEtgI3Vl2r9fI3IJaTo16FXLnUVsKkMrnf9cpwuP5VGfdvomFt/30hxBlO
-         A1GfHWIJrlV+OV0pPXxfFwS3nQx4c2QbOnuPz9QCUbSCGM95tG+Bi6xOLD9istengeKN
-         m0Ct9YE0DEW1RtmveOEs48FtiIs5CyE5J4QRIOc5UrwziHz8nYjUtc+ratCGWw0F5Bk7
-         QK0Io/npaCe62ztNN4kMEcdozc4zGsrj7R7H5k6Ff2RRro54veMwtujplx8dvM+Llyae
-         my9w==
-X-Gm-Message-State: AJIora9Q7kHT1AujEQJShv5eTAnNCtz2/iN4o4Yv4471zMJAoj21xOiu
-        0y3R0s3/0Lk8GWdwZnu4Z98y5A==
-X-Google-Smtp-Source: AGRyM1uWr+0Iab6n0EUMjtF+F8m7nPeSZ1FxM8bh1kbhD5Z5m0CjtgLUrx112XxemSIpDhu0lDEUzQ==
-X-Received: by 2002:adf:d1e1:0:b0:21b:b852:e801 with SMTP id g1-20020adfd1e1000000b0021bb852e801mr7599865wrd.479.1656587411697;
-        Thu, 30 Jun 2022 04:10:11 -0700 (PDT)
-Received: from localhost ([5.181.106.148])
-        by smtp.gmail.com with ESMTPSA id f7-20020a05600c4e8700b003a17ab4e7c8sm2728802wmq.39.2022.06.30.04.10.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 04:10:10 -0700 (PDT)
-From:   Jamie Iles <jamie@jamieiles.com>
-To:     maz@kernel.org
-Cc:     michal.simek@amd.com, linux-kernel@vger.kernel.org,
-        Jamie Iles <jamie@jamieiles.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] irqchip/xilinx: add explicit dependency on OF_ADDRESS
-Date:   Thu, 30 Jun 2022 12:10:08 +0100
-Message-Id: <20220630111008.3838307-1-jamie@jamieiles.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 30 Jun 2022 07:10:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72DA45790
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 04:10:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43638622B4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 11:10:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 229ECC34115;
+        Thu, 30 Jun 2022 11:10:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656587441;
+        bh=Ocbgb/7jtbPf5c7P3Qu4IS2stjMJzDoFkyyY73hHr2Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KwZCxI1QdcIf76JP3BhOMJdxLR4B6uWo/VApAlYCAbryYteKxpiJDv8mks3WPbn/t
+         PN0nmyRcKqUNvQWLX0i4UeGSFYMJg/aJRPtIItPf5ZbGJFlTgo921PPtaBAkcMOfwS
+         EAviKJu/LaVJQnqEAMkfWG8YsiYjdWOBiCPVkp3jUSN7a/BNoE2dxQcvi6boI8iEE1
+         kG+kDnIwIwvKk2KA7/GI7v7uXdSJUVryiLAvAUno8r+dGCAjnpQrQrIbdvT7znkem2
+         wtbsma0gtl/xN3EfCxjcGT59nTF9hSZ+cjUmMY3rJQ3yjQ16RK16uPcLGCXgC6hRkT
+         fUVm+4Tup/Uiw==
+Date:   Thu, 30 Jun 2022 12:10:35 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+Cc:     alsa-devel@alsa-project.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, Alexander.Deucher@amd.com,
+        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
+        zhuning@everest-semi.com, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/5] ASoC: amd: add Machine driver for Jadeite platform
+Message-ID: <Yr2Eq0BUmi6mZsRY@sirena.org.uk>
+References: <20220630031755.1055413-1-Vijendar.Mukunda@amd.com>
+ <20220630031755.1055413-5-Vijendar.Mukunda@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VaXjt56hsiVkurul"
+Content-Disposition: inline
+In-Reply-To: <20220630031755.1055413-5-Vijendar.Mukunda@amd.com>
+X-Cookie: Today is what happened to yesterday.
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,31 +62,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit b84dc7f0e364 ("irqchip/xilinx: Remove microblaze+zynq
-dependency") relaxed the dependencies on the Xilinx interrupt controller
-to be OF only, but some OF architectures (s390 for example) do not
-support OF_ADDRESS and so a build of the driver will result in undefined
-references to of_iomap/iounmap and friends.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Jamie Iles <jamie@jamieiles.com>
----
- drivers/irqchip/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--VaXjt56hsiVkurul
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 1f23a6be7d88..bbb11cb8b0f7 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -298,7 +298,7 @@ config XTENSA_MX
- 
- config XILINX_INTC
- 	bool "Xilinx Interrupt Controller IP"
--	depends on OF
-+	depends on OF_ADDRESS
- 	select IRQ_DOMAIN
- 	help
- 	  Support for the Xilinx Interrupt Controller IP core.
--- 
-2.34.1
+On Thu, Jun 30, 2022 at 08:47:54AM +0530, Vijendar Mukunda wrote:
 
+> +static int st_es8336_hw_params(struct snd_pcm_substream *substream,
+> +			       struct snd_pcm_hw_params *params)
+> +{
+> +	int ret = 0;
+> +	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
+> +	struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
+> +
+> +	ret = snd_soc_dai_set_sysclk(codec_dai, 0, params_rate(params) * 256, SND_SOC_CLOCK_IN);
+> +	if (ret < 0) {
+> +		dev_err(rtd->dev, "can't set codec sysclk: %d\n", ret);
+> +		return ret;
+> +	}
+> +	return ret;
+> +}
+
+> +static const unsigned int st_channels[] = {
+> +	DUAL_CHANNEL,
+> +};
+> +
+> +static const unsigned int st_rates[] = {
+> +	48000,
+> +};
+
+If the clock rate is fixed why not just set the sysclk once at startup
+too?
+
+--VaXjt56hsiVkurul
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK9hKoACgkQJNaLcl1U
+h9D6iQf/cdNWEk90vyAVgMDGpqVrhhgGkycVyqRydGaLYCrCQXsnLdtPqtSpQCyB
+doEqq9MwQGoj/8uz5i/0althh56A2dV2L6k/81LuXbX685XrtdvosvEv9m37y+ru
+ZebtRcmQ668WOgeLYHmthArmVUwjPmUtcOkZ1K7dibKXWm7Elhv0kkXZLTM+UyQs
+MoFY3kjXWMu3vEm+ZTogS+YhilD8EE5Vl3pvGJKZ8NKJxDMrXQbNlO5XMkY+9IaR
+O1U0u8iVoirNM0GWyHbVCwqOPQCIbhqc2g89N1teq8Qs+1WTf8MRAfuo1gnGfbrg
+c0/bwEED3n4t0Rgqqhau7Dq1qPLViA==
+=9h7K
+-----END PGP SIGNATURE-----
+
+--VaXjt56hsiVkurul--

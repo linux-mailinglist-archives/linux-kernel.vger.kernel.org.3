@@ -2,76 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 700E05617FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EE6561801
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235214AbiF3Kdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 06:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
+        id S235217AbiF3Kel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 06:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233035AbiF3Kdo (ORCPT
+        with ESMTP id S235224AbiF3Keh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 06:33:44 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C467F369CA
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 03:33:39 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LYZS14zjSz9tBL;
-        Thu, 30 Jun 2022 12:33:37 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xSgth1V_9y_f; Thu, 30 Jun 2022 12:33:37 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LYZS13tnNz9tBG;
-        Thu, 30 Jun 2022 12:33:37 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 746788B798;
-        Thu, 30 Jun 2022 12:33:37 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id Uvk3kpt0LjIu; Thu, 30 Jun 2022 12:33:37 +0200 (CEST)
-Received: from [192.168.232.210] (unknown [192.168.232.210])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 8D8478B790;
-        Thu, 30 Jun 2022 12:33:36 +0200 (CEST)
-Message-ID: <ff623097-9f18-3914-5eae-bc6e4cd1510f@csgroup.eu>
-Date:   Thu, 30 Jun 2022 12:33:35 +0200
+        Thu, 30 Jun 2022 06:34:37 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFF24F1A9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 03:34:31 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id m6-20020a05600c3b0600b003a0489f412cso1990804wms.1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 03:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=PCovOlRVTpDrG+vkOZBd7S3mDtD6eV1xHY63zuAU/LY=;
+        b=tL+HZPodelQWkM6FQOIWdF4rZiW8J2Cpz0jxD1uM/wbGaa82DZYy1z+VMAUIsaTcHI
+         BfwPEe1OFRLHJvF7E34JZZ0HyfqguCD4vyVnhpklKhr3eqzvV3bIf6S9K/nx+YxUcT/l
+         2WOKdTpyqo4GfsKpMYeGXDh46iy3lnIji/9LQ1dCOO1Ju2a3UCv3fLBeekjI2wuPF3oN
+         pnmMTSW7BfnF+I6fJTjqheE8xyFNTERUVmndoAdQIM9/Qqcf6mgESUK0+EjmzdlsFdEx
+         Pe+vq6LjdbWHhWQLtIrKUUqUQlWR34F9YpJsOMTheJAK6QWHRVD8z+v65WU7m8xKtxoD
+         MbRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=PCovOlRVTpDrG+vkOZBd7S3mDtD6eV1xHY63zuAU/LY=;
+        b=pMux+TQ2nZ6ctXc7xcHsNbvuKqsyoFn1u6dz7fHwrJe0N9OTersyiUqMEipRMB5+VF
+         2k7gF6pkJUxa653QNKo1jTLzcAIOjQF7ZVvsHWJpAf3nSyNs32Tu0oFbj1Z/mbdUrI5K
+         V4ojbYC+GiQSf0xnwu2c3o+hpH/bVZFIX/vNM6gvrG9SWePTGGrbvrqeYb47TCIWsuRg
+         DgbgfqXAop49WL476G0JRsw5NMu0Ia6tjVLO3JWfCCJdFWSGRlKyxYSyNBkOpakEIFST
+         qJG0xiyv3/UJGBoZRVfBjSMHUbtigJpxmN3l1GYCs/M2i4urKq+PBur6pvu1BzNsE58Y
+         93tQ==
+X-Gm-Message-State: AJIora/PPQXxhm8xZFkxVw8j5kNvM9kJOnJCxbrFNNI+ud8hbZisisWb
+        iMluyIArZHGYFuF2IW0Q89xiKA/tXQb9Ng==
+X-Google-Smtp-Source: AGRyM1vvdXB8PmIt0HYuBsVQ0jKtFVWIHtTEN+Xsq+nbw3F9OP+C4HvHXf31BUfS0Cna/5tPLcd0ig==
+X-Received: by 2002:a1c:2703:0:b0:3a0:2ffb:1781 with SMTP id n3-20020a1c2703000000b003a02ffb1781mr10844256wmn.146.1656585269773;
+        Thu, 30 Jun 2022 03:34:29 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id bp25-20020a5d5a99000000b0021bbc0b671esm15609571wrb.20.2022.06.30.03.34.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 03:34:29 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 11:34:27 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, quic_collinsd@quicinc.com,
+        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com
+Subject: Re: [PATCH V15 6/9] mfd: pm8008: Use i2c_new_dummy_device() API
+Message-ID: <Yr18M9dzTOWL0m2c@google.com>
+References: <eccbb030-97f7-3a6c-958e-05adcdca6210@quicinc.com>
+ <YrAt6dq6ty9p8d05@google.com>
+ <a11732d6-a9b1-7ead-e89a-564a57a7192b@quicinc.com>
+ <503f1a8b-eadb-d3a6-6e24-d60437f778b6@quicinc.com>
+ <YrlfF+DMlGFsVBdk@google.com>
+ <a1c6e3c9-962d-411e-7fbf-9e760e9dc8c0@quicinc.com>
+ <Yrqw1YRyCGG+d4GL@google.com>
+ <4112b5af-15de-007c-fcc2-c31ce9f9e426@quicinc.com>
+ <YrxtXdOsIZ5LKhdV@google.com>
+ <f8e70198-d0d8-5500-2869-be9e3a34f3c1@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFC PATCH v3 11/12] powerpc: Remove unreachable() from WARN_ON()
-Content-Language: fr-FR
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Sathvika Vasireddy <sv@linux.vnet.ibm.com>
-Cc:     "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>
-References: <20220624183238.388144-1-sv@linux.ibm.com>
- <20220624183238.388144-12-sv@linux.ibm.com>
- <70b6d08d-aced-7f4e-b958-a3c7ae1a9319@csgroup.eu>
- <92eae2ef-f9b6-019a-5a8e-728cdd9bbbc0@linux.vnet.ibm.com>
- <cce19b1c-449a-f306-533a-9edc855049aa@csgroup.eu>
- <1656572413.pbaqjnrrcl.naveen@linux.ibm.com>
- <da86c612-186d-364f-cc36-bcf942a97083@csgroup.eu>
-In-Reply-To: <da86c612-186d-364f-cc36-bcf942a97083@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <f8e70198-d0d8-5500-2869-be9e3a34f3c1@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,208 +86,272 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 30 Jun 2022, Satya Priya Kakitapalli (Temp) wrote:
 
-
-Le 30/06/2022 à 11:58, Christophe Leroy a écrit :
 > 
+> On 6/29/2022 8:48 PM, Lee Jones wrote:
+> > On Wed, 29 Jun 2022, Satya Priya Kakitapalli (Temp) wrote:
+> > 
+> > > On 6/28/2022 1:12 PM, Lee Jones wrote:
+> > > > On Tue, 28 Jun 2022, Satya Priya Kakitapalli (Temp) wrote:
+> > > > 
+> > > > > On 6/27/2022 1:11 PM, Lee Jones wrote:
+> > > > > > On Mon, 27 Jun 2022, Satya Priya Kakitapalli (Temp) wrote:
+> > > > > > 
+> > > > > > > Hi Lee,
+> > > > > > > 
+> > > > > > > 
+> > > > > > > On 6/20/2022 4:37 PM, Satya Priya Kakitapalli (Temp) wrote:
+> > > > > > > > On 6/20/2022 1:50 PM, Lee Jones wrote:
+> > > > > > > > > On Mon, 20 Jun 2022, Satya Priya Kakitapalli (Temp) wrote:
+> > > > > > > > > 
+> > > > > > > > > > On 6/17/2022 2:27 AM, Lee Jones wrote:
+> > > > > > > > > > > On Tue, 14 Jun 2022, Satya Priya wrote:
+> > > > > > > > > > > 
+> > > > > > > > > > > > Use i2c_new_dummy_device() to register pm8008-regulator
+> > > > > > > > > > > > client present at a different address space, instead of
+> > > > > > > > > > > > defining a separate DT node. This avoids calling the probe
+> > > > > > > > > > > > twice for the same chip, once for each client pm8008-infra
+> > > > > > > > > > > > and pm8008-regulator.
+> > > > > > > > > > > > 
+> > > > > > > > > > > > As a part of this define pm8008_regmap_init() to do regmap
+> > > > > > > > > > > > init for both the clients and define pm8008_get_regmap() to
+> > > > > > > > > > > > pass the regmap to the regulator driver.
+> > > > > > > > > > > > 
+> > > > > > > > > > > > Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+> > > > > > > > > > > > Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> > > > > > > > > > > > ---
+> > > > > > > > > > > > Changes in V15:
+> > > > > > > > > > > >       - None.
+> > > > > > > > > > > > 
+> > > > > > > > > > > > Changes in V14:
+> > > > > > > > > > > >       - None.
+> > > > > > > > > > > > 
+> > > > > > > > > > > > Changes in V13:
+> > > > > > > > > > > >       - None.
+> > > > > > > > > > > > 
+> > > > > > > > > > > >       drivers/mfd/qcom-pm8008.c       | 34
+> > > > > > > > > > > > ++++++++++++++++++++++++++++++++--
+> > > > > > > > > > > >       include/linux/mfd/qcom_pm8008.h |  9 +++++++++
+> > > > > > > > > > > >       2 files changed, 41 insertions(+), 2 deletions(-)
+> > > > > > > > > > > >       create mode 100644 include/linux/mfd/qcom_pm8008.h
+> > > > > > > > > > > > 
+> > > > > > > > > > > > diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
+> > > > > > > > > > > > index 569ffd50..55e2a8e 100644
+> > > > > > > > > > > > --- a/drivers/mfd/qcom-pm8008.c
+> > > > > > > > > > > > +++ b/drivers/mfd/qcom-pm8008.c
+> > > > > > > > > > > > @@ -9,6 +9,7 @@
+> > > > > > > > > > > >       #include <linux/interrupt.h>
+> > > > > > > > > > > >       #include <linux/irq.h>
+> > > > > > > > > > > >       #include <linux/irqdomain.h>
+> > > > > > > > > > > > +#include <linux/mfd/qcom_pm8008.h>
+> > > > > > > > > > > >       #include <linux/module.h>
+> > > > > > > > > > > >       #include <linux/of_device.h>
+> > > > > > > > > > > >       #include <linux/of_platform.h>
+> > > > > > > > > > > > @@ -57,6 +58,7 @@ enum {
+> > > > > > > > > > > >       struct pm8008_data {
+> > > > > > > > > > > >           struct device *dev;
+> > > > > > > > > > > > +    struct regmap *regulators_regmap;
+> > > > > > > > > > > >           int irq;
+> > > > > > > > > > > >           struct regmap_irq_chip_data *irq_data;
+> > > > > > > > > > > >       };
+> > > > > > > > > > > > @@ -150,6 +152,12 @@ static struct regmap_config
+> > > > > > > > > > > > qcom_mfd_regmap_cfg = {
+> > > > > > > > > > > >           .max_register    = 0xFFFF,
+> > > > > > > > > > > >       };
+> > > > > > > > > > > > +struct regmap *pm8008_get_regmap(const struct pm8008_data *chip)
+> > > > > > > > > > > > +{
+> > > > > > > > > > > > +    return chip->regulators_regmap;
+> > > > > > > > > > > > +}
+> > > > > > > > > > > > +EXPORT_SYMBOL_GPL(pm8008_get_regmap);
+> > > > > > > > > > > Seems like abstraction for the sake of abstraction.
+> > > > > > > > > > > 
+> > > > > > > > > > > Why not do the dereference inside the regulator driver?
+> > > > > > > > > > To derefer this in the regulator driver, we need to have the
+> > > > > > > > > > pm8008_data
+> > > > > > > > > > struct definition in the qcom_pm8008 header file.
+> > > > > > > > > > 
+> > > > > > > > > > I think it doesn't look great to have only that structure in
+> > > > > > > > > > header and all
+> > > > > > > > > > other structs and enum in the mfd driver.
+> > > > > > > > > Then why pass 'pm8008_data' at all?
+> > > > > > > > There is one more option, instead of passing the pm8008_data, we could
+> > > > > > > > pass the pdev->dev.parent and get the pm8008 chip data directly in the
+> > > > > > > > pm8008_get_regmap() like below
+> > > > > > > > 
+> > > > > > > > 
+> > > > > > > > struct regmap *pm8008_get_regmap(const struct device *dev)
+> > > > > > > >     {
+> > > > > > > >         const struct pm8008_data *chip = dev_get_drvdata(dev);
+> > > > > > > > 
+> > > > > > > >         return chip->regulators_regmap;
+> > > > > > > > }
+> > > > > > > > EXPORT_SYMBOL_GPL(pm8008_get_regmap);
+> > > > > > > > 
+> > > > > > > > 
+> > > > > > > > By doing this we can avoid having declaration of pm8008_data also in the
+> > > > > > > > header. Please let me know if this looks good.
+> > > > > > > > 
+> > > > > > > Could you please confirm on this?
+> > > > > > > 
+> > > > > > > > > What's preventing you from passing 'regmap'?
+> > > > > > > > I didn't get what you meant here, could you please elaborate a bit?
+> > > > > > Ah yes.  I authored you a patch, but became distracted. Here:
+> > > > > > 
+> > > > > > -----8<--------------------8<-------
+> > > > > > 
+> > > > > > From: Lee Jones <lee.jones@linaro.org>
+> > > > > > 
+> > > > > > mfd: pm8008: Remove driver data structure pm8008_data
+> > > > > > Maintaining a local driver data structure that is never shared
+> > > > > > outside of the core device is an unnecessary complexity.  Half of the
+> > > > > > attributes were not used outside of a single function, one of which
+> > > > > > was not used at all.  The remaining 2 are generic and can be passed
+> > > > > > around as required.
+> > > > > Okay, but we still need to store the regulators_regmap, which is required in
+> > > > > the pm8008 regulator driver. Could we use a global variable for it?
+> > > > Look down ...
+> > > > 
+> > > > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > > > > > ---
+> > > > > >     drivers/mfd/qcom-pm8008.c | 53 ++++++++++++++++++-----------------------------
+> > > > > >     1 file changed, 20 insertions(+), 33 deletions(-)
+> > > > > > 
+> > > > > > diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
+> > > > > > index c472d7f8103c4..4b8ff947762f2 100644
+> > > > > > --- a/drivers/mfd/qcom-pm8008.c
+> > > > > > +++ b/drivers/mfd/qcom-pm8008.c
+> > > > > > @@ -54,13 +54,6 @@ enum {
+> > > > > >     #define PM8008_PERIPH_OFFSET(paddr)	(paddr - PM8008_PERIPH_0_BASE)
+> > > > > > -struct pm8008_data {
+> > > > > > -	struct device *dev;
+> > > > > > -	struct regmap *regmap;
+> > > > > > -	int irq;
+> > > > > > -	struct regmap_irq_chip_data *irq_data;
+> > > > > > -};
+> > > > > > -
+> > > > > >     static unsigned int p0_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_0_BASE)};
+> > > > > >     static unsigned int p1_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_1_BASE)};
+> > > > > >     static unsigned int p2_offs[] = {PM8008_PERIPH_OFFSET(PM8008_PERIPH_2_BASE)};
+> > > > > > @@ -150,7 +143,7 @@ static struct regmap_config qcom_mfd_regmap_cfg = {
+> > > > > >     	.max_register	= 0xFFFF,
+> > > > > >     };
+> > > > > > -static int pm8008_init(struct pm8008_data *chip)
+> > > > > > +static int pm8008_init(struct regmap *regmap)
+> > > > > >     {
+> > > > > >     	int rc;
+> > > > > > @@ -160,34 +153,31 @@ static int pm8008_init(struct pm8008_data *chip)
+> > > > > >     	 * This is required to enable the writing of TYPE registers in
+> > > > > >     	 * regmap_irq_sync_unlock().
+> > > > > >     	 */
+> > > > > > -	rc = regmap_write(chip->regmap,
+> > > > > > -			 (PM8008_TEMP_ALARM_ADDR | INT_SET_TYPE_OFFSET),
+> > > > > > -			 BIT(0));
+> > > > > > +	rc = regmap_write(regmap, (PM8008_TEMP_ALARM_ADDR | INT_SET_TYPE_OFFSET), BIT(0));
+> > > > > >     	if (rc)
+> > > > > >     		return rc;
+> > > > > >     	/* Do the same for GPIO1 and GPIO2 peripherals */
+> > > > > > -	rc = regmap_write(chip->regmap,
+> > > > > > -			 (PM8008_GPIO1_ADDR | INT_SET_TYPE_OFFSET), BIT(0));
+> > > > > > +	rc = regmap_write(regmap, (PM8008_GPIO1_ADDR | INT_SET_TYPE_OFFSET), BIT(0));
+> > > > > >     	if (rc)
+> > > > > >     		return rc;
+> > > > > > -	rc = regmap_write(chip->regmap,
+> > > > > > -			 (PM8008_GPIO2_ADDR | INT_SET_TYPE_OFFSET), BIT(0));
+> > > > > > +	rc = regmap_write(regmap, (PM8008_GPIO2_ADDR | INT_SET_TYPE_OFFSET), BIT(0));
+> > > > > >     	return rc;
+> > > > > >     }
+> > > > > > -static int pm8008_probe_irq_peripherals(struct pm8008_data *chip,
+> > > > > > +static int pm8008_probe_irq_peripherals(struct device *dev,
+> > > > > > +					struct regmap *regmap,
+> > > > > >     					int client_irq)
+> > > > > >     {
+> > > > > >     	int rc, i;
+> > > > > >     	struct regmap_irq_type *type;
+> > > > > >     	struct regmap_irq_chip_data *irq_data;
+> > > > > > -	rc = pm8008_init(chip);
+> > > > > > +	rc = pm8008_init(regmap);
+> > > > > >     	if (rc) {
+> > > > > > -		dev_err(chip->dev, "Init failed: %d\n", rc);
+> > > > > > +		dev_err(dev, "Init failed: %d\n", rc);
+> > > > > >     		return rc;
+> > > > > >     	}
+> > > > > > @@ -207,10 +197,10 @@ static int pm8008_probe_irq_peripherals(struct pm8008_data *chip,
+> > > > > >     				IRQ_TYPE_LEVEL_HIGH | IRQ_TYPE_LEVEL_LOW);
+> > > > > >     	}
+> > > > > > -	rc = devm_regmap_add_irq_chip(chip->dev, chip->regmap, client_irq,
+> > > > > > +	rc = devm_regmap_add_irq_chip(dev, regmap, client_irq,
+> > > > > >     			IRQF_SHARED, 0, &pm8008_irq_chip, &irq_data);
+> > > > > >     	if (rc) {
+> > > > > > -		dev_err(chip->dev, "Failed to add IRQ chip: %d\n", rc);
+> > > > > > +		dev_err(dev, "Failed to add IRQ chip: %d\n", rc);
+> > > > > >     		return rc;
+> > > > > >     	}
+> > > > > > @@ -220,26 +210,23 @@ static int pm8008_probe_irq_peripherals(struct pm8008_data *chip,
+> > > > > >     static int pm8008_probe(struct i2c_client *client)
+> > > > > >     {
+> > > > > >     	int rc;
+> > > > > > -	struct pm8008_data *chip;
+> > > > > > -
+> > > > > > -	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
+> > > > > > -	if (!chip)
+> > > > > > -		return -ENOMEM;
+> > > > > > +	struct device *dev;
+> > > > > > +	struct regmap *regmap;
+> > > > > > -	chip->dev = &client->dev;
+> > > > > > -	chip->regmap = devm_regmap_init_i2c(client, &qcom_mfd_regmap_cfg);
+> > > > > > -	if (!chip->regmap)
+> > > > > > +	dev = &client->dev;
+> > > > > > +	regmap = devm_regmap_init_i2c(client, &qcom_mfd_regmap_cfg);
+> > > > > > +	if (!regmap)
+> > > > > >     		return -ENODEV;
+> > > > > > -	i2c_set_clientdata(client, chip);
+> > > > > > +	i2c_set_clientdata(client, regmap);
+> > > > Here ^
+> > > 
+> > > I have added a dummy device and set the client data by passing regmap, see
+> > > below:
+> > > 
+> > > +       regulators_client = i2c_new_dummy_device(client->adapter,
+> > > client->addr + 1);
+> > > +       if (IS_ERR(regulators_client)) {
+> > > +               dev_err(dev, "can't attach client\n");
+> > > +               return PTR_ERR(regulators_client);
+> > > +       }
+> > > +
+> > > +       regulators_regmap = devm_regmap_init_i2c(regulators_client,
+> > > &qcom_mfd_regmap_cfg[1]);
+> > > +       if (!regmap)
+> > > +               return -ENODEV;
+> > > +
+> > > +       i2c_set_clientdata(client, regulators_regmap);
+> > > 
+> > > Now if i try to get this regmap from regulator driver by doing
+> > > 
+> > > struct regmap *regmap = dev_get_drvdata(pdev->dev.parent);
+> > > 
+> > > it still gets me the regmap of pm8008@8 device and not the regulator device
+> > > regmap (0x9). Not sure if I'm missing something here.
+> > So you need to pass 2 regmap pointers?
+> > 
+> > If you need to pass more than one item to the child devices, you do
+> > need to use a struct for that.
 > 
-> Le 30/06/2022 à 10:05, Naveen N. Rao a écrit :
->> Christophe Leroy wrote:
->>> Hi Sathvika,
->>>
->>> Adding ARM people as they seem to face the same kind of problem (see 
->>> https://patchwork.kernel.org/project/linux-kbuild/patch/20220623014917.199563-33-chenzhongjin@huawei.com/) 
->>>
->>>
->>> Le 27/06/2022 à 17:35, Sathvika Vasireddy a écrit :
->>>>
->>>> On 25/06/22 12:16, Christophe Leroy wrote:
->>>>>
->>>>> Le 24/06/2022 à 20:32, Sathvika Vasireddy a écrit :
->>>>>> objtool is throwing *unannotated intra-function call*
->>>>>> warnings with a few instructions that are marked
->>>>>> unreachable. Remove unreachable() from WARN_ON()
->>>>>> to fix these warnings, as the codegen remains same
->>>>>> with and without unreachable() in WARN_ON().
->>>>> Did you try the two exemples described in commit 1e688dd2a3d6
->>>>> ("powerpc/bug: Provide better flexibility to WARN_ON/__WARN_FLAGS() 
->>>>> with
->>>>> asm goto") ?
->>>>>
->>>>> Without your patch:
->>>>>
->>>>> 00000640 <test>:
->>>>>    640:    81 23 00 84     lwz     r9,132(r3)
->>>>>    644:    71 29 40 00     andi.   r9,r9,16384
->>>>>    648:    40 82 00 0c     bne     654 <test+0x14>
->>>>>    64c:    80 63 00 0c     lwz     r3,12(r3)
->>>>>    650:    4e 80 00 20     blr
->>>>>    654:    0f e0 00 00     twui    r0,0
->>>>>
->>>>> 00000658 <test9w>:
->>>>>    658:    2c 04 00 00     cmpwi   r4,0
->>>>>    65c:    41 82 00 0c     beq     668 <test9w+0x10>
->>>>>    660:    7c 63 23 96     divwu   r3,r3,r4
->>>>>    664:    4e 80 00 20     blr
->>>>>    668:    0f e0 00 00     twui    r0,0
->>>>>    66c:    38 60 00 00     li      r3,0
->>>>>    670:    4e 80 00 20     blr
->>>>>
->>>>>
->>>>> With your patch:
->>>>>
->>>>> 00000640 <test>:
->>>>>    640:    81 23 00 84     lwz     r9,132(r3)
->>>>>    644:    71 29 40 00     andi.   r9,r9,16384
->>>>>    648:    40 82 00 0c     bne     654 <test+0x14>
->>>>>    64c:    80 63 00 0c     lwz     r3,12(r3)
->>>>>    650:    4e 80 00 20     blr
->>>>>    654:    0f e0 00 00     twui    r0,0
->>>>>    658:    4b ff ff f4     b       64c <test+0xc>        <==
->>>>>
->>>>> 0000065c <test9w>:
->>>>>    65c:    2c 04 00 00     cmpwi   r4,0
->>>>>    660:    41 82 00 0c     beq     66c <test9w+0x10>
->>>>>    664:    7c 63 23 96     divwu   r3,r3,r4
->>>>>    668:    4e 80 00 20     blr
->>>>>    66c:    0f e0 00 00     twui    r0,0
->>>>>    670:    38 60 00 00     li      r3,0            <==
->>>>>    674:    4e 80 00 20     blr                <==
->>>>>    678:    38 60 00 00     li      r3,0
->>>>>    67c:    4e 80 00 20     blr
->>>>>
->>>> The builtin variant of unreachable (__builtin_unreachable()) works.
->>>>
->>>> How about using that instead of unreachable() ?
->>>>
->>>>
->>>
->>> In fact the problem comes from the macro annotate_unreachable() which 
->>> is called by unreachable() before calling __build_unreachable().
->>>
->>> Seems like this macro adds (after the unconditional trap twui) a call 
->>> to an empty function whose address is listed in section 
->>> .discard.unreachable
->>>
->>>      1c78:       00 00 e0 0f     twui    r0,0
->>>      1c7c:       55 e7 ff 4b     bl      3d0 
->>> <qdisc_root_sleeping_lock.part.0>
->>>
->>>
->>> RELOCATION RECORDS FOR [.discard.unreachable]:
->>> OFFSET           TYPE              VALUE
->>> 0000000000000000 R_PPC64_REL32     .text+0x00000000000003d0
->>>
->>> The problem is that that function has size 0:
->>>
->>> 00000000000003d0 l     F .text    0000000000000000 
->>> qdisc_root_sleeping_lock.part.0
->>>
->>>
->>> And objtool is not prepared for a function with size 0.
->>
->> annotate_unreachable() seems to have been introduced in commit 
->> 649ea4d5a624f0 ("objtool: Assume unannotated UD2 instructions are dead 
->> ends").
->>
->> Objtool considers 'ud2' instruction to be fatal, so BUG() has 
->> __builtin_unreachable(), rather than unreachable(). See commit 
->> bfb1a7c91fb775 ("x86/bug: Merge annotate_reachable() into _BUG_FLAGS() 
->> asm"). For the same reason, __WARN_FLAGS() is annotated with 
->> _ASM_REACHABLE so that objtool can differentiate warnings from a BUG().
->>
->> On powerpc, we use trap variants for both and don't have a special 
->> instruction for a BUG(). As such, for _WARN_FLAGS(), using 
->> __builtin_unreachable() suffices to achieve optimal code generation 
->> from the compiler. Objtool would consider subsequent instructions to 
->> be reachable. For BUG(), we can continue to use unreachable() so that 
->> objtool can differentiate these from traps used in warnings.
+> I need to pass only one regmap out of the two, but i am not able to retrieve
+> the correct regmap simply by doing i2c_set_clientdata
 > 
-> Not sure I understand what you mean.
-> 
-> __WARN_FLAGS() and BUG() both use 'twui' which is unconditionnal trap, 
-> as such both are the same.
-> 
-> On the other side, WARN_ON() and BUG_ON() use tlbnei which is a 
-> conditionnel trap.
-> 
->>
->>>
->>> The following changes to objtool seem to fix the problem, most 
->>> warning are gone with that change.
->>>
->>> diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
->>> index 63218f5799c2..37c0a268b7ea 100644
->>> --- a/tools/objtool/elf.c
->>> +++ b/tools/objtool/elf.c
->>> @@ -77,6 +77,8 @@ static int symbol_by_offset(const void *key, const 
->>> struct rb_node *node)
->>>
->>>       if (*o < s->offset)
->>>           return -1;
->>> +    if (*o == s->offset && !s->len)
->>> +        return 0;
->>>       if (*o >= s->offset + s->len)
->>>           return 1;
->>>
->>> @@ -400,7 +402,7 @@ static void elf_add_symbol(struct elf *elf, 
->>> struct symbol *sym)
->>>        * Don't store empty STT_NOTYPE symbols in the rbtree.  They
->>>        * can exist within a function, confusing the sorting.
->>>        */
->>> -    if (!sym->len)
->>> +    if (sym->type == STT_NOTYPE && !sym->len)
->>>           rb_erase(&sym->node, &sym->sec->symbol_tree);
->>>   }
->>
->> Is there a reason to do this, rather than change __WARN_FLAGS() to use 
->> __builtin_unreachable()? Or, are you seeing an issue with 
->> unreachable() elsewhere in the kernel?
->>
-> 
-> At the moment I'm trying to understand what the issue is, and explore 
-> possible fixes. I guess if we tell objtool that after 'twui' subsequent 
-> instructions are unreachable, then __builtin_unreachable() is enough.
+> probably because we are having all the child nodes under same DT node and
+> thus not able to distinguish based on the dev pointer
 
-I get a nice result with the following changes (on top of Sathvika's 
-series):
+You can only pull out (get) the pointer that you put in (set).
 
-diff --git a/arch/powerpc/include/asm/bug.h b/arch/powerpc/include/asm/bug.h
-index df6c11e008b9..73f5650f98df 100644
---- a/arch/powerpc/include/asm/bug.h
-+++ b/arch/powerpc/include/asm/bug.h
-@@ -89,7 +89,7 @@
+Unless you over-wrote it later in the thread of execution, you are
+pulling out whatever regulators_regmap happens to be.
 
-  #define BUG() do {						\
-  	BUG_ENTRY("twi 31, 0, 0", 0);				\
--	unreachable();						\
-+	__builtin_unreachable();				\
-  } while (0)
-  #define HAVE_ARCH_BUG
+Is qcom_mfd_regmap_cfg[1] definitely the one you want?
 
-@@ -97,6 +97,7 @@
-  	__label__ __label_warn_on;				\
-  								\
-  	WARN_ENTRY("twi 31, 0, 0", BUGFLAG_WARNING | (flags), __label_warn_on); \
-+	__builtin_unreachable();				\
-  								\
-  __label_warn_on:						\
-  	break;							\
-diff --git a/tools/objtool/arch/powerpc/decode.c 
-b/tools/objtool/arch/powerpc/decode.c
-index 06fc0206bf8e..9a0303304923 100644
---- a/tools/objtool/arch/powerpc/decode.c
-+++ b/tools/objtool/arch/powerpc/decode.c
-@@ -68,6 +68,8 @@ int arch_decode_instruction(struct objtool_file *file, 
-const struct section *sec
-  		}
-  		break;
-  	}
-+	if (insn == 0x0fe00000) /* twui */
-+		*type = INSN_BUG;
-
-  	return 0;
-  }
----
-
-Christophe
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

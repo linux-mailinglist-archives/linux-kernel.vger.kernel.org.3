@@ -2,112 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8517F5618C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 465CE5618CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234446AbiF3LKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 07:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
+        id S234474AbiF3LLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 07:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234426AbiF3LKn (ORCPT
+        with ESMTP id S230395AbiF3LL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 07:10:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72DA45790
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 04:10:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43638622B4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 11:10:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 229ECC34115;
-        Thu, 30 Jun 2022 11:10:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656587441;
-        bh=Ocbgb/7jtbPf5c7P3Qu4IS2stjMJzDoFkyyY73hHr2Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KwZCxI1QdcIf76JP3BhOMJdxLR4B6uWo/VApAlYCAbryYteKxpiJDv8mks3WPbn/t
-         PN0nmyRcKqUNvQWLX0i4UeGSFYMJg/aJRPtIItPf5ZbGJFlTgo921PPtaBAkcMOfwS
-         EAviKJu/LaVJQnqEAMkfWG8YsiYjdWOBiCPVkp3jUSN7a/BNoE2dxQcvi6boI8iEE1
-         kG+kDnIwIwvKk2KA7/GI7v7uXdSJUVryiLAvAUno8r+dGCAjnpQrQrIbdvT7znkem2
-         wtbsma0gtl/xN3EfCxjcGT59nTF9hSZ+cjUmMY3rJQ3yjQ16RK16uPcLGCXgC6hRkT
-         fUVm+4Tup/Uiw==
-Date:   Thu, 30 Jun 2022 12:10:35 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-Cc:     alsa-devel@alsa-project.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, Alexander.Deucher@amd.com,
-        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        zhuning@everest-semi.com, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/5] ASoC: amd: add Machine driver for Jadeite platform
-Message-ID: <Yr2Eq0BUmi6mZsRY@sirena.org.uk>
-References: <20220630031755.1055413-1-Vijendar.Mukunda@amd.com>
- <20220630031755.1055413-5-Vijendar.Mukunda@amd.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VaXjt56hsiVkurul"
-Content-Disposition: inline
-In-Reply-To: <20220630031755.1055413-5-Vijendar.Mukunda@amd.com>
-X-Cookie: Today is what happened to yesterday.
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 30 Jun 2022 07:11:29 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2367645052
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 04:11:27 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R661e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VHrqafz_1656587484;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VHrqafz_1656587484)
+          by smtp.aliyun-inc.com;
+          Thu, 30 Jun 2022 19:11:24 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org
+Cc:     rppt@linux.ibm.com, willy@infradead.org,
+        baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v3 0/3] Add PUD and kernel PTE level pagetable account
+Date:   Thu, 30 Jun 2022 19:11:13 +0800
+Message-Id: <cover.1656586863.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---VaXjt56hsiVkurul
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Now we will miss to account the PUD level pagetable and kernel PTE level
+pagetable, as well as missing to set the PG_table flags for these pagetable
+pages, which will get an inaccurate pagetable accounting, and miss
+PageTable() validation in some cases. So this patch set introduces 2 new
+helpers to help to account PUD and kernel PTE pagetable pages.
 
-On Thu, Jun 30, 2022 at 08:47:54AM +0530, Vijendar Mukunda wrote:
+Note there are still some architectures specific pagetable allocation
+that need to account the pagetable pages, which need more investigation
+and cleanup in future. Now I only send patches to mm mailist, and if no
+objections from mm people, then I will send to the related arch's maillist
+to get more review. Thanks.
 
-> +static int st_es8336_hw_params(struct snd_pcm_substream *substream,
-> +			       struct snd_pcm_hw_params *params)
-> +{
-> +	int ret = 0;
-> +	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
-> +	struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
-> +
-> +	ret = snd_soc_dai_set_sysclk(codec_dai, 0, params_rate(params) * 256, SND_SOC_CLOCK_IN);
-> +	if (ret < 0) {
-> +		dev_err(rtd->dev, "can't set codec sysclk: %d\n", ret);
-> +		return ret;
-> +	}
-> +	return ret;
-> +}
+Changes from RFC v2:
+ - Convert to use mod_lruvec_page_state() for non-order-0 case.
+ - Rename the helpers.
+ - Update some commit messages.
+ - Remove unnecessary __GFP_HIGHMEM clear.
 
-> +static const unsigned int st_channels[] = {
-> +	DUAL_CHANNEL,
-> +};
-> +
-> +static const unsigned int st_rates[] = {
-> +	48000,
-> +};
+Note: I still keep using alloc_pages() to allocate page in this version,
+which follows pmd_alloc_one() and saves unnecessary conversion pointed
+out by Matthew.
 
-If the clock rate is fixed why not just set the sysclk once at startup
-too?
+Changes from RFC v1:
+ - Update some commit message.
+ - Add missing pgtable_clear_and_dec() on X86 arch.
+ - Use __free_page() to free pagetable which can avoid duplicated virt_to_page().
 
---VaXjt56hsiVkurul
-Content-Type: application/pgp-signature; name="signature.asc"
+Baolin Wang (3):
+  mm: Factor out the pagetable pages account into new helper function
+  mm: Add PUD level pagetable account
+  mm: Add kernel PTE level pagetable pages account
 
------BEGIN PGP SIGNATURE-----
+ arch/arm64/include/asm/tlb.h         |  5 ++++-
+ arch/csky/include/asm/pgalloc.h      |  2 +-
+ arch/loongarch/include/asm/pgalloc.h | 11 ++++++++---
+ arch/microblaze/mm/pgtable.c         |  2 +-
+ arch/mips/include/asm/pgalloc.h      | 11 ++++++++---
+ arch/openrisc/mm/ioremap.c           |  2 +-
+ arch/s390/include/asm/tlb.h          |  1 +
+ arch/x86/mm/pgtable.c                | 10 ++++++++--
+ include/asm-generic/pgalloc.h        | 26 ++++++++++++++++++++++----
+ include/linux/mm.h                   | 24 ++++++++++++++++--------
+ 10 files changed, 70 insertions(+), 24 deletions(-)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK9hKoACgkQJNaLcl1U
-h9D6iQf/cdNWEk90vyAVgMDGpqVrhhgGkycVyqRydGaLYCrCQXsnLdtPqtSpQCyB
-doEqq9MwQGoj/8uz5i/0althh56A2dV2L6k/81LuXbX685XrtdvosvEv9m37y+ru
-ZebtRcmQ668WOgeLYHmthArmVUwjPmUtcOkZ1K7dibKXWm7Elhv0kkXZLTM+UyQs
-MoFY3kjXWMu3vEm+ZTogS+YhilD8EE5Vl3pvGJKZ8NKJxDMrXQbNlO5XMkY+9IaR
-O1U0u8iVoirNM0GWyHbVCwqOPQCIbhqc2g89N1teq8Qs+1WTf8MRAfuo1gnGfbrg
-c0/bwEED3n4t0Rgqqhau7Dq1qPLViA==
-=9h7K
------END PGP SIGNATURE-----
+-- 
+1.8.3.1
 
---VaXjt56hsiVkurul--

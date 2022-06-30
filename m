@@ -2,91 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5EC8561747
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 912F4561744
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234667AbiF3KGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 06:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
+        id S234858AbiF3KHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 06:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234781AbiF3KGX (ORCPT
+        with ESMTP id S234638AbiF3KGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 06:06:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B68244A05;
-        Thu, 30 Jun 2022 03:06:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 036C5621B9;
-        Thu, 30 Jun 2022 10:06:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14DCCC34115;
-        Thu, 30 Jun 2022 10:05:57 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ACkRU+Ds"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656583556;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lpetoj7kI9rRA+ZeAoTE77fi6zOrRL2bKq1/FPJ526c=;
-        b=ACkRU+DstmTaTG/qZ0irEBLPkULFIDpmiMuCN9oQNUCoD/n8pqTayt4kE4T3q3fKiM6hfE
-        1kdRZnJIBzQ8fCYp9BJHZ7IO5rxsJ5v1LZ3Q18QgIcZRPREkUJDOIDkZj3Lq1fTNRQTDM3
-        0klFcqdwCZnEM1ZY8LMAJrzSICKkUiQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 2d14dac7 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 30 Jun 2022 10:05:55 +0000 (UTC)
-Date:   Thu, 30 Jun 2022 12:05:50 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     John Stultz <jstultz@google.com>, Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, rcu <rcu@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, sultan@kerneltoast.com,
-        android-kernel-team <android-kernel-team@google.com>,
-        Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH] remove CONFIG_ANDROID
-Message-ID: <Yr11fp13yMRiEphS@zx2c4.com>
-References: <Yrx/8UOY+J8Ao3Bd@zx2c4.com>
- <YryNQvWGVwCjJYmB@zx2c4.com>
- <Yryic4YG9X2/DJiX@google.com>
- <Yry6XvOGge2xKx/n@zx2c4.com>
- <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
- <YrzaCRl9rwy9DgOC@zx2c4.com>
- <CANDhNCpRzzULaGmEGCbbJgVinA0pJJB-gOP9AY0Hy488n9ZStA@mail.gmail.com>
- <YrztOqBBll66C2/n@zx2c4.com>
- <YrzujZuJyfymC0LP@zx2c4.com>
- <CAC_TJvcNOx1C5csdkMCAPVmX4gLcRWkxKO8Vm=isgjgM-MowwA@mail.gmail.com>
+        Thu, 30 Jun 2022 06:06:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54B2F44A20
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 03:06:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 521B11042;
+        Thu, 30 Jun 2022 03:06:30 -0700 (PDT)
+Received: from [10.57.85.25] (unknown [10.57.85.25])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7C3C23F5A1;
+        Thu, 30 Jun 2022 03:06:27 -0700 (PDT)
+Message-ID: <117b31b5-8d06-0af4-7f1c-231d86becf1d@arm.com>
+Date:   Thu, 30 Jun 2022 11:06:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAC_TJvcNOx1C5csdkMCAPVmX4gLcRWkxKO8Vm=isgjgM-MowwA@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] iommu/iova: change IOVA_MAG_SIZE to 127 to save memory
+Content-Language: en-GB
+To:     John Garry <john.garry@huawei.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Paul Menzel <pmenzel@molgen.mpg.de>
+References: <20220630073304.26945-1-feng.tang@intel.com>
+ <13db50bb-57c7-0d54-3857-84b8a4591d9e@arm.com>
+ <7c29d01d-d90c-58d3-a6e0-0b6c404173ac@huawei.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <7c29d01d-d90c-58d3-a6e0-0b6c404173ac@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,137 +53,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kalesh,
-
-On Wed, Jun 29, 2022 at 09:25:32PM -0700, Kalesh Singh wrote:
-> On Wed, Jun 29, 2022 at 5:30 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> >
-> > Hey again,
-> >
-> > On Thu, Jun 30, 2022 at 2:24 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> > > 1) Introduce a simple CONFIG_PM_CONTINUOUS_AUTOSLEEPING Kconfig thing
-> > >    with lots of discouraging help text.
-> > >
-> > > 2) Go with the /sys/power tunable and bikeshed the naming of that a bit
-> > >    to get it to something that reflects this better, and document it as
-> > >    being undesirable except for Android phones.
-> >
-> > One other quick thought, which I had mentioned earlier to Kalesh:
-> >
-> > 3) Make the semantics a process holding open a file descriptor, rather
-> >    than writing 0/1 into a file. It'd be called /sys/power/
-> >    userspace_autosleep_ctrl, or something, and it'd enable this behavior
-> >    while it's opened. And maybe down the line somebody will want to add
-> >    ioctls to it for a different purpose. This way it's less of a tunable
-> >    and more of an indication that there's a userspace app doing/controlling
-> >    something.
-> >
-> > This idea (3) may be a lot of added complexity for basically nothing,
-> > but it might fit the usage semantics concerns a bit better than (2). But
-> > anyway, just an idea. Any one of those three are fine with me.
+On 2022-06-30 10:37, John Garry wrote:
+> On 30/06/2022 10:02, Robin Murphy wrote:
+>> On 2022-06-30 08:33, Feng Tang wrote:
+>>> kmalloc will round up the request size to power of 2, and current
+>>> iova_magazine's size is 1032 (1024+8) bytes, so each instance
+>>> allocated will get 2048 bytes from kmalloc, causing around 1KB
+>>> waste.
+>>>
+>>> And in some exstreme case, the memory wasted can trigger OOM as
+>>> reported in 2019 on a crash kernel with 256 MB memory [1].
+>>
+>> I don't think it really needs pointing out that excessive memory 
+>> consumption can cause OOM. Especially not in the particularly silly 
+>> context of a system with only 2MB of RAM per CPU - that's pretty much 
+>> guaranteed to be doomed one way or another.
+>>
+>>>    [    4.319253] iommu: Adding device 0000:06:00.2 to group 5
+>>>    [    4.325869] iommu: Adding device 0000:20:01.0 to group 15
+>>>    [    4.332648] iommu: Adding device 0000:20:02.0 to group 16
+>>>    [    4.338946] swapper/0 invoked oom-killer: 
+>>> gfp_mask=0x6040c0(GFP_KERNEL|__GFP_COMP), nodemask=(null), order=0, 
+>>> oom_score_adj=0
+>>>    [    4.350251] swapper/0 cpuset=/ mems_allowed=0
+>>>    [    4.354618] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 
+>>> 4.19.57.mx64.282 #1
+>>>    [    4.355612] Hardware name: Dell Inc. PowerEdge R7425/08V001, 
+>>> BIOS 1.9.3 06/25/2019
+>>>    [    4.355612] Call Trace:
+>>>    [    4.355612]  dump_stack+0x46/0x5b
+>>>    [    4.355612]  dump_header+0x6b/0x289
+>>>    [    4.355612]  out_of_memory+0x470/0x4c0
+>>>    [    4.355612]  __alloc_pages_nodemask+0x970/0x1030
+>>>    [    4.355612]  cache_grow_begin+0x7d/0x520
+>>>    [    4.355612]  fallback_alloc+0x148/0x200
+>>>    [    4.355612]  kmem_cache_alloc_trace+0xac/0x1f0
+>>>    [    4.355612]  init_iova_domain+0x112/0x170
+>>>    [    4.355612]  amd_iommu_domain_alloc+0x138/0x1a0
+>>>    [    4.355612]  iommu_group_get_for_dev+0xc4/0x1a0
+>>>    [    4.355612]  amd_iommu_add_device+0x13a/0x610
+>>>    [    4.355612]  add_iommu_group+0x20/0x30
+>>>    [    4.355612]  bus_for_each_dev+0x76/0xc0
+>>>    [    4.355612]  bus_set_iommu+0xb6/0xf0
+>>>    [    4.355612]  amd_iommu_init_api+0x112/0x132
+>>>    [    4.355612]  state_next+0xfb1/0x1165
+>>>    [    4.355612]  amd_iommu_init+0x1f/0x67
+>>>    [    4.355612]  pci_iommu_init+0x16/0x3f
+>>>    ...
+>>>    [    4.670295] Unreclaimable slab info:
+>>>    ...
+>>>    [    4.857565] kmalloc-2048           59164KB      59164KB
+>>>
+>>> Change IOVA_MAG_SIZE from 128 to 127 to make size of 'iova_magazine'
+>>> 1024 bytes so that no memory will be wasted.
+>>>
+>>> [1]. https://lkml.org/lkml/2019/8/12/266
+>>>
+>>> Signed-off-by: Feng Tang <feng.tang@intel.com>
+>>> ---
+>>>   drivers/iommu/iova.c | 7 ++++++-
+>>>   1 file changed, 6 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+>>> index db77aa675145b..27634ddd9b904 100644
+>>> --- a/drivers/iommu/iova.c
+>>> +++ b/drivers/iommu/iova.c
+>>> @@ -614,7 +614,12 @@ EXPORT_SYMBOL_GPL(reserve_iova);
+>>>    * dynamic size tuning described in the paper.
+>>>    */
+>>> -#define IOVA_MAG_SIZE 128
+>>> +/*
+>>> + * As kmalloc's buffer size is fixed to power of 2, 127 is chosen to
+>>> + * assure size of 'iova_magzine' to be 1024 bytes, so that no memory
+>>
+>> Typo: iova_magazine
+>>
+>>> + * will be wasted.
+>>> + */
+>>> +#define IOVA_MAG_SIZE 127
 > 
-> Two concerns John raised:
->   1) Adding new ABI we need to maintain
->   2) Having unclear config options
+> I do wonder if we will see some strange new behaviour since IOVA_FQ_SIZE 
+> % IOVA_MAG_SIZE != 0 now...
+
+I doubt it - even if a flush queue does happen to be entirely full of 
+equal-sized IOVAs, a CPU's loaded magazines also both being perfectly 
+empty when it comes to dump a full fq seem further unlikely, so in 
+practice I don't see this making any appreciable change to the 
+likelihood of spilling back to the depot or not. In fact the smaller the 
+magazines get, the less time would be spent flushing the depot back to 
+the rbtree, where your interesting workload falls off the cliff and 
+never catches back up with the fq timer, so at some point it might even 
+improve (unless it's also already close to the point where smaller 
+caches would bottleneck allocation)... might be interesting to 
+experiment with a wider range of magazine sizes if you had the time and 
+inclination.
+
+Cheers,
+Robin.
+
 > 
-> Another idea, I think, is to add the Kconfig option as
-> CONFIG_SUSPEND_SKIP_RNG_RESEED? Similar to existing
-> CONFIG_SUSPEND_SKIP_SYNC and I think it would address those concerns.
-
-I mentioned in my reply to him that this doesn't really work for me:
-
-| As a general rule, I don't expose knobs like that in wireguard /itself/,
-| but wireguard has no problem with adapting to whatever machine properties
-| it finds itself on. And besides, this *is* a very definite device
-| property, something really particular and peculiar about the machine
-| the kernel is running on. It's a concrete thing that the kernel should
-| know about. So let's go with your "very clear description idea", above,
-| instead.
-
-IOW, we're not going to add a tunable on every possible place this is
-used.
-
-Anyway if you don't want a runtime switch, make a compiletime switch
-called CONFIG_PM_CONTINUOUS_RAPID_AUTOSLEEPING or whatever, write some
-very discouraging help text, and call it a day. And this way you don't
-have to worry about ABI and we can change this later on and do the whole
-thing as a no-big-deal change that somebody can tweak later without
-issue.
-
-The below diff is some boiler plate to help you get started with that
-direction. Similar order of operations for this one:
-
-1. You write a patch for Android's base config to enable this option and
-   post it on Gerrit.
-
-2. You take the diff below, clean it up or bikeshed the naming a bit or
-   do whatever there, and submit it to the kernel, including as a `Link:
-   ...` this thread and the Gerrit link.
-
-3. When the patch lands, you submit the Gerrit CL.
-
-4. When both have landed, Christoph moves forward with his
-   CONFIG_ANDROID removal.
-
-So really, just pick an option here -- the runtime switch or the
-compiletime switch or the crazy fd thing I mentioned -- and run with it.
-
-Jason
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index e3dd1dd3dd22..5332236cb1ad 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -756,7 +756,7 @@ static int random_pm_notification(struct notifier_block *nb, unsigned long actio
-
- 	if (crng_ready() && (action == PM_RESTORE_PREPARE ||
- 	    (action == PM_POST_SUSPEND &&
--	     !IS_ENABLED(CONFIG_PM_AUTOSLEEP) && !IS_ENABLED(CONFIG_ANDROID)))) {
-+	     !IS_ENABLED(CONFIG_PM_AUTOSLEEP) && !IS_ENABLED(CONFIG_PM_RAPID_USERSPACE_AUTOSLEEP)))) {
- 		crng_reseed();
- 		pr_notice("crng reseeded on system resumption\n");
- 	}
-diff --git a/drivers/net/wireguard/device.c b/drivers/net/wireguard/device.c
-index aa9a7a5970fd..b93171f2e6c9 100644
---- a/drivers/net/wireguard/device.c
-+++ b/drivers/net/wireguard/device.c
-@@ -69,7 +69,7 @@ static int wg_pm_notification(struct notifier_block *nb, unsigned long action, v
- 	 * its normal operation rather than as a somewhat rare event, then we
- 	 * don't actually want to clear keys.
- 	 */
--	if (IS_ENABLED(CONFIG_PM_AUTOSLEEP) || IS_ENABLED(CONFIG_ANDROID))
-+	if (IS_ENABLED(CONFIG_PM_AUTOSLEEP) || IS_ENABLED(CONFIG_PM_RAPID_USERSPACE_AUTOSLEEP))
- 		return 0;
-
- 	if (action != PM_HIBERNATION_PREPARE && action != PM_SUSPEND_PREPARE)
-diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-index a12779650f15..bcbfbeb39d4f 100644
---- a/kernel/power/Kconfig
-+++ b/kernel/power/Kconfig
-@@ -150,6 +150,25 @@ config PM_WAKELOCKS
- 	Allow user space to create, activate and deactivate wakeup source
- 	objects with the help of a sysfs-based interface.
-
-+config PM_RAPID_USERSPACE_AUTOSLEEP
-+	bool "Tune for rapid and consistent userspace calls to sleep"
-+	depends on PM_SLEEP
-+	help
-+	Change the behavior of various sleep-sensitive code to deal with
-+	userspace autosuspend daemons that put the machine to sleep and wake it
-+	up extremely often and for short periods of time.
-+
-+	This option mostly disables code paths that most users really should
-+	keep enabled. In particular, only enable this if:
-+
-+	- It is very common to be asleep for only 2 seconds before being woken;	and
-+	- It is very common to be awake for only 2 seconds before sleeping.
-+
-+	This likely only applies to Android devices, and not other machines.
-+	Therefore, you should say N here, unless you're extremely certain that
-+	this is what you want. The option otherwise has bad, undesirable
-+	effects, and should not be enabled just for fun.
-+
- config PM_WAKELOCKS_LIMIT
- 	int "Maximum number of user space wakeup sources (0 = no limit)"
- 	range 0 100000
-
+>>
+>> The change itself seems perfectly reasonable, though.
+>>
+>> Acked-by: Robin Murphy <robin.murphy@arm.com>
+> 

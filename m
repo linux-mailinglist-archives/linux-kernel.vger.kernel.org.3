@@ -2,101 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70541561363
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CFC561366
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232977AbiF3Hkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32894 "EHLO
+        id S233030AbiF3Hlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232963AbiF3Hkx (ORCPT
+        with ESMTP id S232787AbiF3Hlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:40:53 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EC13AA78
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:40:51 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 4007C320092B;
-        Thu, 30 Jun 2022 03:40:49 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 30 Jun 2022 03:40:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1656574848; x=
-        1656661248; bh=AMvqDQ8f+OjeHfV9rASJ/W+awq7Gaq8IEdTb5e5lnYA=; b=J
-        tqPGw0kK0k/k6kLUHOreCuK2c8IiJc9fvB5psBRTIS8JfF1CAYlD8o7YASBgkSGi
-        O4AKe1hiLZe4hOd041AwY1lT4j4POgpwVSo9ZzSjCdRjhTJhE1fj8iXo8L4W+KzZ
-        MOEwOyw8SPaXY/pHckY5Y9PIzFD6QeNpR1UIK/wamPO4jw8LM4DBk8nRw7ANM22A
-        nWdB4qutJ+njH/peOszaajBhGOO5Nl0J4qkybaRi/lCIn7d/hY0oBZTtc2D44Q6J
-        M6K2C1Q0eNAtSuirkJ8TzphlzJL3SymJLhvbHA7hLyWqes99hMYMGkNjOUV7fxda
-        W11Lq3XdR2QsII3I2f1Xg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656574848; x=
-        1656661248; bh=AMvqDQ8f+OjeHfV9rASJ/W+awq7Gaq8IEdTb5e5lnYA=; b=y
-        JMCFR76FABuyL85Tu84bAosN+u7Lkasv6Sj9y92Z3OU1pl8xwX53Ckg4RTGjkB4a
-        LXDbRJzzMKHibBxMU8/Lb2blyJvxCQnn0yYEG146w/3kemx2EAt5RcTGr423f3yj
-        VMxnbVyEEBPgo07sXyW1xX05j69AEb9g++Pte++smKYV5GOCLYBoxvqA95HnjkRA
-        g4w4+nqb9RpqkivWzNcdBwEeYhgO+oeZ14x1dDGL7s9aUxdUN7qAS3WePNvgYuDr
-        GhPsFTp/EwZGvzKzGKqs9Ho6gqBPCLUQeHN4++1i58dd7CnBPwQfd1znovualTjp
-        MIM1jMOTn46ZbhkxtP4SA==
-X-ME-Sender: <xms:gFO9Ygt30HP7y56s1PqRJdcOw_Y8wuG2UfFyreb-PeUfNlSEIg9-kQ>
-    <xme:gFO9Ytet0CrOj-4QRI67c5Bt7-iHRaCq8EEvXBLip8ECucflU7Uh8mETYtaVVrp8K
-    wgo1c4rG9imwZPchAc>
-X-ME-Received: <xmr:gFO9YryGnWLvguxg5JORxfUoHoRRWU_sGBvqaK-JKV-IjtQrYFw4atc3YNrAtl-y5gIIpGGGX1HFwl3ez-0YQpFOMOZcXBRls4Z4drM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehtddguddvgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhggtgfgse
-    htkeertdertdejnecuhfhrohhmpeforgigihhmvgcutfhiphgrrhguuceomhgrgihimhgv
-    segtvghrnhhordhtvggthheqnecuggftrfgrthhtvghrnhepueeigefghfffffeifeehud
-    eiuedvteegueefffevgfetvdffheehkeffvedufeeinecuvehluhhsthgvrhfuihiivgep
-    tdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:gFO9YjOyUgab31j3HFcrw2dhHhEULQemZPjW93nuwCvS8f77isEg9g>
-    <xmx:gFO9Yg92l7ruYvIj_uHn5kSWg1XLU1-l3vOk5PWdUkRRjMDMH0tFwA>
-    <xmx:gFO9YrVaSd_cYPeUxKNoPFyqxmFp-jJuFxS1CD5Buiqj3OIXw-QGlQ>
-    <xmx:gFO9YtNbLdioDSNQXmkKoO9s9AEVnkco6d1IDhKs-sasN4ydKQ5FYw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 30 Jun 2022 03:40:48 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     dave.stevenson@raspberrypi.com, daniel@ffwll.ch, trix@redhat.com,
-        airlied@linux.ie, emma@anholt.net, mripard@kernel.org
-Cc:     Maxime Ripard <maxime@cerno.tech>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: (subset) [PATCH] drm/vc4: change vc4_dma_range_matches from a global to static
-Date:   Thu, 30 Jun 2022 09:40:45 +0200
-Message-Id: <165657484374.261230.9959051107234808555.b4-ty@cerno.tech>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220629200101.498138-1-trix@redhat.com>
-References: <20220629200101.498138-1-trix@redhat.com>
+        Thu, 30 Jun 2022 03:41:49 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63583A1A3;
+        Thu, 30 Jun 2022 00:41:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656574908; x=1688110908;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Kas1K4p5XFnaaEkpjH7XsCiCA1U1Q5VLT4/8BRUEXFI=;
+  b=BPFL4UZIrY/d4wgl9sRfHOZZpo8kSjKiQZdRJZNEOxiossyAovRCR6N8
+   ywgTEFZzf0tQ73kXDTRAHqx8SbghcS9x0e4A+f3Sl0IFPITvT5v7WMNAz
+   QclNC+mIJHIwdRfMi0BglBiOjE1nYPTrz2wJ1NClv3jXntqgiX8G0Rj2d
+   5mStLlRyqKBUOlJKaamuw9IQsJREu/mq58Qd3/SzalBbLimLs/UX51Xfu
+   PHOhio3zgJEIiS5Ddrib1UxWh6/33+ZR8Vix59UdZ6pqvFtgl3U0Cy2So
+   x2d2nVV+xxo707Od22C77+Rwu2bdU0ytj0QtFvEZefaneBD+7ZQQsdhbD
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="271041862"
+X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
+   d="scan'208";a="271041862"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 00:41:48 -0700
+X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
+   d="scan'208";a="647777264"
+Received: from emontau-mobl2.ger.corp.intel.com ([10.249.42.178])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 00:41:46 -0700
+Date:   Thu, 30 Jun 2022 10:41:40 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v1 1/1] serial: 8250_dw: Drop PM ifdeffery
+In-Reply-To: <20220628214511.37373-1-andriy.shevchenko@linux.intel.com>
+Message-ID: <4ae74f48-c51c-cb74-548d-46ff9a9a7a7b@linux.intel.com>
+References: <20220628214511.37373-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-800567806-1656574908=:1605"
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Jun 2022 16:01:01 -0400, Tom Rix wrote:
-> sparse reports
-> drivers/gpu/drm/vc4/vc4_drv.c:270:27: warning: symbol 'vc4_dma_range_matches' was not declared. Should it be static?
-> 
-> vc4_dma_range_matches is only used in vc4_drv.c, so it's storage class specifier
-> should be static.
-> 
-> 
-> [...]
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Applied to drm/drm-misc (drm-misc-next).
+--8323329-800567806-1656574908=:1605
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 
-Thanks!
-Maxime
+On Wed, 29 Jun 2022, Andy Shevchenko wrote:
+
+> Drop CONFIG_PM and CONFIG_PM_SLEEP ifdeffery while converting dw8250_pm_ops
+> to use new PM macros.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
+Not directily related to the patch itself but do you have any idea why 
+1a3c7bb08826 ("PM: core: Add new *_PM_OPS macros, deprecate old ones") 
+didn't wrap RUNTIME_PM_OPS() pointers with pm_ptr()? I'm asking this 
+because in SET_RUNTIME_PM_OPS() the callbacks are only created with
+#ifdef CONFIG_PM so I'd have expected RUNTIME_PM_OPS() to maintain that 
+behavior but it didn't? Was it just an oversight that should be fixed?
+
+-- 
+ i.
+
+> ---
+>  drivers/tty/serial/8250/8250_dw.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
+> index f71428c85562..adcc869352b1 100644
+> --- a/drivers/tty/serial/8250/8250_dw.c
+> +++ b/drivers/tty/serial/8250/8250_dw.c
+> @@ -691,7 +691,6 @@ static int dw8250_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+>  static int dw8250_suspend(struct device *dev)
+>  {
+>  	struct dw8250_data *data = dev_get_drvdata(dev);
+> @@ -709,9 +708,7 @@ static int dw8250_resume(struct device *dev)
+>  
+>  	return 0;
+>  }
+> -#endif /* CONFIG_PM_SLEEP */
+>  
+> -#ifdef CONFIG_PM
+>  static int dw8250_runtime_suspend(struct device *dev)
+>  {
+>  	struct dw8250_data *data = dev_get_drvdata(dev);
+> @@ -733,11 +730,10 @@ static int dw8250_runtime_resume(struct device *dev)
+>  
+>  	return 0;
+>  }
+> -#endif
+>  
+>  static const struct dev_pm_ops dw8250_pm_ops = {
+> -	SET_SYSTEM_SLEEP_PM_OPS(dw8250_suspend, dw8250_resume)
+> -	SET_RUNTIME_PM_OPS(dw8250_runtime_suspend, dw8250_runtime_resume, NULL)
+> +	SYSTEM_SLEEP_PM_OPS(dw8250_suspend, dw8250_resume)
+> +	RUNTIME_PM_OPS(dw8250_runtime_suspend, dw8250_runtime_resume, NULL)
+>  };
+>  
+>  static const struct dw8250_platform_data dw8250_dw_apb = {
+> 
+
+--8323329-800567806-1656574908=:1605--

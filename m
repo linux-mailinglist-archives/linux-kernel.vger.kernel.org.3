@@ -2,109 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E3B56199E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7BE5619A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232927AbiF3LxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 07:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
+        id S234938AbiF3Lyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 07:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbiF3LxE (ORCPT
+        with ESMTP id S234637AbiF3Lyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 07:53:04 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA01251B06
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 04:53:02 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id o25so6049587ejm.3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 04:53:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=S270M/2oWojLEpyTbMB/z2H6TZ3tpIFqXHP77DYgqTo=;
-        b=MWTnMm+SQSRYa2cIbPAJXqdwuU5CR0gWMfNPjwZh/1b0NUpJFcd6prqI/6EtQyUqdY
-         OHqcYATDBXRt9jgKDE9etJ3iPAdRgefZhaTRaAKhNk7iJbW3GS4gcJq5f3xn1/B6+RTP
-         gFQyzlPM5GBa5a+Z9Jdv95ClKIbp2rpnMpjY8oFoDT9MyhPa9Pcop0rUAmeLyPIHs1uL
-         kMCQmKvyItfrfTAvCgwpNsOti8GprxKt+J5HlW8j+Ltm52Y/4VBtR7urTXmxzLvP15vk
-         vNxdiPH1qf4/pk8my1XGf6Vu4pz7fOusHz9gLtGks96eWTs997JR69CRgFfEe0yb/mB7
-         KFCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=S270M/2oWojLEpyTbMB/z2H6TZ3tpIFqXHP77DYgqTo=;
-        b=2I0vg650rN3U19gvUsF3WwLBLxv4KpOBj7S/tMirHcxigf+n8e4giZkVdIW2M+BNWf
-         9DlpdABlXJkOUyMlo6rlf3PbgXFqTxPRYjwPXOETsL4o07Enn/AJ5f2fVxJSBlJMmWRK
-         /dcAQTHoqaDw486/wwblqK9iA8vt+IlWpeRlaJluk2rKPx1ahPBgNVtl+g9m8yXvvI+p
-         Q/DbOjpJIF0BGLPCkJy0jslpsoltgh6Nwrvo7/Yo8fI/y3jNWeWXsSDBlLZa836t+6oj
-         65ZKdsJdsEameXccQAt1mLAXzbD2EgfALMm/b9yLLVYhCXE+ymgGsFGQ9yq0JaJ9wI5o
-         /JAQ==
-X-Gm-Message-State: AJIora/pyhnpCjiHBAiOsm9ntmJ88nFGKKfxXGJs4h2aZThzDeB+63MK
-        dZ4luWs/NHmhvcPiES/aItwTdQ==
-X-Google-Smtp-Source: AGRyM1vRThtJMidYWwYHrUpOCPcr6GBuPTh5GFqkw9tVnwCUUpKY3OrJQw/NnoGOkQBr8MErp+/SIQ==
-X-Received: by 2002:a17:906:4752:b0:726:9e6b:7fb0 with SMTP id j18-20020a170906475200b007269e6b7fb0mr8333347ejs.747.1656589981248;
-        Thu, 30 Jun 2022 04:53:01 -0700 (PDT)
-Received: from [192.168.0.189] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id k12-20020a17090666cc00b007041e969a8asm9027699ejp.97.2022.06.30.04.53.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 04:53:00 -0700 (PDT)
-Message-ID: <c68a688d-c007-2daf-5993-1fe5c765d96f@linaro.org>
-Date:   Thu, 30 Jun 2022 13:52:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 1/4] dt-bindings: interconnect: qcom,msm8998-cpu-bwmon:
- add BWMON device
-Content-Language: en-US
-To:     Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Rob Herring <robh@kernel.org>
-References: <20220629140302.236715-1-krzysztof.kozlowski@linaro.org>
- <20220629140302.236715-2-krzysztof.kozlowski@linaro.org>
- <55cf5a2f-7be2-bb65-09d6-d4d5af4d2f0f@quicinc.com>
- <1de5d955-91f9-032c-0ceb-2e48d04464dc@linaro.org>
- <2e0f19bf-496c-f90a-3549-fe7ace346ff4@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <2e0f19bf-496c-f90a-3549-fe7ace346ff4@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+        Thu, 30 Jun 2022 07:54:53 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22AF851B05;
+        Thu, 30 Jun 2022 04:54:52 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25UAd4ae023725;
+        Thu, 30 Jun 2022 11:54:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=y0ICbooO6ZnULmmiPkLxDZXQ7SEBVCNNquvW2a/RDpw=;
+ b=dJyNjeYFHQBePCnbyOvglEPZBuD1cOI1+ciEJcPfWvdb4kX5SzEpg4ICiSja5aTYR3QB
+ O8AZ5bdYEFwM5M7Trm6Ed9ugAmg/Cozvc8hTHEVY5BeG+wJLXzBv76Z1GgcnPJ24EyEd
+ ksNL2FhDxEX/iQn0Q2XOzsGlmUd3d3vN2JhGayE1t14fpcqWmmvRJtOgL8k57obEd/Ya
+ hBHbI+ihbG6XmtAcQOZiI+bLO7kYDT7W8RdL7qeWEuZWQ8jUo5loaTVc6C16tBC+Hj4W
+ SKiUI+BkySrTMO5NehBsRwI55hcAAtyQkZ4+NkNG0h+sGPfbOg/sQBNh6BlUoyqKnX2U 4A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h19qnjj0v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Jun 2022 11:54:13 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25UBaJu4017926;
+        Thu, 30 Jun 2022 11:54:13 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h19qnjj06-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Jun 2022 11:54:13 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25UBoo2w015598;
+        Thu, 30 Jun 2022 11:54:11 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3gwt0901uf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Jun 2022 11:54:10 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25UBs8t921823828
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Jun 2022 11:54:08 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7D5434C040;
+        Thu, 30 Jun 2022 11:54:08 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EBBC44C044;
+        Thu, 30 Jun 2022 11:54:04 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.82.30])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 30 Jun 2022 11:54:04 +0000 (GMT)
+Message-ID: <cec0d90e9d70719cf3dee203d5b975b9e420d27f.camel@linux.ibm.com>
+Subject: Re: [PATCH v7] x86/kexec: Carry forward IMA measurement log on kexec
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jonathan McDowell <noodles@fb.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Baoquan He <bhe@redhat.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
+Date:   Thu, 30 Jun 2022 07:54:02 -0400
+In-Reply-To: <Yr1geLyslnjKck86@noodles-fedora.dhcp.thefacebook.com>
+References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
+         <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
+         <YnuJCH75GrhVm0Tp@noodles-fedora.dhcp.thefacebook.com>
+         <Yn01Cfb3Divf49g7@noodles-fedora.dhcp.thefacebook.com>
+         <YqcRuQFq5fg1XhB/@noodles-fedora.dhcp.thefacebook.com>
+         <YqtMf9ivGR8Rkl8u@noodles-fedora.dhcp.thefacebook.com>
+         <Yr1geLyslnjKck86@noodles-fedora.dhcp.thefacebook.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Gdetm-DrlqQvFJcIwmEVVE3eweFCrF-u
+X-Proofpoint-ORIG-GUID: NnhuNQTy9jYivibx86zBkACLu3kppZxv
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-30_07,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ spamscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0 suspectscore=0
+ phishscore=0 bulkscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206300045
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/2022 13:29, Rajendra Nayak wrote:
->>> I just update the binding with the new SoC compatible (lets say qcom,sc7280-llcc-bwmon)
->>> and in the device tree node use it as
->>> 	compatible = "qcom,sc7280-llcc-bwmon", "qcom,sdm845-llcc-bwmon", "qcom,msm8998-llcc-bwmon";
->>> without any updates in the driver?
->>
->> I expect:
->> "qcom,sc7280-llcc-bwmon", "qcom,msm8998-llcc-bwmon";
->> and you need to add sc7280 compatible to the driver. The actual proper
->> solution in my patch would be to use msm8998 compatible in the driver,
->> but I did not test MSM8998.
->>
->> Maybe we should switch to that anyway?
+On Thu, 2022-06-30 at 08:36 +0000, Jonathan McDowell wrote:
+> On kexec file load, the Integrity Measurement Architecture (IMA)
+> subsystem may verify the IMA signature of the kernel and initramfs, and
+> measure it. The command line parameters passed to the kernel in the
+> kexec call may also be measured by IMA.
 > 
-> Right, looks like without it every new SoC compatible added would need a dummy
-> update in the driver even though you really don't need to do anything different
-> in the driver.
+> A remote attestation service can verify a TPM quote based on the TPM
+> event log, the IMA measurement list and the TPM PCR data. This can
+> be achieved only if the IMA measurement log is carried over from the
+> current kernel to the next kernel across the kexec call.
+> 
+> PowerPC and ARM64 both achieve this using device tree with a
+> "linux,ima-kexec-buffer" node. x86 platforms generally don't make use of
+> device tree, so use the setup_data mechanism to pass the IMA buffer to
+> the new kernel.
+> 
+> (Mimi, Baoquan, I haven't included your reviewed-bys because this has
+>  changed the section annotations to __init and Boris reasonably enough
+>  wants to make sure IMA folk are happy before taking this update.)
 
-OK, then v7 is coming :)
+FYI, comments like this should be added before the patch changelog
+(after the '---' separator).
 
-Best regards,
-Krzysztof
+> 
+> Signed-off-by: Jonathan McDowell <noodles@fb.com>
+> Link: https://lore.kernel.org/r/YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG
+
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com> # IMA function
+definitions
+

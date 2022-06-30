@@ -2,105 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFE356273F
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2F3562754
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233072AbiF3Xqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 19:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35794 "EHLO
+        id S232573AbiF3Xuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 19:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbiF3Xqc (ORCPT
+        with ESMTP id S231553AbiF3Xub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 19:46:32 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BF15A2CA;
-        Thu, 30 Jun 2022 16:46:23 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id dw10-20020a17090b094a00b001ed00a16eb4so1005793pjb.2;
-        Thu, 30 Jun 2022 16:46:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Ksja30tHqQB+wliESoq3wQHUXNoN886Osza3Cvc7dwo=;
-        b=mBLsEJlhhDea1A5Ewv7xQP8wxFNNX3VXR64Z9ClPk25x2DVo7LZzC0wq4nxzrZgE8V
-         jArX2vIdYg+Qm3vIJndAgDlRaa5yYyoUDuEexYnSFWYDzlbK6mzH89K0yiBqeKmHL/6G
-         k4KrTxqzbL6QFbSRfEIxMei1Xj9xi7AEfA3VAR0SnIrHMxNL0gxrV40gwkI/IYAw+QMg
-         HbDKGhGxx0NjDVM7fAx6aZZ4DGqGW9724eW6bZtYuCPuM0d6V/kyVvMkloKi6gYubOzR
-         vF/1wK/iLx93mlemwnX41NiFsZ3kJ5C47zCDWrT1fpiH4P7fkzEzIU42mbr/IoQzOVIZ
-         BeTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ksja30tHqQB+wliESoq3wQHUXNoN886Osza3Cvc7dwo=;
-        b=KbyHi2qwxjuc+pq1mEotuFeMzxNm42OrL6hrOl5HXheopNtJsw2Uff2jGw6an3aXft
-         vvyXsUC1zgOVK3Ro+TxfM6vBL3653u9uzm6fTbMBGUhjulGhnfvRq08+O9YCM+i9ewRt
-         NVfu9CcAqzMULGVeXFkfs7MWVr/zOmrppS4Jz2MDGjR0xWCrPn6KBShVDfHXtBiz94Pz
-         EHevjbw6S0jcLKVa/GzJsWu2Q2jEt47nLcqgkZ53fbkh5+KgIgbNLVkgLJO7wv+PL1Wd
-         6FMorBcU1c9/6zDKQPj0g6596GEfk7QQvweZHhtHVWVCTNalOclJ8B8zOCPAZwfu7c/k
-         +8sA==
-X-Gm-Message-State: AJIora9rKKGIZ2qPuCQ1pvjsDqd9O7wNL4OwfCarp0mfYLA/9oswZCUO
-        6AtGeeGclhXekDv1A7MB6SQ=
-X-Google-Smtp-Source: AGRyM1s4N3Ywmbodo0vHw0DXmUO30u3oS67uOjxp799x8qp5bP3Cg4QiVaH9eaTZUD7QocbMYCUzhQ==
-X-Received: by 2002:a17:90b:4d84:b0:1ec:aa85:b8ea with SMTP id oj4-20020a17090b4d8400b001ecaa85b8eamr12916217pjb.194.1656632783072;
-        Thu, 30 Jun 2022 16:46:23 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id 15-20020a17090a0d4f00b001eca3c66f6asm2554079pju.43.2022.06.30.16.46.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 16:46:22 -0700 (PDT)
-Message-ID: <d59a31c4-23f2-1233-b685-20967c8a0013@gmail.com>
-Date:   Thu, 30 Jun 2022 16:46:21 -0700
+        Thu, 30 Jun 2022 19:50:31 -0400
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4FF5070E
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:50:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1656633024; x=1688169024;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=nwEn1VMZrx8GUvODDT0OaTNy6z1BOZ2HCe57NZ02Lbc=;
+  b=hKA+D80xRfB6p59uMSg8W7eMfbmIFjsM0x5ZUj9Yyq4MBjUW2aODoDjB
+   KXnLS8DzMwmQDPun51QEj6TvA6krYUqCo7ZB/G4Nn2dggAJLX9p7HQUW2
+   L0zt8DV73M4B+VsWEId56kEy/qnrjdxzG6DG0ML27GGHxwmOEr8KaaFUE
+   +yI0A0Sr6rLgR7GYPIJ1Fw44XVtgLgkcoLY23mbgSDWD40WivuXMYUVgU
+   kDPtVeVO+iQyr7DKjH56QGxvNzGOwfD5UKGMYDZXS9a8Gr2O9zLbQm+L/
+   CV+iafUX0XCyb4yfSpJuT9dV24C4s2OY+QyvoBGrKgbn91ze5QjubZOW6
+   w==;
+X-IronPort-AV: E=Sophos;i="5.92,235,1650902400"; 
+   d="scan'208";a="308859940"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 01 Jul 2022 07:49:42 +0800
+IronPort-SDR: rIp/xhgbaE90fd3X3Lnnf/gseokkYVv3QjnRFtlmhI8kvf326JqCAGDSpjUcBxR0689T97Kxeg
+ xO7DhOdMqriTITNqK42r3PbrpeqKgV/46lHs3NUmo4Wb4zU1pRIxstEAJCfdcVFctbAOjIOqm0
+ 3uVDpuVlNfaQoVB34BCU5sbiUIe6OuvbYVciUAWwsQShc7rSZGHhIlAkZm52E31K8zlIZHJF/w
+ bwy82XV7L+u4pS/KWKwPUzPZV8I53jl2poqfTgV7Oy0cVWqG1QvDJQWwdLXaCn3SrptnQEUUFC
+ RBMa+rX13cAX6hLtQdwlCWzQ
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2022 16:07:15 -0700
+IronPort-SDR: 63KL4gaNOELpeKN607QfPn9J0xyg6K5F89jYiLhAu665bmxjKgs5yMXW1io4mpqyCB2dR30N+W
+ naJCTa+wYhOeteiAOVn33+n7Z9nopHXjIgwUvcW5IGQcOWqmV1oH7iGD6Xl6rGrWxv8rMV6VS3
+ rNX4FDsxFmmvb7vPK7+8CNki+HHv1/tHe7Assf4VenJCrdil4lOJNY295ydD+EPv9iTM2mG4kS
+ 5tVIGjqWaFCxl3REDFQLRzaTPkPFXNTpHssP2WHl1KQIL2tCr9CTICH30RQvoL2T/HgPEZxnyM
+ XCo=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2022 16:49:42 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LYw6Y2mDKz1Rws6
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:49:41 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1656632980; x=1659224981; bh=nwEn1VMZrx8GUvODDT0OaTNy6z1BOZ2HCe5
+        7NZ02Lbc=; b=WLH01e7EcYJscXnwQ3vvbmxQTuNCz3i5pBQVZdrz66seSwF49h1
+        +8GS6jTrsLEAkuw/tD2AknhPYioGLd4d7sT3GQLnO6xu/H8Jja/BvPtC53e7auQP
+        2ySivAr3YR8mb2/bi7YxGSMXNxKQK4k66W4nuilErMzlwRy3gJ/aBV7BiQf2lZgN
+        w3Be/GZWvaOFz6780wZxse2VtnKneGGzbV4SXNJ7ACmPrxcECYPahoxF1WbKesDe
+        Kdmo3OxJxKftQgVnI75yZCLNb1RE5mbPQy6HR+ycBckrjlDzqPdHq0Q3XHuPEaRr
+        ThWJqmi9TPbB2tm7FvbOONX5x4GDU+VLEEw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id XDTQQVTXRSWZ for <linux-kernel@vger.kernel.org>;
+        Thu, 30 Jun 2022 16:49:40 -0700 (PDT)
+Received: from [10.225.163.102] (unknown [10.225.163.102])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LYw6T5Ymgz1RtVk;
+        Thu, 30 Jun 2022 16:49:37 -0700 (PDT)
+Message-ID: <2e6475e5-4899-1e3a-1418-918b9510ec6d@opensource.wdc.com>
+Date:   Fri, 1 Jul 2022 08:49:36 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.18 0/6] 5.18.9-rc1 review
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 4/5] scsi: scsi_transport_sas: Cap shost max_sectors
+ according to DMA optimal limit
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220630133230.239507521@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220630133230.239507521@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     John Garry <john.garry@huawei.com>, joro@8bytes.org,
+        will@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, iommu@lists.linux-foundation.org,
+        iommu@lists.linux.dev, linux-scsi@vger.kernel.org,
+        linuxarm@huawei.com
+References: <1656590892-42307-1-git-send-email-john.garry@huawei.com>
+ <1656590892-42307-5-git-send-email-john.garry@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <1656590892-42307-5-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/30/2022 6:47 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.9 release.
-> There are 6 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 6/30/22 21:08, John Garry wrote:
+> Streaming DMA mappings may be considerably slower when mappings go through
+> an IOMMU and the total mapping length is somewhat long. This is because the
+> IOMMU IOVA code allocates and free an IOVA for each mapping, which may
+> affect performance.
 > 
-> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
-> Anything received after that time might be too late.
+> For performance reasons set the request queue max_sectors from
+> dma_opt_mapping_size(), which knows this mapping limit.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.9-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
+> Signed-off-by: John Garry <john.garry@huawei.com>
+> ---
+>  drivers/scsi/scsi_transport_sas.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> thanks,
-> 
-> greg k-h
+> diff --git a/drivers/scsi/scsi_transport_sas.c b/drivers/scsi/scsi_transport_sas.c
+> index 12bff64dade6..1b45248748e0 100644
+> --- a/drivers/scsi/scsi_transport_sas.c
+> +++ b/drivers/scsi/scsi_transport_sas.c
+> @@ -225,6 +225,7 @@ static int sas_host_setup(struct transport_container *tc, struct device *dev,
+>  {
+>  	struct Scsi_Host *shost = dev_to_shost(dev);
+>  	struct sas_host_attrs *sas_host = to_sas_host_attrs(shost);
+> +	struct device *dma_dev = shost->dma_dev;
+>  
+>  	INIT_LIST_HEAD(&sas_host->rphy_list);
+>  	mutex_init(&sas_host->lock);
+> @@ -236,6 +237,11 @@ static int sas_host_setup(struct transport_container *tc, struct device *dev,
+>  		dev_printk(KERN_ERR, dev, "fail to a bsg device %d\n",
+>  			   shost->host_no);
+>  
+> +	if (dma_dev) {
+> +		shost->max_sectors = min_t(unsigned int, shost->max_sectors,
+> +				dma_opt_mapping_size(dma_dev) >> SECTOR_SHIFT);
+> +	}
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Hmm... shost->max_sectors becomes the max_hw_sectors limit for the block
+dev. So using dma_max_mapping_size(dma_dev) for that limit makes sense.
+Shouldn't dma_opt_mapping_size(dma_dev) be used to limit only the default
+"soft" limit (queue max_sectors limit) instead of the hard limit ?
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+> +
+>  	return 0;
+>  }
+>  
 -- 
-Florian
+Damien Le Moal
+Western Digital Research

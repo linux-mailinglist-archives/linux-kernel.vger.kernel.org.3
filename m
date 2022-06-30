@@ -2,227 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE5E56253C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A14562530
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237544AbiF3V2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 17:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
+        id S237560AbiF3V3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 17:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237499AbiF3V2C (ORCPT
+        with ESMTP id S237582AbiF3V2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 17:28:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F1F51B23;
-        Thu, 30 Jun 2022 14:27:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8B26623AA;
-        Thu, 30 Jun 2022 21:27:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B2B8C341C8;
-        Thu, 30 Jun 2022 21:27:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656624471;
-        bh=NvqzBC09/Y80e2KCCsJMnIUOFz9YdwiZ8n8imT3Xf0M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mBnuqmNq9c697lusQeu8grTz767jz7CF7+OCqwXp0lfM27tk6sDfDWJff4BSEj+uV
-         t+l/lxthKKe2CFd7EjDGBozodGo3nuc81zyI5CS/JfRJA7NERgu1YM1muQv1V00KCn
-         DOSCx6LgT3MxQVCRsMvOsih4PkQPgPpjh8ruXHKpi2HF5nFCTbzTneuGT/W70dODmC
-         74s4jSk9sERp6B02J8gPVmpQ/WAGLgQ52gWGBdUSaigHZ8s7r9WJBX/YvkoluFwvSI
-         GyLnkgod+yj9geRTSfXIeEWaT+1ULoU4Bsm/Nu7IDTyLljykR6Epph/gxiPwrTCpAH
-         cOktWuenPSVQA==
-Date:   Thu, 30 Jun 2022 14:27:50 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org,
-        aneesh.kumar@linux.ibm.com, arnd@arndb.de, 21cnbao@gmail.com,
-        corbet@lwn.net, dave.hansen@linux.intel.com, david@redhat.com,
-        ebiederm@xmission.com, hagen@jauu.net, jack@suse.cz,
-        keescook@chromium.org, kirill@shutemov.name, kucharsk@gmail.com,
-        linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        longpeng2@huawei.com, luto@kernel.org, markhemm@googlemail.com,
-        pcc@google.com, rppt@kernel.org, sieberf@amazon.com,
-        sjpark@amazon.de, surenb@google.com, tst@schoebel-theuer.de,
-        yzaikin@google.com
-Subject: Re: [PATCH v2 4/9] mm/mshare: Add a read operation for msharefs files
-Message-ID: <Yr4VVuCzCp50cu0O@magnolia>
-References: <cover.1656531090.git.khalid.aziz@oracle.com>
- <05649b455e2191642e85cc5522ef39ad49fdeca3.1656531090.git.khalid.aziz@oracle.com>
+        Thu, 30 Jun 2022 17:28:40 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164843700E;
+        Thu, 30 Jun 2022 14:28:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656624520; x=1688160520;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vov2D8XGLh7l4fzlqjW0FYaJ1gTowtT9oIai97+IhHY=;
+  b=lqc0a5cbBr/XdEfiZALSXhOhQpaT3KpFm4M8usVu2M16Y3M59+x7Ix6f
+   WvD4pWHxR/xWnm3VylAAlPYLTR+4Vptd+CydB0+GPSXPc1hSTuURp8kjR
+   qI56do2P/aC2Mjwgc1dkPG6UNnAjKQDN6YKv0S33VlUIzwd4UMU84c71T
+   c4hGz4GF17AC/sZwUi3c2/BLkI9kPRQQgqUs36ZLq2cMrx2H+UC9k6287
+   mMzAZlsPnZgw5Z3EoNOJXMhuiVdlb1as5JnbXf6zxLJimB7xLBkXV+TyQ
+   k33omhVDZcebYMs+EQxMu+7EarIHZIWtAIO/I8sGRtGqL5DQqE8XpsLrJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="280021839"
+X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
+   d="scan'208";a="280021839"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 14:28:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
+   d="scan'208";a="588945471"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 30 Jun 2022 14:28:24 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 0B8D111E; Fri,  1 Jul 2022 00:28:30 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Mark Gross <markgross@kernel.org>
+Subject: [PATCH v1 1/5] ACPI: utils: Introduce acpi_match_video_device_handle() helper
+Date:   Fri,  1 Jul 2022 00:28:15 +0300
+Message-Id: <20220630212819.42958-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <05649b455e2191642e85cc5522ef39ad49fdeca3.1656531090.git.khalid.aziz@oracle.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 04:53:55PM -0600, Khalid Aziz wrote:
-> When a new file is created under msharefs, allocate a new mm_struct
-> that will hold the VMAs for mshare region. Also allocate structure
-> to defines the mshare region and add a read operation to the file
-> that returns this information about the mshare region. Currently
-> this information is returned as a struct:
-> 
-> struct mshare_info {
-> 	unsigned long start;
-> 	unsigned long size;
-> };
-> 
-> This gives the start address for mshare region and its size.
-> 
-> Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
-> ---
->  include/uapi/linux/mman.h |  5 +++
->  mm/mshare.c               | 64 ++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 68 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/uapi/linux/mman.h b/include/uapi/linux/mman.h
-> index f55bc680b5b0..56fe446e24b1 100644
-> --- a/include/uapi/linux/mman.h
-> +++ b/include/uapi/linux/mman.h
-> @@ -41,4 +41,9 @@
->  #define MAP_HUGE_2GB	HUGETLB_FLAG_ENCODE_2GB
->  #define MAP_HUGE_16GB	HUGETLB_FLAG_ENCODE_16GB
->  
-> +struct mshare_info {
-> +	unsigned long start;
-> +	unsigned long size;
+There are a couple of users that open code functionality of matching
+a given handle against ACPI video device IDs. The current approach
+duplicates ID table along with the matching code. Consolidate it
+under the acpi_match_video_device_handle() helper's hood.
 
-You might want to make these explicitly u64, since this is userspace
-ABI and you never know when someone will want to do something crazy like
-run 32-bit programs with mshare files.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/acpi/utils.c | 19 +++++++++++++++++++
+ include/linux/acpi.h |  2 ++
+ 2 files changed, 21 insertions(+)
 
-Also you might want to add some padding fields for flags, future
-expansion, etc.
+diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
+index 3a9773a09e19..4800aba3b99c 100644
+--- a/drivers/acpi/utils.c
++++ b/drivers/acpi/utils.c
+@@ -929,6 +929,25 @@ static int __init acpi_backlight(char *str)
+ }
+ __setup("acpi_backlight=", acpi_backlight);
+ 
++static const struct acpi_device_id video_device_ids[] = {
++	{ACPI_VIDEO_HID, 0},
++	{}
++};
++
++/**
++ * acpi_match_video_device_handle - match handle against ACPI video device IDs
++ * @handle: ACPI handle to match
++ *
++ * Return: true when matches, otherwise false.
++ */
++bool acpi_match_video_device_handle(acpi_handle handle)
++{
++	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
++
++	return adev && !acpi_match_device_ids(adev, video_device_ids);
++}
++EXPORT_SYMBOL(acpi_match_video_device_handle);
++
+ /**
+  * acpi_match_platform_list - Check if the system matches with a given list
+  * @plat: pointer to acpi_platform_list table terminated by a NULL entry
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index 7b96a8bff6d2..c48e8a0df0cc 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -439,6 +439,8 @@ extern char *wmi_get_acpi_device_uid(const char *guid);
+ 
+ extern char acpi_video_backlight_string[];
+ extern long acpi_is_video_device(acpi_handle handle);
++extern bool acpi_match_video_device_handle(acpi_handle handle);
++
+ extern int acpi_blacklisted(void);
+ extern void acpi_osi_setup(char *str);
+ extern bool acpi_osi_is_win8(void);
+-- 
+2.35.1
 
-> +};
-> +
->  #endif /* _UAPI_LINUX_MMAN_H */
-> diff --git a/mm/mshare.c b/mm/mshare.c
-> index 2d5924d39221..d238b68b0576 100644
-> --- a/mm/mshare.c
-> +++ b/mm/mshare.c
-> @@ -22,8 +22,14 @@
->  #include <uapi/linux/magic.h>
->  #include <uapi/linux/limits.h>
->  #include <uapi/linux/mman.h>
-> +#include <linux/sched/mm.h>
->  
->  static struct super_block *msharefs_sb;
-> +struct mshare_data {
-> +	struct mm_struct *mm;
-> +	refcount_t refcnt;
-> +	struct mshare_info *minfo;
-> +};
->  
->  static const struct inode_operations msharefs_dir_inode_ops;
->  static const struct inode_operations msharefs_file_inode_ops;
-> @@ -34,8 +40,29 @@ msharefs_open(struct inode *inode, struct file *file)
->  	return simple_open(inode, file);
->  }
->  
-> +static ssize_t
-> +msharefs_read(struct kiocb *iocb, struct iov_iter *iov)
-> +{
-> +	struct mshare_data *info = iocb->ki_filp->private_data;
-> +	size_t ret;
-> +	struct mshare_info m_info;
-> +
-> +	if (info->minfo != NULL) {
-> +		m_info.start = info->minfo->start;
-> +		m_info.size = info->minfo->size;
-> +	} else {
-> +		m_info.start = 0;
-> +		m_info.size = 0;
-
-Hmmm, read()ing out the shared mapping information.  Heh.
-
-When does this case happen?  Is it before anybody mmaps this file into
-an address space?
-
-> +	}
-> +	ret = copy_to_iter(&m_info, sizeof(m_info), iov);
-> +	if (!ret)
-> +		return -EFAULT;
-> +	return ret;
-> +}
-> +
->  static const struct file_operations msharefs_file_operations = {
->  	.open		= msharefs_open,
-> +	.read_iter	= msharefs_read,
->  	.llseek		= no_llseek,
->  };
->  
-> @@ -73,12 +100,43 @@ static struct dentry
->  	return ERR_PTR(-ENOMEM);
->  }
->  
-> +static int
-> +msharefs_fill_mm(struct inode *inode)
-> +{
-> +	struct mm_struct *mm;
-> +	struct mshare_data *info = NULL;
-> +	int retval = 0;
-> +
-> +	mm = mm_alloc();
-> +	if (!mm) {
-> +		retval = -ENOMEM;
-> +		goto err_free;
-> +	}
-> +
-> +	info = kzalloc(sizeof(*info), GFP_KERNEL);
-> +	if (!info) {
-> +		retval = -ENOMEM;
-> +		goto err_free;
-> +	}
-> +	info->mm = mm;
-> +	info->minfo = NULL;
-> +	refcount_set(&info->refcnt, 1);
-> +	inode->i_private = info;
-> +
-> +	return 0;
-> +
-> +err_free:
-> +	if (mm)
-> +		mmput(mm);
-> +	kfree(info);
-> +	return retval;
-> +}
-> +
->  static struct inode
->  *msharefs_get_inode(struct super_block *sb, const struct inode *dir,
->  			umode_t mode)
->  {
->  	struct inode *inode = new_inode(sb);
-> -
->  	if (inode) {
->  		inode->i_ino = get_next_ino();
->  		inode_init_owner(&init_user_ns, inode, dir, mode);
-> @@ -89,6 +147,10 @@ static struct inode
->  		case S_IFREG:
->  			inode->i_op = &msharefs_file_inode_ops;
->  			inode->i_fop = &msharefs_file_operations;
-> +			if (msharefs_fill_mm(inode) != 0) {
-> +				discard_new_inode(inode);
-> +				inode = ERR_PTR(-ENOMEM);
-
-Is it intentional to clobber the msharefs_fill_mm return value and
-replace it with ENOMEM?
-
---D
-
-> +			}
->  			break;
->  		case S_IFDIR:
->  			inode->i_op = &msharefs_dir_inode_ops;
-> -- 
-> 2.32.0
-> 

@@ -2,89 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E0456191C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE9056192E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234887AbiF3L2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 07:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
+        id S234936AbiF3LaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 07:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234843AbiF3L2J (ORCPT
+        with ESMTP id S233709AbiF3LaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 07:28:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3087DDEC;
-        Thu, 30 Jun 2022 04:28:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3E45B82A1A;
-        Thu, 30 Jun 2022 11:28:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17DA7C34115;
-        Thu, 30 Jun 2022 11:28:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656588484;
-        bh=NIK2828kMHCRILpoHQ9phPRN0eeJFygUQc2X+t1mCWk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rgJ51x9kOVYx445VJUF7VaC/Jwm2Lg5/K/NB2v1yrzFM/dFHleNub+TYe1DTMvzn7
-         0FowU6Rj43HUsq3ebVVSGLTcYy3vpL8x1L0JTCiNE2hUdnfH9+mOIGdxdRcBO/kcCI
-         Kmc4QAqZA44g2JmZdWl+yb7fPr9a9VCXiYyxFPrA=
-Date:   Thu, 30 Jun 2022 13:28:02 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Meng Tang <tangmeng@uniontech.com>
-Cc:     stable@vger.kernel.org, tony0620emma@gmail.com,
-        kvalo@codeaurora.org, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guo-Feng Fan <vincent_fann@realtek.com>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: [PATCH 5.10 v2 1/3] commit 5d6651fe8583 ("rtw88: 8821c: support
- RFE type2 wifi NIC")
-Message-ID: <Yr2Iwn53KqdSSU6V@kroah.com>
-References: <20220628134351.4182-1-tangmeng@uniontech.com>
+        Thu, 30 Jun 2022 07:30:15 -0400
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE3451B24
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 04:30:12 -0700 (PDT)
+X-QQ-mid: bizesmtp88t1656588607t477ilmz
+Received: from localhost.localdomain ( [113.57.152.160])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 30 Jun 2022 19:30:06 +0800 (CST)
+X-QQ-SSF: D140000000200030E000000A0100000
+X-QQ-FEAT: aP2oNmVYkM8sUCvPTo0LbC7fDuf56FZ3uAO5OAe5cfBDTxxb7RDtoPZQzzSFj
+        sRVurMKpDP1KIa0156h+PDTo1ETZTZQbGG50cFR0X/NpSKbsiAWNI0ENgvMy3Nh6BL3eICg
+        pl1GAsPEKgZp4xgLJG3YP+ZzIBcVnc4X+wKEkE/O9HJVxh39iOHMhzODE/pheudVt+ZkW+J
+        5HKXymip9pE2KW4RgEQ9uaIb1jSSpI5ix6uhEjGvbGcJUFcgjWUCPjTsbZJwjh+yu2AVTR9
+        isJZiDBbOX9mCk3u0MLI7jqoLaV7RbD/y/TNr0Af/9E8Dk321yL7qCm7t8hdfoVkryef69w
+        WaEET6rbc5GgEaIHGg=
+X-QQ-GoodBg: 1
+From:   hmy <huanglin@uniontech.com>
+To:     robh+dt@kernel.org
+Cc:     linux-kernel@vger.kernel.org, "3127791@qq.com" <3127791@qq.com>
+Subject: [PATCH] of/fdt:  extend cmdline is not avail when kernel grub config ends with "--"
+Date:   Thu, 30 Jun 2022 19:28:39 +0800
+Message-Id: <20220630112839.30941-1-huanglin@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628134351.4182-1-tangmeng@uniontech.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign10
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 09:43:49PM +0800, Meng Tang wrote:
-> From: Guo-Feng Fan <vincent_fann@realtek.com>
-> 
-> RFE type2 is a new NIC which has one RF antenna shares with BT.
-> Update phy parameter to verstion V57 to allow initial procedure
-> to load extra AGC table for sharing antenna NIC.
-> 
-> Signed-off-by: Guo-Feng Fan <vincent_fann@realtek.com>
-> Signed-off-by: Ping-Ke Shih <pkshih@realtek.com>
-> Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
-> Link: https://lore.kernel.org/r/20210202055012.8296-4-pkshih@realtek.com
-> Signed-off-by: Meng Tang <tangmeng@uniontech.com>
-> ---
->  drivers/net/wireless/realtek/rtw88/main.c     |   2 +
->  drivers/net/wireless/realtek/rtw88/main.h     |   7 +
->  drivers/net/wireless/realtek/rtw88/rtw8821c.c |  47 +++
->  drivers/net/wireless/realtek/rtw88/rtw8821c.h |  14 +
->  .../wireless/realtek/rtw88/rtw8821c_table.c   | 397 ++++++++++++++++++
->  .../wireless/realtek/rtw88/rtw8821c_table.h   |   1 +
->  6 files changed, 468 insertions(+)
+From: "3127791@qq.com" <3127791@qq.com>
 
-How does this meet the stable kernel rules?
+when boot_command_line = boot-command "--" CONFIG_CMDLINE,
+parse_args() will exit and without parsing the contents of CONFIG_CMDLINE
 
-This looks like new hardware support to me, right?  What bugfix does
-this resolve for 5.10 kernels?
+Signed-off-by: 3127791@qq.com <3127791@qq.com>
+---
+ drivers/of/fdt.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-And for newer support, why can you not just move to 5.15?
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index a8f5b6532165..6f46dc94766d 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -1160,6 +1160,7 @@ int __init early_init_dt_scan_chosen(char *cmdline)
+ {
+ 	int l, node;
+ 	const char *p;
++	char *q;
+ 	const void *rng_seed;
+ 	const void *fdt = initial_boot_params;
+ 
+@@ -1186,6 +1187,9 @@ int __init early_init_dt_scan_chosen(char *cmdline)
+ 	 */
+ #ifdef CONFIG_CMDLINE
+ #if defined(CONFIG_CMDLINE_EXTEND)
++	q = strstr(data, "--");
++	if (q)
++		*q = '\0';
+ 	strlcat(cmdline, " ", COMMAND_LINE_SIZE);
+ 	strlcat(cmdline, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
+ #elif defined(CONFIG_CMDLINE_FORCE)
+-- 
+2.25.1
 
-confused,
 
-greg k-h
+

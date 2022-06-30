@@ -2,313 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A315D560E65
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 02:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B00E560E87
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 03:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbiF3A5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 20:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
+        id S230369AbiF3BD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 21:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiF3A5r (ORCPT
+        with ESMTP id S230206AbiF3BDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 20:57:47 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0F8201A1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:57:46 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id l9-20020a056830268900b006054381dd35so13506282otu.4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:57:46 -0700 (PDT)
+        Wed, 29 Jun 2022 21:03:55 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899BF21822
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 18:03:53 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id v9so9290042wrp.7
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 18:03:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=SKqfiDiYuvfDETXVnoeeg5pQ6AZyqtVKR2qDMSZMeUk=;
-        b=MbC6Tw1nfwmIzq9H1rKp+n/UqqIX05yDgOOlpIZdHXKKpP/zyZ6fwpSvAzJ8lYcYlZ
-         YIqyVrj6+1G7upZyavcalRFk921/82SZDL0tu+kbZDdrp3N3BRkw2+YCNvyBvYkqe+Z6
-         a49VJNtdaXVVd5x52SPZ4zs+wyBDcXV32Mmbq5HeQQJV3ErI64ZXkiDtII1g+jJ+dMkh
-         Tgz7TMKzDmDwv9e8+fFx5f8nNR4YDVRJaQKq2XzRQd3G7WQCzRc96Qj/lG0FDtU/wMqL
-         PNqTzGaTuRcp8DiuT8CHwAo16HJuuG3v1fKzsv/9AtubCRHbETL8X6/SxKqE7UptDZuZ
-         MWsg==
+        bh=5NQqj0qR4ORy93iwIYJOr5BAi74gi8sfq3SZuaybn8I=;
+        b=C2c49isPrbsmtusAZGmeODl5nBRjEPvakPfcutjnGFq9an2Lex4u4Hh9ZJOzgzS9xj
+         bXnM0cFTF5LPByoIwfwx4lo4a/JmZOyybxfXyHxY+9GsWMB4nM5v23mNCBvYnS+RvmOz
+         5pvpzmlkck2etpBOTF2/sMWwkC3hTKhBwg3Us=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=SKqfiDiYuvfDETXVnoeeg5pQ6AZyqtVKR2qDMSZMeUk=;
-        b=WBdFGJIViTz76hUqzTUSu9eO1B8xkM0gC94qI4/AwnPWhN1vDllIsSgSts+s6bllPF
-         eJlnYm8PfaLD5szNB01RMX4/GPc5mMfBnp5yglYexPMr1wJxYz4BH5ZDZF6EBQ02D3e7
-         4WJLTQqoTAuo3BQRqx3+lDf4RfW4oUNpir25AHA/OE19zNUr+Jhz8hESBI8V7dkcF3/4
-         9JNqyisNJQ3toC3+/7d5UZu7Y0o7mb/5RSx+Y+Gsqo6P5/lnjMu3sLNOeq9oUx33n0e/
-         UJndFSDXmCJ0J+5s5KyZvCBqUOj8V0YF/m6uUi+qni08w5XNJFL4DzWl7NVyjW2ul9cI
-         mUhQ==
-X-Gm-Message-State: AJIora/KKylJmkWV0YSGBxt7YrCpnPa1gXn3vNMcQLBOeZrOyEPbs0eF
-        Us08VpHNPovlXNEVi9t89dUzSDSLZSnIl8Huj3A=
-X-Google-Smtp-Source: AGRyM1uuqNmU1rx2B7OEGgbZcMQT3ivFsBg7sH7fuoVOlpvED76IbLTkh316ZjKbIN9vW844cpjPQkNBZoXKO5IHV/4=
-X-Received: by 2002:a05:6830:d13:b0:618:b519:5407 with SMTP id
- bu19-20020a0568300d1300b00618b5195407mr201343otb.219.1656550665471; Wed, 29
- Jun 2022 17:57:45 -0700 (PDT)
+        bh=5NQqj0qR4ORy93iwIYJOr5BAi74gi8sfq3SZuaybn8I=;
+        b=xb6dbFkmhajxsaGqB/k0V0LUdZhkk7Ffj7F4XG1rst8gIgINSXZR5f2xI8ELvaPQG4
+         QsLYzh1sQyKN1LQPeNprZQipTMNgWIBxVjpYyCQKyexfCdynxXZ7ABcyBYj/wbXK3S86
+         U4icrMv2bRslDJ7Y2taYPC7Ml3NKQ4HYEUR4kZOUWyccyBRXk6C/cyy5FEpxbgnRGAbB
+         b6SVC0r8gZfI7wSwkWiLQDJKjdlxGdt67Ud43AtQpHq/brnz1mwol/s1Z59LHhj1n8xi
+         Z3zQKFTytocib63PrtZYq9SNOboYCsL0asbTSp4J/G04bny+ob9IEVQuZrOHNdkie94H
+         tROg==
+X-Gm-Message-State: AJIora9s3ayetAyu8/X8sTV62YJK/uDtiiZUDcPS+5jiPiAuz7/Ruu9i
+        mTu5PZ1L8LENkxbr3KuWYeVUExcflWTkolx0kNlJnA==
+X-Google-Smtp-Source: AGRyM1sSHSQkz6DcECWQWK9PFYTmQIZjagW/7lH1bk6p1RXPMkoHKGLN9IvbWPW99XWqmIQF4/UuX4vl7IEyBKdUVpQ=
+X-Received: by 2002:adf:ce8a:0:b0:21b:bced:6883 with SMTP id
+ r10-20020adfce8a000000b0021bbced6883mr5637675wrn.25.1656551031938; Wed, 29
+ Jun 2022 18:03:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220622082513.467538-1-aneesh.kumar@linux.ibm.com> <20220622082513.467538-12-aneesh.kumar@linux.ibm.com>
-In-Reply-To: <20220622082513.467538-12-aneesh.kumar@linux.ibm.com>
-From:   Souptick Joarder <jrdr.linux@gmail.com>
-Date:   Thu, 30 Jun 2022 06:27:34 +0530
-Message-ID: <CAFqt6zYOWURi-U6gsKTf7jjpGjMn0WqeBz1zm-5DAFDQ+Go2xw@mail.gmail.com>
-Subject: Re: [PATCH v7 11/12] mm/demotion: Add documentation for memory tiering
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>
+References: <CAODwPW9E8wWwxbYKyf4_-JFb4F-JSmLR3qOF_iudjX0f9ndF0A@mail.gmail.com>
+ <CAODwPW8fiFSNehZbZDdR9kjHxohLGiyE7edU=Opy0xV_P8JbEQ@mail.gmail.com> <3bb0ffa0-8091-0848-66af-180a41a68bf7@linaro.org>
+In-Reply-To: <3bb0ffa0-8091-0848-66af-180a41a68bf7@linaro.org>
+From:   Julius Werner <jwerner@chromium.org>
+Date:   Wed, 29 Jun 2022 18:03:40 -0700
+Message-ID: <CAODwPW89xZQZiZdQNt6+CcRjz=nbEAAFH0h_dBFSE5v3aFU4rQ@mail.gmail.com>
+Subject: Re: [RFC] Correct memory layout reporting for "jedec,lpddr2" and
+ related bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Julius Werner <jwerner@chromium.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jian-Jia Su <jjsu@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Nikola Milosavljevic <mnidza@outlook.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 2:04 PM Aneesh Kumar K.V
-<aneesh.kumar@linux.ibm.com> wrote:
->
-> From: Jagdish Gediya <jvgediya@linux.ibm.com>
->
-> All N_MEMORY nodes are divided into 3 memoty tiers with tier ID value
+> You need to base your upstream work on upstream tree. My email was
+> changed like three months ago...
 
-s /memoty/ memory
+Apologies, I just used the same email that I sent patches to last
+year. Once I write an actual patch for this issue, I'll make sure to
+use get_maintainer.pl.
 
-> MEMORY_TIER_HBM_GPU, MEMORY_TIER_DRAM and MEMORY_TIER_PMEM. By default,
-> all nodes are assigned to default memory tier.
+> >> We need to be able to report the information that's currently encoded
+> >> in the "jedec,lpddr2" binding separately for each channel+rank
+> >> combination, and we need to be able to tell how many LPDDR chips are
+> >> combined under a single memory channel.
+>
+> Why?
+>
+> At beginning of your message you kind of mixed two different usages:
+> 1. Knowing the topology of the memory.
+> 2. Figuring out total memory.
+>
+> Implementing (1) above would probably solve your (2) use case. But if
+> you only need (2), do you really need to define entire topology?
 
-I think adding the default memory tier name will be helpful.
+Okay, sorry, I wasn't clear here. We are really interested in topology
+(for documentation and SKU identification purposes), so "just"
+figuring out total memory is not enough. The point I wanted to make is
+more that we want to be able to identify the whole topology down to
+the exact number of components on each layer, so the existing binding
+(which just defines one LPDDR chip without explaining how many
+instances of it there are and how they're hooked up together) is not
+enough. Saying "I want to be able to figure out total memory from
+this" is more like an easy way to verify that all the information
+we're looking for is available... i.e. if all the LPDDR chips and
+their amounts and relations to each other are described in a way
+that's detailed enough that I can total up their density values and
+come up with the same number that the /memory node says, then I know
+we're not missing any layer of information. But ultimately I'm
+interested in being able to read out the whole topology, not just
+total capacity.
 
+>> For the latter, I would suggest adding a new property "channel-io-width" which
 >
-> Demotion path for all N_MEMORY nodes is prepared based on the tier ID value
-> of memory tiers.
+> No, because io-width is a standard property, so it should be used
+> instead. It could be defined in channel node.
+
+What exactly do you mean by "standard property" -- do you mean in an
+LPDDR context, or for device tree bindings in general? In other device
+tree bindings, the only thing I can find is `reg-io-width`, so that's
+not quite the same (and wouldn't seem to preclude calling a field here
+`channel-io-width`, since the width that's talking about is not the
+width of a register). In LPDDR context, the term "IO width" mostly
+appears specifically for the bit field in Mode Register 8 that
+describes the amount of DQ pins going into one individual LPDDR chip.
+The field that I need to encode for the channel here is explicitly
+*not* that, it's the amount of DQ pins coming *out* of the LPDDR
+controller, and as explained in my original email those two numbers
+need not necessarily be the same when multiple LPDDR chips are hooked
+up in parallel. So, yes, I could call both of these properties
+`io-width` with one in the rank node and one in the channel node...
+but I think giving the latter one a different name (e.g.
+`channel-io-width`) would be better to avoid confusion and provide a
+hint that there's an important difference between these numbers.
+
+> You also need a timings node. I don't think it would be different for
+> each of ranks, would it?
+
+I think it might be? I'm honestly not a memory expert so I'm not
+really sure (Jian-Jia in CC might know this?), but since different
+ranks can be asymmetric (even when they're on the same part), I could
+imagine that, say, the larger rank might need slightly longer
+precharge time or something like that. They at least all implement a
+separate set of mode registers, so they could theoretically be
+configured with different latency settings through those.
+
+> >> (Also, btw, would it make sense to use this opportunity to combine the
+> >> "jedec,lpddr2" and "jedec,lpddr3" bindings into a single document?
 >
-> This patch adds documention for memory tiering introduction, its sysfs
-> interfaces and how demotion is performed based on memory tiers.
->
-> Suggested-by: Wei Xu <weixugc@google.com>
-> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
-> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> ---
->  Documentation/admin-guide/mm/index.rst        |   1 +
->  .../admin-guide/mm/memory-tiering.rst         | 182 ++++++++++++++++++
->  2 files changed, 183 insertions(+)
->  create mode 100644 Documentation/admin-guide/mm/memory-tiering.rst
->
-> diff --git a/Documentation/admin-guide/mm/index.rst b/Documentation/admin-guide/mm/index.rst
-> index c21b5823f126..3f211cbca8c3 100644
-> --- a/Documentation/admin-guide/mm/index.rst
-> +++ b/Documentation/admin-guide/mm/index.rst
-> @@ -32,6 +32,7 @@ the Linux memory management.
->     idle_page_tracking
->     ksm
->     memory-hotplug
-> +   memory-tiering
->     nommu-mmap
->     numa_memory_policy
->     numaperf
-> diff --git a/Documentation/admin-guide/mm/memory-tiering.rst b/Documentation/admin-guide/mm/memory-tiering.rst
-> new file mode 100644
-> index 000000000000..142c36651f5d
-> --- /dev/null
-> +++ b/Documentation/admin-guide/mm/memory-tiering.rst
-> @@ -0,0 +1,182 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +.. _admin_guide_memory_tiering:
-> +
-> +===========
-> +Memory tiers
-> +============
-> +
-> +This document describes explicit memory tiering support along with
-> +demotion based on memory tiers.
-> +
-> +Introduction
-> +============
-> +
-> +Many systems have multiple types of memory devices e.g. GPU, DRAM and
-> +PMEM. The memory subsystem of these systems can be called a memory
-> +tiering system because the performance of the different types of
-> +memory is different. Memory tiers are defined based on the hardware
-> +capabilities of memory nodes. Each memory tier is assigned a tier ID
-> +value that determines the memory tier position in demotion order.
-> +
-> +The memory tier assignment of each node is independent of each
-> +other. Moving a node from one tier to another tier doesn't affect
-> +the tier assignment of any other node.
-> +
-> +Memory tiers are used to build the demotion targets for nodes. A node
-> +can demote its pages to any node of any lower tiers.
-> +
-> +Memory tier rank
-> +=================
-> +
-> +Memory nodes are divided into 3 types of memory tiers with tier ID
-> +value as shown based on their hardware characteristics.
-> +
-> +
-> +MEMORY_TIER_HBM_GPU
-> +MEMORY_TIER_DRAM
-> +MEMORY_TIER_PMEM
-> +
-> +Memory tiers initialization and (re)assignments
-> +===============================================
-> +
-> +By default, all nodes are assigned to the memory tier with the default tier ID
-> +DEFAULT_MEMORY_TIER which is 200 (MEMORY_TIER_DRAM). The memory tier of
-> +the memory node can be either modified through sysfs or from the driver. On
-> +hotplug, the memory tier with default tier ID is assigned to the memory node.
-> +
-> +
-> +Sysfs interfaces
-> +================
-> +
-> +Nodes belonging to specific tier can be read from,
-> +/sys/devices/system/memtier/memtierN/nodelist (Read-Only)
-> +
-> +Where N is 0 - 2.
-> +
-> +Example 1:
-> +For a system where Node 0 is CPU + DRAM nodes, Node 1 is HBM node,
-> +node 2 is a PMEM node an ideal tier layout will be
-> +
-> +$ cat /sys/devices/system/memtier/memtier0/nodelist
-> +1
-> +$ cat /sys/devices/system/memtier/memtier1/nodelist
-> +0
-> +$ cat /sys/devices/system/memtier/memtier2/nodelist
-> +2
-> +
-> +Example 2:
-> +For a system where Node 0 & 1 are CPU + DRAM nodes, node 2 & 3 are PMEM
-> +nodes.
-> +
-> +$ cat /sys/devices/system/memtier/memtier0/nodelist
-> +cat: /sys/devices/system/memtier/memtier0/nodelist: No such file or
-> +directory
-> +$ cat /sys/devices/system/memtier/memtier1/nodelist
-> +0-1
-> +$ cat /sys/devices/system/memtier/memtier2/nodelist
-> +2-3
-> +
-> +Default memory tier can be read from,
-> +/sys/devices/system/memtier/default_tier (Read-Only)
-> +
-> +e.g.
-> +$ cat /sys/devices/system/memtier/default_tier
-> +memtier200
-> +
-> +Max memory tier ID supported can be read from,
-> +/sys/devices/system/memtier/max_tier (Read-Only)
-> +
-> +e.g.
-> +$ cat /sys/devices/system/memtier/max_tier
-> +400
-> +
-> +Individual node's memory tier can be read of set using,
-> +/sys/devices/system/node/nodeN/memtier (Read-Write)
-> +
-> +where N = node id
-> +
-> +When this interface is written, Node is moved from the old memory tier
-> +to new memory tier and demotion targets for all N_MEMORY nodes are
-> +built again.
-> +
-> +For example 1 mentioned above,
-> +$ cat /sys/devices/system/node/node0/memtier
-> +1
-> +$ cat /sys/devices/system/node/node1/memtier
-> +0
-> +$ cat /sys/devices/system/node/node2/memtier
-> +2
-> +
-> +Additional memory tiers can be created by writing a tier ID value to this file.
-> +This results in a new memory tier creation and moving the specific NUMA node to
-> +that memory tier.
-> +
-> +Demotion
-> +========
-> +
-> +In a system with DRAM and persistent memory, once DRAM
-> +fills up, reclaim will start and some of the DRAM contents will be
-> +thrown out even if there is a space in persistent memory.
-> +Consequently, allocations will, at some point, start falling over to the slower
-> +persistent memory.
-> +
-> +That has two nasty properties. First, the newer allocations can end up in
-> +the slower persistent memory. Second, reclaimed data in DRAM are just
-> +discarded even if there are gobs of space in persistent memory that could
-> +be used.
-> +
-> +Instead of a page being discarded during reclaim, it can be moved to
-> +persistent memory. Allowing page migration during reclaim enables
-> +these systems to migrate pages from fast(higher) tiers to slow(lower)
-> +tiers when the fast(higher) tier is under pressure.
-> +
-> +
-> +Enable/Disable demotion
-> +-----------------------
-> +
-> +By default demotion is disabled, it can be enabled/disabled using
-> +below sysfs interface,
-> +
-> +$ echo 0/1 or false/true > /sys/kernel/mm/numa/demotion_enabled
-> +
-> +preferred and allowed demotion nodes
-> +------------------------------------
-> +
-> +Preferred nodes for a specific N_MEMORY node are the best nodes
-> +from the next possible lower memory tier. Allowed nodes for any
-> +node are all the nodes available in all possible lower memory
-> +tiers.
-> +
-> +Example:
-> +
-> +For a system where Node 0 & 1 are CPU + DRAM nodes, node 2 & 3 are PMEM
-> +nodes,
-> +
-> +node distances:
-> +node   0    1    2    3
-> +   0  10   20   30   40
-> +   1  20   10   40   30
-> +   2  30   40   10   40
-> +   3  40   30   40   10
-> +
-> +memory_tiers[0] = <empty>
-> +memory_tiers[1] = 0-1
-> +memory_tiers[2] = 2-3
-> +
-> +node_demotion[0].preferred = 2
-> +node_demotion[0].allowed   = 2, 3
-> +node_demotion[1].preferred = 3
-> +node_demotion[1].allowed   = 3, 2
-> +node_demotion[2].preferred = <empty>
-> +node_demotion[2].allowed   = <empty>
-> +node_demotion[3].preferred = <empty>
-> +node_demotion[3].allowed   = <empty>
-> +
-> +Memory allocation for demotion
-> +------------------------------
-> +
-> +If a page needs to be demoted from any node, the kernel 1st tries
-> +to allocate a new page from the node's preferred node and fallbacks to
-> +node's allowed targets in allocation fallback order.
-> +
-> --
-> 2.36.1
->
->
+> These bindings are quite different, so combining would result in big
+> allOf. I am not sure if there is benefit in that.
+
+They should basically be 100% identical outside of the timings. I can
+see that jedec,lpddr2 is currently missing the manufacturer-id
+property, that's probably an oversight -- Mode Register 5 with that ID
+exists for LPDDR2 just as well as for LPDDR3, and we're already
+passing the revision IDs which is kinda useless without also passing
+the manufacturer ID as well (because the revision IDs are
+vendor-specific). So merging the bindings would fix that. The only
+other difference I can see are the deprecated
+`revision-id1`/`revision-id2` fields for jedec,lpddr2 -- if I use a
+property inclusion mechanism like Doug suggested, those could stay
+separate in jedec,lpddr2 only (since they're deprecated anyway and
+replaced by `revision-id` in the combined bindings).
+
+For the timings, I'm okay with keeping them separate.

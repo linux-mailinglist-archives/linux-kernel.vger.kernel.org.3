@@ -2,143 +2,425 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF63561882
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C75561887
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbiF3KqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 06:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
+        id S232596AbiF3Kru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 06:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiF3KqP (ORCPT
+        with ESMTP id S229673AbiF3Krr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 06:46:15 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BD5D65
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 03:46:14 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id r1so16675920plo.10
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 03:46:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AHRCCBW/JYhqCHWOVbSogrUe2u3TyZz98/JcPRt3vOM=;
-        b=IicN9pLM0nICiRtnqiY88yj2ZaU+Nb/b/PnRYuAyLzX/hEOX8t4SzAFodnLYTWlXRz
-         DPVEOzR1r2U39H89xXjdq9zYYoYYtNmc2cRFXBCAAHv05qvePfx3EHvI6grx+hvcZtW8
-         fXDvt6sCT4w+6xGYENjw0/NdJCwJGCy1ul40L1MG9E5nZCWEXEMajLlLLo5DDaY6dtOK
-         2HS6KJdWdplHLw+iKj9Hm5byXMvDcKaFBzwjXWMk3IMiomeCa50tkTGxbdgOYJ5cA3Pq
-         ppO0fNfeG9ObHxh/DywqXOWr0psylqZnvI0qZyvkH0bbn1QdZn62H7lvSW/OJcLMswgY
-         RTbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AHRCCBW/JYhqCHWOVbSogrUe2u3TyZz98/JcPRt3vOM=;
-        b=Yj3HpKfS4NzRi9UqYg3c8i0UXqrACR4KM0aeQLaHKc6+ybQDWaHwiEXAWnz/ZUhNEZ
-         zMiCi+8z4Rw8KfAMaiGG7V1smKHhmtvAs9cL9R8aiVtxpfDC5OOwWWw/PbzhgeUdu24M
-         nDCjDa9tmvj5CdTXFysFUM5v/ZnxEbFrg3JG4BAXK8M0ASLLtujDGUsbAV/PX5j7gspG
-         6jWS4dZhjuGHsY/I7Y+UVQsNwSBgS9JZWEjvUtrsslRSWVkVgwJERpPIjiHs/03Mfnoy
-         Hl+jYeTg5zBLsJTWhl1YlPVb+4WoujZ+nANt2onKW6sgXQ2QlnmbIBcS4c88D4PS5XnM
-         UFlw==
-X-Gm-Message-State: AJIora9PE26a4+b633rez3bxRdlThBm5BK+gm0ouEpEF2I9vQ3705VnP
-        0HU2mQgGRUUmEhprERRGRVTD3+1juK8rNg==
-X-Google-Smtp-Source: AGRyM1t1rfYwPCSnYs9iDgfAbHPrQu203uWt+ZTuuf6fPirLXRLU9qsp862QAit9TQ7AZws/PJOclQ==
-X-Received: by 2002:a17:90b:1b07:b0:1ec:c617:a314 with SMTP id nu7-20020a17090b1b0700b001ecc617a314mr9200091pjb.214.1656585973552;
-        Thu, 30 Jun 2022 03:46:13 -0700 (PDT)
-Received: from [10.4.105.41] ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id y5-20020a62ce05000000b0052514384f02sm2465676pfg.54.2022.06.30.03.46.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 03:46:13 -0700 (PDT)
-Message-ID: <a72bf17e-f633-87e1-1166-6a4bff122500@bytedance.com>
-Date:   Thu, 30 Jun 2022 18:46:08 +0800
+        Thu, 30 Jun 2022 06:47:47 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A14A10E0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 03:47:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656586066; x=1688122066;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1VfU8SRjKjsTdI2pN2BKb6S9TF8HBN5Cif6Hblidadk=;
+  b=KFusy9cUbSkcBJ7teqG0eSBI9YaLa0A9lr6gmieg13C9QrIxxG23ug6/
+   NzI2Dp0luG0czBkIBP7vORaILtZB9RNhlXYIfbNRQLFQOXCNd+jElDYjY
+   cIYmF91h29yiZ4M/FQUm5ucnBI5twWnRChI7wJixwe85naLhtduflcdHU
+   uHbvPyqUmQUCOKH6Sp0qLFheP0heVfVsYUspYIgW8gmsifjTCsDusxl/p
+   Odp+ayNXOuiQLlehpAz5Wr0wyzwJMVUJDFKQxRW+SPzwE6HVr/EB/C19t
+   IjN4KiDgUJVv7WorR57vXlcnhHCkLaLN522KphhNvjFF26fDCkLDFPzKc
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="279859634"
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="279859634"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 03:47:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="694005410"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 30 Jun 2022 03:47:44 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o6ri4-000CcW-88;
+        Thu, 30 Jun 2022 10:47:44 +0000
+Date:   Thu, 30 Jun 2022 18:47:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [morimoto:sound-2022-06-30-v3 19/19]
+ sound/soc/codecs/jz4770.c:768:10: error: 'struct snd_soc_dai_driver' has no
+ member named 'playback'
+Message-ID: <202206301824.JlMLdHKl-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH v4 6/7] sched/fair: skip busy cores in SIS search
-Content-Language: en-US
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Josh Don <joshdon@google.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        linux-kernel@vger.kernel.org
-References: <20220619120451.95251-1-wuyun.abel@bytedance.com>
- <20220619120451.95251-7-wuyun.abel@bytedance.com>
- <20220621181442.GA37168@chenyu5-mobl1>
- <543d55e1-fad8-3df3-8bae-d79c0c8d8340@bytedance.com>
- <20220624033032.GA14945@chenyu5-mobl1>
- <3e4d2594-f678-b77a-4883-0b893daf19f6@bytedance.com>
- <2d18453d-9c9b-b57b-1616-d4a9229abd5a@bytedance.com>
- <20220630041645.GA9253@chenyu5-mobl1>
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <20220630041645.GA9253@chenyu5-mobl1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/morimoto/linux sound-2022-06-30-v3
+head:   fc6f65d23a318462b8e17cdf7db622dfc7719ac7
+commit: fc6f65d23a318462b8e17cdf7db622dfc7719ac7 [19/19] remove
+config: sparc-randconfig-r011-20220629 (https://download.01.org/0day-ci/archive/20220630/202206301824.JlMLdHKl-lkp@intel.com/config)
+compiler: sparc-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/morimoto/linux/commit/fc6f65d23a318462b8e17cdf7db622dfc7719ac7
+        git remote add morimoto https://github.com/morimoto/linux
+        git fetch --no-tags morimoto sound-2022-06-30-v3
+        git checkout fc6f65d23a318462b8e17cdf7db622dfc7719ac7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash sound/soc/codecs/ sound/soc/sh/ sound/soc/stm/ sound/soc/uniphier/
 
-On 6/30/22 12:16 PM, Chen Yu Wrote:
-> On Tue, Jun 28, 2022 at 03:58:55PM +0800, Abel Wu wrote:
->>
->> On 6/27/22 6:13 PM, Abel Wu Wrote:
->> There seems like not much difference except hackbench pipe test at
->> certain groups (30~110).
-> OK, smaller LLC domain seems to not have much difference, which might
-> suggest that by leveraging load balance code path, the read/write
-> to LLC shared mask might not be the bottleneck. I have an vague
-> impression that during Aubrey's cpumask searching for idle CPUs
-> work[1], there is concern that updating the shared mask in large LLC
-> has introduced cache contention and performance degrading. Maybe we
-> can find that regressed test case to verify.
-> [1] https://lore.kernel.org/all/1615872606-56087-1-git-send-email-aubrey.li@intel.com/
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I just went through Aubrey's v1-v11 patches and didn't find any
-particular tests other than hackbench/tbench/uperf. Please let
-me know if I missed something, thanks!
+All errors (new ones prefixed by >>):
 
->> I am intended to provide better scalability
->> by applying the filter which will be enabled when:
->>
->>    - The LLC is large enough that simply traversing becomes
->>      in-sufficient, and/or
->>
->>    - The LLC is loaded that unoccupied cpus are minority.
->>
->> But it would be very nice if a more fine grained pattern works well
->> so we can drop the above constrains.
->>
-> We can first try to push a simple version, and later optimize it.
-> One concern about v4 is that, we changed the logic in v3, which recorded
-> the overloaded CPU, while v4 tracks unoccupied CPUs. An overloaded CPU is
-> more "stable" because there are more than 1 running tasks on that runqueue.
-> It is more likely to remain "occupied" for a while. That is to say,
-> nr_task = 1, 2, 3... will all be regarded as occupied, while only nr_task = 0
-> is unoccupied. The former would bring less false negative/positive.
+>> sound/soc/codecs/jz4770.c:768:10: error: 'struct snd_soc_dai_driver' has no member named 'playback'
+     768 |         .playback = {
+         |          ^~~~~~~~
+   sound/soc/codecs/jz4770.c:768:9: warning: braces around scalar initializer
+     768 |         .playback = {
+         |         ^
+   sound/soc/codecs/jz4770.c:768:9: note: (near initialization for 'jz4770_codec_dai.id')
+>> sound/soc/codecs/jz4770.c:769:17: error: field name not in record or union initializer
+     769 |                 .stream_name = "Playback",
+         |                 ^
+   sound/soc/codecs/jz4770.c:769:17: note: (near initialization for 'jz4770_codec_dai.id')
+   sound/soc/codecs/jz4770.c:769:32: warning: initialization of 'unsigned int' from 'char *' makes integer from pointer without a cast [-Wint-conversion]
+     769 |                 .stream_name = "Playback",
+         |                                ^~~~~~~~~~
+   sound/soc/codecs/jz4770.c:769:32: note: (near initialization for 'jz4770_codec_dai.id')
+   sound/soc/codecs/jz4770.c:770:17: error: field name not in record or union initializer
+     770 |                 .channels_min = 2,
+         |                 ^
+   sound/soc/codecs/jz4770.c:770:17: note: (near initialization for 'jz4770_codec_dai.id')
+   sound/soc/codecs/jz4770.c:770:33: warning: excess elements in scalar initializer
+     770 |                 .channels_min = 2,
+         |                                 ^
+   sound/soc/codecs/jz4770.c:770:33: note: (near initialization for 'jz4770_codec_dai.id')
+   sound/soc/codecs/jz4770.c:771:17: error: field name not in record or union initializer
+     771 |                 .channels_max = 2,
+         |                 ^
+   sound/soc/codecs/jz4770.c:771:17: note: (near initialization for 'jz4770_codec_dai.id')
+   sound/soc/codecs/jz4770.c:771:33: warning: excess elements in scalar initializer
+     771 |                 .channels_max = 2,
+         |                                 ^
+   sound/soc/codecs/jz4770.c:771:33: note: (near initialization for 'jz4770_codec_dai.id')
+   sound/soc/codecs/jz4770.c:772:17: error: field name not in record or union initializer
+     772 |                 .rates = SNDRV_PCM_RATE_8000_96000,
+         |                 ^
+   sound/soc/codecs/jz4770.c:772:17: note: (near initialization for 'jz4770_codec_dai.id')
+   In file included from include/sound/pcm_params.h:10,
+                    from sound/soc/codecs/jz4770.c:15:
+   include/sound/pcm.h:132:41: warning: excess elements in scalar initializer
+     132 | #define SNDRV_PCM_RATE_8000_96000       (SNDRV_PCM_RATE_8000_48000|SNDRV_PCM_RATE_64000|\
+         |                                         ^
+   sound/soc/codecs/jz4770.c:772:26: note: in expansion of macro 'SNDRV_PCM_RATE_8000_96000'
+     772 |                 .rates = SNDRV_PCM_RATE_8000_96000,
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/sound/pcm.h:132:41: note: (near initialization for 'jz4770_codec_dai.id')
+     132 | #define SNDRV_PCM_RATE_8000_96000       (SNDRV_PCM_RATE_8000_48000|SNDRV_PCM_RATE_64000|\
+         |                                         ^
+   sound/soc/codecs/jz4770.c:772:26: note: in expansion of macro 'SNDRV_PCM_RATE_8000_96000'
+     772 |                 .rates = SNDRV_PCM_RATE_8000_96000,
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/jz4770.c:773:17: error: field name not in record or union initializer
+     773 |                 .formats = JZ_CODEC_FORMATS,
+         |                 ^
+   sound/soc/codecs/jz4770.c:773:17: note: (near initialization for 'jz4770_codec_dai.id')
+   sound/soc/codecs/jz4770.c:761:26: warning: excess elements in scalar initializer
+     761 | #define JZ_CODEC_FORMATS (SNDRV_PCM_FMTBIT_S16_LE  | \
+         |                          ^
+   sound/soc/codecs/jz4770.c:773:28: note: in expansion of macro 'JZ_CODEC_FORMATS'
+     773 |                 .formats = JZ_CODEC_FORMATS,
+         |                            ^~~~~~~~~~~~~~~~
+   sound/soc/codecs/jz4770.c:761:26: note: (near initialization for 'jz4770_codec_dai.id')
+     761 | #define JZ_CODEC_FORMATS (SNDRV_PCM_FMTBIT_S16_LE  | \
+         |                          ^
+   sound/soc/codecs/jz4770.c:773:28: note: in expansion of macro 'JZ_CODEC_FORMATS'
+     773 |                 .formats = JZ_CODEC_FORMATS,
+         |                            ^~~~~~~~~~~~~~~~
+>> sound/soc/codecs/jz4770.c:775:10: error: 'struct snd_soc_dai_driver' has no member named 'capture'
+     775 |         .capture = {
+         |          ^~~~~~~
+   sound/soc/codecs/jz4770.c:775:9: warning: braces around scalar initializer
+     775 |         .capture = {
+         |         ^
+   sound/soc/codecs/jz4770.c:775:9: note: (near initialization for 'jz4770_codec_dai.base')
+   sound/soc/codecs/jz4770.c:776:17: error: field name not in record or union initializer
+     776 |                 .stream_name = "Capture",
+         |                 ^
+   sound/soc/codecs/jz4770.c:776:17: note: (near initialization for 'jz4770_codec_dai.base')
+   sound/soc/codecs/jz4770.c:776:32: warning: initialization of 'unsigned int' from 'char *' makes integer from pointer without a cast [-Wint-conversion]
+     776 |                 .stream_name = "Capture",
+         |                                ^~~~~~~~~
+   sound/soc/codecs/jz4770.c:776:32: note: (near initialization for 'jz4770_codec_dai.base')
+   sound/soc/codecs/jz4770.c:777:17: error: field name not in record or union initializer
+     777 |                 .channels_min = 2,
+         |                 ^
+   sound/soc/codecs/jz4770.c:777:17: note: (near initialization for 'jz4770_codec_dai.base')
+   sound/soc/codecs/jz4770.c:777:33: warning: excess elements in scalar initializer
+     777 |                 .channels_min = 2,
+         |                                 ^
+   sound/soc/codecs/jz4770.c:777:33: note: (near initialization for 'jz4770_codec_dai.base')
+   sound/soc/codecs/jz4770.c:778:17: error: field name not in record or union initializer
+     778 |                 .channels_max = 2,
+         |                 ^
+   sound/soc/codecs/jz4770.c:778:17: note: (near initialization for 'jz4770_codec_dai.base')
+   sound/soc/codecs/jz4770.c:778:33: warning: excess elements in scalar initializer
+     778 |                 .channels_max = 2,
+         |                                 ^
+   sound/soc/codecs/jz4770.c:778:33: note: (near initialization for 'jz4770_codec_dai.base')
+   sound/soc/codecs/jz4770.c:779:17: error: field name not in record or union initializer
+     779 |                 .rates = SNDRV_PCM_RATE_8000_96000,
+         |                 ^
+   sound/soc/codecs/jz4770.c:779:17: note: (near initialization for 'jz4770_codec_dai.base')
+   In file included from include/sound/pcm_params.h:10,
+                    from sound/soc/codecs/jz4770.c:15:
+   include/sound/pcm.h:132:41: warning: excess elements in scalar initializer
+     132 | #define SNDRV_PCM_RATE_8000_96000       (SNDRV_PCM_RATE_8000_48000|SNDRV_PCM_RATE_64000|\
+         |                                         ^
+   sound/soc/codecs/jz4770.c:779:26: note: in expansion of macro 'SNDRV_PCM_RATE_8000_96000'
+     779 |                 .rates = SNDRV_PCM_RATE_8000_96000,
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/sound/pcm.h:132:41: note: (near initialization for 'jz4770_codec_dai.base')
+     132 | #define SNDRV_PCM_RATE_8000_96000       (SNDRV_PCM_RATE_8000_48000|SNDRV_PCM_RATE_64000|\
+         |                                         ^
+   sound/soc/codecs/jz4770.c:779:26: note: in expansion of macro 'SNDRV_PCM_RATE_8000_96000'
+     779 |                 .rates = SNDRV_PCM_RATE_8000_96000,
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/jz4770.c:780:17: error: field name not in record or union initializer
+     780 |                 .formats = JZ_CODEC_FORMATS,
+         |                 ^
+   sound/soc/codecs/jz4770.c:780:17: note: (near initialization for 'jz4770_codec_dai.base')
+   sound/soc/codecs/jz4770.c:761:26: warning: excess elements in scalar initializer
+     761 | #define JZ_CODEC_FORMATS (SNDRV_PCM_FMTBIT_S16_LE  | \
+         |                          ^
+   sound/soc/codecs/jz4770.c:780:28: note: in expansion of macro 'JZ_CODEC_FORMATS'
+     780 |                 .formats = JZ_CODEC_FORMATS,
+         |                            ^~~~~~~~~~~~~~~~
+   sound/soc/codecs/jz4770.c:761:26: note: (near initialization for 'jz4770_codec_dai.base')
+     761 | #define JZ_CODEC_FORMATS (SNDRV_PCM_FMTBIT_S16_LE  | \
+         |                          ^
+   sound/soc/codecs/jz4770.c:780:28: note: in expansion of macro 'JZ_CODEC_FORMATS'
+     780 |                 .formats = JZ_CODEC_FORMATS,
+         |                            ^~~~~~~~~~~~~~~~
+--
+>> sound/soc/codecs/mt6359.c:2587:18: error: 'struct snd_soc_dai_driver' has no member named 'playback'
+    2587 |                 .playback = {
+         |                  ^~~~~~~~
+   sound/soc/codecs/mt6359.c:2587:17: warning: braces around scalar initializer
+    2587 |                 .playback = {
+         |                 ^
+   sound/soc/codecs/mt6359.c:2587:17: note: (near initialization for 'mt6359_dai_driver[0].id')
+>> sound/soc/codecs/mt6359.c:2588:25: error: field name not in record or union initializer
+    2588 |                         .stream_name = "AIF1 Playback",
+         |                         ^
+   sound/soc/codecs/mt6359.c:2588:25: note: (near initialization for 'mt6359_dai_driver[0].id')
+   sound/soc/codecs/mt6359.c:2588:40: warning: initialization of 'unsigned int' from 'char *' makes integer from pointer without a cast [-Wint-conversion]
+    2588 |                         .stream_name = "AIF1 Playback",
+         |                                        ^~~~~~~~~~~~~~~
+   sound/soc/codecs/mt6359.c:2588:40: note: (near initialization for 'mt6359_dai_driver[0].id')
+   sound/soc/codecs/mt6359.c:2589:25: error: field name not in record or union initializer
+    2589 |                         .channels_min = 1,
+         |                         ^
+   sound/soc/codecs/mt6359.c:2589:25: note: (near initialization for 'mt6359_dai_driver[0].id')
+   sound/soc/codecs/mt6359.c:2589:41: warning: excess elements in scalar initializer
+    2589 |                         .channels_min = 1,
+         |                                         ^
+   sound/soc/codecs/mt6359.c:2589:41: note: (near initialization for 'mt6359_dai_driver[0].id')
+   sound/soc/codecs/mt6359.c:2590:25: error: field name not in record or union initializer
+    2590 |                         .channels_max = 2,
+         |                         ^
+   sound/soc/codecs/mt6359.c:2590:25: note: (near initialization for 'mt6359_dai_driver[0].id')
+   sound/soc/codecs/mt6359.c:2590:41: warning: excess elements in scalar initializer
+    2590 |                         .channels_max = 2,
+         |                                         ^
+   sound/soc/codecs/mt6359.c:2590:41: note: (near initialization for 'mt6359_dai_driver[0].id')
+   sound/soc/codecs/mt6359.c:2591:25: error: field name not in record or union initializer
+    2591 |                         .rates = SNDRV_PCM_RATE_8000_48000 |
+         |                         ^
+   sound/soc/codecs/mt6359.c:2591:25: note: (near initialization for 'mt6359_dai_driver[0].id')
+   In file included from include/sound/soc.h:23,
+                    from sound/soc/codecs/mt6359.c:16:
+   include/sound/pcm.h:131:41: warning: excess elements in scalar initializer
+     131 | #define SNDRV_PCM_RATE_8000_48000       (SNDRV_PCM_RATE_8000_44100|SNDRV_PCM_RATE_48000)
+         |                                         ^
+   sound/soc/codecs/mt6359.c:2591:34: note: in expansion of macro 'SNDRV_PCM_RATE_8000_48000'
+    2591 |                         .rates = SNDRV_PCM_RATE_8000_48000 |
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/sound/pcm.h:131:41: note: (near initialization for 'mt6359_dai_driver[0].id')
+     131 | #define SNDRV_PCM_RATE_8000_48000       (SNDRV_PCM_RATE_8000_44100|SNDRV_PCM_RATE_48000)
+         |                                         ^
+   sound/soc/codecs/mt6359.c:2591:34: note: in expansion of macro 'SNDRV_PCM_RATE_8000_48000'
+    2591 |                         .rates = SNDRV_PCM_RATE_8000_48000 |
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/mt6359.c:2594:25: error: field name not in record or union initializer
+    2594 |                         .formats = MT6359_FORMATS,
+         |                         ^
+   sound/soc/codecs/mt6359.c:2594:25: note: (near initialization for 'mt6359_dai_driver[0].id')
+   sound/soc/codecs/mt6359.c:2579:24: warning: excess elements in scalar initializer
+    2579 | #define MT6359_FORMATS (SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_U16_LE |\
+         |                        ^
+   sound/soc/codecs/mt6359.c:2594:36: note: in expansion of macro 'MT6359_FORMATS'
+    2594 |                         .formats = MT6359_FORMATS,
+         |                                    ^~~~~~~~~~~~~~
+   sound/soc/codecs/mt6359.c:2579:24: note: (near initialization for 'mt6359_dai_driver[0].id')
+    2579 | #define MT6359_FORMATS (SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_U16_LE |\
+         |                        ^
+   sound/soc/codecs/mt6359.c:2594:36: note: in expansion of macro 'MT6359_FORMATS'
+    2594 |                         .formats = MT6359_FORMATS,
+         |                                    ^~~~~~~~~~~~~~
+   sound/soc/codecs/mt6359.c:2587:29: warning: initialized field overwritten [-Woverride-init]
+    2587 |                 .playback = {
+         |                             ^
+   sound/soc/codecs/mt6359.c:2587:29: note: (near initialization for 'mt6359_dai_driver[0].id')
+>> sound/soc/codecs/mt6359.c:2596:18: error: 'struct snd_soc_dai_driver' has no member named 'capture'
+    2596 |                 .capture = {
+         |                  ^~~~~~~
+   sound/soc/codecs/mt6359.c:2596:17: warning: braces around scalar initializer
+    2596 |                 .capture = {
+         |                 ^
+   sound/soc/codecs/mt6359.c:2596:17: note: (near initialization for 'mt6359_dai_driver[0].base')
+   sound/soc/codecs/mt6359.c:2597:25: error: field name not in record or union initializer
+    2597 |                         .stream_name = "AIF1 Capture",
+         |                         ^
+   sound/soc/codecs/mt6359.c:2597:25: note: (near initialization for 'mt6359_dai_driver[0].base')
+   sound/soc/codecs/mt6359.c:2597:40: warning: initialization of 'unsigned int' from 'char *' makes integer from pointer without a cast [-Wint-conversion]
+    2597 |                         .stream_name = "AIF1 Capture",
+         |                                        ^~~~~~~~~~~~~~
+   sound/soc/codecs/mt6359.c:2597:40: note: (near initialization for 'mt6359_dai_driver[0].base')
+   sound/soc/codecs/mt6359.c:2598:25: error: field name not in record or union initializer
+    2598 |                         .channels_min = 1,
+         |                         ^
+   sound/soc/codecs/mt6359.c:2598:25: note: (near initialization for 'mt6359_dai_driver[0].base')
+   sound/soc/codecs/mt6359.c:2598:41: warning: excess elements in scalar initializer
+    2598 |                         .channels_min = 1,
+         |                                         ^
+   sound/soc/codecs/mt6359.c:2598:41: note: (near initialization for 'mt6359_dai_driver[0].base')
+   sound/soc/codecs/mt6359.c:2599:25: error: field name not in record or union initializer
+    2599 |                         .channels_max = 2,
+         |                         ^
+   sound/soc/codecs/mt6359.c:2599:25: note: (near initialization for 'mt6359_dai_driver[0].base')
+   sound/soc/codecs/mt6359.c:2599:41: warning: excess elements in scalar initializer
+    2599 |                         .channels_max = 2,
+         |                                         ^
+   sound/soc/codecs/mt6359.c:2599:41: note: (near initialization for 'mt6359_dai_driver[0].base')
+   sound/soc/codecs/mt6359.c:2600:25: error: field name not in record or union initializer
+    2600 |                         .rates = SNDRV_PCM_RATE_8000 |
+         |                         ^
+   sound/soc/codecs/mt6359.c:2600:25: note: (near initialization for 'mt6359_dai_driver[0].base')
+   In file included from include/sound/soc.h:23,
+                    from sound/soc/codecs/mt6359.c:16:
+   include/sound/pcm.h:110:41: warning: excess elements in scalar initializer
+     110 | #define SNDRV_PCM_RATE_8000             (1<<1)          /* 8000Hz */
+         |                                         ^
+   sound/soc/codecs/mt6359.c:2600:34: note: in expansion of macro 'SNDRV_PCM_RATE_8000'
+    2600 |                         .rates = SNDRV_PCM_RATE_8000 |
+         |                                  ^~~~~~~~~~~~~~~~~~~
+   include/sound/pcm.h:110:41: note: (near initialization for 'mt6359_dai_driver[0].base')
+     110 | #define SNDRV_PCM_RATE_8000             (1<<1)          /* 8000Hz */
+         |                                         ^
+   sound/soc/codecs/mt6359.c:2600:34: note: in expansion of macro 'SNDRV_PCM_RATE_8000'
+    2600 |                         .rates = SNDRV_PCM_RATE_8000 |
+         |                                  ^~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/mt6359.c:2606:25: error: field name not in record or union initializer
+    2606 |                         .formats = MT6359_FORMATS,
+         |                         ^
+   sound/soc/codecs/mt6359.c:2606:25: note: (near initialization for 'mt6359_dai_driver[0].base')
+   sound/soc/codecs/mt6359.c:2579:24: warning: excess elements in scalar initializer
+    2579 | #define MT6359_FORMATS (SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_U16_LE |\
+         |                        ^
+   sound/soc/codecs/mt6359.c:2606:36: note: in expansion of macro 'MT6359_FORMATS'
+    2606 |                         .formats = MT6359_FORMATS,
+         |                                    ^~~~~~~~~~~~~~
+   sound/soc/codecs/mt6359.c:2579:24: note: (near initialization for 'mt6359_dai_driver[0].base')
+    2579 | #define MT6359_FORMATS (SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_U16_LE |\
+         |                        ^
+   sound/soc/codecs/mt6359.c:2606:36: note: in expansion of macro 'MT6359_FORMATS'
+    2606 |                         .formats = MT6359_FORMATS,
+         |                                    ^~~~~~~~~~~~~~
+   sound/soc/codecs/mt6359.c:2613:18: error: 'struct snd_soc_dai_driver' has no member named 'playback'
+    2613 |                 .playback = {
+         |                  ^~~~~~~~
+   sound/soc/codecs/mt6359.c:2613:17: warning: braces around scalar initializer
+    2613 |                 .playback = {
+         |                 ^
+   sound/soc/codecs/mt6359.c:2613:17: note: (near initialization for 'mt6359_dai_driver[1].id')
+   sound/soc/codecs/mt6359.c:2614:25: error: field name not in record or union initializer
+    2614 |                         .stream_name = "AIF2 Playback",
+         |                         ^
+   sound/soc/codecs/mt6359.c:2614:25: note: (near initialization for 'mt6359_dai_driver[1].id')
+   sound/soc/codecs/mt6359.c:2614:40: warning: initialization of 'unsigned int' from 'char *' makes integer from pointer without a cast [-Wint-conversion]
+    2614 |                         .stream_name = "AIF2 Playback",
+         |                                        ^~~~~~~~~~~~~~~
+   sound/soc/codecs/mt6359.c:2614:40: note: (near initialization for 'mt6359_dai_driver[1].id')
+   sound/soc/codecs/mt6359.c:2615:25: error: field name not in record or union initializer
+    2615 |                         .channels_min = 1,
+         |                         ^
+   sound/soc/codecs/mt6359.c:2615:25: note: (near initialization for 'mt6359_dai_driver[1].id')
+   sound/soc/codecs/mt6359.c:2615:41: warning: excess elements in scalar initializer
+    2615 |                         .channels_min = 1,
+         |                                         ^
+   sound/soc/codecs/mt6359.c:2615:41: note: (near initialization for 'mt6359_dai_driver[1].id')
+   sound/soc/codecs/mt6359.c:2616:25: error: field name not in record or union initializer
+    2616 |                         .channels_max = 2,
+         |                         ^
+   sound/soc/codecs/mt6359.c:2616:25: note: (near initialization for 'mt6359_dai_driver[1].id')
+   sound/soc/codecs/mt6359.c:2616:41: warning: excess elements in scalar initializer
+    2616 |                         .channels_max = 2,
+         |                                         ^
+   sound/soc/codecs/mt6359.c:2616:41: note: (near initialization for 'mt6359_dai_driver[1].id')
+   sound/soc/codecs/mt6359.c:2617:25: error: field name not in record or union initializer
+    2617 |                         .rates = SNDRV_PCM_RATE_8000_48000 |
+         |                         ^
+   sound/soc/codecs/mt6359.c:2617:25: note: (near initialization for 'mt6359_dai_driver[1].id')
+   In file included from include/sound/soc.h:23,
+..
 
-Yes, I like the 'overloaded mask' too, but the downside is extra
-cpumask ops needed in the SIS path (the added cpumask_andnot).
-Besides, in this patch, the 'overloaded mask' is also unstable due
-to the state is maintained at core level rather than per-cpu, some
-more thoughts are in cover letter.
 
-> 
-> By far I have tested hackbench/schbench/netperf on top of Peter's sched/core branch,
-> with SIS_UTIL enabled. Overall it looks good, and netperf has especially
-> significant improvement when the load approaches overloaded(which is aligned
-> with your comment above). I'll re-run the netperf for several cycles to check the
-> standard deviation. And I'm also curious about v3's performance because it
-> tracks overloaded CPUs, so I'll also test on v3 with small modifications.
+vim +768 sound/soc/codecs/jz4770.c
 
-Thanks very much for your reviewing and testing.
+2159a6810e96c3 Paul Cercueil 2019-12-24  760  
+2159a6810e96c3 Paul Cercueil 2019-12-24  761  #define JZ_CODEC_FORMATS (SNDRV_PCM_FMTBIT_S16_LE  | \
+2159a6810e96c3 Paul Cercueil 2019-12-24  762  			  SNDRV_PCM_FMTBIT_S18_3LE | \
+2159a6810e96c3 Paul Cercueil 2019-12-24  763  			  SNDRV_PCM_FMTBIT_S20_3LE | \
+2159a6810e96c3 Paul Cercueil 2019-12-24  764  			  SNDRV_PCM_FMTBIT_S24_3LE)
+2159a6810e96c3 Paul Cercueil 2019-12-24  765  
+2159a6810e96c3 Paul Cercueil 2019-12-24  766  static struct snd_soc_dai_driver jz4770_codec_dai = {
+2159a6810e96c3 Paul Cercueil 2019-12-24  767  	.name = "jz4770-hifi",
+2159a6810e96c3 Paul Cercueil 2019-12-24 @768  	.playback = {
+2159a6810e96c3 Paul Cercueil 2019-12-24 @769  		.stream_name = "Playback",
+2159a6810e96c3 Paul Cercueil 2019-12-24  770  		.channels_min = 2,
+2159a6810e96c3 Paul Cercueil 2019-12-24  771  		.channels_max = 2,
+2159a6810e96c3 Paul Cercueil 2019-12-24  772  		.rates = SNDRV_PCM_RATE_8000_96000,
+2159a6810e96c3 Paul Cercueil 2019-12-24 @773  		.formats = JZ_CODEC_FORMATS,
+2159a6810e96c3 Paul Cercueil 2019-12-24  774  	},
+2159a6810e96c3 Paul Cercueil 2019-12-24 @775  	.capture = {
+2159a6810e96c3 Paul Cercueil 2019-12-24  776  		.stream_name = "Capture",
+2159a6810e96c3 Paul Cercueil 2019-12-24  777  		.channels_min = 2,
+2159a6810e96c3 Paul Cercueil 2019-12-24  778  		.channels_max = 2,
+2159a6810e96c3 Paul Cercueil 2019-12-24  779  		.rates = SNDRV_PCM_RATE_8000_96000,
+2159a6810e96c3 Paul Cercueil 2019-12-24  780  		.formats = JZ_CODEC_FORMATS,
+2159a6810e96c3 Paul Cercueil 2019-12-24  781  	},
+2159a6810e96c3 Paul Cercueil 2019-12-24  782  	.ops = &jz4770_codec_dai_ops,
+2159a6810e96c3 Paul Cercueil 2019-12-24  783  };
+2159a6810e96c3 Paul Cercueil 2019-12-24  784  
 
-Abel
+:::::: The code at line 768 was first introduced by commit
+:::::: 2159a6810e96c38a469c39df8e109edb7232d3c9 ASoC: codecs: Add jz4770-codec driver
+
+:::::: TO: Paul Cercueil <paul@crapouillou.net>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

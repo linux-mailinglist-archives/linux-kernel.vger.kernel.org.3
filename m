@@ -2,80 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F40561FEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D3D561FCF
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235827AbiF3QHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 12:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S236282AbiF3QBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 12:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235595AbiF3QHX (ORCPT
+        with ESMTP id S235713AbiF3QBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 12:07:23 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5A7D1AF0F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 09:07:18 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 25UFwEc4007186;
-        Thu, 30 Jun 2022 10:58:14 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 25UFwBWR007180;
-        Thu, 30 Jun 2022 10:58:11 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Thu, 30 Jun 2022 10:58:11 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Sathvika Vasireddy <sv@linux.vnet.ibm.com>,
-        Marc Zyngier <maz@kernel.org>, "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [RFC PATCH v3 11/12] powerpc: Remove unreachable() from WARN_ON()
-Message-ID: <20220630155811.GK25951@gate.crashing.org>
-References: <20220624183238.388144-1-sv@linux.ibm.com> <20220624183238.388144-12-sv@linux.ibm.com> <70b6d08d-aced-7f4e-b958-a3c7ae1a9319@csgroup.eu> <92eae2ef-f9b6-019a-5a8e-728cdd9bbbc0@linux.vnet.ibm.com> <cce19b1c-449a-f306-533a-9edc855049aa@csgroup.eu> <1656572413.pbaqjnrrcl.naveen@linux.ibm.com> <da86c612-186d-364f-cc36-bcf942a97083@csgroup.eu> <1656583960.0nqsj977sr.naveen@linux.ibm.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1656583960.0nqsj977sr.naveen@linux.ibm.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 30 Jun 2022 12:01:05 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567D0205F3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 09:01:04 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-fb6b4da1dfso26395815fac.4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 09:01:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xgBbKieDiC7Mnkk7RkqR7SZbMT1idh4KZCFyw9gKf4Y=;
+        b=ku3hrIfINU9Gz6j8NGGS8tEzEjIt945AWd286RiwiyhiB+M3vBwVxOO7Q7EW6jUV7m
+         msAjfB8cyE2oOxPd1l/4xwbQ46dD5JhCRYdI+5ReKNcMnmvJJJ2YdoZETJ3HWJcJixHO
+         2TDSuMgiixgv1nNXaQs9/wzTz1sLy6Nt0ycyUwTHa1shKUnBrsQjkGUHaznvxLFnO1+c
+         RDiCatJYGDyaSiPpWJdW+6T5PZhkIPidNplRzy6W2wLGFDq124r0EyyHOicDvVdM23HM
+         q8k/qthmHfmGYUvT36IIm8CJg8t+3ufupoIjfF+xk6P6Ufeg6TIBR53LucRwj0qngXN9
+         zKIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xgBbKieDiC7Mnkk7RkqR7SZbMT1idh4KZCFyw9gKf4Y=;
+        b=bHCIEPvGLiL1k0uY+M9GlircQqkbuvDITZuuPeo0eNgq9eJtb8cppodeQNdKgXdYKT
+         y0+bJfjpqimr41MbaW9dLgamTpjxMQEourHWLFWbMqOBRSrFFzosQO2L8OOZ7cl9Oyrp
+         0L/5Ih+P2DJPJFoKuZ9XaN0tGoOFMBvpopO9KJUTXz9OYXho/7ohItucvs7pTGKcwVus
+         Y9SRQBYFjBryfXoyvISNrHHGBm5VAC8Mq0RQKNgoNO+Zc7nTsqUnSLNOBHeaIndBxt1O
+         BZnPo6oHV569iFJhPab4dzHMmJVDTC2qDA8SF2xSqombMgV7d2vD4e+l6YZCskhp0a4J
+         2jhA==
+X-Gm-Message-State: AJIora+3OH2DRqj1LShPZHziOsVi3AFyShEkK0XRyIh830Iq1gLS9anP
+        pK/1/XEv01zkkvyLxEcyK5UOFL02sjV52BD+LhZkEQ==
+X-Google-Smtp-Source: AGRyM1sPtuG+qbEdcwSTIr7QZVHD2VLgcrGbMD039HjWZ04QUBaryHLGH5Ht5bVQ5Sh/0cRO7d3FPzHEJLV5PlDxpTs=
+X-Received: by 2002:a05:6870:c596:b0:101:6409:ae62 with SMTP id
+ ba22-20020a056870c59600b001016409ae62mr6901331oab.112.1656604863408; Thu, 30
+ Jun 2022 09:01:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220621150902.46126-1-mlevitsk@redhat.com> <20220621150902.46126-12-mlevitsk@redhat.com>
+ <CALMp9eSe5jtvmOPWLYCcrMmqyVBeBkg90RwtR4bwxay99NAF3g@mail.gmail.com> <42da1631c8cdd282e5d9cfd0698b6df7deed2daf.camel@redhat.com>
+In-Reply-To: <42da1631c8cdd282e5d9cfd0698b6df7deed2daf.camel@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Thu, 30 Jun 2022 09:00:52 -0700
+Message-ID: <CALMp9eRNZ8D5aRyUEkc7CORz-=bqzfVCSf6nOGZhqQfWfte0dw@mail.gmail.com>
+Subject: Re: [PATCH v2 11/11] KVM: x86: emulator/smm: preserve interrupt
+ shadow in SMRAM
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        x86@kernel.org, Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 04:07:47PM +0530, Naveen N. Rao wrote:
-> Objtool classifies 'ud2' as INSN_BUG, and 'int3' as INSN_TRAP. In x86 
-> BUG(), there is no need for an annotation since objtool assumes that 
-> 'ud2' terminates control flow. But, for __WARN_FLAGS(), since 'ud2' is 
-> used, an explicit annotate_reachable() is needed. That's _reachable_, to 
-> indicate that the control flow can continue with the next instruction.
-> 
-> On powerpc, we should (eventually) classify all trap variants as 
-> INSN_TRAP. Even in the absence of that classification today, objtool 
-> assumes that control flow continues with the next instruction. With your 
-> work to utilize asm goto for __WARN_FLAGS(), with no extra instructions 
-> being generated, I think it is appropriate to just use 
-> __builtin_unreachable() and to not use the annotation.
-> 
-> In any case, we are only hitting this since gcc is generating a 'bl' due 
-> to that annotation. We are not yet enabling full objtool validation on 
-> powerpc, so I think we can revisit this at that point.
+On Wed, Jun 29, 2022 at 11:00 PM Maxim Levitsky <mlevitsk@redhat.com> wrote:
+>
+> On Wed, 2022-06-29 at 09:31 -0700, Jim Mattson wrote:
+> > On Tue, Jun 21, 2022 at 8:09 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
+> > > When #SMI is asserted, the CPU can be in interrupt shadow
+> > > due to sti or mov ss.
+> > >
+> > > It is not mandatory in  Intel/AMD prm to have the #SMI
+> > > blocked during the shadow, and on top of
+> > > that, since neither SVM nor VMX has true support for SMI
+> > > window, waiting for one instruction would mean single stepping
+> > > the guest.
+> > >
+> > > Instead, allow #SMI in this case, but both reset the interrupt
+> > > window and stash its value in SMRAM to restore it on exit
+> > > from SMM.
+> > >
+> > > This fixes rare failures seen mostly on windows guests on VMX,
+> > > when #SMI falls on the sti instruction which mainfest in
+> > > VM entry failure due to EFLAGS.IF not being set, but STI interrupt
+> > > window still being set in the VMCS.
+> >
+> > I think you're just making stuff up! See Note #5 at
+> > https://sandpile.org/x86/inter.htm.
+> >
+> > Can you reference the vendors' documentation that supports this change?
+> >
+>
+> First of all, just to note that the actual issue here was that
+> we don't clear the shadow bits in the guest interruptability field
+> in the vmcb on SMM entry, that triggered a consistency check because
+> we do clear EFLAGS.IF.
+> Preserving the interrupt shadow is just nice to have.
+>
+>
+> That what Intel's spec says for the 'STI':
+>
+> "The IF flag and the STI and CLI instructions do not prohibit the generation of exceptions and nonmaskable inter-
+> rupts (NMIs). However, NMIs (and system-management interrupts) may be inhibited on the instruction boundary
+> following an execution of STI that begins with IF = 0."
+>
+> Thus it is likely that #SMI are just blocked when in shadow, but it is easier to implement
+> it this way (avoids single stepping the guest) and without any user visable difference,
+> which I noted in the patch description, I noted that there are two ways to solve this,
+> and preserving the int shadow in SMRAM is just more simple way.
 
-See also <https://gcc.gnu.org/PR99299> that asks for a __builtin_trap()
-variant that does not terminate control flow ("that is recoverable").
+It's not true that there is no user-visible difference. In your
+implementation, the SMI handler can see that the interrupt was
+delivered in the interrupt shadow.
 
+The right fix for this problem is to block SMI in an interrupt shadow,
+as is likely the case for all modern CPUs.
 
-Segher
+>
+> As for CPUS that neither block SMI nor preserve the int shadaw, in theory they can, but that would
+> break things, as noted in this mail
+>
+> https://lore.kernel.org/lkml/1284913699-14986-1-git-send-email-avi@redhat.com/
+>
+> It is possible though that real cpu supports HLT restart flag, which makes this a non issue,
+> still. I can't rule out that a real cpu doesn't preserve the interrupt shadow on SMI, but
+> I don't see why we can't do this to make things more robust.
+
+Because, as I said, I think you're just making stuff up...unless, of
+course, you have documentation to back this up.

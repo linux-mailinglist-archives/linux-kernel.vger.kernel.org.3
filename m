@@ -2,135 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 652A05625C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 833FA5625C7
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 00:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237590AbiF3V5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 17:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
+        id S236763AbiF3V7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 17:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237271AbiF3V5U (ORCPT
+        with ESMTP id S229531AbiF3V7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 17:57:20 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840E057202
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 14:57:19 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id p69so499508iod.10
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 14:57:19 -0700 (PDT)
+        Thu, 30 Jun 2022 17:59:37 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21273FBE7;
+        Thu, 30 Jun 2022 14:59:36 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id sb34so599771ejc.11;
+        Thu, 30 Jun 2022 14:59:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uzqzvWO6xI/qzQaupX8bR5RZnWn3d58v4IG2QCKmwHU=;
-        b=cp8cJwDcdlIbomiWQnFrZ0zwWFTVLazFVXI9gdwCIChyn9hDeQcQuW3vUFX9EAWT7k
-         2TW+xOpgM3F6JLXd8gFEF3LngmCK9kVVELiF/EIxzxrTe+J79hoEpjvda8fH4zpMMADe
-         Qvnp9rK6AUyKhgRRM5RG2QgH2ibAgpc3/0lLY=
+         :cc:content-transfer-encoding;
+        bh=VCFiO/DeU9BXKDMeaTVORaJLJS+2vXFEBjORLfl2s5k=;
+        b=LvKY1OOTT78vTS8EPbGj0TrO58Z6edbacT16WUNefQLwdjxglPKC7hY1zgMoBIDwzP
+         2xci4QFis9EXN30WVQkkwLYWs7l87b+YBiiRWyiHrhSXInAHmd1BM7aDXMhtPMZI2HY4
+         LBqz+kuSiDwiwJ8EQhRZsklryzlVX/6VZ/Dm8QkCM7gS97EHASij1PJFrTFg3JdqV4pE
+         72QKMYh6DQiwnvMQHeU9G6LbKsFaDoxkZibp7qSQ0GnOAW6OnFg0JT+KoD1aqaUuzPLf
+         h75v8xrcHZUUpGwz0Pq4KzKkNFFgAbl1vUiw7aSTsjp24LOIpKbFQZWeSHfUJLj6RAJs
+         dBdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uzqzvWO6xI/qzQaupX8bR5RZnWn3d58v4IG2QCKmwHU=;
-        b=3xFOLdYaHS+J8yKA/eZVdWvmJuqDGyy1Hcwjebs9iVi8Kw3MMCPx4ZZfbAg7/B1Og4
-         QiDHdZ//NdVDGQK9EIUbtziWKl+6Tqt59CCw+Mx47YD++ZAe8TRu4hctBWY5FaGdJbw/
-         LCBBAoAKGZeqy7b8hKv+owjLyWgoawDZP6D79q2APCeiRcO11uIpEjqFpgrUQY+4KBpa
-         t/dVEbKwwVSiwUr0ufzSX6joEf7HA1AXo5XsI4G90aX+B5K8uUKJ0lo3uRjV2tIMZ7mg
-         ooVUURT5Bi+53mveWwIE8Cr3Jr6A3Rw4wHhEMLmGqq7ekX7ONW7ymwTEcFRLPSGHnKlV
-         g/5Q==
-X-Gm-Message-State: AJIora/Rs4wzQBnBU/bCVtlu7aigW+ZYHG4oLuVfFKDM5S44VrPvkkTJ
-        Kf6WA0HRW8wsQrUJZR8ru5zSQY82skwqpwiNTTY=
-X-Google-Smtp-Source: AGRyM1tUL8zN21bd4oxAY1oy51yAqVw2lXpHYl0QZ4Lo+bdx7fb5BZTyIusGqenYAJKN+5FLP67ALA==
-X-Received: by 2002:a05:6638:2386:b0:33c:ba9c:73cb with SMTP id q6-20020a056638238600b0033cba9c73cbmr6634840jat.208.1656626238889;
-        Thu, 30 Jun 2022 14:57:18 -0700 (PDT)
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com. [209.85.166.46])
-        by smtp.gmail.com with ESMTPSA id s19-20020a02cf33000000b00332044db2aasm9186062jar.95.2022.06.30.14.57.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 14:57:18 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id l24so482651ion.13
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 14:57:17 -0700 (PDT)
-X-Received: by 2002:a6b:b74e:0:b0:675:594e:140d with SMTP id
- h75-20020a6bb74e000000b00675594e140dmr5851331iof.154.1656626237471; Thu, 30
- Jun 2022 14:57:17 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=VCFiO/DeU9BXKDMeaTVORaJLJS+2vXFEBjORLfl2s5k=;
+        b=NWKzicev+ZSPJzn3Je0ulWmq03XpEr+auwguLicX4HqZ9wh/z2LokxTzKWZ7LZkUn3
+         BGs5CTjcpChMVinI1Kh4wyG68muOIdPAx6x5bl77KVeGPnPyaGYsVLeolSeDC96JlDDM
+         sj3YRnKTf8k0sOuXhlV6Nq2MpIk4I/ABjuIBzBXEixw77K6kX1JlipwFKNpGABAQ0udi
+         JsFC8d5/lfgH5zioTmmKiGe5DSDx9/x30/sRch2+56ksAkb5F3oIlFxrT9VrfjMGIJhu
+         mceb7UlViRrRBmalD0V7JkcE+BUuLzKiUg7fuJ6yXsQzAUyOtE29vd8vmL/U4n91ZogU
+         wUug==
+X-Gm-Message-State: AJIora/D6BMLqlDHj/gEDNorgrSKf92gIxY24ABcXKmlxFmVrubC2sl2
+        LtTxe0IfFayWipgQyfKaZKyRGNu9SDe7qSIJ3yC5lrn/
+X-Google-Smtp-Source: AGRyM1utaObcR+X0r6TrHRoLKwSzV4pBavCJL1T5Wzg7peFzpGSlpvtkm1Sf8JauMB3VhrTRV7HUakvHEsj0+Nbkr+k=
+X-Received: by 2002:a17:906:5a62:b0:728:f6d4:7786 with SMTP id
+ my34-20020a1709065a6200b00728f6d47786mr10914153ejc.184.1656626375309; Thu, 30
+ Jun 2022 14:59:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <1656496841-5853-1-git-send-email-quic_vnivarth@quicinc.com>
- <Yr26oSKOhIBMaKsS@kroah.com> <BL0PR02MB45646DE7D61E648321E9FBB5FABA9@BL0PR02MB4564.namprd02.prod.outlook.com>
-In-Reply-To: <BL0PR02MB45646DE7D61E648321E9FBB5FABA9@BL0PR02MB4564.namprd02.prod.outlook.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 30 Jun 2022 14:57:03 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UAqNMbsed2QX0iK6hpZzh-k3VJ4PvzXxXSTD-uTtURJA@mail.gmail.com>
-Message-ID: <CAD=FV=UAqNMbsed2QX0iK6hpZzh-k3VJ4PvzXxXSTD-uTtURJA@mail.gmail.com>
-Subject: Re: [V2] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which
- otherwise could return a sub-optimal clock rate.
-To:     "Vijaya Krishna Nivarthi (Temp) (QUIC)" <quic_vnivarth@quicinc.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "konrad.dybcio@somainline.org" <konrad.dybcio@somainline.org>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Mukesh Savaliya (QUIC)" <quic_msavaliy@quicinc.com>,
-        "mka@chromium.org" <mka@chromium.org>,
-        "swboyd@chromium.org" <swboyd@chromium.org>
+References: <20220629085836.18042-1-fmdefrancesco@gmail.com>
+ <CANn89iK6g+4Fy2VMV7=feUAOUDHu-J38be+oU76yp+zGH6xCJQ@mail.gmail.com>
+ <CAKgT0UcKRJUJrpFHdNrdH98eu_dpiZiVakJRqc2qHrdGJJQRQA@mail.gmail.com> <2254584.ElGaqSPkdT@opensuse>
+In-Reply-To: <2254584.ElGaqSPkdT@opensuse>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Thu, 30 Jun 2022 14:59:23 -0700
+Message-ID: <CAKgT0UfThk3MLcE38wQu5+2Qy7Ld2px-2WJgnD+2xbDsA8iEEw@mail.gmail.com>
+Subject: Re: [Intel-wired-lan] [PATCH] ixgbe: Use kmap_local_page in ixgbe_check_lbtest_frame()
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Jun 30, 2022 at 10:19 AM Vijaya Krishna Nivarthi (Temp) (QUIC)
-<quic_vnivarth@quicinc.com> wrote:
+On Thu, Jun 30, 2022 at 11:18 AM Fabio M. De Francesco
+<fmdefrancesco@gmail.com> wrote:
 >
-> > -----Original Message-----
-> > From: Greg KH <gregkh@linuxfoundation.org>
-> > Sent: Thursday, June 30, 2022 8:31 PM
-> > To: Vijaya Krishna Nivarthi (Temp) (QUIC) <quic_vnivarth@quicinc.com>
-> > Cc: agross@kernel.org; bjorn.andersson@linaro.org;
-> > konrad.dybcio@somainline.org; jirislaby@kernel.org; linux-arm-
-> > msm@vger.kernel.org; linux-serial@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; Mukesh Savaliya (QUIC)
-> > <quic_msavaliy@quicinc.com>; dianders@chromium.org;
-> > mka@chromium.org; swboyd@chromium.org
-> > Subject: Re: [V2] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which
-> > otherwise could return a sub-optimal clock rate.
-> >
-> > WARNING: This email originated from outside of Qualcomm. Please be wary
-> > of any links or attachments, and do not enable macros.
-> >
-> > On Wed, Jun 29, 2022 at 03:30:41PM +0530, Vijaya Krishna Nivarthi wrote:
-> > > In the logic around call to clk_round_rate(), for some corner
-> > > conditions,
-> > > get_clk_div_rate() could return an sub-optimal clock rate. Also, if an
-> > > exact clock rate was not found lowest clock was being returned.
+> On gioved=C3=AC 30 giugno 2022 18:09:18 CEST Alexander Duyck wrote:
+> > On Thu, Jun 30, 2022 at 8:25 AM Eric Dumazet <edumazet@google.com> wrot=
+e:
 > > >
-> > > Search for suitable clock rate in 2 steps
-> > > a) exact match or within 2% tolerance
-> > > b) within 5% tolerance
-> > > This also takes care of corner conditions.
+> > > On Thu, Jun 30, 2022 at 5:17 PM Alexander Duyck
+> > > <alexander.duyck@gmail.com> wrote:
+> > > >
+> > > > On Thu, Jun 30, 2022 at 3:10 AM Maciej Fijalkowski
+> > > > <maciej.fijalkowski@intel.com> wrote:
+> > > > >
+> > > > > On Wed, Jun 29, 2022 at 10:58:36AM +0200, Fabio M. De Francesco
+> wrote:
+> > > > > > The use of kmap() is being deprecated in favor of
+> kmap_local_page().
+> > > > > >
+> > > > > > With kmap_local_page(), the mapping is per thread, CPU local an=
+d
+> not
+> > > > > > globally visible. Furthermore, the mapping can be acquired from
+> any context
+> > > > > > (including interrupts).
+> > > > > >
+> > > > > > Therefore, use kmap_local_page() in ixgbe_check_lbtest_frame()
+> because
+> > > > > > this mapping is per thread, CPU local, and not globally visible=
+.
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > I'd like to ask why kmap was there in the first place and not pla=
+in
+> > > > > page_address() ?
+> > > > >
+> > > > > Alex?
+> > > >
+> > > > The page_address function only works on architectures that have
+> access
+> > > > to all of physical memory via virtual memory addresses. The kmap
+> > > > function is meant to take care of highmem which will need to be
+> mapped
+> > > > before it can be accessed.
+> > > >
+> > > > For non-highmem pages kmap just calls the page_address function.
+> > > > https://elixir.bootlin.com/linux/latest/source/include/linux/highme=
+m-internal.h#L40
 > > >
-> > > Reported-by: kernel test robot <lkp@intel.com>
+> > >
+> > > Sure, but drivers/net/ethernet/intel/ixgbe/ixgbe_main.c is allocating
+> > > pages that are not highmem ?
+> > >
+> > > This kmap() does not seem needed.
 > >
-> > Did the test robot really report the original issue, or just the v2 change?
+> > Good point. So odds are page_address is fine to use. Actually there is
+> > a note to that effect in ixgbe_pull_tail.
 > >
-> > thanks,
+> > As such we could probably go through and update igb, and several of
+> > the other Intel drivers as well.
 > >
-> > greg k-h
+> > - Alex
+> >
+> I don't know this code, however I know kmap*().
 >
-> Test robot raised error for v1 patch and (I think) it got addressed in v2 with call to div_u64.
-> V2 doesn't have this error but other warnings which I am addressing along with other feedback.
-> Below is the error raised for v1.
+> I assumed that, if author used kmap(), there was possibility that the pag=
+e
+> came from highmem.
+>
+> In that case kmap_local_page() looks correct here.
+>
+> However, now I read that that page _cannot_ come from highmem. Therefore,
+> page_address() would suffice.
+>
+> If you all want I can replace kmap() / kunmap() with a "plain"
+> page_address(). Please let me know.
+>
+> Thanks,
+>
+> Fabio
 
-I think the adding of the "Reported-by" only really makes sense if the
-commit landed and then you fixed the robot-reported bug in a separate
-commit. If it reported problems in v1 and you fix them in v2 you
-shouldn't add the tag.
+Replacing it with just page_address() should be fine. Back when I
+wrote the code I didn't realize that GFP_ATOMIC pages weren't
+allocated from highmem so I suspect I just used kmap since it was the
+way to cover all the bases.
 
--Doug
+Thanks,
+
+- Alex

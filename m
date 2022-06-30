@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2F5561D74
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C55A561D94
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236435AbiF3OHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
+        id S236592AbiF3OJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236593AbiF3OGJ (ORCPT
+        with ESMTP id S236897AbiF3OHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:06:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0B86EEA9;
-        Thu, 30 Jun 2022 06:54:10 -0700 (PDT)
+        Thu, 30 Jun 2022 10:07:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D522C48806;
+        Thu, 30 Jun 2022 06:54:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BA176211C;
-        Thu, 30 Jun 2022 13:54:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48116C34115;
-        Thu, 30 Jun 2022 13:54:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9273E61FDB;
+        Thu, 30 Jun 2022 13:54:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A1EAC34115;
+        Thu, 30 Jun 2022 13:54:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597248;
-        bh=tUbC9P3+yubDDefe29H5IMHi8x/o38Uf9ZD+Vi3xwK8=;
+        s=korg; t=1656597279;
+        bh=xiRTtprmP5An0sA7v5N9LMYPbpjDmy0F5HtTfS2RoTk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EUE8/8qagHcuvBzXf6NoH0yN3Jj4ZAmCTCIckudkX2FSUGcJsrySNKnk93i21osaB
-         wgRltucYMpbCATxhU+7SAUCLWs1HqhUERNukD0YpeJ4Rbi7mxBeOB5Ue0H9hqDzuwE
-         ujelhR/6ChSvkP0O7j6cNhP6f+92teAJralnhojI=
+        b=wRkJJp0EyG8+dafqt1Dcj21g7LGBPZOwFQDVXx/WZuWqT9c/iyX4mC0+qY7nLOVUd
+         sj44dNU8YhBBhO/knu83EJ3Ivt12jf5Aq61cTHkj8jjlb23BZmIBDtp5HuhuPQlW7e
+         wXNb/8/tw0iwooEw1u1F2KR3Gnixm/29XlJ4DSsQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH 5.10 04/12] clocksource/drivers/ixp4xx: remove __init from ixp4xx_timer_setup()
+        stable@vger.kernel.org, Seth Forshee <sforshee@digitalocean.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>
+Subject: [PATCH 5.15 13/28] fs: add is_idmapped_mnt() helper
 Date:   Thu, 30 Jun 2022 15:47:09 +0200
-Message-Id: <20220630133230.813883677@linuxfoundation.org>
+Message-Id: <20220630133233.318154508@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133230.676254336@linuxfoundation.org>
-References: <20220630133230.676254336@linuxfoundation.org>
+In-Reply-To: <20220630133232.926711493@linuxfoundation.org>
+References: <20220630133232.926711493@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,75 +58,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Christian Brauner <christian.brauner@ubuntu.com>
 
-ixp4xx_timer_setup is exported, and so can not be an __init function.
-Remove the __init marking as the build system is rightfully claiming
-this is an error in older kernels.
+commit bb49e9e730c2906a958eee273a7819f401543d6c upstream.
 
-This is fixed "properly" in commit 41929c9f628b
-("clocksource/drivers/ixp4xx: Drop boardfile probe path") but that can
-not be backported to older kernels as the reworking of the IXP4xx
-codebase is not suitable for stable releases.
+Multiple places open-code the same check to determine whether a given
+mount is idmapped. Introduce a simple helper function that can be used
+instead. This allows us to get rid of the fragile open-coding. We will
+later change the check that is used to determine whether a given mount
+is idmapped. Introducing a helper allows us to do this in a single
+place instead of doing it for multiple places.
 
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20211123114227.3124056-2-brauner@kernel.org (v1)
+Link: https://lore.kernel.org/r/20211130121032.3753852-2-brauner@kernel.org (v2)
+Link: https://lore.kernel.org/r/20211203111707.3901969-2-brauner@kernel.org
+Cc: Seth Forshee <sforshee@digitalocean.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+CC: linux-fsdevel@vger.kernel.org
+Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+Reviewed-by: Seth Forshee <sforshee@digitalocean.com>
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clocksource/mmio.c                 |    2 +-
- drivers/clocksource/timer-ixp4xx.c         |   10 ++++------
- include/linux/platform_data/timer-ixp4xx.h |    5 ++---
- 3 files changed, 7 insertions(+), 10 deletions(-)
+ fs/cachefiles/bind.c |    2 +-
+ fs/ecryptfs/main.c   |    2 +-
+ fs/namespace.c       |    2 +-
+ fs/nfsd/export.c     |    2 +-
+ fs/overlayfs/super.c |    2 +-
+ fs/proc_namespace.c  |    2 +-
+ include/linux/fs.h   |   14 ++++++++++++++
+ 7 files changed, 20 insertions(+), 6 deletions(-)
 
---- a/drivers/clocksource/mmio.c
-+++ b/drivers/clocksource/mmio.c
-@@ -46,7 +46,7 @@ u64 clocksource_mmio_readw_down(struct c
-  * @bits:	Number of valid bits
-  * @read:	One of clocksource_mmio_read*() above
-  */
--int __init clocksource_mmio_init(void __iomem *base, const char *name,
-+int clocksource_mmio_init(void __iomem *base, const char *name,
- 	unsigned long hz, int rating, unsigned bits,
- 	u64 (*read)(struct clocksource *))
+--- a/fs/cachefiles/bind.c
++++ b/fs/cachefiles/bind.c
+@@ -117,7 +117,7 @@ static int cachefiles_daemon_add_cache(s
+ 	root = path.dentry;
+ 
+ 	ret = -EINVAL;
+-	if (mnt_user_ns(path.mnt) != &init_user_ns) {
++	if (is_idmapped_mnt(path.mnt)) {
+ 		pr_warn("File cache on idmapped mounts not supported");
+ 		goto error_unsupported;
+ 	}
+--- a/fs/ecryptfs/main.c
++++ b/fs/ecryptfs/main.c
+@@ -537,7 +537,7 @@ static struct dentry *ecryptfs_mount(str
+ 		goto out_free;
+ 	}
+ 
+-	if (mnt_user_ns(path.mnt) != &init_user_ns) {
++	if (is_idmapped_mnt(path.mnt)) {
+ 		rc = -EINVAL;
+ 		printk(KERN_ERR "Mounting on idmapped mounts currently disallowed\n");
+ 		goto out_free;
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -3936,7 +3936,7 @@ static int can_idmap_mount(const struct
+ 	 * mapping. It makes things simpler and callers can just create
+ 	 * another bind-mount they can idmap if they want to.
+ 	 */
+-	if (mnt_user_ns(m) != &init_user_ns)
++	if (is_idmapped_mnt(m))
+ 		return -EPERM;
+ 
+ 	/* The underlying filesystem doesn't support idmapped mounts yet. */
+--- a/fs/nfsd/export.c
++++ b/fs/nfsd/export.c
+@@ -427,7 +427,7 @@ static int check_export(struct path *pat
+ 		return -EINVAL;
+ 	}
+ 
+-	if (mnt_user_ns(path->mnt) != &init_user_ns) {
++	if (is_idmapped_mnt(path->mnt)) {
+ 		dprintk("exp_export: export of idmapped mounts not yet supported.\n");
+ 		return -EINVAL;
+ 	}
+--- a/fs/overlayfs/super.c
++++ b/fs/overlayfs/super.c
+@@ -873,7 +873,7 @@ static int ovl_mount_dir_noesc(const cha
+ 		pr_err("filesystem on '%s' not supported\n", name);
+ 		goto out_put;
+ 	}
+-	if (mnt_user_ns(path->mnt) != &init_user_ns) {
++	if (is_idmapped_mnt(path->mnt)) {
+ 		pr_err("idmapped layers are currently not supported\n");
+ 		goto out_put;
+ 	}
+--- a/fs/proc_namespace.c
++++ b/fs/proc_namespace.c
+@@ -80,7 +80,7 @@ static void show_mnt_opts(struct seq_fil
+ 			seq_puts(m, fs_infop->str);
+ 	}
+ 
+-	if (mnt_user_ns(mnt) != &init_user_ns)
++	if (is_idmapped_mnt(mnt))
+ 		seq_puts(m, ",idmapped");
+ }
+ 
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2726,6 +2726,20 @@ static inline struct user_namespace *fil
  {
---- a/drivers/clocksource/timer-ixp4xx.c
-+++ b/drivers/clocksource/timer-ixp4xx.c
-@@ -170,9 +170,8 @@ static int ixp4xx_resume(struct clock_ev
-  * We use OS timer1 on the CPU for the timer tick and the timestamp
-  * counter as a source of real clock ticks to account for missed jiffies.
-  */
--static __init int ixp4xx_timer_register(void __iomem *base,
--					int timer_irq,
--					unsigned int timer_freq)
-+static int ixp4xx_timer_register(void __iomem *base, int timer_irq,
-+				 unsigned int timer_freq)
- {
- 	struct ixp4xx_timer *tmr;
- 	int ret;
-@@ -245,9 +244,8 @@ static __init int ixp4xx_timer_register(
-  * @timer_irq: Linux IRQ number for the timer
-  * @timer_freq: Fixed frequency of the timer
-  */
--void __init ixp4xx_timer_setup(resource_size_t timerbase,
--			       int timer_irq,
--			       unsigned int timer_freq)
-+void ixp4xx_timer_setup(resource_size_t timerbase, int timer_irq,
-+			unsigned int timer_freq)
- {
- 	void __iomem *base;
- 
---- a/include/linux/platform_data/timer-ixp4xx.h
-+++ b/include/linux/platform_data/timer-ixp4xx.h
-@@ -4,8 +4,7 @@
- 
- #include <linux/ioport.h>
- 
--void __init ixp4xx_timer_setup(resource_size_t timerbase,
--			       int timer_irq,
--			       unsigned int timer_freq);
-+void ixp4xx_timer_setup(resource_size_t timerbase, int timer_irq,
-+			unsigned int timer_freq);
- 
- #endif
+ 	return mnt_user_ns(file->f_path.mnt);
+ }
++
++/**
++ * is_idmapped_mnt - check whether a mount is mapped
++ * @mnt: the mount to check
++ *
++ * If @mnt has an idmapping attached to it @mnt is mapped.
++ *
++ * Return: true if mount is mapped, false if not.
++ */
++static inline bool is_idmapped_mnt(const struct vfsmount *mnt)
++{
++	return mnt_user_ns(mnt) != &init_user_ns;
++}
++
+ extern long vfs_truncate(const struct path *, loff_t);
+ int do_truncate(struct user_namespace *, struct dentry *, loff_t start,
+ 		unsigned int time_attrs, struct file *filp);
 
 

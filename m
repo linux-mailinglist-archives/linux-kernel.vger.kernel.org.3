@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A60561D31
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0EC561C62
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235949AbiF3OAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
+        id S235803AbiF3Nxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 09:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236310AbiF3N6a (ORCPT
+        with ESMTP id S235848AbiF3Nwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:58:30 -0400
+        Thu, 30 Jun 2022 09:52:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251EB53D11;
-        Thu, 30 Jun 2022 06:51:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E19B3152A;
+        Thu, 30 Jun 2022 06:49:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C52C62007;
-        Thu, 30 Jun 2022 13:51:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 177CDC34115;
-        Thu, 30 Jun 2022 13:51:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E783162000;
+        Thu, 30 Jun 2022 13:49:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 073D4C34115;
+        Thu, 30 Jun 2022 13:49:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597075;
-        bh=4Vv60tBOAMha/ZVrRLQhs4TgCQHcnlTaoRylK8s+OYA=;
+        s=korg; t=1656596986;
+        bh=fUBXeY/tbiGpHbTy5FVhnNYpcPo4dQ92LT2jXQSqICY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=usgGzKDX+a3IcMLD1CdnaJ7LGdrzhVkfM5TU6ZeFbkELiWjb8jaBFqGOqmK8m/wIR
-         iHgrrCYLS2ScyW98uexZkcwkVuBiq6nxBZMg00vHKqGgPylTbUWtQasFsIEwRZxIiF
-         o2agVttgemrKCEuIcvnrRccav9h16KnxdKTNoKGQ=
+        b=xfuqkklSPG3atPtWtYmbHOWfj3rioHbV0P8XSL7/1TqZEmhyZ1a6PbjbGD93mWoaP
+         nHMJyJ//0c4Wa+X7gbNd4tJpEQA3qcE4G1vFrNwxu+lLqad6jqxhRy9heOFua1WDlm
+         tJQcCybOVLtQMKlxaC0kWGFPgQHET03s+PV+oYlc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 19/49] virtio_net: fix xdp_rxq_info bug after suspend/resume
-Date:   Thu, 30 Jun 2022 15:46:32 +0200
-Message-Id: <20220630133234.472747705@linuxfoundation.org>
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Sumit Dubey2 <Sumit.Dubey2@ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 4.14 22/35] powerpc: Enable execve syscall exit tracepoint
+Date:   Thu, 30 Jun 2022 15:46:33 +0200
+Message-Id: <20220630133233.092536416@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133233.910803744@linuxfoundation.org>
-References: <20220630133233.910803744@linuxfoundation.org>
+In-Reply-To: <20220630133232.433955678@linuxfoundation.org>
+References: <20220630133232.433955678@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,115 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+From: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
 
-[ Upstream commit 8af52fe9fd3bf5e7478da99193c0632276e1dfce ]
+commit ec6d0dde71d760aa60316f8d1c9a1b0d99213529 upstream.
 
-The following sequence currently causes a driver bug warning
-when using virtio_net:
+On execve[at], we are zero'ing out most of the thread register state
+including gpr[0], which contains the syscall number. Due to this, we
+fail to trigger the syscall exit tracepoint properly. Fix this by
+retaining gpr[0] in the thread register state.
 
-  # ip link set eth0 up
-  # echo mem > /sys/power/state (or e.g. # rtcwake -s 10 -m mem)
-  <resume>
-  # ip link set eth0 down
+Before this patch:
+  # tail /sys/kernel/debug/tracing/trace
+	       cat-123     [000] .....    61.449351: sys_execve(filename:
+  7fffa6b23448, argv: 7fffa6b233e0, envp: 7fffa6b233f8)
+	       cat-124     [000] .....    62.428481: sys_execve(filename:
+  7fffa6b23448, argv: 7fffa6b233e0, envp: 7fffa6b233f8)
+	      echo-125     [000] .....    65.813702: sys_execve(filename:
+  7fffa6b23378, argv: 7fffa6b233a0, envp: 7fffa6b233b0)
+	      echo-125     [000] .....    65.822214: sys_execveat(fd: 0,
+  filename: 1009ac48, argv: 7ffff65d0c98, envp: 7ffff65d0ca8, flags: 0)
 
-  Missing register, driver bug
-  WARNING: CPU: 0 PID: 375 at net/core/xdp.c:138 xdp_rxq_info_unreg+0x58/0x60
-  Call trace:
-   xdp_rxq_info_unreg+0x58/0x60
-   virtnet_close+0x58/0xac
-   __dev_close_many+0xac/0x140
-   __dev_change_flags+0xd8/0x210
-   dev_change_flags+0x24/0x64
-   do_setlink+0x230/0xdd0
-   ...
+After this patch:
+  # tail /sys/kernel/debug/tracing/trace
+	       cat-127     [000] .....   100.416262: sys_execve(filename:
+  7fffa41b3448, argv: 7fffa41b33e0, envp: 7fffa41b33f8)
+	       cat-127     [000] .....   100.418203: sys_execve -> 0x0
+	      echo-128     [000] .....   103.873968: sys_execve(filename:
+  7fffa41b3378, argv: 7fffa41b33a0, envp: 7fffa41b33b0)
+	      echo-128     [000] .....   103.875102: sys_execve -> 0x0
+	      echo-128     [000] .....   103.882097: sys_execveat(fd: 0,
+  filename: 1009ac48, argv: 7fffd10d2148, envp: 7fffd10d2158, flags: 0)
+	      echo-128     [000] .....   103.883225: sys_execveat -> 0x0
 
-This happens because virtnet_freeze() frees the receive_queue
-completely (including struct xdp_rxq_info) but does not call
-xdp_rxq_info_unreg(). Similarly, virtnet_restore() sets up the
-receive_queue again but does not call xdp_rxq_info_reg().
-
-Actually, parts of virtnet_freeze_down() and virtnet_restore_up()
-are almost identical to virtnet_close() and virtnet_open(): only
-the calls to xdp_rxq_info_(un)reg() are missing. This means that
-we can fix this easily and avoid such problems in the future by
-just calling virtnet_close()/open() from the freeze/restore handlers.
-
-Aside from adding the missing xdp_rxq_info calls the only difference
-is that the refill work is only cancelled if netif_running(). However,
-this should not make any functional difference since the refill work
-should only be active if the network interface is actually up.
-
-Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
-Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
-Link: https://lore.kernel.org/r/20220621114845.3650258-1-stephan.gerhold@kernkonzept.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+Tested-by: Sumit Dubey2 <Sumit.Dubey2@ibm.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220609103328.41306-1-naveen.n.rao@linux.vnet.ibm.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/virtio_net.c | 25 ++++++-------------------
- 1 file changed, 6 insertions(+), 19 deletions(-)
+ arch/powerpc/kernel/process.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 1a8fe5bacb19..415b26c80fe7 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -2315,7 +2315,6 @@ static const struct ethtool_ops virtnet_ethtool_ops = {
- static void virtnet_freeze_down(struct virtio_device *vdev)
- {
- 	struct virtnet_info *vi = vdev->priv;
--	int i;
+--- a/arch/powerpc/kernel/process.c
++++ b/arch/powerpc/kernel/process.c
+@@ -1613,7 +1613,7 @@ void start_thread(struct pt_regs *regs,
+ 		tm_reclaim_current(0);
+ #endif
  
- 	/* Make sure no work handler is accessing the device */
- 	flush_work(&vi->config_work);
-@@ -2323,14 +2322,8 @@ static void virtnet_freeze_down(struct virtio_device *vdev)
- 	netif_tx_lock_bh(vi->dev);
- 	netif_device_detach(vi->dev);
- 	netif_tx_unlock_bh(vi->dev);
--	cancel_delayed_work_sync(&vi->refill);
--
--	if (netif_running(vi->dev)) {
--		for (i = 0; i < vi->max_queue_pairs; i++) {
--			napi_disable(&vi->rq[i].napi);
--			virtnet_napi_tx_disable(&vi->sq[i].napi);
--		}
--	}
-+	if (netif_running(vi->dev))
-+		virtnet_close(vi->dev);
- }
- 
- static int init_vqs(struct virtnet_info *vi);
-@@ -2338,7 +2331,7 @@ static int init_vqs(struct virtnet_info *vi);
- static int virtnet_restore_up(struct virtio_device *vdev)
- {
- 	struct virtnet_info *vi = vdev->priv;
--	int err, i;
-+	int err;
- 
- 	err = init_vqs(vi);
- 	if (err)
-@@ -2347,15 +2340,9 @@ static int virtnet_restore_up(struct virtio_device *vdev)
- 	virtio_device_ready(vdev);
- 
- 	if (netif_running(vi->dev)) {
--		for (i = 0; i < vi->curr_queue_pairs; i++)
--			if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
--				schedule_delayed_work(&vi->refill, 0);
--
--		for (i = 0; i < vi->max_queue_pairs; i++) {
--			virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
--			virtnet_napi_tx_enable(vi, vi->sq[i].vq,
--					       &vi->sq[i].napi);
--		}
-+		err = virtnet_open(vi->dev);
-+		if (err)
-+			return err;
- 	}
- 
- 	netif_tx_lock_bh(vi->dev);
--- 
-2.35.1
-
+-	memset(regs->gpr, 0, sizeof(regs->gpr));
++	memset(&regs->gpr[1], 0, sizeof(regs->gpr) - sizeof(regs->gpr[0]));
+ 	regs->ctr = 0;
+ 	regs->link = 0;
+ 	regs->xer = 0;
 
 

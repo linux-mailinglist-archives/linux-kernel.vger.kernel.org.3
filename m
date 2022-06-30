@@ -2,154 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FDE5615CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E717A5615BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234061AbiF3JOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 05:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43336 "EHLO
+        id S234029AbiF3JNB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Jun 2022 05:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234016AbiF3JOQ (ORCPT
+        with ESMTP id S233779AbiF3JM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 05:14:16 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B429201A5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:14:15 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25U0LZjF012121
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:14:15 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=J3jHAef7pJ/WI/T7+2xR7U+5ImtGMBx6TbdEpajVzHg=;
- b=NMx9NkwVKuV3649LLjRE8fnUAnvHhHw1Y2Hgym8VlCopAOrvEp39ubQ7kSlOkvC9W8/Z
- qNiBsgrls9OUpIbLXbG9v9/UYnupOq10yvAdyBi2YFXNmGnm7mZPkPmfF1R/RxfTrhxQ
- n9140gh9XpXoMsLZaufei5y7tdvtR++gPnw= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h0rk5wwhx-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:14:14 -0700
-Received: from twshared14577.08.ash8.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 30 Jun 2022 02:14:13 -0700
-Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 88CD72599FCB; Thu, 30 Jun 2022 02:14:08 -0700 (PDT)
-From:   Dylan Yudaken <dylany@fb.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        <io-uring@vger.kernel.org>
-CC:     <Kernel-team@fb.com>, <linux-kernel@vger.kernel.org>,
-        Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH v2 for-next 00/12] io_uring: multishot recv
-Date:   Thu, 30 Jun 2022 02:12:19 -0700
-Message-ID: <20220630091231.1456789-1-dylany@fb.com>
-X-Mailer: git-send-email 2.30.2
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: kYBUq0lu5u269BPW6WjQaZExRQpWAcaY
-X-Proofpoint-GUID: kYBUq0lu5u269BPW6WjQaZExRQpWAcaY
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 30 Jun 2022 05:12:56 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C12192AE
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:12:55 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1o6qDn-0002b6-SL; Thu, 30 Jun 2022 11:12:23 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1o6qDh-003YyD-6B; Thu, 30 Jun 2022 11:12:20 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1o6qDk-0003Cl-3a; Thu, 30 Jun 2022 11:12:20 +0200
+Message-ID: <813a3b51f82a11a86bd3af2c3299c344e08e8963.camel@pengutronix.de>
+Subject: Re: [PATCH v1 04/14] reset: add polarfire soc reset support
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-riscv@lists.infradead.org
+Date:   Thu, 30 Jun 2022 11:12:20 +0200
+In-Reply-To: <20220630080532.323731-5-conor.dooley@microchip.com>
+References: <20220630080532.323731-1-conor.dooley@microchip.com>
+         <20220630080532.323731-5-conor.dooley@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-30_05,2022-06-28_01,2022-06-22_01
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds support for multishot recv/recvmsg to io_uring.
+Hi Conor,
 
-The idea is that generally socket applications will be continually
-enqueuing a new recv() when the previous one completes. This can be
-improved on by allowing the application to queue a multishot receive,
-which will post completions as and when data is available. It uses the
-provided buffers feature to receive new data into a pool provided by
-the application.
+On Do, 2022-06-30 at 09:05 +0100, Conor Dooley wrote:
+Add support for the resets on Microchip's PolarFire SoC (MPFS).
+Reset control is a single register, wedged in between registers for
+clock control. To fit with existed DT etc, the reset controller is
 
-This is more performant in a few ways:
-* Subsequent receives are queued up straight away without requiring the
-  application to finish a processing loop.
-* If there are more data in the socket (sat the provided buffer
-  size is smaller than the socket buffer) then the data is immediately
-  returned, improving batching.
-*  Poll is only armed once and reused, saving CPU cycles
+existing                     ^
 
-Running a small network benchmark [1] shows improved QPS of ~6-8% over a ra=
-nge of loads.
+created using the aux device framework & set up in the clock driver.
 
-[1]: https://github.com/DylanZA/netbench/tree/multishot_recv
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ drivers/reset/Kconfig      |   9 +++
+ drivers/reset/Makefile     |   2 +-
+ drivers/reset/reset-mpfs.c | 145 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 155 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/reset/reset-mpfs.c
 
-While building this I noticed a small problem in multishot poll which is a =
-really
-big problem for receive. If CQEs overflow, then they will be returned to th=
-e user
-out of order. This is annoying for the existing use cases of poll and accep=
-t but
-doesn't totally break the functionality. Both of these return results that =
-aren't
-strictly ordered except for the IORING_CQE_F_MORE flag. For receive this ob=
-viously
-is a critical requirement as otherwise data will be received out of order b=
-y the
-application.
+diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+index 93c8d07ee328..edf48951f763 100644
+--- a/drivers/reset/Kconfig
++++ b/drivers/reset/Kconfig
+@@ -122,6 +122,15 @@ config RESET_MCHP_SPARX5
+ 	help
+ 	  This driver supports switch core reset for the Microchip Sparx5 SoC.
+ 
 
-To fix this, when a multishot CQE hits overflow we remove multishot. The ap=
-plication
-should then clear CQEs until it sees that CQE, and noticing that IORING_CQE=
-_F_MORE is
-not set can re-issue the multishot request.
++config RESET_POLARFIRE_SOC
++	bool "Microchip PolarFire SoC (MPFS) Reset Driver"
++	depends on AUXILIARY_BUS && MCHP_CLK_MPFS
++	default MCHP_CLK_MPFS
++	help
++	  This driver supports peripheral reset for the Microchip PolarFire SoC
++
++	  CONFIG_RESET_MPFS
 
-Patches:
-1-3: relax restrictions around provided buffers to allow 0 size lengths
-4: recycles more buffers on kernel side in error conditions
-5-6: clean up multishot poll API a bit allowing it to end with succesful
-error conditions
-7-8: fix existing problems with multishot poll on overflow
-9: is the multishot receive patch
-10-11: are small fixes to tracing of CQEs
+This doesn't look intentional.
 
-v2:
-* Added patches 6,7,8 (fixing multishot poll bugs)
-* Added patches 10,11 (trace cleanups)
-* added io_recv_finish to reduce duplicate logic
++
+ config RESET_MESON
+ 	tristate "Meson Reset Driver"
+ 	depends on ARCH_MESON || COMPILE_TEST
+diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
+index a80a9c4008a7..5fac3a753858 100644
+--- a/drivers/reset/Makefile
++++ b/drivers/reset/Makefile
+@@ -17,6 +17,7 @@ obj-$(CONFIG_RESET_K210) += reset-k210.o
+ obj-$(CONFIG_RESET_LANTIQ) += reset-lantiq.o
+ obj-$(CONFIG_RESET_LPC18XX) += reset-lpc18xx.o
+ obj-$(CONFIG_RESET_MCHP_SPARX5) += reset-microchip-sparx5.o
++obj-$(CONFIG_RESET_POLARFIRE_SOC) += reset-mpfs.o
+ obj-$(CONFIG_RESET_MESON) += reset-meson.o
+ obj-$(CONFIG_RESET_MESON_AUDIO_ARB) += reset-meson-audio-arb.o
+ obj-$(CONFIG_RESET_NPCM) += reset-npcm.o
+@@ -38,4 +39,3 @@ obj-$(CONFIG_RESET_UNIPHIER) += reset-uniphier.o
+ obj-$(CONFIG_RESET_UNIPHIER_GLUE) += reset-uniphier-glue.o
+ obj-$(CONFIG_RESET_ZYNQ) += reset-zynq.o
+ obj-$(CONFIG_ARCH_ZYNQMP) += reset-zynqmp.o
+-
+diff --git a/drivers/reset/reset-mpfs.c b/drivers/reset/reset-mpfs.c
+new file mode 100644
+index 000000000000..49c47a3e6c70
+--- /dev/null
++++ b/drivers/reset/reset-mpfs.c
+@@ -0,0 +1,145 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * PolarFire SoC (MPFS) Peripheral Clock Reset Controller
++ *
++ * Author: Conor Dooley <conor.dooley@microchip.com>
++ * Copyright (c) 2022 Microchip Technology Inc. and its subsidiaries.
++ *
++ */
++#include <linux/auxiliary_bus.h>
++#include <linux/delay.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/reset-controller.h>
++#include <dt-bindings/clock/microchip,mpfs-clock.h>
++#include <soc/microchip/mpfs.h>
++
++/*
++ * The ENVM reset is the lowest bit in the register & I am using the CLK_FOO
++ * defines in the dt to make things easier to configure - so this is accounting
++ * for the offset of 3 there.
++ */
++#define MPFS_PERIPH_OFFSET	CLK_ENVM
++#define MPFS_NUM_RESETS		30u
++#define MPFS_SLEEP_MIN_US	100
++#define MPFS_SLEEP_MAX_US	200
++
++/*
++ * Peripheral clock resets
++ */
++
++static int mpfs_assert(struct reset_controller_dev *rcdev, unsigned long id)
++{
++	u32 reg;
++
++	reg = mpfs_reset_read(rcdev->dev);
++	reg |= (1u << id);
++	mpfs_reset_write(rcdev->dev, reg);
 
+This is missing a spinlock to protect against concurrent read-modify-
+writes.
 
-Dylan Yudaken (12):
-  io_uring: allow 0 length for buffer select
-  io_uring: restore bgid in io_put_kbuf
-  io_uring: allow iov_len =3D 0 for recvmsg and buffer select
-  io_uring: recycle buffers on error
-  io_uring: clean up io_poll_check_events return values
-  io_uring: add IOU_STOP_MULTISHOT return code
-  io_uring: add allow_overflow to io_post_aux_cqe
-  io_uring: fix multishot poll on overflow
-  io_uring: fix multishot accept ordering
-  io_uring: multishot recv
-  io_uring: fix io_uring_cqe_overflow trace format
-  io_uring: only trace one of complete or overflow
++
++	return 0;
++}
++
++static int mpfs_deassert(struct reset_controller_dev *rcdev, unsigned long id)
++{
++	u32 reg, val;
++
++	reg = mpfs_reset_read(rcdev->dev);
++	val = reg & ~(1u << id);
 
- include/trace/events/io_uring.h |   2 +-
- include/uapi/linux/io_uring.h   |   5 ++
- io_uring/io_uring.c             |  17 ++--
- io_uring/io_uring.h             |  20 +++--
- io_uring/kbuf.c                 |   4 +-
- io_uring/kbuf.h                 |   9 ++-
- io_uring/msg_ring.c             |   4 +-
- io_uring/net.c                  | 139 ++++++++++++++++++++++++++------
- io_uring/poll.c                 |  44 ++++++----
- io_uring/rsrc.c                 |   4 +-
- 10 files changed, 190 insertions(+), 58 deletions(-)
+You could use BIT(id) instead of (1u << id).
 
++	mpfs_reset_write(rcdev->dev, val);
++
++	return 0;
++}
++
++static int mpfs_status(struct reset_controller_dev *rcdev, unsigned long id)
++{
++	u32 reg = mpfs_reset_read(rcdev->dev);
++
++	return (reg & (1u << id));
 
-base-commit: 864a15ca4f196184e3f44d72efc1782a7017cbbd
---=20
-2.30.2
+Side note, this works because MPFS_NUM_RESETS makes sure the sign bit
+is never hit.
 
++}
++
++static int mpfs_reset(struct reset_controller_dev *rcdev, unsigned long id)
++{
++	mpfs_assert(rcdev, id);
++
++	usleep_range(MPFS_SLEEP_MIN_US, MPFS_SLEEP_MAX_US);
++
++	mpfs_deassert(rcdev, id);
++
++	return 0;
++}
++
++static const struct reset_control_ops mpfs_reset_ops = {
++	.reset = mpfs_reset,
++	.assert = mpfs_assert,
++	.deassert = mpfs_deassert,
++	.status = mpfs_status,
++};
++
++static int mpfs_reset_xlate(struct reset_controller_dev *rcdev,
++			    const struct of_phandle_args *reset_spec)
++{
++	unsigned int index = reset_spec->args[0];
++
++	/*
++	 * CLK_RESERVED does not map to a clock, but it does map to a reset,
++	 * so it has to be accounted for here. It is the reset for the fabric,
++	 * so if this reset gets called - do not reset it.
++	 */
++	if (index == CLK_RESERVED) {
++		dev_err(rcdev->dev, "Resetting the fabric is not supported\n");
++		return -EINVAL;
++	}
++
++	if (index < MPFS_PERIPH_OFFSET || index >= (MPFS_PERIPH_OFFSET + rcdev->nr_resets)) {
++		dev_err(rcdev->dev, "Invalid reset index %u\n", reset_spec->args[0]);
+
+s/reset_spec->args[0]/index/
+
++		return -EINVAL;
++	}
++
++	return index - MPFS_PERIPH_OFFSET;
++}
++
++static int mpfs_reset_probe(struct auxiliary_device *adev,
++			    const struct auxiliary_device_id *id)
++{
++	struct device *dev = &adev->dev;
++	struct reset_controller_dev *rcdev;
++	int ret;
++
++	rcdev = devm_kzalloc(dev, sizeof(*rcdev), GFP_KERNEL);
++	if (!rcdev)
++		return -ENOMEM;
++
++	rcdev->dev = dev;
++	rcdev->dev->parent = adev->dev.parent;
+
+s/adev->dev./dev->/
+
++	rcdev->ops = &mpfs_reset_ops;
++	rcdev->of_node = adev->dev.parent->of_node;
+
+s/adev->dev./dev->/
+
++	rcdev->of_reset_n_cells = 1;
++	rcdev->of_xlate = mpfs_reset_xlate;
++	rcdev->nr_resets = MPFS_NUM_RESETS;
++
++	ret = devm_reset_controller_register(dev, rcdev);
++	if (!ret)
++		dev_info(dev, "Registered MPFS reset controller\n");
+
+Is this really useful information for most users?
+
++
++	return ret;
++}
++
++static const struct auxiliary_device_id mpfs_reset_ids[] = {
++	{
++		.name = "clk_mpfs.reset-mpfs",
++	},
++	{ }
++};
++MODULE_DEVICE_TABLE(auxiliary, mpfs_reset_ids);
++
++static struct auxiliary_driver mpfs_reset_driver = {
++	.probe		= mpfs_reset_probe,
++	.id_table	= mpfs_reset_ids,
++};
++
++module_auxiliary_driver(mpfs_reset_driver);
++
++MODULE_DESCRIPTION("Microchip PolarFire SoC Reset Driver");
++MODULE_AUTHOR("Conor Dooley <conor.dooley@microchip.com>");
++MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(MCHP_CLK_MPFS);
+
+regards
+Philipp

@@ -2,189 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83FB5621B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 20:08:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1B35621BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 20:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232937AbiF3SIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 14:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
+        id S235951AbiF3SLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 14:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbiF3SId (ORCPT
+        with ESMTP id S236485AbiF3SLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 14:08:33 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3AD2AE37
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 11:08:32 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id fi2so40484930ejb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 11:08:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=j9nxxeU6YahBlPI3fltsFIAQYvUShziYDUlxlVJ26QI=;
-        b=s7/VHFicVnBs4CDWhCQ0pGpMWLIZSHESOOZqYY9o1QnXFH9b1V7ZMWT6hjoCjkI1qn
-         fbchF1I675KOR1DeQOaW3s0GywbT++EH9hk/yr7Fl/gSztFmPYDkOYxT3d2tR8MvXzun
-         MMua4OGm6vgAsbx1Yk8ywkMY4CczTbmz6u9aVy+w7lUTRwp7YRblXfuMmSXHkrG7zkQ4
-         GCPhPq98aJRwmuUc1RVdJ0TuIIy3F5lLifLhpXtNCAAppn2oCZjuMe4rDvoXzL4KkbXV
-         OoUtfsV8les8wEGdBGWXL3kPF+wBgiGrbj5f+sl460jiz29icwR57Iyr6Q/WfRjDP9LY
-         kALA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=j9nxxeU6YahBlPI3fltsFIAQYvUShziYDUlxlVJ26QI=;
-        b=xRuD3Lk6uJTDTLBYZxSx5wzeuiHIjGOMJl12xGfvGMISLhkpjhX1VczxPVeWCZGhjU
-         7s0374+ru2qkbEvfTO4fHqvlf11zeGEQGPi4++tVg5XDSkdLLDruphkHOc5ZIdzIhk9+
-         rY+dRwpLMqrnCJEeQ7zX4akLpQ2rD1Fh6zT5hOfHudcMSH+M9qqmSlIb8IEYpfgPzEGK
-         RJoQZtkMRCjlPwZd17Bm6Wdl/Y4HJuvITCo63ajijHsydgAyEeAnQqd5+jxNxiysiK/o
-         iJJ14Aiqlh264MWDS/eiaPxr7ilMXINSwOPBKutqXs3mqdiDiDEmUS3MKj9cRcVqyFzo
-         MVNQ==
-X-Gm-Message-State: AJIora9B69m59RXm579tXqPRBDbT5rz3iWVGlrUq8gYIFo/SWDK+Lv5Q
-        twNzREH8Vfv2n1DyqZlKUXMDVw==
-X-Google-Smtp-Source: AGRyM1sJdaf8gq6PHdDzpHLzfj8N8B+yZ1A+B1WdVVsBABfBd2PsxvWUCMFM/rwuYdwKoPz6aeHo7g==
-X-Received: by 2002:a17:906:2001:b0:6f3:bd7f:d878 with SMTP id 1-20020a170906200100b006f3bd7fd878mr9869519ejo.133.1656612510651;
-        Thu, 30 Jun 2022 11:08:30 -0700 (PDT)
-Received: from [192.168.0.190] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id a18-20020a170906671200b00718e4e64b7bsm9382773ejp.79.2022.06.30.11.08.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 11:08:29 -0700 (PDT)
-Message-ID: <db9d9455-37af-1616-8f7f-3d752e7930f1@linaro.org>
-Date:   Thu, 30 Jun 2022 20:08:28 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH net-next v2 01/35] dt-bindings: phy: Add QorIQ SerDes
- binding
-Content-Language: en-US
-To:     Sean Anderson <sean.anderson@seco.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
+        Thu, 30 Jun 2022 14:11:33 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70081.outbound.protection.outlook.com [40.107.7.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8553AA6F;
+        Thu, 30 Jun 2022 11:11:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HG+k/gOZFZTbjk7pwAjaRAYri60m8QPBg9BXTQ3khR4+nkY2Z4zWt7FXqBxBATskMv5uNrfGTh8v09aTFRP86tc5LK+bkK/bjCWG3a/45UJWaqVupIqXFVahkPXxzfIqEznv9k85qlFHn++PFUnJqx9nquBEgQKcDqGSkfKIApsvhKcI2TBcadpIOZsExrvtUbPHPHbKA7hnIUazf1RIOJnE4h0kfMDO04YvJ7i2MG6KrNY4y889lLP/Bx8xuvQ4RipE0ZoOpU61RS547AMT/UtiQGb3D/tz1lLNaXYN7LrlraE9kdZaFTg5CvgDFmjHIcUW+N0UmwzISXhmS2KUTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SvmN3vLS0sVKA7kNQGUlQJqf/Fs6lU4peowKtuhXyuI=;
+ b=F6JWSPIL5WtEusK7IFHIZC1aLScmbXeoq3nyl1+kjyGb4SHxgT2KnSeQBlEmYXgk7E0tU/jVSEr/k1qcX8btPBIc1sErSMgfvLeurub0Yu9L4S2bbwnvMMVE4KjO5rPrDWtFCm6iSoqHAwmfyOK6lgvtThWJ3wJNVgyhhplQNUWV+xze2frVk6GW5kMv68/yonqkiSmxtA0y9bXHMb/FG9kKLnQJ5Au782Yma3gSXYAY1wl0RGJxM1TuaccxF7UWSpmP8Xt/9AiZ8vkur5PJS7dioJVTOgY2UiE5HnuByl6KVrZKgy5USpO2XQ+0vbON1YCb1d3XgWyGj29IvaW16w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SvmN3vLS0sVKA7kNQGUlQJqf/Fs6lU4peowKtuhXyuI=;
+ b=Fw93oNiWZnhtnUFv3L7NPDnbqXuWV77/WwvuM6XJlDwDDXsWOA8epfyAxjaSYvkdh5tsG3AAs1EAzg7Wq5Vzuyd1obq+sD83sWysYPR/YFFSpj0HvcYVz+UmhfjgVLMvIdXnAh6Zr/HhEIy+51WQs/+2BIKjchgA4dcLg/b7GeI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
+ by AM9PR04MB8620.eurprd04.prod.outlook.com (2603:10a6:20b:43b::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Thu, 30 Jun
+ 2022 18:11:27 +0000
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::6546:3ee1:5e6c:278f]) by VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::6546:3ee1:5e6c:278f%5]) with mapi id 15.20.5395.015; Thu, 30 Jun 2022
+ 18:11:27 +0000
+Date:   Thu, 30 Jun 2022 21:11:12 +0300
+From:   Viorel Suman <viorel.suman@oss.nxp.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
-        linux-phy@lists.infradead.org
-References: <20220628221404.1444200-1-sean.anderson@seco.com>
- <20220628221404.1444200-2-sean.anderson@seco.com>
- <20220630172713.GA2921749-robh@kernel.org>
- <7fe84856-7115-b0f4-b0e1-0b47acbddb7a@seco.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <7fe84856-7115-b0f4-b0e1-0b47acbddb7a@seco.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 00/14] dt-bindings: arm: freescale: Switch fsl,scu
+ from txt to yaml
+Message-ID: <20220630181112.mr2256ukhcfnqrvj@fsr-ub1664-116>
+References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
+ <0e515289-9d3c-9c61-950d-09c14b33c8c2@linaro.org>
+ <20220630121042.7kwomc4jc4zppoyw@fsr-ub1664-116>
+ <c4f26508-45bb-d553-36b9-27ace8bed71f@linaro.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c4f26508-45bb-d553-36b9-27ace8bed71f@linaro.org>
+X-ClientProxiedBy: AS4P189CA0012.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d7::15) To VI1PR04MB5005.eurprd04.prod.outlook.com
+ (2603:10a6:803:57::30)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2b0370cb-9c44-420e-537f-08da5ac3f301
+X-MS-TrafficTypeDiagnostic: AM9PR04MB8620:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wU+jJIEUQANyIC3HvEoYIgdtsewgzI8Fa1c3B5rgKxrU/MtqBoqt+5J4KuI6yxn8QIwiOEZ+0D+/nCDbGbo5L+g8zPMGVCP1i02eCh6sORoaK+/CgIL3zSn1/WmdUyR8N7Os/1P8YVEH5J/iayZ8YzqjN3YNpxK8X9xGU3y4+rlX+/Iad+C1XAERw4z1TadPSxc0WIng7XsPjh1NHxtrpwe/k0YT2AikUP82JCs5LDQc+SZobYNoBA3H8VG98BsHNiNXfXYLyiEF1qBIEz0aKpzJYAOu4+Mf6gxS85fBXRjHvm2/6Bme0dIkztBhyXdJA/fPDC+JHtSUMmFd2ataR5Tofn6f+XwY3uzAlzz1IK9hCn2FiYbvlJynxYHktmiTMaJva++rqdEOjvvYiYE0u1qEFYTiagcimZRQnBB3gL4Dxz7sTY5ECYOYrEDBayAL2KImc80Lvs9mN2F52bbP59lOldS3LCwLL4R3tFu3GUSOx3ZpcojUnVmfECu6e+S1cAAxCRUm0t0brRiTv86SqlgkwX2I9GYLJzCC28SIIGfviZopRAY0GuWSNa6osKd0RZ9gClnXFQcTuUUSUPeX3VcahsYblZiVDeX475ept2rWyxNKoPGuOQzymibqyf8WPbutQWzJc9I0GFdypxLxGE2xxNpp1U7+OCvCQaqpTI4mns7dpqIbhD/HC8Ln13zg/sU3XYpWsEdbD3yBvJN8rlLQJU4iVVzKFE+aaGTwhjMprDw/NSn2hvcGld6glA+k27pBcwG3hjmsiyHHFkv5R77rIQde6V5F822s2CBa3JVRsXyRDs/avOKWRV780FsQ/tDIxWNcEhUtHxWcmGiSgQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(39860400002)(136003)(366004)(376002)(396003)(346002)(66946007)(66476007)(66556008)(38350700002)(86362001)(38100700002)(7406005)(54906003)(4326008)(8676002)(6512007)(9686003)(52116002)(53546011)(186003)(5660300002)(26005)(1076003)(33716001)(6506007)(316002)(966005)(6486002)(41300700001)(6666004)(7416002)(478600001)(2906002)(44832011)(83380400001)(8936002)(6916009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?36HGGGWQXzib4Ot+n71zyCgjVMzinMBXe7iFvZflD+KC7lM22GnQ7DbAZBn3?=
+ =?us-ascii?Q?7XUWNIShGgrCeyJLRcUkhQM3u+EOk2kJWyrtsIhBKdLKavr/8TXWjlIA1iR0?=
+ =?us-ascii?Q?Z1F2ArrHNVa80LUn07KDR3hmttg7Usk24FWRIrpafIGp4oiltrAK69oGgTJh?=
+ =?us-ascii?Q?0KRpWJqSsd2tylwJCqS8TYYgmRbgj4/lDQSDSM/kwHQUA2C+tg04wBABR08i?=
+ =?us-ascii?Q?L6JkDIqdTbi1QdyQ9Ze3KXilCSP6DPM9zqTAtxGVpiasVOeqwlreubBN3VDo?=
+ =?us-ascii?Q?MocfgFS032PDE8e9g6F4UWT3YbgHV5jCc1v+GNpu0gFJdRwuGSNkr1VPU2oo?=
+ =?us-ascii?Q?rXpEAGlzZJAi3Tu5lh7iw7nUKpyiWjUBxLB9i9+qsEuKpS76+IqZeCHaiRku?=
+ =?us-ascii?Q?tusUKD989D3OcSznRlgWvwsxn4XmrWRsx6C3bl0lVPZ9lfR9zpzXYisB9QNA?=
+ =?us-ascii?Q?14sHY5rb544Efqhbgpy0CL4nRQqpx5YoC2HGWEQAiG5nKszjDzanyUFdWFWc?=
+ =?us-ascii?Q?ahxcw9c+Y1S0LAWLIuoDTxOMiMoEdyR8UVsbXG936weQPNeCTgQ4+lgqQI3/?=
+ =?us-ascii?Q?Ow52x3seRZPvlplF5E4WaE4TZzAdji2CB2FAVmkog38yJDw4VcNHIUZOqy8w?=
+ =?us-ascii?Q?wIuHngZ6RuITDycBGsMlBHGy8sCq9kb/dJGdeoBLWfdhWBKboPO+tNAEzTBD?=
+ =?us-ascii?Q?1QPp+nqVCBp8fzfXMtaedBZlNmEjgu8cZzzskAFLYHS04mMI5tS9NPGrIVTB?=
+ =?us-ascii?Q?s/7v7qnd0gOZ9w5B1tl7w8m9Lv931V0JByDtITXjK70+pvEvVBf6VOzX+ae7?=
+ =?us-ascii?Q?DGO1uGIX4hrRviEqQ7IcCprOQFvDNAtjkDgpaPE0tBLXZk8OTbXxzpddRE6v?=
+ =?us-ascii?Q?JNjbA14u8DthkgKtpPXa/5aI4l8UXTy1qhxJHy62TSR5Anc2ypDAbTspyDoY?=
+ =?us-ascii?Q?UkDs9uQFFPvRUW8qmtURxhWVcYdPPxmX8HUzHfLXIkkUvQGeKtJYNCkXr1HR?=
+ =?us-ascii?Q?xMUN2aD9vtlJ8dW3KEmI/CQSgMuE1vIUhtbe/4a1EoYArSCEuotc/IiZB2n1?=
+ =?us-ascii?Q?ZJPNjMLhuJ00R/GLIoZ7NgVB0xa9rEpA2w4E0BoVq1wSUqSNozcctKkm+41v?=
+ =?us-ascii?Q?8qvdRvkEwwws6jQVWZ2hn1F0Ndyd1joX1865DUpUZT+vF58EKBdIYsJhbK6s?=
+ =?us-ascii?Q?hMvXxtYVhH6utNnspwgQEc9ATe/wsLvYt6ws4YNH1jTgG9ZcmBSfj7JWuOm4?=
+ =?us-ascii?Q?KOaqSbeeDWDtnPhbGg6rA841UK00Ry63LYKGP6LUG3/Lv4x4aKOeSTY21FfS?=
+ =?us-ascii?Q?ZIxTxK+NwLuFFukR8JkTatk1TbF0Vg/t3zgdE3llx67p4wGk1Tjcxg0QJhCA?=
+ =?us-ascii?Q?aUHfT05vXU7Fx/kwA1FnbuewFH23DFHRpn6Rf4DwRjgGJ3/Az1gGjS9ySMDf?=
+ =?us-ascii?Q?NRhrzBNywNyMJg2K96AsCPU6UDUJHNwJcROupbxTFrkD1uHg20EbD4WSeSA7?=
+ =?us-ascii?Q?Nrh0Wr1Dt167TNnPw/bWnsTldp9m43bATBJ5bMb0Zina+1Hz4wQGWOnY98V9?=
+ =?us-ascii?Q?CyR6CwCkBnVqdpKQxrpcamufEqYsEK2tVCZpSmIy?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2b0370cb-9c44-420e-537f-08da5ac3f301
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 18:11:27.0138
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vh/b/X5hXuhX/PY0I4gTl19a8cO+X4ayzT9kkBCrmk1fp1TaW4cVzVC+TEa16UY1VFGnPLaf+Uc6jCLSGn4rIw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8620
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/2022 20:01, Sean Anderson wrote:
-> Hi Rob,
+On 22-06-30 20:03:07, Krzysztof Kozlowski wrote:
+> On 30/06/2022 14:13, Viorel Suman (OSS) wrote:
+> > On 22-06-29 19:51:06, Krzysztof Kozlowski wrote:
+> >> On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
+> >>> From: Viorel Suman <viorel.suman@nxp.com>
+> >>>
+> >>> Changes since v5: https://lore.kernel.org/lkml/20220616164303.790379-1-viorel.suman@nxp.com/
+> >>>   * Updated according to Krzysztof Kozlowski comments
+> >>>
+> >>
+> >> My comment a about removal of each part of TXT bindings in each patch,
+> >> was not addressed. Your approach makes it more difficult to read patches
+> >> and makes sense only if each subsystem maintainer will take the patches
+> >> (separately). If the patches are going through one tree, then better to
+> >> remove the TXT gradually.
+> >>
+> >> So the question - who is going to take each of the patches?
+> > 
+> > Hi Krzysztof,
+> > 
+> > I just understood the context of your comment, will do it in the next version.
+> > 
+> > Assuming TXT is removed from aggregating TXT - fsl,scu.txt - gradually, do you expect the
+> > removed to be added into the aggregating YAML - fsl,scu.yaml - also gradually within the
+> > same patch ?
 > 
-> On 6/30/22 1:27 PM, Rob Herring wrote:
->> On Tue, Jun 28, 2022 at 06:13:30PM -0400, Sean Anderson wrote:
->>> This adds a binding for the SerDes module found on QorIQ processors. The
->>> phy reference has two cells, one for the first lane and one for the
->>> last. This should allow for good support of multi-lane protocols when
->>> (if) they are added. There is no protocol option, because the driver is
->>> designed to be able to completely reconfigure lanes at runtime.
->>> Generally, the phy consumer can select the appropriate protocol using
->>> set_mode. For the most part there is only one protocol controller
->>> (consumer) per lane/protocol combination. The exception to this is the
->>> B4860 processor, which has some lanes which can be connected to
->>> multiple MACs. For that processor, I anticipate the easiest way to
->>> resolve this will be to add an additional cell with a "protocol
->>> controller instance" property.
->>>
->>> Each serdes has a unique set of supported protocols (and lanes). The
->>> support matrix is stored in the driver and is selected based on the
->>> compatible string. It is anticipated that a new compatible string will
->>> need to be added for each serdes on each SoC that drivers support is
->>> added for. There is no "generic" compatible string for this reason.
->>>
->>> There are two PLLs, each of which can be used as the master clock for
->>> each lane. Each PLL has its own reference. For the moment they are
->>> required, because it simplifies the driver implementation. Absent
->>> reference clocks can be modeled by a fixed-clock with a rate of 0.
->>>
->>> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
->>> ---
->>>
->>> Changes in v2:
->>> - Add #clock-cells. This will allow using assigned-clocks* to configure
->>>   the PLLs.
->>> - Allow a value of 1 for phy-cells. This allows for compatibility with
->>>   the similar (but according to Ioana Ciornei different enough) lynx-28g
->>>   binding.
->>> - Document phy cells in the description
->>> - Document the structure of the compatible strings
->>> - Fix example binding having too many cells in regs
->>> - Move compatible first
->>> - Refer to the device in the documentation, rather than the binding
->>> - Remove minItems
->>> - Rename to fsl,lynx-10g.yaml
->>> - Use list for clock-names
->>>
->>>  .../devicetree/bindings/phy/fsl,lynx-10g.yaml | 93 +++++++++++++++++++
->>>  1 file changed, 93 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/phy/fsl,lynx-10g.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/phy/fsl,lynx-10g.yaml b/Documentation/devicetree/bindings/phy/fsl,lynx-10g.yaml
->>> new file mode 100644
->>> index 000000000000..b5a6f631df9f
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/phy/fsl,lynx-10g.yaml
->>> @@ -0,0 +1,93 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/phy/fsl,lynx-10g.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: NXP Lynx 10G SerDes
->>> +
->>> +maintainers:
->>> +  - Sean Anderson <sean.anderson@seco.com>
->>> +
->>> +description: |
->>> +  These Lynx "SerDes" devices are found in NXP's QorIQ line of processors. The
->>> +  SerDes provides up to eight lanes. Each lane may be configured individually,
->>> +  or may be combined with adjacent lanes for a multi-lane protocol. The SerDes
->>> +  supports a variety of protocols, including up to 10G Ethernet, PCIe, SATA, and
->>> +  others. The specific protocols supported for each lane depend on the
->>> +  particular SoC.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    description: |
->>> +      Each compatible is of the form "fsl,<soc-name>-serdes-<instance>".
->>> +      Although many registers are compatible between different SoCs, the
->>> +      supported protocols and lane assignments tend to be unique to each SerDes.
->>> +      Additionally, the method of activating protocols may also be unique.
->>
->> We typically have properties for handling these variables. Numbering 
->> instances is something we avoid.
-> 
-> On v1, Krzysztof said that this was a better route...
+> Each patch making the conversion should remove the piece being
+> converted. Then finally the patch adding fsl,scu.yaml should remove the
+> last pieces (remaining ones).
 
-I commented about "-1" and "-2" saying you have to make them properties.
-You disagreed and with long messages were convincing me that "-1" and
-"-2" is the only reasonable approach. I never said it is a better route.
-I explicitly asked in several places for defining these as properties,
-not as compatibles.
+Thank you for clarification, will follow this approach in the next version.
 
-You are twisting the entire discussion now.
-
-Best regards,
-Krzysztof
+Regards,
+Viorel

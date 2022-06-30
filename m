@@ -2,73 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924F2561338
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCB5561353
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbiF3H2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
+        id S232913AbiF3Hf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiF3H2L (ORCPT
+        with ESMTP id S232787AbiF3Hf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:28:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CF6FD2E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:28:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 491B561206
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 07:28:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D3A1C34115;
-        Thu, 30 Jun 2022 07:28:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656574088;
-        bh=pH/xoO4PIubE9L5cyy2MmAuYYPk1Vk6KDxujHpTzHis=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PYdKbHrok1mxhBGc71fcOwRPfRdDNuEEy7hNAPhyKw7g/zRTpw1TcZc1ODjaH32xs
-         4G4Qi2u02v4jXei9NWBnI/l+rP092u9PWxX/9mYhSLt3qEPi0UKxXEv7DjaASs7IX0
-         GUiBs9puYxCWSmWdP8DlrN4s0kwwabJ+d36HsKTk=
-Date:   Thu, 30 Jun 2022 09:28:06 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     zys.zljxml@gmail.com
-Cc:     tj@kernel.org, viro@zeniv.linux.org.uk,
-        linux-kernel@vger.kernel.org, katrinzhou <katrinzhou@tencent.com>
-Subject: Re: [PATCH] kernfs: fix potential NULL dereference in __kernfs_remove
-Message-ID: <Yr1QhjNGVJ7oPpRX@kroah.com>
-References: <20220630040047.3241781-1-zys.zljxml@gmail.com>
+        Thu, 30 Jun 2022 03:35:57 -0400
+X-Greylist: delayed 397 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Jun 2022 00:35:56 PDT
+Received: from gw2.atmark-techno.com (gw2.atmark-techno.com [35.74.137.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCDF7326E8
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:35:56 -0700 (PDT)
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+        by gw2.atmark-techno.com (Postfix) with ESMTPS id 0F07B20D5C
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:29:19 +0900 (JST)
+Received: by mail-pj1-f69.google.com with SMTP id em12-20020a17090b014c00b001ed493d4f0cso5249192pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:29:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZlpDtdwmWp2b5cqasTMpXtBnyv72jy1sATeseuyLyBc=;
+        b=cznR8oAII9+W3YDcruYYf0Wk5lFby+7UjaO8AQsC0CS8TOu3i0FPazXxRt97TTfbwu
+         V5B4F4LVl6i4m8mE0JnaaJ+5CMfSIdqdrFW6Cfgbx2h1MNaJSjmhCL0Hp0WORVHJ0oGW
+         JvK1oTuR/vvWtDwR6VKC/cUwSTCFXl3aYYO+lOGyCfODOfb+BDE1wH4DvzL4+Q6vDF6H
+         pVMOfenDT5aVIg4VDslrHLPtjHLNISiTspaoXrxmbaD9uurCC4Xn1nMKQHLgnyhXSvTl
+         CkkWXiGKi4uICXj4stkisdIvfRuRNyU/0hbzfUB7h0ivR942cUoYcE7DiqeJ3oIwG9I0
+         yacg==
+X-Gm-Message-State: AJIora+EVWBscK/XfJcB86YBLEaB5J6Gu/oGNfrz3GMh6GykFtVJA0v4
+        eqp/bvd+fIjAS25gs9uOBuuPsJVEjBA7kaSUVsBHvA9jTKnhug3TGPBNmFrn7guQO9pWTLwRGMp
+        fuW5chdSZYqChs7VsVCYx78mcBA==
+X-Received: by 2002:a17:902:e807:b0:16a:471b:a4cc with SMTP id u7-20020a170902e80700b0016a471ba4ccmr13385058plg.102.1656574158054;
+        Thu, 30 Jun 2022 00:29:18 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1unkGtBy8pj1LseJ12CPT9D2tB8s8CwrIAP721pTZJ67uSW54oYP5hdrssb9ch6i39KkfjNeg==
+X-Received: by 2002:a17:902:e807:b0:16a:471b:a4cc with SMTP id u7-20020a170902e80700b0016a471ba4ccmr13385043plg.102.1656574157789;
+        Thu, 30 Jun 2022 00:29:17 -0700 (PDT)
+Received: from pc-zest.atmarktech (126.88.200.35.bc.googleusercontent.com. [35.200.88.126])
+        by smtp.gmail.com with ESMTPSA id a3-20020a1709027e4300b0016bb24f5d19sm286102pln.209.2022.06.30.00.29.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 30 Jun 2022 00:29:17 -0700 (PDT)
+Received: from martinet by pc-zest.atmarktech with local (Exim 4.95)
+        (envelope-from <martinet@pc-zest>)
+        id 1o6obz-00BbWI-FR;
+        Thu, 30 Jun 2022 16:29:15 +0900
+Date:   Thu, 30 Jun 2022 16:29:05 +0900
+From:   Dominique MARTINET <dominique.martinet@atmark-techno.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-btrfs@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yu Kuai <yukuai3@huawei.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>
+Subject: Major btrfs fiemap slowdown on file with many extents once in cache
+ (RCU stalls?) (Was: [PATCH 1/3] filemap: Correct the conditions for marking
+ a folio as accessed)
+Message-ID: <Yr1QwVW+sHWlAqKj@atmark-techno.com>
+References: <20220619151143.1054746-1-willy@infradead.org>
+ <20220619151143.1054746-2-willy@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220630040047.3241781-1-zys.zljxml@gmail.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220619151143.1054746-2-willy@infradead.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 12:00:47PM +0800, zys.zljxml@gmail.com wrote:
-> From: katrinzhou <katrinzhou@tencent.com>
-> 
-> When lockdep is enabled, lockdep_assert_held_write would
-> cause potential NULL pointer dereference.
-> 
-> Fix the folloeing smatch warnings:
-> 
-> fs/kernfs/dir.c:1353 __kernfs_remove() warn: variable dereferenced before check 'kn' (see line 1346)
-> 
-> Signed-off-by: katrinzhou <katrinzhou@tencent.com>
+Hi Willy, linux-btrfs@vger,
 
-Can you please submit this with your legal name that you use to sign
-documents?
+Matthew Wilcox (Oracle) wrote on Sun, Jun 19, 2022 at 04:11:41PM +0100:
+> We had an off-by-one error which meant that we never marked the first page
+> in a read as accessed.  This was visible as a slowdown when re-reading
+> a file as pages were being evicted from cache too soon.  In reviewing
+> this code, we noticed a second bug where a multi-page folio would be
+> marked as accessed multiple times when doing reads that were less than
+> the size of the folio.
 
-Also, what commit id does this fix?  Did you actually hit this with a
-real workload?  How can this be reproduced and tested?
+when debugging an unrelated issue (short reads on btrfs with io_uring
+and O_DIRECT[1]), I noticed that my horrible big file copy speeds fell
+down from ~2GB/s (there's compression and lots of zeroes) to ~100MB/s
+the second time I was copying it with cp.
 
-thanks,
+I've taken a moment to bisect this and came down to this patch.
 
-greg k-h
+[1] https://lore.kernel.org/all/YrrFGO4A1jS0GI0G@atmark-techno.com/T/#u
+
+
+
+Dropping caches (echo 3 > /proc/sys/vm/drop_caches) restore the speed,
+so there appears to be some bad effect to having the file in cache for
+fiemap?
+To be fair that file is pretty horrible:
+---
+# compsize bigfile
+Processed 1 file, 194955 regular extents (199583 refs), 0 inline.
+Type       Perc     Disk Usage   Uncompressed Referenced  
+TOTAL       15%      3.7G          23G          23G       
+none       100%      477M         477M         514M       
+zstd        14%      3.2G          23G          23G       
+---
+
+Here's what perf has to say about it on top of this patch when running
+`cp bigfile /dev/null` the first time:
+
+98.97%     0.00%  cp       [kernel.kallsyms]    [k]
+entry_SYSCALL_64_after_hwframe
+ entry_SYSCALL_64_after_hwframe
+ do_syscall_64
+  - 93.40% ksys_read
+     - 93.36% vfs_read
+        - 93.25% new_sync_read
+           - 93.20% filemap_read
+              - 83.38% filemap_get_pages
+                 - 82.76% page_cache_ra_unbounded
+                    + 59.72% folio_alloc
+                    + 13.43% read_pages
+                    + 8.75% filemap_add_folio
+                      0.64% xa_load
+                   0.52% filemap_get_read_batch
+              + 8.75% copy_page_to_iter
+  - 4.73% __x64_sys_ioctl
+     - 4.72% do_vfs_ioctl
+        - btrfs_fiemap
+           - 4.70% extent_fiemap
+              + 3.95% btrfs_check_shared
+              + 0.70% get_extent_skip_holes
+
+and second time:
+99.90%     0.00%  cp       [kernel.kallsyms]    [k]
+entry_SYSCALL_64_after_hwfram
+ entry_SYSCALL_64_after_hwframe
+ do_syscall_64
+  - 94.62% __x64_sys_ioctl
+       do_vfs_ioctl
+       btrfs_fiemap
+     - extent_fiemap
+        - 50.01% get_extent_skip_holes
+           - 50.00% btrfs_get_extent_fiemap
+              - 49.97% count_range_bits
+                   rb_next
+        + 28.72% lock_extent_bits
+        + 15.55% __clear_extent_bit
+  - 5.21% ksys_read
+     + 5.21% vfs_read
+
+(if this isn't readable, 95% of the time is spent on fiemap the second
+time around)
+
+
+
+
+I've also been observing RCU stalls on my laptop with the same workload
+(cp to /dev/null), but unfortunately I could not reproduce in qemu so I
+could not take traces to confirm they are caused by the same commit but
+given the workload I'd say that is it?
+I can rebuild a kernel for my laptop and confirm if you think it should
+be something else.
+
+
+I didn't look at the patch itself (yet) so have no suggestion at this
+point - it's plausible the patch fixed something and just exposed slow
+code that had been there all along so it might be better to look at the
+btrfs side first, I don't know.
+If you don't manage to reproduce I'll be happy to test anything thrown
+at me at the very least.
+
+
+Thanks,
+-- 
+Dominique Martinet | Asmadeus

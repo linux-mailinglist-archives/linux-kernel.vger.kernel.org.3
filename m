@@ -2,52 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D900E561F2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2F5561F37
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235470AbiF3P0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 11:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
+        id S235401AbiF3P1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 11:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235110AbiF3P0P (ORCPT
+        with ESMTP id S235286AbiF3P1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 11:26:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D9E53CA57
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:26:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E0F91063;
-        Thu, 30 Jun 2022 08:26:14 -0700 (PDT)
-Received: from [10.57.85.25] (unknown [10.57.85.25])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5784F3F66F;
-        Thu, 30 Jun 2022 08:26:11 -0700 (PDT)
-Message-ID: <2925438a-27d6-aee4-a412-591628ab2373@arm.com>
-Date:   Thu, 30 Jun 2022 16:26:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v12 1/2] iommu/io-pgtable-arm-v7s: Add a quirk to allow
- pgtable PA up to 35bit
-Content-Language: en-GB
-To:     yf.wang@mediatek.com, Will Deacon <will@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Yong Wu <Yong.Wu@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     wsd_upstream@mediatek.com, Libo Kang <Libo.Kang@mediatek.com>,
-        Ning Li <ning.li@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
-        Georgi Djakov <quic_c_gdjako@quicinc.com>,
-        Sven Peter <sven@svenpeter.dev>
-References: <20220630092927.24925-1-yf.wang@mediatek.com>
- <20220630092927.24925-2-yf.wang@mediatek.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220630092927.24925-2-yf.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Thu, 30 Jun 2022 11:27:00 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B97E3D4B4;
+        Thu, 30 Jun 2022 08:27:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656602820; x=1688138820;
+  h=message-id:date:from:subject:to:cc:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=GENfcM2oa8BUQu8vWbSCuMozYUdbkWIY7Pm0Ye91X7M=;
+  b=YF023ThI6xxuI3J5HUZBpYInQ1sug/u2KaKjOUZsCorsigNBo/N8jIKS
+   DPeSH3twTxkxdDx4+IstbiwdoDHjvL8puFgJyKofNP3Enn1nTrZLXLtAw
+   jJgGqeAgmFjgtVwDhOZHbtQne+8e/WbStyCuQoLEP3+BAoyu6sgywH1LZ
+   dWlaLK0xRD8Kn6Lh2g2SeAuZDIE5AHu+6OgrDDafIIw17C7on2Wupy8k6
+   4UccoOu0Iu9pMXM8JbaypLLrr6UFoYYeapdx5+1/JuHxutp0RoTWZtMe5
+   gHsloYdm5BvR8bIytGhcDrHDShkCTK+Jn7sMYRrwGWXxq2pPEsEAVwD1Y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="279924489"
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="279924489"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 08:26:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="588796615"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga007.jf.intel.com with ESMTP; 30 Jun 2022 08:26:58 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 30 Jun 2022 08:26:58 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Thu, 30 Jun 2022 08:26:58 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.49) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Thu, 30 Jun 2022 08:26:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HiATHERvUg36n5UUGw06EFXgpFDPmM/LVsZMffaFeoa9WTHPFVwZ4U+awH3fE0SwerfrCU8eUVED/6xSiqA0UvxyycZPAH2dPO8BKx9mzP/XY4OMXJr3Qbyn4Ft7OWg0clIbTt7cZI+4bixW15+jlaq93TDvlUfM1+Pb002o/vLWObi1cj+KV+Jd3gaDKGO5v5AQMvV2kZ/bN8z3cK6LsZ5m0HqzNbBrWyt3YLGuf8dzSq1uZPqV/J6Y6H+omBQsvCZKL+qs8dK4P3wBwBAEvrG8RIBt8ntg+V3yyaDwea1p5NJItVJJPJdpViylGSfjg6Sm9Y0FOXmRSkhLtNdoDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bVJ3ISfVcDMgDm8/rH51WoZ5HjaVLjCe2keEUiPQw4o=;
+ b=EYj0EBT8/X8FGnnpoBd39MIgpIpf3VrA9VqmN+oVeILCBWS6hDuxwWoUjr+PKXp9kaE1aIN8cH7KmKRWAp8Psksb8500gUleEHv5HFPtRWHDvzp/B7E3VknC9sdwh/R1x9c36q4UtE0n37raclejpBWMAKvTRvNUAVK5f79tU5VIT49xTsXA+gFOJ98z/TKS8tcwrZZZskrOD6vtUzXIQc7Ew7IND5QBdH3Yg0puj2K7hYMiAGrCVt6MWC7R+GjXQ37iMMEprh6ZgVFmWQK/z2YOnAjIqRLj2/QYN1EZ0Idj7JAmZZtqVixXzqsE56aesKi9axQA+Fr47PldJn/cOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
+ by DM5PR11MB1402.namprd11.prod.outlook.com (2603:10b6:3:7::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5373.18; Thu, 30 Jun 2022 15:26:57 +0000
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::95a9:2d1d:b36e:4319]) by PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::95a9:2d1d:b36e:4319%5]) with mapi id 15.20.5395.015; Thu, 30 Jun 2022
+ 15:26:56 +0000
+Message-ID: <5c67d453-a162-b61d-4a27-c854f1ef3587@intel.com>
+Date:   Thu, 30 Jun 2022 08:26:54 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+Subject: Re: [PATCH v2 1/1] Documentation/x86: Add the AMX enabling example
+To:     "Luck, Tony" <tony.luck@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220629224235.20589-1-chang.seok.bae@intel.com>
+ <20220629224235.20589-2-chang.seok.bae@intel.com>
+ <f01bb09a504240059a79a94c24ba4eba@intel.com>
+Content-Language: en-CA
+In-Reply-To: <f01bb09a504240059a79a94c24ba4eba@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-ClientProxiedBy: PH0P220CA0016.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:510:d3::19) To PH0PR11MB4855.namprd11.prod.outlook.com
+ (2603:10b6:510:41::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 79395295-582a-4366-7e8f-08da5aacf7e0
+X-MS-TrafficTypeDiagnostic: DM5PR11MB1402:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: u7EZ8DlfILjZ/iBU7W2bIHg0lLmzl6m7gZgF5T0BDCBAHKb69pBZq4gKrlNQroK0/7iriOwr/464bWeVpfbnc3WTFaVgNNAaFeD6yNAzOG+q63TDEnLhDtl+b5yt1qaKJO+onS6GNIVviHH8W1wMRITPYynpQqQ4dNkEmMW9oCK/3AwIrKG0AG0IScZ5EbVqCGUICq/OiFcG2DfktrbeHL2KFyO9tKCFkGvW6wnwinDpDCMzTs37xR47LlgZG/nlHbOLz1Vb0FuYxqyFHo6gCznIJDO5s3M4uOsFOyKZgFYOg++49yUrZN95FOE1nLZa8wX71K9nYieJWFMn42xoW71i0HdZ74TQ61+tp34djOn1WE3D+Y1t5spdB0GQ9FTjw4Uq/mAeE7CzrycIOWHu+l8CesP5R9bydr4NCP1ewI6V9QBgVqn766MAkuhCOjgQhh1MFasarKt2rcUXGBlrZOmEd9/j8QCF82tf/GmFDbhlho17PUgzlUTbWV+u5w90ClEKTG6KLKfMJTmc0ZG1U4lQRVWQtP8TSAO/DsQh4UhCAGOUfje4q8ZTOz5hweR80QNyC7hBKqqtJTEmgo6/qzScCBnft+AwgH9593q5SMJNNIllnZYdVZvquZrQ7ErqlATkDev/oBcoFKeLCJ85cktgmqWO3jvo7wN+1hli1DEMcMoX8H7YKoFdpnLZEbBDJ3wXQPFagkLEINO3CULJOPc3spqJuQJa3z37ZeowUzGqu8d6pU8ZW9o7U35Oug9HXzQzLj5n495apj+1ryvPjb4u0a6q5eIv1jZTYxAVCQez5aGXwHhHewbq5fkMNzsZ7pMF/5C3edCVwE5Y/dOnOyMMBBlrkufd77j2al2RM24=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(366004)(376002)(39860400002)(396003)(346002)(31686004)(316002)(26005)(6636002)(6512007)(36756003)(38100700002)(54906003)(83380400001)(31696002)(110136005)(478600001)(5660300002)(6506007)(86362001)(4326008)(186003)(66556008)(8676002)(66946007)(2906002)(2616005)(921005)(41300700001)(66476007)(82960400001)(6486002)(8936002)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bjRxZE5rL0VQamJQUGJRdDRBWDNVTS9KaHk5OU1Pb2xkbElxQmREU3pWMXNx?=
+ =?utf-8?B?ZUtiSmxwQWhMYzN3ZVZwS0tDajY1ZEhqVEVoYkxQYVl5S2VJYllaaGk3MXJ5?=
+ =?utf-8?B?NHIxNnRmZmdaTlJVUlFxMmF6OXpCVzVqT3Bud3IwdjR6bkg0R3VQenRxNWlJ?=
+ =?utf-8?B?UTJRUDQyRTFNTGwwL1lrYzg4QzNSWXZ1NC9mRWVDM3BBYXdmNzJlOUlJQWln?=
+ =?utf-8?B?SnFZRnMvK1hPZ2dGcW9kcDlvMzNsdDVFVGxrcmNOL3oxZ0lxdjd5eDhGaUg2?=
+ =?utf-8?B?QkxhOWdMQ2ZEbmQwMStoSElKSUlmMGdyWjV3dWhydWlzbFJ2U3dFSkRtK29W?=
+ =?utf-8?B?bjZmdVgycDhZdnZpL3V2UVE0UDlQZHA4R1BuQk5UNHBaVStUM2psVXBiL0RH?=
+ =?utf-8?B?RW5pVkYxZ3JvcjRaYlIxWmtkSmI1RDFpcG43MWI0YWNPMWdSbUJyeENvVFdu?=
+ =?utf-8?B?d1c1Z1RaV2lsNDQzWHBDQWpCN2Q1YjJlUjNqMnJVamNQc0ozK3Q0ZGRBNmdr?=
+ =?utf-8?B?d1FaL3VienhBV2MwOFRsd0JEeHB0ckxCNzR1a1dxaW1BTmxYdzFWajBGOXJJ?=
+ =?utf-8?B?S3RsNWlhSWJXc0FoeHpLM3hWRlV1Y3JTTU40YWkxRjkyMm9BUGFVOW1HTkRs?=
+ =?utf-8?B?QUpRRnc4MmRDNVFLalBFeC8zYzc5OUNZclBOMmRKWk1IZWVWZk9mRW80V0gr?=
+ =?utf-8?B?aXNPM2hmUHBtZXRlNzdRalNPL2FWenRBbVR6VGdOdEt4UUFIbFNpRjZldzZJ?=
+ =?utf-8?B?a3VUejBIQWI4S29wdmdoQzE4TGIwc01XTUtKZkdrNktCWDl3elZtdlVJZ2M0?=
+ =?utf-8?B?U042RE1LbkRiSW1YWjFxSGNFbTl2K2hQLzgvcGR1RGJtbWZDRmNLSWpXdm9y?=
+ =?utf-8?B?QVpSRTNEUDhIOFAvQnhsSDY5M1NUckVOUkM4VlhoNjVQMGRlMk1RL1I5RmtY?=
+ =?utf-8?B?bTd1ZEJQME8zYUNmTTU5b3hPQUliSXQvY3YrZjFlNmRZZng4bEFvWkJwZEF6?=
+ =?utf-8?B?QURaamM1a0Frdm81enF1S2xORkFZR1dIYXZJcG1aWlNOekhIVGVzSXAyc3Ro?=
+ =?utf-8?B?bk5WOGdsemJmSFlpa3ZJYTBUUFlqUTVWNHNaTzJ4a3dNYWVnOURFKzJ0Vlov?=
+ =?utf-8?B?WGhnSmVjenpLYkhmMkk1TDhQWXZUaTIvU3M1VjBJRlJqQzVMYXIxaXdWVUFO?=
+ =?utf-8?B?RUcrNzJSREZ4RC8vT0NvZnpQVndJaEkzci9jMlFWM0dXRkRPMWl4L1dWTER5?=
+ =?utf-8?B?K25pZzBUK1pOMUVNNjMwOXUzSDJ2Nm5xeHFWbTFvSnFkcThQS3VpQ1NhMEU0?=
+ =?utf-8?B?cUZHMDBvMk0yRVpUUWtaTFI5WDh1aWRxNkJpWkMrMVA5N3hKUEZJWnFKNHZm?=
+ =?utf-8?B?SDB2K0k1R3lZWXI4MEh6S1crZ3pxanhsdU9TWG44Q290VEUvOUozSEZXa3pj?=
+ =?utf-8?B?dkxSeVBWWU5Pci9CbjV1bW8xd2V3ODlQa3RTU1BoWHhIVCt3d2wzbGVXS0t1?=
+ =?utf-8?B?cU5JMm9UVVowdG5rRVBjQS82NlF4RjZObmdSRG5QQWJSb0ZHWlBxL0VrSGZ2?=
+ =?utf-8?B?YThiTlE4dFZWeTZnMEh0Z3pEMVY1NzRUK2dTbDR5ZmFOWFJGckUyL0hmdDRW?=
+ =?utf-8?B?VW5ydlMyRWRXUUlYUVcrK2VMS1UrM1lDSmtZODRjNzNuRUY5OG1Tc3JBMnVR?=
+ =?utf-8?B?ZTZsMGJUVE1kSWxRa0lzUWQrTWxUcUZCbmZHZ3AzQkhXZEZOcjhhK1YwRlRF?=
+ =?utf-8?B?MGd0RXJUWE5uVU9aTDl0LzNjT1pxaUM2eitxbTQvTGtBT0lmQ2hQRlNiNnJX?=
+ =?utf-8?B?cmRJSGJDaEhzbEVldHJUWUFwa0NrODVJQlNvdzMvU1FQdjc4MDBndUVmak84?=
+ =?utf-8?B?VlhRMjBrQ21sbFJ5cmJERTc0QWdZTUlCWXduMVZUcW1LdnlCSjdBcWw2cWxN?=
+ =?utf-8?B?QTEyekRybXRIbUZHYml0bDBQMjRKRGtEZTBZMURHamJRZk1tYjZsQTFqNnNu?=
+ =?utf-8?B?YW4vbE91c0M5OWJlWmJDZVVsZ3ViSmlvQ3hGdVIzNVFxNTdJVlkwNlBSVUtK?=
+ =?utf-8?B?QVB4bG5JcWxmamZtTk1nNU1hdGRrU2RKV1JHV0E2YmhHR2d0ZDg5Y0FBVEJn?=
+ =?utf-8?B?RTJwZ2hrTkF1RmljaEFRa25jWmpHZGc5UjY4alBSNi91Z2hJMVlnNy9MU1I4?=
+ =?utf-8?B?a0E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79395295-582a-4366-7e8f-08da5aacf7e0
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 15:26:56.7312
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Au+EmHFm3nzTM8creVSAws8dsyaZaf/3YlN40fkdYdq+ng3f6gNdqPyCjon0BVFMUGQJ5WF17hYE0abM8HJudAAO9e8qoCIR6lFfdMBMSMg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1402
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,210 +165,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-30 10:29, yf.wang@mediatek.com wrote:
-> From: Yunfei Wang <yf.wang@mediatek.com>
+On 6/29/2022 4:30 PM, Luck, Tony wrote:
+> +        #define ARCH_GET_XCOMP_SUPP  0x1021
+> +
+> +        #define XFEATURE_XTILECFG    17
+> +        #define XFEATURE_XTILEDATA   18
 > 
-> Single memory zone feature will remove ZONE_DMA32 and ZONE_DMA and
-> cause pgtable PA size larger than 32bit.
+> What's the long-term plan for these #defines?  I see that ARCH_GET_XCOMP_SUPP
+> is in arch/x86/include/uapi/asm/prctl.h ... so eventually that will show up in distribution
+> /usr/include/asm/prctl.h courtesy of a glibc update.
 > 
-> Since Mediatek IOMMU hardware support at most 35bit PA in pgtable,
-> so add a quirk to allow the PA of pgtables support up to bit35.
-
-This looks about as clean as it's likely to get now, thanks for persevering.
-
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
-
-> Signed-off-by: Ning Li <ning.li@mediatek.com>
-> Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
-> ---
->   drivers/iommu/io-pgtable-arm-v7s.c | 75 ++++++++++++++++++++++--------
->   include/linux/io-pgtable.h         | 15 ++++--
->   2 files changed, 66 insertions(+), 24 deletions(-)
+> But the XFEATURE bits aren't in a "uapi" file. They are an "enum" in:
 > 
-> diff --git a/drivers/iommu/io-pgtable-arm-v7s.c b/drivers/iommu/io-pgtable-arm-v7s.c
-> index be066c1503d3..ba3115fd0f86 100644
-> --- a/drivers/iommu/io-pgtable-arm-v7s.c
-> +++ b/drivers/iommu/io-pgtable-arm-v7s.c
-> @@ -182,14 +182,8 @@ static bool arm_v7s_is_mtk_enabled(struct io_pgtable_cfg *cfg)
->   		(cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_EXT);
->   }
->   
-> -static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
-> -				    struct io_pgtable_cfg *cfg)
-> +static arm_v7s_iopte to_mtk_iopte(phys_addr_t paddr, arm_v7s_iopte pte)
->   {
-> -	arm_v7s_iopte pte = paddr & ARM_V7S_LVL_MASK(lvl);
-> -
-> -	if (!arm_v7s_is_mtk_enabled(cfg))
-> -		return pte;
-> -
->   	if (paddr & BIT_ULL(32))
->   		pte |= ARM_V7S_ATTR_MTK_PA_BIT32;
->   	if (paddr & BIT_ULL(33))
-> @@ -199,6 +193,17 @@ static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
->   	return pte;
->   }
->   
-> +static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
-> +				    struct io_pgtable_cfg *cfg)
-> +{
-> +	arm_v7s_iopte pte = paddr & ARM_V7S_LVL_MASK(lvl);
-> +
-> +	if (arm_v7s_is_mtk_enabled(cfg))
-> +		return to_mtk_iopte(paddr, pte);
-> +
-> +	return pte;
-> +}
-> +
->   static phys_addr_t iopte_to_paddr(arm_v7s_iopte pte, int lvl,
->   				  struct io_pgtable_cfg *cfg)
->   {
-> @@ -240,10 +245,17 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
->   	dma_addr_t dma;
->   	size_t size = ARM_V7S_TABLE_SIZE(lvl, cfg);
->   	void *table = NULL;
-> +	gfp_t gfp_l1;
-> +
-> +	/*
-> +	 * ARM_MTK_TTBR_EXT extend the translation table base support larger
-> +	 * memory address.
-> +	 */
-> +	gfp_l1 = cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
-> +		 GFP_KERNEL : ARM_V7S_TABLE_GFP_DMA;
->   
->   	if (lvl == 1)
-> -		table = (void *)__get_free_pages(
-> -			__GFP_ZERO | ARM_V7S_TABLE_GFP_DMA, get_order(size));
-> +		table = (void *)__get_free_pages(gfp_l1 | __GFP_ZERO, get_order(size));
->   	else if (lvl == 2)
->   		table = kmem_cache_zalloc(data->l2_tables, gfp);
->   
-> @@ -251,7 +263,8 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
->   		return NULL;
->   
->   	phys = virt_to_phys(table);
-> -	if (phys != (arm_v7s_iopte)phys) {
-> +	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
-> +	    phys >= (1ULL << cfg->oas) : phys != (arm_v7s_iopte)phys) {
->   		/* Doesn't fit in PTE */
->   		dev_err(dev, "Page table does not fit in PTE: %pa", &phys);
->   		goto out_free;
-> @@ -457,9 +470,14 @@ static arm_v7s_iopte arm_v7s_install_table(arm_v7s_iopte *table,
->   					   arm_v7s_iopte curr,
->   					   struct io_pgtable_cfg *cfg)
->   {
-> +	phys_addr_t phys = virt_to_phys(table);
->   	arm_v7s_iopte old, new;
->   
-> -	new = virt_to_phys(table) | ARM_V7S_PTE_TYPE_TABLE;
-> +	new = phys | ARM_V7S_PTE_TYPE_TABLE;
-> +
-> +	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
-> +		new = to_mtk_iopte(phys, new);
-> +
->   	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_NS)
->   		new |= ARM_V7S_ATTR_NS_TABLE;
->   
-> @@ -779,6 +797,8 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
->   						void *cookie)
->   {
->   	struct arm_v7s_io_pgtable *data;
-> +	slab_flags_t slab_flag;
-> +	phys_addr_t paddr;
->   
->   	if (cfg->ias > (arm_v7s_is_mtk_enabled(cfg) ? 34 : ARM_V7S_ADDR_BITS))
->   		return NULL;
-> @@ -788,7 +808,8 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
->   
->   	if (cfg->quirks & ~(IO_PGTABLE_QUIRK_ARM_NS |
->   			    IO_PGTABLE_QUIRK_NO_PERMS |
-> -			    IO_PGTABLE_QUIRK_ARM_MTK_EXT))
-> +			    IO_PGTABLE_QUIRK_ARM_MTK_EXT |
-> +			    IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT))
->   		return NULL;
->   
->   	/* If ARM_MTK_4GB is enabled, the NO_PERMS is also expected. */
-> @@ -796,15 +817,27 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
->   	    !(cfg->quirks & IO_PGTABLE_QUIRK_NO_PERMS))
->   			return NULL;
->   
-> +	if ((cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT) &&
-> +	    !arm_v7s_is_mtk_enabled(cfg))
-> +		return NULL;
-> +
->   	data = kmalloc(sizeof(*data), GFP_KERNEL);
->   	if (!data)
->   		return NULL;
->   
->   	spin_lock_init(&data->split_lock);
-> +
-> +	/*
-> +	 * ARM_MTK_TTBR_EXT extend the translation table base support larger
-> +	 * memory address.
-> +	 */
-> +	slab_flag = cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
-> +		    0 : ARM_V7S_TABLE_SLAB_FLAGS;
-> +
->   	data->l2_tables = kmem_cache_create("io-pgtable_armv7s_l2",
->   					    ARM_V7S_TABLE_SIZE(2, cfg),
->   					    ARM_V7S_TABLE_SIZE(2, cfg),
-> -					    ARM_V7S_TABLE_SLAB_FLAGS, NULL);
-> +					    slab_flag, NULL);
->   	if (!data->l2_tables)
->   		goto out_free_data;
->   
-> @@ -850,12 +883,16 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
->   	wmb();
->   
->   	/* TTBR */
-> -	cfg->arm_v7s_cfg.ttbr = virt_to_phys(data->pgd) | ARM_V7S_TTBR_S |
-> -				(cfg->coherent_walk ? (ARM_V7S_TTBR_NOS |
-> -				 ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_WBWA) |
-> -				 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_WBWA)) :
-> -				(ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_NC) |
-> -				 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_NC)));
-> +	paddr = virt_to_phys(data->pgd);
-> +	if (arm_v7s_is_mtk_enabled(cfg))
-> +		cfg->arm_v7s_cfg.ttbr = paddr | upper_32_bits(paddr);
-> +	else
-> +		cfg->arm_v7s_cfg.ttbr = paddr | ARM_V7S_TTBR_S |
-> +					(cfg->coherent_walk ? (ARM_V7S_TTBR_NOS |
-> +					 ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_WBWA) |
-> +					 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_WBWA)) :
-> +					(ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_NC) |
-> +					 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_NC)));
->   	return &data->iop;
->   
->   out_free_data:
-> diff --git a/include/linux/io-pgtable.h b/include/linux/io-pgtable.h
-> index 86af6f0a00a2..ca98aeadcc80 100644
-> --- a/include/linux/io-pgtable.h
-> +++ b/include/linux/io-pgtable.h
-> @@ -74,17 +74,22 @@ struct io_pgtable_cfg {
->   	 *	to support up to 35 bits PA where the bit32, bit33 and bit34 are
->   	 *	encoded in the bit9, bit4 and bit5 of the PTE respectively.
->   	 *
-> +	 * IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT: (ARM v7s format) MediaTek IOMMUs
-> +	 *	extend the translation table base support up to 35 bits PA, the
-> +	 *	encoding format is same with IO_PGTABLE_QUIRK_ARM_MTK_EXT.
-> +	 *
->   	 * IO_PGTABLE_QUIRK_ARM_TTBR1: (ARM LPAE format) Configure the table
->   	 *	for use in the upper half of a split address space.
->   	 *
->   	 * IO_PGTABLE_QUIRK_ARM_OUTER_WBWA: Override the outer-cacheability
->   	 *	attributes set in the TCR for a non-coherent page-table walker.
->   	 */
-> -	#define IO_PGTABLE_QUIRK_ARM_NS		BIT(0)
-> -	#define IO_PGTABLE_QUIRK_NO_PERMS	BIT(1)
-> -	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT	BIT(3)
-> -	#define IO_PGTABLE_QUIRK_ARM_TTBR1	BIT(5)
-> -	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA	BIT(6)
-> +	#define IO_PGTABLE_QUIRK_ARM_NS			BIT(0)
-> +	#define IO_PGTABLE_QUIRK_NO_PERMS		BIT(1)
-> +	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT		BIT(3)
-> +	#define IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT	BIT(4)
-> +	#define IO_PGTABLE_QUIRK_ARM_TTBR1		BIT(5)
-> +	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA		BIT(6)
->   	unsigned long			quirks;
->   	unsigned long			pgsize_bitmap;
->   	unsigned int			ias;
+> arch/x86/include/asm/fpu/types.h
+> 
+> How will that get to /usr/include?
+
+Perhaps I can think of something like this for AMX state:
+
+diff --git a/arch/x86/include/uapi/asm/prctl.h 
+b/arch/x86/include/uapi/asm/prctl.h
+index 500b96e71f18..08b6c9155b8a 100644
+--- a/arch/x86/include/uapi/asm/prctl.h
++++ b/arch/x86/include/uapi/asm/prctl.h
+@@ -16,6 +16,9 @@
+  #define ARCH_GET_XCOMP_GUEST_PERM      0x1024
+  #define ARCH_REQ_XCOMP_GUEST_PERM      0x1025
+
++#define ARCH_XCOMP_XTILECFG            17
++#define ARCH_XCOMP_XTILEDATA           18
++
+  #define ARCH_MAP_VDSO_X32              0x2001
+  #define ARCH_MAP_VDSO_32               0x2002
+  #define ARCH_MAP_VDSO_64               0x2003
+
+But these state components are architectural. While this can help 
+userspace anyway, saying "XSTATE component" here and on the man-page is 
+probably it as they are already defined in the x86 spec.
+
+Thanks,
+Chang

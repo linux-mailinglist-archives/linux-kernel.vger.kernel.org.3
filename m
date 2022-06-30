@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8F3560E30
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 02:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0BB8560E4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 02:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbiF3AsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 20:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
+        id S231293AbiF3Aue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 20:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiF3AsH (ORCPT
+        with ESMTP id S229539AbiF3Auc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 20:48:07 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC13C2F;
-        Wed, 29 Jun 2022 17:48:06 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id w83so23975183oiw.1;
-        Wed, 29 Jun 2022 17:48:06 -0700 (PDT)
+        Wed, 29 Jun 2022 20:50:32 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A223FDB1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:50:31 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id t21so16642896pfq.1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:50:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vlWcreAQDwZHu5EpZovJb8TbUi6QeIHo7octOq1kCoU=;
-        b=LhYU9+vEWIBDOh4wI2eS6Tte5bKZJ9g8UVOzlHqUhYNoR1TLprZkjdXNuHZP2+/gYC
-         TMmNU4N0tmT1DJ1Q0xihsWw7+rxirU4Ck97l6vzIJ9mM7+IntiZvmikdaFYSeBOk9IvM
-         VHYRcN6kBMvP2G1o1IOipbm6lWC/Z7hhrODdPpjJQZDqZzs/QdW9+ag4lheTG8baUtlk
-         RJSMI7P2RR4iUM9nxUPjofLWVAfz3G6i22W+KSA7AkwWajfQ7FhLZ/snegSi325PpzUo
-         b2jtLDvhVoRvAhyv1wrm9Re/JGOa1ew/TKgdZfQcjdxfEzs978Xl2cZ496jgtNWRyqAF
-         rkSQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ec4XEkBPA35XnLcPG87goxGDH+EEGY22aWvX/z3PefI=;
+        b=NFWCuFGRbcAjPzdLWOr/NQp3XWuDNO6BMyHySS+trahq6mX9UFO7j+zQOkjuhlioWl
+         xSYxRMQtRJOqPe6f8aUpkpL4C7uRkzlXaGc1roT4R/8VsrW+toIgTh/7JqCViwZCe/Eo
+         bM3/bnNdqFYGfV+tPNcVNd3eWRc0Rn5hwxOdK1VlUJRRIZ3O9GRQV5RBdLfmhk10TlJk
+         2ATBJG6SR6FP3U4213Q+Xm15I5KrUa3o0Fr+ZWYv1hYrq+etlRvLYAfJW1P6ul5x863m
+         GIRBOHuiCVrxZTYkdgcV7H2J/2nN8WZlUCw9A7RUKMGArEVcHcudATd8abMaGeTV4LBH
+         kHxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vlWcreAQDwZHu5EpZovJb8TbUi6QeIHo7octOq1kCoU=;
-        b=xy1j8steTz8sjo1OoFS+RFpY/1M+ePO9/68NrfxhqRSgWuvOZ/KE4Dgcgio9fOWpn9
-         oiLsCnyZhr+TWoSpr3lRIYeQ997MtSSgsrrRdhwMMOpKCHBgxG3Uztxq97vdu4q9IfXx
-         LqQ+K0UfJYZhsRwCsps3MvSP/sIgVZ2yclIE8dxKjQkhc7zE1KJNGJ5BZS3b+bkgyJ1A
-         fs2sWnPFlZ+2ikdp21dj30YYU9loFS7A+aMovqdq5ghU5DaIpZ/qZBHv6TH9qT5h5aD1
-         boMUMV57RqYDZbYA2hjxIsyr+xVc6Z/hMs88PL3wcjxhIhky/8A7z8rb/BjdF/4aSlX8
-         lUHg==
-X-Gm-Message-State: AJIora+rjAOwPHt+i5UM7NZqUMKP8eOyvpozUC/8FIUQ3kT8TsQtJzw1
-        KVCZ3YXnDfLn9KEEnAic0e30uy/DVz7sbKcapyc=
-X-Google-Smtp-Source: AGRyM1vu3Cyb+ZseP9e3PFjRsT1FqHUJUZQnECa3Ip5zDwFOWqj3C7gSihUEZsLLgZzkpF/tR3ndrcZa5bNU1SpIo7k=
-X-Received: by 2002:aca:1113:0:b0:335:6d08:31a2 with SMTP id
- 19-20020aca1113000000b003356d0831a2mr3944081oir.258.1656550085532; Wed, 29
- Jun 2022 17:48:05 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ec4XEkBPA35XnLcPG87goxGDH+EEGY22aWvX/z3PefI=;
+        b=hkrBrhXkrIdRUCD+clETMBEF/VR7Hefx+84pgCL7S8aszb5e58b3+/z8JPXeTLuIoQ
+         hO1Rn/kSbOdJL+5ur62xPc5aGzJ/mi2A6rRPDohyOnPo4hGZgzrToTPm7ivCbg5B2lF8
+         hKbJpEaZot5Yy0u3IWmldr1ErMLtlJg34JLV8ANc1ighMQoHBlvEHDmCps2doSWhTHlx
+         4yH9WFSFvm0Gvb0/XOYttN3FOrHhZpznS7FaQIOMgCSBsQa1c7i2sijbAKvN+HVxbUFs
+         VNa8lUHc6HkICIkBN/3xpf5W7wekXM8liaFUcq843IATbS5GTuT+bMnhODI1be00U4YI
+         AQsg==
+X-Gm-Message-State: AJIora9+NfyAmQ14UU5q8/vPnw/0xyBkjyqaYPTdp/7sF89P4Zj59F2f
+        h8SOWTLs/4uZoCI2kPX8kMFDgQ==
+X-Google-Smtp-Source: AGRyM1vwxJL4Embx1Cw1olp7yFM3sPbrYAoDKdwqAqD4m7eulhQl7MEsYnny1f0udvYVdgE3PBRHgA==
+X-Received: by 2002:a65:6bd4:0:b0:405:2d64:532c with SMTP id e20-20020a656bd4000000b004052d64532cmr5361306pgw.179.1656550230789;
+        Wed, 29 Jun 2022 17:50:30 -0700 (PDT)
+Received: from localhost ([122.172.201.58])
+        by smtp.gmail.com with ESMTPSA id 4-20020aa79244000000b005252a06750esm4541969pfp.182.2022.06.29.17.50.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 17:50:30 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 06:20:28 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
+Message-ID: <20220630005028.fddtcbkoksbygwc5@vireshk-i7>
+References: <cover.1654849214.git.viresh.kumar@linaro.org>
+ <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
+ <55623c12-dda3-613f-5bc9-80b3b6fec5f9@nvidia.com>
+ <20220622141511.yzg5itkdwirpavfj@vireshk-i7>
+ <40e616eb-22f9-19c2-8d77-20cd3c7c518b@nvidia.com>
+ <c6f100e4-8a35-ebf0-f833-06ff0d8a2fb6@collabora.com>
 MIME-Version: 1.0
-References: <20220629072932.27506-1-jiaming@nfschina.com>
-In-Reply-To: <20220629072932.27506-1-jiaming@nfschina.com>
-From:   Souptick Joarder <jrdr.linux@gmail.com>
-Date:   Thu, 30 Jun 2022 06:17:55 +0530
-Message-ID: <CAFqt6zZivU3XJmjwdCqhSJBAoNwWfJZeUipG4es4u+iaEnDGtw@mail.gmail.com>
-Subject: Re: [PATCH] exec: Fix a spelling mistake
-To:     Zhang Jiaming <jiaming@nfschina.com>
-Cc:     ebiederm@xmission.com, Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
-        renyu@nfschina.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c6f100e4-8a35-ebf0-f833-06ff0d8a2fb6@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 1:07 PM Zhang Jiaming <jiaming@nfschina.com> wrote:
->
-> Change 'wont't' to 'won't'.
->
-> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+On 29-06-22, 21:33, Dmitry Osipenko wrote:
+> Today I noticed that tegra30-devfreq driver now fails to probe because
+> dev_pm_opp_find_freq_ceil() fails with -ERANGE. This patch is guilty for
+> that. Could you please take a look?
 
-Reviewed-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
-> ---
->  fs/exec.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/exec.c b/fs/exec.c
-> index 96b9847fca99..5f0656e10b5d 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -1156,7 +1156,7 @@ static int de_thread(struct task_struct *tsk)
->                 /*
->                  * We are going to release_task()->ptrace_unlink() silently,
->                  * the tracer can sleep in do_wait(). EXIT_DEAD guarantees
-> -                * the tracer wont't block again waiting for this thread.
-> +                * the tracer won't block again waiting for this thread.
->                  */
->                 if (unlikely(leader->ptrace))
->                         __wake_up_parent(leader, leader->parent);
-> --
-> 2.34.1
->
->
+I remember this corner case now [1] and it was easy to miss this. So
+you want the OPP core to still parse the DT to read opp-hz, but don't
+want dev_pm_opp_set_opp() to update the clock rate for it.
+
+What was the reason for this again ?
+
+I have a couple of solutions in mind, but one may be other than second
+and so want to know the real issue at hand first.
+
+-- 
+viresh
+
+[1] https://lore.kernel.org/lkml/71451eb2-46b2-1ea0-efcc-0811568159a4@gmail.com/

@@ -2,211 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20419561222
+	by mail.lfdr.de (Postfix) with ESMTP id 689B6561223
 	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 07:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbiF3F6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 01:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43396 "EHLO
+        id S232603AbiF3F64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 01:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232569AbiF3F60 (ORCPT
+        with ESMTP id S232740AbiF3F6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 01:58:26 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920155F66
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 22:58:24 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id m14-20020a17090a668e00b001ee6ece8368so1800564pjj.3
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 22:58:24 -0700 (PDT)
+        Thu, 30 Jun 2022 01:58:42 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39ACA2FFCB
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 22:58:40 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id a4so18283780lfm.0
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 22:58:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mOcKN2QE8NoS+NlXFqyzvr6uXu60h5tTF9oQlF/WJLc=;
-        b=pZjsRZTAwDlI6M2jOs66KZmBv8r8btKEibDsbfGgZSpidDHtmMDdj6IC77PdRTCtqt
-         p6uBX2yhxuwyhTrdxYbhL1BA8hOxIBCmJvd+WJ151KUlBRSyqdx8RXwGZIAm578e7gm8
-         fTumnZDyFspv0s9uN93zk+/M+quP154g5IbRGFKaqFw1If+UahOcYIcK50KX+PPr69xt
-         c9CYNWVgY/B9FYW0KvmnfHzZsMUuqljPikr1xXTraKp694O7k7vmK6GtE9adBR7Vy0SE
-         iJPpvqpBotCziNebA1k74r5bF59nrsAfeBFpwa5iRyG7x3sj9b/V2QQ38vpWeLWJ7J1s
-         hdQg==
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=ruV4lyXjfC61DA5wyReXMzsX0cqvp2zK/U29Xvr5SFM=;
+        b=l7nN17DBcsYdsVthyTe/GatE3JPafzHfBZ2cn9zPJgX+Zj0rczBbbwaKNFmcXs6IJa
+         u73Ux9BKCuIkmWg85+KngOck8gzGG8qyfJmGBLqCuUXNe8YGOq1GTjrbTfbXMCkdtUKd
+         CJ1Qvo0me4QK/vgoRsFTihIQ8sEVMfZDm4LLavWUeLK6ebCoZ+ZJ8N02oQiJBU4fnhBP
+         N6Ul/zmhja8DNAAVYH62IfwmWUUyNhpvUceFXy/xswWCf1H8jCny5kKRCaAO+bqcz0Vq
+         Kv91qfaoAty+KqYpt8ayjauiNtv6LJgr7YB6rF840s13XJjZ4TRQAD+WxkSLeiSOfJXm
+         /kPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mOcKN2QE8NoS+NlXFqyzvr6uXu60h5tTF9oQlF/WJLc=;
-        b=lWgHVXrPyfGp3N/eB5DAgEaB0emxWzq+Id3NL0qOnA6rYBMS8F68ynbiZFdMRE7EFf
-         QkqpNCPzhLUl9MPYgMXUT+Jn/y81pGCZfTXs5wuGCYxxElenXs8JRv87d2H6APzB9RCf
-         00XfEkP8E+wGIVrxyaOdc5ivkCQTKSMo8aAnz9ucpPIggDNGBPgHOZ+/3gxdsEm6oG5s
-         XzJwIj58Nlo5GCNKy6oZ0d+4PoFNgZexgb88UTiWOrhfaS8DaGDm8g9kKcdpx9A8Ixyk
-         4yH4RhBtyku+EWiCFGxsiT1pOcuPjjhFMzGMGO4dl/051AUW8u7VYOoWT3wA4Fnu0Ssg
-         3/OA==
-X-Gm-Message-State: AJIora9y01hLf4gbMFv2oeAdjzOxk0KwuQUcXGryAl3zrFHq3fQ/I2JD
-        SQtElXNl31YGizPukdJH9Y7pdw==
-X-Google-Smtp-Source: AGRyM1vqhX+FQ8dE0YoXIV3JRUBlBXZSr4HU0Fid4k1/qav4hqj7bVmuCBytiMOacAgz/y291CanFw==
-X-Received: by 2002:a17:903:41d2:b0:16a:2cc4:4824 with SMTP id u18-20020a17090341d200b0016a2cc44824mr13069024ple.112.1656568703771;
-        Wed, 29 Jun 2022 22:58:23 -0700 (PDT)
-Received: from leo-build-box.lan ([154.3.32.171])
-        by smtp.gmail.com with ESMTPSA id b14-20020a17090a550e00b001e31f4cc977sm3309288pji.56.2022.06.29.22.58.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 22:58:23 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v2 5/5] interconnect: qcom: icc-rpm: Set bandwidth and clock for bucket values
-Date:   Thu, 30 Jun 2022 13:57:22 +0800
-Message-Id: <20220630055723.704605-6-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220630055723.704605-1-leo.yan@linaro.org>
-References: <20220630055723.704605-1-leo.yan@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=ruV4lyXjfC61DA5wyReXMzsX0cqvp2zK/U29Xvr5SFM=;
+        b=8HWHwtFa4xvbYKwrV7C3WXRr2YqB6Rh5r0tM7nXdAtDIX/Rcrym/S/t2sTRNqXWivB
+         E7OKfbX2AXk1pEj6Qc7fF5zblUnZsxzNVK6XQAz3wIMukeSzSF6dFiLoCYhU4hvHTf3n
+         Gesto8VnkLVL4DVq2g5ostDYLfCCXtyWyq7wMTFA07cOKkQDN3ud2cGC7xJw0ILpr5Uf
+         VrlLU3D9GyZr0uMtALuTlct5S32fgVHUpflE0ZJ4epmUENIXY0XDTAsizWMew7MdoEVw
+         P6o3645BA7GEL8tzBka2Owm94mjvCnaPt+JzGu/aie5kFOkmk1OPAVg3yXtR2NaB3vU+
+         Xo+g==
+X-Gm-Message-State: AJIora9DzLA95xZ7x4XkoxFyXIuwPe1v/VQtb0V/7SPek+RGmoF/UFJW
+        l3GBDnFyw3UDAbQACe9pfRybDg==
+X-Google-Smtp-Source: AGRyM1s7D4i5hXZ0Wigjd2+D+zGWVxq+5MhO57oXXY3Yw8RAzPusiAUYoDzHGYkVuiTfAcNpXKv8gA==
+X-Received: by 2002:a05:6512:208c:b0:47f:9ed1:e8e1 with SMTP id t12-20020a056512208c00b0047f9ed1e8e1mr4637273lfr.377.1656568718457;
+        Wed, 29 Jun 2022 22:58:38 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.129])
+        by smtp.gmail.com with ESMTPSA id s13-20020a05651c200d00b0025a928f3d63sm2390485ljo.61.2022.06.29.22.58.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 22:58:38 -0700 (PDT)
+Message-ID: <85bd8614-9a55-3113-e5a8-b7e73f636135@openvz.org>
+Date:   Thu, 30 Jun 2022 08:58:36 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH] x86/fault: ignore RSVD flag in error code if P flag is 0
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        Konstantin Khorenko <khorenko@virtuozzo.com>,
+        steve.sipes@comandsolutions.com
+References: <9bc8de5f-fd80-57fe-0169-0ec942638299@openvz.org>
+Content-Language: en-US
+In-Reply-To: <9bc8de5f-fd80-57fe-0169-0ec942638299@openvz.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit uses buckets for support bandwidth and clock rates.  It
-introduces a new function qcom_icc_bus_aggregate() to calculate the
-aggregate average and peak bandwidths for every bucket, and also it
-calculates the maximum aggregate values across all buckets.
+Some older Intel CPUs have errata:
+"Not-Present Page Faults May Set the RSVD Flag in the Error Code
 
-The maximum aggregate values are used to calculate the final bandwidth
-requests.  And we can set the clock rate per bucket, we use SLEEP bucket
-as default bucket if a platform doesn't enable the interconnect path
-tags in DT binding; otherwise, we use WAKE bucket to set active clock
-and use SLEEP bucket for other clocks.  So far we don't use AMC bucket.
+Problem:
+An attempt to access a page that is not marked present causes a page
+fault. Such a page fault delivers an error code in which both the
+P flag (bit 0) and the RSVD flag (bit 3) are 0. Due to this erratum,
+not-present page faults may deliver an error code in which the P flag
+is 0 but the RSVD flag is 1.
 
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
+Implication:
+Software may erroneously infer that a page fault was due to a
+reserved-bit violation when it was actually due to an attempt
+to access a not-present page.
+
+Workaround: Page-fault handlers should ignore the RSVD flag in the error
+code if the P flag is 0."
+
+This issues was observed on several nodes crashed with messages
+httpd: Corrupted page table at address 7f62d5b48e68
+PGD 80000002e92bf067 PUD 1c99c5067 PMD 195015067 PTE 7fffffffb78b680
+Bad pagetable: 000c [#1] SMP
+
+Let's follow the recommendation and will ignore the RSVD flag in the
+error code if the P flag is 0
+
+Link: https://lore.kernel.org/all/aae9c7c6-989c-0261-470a-252537493b53@openvz.org
+Signed-off-by: Vasily Averin <vvs@openvz.org>
 ---
- drivers/interconnect/qcom/icc-rpm.c | 80 ++++++++++++++++++++++++-----
- 1 file changed, 67 insertions(+), 13 deletions(-)
+ arch/x86/mm/fault.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index b025fc6b97c9..4b932eb807c7 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -302,18 +302,62 @@ static int qcom_icc_bw_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
- 	return 0;
- }
+diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+index fe10c6d76bac..ffc6d6bd2a22 100644
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -1481,6 +1481,15 @@ handle_page_fault(struct pt_regs *regs, unsigned long error_code,
+ 	if (unlikely(kmmio_fault(regs, address)))
+ 		return;
  
-+/**
-+ * qcom_icc_bus_aggregate - aggregate bandwidth by traversing all nodes
-+ * @provider: generic interconnect provider
-+ * @agg_avg: an array for aggregated average bandwidth of buckets
-+ * @agg_peak: an array for aggregated peak bandwidth of buckets
-+ * @max_agg_avg: pointer to max value of aggregated average bandwidth
-+ * @max_agg_peak: pointer to max value of aggregated peak bandwidth
-+ */
-+static void qcom_icc_bus_aggregate(struct icc_provider *provider,
-+				   u64 *agg_avg, u64 *agg_peak,
-+				   u64 *max_agg_avg, u64 *max_agg_peak)
-+{
-+	struct icc_node *node;
-+	struct qcom_icc_node *qn;
-+	int i;
-+
-+	/* Initialise aggregate values */
-+	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-+		agg_avg[i] = 0;
-+		agg_peak[i] = 0;
-+	}
-+
-+	*max_agg_avg = 0;
-+	*max_agg_peak = 0;
-+
 +	/*
-+	 * Iterate nodes on the interconnect and aggregate bandwidth
-+	 * requests for every bucket.
++	 * Some older Intel CPUs have errata
++	 * "Not-Present Page Faults May Set the RSVD Flag in the Error Code"
++	 * It is recommended to ignore the RSVD flag (bit 3) in the error code
++	 * if the P flag (bit 0) is 0.
 +	 */
-+	list_for_each_entry(node, &provider->nodes, node_list) {
-+		qn = node->data;
-+		for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-+			agg_avg[i] += qn->sum_avg[i];
-+			agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
-+		}
-+	}
++	if (unlikely((error_code & X86_PF_RSVD) && !(error_code & X86_PF_PROT)))
++		error_code &= ~X86_PF_RSVD;
 +
-+	/* Find maximum values across all buckets */
-+	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-+		*max_agg_avg = max_t(u64, *max_agg_avg, agg_avg[i]);
-+		*max_agg_peak = max_t(u64, *max_agg_peak, agg_peak[i]);
-+	}
-+}
-+
- static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- {
- 	struct qcom_icc_provider *qp;
- 	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
- 	struct icc_provider *provider;
--	struct icc_node *n;
- 	u64 sum_bw;
- 	u64 max_peak_bw;
- 	u64 rate;
--	u32 agg_avg = 0;
--	u32 agg_peak = 0;
-+	u64 agg_avg[QCOM_ICC_NUM_BUCKETS], agg_peak[QCOM_ICC_NUM_BUCKETS];
-+	u64 max_agg_avg, max_agg_peak;
- 	int ret, i;
-+	int bucket;
- 
- 	src_qn = src->data;
- 	if (dst)
-@@ -321,12 +365,11 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 	provider = src->provider;
- 	qp = to_qcom_provider(provider);
- 
--	list_for_each_entry(n, &provider->nodes, node_list)
--		provider->aggregate(n, 0, n->avg_bw, n->peak_bw,
--				    &agg_avg, &agg_peak);
-+	qcom_icc_bus_aggregate(provider, agg_avg, agg_peak, &max_agg_avg,
-+			       &max_agg_peak);
- 
--	sum_bw = icc_units_to_bps(agg_avg);
--	max_peak_bw = icc_units_to_bps(agg_peak);
-+	sum_bw = icc_units_to_bps(max_agg_avg);
-+	max_peak_bw = icc_units_to_bps(max_agg_peak);
- 
- 	ret = __qcom_icc_set(src, src_qn, sum_bw);
- 	if (ret)
-@@ -337,12 +380,23 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 			return ret;
- 	}
- 
--	rate = max(sum_bw, max_peak_bw);
--
--	do_div(rate, src_qn->buswidth);
--	rate = min_t(u64, rate, LONG_MAX);
--
- 	for (i = 0; i < qp->num_clks; i++) {
-+		/*
-+		 * Use WAKE bucket for active clock, otherwise, use SLEEP bucket
-+		 * for other clocks.  If a platform doesn't set interconnect
-+		 * path tags, by default use sleep bucket for all clocks.
-+		 *
-+		 * Note, AMC bucket is not supported yet.
-+		 */
-+		if (!strcmp(qp->bus_clks[i].id, "bus_a"))
-+			bucket = QCOM_ICC_BUCKET_WAKE;
-+		else
-+			bucket = QCOM_ICC_BUCKET_SLEEP;
-+
-+		rate = icc_units_to_bps(max(agg_avg[bucket], agg_peak[bucket]));
-+		do_div(rate, src_qn->buswidth);
-+		rate = min_t(u64, rate, LONG_MAX);
-+
- 		if (qp->bus_clk_rate[i] == rate)
- 			continue;
- 
+ 	/* Was the fault on kernel-controlled part of the address space? */
+ 	if (unlikely(fault_in_kernel_space(address))) {
+ 		do_kern_addr_fault(regs, error_code, address);
 -- 
-2.25.1
+2.36.1
 

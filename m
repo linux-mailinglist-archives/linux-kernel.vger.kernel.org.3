@@ -2,60 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B635619E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC835619EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233674AbiF3MI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 08:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
+        id S232624AbiF3MKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 08:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbiF3MIx (ORCPT
+        with ESMTP id S234994AbiF3MKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 08:08:53 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AD0286E6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 05:08:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656590930; x=1688126930;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SzRawcd9STLTr0ohxfcr/g7M0Qr7sON0gLQVUD5YBes=;
-  b=NWbXH9b2x0d6XawZN9TsGcIefBbOlsxKbg2j0flC1otzeDEjPtaafThj
-   2YKrZCKrwXw7HUC600mB2ByvNDYHiORxFg3sp8l6XagMZNvlKrQlWjRQu
-   iETqZU9Mp90twa3ldxvqt8FGuSISpi+8QumddnSPsh7Bq9N/EusLq53wU
-   TyNkuaNghnBczqf0zzfLBVOPeiE2Kp4v98X44rVOa1/OCZ9EH4IZR8LI0
-   3vvmO6xcBtS9O6wVjUnYMc+v0OjB3eAKXIrow0Q/HISbx/BfdCb9WEUbK
-   dAhoWDryvVz4rRl+ya9YORWyzwN6mKiDy814UlX9D5s3tKQmCoZKX8XqO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="279874060"
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="279874060"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 05:08:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="837579479"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 30 Jun 2022 05:08:49 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o6syW-000Ciq-Qd;
-        Thu, 30 Jun 2022 12:08:48 +0000
-Date:   Thu, 30 Jun 2022 20:08:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Thu, 30 Jun 2022 08:10:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBC3457B3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 05:10:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2879D61AE9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 12:10:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7CF1C34115;
+        Thu, 30 Jun 2022 12:10:03 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="JpvD10xj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1656591002;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z6R8ilVHf01tyyud5ZhmTl5hpv7IDrrZMOeaMj5v5/o=;
+        b=JpvD10xj50tIvn90A2CYvlDy2YL/QCDPalWB5WrJE9zdLuNWDv7F4mvw+caz+YdgTUUUZr
+        EjWAL6VXlElbUT9WTM2hwjcyu5sy0rbHqJNm1WpYcp9twoEMo7Ch1Bh4mLTuxd/lWwbkpI
+        NSwm88rfNFK8Y2nGFPNAzBL4TXUBlsQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0b57055c (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 30 Jun 2022 12:10:01 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: [morimoto:sound-2022-06-30-v3 10/19] sound/soc/soc-compress.c:576:6:
- error: call to undeclared function 'snd_soc_dai_stream_valid'; ISO C99 and
- later do not support implicit function declarations
-Message-ID: <202206302045.7a2GE3AN-lkp@intel.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH v3] x86/setup: Allow passing RNG seeds via e820 setup table
+Date:   Thu, 30 Jun 2022 14:09:55 +0200
+Message-Id: <20220630120955.1937664-1-Jason@zx2c4.com>
+In-Reply-To: <20220630115952.1917972-1-Jason@zx2c4.com>
+References: <20220630115952.1917972-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,90 +58,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/morimoto/linux sound-2022-06-30-v3
-head:   fc6f65d23a318462b8e17cdf7db622dfc7719ac7
-commit: ea993ad61cf954e1efc29e0eff1292a4498dc3ba [10/19] hoge
-config: powerpc-randconfig-r033-20220629 (https://download.01.org/0day-ci/archive/20220630/202206302045.7a2GE3AN-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/morimoto/linux/commit/ea993ad61cf954e1efc29e0eff1292a4498dc3ba
-        git remote add morimoto https://github.com/morimoto/linux
-        git fetch --no-tags morimoto sound-2022-06-30-v3
-        git checkout ea993ad61cf954e1efc29e0eff1292a4498dc3ba
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/staging/greybus/ sound/soc/
+Currently the only way x86 can get an early boot RNG seed is via EFI,
+which is generally always used now for physical machines, but is very
+rarely used in VMs, especially VMs that are optimized for starting
+"instantaneously", such as Firecracker's MicroVM. Here, we really want
+the ability for the firmware to pass a random seed, similar to what OF
+platforms do with the "rng-seed" property. It also would be nice for
+bootloaders to be able to append seeds to the kernel before launching.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This patch accomplishes that by adding SETUP_RNG_SEED, similar to the
+other 7 SETUP_* entries that are parsed from the e820 setup table. I've
+verified that this works well with QEMU.
 
-All errors (new ones prefixed by >>):
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Changes v2->v3:
+- Actually memmap the right area with the random bytes in it. This
+  worked before because of page sizes, but the code wasn't right. Now
+  it's right.
 
->> sound/soc/soc-compress.c:576:6: error: call to undeclared function 'snd_soc_dai_stream_valid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_PLAYBACK) &&
-               ^
-   sound/soc/soc-compress.c:576:6: note: did you mean 'snd_soc_dai_stream_active'?
-   include/sound/soc-dai.h:600:1: note: 'snd_soc_dai_stream_active' declared here
-   snd_soc_dai_stream_active(struct snd_soc_dai *dai, int stream)
-   ^
-   1 error generated.
+ arch/x86/include/uapi/asm/bootparam.h | 1 +
+ arch/x86/kernel/setup.c               | 8 ++++++++
+ 2 files changed, 9 insertions(+)
 
-
-vim +/snd_soc_dai_stream_valid +576 sound/soc/soc-compress.c
-
-2a99ef0fdb35a0f Liam Girdwood     2014-01-17  535  
-6f0c42269f000b1 Jie Yang          2015-10-13  536  /**
-6f0c42269f000b1 Jie Yang          2015-10-13  537   * snd_soc_new_compress - create a new compress.
-6f0c42269f000b1 Jie Yang          2015-10-13  538   *
-6f0c42269f000b1 Jie Yang          2015-10-13  539   * @rtd: The runtime for which we will create compress
-6f0c42269f000b1 Jie Yang          2015-10-13  540   * @num: the device index number (zero based - shared with normal PCMs)
-6f0c42269f000b1 Jie Yang          2015-10-13  541   *
-6f0c42269f000b1 Jie Yang          2015-10-13  542   * Return: 0 for success, else error.
-6f0c42269f000b1 Jie Yang          2015-10-13  543   */
-6f0c42269f000b1 Jie Yang          2015-10-13  544  int snd_soc_new_compress(struct snd_soc_pcm_runtime *rtd, int num)
-1245b7005de02d5 Namarta Kohli     2012-08-16  545  {
-9e7e3738ab0e908 Kuninori Morimoto 2017-10-11  546  	struct snd_soc_component *component;
-c2233a266178f89 Kuninori Morimoto 2020-03-30  547  	struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
-c2233a266178f89 Kuninori Morimoto 2020-03-30  548  	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
-1245b7005de02d5 Namarta Kohli     2012-08-16  549  	struct snd_compr *compr;
-2a99ef0fdb35a0f Liam Girdwood     2014-01-17  550  	struct snd_pcm *be_pcm;
-1245b7005de02d5 Namarta Kohli     2012-08-16  551  	char new_name[64];
-1245b7005de02d5 Namarta Kohli     2012-08-16  552  	int ret = 0, direction = 0;
-a1068045883ed4a Vinod Koul        2016-01-07  553  	int playback = 0, capture = 0;
-613fb50059cf19a Kuninori Morimoto 2020-01-10  554  	int i;
-1245b7005de02d5 Namarta Kohli     2012-08-16  555  
-7428d8c8bd79368 Kuninori Morimoto 2020-10-30  556  	/*
-7428d8c8bd79368 Kuninori Morimoto 2020-10-30  557  	 * make sure these are same value,
-7428d8c8bd79368 Kuninori Morimoto 2020-10-30  558  	 * and then use these as equally
-7428d8c8bd79368 Kuninori Morimoto 2020-10-30  559  	 */
-7428d8c8bd79368 Kuninori Morimoto 2020-10-30  560  	BUILD_BUG_ON((int)SNDRV_PCM_STREAM_PLAYBACK != (int)SND_COMPRESS_PLAYBACK);
-7428d8c8bd79368 Kuninori Morimoto 2020-10-30  561  	BUILD_BUG_ON((int)SNDRV_PCM_STREAM_CAPTURE  != (int)SND_COMPRESS_CAPTURE);
-7428d8c8bd79368 Kuninori Morimoto 2020-10-30  562  
-6e1276a5e613d25 Bard Liao         2020-02-25  563  	if (rtd->num_cpus > 1 ||
-6e1276a5e613d25 Bard Liao         2020-02-25  564  	    rtd->num_codecs > 1) {
-141dfc9e3751f5f Charles Keepax    2018-01-26  565  		dev_err(rtd->card->dev,
-6e1276a5e613d25 Bard Liao         2020-02-25  566  			"Compress ASoC: Multi CPU/Codec not supported\n");
-8151d5e60232d31 Benoit Cousson    2014-07-08  567  		return -EINVAL;
-8151d5e60232d31 Benoit Cousson    2014-07-08  568  	}
-8151d5e60232d31 Benoit Cousson    2014-07-08  569  
-ccb4214f7f2a8b7 Jiasheng Jiang    2022-03-10  570  	if (!codec_dai) {
-ccb4214f7f2a8b7 Jiasheng Jiang    2022-03-10  571  		dev_err(rtd->card->dev, "Missing codec\n");
-ccb4214f7f2a8b7 Jiasheng Jiang    2022-03-10  572  		return -EINVAL;
-ccb4214f7f2a8b7 Jiasheng Jiang    2022-03-10  573  	}
-ccb4214f7f2a8b7 Jiasheng Jiang    2022-03-10  574  
-1245b7005de02d5 Namarta Kohli     2012-08-16  575  	/* check client and interface hw capabilities */
-467fece8fbc6774 Kuninori Morimoto 2019-07-22 @576  	if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_PLAYBACK) &&
-
-:::::: The code at line 576 was first introduced by commit
-:::::: 467fece8fbc6774a3a3bd0981e1a342fb5022706 ASoC: soc-dai: move snd_soc_dai_stream_valid() to soc-dai.c
-
-:::::: TO: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
-
+diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
+index bea5cdcdf532..a60676b8d1d4 100644
+--- a/arch/x86/include/uapi/asm/bootparam.h
++++ b/arch/x86/include/uapi/asm/bootparam.h
+@@ -11,6 +11,7 @@
+ #define SETUP_APPLE_PROPERTIES		5
+ #define SETUP_JAILHOUSE			6
+ #define SETUP_CC_BLOB			7
++#define SETUP_RNG_SEED			8
+ 
+ #define SETUP_INDIRECT			(1<<31)
+ 
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index bd6c6fd373ae..33e9d23296b6 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -23,6 +23,7 @@
+ #include <linux/usb/xhci-dbgp.h>
+ #include <linux/static_call.h>
+ #include <linux/swiotlb.h>
++#include <linux/random.h>
+ 
+ #include <uapi/linux/mount.h>
+ 
+@@ -355,6 +356,13 @@ static void __init parse_setup_data(void)
+ 		case SETUP_EFI:
+ 			parse_efi_setup(pa_data, data_len);
+ 			break;
++		case SETUP_RNG_SEED:
++			pa_data += sizeof(*data);
++			data_len -= sizeof(*data);
++			data = early_memremap(pa_data, data_len);
++			add_bootloader_randomness(data, data_len);
++			early_memunmap(data, data_len);
++			break;
+ 		default:
+ 			break;
+ 		}
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

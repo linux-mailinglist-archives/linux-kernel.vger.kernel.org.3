@@ -2,215 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB969560DE6
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 02:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4FA560DEA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 02:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbiF3ASn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 20:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
+        id S229878AbiF3AXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 20:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiF3ASm (ORCPT
+        with ESMTP id S229453AbiF3AXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 20:18:42 -0400
-Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5F61EEF4
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:18:41 -0700 (PDT)
-Received: by mail-il1-x14a.google.com with SMTP id g9-20020a056e020d0900b002d958b2a86dso9831755ilj.14
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:18:41 -0700 (PDT)
+        Wed, 29 Jun 2022 20:23:12 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CCCE4E
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:23:07 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id i64so16569493pfc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:23:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=SDDWjQKRaEGkTJ3I32oXUEVaP3itRNsscC5r/hKsp4o=;
-        b=kC+o6UunKcWa3JkImof0IuxjAt0JubhMzUHBxFu72NIFTrsuiWR8qiuPWPtXz8LpUH
-         KyG/M3ohVzxfofN5eycFVNuy3of1Hex0WFzvGWfgBH7XrVEhSfUWK9O36KrS9bArfIqt
-         wifblZuakeSQZhns5bW84J2WrKXT4DfXfX2+X8T3j7UlUssG3YShhx11si4Avr+XTfps
-         ZDi8eWTrfyugN7s96TZFeihmwOym9s0HecXYekiOuXExdhVbTQY2BPkmELp3eXD8W09/
-         Z6HnUjAntyZD2PAIukptDQTTh3l8UQ7NIgDXAwB2nKpYcbU0dH19z+PKnNwhM06YDdfk
-         DngA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bDOI/zGOgy4m2A46KlbmsZQqwXs7u16Ivj5OzK4Omws=;
+        b=dBAbOQvACTkWGpYJZOYa/5H1HMw07URAlIcpTn2jVmcLyMyX0d6J5/z3eVKWA25JrH
+         J8BYM4elvOVARY+ou+ESfx4Wym+pWl0k7GW3DRQepmSXpJQk+POg9EVe+rVCKa/3uILR
+         f2iDtBo+4pVPde+7owd6f5WGub2b8jDDwEO10azRYJyUzt5JOIDmf4gz6nFn2gAlPlRi
+         Mw026bPJiMBkvM6zEK2H6MAMVHoBK2l7JrSFJSuOt7WH1lSN2IIf/RR7vG1aaCfSCnhc
+         LEG4HQ4QOwrq6OpN5bNdk1L2eeLmu9g8uItUaAWxTQyUvfE0c/HXTdzf2yb9gFUobQlZ
+         77qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=SDDWjQKRaEGkTJ3I32oXUEVaP3itRNsscC5r/hKsp4o=;
-        b=z7Xd9ym+D1x7hebqrwHIonnn6KV47XcGLqDXhpjWtHv37WTUowHOTpYf6hP3cGSk4t
-         QyhhG87k67vEsML4xlqm49YWc0gJpMRfDExJ7OB9RCr8r2cpZRkN4ae2NwJNw98i8ku1
-         Qw8WczAcKfmnwadyTmYRlDBMhWYnnY48xa4zyLPPDBvTG/xAND37+ZTNtFj6zfnej3LT
-         fS+6PpcBmy4iQ2xQ2EGlxmaTuS5hdevPspevn/6ZEBJ0wmMsqF4vWc3aiyg0Q6x0QfVJ
-         LSt7WHapr1j3hMJKGpicYzt5HsVpkNIvktb9ugD6Vqg6fzU8CCqmThuZ6ZoaVuwrK2/o
-         4ACA==
-X-Gm-Message-State: AJIora9MP0giN5dThtoaR2hxkp3skaOM3tXU1QRfx5+jT5xZJbRKfeV9
-        9cMbsv8to6H4/deFODvyXrtU6YmqmGhAYA==
-X-Google-Smtp-Source: AGRyM1u2VOaMT7wpjVwAzV+WuTwvxd+1kRwUZNFZr/YOCZVkewlcYwZK1N98RZe/v+BuxXzQOIGzLegnXpVsbg==
-X-Received: from riochico.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:b3e])
- (user=rsilvera job=sendgmr) by 2002:a02:ad04:0:b0:339:e044:64fa with SMTP id
- s4-20020a02ad04000000b00339e04464famr3583148jan.233.1656548320477; Wed, 29
- Jun 2022 17:18:40 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 00:18:25 +0000
-Message-Id: <20220630001825.3905089-1-rsilvera@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH] perf inject: Add a command line option to specify build ids.
-From:   Raul Silvera <rsilvera@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Raul Silvera <rsilvera@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bDOI/zGOgy4m2A46KlbmsZQqwXs7u16Ivj5OzK4Omws=;
+        b=LhwdAwen3wny6ckE9Iyd0nP0FbHJxE1+ks+hCxoV8xAREjXrCFYmePvnXhKLqQgnCM
+         mu45PV+4oiOhMBuqkzIr9LoAd7uiF7utRYJfg8Gbs5RI8RMA4LCejJCPTaiIt0Z+QNZm
+         gk68/W8FuGcjNPsVxA+vamxmNe5Hyyze0eZs+WzrOaNlyU1bX9YHrcTDXJ/AoMzH2pZU
+         aejS1gFzYclCza9SKL7FUjXBLepRImjiHGEMStzTavTGYI1ut0cLTzRn2gDIs5+1SD/e
+         B6bhslObqTZ2iRm8FdNR6413S0fyMuOvW2tQkyoyJwv+KOUuHbNnollR5nRox0NMpRY0
+         Lp8A==
+X-Gm-Message-State: AJIora/q2BmZxeN4tdrZdH3ZnVWTIRLEEANhQeKkJyvV3x3vSGsndCME
+        eNoOXizVdpOTwHWZ3gscngriEQ==
+X-Google-Smtp-Source: AGRyM1sxK5ymsefnvphBWk7lsdcyv9A0WQiBrMsM4q2L26HWA3zQJvGsemB0leRtjJVtuBmKMr3/6g==
+X-Received: by 2002:a05:6a00:a1f:b0:525:3ad6:fb7e with SMTP id p31-20020a056a000a1f00b005253ad6fb7emr2137905pfh.68.1656548587355;
+        Wed, 29 Jun 2022 17:23:07 -0700 (PDT)
+Received: from localhost ([122.172.201.58])
+        by smtp.gmail.com with ESMTPSA id 142-20020a621494000000b0052285857864sm12472325pfu.97.2022.06.29.17.23.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 17:23:06 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 05:53:03 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 22/31] soc/tegra: Migrate to dev_pm_opp_set_config()
+Message-ID: <20220630002303.qdqzx2czz7d3msnk@vireshk-i7>
+References: <449b344f037c7ef1970bc84d31e0d4c4cb4d2951.1653564321.git.viresh.kumar@linaro.org>
+ <20220624004831.po35sowzfo4c47b3@vireshk-i7>
+ <20220624005700.oj4etaajbutvsym7@vireshk-i7>
+ <73d39022-c6fc-0c21-cb68-9714846f02bf@gmail.com>
+ <20220627064526.2nkezq4nufpkl4y2@vireshk-i7>
+ <ecc72279-0892-d5ab-689d-87b8fba5147e@gmail.com>
+ <20220627072104.ir7kujhezxhzl6a7@vireshk-i7>
+ <20220628070943.5tfyad63rh6niq6x@vireshk-i7>
+ <a0155aeb-b209-07e1-747a-594a755f54fc@collabora.com>
+ <f2acd51e-24f6-aa84-cfd4-372dd5e30aa0@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f2acd51e-24f6-aa84-cfd4-372dd5e30aa0@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds the option --known-build-ids to perf inject.
-It allows the user to explicitly specify the build id for a given
-path, instead of retrieving it from the current system. This is
-useful in cases where a perf.data file is processed on a different
-system from where it was collected, or if some of the binaries are
-no longer available.
+On 29-06-22, 18:03, Jon Hunter wrote:
+> Today's -next is also working fine for me too!
 
-The build ids and paths are specified in pairs in the command line.
-Using the file:// specifier, build ids can be loaded from a file
-directly generated by perf buildid-list. This is convenient to copy
-build ids from one perf.data file to another.
+Thanks.
 
-** Example: In this example we use perf record to create two
-perf.data files, one with build ids and another without, and use
-perf buildid-list and perf inject to copy the build ids from the
-first file to the second.
+I hope all the trouble with core update was worth it :)
 
-$ perf record ls /tmp                  # Create perf.data file
-$ perf record --no-buildid ls /tmp -o perf.data.no-buildid
-$ perf buildid-list > /tmp/build-ids.txt
-$ perf inject -b --known-build-ids='file:///tmp/build-ids.txt' \
-$  -i perf.data.no-buildid -o perf.data.buildid
-
-Signed-off-by: Raul Silvera <rsilvera@google.com>
----
- tools/perf/builtin-inject.c | 57 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
-
-diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-index a75bf11585b5..667b942f870e 100644
---- a/tools/perf/builtin-inject.c
-+++ b/tools/perf/builtin-inject.c
-@@ -21,6 +21,7 @@
- #include "util/data.h"
- #include "util/auxtrace.h"
- #include "util/jit.h"
-+#include "util/string2.h"
- #include "util/symbol.h"
- #include "util/synthetic-events.h"
- #include "util/thread.h"
-@@ -35,6 +36,7 @@
- 
- #include <linux/list.h>
- #include <linux/string.h>
-+#include <ctype.h>
- #include <errno.h>
- #include <signal.h>
- 
-@@ -59,6 +61,8 @@ struct perf_inject {
- 	struct itrace_synth_opts itrace_synth_opts;
- 	char			event_copy[PERF_SAMPLE_MAX_SIZE];
- 	struct perf_file_section secs[HEADER_FEAT_BITS];
-+	const char		*known_build_ids_source;
-+	struct strlist		*known_build_ids;
- };
- 
- struct event_entry {
-@@ -570,9 +574,43 @@ static int dso__read_build_id(struct dso *dso)
- 	return dso->has_build_id ? 0 : -1;
- }
- 
-+static bool perf_inject__lookup_known_build_id(struct perf_inject *inject,
-+					       struct dso *dso)
-+{
-+	struct str_node *pos;
-+	int bid_len;
-+
-+	strlist__for_each_entry(pos, inject->known_build_ids) {
-+		const char *space;
-+
-+		pos->s = skip_spaces(pos->s);
-+		space = strstr(pos->s, " ");
-+		if (space == NULL ||
-+		    !strcmp(dso->long_name, skip_spaces(space)))
-+			continue;
-+		bid_len = space - pos->s;
-+		if (bid_len == 0 || bid_len / 2 > BUILD_ID_SIZE)
-+			return false;
-+		for (int ix = 0; 2 * ix + 1 < bid_len; ++ix) {
-+			if (!isxdigit(pos->s[2 * ix]) ||
-+			    !isxdigit(pos->s[2 * ix + 1]))
-+				return false;
-+
-+			dso->bid.data[ix] = (hex(pos->s[2 * ix]) << 4 |
-+					     hex(pos->s[2 * ix + 1]));
-+		}
-+		dso->bid.size = bid_len / 2;
-+		dso->has_build_id = 1;
-+		return true;
-+	}
-+	return false;
-+}
-+
- static int dso__inject_build_id(struct dso *dso, struct perf_tool *tool,
- 				struct machine *machine, u8 cpumode, u32 flags)
- {
-+	struct perf_inject *inject = container_of(tool, struct perf_inject,
-+						  tool);
- 	int err;
- 
- 	if (is_anon_memory(dso->long_name) || flags & MAP_HUGETLB)
-@@ -580,6 +618,10 @@ static int dso__inject_build_id(struct dso *dso, struct perf_tool *tool,
- 	if (is_no_dso_memory(dso->long_name))
- 		return 0;
- 
-+	if (inject->known_build_ids != NULL &&
-+	    perf_inject__lookup_known_build_id(inject, dso))
-+		return 1;
-+
- 	if (dso__read_build_id(dso) < 0) {
- 		pr_debug("no build_id found for %s\n", dso->long_name);
- 		return -1;
-@@ -1082,6 +1124,9 @@ int cmd_inject(int argc, const char **argv)
- 			    "Inject build-ids into the output stream"),
- 		OPT_BOOLEAN(0, "buildid-all", &inject.build_id_all,
- 			    "Inject build-ids of all DSOs into the output stream"),
-+		OPT_STRING(0, "known-build-ids", &inject.known_build_ids_source,
-+			   "buildid path [buildid path...]",
-+			   "build-ids to use for specific files"),
- 		OPT_STRING('i', "input", &inject.input_name, "file",
- 			   "input file name"),
- 		OPT_STRING('o', "output", &inject.output.path, "file",
-@@ -1215,6 +1260,18 @@ int cmd_inject(int argc, const char **argv)
- 		 */
- 		inject.tool.ordered_events = true;
- 		inject.tool.ordering_requires_timestamps = true;
-+		if (inject.known_build_ids_source != NULL) {
-+			struct strlist *known_build_ids;
-+
-+			known_build_ids = strlist__new(
-+			    inject.known_build_ids_source, NULL);
-+
-+			if (known_build_ids == NULL) {
-+				pr_err("Couldn't parse known build ids.\n");
-+				goto out_delete;
-+			}
-+			inject.known_build_ids = known_build_ids;
-+		}
- 	}
- 
- 	if (inject.sched_stat) {
 -- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+viresh

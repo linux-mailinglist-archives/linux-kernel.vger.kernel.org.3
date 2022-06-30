@@ -2,151 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3F45620EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 19:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD015620FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 19:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234330AbiF3RKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 13:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
+        id S233902AbiF3RMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 13:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235304AbiF3RKq (ORCPT
+        with ESMTP id S235229AbiF3RMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 13:10:46 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7A533880
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:10:44 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-317710edb9dso200947b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:10:44 -0700 (PDT)
+        Thu, 30 Jun 2022 13:12:44 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2656533880
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:12:42 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id r20so28271620wra.1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:12:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=C4tyH3Wyg1tODv7Sm2smKsBoDS+J8nqhwGQaq6vu3uY=;
-        b=gnYGD2jS1FIJGGpq0jD3UITkms56aodG5VSVUw4KGb2NOASUoMBZF4GAF2pCZD4yuT
-         1BUfIMSa7UwkVNInhHWxVQsdUY45IwPorOfEp3ZMwrgvpq7Eq/wAAm816woi+NAnVzkO
-         puOGIsOCuaPz5ZUYu6Y4EcKmJFWfdgBhBGv2w=
+        bh=uH3u1IFiXRo5yGbXIVqL1yqXLG2H1E4UXns/GZ0BaVE=;
+        b=FZwPzlvJMTMo74Fom19t74AoePXhXeGrkxqDczxBrgAmUE15h7mMgCvqS1RXp6H6dx
+         AJN1eEqiyXCQcVtOdWLHOlGOIYCzX0NYupog/3JnG9A7ikhyIHZBFXZVFGEfKGdZCXeY
+         zU1hnN1Wdqw7oADY6ZGrKHxwlMGT7A4lHt31aRjqd1iiC/ofThahR164aASaZMojTBSJ
+         5NpYz9PQrcA4PgL8kxOVJoX6B1W4Pk4wJyUC923AhZMJ3cMtqn4TGSDOwf2374Xfwolm
+         zoFBaFGsi3fEWFmXn2NQWslIpMLfYDFs4g+nzRAXD26K3skmpYuoFUlpgEIDvbWxpRWF
+         dGPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=C4tyH3Wyg1tODv7Sm2smKsBoDS+J8nqhwGQaq6vu3uY=;
-        b=qxtJEIIhXfSJorBMn2NWo7TOVXdz1wo1/lTXkqSjgHw28q0znpoU4kRlcGlYjcCGZ4
-         wD0kIZdrPLnsbKieWSEqIOLOkRoOr5oG7nTBwS28ieLqKlXmo/z/djWD92RgIHLrqHaP
-         lEt0jxI/iBPACSQ8nhuEzPp6o4KAK36yyho0i6WxlPWUuvTyUzXSrMi7468pSk+C073y
-         uxAtPoo5+gEHuul8O7GCjs7CQcjEVXpsetEK9WCwanYwPnUdDottax3nIELqVMJaLNVM
-         4RwxHaUc08YEWOLSqE9djAVSxyqXq97kv1wREEcmbAddcoOdSM6/KGvp+6X0H2G2RMPZ
-         VXfw==
-X-Gm-Message-State: AJIora9xnEX5+5AlslRf5tlo0mFBepj+XWU4/DWCdAuP86w2jU+kuiEy
-        sDsv+IAtyLh+93nBkuKpDu9AkmrIVnANXYfpyI0nWA==
-X-Google-Smtp-Source: AGRyM1uMIL9QXjLW/PVKIiDg5RY+SUgQa/orAvMkYfMDivtbvx25fWOLwDlCvs4yZik4khUw0Q+DzoBnfW9oVFDgjCg=
-X-Received: by 2002:a81:5745:0:b0:318:99e6:3279 with SMTP id
- l66-20020a815745000000b0031899e63279mr11262932ywb.311.1656609043950; Thu, 30
- Jun 2022 10:10:43 -0700 (PDT)
+        bh=uH3u1IFiXRo5yGbXIVqL1yqXLG2H1E4UXns/GZ0BaVE=;
+        b=c/s4+1QjYHCKLdLhzwi10E5fh5qduZF9nSk2jvCvm0rJil4CabJJbrUO+xCUx4M8nr
+         tT/xLEYbGXoHiUQjABXhHhg/mkzqAZ6niDNXaZfwMbAQ/hzQnWu3d2qWDGXBEboVZk6w
+         me3QuqWEj4g1gPDbodOX07Cm57z7r7WYUaO9nyW86cPjYOPNtphQbDpgmmhk0JQNezSy
+         W9MqU7mEJ/Al0KcA9CLEiueomIPnJjbW8ShfgwZKuqC0c9QsSL0mHd9aQ7InFZbUL2MK
+         sL3u4w4MS7yAdxKgy864LsvQ58fxPBPbcyqb1tOq2K9tjUfZKr+q0HeZXiacgeWtwrEQ
+         8KtA==
+X-Gm-Message-State: AJIora8CA42JCgb+4DDpzrgDlgJ/BNz0VlYEPZqsavtgdBylVtt6+nDx
+        gxR+mCv0XiUHcznXY844A0JlY+1ptgRbOW3E7Q5X
+X-Google-Smtp-Source: AGRyM1szn9LwRU3Nw9ZfHq8EWST1CWq46Cj3fhZE2wtVrKEw7gClyoWnhjeSGDOpCcCwvmQvyhbN8nUX3DDA/n+VcV0=
+X-Received: by 2002:adf:ef10:0:b0:21b:8740:7085 with SMTP id
+ e16-20020adfef10000000b0021b87407085mr9148009wro.9.1656609160637; Thu, 30 Jun
+ 2022 10:12:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220622173605.1168416-1-pmalani@chromium.org>
- <20220622173605.1168416-2-pmalani@chromium.org> <20220627210407.GA2905757-robh@kernel.org>
- <CACeCKackdbDZrk5fk7qyMwSdTdzyTS=m1vHPFnQOj672W=2nOA@mail.gmail.com>
- <20220628182336.GA711518-robh@kernel.org> <CAEXTbpex9nxP-nyPWvSBchAW4j3C4MZfVHTb=5X0iSLY1bSAKg@mail.gmail.com>
- <CAEXTbpf_jxK-R5aA81FCbpAH4bChA2B9+8qExZUbA7Y+Ort=Gg@mail.gmail.com>
- <CAL_Jsq+C04RXLtm6Ac85Ru3EGwJbqV_UD3_dDWVrKvFSvdm7Ng@mail.gmail.com>
- <CAE-0n53ers881LOTCEmKDDxJQt+5vvXJSURs=o6TcOiR5m_EAw@mail.gmail.com>
- <CACeCKacJnnk4_dXEX7XiboOWrYpfAcE=ukP63agVAYUxWR9Vbg@mail.gmail.com> <CAE-0n50jm1ovUcBC0GCQJszk-4u+0vDQtAxHxsu9SLyn_CkQuQ@mail.gmail.com>
-In-Reply-To: <CAE-0n50jm1ovUcBC0GCQJszk-4u+0vDQtAxHxsu9SLyn_CkQuQ@mail.gmail.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Thu, 30 Jun 2022 10:10:32 -0700
-Message-ID: <CACeCKadtmGZ5iuTHdMms6ZHGn-Uv=MbcdtqmUzqCb=5WHuPj2Q@mail.gmail.com>
-Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Pin-yen Lin <treapking@chromium.org>,
-        Rob Herring <robh@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
+References: <Yrx/8UOY+J8Ao3Bd@zx2c4.com> <YryNQvWGVwCjJYmB@zx2c4.com>
+ <Yryic4YG9X2/DJiX@google.com> <Yry6XvOGge2xKx/n@zx2c4.com>
+ <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
+ <YrzaCRl9rwy9DgOC@zx2c4.com> <CANDhNCpRzzULaGmEGCbbJgVinA0pJJB-gOP9AY0Hy488n9ZStA@mail.gmail.com>
+ <YrztOqBBll66C2/n@zx2c4.com> <YrzujZuJyfymC0LP@zx2c4.com> <CAC_TJvcNOx1C5csdkMCAPVmX4gLcRWkxKO8Vm=isgjgM-MowwA@mail.gmail.com>
+ <Yr11fp13yMRiEphS@zx2c4.com>
+In-Reply-To: <Yr11fp13yMRiEphS@zx2c4.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Thu, 30 Jun 2022 10:12:30 -0700
+Message-ID: <CANDhNCrcEBUUNevNyZp2qttqWssWBEcXMZ5nPO0Ntk7Vszd3bQ@mail.gmail.com>
+Subject: Re: [PATCH] remove CONFIG_ANDROID
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Kalesh Singh <kaleshsingh@google.com>,
+        Christoph Hellwig <hch@lst.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, rcu <rcu@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, sultan@kerneltoast.com,
+        android-kernel-team <android-kernel-team@google.com>,
+        Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(CC+ Bjorn)
-
-On Wed, Jun 29, 2022 at 4:55 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> Quoting Prashant Malani (2022-06-29 15:55:10)
-> > On Wed, Jun 29, 2022 at 2:58 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> > >
-> > > My understanding is there are 4 DP lanes on it6505 and two lanes are
-> > > connected to one usb-c-connector and the other two lanes are connected
-> > > to a different usb-c-connector. The IT6505 driver will send DP out on
-> > > the associated two DP lanes depending on which usb-c-connector has DP
-> > > pins assigned by the typec manager.
-> [...]
+On Thu, Jun 30, 2022 at 3:06 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> On Wed, Jun 29, 2022 at 09:25:32PM -0700, Kalesh Singh wrote:
+> > Two concerns John raised:
+> >   1) Adding new ABI we need to maintain
+> >   2) Having unclear config options
 > >
-> > We can adopt this binding, but from what I gathered in this thread, that
-> > shouldn't be done, because IT6505 isn't meant to be aware of Type-C
-> > connections at all.
+> > Another idea, I think, is to add the Kconfig option as
+> > CONFIG_SUSPEND_SKIP_RNG_RESEED? Similar to existing
+> > CONFIG_SUSPEND_SKIP_SYNC and I think it would address those concerns.
 >
-> How will the driver know which usb-c-connector to route DP to without
-> making the binding aware of typec connections?
-
-I agree with you; I'm saying my interpretation of the comments of this
-thread are that it's not the intended usage of the it6505 part, so the driver
-shouldn't be updated to support that.
-
+> I mentioned in my reply to him that this doesn't really work for me:
 >
-> HPD can be signalled out of band, or not at all (no-hpd). I suspect it's
-> valid to ignore/disconnect the HPD pin here and start/stop DP when, for
-> example, the HPD pin toggles within a dp-connector. HPD could be
-> signaled directly to the kernel via an out of band gpio going from the
-> dp-connector to the SoC. In this case HPD for each dp-connector could be
-> a different gpio and the driver may be required to arbitrate between the
-> two dp-connectors with some 'first to signal wins' logic or something.
-
-Sure, it's possible. I just didn't see anything in the anx7625 datasheet
-to suggest it supported 2x1-lane DP outputs.
-
-For that matter I don't think even it6505 supports > 1 DP sink (based
-on my reading of the datasheet), but I don't have too much experience
-with these parts.
-
-
-> > My interpretation of the current mode-switch search code [1] is that
-> > a top level property of "mode-switch" is required.
+> | As a general rule, I don't expose knobs like that in wireguard /itself/,
+> | but wireguard has no problem with adapting to whatever machine properties
+> | it finds itself on. And besides, this *is* a very definite device
+> | property, something really particular and peculiar about the machine
+> | the kernel is running on. It's a concrete thing that the kernel should
+> | know about. So let's go with your "very clear description idea", above,
+> | instead.
 >
-> Yeah that's how it is right now, but does it have to stay that way?
-> Could the code search the graph and look for a matching node that's
-> registered with the typec framework?
+> IOW, we're not going to add a tunable on every possible place this is
+> used.
 
-I'll have to get back to you on that after reading the code a bit more.
-Maybe Heikki or Bjorn have some comments about it.
-The ACPI Type-C ports do require a device handle labelled "mode-switch"
-which points to the switch device.
+Hrm. Can you explain a bit more on why you're particularly adamant
+against scoping the config to describe the behavior we want from the
+kernel rather than describing a "machine property"?  As personally, I
+greatly prefer Kalesh's suggestion (as it avoids the same critique one
+could make of the CONFIG_ANDROID "flag"), but admittedly this is
+bikeshed territory.
+
+Does this preference come out of the too-many-options-in-gpg
+antipattern? Or is there something else?
+
+
+> Anyway if you don't want a runtime switch, make a compiletime switch
+> called CONFIG_PM_CONTINUOUS_RAPID_AUTOSLEEPING or whatever, write some
+> very discouraging help text, and call it a day. And this way you don't
+> have to worry about ABI and we can change this later on and do the whole
+> thing as a no-big-deal change that somebody can tweak later without
+> issue.
+
+Yeah, this is ok with me, as I don't see much benefit to creating a
+userland ABI, as I don't think at this point we expect the behavior to
+shift or oscillate at runtime.
+
+thanks
+-john

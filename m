@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757D8561D0A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2F5561D74
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236523AbiF3OFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
+        id S236435AbiF3OHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236335AbiF3OEX (ORCPT
+        with ESMTP id S236593AbiF3OGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:04:23 -0400
+        Thu, 30 Jun 2022 10:06:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53446B26D;
-        Thu, 30 Jun 2022 06:53:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0B86EEA9;
+        Thu, 30 Jun 2022 06:54:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E279862112;
-        Thu, 30 Jun 2022 13:53:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 006B4C34115;
-        Thu, 30 Jun 2022 13:53:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BA176211C;
+        Thu, 30 Jun 2022 13:54:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48116C34115;
+        Thu, 30 Jun 2022 13:54:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597199;
-        bh=tLkCRnCXlJuTY66kXfl2X0I04cloy+nkv3LwOZUfMPo=;
+        s=korg; t=1656597248;
+        bh=tUbC9P3+yubDDefe29H5IMHi8x/o38Uf9ZD+Vi3xwK8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NUthLoQfPyXm00VZImGkMpvvj/gN/ZBfI4hHZSqaL465PWB3jUbbjtnv7nw/1nPRh
-         7clEUxPDv4mM7zcwvP2Sv5bYnffeQOjGaQjkz9rq112vmRQ+POQBnOD8jHbsK58DpM
-         mckfXjSX8VIMAuIzuFv+I4W8Vlx1WImixpRAwl0A=
+        b=EUE8/8qagHcuvBzXf6NoH0yN3Jj4ZAmCTCIckudkX2FSUGcJsrySNKnk93i21osaB
+         wgRltucYMpbCATxhU+7SAUCLWs1HqhUERNukD0YpeJ4Rbi7mxBeOB5Ue0H9hqDzuwE
+         ujelhR/6ChSvkP0O7j6cNhP6f+92teAJralnhojI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jian Cai <jiancai@google.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: [PATCH 5.4 14/16] ARM: 9029/1: Make iwmmxt.S support Clangs integrated assembler
-Date:   Thu, 30 Jun 2022 15:47:08 +0200
-Message-Id: <20220630133231.358610011@linuxfoundation.org>
+        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH 5.10 04/12] clocksource/drivers/ixp4xx: remove __init from ixp4xx_timer_setup()
+Date:   Thu, 30 Jun 2022 15:47:09 +0200
+Message-Id: <20220630133230.813883677@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133230.936488203@linuxfoundation.org>
-References: <20220630133230.936488203@linuxfoundation.org>
+In-Reply-To: <20220630133230.676254336@linuxfoundation.org>
+References: <20220630133230.676254336@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,206 +54,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jian Cai <jiancai@google.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit 3c9f5708b7aed6a963e2aefccbd1854802de163e upstream
+ixp4xx_timer_setup is exported, and so can not be an __init function.
+Remove the __init marking as the build system is rightfully claiming
+this is an error in older kernels.
 
-This patch replaces 6 IWMMXT instructions Clang's integrated assembler
-does not support in iwmmxt.S using macros, while making sure GNU
-assembler still emit the same instructions. This should be easier than
-providing full IWMMXT support in Clang.  This is one of the last bits of
-kernel code that could be compiled but not assembled with clang. Once
-all of it works with IAS, we no longer need to special-case 32-bit Arm
-in Kbuild, or turn off CONFIG_IWMMXT when build-testing.
+This is fixed "properly" in commit 41929c9f628b
+("clocksource/drivers/ixp4xx: Drop boardfile probe path") but that can
+not be backported to older kernels as the reworking of the IXP4xx
+codebase is not suitable for stable releases.
 
-"Intel Wireless MMX Technology - Developer Guide - August, 2002" should
-be referenced for the encoding schemes of these extensions.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/975
-
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Jian Cai <jiancai@google.com>
-Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/kernel/iwmmxt.S |   89 +++++++++++++++++++++++------------------------
- arch/arm/kernel/iwmmxt.h |   47 ++++++++++++++++++++++++
- 2 files changed, 92 insertions(+), 44 deletions(-)
- create mode 100644 arch/arm/kernel/iwmmxt.h
+ drivers/clocksource/mmio.c                 |    2 +-
+ drivers/clocksource/timer-ixp4xx.c         |   10 ++++------
+ include/linux/platform_data/timer-ixp4xx.h |    5 ++---
+ 3 files changed, 7 insertions(+), 10 deletions(-)
 
---- a/arch/arm/kernel/iwmmxt.S
-+++ b/arch/arm/kernel/iwmmxt.S
-@@ -16,6 +16,7 @@
- #include <asm/thread_info.h>
- #include <asm/asm-offsets.h>
- #include <asm/assembler.h>
-+#include "iwmmxt.h"
+--- a/drivers/clocksource/mmio.c
++++ b/drivers/clocksource/mmio.c
+@@ -46,7 +46,7 @@ u64 clocksource_mmio_readw_down(struct c
+  * @bits:	Number of valid bits
+  * @read:	One of clocksource_mmio_read*() above
+  */
+-int __init clocksource_mmio_init(void __iomem *base, const char *name,
++int clocksource_mmio_init(void __iomem *base, const char *name,
+ 	unsigned long hz, int rating, unsigned bits,
+ 	u64 (*read)(struct clocksource *))
+ {
+--- a/drivers/clocksource/timer-ixp4xx.c
++++ b/drivers/clocksource/timer-ixp4xx.c
+@@ -170,9 +170,8 @@ static int ixp4xx_resume(struct clock_ev
+  * We use OS timer1 on the CPU for the timer tick and the timestamp
+  * counter as a source of real clock ticks to account for missed jiffies.
+  */
+-static __init int ixp4xx_timer_register(void __iomem *base,
+-					int timer_irq,
+-					unsigned int timer_freq)
++static int ixp4xx_timer_register(void __iomem *base, int timer_irq,
++				 unsigned int timer_freq)
+ {
+ 	struct ixp4xx_timer *tmr;
+ 	int ret;
+@@ -245,9 +244,8 @@ static __init int ixp4xx_timer_register(
+  * @timer_irq: Linux IRQ number for the timer
+  * @timer_freq: Fixed frequency of the timer
+  */
+-void __init ixp4xx_timer_setup(resource_size_t timerbase,
+-			       int timer_irq,
+-			       unsigned int timer_freq)
++void ixp4xx_timer_setup(resource_size_t timerbase, int timer_irq,
++			unsigned int timer_freq)
+ {
+ 	void __iomem *base;
  
- #if defined(CONFIG_CPU_PJ4) || defined(CONFIG_CPU_PJ4B)
- #define PJ4(code...)		code
-@@ -113,33 +114,33 @@ concan_save:
+--- a/include/linux/platform_data/timer-ixp4xx.h
++++ b/include/linux/platform_data/timer-ixp4xx.h
+@@ -4,8 +4,7 @@
  
- concan_dump:
+ #include <linux/ioport.h>
  
--	wstrw	wCSSF, [r1, #MMX_WCSSF]
--	wstrw	wCASF, [r1, #MMX_WCASF]
--	wstrw	wCGR0, [r1, #MMX_WCGR0]
--	wstrw	wCGR1, [r1, #MMX_WCGR1]
--	wstrw	wCGR2, [r1, #MMX_WCGR2]
--	wstrw	wCGR3, [r1, #MMX_WCGR3]
-+	wstrw	wCSSF, r1, MMX_WCSSF
-+	wstrw	wCASF, r1, MMX_WCASF
-+	wstrw	wCGR0, r1, MMX_WCGR0
-+	wstrw	wCGR1, r1, MMX_WCGR1
-+	wstrw	wCGR2, r1, MMX_WCGR2
-+	wstrw	wCGR3, r1, MMX_WCGR3
+-void __init ixp4xx_timer_setup(resource_size_t timerbase,
+-			       int timer_irq,
+-			       unsigned int timer_freq);
++void ixp4xx_timer_setup(resource_size_t timerbase, int timer_irq,
++			unsigned int timer_freq);
  
- 1:	@ MUP? wRn
- 	tst	r2, #0x2
- 	beq	2f
- 
--	wstrd	wR0,  [r1, #MMX_WR0]
--	wstrd	wR1,  [r1, #MMX_WR1]
--	wstrd	wR2,  [r1, #MMX_WR2]
--	wstrd	wR3,  [r1, #MMX_WR3]
--	wstrd	wR4,  [r1, #MMX_WR4]
--	wstrd	wR5,  [r1, #MMX_WR5]
--	wstrd	wR6,  [r1, #MMX_WR6]
--	wstrd	wR7,  [r1, #MMX_WR7]
--	wstrd	wR8,  [r1, #MMX_WR8]
--	wstrd	wR9,  [r1, #MMX_WR9]
--	wstrd	wR10, [r1, #MMX_WR10]
--	wstrd	wR11, [r1, #MMX_WR11]
--	wstrd	wR12, [r1, #MMX_WR12]
--	wstrd	wR13, [r1, #MMX_WR13]
--	wstrd	wR14, [r1, #MMX_WR14]
--	wstrd	wR15, [r1, #MMX_WR15]
-+	wstrd	wR0,  r1, MMX_WR0
-+	wstrd	wR1,  r1, MMX_WR1
-+	wstrd	wR2,  r1, MMX_WR2
-+	wstrd	wR3,  r1, MMX_WR3
-+	wstrd	wR4,  r1, MMX_WR4
-+	wstrd	wR5,  r1, MMX_WR5
-+	wstrd	wR6,  r1, MMX_WR6
-+	wstrd	wR7,  r1, MMX_WR7
-+	wstrd	wR8,  r1, MMX_WR8
-+	wstrd	wR9,  r1, MMX_WR9
-+	wstrd	wR10, r1, MMX_WR10
-+	wstrd	wR11, r1, MMX_WR11
-+	wstrd	wR12, r1, MMX_WR12
-+	wstrd	wR13, r1, MMX_WR13
-+	wstrd	wR14, r1, MMX_WR14
-+	wstrd	wR15, r1, MMX_WR15
- 
- 2:	teq	r0, #0				@ anything to load?
- 	reteq	lr				@ if not, return
-@@ -147,30 +148,30 @@ concan_dump:
- concan_load:
- 
- 	@ Load wRn
--	wldrd	wR0,  [r0, #MMX_WR0]
--	wldrd	wR1,  [r0, #MMX_WR1]
--	wldrd	wR2,  [r0, #MMX_WR2]
--	wldrd	wR3,  [r0, #MMX_WR3]
--	wldrd	wR4,  [r0, #MMX_WR4]
--	wldrd	wR5,  [r0, #MMX_WR5]
--	wldrd	wR6,  [r0, #MMX_WR6]
--	wldrd	wR7,  [r0, #MMX_WR7]
--	wldrd	wR8,  [r0, #MMX_WR8]
--	wldrd	wR9,  [r0, #MMX_WR9]
--	wldrd	wR10, [r0, #MMX_WR10]
--	wldrd	wR11, [r0, #MMX_WR11]
--	wldrd	wR12, [r0, #MMX_WR12]
--	wldrd	wR13, [r0, #MMX_WR13]
--	wldrd	wR14, [r0, #MMX_WR14]
--	wldrd	wR15, [r0, #MMX_WR15]
-+	wldrd	wR0,  r0, MMX_WR0
-+	wldrd	wR1,  r0, MMX_WR1
-+	wldrd	wR2,  r0, MMX_WR2
-+	wldrd	wR3,  r0, MMX_WR3
-+	wldrd	wR4,  r0, MMX_WR4
-+	wldrd	wR5,  r0, MMX_WR5
-+	wldrd	wR6,  r0, MMX_WR6
-+	wldrd	wR7,  r0, MMX_WR7
-+	wldrd	wR8,  r0, MMX_WR8
-+	wldrd	wR9,  r0, MMX_WR9
-+	wldrd	wR10, r0, MMX_WR10
-+	wldrd	wR11, r0, MMX_WR11
-+	wldrd	wR12, r0, MMX_WR12
-+	wldrd	wR13, r0, MMX_WR13
-+	wldrd	wR14, r0, MMX_WR14
-+	wldrd	wR15, r0, MMX_WR15
- 
- 	@ Load wCx
--	wldrw	wCSSF, [r0, #MMX_WCSSF]
--	wldrw	wCASF, [r0, #MMX_WCASF]
--	wldrw	wCGR0, [r0, #MMX_WCGR0]
--	wldrw	wCGR1, [r0, #MMX_WCGR1]
--	wldrw	wCGR2, [r0, #MMX_WCGR2]
--	wldrw	wCGR3, [r0, #MMX_WCGR3]
-+	wldrw	wCSSF, r0, MMX_WCSSF
-+	wldrw	wCASF, r0, MMX_WCASF
-+	wldrw	wCGR0, r0, MMX_WCGR0
-+	wldrw	wCGR1, r0, MMX_WCGR1
-+	wldrw	wCGR2, r0, MMX_WCGR2
-+	wldrw	wCGR3, r0, MMX_WCGR3
- 
- 	@ clear CUP/MUP (only if r1 != 0)
- 	teq	r1, #0
---- /dev/null
-+++ b/arch/arm/kernel/iwmmxt.h
-@@ -0,0 +1,47 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef __IWMMXT_H__
-+#define __IWMMXT_H__
-+
-+.irp b, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
-+.set .LwR\b, \b
-+.set .Lr\b, \b
-+.endr
-+
-+.set .LwCSSF, 0x2
-+.set .LwCASF, 0x3
-+.set .LwCGR0, 0x8
-+.set .LwCGR1, 0x9
-+.set .LwCGR2, 0xa
-+.set .LwCGR3, 0xb
-+
-+.macro wldrd, reg:req, base:req, offset:req
-+.inst 0xedd00100 | (.L\reg << 12) | (.L\base << 16) | (\offset >> 2)
-+.endm
-+
-+.macro wldrw, reg:req, base:req, offset:req
-+.inst 0xfd900100 | (.L\reg << 12) | (.L\base << 16) | (\offset >> 2)
-+.endm
-+
-+.macro wstrd, reg:req, base:req, offset:req
-+.inst 0xedc00100 | (.L\reg << 12) | (.L\base << 16) | (\offset >> 2)
-+.endm
-+
-+.macro wstrw, reg:req, base:req, offset:req
-+.inst 0xfd800100 | (.L\reg << 12) | (.L\base << 16) | (\offset >> 2)
-+.endm
-+
-+#ifdef __clang__
-+
-+#define wCon c1
-+
-+.macro tmrc, dest:req, control:req
-+mrc p1, 0, \dest, \control, c0, 0
-+.endm
-+
-+.macro tmcr, control:req, src:req
-+mcr p1, 0, \src, \control, c0, 0
-+.endm
-+#endif
-+
-+#endif
+ #endif
 
 

@@ -2,211 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04AE561A4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65FCD561A37
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234016AbiF3M0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 08:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
+        id S233367AbiF3MVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 08:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbiF3MZ7 (ORCPT
+        with ESMTP id S233483AbiF3MVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 08:25:59 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A4A2B254;
-        Thu, 30 Jun 2022 05:25:58 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id w1-20020a17090a6b8100b001ef26ab992bso2710193pjj.0;
-        Thu, 30 Jun 2022 05:25:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qkHYOhJM2c9y390Fvehg2as/eHGMXd+hD7+AN1EM9Hk=;
-        b=PvO6+OEEu12TpdotNoiaVC3Y2k+hqoXKxzm/fust/MXyJGVsgJTQxopZTfpbouCTzm
-         Z8bEBHZ1hE6ajbL85cIfM66xRco/8AGGpmLM/kRiDNeLSe7kWEkWTlxnfz+14XsmkGeZ
-         pMnfyxqD18pAi+orXakcTAhOckimSL7bRyrBr/eKqIxW4QedsWhqkJ482SV06mK6ITxl
-         uIzbI7B5vOzdXx2k8gouUGvkMoYgcM2KYH+kWMNd8qEZfeM1xMqt8Ff7WhFcFYn4Sk4s
-         pC5iNDxGt7Fmeud71ORT9T7vSDe6zHX+f3449MY+oDsbJxx6XOYz3DMGsBzPwODEm9rX
-         FHcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qkHYOhJM2c9y390Fvehg2as/eHGMXd+hD7+AN1EM9Hk=;
-        b=kAPgrk9whWXWaoTMrK3ZhunuQHiHtFpZDJqxBOx+Ww/+vOKva/kL9kwov0AV/Y9yQ2
-         zpFFth96P7CQMqUeyzp5k7r3SJqaLTFAKAS7yAL0uCH/VFZ8FY15XowN/CXZ/sbeB0LF
-         OfwYXRRt2gD8X2DojQjU//mKZLU8Y4/wv0hxI8ZSKiBc8rfNsC2omMqDaxnGLVJDAKc3
-         qtgkCFOgTFvX48viwzD8b84hVzcAEb9Nv3ikvyNFCoAg1n1Rtupu3xQQ4HGpYb2ih+s2
-         Xtspo8iI0/03FKG9yqJyC65VZXb9IOsxWJlHZ1ZPbd0t9zBBJD2BOj1Hy8QmcAF4TkiO
-         f3Jg==
-X-Gm-Message-State: AJIora/3XmOf4m/H/yCbvdn419IGpckYMJ+a+dIHGiwCcGUvNvVu7qNV
-        9gNfqr8qM675Ase8Qt7xUsc=
-X-Google-Smtp-Source: AGRyM1umtmOk5qnLsnGcbL/ju4/z5YSUD/snffNJOlMAgvcpnx1K0zsBt6y3p4RhdDd6bvBdw20SMQ==
-X-Received: by 2002:a17:903:1207:b0:16a:7e87:dad3 with SMTP id l7-20020a170903120700b0016a7e87dad3mr14402077plh.99.1656591958042;
-        Thu, 30 Jun 2022 05:25:58 -0700 (PDT)
-Received: from sebin-inspiron ([103.160.233.84])
-        by smtp.gmail.com with ESMTPSA id x20-20020a17090300d400b0016a1252976fsm13244844plc.107.2022.06.30.05.25.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 05:25:57 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 17:55:50 +0530
-From:   Sebin Sebastian <mailmesebin00@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Neal Liu <neal_liu@aspeedtech.com>,
-        Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 -next] usb: gadget: dereference before null check
-Message-ID: <Yr2WTqafL1X565dE@sebin-inspiron>
-References: <20220630044706.10772-1-mailmesebin00@gmail.com>
- <Yr1IjFBe6JjrDq8n@kroah.com>
- <Yr2DDkdFdt/A7pmL@sebin-inspiron>
- <Yr2EaEqEbYC7LViw@kroah.com>
+        Thu, 30 Jun 2022 08:21:22 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFBF22BCC;
+        Thu, 30 Jun 2022 05:21:20 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LYcp56W9kzkWfY;
+        Thu, 30 Jun 2022 20:19:25 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 30 Jun
+ 2022 20:21:18 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yekai13@huawei.com>, <liulongfang@huawei.com>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>
+CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <shaozhengchao@huawei.com>
+Subject: [PATCH v2] crypto: hisilicon/sec - don't sleep when in softirq
+Date:   Thu, 30 Jun 2022 20:26:22 +0800
+Message-ID: <20220630122622.55492-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yr2EaEqEbYC7LViw@kroah.com>
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 01:09:28PM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Jun 30, 2022 at 04:33:42PM +0530, Sebin Sebastian wrote:
-> > On Thu, Jun 30, 2022 at 08:54:04AM +0200, Greg Kroah-Hartman wrote:
-> > > On Thu, Jun 30, 2022 at 10:17:06AM +0530, Sebin Sebastian wrote:
-> > > > Fix coverity warning dereferencing before null check. _ep and desc is
-> > > > dereferenced on all paths until the check for null. Move the
-> > > > initializations after the check for null.
-> > > 
-> > > How can those values ever be NULL?
-> > > 
-> > > > Coverity issue: 1518209
-> > > > 
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > 
-> > > kernel test robot did not find this issue.
-> > > 
-> >  After I submitted the PATCH v1, kernel test robot ran some tests and
-> >  produced a report of the things that I broke while creating the patch.
-> >  That's why I kept this tag.
-> 
-> Yes, but the kernel test robot reported your first patch was broken, not
-> that this commit itself was reported by that.  Please drop that, it's
-> confusing I know, and trips lots of people up, but is not needed here.
-> 
-> > 
-> > > > Signed-off-by: Sebin Sebastian <mailmesebin00@gmail.com>
-> > > 
-> > > What commit id does this change fix?
-> > > 
-> >  So should I provide the commit ID of the patch v1 that kernel
-> >  test robot referred to?
-> 
-> No, report the commit id that this commit you are creating fixes.  It
-> had to be added to the tree sometime in the past, right?
-> 
-> > 
-> > > > ---
-> > > >  Changes since v1: Fix the build errors and warnings due to first patch.
-> > > >  Fix the undeclared 'ep' and 'maxpacket' error. Fix the ISO C90 warning.
-> > > > 
-> > > >  drivers/usb/gadget/udc/aspeed_udc.c | 21 ++++++++++++++-------
-> > > >  1 file changed, 14 insertions(+), 7 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
-> > > > index d75a4e070bf7..a43cf8dde2a8 100644
-> > > > --- a/drivers/usb/gadget/udc/aspeed_udc.c
-> > > > +++ b/drivers/usb/gadget/udc/aspeed_udc.c
-> > > > @@ -341,26 +341,33 @@ static void ast_udc_stop_activity(struct ast_udc_dev *udc)
-> > > >  static int ast_udc_ep_enable(struct usb_ep *_ep,
-> > > >  			     const struct usb_endpoint_descriptor *desc)
-> > > >  {
-> > > > -	u16 maxpacket = usb_endpoint_maxp(desc);
-> > > > -	struct ast_udc_ep *ep = to_ast_ep(_ep);
-> > > 
-> > > checking that ep is NULL here is an impossible thing on its own.  You
-> > > did change this so that you didn't check this anymore, which is odd as
-> > > you did not mention that in the changelog text :(
-> > > 
-> >  Yes, I missed the checking for ep. I thought of checking it after
-> >  initilizing ep.
-> > 
-> > > > -	struct ast_udc_dev *udc = ep->udc;
-> > > > -	u8 epnum = usb_endpoint_num(desc);
-> > > >  	unsigned long flags;
-> > > >  	u32 ep_conf = 0;
-> > > >  	u8 dir_in;
-> > > >  	u8 type;
-> > > > +	u16 maxpacket;
-> > > > +	struct ast_udc_ep *ep;
-> > > > +	struct ast_udc_dev *udc;
-> > > > +	u8 epnum;
-> > > 
-> > > Why did you reorder these?
-> > > 
-> > This is actually the original order that these were in. I reordered it
-> > while creating the first patch, then I changed it back to the original
-> > order they were in the source tree for this patch.
-> 
-> So this patch does not apply cleanly on linux-next?  We did not apply
-> your intermediate, broken, patch for obvious reasons, so you can not
-> send a change on top of that, right?
-> 
-> > > >  
-> > > > -	if (!_ep || !ep || !desc || desc->bDescriptorType != USB_DT_ENDPOINT ||
-> > > > -	    maxpacket == 0 || maxpacket > ep->ep.maxpacket) {
-> > > > +	if (!_ep || !desc || desc->bDescriptorType != USB_DT_ENDPOINT) {
-> > > >  		EP_DBG(ep, "Failed, invalid EP enable param\n");
-> > > >  		return -EINVAL;
-> > > >  	}
-> > > > -
-> > > 
-> > > Why did you remove this line?
-> > >
-> > I removed the check for maxpacket because it is not initialized in this
-> > part, the check for the same thing comes after initialization.
-> > This is the check for that, this is also included in the patch.
-> > +	if (maxpacket == 0 || maxpacket > ep->ep.maxpacket) {
-> > +               EP_DBG(ep, "Failed, invalid EP enable param\n");
-> > +               return -EINVAL;
-> > +       }
-> > Should I add the check for 'ep' in this part?
-> > 
-> > > Also, your To: line is messed up somehow, please fix your email
-> > > client...
-> > > 
-> > Ok, I will surely do it.
-> > 
-> > > thanks,
-> > > 
-> > > gre gk-h
-> > 
-> > I did many mistakes in the patch v1, so I had to bring this patch to the
-> > original state things were. I left all the declarations in the same
-> > order (which made it seem like reordering) and moved the initialization
-> > part after the check for _ep and desc. 
-> 
-> 
-> Perhaps you might want to start out doing coding style cleanups in
-> drivers/staging/* to get the process of how to submit patches properly
-> and test your changes before sending them out, before going out into the
-> real part of the kernel.
-> 
-> thanks,
-> 
-> greg k-h
-I am sorry to mess things up like this. I understand the entire process
-of sending out patches and to not waste maintainer's time on these kind
-of things.
-This patch does apply cleanly on linux-next. There are no warnings or
-errors while building and no checkpatch errors. Can I just send one
-final patch including proper commit ID and the missing check for ep.
-Thanks for pointing out all these mistakes.
+When kunpeng920 encryption driver is used to deencrypt and decrypt
+packets during the softirq, it is not allowed to use mutex lock. The
+kernel will report the following error:
+
+BUG: scheduling while atomic: swapper/57/0/0x00000300
+Call trace:
+dump_backtrace+0x0/0x1e4
+show_stack+0x20/0x2c
+dump_stack+0xd8/0x140
+__schedule_bug+0x68/0x80
+__schedule+0x728/0x840
+schedule+0x50/0xe0
+schedule_preempt_disabled+0x18/0x24
+__mutex_lock.constprop.0+0x594/0x5dc
+__mutex_lock_slowpath+0x1c/0x30
+mutex_lock+0x50/0x60
+sec_request_init+0x8c/0x1a0 [hisi_sec2]
+sec_process+0x28/0x1ac [hisi_sec2]
+sec_skcipher_crypto+0xf4/0x1d4 [hisi_sec2]
+sec_skcipher_encrypt+0x1c/0x30 [hisi_sec2]
+crypto_skcipher_encrypt+0x2c/0x40
+crypto_authenc_encrypt+0xc8/0xfc [authenc]
+crypto_aead_encrypt+0x2c/0x40
+echainiv_encrypt+0x144/0x1a0 [echainiv]
+crypto_aead_encrypt+0x2c/0x40
+esp_output_tail+0x348/0x5c0 [esp4]
+esp_output+0x120/0x19c [esp4]
+xfrm_output_one+0x25c/0x4d4
+xfrm_output_resume+0x6c/0x1fc
+xfrm_output+0xac/0x3c0
+xfrm4_output+0x64/0x130
+ip_build_and_send_pkt+0x158/0x20c
+tcp_v4_send_synack+0xdc/0x1f0
+tcp_conn_request+0x7d0/0x994
+tcp_v4_conn_request+0x58/0x6c
+tcp_v6_conn_request+0xf0/0x100
+tcp_rcv_state_process+0x1cc/0xd60
+tcp_v4_do_rcv+0x10c/0x250
+tcp_v4_rcv+0xfc4/0x10a4
+ip_protocol_deliver_rcu+0xf4/0x200
+ip_local_deliver_finish+0x58/0x70
+ip_local_deliver+0x68/0x120
+ip_sublist_rcv_finish+0x70/0x94
+ip_list_rcv_finish.constprop.0+0x17c/0x1d0
+ip_sublist_rcv+0x40/0xb0
+ip_list_rcv+0x140/0x1dc
+__netif_receive_skb_list_core+0x154/0x28c
+__netif_receive_skb_list+0x120/0x1a0
+netif_receive_skb_list_internal+0xe4/0x1f0
+napi_complete_done+0x70/0x1f0
+gro_cell_poll+0x9c/0xb0
+napi_poll+0xcc/0x264
+net_rx_action+0xd4/0x21c
+__do_softirq+0x130/0x358
+irq_exit+0x11c/0x13c
+__handle_domain_irq+0x88/0xf0
+gic_handle_irq+0x78/0x2c0
+el1_irq+0xb8/0x140
+arch_cpu_idle+0x18/0x40
+default_idle_call+0x5c/0x1c0
+cpuidle_idle_call+0x174/0x1b0
+do_idle+0xc8/0x160
+cpu_startup_entry+0x30/0x11c
+secondary_start_kernel+0x158/0x1e4
+softirq: huh, entered softirq 3 NET_RX 0000000093774ee4 with
+preempt_count 00000100, exited with fffffe00?
+
+V1: use spin_lock will cause soft lockup
+
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+ drivers/crypto/hisilicon/sec2/sec.h        |  2 +-
+ drivers/crypto/hisilicon/sec2/sec_crypto.c | 20 ++++++++++----------
+ 2 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/crypto/hisilicon/sec2/sec.h b/drivers/crypto/hisilicon/sec2/sec.h
+index 42bb486f3b6d..d2a0bc93e752 100644
+--- a/drivers/crypto/hisilicon/sec2/sec.h
++++ b/drivers/crypto/hisilicon/sec2/sec.h
+@@ -119,7 +119,7 @@ struct sec_qp_ctx {
+ 	struct idr req_idr;
+ 	struct sec_alg_res res[QM_Q_DEPTH];
+ 	struct sec_ctx *ctx;
+-	struct mutex req_lock;
++	spinlock_t req_lock;
+ 	struct list_head backlog;
+ 	struct hisi_acc_sgl_pool *c_in_pool;
+ 	struct hisi_acc_sgl_pool *c_out_pool;
+diff --git a/drivers/crypto/hisilicon/sec2/sec_crypto.c b/drivers/crypto/hisilicon/sec2/sec_crypto.c
+index 6eebe739893c..71dfa7db6394 100644
+--- a/drivers/crypto/hisilicon/sec2/sec_crypto.c
++++ b/drivers/crypto/hisilicon/sec2/sec_crypto.c
+@@ -127,11 +127,11 @@ static int sec_alloc_req_id(struct sec_req *req, struct sec_qp_ctx *qp_ctx)
+ {
+ 	int req_id;
+ 
+-	mutex_lock(&qp_ctx->req_lock);
++	spin_lock_bh(&qp_ctx->req_lock);
+ 
+ 	req_id = idr_alloc_cyclic(&qp_ctx->req_idr, NULL,
+ 				  0, QM_Q_DEPTH, GFP_ATOMIC);
+-	mutex_unlock(&qp_ctx->req_lock);
++	spin_unlock_bh(&qp_ctx->req_lock);
+ 	if (unlikely(req_id < 0)) {
+ 		dev_err(req->ctx->dev, "alloc req id fail!\n");
+ 		return req_id;
+@@ -156,9 +156,9 @@ static void sec_free_req_id(struct sec_req *req)
+ 	qp_ctx->req_list[req_id] = NULL;
+ 	req->qp_ctx = NULL;
+ 
+-	mutex_lock(&qp_ctx->req_lock);
++	spin_lock_bh(&qp_ctx->req_lock);
+ 	idr_remove(&qp_ctx->req_idr, req_id);
+-	mutex_unlock(&qp_ctx->req_lock);
++	spin_unlock_bh(&qp_ctx->req_lock);
+ }
+ 
+ static u8 pre_parse_finished_bd(struct bd_status *status, void *resp)
+@@ -273,7 +273,7 @@ static int sec_bd_send(struct sec_ctx *ctx, struct sec_req *req)
+ 	    !(req->flag & CRYPTO_TFM_REQ_MAY_BACKLOG))
+ 		return -EBUSY;
+ 
+-	mutex_lock(&qp_ctx->req_lock);
++	spin_lock_bh(&qp_ctx->req_lock);
+ 	ret = hisi_qp_send(qp_ctx->qp, &req->sec_sqe);
+ 
+ 	if (ctx->fake_req_limit <=
+@@ -281,10 +281,10 @@ static int sec_bd_send(struct sec_ctx *ctx, struct sec_req *req)
+ 		list_add_tail(&req->backlog_head, &qp_ctx->backlog);
+ 		atomic64_inc(&ctx->sec->debug.dfx.send_cnt);
+ 		atomic64_inc(&ctx->sec->debug.dfx.send_busy_cnt);
+-		mutex_unlock(&qp_ctx->req_lock);
++		spin_unlock_bh(&qp_ctx->req_lock);
+ 		return -EBUSY;
+ 	}
+-	mutex_unlock(&qp_ctx->req_lock);
++	spin_unlock_bh(&qp_ctx->req_lock);
+ 
+ 	if (unlikely(ret == -EBUSY))
+ 		return -ENOBUFS;
+@@ -487,7 +487,7 @@ static int sec_create_qp_ctx(struct hisi_qm *qm, struct sec_ctx *ctx,
+ 
+ 	qp->req_cb = sec_req_cb;
+ 
+-	mutex_init(&qp_ctx->req_lock);
++	spin_lock_init(&qp_ctx->req_lock);
+ 	idr_init(&qp_ctx->req_idr);
+ 	INIT_LIST_HEAD(&qp_ctx->backlog);
+ 
+@@ -1382,7 +1382,7 @@ static struct sec_req *sec_back_req_clear(struct sec_ctx *ctx,
+ {
+ 	struct sec_req *backlog_req = NULL;
+ 
+-	mutex_lock(&qp_ctx->req_lock);
++	spin_lock_bh(&qp_ctx->req_lock);
+ 	if (ctx->fake_req_limit >=
+ 	    atomic_read(&qp_ctx->qp->qp_status.used) &&
+ 	    !list_empty(&qp_ctx->backlog)) {
+@@ -1390,7 +1390,7 @@ static struct sec_req *sec_back_req_clear(struct sec_ctx *ctx,
+ 				typeof(*backlog_req), backlog_head);
+ 		list_del(&backlog_req->backlog_head);
+ 	}
+-	mutex_unlock(&qp_ctx->req_lock);
++	spin_unlock_bh(&qp_ctx->req_lock);
+ 
+ 	return backlog_req;
+ }
+-- 
+2.17.1
+

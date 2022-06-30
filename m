@@ -2,137 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E7BD561E2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:37:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8FE561E42
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237224AbiF3OhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
+        id S236008AbiF3Ojk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235979AbiF3Ogz (ORCPT
+        with ESMTP id S235513AbiF3OjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:36:55 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286CA201A6;
-        Thu, 30 Jun 2022 07:32:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CB1B921EFB;
-        Thu, 30 Jun 2022 14:32:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1656599532; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r+2jSverPOfqGEKU6YL54SGkmzqRewq0zi4aTwuQWVg=;
-        b=NQJFxWMbAHm7LziJAaX0qwJ3jblN0hLNNfEOc+ukjrHuS04pTcAJtGu2PvLSHHm2baWcLi
-        6d6yoEW/ti0PFPza/gAw0Pv8kuPVwzG0Cqo/igYQU3BYxnCm+v4Hr+jEtN7Hz8DTdG0u0/
-        9iFRnVdTN7We1cfra567KIbMx3damAM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7FB7913A5C;
-        Thu, 30 Jun 2022 14:32:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id +DZiHuyzvWJHbAAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 30 Jun 2022 14:32:12 +0000
-Date:   Thu, 30 Jun 2022 16:32:11 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v11 7/8] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Message-ID: <20220630143211.GA22105@blackbody.suse.cz>
-References: <20220510153413.400020-8-longman@redhat.com>
- <YqYnQ4U4t6j/3UaL@slm.duckdns.org>
- <404171dc-0da3-21f2-5003-9718f875e967@redhat.com>
- <YqarMyNo9oHxhZFh@slm.duckdns.org>
- <20220613142452.GB6910@blackbody.suse.cz>
- <YqdzuSQuAeiPXQvy@slm.duckdns.org>
- <20220613175548.GB21665@blackbody.suse.cz>
- <Yqd7WMFj6AEyV3Cy@slm.duckdns.org>
- <20220614115345.GA6771@blackbody.suse.cz>
- <YroApRMPV/6zO5I8@mtj.duckdns.org>
+        Thu, 30 Jun 2022 10:39:22 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F071928A;
+        Thu, 30 Jun 2022 07:38:27 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-118-63.bstnma.fios.verizon.net [173.48.118.63])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 25UEbwFJ000461
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Jun 2022 10:37:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1656599881; bh=rZwPiLcKye0U/mwTOCKDykueQ6+V0zCIaDXWdLBBeO4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Ys+pFhD/OX//kD7MlmS3BJ92SirYngNws0DllJmHUer2zwRl0B4HPiTpBItpRH7qa
+         Ea2dBXSeGgJSOGobvkMMm0L5wwawJsm3tzxAaRfwI0+ojQ/YTUqnbZDiZaMHUmWalr
+         4KPAl3mjsxecX9dN6cvh/sfbBfg2ixmkBKdyvZkHAx1J5BMYEXsYDagvoE2COARDFG
+         AbTkkKx7A0/ezq+rBHRm/GDh1L6i3MBCMoAqP4D2TU1+//oEaMQlqFAtY9tsAQ0nZb
+         WW34OFwYzcCWgD5SvUNtzZyhlP3Rw0RULwD66GOSPUazwt6ddAZrmO/KprrAnVyEaq
+         aLr/Unsy9Z+uA==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 8477815C3E94; Thu, 30 Jun 2022 10:37:58 -0400 (EDT)
+Date:   Thu, 30 Jun 2022 10:37:58 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Dominique MARTINET <dominique.martinet@atmark-techno.com>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-btrfs@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yu Kuai <yukuai3@huawei.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>
+Subject: Re: Major btrfs fiemap slowdown on file with many extents once in
+ cache (RCU stalls?) (Was: [PATCH 1/3] filemap: Correct the conditions for
+ marking a folio as accessed)
+Message-ID: <Yr21RoL+ztf1W5Od@mit.edu>
+References: <20220619151143.1054746-1-willy@infradead.org>
+ <20220619151143.1054746-2-willy@infradead.org>
+ <Yr1QwVW+sHWlAqKj@atmark-techno.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <YroApRMPV/6zO5I8@mtj.duckdns.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yr1QwVW+sHWlAqKj@atmark-techno.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 04:10:29AM +0900, Tejun Heo <tj@kernel.org> wrote:
-> What I'm trying to say is that cpuset.cpus of child_1 and child_2 are
-> owned by the parent,
+On Thu, Jun 30, 2022 at 04:29:05PM +0900, Dominique MARTINET wrote:
+> Hi Willy, linux-btrfs@vger,
+> 
+> Matthew Wilcox (Oracle) wrote on Sun, Jun 19, 2022 at 04:11:41PM +0100:
+> > We had an off-by-one error which meant that we never marked the first page
+> > in a read as accessed.  This was visible as a slowdown when re-reading
+> > a file as pages were being evicted from cache too soon.  In reviewing
+> > this code, we noticed a second bug where a multi-page folio would be
+> > marked as accessed multiple times when doing reads that were less than
+> > the size of the folio.
+> 
+> when debugging an unrelated issue (short reads on btrfs with io_uring
+> and O_DIRECT[1]), I noticed that my horrible big file copy speeds fell
+> down from ~2GB/s (there's compression and lots of zeroes) to ~100MB/s
+> the second time I was copying it with cp.
+> 
+> I've taken a moment to bisect this and came down to this patch.
 
-Cf
+I think you may have forgotten to include the commit-id that was the
+results of your bisect.... ?
 
-On Mon, Jun 13, 2022 at 08:00:56AM -1000, Tejun Heo <tj@kernel.org> wrote:
-> On Mon, Jun 13, 2022 at 07:55:49PM +0200, Michal Koutn=FD wrote:
-> > I don't think child_*/cpuset.cpus must be owned by root.
->=20
-> I meant the parent.
-
-I'm slightly confused.
-
-> so a feature which blocks siblings from intersecting each other
-> doesn't make whole lot of sense because all those files are under the
-> control of the parent who would have the power to enable or disable
-> the restrition anyway.
-
-file				owner
-parent/				user (mkdir)
-`- cpuset.cpus			root
-`- cpuset.cpus.partition	root	(P)
-`- child_1/			user
-  ` cpuset.cpus			user	(*)
-`- child_2/			user
-  ` cpuset.cpus			user	(*)
-
-The writes to child cpuset.cpus may/may not invalidate parent's (P)
-partition validity (whether a cpu is left to it to host possible tasks).
-child_1 vs child_2 overlap affects only whether the children cgroups are
-a valid partition.
-
-I think you mean: writes to children cpuset.cpus should be allowed,
-possible exclusivity violation should be reported in
-parent/cpuset.cpus.partition.
-
-What I thought was OK: prevent (fail) writes to children cpuset.cpus
-that'd violate the exclusivity (or would take the last cpu from parent
-if it's necessary to host a task).
-IMO, it's similar to failed writes to parent/cgroup.subtree_control in a
-delegated subtree if the parent still has some tasks (that'd violate
-internal node constraint).
-
-What I think might still be OK: allow writes to children cpuset.cpus
-that violate exclusivity and report that in children's
-cpuset.cpus.partition. Writes that'd take last cpu from parent should
-still fail (similar to the failing subtree_control writes above).
-
-Hope that clarifies,
-Michal
+					- Ted

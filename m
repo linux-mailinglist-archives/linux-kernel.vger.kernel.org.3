@@ -2,105 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591D8561955
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC49D561958
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235073AbiF3Lgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 07:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51844 "EHLO
+        id S235102AbiF3Lhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 07:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbiF3Lgk (ORCPT
+        with ESMTP id S235074AbiF3LhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 07:36:40 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F7E5A446;
-        Thu, 30 Jun 2022 04:36:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=YUegSAtrHJuf++oLd2AkDHyUJS1bF226T9zeUPibzdI=; b=a7IyqWkdA70BWwqXqNN4nS6fTV
-        52K3yOWMROiMYthiioE0NOH9Ir1XwJG5ltYsjVradu9PNBobke0xtZqhLqFjls/9RKQR56sB49MrW
-        UYUziAQa0i7ekm0yvuTbY0H2eeMjLvComguGJCv7m4g410lnooasvXKDqntBVQx98MsSy9rP+DFtH
-        o2EK19blD/VcqDrCuffcK/Up1avcHPtMBF1Aa1x01aIlWqtC+C7emT76eSYTUdp08/x4ZNczFdWPL
-        dRPwpftJN3R++G3Ac//nPYu5d3WJDfL8VpUNVA+p/YzfUMztYnIBtQrIWQySDu3wOyE55YtMIPaB4
-        pFXs5xRg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33114)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1o6sTI-0004Lw-8e; Thu, 30 Jun 2022 12:36:32 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1o6sTB-0006kW-4c; Thu, 30 Jun 2022 12:36:25 +0100
-Date:   Thu, 30 Jun 2022 12:36:25 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Subject: Re: [Patch net-next v14 10/13] net: dsa: microchip: lan937x: add
- phylink_get_caps support
-Message-ID: <Yr2KuQonUBo74As+@shell.armlinux.org.uk>
-References: <20220630102041.25555-1-arun.ramadoss@microchip.com>
- <20220630102041.25555-11-arun.ramadoss@microchip.com>
+        Thu, 30 Jun 2022 07:37:20 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B715A44F;
+        Thu, 30 Jun 2022 04:37:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656589039; x=1688125039;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=cJOc9pifRuPqoq93Kxnv9kcuAQi7B+at/0gDeNXNrbw=;
+  b=g/VEfy35U6moKwPaE49uV1lTfha11Ef4GJbu6GYXAAhXp43mPUm5S5Tu
+   ZO0kv1LZapu2FcPlltrw58uNGkO2r4U33eANz7N936XOYS+SV7GGNgs/r
+   FfasxhulYmjrGHoV+hvN8rw2AsPhnMxZ0TylisBxVbneeVQTPJtgvayT1
+   qhJvc/mfuAYlLOmWFFySLsyjWQth+4lSPXs1H1cIACkt40SevffzdpNV1
+   I5Kmv28gbSOUwMO69fsbe1D42eBoIBhnCRwqqTVrbB/ZgwjwrK/6c7aAk
+   gGONoUlYSKQLGino2tweJIW7QitegZq3bkBwcZ9l3KSIPSEH2FjOaZMfD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="262121654"
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="262121654"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 04:37:19 -0700
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="617947907"
+Received: from zhihuich-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.49.124])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 04:37:17 -0700
+Message-ID: <cfeb3b8b02646b073d5355495ec8842ac33aeae5.camel@intel.com>
+Subject: Re: [PATCH v7 035/102] KVM: x86/mmu: Explicitly check for MMIO spte
+ in fast page fault
+From:   Kai Huang <kai.huang@intel.com>
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Date:   Thu, 30 Jun 2022 23:37:15 +1200
+In-Reply-To: <71e4c19d1dff8135792e6c5a17d3a483bc99875b.1656366338.git.isaku.yamahata@intel.com>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
+         <71e4c19d1dff8135792e6c5a17d3a483bc99875b.1656366338.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220630102041.25555-11-arun.ramadoss@microchip.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 03:50:38PM +0530, Arun Ramadoss wrote:
-> The internal phy of the LAN937x are capable of 100Mbps speed. And the
+On Mon, 2022-06-27 at 14:53 -0700, isaku.yamahata@intel.com wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
+>=20
+> Explicitly check for an MMIO spte in the fast page fault flow.  TDX will
+> use a not-present entry for MMIO sptes, which can be mistaken for an
+> access-tracked spte since both have SPTE_SPECIAL_MASK set.
 
-Good English grammar suggests never to start a sentence with "And".
+SPTE_SPECIAL_MASK has been removed in latest KVM code.  The changelog needs
+update.
 
-> xMII port of switch is capable of 10/100/1000Mbps.
+In fact, if I understand correctly, I don't think this changelog is correct=
+:
 
-... and supports flow control?
+The existing code doesn't check is_mmio_spte() because:
 
-> +void lan937x_phylink_get_caps(struct ksz_device *dev, int port,
-> +			      struct phylink_config *config)
-> +{
-> +	config->mac_capabilities = MAC_100FD;
-> +
-> +	if (dev->info->supports_rgmii[port]) {
-> +		/* MII/RMII/RGMII ports */
-> +		config->mac_capabilities |= MAC_ASYM_PAUSE | MAC_SYM_PAUSE |
-> +					    MAC_100HD | MAC_10 | MAC_1000FD;
+1) If MMIO caching is enabled, MMIO fault is always handled in
+handle_mmio_page_fault() before reaching here;=20
 
-And SGMII too? (Which seems to be a given because from your list in the
-series cover message, SGMII ports also support RGMII).
+2) If MMIO caching is disabled, is_shadow_present_pte() always returns fals=
+e for
+MMIO spte, and is_mmio_spte() also always return false for MMIO spte, so th=
+ere's
+no need check here.
 
-Thanks.
+"A non-present entry for MMIO spte" doesn't necessarily mean
+is_shadow_present_pte() will return true for it, and there's no explanation=
+ at
+all that for TDX guest a MMIO spte could reach here and is_shadow_present_p=
+te()
+returns true for it.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+If this patch is ever needed, it should come with or after the patch (patch=
+es)
+that handles MMIO fault for TD guest.
+
+Hi Sean, Paolo,
+
+Did I miss anything?
+
+>=20
+> MMIO sptes are handled in handle_mmio_page_fault for non-TDX VMs, so this
+> patch does not affect them.  TDX will handle MMIO emulation through a
+> hypercall instead.
+>=20
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 17252f39bd7c..51306b80f47c 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -3163,7 +3163,7 @@ static int fast_page_fault(struct kvm_vcpu *vcpu, s=
+truct kvm_page_fault *fault)
+>  		else
+>  			sptep =3D fast_pf_get_last_sptep(vcpu, fault->addr, &spte);
+> =20
+> -		if (!is_shadow_present_pte(spte))
+> +		if (!is_shadow_present_pte(spte) || is_mmio_spte(spte))
+>  			break;
+> =20
+>  		sp =3D sptep_to_sp(sptep);
+

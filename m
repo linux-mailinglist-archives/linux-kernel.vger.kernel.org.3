@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4812560EB7
+	by mail.lfdr.de (Postfix) with ESMTP id 8B128560EB6
 	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 03:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbiF3BeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 21:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
+        id S231374AbiF3BcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 21:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiF3BeJ (ORCPT
+        with ESMTP id S231325AbiF3BcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 21:34:09 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7331C128;
-        Wed, 29 Jun 2022 18:34:08 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LYLSj06Xcz9sv3;
-        Thu, 30 Jun 2022 09:33:25 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+        Wed, 29 Jun 2022 21:32:06 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F83340CA;
+        Wed, 29 Jun 2022 18:32:05 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LYLNS3gdwz1L8kC;
+        Thu, 30 Jun 2022 09:29:44 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 30 Jun 2022 09:34:06 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.66) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 30 Jun 2022 09:34:06 +0800
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-To:     <rostedt@goodmis.org>, <mingo@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <tom.zanussi@linux.intel.com>,
-        <trix@redhat.com>
-CC:     <stable@vger.kernel.org>, <zhangjinhao2@huawei.com>,
-        <zhengyejian1@huawei.com>
-Subject: [PATCH] tracing/histograms: Simplify create_hist_fields()
-Date:   Thu, 30 Jun 2022 09:31:52 +0800
-Message-ID: <20220630013152.164871-1-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.32.0
+ 15.1.2375.24; Thu, 30 Jun 2022 09:32:01 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 30 Jun
+ 2022 09:32:01 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>
+CC:     <clement.leger@bootlin.com>, <olteanv@gmail.com>,
+        <f.fainelli@gmail.com>, <davem@davemloft.net>
+Subject: [PATCH -next v2] net: dsa: rzn1-a5psw: add missing of_node_put() in a5psw_pcs_get()
+Date:   Thu, 30 Jun 2022 09:41:53 +0800
+Message-ID: <20220630014153.1888811-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.66]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml100012.china.huawei.com (7.185.36.121)
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,43 +51,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When I look into implements of create_hist_fields(), I think there can be
-following two simplifications:
-  1. If something wrong happened in parse_var_defs(), free_var_defs() would
-     have been called in it, so no need goto free again after calling it;
-  2. After calling create_key_fields(), regardless of the value of 'ret', it
-     then always runs into 'out: ', so the judge of 'ret' is redundant.
+of_parse_phandle() will increase the refcount of 'pcs_node', so add
+of_node_put() before return from a5psw_pcs_get().
 
-No functional changes.
-
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+Fixes: 888cdb892b61 ("net: dsa: rzn1-a5psw: add Renesas RZ/N1 advanced 5 port switch driver")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- kernel/trace/trace_events_hist.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+v2:
+  call of_node_put() after miic_create()
+---
+ drivers/net/dsa/rzn1_a5psw.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index 2784951e0fc8..832c4ccf41ab 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -4454,7 +4454,7 @@ static int create_hist_fields(struct hist_trigger_data *hist_data,
+diff --git a/drivers/net/dsa/rzn1_a5psw.c b/drivers/net/dsa/rzn1_a5psw.c
+index 3e910da98ae2..dece613ee881 100644
+--- a/drivers/net/dsa/rzn1_a5psw.c
++++ b/drivers/net/dsa/rzn1_a5psw.c
+@@ -917,12 +917,14 @@ static int a5psw_pcs_get(struct a5psw *a5psw)
+ 		}
  
- 	ret = parse_var_defs(hist_data);
- 	if (ret)
--		goto out;
-+		return ret;
+ 		a5psw->pcs[reg] = pcs;
++		of_node_put(pcs_node);
+ 	}
+ 	of_node_put(ports);
  
- 	ret = create_val_fields(hist_data, file);
- 	if (ret)
-@@ -4465,8 +4465,7 @@ static int create_hist_fields(struct hist_trigger_data *hist_data,
- 		goto out;
+ 	return 0;
  
- 	ret = create_key_fields(hist_data, file);
--	if (ret)
--		goto out;
-+
-  out:
- 	free_var_defs(hist_data);
- 
+ free_pcs:
++	of_node_put(pcs_node);
+ 	of_node_put(port);
+ 	of_node_put(ports);
+ 	a5psw_pcs_free(a5psw);
 -- 
-2.32.0
+2.25.1
 

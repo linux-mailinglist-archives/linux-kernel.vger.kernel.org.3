@@ -2,81 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDBD756146D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F321D561467
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233814AbiF3INx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 04:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
+        id S233710AbiF3IML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 04:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233795AbiF3INV (ORCPT
+        with ESMTP id S233661AbiF3ILX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 04:13:21 -0400
-Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05028443F8;
-        Thu, 30 Jun 2022 01:11:02 -0700 (PDT)
-Received: from grover.sesame ([133.106.249.59]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 25U89jbd027588;
-        Thu, 30 Jun 2022 17:09:46 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 25U89jbd027588
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1656576587;
-        bh=IQNcLr2Q+Rml5vvqNmFGoUixW6iYHrmzrTzAVBg3K38=;
-        h=From:To:Cc:Subject:Date:From;
-        b=2UbB7kkrA1O4vWKUt5gGyR6+QhuAngLnM8skaKAeuLK7BYDo8qR9P/yZdX6Nl9xtC
-         /4D6PKUBj78yatuw8XfT9zbitF+F7kXDkjG7lRA/iIyS+S69u7nrB6+J9ERXZ3juze
-         az7+Yx/B8e2VoYaAvWUVJITRRP8Tu964Mnhp4DSM1MOwhSyOAslZKbmC2kcMMo8juV
-         9jSg4Lo4RsaenQk4L+BxlQQFjW3AafzTpRQn2Zu+kG7YW7KxtXc+KpxC7b3GEk5Tke
-         g7LeC6A3k+7arSN1GqB/R41IPOYWVq2GisMTFydcHG0PDnMBoCUvXI6OwDT6pFoChG
-         c2AmcmcRqBlVw==
-X-Nifty-SrcIP: [133.106.249.59]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kbuild: remove unused cmd_none in scripts/Makefile.modinst
-Date:   Thu, 30 Jun 2022 17:09:35 +0900
-Message-Id: <20220630080935.316394-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Thu, 30 Jun 2022 04:11:23 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBB21A826
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:09:41 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8D74721C97;
+        Thu, 30 Jun 2022 08:09:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1656576580; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gSJC+aj+BfNql4oU2JcGgOEE5XeUn40IH1rlwgZea4s=;
+        b=X3GjqDbnVuh6BBl2wjlm4icDKQ5igyudH0AprJMQaGGeIDCbo5gWJp9fOH5T3q9Fb0YL4A
+        3eUccMozS8f1EJ1ONjN66sZ/MxGnz3ibWhPTHdEVi3WzzCI58o9XQJXFxQ1sHg5dg6Thqw
+        XLsbCA5fVJ0wYmkfo5RBBxBRDYK3SSg=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5712E13A5C;
+        Thu, 30 Jun 2022 08:09:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id AN/ZE0RavWLZQAAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 30 Jun 2022 08:09:40 +0000
+Message-ID: <9e2205f6-3d7d-fcdd-26ed-a8f7c9f1c814@suse.com>
+Date:   Thu, 30 Jun 2022 10:09:39 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] xen: Fix spelling mistake
+Content-Language: en-US
+To:     Zhang Jiaming <jiaming@nfschina.com>, sstabellini@kernel.org,
+        oleksandr_tyshchenko@epam.com
+Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, renyu@nfschina.com
+References: <20220630075027.68833-1-jiaming@nfschina.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20220630075027.68833-1-jiaming@nfschina.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------fNCBxfoPNxIBxv4WQdbzuGpD"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 65ce9c38326e ("kbuild: move module strip/compression code into
-scripts/Makefile.modinst") added this unused code.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------fNCBxfoPNxIBxv4WQdbzuGpD
+Content-Type: multipart/mixed; boundary="------------8QciTfUEMB4lsjlv1xBOvLsO";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Zhang Jiaming <jiaming@nfschina.com>, sstabellini@kernel.org,
+ oleksandr_tyshchenko@epam.com
+Cc: xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+ liqiong@nfschina.com, renyu@nfschina.com
+Message-ID: <9e2205f6-3d7d-fcdd-26ed-a8f7c9f1c814@suse.com>
+Subject: Re: [PATCH] xen: Fix spelling mistake
+References: <20220630075027.68833-1-jiaming@nfschina.com>
+In-Reply-To: <20220630075027.68833-1-jiaming@nfschina.com>
 
-Perhaps, I thought cmd_none was useful for CONFIG_MODULE_COMPRESS_NONE,
-but I did not use it after all.
+--------------8QciTfUEMB4lsjlv1xBOvLsO
+Content-Type: multipart/mixed; boundary="------------vkyqrtAevLXUTiJzuBfVX8AP"
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+--------------vkyqrtAevLXUTiJzuBfVX8AP
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
- scripts/Makefile.modinst | 3 ---
- 1 file changed, 3 deletions(-)
+T24gMzAuMDYuMjIgMDk6NTAsIFpoYW5nIEppYW1pbmcgd3JvdGU6DQo+IENoYW5nZSAnbWFw
+ZWQnIHRvICdtYXBwZWQnLg0KPiBDaGFuZ2UgJ3VubWFwZWQnIHRvICd1bm1hcHBlZCcuDQo+
+IA0KPiBTaWduZWQtb2ZmLWJ5OiBaaGFuZyBKaWFtaW5nIDxqaWFtaW5nQG5mc2NoaW5hLmNv
+bT4NCg0KUmV2aWV3ZWQtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4NCg0K
+DQpKdWVyZ2VuDQo=
+--------------vkyqrtAevLXUTiJzuBfVX8AP
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
-index c2c43a0ecfe0..16a02e9237d3 100644
---- a/scripts/Makefile.modinst
-+++ b/scripts/Makefile.modinst
-@@ -28,9 +28,6 @@ modules := $(patsubst $(extmod_prefix)%, $(dst)/%$(suffix-y), $(modules))
- __modinst: $(modules)
- 	@:
- 
--quiet_cmd_none =
--      cmd_none = :
--
- #
- # Installation
- #
--- 
-2.32.0
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------vkyqrtAevLXUTiJzuBfVX8AP--
+
+--------------8QciTfUEMB4lsjlv1xBOvLsO--
+
+--------------fNCBxfoPNxIBxv4WQdbzuGpD
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmK9WkMFAwAAAAAACgkQsN6d1ii/Ey99
+dQf/cPF94WiMiaR5qS+vQEg+DHt5IjHajB+kRTARuHdYhhTDiS4ZkDn/oR1xtnJzMW0HqzPjcmQa
+aHB+N2cdEcH1PFyhxTJUPTEObGH3sZksqRzxltq99N/aZ9sNifoTjHkDx1FFwFPs0b+CM6UX+5HN
+4rXt8Rxf2Hdnw6N5jsLI3ZjpoGZ7tCA720ntqJ8AMiDfqxZX/Uizi3yNCJLduum9gu58xKx1ams2
+ugzMLZBIIPg82Nh4pGSL2GnNztIUNkLJD63Z7upSqeZCUAjlnM9hwLIHK4V8v7ljXYWxjCZLz6Aq
+WYEqwhm3eO1QLs14H3iVj8YXm4Vn5NDVh4lxbmo0Zg==
+=d3MF
+-----END PGP SIGNATURE-----
+
+--------------fNCBxfoPNxIBxv4WQdbzuGpD--

@@ -2,149 +2,482 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF7E56164B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C7056164E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232911AbiF3J3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 05:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
+        id S232949AbiF3J3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 05:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiF3J26 (ORCPT
+        with ESMTP id S233335AbiF3J3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 05:28:58 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2723A112
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:28:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656581338; x=1688117338;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0DTG2u6m3ZJQ1eowa1Tp9B3y0nN+bfBmbgViftnv1Aw=;
-  b=wmLZTUIjbmIGUYpqZesy0HS3bxOKc2Z+g/hYAiD8tM1eMTXB+SRU+2kv
-   ZAZSyXj5rIScRJuPCfQc2XwLBOQVUDuQweDPn20/KXqJRXfoVpD5fIpXT
-   y07KNbMYWD8MP05OuWpI/d11pENCHx9MFiqvVA6STFspv1Gc4CVSEJzxr
-   0=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 30 Jun 2022 02:28:57 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 02:28:57 -0700
-Received: from [10.50.30.42] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 30 Jun
- 2022 02:28:52 -0700
-Message-ID: <95d8e5c0-e382-4e8a-c8c6-2acbc0d31ca8@quicinc.com>
-Date:   Thu, 30 Jun 2022 14:58:49 +0530
+        Thu, 30 Jun 2022 05:29:14 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF10F42A35;
+        Thu, 30 Jun 2022 02:29:11 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VHrLXLM_1656581348;
+Received: from 30.97.57.27(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VHrLXLM_1656581348)
+          by smtp.aliyun-inc.com;
+          Thu, 30 Jun 2022 17:29:09 +0800
+Message-ID: <4e4b0130-81a1-567c-0fd5-624f9d18ce85@linux.alibaba.com>
+Date:   Thu, 30 Jun 2022 17:29:07 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] srcu: Reduce blocking agressiveness of expedited grace
- periods further
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [RFC] libubd: library for ubd(userspace block driver based on
+ io_uring passthrough)
 Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-CC:     <paulmck@kernel.org>, <frederic@kernel.org>,
-        <josh@joshtriplett.org>, <rostedt@goodmis.org>,
-        <mathieu.desnoyers@efficios.com>, <jiangshanlai@gmail.com>,
-        <joel@joelfernandes.org>, <linux-kernel@vger.kernel.org>,
-        <zhangfei.gao@foxmail.com>, <boqun.feng@gmail.com>,
-        <urezki@gmail.com>, <shameerali.kolothum.thodi@huawei.com>,
-        <pbonzini@redhat.com>, <mtosatti@redhat.com>,
-        <eric.auger@redhat.com>, <chenxiang66@hisilicon.com>
-References: <20220630041201.18301-1-quic_neeraju@quicinc.com>
- <87o7ya1ozz.wl-maz@kernel.org>
-From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
-In-Reply-To: <87o7ya1ozz.wl-maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     linux-block@vger.kernel.org, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        joseph.qi@linux.alibaba.com
+References: <fd926012-6845-05e4-077b-6c8cfbf3d3cc@linux.alibaba.com>
+ <YrnMwgW7TemVdbXv@T590>
+ <fada5140-077e-6904-f9b6-c7bfba7779eb@linux.alibaba.com>
+ <Yrw4gJq+NaX+TCDz@T590>
+ <b3ef9b0e-f24c-7867-91c8-2bf15c646b77@linux.alibaba.com>
+ <Yr1oMvYCqn5m2oLX@T590>
+From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+In-Reply-To: <Yr1oMvYCqn5m2oLX@T590>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/30/2022 2:56 PM, Marc Zyngier wrote:
-> On Thu, 30 Jun 2022 05:12:01 +0100,
-> Neeraj Upadhyay <quic_neeraju@quicinc.com> wrote:
+On 2022/6/30 17:09, Ming Lei wrote:
+> On Thu, Jun 30, 2022 at 03:16:21PM +0800, Ziyang Zhang wrote:
+>> Hi, Ming
 >>
->> Commit 640a7d37c3f4 ("srcu: Block less aggressively for expedited
->> grace periods") highlights a problem where aggressively blocking
->> SRCU expedited grace periods, as was introduced in commit
->> 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
->> from consuming CPU"), introduces ~2 minutes delay to the overall
->> ~3.5 minutes boot time, when starting VMs with "-bios QEMU_EFI.fd"
->> cmdline on qemu, which results in very high rate of memslots
->> add/remove, which causes > ~6000 synchronize_srcu() calls for
->> kvm->srcu SRCU instance.
+>> On 2022/6/29 19:33, Ming Lei wrote:
+>>> On Wed, Jun 29, 2022 at 11:22:23AM +0800, Ziyang Zhang wrote:
+>>>> Hi Ming,
+>>>>
+>>>> On 2022/6/27 23:29, Ming Lei wrote:
+>>>>> Hi Ziyang,
+>>>>>
+>>>>> On Mon, Jun 27, 2022 at 04:20:55PM +0800, Ziyang Zhang wrote:
+>>>>>> Hi Ming,
+>>>>>>
+>>>>>> We are learning your ubd code and developing a library: libubd for ubd.
+>>>>>> This article explains why we need libubd and how we design it.
+>>>>>>
+>>>>>> Related threads:
+>>>>>> (1) https://lore.kernel.org/all/Yk%2Fn7UtGK1vVGFX0@T590/
+>>>>>> (2) https://lore.kernel.org/all/YnDhorlKgOKiWkiz@T590/
+>>>>>> (3) https://lore.kernel.org/all/20220509092312.254354-1-ming.lei@redhat.com/
+>>>>>> (4) https://lore.kernel.org/all/20220517055358.3164431-1-ming.lei@redhat.com/
+>>>>>>
+>>>>>>
+>>>>>> Userspace block driver(ubd)[1], based on io_uring passthrough,
+>>>>>> allows users to define their own backend storage in userspace
+>>>>>> and provides block devices such as /dev/ubdbX.
+>>>>>> Ming Lei has provided kernel driver code: ubd_drv.c[2]
+>>>>>> and userspace code: ubdsrv[3].
+>>>>>>
+>>>>>> ubd_drv.c simply passes all blk-mq IO requests
+>>>>>> to ubdsrv through io_uring sqes/cqes. We think the kernel code
+>>>>>> is pretty well-designed.
+>>>>>>
+>>>>>> ubdsrv is implemented by a single daemon
+>>>>>> and target(backend) IO handling(null_tgt and loop_tgt) 
+>>>>>> is embedded in the daemon. 
+>>>>>> While trying ubdsrv, we find ubdsrv is hard to be used 
+>>>>>> by our backend.
+>>>>>
+>>>>> ubd is supposed to provide one generic framework for user space block
+>>>>> driver, and it can be used for doing lots of fun/useful thing.
+>>>>>
+>>>>> If I understand correctly, this isn't same with your use case:
+>>>>>
+>>>>> 1) your user space block driver isn't generic, and should be dedicated
+>>>>> for Alibaba's uses
+>>>>>
+>>>>> 2) your case has been there for long time, and you want to switch from other
+>>>>> approach(maybe tcmu) to ubd given ubd has better performance.
+>>>>>
+>>>>
+>>>> Yes, you are correct :)
+>>>> The idea of design libubd is actually from libtcmu.
+>>>>
+>>>> We do have some userspace storage system as the IO handling backend, 
+>>>> and we need ubd to provide block drivers such as /dev/ubdbX for up layer client apps.
+>>>>
+>>>>
+>>>> I think your motivation is that provides a complete user block driver to users
+>>>> and they DO NOT change any code.
+>>>> Users DO change their code using libubd for embedding libubd into the backend.
+>>>>
+>>>>
+>>>>>> First is description of our backend:
+>>>>>>
+>>>>>> (1) a distributing system sends/receives IO requests 
+>>>>>>     through network.
+>>>>>>
+>>>>>> (2) The system use RPC calls among hundreds of
+>>>>>>      storage servers and RPC calls are associated with data buffers
+>>>>>>      allocated from a memory pool.
+>>>>>>
+>>>>>> (3) On each server for each device(/dev/vdX), our backend runs
+>>>>>>      many threads to handle IO requests and manage the device. 
+>>>>>>
+>>>>>> Second are reasons why ubdsrv is hard to use for us:
+>>>>>>
+>>>>>> (1) ubdsrv requires the target(backend) issues IO requests
+>>>>>>     to the io_uring provided by ubdsrv but our backend 
+>>>>>>     uses something like RPC and does not support io_uring.
+>>>>>
+>>>>> As one generic framework, the io command has to be io_uring
+>>>>> passthrough, and the io doesn't have to be handled by io_uring.
+>>>>
+>>>> Yes, our backend define its own communicating method.
+>>>>
+>>>>>
+>>>>> But IMO io_uring is much more efficient, so I'd try to make async io
+>>>>> (io uring) as the 1st citizen in the framework, especially for new
+>>>>> driver.
+>>>>>
+>>>>> But it can support other way really, such as use io_uring with eventfd,
+>>>>> the other userspace context can handle io, then wake up io_uring context
+>>>>> via eventfd. You may not use io_uring for handling io, but you still
+>>>>> need to communicate with the context for handling io_uring passthrough
+>>>>> command, and one mechanism(such as eventfd) has to be there for the
+>>>>> communication.
+>>>>
+>>>> Ok, eventfd may be helpful. 
+>>>> If you read my API, you may find ubdlib_complete_io_request().
+>>>> I think the backend io worker thread can call this function to tell the 
+>>>> ubd queue thread(the io_uring context in it) to commit the IO.
+>>>
+>>> The ubdlib_complete_io_request() has to be called in the same pthread
+>>> context, that looks not flexible. When you handle IO via non-io_uring in the same
+>>> context, the cpu utilization in submission/completion side should be
+>>> higher than io_uring. And this way should be worse than the usage in
+>>> ubd/loop, that is why I suggest to use one io_uring for handling both
+>>> io command and io request if possible.
 >>
->> Below table captures the experiments done by Zhangfei Gao and Shameer
->> to measure the boottime impact with various values of non-sleeping
->> per phase counts, with HZ_250 and preemption enabled:
+>> ubdlib_complete_io_request() can be called in the io worker thread,
+>> not in the ubdsrv queue thread(with the io_uring context for handling uring_cmd).
 >>
->> +──────────────────────────+────────────────+
->> | SRCU_MAX_NODELAY_PHASE   | Boot time (s)  |
->> +──────────────────────────+────────────────+
->> | 100                      | 30.053         |
->> | 150                      | 25.151         |
->> | 200                      | 20.704         |
->> | 250                      | 15.748         |
->> | 500                      | 11.401         |
->> | 1000                     | 11.443         |
->> | 10000                    | 11.258         |
->> | 1000000                  | 11.154         |
->> +──────────────────────────+────────────────+
+>> You can find ubd_runner.c in my libubd repo. There are many io worker
+>> threads for each ubdsrv queue to handle IO requests.
 >>
->> Analysis on the experiment results showed improved boot time
->> with non blocking delays close to one jiffy duration. This
->> was also seen when number of per-phase iterations were scaled
->> to one jiffy.
+>> Actually this idea comes from tcmu-runner. The data flow is:
 >>
->> So, this change scales per-grace-period phase number of non-sleeping
->> polls, such that, non-sleeping polls are done for one jiffy. In addition
->> to this, srcu_get_delay() call in srcu_gp_end(), which is used to calculate
->> the delay used for scheduling callbacks, is replaced with the check for
->> expedited grace period. This is done, to schedule cbs for completed expedited
->> grace periods immediately, which results in improved boot time seen in
->> experiments.
+>> 1) in ubdsrv queue thread, io_uring_enter(): returns(IO reqs received from blk-mq)
 >>
->> In addition to the changes to default per phase delays, this change
->> adds 3 new kernel parameters - srcutree.srcu_max_nodelay,
->> srcutree.srcu_max_nodelay_phase, srcutree.srcu_retry_check_delay.
->> This allows users to configure the srcu grace period scanning delays,
->> depending on their system configuration requirements.
+>> 2) in ubdsrv queue thread, ubdsrv_reap_requests(): iterate on each cqe(with an IO req),
+>>    
+>>    for READ/WRITE requests, ubd_aio_queue_io() to enqueue the IO req into a io_queue
+>>    (each ubdsrv queue has one io_queue). This IO req's status is IO_HANDLING_ASYNC.
+>>     
+>>    for other simple(can be handled very quickly), 
+>>    handle it right now and call ubdlib_complete_io_request()
 >>
->> Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
->> Tested-by: Marc Zyngier <maz@kernel.org>
->> ---
+>> 3) in ubdsrv queue thread, ubdsrv_commit_and_fetch(): iterate on all IO slots per ubdsrv queue
+>>    and setup sqe if one IO(IO completion) is ready to commit.
+>>    
+>>    Here, some IO slots are still IO_HANDLING_ASYNC so no sqe is generated for them.
 >>
->> Change in v2:
 >>
->>    - Change srcu_max_nodelay default value to consider phase delay
->>      iterations
->>    - Apply Pauls' feedback
->>    - Add Marc's Tested-by
+>> 4)  in ubdsrv queue thread, io_uring_enter(): submit all sqes and wait for cqes
+>>     (io_uring_enter() will return after at least one IO req is received from blk-mq)
+>>    
+>> 5) When 3) or 4) happens, at the same time in ubdsrv queue IO worker threads:
+>>    each io worker thread try to deque and handle one IO req from io_queue per ubdsrv queue.
+>>    
+>>    After the IO worker handles the IO req(WRITE/READ), it calls ubdlib_complete_io_request()
+>>    This function can mark this  IO req's status to ready to commit.
+>>
+>> IO handling/completion and io_uring_enter() can happen at the same time.
+>>
+>> Besides, io_uring_enter can:
+>>
+>> 1) block and wait for cqes until at least
+>> one blk-mq req comes from queue_rq()
+>>
+>> 2) submit sqes(with last IO completion and next fetch)
+>>
+>> so I have to consider how to notify io_uring about io completion 
+>> after io_uring_enter() is slept(block and wait for cqes).
 > 
-> I gave this a go on the same platform as v1, and the result is
-> actually much better as I didn't have to add any extra command-line
-> option to get to a reasonable result (41s). I think we have a winner.
+> Yeah, that was exactly my question, :-)
 > 
-
-Thank you for testing it!
-
-
-Thanks
-Neeraj
-
-> Thanks again,
+>>
+>> In current version of ubd_runner(an async libubd target), I try to use an "unblock"
+>> io_uring_enter_timeout() and caller can set a timeout value for it.
+>> So IO completions happen after io_uring_enter_timeout() call can be committed
+>> by next io_uring_enter_timeout() call...
+>>
+>> But this is a very ugly implementation 
+>> because I may waste CPU on useless loops in ubdsrv queue thread if
+>> blk-mq reqs do not income frequently.
+>>
+>> You mentioned that eventfd may be helpful and I agree with you. :)
+>> I can register an eventfd in io_uring after ubd_aio_queue_io() and write the eventfd
+>> in  ubdlib_complete_io_request().
+>>
+>> I will fix my code.
 > 
-> 	M.
+> FYI, there is one example about using eventfd to wakeup io_uring, which
+> can be added to the library for your usecase:
 > 
+> https://gist.github.com/1Jo1/6496d1b8b6b363c301271340e2eab95b
+
+Thanks, will take a view.
+
+> 
+>>
+>>>
+>>>>
+>>>>
+>>>>
+>>>>>
+>>>>>>
+>>>>>> (2) ubdsrv forks a daemon and it takes over everything.
+>>>>>>     Users should type "list/stop/del" ctrl-commands to interact with
+>>>>>>     the daemon. It is inconvenient for our backend
+>>>>>>     because it has threads(from a C++ thread library) running inside.
+>>>>>
+>>>>> No, list/stop/del won't interact with the daemon, and the per-queue
+>>>>> pthread is only handling IO commands(io_uring passthrough) and IO request.
+>>>>>
+>>>>
+>>>>
+>>>> Sorry I made a mistake.
+>>>>
+>>>> I mean from user's view, 
+>>>> he has to type list/del/stop from cmdlind to control the daemon.
+>>>> (I know the control flow is cmdline-->ubd_drv.c-->ubdsrv daemon).
+>>>>
+>>>> This is a little weird if we try to make a ubd library.
+>>>> So I actually provides APIs in libubd for users to do these list/del/stop works.
+>>>
+>>> OK, that is fine to export APIs for admin purpose.
+>>>
+>>>>
+>>>>
+>>>>>>
+>>>>>> (3) ubdsrv PRE-allocates internal data buffers for each ubd device.
+>>>>>>     The data flow is:
+>>>>>>     bio vectors <-1-> ubdsrv data buffer <-2-> backend buffer(our RPC buffer).
+>>>>>>     Since ubdsrv does not export its internal data buffer to backend,
+>>>>>>     the second copy is unavoidable. 
+>>>>>>     PRE-allocating data buffer may not be a good idea for wasting memory
+>>>>>>     if there are hundreds of ubd devices(/dev/ubdbX).
+>>>>>
+>>>>> The preallocation is just virtual memory, which is cheap and not pinned, but
+>>>>> ubdsrv does support buffer provided by io command, see:
+>>>>>
+>>>>> https://github.com/ming1/linux/commit/0a964a1700e11ba50227b6d633edf233bdd8a07d
+>>>>
+>>>> Actually I discussed on the design of pre-allocation in your RFC patch for ubd_drv
+>>>> but you did not reply :)
+>>>>
+>>>> I paste it here:
+>>>>
+>>>> "I am worried about the fixed-size(size is max io size, 256KiB) pre-allocated data buffers in UBDSRV
+>>>> may consume too much memory. Do you mean these pages can be reclaimed by sth like madvise()?
+>>>> If (1)swap is not set and (2)madvise() is not called, these pages may not be reclaimed."
+>>>>
+>>>> I observed that your ubdsrv use posix_memalign() to pre-allocate data buffers, 
+>>>> and I have already noticed the memory cost while testing your ubdsrv with hundreds of /dev/ubdbX.
+>>>
+>>> Usually posix_memalign just allocates virtual memory which is unlimited
+>>> in 64bit arch, and pages should be allocated until the buffer is read or write.
+>>> After the READ/WRITE is done, kernel still can reclaim the pages in this
+>>> virtual memory.
+>>>
+>>> In future, we still may optimize the memory uses via madvise, such as
+>>> MADV_DONTNEED, after the slot is idle for long enough.
+>>
+>> Ok, thanks for explanation. 
+>>
+>>>
+>>>>
+>>>> Another IMPORTANT problem is your commit:
+>>>> https://github.com/ming1/linux/commit/0a964a1700e11ba50227b6d633edf233bdd8a07d
+>>>> may be not helpful for WRITE requests if I understand correctly.
+>>>>
+>>>> Consider this data flow:
+>>>>
+>>>> 1. ubdsrv commits an IO req(req1, a READ req).
+>>>>
+>>>> 2. ubdsrv issues a sqe(UBD_IO_COMMIT_AND_FETCH_REQ), and sets io->addr to addr1.
+>>>>    addr1 is the addr of buffer user passed.
+>>>>    
+>>>>
+>>>> 3. ubd gets the sqe and commits req1, sets io->addr to addr1.
+>>>>
+>>>> 4. ubd gets IO req(req2, a WRITE req) from blk-mq(queue_rq) and commit a cqe.
+>>>>
+>>>> 5. ubd copys data to be written from biovec to addr1 in a task_work.
+>>>>
+>>>> 6. ubdsrv gets the cqe and tell the IO target to handle req2.
+>>>>
+>>>> 7. IO target handles req2. It is a WRITE req so target issues a io_uring write
+>>>>    cmd(with buffer set to addr1).
+>>>>
+>>>>
+>>>>
+>>>> The problem happens in 5). You cannot know the actual data_len of an blk-mq req
+>>>> until you get one in queue_rq. So length of addr1 may be less than data_len.
+>>>
+>>> So far, the actual length of buffer has to be set as at least rq_max_blocks, since
+>>> we set it as ubd queue's max hw sectors. Yeah, you may argue memory
+>>> waste, but process virtual address is unlimited for 64bit arch, and
+>>> pages are allocated until actual read/write is started.
+>>
+>> Ok, since I allow users to config rq_max_blocks in libubd, 
+>> it's users' responsibility to ensure length of user buffers
+>> is at least rq_max_blocks.
+>>
+>> Now I agree on your commit:
+>> https://github.com/ming1/linux/commit/0a964a1700e11ba50227b6d633edf233bdd8a07d
+>>
+>> Provide WRITE buffer in advance(when sending COMMIT_AND_FETCH) seems OK :)
+>>
+>>>
+>>>>>
+>>>>>>
+>>>>>> To better use ubd in more complicated scenarios, we have developed libubd.
+>>>>>> It does not assume implementation of backend and can be embedded into it.
+>>>>>> We refer to the code structure of tcmu-runner[4], 
+>>>>>> which includes a library(libtcmu) for users 
+>>>>>> to embed tcmu-runner inside backend's code. 
+>>>>>> It:
+>>>>>>
+>>>>>> (1) Does not fork/pthread_create but embedded in backend's threads
+>>>>>
+>>>>> That is because your backend may not use io_uring, I guess.
+>>>>>
+>>>>> But it is pretty easy to move the decision of creating pthread to target
+>>>>> code, which can be done in the interface of .prepare_target().
+>>>>
+>>>> I think the library should not create any thread if we want a libubd.
+>>>
+>>> I Agree.
+>>>
+>>>>
+>>>>>
+>>>>>>
+>>>>>> (2) Provides libubd APIs for backend to add/delete ubd devices 
+>>>>>>     and fetch/commit IO requests
+>>>>>
+>>>>> The above could be the main job of libubd.
+>>>>
+>>>> indeed.
+>>>>
+>>>>>
+>>>>>>
+>>>>>> (3) simply passes backend-provided data buffers to ubd_drv.c in kernel,
+>>>>>>     since the backend actually has no knowledge 
+>>>>>>     on incoming data size until it gets an IO descriptor.
+>>>>>
+>>>>> I can understand your requirement, not look at your code yet, but libubd
+>>>>> should be pretty thin from function viewpoint, and there are lots of common
+>>>>> things to abstract/share among all drivers, please see recent ubdsrv change:
+>>>>>
+>>>>> https://github.com/ming1/ubdsrv/commits/master
+>>>>>
+>>>>> in which:
+>>>>> 	- coroutine is added for handling target io
+>>>>> 	- the target interface(ubdsrv_tgt_type) has been cleaned/improved for
+>>>>> 	supporting complicated target
+>>>>> 	- c++ support
+>>>>
+>>>> Yes, I have read your coroutine code but I am not an expert of C++ 20.:(
+>>>> I think it is actually target(backend) design and ubd should not assume 
+>>>> how the backend handle IOs. 
+>>>>
+>>>> The work ubd in userspace has to be done is:
+>>>>
+>>>> 1) give some IO descriptors to backend, such as ubd_get_io_requests()
+>>>>
+>>>> 2) get IO completion form backend, such as ubd_complete_io_requests()
+>>>
+>>> Or the user provides/registers two callbacks: handle_io_async() and
+>>> io_complete(), the former is called when one request comes from ubd
+>>> driver, the latter(optional) is called when one io is done.
+>>>
+>>> Also you didn't mention how you notify io_uring about io completion after
+>>> io_uring_enter() is slept if your backend code doesn't use io_uring to
+>>> handle io.
+>>>
+>>> I think one communication mechanism(such as eventfd) is needed for your
+>>> case.
+>>
+>> Ok, I will try eventfd with io_uring.
+>>
+>>>
+>>>>
+>>>>
+>>>>
+>>>>>
+>>>>> IMO, libubd isn't worth of one freshly new project, and it could be integrated
+>>>>> into ubdsrv easily. The potential users could be existed usersapce
+>>>>> block driver projects.
+>>>>
+>>>> Yes, so many userspace storage systems can use ubd!
+>>>> You may look at tcmu-runner. It:
+>>>>
+>>>> 1) provides a library(libtcmu.c) for those who have a existing backend.
+>>>>
+>>>> 2) provides a runner(main.c in tcmu-runner) like your ubdsrv 
+>>>>    for those who just want to run it. 
+>>>>    And the runner is build on top of libtcmu.
+>>>>
+>>>>>
+>>>>> If you don't object, I am happy to co-work with you to add the support
+>>>>> for libubd in ubdsrv, then we can avoid to invent a wheel
+>>>>
+>>>> +1 :)
+>>>
+>>> Thinking of further, I'd suggest to split ubdsrv into two parts:
+>>>
+>>> 1) libubdsrv
+>>> - provide APIs like what you did in libubd
+>>> - provide API for notify io_uring(handling io command) that one io is
+>>> completed, and the API should support handling IO from other context
+>>> (not same with the io_uring context for handling io command).
+>>>
+>>> 2) ubd target
+>>> - built on libubdsrv, such as ubd command is built on libubdsrv, and
+>>> specific target implementation is built on the library too.
+>>>
+>>> It shouldn't be hard to work towards this direction, and I guess this
+>>> way should make current target implementation more clean.
+>>>
+>>
+>> Yes, this is like tcmu-runner's structure: a libtcmu and some target
+>> Thanks, Ming.  Glad to co-work with you.
+>>
+>> I will take your advice and improve libubd(the communication mechanism, maybe eventfd).
+> 
+> I have added libublk branch for working towards this direction, if we
+> cowork on libublk, please write patch against this branch, then I can
+> apply your patch directly.
+> 
+> https://github.com/ming1/ubdsrv/tree/libublk
+
+Ok, but It concerns me that libubdsrv may change current ubdsrv project's structure a lot
+because:
+1) target implementation will be built on top of libubdsrv and the target
+   should create pthread(ubdsrv loop) itself.
+
+2) have to remove pthread/process(daemon) in current ubdsrv to build libubdsrv.
+   It was really a hard job. :-(
+
+If you agree to adjust current ubdsrv project's structure, I will start right now.
+
+> 
+> Thanks, 
+> Ming

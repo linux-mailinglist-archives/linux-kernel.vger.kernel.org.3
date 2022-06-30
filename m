@@ -2,138 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8656561795
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 964E35617CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234534AbiF3KU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 06:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
+        id S234862AbiF3KXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 06:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232866AbiF3KUz (ORCPT
+        with ESMTP id S235021AbiF3KWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 06:20:55 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA21545064;
-        Thu, 30 Jun 2022 03:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656584454; x=1688120454;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=4FGMng3U7GLnTku7mVOT+9WivvYzRVqmckgQnASfO9g=;
-  b=Ql7uZZoKVL79/biniHg1ixcW1/+HejRnB0gKU2OHD3IKpn/VQZdHNUR3
-   MIhLK/xan1qP6/Oj+gyjDTOnEgGrlKJgjCpnLQWzH+6LPgqZnHH9S3P/p
-   ADHcaq4N48AhXIVombcCkpdTa1bObojX4AKuCViGUYMhrmc1Pr5q22tAP
-   MLtEYflBv26zufbro0h0pSmGilkKqJ0+vEvNTRvzYCRV+bBWThM9djew2
-   KMWcmKzErZ4ySMT/5PJ6mbqKMWmRuWydXRZXm/4Uqwd3deXwi4xaSSnjR
-   91LYYxVZb590MplsyFOQB9owAJkDvnfEQjL5nxffp6ftVu1d7bxecLrKt
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="346300209"
-X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
-   d="scan'208";a="346300209"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 03:20:53 -0700
-X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
-   d="scan'208";a="647832875"
-Received: from emontau-mobl2.ger.corp.intel.com ([10.249.42.178])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 03:20:50 -0700
-Date:   Thu, 30 Jun 2022 13:20:49 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] 8250_dwlib: Convert bitops to newer form
-In-Reply-To: <CAHp75VcH9O6=Lk06w3Set==zBEFyseCSDN6OUE3n7g4ZnBM4Bg@mail.gmail.com>
-Message-ID: <eeba3ce9-c0a1-2363-154a-82b0b4468e3@linux.intel.com>
-References: <20220630100536.41329-1-ilpo.jarvinen@linux.intel.com> <CAHp75VcH9O6=Lk06w3Set==zBEFyseCSDN6OUE3n7g4ZnBM4Bg@mail.gmail.com>
+        Thu, 30 Jun 2022 06:22:46 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C6E457B6
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 03:22:41 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id n8so11950499eda.0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 03:22:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=y5UsByWLMWEYobec0CN6KDFyOSWUvAwaZ8r1U9iYpCA=;
+        b=GSP8LRnEUC3YB9em437uwIQRy41VuAuO8g4G5+rvlN9pk2hRaUTIC7RPWtP+4/iLfX
+         NbsuWSaMTClElRWXyedG58ZqOOrY3YChazC5x54rw4O8k7egy1jc2YTFgWJa0c+1ttes
+         WDniBrpGY8CGEvQSfn1HIIBiabI/klkG7e0t/6oshc86Mmf1IwxQVWtQIdNQz47n2Wxq
+         Ue14QtxdR3M9VfCM5ucJ5Mlfr4QiWIiaFaUzmo4H9QDF7WWHx7EXyIYXWUM/c6ey2xDY
+         JLckjeXOeuKccRqfKBHHRBOHdgNiEomFXjbyXjpOSC/DPYhETa51oG8U7CQViQueT1hO
+         iA+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=y5UsByWLMWEYobec0CN6KDFyOSWUvAwaZ8r1U9iYpCA=;
+        b=KdI5pm6bD3JIShy2wQ9o1sGPw2/9IWUb7T3ZWT+sL6o0VatLZ7KSzyovdVF2OHhTLP
+         ZW7HnP3y29V+2tuY1Xi+8AYxa98Rj9nUn3FPu7tdltue5C6PgcLizRs9lhiBWmm63uNH
+         ZJXAKtKqaKAYhsL/ZEvhspipdWdioLuJH1QY2b+LRzg02+DsrrjxvuNP3eEuDIG3YU11
+         UVsD7PSbrkT5uMjyTaB0bJHsT4Qkr9CsaxrxzjL9LoLXR1kymJEPb+wAdzngvMAePo0d
+         PnoMgJ6olVDyX6aipyhiY9GcLdC5FFzRh7v3Co8s7HZGsX3D8zfILI3OJEegSpwUnRSW
+         mhuw==
+X-Gm-Message-State: AJIora8BrZH/PJ9tPokjYhzMbXhBgGA40ch2Ho/L60sLhbXYxiWw8aH4
+        SdG8REFmMRNkJu3jp6iWAO0jPQ==
+X-Google-Smtp-Source: AGRyM1v/sMpb6LQCI0Xbq3TfjZJdpaj0M12tlJRfujf5QX2IMx+u6M1wnBeddEncbkc3uKPAx1y/Nw==
+X-Received: by 2002:aa7:d484:0:b0:435:65b0:e2d8 with SMTP id b4-20020aa7d484000000b0043565b0e2d8mr10622588edr.373.1656584559605;
+        Thu, 30 Jun 2022 03:22:39 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id u17-20020a056402111100b0042deea0e961sm13022756edv.67.2022.06.30.03.22.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 03:22:39 -0700 (PDT)
+Message-ID: <47d8d747-54ef-df52-3b9c-acb9a77fa14a@blackwall.org>
+Date:   Thu, 30 Jun 2022 13:22:37 +0300
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-29156649-1656584452=:1605"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that multicast
+ packets cannot unlock a locked port
+Content-Language: en-US
+To:     Hans Schultz <hans@kapio-technology.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+References: <20220630100512.604364-1-hans@kapio-technology.com>
+ <20220630100512.604364-2-hans@kapio-technology.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20220630100512.604364-2-hans@kapio-technology.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-29156649-1656584452=:1605
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Thu, 30 Jun 2022, Andy Shevchenko wrote:
-
-> On Thu, Jun 30, 2022 at 12:08 PM Ilpo Järvinen
-> <ilpo.jarvinen@linux.intel.com> wrote:
-> >
-> > Instead of open-coding, use BIT(), GENMASK(), and FIELD_GET() helpers.
+On 30/06/2022 13:05, Hans Schultz wrote:
+> This makes it possible to use the locked port feature with learning
+> turned on which is needed for various driver features.
 > 
-> FIELD_GET() requires bitfield.h to be included. Is this the case already?
-
-It's there already.
-
--- 
- i.
-
-> If so,
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Signed-off-by: Hans Schultz <hans@kapio-technology.com>
+> ---
+>  net/bridge/br_input.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >  drivers/tty/serial/8250/8250_dwlib.c | 26 +++++++++++++-------------
-> >  1 file changed, 13 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/drivers/tty/serial/8250/8250_dwlib.c b/drivers/tty/serial/8250/8250_dwlib.c
-> > index da330ef46446..a8bbed74ea70 100644
-> > --- a/drivers/tty/serial/8250/8250_dwlib.c
-> > +++ b/drivers/tty/serial/8250/8250_dwlib.c
-> > @@ -46,21 +46,21 @@
-> >  #define DW_UART_LCR_EXT_TRANSMIT_MODE  BIT(3)
-> >
-> >  /* Component Parameter Register bits */
-> > -#define DW_UART_CPR_ABP_DATA_WIDTH     (3 << 0)
-> > -#define DW_UART_CPR_AFCE_MODE          (1 << 4)
-> > -#define DW_UART_CPR_THRE_MODE          (1 << 5)
-> > -#define DW_UART_CPR_SIR_MODE           (1 << 6)
-> > -#define DW_UART_CPR_SIR_LP_MODE                (1 << 7)
-> > -#define DW_UART_CPR_ADDITIONAL_FEATURES        (1 << 8)
-> > -#define DW_UART_CPR_FIFO_ACCESS                (1 << 9)
-> > -#define DW_UART_CPR_FIFO_STAT          (1 << 10)
-> > -#define DW_UART_CPR_SHADOW             (1 << 11)
-> > -#define DW_UART_CPR_ENCODED_PARMS      (1 << 12)
-> > -#define DW_UART_CPR_DMA_EXTRA          (1 << 13)
-> > -#define DW_UART_CPR_FIFO_MODE          (0xff << 16)
-> > +#define DW_UART_CPR_ABP_DATA_WIDTH     GENMASK(1, 0)
-> > +#define DW_UART_CPR_AFCE_MODE          BIT(4)
-> > +#define DW_UART_CPR_THRE_MODE          BIT(5)
-> > +#define DW_UART_CPR_SIR_MODE           BIT(6)
-> > +#define DW_UART_CPR_SIR_LP_MODE                BIT(7)
-> > +#define DW_UART_CPR_ADDITIONAL_FEATURES        BIT(8)
-> > +#define DW_UART_CPR_FIFO_ACCESS                BIT(9)
-> > +#define DW_UART_CPR_FIFO_STAT          BIT(10)
-> > +#define DW_UART_CPR_SHADOW             BIT(11)
-> > +#define DW_UART_CPR_ENCODED_PARMS      BIT(12)
-> > +#define DW_UART_CPR_DMA_EXTRA          BIT(13)
-> > +#define DW_UART_CPR_FIFO_MODE          GENMASK(23, 16)
-> >
-> >  /* Helper for FIFO size calculation */
-> > -#define DW_UART_CPR_FIFO_SIZE(a)       (((a >> 16) & 0xff) * 16)
-> > +#define DW_UART_CPR_FIFO_SIZE(a)       (FIELD_GET(DW_UART_CPR_FIFO_MODE, (a)) * 16)
-> >
-> >  /*
-> >   * divisor = div(I) + div(F)
-> > --
-> > 2.30.2
-> >
-> 
-> 
-> 
+> diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
+> index 68b3e850bcb9..a3ce0a151817 100644
+> --- a/net/bridge/br_input.c
+> +++ b/net/bridge/br_input.c
+> @@ -215,6 +215,7 @@ static void __br_handle_local_finish(struct sk_buff *skb)
+>  	if ((p->flags & BR_LEARNING) &&
+>  	    nbp_state_should_learn(p) &&
+>  	    !br_opt_get(p->br, BROPT_NO_LL_LEARN) &&
+> +	    !(p->flags & BR_PORT_LOCKED) &&
+>  	    br_should_learn(p, skb, &vid))
+>  		br_fdb_update(p->br, p, eth_hdr(skb)->h_source, vid, 0);
+>  }
 
---8323329-29156649-1656584452=:1605--
+hmm this is called for link-local traffic (01:80:c2), the title is misleading
+please include the real traffic type because it doesn't concern mcast
+
+Also please include the long explanation from the 0 patch in this one
+and drop the cover letter, it's good to have the info.
+
+Thanks,
+ Nik
+
+
+
+

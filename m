@@ -2,99 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA20561B6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5D7561B75
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbiF3NcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 09:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37032 "EHLO
+        id S234067AbiF3NhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 09:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234211AbiF3NcN (ORCPT
+        with ESMTP id S232771AbiF3NhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:32:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7EB366B7;
-        Thu, 30 Jun 2022 06:32:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF78A61F89;
-        Thu, 30 Jun 2022 13:32:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FDAEC34115;
-        Thu, 30 Jun 2022 13:32:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656595932;
-        bh=P4ygcIAZvGne77x7p3ESNwZJYO63gwNBVMImtEJj/Aw=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=uaLMUe0Kjgw7n42wD8QtWWvbYn63qmHgABLj0+dirlxPm7dLoQ8BxA3CimjMDUhB8
-         e52pmNAiqhXWOJIukn5AgG8zcO2cEcVKw6PmvTkMXeZpYrLSqdu0NVy1ydMyH/DKCQ
-         hVyKYIazGjilWAK6i9GvmJuKaMeV2ACUWbmJ7b54Rxqb8zaHHWyAyTXxINIA4pvCV2
-         5cPn/IJ2TYqaYYAhLIxFRsaRWcRtibZ6tdmN6QgyNvALkv9pMsmzgXlgvaTjy4Mmft
-         HeUzOxJonMkfb7otYacjhbuGzEPksBxuETqyuyMf8KJwSO0Ao4SEhOb6rWrX0RChNV
-         Hfc/RZV5a/NPA==
-From:   Mark Brown <broonie@kernel.org>
-To:     stephan.gerhold@kernkonzept.com
-Cc:     bjorn.andersson@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, lgirdwood@gmail.com,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <20220623094614.1410180-1-stephan.gerhold@kernkonzept.com>
-References: <20220623094614.1410180-1-stephan.gerhold@kernkonzept.com>
-Subject: Re: [PATCH 0/3] regulator: qcom_smd: Add PM8909 and fix pm8916_pldo range
-Message-Id: <165659593011.540699.6977460772131709701.b4-ty@kernel.org>
-Date:   Thu, 30 Jun 2022 14:32:10 +0100
+        Thu, 30 Jun 2022 09:37:16 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEBD29826;
+        Thu, 30 Jun 2022 06:37:15 -0700 (PDT)
+Received: from fraeml741-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LYfVw1j3Xz687ZT;
+        Thu, 30 Jun 2022 21:36:24 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml741-chm.china.huawei.com (10.206.15.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 30 Jun 2022 15:37:12 +0200
+Received: from [10.126.174.156] (10.126.174.156) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 30 Jun 2022 14:37:12 +0100
+Message-ID: <7aad2916-1774-76c5-339a-bbcac4655642@huawei.com>
+Date:   Thu, 30 Jun 2022 14:37:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2] hisi_lpc: Use acpi_dev_for_each_child()
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+CC:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <12026357.O9o76ZdvQC@kreacher> <2657553.mvXUDI8C0e@kreacher>
+ <CAJZ5v0jNOsAXSuX9dw9N3w12Y_nq62Z=OL4QQTwH=OnReGpQvA@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <CAJZ5v0jNOsAXSuX9dw9N3w12Y_nq62Z=OL4QQTwH=OnReGpQvA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.174.156]
+X-ClientProxiedBy: lhreml727-chm.china.huawei.com (10.201.108.78) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Jun 2022 11:46:11 +0200, Stephan Gerhold wrote:
-> Fix the voltage range for the pm8916_pldo in the qcom_smd-regulator
-> driver and add definitions for the regulators available in PM8909.
+On 30/06/2022 13:48, Rafael J. Wysocki wrote:
+> On Wed, Jun 29, 2022 at 3:47 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>>
+>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>
+>> Instead of walking the list of children of an ACPI device directly,
+>> use acpi_dev_for_each_child() to carry out an action for all of
+>> the given ACPI device's children.
+>>
+>> This will help to eliminate the children list head from struct
+>> acpi_device as it is redundant and it is used in questionable ways
+>> in some places (in particular, locking is needed for walking the
+>> list pointed to it safely, but it is often missing).
 > 
-> Stephan Gerhold (3):
->   regulator: qcom_smd: Fix pm8916_pldo range
->   regulator: dt-bindings: qcom,smd-rpm: Add PM8909
->   regulator: qcom_smd: Add PM8909 RPM regulators
+> I've overlooked another usage of the children list in hisi_lpc, in
+> hisi_lpc_acpi_probe(), and eliminating that one is a bit more
+> complicated.
 > 
-> [...]
+> So please scratch this one and I will send a v3 when 0-day tells me
+> that it builds.
 
-Applied to
+Hi Rafael,
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+If it makes things simpler then I can just fix the driver so that we 
+can't unload it. Let me know if that suits better.
 
-Thanks!
+Cheers
 
-[1/3] regulator: qcom_smd: Fix pm8916_pldo range
-      commit: e8977917e116d1571dacb8e9864474551c1c12bd
-[2/3] regulator: dt-bindings: qcom,smd-rpm: Add PM8909
-      commit: 8cbb948a7cc2875d09234e2ce0424bc501c370b9
-[3/3] regulator: qcom_smd: Add PM8909 RPM regulators
-      commit: bc4d193238be4ef8ecee1ba0e0371169ad448c31
+> 
+>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>> Acked-by: John Garry <john.garry@huawei.com>
+>> ---
+>>
+>> -> v2:
+>>     * Drop unused local variable (John).
+>>     * Add ACK from John.
+>>
+>> ---
+>>   drivers/bus/hisi_lpc.c |   14 ++++++++------
+>>   1 file changed, 8 insertions(+), 6 deletions(-)
+>>
+>> Index: linux-pm/drivers/bus/hisi_lpc.c
+>> ===================================================================
+>> --- linux-pm.orig/drivers/bus/hisi_lpc.c
+>> +++ linux-pm/drivers/bus/hisi_lpc.c
+>> @@ -471,6 +471,12 @@ static int hisi_lpc_acpi_remove_subdev(s
+>>          return 0;
+>>   }
+>>
+>> +static int hisi_lpc_acpi_clear_enumerated(struct acpi_device *adev, void *not_used)
+>> +{
+>> +       acpi_device_clear_enumerated(adev);
+>> +       return 0;
+>> +}
+>> +
+>>   struct hisi_lpc_acpi_cell {
+>>          const char *hid;
+>>          const char *name;
+>> @@ -480,13 +486,9 @@ struct hisi_lpc_acpi_cell {
+>>
+>>   static void hisi_lpc_acpi_remove(struct device *hostdev)
+>>   {
+>> -       struct acpi_device *adev = ACPI_COMPANION(hostdev);
+>> -       struct acpi_device *child;
+>> -
+>>          device_for_each_child(hostdev, NULL, hisi_lpc_acpi_remove_subdev);
+>> -
+>> -       list_for_each_entry(child, &adev->children, node)
+>> -               acpi_device_clear_enumerated(child);
+>> +       acpi_dev_for_each_child(ACPI_COMPANION(hostdev),
+>> +                               hisi_lpc_acpi_clear_enumerated, NULL);
+>>   }
+>>
+>>   /*
+>>
+>>
+>>
+> .
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

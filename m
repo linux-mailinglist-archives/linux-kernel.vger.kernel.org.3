@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 973D35613FD
+	by mail.lfdr.de (Postfix) with ESMTP id 4F4E15613FC
 	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbiF3IBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 04:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
+        id S231920AbiF3IBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 04:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233472AbiF3IAa (ORCPT
+        with ESMTP id S233276AbiF3IAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 04:00:30 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1804163F;
-        Thu, 30 Jun 2022 01:00:21 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-3176b6ed923so170860657b3.11;
-        Thu, 30 Jun 2022 01:00:21 -0700 (PDT)
+        Thu, 30 Jun 2022 04:00:43 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4388240A11;
+        Thu, 30 Jun 2022 01:00:42 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-31bf3656517so80349277b3.12;
+        Thu, 30 Jun 2022 01:00:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=YYg/Wp4bT4dysW+fftXKNsqrJ8LDP2HiO/OhiEJYgwY=;
-        b=bc0me7bZxE6sqbBQIqa8Lm0CwTH3ChwQx+vl92dAZ1YB8KQcyEbeUNWvtGPfaWrEn4
-         SAICYfKoB3HR8nZ2GCIf/sQYJncOEenHqxy07Mr/fhbBs5+gwXG/rE2H1bUxf1923z4u
-         bWsfyhqO4GhdEo3xexs6S3sWTpQ1SiiMmQM5ySY9aYztSvzLzanMhtlPerqiSLqBQ496
-         4eg1tUg6xduIEX3rmnzrZrWF0fI1ll2y2ZtuAcHPdfm06Yj+Yapt9dzY3ohmm8cTcnXP
-         B0aUGaOHP9bFII3K8YSa/xjqEOqAfUDBOx1XUZJpzYRCK94GC2Jj1/YnT99V8DniSG94
-         HQfA==
+        bh=XgHwl7lP0Pje/1oFOwB//0grAC9GnR7mcML9AHsfC2I=;
+        b=BQF0EfehXCNzjbXoo4w28te8+5VjjrHq1TqK7P92fyqab5cQTLm1OuCcNpqzX2z2C0
+         srYFMm3c3iDk+aI76DmUvij4v+8+tskF7VLDsH1d5mbZt/UYd4ebLrg1wXeoDbH7B3rb
+         /xNA5lPpC102hJ9xUKRlt5E+yiZPl5UzAPGFQuy50zfUpw/ThNn/1s83c4hyawdcBfRG
+         bsO9B/V4oouaFZiVnnt0LxEraXeFn1urCIVvXeMP/Rk5EsYWq2wDs9bAwFzia43rBSyR
+         B03oq23onpgCZXPnMvDcKOi9yzaGQrk5S9GV/soAkRDrseEAmgdJ0SO/AdMJdU6L5krG
+         FP0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YYg/Wp4bT4dysW+fftXKNsqrJ8LDP2HiO/OhiEJYgwY=;
-        b=oOvRuwXf73cSQUyptN+Pwd7bB8iHUSH9YoyxdAxUQ/jEJVsSre0X7Sj86tu1e4rbJc
-         HWBP2WVQMY2H92uwgBzVe3GHjyM/qyaIiJsBnwgeip1uyzPl0xcwBYUOa3tEjcSxEHQd
-         J057EGOWq+gsYhMOHhHtrbZ7fxwe3YLkgBUKfkJ3k4j12LI9miEdEDAeCLA2pFclnHJj
-         94VAiF3JksSyYP2YU7/PGUg+4lItcuRixQ/jnFlcZq0N6rMr+KVRnyJy4WaJtG+j18Bx
-         6+GWcYK221gfJFMu0RQg9v+llsHLCPiYZxIEHSyHtB3AZ1csHrgecJxyEIGQN3la0q8c
-         YKlQ==
-X-Gm-Message-State: AJIora9oJZx1Bes4d28DKOjwjdtrc5CasSpxoIym/2UHNX8AJHv9rfGO
-        ocz+bsoYtmh5dVuBEwXMEEAAztXiLIEB7xk/U4Y=
-X-Google-Smtp-Source: AGRyM1sKHpDBBl+UVcZBP9FJ/U9eNhoLOC4sdX+8DdLhlzteYXI5xmafjkNRHeePyuijTxFbMGvWs296X58zC0GMQmg=
-X-Received: by 2002:a81:cd3:0:b0:317:861c:ac07 with SMTP id
- 202-20020a810cd3000000b00317861cac07mr9008772ywm.486.1656576020271; Thu, 30
- Jun 2022 01:00:20 -0700 (PDT)
+        bh=XgHwl7lP0Pje/1oFOwB//0grAC9GnR7mcML9AHsfC2I=;
+        b=V9rztE7M60F6DJHBZ2ctxxH3I0hEUfuRZDaB8KJKinbMr5CltPuFAy+DwF4sY5p+l7
+         i8EQS9wg/xCf1ef+lZ7vP2q3oRGOLU1DAUU3zDKn/v6lrzQwzoTzaLyfRc5ZuUVK//NM
+         QwQNnjtAgAiYQonGwYOABRuPcu6g6eMmGg+hAOKylYo/MuUg7DdMZ2px6FrazPBPdw+m
+         Y1M5uD0mgXRTM4hUsujpDkPkPQN1JVyQFZQVcf4XIxb0O4nSFFkzMfQkcmrS3QfFmEjW
+         KkFwT6DntHJWRYqYY3yQovxA55O5GVFYMkOH0HxTV0frE0mmojnh3mcr/V6GoUGh16lt
+         mEyQ==
+X-Gm-Message-State: AJIora9ahvjSjD65fMnR5Ygr7X8gK+7v3UfGfPxJGV3nXNkCzw9pGMX6
+        q2IkXfi0ddSCQWvT+CtHJvbdhVEJ2t4gHfaPFeFZLAxgK26NmjLx
+X-Google-Smtp-Source: AGRyM1vDh6JZcEnVOI+TrwfNxFsoJVaMxTHFk0dysBdJwNPMufgpUnNF1yzBf8YZBzFPK8WTRH12P2gWQCJmQfBNaq4=
+X-Received: by 2002:a81:468b:0:b0:318:4cac:6576 with SMTP id
+ t133-20020a81468b000000b003184cac6576mr8605426ywa.277.1656576041340; Thu, 30
+ Jun 2022 01:00:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com> <20220629143046.213584-14-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220629143046.213584-14-aidanmacdonald.0x0@gmail.com>
+References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com> <20220629143046.213584-15-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220629143046.213584-15-aidanmacdonald.0x0@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 30 Jun 2022 09:59:41 +0200
-Message-ID: <CAHp75VeZceiA9fUg2bT-wQz4U2sNjZa_xQmh6ALFx5BdmQK6Yg@mail.gmail.com>
-Subject: Re: [PATCH v4 13/15] power: axp20x_battery: Add constant charge
- current table
+Date:   Thu, 30 Jun 2022 10:00:01 +0200
+Message-ID: <CAHp75VdJ=FOhW5DBUZnt_sSBRLODGaz=tEAOjffyQ9i6CMg2JA@mail.gmail.com>
+Subject: Re: [PATCH v4 14/15] power: axp20x_battery: Support battery status
+ without fuel gauge
 To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
@@ -87,128 +87,98 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Wed, Jun 29, 2022 at 4:30 PM Aidan MacDonald
 <aidanmacdonald.0x0@gmail.com> wrote:
 >
-> Add a table-based lookup method for constant charge current,
-> which is necessary when the setting cannot be represented as
-> a linear range.
->
-> This also replaces the hard-coded 300 mA default ccc setting
-> if the DT-specified value is unsupported; the minimum value
-> for the device is now set exactly instead of relying on the
-> value being rounded down to a supported value.
+> Add a "has_fg" flag to indicate that the chip has a fuel gauge.
+> Report battery full status on chips with no fuel gauge using the
+> battery voltage.
 
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 > ---
->  drivers/power/supply/axp20x_battery.c | 59 +++++++++++++++++++++------
->  1 file changed, 47 insertions(+), 12 deletions(-)
+>  drivers/power/supply/axp20x_battery.c | 34 ++++++++++++++++++++++++++-
+>  1 file changed, 33 insertions(+), 1 deletion(-)
 >
 > diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
-> index 9106077c0dbb..401779d84d2b 100644
+> index 401779d84d2b..574c1d001556 100644
 > --- a/drivers/power/supply/axp20x_battery.c
 > +++ b/drivers/power/supply/axp20x_battery.c
-> @@ -61,6 +61,14 @@ struct axp20x_batt_ps;
->  struct axp_data {
->         int     ccc_scale;
->         int     ccc_offset;
-> +       /*
-> +        * Lookup table for constant charge current, if provided this is used
-> +        * instead of ccc_scale/ccc_offset.
-> +        *
-> +        * The table is indexed by the field AXP20X_CHRG_CTRL1_TGT_CURR so it
-> +        * must have AXP20X_CHRG_CTRL1_TGT_CURR+1 elements.
-> +        */
-> +       const int *ccc_table;
+> @@ -69,6 +69,7 @@ struct axp_data {
+>          * must have AXP20X_CHRG_CTRL1_TGT_CURR+1 elements.
+>          */
+>         const int *ccc_table;
+> +       bool    has_fg;
 >         bool    has_fg_valid;
 >         int     (*get_max_voltage)(struct axp20x_batt_ps *batt, int *val);
 >         int     (*set_max_voltage)(struct axp20x_batt_ps *batt, int val);
-> @@ -176,7 +184,10 @@ static int axp20x_get_constant_charge_current(struct axp20x_batt_ps *axp,
+> @@ -197,7 +198,7 @@ static int axp20x_battery_get_prop(struct power_supply *psy,
+>                                    union power_supply_propval *val)
+>  {
+>         struct axp20x_batt_ps *axp20x_batt = power_supply_get_drvdata(psy);
+> -       int ret = 0, reg, val1;
+> +       int ret = 0, reg, val1, val2;
 >
->         *val &= AXP20X_CHRG_CTRL1_TGT_CURR;
+>         switch (psp) {
+>         case POWER_SUPPLY_PROP_PRESENT:
+> @@ -231,6 +232,34 @@ static int axp20x_battery_get_prop(struct power_supply *psy,
+>                         return 0;
+>                 }
 >
-> -       *val = *val * axp->data->ccc_scale + axp->data->ccc_offset;
-> +       if (axp->data->ccc_table)
-> +               *val = axp->data->ccc_table[*val];
-> +       else
-> +               *val = *val * axp->data->ccc_scale + axp->data->ccc_offset;
->
->         return 0;
->  }
-> @@ -389,16 +400,35 @@ static int axp20x_battery_set_max_voltage(struct axp20x_batt_ps *axp20x_batt,
->                                   AXP20X_CHRG_CTRL1_TGT_VOLT, val);
->  }
->
-> +static int axp20x_get_constant_charge_current_sel(struct axp20x_batt_ps *axp_batt,
-> +                                                 int charge_current)
-> +{
-> +       int i;
+> +               /*
+> +                * If the chip does not have a fuel gauge, we check battery full status
+> +                * using voltage instead.
+> +                */
+> +               if (!axp20x_batt->data->has_fg) {
+> +                       ret = axp20x_batt->data->get_max_voltage(axp20x_batt, &val1);
+> +                       if (ret)
+> +                               return ret;
 > +
-> +       if (axp_batt->data->ccc_table) {
-> +               for (i = AXP20X_CHRG_CTRL1_TGT_CURR; i >= 0; i--) {
-> +                       if (axp_batt->data->ccc_table[i] <= charge_current)
-> +                               return i;
+> +                       ret = iio_read_channel_processed(axp20x_batt->batt_v, &val2);
+> +                       if (ret)
+> +                               return ret;
+> +
+> +                       /* IIO subsystem reports voltage in mV but we need uV */
+> +                       val2 *= 1000;
+> +
+> +                       /*
+> +                        * According to the AXP192 datasheet, charging will restart if
+> +                        * the battery voltage drops below V_rch = V_tgt - 0.1 V, so we
+> +                        * report the battery is full if its voltage is at least V_rch.
+> +                        */
+> +                       if (val2 >= val1 - 100000)
+> +                               val->intval = POWER_SUPPLY_STATUS_FULL;
+> +                       else
+> +                               val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
+> +                       break;
 > +               }
 > +
-> +               return -EINVAL;
-> +       }
-> +
-> +       i = (charge_current - axp_batt->data->ccc_offset) / axp_batt->data->ccc_scale;
-> +       if (i > AXP20X_CHRG_CTRL1_TGT_CURR || i < 0)
-> +               return -EINVAL;
-> +
-> +       return i;
-> +}
-> +
->  static int axp20x_set_constant_charge_current(struct axp20x_batt_ps *axp_batt,
->                                               int charge_current)
->  {
->         if (charge_current > axp_batt->max_ccc)
->                 return -EINVAL;
->
-> -       charge_current = (charge_current - axp_batt->data->ccc_offset) /
-> -               axp_batt->data->ccc_scale;
-> -
-> -       if (charge_current > AXP20X_CHRG_CTRL1_TGT_CURR || charge_current < 0)
-> +       charge_current = axp20x_get_constant_charge_current_sel(axp_batt, charge_current);
-> +       if (charge_current < 0)
->                 return -EINVAL;
->
->         return regmap_update_bits(axp_batt->regmap, AXP20X_CHRG_CTRL1,
-> @@ -410,14 +440,14 @@ static int axp20x_set_max_constant_charge_current(struct axp20x_batt_ps *axp,
->  {
->         bool lower_max = false;
->
-> -       charge_current = (charge_current - axp->data->ccc_offset) /
-> -               axp->data->ccc_scale;
-> -
-> -       if (charge_current > AXP20X_CHRG_CTRL1_TGT_CURR || charge_current < 0)
-> +       charge_current = axp20x_get_constant_charge_current_sel(axp, charge_current);
-> +       if (charge_current < 0)
->                 return -EINVAL;
->
-> -       charge_current = charge_current * axp->data->ccc_scale +
-> -               axp->data->ccc_offset;
-> +       if (axp->data->ccc_table)
-> +               charge_current = axp->data->ccc_table[charge_current];
-> +       else
-> +               charge_current = charge_current * axp->data->ccc_scale + axp->data->ccc_offset;
->
->         if (charge_current > axp->max_ccc)
->                 dev_warn(axp->dev,
-> @@ -629,7 +659,12 @@ static int axp20x_power_probe(struct platform_device *pdev)
->                                                                    ccc)) {
->                         dev_err(&pdev->dev,
->                                 "couldn't set constant charge current from DT: fallback to minimum value\n");
-> -                       ccc = 300000;
-> +
-> +                       if (axp20x_batt->data->ccc_table)
-> +                               ccc = axp20x_batt->data->ccc_table[0];
-> +                       else
-> +                               ccc = axp20x_batt->data->ccc_offset;
-> +
->                         axp20x_batt->max_ccc = ccc;
->                         axp20x_set_constant_charge_current(axp20x_batt, ccc);
->                 }
+>                 ret = regmap_read(axp20x_batt->regmap, AXP20X_FG_RES, &val1);
+>                 if (ret)
+>                         return ret;
+> @@ -552,6 +581,7 @@ static const struct power_supply_desc axp20x_batt_ps_desc = {
+>  static const struct axp_data axp209_data = {
+>         .ccc_scale = 100000,
+>         .ccc_offset = 300000,
+> +       .has_fg = true,
+>         .get_max_voltage = axp20x_battery_get_max_voltage,
+>         .set_max_voltage = axp20x_battery_set_max_voltage,
+>  };
+> @@ -559,6 +589,7 @@ static const struct axp_data axp209_data = {
+>  static const struct axp_data axp221_data = {
+>         .ccc_scale = 150000,
+>         .ccc_offset = 300000,
+> +       .has_fg = true,
+>         .has_fg_valid = true,
+>         .get_max_voltage = axp22x_battery_get_max_voltage,
+>         .set_max_voltage = axp22x_battery_set_max_voltage,
+> @@ -567,6 +598,7 @@ static const struct axp_data axp221_data = {
+>  static const struct axp_data axp813_data = {
+>         .ccc_scale = 200000,
+>         .ccc_offset = 200000,
+> +       .has_fg = true,
+>         .has_fg_valid = true,
+>         .get_max_voltage = axp813_battery_get_max_voltage,
+>         .set_max_voltage = axp20x_battery_set_max_voltage,
 > --
 > 2.35.1
 >

@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 249BE56256A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15BAB56256E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237578AbiF3Vh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 17:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
+        id S236383AbiF3Vie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 17:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237387AbiF3Vhu (ORCPT
+        with ESMTP id S237141AbiF3Vib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 17:37:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB84A53D0B;
-        Thu, 30 Jun 2022 14:37:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8529AB82D62;
-        Thu, 30 Jun 2022 21:37:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B0CAC341C8;
-        Thu, 30 Jun 2022 21:37:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656625066;
-        bh=/1mPg+HnK95Yhfa0x9xppZXAMpxCw2yRXLpQyUsVUs4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=okEDMuKgkx85z8wootjkayGx5wpPaISbSuvv2iz+k60DQnfW4MphYuCxOU9S+PM04
-         dKH+ZsGnlHJg6R+ydb0rmea9sbOcUNgNHvSMJwxknZkitlb6mOx8PeaY80hPWYU0YY
-         v4FnFJj4ogxdv/ask676u11UFy1N9XJoICUtAFIGqoQrrBWM+H5sezK7bBEleXOl3q
-         fwagwQYhsTRFZ9TqoB/hs8y8qAerOt/QwwVhe3OJKYnh1m7/RhdE0/Taas957m8GjA
-         xtzc+HcsRKg3UneQB0DvMA3+LqH/J2B1MyytK1Kj9I5Aj0MFrYzb04sALfWxVvo/Ul
-         H6E6oBx+2QCxw==
-Date:   Thu, 30 Jun 2022 14:37:45 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org,
-        aneesh.kumar@linux.ibm.com, arnd@arndb.de, 21cnbao@gmail.com,
-        corbet@lwn.net, dave.hansen@linux.intel.com, david@redhat.com,
-        ebiederm@xmission.com, hagen@jauu.net, jack@suse.cz,
-        keescook@chromium.org, kirill@shutemov.name, kucharsk@gmail.com,
-        linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        longpeng2@huawei.com, luto@kernel.org, markhemm@googlemail.com,
-        pcc@google.com, rppt@kernel.org, sieberf@amazon.com,
-        sjpark@amazon.de, surenb@google.com, tst@schoebel-theuer.de,
-        yzaikin@google.com
-Subject: Re: [PATCH v2 2/9] mm/mshare: pre-populate msharefs with information
- file
-Message-ID: <Yr4Xqe22CI/ff0ge@magnolia>
-References: <cover.1656531090.git.khalid.aziz@oracle.com>
- <34e2eabbef5916c784dc16856ce25b3967f9b405.1656531090.git.khalid.aziz@oracle.com>
+        Thu, 30 Jun 2022 17:38:31 -0400
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768D31F2C4;
+        Thu, 30 Jun 2022 14:38:30 -0700 (PDT)
+Received: by mail-il1-f178.google.com with SMTP id p14so256868ile.1;
+        Thu, 30 Jun 2022 14:38:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pLjHwdt8TH9Omgx/eV4DUFvAnOF4nqWCnxHdlR/dkE4=;
+        b=zWOo4uuxCPlFHFmAqTKuwB25z0izyNZYfwBBppCYXpMwykgNTQX1YjO/4BUiusbSgh
+         yQhDyWHW+CPoDF6yMBm8nzK01y0JFPRcdbswd83Ph+9AdNOD1Vf4i3xHkhaect0ipcLG
+         drD+unPNLBn2Snou2Xvh9iSjc5sL+++tg0kFQFkmWzM4ibLjfV5zNph3FmiG7BzPtcRj
+         RrUe36XQcoTaSyzFW1zDyEAQ6IkQAvKKKguOEWI4yt3P25mcNhCxKUcNiE8140m49mvH
+         cP9KlOZ1Zf7PUmBKD5fhBKm/+d0jc7NJm3SNUg6LKd7VDNdjG8LgZXJZSyL3o0mJsCY3
+         rwww==
+X-Gm-Message-State: AJIora9Nuzb4TMJ/MTumKcbVRLZtb4UYWMb9SRYouuOaKbjh30hZilBU
+        e8qj8rBCd+8/GiYSHNohMA==
+X-Google-Smtp-Source: AGRyM1ub4VqIUMbN7Saxmn/utQJsJdllO+aKH4aeiaHcd+oT4ZHt2eOVlnAJNDvVcaIqYPweko7aDA==
+X-Received: by 2002:a05:6e02:18c5:b0:2da:e18e:c876 with SMTP id s5-20020a056e0218c500b002dae18ec876mr1248065ilu.186.1656625109720;
+        Thu, 30 Jun 2022 14:38:29 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id e17-20020a6b5011000000b00675594df2d3sm4166809iob.17.2022.06.30.14.38.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 14:38:29 -0700 (PDT)
+Received: (nullmailer pid 3353197 invoked by uid 1000);
+        Thu, 30 Jun 2022 21:38:27 -0000
+Date:   Thu, 30 Jun 2022 15:38:27 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH] docs: dt: writing-bindings: Update URL to DT schemas
+Message-ID: <20220630213827.GA3353112-robh@kernel.org>
+References: <20220627223950.35748-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <34e2eabbef5916c784dc16856ce25b3967f9b405.1656531090.git.khalid.aziz@oracle.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220627223950.35748-1-paul@crapouillou.net>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,130 +63,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 04:53:53PM -0600, Khalid Aziz wrote:
-> Users of mshare feature to share page tables need to know the size
-> and alignment requirement for shared regions. Pre-populate msharefs
-> with a file, mshare_info, that provides this information.
+On Mon, 27 Jun 2022 23:39:50 +0100, Paul Cercueil wrote:
+> The previous URL was giving a 404 error.
 > 
-> Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > ---
->  mm/mshare.c | 62 +++++++++++++++++++++++++++++++++++++++++------------
->  1 file changed, 48 insertions(+), 14 deletions(-)
+>  Documentation/devicetree/bindings/writing-bindings.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/mm/mshare.c b/mm/mshare.c
-> index c8fab3869bab..3e448e11c742 100644
-> --- a/mm/mshare.c
-> +++ b/mm/mshare.c
-> @@ -25,8 +25,8 @@
->  static struct super_block *msharefs_sb;
->  
->  static const struct file_operations msharefs_file_operations = {
-> -	.open	= simple_open,
-> -	.llseek	= no_llseek,
-> +	.open		= simple_open,
-> +	.llseek		= no_llseek,
 
-I feel like there's a lot of churn between the previous patch and this
-one that could have been in the previous patch.
-
->  };
->  
->  static int
-> @@ -42,23 +42,52 @@ msharefs_d_hash(const struct dentry *dentry, struct qstr *qstr)
->  	return 0;
->  }
->  
-> +static void
-> +mshare_evict_inode(struct inode *inode)
-> +{
-> +	clear_inode(inode);
-> +}
-> +
->  static const struct dentry_operations msharefs_d_ops = {
->  	.d_hash = msharefs_d_hash,
->  };
->  
-> +static ssize_t
-> +mshare_info_read(struct file *file, char __user *buf, size_t nbytes,
-> +		loff_t *ppos)
-> +{
-> +	char s[80];
-> +
-> +	sprintf(s, "%ld", PGDIR_SIZE);
-
-SO what is this "mshare_info" file supposed to reveal?  Hugepage size?
-I wonder why this isn't exported in struct mshare_info?
-
-> +	return simple_read_from_buffer(buf, nbytes, ppos, s, strlen(s));
-> +}
-> +
-> +static const struct file_operations mshare_info_ops = {
-> +	.read   = mshare_info_read,
-> +	.llseek	= noop_llseek,
-> +};
-> +
-> +static const struct super_operations mshare_s_ops = {
-> +	.statfs	     = simple_statfs,
-> +	.evict_inode = mshare_evict_inode,
-> +};
-> +
->  static int
->  msharefs_fill_super(struct super_block *sb, struct fs_context *fc)
->  {
-> -	static const struct tree_descr empty_descr = {""};
-> +	static const struct tree_descr mshare_files[] = {
-> +		[2] = { "mshare_info", &mshare_info_ops, 0444},
-> +		{""},
-> +	};
->  	int err;
->  
-> -	sb->s_d_op = &msharefs_d_ops;
-> -	err = simple_fill_super(sb, MSHARE_MAGIC, &empty_descr);
-> -	if (err)
-> -		return err;
-> -
-> -	msharefs_sb = sb;
-> -	return 0;
-> +	err = simple_fill_super(sb, MSHARE_MAGIC, mshare_files);
-> +	if (!err) {
-> +		msharefs_sb = sb;
-> +		sb->s_d_op = &msharefs_d_ops;
-> +		sb->s_op = &mshare_s_ops;
-> +	}
-> +	return err;
->  }
->  
->  static int
-> @@ -84,20 +113,25 @@ static struct file_system_type mshare_fs = {
->  	.kill_sb		= kill_litter_super,
->  };
->  
-> -static int
-> +static int __init
->  mshare_init(void)
->  {
->  	int ret = 0;
->  
->  	ret = sysfs_create_mount_point(fs_kobj, "mshare");
->  	if (ret)
-> -		return ret;
-> +		goto out;
->  
->  	ret = register_filesystem(&mshare_fs);
-> -	if (ret)
-> +	if (ret) {
->  		sysfs_remove_mount_point(fs_kobj, "mshare");
-> +		goto out;
-> +	}
-> +
-> +	return 0;
->  
-> +out:
->  	return ret;
->  }
->  
-> -fs_initcall(mshare_init);
-> +core_initcall(mshare_init);
-> -- 
-> 2.32.0
-> 
+Applied, thanks!

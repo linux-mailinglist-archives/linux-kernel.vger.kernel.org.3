@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A6A561D83
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A20561CF7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237133AbiF3OOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
+        id S235451AbiF3OOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236911AbiF3ONo (ORCPT
+        with ESMTP id S236932AbiF3ONp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:13:44 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29FB3BBEF;
-        Thu, 30 Jun 2022 06:59:31 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LYfyt48lDzhYq0;
-        Thu, 30 Jun 2022 21:57:10 +0800 (CST)
+        Thu, 30 Jun 2022 10:13:45 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB013EAB8;
+        Thu, 30 Jun 2022 06:59:34 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LYfyv32NDz1L8fD;
+        Thu, 30 Jun 2022 21:57:11 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 30 Jun 2022 21:59:28 +0800
+ 15.1.2375.24; Thu, 30 Jun 2022 21:59:29 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 30 Jun
@@ -30,10 +30,12 @@ From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>
 CC:     <gregkh@linuxfoundation.org>, <geert+renesas@glider.be>,
         <peter@hurleysoftware.com>, <sjoerd.simons@collabora.co.uk>
-Subject: [PATCH 1/2] serial: sh-sci: fix missing sci_cleanup_single() in sci_probe_single()
-Date:   Thu, 30 Jun 2022 22:09:18 +0800
-Message-ID: <20220630140919.3857698-1-yangyingliang@huawei.com>
+Subject: [PATCH 2/2] serial: sh-sci: fix missing uart_unregister_driver() in sci_probe_single()
+Date:   Thu, 30 Jun 2022 22:09:19 +0800
+Message-ID: <20220630140919.3857698-2-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220630140919.3857698-1-yangyingliang@huawei.com>
+References: <20220630140919.3857698-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -50,58 +52,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing sci_cleanup_single() in error case in sci_probe_single()
+Add missing uart_unregister_driver() in error case in sci_probe_single().
 
-Fixes: f907c9ea8835 ("serial: sh-sci: Add support for GPIO-controlled modem lines")
+Fixes: 352b92664549 ("serial: sh-sci: Move uart_register_driver call to device probe")
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/tty/serial/sh-sci.c | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
+ drivers/tty/serial/sh-sci.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-index 0075a1420005..ca5a58f01aff 100644
+index ca5a58f01aff..08a249eaaa8c 100644
 --- a/drivers/tty/serial/sh-sci.c
 +++ b/drivers/tty/serial/sh-sci.c
-@@ -3283,25 +3283,31 @@ static int sci_probe_single(struct platform_device *dev,
- 		return ret;
+@@ -3280,7 +3280,7 @@ static int sci_probe_single(struct platform_device *dev,
+ 
+ 	ret = sci_init_single(dev, sciport, index, p, false);
+ 	if (ret)
+-		return ret;
++		goto err_unregister;
  
  	sciport->gpios = mctrl_gpio_init(&sciport->port, 0);
--	if (IS_ERR(sciport->gpios))
--		return PTR_ERR(sciport->gpios);
-+	if (IS_ERR(sciport->gpios)) {
-+		ret = PTR_ERR(sciport->gpios);
-+		goto err_cleanup_single;
-+	}
+ 	if (IS_ERR(sciport->gpios)) {
+@@ -3306,6 +3306,10 @@ static int sci_probe_single(struct platform_device *dev,
  
- 	if (sciport->has_rtscts) {
- 		if (mctrl_gpio_to_gpiod(sciport->gpios, UART_GPIO_CTS) ||
- 		    mctrl_gpio_to_gpiod(sciport->gpios, UART_GPIO_RTS)) {
- 			dev_err(&dev->dev, "Conflicting RTS/CTS config\n");
--			return -EINVAL;
-+			ret = -EINVAL;
-+			goto err_cleanup_single;
- 		}
- 		sciport->port.flags |= UPF_HARD_FLOW;
- 	}
+ err_cleanup_single:
+ 	sci_cleanup_single(sciport);
++err_unregister:
++	mutex_lock(&sci_uart_registration_lock);
++	uart_unregister_driver(&sci_uart_driver);
++	mutex_unlock(&sci_uart_registration_lock);
  
- 	ret = uart_add_one_port(&sci_uart_driver, &sciport->port);
--	if (ret) {
--		sci_cleanup_single(sciport);
--		return ret;
--	}
-+	if (ret)
-+		goto err_cleanup_single;
- 
- 	return 0;
-+
-+err_cleanup_single:
-+	sci_cleanup_single(sciport);
-+
-+	return ret;
+ 	return ret;
  }
- 
- static int sci_probe(struct platform_device *dev)
 -- 
 2.25.1
 

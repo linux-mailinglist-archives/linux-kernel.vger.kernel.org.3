@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57EFB561CA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0759561C52
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236204AbiF3OAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
+        id S235859AbiF3Nyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 09:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236593AbiF3N7N (ORCPT
+        with ESMTP id S235825AbiF3Nxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:59:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9E95C9DC;
-        Thu, 30 Jun 2022 06:52:01 -0700 (PDT)
+        Thu, 30 Jun 2022 09:53:54 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12D54D4CC;
+        Thu, 30 Jun 2022 06:50:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C17DCB82AF0;
-        Thu, 30 Jun 2022 13:51:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18B49C34115;
-        Thu, 30 Jun 2022 13:51:33 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BDDEDCE2EC5;
+        Thu, 30 Jun 2022 13:50:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B15E0C3411E;
+        Thu, 30 Jun 2022 13:50:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597094;
-        bh=9pFnt4Tljffl4natwPHL1q2QboxEpLx0K3ObN0lkqLA=;
+        s=korg; t=1656597006;
+        bh=1AdeRkjT1D9guRWJn8hKQdm2VdWHMDHQ56vEvC5zzyc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lQhcLbdN3KM33Gij4sNWE+v4p/pVImZSOfVVlFF8rp15ZRoT+I19qtfXEuxAoQF8t
-         zoZ1Dy53oqgVGjr7/RAo0H1/CYZ7Mnj7RohuLInER2kEhi91BuWdra/H5R49LgJFAX
-         rOrkDsx/01a9XqrIgZFgF9qCA6y1BGF1KQRp383U=
+        b=jRuvWGvtYm1a68vP5MX7Bw0jPX6qUlEd4LvV61KeCQ1PcrazZcPZ6xIAIjr1j2tdL
+         yWmIgPaN8XvfIqsAMeuVDnN1X7xARvv8/QCj7pp4TEezpijq8Yf+Igvi0ti7Shm7B8
+         g/tv9CRHGYvTzUPPZtW3wOqWw+mkofZIq900pg9M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
-        Hans de Goede <hdegoede@redhat.com>, Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.19 26/49] iio: accel: mma8452: ignore the return value of reset operation
-Date:   Thu, 30 Jun 2022 15:46:39 +0200
-Message-Id: <20220630133234.668762216@linuxfoundation.org>
+        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH 4.14 29/35] modpost: fix section mismatch check for exported init/exit sections
+Date:   Thu, 30 Jun 2022 15:46:40 +0200
+Message-Id: <20220630133233.296570364@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133233.910803744@linuxfoundation.org>
-References: <20220630133233.910803744@linuxfoundation.org>
+In-Reply-To: <20220630133232.433955678@linuxfoundation.org>
+References: <20220630133232.433955678@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haibo Chen <haibo.chen@nxp.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-commit bf745142cc0a3e1723f9207fb0c073c88464b7b4 upstream.
+commit 28438794aba47a27e922857d27b31b74e8559143 upstream.
 
-On fxls8471, after set the reset bit, the device will reset immediately,
-will not give ACK. So ignore the return value of this reset operation,
-let the following code logic to check whether the reset operation works.
+Since commit f02e8a6596b7 ("module: Sort exported symbols"),
+EXPORT_SYMBOL* is placed in the individual section ___ksymtab(_gpl)+<sym>
+(3 leading underscores instead of 2).
 
-Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-Fixes: ecabae713196 ("iio: mma8452: Initialise before activating")
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/1655292718-14287-1-git-send-email-haibo.chen@nxp.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Since then, modpost cannot detect the bad combination of EXPORT_SYMBOL
+and __init/__exit.
+
+Fix the .fromsec field.
+
+Fixes: f02e8a6596b7 ("module: Sort exported symbols")
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/accel/mma8452.c |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ scripts/mod/modpost.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iio/accel/mma8452.c
-+++ b/drivers/iio/accel/mma8452.c
-@@ -1486,10 +1486,14 @@ static int mma8452_reset(struct i2c_clie
- 	int i;
- 	int ret;
- 
--	ret = i2c_smbus_write_byte_data(client,	MMA8452_CTRL_REG2,
-+	/*
-+	 * Find on fxls8471, after config reset bit, it reset immediately,
-+	 * and will not give ACK, so here do not check the return value.
-+	 * The following code will read the reset register, and check whether
-+	 * this reset works.
-+	 */
-+	i2c_smbus_write_byte_data(client, MMA8452_CTRL_REG2,
- 					MMA8452_CTRL_REG2_RST);
--	if (ret < 0)
--		return ret;
- 
- 	for (i = 0; i < 10; i++) {
- 		usleep_range(100, 200);
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -1077,7 +1077,7 @@ static const struct sectioncheck section
+ },
+ /* Do not export init/exit functions or data */
+ {
+-	.fromsec = { "__ksymtab*", NULL },
++	.fromsec = { "___ksymtab*", NULL },
+ 	.bad_tosec = { INIT_SECTIONS, EXIT_SECTIONS, NULL },
+ 	.mismatch = EXPORT_TO_INIT_EXIT,
+ 	.symbol_white_list = { DEFAULT_SYMBOL_WHITE_LIST, NULL },
 
 

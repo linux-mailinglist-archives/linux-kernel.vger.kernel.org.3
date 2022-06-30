@@ -2,86 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1197D561F11
+	by mail.lfdr.de (Postfix) with ESMTP id D0419561F13
 	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235671AbiF3PTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 11:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
+        id S235688AbiF3PTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 11:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235454AbiF3PTh (ORCPT
+        with ESMTP id S235661AbiF3PTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 11:19:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83884377D4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:19:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656602375;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YuBa4kskIVPuEkGmG7+439Fcn87oYLE8R41NL6X8Zug=;
-        b=BkPU+TqTptcNR2celvrqkKyNtAi/RpQcfyfL8wCX6m+rhOdmfyjBSiMKlhUOeQhgO5e/M6
-        qu3rB1cZsNFNY+O0k0nGrpGjkaP6NG1C35yA7LJUpS0KzvSFBa4I+eE9KpkM1eHR4xC/Ks
-        BoBviTbNNVSZAlValuhoqrk0h1/pnpg=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-424--cGakFd3O4G8ydL6A4fxeA-1; Thu, 30 Jun 2022 11:19:33 -0400
-X-MC-Unique: -cGakFd3O4G8ydL6A4fxeA-1
-Received: by mail-ed1-f71.google.com with SMTP id s1-20020a056402520100b00439658fad14so330739edd.20
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:19:33 -0700 (PDT)
+        Thu, 30 Jun 2022 11:19:40 -0400
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EC0377FE;
+        Thu, 30 Jun 2022 08:19:39 -0700 (PDT)
+Received: by mail-il1-f170.google.com with SMTP id h20so12589373ilj.13;
+        Thu, 30 Jun 2022 08:19:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=YuBa4kskIVPuEkGmG7+439Fcn87oYLE8R41NL6X8Zug=;
-        b=7BQuHndJRFMOw3KvFBtfXwUTDP+lMq3fqLs1zhxBg5QETnNTXb+0f8RcTSFxt3IVyE
-         80FPhAxQI4ufyLPSL2WAaU9iRLcOhROid3KGtGjFXZv6d3bSuU5WnUxkRpLmomEJC6Sq
-         XjCbAc4Zop7bzMCOlbSf4fB+RbobOcsOWzIfykRaZPslU+/6+tEqgXroMhOu8Vi2yYB4
-         SJAm9E/2t+kgvzgmIy/jbZANsPPG5FPNCAUH4pAHch3xmaIiqlw3sCQx5gL0cpWG5e12
-         yqwb0ReqIwn8kulvMfmRL08Vryl0pwedMuBjFX4YdtgsrnTOy3lT11QiUjICa6sE7XM+
-         2dpA==
-X-Gm-Message-State: AJIora9vBa4ghrYkE18e2Q7EWDkHPTbl5LRK37uoyXQoTwC9rkjJgnnW
-        pduj8U7j/E2YTQGV1/uoAxj4Y/rrJ7z4ZflyonbQ1dXWN87Qp7lxU6WNrvCzcs84nNIndlFRGq5
-        Evp919s4pqNvoLcRzPY+3Rlfv
-X-Received: by 2002:a17:907:d90:b0:726:42bb:c8a0 with SMTP id go16-20020a1709070d9000b0072642bbc8a0mr8805339ejc.575.1656602372207;
-        Thu, 30 Jun 2022 08:19:32 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v7AltquG+2YtPTq20ATbXx+G+hbUSpjeyVaIJS09P+cEaz65cuVlBl1UKp7ee5MwsTVzbOHw==
-X-Received: by 2002:a17:907:d90:b0:726:42bb:c8a0 with SMTP id go16-20020a1709070d9000b0072642bbc8a0mr8805315ejc.575.1656602371936;
-        Thu, 30 Jun 2022 08:19:31 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id cb25-20020a0564020b7900b004359dafe822sm13358720edb.29.2022.06.30.08.19.30
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ADsvCR0mog9Wctcf3viijqLXbCb8A/ISSb9KkaYOBcQ=;
+        b=cCs6Ygz0yf8Xf/i2rMrycvTOWJPctBTOHWroKkB4GKyDw0xnSrq7Su/sM/JyP5DKCr
+         CBE8eedgnLBedmKOUXg/zyCqjzwcrPiel0HPvJCDJDXCUuPWVjq5iIx4RtZBOvTotxRc
+         lO5K4yOkN8McDwRdYqx53j8k5Tt9bikH63Rhnv+pGbZKSLN3etsomFTqm08ON2MNIu1N
+         KEnfdG8ERfIhJz0bWr9JiJMuV4Z1S22Djm/MCFNmcac476pY4AF/f7xOw3sNLjoluUDJ
+         agEz9Na6xH1v2N1qNRPpLyf1+WamWhLThqWT3zp1vG1+vMtL3KAXTuorIj9OldSJfZPk
+         yc2A==
+X-Gm-Message-State: AJIora/ArW91ayKj5S21dJ7qJ5Nxy0Xa8na7sW/zjg+7fc5qBAJv6Ft/
+        b3COPoXmvzZvbrVq6+O2Qw==
+X-Google-Smtp-Source: AGRyM1syNumhIZ9i8WZw9tGrKUzdzJYR0RUCc8u+zCX5QaXsZAZPAG6uCSOCyYG4AF4BzG+LxuqWjA==
+X-Received: by 2002:a05:6e02:b22:b0:2d9:2bda:34e9 with SMTP id e2-20020a056e020b2200b002d92bda34e9mr5615211ilu.273.1656602378655;
+        Thu, 30 Jun 2022 08:19:38 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id r19-20020a02c853000000b00339dfb793aesm8731583jao.86.2022.06.30.08.19.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 08:19:31 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-Cc:     mail@anirudhrb.com, kumarpraveen@linux.microsoft.com,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        wei.liu@kernel.org, robert.bradford@intel.com, liuwe@microsoft.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Ilias Stamatis <ilstam@amazon.com>
-Subject: Re: [PATCH v2] KVM: nVMX: Don't expose eVMCS unsupported fields to L1
-In-Reply-To: <87bkudugri.fsf@redhat.com>
-References: <20220628103241.1785380-1-anrayabh@linux.microsoft.com>
- <87bkudugri.fsf@redhat.com>
-Date:   Thu, 30 Jun 2022 17:19:30 +0200
-Message-ID: <87h742rxfh.fsf@redhat.com>
+        Thu, 30 Jun 2022 08:19:38 -0700 (PDT)
+Received: (nullmailer pid 2729118 invoked by uid 1000);
+        Thu, 30 Jun 2022 15:19:36 -0000
+Date:   Thu, 30 Jun 2022 09:19:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mikko Perttunen <cyndis@kapsi.fi>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7/v3 00/22] Host1x context isolation / Tegra234 support
+Message-ID: <20220630151936.GA2722229-robh@kernel.org>
+References: <20220627142008.2072474-1-cyndis@kapsi.fi>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220627142008.2072474-1-cyndis@kapsi.fi>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,143 +68,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vitaly Kuznetsov <vkuznets@redhat.com> writes:
+On Mon, Jun 27, 2022 at 05:19:46PM +0300, Mikko Perttunen wrote:
+> From: Mikko Perttunen <mperttunen@nvidia.com>
+> 
+> Integrated the Host1x context isolation series (patches 1 to 8) and
+> Tegra234 support series (patches 9 to 22) in one email thread for
+> the benefit of automatic testers.
 
-> Anirudh Rayabharam <anrayabh@linux.microsoft.com> writes:
->
->> When running cloud-hypervisor tests, VM entry into an L2 guest on KVM on
->> Hyper-V fails with this splat (stripped for brevity):
->>
->> [ 1481.600386] WARNING: CPU: 4 PID: 7641 at arch/x86/kvm/vmx/nested.c:4563 nested_vmx_vmexit+0x70d/0x790 [kvm_intel]
->> [ 1481.600427] CPU: 4 PID: 7641 Comm: vcpu2 Not tainted 5.15.0-1008-azure #9-Ubuntu
->> [ 1481.600429] Hardware name: Microsoft Corporation Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.1 07/22/2021
->> [ 1481.600430] RIP: 0010:nested_vmx_vmexit+0x70d/0x790 [kvm_intel]
->> [ 1481.600447] Call Trace:
->> [ 1481.600449]  <TASK>
->> [ 1481.600451]  nested_vmx_reflect_vmexit+0x10b/0x440 [kvm_intel]
->> [ 1481.600457]  __vmx_handle_exit+0xef/0x670 [kvm_intel]
->> [ 1481.600467]  vmx_handle_exit+0x12/0x50 [kvm_intel]
->> [ 1481.600472]  vcpu_enter_guest+0x83a/0xfd0 [kvm]
->> [ 1481.600524]  vcpu_run+0x5e/0x240 [kvm]
->> [ 1481.600560]  kvm_arch_vcpu_ioctl_run+0xd7/0x550 [kvm]
->> [ 1481.600597]  kvm_vcpu_ioctl+0x29a/0x6d0 [kvm]
->> [ 1481.600634]  __x64_sys_ioctl+0x91/0xc0
->> [ 1481.600637]  do_syscall_64+0x5c/0xc0
->> [ 1481.600667]  entry_SYSCALL_64_after_hwframe+0x44/0xae
->> [ 1481.600670] RIP: 0033:0x7f688becdaff
->> [ 1481.600686]  </TASK>
->>
->> TSC multiplier field is currently not supported in EVMCS in KVM. It was
->> previously not supported from Hyper-V but has been added since. Because
->> it is not supported in KVM the use "TSC scaling control" is filtered out
->> of vmcs_config by evmcs_sanitize_exec_ctrls().
->>
->> However, in nested_vmx_setup_ctls_msrs(), TSC scaling is exposed to L1.
->> eVMCS unsupported fields are not sanitized. When L1 tries to launch an L2
->> guest, vmcs12 has TSC scaling enabled. This propagates to vmcs02. But KVM
->> doesn't set the TSC multiplier value because kvm_has_tsc_control is false.
->> Due to this VM entry for L2 guest fails. (VM entry fails if
->> "use TSC scaling" is 1 but TSC multiplier is 0.)
->>
->> To fix, in nested_vmx_setup_ctls_msrs(), sanitize the values read from MSRs
->> by filtering out fields that are not supported by eVMCS.
->>
->> This is a stable-friendly intermediate fix. A more comprehensive fix is
->> in progress [1] but is probably too complicated to safely apply to
->> stable.
->>
->> [1]: https://lore.kernel.org/kvm/20220627160440.31857-1-vkuznets@redhat.com/
->>
->> Fixes: d041b5ea93352 ("KVM: nVMX: Enable nested TSC scaling")
->> Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
->> ---
->>
->> Changes since v1:
->> - Sanitize all eVMCS unsupported fields instead of just TSC scaling.
->>
->> v1: https://lore.kernel.org/lkml/20220613161611.3567556-1-anrayabh@linux.microsoft.com/
->>
->> ---
->>  arch/x86/kvm/vmx/nested.c | 16 ++++++++++++++++
->>  1 file changed, 16 insertions(+)
->>
->> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
->> index f5cb18e00e78..f88d748c7cc6 100644
->> --- a/arch/x86/kvm/vmx/nested.c
->> +++ b/arch/x86/kvm/vmx/nested.c
->> @@ -6564,6 +6564,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->>  		msrs->pinbased_ctls_high);
->>  	msrs->pinbased_ctls_low |=
->>  		PIN_BASED_ALWAYSON_WITHOUT_TRUE_MSR;
->> +#if IS_ENABLED(CONFIG_HYPERV)
->> +	if (static_branch_unlikely(&enable_evmcs))
->> +		msrs->pinbased_ctls_high &= ~EVMCS1_UNSUPPORTED_PINCTRL;
->> +#endif
->>  	msrs->pinbased_ctls_high &=
->>  		PIN_BASED_EXT_INTR_MASK |
->>  		PIN_BASED_NMI_EXITING |
->> @@ -6580,6 +6584,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->>  	msrs->exit_ctls_low =
->>  		VM_EXIT_ALWAYSON_WITHOUT_TRUE_MSR;
->>  
->> +#if IS_ENABLED(CONFIG_HYPERV)
->> +	if (static_branch_unlikely(&enable_evmcs))
->> +		msrs->exit_ctls_high &= ~EVMCS1_UNSUPPORTED_VMEXIT_CTRL;
->> +#endif
->>  	msrs->exit_ctls_high &=
->>  #ifdef CONFIG_X86_64
->>  		VM_EXIT_HOST_ADDR_SPACE_SIZE |
->> @@ -6600,6 +6608,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->>  		msrs->entry_ctls_high);
->>  	msrs->entry_ctls_low =
->>  		VM_ENTRY_ALWAYSON_WITHOUT_TRUE_MSR;
->> +#if IS_ENABLED(CONFIG_HYPERV)
->> +	if (static_branch_unlikely(&enable_evmcs))
->> +		msrs->entry_ctls_high &= ~EVMCS1_UNSUPPORTED_VMENTRY_CTRL;
->> +#endif
->>  	msrs->entry_ctls_high &=
->>  #ifdef CONFIG_X86_64
->>  		VM_ENTRY_IA32E_MODE |
->> @@ -6657,6 +6669,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->>  		      msrs->secondary_ctls_high);
->>  
->>  	msrs->secondary_ctls_low = 0;
->> +#if IS_ENABLED(CONFIG_HYPERV)
->> +	if (static_branch_unlikely(&enable_evmcs))
->> +		msrs->secondary_ctls_high &= ~EVMCS1_UNSUPPORTED_2NDEXEC;
->> +#endif
->>  	msrs->secondary_ctls_high &=
->>  		SECONDARY_EXEC_DESC |
->>  		SECONDARY_EXEC_ENABLE_RDTSCP |
->
-> (In theory, threre's also EVMCS1_UNSUPPORTED_VMFUNC filtering out
-> VMX_VMFUNC_EPTP_SWITCHING (as eVMCS EPTP_LIST_ADDRESS) but it is not
-> used by KVM)
->
-> As I said in another thread, I think this is fine as a
-> stable@/intermediate fix. Assuming the way to go for mainline is my
-> "KVM: nVMX: Use vmcs_config for setting up nested VMX MSRs", this patch
-> won't be needed and can be reverted.
+And probably to the detriment of tools looking at the version number 
+like b4 with the double version. Don't get creative like this.
 
-(I've already said that in another thread, putting it here for
-visibility)
-
-I have to take this back. As-is, the patch is likely to break live
-migration because of the reasons expressed by Jim:
-https://lore.kernel.org/kvm/CALMp9eSBLcvuNDquvSfUnaF3S3f4ZkzqDRSsz-v93ZeX=xnssg@mail.gmail.com/
-
-In case we filter out SECONDARY_EXEC_TSC_SCALING here in
-nested_vmx_setup_ctls_msrs(), KVM_SET_MSRS on the destination will fail
-because the data will have an unsupported bit.
-
-It seems the easiest way to go for stable@ is to actually enable TSC
-scaling, like the 4 patches I've suggested here:
-https://lore.kernel.org/kvm/87bkujy4z9.fsf@redhat.com/
-
-The full solution including vmcs_config usage for
-nested_vmx_setup_ctls_msrs() is 28 patches now, it's likely a no-go for
-stable :-(
-
--- 
-Vitaly
-
+Rob

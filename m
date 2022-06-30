@@ -2,148 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883E8562038
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D7B562041
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235507AbiF3QYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 12:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
+        id S235821AbiF3Q0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 12:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiF3QYD (ORCPT
+        with ESMTP id S230023AbiF3Q0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 12:24:03 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637E731368
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 09:24:01 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 23so18954258pgc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 09:24:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UQ0ABdxfR6D43G67MI06zZIhVmsQkiYQlJlGftbg3co=;
-        b=U34n6EPZFSdi0BxyjYW9mpzFC4uLov7wQVqlBzu4KgmT9eQTL1rff0zfX9lTeGFG6x
-         oAlz37vRUkmn91Zv1WGucnJQH0McZEV4cs1nm2Ji5UcXzWtixkiPwquhMbXwOjbY4KID
-         g/U02e1hG1qzapf6uMxCMR+iLfmBhnlc96EiMONXF7wsJybq5FfZ6DFeC+8uPyLd2B/W
-         nfedQ4nuV5Ft5fas0ry+rGPn5vbcjWNwjatkIoubdkClM6Mm71HXuzlO4IYki9z5lqP2
-         CkjIkqZvO/lcSUJqm/uY6NspI/2FaW9jwowoIjxaBXl+q7NZTJnwq8G9Jhy4m1FjzK4K
-         1Q3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UQ0ABdxfR6D43G67MI06zZIhVmsQkiYQlJlGftbg3co=;
-        b=q6ziQ6sJmP1ghF8POXyvM5ryO65W1rEHCHeBJJ+ElxsQYQgRyNDnMRsQZGTjLZYSjs
-         jVeBKdseWxt/WrEqqwmX9PqM8JcquP1860V6GrIwe4n1pxPX2hUMlcjNpYpF3PACdYfX
-         F0Bl3AxmS/xCrycsuLZZu5fVi1inl9Ml6biy47C+Uvyz9uPoOzfg5RW9UuAl6DcP3ncC
-         Zh4Uf3PSKpaYGG6uagSRWQ5i4u9SlYF2cXihfMzD5q190aXXim3f4lmNxZocSy32oyjU
-         yZAtELy3Oxepfke30BI9ubJfpt6vT96/SMpVe0SqwQZYYvn5D8VA+KASIDPl3r+121Um
-         oUyw==
-X-Gm-Message-State: AJIora9VD/fOc6nhbY6ayaavLNOBlBZ9+U994qPeGHypCgom9RmCiEjW
-        LU6ai8ttE7Ura07NEUcNIWzYT55w15enWkoudxRe9w==
-X-Google-Smtp-Source: AGRyM1vyljlV3h/CFSJYkNpPc3JzXZ4DEIbWhvcjFs6Qm0gF5Tz+g16pAYIAcWs2EeS1saAxpg3NA+2q2/KUAbSN9II=
-X-Received: by 2002:a63:5449:0:b0:40d:c8d4:ed6a with SMTP id
- e9-20020a635449000000b0040dc8d4ed6amr8372360pgm.9.1656606240746; Thu, 30 Jun
- 2022 09:24:00 -0700 (PDT)
+        Thu, 30 Jun 2022 12:26:23 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC7831DDB;
+        Thu, 30 Jun 2022 09:26:21 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5FD75240006;
+        Thu, 30 Jun 2022 16:26:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656606380;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Ub7MTUUE2hv+8hYKHLTeAm9AB3Acs240cVnO+TTjyMI=;
+        b=GNQD12DMHY+Txmr6rW+F7vIEB9gkB3V5cSer0MzO7bvlfj8FUd1QlCmi5f79He1E7YNi4o
+        YkBLZAZ8b9NDzZdJqBhe4ImpmAvH0nMYBg3J06mk2403U8Tmd9INinPQP8wV3zrBj4wxKK
+        DiXQl5btYFpho1In9qfhI92O0b2wLAa8i0Elnq+luKCLCa/sAa7x2KXk//ByFfJdMk8b3a
+        pTc4frVAMKGW3ZbqnkGTfzza0x9IBtgKGxUjnT0XY3UNMr8nEkLkogrnQEWu9HDEZxUT0D
+        xYSM04sPUNf7aaEc3d5yZMQ/wppjfhT0/Jh7W4Lxwi3+QilwY+6o+EP9cnBlXg==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>
+Subject: [PATCH net-next v2] dt-bindings: net: dsa: renesas,rzn1-a5psw: add interrupts description
+Date:   Thu, 30 Jun 2022 18:25:15 +0200
+Message-Id: <20220630162515.37302-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220624173656.2033256-1-jthoughton@google.com>
- <20220624173656.2033256-5-jthoughton@google.com> <YroYaWVvNZJvtqsH@monkey>
- <Yrvsn66c+UI8ZQlO@FVFYT0MHHV2J.usts.net> <Yry+PPHSat2uN+aG@monkey>
- <CADrL8HX9OkuWzpODBzHx-6-7_SLJ1YCCe5HxXdPa4ibqeQZu3A@mail.gmail.com>
- <YrzRLVQaYtYAYsEa@monkey> <Yr1uUmfA/iWO740v@FVFYT0MHHV2J.usts.net>
-In-Reply-To: <Yr1uUmfA/iWO740v@FVFYT0MHHV2J.usts.net>
-From:   James Houghton <jthoughton@google.com>
-Date:   Thu, 30 Jun 2022 09:23:49 -0700
-Message-ID: <CADrL8HWuF-yXvgdJW7wWQSMU0GsRg3gttHykhV7=1VYSxfzkag@mail.gmail.com>
-Subject: Re: [RFC PATCH 04/26] hugetlb: make huge_pte_lockptr take an explicit
- shift argument.
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Jue Wang <juew@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 2:35 AM Muchun Song <songmuchun@bytedance.com> wrote:
->
-> On Wed, Jun 29, 2022 at 03:24:45PM -0700, Mike Kravetz wrote:
-> > On 06/29/22 14:39, James Houghton wrote:
-> > > On Wed, Jun 29, 2022 at 2:04 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
-> > > >
-> > > > On 06/29/22 14:09, Muchun Song wrote:
-> > > > > On Mon, Jun 27, 2022 at 01:51:53PM -0700, Mike Kravetz wrote:
-> > > > > > On 06/24/22 17:36, James Houghton wrote:
-> > > > > > > This is needed to handle PTL locking with high-granularity mapping. We
-> > > > > > > won't always be using the PMD-level PTL even if we're using the 2M
-> > > > > > > hugepage hstate. It's possible that we're dealing with 4K PTEs, in which
-> > > > > > > case, we need to lock the PTL for the 4K PTE.
-> > > > > >
-> > > > > > I'm not really sure why this would be required.
-> > > > > > Why not use the PMD level lock for 4K PTEs?  Seems that would scale better
-> > > > > > with less contention than using the more coarse mm lock.
-> > > > > >
-> > > > >
-> > > > > Your words make me thing of another question unrelated to this patch.
-> > > > > We __know__ that arm64 supports continues PTE HugeTLB. huge_pte_lockptr()
-> > > > > did not consider this case, in this case, those HugeTLB pages are contended
-> > > > > with mm lock. Seems we should optimize this case. Something like:
-> > > > >
-> > > > > diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> > > > > index 0d790fa3f297..68a1e071bfc0 100644
-> > > > > --- a/include/linux/hugetlb.h
-> > > > > +++ b/include/linux/hugetlb.h
-> > > > > @@ -893,7 +893,7 @@ static inline gfp_t htlb_modify_alloc_mask(struct hstate *h, gfp_t gfp_mask)
-> > > > >  static inline spinlock_t *huge_pte_lockptr(struct hstate *h,
-> > > > >                                            struct mm_struct *mm, pte_t *pte)
-> > > > >  {
-> > > > > -       if (huge_page_size(h) == PMD_SIZE)
-> > > > > +       if (huge_page_size(h) <= PMD_SIZE)
-> > > > >                 return pmd_lockptr(mm, (pmd_t *) pte);
-> > > > >         VM_BUG_ON(huge_page_size(h) == PAGE_SIZE);
-> > > > >         return &mm->page_table_lock;
-> > > > >
-> > > > > I did not check if elsewhere needs to be changed as well. Just a primary
-> > > > > thought.
-> > >
-> > > I'm not sure if this works. If hugetlb_pte_size(hpte) is PAGE_SIZE,
-> > > then `hpte.ptep` will be a pte_t, not a pmd_t -- I assume that breaks
-> > > things. So I think, when doing a HugeTLB PT walk down to PAGE_SIZE, we
-> > > need to separately keep track of the location of the PMD so that we
-> > > can use it to get the PMD lock.
-> >
-> > I assume Muchun was talking about changing this in current code (before
-> > your changes) where huge_page_size(h) can not be PAGE_SIZE.
-> >
->
-> Yes, that's what I meant.
+Describe the switch interrupts (dlr, switch, prp, hub, pattern) which
+are connected to the GIC.
 
-Right -- but I think my point still stands. If `huge_page_size(h)` is
-CONT_PTE_SIZE, then the `pte_t *` passed to `huge_pte_lockptr` will
-*actually* point to a `pte_t` and not a `pmd_t` (I'm pretty sure the
-distinction is important). So it seems like we need to separately keep
-track of the real pmd_t that is being used in the CONT_PTE_SIZE case
-(and therefore, when considering HGM, the PAGE_SIZE case).
+Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+---
+Changes in V2:
+ - Fix typo in interrupt-names property.
 
-However, we *can* make this optimization for CONT_PMD_SIZE (maybe this
-is what you originally meant, Muchun?), so instead of
-`huge_page_size(h) == PMD_SIZE`, we could do `huge_page_size(h) >=
-PMD_SIZE && huge_page_size(h) < PUD_SIZE`.
+ .../bindings/net/dsa/renesas,rzn1-a5psw.yaml  | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
->
-> Thanks.
+diff --git a/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
+index 103b1ef5af1b..e68c7e353100 100644
+--- a/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
+@@ -26,6 +26,22 @@ properties:
+   reg:
+     maxItems: 1
+ 
++  interrupts:
++    items:
++      - description: DLR interrupt
++      - description: Switch interrupt
++      - description: PRP interrupt
++      - description: Integrated HUB module interrupt
++      - description: RX Pattern interrupt
++
++  interrupt-names:
++    items:
++      - const: dlr
++      - const: switch
++      - const: prp
++      - const: hub
++      - const: ptrn
++
+   power-domains:
+     maxItems: 1
+ 
+@@ -76,6 +92,7 @@ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+     #include <dt-bindings/clock/r9a06g032-sysctrl.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
+ 
+     switch@44050000 {
+         compatible = "renesas,r9a06g032-a5psw", "renesas,rzn1-a5psw";
+@@ -83,6 +100,12 @@ examples:
+         clocks = <&sysctrl R9A06G032_HCLK_SWITCH>, <&sysctrl R9A06G032_CLK_SWITCH>;
+         clock-names = "hclk", "clk";
+         power-domains = <&sysctrl>;
++        interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
++        interrupt-names = "dlr", "switch", "prp", "hub", "ptrn";
+ 
+         dsa,member = <0 0>;
+ 
+-- 
+2.36.1
+

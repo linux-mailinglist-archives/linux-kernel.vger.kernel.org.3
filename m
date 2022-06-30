@@ -2,87 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696065624F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8495624FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237376AbiF3VOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 17:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
+        id S236828AbiF3VQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 17:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236786AbiF3VOx (ORCPT
+        with ESMTP id S237306AbiF3VQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 17:14:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B36F1FCCF;
-        Thu, 30 Jun 2022 14:14:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5AA8B82D3B;
-        Thu, 30 Jun 2022 21:14:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 210E5C341C7;
-        Thu, 30 Jun 2022 21:14:47 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="A1EpNQGs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656623685;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5LqSDYksxpph4Ux5rfA5pCNDcFAhvGHpXJyugGDZSZk=;
-        b=A1EpNQGszuHFSejnU7fJ/8YyQs7m40/Sfoqh/8cLOEb5GLyEZhzC9QvigC1o6WWqKKTVIt
-        pXroP6g2vcxkBz8+Ci7UMGX8TwQ8Iya562wGVq0FeOc86pp0Igiz7yN0MIdIL/G+feTJVb
-        xN3A8LCnZPlOXNKeLydARJDgZAAZTbY=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7bed71ba (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 30 Jun 2022 21:14:45 +0000 (UTC)
-Date:   Thu, 30 Jun 2022 23:14:41 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     John Stultz <jstultz@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Saravana Kannan <saravanak@google.com>,
-        "T.J. Mercier" <tjmercier@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] pm/sleep: Add PM_USERSPACE_AUTOSLEEP Kconfig
-Message-ID: <Yr4SQVjBCilyV1na@zx2c4.com>
-References: <20220630191230.235306-1-kaleshsingh@google.com>
- <Yr3+RLhpp3g9A7vb@zx2c4.com>
- <CAC_TJvdV9bU2xWpbgrQuyrr6ens9gzDnZT2UzAY6Q6ZN9p7aEw@mail.gmail.com>
+        Thu, 30 Jun 2022 17:16:25 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1603207D
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 14:16:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1656623783; x=1688159783;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=S3lpds+Dm08bh0wmuZJxD7UtITL3wTfX27aPen8VTS4=;
+  b=L08f//uVVAqasHYcso2YTgVcDladYUMu20X4p38hNGZmPr3RJrInGZpW
+   oDydX6kq6AeTSxb+c5Gym+iEiFvdd2ibjXJlyFRf9n2u0PvWDNXo9/Kch
+   hPCBq8x24nQebE+wBcfEJcWeOZSeN0oIXyRHaG6GisWhsWyCRaxeU89A4
+   hkEdZsS3g79pyXTELaqB64IrxLaSN8NEY5gwrRTgTGPFemSx1P0Qxrt5C
+   pQ1msxBY2OnIgtVXC5MPP2iNJXmhxxcjR6dvJiBPMyh34y/HmnxVHfc7J
+   /ESoLT0K63PHXh4hSnVosxQNY8v63wQpjPfBIgVFCI9oC3vYcFNlu79sS
+   w==;
+X-IronPort-AV: E=Sophos;i="5.92,235,1650902400"; 
+   d="scan'208";a="209407245"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 01 Jul 2022 05:16:22 +0800
+IronPort-SDR: VkGpcgwjDtxVX0wrWKT7qvKLCBUNFDFITEFMwlpiZ6fhlvHpDNY6EqFloQvA68ftDDtaXfL6A4
+ 0k9h+NnK3qzAjtcIaEj9dtWKKBpPZAwW4QTOafNxf2xoM9RyEXVK1mz8L8Lwfher7t4ii17VEx
+ 6trDLJ9b8JmCRskHc9Ce5/UOV33u3r3ZpVfdfySpTG6zN3jVtV5hn8MVL7RryQ8gJEJVQ3r5LR
+ T8L35ZdoWQhXKsdKgrjosWnjxqRRW7HYKOFiN6LbaNVze9mfQ0mQp9YXMnV4j/yiq6Ae6GKjoV
+ n2wh4Dksl9A/HvWPlMKstGos
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2022 13:38:35 -0700
+IronPort-SDR: xj2kGV1QT/yzuIXjrvnf3Zs393FIb+FOievulQYINkIaSKLHjGvqGOTe+YPl+83UyPlI8X/ll5
+ EIETifOBrmCWeV9zGYs9BHUcNqLugMk6psu0R1ykwz9z+9cX/Qv6WGus16Xh9Ij7nV71CR4lPZ
+ JwW5+je4u0wwZ/l4gEnx9IMbcIOjh5uTBuGflUPdoOBuBvezEtscxe3Y/BJkhsNhW6hlfwCtf/
+ a312A22AXAsUeK2P6tZkYbnbM9J8WkKqTlbbiQLKxdfngV9Y3aJwxAKxDSK4qySRgFg4n/iRY7
+ Maw=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2022 14:16:24 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LYrjg1w9vz1Rws0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 14:16:23 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1656623782; x=1659215783; bh=S3lpds+Dm08bh0wmuZJxD7UtITL3wTfX27a
+        Pen8VTS4=; b=fqgmkU+iwbRN2+uHSjvLVbZM044xrtbN6ybNAxqU3pTozv2N4+l
+        ibyfSai70KCZf9LEusqGftOtnBKvThI8qlw3u+IHNUfjozKWyj474NoqQ6917Yn2
+        1WL1DcQZ2sQ9hYv+ciKGVsBWlAMyK45U71R8IahiJ8FTmsZ6AxSg/WCDMmCqEtpd
+        YrBkDIyKeMOmlX50DRvFOTtIKnvIAYCTb058enQ9HpsXmg3os+iYLcq0zKKcDbFx
+        nvjqkia3dvJTOA1bic5FQjsxuo6LcghR5Xx9fvgsMB7AKDAEnb5MLPzsjVZYW8pZ
+        aQvxEJEBUd3V3B7ENvqn8rnl0Xp51xi4N5w==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id rcQpKcTgxEwG for <linux-kernel@vger.kernel.org>;
+        Thu, 30 Jun 2022 14:16:22 -0700 (PDT)
+Received: from [10.225.163.102] (unknown [10.225.163.102])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LYrjX18xMz1RtVk;
+        Thu, 30 Jun 2022 14:16:15 -0700 (PDT)
+Message-ID: <f228057b-7c17-e536-ce6f-6597e263f06d@opensource.wdc.com>
+Date:   Fri, 1 Jul 2022 06:16:14 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAC_TJvdV9bU2xWpbgrQuyrr6ens9gzDnZT2UzAY6Q6ZN9p7aEw@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 00/15] Canaan devicetree fixes
+Content-Language: en-US
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Niklas Cassel <Niklas.Cassel@wdc.com>
+Cc:     Conor Dooley <mail@conchuod.ie>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+References: <20220629184343.3438856-1-mail@conchuod.ie>
+ <Yr3PKR0Uj1bE5Y6O@x1-carbon> <20220630175318.g2zmu6ek7l5iakve@bogus>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220630175318.g2zmu6ek7l5iakve@bogus>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 01:41:40PM -0700, Kalesh Singh wrote:
-> Our latest supported kernels in Android are based on 5.15 so the
-> config change isn't yet needed. Once there are newer versions with the
-> CONFIG_ANDROID removed I will add this to the defconfig.
+On 7/1/22 02:53, Sudeep Holla wrote:
+> On Thu, Jun 30, 2022 at 04:28:26PM +0000, Niklas Cassel wrote:
+>> On Wed, Jun 29, 2022 at 07:43:29PM +0100, Conor Dooley wrote:
+>>> From: Conor Dooley <conor.dooley@microchip.com>
+>>>
+>>> Hey all,
+>>> This series should rid us of dtbs_check errors for the RISC-V Canaan k210
+>>> based boards. To make keeping it that way a little easier, I changed the
+>>> Canaan devicetree Makefile so that it would build all of the devicetrees
+>>> in the directory if SOC_CANAAN.
+>>>
+>>> I *DO NOT* have any Canaan hardware so I have not tested any of this in
+>>> action. Since I sent v1, I tried to buy some since it's cheap - but could
+>>> out of the limited stockists none seemed to want to deliver to Ireland :(
+>>> I based the series on next-20220617.
+>>>
+>>
+>> I first tried to apply your series on top of next-20220630,
+>> but was greeted by a bunch of different warnings on boot,
+>> including endless RCU stall warnings.
+>> However, even when booting next-20220630 without your patches,
+>> I got the same warnings and RCU stall.
+>>
+> 
+> Is it possible to share the boot logs please ?
+> Conor is having issues with my arch_topology/cacheinfo updates in -next.
+> I would like to know if your issue is related to that or not ?
 
-Okay. It might be still worth getting something uploaded to gerrit so
-that it's easy to remember and submit whenever the time comes.
+FYI, I see rcu warnings on boot on my dual-socket 8-cores Xeon system, but
+the same kernel does not have the rcu warnings with an AMD Epyc single
+socket 16-cores box.
 
-Also, what about android running on mainline? Where does that base
-config live?
+> 
+>> So I tested your series on top of v5.19-rc4 +
+>> commit 0397d50f4cad ("spi: dt-bindings: Move 'rx-sample-delay-ns' to
+>> spi-peripheral-props.yaml") cherry-picked,
+>> (in order to avoid conflicts when applying your series,)
+>> and the board was working as intended, no warnings or RCU stalls.
+>>
+> 
+> If possible can you give this branch[1] a try where my changes are and doesn't
+> have any other changes from -next. Sorry to bother you.
+> 
+> Conor seem to have issue with this commit[2], so if you get issues try to
+> check if [3] works.
+> 
+> Regards,
+> Sudeep
+> 
+> [1] https://git.kernel.org/sudeep.holla/c/ae85abf284e7
+> [2] https://git.kernel.org/sudeep.holla/c/155bd845d17b
+> [3] https://git.kernel.org/sudeep.holla/c/009297d29faa
 
-Jason
+
+-- 
+Damien Le Moal
+Western Digital Research

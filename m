@@ -2,82 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11302561426
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C30561440
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233648AbiF3IFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 04:05:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
+        id S233662AbiF3IHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 04:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233673AbiF3IFY (ORCPT
+        with ESMTP id S233713AbiF3IH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 04:05:24 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E254130D
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:05:20 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id h23so37319917ejj.12
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:05:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ik6FUsCzNZiu9EfbLO72KDalLuo/xuLvHalvhOV/dIo=;
-        b=icYGEKccYdgHInp7tFB1pnhXjU18hV9rabV4eo63UYUr7kbNWe1Luob0Q56hhZny06
-         CSnX1+qqxWY3m8x7As3Ku17HEike7DGNmxm96b5JEL2+7WjblF05FuxhIE0kjIpxmPTW
-         Hu4mNfW87bJgt2ybaCZv0yQNAwlku6Ev2P4hWQYaL7T0QrepVa6RKhxQ4mdAlPSMfIYu
-         PA3aGI7TAL/2RGawYGzzKvjKVRWrVN/D9fqfWM77OIi+Q35d9JN8pi3++frjmhMo4UAq
-         4PJs9GyK5MW38RIGt1r/oKuMhW5+Xj8qYZ33dSi0yPdqxi8D2rs/UB4v8ywVrk42J9d5
-         BHkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ik6FUsCzNZiu9EfbLO72KDalLuo/xuLvHalvhOV/dIo=;
-        b=71R/pZ7WAtNfZIc2d3MLuc4hneIWlhb364xQS+olES9biqQGmMasy4iyw+ZBYFHv+d
-         QAv+lj5Rf7R/0za2FTmcqK1RfkNhq/mDBl95jjq1twbR1an/RikuTXVdNig15BuAWUzL
-         FI2TWWRws+hn3a2O6oHjVtI4kci0Zuc+ifNnymK2P3mrCysv0PFnJxh0uue524zRayxf
-         /mY7imaEDQSLOuUD41jyqK9wOQUm4i5H5fzom04XqiCFmO7UkDkPMPZvrwbtsDM+5u+D
-         yTnYluJIMuI2kFbhuLduKRy7b4dYCrdH8Nz4KKcetn4Djsu1XjSOYxeSAZIkqVhCfy9H
-         uNng==
-X-Gm-Message-State: AJIora9RkftI2ShISrPYNkXkRKRc9N4XUz9H7Yj8AYN0Ca9w4wzXNhFs
-        iM51IvhcjmA82ZiKt6CM+mdy6Q==
-X-Google-Smtp-Source: AGRyM1tP/qfGO00LL1laS/lsR3dmHQ5UYROZqBJGZ2LruhAHU+Vv5k0qyGUeWXitMSWJcKXmzVS7Qg==
-X-Received: by 2002:a17:906:7482:b0:722:edf9:e72f with SMTP id e2-20020a170906748200b00722edf9e72fmr7608726ejl.92.1656576319111;
-        Thu, 30 Jun 2022 01:05:19 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id bg6-20020a170906a04600b00722e31fcf42sm8747619ejb.184.2022.06.30.01.05.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 01:05:18 -0700 (PDT)
-Message-ID: <8f51aed8-956b-ac09-3baf-2b4572db1352@linaro.org>
-Date:   Thu, 30 Jun 2022 10:05:17 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFC] Correct memory layout reporting for "jedec,lpddr2" and
- related bindings
-Content-Language: en-US
-To:     Julius Werner <jwerner@chromium.org>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jian-Jia Su <jjsu@google.com>,
-        Doug Anderson <dianders@chromium.org>,
+        Thu, 30 Jun 2022 04:07:29 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A483D41335;
+        Thu, 30 Jun 2022 01:07:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656576447; x=1688112447;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xg8LrUK4CK/f+slaxiW8w/2cvQ2plwdDazQvdSmW29g=;
+  b=Fk1YPlw/KnT0KFHj7kUotH+Qh1EHPZxHAuN7EVZzYJoYueFZc2VaJubp
+   U8xyH2PcFRQ4GWX5UhTYwtOtXaPq4r9CphS97+xukNyL+OcEWV7kGT+Df
+   fmon09Vf9gpFKgXIlvSOm0rjIaH0IzDUp1Wj2XUDp3zDCmwLxeFWhk7VO
+   DtlTZEMOhk0Qa8eiD1N7aQermixF9RcpbvcXjR8bgMfur08e5GiAlBKH/
+   /wlc4mmkSOXL87r79nPSfn0DH4uy49SMvhmPRyZlD0RloNJFdNYsMCN4m
+   IMAM6fPJvH/Ncqn6MQP+oIZ7mOqVBVltEPZKxxIGQkWwDStwhqET8UKsv
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
+   d="scan'208";a="102426504"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Jun 2022 01:07:25 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 30 Jun 2022 01:07:25 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 30 Jun 2022 01:07:21 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Nikola Milosavljevic <mnidza@outlook.com>
-References: <CAODwPW9E8wWwxbYKyf4_-JFb4F-JSmLR3qOF_iudjX0f9ndF0A@mail.gmail.com>
- <CAODwPW8fiFSNehZbZDdR9kjHxohLGiyE7edU=Opy0xV_P8JbEQ@mail.gmail.com>
- <3bb0ffa0-8091-0848-66af-180a41a68bf7@linaro.org>
- <CAODwPW89xZQZiZdQNt6+CcRjz=nbEAAFH0h_dBFSE5v3aFU4rQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAODwPW89xZQZiZdQNt6+CcRjz=nbEAAFH0h_dBFSE5v3aFU4rQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Daire McNamara" <daire.mcnamara@microchip.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: [PATCH v1 00/14] PolarFire SoC reset controller & clock cleanups
+Date:   Thu, 30 Jun 2022 09:05:19 +0100
+Message-ID: <20220630080532.323731-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,92 +75,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/2022 03:03, Julius Werner wrote:
->>> For the latter, I would suggest adding a new property "channel-io-width" which
->>
->> No, because io-width is a standard property, so it should be used
->> instead. It could be defined in channel node.
-> 
-> What exactly do you mean by "standard property" -- do you mean in an
-> LPDDR context, or for device tree bindings in general? In other device
-> tree bindings, the only thing I can find is `reg-io-width`,
+Hey all,
+I know I have not sat on the RFC I sent about the aux. bus parts
+for too long, but figured I'd just send the whole thing anyway to all
+lists etc.
 
-I had impression I saw io-width outside of LPPDR bindings, but
-apparently it's only reg-io-width
+Kinda two things happening in this series, but I sent it together to
+ensure the second part would apply correctly.
 
->  so that's
-> not quite the same (and wouldn't seem to preclude calling a field here
-> `channel-io-width`, since the width that's talking about is not the
-> width of a register).
+The first is the reset controller that I promised after discovering the
+issue triggered by CONFIG_PM & the phy not coming up correctly. I have
+now removed all the messing with resets from clock enable/disable
+functions & now use the aux bus to set up a reset controller driver.
+Since I needed something to test it, I hooked up the reset for the
+Cadence MACB on PolarFire SoC.
 
-reg-io-width is not only about register width, but width of access size
-or width of IO.
+The second part adds rate control for the MSS PLL clock, followed by
+some simplifications to the driver & conversions of some custom structs
+to the corresponding structs in the framework.
 
+Thanks,
+Conor.
 
-> In LPDDR context, the term "IO width" mostly
-> appears specifically for the bit field in Mode Register 8 that
-> describes the amount of DQ pins going into one individual LPDDR chip.
-> The field that I need to encode for the channel here is explicitly
-> *not* that, it's the amount of DQ pins coming *out* of the LPDDR
-> controller, and as explained in my original email those two numbers
-> need not necessarily be the same when multiple LPDDR chips are hooked
-> up in parallel. So, yes, I could call both of these properties
-> `io-width` with one in the rank node and one in the channel node...
-> but I think giving the latter one a different name (e.g.
-> `channel-io-width`) would be better to avoid confusion and provide a
-> hint that there's an important difference between these numbers.
+FYI, there'll be maintainers conflicts with an obvious resolution in
+-next, but I cannot rebase on then b/c unrelated changes have broken
+boot there at the moment.
 
-Send the bindings, we'll see what the DT binding maintainers will say. :)
+Conor Dooley (14):
+  dt-bindings: clk: microchip: mpfs: add reset controller support
+  dt-bindings: net: cdns,macb: document polarfire soc's macb
+  clk: microchip: mpfs: add reset controller
+  reset: add polarfire soc reset support
+  MAINTAINERS: add polarfire soc reset controller
+  net: macb: add polarfire soc reset support
+  riscv: dts: microchip: add mpfs specific macb reset support
+  clk: microchip: mpfs: add module_authors entries
+  clk: microchip: mpfs: add MSS pll's set & round rate
+  clk: microchip: mpfs: move id & offset out of clock structs
+  clk: microchip: mpfs: simplify control reg access
+  clk: microchip: mpfs: delete 2 line mpfs_clk_register_foo()
+  clk: microchip: mpfs: convert cfg_clk to clk_divider
+  clk: microchip: mpfs: convert periph_clk to clk_gate
 
-> 
->> You also need a timings node. I don't think it would be different for
->> each of ranks, would it?
-> 
-> I think it might be? I'm honestly not a memory expert so I'm not
-> really sure (Jian-Jia in CC might know this?), but since different
-> ranks can be asymmetric (even when they're on the same part), I could
-> imagine that, say, the larger rank might need slightly longer
-> precharge time or something like that. They at least all implement a
-> separate set of mode registers, so they could theoretically be
-> configured with different latency settings through those.
-
-This feels weird... although maybe one or few parameters of timings
-could be different.
-
-How the asymmetric SDRAMs report density? This is a field with
-fixed/enum values, so does it mean two-rank-asymmetric module has two
-registers, one per each rank and choice of register depends on chip select?
-
-> 
->>>> (Also, btw, would it make sense to use this opportunity to combine the
->>>> "jedec,lpddr2" and "jedec,lpddr3" bindings into a single document?
->>
->> These bindings are quite different, so combining would result in big
->> allOf. I am not sure if there is benefit in that.
-> 
-> They should basically be 100% identical outside of the timings. I can
-> see that jedec,lpddr2 is currently missing the manufacturer-id
-> property, that's probably an oversight -- Mode Register 5 with that ID
-> exists for LPDDR2 just as well as for LPDDR3, and we're already
-> passing the revision IDs which is kinda useless without also passing
-> the manufacturer ID as well (because the revision IDs are
-> vendor-specific).
-
-Manufacturer ID is taken from compatible. LPDDR3 has it deprecated.
-
-> So merging the bindings would fix that. 
-
-Nothing to fix, it was by choice.
-
-> The only
-> other difference I can see are the deprecated
-> `revision-id1`/`revision-id2` fields for jedec,lpddr2 -- if I use a
-> property inclusion mechanism like Doug suggested, those could stay
-> separate in jedec,lpddr2 only (since they're deprecated anyway and
-> replaced by `revision-id` in the combined bindings).
-> 
-> For the timings, I'm okay with keeping them separate.
+ .../bindings/clock/microchip,mpfs.yaml        |  17 +-
+ .../devicetree/bindings/net/cdns,macb.yaml    |   1 +
+ MAINTAINERS                                   |   1 +
+ arch/riscv/boot/dts/microchip/mpfs.dtsi       |   7 +-
+ drivers/clk/microchip/Kconfig                 |   1 +
+ drivers/clk/microchip/clk-mpfs.c              | 377 +++++++++---------
+ drivers/net/ethernet/cadence/macb_main.c      |  25 +-
+ drivers/reset/Kconfig                         |   9 +
+ drivers/reset/Makefile                        |   2 +-
+ drivers/reset/reset-mpfs.c                    | 145 +++++++
+ include/soc/microchip/mpfs.h                  |   8 +
+ 11 files changed, 393 insertions(+), 200 deletions(-)
+ create mode 100644 drivers/reset/reset-mpfs.c
 
 
-Best regards,
-Krzysztof
+base-commit: b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
+-- 
+2.36.1
+

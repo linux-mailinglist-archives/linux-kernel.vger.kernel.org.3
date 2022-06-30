@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEC4562164
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 19:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C53562168
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 19:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236400AbiF3Rig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 13:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34342 "EHLO
+        id S236404AbiF3Rkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 13:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233863AbiF3Rie (ORCPT
+        with ESMTP id S233863AbiF3Rki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 13:38:34 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A3E15824
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:38:33 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id w83so218895oiw.1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:38:33 -0700 (PDT)
+        Thu, 30 Jun 2022 13:40:38 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645EB1107
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:40:37 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so133058fac.13
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:40:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=yRt2uPyCTkr3L23mkOV5jzWQCVWH61bPdgdKUhINZi0=;
-        b=dUxjXs4MlHvfXO9xVNfCPOq2IDb3+NDw6so8BPXnwxWxhv51RZ3Uh49XkRLb1PVquF
-         vXPqYQo3o0XU/wDvQ6ceawvxHBXRA6/9tMKO96IJn9b6JEOhHhvB7nlxlfKd9UN9caB8
-         7Ah2Jx6IJa/TbkshlWuKPbumjWqYC/OTi4pxLgsAHTP7xDZfpOjn7w5sOBs2ai7IWgs7
-         BOf2Oevb9NpBtcNPYKn8VcOL0QZQmrHo6tDKPFmhyIOpgm1J7r+3HxURB250+u3OgUGt
-         QjSBPh2z9yjLRsQFWdO+axuYy17ZZf3rGj9pUwmzGv3kzSIwUgE9cyYMMEYSkGjVZdsr
-         Jehg==
+        bh=EGE13E6ZZhU25BMBFH6IJpwsNUcglEsD50ZGiHxhMVQ=;
+        b=wjpd5H5KnbK7QTTI1de178JpUIRh8kjd3V+neF7jaJMjKPOwwd8Yj3j6ypd/aj7XyM
+         FzeRco6DWJdluLH2th9Nq4HXW38kLqUF3qG1n4XIiBYQ5zcqmNYdWeZizDCDQ33xm8Wy
+         Aq73WpUD4rUGSpe56pix+rm8fChl04rPKwtNEekm2OFX5I3OGhJuYUwpxV1TeRJd7F+D
+         DeLAlCLrs2bVcRtK5YhtTnLLRzsRtx3/T3KAsaF6pCoOXqbOymhLjFdHJ26WHOojebDo
+         BTXJy5O7P4JetRaGRewOjy+iWEcba8u1xtxPSn+QL8OvxWqlXeoLpkq0C6SbUnx176lO
+         RFqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=yRt2uPyCTkr3L23mkOV5jzWQCVWH61bPdgdKUhINZi0=;
-        b=L0VtWxKd/yZ/Z5kW6UBRMnKGeaW8udGOTjw7Mit3KXH8zuSjcqq4q/+V5mG0x9hUqV
-         spxWEYleTDG+2BWF3BRm6LznoGg5xEWXqNhh5jF2KTBt8PQMRKq3UC6KQWPOvCwFaniD
-         2kgM218/p1oWaDkUK9mc8ZoXjbmU8IpA34UlGUW6YgOiZBPfCo57+abwW3KQB6yUUn2k
-         e5vUZ8dUd4osvCrOCRiLlQyP8bQhcX6xFl8t0Y5U9ry3sapX/x1AgczL/4jDFqBGUhNz
-         Nsz81Sd7V6NWb6+sKJU6I0FjP/SsMoj4dstTJtbwCcRaIBzVQ5tGtwYBASfC2sywhbNL
-         87uw==
-X-Gm-Message-State: AJIora8xpxVeiDuOfoSPiWn1VWHH9hLys+N7c7ElAx7ohpNwEpufMfst
-        v9N84rhldjw80cn1CN8ciM+oxx9eUTbvclOc
-X-Google-Smtp-Source: AGRyM1sMFzpdDko0W+UJF+RaaGAmUzY7TXCDlzU+R3T3PNpyAfQe5AIXUZ1C8LrlBLBZuPyCeeNW5A==
-X-Received: by 2002:aca:c282:0:b0:32f:546:61ff with SMTP id s124-20020acac282000000b0032f054661ffmr5879809oif.39.1656610711298;
-        Thu, 30 Jun 2022 10:38:31 -0700 (PDT)
+        bh=EGE13E6ZZhU25BMBFH6IJpwsNUcglEsD50ZGiHxhMVQ=;
+        b=LXi73mcbDI3Hdfkj+t/0u8+5ibcpmOuAElJ/Fp56tv8sGAukChkoGLjSBjlrgSIe24
+         puvRbGt5ClyvjR/qa7K1y6TpEf9YkcYJ2DOlAg2AxKwj43x6Sc6LwMakJVANfCXptopU
+         Igxqxvp+Bj59ehf+RahrA+UTPA5Azrv22BZFXeE2xLdIj99+f/W63z+1ejDCeY+lsJkj
+         0enYG3aziShfWL2WurDoWVyR+AAdvwMxUTBq3VBKnt/wsrIWRDSe2edeMQG/mtkaQir6
+         AzMKeysdfheCVqguVPpPUhBPs3EPQe0U3I1Gx700oujxru1Jw7qY4BNIlrLds0bCz5tQ
+         nvng==
+X-Gm-Message-State: AJIora+c2/RxZWfuWBwEhknYYatihFa4qFdW+hvI1WicY5Cdyj9nWEx8
+        vWU3dLNoKvNX1BwJDJpDuq9fgA==
+X-Google-Smtp-Source: AGRyM1v0Nx0E1opyB9avEAkzQRKPrjH670PrUahCZqH0PNOb+fyeVLDUCCM6nt1U4s8F/ZcMFjbTWw==
+X-Received: by 2002:a05:6870:7885:b0:104:9120:c382 with SMTP id hc5-20020a056870788500b001049120c382mr5973550oab.115.1656610836765;
+        Thu, 30 Jun 2022 10:40:36 -0700 (PDT)
 Received: from eze-laptop ([190.190.187.68])
-        by smtp.gmail.com with ESMTPSA id c13-20020aca1c0d000000b003351dbf5e36sm10269648oic.43.2022.06.30.10.38.26
+        by smtp.gmail.com with ESMTPSA id m13-20020a056820050d00b0041b8e651c1csm11819888ooj.40.2022.06.30.10.40.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 10:38:30 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 14:38:24 -0300
+        Thu, 30 Jun 2022 10:40:36 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 14:40:30 -0300
 From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
 Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, p.zabel@pengutronix.de,
@@ -60,14 +60,14 @@ Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, p.zabel@pengutronix.de,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@collabora.com
-Subject: Re: [PATCH 5/7] media: Hantro: HEVC: Allows 10-bit bitstream
-Message-ID: <Yr3fkPrQXqT+UZNa@eze-laptop>
+Subject: Re: [PATCH 6/7] media: hantro: imx8m: Enable 10bit decoding
+Message-ID: <Yr3gDuzOXk58wTnd@eze-laptop>
 References: <20220617115802.396442-1-benjamin.gaignard@collabora.com>
- <20220617115802.396442-6-benjamin.gaignard@collabora.com>
+ <20220617115802.396442-7-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220617115802.396442-6-benjamin.gaignard@collabora.com>
+In-Reply-To: <20220617115802.396442-7-benjamin.gaignard@collabora.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -79,45 +79,69 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Benjamin,
 
-On Fri, Jun 17, 2022 at 01:58:00PM +0200, Benjamin Gaignard wrote:
-> Stop limiting HEVC support to 8-bits bitstreams also
-> accept 10-bits bitstreams.
+On Fri, Jun 17, 2022 at 01:58:01PM +0200, Benjamin Gaignard wrote:
+> Expose 10bit pixel formats to enable 10bit decoding in IMX8M SoCs.
 > 
 > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> ---
->  drivers/staging/media/hantro/hantro_hevc.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
-> index e06837108a09..85688a4df166 100644
-> --- a/drivers/staging/media/hantro/hantro_hevc.c
-> +++ b/drivers/staging/media/hantro/hantro_hevc.c
-> @@ -159,8 +159,8 @@ int hantro_hevc_validate_sps(struct hantro_ctx *ctx, const struct v4l2_ctrl_hevc
 
-I'd like to go back to checking the SPS control directly
-in hantro_try_ctrl. I believe the best and most reasonable
-place to validate the controls would be TRY_CTRL.
-
-See https://patchwork.linuxtv.org/project/linux-media/patch/20220629195624.45745-2-ezequiel@vanguardiasur.com.ar/.
-
->  	if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
->  		/* Luma and chroma bit depth mismatch */
->  		return -EINVAL;
-> -	if (sps->bit_depth_luma_minus8 != 0)
-> -		/* Only 8-bit is supported */
-> +	if (sps->bit_depth_luma_minus8 != 0 && sps->bit_depth_luma_minus8 != 2)
-> +		/* Only 8-bit and 10-bit is supported */
-
-Having said that, the change looks good:
+Looks good to me.
 
 Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-Thanks,
+Have you checked Fluster tests passess using both P010 and P010_4L4?
+It would be good to double-check.
+
+Thanks a lot,
 Ezequiel
 
->  		return -EINVAL;
+> ---
+>  drivers/staging/media/hantro/imx8m_vpu_hw.c | 27 +++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+> 
+> diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+> index 77f574fdfa77..b390228fd3b4 100644
+> --- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
+> +++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+> @@ -162,12 +162,39 @@ static const struct hantro_fmt imx8m_vpu_g2_postproc_fmts[] = {
+>  			.step_height = MB_DIM,
+>  		},
+>  	},
+> +	{
+> +		.fourcc = V4L2_PIX_FMT_P010,
+> +		.codec_mode = HANTRO_MODE_NONE,
+> +		.postprocessed = true,
+> +		.frmsize = {
+> +			.min_width = FMT_MIN_WIDTH,
+> +			.max_width = FMT_UHD_WIDTH,
+> +			.step_width = MB_DIM,
+> +			.min_height = FMT_MIN_HEIGHT,
+> +			.max_height = FMT_UHD_HEIGHT,
+> +			.step_height = MB_DIM,
+> +		},
+> +	},
+>  };
 >  
->  	ctx->bit_depth = sps->bit_depth_luma_minus8 + 8;
+>  static const struct hantro_fmt imx8m_vpu_g2_dec_fmts[] = {
+>  	{
+>  		.fourcc = V4L2_PIX_FMT_NV12_4L4,
+>  		.codec_mode = HANTRO_MODE_NONE,
+> +		.match_depth = true,
+> +		.frmsize = {
+> +			.min_width = FMT_MIN_WIDTH,
+> +			.max_width = FMT_UHD_WIDTH,
+> +			.step_width = TILE_MB_DIM,
+> +			.min_height = FMT_MIN_HEIGHT,
+> +			.max_height = FMT_UHD_HEIGHT,
+> +			.step_height = TILE_MB_DIM,
+> +		},
+> +	},
+> +	{
+> +		.fourcc = V4L2_PIX_FMT_P010_4L4,
+> +		.codec_mode = HANTRO_MODE_NONE,
+> +		.match_depth = true,
+>  		.frmsize = {
+>  			.min_width = FMT_MIN_WIDTH,
+>  			.max_width = FMT_UHD_WIDTH,
 > -- 
 > 2.32.0
 > 

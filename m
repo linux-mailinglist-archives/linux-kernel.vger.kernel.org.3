@@ -2,125 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA385561E48
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9E9561E50
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235180AbiF3Oj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
+        id S234604AbiF3OnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235373AbiF3Ojc (ORCPT
+        with ESMTP id S230518AbiF3OnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:39:32 -0400
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id C7D69DC9;
-        Thu, 30 Jun 2022 07:39:12 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [221.192.178.120])
-        by mail-app2 (Coremail) with SMTP id by_KCgA3P4t1tb1i0uLmAg--.61459S2;
-        Thu, 30 Jun 2022 22:38:53 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-hams@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-        davem@davemloft.net, ralf@linux-mips.org,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH net] net: rose: fix UAF bug caused by rose_t0timer_expiry
-Date:   Thu, 30 Jun 2022 22:38:42 +0800
-Message-Id: <20220630143842.24906-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: by_KCgA3P4t1tb1i0uLmAg--.61459S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ar1ftFyktw4DJryUAr1xuFg_yoW8ur1kpF
-        WYkr13Jrs3J3yqgFW8ZF4kZrW7Gw4DJFy7GF18CFWSy3Z7Jr4YvF1Dtry8ZF4xAFWkCFya
-        grykWry3A3ZIyrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6ry5
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUrpBTUUUUU
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgsRAVZdtaeZYQBWsu
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 30 Jun 2022 10:43:19 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E7DDF5D;
+        Thu, 30 Jun 2022 07:43:17 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d5so17187003plo.12;
+        Thu, 30 Jun 2022 07:43:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RUoQVUfGIj+k3cK9VwLwIAhO4opF70rEutg3/2JWbC4=;
+        b=mgt0FAe0RaXxmkNV3dy2J1eV/FbHCE1/hDOnsUyVtVhvzO5yUJ0GR22CtF1X14Qnr7
+         CXxb8edTqh/LWLZmNaoF0bq7rHhonzgqNKelVBfU+dOi03LOjpThN7IxfB6vDgYeLd4r
+         W0LxeHexHjzHAzClwJwrY5Bnq0FsevwUOiYTReuID5T2LmFDZN2SHDD2ZNe9v9wLKdA8
+         ZyMYqUXMTrbGbwHxnttvTjIGZUA2dF3zxMuD01r9Lp3atcGjoQamcELO+XoLNGj8RJpQ
+         CU81vdOtOqTnAjLfDLcNGWg8u3YkUSsZ23oQwudqa3tZib6HtnbnoXIDq13jo2916ARP
+         CCLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RUoQVUfGIj+k3cK9VwLwIAhO4opF70rEutg3/2JWbC4=;
+        b=KCpvofXeV2g5fyo/9PrMVCLKlO3Ljd+H9xjkkrpumdIOhrk1WBIMl4CQUG8KAQi3wn
+         5TerU3ep1zivUc31OsYF+dr/ZWc24HEGlpKAGUTwFXmowon6DacN5xJtet2s6X432ODG
+         JmNg/yjWorODlckfQmRBffGygvINM5ShbyZ8xXHEiGNmg0EL1Jn5WYcMGzB5ySFlIB90
+         aV5kqCUB3P61Kbi0vnAVD81x8gEzmO5h/u8V2RozyWvAlsU0q9oI/PTY9stkBKh/lJTh
+         vKCoBZWK/XsIGo/heirHzjrF+EqMM71RtVNkrtWJMgROTWkyngD/xA0qAuGAQ5WMABZ7
+         qfdg==
+X-Gm-Message-State: AJIora+Sy96qocbWefnzwuczWpyXcBg8vfqP2FJ4t533d7IkeSpWeV3s
+        LgO1TxYyZnwiBRDAV302Ahg=
+X-Google-Smtp-Source: AGRyM1sYB1R3u1XCkRIl82xDtM8/BHbKNahIwLTkJ9JVsgEUEwGEDwnGSfR9o/mfcbDeU5mr4vFWJg==
+X-Received: by 2002:a17:90b:d82:b0:1ef:366f:b654 with SMTP id bg2-20020a17090b0d8200b001ef366fb654mr4955387pjb.151.1656600196861;
+        Thu, 30 Jun 2022 07:43:16 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o15-20020a17090ab88f00b001e305f5cd22sm4498009pjr.47.2022.06.30.07.43.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 07:43:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <05ab4cec-ed35-1923-5750-e43c3ed30c50@roeck-us.net>
+Date:   Thu, 30 Jun 2022 07:43:11 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6 08/14] dt-bindings: watchdog: Add fsl,scu-wdt yaml file
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
+ <20220629164414.301813-9-viorel.suman@oss.nxp.com>
+ <988844aa-f7ce-3cba-dd6c-227fa6d58102@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <988844aa-f7ce-3cba-dd6c-227fa6d58102@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are UAF bugs caused by rose_t0timer_expiry(). The
-root cause is that del_timer() could not stop the timer
-handler that is running and there is no synchronization.
-One of the race conditions is shown below:
+On 6/29/22 10:59, Krzysztof Kozlowski wrote:
+> On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
+>> From: Abel Vesa <abel.vesa@nxp.com>
+>>
+>> In order to replace the fsl,scu txt file from bindings/arm/freescale,
+>> we need to split it between the right subsystems. This patch documents
+>> separately the 'watchdog' child node of the SCU main node.
+>>
+>> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+>> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+>> ---
+> 
+> Assuming all patches are taken independently:
+> 
+> 
+Assuming the same:
 
-    (thread 1)             |        (thread 2)
-                           | rose_device_event
-                           |   rose_rt_device_down
-                           |     rose_remove_neigh
-rose_t0timer_expiry        |       rose_stop_t0timer(rose_neigh)
-  ...                      |         del_timer(&neigh->t0timer)
-                           |         kfree(rose_neigh) //[1]FREE
-  neigh->dce_mode //[2]USE |
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-The rose_neigh is deallocated in position [1] and use in
-position [2].
-
-The crash trace triggered by POC is like below:
-
-BUG: KASAN: use-after-free in expire_timers+0x144/0x320
-Write of size 8 at addr ffff888009b19658 by task swapper/0/0
-...
-Call Trace:
- <IRQ>
- dump_stack_lvl+0xbf/0xee
- print_address_description+0x7b/0x440
- print_report+0x101/0x230
- ? expire_timers+0x144/0x320
- kasan_report+0xed/0x120
- ? expire_timers+0x144/0x320
- expire_timers+0x144/0x320
- __run_timers+0x3ff/0x4d0
- run_timer_softirq+0x41/0x80
- __do_softirq+0x233/0x544
- ...
-
-This patch changes del_timer() in rose_stop_t0timer() and
-rose_stop_ftimer() to del_timer_sync() in order that the
-timer handler could be finished before the resources such as
-rose_neigh and so on are deallocated. As a result, the UAF
-bugs could be mitigated.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- net/rose/rose_link.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/net/rose/rose_link.c b/net/rose/rose_link.c
-index 8b96a56d3a4..9734d1264de 100644
---- a/net/rose/rose_link.c
-+++ b/net/rose/rose_link.c
-@@ -54,12 +54,12 @@ static void rose_start_t0timer(struct rose_neigh *neigh)
- 
- void rose_stop_ftimer(struct rose_neigh *neigh)
- {
--	del_timer(&neigh->ftimer);
-+	del_timer_sync(&neigh->ftimer);
- }
- 
- void rose_stop_t0timer(struct rose_neigh *neigh)
- {
--	del_timer(&neigh->t0timer);
-+	del_timer_sync(&neigh->t0timer);
- }
- 
- int rose_ftimer_running(struct rose_neigh *neigh)
--- 
-2.17.1
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>  >
+> Best regards,
+> Krzysztof
 

@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA0E561C3F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B27BE561C4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235737AbiF3Nyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 09:54:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
+        id S235836AbiF3NzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 09:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235716AbiF3NyU (ORCPT
+        with ESMTP id S235807AbiF3Nya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:54:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DE752380;
-        Thu, 30 Jun 2022 06:50:15 -0700 (PDT)
+        Thu, 30 Jun 2022 09:54:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B442A58FD2;
+        Thu, 30 Jun 2022 06:50:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1ED9461FD8;
-        Thu, 30 Jun 2022 13:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29582C34115;
-        Thu, 30 Jun 2022 13:50:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A074B82AF6;
+        Thu, 30 Jun 2022 13:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D983BC34115;
+        Thu, 30 Jun 2022 13:50:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597014;
-        bh=DuigcMx0DqVCBIG2n4mSaG34J8iwHHjFkHvYhh4Vh9Y=;
+        s=korg; t=1656597017;
+        bh=UqT7Ezn9pWtS5CRV1aEcCh3rXLPAeHPdmaWs4yzft/k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pNg0vYEIXhaNR/qzJc5VqMRqznETE0SJh8YEKW+WnOhwA1MkbnAOd5ZfMZaph4f09
-         tJJ1iDNbJnUux8Zu4rv76iCP2Vc3EnfKs5wxm/fgaDQp6eqIk6V36CFx1xo+SwOXUh
-         ydGgRujznGqP14Upo7v4A39+lu6uFovYQU7xpqo4=
+        b=KjbSFD5d+cSG1OPl/lXFxF8E+50mi2ExgfvSuWifl9hk/xcL/CefVTY5AX4cRlO3U
+         MCkHjdQV4f6avPbLxafI+WF0tRfY0xYXUnUAOpQvBKiMCOzFDDcESG5Y6eOlW1pMX7
+         PDgb4bTqj8l6Lvm09lFaq687PKzZX9KcwAiZUQ1k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Christoph Hellwig <hch@lst.de>, Jessica Yu <jeyu@kernel.org>
-Subject: [PATCH 4.14 31/35] drm: remove drm_fb_helper_modinit
-Date:   Thu, 30 Jun 2022 15:46:42 +0200
-Message-Id: <20220630133233.355081013@linuxfoundation.org>
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Juergen Gross <jgross@suse.com>
+Subject: [PATCH 4.14 32/35] xen: unexport __init-annotated xen_xlate_map_ballooned_pages()
+Date:   Thu, 30 Jun 2022 15:46:43 +0200
+Message-Id: <20220630133233.383327806@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220630133232.433955678@linuxfoundation.org>
 References: <20220630133232.433955678@linuxfoundation.org>
@@ -54,104 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-commit bf22c9ec39da90ce866d5f625d616f28bc733dc1 upstream.
+commit dbac14a5a05ff8e1ce7c0da0e1f520ce39ec62ea upstream.
 
-drm_fb_helper_modinit has a lot of boilerplate for what is not very
-simple functionality.  Just open code it in the only caller using
-IS_ENABLED and IS_MODULE, and skip the find_module check as a
-request_module is harmless if the module is already loaded (and not
-other caller has this find_module check either).
+EXPORT_SYMBOL and __init is a bad combination because the .init.text
+section is freed up after the initialization. Hence, modules cannot
+use symbols annotated __init. The access to a freed symbol may end up
+with kernel panic.
 
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Jessica Yu <jeyu@kernel.org>
+modpost used to detect it, but it has been broken for a decade.
+
+Recently, I fixed modpost so it started to warn it again, then this
+showed up in linux-next builds.
+
+There are two ways to fix it:
+
+  - Remove __init
+  - Remove EXPORT_SYMBOL
+
+I chose the latter for this case because none of the in-tree call-sites
+(arch/arm/xen/enlighten.c, arch/x86/xen/grant-table.c) is compiled as
+modular.
+
+Fixes: 243848fc018c ("xen/grant-table: Move xlated_setup_gnttab_pages to common place")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Acked-by: Stefano Stabellini <sstabellini@kernel.org>
+Link: https://lore.kernel.org/r/20220606045920.4161881-1-masahiroy@kernel.org
+Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/drm_crtc_helper_internal.h |   10 ----------
- drivers/gpu/drm/drm_fb_helper.c            |   21 ---------------------
- drivers/gpu/drm/drm_kms_helper_common.c    |   23 +++++++++++------------
- 3 files changed, 11 insertions(+), 43 deletions(-)
+ drivers/xen/xlate_mmu.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/gpu/drm/drm_crtc_helper_internal.h
-+++ b/drivers/gpu/drm/drm_crtc_helper_internal.h
-@@ -32,16 +32,6 @@
- #include <drm/drm_encoder.h>
- #include <drm/drm_modes.h>
+--- a/drivers/xen/xlate_mmu.c
++++ b/drivers/xen/xlate_mmu.c
+@@ -262,4 +262,3 @@ int __init xen_xlate_map_ballooned_pages
  
--/* drm_fb_helper.c */
--#ifdef CONFIG_DRM_FBDEV_EMULATION
--int drm_fb_helper_modinit(void);
--#else
--static inline int drm_fb_helper_modinit(void)
--{
--	return 0;
--}
--#endif
--
- /* drm_dp_aux_dev.c */
- #ifdef CONFIG_DRM_DP_AUX_CHARDEV
- int drm_dp_aux_dev_init(void);
---- a/drivers/gpu/drm/drm_fb_helper.c
-+++ b/drivers/gpu/drm/drm_fb_helper.c
-@@ -2612,24 +2612,3 @@ int drm_fb_helper_hotplug_event(struct d
  	return 0;
  }
- EXPORT_SYMBOL(drm_fb_helper_hotplug_event);
--
--/* The Kconfig DRM_KMS_HELPER selects FRAMEBUFFER_CONSOLE (if !EXPERT)
-- * but the module doesn't depend on any fb console symbols.  At least
-- * attempt to load fbcon to avoid leaving the system without a usable console.
-- */
--int __init drm_fb_helper_modinit(void)
--{
--#if defined(CONFIG_FRAMEBUFFER_CONSOLE_MODULE) && !defined(CONFIG_EXPERT)
--	const char name[] = "fbcon";
--	struct module *fbcon;
--
--	mutex_lock(&module_mutex);
--	fbcon = find_module(name);
--	mutex_unlock(&module_mutex);
--
--	if (!fbcon)
--		request_module_nowait(name);
--#endif
--	return 0;
--}
--EXPORT_SYMBOL(drm_fb_helper_modinit);
---- a/drivers/gpu/drm/drm_kms_helper_common.c
-+++ b/drivers/gpu/drm/drm_kms_helper_common.c
-@@ -35,19 +35,18 @@ MODULE_LICENSE("GPL and additional right
- 
- static int __init drm_kms_helper_init(void)
- {
--	int ret;
-+	/*
-+	 * The Kconfig DRM_KMS_HELPER selects FRAMEBUFFER_CONSOLE (if !EXPERT)
-+	 * but the module doesn't depend on any fb console symbols.  At least
-+	 * attempt to load fbcon to avoid leaving the system without a usable
-+	 * console.
-+	 */
-+	if (IS_ENABLED(CONFIG_DRM_FBDEV_EMULATION) &&
-+	    IS_MODULE(CONFIG_FRAMEBUFFER_CONSOLE) &&
-+	    !IS_ENABLED(CONFIG_EXPERT))
-+		request_module_nowait("fbcon");
- 
--	/* Call init functions from specific kms helpers here */
--	ret = drm_fb_helper_modinit();
--	if (ret < 0)
--		goto out;
--
--	ret = drm_dp_aux_dev_init();
--	if (ret < 0)
--		goto out;
--
--out:
--	return ret;
-+	return drm_dp_aux_dev_init();
- }
- 
- static void __exit drm_kms_helper_exit(void)
+-EXPORT_SYMBOL_GPL(xen_xlate_map_ballooned_pages);
 
 

@@ -2,366 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED2E5621DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 20:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D405C5621DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 20:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236219AbiF3SOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 14:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
+        id S235456AbiF3SOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 14:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236257AbiF3SN7 (ORCPT
+        with ESMTP id S236642AbiF3SOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 14:13:59 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED2B3DDD0;
-        Thu, 30 Jun 2022 11:13:56 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id ad8ed56b92f73f43; Thu, 30 Jun 2022 20:13:54 +0200
-Received: from kreacher.localnet (unknown [213.134.175.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id A4C8966CA52;
-        Thu, 30 Jun 2022 20:13:53 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        John Garry <john.garry@huawei.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v3] hisi_lpc: Use acpi_dev_for_each_child()
-Date:   Thu, 30 Jun 2022 20:13:52 +0200
-Message-ID: <5606189.DvuYhMxLoT@kreacher>
-In-Reply-To: <2657553.mvXUDI8C0e@kreacher>
-References: <12026357.O9o76ZdvQC@kreacher> <2657553.mvXUDI8C0e@kreacher>
+        Thu, 30 Jun 2022 14:14:44 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D21542A18
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 11:14:41 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25UHUpUt020594;
+        Thu, 30 Jun 2022 18:14:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=e27YmPtAAdLaZlSs7tQam3NrRcqENuYodJjm/CK7ql0=;
+ b=CwA8P9q9gzqJW0bnpI6Z3Ik7fDSQK0cJhZQHx6VBa2NkP5NuhzXtsQ1uD7Tc1cC8VsJe
+ ou/8q4C7eZ8PJK9xMtl/eZzrI5Czqz6sBY8lc2wovSHccMRny1Ooo7lMiU+VulB61zsf
+ s01k3qKzFd0LHN7DbDd8Fe2BqERUJv8y0l6kJZkGMPnQmXc6WHDPvkeYigK2NezsqoBq
+ C4W76r89u3e0CmQmJjA8kz4org8MRkCxm4BBWQGKjzl7LDhK7IF94JvTIgikUswQv3IT
+ nKP/yWqZYDSPlQsihm5DGYazsrgcq16zrnQfyrpVS8vULXROSx9Je7L1f4yH1aLuLeoJ gA== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gwsysn0px-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Jun 2022 18:14:24 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25UI6Ro0034246;
+        Thu, 30 Jun 2022 18:14:20 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2105.outbound.protection.outlook.com [104.47.70.105])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gwrt49gcv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Jun 2022 18:14:20 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j8xYtcPW1frhU1nMA0yI6sNGKo8L3iCiogl8Sgy0Z9voNhkd+HGLbACM47WXSiH1kbOEx3p1PknDPFEZlrIbZGxBaTqIJ8yJ0RB2dsDifI6A3x6Af01Jc39sMRNVZIFFJ04H/PEkUiZkhC4UWj+4TPIAHByf6BpOlnxGE4bxNysQ5VkztFysAbwX2rINiMbkR31CvbK7sBGD9wcJiRS21sWRFtxZ3GCpwjdjEZqDr0Ivb+8gMo48XB3z+ajxAJirIiN2W9v475z/gm/l3UIAwibW67SsLGptSQE2d4tgrBG5P0FXiBnwwW7UCzm6k27MQh7WGQ87y1eYuwBsPoygJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=e27YmPtAAdLaZlSs7tQam3NrRcqENuYodJjm/CK7ql0=;
+ b=Q5FFR0tH8VaR4b9fZo3pw6fwlnKGaTICzb6YUHw8xR+o+CFv9zvvbLhvzgthZs9ml+9VX60kVBbXCYS7o535IsClQsoX8XBAv9dy38G47qh/V1eWU63qJ1sseUL++ATFP6fn9nEd2vZSkCY4iJejzW1dp8aVgXdfwoxmIRg+XAEaQ36Iosh/5aDv6xnDKIKMJQTO1RKSdWpJd+WQo4/LRbCWoJHuikMI8ylrYw+wLoBVvi25IzRvxBqjFQtKVVvl/2gTKHxer/0kWRBVbmkK+3NF3T6+730ofjx5HJ4DgR86VpICJpdTOS/ec8XUwUTb37z+qfX1qTcZlQ4fJOsr1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=e27YmPtAAdLaZlSs7tQam3NrRcqENuYodJjm/CK7ql0=;
+ b=p0IyVc5ypFPpyvStBlQK3iSw6DfmVHhpaRi1np89zRU+AV8imcUW6LARsSf5fyBTjy3Wm443ccoKeDZkZZMxqh6VbsjSUX49Hind5hn67SKKkdNiI35VWwKerO1UfE81LIYyz0GifDM3zOlUBRYTWFZZ2hm6NWgXaiRenaSwyN4=
+Received: from SJ0PR10MB4429.namprd10.prod.outlook.com (2603:10b6:a03:2d1::14)
+ by BN6PR10MB1667.namprd10.prod.outlook.com (2603:10b6:405:5::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Thu, 30 Jun
+ 2022 18:14:19 +0000
+Received: from SJ0PR10MB4429.namprd10.prod.outlook.com
+ ([fe80::20c4:5b7f:ce53:eb20]) by SJ0PR10MB4429.namprd10.prod.outlook.com
+ ([fe80::20c4:5b7f:ce53:eb20%9]) with mapi id 15.20.5395.014; Thu, 30 Jun 2022
+ 18:14:19 +0000
+From:   Jane Chu <jane.chu@oracle.com>
+To:     Christoph Hellwig <hch@lst.de>
+CC:     "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>
+Subject: Re: [PATCH] pmem: fix a name collision
+Thread-Topic: [PATCH] pmem: fix a name collision
+Thread-Index: AQHYjKojrjx3wgbW9kqQ1gQ/imEzv61oPnmAgAACnwA=
+Date:   Thu, 30 Jun 2022 18:14:18 +0000
+Message-ID: <84a1d4ee-0eee-22db-df04-03e19cb518c6@oracle.com>
+References: <20220630175155.3144222-1-jane.chu@oracle.com>
+ <20220630180455.GA17898@lst.de>
+In-Reply-To: <20220630180455.GA17898@lst.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b2c6da01-c9ec-44ad-421b-08da5ac4599f
+x-ms-traffictypediagnostic: BN6PR10MB1667:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GW5i19n9ljx5vYoKFMH5JbxWOA5+uxmr1HDwUAe6kao5L7+6cGuK+ErZxg1x7kW2EdH0MGfBWdOC2o8Dbwc5ZpPeOqPuZzQAuW+YbMkiHEZep0c9LtGQInKCLDBQ4dASPBdGaLkg2c8Kl4oNljnq5ds+w/naTvFysAbTCzYmofW+KOHv13aT8qBVKVk3nN/szWG6ldwlYLZMpKzpk0Rz45opBKmXMBkn/wfpZgLGlx5tiBj2UvUl791KZPTr9/uUhVozm7X1UY8qFfV9WUunaYxmKJMROSYiT/674P/hM4VgfBfx95tYZcJMOXby7SVWSmPUUNPBCc5L0nT9tuKWjKvMHHwuDaQEEO3hX9cjurfjrgWyGoPUoV/gJhZ0TQFYCQ0BPUkOlXy5qxK7Bqb91XxmXXm+RxLjHTgwKFR3do7nu88hhrurhCERICeAE0sP4AVb3B/ImqelFAJPwMOwn4y5pHMwRd0jVCeQkY9Se1EpUGahjytWjWGbjosIAWFV1QNhW86ysEtuadaII6BIF8Hgz3l+zVCl5xy6FFotwjL6ZaVv9ZsXYWpDt8WLSs9ODqF8AdJm3cVZdb0Xe4s38qZDkVIt7yYS0ZiPgoV4T63yfwPb4czqIRPumPQq87YBWv5S2pAByn9ENdUwPoxcTzYvvrhN/yKBf99A9aAkHx5O57kE2WDhCyAT2TqC4dC4zAZo+0rE3XVuOyAMaU1LZcsrQlQ1YxPMF4gtG9ZQhVQmAaqdJAppghpv1k+8xHQh3RSYvGb4Z0uXC/MCedNQe74XNvSj39ib+uHvDNVwRiXKtZiwjS3H5bgvJeryFPSk2gNXmjDcNTkD6m2DQyPy08T/EP/g+KMZ6HnEa/LgyX2FDQdw/Wxa5FBZV0iv6hhD
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB4429.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(376002)(366004)(39860400002)(346002)(31696002)(86362001)(6506007)(54906003)(41300700001)(5660300002)(44832011)(478600001)(71200400001)(2906002)(4744005)(66476007)(8676002)(38070700005)(64756008)(4326008)(2616005)(53546011)(66946007)(31686004)(6916009)(36756003)(6512007)(76116006)(38100700002)(6486002)(316002)(186003)(26005)(66556008)(122000001)(8936002)(66446008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?T0wrQnMvUXpmeDNVMUlJbGRKdjNiK0gybzVjckloaWNLWUk2YTZ0cWtoSTF1?=
+ =?utf-8?B?TERIWVZUN2VwRXhnNG5CVFI0eWN3NWlYdXV1ODB0MHV5cXJjRnRWK1pnVmRE?=
+ =?utf-8?B?OWJYTXdvc3NMQklOR0tBa1VWTFJkWS9CNGFZeGRaMUpPT0wvWTNjN3R0aEZG?=
+ =?utf-8?B?R3lrcTZiS3pUK1U5U2orZ3NyMkIzVmN3OW1BQTZ4T1I2bE5Pb3ZHZk9GZTF3?=
+ =?utf-8?B?YmwwU3kxc2ZPUk05RExFY2xram5CU1ZCbE9oV0RwZGkrWThKTG1rRWNFK1Jk?=
+ =?utf-8?B?NnJhOVFkUXJYbUROMUtKSW9FUlZqSmdCeFJpVjZ0cnlHWUhLRS8rcHBWdnlm?=
+ =?utf-8?B?T3haai9xL2ltRmw1NGhCaEFUK21WQzhRdlRGdmJscU1NU2Z1S1VQRFJDcnNL?=
+ =?utf-8?B?UUZDU3dKbm4xWExzMEZzenp5OFVZQ1NpMS9pQU1oR0xHUnFZNDBqZDlsM0o5?=
+ =?utf-8?B?ZElVSlNHanRtV0xKZlkvUm9lVlJjUWZDUUdUNnBMQ0ppeExOWG9SQUxlN2ZW?=
+ =?utf-8?B?aXNtN21aRkFCc09xSE5lV2x3KzY4MWhnNFRkWTF4dnF5SEZ0dnZuVjI5aitm?=
+ =?utf-8?B?VEc2akJWV2s0TmZ3dEdjMk5ia2lHNm9xSWpjbkZFMjNtMnVMTGxkSHd1aDJs?=
+ =?utf-8?B?dHJXRlErVkdlN20rVVpBNVVETWZIcy8wb3gyUVJGUmVFZDFXZnlIWk1OMSti?=
+ =?utf-8?B?d1k4TWtZNzR4c0xsL3d2c05mNFNOdzBtYWJQQzZOa242MUdvYlA3S0xYNGND?=
+ =?utf-8?B?LzdHbXdWc3FYTmlLTFNSRTloSXR6dlEwTDljSXdtYWlKNkVkdCtsS2oxNStV?=
+ =?utf-8?B?NTVmU25yc1VSeitnaDlscmhxeFNOcnQxcS9rV1NaTDZ5WGMwU3dQc2ZGKzdE?=
+ =?utf-8?B?NkVZZjNUNG9vb1podVRjREl0VmhVeEF1WWZmNmNOSHNxb2Q1UDNhWEhReDFQ?=
+ =?utf-8?B?U2pKOFVnQVBzQ3djQi9ERjdzazVNU3NTaU05REpmSUVuSnlMd1FMRlpXZmdZ?=
+ =?utf-8?B?bExEVjU0OVpmMFBRTUpoZmxoYmR3WDRDVzZyYlFpdXZPTE1WcGMxd3NDRzl2?=
+ =?utf-8?B?WHFmYzFmdGN1WkUweG43Vy9YcDNtcHlqOEx3NnNqUG9PNUhLV1lmRXk1cExz?=
+ =?utf-8?B?NDc2U2VXNktFbHRUU2ZKRkdySHVYbEtETXUxVHBPR0RaNm1GQm4xcE84MzBy?=
+ =?utf-8?B?RlhXeXh1RUlCcXhRRDE0Q2QrcUxzTVlQckNkWGc5dThGa2hPd3FzMlI4VDlE?=
+ =?utf-8?B?L0hHdDBYaEdLYmtnSHBTMFV1ZExEYTkrcnBGd0ZXWGoxcWU5ajh4Sy9lZXBT?=
+ =?utf-8?B?YkZEbFV2T09jZXZZY3ZrRDlWMGhPZUhHYklDTlRHVnBYajZZd0NXazhnd28y?=
+ =?utf-8?B?d0taOG9iUUJNK2JHcURWNmNaOXBrUmw5L0RKVERZbXQzeTZUTzdRbHJ2MUMr?=
+ =?utf-8?B?MVcyb2xqUFVpWFBmcTlQWnJnRXRlK1B6clllSTNYSFA3S25MektCcnY1NWg2?=
+ =?utf-8?B?S0hYcm1zWE13bW8vMjA1SkVzaStGTWtLbjRyLzNxWC9xYm5QY3VoZ1Bhcnc4?=
+ =?utf-8?B?ZWRTL3ZPL0k3Wm1UYzgrSVVPQ21MOVl0bTNwanIwd1dMU0JoZmJURWt3SjNR?=
+ =?utf-8?B?SCtaT2cyaWdMQ0xaTkw5cFBiT205K04xQkdaVVJ5d3M5MnRrM05ZaEpPb3gv?=
+ =?utf-8?B?Zk0xci9VNDZVaDNyQVl5djVSZVI5dmFyK3lyZjFZTXRXRDZyc2FkeTFXcnVS?=
+ =?utf-8?B?cWNMclFjVkpZOGFPRlVTbWxSYVRnU29tTDFGTnhuRWlsajlyN1E5RXYxSWow?=
+ =?utf-8?B?NHlyWlVoZWdGM000TUg3SnIxTHlpQXd6OUU2WXlaWEQ2Qno2bkpDNkF1a1JX?=
+ =?utf-8?B?ZEgyc0xjRHVseElyUUUrdFZPbmNneVZYMnArSTRtbVNjL1BqYmJwYnFjMTdu?=
+ =?utf-8?B?b2w0Ui92TTFYLzFJOW55cUl6NmIranhuL1luMFhqYmN3dTRCU0tmYm9XTEdt?=
+ =?utf-8?B?Y0pHRnh6NkNrd0Jzc1ZPSjRIK1lMdHBZbldjWnVnUmt0MHpremhVM1J6ZW5T?=
+ =?utf-8?B?Rmk2ZGlldUxkUjJTRzFsamJkZmtJOTkvVE5CSWVGaEtRS2VXcitLb056NlhK?=
+ =?utf-8?Q?gyiY=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <236CCDC8A0B17A488E59FF8CFD293DA2@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.175.198
-X-CLIENT-HOSTNAME: 213.134.175.198
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudehuddguddvtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudejhedrudelkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddujeehrdduleekpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhohhhnrdhgrghrrhihsehhuhgrfigvihdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhinhht
- vghlrdgtohhmpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB4429.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2c6da01-c9ec-44ad-421b-08da5ac4599f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jun 2022 18:14:18.9733
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: f5woWY+CxCXB3WlA5Yj7IWGJekZUiy02hIanayiQJeLDIHmmrcWA3BJgkWnVE+9hRAnK7Hrwz+HnB//eZ357ug==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR10MB1667
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-06-30_12:2022-06-28,2022-06-30 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 phishscore=0
+ malwarescore=0 mlxlogscore=999 spamscore=0 adultscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206300071
+X-Proofpoint-ORIG-GUID: F965ISq54khfY4H4xWTyKM7lBbq5e_jO
+X-Proofpoint-GUID: F965ISq54khfY4H4xWTyKM7lBbq5e_jO
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Subject: [PATCH] hisi_lpc: Use acpi_dev_for_each_child()
-
-Instead of walking the list of children of an ACPI device directly,
-use acpi_dev_for_each_child() to carry out an action for all of
-the given ACPI device's children.
-
-This will help to eliminate the children list head from struct
-acpi_device as it is redundant and it is used in questionable ways
-in some places (in particular, locking is needed for walking the
-list pointed to it safely, but it is often missing).
-
-While at it, simplify hisi_lpc_acpi_set_io_res() by making it accept
-a struct acpi_device pointer from the caller, instead of going to
-struct device and back to get the same result, and clean up confusion
-regarding hostdev and its ACPI companion in that function.
-
-Also remove a redundant check from it.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- 
-v2 -> v3:
-   * Also cover hisi_lpc_acpi_probe() which has triggered additional
-     changes.
-   * Drop the ACK as new material was added.
-
--> v2:
-   * Drop unused local variable (John).
-   * Add ACK from John.
-
----
- drivers/bus/hisi_lpc.c |  201 +++++++++++++++++++++++--------------------------
- 1 file changed, 98 insertions(+), 103 deletions(-)
-
-Index: linux-pm/drivers/bus/hisi_lpc.c
-===================================================================
---- linux-pm.orig/drivers/bus/hisi_lpc.c
-+++ linux-pm/drivers/bus/hisi_lpc.c
-@@ -379,7 +379,7 @@ static void hisi_lpc_acpi_fixup_child_re
- 
- /*
-  * hisi_lpc_acpi_set_io_res - set the resources for a child
-- * @child: the device node to be updated the I/O resource
-+ * @adev: ACPI companion of the device node to be updated the I/O resource
-  * @hostdev: the device node associated with host controller
-  * @res: double pointer to be set to the address of translated resources
-  * @num_res: pointer to variable to hold the number of translated resources
-@@ -390,31 +390,24 @@ static void hisi_lpc_acpi_fixup_child_re
-  * host-relative address resource.  This function will return the translated
-  * logical PIO addresses for each child devices resources.
-  */
--static int hisi_lpc_acpi_set_io_res(struct device *child,
-+static int hisi_lpc_acpi_set_io_res(struct acpi_device *adev,
- 				    struct device *hostdev,
- 				    const struct resource **res, int *num_res)
- {
--	struct acpi_device *adev;
--	struct acpi_device *host;
-+	struct acpi_device *host = to_acpi_device(adev->dev.parent);
- 	struct resource_entry *rentry;
- 	LIST_HEAD(resource_list);
- 	struct resource *resources;
- 	int count;
- 	int i;
- 
--	if (!child || !hostdev)
--		return -EINVAL;
--
--	host = to_acpi_device(hostdev);
--	adev = to_acpi_device(child);
--
- 	if (!adev->status.present) {
--		dev_dbg(child, "device is not present\n");
-+		dev_dbg(&adev->dev, "device is not present\n");
- 		return -EIO;
- 	}
- 
- 	if (acpi_device_enumerated(adev)) {
--		dev_dbg(child, "has been enumerated\n");
-+		dev_dbg(&adev->dev, "has been enumerated\n");
- 		return -EIO;
- 	}
- 
-@@ -425,7 +418,7 @@ static int hisi_lpc_acpi_set_io_res(stru
- 	 */
- 	count = acpi_dev_get_resources(adev, &resource_list, NULL, NULL);
- 	if (count <= 0) {
--		dev_dbg(child, "failed to get resources\n");
-+		dev_dbg(&adev->dev, "failed to get resources\n");
- 		return count ? count : -EIO;
- 	}
- 
-@@ -454,7 +447,7 @@ static int hisi_lpc_acpi_set_io_res(stru
- 			continue;
- 		ret = hisi_lpc_acpi_xlat_io_res(adev, host, &resources[i]);
- 		if (ret) {
--			dev_err(child, "translate IO range %pR failed (%d)\n",
-+			dev_err(&adev->dev, "translate IO range %pR failed (%d)\n",
- 				&resources[i], ret);
- 			return ret;
- 		}
-@@ -471,6 +464,12 @@ static int hisi_lpc_acpi_remove_subdev(s
- 	return 0;
- }
- 
-+static int hisi_lpc_acpi_clear_enumerated(struct acpi_device *adev, void *not_used)
-+{
-+	acpi_device_clear_enumerated(adev);
-+	return 0;
-+}
-+
- struct hisi_lpc_acpi_cell {
- 	const char *hid;
- 	const char *name;
-@@ -480,13 +479,89 @@ struct hisi_lpc_acpi_cell {
- 
- static void hisi_lpc_acpi_remove(struct device *hostdev)
- {
--	struct acpi_device *adev = ACPI_COMPANION(hostdev);
--	struct acpi_device *child;
--
- 	device_for_each_child(hostdev, NULL, hisi_lpc_acpi_remove_subdev);
-+	acpi_dev_for_each_child(ACPI_COMPANION(hostdev),
-+				hisi_lpc_acpi_clear_enumerated, NULL);
-+}
-+
-+static int hisi_lpc_acpi_add_child(struct acpi_device *child, void *data)
-+{
-+	const char *hid = acpi_device_hid(child);
-+	struct device *hostdev = data;
-+	const struct hisi_lpc_acpi_cell *cell;
-+	struct platform_device *pdev;
-+	const struct resource *res;
-+	bool found = false;
-+	int num_res;
-+	int ret;
-+
-+	ret = hisi_lpc_acpi_set_io_res(child, hostdev, &res, &num_res);
-+	if (ret) {
-+		dev_warn(hostdev, "set resource fail (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	cell = (struct hisi_lpc_acpi_cell []){
-+		/* ipmi */
-+		{
-+			.hid = "IPI0001",
-+			.name = "hisi-lpc-ipmi",
-+		},
-+		/* 8250-compatible uart */
-+		{
-+			.hid = "HISI1031",
-+			.name = "serial8250",
-+			.pdata = (struct plat_serial8250_port []) {
-+				{
-+					.iobase = res->start,
-+					.uartclk = 1843200,
-+					.iotype = UPIO_PORT,
-+					.flags = UPF_BOOT_AUTOCONF,
-+				},
-+				{}
-+			},
-+			.pdata_size = 2 *
-+				sizeof(struct plat_serial8250_port),
-+		},
-+		{}
-+	};
-+
-+	for (; cell && cell->name; cell++) {
-+		if (!strcmp(cell->hid, hid)) {
-+			found = true;
-+			break;
-+		}
-+	}
-+
-+	if (!found) {
-+		dev_warn(hostdev,
-+			 "could not find cell for child device (%s), discarding\n",
-+			 hid);
-+		return 0;
-+	}
-+
-+	pdev = platform_device_alloc(cell->name, PLATFORM_DEVID_AUTO);
-+	if (!pdev)
-+		return -ENOMEM;
-+
-+	pdev->dev.parent = hostdev;
-+	ACPI_COMPANION_SET(&pdev->dev, child);
-+
-+	ret = platform_device_add_resources(pdev, res, num_res);
-+	if (ret)
-+		return ret;
-+
-+	ret = platform_device_add_data(pdev, cell->pdata, cell->pdata_size);
-+	if (ret)
-+		return ret;
-+
-+	ret = platform_device_add(pdev);
-+	if (ret)
-+		return ret;
- 
--	list_for_each_entry(child, &adev->children, node)
--		acpi_device_clear_enumerated(child);
-+	acpi_device_set_enumerated(child);
-+
-+	return 0;
- }
- 
- /*
-@@ -501,94 +576,14 @@ static void hisi_lpc_acpi_remove(struct
-  */
- static int hisi_lpc_acpi_probe(struct device *hostdev)
- {
--	struct acpi_device *adev = ACPI_COMPANION(hostdev);
--	struct acpi_device *child;
- 	int ret;
- 
- 	/* Only consider the children of the host */
--	list_for_each_entry(child, &adev->children, node) {
--		const char *hid = acpi_device_hid(child);
--		const struct hisi_lpc_acpi_cell *cell;
--		struct platform_device *pdev;
--		const struct resource *res;
--		bool found = false;
--		int num_res;
--
--		ret = hisi_lpc_acpi_set_io_res(&child->dev, &adev->dev, &res,
--					       &num_res);
--		if (ret) {
--			dev_warn(hostdev, "set resource fail (%d)\n", ret);
--			goto fail;
--		}
--
--		cell = (struct hisi_lpc_acpi_cell []){
--			/* ipmi */
--			{
--				.hid = "IPI0001",
--				.name = "hisi-lpc-ipmi",
--			},
--			/* 8250-compatible uart */
--			{
--				.hid = "HISI1031",
--				.name = "serial8250",
--				.pdata = (struct plat_serial8250_port []) {
--					{
--						.iobase = res->start,
--						.uartclk = 1843200,
--						.iotype = UPIO_PORT,
--						.flags = UPF_BOOT_AUTOCONF,
--					},
--					{}
--				},
--				.pdata_size = 2 *
--					sizeof(struct plat_serial8250_port),
--			},
--			{}
--		};
--
--		for (; cell && cell->name; cell++) {
--			if (!strcmp(cell->hid, hid)) {
--				found = true;
--				break;
--			}
--		}
--
--		if (!found) {
--			dev_warn(hostdev,
--				 "could not find cell for child device (%s), discarding\n",
--				 hid);
--			continue;
--		}
--
--		pdev = platform_device_alloc(cell->name, PLATFORM_DEVID_AUTO);
--		if (!pdev) {
--			ret = -ENOMEM;
--			goto fail;
--		}
--
--		pdev->dev.parent = hostdev;
--		ACPI_COMPANION_SET(&pdev->dev, child);
--
--		ret = platform_device_add_resources(pdev, res, num_res);
--		if (ret)
--			goto fail;
--
--		ret = platform_device_add_data(pdev, cell->pdata,
--					       cell->pdata_size);
--		if (ret)
--			goto fail;
--
--		ret = platform_device_add(pdev);
--		if (ret)
--			goto fail;
--
--		acpi_device_set_enumerated(child);
--	}
--
--	return 0;
-+	ret = acpi_dev_for_each_child(ACPI_COMPANION(hostdev),
-+				      hisi_lpc_acpi_add_child, hostdev);
-+	if (ret)
-+		hisi_lpc_acpi_remove(hostdev);
- 
--fail:
--	hisi_lpc_acpi_remove(hostdev);
- 	return ret;
- }
- 
-
-
-
+T24gNi8zMC8yMDIyIDExOjA0IEFNLCBDaHJpc3RvcGggSGVsbHdpZyB3cm90ZToNCj4gT24gVGh1
+LCBKdW4gMzAsIDIwMjIgYXQgMTE6NTE6NTVBTSAtMDYwMCwgSmFuZSBDaHUgd3JvdGU6DQo+PiAt
+c3RhdGljIHBoeXNfYWRkcl90IHRvX3BoeXMoc3RydWN0IHBtZW1fZGV2aWNlICpwbWVtLCBwaHlz
+X2FkZHJfdCBvZmZzZXQpDQo+PiArc3RhdGljIHBoeXNfYWRkcl90IF90b19waHlzKHN0cnVjdCBw
+bWVtX2RldmljZSAqcG1lbSwgcGh5c19hZGRyX3Qgb2Zmc2V0KQ0KPiANCj4gSSdkIHJhdGhlciBj
+YWxsIHRoaXMgcG1lbV90b19waHlzIGFzIHRoYXQgaXMgYSBtdWNoIG5pY2VyIG5hbWUuDQoNCk9r
+YXksIHRoYW5rcyENCg0KLWphbmUNCg==

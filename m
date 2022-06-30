@@ -2,76 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1077561E22
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7BD561E2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234605AbiF3OhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
+        id S237224AbiF3OhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237183AbiF3Ogz (ORCPT
+        with ESMTP id S235979AbiF3Ogz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 30 Jun 2022 10:36:55 -0400
-Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 503791AF23;
-        Thu, 30 Jun 2022 07:32:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=h5I54
-        kNsTH2s2ciOHexU+iZ2FEzVCsqPdcPCraazqQE=; b=k8mK5acHl6BxS0WeZ+zlm
-        7RGujFIQVV/Z0t4Z+Eogm/b1syR4ekTjLKHf6oHPYaBn5x+6Ly/X0UA5TIPjo1aY
-        rDo4rEiF1qaSRJb3syij1USHKvDzVB8SiCXcQdbtgONeJa7rk6BfBW+RvpmBYxAI
-        YjNl7erT6ehR/5LBACporY=
-Received: from localhost.localdomain (unknown [123.112.69.106])
-        by smtp3 (Coremail) with SMTP id G9xpCgCHJJbFs71ikcHHMg--.62175S4;
-        Thu, 30 Jun 2022 22:31:53 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     herbert@gondor.apana.org.au, davem@davemloft.net
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH] crypto: hisilicon/sec - fix inconsistent argument
-Date:   Thu, 30 Jun 2022 22:31:32 +0800
-Message-Id: <20220630143132.2180469-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286CA201A6;
+        Thu, 30 Jun 2022 07:32:14 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CB1B921EFB;
+        Thu, 30 Jun 2022 14:32:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1656599532; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=r+2jSverPOfqGEKU6YL54SGkmzqRewq0zi4aTwuQWVg=;
+        b=NQJFxWMbAHm7LziJAaX0qwJ3jblN0hLNNfEOc+ukjrHuS04pTcAJtGu2PvLSHHm2baWcLi
+        6d6yoEW/ti0PFPza/gAw0Pv8kuPVwzG0Cqo/igYQU3BYxnCm+v4Hr+jEtN7Hz8DTdG0u0/
+        9iFRnVdTN7We1cfra567KIbMx3damAM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7FB7913A5C;
+        Thu, 30 Jun 2022 14:32:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +DZiHuyzvWJHbAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Thu, 30 Jun 2022 14:32:12 +0000
+Date:   Thu, 30 Jun 2022 16:32:11 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v11 7/8] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <20220630143211.GA22105@blackbody.suse.cz>
+References: <20220510153413.400020-8-longman@redhat.com>
+ <YqYnQ4U4t6j/3UaL@slm.duckdns.org>
+ <404171dc-0da3-21f2-5003-9718f875e967@redhat.com>
+ <YqarMyNo9oHxhZFh@slm.duckdns.org>
+ <20220613142452.GB6910@blackbody.suse.cz>
+ <YqdzuSQuAeiPXQvy@slm.duckdns.org>
+ <20220613175548.GB21665@blackbody.suse.cz>
+ <Yqd7WMFj6AEyV3Cy@slm.duckdns.org>
+ <20220614115345.GA6771@blackbody.suse.cz>
+ <YroApRMPV/6zO5I8@mtj.duckdns.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: G9xpCgCHJJbFs71ikcHHMg--.62175S4
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKFykXrWDAw13urWruF1fXrb_yoWDJFg_ua
-        yUCF13Zr4UGw4qqw17tFZYvF1Yvw1rWF1fZF43try3t3yqvr4YgF1rZrs8CF4UC3yj9ryY
-        9ws7Gw18ZFyUWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRZYFCPUUUUU==
-X-Originating-IP: [123.112.69.106]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/xtbBORkwjF-POQcyywAAsL
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YroApRMPV/6zO5I8@mtj.duckdns.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The argument passed to sec_queue_aw_alloc() should be
-SEC_QUEUE_AW_FROCE_NOALLOC instead of SEC_QUEUE_AR_FROCE_NOALLOC.
+On Tue, Jun 28, 2022 at 04:10:29AM +0900, Tejun Heo <tj@kernel.org> wrote:
+> What I'm trying to say is that cpuset.cpus of child_1 and child_2 are
+> owned by the parent,
 
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
----
- drivers/crypto/hisilicon/sec/sec_drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Cf
 
-diff --git a/drivers/crypto/hisilicon/sec/sec_drv.c b/drivers/crypto/hisilicon/sec/sec_drv.c
-index c8de1b51c843..e75851326c1e 100644
---- a/drivers/crypto/hisilicon/sec/sec_drv.c
-+++ b/drivers/crypto/hisilicon/sec/sec_drv.c
-@@ -892,7 +892,7 @@ bool sec_queue_can_enqueue(struct sec_queue *queue, int num)
- static void sec_queue_hw_init(struct sec_queue *queue)
- {
- 	sec_queue_ar_alloc(queue, SEC_QUEUE_AR_FROCE_NOALLOC);
--	sec_queue_aw_alloc(queue, SEC_QUEUE_AR_FROCE_NOALLOC);
-+	sec_queue_aw_alloc(queue, SEC_QUEUE_AW_FROCE_NOALLOC);
- 	sec_queue_ar_pkgattr(queue, 1);
- 	sec_queue_aw_pkgattr(queue, 1);
- 
--- 
-2.25.1
+On Mon, Jun 13, 2022 at 08:00:56AM -1000, Tejun Heo <tj@kernel.org> wrote:
+> On Mon, Jun 13, 2022 at 07:55:49PM +0200, Michal Koutn=FD wrote:
+> > I don't think child_*/cpuset.cpus must be owned by root.
+>=20
+> I meant the parent.
 
+I'm slightly confused.
+
+> so a feature which blocks siblings from intersecting each other
+> doesn't make whole lot of sense because all those files are under the
+> control of the parent who would have the power to enable or disable
+> the restrition anyway.
+
+file				owner
+parent/				user (mkdir)
+`- cpuset.cpus			root
+`- cpuset.cpus.partition	root	(P)
+`- child_1/			user
+  ` cpuset.cpus			user	(*)
+`- child_2/			user
+  ` cpuset.cpus			user	(*)
+
+The writes to child cpuset.cpus may/may not invalidate parent's (P)
+partition validity (whether a cpu is left to it to host possible tasks).
+child_1 vs child_2 overlap affects only whether the children cgroups are
+a valid partition.
+
+I think you mean: writes to children cpuset.cpus should be allowed,
+possible exclusivity violation should be reported in
+parent/cpuset.cpus.partition.
+
+What I thought was OK: prevent (fail) writes to children cpuset.cpus
+that'd violate the exclusivity (or would take the last cpu from parent
+if it's necessary to host a task).
+IMO, it's similar to failed writes to parent/cgroup.subtree_control in a
+delegated subtree if the parent still has some tasks (that'd violate
+internal node constraint).
+
+What I think might still be OK: allow writes to children cpuset.cpus
+that violate exclusivity and report that in children's
+cpuset.cpus.partition. Writes that'd take last cpu from parent should
+still fail (similar to the failing subtree_control writes above).
+
+Hope that clarifies,
+Michal

@@ -2,93 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0239C5623D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 22:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7985623EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 22:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237022AbiF3UGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 16:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
+        id S237040AbiF3UIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 16:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236841AbiF3UGd (ORCPT
+        with ESMTP id S237145AbiF3UIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 16:06:33 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0373B568
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 13:06:31 -0700 (PDT)
-Received: from dimapc.. (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C4F7A6601982;
-        Thu, 30 Jun 2022 21:06:29 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656619590;
-        bh=ZPZ5Uw8WfuLpWfqCGj0P84Xq3+MvCoBG3Xz7cqkjkIg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GtuP5uxMVGGoJr+g1XAK8gzrG+Ce0uKhMWiz8589NkV3hXraWoS9dXwCl2p4iDfzi
-         yRGe/FI+8iOcun6gyHS5hv3V6jD/M8o3MRjPfZfappvu6pOhorvCMvKvCdP7WHFdgW
-         GPciW+ul7eGORtSTNkIaU7pixxx3lJ/LMxmEYYuBqafO5Q6KD5BNJh1cd7AekE8uIR
-         WShj/XvrAzMRocXBpSJ4xg8K7KVUMuDiSIXmyso5SQmvi/q/lt0jBiJa9IiOd9jeGq
-         134r/fzE5N/WxVSFc4IMm2D+yVe7V5FVv7hfkSY3PvgPY9hGAIft7FAU1vchCGAJBs
-         88JGZOeLAISbg==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, kernel@collabora.com
-Subject: [PATCH v7 2/2] drm/panfrost: Fix shrinker list corruption by madvise IOCTL
-Date:   Thu, 30 Jun 2022 23:06:01 +0300
-Message-Id: <20220630200601.1884120-3-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220630200601.1884120-1-dmitry.osipenko@collabora.com>
-References: <20220630200601.1884120-1-dmitry.osipenko@collabora.com>
+        Thu, 30 Jun 2022 16:08:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA32745539
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 13:08:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 998032B;
+        Thu, 30 Jun 2022 13:08:31 -0700 (PDT)
+Received: from bogus (unknown [10.57.39.193])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2C9753F5A1;
+        Thu, 30 Jun 2022 13:08:27 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 21:07:17 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Conor.Dooley@microchip.com
+Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        atishp@atishpatra.org, atishp@rivosinc.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        wangqing@vivo.com, robh+dt@kernel.org, rafael@kernel.org,
+        ionela.voinescu@arm.com, pierre.gondois@arm.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, gshan@redhat.com,
+        Valentina.FernandezAlanis@microchip.com
+Subject: Re: [PATCH v5 09/19] arch_topology: Use the last level cache
+ information from the cacheinfo
+Message-ID: <20220630200717.zlc6z6zcqbsw7euk@bogus>
+References: <3656a067-cc3f-fd5b-e339-5925a856cce1@microchip.com>
+ <20220629184217.krzt6l7qadymbj6h@bogus>
+ <f1f4a30e-7a84-30e2-197c-4153b3e66b64@microchip.com>
+ <20220629195454.vbsjvcadmukiunt7@bogus>
+ <03433f57-04ed-44a9-a2f6-5577df94f11e@microchip.com>
+ <b2ab0ac1-bfef-5ba0-4ee5-15e604d8aa2e@microchip.com>
+ <20220630103958.tcear5oz3orsqwg6@bogus>
+ <9d9e80b8-17e2-b1d9-14fa-f1d8d7dfbd9a@microchip.com>
+ <20220630173513.dyrrmjbpxzi3e6fe@bogus>
+ <3840dbf7-ca18-b7ab-4d7a-92c9305476fa@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3840dbf7-ca18-b7ab-4d7a-92c9305476fa@microchip.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Calling madvise IOCTL twice on BO causes memory shrinker list corruption
-and crashes kernel because BO is already on the list and it's added to
-the list again, while BO should be removed from the list before it's
-re-added. Fix it.
+On Thu, Jun 30, 2022 at 07:20:04PM +0000, Conor.Dooley@microchip.com wrote:
+> 
+> 
+> On 30/06/2022 18:35, Sudeep Holla wrote:
+> > On Thu, Jun 30, 2022 at 04:37:50PM +0000, Conor.Dooley@microchip.com wrote:
+> >> On 30/06/2022 11:39, Sudeep Holla wrote:
+> >>>
+> >>> I can't think of any reason for that to happen unless detect_cache_attributes
+> >>> is failing from init_cpu_topology and we are ignoring that.
+> >>>
+> >>> Are all RISC-V platforms failing on -next or is it just this platform ?
+> >>
+> >> I don't know. I only have SoCs with this core complex & one that does not
+> >> work with upstream. I can try my other board with this SoC - but I am on
+> >> leave at the moment w/ a computer or internet during the day so it may be
+> >> a few days before I can try it.
+> >>
+> > 
+> > Sure, no worries.
+> > 
+> >> However, Niklas Cassel has tried to use the Canaan K210 on next-20220630
+> >> but had issues with RCU stalling:
+> >> https://lore.kernel.org/linux-riscv/Yr3PKR0Uj1bE5Y6O@x1-carbon/T/#m52016996fcf5fa0501066d73352ed8e806803e06
+> >> Not going to claim any relation, but that's minus 1 to the platforms that
+> >> can be used to test this on upstream RISC-V.
+> >>
+> > 
+> > Ah OK, will check and ask full logs to see if there is any relation.
+> > 
+> >>> We may have to try with some logs in detect_cache_attributes,
+> >>> last_level_cache_is_valid and last_level_cache_is_shared to check where it
+> >>> is going wrong.
+> >>>
+> >>> It must be crashing in smp_callin->update_siblings_masks->last_level_cache_is_shared
+> 
+> 
+> So, looks like there's a problem in cache_leaves_are_shared() which is hit
+> by the above path. Both of the if clauses are false, and the function falls
+> through to return sib_leaf->fw_token == this_leaf->fw_token;
 
-Cc: stable@vger.kernel.org
-Fixes: 013b65101315 ("drm/panfrost: Add madvise and shrinker support")
-Acked-by: Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
-Reviewed-by: Steven Price <steven.price@arm.com>
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
- drivers/gpu/drm/panfrost/panfrost_drv.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Both if() failing is expected and that statement
+	return sib_leaf->fw_token == this_leaf->fw_token;
+execution is correct.
 
-diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
-index c58075bc096e..2d870cf73b07 100644
---- a/drivers/gpu/drm/panfrost/panfrost_drv.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
-@@ -433,8 +433,8 @@ static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
- 
- 	if (args->retained) {
- 		if (args->madv == PANFROST_MADV_DONTNEED)
--			list_add_tail(&bo->base.madv_list,
--				      &pfdev->shrinker_list);
-+			list_move_tail(&bo->base.madv_list,
-+				       &pfdev->shrinker_list);
- 		else if (args->madv == PANFROST_MADV_WILLNEED)
- 			list_del_init(&bo->base.madv_list);
- 	}
+> Both sib_leaf & this_leaf seem to be null.
+>
+
+But this is wrong as last_level_cache_is_shared checks for
+last_level_cache_is_valid which must return false if the fw_token = NULL
+So we must not hit the above return statement with NULL fw_token.
+
+> static inline bool cache_leaves_are_shared(struct cacheinfo *this_leaf,
+> 					   struct cacheinfo *sib_leaf)
+> {
+> 	/*
+> 	 * For non DT/ACPI systems, assume unique level 1 caches,
+> 	 * system-wide shared caches for all other levels. This will be used
+> 	 * only if arch specific code has not populated shared_cpu_map
+> 	 */
+> 	if (!(IS_ENABLED(CONFIG_OF) || IS_ENABLED(CONFIG_ACPI)))
+> 		return !(this_leaf->level == 1);
+> 
+> 	if ((sib_leaf->attributes & CACHE_ID) &&
+> 	    (this_leaf->attributes & CACHE_ID))
+> 		return sib_leaf->id == this_leaf->id;
+> 
+> 	return sib_leaf->fw_token == this_leaf->fw_token;
+> }
+> 
+> Any ideas what to look at next?
+
+I wonder how did we not get last_level_cache_is_valid as false if the
+fw_node is NULL. But it should not be NULL at the first place.
+
 -- 
-2.36.1
-
+Regards,
+Sudeep

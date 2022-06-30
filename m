@@ -2,289 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8435B561473
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11302561426
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233887AbiF3IPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 04:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
+        id S233648AbiF3IFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 04:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233673AbiF3IO3 (ORCPT
+        with ESMTP id S233673AbiF3IFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 04:14:29 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7134505A
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:11:42 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25U89KN6006373;
-        Thu, 30 Jun 2022 08:10:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=yEtqezDZbPfGWcbcHn8kTWhmCp1eMfHZ8CewXlyvgwU=;
- b=Nq4afHf3e5j0bFRvHSNKUNIEJ2GAMYbf3M8SKnJjUIgn6UWiiti6WjPvPCldh274pACg
- ZGejR9++viTFivh9Ff0F5v4aMjmgBZTMn7kEbb+U0jMOGWV/QB7FYIhWBkXLCUDMmmiq
- +AyAhlr/dWkl91NyuoagEexjBlNDbi+/Bydx6xxrql/uDNZHAqMjxRY9SfeJHuRsFPQt
- FkqdgBYSh4awC9r/JXEm18Kwp5s5ghrdpr5TT1nQlZoO/guc/IMDfkepUVHYXCQB+IL8
- j/5UwKw6/UAQE7LhKROPJ+E/287WlVHLoC/6xqLwST0aBCgXv4e8N6ysZSuSSJnYC5Pz 1g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h17rp0cu8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Jun 2022 08:10:58 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25U8AvpA011361;
-        Thu, 30 Jun 2022 08:10:57 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h17rp0bsd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Jun 2022 08:10:57 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25U7o6jA009212;
-        Thu, 30 Jun 2022 08:05:13 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma05fra.de.ibm.com with ESMTP id 3gwt095sem-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Jun 2022 08:05:12 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25U85AXU17105272
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 Jun 2022 08:05:10 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5A6F542045;
-        Thu, 30 Jun 2022 08:05:10 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DE43A42041;
-        Thu, 30 Jun 2022 08:05:09 +0000 (GMT)
-Received: from localhost (unknown [9.43.87.212])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 30 Jun 2022 08:05:09 +0000 (GMT)
-Date:   Thu, 30 Jun 2022 13:35:08 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [RFC PATCH v3 11/12] powerpc: Remove unreachable() from WARN_ON()
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Sathvika Vasireddy <sv@linux.vnet.ibm.com>
-Cc:     "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>
-References: <20220624183238.388144-1-sv@linux.ibm.com>
-        <20220624183238.388144-12-sv@linux.ibm.com>
-        <70b6d08d-aced-7f4e-b958-a3c7ae1a9319@csgroup.eu>
-        <92eae2ef-f9b6-019a-5a8e-728cdd9bbbc0@linux.vnet.ibm.com>
-        <cce19b1c-449a-f306-533a-9edc855049aa@csgroup.eu>
-In-Reply-To: <cce19b1c-449a-f306-533a-9edc855049aa@csgroup.eu>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1656572413.pbaqjnrrcl.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: bOQhnIeOkTwX0KzFohbnqCvDxF9f_wp9
-X-Proofpoint-GUID: 7JkAs9pqNeIiJt33LfOOdR43g2dYGJIO
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 30 Jun 2022 04:05:24 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E254130D
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:05:20 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id h23so37319917ejj.12
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:05:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ik6FUsCzNZiu9EfbLO72KDalLuo/xuLvHalvhOV/dIo=;
+        b=icYGEKccYdgHInp7tFB1pnhXjU18hV9rabV4eo63UYUr7kbNWe1Luob0Q56hhZny06
+         CSnX1+qqxWY3m8x7As3Ku17HEike7DGNmxm96b5JEL2+7WjblF05FuxhIE0kjIpxmPTW
+         Hu4mNfW87bJgt2ybaCZv0yQNAwlku6Ev2P4hWQYaL7T0QrepVa6RKhxQ4mdAlPSMfIYu
+         PA3aGI7TAL/2RGawYGzzKvjKVRWrVN/D9fqfWM77OIi+Q35d9JN8pi3++frjmhMo4UAq
+         4PJs9GyK5MW38RIGt1r/oKuMhW5+Xj8qYZ33dSi0yPdqxi8D2rs/UB4v8ywVrk42J9d5
+         BHkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ik6FUsCzNZiu9EfbLO72KDalLuo/xuLvHalvhOV/dIo=;
+        b=71R/pZ7WAtNfZIc2d3MLuc4hneIWlhb364xQS+olES9biqQGmMasy4iyw+ZBYFHv+d
+         QAv+lj5Rf7R/0za2FTmcqK1RfkNhq/mDBl95jjq1twbR1an/RikuTXVdNig15BuAWUzL
+         FI2TWWRws+hn3a2O6oHjVtI4kci0Zuc+ifNnymK2P3mrCysv0PFnJxh0uue524zRayxf
+         /mY7imaEDQSLOuUD41jyqK9wOQUm4i5H5fzom04XqiCFmO7UkDkPMPZvrwbtsDM+5u+D
+         yTnYluJIMuI2kFbhuLduKRy7b4dYCrdH8Nz4KKcetn4Djsu1XjSOYxeSAZIkqVhCfy9H
+         uNng==
+X-Gm-Message-State: AJIora9RkftI2ShISrPYNkXkRKRc9N4XUz9H7Yj8AYN0Ca9w4wzXNhFs
+        iM51IvhcjmA82ZiKt6CM+mdy6Q==
+X-Google-Smtp-Source: AGRyM1tP/qfGO00LL1laS/lsR3dmHQ5UYROZqBJGZ2LruhAHU+Vv5k0qyGUeWXitMSWJcKXmzVS7Qg==
+X-Received: by 2002:a17:906:7482:b0:722:edf9:e72f with SMTP id e2-20020a170906748200b00722edf9e72fmr7608726ejl.92.1656576319111;
+        Thu, 30 Jun 2022 01:05:19 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id bg6-20020a170906a04600b00722e31fcf42sm8747619ejb.184.2022.06.30.01.05.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 01:05:18 -0700 (PDT)
+Message-ID: <8f51aed8-956b-ac09-3baf-2b4572db1352@linaro.org>
+Date:   Thu, 30 Jun 2022 10:05:17 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-30_04,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- mlxlogscore=999 bulkscore=0 malwarescore=0 adultscore=0 suspectscore=0
- mlxscore=0 spamscore=0 clxscore=1011 lowpriorityscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206300030
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC] Correct memory layout reporting for "jedec,lpddr2" and
+ related bindings
+Content-Language: en-US
+To:     Julius Werner <jwerner@chromium.org>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jian-Jia Su <jjsu@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Nikola Milosavljevic <mnidza@outlook.com>
+References: <CAODwPW9E8wWwxbYKyf4_-JFb4F-JSmLR3qOF_iudjX0f9ndF0A@mail.gmail.com>
+ <CAODwPW8fiFSNehZbZDdR9kjHxohLGiyE7edU=Opy0xV_P8JbEQ@mail.gmail.com>
+ <3bb0ffa0-8091-0848-66af-180a41a68bf7@linaro.org>
+ <CAODwPW89xZQZiZdQNt6+CcRjz=nbEAAFH0h_dBFSE5v3aFU4rQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAODwPW89xZQZiZdQNt6+CcRjz=nbEAAFH0h_dBFSE5v3aFU4rQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy wrote:
-> Hi Sathvika,
->=20
-> Adding ARM people as they seem to face the same kind of problem (see=20
-> https://patchwork.kernel.org/project/linux-kbuild/patch/20220623014917.19=
-9563-33-chenzhongjin@huawei.com/)
->=20
-> Le 27/06/2022 =C3=A0 17:35, Sathvika Vasireddy a =C3=A9crit=C2=A0:
->>=20
->> On 25/06/22 12:16, Christophe Leroy wrote:
->>>
->>> Le 24/06/2022 =C3=A0 20:32, Sathvika Vasireddy a =C3=A9crit=C2=A0:
->>>> objtool is throwing *unannotated intra-function call*
->>>> warnings with a few instructions that are marked
->>>> unreachable. Remove unreachable() from WARN_ON()
->>>> to fix these warnings, as the codegen remains same
->>>> with and without unreachable() in WARN_ON().
->>> Did you try the two exemples described in commit 1e688dd2a3d6
->>> ("powerpc/bug: Provide better flexibility to WARN_ON/__WARN_FLAGS() with
->>> asm goto") ?
->>>
->>> Without your patch:
->>>
->>> 00000640 <test>:
->>> =C2=A0=C2=A0 640:=C2=A0=C2=A0=C2=A0 81 23 00 84=C2=A0=C2=A0=C2=A0=C2=A0=
- lwz=C2=A0=C2=A0=C2=A0=C2=A0 r9,132(r3)
->>> =C2=A0=C2=A0 644:=C2=A0=C2=A0=C2=A0 71 29 40 00=C2=A0=C2=A0=C2=A0=C2=A0=
- andi.=C2=A0=C2=A0 r9,r9,16384
->>> =C2=A0=C2=A0 648:=C2=A0=C2=A0=C2=A0 40 82 00 0c=C2=A0=C2=A0=C2=A0=C2=A0=
- bne=C2=A0=C2=A0=C2=A0=C2=A0 654 <test+0x14>
->>> =C2=A0=C2=A0 64c:=C2=A0=C2=A0=C2=A0 80 63 00 0c=C2=A0=C2=A0=C2=A0=C2=A0=
- lwz=C2=A0=C2=A0=C2=A0=C2=A0 r3,12(r3)
->>> =C2=A0=C2=A0 650:=C2=A0=C2=A0=C2=A0 4e 80 00 20=C2=A0=C2=A0=C2=A0=C2=A0=
- blr
->>> =C2=A0=C2=A0 654:=C2=A0=C2=A0=C2=A0 0f e0 00 00=C2=A0=C2=A0=C2=A0=C2=A0=
- twui=C2=A0=C2=A0=C2=A0 r0,0
->>>
->>> 00000658 <test9w>:
->>> =C2=A0=C2=A0 658:=C2=A0=C2=A0=C2=A0 2c 04 00 00=C2=A0=C2=A0=C2=A0=C2=A0=
- cmpwi=C2=A0=C2=A0 r4,0
->>> =C2=A0=C2=A0 65c:=C2=A0=C2=A0=C2=A0 41 82 00 0c=C2=A0=C2=A0=C2=A0=C2=A0=
- beq=C2=A0=C2=A0=C2=A0=C2=A0 668 <test9w+0x10>
->>> =C2=A0=C2=A0 660:=C2=A0=C2=A0=C2=A0 7c 63 23 96=C2=A0=C2=A0=C2=A0=C2=A0=
- divwu=C2=A0=C2=A0 r3,r3,r4
->>> =C2=A0=C2=A0 664:=C2=A0=C2=A0=C2=A0 4e 80 00 20=C2=A0=C2=A0=C2=A0=C2=A0=
- blr
->>> =C2=A0=C2=A0 668:=C2=A0=C2=A0=C2=A0 0f e0 00 00=C2=A0=C2=A0=C2=A0=C2=A0=
- twui=C2=A0=C2=A0=C2=A0 r0,0
->>> =C2=A0=C2=A0 66c:=C2=A0=C2=A0=C2=A0 38 60 00 00=C2=A0=C2=A0=C2=A0=C2=A0=
- li=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r3,0
->>> =C2=A0=C2=A0 670:=C2=A0=C2=A0=C2=A0 4e 80 00 20=C2=A0=C2=A0=C2=A0=C2=A0=
- blr
->>>
->>>
->>> With your patch:
->>>
->>> 00000640 <test>:
->>> =C2=A0=C2=A0 640:=C2=A0=C2=A0=C2=A0 81 23 00 84=C2=A0=C2=A0=C2=A0=C2=A0=
- lwz=C2=A0=C2=A0=C2=A0=C2=A0 r9,132(r3)
->>> =C2=A0=C2=A0 644:=C2=A0=C2=A0=C2=A0 71 29 40 00=C2=A0=C2=A0=C2=A0=C2=A0=
- andi.=C2=A0=C2=A0 r9,r9,16384
->>> =C2=A0=C2=A0 648:=C2=A0=C2=A0=C2=A0 40 82 00 0c=C2=A0=C2=A0=C2=A0=C2=A0=
- bne=C2=A0=C2=A0=C2=A0=C2=A0 654 <test+0x14>
->>> =C2=A0=C2=A0 64c:=C2=A0=C2=A0=C2=A0 80 63 00 0c=C2=A0=C2=A0=C2=A0=C2=A0=
- lwz=C2=A0=C2=A0=C2=A0=C2=A0 r3,12(r3)
->>> =C2=A0=C2=A0 650:=C2=A0=C2=A0=C2=A0 4e 80 00 20=C2=A0=C2=A0=C2=A0=C2=A0=
- blr
->>> =C2=A0=C2=A0 654:=C2=A0=C2=A0=C2=A0 0f e0 00 00=C2=A0=C2=A0=C2=A0=C2=A0=
- twui=C2=A0=C2=A0=C2=A0 r0,0
->>> =C2=A0=C2=A0 658:=C2=A0=C2=A0=C2=A0 4b ff ff f4=C2=A0=C2=A0=C2=A0=C2=A0=
- b=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 64c <test+0xc>=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 <=3D=3D
->>>
->>> 0000065c <test9w>:
->>> =C2=A0=C2=A0 65c:=C2=A0=C2=A0=C2=A0 2c 04 00 00=C2=A0=C2=A0=C2=A0=C2=A0=
- cmpwi=C2=A0=C2=A0 r4,0
->>> =C2=A0=C2=A0 660:=C2=A0=C2=A0=C2=A0 41 82 00 0c=C2=A0=C2=A0=C2=A0=C2=A0=
- beq=C2=A0=C2=A0=C2=A0=C2=A0 66c <test9w+0x10>
->>> =C2=A0=C2=A0 664:=C2=A0=C2=A0=C2=A0 7c 63 23 96=C2=A0=C2=A0=C2=A0=C2=A0=
- divwu=C2=A0=C2=A0 r3,r3,r4
->>> =C2=A0=C2=A0 668:=C2=A0=C2=A0=C2=A0 4e 80 00 20=C2=A0=C2=A0=C2=A0=C2=A0=
- blr
->>> =C2=A0=C2=A0 66c:=C2=A0=C2=A0=C2=A0 0f e0 00 00=C2=A0=C2=A0=C2=A0=C2=A0=
- twui=C2=A0=C2=A0=C2=A0 r0,0
->>> =C2=A0=C2=A0 670:=C2=A0=C2=A0=C2=A0 38 60 00 00=C2=A0=C2=A0=C2=A0=C2=A0=
- li=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r3,0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 <=3D=3D
->>> =C2=A0=C2=A0 674:=C2=A0=C2=A0=C2=A0 4e 80 00 20=C2=A0=C2=A0=C2=A0=C2=A0=
- blr=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 <=3D=3D
->>> =C2=A0=C2=A0 678:=C2=A0=C2=A0=C2=A0 38 60 00 00=C2=A0=C2=A0=C2=A0=C2=A0=
- li=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r3,0
->>> =C2=A0=C2=A0 67c:=C2=A0=C2=A0=C2=A0 4e 80 00 20=C2=A0=C2=A0=C2=A0=C2=A0=
- blr
->>>
->> The builtin variant of unreachable (__builtin_unreachable()) works.
->>=20
->> How about using that instead of unreachable() ?
->>=20
->>=20
->=20
-> In fact the problem comes from the macro annotate_unreachable() which is=
-=20
-> called by unreachable() before calling __build_unreachable().
->=20
-> Seems like this macro adds (after the unconditional trap twui) a call to=
-=20
-> an empty function whose address is listed in section .discard.unreachable
->=20
->      1c78:       00 00 e0 0f     twui    r0,0
->      1c7c:       55 e7 ff 4b     bl      3d0=20
-> <qdisc_root_sleeping_lock.part.0>
->=20
->=20
-> RELOCATION RECORDS FOR [.discard.unreachable]:
-> OFFSET           TYPE              VALUE
-> 0000000000000000 R_PPC64_REL32     .text+0x00000000000003d0
->=20
-> The problem is that that function has size 0:
->=20
-> 00000000000003d0 l     F .text	0000000000000000=20
-> qdisc_root_sleeping_lock.part.0
->=20
->=20
-> And objtool is not prepared for a function with size 0.
+On 30/06/2022 03:03, Julius Werner wrote:
+>>> For the latter, I would suggest adding a new property "channel-io-width" which
+>>
+>> No, because io-width is a standard property, so it should be used
+>> instead. It could be defined in channel node.
+> 
+> What exactly do you mean by "standard property" -- do you mean in an
+> LPDDR context, or for device tree bindings in general? In other device
+> tree bindings, the only thing I can find is `reg-io-width`,
 
-annotate_unreachable() seems to have been introduced in commit=20
-649ea4d5a624f0 ("objtool: Assume unannotated UD2 instructions are dead=20
-ends").
+I had impression I saw io-width outside of LPPDR bindings, but
+apparently it's only reg-io-width
 
-Objtool considers 'ud2' instruction to be fatal, so BUG() has=20
-__builtin_unreachable(), rather than unreachable(). See commit=20
-bfb1a7c91fb775 ("x86/bug: Merge annotate_reachable() into _BUG_FLAGS()=20
-asm"). For the same reason, __WARN_FLAGS() is annotated with=20
-_ASM_REACHABLE so that objtool can differentiate warnings from a BUG().
+>  so that's
+> not quite the same (and wouldn't seem to preclude calling a field here
+> `channel-io-width`, since the width that's talking about is not the
+> width of a register).
 
-On powerpc, we use trap variants for both and don't have a special=20
-instruction for a BUG(). As such, for _WARN_FLAGS(), using=20
-__builtin_unreachable() suffices to achieve optimal code generation from=20
-the compiler. Objtool would consider subsequent instructions to be=20
-reachable. For BUG(), we can continue to use unreachable() so that=20
-objtool can differentiate these from traps used in warnings.
-
->=20
-> The following changes to objtool seem to fix the problem, most warning=20
-> are gone with that change.
->=20
-> diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-> index 63218f5799c2..37c0a268b7ea 100644
-> --- a/tools/objtool/elf.c
-> +++ b/tools/objtool/elf.c
-> @@ -77,6 +77,8 @@ static int symbol_by_offset(const void *key, const=20
-> struct rb_node *node)
->=20
->   	if (*o < s->offset)
->   		return -1;
-> +	if (*o =3D=3D s->offset && !s->len)
-> +		return 0;
->   	if (*o >=3D s->offset + s->len)
->   		return 1;
->=20
-> @@ -400,7 +402,7 @@ static void elf_add_symbol(struct elf *elf, struct=20
-> symbol *sym)
->   	 * Don't store empty STT_NOTYPE symbols in the rbtree.  They
->   	 * can exist within a function, confusing the sorting.
->   	 */
-> -	if (!sym->len)
-> +	if (sym->type =3D=3D STT_NOTYPE && !sym->len)
->   		rb_erase(&sym->node, &sym->sec->symbol_tree);
->   }
-
-Is there a reason to do this, rather than change __WARN_FLAGS() to use=20
-__builtin_unreachable()? Or, are you seeing an issue with unreachable()=20
-elsewhere in the kernel?
+reg-io-width is not only about register width, but width of access size
+or width of IO.
 
 
-- Naveen
+> In LPDDR context, the term "IO width" mostly
+> appears specifically for the bit field in Mode Register 8 that
+> describes the amount of DQ pins going into one individual LPDDR chip.
+> The field that I need to encode for the channel here is explicitly
+> *not* that, it's the amount of DQ pins coming *out* of the LPDDR
+> controller, and as explained in my original email those two numbers
+> need not necessarily be the same when multiple LPDDR chips are hooked
+> up in parallel. So, yes, I could call both of these properties
+> `io-width` with one in the rank node and one in the channel node...
+> but I think giving the latter one a different name (e.g.
+> `channel-io-width`) would be better to avoid confusion and provide a
+> hint that there's an important difference between these numbers.
 
+Send the bindings, we'll see what the DT binding maintainers will say. :)
+
+> 
+>> You also need a timings node. I don't think it would be different for
+>> each of ranks, would it?
+> 
+> I think it might be? I'm honestly not a memory expert so I'm not
+> really sure (Jian-Jia in CC might know this?), but since different
+> ranks can be asymmetric (even when they're on the same part), I could
+> imagine that, say, the larger rank might need slightly longer
+> precharge time or something like that. They at least all implement a
+> separate set of mode registers, so they could theoretically be
+> configured with different latency settings through those.
+
+This feels weird... although maybe one or few parameters of timings
+could be different.
+
+How the asymmetric SDRAMs report density? This is a field with
+fixed/enum values, so does it mean two-rank-asymmetric module has two
+registers, one per each rank and choice of register depends on chip select?
+
+> 
+>>>> (Also, btw, would it make sense to use this opportunity to combine the
+>>>> "jedec,lpddr2" and "jedec,lpddr3" bindings into a single document?
+>>
+>> These bindings are quite different, so combining would result in big
+>> allOf. I am not sure if there is benefit in that.
+> 
+> They should basically be 100% identical outside of the timings. I can
+> see that jedec,lpddr2 is currently missing the manufacturer-id
+> property, that's probably an oversight -- Mode Register 5 with that ID
+> exists for LPDDR2 just as well as for LPDDR3, and we're already
+> passing the revision IDs which is kinda useless without also passing
+> the manufacturer ID as well (because the revision IDs are
+> vendor-specific).
+
+Manufacturer ID is taken from compatible. LPDDR3 has it deprecated.
+
+> So merging the bindings would fix that. 
+
+Nothing to fix, it was by choice.
+
+> The only
+> other difference I can see are the deprecated
+> `revision-id1`/`revision-id2` fields for jedec,lpddr2 -- if I use a
+> property inclusion mechanism like Doug suggested, those could stay
+> separate in jedec,lpddr2 only (since they're deprecated anyway and
+> replaced by `revision-id` in the combined bindings).
+> 
+> For the timings, I'm okay with keeping them separate.
+
+
+Best regards,
+Krzysztof

@@ -2,152 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870065616E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F085616F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbiF3J47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 05:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58490 "EHLO
+        id S234636AbiF3J50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 05:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234600AbiF3J45 (ORCPT
+        with ESMTP id S234619AbiF3J5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 05:56:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63A0743AC1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:56:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656583015;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CDu+zCVL/iHOE4iiWUZjPtowW+QlF+sjQdHuJYh9AdU=;
-        b=eO03aUtnys/vdryqr0BX3lAkt9jUSKzwUf9sEukQTZoEUISAGEthZxH54uarpYZUk3i8gb
-        FyaKt1wqf1R/O5aSZfVo6NBEKQaqawCwIS3hlHsJMRt4cvhTnqIELIaobYXMP8t6VftVkZ
-        5ABq4AV4v7W6Y1UOCC4IbDnMNFB5Z3o=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-299-xGSpg6wUPkSw00KDq1e1XA-1; Thu, 30 Jun 2022 05:56:53 -0400
-X-MC-Unique: xGSpg6wUPkSw00KDq1e1XA-1
-Received: by mail-qv1-f70.google.com with SMTP id mr11-20020a056214348b00b004705c0cb439so17944637qvb.19
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:56:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=CDu+zCVL/iHOE4iiWUZjPtowW+QlF+sjQdHuJYh9AdU=;
-        b=71UvhqXLliLiVWe2SXv+j8aYcxeQKoBQ9OMLA+4TjMrzB46jZTtHWOQku20qJJb5J8
-         9zDWOO3iwuU+LOqK8Yda7pBrt9upF3YzrGQnCqQ4xRpsidKrOX24E/aJMoGoWgHyQ2R5
-         HVaHIKbY4k8Vvuur3JQInrNBVr2ijGglIWuXXnxzf0jk/kJEErFu1ijkw3if+Do0+4Fy
-         6Zbvi4vw78MBpzjiqphL608IoIXr8Y4o2qtWxpfBbKuBJpGM0S5heSrbpTnmw12+AMRK
-         HXm2ZfRshnu2C/FEukz3+ALQ+B5ns2UMsB+ZzUV2ZPwkQnl2bg4EmXgq9sYTxWkd/R6T
-         o8ZA==
-X-Gm-Message-State: AJIora9dS2IsFEIDWXYu9E9j1grLgOVX9yWNOblGNQRZqec7jipa0nog
-        PjZxJ93CuWIRYj795RRPmczoBZ2lXuLS+3ayPNex4NaiDhLZZH0qbO4KS4D33NRJSlInorEt9aE
-        0IaEVoSvWXjHFEFF4yGix+wzt
-X-Received: by 2002:ac8:5298:0:b0:319:63c3:8b1d with SMTP id s24-20020ac85298000000b0031963c38b1dmr6624866qtn.261.1656583013345;
-        Thu, 30 Jun 2022 02:56:53 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vDeUZ5o9LgiRwYosHFqD2jL02bO5En5FUz0PWgFnCB07gQjcN/TW5qNV4yFvA2a5vWanzumQ==
-X-Received: by 2002:ac8:5298:0:b0:319:63c3:8b1d with SMTP id s24-20020ac85298000000b0031963c38b1dmr6624851qtn.261.1656583013075;
-        Thu, 30 Jun 2022 02:56:53 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-106-148.dyn.eolo.it. [146.241.106.148])
-        by smtp.gmail.com with ESMTPSA id g6-20020ac842c6000000b00317ccc66971sm11586812qtm.52.2022.06.30.02.56.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 02:56:52 -0700 (PDT)
-Message-ID: <64e59afe33fff04861c800853a549f7979270f79.camel@redhat.com>
-Subject: Re: [PATCH] net: hinic: avoid kernel hung in hinic_get_stats64()
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Qiao Ma <mqaio@linux.alibaba.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, gustavoars@kernel.org,
-        cai.huoqing@linux.dev, aviad.krawczyk@huawei.com,
-        zhaochen6@huawei.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 30 Jun 2022 11:56:48 +0200
-In-Reply-To: <07736c2b7019b6883076a06129e06e8f7c5f7154.1656487154.git.mqaio@linux.alibaba.com>
-References: <07736c2b7019b6883076a06129e06e8f7c5f7154.1656487154.git.mqaio@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Thu, 30 Jun 2022 05:57:19 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B4543ACD;
+        Thu, 30 Jun 2022 02:57:18 -0700 (PDT)
+Received: from [192.168.2.145] (unknown [109.252.118.164])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E21336601948;
+        Thu, 30 Jun 2022 10:57:16 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656583037;
+        bh=q8/O3O9cAhPR9Cw2/yL31YTcTztXCqBC3JyU3IRJV6w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CjzdPE+le26ptVF7yKxrthrH553wOh4ZGUcJWjlPN741GxPd/+Cp/8DP2Pu++2X3v
+         0UTM43e18ilosLAMvbE+hHdx2ZACU9wFpVjrpHvBNw//+jn2Ej/XWx0SzE+uGEDNKF
+         HeElZTbqMEZ4Az8g2BNH/vqBjqg5YRh6dOB4myXdfOQzR6rF8jCOrLlg+//CDlI86n
+         u0OyRLor47xOcUnTeaB0eV9lVz4Gnwc7Rhe8PzgqD38uzrvKXMcQ598GI87ooyzoEA
+         rGOT+q0PLgfPIM+faQHKk5JQwxGK1kjr7LRPdBoDS4IqTU5goUAtLDBZtPtgycc8l4
+         12uyZp4FYJLrw==
+Message-ID: <b899ff5f-b424-5f44-7c94-deb013ff6bbc@collabora.com>
+Date:   Thu, 30 Jun 2022 12:57:13 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <cover.1654849214.git.viresh.kumar@linaro.org>
+ <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
+ <55623c12-dda3-613f-5bc9-80b3b6fec5f9@nvidia.com>
+ <20220622141511.yzg5itkdwirpavfj@vireshk-i7>
+ <40e616eb-22f9-19c2-8d77-20cd3c7c518b@nvidia.com>
+ <c6f100e4-8a35-ebf0-f833-06ff0d8a2fb6@collabora.com>
+ <20220630005028.fddtcbkoksbygwc5@vireshk-i7>
+ <8367c38b-8cd3-cde1-5833-874769ef3350@collabora.com>
+ <20220630095245.otvo53ezd4avoujw@vireshk-i7>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20220630095245.otvo53ezd4avoujw@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-29 at 15:28 +0800, Qiao Ma wrote:
-> When using hinic device as a bond slave device, and reading device stats of
-> master bond device, the kernel may hung.
+On 6/30/22 12:52, Viresh Kumar wrote:
+> On 30-06-22, 12:13, Dmitry Osipenko wrote:
+>> On 6/30/22 03:50, Viresh Kumar wrote:
+>>> On 29-06-22, 21:33, Dmitry Osipenko wrote:
+>>>> Today I noticed that tegra30-devfreq driver now fails to probe because
+>>>> dev_pm_opp_find_freq_ceil() fails with -ERANGE. This patch is guilty for
+>>>> that. Could you please take a look?
+>  
+>> We added memory interconnect support to Tegra and since that time only
+>> the memory controller can drive the clock rate. All other drivers,
+>> including the devfreq, now issue memory bandwidth requests using ICC.
+>>
+>> In case of the devfreq driver, it's the OPP core that makes the bw
+>> request using ICC.
+>>
+>> But it's the set_freq_table() that fails [2], I see
+>> dev_pm_opp_get_opp_count() returns 17, which is correct, and then
+>> dev_pm_opp_find_freq_ceil(freq=0) returns freq=1, which shall be
+>> freq=12750000.
 > 
-> The kernel panic calltrace as follows:
-> Kernel panic - not syncing: softlockup: hung tasks
-> Call trace:
->   native_queued_spin_lock_slowpath+0x1ec/0x31c
->   dev_get_stats+0x60/0xcc
->   dev_seq_printf_stats+0x40/0x120
->   dev_seq_show+0x1c/0x40
->   seq_read_iter+0x3c8/0x4dc
->   seq_read+0xe0/0x130
->   proc_reg_read+0xa8/0xe0
->   vfs_read+0xb0/0x1d4
->   ksys_read+0x70/0xfc
->   __arm64_sys_read+0x20/0x30
->   el0_svc_common+0x88/0x234
->   do_el0_svc+0x2c/0x90
->   el0_svc+0x1c/0x30
->   el0_sync_handler+0xa8/0xb0
->   el0_sync+0x148/0x180
+> I am confused, you said earlier that it is failing with -ERANGE, but
+> now it is a bad freq value ?
 > 
-> And the calltrace of task that actually caused kernel hungs as follows:
->   __switch_to+124
->   __schedule+548
->   schedule+72
->   schedule_timeout+348
->   __down_common+188
->   __down+24
->   down+104
->   hinic_get_stats64+44 [hinic]
->   dev_get_stats+92
->   bond_get_stats+172 [bonding]
->   dev_get_stats+92
->   dev_seq_printf_stats+60
->   dev_seq_show+24
->   seq_read_iter+964
->   seq_read+220
->   proc_reg_read+164
->   vfs_read+172
->   ksys_read+108
->   __arm64_sys_read+28
->   el0_svc_common+132
->   do_el0_svc+40
->   el0_svc+24
->   el0_sync_handler+164
->   el0_sync+324
+> Which one of these it is ?
 > 
-> When getting device stats from bond, kernel will call bond_get_stats().
-> It first holds the spinlock bond->stats_lock, and then call
-> hinic_get_stats64() to collect hinic device's stats.
-> However, hinic_get_stats64() calls `down(&nic_dev->mgmt_lock)` to
-> protect its critical section, which may schedule current task out.
-> And if system is under high pressure, the task cannot be woken up
-> immediately, which eventually triggers kernel hung panic.
+> The problem I see is here though, because of which I was asking you
+> the question earlier:
 > 
-> Fixes: edd384f682cc ("net-next/hinic: Add ethtool and stats")
-> Signed-off-by: Qiao Ma <mqaio@linux.alibaba.com>
+> - tegra30-devfreq driver calls devm_pm_opp_of_add_table_noclk(), i.e.
+>   clk_count == 0.
+> 
+> - _read_rate() (in drivers/opp/of.c) skips reading any opp-hz
+>   properties if clk_count is 0.
+> 
+> - And so you can get -ERANGE or some other error.
+> 
+> Can you please see where we are failing. Also I don't see how freq can
+> get set to 1 currently.
+> 
 
-Side note: it looks like that after this patch every section protected
-by the mgmt_lock is already under rtnl lock protection, so you could
-probably remove the hinic specific lock (in a separate, net-next,
-patch).
+The set_freq_table() gets available freqs using
+dev_pm_opp_find_freq_ceil() iteration.
 
-Please double check the above as I skimmed upon that quickly.
+The first dev_pm_opp_find_freq_ceil(freq=0) succeeds and returns ceil
+freq=1.
 
-Thanks,
+The second dev_pm_opp_find_freq_ceil(freq=1) fails with -ERANGE.
 
-Paolo
+I haven't looked yet at why freq is set to 1.
 
+-- 
+Best regards,
+Dmitry

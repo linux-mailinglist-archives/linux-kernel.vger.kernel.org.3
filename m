@@ -2,250 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1FB5613E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 563DD56140E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233575AbiF3H72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
+        id S233637AbiF3IAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 04:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233434AbiF3H7P (ORCPT
+        with ESMTP id S233634AbiF3IAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:59:15 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF56D40E7E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:59:12 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id o25so4907228ejm.3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:59:12 -0700 (PDT)
+        Thu, 30 Jun 2022 04:00:11 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE37441304;
+        Thu, 30 Jun 2022 01:00:02 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3177f4ce3e2so171101327b3.5;
+        Thu, 30 Jun 2022 01:00:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UWoxaHa9vwxRJ6htkBZWfNpkwJZl7SwP5oymQpu5C9M=;
-        b=AgTvAomP7BwhDmMrgHzBlaSrddv2EaZOMyN+NwwxRWasoyUhvqycpuDsjOFu4IKXmI
-         uZSdAAyhDrNRlfAfgUzFeGQ7QXM0vvD46z6yBerONji2+GtagX0b8z/8JjMX4JFJn11H
-         k0Cok2PIT0lKIaCwPHp18AAi+Kkx/7qTMgN5Q=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qXJzLbog6MJ74pFBfsgk8qL8nqFotk4VAzV4IxDY2Z8=;
+        b=CDVpU266vwg+nZGjOIqDIDXtqmdC30ZezHVdSz5okTFV6FQyV1OlKuD0XqUct0KgYt
+         YEg1s2zo16B/1Wy8rPIFM/y1x3zp9p7if/ECsaEDeKkAlEsX+njd4b5yuRFJkne6v8Uv
+         T/UJEbebioDSfjqJVtrvOQkbZBLVHvSfGlSKkkXp5owlLcy26T/3Q+VpszHeiFJ66bsc
+         SMcb9aRmXR0nUtmVAtiCDwvJexLSTlqQnBOAud5B59AIZL5e/Y8SOG8LCeM8FsoCgfv/
+         KFyWSeV13LQpYcpNKpnDun+1qcRkFFDOqgzlnLfKbG9wKtwpKHMsMhhpdU/dUxRS8s2W
+         m3kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UWoxaHa9vwxRJ6htkBZWfNpkwJZl7SwP5oymQpu5C9M=;
-        b=rP6u39Az7T9eg6LxwMBY0ft4LBdasBWtGEutd1/xAeZA4v1XcPIfyXMCGM46S2kBxE
-         szETdAX/vFqvhIdKPj3omqi0GnTDMz6fYkCHDsvSBdHYN2zmPQGEAy2NKjAv3TdPYope
-         64QlP2KK6H3xoxLt3kXVbSSNJIggSHVGpkSQWOCPm1K41d+Glurw67Yt5m6NavPD4sVB
-         9s65xh++i+KcNe4Ur277IwwXI3dNVoEsFXuPXzORCTW7JMbA89WITDu/K8EZ7LltzaSM
-         ljBmUzJTNpXD1Kybb9QMjJzVf9OCsHuQsn/Z3e9pLxXuE7ZWCJUfC20aDf4iHmiwH1D+
-         y+hw==
-X-Gm-Message-State: AJIora+KYka1sPGslbL7G1JD18CyV+Ft0oz7tsfbmohNc6aT5KrViBJk
-        LYwvClQ6fY69WY+9STnyF2gYmw==
-X-Google-Smtp-Source: AGRyM1sKoxRfGn4k8OqA4AVTM6Di92Va176J6zDkJUKjtWogkJiZTYIEFSkZtCthU/c7vRRvLEDUJQ==
-X-Received: by 2002:a17:907:9706:b0:726:2cf4:6698 with SMTP id jg6-20020a170907970600b007262cf46698mr7327522ejc.619.1656575951352;
-        Thu, 30 Jun 2022 00:59:11 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-58-216.cust.vodafonedsl.it. [188.217.58.216])
-        by smtp.gmail.com with ESMTPSA id g26-20020a170906199a00b00724ff3251c4sm8746269ejd.26.2022.06.30.00.59.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 00:59:11 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 09:59:09 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        quentin.schulz@theobroma-systems.com,
-        Daniel Scally <djrscally@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/6] media: ov5693: move hw cfg functions into
- ov5693_hwcfg
-Message-ID: <20220630075909.GB482517@tom-ThinkPad-T14s-Gen-2i>
-References: <20220629152933.422990-1-tommaso.merciai@amarulasolutions.com>
- <20220629152933.422990-5-tommaso.merciai@amarulasolutions.com>
- <20220629160756.s6vh7r3uqj62oaqd@uno.localdomain>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qXJzLbog6MJ74pFBfsgk8qL8nqFotk4VAzV4IxDY2Z8=;
+        b=VjiV1B7KXpWSEHTr3col/8wIE2lTkW/DVoHNks9zPgPQfpubkhX/C2P6rKXWJ1VSh5
+         4GI9abfyO5SAO4yoX7+H883JeYU7WQLfZIr435V4mTS8H8xFCZOlnyduNZemJHLbKKbB
+         MGvbEHYlV7Pm89icdm1/5j0RI01fPYm1h0YyLPF3ZKhDO8f8kNTepNm132+PllY43Zuk
+         RklicuKVKAkD4/MrarMwwj+Xh+jtEVmGIsOkfSdB2F/dEFv4YJH4XOfLpkoGoXb/5J6W
+         wMbVENlT9KaJQKcxc0R0/eSoE7L5WiVRrnYacJYXlQt5Ih5QtsTy8b+AB3i8PchS6Ab/
+         BHjw==
+X-Gm-Message-State: AJIora9JniEcCj5v5QRLe1Eb5VWesn7c9YCoFgS/9CqXSEZfvN7ntH0G
+        QgOpK9yRKPAytE1dPreaLMtq5pGSRImlSuFyasE=
+X-Google-Smtp-Source: AGRyM1v4zwmzhbMhptAPn2N3SU98uSYBAsImAnNff2/xupAFRFXpuWYjRHqeRLK+eXYsjJZE9xZyaHAnQlxkK3KwkH4=
+X-Received: by 2002:a81:1889:0:b0:317:987b:8e82 with SMTP id
+ 131-20020a811889000000b00317987b8e82mr8712949ywy.185.1656576001966; Thu, 30
+ Jun 2022 01:00:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629160756.s6vh7r3uqj62oaqd@uno.localdomain>
+References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com> <20220629143046.213584-12-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220629143046.213584-12-aidanmacdonald.0x0@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 30 Jun 2022 09:59:23 +0200
+Message-ID: <CAHp75VdReU+mJwf9ucE4GGfBhajf0AYq2tkcfWxWy0W2OESdJQ@mail.gmail.com>
+Subject: Re: [PATCH v4 11/15] power: supply: axp20x_usb_power: Add support for AXP192
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>, quic_gurus@quicinc.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Michael Walle <michael@walle.cc>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacopo,
+On Wed, Jun 29, 2022 at 4:30 PM Aidan MacDonald
+<aidanmacdonald.0x0@gmail.com> wrote:
+>
+> The AXP192's USB power supply is similar to the AXP202 but it has
+> different USB current limits and a different offset for the VBUS
+> status register.
 
-On Wed, Jun 29, 2022 at 06:07:56PM +0200, Jacopo Mondi wrote:
-> Hi Tommaso,
-> 
-> On Wed, Jun 29, 2022 at 05:29:31PM +0200, Tommaso Merciai wrote:
-> > Move hw configuration functions into ov5693_hwcfg. This is done to
-> > separate the code that handle the hw cfg from probe in a clean way.
-> > Add also support to get clock from "clock-frequency" fwnode in
-> > ov5675_hwcfg function
-> 
-> Why ? :)
-> 
-> What about:
-> 
-> "Add support for ACPI-based platforms that specify the clock frequency by
-> using the "clock-frequency" property instead of specifying a clock
-> provider reference."
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Thanks for suggestion. I use this in v4
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Reviewed-by: Chen-Yu Tsai <wens@csie.org>
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>  drivers/power/supply/axp20x_usb_power.c | 84 +++++++++++++++++++++----
+>  1 file changed, 73 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
+> index a1e6d1d44808..f83e2ed6d507 100644
+> --- a/drivers/power/supply/axp20x_usb_power.c
+> +++ b/drivers/power/supply/axp20x_usb_power.c
+> @@ -48,6 +48,9 @@
+>  #define AXP813_VBUS_CLIMIT_2000mA      2
+>  #define AXP813_VBUS_CLIMIT_2500mA      3
+>
+> +#define AXP192_VBUS_CLIMIT_EN          BIT(1)
+> +#define AXP192_VBUS_CLIMIT_100mA       BIT(0)
+> +
+>  #define AXP20X_ADC_EN1_VBUS_CURR       BIT(2)
+>  #define AXP20X_ADC_EN1_VBUS_VOLT       BIT(3)
+>
+> @@ -121,6 +124,25 @@ static void axp20x_usb_power_poll_vbus(struct work_struct *work)
+>                 mod_delayed_work(system_power_efficient_wq, &power->vbus_detect, DEBOUNCE_TIME);
+>  }
+>
+> +static int axp192_get_current_max(struct axp20x_usb_power *power, int *val)
+> +{
+> +       unsigned int v;
+> +       int ret;
+> +
+> +       ret = regmap_read(power->regmap, AXP20X_VBUS_IPSOUT_MGMT, &v);
+> +       if (ret)
+> +               return ret;
+> +
+> +       if (!(v & AXP192_VBUS_CLIMIT_EN))
+> +               *val = -1;
+> +       else if (v & AXP192_VBUS_CLIMIT_100mA)
+> +               *val = 100000;
+> +       else
+> +               *val = 500000;
+> +
+> +       return 0;
+> +}
+> +
+>  static int axp20x_get_current_max(struct axp20x_usb_power *power, int *val)
+>  {
+>         unsigned int v;
+> @@ -179,7 +201,7 @@ static int axp20x_usb_power_get_property(struct power_supply *psy,
+>         enum power_supply_property psp, union power_supply_propval *val)
+>  {
+>         struct axp20x_usb_power *power = power_supply_get_drvdata(psy);
+> -       unsigned int input, v;
+> +       unsigned int input, v, reg;
+>         int ret;
+>
+>         switch (psp) {
+> @@ -215,6 +237,8 @@ static int axp20x_usb_power_get_property(struct power_supply *psy,
+>         case POWER_SUPPLY_PROP_CURRENT_MAX:
+>                 if (power->axp20x_id == AXP813_ID)
+>                         return axp813_get_current_max(power, &val->intval);
+> +               else if (power->axp20x_id == AXP192_ID)
+> +                       return axp192_get_current_max(power, &val->intval);
+>                 return axp20x_get_current_max(power, &val->intval);
+>         case POWER_SUPPLY_PROP_CURRENT_NOW:
+>                 if (IS_ENABLED(CONFIG_AXP20X_ADC)) {
+> @@ -256,16 +280,19 @@ static int axp20x_usb_power_get_property(struct power_supply *psy,
+>
+>                 val->intval = POWER_SUPPLY_HEALTH_GOOD;
+>
+> -               if (power->axp20x_id == AXP202_ID) {
+> -                       ret = regmap_read(power->regmap,
+> -                                         AXP20X_USB_OTG_STATUS, &v);
+> -                       if (ret)
+> -                               return ret;
+> +               if (power->axp20x_id == AXP192_ID)
+> +                       reg = AXP192_USB_OTG_STATUS;
+> +               else if (power->axp20x_id == AXP202_ID)
+> +                       reg = AXP20X_USB_OTG_STATUS;
+> +               else
+> +                       break; /* Other chips lack the OTG status register */
+>
+> -                       if (!(v & AXP20X_USB_STATUS_VBUS_VALID))
+> -                               val->intval =
+> -                                       POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
+> -               }
+> +               ret = regmap_read(power->regmap, reg, &v);
+> +               if (ret)
+> +                       return ret;
+> +
+> +               if (!(v & AXP20X_USB_STATUS_VBUS_VALID))
+> +                       val->intval = POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
+>                 break;
+>         case POWER_SUPPLY_PROP_PRESENT:
+>                 val->intval = !!(input & AXP20X_PWR_STATUS_VBUS_PRESENT);
+> @@ -316,6 +343,28 @@ static int axp20x_usb_power_set_voltage_min(struct axp20x_usb_power *power,
+>         return -EINVAL;
+>  }
+>
+> +static int axp192_usb_power_set_current_max(struct axp20x_usb_power *power,
+> +                                           int intval)
+> +{
+> +       const unsigned int mask = AXP192_VBUS_CLIMIT_EN |
+> +                                 AXP192_VBUS_CLIMIT_100mA;
+> +       unsigned int val;
+> +
+> +       switch (intval) {
+> +       case 100000:
+> +               val = AXP192_VBUS_CLIMIT_EN | AXP192_VBUS_CLIMIT_100mA;
+> +               break;
+> +       case 500000:
+> +               val = AXP192_VBUS_CLIMIT_EN;
+> +               break;
+> +       default:
+> +               return -EINVAL;
+> +       }
+> +
+> +       return regmap_update_bits(power->regmap,
+> +                                 AXP20X_VBUS_IPSOUT_MGMT, mask, val);
+> +}
+> +
+>  static int axp813_usb_power_set_current_max(struct axp20x_usb_power *power,
+>                                             int intval)
+>  {
+> @@ -383,6 +432,9 @@ static int axp20x_usb_power_set_property(struct power_supply *psy,
+>                 if (power->axp20x_id == AXP813_ID)
+>                         return axp813_usb_power_set_current_max(power,
+>                                                                 val->intval);
+> +               else if (power->axp20x_id == AXP192_ID)
+> +                       return axp192_usb_power_set_current_max(power,
+> +                                                               val->intval);
+>                 return axp20x_usb_power_set_current_max(power, val->intval);
+>
+>         default:
+> @@ -468,6 +520,13 @@ struct axp_data {
+>         enum axp20x_variants            axp20x_id;
+>  };
+>
+> +static const struct axp_data axp192_data = {
+> +       .power_desc     = &axp20x_usb_power_desc,
+> +       .irq_names      = axp20x_irq_names,
+> +       .num_irq_names  = ARRAY_SIZE(axp20x_irq_names),
+> +       .axp20x_id      = AXP192_ID,
+> +};
+> +
+>  static const struct axp_data axp202_data = {
+>         .power_desc     = &axp20x_usb_power_desc,
+>         .irq_names      = axp20x_irq_names,
+> @@ -600,7 +659,7 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
+>         if (ret)
+>                 return ret;
+>
+> -       if (power->axp20x_id == AXP202_ID) {
+> +       if (power->axp20x_id == AXP192_ID || power->axp20x_id == AXP202_ID) {
+>                 /* Enable vbus valid checking */
+>                 ret = regmap_update_bits(power->regmap, AXP20X_VBUS_MON,
+>                                          AXP20X_VBUS_MON_VBUS_VALID,
+> @@ -659,6 +718,9 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
+>
+>  static const struct of_device_id axp20x_usb_power_match[] = {
+>         {
+> +               .compatible = "x-powers,axp192-usb-power-supply",
+> +               .data = &axp192_data,
+> +       }, {
+>                 .compatible = "x-powers,axp202-usb-power-supply",
+>                 .data = &axp202_data,
+>         }, {
+> --
+> 2.35.1
+>
 
-> 
-> >
-> > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> 
-> Not on this patch, but it seems you have not collected the tags
-> received on the previous version of the series.
-> 
-> > ---
-> > Changes since v2:
-> >  - Fix commit body as suggested by Sakari, Jacopo
-> >  - Add details to commit body as suggested Jacopo
-> >  - Move ov5693_check_hwcfg into ov5693_hwcfg
-> >  - Fix xvclk_rate position as suggested Jacopo
-> 
-> Also fixed a bug it seems :)
-
-You are right :'(
-
-> 
-> >
-> >  drivers/media/i2c/ov5693.c | 57 +++++++++++++++++++++++---------------
-> >  1 file changed, 34 insertions(+), 23 deletions(-)
-> >
-> > diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
-> > index d2adc5513a21..3c805a5a5181 100644
-> > --- a/drivers/media/i2c/ov5693.c
-> > +++ b/drivers/media/i2c/ov5693.c
-> > @@ -1339,16 +1339,48 @@ static int ov5693_get_regulators(struct ov5693_device *ov5693)
-> >  				       ov5693->supplies);
-> >  }
-> >
-> > -static int ov5693_check_hwcfg(struct ov5693_device *ov5693)
-> > +static int ov5693_hwcfg(struct ov5693_device *ov5693)
-> >  {
-> >  	struct fwnode_handle *fwnode = dev_fwnode(ov5693->dev);
-> >  	struct v4l2_fwnode_endpoint bus_cfg = {
-> >  		.bus_type = V4L2_MBUS_CSI2_DPHY,
-> >  	};
-> >  	struct fwnode_handle *endpoint;
-> > +	u32 xvclk_rate;
-> >  	unsigned int i;
-> >  	int ret;
-> >
-> > +	ov5693->xvclk = devm_clk_get_optional(ov5693->dev, "xvclk");
-> > +	if (IS_ERR(ov5693->xvclk))
-> > +		return dev_err_probe(ov5693->dev, PTR_ERR(ov5693->xvclk),
-> > +				     "failed to get xvclk: %ld\n",
-> > +				     PTR_ERR(ov5693->xvclk));
-> > +
-> > +	if (ov5693->xvclk) {
-> > +		xvclk_rate = clk_get_rate(ov5693->xvclk);
-> > +	} else {
-> > +		ret = fwnode_property_read_u32(fwnode, "clock-frequency",
-> > +					       &xvclk_rate);
-> > +
-> > +		if (ret) {
-> > +			dev_err(ov5693->dev, "can't get clock frequency");
-> > +			return ret;
-> > +		}
-> > +	}
-> 
-> This now looks good to me, thanks!
-> 
-> > +
-> > +	if (xvclk_rate != OV5693_XVCLK_FREQ)
-> > +		dev_warn(ov5693->dev, "Found clk freq %u, expected %u\n",
-> > +			 xvclk_rate, OV5693_XVCLK_FREQ);
-> > +
-> > +	ret = ov5693_configure_gpios(ov5693);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = ov5693_get_regulators(ov5693);
-> > +	if (ret)
-> > +		return dev_err_probe(ov5693->dev, ret,
-> > +				     "Error fetching regulators\n");
-> > +
-> >  	endpoint = fwnode_graph_get_next_endpoint(fwnode, NULL);
-> >  	if (!endpoint)
-> >  		return -EPROBE_DEFER; /* Could be provided by cio2-bridge */
-> > @@ -1390,7 +1422,6 @@ static int ov5693_check_hwcfg(struct ov5693_device *ov5693)
-> >  static int ov5693_probe(struct i2c_client *client)
-> >  {
-> >  	struct ov5693_device *ov5693;
-> > -	u32 xvclk_rate;
-> >  	int ret = 0;
-> 
-> No need for ret to be intialized, but it was already like this...
-
-I can send patch later for this, or you prefer to fix this in this
-series?
-
-Regards,
-Tommaso
-
-> 
-> The patch itself looks good
-> Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-> 
-> Thanks
->   j
-> 
-> >
-> >  	ov5693 = devm_kzalloc(&client->dev, sizeof(*ov5693), GFP_KERNEL);
-> > @@ -1400,7 +1431,7 @@ static int ov5693_probe(struct i2c_client *client)
-> >  	ov5693->client = client;
-> >  	ov5693->dev = &client->dev;
-> >
-> > -	ret = ov5693_check_hwcfg(ov5693);
-> > +	ret = ov5693_hwcfg(ov5693);
-> >  	if (ret)
-> >  		return ret;
-> >
-> > @@ -1408,26 +1439,6 @@ static int ov5693_probe(struct i2c_client *client)
-> >
-> >  	v4l2_i2c_subdev_init(&ov5693->sd, client, &ov5693_ops);
-> >
-> > -	ov5693->xvclk = devm_clk_get(&client->dev, "xvclk");
-> > -	if (IS_ERR(ov5693->xvclk)) {
-> > -		dev_err(&client->dev, "Error getting clock\n");
-> > -		return PTR_ERR(ov5693->xvclk);
-> > -	}
-> > -
-> > -	xvclk_rate = clk_get_rate(ov5693->xvclk);
-> > -	if (xvclk_rate != OV5693_XVCLK_FREQ)
-> > -		dev_warn(&client->dev, "Found clk freq %u, expected %u\n",
-> > -			 xvclk_rate, OV5693_XVCLK_FREQ);
-> > -
-> > -	ret = ov5693_configure_gpios(ov5693);
-> > -	if (ret)
-> > -		return ret;
-> > -
-> > -	ret = ov5693_get_regulators(ov5693);
-> > -	if (ret)
-> > -		return dev_err_probe(&client->dev, ret,
-> > -				     "Error fetching regulators\n");
-> > -
-> >  	ov5693->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-> >  	ov5693->pad.flags = MEDIA_PAD_FL_SOURCE;
-> >  	ov5693->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-> > --
-> > 2.25.1
-> >
 
 -- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
-
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+With Best Regards,
+Andy Shevchenko

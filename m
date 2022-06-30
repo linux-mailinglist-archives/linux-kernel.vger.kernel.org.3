@@ -2,149 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD015620FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 19:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3DE25620F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 19:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233902AbiF3RMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 13:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
+        id S235361AbiF3RMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 13:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235229AbiF3RMo (ORCPT
+        with ESMTP id S231348AbiF3RMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 13:12:44 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2656533880
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:12:42 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id r20so28271620wra.1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:12:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uH3u1IFiXRo5yGbXIVqL1yqXLG2H1E4UXns/GZ0BaVE=;
-        b=FZwPzlvJMTMo74Fom19t74AoePXhXeGrkxqDczxBrgAmUE15h7mMgCvqS1RXp6H6dx
-         AJN1eEqiyXCQcVtOdWLHOlGOIYCzX0NYupog/3JnG9A7ikhyIHZBFXZVFGEfKGdZCXeY
-         zU1hnN1Wdqw7oADY6ZGrKHxwlMGT7A4lHt31aRjqd1iiC/ofThahR164aASaZMojTBSJ
-         5NpYz9PQrcA4PgL8kxOVJoX6B1W4Pk4wJyUC923AhZMJ3cMtqn4TGSDOwf2374Xfwolm
-         zoFBaFGsi3fEWFmXn2NQWslIpMLfYDFs4g+nzRAXD26K3skmpYuoFUlpgEIDvbWxpRWF
-         dGPg==
+        Thu, 30 Jun 2022 13:12:41 -0400
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14AF3EF38;
+        Thu, 30 Jun 2022 10:12:38 -0700 (PDT)
+Received: by mail-il1-f180.google.com with SMTP id k7so12805108ils.8;
+        Thu, 30 Jun 2022 10:12:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uH3u1IFiXRo5yGbXIVqL1yqXLG2H1E4UXns/GZ0BaVE=;
-        b=c/s4+1QjYHCKLdLhzwi10E5fh5qduZF9nSk2jvCvm0rJil4CabJJbrUO+xCUx4M8nr
-         tT/xLEYbGXoHiUQjABXhHhg/mkzqAZ6niDNXaZfwMbAQ/hzQnWu3d2qWDGXBEboVZk6w
-         me3QuqWEj4g1gPDbodOX07Cm57z7r7WYUaO9nyW86cPjYOPNtphQbDpgmmhk0JQNezSy
-         W9MqU7mEJ/Al0KcA9CLEiueomIPnJjbW8ShfgwZKuqC0c9QsSL0mHd9aQ7InFZbUL2MK
-         sL3u4w4MS7yAdxKgy864LsvQ58fxPBPbcyqb1tOq2K9tjUfZKr+q0HeZXiacgeWtwrEQ
-         8KtA==
-X-Gm-Message-State: AJIora8CA42JCgb+4DDpzrgDlgJ/BNz0VlYEPZqsavtgdBylVtt6+nDx
-        gxR+mCv0XiUHcznXY844A0JlY+1ptgRbOW3E7Q5X
-X-Google-Smtp-Source: AGRyM1szn9LwRU3Nw9ZfHq8EWST1CWq46Cj3fhZE2wtVrKEw7gClyoWnhjeSGDOpCcCwvmQvyhbN8nUX3DDA/n+VcV0=
-X-Received: by 2002:adf:ef10:0:b0:21b:8740:7085 with SMTP id
- e16-20020adfef10000000b0021b87407085mr9148009wro.9.1656609160637; Thu, 30 Jun
- 2022 10:12:40 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vH+eIeVMyqxiZo7+C2E8+WxMh8E5sNuGYMj0NCMiFYc=;
+        b=FXB/YzLVXfbCiDRG6H68XfbKBuwwvfJfOe+cBXqFy1G4l97L6ntSzf3fKv1c+5iOG9
+         6kUwiNWLJmYwsfmicPEgSAfSV6l8q/unSZmpS2PRhZiH9jj0GF5XX8RJ0HaAUy7fcZ2V
+         n9w0vJLocSzd3HWMuzfxFF/I1FpnVDYnCO+icCUQok5DPzcge9Y4MddmqJN0uN/CCELY
+         1YOsiCOcYwA2EwAVM6b0DiZJ9Exxgx9iQuBXQXfByrxIxac3PHYm67/yPfoTRNdF3xhR
+         SWI7PW5y0XN7qL1Q2f4YkmEhrWdBQDugeqlLMtZUQmgztVymudY/55K/64CZU2dNxAU2
+         0e4w==
+X-Gm-Message-State: AJIora/yiiwvvm1ENrYEg7U9ABr9PoMOuPo7XN+051RwxSnqYbe97siE
+        SMOtr+kuXtogYhAS4dg72LdR/Q3ahg==
+X-Google-Smtp-Source: AGRyM1tYEmugjifHFHRwNw9YGWl6wPQoGw00b9hcZYt4UmmpCK8sUvJEvNDX1A4o85vt603e9O081A==
+X-Received: by 2002:a05:6e02:16cc:b0:2da:b7b7:a7ab with SMTP id 12-20020a056e0216cc00b002dab7b7a7abmr6095559ilx.114.1656609157996;
+        Thu, 30 Jun 2022 10:12:37 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id m9-20020a02cdc9000000b00331fdc68ccesm8617042jap.140.2022.06.30.10.12.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 10:12:37 -0700 (PDT)
+Received: (nullmailer pid 2919582 invoked by uid 1000);
+        Thu, 30 Jun 2022 17:12:36 -0000
+Date:   Thu, 30 Jun 2022 11:12:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-iio@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+Subject: Re: [PATCH v7 1/2] dt-bindings: iio: adc: add AD4130
+Message-ID: <20220630171236.GA2912452-robh@kernel.org>
+References: <20220628144649.3957286-1-cosmin.tanislav@analog.com>
+ <20220628144649.3957286-2-cosmin.tanislav@analog.com>
 MIME-Version: 1.0
-References: <Yrx/8UOY+J8Ao3Bd@zx2c4.com> <YryNQvWGVwCjJYmB@zx2c4.com>
- <Yryic4YG9X2/DJiX@google.com> <Yry6XvOGge2xKx/n@zx2c4.com>
- <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
- <YrzaCRl9rwy9DgOC@zx2c4.com> <CANDhNCpRzzULaGmEGCbbJgVinA0pJJB-gOP9AY0Hy488n9ZStA@mail.gmail.com>
- <YrztOqBBll66C2/n@zx2c4.com> <YrzujZuJyfymC0LP@zx2c4.com> <CAC_TJvcNOx1C5csdkMCAPVmX4gLcRWkxKO8Vm=isgjgM-MowwA@mail.gmail.com>
- <Yr11fp13yMRiEphS@zx2c4.com>
-In-Reply-To: <Yr11fp13yMRiEphS@zx2c4.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Thu, 30 Jun 2022 10:12:30 -0700
-Message-ID: <CANDhNCrcEBUUNevNyZp2qttqWssWBEcXMZ5nPO0Ntk7Vszd3bQ@mail.gmail.com>
-Subject: Re: [PATCH] remove CONFIG_ANDROID
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Kalesh Singh <kaleshsingh@google.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, rcu <rcu@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, sultan@kerneltoast.com,
-        android-kernel-team <android-kernel-team@google.com>,
-        Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220628144649.3957286-2-cosmin.tanislav@analog.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 3:06 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> On Wed, Jun 29, 2022 at 09:25:32PM -0700, Kalesh Singh wrote:
-> > Two concerns John raised:
-> >   1) Adding new ABI we need to maintain
-> >   2) Having unclear config options
-> >
-> > Another idea, I think, is to add the Kconfig option as
-> > CONFIG_SUSPEND_SKIP_RNG_RESEED? Similar to existing
-> > CONFIG_SUSPEND_SKIP_SYNC and I think it would address those concerns.
->
-> I mentioned in my reply to him that this doesn't really work for me:
->
-> | As a general rule, I don't expose knobs like that in wireguard /itself/,
-> | but wireguard has no problem with adapting to whatever machine properties
-> | it finds itself on. And besides, this *is* a very definite device
-> | property, something really particular and peculiar about the machine
-> | the kernel is running on. It's a concrete thing that the kernel should
-> | know about. So let's go with your "very clear description idea", above,
-> | instead.
->
-> IOW, we're not going to add a tunable on every possible place this is
-> used.
+On Tue, Jun 28, 2022 at 05:46:48PM +0300, Cosmin Tanislav wrote:
+> AD4130-8 is an ultra-low power, high precision, measurement solution for
+> low bandwidth battery operated applications.
+> 
+> The fully integrated AFE (Analog Front-End) includes a multiplexer for up
+> to 16 single-ended or 8 differential inputs, PGA (Programmable Gain
+> Amplifier), 24-bit Sigma-Delta ADC, on-chip reference and oscillator,
+> selectable filter options, smart sequencer, sensor biasing and excitation
+> options, diagnostics, and a FIFO buffer.
+> 
+> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> ---
+>  .../bindings/iio/adc/adi,ad4130.yaml          | 256 ++++++++++++++++++
+>  1 file changed, 256 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
 
-Hrm. Can you explain a bit more on why you're particularly adamant
-against scoping the config to describe the behavior we want from the
-kernel rather than describing a "machine property"?  As personally, I
-greatly prefer Kalesh's suggestion (as it avoids the same critique one
-could make of the CONFIG_ANDROID "flag"), but admittedly this is
-bikeshed territory.
+The bot report can be ignored. It's all due to '-nanoamp' suffix 
+landing.
 
-Does this preference come out of the too-many-options-in-gpg
-antipattern? Or is there something else?
-
-
-> Anyway if you don't want a runtime switch, make a compiletime switch
-> called CONFIG_PM_CONTINUOUS_RAPID_AUTOSLEEPING or whatever, write some
-> very discouraging help text, and call it a day. And this way you don't
-> have to worry about ABI and we can change this later on and do the whole
-> thing as a no-big-deal change that somebody can tweak later without
-> issue.
-
-Yeah, this is ok with me, as I don't see much benefit to creating a
-userland ABI, as I don't think at this point we expect the behavior to
-shift or oscillate at runtime.
-
-thanks
--john
+Reviewed-by: Rob Herring <robh@kernel.org>

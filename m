@@ -2,110 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76BC9561E6E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D063561E74
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235745AbiF3Ov4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57862 "EHLO
+        id S235757AbiF3Oxv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Jun 2022 10:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235485AbiF3Ovx (ORCPT
+        with ESMTP id S229966AbiF3Oxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:51:53 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEB41D0D7
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 07:51:51 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id b26so15301186wrc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 07:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=9Vy0Q0yOTMgozrHr/k/yV5yONhH9Zbt0a1EaEatVf+M=;
-        b=r4J30h3bEqLpGViZoCt3O4Hu1A5Wj8yEoXJyszGfn/2GIs+kmRDBHulPLdUyC4Ipgf
-         511lhEjeX6IjV6aAfF4VgBZrNrJgHftDLZbVV7kyp+6VJtKdZ/CQfMINKKgXtPTKNGZt
-         5L2uSoPR4Ll1ZcvuB0Pp5zfWhANJGiUi77pZuSpTenN24NJaiedqX+Ma26654YC4zDcg
-         +hbWPRjgQObK+W99vRfGDLVj3QX/o1hqIR+2AYQhIKXLEOV2e98MCtRtla8lQgWG9uDV
-         BCYikfSKz9/5Et7f0xcWox2UNv/tFKLx+pSXweXdeRvtvKiRMe0thmxCDXTmS1TYJ6OK
-         Pvaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=9Vy0Q0yOTMgozrHr/k/yV5yONhH9Zbt0a1EaEatVf+M=;
-        b=WWfe5nhM1nRAIrCnsmtjFTNhbCMdBfXMGVwoG63O3tKg0Cp0sqK+n+nSQgr/e9H7NH
-         jviT2nZEhlh/2ry8xDDQLhf9/MNc2HKdWgGjlhpeqbV/S6eUCpEwiCw1XAuhwS75/fEa
-         zbXqd+oJ9oprI03FEQXA5BV2nJHF7gBi1joLlRMhjXB/qaOAudHpWLeMGJokOf/Qj8b8
-         J6FaMzpF2+hkT08uNsI+Sssii5VEt4E5WzCIY+tDnPllR73x2DcsXA1tcM9OIMBfQ4ub
-         w6adXVoJvv0ylXZaueAAcFIpVDgNbllRvcemM7ZNvUB0sndpNiIgRS1CWtQB9mTlm+ML
-         EU0A==
-X-Gm-Message-State: AJIora+5HaExeIYCGOU/gF/BvBlKSjFzm/Y1ObHF73lLrpwgddxoRzZs
-        uhs6/ibN1s8TarFraPLLqCR9Pg==
-X-Google-Smtp-Source: AGRyM1sZE6o0QXRdpPatXcWMIkBfS5RwTO5A1CXqWo9NWMsluuItsc+JQISfOGpvtoQ5/vBZ9B/ppA==
-X-Received: by 2002:a5d:47a1:0:b0:21d:1723:94f3 with SMTP id 1-20020a5d47a1000000b0021d172394f3mr8540807wrb.580.1656600710016;
-        Thu, 30 Jun 2022 07:51:50 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id r16-20020a05600c35d000b003a0375c4f73sm7209219wmq.44.2022.06.30.07.51.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 07:51:49 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 16:51:47 +0200
-From:   LABBE Corentin <clabbe@baylibre.com>
-To:     John Keeping <john@metanate.com>
-Cc:     heiko@sntech.de, ardb@kernel.org, herbert@gondor.apana.org.au,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v7 14/33] crypto: rockchip: handle reset also in PM
-Message-ID: <Yr24g3LoO5uFuCux@Red>
-References: <20220508185957.3629088-1-clabbe@baylibre.com>
- <20220508185957.3629088-15-clabbe@baylibre.com>
- <YrBUODGF51oUsF1f@donbot>
- <YrF74tmA9qc+I3JF@Red>
- <YrHJn6Pl5B/1pj9L@donbot>
+        Thu, 30 Jun 2022 10:53:49 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48241B798
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 07:53:48 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1o6vXc-0002Re-Vr; Thu, 30 Jun 2022 16:53:13 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1o6vXO-003bqn-HG; Thu, 30 Jun 2022 16:53:02 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1o6vXR-000AqK-Co; Thu, 30 Jun 2022 16:53:01 +0200
+Message-ID: <c01103ae5582cda01708c25ddc3f9bb538c67ab0.camel@pengutronix.de>
+Subject: Re: [PATCH v6 08/17] reset: npcm: using syscon instead of device
+ data
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Jonathan =?ISO-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Date:   Thu, 30 Jun 2022 16:53:01 +0200
+In-Reply-To: <CAP6Zq1htXxpBR-=FW=8grzspGcLPDM5qiMUPNqh7wNiO=0=HAA@mail.gmail.com>
+References: <20220630103606.83261-1-tmaimon77@gmail.com>
+         <20220630103606.83261-9-tmaimon77@gmail.com>
+         <63f8d70ad9c657890669e9c32775632af4e36995.camel@pengutronix.de>
+         <CAP6Zq1htXxpBR-=FW=8grzspGcLPDM5qiMUPNqh7wNiO=0=HAA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YrHJn6Pl5B/1pj9L@donbot>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, Jun 21, 2022 at 02:37:35PM +0100, John Keeping a �crit :
-> On Tue, Jun 21, 2022 at 10:05:54AM +0200, LABBE Corentin wrote:
-> > Le Mon, Jun 20, 2022 at 12:04:24PM +0100, John Keeping a �crit :
-> > > On Sun, May 08, 2022 at 06:59:38PM +0000, Corentin Labbe wrote:
-> > > > reset could be handled by PM functions.
-> > > 
-> > > Is there any further rationale for this?
-> > > 
-> > > After this change there is no longer a guaranteed reset pulse on probe
-> > > since the reset control may already be de-asserted.  This is normally
-> > > the most important case for a reset as it's the only time when the state
-> > > of the hardware is unknown.
-> > > 
-> > > The original use of devm_add_action_or_reset() seems a bit weird already
-> > > since there doesn't seem to be any need to assert reset when the driver
-> > > is unloaded.
-> > > 
+On Do, 2022-06-30 at 14:20 +0300, Tomer Maimon wrote:
+> Hi Philipp,
+> 
+> Thanks for your comment.
+> 
+> On Thu, 30 Jun 2022 at 13:59, Philipp Zabel <p.zabel@pengutronix.de> wrote:
 > > 
-> > I am not an hw engineer, so my knowledge on reset is low.
-> > So why not having a reset pulse on probe is a problem ?
+> > Hi Tomer,
+> > 
+> > On Do, 2022-06-30 at 13:35 +0300, Tomer Maimon wrote:
+> > Using syscon device tree property instead of device data to handle the
+> > NPCM general control registers.
+> > 
+> > In case the syscon not found the code still search for nuvoton,npcm750-gcr
+> > to support DTS backward compatibility.
+> > 
+> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> > ---
+> >  drivers/reset/reset-npcm.c | 17 ++++++++---------
+> >  1 file changed, 8 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/drivers/reset/reset-npcm.c b/drivers/reset/reset-npcm.c
+> > index 2ea4d3136e15..431ff2b602c5 100644
+> > --- a/drivers/reset/reset-npcm.c
+> > +++ b/drivers/reset/reset-npcm.c
+> > @@ -138,8 +138,7 @@ static int npcm_reset_xlate(struct reset_controller_dev *rcdev,
+> >  }
+> > 
+> > 
+> >  static const struct of_device_id npcm_rc_match[] = {
+> > -       { .compatible = "nuvoton,npcm750-reset",
+> > -               .data = (void *)"nuvoton,npcm750-gcr" },
+> > +       { .compatible = "nuvoton,npcm750-reset"},
+> > 
+> > Add a space.                                  ^^
+> Will modify in V7
+> > 
+> >         { }
+> >  };
+> > 
+> > 
+> > @@ -155,15 +154,15 @@ static int npcm_usb_reset(struct platform_device *pdev, struct npcm_rc_data *rc)
+> >         u32 ipsrst1_bits = 0;
+> >         u32 ipsrst2_bits = NPCM_IPSRST2_USB_HOST;
+> >         u32 ipsrst3_bits = 0;
+> > -       const char *gcr_dt;
+> > 
+> > 
+> > -       gcr_dt = (const char *)
+> > -       of_match_device(dev->driver->of_match_table, dev)->data;
+> > -
+> > -       gcr_regmap = syscon_regmap_lookup_by_compatible(gcr_dt);
+> > +       gcr_regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "nuvoton,sysgcr");
+> >         if (IS_ERR(gcr_regmap)) {
+> > -               dev_err(&pdev->dev, "Failed to find %s\n", gcr_dt);
+> > -               return PTR_ERR(gcr_regmap);
+> > +               dev_warn(&pdev->dev, "Failed to find nuvoton,sysgcr search for nuvoton,npcm750-gcr for Poleg backward compatibility");
+> > 
+> > Is this warning useful to the user? Maybe add suggestion like "please
+> > update the device tree". Also there is no further message if
+> > nuvoton,npcm750-gcr is found and all is well.
 > 
-> The point of the reset is to bring the hardware back to a known state.
-> Since we don't know what state the hardware will be in following the
-> bootloader or previous OS, I think the reset in probe is the only place
-> that it is important.
+> O.K.
+> I think about two options:
 > 
-> If this patch isn't fixing anything, I suggest just dropping it.
+> 1. Modify the message "Failed to find nuvoton,sysgcr property, please
+> update the device tree\n Search for nuvoton,npcm750-gcr for Poleg
+> backward compatibility"
 
-Thanks for the explanation, I will re-add the reset at probe.
+I would replace "Search for" with "Using"
+The second line probably should be dev_info() level.
 
+> OR
+> 
+> 2.
+>         if (IS_ERR(rc->gcr_regmap)) {
+>                 dev_warn(&pdev->dev, "Failed to find nuvoton,sysgcr
+> please update the device tree");
+>                 rc->gcr_regmap =
+> syscon_regmap_lookup_by_compatible("nuvoton,npcm750-gcr");
+>                 if (IS_ERR(rc->gcr_regmap)) {
+>                         dev_err(&pdev->dev, "Failed to find
+> nuvoton,npcm750-gcr");
+>                         return PTR_ERR(rc->gcr_regmap);
+>                 }
+>                  dev_info(&pdev->dev, "found nuvoton,npcm750-gcr for
+> Poleg backward compatibility");
+>         }
+> 
+> The only problem that I have with option 2 is if our customers will
+> use the latest reset driver and they will not update their device tree
+> they will see all the time the dev_info message.
+> 
+> What do you think?
+
+I'm fine with either. With the "please update DT" prompt it's clear how
+to get rid of the warning.
+
+regards
+Philipp

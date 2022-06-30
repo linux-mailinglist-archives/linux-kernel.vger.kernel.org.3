@@ -2,273 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A805618FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2DE5618F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234700AbiF3LUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 07:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
+        id S234683AbiF3LVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 07:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234683AbiF3LUN (ORCPT
+        with ESMTP id S234657AbiF3LU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 07:20:13 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D574D4ED;
-        Thu, 30 Jun 2022 04:20:11 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id ay16so38361867ejb.6;
-        Thu, 30 Jun 2022 04:20:11 -0700 (PDT)
+        Thu, 30 Jun 2022 07:20:57 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC8C4F64E;
+        Thu, 30 Jun 2022 04:20:56 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id b2so329036uaq.8;
+        Thu, 30 Jun 2022 04:20:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=s8MO9mMa1bq2hJggtQa7J+wxVNTG6bz7mxC4q8MXXFI=;
-        b=ozapMMM+OpcCkvZB2MwOtC0ncVnDKR0WF4UiDQdsmDHZGD4DTFwmSyMjseFxfBIlYB
-         /stb3g3PgJFHBE+1TrUOpO9MB6pwGfLDWc89XE6YJePjyLaHsLzfNZk7NxyXpo+UjN/V
-         Ap/wGWW3RwutxyrDNmK0snOLVDGnn6Poh0ENdgxVWHviPRkKyTIJcLoW/LlF/RcM7XLw
-         TWXbGqtdWF5+Y1jzpbUuzTxhfCkUVQCoCW6VV+PjGGEn0oKNDE+dPNuw4XyOgGsnuwmj
-         OAezAOhkZfCm8WGG3hg/6S4YmoQ/5vNUx5aEssEJ8mOF0ARWda08fiFSYzcH8As8PFv1
-         OHZA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=F3z5vFPzEHYOTQK4dAz/8T9O7wftcSUcZ/VZVshv+x8=;
+        b=AGHLlGOGhO0C6LP/EywIiPK3kp69qKznp+IwV4eEgAbF7QdJCbcvAbBmWXWragOp8N
+         /4t3JQ2nFEINqZT8Uo7vC6dJoxT0WQCTBqevJ/f1fUwPj3NpO0pDh8GZ7yBJ72jK24ei
+         vroPJiiirxt6iCmJBo5HSm0TNZdTYfvfSKuid+Gic7ZUonJ62jzi3wIdgY/ka3AcNIss
+         ajD9cRvqTOGgPXElDZnLNDd4hoWe+8ZalbX1iZMuHebkmD+hY5FScbVSj0pzFOWo1vZc
+         jw1P4uLQJx3Ht4OQxLDjH0TqDcmA71bFxaf3ZzOxwGV14WlJ5d5c0G2/JC8MOtHBIOWz
+         nMhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=s8MO9mMa1bq2hJggtQa7J+wxVNTG6bz7mxC4q8MXXFI=;
-        b=s+INmmq2/h1Z6GG5GVKq//zVOuPwKS8qiDsBhJObEF6oWv1aVOl5xf3xbZn8DF9ow+
-         zDXC6K8/Jr/ExcrdNoiFDvTeIf+X6zth3EC1qoAHwxfsLoes6l3O1+2NGQPgJGVk80a4
-         tC4bFw2XPmoHQkuhi+tqaIG4/dbfIbSCiohvB9UdVTXuR04QQW2SoXLW+B8vsu9nzJAs
-         Zrp0fy0QQENz4Of89YpD4Tu30SEZOAli1LqL0vv0WfKOsk+XDnsUMBO1iT8H245kdQrJ
-         USRsrubOfnwKrzB7lEzjH+zgPXEyitj/Y/HRjpurNpZ+M/ccUy3ikOgAMDKOgkXTTHXy
-         zoPQ==
-X-Gm-Message-State: AJIora+LoQTblIjdz//EVp6Or4g9Q1NHUw36SD1ixm2010kwwjICAZFV
-        qTteHdEQmX7nScw5f3taPUU=
-X-Google-Smtp-Source: AGRyM1vfpQq6ZOVJ0VDwuAbaEwiREFT06sNqfr7RErBzIzhM45kbRbqxz071SdAVbUmH6oK7r82Aog==
-X-Received: by 2002:a17:907:2d9f:b0:726:8e98:63f9 with SMTP id gt31-20020a1709072d9f00b007268e9863f9mr8584152ejc.28.1656588009884;
-        Thu, 30 Jun 2022 04:20:09 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id s3-20020a1709067b8300b0070efa110afcsm8919142ejo.83.2022.06.30.04.20.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 04:20:09 -0700 (PDT)
-Message-ID: <62bd86e9.1c69fb81.0796.06ac@mx.google.com>
-X-Google-Original-Message-ID: <Yr2G51HPmXz+RDHm@Ansuel-xps.>
-Date:   Thu, 30 Jun 2022 13:20:07 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v4 3/5] dt-bindings: arm: msm: Rework kpss-gcc driver
- Documentation to yaml
-References: <20220629121441.6552-1-ansuelsmth@gmail.com>
- <20220629121441.6552-4-ansuelsmth@gmail.com>
- <D90DE67E-DA29-4A0D-BBC1-C8209FDF69D3@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=F3z5vFPzEHYOTQK4dAz/8T9O7wftcSUcZ/VZVshv+x8=;
+        b=d/DReOV7tCKTHXgQUjFzkqF9/9+OEAyBVPWkL6+xKoF8yBTfuFHOZIMh2Cvn+FH8Vw
+         iZVpjxM1nTuUB46YvT/bQ0f03AasNYb+2ey9pHtyqluetI9l8Cfmo5Ny3l3iWTnPAiHV
+         SyWVO4sSq9T3SD/8oA0IpJOwvxcEyaYmp3aZA8dzsh00LVvwoWtBpm114zfE3TaHiMUw
+         yjpfLY9SIvortxWCxFn7UAHeraGaLub6H3RCFB0RyRvgrpIxNhKxdPEdAc/GMB68iXhF
+         T3qailow5fzPlFx+qTNoY6DmeNV9A1aUQwpaVkGG61dCWtsF5ki9fBs/mKcKK6IyUVOY
+         PY7Q==
+X-Gm-Message-State: AJIora/ZxVI9ZSu7U2exbxmdx2VNz/fPy9rNHimzu0TjpAci/TJepclw
+        4tQGmPrz87sWpcsNEpcw5sgmzM78Rlyt/iz0qF8=
+X-Google-Smtp-Source: AGRyM1tIHcDTCN5whYD6NPt9k1aTCwy2tAYvtJdMaKYpKf0k99F9BYlhWeftUKEisFw9Bns+iXrNMGbk7qv62HtofsQ=
+X-Received: by 2002:ab0:2790:0:b0:37f:1d08:c2b8 with SMTP id
+ t16-20020ab02790000000b0037f1d08c2b8mr4309598uap.107.1656588055298; Thu, 30
+ Jun 2022 04:20:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <D90DE67E-DA29-4A0D-BBC1-C8209FDF69D3@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220630103606.83261-1-tmaimon77@gmail.com> <20220630103606.83261-9-tmaimon77@gmail.com>
+ <63f8d70ad9c657890669e9c32775632af4e36995.camel@pengutronix.de>
+In-Reply-To: <63f8d70ad9c657890669e9c32775632af4e36995.camel@pengutronix.de>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Thu, 30 Jun 2022 14:20:44 +0300
+Message-ID: <CAP6Zq1htXxpBR-=FW=8grzspGcLPDM5qiMUPNqh7wNiO=0=HAA@mail.gmail.com>
+Subject: Re: [PATCH v6 08/17] reset: npcm: using syscon instead of device data
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 09:43:05AM +0300, Dmitry Baryshkov wrote:
-> 
-> 
-> On 29 June 2022 15:14:39 GMT+03:00, Christian Marangi <ansuelsmth@gmail.com> wrote:
-> >Rework kpss-gcc driver Documentation to yaml Documentation.
-> >The current kpss-gcc Documentation have major problems and can't be
-> >converted directly. Introduce various changes to the original
-> >Documentation.
-> >
-> >Add #clock-cells additional binding as this clock outputs a static clk
-> >named acpu_l2_aux with supported compatible.
-> >Only some compatible require and outputs a clock, for the others, set
-> >only the reg as a required binding to correctly export the kpss-gcc
-> >registers. As the reg is shared also add the required syscon compatible.
-> >
-> >Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> >---
-> > .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ---------
-> > .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 90 +++++++++++++++++++
-> > 2 files changed, 90 insertions(+), 44 deletions(-)
-> > delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
-> > create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-> >
-> >diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
-> >deleted file mode 100644
-> >index e628758950e1..000000000000
-> >--- a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
-> >+++ /dev/null
-> >@@ -1,44 +0,0 @@
-> >-Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
-> >-
-> >-PROPERTIES
-> >-
-> >-- compatible:
-> >-	Usage: required
-> >-	Value type: <string>
-> >-	Definition: should be one of the following. The generic compatible
-> >-			"qcom,kpss-gcc" should also be included.
-> >-			"qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc"
-> >-			"qcom,kpss-gcc-apq8064", "qcom,kpss-gcc"
-> >-			"qcom,kpss-gcc-msm8974", "qcom,kpss-gcc"
-> >-			"qcom,kpss-gcc-msm8960", "qcom,kpss-gcc"
-> >-
-> >-- reg:
-> >-	Usage: required
-> >-	Value type: <prop-encoded-array>
-> >-	Definition: base address and size of the register region
-> >-
-> >-- clocks:
-> >-	Usage: required
-> >-	Value type: <prop-encoded-array>
-> >-	Definition: reference to the pll parents.
-> >-
-> >-- clock-names:
-> >-	Usage: required
-> >-	Value type: <stringlist>
-> >-	Definition: must be "pll8_vote", "pxo".
-> >-
-> >-- clock-output-names:
-> >-	Usage: required
-> >-	Value type: <string>
-> >-	Definition: Name of the output clock. Typically acpu_l2_aux indicating
-> >-		    an L2 cache auxiliary clock.
-> >-
-> >-Example:
-> >-
-> >-	l2cc: clock-controller@2011000 {
-> >-		compatible = "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc";
-> >-		reg = <0x2011000 0x1000>;
-> >-		clocks = <&gcc PLL8_VOTE>, <&gcc PXO_SRC>;
-> >-		clock-names = "pll8_vote", "pxo";
-> >-		clock-output-names = "acpu_l2_aux";
-> >-	};
-> >diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-> >new file mode 100644
-> >index 000000000000..27f7df7e3ec4
-> >--- /dev/null
-> >+++ b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-> >@@ -0,0 +1,90 @@
-> >+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> >+%YAML 1.2
-> >+---
-> >+$id: http://devicetree.org/schemas/arm/msm/qcom,kpss-gcc.yaml#
-> >+$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >+
-> >+title: Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
-> >+
-> >+maintainers:
-> >+  - Christian Marangi <ansuelsmth@gmail.com>
-> >+
-> >+description: |
-> >+  Krait Processor Sub-system (KPSS) Global Clock Controller (GCC). Used
-> >+  to control L2 mux (in the current implementation) and provide access
-> >+  to the kpss-gcc registers.
-> >+
-> >+properties:
-> >+  compatible:
-> >+    items:
-> >+      - enum:
-> >+          - qcom,kpss-gcc-ipq8064
-> >+          - qcom,kpss-gcc-apq8064
-> >+          - qcom,kpss-gcc-msm8974
-> >+          - qcom,kpss-gcc-msm8960
-> >+          - qcom,kpss-gcc-msm8660
-> >+          - qcom,kpss-gcc-mdm9615
-> >+      - const: qcom,kpss-gcc
-> >+      - const: syscon
-> >+
-> >+  reg:
-> >+    maxItems: 1
-> >+
-> >+  clocks:
-> >+    items:
-> >+      - description: phandle to pll8_vote
-> >+      - description: phandle to pxo_board
-> >+
-> >+  clock-names:
-> >+    items:
-> >+      - const: pll8_vote
-> >+      - const: pxo
-> >+
-> >+  '#clock-cells':
-> >+    const: 0
-> >+
-> >+required:
-> >+  - compatible
-> >+  - reg
-> >+
-> >+if:
-> >+  properties:
-> >+    compatible:
-> >+      contains:
-> >+        enum:
-> >+          - qcom,kpss-gcc-ipq8064
-> >+          - qcom,kpss-gcc-apq8064
-> >+          - qcom,kpss-gcc-msm8974
-> >+          - qcom,kpss-gcc-msm8960
-> >+then:
-> >+  required:
-> >+    - clocks
-> >+    - clock-names
-> >+    - '#clock-cells'
-> >+else:
-> >+  properties:
-> >+    clock: false
-> >+    clock-names: false
-> >+    '#clock-cells': false
-> 
-> I suppose this chunk is not so correct. We can not describe these properties as required since current DTs do not have them. Also if somebody decides to fix the mdm9615 or msm8660 platforms, he works have to change this (again). Thus I'd just leave this whole chunk out.
+Hi Philipp,
+
+Thanks for your comment.
+
+On Thu, 30 Jun 2022 at 13:59, Philipp Zabel <p.zabel@pengutronix.de> wrote:
 >
+> Hi Tomer,
+>
+> On Do, 2022-06-30 at 13:35 +0300, Tomer Maimon wrote:
+> Using syscon device tree property instead of device data to handle the
+> NPCM general control registers.
+>
+> In case the syscon not found the code still search for nuvoton,npcm750-gcr
+> to support DTS backward compatibility.
+>
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>  drivers/reset/reset-npcm.c | 17 ++++++++---------
+>  1 file changed, 8 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/reset/reset-npcm.c b/drivers/reset/reset-npcm.c
+> index 2ea4d3136e15..431ff2b602c5 100644
+> --- a/drivers/reset/reset-npcm.c
+> +++ b/drivers/reset/reset-npcm.c
+> @@ -138,8 +138,7 @@ static int npcm_reset_xlate(struct reset_controller_dev *rcdev,
+>  }
+>
+>
+>  static const struct of_device_id npcm_rc_match[] = {
+> -       { .compatible = "nuvoton,npcm750-reset",
+> -               .data = (void *)"nuvoton,npcm750-gcr" },
+> +       { .compatible = "nuvoton,npcm750-reset"},
+>
+> Add a space.                                  ^^
+Will modify in V7
+>
+>         { }
+>  };
+>
+>
+> @@ -155,15 +154,15 @@ static int npcm_usb_reset(struct platform_device *pdev, struct npcm_rc_data *rc)
+>         u32 ipsrst1_bits = 0;
+>         u32 ipsrst2_bits = NPCM_IPSRST2_USB_HOST;
+>         u32 ipsrst3_bits = 0;
+> -       const char *gcr_dt;
+>
+>
+> -       gcr_dt = (const char *)
+> -       of_match_device(dev->driver->of_match_table, dev)->data;
+> -
+> -       gcr_regmap = syscon_regmap_lookup_by_compatible(gcr_dt);
+> +       gcr_regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "nuvoton,sysgcr");
+>         if (IS_ERR(gcr_regmap)) {
+> -               dev_err(&pdev->dev, "Failed to find %s\n", gcr_dt);
+> -               return PTR_ERR(gcr_regmap);
+> +               dev_warn(&pdev->dev, "Failed to find nuvoton,sysgcr search for nuvoton,npcm750-gcr for Poleg backward compatibility");
+>
+> Is this warning useful to the user? Maybe add suggestion like "please
+> update the device tree". Also there is no further message if
+> nuvoton,npcm750-gcr is found and all is well.
 
-With a quick check I notice that all the other platform doesn't have
-pxo_board or PLL8_VOTE clk so they wouln't work with the current
-driver... to me it seems they are just exposing the kpss-gcc reg with
-syscon and they are used in the rpm driver... This is very similar to
-the acc-v1 and acc-v2 separation where acc-v2 only provide the reg and
-nothing else. Wonder if we should do the same here or add clk support
-only for the specific compatible as I did here...
+O.K.
+I think about two options:
 
-In both case dts changes are required and a similar chunk is necessary.
+1. Modify the message "Failed to find nuvoton,sysgcr property, please
+update the device tree\n Search for nuvoton,npcm750-gcr for Poleg
+backward compatibility"
 
-> >+
-> >+additionalProperties: false
-> >+
-> >+examples:
-> >+  - |
-> >+    #include <dt-bindings/clock/qcom,gcc-ipq806x.h>
-> >+
-> >+    clock-controller@2011000 {
-> >+      compatible = "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc", "syscon";
-> >+      reg = <0x2011000 0x1000>;
-> >+      clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
-> >+      clock-names = "pll8_vote", "pxo";
-> >+      #clock-cells = <0>;
-> >+    };
-> >+
-> >+  - |
-> >+    clock-controller@2011000 {
-> >+      compatible = "qcom,kpss-gcc-mdm9615", "qcom,kpss-gcc", "syscon";
-> >+      reg = <0x02011000 0x1000>;
-> >+    };
-> >+...
-> >+
-> 
-> -- 
-> With best wishes
-> Dmitry
+OR
 
--- 
-	Ansuel
+2.
+        if (IS_ERR(rc->gcr_regmap)) {
+                dev_warn(&pdev->dev, "Failed to find nuvoton,sysgcr
+please update the device tree");
+                rc->gcr_regmap =
+syscon_regmap_lookup_by_compatible("nuvoton,npcm750-gcr");
+                if (IS_ERR(rc->gcr_regmap)) {
+                        dev_err(&pdev->dev, "Failed to find
+nuvoton,npcm750-gcr");
+                        return PTR_ERR(rc->gcr_regmap);
+                }
+                 dev_info(&pdev->dev, "found nuvoton,npcm750-gcr for
+Poleg backward compatibility");
+        }
+
+The only problem that I have with option 2 is if our customers will
+use the latest reset driver and they will not update their device tree
+they will see all the time the dev_info message.
+
+What do you think?
+>
+> regards
+> Philipp
+
+Best regards,
+
+Tomer

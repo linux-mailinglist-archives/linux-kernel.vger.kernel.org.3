@@ -2,172 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F321D561467
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC46F561474
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233710AbiF3IML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 04:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S233855AbiF3IPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 04:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233661AbiF3ILX (ORCPT
+        with ESMTP id S233593AbiF3IPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 04:11:23 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBB21A826
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:09:41 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8D74721C97;
-        Thu, 30 Jun 2022 08:09:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1656576580; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gSJC+aj+BfNql4oU2JcGgOEE5XeUn40IH1rlwgZea4s=;
-        b=X3GjqDbnVuh6BBl2wjlm4icDKQ5igyudH0AprJMQaGGeIDCbo5gWJp9fOH5T3q9Fb0YL4A
-        3eUccMozS8f1EJ1ONjN66sZ/MxGnz3ibWhPTHdEVi3WzzCI58o9XQJXFxQ1sHg5dg6Thqw
-        XLsbCA5fVJ0wYmkfo5RBBxBRDYK3SSg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5712E13A5C;
-        Thu, 30 Jun 2022 08:09:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id AN/ZE0RavWLZQAAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 30 Jun 2022 08:09:40 +0000
-Message-ID: <9e2205f6-3d7d-fcdd-26ed-a8f7c9f1c814@suse.com>
-Date:   Thu, 30 Jun 2022 10:09:39 +0200
+        Thu, 30 Jun 2022 04:15:15 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF124551E
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:11:59 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id q9so26050151wrd.8
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:11:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OOTtRji8xWxni9yaz7W2gJeXuoycpc5ucnabq09T1bI=;
+        b=C/t7WScdZ/5eix0bLbi5ANYeY6fv//pLAEkNiNGTQlX2F/ffEsR+ecAoWsQRUZpi4j
+         d4nJ9pk1zyOyBZAky3saX2ye0R26VCTrlfnfnfbBzbop0L1f8E+raQ9k09JLPunbMvS9
+         4msYhRwSFUWyBiH/XpkUcLHUQvqqBJXJ5ikK1WDRBW9Yu9FD4lPoFHFF3vb8hoTkhVDB
+         M8NmmKi0v16q7gb8fffcAaZg6IVIzDbKzaEdkfn9or57m3HKOw2Lk/apcF/FqH2RVfcu
+         IixbL3aooVwh7ngriV8dFFzhW5+DOvydORAtoqqkQks5g3WES+aw7SBaj2YKrW8+a4wu
+         7QNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OOTtRji8xWxni9yaz7W2gJeXuoycpc5ucnabq09T1bI=;
+        b=oTBvW5nzn4zYqOzJFo8uR/BgjgAVbYODRB1CLlL94eDzRC7zF8Sc1+PFC0jut/RTSr
+         AxCH7aW1l8/flID7BcoTdpFNxfWPiYQ9F53hKZcMwammvnrieFHzrBrH1YpD+vBeiHjc
+         5QIk3fv0IcO20xCFyyrB1CDX1M8unC5yxZXj20mPBYwMrBB5ugIyjhc4GpqwMkLxowEd
+         KIutklBV61I3i1+j8ouraucks2+wFou61Coz5grENRRCoDN/na7TuPN089kbAUBkM9Qb
+         BB567SjxMGuNZAR/bAuVYKDu/5DJhVQD1C5CH04zIWhSwdkPxe/hvuMKYec5/hHsd4KK
+         TFHQ==
+X-Gm-Message-State: AJIora8KvVXflRIn2sKBqIwjMEt8tmZoRktUgUJDGyKZliLd76wyRY5U
+        8LI9QsOuqRUjPzHOXpo/p0qCnBiJfM1KjuFCKY/5Bw==
+X-Google-Smtp-Source: AGRyM1sRbLewf4sxnz4dB3dN5YFnj/nq45OZFcL5LF+PbryGz/OIGzLay9e+M5ljvDXSGtGyYeW84pDmWiENzpMBuFI=
+X-Received: by 2002:a05:6000:1542:b0:21d:28c0:eb43 with SMTP id
+ 2-20020a056000154200b0021d28c0eb43mr7083362wry.622.1656576718103; Thu, 30 Jun
+ 2022 01:11:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] xen: Fix spelling mistake
-Content-Language: en-US
-To:     Zhang Jiaming <jiaming@nfschina.com>, sstabellini@kernel.org,
-        oleksandr_tyshchenko@epam.com
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        liqiong@nfschina.com, renyu@nfschina.com
-References: <20220630075027.68833-1-jiaming@nfschina.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220630075027.68833-1-jiaming@nfschina.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------fNCBxfoPNxIBxv4WQdbzuGpD"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220630074757.2739000-1-davidgow@google.com> <20220630074757.2739000-2-davidgow@google.com>
+In-Reply-To: <20220630074757.2739000-2-davidgow@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 30 Jun 2022 16:11:46 +0800
+Message-ID: <CABVgOS=0PmF5k8RcP2Q3JNkMXK4Pd6ZLVGgCT9Ff+t9Dt_wA=w@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] UML: add support for KASAN under x86_64
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc:     kasan-dev <kasan-dev@googlegroups.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------fNCBxfoPNxIBxv4WQdbzuGpD
-Content-Type: multipart/mixed; boundary="------------8QciTfUEMB4lsjlv1xBOvLsO";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Zhang Jiaming <jiaming@nfschina.com>, sstabellini@kernel.org,
- oleksandr_tyshchenko@epam.com
-Cc: xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
- liqiong@nfschina.com, renyu@nfschina.com
-Message-ID: <9e2205f6-3d7d-fcdd-26ed-a8f7c9f1c814@suse.com>
-Subject: Re: [PATCH] xen: Fix spelling mistake
-References: <20220630075027.68833-1-jiaming@nfschina.com>
-In-Reply-To: <20220630075027.68833-1-jiaming@nfschina.com>
+On Thu, Jun 30, 2022 at 3:48 PM David Gow <davidgow@google.com> wrote:
+>
+> From: Patricia Alfonso <trishalfonso@google.com>
+>
+> Make KASAN run on User Mode Linux on x86_64.
+>
+> The UML-specific KASAN initializer uses mmap to map the ~16TB of shadow
+> memory to the location defined by KASAN_SHADOW_OFFSET.  kasan_init()
+> utilizes constructors to initialize KASAN before main().
+>
+> The location of the KASAN shadow memory, starting at
+> KASAN_SHADOW_OFFSET, can be configured using the KASAN_SHADOW_OFFSET
+> option. The default location of this offset is 0x100000000000, which
+> keeps it out-of-the-way even on UML setups with more "physical" memory.
+>
+> For low-memory setups, 0x7fff8000 can be used instead, which fits in an
+> immediate and is therefore faster, as suggested by Dmitry Vyukov. There
+> is usually enough free space at this location; however, it is a config
+> option so that it can be easily changed if needed.
+>
+> Note that, unlike KASAN on other architectures, vmalloc allocations
+> still use the shadow memory allocated upfront, rather than allocating
+> and free-ing it per-vmalloc allocation.
+>
+> If another architecture chooses to go down the same path, we should
+> replace the checks for CONFIG_UML with something more generic, such
+> as:
+> - A CONFIG_KASAN_NO_SHADOW_ALLOC option, which architectures could set
+> - or, a way of having architecture-specific versions of these vmalloc
+>   and module shadow memory allocation options.
+>
+> Also note that, while UML supports both KASAN in inline mode
+> (CONFIG_KASAN_INLINE) and static linking (CONFIG_STATIC_LINK), it does
+> not support both at the same time.
+>
+> Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
+> Co-developed-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> Signed-off-by: David Gow <davidgow@google.com>
+> Reviewed-by: Johannes Berg <johannes@sipsolutions.net>
+> ---
+> This is v3 of the KASAN/UML port. It should be ready to go.
+>
+> Note that this will fail to build if UML is linked statically due to:
+> https://lore.kernel.org/all/20220526185402.955870-1-davidgow@google.com/
+>
+>
+> Changes since v2:
+> https://lore.kernel.org/lkml/20220527185600.1236769-2-davidgow@google.com/
+> - Don't define CONFIG_KASAN in USER_CFLAGS, given we dont' use it.
+>   (Thanks Johannes)
+> - Update patch descriptions and comments given we allocate shadow memory based
+>   on the size of the virtual address space, not the "physical" memory
+>   used by UML.
+>   - This was changed between the original RFC and v1, with
+>     KASAN_SHADOW_SIZE's definition being updated.
+>   - References to UML using 18TB of space and the shadow memory taking
+>     2.25TB were updated. (Thanks Johannes)
+>   - A mention of physical memory in a comment was updated. (Thanks
+>     Andrey)
+> - Move some discussion of how the vmalloc() handling could be made more
+>   generic from a comment to the commit description. (Thanks Andrey)
+>
+> Changes since RFC v3:
+> https://lore.kernel.org/all/20220526010111.755166-1-davidgow@google.com/
+> - No longer print "KernelAddressSanitizer initialized" (Johannes)
+> - Document the reason for the CONFIG_UML checks in shadow.c (Dmitry)
+> - Support static builds via kasan_arch_is_ready() (Dmitry)
+> - Get rid of a redundant call to kasam_mem_to_shadow() (Dmitry)
+> - Use PAGE_ALIGN and the new PAGE_ALIGN_DOWN macros (Dmitry)
+> - Reinstate missing arch/um/include/asm/kasan.h file (Johannes)
+>
+> Changes since v1:
+> https://lore.kernel.org/all/20200226004608.8128-1-trishalfonso@google.com/
+> - Include several fixes from Vincent Whitchurch:
+> https://lore.kernel.org/all/20220525111756.GA15955@axis.com/
+> - Support for KASAN_VMALLOC, by changing the way
+>   kasan_{populate,release}_vmalloc work to update existing shadow
+>   memory, rather than allocating anything new.
+> - A similar fix for modules' shadow memory.
+> - Support for KASAN_STACK
+>   - This requires the bugfix here:
+> https://lore.kernel.org/lkml/20220523140403.2361040-1-vincent.whitchurch@axis.com/
+>   - Plus a couple of files excluded from KASAN.
+> - Revert the default shadow offset to 0x100000000000
+>   - This was breaking when mem=1G for me, at least.
+> - A few minor fixes to linker sections and scripts.
+>   - I've added one to dyn.lds.S on top of the ones Vincent added.
+>
+> ---
 
---------------8QciTfUEMB4lsjlv1xBOvLsO
-Content-Type: multipart/mixed; boundary="------------vkyqrtAevLXUTiJzuBfVX8AP"
+<... snip ...>
 
---------------vkyqrtAevLXUTiJzuBfVX8AP
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
+> index a4f07de21771..7a7fc76e99a8 100644
+> --- a/mm/kasan/shadow.c
+> +++ b/mm/kasan/shadow.c
+> @@ -295,9 +295,22 @@ int kasan_populate_vmalloc(unsigned long addr, unsigned long size)
+>                 return 0;
+>
+>         shadow_start = (unsigned long)kasan_mem_to_shadow((void *)addr);
+> -       shadow_start = ALIGN_DOWN(shadow_start, PAGE_SIZE);
+>         shadow_end = (unsigned long)kasan_mem_to_shadow((void *)addr + size);
+> -       shadow_end = ALIGN(shadow_end, PAGE_SIZE);
+> +
+> +       /*
+> +        * User Mode Linux maps enough shadow memory for all of virtual memory
+> +        * at boot, so doesn't need to allocate more on vmalloc, just clear it.
+> +        *
+> +         * The remaining CONFIG_UML checks in this file exist for the same
+> +         * reason.
+> +        */
 
-T24gMzAuMDYuMjIgMDk6NTAsIFpoYW5nIEppYW1pbmcgd3JvdGU6DQo+IENoYW5nZSAnbWFw
-ZWQnIHRvICdtYXBwZWQnLg0KPiBDaGFuZ2UgJ3VubWFwZWQnIHRvICd1bm1hcHBlZCcuDQo+
-IA0KPiBTaWduZWQtb2ZmLWJ5OiBaaGFuZyBKaWFtaW5nIDxqaWFtaW5nQG5mc2NoaW5hLmNv
-bT4NCg0KUmV2aWV3ZWQtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4NCg0K
-DQpKdWVyZ2VuDQo=
---------------vkyqrtAevLXUTiJzuBfVX8AP
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Whoops: these lines had tabs converted to spaces when I reformatted
+them. I've sent out v4 which actually passes checkpatch:
+https://lore.kernel.org/lkml/20220630080834.2742777-2-davidgow@google.com/
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Sorry for the spam!
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------vkyqrtAevLXUTiJzuBfVX8AP--
-
---------------8QciTfUEMB4lsjlv1xBOvLsO--
-
---------------fNCBxfoPNxIBxv4WQdbzuGpD
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmK9WkMFAwAAAAAACgkQsN6d1ii/Ey99
-dQf/cPF94WiMiaR5qS+vQEg+DHt5IjHajB+kRTARuHdYhhTDiS4ZkDn/oR1xtnJzMW0HqzPjcmQa
-aHB+N2cdEcH1PFyhxTJUPTEObGH3sZksqRzxltq99N/aZ9sNifoTjHkDx1FFwFPs0b+CM6UX+5HN
-4rXt8Rxf2Hdnw6N5jsLI3ZjpoGZ7tCA720ntqJ8AMiDfqxZX/Uizi3yNCJLduum9gu58xKx1ams2
-ugzMLZBIIPg82Nh4pGSL2GnNztIUNkLJD63Z7upSqeZCUAjlnM9hwLIHK4V8v7ljXYWxjCZLz6Aq
-WYEqwhm3eO1QLs14H3iVj8YXm4Vn5NDVh4lxbmo0Zg==
-=d3MF
------END PGP SIGNATURE-----
-
---------------fNCBxfoPNxIBxv4WQdbzuGpD--
+-- David

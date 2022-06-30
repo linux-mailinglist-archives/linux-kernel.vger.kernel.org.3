@@ -2,48 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934095626D5
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A17562650
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 00:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbiF3XJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 19:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
+        id S229606AbiF3W6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 18:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbiF3XJ3 (ORCPT
+        with ESMTP id S229651AbiF3W6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 19:09:29 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCD658FF6;
-        Thu, 30 Jun 2022 16:09:10 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LYvCj5btvz4xYN;
-        Fri,  1 Jul 2022 09:09:05 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1656630546;
-        bh=QBTNcuUm751z0k80BSQeAPHxagbvkvhrF/MhPGElgIM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=hR9GJ6/xLqNEtpml6gBusBL17BkWfzbkXRStStpSduPShT2COmXcr6C+DUYuntM/4
-         CToOeHdo6YEx1PfZGdLfxPyxitjdYekC8Rx4tYfUwa1XS0x/WIL3jgxp1rrmQ43ICo
-         iThAGBTkIZLVL1+lS5VANJm+T0BrOrNLYAC0G9aMz4BYler1QfkeqNPSr2DA+KsKGI
-         D6Qa/o5inzZMMYBN7nDi+LWCA/H72fH014IsKudtpBX73IeOiWyny0D3ixXVtaNPmG
-         4vaKgucCywTw4bWsET108rR4TS16Kbwuv+8HCimwbr3rkRSLjH1pm+b4GuS1Eik1tP
-         ofOU2DARIEfag==
-Date:   Fri, 1 Jul 2022 08:56:57 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the amdgpu tree
-Message-ID: <20220701085657.230b2e13@canb.auug.org.au>
+        Thu, 30 Jun 2022 18:58:21 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF2D3B011;
+        Thu, 30 Jun 2022 15:58:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=S/+biBIIU9UdjIcwTOYXd9h3c56AURDSMTACq4UFluM=; b=j44wui+KQxn1Lo77Lh20kh2iO3
+        XKEMwDRB4LpYKiYLtWM95ySbFIGAlT47iRtsZseqjZ0p/jHiYmTRwq5yupaTuY6nj8XAh2JSAMeqf
+        NsYQkC63fru/VKsfQyViDzMfjfZJlg54Wjeb6vstPiwl7NCj8Wi0SqwvwcszyUISNF8ruDEmQW7Nd
+        R6oea9ASJ30e29WXtaMehgRrcB90wDWm/m14ZBmh1d7vN+mbEAXr3+pX2dxrNs+UMe2IaItBmAcBZ
+        39ThDuTAHgOfrUSbP4cVLkkiro6cPsZF2rxXzEgW+Crhax84ZIrghkbU7UJ9T/cgB0Ijpgbaj9/iq
+        /yrRKw0w==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1o736R-006if9-Gt;
+        Thu, 30 Jun 2022 22:57:39 +0000
+Date:   Thu, 30 Jun 2022 23:57:39 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Khalid Aziz <khalid.aziz@oracle.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org,
+        aneesh.kumar@linux.ibm.com, arnd@arndb.de, 21cnbao@gmail.com,
+        corbet@lwn.net, dave.hansen@linux.intel.com, david@redhat.com,
+        ebiederm@xmission.com, hagen@jauu.net, jack@suse.cz,
+        keescook@chromium.org, kirill@shutemov.name, kucharsk@gmail.com,
+        linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        longpeng2@huawei.com, luto@kernel.org, markhemm@googlemail.com,
+        pcc@google.com, rppt@kernel.org, sieberf@amazon.com,
+        sjpark@amazon.de, surenb@google.com, tst@schoebel-theuer.de,
+        yzaikin@google.com
+Subject: Re: [PATCH v2 1/9] mm: Add msharefs filesystem
+Message-ID: <Yr4qY32eHzJy5vvw@ZenIV>
+References: <cover.1656531090.git.khalid.aziz@oracle.com>
+ <de5566e71e038d95342d00364c6760c7078cb091.1656531090.git.khalid.aziz@oracle.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Pe/PFjYc42CpnmZK=c=P=GR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <de5566e71e038d95342d00364c6760c7078cb091.1656531090.git.khalid.aziz@oracle.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,69 +60,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Pe/PFjYc42CpnmZK=c=P=GR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jun 29, 2022 at 04:53:52PM -0600, Khalid Aziz wrote:
+> +static int
+> +msharefs_d_hash(const struct dentry *dentry, struct qstr *qstr)
+> +{
+> +	unsigned long hash = init_name_hash(dentry);
+> +	const unsigned char *s = qstr->name;
+> +	unsigned int len = qstr->len;
+> +
+> +	while (len--)
+> +		hash = partial_name_hash(*s++, hash);
+> +	qstr->hash = end_name_hash(hash);
+> +	return 0;
+> +}
 
-Hi all,
-
-In commits
-
-  41a2d4df3d72 ("drm/amd/display: Fix __nedf2 undefined for 32 bit compilat=
-ion")
-  916ae9cc5385 ("drm/amd/display: Fix __muldf3 undefined for 32 bit compila=
-tion")
-  f20eb84561de ("drm/amd/display: Fix __floatunsidf undefined for 32 bit co=
-mpilation")
-
-Fixes tag
-
-  Fixes: 9b79abf79c414 ("drm/amd/display: add CLKMGR changes for DCN32/321")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 265280b99822 ("drm/amd/display: add CLKMGR changes for DCN32/321")
-
-In commit
-
-  204b022bcbbf ("drm/amd/display: Fix __umoddi3 undefined for 32 bit compil=
-ation")
-
-Fixes tag
-
-  Fixes: 9b0e0d433f74 ("drm/amd/display: Add dependant changes for DCN32/32=
-1")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: d3dfceb58de5 ("drm/amd/display: Add dependant changes for DCN32/321")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Pe/PFjYc42CpnmZK=c=P=GR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK+KjkACgkQAVBC80lX
-0Gz3bgf/W/aaApNBPysZiDfpX0ddOI72IFtdSyeiNTseWCBGfEfLCUIxxURSPBk8
-vT5Nj4oXvB6Smu0drN2o0qFaN66y7GOjfIrvahl5uJs+BbtUtt+RGbBuM3xd0Mjl
-FuCkDa3U10uuC8EMxNBeC5OBznnQmIfA88VHBNEYEXsLuj2kRCTZjZT/HGg0zk9Q
-A2prbZmYZls04fYt8z7jyK7VfSlguWtpV+4kiisLH9ddbkO9BHxN/0Zq4pKrNAB2
-yLGLl4cew72Rys5RRVYrtKT7XJASSGegh6B0MFLPtaAwPvfq7Ff2Pz8OjkOWZB1z
-76qoEB60p4698WpMeSUnOeNibLY/zA==
-=yHLb
------END PGP SIGNATURE-----
-
---Sig_/Pe/PFjYc42CpnmZK=c=P=GR--
+What do you need that for and how is it different from letting it
+use full_name_hash() (which is what it will do if you leave
+dentry_operations->d_hash equal to NULL)?

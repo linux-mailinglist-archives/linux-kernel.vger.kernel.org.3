@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49FF561D95
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7919561D4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236283AbiF3OGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
+        id S236861AbiF3OLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236520AbiF3OFh (ORCPT
+        with ESMTP id S236407AbiF3OK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:05:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B5A6EEBA;
-        Thu, 30 Jun 2022 06:53:55 -0700 (PDT)
+        Thu, 30 Jun 2022 10:10:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF0E7B36D;
+        Thu, 30 Jun 2022 06:55:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D8F162112;
-        Thu, 30 Jun 2022 13:53:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F036C34115;
-        Thu, 30 Jun 2022 13:53:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EBB86204B;
+        Thu, 30 Jun 2022 13:55:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AFC1C34115;
+        Thu, 30 Jun 2022 13:55:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597234;
-        bh=HlUdkeevkwlkADXGp1lJ6XF/tQ3oXFSVRy8yE4P3sXM=;
+        s=korg; t=1656597334;
+        bh=xZaMOLIUAyQhvt0htMhHL9IVnbXEGjmGLwcZx/QPWwM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zcy9xcN41hZIyKgAgBHrDctZ/6bJyoi6qaYYDcAZC0WvtblTiz3Dbcsk8XxdBIkHD
-         8SgSCJ/lxIXwTxNmsUsAaPSYwFwfS+KlzJmoCxH5xLRMQ2Xuaj76LDMD7DDv0yetej
-         6MnmExEil0zak/cqqp6qJWlkmcuUd+c/hBIwWY9I=
+        b=ezA/JTK0WdgEEi90d0SmpU7yknz6cjVHJ2JP+LoVjSqOhvE/YbUcxmNuoPGVe1pd4
+         fbyAT4gtyCsTGISQCkMd7m+K/LG1mlUUMIctmJ8sgim1FDl6aaAz7xfqeL7IKJ6ZR/
+         ta5bF6uhPew2DkI6RAL6VKQO+YFrQFTUU6nYvTgc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dave Chinner <dchinner@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH 5.10 10/12] xfs: check sb_meta_uuid for dabuf buffer recovery
-Date:   Thu, 30 Jun 2022 15:47:15 +0200
-Message-Id: <20220630133230.996324972@linuxfoundation.org>
+        stable@vger.kernel.org, Seth Forshee <sforshee@digitalocean.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>
+Subject: [PATCH 5.15 20/28] fs: port higher-level mapping helpers
+Date:   Thu, 30 Jun 2022 15:47:16 +0200
+Message-Id: <20220630133233.523384488@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133230.676254336@linuxfoundation.org>
-References: <20220630133230.676254336@linuxfoundation.org>
+In-Reply-To: <20220630133232.926711493@linuxfoundation.org>
+References: <20220630133232.926711493@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,82 +58,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Chinner <dchinner@redhat.com>
+From: Christian Brauner <christian.brauner@ubuntu.com>
 
-commit 09654ed8a18cfd45027a67d6cbca45c9ea54feab upstream.
+commit 209188ce75d0d357c292f6bb81d712acdd4e7db7 upstream.
 
-Got a report that a repeated crash test of a container host would
-eventually fail with a log recovery error preventing the system from
-mounting the root filesystem. It manifested as a directory leaf node
-corruption on writeback like so:
+Enable the mapped_fs{g,u}id() helpers to support filesystems mounted
+with an idmapping. Apart from core mapping helpers that use
+mapped_fs{g,u}id() to initialize struct inode's i_{g,u}id fields xfs is
+the only place that uses these low-level helpers directly.
 
- XFS (loop0): Mounting V5 Filesystem
- XFS (loop0): Starting recovery (logdev: internal)
- XFS (loop0): Metadata corruption detected at xfs_dir3_leaf_check_int+0x99/0xf0, xfs_dir3_leaf1 block 0x12faa158
- XFS (loop0): Unmount and run xfs_repair
- XFS (loop0): First 128 bytes of corrupted metadata buffer:
- 00000000: 00 00 00 00 00 00 00 00 3d f1 00 00 e1 9e d5 8b  ........=.......
- 00000010: 00 00 00 00 12 fa a1 58 00 00 00 29 00 00 1b cc  .......X...)....
- 00000020: 91 06 78 ff f7 7e 4a 7d 8d 53 86 f2 ac 47 a8 23  ..x..~J}.S...G.#
- 00000030: 00 00 00 00 17 e0 00 80 00 43 00 00 00 00 00 00  .........C......
- 00000040: 00 00 00 2e 00 00 00 08 00 00 17 2e 00 00 00 0a  ................
- 00000050: 02 35 79 83 00 00 00 30 04 d3 b4 80 00 00 01 50  .5y....0.......P
- 00000060: 08 40 95 7f 00 00 02 98 08 41 fe b7 00 00 02 d4  .@.......A......
- 00000070: 0d 62 ef a7 00 00 01 f2 14 50 21 41 00 00 00 0c  .b.......P!A....
- XFS (loop0): Corruption of in-memory data (0x8) detected at xfs_do_force_shutdown+0x1a/0x20 (fs/xfs/xfs_buf.c:1514).  Shutting down.
- XFS (loop0): Please unmount the filesystem and rectify the problem(s)
- XFS (loop0): log mount/recovery failed: error -117
- XFS (loop0): log mount failed
+The patch only extends the helpers to be able to take the filesystem
+idmapping into account. Since we don't actually yet pass the
+filesystem's idmapping in no functional changes happen. This will happen
+in a final patch.
 
-Tracing indicated that we were recovering changes from a transaction
-at LSN 0x29/0x1c16 into a buffer that had an LSN of 0x29/0x1d57.
-That is, log recovery was overwriting a buffer with newer changes on
-disk than was in the transaction. Tracing indicated that we were
-hitting the "recovery immediately" case in
-xfs_buf_log_recovery_lsn(), and hence it was ignoring the LSN in the
-buffer.
-
-The code was extracting the LSN correctly, then ignoring it because
-the UUID in the buffer did not match the superblock UUID. The
-problem arises because the UUID check uses the wrong UUID - it
-should be checking the sb_meta_uuid, not sb_uuid. This filesystem
-has sb_uuid != sb_meta_uuid (which is fine), and the buffer has the
-correct matching sb_meta_uuid in it, it's just the code checked it
-against the wrong superblock uuid.
-
-The is no corruption in the filesystem, and failing to recover the
-buffer due to a write verifier failure means the recovery bug did
-not propagate the corruption to disk. Hence there is no corruption
-before or after this bug has manifested, the impact is limited
-simply to an unmountable filesystem....
-
-This was missed back in 2015 during an audit of incorrect sb_uuid
-usage that resulted in commit fcfbe2c4ef42 ("xfs: log recovery needs
-to validate against sb_meta_uuid") that fixed the magic32 buffers to
-validate against sb_meta_uuid instead of sb_uuid. It missed the
-magicda buffers....
-
-Fixes: ce748eaa65f2 ("xfs: create new metadata UUID field and incompat flag")
-Signed-off-by: Dave Chinner <dchinner@redhat.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
+Link: https://lore.kernel.org/r/20211123114227.3124056-9-brauner@kernel.org (v1)
+Link: https://lore.kernel.org/r/20211130121032.3753852-9-brauner@kernel.org (v2)
+Link: https://lore.kernel.org/r/20211203111707.3901969-9-brauner@kernel.org
+Cc: Seth Forshee <sforshee@digitalocean.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+CC: linux-fsdevel@vger.kernel.org
+Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+Reviewed-by: Seth Forshee <sforshee@digitalocean.com>
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/xfs_buf_item_recover.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/xfs/xfs_inode.c            |    8 ++++----
+ fs/xfs/xfs_symlink.c          |    4 ++--
+ include/linux/fs.h            |    8 ++++----
+ include/linux/mnt_idmapping.h |   12 ++++++++----
+ 4 files changed, 18 insertions(+), 14 deletions(-)
 
---- a/fs/xfs/xfs_buf_item_recover.c
-+++ b/fs/xfs/xfs_buf_item_recover.c
-@@ -805,7 +805,7 @@ xlog_recover_get_buf_lsn(
- 	}
+--- a/fs/xfs/xfs_inode.c
++++ b/fs/xfs/xfs_inode.c
+@@ -994,8 +994,8 @@ xfs_create(
+ 	/*
+ 	 * Make sure that we have allocated dquot(s) on disk.
+ 	 */
+-	error = xfs_qm_vop_dqalloc(dp, mapped_fsuid(mnt_userns),
+-			mapped_fsgid(mnt_userns), prid,
++	error = xfs_qm_vop_dqalloc(dp, mapped_fsuid(mnt_userns, &init_user_ns),
++			mapped_fsgid(mnt_userns, &init_user_ns), prid,
+ 			XFS_QMOPT_QUOTALL | XFS_QMOPT_INHERIT,
+ 			&udqp, &gdqp, &pdqp);
+ 	if (error)
+@@ -1148,8 +1148,8 @@ xfs_create_tmpfile(
+ 	/*
+ 	 * Make sure that we have allocated dquot(s) on disk.
+ 	 */
+-	error = xfs_qm_vop_dqalloc(dp, mapped_fsuid(mnt_userns),
+-			mapped_fsgid(mnt_userns), prid,
++	error = xfs_qm_vop_dqalloc(dp, mapped_fsuid(mnt_userns, &init_user_ns),
++			mapped_fsgid(mnt_userns, &init_user_ns), prid,
+ 			XFS_QMOPT_QUOTALL | XFS_QMOPT_INHERIT,
+ 			&udqp, &gdqp, &pdqp);
+ 	if (error)
+--- a/fs/xfs/xfs_symlink.c
++++ b/fs/xfs/xfs_symlink.c
+@@ -184,8 +184,8 @@ xfs_symlink(
+ 	/*
+ 	 * Make sure that we have allocated dquot(s) on disk.
+ 	 */
+-	error = xfs_qm_vop_dqalloc(dp, mapped_fsuid(mnt_userns),
+-			mapped_fsgid(mnt_userns), prid,
++	error = xfs_qm_vop_dqalloc(dp, mapped_fsuid(mnt_userns, &init_user_ns),
++			mapped_fsgid(mnt_userns, &init_user_ns), prid,
+ 			XFS_QMOPT_QUOTALL | XFS_QMOPT_INHERIT,
+ 			&udqp, &gdqp, &pdqp);
+ 	if (error)
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -1666,7 +1666,7 @@ static inline kgid_t i_gid_into_mnt(stru
+ static inline void inode_fsuid_set(struct inode *inode,
+ 				   struct user_namespace *mnt_userns)
+ {
+-	inode->i_uid = mapped_fsuid(mnt_userns);
++	inode->i_uid = mapped_fsuid(mnt_userns, &init_user_ns);
+ }
  
- 	if (lsn != (xfs_lsn_t)-1) {
--		if (!uuid_equal(&mp->m_sb.sb_uuid, uuid))
-+		if (!uuid_equal(&mp->m_sb.sb_meta_uuid, uuid))
- 			goto recover_immediately;
- 		return lsn;
- 	}
+ /**
+@@ -1680,7 +1680,7 @@ static inline void inode_fsuid_set(struc
+ static inline void inode_fsgid_set(struct inode *inode,
+ 				   struct user_namespace *mnt_userns)
+ {
+-	inode->i_gid = mapped_fsgid(mnt_userns);
++	inode->i_gid = mapped_fsgid(mnt_userns, &init_user_ns);
+ }
+ 
+ /**
+@@ -1701,10 +1701,10 @@ static inline bool fsuidgid_has_mapping(
+ 	kuid_t kuid;
+ 	kgid_t kgid;
+ 
+-	kuid = mapped_fsuid(mnt_userns);
++	kuid = mapped_fsuid(mnt_userns, &init_user_ns);
+ 	if (!uid_valid(kuid))
+ 		return false;
+-	kgid = mapped_fsgid(mnt_userns);
++	kgid = mapped_fsgid(mnt_userns, &init_user_ns);
+ 	if (!gid_valid(kgid))
+ 		return false;
+ 	return kuid_has_mapping(fs_userns, kuid) &&
+--- a/include/linux/mnt_idmapping.h
++++ b/include/linux/mnt_idmapping.h
+@@ -196,6 +196,7 @@ static inline kgid_t mapped_kgid_user(st
+ /**
+  * mapped_fsuid - return caller's fsuid mapped up into a mnt_userns
+  * @mnt_userns: the mount's idmapping
++ * @fs_userns: the filesystem's idmapping
+  *
+  * Use this helper to initialize a new vfs or filesystem object based on
+  * the caller's fsuid. A common example is initializing the i_uid field of
+@@ -205,14 +206,16 @@ static inline kgid_t mapped_kgid_user(st
+  *
+  * Return: the caller's current fsuid mapped up according to @mnt_userns.
+  */
+-static inline kuid_t mapped_fsuid(struct user_namespace *mnt_userns)
++static inline kuid_t mapped_fsuid(struct user_namespace *mnt_userns,
++				  struct user_namespace *fs_userns)
+ {
+-	return mapped_kuid_user(mnt_userns, &init_user_ns, current_fsuid());
++	return mapped_kuid_user(mnt_userns, fs_userns, current_fsuid());
+ }
+ 
+ /**
+  * mapped_fsgid - return caller's fsgid mapped up into a mnt_userns
+  * @mnt_userns: the mount's idmapping
++ * @fs_userns: the filesystem's idmapping
+  *
+  * Use this helper to initialize a new vfs or filesystem object based on
+  * the caller's fsgid. A common example is initializing the i_gid field of
+@@ -222,9 +225,10 @@ static inline kuid_t mapped_fsuid(struct
+  *
+  * Return: the caller's current fsgid mapped up according to @mnt_userns.
+  */
+-static inline kgid_t mapped_fsgid(struct user_namespace *mnt_userns)
++static inline kgid_t mapped_fsgid(struct user_namespace *mnt_userns,
++				  struct user_namespace *fs_userns)
+ {
+-	return mapped_kgid_user(mnt_userns, &init_user_ns, current_fsgid());
++	return mapped_kgid_user(mnt_userns, fs_userns, current_fsgid());
+ }
+ 
+ #endif /* _LINUX_MNT_IDMAPPING_H */
 
 

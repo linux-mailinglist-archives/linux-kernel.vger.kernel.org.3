@@ -2,81 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4BF561335
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 924F2561338
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbiF3H1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50706 "EHLO
+        id S232439AbiF3H2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiF3H1C (ORCPT
+        with ESMTP id S230402AbiF3H2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:27:02 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CEB3879C;
-        Thu, 30 Jun 2022 00:27:01 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        Thu, 30 Jun 2022 03:28:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CF6FD2E
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:28:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 73BC52223E;
-        Thu, 30 Jun 2022 09:26:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1656574018;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zjrfyTV5MhZ/ZdhkEC7JgGAqSs/5JnxfS2vRsmrz01Y=;
-        b=EJK731q8CqsM1mgdMNjEaM2dgFiziXDifqo3WToZDaj4/VuCqHc8NQ6d5qwFH80aM3N59p
-        jvx3lH9jp+d3AC+Rkmk/cmITFnlJN6830y8jsk7n+X6Y+2iH7n71q2SEHMb5wFKQiwSamH
-        8sIQet4ySkEdu3YoS2gQ0l2gXUZY71o=
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 491B561206
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 07:28:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D3A1C34115;
+        Thu, 30 Jun 2022 07:28:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656574088;
+        bh=pH/xoO4PIubE9L5cyy2MmAuYYPk1Vk6KDxujHpTzHis=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PYdKbHrok1mxhBGc71fcOwRPfRdDNuEEy7hNAPhyKw7g/zRTpw1TcZc1ODjaH32xs
+         4G4Qi2u02v4jXei9NWBnI/l+rP092u9PWxX/9mYhSLt3qEPi0UKxXEv7DjaASs7IX0
+         GUiBs9puYxCWSmWdP8DlrN4s0kwwabJ+d36HsKTk=
+Date:   Thu, 30 Jun 2022 09:28:06 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     zys.zljxml@gmail.com
+Cc:     tj@kernel.org, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org, katrinzhou <katrinzhou@tencent.com>
+Subject: Re: [PATCH] kernfs: fix potential NULL dereference in __kernfs_remove
+Message-ID: <Yr1QhjNGVJ7oPpRX@kroah.com>
+References: <20220630040047.3241781-1-zys.zljxml@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 30 Jun 2022 09:26:55 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
-        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
-        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
-        rafael@kernel.org, quic_gurus@quicinc.com,
-        sebastian.reichel@collabora.com, andy.shevchenko@gmail.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 13/16] pinctrl: Add AXP192 pin control driver
-In-Reply-To: <me4ummrWKIPseIG4ay7yCfrumN8sIdvc@localhost>
-References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com>
- <20220618214009.2178567-14-aidanmacdonald.0x0@gmail.com>
- <cafd8a40ad35dcf8a35350261af6031c@walle.cc>
- <me4ummrWKIPseIG4ay7yCfrumN8sIdvc@localhost>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <01a338e8f94b077df3fe2c4f13d4da28@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220630040047.3241781-1-zys.zljxml@gmail.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-06-27 15:12, schrieb Aidan MacDonald:
-
->> I *think* what is needed for gpio-regmap to support this is:
->>  - support values and masks for the direction, for now, we
->>    only support single bits.
->>  - support the pinctrl_gpio_direction_{input,output} calls
->> 
->> -michael
+On Thu, Jun 30, 2022 at 12:00:47PM +0800, zys.zljxml@gmail.com wrote:
+> From: katrinzhou <katrinzhou@tencent.com>
 > 
-> That sounds about right, thanks for taking a look.
+> When lockdep is enabled, lockdep_assert_held_write would
+> cause potential NULL pointer dereference.
+> 
+> Fix the folloeing smatch warnings:
+> 
+> fs/kernfs/dir.c:1353 __kernfs_remove() warn: variable dereferenced before check 'kn' (see line 1346)
+> 
+> Signed-off-by: katrinzhou <katrinzhou@tencent.com>
 
-I thought you were trying to add these to gpio-regmap? Unless
-I'm missing something, that should be easy enough.
+Can you please submit this with your legal name that you use to sign
+documents?
 
--michael
+Also, what commit id does this fix?  Did you actually hit this with a
+real workload?  How can this be reproduced and tested?
+
+thanks,
+
+greg k-h

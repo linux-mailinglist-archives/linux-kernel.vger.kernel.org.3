@@ -2,120 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3051D562405
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 22:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 449BF5623FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 22:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237219AbiF3UQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 16:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
+        id S237185AbiF3UMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 16:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236609AbiF3UQe (ORCPT
+        with ESMTP id S237173AbiF3UM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 16:16:34 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F5F443E9;
-        Thu, 30 Jun 2022 13:16:33 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25UJIOxk032478;
-        Thu, 30 Jun 2022 20:16:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=M6h9rCysIve6/4MDaHJHBceL6zoUVpld+iy6duPPzP0=;
- b=jX9iLG/g2sitZSwByO685IZ4yIqR6tfDHbHifOtPDSiHAnsvvrM7k2xAgTp6mUepWObK
- OvkCGIUXRwj2+J9SuAjJN92y1qms59OkItRG3stD/QRvTxYL4wMEASYD9XJwSlkak3FX
- 9w670aVFElkjeaJbpLG3Zenc7Wa/iRl/6ZR1W/FxHP2KBJy82igWoyB5M1GhtrUBAlx/
- NU0dPSi2ydkYdLeILm6bxHxPuSIQ4pFwvDgnIBrDb/qKl4yYuWOjMcKnmTzLrc1rQIjY
- WhzaNChqBsoAfjcpvrTVVv3EXwGTyMR7JENvysTtEztOq+5ZTpHmP3hxeE9qvG02Y+67 8A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h1hvf9xhu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Jun 2022 20:16:20 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25UJTGv7015427;
-        Thu, 30 Jun 2022 20:16:19 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h1hvf9xgk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Jun 2022 20:16:19 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25UK5wN8020235;
-        Thu, 30 Jun 2022 20:16:18 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma05wdc.us.ibm.com with ESMTP id 3gwt0anab1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Jun 2022 20:16:18 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25UKGH3C56361320
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 Jun 2022 20:16:17 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C9C98112062;
-        Thu, 30 Jun 2022 20:16:17 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C3C37112061;
-        Thu, 30 Jun 2022 20:16:15 +0000 (GMT)
-Received: from [9.211.159.19] (unknown [9.211.159.19])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu, 30 Jun 2022 20:16:15 +0000 (GMT)
-Message-ID: <fcac3b0c-db51-7221-d41a-0207144f131c@linux.ibm.com>
-Date:   Thu, 30 Jun 2022 22:16:14 +0200
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH net-next v2] net/smc: align the connect behaviour with TCP
-To:     Guangguan Wang <guangguan.wang@linux.alibaba.com>
-Cc:     davem@davemloft.net, Karsten Graul <kgraul@linux.ibm.com>,
-        liuyacan@corp.netease.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com
-References: <26d43c65-1f23-5b83-6377-3327854387c4@linux.ibm.com>
- <20220524125725.951315-1-liuyacan@corp.netease.com>
- <3bb9366d-f271-a603-a280-b70ae2d59c00@linux.ibm.com>
- <8a15e288-4534-501c-8b3d-c235ae93238f@linux.ibm.com>
- <d2195919-1cae-b667-c137-8398848fa43b@linux.alibaba.com>
-From:   Wenjia Zhang <wenjia@linux.ibm.com>
-In-Reply-To: <d2195919-1cae-b667-c137-8398848fa43b@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: CMcqm8_cUXiFbKypbQ8ENzzB_-f_ZRuU
-X-Proofpoint-GUID: HYvWA50vrtk3KRUVBO-AnEw9-n12uWtq
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 30 Jun 2022 16:12:29 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9B045519;
+        Thu, 30 Jun 2022 13:12:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656619945; x=1688155945;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iAJNP6Q4x6+0+j5y4dRqku115cNqe9oib6TCpNrW0Yw=;
+  b=FzeGQdvOLozG7iwYK73bQ4tRCk/2K2IIgQnFpkiFgD+DVfl5EvHosu8u
+   emCa0NEk9aGtRNTIq2c/YWdMV9YutxFttE/87VfYAf+V5ep4hWZLOYsBT
+   dYYSVV5sTkVj7EejdRvMWeJaJhn6O60LOXiBuliGjCOuxTGKgLqmqDxs4
+   SySgWlzrrYDYLrp1+tW1lCTeQNqt8dN3EYPnYxFx/8K6qMRlmp+3U2WZx
+   DN5XCbjMAWq7R9nmvPiMkfpa2P9brvFcQ10/l9hM4jaVCht4ndDDrCDbH
+   fqsZjtYKnDxWR/EKUH0XvpXwqREgPZ0K23lAId8w9D5bk/ksmYa5RVjVE
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
+   d="scan'208";a="170313557"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Jun 2022 13:12:24 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 30 Jun 2022 13:12:23 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 30 Jun 2022 13:12:23 -0700
+Date:   Thu, 30 Jun 2022 22:16:17 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: fwnode_for_each_child_node() and OF backend discrepancy
+Message-ID: <20220630201617.sqpihcevym7sxqng@soft-dev3-1.localhost>
+References: <CAHp75VcANMjxgS6S24Zh+mz66usb6LBnQk-ENvU9JHSXXsG1DA@mail.gmail.com>
+ <9e58f421c27121977d11381530757a6e@walle.cc>
+ <3ab8afab-b6b7-46aa-06d4-6740cee422d7@linaro.org>
+ <288f56ba9cfad46354203b7698babe91@walle.cc>
+ <daaddbd5-1cd4-d3ce-869a-249bdd8aecb9@linaro.org>
+ <96f40ae6abf76af3b643b1e1c60d1d9f@walle.cc>
+ <f9eb6d94-c451-0c9f-f123-2f1324f68b68@linaro.org>
+ <CAHp75VdWdUY-XyGBsQb3i9thCswmBo4UEAEaZCO5MC_HMW+fSQ@mail.gmail.com>
+ <20220628205254.gnllvaz7w5jmpfe5@soft-dev3-1.localhost>
+ <4782de1fc6692a98bd6c267c2714325f@walle.cc>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-30_14,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- impostorscore=0 mlxscore=0 phishscore=0 clxscore=1015 bulkscore=0
- mlxlogscore=933 priorityscore=1501 lowpriorityscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206300073
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <4782de1fc6692a98bd6c267c2714325f@walle.cc>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The 06/28/2022 23:07, Michael Walle wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> Am 2022-06-28 22:52, schrieb Horatiu Vultur:
+> > The 06/28/2022 22:28, Andy Shevchenko wrote:
+> > > EXTERNAL EMAIL: Do not click links or open attachments unless you know
+> > > the content is safe
+> > > 
+> > > On Tue, Jun 28, 2022 at 5:17 PM Krzysztof Kozlowski
+> > > <krzysztof.kozlowski@linaro.org> wrote:
+> > > > On 28/06/2022 17:09, Michael Walle wrote:
+> > 
+> > Hi,
+> > 
+> > Sorry for joint this late.
+> > 
+> > > 
+> > > ...
+> > > 
+> > > > > Mh. Assume a SoC with an integrated ethernet switch. Some ports
+> > > > > are externally connected, some don't. I'd think they should be disabled,
+> > > > > no? Until now, all bindings I know, treat them as disabled. But OTOH
+> > > > > you still need to do some configurations on them, like disable port
+> > > > > forwarding, disable them or whatever. So the hardware is present, but
+> > > > > it is not connected to anything.
+> > > >
+> > > > I see your point and the meaning is okay... except that drivers don't
+> > > > touch disabled nodes. If a device (with some address space) is disabled,
+> > > > you do not write there "please be power off". Here the case is a bit
+> > > > different, because I think ports do not have their own address space.
+> > > > Yet it contradicts the logic - something is disabled in DT and you
+> > > > expect to perform actual operations on it.
+> > > 
+> > > You beat me up to this comment, I also see a contradiction of what
+> > > "disabled" means in your, Michael, case and what it should be.
+> > > 
+> > > If you need to perform an operation on some piece of HW, it has not to
+> > > be disabled.
+> > > 
+> > > Or, you may deduce them by knowing how many ports in hardware (this is
+> > > usually done not by counting the nodes, but by a property) and do
+> > > whatever you want on ones, you have  not listed (by port_num) in the
+> > > array of parsed children.
+> > 
+> > It is not possible to have a defined for the MAX number of ports that
+> > supported by lan966x. Which is 8. And assigned that define to
+> > num_phys_ports instead of counting the entries in DT?
+> 
+> You mean also for the lan9662? I'm pretty sure that doesn't
+> work. Have a look where num_phys_ports is used. One random
+> example:
+> https://elixir.bootlin.com/linux/latest/source/drivers/net/ethernet/microchip/lan966x/lan966x_main.c#L874
+> 
+> So if your switch only has 4 ports, then I'd guess you'll
+> access a non-existing register.
 
+Underneath lan662 and lan668 is the same chip. The HW people disable
+some ports/features on each platform but from what I know you will still
+be able to access the registers.
 
-On 30.06.22 16:29, Guangguan Wang wrote:
-> I'm so sorry I missed the last emails for this discussion.
 > 
-> Yes, commit (86434744) is the trigger of the problem described in
-> https://lore.kernel.org/linux-s390/45a19f8b-1b64-3459-c28c-aebab4fd8f1e@linux.alibaba.com/#t  .
-> 
-> And I have tested just remove the following lines from smc_connection() can solve the above problem.
-> if (smc->use_fallback)
->       goto out;
-> 
-> I aggree that partly reverting the commit (86434744) is a better solution.
-> 
-> Thanks,
-> Guangguan Wang
-Thank you for your effort!
-Would you like to revert this patch? We'll revert the commit (86434744) 
-partly.
+> -michael
+
+-- 
+/Horatiu

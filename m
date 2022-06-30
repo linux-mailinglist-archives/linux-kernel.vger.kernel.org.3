@@ -2,118 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C485613CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54EBF5613D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233353AbiF3Hz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
+        id S233381AbiF3H5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233227AbiF3Hzt (ORCPT
+        with ESMTP id S233303AbiF3H4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:55:49 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A163FDA8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:55:47 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id g26so37334917ejb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:55:47 -0700 (PDT)
+        Thu, 30 Jun 2022 03:56:52 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC0C403F2;
+        Thu, 30 Jun 2022 00:56:51 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-31772f8495fso170968337b3.4;
+        Thu, 30 Jun 2022 00:56:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=aF/vEDhaI5UVVLV88GtQNx4eslB+Jp6D1zXXDLVk0z0=;
-        b=SdAzaqx0a2HqVvHti2rhUsh4ejd+qNYnUrNZk75ymkYzwt1/6LoGUcBrepuEpk0tEf
-         NY60QN6MuAUGwQNI0pmmgTokJBXmKwOo3/dKRbMaRZAoWxngW0zgvzxzrAJPrAN1voiB
-         Nfbc1Q6DNzFRVi7zOCSyfVsTLyCKlnJgF0CQI=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=pEG1/5zis6fn9rNZ4cGko3gg4B1FcMMHyqkPX5BcdX8=;
+        b=lUC9kYaRwM0BjvSJzSRdKvwLFR+U74/hzLpRgkBkjOYr3XOjlj8CgqHmG2gaxHtuXW
+         1p75RyRI75cVj0hLo6CN4AvRSRqvF8919+hwoZ+eS6PhYrHH8dnELlYJpoDseAw7VhOo
+         YvtV6hmG/9VwnLXEUbU58K+8kqJhnUsZWZJUfHjM7H/QyIeUdrBB2NtsHrvGxBrWj8zn
+         yWrCYFkZpCdJ9Cv1Wykh5yWKbAOic2NH8/ekh+lNWvY30npihYkkuaKywkv1Mml0gnUR
+         ko0SCMOC/MoRxXjcrijqOJxmOCmK9mwWlNQoGhTEgsz9JYEy3Ek6VyKRMaW9lGQGlnBh
+         ZeJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aF/vEDhaI5UVVLV88GtQNx4eslB+Jp6D1zXXDLVk0z0=;
-        b=A2n1vPXaO3rR7OJEFWu9oRdZmxYUhWcI0dZuB68kILElf89ozbc4Kurc54z7X6FbT2
-         PI8Heqo7Elr+JHVa/5xDOdt3O9XPBeeBwFf879aTzfV6rz0tbNkUMXmqiVIfigQXuSDv
-         GGjsRgU68PtIWlmlHfKtkmQd2JYEjh8TPaCN+yKclJTDLWKdcJVjgdpBrb5/D+m1PVNL
-         Zb0cyBpxGSyhfqQyMzgcRHTXxmgpDdikPV/7mNECaJH0cC+AibiG57AoaOgzMVqtpYtB
-         7hhD+8lnckDvuzEJFvzelqcvB0vzS3rwOQxbMyhqY7bTjW5iMmUstLsgPacuYA+/vCKo
-         2bSg==
-X-Gm-Message-State: AJIora/McZAmlAEZzLa5KI6PpyFx6lDdt+qUarVdd6eryOXamYQu6aaI
-        Ra0K9tRP0dgDBQG8qK9tXMeDfg==
-X-Google-Smtp-Source: AGRyM1sFxgnCxjRqgI34Ka4G2ur+BiufICOZE9Ek9zsmUXbnylVTyNwys7genpkhFF1IKXTYPS9oWg==
-X-Received: by 2002:a17:906:51cf:b0:722:e994:948e with SMTP id v15-20020a17090651cf00b00722e994948emr7380018ejk.656.1656575746195;
-        Thu, 30 Jun 2022 00:55:46 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-58-216.cust.vodafonedsl.it. [188.217.58.216])
-        by smtp.gmail.com with ESMTPSA id le23-20020a170906ae1700b006f3ef214dbesm8660122ejb.36.2022.06.30.00.55.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 00:55:45 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 09:55:43 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        quentin.schulz@theobroma-systems.com,
-        Daniel Scally <djrscally@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/6] media: dt-bindings: ov5693: document YAML binding
-Message-ID: <20220630075543.GA482517@tom-ThinkPad-T14s-Gen-2i>
-References: <20220629152933.422990-1-tommaso.merciai@amarulasolutions.com>
- <20220629152933.422990-6-tommaso.merciai@amarulasolutions.com>
- <673c2e59-d1c5-f6b8-df80-b5a46a7aa92e@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=pEG1/5zis6fn9rNZ4cGko3gg4B1FcMMHyqkPX5BcdX8=;
+        b=F3pUhr1e3yoggIiQXQN/2ZICZsMt8gSHkzD5FshbaeCT0/EzmIHmdK8u9b+TmkCZPW
+         22f6Wy7TRP1R7cHQajG1yMa184MKEfQ0gRpTiwP25iMvmzwT8rTwlNYVJAzblITq9sbP
+         LIH4Ogot65byst8OJWyHKCntZNs1Y9RHfUviArbsRn6G5b0TgBoSO0rZVVVD/HbRqkHM
+         zacfozMnKT3dpTg80gbZzSgKnGPqKHBByaXIWsc1IxfPUVfs0qWMQOnL61Iqn685T2m7
+         SVHENeLrYddwynI/6KGay9x3GAmD3L1s/Uuc126QKeS+joe5K8Oxxt+/rZM2Q1nAAf17
+         bWkw==
+X-Gm-Message-State: AJIora9CQ5FV9dTzXPmsMwrZrliptktsGwWkBeL7Qa5u4A081xXenXrd
+        7hFwlPrtyoF1ZBNFcA25H23Wcg+YIFr+cDCbYONzUJyoK4zmaQ==
+X-Google-Smtp-Source: AGRyM1so4U5iXRDnUOmFWKUYfH0VuZUgTl25P/lq+qTjChyyYigKaV1z5jimYDiiHWkd9cptmD5wDFJk6IJadT5Wtj0=
+X-Received: by 2002:a81:2386:0:b0:317:6586:8901 with SMTP id
+ j128-20020a812386000000b0031765868901mr8806187ywj.195.1656575810965; Thu, 30
+ Jun 2022 00:56:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <673c2e59-d1c5-f6b8-df80-b5a46a7aa92e@linaro.org>
+References: <20220628214511.37373-1-andriy.shevchenko@linux.intel.com> <4ae74f48-c51c-cb74-548d-46ff9a9a7a7b@linux.intel.com>
+In-Reply-To: <4ae74f48-c51c-cb74-548d-46ff9a9a7a7b@linux.intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 30 Jun 2022 09:56:11 +0200
+Message-ID: <CAHp75VfY_4CA36MHSi7=VtmcGdXi5kL9aB1HYy2WOJNqc-6L9g@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] serial: 8250_dw: Drop PM ifdeffery
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Thu, Jun 30, 2022 at 9:42 AM Ilpo J=C3=A4rvinen
+<ilpo.jarvinen@linux.intel.com> wrote:
+>
+> On Wed, 29 Jun 2022, Andy Shevchenko wrote:
+>
+> > Drop CONFIG_PM and CONFIG_PM_SLEEP ifdeffery while converting dw8250_pm=
+_ops
+> > to use new PM macros.
+> >
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>
+> Reviewed-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+>
+> Not directily related to the patch itself but do you have any idea why
+> 1a3c7bb08826 ("PM: core: Add new *_PM_OPS macros, deprecate old ones")
+> didn't wrap RUNTIME_PM_OPS() pointers with pm_ptr()? I'm asking this
+> because in SET_RUNTIME_PM_OPS() the callbacks are only created with
+> #ifdef CONFIG_PM so I'd have expected RUNTIME_PM_OPS() to maintain that
+> behavior but it didn't? Was it just an oversight that should be fixed?
 
-On Wed, Jun 29, 2022 at 08:14:52PM +0200, Krzysztof Kozlowski wrote:
-> On 29/06/2022 17:29, Tommaso Merciai wrote:
-> > Add documentation of device tree in YAML schema for the OV5693
-> > CMOS image sensor from Omnivision
-> > 
-> > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> > ---
-> > Changes since v1:
-> >  - Fix allOf position as suggested by Krzysztof
-> >  - Remove port description as suggested by Krzysztof
-> >  - Fix EOF as suggested by Krzysztof
-> > 
-> > Changes since v2:
-> >  - Fix commit body as suggested by Krzysztof
-> 
-> You received a tag, so if you decided to send v3, you need to include it.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I have had the same question, but I think it might be related to how
+PM runtime functions when there is no respective configuration option
+set.
 
-Thanks for suggestion.
++Cc: Rafael.
 
-Regards,
-Tommaso
-
-> 
-> 
-> Best regards,
-> Krzysztof
-
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
-
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+--=20
+With Best Regards,
+Andy Shevchenko

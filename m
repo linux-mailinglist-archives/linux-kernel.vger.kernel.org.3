@@ -2,145 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B158E5625A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EADA75625A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237710AbiF3VxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 17:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
+        id S237717AbiF3Vxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 17:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237700AbiF3VxT (ORCPT
+        with ESMTP id S237712AbiF3Vxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 17:53:19 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17EF1DEBF
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 14:53:18 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ABC511042;
-        Thu, 30 Jun 2022 14:53:17 -0700 (PDT)
-Received: from airbuntu (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE56C3F792;
-        Thu, 30 Jun 2022 14:53:15 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 22:53:10 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched: fix rq lock recursion issue
-Message-ID: <20220630215310.wb3kab72tlh5pq2g@airbuntu>
-References: <20220624074240.13108-1-quic_satyap@quicinc.com>
+        Thu, 30 Jun 2022 17:53:33 -0400
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789ED53ED1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 14:53:32 -0700 (PDT)
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4LYsXW4FcCz9t3L;
+        Thu, 30 Jun 2022 21:53:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1656626011; bh=RqJKTEPUdoC1D9GIM8x0UctkWHtsVb+6wjMsLs0x0AI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Hy/pb4x66b/TSannBUttIKlvROq5Ku/c0uYouxfsx72ixV8wvWZC5kR+t3DSMd4Vy
+         6Gn3ZVncJLrZAlJ/EPtXvN7kRO+lJOUe0i80zfCgVCwNdtOO8zyldWT/u5YTl7mE8p
+         Tr55qEkT6raiumklFg5QlkAH33P5mwBTwuntLYEI=
+X-Riseup-User-ID: F2684EDD2FB94981689F68EA8BD196BB1BD1523BABCB7B9467C80C26E05249A8
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4LYsXR1mCNz5vQt;
+        Thu, 30 Jun 2022 21:53:26 +0000 (UTC)
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+Subject: [PATCH] drm/amd/display: Remove unused variables from vba_vars_st
+Date:   Thu, 30 Jun 2022 18:53:16 -0300
+Message-Id: <20220630215316.1078841-1-mairacanal@riseup.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220624074240.13108-1-quic_satyap@quicinc.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Satya
+Some variables from the struct vba_vars_st are not referenced in any
+other place on the codebase. As they are not used, this commit removes
+those variables.
 
-On 06/24/22 00:42, Satya Durga Srinivasu Prabhala wrote:
-> Below recursion is observed in a rare scenario where __schedule()
-> takes rq lock, at around same time task's affinity is being changed,
-> bpf function for tracing sched_switch calls migrate_enabled(),
-> checks for affinity change (cpus_ptr != cpus_mask) lands into
-> __set_cpus_allowed_ptr which tries acquire rq lock and causing the
-> recursion bug.
-> 
-> Fix the issue by switching to preempt_enable/disable() for non-RT
-> Kernels.
+Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+---
 
-Interesting bug. Thanks for the report. Unfortunately I can't see this being
-a fix as it just limits the bug visibility to PREEMPT_RT kernels, but won't fix
-anything, no? ie: Kernels compiled with PREEMPT_RT will still hit this failure.
+Unused variables from structs are not warned by compilers, so they are a bit
+harder to find. In order to find these unused variables, I used git grep and
+checked if they were used anywhere else.
 
-I'm curious how the race with set affinity is happening. I would have thought
-user space would get blocked as __schedule() will hold the rq lock.
+Any feedback or suggestion (maybe a tool to check unused variables from structs)
+is welcomed!
 
-Do you have more details on that?
+Best Regards,
+- Maíra Canal
 
+---
+ .../drm/amd/display/dc/dml/display_mode_vba.c |  1 -
+ .../drm/amd/display/dc/dml/display_mode_vba.h | 33 -------------------
+ 2 files changed, 34 deletions(-)
 
-Thanks
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c
+index ed23c7c79d86..6b3918609d26 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c
+@@ -346,7 +346,6 @@ static void fetch_socbb_params(struct display_mode_lib *mode_lib)
+ 	mode_lib->vba.DRAMClockChangeRequirementFinal = 1;
+ 	mode_lib->vba.FCLKChangeRequirementFinal = 1;
+ 	mode_lib->vba.USRRetrainingRequiredFinal = 1;
+-	mode_lib->vba.ConfigurableDETSizeEnFinal = 0;
+ 	mode_lib->vba.AllowForPStateChangeOrStutterInVBlankFinal = soc->allow_for_pstate_or_stutter_in_vblank_final;
+ 	mode_lib->vba.DRAMClockChangeLatency = soc->dram_clock_change_latency_us;
+ 	mode_lib->vba.DummyPStateCheck = soc->dram_clock_change_latency_us == soc->dummy_pstate_latency_us;
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h
+index 25a9a606ab6f..e95b2199d85a 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h
++++ b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h
+@@ -232,7 +232,6 @@ struct vba_vars_st {
+ 	double DISPCLKWithRampingRoundedToDFSGranularity;
+ 	double DISPCLKWithoutRampingRoundedToDFSGranularity;
+ 	double MaxDispclkRoundedToDFSGranularity;
+-	double MaxDppclkRoundedToDFSGranularity;
+ 	bool DCCEnabledAnyPlane;
+ 	double ReturnBandwidthToDCN;
+ 	unsigned int TotalActiveDPP;
+@@ -249,7 +248,6 @@ struct vba_vars_st {
+ 	double VBlankTime;
+ 	double SmallestVBlank;
+ 	enum dm_prefetch_modes AllowForPStateChangeOrStutterInVBlankFinal; // Mode Support only
+-	double DCFCLKDeepSleepPerSurface[DC__NUM_DPP__MAX];
+ 	double DCFCLKDeepSleepPerPlane[DC__NUM_DPP__MAX];
+ 	double EffectiveDETPlusLBLinesLuma;
+ 	double EffectiveDETPlusLBLinesChroma;
+@@ -297,7 +295,6 @@ struct vba_vars_st {
+ 	double SMNLatency;
+ 	double FCLKChangeLatency;
+ 	unsigned int MALLAllocatedForDCNFinal;
+-	double DefaultGPUVMMinPageSizeKBytes; // Default for the project
+ 	double MaxAveragePercentOfIdealFabricBWDisplayCanUseInNormalSystemOperation;
+ 	double MaxAveragePercentOfIdealDRAMBWDisplayCanUseInNormalSystemOperationSTROBE;
+ 	double PercentOfIdealDRAMBWReceivedAfterUrgLatencySTROBE;
+@@ -819,8 +816,6 @@ struct vba_vars_st {
+ 	double         dummy8[DC__NUM_DPP__MAX];
+ 	double         dummy13[DC__NUM_DPP__MAX];
+ 	double         dummy_double_array[2][DC__NUM_DPP__MAX];
+-	unsigned int        dummyinteger1ms[DC__NUM_DPP__MAX];
+-	double        dummyinteger2ms[DC__NUM_DPP__MAX];
+ 	unsigned int        dummyinteger3[DC__NUM_DPP__MAX];
+ 	unsigned int        dummyinteger4[DC__NUM_DPP__MAX];
+ 	unsigned int        dummyinteger5;
+@@ -830,16 +825,7 @@ struct vba_vars_st {
+ 	unsigned int        dummyinteger9;
+ 	unsigned int        dummyinteger10;
+ 	unsigned int        dummyinteger11;
+-	unsigned int        dummyinteger12;
+-	unsigned int        dummyinteger30;
+-	unsigned int        dummyinteger31;
+-	unsigned int        dummyinteger32;
+-	unsigned int        dummyintegerarr1[DC__NUM_DPP__MAX];
+-	unsigned int        dummyintegerarr2[DC__NUM_DPP__MAX];
+-	unsigned int        dummyintegerarr3[DC__NUM_DPP__MAX];
+-	unsigned int        dummyintegerarr4[DC__NUM_DPP__MAX];
+ 	unsigned int        dummy_integer_array[8][DC__NUM_DPP__MAX];
+-	unsigned int        dummy_integer_array22[22][DC__NUM_DPP__MAX];
+ 
+ 	bool           dummysinglestring;
+ 	bool           SingleDPPViewportSizeSupportPerPlane[DC__NUM_DPP__MAX];
+@@ -980,7 +966,6 @@ struct vba_vars_st {
+ 	double TimePerChromaMetaChunkFlip[DC__NUM_DPP__MAX];
+ 	unsigned int DCCCMaxUncompressedBlock[DC__NUM_DPP__MAX];
+ 	unsigned int DCCCMaxCompressedBlock[DC__NUM_DPP__MAX];
+-	unsigned int DCCCIndependent64ByteBlock[DC__NUM_DPP__MAX];
+ 	double VStartupMargin;
+ 	bool NotEnoughTimeForDynamicMetadata[DC__NUM_DPP__MAX];
+ 
+@@ -1085,8 +1070,6 @@ struct vba_vars_st {
+ 	double WritebackDelayTime[DC__NUM_DPP__MAX];
+ 	unsigned int DCCYIndependentBlock[DC__NUM_DPP__MAX];
+ 	unsigned int DCCCIndependentBlock[DC__NUM_DPP__MAX];
+-	unsigned int dummyinteger15;
+-	unsigned int dummyinteger16;
+ 	unsigned int dummyinteger17;
+ 	unsigned int dummyinteger18;
+ 	unsigned int dummyinteger19;
+@@ -1147,17 +1130,11 @@ struct vba_vars_st {
+ 	int Z8NumberOfStutterBurstsPerFrame;
+ 	unsigned int MaximumDSCBitsPerComponent;
+ 	unsigned int NotEnoughUrgentLatencyHidingA[DC__VOLTAGE_STATES][2];
+-	double UrgentLatencyWithUSRRetraining;
+-	double UrgLatencyWithUSRRetraining[DC__VOLTAGE_STATES];
+ 	double ReadBandwidthSurfaceLuma[DC__NUM_DPP__MAX];
+ 	double ReadBandwidthSurfaceChroma[DC__NUM_DPP__MAX];
+ 	double SurfaceRequiredDISPCLKWithoutODMCombine;
+ 	double SurfaceRequiredDISPCLK;
+-	double SurfaceRequiredDISPCLKWithODMCombine2To1;
+-	double SurfaceRequiredDISPCLKWithODMCombine4To1;
+ 	double MinActiveFCLKChangeLatencySupported;
+-	double dummy14;
+-	double dummy15;
+ 	int MinVoltageLevel;
+ 	int MaxVoltageLevel;
+ 	unsigned int TotalNumberOfSingleDPPSurfaces[DC__VOLTAGE_STATES][2];
+@@ -1168,17 +1145,10 @@ struct vba_vars_st {
+ 	bool ExceededMALLSize;
+ 	bool PTE_BUFFER_MODE[DC__NUM_DPP__MAX];
+ 	unsigned int BIGK_FRAGMENT_SIZE[DC__NUM_DPP__MAX];
+-	unsigned int dummyinteger33;
+ 	unsigned int CompressedBufferSizeInkByteThisState;
+ 	enum dm_fclock_change_support FCLKChangeSupport[DC__VOLTAGE_STATES][2];
+-	Latencies myLatency;
+-	Latencies mLatency;
+-	Watermarks DummyWatermark;
+ 	bool USRRetrainingSupport[DC__VOLTAGE_STATES][2];
+-	bool dummyBooleanvector1[DC__NUM_DPP__MAX];
+-	bool dummyBooleanvector2[DC__NUM_DPP__MAX];
+ 	enum dm_use_mall_for_pstate_change_mode UsesMALLForPStateChange[DC__NUM_DPP__MAX];
+-	bool NotEnoughUrgentLatencyHiding_dml32[DC__VOLTAGE_STATES][2];
+ 	bool UnboundedRequestEnabledAllStates[DC__VOLTAGE_STATES][2];
+ 	bool SingleDPPViewportSizeSupportPerSurface[DC__NUM_DPP__MAX];
+ 	enum dm_use_mall_for_static_screen_mode UseMALLForStaticScreen[DC__NUM_DPP__MAX];
+@@ -1186,9 +1156,6 @@ struct vba_vars_st {
+ 	bool DRAMClockChangeRequirementFinal;
+ 	bool FCLKChangeRequirementFinal;
+ 	bool USRRetrainingRequiredFinal;
+-	bool MALLUseFinal;
+-	bool ConfigurableDETSizeEnFinal;
+-	bool dummyboolean;
+ 	unsigned int DETSizeOverride[DC__NUM_DPP__MAX];
+ 	unsigned int nomDETInKByte;
+ 	enum mpc_combine_affinity  MPCCombineUse[DC__NUM_DPP__MAX];
+-- 
+2.36.1
 
---
-Qais Yousef
-
-> 
-> -010 |spin_bug(lock = ???, msg = ???)
-> -011 |debug_spin_lock_before(inline)
-> -011 |do_raw_spin_lock(lock = 0xFFFFFF89323BB600)
-> -012 |_raw_spin_lock(inline)
-> -012 |raw_spin_rq_lock_nested(inline)
-> -012 |raw_spin_rq_lock(inline)
-> -012 |task_rq_lock(p = 0xFFFFFF88CFF1DA00, rf = 0xFFFFFFC03707BBE8)
-> -013 |__set_cpus_allowed_ptr(inline)
-> -013 |migrate_enable()
-> -014 |trace_call_bpf(call = ?, ctx = 0xFFFFFFFDEF954600)
-> -015 |perf_trace_run_bpf_submit(inline)
-> -015 |perf_trace_sched_switch(__data = 0xFFFFFFE82CF0BCB8, preempt = FALSE, prev = ?, next = ?)
-> -016 |__traceiter_sched_switch(inline)
-> -016 |trace_sched_switch(inline)
-> -016 |__schedule(sched_mode = ?)
-> -017 |schedule()
-> -018 |arch_local_save_flags(inline)
-> -018 |arch_irqs_disabled(inline)
-> -018 |__raw_spin_lock_irq(inline)
-> -018 |_raw_spin_lock_irq(inline)
-> -018 |worker_thread(__worker = 0xFFFFFF88CE251300)
-> -019 |kthread(_create = 0xFFFFFF88730A5A80)
-> -020 |ret_from_fork(asm)
-> 
-> Signed-off-by: Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>
-> ---
->  kernel/sched/core.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index bfa7452ca92e..e254e9227341 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -2223,6 +2223,7 @@ static void migrate_disable_switch(struct rq *rq, struct task_struct *p)
->  
->  void migrate_disable(void)
->  {
-> +#ifdef CONFIG_PREEMPT_RT
->  	struct task_struct *p = current;
->  
->  	if (p->migration_disabled) {
-> @@ -2234,11 +2235,15 @@ void migrate_disable(void)
->  	this_rq()->nr_pinned++;
->  	p->migration_disabled = 1;
->  	preempt_enable();
-> +#else
-> +	preempt_disable();
-> +#endif
->  }
->  EXPORT_SYMBOL_GPL(migrate_disable);
->  
->  void migrate_enable(void)
->  {
-> +#ifdef CONFIG_PREEMPT_RT
->  	struct task_struct *p = current;
->  
->  	if (p->migration_disabled > 1) {
-> @@ -2265,6 +2270,9 @@ void migrate_enable(void)
->  	p->migration_disabled = 0;
->  	this_rq()->nr_pinned--;
->  	preempt_enable();
-> +#else
-> +	preempt_enable();
-> +#endif
->  }
->  EXPORT_SYMBOL_GPL(migrate_enable);
->  
-> -- 
-> 2.36.1
-> 

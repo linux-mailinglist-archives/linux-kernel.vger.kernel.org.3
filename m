@@ -2,104 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62179562420
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 22:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E09A562424
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 22:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235656AbiF3U1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 16:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
+        id S236247AbiF3Uaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 16:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234038AbiF3U1Q (ORCPT
+        with ESMTP id S232654AbiF3Uae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 16:27:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B96053D48C
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 13:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656620832;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=B3cZCUIF3lnhc5FF1faZXpJlZvOkKmHLoTPPOnd8z5Q=;
-        b=deGcGhyuGQFUbgrhGjO61nJOz/MBbkWudsIKoaIWkgdcxyai4vvYCtKx/GfQgdDmZZTmyX
-        P7rDJ9yoFg6L5lTMib4gguPxWdAuegMqltk8C+pOYfJuaFwVUrzcH/ras0slCi0IAhiU1H
-        t8EQmY2IHUjQNIeDSWQaPx8J4PAJrzU=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-292-XMTnXfYmNm2AUdEwe45u9A-1; Thu, 30 Jun 2022 16:27:11 -0400
-X-MC-Unique: XMTnXfYmNm2AUdEwe45u9A-1
-Received: by mail-wr1-f69.google.com with SMTP id o21-20020adfa115000000b0021d3f78ebc2so15720wro.11
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 13:27:11 -0700 (PDT)
+        Thu, 30 Jun 2022 16:30:34 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34512D1EA
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 13:30:32 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id a13so266759lfr.10
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 13:30:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=r7BZ1uLXiCYtoGWqu+Wm9i+dqx8VhlWlmcV7AumSYp8=;
+        b=Oiwmmi0+jQC+r/NxTB8Q0HAF0BiecJppMWrub2pZ63OI+HkRtBgOIO25KkeQKGd/P3
+         OPlMIpkp7lFh4FACeK2866/LQjDrQEE4yyOY8q9IGplIdp6TdKQ+cqQsL/PhKZYeTkBI
+         F5SDqqejqhcej6KNM8lFmYn3uGpGoXvtOv/e9xLIgXgYrg5H4jS3BgFlUe7ej+e4fcGL
+         rCMNEVlOldf5XIOqCUj1cbKXfZI5XYS6jahxMgMMMmdM4bv1l2sKQguM3/ABz/X2oqHN
+         4xei0r31qtIAexJfbB0Ozf2k3cxwQvdhkGKSpG5tmwJ+lCvyt++YqsQGOaclsK5P/TIR
+         sxBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=B3cZCUIF3lnhc5FF1faZXpJlZvOkKmHLoTPPOnd8z5Q=;
-        b=MbrAI8nF/+hlH1GgiTCpUgH6rur7drbgBujemhlIV4cOSNxFWvPX5fWdRxJxC7weUW
-         jJoQf9x2gWOpuAo2ixbQOlh1ZtLIZdgqWspTCzkVCuFoTOyxPwhrG1599RW9CLQ2atuT
-         YDQ+5W9QsLDI7eLw2rRU9XRE4iP7v/NKBQ2scpDZO+gqmKm4p8kgSou2LDmCkHKvYgC8
-         +/kgl3oivmE/nZSd2c/sXTbSvNzcpo+EmPHJE0iByJogyTK1faPCUU1RWqRlgUJDB85X
-         8QSQbJMktUiKC0LtwdwlUvUISu3LB+1bwqpE1KSY/m9iW+J9YKT+vqf29+gq5u5xb7Zt
-         oJOA==
-X-Gm-Message-State: AJIora8Z3Mbayxn3ATBHhAk65XYqIKOBsPnFu5t1jqBoiJJPN7yyGSlc
-        R1gaXUKzK55aAq57vkgwbGm+qhuUg1/nCIyoKJ9LaMzHXX09HgKb+OO3ONdm1CIdZMzABYddWt9
-        eGEJc4ge6zZH8M4s55HXk7LPkNg8GZwZOOnv1Vlc64qaA9BmnMHwpfLaaVYXUXQwQ92Lxlw==
-X-Received: by 2002:a1c:4405:0:b0:3a1:886d:c33c with SMTP id r5-20020a1c4405000000b003a1886dc33cmr1979080wma.200.1656620830421;
-        Thu, 30 Jun 2022 13:27:10 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vN3emLAhFi79LfaVq/yG2oz3uypiyXu0Rea6T98wAbOL8ANlXOGgUJAGGt8l7pf/DJEfTVhg==
-X-Received: by 2002:a1c:4405:0:b0:3a1:886d:c33c with SMTP id r5-20020a1c4405000000b003a1886dc33cmr1979048wma.200.1656620830194;
-        Thu, 30 Jun 2022 13:27:10 -0700 (PDT)
-Received: from redhat.com ([2.55.3.188])
-        by smtp.gmail.com with ESMTPSA id j10-20020a5d448a000000b0021b8c99860asm20440516wrq.115.2022.06.30.13.27.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 13:27:09 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 16:27:07 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org
-Subject: [PATCH] Bluetooth: virtio_bt: mark broken
-Message-ID: <20220630202700.18187-1-mst@redhat.com>
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=r7BZ1uLXiCYtoGWqu+Wm9i+dqx8VhlWlmcV7AumSYp8=;
+        b=SbVSSIHFiShwEda94ZfzDaX+G7w8Tv9KZ25VOgJyODhTfQ9xYiu3P9touA442uxT08
+         6fchXxrMoVgMcMv03td91bKvPBxjKkb2rV3hPXL4sh0R3439KLAVyMAsKv7DzHNFMeSj
+         9M8s7M8YOurgf86GtndN2W2LbuYToD5Xsxw1ORxixEndT9sWDRxwpYh9AFeP/XeVtUeG
+         1Nw6TgBY2dlr1WB0sajMN9D9E967S0UUuG0y49fY2tdStJpI7ljBvBVvPEQAMhidv4u4
+         bcG/wK8Cn6dxjgMY82Emd/mUrLGSwZhsmO3pX8XWMUm/afvZn1phKndmp3QQ62yE9gyL
+         vDmQ==
+X-Gm-Message-State: AJIora+7SLc31a7i28ylJkQf8/6LpOFpfWGGeODliZdHv7zkqTlQJr3t
+        lhR5FuSmNzgOh7JODkz0OlgDq6/PmHbnmrDrBIw=
+X-Google-Smtp-Source: AGRyM1t9h0euxQQnKpYfVD1ojtp4Uhw1F93FnDp9yZejDkU0uQQdt/DOHh+bJlnChPE7dribGH22HlepLT4lHDK+0PQ=
+X-Received: by 2002:a05:6512:22d4:b0:47f:706b:23b5 with SMTP id
+ g20-20020a05651222d400b0047f706b23b5mr6767956lfu.44.1656621030733; Thu, 30
+ Jun 2022 13:30:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
-X-Mutt-Fcc: =sent
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Reply-To: oprincekufour@gmail.com
+Sender: dr.modiga.marten@gmail.com
+Received: by 2002:ab3:518f:0:0:0:0:0 with HTTP; Thu, 30 Jun 2022 13:30:29
+ -0700 (PDT)
+From:   PRINCE KUFOUR OTUMFUO <oprincekufour@gmail.com>
+Date:   Thu, 30 Jun 2022 21:30:29 +0100
+X-Google-Sender-Auth: jTn7H4TDlKqzbK4D0gnNg5QISh4
+Message-ID: <CAD91S9Lefju3R6ppog7nN2Qg0m_HmZwiUaBAiDvRvn1XokYcow@mail.gmail.com>
+Subject: PRINCE KUFOUR OTUMFUO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.3 required=5.0 tests=ADVANCE_FEE_4_NEW,BAYES_60,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:143 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.7358]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [dr.modiga.marten[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.3 ADVANCE_FEE_4_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+        *  2.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Issues around the driver are not addressed
-- issues around device removal:
-https://lore.kernel.org/r/20211125174200.133230-1-mst%40redhat.com
-- no spec
-- no QEMU support
+I am Prince Kufour Otumfuo the elder son of the late King
+Otumfuo Opoku ware II whose demise occur following a brief illness.
+Before the death of my father, King Otumfuo Opoku ware II, I was
+authorised and officially known as the next successor and beneficiary
+of my father's property according to African Traditional rite.
 
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
----
- drivers/bluetooth/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Most of my father's wealth includes Gold and Diamond worth the
+following qualities.
 
-diff --git a/drivers/bluetooth/Kconfig b/drivers/bluetooth/Kconfig
-index e30707405455..c5bb105416bd 100644
---- a/drivers/bluetooth/Kconfig
-+++ b/drivers/bluetooth/Kconfig
-@@ -435,6 +435,7 @@ config BT_HCIRSI
- config BT_VIRTIO
- 	tristate "Virtio Bluetooth driver"
- 	depends on VIRTIO
-+	depends on BROKEN
- 	help
- 	  Virtio Bluetooth support driver.
- 	  This driver supports Virtio Bluetooth devices.
--- 
-MST
+(1) 99kg alluvial gold dust Best quality GEM/Servce 100
 
+(2) 22 karat Quantity 3000 S.A
+
+(3) 9.0 purity Colour : Brown (unpolished) Size: 3/8 carats
+
+As a result of polygamous family, there has been a dead luck over the
+issue of division of my father's property between members of my family
+and community as a whole. In conjunction with this, the thrown which
+is only left to me as the eldest man in the family is been battled by
+the member of the twenty one hamlet that made up of Ashanti kingdom.
+
+This ugly situation made me to secretly move the gold dust having the
+above mentioned qualities into a security and finance firm with the
+assistance of my uncle whom serves as a secretary to Ashanti council
+of elders.
+
+If you are interested to buy it just contact me or just look for a buyer for me.
+
+I have promise to run the deal with you, base in the degree of
+sincerity and trust in you. Having receive your reply, I will feed you
+with the relevant information covering the consignment.
+
+Note, I and my mother hoped heavily on this transaction. Please reach me
+to avoid much publicity.
+
+Thanks. Yours faithfully,
+
+PRINCE KUFOUR OTUMFUO

@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C56560FB6
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 05:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32AF2560FBD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 05:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbiF3DhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 23:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
+        id S231684AbiF3DkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 23:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiF3DhQ (ORCPT
+        with ESMTP id S230386AbiF3DkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 23:37:16 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602D41117A;
-        Wed, 29 Jun 2022 20:37:15 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 29 Jun 2022 23:40:19 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886BB1E3D0;
+        Wed, 29 Jun 2022 20:40:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LYPCY6fy6z4x7V;
-        Thu, 30 Jun 2022 13:37:13 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1656560234;
-        bh=0ERk33ZGimAvhMDpUrHc8OMoPxZlnQftHPly0/kXP3U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=WyfGuHyx0jWoPFBVi/c/QxvQUN5qSRrDN+ztCdtD+N04ydlaul5KAErTbZbTIp8vw
-         J8Z8v8oGou+mAiyoFtGYnOtlY86QgOeKP66CSpMmOSUDdpRR90ncp7Rzrx8wPQ7Fn4
-         QRosb09Mi4CugFME86stv0BG8ApI0eXKqDZ1akEr5pCw7DSd9Ilis/vR6fPKfPWr72
-         J/zdYcaPrXpKID2T6GVs+BsxC2mVJ26+fypeK8gEwYnEl6P1po4RtFx8ok8+CITO2Y
-         2c0ybH9fddTtlT1HkRGtD1sdFUrBBZyee7Cd/N2Fr1Sz4WpW2PtHcMCmLeMDA/qLO6
-         m/vzr0vjzA3EA==
-Date:   Thu, 30 Jun 2022 13:37:12 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Liam Howlett <liam.howlett@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the mm tree
-Message-ID: <20220630133712.1a3b0ff9@canb.auug.org.au>
+        by sin.source.kernel.org (Postfix) with ESMTPS id E0485CE1290;
+        Thu, 30 Jun 2022 03:40:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 51991C341CA;
+        Thu, 30 Jun 2022 03:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656560414;
+        bh=GRbxPmIzfYUd0olcDNpMbJNFXHPvb4nZdiy0NGphrGM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=bhA+3/gNul4m4v+BbNir3u6UqcgU80tomzUMKByDoBDcY3OUJi8LalB3W/h9LIQRl
+         A6ThfNeqqYmz+eLEoctgnsLxBFYkt1YnirArlKxKzviYEqRfLDRXFU1WeLOSPt6nJF
+         unsGZvyEAchoILtCEmUuYyfMudSXJDihYAyoDRlNhZ1zESRWPN7pR/TTd5dFDpo4i7
+         JeCyYkclxKBKER8Pi81i7MY1bzMU9h3NiV40xXufZ/Ra6FVwSkK5tPfeqFLioYmgeK
+         r/JxNvUAFUGfaJTvujhQDlMbNErV3K5TUd+WhQ024ascFDKu2C8tREgWWCsyLRREif
+         8w15H8okvwZCw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3D31EE49BBA;
+        Thu, 30 Jun 2022 03:40:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/aVwxAAb22P_01OExSTyM6il";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 0/4] net: dsa: add pause stats support
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165656041424.25608.15286972215720415620.git-patchwork-notify@kernel.org>
+Date:   Thu, 30 Jun 2022 03:40:14 +0000
+References: <20220628085155.2591201-1-o.rempel@pengutronix.de>
+In-Reply-To: <20220628085155.2591201-1-o.rempel@pengutronix.de>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     woojung.huh@microchip.com, andrew@lunn.ch,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        lukas@wunner.de, UNGLinuxDriver@microchip.com
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/aVwxAAb22P_01OExSTyM6il
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello:
 
-Hi all,
+This series was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-In commit
+On Tue, 28 Jun 2022 10:51:51 +0200 you wrote:
+> changes v2:
+> - add Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+> - remove packet calculation fix from ar9331 patch. It needs more fixes.
+> - add packet calculation fix for microchip
+> 
+> Oleksij Rempel (4):
+>   net: dsa: add get_pause_stats support
+>   net: dsa: ar9331: add support for pause stats
+>   net: dsa: microchip: add pause stats support
+>   net: dsa: microchip: count pause packets together will all other
+>     packets
+> 
+> [...]
 
-  500caa69a5a0 ("test_maple_tree: add test for spanning store to most of th=
-e tree")
+Here is the summary with links:
+  - [net-next,v2,1/4] net: dsa: add get_pause_stats support
+    https://git.kernel.org/netdev/net-next/c/3d410403a572
+  - [net-next,v2,2/4] net: dsa: ar9331: add support for pause stats
+    https://git.kernel.org/netdev/net-next/c/ea294f39b438
+  - [net-next,v2,3/4] net: dsa: microchip: add pause stats support
+    https://git.kernel.org/netdev/net-next/c/c4748ff6566b
+  - [net-next,v2,4/4] net: dsa: microchip: count pause packets together will all other packets
+    https://git.kernel.org/netdev/net-next/c/961d6c70d886
 
-Fixes tag
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  Fixes: 1d3ae73e4e86 (test_maple_tree: Add test for spanning store to most=
- of the tree)
 
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-It seems to be self referential ...
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/aVwxAAb22P_01OExSTyM6il
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK9GmgACgkQAVBC80lX
-0GwyAgf9H/8hqOVzHfkn3cIkBDA0RubU4jxnn7+CU+n4ziLaEi/qbPjz21D8bqD+
-tcOFes4QN/x2rsUIqznvh748FYzVXITmYWIq/Tc/BqixHWkPlXlrRpYd5FkYkvGG
-EZhR7CXhwcCKtQWoHaHO0ZuW/gt9JKUtQNNmHeOvDMZ9JssRIj66RJkcYe9XJGVR
-i+QDQ5Bj7ZkRUdfE742uDrKJnO+aQa2Ba6R9lYif68gddZr7on+oOQnUYPmp/obH
-62ix+Qd+AcNlLZ2HARxhEVLwLRl6NWfh6t2HDkWD0BX6+1F2crLqxmaWYFCzZodl
-pW4hM7glq+RcbILLRRFIVQ9VT/wfRw==
-=OJxL
------END PGP SIGNATURE-----
-
---Sig_/aVwxAAb22P_01OExSTyM6il--

@@ -2,123 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01829561AAF
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F013561A88
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235067AbiF3MqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 08:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
+        id S234627AbiF3MlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 08:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235043AbiF3MqP (ORCPT
+        with ESMTP id S230099AbiF3MlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 08:46:15 -0400
-Received: from smtp2.infineon.com (smtp2.infineon.com [IPv6:2a00:18f0:1e00:4::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB1D22508;
-        Thu, 30 Jun 2022 05:46:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1656593174; x=1688129174;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+S/i0os03fT4PDMmolQDm3D23GK/ZwuYZfdR8J4uDrE=;
-  b=K9eMvdpR1j9KVuHduZd7t9BDwgGHotADx4kMXTtNqGCm1GRJW3DCac3e
-   qGIFjtVAOXkEuzY/4/yg6yempXAgW04ez10VGK0N6VSr1Ks/xLzaj5OsI
-   wgytUK/OP/SFZKSfPGmnC1VJK1pxIKB9uNmBYgMUUigadS2euVIn9xkJO
-   Q=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="186455692"
-X-IronPort-AV: E=Sophos;i="5.92,234,1650924000"; 
-   d="scan'208";a="186455692"
-Received: from unknown (HELO mucxv001.muc.infineon.com) ([172.23.11.16])
-  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 14:46:13 +0200
-Received: from MUCSE803.infineon.com (MUCSE803.infineon.com [172.23.29.29])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mucxv001.muc.infineon.com (Postfix) with ESMTPS;
-        Thu, 30 Jun 2022 14:46:13 +0200 (CEST)
-Received: from MUCSE807.infineon.com (172.23.29.33) by MUCSE803.infineon.com
- (172.23.29.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Thu, 30 Jun
- 2022 14:46:13 +0200
-Received: from ISCNPF0RJXQS.infineon.com (172.23.8.247) by
- MUCSE807.infineon.com (172.23.29.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.26; Thu, 30 Jun 2022 14:46:11 +0200
-From:   Hakan Jansson <hakan.jansson@infineon.com>
-CC:     Hakan Jansson <hakan.jansson@infineon.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
-        <linux-bluetooth@vger.kernel.org>
-Subject: [PATCH v2 4/5] Bluetooth: hci_bcm: Prevent early baudrate setting in autobaud mode
-Date:   Thu, 30 Jun 2022 14:45:23 +0200
-Message-ID: <a211533dc6c9a0d5a5d1533d24a26fb996d45dc7.1656583541.git.hakan.jansson@infineon.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1656583541.git.hakan.jansson@infineon.com>
-References: <cover.1656583541.git.hakan.jansson@infineon.com>
+        Thu, 30 Jun 2022 08:41:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B383FDBA;
+        Thu, 30 Jun 2022 05:41:19 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25UBLoN4007511;
+        Thu, 30 Jun 2022 12:41:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=GkXaiqkN9lB0iyXYP33RrScm+EbGQAdPQjyAj+b3OSM=;
+ b=qQVsH45DermNfcF5UQkc5PTXSAVl9/fnCVG1bPrYT/ha4HPdQkZAlK00m3gMVlVN+QWC
+ X91MtkiHanUbT+4FJxmU0ydf2AR4xxozJwyFjUlVxmRSCZyBlGcUSci3wjwpMJ5QmWn0
+ WwWtK7qc/vx5aJbYOhWSFeo5l7LepON58W4UkCY0YL/BSHG1bTVkHgMzcjM1/5xk8elN
+ vD54H3+kkKD8OnumbBoFocFaZt8WQk87LYWINeA1+IYvpa/PihfLYvjL7DBVxehCkIpZ
+ rDw4/M8K3WGY/HWJdbYVTsIAQHQK+5C/qR3gF7ZGHFWNfUrQqI5yzVMgquUQ7xAnHanp gA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h1avxt5gs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Jun 2022 12:41:16 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25UCGtcF015765;
+        Thu, 30 Jun 2022 12:41:16 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h1avxt5f2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Jun 2022 12:41:16 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25UCeh80023203;
+        Thu, 30 Jun 2022 12:41:13 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3gwt08x2et-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Jun 2022 12:41:13 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25UCfAQL13566426
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Jun 2022 12:41:10 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7307D52050;
+        Thu, 30 Jun 2022 12:41:10 +0000 (GMT)
+Received: from [9.171.69.2] (unknown [9.171.69.2])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 17D1A5204F;
+        Thu, 30 Jun 2022 12:41:10 +0000 (GMT)
+Message-ID: <90996285-9ae3-0030-a5e3-a3f1bfa23088@linux.ibm.com>
+Date:   Thu, 30 Jun 2022 14:45:39 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE824.infineon.com (172.23.29.55) To
- MUCSE807.infineon.com (172.23.29.33)
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v6 4/5] PCI: Extend isolated function probing to s390
+Content-Language: en-US
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220628143100.3228092-1-schnelle@linux.ibm.com>
+ <20220628143100.3228092-5-schnelle@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <20220628143100.3228092-5-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: BJo64tGRqJehdK4oXVVrAy7srVdrrsKh
+X-Proofpoint-GUID: HpsKrbPP05NU9-aXZuu2ENmpeVFN3oQ2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-30_07,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 clxscore=1015 spamscore=0 bulkscore=0 impostorscore=0
+ mlxscore=0 mlxlogscore=852 suspectscore=0 lowpriorityscore=0 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206300050
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Always prevent trying to set device baudrate before calling setup() when
-using autobaud mode.
 
-This was previously happening for devices which had device specific data
-with member no_early_set_baudrate set to 0.
 
-Signed-off-by: Hakan Jansson <hakan.jansson@infineon.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
----
-V1 -> V2:
-  - No changes, submitted as part of updated patch series
+On 6/28/22 16:30, Niklas Schnelle wrote:
+> Like the jailhouse hypervisor s390's PCI architecture allows passing
+> isolated PCI functions to an OS instance. As of now this is was not
+> utilized even with multi-function support as the s390 PCI code makes
+> sure that only virtual PCI busses including a function with devfn 0 are
+> presented to the PCI subsystem. A subsequent change will remove this
+> restriction.
+> 
+> Allow probing such functions by replacing the existing check for
+> jailhouse_paravirt() with a new hypervisor_isolated_pci_functions()
+> helper.
+> 
+> Cc: Jan Kiszka <jan.kiszka@siemens.com>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>   drivers/pci/probe.c        | 2 +-
+>   include/linux/hypervisor.h | 8 ++++++++
+>   2 files changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index a18e07e6a7df..156dd13594b8 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -2667,7 +2667,7 @@ int pci_scan_slot(struct pci_bus *bus, int devfn)
+>   			 * a hypervisor which passes through individual PCI
+>   			 * functions.
+>   			 */
+> -			if (!jailhouse_paravirt())
+> +			if (!hypervisor_isolated_pci_functions())
+>   				break;
+>   		}
+>   		fn = next_fn(bus, dev, fn);
+> diff --git a/include/linux/hypervisor.h b/include/linux/hypervisor.h
+> index fc08b433c856..33b1c0482aac 100644
+> --- a/include/linux/hypervisor.h
+> +++ b/include/linux/hypervisor.h
+> @@ -32,4 +32,12 @@ static inline bool jailhouse_paravirt(void)
+>   
+>   #endif /* !CONFIG_X86 */
+>   
+> +static inline bool hypervisor_isolated_pci_functions(void)
+> +{
+> +	if (IS_ENABLED(CONFIG_S390))
+> +		return true;
+> +	else
+> +		return jailhouse_paravirt();
 
- drivers/bluetooth/hci_bcm.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+I would spare the else,
 
-diff --git a/drivers/bluetooth/hci_bcm.c b/drivers/bluetooth/hci_bcm.c
-index 9a129867a4c0..0ae627c293c5 100644
---- a/drivers/bluetooth/hci_bcm.c
-+++ b/drivers/bluetooth/hci_bcm.c
-@@ -484,7 +484,7 @@ static int bcm_open(struct hci_uart *hu)
- 		/* If oper_speed is set, ldisc/serdev will set the baudrate
- 		 * before calling setup()
- 		 */
--		if (!bcm->dev->no_early_set_baudrate)
-+		if (!bcm->dev->no_early_set_baudrate && !bcm->dev->use_autobaud_mode)
- 			hu->oper_speed = bcm->dev->oper_speed;
- 
- 		err = bcm_gpio_set_power(bcm->dev, true);
-@@ -1204,9 +1204,6 @@ static int bcm_of_probe(struct bcm_device *bdev)
- {
- 	bdev->use_autobaud_mode = device_property_read_bool(bdev->dev,
- 							    "brcm,requires-autobaud-mode");
--	if (bdev->use_autobaud_mode)
--		bdev->no_early_set_baudrate = true;
--
- 	device_property_read_u32(bdev->dev, "max-speed", &bdev->oper_speed);
- 	device_property_read_u8_array(bdev->dev, "brcm,bt-pcm-int-params",
- 				      bdev->pcm_int_params, 5);
+Another remark, shouldn't it be the last patch?
+
+otherwise LGTM
+
+Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
+
+
+> +}
+> +
+>   #endif /* __LINUX_HYPEVISOR_H */
+> 
+
 -- 
-2.25.1
-
+Pierre Morel
+IBM Lab Boeblingen

@@ -2,125 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE33562479
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 22:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1332D562470
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 22:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237039AbiF3Ul5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 16:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
+        id S237023AbiF3Uko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 16:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiF3Uly (ORCPT
+        with ESMTP id S231316AbiF3Ukl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 16:41:54 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FB85596
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 13:41:53 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id k22so267698wrd.6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 13:41:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6sxgvUgX/lE05DRaRDrj2PDjJhleRoRRDvjJlfkAEzg=;
-        b=GZYjjHKfVCa+9zANi+gEoiM5SSOKOGDkVkDe96gkOxIAHoB7CZIO/YgR4LY48B9PT6
-         ZYIxvmRzX9/oZ9OVThsoJ3x6/jtWmvKCmj55r7O9XNary8Z+YA71JG1/7w2y1jswy8Fa
-         DUNp5eCuf3t1wycrDiBa8yTy/Qluga4rZcDmiX8XJi/PepFFuBWfc0HRW1jeSfA7pTiy
-         1fHCyUP398gvCkEE1aqi0roDUYpIMNQrTPjMwCLMvEvJU5WtHddYn0FmQwrd1coZiTCd
-         843Vj2wDV01tIemZ6LaCV8aXVHynHFeU90CWZmsrm2zQTvIE8/lsZPr7gcUPBKWd6isB
-         rdCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6sxgvUgX/lE05DRaRDrj2PDjJhleRoRRDvjJlfkAEzg=;
-        b=uRyZB6FIQMbkkuLLMdTBht18+oODh370/ih/xOX/zrHMbQ6luDiVhm3dg0iAa3ymPn
-         kw56zCmMzQhBGE+3Rr7HqdwLDtdfu7S6+OpyRlJUNR8bzLBQ8j0UM48fo3WK5syyGedE
-         vqcYfowB+rynidQQmDfCARbPySFwfLGBcr9X/O3imB9704xqymIG+rdoHKmucjkvwpIz
-         8xoqkKQWoMCMRRZhey6CUEITK5UooDPHrYpbVmmeJL3xr3qfXlZx3kzLwy+QD42O3VBT
-         FVQBjw6gbgfA1cMTSqPmQ7lsT8a6I6GvrlPoYbTp8wDT6xe4VJLfohEmp1WpLJmsy4hO
-         ZLGA==
-X-Gm-Message-State: AJIora9e4Ku0kQqCSvDt4LIk007/YZBEqgHSz2HkX8lenVFxgJ9V9xjs
-        dTJwlCrGk/ozAswJQMiqihuuVMVYqbcJSPPt/fNq9w==
-X-Google-Smtp-Source: AGRyM1tPLbfsN2BJnOcFOWFvfQT8AJ8Pw9fqyeaUEOZa832kPW4lB+7bPTChF3jB0KOvv6fyB662Q1iQc2L8Imbuj7A=
-X-Received: by 2002:a05:6000:508:b0:21d:4105:caf9 with SMTP id
- a8-20020a056000050800b0021d4105caf9mr3367565wrf.699.1656621711704; Thu, 30
- Jun 2022 13:41:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220630191230.235306-1-kaleshsingh@google.com> <Yr3+RLhpp3g9A7vb@zx2c4.com>
-In-Reply-To: <Yr3+RLhpp3g9A7vb@zx2c4.com>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Thu, 30 Jun 2022 13:41:40 -0700
-Message-ID: <CAC_TJvdV9bU2xWpbgrQuyrr6ens9gzDnZT2UzAY6Q6ZN9p7aEw@mail.gmail.com>
-Subject: Re: [PATCH] pm/sleep: Add PM_USERSPACE_AUTOSLEEP Kconfig
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     John Stultz <jstultz@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Saravana Kannan <saravanak@google.com>,
-        "T.J. Mercier" <tjmercier@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        "David S. Miller" <davem@davemloft.net>,
+        Thu, 30 Jun 2022 16:40:41 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69B22DB;
+        Thu, 30 Jun 2022 13:40:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656621640; x=1688157640;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dLHwojcIwhnxNiJZmRhvdWkTN7FOsnP5rdFn+0H9dDI=;
+  b=VKHeF8RNBqZIcBwicqtq9t42AcBwiu4mh6kuKKXsu8Ssx/KBYBqFi9dc
+   phuFJjWHNzTgS0RX7eUgJH3D6rPeJkPxlfayDVHjtWFDOfz6MoGJETzsY
+   XnNurJH1j3uNp5ledT8EWNf7opWzkCRr9Q+PRHdG8SZTw5vvsuR6HqdQL
+   u4xcNw7WUE0a5XZvivGM0p7uDCmtaFT11BFiyoMM3QszT5Iw+kE368l0n
+   76M5dFLW1MebWxd4x7dp4V4LRoDt9i1C7KCcJ1+jg6HswY4fd82DTzPv0
+   psrbbbVQfX8TQwV/pzTDmtwK8dKGfrxExAh8IFEgw487z6vbXrkgUZ+1d
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
+   d="scan'208";a="170590192"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Jun 2022 13:40:39 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 30 Jun 2022 13:40:39 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 30 Jun 2022 13:40:39 -0700
+Date:   Thu, 30 Jun 2022 22:44:33 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next 0/4] net: lan966x: hardcode port count
+Message-ID: <20220630204433.hg2a2ws2zk5p73ld@soft-dev3-1.localhost>
+References: <20220630140237.692986-1-michael@walle.cc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20220630140237.692986-1-michael@walle.cc>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 12:49 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> Hi Kalesh,
->
-> On Thu, Jun 30, 2022 at 07:12:29PM +0000, Kalesh Singh wrote:
-> > Systems that initiate frequent suspend/resume from userspace
-> > can make the kernel aware by enabling PM_USERSPACE_AUTOSLEEP
-> > config.
-> >
-> > This allows for certain sleep-sensitive code (wireguard/rng) to
-> > decide on what preparatory work should be performed (or not) in
-> > their pm_notification callbacks.
-> >
-> > This patch was prompted by the discussion at [1] which attempts
-> > to remove CONFIG_ANDROID that currently guards these code paths.
-> >
-> > [1] https://lore.kernel.org/r/20220629150102.1582425-1-hch@lst.de/
-> >
-> > Suggested-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
->
-> Thanks, looks good to me. Do you have a corresponding Gerrit link to the
-> change adding this to the base Android kernel config? If so, have my
-> Ack:
->
->     Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
+The 06/30/2022 16:02, Michael Walle wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> Don't rely on the device tree to count the number of physical port. Instead
+> introduce a new compatible string which the driver can use to select the
+> correct port count.
+> 
+> This also hardcodes the generic compatible string to 8. The rationale is
+> that this compatible string was just used for the LAN9668 for now and I'm
+> not even sure the current driver would support the LAN9662.
 
-Hi Jason,
+It works also on LAN9662, but I didn't have time to send patches for
+DTs. Then when I send patches for LAN9662, do I need to go in all dts
+files to change the compatible string for the 'switch' node?
 
-Our latest supported kernels in Android are based on 5.15 so the
-config change isn't yet needed. Once there are newer versions with the
-CONFIG_ANDROID removed I will add this to the defconfig.
-
-Thanks,
-Kalesh
-
->
-> Jason
->
+> 
+> Michael Walle (4):
+>   net: lan966x: hardcode the number of external ports
+>   dt-bindings: net: lan966x: add specific compatible string
+>   net: lan966x: add new compatible microchip,lan9668-switch
+>   ARM: dts: lan966x: use new microchip,lan9668-switch compatible
+> 
+>  .../net/microchip,lan966x-switch.yaml         |  5 +++-
+>  arch/arm/boot/dts/lan966x.dtsi                |  2 +-
+>  .../ethernet/microchip/lan966x/lan966x_main.c | 24 +++++++++++++------
+>  3 files changed, 22 insertions(+), 9 deletions(-)
+> 
 > --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
+> 2.30.2
+> 
+
+-- 
+/Horatiu

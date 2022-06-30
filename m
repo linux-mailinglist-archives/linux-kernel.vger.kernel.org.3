@@ -2,89 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 851AF561563
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E74E1561566
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233962AbiF3Iq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 04:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
+        id S233237AbiF3Iq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 04:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232869AbiF3IqV (ORCPT
+        with ESMTP id S232869AbiF3Iq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 04:46:21 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030D7340E2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:46:20 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id l2-20020a05600c4f0200b0039c55c50482so1235554wmq.0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:46:19 -0700 (PDT)
+        Thu, 30 Jun 2022 04:46:56 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D04741632
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:46:54 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id h23so37519211ejj.12
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:46:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=sPtsGsGxiY0pUJurJivkSz6fB7RJpCiec1m/UGMaAjk=;
-        b=DBAJoYyq7Z73P2+PdO6gsa3dmnvFmEowkOKISZ9iJz6pAEmXXVZIgWfDMriW3xYBnH
-         GvMAPIj6o3sVkw5riTDzKq9KZMiOj1coVvIRjSlknhw4w6M1BeyL7uLLQFetLUzNyR72
-         EQdNsTFZ8oSwNpP04o1/ZP0FjCouCsFW7TjNau7dO4vIpECdQzO1JUF/KoMzvPIFS3w8
-         bZ1zc8HlZdn+PdVg2BOhAx7Rwem9CD3pgAiW2MLDZ+K7avrwqUxnzrIKwYfeS4F1IiDP
-         EFPOXND2h1M2PUGx0GlTy7INVMXhhVJMynpsuiuTvBCJ4ug9aUl40GOpmGpFrBzp8pwS
-         q+Bw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ijUWiZS99qlF/8rRWRrspTyoZo9W1oBwhdsM2NPK7es=;
+        b=LSQDYNqaVAhiuyHrnxLSnNa4KYDv5v3ZdaOXu5gMU1DNOz4x+YfG+VbjZ3A2gl6eCZ
+         L11gg0aPuodv4gHEIQZvv3w7UoafvFp6QSMCORZOtk7LrTMXRgd4SVEOEyhEZGy/K+N5
+         UZl3y/Q5imBi7T/+mmSKMxsAc6rGkfi9cr/GMX0htQFoC3J+GglHPNgqtaHaKYDlR0Jd
+         /wphyRmcQdqDgvehLCcuADzaIjxjTvPL6CA6lxIli1waynFegdrl7RFXasXziwn+ObtA
+         pa6ahDmX1+PUTGkwA1bOn8GKu6RQZ8ySt3LcCn80K5U/jGZqsgQShDYkkfrrF++6AwhR
+         JVCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=sPtsGsGxiY0pUJurJivkSz6fB7RJpCiec1m/UGMaAjk=;
-        b=Rj531fESoRivm0seg6eYBZVC9Nm/8zX4aFsdWUySmP60JzT9fyNvDjjRSadKXQyfvF
-         YgJ4gLKzwGLXyBufA1ozdDnNUHEzjSw1lOgoHcFlI82lJ9VK1HYn3co5Tdn81x3yQURv
-         HzAfshCdKWNIXQg08ofK7gZRjkzeqPHvpdNThHtKp4mc4h2ieF0ufBtpMExeDwhOqg0u
-         s1ZEEZkKIVECbD6WxvjEckHxlxZStl8r0TCMCwBfWRuP98COyvqkrjjwXrnHCs0hZCMj
-         rgBWMOggAgmKSJ140K/+W3lQWF8p3LybVVFRosJFW6m5wbc87+tceSzhRVyaliYPKTuj
-         ng6g==
-X-Gm-Message-State: AJIora979yzSzCWMMjia8+we7j1Plas/DIOj1mqVEXdv3yeMxNVRnfsW
-        uxp32neV/DseZRFz77e4b6P5Fw==
-X-Google-Smtp-Source: AGRyM1ugh7ioXGoQUFDmXtrKxolSnmDVjP63pLV19ZWBQnnH2IWw2DyBym1XDSOSurWwcmKuA1D5Sg==
-X-Received: by 2002:a05:600c:4e51:b0:3a0:4e8d:1e44 with SMTP id e17-20020a05600c4e5100b003a04e8d1e44mr8845997wmq.105.1656578778595;
-        Thu, 30 Jun 2022 01:46:18 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id l1-20020a5d4bc1000000b00219e77e489fsm18371784wrt.17.2022.06.30.01.46.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 01:46:17 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 09:46:15 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>, quic_gurus@quicinc.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Michael Walle <michael@walle.cc>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v4 00/15] Add support for AXP192 PMIC
-Message-ID: <Yr1i19uttBub3G8P@google.com>
-References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com>
- <CAHp75Vc=PWXauEKDNX+vmqv=oO1LDv8-GgU3OFZXjf8yJrG8wA@mail.gmail.com>
- <CAHp75VeqvCnWtWLF1zySPGkfBT5obosu0h_pZEhz+pOQWzMdWQ@mail.gmail.com>
- <Yr1W/m6UV3792GvF@google.com>
- <CAHp75VdC=Dw_YnTuzZ+PMLfr0y1NcH2DQ1bRccU8e=cGLWznuQ@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ijUWiZS99qlF/8rRWRrspTyoZo9W1oBwhdsM2NPK7es=;
+        b=asQg3ttzmG1WtmUcElvHxu5s41HTplO9OHmNXq3m1HmEv7oGbIiU9V6lVJ4yvu6HsN
+         is71urKuFgFql4Q/jk9rYEmnQLEN1ECMX95JupLl4qR6OZLF7A0mZFPJOXlf6auuaCNb
+         r8FnqtYa29NKHLpzC4Oe+YVDEeyCpt8vCpqz/Vdwa3h6AEQ7y+wkrVutUE3SHCy4nK/B
+         n80jpG4SWUL+/kPtwFPOU3GYawJiAbvuPJUwbLDSUzq0adxe1Z6ZTjJ4ix+qrsGA0kO4
+         srswAAasPlx9J/ssxJhm4Y+FaMuKl0lH4tQeBUWOwnKpVWmxzViKuaXW8Svn76HZokwn
+         M5EA==
+X-Gm-Message-State: AJIora+5rPq6EWLR9Vl1CNrwdyI2xA+xumvJq6z9QDYTgrkw06rcdnWv
+        8U8q29HSBmOhQDA884irRHhFtw==
+X-Google-Smtp-Source: AGRyM1snFeJioxa+M3t6BLa7YLUALZZi9c8Py51mZRv9MEGq2s62WIPMl6nK5TS4PB5kSwACpnzQew==
+X-Received: by 2002:a17:907:6e1e:b0:726:be5e:7130 with SMTP id sd30-20020a1709076e1e00b00726be5e7130mr7902698ejc.381.1656578812745;
+        Thu, 30 Jun 2022 01:46:52 -0700 (PDT)
+Received: from [192.168.0.188] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id hx23-20020a170906847700b00722e84c3d44sm8711679ejc.118.2022.06.30.01.46.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 01:46:52 -0700 (PDT)
+Message-ID: <2df6673b-6f8d-19c2-90ca-342e3ba72040@linaro.org>
+Date:   Thu, 30 Jun 2022 10:46:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VdC=Dw_YnTuzZ+PMLfr0y1NcH2DQ1bRccU8e=cGLWznuQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 6/7] memory: renesas-rpc-if: Pass device instead of rpcif
+ to rpcif_*()
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1656341824.git.geert+renesas@glider.be>
+ <e313b7f9a856fd8546aabb20d44d10e3af6676c6.1656341824.git.geert+renesas@glider.be>
+ <20220630092552.68a8b3ff@xps-13>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220630092552.68a8b3ff@xps-13>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -93,45 +84,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Jun 2022, Andy Shevchenko wrote:
-
-> On Thu, Jun 30, 2022 at 9:55 AM Lee Jones <lee.jones@linaro.org> wrote:
-> > On Wed, 29 Jun 2022, Andy Shevchenko wrote:
-> > > On Wed, Jun 29, 2022 at 11:14 PM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
-> > > > On Wed, Jun 29, 2022 at 4:29 PM Aidan MacDonald
-> > > > <aidanmacdonald.0x0@gmail.com> wrote:
-> > > > >
-> > > > > Changes in v4:
-> > > > >
-> > > > > * Drop regmap-irq patches and rebase on top of the regmap-irq
-> > > > >   refactoring series[1], which implements the same functionality.
-> > > > > * Reorder mfd_cells, putting one-line entries at the bottom.
-> > > > > * Fix incorrect example in axp192-gpio device tree bindings.
-> > > > > * Perform adc_en2 flag -> adc_en2_mask conversion in axp20x_adc
-> > > > >   as a separate patch.
-> > > > > * Simplify axp192_usb_power_set_current_max().
-> > > > > * Drop unneeded OF dependency in pin control driver, and document
-> > > > >   tables used for describing register layouts.
-> > > > > * Various style fixups suggested by Andy Shevchenko.
-> > > >
-> > > > For patches 6-11
-> > > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > >
-> > > Ditto for patches 13-15.
-> >
-> > Not sure `b4` will pick these up!
+On 30/06/2022 09:25, Miquel Raynal wrote:
+> Hi Krzysztof,
 > 
-> No it won't. But it's not an issue, one may use `git msg-filter` for
-> that, esp. taking into account that series most likely will be resent
-> due to patch 12 (`but not fully sure it will be the case).
+> geert+renesas@glider.be wrote on Mon, 27 Jun 2022 17:31:13 +0200:
 > 
-> For your convenience I have added on per patch basis.
+>> Most rpcif_*() API functions do not need access to any other fields in
+>> the rpcif structure than the device pointer.  Simplify dependencies by
+>> passing the device pointer instead.
+>>
+>> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>> ---
+>>  drivers/memory/renesas-rpc-if.c | 32 ++++++++++++++++----------------
+>>  drivers/mtd/hyperbus/rpc-if.c   | 18 +++++++++---------
+> 
+> [...]
+> 
+>> diff --git a/drivers/mtd/hyperbus/rpc-if.c b/drivers/mtd/hyperbus/rpc-if.c
+>> index d00d302434030b20..41734e337ac00e40 100644
+>> --- a/drivers/mtd/hyperbus/rpc-if.c
+>> +++ b/drivers/mtd/hyperbus/rpc-if.c
+>> @@ -56,7 +56,7 @@ static void rpcif_hb_prepare_read(struct rpcif *rpc, void *to,
+>>  	op.data.nbytes = len;
+>>  	op.data.buf.in = to;
+>>  
+>> -	rpcif_prepare(rpc, &op, NULL, NULL);
+>> +	rpcif_prepare(rpc->dev, &op, NULL, NULL);
+>>  }
+>>  
+>>  static void rpcif_hb_prepare_write(struct rpcif *rpc, unsigned long to,
+>> @@ -70,7 +70,7 @@ static void rpcif_hb_prepare_write(struct rpcif *rpc, unsigned long to,
+>>  	op.data.nbytes = len;
+>>  	op.data.buf.out = from;
+>>  
+>> -	rpcif_prepare(rpc, &op, NULL, NULL);
+>> +	rpcif_prepare(rpc->dev, &op, NULL, NULL);
+>>  }
+>>  
+>>  static u16 rpcif_hb_read16(struct hyperbus_device *hbdev, unsigned long addr)
+>> @@ -81,7 +81,7 @@ static u16 rpcif_hb_read16(struct hyperbus_device *hbdev, unsigned long addr)
+>>  
+>>  	rpcif_hb_prepare_read(&hyperbus->rpc, &data, addr, 2);
+>>  
+>> -	rpcif_manual_xfer(&hyperbus->rpc);
+>> +	rpcif_manual_xfer(hyperbus->rpc.dev);
+>>  
+>>  	return data.x[0];
+>>  }
+>> @@ -94,7 +94,7 @@ static void rpcif_hb_write16(struct hyperbus_device *hbdev, unsigned long addr,
+>>  
+>>  	rpcif_hb_prepare_write(&hyperbus->rpc, addr, &data, 2);
+>>  
+>> -	rpcif_manual_xfer(&hyperbus->rpc);
+>> +	rpcif_manual_xfer(hyperbus->rpc.dev);
+>>  }
+>>  
+>>  static void rpcif_hb_copy_from(struct hyperbus_device *hbdev, void *to,
+>> @@ -105,7 +105,7 @@ static void rpcif_hb_copy_from(struct hyperbus_device *hbdev, void *to,
+>>  
+>>  	rpcif_hb_prepare_read(&hyperbus->rpc, to, from, len);
+>>  
+>> -	rpcif_dirmap_read(&hyperbus->rpc, from, len, to);
+>> +	rpcif_dirmap_read(hyperbus->rpc.dev, from, len, to);
+>>  }
+>>  
+>>  static const struct hyperbus_ops rpcif_hb_ops = {
+>> @@ -130,9 +130,9 @@ static int rpcif_hb_probe(struct platform_device *pdev)
+>>  
+>>  	platform_set_drvdata(pdev, hyperbus);
+>>  
+>> -	rpcif_enable_rpm(&hyperbus->rpc);
+>> +	rpcif_enable_rpm(hyperbus->rpc.dev);
+>>  
+>> -	error = rpcif_hw_init(&hyperbus->rpc, true);
+>> +	error = rpcif_hw_init(hyperbus->rpc.dev, true);
+>>  	if (error)
+>>  		goto out_disable_rpm;
+>>  
+>> @@ -150,7 +150,7 @@ static int rpcif_hb_probe(struct platform_device *pdev)
+>>  	return 0;
+>>  
+>>  out_disable_rpm:
+>> -	rpcif_disable_rpm(&hyperbus->rpc);
+>> +	rpcif_disable_rpm(hyperbus->rpc.dev);
+>>  	return error;
+>>  }
+> 
+> This will only apply on top of mtd/next, because that
+> rpcif_disable_rpm() balance call was very recently contributed by Geert:
+> https://lore.kernel.org/linux-mtd/f3070e1af480cb252ae183d479a593dbbf947685.1655457790.git.geert+renesas@glider.be/
+> 
+> So we need to first share an immutable tag on the current mtd/next
+> branch. Richard, that is my vacation gift for you :)
 
-That helps, thanks Andy.
+I don't want entire mtd/next. I could take Renesas hyperbus specific
+commits. Another solution is me to rebase on some rcX, if that commit
+was sent as fix for current cycle.
+The third option is to simply resolve a conflict - which should looks
+pretty easy and compile-testable. In that case the commit should be
+rebased on my v5.19-rc1.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Best regards,
+Krzysztof

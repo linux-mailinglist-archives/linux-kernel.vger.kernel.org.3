@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11CB3561F64
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EFB7561F5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236145AbiF3PeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 11:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41466 "EHLO
+        id S236159AbiF3PeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 11:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235903AbiF3Pde (ORCPT
+        with ESMTP id S235920AbiF3Pdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 11:33:34 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DC14130A;
-        Thu, 30 Jun 2022 08:33:33 -0700 (PDT)
+        Thu, 30 Jun 2022 11:33:35 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F003ED2C;
+        Thu, 30 Jun 2022 08:33:34 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7B9016601977;
-        Thu, 30 Jun 2022 16:33:31 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5EA0D6601979;
+        Thu, 30 Jun 2022 16:33:32 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656603212;
-        bh=Z5AoNXePqDCnxXb8uAYZR8QzxcTn7tQFTixe292MpDQ=;
+        s=mail; t=1656603213;
+        bh=UHGvuNhuUk7L5c7BKtAhAhJRqJa8V9GWgDdTDxtXvvw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d9EDnd81JFVrRCxiTNFt7rOMnjZSNr+4qseMa/IczEdoCewcK+wMLT2uYpCbgdU26
-         90Tslt8i42cXFf+ZAgwjkVaRUPMctG2KgC5Ldp54TEqqGFK0vUbnBvpvDwH60cXST3
-         vU4bc5fuV+tSV2yHkhTW81nMKV61DF03znoxt/jlEtJz7B+i+jOwThjpwJWDsaXGVU
-         /xPWygGxtV1kLB2Ahk/momOOE/EsWCKeTvTRhiXP8GVT+u0s7Kx/1F/xwzOI2Rq0Do
-         1eR1vOnxfVGYFFBf0Z4nujT8WbpNhbAYwr0mWypDdgZGalLgMCVUO0mEw/s2joztNh
-         T3oigYwSDiqDA==
+        b=lssvneloFtoaJ59J9UcbKSZwHCwGiqV6tWJ5ePbZXkha7i7mmKQ2GXp8StPv8sQ0w
+         xY5AOgCbS+K8uHBmBcy6jQ9JIgAwsk0Ltgr5gzlgSgRMSxQQuCx/adzp8KLtj5K+es
+         6+M1HHqO5hEt26ijSUqRfkb775kRvpFJUY0O/hv+B+8B7+KQ1LOIDT019onrD2NFKu
+         AEfvOhIC+4X/fAwiiMp1gQ1uFGH3GcQuDYWimFI8t2MlpwrMGMGO1ySXs5GkBKRvxH
+         XS5sVuk9tCm+au1k7MZGkaOFS4lHV5JYNsNxdqyqp4z4HLaT25PVnx4zOxp4WQHvtw
+         mkI4Jo/mzD5Mg==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     robh+dt@kernel.org
@@ -42,9 +42,9 @@ Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
         sean.wang@mediatek.com, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, wenst@chromium.org
-Subject: [PATCH 09/11] arm64: dts: mediatek: cherry: Enable MT6360 sub-pmic on I2C7
-Date:   Thu, 30 Jun 2022 17:33:14 +0200
-Message-Id: <20220630153316.308767-10-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 10/11] arm64: dts: mediatek: cherry: Enable support for the SPI NOR flash
+Date:   Thu, 30 Jun 2022 17:33:15 +0200
+Message-Id: <20220630153316.308767-11-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220630153316.308767-1-angelogioacchino.delregno@collabora.com>
 References: <20220630153316.308767-1-angelogioacchino.delregno@collabora.com>
@@ -59,54 +59,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All devices of the Cherry platform have a MT6360 sub-pmic,
-providing two LDOs. Add the required node to enable the PMIC
-but without regulators yet, as these will be added in a
-later commit.
+This platform has a SPI NOR: enable support for it, completing the
+storage compartment enablement for the entire platform.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../boot/dts/mediatek/mt8195-cherry.dtsi      | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ .../boot/dts/mediatek/mt8195-cherry.dtsi      | 31 +++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-index 379d0e5c4055..1668aa1be373 100644
+index 1668aa1be373..2687c6d40ac1 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-@@ -161,6 +161,18 @@ &i2c7 {
- 	clock-frequency = <400000>;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&i2c7_pin>;
-+
-+	pmic@34 {
-+		#interrupt-cells = <2>;
-+		compatible = "mediatek,mt6360";
-+		reg = <0x34>;
-+		interrupt-controller;
-+		interrupts-extended = <&pio 130 IRQ_TYPE_EDGE_FALLING>;
-+		interrupt-names = "IRQB";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&subpmic_default>;
-+		wakeup-source;
-+	};
+@@ -231,6 +231,21 @@ &mt6359_vufs_ldo_reg {
+ 	regulator-always-on;
  };
  
- &mmc0 {
-@@ -558,6 +570,14 @@ pins-miso {
- 			bias-pull-down;
++&nor_flash {
++	status = "okay";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&nor_pins_default>;
++
++	flash@0 {
++		compatible = "jedec,spi-nor";
++		reg = <0>;
++		spi-max-frequency = <52000000>;
++		spi-rx-bus-width = <2>;
++		spi-tx-bus-width = <2>;
++	};
++};
++
+ &pio {
+ 	mediatek,rsel-resistance-in-si-unit;
+ 	pinctrl-names = "default";
+@@ -513,6 +528,22 @@ pins-rst {
  		};
  	};
+ 
++	nor_pins_default: nor-default-pins {
++		pins-ck-io {
++			pinmux = <PINMUX_GPIO142__FUNC_SPINOR_IO0>,
++				 <PINMUX_GPIO141__FUNC_SPINOR_CK>,
++				 <PINMUX_GPIO143__FUNC_SPINOR_IO1>;
++			drive-strength = <MTK_DRIVE_6mA>;
++			bias-pull-down;
++		};
 +
-+	subpmic_default: subpmic-default-pins {
-+		subpmic_pin_irq: pins-subpmic-int-n {
-+			pinmux = <PINMUX_GPIO130__FUNC_GPIO130>;
-+			input-enable;
++		pins-cs {
++			pinmux = <PINMUX_GPIO140__FUNC_SPINOR_CS>;
++			drive-strength = <MTK_DRIVE_6mA>;
 +			bias-pull-up;
 +		};
 +	};
- };
- 
- &pmic {
++
+ 	pio_default: pio-default-pins {
+ 		pins-wifi-enable {
+ 			pinmux = <PINMUX_GPIO58__FUNC_GPIO58>;
 -- 
 2.35.1
 

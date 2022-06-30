@@ -2,112 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D91C56147C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDBD756146D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233932AbiF3IL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 04:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36402 "EHLO
+        id S233814AbiF3INx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 04:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233258AbiF3IKe (ORCPT
+        with ESMTP id S233795AbiF3INV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 04:10:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38A342A38;
-        Thu, 30 Jun 2022 01:09:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F20661DBD;
-        Thu, 30 Jun 2022 08:09:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29881C34115;
-        Thu, 30 Jun 2022 08:09:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656576555;
-        bh=4oTlWkxVAMIWDl62630iJPW4grJUqfntfjQlLB+ZkwM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LcbLDH8abfsYkL+KSdH/EKdGrADa5Y+T+9Yr0PwG9k80y5eyRSZOelEYMddtQuQ8z
-         nax5NitsvscRmZEWa1pDAB6W1Ac1Pq60FFjiNiVQyUTGGFteGwgaj07P7aW1CSr4bs
-         qcmCWlgjGbQP3T5tzmwO1Sf2o3hAtNf3jtw5ZOrX3dUi+vMEj09W61fddy9Ft1shQD
-         bmI36/Ep4MBODiQAUrEC34cKVJPJ0Km5wYIImjhrV1o9kg1PEFLinGsC/IkIfrU/92
-         rFeWnqL48nzOwOiMN4yrlvSEBiiqa56YSGih3sZgCuNugEp0Tbmj+vNEgRyDlRjub2
-         dd3ElJUUdesCw==
-Date:   Thu, 30 Jun 2022 10:09:12 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, alexandre.belloni@bootlin.com,
-        ludovic.desroches@microchip.com, andrew@sanpeople.com,
-        mhoffman@lightlink.com, khali@linux-fr.org, peda@axentia.se,
-        Claudiu Beznea <Claudiu.Beznea@microchip.com>,
-        Cristian Birsan <Cristian.Birsan@microchip.com>
-Subject: Re: [RESEND 0/3] i2c: at91: Fixes and updates
-Message-ID: <Yr1aKJs5MYIINhlc@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, alexandre.belloni@bootlin.com,
-        ludovic.desroches@microchip.com, andrew@sanpeople.com,
-        mhoffman@lightlink.com, khali@linux-fr.org, peda@axentia.se,
-        Claudiu Beznea <Claudiu.Beznea@microchip.com>,
-        Cristian Birsan <Cristian.Birsan@microchip.com>
-References: <20220614101347.16910-1-codrin.ciubotariu@microchip.com>
- <YrysFU0fP7X1wkBd@shikoro>
- <176099e2-cbff-1987-f59a-2ca618a9c92a@microchip.com>
+        Thu, 30 Jun 2022 04:13:21 -0400
+Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05028443F8;
+        Thu, 30 Jun 2022 01:11:02 -0700 (PDT)
+Received: from grover.sesame ([133.106.249.59]) (authenticated)
+        by conuserg-11.nifty.com with ESMTP id 25U89jbd027588;
+        Thu, 30 Jun 2022 17:09:46 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 25U89jbd027588
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1656576587;
+        bh=IQNcLr2Q+Rml5vvqNmFGoUixW6iYHrmzrTzAVBg3K38=;
+        h=From:To:Cc:Subject:Date:From;
+        b=2UbB7kkrA1O4vWKUt5gGyR6+QhuAngLnM8skaKAeuLK7BYDo8qR9P/yZdX6Nl9xtC
+         /4D6PKUBj78yatuw8XfT9zbitF+F7kXDkjG7lRA/iIyS+S69u7nrB6+J9ERXZ3juze
+         az7+Yx/B8e2VoYaAvWUVJITRRP8Tu964Mnhp4DSM1MOwhSyOAslZKbmC2kcMMo8juV
+         9jSg4Lo4RsaenQk4L+BxlQQFjW3AafzTpRQn2Zu+kG7YW7KxtXc+KpxC7b3GEk5Tke
+         g7LeC6A3k+7arSN1GqB/R41IPOYWVq2GisMTFydcHG0PDnMBoCUvXI6OwDT6pFoChG
+         c2AmcmcRqBlVw==
+X-Nifty-SrcIP: [133.106.249.59]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kbuild: remove unused cmd_none in scripts/Makefile.modinst
+Date:   Thu, 30 Jun 2022 17:09:35 +0900
+Message-Id: <20220630080935.316394-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="JKSchcY7C2IiYKYc"
-Content-Disposition: inline
-In-Reply-To: <176099e2-cbff-1987-f59a-2ca618a9c92a@microchip.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 65ce9c38326e ("kbuild: move module strip/compression code into
+scripts/Makefile.modinst") added this unused code.
 
---JKSchcY7C2IiYKYc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Perhaps, I thought cmd_none was useful for CONFIG_MODULE_COMPRESS_NONE,
+but I did not use it after all.
 
-Hi Nicolas,
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-> Codrin is not with Microchip anymore and we have to re-distribute the
-> maintenance of this driver internally. His email address will probably
-> "bounce" soon.
+ scripts/Makefile.modinst | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Ah, very unfortunate that we couldn't move this series forward
-because of the mysterious mail problems.
+diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
+index c2c43a0ecfe0..16a02e9237d3 100644
+--- a/scripts/Makefile.modinst
++++ b/scripts/Makefile.modinst
+@@ -28,9 +28,6 @@ modules := $(patsubst $(extmod_prefix)%, $(dst)/%$(suffix-y), $(modules))
+ __modinst: $(modules)
+ 	@:
+ 
+-quiet_cmd_none =
+-      cmd_none = :
+-
+ #
+ # Installation
+ #
+-- 
+2.32.0
 
-All the best,
-
-   Wolfram
-
-
---JKSchcY7C2IiYKYc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmK9WicACgkQFA3kzBSg
-KbYeBQ/+LdGfNG/Hx0HMxAksuZ20RbTm+2Ymoj0D7yLdwyyqETHPe8xQkgr8PtC2
-xuwbSuvVwnfrtaNiFmOlcpy+igjasuE6NDLHo1LRU+0mSlqmNR02+dxFrY4Qjz3V
-RjSjSFBmpl43TChvuNNqkzyA6d8ce0x7inEucap4G57G1l4tt13Hemv2hFrRC+Fx
-PjlWVKiOASe53ISwG8luH68GwJtr2/D59wP4d+DE6YCWX6qDtLXf38OfwT/cZBHQ
-DxoOnhPKcOlqWlATtZZG36kqE5Cf0q1ImXJPnvQSIvc83LQNSYbldBXV97LWIhMx
-3v1xE4J8kY3FFdGIzRkwPgmA5gpaeO5CMD3ZQ8DhgMKmHdSYSWRrC6XWC610BaDJ
-L4gfLnofsjpPyrKkGBFC/4FS5M2WXXSFYhapgH8UknU4bobGVjQhdAFdI+QtMapn
-CjWTHRCtrtO/APDz4T6Eq7yeiQ9TDBdiAYhrQimQzqx1qMby/HjpK/r4zjabv2ga
-10UDwfawCcsIAm+WvMcBEJYCafpmLZmFOuO3sJIRxpB0O5W+lQWcvjU26+bsS78G
-j/9Ua2w0Ifow1Br9r6IeyA1u0XO01D0SXr9EDUw4Fwg2QuaEkqK6v1LA2tp4Bsk7
-gIernz2iKlqnQe5P2k84l3BaNxQVyE+wadfoTr6sVZDPPXj6H1U=
-=MNMK
------END PGP SIGNATURE-----
-
---JKSchcY7C2IiYKYc--

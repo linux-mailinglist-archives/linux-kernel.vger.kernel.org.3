@@ -2,50 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2195614E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FB05614F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233586AbiF3IXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 04:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
+        id S233752AbiF3IYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 04:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233488AbiF3IW4 (ORCPT
+        with ESMTP id S233319AbiF3IYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 04:22:56 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32677B6D;
-        Thu, 30 Jun 2022 01:22:53 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LYWVT4nzZzhYx7;
-        Thu, 30 Jun 2022 16:20:33 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 30 Jun 2022 16:22:51 +0800
-Subject: Re: [PATCH -next, v2] powerpc: add support for syscall stack
- randomization
-To:     Michael Ellerman <mpe@ellerman.id.au>, <benh@kernel.crashing.org>,
-        <paulus@samba.org>, <npiggin@gmail.com>,
-        <christophe.leroy@csgroup.eu>
-CC:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>
-References: <20220516073225.112875-1-xiujianfeng@huawei.com>
- <87zghw2efr.fsf@mpe.ellerman.id.au>
-From:   xiujianfeng <xiujianfeng@huawei.com>
-Message-ID: <347aee64-fd5b-c8c6-55c8-76fd49e089e7@huawei.com>
-Date:   Thu, 30 Jun 2022 16:22:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Thu, 30 Jun 2022 04:24:09 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2069.outbound.protection.outlook.com [40.107.94.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1204624F;
+        Thu, 30 Jun 2022 01:23:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N2N3ROy+PtEtAhtoeT0+Qhwb1CH3zTx6KDOE6suilMfS8SwZ6Y714d0EWp50oIWIQGP95MigMmN7MRepVrP45+o1OMW6WBmbmANyv1lG6VS/lEXtIIKfqJQ6ZQUnPXHq/Hlm4/mRsqO4hheETKNVMM+BCZJ/oTY4AB56HJncH5xb+RVmlXS6NZnxMujN9/RAgXj32yKP6+v5xejgRKb5yu1IVBM7D5Zdk1GB1X+y1VDcU7/9ATr+7f97ndspdmBms6KsBILw5Qrmv2+dlISD3wBrd5RrbQ1MzuqlB+R+4dgiXOUyV90HdKpgwLe/ttZMZVatwiSteyVWJcpOp/SvJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zUKMIVxOLLX9sb5EwPwkvnTCqtbfb2s+TXdh91PPFs0=;
+ b=VfyX+xPXXGjaBq+lHG2KuXcAJyMHJAI7xHEndioTkajtuF+CIeS+PXruGKGX0AGNfjdGySsCbRc8rdVasCgrHfaeBQduYHvilbIzyUlkLg9mC9AD5z7hf047kbz9VWBvbk4nqGN5aYVN9Kl8DMt1DurJNQg6+heYlI7Mf4hNqFoxH4rRQvR9XZ9oNRdMDNO2GVj2m1fXuVZpCW/nV5t7yjNhvym61FrFmBsmwNiMM23HQkExApxSGrOe8xlBkDyX70EfHeqilVxoTy4PCaszd3O/lonI1lpXwd4yzPM80cPOBkYBRmeMIEoa1gxsh+luYZJWhIy1P3UMws4eQCsK+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zUKMIVxOLLX9sb5EwPwkvnTCqtbfb2s+TXdh91PPFs0=;
+ b=vHNaqhameFI4Uf+xSvSfSSjuDjUXly1nwUijjLMNZr1quK0lSqbyU9WrCPnXvwofyQ/L4GqfimyJ4UIGAljpz8+zQC+7L746VMLD792rcx+NKp8QYjFOnF+MwliUwpPM+35s5LGPNPJLh8Qijm4kSvZBuGOBfbnREzQdN175/ak=
+Received: from BY5PR12MB4902.namprd12.prod.outlook.com (2603:10b6:a03:1dd::9)
+ by CY4PR12MB1350.namprd12.prod.outlook.com (2603:10b6:903:41::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Thu, 30 Jun
+ 2022 08:23:39 +0000
+Received: from BY5PR12MB4902.namprd12.prod.outlook.com
+ ([fe80::59c7:d947:6370:7de6]) by BY5PR12MB4902.namprd12.prod.outlook.com
+ ([fe80::59c7:d947:6370:7de6%7]) with mapi id 15.20.5373.022; Thu, 30 Jun 2022
+ 08:23:39 +0000
+From:   "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>
+To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>,
+        Marek Vasut <marex@denx.de>,
+        Raviteja Narayanam <raviteja.narayanam@xilinx.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "git@xilinx.com" <git@xilinx.com>,
+        "joe@perches.com" <joe@perches.com>
+Subject: RE: [PATCH v2 03/10] i2c: xiic: Switch to Xiic standard mode for
+ i2c-read
+Thread-Topic: [PATCH v2 03/10] i2c: xiic: Switch to Xiic standard mode for
+ i2c-read
+Thread-Index: AQHYi7Z96YneRUlKs0uey4IWElH1DK1maycAgAABPICAAS8KwA==
+Date:   Thu, 30 Jun 2022 08:23:38 +0000
+Message-ID: <BY5PR12MB4902D6BAA8D1035BEF022D8E81BA9@BY5PR12MB4902.namprd12.prod.outlook.com>
+References: <20210626102806.15402-1-raviteja.narayanam@xilinx.com>
+ <20210626102806.15402-4-raviteja.narayanam@xilinx.com>
+ <ad7626bd-bcbb-48fc-5e32-bc95fafcb917@nokia.com>
+ <80c524c3-8c31-346d-2691-48f93fa6001f@denx.de>
+ <6cf9647e-10dd-8523-962d-a7c40b532fe2@nokia.com>
+In-Reply-To: <6cf9647e-10dd-8523-962d-a7c40b532fe2@nokia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-06-30T08:23:36Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=3ea90cca-9979-4bb7-8049-128158d3bb22;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c815711e-a733-4f76-8237-08da5a71d5c6
+x-ms-traffictypediagnostic: CY4PR12MB1350:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: x5gNYrB57aEdbTxC8GBiThbfF8JCEOZbBNwOHILLzVmFSeoFYMEbh4fPAwShGcS68Lue8JFsPvAoNyleUWfmuUO/6wqEV4EcyR/rGwZRbHt/7p+sFaH+DVLgF4qWCz9/zUCx8Z65L2eZ1YdAipDoFitSMYrovaPpaQlfGeMWoUAYCprrCRy3dLHtFgweVQ4dAegyZUp4Ubz3icmg4RNbpKpe+ZX9FNBViYej+lgV14UMHsKOMeYantXR/ETU4fD5jXMKhF1MJo6g3+rinISI4nS8uEX6+aRR/5NcolwVOHZLyrpfPbVg0Ky6HJU9CtV7EaHuKBp8ipILn4cNXw70pi1qNCMc68dHCR8w6/dzc5TkqEfap8ni86Pt9aUXesauH6YNKd1Con9K6AEupHLOuYj2+G9QmaT/N3oh76pczb+Jgxzmn5oS+26+BxEF2Bt2GjSRaQuCWaYm+VKHltspQFAbzF/CMtOYMGVzbsdd3+B29AD9McSuSxRtYjM0wanlpykiuUHyT0HY8O2XCsz9NBeu0aZ4ZbK0ZsD7dQR9iD9Hiw3dcJVj1G8OybUthTDXDNYrmChpDdo955ipiSRh7Z+O8qHlnOeHRYFksuYtsSbkCrE94Vrtxz/KQqIIgcE65qzbapmNp3RcaTP/3uC9uyyyLftbcu8lqQFUKpn0+NkF5PoI+9KloF6gi640Iv8lFShmPqQWHcqVozWtMpQYzTXTusy/jA+BcHFDAGSw6lb5mjxDVGKXWHTImrRp+Yp20FJvt4cTtFfvQ+tolQHOUhxTWKtWkih0ckyeTEXHdMhbEjs9gNVQv3qeW1PwAemB
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4902.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(346002)(366004)(376002)(136003)(26005)(6506007)(7696005)(53546011)(9686003)(38070700005)(55016003)(38100700002)(122000001)(186003)(33656002)(83380400001)(66556008)(66476007)(64756008)(71200400001)(76116006)(66946007)(66446008)(8676002)(4326008)(8936002)(52536014)(478600001)(5660300002)(86362001)(316002)(296002)(54906003)(110136005)(2906002)(41300700001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?d2Y2OCsrMllPdk90eTNaVXU3VERYMG5VYmpmendtc3pMTEZHM3d5dGo2Rkxs?=
+ =?utf-8?B?WUZ2dUJrY2tYWm1oUWl0Y1BPNW9xN1RJZUJZMzVRSzdLdzMvKzlVK2dNTWJF?=
+ =?utf-8?B?NXdzWjV5eXB2Tk9JeFRmYlRheEJrKzE0M1gxbzlPS0I1RTdXQVZvU1VuK3hk?=
+ =?utf-8?B?d2JOOURwMkc0aXF2SFExbEZSU3dnT1lQY2VqODAycURpUXdaSjNmNnJaaXpl?=
+ =?utf-8?B?Rnl5amMvYk5QUXdocFYxUFVWTS9DOVp3UWo2QW9JS0lrYTNORS9IZTFvd0dl?=
+ =?utf-8?B?Sno3aTBFTHZFNXk4MnBqRFlOa3c3NnVhem14dHB1aDZaN1FLL3c0TVNRclRR?=
+ =?utf-8?B?OXJPVzlmTVBRSXRRUGhGcWNSekRBMVBXbHFqVGlYeFVnWGJxa05xOGFZajNn?=
+ =?utf-8?B?Wlp4Y3Joa3RxelhoSTVDaTJsYjRGQmgyb20vT1ExNjhEV2NibjVneUFRYmF4?=
+ =?utf-8?B?VWRDL1BlUFg1Mm83STM2eDJDWkhmQmxyZDVSOGQrbENqb1dJa0pyMmg2Q1lO?=
+ =?utf-8?B?SVlacXNXRk9PNXhrL0x5RFhmT2dMRU05NlV4Y05XZkl0NmVCM3g3WHlPOGwv?=
+ =?utf-8?B?VU1DbElaQmdXRWI0Sk9mSC9JY29xdWhqaURrb200c3BESEZFLzVJRUVwazQ1?=
+ =?utf-8?B?Sk9JZWRBWWVPZUtuWG85V2o1ejNHLzZqS3luYUVBdzlhbm5GVnhFd1dCbFFZ?=
+ =?utf-8?B?RjJNWlY2NUk3NFNuc2VWeThQV1ZRK0doRE9ZMkVIejNxMHBlVGl0aGZlTEtu?=
+ =?utf-8?B?eWtVTTEzVkZVai9ib3MzZUFJc3ozTkl1TVpETkxicEUzMEZ4WnZjZm1Scmdo?=
+ =?utf-8?B?cUtFMlVTbGtKRDIrOHBkZ2twSmZsUWIyQmhBa1hXNmRra0hPRElJR1RkQlVv?=
+ =?utf-8?B?bFpYcXFjY2ZTWEx1WmppbE9hOU9hOWJnSTdwenNNU3ZKdVliL0RIMHBSSUtM?=
+ =?utf-8?B?VGdiWFl5bitoYVpHb0Fid2ZzQVF2RHlIMm9ZWFNLaG9TMVJIbXdLM01pMC8v?=
+ =?utf-8?B?WVBva1lYcmhiOFV1MC9keG5mWTlhSnZVbzBxVk9lS3hXcERHbm03bnJNeWhG?=
+ =?utf-8?B?OGFHRjh1cFkxazJSbDdiMVM3L0lQNkZjSHdJNTRWQW56U3NEY2JaQ0w4VDQ2?=
+ =?utf-8?B?Q05aMUVOemlvRnF5ejBSV1JOaEV2VjNwSTh6UGt0Z1dnTGxvNlhZSWFrWHhU?=
+ =?utf-8?B?cTNUcSsxNFA2Ymh3UVlKMTQzMGFXelJBckllcUttT1VIWDNqdnVEanBMUlJG?=
+ =?utf-8?B?Wk1RbFVCSjZqclFkZmxIcjZ6bWFkRWJaWXFLOHlYdlhCaWtpbXNUc2NRVCtU?=
+ =?utf-8?B?L3FzRS9yNmkzM1FSQXYwODViMjIzMThQNy9hd2tTb0N6MlB5akVoNEQyUVVE?=
+ =?utf-8?B?eER4bkpKWmVGVjk1N0tHZ3dRamZZanBwK2Nac3FMeU1QamJPYTBLdGM5OGt6?=
+ =?utf-8?B?MnRmd1dqQ0FJb293ODdpQ2cyNzV5b2tyejJBNTg5cGxHMmVsZXpWNzV6OEJI?=
+ =?utf-8?B?dzdyRG40a25qcnVKSFRBdnZsc1NwMVVIQmZWTG1UdDI5T055OWhHRERVU0pB?=
+ =?utf-8?B?UytHT1RZVjhOWDhxU1ViVC93QXlvNldWSG9ya1RqbDFFQlIzMDhNYU5JM3Jn?=
+ =?utf-8?B?MWdhVm00U3dLamlmd1U0QjJzN25PZXIrUEhLZGVmN0EzdERYVVdsL1FuYTYy?=
+ =?utf-8?B?RUF1UVJYNWRpRi9OaTYrSUJ6dk9GMEtwMGVqSnNsZGVQcTcveStQZjJuaFZv?=
+ =?utf-8?B?UnJFdk5hbWw5RC91U2VoT1IxY0lHSDVtbHpYNU9LQy9wcHZ5M3U2VWZGREVy?=
+ =?utf-8?B?V3dFWnFmSUsvLy9FZ0pkWkNua0tHM25qclNKL1lRNTRYV1hyT3RVY0E0RGpG?=
+ =?utf-8?B?YTROYW8veDlvR2xaV2x3b01uTmUzQllDUzN3bDdnQng4bnBoYU4vTmlaeVZn?=
+ =?utf-8?B?QmFNaHdWZ1FCZ0c5OHZrL3g4MGcyMUZPSENEM2tSV3l6OVMrUHY3K2NWVy8x?=
+ =?utf-8?B?bCtRU2xWNnEzdTB4NUhDSzBJRmdoL1k0RFFJMnEwS3VaV0Vwc0s5MVp4U1Ax?=
+ =?utf-8?B?ZVFGT3p6VFFBUW9TYXFyUzdPc1o5aXhveHlHaGdGemFHckcrN2MwcTA0WkxL?=
+ =?utf-8?Q?jY/U=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <87zghw2efr.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4902.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c815711e-a733-4f76-8237-08da5a71d5c6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jun 2022 08:23:39.0238
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: AeWx1tXnYNHjiyx9NoFfBp2fgm2kcKMrNUGAbn6dm7MVymwNA4Q76zQgdy0lWM5/yXVxYpTeP15Iry5msi59Cw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1350
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,439 +144,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-ÔÚ 2022/6/29 14:04, Michael Ellerman Ð´µÀ:
-> Xiu Jianfeng <xiujianfeng@huawei.com> writes:
->> Add support for adding a random offset to the stack while handling
->> syscalls. This patch uses mftb() instead of get_random_int() for better
->> performance.
->>
->> In order to avoid unconditional stack canaries on syscall entry (due to
->> the use of alloca()), also disable stack protector to avoid triggering
->> needless checks and slowing down the entry path. As there is no general
->> way to control stack protector coverage with a function attribute, this
->> must be disabled at the compilation unit level.
->>
->> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
->>
->> ---
->> Changes in v2:
->>    -move choose choose_random_kstack_offset() to the end of system_call_exception
->>    -allow full 6 (10) bits of entropy
->>    -disable stack-protector for interrupt.c
->> ---
->>   arch/powerpc/Kconfig            |  1 +
->>   arch/powerpc/kernel/Makefile    |  7 +++++++
->>   arch/powerpc/kernel/interrupt.c | 19 ++++++++++++++++++-
->>   3 files changed, 26 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
->> index 98309eeae09c..2f0019a0054e 100644
->> --- a/arch/powerpc/Kconfig
->> +++ b/arch/powerpc/Kconfig
->> @@ -192,6 +192,7 @@ config PPC
->>   	select HAVE_ARCH_KASAN			if PPC32 && PPC_PAGE_SHIFT <= 14
->>   	select HAVE_ARCH_KASAN_VMALLOC		if PPC32 && PPC_PAGE_SHIFT <= 14
->>   	select HAVE_ARCH_KFENCE			if PPC_BOOK3S_32 || PPC_8xx || 40x
->> +	select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
->>   	select HAVE_ARCH_KGDB
->>   	select HAVE_ARCH_MMAP_RND_BITS
->>   	select HAVE_ARCH_MMAP_RND_COMPAT_BITS	if COMPAT
->> diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
->> index 4ddd161aef32..5c5e85b8229b 100644
->> --- a/arch/powerpc/kernel/Makefile
->> +++ b/arch/powerpc/kernel/Makefile
->> @@ -40,6 +40,13 @@ CFLAGS_cputable.o += -DDISABLE_BRANCH_PROFILING
->>   CFLAGS_btext.o += -DDISABLE_BRANCH_PROFILING
->>   endif
->>   
->> +#ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
->> +# Remove stack protector to avoid triggering unneeded stack canary
->> +# checks due to randomize_kstack_offset.
->> +CFLAGS_REMOVE_interrupt.o = -fstack-protector -fstack-protector-strong
->> +CFLAGS_interrupt.o += -fno-stack-protector
->> +#endif
-> I'm a bit reluctant to remove stack protection from all of interrupt.c
-> just for this feature.
->
-> It's true that none of the functions in interrupt.c currently trigger
-> stack protection, but that could change in future.
->
-> What about splitting system_call_exception() into a separate file as a
-> lead-up patch, example below. Then we can just exclude stack protection
-> from that one function.
->
-> cheers
-Thanks, it's a good idea, I will do in v3.
->
-> diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
-> index f91f0f29a566..ecfd333b95d1 100644
-> --- a/arch/powerpc/kernel/Makefile
-> +++ b/arch/powerpc/kernel/Makefile
-> @@ -61,7 +61,7 @@ obj-y				:= cputable.o syscalls.o \
->   				   udbg.o misc.o io.o misc_$(BITS).o \
->   				   of_platform.o prom_parse.o firmware.o \
->   				   hw_breakpoint_constraints.o interrupt.o \
-> -				   kdebugfs.o stacktrace.o
-> +				   kdebugfs.o stacktrace.o syscall.o
->   obj-y				+= ptrace/
->   obj-$(CONFIG_PPC64)		+= setup_64.o \
->   				   paca.o nvram_64.o note.o
-> diff --git a/arch/powerpc/kernel/interrupt.c b/arch/powerpc/kernel/interrupt.c
-> index 784ea3289c84..0e75cb03244a 100644
-> --- a/arch/powerpc/kernel/interrupt.c
-> +++ b/arch/powerpc/kernel/interrupt.c
-> @@ -24,8 +24,6 @@
->   unsigned long global_dbcr0[NR_CPUS];
->   #endif
->   
-> -typedef long (*syscall_fn)(long, long, long, long, long, long);
-> -
->   #ifdef CONFIG_PPC_BOOK3S_64
->   DEFINE_STATIC_KEY_FALSE(interrupt_exit_not_reentrant);
->   static inline bool exit_must_hard_disable(void)
-> @@ -73,165 +71,6 @@ static notrace __always_inline bool prep_irq_for_enabled_exit(bool restartable)
->   	return true;
->   }
->   
-> -/* Has to run notrace because it is entered not completely "reconciled" */
-> -notrace long system_call_exception(long r3, long r4, long r5,
-> -				   long r6, long r7, long r8,
-> -				   unsigned long r0, struct pt_regs *regs)
-> -{
-> -	syscall_fn f;
-> -
-> -	kuap_lock();
-> -
-> -	regs->orig_gpr3 = r3;
-> -
-> -	if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
-> -		BUG_ON(irq_soft_mask_return() != IRQS_ALL_DISABLED);
-> -
-> -	trace_hardirqs_off(); /* finish reconciling */
-> -
-> -	CT_WARN_ON(ct_state() == CONTEXT_KERNEL);
-> -	user_exit_irqoff();
-> -
-> -	BUG_ON(regs_is_unrecoverable(regs));
-> -	BUG_ON(!(regs->msr & MSR_PR));
-> -	BUG_ON(arch_irq_disabled_regs(regs));
-> -
-> -#ifdef CONFIG_PPC_PKEY
-> -	if (mmu_has_feature(MMU_FTR_PKEY)) {
-> -		unsigned long amr, iamr;
-> -		bool flush_needed = false;
-> -		/*
-> -		 * When entering from userspace we mostly have the AMR/IAMR
-> -		 * different from kernel default values. Hence don't compare.
-> -		 */
-> -		amr = mfspr(SPRN_AMR);
-> -		iamr = mfspr(SPRN_IAMR);
-> -		regs->amr  = amr;
-> -		regs->iamr = iamr;
-> -		if (mmu_has_feature(MMU_FTR_BOOK3S_KUAP)) {
-> -			mtspr(SPRN_AMR, AMR_KUAP_BLOCKED);
-> -			flush_needed = true;
-> -		}
-> -		if (mmu_has_feature(MMU_FTR_BOOK3S_KUEP)) {
-> -			mtspr(SPRN_IAMR, AMR_KUEP_BLOCKED);
-> -			flush_needed = true;
-> -		}
-> -		if (flush_needed)
-> -			isync();
-> -	} else
-> -#endif
-> -		kuap_assert_locked();
-> -
-> -	booke_restore_dbcr0();
-> -
-> -	account_cpu_user_entry();
-> -
-> -	account_stolen_time();
-> -
-> -	/*
-> -	 * This is not required for the syscall exit path, but makes the
-> -	 * stack frame look nicer. If this was initialised in the first stack
-> -	 * frame, or if the unwinder was taught the first stack frame always
-> -	 * returns to user with IRQS_ENABLED, this store could be avoided!
-> -	 */
-> -	irq_soft_mask_regs_set_state(regs, IRQS_ENABLED);
-> -
-> -	/*
-> -	 * If system call is called with TM active, set _TIF_RESTOREALL to
-> -	 * prevent RFSCV being used to return to userspace, because POWER9
-> -	 * TM implementation has problems with this instruction returning to
-> -	 * transactional state. Final register values are not relevant because
-> -	 * the transaction will be aborted upon return anyway. Or in the case
-> -	 * of unsupported_scv SIGILL fault, the return state does not much
-> -	 * matter because it's an edge case.
-> -	 */
-> -	if (IS_ENABLED(CONFIG_PPC_TRANSACTIONAL_MEM) &&
-> -			unlikely(MSR_TM_TRANSACTIONAL(regs->msr)))
-> -		set_bits(_TIF_RESTOREALL, &current_thread_info()->flags);
-> -
-> -	/*
-> -	 * If the system call was made with a transaction active, doom it and
-> -	 * return without performing the system call. Unless it was an
-> -	 * unsupported scv vector, in which case it's treated like an illegal
-> -	 * instruction.
-> -	 */
-> -#ifdef CONFIG_PPC_TRANSACTIONAL_MEM
-> -	if (unlikely(MSR_TM_TRANSACTIONAL(regs->msr)) &&
-> -	    !trap_is_unsupported_scv(regs)) {
-> -		/* Enable TM in the kernel, and disable EE (for scv) */
-> -		hard_irq_disable();
-> -		mtmsr(mfmsr() | MSR_TM);
-> -
-> -		/* tabort, this dooms the transaction, nothing else */
-> -		asm volatile(".long 0x7c00071d | ((%0) << 16)"
-> -				:: "r"(TM_CAUSE_SYSCALL|TM_CAUSE_PERSISTENT));
-> -
-> -		/*
-> -		 * Userspace will never see the return value. Execution will
-> -		 * resume after the tbegin. of the aborted transaction with the
-> -		 * checkpointed register state. A context switch could occur
-> -		 * or signal delivered to the process before resuming the
-> -		 * doomed transaction context, but that should all be handled
-> -		 * as expected.
-> -		 */
-> -		return -ENOSYS;
-> -	}
-> -#endif // CONFIG_PPC_TRANSACTIONAL_MEM
-> -
-> -	local_irq_enable();
-> -
-> -	if (unlikely(read_thread_flags() & _TIF_SYSCALL_DOTRACE)) {
-> -		if (unlikely(trap_is_unsupported_scv(regs))) {
-> -			/* Unsupported scv vector */
-> -			_exception(SIGILL, regs, ILL_ILLOPC, regs->nip);
-> -			return regs->gpr[3];
-> -		}
-> -		/*
-> -		 * We use the return value of do_syscall_trace_enter() as the
-> -		 * syscall number. If the syscall was rejected for any reason
-> -		 * do_syscall_trace_enter() returns an invalid syscall number
-> -		 * and the test against NR_syscalls will fail and the return
-> -		 * value to be used is in regs->gpr[3].
-> -		 */
-> -		r0 = do_syscall_trace_enter(regs);
-> -		if (unlikely(r0 >= NR_syscalls))
-> -			return regs->gpr[3];
-> -		r3 = regs->gpr[3];
-> -		r4 = regs->gpr[4];
-> -		r5 = regs->gpr[5];
-> -		r6 = regs->gpr[6];
-> -		r7 = regs->gpr[7];
-> -		r8 = regs->gpr[8];
-> -
-> -	} else if (unlikely(r0 >= NR_syscalls)) {
-> -		if (unlikely(trap_is_unsupported_scv(regs))) {
-> -			/* Unsupported scv vector */
-> -			_exception(SIGILL, regs, ILL_ILLOPC, regs->nip);
-> -			return regs->gpr[3];
-> -		}
-> -		return -ENOSYS;
-> -	}
-> -
-> -	/* May be faster to do array_index_nospec? */
-> -	barrier_nospec();
-> -
-> -	if (unlikely(is_compat_task())) {
-> -		f = (void *)compat_sys_call_table[r0];
-> -
-> -		r3 &= 0x00000000ffffffffULL;
-> -		r4 &= 0x00000000ffffffffULL;
-> -		r5 &= 0x00000000ffffffffULL;
-> -		r6 &= 0x00000000ffffffffULL;
-> -		r7 &= 0x00000000ffffffffULL;
-> -		r8 &= 0x00000000ffffffffULL;
-> -
-> -	} else {
-> -		f = (void *)sys_call_table[r0];
-> -	}
-> -
-> -	return f(r3, r4, r5, r6, r7, r8);
-> -}
-> -
->   static notrace void booke_load_dbcr0(void)
->   {
->   #ifdef CONFIG_PPC_ADV_DEBUG_REGS
-> diff --git a/arch/powerpc/kernel/syscall.c b/arch/powerpc/kernel/syscall.c
-> new file mode 100644
-> index 000000000000..4d5689eeaf25
-> --- /dev/null
-> +++ b/arch/powerpc/kernel/syscall.c
-> @@ -0,0 +1,173 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +#include <linux/compat.h>
-> +#include <linux/context_tracking.h>
-> +
-> +#include <asm/interrupt.h>
-> +#include <asm/kup.h>
-> +#include <asm/syscall.h>
-> +#include <asm/time.h>
-> +#include <asm/tm.h>
-> +#include <asm/unistd.h>
-> +
-> +
-> +typedef long (*syscall_fn)(long, long, long, long, long, long);
-> +
-> +/* Has to run notrace because it is entered not completely "reconciled" */
-> +notrace long system_call_exception(long r3, long r4, long r5,
-> +				   long r6, long r7, long r8,
-> +				   unsigned long r0, struct pt_regs *regs)
-> +{
-> +	syscall_fn f;
-> +
-> +	kuap_lock();
-> +
-> +	regs->orig_gpr3 = r3;
-> +
-> +	if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
-> +		BUG_ON(irq_soft_mask_return() != IRQS_ALL_DISABLED);
-> +
-> +	trace_hardirqs_off(); /* finish reconciling */
-> +
-> +	CT_WARN_ON(ct_state() == CONTEXT_KERNEL);
-> +	user_exit_irqoff();
-> +
-> +	BUG_ON(regs_is_unrecoverable(regs));
-> +	BUG_ON(!(regs->msr & MSR_PR));
-> +	BUG_ON(arch_irq_disabled_regs(regs));
-> +
-> +#ifdef CONFIG_PPC_PKEY
-> +	if (mmu_has_feature(MMU_FTR_PKEY)) {
-> +		unsigned long amr, iamr;
-> +		bool flush_needed = false;
-> +		/*
-> +		 * When entering from userspace we mostly have the AMR/IAMR
-> +		 * different from kernel default values. Hence don't compare.
-> +		 */
-> +		amr = mfspr(SPRN_AMR);
-> +		iamr = mfspr(SPRN_IAMR);
-> +		regs->amr  = amr;
-> +		regs->iamr = iamr;
-> +		if (mmu_has_feature(MMU_FTR_BOOK3S_KUAP)) {
-> +			mtspr(SPRN_AMR, AMR_KUAP_BLOCKED);
-> +			flush_needed = true;
-> +		}
-> +		if (mmu_has_feature(MMU_FTR_BOOK3S_KUEP)) {
-> +			mtspr(SPRN_IAMR, AMR_KUEP_BLOCKED);
-> +			flush_needed = true;
-> +		}
-> +		if (flush_needed)
-> +			isync();
-> +	} else
-> +#endif
-> +		kuap_assert_locked();
-> +
-> +	booke_restore_dbcr0();
-> +
-> +	account_cpu_user_entry();
-> +
-> +	account_stolen_time();
-> +
-> +	/*
-> +	 * This is not required for the syscall exit path, but makes the
-> +	 * stack frame look nicer. If this was initialised in the first stack
-> +	 * frame, or if the unwinder was taught the first stack frame always
-> +	 * returns to user with IRQS_ENABLED, this store could be avoided!
-> +	 */
-> +	irq_soft_mask_regs_set_state(regs, IRQS_ENABLED);
-> +
-> +	/*
-> +	 * If system call is called with TM active, set _TIF_RESTOREALL to
-> +	 * prevent RFSCV being used to return to userspace, because POWER9
-> +	 * TM implementation has problems with this instruction returning to
-> +	 * transactional state. Final register values are not relevant because
-> +	 * the transaction will be aborted upon return anyway. Or in the case
-> +	 * of unsupported_scv SIGILL fault, the return state does not much
-> +	 * matter because it's an edge case.
-> +	 */
-> +	if (IS_ENABLED(CONFIG_PPC_TRANSACTIONAL_MEM) &&
-> +			unlikely(MSR_TM_TRANSACTIONAL(regs->msr)))
-> +		set_bits(_TIF_RESTOREALL, &current_thread_info()->flags);
-> +
-> +	/*
-> +	 * If the system call was made with a transaction active, doom it and
-> +	 * return without performing the system call. Unless it was an
-> +	 * unsupported scv vector, in which case it's treated like an illegal
-> +	 * instruction.
-> +	 */
-> +#ifdef CONFIG_PPC_TRANSACTIONAL_MEM
-> +	if (unlikely(MSR_TM_TRANSACTIONAL(regs->msr)) &&
-> +	    !trap_is_unsupported_scv(regs)) {
-> +		/* Enable TM in the kernel, and disable EE (for scv) */
-> +		hard_irq_disable();
-> +		mtmsr(mfmsr() | MSR_TM);
-> +
-> +		/* tabort, this dooms the transaction, nothing else */
-> +		asm volatile(".long 0x7c00071d | ((%0) << 16)"
-> +				:: "r"(TM_CAUSE_SYSCALL|TM_CAUSE_PERSISTENT));
-> +
-> +		/*
-> +		 * Userspace will never see the return value. Execution will
-> +		 * resume after the tbegin. of the aborted transaction with the
-> +		 * checkpointed register state. A context switch could occur
-> +		 * or signal delivered to the process before resuming the
-> +		 * doomed transaction context, but that should all be handled
-> +		 * as expected.
-> +		 */
-> +		return -ENOSYS;
-> +	}
-> +#endif // CONFIG_PPC_TRANSACTIONAL_MEM
-> +
-> +	local_irq_enable();
-> +
-> +	if (unlikely(read_thread_flags() & _TIF_SYSCALL_DOTRACE)) {
-> +		if (unlikely(trap_is_unsupported_scv(regs))) {
-> +			/* Unsupported scv vector */
-> +			_exception(SIGILL, regs, ILL_ILLOPC, regs->nip);
-> +			return regs->gpr[3];
-> +		}
-> +		/*
-> +		 * We use the return value of do_syscall_trace_enter() as the
-> +		 * syscall number. If the syscall was rejected for any reason
-> +		 * do_syscall_trace_enter() returns an invalid syscall number
-> +		 * and the test against NR_syscalls will fail and the return
-> +		 * value to be used is in regs->gpr[3].
-> +		 */
-> +		r0 = do_syscall_trace_enter(regs);
-> +		if (unlikely(r0 >= NR_syscalls))
-> +			return regs->gpr[3];
-> +		r3 = regs->gpr[3];
-> +		r4 = regs->gpr[4];
-> +		r5 = regs->gpr[5];
-> +		r6 = regs->gpr[6];
-> +		r7 = regs->gpr[7];
-> +		r8 = regs->gpr[8];
-> +
-> +	} else if (unlikely(r0 >= NR_syscalls)) {
-> +		if (unlikely(trap_is_unsupported_scv(regs))) {
-> +			/* Unsupported scv vector */
-> +			_exception(SIGILL, regs, ILL_ILLOPC, regs->nip);
-> +			return regs->gpr[3];
-> +		}
-> +		return -ENOSYS;
-> +	}
-> +
-> +	/* May be faster to do array_index_nospec? */
-> +	barrier_nospec();
-> +
-> +	if (unlikely(is_compat_task())) {
-> +		f = (void *)compat_sys_call_table[r0];
-> +
-> +		r3 &= 0x00000000ffffffffULL;
-> +		r4 &= 0x00000000ffffffffULL;
-> +		r5 &= 0x00000000ffffffffULL;
-> +		r6 &= 0x00000000ffffffffULL;
-> +		r7 &= 0x00000000ffffffffULL;
-> +		r8 &= 0x00000000ffffffffULL;
-> +
-> +	} else {
-> +		f = (void *)sys_call_table[r0];
-> +	}
-> +
-> +	return f(r3, r4, r5, r6, r7, r8);
-> +}
+W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNCkhpIEtyenlzenRvZiwgDQoNCj4g
+LS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS3J6eXN6dG9mIEFkYW1za2kgPGty
+enlzenRvZi5hZGFtc2tpQG5va2lhLmNvbT4NCj4gU2VudDogV2VkbmVzZGF5LCBKdW5lIDI5LCAy
+MDIyIDc6NDAgUE0NCj4gVG86IE1hcmVrIFZhc3V0IDxtYXJleEBkZW54LmRlPjsgUmF2aXRlamEg
+TmFyYXlhbmFtDQo+IDxyYXZpdGVqYS5uYXJheWFuYW1AeGlsaW54LmNvbT47IGxpbnV4LWkyY0B2
+Z2VyLmtlcm5lbC5vcmc7DQo+IG1pY2hhbC5zaW1la0B4aWxpbnguY29tDQo+IENjOiBsaW51eC1h
+cm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5v
+cmc7DQo+IGdpdEB4aWxpbnguY29tOyBqb2VAcGVyY2hlcy5jb20NCj4gU3ViamVjdDogUmU6IFtQ
+QVRDSCB2MiAwMy8xMF0gaTJjOiB4aWljOiBTd2l0Y2ggdG8gWGlpYyBzdGFuZGFyZCBtb2RlIGZv
+ciBpMmMtDQo+IHJlYWQNCj4gDQo+IFtDQVVUSU9OOiBFeHRlcm5hbCBFbWFpbF0NCj4gDQo+IENB
+VVRJT046IFRoaXMgbWVzc2FnZSBoYXMgb3JpZ2luYXRlZCBmcm9tIGFuIEV4dGVybmFsIFNvdXJj
+ZS4gUGxlYXNlIHVzZQ0KPiBwcm9wZXIganVkZ21lbnQgYW5kIGNhdXRpb24gd2hlbiBvcGVuaW5n
+IGF0dGFjaG1lbnRzLCBjbGlja2luZyBsaW5rcywgb3INCj4gcmVzcG9uZGluZyB0byB0aGlzIGVt
+YWlsLg0KPiANCj4gDQo+IEhpIE1hcmVrLA0KPiANCj4gVyBkbml1IDI5LjA2LjIwMjIgbyAxNjow
+NSwgTWFyZWsgVmFzdXQgcGlzemU6DQo+ID4+IFsuLi5dDQo+ID4+DQo+ID4+IElmIHRob3NlIHR3
+byBtb2RlcyBvbmx5IGRpZmZlciBpbiBzb2Z0d2FyZSBjb21wbGV4aXR5IGJ1dCB3ZSBhcmUgbm90
+DQo+ID4+IGFibGUgdG8gc3VwcG9ydCBvbmx5IHRoZSBzaW1wbGVyIG9uZSBhbmQgd2UgaGF2ZSBz
+dXBwb3J0IGZvciB0aGUgbW9yZQ0KPiA+PiBjb21wbGljYXRlZCAoc3RhbmRhcmQgbW9kZSkgYW55
+d2F5cywgd2Uga25vdyB0aGF0IHN0YW5kYXJkIG1vZGUgY2FuDQo+ID4+IGhhbmRsZSBvciB0aGUg
+Y2FzZXMgd2hpbGUgZHluYW1pYyBtb2RlIGNhbm5vdCwgd2UgYWxzbyBrbm93IHRoYXQNCj4gPj4g
+ZHluYW1pYyBtb2RlIGlzIGJyb2tlbiBvbiBzb21lIHZlcnNpb25zIG9mIHRoZSBjb3JlLCB3aHkg
+ZG8gd2UNCj4gPj4gYWN0dWFsbHkga2VlcCBzdXBwb3J0IGZvciBkeW5hbWljIG1vZGU/DQo+ID4N
+Cj4gPiBJZiBJIHJlY2FsbCBpdCByaWdodCwgdGhlIGR5bmFtaWMgbW9kZSB3YXMgc3VwcG9zZWQg
+dG8gaGFuZGxlDQo+ID4gdHJhbnNmZXJzIGxvbmdlciB0aGFuIDI1NSBCeXRlcywgd2hpY2ggdGhl
+IGNvcmUgY2Fubm90IGRvIGluIFN0YW5kYXJkDQo+ID4gbW9kZS4gSXQgaXMgbmVlZGVkIGUuZy4g
+YnkgQXRtZWwgTVhUIHRvdWNoIGNvbnRyb2xsZXIuIEkgc3BlbnQgYSBsb3QNCj4gPiBvZiB0aW1l
+IGRlYnVnZ2luZyB0aGUgcmFjZSBjb25kaXRpb25zIGluIHRoZSBYSUlDLCB3aGljaCBJIHVsdGlt
+YXRlbHkNCj4gPiBmaXhlZCAodGhlIHBhdGNoZXMgYXJlIHVwc3RyZWFtKSwgYnV0IHRoZSBsb25n
+IHRyYW5zZmVycyBJIHJhdGhlcg0KPiA+IGZpeGVkIGluIHRoZSBNWFQgZHJpdmVyIGluc3RlYWQu
+DQo+ID4NCj4gPiBJIGFsc28gcmVjYWxsIHRoZXJlIHdhcyBzdXBwb3NlZCB0byBiZSBzb21lIHVw
+ZGF0ZSBmb3IgdGhlIFhJSUMgY29yZQ0KPiA+IGNvbWluZyB3aXRoIG5ld2VyIHZpdmFkbywgYnV0
+IEkgbWlnaHQgYmUgd3JvbmcgYWJvdXQgdGhhdC4NCj4gDQo+IEl0IHNlZW1zIHRvIGJlIHRoZSBv
+dGhlciB3YXkgYXJvdW5kIC0gZHluYW1pYyBtb2RlIGlzIGxpbWl0ZWQgdG8gMjU1IGJ5dGVzIC0N
+Cj4gd2hlbiB5b3UgdHJpZ2dlciBkeW5hbWljIG1vZGUgeW91IGZpcnN0IHdyaXRlIHRoZSBhZGRy
+ZXNzIG9mIHRoZSBzbGF2ZSB0bw0KPiB0aGUgRklGTywgdGhlbiB5b3Ugd3JpdGUgdGhlIGxlbmd0
+aCBhcyBvbmUgYnl0ZSBzbyB5b3UgY2FuJ3QgcmVxdWVzdCBtb3JlDQo+IHRoYW4gMjU1IGJ5dGVz
+LiBTbyAqc3RhbmRhcmQqIG1vZGUgaXMgdXNlZCBmb3IgdGhvc2UgbWVzc2FnZXMuIEluIG90aGVy
+DQo+IHdvcmRzIC0gZHluYW1pYyBtb2RlIGlzIHRoZSBvbmUgdGhhdCBpcyBtb3JlIGxpbWl0ZWQN
+Cj4gLSBldmVyeXRoaW5nIHRoYXQgeW91IGNhbiBkbyBpbiBkeW5hbWljIG1vZGUgeW91IGNhbiBh
+bHNvIGRvIGluIHN0YW5kYXJkDQo+IG1vZGUuIFNvIHdoeSBkb24ndCB3ZSB1c2Ugc3RhbmRhcmQg
+bW9kZSBhbHdheXMgZm9yIGV2ZXJ5dGhpbmc/DQoNCkhvd2V2ZXIgIHRoZSBjdXJyZW50IG1vZGUg
+aXMgZHluYW1pYyBtb2RlIHNvIGZvciBsZXNzIHRoYW4gMjU1IHdlIGNhbiB1c2UgZHluYW1pYyBt
+b2RlLih0aGUgY3VycmVudCBiZWhhdmlvciB3aWxsIG5vdCBjaGFuZ2UpDQpBbHNvIHRoZSBkeW5h
+bWljIG1vZGUgIGlzICBuaWNlciBvbiB0aGUgcHJvY2Vzc29yIHJlc291cmNlcy4gV2Ugc2V0IHRo
+ZSBieXRlcyBhbmQgdGhlIGNvbnRyb2xsZXIgdGFrZXMgY2FyZSBvZiANCnRyYW5zZmVycmluZy4N
+Cg0KSG93ZXZlciBkbyBub3QgaGF2ZSBhbnkgc3Ryb25nIHZpZXdzIG9wZW4gdG8gc3VnZ2VzdGlv
+bnMuDQoNCj4gDQo+IEtyenlzenRvZg0K

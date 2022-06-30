@@ -2,78 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 409FE56134D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D7E56134F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232824AbiF3HdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
+        id S232853AbiF3Hd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiF3HdI (ORCPT
+        with ESMTP id S232851AbiF3Hd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:33:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE39B38;
-        Thu, 30 Jun 2022 00:33:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D334615FC;
-        Thu, 30 Jun 2022 07:33:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC2DAC34115;
-        Thu, 30 Jun 2022 07:33:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656574385;
-        bh=qdJ1ojG9FqadeWBXMNSsSNxd/lwx2dqBZ2YeAVl+g+Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MbZL5eKqEHaju7VKRVwNDolxeozHoNlnAdtBglMqRVbabNDh6BljVGTbCDAP+o+kh
-         IDnCn8rOZoBW7dWJnrmPULuCm4BDXD5Bx6lYEeeQ0pGJfh+LneIb4Q8xUn6wqvw79L
-         4gJKcCb7roY+QtUGUH2OzZr4OgTR7srfsOBMQRh4Lb25x14bRjWtjDNWBvEgqG1p8H
-         S8coVw117PyBR2iNMzGWkTQ4hRa0cMj+QAcNY2Fi1zmfA/7ty1WgCSU8ibpPagLyCP
-         HEJ6B6B+bYeplk1KzYVF+6SsUhPhuKz8OXND7AohryRw1kMumpSIy1t3wbopRNb7xH
-         egX77JL8hr5Ng==
-Date:   Thu, 30 Jun 2022 08:32:56 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Fei Yang <fei.yang@intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Mika Kuoppala <mika.kuoppala@linux.intel.com>,
-        Chris Wilson <chris.p.wilson@intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Thomas =?UTF-8?B?SGVsbHN0csO2bQ==?= 
-        <thomas.hellstrom@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        Thomas Hellstrom <thomas.hellstrom@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Bruce Chang <yu.bruce.chang@intel.com>,
-        Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>,
-        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
-        John Harrison <John.C.Harrison@intel.com>
-Subject: Re: [PATCH 5/6] drm/i915/gt: Serialize GRDOM access between
- multiple engine resets
-Message-ID: <20220630083256.35a56cb1@sal.lan>
-In-Reply-To: <7e6a9a27-7286-7f21-7fec-b9832b93b10c@linux.intel.com>
-References: <cover.1655306128.git.mchehab@kernel.org>
-        <5ee647f243a774927ec328bfca8212abc4957909.1655306128.git.mchehab@kernel.org>
-        <YrRLyg1IJoZpVGfg@intel.intel>
-        <160e613f-a0a8-18ff-5d4b-249d4280caa8@linux.intel.com>
-        <20220627110056.6dfa4f9b@maurocar-mobl2>
-        <d79492ad-b99a-f9a9-f64a-52b94db68a3b@linux.intel.com>
-        <20220629172955.64ffb5c3@maurocar-mobl2>
-        <7e6a9a27-7286-7f21-7fec-b9832b93b10c@linux.intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Thu, 30 Jun 2022 03:33:27 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2133334B
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656574406; x=1688110406;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yS4Suwf7GI6LhylNscWfzZ0ukkPLH++SXvgQgtpNGaQ=;
+  b=OlzD+6hY0HhiFHVXz3+edKtKH/6Ai6+DJiKdUKmeJ1QiwyH55DGWZwKg
+   7/UCM8akS0OMiHVmL9eUBNefmxOE6J4cFdzNZOCLv1mwbyCSz2J8VtoQd
+   Ci8G4dLZYdLF5O0M9lXiF2Z46bA4xVDby8nLfgzO+kZ1k6zA3huUBVSdm
+   kKIwZ/EaQSi6cD10RVvxBQ07mQODaZGNiVrJCNhETIgthS0R3zhHtdbmf
+   SIGTiNUr3KNXhyxusjSZ/l7l4pJry2NbVZn+X9wQsQoEZ/WTrdaRTIruM
+   WTX4NIjxfdw/0cY/+8tAcJdc/LneM7PbcEtx+EhhlZMqzUgD3d9Q/8hQY
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="343960417"
+X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
+   d="scan'208";a="343960417"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 00:33:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
+   d="scan'208";a="680866208"
+Received: from shbuild999.sh.intel.com ([10.239.146.138])
+  by FMSMGA003.fm.intel.com with ESMTP; 30 Jun 2022 00:33:05 -0700
+From:   Feng Tang <feng.tang@intel.com>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Cc:     linux-mm@kvack.org, Paul Menzel <pmenzel@molgen.mpg.de>,
+        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>
+Subject: [PATCH] iommu/iova: change IOVA_MAG_SIZE to 127 to save memory
+Date:   Thu, 30 Jun 2022 15:33:04 +0800
+Message-Id: <20220630073304.26945-1-feng.tang@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,140 +63,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, 29 Jun 2022 17:02:59 +0100
-Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> escreveu:
+kmalloc will round up the request size to power of 2, and current
+iova_magazine's size is 1032 (1024+8) bytes, so each instance
+allocated will get 2048 bytes from kmalloc, causing around 1KB
+waste.
 
-> On 29/06/2022 16:30, Mauro Carvalho Chehab wrote:
-> > On Tue, 28 Jun 2022 16:49:23 +0100
-> > Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
-> >  =20
-> >> .. which for me means a different patch 1, followed by patch 6 (moved
-> >> to be patch 2) would be ideal stable material.
-> >>
-> >> Then we have the current patch 2 which is open/unknown (to me at least=
-).
-> >>
-> >> And the rest seem like optimisations which shouldn't be tagged as fixe=
-s.
-> >>
-> >> Apart from patch 5 which should be cc: stable, but no fixes as agreed.
-> >>
-> >> Could you please double check if what I am suggesting here is feasible
-> >> to implement and if it is just send those minimal patches out alone? =
-=20
-> >=20
-> > Tested and porting just those 3 patches are enough to fix the Broadwell
-> > bug.
-> >=20
-> > So, I submitted a v2 of this series with just those. They all need to
-> > be backported to stable. =20
->=20
-> I would really like to give even a smaller fix a try. Something like, alt=
-hough not even compile tested:
->=20
-> commit 4d5e94aef164772f4d85b3b4c1a46eac9a2bd680
-> Author: Chris Wilson <chris.p.wilson@intel.com>
-> Date:   Wed Jun 29 16:25:24 2022 +0100
->=20
->      drm/i915/gt: Serialize TLB invalidates with GT resets
->     =20
->      Avoid trying to invalidate the TLB in the middle of performing an
->      engine reset, as this may result in the reset timing out. Currently,
->      the TLB invalidate is only serialised by its own mutex, forgoing the
->      uncore lock, but we can take the uncore->lock as well to serialise
->      the mmio access, thereby serialising with the GDRST.
->     =20
->      Tested on a NUC5i7RYB, BIOS RYBDWi35.86A.0380.2019.0517.1530 with
->      i915 selftest/hangcheck.
->     =20
->      Cc: stable@vger.kernel.org
->      Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing =
-store")
->      Reported-by: Mauro Carvalho Chehab <mchehab@kernel.org>
->      Tested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
->      Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
->      Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
->      Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
->      Acked-by: Thomas Hellstr=C3=B6m <thomas.hellstrom@linux.intel.com>
->      Reviewed-by: Andi Shyti <andi.shyti@intel.com>
->      Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
->      Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
->=20
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt=
-/intel_gt.c
-> index 8da3314bb6bf..aaadd0b02043 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt.c
-> @@ -952,7 +952,23 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->          mutex_lock(&gt->tlb_invalidate_lock);
->          intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
->  =20
-> +       spin_lock_irq(&uncore->lock); /* serialise invalidate with GT res=
-et */
-> +
-> +       for_each_engine(engine, gt, id) {
-> +               struct reg_and_bit rb;
-> +
-> +               rb =3D get_reg_and_bit(engine, regs =3D=3D gen8_regs, reg=
-s, num);
-> +               if (!i915_mmio_reg_offset(rb.reg))
-> +                       continue;
-> +
-> +               intel_uncore_write_fw(uncore, rb.reg, rb.bit);
-> +       }
-> +
-> +       spin_unlock_irq(&uncore->lock);
-> +
->          for_each_engine(engine, gt, id) {
-> +               struct reg_and_bit rb;
-> +
->                  /*
->                   * HW architecture suggest typical invalidation time at =
-40us,
->                   * with pessimistic cases up to 100us and a recommendati=
-on to
-> @@ -960,13 +976,11 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->                   */
->                  const unsigned int timeout_us =3D 100;
->                  const unsigned int timeout_ms =3D 4;
-> -               struct reg_and_bit rb;
->  =20
->                  rb =3D get_reg_and_bit(engine, regs =3D=3D gen8_regs, re=
-gs, num);
->                  if (!i915_mmio_reg_offset(rb.reg))
->                          continue;
->  =20
-> -               intel_uncore_write_fw(uncore, rb.reg, rb.bit);
->                  if (__intel_wait_for_register_fw(uncore,
->                                                   rb.reg, rb.bit, 0,
->                                                   timeout_us, timeout_ms,
->=20
+And in some exstreme case, the memory wasted can trigger OOM as
+reported in 2019 on a crash kernel with 256 MB memory [1].
 
-This won't work, as it is not serializing TLB cache invalidation with
-i915 resets. Besides that, this is more or less merging patches 1 and 3,
-placing patches with different rationales altogether. Upstream rule is
-to have one logical change per patch.
+  [    4.319253] iommu: Adding device 0000:06:00.2 to group 5
+  [    4.325869] iommu: Adding device 0000:20:01.0 to group 15
+  [    4.332648] iommu: Adding device 0000:20:02.0 to group 16
+  [    4.338946] swapper/0 invoked oom-killer: gfp_mask=0x6040c0(GFP_KERNEL|__GFP_COMP), nodemask=(null), order=0, oom_score_adj=0
+  [    4.350251] swapper/0 cpuset=/ mems_allowed=0
+  [    4.354618] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 4.19.57.mx64.282 #1
+  [    4.355612] Hardware name: Dell Inc. PowerEdge R7425/08V001, BIOS 1.9.3 06/25/2019
+  [    4.355612] Call Trace:
+  [    4.355612]  dump_stack+0x46/0x5b
+  [    4.355612]  dump_header+0x6b/0x289
+  [    4.355612]  out_of_memory+0x470/0x4c0
+  [    4.355612]  __alloc_pages_nodemask+0x970/0x1030
+  [    4.355612]  cache_grow_begin+0x7d/0x520
+  [    4.355612]  fallback_alloc+0x148/0x200
+  [    4.355612]  kmem_cache_alloc_trace+0xac/0x1f0
+  [    4.355612]  init_iova_domain+0x112/0x170
+  [    4.355612]  amd_iommu_domain_alloc+0x138/0x1a0
+  [    4.355612]  iommu_group_get_for_dev+0xc4/0x1a0
+  [    4.355612]  amd_iommu_add_device+0x13a/0x610
+  [    4.355612]  add_iommu_group+0x20/0x30
+  [    4.355612]  bus_for_each_dev+0x76/0xc0
+  [    4.355612]  bus_set_iommu+0xb6/0xf0
+  [    4.355612]  amd_iommu_init_api+0x112/0x132
+  [    4.355612]  state_next+0xfb1/0x1165
+  [    4.355612]  amd_iommu_init+0x1f/0x67
+  [    4.355612]  pci_iommu_init+0x16/0x3f
+  ...
+  [    4.670295] Unreclaimable slab info:
+  ...
+  [    4.857565] kmalloc-2048           59164KB      59164KB
 
-> If this works it would be least painful to backport. The other improvemen=
-ts can then be devoid of the fixes tag.
+Change IOVA_MAG_SIZE from 128 to 127 to make size of 'iova_magazine'
+1024 bytes so that no memory will be wasted.
 
-=46rom backport PoV, it wouldn't make any difference applying one patch
-or two. See, intel_gt_invalidate_tlbs() function doesn't exist before
-changeset 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing stor=
-e"),
-so, it shouldn't have merge conflicts while backporting it, maybe except
-if some functions it calls (or parameters) have changed. On such case,
-the backport fix should be trivial, and the end result of backporting
-one folded patch or two would be the same.
+[1]. https://lkml.org/lkml/2019/8/12/266
 
-If any conflict happens, I can help doing the backports.
+Signed-off-by: Feng Tang <feng.tang@intel.com>
+---
+ drivers/iommu/iova.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-> > I still think that other TLB patches are needed/desired upstream, but
-> > I'll submit them on a separate series. Let's fix the regression first ;=
--) =20
->=20
-> Yep, that's exactly right.
->=20
-> Regards,
->=20
-> Tvrtko
+diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+index db77aa675145b..27634ddd9b904 100644
+--- a/drivers/iommu/iova.c
++++ b/drivers/iommu/iova.c
+@@ -614,7 +614,12 @@ EXPORT_SYMBOL_GPL(reserve_iova);
+  * dynamic size tuning described in the paper.
+  */
+ 
+-#define IOVA_MAG_SIZE 128
++/*
++ * As kmalloc's buffer size is fixed to power of 2, 127 is chosen to
++ * assure size of 'iova_magzine' to be 1024 bytes, so that no memory
++ * will be wasted.
++ */
++#define IOVA_MAG_SIZE 127
+ #define MAX_GLOBAL_MAGS 32	/* magazines per bin */
+ 
+ struct iova_magazine {
+-- 
+2.27.0
+

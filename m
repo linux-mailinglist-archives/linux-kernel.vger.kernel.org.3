@@ -2,112 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3E65620AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B7B5620B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236222AbiF3Q51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 12:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56614 "EHLO
+        id S234492AbiF3Q7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 12:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236287AbiF3Q5W (ORCPT
+        with ESMTP id S230363AbiF3Q7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 12:57:22 -0400
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC07393DC;
-        Thu, 30 Jun 2022 09:57:21 -0700 (PDT)
-Received: by mail-il1-f181.google.com with SMTP id p9so12491515ilj.7;
-        Thu, 30 Jun 2022 09:57:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cSCjzkkaYP9MYdWZQafK4xMoYiSrEDWkLIVS/pLNRR8=;
-        b=JmV7Xak6rkAw/IIrTD8iY8w38WPI88kBk7nLKfjetfg04LNFPiUXEDkjmISZec4N3H
-         GXm40CZ9XEeDb7iLPScDqs5zcJ179gLte5Oe2F/UogWu8POy64s6v4c3A5uoJxwi/uPr
-         ohFaziFaTPf0Ko3EnxK7cclEo3VI468FmXqzg/RxVDIXadLL3bae36JGdbQwLhk0Ub7n
-         VomTJEN8tIkBhmTGtiEEDpsVI9eEH3jew/PnM4pmqkD67oowqrRdCqq1AV6UmYHcNygO
-         nDRAHxjpZN7LbKkfYy9Vpk8JG+fQdTxx7jb2DlX5yuChgUU8sIrnkYhF/F3x9UAgknGj
-         +i5A==
-X-Gm-Message-State: AJIora9y36wf4Doxgne49ArSEUSsprnUYoqnFz1swjH4XBazdC6ae11M
-        DzsLBO7dYtuvLs/GDsY8tKB48z0tPA==
-X-Google-Smtp-Source: AGRyM1ur4AOc7bK5eVjgml5dO/I1YI3o54vzy9DsjE/7iDAB6CuVvnaI9nMRxVWdksw+oB2ay497Pw==
-X-Received: by 2002:a92:cd8f:0:b0:2d9:5d44:6a53 with SMTP id r15-20020a92cd8f000000b002d95d446a53mr5817684ilb.226.1656608240763;
-        Thu, 30 Jun 2022 09:57:20 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id q25-20020a05663810d900b0032e1a07228asm8851588jad.26.2022.06.30.09.57.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 09:57:20 -0700 (PDT)
-Received: (nullmailer pid 2895373 invoked by uid 1000);
-        Thu, 30 Jun 2022 16:57:17 -0000
-Date:   Thu, 30 Jun 2022 10:57:17 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>, dmaengine@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        alsa-devel@alsa-project.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Jose Abreu <joabreu@synopsys.com>,
-        devicetree@vger.kernel.org, Serge Semin <fancer.lancer@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Mark Brown <broonie@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH v3 04/15] spi: dt-bindings: dw-apb-ssi: update
- spi-{r,t}x-bus-width
-Message-ID: <20220630165717.GA2895317-robh@kernel.org>
-References: <20220629184343.3438856-1-mail@conchuod.ie>
- <20220629184343.3438856-5-mail@conchuod.ie>
-MIME-Version: 1.0
+        Thu, 30 Jun 2022 12:59:38 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2109.outbound.protection.outlook.com [40.107.94.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA1B205ED;
+        Thu, 30 Jun 2022 09:59:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G3uBnG/oswBkgYH+wVKZqib4bXUDovmzD+cgCktIk6iKdw9xyJP+Tx3QGCeqiQ5pb7QrkX3KP4adIQ6zHvR9SviZICUdAyJyEjtP8SLIEgtfXd60I8PB36SiYBC2ypYi13Z054pBcfbC83IUCskGA0dOrdQSJR3yi9DY8Z4t/8V3LhJ3+0lmop4q3lfBxZQzLyVaXYlaGZ0uoDAMXA9evMlstJukWcPRcKqqOW/4eXpGwxiGj7co+YsLiT3nVLXrD1qgD3IBJPSzXr7jD4k3nk/tCh6jybuhLBU4wibmBhbeP/lmXQHGN5WdXMF2c3c0Ya+jkaLdr37D7p2FajuToQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8UWGs03E3Hpgfj+rRfKu/Dl7twMuBlsLA3afrO1bKhg=;
+ b=UI2FlfyMqT3ec/Pa5AyMBLNe/pJ2je8ZheRp3MD/X6veFHIhTOcv6pcIrs+QP/OP5xfjK7Tr4/PI3W+UuWbyXa8HOb4XRtSOLnqhFtEIwapS4GQNNQ/JW9gZjbMMae91UDaR+FhUk5EcPYVewU570pi3FaCZ+WaSeDsKfv6qdLfIr6CuSUH3JBZ2eHnp7QFYx4cGLfwsFLG5dd53LsrQz4/OMZA+aM+yLRwOiz+x3TDI/FjPtKoQVsiUtpZBgaSzwEExNYpVV8jXhnAG9TaH1hk4P4cLzeS27tBIOgvXokvlWNCZ0MXuit9ftQEBTJBabGLbQ4HMwscPlRevwfFBVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8UWGs03E3Hpgfj+rRfKu/Dl7twMuBlsLA3afrO1bKhg=;
+ b=WMIWdRA7m+BSEFPMnsg3m4Jd5ZikSZIOCkr8lkots4+ZXhud3G4UHRpFGIdUL9NtynLy85Ni5fycJvanNOLgpF1f5D6HevcCBUbPSahD7RdE/VSYWoHPn+PRgHwwp7JFFs+DvXvJRYADdDDG0tEvKKtF4KKiowTJ2nJIImAOgdA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by BN6PR10MB1763.namprd10.prod.outlook.com
+ (2603:10b6:405:b::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Thu, 30 Jun
+ 2022 16:59:36 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::712f:6916:3431:e74e]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::712f:6916:3431:e74e%6]) with mapi id 15.20.5373.018; Thu, 30 Jun 2022
+ 16:59:35 +0000
+Date:   Thu, 30 Jun 2022 09:59:28 -0700
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Tero Kristo <kristo@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
+Subject: Re: use-after-free warnings in 5.19-rcX kernel
+Message-ID: <20220630165928.GA2152027@euler>
+References: <20220630043558.GA1985665@euler>
+ <Yr1JKPLQRj/IM21m@atomide.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220629184343.3438856-5-mail@conchuod.ie>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yr1JKPLQRj/IM21m@atomide.com>
+X-ClientProxiedBy: BYAPR02CA0014.namprd02.prod.outlook.com
+ (2603:10b6:a02:ee::27) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c7895689-41d3-422f-a164-08da5ab9e929
+X-MS-TrafficTypeDiagnostic: BN6PR10MB1763:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wY+PcM9DGGtOMtStNiRCKw7xgNeu51C9LjF+zg0/Og4kIEquozK5O2tPfBhJZ/vA4B3/Kg1CqoGnMw+6zbi7vPZKxLEVZ/UBHPe0SDmAUuRhOGhC7G7O9mk4IHgLykqqV6VDjTe087DSDPyZoHZZbuCh1rQUzUzHQJWDLXrr+aH0VzXNUTcuTNzlrd6u11lpyVY3260J1bPw+m+UQo1l+jZaMfc/BBW56XUBkOIb7N0Imn977CF5sj3rDbs3snf0/6AHpg+eanwlZFL3d3A6QxzAU2ulYe2+vop8lCfQhIv3Zd92IHQmm0Fb7+wPn7iG7BXjajB5zwe3ZhlSI48JKR/muLAwx8N5D8FI74xMUmNr9rBsfhQLB/yPnGN5CQ+pVAMoMr9Do3F165aDuFIe/ZU0q7AUyU8FEt1+edjL4sdZXYu3W++GESP4KU4/WJoPxwzwZAuCA4Kk+Wz7xwt3ySgxoH1tk8l6C7bgNXETbKPQTtPnYSBbOlbxP90IXF5/Qnegd0z2P8xXYXhoR1r/bwiZE6b2fo0yUnupVnvGhz9GCgKSgrvz1YDzdVZhDxCD/vqfmV4HxpUY9N+0ro6YRZfOG8ZHdCkZA9bgSFpl2/U5vZQ1FSraTy8W2dMu2JSI+FGz8DlXWdpESf6dX5BzW9aUqdYBMnFUXhtmNt4uvwBAaa6598UQ2xS5H61fV6rHPTQUmSant81+L4X9h8YAOo2hhisFn10bEQyt6w5pC+7gjrv0NzndP2VTR1FCG/m54XoBFcGIm80eQURyNqjoIkiO6K0tMYM9zYRZbqWwxTunfAgcQhdq9vHLnrnmUUOxb6gTNx1lcxlbShSZvrEZwg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(346002)(376002)(136003)(396003)(39830400003)(6666004)(6512007)(6506007)(9686003)(41300700001)(86362001)(52116002)(26005)(186003)(1076003)(38350700002)(83380400001)(38100700002)(6486002)(33656002)(66476007)(66946007)(66556008)(4326008)(8676002)(2906002)(5660300002)(54906003)(966005)(44832011)(4744005)(6916009)(8936002)(33716001)(478600001)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6oH7dLLJcOj3x+4HZjMJiLJ5DA39oRtbR+UPyHpvkpTjdKOFvvIRkQDO2g37?=
+ =?us-ascii?Q?sc3b0wgxkFmgtDLUivJ1fdPHDbyE0kMAkx2te+Mzn5LXF/b9VSgXwV+LSr7E?=
+ =?us-ascii?Q?rxovEPmmgR/JaXRxCPtH9KKA+OPhv2leZtDUn1IP2h2zyvMot7y8X6IBXW86?=
+ =?us-ascii?Q?LiHPuPUsJ5rbYVmAlw7f4yDLORRUT5Wt1M3h5v+3kXRb78TcFYzefkgR9aiZ?=
+ =?us-ascii?Q?vszH+AOHlGYoHXHHDranT04qsbUAsc4KPaKxQwh6ll6/49gFCEiOaZnfMTfd?=
+ =?us-ascii?Q?/Urpx5y6ZXMu9cIgGyDxjU3ExFZB+RVijDYzutz3pdr0DfkrIq1ENt8vP6Ts?=
+ =?us-ascii?Q?cbSA5o7g5QUwT2kcRJme745RmzoQ9oshXUuqqYHdEbf6Axi/7B3zM/Zy3ygR?=
+ =?us-ascii?Q?YR6YMNTS4LhT+ePTa/nfKYKOdZYfSEJASuxF3qwN7ISy1iDSH4pusoalzgrz?=
+ =?us-ascii?Q?vns6GvY2NE5rzu6B8/kqAQvdUeE+FQdROwq0Px/Z5QHi76ya23RI8VSaikfW?=
+ =?us-ascii?Q?reCeJk22QfSX7fa2PDmJokN++mz/DL8repvHmbqgut3TXuopRseyiVPjrUuA?=
+ =?us-ascii?Q?90aCykpcJuf59zMuMvLtu5OeUPyguk+zUZYtkPK8lL3Lexn6WEsbCK46CzLf?=
+ =?us-ascii?Q?XQk1qRbezvoti4ETKtHRWSqj0gdxFWi6+MDcfSiUXtNPfjCrtwcYuYgpj+Ta?=
+ =?us-ascii?Q?eY8bBPRCMhtFQe/NxAG0bVr14e48EXLSZyUCBz8B7TUs1Wpjx4m7uM1KnvIn?=
+ =?us-ascii?Q?n1qtlQQJSxxUy+eVUIuNSPWNjnIFsJe7+khsr+EjmPcDH0ku2aVYVJgoBsqK?=
+ =?us-ascii?Q?X3jCjB+S8OjSIHY6aAsht9YugHaGuI6ycU2OoY8T6S5/5hL9Qnm56bfcawm4?=
+ =?us-ascii?Q?HXbGex/qkltU4cwOPfxftzlJprMDjLIo2AFg2GFFB+YnZllnz0U0UWDviXxB?=
+ =?us-ascii?Q?h2fXUYE9vH5XylPNy2Sg12kCVzQkfcVqVv++sjLTJ1rSkG22Y+8Ff6jjTvcx?=
+ =?us-ascii?Q?BefJyhOqeSDUIQGSEkR20l13j7XbDsP4r2fvHbXxpjQOsUNbL0tc1IOo8GO3?=
+ =?us-ascii?Q?KpS8Xa4mwACrPz5hl2e+6imhKGH09xYTd8d7DunSPXnm+RLmg3cuoYu9Guxh?=
+ =?us-ascii?Q?cUiIqXcJ+nYvb9TuOHvdHHEVEnoJrc4x0INsjaxrkOD6e1VJs6CklSzfImp7?=
+ =?us-ascii?Q?5yWrQRtV/Ju98FrmhhjPkfzE9/PdZYb1atQsCt14RaO9WZ0csl9T860x0G1r?=
+ =?us-ascii?Q?LmJ1oOOK0yoFyUoftDBppVkBwzuJIRM8XCgHPMdtkt4PZh/AIxizohDLFQGD?=
+ =?us-ascii?Q?jeGmYzdlHhn6gmZsc/gck2pvl08bb96YxCV8FChxh5DQiSE1zZd6mese6NjE?=
+ =?us-ascii?Q?2d51uHWavBcPTt0zz7maYIlPWB7Wx3uV4I4SlONzQHr/Arkz1NFrlcn7tltk?=
+ =?us-ascii?Q?O2PXWTSwPF0Ll1B5vt00tjgzsYAXidCSC0hfyXw0z0ldX3+Ki8rN7r37Ya3Y?=
+ =?us-ascii?Q?Frc+LeXzlbcmM+p07HHqpQPc2wtzi1nC63A/yzmRRiEQRHSm/153tGU/dxV+?=
+ =?us-ascii?Q?uBI4b0BRLUAtcqM5+0ZjUwfFKNs3cFOq5v0QiPok6PpYkgA3+UQD76NTpRie?=
+ =?us-ascii?Q?Iw=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7895689-41d3-422f-a164-08da5ab9e929
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 16:59:35.8146
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: agNdL0TgFz5dUwoaBF7AUXSDVkOpAkKATadFt4/+gfS3FM4A5sxTxOPQN0t+v54fO7SFQxffwMiK8zMNYZY/dyqyevhEg3mEYQI1dzkVEyQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR10MB1763
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Jun 2022 19:43:33 +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Thu, Jun 30, 2022 at 09:56:40AM +0300, Tony Lindgren wrote:
+> Hi,
 > 
-> Most users of dw-apb-ssi use spi-{r,t}x-bus-width of 1, however the
-> Canaan k210 is wired up for a width of 4.
-> Quoting Serge:
-> The modern DW APB SSI controllers of v.4.* and newer also support the
-> enhanced SPI Modes too (Dual, Quad and Octal). Since the IP-core
-> version is auto-detected at run-time there is no way to create a
-> DT-schema correctly constraining the Rx/Tx SPI bus widths.
-> /endquote
+> * Colin Foster <colin.foster@in-advantage.com> [220630 04:30]:
+> > Hi Tony,
+> > 
+> > I'm running a beaglebone black and doing some dev on the
+> > next-next/master line. I noticed a lot of messages coming by during
+> > boot, and more recently a change that shouldn't have made a difference
+> > seems to stop me from booting.
+> > 
+> > The commit in question is commit: ec7aa25fa483 ("ARM: dts: Use clock-output-names for am3")
+> > Prior to this commit, the boot seems fine. After this commit, I get
+> > several warnings.
 > 
-> As such, drop the restriction on only supporting a bus width of 1.
+> This should be fixed with:
 > 
-> Link: https://lore.kernel.org/all/20220620205654.g7fyipwytbww5757@mobilestation/
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 6 ------
->  1 file changed, 6 deletions(-)
+> [PATCH] clk: ti: Fix missing of_node_get() ti_find_clock_provider()
+> https://lore.kernel.org/linux-clk/20220621091118.33930-1-tony@atomide.com/
 > 
+> Can you please give it a try?
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Yep - seems to fix the issue. Thanks!
+
+> 
+> Regards,
+> 
+> Tony

@@ -2,183 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D525622D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 21:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD8C5622E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 21:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235586AbiF3TOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 15:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49356 "EHLO
+        id S235718AbiF3TQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 15:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbiF3TOZ (ORCPT
+        with ESMTP id S229906AbiF3TQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 15:14:25 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A612F3982F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 12:14:24 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id x4so337719pfq.2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 12:14:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CseVMsc9DMcvnremI2IMCVn9RXMEwKZ3PfQxnseEk1Y=;
-        b=L86qxID6q2M+JSm6WJlw/ywbiK2Bd4F4OqP2crvM+fBErSUs7vAk8+S+Iq/oWCc3S3
-         A/zD733aSeW/NQtqDBUXacjPlB7RxpFMnf6lRRa/+NdtBmLjMtHmcPsoOWwkq8KCWT59
-         Wrjd2sZMC+z5N1mQaKCk8s3sRW71BeCnVhZwSRy715zMP+SNJe7eU9WYohudOv1KNRGA
-         /2Hl1gt/4XtlScYZ3mwC111MIu9O+AEpZ9xmxnKCHZmdZRhh6DrJvNuc5sQfRD0Ka1kU
-         JrjpbfOKNuX8+d69m9LSTBv0r1O0mwEp5rUB+SIBwil7KVtufeEqPNZkhvO1MatEsuMw
-         lriQ==
+        Thu, 30 Jun 2022 15:16:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AB663F894
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 12:16:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656616581;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=YfIy+4gvd/lbZdQIcXGuL2bNS8ZcX5l36dLsXmKY+tU=;
+        b=iwMgEOlUX8L90wSW5ML2c+jxFL467DISevGlgdEVxG6umXUd5r85lFAV1K+cbbgqbxL9Zh
+        dcAgBJQ9lHnaXSy2SIhwXPQPO+2+bmMeyokuUJQk1by3sQ/f2FB4OS7hFfFoATCQDVPgkS
+        z8JAEHNQ0MiVvSF5n3HQDou47O+s9dk=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-651-G-EeYRCiOUKvcqNuoM-IWw-1; Thu, 30 Jun 2022 15:16:19 -0400
+X-MC-Unique: G-EeYRCiOUKvcqNuoM-IWw-1
+Received: by mail-wr1-f70.google.com with SMTP id a1-20020adfbc41000000b0021b90d6d69aso3302237wrh.1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 12:16:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CseVMsc9DMcvnremI2IMCVn9RXMEwKZ3PfQxnseEk1Y=;
-        b=d+mMLKCqXqt3mI5PSTKk+UnTyHtqgzpibupytj4u/XWattx/Ai0BSPs/abSRmiQq1u
-         0c0iyctoE9Ge28Z9QY40h0aYdMBikZRh7APtS6IdeMM9rnjP77cF3kl0FVLUEZmUEid7
-         EqcvjnHyNNuhIbVfucrwYfYszbkPKWGUfq4z3pPdgQ2TSXSvF4On00nUka26KjzsXTIG
-         ghnZdvlnNvzO9OjSzr9H7BbXAhC3ZVSu77MvLGGY6XVYbDfBg3cD84LbGeifkyjRBc5j
-         Oleeq918kdeg55CL+9BW5sWQfPCF/tf/B3LkttzoNMB80tKL47SUtda1PcDgRwbGevAF
-         YzpQ==
-X-Gm-Message-State: AJIora/5S5MeSDaXOiyIfWG7yWw0pRTU4Akz4Yt/ZPdKPJrC1d7MxwlM
-        9TOKsi20Mor8RLIL9zABTW3XEcO7NlNL/8pTk2Er0A==
-X-Google-Smtp-Source: AGRyM1sSw2bcuHVxuECIXV0dhinx7eNbwu+6Xk72mVPwUCDEPf65Qjtbn+gPrnXqf1ZcPTdHgl0RAcjI8NMysu55SIM=
-X-Received: by 2002:a65:6b8a:0:b0:3db:7dc5:fec2 with SMTP id
- d10-20020a656b8a000000b003db7dc5fec2mr8746604pgw.223.1656616463900; Thu, 30
- Jun 2022 12:14:23 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=YfIy+4gvd/lbZdQIcXGuL2bNS8ZcX5l36dLsXmKY+tU=;
+        b=dQDOt8yLuV81xjOHciMSaEd/TQHSykMpAvqlg6EfxAYR15dxvg0hxJjU8gKogwGfU5
+         /Z1vw0SksdnRvfAdKppIqwH4hNSNJStxRDPJQHEAanEY1njPkPJ6ZJljiLUhymPwgAEk
+         vDT7NuXI7Hys2IlfncVUk6mP5upiXPa9raqIE5Zln0q8R+6XQ4FlGAkoyfAArZpUEUvF
+         Xu/OqPpibDMMSGv40ID4ci5QIOCmqoTh+KJiZlBt88z0kUTPhOAmqIZDiyMc6UZNRU2w
+         XJTqQov6mTRVT8M3vmfqtXamYXapUp38fwZCyMPjRpgtTw7IIcTzQIcez1is+zfhDx/o
+         LQPg==
+X-Gm-Message-State: AJIora+icjnpPdjAvGVbFvDFXPLy5QIDND/ZEMUsls9f3fOm/j9A1z2J
+        /rRf4T4UHlSaoESG/+j6Qk/0OmWcGkquIQ/LTx3JvYuL0Edb+r0Ej6W+sZvHj1eFN6yDIJCu3Wm
+        Ua0rIbwczfcXLcaCs7eMx8578vwJla/kix/MYDmDls+paMK8RVCcJ0VWRrKMQ32CvC3wkgQ==
+X-Received: by 2002:a5d:584e:0:b0:21c:e4db:35e with SMTP id i14-20020a5d584e000000b0021ce4db035emr9821074wrf.192.1656616577978;
+        Thu, 30 Jun 2022 12:16:17 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uIKmZuYR4ZzwFuRRqKsirvt0WLtvLcOYn6IIXl1lJjoxm21cIWDoqwMpYY9h/B+uEIpeJSmA==
+X-Received: by 2002:a5d:584e:0:b0:21c:e4db:35e with SMTP id i14-20020a5d584e000000b0021ce4db035emr9821043wrf.192.1656616577714;
+        Thu, 30 Jun 2022 12:16:17 -0700 (PDT)
+Received: from redhat.com ([2.55.3.188])
+        by smtp.gmail.com with ESMTPSA id j19-20020a5d6e53000000b002102b16b9a4sm20128454wrz.110.2022.06.30.12.16.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 12:16:17 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 15:16:15 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH] virtio: VIRTIO_HARDEN_NOTIFICATION is broken
+Message-ID: <20220630191559.16738-1-mst@redhat.com>
 MIME-Version: 1.0
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
- <20220519153713.819591-7-chao.p.peng@linux.intel.com> <b3ce0855-0e4b-782a-599c-26590df948dd@amd.com>
- <20220624090246.GA2181919@chaop.bj.intel.com>
-In-Reply-To: <20220624090246.GA2181919@chaop.bj.intel.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Thu, 30 Jun 2022 12:14:13 -0700
-Message-ID: <CAGtprH82H_fjtRbL0KUxOkgOk4pgbaEbAydDYfZ0qxz41JCnAQ@mail.gmail.com>
-Subject: Re: [PATCH v6 6/8] KVM: Handle page fault for private memory
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     "Nikunj A. Dadhania" <nikunj@amd.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jun Nakajima <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
+X-Mutt-Fcc: =sent
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-...
-> > >     /*
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index afe18d70ece7..e18460e0d743 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > @@ -2899,6 +2899,9 @@ int kvm_mmu_max_mapping_level(struct kvm *kvm,
-> > >     if (max_level == PG_LEVEL_4K)
-> > >             return PG_LEVEL_4K;
-> > >
-> > > +   if (kvm_slot_is_private(slot))
-> > > +           return max_level;
-> >
-> > Can you explain the rationale behind the above change?
-> > AFAIU, this overrides the transparent_hugepage=never setting for both
-> > shared and private mappings.
->
-> As Sean pointed out, this should check against fault->is_private instead
-> of the slot. For private fault, the level is retrieved and stored to
-> fault->max_level in kvm_faultin_pfn_private() instead of here.
->
-> For shared fault, it will continue to query host_level below. For
-> private fault, the host level has already been accounted in
-> kvm_faultin_pfn_private().
->
-> Chao
-> >
+This option doesn't really work and breaks too many drivers.
+Not yet sure what's the right thing to do, for now
+let's make sure randconfig isn't broken by this.
 
-With transparent_hugepages=always setting I see issues with the
-current implementation.
+Fixes: c346dae4f3fb ("virtio: disable notification hardening by default")
+Cc: "Jason Wang" <jasowang@redhat.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+---
+ drivers/virtio/Kconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Scenario:
-1) Guest accesses a gfn range 0x800-0xa00 as private
-2) Guest calls mapgpa to convert the range 0x84d-0x86e as shared
-3) Guest tries to access recently converted memory as shared for the first time
-Guest VM shutdown is observed after step 3 -> Guest is unable to
-proceed further since somehow code section is not as expected
+diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
+index e1556d2a355a..afb9051e0125 100644
+--- a/drivers/virtio/Kconfig
++++ b/drivers/virtio/Kconfig
+@@ -31,11 +31,12 @@ if VIRTIO_MENU
+ 
+ config VIRTIO_HARDEN_NOTIFICATION
+         bool "Harden virtio notification"
++        depends on BROKEN
+         help
+           Enable this to harden the device notifications and suppress
+           those that happen at a time where notifications are illegal.
+ 
+-          Experimental: Note that several drivers still have bugs that
++          Experimental: Note that several drivers still have issues that
+           may cause crashes or hangs when correct handling of
+           notifications is enforced; depending on the subset of
+           drivers and devices you use, this may or may not work.
+-- 
+MST
 
-Corresponding KVM trace logs after step 3:
-VCPU-0-61883   [078] ..... 72276.115679: kvm_page_fault: address
-84d000 error_code 4
-VCPU-0-61883   [078] ..... 72276.127005: kvm_mmu_spte_requested: gfn
-84d pfn 100b4a4d level 2
-VCPU-0-61883   [078] ..... 72276.127008: kvm_tdp_mmu_spte_changed: as
-id 0 gfn 800 level 2 old_spte 100b1b16827 new_spte 100b4a00ea7
-VCPU-0-61883   [078] ..... 72276.127009: kvm_mmu_prepare_zap_page: sp
-gen 0 gfn 800 l1 8-byte q0 direct wux nxe ad root 0 sync
-VCPU-0-61883   [078] ..... 72276.127009: kvm_tdp_mmu_spte_changed: as
-id 0 gfn 800 level 1 old_spte 1003eb27e67 new_spte 5a0
-VCPU-0-61883   [078] ..... 72276.127010: kvm_tdp_mmu_spte_changed: as
-id 0 gfn 801 level 1 old_spte 10056cc8e67 new_spte 5a0
-VCPU-0-61883   [078] ..... 72276.127010: kvm_tdp_mmu_spte_changed: as
-id 0 gfn 802 level 1 old_spte 10056fa2e67 new_spte 5a0
-VCPU-0-61883   [078] ..... 72276.127010: kvm_tdp_mmu_spte_changed: as
-id 0 gfn 803 level 1 old_spte 0 new_spte 5a0
-....
- VCPU-0-61883   [078] ..... 72276.127089: kvm_tdp_mmu_spte_changed: as
-id 0 gfn 9ff level 1 old_spte 100a43f4e67 new_spte 5a0
- VCPU-0-61883   [078] ..... 72276.127090: kvm_mmu_set_spte: gfn 800
-spte 100b4a00ea7 (rwxu) level 2 at 10052fa5020
- VCPU-0-61883   [078] ..... 72276.127091: kvm_fpu: unload
-
-Looks like with transparent huge pages enabled kvm tried to handle the
-shared memory fault on 0x84d gfn by coalescing nearby 4K pages
-to form a contiguous 2MB page mapping at gfn 0x800, since level 2 was
-requested in kvm_mmu_spte_requested.
-This caused the private memory contents from regions 0x800-0x84c and
-0x86e-0xa00 to get unmapped from the guest leading to guest vm
-shutdown.
-
-Does getting the mapping level as per the fault access type help
-address the above issue? Any such coalescing should not cross between
-private to
-shared or shared to private memory regions.
-
-> > >     host_level = host_pfn_mapping_level(kvm, gfn, pfn, slot);
-> > >     return min(host_level, max_level);
-> > >  }
-> >
-
-Regards,
-Vishal

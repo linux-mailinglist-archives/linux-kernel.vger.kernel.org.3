@@ -2,105 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C3B561AE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA92561AF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234308AbiF3NCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 09:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41208 "EHLO
+        id S235147AbiF3NFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 09:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235190AbiF3NCb (ORCPT
+        with ESMTP id S234774AbiF3NFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:02:31 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2529140E67;
-        Thu, 30 Jun 2022 06:02:31 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25UCCcJE021718;
-        Thu, 30 Jun 2022 13:02:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=Zin55iReFVYask8LlcnJU0tNnOs0FShBSAddaEKcrN0=;
- b=dbkl6VK6WiMjcBPjLV73Br82dDU9TRpCFWkPS/CAJZ9qymYCsNoN/SMkmv9kRwqIdumj
- iYp3Bv1R1sx6ZDo8zRY5OetkmqwTrYRV8T9YHRG4oppAdG5jV1T7m5WVuW/b8Gfp0Ty2
- rFk8BNsZgVEnIn/glP6XRDFGwm5kH+5f02To6vftesLmBLuxBN0g/c1HK5CiSl/ETN7C
- swbskNLA8OhYCMp6guygBJSJft4sR49tQ4MzEOCGMVMgYFVSZrTJS5pAAxXzsIhCCQYg
- 0N5yqxYTA69m08c4c7+vbxjM6N9XU4cKs8Fep+OM751SiAIQTW3kFXPmBDXQadq9SKGi bA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h1bmmsfa3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Jun 2022 13:02:20 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25UCDEwB022982;
-        Thu, 30 Jun 2022 13:02:19 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h1bmmsf8e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Jun 2022 13:02:19 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25UColij026794;
-        Thu, 30 Jun 2022 13:02:17 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3gwsmhx3nu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Jun 2022 13:02:16 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25UD2EsX21561680
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 Jun 2022 13:02:14 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9B3F14C044;
-        Thu, 30 Jun 2022 13:02:14 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7549C4C040;
-        Thu, 30 Jun 2022 13:02:12 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.82.30])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 30 Jun 2022 13:02:12 +0000 (GMT)
-Message-ID: <85e23c1c9460b3b3e9afbeb0789bb0320dda3f51.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 1/5] drivers: of: kexec ima: Support 32-bit platforms
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>, dmitry.kasatkin@gmail.com,
-        linux-integrity@vger.kernel.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Date:   Thu, 30 Jun 2022 09:02:11 -0400
-In-Reply-To: <20220624044811.9682-2-palmer@rivosinc.com>
-References: <20220624044811.9682-1-palmer@rivosinc.com>
-         <20220624044811.9682-2-palmer@rivosinc.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: OIbSsAg0_Mv4tb80y96_oDp23Vz_FRel
-X-Proofpoint-ORIG-GUID: 03tDXB3J7cuQMldkokm7ErA1U1XRRNKu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-30_09,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- priorityscore=1501 malwarescore=0 adultscore=0 impostorscore=0
- lowpriorityscore=0 bulkscore=0 phishscore=0 spamscore=0 mlxlogscore=977
- suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206300052
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 30 Jun 2022 09:05:48 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E722205FD
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 06:05:46 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id fw3so11241981ejc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 06:05:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YiSqVIzhdKNt6jDuv6m0mtfu6qdlxyAFm39nziCEFfE=;
+        b=LdIaWH7US44QX7IILZNcJGjXl7yhOLYLouzEwIoJ+KNAEWGmExBmeIQZ29Suavq9Sq
+         i1CYsIEC7qA0DVrwHA7YP+QX9K9GSmVDeH3gMrPLIBDST4ssWU7wyct5XGwQSSc3CIGB
+         2Bj+jkPCcjulhWoFk3FltD8ZCS0uh1ilcLU9t5KMSzNulQH4LUuwjNUpm1DPHFDJ9UAE
+         4DJHwAs7FYpZz8cymBQusgNw5fcwuJVJ+ZibrrksD3bCOscFayGZt/Kt0OpC/rVLM8yR
+         NSaG0wuVOz7wbqxREJ65u90eHApyo+yw6FV9MZayPmbzSwlTXVbSWOH5++gypvQs5aPm
+         X9sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YiSqVIzhdKNt6jDuv6m0mtfu6qdlxyAFm39nziCEFfE=;
+        b=Im9+8wz8QgTcFy8DiX1e5BxetaE4XNoGD6qVt7TvWs2CQvGjS7GHE1OR4/9a9Saz+m
+         /cs5VFy+/V3+DaszXGdKHTNr3rw+HmmbevpOVm/hvBciNq6EVRAn+YXJ70kv3niDTH5B
+         R8N7maL02YsswK1+7qRbMXpA2XVdWlkAYfWObo+EnIJz4nYINJzQAAD53IXFIHdGE/hC
+         IFWpwjrTGd85q2BxnR+qApcjxs0s3fV3n5njGpXfYBRLsso4sHNNXA/iZDT36VANDs8u
+         f7YDqiPy27Rlw/A5kiKG10l6l5KNbuSs4XEg13YVJXHDIlTEJf0wXy3Hyp6C563yYDJu
+         gB7g==
+X-Gm-Message-State: AJIora/ujJUAes83xQEjwyO/8nufHrSwaaztJu+lN0aOZkBkYnabIOJT
+        3YYA0R3qY7+NcGinDX9AvSlVYQ==
+X-Google-Smtp-Source: AGRyM1tZe+0W4d+ICqLzhJw1k47MwurWZZZ6YzgHwcuZ1uK6sFiwanVofJyXP1RnfwHFxl81sOjW8g==
+X-Received: by 2002:a17:906:a0cf:b0:726:cbdd:466b with SMTP id bh15-20020a170906a0cf00b00726cbdd466bmr8617602ejb.410.1656594345137;
+        Thu, 30 Jun 2022 06:05:45 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id f15-20020a1709062c4f00b007081282cbd8sm9124967ejh.76.2022.06.30.06.05.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 06:05:44 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>
+Subject: [PATCH v7 0/4] soc/arm64: qcom: Add initial version of bwmon
+Date:   Thu, 30 Jun 2022 15:05:37 +0200
+Message-Id: <20220630130541.563001-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-06-23 at 21:48 -0700, Palmer Dabbelt wrote:
-> RISC-V recently added kexec_file() support, which uses enables kexec
-> IMA.  We're the first 32-bit platform to support this, so we found a
-> build bug.
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Hi,
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+Changes since v6
+================
+1. Patch #2 (driver): use MSM8998 compatible.
+
+Changes since v5
+================
+1. Rename compatible (and files) to qcom,msm8998-llcc-bwmon as Rajendra suggested.
+   Keep the reviews/acks as the change is not significant.
+2. Update comment in DTS, update description in bindings and in Kconfig.
+
+Changes since v4
+================
+1. Patch #1 (binding): Use qcom,msm8998-cpu-bwmon fallback compatible, only one
+   interconnect. Rename to qcom,msm8998-cpu-bwmon.yaml. This reflects
+   discussion with Bjorn, about the proper fallback compatible. Driver was
+   tested only on SDM845, so only that one compatible is actually implemented.
+   Keep the reviews/acks as the change is not significant.
+2. Patch #4 (DTS): Use qcom,msm8998-cpu-bwmon fallback compatible, only one
+   interconnect, use the LLCC bandwidth in OPP.
+
+remove unused irq_enable (kbuild robot);
+Changes since v3
+================
+1. Patch #2 (bwmon): remove unused irq_enable (kbuild robot);
+   split bwmon_clear() into clearing counters and interrupts, so bwmon_start()
+   does not clear the counters twice.
+
+Changes since v2
+================
+1. Spent a lot of time on benchmarking and learning the BWMON behavior.
+2. Drop PM/OPP patch - applied.
+3. Patch #1: drop opp-avg-kBps.
+4. Patch #2: Add several comments explaining pieces of code and BWMON, extend
+   commit msg with measurements, extend help message, add new #defines to document
+   some magic values, reorder bwmon clear/disable/enable operations to match
+   downstream source and document this with comments, fix unit count from 1 MB
+   to 65 kB.
+5. Patch #4: drop opp-avg-kBps.
+6. Add accumulated Rb tags.
+
+Changes since v1
+================
+1. Add defconfig change.
+2. Fix missing semicolon in MODULE_AUTHOR.
+3. Add original downstream (msm-4.9 tree) copyrights to the driver.
+
+Description
+===========
+BWMON is a data bandwidth monitor providing throughput/bandwidth over certain
+interconnect links in a SoC.  It might be used to gather current bus usage and
+vote for interconnect bandwidth, thus adjusting the bus speed based on actual
+usage.
+
+The work is built on top of Thara Gopinath's patches with several cleanups,
+changes and simplifications.
+
+Cc: Rajendra Nayak <quic_rjendra@quicinc.com>
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (4):
+  dt-bindings: interconnect: qcom,msm8998-cpu-bwmon: add BWMON device
+  soc: qcom: icc-bwmon: Add bandwidth monitoring driver
+  arm64: defconfig: enable Qualcomm Bandwidth Monitor
+  arm64: dts: qcom: sdm845: Add CPU BWMON
+
+ .../interconnect/qcom,msm8998-llcc-bwmon.yaml |  85 ++++
+ MAINTAINERS                                   |   7 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  37 ++
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/soc/qcom/Kconfig                      |  15 +
+ drivers/soc/qcom/Makefile                     |   1 +
+ drivers/soc/qcom/icc-bwmon.c                  | 421 ++++++++++++++++++
+ 7 files changed, 567 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,msm8998-llcc-bwmon.yaml
+ create mode 100644 drivers/soc/qcom/icc-bwmon.c
+
+-- 
+2.34.1
 

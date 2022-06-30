@@ -2,68 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA6A560F53
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 04:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 148BD560F54
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 04:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbiF3Cr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 22:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
+        id S231905AbiF3Cr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 22:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiF3CrU (ORCPT
+        with ESMTP id S231908AbiF3Crv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 22:47:20 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D9321812
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 19:47:19 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so23985483fac.13
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 19:47:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3ywqPnrjk7+VPwmHhFZLyGQcPPOrrzS3ghZVEbWBRsY=;
-        b=Yfiv4yeJnVDfKHzZxIVuXfngaSaGc/rDJgH1CtKIs+fDZol8XTu0pzq4mN6GQjNtrN
-         u2DfBT3VuIIxD/5Z7+K8WuPcUDhA4h8rIcK7EXuvrVqC9xb9K+Uk5i9tE6z2vNRo0PaG
-         xr1KJxjWun0V9ioMUFS25LfPCpJctZpcwTIE22c+Hd9SlMepazMbzB0WzvoB4ryvXZAc
-         wDI77EpN+KZueTi3op/HW0x7VswoEHnv43PN5We8T6uFyhdukN0jRfusAfOowRRV9igT
-         d9vlo5H5kDfKvCheJIBjTbtOyRaHJ8horb0mrRTmR3YbQ1dnq2b7Uu+/3XweowC/32iN
-         OEmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3ywqPnrjk7+VPwmHhFZLyGQcPPOrrzS3ghZVEbWBRsY=;
-        b=uCOh03b6tbFaY4DQU6v4j21PWcR5zSknWuzxWwrR8mVuLFxdLg2ki43bgrIswV6Npb
-         ULIMXgqtMmXOdab//ztTWvKYTv7rCrdVAlnJ5XTSTJlIN8rbAiP+kEVaxuY6dOo4nLVY
-         pEGb7vw73kU034YLPtfHxlq4+VlFo8DgMmmotDiV1OMRXHMngMyBagUQzkXqO8FTvGJi
-         JjBPMRocr9Wbmt8BXo4pl1bdGWor8ukY4wNrG/Ivh8uOdtKWM8SPz89t5xia+1brtHBz
-         J3SOvsNKztPlonizx5Vo3B2r7Jfljjo2RIz1b/k8emPF9T8fUVgl3E39hhcrtgpHhXTR
-         XL8g==
-X-Gm-Message-State: AJIora90d27M1AqqUgFfZEEWv/NfGbhWO1HE8L7oF2lw6BXIVhisgASh
-        i4+0Bo25PiJILVqOyYXJ7vq5Pw==
-X-Google-Smtp-Source: AGRyM1vT5F9b2gbHBQlo0yTk02K5QrCj8X+q2voFbBIbG489Mv1argV4Cf2nf/uYkeUq4NeV1lqbpQ==
-X-Received: by 2002:a05:6870:b60e:b0:e9:35aa:3cb8 with SMTP id cm14-20020a056870b60e00b000e935aa3cb8mr3706626oab.249.1656557238394;
-        Wed, 29 Jun 2022 19:47:18 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id 7-20020aca2107000000b003264a325ecdsm9555170oiz.5.2022.06.29.19.47.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 19:47:17 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 21:47:15 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Sibi Sankar <quic_sibis@quicinc.com>
-Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        quic_psodagud@quicinc.com, eberman@codeaurora.org
-Subject: Re: [RFC 0/3] Add interconnect support to the SCM interface
-Message-ID: <Yr0Os5TOITY7f0Wk@builder.lan>
-References: <1653289258-17699-1-git-send-email-quic_sibis@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1653289258-17699-1-git-send-email-quic_sibis@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Wed, 29 Jun 2022 22:47:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC2E3B02D
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 19:47:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 701C6B82718
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:47:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4921C34114;
+        Thu, 30 Jun 2022 02:47:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1656557268;
+        bh=q4b1LJ2DwRDteJ3iTMyAFDQxG0jHMQ+puHrfpRpsSCw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KHQuPbMara6fJJNuTBPMcoIs0XXta5ogWsfuxzDDfaGdl+2yKvMEMvhAdnWo/Bqgs
+         YHCM4qLx2j/0JANzk/mhQxitqSJeEIJICbburn+iHGcMx2IXS7L9EJ1FdTFsO7Uckn
+         ovTRCIFbdeGlqXZlQiwckRC/P/Co3qNfzuRpQ3KI=
+Date:   Wed, 29 Jun 2022 19:47:47 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, dave.hansen@intel.com,
+        Joerg Roedel <jroedel@suse.de>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [RFC PATCH] mm/slub: enable debugging memory wasting of kmalloc
+Message-Id: <20220629194747.62effc10a994f67e26fe96af@linux-foundation.org>
+In-Reply-To: <20220630023844.GA4668@shbuild999.sh.intel.com>
+References: <20220630014715.73330-1-feng.tang@intel.com>
+        <20220629193006.77e9f071a5940e882c459cdd@linux-foundation.org>
+        <20220630023844.GA4668@shbuild999.sh.intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,33 +62,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 23 May 02:00 CDT 2022, Sibi Sankar wrote:
+On Thu, 30 Jun 2022 10:38:44 +0800 Feng Tang <feng.tang@intel.com> wrote:
 
-> Some of the SMC calls required by remoteproc PAS driver on SM8450 SoCs
-> get a performance benefit from having a max vote to the crypto->ddr path.
-> Add support for bandwidth (bw) voting for those SMC calls when the
-> interconnects property is specified. Marking this as an RFC since the path
-> could either be specified in the individual remoteprocs or directly in the
-> scm interface.
+> Hi Andrew,
 > 
+> Thanks for the review!
+> 
+> On Wed, Jun 29, 2022 at 07:30:06PM -0700, Andrew Morton wrote:
+> > On Thu, 30 Jun 2022 09:47:15 +0800 Feng Tang <feng.tang@intel.com> wrote:
+> > 
+> > > kmalloc's API family is critical for mm, with one shortcoming that
+> > > its object size is fixed to be power of 2. When user requests memory
+> > > for '2^n + 1' bytes, actually 2^(n+1) bytes will be allocated, so
+> > > in worst case, there is around 50% memory space waste.
+> > > 
+> > > We've met a kernel boot OOM panic, and from the dumped slab info:
+> > > 
+> > >     [   26.062145] kmalloc-2k            814056KB     814056KB
+> > > 
+> > > >From debug we found there are huge number of 'struct iova_magazine',
+> > > whose size is 1032 bytes (1024 + 8), so each allocation will waste
+> > > 1016 bytes. Though the issue is solved by giving the right(bigger)
+> > > size of RAM, it is still better to optimize the size (either use
+> > > a kmalloc friendly size or create a dedicated slab for it).
+> > 
+> > Well that's nice, and additional visibility is presumably a good thing.
+> > 
+> > But what the heck is going on with iova_magazine?  Is anyone looking at
+> > moderating its impact?
+> 
+> Yes, I have a very simple patch at hand
+> 
+> --- a/drivers/iommu/iova.c
+> +++ b/drivers/iommu/iova.c
+> @@ -614,7 +614,7 @@ EXPORT_SYMBOL_GPL(reserve_iova);
+>   * dynamic size tuning described in the paper.
+>   */
+>  
+> -#define IOVA_MAG_SIZE 128
+> +#define IOVA_MAG_SIZE 127
 
-I find it reasonable to state that the clocking needs for the CE relates
-to the SCM and not the remoteproc, and it's in line with the management
-of CE clocks from the SCM driver.
+Well OK.  Would benefit from a comment explaining the reasoning.
 
-Regards,
-Bjorn
+But we still have eleventy squillion of these things in flight.  Why?
 
-> Sibi Sankar (3):
->   dt-bindings: firmware: qcom-scm: Add interconnects property
->   firmware: qcom_scm: Add bw voting support to the SCM interface
->   arm64: dts: qcom: sm8450: Add interconnect requirements for SCM
+>  #define MAX_GLOBAL_MAGS 32	/* magazines per bin */
+>  
+>  struct iova_magazine {
 > 
->  .../devicetree/bindings/firmware/qcom,scm.txt      |  1 +
->  arch/arm64/boot/dts/qcom/sm8450.dtsi               |  1 +
->  drivers/firmware/qcom_scm.c                        | 69 ++++++++++++++++++++++
->  3 files changed, 71 insertions(+)
-> 
-> -- 
-> 2.7.4
-> 
+> I guess changing it from 128 to 127 will not hurt much, and plan to
+> send it out soon.
+

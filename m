@@ -2,58 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCBD6561030
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 06:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99AB4561036
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 06:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231981AbiF3E3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 00:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
+        id S231776AbiF3Ebm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 00:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiF3E3M (ORCPT
+        with ESMTP id S229687AbiF3Ebk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 00:29:12 -0400
-Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90FF33E28;
-        Wed, 29 Jun 2022 21:29:10 -0700 (PDT)
-Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
-        by ni.piap.pl (Postfix) with ESMTPSA id DB312C3F3EDF;
-        Thu, 30 Jun 2022 06:29:06 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl DB312C3F3EDF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=piap.pl; s=mail;
-        t=1656563347; bh=h1CvsX5f0r5ND4l/vVuhCgjxDaKnyXHFKfDiL3Ks5Yw=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=GLt2XT7f6rm1gzfK7d46W8JtcpT/qQH4WaOG5gTiptH7NCqixhgnuT/E4NdnYvupp
-         7ssruRSLPXILRjAq7OdvvoAfdHDzyKR8b4FQdLa8zQ34Fc5sCsdTOCxvQlaEeOrnDG
-         J5O5bUhy5qPn0/VWvC+aDSgQA/hrIoH2acyxgbz8=
-From:   =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Joe Perches <joe@perches.com>
-Subject: Re: [PATCH v8 2/2] On Semi AR0521 sensor driver
-References: <m3pmn66pie.fsf@t19.piap.pl> <m3h78i6p4t.fsf@t19.piap.pl>
-        <20220301093107.ihokyp4xptkzpbpc@uno.localdomain>
-        <m38rtt7sx7.fsf@t19.piap.pl>
-        <20220301143044.2l4vlwbnh5n3g5ng@uno.localdomain>
-        <m37d7ufrzx.fsf@t19.piap.pl> <m3pmkryywn.fsf@t19.piap.pl>
-        <YrziTabYLlZ2bX+1@valkosipuli.retiisi.eu>
-Sender: khalasa@piap.pl
-Date:   Thu, 30 Jun 2022 06:29:06 +0200
-In-Reply-To: <YrziTabYLlZ2bX+1@valkosipuli.retiisi.eu> (Sakari Ailus's message
-        of "Thu, 30 Jun 2022 02:37:49 +0300")
-Message-ID: <m34k027p0t.fsf@t19.piap.pl>
+        Thu, 30 Jun 2022 00:31:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5464937AB0;
+        Wed, 29 Jun 2022 21:31:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04C7BB8288B;
+        Thu, 30 Jun 2022 04:31:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2FEFC34115;
+        Thu, 30 Jun 2022 04:31:30 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: [PATCH V2 0/4] mm/sparse-vmemmap: Generalise helpers and enable for
+Date:   Thu, 30 Jun 2022 12:32:33 +0800
+Message-Id: <20220630043237.2059576-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-KLMS-Message-Action: skipped
-X-KLMS-AntiSpam-Status: not scanned, license restriction
-X-KLMS-AntiPhishing: not scanned, license restriction
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, not scanned, license restriction
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,29 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sakari,
+This series is in order to enable sparse-vmemmap for LoongArch. But
+LoongArch cannot use generic helpers directly because MIPS&LoongArch
+need to call pgd_init()/pud_init()/pmd_init() when populating page
+tables. So we adjust the prototypes of p?d_init() to make generic
+helpers can call them, then enable sparse-vmemmap with generic helpers,
+and to be further, generalise vmemmap_populate_hugepages() for ARM64,
+X86 and LoongArch.
 
-Sakari Ailus <sakari.ailus@iki.fi> writes:
+V1 -> V2:
+Split ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP to a separate patch.
 
-> I've
-> applied it with these changes:
->
-> diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-...
-> @@ -1056,4 +1058,4 @@ module_i2c_driver(ar0521_i2c_driver);
->=20=20
->  MODULE_DESCRIPTION("AR0521 MIPI Camera subdev driver");
->  MODULE_AUTHOR("Krzysztof Ha=C5=82asa <khalasa@piap.pl>");
-> -MODULE_LICENSE("GPL v2");
-> +MODULE_LICENSE("GPL");
+Huacai Chen and Feiyang Chen(4):
+ MIPS&LoongArch: Adjust prototypes of p?d_init().
+ LoongArch: Add sparse memory vmemmap support.
+ mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages().
+ LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP.
 
-Why did you change this? Are now "GPL v2" tags forbidden in
-drivers/media?
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn> 
+---
+ arch/arm64/mm/mmu.c                    | 53 ++++++--------------
+ arch/loongarch/Kconfig                 |  2 +
+ arch/loongarch/include/asm/pgalloc.h   | 13 +----
+ arch/loongarch/include/asm/pgtable.h   | 13 +++--
+ arch/loongarch/include/asm/sparsemem.h |  8 +++
+ arch/loongarch/kernel/numa.c           |  4 +-
+ arch/loongarch/mm/init.c               | 44 +++++++++++++++-
+ arch/loongarch/mm/pgtable.c            | 23 +++++----
+ arch/mips/include/asm/pgalloc.h        |  8 +--
+ arch/mips/include/asm/pgtable-64.h     |  8 +--
+ arch/mips/kvm/mmu.c                    |  3 +-
+ arch/mips/mm/pgtable-32.c              | 10 ++--
+ arch/mips/mm/pgtable-64.c              | 18 ++++---
+ arch/mips/mm/pgtable.c                 |  2 +-
+ arch/x86/mm/init_64.c                  | 92 ++++++++++++----------------------
+ include/linux/mm.h                     |  8 +++
+ include/linux/page-flags.h             |  1 +
+ mm/sparse-vmemmap.c                    | 64 +++++++++++++++++++++++
+ 18 files changed, 222 insertions(+), 152 deletions(-)
+--
+2.27.0
 
-Thanks for looking at this, though.
---=20
-Krzysztof "Chris" Ha=C5=82asa
-
-Sie=C4=87 Badawcza =C5=81ukasiewicz
-Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
-Al. Jerozolimskie 202, 02-486 Warszawa

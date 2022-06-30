@@ -2,143 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 984C3561B40
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E04561AC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234821AbiF3NZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 09:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
+        id S234855AbiF3MuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 08:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbiF3NZR (ORCPT
+        with ESMTP id S234175AbiF3MuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:25:17 -0400
-X-Greylist: delayed 2163 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Jun 2022 06:25:17 PDT
-Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [95.217.213.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFB03120B
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 06:25:17 -0700 (PDT)
-Received: from 168.7-181-91.adsl-dyn.isp.belgacom.be ([91.181.7.168] helo=deadeye)
-        by maynard with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ben@decadent.org.uk>)
-        id 1o6tbT-0001RQ-EK; Thu, 30 Jun 2022 14:49:03 +0200
-Received: from ben by deadeye with local (Exim 4.95)
-        (envelope-from <ben@decadent.org.uk>)
-        id 1o6tbR-003M4l-LM;
-        Thu, 30 Jun 2022 14:49:01 +0200
-Message-ID: <01d6cfab3d8e466718cb254279bcae90d3390235.camel@decadent.org.uk>
-Subject: Re: [PATCH stable 4.19] swiotlb: skip swiotlb_bounce when orig_addr
- is zero
-From:   Ben Hutchings <ben@decadent.org.uk>
-To:     Liu Shixin <liushixin2@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Date:   Thu, 30 Jun 2022 14:48:56 +0200
-In-Reply-To: <20220630113331.1544886-1-liushixin2@huawei.com>
-References: <20220630113331.1544886-1-liushixin2@huawei.com>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-yepyHi/rra1L4p3Rn+ML"
-User-Agent: Evolution 3.44.1-2 
+        Thu, 30 Jun 2022 08:50:05 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449AD4092F
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 05:50:01 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id h187so31354223ybg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 05:50:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=ZwzSWKe8aJcF2q7NRCCrMkrvQ9eS4Q9joDzntgIKPec=;
+        b=S78S+TyPx36awhtCaE0Keub2LARo0kgsW0JHrCJWdX0xpob5uA1OD3kxQ27FLZzdVu
+         gwssUm2TlTWZBStpsaJBIhgU2mRrRCZItsCetZIazJvYtw4efK65QYH0eBGC0FlLEpWA
+         5D2gdN3UiFGgudUlS8lLoXseDFCoMygsnyTfp3a2OHaW9Q/Y1KuplrOQjGMn/g8heKpi
+         DMYs3fQ0EbezO8gM1EUf+WRee7ymcRovhaaUSYjdhiZcIHvNWgzpkCV4BdLYzMzDdYap
+         vyL1KzSltRQCt07dBslki+SLJQ+KGtqrdpG9gua5zDLUnVGln8nIfhIeelR+HN+ioNEc
+         gyMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=ZwzSWKe8aJcF2q7NRCCrMkrvQ9eS4Q9joDzntgIKPec=;
+        b=ncVy+5ILKJMlHeg9+7IiXKCNBnXXi/LRREkSK7eliaZGEJK7PU5YQ38eScskw5uOPx
+         jnHveBAiqZoqOeAwRnDldWD4KEPF2YjobiQiDsDjF3fg/txlx66FRNF4P3uTW2J1bGT7
+         6pdBJLVdOK1xGuyq1sFh2oAkLCRphiALR1ApW0bUIFq3pSZSFQKi8HSZF8MO3XzTuPmL
+         lOmTq1MbDIDcMKXtcXL8kLlrfn/RDTZOMv8LEncfPfNrPPClE1yoRfmayacMCJowGaIQ
+         d2EURf0+gMUmjY6aIldCNLxMGcWx1My+Hg+sHntD0kz1RbDT782aombvw8U+gYqqwDD4
+         6lQA==
+X-Gm-Message-State: AJIora+CEA/twftCWkR63aFd6Y22FuzNBuvYWOfssku9zFYIjRWRYaMx
+        Z1OR+CtT4u9cQ74w3uVL+x3PQ3SB8pWpnkcWX6E=
+X-Google-Smtp-Source: AGRyM1sLu2rLMyHFb7kD6qvYQPvOsXS8rHTxgIWg2jtvdTkhIG2mpQ4PnUGmr7Tr1zbF6G8nay9QTf64nCfGcjznoz0=
+X-Received: by 2002:a05:6902:102f:b0:66d:ff4:804b with SMTP id
+ x15-20020a056902102f00b0066d0ff4804bmr9557491ybt.229.1656593400109; Thu, 30
+ Jun 2022 05:50:00 -0700 (PDT)
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 91.181.7.168
-X-SA-Exim-Mail-From: ben@decadent.org.uk
-X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Sender: ojongonwa24@gmail.com
+Received: by 2002:a05:7108:658d:0:0:0:0 with HTTP; Thu, 30 Jun 2022 05:49:59
+ -0700 (PDT)
+From:   "Doris.David" <mrs.doris.david02@gmail.com>
+Date:   Thu, 30 Jun 2022 05:49:59 -0700
+X-Google-Sender-Auth: TEFI7V0_d8vZIbUyoaRp5OdHnTk
+Message-ID: <CAFOfhhPKY2QPm5TxgGyxo7nDPXDF12Dop_BiXhSC-0wuy3Zcxw@mail.gmail.com>
+Subject: Re: Greetings My Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_60,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b31 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.7503]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ojongonwa24[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ojongonwa24[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Greetings,
 
---=-yepyHi/rra1L4p3Rn+ML
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+I sent this mail praying it will find you in a good condition, since I
+myself am in a very critical health condition in which I sleep every
+night  without knowing if I may be alive to see the next day. I am
+Mrs.Doris David, a widow suffering from a long time illness. I have
+some funds I  inherited from my late husband, the sum of
+($11,000,000.00) my Doctor told me recently that I have serious
+sickness which is a cancer problem. What disturbs me most is my stroke
+sickness. Having known my condition, I decided to donate this fund to
+a good person that will utilize it the way I am going to instruct
+herein. I need a very honest God.
 
-On Thu, 2022-06-30 at 19:33 +0800, Liu Shixin wrote:
-> After patch ddbd89deb7d3 ("swiotlb: fix info leak with DMA_FROM_DEVICE"),
-> swiotlb_bounce will be called in swiotlb_tbl_map_single unconditionally.
-> This requires that the physical address must be valid, which is not alway=
-s
-> true on stable-4.19 or earlier version.
-> On stable-4.19, swiotlb_alloc_buffer will call swiotlb_tbl_map_single wit=
-h
-> orig_addr equal to zero, which cause such a panic:
->=20
-> Unable to handle kernel paging request at virtual address ffffb77a4000000=
-0
-> ...
-> pc : __memcpy+0x100/0x180
-> lr : swiotlb_bounce+0x74/0x88
-> ...
-> Call trace:
->  __memcpy+0x100/0x180
->  swiotlb_tbl_map_single+0x2c8/0x338
->  swiotlb_alloc+0xb4/0x198
->  __dma_alloc+0x84/0x1d8
->  ...
->=20
-> On stable-4.9 and stable-4.14, swiotlb_alloc_coherent wille call map_sing=
-le
-> with orig_addr equal to zero, which can cause same panic.
->=20
-> Fix this by skipping swiotlb_bounce when orig_addr is zero.
+fearing a person who can claim this money and use it for Charity
+works, for orphanages, widows and also build schools for less
+privileges that will be named after my late husband if possible and to
+promote the word of God and the effort that the house of God is
+maintained. I do not want a situation where this money will be used in
+an ungodly manner. That's why I' making this decision. I'm not afraid
+of death so I know where I'm going. I accept this decision because I
+do not have any child who will inherit this money after I die. Please
+I want your sincere and urgent answer to know if you will be able to
+execute this project, and I will give you more information on how
+thunder will be transferred to your bank account. I am waiting for
+your reply.
 
-Thanks for fixing this.  I tried to test the backports by forcing use
-of swiotlb, but apparently it still didn't get used.
-
-Ben.
-
-> Fixes: ddbd89deb7d3 ("swiotlb: fix info leak with DMA_FROM_DEVICE")
-> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-> ---
->  kernel/dma/swiotlb.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-> index 8b1360772fc5..b1e2ce2f9c2d 100644
-> --- a/kernel/dma/swiotlb.c
-> +++ b/kernel/dma/swiotlb.c
-> @@ -594,7 +594,8 @@ phys_addr_t swiotlb_tbl_map_single(struct device *hwd=
-ev,
->  	 * unconditional bounce may prevent leaking swiotlb content (i.e.
->  	 * kernel memory) to user-space.
->  	 */
-> -	swiotlb_bounce(orig_addr, tlb_addr, size, DMA_TO_DEVICE);
-> +	if (orig_addr)
-> +		swiotlb_bounce(orig_addr, tlb_addr, size, DMA_TO_DEVICE);
->  	return tlb_addr;
->  }
-> =20
-
---=20
-Ben Hutchings
-Nothing is ever a complete failure;
-it can always serve as a bad example.
-
---=-yepyHi/rra1L4p3Rn+ML
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQIyBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmK9m7kACgkQ57/I7JWG
-EQmAzg/4778VL7ohyyfG2tX3pG5qxojr5oph3JeBdR1qkBQ40kvSS4KXd3yk8d4t
-9CfsXko1TQie1bp01KsEJtcpbuo6V2Hsz7T+eb3z15C4FB1RZ5j7W45Sd4Tu8NkB
-aCxzxgUJYoSXodZsKXQU/cA3hXEDv0ypE+JQvMHFJ+8CqSKD6IXaPaxZg65RtlQz
-btmh3U3NeQ4Kn7d7LYsxU0JaF1qNVESqbRnO92SXqfStZDt3aL8loO+rOJiEwpdp
-Wp0zWNyPyo9AosmrIKo9a4kJbj9k30ND8aPCoO6H5NpMVO6/kYO4sCHuQcYUKyUa
-lXuoJG0RQnOuWOVm9OqfeVIa9G8MfZ0JH8YCLJ8/w/jxGcPweRC9h2YrwzR/9cNQ
-wqWH9sscwtBUTEaY73+URipEeQz32R/qSXmZksmSPGzdsB7A3ruErBoD7VK5LkNX
-INOgIYDRMR9RnEVsEULeb5b6xaxex+LZSnS78D503bV9pHafw4zxjVgLYhPhN7ZG
-pOnS3QBoOfX35taT1p9UwLl+NvJmtSP5BGnx8Py24SZlYLQWSFlaT0BjteFJcFXR
-FsnaT990164jM7Mw9uqj5PUkNZvmgVdw8z65ZkjsWt/0h2+MOXUU7cmh8s13PHzE
-IVMkayp7kk1VuXeIHgwcrRUEq1Ek/Qlwya1tYCbqQEuwh+Nl/Q==
-=lErt
------END PGP SIGNATURE-----
-
---=-yepyHi/rra1L4p3Rn+ML--
+May God Bless you,
+Mrs.Doris David,

@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9EEE5613B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C65E5613AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbiF3HwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
+        id S232039AbiF3Hwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233276AbiF3HwG (ORCPT
+        with ESMTP id S233597AbiF3Hwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:52:06 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F893DA5A
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:52:05 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o6oxy-0005cJ-1S; Thu, 30 Jun 2022 09:51:58 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o6oxt-003Y3w-NV; Thu, 30 Jun 2022 09:51:57 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o6oxw-00BPTC-Nb; Thu, 30 Jun 2022 09:51:56 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: [PATCH net-next v1 1/1] iio: adc: tsc2046: silent spi_device_id warning
-Date:   Thu, 30 Jun 2022 09:51:55 +0200
-Message-Id: <20220630075155.2718293-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Thu, 30 Jun 2022 03:52:35 -0400
+Received: from smtpbg.qq.com (unknown [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B8D3F314;
+        Thu, 30 Jun 2022 00:52:30 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1656575526tvn9rh9i
+Received: from localhost.localdomain ( [182.148.13.66])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 30 Jun 2022 15:52:03 +0800 (CST)
+X-QQ-SSF: 0100000000200070C000B00A0000000
+X-QQ-FEAT: 3uawQE1sH+082I/m9dTggk/2Vl6B63L6A6cnIejRi6ix6XCisCPgOsSZYnRtn
+        k0z8IM6BDMwLf21oWwSPclDrTHXHmpoCODME2rXZlhK7liMTmK9GgHNIl7akgLjbPlPXZtX
+        0W+nj4NON8A8T6fZL8nzcXBfvv+FoaOTNeiUJC6j18SJzLgZ0hvfdz+WOj6GDcDYxMBucxp
+        e98jfVfRc72S6sS2bJ9f4oTX6fG8D/4uRe9c4jUMvhpIyrpdGoC3IIKNqtT+PMrR7EuF30n
+        11z2f4kJZIYISJqT778pMzTKRag2/83jvLiXZcQ8h/cadSVseyjBN02wXgdOqcWFRmAaOS2
+        sg+eLGKAAYFroqJAJU=
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] ethernet/natsemi: fix repeated words in comments
+Date:   Thu, 30 Jun 2022 15:51:56 +0800
+Message-Id: <20220630075156.61577-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,37 +49,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add spi_device_id to silent following warning:
- SPI driver tsc2046 has no spi_device_id for ti,tsc2046e-adc
+Delete the redundant word 'in'.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
- drivers/iio/adc/ti-tsc2046.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/net/ethernet/natsemi/natsemi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iio/adc/ti-tsc2046.c b/drivers/iio/adc/ti-tsc2046.c
-index 55b35570ad8b..27dc959aee37 100644
---- a/drivers/iio/adc/ti-tsc2046.c
-+++ b/drivers/iio/adc/ti-tsc2046.c
-@@ -833,11 +833,18 @@ static const struct of_device_id ads7950_of_table[] = {
- };
- MODULE_DEVICE_TABLE(of, ads7950_of_table);
+diff --git a/drivers/net/ethernet/natsemi/natsemi.c b/drivers/net/ethernet/natsemi/natsemi.c
+index 50bca486a244..9aae7f1eb5d2 100644
+--- a/drivers/net/ethernet/natsemi/natsemi.c
++++ b/drivers/net/ethernet/natsemi/natsemi.c
+@@ -158,7 +158,7 @@ MODULE_PARM_DESC(full_duplex, "DP8381x full duplex setting(s) (1)");
+ I. Board Compatibility
  
-+static const struct spi_device_id tsc2046_adc_spi_ids[] = {
-+	{ "tsc2046e-adc" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(spi, tsc2046_adc_spi_ids);
-+
- static struct spi_driver tsc2046_adc_driver = {
- 	.driver = {
- 		.name = "tsc2046",
- 		.of_match_table = ads7950_of_table,
- 	},
-+	.id_table = tsc2046_adc_spi_ids,
- 	.probe = tsc2046_adc_probe,
- };
- module_spi_driver(tsc2046_adc_driver);
+ This driver is designed for National Semiconductor DP83815 PCI Ethernet NIC.
+-It also works with other chips in in the DP83810 series.
++It also works with other chips in the DP83810 series.
+ 
+ II. Board-specific settings
+ 
 -- 
-2.30.2
+2.36.1
 

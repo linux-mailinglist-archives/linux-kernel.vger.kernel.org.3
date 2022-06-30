@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563DD56140E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 973D35613FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233637AbiF3IAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 04:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
+        id S232566AbiF3IBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 04:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233634AbiF3IAL (ORCPT
+        with ESMTP id S233472AbiF3IAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 04:00:11 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE37441304;
-        Thu, 30 Jun 2022 01:00:02 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3177f4ce3e2so171101327b3.5;
-        Thu, 30 Jun 2022 01:00:02 -0700 (PDT)
+        Thu, 30 Jun 2022 04:00:30 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1804163F;
+        Thu, 30 Jun 2022 01:00:21 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-3176b6ed923so170860657b3.11;
+        Thu, 30 Jun 2022 01:00:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=qXJzLbog6MJ74pFBfsgk8qL8nqFotk4VAzV4IxDY2Z8=;
-        b=CDVpU266vwg+nZGjOIqDIDXtqmdC30ZezHVdSz5okTFV6FQyV1OlKuD0XqUct0KgYt
-         YEg1s2zo16B/1Wy8rPIFM/y1x3zp9p7if/ECsaEDeKkAlEsX+njd4b5yuRFJkne6v8Uv
-         T/UJEbebioDSfjqJVtrvOQkbZBLVHvSfGlSKkkXp5owlLcy26T/3Q+VpszHeiFJ66bsc
-         SMcb9aRmXR0nUtmVAtiCDwvJexLSTlqQnBOAud5B59AIZL5e/Y8SOG8LCeM8FsoCgfv/
-         KFyWSeV13LQpYcpNKpnDun+1qcRkFFDOqgzlnLfKbG9wKtwpKHMsMhhpdU/dUxRS8s2W
-         m3kQ==
+        bh=YYg/Wp4bT4dysW+fftXKNsqrJ8LDP2HiO/OhiEJYgwY=;
+        b=bc0me7bZxE6sqbBQIqa8Lm0CwTH3ChwQx+vl92dAZ1YB8KQcyEbeUNWvtGPfaWrEn4
+         SAICYfKoB3HR8nZ2GCIf/sQYJncOEenHqxy07Mr/fhbBs5+gwXG/rE2H1bUxf1923z4u
+         bWsfyhqO4GhdEo3xexs6S3sWTpQ1SiiMmQM5ySY9aYztSvzLzanMhtlPerqiSLqBQ496
+         4eg1tUg6xduIEX3rmnzrZrWF0fI1ll2y2ZtuAcHPdfm06Yj+Yapt9dzY3ohmm8cTcnXP
+         B0aUGaOHP9bFII3K8YSa/xjqEOqAfUDBOx1XUZJpzYRCK94GC2Jj1/YnT99V8DniSG94
+         HQfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qXJzLbog6MJ74pFBfsgk8qL8nqFotk4VAzV4IxDY2Z8=;
-        b=VjiV1B7KXpWSEHTr3col/8wIE2lTkW/DVoHNks9zPgPQfpubkhX/C2P6rKXWJ1VSh5
-         4GI9abfyO5SAO4yoX7+H883JeYU7WQLfZIr435V4mTS8H8xFCZOlnyduNZemJHLbKKbB
-         MGvbEHYlV7Pm89icdm1/5j0RI01fPYm1h0YyLPF3ZKhDO8f8kNTepNm132+PllY43Zuk
-         RklicuKVKAkD4/MrarMwwj+Xh+jtEVmGIsOkfSdB2F/dEFv4YJH4XOfLpkoGoXb/5J6W
-         wMbVENlT9KaJQKcxc0R0/eSoE7L5WiVRrnYacJYXlQt5Ih5QtsTy8b+AB3i8PchS6Ab/
-         BHjw==
-X-Gm-Message-State: AJIora9JniEcCj5v5QRLe1Eb5VWesn7c9YCoFgS/9CqXSEZfvN7ntH0G
-        QgOpK9yRKPAytE1dPreaLMtq5pGSRImlSuFyasE=
-X-Google-Smtp-Source: AGRyM1v4zwmzhbMhptAPn2N3SU98uSYBAsImAnNff2/xupAFRFXpuWYjRHqeRLK+eXYsjJZE9xZyaHAnQlxkK3KwkH4=
-X-Received: by 2002:a81:1889:0:b0:317:987b:8e82 with SMTP id
- 131-20020a811889000000b00317987b8e82mr8712949ywy.185.1656576001966; Thu, 30
- Jun 2022 01:00:01 -0700 (PDT)
+        bh=YYg/Wp4bT4dysW+fftXKNsqrJ8LDP2HiO/OhiEJYgwY=;
+        b=oOvRuwXf73cSQUyptN+Pwd7bB8iHUSH9YoyxdAxUQ/jEJVsSre0X7Sj86tu1e4rbJc
+         HWBP2WVQMY2H92uwgBzVe3GHjyM/qyaIiJsBnwgeip1uyzPl0xcwBYUOa3tEjcSxEHQd
+         J057EGOWq+gsYhMOHhHtrbZ7fxwe3YLkgBUKfkJ3k4j12LI9miEdEDAeCLA2pFclnHJj
+         94VAiF3JksSyYP2YU7/PGUg+4lItcuRixQ/jnFlcZq0N6rMr+KVRnyJy4WaJtG+j18Bx
+         6+GWcYK221gfJFMu0RQg9v+llsHLCPiYZxIEHSyHtB3AZ1csHrgecJxyEIGQN3la0q8c
+         YKlQ==
+X-Gm-Message-State: AJIora9oJZx1Bes4d28DKOjwjdtrc5CasSpxoIym/2UHNX8AJHv9rfGO
+        ocz+bsoYtmh5dVuBEwXMEEAAztXiLIEB7xk/U4Y=
+X-Google-Smtp-Source: AGRyM1sKHpDBBl+UVcZBP9FJ/U9eNhoLOC4sdX+8DdLhlzteYXI5xmafjkNRHeePyuijTxFbMGvWs296X58zC0GMQmg=
+X-Received: by 2002:a81:cd3:0:b0:317:861c:ac07 with SMTP id
+ 202-20020a810cd3000000b00317861cac07mr9008772ywm.486.1656576020271; Thu, 30
+ Jun 2022 01:00:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com> <20220629143046.213584-12-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220629143046.213584-12-aidanmacdonald.0x0@gmail.com>
+References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com> <20220629143046.213584-14-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220629143046.213584-14-aidanmacdonald.0x0@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 30 Jun 2022 09:59:23 +0200
-Message-ID: <CAHp75VdReU+mJwf9ucE4GGfBhajf0AYq2tkcfWxWy0W2OESdJQ@mail.gmail.com>
-Subject: Re: [PATCH v4 11/15] power: supply: axp20x_usb_power: Add support for AXP192
+Date:   Thu, 30 Jun 2022 09:59:41 +0200
+Message-ID: <CAHp75VeZceiA9fUg2bT-wQz4U2sNjZa_xQmh6ALFx5BdmQK6Yg@mail.gmail.com>
+Subject: Re: [PATCH v4 13/15] power: axp20x_battery: Add constant charge
+ current table
 To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
@@ -86,178 +87,128 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Wed, Jun 29, 2022 at 4:30 PM Aidan MacDonald
 <aidanmacdonald.0x0@gmail.com> wrote:
 >
-> The AXP192's USB power supply is similar to the AXP202 but it has
-> different USB current limits and a different offset for the VBUS
-> status register.
+> Add a table-based lookup method for constant charge current,
+> which is necessary when the setting cannot be represented as
+> a linear range.
+>
+> This also replaces the hard-coded 300 mA default ccc setting
+> if the DT-specified value is unsupported; the minimum value
+> for the device is now set exactly instead of relying on the
+> value being rounded down to a supported value.
 
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> Reviewed-by: Chen-Yu Tsai <wens@csie.org>
 > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 > ---
->  drivers/power/supply/axp20x_usb_power.c | 84 +++++++++++++++++++++----
->  1 file changed, 73 insertions(+), 11 deletions(-)
+>  drivers/power/supply/axp20x_battery.c | 59 +++++++++++++++++++++------
+>  1 file changed, 47 insertions(+), 12 deletions(-)
 >
-> diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
-> index a1e6d1d44808..f83e2ed6d507 100644
-> --- a/drivers/power/supply/axp20x_usb_power.c
-> +++ b/drivers/power/supply/axp20x_usb_power.c
-> @@ -48,6 +48,9 @@
->  #define AXP813_VBUS_CLIMIT_2000mA      2
->  #define AXP813_VBUS_CLIMIT_2500mA      3
+> diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
+> index 9106077c0dbb..401779d84d2b 100644
+> --- a/drivers/power/supply/axp20x_battery.c
+> +++ b/drivers/power/supply/axp20x_battery.c
+> @@ -61,6 +61,14 @@ struct axp20x_batt_ps;
+>  struct axp_data {
+>         int     ccc_scale;
+>         int     ccc_offset;
+> +       /*
+> +        * Lookup table for constant charge current, if provided this is used
+> +        * instead of ccc_scale/ccc_offset.
+> +        *
+> +        * The table is indexed by the field AXP20X_CHRG_CTRL1_TGT_CURR so it
+> +        * must have AXP20X_CHRG_CTRL1_TGT_CURR+1 elements.
+> +        */
+> +       const int *ccc_table;
+>         bool    has_fg_valid;
+>         int     (*get_max_voltage)(struct axp20x_batt_ps *batt, int *val);
+>         int     (*set_max_voltage)(struct axp20x_batt_ps *batt, int val);
+> @@ -176,7 +184,10 @@ static int axp20x_get_constant_charge_current(struct axp20x_batt_ps *axp,
 >
-> +#define AXP192_VBUS_CLIMIT_EN          BIT(1)
-> +#define AXP192_VBUS_CLIMIT_100mA       BIT(0)
-> +
->  #define AXP20X_ADC_EN1_VBUS_CURR       BIT(2)
->  #define AXP20X_ADC_EN1_VBUS_VOLT       BIT(3)
+>         *val &= AXP20X_CHRG_CTRL1_TGT_CURR;
 >
-> @@ -121,6 +124,25 @@ static void axp20x_usb_power_poll_vbus(struct work_struct *work)
->                 mod_delayed_work(system_power_efficient_wq, &power->vbus_detect, DEBOUNCE_TIME);
->  }
->
-> +static int axp192_get_current_max(struct axp20x_usb_power *power, int *val)
-> +{
-> +       unsigned int v;
-> +       int ret;
-> +
-> +       ret = regmap_read(power->regmap, AXP20X_VBUS_IPSOUT_MGMT, &v);
-> +       if (ret)
-> +               return ret;
-> +
-> +       if (!(v & AXP192_VBUS_CLIMIT_EN))
-> +               *val = -1;
-> +       else if (v & AXP192_VBUS_CLIMIT_100mA)
-> +               *val = 100000;
+> -       *val = *val * axp->data->ccc_scale + axp->data->ccc_offset;
+> +       if (axp->data->ccc_table)
+> +               *val = axp->data->ccc_table[*val];
 > +       else
-> +               *val = 500000;
-> +
-> +       return 0;
-> +}
-> +
->  static int axp20x_get_current_max(struct axp20x_usb_power *power, int *val)
->  {
->         unsigned int v;
-> @@ -179,7 +201,7 @@ static int axp20x_usb_power_get_property(struct power_supply *psy,
->         enum power_supply_property psp, union power_supply_propval *val)
->  {
->         struct axp20x_usb_power *power = power_supply_get_drvdata(psy);
-> -       unsigned int input, v;
-> +       unsigned int input, v, reg;
->         int ret;
+> +               *val = *val * axp->data->ccc_scale + axp->data->ccc_offset;
 >
->         switch (psp) {
-> @@ -215,6 +237,8 @@ static int axp20x_usb_power_get_property(struct power_supply *psy,
->         case POWER_SUPPLY_PROP_CURRENT_MAX:
->                 if (power->axp20x_id == AXP813_ID)
->                         return axp813_get_current_max(power, &val->intval);
-> +               else if (power->axp20x_id == AXP192_ID)
-> +                       return axp192_get_current_max(power, &val->intval);
->                 return axp20x_get_current_max(power, &val->intval);
->         case POWER_SUPPLY_PROP_CURRENT_NOW:
->                 if (IS_ENABLED(CONFIG_AXP20X_ADC)) {
-> @@ -256,16 +280,19 @@ static int axp20x_usb_power_get_property(struct power_supply *psy,
->
->                 val->intval = POWER_SUPPLY_HEALTH_GOOD;
->
-> -               if (power->axp20x_id == AXP202_ID) {
-> -                       ret = regmap_read(power->regmap,
-> -                                         AXP20X_USB_OTG_STATUS, &v);
-> -                       if (ret)
-> -                               return ret;
-> +               if (power->axp20x_id == AXP192_ID)
-> +                       reg = AXP192_USB_OTG_STATUS;
-> +               else if (power->axp20x_id == AXP202_ID)
-> +                       reg = AXP20X_USB_OTG_STATUS;
-> +               else
-> +                       break; /* Other chips lack the OTG status register */
->
-> -                       if (!(v & AXP20X_USB_STATUS_VBUS_VALID))
-> -                               val->intval =
-> -                                       POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
-> -               }
-> +               ret = regmap_read(power->regmap, reg, &v);
-> +               if (ret)
-> +                       return ret;
-> +
-> +               if (!(v & AXP20X_USB_STATUS_VBUS_VALID))
-> +                       val->intval = POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
->                 break;
->         case POWER_SUPPLY_PROP_PRESENT:
->                 val->intval = !!(input & AXP20X_PWR_STATUS_VBUS_PRESENT);
-> @@ -316,6 +343,28 @@ static int axp20x_usb_power_set_voltage_min(struct axp20x_usb_power *power,
->         return -EINVAL;
+>         return 0;
+>  }
+> @@ -389,16 +400,35 @@ static int axp20x_battery_set_max_voltage(struct axp20x_batt_ps *axp20x_batt,
+>                                   AXP20X_CHRG_CTRL1_TGT_VOLT, val);
 >  }
 >
-> +static int axp192_usb_power_set_current_max(struct axp20x_usb_power *power,
-> +                                           int intval)
+> +static int axp20x_get_constant_charge_current_sel(struct axp20x_batt_ps *axp_batt,
+> +                                                 int charge_current)
 > +{
-> +       const unsigned int mask = AXP192_VBUS_CLIMIT_EN |
-> +                                 AXP192_VBUS_CLIMIT_100mA;
-> +       unsigned int val;
+> +       int i;
 > +
-> +       switch (intval) {
-> +       case 100000:
-> +               val = AXP192_VBUS_CLIMIT_EN | AXP192_VBUS_CLIMIT_100mA;
-> +               break;
-> +       case 500000:
-> +               val = AXP192_VBUS_CLIMIT_EN;
-> +               break;
-> +       default:
+> +       if (axp_batt->data->ccc_table) {
+> +               for (i = AXP20X_CHRG_CTRL1_TGT_CURR; i >= 0; i--) {
+> +                       if (axp_batt->data->ccc_table[i] <= charge_current)
+> +                               return i;
+> +               }
+> +
 > +               return -EINVAL;
 > +       }
 > +
-> +       return regmap_update_bits(power->regmap,
-> +                                 AXP20X_VBUS_IPSOUT_MGMT, mask, val);
+> +       i = (charge_current - axp_batt->data->ccc_offset) / axp_batt->data->ccc_scale;
+> +       if (i > AXP20X_CHRG_CTRL1_TGT_CURR || i < 0)
+> +               return -EINVAL;
+> +
+> +       return i;
 > +}
 > +
->  static int axp813_usb_power_set_current_max(struct axp20x_usb_power *power,
->                                             int intval)
+>  static int axp20x_set_constant_charge_current(struct axp20x_batt_ps *axp_batt,
+>                                               int charge_current)
 >  {
-> @@ -383,6 +432,9 @@ static int axp20x_usb_power_set_property(struct power_supply *psy,
->                 if (power->axp20x_id == AXP813_ID)
->                         return axp813_usb_power_set_current_max(power,
->                                                                 val->intval);
-> +               else if (power->axp20x_id == AXP192_ID)
-> +                       return axp192_usb_power_set_current_max(power,
-> +                                                               val->intval);
->                 return axp20x_usb_power_set_current_max(power, val->intval);
+>         if (charge_current > axp_batt->max_ccc)
+>                 return -EINVAL;
 >
->         default:
-> @@ -468,6 +520,13 @@ struct axp_data {
->         enum axp20x_variants            axp20x_id;
->  };
+> -       charge_current = (charge_current - axp_batt->data->ccc_offset) /
+> -               axp_batt->data->ccc_scale;
+> -
+> -       if (charge_current > AXP20X_CHRG_CTRL1_TGT_CURR || charge_current < 0)
+> +       charge_current = axp20x_get_constant_charge_current_sel(axp_batt, charge_current);
+> +       if (charge_current < 0)
+>                 return -EINVAL;
 >
-> +static const struct axp_data axp192_data = {
-> +       .power_desc     = &axp20x_usb_power_desc,
-> +       .irq_names      = axp20x_irq_names,
-> +       .num_irq_names  = ARRAY_SIZE(axp20x_irq_names),
-> +       .axp20x_id      = AXP192_ID,
-> +};
+>         return regmap_update_bits(axp_batt->regmap, AXP20X_CHRG_CTRL1,
+> @@ -410,14 +440,14 @@ static int axp20x_set_max_constant_charge_current(struct axp20x_batt_ps *axp,
+>  {
+>         bool lower_max = false;
+>
+> -       charge_current = (charge_current - axp->data->ccc_offset) /
+> -               axp->data->ccc_scale;
+> -
+> -       if (charge_current > AXP20X_CHRG_CTRL1_TGT_CURR || charge_current < 0)
+> +       charge_current = axp20x_get_constant_charge_current_sel(axp, charge_current);
+> +       if (charge_current < 0)
+>                 return -EINVAL;
+>
+> -       charge_current = charge_current * axp->data->ccc_scale +
+> -               axp->data->ccc_offset;
+> +       if (axp->data->ccc_table)
+> +               charge_current = axp->data->ccc_table[charge_current];
+> +       else
+> +               charge_current = charge_current * axp->data->ccc_scale + axp->data->ccc_offset;
+>
+>         if (charge_current > axp->max_ccc)
+>                 dev_warn(axp->dev,
+> @@ -629,7 +659,12 @@ static int axp20x_power_probe(struct platform_device *pdev)
+>                                                                    ccc)) {
+>                         dev_err(&pdev->dev,
+>                                 "couldn't set constant charge current from DT: fallback to minimum value\n");
+> -                       ccc = 300000;
 > +
->  static const struct axp_data axp202_data = {
->         .power_desc     = &axp20x_usb_power_desc,
->         .irq_names      = axp20x_irq_names,
-> @@ -600,7 +659,7 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
->         if (ret)
->                 return ret;
->
-> -       if (power->axp20x_id == AXP202_ID) {
-> +       if (power->axp20x_id == AXP192_ID || power->axp20x_id == AXP202_ID) {
->                 /* Enable vbus valid checking */
->                 ret = regmap_update_bits(power->regmap, AXP20X_VBUS_MON,
->                                          AXP20X_VBUS_MON_VBUS_VALID,
-> @@ -659,6 +718,9 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
->
->  static const struct of_device_id axp20x_usb_power_match[] = {
->         {
-> +               .compatible = "x-powers,axp192-usb-power-supply",
-> +               .data = &axp192_data,
-> +       }, {
->                 .compatible = "x-powers,axp202-usb-power-supply",
->                 .data = &axp202_data,
->         }, {
+> +                       if (axp20x_batt->data->ccc_table)
+> +                               ccc = axp20x_batt->data->ccc_table[0];
+> +                       else
+> +                               ccc = axp20x_batt->data->ccc_offset;
+> +
+>                         axp20x_batt->max_ccc = ccc;
+>                         axp20x_set_constant_charge_current(axp20x_batt, ccc);
+>                 }
 > --
 > 2.35.1
 >

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A49561D43
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 688FA561D16
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236804AbiF3OJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
+        id S236729AbiF3OI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237014AbiF3OIE (ORCPT
+        with ESMTP id S236998AbiF3OID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:08:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A97F58FE2;
-        Thu, 30 Jun 2022 06:55:00 -0700 (PDT)
+        Thu, 30 Jun 2022 10:08:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36B658FCE;
+        Thu, 30 Jun 2022 06:54:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F053A6214E;
-        Thu, 30 Jun 2022 13:54:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0907BC34115;
-        Thu, 30 Jun 2022 13:54:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5D7161F60;
+        Thu, 30 Jun 2022 13:54:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5406C34115;
+        Thu, 30 Jun 2022 13:54:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597295;
-        bh=AfiYerHK8ynfsAmFQ810Q0NwarNpAhjP60hMUlP7REA=;
+        s=korg; t=1656597298;
+        bh=WSC4Ty7X9kVE4lplSVd+NK0Bnrgsp6SoIYov4oT+WTE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ibwPTHJ0Z65733JH6U2QgcJxCOUgqXGpUgjn9zFMSe0qOLbP9OFNvdSQuRUym+SOq
-         ONJ/YmHLLFS4ybIr+iH1Pl/jEKeeFmNZp+0YVyMvDmii/ywdlX2p3ISc61GLc9hgFT
-         xXNYBRLZWsTaKKCSnH8fJvLshDeBzuqkAo10bzmY=
+        b=B40z93/wtVxbFkoCrN4KR9gCDfP65ptw9c6f9IpZUsaav0pxz7KUBQ2YDqitw9EdY
+         Er17YgSdxy/ghRSy+yxZL0BUqodU67AMxqkrDC7rXIop2KldDrF+L17LTPCiX1t7rI
+         PHhgpCmIspZagX06pswEu5HU3NBllH2znQkiOX9M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yang Xu <xuyang2018.jy@fujitsu.com>,
         "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Chandan Babu R <chandan.babu@oracle.com>,
         Leah Rumancik <leah.rumancik@gmail.com>
-Subject: [PATCH 5.15 07/28] xfs: Fix the free logic of state in xfs_attr_node_hasname
-Date:   Thu, 30 Jun 2022 15:47:03 +0200
-Message-Id: <20220630133233.142499211@linuxfoundation.org>
+Subject: [PATCH 5.15 08/28] xfs: remove all COW fork extents when remounting readonly
+Date:   Thu, 30 Jun 2022 15:47:04 +0200
+Message-Id: <20220630133233.172093513@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220630133232.926711493@linuxfoundation.org>
 References: <20220630133232.926711493@linuxfoundation.org>
@@ -55,126 +56,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Xu <xuyang2018.jy@fujitsu.com>
+From: "Darrick J. Wong" <djwong@kernel.org>
 
-[ Upstream commit a1de97fe296c52eafc6590a3506f4bbd44ecb19a ]
+[ Upstream commit 089558bc7ba785c03815a49c89e28ad9b8de51f9 ]
 
-When testing xfstests xfs/126 on lastest upstream kernel, it will hang on some machine.
-Adding a getxattr operation after xattr corrupted, I can reproduce it 100%.
+As part of multiple customer escalations due to file data corruption
+after copy on write operations, I wrote some fstests that use fsstress
+to hammer on COW to shake things loose.  Regrettably, I caught some
+filesystem shutdowns due to incorrect rmap operations with the following
+loop:
 
-The deadlock as below:
-[983.923403] task:setfattr        state:D stack:    0 pid:17639 ppid: 14687 flags:0x00000080
-[  983.923405] Call Trace:
-[  983.923410]  __schedule+0x2c4/0x700
-[  983.923412]  schedule+0x37/0xa0
-[  983.923414]  schedule_timeout+0x274/0x300
-[  983.923416]  __down+0x9b/0xf0
-[  983.923451]  ? xfs_buf_find.isra.29+0x3c8/0x5f0 [xfs]
-[  983.923453]  down+0x3b/0x50
-[  983.923471]  xfs_buf_lock+0x33/0xf0 [xfs]
-[  983.923490]  xfs_buf_find.isra.29+0x3c8/0x5f0 [xfs]
-[  983.923508]  xfs_buf_get_map+0x4c/0x320 [xfs]
-[  983.923525]  xfs_buf_read_map+0x53/0x310 [xfs]
-[  983.923541]  ? xfs_da_read_buf+0xcf/0x120 [xfs]
-[  983.923560]  xfs_trans_read_buf_map+0x1cf/0x360 [xfs]
-[  983.923575]  ? xfs_da_read_buf+0xcf/0x120 [xfs]
-[  983.923590]  xfs_da_read_buf+0xcf/0x120 [xfs]
-[  983.923606]  xfs_da3_node_read+0x1f/0x40 [xfs]
-[  983.923621]  xfs_da3_node_lookup_int+0x69/0x4a0 [xfs]
-[  983.923624]  ? kmem_cache_alloc+0x12e/0x270
-[  983.923637]  xfs_attr_node_hasname+0x6e/0xa0 [xfs]
-[  983.923651]  xfs_has_attr+0x6e/0xd0 [xfs]
-[  983.923664]  xfs_attr_set+0x273/0x320 [xfs]
-[  983.923683]  xfs_xattr_set+0x87/0xd0 [xfs]
-[  983.923686]  __vfs_removexattr+0x4d/0x60
-[  983.923688]  __vfs_removexattr_locked+0xac/0x130
-[  983.923689]  vfs_removexattr+0x4e/0xf0
-[  983.923690]  removexattr+0x4d/0x80
-[  983.923693]  ? __check_object_size+0xa8/0x16b
-[  983.923695]  ? strncpy_from_user+0x47/0x1a0
-[  983.923696]  ? getname_flags+0x6a/0x1e0
-[  983.923697]  ? _cond_resched+0x15/0x30
-[  983.923699]  ? __sb_start_write+0x1e/0x70
-[  983.923700]  ? mnt_want_write+0x28/0x50
-[  983.923701]  path_removexattr+0x9b/0xb0
-[  983.923702]  __x64_sys_removexattr+0x17/0x20
-[  983.923704]  do_syscall_64+0x5b/0x1a0
-[  983.923705]  entry_SYSCALL_64_after_hwframe+0x65/0xca
-[  983.923707] RIP: 0033:0x7f080f10ee1b
+mount <filesystem>				# (0)
+fsstress <run only readonly ops> &		# (1)
+while true; do
+	fsstress <run all ops>
+	mount -o remount,ro			# (2)
+	fsstress <run only readonly ops>
+	mount -o remount,rw			# (3)
+done
 
-When getxattr calls xfs_attr_node_get function, xfs_da3_node_lookup_int fails with EFSCORRUPTED in
-xfs_attr_node_hasname because we have use blocktrash to random it in xfs/126. So it
-free state in internal and xfs_attr_node_get doesn't do xfs_buf_trans release job.
+When (2) happens, notice that (1) is still running.  xfs_remount_ro will
+call xfs_blockgc_stop to walk the inode cache to free all the COW
+extents, but the blockgc mechanism races with (1)'s reader threads to
+take IOLOCKs and loses, which means that it doesn't clean them all out.
+Call such a file (A).
 
-Then subsequent removexattr will hang because of it.
+When (3) happens, xfs_remount_rw calls xfs_reflink_recover_cow, which
+walks the ondisk refcount btree and frees any COW extent that it finds.
+This function does not check the inode cache, which means that incore
+COW forks of inode (A) is now inconsistent with the ondisk metadata.  If
+one of those former COW extents are allocated and mapped into another
+file (B) and someone triggers a COW to the stale reservation in (A), A's
+dirty data will be written into (B) and once that's done, those blocks
+will be transferred to (A)'s data fork without bumping the refcount.
 
-This bug was introduced by kernel commit 07120f1abdff ("xfs: Add xfs_has_attr and subroutines").
-It adds xfs_attr_node_hasname helper and said caller will be responsible for freeing the state
-in this case. But xfs_attr_node_hasname will free state itself instead of caller if
-xfs_da3_node_lookup_int fails.
+The results are catastrophic -- file (B) and the refcount btree are now
+corrupt.  Solve this race by forcing the xfs_blockgc_free_space to run
+synchronously, which causes xfs_icwalk to return to inodes that were
+skipped because the blockgc code couldn't take the IOLOCK.  This is safe
+to do here because the VFS has already prohibited new writer threads.
 
-Fix this bug by moving the step of free state into caller.
-
-Also, use "goto error/out" instead of returning error directly in xfs_attr_node_addname_find_attr and
-xfs_attr_node_removename_setup function because we should free state ourselves.
-
-Fixes: 07120f1abdff ("xfs: Add xfs_has_attr and subroutines")
-Signed-off-by: Yang Xu <xuyang2018.jy@fujitsu.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Fixes: 10ddf64e420f ("xfs: remove leftover CoW reservations when remounting ro")
 Signed-off-by: Darrick J. Wong <djwong@kernel.org>
+Reviewed-by: Dave Chinner <dchinner@redhat.com>
+Reviewed-by: Chandan Babu R <chandan.babu@oracle.com>
 Signed-off-by: Leah Rumancik <leah.rumancik@gmail.com>
 Acked-by: Darrick J. Wong <djwong@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/libxfs/xfs_attr.c |   17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+ fs/xfs/xfs_super.c |   14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
---- a/fs/xfs/libxfs/xfs_attr.c
-+++ b/fs/xfs/libxfs/xfs_attr.c
-@@ -1077,21 +1077,18 @@ xfs_attr_node_hasname(
- 
- 	state = xfs_da_state_alloc(args);
- 	if (statep != NULL)
--		*statep = NULL;
-+		*statep = state;
+--- a/fs/xfs/xfs_super.c
++++ b/fs/xfs/xfs_super.c
+@@ -1768,7 +1768,10 @@ static int
+ xfs_remount_ro(
+ 	struct xfs_mount	*mp)
+ {
+-	int error;
++	struct xfs_icwalk	icw = {
++		.icw_flags	= XFS_ICWALK_FLAG_SYNC,
++	};
++	int			error;
  
  	/*
- 	 * Search to see if name exists, and get back a pointer to it.
+ 	 * Cancel background eofb scanning so it cannot race with the final
+@@ -1776,8 +1779,13 @@ xfs_remount_ro(
  	 */
- 	error = xfs_da3_node_lookup_int(state, &retval);
--	if (error) {
--		xfs_da_state_free(state);
--		return error;
--	}
-+	if (error)
-+		retval = error;
+ 	xfs_blockgc_stop(mp);
  
--	if (statep != NULL)
--		*statep = state;
--	else
-+	if (!statep)
- 		xfs_da_state_free(state);
-+
- 	return retval;
- }
- 
-@@ -1112,7 +1109,7 @@ xfs_attr_node_addname_find_attr(
- 	 */
- 	retval = xfs_attr_node_hasname(args, &dac->da_state);
- 	if (retval != -ENOATTR && retval != -EEXIST)
--		return retval;
-+		goto error;
- 
- 	if (retval == -ENOATTR && (args->attr_flags & XATTR_REPLACE))
- 		goto error;
-@@ -1337,7 +1334,7 @@ int xfs_attr_node_removename_setup(
- 
- 	error = xfs_attr_node_hasname(args, state);
- 	if (error != -EEXIST)
--		return error;
-+		goto out;
- 	error = 0;
- 
- 	ASSERT((*state)->path.blk[(*state)->path.active - 1].bp != NULL);
+-	/* Get rid of any leftover CoW reservations... */
+-	error = xfs_blockgc_free_space(mp, NULL);
++	/*
++	 * Clear out all remaining COW staging extents and speculative post-EOF
++	 * preallocations so that we don't leave inodes requiring inactivation
++	 * cleanups during reclaim on a read-only mount.  We must process every
++	 * cached inode, so this requires a synchronous cache scan.
++	 */
++	error = xfs_blockgc_free_space(mp, &icw);
+ 	if (error) {
+ 		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_INCORE);
+ 		return error;
 
 

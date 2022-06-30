@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879C7561BD3
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A410A561C48
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235396AbiF3Nso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 09:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48142 "EHLO
+        id S235279AbiF3N5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 09:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235340AbiF3NsB (ORCPT
+        with ESMTP id S235973AbiF3N4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:48:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBAD30F6C;
-        Thu, 30 Jun 2022 06:47:59 -0700 (PDT)
+        Thu, 30 Jun 2022 09:56:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6613F13B44A;
+        Thu, 30 Jun 2022 06:50:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D7FC62004;
-        Thu, 30 Jun 2022 13:47:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5940DC3411E;
-        Thu, 30 Jun 2022 13:47:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9912B82AEF;
+        Thu, 30 Jun 2022 13:50:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26AC9C34115;
+        Thu, 30 Jun 2022 13:50:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656596878;
-        bh=uQLXQon7cYynhex6eLYs7/JoYxmTZFdbi9QBecIpZJU=;
+        s=korg; t=1656597050;
+        bh=h1N85u9a3APp1yw2woC9p/8mzkK2TLZrhyjIps8M9WU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SRQU/dvxS9XATFFnj3k/H675psJ7HwIDDv63tA/Z/VBS/V7YJivxKznx27dxvPkfg
-         HvzKT5VkUoevGLMzXAmouUMv8AbddOy1+XGo2pZ5KarnAaeHgZEOGkobTJ14Qq4Ckm
-         SIWSYvaWxg3jfVmgJ3XMfuHumYBs7t5gDh+bIRV4=
+        b=2aUKgXUZIvKoSK3E9Uwo8xtAfobOIz7Bg4aftZZmf54QCtzEs6dKH4q1Zh6WCG2vn
+         NLMgE0dTPvpyoceMrgU20YNwkfjegIZkFb2ie6MVKlYqh9qDlFiyvTTahoSI9+ihUx
+         aZwK0X65ZB498eenuRbXKqwV0WkXgOdxaJH16QX8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
-        Hans de Goede <hdegoede@redhat.com>, Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.9 14/29] iio: accel: mma8452: ignore the return value of reset operation
-Date:   Thu, 30 Jun 2022 15:46:14 +0200
-Message-Id: <20220630133231.624384454@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.19 02/49] random: schedule mix_interrupt_randomness() less often
+Date:   Thu, 30 Jun 2022 15:46:15 +0200
+Message-Id: <20220630133233.982703219@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133231.200642128@linuxfoundation.org>
-References: <20220630133231.200642128@linuxfoundation.org>
+In-Reply-To: <20220630133233.910803744@linuxfoundation.org>
+References: <20220630133233.910803744@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haibo Chen <haibo.chen@nxp.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit bf745142cc0a3e1723f9207fb0c073c88464b7b4 upstream.
+commit 534d2eaf1970274150596fdd2bf552721e65d6b2 upstream.
 
-On fxls8471, after set the reset bit, the device will reset immediately,
-will not give ACK. So ignore the return value of this reset operation,
-let the following code logic to check whether the reset operation works.
+It used to be that mix_interrupt_randomness() would credit 1 bit each
+time it ran, and so add_interrupt_randomness() would schedule mix() to
+run every 64 interrupts, a fairly arbitrary number, but nonetheless
+considered to be a decent enough conservative estimate.
 
-Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-Fixes: ecabae713196 ("iio: mma8452: Initialise before activating")
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/1655292718-14287-1-git-send-email-haibo.chen@nxp.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Since e3e33fc2ea7f ("random: do not use input pool from hard IRQs"),
+mix() is now able to credit multiple bits, depending on the number of
+calls to add(). This was done for reasons separate from this commit, but
+it has the nice side effect of enabling this patch to schedule mix()
+less often.
+
+Currently the rules are:
+a) Credit 1 bit for every 64 calls to add().
+b) Schedule mix() once a second that add() is called.
+c) Schedule mix() once every 64 calls to add().
+
+Rules (a) and (c) no longer need to be coupled. It's still important to
+have _some_ value in (c), so that we don't "over-saturate" the fast
+pool, but the once per second we get from rule (b) is a plenty enough
+baseline. So, by increasing the 64 in rule (c) to something larger, we
+avoid calling queue_work_on() as frequently during irq storms.
+
+This commit changes that 64 in rule (c) to be 1024, which means we
+schedule mix() 16 times less often. And it does *not* need to change the
+64 in rule (a).
+
+Fixes: 58340f8e952b ("random: defer fast pool mixing to worker")
+Cc: stable@vger.kernel.org
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/accel/mma8452.c |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/char/random.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iio/accel/mma8452.c
-+++ b/drivers/iio/accel/mma8452.c
-@@ -1405,10 +1405,14 @@ static int mma8452_reset(struct i2c_clie
- 	int i;
- 	int ret;
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -996,7 +996,7 @@ void add_interrupt_randomness(int irq)
+ 	if (new_count & MIX_INFLIGHT)
+ 		return;
  
--	ret = i2c_smbus_write_byte_data(client,	MMA8452_CTRL_REG2,
-+	/*
-+	 * Find on fxls8471, after config reset bit, it reset immediately,
-+	 * and will not give ACK, so here do not check the return value.
-+	 * The following code will read the reset register, and check whether
-+	 * this reset works.
-+	 */
-+	i2c_smbus_write_byte_data(client, MMA8452_CTRL_REG2,
- 					MMA8452_CTRL_REG2_RST);
--	if (ret < 0)
--		return ret;
+-	if (new_count < 64 && !time_is_before_jiffies(fast_pool->last + HZ))
++	if (new_count < 1024 && !time_is_before_jiffies(fast_pool->last + HZ))
+ 		return;
  
- 	for (i = 0; i < 10; i++) {
- 		usleep_range(100, 200);
+ 	if (unlikely(!fast_pool->mix.func))
 
 

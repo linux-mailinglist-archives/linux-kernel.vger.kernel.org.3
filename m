@@ -2,80 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3D956134A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 409FE56134D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbiF3Hct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54440 "EHLO
+        id S232824AbiF3HdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbiF3Hcp (ORCPT
+        with ESMTP id S230160AbiF3HdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:32:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E74CD396AD
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:32:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656574363;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kqEEUMLIpCgFyqW1I7pVlBIg/VcqZRs+Rv7NEYalj0g=;
-        b=MUJrgsiDiExsUK0zFpmq4M+wHMliea6xmXhD0YMPgudKu3F0EDrIPI6cS8UBNrcZibpajr
-        +qH6a5l9Eh+elQgoJscaPbz9I7qjHMxl3VP7agWFtMCRDrqDBGB5VvkaQxd7KoRrl+PN04
-        HMkRbiDUKhXBlZDKhkW/Rr+zlegVxnY=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-22-Se9HydqxP5yHgzjokmbVBg-1; Thu, 30 Jun 2022 03:32:42 -0400
-X-MC-Unique: Se9HydqxP5yHgzjokmbVBg-1
-Received: by mail-wr1-f70.google.com with SMTP id e6-20020adfc846000000b0021d2af9adb6so837989wrh.18
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:32:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=kqEEUMLIpCgFyqW1I7pVlBIg/VcqZRs+Rv7NEYalj0g=;
-        b=Yqs/SbnSVdU6jWq0c9b3gva2blSzcYNYaDjMFZZAbDMLYCNPPbv4/rr/1RuWQBq6hY
-         ZOGYVPIcqmYvEJQxAzpd8KIR2Bf0fqedUnB8wSIGcSyT6WiO0BavSQ86fUcVPYvuQo8G
-         zIXHja79AzQ0WjzjSZtGo7oK1np5HcxTnAOa1wOAu3NFv2XwprWJoQD8Icdq7ByErmfe
-         0xG+VyYwwA7s6ash0ER78rNDC9oEIR+YoITuowd2qDkX923ZLQGML13YvRy35sIpYA9J
-         URFOuwhXnG4fal3+K55oBWLArlEHrANxwUQo2Zkr7sYlZOtZPUxKI9uzAc2zr0ktj3Za
-         HGJg==
-X-Gm-Message-State: AJIora+xNgdK8SK01ZxJDpNfPRDBiJPNM/u8woQq4Ij1FswMYtfFfT15
-        ZdsiM1e964evXZ+6qvFPKWXIm8VDXCv0XW7S0gtYhSMRlIZSQ5REHC6JM9U+NMF3+QDLh0YxtOy
-        1tDeLJKRsUw0AexEJuDf6Di4wiYUMe/lwTjXEE+HW9/a5lySGZmEovj25DR2xgMjrFldgv1r7fZ
-        J0
-X-Received: by 2002:a5d:43c7:0:b0:21d:1e01:e9ac with SMTP id v7-20020a5d43c7000000b0021d1e01e9acmr6691777wrr.187.1656574361361;
-        Thu, 30 Jun 2022 00:32:41 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uugW08aJHQzNn79zj+aesKxAUlGlhNhpOSU/8IbtFyE4VGJLptXuhE0UbQzVn4tFe8gz809w==
-X-Received: by 2002:a5d:43c7:0:b0:21d:1e01:e9ac with SMTP id v7-20020a5d43c7000000b0021d1e01e9acmr6691743wrr.187.1656574361002;
-        Thu, 30 Jun 2022 00:32:41 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id n30-20020a05600c501e00b0039c454067ddsm5775414wmr.15.2022.06.30.00.32.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 00:32:40 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 16/28] KVM: VMX: Tweak the special handling of
- SECONDARY_EXEC_ENCLS_EXITING in setup_vmcs_config()
-In-Reply-To: <CALMp9eS_iAijAk4pdK1tjLbRp3XH-PhR1mX4gaSXztWPXJpfkA@mail.gmail.com>
-References: <20220629150625.238286-1-vkuznets@redhat.com>
- <20220629150625.238286-17-vkuznets@redhat.com>
- <CALMp9eS_iAijAk4pdK1tjLbRp3XH-PhR1mX4gaSXztWPXJpfkA@mail.gmail.com>
-Date:   Thu, 30 Jun 2022 09:32:39 +0200
-Message-ID: <87wncysj1k.fsf@redhat.com>
+        Thu, 30 Jun 2022 03:33:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE39B38;
+        Thu, 30 Jun 2022 00:33:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D334615FC;
+        Thu, 30 Jun 2022 07:33:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC2DAC34115;
+        Thu, 30 Jun 2022 07:33:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656574385;
+        bh=qdJ1ojG9FqadeWBXMNSsSNxd/lwx2dqBZ2YeAVl+g+Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MbZL5eKqEHaju7VKRVwNDolxeozHoNlnAdtBglMqRVbabNDh6BljVGTbCDAP+o+kh
+         IDnCn8rOZoBW7dWJnrmPULuCm4BDXD5Bx6lYEeeQ0pGJfh+LneIb4Q8xUn6wqvw79L
+         4gJKcCb7roY+QtUGUH2OzZr4OgTR7srfsOBMQRh4Lb25x14bRjWtjDNWBvEgqG1p8H
+         S8coVw117PyBR2iNMzGWkTQ4hRa0cMj+QAcNY2Fi1zmfA/7ty1WgCSU8ibpPagLyCP
+         HEJ6B6B+bYeplk1KzYVF+6SsUhPhuKz8OXND7AohryRw1kMumpSIy1t3wbopRNb7xH
+         egX77JL8hr5Ng==
+Date:   Thu, 30 Jun 2022 08:32:56 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Fei Yang <fei.yang@intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Mika Kuoppala <mika.kuoppala@linux.intel.com>,
+        Chris Wilson <chris.p.wilson@intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Thomas =?UTF-8?B?SGVsbHN0csO2bQ==?= 
+        <thomas.hellstrom@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Bruce Chang <yu.bruce.chang@intel.com>,
+        Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>,
+        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
+        John Harrison <John.C.Harrison@intel.com>
+Subject: Re: [PATCH 5/6] drm/i915/gt: Serialize GRDOM access between
+ multiple engine resets
+Message-ID: <20220630083256.35a56cb1@sal.lan>
+In-Reply-To: <7e6a9a27-7286-7f21-7fec-b9832b93b10c@linux.intel.com>
+References: <cover.1655306128.git.mchehab@kernel.org>
+        <5ee647f243a774927ec328bfca8212abc4957909.1655306128.git.mchehab@kernel.org>
+        <YrRLyg1IJoZpVGfg@intel.intel>
+        <160e613f-a0a8-18ff-5d4b-249d4280caa8@linux.intel.com>
+        <20220627110056.6dfa4f9b@maurocar-mobl2>
+        <d79492ad-b99a-f9a9-f64a-52b94db68a3b@linux.intel.com>
+        <20220629172955.64ffb5c3@maurocar-mobl2>
+        <7e6a9a27-7286-7f21-7fec-b9832b93b10c@linux.intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,74 +81,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jim Mattson <jmattson@google.com> writes:
+Em Wed, 29 Jun 2022 17:02:59 +0100
+Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> escreveu:
 
-> On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
->>
->> SECONDARY_EXEC_ENCLS_EXITING is conditionally added to the 'optional'
->> checklist in setup_vmcs_config() but there's little value in doing so.
->> First, as the control is optional, we can always check for its
->> presence, no harm done. Second, the only real value cpu_has_sgx() check
->> gives is that on the CPUs which support SECONDARY_EXEC_ENCLS_EXITING but
->> don't support SGX, the control is not getting enabled. It's highly unlikely
->> such CPUs exist but it's possible that some hypervisors expose broken vCPU
->> models.
->>
->> Preserve cpu_has_sgx() check but filter the result of adjust_vmx_controls()
->> instead of the input.
->>
->> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
->> ---
->>  arch/x86/kvm/vmx/vmx.c | 9 ++++++---
->>  1 file changed, 6 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->> index 89a3bbafa5af..e32d91006b80 100644
->> --- a/arch/x86/kvm/vmx/vmx.c
->> +++ b/arch/x86/kvm/vmx/vmx.c
->> @@ -2528,9 +2528,9 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
->>                         SECONDARY_EXEC_PT_CONCEAL_VMX |
->>                         SECONDARY_EXEC_ENABLE_VMFUNC |
->>                         SECONDARY_EXEC_BUS_LOCK_DETECTION |
->> -                       SECONDARY_EXEC_NOTIFY_VM_EXITING;
->> -               if (cpu_has_sgx())
->> -                       opt2 |= SECONDARY_EXEC_ENCLS_EXITING;
->> +                       SECONDARY_EXEC_NOTIFY_VM_EXITING |
->> +                       SECONDARY_EXEC_ENCLS_EXITING;
->> +
->>                 if (adjust_vmx_controls(min2, opt2,
->>                                         MSR_IA32_VMX_PROCBASED_CTLS2,
->>                                         &_cpu_based_2nd_exec_control) < 0)
->> @@ -2577,6 +2577,9 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
->>                 vmx_cap->vpid = 0;
->>         }
->>
->> +       if (!cpu_has_sgx())
->> +               _cpu_based_2nd_exec_control &= ~SECONDARY_EXEC_ENCLS_EXITING;
->
-> NYC, but why is there a leading underscore here?
+> On 29/06/2022 16:30, Mauro Carvalho Chehab wrote:
+> > On Tue, 28 Jun 2022 16:49:23 +0100
+> > Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
+> >  =20
+> >> .. which for me means a different patch 1, followed by patch 6 (moved
+> >> to be patch 2) would be ideal stable material.
+> >>
+> >> Then we have the current patch 2 which is open/unknown (to me at least=
+).
+> >>
+> >> And the rest seem like optimisations which shouldn't be tagged as fixe=
+s.
+> >>
+> >> Apart from patch 5 which should be cc: stable, but no fixes as agreed.
+> >>
+> >> Could you please double check if what I am suggesting here is feasible
+> >> to implement and if it is just send those minimal patches out alone? =
+=20
+> >=20
+> > Tested and porting just those 3 patches are enough to fix the Broadwell
+> > bug.
+> >=20
+> > So, I submitted a v2 of this series with just those. They all need to
+> > be backported to stable. =20
+>=20
+> I would really like to give even a smaller fix a try. Something like, alt=
+hough not even compile tested:
+>=20
+> commit 4d5e94aef164772f4d85b3b4c1a46eac9a2bd680
+> Author: Chris Wilson <chris.p.wilson@intel.com>
+> Date:   Wed Jun 29 16:25:24 2022 +0100
+>=20
+>      drm/i915/gt: Serialize TLB invalidates with GT resets
+>     =20
+>      Avoid trying to invalidate the TLB in the middle of performing an
+>      engine reset, as this may result in the reset timing out. Currently,
+>      the TLB invalidate is only serialised by its own mutex, forgoing the
+>      uncore lock, but we can take the uncore->lock as well to serialise
+>      the mmio access, thereby serialising with the GDRST.
+>     =20
+>      Tested on a NUC5i7RYB, BIOS RYBDWi35.86A.0380.2019.0517.1530 with
+>      i915 selftest/hangcheck.
+>     =20
+>      Cc: stable@vger.kernel.org
+>      Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing =
+store")
+>      Reported-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+>      Tested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+>      Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+>      Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
+>      Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+>      Acked-by: Thomas Hellstr=C3=B6m <thomas.hellstrom@linux.intel.com>
+>      Reviewed-by: Andi Shyti <andi.shyti@intel.com>
+>      Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+>      Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+>=20
+> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt=
+/intel_gt.c
+> index 8da3314bb6bf..aaadd0b02043 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_gt.c
+> +++ b/drivers/gpu/drm/i915/gt/intel_gt.c
+> @@ -952,7 +952,23 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
+>          mutex_lock(&gt->tlb_invalidate_lock);
+>          intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
+>  =20
+> +       spin_lock_irq(&uncore->lock); /* serialise invalidate with GT res=
+et */
+> +
+> +       for_each_engine(engine, gt, id) {
+> +               struct reg_and_bit rb;
+> +
+> +               rb =3D get_reg_and_bit(engine, regs =3D=3D gen8_regs, reg=
+s, num);
+> +               if (!i915_mmio_reg_offset(rb.reg))
+> +                       continue;
+> +
+> +               intel_uncore_write_fw(uncore, rb.reg, rb.bit);
+> +       }
+> +
+> +       spin_unlock_irq(&uncore->lock);
+> +
+>          for_each_engine(engine, gt, id) {
+> +               struct reg_and_bit rb;
+> +
+>                  /*
+>                   * HW architecture suggest typical invalidation time at =
+40us,
+>                   * with pessimistic cases up to 100us and a recommendati=
+on to
+> @@ -960,13 +976,11 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
+>                   */
+>                  const unsigned int timeout_us =3D 100;
+>                  const unsigned int timeout_ms =3D 4;
+> -               struct reg_and_bit rb;
+>  =20
+>                  rb =3D get_reg_and_bit(engine, regs =3D=3D gen8_regs, re=
+gs, num);
+>                  if (!i915_mmio_reg_offset(rb.reg))
+>                          continue;
+>  =20
+> -               intel_uncore_write_fw(uncore, rb.reg, rb.bit);
+>                  if (__intel_wait_for_register_fw(uncore,
+>                                                   rb.reg, rb.bit, 0,
+>                                                   timeout_us, timeout_ms,
+>=20
 
-No idea to be honest, this goes way back to 2007 when
-setup_vmcs_config() was introduced:
+This won't work, as it is not serializing TLB cache invalidation with
+i915 resets. Besides that, this is more or less merging patches 1 and 3,
+placing patches with different rationales altogether. Upstream rule is
+to have one logical change per patch.
 
-commit 1c3d14fe0ab75337a3f6c06b6bc18bcbc2b3d0bc
-Author: Yang, Sheng <sheng.yang@intel.com>
-Date:   Sun Jul 29 11:07:42 2007 +0300
+> If this works it would be least painful to backport. The other improvemen=
+ts can then be devoid of the fixes tag.
 
-    KVM: VMX: Improve the method of writing vmcs control
+=46rom backport PoV, it wouldn't make any difference applying one patch
+or two. See, intel_gt_invalidate_tlbs() function doesn't exist before
+changeset 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing stor=
+e"),
+so, it shouldn't have merge conflicts while backporting it, maybe except
+if some functions it calls (or parameters) have changed. On such case,
+the backport fix should be trivial, and the end result of backporting
+one folded patch or two would be the same.
 
->
->>         if (_cpu_based_exec_control & CPU_BASED_ACTIVATE_TERTIARY_CONTROLS) {
->>                 u64 opt3 = TERTIARY_EXEC_IPI_VIRT;
->>
->> --
->> 2.35.3
->>
-> Reviewed-by: Jim Mattson <jmattson@google.com>
->
+If any conflict happens, I can help doing the backports.
 
-Thanks!
-
--- 
-Vitaly
-
+> > I still think that other TLB patches are needed/desired upstream, but
+> > I'll submit them on a separate series. Let's fix the regression first ;=
+-) =20
+>=20
+> Yep, that's exactly right.
+>=20
+> Regards,
+>=20
+> Tvrtko

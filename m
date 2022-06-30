@@ -2,305 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9BD560FEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 06:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33378560FF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 06:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbiF3EMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 00:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
+        id S231916AbiF3EQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 00:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiF3EMN (ORCPT
+        with ESMTP id S231410AbiF3EQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 00:12:13 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA4C2FFDD
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 21:12:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656562332; x=1688098332;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CzoKs7yV1jZZ0p/i/GL4zDFWrQ6dMzkZ1uMReeVJAWs=;
-  b=KChKByh3IOU4m+iCU5/UUqAQL+cnOfgL9JPH/MSOsvmauc5ZsUUOroF/
-   cQyHPE1fBYIIiikETCJi+z7SV1+aBIKC/VWhaYO8fKgfCTe2AFevS58oQ
-   gVk6ygr34pnJ2wwW2aWivGOYoIKgDbVkgwna00XZViOPV3dnlTtQ4fq8l
-   A=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 29 Jun 2022 21:12:12 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 21:12:11 -0700
-Received: from localhost (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 29 Jun
- 2022 21:12:10 -0700
-From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
-To:     <paulmck@kernel.org>, <frederic@kernel.org>,
-        <josh@joshtriplett.org>, <rostedt@goodmis.org>,
-        <mathieu.desnoyers@efficios.com>, <jiangshanlai@gmail.com>,
-        <joel@joelfernandes.org>
-CC:     <linux-kernel@vger.kernel.org>, <zhangfei.gao@foxmail.com>,
-        <boqun.feng@gmail.com>, <urezki@gmail.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <pbonzini@redhat.com>,
-        <mtosatti@redhat.com>, <eric.auger@redhat.com>,
-        <chenxiang66@hisilicon.com>, <maz@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Subject: [PATCH v2] srcu: Reduce blocking agressiveness of expedited grace periods further
-Date:   Thu, 30 Jun 2022 09:42:01 +0530
-Message-ID: <20220630041201.18301-1-quic_neeraju@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 30 Jun 2022 00:16:28 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85A238185
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 21:16:22 -0700 (PDT)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220630041617epoutp02f4b9a3968e3295d0a6e0025df60af467~9SuM25Txe1755517555epoutp02w
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 04:16:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220630041617epoutp02f4b9a3968e3295d0a6e0025df60af467~9SuM25Txe1755517555epoutp02w
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1656562577;
+        bh=WYo+8++U2XG7rGkYKmdbzvrC7WI9k8fTzCRkX5FeOR8=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=RZlHy7Y3RgnXhaktEJeZTYJEACo5Npfj7cDGJSAcSo/BLwvC/pj5J3K2imVX0tkKH
+         GUCoQNo1GxlOExUzhIxee1LDT2+99C3IgXBxXASvSIwzppfkAg61ZfGJMtm1/y76Zt
+         W7BRmC/gImTvvm8kqUnd74xcaI6wJm6VwxuXAEoo=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220630041617epcas1p2e6c393b9dd489291a46448eb94d680cb~9SuMRhUi91655416554epcas1p23;
+        Thu, 30 Jun 2022 04:16:17 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.38.237]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4LYQ4c0Fkvz4x9Q3; Thu, 30 Jun
+        2022 04:16:16 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        AA.26.10203.F832DB26; Thu, 30 Jun 2022 13:16:15 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220630041615epcas1p17a727ebc024297c2a5e6ed879abcef6d~9SuKz4mJP1022110221epcas1p1-;
+        Thu, 30 Jun 2022 04:16:15 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220630041615epsmtrp1c20ff3825e2619240e59b05ce64a628c~9SuKynX7W1942119421epsmtrp1r;
+        Thu, 30 Jun 2022 04:16:15 +0000 (GMT)
+X-AuditID: b6c32a38-597ff700000027db-c2-62bd238f7c17
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0A.B3.08802.F832DB26; Thu, 30 Jun 2022 13:16:15 +0900 (KST)
+Received: from inkidae001 (unknown [10.113.221.213]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220630041615epsmtip2daa72489fc999f2f6cee0e9f8bcaaf03~9SuKdaJQY0204302043epsmtip2k;
+        Thu, 30 Jun 2022 04:16:15 +0000 (GMT)
+From:   =?ks_c_5601-1987?B?tOvAzrHiL1RpemVuIFBsYXRmb3JtIExhYihTUikvu++8usD8wNo=?= 
+        <inki.dae@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        "'Seung-Woo Kim'" <sw0312.kim@samsung.com>,
+        "'Kyungmin Park'" <kyungmin.park@samsung.com>,
+        "'David Airlie'" <airlied@linux.ie>,
+        "'Daniel Vetter'" <daniel@ffwll.ch>,
+        "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
+        "'Alim Akhtar'" <alim.akhtar@samsung.com>,
+        "'Kishon Vijay Abraham I'" <kishon@ti.com>,
+        "'Vinod Koul'" <vkoul@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>
+In-Reply-To: <20220626163320.6393-1-krzysztof.kozlowski@linaro.org>
+Subject: RE: [PATCH 1/2] drm/exynos: MAINTAINERS: move Joonyoung Shim to
+ credits
+Date:   Thu, 30 Jun 2022 13:16:14 +0900
+Message-ID: <0de401d88c38$23aeb8e0$6b0c2aa0$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="ks_c_5601-1987"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: ko
+Thread-Index: AQJghn6p1dSqDKoivxgEEVwDdxk9yAKXUcLlrEKoniA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFJsWRmVeSWpSXmKPExsWy7bCmgW6/8t4kg+U3rSx6z51ksngwbxub
+        xf9tE5kt5h85x2px5et7NosLT3vYLPpePGS22Pt6K7vF2aY37BabHl9jtbi8aw6bxYRV31gs
+        Zpzfx2TRuvcIu8WMyS/ZLHbeOcHsIOCx99sCFo9NqzrZPO5c28Pmsf3bA1aP+93HmTw2L6n3
+        6NuyitHj+I3tTB6fN8kFcEZl22SkJqakFimk5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl
+        5qbaKrn4BOi6ZeYAvaGkUJaYUwoUCkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJKTAt0CtOzC0u
+        zUvXy0stsTI0MDAyBSpMyM44/u4fa8FhgYrri3ayNzA+4O1i5OSQEDCRuPPpAUsXIxeHkMAO
+        Ronl05cwQjifGCVOXT/OCuF8ZpSYOPk2K0zLvCsNUIldjBI3dx+Dcl4ySjRMecsIUsUmkCFx
+        t30xWIeIwHxWiUfPk0FsTgFnies3X7GD2MICQRLv/v0FWs7BwSKgKnFhvSlImFfAUqJ17SsW
+        CFtQ4uTMJ2A2s4CRxJLV85kgbHmJ7W/nMEMcpCDx8+kyVoi4iMTszjZmiLVWEmsWrQP7TULg
+        BYfEh//fWCAaXCTeNfyAahaWeHV8CzuELSXxsr+NHaJhMqPEnesroLpnMEoc/nmdEaLKWGL/
+        0slMELaixM7fcxkhVvNJvPvawwryjYQAr0RHmxBEiZLEsYs3oFolJC4smcgGUeIhcfBK7QRG
+        xVlI/pyF5M9ZSP6cheS3BYwsqxjFUguKc9NTiw0LTODxnZyfu4kRnMi1LHYwzn37Qe8QIxMH
+        4yFGCQ5mJRHehWd2JgnxpiRWVqUW5ccXleakFh9iNAWG/ERmKdHkfGAuySuJNzSxNDAxMzI2
+        sTA0M1QS5+2dejpRSCA9sSQ1OzW1ILUIpo+Jg1OqgSmix9NS5+S5+y0vTjyenDJlhkTs50fT
+        3V9fd21PNpCa4s/99fbH+GMiTO921co8DK79mfWIQ/PTdp0D9p7f0lRm7AyoZFZMm3He4Gqo
+        htyn7HeqRlrXKl6fS1n166cOz92Vs7puGbBaPXGzv3LM6c/Vld+2KuamBHC4cv/68qnx4SH+
+        9cvXrPomxTWJX5s90GiOapPWirTjzzz+8uy0V+w9OPmy5eXs1XwBFu+kk1hWPdn6eBZ/xfwP
+        b68KROpaNatP3vCk2EixRPmM0Ju6O2uLpVVvR4dX/VE90DZRef6kyYX96XxlKYvuW8m85NeZ
+        Wz9xVXq2Bvsm5rQnuhWeZmEypzftm5bGqh6yjHPtllAlluKMREMt5qLiRABvXwPAbQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGIsWRmVeSWpSXmKPExsWy7bCSvG6/8t4kg/svRC16z51ksngwbxub
+        xf9tE5kt5h85x2px5et7NosLT3vYLPpePGS22Pt6K7vF2aY37BabHl9jtbi8aw6bxYRV31gs
+        Zpzfx2TRuvcIu8WMyS/ZLHbeOcHsIOCx99sCFo9NqzrZPO5c28Pmsf3bA1aP+93HmTw2L6n3
+        6NuyitHj+I3tTB6fN8kFcEZx2aSk5mSWpRbp2yVwZRx/94+14LBAxfVFO9kbGB/wdjFyckgI
+        mEjMu9LA2sXIxSEksINRYu+RZvYuRg6ghITElq0cEKawxOHDxRAlzxklnsxezAbSyyaQJjFp
+        7n6wXhGB1awSV7asYoKomsIo8WHBEVaQKk4BZ4nrN1+xg9jCAgESO498BVvAIqAqcWG9KUiY
+        V8BSonXtKxYIW1Di5MwnYDYz0HGNh7uhbHmJ7W/nMEMcrSDx8+kyVoi4iMTszjawuIiAlcSa
+        RetYJjAKzUIyahaSUbOQjJqFpH0BI8sqRsnUguLc9NxiwwKjvNRyveLE3OLSvHS95PzcTYzg
+        qNXS2sG4Z9UHvUOMTByMhxglOJiVRHgXntmZJMSbklhZlVqUH19UmpNafIhRmoNFSZz3QtfJ
+        eCGB9MSS1OzU1ILUIpgsEwenVAPT+Z9b5M9Pf6bJEb7wvd/y3W5mjyJdbdN9ft+sV+1Z8nDi
+        oxeGpzvTJkZsvd3/Tf94X6Rft7R2eDnn9EPH+9lldFIseYL9Pyw90L5JKm2DgLPOOo5PizJe
+        3XNzLf2mGCl7ev0muwIB8aT4F5r9a28+Eo/sZtz/dIuNSwfnkuz6e5sY/vjtljfpPXTr876u
+        fycbl908m+OkkrSqw+aJvfmfSWos0gG8mx9O/jP5phCPu6+peIzeqobGc0ofMhViuubILex+
+        uDEmx7lOOfuJ+Ov9jD0Kj8//8Nl0ep5/7lKby81qLVfnSL6tYNR9GaDZ+ujsinuTmZpXTjR0
+        1Qt1n/qrmTN+xtTV6txHlLcE/qxWYinOSDTUYi4qTgQAKL4DqUkDAAA=
+X-CMS-MailID: 20220630041615epcas1p17a727ebc024297c2a5e6ed879abcef6d
+X-Msg-Generator: CA
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220626163558epcas1p3f525431b9fb237bd420ad1453daaf1ac
+References: <CGME20220626163558epcas1p3f525431b9fb237bd420ad1453daaf1ac@epcas1p3.samsung.com>
+        <20220626163320.6393-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 640a7d37c3f4 ("srcu: Block less aggressively for expedited
-grace periods") highlights a problem where aggressively blocking
-SRCU expedited grace periods, as was introduced in commit
-282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
-from consuming CPU"), introduces ~2 minutes delay to the overall
-~3.5 minutes boot time, when starting VMs with "-bios QEMU_EFI.fd"
-cmdline on qemu, which results in very high rate of memslots
-add/remove, which causes > ~6000 synchronize_srcu() calls for
-kvm->srcu SRCU instance.
 
-Below table captures the experiments done by Zhangfei Gao and Shameer
-to measure the boottime impact with various values of non-sleeping
-per phase counts, with HZ_250 and preemption enabled:
 
-+──────────────────────────+────────────────+
-| SRCU_MAX_NODELAY_PHASE   | Boot time (s)  |
-+──────────────────────────+────────────────+
-| 100                      | 30.053         |
-| 150                      | 25.151         |
-| 200                      | 20.704         |
-| 250                      | 15.748         |
-| 500                      | 11.401         |
-| 1000                     | 11.443         |
-| 10000                    | 11.258         |
-| 1000000                  | 11.154         |
-+──────────────────────────+────────────────+
+> -----Original Message-----
+> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
+> Sent: Monday, June 27, 2022 1:33 AM
+> To: Inki Dae <inki.dae@samsung.com>; Seung-Woo Kim
+> <sw0312.kim@samsung.com>; Kyungmin Park <kyungmin.park@samsung.com>; David
+> Airlie <airlied@linux.ie>; Daniel Vetter <daniel@ffwll.ch>; Rob Herring
+> <robh+dt@kernel.org>; Krzysztof Kozlowski
+> <krzysztof.kozlowski+dt@linaro.org>; Alim Akhtar
+<alim.akhtar@samsung.com>;
+> Kishon Vijay Abraham I <kishon@ti.com>; Vinod Koul <vkoul@kernel.org>;
+> linux-kernel@vger.kernel.org; dri-devel@lists.freedesktop.org;
+> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> samsung-soc@vger.kernel.org; linux-phy@lists.infradead.org
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Subject: [PATCH 1/2] drm/exynos: MAINTAINERS: move Joonyoung Shim to
+> credits
+> 
+> Emails to Joonyoung Shim bounce ("550 5.1.1 Recipient address rejected:
+> User unknown"), so move him to credits file.
+> 
 
-Analysis on the experiment results showed improved boot time
-with non blocking delays close to one jiffy duration. This
-was also seen when number of per-phase iterations were scaled
-to one jiffy.
+Applied.
 
-So, this change scales per-grace-period phase number of non-sleeping
-polls, such that, non-sleeping polls are done for one jiffy. In addition
-to this, srcu_get_delay() call in srcu_gp_end(), which is used to calculate
-the delay used for scheduling callbacks, is replaced with the check for
-expedited grace period. This is done, to schedule cbs for completed expedited
-grace periods immediately, which results in improved boot time seen in
-experiments.
+Thanks,
+Inki Dae
 
-In addition to the changes to default per phase delays, this change
-adds 3 new kernel parameters - srcutree.srcu_max_nodelay,
-srcutree.srcu_max_nodelay_phase, srcutree.srcu_retry_check_delay.
-This allows users to configure the srcu grace period scanning delays,
-depending on their system configuration requirements.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  CREDITS     | 4 ++++
+>  MAINTAINERS | 1 -
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/CREDITS b/CREDITS
+> index 7e85a53b6a88..91a564c17012 100644
+> --- a/CREDITS
+> +++ b/CREDITS
+> @@ -3491,6 +3491,10 @@ D: wd33c93 SCSI driver (linux-m68k)
+>  S: San Jose, California
+>  S: USA
+> 
+> +N: Joonyoung Shim
+> +E: y0922.shim@samsung.com
+> +D: Samsung Exynos DRM drivers
+> +
+>  N: Robert Siemer
+>  E: Robert.Siemer@gmx.de
+>  P: 2048/C99A4289 2F DC 17 2E 56 62 01 C8  3D F2 AC 09 F2 E5 DD EE
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 19875f60ebb1..d208bf3b6f11 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6695,7 +6695,6 @@ F:	drivers/gpu/drm/bridge/
+> 
+>  DRM DRIVERS FOR EXYNOS
+>  M:	Inki Dae <inki.dae@samsung.com>
+> -M:	Joonyoung Shim <jy0922.shim@samsung.com>
+>  M:	Seung-Woo Kim <sw0312.kim@samsung.com>
+>  M:	Kyungmin Park <kyungmin.park@samsung.com>
+>  L:	dri-devel@lists.freedesktop.org
+> --
+> 2.34.1
 
-Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Tested-by: Marc Zyngier <maz@kernel.org>
----
-
-Change in v2:
-
-  - Change srcu_max_nodelay default value to consider phase delay
-    iterations
-  - Apply Pauls' feedback
-  - Add Marc's Tested-by
-
- .../admin-guide/kernel-parameters.txt         | 18 ++++
- kernel/rcu/srcutree.c                         | 82 ++++++++++++++-----
- 2 files changed, 81 insertions(+), 19 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index af647714c113..7e34086c64f5 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5805,6 +5805,24 @@
- 			expediting.  Set to zero to disable automatic
- 			expediting.
- 
-+	srcutree.srcu_max_nodelay [KNL]
-+			Specifies the number of no-delay instances
-+			per jiffy for which the SRCU grace period
-+			worker thread will be rescheduled with zero
-+			delay. Beyond this limit, worker thread will
-+			be rescheduled with a sleep delay of one jiffy.
-+
-+	srcutree.srcu_max_nodelay_phase [KNL]
-+			Specifies the per-grace-period phase, number of
-+			non-sleeping polls of readers. Beyond this limit,
-+			grace period worker thread will be rescheduled
-+			with a sleep delay of one jiffy, between each
-+			rescan of the readers, for a grace period phase.
-+
-+	srcutree.srcu_retry_check_delay [KNL]
-+			Specifies number of microseconds of non-sleeping
-+			delay between each non-sleeping poll of readers.
-+
- 	srcutree.small_contention_lim [KNL]
- 			Specifies the number of update-side contention
- 			events per jiffy will be tolerated before
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index 0db7873f4e95..1c304fec89c0 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -511,10 +511,52 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
- 	return sum;
- }
- 
--#define SRCU_INTERVAL		1	// Base delay if no expedited GPs pending.
--#define SRCU_MAX_INTERVAL	10	// Maximum incremental delay from slow readers.
--#define SRCU_MAX_NODELAY_PHASE	3	// Maximum per-GP-phase consecutive no-delay instances.
--#define SRCU_MAX_NODELAY	100	// Maximum consecutive no-delay instances.
-+/*
-+ * We use an adaptive strategy for synchronize_srcu() and especially for
-+ * synchronize_srcu_expedited().  We spin for a fixed time period
-+ * (defined below, boot time configurable) to allow SRCU readers to exit
-+ * their read-side critical sections.  If there are still some readers
-+ * after one jiffy, we repeatedly block for one jiffy time periods.
-+ * The blocking time is increased as the grace-period age increases,
-+ * with max blocking time capped at 10 jiffies.
-+ */
-+#define SRCU_DEFAULT_RETRY_CHECK_DELAY		5
-+
-+static ulong srcu_retry_check_delay = SRCU_DEFAULT_RETRY_CHECK_DELAY;
-+module_param(srcu_retry_check_delay, ulong, 0444);
-+
-+#define SRCU_INTERVAL		1		// Base delay if no expedited GPs pending.
-+#define SRCU_MAX_INTERVAL	10		// Maximum incremental delay from slow readers.
-+
-+#define SRCU_DEFAULT_MAX_NODELAY_PHASE_LO	3UL	// Lowmark on default per-GP-phase
-+							// no-delay instances.
-+#define SRCU_DEFAULT_MAX_NODELAY_PHASE_HI	1000UL	// Highmark on default per-GP-phase
-+							// no-delay instances.
-+
-+#define SRCU_UL_CLAMP_LO(val, low)	((val) > (low) ? (val) : (low))
-+#define SRCU_UL_CLAMP_HI(val, high)	((val) < (high) ? (val) : (high))
-+#define SRCU_UL_CLAMP(val, low, high)	SRCU_UL_CLAMP_HI(SRCU_UL_CLAMP_LO((val), (low)), (high))
-+// per-GP-phase no-delay instances adjusted to allow non-sleeping poll upto
-+// one jiffies time duration. Mult by 2 is done to factor in the srcu_get_delay()
-+// called from process_srcu().
-+#define SRCU_DEFAULT_MAX_NODELAY_PHASE_ADJUSTED	\
-+	(2UL * USEC_PER_SEC / HZ / SRCU_DEFAULT_RETRY_CHECK_DELAY)
-+
-+// Maximum per-GP-phase consecutive no-delay instances.
-+#define SRCU_DEFAULT_MAX_NODELAY_PHASE	\
-+	SRCU_UL_CLAMP(SRCU_DEFAULT_MAX_NODELAY_PHASE_ADJUSTED,	\
-+		      SRCU_DEFAULT_MAX_NODELAY_PHASE_LO,	\
-+		      SRCU_DEFAULT_MAX_NODELAY_PHASE_HI)
-+
-+static ulong srcu_max_nodelay_phase = SRCU_DEFAULT_MAX_NODELAY_PHASE;
-+module_param(srcu_max_nodelay_phase, ulong, 0444);
-+
-+// Maximum consecutive no-delay instances.
-+#define SRCU_DEFAULT_MAX_NODELAY	(SRCU_DEFAULT_MAX_NODELAY_PHASE > 100 ?	\
-+					 SRCU_DEFAULT_MAX_NODELAY_PHASE : 100)
-+
-+static ulong srcu_max_nodelay = SRCU_DEFAULT_MAX_NODELAY;
-+module_param(srcu_max_nodelay, ulong, 0444);
- 
- /*
-  * Return grace-period delay, zero if there are expedited grace
-@@ -535,7 +577,7 @@ static unsigned long srcu_get_delay(struct srcu_struct *ssp)
- 			jbase += j - gpstart;
- 		if (!jbase) {
- 			WRITE_ONCE(ssp->srcu_n_exp_nodelay, READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
--			if (READ_ONCE(ssp->srcu_n_exp_nodelay) > SRCU_MAX_NODELAY_PHASE)
-+			if (READ_ONCE(ssp->srcu_n_exp_nodelay) > srcu_max_nodelay_phase)
- 				jbase = 1;
- 		}
- 	}
-@@ -612,15 +654,6 @@ void __srcu_read_unlock(struct srcu_struct *ssp, int idx)
- }
- EXPORT_SYMBOL_GPL(__srcu_read_unlock);
- 
--/*
-- * We use an adaptive strategy for synchronize_srcu() and especially for
-- * synchronize_srcu_expedited().  We spin for a fixed time period
-- * (defined below) to allow SRCU readers to exit their read-side critical
-- * sections.  If there are still some readers after a few microseconds,
-- * we repeatedly block for 1-millisecond time periods.
-- */
--#define SRCU_RETRY_CHECK_DELAY		5
--
- /*
-  * Start an SRCU grace period.
-  */
-@@ -706,7 +739,7 @@ static void srcu_schedule_cbs_snp(struct srcu_struct *ssp, struct srcu_node *snp
-  */
- static void srcu_gp_end(struct srcu_struct *ssp)
- {
--	unsigned long cbdelay;
-+	unsigned long cbdelay = 1;
- 	bool cbs;
- 	bool last_lvl;
- 	int cpu;
-@@ -726,7 +759,9 @@ static void srcu_gp_end(struct srcu_struct *ssp)
- 	spin_lock_irq_rcu_node(ssp);
- 	idx = rcu_seq_state(ssp->srcu_gp_seq);
- 	WARN_ON_ONCE(idx != SRCU_STATE_SCAN2);
--	cbdelay = !!srcu_get_delay(ssp);
-+	if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq), READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
-+		cbdelay = 0;
-+
- 	WRITE_ONCE(ssp->srcu_last_gp_end, ktime_get_mono_fast_ns());
- 	rcu_seq_end(&ssp->srcu_gp_seq);
- 	gpseq = rcu_seq_current(&ssp->srcu_gp_seq);
-@@ -927,12 +962,16 @@ static void srcu_funnel_gp_start(struct srcu_struct *ssp, struct srcu_data *sdp,
-  */
- static bool try_check_zero(struct srcu_struct *ssp, int idx, int trycount)
- {
-+	unsigned long curdelay;
-+
-+	curdelay = !srcu_get_delay(ssp);
-+
- 	for (;;) {
- 		if (srcu_readers_active_idx_check(ssp, idx))
- 			return true;
--		if (--trycount + !srcu_get_delay(ssp) <= 0)
-+		if ((--trycount + curdelay) <= 0)
- 			return false;
--		udelay(SRCU_RETRY_CHECK_DELAY);
-+		udelay(srcu_retry_check_delay);
- 	}
- }
- 
-@@ -1588,7 +1627,7 @@ static void process_srcu(struct work_struct *work)
- 		j = jiffies;
- 		if (READ_ONCE(ssp->reschedule_jiffies) == j) {
- 			WRITE_ONCE(ssp->reschedule_count, READ_ONCE(ssp->reschedule_count) + 1);
--			if (READ_ONCE(ssp->reschedule_count) > SRCU_MAX_NODELAY)
-+			if (READ_ONCE(ssp->reschedule_count) > srcu_max_nodelay)
- 				curdelay = 1;
- 		} else {
- 			WRITE_ONCE(ssp->reschedule_count, 1);
-@@ -1680,6 +1719,11 @@ static int __init srcu_bootup_announce(void)
- 	pr_info("Hierarchical SRCU implementation.\n");
- 	if (exp_holdoff != DEFAULT_SRCU_EXP_HOLDOFF)
- 		pr_info("\tNon-default auto-expedite holdoff of %lu ns.\n", exp_holdoff);
-+	if (srcu_retry_check_delay != SRCU_DEFAULT_RETRY_CHECK_DELAY)
-+		pr_info("\tNon-default retry check delay of %lu us.\n", srcu_retry_check_delay);
-+	if (srcu_max_nodelay != SRCU_DEFAULT_MAX_NODELAY)
-+		pr_info("\tNon-default max no-delay of %lu.\n", srcu_max_nodelay);
-+	pr_info("\tMax phase no-delay instances is %lu.\n", srcu_max_nodelay_phase);
- 	return 0;
- }
- early_initcall(srcu_bootup_announce);
--- 
-2.17.1
 

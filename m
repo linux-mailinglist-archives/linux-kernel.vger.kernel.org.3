@@ -2,242 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2C5561503
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816B25614F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233717AbiF3IZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 04:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
+        id S233598AbiF3I0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 04:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233484AbiF3IYo (ORCPT
+        with ESMTP id S233979AbiF3I0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 04:24:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9122D186E6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:24:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656577480;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hqIzgmR5tuOUBDBCfoAqKMfRDeawIdE7bmJ0sAWUGNs=;
-        b=e1+CpfvJ3iKaS02Jc4SMYgoCVk+Ko2wIpyQ7kSGVG1lJbk0RgCEk4gJMoC6YprN9WQm8Dd
-        Z2ZCYKVptfVSXNJOSMWDsWayiZr/fB0SkBUEL1PBkjR7czEfToPJ91l9sZZAFmgUMM78di
-        hbUzUYLF5gIatXIHEXh0q4M/DAq0FP4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-249-1U9-LxXeOyGGoyxZ1ALiTA-1; Thu, 30 Jun 2022 04:24:37 -0400
-X-MC-Unique: 1U9-LxXeOyGGoyxZ1ALiTA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E05B93C1174C;
-        Thu, 30 Jun 2022 08:24:36 +0000 (UTC)
-Received: from starship (unknown [10.40.194.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 932F4112131B;
-        Thu, 30 Jun 2022 08:24:34 +0000 (UTC)
-Message-ID: <e04341912abfa1590edd4ee7c33efde6e227b93f.camel@redhat.com>
-Subject: Re: [PATCH v2 00/21] KVM: x86: Event/exception fixes and cleanups
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
-        Peter Shier <pshier@google.com>
-Date:   Thu, 30 Jun 2022 11:24:33 +0300
-In-Reply-To: <CALMp9eQQROfYW7tNPaYCL5umjDr5ntsXuQ3BmorD8BWQiUGjdw@mail.gmail.com>
-References: <20220614204730.3359543-1-seanjc@google.com>
-         <7e05e0befa13af05f1e5f0fd8658bc4e7bdf764f.camel@redhat.com>
-         <CALMp9eQQROfYW7tNPaYCL5umjDr5ntsXuQ3BmorD8BWQiUGjdw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 30 Jun 2022 04:26:13 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CC1F37
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:26:08 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id k9so8234946pfg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:26:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SypOXZhyCHcQ8uGWyAhO7T7jqGFnGubO/tkVQlNzSa4=;
+        b=DeEze/KklMdcNbZipxXzP0SlnFO+AajUe1pUYxnUv+AWjVWwPzyohpvkUKIM4n/ryI
+         kKqok4eZ12Vu/RmNcksSQrpSPnMPpu1xcNezPxxq6I9JPbuv3qb0Y+AaCvRwxiX/Q7HI
+         JWc4DJw69J8+rfSzou1PE9NF5z1z/HGVXa1m6N/Q4Ck42Xjc7jOlbzS+HQoRv3qiLOpL
+         QPekbxL+9AjUVcTADdpI6qlU706Qm1kbsDSaPdr1Lr5P/JwH4Z0CRONmPQ1PR2OiB/eo
+         7q/ZRWyOnANN3b/GTEKM3dFyU05OiSE5lOw6k92eR+yjqsmaGa5ZSHjEb3ZlFJp9PxGQ
+         R+MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SypOXZhyCHcQ8uGWyAhO7T7jqGFnGubO/tkVQlNzSa4=;
+        b=V9xCsU9iPpTKdTc3EdqW+4aTBhTj1opDtLHeW9FaMHVzzorkp+zAQdZhSyrbX1thM1
+         PV/rH2pWqLLQ0EWUG4wwMNEc2V1BM+SNLZpMSXsNZ4JmPPsoj/6AtOux3b+bNqEZKWAj
+         7KirICfr9SElfPpGHba5oeeB3qO/OIUAPrSXWP2CO5O9onfAtxvWuchm+e9sIa5bDltL
+         UPW63RA4LjlQONa8fjZdz4MQXEfzNu16s4Vhbzeo7lG6X0+ySiy5HC955PhtXRWx9CbE
+         f4p3vSquV8hQIz9pZEJdL4p3/BxeFdiLxMuiwSOF8Ykj78d8KMQLp3dgTpzjVb3qjknW
+         QaFw==
+X-Gm-Message-State: AJIora85FWXKBHvA+w71C3e7pJ5qUKFaf7rwgLEkkhjzZQyYIa2vMPoh
+        IE2Pm5mKv3KjyzQK2upnTiE=
+X-Google-Smtp-Source: AGRyM1uQpCyqTx3DGUB2vNh0oC2rmkVbMFyz51r1Y/mXQcmrjjX2YZ79JlIoKH3UTUsU+9gXklGZAA==
+X-Received: by 2002:a05:6a00:10c3:b0:525:40fe:6e8d with SMTP id d3-20020a056a0010c300b0052540fe6e8dmr14418704pfu.38.1656577567706;
+        Thu, 30 Jun 2022 01:26:07 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.141.3])
+        by smtp.gmail.com with ESMTPSA id p26-20020a056a0026da00b005251e2b53acsm12822797pfw.116.2022.06.30.01.26.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 01:26:07 -0700 (PDT)
+From:   zys.zljxml@gmail.com
+To:     tj@kernel.org, gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk
+Cc:     linux-kernel@vger.kernel.org, Yushan Zhou <katrinzhou@tencent.com>
+Subject: [PATCH v2] kernfs: fix potential NULL dereference in __kernfs_remove
+Date:   Thu, 30 Jun 2022 16:25:12 +0800
+Message-Id: <20220630082512.3482581-1-zys.zljxml@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-29 at 08:53 -0700, Jim Mattson wrote:
-> On Wed, Jun 29, 2022 at 4:17 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
-> > On Tue, 2022-06-14 at 20:47 +0000, Sean Christopherson wrote:
-> > > The main goal of this series is to fix KVM's longstanding bug of not
-> > > honoring L1's exception intercepts wants when handling an exception that
-> > > occurs during delivery of a different exception.  E.g. if L0 and L1 are
-> > > using shadow paging, and L2 hits a #PF, and then hits another #PF while
-> > > vectoring the first #PF due to _L1_ not having a shadow page for the IDT,
-> > > KVM needs to check L1's intercepts before morphing the #PF => #PF => #DF
-> > > so that the #PF is routed to L1, not injected into L2 as a #DF.
-> > > 
-> > > nVMX has hacked around the bug for years by overriding the #PF injector
-> > > for shadow paging to go straight to VM-Exit, and nSVM has started doing
-> > > the same.  The hacks mostly work, but they're incomplete, confusing, and
-> > > lead to other hacky code, e.g. bailing from the emulator because #PF
-> > > injection forced a VM-Exit and suddenly KVM is back in L1.
-> > > 
-> > > Everything leading up to that are related fixes and cleanups I encountered
-> > > along the way; some through code inspection, some through tests.
-> > > 
-> > > v2:
-> > >   - Rebased to kvm/queue (commit 8baacf67c76c) + selftests CPUID
-> > >     overhaul.
-> > >     https://lore.kernel.org/all/20220614200707.3315957-1-seanjc@google.com
-> > >   - Treat KVM_REQ_TRIPLE_FAULT as a pending exception.
-> > > 
-> > > v1: https://lore.kernel.org/all/20220311032801.3467418-1-seanjc@google.com
-> > > 
-> > > Sean Christopherson (21):
-> > >   KVM: nVMX: Unconditionally purge queued/injected events on nested
-> > >     "exit"
-> > >   KVM: VMX: Drop bits 31:16 when shoving exception error code into VMCS
-> > >   KVM: x86: Don't check for code breakpoints when emulating on exception
-> > >   KVM: nVMX: Treat General Detect #DB (DR7.GD=1) as fault-like
-> > >   KVM: nVMX: Prioritize TSS T-flag #DBs over Monitor Trap Flag
-> > >   KVM: x86: Treat #DBs from the emulator as fault-like (code and
-> > >     DR7.GD=1)
-> > >   KVM: x86: Use DR7_GD macro instead of open coding check in emulator
-> > >   KVM: nVMX: Ignore SIPI that arrives in L2 when vCPU is not in WFS
-> > >   KVM: nVMX: Unconditionally clear mtf_pending on nested VM-Exit
-> > >   KVM: VMX: Inject #PF on ENCLS as "emulated" #PF
-> > >   KVM: x86: Rename kvm_x86_ops.queue_exception to inject_exception
-> > >   KVM: x86: Make kvm_queued_exception a properly named, visible struct
-> > >   KVM: x86: Formalize blocking of nested pending exceptions
-> > >   KVM: x86: Use kvm_queue_exception_e() to queue #DF
-> > >   KVM: x86: Hoist nested event checks above event injection logic
-> > >   KVM: x86: Evaluate ability to inject SMI/NMI/IRQ after potential
-> > >     VM-Exit
-> > >   KVM: x86: Morph pending exceptions to pending VM-Exits at queue time
-> > >   KVM: x86: Treat pending TRIPLE_FAULT requests as pending exceptions
-> > >   KVM: VMX: Update MTF and ICEBP comments to document KVM's subtle
-> > >     behavior
-> > >   KVM: selftests: Use uapi header to get VMX and SVM exit reasons/codes
-> > >   KVM: selftests: Add an x86-only test to verify nested exception
-> > >     queueing
-> > > 
-> > >  arch/x86/include/asm/kvm-x86-ops.h            |   2 +-
-> > >  arch/x86/include/asm/kvm_host.h               |  35 +-
-> > >  arch/x86/kvm/emulate.c                        |   3 +-
-> > >  arch/x86/kvm/svm/nested.c                     | 102 ++---
-> > >  arch/x86/kvm/svm/svm.c                        |  18 +-
-> > >  arch/x86/kvm/vmx/nested.c                     | 319 +++++++++-----
-> > >  arch/x86/kvm/vmx/sgx.c                        |   2 +-
-> > >  arch/x86/kvm/vmx/vmx.c                        |  53 ++-
-> > >  arch/x86/kvm/x86.c                            | 404 +++++++++++-------
-> > >  arch/x86/kvm/x86.h                            |  11 +-
-> > >  tools/testing/selftests/kvm/.gitignore        |   1 +
-> > >  tools/testing/selftests/kvm/Makefile          |   1 +
-> > >  .../selftests/kvm/include/x86_64/svm_util.h   |   7 +-
-> > >  .../selftests/kvm/include/x86_64/vmx.h        |  51 +--
-> > >  .../kvm/x86_64/nested_exceptions_test.c       | 295 +++++++++++++
-> > >  15 files changed, 886 insertions(+), 418 deletions(-)
-> > >  create mode 100644 tools/testing/selftests/kvm/x86_64/nested_exceptions_test.c
-> > > 
-> > > 
-> > > base-commit: 816967202161955f398ce379f9cbbedcb1eb03cb
-> > 
-> > Hi Sean and everyone!
-> > 
-> > 
-> > Before I continue reviewing the patch series, I would like you to check if
-> > I understand the monitor trap/pending debug exception/event injection
-> > logic on VMX correctly. I was looking at the spec for several hours and I still have more
-> > questions that answers about it.
-> > 
-> > So let me state what I understand:
-> > 
-> > 1. Event injection (aka eventinj in SVM terms):
-> > 
-> >   (VM_ENTRY_INTR_INFO_FIELD/VM_ENTRY_EXCEPTION_ERROR_CODE/VM_ENTRY_INSTRUCTION_LEN)
-> > 
-> >   If I understand correctly all event injections types just like on SVM just inject,
-> >   and never create something pending, and/or drop the injection if event is not allowed
-> >   (like if EFLAGS.IF is 0). VMX might have some checks that could fail VM entry,
-> >   if for example you try to inject type 0 (hardware interrupt) and EFLAGS.IF is 0,
-> >   I haven't checked this)
-> > 
-> >   All event injections happen right away, don't deliver any payload (like DR6), etc.
-> > 
-> >   Injection types 4/5/6, do the same as injection types 0/2/3 but in addition to that,
-> >   type 4/6 do a DPL check in IDT, and also these types can promote the RIP prior
-> >   to pushing it to the exception stack using VM_ENTRY_INSTRUCTION_LEN to be consistent
-> >   with cases when these trap like events are intercepted, where the interception happens
-> >   on the start of the instruction despite exceptions being trap-like.
-> > 
-> > 
-> > 2. #DB is the only trap like exception that can be pending for one more instruction
-> >    if MOV SS shadow is on (any other cases?).
-> >    (AMD just ignores the whole thing, rightfully)
-> > 
-> >    That is why we have the GUEST_PENDING_DBG_EXCEPTIONS vmcs field.
-> >    I understand that it will be written by CPU in case we have VM exit at the moment
-> >    where #DB is already pending but not yet delivered.
-> > 
-> >    That field can also be (sadly) used to "inject" #DB to the guest, if the hypervisor sets it,
-> >    and this #DB will actually update DR6 and such, and might be delayed/lost.
-> > 
-> > 
-> > 3. Facts about MTF:
-> > 
-> >    * MTF as a feature is basically 'single step the guest by generating MTF VM exits after each executed
-> >      instruction', and is enabled in primary execution controls.
-> > 
-> >    * MTF is also an 'event', and it can be injected separately by the hypervisor with event type 7,
-> >      and that has no connection to the 'feature', although usually this injection will be useful
-> >      when the hypervisor does some kind of re-injection, triggered by the actual MTF feature.
-> > 
-> >    * MTF event can be lost, if higher priority VM exit happens, this is why the SDM says about 'pending MTF',
-> >      which means that MTF vmexit should happen unless something else prevents it and/or higher priority VM exit
-> >      overrides it.
-> > 
-> >    * MTF event is raised (when the primary execution controls bit is enabled) when:
-> > 
-> >         - after an injected (vectored), aka eventinj/VM_ENTRY_INTR_INFO_FIELD, done updating the guest state
-> >           (that is stack was switched, stuff was pushed to new exception stack, RIP updated to the handler)
-> >           I am not 100% sure about this but this seems to be what PRM implies:
-> > 
-> >           "If the “monitor trap flag” VM-execution control is 1 and VM entry is injecting a vectored event (see Section
-> >           26.6.1), an MTF VM exit is pending on the instruction boundary before the first instruction following the
-> >           VM entry."
-> > 
-> >         - If an interrupt and or #DB exception happens prior to executing first instruction of the guest,
-> >           then once again MTF will happen on first instruction of the exception/interrupt handler
-> > 
-> >           "If the “monitor trap flag” VM-execution control is 1, VM entry is not injecting an event, and a pending event
-> >           (e.g., debug exception or interrupt) is delivered before an instruction can execute, an MTF VM exit is pending
-> >           on the instruction boundary following delivery of the event (or any nested exception)."
-> > 
-> >           That means that #DB has higher priority that MTF, but not specified if fault DB or trap DB
-> > 
-> >         - If instruction causes exception, once again, on first instruction of the exception handler MTF will happen.
-> > 
-> >         - Otherwise after an instruction (or REP iteration) retires.
-> > 
-> > 
-> > If you have more facts about MTF and related stuff and/or if I made a mistake in the above, I am all ears to listen!
-> 
-> Here's a comprehensive spreadsheet on virtualizing MTF, compiled by
-> Peter Shier. (Just in case anyone is interested in *truly*
-> virtualizing the feature under KVM, rather than just setting a
-> VM-execution control bit in vmcs02 and calling it done.)
-> 
-> https://docs.google.com/spreadsheets/d/e/2PACX-1vQYP3PgY_JT42zQaR8uMp4U5LCey0qSlvMb80MLwjw-kkgfr31HqLSqAOGtdZ56aU2YdVTvfkruhuon/pubhtml
+From: Yushan Zhou <katrinzhou@tencent.com>
 
-Neither can I access this document sadly :(
+When lockdep is enabled, lockdep_assert_held_write would
+cause potential NULL pointer dereference.
 
-Best regards,
-	Maxim Levitsky
+Fix the following smatch warnings:
 
-> 
+fs/kernfs/dir.c:1353 __kernfs_remove() warn: variable dereferenced before check 'kn' (see line 1346)
 
+Fixes: 393c3714081a ("kernfs: switch global kernfs_rwsem lock to per-fs lock")
+Signed-off-by: Yushan Zhou <katrinzhou@tencent.com>
+---
+
+Change in v2:
+- Fix formatting issue
+
+ fs/kernfs/dir.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
+index 6eca72cfa1f2..1cc88ba6de90 100644
+--- a/fs/kernfs/dir.c
++++ b/fs/kernfs/dir.c
+@@ -1343,14 +1343,17 @@ static void __kernfs_remove(struct kernfs_node *kn)
+ {
+ 	struct kernfs_node *pos;
+ 
++	/* Short-circuit if non-root @kn has already finished removal. */
++	if (!kn)
++		return;
++
+ 	lockdep_assert_held_write(&kernfs_root(kn)->kernfs_rwsem);
+ 
+ 	/*
+-	 * Short-circuit if non-root @kn has already finished removal.
+ 	 * This is for kernfs_remove_self() which plays with active ref
+ 	 * after removal.
+ 	 */
+-	if (!kn || (kn->parent && RB_EMPTY_NODE(&kn->rb)))
++	if (kn->parent && RB_EMPTY_NODE(&kn->rb))
+ 		return;
+ 
+ 	pr_debug("kernfs %s: removing\n", kn->name);
+-- 
+2.27.0
 

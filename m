@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98461561C9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4717E561C5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235281AbiF3OA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
+        id S235471AbiF3NyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 09:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236525AbiF3N7D (ORCPT
+        with ESMTP id S235918AbiF3Nwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:59:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC414427C4;
-        Thu, 30 Jun 2022 06:51:53 -0700 (PDT)
+        Thu, 30 Jun 2022 09:52:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8592534664;
+        Thu, 30 Jun 2022 06:50:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 437B8B82AED;
-        Thu, 30 Jun 2022 13:51:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 974BBC34115;
-        Thu, 30 Jun 2022 13:51:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12D3761FD8;
+        Thu, 30 Jun 2022 13:50:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17C33C34115;
+        Thu, 30 Jun 2022 13:49:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597089;
-        bh=X8JUC66ow/6HI6++cQqPQ7voqNEha44XQ01WnUiymBM=;
+        s=korg; t=1656597000;
+        bh=l+0t1T7UVgnnl52KigGaMI+Ya57FIMlUgLltqt/jz/M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZoerRl/u/dB2Fuc2/TZswtUAKofknkcLikvW1mDUn2UyYpSEe/iSmQiQeIUpRrvHA
-         jTbGiz4t8O3EGCwd9SLitAe9uvMuYOwanRHMaR5ZqUR2XYYzs8lSg3CAzAt9wORArA
-         Suaauo0XADRALiHZwmYlMboHxf6lMDhp3SH7SGhw=
+        b=WaGTonxdISR/BsXGEERGT+72jMbHzphrnNVCi6NXo8nGGUFsPHZ8542BrOKijNopB
+         Q9qVlIBU+0wTnfi+OY0vTUnw6JEVQRV9111uDc538inHyxZ2fytl+9EC57G3ylzuyu
+         BtF++FGnsSskJu84cmQjg/wAuuSULSbNBFpmF9gs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.19 24/49] iio:chemical:ccs811: rearrange iio trigger get and register
-Date:   Thu, 30 Jun 2022 15:46:37 +0200
-Message-Id: <20220630133234.612211320@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH 4.14 27/35] ARM: Fix refcount leak in axxia_boot_secondary
+Date:   Thu, 30 Jun 2022 15:46:38 +0200
+Message-Id: <20220630133233.237132772@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133233.910803744@linuxfoundation.org>
-References: <20220630133233.910803744@linuxfoundation.org>
+In-Reply-To: <20220630133232.433955678@linuxfoundation.org>
+References: <20220630133232.433955678@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Rokosov <DDRokosov@sberdevices.ru>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit d710359c0b445e8c03e24f19ae2fb79ce7282260 upstream.
+commit 7c7ff68daa93d8c4cdea482da4f2429c0398fcde upstream.
 
-IIO trigger interface function iio_trigger_get() should be called after
-iio_trigger_register() (or its devm analogue) strictly, because of
-iio_trigger_get() acquires module refcnt based on the trigger->owner
-pointer, which is initialized inside iio_trigger_register() to
-THIS_MODULE.
-If this call order is wrong, the next iio_trigger_put() (from sysfs
-callback or "delete module" path) will dereference "default" module
-refcnt, which is incorrect behaviour.
+of_find_compatible_node() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+Add missing of_node_put() to avoid refcount leak.
 
-Fixes: f1f065d7ac30 ("iio: chemical: ccs811: Add support for data ready trigger")
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/20220524181150.9240-5-ddrokosov@sberdevices.ru
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: 1d22924e1c4e ("ARM: Add platform support for LSI AXM55xx SoC")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220601090548.47616-1-linmq006@gmail.com'
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/chemical/ccs811.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/mach-axxia/platsmp.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/iio/chemical/ccs811.c
-+++ b/drivers/iio/chemical/ccs811.c
-@@ -421,11 +421,11 @@ static int ccs811_probe(struct i2c_clien
- 		data->drdy_trig->dev.parent = &client->dev;
- 		data->drdy_trig->ops = &ccs811_trigger_ops;
- 		iio_trigger_set_drvdata(data->drdy_trig, indio_dev);
--		indio_dev->trig = data->drdy_trig;
--		iio_trigger_get(indio_dev->trig);
- 		ret = iio_trigger_register(data->drdy_trig);
- 		if (ret)
- 			goto err_poweroff;
-+
-+		indio_dev->trig = iio_trigger_get(data->drdy_trig);
- 	}
+--- a/arch/arm/mach-axxia/platsmp.c
++++ b/arch/arm/mach-axxia/platsmp.c
+@@ -42,6 +42,7 @@ static int axxia_boot_secondary(unsigned
+ 		return -ENOENT;
  
- 	ret = iio_triggered_buffer_setup(indio_dev, NULL,
+ 	syscon = of_iomap(syscon_np, 0);
++	of_node_put(syscon_np);
+ 	if (!syscon)
+ 		return -ENOMEM;
+ 
 
 

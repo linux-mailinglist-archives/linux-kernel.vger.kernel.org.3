@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06758561B6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA20561B6B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234682AbiF3NcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 09:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
+        id S230400AbiF3NcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 09:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233783AbiF3NcI (ORCPT
+        with ESMTP id S234211AbiF3NcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:32:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3025D38BC4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 06:32:08 -0700 (PDT)
+        Thu, 30 Jun 2022 09:32:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7EB366B7;
+        Thu, 30 Jun 2022 06:32:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C06AB61F88
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 13:32:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 500F9C34115;
-        Thu, 30 Jun 2022 13:32:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF78A61F89;
+        Thu, 30 Jun 2022 13:32:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FDAEC34115;
+        Thu, 30 Jun 2022 13:32:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656595927;
-        bh=MQ99EA8MPq4y6QBBwwIjkqow6PwqZgEuhPY0Ewq7swc=;
+        s=k20201202; t=1656595932;
+        bh=P4ygcIAZvGne77x7p3ESNwZJYO63gwNBVMImtEJj/Aw=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=YHL2cisNZD3hQ3ALsm0hnNYkJ8paM/cVAfmE28lt/JE4P7K8p7HWEZU/1i+r9zHPd
-         S53UuyXwutDkAsbVMJkV759XsE5WCYZj3NuC+Hjea7IYXkPOd++G2Ml7k8vccj5pL8
-         3HPCT4pYkY9BTVXGDzciojlB8Ji6/RyAWGIpl58dtRVw366v7Ma6wqtoYEl7AEqUCA
-         ebM4l9FaLECWzDHyOPCqd9AinIJ+VdvPKHh/cLYPfsmssha56TY4EEkoLRERP6gJxB
-         7YoLcBC1tnfhRO6Qb++YJQNr3VIW/Bjbbf6z/570pZYueWoz9MLVTX23n7xP9GHVhP
-         a2UpCcShZfxTQ==
+        b=uaLMUe0Kjgw7n42wD8QtWWvbYn63qmHgABLj0+dirlxPm7dLoQ8BxA3CimjMDUhB8
+         e52pmNAiqhXWOJIukn5AgG8zcO2cEcVKw6PmvTkMXeZpYrLSqdu0NVy1ydMyH/DKCQ
+         hVyKYIazGjilWAK6i9GvmJuKaMeV2ACUWbmJ7b54Rxqb8zaHHWyAyTXxINIA4pvCV2
+         5cPn/IJ2TYqaYYAhLIxFRsaRWcRtibZ6tdmN6QgyNvALkv9pMsmzgXlgvaTjy4Mmft
+         HeUzOxJonMkfb7otYacjhbuGzEPksBxuETqyuyMf8KJwSO0Ao4SEhOb6rWrX0RChNV
+         Hfc/RZV5a/NPA==
 From:   Mark Brown <broonie@kernel.org>
-To:     gregkh@linuxfoundation.org, schspa@gmail.com, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <20220629130951.63040-1-schspa@gmail.com>
-References: <20220629130951.63040-1-schspa@gmail.com>
-Subject: Re: [PATCH] regmap: cache: Add extra parameter check in regcache_init
-Message-Id: <165659592604.540673.9610049646395507575.b4-ty@kernel.org>
-Date:   Thu, 30 Jun 2022 14:32:06 +0100
+To:     stephan.gerhold@kernkonzept.com
+Cc:     bjorn.andersson@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, lgirdwood@gmail.com,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20220623094614.1410180-1-stephan.gerhold@kernkonzept.com>
+References: <20220623094614.1410180-1-stephan.gerhold@kernkonzept.com>
+Subject: Re: [PATCH 0/3] regulator: qcom_smd: Add PM8909 and fix pm8916_pldo range
+Message-Id: <165659593011.540699.6977460772131709701.b4-ty@kernel.org>
+Date:   Thu, 30 Jun 2022 14:32:10 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -53,24 +56,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Jun 2022 21:09:51 +0800, Schspa Shi wrote:
-> When num_reg_defaults > 0 but reg_defaults is NULL, there will be a
-> NULL pointer exception.
+On Thu, 23 Jun 2022 11:46:11 +0200, Stephan Gerhold wrote:
+> Fix the voltage range for the pm8916_pldo in the qcom_smd-regulator
+> driver and add definitions for the regulators available in PM8909.
 > 
-> Current code has no such usage, but as additional hardening, also
-> check this to prevent any chance of crashing.
-> 
+> Stephan Gerhold (3):
+>   regulator: qcom_smd: Fix pm8916_pldo range
+>   regulator: dt-bindings: qcom,smd-rpm: Add PM8909
+>   regulator: qcom_smd: Add PM8909 RPM regulators
 > 
 > [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
 Thanks!
 
-[1/1] regmap: cache: Add extra parameter check in regcache_init
-      commit: a5201d42e2f8a8e8062103170027840ee372742f
+[1/3] regulator: qcom_smd: Fix pm8916_pldo range
+      commit: e8977917e116d1571dacb8e9864474551c1c12bd
+[2/3] regulator: dt-bindings: qcom,smd-rpm: Add PM8909
+      commit: 8cbb948a7cc2875d09234e2ce0424bc501c370b9
+[3/3] regulator: qcom_smd: Add PM8909 RPM regulators
+      commit: bc4d193238be4ef8ecee1ba0e0371169ad448c31
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

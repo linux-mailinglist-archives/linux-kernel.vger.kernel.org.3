@@ -2,97 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84C8560EF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 04:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7E0560EF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 04:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbiF3CEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 22:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
+        id S231319AbiF3CIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 22:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiF3CEw (ORCPT
+        with ESMTP id S229623AbiF3CIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 22:04:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2045B3B571
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 19:04:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 29 Jun 2022 22:08:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D41E415FD3
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 19:08:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656554896;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rdzs+ejxlay4oS8U29luxVEbd5hmptD+SpCokSpGfUE=;
+        b=Pd00K0YB1etdvwQJZ8zDQRaAWGji4ar2rKM8yIs3XmbYKY+tJqMDjramEJmAaZs+wlyFUz
+        o6oYCR2eTbrnAtqk5yQ9pz+EinkjWladb6tXPrdfPQDp4VmBYO79AHfexc5bETC9A6WSwC
+        q97O4lw+9T7sxofD3SVS90J49eP3fTw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-363-_hjto7RuNAajHfm7IQHkQg-1; Wed, 29 Jun 2022 22:08:11 -0400
+X-MC-Unique: _hjto7RuNAajHfm7IQHkQg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79AD7B826A8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:04:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EA3BC34114;
-        Thu, 30 Jun 2022 02:04:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656554688;
-        bh=GtdBoKOokWarrldoZgOzYh8XTSyehxtzazmyNXJqCkQ=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=KhGs07lKCOcrjUU6P9heOO6gYVdTcQ2eI1H5AXZ158zVRUuohGBRYgGKeHL1Ojdm6
-         GOjswBoP5zyW+rCnlMIlYgRoxoRd/Pk8XsP2sioMgQg4oA3zxXCy4TqwO3r8dMG7ut
-         3HaYatALZYJ/ve9Mj9Y/laE99036uz7XesrFK8lKL52lryZY55R8hkGKvj4b3AlvyR
-         V33BQXKH0GxZDd/Aie6csR7tfFmr3lNlwQ3c3ytTdSATJ6lg/CEU7p+tVjt62jrAMO
-         QkeEUeV5MD7Lg+RWpTf/GqkkuaCaWDhun2fjvZ8OWocf7FfuK7Iy/qhVhG1rtREnF/
-         I0YavpE19z20g==
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 8161327C0054;
-        Wed, 29 Jun 2022 22:04:46 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute2.internal (MEProxy); Wed, 29 Jun 2022 22:04:46 -0400
-X-ME-Sender: <xms:vgS9YkxTN1Ukp9SkWWpJcIeDZrlMAK0z1yymT-rj2kUDIHXSBLk-dg>
-    <xme:vgS9YoTbavcxeMeJ0lMH4OmChdLJKZXHs22gacFmz5fsZuBZpl9zGs_8kQppzy_8p
-    ztg19dvrWSAbzxkLEQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehtddgheegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepvdfhuedvtdfhudffhfekkefftefghfeltdelgeffteehueegjeff
-    udehgfetiefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
-    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
-    igrdhluhhtohdruhhs
-X-ME-Proxy: <xmx:vgS9YmVnyCZEaM6Ro9gX8I1Vic9Ve9XbkU92UG8hgpWJOSv0z1OvPQ>
-    <xmx:vgS9YigwOLyUK5KTFnx7edr5bcWV4DXC-AXFfmHdy7welai1U3oliw>
-    <xmx:vgS9YmA1VPBDksrXmEvRv1xA0R0lENqU0PwICJDDHgSgxg0vdqjlRQ>
-    <xmx:vgS9YnKZBbfiR-uTKFFs_GDft8tJjr0L7YTVHdbl4n-MyvWFVT_UKg>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1EAD331A0062; Wed, 29 Jun 2022 22:04:46 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-713-g1f035dc716-fm-20220617.001-g1f035dc7
-Mime-Version: 1.0
-Message-Id: <5a92ba37-69ae-477e-9747-315d41d3206e@www.fastmail.com>
-In-Reply-To: <20220616165413.c35yliaxbxvmwsqw@black.fi.intel.com>
-References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
- <20220610143527.22974-7-kirill.shutemov@linux.intel.com>
- <c3b4f3ccf8ee547a588bf8a971064e4d62b6a44c.camel@intel.com>
- <20220610180635.l44opq2votd3gxpl@black.fi.intel.com>
- <5b56c88e477d879e5a0e3c15627cb05901a812f4.camel@intel.com>
- <dda083610d4c8b8d8d0b09021345e9cc0cb35bbe.camel@intel.com>
- <5d3b281f-3d8b-4bbd-9681-b226810c3e8b@www.fastmail.com>
- <Yqr7mzvX1+hWM8NL@hirez.programming.kicks-ass.net>
- <20220616165413.c35yliaxbxvmwsqw@black.fi.intel.com>
-Date:   Wed, 29 Jun 2022 19:04:24 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc:     "Rick P Edgecombe" <rick.p.edgecombe@intel.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "Andi Kleen" <ak@linux.intel.com>,
-        "dvyukov@google.com" <dvyukov@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
-        "glider@google.com" <glider@google.com>
-Subject: Re: [PATCHv3 6/8] x86/mm: Provide ARCH_GET_UNTAG_MASK and
- ARCH_ENABLE_TAGGED_ADDR
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DD43D85A581;
+        Thu, 30 Jun 2022 02:08:10 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-12-189.pek2.redhat.com [10.72.12.189])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EEFEB492C3B;
+        Thu, 30 Jun 2022 02:08:07 +0000 (UTC)
+From:   Jason Wang <jasowang@redhat.com>
+To:     mst@redhat.com, jasowang@redhat.com, davem@davemloft.net,
+        kuba@kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V2] virtio-net: fix the race between refill work and close
+Date:   Thu, 30 Jun 2022 10:08:04 +0800
+Message-Id: <20220630020805.74658-1-jasowang@redhat.com>
+MIME-Version: 1.0
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,19 +58,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+We try using cancel_delayed_work_sync() to prevent the work from
+enabling NAPI. This is insufficient since we don't disable the source
+of the refill work scheduling. This means an NAPI poll callback after
+cancel_delayed_work_sync() can schedule the refill work then can
+re-enable the NAPI that leads to use-after-free [1].
 
+Since the work can enable NAPI, we can't simply disable NAPI before
+calling cancel_delayed_work_sync(). So fix this by introducing a
+dedicated boolean to control whether or not the work could be
+scheduled from NAPI.
 
-On Thu, Jun 16, 2022, at 9:54 AM, Kirill A. Shutemov wrote:
-> On Thu, Jun 16, 2022 at 11:44:59AM +0200, Peter Zijlstra wrote:
->> > get_nr_threads() is the wrong thing.  Either look at mm->mm_users or
->> > find a way to get rid of this restriction entirely.
->> 
->> mm->mm_users should indeed be sufficient here.
->
-> Hm. kthread_use_mm() doesn't bump mm_users. Do we care?
+[1]
+==================================================================
+BUG: KASAN: use-after-free in refill_work+0x43/0xd4
+Read of size 2 at addr ffff88810562c92e by task kworker/2:1/42
 
-I think the idea is that the kthread in question is expected to hold an mm_users reference. 
+CPU: 2 PID: 42 Comm: kworker/2:1 Not tainted 5.19.0-rc1+ #480
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+Workqueue: events refill_work
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x34/0x44
+ print_report.cold+0xbb/0x6ac
+ ? _printk+0xad/0xde
+ ? refill_work+0x43/0xd4
+ kasan_report+0xa8/0x130
+ ? refill_work+0x43/0xd4
+ refill_work+0x43/0xd4
+ process_one_work+0x43d/0x780
+ worker_thread+0x2a0/0x6f0
+ ? process_one_work+0x780/0x780
+ kthread+0x167/0x1a0
+ ? kthread_exit+0x50/0x50
+ ret_from_fork+0x22/0x30
+ </TASK>
+...
 
->
-> -- 
->  Kirill A. Shutemov
+Fixes: b2baed69e605c ("virtio_net: set/cancel work on ndo_open/ndo_stop")
+Signed-off-by: Jason Wang <jasowang@redhat.com>
+---
+ drivers/net/virtio_net.c | 38 ++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 36 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index db05b5e930be..21bf1e5c81ef 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -251,6 +251,12 @@ struct virtnet_info {
+ 	/* Does the affinity hint is set for virtqueues? */
+ 	bool affinity_hint_set;
+ 
++	/* Is refill work enabled? */
++	bool refill_work_enabled;
++
++	/* The lock to synchronize the access to refill_work_enabled */
++	spinlock_t refill_lock;
++
+ 	/* CPU hotplug instances for online & dead */
+ 	struct hlist_node node;
+ 	struct hlist_node node_dead;
+@@ -348,6 +354,20 @@ static struct page *get_a_page(struct receive_queue *rq, gfp_t gfp_mask)
+ 	return p;
+ }
+ 
++static void enable_refill_work(struct virtnet_info *vi)
++{
++	spin_lock(&vi->refill_lock);
++	vi->refill_work_enabled = true;
++	spin_unlock(&vi->refill_lock);
++}
++
++static void disable_refill_work(struct virtnet_info *vi)
++{
++	spin_lock(&vi->refill_lock);
++	vi->refill_work_enabled = false;
++	spin_unlock(&vi->refill_lock);
++}
++
+ static void virtqueue_napi_schedule(struct napi_struct *napi,
+ 				    struct virtqueue *vq)
+ {
+@@ -1527,8 +1547,12 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
+ 	}
+ 
+ 	if (rq->vq->num_free > min((unsigned int)budget, virtqueue_get_vring_size(rq->vq)) / 2) {
+-		if (!try_fill_recv(vi, rq, GFP_ATOMIC))
+-			schedule_delayed_work(&vi->refill, 0);
++		if (!try_fill_recv(vi, rq, GFP_ATOMIC)) {
++			spin_lock(&vi->refill_lock);
++			if (vi->refill_work_enabled)
++				schedule_delayed_work(&vi->refill, 0);
++			spin_unlock(&vi->refill_lock);
++		}
+ 	}
+ 
+ 	u64_stats_update_begin(&rq->stats.syncp);
+@@ -1651,6 +1675,8 @@ static int virtnet_open(struct net_device *dev)
+ 	struct virtnet_info *vi = netdev_priv(dev);
+ 	int i, err;
+ 
++	enable_refill_work(vi);
++
+ 	for (i = 0; i < vi->max_queue_pairs; i++) {
+ 		if (i < vi->curr_queue_pairs)
+ 			/* Make sure we have some buffers: if oom use wq. */
+@@ -2033,6 +2059,8 @@ static int virtnet_close(struct net_device *dev)
+ 	struct virtnet_info *vi = netdev_priv(dev);
+ 	int i;
+ 
++	/* Make sure NAPI doesn't schedule refill work */
++	disable_refill_work(vi);
+ 	/* Make sure refill_work doesn't re-enable napi! */
+ 	cancel_delayed_work_sync(&vi->refill);
+ 
+@@ -2776,6 +2804,9 @@ static void virtnet_freeze_down(struct virtio_device *vdev)
+ 	netif_tx_lock_bh(vi->dev);
+ 	netif_device_detach(vi->dev);
+ 	netif_tx_unlock_bh(vi->dev);
++	/* Make sure NAPI doesn't schedule refill work */
++	disable_refill_work(vi);
++	/* Make sure refill_work doesn't re-enable napi! */
+ 	cancel_delayed_work_sync(&vi->refill);
+ 
+ 	if (netif_running(vi->dev)) {
+@@ -2799,6 +2830,8 @@ static int virtnet_restore_up(struct virtio_device *vdev)
+ 
+ 	virtio_device_ready(vdev);
+ 
++	enable_refill_work(vi);
++
+ 	if (netif_running(vi->dev)) {
+ 		for (i = 0; i < vi->curr_queue_pairs; i++)
+ 			if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
+@@ -3548,6 +3581,7 @@ static int virtnet_probe(struct virtio_device *vdev)
+ 	vdev->priv = vi;
+ 
+ 	INIT_WORK(&vi->config_work, virtnet_config_changed_work);
++	spin_lock_init(&vi->refill_lock);
+ 
+ 	/* If we can receive ANY GSO packets, we must allocate large ones. */
+ 	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
+-- 
+2.25.1
+

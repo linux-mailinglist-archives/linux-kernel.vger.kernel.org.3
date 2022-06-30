@@ -2,110 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81806561572
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BF8561577
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234030AbiF3Iwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 04:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
+        id S233792AbiF3Ixo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 04:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233991AbiF3IwV (ORCPT
+        with ESMTP id S231130AbiF3Ixm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 04:52:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF80C427E9
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:52:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EBE561BF7;
-        Thu, 30 Jun 2022 01:52:20 -0700 (PDT)
-Received: from [10.57.85.25] (unknown [10.57.85.25])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DF03E3F5A1;
-        Thu, 30 Jun 2022 01:52:18 -0700 (PDT)
-Message-ID: <2cf27cd6-5cb9-57e7-dc52-e39f37945343@arm.com>
-Date:   Thu, 30 Jun 2022 09:52:12 +0100
+        Thu, 30 Jun 2022 04:53:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9EA3B542;
+        Thu, 30 Jun 2022 01:53:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DEEFB82924;
+        Thu, 30 Jun 2022 08:53:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F6F1C385A5;
+        Thu, 30 Jun 2022 08:53:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656579219;
+        bh=98LP8TqrAriutG23cVTk9h4C/uw9Lw8fbs5WwhfVi40=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pCfiIOuRlS6deNhUfZbpGjWGIVTgcU0TRbrE7TwiGCQmgN9h+Y0+o3y8lEfj18X77
+         RNUhjvbez2W1w6C/exIBHvBpRc/fIV79Subv49LmORt2pGCJvv7MuOt2sxyHeB4taG
+         4uydP7XdjpETqE5JlfQQzv2k8snm0uZT5+DRQfQUAFTGZMSmFocpnnHQM1H0fOZECM
+         V/v05y+Ym3VHBNrG1DAIqZMGh4L8Ky/jyN0i4jTqNy5yHwgs6LdlT73i261gE+fdt1
+         c7aIO8r3XE+6GTt4LQL6RU+YQ6kRuxk4KyCQCtq7Hquecwd2ESdkKwDWhFzBGzXRPx
+         L3ujRJ7vRnVeQ==
+Received: by mail-vs1-f48.google.com with SMTP id z66so17610203vsb.3;
+        Thu, 30 Jun 2022 01:53:39 -0700 (PDT)
+X-Gm-Message-State: AJIora+eIBBT+PpgIbzPV9mlb+hawx4UqYqSJ6YGlj52BDWfT/0R0AX7
+        va89nUJx2sCi3MKgbNC+v1n1KMJkD3i9bjMe46Q=
+X-Google-Smtp-Source: AGRyM1usGSpW65/S+D3bTGvnsIsuanAbAX0oa4OCyYXk/MFf5yU3THi8COlykfUvDOw9YX5tbgBR13xexsBTWE/4zc0=
+X-Received: by 2002:a05:6102:6c4:b0:354:3f88:4d3f with SMTP id
+ m4-20020a05610206c400b003543f884d3fmr8085454vsg.78.1656579217987; Thu, 30 Jun
+ 2022 01:53:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH] mm/slub: enable debugging memory wasting of kmalloc
-Content-Language: en-GB
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Feng Tang <feng.tang@intel.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, dave.hansen@intel.com,
-        Joerg Roedel <jroedel@suse.de>
-References: <20220630014715.73330-1-feng.tang@intel.com>
- <20220629193006.77e9f071a5940e882c459cdd@linux-foundation.org>
- <20220630023844.GA4668@shbuild999.sh.intel.com>
- <20220629194747.62effc10a994f67e26fe96af@linux-foundation.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220629194747.62effc10a994f67e26fe96af@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220630043237.2059576-1-chenhuacai@loongson.cn> <35094088-d5da-cd36-66e2-5117304c5712@gmail.com>
+In-Reply-To: <35094088-d5da-cd36-66e2-5117304c5712@gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Thu, 30 Jun 2022 16:53:25 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6NubNmoNvOkjnDT925O7Kb0yKPDKhGXroxhrU+AuECfQ@mail.gmail.com>
+Message-ID: <CAAhV-H6NubNmoNvOkjnDT925O7Kb0yKPDKhGXroxhrU+AuECfQ@mail.gmail.com>
+Subject: Re: [PATCH V2 0/4] mm/sparse-vmemmap: Generalise helpers and enable for
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-30 03:47, Andrew Morton wrote:
-> On Thu, 30 Jun 2022 10:38:44 +0800 Feng Tang <feng.tang@intel.com> wrote:
-> 
->> Hi Andrew,
->>
->> Thanks for the review!
->>
->> On Wed, Jun 29, 2022 at 07:30:06PM -0700, Andrew Morton wrote:
->>> On Thu, 30 Jun 2022 09:47:15 +0800 Feng Tang <feng.tang@intel.com> wrote:
->>>
->>>> kmalloc's API family is critical for mm, with one shortcoming that
->>>> its object size is fixed to be power of 2. When user requests memory
->>>> for '2^n + 1' bytes, actually 2^(n+1) bytes will be allocated, so
->>>> in worst case, there is around 50% memory space waste.
->>>>
->>>> We've met a kernel boot OOM panic, and from the dumped slab info:
->>>>
->>>>      [   26.062145] kmalloc-2k            814056KB     814056KB
->>>>
->>>> >From debug we found there are huge number of 'struct iova_magazine',
->>>> whose size is 1032 bytes (1024 + 8), so each allocation will waste
->>>> 1016 bytes. Though the issue is solved by giving the right(bigger)
->>>> size of RAM, it is still better to optimize the size (either use
->>>> a kmalloc friendly size or create a dedicated slab for it).
->>>
->>> Well that's nice, and additional visibility is presumably a good thing.
->>>
->>> But what the heck is going on with iova_magazine?  Is anyone looking at
->>> moderating its impact?
->>
->> Yes, I have a very simple patch at hand
->>
->> --- a/drivers/iommu/iova.c
->> +++ b/drivers/iommu/iova.c
->> @@ -614,7 +614,7 @@ EXPORT_SYMBOL_GPL(reserve_iova);
->>    * dynamic size tuning described in the paper.
->>    */
->>   
->> -#define IOVA_MAG_SIZE 128
->> +#define IOVA_MAG_SIZE 127
-> 
-> Well OK.  Would benefit from a comment explaining the reasoning.
-> 
-> But we still have eleventy squillion of these things in flight.  Why?
+Hi, Sergei,
 
-They're storage for a per-CPU caching scheme - for n CPUs, there should 
-currently be (2n + 32) * 6 in flight, since there's one set for each of 
-6 sizes. The 32 really should be n or 2n as well since it's needlessly 
-large for small systems and a bottleneck for large ones, but it needs 
-some unpicking to allow for dynamic allocations.
+On Thu, Jun 30, 2022 at 4:30 PM Sergei Shtylyov
+<sergei.shtylyov@gmail.com> wrote:
+>
+> Hello!
+>
+>    Your subject looks unfinished...
+Thank you, this seems because the subject is too long.
 
-Thanks,
-Robin.
+Huacai
+>
+> MBR, Sergey

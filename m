@@ -2,94 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18923561E1F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2406D561E1C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237194AbiF3OhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
+        id S237099AbiF3Og5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235918AbiF3Ogx (ORCPT
+        with ESMTP id S237151AbiF3Ogl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:36:53 -0400
-X-Greylist: delayed 186 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Jun 2022 07:31:09 PDT
-Received: from gmmr-2.centrum.cz (gmmr-2.centrum.cz [IPv6:2a00:da80:1:502::7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D58F1020
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 07:31:08 -0700 (PDT)
-Received: from gmmr-2.centrum.cz (localhost [127.0.0.1])
-        by gmmr-2.centrum.cz (Postfix) with ESMTP id D721824E86AF;
-        Thu, 30 Jun 2022 16:27:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=atlas.cz; s=mail;
-        t=1656599278; bh=vlhxEe8srxoyYwFAEgaB16uc4WpIlbHnozTguOSAmvU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=iviVYsyfKb5aj2ljdklUBpohpa22A0sJaXkPoiEmxwMnSlcuofSZGIUfdfoMF2q74
-         od/ZgayM0DveqBHFEbCBDZMFihvq6BIpnqk1Hq8tu7VFE2Ea4C2eRjrGWxs94scJmb
-         NkEO4oQ3JUlvrbPUaA/SjpmRi/Pxftvjz905JPBw=
-Received: from vm2.excello.cz (vm2.excello.cz [IPv6:2001:67c:15a0:4000::b])
-        by gmmr-2.centrum.cz (Postfix) with QMQP
-        id D636A2457DA2; Thu, 30 Jun 2022 16:27:58 +0200 (CEST)
-Received: from vm2.excello.cz by vm2.excello.cz
- (VF-Scanner: Clear:RC:0(2a00:da80:1:502::7):SC:0(-1.5/5.0):CC:0:;
- processed in 0.3 s); 30 Jun 2022 14:27:58 +0000
-X-VF-Scanner-ID: 20220630142758.530909.10951.vm2.excello.cz.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from gmmr-2.centrum.cz (2a00:da80:1:502::7)
-  by out1.virusfree.cz with ESMTPS (TLSv1.3, TLS_AES_256_GCM_SHA384); 30 Jun 2022 16:27:58 +0200
-Received: from gm-smtp11.centrum.cz (unknown [10.255.254.25])
-        by gmmr-2.centrum.cz (Postfix) with ESMTP id 79E14238C8B6;
-        Thu, 30 Jun 2022 16:27:58 +0200 (CEST)
-Received: from localhost.localdomain (unknown [213.220.225.64])
-        by gm-smtp11.centrum.cz (Postfix) with ESMTPA id 57FE918054D46;
-        Thu, 30 Jun 2022 16:27:58 +0200 (CEST)
-From:   =?UTF-8?q?Petr=20Van=C4=9Bk?= <arkamar@atlas.cz>
-To:     Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Petr=20Van=C4=9Bk?= <arkamar@atlas.cz>,
-        Leon Romanovsky <leon@kernel.org>
-Subject: [PATCH] xfrm: improve wording of comment above XFRM_OFFLOAD flags
-Date:   Thu, 30 Jun 2022 16:27:20 +0200
-Message-Id: <20220630142720.19137-1-arkamar@atlas.cz>
-X-Mailer: git-send-email 2.35.1
+        Thu, 30 Jun 2022 10:36:41 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFCD58FC1;
+        Thu, 30 Jun 2022 07:29:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656599392; x=1688135392;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=wQpzAJXTo7Bhnhsk3imUJSwSv9/OyCu1er02rRF6zKA=;
+  b=OOdEHLEFZ5SJXDev514ghXyhkZpYLlHGYz24gYfPWtUVC4pINjPvVI3K
+   49jPUiiM+B3cQnvSiFlUGyJqBguYztEDhTdaAU7/ahzuiT0YJh8x5sD6Y
+   vs7wvxZ77oCCWKXEUpai0eRiDBQmKhgBFKQxexU/wbbm/CkUG+7MpDqyW
+   ZqvZKtWgQpJ9NTJmJkvFM1tFXOdxNT2eOaDOHGC3+jfx+XIb+xkUdKOxX
+   X4sQJfHqiQtsbzbd8gxpXR2T8iDczy1HqpIIomXQtpics7445R6JGAbBf
+   oDq++A9lv/U8S9Y8PKk/0UFpA947vDUJfffwkGyHVZSv3XtYWtwKDPSdz
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="281127819"
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="281127819"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 07:29:52 -0700
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="647912693"
+Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.25.211]) ([10.213.25.211])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 07:29:44 -0700
+Message-ID: <95e834e2-bd6f-efd9-28d2-9e983f9de7ae@intel.com>
+Date:   Thu, 30 Jun 2022 16:29:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.10.0
+Subject: Re: [Intel-gfx] [PATCH] drm/i915: Remove __dma_fence_is_chain()
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     Rob Clark <robdclark@chromium.org>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        intel-gfx@lists.freedesktop.org,
+        open list <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+References: <20220628233512.439555-1-robdclark@gmail.com>
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <20220628233512.439555-1-robdclark@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I have noticed a few minor wording issues in a comment recently added
-above XFRM_OFFLOAD flags in 7c76ecd9c99b ("xfrm: enforce validity of
-offload input flags").
+On 29.06.2022 01:35, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
+> 
+> drive-by cleanup
+> 
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
 
-Signed-off-by: Petr Vaněk <arkamar@atlas.cz>
----
- include/uapi/linux/xfrm.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
 
-diff --git a/include/uapi/linux/xfrm.h b/include/uapi/linux/xfrm.h
-index 65e13a099b1a..ee8862d4335e 100644
---- a/include/uapi/linux/xfrm.h
-+++ b/include/uapi/linux/xfrm.h
-@@ -511,9 +511,9 @@ struct xfrm_user_offload {
- 	int				ifindex;
- 	__u8				flags;
- };
--/* This flag was exposed without any kernel code that supporting it.
-- * Unfortunately, strongswan has the code that uses sets this flag,
-- * which makes impossible to reuse this bit.
-+/* This flag was exposed without any kernel code that supports it.
-+ * Unfortunately, strongswan has the code that sets this flag,
-+ * which makes it impossible to reuse this bit.
-  *
-  * So leave it here to make sure that it won't be reused by mistake.
-  */
--- 
-2.35.1
+Regards
+Andrzej
+
+> ---
+>   drivers/gpu/drm/i915/gem/i915_gem_wait.c | 7 +------
+>   1 file changed, 1 insertion(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_wait.c b/drivers/gpu/drm/i915/gem/i915_gem_wait.c
+> index 319936f91ac5..667841780514 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_wait.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_wait.c
+> @@ -73,11 +73,6 @@ static void fence_set_priority(struct dma_fence *fence,
+>   	rcu_read_unlock();
+>   }
+>   
+> -static inline bool __dma_fence_is_chain(const struct dma_fence *fence)
+> -{
+> -	return fence->ops == &dma_fence_chain_ops;
+> -}
+> -
+>   void i915_gem_fence_wait_priority(struct dma_fence *fence,
+>   				  const struct i915_sched_attr *attr)
+>   {
+> @@ -93,7 +88,7 @@ void i915_gem_fence_wait_priority(struct dma_fence *fence,
+>   
+>   		for (i = 0; i < array->num_fences; i++)
+>   			fence_set_priority(array->fences[i], attr);
+> -	} else if (__dma_fence_is_chain(fence)) {
+> +	} else if (dma_fence_is_chain(fence)) {
+>   		struct dma_fence *iter;
+>   
+>   		/* The chain is ordered; if we boost the last, we boost all */
 

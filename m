@@ -2,77 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43822561F02
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38FE3561F09
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235771AbiF3PSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 11:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
+        id S231254AbiF3PS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 11:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235657AbiF3PR7 (ORCPT
+        with ESMTP id S235824AbiF3PSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 11:17:59 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A24344D8;
-        Thu, 30 Jun 2022 08:17:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656602278; x=1688138278;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FDi0FOKTrj8PQy31Ckcb5baI4yZzM2OKFrPDYMBFWyQ=;
-  b=fAMALFF96QJJx02GpidsUetH1xR7zbCxptjGyzEF7OvkrfEAOlNAqifr
-   CVaNX9ZDSrVBL/P1SbdP7MUTONUF/I2JrwErPVSHCQIe+17TLHVKMEQqH
-   S9UPP7WF9tBxkKpPwiUpkkGvTPzyqdE99VQ34dIMXQfed5aC6hZU+U+ja
-   E=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 30 Jun 2022 08:17:58 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 08:17:57 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 30 Jun 2022 08:17:56 -0700
-Received: from [10.216.41.7] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 30 Jun
- 2022 08:17:50 -0700
-Message-ID: <78bfe8bd-b07e-5a53-156b-ad8b24829f29@quicinc.com>
-Date:   Thu, 30 Jun 2022 20:47:46 +0530
+        Thu, 30 Jun 2022 11:18:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D81464DE
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:18:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71CBD60F1B
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 15:18:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5144AC34115;
+        Thu, 30 Jun 2022 15:18:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656602293;
+        bh=PdIQJJsnc4nBeLOxlJtfEmJmZ33t1MTFhwJmcl1cXMo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zHjkKecnSpHYCW6EhTZ9oQ86e9OLULEXAHXc8U9uxF4kXUDV08NCKDbOd85eg4z1+
+         eHutQMTtE7hLeGonI1IApqVOLnIrTb/8e1ey1zEf7NS1OMyLG4o4SYQ49S+3Cx4wW8
+         vZHww0GtaA94kXT+UqeeLaduehtLW1KhuWzsr1+k=
+Date:   Thu, 30 Jun 2022 17:18:11 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Yangxi Xiang <xyangxi5@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        nick black <dankamongmen@gmail.com>
+Subject: Re: [PATCH v3] vt: fix memory overlapping when deleting chars in the
+ buffer
+Message-ID: <Yr2+s6wQWSfq/Gl5@kroah.com>
+References: <20220628093322.5688-1-xyangxi5@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3 4/4] drm/msm/adreno: Fix up formatting
-Content-Language: en-US
-To:     Joe Perches <joe@perches.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>
-CC:     <martin.botka@somainline.org>,
-        <angelogioacchino.delregno@somainline.org>,
-        <marijn.suijten@somainline.org>, <jamipkettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Emma Anholt <emma@anholt.net>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20220528160353.157870-1-konrad.dybcio@somainline.org>
- <20220528160353.157870-4-konrad.dybcio@somainline.org>
- <d470331985c7d82c6e5bb6d548ab610479416761.camel@perches.com>
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <d470331985c7d82c6e5bb6d548ab610479416761.camel@perches.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220628093322.5688-1-xyangxi5@gmail.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,37 +55,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/28/2022 10:22 PM, Joe Perches wrote:
-> On Sat, 2022-05-28 at 18:03 +0200, Konrad Dybcio wrote:
->> Leading spaces are not something checkpatch likes, and it says so when
->> they are present. Use tabs consistently to indent function body and
->> unwrap a 83-char-long line, as 100 is cool nowadays.
-> unassociated trivia:
->
->> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
-> []
->> @@ -199,7 +199,7 @@ static inline int adreno_is_a420(struct adreno_gpu *gpu)
->>   
->>   static inline int adreno_is_a430(struct adreno_gpu *gpu)
->>   {
->> -       return gpu->revn == 430;
->> +	return gpu->revn == 430;
->>   }
-> looks like these could/should return bool
-But this is just a format fix.
+On Tue, Jun 28, 2022 at 05:33:22PM +0800, Yangxi Xiang wrote:
+> A memory overlapping copy occurs when deleting a long line. This memory
+> overlapping copy can cause data corruption when scr_memcpyw is optimized
+> to memcpy because memcpy does not ensure its behavior if the destination
+> buffer overlaps with the source buffer. The line buffer is not always
+> broken, because the memcpy utilizes the hardware acceleration, whose
+> result is not deterministic.
+> 
+> Fix this problem by using replacing the scr_memcpyw with scr_memmovew.
+> 
+> Fixes: 81732c3b2fed ("Fix line garbage in virtual console")
 
->
->>   static inline int adreno_is_a506(struct adreno_gpu *gpu)
->> @@ -239,7 +239,7 @@ static inline int adreno_is_a540(struct adreno_gpu *gpu)
->>   
->>   static inline int adreno_is_a618(struct adreno_gpu *gpu)
->>   {
->> -       return gpu->revn == 618;
->> +	return gpu->revn == 618;
->>   }
-> etc...
+Nit, this should have been:
+	Fixes: 81732c3b2fed ("tty vt: Fix line garbage in virtual console on command line edition")
 
-Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+otherwise our tools complain.  I've fixed it up when applying it.
 
+thanks,
 
--Akhil.
+greg k-h

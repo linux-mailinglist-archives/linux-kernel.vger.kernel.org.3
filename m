@@ -2,118 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D26561F31
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D900E561F2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235761AbiF3P0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 11:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
+        id S235470AbiF3P0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 11:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235644AbiF3PZz (ORCPT
+        with ESMTP id S235110AbiF3P0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 11:25:55 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C583039831
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:25:53 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-31772f8495fso182648517b3.4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:25:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b1HHuJRU/PzgASK5LVwUbv/TAJnPbu4jGG6I27QsOqY=;
-        b=K7z0kaXZV+Vs0mudhBZ7v5I4hJ8K2IoRajqCVJXAvPAUEz8uwvT8kGg0TdLJ301AZC
-         JKYyEQwIY2IUACWR8lS97iGRrC3WGn0tOXHUT16Ho/0modgYkovGX6yeA4tUtBtJfS0z
-         Zlme6FyIJLdzNxUkBOwb8Mg7cC00jhPzMIFSa5h9jSd6wzE5flCIjTdT1UreW/ZMi4jZ
-         yZ1Hp5lhZBiHrqx3mTXl95L0gizbbmnSXYD/Qa7zF5btYwTA0Hz3lZxHv2AbyPMVnZzl
-         OM/jrbRauDoW2DR/7klV31KWRREq37PILkOqdgt1n2sU2VQbdKdICAxeJsewdFtutPMr
-         WhbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b1HHuJRU/PzgASK5LVwUbv/TAJnPbu4jGG6I27QsOqY=;
-        b=ani3TzAlgkJ8UycP+wAG49ZNhKnhm6B8xkydoa0R+uV4WpW286dMnbA1E0/BJz/gei
-         4GdP/RlL1+3BPPN45qq3BC2VNEwenqx2tEL1GGfNp4F/Ug+MKD3pVPL4vS3HHrridRQ/
-         rtAIWEKvHb2kVfBZVd0WcVmRzAPdwCCNLkYKygnS5gwLd57dM/7VIQBakDUJKSEr+zd7
-         igpdJS6sy5KfVZ5yjXqyGCU03hPfe4PP0CHs80/RZKEvfF9jMz/WPLr+IXOQon4sMtC4
-         DrpETMO8oA6eZDsL5MZKNE2RwbehBewNj29IpvLIgUY2BAGYKnkJYb+t2ga0jEkoePGy
-         VMGQ==
-X-Gm-Message-State: AJIora/ebiUifjXcQFVXLsWX1GK+ryDWkyHHkzvk8wibRx7eZdxuOqpn
-        8l/U4wKk+ApCX6875ssQhsvezaE9hdH1QBkvvISm5g==
-X-Google-Smtp-Source: AGRyM1uuJ9rW4KbHFrPXVR1zK2ZCcPA3iz7q8YM9loeKl8FGUB46bzc9Tsz6h5bvkfR24CeeTCDnuPbW+dVmdEVQjFQ=
-X-Received: by 2002:a0d:df50:0:b0:317:9c40:3b8b with SMTP id
- i77-20020a0ddf50000000b003179c403b8bmr11226355ywe.332.1656602752755; Thu, 30
- Jun 2022 08:25:52 -0700 (PDT)
+        Thu, 30 Jun 2022 11:26:15 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D9E53CA57
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:26:14 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E0F91063;
+        Thu, 30 Jun 2022 08:26:14 -0700 (PDT)
+Received: from [10.57.85.25] (unknown [10.57.85.25])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5784F3F66F;
+        Thu, 30 Jun 2022 08:26:11 -0700 (PDT)
+Message-ID: <2925438a-27d6-aee4-a412-591628ab2373@arm.com>
+Date:   Thu, 30 Jun 2022 16:26:06 +0100
 MIME-Version: 1.0
-References: <20220629085836.18042-1-fmdefrancesco@gmail.com>
- <Yr12jl1nEqqVI3TT@boxer> <CAKgT0UfGM8nCZnnYjWPKT+JXOwVJx1xj6n7ssGi41vH4GrUy0Q@mail.gmail.com>
-In-Reply-To: <CAKgT0UfGM8nCZnnYjWPKT+JXOwVJx1xj6n7ssGi41vH4GrUy0Q@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 30 Jun 2022 17:25:40 +0200
-Message-ID: <CANn89iK6g+4Fy2VMV7=feUAOUDHu-J38be+oU76yp+zGH6xCJQ@mail.gmail.com>
-Subject: Re: [Intel-wired-lan] [PATCH] ixgbe: Use kmap_local_page in ixgbe_check_lbtest_frame()
-To:     Alexander Duyck <alexander.duyck@gmail.com>
-Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v12 1/2] iommu/io-pgtable-arm-v7s: Add a quirk to allow
+ pgtable PA up to 35bit
+Content-Language: en-GB
+To:     yf.wang@mediatek.com, Will Deacon <will@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Yong Wu <Yong.Wu@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     wsd_upstream@mediatek.com, Libo Kang <Libo.Kang@mediatek.com>,
+        Ning Li <ning.li@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
+        Georgi Djakov <quic_c_gdjako@quicinc.com>,
+        Sven Peter <sven@svenpeter.dev>
+References: <20220630092927.24925-1-yf.wang@mediatek.com>
+ <20220630092927.24925-2-yf.wang@mediatek.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220630092927.24925-2-yf.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 5:17 PM Alexander Duyck
-<alexander.duyck@gmail.com> wrote:
->
-> On Thu, Jun 30, 2022 at 3:10 AM Maciej Fijalkowski
-> <maciej.fijalkowski@intel.com> wrote:
-> >
-> > On Wed, Jun 29, 2022 at 10:58:36AM +0200, Fabio M. De Francesco wrote:
-> > > The use of kmap() is being deprecated in favor of kmap_local_page().
-> > >
-> > > With kmap_local_page(), the mapping is per thread, CPU local and not
-> > > globally visible. Furthermore, the mapping can be acquired from any context
-> > > (including interrupts).
-> > >
-> > > Therefore, use kmap_local_page() in ixgbe_check_lbtest_frame() because
-> > > this mapping is per thread, CPU local, and not globally visible.
-> >
-> > Hi,
-> >
-> > I'd like to ask why kmap was there in the first place and not plain
-> > page_address() ?
-> >
-> > Alex?
->
-> The page_address function only works on architectures that have access
-> to all of physical memory via virtual memory addresses. The kmap
-> function is meant to take care of highmem which will need to be mapped
-> before it can be accessed.
->
-> For non-highmem pages kmap just calls the page_address function.
-> https://elixir.bootlin.com/linux/latest/source/include/linux/highmem-internal.h#L40
+On 2022-06-30 10:29, yf.wang@mediatek.com wrote:
+> From: Yunfei Wang <yf.wang@mediatek.com>
+> 
+> Single memory zone feature will remove ZONE_DMA32 and ZONE_DMA and
+> cause pgtable PA size larger than 32bit.
+> 
+> Since Mediatek IOMMU hardware support at most 35bit PA in pgtable,
+> so add a quirk to allow the PA of pgtables support up to bit35.
 
+This looks about as clean as it's likely to get now, thanks for persevering.
 
-Sure, but drivers/net/ethernet/intel/ixgbe/ixgbe_main.c is allocating
-pages that are not highmem ?
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
 
-This kmap() does not seem needed.
+> Signed-off-by: Ning Li <ning.li@mediatek.com>
+> Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+> ---
+>   drivers/iommu/io-pgtable-arm-v7s.c | 75 ++++++++++++++++++++++--------
+>   include/linux/io-pgtable.h         | 15 ++++--
+>   2 files changed, 66 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/iommu/io-pgtable-arm-v7s.c b/drivers/iommu/io-pgtable-arm-v7s.c
+> index be066c1503d3..ba3115fd0f86 100644
+> --- a/drivers/iommu/io-pgtable-arm-v7s.c
+> +++ b/drivers/iommu/io-pgtable-arm-v7s.c
+> @@ -182,14 +182,8 @@ static bool arm_v7s_is_mtk_enabled(struct io_pgtable_cfg *cfg)
+>   		(cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_EXT);
+>   }
+>   
+> -static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
+> -				    struct io_pgtable_cfg *cfg)
+> +static arm_v7s_iopte to_mtk_iopte(phys_addr_t paddr, arm_v7s_iopte pte)
+>   {
+> -	arm_v7s_iopte pte = paddr & ARM_V7S_LVL_MASK(lvl);
+> -
+> -	if (!arm_v7s_is_mtk_enabled(cfg))
+> -		return pte;
+> -
+>   	if (paddr & BIT_ULL(32))
+>   		pte |= ARM_V7S_ATTR_MTK_PA_BIT32;
+>   	if (paddr & BIT_ULL(33))
+> @@ -199,6 +193,17 @@ static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
+>   	return pte;
+>   }
+>   
+> +static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
+> +				    struct io_pgtable_cfg *cfg)
+> +{
+> +	arm_v7s_iopte pte = paddr & ARM_V7S_LVL_MASK(lvl);
+> +
+> +	if (arm_v7s_is_mtk_enabled(cfg))
+> +		return to_mtk_iopte(paddr, pte);
+> +
+> +	return pte;
+> +}
+> +
+>   static phys_addr_t iopte_to_paddr(arm_v7s_iopte pte, int lvl,
+>   				  struct io_pgtable_cfg *cfg)
+>   {
+> @@ -240,10 +245,17 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
+>   	dma_addr_t dma;
+>   	size_t size = ARM_V7S_TABLE_SIZE(lvl, cfg);
+>   	void *table = NULL;
+> +	gfp_t gfp_l1;
+> +
+> +	/*
+> +	 * ARM_MTK_TTBR_EXT extend the translation table base support larger
+> +	 * memory address.
+> +	 */
+> +	gfp_l1 = cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
+> +		 GFP_KERNEL : ARM_V7S_TABLE_GFP_DMA;
+>   
+>   	if (lvl == 1)
+> -		table = (void *)__get_free_pages(
+> -			__GFP_ZERO | ARM_V7S_TABLE_GFP_DMA, get_order(size));
+> +		table = (void *)__get_free_pages(gfp_l1 | __GFP_ZERO, get_order(size));
+>   	else if (lvl == 2)
+>   		table = kmem_cache_zalloc(data->l2_tables, gfp);
+>   
+> @@ -251,7 +263,8 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
+>   		return NULL;
+>   
+>   	phys = virt_to_phys(table);
+> -	if (phys != (arm_v7s_iopte)phys) {
+> +	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
+> +	    phys >= (1ULL << cfg->oas) : phys != (arm_v7s_iopte)phys) {
+>   		/* Doesn't fit in PTE */
+>   		dev_err(dev, "Page table does not fit in PTE: %pa", &phys);
+>   		goto out_free;
+> @@ -457,9 +470,14 @@ static arm_v7s_iopte arm_v7s_install_table(arm_v7s_iopte *table,
+>   					   arm_v7s_iopte curr,
+>   					   struct io_pgtable_cfg *cfg)
+>   {
+> +	phys_addr_t phys = virt_to_phys(table);
+>   	arm_v7s_iopte old, new;
+>   
+> -	new = virt_to_phys(table) | ARM_V7S_PTE_TYPE_TABLE;
+> +	new = phys | ARM_V7S_PTE_TYPE_TABLE;
+> +
+> +	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
+> +		new = to_mtk_iopte(phys, new);
+> +
+>   	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_NS)
+>   		new |= ARM_V7S_ATTR_NS_TABLE;
+>   
+> @@ -779,6 +797,8 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
+>   						void *cookie)
+>   {
+>   	struct arm_v7s_io_pgtable *data;
+> +	slab_flags_t slab_flag;
+> +	phys_addr_t paddr;
+>   
+>   	if (cfg->ias > (arm_v7s_is_mtk_enabled(cfg) ? 34 : ARM_V7S_ADDR_BITS))
+>   		return NULL;
+> @@ -788,7 +808,8 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
+>   
+>   	if (cfg->quirks & ~(IO_PGTABLE_QUIRK_ARM_NS |
+>   			    IO_PGTABLE_QUIRK_NO_PERMS |
+> -			    IO_PGTABLE_QUIRK_ARM_MTK_EXT))
+> +			    IO_PGTABLE_QUIRK_ARM_MTK_EXT |
+> +			    IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT))
+>   		return NULL;
+>   
+>   	/* If ARM_MTK_4GB is enabled, the NO_PERMS is also expected. */
+> @@ -796,15 +817,27 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
+>   	    !(cfg->quirks & IO_PGTABLE_QUIRK_NO_PERMS))
+>   			return NULL;
+>   
+> +	if ((cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT) &&
+> +	    !arm_v7s_is_mtk_enabled(cfg))
+> +		return NULL;
+> +
+>   	data = kmalloc(sizeof(*data), GFP_KERNEL);
+>   	if (!data)
+>   		return NULL;
+>   
+>   	spin_lock_init(&data->split_lock);
+> +
+> +	/*
+> +	 * ARM_MTK_TTBR_EXT extend the translation table base support larger
+> +	 * memory address.
+> +	 */
+> +	slab_flag = cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
+> +		    0 : ARM_V7S_TABLE_SLAB_FLAGS;
+> +
+>   	data->l2_tables = kmem_cache_create("io-pgtable_armv7s_l2",
+>   					    ARM_V7S_TABLE_SIZE(2, cfg),
+>   					    ARM_V7S_TABLE_SIZE(2, cfg),
+> -					    ARM_V7S_TABLE_SLAB_FLAGS, NULL);
+> +					    slab_flag, NULL);
+>   	if (!data->l2_tables)
+>   		goto out_free_data;
+>   
+> @@ -850,12 +883,16 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
+>   	wmb();
+>   
+>   	/* TTBR */
+> -	cfg->arm_v7s_cfg.ttbr = virt_to_phys(data->pgd) | ARM_V7S_TTBR_S |
+> -				(cfg->coherent_walk ? (ARM_V7S_TTBR_NOS |
+> -				 ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_WBWA) |
+> -				 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_WBWA)) :
+> -				(ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_NC) |
+> -				 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_NC)));
+> +	paddr = virt_to_phys(data->pgd);
+> +	if (arm_v7s_is_mtk_enabled(cfg))
+> +		cfg->arm_v7s_cfg.ttbr = paddr | upper_32_bits(paddr);
+> +	else
+> +		cfg->arm_v7s_cfg.ttbr = paddr | ARM_V7S_TTBR_S |
+> +					(cfg->coherent_walk ? (ARM_V7S_TTBR_NOS |
+> +					 ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_WBWA) |
+> +					 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_WBWA)) :
+> +					(ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_NC) |
+> +					 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_NC)));
+>   	return &data->iop;
+>   
+>   out_free_data:
+> diff --git a/include/linux/io-pgtable.h b/include/linux/io-pgtable.h
+> index 86af6f0a00a2..ca98aeadcc80 100644
+> --- a/include/linux/io-pgtable.h
+> +++ b/include/linux/io-pgtable.h
+> @@ -74,17 +74,22 @@ struct io_pgtable_cfg {
+>   	 *	to support up to 35 bits PA where the bit32, bit33 and bit34 are
+>   	 *	encoded in the bit9, bit4 and bit5 of the PTE respectively.
+>   	 *
+> +	 * IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT: (ARM v7s format) MediaTek IOMMUs
+> +	 *	extend the translation table base support up to 35 bits PA, the
+> +	 *	encoding format is same with IO_PGTABLE_QUIRK_ARM_MTK_EXT.
+> +	 *
+>   	 * IO_PGTABLE_QUIRK_ARM_TTBR1: (ARM LPAE format) Configure the table
+>   	 *	for use in the upper half of a split address space.
+>   	 *
+>   	 * IO_PGTABLE_QUIRK_ARM_OUTER_WBWA: Override the outer-cacheability
+>   	 *	attributes set in the TCR for a non-coherent page-table walker.
+>   	 */
+> -	#define IO_PGTABLE_QUIRK_ARM_NS		BIT(0)
+> -	#define IO_PGTABLE_QUIRK_NO_PERMS	BIT(1)
+> -	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT	BIT(3)
+> -	#define IO_PGTABLE_QUIRK_ARM_TTBR1	BIT(5)
+> -	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA	BIT(6)
+> +	#define IO_PGTABLE_QUIRK_ARM_NS			BIT(0)
+> +	#define IO_PGTABLE_QUIRK_NO_PERMS		BIT(1)
+> +	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT		BIT(3)
+> +	#define IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT	BIT(4)
+> +	#define IO_PGTABLE_QUIRK_ARM_TTBR1		BIT(5)
+> +	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA		BIT(6)
+>   	unsigned long			quirks;
+>   	unsigned long			pgsize_bitmap;
+>   	unsigned int			ias;

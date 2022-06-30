@@ -2,56 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE1F561F4A
+	by mail.lfdr.de (Postfix) with ESMTP id E930B561F4C
 	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235254AbiF3PcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 11:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40632 "EHLO
+        id S235879AbiF3Pci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 11:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235809AbiF3PcF (ORCPT
+        with ESMTP id S235854AbiF3Pcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 11:32:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75693A738
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:32:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 736BF61904
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 15:32:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49DB7C341CC;
-        Thu, 30 Jun 2022 15:32:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656603123;
-        bh=DMoXyBY8anTUJp0z5XM+bV0yDDpw0G7731nqB1esFYQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZcYHX7j34PqL86ygQiByoktv5ZxOg5p0qqwuvZlD2xxc/DIBosQtSMBLlmsm6rs4p
-         +SW6b8jtsrCQTkWx0KqMnuCk7j1i64FNAutDF+0HGtcNsxoIiU7U+RyhivqP8ZVB1q
-         lkiXBA4JarrAhhHIKqoWeQAjlnjXFt5wvzol+ranak6I/76jO6ywEH3B5ruZxsWabd
-         9m0wooGnOlGftVn4MP8w+Ugx2gAtRgsUPIx8qnR7wm+gOKpWw6mS2Jr2ld+rQ8vKQY
-         TogUk4QCyagiIMj75KLzTiXDos5nk34v3jp9I4F8LSrNPcvnNQzKyZqRE3dEms6g8U
-         be0lYglwtp1BA==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Joey Gouly <joey.gouly@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linudx.dev,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 2/2] arm64: vdso32: Add DWARF_DEBUG
-Date:   Thu, 30 Jun 2022 08:31:21 -0700
-Message-Id: <20220630153121.1317045-3-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630153121.1317045-1-nathan@kernel.org>
-References: <20220630153121.1317045-1-nathan@kernel.org>
+        Thu, 30 Jun 2022 11:32:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C45C33D4AF
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:32:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656603153;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=pcmUWHwjNzcwYP1ffPOW41Lm6XhO65tP5GIsXRO8MKU=;
+        b=EJG2vF9kLssqTnJXe7C2lIEfafISDQ3u+RAZ9Ah+1PeDlAxN2fOA+O2XEicCB5wEZh2gGz
+        iLMDGCcBO3ufvVvh3eVfZfvorXlyZ/GmhrXJXu6RinwpiQMc58AAPdjgEEeYSErDew00xb
+        W6O3gzdSHajK4pCgbb1leOl8arOY8jc=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-237-0MiIVzZMMI2Qtsv4tvyS0g-1; Thu, 30 Jun 2022 11:32:29 -0400
+X-MC-Unique: 0MiIVzZMMI2Qtsv4tvyS0g-1
+Received: by mail-qv1-f71.google.com with SMTP id mz4-20020a0562142d0400b004726d99aa49so11496216qvb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:32:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pcmUWHwjNzcwYP1ffPOW41Lm6XhO65tP5GIsXRO8MKU=;
+        b=d0aYyRbAp8LVEBN4g/TpZ3HFNt5NxrgWoEngFdLR0EVoU5laqhodj0JYVpOu+RnaRv
+         jFhkq/lOTwpssYqD/YIN9EctwEv4rrhShnRe10T/72riKS3/agNtliQ6U2Eu80lbknCD
+         +VnCezsM/DwJwE/nhvDXiZXsGWMcZxmjQXN1jNdBdo/cyMGUrpDV218j2cxNHRz1DeD9
+         +UVrdkSUmIleMADj8etChyHJq1Wf4nx9tTVnQqgDkMA7tvWiQPR//pGymr2LWQV9c8PT
+         ICJLEI32trC/uU1kTJmaN4o+mx90tglOVE96ob283o+Ff0YoVLelCrxJQAmM776L2xZy
+         jBiQ==
+X-Gm-Message-State: AJIora+AIC2cXkdBXuMU7SBVrZ/+s7SNCcrfG1ytJy+9FnKeGs+qwzOL
+        IVkGZKmjJhup64v5puHN7GBQjr1phDNd4HxwcOSs27eqSTvqUqBztBAUYX72Bwkz3lM3fpQt9mW
+        EFyBSw6CVsuRM40iaPpD02MVK
+X-Received: by 2002:a05:620a:8018:b0:6af:1fee:41ac with SMTP id ee24-20020a05620a801800b006af1fee41acmr6695916qkb.476.1656603146766;
+        Thu, 30 Jun 2022 08:32:26 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vkIc7TNQUd9dH7P1QOC596mqRPfmhoP8IEwy11rq536OjOmrdmPduBteJuiTGuWl5OEDH/Ag==
+X-Received: by 2002:a05:620a:8018:b0:6af:1fee:41ac with SMTP id ee24-20020a05620a801800b006af1fee41acmr6695886qkb.476.1656603146450;
+        Thu, 30 Jun 2022 08:32:26 -0700 (PDT)
+Received: from step1.redhat.com (host-87-11-6-149.retail.telecomitalia.it. [87.11.6.149])
+        by smtp.gmail.com with ESMTPSA id y20-20020a05620a44d400b006af0639f7casm16089325qkp.12.2022.06.30.08.32.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 08:32:25 -0700 (PDT)
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     virtualization@lists.linux-foundation.org
+Cc:     Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>
+Subject: [PATCH v2 0/3] vdpa_sim_blk: several fixes for the vDPA block simulator
+Date:   Thu, 30 Jun 2022 17:32:18 +0200
+Message-Id: <20220630153221.83371-1-sgarzare@redhat.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,50 +77,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building the 32-bit vDSO with LLVM 15 and CONFIG_DEBUG_INFO, there
-are the following orphan section warnings:
+v2:
+- Patch 2: restored previous behaviour, exiting the loop immediately if the
+  request is malformed [Jason]
+- Added Jason's A-b In patch 1 and 3
 
-  ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_abbrev) is being placed in '.debug_abbrev'
-  ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_info) is being placed in '.debug_info'
-  ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_str_offsets) is being placed in '.debug_str_offsets'
-  ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_str) is being placed in '.debug_str'
-  ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_addr) is being placed in '.debug_addr'
-  ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_line) is being placed in '.debug_line'
-  ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_line_str) is being placed in '.debug_line_str'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_loclists) is being placed in '.debug_loclists'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_abbrev) is being placed in '.debug_abbrev'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_info) is being placed in '.debug_info'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_rnglists) is being placed in '.debug_rnglists'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_str_offsets) is being placed in '.debug_str_offsets'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_str) is being placed in '.debug_str'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_addr) is being placed in '.debug_addr'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_frame) is being placed in '.debug_frame'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_line) is being placed in '.debug_line'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_line_str) is being placed in '.debug_line_str'
+v1: https://lore.kernel.org/virtualization/20220621160859.196646-1-sgarzare@redhat.com/
 
-These are DWARF5 sections, as that is the implicit default version for
-clang-14 and newer when just '-g' is used. All DWARF sections are
-handled by the DWARF_DEBUG macro from include/asm-generic/vmlinux.lds.h
-so use that macro here to fix the warnings regardless of DWARF version.
+The first two patches essentially limit the possibility of the guest
+doing a DoS to the host.
 
-Fixes: 9d4775b332e1 ("arm64: vdso32: enable orphan handling for VDSO")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/arm64/kernel/vdso32/vdso.lds.S | 1 +
- 1 file changed, 1 insertion(+)
+The third makes the simulator more correct (following what we do in
+vdpa_sim_net) by calling vringh_complete_iotlb() in the error path as well.
 
-diff --git a/arch/arm64/kernel/vdso32/vdso.lds.S b/arch/arm64/kernel/vdso32/vdso.lds.S
-index c25bed8e6df1..8d95d7d35057 100644
---- a/arch/arm64/kernel/vdso32/vdso.lds.S
-+++ b/arch/arm64/kernel/vdso32/vdso.lds.S
-@@ -57,6 +57,7 @@ SECTIONS
- 	.rel.dyn	: { *(.rel*) }
- 
- 	.ARM.exidx : { *(.ARM.exidx*) }
-+	DWARF_DEBUG
- 	ELF_DETAILS
- 	.ARM.attributes 0 : { *(.ARM.attributes) }
- 
+Stefano Garzarella (3):
+  vdpa_sim_blk: use dev_dbg() to print errors
+  vdpa_sim_blk: limit the number of request handled per batch
+  vdpa_sim_blk: call vringh_complete_iotlb() also in the error path
+
+ drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 44 ++++++++++++++++++----------
+ 1 file changed, 29 insertions(+), 15 deletions(-)
+
 -- 
-2.37.0
+2.36.1
 

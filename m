@@ -2,138 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53BAD56155B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6000456155E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233645AbiF3IoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 04:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46256 "EHLO
+        id S233670AbiF3IqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 04:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232392AbiF3IoU (ORCPT
+        with ESMTP id S232001AbiF3Ip6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 04:44:20 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61DAC1AF29;
-        Thu, 30 Jun 2022 01:44:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1656578656; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8HyTVBLAUfpwlyXYrVPEtcPS7gJ1O8fJkaJWfQT+/QQ=;
-        b=ccAzyIa2trLv5mLPWTwyQSxfCZ/snogaVMnuutpQPPZrY745ccZqReeaPE1NahngbImc4t
-        7xy7aRn8cNh2QGYIiWYmUHyNufoE3ZGyP/Iqy4EEU26zBWf7VJHgRdktXI0EjHsuXEIO0n
-        GxpQ1n+TRk6tDIopXVH9aKrDgnpqEBw=
-Date:   Thu, 30 Jun 2022 09:44:07 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v1 1/1] serial: 8250_dw: Drop PM ifdeffery
-To:     Ilpo =?iso-8859-1?q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Message-Id: <J98AER.7ZO6O9DK05IM1@crapouillou.net>
-In-Reply-To: <4ae74f48-c51c-cb74-548d-46ff9a9a7a7b@linux.intel.com>
-References: <20220628214511.37373-1-andriy.shevchenko@linux.intel.com>
-        <4ae74f48-c51c-cb74-548d-46ff9a9a7a7b@linux.intel.com>
+        Thu, 30 Jun 2022 04:45:58 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2AD1EED0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:45:57 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id h14-20020a1ccc0e000000b0039eff745c53so1180035wmb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:45:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=T/R4fFP/Nheq+mHl4LKypJiecS5mA9jxh87TsPRmo+0=;
+        b=U/wrS85NDiwymHaaOof+NTLDRie83Dyy3ovzraRbnqbAq3Vays0JRxvhwp5FR5MXo9
+         bhFwTH98V2evtd+fJ33F4cqj64r4dSb1QVK/ihxf9y+AkVTGLu7pSeDmltDJkTk+eGni
+         x4nn2AfIZy/7KchUYW99Mxq8n7NPlWykPgfSCTsRASGk0VOJhnyKLLBn8Oa3BWP4m8ER
+         hJZPVKNBF3gUELuBN8pHVfA37S2c3JA2YTHBEGRBq6XfycMHEsWXJHl6xArE4eKgneD4
+         r5I3uRZ460k66k5DyYn9orvcSVLIdic/6cxqREBjChe700Owcjsp4Gzt113nSkUOJDgG
+         cQpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=T/R4fFP/Nheq+mHl4LKypJiecS5mA9jxh87TsPRmo+0=;
+        b=gkaiS/eML+vToFfUUt2T9AFWHeHXoJchRcUuJph0LKq071WhEWFhw7WecTt+sViRw4
+         GPc1+W6ZuNMiNOQu2f5X9H+QgVDpNiFK71yxoZQBMs2j/BXjMJYsE5MFK/Zm2qb5cpY8
+         QbkrWzRtjYgzWUDD5piAh3LViHy1WnE0ImHhHLJboW3h79rZl+kXpKJo4z3pjrTgfr1V
+         m3l4B8r11bg4H3ilYkvY25Wi/laap5R+/9t+AF1BhtEQ7KoPVH9/aAV/vyPI4Td/6nhV
+         VsLkjQBOw7sDiSyK32slKLs9B3E5E4LyvXqLxPm1xzIsRiVlZ3JiK12KPnANSycl3UE9
+         4Qnw==
+X-Gm-Message-State: AJIora8uhUnr7udo91eFZpdbCuAudzyVEmAteBgzu7LIlPG7ZBU/pAE/
+        Rkms/IkRH7vO0aREFJDKOKMIMA==
+X-Google-Smtp-Source: AGRyM1sG9DXk0FND1RNcYBYu5gY9BHQgnh+7wDrvh7Ambj12Yb0OvP7PCV3glYmZrszDAlKcNt4edQ==
+X-Received: by 2002:a05:600c:3ba7:b0:3a1:6c19:fa8c with SMTP id n39-20020a05600c3ba700b003a16c19fa8cmr7721436wms.120.1656578755674;
+        Thu, 30 Jun 2022 01:45:55 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id f7-20020a05600c4e8700b003a17ab4e7c8sm2107232wmq.39.2022.06.30.01.45.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 01:45:55 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 09:45:53 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH v1 1/9] mfd: intel_soc_pmic_crc: Merge Intel PMIC core to
+ crc
+Message-ID: <Yr1iweMUl+EUY+Q6@google.com>
+References: <20220616182524.7956-1-andriy.shevchenko@linux.intel.com>
+ <Yrmr175fsQi6ToEY@google.com>
+ <YrrO0CQVv6hj1AB0@smile.fi.intel.com>
+ <YrxjTD0sJXh8cgVP@google.com>
+ <CAHp75VdHpqAxS3jmFi-1Sw6wB1CP3wQVM_+5OP0C_yFFG336LA@mail.gmail.com>
+ <Yr1YXHb3GqwZncFK@google.com>
+ <CAHp75Vf1UK9Z2P1D9v_j9rsdKoDXWSvb=wJgmkvACYgwofWrxA@mail.gmail.com>
+ <35c907e6-6018-d22b-1992-ffc66eb82b0e@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <35c907e6-6018-d22b-1992-ffc66eb82b0e@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ilpo,
+On Thu, 30 Jun 2022, Hans de Goede wrote:
 
-Le jeu., juin 30 2022 at 10:41:40 +0300, Ilpo J=E4rvinen=20
-<ilpo.jarvinen@linux.intel.com> a =E9crit :
-> On Wed, 29 Jun 2022, Andy Shevchenko wrote:
->=20
->>  Drop CONFIG_PM and CONFIG_PM_SLEEP ifdeffery while converting=20
->> dw8250_pm_ops
->>  to use new PM macros.
->>=20
->>  Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->=20
-> Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
->=20
-> Not directily related to the patch itself but do you have any idea why
-> 1a3c7bb08826 ("PM: core: Add new *_PM_OPS macros, deprecate old ones")
-> didn't wrap RUNTIME_PM_OPS() pointers with pm_ptr()? I'm asking this
-> because in SET_RUNTIME_PM_OPS() the callbacks are only created with
-> #ifdef CONFIG_PM so I'd have expected RUNTIME_PM_OPS() to maintain=20
-> that
-> behavior but it didn't? Was it just an oversight that should be fixed?
+> Hi,
+> 
+> On 6/30/22 10:07, Andy Shevchenko wrote:
+> > On Thu, Jun 30, 2022 at 10:01 AM Lee Jones <lee.jones@linaro.org> wrote:
+> >> On Wed, 29 Jun 2022, Andy Shevchenko wrote:
+> >>> On Wed, Jun 29, 2022 at 4:36 PM Lee Jones <lee.jones@linaro.org> wrote:
+> >>>> On Tue, 28 Jun 2022, Andy Shevchenko wrote:> > On Mon, Jun 27, 2022 at 02:08:39PM +0100, Lee Jones wrote:
+> >>>>>> On Thu, 16 Jun 2022, Andy Shevchenko wrote:
+> > 
+> > ...
+> > 
+> >>>>>>>  drivers/mfd/intel_soc_pmic_core.c | 160 -----------------------------
+> >>>>>>>  drivers/mfd/intel_soc_pmic_core.h |  25 -----
+> >>>>>>>  drivers/mfd/intel_soc_pmic_crc.c  | 162 ++++++++++++++++++++++++++++--
+> >>>>>>>  4 files changed, 157 insertions(+), 193 deletions(-)
+> >>>>>>>  delete mode 100644 drivers/mfd/intel_soc_pmic_core.c
+> >>>>>>>  delete mode 100644 drivers/mfd/intel_soc_pmic_core.h
+> >>>>>>
+> >>>>>> Can you submit this again with the -M flag please.
+> >>>>>
+> >>>>> This is done with this flag. Basically for the last several years I do my
+> >>>>> submissions with that flag.
+> >>>>
+> >>>> Odd.  I thought -M only showed diff for the changes.
+> >>>
+> >>> It's exactly what happens here in this patch. What did I miss?
+> >>>
+> >>> Note here is not renaming, but merging contents of one file (actually
+> >>> two files) into another. What you are talking about is probably -D,
+> >>> but AFAIR Git (at least that time) can't catch up deleted files from
+> >>> the mbox format. That's why I do not use -D for submissions.
+> >>
+> >> Ah yes, that's probably it then.
+> >>
+> >> From a quick look at the diff (I missed the 2 "--" at the end), it
+> >> looked like this was a rename.  In which case -M won't do anything
+> >> useful here.  I'll have to brain grep the differences instead.
+> > 
+> > Please do, it will be good to have this double checked.
+> 
+> Note that I already did a manual compare of the moved code blocks
+> to check that they were not changed before giving my Reviewed-by.
 
-The RUNTIME_PM_OPS() does not wrap pointers with pm_ptr(), because the=20
-pointer to the dev_pm_ops should only ever be used wrapped with=20
-pm_ptr() or pm_sleep_ptr().
+Super, thanks Hans.
 
-Which is not done here.
-
-Andy:
-The deference of dw8250_pm_ops should be pm_ptr(&dw8250_pm_ops). If you=20
-only had system suspend/resume functions, you'd use pm_sleep_ptr()=20
-there.
-
-Cheers,
--Paul
-
-> --
->  i.
->=20
->>  ---
->>   drivers/tty/serial/8250/8250_dw.c | 8 ++------
->>   1 file changed, 2 insertions(+), 6 deletions(-)
->>=20
->>  diff --git a/drivers/tty/serial/8250/8250_dw.c=20
->> b/drivers/tty/serial/8250/8250_dw.c
->>  index f71428c85562..adcc869352b1 100644
->>  --- a/drivers/tty/serial/8250/8250_dw.c
->>  +++ b/drivers/tty/serial/8250/8250_dw.c
->>  @@ -691,7 +691,6 @@ static int dw8250_remove(struct platform_device=20
->> *pdev)
->>   	return 0;
->>   }
->>=20
->>  -#ifdef CONFIG_PM_SLEEP
->>   static int dw8250_suspend(struct device *dev)
->>   {
->>   	struct dw8250_data *data =3D dev_get_drvdata(dev);
->>  @@ -709,9 +708,7 @@ static int dw8250_resume(struct device *dev)
->>=20
->>   	return 0;
->>   }
->>  -#endif /* CONFIG_PM_SLEEP */
->>=20
->>  -#ifdef CONFIG_PM
->>   static int dw8250_runtime_suspend(struct device *dev)
->>   {
->>   	struct dw8250_data *data =3D dev_get_drvdata(dev);
->>  @@ -733,11 +730,10 @@ static int dw8250_runtime_resume(struct=20
->> device *dev)
->>=20
->>   	return 0;
->>   }
->>  -#endif
->>=20
->>   static const struct dev_pm_ops dw8250_pm_ops =3D {
->>  -	SET_SYSTEM_SLEEP_PM_OPS(dw8250_suspend, dw8250_resume)
->>  -	SET_RUNTIME_PM_OPS(dw8250_runtime_suspend, dw8250_runtime_resume,=20
->> NULL)
->>  +	SYSTEM_SLEEP_PM_OPS(dw8250_suspend, dw8250_resume)
->>  +	RUNTIME_PM_OPS(dw8250_runtime_suspend, dw8250_runtime_resume,=20
->> NULL)
->>   };
->>=20
->>   static const struct dw8250_platform_data dw8250_dw_apb =3D {
->>=20
-
-
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

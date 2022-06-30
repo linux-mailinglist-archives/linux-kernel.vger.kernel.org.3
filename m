@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA86562319
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 21:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4E656231D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 21:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236845AbiF3T1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 15:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
+        id S236713AbiF3T2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 15:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236748AbiF3T13 (ORCPT
+        with ESMTP id S236257AbiF3T2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 15:27:29 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B66F42ED6
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 12:27:28 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id mf9so87624ejb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 12:27:28 -0700 (PDT)
+        Thu, 30 Jun 2022 15:28:10 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0681163
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 12:28:06 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id s188so355114oib.6
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 12:28:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=feCBs3SZp7swfaMlUVIaixS6lb9azkfUPXOLn8L7U8A=;
-        b=aMGKhUPoRJzWDRYuTQbm/9jyUn+p8BPoZOJWBU3++bUqJqH0vW1slpEOm7yHfz9Sd4
-         sxgvPMLp/Yz/VGa5y57bhZx7zt30oEwx1Jyh1wyceW1uQ6sgu6njRnyWiy4p/xbxRX5v
-         heAA2d8+dzM3o7Nsj8Vfj5+08SwsUizGOCIpK89bExRclwnVZm2xBGlz5BPMzfha9Ma8
-         rB3i0iP4Mq8jwYQ136rDpC1sWOEcFB7mnzOo7xXlr0xmJVD/qekuHwAAyb288UmUKcT6
-         2ZMPB87DZgBWhF4Zc7NAlpv5CtxTmWxCT+xsg3/fdDcqzw11O+HMtvJRIyDVXNWs5wSG
-         5ERg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Be8QNcCzBh2OVJvduXkHkZHJYzkPyNZW5yQHcwTAmSA=;
+        b=N8ycTjRtAbg+TjfoZ3hOkQeAn7uV7hJlsVLOghZ6Wb4Yinwr16MSGOs3SR4SaiK2+t
+         Su/ejV+XTyD5m+P3z3ljjkJ9PfVuxyhz3tdUikcPG5vx9OIviqPgUc80uh6jHC8yHnaW
+         MpgAIjrYyN4v8h5DAtTvj5AwK34NoOifFHyXryAnf9Ei6pWo5xe8zQ25NP7LvChQzeyl
+         1hqgq1ukI6y1ssU1yCz6kyjXyCOpCzMs/0KIrbXhxsnEpNl76H3PBv1fm7U7D2yOp8Ri
+         Jyju2aFUTnzG7iE0C/Du9maCuMPgwWrdpbaqDo7Z/fWp+sT+obzdTe1V9ALUh7oQVooj
+         VcLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=feCBs3SZp7swfaMlUVIaixS6lb9azkfUPXOLn8L7U8A=;
-        b=OIPq0C00YxflAL0P/DH9uziFF7sC7PNn4aAm1OjnLvwMN3QM3RueZibr/7jjiLxgTH
-         N6bDtl1OpKUFvux+lkDTjcCfPW7UN9JAATrft7Pqo4RfxyWX2NbJlV2mdeBQzbi2PMmC
-         whrWq0XD6HFqflXG82Id8o42w9fCoZXryEVT35wK1Pu8DPGObwDpTdqQ795u+1ZiLe3S
-         ymxTGqpQcxgVkQfBeqRCZ9Kt7jxaycyjDNxX6nqdFRKKaYl1hX3B22dj5bSzL+ULWlXU
-         QMannLrI7vWIp1gOAMObzKL68rdzOvpTIkfZJ3VUtITtPaJnvsfbG8ErygY5GgH1BaNT
-         ut0w==
-X-Gm-Message-State: AJIora95ojEMhSJE6qc3wJsnYfPT/+8UvfnprW8wq5/LYJPHNtZ08NHo
-        r3KFGSJu1Qzd1xtlF4It9FiItBXr99F1MA==
-X-Google-Smtp-Source: AGRyM1uNlIf5G3X2BrYx8D1HZQ506BFUfDgJON3MXOC6l4sXTrpcRIRKPFWNdTESNlB1gMDmvXcXiQ==
-X-Received: by 2002:a17:906:730f:b0:726:ca34:e605 with SMTP id di15-20020a170906730f00b00726ca34e605mr10704263ejc.347.1656617246777;
-        Thu, 30 Jun 2022 12:27:26 -0700 (PDT)
-Received: from [192.168.0.190] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id z7-20020a1709063ac700b0072321c99b78sm9368874ejd.57.2022.06.30.12.27.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 12:27:26 -0700 (PDT)
-Message-ID: <51cb7b8b-9616-35b1-cd34-e054dd98369c@linaro.org>
-Date:   Thu, 30 Jun 2022 21:27:24 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Be8QNcCzBh2OVJvduXkHkZHJYzkPyNZW5yQHcwTAmSA=;
+        b=Pyy8irK+xFFeccJ8rhzZ4JTQAKNSHhExiFv66fYnvwg3s0exuqE4pFLv/Bb0qvSkX2
+         FHmG12Og3/xNC/wkK5hpxEHwF2coH6kMcWY3YaeepzHtnt2buaoO4Sn5yOlKmDEHmCyM
+         TlyvKuviQfUzbSherlmbk8VJHBqKlLlSPiyn4APBTncYmLn/trWee9iJ1UI7Wp9f5q2r
+         LtrjFdY2l7RiG4Szpw4xsRjxhuqmm2Y5kv4zioZwVvngGt4GPgN49SKOcUYQqPmOJHH7
+         unzceeb5CIgNkbK9CGyWF4tVayHX/LTA+tI1w7F2c5L6y9bkLCgpLNXGpmAVUADDR7hk
+         5AQg==
+X-Gm-Message-State: AJIora+39bWqG+uyLQfeHxBq+hPPb2ihfnxuo2vVnW0naG3zeraba+d7
+        +ZZkyUafLPsjWZgdNxmD+90Odw==
+X-Google-Smtp-Source: AGRyM1tKrtGPmsIuyjwRTsLjKZZHCHYFwdBQOxt+vzmBA0QSvpywqAo9YWprSidSqREkAOzK7SGvSQ==
+X-Received: by 2002:a05:6808:1490:b0:335:b325:7ae7 with SMTP id e16-20020a056808149000b00335b3257ae7mr5658305oiw.154.1656617286095;
+        Thu, 30 Jun 2022 12:28:06 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id 38-20020a9d0c29000000b0060bf6213084sm5354954otr.27.2022.06.30.12.28.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 12:28:05 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 14:28:03 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     dmitry.baryshkov@linaro.org, agross@kernel.org,
+        mathieu.poirier@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] remoteproc: qcom: pas: Add decrypt shutdown support for
+ modem
+Message-ID: <Yr35Q2G8NNvYaI8M@builder.lan>
+References: <1653031684-14771-1-git-send-email-quic_sibis@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] ARM: dts: imx6qdl-ts7970: Fix ngpio typo and count
-Content-Language: en-US
-To:     kris@embeddedTS.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Mark Featherston <mark@embeddedTS.com>
-References: <20220630182746.3813-1-kris@embeddedTS.com>
- <1654112f-839f-1de2-0f00-fbf501824d6d@linaro.org>
- <1656616263.4126.2.camel@embeddedTS.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1656616263.4126.2.camel@embeddedTS.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1653031684-14771-1-git-send-email-quic_sibis@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,29 +72,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/2022 21:11, Kris Bahnsen wrote:
-> On Thu, 2022-06-30 at 20:56 +0200, Krzysztof Kozlowski wrote:
->> On 30/06/2022 20:27, Kris Bahnsen wrote:
->>> Device-tree incorrectly used "ngpio" which caused the driver to
->>> fallback to 32 ngpios.
->>>
->>> This platform has 62 GPIO registers.
->>>
->>> Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
->>> ---
->>
->>
->> Ah and one more - for some reason you did not send it to maintainers, so
->> patch will be most likely ignored. Please use scripts/get_maintainer.pl
->> to CC relevant people.
+On Fri 20 May 02:28 CDT 2022, Sibi Sankar wrote:
+
+> The initial shutdown request to modem on SM8450 SoCs would start the
+> decryption process and will keep returning errors until the modem shutdown
+> is complete. Fix this by retrying shutdowns in fixed intervals.
 > 
-> I reviewed that output and erred on the side of not generating
-> too much noise and skipped folks/lists marked as general ARM/NXP
-> maintainers. I'll be sure to send to all in the future.
+> Err Logs on modem shutdown:
+> qcom_q6v5_pas 4080000.remoteproc: failed to shutdown: -22
+> remoteproc remoteproc3: can't stop rproc: -22
+> 
+> Fixes: 5cef9b48458d ("remoteproc: qcom: pas: Add SM8450 remoteproc support")
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
 
-For small patchsets usually entire output of get_maintainers.pl is
-correct. What's worth to skip are the entries coming from history
-(--no-git-fallback).
+Looks reasonable, just two inquiries below.
 
-Best regards,
-Krzysztof
+> ---
+>  drivers/remoteproc/qcom_q6v5_pas.c | 67 +++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 66 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+> index 6ae39c5653b1..d04c4b877e12 100644
+> --- a/drivers/remoteproc/qcom_q6v5_pas.c
+> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
+> @@ -8,6 +8,7 @@
+>   */
+>  
+>  #include <linux/clk.h>
+> +#include <linux/delay.h>
+>  #include <linux/firmware.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/kernel.h>
+> @@ -29,6 +30,8 @@
+>  #include "qcom_q6v5.h"
+>  #include "remoteproc_internal.h"
+>  
+> +#define ADSP_DECRYPT_SHUTDOWN_DELAY_MS	100
+> +
+>  struct adsp_data {
+>  	int crash_reason_smem;
+>  	const char *firmware_name;
+> @@ -36,6 +39,7 @@ struct adsp_data {
+>  	unsigned int minidump_id;
+>  	bool has_aggre2_clk;
+>  	bool auto_boot;
+> +	bool decrypt_shutdown;
+>  
+>  	char **proxy_pd_names;
+>  
+> @@ -65,6 +69,7 @@ struct qcom_adsp {
+>  	unsigned int minidump_id;
+>  	int crash_reason_smem;
+>  	bool has_aggre2_clk;
+> +	bool decrypt_shutdown;
+>  	const char *info_name;
+>  
+>  	struct completion start_done;
+> @@ -128,6 +133,20 @@ static void adsp_pds_disable(struct qcom_adsp *adsp, struct device **pds,
+>  	}
+>  }
+>  
+> +static int adsp_decrypt_shutdown(struct qcom_adsp *adsp)
+> +{
+> +	int retry_num = 50;
+
+Seems unsigned to me.
+
+> +	int ret = -EINVAL;
+> +
+> +	while (retry_num && ret) {
+> +		msleep(ADSP_DECRYPT_SHUTDOWN_DELAY_MS);
+> +		ret = qcom_scm_pas_shutdown(adsp->pas_id);
+> +		retry_num--;
+> +	}
+
+Will qcom_scm_pas_shutdown() ever return any other errors than -EINVAL?
+
+Would it make sense to make this:
+
+	do {
+		...;
+	} while (ret == -EINVAL && --retry_num);
+
+> +
+> +	return ret;
+> +}
+> +
+>  static int adsp_unprepare(struct rproc *rproc)
+>  {
+>  	struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
+> @@ -249,6 +268,9 @@ static int adsp_stop(struct rproc *rproc)
+>  		dev_err(adsp->dev, "timed out on wait\n");
+>  
+>  	ret = qcom_scm_pas_shutdown(adsp->pas_id);
+> +	if (ret && adsp->decrypt_shutdown)
+> +		ret = adsp_decrypt_shutdown(adsp);
+> +
+>  	if (ret)
+>  		dev_err(adsp->dev, "failed to shutdown: %d\n", ret);
+>  
+> @@ -459,6 +481,7 @@ static int adsp_probe(struct platform_device *pdev)
+>  	adsp->pas_id = desc->pas_id;
+>  	adsp->has_aggre2_clk = desc->has_aggre2_clk;
+>  	adsp->info_name = desc->sysmon_name;
+> +	adsp->decrypt_shutdown = desc->decrypt_shutdown;
+>  	platform_set_drvdata(pdev, adsp);
+>  
+>  	device_wakeup_enable(adsp->dev);
+> @@ -533,6 +556,7 @@ static const struct adsp_data adsp_resource_init = {
+>  		.pas_id = 1,
+>  		.has_aggre2_clk = false,
+>  		.auto_boot = true,
+> +		.decrypt_shutdown = false,
+
+With all these booleans, I would prefer if we cleaned it up to not list
+the disabled options. That would make it quicker to spot which features
+are actually enabled for each remoteproc.
+
+Regards,
+Bjorn

@@ -2,85 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1135156250E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D3D562519
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237529AbiF3VWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 17:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
+        id S236559AbiF3V1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 17:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237509AbiF3VW3 (ORCPT
+        with ESMTP id S237383AbiF3V13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 17:22:29 -0400
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177E04D157;
-        Thu, 30 Jun 2022 14:22:29 -0700 (PDT)
-Received: by mail-il1-f171.google.com with SMTP id p9so212209ilj.7;
-        Thu, 30 Jun 2022 14:22:29 -0700 (PDT)
+        Thu, 30 Jun 2022 17:27:29 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9548D2C644;
+        Thu, 30 Jun 2022 14:27:28 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id cf14so526748edb.8;
+        Thu, 30 Jun 2022 14:27:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xwFag/8dD9IbF/CnQDYyQibGAMvtrP+argkacsTtWyA=;
+        b=c6F7SPIBvZxuDf5DQh6bLbiCsnJEu9ZJgBpILntm10WfLxUfKHfF8e3yUt3C4xV+EG
+         xve3lphmmuAiuYM5tkI766IJJ4RJKCOb141J8QGJh8tahssi5qZcQSY1kpE80ADTiQRl
+         p9MS83pu8r7QuqBBTIzXwZdxUiy2KkHsIYKc8/CRgQTUZiTWFJdpdqj+Ol/8d4O2ZToz
+         W1BS1mVrOdXJTqxfO06sFsb3EoD43U4Z/Eogl/HF07GFs41SyW/9jLQ505jMB185QNS3
+         fp2M0yHlZgNORm/hFfMNYf42fbDYI4Y4ApmbmIsOdygm/QwtkJXuaZP9fE8aA8nFtgtw
+         0KOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T4909o+ZJwgi1L8MENIjc0OE7vRQ1YbJuBfUhGjWQ1Y=;
-        b=X8pUNAquAXfSF/uIdQO/a2jFB2pKta48hmSBJ7I+sX3P3PoIFYLYf8dOX46bm2N9fp
-         ODNn9jmEg2AQQn42m0nS2ks/IvwS/PL6TAa92R9Kfc6qHvWn2jOtNOQHXD+XD4Do5H9S
-         wrm5ovy20+TSiUSqhSpe9XR3gu6ioR7cYhYi2yhvH8XAxdXllu2HhjjNJAQ5gSMLMOJd
-         vSwa24OqYbCYaN+jp4+IPMCa0T9pCb9tHHuHxxUcRwdL/0gyh4mSgBksKC+14L+uO0lq
-         rhI/5e0TwRJFitI+MYk3Q249AP2sXnh68X1R69AxJv8lLEobLE0fEBUdMEH+QQyRqeeN
-         /pxg==
-X-Gm-Message-State: AJIora/Nkvei6StRl5rwJcl8CY7ADuVWCd/nDHWVvZMwO6tIyIIQK0MD
-        4q8h9/KXBm+dHSNMcxN8Og==
-X-Google-Smtp-Source: AGRyM1tUHkRznlT3Zwq7RVA5PUw0xyPJTRlCsDeBnrR2kcY+djt+IfRnZuYf80Z7Nv6TfFTCt9EuSA==
-X-Received: by 2002:a92:d5cf:0:b0:2d1:d9b0:d5b1 with SMTP id d15-20020a92d5cf000000b002d1d9b0d5b1mr6199947ilq.252.1656624148343;
-        Thu, 30 Jun 2022 14:22:28 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id m4-20020a924b04000000b002d3edd935e5sm8402748ilg.53.2022.06.30.14.22.27
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xwFag/8dD9IbF/CnQDYyQibGAMvtrP+argkacsTtWyA=;
+        b=pqtmzculiZutJj8X6yEo5pidSqxLyI2eyrZBK4cN7X8haVzMYl1IN2bwoxOUKPLqbx
+         8yRI/tTD1u9/6DrFkXNUQDtG10dPuhWlkMlDfcD3WIKAz9qfhkl0quWTYQ5q0332gEod
+         Cgfi0TBlUjdVoriHNF1UlJkhWxsCXQ+M21gYUsrbJmqWBzLr3JWAA7LaCtSuCUV2lj9p
+         P6CqLVVJPHWZjCkn41DrkVHT+5o6aEg39sNLv/RPV5rMLUzenhLIXcSdrRTGdiKGb1l1
+         nEpdiCpbqHQINyidRBy202jtvGqcg1C6ynY0NW+9jVXcDPUjyRHPTXU1z34gCG/rZr9Q
+         imGQ==
+X-Gm-Message-State: AJIora/4JohFrSZER+5p5uJz8xaRXo7odrtq0gk+xwfUB31LbBIEfw6c
+        uaPiyBptEWcquT2qSb+/FYQ=
+X-Google-Smtp-Source: AGRyM1vXN3EgMlYBg+rl9Vt5tDnm/JV/8GAp02bbjgtXFlMB0v+gDe6RoAOMsSmbYiMOuMzMFsDgKw==
+X-Received: by 2002:a05:6402:3785:b0:435:5d0e:2a2e with SMTP id et5-20020a056402378500b004355d0e2a2emr14829034edb.307.1656624447134;
+        Thu, 30 Jun 2022 14:27:27 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a01-0c23-c4e7-0400-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:c4e7:400::e63])
+        by smtp.googlemail.com with ESMTPSA id m9-20020a509989000000b004355d27799fsm14159078edb.96.2022.06.30.14.27.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 14:22:27 -0700 (PDT)
-Received: (nullmailer pid 3323810 invoked by uid 1000);
-        Thu, 30 Jun 2022 21:22:26 -0000
-Date:   Thu, 30 Jun 2022 15:22:26 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     robh+dt@kernel.org, matthias.bgg@gmail.com, sean.wang@mediatek.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, nfraprado@collabora.com,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: pinctrl: mt8195: Add and use
- drive-strength-microamp
-Message-ID: <20220630212226.GA3323748-robh@kernel.org>
-References: <20220630131543.225554-1-angelogioacchino.delregno@collabora.com>
+        Thu, 30 Jun 2022 14:27:26 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     hauke@hauke-m.de, netdev@vger.kernel.org
+Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        stable@vger.kernel.org
+Subject: [PATCH net v1] net: dsa: lantiq_gswip: Fix FDB add/remove on the CPU port
+Date:   Thu, 30 Jun 2022 23:27:03 +0200
+Message-Id: <20220630212703.3280485-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220630131543.225554-1-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Jun 2022 15:15:43 +0200, AngeloGioacchino Del Regno wrote:
-> As was already done for MT8192 in commit b52e695324bb ("dt-bindings:
-> pinctrl: mt8192: Add drive-strength-microamp"), replace the custom
-> mediatek,drive-strength-adv property with the standardized pinconf
-> 'drive-strength-microamp' one.
-> 
-> Similarly to the mt8192 counterpart, there's no user of property
-> 'mediatek,drive-strength-adv', hence removing it is safe.
-> 
-> Fixes: 69c3d58dc187 ("dt-bindings: pinctrl: mt8195: Add mediatek,drive-strength-adv property")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../bindings/pinctrl/pinctrl-mt8195.yaml      | 27 ++-----------------
->  1 file changed, 2 insertions(+), 25 deletions(-)
-> 
+There's no bridge available when adding or removing a static FDB entry
+for (towards) the CPU port. This is intentional because the CPU port is
+always considered standalone, even if technically for the GSWIP driver
+it's part of every bridge.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Handling FDB add/remove on the CPU port fixes the following message
+during boot in OpenWrt:
+  port 4 failed to add <LAN MAC address> vid 1 to fdb: -22
+as well as the following message during system shutdown:
+  port 4 failed to delete <LAN MAC address> vid 1 from fdb: -22
+
+Use FID 0 (which is also the "default" FID) when adding/removing an FDB
+entry for the CPU port. Testing with a BT Home Hub 5A shows that this
+"default" FID works as expected:
+- traffic from/to LAN (ports in a bridge) is not seen on the WAN port
+  (standalone port)
+- traffic from/to the WAN port (standalone port) is not seen on the LAN
+  (ports in a bridge) ports
+- traffic from/to LAN is not seen on another LAN port with a different
+  VLAN
+- traffic from/to one LAN port to another is still seen
+
+Fixes: 58c59ef9e930c4 ("net: dsa: lantiq: Add Forwarding Database access")
+Cc: stable@vger.kernel.org
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+---
+This patch is "minimalistic" on purpose: the goal is to have it
+backported to Linux 5.15. Linux 5.15 doesn't have
+dsa_fdb_present_in_other_db() or struct dsa_db yet. Once this patch has
+been accepted I will work on implementing FDB isolation for the Lantiq
+GSWIP driver.
+
+Hauke, I hope I considered all test-cases which you find relevant. If not
+then please let me know.
+
+
+ drivers/net/dsa/lantiq_gswip.c | 29 ++++++++++++++++++-----------
+ 1 file changed, 18 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/net/dsa/lantiq_gswip.c b/drivers/net/dsa/lantiq_gswip.c
+index e531b93f3cb2..9dab28903af0 100644
+--- a/drivers/net/dsa/lantiq_gswip.c
++++ b/drivers/net/dsa/lantiq_gswip.c
+@@ -1365,19 +1365,26 @@ static int gswip_port_fdb(struct dsa_switch *ds, int port,
+ 	int i;
+ 	int err;
+ 
+-	if (!bridge)
+-		return -EINVAL;
+-
+-	for (i = max_ports; i < ARRAY_SIZE(priv->vlans); i++) {
+-		if (priv->vlans[i].bridge == bridge) {
+-			fid = priv->vlans[i].fid;
+-			break;
++	if (bridge) {
++		for (i = max_ports; i < ARRAY_SIZE(priv->vlans); i++) {
++			if (priv->vlans[i].bridge == bridge) {
++				fid = priv->vlans[i].fid;
++				break;
++			}
+ 		}
+-	}
+ 
+-	if (fid == -1) {
+-		dev_err(priv->dev, "Port not part of a bridge\n");
+-		return -EINVAL;
++		if (fid == -1) {
++			dev_err(priv->dev, "Port not part of a bridge\n");
++			return -EINVAL;
++		}
++	} else if (dsa_is_cpu_port(ds, port)) {
++		/* Use FID 0 which is the "default" and used as fallback. This
++		 * is not used by any standalone port or a bridge, so we can
++		 * safely use it for the CPU port.
++		 */
++		fid = 0;
++	} else {
++		return -EOPNOTSUPP;
+ 	}
+ 
+ 	mac_bridge.table = GSWIP_TABLE_MAC_BRIDGE;
+-- 
+2.37.0
+

@@ -2,149 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E1456220F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 20:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED4556221F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 20:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236626AbiF3S34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 14:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45164 "EHLO
+        id S236694AbiF3Sds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 14:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233056AbiF3S3z (ORCPT
+        with ESMTP id S236687AbiF3Sdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 14:29:55 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2060.outbound.protection.outlook.com [40.107.94.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF65427EB
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 11:29:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NLY8ilyQCpu73t7urQlG+miREk6SQr8rTUd7RnIcuWN9P+iYDqkYE4dr2md89eG2bi9pdNmS/eeBQSvhIFE2P9EFvNqv3eRmFxyZwOp/FPYlxGyZvRpunIhL67+MO7XNrxrT9t5pjlivda7Dlj3yjJS+9PGL4aUVFuhmshLFBoVkwYNxqcfzBHwCzxnkiRJ4v/QB/vZ3sjki+hl95IgVHqzC2GOWHtRFISf/7vtUUzmm30MX7PrfW3JKL7lE0lMc+HYBWHxnCYbHWQU4LYZvCVcN4VapAOlj31SdHJeBbLDLm3nb2TCO6i+qqVCtaQojaJQGcWpCEniXBWTrzNbX6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5CKJm3taaNU29G9UqYZKXdiRPyMbSbrefel5N9RpMJo=;
- b=e/zpyUjbZ0BzrXAXMFMsIbV/TYzpz+t78c+skjzgCjh5fQQrqB7UIAhkXtmjrq8Mn5pSPKPcxKy9xYtaYDBJBDPh5WdGLIbqKblQpfXujCQg/mwfMjN8FK3Ru5r7X/Wmzttz2AqSzMIgktIBZFfXnMtgfc+Nhxek6zurowR7lNcynXT+6g6MpUPj6CCrCC3iJKfzklbEIAGS+F2DlpkaMjJIhSIDfkMNYDv9dfluBiQtEUYdamm2NsYexjZZmbX+Pt4n3hTvz/1dlQYKsTP3GAv1fc32ZynsuOq5vAkfi2jaf+DXgF6zzfwDz7EJhmqN1gww+qOY2jQ0hKZZM2ReUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5CKJm3taaNU29G9UqYZKXdiRPyMbSbrefel5N9RpMJo=;
- b=ZgHExm8NlSUV8NHwYfALMTT9PFHrPdmrPUW5bpBvt02QHD1WutNUKNVI2U8VXnY9JULwT2acgvmy0aM3q3Tw04vnVDRrolYUXWINOLWZ+AjL6me1yagrRr9UNZQL54dsYiB+aZVUQIza4E07d7WWtTrTgeDslwTa9TKp7/sUUzI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
- by DM6PR12MB3580.namprd12.prod.outlook.com (2603:10b6:5:11e::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Thu, 30 Jun
- 2022 18:29:47 +0000
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::6d50:f6c5:cea4:1d95]) by DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::6d50:f6c5:cea4:1d95%6]) with mapi id 15.20.5373.018; Thu, 30 Jun 2022
- 18:29:47 +0000
-Message-ID: <cc1dd78a-487b-bf10-5297-66941b9847fd@amd.com>
-Date:   Fri, 1 Jul 2022 00:02:19 +0530
+        Thu, 30 Jun 2022 14:33:46 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB62255A1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 11:33:43 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id r18so19851797edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 11:33:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yJGEttsMIPFNExRUVjMuioYnkzWMdO3yRAB963cFp2o=;
+        b=bVZKc01WEs5LMjU5JtELjSXU1pShwhHGLZhNmZYt3wfTdiQE/yN2UAshZdvCOv8QGq
+         jvuwowiNtOjr5posUthWXU7PWhNZt5GOF4X2vS97DTQrhkMDd85y2516gnqfIuFFlh2I
+         ruddBdJWCPzK2JSEvz6DATLXX11xi0ZKag2bf5Laj6MHMpCI7ursQwhCZpecYj90tw5h
+         nPUB4qcjaCKLvbhHoLjfivF0IkdS9P0U2XM5vlr2MQX+1XbAOzaKqW9xv/xG0frtmHy6
+         SsZzW6ElgdT4rkY8rdjUlQFfxOrx2HPWseOs3kKWIzs1pfoxsos6mZK6KSJsuFIKNtoI
+         Jsqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yJGEttsMIPFNExRUVjMuioYnkzWMdO3yRAB963cFp2o=;
+        b=OPiWUXvl4xQdsP5suG4Batrd+pykNJq6wvayLLKqoKdUvNHW9vet9PgYbUiHqDmGed
+         o/5NPjSIYmahFrU1cCOD05mUCjOEcfc9w16NHfYH8qTBIWBn3h5BgapZvLTc4EGRm2fx
+         z2jNQkcfQbd/LJVZNdJ9+D9GQ8QN6JN9k9j3/dVHu54/Mm5IKWlH9P5z82X1rPHJPOMN
+         HpusXiCFGNbx3lU0Q5XAPOsyNuLpi5VQhOzDzg2vVvbEByZyjuiBpkzXhyoOuRw/xyO3
+         YrCE0yLEKcKmgbcmcLoSIBJTXTUgumM7Dr+Om4qZqo0g9Ner4RIaI4H4Fg+KC9ev1v31
+         J52g==
+X-Gm-Message-State: AJIora+YGQgPgY+Kff5eu6X6gWM10DYrG7ooTXaEcC9uRpI1UlzQPJ+X
+        SPqjnpEDI8a2nuDMbLYCfLnrTe3pHcK3KQ==
+X-Google-Smtp-Source: AGRyM1s8xy762cCi9FZl1Kcj0KeKPHclcEopngQ5Us/lz3lUXqlZKh+6oqktKAwNKh4wiC/U7Zn6jA==
+X-Received: by 2002:a05:6402:3708:b0:433:2d3b:ed5 with SMTP id ek8-20020a056402370800b004332d3b0ed5mr13495310edb.246.1656614022289;
+        Thu, 30 Jun 2022 11:33:42 -0700 (PDT)
+Received: from [192.168.0.190] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id w3-20020a1709067c8300b00722fc0779e3sm9482072ejo.85.2022.06.30.11.33.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 11:33:41 -0700 (PDT)
+Message-ID: <78faf75d-80b7-7a0e-e306-6351dbe5133c@linaro.org>
+Date:   Thu, 30 Jun 2022 20:33:39 +0200
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5/5] ASoC: amd: enable machine driver build for Jadeite
- platform
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v6 02/14] dt-bindings: pinctrl: imx: Add fsl,scu-iomux
+ yaml file
 Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     alsa-devel@alsa-project.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, Alexander.Deucher@amd.com,
-        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        zhuning@everest-semi.com, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Julian Braha <julianbraha@gmail.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220630031755.1055413-1-Vijendar.Mukunda@amd.com>
- <20220630031755.1055413-6-Vijendar.Mukunda@amd.com>
- <Yr2E9SQCtk1u6V+i@sirena.org.uk>
-From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-In-Reply-To: <Yr2E9SQCtk1u6V+i@sirena.org.uk>
+To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
+ <20220629164414.301813-3-viorel.suman@oss.nxp.com>
+ <f0634bf0-77e9-939e-693f-31d50af4768c@linaro.org>
+ <20220630123754.esbuac4pfktlseh2@fsr-ub1664-116>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220630123754.esbuac4pfktlseh2@fsr-ub1664-116>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0029.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:97::18) To DM6PR12MB4123.namprd12.prod.outlook.com
- (2603:10b6:5:21f::23)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 11b1dd4e-6e30-40e1-a870-08da5ac682ce
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3580:EE_
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RV8zfvNpnnzoOjvK8nbJiJTZg49f2iTAgikShFl0P5KXSnG8qdTPpTEEl35v7b6RT6zfnWV/2Ag1+qTj6tryIPqnRKJ+zbghrAh+4zus7yV6Hwrkv4rWlI7W2dJzGb9fpyPytbfdLK8G658l9c/ab7sYqMFyhSHHWKp1FL22e4IqHQZC3/t0jq1aAQ98esPkjijvsf5rCGXwwk7MZzU8QAmIKDoesesBdMtH0fE3LPCi8EPlc0JmkLJCUziiMer5pY5nyRkHx1Q2kWUuMJNj13N8RDbILQHdurOwqUn/1rD2CA8jfb+fEfpT5pDpPvcpQTQA349p4UVUH8Ys1TnWUE4m/4tY8Tz/yg3Kn++O6xJdPsEDcyuK4ko0Mc6OOIz4aYH71NqwHwkYS6OUl4NqFfPuRtevN0X83auwDlGCRO/5emyL8uzAXYXpNRF+E13O5CCEJVTdZWNr5UfJg+R3kDmygBavUAIJygqIlwTn5PSFlYJajADR46pcjyxKbdt31G/AZi+IOuTNRm9L6TcG8HN0F1Nta5t1xVtv+It390RaCtgboVhnsgzkeq9IeFuNx7HFZvMlJpS4hvXEsWl4UC36EUNNZN/fwR6ocANWJ/zIuAZ8CGvVslwLx2qLmvIN+y6usDYy6wQe23SUUpxBGosg967+5rHTsWWbbB0EPaZ8jiKBlOgVzb1iImHkqlctqqJjzMdzUKdKB4g/cbeZuDf4UTEPLwoaYNCR5SzqoF4LIBG3ZjOXSPzpdR8PyKGADQyoE7kmDTc6iO4Ecl3tLtAhMz2s84EWIkOODelLAcnuAgWdKAtas7PzWbuW75DREPfbXfN8d8IGYOw4fCO7ZzDnAOCfyVhsORFlIDTSfkI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(376002)(346002)(39860400002)(366004)(6916009)(4744005)(54906003)(86362001)(5660300002)(41300700001)(2616005)(31696002)(38100700002)(8936002)(6486002)(6666004)(478600001)(186003)(316002)(66556008)(31686004)(36756003)(8676002)(66946007)(53546011)(7416002)(6512007)(26005)(2906002)(4326008)(66476007)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZGFpN25iZzRFUXlQOEhYMTA0Z0ZKRWhmUnRQZGQ3RHZlL2hUSWR1QkFZckhQ?=
- =?utf-8?B?VzJORFkxdWEyOVhDdGNJU2pFUHFhQzJld21FM1psWms2T3A1REhWZkZCWlp1?=
- =?utf-8?B?T3hkTkxaU3VoYTNkTjlidkRaUzJpZExSNUxIVmh6aUF0WXd6VEYwRTNCZ0N4?=
- =?utf-8?B?ZHZ2d2xEUzVkOVUzK3dHamx3Ry85RWpSR0RzQ1pQbXdMRm1jN2tDem9nbHJa?=
- =?utf-8?B?R0VzYVVNZDZhRWgzblpQMnBreTRFTnhUY3UwYmNMdHI3UXRVRW40aDFzR1Rk?=
- =?utf-8?B?Tnljakszc0lvSFN5NFhIMlJ5aU91ZE9SdnBpTXR2d0p1aUR1YWduZFBsZTNx?=
- =?utf-8?B?L0JVUExvdVkrSU0vemRERWs2QzRwTUFCcmtjcTgxV1hSRW9yNEl6NmIxMHRl?=
- =?utf-8?B?MFkxU0FqSmlmWUc4U29zeWJyaHVCS1JVM2t2N2FFdGVNUm1UQUk1cWdWb3Mw?=
- =?utf-8?B?SzVFODBRNWxoOHI2bWw4cUlBVmJYdVg1M1RnbUNKcVQ3QS9vVkZGeldRYjhX?=
- =?utf-8?B?N2RDcFZQUmZCWWlxVTRWUU4xQmJ0ZjE4KzN2MUhXVGpScmVQWFJCbWRkMnRt?=
- =?utf-8?B?d2t5TmNvUWxDMWNKZkM4OGNQOHBEc2tXQ21QbmtScHMyWUZkd04yaTZDdjB3?=
- =?utf-8?B?ZXJ6QytqaFNNSUVnYzFMTzRCOVVCUWdpV2tRSVVGdFlqZC91TFAyOU1yUG83?=
- =?utf-8?B?M1BFWGovOEMwazVHSS9QeXZyTXVsYm5YWklFLzdtK0NnRXRXRmV6UDRmV0J4?=
- =?utf-8?B?N1dYR2ZEc2R5YnFGSUltYk1ESE9KcVBZQ3N3STJMaTAvcFVCSmZJMUxEWGwz?=
- =?utf-8?B?ZEdsTWptbjAvUFdjU3pCWHR4YW1abDFLZTdVQzNTbUZLeDdMUDg4amZtVDJE?=
- =?utf-8?B?dGpyR0VPVGRqWGF5L3RtT0hKcm1mcngxaTl0WDNsTmUzbXRuZ2pDeUNHNUU2?=
- =?utf-8?B?K0ViRkRWRE96U2xkSXpHYUVLVWlRZTFHRk1uR3gwZlVvQnlCK09wQU1UejhF?=
- =?utf-8?B?T0JIcG5HZmkyd2FzZWt5WjdlWFJYTC9TcXUyaEJKakxjTXN3RjZ0eDk2SlBC?=
- =?utf-8?B?OVNpTENuY05Qc1Avem5UYlJpRXFZK09KNXV0U0JGdHkxN2R2cUtURlQwRTNF?=
- =?utf-8?B?ME9EQ1d2a1U3YWZYNElvSmRxNWxxemNtU1YxT050aThSVThIcTNhK1FUN3dw?=
- =?utf-8?B?VE83ZnYxUUFFYnc3Ni9iUHo3N0tFU0QzcXdPWnNQUUpwNkRVTlVHeUpvQldU?=
- =?utf-8?B?KzViancxaXlaTU5yZW5FZGVRZzFOVVQ0KzRmM1FCelhCUFJYdTFoRGptWEpH?=
- =?utf-8?B?Z1ZudmtwMDI4dFdEN3MwYkxqTmdPN1QycFc4eG9LYmhqZWVsQU84TVRBV0Q5?=
- =?utf-8?B?UjlJVWp2TFA1citHcVlSZEtaKzhML2ZUVWJjTDM5MzUvS1lqb2cwR05hbVlY?=
- =?utf-8?B?NTlrTitEV2RDQm9FdUR1cnJUUVg0MmVITUFPZkRiZUNiT0VrSGt0eGJMcy9h?=
- =?utf-8?B?YjZzczNtTFViOXNTVm5aWnIrQnpzTlllWllBcXFmemxsYTJPZE9rSzQyZGNn?=
- =?utf-8?B?VkhXd2E1dmZSbHNuaFM3VTZhbytvbU1lWmhxVVIyeWRBOHpjc2d1RE9DdW84?=
- =?utf-8?B?WXJOdUp4c3lCdDBOdURuWTBGZHl0SDBXbER1WEhGNWhSMVBkaFZpakYySmhk?=
- =?utf-8?B?R25IckR1UmljN1llclpZNkR6TmQxRi84Ty9nMGNMOWRSS2lJaWNRdW9yQ1JZ?=
- =?utf-8?B?MUNxamZLMSt4aCtYQWJGc3JoY1dweGtCSnFIRzQxUVMvOFFFQ0pLWDBVSlEr?=
- =?utf-8?B?SXVqWThmN0l1QytBQXkwYlNCYTdUSHR0TkpWa3V1VmV1YkpOZkQwd2RlaVVv?=
- =?utf-8?B?QlRmbzYzQmJuS1NCenErYWs2ZThkWldETUhYN1BockVhL3drUUdZN1lxZ3JB?=
- =?utf-8?B?MnRaZFJ2TzlBZDBZV29ncGIvaFpZV2NtNnJoYk1tVlBSVkxnaHpXUHdINTl1?=
- =?utf-8?B?cnBkZXRJRUZxNmFDejFLRUQ4ellLVjIrOExBUmtWdjMyL1N0c3c0TXdIM3Zr?=
- =?utf-8?B?TDdwSERXUnpaRnpxc1hMODJNdUFnVlJCMnJCL0RYeUorQzJXelBHMFh1QTZX?=
- =?utf-8?Q?Bd8z2MZWnXMUfFCprgqIRTRmu?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11b1dd4e-6e30-40e1-a870-08da5ac682ce
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 18:29:47.5169
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: p8GXhRXXavvIM0o4+/c9b/QpnGWn+VsO4QReDb40eGF0wRrK+kp4pp6Ws/JZq1naLQVZiyHHkw6IJ5wrMXZsrg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3580
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/30/22 4:41 PM, Mark Brown wrote:
-> On Thu, Jun 30, 2022 at 08:47:55AM +0530, Vijendar Mukunda wrote:
+On 30/06/2022 14:37, Viorel Suman (OSS) wrote:
+> On 22-06-29 19:53:51, Krzysztof Kozlowski wrote:
+>> On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
+>>> From: Abel Vesa <abel.vesa@nxp.com>
+>>>
+>>> In order to replace the fsl,scu txt file from bindings/arm/freescale,
+>>> we need to split it between the right subsystems. This patch documents
+>>> separately the 'iomux/pinctrl' child node of the SCU main node.
+>>>
+>>> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+>>> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+>>> ---
+>>>  .../bindings/pinctrl/fsl,scu-pinctrl.yaml     | 68 +++++++++++++++++++
+>>>  1 file changed, 68 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
+>>> new file mode 100644
+>>> index 000000000000..76a2e7b28172
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
+> [...]
+>>> +      fsl,pins:
+>>> +        description:
+>>> +          each entry consists of 3 integers and represents the pin ID, the mux value
+>>> +          and config setting for the pin. The first 2 integers - pin_id and mux_val - are
+>>> +          specified using a PIN_FUNC_ID macro, which can be found in
+>>> +          <include/dt-bindings/pinctrl/pads-imx8qxp.h>. The last integer CONFIG is
+>>> +          the pad setting value like pull-up on this pin. Please refer to the
+>>> +          appropriate i.MX8 Reference Manual for detailed CONFIG settings.
+>>> +        $ref: /schemas/types.yaml#/definitions/uint32-matrix
+>>
+>> Look at fsl,imx8mq-pinctrl.yaml. Each item is described (items under items).
 > 
->> +	depends on SND_SOC_AMD_ACP && I2C && ACPI
+> Added them initially, but later dropped because of some logs like
+> "pinctrl@xxxxxxx: usdhc1grp:fsl,pins:0: [...] is too long" shown by
+> "make dt_binding_check dtbs_check DT_SCHEMA_FILES=[...]/fsl,scu-pinctrl.yaml"
 > 
-> The code treated ACPI as optional so you could relax the ACPI dependency
-> ot be "ACPI || COMPILE_TEST" (I think the same applies to I2C).
+> Same logs are shown for "fsl,imx8mq-pinctrl.yaml". Will add the items description in the next
+> version.
+>
 
-Will fix it and push the newer version.
+The fsl,imx8mq-pinctrl.yaml should be correct and I don't see the reason
+why dtschema complains in some of the entries. It's like one define was
+not correct... I'll take a look at this later, but anyway keep the same
+as fsl,imx8mq-pinctrl.yaml even if it complains.
+
+
+Best regards,
+Krzysztof

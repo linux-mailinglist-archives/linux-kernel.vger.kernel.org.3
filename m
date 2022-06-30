@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B3B561ECB
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78EAC561ED2
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235495AbiF3PJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 11:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
+        id S235543AbiF3PKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 11:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbiF3PJB (ORCPT
+        with ESMTP id S235514AbiF3PKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 11:09:01 -0400
-Received: from azure-sdnproxy-3.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8609E28E0F;
-        Thu, 30 Jun 2022 08:08:59 -0700 (PDT)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Thu, 30 Jun 2022 23:08:41
- +0800 (GMT+08:00)
-X-Originating-IP: [221.192.178.120]
-Date:   Thu, 30 Jun 2022 23:08:41 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Eric Dumazet" <edumazet@google.com>
-Cc:     linux-hams@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "David Miller" <davem@davemloft.net>,
-        "Ralf Baechle" <ralf@linux-mips.org>
-Subject: Re: [PATCH net] net: rose: fix UAF bug caused by
- rose_t0timer_expiry
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <CANn89iLda2oxoPQaGd9r8frAaOu1LqxmWYm2O8W4HXaGRN8tcQ@mail.gmail.com>
-References: <20220630143842.24906-1-duoming@zju.edu.cn>
- <CANn89iLda2oxoPQaGd9r8frAaOu1LqxmWYm2O8W4HXaGRN8tcQ@mail.gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Thu, 30 Jun 2022 11:10:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7752AE26
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:10:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BF5160E94
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 15:10:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED6AFC3411E;
+        Thu, 30 Jun 2022 15:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656601815;
+        bh=l7KxMBhRvrNgW0srsiaNIvYfDYhR6onbRDyQH5tjYrY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=qbm2u+66ATk65SMpLsZsZXOONGGNVrOO3u2KGQ+DXjFczwYDnwYVvV/qViNmxVJl0
+         Gl7pqNZtw3Er1FMXGZszn78zFZTVox92IYFqtK6p6pE9ZZ+fbJbC2Kcdf6fCS0zUvC
+         Pg6BQGyKpQchJFBB1WdZm5IqiCO92eqJ1L/qfhLdpcVP7762XrZ6D9iNrdeGZ2JpbA
+         r/r37P5Rscz7zKHecYdISAb+22HAZChxx3LUSzcppwGyv0MIxakv4EGtYd3FauMghW
+         /H58VYSXnziRshuHgMMBxSWphRGy5ZzhHpMAPkmR+yCR4L2gZQuFw1ZZ9rBjmQEJeq
+         cc7EF/f0kfoFQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>, trix@redhat.com, perex@perex.cz,
+        krzysztof.kozlowski@linaro.org, lgirdwood@gmail.com,
+        s.nawrocki@samsung.com, tiwai@suse.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220629201811.2537853-1-trix@redhat.com>
+References: <20220629201811.2537853-1-trix@redhat.com>
+Subject: Re: [PATCH] ASoC: samsung: change neo1973_audio from a global to static
+Message-Id: <165660181358.664251.18405607325309660233.b4-ty@kernel.org>
+Date:   Thu, 30 Jun 2022 16:10:13 +0100
 MIME-Version: 1.0
-Message-ID: <bed69ee.1e8d9.181b528391c.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgC3COF6vL1iQgHiAg--.63195W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgARAVZdtaenFwABs6
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,59 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBUaHUsIDMwIEp1biAyMDIyIDE2OjQ0OjI5ICswMjAwIEVyaWMgRHVtYXpldCB3
-cm90ZToKCj4gPiBUaGVyZSBhcmUgVUFGIGJ1Z3MgY2F1c2VkIGJ5IHJvc2VfdDB0aW1lcl9leHBp
-cnkoKS4gVGhlCj4gPiByb290IGNhdXNlIGlzIHRoYXQgZGVsX3RpbWVyKCkgY291bGQgbm90IHN0
-b3AgdGhlIHRpbWVyCj4gPiBoYW5kbGVyIHRoYXQgaXMgcnVubmluZyBhbmQgdGhlcmUgaXMgbm8g
-c3luY2hyb25pemF0aW9uLgo+ID4gT25lIG9mIHRoZSByYWNlIGNvbmRpdGlvbnMgaXMgc2hvd24g
-YmVsb3c6Cj4gPgo+ID4gICAgICh0aHJlYWQgMSkgICAgICAgICAgICAgfCAgICAgICAgKHRocmVh
-ZCAyKQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgfCByb3NlX2RldmljZV9ldmVudAo+
-ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIHJvc2VfcnRfZGV2aWNlX2Rvd24KPiA+
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAgIHJvc2VfcmVtb3ZlX25laWdoCj4gPiBy
-b3NlX3QwdGltZXJfZXhwaXJ5ICAgICAgICB8ICAgICAgIHJvc2Vfc3RvcF90MHRpbWVyKHJvc2Vf
-bmVpZ2gpCj4gPiAgIC4uLiAgICAgICAgICAgICAgICAgICAgICB8ICAgICAgICAgZGVsX3RpbWVy
-KCZuZWlnaC0+dDB0aW1lcikKPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAgICAg
-ICBrZnJlZShyb3NlX25laWdoKSAvL1sxXUZSRUUKPiA+ICAgbmVpZ2gtPmRjZV9tb2RlIC8vWzJd
-VVNFIHwKPiA+Cj4gPiBUaGUgcm9zZV9uZWlnaCBpcyBkZWFsbG9jYXRlZCBpbiBwb3NpdGlvbiBb
-MV0gYW5kIHVzZSBpbgo+ID4gcG9zaXRpb24gWzJdLgo+ID4KPiA+IFRoZSBjcmFzaCB0cmFjZSB0
-cmlnZ2VyZWQgYnkgUE9DIGlzIGxpa2UgYmVsb3c6Cj4gPgo+ID4gQlVHOiBLQVNBTjogdXNlLWFm
-dGVyLWZyZWUgaW4gZXhwaXJlX3RpbWVycysweDE0NC8weDMyMAo+ID4gV3JpdGUgb2Ygc2l6ZSA4
-IGF0IGFkZHIgZmZmZjg4ODAwOWIxOTY1OCBieSB0YXNrIHN3YXBwZXIvMC8wCj4gPiAuLi4KPiA+
-IENhbGwgVHJhY2U6Cj4gPiAgPElSUT4KPiA+ICBkdW1wX3N0YWNrX2x2bCsweGJmLzB4ZWUKPiA+
-ICBwcmludF9hZGRyZXNzX2Rlc2NyaXB0aW9uKzB4N2IvMHg0NDAKPiA+ICBwcmludF9yZXBvcnQr
-MHgxMDEvMHgyMzAKPiA+ICA/IGV4cGlyZV90aW1lcnMrMHgxNDQvMHgzMjAKPiA+ICBrYXNhbl9y
-ZXBvcnQrMHhlZC8weDEyMAo+ID4gID8gZXhwaXJlX3RpbWVycysweDE0NC8weDMyMAo+ID4gIGV4
-cGlyZV90aW1lcnMrMHgxNDQvMHgzMjAKPiA+ICBfX3J1bl90aW1lcnMrMHgzZmYvMHg0ZDAKPiA+
-ICBydW5fdGltZXJfc29mdGlycSsweDQxLzB4ODAKPiA+ICBfX2RvX3NvZnRpcnErMHgyMzMvMHg1
-NDQKPiA+ICAuLi4KPiA+Cj4gPiBUaGlzIHBhdGNoIGNoYW5nZXMgZGVsX3RpbWVyKCkgaW4gcm9z
-ZV9zdG9wX3QwdGltZXIoKSBhbmQKPiA+IHJvc2Vfc3RvcF9mdGltZXIoKSB0byBkZWxfdGltZXJf
-c3luYygpIGluIG9yZGVyIHRoYXQgdGhlCj4gPiB0aW1lciBoYW5kbGVyIGNvdWxkIGJlIGZpbmlz
-aGVkIGJlZm9yZSB0aGUgcmVzb3VyY2VzIHN1Y2ggYXMKPiA+IHJvc2VfbmVpZ2ggYW5kIHNvIG9u
-IGFyZSBkZWFsbG9jYXRlZC4gQXMgYSByZXN1bHQsIHRoZSBVQUYKPiA+IGJ1Z3MgY291bGQgYmUg
-bWl0aWdhdGVkLgo+ID4KPiA+IEZpeGVzOiAxZGExNzdlNGMzZjQgKCJMaW51eC0yLjYuMTItcmMy
-IikKPiA+IFNpZ25lZC1vZmYtYnk6IER1b21pbmcgWmhvdSA8ZHVvbWluZ0B6anUuZWR1LmNuPgo+
-ID4gLS0tCj4gPiAgbmV0L3Jvc2Uvcm9zZV9saW5rLmMgfCA0ICsrLS0KPiA+ICAxIGZpbGUgY2hh
-bmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQo+ID4KPiA+IGRpZmYgLS1naXQg
-YS9uZXQvcm9zZS9yb3NlX2xpbmsuYyBiL25ldC9yb3NlL3Jvc2VfbGluay5jCj4gPiBpbmRleCA4
-Yjk2YTU2ZDNhNC4uOTczNGQxMjY0ZGUgMTAwNjQ0Cj4gPiAtLS0gYS9uZXQvcm9zZS9yb3NlX2xp
-bmsuYwo+ID4gKysrIGIvbmV0L3Jvc2Uvcm9zZV9saW5rLmMKPiA+IEBAIC01NCwxMiArNTQsMTIg
-QEAgc3RhdGljIHZvaWQgcm9zZV9zdGFydF90MHRpbWVyKHN0cnVjdCByb3NlX25laWdoICpuZWln
-aCkKPiA+Cj4gPiAgdm9pZCByb3NlX3N0b3BfZnRpbWVyKHN0cnVjdCByb3NlX25laWdoICpuZWln
-aCkKPiA+ICB7Cj4gPiAtICAgICAgIGRlbF90aW1lcigmbmVpZ2gtPmZ0aW1lcik7Cj4gPiArICAg
-ICAgIGRlbF90aW1lcl9zeW5jKCZuZWlnaC0+ZnRpbWVyKTsKPiA+ICB9Cj4gCj4gQXJlIHlvdSBz
-dXJlIHRoaXMgaXMgc2FmZSA/Cj4gCj4gZGVsX3RpbWVyX3N5bmMoKSBjb3VsZCBoYW5nIGlmIHRo
-ZSBjYWxsZXIgaG9sZHMgYSBsb2NrIHRoYXQgdGhlIHRpbWVyCj4gZnVuY3Rpb24gd291bGQgbmVl
-ZCB0byBhY3F1aXJlLgoKSSB0aGluayB0aGlzIGlzIHNhZmUuIFRoZSByb3NlX2Z0aW1lcl9leHBp
-cnkoKSBpcyBhbiBlbXB0eSBmdW5jdGlvbiB0aGF0IGlzCnNob3duIGJlbG93OgoKc3RhdGljIHZv
-aWQgcm9zZV9mdGltZXJfZXhwaXJ5KHN0cnVjdCB0aW1lcl9saXN0ICp0KQp7Cn0KCj4gPgo+ID4g
-IHZvaWQgcm9zZV9zdG9wX3QwdGltZXIoc3RydWN0IHJvc2VfbmVpZ2ggKm5laWdoKQo+ID4gIHsK
-PiA+IC0gICAgICAgZGVsX3RpbWVyKCZuZWlnaC0+dDB0aW1lcik7Cj4gPiArICAgICAgIGRlbF90
-aW1lcl9zeW5jKCZuZWlnaC0+dDB0aW1lcik7Cj4gPiAgfQo+IAo+IFNhbWUgaGVyZSwgcGxlYXNl
-IGV4cGxhaW4gd2h5IGl0IGlzIHNhZmUuCgpUaGUgcm9zZV9zdG9wX3QwdGltZXIoKSBtYXkgaG9s
-ZCAicm9zZV9ub2RlX2xpc3RfbG9jayIgYW5kICJyb3NlX25laWdoX2xpc3RfbG9jayIsCmJ1dCB0
-aGUgdGltZXIgaGFuZGxlciByb3NlX3QwdGltZXJfZXhwaXJ5KCkgdGhhdCBpcyBzaG93biBiZWxv
-dyBkb2VzIG5vdCBuZWVkCnRoZXNlIHR3byBsb2Nrcy4KCnN0YXRpYyB2b2lkIHJvc2VfdDB0aW1l
-cl9leHBpcnkoc3RydWN0IHRpbWVyX2xpc3QgKnQpCnsKCXN0cnVjdCByb3NlX25laWdoICpuZWln
-aCA9IGZyb21fdGltZXIobmVpZ2gsIHQsIHQwdGltZXIpOwoKCXJvc2VfdHJhbnNtaXRfcmVzdGFy
-dF9yZXF1ZXN0KG5laWdoKTsKCgluZWlnaC0+ZGNlX21vZGUgPSAwOwoKCXJvc2Vfc3RhcnRfdDB0
-aW1lcihuZWlnaCk7Cn0KCkJlc3QgcmVnYXJkcywKRHVvbWluZyBaaG91
+On Wed, 29 Jun 2022 16:18:11 -0400, Tom Rix wrote:
+> sparse reports
+> sound/soc/samsung/neo1973_wm8753.c:347:24: warning: symbol 'neo1973_audio' was not declared. Should it be static?
+> 
+> neo1973_audio is only used in neo1973_wm8753.c, so it's
+> storage class specifier should be static.
+> 
+> 
+> [...]
+
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: samsung: change neo1973_audio from a global to static
+      commit: 871325d800ed532ba5874257f04bb4ae75125bc4
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

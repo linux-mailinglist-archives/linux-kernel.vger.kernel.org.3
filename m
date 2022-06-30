@@ -2,175 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394F0561AD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4D74561ADB
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235060AbiF3M5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 08:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37284 "EHLO
+        id S234931AbiF3NAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 09:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234766AbiF3M5n (ORCPT
+        with ESMTP id S234766AbiF3NAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 08:57:43 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2045.outbound.protection.outlook.com [40.107.212.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031F043AF0;
-        Thu, 30 Jun 2022 05:57:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RrtHoGqe9iBKyVp/Uvfjgzl2+ztQcoAXtWbvuUpVz1V+qnjtcFsxWOkVQR9A/EArX2HmwiTFv0b/r2aQDwZIYSHXwCHRFKCEg8bX2g+YGa791v3cIzhqK6iX9ZQgf5hC5zRSoxNG0Wz0etW6wpz4LRlV7g0JG0bpQx/hVSCX4VG5yzi1PaxJVUYCpZbHQjKjGJi3Zzclm6DnfXIQd9WWoGobfi5uLnqsbGIA4G9euqVz0FYz5KCUDvMCOFGA/kuAEOx8q3RjXxEue3vDrBruqgCR2HkajGRJuCGlL0HkrLUc5JS3JrzEg/nj0cjerVJ7EFX6UYqwu/tUPuVG+574dA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RW9RxJufLrpLnCuBs6crpTH66YnGUklAwMEYulHOzTA=;
- b=GhRtLpFHcjx1d9a10w+sZP7S+RRarD1K60ItiEpcJ6nO1Gkf56+n9gcThU26W7qPdfU4iCHaQusmUuY4zzt8nSvN9Afz/rai6dNUoKKvK2ho1D1pwT21CtBL6Lz1cxNhGT1ULnaqwqWcUxnE6uNSfx/vXxj7jwCWNKEPM9MMyM7XaFKZaufOtLeMyyfjZXa4IKibNcQdjx1WIEbPrV+Z+qFnV9p+618TXbRfQUmcsZ08xpfREmbkomduy3Z1NEizJj44QoCGJVQCB1ZgvRySjzKmU0rAIEg3E/UYl/3hb97KaIzB2PJ1AYdyI9UIuOvtUrJpRo2urfLtO0CxNnPfMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RW9RxJufLrpLnCuBs6crpTH66YnGUklAwMEYulHOzTA=;
- b=ZShDDkdwusk5Wcii30tt9nfMfOFEaMYzvHm3mrh5pVL9WhSXhhMbA5MHaqyoKdFfhjY1kLgLV9vxo0XrSPFuJI1PIcVy+CKVdYvhfDtO3hmMtHQ0hjBJ/NPRCrdnbA9tUQ98zAntDtXN0P7VwkzS/HZ97d1zO1XzUEiL9DWYULmS+IgrWdJbAMUa2VM6Y48+EvzRVgGVaZxXKzwEYICLL1NoqrYWKlhMhpD1/JtqJaWV/Pr1qjCDQgMyCia6PbZnUSX3i6ieVoQt/bfRVK4yLOb3o6yBFtKkROfRl6dzM95WNGuksVdvnuBvKdeRIJvCO8Mr/UzpId8GQJch2kxwZg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DM5PR12MB1881.namprd12.prod.outlook.com (2603:10b6:3:10f::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Thu, 30 Jun
- 2022 12:57:40 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb%3]) with mapi id 15.20.5395.015; Thu, 30 Jun 2022
- 12:57:40 +0000
-Date:   Thu, 30 Jun 2022 09:57:38 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Leon Romanovsky <leonro@nvidia.com>
-Subject: [GIT PULL] Please pull RDMA subsystem changes
-Message-ID: <20220630125738.GA969304@nvidia.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qDbXVdCdHGoSgWSk"
-Content-Disposition: inline
-X-ClientProxiedBy: BL1PR13CA0313.namprd13.prod.outlook.com
- (2603:10b6:208:2c1::18) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Thu, 30 Jun 2022 09:00:31 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6B540E72
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 06:00:28 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id v193-20020a1cacca000000b003a051f41541so1638371wme.5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 06:00:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Nh7MOeHqpu+KJjz+AQfMOAMAr6taCyP+a8n4nKC3Ilk=;
+        b=it46n3LRqtbFUNmtsO5pMTfu8XVzRaw4AkZn64FfFqiNM1TD6/fI7WCexAZ0kter1B
+         8V8OaDXmnLHFEVjmxaS1FdoZ/0Pf84G9bzIqI4QqQjedMkhnBmQBdU+PwdgSJrtv6ILa
+         YojZAZPCS0q0Vzyef/v9d8v/StEujzRRvmdoxuC2JuWaNkyDRB8bjFaK+5U8690VKtQr
+         A+dV+PdyNl/h0Za7ayvfNFEkp5xg/LIVabnTWn9hG40wAoh2NyJdEByXSjWVz2jTA68x
+         5s7wTsAYHACQpXHMeszYGlsMUuVIWWWm/MTFVxmXg0L7vTMs+K/LI3Fcoc+RyBlDDobT
+         xHLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Nh7MOeHqpu+KJjz+AQfMOAMAr6taCyP+a8n4nKC3Ilk=;
+        b=ol1ERA+3iimzRr9KJP/wgT6IDpXHHVcfMJsSmjxES2zOOb2tJB42xOOWhII8nf69Ls
+         KQmEC6KGkAA5vYO+gCibZINw5xOm4Idih6DBbBK6kSF/Ob2NO6hrbXgd13diZaGgAn8k
+         8c6MYFUBdm0zj1fLAdJ0EBnoOpIjX+5Dk7WFCoSlzWUySjjuk/9mbxge4RJK6aN7V3l3
+         ZMSWu069/5KSdRQX4UnWC0jH7Wr2WArMV2yV2HvVK0FEz3LuL8O7atZPaBx0nfoj7ylO
+         nVrokiDVk7GfOzgb4aqWebO72Yx8MG3RV/mAQKH/JnKt9Yjvwps0h1lyx5WZZoW8e4yd
+         6jvA==
+X-Gm-Message-State: AJIora8BKqG5VXrssWJ/TLmJufId54nDtIfTDDGLzqEJ4OLFnHpSjHPJ
+        63emIVNoOIUM7ipZDhKJ7cvvVQ==
+X-Google-Smtp-Source: AGRyM1vJ3ZxH45D8hUgK2tFT90WipVg22meqPE/QRLhl20LRmrNPtv60AoVVnzHUObi1UxrNlko/Gg==
+X-Received: by 2002:a05:600c:27d1:b0:3a1:7e0c:56bf with SMTP id l17-20020a05600c27d100b003a17e0c56bfmr3784642wmb.186.1656594026688;
+        Thu, 30 Jun 2022 06:00:26 -0700 (PDT)
+Received: from srini-hackbase.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id o4-20020a5d6484000000b0020d02262664sm19273608wri.25.2022.06.30.06.00.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 06:00:25 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Subject: [PATCH 1/2] ASoC: codecs: wsa881x: handle timeouts in resume path
+Date:   Thu, 30 Jun 2022 14:00:22 +0100
+Message-Id: <20220630130023.9308-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bbeb90a1-21b3-4337-b553-08da5a981d51
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1881:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a9a0BA744m91jmDOXIZAGgsVORvGNri0iVyTsYQgS0JxKQ1yL51j0hbpLU5eRFtvdBqfYdFdk2DjpNR3dI4SgbnkquI+ZgZpnJ/nszTKlRrvf1lFyNIXNNZ1tIqcMQRd6BWRoOIEeI9b31x0xm69oLKV7gtMX9wAwuKgbW6oUmm9b4/4jaoRMh05/8DFP699p3/iubD4cMs/BtC46UXxePEYoe0bd0PmuvP/uzZ1XN+de7BtJj6lo8VdpPFuOi4Mg99/NfA6MOm2Pn6okMCv6lE6PVXlM2QtZVZ2mo11WWieAVXB1qoYZYYu57PSThesQX1zs+zjG36CW5RuDZ7lfoKNxkhg9L1CRw8pw26k4xi/YT9U22JyzVhIHXEw4oS4QAuUXxQtZk0uAEYnUSjjKssWTVZAv7mPWOy3awWzDW1xwTE+li+fs/HXwTo0ZyqglgbM5lKNd6ofWc/CkN+tLnwrgXokpqK+G1v4iYW0VE26kfoRHFnJYcV4ganRIkeyoKxawTad5ASbEzkt4IiteYW1BB4lQsGHYn4Ijvb8hz/xA+qkoTQN7nnoKq14HT6wkgplDApLtKAo0twE+sXvuTOxhTLdgANNXaGqr2BuikpcotOR3vMifvlVT+pV9fg9zTCiGmI0HXNFBbLevwbwZusRuQqbPkUhFTjC4faih2LgFZlHD4lQcSbJ9Cafo62yMa5d9nq5PCyDL4Z+dnkkmy5PED8zGG3BtxEDT79N0FNSN1cbE46ZbRCgBx0HGIKMqfavu0A3uHu6uzZv2iNtU8/qoZVm3MCs5HUb9/+KTYaEpm473QLxonTNoo7EWK/kWtrhYq7hqUJ7YqeKlsmGxg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(136003)(39860400002)(396003)(346002)(376002)(66946007)(6512007)(36756003)(2906002)(8936002)(5660300002)(83380400001)(86362001)(1076003)(6506007)(38100700002)(2616005)(41300700001)(21480400003)(66556008)(186003)(66476007)(4326008)(8676002)(107886003)(6486002)(478600001)(6916009)(44144004)(33656002)(26005)(316002)(27376004)(2700100001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kv4Ki1O+NXWLStWDI+rOTFegIJ/hgcwGCS62nzu6DBnamdfkeCHVH+1iavgl?=
- =?us-ascii?Q?itTkqBu3IopUprahuZLF686FL2jztMgF9AZFOuyHc2LkEFqcIKn11KXaiB1g?=
- =?us-ascii?Q?rlEG1R4jz8iNUALMqtlVzLj3JLzsuNMVXDoXJ95hTnSKT0oik5U9wta+UI2A?=
- =?us-ascii?Q?KGOkgfbQWbVb73u/OUM9fm065Bcz6huh2Rq0LMaX3dQK4qPjqQDWJ9jJY4CS?=
- =?us-ascii?Q?UP3xdwAS8gvGQ3OluTHOx2qcnEDwQiM5EaUkntLS+ZgQsgef+SutJFz2YqkX?=
- =?us-ascii?Q?tOCefTMtRFbbv2XRFASt4XaXzBoiWkz3dwiW6QmAUJ0br6Iae2P4M0SNeDae?=
- =?us-ascii?Q?iIq5dsi/YOSqVXceQ0C6Jths6SUVY77BGiwg9HTAW0ANDkcWJB2WyvaCWx0l?=
- =?us-ascii?Q?bVvseDY9/yKPx7VtyT410Qv3r6mLKFfCNiJGi4J/asG+YtE6RsBpKisK1+e9?=
- =?us-ascii?Q?QFKf8pkA2a5KzYjBKcY2SKS85R4FsbrFQns28eJ170Utbnou8vtXiyoo6EQD?=
- =?us-ascii?Q?9b9RMfEyKlJAgQQl+IBpejqunOpws2pibQ/sGaE+pTZdL65JVRcc6wuGOYzS?=
- =?us-ascii?Q?pj3B9W6zhHlnxbz/QjbOaaRc+11xdQNzxejpO9GlouDsFUcnuVmFKymLxAKu?=
- =?us-ascii?Q?y3vAeHyCX6uXKB6qDh+HgaUQfLG0XJ9fpi6dhuiVBBGJmUrZMUq2pLcqegyd?=
- =?us-ascii?Q?oU3PnDpA7bjvp3Wu5rfYAlCgxH3f7EILC0xj0aGS++zE92G1Y0ZZdwLuLmgk?=
- =?us-ascii?Q?TP09u5lbinRMdSe4ZKoELHO9+BiqJYwECZAgodblSMVXIcHLTggCQy+oL+ZE?=
- =?us-ascii?Q?pmZ3P60N3W/ZKQ3gZ/rKvh3cmW65FxKUQ7OronDiGeRfRsoVC3edmx1ppeO/?=
- =?us-ascii?Q?HyZl8KugmbBB6SvlOn7YJyU4xrKLM1iPj9aimWB9KMX8SOrf7I204plZbUle?=
- =?us-ascii?Q?03k7A/MXHUM4dl2FUUu0ApZN4PZIuVIEpxJ2RLKFpz5QULnRBuF0whVjCvMJ?=
- =?us-ascii?Q?LqdL5de3L+70onn9ahEPc0n17sO2eUAu+QKXkN9P9asprBcC0hhoFNCl/qXV?=
- =?us-ascii?Q?AAWoYtssz8FwlGJPee+OLkZr3BJof3hs5KrVNoXmXVseVWbhZMiIynjwX6Nd?=
- =?us-ascii?Q?R/YXKv9A7UawjSoNhV4V0QxgWXffRiI6L2/lrVTrMzXlp46Ra/O+BEMm4e6t?=
- =?us-ascii?Q?NWBSVDUoFl7TywTGbbBkajCLH2UExP840Szu5pSZnHIm0TeMFzSltNPqtOoW?=
- =?us-ascii?Q?CDnxG+obGAPhaWECg3JW4pSKH8XfJsm/2Uu6Y7jTlp5MqmNznlvSvrNGKrMO?=
- =?us-ascii?Q?bsIHxaujqQvADnCq55ZLCoKKcI282jS7jg5x7OawoNYkYqRjrePwFZp8tpuQ?=
- =?us-ascii?Q?Oxq0FAwACdxzj4oLd/68kVHUNRyQlE7gTIysJYLYXTVa/iR3ofAfmzVRF2AK?=
- =?us-ascii?Q?bd1o65uL8dibX/2UBEWQbcdVKo+wjTH5TMRet8v5+Z31PJToJRQTOmPq1StU?=
- =?us-ascii?Q?9H6EIsDxt5FJDREbrrP508SuRpFn9vsy013DanYgxPK1Tyze8Xu2dVrQELgz?=
- =?us-ascii?Q?bGuc7f4GgFreBtDaVX5JtCr1FI6ssDGLAcRxnTFf?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbeb90a1-21b3-4337-b553-08da5a981d51
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 12:57:40.0706
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iGvDGkVjS0MitAeNvCXRbbUEVfy43cGwdrCTJZmVKedtYrse1aSP8P1fkBWel4Np
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1881
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---qDbXVdCdHGoSgWSk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Currently we do not check if SoundWire slave initialization timeout
+expired before continuing to access its registers.
 
-Hi Linus,
+Its possible that the registers are not accessible if timeout is
+expired. Handle this by returning timeout in resume path.
 
-Just a few patches that have accumulated in the last 5 weeks
+Reported-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Fixes: 8dd552458361 ("ASoC: codecs: wsa881x: add runtime pm support")
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ sound/soc/codecs/wsa881x.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-Thanks,
-Jason
+diff --git a/sound/soc/codecs/wsa881x.c b/sound/soc/codecs/wsa881x.c
+index dc954b85a988..6c8b1db649b8 100644
+--- a/sound/soc/codecs/wsa881x.c
++++ b/sound/soc/codecs/wsa881x.c
+@@ -1173,11 +1173,17 @@ static int __maybe_unused wsa881x_runtime_resume(struct device *dev)
+ 	struct sdw_slave *slave = dev_to_sdw_dev(dev);
+ 	struct regmap *regmap = dev_get_regmap(dev, NULL);
+ 	struct wsa881x_priv *wsa881x = dev_get_drvdata(dev);
++	unsigned long time;
+ 
+ 	gpiod_direction_output(wsa881x->sd_n, 1);
+ 
+-	wait_for_completion_timeout(&slave->initialization_complete,
+-				    msecs_to_jiffies(WSA881X_PROBE_TIMEOUT));
++	time = wait_for_completion_timeout(&slave->initialization_complete,
++					   msecs_to_jiffies(WSA881X_PROBE_TIMEOUT));
++	if (!time) {
++		dev_err(dev, "Initialization not complete, timed out\n");
++		gpiod_direction_output(wsa881x->sd_n, 0);
++		return -ETIMEDOUT;
++	}
+ 
+ 	regcache_cache_only(regmap, false);
+ 	regcache_sync(regmap);
+-- 
+2.25.1
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
-
-for you to fetch changes up to 0fe3dbbefb74a8575f61d7801b08dbc50523d60d:
-
-  linux/dim: Fix divide by 0 in RDMA DIM (2022-06-28 10:37:25 -0300)
-
-----------------------------------------------------------------
-First v5.19 rc pull request
-
-Three minor bug fixes:
-
-- qedr not setting the QP timeout properly toward userspace
-
-- Memory leak on error path in ib_cm
-
-- Divide by 0 in RDMA interrupt moderation
-
-----------------------------------------------------------------
-Kamal Heib (1):
-      RDMA/qedr: Fix reporting QP timeout attribute
-
-Miaoqian Lin (1):
-      RDMA/cm: Fix memory leak in ib_cm_insert_listen
-
-Tao Liu (1):
-      linux/dim: Fix divide by 0 in RDMA DIM
-
- drivers/infiniband/core/cm.c       | 4 +++-
- drivers/infiniband/hw/qedr/qedr.h  | 1 +
- drivers/infiniband/hw/qedr/verbs.c | 4 +++-
- include/linux/dim.h                | 2 +-
- 4 files changed, 8 insertions(+), 3 deletions(-)
-
---qDbXVdCdHGoSgWSk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRRRCHOFoQz/8F5bUaFwuHvBreFYQUCYr2dwAAKCRCFwuHvBreF
-YUPsAP9f0WwoLHMxOm3+yLmd+oKOOkZWlgxVCCT8ZdQiGI/MTAD/cjL9m5fQlQIl
-3DCU5yxNsLMJnVXvfA5Dy2xEoWy2dwg=
-=8XT7
------END PGP SIGNATURE-----
-
---qDbXVdCdHGoSgWSk--

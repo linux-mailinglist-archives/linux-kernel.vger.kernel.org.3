@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B530561BDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E88CE561C98
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235410AbiF3Ns6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 09:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
+        id S236113AbiF3OAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234841AbiF3NsR (ORCPT
+        with ESMTP id S236123AbiF3N5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:48:17 -0400
+        Thu, 30 Jun 2022 09:57:43 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13C124941;
-        Thu, 30 Jun 2022 06:48:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B44553D02;
+        Thu, 30 Jun 2022 06:51:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ACDBFB82AD8;
-        Thu, 30 Jun 2022 13:48:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19783C34115;
-        Thu, 30 Jun 2022 13:48:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F09DB82AD8;
+        Thu, 30 Jun 2022 13:50:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D368DC34115;
+        Thu, 30 Jun 2022 13:50:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656596881;
-        bh=iHDelUGsW4GMdXhXCRonmDdd/G3/Yh0SQ4wX9e19R3Q=;
+        s=korg; t=1656597053;
+        bh=NbbeKQEkCqGH7eRSg2mh0Rg8B4WuQz46K8KLqlu+Qdo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ENfVf0umr7oyPMFyWNkt4pOUoOq03EsbL7en4Zu1SCzJCZwqbNggS1OgmNjGzAf8R
-         pdP5Ze5ejz52i9B8Xo0E4LQ6pxT0tkZ/Jk0ii0LIMEF4U/aLMRwBI2+YkzuZDXQenc
-         EY3kf+wXmpcRv4PIb5Z9JBz5uf3OUlwtpuQmckfs=
+        b=sjCZVfdku1dYc0E/Zd6KS1tNvHs0gSv9VDanG0wq6+XzT/Ha0shtMXCAY4UUMomiG
+         t+xXs2Db1O8+3IytBln/O+L+W6JWBqeSsjr4vssfrWFpvBgpPMFvxGLsFq8uXrJzh+
+         Z5A1/ROBfoARh9yKYwyfM9LdV7yXadf1vymdOJ94=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Lars-Peter Clausen <lars@metafoo.de>, Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.9 15/29] iio: trigger: sysfs: fix use-after-free on remove
-Date:   Thu, 30 Jun 2022 15:46:15 +0200
-Message-Id: <20220630133231.653966976@linuxfoundation.org>
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.19 03/49] ALSA: hda/via: Fix missing beep setup
+Date:   Thu, 30 Jun 2022 15:46:16 +0200
+Message-Id: <20220630133234.010703384@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133231.200642128@linuxfoundation.org>
-References: <20220630133231.200642128@linuxfoundation.org>
+In-Reply-To: <20220630133233.910803744@linuxfoundation.org>
+References: <20220630133233.910803744@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,69 +53,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Whitchurch <vincent.whitchurch@axis.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 78601726d4a59a291acc5a52da1d3a0a6831e4e8 upstream.
+commit c7807b27d510e5aa53c8a120cfc02c33c24ebb5f upstream.
 
-Ensure that the irq_work has completed before the trigger is freed.
+Like the previous fix for Conexant codec, the beep_nid has to be set
+up before calling snd_hda_gen_parse_auto_config(); otherwise it'd miss
+the path setup.
 
- ==================================================================
- BUG: KASAN: use-after-free in irq_work_run_list
- Read of size 8 at addr 0000000064702248 by task python3/25
+Fix the call order for addressing the missing beep setup.
 
- Call Trace:
-  irq_work_run_list
-  irq_work_tick
-  update_process_times
-  tick_sched_handle
-  tick_sched_timer
-  __hrtimer_run_queues
-  hrtimer_interrupt
-
- Allocated by task 25:
-  kmem_cache_alloc_trace
-  iio_sysfs_trig_add
-  dev_attr_store
-  sysfs_kf_write
-  kernfs_fop_write_iter
-  new_sync_write
-  vfs_write
-  ksys_write
-  sys_write
-
- Freed by task 25:
-  kfree
-  iio_sysfs_trig_remove
-  dev_attr_store
-  sysfs_kf_write
-  kernfs_fop_write_iter
-  new_sync_write
-  vfs_write
-  ksys_write
-  sys_write
-
- ==================================================================
-
-Fixes: f38bc926d022 ("staging:iio:sysfs-trigger: Use irq_work to properly active trigger")
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-Reviewed-by: Lars-Peter Clausen <lars@metafoo.de>
-Link: https://lore.kernel.org/r/20220519091925.1053897-1-vincent.whitchurch@axis.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: 0e8f9862493a ("ALSA: hda/via - Simplify control management")
+Cc: <stable@vger.kernel.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216152
+Link: https://lore.kernel.org/r/20220620104008.1994-2-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/trigger/iio-trig-sysfs.c |    1 +
- 1 file changed, 1 insertion(+)
+ sound/pci/hda/patch_via.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/iio/trigger/iio-trig-sysfs.c
-+++ b/drivers/iio/trigger/iio-trig-sysfs.c
-@@ -199,6 +199,7 @@ static int iio_sysfs_trigger_remove(int
- 	}
+--- a/sound/pci/hda/patch_via.c
++++ b/sound/pci/hda/patch_via.c
+@@ -533,11 +533,11 @@ static int via_parse_auto_config(struct
+ 	if (err < 0)
+ 		return err;
  
- 	iio_trigger_unregister(t->trig);
-+	irq_work_sync(&t->work);
- 	iio_trigger_free(t->trig);
+-	err = snd_hda_gen_parse_auto_config(codec, &spec->gen.autocfg);
++	err = auto_parse_beep(codec);
+ 	if (err < 0)
+ 		return err;
  
- 	list_del(&t->l);
+-	err = auto_parse_beep(codec);
++	err = snd_hda_gen_parse_auto_config(codec, &spec->gen.autocfg);
+ 	if (err < 0)
+ 		return err;
+ 
 
 

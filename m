@@ -2,98 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7EA5612A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 08:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 647A85612AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 08:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232285AbiF3GkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 02:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44488 "EHLO
+        id S232817AbiF3Gmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 02:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231617AbiF3GkP (ORCPT
+        with ESMTP id S232867AbiF3Gmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 02:40:15 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F622E9DE
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 23:40:14 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id o9so25178420edt.12
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 23:40:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5YRjk+I1tOU+IE/aXdonB59E6sy7aNXVn8XEDauefqQ=;
-        b=CrZpADPV9qdNUMyNR0WCBSyyHAhUtDgoCe0NWzMNFi7M0+7nQsggCNreJqHql8H0fW
-         KlM22JXiYUrKpr5EJ6rPKnNYXjnARkmT5KB4NB/pCauB+Th4HD0raxHvl2s5mWV+3lCm
-         zKjto8Ywx97VLoTHMQqZGZbOjpJ792BwqAqHE9tXD5QOOFY2LVyk6NqsGsJWAz7hziTA
-         4Vb1pWTLsq7a1L0ezJz/P61elhmqGzWJ0UixxQAVgqv8biN+mLnS4NwvBP7Ly73s1ZyK
-         PVskO49lOWESGRRH/ESlnaQ3KWrWC331sruD+A1XHMOePno/2SStnsvFH6rkf+tvQFSy
-         LFaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5YRjk+I1tOU+IE/aXdonB59E6sy7aNXVn8XEDauefqQ=;
-        b=4yX+E1mb1PESEklArxzTIidEc+wywITYuhLSUPcUN777EyPRxRLOku5cQ79cycTWma
-         Zd3qN+wglFTSnnqZ2/Sh8pWe7fE1oT34B6FTV9r+gfHJnK6gtL/UwgqHGgPLtPox1Kpm
-         YgloM+e5nGWk1V447w8YHySouYe2OUNuuaIJUDlnE5142p/eHqDMFaR9ptFk4RUIaKKl
-         CcGDodfh7t8Bb4aQuYtMa4Kyf5Lj+motl9C8EdQ3bcxTMjJ/2Zf/3DBY0lchWZrz0tIj
-         kqqFafAMWo0YBQmKJQaPepWrVUax9wAve6wHEWzz+XbdusoL2BGxaVgSDsFDlCH8OLK3
-         6IAA==
-X-Gm-Message-State: AJIora8TBIJDREnemw09HXSqTKn6dvQh1IT+M63tYeAjVskwLyEpFPtS
-        p5mSE4CGvnxmsbPV47at48qEV1MAQbk=
-X-Google-Smtp-Source: AGRyM1vRJhE//LmjjGmIeJh5OLMJsvM8XsEeSlrk8TO1LDZBLk7KUtQzYrQE/U3WiDU0tnr5r4BYPA==
-X-Received: by 2002:a05:6402:50ce:b0:435:a2bf:e44d with SMTP id h14-20020a05640250ce00b00435a2bfe44dmr9465489edb.386.1656571213480;
-        Wed, 29 Jun 2022 23:40:13 -0700 (PDT)
-Received: from uni.. (adsl-146.37.6.170.tellas.gr. [37.6.170.146])
-        by smtp.googlemail.com with ESMTPSA id g4-20020a170906868400b006fee98045cdsm8834469ejx.10.2022.06.29.23.40.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 23:40:13 -0700 (PDT)
-From:   Xenia Ragiadakou <burzalodowa@gmail.com>
-To:     will@kernel.org, joro@8bytes.org, robin.murphy@arm.com
-Cc:     linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Xenia Ragiadakou <burzalodowa@gmail.com>
-Subject: [PATCH] iommu/arm-smmu-v3: Fix undefined behavior in GBPA_UPDATE
-Date:   Thu, 30 Jun 2022 09:39:59 +0300
-Message-Id: <20220630063959.27226-1-burzalodowa@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 30 Jun 2022 02:42:35 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171E22F679
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 23:42:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 34F16CE2BCE
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 06:42:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 226C2C341CA;
+        Thu, 30 Jun 2022 06:42:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656571350;
+        bh=n8/aWzfP7FAsvJoeycNZ8swGQKCwTxKT/KxY3fF1rME=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=C/w9h8s30n5rRj4CENTPEQ9ppa+/Y8reiGW8vKWs058A0NgwggYfxNDqtVr9SPGBb
+         41c8CqRABfz1wZfEjb5eTE8mhvScJcd3SKFd/RxqEaUBPQ5gVrBJqEoVWlG8gumBt8
+         oexpmWmYP0VHV4UTVzVIxhLINjw9KN1TY6liANjY=
+Date:   Thu, 30 Jun 2022 08:42:27 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     Vipin Sharma <vipinsh@google.com>, rkovhaev@gmail.com,
+        zackary.liu.pro@gmail.com, ripxorip@gmail.com,
+        masahiroy@kernel.org, xujialu@vimux.org,
+        "drjones@redhat.com" <drjones@redhat.com>, dmatlack@google.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scripts/tags.sh: Include tools directory in tags
+ generation
+Message-ID: <Yr1F0xKlrFsuJWWA@kroah.com>
+References: <20220618005457.2379324-1-vipinsh@google.com>
+ <CAHVum0euKMV+rCLXMQ4NuDAqowyeCkO1LheSafR2tm=R4aUfJw@mail.gmail.com>
+ <YrqaKpdVDl8DBl4g@kroah.com>
+ <CAHVum0f=_7kh_OrOqiTH=UZuvr3ZbxNcZeUSbT66x5r0q2XEgQ@mail.gmail.com>
+ <b1b5666a-67a7-469c-d6c7-e585cf59c632@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b1b5666a-67a7-469c-d6c7-e585cf59c632@collabora.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The expression 1 << 31 results in undefined behaviour because the type of
-integer constant 1 is (signed) int and the result of shifting 1 by 31 bits
-is not representable in the (signed) int type.
+On Thu, Jun 30, 2022 at 01:54:00AM +0300, Cristian Ciocaltea wrote:
+> 
+> On 6/30/22 01:18, Vipin Sharma wrote:
+> > On Mon, Jun 27, 2022 at 11:05 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > 
+> > > On Mon, Jun 27, 2022 at 10:47:35AM -0700, Vipin Sharma wrote:
+> > > > On Fri, Jun 17, 2022 at 5:55 PM Vipin Sharma <vipinsh@google.com> wrote:
+> > > > > 
+> > > > > Add tools directory in generating tags and quiet the "No such file or
+> > > > > directory" warnings.
+> > > > > 
+> > > > > It reverts the changes introduced in commit 162343a876f1
+> > > > > ("scripts/tags.sh: exclude tools directory from tags generation") while
+> > > > > maintainig the original intent of the patch to get rid of the warnings.
+> > > > > This allows the root level cscope files to include tools source code
+> > > > > besides kernel and a single place to browse the code for both.
+> > > > > 
+> > > > > Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> > > > > ---
+> > > > > 
+> > > > > I have found myself many times to browse tools and other part of the
+> > > > > kernel code together. Excluding tools from the root level cscope makes
+> > > > > it difficult to efficiently move between files and find user api
+> > > > > definitions.
+> > > > > 
+> > > > > Root cause of these warning is due to generated .cmd files which use
+> > > > > relative paths in some files, I am not sure how to make them absolute
+> > > > > file paths which can satisfy realpath warnings. Also, not sure if those
+> > > > > warnings are helpful and should be kept. Passing "-q" to realpath seems
+> > > > > easier solution. Please, let me know if there is a better alternative.
+> > > > > 
+> > > > > Thanks
+> > > > > 
+> > > > >   scripts/tags.sh | 9 +--------
+> > > > >   1 file changed, 1 insertion(+), 8 deletions(-)
+> > > > > 
+> > > > > diff --git a/scripts/tags.sh b/scripts/tags.sh
+> > > > > index 01fab3d4f90b5..e137cf15aae9d 100755
+> > > > > --- a/scripts/tags.sh
+> > > > > +++ b/scripts/tags.sh
+> > > > > @@ -25,13 +25,6 @@ else
+> > > > >          tree=${srctree}/
+> > > > >   fi
+> > > > > 
+> > > > > -# ignore userspace tools
+> > > > > -if [ -n "$COMPILED_SOURCE" ]; then
+> > > > > -       ignore="$ignore ( -path ./tools ) -prune -o"
+> > > > > -else
+> > > > > -       ignore="$ignore ( -path ${tree}tools ) -prune -o"
+> > > > > -fi
+> > > > > -
+> > > > >   # Detect if ALLSOURCE_ARCHS is set. If not, we assume SRCARCH
+> > > > >   if [ "${ALLSOURCE_ARCHS}" = "" ]; then
+> > > > >          ALLSOURCE_ARCHS=${SRCARCH}
+> > > > > @@ -100,7 +93,7 @@ all_compiled_sources()
+> > > > >                  find $ignore -name "*.cmd" -exec \
+> > > > >                          grep -Poh '(?(?=^source_.* \K).*|(?=^  \K\S).*(?= \\))' {} \+ |
+> > > > >                  awk '!a[$0]++'
+> > > > > -       } | xargs realpath -es $([ -z "$KBUILD_ABS_SRCTREE" ] && echo --relative-to=.) |
+> > > > > +       } | xargs realpath -esq $([ -z "$KBUILD_ABS_SRCTREE" ] && echo --relative-to=.) |
+> > > > >          sort -u
+> > > > >   }
+> > > > > 
+> > > > > --
+> > > > > 2.37.0.rc0.104.g0611611a94-goog
+> > > > > 
+> > > > 
+> > > > Hi Greg,
+> > > > 
+> > > > Any update on the patch?
+> > > 
+> > > Nope!
+> > > 
+> > > I don't really think we should add back in the tools to this, as if you
+> > > want to search them, then can't you just generate the needed tags for
+> > > the tools directory?
+> > > 
+> > 
+> > Some folders in the tools directory do provide cscope rules. However,
+> > those tags can only be used when I open the vim in those directories.
+> > For example, if I am writing a KVM selftest and I want to explore code
+> > related to certain ioctl in kernel as well as some code in KVM
+> > selftest library, I cannot use two cscope files (one in the kernel
+> > root dir and another in tools/testing/selftests/kvm) in a single VIM
+> > instance. It starts having issues with the file paths. If the root
+> > level cscope file includes tools directory then all of the tags will
+> > be at one place and makes it very easy to browse tools code along with
+> > the rest of the kernel.
+> > 
+> > > But as I don't even use this script ever, it feels odd for me to be the
+> > > one "owning" it, so it would be great if others could chime in who
+> > > actually use it.
+> > > 
+> 
+> Since the tools directory has been excluded just to get rid of those
+> warnings, I think there is no obvious reason to not add it back - at least
+> the use case described above is perfectly valid.
 
-Change the type of 1 to unsigned int by adding the U suffix.
-
-Signed-off-by: Xenia Ragiadakou <burzalodowa@gmail.com>
----
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-index cd48590ada30..44fbd499edea 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-@@ -96,7 +96,7 @@
- #define CR2_E2H				(1 << 0)
- 
- #define ARM_SMMU_GBPA			0x44
--#define GBPA_UPDATE			(1 << 31)
-+#define GBPA_UPDATE			(1U << 31)
- #define GBPA_ABORT			(1 << 20)
- 
- #define ARM_SMMU_IRQ_CTRL		0x50
--- 
-2.34.1
+So is that an "Acked-by:"?
 

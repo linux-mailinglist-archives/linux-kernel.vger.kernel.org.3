@@ -2,100 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0BB8560E4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 02:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 642C0560E58
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 02:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231293AbiF3Aue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 20:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
+        id S231342AbiF3Auy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 20:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiF3Auc (ORCPT
+        with ESMTP id S229539AbiF3Auw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 20:50:32 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A223FDB1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:50:31 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id t21so16642896pfq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:50:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ec4XEkBPA35XnLcPG87goxGDH+EEGY22aWvX/z3PefI=;
-        b=NFWCuFGRbcAjPzdLWOr/NQp3XWuDNO6BMyHySS+trahq6mX9UFO7j+zQOkjuhlioWl
-         xSYxRMQtRJOqPe6f8aUpkpL4C7uRkzlXaGc1roT4R/8VsrW+toIgTh/7JqCViwZCe/Eo
-         bM3/bnNdqFYGfV+tPNcVNd3eWRc0Rn5hwxOdK1VlUJRRIZ3O9GRQV5RBdLfmhk10TlJk
-         2ATBJG6SR6FP3U4213Q+Xm15I5KrUa3o0Fr+ZWYv1hYrq+etlRvLYAfJW1P6ul5x863m
-         GIRBOHuiCVrxZTYkdgcV7H2J/2nN8WZlUCw9A7RUKMGArEVcHcudATd8abMaGeTV4LBH
-         kHxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ec4XEkBPA35XnLcPG87goxGDH+EEGY22aWvX/z3PefI=;
-        b=hkrBrhXkrIdRUCD+clETMBEF/VR7Hefx+84pgCL7S8aszb5e58b3+/z8JPXeTLuIoQ
-         hO1Rn/kSbOdJL+5ur62xPc5aGzJ/mi2A6rRPDohyOnPo4hGZgzrToTPm7ivCbg5B2lF8
-         hKbJpEaZot5Yy0u3IWmldr1ErMLtlJg34JLV8ANc1ighMQoHBlvEHDmCps2doSWhTHlx
-         4yH9WFSFvm0Gvb0/XOYttN3FOrHhZpznS7FaQIOMgCSBsQa1c7i2sijbAKvN+HVxbUFs
-         VNa8lUHc6HkICIkBN/3xpf5W7wekXM8liaFUcq843IATbS5GTuT+bMnhODI1be00U4YI
-         AQsg==
-X-Gm-Message-State: AJIora9+NfyAmQ14UU5q8/vPnw/0xyBkjyqaYPTdp/7sF89P4Zj59F2f
-        h8SOWTLs/4uZoCI2kPX8kMFDgQ==
-X-Google-Smtp-Source: AGRyM1vwxJL4Embx1Cw1olp7yFM3sPbrYAoDKdwqAqD4m7eulhQl7MEsYnny1f0udvYVdgE3PBRHgA==
-X-Received: by 2002:a65:6bd4:0:b0:405:2d64:532c with SMTP id e20-20020a656bd4000000b004052d64532cmr5361306pgw.179.1656550230789;
-        Wed, 29 Jun 2022 17:50:30 -0700 (PDT)
-Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id 4-20020aa79244000000b005252a06750esm4541969pfp.182.2022.06.29.17.50.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 17:50:30 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 06:20:28 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
-Message-ID: <20220630005028.fddtcbkoksbygwc5@vireshk-i7>
-References: <cover.1654849214.git.viresh.kumar@linaro.org>
- <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
- <55623c12-dda3-613f-5bc9-80b3b6fec5f9@nvidia.com>
- <20220622141511.yzg5itkdwirpavfj@vireshk-i7>
- <40e616eb-22f9-19c2-8d77-20cd3c7c518b@nvidia.com>
- <c6f100e4-8a35-ebf0-f833-06ff0d8a2fb6@collabora.com>
+        Wed, 29 Jun 2022 20:50:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0942403ED;
+        Wed, 29 Jun 2022 17:50:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C6FCB827B6;
+        Thu, 30 Jun 2022 00:50:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E5E0C34114;
+        Thu, 30 Jun 2022 00:50:41 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Rio6hS73"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1656550239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lAj+UsLxPeGR3JIzKkMAY3UQ4Fc7rVtE34gVa7F5Mk0=;
+        b=Rio6hS73DikBrANqdWBHqlvUAZr9HeM3Tw2P2RT7GwzMWfx1mEoPnAX9y2tYS3dnyLa61K
+        G9F/AphVS3+hx/JuleNTfayYZfXj8oeQUQ6MZ4LtXRluQmG0UQvBPWFw0KqujncUNs3GUB
+        +IL/7OeJsmgFDXKFSsmPdhgTbsSjW5k=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c29fd627 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 30 Jun 2022 00:50:39 +0000 (UTC)
+Date:   Thu, 30 Jun 2022 02:50:34 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     Kalesh Singh <kaleshsingh@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, rcu <rcu@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, sultan@kerneltoast.com,
+        android-kernel-team <android-kernel-team@google.com>,
+        John Stultz <jstultz@google.com>,
+        Saravana Kannan <saravanak@google.com>, rafael@kernel.org
+Subject: Re: [PATCH] remove CONFIG_ANDROID
+Message-ID: <YrzzWmQ9+uDRlO5K@zx2c4.com>
+References: <Yrx8/Fyx15CTi2zq@zx2c4.com>
+ <20220629163007.GA25279@lst.de>
+ <Yrx/8UOY+J8Ao3Bd@zx2c4.com>
+ <YryNQvWGVwCjJYmB@zx2c4.com>
+ <Yryic4YG9X2/DJiX@google.com>
+ <Yry6XvOGge2xKx/n@zx2c4.com>
+ <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
+ <YrzaCRl9rwy9DgOC@zx2c4.com>
+ <CAC_TJvcEzp+zQp50wtj4=7b6vEObpJCQYLaTLhHJCxFdk3TgPg@mail.gmail.com>
+ <306dacfb29c2e38312943fa70d419f0a8d5ffe82.camel@perches.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c6f100e4-8a35-ebf0-f833-06ff0d8a2fb6@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <306dacfb29c2e38312943fa70d419f0a8d5ffe82.camel@perches.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29-06-22, 21:33, Dmitry Osipenko wrote:
-> Today I noticed that tegra30-devfreq driver now fails to probe because
-> dev_pm_opp_find_freq_ceil() fails with -ERANGE. This patch is guilty for
-> that. Could you please take a look?
+On Wed, Jun 29, 2022 at 05:36:57PM -0700, Joe Perches wrote:
+> > > +static ssize_t pm_userspace_autosleeper_show(struct kobject *kobj,
+> > > +                               struct kobj_attribute *attr, char *buf)
+> > > +{
+> > > +       return sprintf(buf, "%d\n", pm_userspace_autosleeper_enabled);
+> 
+> This should use sysfs_emit no?
 
-I remember this corner case now [1] and it was easy to miss this. So
-you want the OPP core to still parse the DT to read opp-hz, but don't
-want dev_pm_opp_set_opp() to update the clock rate for it.
+Probably, yea. Note that I just copy and pasted a nearby function,
+pm_async_show, `:%s/`d the variable name, and then promptly `git diff |
+clip`d it and plonked it into my email. Looking at the file, it uses
+sprintf all over the place in this fashion. So you may want to submit a
+cleanup to Rafael on this if you're right about sysfs_emit() being
+universally preferred.
 
-What was the reason for this again ?
-
-I have a couple of solutions in mind, but one may be other than second
-and so want to know the real issue at hand first.
-
--- 
-viresh
-
-[1] https://lore.kernel.org/lkml/71451eb2-46b2-1ea0-efcc-0811568159a4@gmail.com/
+Jason

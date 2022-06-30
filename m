@@ -2,130 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBA2560F61
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 05:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19ED8560F64
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 05:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbiF3DBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 23:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
+        id S231439AbiF3DCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 23:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiF3DB2 (ORCPT
+        with ESMTP id S229455AbiF3DCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 23:01:28 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03BC35255
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 20:01:26 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-fe023ab520so24040428fac.10
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 20:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yCr9cRfs56yqMpVTk7a3xjU0D0ojSFJS/cwqqD+Mwz4=;
-        b=ngUr5JbTktZVsE6b2wDE1emh5U9bmodR1UAxMTaBlSmDUGWfFYPF3wHBXMfWDLhXJP
-         n/qR3sHWGifYOYsNOe74r8A7wqpV/cesxilsWLRghFsNRtAiSswOYuEwZCzpIZDM1mh4
-         cKfY1eb1jLbJ2Np34J5VHv9VzLSC+4/6Dxq/YDe6t6A1x7fdJOPt+wSNTOqPxh82hKFg
-         LnoP6om9Tnfe576LjxKLp0K278QRD3f4+Vip0mBihn04GR101VPqaq56NsBtiFAiPmQb
-         WImKFM4Yyk0gySnNu8yRXroRN8EUYk49/CXhSQYtGjNmsbDqPrrFaYqTevr3ohwuwQnH
-         G3Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yCr9cRfs56yqMpVTk7a3xjU0D0ojSFJS/cwqqD+Mwz4=;
-        b=v13EscJ8h4Hj9AeZQwoXTXmKJa0G7HqeUOgxGAVYWXM8/Y67GPQ/secyw5uarg5jVZ
-         Rlk4I12NX6T4oEBgLrJ/7Fa1pRpcEC1yo5fHz6bImQ842Dq+JT67Ydp/8+syVirf2RYQ
-         i19l+F2HYmGIBs6ouOz8g7XGMuxZrSm0Q1nsrTc3RkgR8Sxs4ZvfxhQmttbnOJ1s/Vrx
-         O6Ynb2O/M8z+ikv05pu3lRNpxZLVyBfQj3WfhAo/+LyAj45xMQvw4KsrO27JhGBo7TNw
-         GfrsIP1JHlPnJFC5dAXC33pJGpBSsojL3vnfdMDAOSxJmi+MsrpTAT0ZjS3Ag/9jIkvt
-         8RDQ==
-X-Gm-Message-State: AJIora/H9tnvxaCD1pVgfIs79UuEYG01/JM5uciPOEMavQUPS1rBJanF
-        nOx/taObBw5/N9CvXAPcQsBzaQ==
-X-Google-Smtp-Source: AGRyM1vxT3RmDtNp225rcfbgqMVN0MXLUHrf6ZTMF6e39DiFAQWayxlwxzX45ESPDVpd+TEJvUiPCg==
-X-Received: by 2002:a05:6870:cd06:b0:108:c466:4c7e with SMTP id qk6-20020a056870cd0600b00108c4664c7emr3752591oab.62.1656558085963;
-        Wed, 29 Jun 2022 20:01:25 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id cm8-20020a056870b60800b00101d05c2245sm12219096oab.37.2022.06.29.20.01.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 20:01:24 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 22:01:22 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Johan Hovold <johan@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 3/5] arm64: dts: qcom: add SC8280XP platform
-Message-ID: <Yr0SAkPYoP5FD8r9@builder.lan>
-References: <20220629041438.1352536-1-bjorn.andersson@linaro.org>
- <20220629041438.1352536-4-bjorn.andersson@linaro.org>
- <Yryc8AUIPoWmeyB9@gerhold.net>
+        Wed, 29 Jun 2022 23:02:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C62286DF;
+        Wed, 29 Jun 2022 20:02:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3E806202D;
+        Thu, 30 Jun 2022 03:02:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ADC3C3411E;
+        Thu, 30 Jun 2022 03:02:27 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="cEfq2bbY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1656558145;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lAxoLbADZAhu/fbtT19sYsfwjIQHx+7cL3zp8zm5ylc=;
+        b=cEfq2bbYg+E0cJPmGbfqowUlZyBsEFMB+Tx0GAvzVTKBOF7AJsVTfIV6F3UeLWUpu2xbSL
+        REcWxgdTxNMimTFAsv2fXTf8VAIjeKWpDKecdvNtTMkrU9267h6JnxgCkrxxlSMx660w+6
+        xigc6asOchBZ4Fie7h+gI+in3P0RKaw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 44cb7fda (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 30 Jun 2022 03:02:25 +0000 (UTC)
+Date:   Thu, 30 Jun 2022 05:02:19 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     Kalesh Singh <kaleshsingh@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, rcu <rcu@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, sultan@kerneltoast.com,
+        android-kernel-team <android-kernel-team@google.com>,
+        John Stultz <jstultz@google.com>,
+        Saravana Kannan <saravanak@google.com>, rafael@kernel.org
+Subject: Re: [PATCH] remove CONFIG_ANDROID
+Message-ID: <Yr0SO0Ubi3Js7ciP@zx2c4.com>
+References: <Yrx/8UOY+J8Ao3Bd@zx2c4.com>
+ <YryNQvWGVwCjJYmB@zx2c4.com>
+ <Yryic4YG9X2/DJiX@google.com>
+ <Yry6XvOGge2xKx/n@zx2c4.com>
+ <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
+ <YrzaCRl9rwy9DgOC@zx2c4.com>
+ <CAC_TJvcEzp+zQp50wtj4=7b6vEObpJCQYLaTLhHJCxFdk3TgPg@mail.gmail.com>
+ <306dacfb29c2e38312943fa70d419f0a8d5ffe82.camel@perches.com>
+ <YrzzWmQ9+uDRlO5K@zx2c4.com>
+ <1a1f24707a03c2363e29ef91905e9f206fb6a0b5.camel@perches.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yryc8AUIPoWmeyB9@gerhold.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1a1f24707a03c2363e29ef91905e9f206fb6a0b5.camel@perches.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 29 Jun 13:42 CDT 2022, Stephan Gerhold wrote:
-
-> On Tue, Jun 28, 2022 at 09:14:36PM -0700, Bjorn Andersson wrote:
-> > Introduce initial support for the Qualcomm SC8280XP platform, aka 8cx
-> > Gen 3. This initial contribution supports SMP, CPUfreq, CPU cluster
-> > idling, GCC, TLMM, SMMU, RPMh regulators, power-domains and clocks,
-> > interconnects, some QUPs, UFS, remoteprocs, USB, watchdog, LLCC and
-> > tsens.
+On Wed, Jun 29, 2022 at 06:44:14PM -0700, Joe Perches wrote:
+> On Thu, 2022-06-30 at 02:50 +0200, Jason A. Donenfeld wrote:
+> > On Wed, Jun 29, 2022 at 05:36:57PM -0700, Joe Perches wrote:
+> > > > > +static ssize_t pm_userspace_autosleeper_show(struct kobject *kobj,
+> > > > > +                               struct kobj_attribute *attr, char *buf)
+> > > > > +{
+> > > > > +       return sprintf(buf, "%d\n", pm_userspace_autosleeper_enabled);
+> > > 
+> > > This should use sysfs_emit no?
 > > 
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-> > Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > ---
-> > 
-> > Changes since v2:
-> > - Fixed include sort order
-> > - Dropped a stray newline in &CPU0
-> > - Renamed reserved-memory regions
-> > - Dropped clock-frequency of the timers node
-> > - Reduced #address-cells and #size-cells to 1 in timer node
-> > 
-> >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2142 ++++++++++++++++++++++++
-> >  1 file changed, 2142 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > new file mode 100644
-> > index 000000000000..c9d608ac87fa
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > @@ -0,0 +1,2142 @@
-> [...]
-> > +	timer {
-> > +		compatible = "arm,armv8-timer";
-> > +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-> > +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-> > +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-> > +			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
-> > +		clock-frequency = <19200000>;
+> > Probably, yea. Note that I just copy and pasted a nearby function,
+> > pm_async_show, `:%s/`d the variable name, and then promptly `git diff |
+> > clip`d it and plonked it into my email. Looking at the file, it uses
+> > sprintf all over the place in this fashion. So you may want to submit a
+> > cleanup to Rafael on this if you're right about sysfs_emit() being
+> > universally preferred.
 > 
-> Please drop the "clock-frequency" here as well (if possible).
+> Perhaps:
 > 
+> (trivial refactored and added a missing newline in autosleep_show)
+> 
+> ---
+>  kernel/power/main.c | 102 ++++++++++++++++++++++++++--------------------------
+>  1 file changed, 52 insertions(+), 50 deletions(-)
 
-Sorry, missed that commend from your previous feedback. Will drop this
-as I'm applying the patches.
+You should probably post a proper patch to the PM people. At least I'm
+not going to look at that here, as it's not really relevant at all to
+this discussion.
 
-Thanks,
-Bjorn
+Jason

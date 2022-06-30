@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7445612DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FC25612DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232335AbiF3HAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
+        id S232832AbiF3HBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiF3HAU (ORCPT
+        with ESMTP id S229924AbiF3HBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:00:20 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECBA3614E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:00:17 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id lw20so37145914ejb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:00:17 -0700 (PDT)
+        Thu, 30 Jun 2022 03:01:19 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314C836697
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:01:18 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id v185so22618036ybe.8
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:01:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=r6uCmFRitcAcRJI/H5P66MBQjDkhl2NiZLnGLT9y1H8=;
-        b=v0EeWU8EO4ppWz/+OhslLQimyA4SEA+VJEVL1kvXnbFjSvW8mo31GHtcxqoF4OEYSC
-         Qf3kZOohwoCkTOSjzNiBJCXCZPCGuDJOlW4GdDLGFgPbBlUcGDGpbOYkITuSQ01PuoF4
-         k3CR5TP3TVBZI3Pz0jABdIBbRuKH0JZnVIWPN3/Adh1m+VGPvohIUDh/epdfTjrXDtC6
-         mKJz4kpAetfqgmU4FmU3HaVZjbitYNsWFVfhmBGtL9ZmcHjzumR/BAHOVq4R8/iYF82d
-         c5s2piBZ0PJ62vIlDi7F/gh8IZJ452kthNPFVlgSgJqsZ4H1ICe1iYyULPslGEfprzDe
-         gJ0g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9MAZhSdNJo3QokCNWF16iPYG6xcDRmv0nRT3AeZjRHk=;
+        b=d1872KUv97LdlFmqqlKYeSNxhGag05R6wVXr96rFIwqSnSEjzF4+E6vhbBZc3Ksi2b
+         ihHpXQRBkpuz7GcmAfaO1eEr6TO4q6GWRWWmQwb292nav8hK8D8mOZGISeHd0EUA37Ga
+         5IwnDj8e4pVcnBpQDsn/COi2WlrE3RuGCe9HnYftNMq4rizOw6mEI0eK08z+kKvQ8hde
+         HoyQX5HNqxNU65sIhc5TAvpG4QqC7AcrkcxJifPIiKFk2iZflZVWzRhtSV0trmh2L2Yn
+         JS2WkLDqdnxC68huw33b55uU2tdepqzGCSDO84Vz0xoDYoPNVm61QInmJ89OzWXIH9mr
+         9nLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=r6uCmFRitcAcRJI/H5P66MBQjDkhl2NiZLnGLT9y1H8=;
-        b=CpeDgGsZ6xOTYspRUgpnLL+X7xdEoGwC0qkcdUBQgLIvXDYOO/eDCSAMzvukryJNJ+
-         NacFgPsG9UamA8GS+/imHpIHCSpGzFcFT061NwgLe9A+Hgmy815WKpMe8CuKpM2feRCz
-         Wj8NoY5+w0sfyNpjfYNecG3J63p6RqeOFGpVL5tk7laU13v2Jds6I/6TpnRj9YW8Ouj6
-         YwGu1A6k0rnqXOMt9LkC/i6wuCzCK/v4yCySINrsjQ+uv4G8sMXCkWb7q6az8NfNcbC6
-         AFmVv+SzK4P9185NI85ecD+bvRuzwQseBHZG2GyoFwHo8RMHiXQsrCKtIZgNzAlP1NCh
-         Xm+Q==
-X-Gm-Message-State: AJIora+mWsBo2rJ64P6OUrfZ7Dvv8dsaPmSZogtCoH0EO5R+7EIC8tXo
-        0+s163TiwpSOOXsi5chpn1Ye7Q==
-X-Google-Smtp-Source: AGRyM1tDY2nkZypAnZWoTW20KgzJCRPt2W3F9vTeZn7uUeKvjjX9GMEPJDY9RlYCs4qwnDq5NL4NzQ==
-X-Received: by 2002:a17:907:1c09:b0:726:b834:1a21 with SMTP id nc9-20020a1709071c0900b00726b8341a21mr7356139ejc.518.1656572416273;
-        Thu, 30 Jun 2022 00:00:16 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id v26-20020a170906489a00b00705f6dab05bsm8676238ejq.183.2022.06.30.00.00.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 00:00:15 -0700 (PDT)
-Message-ID: <63d495de-588b-0568-a4d6-31e24ef50377@linaro.org>
-Date:   Thu, 30 Jun 2022 09:00:14 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9MAZhSdNJo3QokCNWF16iPYG6xcDRmv0nRT3AeZjRHk=;
+        b=uk8KCtbj7kRHOFcgP+eNfv0Y/xR8atr7wUt7yupuAzmvwrAyBq916c/+1X1/Ocgrsn
+         vQNhR7Hm1Avm1xTjk32LoXxvxfOWx8qe5/mMfOUB2G49WxR2b/Amb3BX/6iQjf+iy+GQ
+         ZHTKuBNDSkIsoDjwldXib6LTxY0a+U3y101JUUlNxU0OXXnn4fYiXL9E4fIC/iIwqUFj
+         KEqHzjzsWS/1iwBlqh3PeY32VRfdCxRV57cxkhfOsV6uNyQUyKj2yN+2aZN7MbXQ34Op
+         PLiLrfcqiHcYVDAFzb5ufZXbUIvMJ0e3I09toVvCnSPbJlED+8BCb7PcSAaDaNvQ/DJO
+         s5QA==
+X-Gm-Message-State: AJIora8a7SCeLoIv4hwkh9tl4FUixA45UNq56oxOqWiOy+1cxRhdmvJ9
+        /YppBKgmkAZLJmliz/7ZO7QRoROpT6nh6jCCYdV48g==
+X-Google-Smtp-Source: AGRyM1tI8AU9DaGXxeIyzotuiun7FqolJenmEF9ES7RUXabvemB9RjBSPIJMc0Jn7NjK0uYgCL/0rTZdFzpLFDbTzgc=
+X-Received: by 2002:a05:6902:1501:b0:66d:2ae0:46b5 with SMTP id
+ q1-20020a056902150100b0066d2ae046b5mr8039359ybu.225.1656572477270; Thu, 30
+ Jun 2022 00:01:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] ASoC: samsung: change neo1973_audio from a global to
- static
-Content-Language: en-US
-To:     Tom Rix <trix@redhat.com>, s.nawrocki@samsung.com,
-        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, arnd@arndb.de
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-References: <20220629201811.2537853-1-trix@redhat.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220629201811.2537853-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <BYAPR02MB4488F89EC5DB73D1FEAE9B4594B59@BYAPR02MB4488.namprd02.prod.outlook.com>
+ <CAKfTPtA7wJBROfRkSQV7FzWaWqoaQjSO7iyqBt6AgGsv2OsNSw@mail.gmail.com>
+ <409fc8d0-119a-3358-0fc5-99a786a9564a@huawei.com> <20220627105954.GA7670@vingu-book>
+ <BYAPR02MB44881D68479406679935EDAA94BB9@BYAPR02MB4488.namprd02.prod.outlook.com>
+In-Reply-To: <BYAPR02MB44881D68479406679935EDAA94BB9@BYAPR02MB4488.namprd02.prod.outlook.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 30 Jun 2022 09:01:06 +0200
+Message-ID: <CAKfTPtDyzBHtJ7ZFoXXDgBo721QsfR9m7FR4KaEn34EjoE2GhQ@mail.gmail.com>
+Subject: Re: Perf regression from scheduler load_balance rework in 5.5?
+To:     David Chen <david.chen@nutanix.com>
+Cc:     Zhang Qiao <zhangqiao22@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,21 +70,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/06/2022 22:18, Tom Rix wrote:
-> sparse reports
-> sound/soc/samsung/neo1973_wm8753.c:347:24: warning: symbol 'neo1973_audio' was not declared. Should it be static?
-> 
-> neo1973_audio is only used in neo1973_wm8753.c, so it's
-> storage class specifier should be static.
-> 
-> Fixes: e26a2abcc246 ("ASoC: samsung: neo1973: turn into platform driver")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
+Hi David,
 
-Compile testing works!
+On Wed, 29 Jun 2022 at 23:45, David Chen <david.chen@nutanix.com> wrote:
+>
+>
+[...]
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> Hi,
+>
+> I applied the patch on top of 5.10 and also enabled CONFIG_IRQ_TIME_ACCOUNTING.
+> And it did fix the issue I had.
 
+Thanks for testing. I'm going to prepare a patch
 
-Best regards,
-Krzysztof
+Vincent
+>
+> Thanks,
+> David

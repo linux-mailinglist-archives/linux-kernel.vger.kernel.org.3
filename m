@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B4E3561BFE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FF2561D5C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235525AbiF3Nte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 09:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
+        id S236084AbiF3ODA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235370AbiF3Nsd (ORCPT
+        with ESMTP id S236068AbiF3OBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:48:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2B1B8A;
-        Thu, 30 Jun 2022 06:48:31 -0700 (PDT)
+        Thu, 30 Jun 2022 10:01:07 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E868443F1;
+        Thu, 30 Jun 2022 06:52:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72EA8B82AEE;
-        Thu, 30 Jun 2022 13:48:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA20FC34115;
-        Thu, 30 Jun 2022 13:48:28 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A627ACE2EA3;
+        Thu, 30 Jun 2022 13:52:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5A62C34115;
+        Thu, 30 Jun 2022 13:52:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656596909;
-        bh=3Ihd5GIIOBhwJzmG7v9iDbiZR6D5ygr/fsn/Xgn+6KI=;
+        s=korg; t=1656597158;
+        bh=6AxkFONhHzmOfd4oMiIArsoJYhYr/Fsf+dMwrYnOOFM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RJDCO9cCsoTkc6ISgooRf/WxSjKn3F/Su29I9Qa/kX005oXXHnLJCfY7uPcMNcWR7
-         ERBtEJ7gEwCNyBpGmlCzCGte0GuuWB/cfotnz+kAZKkSf3RX9qpUs/HXBNE7GRd8B8
-         NFu2ZrR3Y5UoOACTxfZiKVXDL68RkTX0e0bafUqU=
+        b=mm5agnY3TPNlYRVmyl/AiuGtHeIbrnagj6db1PFNTkF8kfUIz1or4CVVmmWsqnZHW
+         3PffP0EyXBqdql0+vpOzFOuUqGDFEWDUbdlf2kpBa7Blg6ByHZMtP7m+ROWkvrO+fC
+         oRg2hr6Wa1xiBqCvsnXmR8GxExuw9AfTL2ddgfUI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 4.9 24/29] powerpc/pseries: wire up rng during setup_arch()
+        stable@vger.kernel.org, Ballon Shi <ballon.shi@quectel.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.19 11/49] USB: serial: option: add Quectel RM500K module support
 Date:   Thu, 30 Jun 2022 15:46:24 +0200
-Message-Id: <20220630133231.913966773@linuxfoundation.org>
+Message-Id: <20220630133234.236849302@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133231.200642128@linuxfoundation.org>
-References: <20220630133231.200642128@linuxfoundation.org>
+In-Reply-To: <20220630133233.910803744@linuxfoundation.org>
+References: <20220630133233.910803744@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,81 +55,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Macpaul Lin <macpaul.lin@mediatek.com>
 
-commit e561e472a3d441753bd012333b057f48fef1045b upstream.
+commit 15b694e96c31807d8515aacfa687a1e8a4fbbadc upstream.
 
-The platform's RNG must be available before random_init() in order to be
-useful for initial seeding, which in turn means that it needs to be
-called from setup_arch(), rather than from an init call. Fortunately,
-each platform already has a setup_arch function pointer, which means
-it's easy to wire this up. This commit also removes some noisy log
-messages that don't add much.
+Add usb product id of the Quectel RM500K module.
 
-Fixes: a489043f4626 ("powerpc/pseries: Implement arch_get_random_long() based on H_RANDOM")
-Cc: stable@vger.kernel.org # v3.13+
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220611151015.548325-4-Jason@zx2c4.com
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+RM500K provides 2 mandatory interfaces to Linux host after enumeration.
+ - /dev/ttyUSB5: this is a serial interface for control path. User needs
+   to write AT commands to this device node to query status, set APN,
+   set PIN code, and enable/disable the data connection to 5G network.
+ - ethX: this is the data path provided as a RNDIS devices. After the
+   data connection has been established, Linux host can access 5G data
+   network via this interface.
+
+"RNDIS": RNDIS + ADB + AT (/dev/ttyUSB5) + MODEM COMs
+
+usb-devices output for 0x7001:
+T:  Bus=05 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=7001 Rev=00.01
+S:  Manufacturer=MediaTek Inc.
+S:  Product=USB DATA CARD
+S:  SerialNumber=869206050009672
+C:  #Ifs=10 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=02 Prot=ff Driver=rndis_host
+E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=125us
+I:  If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=09(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+Co-developed-by: Ballon Shi <ballon.shi@quectel.com>
+Signed-off-by: Ballon Shi <ballon.shi@quectel.com>
+Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/platforms/pseries/pseries.h |    2 ++
- arch/powerpc/platforms/pseries/rng.c     |   11 +++--------
- arch/powerpc/platforms/pseries/setup.c   |    1 +
- 3 files changed, 6 insertions(+), 8 deletions(-)
+ drivers/usb/serial/option.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/arch/powerpc/platforms/pseries/pseries.h
-+++ b/arch/powerpc/platforms/pseries/pseries.h
-@@ -81,4 +81,6 @@ unsigned long pseries_memory_block_size(
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -257,6 +257,7 @@ static void option_instat_callback(struc
+ #define QUECTEL_PRODUCT_RM500Q			0x0800
+ #define QUECTEL_PRODUCT_EC200S_CN		0x6002
+ #define QUECTEL_PRODUCT_EC200T			0x6026
++#define QUECTEL_PRODUCT_RM500K			0x7001
  
- void pseries_setup_rfi_flush(void);
+ #define CMOTECH_VENDOR_ID			0x16d8
+ #define CMOTECH_PRODUCT_6001			0x6001
+@@ -1150,6 +1151,7 @@ static const struct usb_device_id option
+ 	  .driver_info = ZLP },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500K, 0xff, 0x00, 0x00) },
  
-+void pseries_rng_init(void);
-+
- #endif /* _PSERIES_PSERIES_H */
---- a/arch/powerpc/platforms/pseries/rng.c
-+++ b/arch/powerpc/platforms/pseries/rng.c
-@@ -14,6 +14,7 @@
- #include <asm/archrandom.h>
- #include <asm/machdep.h>
- #include <asm/plpar_wrappers.h>
-+#include "pseries.h"
- 
- 
- static int pseries_get_random_long(unsigned long *v)
-@@ -28,19 +29,13 @@ static int pseries_get_random_long(unsig
- 	return 0;
- }
- 
--static __init int rng_init(void)
-+void __init pseries_rng_init(void)
- {
- 	struct device_node *dn;
- 
- 	dn = of_find_compatible_node(NULL, NULL, "ibm,random");
- 	if (!dn)
--		return -ENODEV;
--
--	pr_info("Registering arch random hook.\n");
--
-+		return;
- 	ppc_md.get_random_seed = pseries_get_random_long;
--
- 	of_node_put(dn);
--	return 0;
- }
--machine_subsys_initcall(pseries, rng_init);
---- a/arch/powerpc/platforms/pseries/setup.c
-+++ b/arch/powerpc/platforms/pseries/setup.c
-@@ -585,6 +585,7 @@ static void __init pSeries_setup_arch(vo
- 	}
- 
- 	ppc_md.pcibios_root_bridge_prepare = pseries_root_bridge_prepare;
-+	pseries_rng_init();
- }
- 
- static int __init pSeries_init_panel(void)
+ 	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
+ 	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
 
 

@@ -2,126 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19ED8560F64
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 05:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CAA6560F68
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 05:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbiF3DCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 23:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
+        id S231614AbiF3DDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 23:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiF3DCd (ORCPT
+        with ESMTP id S229455AbiF3DDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 23:02:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C62286DF;
-        Wed, 29 Jun 2022 20:02:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3E806202D;
-        Thu, 30 Jun 2022 03:02:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ADC3C3411E;
-        Thu, 30 Jun 2022 03:02:27 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="cEfq2bbY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656558145;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lAxoLbADZAhu/fbtT19sYsfwjIQHx+7cL3zp8zm5ylc=;
-        b=cEfq2bbYg+E0cJPmGbfqowUlZyBsEFMB+Tx0GAvzVTKBOF7AJsVTfIV6F3UeLWUpu2xbSL
-        REcWxgdTxNMimTFAsv2fXTf8VAIjeKWpDKecdvNtTMkrU9267h6JnxgCkrxxlSMx660w+6
-        xigc6asOchBZ4Fie7h+gI+in3P0RKaw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 44cb7fda (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 30 Jun 2022 03:02:25 +0000 (UTC)
-Date:   Thu, 30 Jun 2022 05:02:19 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     Kalesh Singh <kaleshsingh@google.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, rcu <rcu@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, sultan@kerneltoast.com,
-        android-kernel-team <android-kernel-team@google.com>,
-        John Stultz <jstultz@google.com>,
-        Saravana Kannan <saravanak@google.com>, rafael@kernel.org
-Subject: Re: [PATCH] remove CONFIG_ANDROID
-Message-ID: <Yr0SO0Ubi3Js7ciP@zx2c4.com>
-References: <Yrx/8UOY+J8Ao3Bd@zx2c4.com>
- <YryNQvWGVwCjJYmB@zx2c4.com>
- <Yryic4YG9X2/DJiX@google.com>
- <Yry6XvOGge2xKx/n@zx2c4.com>
- <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
- <YrzaCRl9rwy9DgOC@zx2c4.com>
- <CAC_TJvcEzp+zQp50wtj4=7b6vEObpJCQYLaTLhHJCxFdk3TgPg@mail.gmail.com>
- <306dacfb29c2e38312943fa70d419f0a8d5ffe82.camel@perches.com>
- <YrzzWmQ9+uDRlO5K@zx2c4.com>
- <1a1f24707a03c2363e29ef91905e9f206fb6a0b5.camel@perches.com>
+        Wed, 29 Jun 2022 23:03:32 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85B92FFC8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 20:03:31 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id g4so10270055pgc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 20:03:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=eFrmibnOmK8XtuM6Tf2P09vssNYtvI09arlKksnBKmE=;
+        b=gh082DJ/aYAWrrxFP3fklYYjtIoW+j/NN4MkEMRnj4P4EZJNZUvCVpg+Zc2sAZiNln
+         HkviLYrDCvJA2USF4UphbxO4twsOAgYkmU4Uq0063yklzyZZen9dI5QYtjT+2vqiZUuR
+         2kH0TwJGGzem1LZ8vtMUD5kT8RYrX6U6sEtBrgnv2jWWxm3nrPF2qoQ/YHgH5Rr69+A+
+         OnBuOt78XCgmfOi8JSbbvmwaz67r5STd9pRHYkxzBQtzBOxlJineMGCRRUfY0V7fjeXp
+         0GdMPB2QQRtSM14x8tiaq/JmtPC5F+hjcDaXDGAyxQR+mFladnfaQ2xKWQORA463rSl8
+         5xUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eFrmibnOmK8XtuM6Tf2P09vssNYtvI09arlKksnBKmE=;
+        b=UyHW79pAXEgPxKv7FVohFcLN+h6hn6EMo80tDz2rKnsf5AcSfjljLmSdyloqEkq19L
+         sS75eQlJqFYYv7HQo2ODKmFdvINuBKZXIXsCKMJTbLaojmuijEAeRgig55wJzRTvD9gD
+         Q96tgx+y3fVUaz5pVLY5CeOO4uocF2jXg/IasP6DbkE9rDGgA2qt8E9WmC4IHh96Dp+j
+         qqN7zu0dgpxC+tSgjRT1+dQ9S/+/sgcrQJ65LWnZBo5U8uqlSBRx5U5sGi+lK72DPthv
+         nZU5Q+TQM+wF/+gm5CagA4qXnfxpR7XCQkwpOTOLiLimn95T1Sk9ec4SDjMIOn8rwAWu
+         xTrQ==
+X-Gm-Message-State: AJIora8W/KdYk4nxUsROnN19zVO10mEOPaiiQRezO5DNZi+Yn2q+sit7
+        VlUx2UpEKbGTTRbK4i2nKl4GEg==
+X-Google-Smtp-Source: AGRyM1uZFnWsWDxmIxiqvexAY7Zh4+0DiY9yIDIzUAJE34QykecHZzGWoUwHktqumn/9aK+e4vJsUQ==
+X-Received: by 2002:a05:6a00:168a:b0:4f7:e161:83cd with SMTP id k10-20020a056a00168a00b004f7e16183cdmr13470004pfc.56.1656558211129;
+        Wed, 29 Jun 2022 20:03:31 -0700 (PDT)
+Received: from [192.168.123.227] ([122.255.60.245])
+        by smtp.gmail.com with ESMTPSA id e13-20020aa7824d000000b0052527e3c5easm12224285pfn.87.2022.06.29.20.03.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 20:03:30 -0700 (PDT)
+Message-ID: <fc510255-4813-6b96-f5e5-de4e591a9e7b@linaro.org>
+Date:   Thu, 30 Jun 2022 08:33:17 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1a1f24707a03c2363e29ef91905e9f206fb6a0b5.camel@perches.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: qemu-system-s390x hang in tcg
+Content-Language: en-US
+To:     Sven Schnelle <svens@linux.ibm.com>,
+        =?UTF-8?Q?Alex_Benn=c3=a9e?= <alex.bennee@linaro.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Yu Zhao <yuzhao@google.com>, Juergen Gross <jgross@suse.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Andreas Krebbel <krebbel@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Thomas Huth <thuth@redhat.com>, qemu-devel@nongnu.org,
+        qemu-s390x@nongnu.org
+References: <20220426150616.3937571-24-Liam.Howlett@oracle.com>
+ <20220428201947.GA1912192@roeck-us.net>
+ <20220429003841.cx7uenepca22qbdl@revolver>
+ <20220428181621.636487e753422ad0faf09bd6@linux-foundation.org>
+ <20220502001358.s2azy37zcc27vgdb@revolver>
+ <20220501172412.50268e7b217d0963293e7314@linux-foundation.org>
+ <Ym+v4lfU5IyxkGc4@osiris> <20220502133050.kuy2kjkzv6msokeb@revolver>
+ <YnAn3FI9aVCi/xKd@osiris> <YnGHJ7oroqF+v1u+@osiris>
+ <20220503215520.qpaukvjq55o7qwu3@revolver>
+ <60a3bc3f-5cd6-79ac-a7a8-4ecc3d7fd3db@linux.ibm.com>
+ <15f5f8d6-dc92-d491-d455-dd6b22b34bc3@redhat.com>
+ <yt9d5ykkhrvv.fsf_-_@linux.ibm.com> <87pmirj3aq.fsf@linaro.org>
+ <yt9dbkubhhna.fsf@linux.ibm.com>
+From:   Richard Henderson <richard.henderson@linaro.org>
+In-Reply-To: <yt9dbkubhhna.fsf@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 06:44:14PM -0700, Joe Perches wrote:
-> On Thu, 2022-06-30 at 02:50 +0200, Jason A. Donenfeld wrote:
-> > On Wed, Jun 29, 2022 at 05:36:57PM -0700, Joe Perches wrote:
-> > > > > +static ssize_t pm_userspace_autosleeper_show(struct kobject *kobj,
-> > > > > +                               struct kobj_attribute *attr, char *buf)
-> > > > > +{
-> > > > > +       return sprintf(buf, "%d\n", pm_userspace_autosleeper_enabled);
-> > > 
-> > > This should use sysfs_emit no?
-> > 
-> > Probably, yea. Note that I just copy and pasted a nearby function,
-> > pm_async_show, `:%s/`d the variable name, and then promptly `git diff |
-> > clip`d it and plonked it into my email. Looking at the file, it uses
-> > sprintf all over the place in this fashion. So you may want to submit a
-> > cleanup to Rafael on this if you're right about sysfs_emit() being
-> > universally preferred.
+On 6/29/22 16:16, Sven Schnelle wrote:
+> Thanks, that was very helpful. I added debugging and it turned out
+> that the TB is left because of a pending irq. The code then calls
+> s390_cpu_exec_interrupt:
 > 
-> Perhaps:
+> bool s390_cpu_exec_interrupt(CPUState *cs, int interrupt_request)
+> {
+>      if (interrupt_request & CPU_INTERRUPT_HARD) {
+>          S390CPU *cpu = S390_CPU(cs);
+>          CPUS390XState *env = &cpu->env;
 > 
-> (trivial refactored and added a missing newline in autosleep_show)
+>          if (env->ex_value) {
+>              /* Execution of the target insn is indivisible from
+>                 the parent EXECUTE insn.  */
+>              return false;
+>          }
+>          if (s390_cpu_has_int(cpu)) {
+>              s390_cpu_do_interrupt(cs);
+>              return true;
+>          }
+>          if (env->psw.mask & PSW_MASK_WAIT) {
+>              /* Woken up because of a floating interrupt but it has already
+>               * been delivered. Go back to sleep. */
+>              cpu_interrupt(CPU(cpu), CPU_INTERRUPT_HALT);
+>          }
+>      }
+>      return false;
+> }
 > 
-> ---
->  kernel/power/main.c | 102 ++++++++++++++++++++++++++--------------------------
->  1 file changed, 52 insertions(+), 50 deletions(-)
+> Note the 'if (env->ex_value) { }' check. It looks like this function
+> just returns false in case tcg is executing an EX instruction. After
+> that the information that the TB should be exited because of an
+> interrupt is gone. So the TB's are never exited again, although the
+> interrupt wasn't handled. At least that's my assumption now, if i'm
+> wrong please tell me.
 
-You should probably post a proper patch to the PM people. At least I'm
-not going to look at that here, as it's not really relevant at all to
-this discussion.
+Ah, yes, I see.
 
-Jason
+We wanted to treat ex_value != 0 as if interrupts are disabled, because we have no way of 
+stacking that value for re-execution after the interrupt (which itself could use EXECUTE).
+
+One solution might be to zap ex_value and arrange to re-execute the EXECUTE instruction 
+after the interrupt.
+
+Another solution is to generate an exit from any TB translating ex_value, so that 
+interrupts are re-examined.  This is probably cleanest.  I'll prepare a patch.
+
+
+r~

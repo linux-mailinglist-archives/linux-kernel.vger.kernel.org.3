@@ -2,94 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22FF356170A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A13561711
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234137AbiF3KCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 06:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36700 "EHLO
+        id S234674AbiF3KCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 06:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233213AbiF3KCF (ORCPT
+        with ESMTP id S233213AbiF3KCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 06:02:05 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B5A43ED1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 03:02:02 -0700 (PDT)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 2787A423E5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:02:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1656583321;
-        bh=wIYh+/Ozpb80cqbgI0j8SCGA1rmqDwRVQ0ZfOk2tveM=;
-        h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type;
-        b=U8UBGrok+rn2qhWkkUpQ35TJpsmwAFaWwQZgPBjWo6UTp6m22wRlzSq55RPH7J4os
-         X6+3ARDCOiXhgB+OOvplwT8GsrT9rpHdSWE/SGqTfqIVpFHef2C0MxUN9ndTjGcS9Z
-         20ayRuZsCBkET4kllbKuFdteZBVI6FnSsbcEOLP/maavd/gk6oHHR6n+LMRBLNg/BZ
-         Y3o95QNZTKFpxOrlA/zwCR68kfeyJAffZcW1XguYxLwahRBcxELNyVYVqfLfbL0X5r
-         LpayKBRlKG5IVVoPosO09qLwiVzEmFO8MzUjkr4B/ER7TiaVVIEU9cJX38uWmBTh8W
-         T+Nd0VJ770j0Q==
-Received: by mail-ed1-f71.google.com with SMTP id x8-20020a056402414800b0042d8498f50aso14107387eda.23
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 03:02:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=wIYh+/Ozpb80cqbgI0j8SCGA1rmqDwRVQ0ZfOk2tveM=;
-        b=YYinnhw1UKSaFB5QlZ0pJzqhKA58IdwM5RXpSwZKQu9qB975ldrpvLurKE/e0LoRqs
-         OcREVDMMovUIZR32H0i/lxiNmxLxZ0b42rvzXelN4zH8Ab16d7cn1gdjsoLMoNYoMtJ4
-         inY9+g+0GJAVqmvLbVwJFPe48cx4rwqMoAHtqLhm0zkVgbPlbbXlOaOg2OgKvvTAAOVJ
-         TOh8YqdsqLRN2aK4kGXVhYEfbb/o/TfpLT6e/Y8C5IjmDyibajccHJ+H3L3MvV0Qz1iB
-         sswJWSpjDka5NwjTbnGJtGntAUDoBISvZrN1HsN3ZT/IkqNtFw3mz3TeSMXiavhO2wss
-         Hbsw==
-X-Gm-Message-State: AJIora+l5EW6u5o0bI7GStOOE1Ag9A0ubLzh26P5d5XfvIDdewCiBD5f
-        vYSKHxy4fmYkBaBOs+5r0sM74MbqblfWvhOsrJUvqifx9oJojo0xpdaXRSu6oFffaTM8i0vtvgk
-        yf96bM5k/YF71zxNXgc++KZt3GGk7l74g4ucNIGU/SA==
-X-Received: by 2002:a17:906:6146:b0:722:f8c4:ec9b with SMTP id p6-20020a170906614600b00722f8c4ec9bmr8477893ejl.708.1656583320339;
-        Thu, 30 Jun 2022 03:02:00 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vdDtvXrzIADOYaPgD1LYAc9jmzgUxML4F7NW1hAVyacDhmAXcIjpfNz5/zgEYUzHTVOctNRQ==
-X-Received: by 2002:a17:906:6146:b0:722:f8c4:ec9b with SMTP id p6-20020a170906614600b00722f8c4ec9bmr8477878ejl.708.1656583320184;
-        Thu, 30 Jun 2022 03:02:00 -0700 (PDT)
-Received: from localhost ([2001:67c:1560:8007::aac:c03c])
-        by smtp.gmail.com with ESMTPSA id d3-20020a1709063ec300b0072629cbf1efsm8828502ejj.119.2022.06.30.03.01.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 03:01:59 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 13:01:56 +0300
-From:   Cengiz Can <cengiz.can@canonical.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Wondering the reason why __fput_sync is not exported as GPL only
-Message-ID: <Yr10lO4vDLiqwLX6@nexusd>
+        Thu, 30 Jun 2022 06:02:46 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4BC43EDE;
+        Thu, 30 Jun 2022 03:02:44 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 17EE65C02FC;
+        Thu, 30 Jun 2022 06:02:44 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Thu, 30 Jun 2022 06:02:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1656583364; x=1656669764; bh=TAIcAgNNAp
+        8QIpHYtRSOz7CgB2mDvAl/qh8TqyK3DN8=; b=kAh6BD1/2JQxR0GOot/3t8mSpi
+        vycaf/hQi7/JQ4dG4h4VMpo17DAf8hfCNrN1inbvsJ7YxLvtAh12DTTQ4biXxQmS
+        cQO9j5i0GRD1WVJbznGceotDIOfy40F2kbY3ou9mynkfUWYMQbHmrBHyGFry/fBZ
+        Kd31DppBoaPDw9Hp0Y5CZRFvAmxlsJcvFKFtnAF+rWBKReDoTZfSBIfWiE+a4K0l
+        c1eRcACljbAavkOfLoNpHaZPx0cs78wUWOBse/HuHge4rRC/Kok23I6xSY9x5IAZ
+        YwUltXKxvO3mDWDQRwq1wY4Axiw9MGL7dJ99VoWLTZGNeeH/DS+Lfst0KLQA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1656583364; x=1656669764; bh=TAIcAgNNAp8QI
+        pHYtRSOz7CgB2mDvAl/qh8TqyK3DN8=; b=DY8j6Sphwo6tsraAxL0XaL+iqKHvo
+        SECDDRp1VCzTl/FX6UcQJtjXfNR+4we5qVwkcrfntQpzcuDTcJ69Ndpa8n2PA+2r
+        x8Ny1TYPZvMyjH+oCTxOyKSBbUfzGp/JShj2ZH02VHERWvvorzxRqvYz17L/s2aq
+        GTQge0JbZ9duyX7u3grnE+9SzxBGvny5VnL/mBUKVsi4CFM35g4oSbjXIm+sAZFb
+        shQCKsyCcqHx2349tLpSzLQ/u52klDz6ga/ULao6UkpKF3V7QVwpgkOrxAfxZLGX
+        LGh/DA2WJKEdZz/WoSGY+aM39DWO0eQPOyVneWuXgNfZLr+5ZQXc0vJmg==
+X-ME-Sender: <xms:w3S9YkZxbMdgdMdH7ND4D-gjocW3k7dZLXI5f19oDYa9L7ZuhBTBzg>
+    <xme:w3S9YvY6b7-Z3c7dO9bDRQduPp3XVdAj3eAdHstSNLASoRudMCT7nLwIg--YiSfiU
+    dyy1B9-ChOXl-ByrQ>
+X-ME-Received: <xmr:w3S9Yu92fReuoFg6kXGhyaWcbP7v3V5g-RgMKatddj-QYpJhcuDwWB_ud-nvAK6-JIY7wRI4-A1_1zEifXERD24AVf79EQLXzk1t_LRhNJet-1ukzo2Ym-6LRq6uVFK6cbK6jQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehuddgvddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
+    frrghtthgvrhhnpeefkedvudekfeehgffgteekieehhfekfeegteefgfduhfffvdehvdet
+    keegfefgteenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghn
+    ugdrohhrgh
+X-ME-Proxy: <xmx:w3S9YurJfeQX2H8_wCkg5sdfNMLGcHSD09xum9Shj7UYN-msPa0haw>
+    <xmx:w3S9Yvr48pi_BoW0cksUsZsuWPwu_fheEygwvQu43DvFBDF0S5BFew>
+    <xmx:w3S9YsQ6gz4R6bl5pOwfWUjfEMmQEsn4wAsgLVwMoc6W0Vqb0LKBXA>
+    <xmx:xHS9YvbemzsULfjHqmtTw3WTUNcwSByu2lDc_D36bJ44S0UF9pLXnA>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 30 Jun 2022 06:02:42 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Guo Ren <guoren@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v3 0/4] Add PLIC support for Renesas RZ/Five SoC / Fix T-HEAD PLIC edge flow
+Date:   Thu, 30 Jun 2022 05:02:37 -0500
+Message-Id: <20220630100241.35233-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-User-Agent: Mutt/2.1.4 (2021-12-11)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Alexander!
+This patch series adds PLIC support for Renesas RZ/Five SoC.
 
-While backporting a few commits from stable to ubuntu distro kernel, 
-I noticed that `__fput_sync` in `fs/file_table.c` is exported as
-EXPORT_SYMBOL rather than EXPORT_SYMBOL_GPL.
+Since the T-HEAD C900 PLIC has the same behavior, it also applies the
+fix for that variant.
 
-Since I don't know the details, I wanted to ask if you know why.
+This series is an update of v2 of the RZ/Five series[0], and replaces
+the separate T-HEAD series[1].
 
-There are certain OOT patches, in circulation, that export this as _GPL
-and I'm not sure if I can convert this export to non-GPL whenever it was
-exported as GPL only.
+[0]: https://lore.kernel.org/linux-riscv/20220626004326.8548-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+[1]: https://lore.kernel.org/linux-riscv/20220627051257.38543-1-samuel@sholland.org/
 
-Thank you in advance.
+Changes in v3:
+ - Add a more detailed explanation for why #interrupt-cells differs
+ - Add andestech,nceplic100 as a fallback compatible
+ - Separate the conditional part of the binding into two blocks (one for
+   the PLIC implementation and the other for the SoC integration)
+ - Use a quirk bit for selecting the flow instead of a variant ID
+ - Use the andestech,nceplic100 compatible to select the new behavior
+ - Use handle_edge_irq instead of handle_fasteoi_ack_irq so .irq_ack
+   always gets called
+ - Do not set the handler name, as RISC-V selects GENERIC_IRQ_SHOW_LEVEL
+ - Use the same name for plic_edge_chip as plic_chip
 
-Cengiz Can
+Changes in v2:
+ - Fixed review comments pointed by Marc and Krzysztof.
 
+Changes in v1:
+ - Fixed review comments pointed by Rob and Geert.
+ - Changed implementation for EDGE interrupt handling on Renesas RZ/Five
+   SoC.
+
+Lad Prabhakar (2):
+  dt-bindings: interrupt-controller: sifive,plic: Document Renesas
+    RZ/Five SoC
+  irqchip/sifive-plic: Add support for Renesas RZ/Five SoC
+
+Samuel Holland (2):
+  dt-bindings: interrupt-controller: Require trigger type for T-HEAD
+    PLIC
+  irqchip/sifive-plic: Fix T-HEAD PLIC edge trigger handling
+
+ .../sifive,plic-1.0.0.yaml                    | 65 +++++++++++++--
+ drivers/irqchip/irq-sifive-plic.c             | 80 +++++++++++++++++--
+ 2 files changed, 135 insertions(+), 10 deletions(-)
+
+-- 
+2.35.1
 

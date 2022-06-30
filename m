@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11601561D52
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFE4561D87
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236318AbiF3OEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44998 "EHLO
+        id S236270AbiF3ODQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236170AbiF3ODC (ORCPT
+        with ESMTP id S235365AbiF3OB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:03:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEDE65D5C;
-        Thu, 30 Jun 2022 06:53:12 -0700 (PDT)
+        Thu, 30 Jun 2022 10:01:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48ACD50718;
+        Thu, 30 Jun 2022 06:52:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 188F7620E4;
-        Thu, 30 Jun 2022 13:53:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2503AC34115;
-        Thu, 30 Jun 2022 13:53:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53A26B82AEF;
+        Thu, 30 Jun 2022 13:52:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9A4FC34115;
+        Thu, 30 Jun 2022 13:52:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597188;
-        bh=tUbC9P3+yubDDefe29H5IMHi8x/o38Uf9ZD+Vi3xwK8=;
+        s=korg; t=1656597147;
+        bh=TBHOlCgI4P/ivcpcBjHQMwjrR2XUb2vJ4UkttqkCnUs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l4kSRKftcA3DvsUAqJjhoA+u9DP3C4e31sfevO67+d/HX7fUm2W1M90S9mIDjpsqJ
-         MsA4hWGh/NreHZ8mB8M6dew7LY6qh2MgE04PL1jxSPMhX+q+YDbf/JppW6eP28L3Uj
-         E7M3XTgR0+3do2Ed4qY5B25o1wM0R7tpZU5sd60I=
+        b=1vsdSaxQeDSzi5+PqGbDap0NpkWqwlowOcI175KsbPu2BrqVyXXUlpLQECIrmC6kd
+         DxifrxN5GzonxHzBaOCw2SadpOA1tcVzlRhnPoxz3vIj6P2DIo6Xprb60MoxtbzANC
+         BoX6erQBF34sj8ULbsNDsSd0sCM7368xTFxj21Po=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH 5.4 02/16] clocksource/drivers/ixp4xx: remove __init from ixp4xx_timer_setup()
+        stable@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Christoph Hellwig <hch@lst.de>, Jessica Yu <jeyu@kernel.org>
+Subject: [PATCH 4.19 43/49] drm: remove drm_fb_helper_modinit
 Date:   Thu, 30 Jun 2022 15:46:56 +0200
-Message-Id: <20220630133231.009464890@linuxfoundation.org>
+Message-Id: <20220630133235.144699150@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133230.936488203@linuxfoundation.org>
-References: <20220630133230.936488203@linuxfoundation.org>
+In-Reply-To: <20220630133233.910803744@linuxfoundation.org>
+References: <20220630133233.910803744@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,75 +54,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Christoph Hellwig <hch@lst.de>
 
-ixp4xx_timer_setup is exported, and so can not be an __init function.
-Remove the __init marking as the build system is rightfully claiming
-this is an error in older kernels.
+commit bf22c9ec39da90ce866d5f625d616f28bc733dc1 upstream.
 
-This is fixed "properly" in commit 41929c9f628b
-("clocksource/drivers/ixp4xx: Drop boardfile probe path") but that can
-not be backported to older kernels as the reworking of the IXP4xx
-codebase is not suitable for stable releases.
+drm_fb_helper_modinit has a lot of boilerplate for what is not very
+simple functionality.  Just open code it in the only caller using
+IS_ENABLED and IS_MODULE, and skip the find_module check as a
+request_module is harmless if the module is already loaded (and not
+other caller has this find_module check either).
 
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Jessica Yu <jeyu@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clocksource/mmio.c                 |    2 +-
- drivers/clocksource/timer-ixp4xx.c         |   10 ++++------
- include/linux/platform_data/timer-ixp4xx.h |    5 ++---
- 3 files changed, 7 insertions(+), 10 deletions(-)
+ drivers/gpu/drm/drm_crtc_helper_internal.h |   10 ----------
+ drivers/gpu/drm/drm_fb_helper.c            |   21 ---------------------
+ drivers/gpu/drm/drm_kms_helper_common.c    |   23 +++++++++++------------
+ 3 files changed, 11 insertions(+), 43 deletions(-)
 
---- a/drivers/clocksource/mmio.c
-+++ b/drivers/clocksource/mmio.c
-@@ -46,7 +46,7 @@ u64 clocksource_mmio_readw_down(struct c
-  * @bits:	Number of valid bits
-  * @read:	One of clocksource_mmio_read*() above
-  */
--int __init clocksource_mmio_init(void __iomem *base, const char *name,
-+int clocksource_mmio_init(void __iomem *base, const char *name,
- 	unsigned long hz, int rating, unsigned bits,
- 	u64 (*read)(struct clocksource *))
+--- a/drivers/gpu/drm/drm_crtc_helper_internal.h
++++ b/drivers/gpu/drm/drm_crtc_helper_internal.h
+@@ -32,16 +32,6 @@
+ #include <drm/drm_encoder.h>
+ #include <drm/drm_modes.h>
+ 
+-/* drm_fb_helper.c */
+-#ifdef CONFIG_DRM_FBDEV_EMULATION
+-int drm_fb_helper_modinit(void);
+-#else
+-static inline int drm_fb_helper_modinit(void)
+-{
+-	return 0;
+-}
+-#endif
+-
+ /* drm_dp_aux_dev.c */
+ #ifdef CONFIG_DRM_DP_AUX_CHARDEV
+ int drm_dp_aux_dev_init(void);
+--- a/drivers/gpu/drm/drm_fb_helper.c
++++ b/drivers/gpu/drm/drm_fb_helper.c
+@@ -3270,24 +3270,3 @@ int drm_fbdev_generic_setup(struct drm_d
+ 	return 0;
+ }
+ EXPORT_SYMBOL(drm_fbdev_generic_setup);
+-
+-/* The Kconfig DRM_KMS_HELPER selects FRAMEBUFFER_CONSOLE (if !EXPERT)
+- * but the module doesn't depend on any fb console symbols.  At least
+- * attempt to load fbcon to avoid leaving the system without a usable console.
+- */
+-int __init drm_fb_helper_modinit(void)
+-{
+-#if defined(CONFIG_FRAMEBUFFER_CONSOLE_MODULE) && !defined(CONFIG_EXPERT)
+-	const char name[] = "fbcon";
+-	struct module *fbcon;
+-
+-	mutex_lock(&module_mutex);
+-	fbcon = find_module(name);
+-	mutex_unlock(&module_mutex);
+-
+-	if (!fbcon)
+-		request_module_nowait(name);
+-#endif
+-	return 0;
+-}
+-EXPORT_SYMBOL(drm_fb_helper_modinit);
+--- a/drivers/gpu/drm/drm_kms_helper_common.c
++++ b/drivers/gpu/drm/drm_kms_helper_common.c
+@@ -63,19 +63,18 @@ MODULE_PARM_DESC(edid_firmware,
+ 
+ static int __init drm_kms_helper_init(void)
  {
---- a/drivers/clocksource/timer-ixp4xx.c
-+++ b/drivers/clocksource/timer-ixp4xx.c
-@@ -170,9 +170,8 @@ static int ixp4xx_resume(struct clock_ev
-  * We use OS timer1 on the CPU for the timer tick and the timestamp
-  * counter as a source of real clock ticks to account for missed jiffies.
-  */
--static __init int ixp4xx_timer_register(void __iomem *base,
--					int timer_irq,
--					unsigned int timer_freq)
-+static int ixp4xx_timer_register(void __iomem *base, int timer_irq,
-+				 unsigned int timer_freq)
- {
- 	struct ixp4xx_timer *tmr;
- 	int ret;
-@@ -245,9 +244,8 @@ static __init int ixp4xx_timer_register(
-  * @timer_irq: Linux IRQ number for the timer
-  * @timer_freq: Fixed frequency of the timer
-  */
--void __init ixp4xx_timer_setup(resource_size_t timerbase,
--			       int timer_irq,
--			       unsigned int timer_freq)
-+void ixp4xx_timer_setup(resource_size_t timerbase, int timer_irq,
-+			unsigned int timer_freq)
- {
- 	void __iomem *base;
+-	int ret;
++	/*
++	 * The Kconfig DRM_KMS_HELPER selects FRAMEBUFFER_CONSOLE (if !EXPERT)
++	 * but the module doesn't depend on any fb console symbols.  At least
++	 * attempt to load fbcon to avoid leaving the system without a usable
++	 * console.
++	 */
++	if (IS_ENABLED(CONFIG_DRM_FBDEV_EMULATION) &&
++	    IS_MODULE(CONFIG_FRAMEBUFFER_CONSOLE) &&
++	    !IS_ENABLED(CONFIG_EXPERT))
++		request_module_nowait("fbcon");
  
---- a/include/linux/platform_data/timer-ixp4xx.h
-+++ b/include/linux/platform_data/timer-ixp4xx.h
-@@ -4,8 +4,7 @@
+-	/* Call init functions from specific kms helpers here */
+-	ret = drm_fb_helper_modinit();
+-	if (ret < 0)
+-		goto out;
+-
+-	ret = drm_dp_aux_dev_init();
+-	if (ret < 0)
+-		goto out;
+-
+-out:
+-	return ret;
++	return drm_dp_aux_dev_init();
+ }
  
- #include <linux/ioport.h>
- 
--void __init ixp4xx_timer_setup(resource_size_t timerbase,
--			       int timer_irq,
--			       unsigned int timer_freq);
-+void ixp4xx_timer_setup(resource_size_t timerbase, int timer_irq,
-+			unsigned int timer_freq);
- 
- #endif
+ static void __exit drm_kms_helper_exit(void)
 
 

@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66AE560F99
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 05:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8A0560F95
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 05:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231966AbiF3DUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 23:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
+        id S232012AbiF3DXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 23:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbiF3DUV (ORCPT
+        with ESMTP id S231533AbiF3DXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 23:20:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DF940A38;
-        Wed, 29 Jun 2022 20:20:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75391B827FB;
-        Thu, 30 Jun 2022 03:20:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 16732C341CA;
-        Thu, 30 Jun 2022 03:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656559214;
-        bh=DQg6ibDynoYcoqExVb/W9xu3z+AWl3sONWXlXNqrmoU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=VS+IfqZ2W5qNpOmLcATfwuiVaKD/DoS/5GL4fm5OHoheMkuaRQMz7jIoAAXLDG4Uj
-         IUlClOEmfYuRKPRAuE+KshoH5m/23rVKlmRrZeBjZ6tWuLr4vo29EvRNEHZZOKzO4t
-         YcUBcJQAF7GoA+vsYtKF9rcnUDq3B1F0giyjRjOl4Zk9Eq6Gx/SUSfAnwlJgnLLjUj
-         7/Buv3Sgu1HWAT4/dVz8iXAkrIlQpn5F5n7IvLj9HU7rT5puTeHyJTjz7CsaKFtcCd
-         oH61mOnhKI6NoW57T6Ydm80A3RQI3WFmNKe3P+cPWNBskODpeU9wnptOedFvwj4vv/
-         H8rlp0KrR7P2w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EADAAE49FA0;
-        Thu, 30 Jun 2022 03:20:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 29 Jun 2022 23:23:21 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D1617E2D
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 20:23:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656559400; x=1688095400;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Kt86ua8WgIQ6xNJV4KsVEmxVoqhINuYbDD56u/ebnzM=;
+  b=JHpEcGJlB311+9c4kQ6uXGnP2vOiFxdmg9H3eyC9sD1kQAqlJJN21Vcx
+   BdKCninGkafOE2NFENFx6+zEVgr3LVo7kqakfKB8xFjuBJmSd+ceBFNLK
+   BXAycXAj4utaXPWroTA9+u1hGjVUfCxhrjxSFH6YhEw/3u5gKctr/8Po5
+   1UfMR/KHZeHj6675HvpMBbsFoytHSESyPLCkgeJoFbrl0IHhQDWE1InZg
+   AYh5iZ0E+9BX9GYni+FMbKJJ8TNr0Hk8FieHzN1JU5dXixtKWyAAoQlEV
+   tCFM08LIrFD1nDrag/m/xPmGspSXt8BUPibdW+cza5PyDzZXGo/J55IOZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="343915558"
+X-IronPort-AV: E=Sophos;i="5.92,232,1650956400"; 
+   d="scan'208";a="343915558"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 20:23:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,232,1650956400"; 
+   d="scan'208";a="647690885"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
+  by fmsmga008.fm.intel.com with ESMTP; 29 Jun 2022 20:23:16 -0700
+Date:   Thu, 30 Jun 2022 11:23:15 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, dave.hansen@intel.com,
+        Joerg Roedel <jroedel@suse.de>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [RFC PATCH] mm/slub: enable debugging memory wasting of kmalloc
+Message-ID: <20220630032315.GB4668@shbuild999.sh.intel.com>
+References: <20220630014715.73330-1-feng.tang@intel.com>
+ <20220629193006.77e9f071a5940e882c459cdd@linux-foundation.org>
+ <20220630023844.GA4668@shbuild999.sh.intel.com>
+ <20220629194747.62effc10a994f67e26fe96af@linux-foundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests net: fix kselftest net fatal error
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165655921395.17409.13594561872528407248.git-patchwork-notify@kernel.org>
-Date:   Thu, 30 Jun 2022 03:20:13 +0000
-References: <20220628174744.7908-1-dietschc@csp.edu>
-In-Reply-To: <20220628174744.7908-1-dietschc@csp.edu>
-To:     Coleman Dietsch <dietschc@csp.edu>
-Cc:     linux-kselftest@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220629194747.62effc10a994f67e26fe96af@linux-foundation.org>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,29 +71,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 28 Jun 2022 12:47:44 -0500 you wrote:
-> The incorrect path is causing the following error when trying to run net
-> kselftests:
+On Wed, Jun 29, 2022 at 07:47:47PM -0700, Andrew Morton wrote:
+> On Thu, 30 Jun 2022 10:38:44 +0800 Feng Tang <feng.tang@intel.com> wrote:
 > 
-> In file included from bpf/nat6to4.c:43:
-> ../../../lib/bpf/bpf_helpers.h:11:10: fatal error: 'bpf_helper_defs.h' file not found
->          ^~~~~~~~~~~~~~~~~~~
-> 1 error generated.
+> > Hi Andrew,
+> > 
+> > Thanks for the review!
+> > 
+> > On Wed, Jun 29, 2022 at 07:30:06PM -0700, Andrew Morton wrote:
+> > > On Thu, 30 Jun 2022 09:47:15 +0800 Feng Tang <feng.tang@intel.com> wrote:
+> > > 
+> > > > kmalloc's API family is critical for mm, with one shortcoming that
+> > > > its object size is fixed to be power of 2. When user requests memory
+> > > > for '2^n + 1' bytes, actually 2^(n+1) bytes will be allocated, so
+> > > > in worst case, there is around 50% memory space waste.
+> > > > 
+> > > > We've met a kernel boot OOM panic, and from the dumped slab info:
+> > > > 
+> > > >     [   26.062145] kmalloc-2k            814056KB     814056KB
+> > > > 
+> > > > >From debug we found there are huge number of 'struct iova_magazine',
+> > > > whose size is 1032 bytes (1024 + 8), so each allocation will waste
+> > > > 1016 bytes. Though the issue is solved by giving the right(bigger)
+> > > > size of RAM, it is still better to optimize the size (either use
+> > > > a kmalloc friendly size or create a dedicated slab for it).
+> > > 
+> > > Well that's nice, and additional visibility is presumably a good thing.
+> > > 
+> > > But what the heck is going on with iova_magazine?  Is anyone looking at
+> > > moderating its impact?
+> > 
+> > Yes, I have a very simple patch at hand
+> > 
+> > --- a/drivers/iommu/iova.c
+> > +++ b/drivers/iommu/iova.c
+> > @@ -614,7 +614,7 @@ EXPORT_SYMBOL_GPL(reserve_iova);
+> >   * dynamic size tuning described in the paper.
+> >   */
+> >  
+> > -#define IOVA_MAG_SIZE 128
+> > +#define IOVA_MAG_SIZE 127
 > 
-> [...]
+> Well OK.  Would benefit from a comment explaining the reasoning.
+ 
+Sure, will try to give the full context.
 
-Here is the summary with links:
-  - selftests net: fix kselftest net fatal error
-    https://git.kernel.org/netdev/net/c/7b92aa9e6135
+> But we still have eleventy squillion of these things in flight.  Why?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I've checked the waste info right after boot for desktop/server, the
+waste is not severe generally, and I didn't even find 'iova_magzine'
+(could be due to it's virtulization related).  
 
+When dockers are started to run workload, more kmalloc is invoked
+and the waste increases accordingly.
 
+Another case that can benefit is budget devices with limited memory,
+which wants to squeeze the wasted memory.
+
+Thanks,
+Feng
+
+> >  #define MAX_GLOBAL_MAGS 32	/* magazines per bin */
+> >  
+> >  struct iova_magazine {
+> > 
+> > I guess changing it from 128 to 127 will not hurt much, and plan to
+> > send it out soon.
+> 

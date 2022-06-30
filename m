@@ -2,102 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 818DF561643
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44C7561644
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231485AbiF3JZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 05:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
+        id S232400AbiF3J0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 05:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiF3JZR (ORCPT
+        with ESMTP id S230131AbiF3J0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 05:25:17 -0400
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04023A71C;
-        Thu, 30 Jun 2022 02:25:16 -0700 (PDT)
-Received: by mail-qk1-f177.google.com with SMTP id b125so13908923qkg.11;
-        Thu, 30 Jun 2022 02:25:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=24CMEFCHWbIRhmYUqpqkC6kLf9aI1+ezMoPxKMAQOcI=;
-        b=jFRXSa75d0zEeKwjwWGD1OrDUceTJJ/FgqNOhaGBT6JP8kE6ngIYNGmlYcZHLia8AC
-         PZmrwG3xSWDyeiF7JcopSBFeY24RwsIAWmhQOQCnZv3M2s/PFhiQPpEgaN8S7+lMTpir
-         LvtE7EdzpqTFhDz1GcHRyzd/KwiAkDVw/z5928i6LSOi21k7uI3/d4rtE7uchq+PPnsv
-         56Kktn7jVbmwAmZgPQnh6jaipRiPQbRe4dgX0zTSzWuLJ7foFC76KLXvq9N36cClavUa
-         DCIdsgJpi46TG7Amc3WJRQAcDZH0zxWrh+H6nBAuzfTIgdQjEHBTy/GNEnf+uKKT0xHX
-         S3nQ==
-X-Gm-Message-State: AJIora8Jp9I/sbGt2w6t6ncSXN1BANmRHp5/7KiSaQRqWDouWcNuYFvA
-        hKlzPNwCPwOBCIOQRgz9j+Oib/owCYfAug==
-X-Google-Smtp-Source: AGRyM1vokc57zFo9ipAcAkPXJhSncE7N62Y6Zngrak6WmiVFgVZESiU5Tfap7pTOWk5+gprSxMLcfw==
-X-Received: by 2002:a37:bb06:0:b0:6af:1396:733a with SMTP id l6-20020a37bb06000000b006af1396733amr5415781qkf.19.1656581115510;
-        Thu, 30 Jun 2022 02:25:15 -0700 (PDT)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id bk32-20020a05620a1a2000b006af1d3e8080sm11009475qkb.85.2022.06.30.02.25.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 02:25:15 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-31772f8495fso172895027b3.4;
-        Thu, 30 Jun 2022 02:25:14 -0700 (PDT)
-X-Received: by 2002:a81:574c:0:b0:317:7c3a:45be with SMTP id
- l73-20020a81574c000000b003177c3a45bemr9028878ywb.316.1656581114644; Thu, 30
- Jun 2022 02:25:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220630151511.58281e52@canb.auug.org.au>
-In-Reply-To: <20220630151511.58281e52@canb.auug.org.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 30 Jun 2022 11:25:03 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVD0XZg5grY251D4tqxmJ6bH4MWK2s_4+yLRBdUzPBLTg@mail.gmail.com>
-Message-ID: <CAMuHMdVD0XZg5grY251D4tqxmJ6bH4MWK2s_4+yLRBdUzPBLTg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the pinctrl-renesas tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 30 Jun 2022 05:26:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36E33BBEB
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:26:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FCB16202C
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 09:26:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD5D2C341C8;
+        Thu, 30 Jun 2022 09:26:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656581170;
+        bh=n6+1Ku6G2yLFJMB63MGn+8LkMx2uRNdQoKXr0T4ZpKE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Uc+Ucq8UCQkRT4WVeKibZ+hzsTWKd6SDZZlIZajvm4rh0bLfgbVLMVhzUtVfAMxNN
+         BfIKDEAWGXTHPEXH6tUY/VXBAYW51V6O1iHceZfF6W8Pk6IsfUe+L3Sc+QW14P9gVH
+         MFHJHBH5fQnlkD5jfqOjts1NH9fwpdywaOpJ553toGYzoGaWqhdJSuxLMitA7Pu4vK
+         lNGyv+LiOM+3JS8SlC5Il0H4qPQJxM5IMgJyr/enJSbxXNxLMSWgorl2SAYzFm0YH+
+         o54rzbE/eMB/TOA77ntp416nRfrJ1YP57mEe7ZNhrVY1h7pn3zvNlxabcoqGU/EBWr
+         3dn9GpDTcez+A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o6qR6-004IBg-KL;
+        Thu, 30 Jun 2022 10:26:08 +0100
+Date:   Thu, 30 Jun 2022 10:26:08 +0100
+Message-ID: <87o7ya1ozz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc:     <paulmck@kernel.org>, <frederic@kernel.org>,
+        <josh@joshtriplett.org>, <rostedt@goodmis.org>,
+        <mathieu.desnoyers@efficios.com>, <jiangshanlai@gmail.com>,
+        <joel@joelfernandes.org>, <linux-kernel@vger.kernel.org>,
+        <zhangfei.gao@foxmail.com>, <boqun.feng@gmail.com>,
+        <urezki@gmail.com>, <shameerali.kolothum.thodi@huawei.com>,
+        <pbonzini@redhat.com>, <mtosatti@redhat.com>,
+        <eric.auger@redhat.com>, <chenxiang66@hisilicon.com>
+Subject: Re: [PATCH v2] srcu: Reduce blocking agressiveness of expedited grace periods further
+In-Reply-To: <20220630041201.18301-1-quic_neeraju@quicinc.com>
+References: <20220630041201.18301-1-quic_neeraju@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: quic_neeraju@quicinc.com, paulmck@kernel.org, frederic@kernel.org, josh@joshtriplett.org, rostedt@goodmis.org, mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com, joel@joelfernandes.org, linux-kernel@vger.kernel.org, zhangfei.gao@foxmail.com, boqun.feng@gmail.com, urezki@gmail.com, shameerali.kolothum.thodi@huawei.com, pbonzini@redhat.com, mtosatti@redhat.com, eric.auger@redhat.com, chenxiang66@hisilicon.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On Thu, 30 Jun 2022 05:12:01 +0100,
+Neeraj Upadhyay <quic_neeraju@quicinc.com> wrote:
+>=20
+> Commit 640a7d37c3f4 ("srcu: Block less aggressively for expedited
+> grace periods") highlights a problem where aggressively blocking
+> SRCU expedited grace periods, as was introduced in commit
+> 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
+> from consuming CPU"), introduces ~2 minutes delay to the overall
+> ~3.5 minutes boot time, when starting VMs with "-bios QEMU_EFI.fd"
+> cmdline on qemu, which results in very high rate of memslots
+> add/remove, which causes > ~6000 synchronize_srcu() calls for
+> kvm->srcu SRCU instance.
+>=20
+> Below table captures the experiments done by Zhangfei Gao and Shameer
+> to measure the boottime impact with various values of non-sleeping
+> per phase counts, with HZ_250 and preemption enabled:
+>=20
+> +=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80+
+> | SRCU_MAX_NODELAY_PHASE   | Boot time (s)  |
+> +=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80+
+> | 100                      | 30.053         |
+> | 150                      | 25.151         |
+> | 200                      | 20.704         |
+> | 250                      | 15.748         |
+> | 500                      | 11.401         |
+> | 1000                     | 11.443         |
+> | 10000                    | 11.258         |
+> | 1000000                  | 11.154         |
+> +=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80+
+>=20
+> Analysis on the experiment results showed improved boot time
+> with non blocking delays close to one jiffy duration. This
+> was also seen when number of per-phase iterations were scaled
+> to one jiffy.
+>=20
+> So, this change scales per-grace-period phase number of non-sleeping
+> polls, such that, non-sleeping polls are done for one jiffy. In addition
+> to this, srcu_get_delay() call in srcu_gp_end(), which is used to calcula=
+te
+> the delay used for scheduling callbacks, is replaced with the check for
+> expedited grace period. This is done, to schedule cbs for completed exped=
+ited
+> grace periods immediately, which results in improved boot time seen in
+> experiments.
+>=20
+> In addition to the changes to default per phase delays, this change
+> adds 3 new kernel parameters - srcutree.srcu_max_nodelay,
+> srcutree.srcu_max_nodelay_phase, srcutree.srcu_retry_check_delay.
+> This allows users to configure the srcu grace period scanning delays,
+> depending on their system configuration requirements.
+>=20
+> Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> Tested-by: Marc Zyngier <maz@kernel.org>
+> ---
+>=20
+> Change in v2:
+>=20
+>   - Change srcu_max_nodelay default value to consider phase delay
+>     iterations
+>   - Apply Pauls' feedback
+>   - Add Marc's Tested-by
 
-On Thu, Jun 30, 2022 at 7:15 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> After merging the pinctrl-renesas tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> drivers/pinctrl/renesas/pinctrl-rzv2m.c: In function 'rzv2m_dt_subnode_to_map':
-> drivers/pinctrl/renesas/pinctrl-rzv2m.c:37:33: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
->    37 | #define MUX_FUNC(pinconf)       FIELD_GET(MUX_FUNC_MASK, (pinconf))
->       |                                 ^~~~~~~~~
-> drivers/pinctrl/renesas/pinctrl-rzv2m.c:306:31: note: in expansion of macro 'MUX_FUNC'
->   306 |                 psel_val[i] = MUX_FUNC(value);
->       |                               ^~~~~~~~
-> cc1: all warnings being treated as errors
->
-> Caused by commit
->
->   1e18476c392f ("pinctrl: renesas: Add RZ/V2M pin and gpio controller driver")
->
-> I have used the pinctrl-renesas tree from next-20220629 for today.
+I gave this a go on the same platform as v1, and the result is
+actually much better as I didn't have to add any extra command-line
+option to get to a reasonable result (41s). I think we have a winner.
 
-Thanks for the report.  This was missing an include of <linux/bitfield.h>,
-which is included implicitly on arm64.
+Thanks again,
 
-Fixed and updated.
+	M.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--=20
+Without deviation from the norm, progress is not possible.

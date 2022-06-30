@@ -2,132 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9E055616C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F06005616C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234562AbiF3JrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 05:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
+        id S233085AbiF3Jsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 05:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234509AbiF3JrO (ORCPT
+        with ESMTP id S234542AbiF3Jsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 05:47:14 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EDF4339F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:47:12 -0700 (PDT)
-X-UUID: 9598c00f255d43a0954087a8dac8889c-20220630
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:43f2f889-0537-4be0-a59d-a3f0d314a63b,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:87442a2,CLOUDID:d51d0e63-0b3f-4b2c-b3a6-ed5c044366a0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 9598c00f255d43a0954087a8dac8889c-20220630
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <haibo.li@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 249206036; Thu, 30 Jun 2022 17:47:07 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 30 Jun 2022 17:47:06 +0800
-Received: from mszsdtcf10.gcn.mediatek.inc (10.16.4.60) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Thu, 30 Jun 2022 17:47:05 +0800
-From:   Haibo Li <haibo.li@mediatek.com>
-To:     Sami Tolvanen <samitolvanen@google.com>
-CC:     <xiaoming.yu@mediatek.com>, Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Haibo Li <haibo.li@mediatek.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>
-Subject: [PATCH 2/2] ANDROID: cfi: free old cfi shadow asynchronously
-Date:   Thu, 30 Jun 2022 17:46:46 +0800
-Message-ID: <20220630094646.91837-3-haibo.li@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220630094646.91837-1-haibo.li@mediatek.com>
-References: <20220630094646.91837-1-haibo.li@mediatek.com>
+        Thu, 30 Jun 2022 05:48:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52D5228718
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:48:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656582513;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:in-reply-to:in-reply-to:  references:references;
+        bh=81XeNR30/gt+PowfKeOGNijQshuWEzmNgPk0a20HvN0=;
+        b=jMfxaYvPWQp3RshSdzEGvBMgU8eZ+5g5zaOGDl4kEf7xvjJsS5pih9fMR/fyNIE0kXt5p3
+        J1Zpfs/scSNUc6Res5jnY3XQ9WtoFJS4EdGs1M+S/TEey+wiirJ9JA3XjoU1Dc4Xbpj+Kl
+        wu4hWSXCbhM70FEUvINDb/635ZA+vbw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-323-isF8oHKAOWuBrh-V19C9Cw-1; Thu, 30 Jun 2022 05:48:32 -0400
+X-MC-Unique: isF8oHKAOWuBrh-V19C9Cw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C1E5E80029D;
+        Thu, 30 Jun 2022 09:48:31 +0000 (UTC)
+Received: from redhat.com (unknown [10.33.36.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 732B7492C3B;
+        Thu, 30 Jun 2022 09:48:30 +0000 (UTC)
+Date:   Thu, 30 Jun 2022 10:48:27 +0100
+From:   Daniel =?utf-8?B?UC4gQmVycmFuZ8Op?= <berrange@redhat.com>
+To:     Lei He <helei.sig11@bytedance.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        dhowells@redhat.com, "Michael S. Tsirkin" <mst@redhat.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pizhenwei@bytedance.com
+Subject: Re: [External] [PATCH v2 0/4] virtio-crypto: support ECDSA algorithm
+Message-ID: <Yr1xa4twKn3qFAt9@redhat.com>
+Reply-To: Daniel =?utf-8?B?UC4gQmVycmFuZ8Op?= <berrange@redhat.com>
+References: <20220623070550.82053-1-helei.sig11@bytedance.com>
+ <Yr1JvG1aJUp4I/fP@gondor.apana.org.au>
+ <C7191BC8-5BE0-47CB-A302-735BBD1CBED0@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <C7191BC8-5BE0-47CB-A302-735BBD1CBED0@bytedance.com>
+User-Agent: Mutt/2.2.6 (2022-06-05)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currenly, it uses synchronize_rcu() to wait old rcu reader to go away
-in update_shadow.In embedded platform like ARM CA7X,
-load_module blocks 40~50ms in update_shadow.
-When there are more than one hundred kernel modules,
-it blocks several seconds.
+On Thu, Jun 30, 2022 at 03:23:39PM +0800, Lei He wrote:
+> 
+> > On Jun 30, 2022, at 2:59 PM, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+> > 
+> > On Thu, Jun 23, 2022 at 03:05:46PM +0800, Lei He wrote:
+> >> From: lei he <helei.sig11@bytedance.com>
+> >> 
+> >> This patch supports the ECDSA algorithm for virtio-crypto.
+> > 
+> > Why is this necessary?
+> > 
+> 
+> The main purpose of this patch is to offload ECDSA computations to virtio-crypto dev.
+> We can modify the backend of virtio-crypto to allow hardware like Intel QAT cards to 
+> perform the actual calculations, and user-space applications such as HTTPS server 
+> can access those backend in a unified way(eg, keyctl_pk_xx syscall).
+> 
+> Related works are also described in following patch series:
+> https://lwn.net/ml/linux-crypto/20220525090118.43403-1-helei.sig11@bytedance.com/
 
-To accelerate load_module,change synchronize_rcu to call_rcu.
+IIUC, this link refers to testing performance of the RSA impl of
+virtio-crypto with a vhost-user backend, leveraging an Intel QAT
+device on the host. What's the status of that depolyment setup ?
+Is code for it published anywhere, and does it have dependancy on
+any kernel patches that are not yet posted and/or merged ? Does it
+cover both ECDSA and RSA yet, or still only RSA ?
 
-Signed-off-by: Haibo Li <haibo.li@mediatek.com>
-Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
----
- kernel/cfi.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+The QEMU backend part of the virtio-crypto support for ECDSA looks fine
+to merge, but obviously I'd like some positive sign that the kernel
+maintainers are willing to accept the guest driver side.
 
-diff --git a/kernel/cfi.c b/kernel/cfi.c
-index 456771c8e454..a4836d59ca27 100644
---- a/kernel/cfi.c
-+++ b/kernel/cfi.c
-@@ -43,6 +43,8 @@ typedef u16 shadow_t;
- struct cfi_shadow {
- 	/* Page index for the beginning of the shadow */
- 	unsigned long base;
-+	/* rcu to free old cfi_shadow asynchronously */
-+	struct rcu_head rcu;
- 	/* An array of __cfi_check locations (as indices to the shadow) */
- 	shadow_t shadow[1];
- } __packed;
-@@ -182,6 +184,13 @@ static void remove_module_from_shadow(struct cfi_shadow *s, struct module *mod,
- 	}
- }
- 
-+static void _cfi_shadow_free_rcu(struct rcu_head *rcu)
-+{
-+	struct cfi_shadow *old = container_of(rcu, struct cfi_shadow, rcu);
-+
-+	vfree(old);
-+}
-+
- typedef void (*update_shadow_fn)(struct cfi_shadow *, struct module *,
- 			unsigned long min_addr, unsigned long max_addr);
- 
-@@ -211,11 +220,10 @@ static void update_shadow(struct module *mod, unsigned long base_addr,
- 
- 	rcu_assign_pointer(cfi_shadow, next);
- 	mutex_unlock(&shadow_update_lock);
--	synchronize_rcu();
- 
- 	if (prev) {
- 		set_memory_rw((unsigned long)prev, SHADOW_PAGES);
--		vfree(prev);
-+		call_rcu(&prev->rcu, _cfi_shadow_free_rcu);
- 	}
- }
- 
+With regards,
+Daniel
 -- 
-2.25.1
+|: https://berrange.com      -o-    https://www.flickr.com/photos/dberrange :|
+|: https://libvirt.org         -o-            https://fstop138.berrange.com :|
+|: https://entangle-photo.org    -o-    https://www.instagram.com/dberrange :|
 

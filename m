@@ -2,79 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C915562015
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CBF2562022
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236005AbiF3QRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 12:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53784 "EHLO
+        id S235824AbiF3QT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 12:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236353AbiF3QRf (ORCPT
+        with ESMTP id S235370AbiF3QT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 12:17:35 -0400
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326F62E087;
-        Thu, 30 Jun 2022 09:17:35 -0700 (PDT)
-Received: by mail-il1-f170.google.com with SMTP id 9so12711122ill.5;
-        Thu, 30 Jun 2022 09:17:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=q/SFM7tlCbPG9MPt9DVFEuD2pGYii3RFWX7VVRKazOI=;
-        b=HF/wT857fNrJv3dugodIxp6CHjG5x9w8CfgZBoPB/G3nTb+ZH+CThGA7StnH25vwNq
-         AheX16MrhLAvW0QyTmHKZf2aTRS5ylYBTx9E73SMXzaHL2ou9i03bO4pSbijSSc8gkqc
-         x11OaW1kqoB4Cb9Vil530r/dlJ6N10L6Ic3IcIYhvVwczXxnHfnI73PkdOmag+1mF6zJ
-         uCfvsl0Lp7WzxFzYKGHyKDEESZ+NoTRS5aYSj+81Ss5VhUf26lHaw0AvRv3es0w5ByOK
-         ZuK4uIcNaAeGdGIUegPBcX0EGn29wYaUvnGupA9FXIIXmZ7JFF5AAuzBF6TvortdmtjO
-         XuoQ==
-X-Gm-Message-State: AJIora9UqlmMU2Ccytcok2k6DLTneNd6KeyJfj0LKMKmY29TMn9zOO4h
-        FxoWYjfqaWiWC1caPNw0suAZxmvcQg==
-X-Google-Smtp-Source: AGRyM1ug+M9kyReUNbTWDDSl6F6kAbLlRpJAtMHlaAXsWsTP0S7OgFkMXyOCqKekOQy8Ugh+oOD2Iw==
-X-Received: by 2002:a05:6e02:b24:b0:2d9:2ad3:3153 with SMTP id e4-20020a056e020b2400b002d92ad33153mr5670692ilu.208.1656605854462;
-        Thu, 30 Jun 2022 09:17:34 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id p13-20020a056638216d00b00339ea90fa80sm8677059jak.71.2022.06.30.09.17.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 09:17:34 -0700 (PDT)
-Received: (nullmailer pid 2830875 invoked by uid 1000);
-        Thu, 30 Jun 2022 16:17:31 -0000
-Date:   Thu, 30 Jun 2022 10:17:31 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Thu, 30 Jun 2022 12:19:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4FC62A974
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 09:19:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC2331042;
+        Thu, 30 Jun 2022 09:19:55 -0700 (PDT)
+Received: from bogus (unknown [10.57.39.193])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E93263F66F;
+        Thu, 30 Jun 2022 09:19:53 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 17:18:42 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     Jim Quinlan <james.quinlan@broadcom.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>
-Subject: Re: [PATCH net-next] dt-bindings: net: dsa: renesas,rzn1-a5psw: add
- interrupts description
-Message-ID: <20220630161731.GA2830744-robh@kernel.org>
-References: <20220629091305.125291-1-clement.leger@bootlin.com>
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Subject: Re: [PATCH 0/2] Add SCMI full message tracing
+Message-ID: <20220630161842.n57xwxbhon4hq4ln@bogus>
+References: <20220623145533.2882688-1-cristian.marussi@arm.com>
+ <CA+-6iNx_EW_L5Ffn-L+xyg8VVGVPyBonvBFVV6dq69HpTHdqrQ@mail.gmail.com>
+ <YryXp5ieC+dz8CSy@e120937-lin>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220629091305.125291-1-clement.leger@bootlin.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <YryXp5ieC+dz8CSy@e120937-lin>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,14 +50,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Jun 2022 11:13:04 +0200, Clément Léger wrote:
-> Describe the switch interrupts (dlr, switch, prp, hub, pattern) which
-> are connected to the GIC.
+On Wed, Jun 29, 2022 at 07:19:32PM +0100, Cristian Marussi wrote:
+> On Mon, Jun 27, 2022 at 03:05:57PM -0400, Jim Quinlan wrote:
+
+[...]
+
+> > This format is also easy to parse with a script:  strip the preamble,
+> > split on whitespace, and then split on '=' to get the  [key, value]
+> > pairs.
 > 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-> ---
->  .../bindings/net/dsa/renesas,rzn1-a5psw.yaml  | 23 +++++++++++++++++++
->  1 file changed, 23 insertions(+)
+> In fact having a grep-friendly format is better.
+> 
+> Thanks for your feedback, I'll wait to see if someone else wants to
+> chime in and repost.
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+I agree with Jim's proposal, please update and send the patch.
+
+-- 
+Regards,
+Sudeep

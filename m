@@ -2,129 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC49D561958
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2694556195D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235102AbiF3Lhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 07:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
+        id S235183AbiF3LiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 07:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235074AbiF3LhU (ORCPT
+        with ESMTP id S234211AbiF3LiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 07:37:20 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B715A44F;
-        Thu, 30 Jun 2022 04:37:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656589039; x=1688125039;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=cJOc9pifRuPqoq93Kxnv9kcuAQi7B+at/0gDeNXNrbw=;
-  b=g/VEfy35U6moKwPaE49uV1lTfha11Ef4GJbu6GYXAAhXp43mPUm5S5Tu
-   ZO0kv1LZapu2FcPlltrw58uNGkO2r4U33eANz7N936XOYS+SV7GGNgs/r
-   FfasxhulYmjrGHoV+hvN8rw2AsPhnMxZ0TylisBxVbneeVQTPJtgvayT1
-   qhJvc/mfuAYlLOmWFFySLsyjWQth+4lSPXs1H1cIACkt40SevffzdpNV1
-   I5Kmv28gbSOUwMO69fsbe1D42eBoIBhnCRwqqTVrbB/ZgwjwrK/6c7aAk
-   gGONoUlYSKQLGino2tweJIW7QitegZq3bkBwcZ9l3KSIPSEH2FjOaZMfD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="262121654"
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="262121654"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 04:37:19 -0700
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="617947907"
-Received: from zhihuich-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.49.124])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 04:37:17 -0700
-Message-ID: <cfeb3b8b02646b073d5355495ec8842ac33aeae5.camel@intel.com>
-Subject: Re: [PATCH v7 035/102] KVM: x86/mmu: Explicitly check for MMIO spte
- in fast page fault
-From:   Kai Huang <kai.huang@intel.com>
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Date:   Thu, 30 Jun 2022 23:37:15 +1200
-In-Reply-To: <71e4c19d1dff8135792e6c5a17d3a483bc99875b.1656366338.git.isaku.yamahata@intel.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
-         <71e4c19d1dff8135792e6c5a17d3a483bc99875b.1656366338.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Thu, 30 Jun 2022 07:38:10 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BD7211;
+        Thu, 30 Jun 2022 04:38:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Pv/MrnU/LrYOZTd4cC/4ZooyB5G39qwbNjjlZ82jsScTxbaqOdG08SeV2qj0uvPVlOmQHwGU/icKrgKjiKkNJZTKj9IFM2UhOo122bAVVEhB1058mIfykru3zLvCwWm5pxgFxLyC/mhqzICC2bDIhPbyoUsLUWoZm3XoAaIcWpe6gcieLLCwYA41PhdGieDS/iWB/+VPozKO1DZXsmgLrfgMU4QyNhD23otP9nfpnC6K8TlD23mU4f8IYsbN9lcBuw7SpaN9v0q9Iepmn+6q6Z57i3q3CC1ajXTlDQgxvQMn/N+W7PNuwrbZiX5MMqmUOpXQckFyI7GQszfs0pLuwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DKujan2IbH/dDqQkS1tM31TozdGPb8fajbOCPRIL1q4=;
+ b=dS/7qxOVbEpmGrRxG1odZqThv5TNPnZIblbrr0HNS6auRgs2QirDWo/d+5SCXOgSRAEpFD1km5iAoR9/rS5I+V1Nry6hzAGeRKf3+/xPfOgitIWgoYbxepb5tIy5KNHseH/XE6Lopd/yeLkqmd9taPEVemb7MHZhso62DyNlXt37V1Eo3nqDaBj2G7rMj7EXFvvu181wEha8Q5phsPyuUqKk8hrHozBiRi1IWp7oIY24ZhQ/onF6bwwrwmGrlFDrji/9jg3Mo6zpwhWH3uNYHUCQSutcj8101kMPa8WG+wuxcCxFhdk70Vh/q32p3AZ0h+b++2AHX76JUx+adNw2fw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DKujan2IbH/dDqQkS1tM31TozdGPb8fajbOCPRIL1q4=;
+ b=BiNzjnGL14vJE6QnbJ5LymQDSqNPZMIEwenj54sE2rgl8Z0H1w/7e4kMAR/bQ4oXq7cmeaDe3nkvDkOGjmUy80qHPJuknPKUKf+i2ci+w/6IbyGt0iYHi4CJ2Sm8Kg4GSj0zJ8PEv0VpLIKiwSl8ajH4RPhtHDoH8jbffesCgePzdaSgx1ovJD55W2HPcdaltHpwUGmbPhWl9VGHGuqM1PDp/jPUlFkrmutlGO9VMoz2Q4vkHJidZjjDk4LJV7vB8ujeiYfx/efTZww+phK0TFrq2T9zFoig+RKwxQ5+0iXUM3vxXPBusncg81bquthq/XTUiKVciau1+gMQ88NMWQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by CH2PR12MB3894.namprd12.prod.outlook.com (2603:10b6:610:2b::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Thu, 30 Jun
+ 2022 11:38:02 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::611c:e609:d343:aa34]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::611c:e609:d343:aa34%5]) with mapi id 15.20.5395.014; Thu, 30 Jun 2022
+ 11:38:02 +0000
+Date:   Thu, 30 Jun 2022 14:37:56 +0300
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     Hans Schultz <hans@kapio-technology.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that link-local
+ traffic cannot unlock a locked port
+Message-ID: <Yr2LFI1dx6Oc7QBo@shredder>
+References: <20220630111634.610320-1-hans@kapio-technology.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220630111634.610320-1-hans@kapio-technology.com>
+X-ClientProxiedBy: VI1PR07CA0169.eurprd07.prod.outlook.com
+ (2603:10a6:802:3e::17) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e244c5ad-d3cc-42e2-c0b8-08da5a8cfd98
+X-MS-TrafficTypeDiagnostic: CH2PR12MB3894:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ovOyiMWS37MK0N4CAAa21kBUArr7Cs9NyTpBfvtToyLQLNYN8aB73I1IplmzUM0hfF+dgidnS4UZul5GLFrjseWO6pf9KrNXpa7i5c4mtT/+Xfht6SfWWRULYaB5kn5D3M2YL2tBemvu5HeEZhqDR9JneVIyibfZgo2smrB+op/2C5oY/cSZV2KULq/dClo0w78UbJ6Mh6Mqkd+LunMZtmLsuAV5wGOD76U166me/QjiorTN/rRFwAS211+bd6vzi8Uhb1lJhgiQHNxXS66tGHlDHVZe74j5prme+oCRfuIjDWKhpY5Z4GihOQk8ZHtkJMApHFtavp1MXgK9lnaWS1gBmMS6dpxM5z6NMBdD6kJeBPsCxOZFkKLR6k8st10WHHE/wThqCR0S/ZcqGT2AgQzCXwzR9B2HlbBsW/Kb+vO1fxWk8d7yyieQ5h3g6hTLFCYdlDIzebv8PKpG2Id3S8vv9eFkroTpJOnwYLuY1R44r2VDQlTR4CRayDNH8Q2ju13R6v1XKYRzI8A5L/BwA8sXOA9+/fTBgHiIkYI6N3qcbefN6yr7ZpCZRjR9JFnGZPXTUAiyhZ3vuatlJV92XCyBFcel7D1++ju+oCnykoqf/ga7stAPixTfsf45CTmcHh+QaaQiILgZ1tGvFI2NpbRWSRofEDaooT1cNOWDHBHm7PyhIn5KZWmsbZSIF4mFP1mhbe3PJek7+f1HDpjt+7/Jh+rwFGrtlRQ3/jm7H/MQuCNf41r0+w+g1iBW0rM7v1fZmDTCdpar9F+qDq/5TQT5s5ezA7TACiFI8K3LcGTpSN+WVixtBJoU67DbN49HQh5FnZq61RR51cZkMSQdAQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(396003)(39860400002)(136003)(366004)(376002)(346002)(6506007)(6666004)(966005)(38100700002)(478600001)(41300700001)(6486002)(26005)(316002)(9686003)(54906003)(6512007)(6916009)(7416002)(4326008)(66946007)(33716001)(5660300002)(83380400001)(66556008)(8936002)(86362001)(186003)(8676002)(2906002)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lWHcmdMz/IBOxaGM2iAVoKoyHNlyQYQAGrRph9shcOAHjCAZ5c3t8dH2yvkL?=
+ =?us-ascii?Q?XRwmqVXs1kQphrWj1njPvE1j88O4In25E474Zac3KD2I8RFnkXXmnzfSxNTs?=
+ =?us-ascii?Q?87aeGoE7pIQNl4EMjjC3vilgl9AWJwi8Elp04MYro0WeZWx4d1XkBo7JQ8Nm?=
+ =?us-ascii?Q?x0MEceQmxGoMinnTQqLknln+TSVVZRnUenS4vXMRsxp8TnhVZm2vXQhiB+rF?=
+ =?us-ascii?Q?lv7VHmd4frUoYGHVvvQNF2MohCtV0c1gjLnhdcFClsi9maBAmk/TcWIHd58r?=
+ =?us-ascii?Q?jlWJwKIUzzOmdUmmTjaeB9VQj0OBBrj+XuN8CgAGHq6MEDrsuurJf/00Hr1l?=
+ =?us-ascii?Q?bBnCDY/YysYpbZpijn4JFb6aujoQ5X/krrPv81QU6ckvyp+oXfuRUl4pLN7e?=
+ =?us-ascii?Q?0GZv0ddctkER7bF/vOqsm73AW1oeIasWnMPojMz59bZ7k2AQC0dvmssu4ez2?=
+ =?us-ascii?Q?/KUQSqJ4xMkJHTKQAXIJoB/VYP1sYgS2g1U6uptuO6bg0LcYMz+EXt/t4ifG?=
+ =?us-ascii?Q?sZWOCqE1pBD3vdqOEV6lg82YBX4LJftz5VkwJqWlX/328jO6C8tQFbLsp2Yn?=
+ =?us-ascii?Q?ovL772le4GxHTUSDG2v66hSKo0SkJapPU6paLj4gtjrDTGg03DouVQUDGFPe?=
+ =?us-ascii?Q?qlT/Hd97wmmUQ83AiTSkH189i9E2S5cPuqKsmU2VV4bj1NjYUu4XTlZJ8qjc?=
+ =?us-ascii?Q?fyAC+H+qFwJ6p6MJyPXsHN7NeTwf0rSdMAVyZ5fc6ZwnLlOb0YuYa0oeF8Xo?=
+ =?us-ascii?Q?GkRv3IVbPy+CChPtqKTy+cce2UzJRQIosaSlUCyXWDyk5hL9rlHKQYQDGw6C?=
+ =?us-ascii?Q?+wrZvvKkyVxb5CuzeE1Dl5LWCe1o2Lc9Ez0MEHjr0fpcom+hh3mFID/x/7H2?=
+ =?us-ascii?Q?UP2nbmsvqP2ii9GssLtP/+2U2z1jGO39ON81yTTnG/uMiyFzXoqLjGGsG1bl?=
+ =?us-ascii?Q?X+DphnZftYHgEqhIAdpmJg8ChxM3tI46Ya2bocFz2lIO+wpw94ZcbkZQR9k2?=
+ =?us-ascii?Q?w7qtzL7OBhwQBAy8r6DqgVo6poAi9TzjEiN6L7EoKol/wrDTrN5ykPwO7hz3?=
+ =?us-ascii?Q?n9gj6cJcm9DAnr00cOh83Nag0L5kqmfjhPyQISr/PJgubFK3FgfSGiaTifBH?=
+ =?us-ascii?Q?KPqCpbOorrOrY8ouByClFP7I6+13NLMwHffcEXxgPc6AGXEpntLxbHidT8wb?=
+ =?us-ascii?Q?2/8BIcu7xWboptpUbKUVULDz9Q9PIXDMJ8J1KPLv5+yEk5ec+q1//IGhprqJ?=
+ =?us-ascii?Q?vPZro2ptgw5I+mXjzqoCmI8sFnDkwJ8XvhxwSWGQEPKxtOtaEA7dpp6KKV7I?=
+ =?us-ascii?Q?x9G0ZyVFNQxKuD7eR/7cxE+ixZm5dWQ4EBgDRvX9/yR/+S+Syaw8EDHynv4T?=
+ =?us-ascii?Q?mH7IpHZ/A5I+fGtc+qdmTM2osb/gTEU2OoHRBtycQuOS/UgyC9HG6G0voyez?=
+ =?us-ascii?Q?4sNrA+LB9ERbhpMvxg6asRzKgxWVpw00shZycfQDqDqSwnKXZ16wMBkwYNma?=
+ =?us-ascii?Q?wO5bUT4f1RKQFxUwO8a0sB0lM/sb4dgZK0tfg+WFT65s38CiVnMCJkCbIpDt?=
+ =?us-ascii?Q?Gp76T/mVrsZ5sMOGsdWBhWztD8R+dgzFeelJjY+2?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e244c5ad-d3cc-42e2-c0b8-08da5a8cfd98
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 11:38:02.5257
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1HzybaR9/ARgc9OYYyyGFvFXgGQckcRkqLL+IsKfer/ZHkDoPs2tDLhQTDO6F2XvQgBGJJTp4YKP7LRp7M+SyQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB3894
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-27 at 14:53 -0700, isaku.yamahata@intel.com wrote:
-> From: Sean Christopherson <sean.j.christopherson@intel.com>
->=20
-> Explicitly check for an MMIO spte in the fast page fault flow.  TDX will
-> use a not-present entry for MMIO sptes, which can be mistaken for an
-> access-tracked spte since both have SPTE_SPECIAL_MASK set.
+On Thu, Jun 30, 2022 at 01:16:34PM +0200, Hans Schultz wrote:
+> This patch is related to the patch set
+> "Add support for locked bridge ports (for 802.1X)"
+> Link: https://lore.kernel.org/netdev/20220223101650.1212814-1-schultz.hans+netdev@gmail.com/
+> 
+> This patch makes the locked port feature work with learning turned on,
+> which is enabled with the command:
+> 
+> bridge link set dev DEV learning on
+> 
+> Without this patch, link local traffic (01:80:c2) like EAPOL packets will
+> create a fdb entry when ingressing on a locked port with learning turned
+> on, thus unintentionally opening up the port for traffic for the said MAC.
+> 
+> Some switchcore features like Mac-Auth and refreshing of FDB entries,
+> require learning enables on some switchcores, f.ex. the mv88e6xxx family.
+> Other features may apply too.
+> 
+> Since many switchcores trap or mirror various multicast packets to the
+> CPU, link local traffic will unintentionally unlock the port for the
+> SA mac in question unless prevented by this patch.
 
-SPTE_SPECIAL_MASK has been removed in latest KVM code.  The changelog needs
-update.
+Why not just teach hostapd to do:
 
-In fact, if I understand correctly, I don't think this changelog is correct=
-:
+echo 1 > /sys/class/net/br0/bridge/no_linklocal_learn
 
-The existing code doesn't check is_mmio_spte() because:
-
-1) If MMIO caching is enabled, MMIO fault is always handled in
-handle_mmio_page_fault() before reaching here;=20
-
-2) If MMIO caching is disabled, is_shadow_present_pte() always returns fals=
-e for
-MMIO spte, and is_mmio_spte() also always return false for MMIO spte, so th=
-ere's
-no need check here.
-
-"A non-present entry for MMIO spte" doesn't necessarily mean
-is_shadow_present_pte() will return true for it, and there's no explanation=
- at
-all that for TDX guest a MMIO spte could reach here and is_shadow_present_p=
-te()
-returns true for it.
-
-If this patch is ever needed, it should come with or after the patch (patch=
-es)
-that handles MMIO fault for TD guest.
-
-Hi Sean, Paolo,
-
-Did I miss anything?
-
->=20
-> MMIO sptes are handled in handle_mmio_page_fault for non-TDX VMs, so this
-> patch does not affect them.  TDX will handle MMIO emulation through a
-> hypercall instead.
->=20
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 17252f39bd7c..51306b80f47c 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -3163,7 +3163,7 @@ static int fast_page_fault(struct kvm_vcpu *vcpu, s=
-truct kvm_page_fault *fault)
->  		else
->  			sptep =3D fast_pf_get_last_sptep(vcpu, fault->addr, &spte);
-> =20
-> -		if (!is_shadow_present_pte(spte))
-> +		if (!is_shadow_present_pte(spte) || is_mmio_spte(spte))
->  			break;
-> =20
->  		sp =3D sptep_to_sp(sptep);
-
+?

@@ -2,184 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8C8561BA8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66755561C02
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234222AbiF3Nqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 09:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47294 "EHLO
+        id S235432AbiF3NvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 09:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbiF3Nqf (ORCPT
+        with ESMTP id S235635AbiF3Nub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:46:35 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFC521274;
-        Thu, 30 Jun 2022 06:46:34 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id fw3so11472710ejc.10;
-        Thu, 30 Jun 2022 06:46:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WpUG/1Adlro4yhfIfUNT1zQ44D9g1crkrWmNqAskdRQ=;
-        b=XdyaQI4bpl3rJeGqJ7aKTdzqGPKYOk0JKqHMymVALHU8U40ZV/bQRSUEy4zPafkGSY
-         h3DQr2JOUJ/VYZqt6zgDPbLV4tlzjAokSYethVPC8lXnTqoX3h0V8NT9KIr1xBQGQhuc
-         +9/6Y+B9qoOrsAVI3vy/ZBxpKI5J/JwiZvWlxX52h6IbJicVx/coPBN8nveFtW3ouOMV
-         9/7y2UGv1dVMvoLELH9AmGmE6NnC4urs3ClM1rokPaNhmAUrxbBswwn2DOAXTiLfPpTn
-         0TXVc6JhvUUWKC+dv7e6+uAc0TBMlWc+YWe1OGV4/ezeNwhofTtTSJAji5gPMPfJkrkH
-         4pQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WpUG/1Adlro4yhfIfUNT1zQ44D9g1crkrWmNqAskdRQ=;
-        b=HiM1eVaiQTRN548SRVOwVLVANC3sgDp6sT1vJ+e18zn5F9eK8P8rmTHJyHSyr+dvFn
-         uk1HsEOMokwo3W2KR6LzxpaDGkfXJRkf3cfjgPOGLmHyZg6E8uqO3FL5+YMLyclSyfTu
-         UHZfbAoT4Mh4G4UtIalKB4vUVcwKYXok9svwtWUeb0RnikyrR0wR7OVV228kooKtuDnn
-         yWUDP6KZ+M9+TBuyigEz2k1g0KE9lQQrm0+fmqxcxWKDW1NavqmWbE2/Nd6pM6icgZIP
-         HBwe9FPxVRkBQ7IoWlM0QhKTNXKX3lwiFDYhquE57MwOxTc9CLQHr8XMtazEocUBah+N
-         4WeQ==
-X-Gm-Message-State: AJIora/EuO+ySNXK7r7hjGfPgiLpJD9d22Cyx271BSXzCX08wa3qZqjF
-        IuLx0Kjxvnrd38bo80+jrzo=
-X-Google-Smtp-Source: AGRyM1v/saxokxA3Z1/0oWe8gdZOE0DUfGiMLl3Mrmq+LzIasuT/CYNL75AKaoF7LOGKSfDab6f9HQ==
-X-Received: by 2002:a17:907:968a:b0:722:e508:fc15 with SMTP id hd10-20020a170907968a00b00722e508fc15mr9385020ejc.188.1656596793056;
-        Thu, 30 Jun 2022 06:46:33 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id bk8-20020a170906b0c800b0071c6dc728b2sm9016615ejb.86.2022.06.30.06.46.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 06:46:32 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
+        Thu, 30 Jun 2022 09:50:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371023C710;
+        Thu, 30 Jun 2022 06:49:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1EB9BB82AEF;
+        Thu, 30 Jun 2022 13:48:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82BB4C36AE2;
+        Thu, 30 Jun 2022 13:48:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656596936;
+        bh=ObkPRihGr6GwGF8PylNRB0yuQn5FlDhxalTsxytZMbs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pbrTFAvMX8Z9R4gOw32nYWeKx0BjUhbRmORge76/6bMYBRIBTrRgmy7J/ypPN+kGi
+         CbrGYvvYJU8SQIamHxuL7OyjZq75o+XJSGSgisLvtu5W5dZrMzDeuwflErF1EAw+fz
+         TuW0RcEysuOtp1DCd6c7eWjeJfrCsD12CwQuhzXM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Jonathan Toppins <jtoppins@redhat.com>,
+        Jay Vosburgh <jay.vosburgh@canonical.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [net-next PATCH RFC] net: dsa: qca8k: move driver to qca dir
-Date:   Thu, 30 Jun 2022 15:46:06 +0200
-Message-Id: <20220630134606.25847-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 07/29] bonding: ARP monitor spams NETDEV_NOTIFY_PEERS notifiers
+Date:   Thu, 30 Jun 2022 15:46:07 +0200
+Message-Id: <20220630133231.419368643@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.0
+In-Reply-To: <20220630133231.200642128@linuxfoundation.org>
+References: <20220630133231.200642128@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move qca8k driver to qca dir in preparation for code split and
-introduction of ipq4019 switch based on qca8k.
+From: Jay Vosburgh <jay.vosburgh@canonical.com>
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+[ Upstream commit 7a9214f3d88cfdb099f3896e102a306b316d8707 ]
+
+The bonding ARP monitor fails to decrement send_peer_notif, the
+number of peer notifications (gratuitous ARP or ND) to be sent. This
+results in a continuous series of notifications.
+
+Correct this by decrementing the counter for each notification.
+
+Reported-by: Jonathan Toppins <jtoppins@redhat.com>
+Signed-off-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+Fixes: b0929915e035 ("bonding: Fix RTNL: assertion failed at net/core/rtnetlink.c for ab arp monitor")
+Link: https://lore.kernel.org/netdev/b2fd4147-8f50-bebd-963a-1a3e8d1d9715@redhat.com/
+Tested-by: Jonathan Toppins <jtoppins@redhat.com>
+Reviewed-by: Jonathan Toppins <jtoppins@redhat.com>
+Link: https://lore.kernel.org/r/9400.1655407960@famine
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
+ drivers/net/bonding/bond_main.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Posting this as a RFC to discuss the problems of such change.
-
-This is needed as in the next future the qca8k driver will be split
-to a common code. This needs to be done as the ipq4019 is based on qca8k
-but will have some additional configuration thing and other phylink
-handling so it will require different setup function. Aside from these
-difference almost all the regs are the same of qca8k.
-
-For this reason keeping the driver in the generic dsa dir would create
-some caos and I think it would be better to move it the dedicated qca
-dir.
-
-This will for sure creates some problems with backporting patch.
-
-So the question is... Is this change acceptable or we are cursed to
-keeping this driver in the generic dsa directory?
-
-Additional bonus question, since the ethernet part still requires some
-time to get merged, wonder if it's possible to send the code split with
-qca8k as the only user (currently) and later just add the relevant
-ipq4019 changes.
-
-(this ideally is to prepare stuff and not send a big scary series when
-it's time to send ipq4019 changes)
-
- drivers/net/dsa/Kconfig           | 8 --------
- drivers/net/dsa/Makefile          | 1 -
- drivers/net/dsa/qca/Kconfig       | 8 ++++++++
- drivers/net/dsa/qca/Makefile      | 1 +
- drivers/net/dsa/{ => qca}/qca8k.c | 0
- drivers/net/dsa/{ => qca}/qca8k.h | 0
- 6 files changed, 9 insertions(+), 9 deletions(-)
- rename drivers/net/dsa/{ => qca}/qca8k.c (100%)
- rename drivers/net/dsa/{ => qca}/qca8k.h (100%)
-
-diff --git a/drivers/net/dsa/Kconfig b/drivers/net/dsa/Kconfig
-index 702d68ae435a..d8ae0e8af2a0 100644
---- a/drivers/net/dsa/Kconfig
-+++ b/drivers/net/dsa/Kconfig
-@@ -60,14 +60,6 @@ source "drivers/net/dsa/sja1105/Kconfig"
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 0d9226bdf661..33843b89ab04 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -3014,9 +3014,11 @@ static void bond_activebackup_arp_mon(struct work_struct *work)
+ 		if (!rtnl_trylock())
+ 			return;
  
- source "drivers/net/dsa/xrs700x/Kconfig"
- 
--config NET_DSA_QCA8K
--	tristate "Qualcomm Atheros QCA8K Ethernet switch family support"
--	select NET_DSA_TAG_QCA
--	select REGMAP
--	help
--	  This enables support for the Qualcomm Atheros QCA8K Ethernet
--	  switch chips.
--
- source "drivers/net/dsa/realtek/Kconfig"
- 
- config NET_DSA_RZN1_A5PSW
-diff --git a/drivers/net/dsa/Makefile b/drivers/net/dsa/Makefile
-index b32907afa702..16eb879e0cb4 100644
---- a/drivers/net/dsa/Makefile
-+++ b/drivers/net/dsa/Makefile
-@@ -8,7 +8,6 @@ endif
- obj-$(CONFIG_NET_DSA_LANTIQ_GSWIP) += lantiq_gswip.o
- obj-$(CONFIG_NET_DSA_MT7530)	+= mt7530.o
- obj-$(CONFIG_NET_DSA_MV88E6060) += mv88e6060.o
--obj-$(CONFIG_NET_DSA_QCA8K)	+= qca8k.o
- obj-$(CONFIG_NET_DSA_RZN1_A5PSW) += rzn1_a5psw.o
- obj-$(CONFIG_NET_DSA_SMSC_LAN9303) += lan9303-core.o
- obj-$(CONFIG_NET_DSA_SMSC_LAN9303_I2C) += lan9303_i2c.o
-diff --git a/drivers/net/dsa/qca/Kconfig b/drivers/net/dsa/qca/Kconfig
-index 13b7e679b8b5..ba339747362c 100644
---- a/drivers/net/dsa/qca/Kconfig
-+++ b/drivers/net/dsa/qca/Kconfig
-@@ -7,3 +7,11 @@ config NET_DSA_AR9331
- 	help
- 	  This enables support for the Qualcomm Atheros AR9331 built-in Ethernet
- 	  switch.
-+
-+config NET_DSA_QCA8K
-+	tristate "Qualcomm Atheros QCA8K Ethernet switch family support"
-+	select NET_DSA_TAG_QCA
-+	select REGMAP
-+	help
-+	  This enables support for the Qualcomm Atheros QCA8K Ethernet
-+	  switch chips.
-diff --git a/drivers/net/dsa/qca/Makefile b/drivers/net/dsa/qca/Makefile
-index 274022319066..40bb7c27285b 100644
---- a/drivers/net/dsa/qca/Makefile
-+++ b/drivers/net/dsa/qca/Makefile
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_NET_DSA_AR9331)	+= ar9331.o
-+obj-$(CONFIG_NET_DSA_QCA8K)	+= qca8k.o
-diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca/qca8k.c
-similarity index 100%
-rename from drivers/net/dsa/qca8k.c
-rename to drivers/net/dsa/qca/qca8k.c
-diff --git a/drivers/net/dsa/qca8k.h b/drivers/net/dsa/qca/qca8k.h
-similarity index 100%
-rename from drivers/net/dsa/qca8k.h
-rename to drivers/net/dsa/qca/qca8k.h
+-		if (should_notify_peers)
++		if (should_notify_peers) {
++			bond->send_peer_notif--;
+ 			call_netdevice_notifiers(NETDEV_NOTIFY_PEERS,
+ 						 bond->dev);
++		}
+ 		if (should_notify_rtnl) {
+ 			bond_slave_state_notify(bond);
+ 			bond_slave_link_notify(bond);
 -- 
-2.36.1
+2.35.1
+
+
 

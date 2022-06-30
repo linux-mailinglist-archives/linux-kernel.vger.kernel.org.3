@@ -2,101 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB53561045
+	by mail.lfdr.de (Postfix) with ESMTP id 33CD4561044
 	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 06:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbiF3EeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 00:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44890 "EHLO
+        id S232168AbiF3Ee3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 00:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231617AbiF3EeN (ORCPT
+        with ESMTP id S232160AbiF3Ee0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 00:34:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58571F2D7;
-        Wed, 29 Jun 2022 21:34:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BF39620F6;
-        Thu, 30 Jun 2022 04:34:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3983EC34115;
-        Thu, 30 Jun 2022 04:34:07 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V2 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-Date:   Thu, 30 Jun 2022 12:32:37 +0800
-Message-Id: <20220630043237.2059576-5-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220630043237.2059576-1-chenhuacai@loongson.cn>
-References: <20220630043237.2059576-1-chenhuacai@loongson.cn>
+        Thu, 30 Jun 2022 00:34:26 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7343E5EE
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 21:34:25 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id e132so1771637pgc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 21:34:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ve/vXBI5N+hLr5sCxzL7fj/EAUdEfCHLabZmvvVnHmI=;
+        b=KOAdovB2Ezy8cAIx4fJetquqz+9T3XczFsn5nK3MTESaEEphQmvF32YhuUw2lTBVHb
+         8EB+wkjBehfoXKzO7bCB2Zmdhh2tr6BRFZKsHy1F5RBPEUhIj4AsKyrKIJ0IuUwBqgrw
+         qtZShd3TMB/o2g+TaXIG/cXlo4VaKm543PDLaGg5zT2VsLICzRCN6XnLYACYyE9eVsUO
+         i7R1wF4khrGJ/9UHV+7+fhJoH4Oz0QdwCKDHUHjf7skkW7U6AkyiL0Dzhptt3XH4Vp7z
+         MdESzhA7AyHQ4KmRRMQbfzUj6QO3YlzuegXXdSWluMugTFJ1V38lXZQf+WKAJki/nkUq
+         eUGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ve/vXBI5N+hLr5sCxzL7fj/EAUdEfCHLabZmvvVnHmI=;
+        b=RQ6bHJhrEPfT5bibKCP42X9JRqhnq4TO1HKQyYCbGmZQnJxbPmkJ2G1KBWjafCy6RB
+         KY4Ecemh3w3ySu/6s4HAw2oyZObqWUSme0V5Q5+IT4D9UZ1Bsz78AaAsC949xlWhsj/z
+         KE2y2iqYeBKLnw/5jGHxxyL2EyA0ZACFrhaWV0IPF9ajhCCZG3ybw0JeXxxrWPsdux+4
+         HvgLy8D1c08dM6liyCik7jBl0zgoYJdjpChhbL57/KXns1WfMi182FHQjZw6sp6we0Wm
+         hWuZPi+is6CBq/YlwlkvdKQckkKO9oz69VCL/SESvq/ZaswbQKEnr/JW8K1l3hJAdRcr
+         /dtA==
+X-Gm-Message-State: AJIora/o8UrmDTmpFaVZdzDVdKX2c/s7JX88Eqg41PGOgEqzbSLa/w4/
+        g+BVn1BRitdYwZjDW7Wh43WZ
+X-Google-Smtp-Source: AGRyM1s3sTW3qj/6y0W+Kw9RGDfAOKTyDtk1auDsy0RslDnd8VNf1JtWl1JkuAjacIc+qv0bFPij9w==
+X-Received: by 2002:a63:210f:0:b0:40d:dd27:8361 with SMTP id h15-20020a63210f000000b0040ddd278361mr6034809pgh.306.1656563664914;
+        Wed, 29 Jun 2022 21:34:24 -0700 (PDT)
+Received: from thinkpad ([59.92.102.209])
+        by smtp.gmail.com with ESMTPSA id t129-20020a625f87000000b005259578e8fcsm9061064pfb.181.2022.06.29.21.34.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 21:34:24 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 10:04:15 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, swboyd@chromium.org,
+        dmitry.baryshkov@linaro.org,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2 1/2] PCI: qcom: Add system PM support
+Message-ID: <20220630043415.GA5012@thinkpad>
+References: <1656055682-18817-1-git-send-email-quic_krichai@quicinc.com>
+ <1656495214-4028-1-git-send-email-quic_krichai@quicinc.com>
+ <1656495214-4028-2-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1656495214-4028-2-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feiyang Chen <chenfeiyang@loongson.cn>
+On Wed, Jun 29, 2022 at 03:03:33PM +0530, Krishna chaitanya chundru wrote:
+> Add suspend and resume pm callbacks.
+> 
+> When system suspends, and if the link is in L1ss, disable the clocks
+> so that system enters into low power state to save the maximum power.
+> And when the system resumes, enable the clocks back if they are
+> disabled in the suspend path.
+> 
 
-The feature of minimizing overhead of struct page associated with each
-HugeTLB page is implemented on x86_64. However, the infrastructure of
-this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
-OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
+Why only during L1ss and not L2/L3?
 
-To avoid build error on LoongArch we should include linux/static_key.h
-in page-flags.h.
+> Changes since v1:
+> 	- Fixed compilation errors.
+> 
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom.c | 81 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 81 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 6ab9089..8e9ef37 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -41,6 +41,9 @@
+>  #define L23_CLK_RMV_DIS				BIT(2)
+>  #define L1_CLK_RMV_DIS				BIT(1)
+>  
+> +#define PCIE20_PARF_PM_STTS                     0x24
+> +#define PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB    BIT(8)
+> +
+>  #define PCIE20_PARF_PHY_CTRL			0x40
+>  #define PHY_CTRL_PHY_TX0_TERM_OFFSET_MASK	GENMASK(20, 16)
+>  #define PHY_CTRL_PHY_TX0_TERM_OFFSET(x)		((x) << 16)
+> @@ -190,6 +193,8 @@ struct qcom_pcie_ops {
+>  	void (*post_deinit)(struct qcom_pcie *pcie);
+>  	void (*ltssm_enable)(struct qcom_pcie *pcie);
+>  	int (*config_sid)(struct qcom_pcie *pcie);
+> +	int (*enable_clks)(struct qcom_pcie *pcie);
+> +	int (*disable_clks)(struct qcom_pcie *pcie);
 
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
----
- arch/loongarch/Kconfig     | 1 +
- include/linux/page-flags.h | 1 +
- 2 files changed, 2 insertions(+)
+I think these could vary between platforms. Like some other platform may try to
+disable regulators etc... So use names such as suspend and resume.
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 55ab84fd70e5..8e56ca28165e 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -49,6 +49,7 @@ config LOONGARCH
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-+	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
- 	select ARCH_WANTS_NO_INSTR
- 	select BUILDTIME_TABLE_SORT
- 	select COMMON_CLK
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index e66f7aa3191d..28a53ac7aa3e 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -9,6 +9,7 @@
- #include <linux/types.h>
- #include <linux/bug.h>
- #include <linux/mmdebug.h>
-+#include <linux/static_key.h>
- #ifndef __GENERATING_BOUNDS_H
- #include <linux/mm_types.h>
- #include <generated/bounds.h>
+>  };
+>  
+>  struct qcom_pcie_cfg {
+> @@ -199,6 +204,7 @@ struct qcom_pcie_cfg {
+>  	unsigned int has_ddrss_sf_tbu_clk:1;
+>  	unsigned int has_aggre0_clk:1;
+>  	unsigned int has_aggre1_clk:1;
+> +	unsigned int support_pm_ops:1;
+>  };
+>  
+>  struct qcom_pcie {
+> @@ -209,6 +215,7 @@ struct qcom_pcie {
+>  	struct phy *phy;
+>  	struct gpio_desc *reset;
+>  	const struct qcom_pcie_cfg *cfg;
+> +	unsigned int is_suspended:1;
+
+Why do you need this flag? Is suspend going to happen multiple times in
+an out-of-order manner?
+
+>  };
+>  
+>  #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
+> @@ -1308,6 +1315,23 @@ static void qcom_pcie_post_deinit_2_7_0(struct qcom_pcie *pcie)
+>  	clk_disable_unprepare(res->pipe_clk);
+>  }
+>  
+
+[...]
+
+> +static const struct dev_pm_ops qcom_pcie_pm_ops = {
+> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_pm_suspend, qcom_pcie_pm_resume)
+
+Use the new macro: NOIRQ_SYSTEM_SLEEP_PM_OPS
+
+> +};
+> +
+>  static const struct of_device_id qcom_pcie_match[] = {
+>  	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
+>  	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
+> @@ -1679,6 +1759,7 @@ static struct platform_driver qcom_pcie_driver = {
+>  	.probe = qcom_pcie_probe,
+>  	.driver = {
+>  		.name = "qcom-pcie",
+> +		.pm = &qcom_pcie_pm_ops,
+
+There will be warnings when CONFIG_PM_SLEEP is not set. So use below,
+
+		.pm = pm_sleep_ptr(&qcom_pcie_pm_ops),
+
+Thanks,
+Mani
+
+>  		.suppress_bind_attrs = true,
+>  		.of_match_table = qcom_pcie_match,
+>  	},
+> -- 
+> 2.7.4
+> 
+
 -- 
-2.27.0
-
+மணிவண்ணன் சதாசிவம்

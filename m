@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F3F561492
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88DD05614B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233044AbiF3ISL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 04:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
+        id S233208AbiF3ISQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 04:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232959AbiF3IRB (ORCPT
+        with ESMTP id S232927AbiF3IRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 04:17:01 -0400
+        Thu, 30 Jun 2022 04:17:06 -0400
 Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3858A55B6;
-        Thu, 30 Jun 2022 01:15:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C831642EC9;
+        Thu, 30 Jun 2022 01:15:14 -0700 (PDT)
 Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
         by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1o6pKC-00Cy6b-2G; Thu, 30 Jun 2022 18:14:57 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Thu, 30 Jun 2022 16:14:56 +0800
-Date:   Thu, 30 Jun 2022 16:14:56 +0800
+        id 1o6pKO-00Cy6j-IU; Thu, 30 Jun 2022 18:15:10 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Thu, 30 Jun 2022 16:15:08 +0800
+Date:   Thu, 30 Jun 2022 16:15:08 +0800
 From:   Herbert Xu <herbert@gondor.apana.org.au>
 To:     Jiang Jian <jiangjian@cdjrlc.com>
-Cc:     horia.geanta@nxp.com, pankaj.gupta@nxp.com, gaurav.jain@nxp.com,
+Cc:     +horia.geanta@nxp.com, pankaj.gupta@nxp.com, gaurav.jain@nxp.com,
         davem@davemloft.net, linux-crypto@vger.kernel.org,
         linux-kernel@vger.kernel.org, jiangjian@cdjrlc.com
-Subject: Re: [PATCH] crypto: caam - drop unexpected word 'a' in comments
-Message-ID: <Yr1bgDC8NyP36tPA@gondor.apana.org.au>
+Subject: Re: [PATCH] crypto: caam - drop unexpected word 'for' in comments
+Message-ID: <Yr1bjBQyMMLa5bYr@gondor.apana.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220623071123.12885-1-jiangjian@cdjrlc.com>
+In-Reply-To: <20220623102536.34573-1-jiangjian@cdjrlc.com>
 X-Newsgroups: apana.lists.os.linux.cryptoapi,apana.lists.os.linux.kernel
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -42,17 +42,21 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Jiang Jian <jiangjian@cdjrlc.com> wrote:
-> Drop the unexpected word 'a' in the comments that need to be dropped
+> there is an unexpected word 'for' in the comments that need to be dropped
 > 
-> * This is a a cache of buffers, from which the users of CAAM QI driver
-> -->
-> * This is a cache of buffers, from which the users of CAAM QI driver
+> file - drivers/crypto/caam/caamhash_desc.c
+> line - 25
+> 
+> *              must be false for for ahash first and digest
+> 
+> changed to:
+> 
+> *              must be false for ahash first and digest
 > 
 > Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
 > ---
-> drivers/crypto/caam/caamalg_qi2.c | 2 +-
-> drivers/crypto/caam/qi.c          | 2 +-
-> 2 files changed, 2 insertions(+), 2 deletions(-)
+> drivers/crypto/caam/caamhash_desc.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
 
 Patch applied.  Thanks.
 -- 

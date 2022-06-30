@@ -2,136 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE5A560EFA
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 04:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382F2560EFF
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 04:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbiF3CJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 22:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35940 "EHLO
+        id S231334AbiF3CKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 22:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiF3CJV (ORCPT
+        with ESMTP id S229609AbiF3CKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 22:09:21 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1DD37A9A
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 19:09:20 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id b26so12651748wrc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 19:09:20 -0700 (PDT)
+        Wed, 29 Jun 2022 22:10:30 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5ED3DA58;
+        Wed, 29 Jun 2022 19:10:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hdyIx5FpirbeiM+KXQcsxG+JTSX3RaLyAakby7DKvG0=;
-        b=l4PlpC1uBr51seSmaB9EGzmAqLAQ0Uff7iJI49CFKx7B2nDssvIwo7joJuymZEKEXh
-         qrVj7fBKDs1YhOHFVS4aVFYunry1OnCTTqwUYeHcrkNEUHrDmaUbO9A6jq57dqT3+PKD
-         6wrc/cUkZNmp20ylvzD0WG2fVPWfY1Zp4G6Tb6J5rpyPRsFSWHxp9HqeUFevf85Fl5el
-         71CekmS8rklU2Og6zrz100Qj1ZX1hYVJ88clB73SAUVfQoqmqQ8JyTXH40QAsmKhOAYw
-         Z6goZd6OBvIHpp1DGjDLTP5+Cc5gjn7f5YFkl9CVpNn1k04wKCYSz0V+qtgdt7jmHrlw
-         VAlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hdyIx5FpirbeiM+KXQcsxG+JTSX3RaLyAakby7DKvG0=;
-        b=GYpLabOvFLG5BS0ZQcQDavolUocRVGc9uL66cmGTLDjwWrsKoGzLEbQxF4ReECSxx1
-         xN5GHNYxUbwzp1J1ACs/8L6B63Jn6c5AMOdH90ROL4dLVE0qzHSyUWFmp1oZzwRyBFfO
-         QBy6Pmbwp75Rd6MKSwP+t8NsSvv8nV7rIX5SWzYfKdR2YU05qKIXIPSs+YTtQR0lUNHG
-         a/PugPUMPA0xMkfOrHJ0XftIguKnKq9CrIv9lhxySkvwBrI3TfYsVX/Fv2al6AhRyRQ/
-         gQOZ3QdqKcPzQslWEmDrUpZl36aKzrp/mbRQ25BmGgXWkQvi5nXHQyFIu/pLIYarDLW3
-         yNpQ==
-X-Gm-Message-State: AJIora/F6bAq7TAlVbNmzQWi2OLHIqj3Kh8FOCh7Zn8LM1EPEyKjeRHX
-        URSDQtULAJpSombxWPeaIrbtYey2Vr31JndFPHC94g==
-X-Google-Smtp-Source: AGRyM1sTmn7NUX08Wg8Mx/WoDWKA8WR3jj26GmIlUKo6fXqusf252Qh5r32vaIWazO4psbQB43iblGLVll5kV7oWQdE=
-X-Received: by 2002:adf:f146:0:b0:21b:8c7d:7294 with SMTP id
- y6-20020adff146000000b0021b8c7d7294mr5812219wro.582.1656554958597; Wed, 29
- Jun 2022 19:09:18 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656555029; x=1688091029;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VkE1t8r/62tuKtjsziGoezRkG42VcXA8LP22e3VJDXo=;
+  b=fg8RlwN7v39//Kk4u5MhIQii1RE+/h8i9stUQ9ngF97YD5CUzjV4tAuo
+   mpzhqWRlM+mzIxp65h9jZOUTZZuUDC8+nCNkme/CPZwDeatFSyYk6XIPY
+   +wQjQRREkQdt4TlqWrDMwFEeGNAcsFWlz/5Cto9zADqTmooUxmPlaC5AX
+   g=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 29 Jun 2022 19:10:29 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 19:10:27 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 29 Jun 2022 19:10:27 -0700
+Received: from [10.38.245.159] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 29 Jun
+ 2022 19:10:24 -0700
+Message-ID: <537e8e8b-03f7-9fc0-4416-3b69d375ba9b@quicinc.com>
+Date:   Wed, 29 Jun 2022 19:10:21 -0700
 MIME-Version: 1.0
-References: <YrQ1o3CeaZWhm+h4@dhcp22.suse.cz> <CAJD7tkadsLOV7GMFAm+naX4Y1WpZ-4=NkAhAMxNw60iaRPWx=w@mail.gmail.com>
- <YrSWruhPlJV1X9kp@dhcp22.suse.cz> <CALvZod6eLa1X1FJ2Qi6FXhFA-qBCP4mN2SB31MSgjj+g8hKo6Q@mail.gmail.com>
- <YrSdFy3qYdG+rGR6@dhcp22.suse.cz> <CAJD7tkZNEtzJMDsLMHuNHkxFfurS37UuK=zFcPCkOkWfN-dbJQ@mail.gmail.com>
- <YrlpcdgF1HzA7bHS@dhcp22.suse.cz> <CAJD7tkYVy2uNwaPiiJdPKT5P_O-9WgxD68iFJ6vw=TLJcQV3Ag@mail.gmail.com>
- <Yrl2T632Vfv8QGPn@dhcp22.suse.cz> <CAJD7tkZzwzHq7Q7KKUdVSdO4LWTPkrGprp0Q-ze_SWhUd_mTMw@mail.gmail.com>
- <YrmjH2FZF7iNn8da@dhcp22.suse.cz> <CAJD7tkYemNQqu_O2nYG3cqxPWGELvc6Lh5i+KKNCtv6cgSPmdA@mail.gmail.com>
- <CALvZod68WdrXEmBpOkadhB5GPYmCXaDZzXH=yyGOCAjFRn4NDQ@mail.gmail.com>
-In-Reply-To: <CALvZod68WdrXEmBpOkadhB5GPYmCXaDZzXH=yyGOCAjFRn4NDQ@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 29 Jun 2022 19:08:42 -0700
-Message-ID: <CAJD7tkZeySa9V+nuoGfmugrOcxaiaXFspPKLkgTFkvsrri=J3g@mail.gmail.com>
-Subject: Re: [PATCH] mm: vmpressure: don't count userspace-induced reclaim as
- memory pressure
-To:     Shakeel Butt <shakeelb@google.com>, Michal Hocko <mhocko@suse.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [Freedreno] [PATCH] drm/msm/dp: make eDP panel as the first
+ connected connector
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>,
+        Doug Anderson <dianders@chromium.org>
+CC:     freedreno <freedreno@lists.freedesktop.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Vinod Koul" <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <1656429606-2765-1-git-send-email-quic_khsieh@quicinc.com>
+ <F35C87BF-46A5-41D3-B8A5-B2AB4A24252D@linaro.org>
+ <CAD=FV=X3cv=Q30pODyi__OyRY+LbFT14RfEELvm_DAeHafF70g@mail.gmail.com>
+ <CAF6AEGvFYK3x_CmErkKsmYNEv9y8AksE9UB_sfp-Z7RieX=tVg@mail.gmail.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <CAF6AEGvFYK3x_CmErkKsmYNEv9y8AksE9UB_sfp-Z7RieX=tVg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 6:07 PM Shakeel Butt <shakeelb@google.com> wrote:
->
-> On Mon, Jun 27, 2022 at 10:04 AM Yosry Ahmed <yosryahmed@google.com> wrote:
-> >
-> > On Mon, Jun 27, 2022 at 5:31 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> [...]
-> > >
-> > > I can see clear arguments for memory.reclaim opt out for vmpressure
-> > > because we have established that this is not a measure to express a
-> > > memory pressure on the cgroup.
-> > >
-> > > Max/High are less clear to me, TBH. I do understand reasoning for PSI
-> > > exclusion because considering the calling process to be stalled and
-> > > non-productive is misleading. It just does its work so in a way it is
-> > > a productive time in the end. For the vmpressure, which measures how
-> > > hard/easy it is to reclaim memory why this should special for this
-> > > particular reclaim?
-> > >
-> > > Again, an explanation of the effect on the socket pressure could give a
-> > > better picture. Say that I somebody reduces the limit (hard/high) and it
-> > > takes quite some effort to shrink the consumption down. Should the
-> > > networking layer react to that in any way or should it wait for the
-> > > active allocation during that process to find that out?
-> >
-> > I am out of my depth here. Any answer on my side would be purely
-> > speculation at this point. Shakeel, can you help us here or tag some
-> > networking people?
->
-> So, the effect of returning true from mem_cgroup_under_socket_pressure() are:
->
-> 1. Reducing send and receive buffers of the current socket.
-> 2. May drop packets on the rx path.
-> 3. May throttle current thread on the tx path.
->
-> Now regarding the behavior from the reclaim due to reducing max or
-> high, I think the kernel should not ignore vmpressure. Please note
-> that unlike PSI which is associated with the current process,
-> vmpressure is associated with the target memcg. So, any reclaim on
-> that memcg due to real shortage of memory should not be ignored. That
-> reclaim can be global reclaim or limit reclaim of ancestor or itself
-> or reclaim due to lowering the limit of ancestor or itself.
 
-So it seems like we should only ignore vmpressure for proactive
-reclaim (aka memory.reclaim).
 
-Michal, let me know what you think here, I can drop psi and
-limit-setting changes in v3 and basically just ignore vmpressure for
-memory.reclaim (MEMCG_RECLAIM_PROACTIVE / sc->proactive instead of
-MEMCG_RECLAIM_CONTROLLED / sc->controlled maybe).
+On 6/29/2022 6:57 PM, Rob Clark wrote:
+> On Wed, Jun 29, 2022 at 5:36 PM Doug Anderson <dianders@chromium.org> wrote:
+>>
+>> Hi,
+>>
+>> On Tue, Jun 28, 2022 at 1:14 PM Dmitry Baryshkov
+>> <dmitry.baryshkov@linaro.org> wrote:
+>>>
+>>> On 28 June 2022 18:20:06 GMT+03:00, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>>>> Some userspace presumes that the first connected connector is the main
+>>>> display, where it's supposed to display e.g. the login screen. For
+>>>> laptops, this should be the main panel.
+>>>>
+>>>> This patch call drm_helper_move_panel_connectors_to_head() after
+>>>> drm_bridge_connector_init() to make sure eDP stay at head of
+>>>> connected connector list. This fixes unexpected corruption happen
+>>>> at eDP panel if eDP is not placed at head of connected connector
+>>>> list.
+>>>
+>>> The change itself is a good fix anyway. (And I'd ack it.) However I would like to understand why does it fix the corruption issue. What is we have eDP and DSI, with DSI ending up before the eDP? Would we see the issue?
+>>> Also could you please describe the mind of corruption you are observing?
+>>
+>> I've spent a whole bunch of time poking at this and in the end my
+>> conclusion is this:
+>>
+>> 1. The glitchyness seems to be a result of the Chrome OS userspace
+>> somehow telling the kernel to do something wrong.
+>>
+>> 2. I believe (though I have no proof other than Kuogee's patch fixing
+>> things) that the Chrome OS userspace is simply confused by the eDP
+>> connector being second. This would imply that Kuogee's patch is
+>> actually the right one.
+>>
+>> 3. It would be ideal if the Chrome OS userspace were fixed to handle
+>> this, but it's an area of code that I've never looked at. It also
+>> seems terribly low priority to fix since apparently other OSes have
+>> similar problems (seems like this code was originally added by
+>> RedHat?)
+>>
+>>
+>> Specifically, I tested with a similar but "persistent" glitch that I
+>> reproduced. The glitch Kuogee was digging into was a transitory glitch
+>> on the eDP (internal) display when you plugged in a DP (external)
+>> display. It would show up for a frame or two and then be fixed. I can
+>> get a similar-looking glitch (vertical black and white bars) that
+>> persists by doing these steps on a Chrome OS device (and Chrome OS
+>> kernel):
+>>
+>> a) Observe screen looks good.
+>> b) Observe DP not connected.
+>> c) Plug in DP
+>> d) See transitory glitch on screen, then it all looks fine.
+>> e) set_power_policy --ac_screen_dim_delay=5 --ac_screen_off_delay=10
+>> f) Wait for screen to turn off
+>> g) Unplug DP
+>> h) Hit key on keyboard to wake device.
+>> i) See glitchy.
+>> j) Within 5 seconds: set_power_policy --ac_screen_dim_delay=5000
+>> --ac_screen_off_delay=10000
+>>
+>> Once I'm in the persistent glitch:
+>>
+>> * The "screenshot" command in Chrome OS shows corruption. Not exactly
+>> black and white bars, but the image produced has distinct bands of
+>> garbage.
+>>
+>> * I can actually toggle between VT2 and the main screen (VT1). Note
+>> that VT1/VT2 are not quite the normal Linux managed solution--I
+>> believe they're handled by frecon. In any case, when I switch to VT2
+>> it looks normal (I can see the login prompt). Then back to VT1 and the
+>> vertical bars glitch. Back to VT2 and it's normal. Back to VT1 and the
+>> glitch again. This implies (especially with the extra evidence of
+>> screenshot) that the display controller hardware is all fine and that
+>> it's the underlying data that's somehow messed up.
+> 
+> fwiw, from looking at this a bit w/ Doug, I think the "glitch" is
+> simply just an un-renderered buffer being interpreted by the display
+> controller as UBWC (because userspace tells it to)
+> 
+> BR,
+> -R
+
+Acked and agree with the comments both of you have stated and looking at 
+the corrupted buffers in the snapshot.
+
+Hence,
+
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+
+> 
+>> When I pick Kuogee's patch then this "persistent" glitch goes away
+>> just like the transitory one does.
+>>
+>> I'm going to go ahead and do:
+>>
+>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>> Tested-by: Douglas Anderson <dianders@chromium.org>

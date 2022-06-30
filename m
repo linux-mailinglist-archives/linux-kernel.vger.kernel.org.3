@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D755612D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 08:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5F55612D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 08:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbiF3G44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 02:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56644 "EHLO
+        id S232495AbiF3G47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 02:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbiF3G4x (ORCPT
+        with ESMTP id S232615AbiF3G4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 02:56:53 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9B832069
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 23:56:51 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LYTbD10nmzhYxS;
-        Thu, 30 Jun 2022 14:54:32 +0800 (CST)
+        Thu, 30 Jun 2022 02:56:54 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0AE32ED5
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 23:56:52 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LYTYq2ZzYzTgKs;
+        Thu, 30 Jun 2022 14:53:19 +0800 (CST)
 Received: from localhost.localdomain (10.67.164.66) by
  canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -37,9 +37,9 @@ CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
         <hesham.almatary@huawei.com>, <john.garry@huawei.com>,
         <shenyang39@huawei.com>, <kprateek.nayak@amd.com>,
         <yu.c.chen@intel.com>, <wuyun.abel@bytedance.com>
-Subject: [PATCH v5 1/2] sched: Add per_cpu cluster domain info and cpus_share_lowest_cache API
-Date:   Thu, 30 Jun 2022 14:55:26 +0800
-Message-ID: <20220630065527.38544-2-yangyicong@hisilicon.com>
+Subject: [PATCH v5 2/2] sched/fair: Scan cluster before scanning LLC in wake-up path
+Date:   Thu, 30 Jun 2022 14:55:27 +0800
+Message-ID: <20220630065527.38544-3-yangyicong@hisilicon.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20220630065527.38544-1-yangyicong@hisilicon.com>
 References: <20220630065527.38544-1-yangyicong@hisilicon.com>
@@ -61,151 +61,134 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Barry Song <song.bao.hua@hisilicon.com>
 
-Add per-cpu cluster domain info and cpus_share_lowest_cache() API.
-This is the preparation for the optimization of select_idle_cpu()
-on platforms with cluster scheduler level.
+For platforms having clusters like Kunpeng920, CPUs within the same cluster
+have lower latency when synchronizing and accessing shared resources like
+cache. Thus, this patch tries to find an idle cpu within the cluster of the
+target CPU before scanning the whole LLC to gain lower latency.
 
-Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
+Note neither Kunpeng920 nor x86 Jacobsville supports SMT, so this patch
+doesn't consider SMT for this moment.
+
+Testing has been done on Kunpeng920 by pinning tasks to one numa and two
+numa. On Kunpeng920, Each numa has 8 clusters and each cluster has 4 CPUs.
+
+With this patch, We noticed enhancement on tbench within one numa or cross
+two numa.
+
+On numa 0:
+                           tip/core                 patched
+Hmean     1        345.89 (   0.00%)      393.96 *  13.90%*
+Hmean     2        697.77 (   0.00%)      786.04 *  12.65%*
+Hmean     4       1392.51 (   0.00%)     1570.26 *  12.76%*
+Hmean     8       2800.61 (   0.00%)     3083.98 *  10.12%*
+Hmean     16      5514.27 (   0.00%)     6116.00 *  10.91%*
+Hmean     32     10869.81 (   0.00%)    10782.98 *  -0.80%*
+Hmean     64      8315.22 (   0.00%)     8519.84 *   2.46%*
+Hmean     128     6324.47 (   0.00%)     7159.35 *  13.20%*
+
+On numa 0-1:
+                           tip/core                 patched
+Hmean     1        348.68 (   0.00%)      387.91 *  11.25%*
+Hmean     2        693.57 (   0.00%)      774.91 *  11.73%*
+Hmean     4       1369.26 (   0.00%)     1475.48 *   7.76%*
+Hmean     8       2772.99 (   0.00%)     2984.61 *   7.63%*
+Hmean     16      4825.83 (   0.00%)     5873.13 *  21.70%*
+Hmean     32     10250.32 (   0.00%)    11688.06 *  14.03%*
+Hmean     64     16309.51 (   0.00%)    19889.48 *  21.95%*
+Hmean     128    13022.32 (   0.00%)    16005.64 *  22.91%*
+Hmean     256    11335.79 (   0.00%)    13821.74 *  21.93%*
+
+Tested-by: Yicong Yang <yangyicong@hisilicon.com>
 Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
 Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
 ---
- include/linux/sched/sd_flags.h |  7 +++++++
- include/linux/sched/topology.h |  8 +++++++-
- kernel/sched/core.c            | 12 ++++++++++++
- kernel/sched/sched.h           |  2 ++
- kernel/sched/topology.c        | 15 +++++++++++++++
- 5 files changed, 43 insertions(+), 1 deletion(-)
+ kernel/sched/fair.c | 44 +++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 41 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/sched/sd_flags.h b/include/linux/sched/sd_flags.h
-index 57bde66d95f7..42ed454e8b18 100644
---- a/include/linux/sched/sd_flags.h
-+++ b/include/linux/sched/sd_flags.h
-@@ -109,6 +109,13 @@ SD_FLAG(SD_ASYM_CPUCAPACITY_FULL, SDF_SHARED_PARENT | SDF_NEEDS_GROUPS)
-  */
- SD_FLAG(SD_SHARE_CPUCAPACITY, SDF_SHARED_CHILD | SDF_NEEDS_GROUPS)
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index f80ae86bb404..dff5dec0d792 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6323,6 +6323,40 @@ static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd
  
+ #endif /* CONFIG_SCHED_SMT */
+ 
++#ifdef CONFIG_SCHED_CLUSTER
 +/*
-+ * Domain members share CPU cluster (LLC tags or L2 cache)
-+ *
-+ * NEEDS_GROUPS: Clusters are shared between groups.
++ * Scan the cluster domain for idle CPUs and clear cluster cpumask after scanning
 + */
-+SD_FLAG(SD_CLUSTER, SDF_NEEDS_GROUPS)
++static inline int scan_cluster(struct task_struct *p, struct cpumask *cpus,
++			       int target, int *nr)
++{
++	struct sched_domain *sd = rcu_dereference(per_cpu(sd_cluster, target));
++	int cpu, idle_cpu;
++
++	/* TODO: Support SMT system with cluster topology */
++	if (!sched_smt_active() && sd) {
++		for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
++			if (!--*nr)
++				return -1;
++
++			idle_cpu = __select_idle_cpu(cpu, p);
++			if ((unsigned int)idle_cpu < nr_cpumask_bits)
++				return idle_cpu;
++		}
++
++		cpumask_andnot(cpus, cpus, sched_domain_span(sd));
++	}
++
++	return -1;
++}
++#else
++static inline int scan_cluster(struct task_struct *p, struct cpumask *cpus,
++			       int target, int *nr)
++{
++	return -1;
++}
++#endif
 +
  /*
-  * Domain members share CPU package resources (i.e. caches)
-  *
-diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-index 816df6cc444e..c0d21667ddf3 100644
---- a/include/linux/sched/topology.h
-+++ b/include/linux/sched/topology.h
-@@ -45,7 +45,7 @@ static inline int cpu_smt_flags(void)
- #ifdef CONFIG_SCHED_CLUSTER
- static inline int cpu_cluster_flags(void)
- {
--	return SD_SHARE_PKG_RESOURCES;
-+	return SD_CLUSTER | SD_SHARE_PKG_RESOURCES;
- }
- #endif
+  * Scan the LLC domain for idle CPUs; this is dynamically regulated by
+  * comparing the average scan cost (tracked in sd->avg_scan_cost) against the
+@@ -6383,6 +6417,10 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+ 		}
+ 	}
  
-@@ -179,6 +179,7 @@ cpumask_var_t *alloc_sched_domains(unsigned int ndoms);
- void free_sched_domains(cpumask_var_t doms[], unsigned int ndoms);
- 
- bool cpus_share_cache(int this_cpu, int that_cpu);
-+bool cpus_share_lowest_cache(int this_cpu, int that_cpu);
- 
- typedef const struct cpumask *(*sched_domain_mask_f)(int cpu);
- typedef int (*sched_domain_flags_f)(void);
-@@ -232,6 +233,11 @@ static inline bool cpus_share_cache(int this_cpu, int that_cpu)
- 	return true;
- }
- 
-+static inline bool cpus_share_lowest_cache(int this_cpu, int that_cpu)
-+{
-+	return true;
-+}
++	idle_cpu = scan_cluster(p, cpus, target, &nr);
++	if ((unsigned int)idle_cpu < nr_cpumask_bits)
++		return idle_cpu;
 +
- #endif	/* !CONFIG_SMP */
+ 	for_each_cpu_wrap(cpu, cpus, target + 1) {
+ 		if (has_idle_core) {
+ 			i = select_idle_core(p, cpu, cpus, &idle_cpu);
+@@ -6390,7 +6428,7 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+ 				return i;
  
- #if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index d3e2c5a7c1b7..2e6816aeaa2b 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3808,6 +3808,18 @@ bool cpus_share_cache(int this_cpu, int that_cpu)
- 	return per_cpu(sd_llc_id, this_cpu) == per_cpu(sd_llc_id, that_cpu);
- }
- 
-+/*
-+ * Whether CPUs are share lowest cache, which means LLC on non-cluster
-+ * machines and LLC tag or L2 on machines with clusters.
-+ */
-+bool cpus_share_lowest_cache(int this_cpu, int that_cpu)
-+{
-+	if (this_cpu == that_cpu)
-+		return true;
-+
-+	return per_cpu(sd_lowest_cache_id, this_cpu) == per_cpu(sd_lowest_cache_id, that_cpu);
-+}
-+
- static inline bool ttwu_queue_cond(int cpu)
- {
+ 		} else {
+-			if (!--nr)
++			if (--nr <= 0)
+ 				return -1;
+ 			idle_cpu = __select_idle_cpu(cpu, p);
+ 			if ((unsigned int)idle_cpu < nr_cpumask_bits)
+@@ -6489,7 +6527,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
  	/*
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 02c970501295..767e637ceb5a 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1753,7 +1753,9 @@ static inline struct sched_domain *lowest_flag_domain(int cpu, int flag)
- DECLARE_PER_CPU(struct sched_domain __rcu *, sd_llc);
- DECLARE_PER_CPU(int, sd_llc_size);
- DECLARE_PER_CPU(int, sd_llc_id);
-+DECLARE_PER_CPU(int, sd_lowest_cache_id);
- DECLARE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
-+DECLARE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
- DECLARE_PER_CPU(struct sched_domain __rcu *, sd_numa);
- DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
- DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 8739c2a5a54e..8ab27c0d6d1f 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -664,6 +664,8 @@ static void destroy_sched_domains(struct sched_domain *sd)
- DEFINE_PER_CPU(struct sched_domain __rcu *, sd_llc);
- DEFINE_PER_CPU(int, sd_llc_size);
- DEFINE_PER_CPU(int, sd_llc_id);
-+DEFINE_PER_CPU(int, sd_lowest_cache_id);
-+DEFINE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
- DEFINE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
- DEFINE_PER_CPU(struct sched_domain __rcu *, sd_numa);
- DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
-@@ -689,6 +691,18 @@ static void update_top_cache_domain(int cpu)
- 	per_cpu(sd_llc_id, cpu) = id;
- 	rcu_assign_pointer(per_cpu(sd_llc_shared, cpu), sds);
- 
-+	sd = lowest_flag_domain(cpu, SD_CLUSTER);
-+	if (sd)
-+		id = cpumask_first(sched_domain_span(sd));
-+	rcu_assign_pointer(per_cpu(sd_cluster, cpu), sd);
-+
-+	/*
-+	 * This assignment should be placed after the sd_llc_id as
-+	 * we want this id equals to cluster id on cluster machines
-+	 * but equals to LLC id on non-Cluster machines.
-+	 */
-+	per_cpu(sd_lowest_cache_id, cpu) = id;
-+
- 	sd = lowest_flag_domain(cpu, SD_NUMA);
- 	rcu_assign_pointer(per_cpu(sd_numa, cpu), sd);
- 
-@@ -1532,6 +1546,7 @@ static struct cpumask		***sched_domains_numa_masks;
-  */
- #define TOPOLOGY_SD_FLAGS		\
- 	(SD_SHARE_CPUCAPACITY	|	\
-+	 SD_CLUSTER		|	\
- 	 SD_SHARE_PKG_RESOURCES |	\
- 	 SD_NUMA		|	\
- 	 SD_ASYM_PACKING)
+ 	 * If the previous CPU is cache affine and idle, don't be stupid:
+ 	 */
+-	if (prev != target && cpus_share_cache(prev, target) &&
++	if (prev != target && cpus_share_lowest_cache(prev, target) &&
+ 	    (available_idle_cpu(prev) || sched_idle_cpu(prev)) &&
+ 	    asym_fits_capacity(task_util, prev))
+ 		return prev;
+@@ -6515,7 +6553,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+ 	p->recent_used_cpu = prev;
+ 	if (recent_used_cpu != prev &&
+ 	    recent_used_cpu != target &&
+-	    cpus_share_cache(recent_used_cpu, target) &&
++	    cpus_share_lowest_cache(recent_used_cpu, target) &&
+ 	    (available_idle_cpu(recent_used_cpu) || sched_idle_cpu(recent_used_cpu)) &&
+ 	    cpumask_test_cpu(p->recent_used_cpu, p->cpus_ptr) &&
+ 	    asym_fits_capacity(task_util, recent_used_cpu)) {
 -- 
 2.24.0
 

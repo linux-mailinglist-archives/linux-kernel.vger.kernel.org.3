@@ -2,102 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5905624E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 945195624EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237210AbiF3VMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 17:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34514 "EHLO
+        id S237251AbiF3VNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 17:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236886AbiF3VMk (ORCPT
+        with ESMTP id S237044AbiF3VND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 17:12:40 -0400
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229212127A;
-        Thu, 30 Jun 2022 14:12:40 -0700 (PDT)
-Received: by mail-io1-f53.google.com with SMTP id v185so394515ioe.11;
-        Thu, 30 Jun 2022 14:12:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NU/AvFQx41MnlN2INgX2d2mKGjQ/GchZyPYaF7yuRhA=;
-        b=mT6zq8QTXaOUOB9wBE3BngsvV82jSG+FW7dU90bH0EZUqGu0CoymiSuVbPTrIEVUad
-         t/17L76RmRUBCx7V5FIX5NHkQFuvQ5UihF3Ej9XWE4CcLSc/zxpt6VVDrW0m2kDOhswZ
-         MueFyJsH8GaVIXRKVkD5A+8+tJR3nPnYk3fRnmp/sHCpUthjJdbzQHAWCPGgBAKH9grn
-         jehBspUoImHsntqO1W/7qXgLw5+6lmlLF7Q0EzHZT8UtysbqrLrMHSbLtzBVaPqyv9+j
-         bE6svwh0pjWoQN9h/o8dR/3cmr1PXBAz71zQAst38ozycSZFU63liom/EMB2VxuEFhcl
-         0+Fw==
-X-Gm-Message-State: AJIora83wACW5k15YYM52MxeDubj64c9asj5/oujfd01vOSE5cY1bcCw
-        +otW6/sokKSUNg6a6YnHJA==
-X-Google-Smtp-Source: AGRyM1vUHpxJtmnIdMF6WAmLIKQFfm7Jk2VLKtR0y9ZsnjCfaDTN83tgI2HN2T4Q9CJZujIfMhz7Gw==
-X-Received: by 2002:a05:6638:3802:b0:32e:3d9a:9817 with SMTP id i2-20020a056638380200b0032e3d9a9817mr6879427jav.206.1656623559373;
-        Thu, 30 Jun 2022 14:12:39 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id p26-20020a02b39a000000b0033c8ae0cc59sm6515478jan.143.2022.06.30.14.12.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 14:12:38 -0700 (PDT)
-Received: (nullmailer pid 3307283 invoked by uid 1000);
-        Thu, 30 Jun 2022 21:12:36 -0000
-Date:   Thu, 30 Jun 2022 15:12:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Conor.Dooley@microchip.com
-Cc:     Sergiu.Moga@microchip.com, Claudiu.Beznea@microchip.com,
-        linux-arm-kernel@lists.infradead.org, UNGLinuxDriver@microchip.com,
-        linux-spi@vger.kernel.org, broonie@kernel.org,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        Nicolas.Ferre@microchip.com, Kavyasree.Kotagiri@microchip.com,
-        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: spi: convert spi_atmel to json-schema
-Message-ID: <20220630211236.GA3303869-robh@kernel.org>
-References: <20220629125804.137099-1-sergiu.moga@microchip.com>
- <1656542219.625404.1042476.nullmailer@robh.at.kernel.org>
- <8191d9e3-88e9-c8fb-2544-d25d3a93d0a8@microchip.com>
+        Thu, 30 Jun 2022 17:13:03 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76977220C6;
+        Thu, 30 Jun 2022 14:13:02 -0700 (PDT)
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1o71T6-0001kM-0I; Thu, 30 Jun 2022 23:12:56 +0200
+Received: from [85.1.206.226] (helo=linux-3.home)
+        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1o71T5-0002uc-Ak; Thu, 30 Jun 2022 23:12:55 +0200
+Subject: Re: [PATCH bpf-next v6 0/4] bpf trampoline for arm64
+To:     Xu Kuohai <xukuohai@huawei.com>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        James Morse <james.morse@arm.com>,
+        Hou Tao <houtao1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>
+References: <20220625161255.547944-1-xukuohai@huawei.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <d3c1f1ed-353a-6af2-140d-c7051125d023@iogearbox.net>
+Date:   Thu, 30 Jun 2022 23:12:54 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8191d9e3-88e9-c8fb-2544-d25d3a93d0a8@microchip.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220625161255.547944-1-xukuohai@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26589/Thu Jun 30 10:08:14 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 10:45:20PM +0000, Conor.Dooley@microchip.com wrote:
-> On 29/06/2022 23:36, Rob Herring wrote:
-> > On Wed, 29 Jun 2022 15:58:04 +0300, Sergiu Moga wrote:
-> >> Convert SPI binding for Atmel/Microchip SoCs to Device Tree Schema
-> >> format.
-> >>
-> >> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
-> >> ---
-> >>  .../devicetree/bindings/spi/atmel,spi.yaml    | 82 +++++++++++++++++++
-> >>  .../devicetree/bindings/spi/spi_atmel.txt     | 36 --------
-> >>  2 files changed, 82 insertions(+), 36 deletions(-)
-> >>  create mode 100644 Documentation/devicetree/bindings/spi/atmel,spi.yaml
-> >>  delete mode 100644 Documentation/devicetree/bindings/spi/spi_atmel.txt
-> >>
-> > 
-> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> > 
-> > yamllint warnings/errors:
-> > 
-> > dtschema/dtc warnings/errors:
-> > Documentation/devicetree/bindings/spi/atmel,spi.example.dtb:0:0: /example-0/spi@fffcc000/mmc@0: failed to match any schema with compatible: ['mmc-spi-slot']
+Hey Mark,
+
+On 6/25/22 6:12 PM, Xu Kuohai wrote:
+> This patchset introduces bpf trampoline on arm64. A bpf trampoline converts
+> native calling convention to bpf calling convention and is used to implement
+> various bpf features, such as fentry, fexit, fmod_ret and struct_ops.
 > 
-> My conversion of this should be in -next right?
+> The trampoline introduced does essentially the same thing as the bpf
+> trampoline does on x86.
+> 
+> Tested on raspberry pi 4b and qemu:
+> 
+>   #18 /1     bpf_tcp_ca/dctcp:OK
+>   #18 /2     bpf_tcp_ca/cubic:OK
+>   #18 /3     bpf_tcp_ca/invalid_license:OK
+>   #18 /4     bpf_tcp_ca/dctcp_fallback:OK
+>   #18 /5     bpf_tcp_ca/rel_setsockopt:OK
+>   #18        bpf_tcp_ca:OK
+>   #51 /1     dummy_st_ops/dummy_st_ops_attach:OK
+>   #51 /2     dummy_st_ops/dummy_init_ret_value:OK
+>   #51 /3     dummy_st_ops/dummy_init_ptr_arg:OK
+>   #51 /4     dummy_st_ops/dummy_multiple_args:OK
+>   #51        dummy_st_ops:OK
+>   #57 /1     fexit_bpf2bpf/target_no_callees:OK
+>   #57 /2     fexit_bpf2bpf/target_yes_callees:OK
+>   #57 /3     fexit_bpf2bpf/func_replace:OK
+>   #57 /4     fexit_bpf2bpf/func_replace_verify:OK
+>   #57 /5     fexit_bpf2bpf/func_sockmap_update:OK
+>   #57 /6     fexit_bpf2bpf/func_replace_return_code:OK
+>   #57 /7     fexit_bpf2bpf/func_map_prog_compatibility:OK
+>   #57 /8     fexit_bpf2bpf/func_replace_multi:OK
+>   #57 /9     fexit_bpf2bpf/fmod_ret_freplace:OK
+>   #57        fexit_bpf2bpf:OK
+>   #237       xdp_bpf2bpf:OK
+> 
+> v6:
+> - Since Mark is refactoring arm64 ftrace to support long jump and reduce the
+>    ftrace trampoline overhead, it's not clear how we'll attach bpf trampoline
+>    to regular kernel functions, so remove ftrace related patches for now.
+> - Add long jump support for attaching bpf trampoline to bpf prog, since bpf
+>    trampoline and bpf prog are allocated via vmalloc, there is chance the
+>    distance exceeds the max branch range.
+> - Collect ACK/Review-by, not sure if the ACK and Review-bys for bpf_arch_text_poke()
+>    should be kept, since the changes to it is not trivial
+> - Update some commit messages and comments
 
-I don't know, you tell me.
+Given you've been taking a look and had objections in v5, would be great if you
+can find some cycles for this v6.
 
-> Is this just an incorrect base for the bot, or am I missing
-> something?
-
-The bot runs on rc1.
-
-Rob
+Thanks a lot,
+Daniel

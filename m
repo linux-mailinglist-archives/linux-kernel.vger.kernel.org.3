@@ -2,104 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18410561FE8
+	by mail.lfdr.de (Postfix) with ESMTP id 604B8561FE9
 	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235704AbiF3QHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 12:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
+        id S235588AbiF3QH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 12:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235595AbiF3QHd (ORCPT
+        with ESMTP id S234901AbiF3QHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 12:07:33 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07331AF0F;
-        Thu, 30 Jun 2022 09:07:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656605251; x=1688141251;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=rVhsXlaSwKi/9ubObaloKtFwrU5bFv0Ykt9c96pG2MQ=;
-  b=ax5J+5tQdvIcxPU6y1UC1yWN2tNzAWlDqY8RJPqdTc5r9AZBRep9kx/8
-   4mAABkrvMKCteDXnqix8pDVQkDtkNoQ64L3IHXGDHAMJL3klqc8VHs7jA
-   ox0qKfSbnuZoejJ+f/mx+01b4JAt5Kn0ARTmKFxt0R4lXZ6Rc67TVtCqV
-   uXMX4OkE47CBnx8s0/rOctzVHAB9EzZdF6USmnmkx4zrIB+XcaSw6XJda
-   lXrHWL3faKHQAksIERb2wKMNZcWPoKRo6HcKUwVvccAqq+SBX9U8HOWmK
-   2OLz5eo7qMeyI3m2UqRXYRSC9CTuihknXNiMyz0RqLsXp2FNZ2JSokuPp
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="262793284"
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="262793284"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 09:07:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="647949156"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Jun 2022 09:07:31 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 30 Jun 2022 09:07:30 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 30 Jun 2022 09:07:29 -0700
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
- Thu, 30 Jun 2022 09:07:29 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     "Bae, Chang Seok" <chang.seok.bae@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-CC:     "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 1/1] Documentation/x86: Add the AMX enabling example
-Thread-Topic: [PATCH v2 1/1] Documentation/x86: Add the AMX enabling example
-Thread-Index: AQHYjArQoWH2w9xfNEO7Tn8LqH3Xaq1nBneQgAGCcwD//5Sy0A==
-Date:   Thu, 30 Jun 2022 16:07:29 +0000
-Message-ID: <66c4d3ce4c6f47d29bbb951739555eb0@intel.com>
-References: <20220629224235.20589-1-chang.seok.bae@intel.com>
- <20220629224235.20589-2-chang.seok.bae@intel.com>
- <f01bb09a504240059a79a94c24ba4eba@intel.com>
- <5c67d453-a162-b61d-4a27-c854f1ef3587@intel.com>
-In-Reply-To: <5c67d453-a162-b61d-4a27-c854f1ef3587@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 30 Jun 2022 12:07:53 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD9822B1D
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 09:07:52 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id l11so34536964ybu.13
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 09:07:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kZYpRpqYmpLHtSZ4UZWrh/TDPBDXwHd9fuFtqbGJNp8=;
+        b=BuX4qA5++m+OrJvsOaRfSJjyTNROnqnd/mCvs1fJFZLG3AYi/V7Afuuc+DxYwklGe2
+         8TTd0CJJFfjl5KQwwQlWyyn84g40XaWyHt0y/uDsKjx7TBMs1SIJTniaOuT4nRFnWCOW
+         4mUH+1+M0E2Hw+WrjJvpBSvc9OZcerbYjFVpotYfn/oy5PZSMjbx3PKSOeuirVFFjRiH
+         I6i0pWr1Bm26YHBfmj8Q4KWnzxx/b/1IT3Gf1o4kxilrc9UXbFRwcGcIsyEFpW80Uq+m
+         CW0xXsP0zwXdpH8cWyDpSNce0LE26o0TO+q1YcwIDpeXgStFfhRqHawz8szkHxHYixXX
+         RWdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kZYpRpqYmpLHtSZ4UZWrh/TDPBDXwHd9fuFtqbGJNp8=;
+        b=hdK+8jfwvvBU2231/++p+D59K1UBfbFBJcRh9iTU2zdQM6XZbgZ9yYPn7PrRaA0Z3g
+         r8wLbPKp7zsUi0p2rDChBV6gHdTcGVa2VvYhQ7UoYuW73WJ6bq8XQhgNnqXrlpwmSsHG
+         IZEs/eM/Ae6ZCJ4iODfZ0viczLpIa+Mq28Ff/lBBC7YAXL0+dNPjmcTzEVhY2QBrBaNP
+         na0FwS3xnvwuDG5J8BNocT/5WcxKQ4v9DMOMHWa9OmLqt/nVoeI2ji/0KND0x21DRtih
+         5qE6W0u6GClowUVVHzdXbOyxv8psCs5FcbejObEd9zEoy/JIVA2dZvrIR80PzCW5Mgdi
+         ygKw==
+X-Gm-Message-State: AJIora82E6lydzWong3d6C9uoVLxIOmevNIUF60UAMrA6pDnO/3+mquJ
+        L9EJ0argEt1AvcGG7Ia6MqyPtAtyk47GSntV63pvSA==
+X-Google-Smtp-Source: AGRyM1veIK5oqkXm9Jh6FafjYaMA6RaYT2l9Mbn0Rx3j6oD+QxIsrfxzOTk4yC6i7GZ5Uj5bAoLxk+SS6q5Fa7uvISQ=
+X-Received: by 2002:a25:e211:0:b0:669:9cf9:bac7 with SMTP id
+ h17-20020a25e211000000b006699cf9bac7mr9710834ybe.407.1656605271052; Thu, 30
+ Jun 2022 09:07:51 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220630143842.24906-1-duoming@zju.edu.cn> <CANn89iLda2oxoPQaGd9r8frAaOu1LqxmWYm2O8W4HXaGRN8tcQ@mail.gmail.com>
+ <bed69ee.1e8d9.181b528391c.Coremail.duoming@zju.edu.cn> <CANn89iKo-uuF-iQWrfL=pgMu7bEakWHPDAVuLvT-TZ4AujiD=w@mail.gmail.com>
+ <55ffc892.1ea21.181b54f4b2f.Coremail.duoming@zju.edu.cn>
+In-Reply-To: <55ffc892.1ea21.181b54f4b2f.Coremail.duoming@zju.edu.cn>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 30 Jun 2022 18:07:39 +0200
+Message-ID: <CANn89iLBE_kdnznsURLHVuaKqvzJ2nyuzKxz2y8G_29WjccsOA@mail.gmail.com>
+Subject: Re: [PATCH net] net: rose: fix UAF bug caused by rose_t0timer_expiry
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     linux-hams@vger.kernel.org, netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Ralf Baechle <ralf@linux-mips.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBCdXQgdGhlc2Ugc3RhdGUgY29tcG9uZW50cyBhcmUgYXJjaGl0ZWN0dXJhbC4gV2hpbGUgdGhp
-cyBjYW4gaGVscCANCj4gdXNlcnNwYWNlIGFueXdheSwgc2F5aW5nICJYU1RBVEUgY29tcG9uZW50
-IiBoZXJlIGFuZCBvbiB0aGUgbWFuLXBhZ2UgaXMgDQo+IHByb2JhYmx5IGl0IGFzIHRoZXkgYXJl
-IGFscmVhZHkgZGVmaW5lZCBpbiB0aGUgeDg2IHNwZWMuDQoNCkFuIGFwcGxpY2F0aW9uIHdyaXRl
-ciBjYW4ndCB1c2U6DQoNCiMgaW5jbHVkZSB7eDg2IHNwZWN9Ig0KDQp0byBnZXQgdGhlc2UgdmFs
-dWVzIC4uLiBpZiBhcHBsaWNhdGlvbnMgbmVlZCB0aGVtIHRvIGZpbmQgb3V0IGlmIEFNWCBpcyBw
-cmVzZW50LA0KYW5kIHRvIGVuYWJsZSBpdCwgdGhlbiB0aGV5IG5lZWQgYW4gQVBJLg0KDQpNYXli
-ZSB5b3VyIGV4YW1wbGUgY29kZSBzaG91bGQganVzdCBiZSBhIGxpYnJhcnkgcm91dGluZT8gU28g
-YXBwbGljYXRpb24gd3JpdGVycw0KY2FuIGp1c3QgZG86DQoNCglpZiAoIWludGVsX2FteF9lbmFi
-bGUoKSkgew0KCQllcnJvciBtZXNzYWdlLCBvciBmYWxsIGJhY2sgdG8gbm9uLUFNWCBpbXBsZW1l
-bnRhdGlvbg0KCX0NCg0Kd2l0aG91dCBoYXZpbmcgdG8gd29ycnkgYWJvdXQgdGhvc2UgI2RlZmlu
-ZXMuDQoNCi1Ub255DQo=
+On Thu, Jun 30, 2022 at 5:51 PM <duoming@zju.edu.cn> wrote:
+>
+> Hello,
+>
+> On Thu, 30 Jun 2022 17:17:10 +0200 Eric Dumazet wrote:
+>
+> > > > > There are UAF bugs caused by rose_t0timer_expiry(). The
+> > > > > root cause is that del_timer() could not stop the timer
+> > > > > handler that is running and there is no synchronization.
+> > > > > One of the race conditions is shown below:
+> > > > >
+> > > > >     (thread 1)             |        (thread 2)
+> > > > >                            | rose_device_event
+> > > > >                            |   rose_rt_device_down
+> > > > >                            |     rose_remove_neigh
+> > > > > rose_t0timer_expiry        |       rose_stop_t0timer(rose_neigh)
+> > > > >   ...                      |         del_timer(&neigh->t0timer)
+> > > > >                            |         kfree(rose_neigh) //[1]FREE
+> > > > >   neigh->dce_mode //[2]USE |
+> > > > >
+> > > > > The rose_neigh is deallocated in position [1] and use in
+> > > > > position [2].
+> > > > >
+> > > > > The crash trace triggered by POC is like below:
+> > > > >
+> > > > > BUG: KASAN: use-after-free in expire_timers+0x144/0x320
+> > > > > Write of size 8 at addr ffff888009b19658 by task swapper/0/0
+> > > > > ...
+> > > > > Call Trace:
+> > > > >  <IRQ>
+> > > > >  dump_stack_lvl+0xbf/0xee
+> > > > >  print_address_description+0x7b/0x440
+> > > > >  print_report+0x101/0x230
+> > > > >  ? expire_timers+0x144/0x320
+> > > > >  kasan_report+0xed/0x120
+> > > > >  ? expire_timers+0x144/0x320
+> > > > >  expire_timers+0x144/0x320
+> > > > >  __run_timers+0x3ff/0x4d0
+> > > > >  run_timer_softirq+0x41/0x80
+> > > > >  __do_softirq+0x233/0x544
+> > > > >  ...
+> > > > >
+> > > > > This patch changes del_timer() in rose_stop_t0timer() and
+> > > > > rose_stop_ftimer() to del_timer_sync() in order that the
+> > > > > timer handler could be finished before the resources such as
+> > > > > rose_neigh and so on are deallocated. As a result, the UAF
+> > > > > bugs could be mitigated.
+> > > > >
+> > > > > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> > > > > Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> > > > > ---
+> > > > >  net/rose/rose_link.c | 4 ++--
+> > > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/net/rose/rose_link.c b/net/rose/rose_link.c
+> > > > > index 8b96a56d3a4..9734d1264de 100644
+> > > > > --- a/net/rose/rose_link.c
+> > > > > +++ b/net/rose/rose_link.c
+> > > > > @@ -54,12 +54,12 @@ static void rose_start_t0timer(struct rose_neigh *neigh)
+> > > > >
+> > > > >  void rose_stop_ftimer(struct rose_neigh *neigh)
+> > > > >  {
+> > > > > -       del_timer(&neigh->ftimer);
+> > > > > +       del_timer_sync(&neigh->ftimer);
+> > > > >  }
+> > > >
+> > > > Are you sure this is safe ?
+> > > >
+> > > > del_timer_sync() could hang if the caller holds a lock that the timer
+> > > > function would need to acquire.
+> > >
+> > > I think this is safe. The rose_ftimer_expiry() is an empty function that is
+> > > shown below:
+> > >
+> > > static void rose_ftimer_expiry(struct timer_list *t)
+> > > {
+> > > }
+> > >
+> > > > >
+> > > > >  void rose_stop_t0timer(struct rose_neigh *neigh)
+> > > > >  {
+> > > > > -       del_timer(&neigh->t0timer);
+> > > > > +       del_timer_sync(&neigh->t0timer);
+> > > > >  }
+> > > >
+> > > > Same here, please explain why it is safe.
+> > >
+> > > The rose_stop_t0timer() may hold "rose_node_list_lock" and "rose_neigh_list_lock",
+> > > but the timer handler rose_t0timer_expiry() that is shown below does not need
+> > > these two locks.
+> > >
+> > > static void rose_t0timer_expiry(struct timer_list *t)
+> > > {
+> > >         struct rose_neigh *neigh = from_timer(neigh, t, t0timer);
+> > >
+> > >         rose_transmit_restart_request(neigh);
+> > >
+> > >         neigh->dce_mode = 0;
+> > >
+> > >         rose_start_t0timer(neigh);
+> >
+> > This will rearm the timer.  del_timer_sync() will not help.
+>
+> Thank you for your time, but I don't think so.
+>
+> > Please read the comment in front of del_timer_sync(), in kernel/time/timer.c
+>
+> I wrote a kernel module to test whether del_timer_sync() could finish a timer handler
+> that use mod_timer() to rewind itself. The following is the result.
+>
+> # insmod del_timer_sync.ko
+> [  929.374405] my_timer will be create.
+> [  929.374738] the jiffies is :4295595572
+> [  930.411581] In my_timer_function
+> [  930.411956] the jiffies is 4295596609
+> [  935.466643] In my_timer_function
+> [  935.467505] the jiffies is 4295601665
+> [  940.586538] In my_timer_function
+> [  940.586916] the jiffies is 4295606784
+> [  945.706579] In my_timer_function
+> [  945.706885] the jiffies is 4295611904
+>
+> #
+> # rmmod del_timer_sync.ko
+> [  948.507692] the del_timer_sync is :1
+> [  948.507692]
+> #
+> #
+>
+> The result of the experiment shows that the timer handler could
+> be killed after we execute del_timer_sync(), even if the timer could
+> rewind itself.
+
+
+This is not enough to run an experiment to determine a comment is obsolete.
+
+Especially if you are not running the code from interrupts, like rose
+protocol might...
+
+If you think the comment is obsolete, please send a patch to amend it.

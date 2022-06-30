@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E91561BF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F672561DA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235449AbiF3NtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 09:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
+        id S236245AbiF3OAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235306AbiF3NsY (ORCPT
+        with ESMTP id S235984AbiF3N47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:48:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFEB38D;
-        Thu, 30 Jun 2022 06:48:12 -0700 (PDT)
+        Thu, 30 Jun 2022 09:56:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19EA13B474;
+        Thu, 30 Jun 2022 06:51:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BFF6FB82AED;
-        Thu, 30 Jun 2022 13:48:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F2A0C34115;
-        Thu, 30 Jun 2022 13:48:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D820EB82AF6;
+        Thu, 30 Jun 2022 13:51:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24F9DC34115;
+        Thu, 30 Jun 2022 13:51:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656596889;
-        bh=jnYrvhpOjtPsZoLxpSm3lR+OsLMdO0LuIl9CHFPgdyQ=;
+        s=korg; t=1656597061;
+        bh=x7P22JytzPf6oNjq71S/evHGGCzh/+caYNfY3VnwaO0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z+6t2UAKO09vOQUzv0YKG0Fc5D97VKsYtopwVuY0xE75IhcIRYOTMQDVkvnvksgkH
-         wqM1XnIqj2cUmTtrk4q5Mv7DQweRMOmoz6RT9z00/9uC1lIju1ZzNq+ktEX5olJBVV
-         tcfctiXW4Od1ezZ1oeBht2EAcecDYWJ14rxR97iw=
+        b=u/J7E9wuDk4YaU98ZH6P2Vs2tx8phMvjwC0hTo1MEr7qkVYXLFA//AjoFpMlMsOjM
+         Immu7Gp6xgiax/O+Q/3j9iz9dXpZZt8xwOZYB6nQNl7hDN1lIcYXMSEeFIj1ITRg3n
+         f+2cNUzEJY7s2ecM3rOrXV7w3baX5ZhPABDuQrHY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Sumit Dubey2 <Sumit.Dubey2@ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 4.9 18/29] powerpc: Enable execve syscall exit tracepoint
-Date:   Thu, 30 Jun 2022 15:46:18 +0200
-Message-Id: <20220630133231.740297091@linuxfoundation.org>
+        stable@vger.kernel.org, Edward Wu <edwardwu@realtek.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 4.19 06/49] ata: libata: add qc->flags in ata_qc_complete_template tracepoint
+Date:   Thu, 30 Jun 2022 15:46:19 +0200
+Message-Id: <20220630133234.095838169@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133231.200642128@linuxfoundation.org>
-References: <20220630133231.200642128@linuxfoundation.org>
+In-Reply-To: <20220630133233.910803744@linuxfoundation.org>
+References: <20220630133233.910803744@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,58 +54,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+From: Edward Wu <edwardwu@realtek.com>
 
-commit ec6d0dde71d760aa60316f8d1c9a1b0d99213529 upstream.
+commit 540a92bfe6dab7310b9df2e488ba247d784d0163 upstream.
 
-On execve[at], we are zero'ing out most of the thread register state
-including gpr[0], which contains the syscall number. Due to this, we
-fail to trigger the syscall exit tracepoint properly. Fix this by
-retaining gpr[0] in the thread register state.
+Add flags value to check the result of ata completion
 
-Before this patch:
-  # tail /sys/kernel/debug/tracing/trace
-	       cat-123     [000] .....    61.449351: sys_execve(filename:
-  7fffa6b23448, argv: 7fffa6b233e0, envp: 7fffa6b233f8)
-	       cat-124     [000] .....    62.428481: sys_execve(filename:
-  7fffa6b23448, argv: 7fffa6b233e0, envp: 7fffa6b233f8)
-	      echo-125     [000] .....    65.813702: sys_execve(filename:
-  7fffa6b23378, argv: 7fffa6b233a0, envp: 7fffa6b233b0)
-	      echo-125     [000] .....    65.822214: sys_execveat(fd: 0,
-  filename: 1009ac48, argv: 7ffff65d0c98, envp: 7ffff65d0ca8, flags: 0)
-
-After this patch:
-  # tail /sys/kernel/debug/tracing/trace
-	       cat-127     [000] .....   100.416262: sys_execve(filename:
-  7fffa41b3448, argv: 7fffa41b33e0, envp: 7fffa41b33f8)
-	       cat-127     [000] .....   100.418203: sys_execve -> 0x0
-	      echo-128     [000] .....   103.873968: sys_execve(filename:
-  7fffa41b3378, argv: 7fffa41b33a0, envp: 7fffa41b33b0)
-	      echo-128     [000] .....   103.875102: sys_execve -> 0x0
-	      echo-128     [000] .....   103.882097: sys_execveat(fd: 0,
-  filename: 1009ac48, argv: 7fffd10d2148, envp: 7fffd10d2158, flags: 0)
-	      echo-128     [000] .....   103.883225: sys_execveat -> 0x0
-
+Fixes: 255c03d15a29 ("libata: Add tracepoints")
 Cc: stable@vger.kernel.org
-Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-Tested-by: Sumit Dubey2 <Sumit.Dubey2@ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220609103328.41306-1-naveen.n.rao@linux.vnet.ibm.com
+Signed-off-by: Edward Wu <edwardwu@realtek.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/kernel/process.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/trace/events/libata.h |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/arch/powerpc/kernel/process.c
-+++ b/arch/powerpc/kernel/process.c
-@@ -1591,7 +1591,7 @@ void start_thread(struct pt_regs *regs,
- 		tm_reclaim_current(0);
- #endif
+--- a/include/trace/events/libata.h
++++ b/include/trace/events/libata.h
+@@ -249,6 +249,7 @@ DECLARE_EVENT_CLASS(ata_qc_complete_temp
+ 		__entry->hob_feature	= qc->result_tf.hob_feature;
+ 		__entry->nsect		= qc->result_tf.nsect;
+ 		__entry->hob_nsect	= qc->result_tf.hob_nsect;
++		__entry->flags		= qc->flags;
+ 	),
  
--	memset(regs->gpr, 0, sizeof(regs->gpr));
-+	memset(&regs->gpr[1], 0, sizeof(regs->gpr) - sizeof(regs->gpr[0]));
- 	regs->ctr = 0;
- 	regs->link = 0;
- 	regs->xer = 0;
+ 	TP_printk("ata_port=%u ata_dev=%u tag=%d flags=%s status=%s " \
 
 

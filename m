@@ -2,93 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3FC561ABD
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF30561AC9
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233832AbiF3MtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 08:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59214 "EHLO
+        id S235121AbiF3Mxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 08:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234815AbiF3MtS (ORCPT
+        with ESMTP id S232297AbiF3Mxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 08:49:18 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BABB3FD9D;
-        Thu, 30 Jun 2022 05:49:17 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25UCNHVO021290;
-        Thu, 30 Jun 2022 12:49:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=z82onWhMH2MeNyfwc0u66x2ucSnI99TbyunPSGwrsdI=;
- b=OR3KXOn+/968sEfA9DIFSLxLoFGYsrakgpKMeJCBt5ixGiN9tGnLO3ze5mr1vFarF1bU
- yw0ywSC5WI6mHtvo0Pov/P3bYXHTV9G1E/6yc/VplFzknxmqcdmKVlWETvl4WuHmiquC
- bmaVQJL4n3eATPSFPwDgO/szBXriu1E1+B2cvIqkb5stZr0fZi2RSODYyckDpDYC6CZk
- qyK8w4GksmMS73tT6hW0ybJQ490pvgUIFiebXgVEQgmOK7ss/oqO29pgMG3ly9h967Xp
- d+LsGFSaC8B+sUgUpa7nPi/AZkcbp15j1/f60RlYqfUXZFVjexohnkB8p/ktU6PKu1Mm Kw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h1bsn0jqd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Jun 2022 12:49:14 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25UCav0I007066;
-        Thu, 30 Jun 2022 12:49:14 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h1bsn0jpu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Jun 2022 12:49:14 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25UCd7Ig023320;
-        Thu, 30 Jun 2022 12:49:12 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3gwt09046w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Jun 2022 12:49:11 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25UCn8QT17694980
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 Jun 2022 12:49:08 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B52755204E;
-        Thu, 30 Jun 2022 12:49:08 +0000 (GMT)
-Received: from [9.171.69.2] (unknown [9.171.69.2])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 4FFA352050;
-        Thu, 30 Jun 2022 12:49:08 +0000 (GMT)
-Message-ID: <54426ccd-8c1d-c4e5-6fec-07c77c0f3d59@linux.ibm.com>
-Date:   Thu, 30 Jun 2022 14:53:37 +0200
+        Thu, 30 Jun 2022 08:53:52 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFE4427FE
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 05:53:49 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R791e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VHsMkU4_1656593624;
+Received: from 30.225.28.186(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VHsMkU4_1656593624)
+          by smtp.aliyun-inc.com;
+          Thu, 30 Jun 2022 20:53:45 +0800
+Message-ID: <ace8c9bb-83e1-fee8-4f15-987cffe68231@linux.alibaba.com>
+Date:   Thu, 30 Jun 2022 20:53:43 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v6 5/5] s390/pci: allow zPCI zbus without a function zero
-Content-Language: en-US
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220628143100.3228092-1-schnelle@linux.ibm.com>
- <20220628143100.3228092-6-schnelle@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <20220628143100.3228092-6-schnelle@linux.ibm.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3] arm64: mm: fix linear mapping mem access performance
+ degradation
+From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
+To:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
+        will@kernel.org, akpm@linux-foundation.org, david@redhat.com,
+        jianyong.wu@arm.com, james.morse@arm.com, quic_qiancai@quicinc.com,
+        christophe.leroy@csgroup.eu, jonathan@marek.ca,
+        mark.rutland@arm.com, thunder.leizhen@huawei.com,
+        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, rppt@kernel.org,
+        geert+renesas@glider.be, ardb@kernel.org, linux-mm@kvack.org,
+        yaohongbo@linux.alibaba.com
+Cc:     alikernel-developer@linux.alibaba.com
+References: <1656586222-98555-1-git-send-email-guanghuifeng@linux.alibaba.com>
+In-Reply-To: <1656586222-98555-1-git-send-email-guanghuifeng@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: s4_fxW1o1PXuqSjfHBSRDmuuGzXdE0vP
-X-Proofpoint-GUID: uVzBkvkvE5Cixpdp_DbF1bgW1waVTp2K
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-30_07,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0
- malwarescore=0 spamscore=0 impostorscore=0 adultscore=0 mlxlogscore=999
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206300050
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -97,173 +53,462 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 6/28/22 16:31, Niklas Schnelle wrote:
-> Currently the zPCI code block PCI bus creation and probing of a zPCI
-> zbus unless there is a PCI function with devfn 0. This is always the
-> case for the PCI functions with hidden RID but may keep PCI functions
-> from a multi-function PCI device with RID information invisible until
-> the function 0 becomes visible. Worse as a PCI bus is necessary to even
-> present a PCI hotplug slot even that remains invisible.
+在 2022/6/30 18:50, Guanghui Feng 写道:
+> The arm64 can build 2M/1G block/sectiion mapping. When using DMA/DMA32 zone
+> (enable crashkernel, disable rodata full, disable kfence), the mem_map will
+> use non block/section mapping(for crashkernel requires to shrink the region
+> in page granularity). But it will degrade performance when doing larging
+> continuous mem access in kernel(memcpy/memmove, etc).
 > 
-> With the probing of these so called isolated PCI functions enabled for
-> s390 in common code this restriction is no longer necessary. On network
-> cards with multiple ports and a PF per port this also allows using each
-> port on its own while still providing the physical PCI topology
-> information in the devfn needed to associate VFs with their parent PF.
+> There are many changes and discussions:
+> commit 031495635b46 ("arm64: Do not defer reserve_crashkernel() for
+> platforms with no DMA memory zones")
+> commit 0a30c53573b0 ("arm64: mm: Move reserve_crashkernel() into
+> mem_init()")
+> commit 2687275a5843 ("arm64: Force NO_BLOCK_MAPPINGS if crashkernel
+> reservation is required")
 > 
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> This patch changes mem_map to use block/section mapping with crashkernel.
+> Firstly, do block/section mapping(normally 2M or 1G) for all avail mem at
+> mem_map, reserve crashkernel memory. And then walking pagetable to split
+> block/section mapping to non block/section mapping(normally 4K) [[[only]]]
+> for crashkernel mem. So the linear mem mapping use block/section mapping
+> as more as possible. We will reduce the cpu dTLB miss conspicuously, and
+> accelerate mem access about 10-20% performance improvement.
+> 
+> I have tested it with pft(Page Fault Test) and fio, obtained great
+> performace improvement.
+> 
+> For fio test:
+> 1.prepare ramdisk
+>    modprobe -r brd
+>    modprobe brd rd_nr=1 rd_size=67108864
+>    dmsetup remove_all
+>    wipefs -a --force /dev/ram0
+>    mkfs -t ext4 -E lazy_itable_init=0,lazy_journal_init=0 -q -F /dev/ram0
+>    mkdir -p /fs/ram0
+>    mount -t ext4 /dev/ram0 /fs/ram0
+> 
+> 2.prepare fio paremeter in x.fio file:
+> [global]
+> bs=4k
+> ioengine=psync
+> iodepth=128
+> size=32G
+> direct=1
+> invalidate=1
+> group_reporting
+> thread=1
+> rw=read
+> directory=/fs/ram0
+> numjobs=1
+> 
+> [task_0]
+> cpus_allowed=16
+> stonewall=1
+> 
+> 3.run testcase:
+> perf stat -e dTLB-load-misses fio x.fio
+> 
+> 4.contrast
+> ------------------------
+> 			without patch		with patch
+> fio READ		aggrb=1493.2MB/s	aggrb=1775.3MB/s
+> dTLB-load-misses	1,818,320,693		438,729,774
+> time elapsed(s)		70.500326434		62.877316408
+> user(s)			15.926332000		15.684721000
+> sys(s)			54.211939000		47.046165000
+> 
+> 5.conclusion
+> Using this patch will reduce dTLB misses and improve performace greatly.
+> 
+> Signed-off-by: Guanghui Feng <guanghuifeng@linux.alibaba.com>
 > ---
->   arch/s390/pci/pci_bus.c | 82 ++++++++++-------------------------------
->   1 file changed, 20 insertions(+), 62 deletions(-)
+>   arch/arm64/include/asm/mmu.h |   1 +
+>   arch/arm64/mm/init.c         |   8 +-
+>   arch/arm64/mm/mmu.c          | 231 ++++++++++++++++++++++++++++++-------------
+>   3 files changed, 168 insertions(+), 72 deletions(-)
 > 
-> diff --git a/arch/s390/pci/pci_bus.c b/arch/s390/pci/pci_bus.c
-> index 5d77acbd1c87..6a8da1b742ae 100644
-> --- a/arch/s390/pci/pci_bus.c
-> +++ b/arch/s390/pci/pci_bus.c
-> @@ -145,9 +145,6 @@ int zpci_bus_scan_bus(struct zpci_bus *zbus)
->   	struct zpci_dev *zdev;
->   	int devfn, rc, ret = 0;
->   
-> -	if (!zbus->function[0])
-> -		return 0;
-> -
->   	for (devfn = 0; devfn < ZPCI_FUNCTIONS_PER_BUS; devfn++) {
->   		zdev = zbus->function[devfn];
->   		if (zdev && zdev->state == ZPCI_FN_STATE_CONFIGURED) {
-> @@ -184,26 +181,26 @@ void zpci_bus_scan_busses(void)
->   
->   /* zpci_bus_create_pci_bus - Create the PCI bus associated with this zbus
->    * @zbus: the zbus holding the zdevices
-> - * @f0: function 0 of the bus
-> + * @fr: PCI root function that will determine the bus's domain, and bus speeed
->    * @ops: the pci operations
->    *
-> - * Function zero is taken as a parameter as this is used to determine the
-> - * domain, multifunction property and maximum bus speed of the entire bus.
-> + * The PCI function @fr determines the domain (its UID), multifunction property
-> + * and maximum bus speed of the entire bus.
->    *
->    * Return: 0 on success, an error code otherwise
->    */
-> -static int zpci_bus_create_pci_bus(struct zpci_bus *zbus, struct zpci_dev *f0, struct pci_ops *ops)
-> +static int zpci_bus_create_pci_bus(struct zpci_bus *zbus, struct zpci_dev *fr, struct pci_ops *ops)
->   {
->   	struct pci_bus *bus;
->   	int domain;
->   
-> -	domain = zpci_alloc_domain((u16)f0->uid);
-> +	domain = zpci_alloc_domain((u16)fr->uid);
->   	if (domain < 0)
->   		return domain;
->   
->   	zbus->domain_nr = domain;
-> -	zbus->multifunction = f0->rid_available;
-> -	zbus->max_bus_speed = f0->max_bus_speed;
-> +	zbus->multifunction = fr->rid_available;
-> +	zbus->max_bus_speed = fr->max_bus_speed;
->   
->   	/*
->   	 * Note that the zbus->resources are taken over and zbus->resources
-> @@ -303,47 +300,6 @@ void pcibios_bus_add_device(struct pci_dev *pdev)
->   	}
+> diff --git a/arch/arm64/include/asm/mmu.h b/arch/arm64/include/asm/mmu.h
+> index 48f8466..1a46b81 100644
+> --- a/arch/arm64/include/asm/mmu.h
+> +++ b/arch/arm64/include/asm/mmu.h
+> @@ -63,6 +63,7 @@ static inline bool arm64_kernel_unmapped_at_el0(void)
+>   extern void arm64_memblock_init(void);
+>   extern void paging_init(void);
+>   extern void bootmem_init(void);
+> +extern void map_crashkernel(void);
+>   extern void __iomem *early_io_map(phys_addr_t phys, unsigned long virt);
+>   extern void init_mem_pgprot(void);
+>   extern void create_pgd_mapping(struct mm_struct *mm, phys_addr_t phys,
+> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> index 339ee84..241d27e 100644
+> --- a/arch/arm64/mm/init.c
+> +++ b/arch/arm64/mm/init.c
+> @@ -190,6 +190,7 @@ static void __init reserve_crashkernel(void)
+>   	crashk_res.start = crash_base;
+>   	crashk_res.end = crash_base + crash_size - 1;
+>   	insert_resource(&iomem_resource, &crashk_res);
+> +	map_crashkernel();
 >   }
 >   
-> -/* zpci_bus_create_hotplug_slots - Add hotplug slot(s) for device added to bus
-> - * @zdev: the zPCI device that was newly added
-> - *
-> - * Add the hotplug slot(s) for the newly added PCI function. Normally this is
-> - * simply the slot for the function itself. If however we are adding the
-> - * function 0 on a zbus, it might be that we already registered functions on
-> - * that zbus but could not create their hotplug slots yet so add those now too.
-> - *
-> - * Return: 0 on success, an error code otherwise
-> - */
-> -static int zpci_bus_create_hotplug_slots(struct zpci_dev *zdev)
-> -{
-> -	struct zpci_bus *zbus = zdev->zbus;
-> -	int devfn, rc = 0;
+>   /*
+> @@ -388,10 +389,6 @@ void __init arm64_memblock_init(void)
+>   	}
+>   
+>   	early_init_fdt_scan_reserved_mem();
 > -
-> -	rc = zpci_init_slot(zdev);
-> -	if (rc)
-> -		return rc;
-> -	zdev->has_hp_slot = 1;
+> -	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
+> -		reserve_crashkernel();
 > -
-> -	if (zdev->devfn == 0 && zbus->multifunction) {
-> -		/* Now that function 0 is there we can finally create the
-> -		 * hotplug slots for those functions with devfn != 0 that have
-> -		 * been parked in zbus->function[] waiting for us to be able to
-> -		 * create the PCI bus.
-> -		 */
-> -		for  (devfn = 1; devfn < ZPCI_FUNCTIONS_PER_BUS; devfn++) {
-> -			zdev = zbus->function[devfn];
-> -			if (zdev && !zdev->has_hp_slot) {
-> -				rc = zpci_init_slot(zdev);
-> -				if (rc)
-> -					return rc;
-> -				zdev->has_hp_slot = 1;
-> -			}
-> -		}
-> -
-> -	}
-> -
-> -	return rc;
-> -}
-> -
->   static int zpci_bus_add_device(struct zpci_bus *zbus, struct zpci_dev *zdev)
+>   	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
+>   }
+>   
+> @@ -438,8 +435,7 @@ void __init bootmem_init(void)
+>   	 * request_standard_resources() depends on crashkernel's memory being
+>   	 * reserved, so do it here.
+>   	 */
+> -	if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
+> -		reserve_crashkernel();
+> +	reserve_crashkernel();
+>   
+>   	memblock_dump_all();
+>   }
+> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> index 626ec32..4b779cf 100644
+> --- a/arch/arm64/mm/mmu.c
+> +++ b/arch/arm64/mm/mmu.c
+> @@ -42,6 +42,7 @@
+>   #define NO_BLOCK_MAPPINGS	BIT(0)
+>   #define NO_CONT_MAPPINGS	BIT(1)
+>   #define NO_EXEC_MAPPINGS	BIT(2)	/* assumes FEAT_HPDS is not used */
+> +#define NO_SEC_REMAPPINGS	BIT(3)	/* rebuild with non block/sec mapping*/
+>   
+>   u64 idmap_t0sz = TCR_T0SZ(VA_BITS_MIN);
+>   u64 idmap_ptrs_per_pgd = PTRS_PER_PGD;
+> @@ -156,11 +157,12 @@ static bool pgattr_change_is_safe(u64 old, u64 new)
+>   }
+>   
+>   static void init_pte(pmd_t *pmdp, unsigned long addr, unsigned long end,
+> -		     phys_addr_t phys, pgprot_t prot)
+> +		     phys_addr_t phys, pgprot_t prot, int flags)
 >   {
->   	int rc = -EINVAL;
-> @@ -352,21 +308,19 @@ static int zpci_bus_add_device(struct zpci_bus *zbus, struct zpci_dev *zdev)
->   		pr_err("devfn %04x is already assigned\n", zdev->devfn);
->   		return rc;
->   	}
+>   	pte_t *ptep;
+>   
+> -	ptep = pte_set_fixmap_offset(pmdp, addr);
+> +	ptep = (flags & NO_SEC_REMAPPINGS) ? pte_offset_kernel(pmdp, addr) :
+> +		pte_set_fixmap_offset(pmdp, addr);
+
+I'm sorry.
+There is a bug.
+In the init_pud_remap function rebuild left/right margin mem mapping(out 
+of crashkernel mem) without NO_SEC_REMAPPINGS, so it will call the 
+init_pmd/init_pte with using pmd_set_fixmap_offset/pte_set_fixmap_offset.
+
+But when rebuilding, it should't use fixmap(because the pgdir have 
+switch to swapper_pg_dir)
+I'll fix it soon.
+
+>   	do {
+>   		pte_t old_pte = READ_ONCE(*ptep);
+>   
+> @@ -176,7 +178,8 @@ static void init_pte(pmd_t *pmdp, unsigned long addr, unsigned long end,
+>   		phys += PAGE_SIZE;
+>   	} while (ptep++, addr += PAGE_SIZE, addr != end);
+>   
+> -	pte_clear_fixmap();
+> +	if (!(flags & NO_SEC_REMAPPINGS))
+> +		pte_clear_fixmap();
+>   }
+>   
+>   static void alloc_init_cont_pte(pmd_t *pmdp, unsigned long addr,
+> @@ -208,16 +211,59 @@ static void alloc_init_cont_pte(pmd_t *pmdp, unsigned long addr,
+>   		next = pte_cont_addr_end(addr, end);
+>   
+>   		/* use a contiguous mapping if the range is suitably aligned */
+> -		if ((((addr | next | phys) & ~CONT_PTE_MASK) == 0) &&
+> +		if (!(flags & NO_SEC_REMAPPINGS) &&
+> +		   (((addr | next | phys) & ~CONT_PTE_MASK) == 0) &&
+>   		    (flags & NO_CONT_MAPPINGS) == 0)
+>   			__prot = __pgprot(pgprot_val(prot) | PTE_CONT);
+>   
+> -		init_pte(pmdp, addr, next, phys, __prot);
+> +		init_pte(pmdp, addr, next, phys, __prot, flags);
+>   
+>   		phys += next - addr;
+>   	} while (addr = next, addr != end);
+>   }
+>   
+> +static void init_pmd_remap(pud_t *pudp, unsigned long addr, unsigned long end,
+> +			   phys_addr_t phys, pgprot_t prot,
+> +			   phys_addr_t (*pgtable_alloc)(int), int flags)
+> +{
+> +	unsigned long next;
+> +	pmd_t *pmdp;
+> +	phys_addr_t map_offset;
+> +	pmdval_t pmdval;
 > +
-
-Unnecessary CR
-
->   	zdev->zbus = zbus;
->   	zbus->function[zdev->devfn] = zdev;
->   	zpci_nb_devices++;
+> +	pmdp = pmd_offset(pudp, addr);
+> +	do {
+> +		next = pmd_addr_end(addr, end);
+> +
+> +		if (!pmd_none(*pmdp) && pmd_sect(*pmdp)) {
+> +			phys_addr_t pte_phys = pgtable_alloc(PAGE_SHIFT);
+> +			pmd_clear(pmdp);
+> +			pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
+> +			if (flags & NO_EXEC_MAPPINGS)
+> +				pmdval |= PMD_TABLE_PXN;
+> +			__pmd_populate(pmdp, pte_phys, pmdval);
+> +			flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+> +
+> +			map_offset = addr - (addr & PMD_MASK);
+> +			if (map_offset)
+> +			    alloc_init_cont_pte(pmdp, addr & PMD_MASK, addr,
+> +						phys - map_offset, prot,
+> +						pgtable_alloc,
+> +						flags & (~NO_SEC_REMAPPINGS));
+> +
+> +			if (next < (addr & PMD_MASK) + PMD_SIZE)
+> +			    alloc_init_cont_pte(pmdp, next,
+> +					       (addr & PUD_MASK) + PUD_SIZE,
+> +					        next - addr + phys,
+> +						prot, pgtable_alloc,
+> +						flags & (~NO_SEC_REMAPPINGS));
+> +		}
+> +		alloc_init_cont_pte(pmdp, addr, next, phys, prot,
+> +				    pgtable_alloc, flags);
+> +		phys += next - addr;
+> +	} while (pmdp++, addr = next, addr != end);
+> +}
+> +
+>   static void init_pmd(pud_t *pudp, unsigned long addr, unsigned long end,
+>   		     phys_addr_t phys, pgprot_t prot,
+>   		     phys_addr_t (*pgtable_alloc)(int), int flags)
+> @@ -286,16 +332,87 @@ static void alloc_init_cont_pmd(pud_t *pudp, unsigned long addr,
+>   		next = pmd_cont_addr_end(addr, end);
 >   
-> -	if (zbus->bus) {
-> -		if (zbus->multifunction && !zdev->rid_available) {
-> -			WARN_ONCE(1, "rid_available not set for multifunction\n");
-> -			goto error;
-> -		}
-> -
-> -		zpci_bus_create_hotplug_slots(zdev);
-> -	} else {
-> -		/* Hotplug slot will be created once function 0 appears */
-> -		zbus->multifunction = 1;
-> +	if (zbus->multifunction && !zdev->rid_available) {
-> +		WARN_ONCE(1, "rid_available not set for multifunction\n");
-> +		goto error;
->   	}
-> +	rc = zpci_init_slot(zdev);
-> +	if (rc)
-> +		goto error;
-> +	zdev->has_hp_slot = 1;
+>   		/* use a contiguous mapping if the range is suitably aligned */
+> -		if ((((addr | next | phys) & ~CONT_PMD_MASK) == 0) &&
+> +		if (!(flags & NO_SEC_REMAPPINGS) &&
+> +		   (((addr | next | phys) & ~CONT_PMD_MASK) == 0) &&
+>   		    (flags & NO_CONT_MAPPINGS) == 0)
+>   			__prot = __pgprot(pgprot_val(prot) | PTE_CONT);
 >   
->   	return 0;
+> -		init_pmd(pudp, addr, next, phys, __prot, pgtable_alloc, flags);
+> +		if (flags & NO_SEC_REMAPPINGS)
+> +			init_pmd_remap(pudp, addr, next, phys, __prot,
+> +				       pgtable_alloc, flags);
+> +		else
+> +			init_pmd(pudp, addr, next, phys, __prot,
+> +				 pgtable_alloc, flags);
 >   
-> @@ -400,7 +354,11 @@ int zpci_bus_device_register(struct zpci_dev *zdev, struct pci_ops *ops)
->   			return -ENOMEM;
->   	}
+>   		phys += next - addr;
+>   	} while (addr = next, addr != end);
+>   }
 >   
-> -	if (zdev->devfn == 0) {
-> +	if (!zbus->bus) {
-> +		/* The UID of the first PCI function registered with a zpci_bus
-> +		 * is used as the domain number for that bus. Currently there
-> +		 * is exactly one zpci_bus per domain.
+> +static void init_pud_remap(pud_t *pudp, unsigned long addr, unsigned long next,
+> +			   phys_addr_t phys, pgprot_t prot,
+> +			   phys_addr_t (*pgtable_alloc)(int),
+> +			   int flags)
+> +{
+> +	pudval_t pudval;
+> +	phys_addr_t map_offset;
+> +
+> +	if (!pud_none(*pudp) && pud_sect(*pudp)) {
+> +		phys_addr_t pmd_phys = pgtable_alloc(PMD_SHIFT);
+> +		pud_clear(pudp);
+> +		pudval = PUD_TYPE_TABLE | PUD_TABLE_UXN;
+> +		if (flags & NO_EXEC_MAPPINGS)
+> +			pudval |= PUD_TABLE_PXN;
+> +
+> +		__pud_populate(pudp, pmd_phys, pudval);
+> +		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+> +
+> +		map_offset = addr - (addr & PUD_MASK);
+> +		if (map_offset)
+> +		    alloc_init_cont_pmd(pudp, addr & PUD_MASK,
+> +					addr, phys - map_offset,
+> +					prot, pgtable_alloc,
+> +					flags &	(~NO_SEC_REMAPPINGS));
+> +
+> +		if (next < (addr & PUD_MASK) + PUD_SIZE)
+> +		    alloc_init_cont_pmd(pudp, next,
+> +				       (addr & PUD_MASK) + PUD_SIZE,
+> +					next - addr + phys,
+> +					prot, pgtable_alloc,
+> +					flags & (~NO_SEC_REMAPPINGS));
+> +	}
+> +	alloc_init_cont_pmd(pudp, addr, next, phys, prot,
+> +			    pgtable_alloc, flags);
+> +}
+> +
+> +static void init_pud(pud_t *pudp, unsigned long addr, unsigned long next,
+> +		     phys_addr_t phys, pgprot_t prot,
+> +		     phys_addr_t (*pgtable_alloc)(int),
+> +		     int flags)
+> +{
+> +	pud_t old_pud = READ_ONCE(*pudp);
+> +	/*
+> +	 * For 4K granule only, attempt to put down a 1GB block
+> +	 */
+> +	if (pud_sect_supported() &&
+> +	   ((addr | next | phys) & ~PUD_MASK) == 0 &&
+> +	   (flags & NO_BLOCK_MAPPINGS) == 0) {
+> +		pud_set_huge(pudp, phys, prot);
+> +
+> +		/*
+> +		 * After the PUD entry has been populated once, we
+> +		 * only allow updates to the permission attributes.
 > +		 */
->   		rc = zpci_bus_create_pci_bus(zbus, zdev, ops);
->   		if (rc)
->   			goto error;
-> 
-
-
-Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
-
-
--- 
-Pierre Morel
-IBM Lab Boeblingen
+> +		BUG_ON(!pgattr_change_is_safe(pud_val(old_pud),
+> +					      READ_ONCE(pud_val(*pudp))));
+> +	} else {
+> +		alloc_init_cont_pmd(pudp, addr, next, phys, prot,
+> +				    pgtable_alloc, flags);
+> +
+> +		BUG_ON(pud_val(old_pud) != 0 &&
+> +		       pud_val(old_pud) != READ_ONCE(pud_val(*pudp)));
+> +	}
+> +}
+> +
+>   static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+>   			   phys_addr_t phys, pgprot_t prot,
+>   			   phys_addr_t (*pgtable_alloc)(int),
+> @@ -325,37 +442,24 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+>   	 */
+>   	if (system_state != SYSTEM_BOOTING)
+>   		mutex_lock(&fixmap_lock);
+> -	pudp = pud_set_fixmap_offset(p4dp, addr);
+> -	do {
+> -		pud_t old_pud = READ_ONCE(*pudp);
+>   
+> +	pudp = (flags & NO_SEC_REMAPPINGS) ? pud_offset(p4dp, addr) :
+> +		pud_set_fixmap_offset(p4dp, addr);
+> +	do {
+>   		next = pud_addr_end(addr, end);
+>   
+> -		/*
+> -		 * For 4K granule only, attempt to put down a 1GB block
+> -		 */
+> -		if (pud_sect_supported() &&
+> -		   ((addr | next | phys) & ~PUD_MASK) == 0 &&
+> -		    (flags & NO_BLOCK_MAPPINGS) == 0) {
+> -			pud_set_huge(pudp, phys, prot);
+> -
+> -			/*
+> -			 * After the PUD entry has been populated once, we
+> -			 * only allow updates to the permission attributes.
+> -			 */
+> -			BUG_ON(!pgattr_change_is_safe(pud_val(old_pud),
+> -						      READ_ONCE(pud_val(*pudp))));
+> -		} else {
+> -			alloc_init_cont_pmd(pudp, addr, next, phys, prot,
+> -					    pgtable_alloc, flags);
+> -
+> -			BUG_ON(pud_val(old_pud) != 0 &&
+> -			       pud_val(old_pud) != READ_ONCE(pud_val(*pudp)));
+> -		}
+> +		if (flags & NO_SEC_REMAPPINGS)
+> +			init_pud_remap(pudp, addr, next, phys, prot,
+> +				       pgtable_alloc, flags);
+> +		else
+> +			init_pud(pudp, addr, next, phys, prot, pgtable_alloc,
+> +				 flags);
+>   		phys += next - addr;
+>   	} while (pudp++, addr = next, addr != end);
+>   
+> -	pud_clear_fixmap();
+> +	if (!(flags & NO_SEC_REMAPPINGS))
+> +		pud_clear_fixmap();
+> +
+>   	if (system_state != SYSTEM_BOOTING)
+>   		mutex_unlock(&fixmap_lock);
+>   }
+> @@ -483,20 +587,39 @@ void __init mark_linear_text_alias_ro(void)
+>   			    PAGE_KERNEL_RO);
+>   }
+>   
+> -static bool crash_mem_map __initdata;
+> +#ifdef CONFIG_KEXEC_CORE
+> +static phys_addr_t __init early_crashkernel_pgtable_alloc(int shift)
+> +{
+> +	phys_addr_t phys;
+> +	void *ptr;
+>   
+> -static int __init enable_crash_mem_map(char *arg)
+> +	phys = memblock_phys_alloc_range(PAGE_SIZE, PAGE_SIZE, 0,
+> +					 MEMBLOCK_ALLOC_NOLEAKTRACE);
+> +	if (!phys)
+> +		panic("Failed to allocate page table page\n");
+> +
+> +	ptr = (void *)__phys_to_virt(phys);
+> +	memset(ptr, 0, PAGE_SIZE);
+> +	return phys;
+> +}
+> +
+> +void __init map_crashkernel(void)
+>   {
+> -	/*
+> -	 * Proper parameter parsing is done by reserve_crashkernel(). We only
+> -	 * need to know if the linear map has to avoid block mappings so that
+> -	 * the crashkernel reservations can be unmapped later.
+> -	 */
+> -	crash_mem_map = true;
+> +	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+> +	    return;
+>   
+> -	return 0;
+> +	if (!crashk_res.end)
+> +	    return;
+> +
+> +	__create_pgd_mapping(swapper_pg_dir, crashk_res.start,
+> +			     __phys_to_virt(crashk_res.start),
+> +			     crashk_res.end + 1 - crashk_res.start, PAGE_KERNEL,
+> +			     early_crashkernel_pgtable_alloc,
+> +			     NO_EXEC_MAPPINGS | NO_SEC_REMAPPINGS);
+>   }
+> -early_param("crashkernel", enable_crash_mem_map);
+> +#else
+> +void __init map_crashkernel(void) {}
+> +#endif
+>   
+>   static void __init map_mem(pgd_t *pgdp)
+>   {
+> @@ -527,17 +650,6 @@ static void __init map_mem(pgd_t *pgdp)
+>   	 */
+>   	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
+>   
+> -#ifdef CONFIG_KEXEC_CORE
+> -	if (crash_mem_map) {
+> -		if (IS_ENABLED(CONFIG_ZONE_DMA) ||
+> -		    IS_ENABLED(CONFIG_ZONE_DMA32))
+> -			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+> -		else if (crashk_res.end)
+> -			memblock_mark_nomap(crashk_res.start,
+> -			    resource_size(&crashk_res));
+> -	}
+> -#endif
+> -
+>   	/* map all the memory banks */
+>   	for_each_mem_range(i, &start, &end) {
+>   		if (start >= end)
+> @@ -570,19 +682,6 @@ static void __init map_mem(pgd_t *pgdp)
+>   	 * in page granularity and put back unused memory to buddy system
+>   	 * through /sys/kernel/kexec_crash_size interface.
+>   	 */
+> -#ifdef CONFIG_KEXEC_CORE
+> -	if (crash_mem_map &&
+> -	    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) {
+> -		if (crashk_res.end) {
+> -			__map_memblock(pgdp, crashk_res.start,
+> -				       crashk_res.end + 1,
+> -				       PAGE_KERNEL,
+> -				       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
+> -			memblock_clear_nomap(crashk_res.start,
+> -					     resource_size(&crashk_res));
+> -		}
+> -	}
+> -#endif
+>   }
+>   
+>   void mark_rodata_ro(void)

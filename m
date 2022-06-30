@@ -2,74 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EFFA561EA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F224561EAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234637AbiF3PAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 11:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
+        id S235177AbiF3PCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 11:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232475AbiF3PAy (ORCPT
+        with ESMTP id S234536AbiF3PB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 11:00:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764AD1EC4D;
-        Thu, 30 Jun 2022 08:00:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12AF162342;
-        Thu, 30 Jun 2022 15:00:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E581AC34115;
-        Thu, 30 Jun 2022 15:00:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656601252;
-        bh=GIN6H47G5ahaWWEBKBaLwqpkro/q6ysaDa2KPJG41Xk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YMIYHgTtSL/6hHAeUURt2DhbkRYiy8t5WG5ZPaoND2KXJnh4Am2WN9IcN6Aj6DQuL
-         cTU+3D0fkBDxj1gi8nga8nda+mozbGX5j2TdARsKpd65g8RboDifsEqHKkp+0wZv9E
-         opIwn4IEE/V4m36KLSkwBCNMZS9BDZXZ17vIcpZQ=
-Date:   Thu, 30 Jun 2022 17:00:49 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, jirislaby@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_msavaliy@quicinc.com,
-        dianders@chromium.org, mka@chromium.org, swboyd@chromium.org
-Subject: Re: [V2] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which
- otherwise could return a sub-optimal clock rate.
-Message-ID: <Yr26oSKOhIBMaKsS@kroah.com>
-References: <1656496841-5853-1-git-send-email-quic_vnivarth@quicinc.com>
+        Thu, 30 Jun 2022 11:01:57 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4631F63D;
+        Thu, 30 Jun 2022 08:01:56 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25UDiqaR003941;
+        Thu, 30 Jun 2022 10:01:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=tE00initlptw2sRprEoJ6Mg4Fr4Jr2LI3wz+6oohsnw=;
+ b=Kpsx+2b3g0eZiSfOenerOaJbdmisDNhmsyInogeXFMIQES1CyhEQd2Rozz4AcXSFVYa5
+ QvpJIO4LTKH8puJx0sDZu7/hwEj1vr1HW2eNlKClZh8pg/HiXzdzdlDVk+yh2ln7R2Ah
+ ViNwfJXZ/vfvxfopn1Jmknd+eIFvd5YsfHXCJmi9g+9Q8aeUgZzSl7OKV/J5Z+acVJfk
+ KYse+5GTHvCCk9v+ETioSsh/JUM21gpWmOwxlDjRJpnaqv8DNTIHnewkd6LaUqEceH63
+ CqtBnQNCJr2l5Gd3RwTLadPYN/IDrsVkNFrGcWiL4IWRqmjIaRvVoAY4CS10gzp/q77m 4w== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3gwxsq6r1g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 30 Jun 2022 10:01:41 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 30 Jun
+ 2022 16:01:40 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
+ Transport; Thu, 30 Jun 2022 16:01:40 +0100
+Received: from sbinding-cirrus-dsktp.ad.cirrus.com (unknown [198.90.238.163])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 573062A9;
+        Thu, 30 Jun 2022 15:01:39 +0000 (UTC)
+From:   Stefan Binding <sbinding@opensource.cirrus.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+CC:     <linux-acpi@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: [PATCH v5 0/2] Read _SUB from ACPI to be able to identify firmware
+Date:   Thu, 30 Jun 2022 16:01:33 +0100
+Message-ID: <20220630150135.1799535-1-sbinding@opensource.cirrus.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1656496841-5853-1-git-send-email-quic_vnivarth@quicinc.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: qsewX1yu3afAJzCcZISt3uqbIWxdt7hg
+X-Proofpoint-ORIG-GUID: qsewX1yu3afAJzCcZISt3uqbIWxdt7hg
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 03:30:41PM +0530, Vijaya Krishna Nivarthi wrote:
-> In the logic around call to clk_round_rate(), for some corner conditions,
-> get_clk_div_rate() could return an sub-optimal clock rate. Also, if an
-> exact clock rate was not found lowest clock was being returned.
-> 
-> Search for suitable clock rate in 2 steps
-> a) exact match or within 2% tolerance
-> b) within 5% tolerance
-> This also takes care of corner conditions.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
+CS35L41 has a DSP which is able to run firmware, as well as a tuning file.
+Different systems may want to use different firmwares and tuning files, and
+some firmwares/tunings may not be compatible with other systems.
+To allow a system to select the correct fimware/tuning, we can read an _SUB
+from the ACPI. This _SUB can then be used to uniquely identify the system
+in the firmware/tuning file name.
 
-Did the test robot really report the original issue, or just the v2
-change?
+Add a helper function which reads the _SUB, so this can be used by other
+parts in the future.
+Add support inside the CS35L41 ASoC driver to read this _SUB, and save it
+appropriately.
 
-thanks,
+Changes since v4:
+- Rename function
 
-greg k-h
+Changes since v3:
+- Fix 32 bit format string warning
+
+Changes since v2:
+- Fix error in function prototype
+
+Changes since v1:
+- Add length validation for SSID String
+- Rename API
+- Allocate memory inside API
+- Use ACPI_HANDLE macro instead of ACPI_COMPANION
+- Improve error handling
+
+Stefan Binding (2):
+  ACPI: utils: Add api to read _SUB from ACPI
+  ASoC: cs35l41: Read System Name from ACPI _SUB to identify firmware
+
+ drivers/acpi/utils.c       | 38 ++++++++++++++++++++++++++++++++++++++
+ include/linux/acpi.h       |  6 ++++++
+ sound/soc/codecs/cs35l41.c | 24 ++++++++++++++++++++++++
+ 3 files changed, 68 insertions(+)
+
+-- 
+2.25.1
+

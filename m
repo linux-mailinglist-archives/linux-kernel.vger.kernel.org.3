@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4339F561CCA
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF33561D10
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236815AbiF3OJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
+        id S236401AbiF3OEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237098AbiF3OIN (ORCPT
+        with ESMTP id S236399AbiF3OD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:08:13 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75D3599D2;
-        Thu, 30 Jun 2022 06:55:05 -0700 (PDT)
+        Thu, 30 Jun 2022 10:03:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6166B242;
+        Thu, 30 Jun 2022 06:53:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A36E9CE2EC5;
-        Thu, 30 Jun 2022 13:55:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 759F0C34115;
-        Thu, 30 Jun 2022 13:55:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37476B82AF3;
+        Thu, 30 Jun 2022 13:53:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BEDEC34115;
+        Thu, 30 Jun 2022 13:53:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597300;
-        bh=IlUuLaioXD4aLocQ1ckAcqmG2YPQSwNfIkXxiJQxQdw=;
+        s=korg; t=1656597193;
+        bh=eKE4cgu2e63UU+R+fmDk3aaFZEunnEBDlo8wObbI/0Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u6fLRcWm4GBnMO2CkLpZEnhAJUjabHvVjXzjVBGoSDeD/nfwhO7mwIC1ETZcImTSB
-         uioFSsHbtUqeSLntJHLpPxhUzg0UdnJ+ORkVlN3ygqbbJ+qWHkbN7UD6e5Bac11ahU
-         VuZfHaWoQVG5Jq2U3Qsm4O2p/TzUNkCL9wTUWnV0=
+        b=yVHrj+yUD5O9Z4P0UYIrJXbTjFzKBu0fCXSwGeYNvtsw5cTFKziAkkaG6OqA4fDY9
+         J4cz2qREfS1HAqDDiWVATjdJmkVGDUV8HaC8iLZtr6BLkIsEXGsAZ/YAQv2M5TK2y/
+         AHPyvthxX6Vv/NKuAAqDJGZ2kTiuSQoGTEsi7Cmk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Leah Rumancik <leah.rumancik@gmail.com>
-Subject: [PATCH 5.15 09/28] xfs: check sb_meta_uuid for dabuf buffer recovery
-Date:   Thu, 30 Jun 2022 15:47:05 +0200
-Message-Id: <20220630133233.201165379@linuxfoundation.org>
+        Stefan Agner <stefan@agner.ch>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: [PATCH 5.4 12/16] ARM: 8929/1: use APSR_nzcv instead of r15 as mrc operand
+Date:   Thu, 30 Jun 2022 15:47:06 +0200
+Message-Id: <20220630133231.301550401@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133232.926711493@linuxfoundation.org>
-References: <20220630133232.926711493@linuxfoundation.org>
+In-Reply-To: <20220630133230.936488203@linuxfoundation.org>
+References: <20220630133230.936488203@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,82 +55,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Chinner <dchinner@redhat.com>
+From: Stefan Agner <stefan@agner.ch>
 
-[ Upstream commit 09654ed8a18cfd45027a67d6cbca45c9ea54feab ]
+commit 9f1984c6ae30e2a379751339ce3375a21099b5d4 upstream
 
-Got a report that a repeated crash test of a container host would
-eventually fail with a log recovery error preventing the system from
-mounting the root filesystem. It manifested as a directory leaf node
-corruption on writeback like so:
+LLVM's integrated assembler does not accept r15 as mrc operand.
+  arch/arm/boot/compressed/head.S:1267:16: error: operand must be a register in range [r0, r14] or apsr_nzcv
+  1: mrc p15, 0, r15, c7, c14, 3 @ test,clean,invalidate D cache
+                 ^
 
- XFS (loop0): Mounting V5 Filesystem
- XFS (loop0): Starting recovery (logdev: internal)
- XFS (loop0): Metadata corruption detected at xfs_dir3_leaf_check_int+0x99/0xf0, xfs_dir3_leaf1 block 0x12faa158
- XFS (loop0): Unmount and run xfs_repair
- XFS (loop0): First 128 bytes of corrupted metadata buffer:
- 00000000: 00 00 00 00 00 00 00 00 3d f1 00 00 e1 9e d5 8b  ........=.......
- 00000010: 00 00 00 00 12 fa a1 58 00 00 00 29 00 00 1b cc  .......X...)....
- 00000020: 91 06 78 ff f7 7e 4a 7d 8d 53 86 f2 ac 47 a8 23  ..x..~J}.S...G.#
- 00000030: 00 00 00 00 17 e0 00 80 00 43 00 00 00 00 00 00  .........C......
- 00000040: 00 00 00 2e 00 00 00 08 00 00 17 2e 00 00 00 0a  ................
- 00000050: 02 35 79 83 00 00 00 30 04 d3 b4 80 00 00 01 50  .5y....0.......P
- 00000060: 08 40 95 7f 00 00 02 98 08 41 fe b7 00 00 02 d4  .@.......A......
- 00000070: 0d 62 ef a7 00 00 01 f2 14 50 21 41 00 00 00 0c  .b.......P!A....
- XFS (loop0): Corruption of in-memory data (0x8) detected at xfs_do_force_shutdown+0x1a/0x20 (fs/xfs/xfs_buf.c:1514).  Shutting down.
- XFS (loop0): Please unmount the filesystem and rectify the problem(s)
- XFS (loop0): log mount/recovery failed: error -117
- XFS (loop0): log mount failed
+Use APSR_nzcv instead of r15. The GNU assembler supports this
+syntax since binutils 2.21 [0].
 
-Tracing indicated that we were recovering changes from a transaction
-at LSN 0x29/0x1c16 into a buffer that had an LSN of 0x29/0x1d57.
-That is, log recovery was overwriting a buffer with newer changes on
-disk than was in the transaction. Tracing indicated that we were
-hitting the "recovery immediately" case in
-xfs_buf_log_recovery_lsn(), and hence it was ignoring the LSN in the
-buffer.
+[0] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h=db472d6ff0f438a21b357249a9b48e4b74498076
 
-The code was extracting the LSN correctly, then ignoring it because
-the UUID in the buffer did not match the superblock UUID. The
-problem arises because the UUID check uses the wrong UUID - it
-should be checking the sb_meta_uuid, not sb_uuid. This filesystem
-has sb_uuid != sb_meta_uuid (which is fine), and the buffer has the
-correct matching sb_meta_uuid in it, it's just the code checked it
-against the wrong superblock uuid.
-
-The is no corruption in the filesystem, and failing to recover the
-buffer due to a write verifier failure means the recovery bug did
-not propagate the corruption to disk. Hence there is no corruption
-before or after this bug has manifested, the impact is limited
-simply to an unmountable filesystem....
-
-This was missed back in 2015 during an audit of incorrect sb_uuid
-usage that resulted in commit fcfbe2c4ef42 ("xfs: log recovery needs
-to validate against sb_meta_uuid") that fixed the magic32 buffers to
-validate against sb_meta_uuid instead of sb_uuid. It missed the
-magicda buffers....
-
-Fixes: ce748eaa65f2 ("xfs: create new metadata UUID field and incompat flag")
-Signed-off-by: Dave Chinner <dchinner@redhat.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Leah Rumancik <leah.rumancik@gmail.com>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/xfs_buf_item_recover.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/compressed/head.S |    2 +-
+ arch/arm/mm/proc-arm1026.S      |    4 ++--
+ arch/arm/mm/proc-arm926.S       |    4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
---- a/fs/xfs/xfs_buf_item_recover.c
-+++ b/fs/xfs/xfs_buf_item_recover.c
-@@ -816,7 +816,7 @@ xlog_recover_get_buf_lsn(
- 	}
- 
- 	if (lsn != (xfs_lsn_t)-1) {
--		if (!uuid_equal(&mp->m_sb.sb_uuid, uuid))
-+		if (!uuid_equal(&mp->m_sb.sb_meta_uuid, uuid))
- 			goto recover_immediately;
- 		return lsn;
- 	}
+--- a/arch/arm/boot/compressed/head.S
++++ b/arch/arm/boot/compressed/head.S
+@@ -1274,7 +1274,7 @@ iflush:
+ __armv5tej_mmu_cache_flush:
+ 		tst	r4, #1
+ 		movne	pc, lr
+-1:		mrc	p15, 0, r15, c7, c14, 3	@ test,clean,invalidate D cache
++1:		mrc	p15, 0, APSR_nzcv, c7, c14, 3	@ test,clean,invalidate D cache
+ 		bne	1b
+ 		mcr	p15, 0, r0, c7, c5, 0	@ flush I cache
+ 		mcr	p15, 0, r0, c7, c10, 4	@ drain WB
+--- a/arch/arm/mm/proc-arm1026.S
++++ b/arch/arm/mm/proc-arm1026.S
+@@ -138,7 +138,7 @@ ENTRY(arm1026_flush_kern_cache_all)
+ 	mov	ip, #0
+ __flush_whole_cache:
+ #ifndef CONFIG_CPU_DCACHE_DISABLE
+-1:	mrc	p15, 0, r15, c7, c14, 3		@ test, clean, invalidate
++1:	mrc	p15, 0, APSR_nzcv, c7, c14, 3		@ test, clean, invalidate
+ 	bne	1b
+ #endif
+ 	tst	r2, #VM_EXEC
+@@ -363,7 +363,7 @@ ENTRY(cpu_arm1026_switch_mm)
+ #ifdef CONFIG_MMU
+ 	mov	r1, #0
+ #ifndef CONFIG_CPU_DCACHE_DISABLE
+-1:	mrc	p15, 0, r15, c7, c14, 3		@ test, clean, invalidate
++1:	mrc	p15, 0, APSR_nzcv, c7, c14, 3		@ test, clean, invalidate
+ 	bne	1b
+ #endif
+ #ifndef CONFIG_CPU_ICACHE_DISABLE
+--- a/arch/arm/mm/proc-arm926.S
++++ b/arch/arm/mm/proc-arm926.S
+@@ -131,7 +131,7 @@ __flush_whole_cache:
+ #ifdef CONFIG_CPU_DCACHE_WRITETHROUGH
+ 	mcr	p15, 0, ip, c7, c6, 0		@ invalidate D cache
+ #else
+-1:	mrc	p15, 0, r15, c7, c14, 3 	@ test,clean,invalidate
++1:	mrc	p15, 0, APSR_nzcv, c7, c14, 3 	@ test,clean,invalidate
+ 	bne	1b
+ #endif
+ 	tst	r2, #VM_EXEC
+@@ -358,7 +358,7 @@ ENTRY(cpu_arm926_switch_mm)
+ 	mcr	p15, 0, ip, c7, c6, 0		@ invalidate D cache
+ #else
+ @ && 'Clean & Invalidate whole DCache'
+-1:	mrc	p15, 0, r15, c7, c14, 3 	@ test,clean,invalidate
++1:	mrc	p15, 0, APSR_nzcv, c7, c14, 3 	@ test,clean,invalidate
+ 	bne	1b
+ #endif
+ 	mcr	p15, 0, ip, c7, c5, 0		@ invalidate I cache
 
 

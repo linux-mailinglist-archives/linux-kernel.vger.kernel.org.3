@@ -2,185 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99574561928
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 434E6561934
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234922AbiF3L37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 07:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
+        id S235004AbiF3Lab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 07:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233709AbiF3L36 (ORCPT
+        with ESMTP id S234976AbiF3La1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 07:29:58 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD33B51B19;
-        Thu, 30 Jun 2022 04:29:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656588597; x=1688124597;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=q7t7huWqqyvukcdjHZFkSKy89Z4N3/4yYif45b8R+Gw=;
-  b=rVvS8tsWUGTYcfAtyjtLed7Twb9Gwl6MuL30EpKkTfnfbXPiFNaOIYjg
-   5DHl/Z/l0SxBqxjD8f4QdwRUePJA8A/TlTfrTPych9+D2HL4Ywk1bsjiU
-   C4izWBPABva+wzQrTNyu3K/IElZmiZ6EB1qcdu0vvGx72vu8u+olv6FK1
-   U=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 30 Jun 2022 04:29:57 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 04:29:55 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 30 Jun 2022 04:29:55 -0700
-Received: from [10.216.5.206] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 30 Jun
- 2022 04:29:50 -0700
-Message-ID: <2e0f19bf-496c-f90a-3549-fe7ace346ff4@quicinc.com>
-Date:   Thu, 30 Jun 2022 16:59:46 +0530
+        Thu, 30 Jun 2022 07:30:27 -0400
+Received: from relay2.uni-heidelberg.de (relay2.uni-heidelberg.de [129.206.119.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492D351B28
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 04:30:24 -0700 (PDT)
+X-IPAS-Result: =?us-ascii?q?A2DsBgALiL1iffxkzoFagliDJYFXlBABAQEGgUKLMIEJh?=
+ =?us-ascii?q?WktiieCBwEBAQEBAQEBAQkvEwQBAUCKESc1CA4BAgQBAQEBAwIDAQEBAQEBA?=
+ =?us-ascii?q?wEBBgEBAQEBBwQUAQEjPCeFaA2GewFGhEsBA4JkATOuBoEBhloBgT+BZYE9i?=
+ =?us-ascii?q?VqFIIFAgRCEfYURhW4Emj4KAwkEBwVGFxJOMSECRQscAQgGBgcBCAEFCCgEA?=
+ =?us-ascii?q?gEBAQYFGBQBAwEBExIFEwwHKAoSAhIMChsHBwMLBTINAg4HAQEMDwECDwMBA?=
+ =?us-ascii?q?hEBBwIJEggGDysIAwEBAwEHAQICAyALAgMWCQcIAgECBQICAQMPAQgKHBIQF?=
+ =?us-ascii?q?AIEDQQeCQIIAQIZHiwHAgIEDgMjHQgLCgMOAwQDARACGAcCARUBBQIECAQBA?=
+ =?us-ascii?q?wYDCBUZAQ0nBAcDEgINAQYBAgYBAQUFAQMYCAMUAwUBAggDFgcBAiEFCiYJB?=
+ =?us-ascii?q?A0DASIbAgMDAQQbCgIBAgIFFgUCAQECAwIGFQYCAj8vER0NCAQIBAkSHCMBA?=
+ =?us-ascii?q?gwBBAECBy8FBC0CAQEeBAUBBQ8CCAEBFgIGBAMCAgMBAQIBFgIQCAIIJxcHE?=
+ =?us-ascii?q?zMZAQU3FA4PAQMGCBkcIgcJBwUGFgMMFSceKQUHERIbDwQNDQo0IBYkAQEOB?=
+ =?us-ascii?q?QMBEhkRDgcUClMmIRUQBgErFgMEAQMDAgYaAQIDIgISCwkVAgQmCAkDFgYtB?=
+ =?us-ascii?q?QEiHRmcDFohE05ZgQKSaSqDDatmB4NREAGLEJR5LYVFkR0CkgAtlkaidIRPN?=
+ =?us-ascii?q?YEuA4IQTSODOAlIGQ+NdgGJXYUeczsCBgsBAQMJjwUBAQ?=
+IronPort-Data: A9a23:Get78K0b2Xb8qirwzPbD5Ulxkn2cJEfYwER7XKvMYLTBsI5bpzQOy
+ TBOWGHTOq3fZ2vxf95zOo6z8B8D7ZXUydQ2SgZo3Hw8FHgiRejtXInGdBeuY0t+DSFhoGZPt
+ Zh2hgzodZhsJpPkjk7xdOCn9xGQ7InQLlbGILas1htZGEk1Ek/NtTo5w7Rj2tAz2YDja++wk
+ YqaT/P3aQfNNwFcbzp8B5Kr8HuDa9yr5Vv0FnRnDRx6lAe2e0s9VfrzFonpR5fMebS4K8bhL
+ wr1IBFVyUuCl/slIovNfr8W6STmSJaKVeSFoiI+t6RPHnGuqwRqupvXOsbwZm97szuUw9lr0
+ u9hrIKKahYCA6TTkboCBkww/yFWZcWq+ZfCKHm76ZXV0kvHNnvhwvljCEs7J4Je9usf7WNmr
+ KZJbmpVMFba37rwmu/hIgVvrp1LwM3DJ4gfvnx41TzDJe06XJyFXqPLoN9V3Ts9gspDB/mYa
+ 8dxhT9HNUmfPUceZwhHYH44tNaKrybGXzkGkxHL5ukK0lnh71dU67e4ZbI5ffTRGZsJxB/Az
+ o7cxEzmAAodKNW3xj+M83bqjejK9Qv0Qo8dF72Q8v9snU2dwXEVBBQKVFy95/6jhSaWX9NZN
+ lxR4TYnoqk0+2SvT8LhRFu8oXiZrlgQVsQ4O+Nh8wqNjKXV/y6eG3QASTlCLtchsaceQT0sy
+ 0/MnN7zAzFrmKOaRGjb9bqOqz62fy8PIgc/iTQsSAIE54G65pw1j1fPQ9dvHaq/g8f6Xz39q
+ 9yXkMQgr5krg9NX3r+hx3zenQiPt7P0RxE8uBqCCwpJ8ThFTIKiYoWp733S4vBBMJuVQzG9U
+ J4sxpL2AAcmUMHlqcCdfAkeNO34u6/db1UwlXY/Qcl5rlxB7lb+Jdg43d1oGKt+GuopEdMDS
+ G/euA9c4JVeJnTCgURfPdPoUZxCIUTIP93pW/aRUXGaeIRteQqN8TthDXN8MkjomUkoyfh5J
+ JGaNMahDHoXDa5q1jXwS+p1PV4XKsIWmzy7qXPTlkrPPV+iiJi9Euht3LymMrhR0U98iF+Jm
+ +uzzuPTo/mlbMXwYzPM7akYJk0QIH4wCPje8pIKKLPZfVY9Qzh4VJc9JI/NnaQ7x8y5cc+Wo
+ hmAtrNwlguXaYDvc13bNy46NtsDo74u8CtqVcDTAbpY8yN/P9r1tf93m2ofd7Qj6/FuheNyT
+ ucIYd6BHuUHTDnb5DMHbvHAQH9KK3yWafa1F3T+OlAXIcU/LzElD/e+I2MDAgFSVXft3Sb/y
+ pX8vj7mrW0rHl06UZ2GMK30lTtcfxE1wYpPYqcBGfELEG2EzWSgA3aZYiMfSy3UFSj++w==
+IronPort-HdrOrdr: A9a23:3C4UUKw86Xpqa7TT0SXOKrPwCL1zdoMgy1knxilNoERuA6ilfr
+ OV7ZMmPH7P+U0ssR4b+exoVJPsfZqYz+8R3WBzB8bZYOCFghrKEGgK1+KLqFfd8m/Fh4xgPM
+ xbHJSWfeeQMbEMt6jHCWeDf+rJn7K8gd2VbKzlvhFQpElRGthdBq1Ce3qm+2NNNXF7OaY=
+X-IronPort-Anti-Spam-Filtered: true
+Received: from mail01.uni-heidelberg.de ([129.206.100.252])
+  by relay2.uni-heidelberg.de with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2022 13:30:23 +0200
+Received: from localhost (dhcp567-177.laptop-wlc.uni-heidelberg.de [147.142.67.177])
+        (Authenticated sender: ln194)
+        by mail01.uni-heidelberg.de (Postfix) with ESMTPSA id 0C8B7300084F1;
+        Thu, 30 Jun 2022 13:30:22 +0200 (CEST)
+From:   Felix Schlepper <f3sch.git@outlook.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        wjsota@gmail.com, Felix Schlepper <f3sch.git@outlook.com>
+Subject: [PATCH v2 0/6] Staging: rtl8192e: rtllib_wx codingstyle/refactor
+Date:   Thu, 30 Jun 2022 13:30:13 +0200
+Message-Id: <cover.1656587827.git.f3sch.git@outlook.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v6 1/4] dt-bindings: interconnect: qcom,msm8998-cpu-bwmon:
- add BWMON device
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Georgi Djakov" <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Rob Herring <robh@kernel.org>
-References: <20220629140302.236715-1-krzysztof.kozlowski@linaro.org>
- <20220629140302.236715-2-krzysztof.kozlowski@linaro.org>
- <55cf5a2f-7be2-bb65-09d6-d4d5af4d2f0f@quicinc.com>
- <1de5d955-91f9-032c-0ceb-2e48d04464dc@linaro.org>
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-In-Reply-To: <1de5d955-91f9-032c-0ceb-2e48d04464dc@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series addresses some issues raised by chechpatch.pl
+and some minor refactoring of rtllib_modes[].
 
+v2:
+    - split multi assignment in two separate steps.
+      This avoids having 'fixed'='disabled', which
+      is silly.
+    - Since there is no formatting of the rtllib_modes[],
+      one can safely refactor this code into a array of
+      strings. This allows using functions like strcpy/strlen,
+      which is less error prone than using a
+      rtllib_modes.mode_size.
 
-On 6/30/2022 4:53 PM, Krzysztof Kozlowski wrote:
-> On 30/06/2022 13:14, Rajendra Nayak wrote:
->>
->> On 6/29/2022 7:32 PM, Krzysztof Kozlowski wrote:
->>> Add bindings for the Qualcomm Bandwidth Monitor device providing
->>> performance data on interconnects.  The bindings describe only BWMON CPU
->>> (version 4), e.g. the instance which appeared for the first on Qualcomm
->>> MSM8998 SoC and is also used on SDM845.  This BWMON device sits between
->>> CPU and Last Level Cache Controller.
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> Reviewed-by: Rob Herring <robh@kernel.org>
->>> Acked-by: Georgi Djakov <djakov@kernel.org>
->>> ---
->>>    .../interconnect/qcom,msm8998-llcc-bwmon.yaml | 85 +++++++++++++++++++
->>>    1 file changed, 85 insertions(+)
->>>    create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,msm8998-llcc-bwmon.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-llcc-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-llcc-bwmon.yaml
->>> new file mode 100644
->>> index 000000000000..76e09658d615
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-llcc-bwmon.yaml
->>> @@ -0,0 +1,85 @@
->>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/interconnect/qcom,msm8998-llcc-bwmon.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Qualcomm Interconnect Bandwidth Monitor
->>> +
->>> +maintainers:
->>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> +
->>> +description: |
->>> +  Bandwidth Monitor measures current throughput on buses between various NoC
->>> +  fabrics and provides information when it crosses configured thresholds.
->>> +
->>> +  Certain SoCs might have more than one Bandwidth Monitors, for example on SDM845::
->>> +   - Measuring the bandwidth between CPUs and Last Level Cache Controller -
->>> +     called LLCC BWMON,
->>> +   - Measuring the bandwidth between Last Level Cache Controller and memory (DDR).
->>> +
->>> +properties:
->>> +  compatible:
->>> +    oneOf:
->>> +      - items:
->>> +          - enum:
->>> +              - qcom,sdm845-llcc-bwmon
->>> +          - const: qcom,msm8998-llcc-bwmon
->>> +      - const: qcom,msm8998-llcc-bwmon       # BWMON v4
->>> +
->>> +  interconnects:
->>> +    maxItems: 1
->>> +
->>> +  interrupts:
->>> +    maxItems: 1
->>> +
->>> +  operating-points-v2: true
->>> +  opp-table: true
->>> +
->>> +  reg:
->>> +    # BWMON v4 (currently described) and BWMON v5 use one register address
->>> +    # space.  BWMON v2 uses two register spaces - not yet described.
->>> +    maxItems: 1
->>> +
->>> +required:
->>> +  - compatible
->>> +  - interconnects
->>> +  - interrupts
->>> +  - operating-points-v2
->>> +  - opp-table
->>> +  - reg
->>> +
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    #include <dt-bindings/interconnect/qcom,sdm845.h>
->>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->>> +
->>> +    pmu@1436400 {
->>> +        compatible = "qcom,sdm845-llcc-bwmon", "qcom,msm8998-llcc-bwmon";
->>
->> so with this compatible fallback scheme, I am trying to understand what
->> do I need to do if I have to add support for another SoC for instance.
->>
->> I just update the binding with the new SoC compatible (lets say qcom,sc7280-llcc-bwmon)
->> and in the device tree node use it as
->> 	compatible = "qcom,sc7280-llcc-bwmon", "qcom,sdm845-llcc-bwmon", "qcom,msm8998-llcc-bwmon";
->> without any updates in the driver?
-> 
-> I expect:
-> "qcom,sc7280-llcc-bwmon", "qcom,msm8998-llcc-bwmon";
-> and you need to add sc7280 compatible to the driver. The actual proper
-> solution in my patch would be to use msm8998 compatible in the driver,
-> but I did not test MSM8998.
-> 
-> Maybe we should switch to that anyway?
+Felix Schlepper (6):
+  Staging: rtl8192e: Refactored rtllib_modes
+  Staging: rtl8192e: Avoid multiple assignments
+  Staging: rtl8192e: Remove unnecessary parentheses
+  Staging: rtl8192e: Added braces around else
+  Staging: rtl8192e: Remove unnecessary blank line
+  Staging: rtl8192e: Added spaces around '+'
 
-Right, looks like without it every new SoC compatible added would need a dummy
-update in the driver even though you really don't need to do anything different
-in the driver.
+ drivers/staging/rtl8192e/rtllib_wx.c | 37 +++++++++++-----------------
+ 1 file changed, 14 insertions(+), 23 deletions(-)
+
+-- 
+2.36.1
+

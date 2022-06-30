@@ -2,167 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C64E560E14
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 02:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5A5560E1B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 02:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiF3Adu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 20:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
+        id S230117AbiF3AhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 20:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiF3Ads (ORCPT
+        with ESMTP id S229925AbiF3AhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 20:33:48 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587D822B26;
-        Wed, 29 Jun 2022 17:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656549204;
-        bh=6lMtPAGrUriFxRzqDiaMwPvLBe2jbc2oorL+KRQ6G0E=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=OTfO9M329EBUUJzlZ1kbot16CJAYzs5ESaOYQyePWGapX3napQEOrHhH7cKml2QQ/
-         yIgsiGzNOB4dIvRKTFL1sn18+xH2wDYOedTHKmXxKV/NZzbYt4gtSpsf+jRgT+FmgI
-         MvL1/vex3OQvuxQOnMwOSZifdykD17XemB3nxQjE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.69] ([46.223.3.23]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MuUnA-1npSBa1f4k-00rWrE; Thu, 30
- Jun 2022 02:33:24 +0200
-Message-ID: <16841959-42c9-cbd7-e767-39050134b070@gmx.de>
-Date:   Thu, 30 Jun 2022 02:33:23 +0200
+        Wed, 29 Jun 2022 20:37:04 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F23028717
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:37:03 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id u12so35766091eja.8
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MD/TmTcrQEiZqX2Bjoyo72hV/tgqwsB/VS7liK0M4hY=;
+        b=HeIA5Da9l8UvD4H4iDgPRtvuycOMJXJpAAfo8lblN1BJG1Th+zubJ+VY5Im1UUxsQe
+         2pZfW8CNWgyPy0WDAjKew+yjU3CQSjl56GNR5fKp0NRCndcOmqKoTe0IbTZgraD/kuWb
+         TWXX9BCr+B1GfCA33OQtCqwDt5TssQC2VynmI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MD/TmTcrQEiZqX2Bjoyo72hV/tgqwsB/VS7liK0M4hY=;
+        b=8PEM7zT1smVYuTXYMES5ww9+BI+k4Am8uJ7Y+Fx2O95BZJLFlAFwsm0IuUpXaxahGK
+         TSeLbZTrYR98chZ/Sm9aM63eM0Hsdvx69cBjq2kNmVTdEYBf7pueVQIr7Tddbm+bDrSr
+         O1yr846f2UgEQjkmGFoImvpP5iMzJH3SfZ2x8EMct1y/AzrqU1wrJ5fYZeiV4b+2X3YT
+         XjlaZunYIZYg7kRJGC+I1kfI8S3TEnXVxpJhDspjoDE2NC/VK+9Sm2m18hpgqJ7I15eW
+         GkZtccYnEyxu2ekK6v+AJ7MiBin7dnFcfr+Gr6IljUliWadWs6qN6+qcUjbQ0n1tZJIR
+         U45Q==
+X-Gm-Message-State: AJIora+oRZSrUkjZfTnih+5g4598bn9LmxLqzXfC0EV8y9qVBzSJ1zns
+        CcV4WzxPyc7DGsZCNU7etEAgxgLVjmKccxa4fpE=
+X-Google-Smtp-Source: AGRyM1s/YqpKkMBlfzGPD9B+kadYSqOeW2ylfsaz7yhD24QSKHHFwd91ZKPjnIswm0AE+PzDf9JcCw==
+X-Received: by 2002:a17:907:7b84:b0:726:c8a0:c9e7 with SMTP id ne4-20020a1709077b8400b00726c8a0c9e7mr5900788ejc.375.1656549421326;
+        Wed, 29 Jun 2022 17:37:01 -0700 (PDT)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id g6-20020a1709064e4600b007121b22b376sm8286710ejw.105.2022.06.29.17.36.59
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 17:37:00 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id i25so19303546wrc.13
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:36:59 -0700 (PDT)
+X-Received: by 2002:adf:d1c1:0:b0:21b:a5e9:b7b2 with SMTP id
+ b1-20020adfd1c1000000b0021ba5e9b7b2mr5938881wrd.405.1656549418843; Wed, 29
+ Jun 2022 17:36:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 7/8] serial: ar933x: Remove redundant assignment in
- rs485_config
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        vz@mleia.com, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, lukas@wunner.de,
-        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
-References: <20220622154659.8710-1-LinoSanfilippo@gmx.de>
- <20220622154659.8710-8-LinoSanfilippo@gmx.de>
- <f7beef4-c422-cae3-8e22-8652b407434@linux.intel.com>
- <df19d91d-371b-f0e9-e37c-2bde00d2b840@gmx.de>
- <033c8d2-3f2e-afe6-2e98-14a61c872b4b@linux.intel.com>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-In-Reply-To: <033c8d2-3f2e-afe6-2e98-14a61c872b4b@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:fymyF5SOHTcLkP7SEfj64ke4xtX230O6VAwEagenoFcJ803fosw
- wkg5UGVaEOg6mVKNvQrFLo8N9QdLAqIzLyznEhSbCt4CfIOaGpRfpcT2jTa/dFg/21oLz6p
- krFyF6418nG9fkDLq6N6SGQmMORLvyhEuWF5knUEIyvYIEOe5HGI8I6nw8l1WOqTVyioAkZ
- /SC596f1UWyQ3Du22z4Ng==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:51DN12aZLlc=:3sUM85SzIBq78Pf0cH/jpZ
- Ff/FgiAP9iq/TGsKaU2CVbxwuvh2qU9ccFYq4RvM/H9Szz+FUBDyknuam+NCMMrvEVHfpsila
- 2o/e6UWmIcVXThNt/6x2d5hsJojpWVJlR1GKe/EjPRKej4ke4dIqtuqyJ6pktJQ90m+YhZ68n
- 2K4/glejULVCiwiJHgxfPzkR3FS/rawy0oNz11xbpQvELDmrNA3zqQt7Y3pDqhs/vsq89rN1W
- pzo9Z2WQ5cTlVgrSnGsK14Oqc4S+QZ0HuJp9I58GoQXRevss4nfbQEbgvCHn4oupbTZe2lI/6
- MgokvufMg02+ZmYV62KzPADovBJe0Fl+F7feC8Bw0RGg9oFiSKiDmpqcTcwTwXRwhEaG09A3H
- 0rovTr+3LTmF1FujvCyKNc75Yt9LzIpLp9wLvwsmC+QEcAKTe9z2bV66zj7f/lFX9T0TLpEoA
- oCoBP8PBUxn4CHXuXfYE4uGOl2oB7Iw4hi2Ozx+JVE9t2sejxw3iS50svgJ+ZtgweUYc+PoFH
- vlW6yTgHGyXEu76bJMs1gRcalZcoUZBqJxadnEv89l+p5Z8WDa8RjKOg+ocDbpa7l49sAFgdH
- vll/9sLnhHSXSREYxfW7+qXqjqpn3j3UqMoh3Qnhs/KG4+AlEkYtJ+jco6VamT+Kt5xrCdHPZ
- vJODztbVUAw+ExqmVbALP6vu+st3rFHoEyYxcvdCdVDiAkS7LFgCvqxQ2E17dh6BLDz+9o+fq
- Td9hAqJigYZSvtAXF7Urp185ZUpk3UWzSb9jRnM+NeoOiVfDAeY7H2iylUgKLWbGbnceJZb+J
- R+/gD6wRWezhyRpIi1TFr57PC3DCj/a/YX8IO/+kIpUZUzVy07XPQmi+JFG2kNzCRwrAqhpI0
- qOWavPFe8OuQBn2fA/BxuCzXczlUOGX8whbS7m8x7K/gtogfeonF67/4PuTHXSv91ZM88RjwV
- SX8Ek6DzIBrtBvp8tl1rbmeuGx78g75ovVKjK1KrYFfryg5qUPXOvD4r5XXJ+kH/UJ9n0jcGU
- AYkTAOEa4RFKz7JVHWSq194siH6Ch8XkzpEZpNh4o7g3iu+HfJzytOAcDbuK9UDXq1O2Ff6Pk
- t1n2/gCvleNT5e6BkAIA7exqLvxSZsrmbBpn5X4jCKZJ/aaQnPO1gALFg==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1656429606-2765-1-git-send-email-quic_khsieh@quicinc.com> <F35C87BF-46A5-41D3-B8A5-B2AB4A24252D@linaro.org>
+In-Reply-To: <F35C87BF-46A5-41D3-B8A5-B2AB4A24252D@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 29 Jun 2022 17:36:45 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=X3cv=Q30pODyi__OyRY+LbFT14RfEELvm_DAeHafF70g@mail.gmail.com>
+Message-ID: <CAD=FV=X3cv=Q30pODyi__OyRY+LbFT14RfEELvm_DAeHafF70g@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/dp: make eDP panel as the first connected connector
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Koul <vkoul@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On 27.06.22 10:14, Ilpo J=C3=A4rvinen wrote:
-> On Sun, 26 Jun 2022, Lino Sanfilippo wrote:
+On Tue, Jun 28, 2022 at 1:14 PM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
 >
->> On 25.06.22 at 12:14, Ilpo J=C3=A4rvinen wrote:
->>> On Wed, 22 Jun 2022, Lino Sanfilippo wrote:
->>>
->>>> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->>>>
->>>> In uart_set_rs485_config() the serial core already assigns the passed
->>>> serial_rs485 struct to the uart port.
->>>>
->>>> So remove the assignment in the drivers rs485_config() function to av=
-oid
->>>> redundancy.
->>>>
->>>> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->>>> ---
->>>>  drivers/tty/serial/ar933x_uart.c | 1 -
->>>>  1 file changed, 1 deletion(-)
->>>>
->>>> diff --git a/drivers/tty/serial/ar933x_uart.c b/drivers/tty/serial/ar=
-933x_uart.c
->>>> index ab2c5b2a1ce8..857e010d01dc 100644
->>>> --- a/drivers/tty/serial/ar933x_uart.c
->>>> +++ b/drivers/tty/serial/ar933x_uart.c
->>>> @@ -591,7 +591,6 @@ static int ar933x_config_rs485(struct uart_port *=
-port,
->>>>  		dev_err(port->dev, "RS485 needs rts-gpio\n");
->>>>  		return 1;
->>>>  	}
->>>> -	port->rs485 =3D *rs485conf;
->>>>  	return 0;
->>>>  }
->>>
->>> Hmm, I realize that for some reason I missed cleaning up this particul=
-ar
->>> driver after introducing the serial_rs485 sanitization. It shouldn't n=
-eed
->>> that preceeding if block either because ar933x_no_rs485 gets applied i=
-f
->>> there's no rts_gpiod so the core clears SER_RS485_ENABLED.
->>
->> I think we still need that "if" in case that RS485 was not enabled at d=
-river
->> startup (no rs485-enabled-at-boot-time) and no RTS GPIO was defined but=
- then
->> RS485 is enabled via TIOCSRS485.
->>
->> Maybe in ar933x_uart_probe()
->>
->> 	if ((port->rs485.flags & SER_RS485_ENABLED) &&
->> 	    !up->rts_gpiod) {
->> 		dev_err(&pdev->dev, "lacking rts-gpio, disabling RS485\n");
->> 		port->rs485.flags &=3D ~SER_RS485_ENABLED;
->> 		port->rs485_supported =3D &ar933x_no_rs485;
->> 	}
->>
->> should rather be
+> On 28 June 2022 18:20:06 GMT+03:00, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+> >Some userspace presumes that the first connected connector is the main
+> >display, where it's supposed to display e.g. the login screen. For
+> >laptops, this should be the main panel.
+> >
+> >This patch call drm_helper_move_panel_connectors_to_head() after
+> >drm_bridge_connector_init() to make sure eDP stay at head of
+> >connected connector list. This fixes unexpected corruption happen
+> >at eDP panel if eDP is not placed at head of connected connector
+> >list.
 >
-> I think it would be better (and what I should have done while moving the
-> check there in the first place but I missed it). In addition, however, i=
-t
-> would be useful to not print unnecessarily:
->
->> 	if (!up->rts_gpiod) {
->
-> if (port->rs485.flags & SER_RS485_ENABLED) {
->
->> 		dev_err(&pdev->dev, "lacking rts-gpio, disabling RS485\n");
->> 		port->rs485.flags &=3D ~SER_RS485_ENABLED;
->
-> }
+> The change itself is a good fix anyway. (And I'd ack it.) However I would like to understand why does it fix the corruption issue. What is we have eDP and DSI, with DSI ending up before the eDP? Would we see the issue?
+> Also could you please describe the mind of corruption you are observing?
+
+I've spent a whole bunch of time poking at this and in the end my
+conclusion is this:
+
+1. The glitchyness seems to be a result of the Chrome OS userspace
+somehow telling the kernel to do something wrong.
+
+2. I believe (though I have no proof other than Kuogee's patch fixing
+things) that the Chrome OS userspace is simply confused by the eDP
+connector being second. This would imply that Kuogee's patch is
+actually the right one.
+
+3. It would be ideal if the Chrome OS userspace were fixed to handle
+this, but it's an area of code that I've never looked at. It also
+seems terribly low priority to fix since apparently other OSes have
+similar problems (seems like this code was originally added by
+RedHat?)
 
 
-Right. I will send a fix for this with the new version of my series.
+Specifically, I tested with a similar but "persistent" glitch that I
+reproduced. The glitch Kuogee was digging into was a transitory glitch
+on the eDP (internal) display when you plugged in a DP (external)
+display. It would show up for a frame or two and then be fixed. I can
+get a similar-looking glitch (vertical black and white bars) that
+persists by doing these steps on a Chrome OS device (and Chrome OS
+kernel):
 
-Regards,
-Lino
+a) Observe screen looks good.
+b) Observe DP not connected.
+c) Plug in DP
+d) See transitory glitch on screen, then it all looks fine.
+e) set_power_policy --ac_screen_dim_delay=5 --ac_screen_off_delay=10
+f) Wait for screen to turn off
+g) Unplug DP
+h) Hit key on keyboard to wake device.
+i) See glitchy.
+j) Within 5 seconds: set_power_policy --ac_screen_dim_delay=5000
+--ac_screen_off_delay=10000
 
+Once I'm in the persistent glitch:
 
+* The "screenshot" command in Chrome OS shows corruption. Not exactly
+black and white bars, but the image produced has distinct bands of
+garbage.
+
+* I can actually toggle between VT2 and the main screen (VT1). Note
+that VT1/VT2 are not quite the normal Linux managed solution--I
+believe they're handled by frecon. In any case, when I switch to VT2
+it looks normal (I can see the login prompt). Then back to VT1 and the
+vertical bars glitch. Back to VT2 and it's normal. Back to VT1 and the
+glitch again. This implies (especially with the extra evidence of
+screenshot) that the display controller hardware is all fine and that
+it's the underlying data that's somehow messed up.
+
+When I pick Kuogee's patch then this "persistent" glitch goes away
+just like the transitory one does.
+
+I'm going to go ahead and do:
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Tested-by: Douglas Anderson <dianders@chromium.org>

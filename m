@@ -2,90 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BAF5561911
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0B35618E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234790AbiF3LZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 07:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
+        id S234575AbiF3LRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 07:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232953AbiF3LZ0 (ORCPT
+        with ESMTP id S232504AbiF3LRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 07:25:26 -0400
-X-Greylist: delayed 443 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Jun 2022 04:25:24 PDT
-Received: from mail1.systemli.org (mail1.systemli.org [IPv6:2a11:7980:3::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BC44F653;
-        Thu, 30 Jun 2022 04:25:24 -0700 (PDT)
-From:   Nick Hainke <vincent@systemli.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=systemli.org;
-        s=default; t=1656587878;
-        bh=OPUPtfw6pfWCiR1mZeXscth6kv6xBVcFjag/DYVBL48=;
-        h=From:To:Cc:Subject:Date:From;
-        b=+YxJ4+G0hePqtaNyGs7JHJJs4ZP3r7h0fmuyqN6Ay4vISE+ON4aL0THp0A4D3Grdh
-         ZvAZFqesoSjzk+112z1z2DWtAWQmdBvA7crbd49LvccUcHvY5AOls1G3BPnMwnC1rK
-         H/47i+3HpRnh82uL2dUd8pAk/rPVT896dFniOkg3HwkALOdURiN/fNd7boQqfJZOqT
-         WKDAu+wP3eP1b79Ds/wX9MXryytTjoBXSzBBq7Lu5DU3bvkt6vHXCNSeAou4zLUrDF
-         rq9nm6/gCqwB1HaSLJagyLcXtw66K0wE0Q94IMWCSh040V7NFeuqIrJEmIenGZ3+oN
-         PogK2koGz7ekw==
-To:     linux-mediatek@lists.infradead.org
-Cc:     Nick Hainke <vincent@systemli.org>,
-        INAGAKI Hiroshi <musashino.open@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ryder Lee <ryder.lee@mediatek.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: mt7622: fix BPI-R64 WPS button
-Date:   Thu, 30 Jun 2022 13:16:57 +0200
-Message-Id: <20220630111746.4098-1-vincent@systemli.org>
+        Thu, 30 Jun 2022 07:17:49 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1954D4CD
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 04:17:47 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id pk21so38393641ejb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 04:17:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xOuD0VayMLaVqMSm3qQEckL7M1TiFwHS72WWPKTLO58=;
+        b=f2mg5NQcZInRzApmj3Hn1BwfNl1pudDvuPud+y6bW5QTphTs0bXap0Uu2pOmCLjt67
+         13Xcr7cbtXO40QwP5BGR3/Lv14ByQi77QfcKQJTj7qwsgFHLYMfioS2b8xPcxClm0exN
+         02p3T+AEeSkzysS7nxVSBskiMedr+oMz8YB+IB49n+wlv6Xw5o6bFyjETvnBcjFtmfNy
+         WBv6ktj6+xlzz9y7+owgEUGG2ApUAOwv60wCPv8UVM8+o1cA2RPMvOR2txdT2PzZAaWo
+         ijfpniC2e0HaioZ1VUHPbiJEFo37djO+X7EQpbklN41PWDjuWEwEMCoqLhxfyPvQhrkc
+         8SRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xOuD0VayMLaVqMSm3qQEckL7M1TiFwHS72WWPKTLO58=;
+        b=v4zkia6owzcZcGdiyRK4tutOo2yT6/3Cw5H/PRvosBpFHExoIB5sZ8dwBhm9W4MXe3
+         o7W/cfIDCQP9K4FKeq0rC0GshO/DPZh6M1IhbI/Vy8qxq6JTg8EWa1vKx/4vZMVsckSr
+         Yy2O3g80vTMy2jkn2hensN339o2IyqpA58kMVRbPNCMBlSlX1hOPzGYyE3Tc5oJveQIv
+         Je49Cagb7OzFZhbnjbqm7gcJiaiFXHWWHpuSzz4s2n+C+jZRCr9OACyYblwfqhWGTU/1
+         OqvzxNW/+dtyVovsdPAGBX6jwwDjunR3YyZITsCiu4FDrrJMjckhDN+lz0Y5ravMg/27
+         sA6Q==
+X-Gm-Message-State: AJIora+loSvGVT7v2O1G2xzmanYHldOqUTfNedBKBhMylsgdTdU58sDe
+        S6a18TdLBDsaAq4PnYr3YTA0zA==
+X-Google-Smtp-Source: AGRyM1sTwlP8l8cSXnZAeirtFdsJCaUPo0dMEU/k0FpVqeYgtZw9UTyY9WN6rJ5Nib2hOc5JVBVPWQ==
+X-Received: by 2002:a17:906:149b:b0:726:2968:e32a with SMTP id x27-20020a170906149b00b007262968e32amr8420709ejc.71.1656587866001;
+        Thu, 30 Jun 2022 04:17:46 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id pv1-20020a170907208100b00726abf9cd8esm4697467ejb.125.2022.06.30.04.17.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 04:17:45 -0700 (PDT)
+Message-ID: <80d971ea-88b9-0d21-b6f4-93124ba6a678@blackwall.org>
+Date:   Thu, 30 Jun 2022 14:17:43 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that link-local
+ traffic cannot unlock a locked port
+Content-Language: en-US
+To:     Hans Schultz <hans@kapio-technology.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+References: <20220630111634.610320-1-hans@kapio-technology.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20220630111634.610320-1-hans@kapio-technology.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bananapi R64 (BPI-R64) experiences wrong WPS button signals.
-In OpenWrt pushing the WPS button while powering on the device will set
-it to recovery mode. Currently, this also happens without any user
-interaction. In particular, the wrong signals appear while booting the
-device or restarting it, e.g. after doing a system upgrade. If the
-device is in recovery mode the user needs to manually power cycle or
-restart it.
+On 30/06/2022 14:16, Hans Schultz wrote:
+> This patch is related to the patch set
+> "Add support for locked bridge ports (for 802.1X)"
+> Link: https://lore.kernel.org/netdev/20220223101650.1212814-1-schultz.hans+netdev@gmail.com/
+> 
+> This patch makes the locked port feature work with learning turned on,
+> which is enabled with the command:
+> 
+> bridge link set dev DEV learning on
+> 
+> Without this patch, link local traffic (01:80:c2) like EAPOL packets will
+> create a fdb entry when ingressing on a locked port with learning turned
+> on, thus unintentionally opening up the port for traffic for the said MAC.
+> 
+> Some switchcore features like Mac-Auth and refreshing of FDB entries,
+> require learning enables on some switchcores, f.ex. the mv88e6xxx family.
+> Other features may apply too.
+> 
+> Since many switchcores trap or mirror various multicast packets to the
+> CPU, link local traffic will unintentionally unlock the port for the
+> SA mac in question unless prevented by this patch.
+> 
+> Signed-off-by: Hans Schultz <hans@kapio-technology.com>
+> ---
+>  net/bridge/br_input.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
+> index 68b3e850bcb9..a3ce0a151817 100644
+> --- a/net/bridge/br_input.c
+> +++ b/net/bridge/br_input.c
+> @@ -215,6 +215,7 @@ static void __br_handle_local_finish(struct sk_buff *skb)
+>  	if ((p->flags & BR_LEARNING) &&
+>  	    nbp_state_should_learn(p) &&
+>  	    !br_opt_get(p->br, BROPT_NO_LL_LEARN) &&
+> +	    !(p->flags & BR_PORT_LOCKED) &&
+>  	    br_should_learn(p, skb, &vid))
+>  		br_fdb_update(p->br, p, eth_hdr(skb)->h_source, vid, 0);
+>  }
 
-The official BPI-R64 sources set the WPS button to GPIO_ACTIVE_LOW in
-the device tree. This setting seems to suppress the unwanted WPS button
-press signals. So this commit changes the button from GPIO_ACTIVE_HIGH to
-GPIO_ACTIVE_LOW.
-
-The official BPI-R64 sources can be found on
-https://github.com/BPI-SINOVOIP/BPI-R64-openwrt
-
-Fixes: 0b6286dd96c0 ("arm64: dts: mt7622: add bananapi BPI-R64 board")
-
-Suggested-by: INAGAKI Hiroshi <musashino.open@gmail.com>
-Signed-off-by: Nick Hainke <vincent@systemli.org>
----
- arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts b/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
-index 2b9bf8dd14ec..7538918c7a82 100644
---- a/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
-@@ -49,7 +49,7 @@ factory {
- 		wps {
- 			label = "wps";
- 			linux,code = <KEY_WPS_BUTTON>;
--			gpios = <&pio 102 GPIO_ACTIVE_HIGH>;
-+			gpios = <&pio 102 GPIO_ACTIVE_LOW>;
- 		};
- 	};
- 
--- 
-2.37.0
-
+LGTM, thanks!
+Acked-by: Nikolay Aleksandrov <razor@blackwall.org>

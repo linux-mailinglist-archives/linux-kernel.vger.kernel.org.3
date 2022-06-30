@@ -2,128 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C91A5619BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59AA05619C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235167AbiF3MAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 08:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
+        id S235178AbiF3MBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 08:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiF3MAC (ORCPT
+        with ESMTP id S234313AbiF3MBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 08:00:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04EA52393
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 05:00:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62DA5B8291F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 12:00:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CAB7C34115;
-        Thu, 30 Jun 2022 11:59:58 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="PZRUI3Ld"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656590396;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l79OQpjYte3G9tZrhkDQofg0kfvRrmosbnXOJcuVKxA=;
-        b=PZRUI3LdrnQ+6nTWC5oeRO9aHr0M0yHxjypirE2Ka/w8eU30pCHw/5iup1pQMULwUEBRT+
-        2nmiNEGuwb1LEhZ2WT9hQgqSbacWsmitRyxYl3KFr79r0NRvY0RjUBU3/QddLGh9Nkkhpe
-        ZRZW+a8e32C5M0i7URibLo+du+rH3E4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5b5f9f48 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 30 Jun 2022 11:59:56 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH v2] x86/setup: Allow passing RNG seeds via e820 setup table
-Date:   Thu, 30 Jun 2022 13:59:52 +0200
-Message-Id: <20220630115952.1917972-1-Jason@zx2c4.com>
-In-Reply-To: <20220630113300.1892799-1-Jason@zx2c4.com>
-References: <20220630113300.1892799-1-Jason@zx2c4.com>
+        Thu, 30 Jun 2022 08:01:36 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E1174785
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 05:01:35 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-317741c86fdso176522207b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 05:01:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IvKEIjzjU4LPTr3SH+n5s231w0NrZo/WhcQOyoRJxbo=;
+        b=a577l4Vwc0EvrQPcjQ592IpDDOqs2LH+70gy+iEjdBsvx/M+bx4LDU/okbZz+EzTqi
+         xSieK68x+/jTJbzDuRhio2KXcNXf0mkhWxYirTxSaHR6mIMshUGdnfcgCiZ9AwdRQSgO
+         25NyP8dFEV3pN3d1oHjNF6ZqiAFATjrBn6Egx98w5UfA20iSIrbR6ezgv9/C7D7PlpcL
+         30bbGK+9O72XSPAJ4koLw6SCMjBK4qMLY3vvYmD2EBRMEibfqNTR/vBb7jSifBVshGc8
+         Eeex8qLNzbVVxBPymsKqZ94yfUM2QzbBq+r67bcDv/t8Ql9tJPkhkYXnrbi5mGtDoEFP
+         XgIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IvKEIjzjU4LPTr3SH+n5s231w0NrZo/WhcQOyoRJxbo=;
+        b=dlUHqCqyA01NfbJXpK33KfRStQPvBQmIE/rQP57Cv7TpOih8pkqcu8S84Kv+y9mwo4
+         KiGH6XNxHOFiwBmcBQ/wiAM8LGDHu76SkCDQ4C2YiXBndKneWL/5szRSwvDGxQEdP5e2
+         eP/zgOkXlvNipJiregPqhNvg58TLnh4tSux4nWyL4zTnWAuNfDhGmqk9+bsvQfkmTus5
+         gE0ZVXZWaOnjqU4JS894sBrmIbwCTl2/HNwH5+8SOFmsiaqG5vl1YwcOqDVgnnw9748X
+         FKAyOu4OZHRX/psNB5Qwsaw2Zyg8v1Yd3duTpmqVU8F099VSJp83jkpJfVbQiuYcHMFS
+         wuyw==
+X-Gm-Message-State: AJIora9ZhSnlXD8p+ooDGLbhiEHVXNJbey0caKo26MRiR7YmZ3zjvFu+
+        LETtQPaYnbB2Kw9uSQbnmHFinES7KpqgGztvri0dLQ==
+X-Google-Smtp-Source: AGRyM1sAv3huAMlZJPo1fFK7z2myKSXoujboeKvI27J2j4nuaqNB9V7fuVMOuLmlv2hgqaEtUA8aZivsjOqi4VQlE0I=
+X-Received: by 2002:a0d:e20a:0:b0:317:ce36:a3a0 with SMTP id
+ l10-20020a0de20a000000b00317ce36a3a0mr10375298ywe.448.1656590494542; Thu, 30
+ Jun 2022 05:01:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1656489290-20881-1-git-send-email-quic_srivasam@quicinc.com>
+In-Reply-To: <1656489290-20881-1-git-send-email-quic_srivasam@quicinc.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 30 Jun 2022 14:01:22 +0200
+Message-ID: <CACRpkdYPQoDQ6oUBfB__pBvqMUD7yBaeuDcLfOqRKHm6sFkc7Q@mail.gmail.com>
+Subject: Re: [PATCH v2] pinctrl: qcom: sc7280: Fix compile bug
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org, quic_plai@quicinc.com,
+        bgoswami@quicinc.com, perex@perex.cz, tiwai@suse.com,
+        srinivas.kandagatla@linaro.org, quic_rohkumar@quicinc.com,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the only way x86 can get an early boot RNG seed is via EFI,
-which is generally always used now for physical machines, but is very
-rarely used in VMs, especially VMs that are optimized for starting
-"instantaneously", such as Firecracker's MicroVM. Here, we really want
-the ability for the firmware to pass a random seed, similar to what OF
-platforms do with the "rng-seed" property. It also would be nice for
-bootloaders to be able to append seeds to the kernel before launching.
+On Wed, Jun 29, 2022 at 9:55 AM Srinivasa Rao Mandadapu
+<quic_srivasam@quicinc.com> wrote:
 
-This patch accomplishes that by adding SETUP_RNG_SEED, similar to the
-other 7 SETUP_* entries that are parsed from the e820 setup table. I've
-verified that this works well with QEMU.
+> Fix the compilation error, caused by updating constant variable.
+> Hence remove redundant constant variable, which is no more useful
+> as per new design.
+>
+> The issue is due to some unstaged changes. Fix it up.
+>
+> Fixes: 36fe26843d6d ("pinctrl: qcom: sc7280: Add clock optional check for ADSP bypass targets")
+>
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-Changes v1->v2:
-- Fix small typo of data_len -> data->len.
+Patch applied, thanks for fixing this!
 
- arch/x86/include/uapi/asm/bootparam.h | 1 +
- arch/x86/kernel/setup.c               | 8 +++++++-
- 2 files changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
-index bea5cdcdf532..a60676b8d1d4 100644
---- a/arch/x86/include/uapi/asm/bootparam.h
-+++ b/arch/x86/include/uapi/asm/bootparam.h
-@@ -11,6 +11,7 @@
- #define SETUP_APPLE_PROPERTIES		5
- #define SETUP_JAILHOUSE			6
- #define SETUP_CC_BLOB			7
-+#define SETUP_RNG_SEED			8
- 
- #define SETUP_INDIRECT			(1<<31)
- 
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index bd6c6fd373ae..ce8bb744e576 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -23,6 +23,7 @@
- #include <linux/usb/xhci-dbgp.h>
- #include <linux/static_call.h>
- #include <linux/swiotlb.h>
-+#include <linux/random.h>
- 
- #include <uapi/linux/mount.h>
- 
-@@ -343,7 +344,8 @@ static void __init parse_setup_data(void)
- 		data_len = data->len + sizeof(struct setup_data);
- 		data_type = data->type;
- 		pa_next = data->next;
--		early_memunmap(data, sizeof(*data));
-+		if (data_type != SETUP_RNG_SEED)
-+			early_memunmap(data, sizeof(*data));
- 
- 		switch (data_type) {
- 		case SETUP_E820_EXT:
-@@ -355,6 +357,10 @@ static void __init parse_setup_data(void)
- 		case SETUP_EFI:
- 			parse_efi_setup(pa_data, data_len);
- 			break;
-+		case SETUP_RNG_SEED:
-+			add_bootloader_randomness(data + 1, data->len);
-+			early_memunmap(data, sizeof(*data));
-+			break;
- 		default:
- 			break;
- 		}
--- 
-2.35.1
-
+Yours,
+Linus Walleij

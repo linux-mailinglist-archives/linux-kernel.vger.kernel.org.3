@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E43D5612B4
+	by mail.lfdr.de (Postfix) with ESMTP id 4736A5612B3
 	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 08:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232717AbiF3GpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 02:45:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
+        id S232828AbiF3GpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 02:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbiF3GpR (ORCPT
+        with ESMTP id S232717AbiF3GpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 02:45:17 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3662031205
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 23:45:15 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id r9so16491317ljp.9
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 23:45:15 -0700 (PDT)
+        Thu, 30 Jun 2022 02:45:08 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3185E2F679
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 23:45:07 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id sb34so36957475ejc.11
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 23:45:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:subject:user-agent:in-reply-to:references:message-id
-         :mime-version:content-transfer-encoding;
-        bh=fTV3UZJ8iWa2cSqb4oJMbGSxrzXh4aLO9yzSsaSbNW8=;
-        b=sQ9mpyLEUMu6hJYiXdFDncQJ0BJCa0ot78zi4pUlPT7BFc1v8Yh/MQgyo0E1wiOljb
-         Tl+6R0AfPc8ImR3AKsWMP7G4PYLa7h9v/XJXineSAeEC7LsEAFB6eVp+2rYOYsI0xjyT
-         XN3rDDxv+lrxceIdHxjWz8g19DPvLUBPkzsk74lvrlyodedG8fFbBi/EuzJl6r8VD4O7
-         yr2ko687WHJ/ZkL786xe9BD+SEjfimE+KQ6a8rcT8yZRs0/bG8HQzAgiaNmyjf8Og9uy
-         NgLzAeooWsIXOgd2H0VjXBhgLabIex/hIXQTmUAEGltppttpn5fD2ZcSt1gOFezRQ5tE
-         DYzw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=SEHHtXscQPdl7vov2HttOhjl2K/3hLOdoodmcl4p85o=;
+        b=mQ8uWCg/PjD7TkytMn5/9PSoSY+uzqsmvzu6MKlaoFW2UBG9jlRSyZNBDFwgxl1o5h
+         u/atKVC4jvPDnRdAntXL+Mq50nCBCjjSPtAxbAKCuEr8x8m2fGesiLBcUbJca9f1nbcF
+         u2HRZey4syVKo6v3KVGPHa3AYnKcc7nq3KPLmjm9C2VFoE9AGA7ng1OoLhZ6LHAk08yl
+         gM59AFVkk2/sqq35ZOvl4efbz0JcyVJZq0q2LQV9H89k422mnVBkNG66wKob2hgpXSiD
+         SsiGDUJAULf1fYw6SbNLHNHOhLg3v5cuBMUMh+dMQbo0T6i4mHgwS5P65jQn4ffaDgGM
+         PV8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:user-agent:in-reply-to
-         :references:message-id:mime-version:content-transfer-encoding;
-        bh=fTV3UZJ8iWa2cSqb4oJMbGSxrzXh4aLO9yzSsaSbNW8=;
-        b=uYhv/JbnX0y6vDb3dzPi4I6QOiNaPL6TL8vkKgF6qP1QaFPrUMmjodVtZQ/FD+a2Ki
-         nIIP0DOrSh1HN2W+qttL0yKqIeBU1f7yV0wU3wTZQGGsKO4EYTxguwYPkkVDteAFZvjb
-         jvTP5Us2EssBtWllkXZVfm699UhwBFLSReGROhpIMcB/7i2ROyj9Qk6ayweHG//Nh9uy
-         NqH0ulEGWgxWdnDaBt+FBngde+VFUTG2SmK0oZ5Wzr2IFJlFT3ZYRV80y5MsddI07RUU
-         PKYqp3qb+oEEEPdxjLoWb1qzqrw0rJ7LEyL0+RYsXJMm5z1eiLubE3RJ6HgAYFohWFMw
-         3JLg==
-X-Gm-Message-State: AJIora/zafT176gNnbF9dglv7Y9Q+dQs1qv0UoQ1paExn1X/JbUPXHjK
-        aZJP/mL77KWymkPe2Dhgn0Biyw==
-X-Google-Smtp-Source: AGRyM1sg5NrMfFA43dw9hkBCjjzWbbjZlTBQWU2W1F81EEQzjiWxr05HUwdPiFvHyKlySpuzKLH/Pw==
-X-Received: by 2002:a05:651c:158c:b0:250:a23d:2701 with SMTP id h12-20020a05651c158c00b00250a23d2701mr4209164ljq.475.1656571513552;
-        Wed, 29 Jun 2022 23:45:13 -0700 (PDT)
-Received: from [127.0.0.1] ([94.25.229.210])
-        by smtp.gmail.com with ESMTPSA id 20-20020ac25f54000000b0047fa0251460sm2942546lfz.174.2022.06.29.23.45.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 Jun 2022 23:45:12 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 09:43:05 +0300
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v4_3/5=5D_dt-bindings=3A_arm=3A_msm=3A_R?= =?US-ASCII?Q?ework_kpss-gcc_driver_Documentation_to_yaml?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220629121441.6552-4-ansuelsmth@gmail.com>
-References: <20220629121441.6552-1-ansuelsmth@gmail.com> <20220629121441.6552-4-ansuelsmth@gmail.com>
-Message-ID: <D90DE67E-DA29-4A0D-BBC1-C8209FDF69D3@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SEHHtXscQPdl7vov2HttOhjl2K/3hLOdoodmcl4p85o=;
+        b=s5dO+2mn5LpS1hOvTBh6CQGLtWvg9kj8mopegfHXLlMlgieqIJQozaHSZVFzg1JPYr
+         fyoLMys4EtSTeuln9B1he3J8EpjpWA8byR7whiGhjS6jhD+uSflWDJYSvz3LnvIOHGt6
+         CKDoXdEm/PBYTyUsedaWuPqwp7zAUu6wEYdaOfIY1smbxnfBFBP1HF2E/YrdCzWhYd1d
+         sqIlrZvSo/wh2gr5mM2vDZR9X+Oq159D0sOZPPb0/le3hGsiuXMcNg4THH3ZvrMXUgzK
+         Qi68VjgKKlyTOYEXtNKa126otaynpU8PgHNRCFVuzUxCBONTC0S00LNdFLz6KS3ctgtx
+         +XGQ==
+X-Gm-Message-State: AJIora+ynrnhFAmo+ApPHxtNfbR3Z5H/pX6A0IIjgxFvcYrlyMgsA/BM
+        qOzHYDpjjcRd18oNA6Bs4MBgNww4/I8=
+X-Google-Smtp-Source: AGRyM1tl8g3NYtHoVMp383h2kVsFbxVBbWuRR3STVIr08Pz8c9Q8oFzLEaghSp/mRcK1qvE/Ucq67Q==
+X-Received: by 2002:a17:907:9483:b0:726:bea5:7a87 with SMTP id dm3-20020a170907948300b00726bea57a87mr7276684ejc.629.1656571505579;
+        Wed, 29 Jun 2022 23:45:05 -0700 (PDT)
+Received: from [192.168.0.12] (nborisov.ddns.nbis.net. [85.187.217.137])
+        by smtp.gmail.com with ESMTPSA id s2-20020a170906454200b006fe9ec4ba9esm8763471ejq.52.2022.06.29.23.45.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 23:45:05 -0700 (PDT)
+Message-ID: <feb7d93c-76bc-a7fc-0714-ed71495a16b9@gmail.com>
+Date:   Thu, 30 Jun 2022 09:45:04 +0300
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 5/7] fs: remove no_llseek
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk
+References: <20220629130702.954310-1-Jason@zx2c4.com>
+ <20220629130702.954310-6-Jason@zx2c4.com>
+From:   Nikolay Borisov <n.borisov.lkml@gmail.com>
+In-Reply-To: <20220629130702.954310-6-Jason@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,188 +76,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 29 June 2022 15:14:39 GMT+03:00, Christian Marangi <ansuelsmth@gmail=2E=
-com> wrote:
->Rework kpss-gcc driver Documentation to yaml Documentation=2E
->The current kpss-gcc Documentation have major problems and can't be
->converted directly=2E Introduce various changes to the original
->Documentation=2E
->
->Add #clock-cells additional binding as this clock outputs a static clk
->named acpu_l2_aux with supported compatible=2E
->Only some compatible require and outputs a clock, for the others, set
->only the reg as a required binding to correctly export the kpss-gcc
->registers=2E As the reg is shared also add the required syscon compatible=
-=2E
->
->Signed-off-by: Christian Marangi <ansuelsmth@gmail=2Ecom>
->---
-> =2E=2E=2E/bindings/arm/msm/qcom,kpss-gcc=2Etxt        | 44 ---------
-> =2E=2E=2E/bindings/arm/msm/qcom,kpss-gcc=2Eyaml       | 90 +++++++++++++=
-++++++
-> 2 files changed, 90 insertions(+), 44 deletions(-)
-> delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-g=
-cc=2Etxt
-> create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-g=
-cc=2Eyaml
->
->diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc=2Etx=
-t b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc=2Etxt
->deleted file mode 100644
->index e628758950e1=2E=2E000000000000
->--- a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc=2Etxt
->+++ /dev/null
->@@ -1,44 +0,0 @@
->-Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
->-
->-PROPERTIES
->-
->-- compatible:
->-	Usage: required
->-	Value type: <string>
->-	Definition: should be one of the following=2E The generic compatible
->-			"qcom,kpss-gcc" should also be included=2E
->-			"qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc"
->-			"qcom,kpss-gcc-apq8064", "qcom,kpss-gcc"
->-			"qcom,kpss-gcc-msm8974", "qcom,kpss-gcc"
->-			"qcom,kpss-gcc-msm8960", "qcom,kpss-gcc"
->-
->-- reg:
->-	Usage: required
->-	Value type: <prop-encoded-array>
->-	Definition: base address and size of the register region
->-
->-- clocks:
->-	Usage: required
->-	Value type: <prop-encoded-array>
->-	Definition: reference to the pll parents=2E
->-
->-- clock-names:
->-	Usage: required
->-	Value type: <stringlist>
->-	Definition: must be "pll8_vote", "pxo"=2E
->-
->-- clock-output-names:
->-	Usage: required
->-	Value type: <string>
->-	Definition: Name of the output clock=2E Typically acpu_l2_aux indicatin=
-g
->-		    an L2 cache auxiliary clock=2E
->-
->-Example:
->-
->-	l2cc: clock-controller@2011000 {
->-		compatible =3D "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc";
->-		reg =3D <0x2011000 0x1000>;
->-		clocks =3D <&gcc PLL8_VOTE>, <&gcc PXO_SRC>;
->-		clock-names =3D "pll8_vote", "pxo";
->-		clock-output-names =3D "acpu_l2_aux";
->-	};
->diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc=2Eya=
-ml b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc=2Eyaml
->new file mode 100644
->index 000000000000=2E=2E27f7df7e3ec4
->--- /dev/null
->+++ b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc=2Eyaml
->@@ -0,0 +1,90 @@
->+# SPDX-License-Identifier: GPL-2=2E0-only OR BSD-2-Clause
->+%YAML 1=2E2
->+---
->+$id: http://devicetree=2Eorg/schemas/arm/msm/qcom,kpss-gcc=2Eyaml#
->+$schema: http://devicetree=2Eorg/meta-schemas/core=2Eyaml#
->+
->+title: Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
->+
->+maintainers:
->+  - Christian Marangi <ansuelsmth@gmail=2Ecom>
->+
->+description: |
->+  Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)=2E Use=
-d
->+  to control L2 mux (in the current implementation) and provide access
->+  to the kpss-gcc registers=2E
->+
->+properties:
->+  compatible:
->+    items:
->+      - enum:
->+          - qcom,kpss-gcc-ipq8064
->+          - qcom,kpss-gcc-apq8064
->+          - qcom,kpss-gcc-msm8974
->+          - qcom,kpss-gcc-msm8960
->+          - qcom,kpss-gcc-msm8660
->+          - qcom,kpss-gcc-mdm9615
->+      - const: qcom,kpss-gcc
->+      - const: syscon
->+
->+  reg:
->+    maxItems: 1
->+
->+  clocks:
->+    items:
->+      - description: phandle to pll8_vote
->+      - description: phandle to pxo_board
->+
->+  clock-names:
->+    items:
->+      - const: pll8_vote
->+      - const: pxo
->+
->+  '#clock-cells':
->+    const: 0
->+
->+required:
->+  - compatible
->+  - reg
->+
->+if:
->+  properties:
->+    compatible:
->+      contains:
->+        enum:
->+          - qcom,kpss-gcc-ipq8064
->+          - qcom,kpss-gcc-apq8064
->+          - qcom,kpss-gcc-msm8974
->+          - qcom,kpss-gcc-msm8960
->+then:
->+  required:
->+    - clocks
->+    - clock-names
->+    - '#clock-cells'
->+else:
->+  properties:
->+    clock: false
->+    clock-names: false
->+    '#clock-cells': false
+On 29.06.22 г. 16:07 ч., Jason A. Donenfeld wrote:
+> Now that all callers of ->llseek are going through vfs_llseek(), we
+> don't gain anything by keeping no_llseek around. Nothing compares it or
+> calls it.
+> 
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>   fs/read_write.c    | 17 +++--------------
+>   include/linux/fs.h |  1 -
+>   2 files changed, 3 insertions(+), 15 deletions(-)
+> 
+> diff --git a/fs/read_write.c b/fs/read_write.c
+> index b1b1cdfee9d3..69cd8d72d91e 100644
+> --- a/fs/read_write.c
+> +++ b/fs/read_write.c
+> @@ -227,12 +227,6 @@ loff_t noop_llseek(struct file *file, loff_t offset, int whence)
+>   }
+>   EXPORT_SYMBOL(noop_llseek);
+>   
+> -loff_t no_llseek(struct file *file, loff_t offset, int whence)
+> -{
+> -	return -ESPIPE;
+> -}
+> -EXPORT_SYMBOL(no_llseek);
+> -
+>   loff_t default_llseek(struct file *file, loff_t offset, int whence)
+>   {
+>   	struct inode *inode = file_inode(file);
+> @@ -290,14 +284,9 @@ EXPORT_SYMBOL(default_llseek);
+>   
+>   loff_t vfs_llseek(struct file *file, loff_t offset, int whence)
+>   {
+> -	loff_t (*fn)(struct file *, loff_t, int);
+> -
+> -	fn = no_llseek;
+> -	if (file->f_mode & FMODE_LSEEK) {
+> -		if (file->f_op->llseek)
+> -			fn = file->f_op->llseek;
+> -	}
+> -	return fn(file, offset, whence);
+> +	if (!(file->f_mode & FMODE_LSEEK) || !file->f_op->llseek)
 
-I suppose this chunk is not so correct=2E We can not describe these proper=
-ties as required since current DTs do not have them=2E Also if somebody dec=
-ides to fix the mdm9615 or msm8660 platforms, he works have to change this =
-(again)=2E Thus I'd just leave this whole chunk out=2E
+Is it not sufficient here to just check for the presence of FMODE_LSEEK? 
+NULL  llseek shall result in FMODE_LSEEK not being set when the file is 
+opened?
 
->+
->+additionalProperties: false
->+
->+examples:
->+  - |
->+    #include <dt-bindings/clock/qcom,gcc-ipq806x=2Eh>
->+
->+    clock-controller@2011000 {
->+      compatible =3D "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc", "syscon";
->+      reg =3D <0x2011000 0x1000>;
->+      clocks =3D <&gcc PLL8_VOTE>, <&pxo_board>;
->+      clock-names =3D "pll8_vote", "pxo";
->+      #clock-cells =3D <0>;
->+    };
->+
->+  - |
->+    clock-controller@2011000 {
->+      compatible =3D "qcom,kpss-gcc-mdm9615", "qcom,kpss-gcc", "syscon";
->+      reg =3D <0x02011000 0x1000>;
->+    };
->+=2E=2E=2E
->+
-
---=20
-With best wishes
-Dmitry
+> +		return -ESPIPE;
+> +	return file->f_op->llseek(file, offset, whence);
+>   }
+>   EXPORT_SYMBOL(vfs_llseek);
+>   
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index 9ad5e3520fae..0cb5a1706e1f 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -3022,7 +3022,6 @@ extern long do_splice_direct(struct file *in, loff_t *ppos, struct file *out,
+>   extern void
+>   file_ra_state_init(struct file_ra_state *ra, struct address_space *mapping);
+>   extern loff_t noop_llseek(struct file *file, loff_t offset, int whence);
+> -extern loff_t no_llseek(struct file *file, loff_t offset, int whence);
+>   extern loff_t vfs_setpos(struct file *file, loff_t offset, loff_t maxsize);
+>   extern loff_t generic_file_llseek(struct file *file, loff_t offset, int whence);
+>   extern loff_t generic_file_llseek_size(struct file *file, loff_t offset,

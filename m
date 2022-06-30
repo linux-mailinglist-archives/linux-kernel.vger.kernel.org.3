@@ -2,127 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35EBC5615FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 737AF561618
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234298AbiF3JRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 05:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
+        id S232424AbiF3JTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 05:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234316AbiF3JR1 (ORCPT
+        with ESMTP id S234376AbiF3JTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 05:17:27 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8034433BC
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:16:17 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id e40so25706906eda.2
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:16:17 -0700 (PDT)
+        Thu, 30 Jun 2022 05:19:37 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EA13617B;
+        Thu, 30 Jun 2022 02:19:26 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id jb13so16491612plb.9;
+        Thu, 30 Jun 2022 02:19:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Jxh9+8wGKifer/pkVBwkWFz/cUObqSEK4gTsvDCOLoQ=;
-        b=mtiJ96LmLCRmWOanbe4ljk3xT3YdaBPutJSnlnWsxIYdNS9uCVN/HAHRCmp0acxDWV
-         rRNbdX9q9ZTX2WKIGY62cj2PCkJ3HDA44PxEcjzLDxS6iafRpTUiVmalPY3vA677ko7n
-         61aO/2oFVlXmsx844VQlHLW80YR1GOupEAi4o=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fLYDaSCtaI4oKBIoE33L26xaElZMqg+lpnSIEv8ui4M=;
+        b=lQS+XYiWOOir8W0h4O7FLvFCbXwQ1NslTGRCyy+sYAdMQt7kYtHsiTaqWvnlQphT52
+         rmH/898s2V8aSXHRk7DAEazmm7cuRgEGYHW9S+WDmA2fBPpwq0bg5q1af6s9/PQ/dq3x
+         3NCjGiJkt67TAmLgL0zS5JllWOc9ovhWit0j+ex/4XXqr9Ab7Ry1Y0T1T9YwLOuSGQgQ
+         xhVe/3MU46/JycjOULbinyJ2qZCQ/noICqDmAGaY82NNjvJuUZr6n9UeLGidhofdUKW9
+         /O/uVMCJ9vkznFRg4l+tHHyHlS2i3SksSlXnllf82f8lYmIeVgAq216JCnejPGkj1KZ7
+         MKsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Jxh9+8wGKifer/pkVBwkWFz/cUObqSEK4gTsvDCOLoQ=;
-        b=PBzqphbGYttWcJpJ7creyvzjoSMcI2O6H6e0ncH0sP1NuVJLVx0llB515gslcKW04w
-         FmuzTcp4uu0GeZaay9dvAVcvJGEUzt7YgFCRkkYn7t2jEHjG2l58ne4YGzG/0oxmNtCR
-         p14a8DLWbmyW8eHQsI2pVEIFOPE9f6CjiY9Q1QdIENsIODbq0kVmaCcrwsX/WMRsQdy2
-         082039u4Pk0IUUNzlbhbw704nmh8dMSFKS5LC33gWe33BgMIcQpihPA2i6joP+0ytmIa
-         Q1xkgu2pE82nsy6dUUqY6SAC4YLl6KFh8g/1cwkxiEFQU/83hzxyqfrVz2TNcjc2En3I
-         0kMw==
-X-Gm-Message-State: AJIora9MtMT+p9w6qG7d6xAEWw9R2fImPCm14AoVRj7aC2vKmc+1xdEK
-        bmNZK7VZWhOL8fYwmq4DU9pigQ==
-X-Google-Smtp-Source: AGRyM1tftLZ2XSVsXGwKY1tVp8BzpGnUHbWht4UDCihn1aRATfSGrqPAHKl0L1tGrObwQOnOD1W32A==
-X-Received: by 2002:a05:6402:4306:b0:435:a1c9:4272 with SMTP id m6-20020a056402430600b00435a1c94272mr10263737edc.205.1656580576250;
-        Thu, 30 Jun 2022 02:16:16 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-58-216.cust.vodafonedsl.it. [188.217.58.216])
-        by smtp.gmail.com with ESMTPSA id q10-20020a170906940a00b006fe8bf56f53sm8947680ejx.43.2022.06.30.02.16.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 02:16:15 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 11:16:13 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        quentin.schulz@theobroma-systems.com,
-        Daniel Scally <djrscally@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 5/6] media: dt-bindings: ov5693: document YAML binding
-Message-ID: <20220630091613.GD482517@tom-ThinkPad-T14s-Gen-2i>
-References: <20220630074525.481790-1-tommaso.merciai@amarulasolutions.com>
- <20220630074525.481790-6-tommaso.merciai@amarulasolutions.com>
- <167f09c1-795d-1471-20f7-9f4df29355ed@linaro.org>
- <20220630090232.GC482517@tom-ThinkPad-T14s-Gen-2i>
- <Yr1pD2U2ilXXXX+Q@valkosipuli.retiisi.eu>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fLYDaSCtaI4oKBIoE33L26xaElZMqg+lpnSIEv8ui4M=;
+        b=PMQISoBvzHhZNknGRdgQyXdZRsGYCsdvGLZxv2M+rr3PNxaqJXDAL2GkKZqlzX0ayn
+         n9AS0L+BVKOnJlCfW1wrcGigEhe0nhyV81nKln25qiD84zSp4iY9T1kGsR3loZIc4cJW
+         qa7Bn4aaa1IFfoFchCw4ZEEZn4/qz7GXqUCkg+piTq8sFR0Q5dU3L0Gov9i3vVD5QDZA
+         m49u54wHIL+7jI8fq1ZnlLl3FGlCKOiHPRm31mz+bkdnoFYGPsiLFj8PiNMBmAXzzePc
+         JDA6hNyFf8IhqQMrR96vfvefY5EYhZwNfRm9Vdn+m7GQOiLHBupzB/cA+UVZJuud/UYd
+         RRfA==
+X-Gm-Message-State: AJIora+7AAcqipHfbKArYFt5+PgfrxLC05Hw1nTiC6DpWOpyCG1RdD7h
+        EHnxefBHcQW1eCwHvL/kA9BZ4jQ6mLSNzA==
+X-Google-Smtp-Source: AGRyM1vLop+Jg2Qyz8OlJ9mHLFy3qCvrTfWpgyKdWHGPoJmvygDLtysX/JGUENFAxWM/OgooTXeEUA==
+X-Received: by 2002:a17:90b:3a8d:b0:1ef:7d4:6a5f with SMTP id om13-20020a17090b3a8d00b001ef07d46a5fmr8969827pjb.139.1656580766226;
+        Thu, 30 Jun 2022 02:19:26 -0700 (PDT)
+Received: from [192.168.50.247] ([103.84.139.165])
+        by smtp.gmail.com with ESMTPSA id w20-20020a1709029a9400b0015e8d4eb231sm12958654plp.123.2022.06.30.02.19.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 02:19:25 -0700 (PDT)
+Message-ID: <665de056-6ec1-e4e1-adf9-4df3e35628b7@gmail.com>
+Date:   Thu, 30 Jun 2022 17:19:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yr1pD2U2ilXXXX+Q@valkosipuli.retiisi.eu>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] net: tipc: fix possible infoleak in tipc_mon_rcv()
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     jmaloy@redhat.com, ying.xue@windriver.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com,
+        tung.q.nguyen@dektech.com.au, netdev@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org
+References: <20220628083122.26942-1-hbh25y@gmail.com>
+ <20220629203118.7bdcc87f@kernel.org>
+From:   Hangyu Hua <hbh25y@gmail.com>
+In-Reply-To: <20220629203118.7bdcc87f@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sakari,
-
-On Thu, Jun 30, 2022 at 12:12:47PM +0300, Sakari Ailus wrote:
-> On Thu, Jun 30, 2022 at 11:02:32AM +0200, Tommaso Merciai wrote:
-> > On Thu, Jun 30, 2022 at 10:07:19AM +0200, Krzysztof Kozlowski wrote:
-> > > On 30/06/2022 09:45, Tommaso Merciai wrote:
-> > > > Add documentation of device tree in YAML schema for the OV5693
-> > > > CMOS image sensor from Omnivision
-> > > > 
-> > > > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> > > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > > Reviewed-by: Sakari Ailus <sakari.ailus@iki.fi>
-> > > 
-> > > How Sakari's tag appeared here? There was no email from him.
-> > 
-> > Sakari made me some review on v2, but I think he forgot to add the mailing
-> > list in cc. ( I suppose :) )
-> > 
-> > Let me know if I need to remove this.
+On 2022/6/30 11:31, Jakub Kicinski wrote:
+> On Tue, 28 Jun 2022 16:31:22 +0800 Hangyu Hua wrote:
+>> dom_bef is use to cache current domain record only if current domain
+>> exists. But when current domain does not exist, dom_bef will still be used
+>> in mon_identify_lost_members. This may lead to an information leak.
 > 
-> You're only supposed to put these tags into patches if you get them in
-> written form as part of the review, signalling acceptance of the patch in
-> various forms. Just commenting a patch does not imply this.
+> AFAICT applied_bef must be zero if peer->domain was 0, so I don't think
+> mon_identify_lost_members() will do anything.
 > 
-> Please also see Documentation/process/submitting-patches.rst for more
-> information on how to use the tags.
 
-Thanks for sharing this. My bad.
-I remove your tags.
+void tipc_mon_rcv(struct net *net, void *data, u16 dlen, u32 addr,
+		  struct tipc_mon_state *state, int bearer_id)
+{
+...
+	if (!dom || (dom->len < new_dlen)) {
+		kfree(dom);
+		dom = kmalloc(new_dlen, GFP_ATOMIC);	<--- [1]
+		peer->domain = dom;
+		if (!dom)
+			goto exit;
+	}
+...
+}
 
-Regards,
-Tommaso
+peer->domain will be NULL when [1] fails. But there will not change 
+peer->applied to 0. In this case, if tipc_mon_rcv is called again then 
+an information leak will happen.
 
-> 
-> -- 
-> Sakari Ailus
+Thanks,
+Hangyu.
 
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
-
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+>> Fix this by adding a memset before using dom_bef.
+>>
+>> Fixes: 35c55c9877f8 ("tipc: add neighbor monitoring framework")
+>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>

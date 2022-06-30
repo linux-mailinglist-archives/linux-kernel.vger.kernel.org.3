@@ -2,489 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1CE5616B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FC35616B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234609AbiF3Jlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 05:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
+        id S232862AbiF3Jnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 05:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234543AbiF3JlX (ORCPT
+        with ESMTP id S229544AbiF3Jnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 05:41:23 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25D243AF0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:41:18 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id i18so32713335lfu.8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:41:18 -0700 (PDT)
+        Thu, 30 Jun 2022 05:43:50 -0400
+Received: from esa6.fujitsucc.c3s2.iphmx.com (esa6.fujitsucc.c3s2.iphmx.com [68.232.159.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A71740E69;
+        Thu, 30 Jun 2022 02:43:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1656582229; x=1688118229;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=W0yc1av926wLTaTcH4nk7Lz2caTBheLhjPikjVYmYi8=;
+  b=otMTlR85vQmC+RDV+iadeVKCyiDyXrfQ9cHJTLCo5R4wup5P1bYbWdrh
+   fQUSkz8B+PGVG5n7YcbUy2WB10OgAepqZ3q18bg8Bd3lGp4Kmb5RRXvvw
+   9v6QVXQ8vMnxKOL9R0YUKCZS+Df1CpkuSh3MgPEZeOtGmLh9HbVg3Ok85
+   NwiI5I9ra2n217cLDUNHOr/4NLq1vfpkH7KLnRpgF/YOz+IEeY0HPQMym
+   hDxy1sQuWu2BnlTrbCKlTSJO1YCdPGBp/wQZLWtpmv9HZTjK8twv73xc/
+   PRIA38/rNij6/E6Mt3Y65pZ4xKNadxRydvyNCZyFSIvS6+kDXSXOo330Y
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="59348152"
+X-IronPort-AV: E=Sophos;i="5.92,233,1650898800"; 
+   d="scan'208";a="59348152"
+Received: from mail-os0jpn01lp2107.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.107])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 18:43:39 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mCvXflB+RmuZIKWp7prhmPh/XuNBEj86eF5h/MdWejG7ejUx5cP42h+T3zcV5ataH1YGMqvJGf5X6RDcwgRgzNdRcmTCew3p/xDUNuB+SqWSaoRIhvkx/wqzdjC3DzjoZ68eavmP3OO+ZEpUvZEdBo/Jzn7YRt5DN3vtM7LIr105hFqFhMtjzVBf9c4wD/GCnT6xJCd9+iF5ZpGA7Xgsbtoq//TC75Kd7Jjbp8gPOP4+SUgnkz0V3991IsFd0z0Wk3BN1JSysafDTlYD9HlABa/uGeWeshwe2l8B1GlSfhDRHOoo7SNtoUY5Myw1Tp6l/XNmDrObgsXvU12ufPJUow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=W0yc1av926wLTaTcH4nk7Lz2caTBheLhjPikjVYmYi8=;
+ b=V8pGABBV7Wm/x43rP/l8kkIiW8cU39YWHQAiapxt+VwZ4pXESiyCwgRUCA65fEhPBmHjTk3G69OhwfTwGsmshCeHd9ntcuihe7xzNwmreax0uT0gzp8Iicllp1wJmuXWd8f438O9hzvZWbZa02P6RLBnpiBnHhSzE5pSWp66aPdGmIkwlji9NeBhwBP2MWJEo29AeWz9XTlgxxeqDbVaxh5HMJHP6QHK8IAit8Z9iYIfiO1XSp+mc1KdpUBp57XuK1ZhYZ/RSHYgiHTcuWl65tBrn4BPQlhDHz9Gxg1DL+7XJOZchkPKOYPP9qq3hMY4M+CJjRY2VEhxf57WaTOCtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wAVpu4PqqEDDZdXNb0Q5jWsifj6l0cepNEIgy3bnybo=;
-        b=Y4rVKbnm36BrTBp1d2sMlc6FZZKUDUYOgL0uTPtVo1Bga+uCtwgwkZwx9A6izgA0X/
-         TaiSeeil4eFOcD1ddaQBBK7waBKuJFJNjxgamnOlD1TEIDE6SRhFQ6MAa9dTXk2Hscf0
-         RL+mEEOz0WkahP3ExB9KNcQ3QPWebGJmLA/Gk3wdBAqxUB1iY6TF8yCzhC8VWOyZeBG7
-         fpn4V+RcRDIEJNP267LiSnqDZ2Sa4srBlOkusxRuVTh9zuquw7RunFz6HVX/lE4PuXsm
-         AzUM+BzWkUFCMdsoYZ6c8JlaRP3+bjey+yFCVwMfcr6BE+axtl6rS5+G+F4ogqWL6FOQ
-         kzdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wAVpu4PqqEDDZdXNb0Q5jWsifj6l0cepNEIgy3bnybo=;
-        b=XG4REMMxGgA3dt3FPcjNqjiZK7zvHJ01W3o7egfh7S1ru12qOsVvhlWQrOnoMhdjRz
-         2RBlXC5zBNkFl3kdd/ndcyrbLsv6z0WsdRlqbB8FqnjZPAIjhe/mYD49cUCKnzJpMiSv
-         tF9bDcAGtjl5rXW0kCgdLYQThjGNE4cCe9jbB1qSm8pxKhRFEoXhn2Nw1p+8KdPpvXrr
-         BI2UMrQpCDBfDr/svwbmnIDMvtC8cEv+WWa8ovy4sTTmrMcLkuUKVbto9AU/YZEjYVfc
-         KoIYpb2oB+mEWxNS9QzkoA61G9uklC8Fdyd52p/3C28ZJZkYld3TIxhGHaUTVtmm750F
-         xMPg==
-X-Gm-Message-State: AJIora/YgH3BmOf+dtFiYX8of//Rh1yUcnOwlJOdLyQTNXYRMOCaHZKX
-        jt473XdRh0ZNoeXx14XcGv+sbEXVAkZ8qri1Rat8FA==
-X-Google-Smtp-Source: AGRyM1vcc+bvhr56dUjsigeF6EXIgHHqOGMXOXMlttY6g0+pX2ZaAEJHOUjAmajJDtJAL7kUY9xDC0AtdKPz5HqvkP0=
-X-Received: by 2002:a05:6512:2520:b0:47f:8512:19c1 with SMTP id
- be32-20020a056512252000b0047f851219c1mr4950575lfb.540.1656582076993; Thu, 30
- Jun 2022 02:41:16 -0700 (PDT)
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W0yc1av926wLTaTcH4nk7Lz2caTBheLhjPikjVYmYi8=;
+ b=Ct1sY9oA6fo71ndcQ5Jg2nhlNusKtiODnDg2jxlFJxNc0zIdzCpI4JQthYuIuahQttzHYEB197jk+h8sJN5+UZ1gYLqYpk97u9OGYoedFR57B7Bax+Np40ipaoTXZtHawU+AaBjAcmNwSVwntdf8KeQZQoLGq009XrBh6AphIRk=
+Received: from OSBPR01MB2037.jpnprd01.prod.outlook.com (2603:1096:603:25::17)
+ by TYYPR01MB6925.jpnprd01.prod.outlook.com (2603:1096:400:d4::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Thu, 30 Jun
+ 2022 09:43:36 +0000
+Received: from OSBPR01MB2037.jpnprd01.prod.outlook.com
+ ([fe80::3151:373d:fb9d:afd1]) by OSBPR01MB2037.jpnprd01.prod.outlook.com
+ ([fe80::3151:373d:fb9d:afd1%7]) with mapi id 15.20.5373.018; Thu, 30 Jun 2022
+ 09:43:36 +0000
+From:   "tarumizu.kohei@fujitsu.com" <tarumizu.kohei@fujitsu.com>
+To:     'Dave Hansen' <dave.hansen@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+CC:     Greg KH <gregkh@linuxfoundation.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "eugenis@google.com" <eugenis@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "pcc@google.com" <pcc@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "marcos@orca.pet" <marcos@orca.pet>,
+        "marcan@marcan.st" <marcan@marcan.st>,
+        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+        "conor.dooley@microchip.com" <conor.dooley@microchip.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "ast@kernel.org" <ast@kernel.org>,
+        "peter.chen@kernel.org" <peter.chen@kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        Paolo Valente <paolo.valente@unimore.it>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: RE: [PATCH v5 0/6] Add hardware prefetch control driver for A64FX and
+ x86
+Thread-Topic: [PATCH v5 0/6] Add hardware prefetch control driver for A64FX
+ and x86
+Thread-Index: AQHYemckLVPNFhFQbU+IAdEo3cwBO61IoUEAgAYyEhCAAA4dgIAEfPmggA+/dICAAfm5AIAATIAAgAALogCAAiff8A==
+Date:   Thu, 30 Jun 2022 09:43:36 +0000
+Message-ID: <OSBPR01MB2037621D4E6E65832DD9C95D80BA9@OSBPR01MB2037.jpnprd01.prod.outlook.com>
+References: <20220607120530.2447112-1-tarumizu.kohei@fujitsu.com>
+ <YqNCDrqcp9t8HlUJ@kroah.com>
+ <OSBPR01MB203749DA00C7BEE5741AFEB980AA9@OSBPR01MB2037.jpnprd01.prod.outlook.com>
+ <YqiAY689pOJbHKUd@kroah.com>
+ <TY2PR01MB20426C7822E46B2E8B2525FB80AF9@TY2PR01MB2042.jpnprd01.prod.outlook.com>
+ <CACRpkdaV8+06gzxi3ou4+nxa28R5Rhzg+KJ8HWh4gyK4AkoC9g@mail.gmail.com>
+ <086370dd-281f-5ac6-3a0f-f1b80500c668@intel.com>
+ <CACRpkdYTNuszctk=stB+RLr5kKwhR2ebF2MJCYQwMwYYPPReLg@mail.gmail.com>
+ <6934b82d-db12-8a17-7dea-7bcbd4fe8566@intel.com>
+In-Reply-To: <6934b82d-db12-8a17-7dea-7bcbd4fe8566@intel.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: =?utf-8?B?TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2Uw?=
+ =?utf-8?B?NTBfQWN0aW9uSWQ9MjE3MmI2YjgtNTNlMS00YTA3LTlhYzYtNzMyZGExZTUy?=
+ =?utf-8?B?ZWI2O01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQtM2IwZjRm?=
+ =?utf-8?B?ZWNlMDUwX0NvbnRlbnRCaXRzPTA7TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5?=
+ =?utf-8?B?LTQyYWMtYWI0ZC0zYjBmNGZlY2UwNTBfRW5hYmxlZD10cnVlO01TSVBfTGFi?=
+ =?utf-8?B?ZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQtM2IwZjRmZWNlMDUwX01ldGhv?=
+ =?utf-8?B?ZD1TdGFuZGFyZDtNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1hYjRk?=
+ =?utf-8?B?LTNiMGY0ZmVjZTA1MF9OYW1lPUZVSklUU1UtUkVTVFJJQ1RFRO+/ou++gA==?=
+ =?utf-8?B?776LO01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQtM2IwZjRm?=
+ =?utf-8?B?ZWNlMDUwX1NldERhdGU9MjAyMi0wNi0zMFQwNTo1Njo1M1o7TVNJUF9MYWJl?=
+ =?utf-8?B?bF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2UwNTBfU2l0ZUlk?=
+ =?utf-8?Q?=3Da19f121d-81e1-4858-a9d8-736e267fd4c7;?=
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d371ce42-abbe-4b99-7690-08da5a7d0114
+x-ms-traffictypediagnostic: TYYPR01MB6925:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8VYdfgkriqgVqC8Nin7wxTXoYGPfG0dPA6gztQxyvbSsETIUdB3lWMSLF7jcZthlglZYQfVGsFmrq3s9p5Nxb0XajbNlH0uwW9Ql2PoqKIiJxIuRf9j9Xg8ZpkphWerdTDPoirtjbhCtuf+m57W6rf9X1WIcjOBYXETOeltzpHhsglpgZJd4hayeVWAj2IayixNVGsgcRElnZH3dneuyJp4QgwuIyxJSKy4RoLm1lfxentf7m/vx5fuIygw2xN1ee0ZMnDWw+iduF7pFORz74F4Rq5PsoMWCmJrTRqSvgeVs4xJsI4jLrWNUriSIMRDqm3kgpWAWtgdmDyAJNWA2xlHIewo1hdCeW7r+FF54yKtXNYWWCVPKb0/QUZjkazmTgR/lfBcog1ZQQuvtTnnpvLT8Cf1cXbb3iTm7b2nrmgnC5zLKc04nnmmaJD8PfRHlpOlssY4PeAPpAbITDAaGpgQ3rvtQTbID03HroCGlYh2/kcAsTJMJMcNO7jusx9O+8Zh6YXS9lONN706NZ3cW0E7OyZcG8OLWuPdstIjyySjud8G4kM9FaLxdnh7yTwsHnB1adk5DH3LA9ylPWU+obKPNEkDwVdsOHhqwDo7dZncfa4rOwhQ6WvHEEFkc4RIFNiqLmhkEJwlmzbVmH7bTdBMQGYM67QYxhYyOgEooagwzkNgMz87VDpje2KdTkphj4dAGyEoITb3x5Lq4RQgFgnCi75K+8cE4Fc94fHlgAyWxigtck41QiTkI7+eBasHJCHRPQDrKcjCE192m1uMAzz1Oiu2JrRsDZByJsNUJ5KbTzg0XRAs3ajodJhXjMKdHyFD557bF8SlF0KaEdNPnbmzDzHZtRvpCc/LTKhvDFWU=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSBPR01MB2037.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(366004)(346002)(39860400002)(376002)(38100700002)(85182001)(41300700001)(54906003)(186003)(478600001)(110136005)(316002)(2906002)(83380400001)(82960400001)(86362001)(7696005)(66476007)(71200400001)(8676002)(26005)(9686003)(66446008)(76116006)(64756008)(66946007)(4326008)(38070700005)(66556008)(966005)(6506007)(33656002)(52536014)(7406005)(8936002)(7416002)(122000001)(5660300002)(55016003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M1dqUVlRNmlhWEFjUTZUQ1VwanlPb3dsNWR1YkF6NkVjY2ZVYi9hdlJiZ2g1?=
+ =?utf-8?B?LzFHOTVEdG9mR1ZaeTVDQlYxZW1sYlh1TitIUUFjeFBHOTJWdW85eGZTNkJ3?=
+ =?utf-8?B?R3hvTEpqOFp3OFBjejNxRnJkVlFlNktmcUxQNHJWaC9mMmR5WURGb3YvTGFK?=
+ =?utf-8?B?OW5mZlc4akVEVm9GZFVwUDZnZ0FTNEF1czQwd3ZRNzg3MGVaVFVxOUxSS2Z4?=
+ =?utf-8?B?V3FBdFIzcWx2cTlDa3BIUXpIVVRwd1N3VnJkOGtOSC82RUEyRjhzenIzbVJW?=
+ =?utf-8?B?WXFHWGFRQmU0TnlMUVlzVjJVVzdjYnh5elFBV3ZEQ3JnTEN4K2pYcEI4bE1B?=
+ =?utf-8?B?SmhwY2kxa1pwV2JlN1p0WS9oYlVOREFNeFd3a0o2aEdUQlVYL3RHWXpCSHF0?=
+ =?utf-8?B?alRKUkxJTjlwRkdZL0lkWGJNSVY2MEtoeENMTGFlRlRqUVB4TlVOM253WEcv?=
+ =?utf-8?B?SkFQdXZoY2swR3JXY2VlR0JOV2l2NjlrblAyWFNGalRHVTc5eUR1SWNwcFZF?=
+ =?utf-8?B?WWUxTXREbFZSSE9PN3c3OWJYeVNlUU51OEdLOEwzNUxTaEZSc25xM3UySHFE?=
+ =?utf-8?B?aHJJN1NaVktTZWlkdHV6cUZlREFCUTB5cEhEZEM4VWVDU0ZZZ0IwdWZuODQ0?=
+ =?utf-8?B?eXNhN05XbCtjWGhScGlsKzIxemFWNHBUZEozd2ZTUzVHNWJLS0FBNGFwOVB4?=
+ =?utf-8?B?RXpKM1NndmsyL1RVWXUxeUN5VDVTdEdTMjMrWDBaTG9icUNoanlTZlpUYzkz?=
+ =?utf-8?B?VjBHaVhsbzZnekZFZ21BTkNGeVl6dXJDWjRWZE85UHEyeUtUUXl2cENSNGJl?=
+ =?utf-8?B?bStjOWZ6NHJhL3ExV0FZTTVlbmhNOVA0ZVF5bUE0RCtlTkZqUGxZelJpL2Mr?=
+ =?utf-8?B?eGJEclNSOGpnZVlWSE9YVjNEU29GYVVVTGl5S1hGeldFemJweFEzYkZvQ2x0?=
+ =?utf-8?B?UG1aTVpGSmlxTS8zV1FXRElKZ2Jnd292STJFcktVVG1EODBuR0FXK0ZnSlZy?=
+ =?utf-8?B?VEVkbkp0SStWQTBqWlp4YkpVR2o2YWV4NTdJZ2RyU1drNTBlNE9KVVFKSUth?=
+ =?utf-8?B?dUkxL0NNaWFQVWh0S1Y2YmttRkkwR1R3MlBqZ1hlbCt4cUkvczh1dWp0NzBo?=
+ =?utf-8?B?Q2R2b1JBbVRHa2hOcHpONmV6RFJkUTkrNWNUcDhRSUpzakZnTCtmczRNaHl4?=
+ =?utf-8?B?dnE5aURxT0hId2xMTWJjcDlJcXVaWisreiszK0ZiVWRRM05RbkdFWVhlRnZJ?=
+ =?utf-8?B?ZWNUSUZGNHRwZzRobCtTaTRxRVJDL3hSUkdyZ0NVcHhJL3g3dSs4akU0b1Jz?=
+ =?utf-8?B?N3ZRL1FNakNUWVAzVWM5ZE5aY0YrYUU2K0YvU2FTYjN1R2tacW1XbmhacnVx?=
+ =?utf-8?B?RTY3SGZpTGJKdVg2QWVWTlVGM0VJYXNYRTlhMFhjTUFBRk1jRnhiNVdQOCtP?=
+ =?utf-8?B?c2Iwd25nc2c0bWsrd0M4SkwvNHp0YURJRG1PenpldE9nai9ieW9tTUlXbGZP?=
+ =?utf-8?B?aTZGbC90UXFMdVpnZ01oYXF2RUxGQUpkN2IxNmNyblBhOWZrbTRSanFkYk45?=
+ =?utf-8?B?YW1XT05oT2t3NzFEdW1nMkd2cmh2VFljWWJUVWF3c09VUlNpd1ZROHBYb1kz?=
+ =?utf-8?B?dG5MMDRUTnZ2ckRzWTl5dFFlekFKY3BLZ0ZJRWFqbkRwOFdPYitadFFjV2Z6?=
+ =?utf-8?B?Wmg3K0g5MWJjeUJEZit2eGpWemp3Z0IySHdCZFRwemtoN0NaS2gzY2J3UWVI?=
+ =?utf-8?B?dU5zaDU3NG1iVmFBa3lrS3p1dEF0YTdKMmo2Rk5BeVF5bTVGemJHVXdRdVZq?=
+ =?utf-8?B?dXhwUkd3V3p1RE9SNXdkN3pwMTlEY0VJbEllRFNMK09Ldk1NSmRYcmQ4bGFT?=
+ =?utf-8?B?Q010ckdsd05Qc0d3WVZTT29hT1hBVzZKOEZDUURjMitWQXh5eGtqUjdtZTFY?=
+ =?utf-8?B?bGs4WWVaYzUrTUtiZytaTU9lUTU5VXlsR0x1Y1VJUjBLN0NCbkpnNlU3WjR4?=
+ =?utf-8?B?WFQwVHNYVHBiT01ZN1k4bXJkcThzTnlkWSszUXpOVGhNbU8ySG1wVG01ZzVm?=
+ =?utf-8?B?QU9SN2x0d0ZIVm1zR0trTkNhSm1ReGdFKzNVamhYbzhUOGlzR2pEN1BHbW1q?=
+ =?utf-8?B?M0RkVjZWOFROWTByaVlBcytLbnBlbElyNTE5NTJqWk1OajdhK3c1dEErczMr?=
+ =?utf-8?B?Y3c9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220630080834.2742777-1-davidgow@google.com> <20220630080834.2742777-2-davidgow@google.com>
-In-Reply-To: <20220630080834.2742777-2-davidgow@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 30 Jun 2022 11:41:04 +0200
-Message-ID: <CACT4Y+ZahTu0pGNSdZmx=4ZJHt4=mVuhxQnH_7ykDA5_fBJZVQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] UML: add support for KASAN under x86_64
-To:     David Gow <davidgow@google.com>
-Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Patricia Alfonso <trishalfonso@google.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        anton.ivanov@cambridgegreys.com,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-um@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
-        Daniel Latypov <dlatypov@google.com>, linux-mm@kvack.org,
-        kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSBPR01MB2037.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d371ce42-abbe-4b99-7690-08da5a7d0114
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jun 2022 09:43:36.1251
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Ps9wPnJn2E8nFSjpvuR4Z01jnKj6HTpMRePNk4mJPYmgx8WmVCU89DAgoBxlDOn5GZyquuBjed41USntp9UxK9WefrrgtsX/G6z/IMxQ3NA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYPR01MB6925
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Jun 2022 at 10:08, David Gow <davidgow@google.com> wrote:
->
-> From: Patricia Alfonso <trishalfonso@google.com>
->
-> Make KASAN run on User Mode Linux on x86_64.
->
-> The UML-specific KASAN initializer uses mmap to map the ~16TB of shadow
-> memory to the location defined by KASAN_SHADOW_OFFSET.  kasan_init()
-> utilizes constructors to initialize KASAN before main().
->
-> The location of the KASAN shadow memory, starting at
-> KASAN_SHADOW_OFFSET, can be configured using the KASAN_SHADOW_OFFSET
-> option. The default location of this offset is 0x100000000000, which
-> keeps it out-of-the-way even on UML setups with more "physical" memory.
->
-> For low-memory setups, 0x7fff8000 can be used instead, which fits in an
-> immediate and is therefore faster, as suggested by Dmitry Vyukov. There
-> is usually enough free space at this location; however, it is a config
-> option so that it can be easily changed if needed.
->
-> Note that, unlike KASAN on other architectures, vmalloc allocations
-> still use the shadow memory allocated upfront, rather than allocating
-> and free-ing it per-vmalloc allocation.
->
-> If another architecture chooses to go down the same path, we should
-> replace the checks for CONFIG_UML with something more generic, such
-> as:
-> - A CONFIG_KASAN_NO_SHADOW_ALLOC option, which architectures could set
-> - or, a way of having architecture-specific versions of these vmalloc
->   and module shadow memory allocation options.
->
-> Also note that, while UML supports both KASAN in inline mode
-> (CONFIG_KASAN_INLINE) and static linking (CONFIG_STATIC_LINK), it does
-> not support both at the same time.
->
-> Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
-> Co-developed-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> Signed-off-by: David Gow <davidgow@google.com>
-> Reviewed-by: Johannes Berg <johannes@sipsolutions.net>
-> ---
-> This is v4 of the KASAN/UML port. It should be ready to go, and is
-> identical to v3 module a minor formatting error.
->
-> Note that this will fail to build if UML is linked statically due to:
-> https://lore.kernel.org/all/20220526185402.955870-1-davidgow@google.com/
->
-> Changes since v3:
-> https://lore.kernel.org/lkml/20220630074757.2739000-2-davidgow@google.com/
-> - Fix some tabs which got converted to spaces by a rogue vim plugin.
->
-> Changes since v2:
-> https://lore.kernel.org/lkml/20220527185600.1236769-2-davidgow@google.com/
-> - Don't define CONFIG_KASAN in USER_CFLAGS, given we dont' use it.
->   (Thanks Johannes)
-> - Update patch descriptions and comments given we allocate shadow memory based
->   on the size of the virtual address space, not the "physical" memory
->   used by UML.
->   - This was changed between the original RFC and v1, with
->     KASAN_SHADOW_SIZE's definition being updated.
->   - References to UML using 18TB of space and the shadow memory taking
->     2.25TB were updated. (Thanks Johannes)
->   - A mention of physical memory in a comment was updated. (Thanks
->     Andrey)
-> - Move some discussion of how the vmalloc() handling could be made more
->   generic from a comment to the commit description. (Thanks Andrey)
->
-> Changes since RFC v3:
-> https://lore.kernel.org/all/20220526010111.755166-1-davidgow@google.com/
-> - No longer print "KernelAddressSanitizer initialized" (Johannes)
-> - Document the reason for the CONFIG_UML checks in shadow.c (Dmitry)
-> - Support static builds via kasan_arch_is_ready() (Dmitry)
-> - Get rid of a redundant call to kasam_mem_to_shadow() (Dmitry)
-> - Use PAGE_ALIGN and the new PAGE_ALIGN_DOWN macros (Dmitry)
-> - Reinstate missing arch/um/include/asm/kasan.h file (Johannes)
->
-> Changes since v1:
-> https://lore.kernel.org/all/20200226004608.8128-1-trishalfonso@google.com/
-> - Include several fixes from Vincent Whitchurch:
-> https://lore.kernel.org/all/20220525111756.GA15955@axis.com/
-> - Support for KASAN_VMALLOC, by changing the way
->   kasan_{populate,release}_vmalloc work to update existing shadow
->   memory, rather than allocating anything new.
-> - A similar fix for modules' shadow memory.
-> - Support for KASAN_STACK
->   - This requires the bugfix here:
-> https://lore.kernel.org/lkml/20220523140403.2361040-1-vincent.whitchurch@axis.com/
->   - Plus a couple of files excluded from KASAN.
-> - Revert the default shadow offset to 0x100000000000
->   - This was breaking when mem=1G for me, at least.
-> - A few minor fixes to linker sections and scripts.
->   - I've added one to dyn.lds.S on top of the ones Vincent added.
->
-> ---
->  arch/um/Kconfig                  | 15 +++++++++++++
->  arch/um/include/asm/common.lds.S |  2 ++
->  arch/um/include/asm/kasan.h      | 37 ++++++++++++++++++++++++++++++++
->  arch/um/kernel/Makefile          |  3 +++
->  arch/um/kernel/dyn.lds.S         |  6 +++++-
->  arch/um/kernel/mem.c             | 19 ++++++++++++++++
->  arch/um/os-Linux/mem.c           | 22 +++++++++++++++++++
->  arch/um/os-Linux/user_syms.c     |  4 ++--
->  arch/x86/um/Makefile             |  3 ++-
->  arch/x86/um/vdso/Makefile        |  3 +++
->  mm/kasan/shadow.c                | 29 +++++++++++++++++++++++--
->  11 files changed, 137 insertions(+), 6 deletions(-)
->  create mode 100644 arch/um/include/asm/kasan.h
->
-> diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-> index 8062a0c08952..289c9dc226d6 100644
-> --- a/arch/um/Kconfig
-> +++ b/arch/um/Kconfig
-> @@ -12,6 +12,8 @@ config UML
->         select ARCH_HAS_STRNLEN_USER
->         select ARCH_NO_PREEMPT
->         select HAVE_ARCH_AUDITSYSCALL
-> +       select HAVE_ARCH_KASAN if X86_64
-> +       select HAVE_ARCH_KASAN_VMALLOC if HAVE_ARCH_KASAN
->         select HAVE_ARCH_SECCOMP_FILTER
->         select HAVE_ASM_MODVERSIONS
->         select HAVE_UID16
-> @@ -220,6 +222,19 @@ config UML_TIME_TRAVEL_SUPPORT
->
->           It is safe to say Y, but you probably don't need this.
->
-> +config KASAN_SHADOW_OFFSET
-> +       hex
-> +       depends on KASAN
-> +       default 0x100000000000
-> +       help
-> +         This is the offset at which the ~16TB of shadow memory is
-> +         mapped and used by KASAN for memory debugging. This can be any
-> +         address that has at least KASAN_SHADOW_SIZE (total address space divided
-> +         by 8) amount of space so that the KASAN shadow memory does not conflict
-> +         with anything. The default is 0x100000000000, which works even if mem is
-> +         set to a large value. On low-memory systems, try 0x7fff8000, as it fits
-> +         into the immediate of most instructions, improving performance.
-> +
->  endmenu
->
->  source "arch/um/drivers/Kconfig"
-> diff --git a/arch/um/include/asm/common.lds.S b/arch/um/include/asm/common.lds.S
-> index eca6c452a41b..fd481ac371de 100644
-> --- a/arch/um/include/asm/common.lds.S
-> +++ b/arch/um/include/asm/common.lds.S
-> @@ -83,6 +83,8 @@
->    }
->    .init_array : {
->         __init_array_start = .;
-> +       *(.kasan_init)
-> +       *(.init_array.*)
->         *(.init_array)
->         __init_array_end = .;
->    }
-> diff --git a/arch/um/include/asm/kasan.h b/arch/um/include/asm/kasan.h
-> new file mode 100644
-> index 000000000000..0d6547f4ec85
-> --- /dev/null
-> +++ b/arch/um/include/asm/kasan.h
-> @@ -0,0 +1,37 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __ASM_UM_KASAN_H
-> +#define __ASM_UM_KASAN_H
-> +
-> +#include <linux/init.h>
-> +#include <linux/const.h>
-> +
-> +#define KASAN_SHADOW_OFFSET _AC(CONFIG_KASAN_SHADOW_OFFSET, UL)
-> +
-> +/* used in kasan_mem_to_shadow to divide by 8 */
-> +#define KASAN_SHADOW_SCALE_SHIFT 3
-> +
-> +#ifdef CONFIG_X86_64
-> +#define KASAN_HOST_USER_SPACE_END_ADDR 0x00007fffffffffffUL
-> +/* KASAN_SHADOW_SIZE is the size of total address space divided by 8 */
-> +#define KASAN_SHADOW_SIZE ((KASAN_HOST_USER_SPACE_END_ADDR + 1) >> \
-> +                       KASAN_SHADOW_SCALE_SHIFT)
-> +#else
-> +#error "KASAN_SHADOW_SIZE is not defined for this sub-architecture"
-> +#endif /* CONFIG_X86_64 */
-> +
-> +#define KASAN_SHADOW_START (KASAN_SHADOW_OFFSET)
-> +#define KASAN_SHADOW_END (KASAN_SHADOW_START + KASAN_SHADOW_SIZE)
-> +
-> +#ifdef CONFIG_KASAN
-> +void kasan_init(void);
-> +void kasan_map_memory(void *start, unsigned long len);
-> +extern int kasan_um_is_ready;
-> +
-> +#ifdef CONFIG_STATIC_LINK
-> +#define kasan_arch_is_ready() (kasan_um_is_ready)
-> +#endif
-> +#else
-> +static inline void kasan_init(void) { }
-> +#endif /* CONFIG_KASAN */
-> +
-> +#endif /* __ASM_UM_KASAN_H */
-> diff --git a/arch/um/kernel/Makefile b/arch/um/kernel/Makefile
-> index 1c2d4b29a3d4..a089217e2f0e 100644
-> --- a/arch/um/kernel/Makefile
-> +++ b/arch/um/kernel/Makefile
-> @@ -27,6 +27,9 @@ obj-$(CONFIG_EARLY_PRINTK) += early_printk.o
->  obj-$(CONFIG_STACKTRACE) += stacktrace.o
->  obj-$(CONFIG_GENERIC_PCI_IOMAP) += ioport.o
->
-> +KASAN_SANITIZE_stacktrace.o := n
-> +KASAN_SANITIZE_sysrq.o := n
-
-Why are these needed?
-It's helpful to leave some comments for any of *_SANITIZE:=n.
-Otherwise later it's unclear if it's due to some latent bugs, some
-inherent incompatibility, something that can be fixed, etc.
-
-Otherwise the patch looks good to me.
-
-> +
->  USER_OBJS := config.o
->
->  include arch/um/scripts/Makefile.rules
-> diff --git a/arch/um/kernel/dyn.lds.S b/arch/um/kernel/dyn.lds.S
-> index 2f2a8ce92f1e..2b7fc5b54164 100644
-> --- a/arch/um/kernel/dyn.lds.S
-> +++ b/arch/um/kernel/dyn.lds.S
-> @@ -109,7 +109,11 @@ SECTIONS
->       be empty, which isn't pretty.  */
->    . = ALIGN(32 / 8);
->    .preinit_array     : { *(.preinit_array) }
-> -  .init_array     : { *(.init_array) }
-> +  .init_array     : {
-> +    *(.kasan_init)
-> +    *(.init_array.*)
-> +    *(.init_array)
-> +  }
->    .fini_array     : { *(.fini_array) }
->    .data           : {
->      INIT_TASK_DATA(KERNEL_STACK_SIZE)
-> diff --git a/arch/um/kernel/mem.c b/arch/um/kernel/mem.c
-> index 15295c3237a0..276a1f0b91f1 100644
-> --- a/arch/um/kernel/mem.c
-> +++ b/arch/um/kernel/mem.c
-> @@ -18,6 +18,25 @@
->  #include <kern_util.h>
->  #include <mem_user.h>
->  #include <os.h>
-> +#include <linux/sched/task.h>
-> +
-> +#ifdef CONFIG_KASAN
-> +int kasan_um_is_ready;
-> +void kasan_init(void)
-> +{
-> +       /*
-> +        * kasan_map_memory will map all of the required address space and
-> +        * the host machine will allocate physical memory as necessary.
-> +        */
-> +       kasan_map_memory((void *)KASAN_SHADOW_START, KASAN_SHADOW_SIZE);
-> +       init_task.kasan_depth = 0;
-> +       kasan_um_is_ready = true;
-> +}
-> +
-> +static void (*kasan_init_ptr)(void)
-> +__section(".kasan_init") __used
-> += kasan_init;
-> +#endif
->
->  /* allocated in paging_init, zeroed in mem_init, and unchanged thereafter */
->  unsigned long *empty_zero_page = NULL;
-> diff --git a/arch/um/os-Linux/mem.c b/arch/um/os-Linux/mem.c
-> index 3c1b77474d2d..8530b2e08604 100644
-> --- a/arch/um/os-Linux/mem.c
-> +++ b/arch/um/os-Linux/mem.c
-> @@ -17,6 +17,28 @@
->  #include <init.h>
->  #include <os.h>
->
-> +/*
-> + * kasan_map_memory - maps memory from @start with a size of @len.
-> + * The allocated memory is filled with zeroes upon success.
-> + * @start: the start address of the memory to be mapped
-> + * @len: the length of the memory to be mapped
-> + *
-> + * This function is used to map shadow memory for KASAN in uml
-> + */
-> +void kasan_map_memory(void *start, size_t len)
-> +{
-> +       if (mmap(start,
-> +                len,
-> +                PROT_READ|PROT_WRITE,
-> +                MAP_FIXED|MAP_ANONYMOUS|MAP_PRIVATE|MAP_NORESERVE,
-> +                -1,
-> +                0) == MAP_FAILED) {
-> +               os_info("Couldn't allocate shadow memory: %s\n.",
-> +                       strerror(errno));
-> +               exit(1);
-> +       }
-> +}
-> +
->  /* Set by make_tempfile() during early boot. */
->  static char *tempdir = NULL;
->
-> diff --git a/arch/um/os-Linux/user_syms.c b/arch/um/os-Linux/user_syms.c
-> index 715594fe5719..cb667c9225ab 100644
-> --- a/arch/um/os-Linux/user_syms.c
-> +++ b/arch/um/os-Linux/user_syms.c
-> @@ -27,10 +27,10 @@ EXPORT_SYMBOL(strstr);
->  #ifndef __x86_64__
->  extern void *memcpy(void *, const void *, size_t);
->  EXPORT_SYMBOL(memcpy);
-> -#endif
-> -
->  EXPORT_SYMBOL(memmove);
->  EXPORT_SYMBOL(memset);
-> +#endif
-> +
->  EXPORT_SYMBOL(printf);
->
->  /* Here, instead, I can provide a fake prototype. Yes, someone cares: genksyms.
-> diff --git a/arch/x86/um/Makefile b/arch/x86/um/Makefile
-> index ba5789c35809..f778e37494ba 100644
-> --- a/arch/x86/um/Makefile
-> +++ b/arch/x86/um/Makefile
-> @@ -28,7 +28,8 @@ else
->
->  obj-y += syscalls_64.o vdso/
->
-> -subarch-y = ../lib/csum-partial_64.o ../lib/memcpy_64.o ../entry/thunk_64.o
-> +subarch-y = ../lib/csum-partial_64.o ../lib/memcpy_64.o ../entry/thunk_64.o \
-> +       ../lib/memmove_64.o ../lib/memset_64.o
->
->  endif
->
-> diff --git a/arch/x86/um/vdso/Makefile b/arch/x86/um/vdso/Makefile
-> index 5943387e3f35..8c0396fd0e6f 100644
-> --- a/arch/x86/um/vdso/Makefile
-> +++ b/arch/x86/um/vdso/Makefile
-> @@ -3,6 +3,9 @@
->  # Building vDSO images for x86.
->  #
->
-> +# do not instrument on vdso because KASAN is not compatible with user mode
-> +KASAN_SANITIZE                 := n
-> +
->  # Prevents link failures: __sanitizer_cov_trace_pc() is not linked in.
->  KCOV_INSTRUMENT                := n
->
-> diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
-> index a4f07de21771..0e3648b603a6 100644
-> --- a/mm/kasan/shadow.c
-> +++ b/mm/kasan/shadow.c
-> @@ -295,9 +295,22 @@ int kasan_populate_vmalloc(unsigned long addr, unsigned long size)
->                 return 0;
->
->         shadow_start = (unsigned long)kasan_mem_to_shadow((void *)addr);
-> -       shadow_start = ALIGN_DOWN(shadow_start, PAGE_SIZE);
->         shadow_end = (unsigned long)kasan_mem_to_shadow((void *)addr + size);
-> -       shadow_end = ALIGN(shadow_end, PAGE_SIZE);
-> +
-> +       /*
-> +        * User Mode Linux maps enough shadow memory for all of virtual memory
-> +        * at boot, so doesn't need to allocate more on vmalloc, just clear it.
-> +        *
-> +        * The remaining CONFIG_UML checks in this file exist for the same
-> +        * reason.
-> +        */
-> +       if (IS_ENABLED(CONFIG_UML)) {
-> +               __memset((void *)shadow_start, KASAN_VMALLOC_INVALID, shadow_end - shadow_start);
-> +               return 0;
-> +       }
-> +
-> +       shadow_start = PAGE_ALIGN_DOWN(shadow_start);
-> +       shadow_end = PAGE_ALIGN(shadow_end);
->
->         ret = apply_to_page_range(&init_mm, shadow_start,
->                                   shadow_end - shadow_start,
-> @@ -466,6 +479,10 @@ void kasan_release_vmalloc(unsigned long start, unsigned long end,
->
->         if (shadow_end > shadow_start) {
->                 size = shadow_end - shadow_start;
-> +               if (IS_ENABLED(CONFIG_UML)) {
-> +                       __memset(shadow_start, KASAN_SHADOW_INIT, shadow_end - shadow_start);
-> +                       return;
-> +               }
->                 apply_to_existing_page_range(&init_mm,
->                                              (unsigned long)shadow_start,
->                                              size, kasan_depopulate_vmalloc_pte,
-> @@ -531,6 +548,11 @@ int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask)
->         if (WARN_ON(!PAGE_ALIGNED(shadow_start)))
->                 return -EINVAL;
->
-> +       if (IS_ENABLED(CONFIG_UML)) {
-> +               __memset((void *)shadow_start, KASAN_SHADOW_INIT, shadow_size);
-> +               return 0;
-> +       }
-> +
->         ret = __vmalloc_node_range(shadow_size, 1, shadow_start,
->                         shadow_start + shadow_size,
->                         GFP_KERNEL,
-> @@ -554,6 +576,9 @@ int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask)
->
->  void kasan_free_module_shadow(const struct vm_struct *vm)
->  {
-> +       if (IS_ENABLED(CONFIG_UML))
-> +               return;
-> +
->         if (vm->flags & VM_KASAN)
->                 vfree(kasan_mem_to_shadow(vm->addr));
->  }
-> --
-> 2.37.0.rc0.161.g10f37bed90-goog
->
+SGkgRGF2ZSwNCg0KPiBUaGV5IHJ1biB0aGVpciBmb3J0cmFuIGFwcC4gIENoYW5nZSB0aGUgTVNS
+cy4gIFJ1biBpdCBhZ2Fpbi4gIFNlZSBpZiBpdA0KPiBzaW11bGF0ZWQgdGhlIG51Y2xlYXIgd2Vh
+cG9uIGJsYXN0IGFueSBmYXN0ZXIgb3Igc2xvd2VyLiAgUmluc2UuICBSZXBlYXQuDQo+IA0KPiBP
+bmUgdGhpbmcgdGhhdCBpcyBtaXNzaW5nIGZyb20gdGhlIGNoYW5nZWxvZyBhbmQgY292ZXIgbGV0
+dGVyIGhlcmU6IE9uIHg4NiwNCj4gdGhlcmUncyBhICd3cm1zcigxKScgdG9vbC4gIFRoYXQgdG9v
+ayBwb2tlcyBhdCBNb2RlbCBTcGVjaWZpYyBSZWdpc3RlcnMgKE1TUnMpDQo+IHZpYSB0aGUgL2Rl
+di9jcHUvWC9tc3IgaW50ZXJmYWNlLiAgVGhhdCBpbnRlcmZhY2UgaXMgYSB2ZXJ5LCB2ZXJ5IHRo
+aW5seS12ZWlsZWQNCj4gd3JhcHBlciBhcm91bmQgdGhlIFdSTVNSIChXUml0ZSBNU1IpIGluc3Ry
+dWN0aW9uLg0KPiANCj4gSW4gb3RoZXIgd29yZHMsIG9uIHg4Niwgb3VyIGN1cnJlbnQgaW50ZXJm
+YWNlIGFsbG93cyB1c2Vyc3BhY2UgcHJvZ3JhbXMgdG8NCj4gYXJiaXRyYXJpbHkgcG9rZSBhdCBv
+dXIgbW9zdCBzZW5zaXRpdmUgaGFyZHdhcmUgY29uZmlndXJhdGlvbiByZWdpc3RlcnMuICBPbmUg
+b2YNCj4gdGhlIG1vc3QgY29tbW9uIHJlYXNvbnMgdXNlcnMgaGF2ZSByZXBvcnRlZCBkb2luZyB0
+aGlzICh3ZSBoYXZlDQo+IHByX3dhcm4oKWluZ3MgYWJvdXQgaXQpIGlzIGNvbnRyb2xsaW5nIHRo
+ZSBwcmVmZXRjaCBoYXJkd2FyZS4NCj4gDQo+IFRoaXMgaW50ZXJmYWNlIHdvdWxkIHRha2UgYSBn
+b29kIGNodW5rIG9mIHRoZSB4ODYgd3Jtc3IoMSkgYXVkaWVuY2UgYW5kDQo+IGNvbnZlcnQgdGhl
+bSBvdmVyIHRvIGEgbGVzcyBkYW5nZXJvdXMgaW50ZXJmYWNlLiAgVGhhdCdzIGEgd2luIG9uIHg4
+Ni4NCj4gV2UgZG9uJ3QgZXZlbiAqcmVtb3RlbHkqIGhhdmUgbGluZS1vZi1zaWdodCBmb3IgYSBn
+ZW5lcmljIHNvbHV0aW9uIGZvciB0aGUga2VybmVsDQo+IHRvIGZpZ3VyZSBvdXQgYSBzaW5nbGUg
+ImJlc3QiIHZhbHVlIGZvciB0aGVzZSByZWdpc3RlcnMuDQoNClRoYW5rIHlvdSBmb3IgbWVudGlv
+bmluZyB3cm1zciB0b29sLg0KDQpUaGlzIGlzIG9uZSBvZiB0aGUgcmVhc29uIHdoeSBJIHdhbnQg
+dG8gYWRkIHRoZSBzeXNmcyBpbnRlcmZhY2UuIEkNCndpbGwgYWRkIHRoZSBkZXNjcmlwdGlvbiB0
+aGF0IHRoaXMgaW50ZXJmYWNlIGNhbiBiZSB1c2VkIGluc3RlYWQgb2YNCndybXNyIHRvb2wgKG9y
+IE1TUiBkcml2ZXIpIGZvciBoYXJkd2FyZSBwcmVmZXRjaCBjb250cm9sIHVzYWdlIHRvIHRoZQ0K
+Y292ZXIgbGV0dGVyLg0KDQpJIHJlYWQgYmVsb3cgdGhhdCB3ZSBzaG91bGQgbm90IGFjY2Vzc2Ug
+YW55IE1TUiBkaXJlY3RseSBmcm9tDQp1c2Vyc3BhY2Ugd2l0aG91dCByZXN0cmljdGlvbi4NCmh0
+dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RpcC90aXAuZ2l0
+L2Fib3V0Lw0KDQo=

@@ -2,72 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416A9562698
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F9A562694
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbiF3XNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 19:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        id S231785AbiF3XOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 19:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbiF3XNi (ORCPT
+        with ESMTP id S230336AbiF3XOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 19:13:38 -0400
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4C922B33;
-        Thu, 30 Jun 2022 16:13:15 -0700 (PDT)
-Received: by mail-io1-f53.google.com with SMTP id v185so659724ioe.11;
-        Thu, 30 Jun 2022 16:13:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8mU7qq1xT9xP4AkHkk9ztlC+s1KHGpH2/AR1TP7Q5AU=;
-        b=Nec7cJj6+pkbrR3PoOoB+Zs/eF/5mt2uCKXJ/NTYYkFpyKFce5U16Wqw+2ABFeC26Q
-         z6unKNhu6JXnlmbPCOutIrMjip4/JlcaPxAa/bN3Ai8v2WQjWWqKX81Lc76qQxD0Fr9h
-         7A9V/78YSCLAsccsxW8jMzMd8SIubXaSYF+YOSNwKe2pZ3zScluY+sSYQAZgDOL9nQas
-         yB1Xo/g3cJ10fWL37qABCW3gRwG5gvwy+sECGBuBTeFYeoNVyTqHnj1bb7BUk+mLxD17
-         WaXZ21v42k7tZ2zohiaTbm4dIJRoY0dayUhvq1F8gIFyhjCdCH4AY8zX1okpOzthYRRD
-         T/Dg==
-X-Gm-Message-State: AJIora8c0SxUQhEUkE9JOW3XDrnVPiHHdjkY3SwORuek7UqPpzNSdgpv
-        v9tEjM9PZrLZliDK0jbqnA==
-X-Google-Smtp-Source: AGRyM1tH4HtQwEQklQC5StD8tG8HSFDW3U9bg3qVFD5iYWgjqigY+f6NDhBsU0FoXSsPKDeApCefIA==
-X-Received: by 2002:a5d:9758:0:b0:669:7d33:c556 with SMTP id c24-20020a5d9758000000b006697d33c556mr5613843ioo.2.1656630794249;
-        Thu, 30 Jun 2022 16:13:14 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id s21-20020a6bdc15000000b0067533ab9404sm6237051ioc.16.2022.06.30.16.13.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 16:13:13 -0700 (PDT)
-Received: (nullmailer pid 3508147 invoked by uid 1000);
-        Thu, 30 Jun 2022 23:13:11 -0000
-Date:   Thu, 30 Jun 2022 17:13:11 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jesse Taube <mr.bossman075@gmail.com>
-Cc:     linux-gpio@vger.kernel.org, stefan@agner.ch, shawnguo@kernel.org,
-        abel.vesa@nxp.com, linux@armlinux.org.uk, linus.walleij@linaro.org,
-        tglx@linutronix.de, devicetree@vger.kernel.org, linux-imx@nxp.com,
-        cniedermaier@dh-electronics.com, kernel@pengutronix.de,
-        tharvey@gateworks.com, festevam@gmail.com, clin@suse.com,
-        robh+dt@kernel.org, sebastian.reichel@collabora.com,
-        leoyang.li@nxp.com, dev@lynxeye.de, olof@lixom.net,
-        linux-clk@vger.kernel.org, mturquette@baylibre.com,
-        aisheng.dong@nxp.com, Mr.Bossman075@gmail.com,
-        marcel.ziswiler@toradex.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        s.hauer@pengutronix.de, sboyd@kernel.org,
-        giulio.benetti@benettiengineering.com
-Subject: Re: [PATCH v4 06/13] dt-bindings: clock: imx: Add documentation for
- i.MXRT1170 clock
-Message-ID: <20220630231311.GA3508108-robh@kernel.org>
-References: <20220626064523.3683775-1-Mr.Bossman075@gmail.com>
- <20220626064523.3683775-7-Mr.Bossman075@gmail.com>
+        Thu, 30 Jun 2022 19:14:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CE91261E;
+        Thu, 30 Jun 2022 16:13:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4D20B82CBF;
+        Thu, 30 Jun 2022 23:13:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12682C34115;
+        Thu, 30 Jun 2022 23:13:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656630832;
+        bh=LcRXKeZ1Ow0hvntfZpb4qJkONjz8OExyuqW5J+4q7Kg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FoSvl9eDCCmacnmlLHiNo082z31H5MLSLoQ4Rdb92iRFEj7W4BoIru4nAE6JjuU8D
+         2+1dtFYxJfywoXYmRKF4HJItWscz/jzUIt8OhtKbXHVI+GTCx9Nsg5h9Wp1DG9GKQJ
+         nInVCBkU4Kly6kpTv1PN9Qa8P0783hHkdoQlt9aKVxEYmSSjU9SxTnel9MfSrSAkoQ
+         LFvw8oParpJnSER0mLFm+GbhzshGUOC9SNYDFAJauaElbH6cbqI44tGMN1qi/1+k45
+         y7tmy007zcRUtTtW0chZMyS100zB2ESC5s7Z0TzT+0FyZKpM4LM+Mi1pcveONf5foC
+         j67ADcgHIidkg==
+Date:   Fri, 1 Jul 2022 02:13:48 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Gilad Ben-Yossef <gilad@benyossef.com>,
+        Eric Biggers <ebiggers@google.com>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] KEYS: asymmetric: enforce SM2 signature use pkey algo
+Message-ID: <Yr4uLEmN0Jeh3dGC@kernel.org>
+References: <20220628033720.43847-1-tianjia.zhang@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220626064523.3683775-7-Mr.Bossman075@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220628033720.43847-1-tianjia.zhang@linux.alibaba.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,23 +58,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 26 Jun 2022 02:45:16 -0400, Jesse Taube wrote:
-> Add DT binding documentation for i.MXRT1170 clock driver.
+On Tue, Jun 28, 2022 at 11:37:20AM +0800, Tianjia Zhang wrote:
+> The signature verification of SM2 needs to add the Za value and
+> recalculate sig->digest, which requires the detection of the pkey_algo
+> in public_key_verify_signature(). As Eric Biggers said, the pkey_algo
+> field in sig is attacker-controlled and should be use pkey->pkey_algo
+> instead of sig->pkey_algo, and secondly, if sig->pkey_algo is NULL, it
+> will also cause signature verification failure.
 > 
-> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> The software_key_determine_akcipher() already forces the algorithms
+> are matched, so the SM3 algorithm is enforced in the SM2 signature,
+> although this has been checked, we still avoid using any algorithm
+> information in the signature as input.
+> 
+> Fixes: 215525639631 ("X.509: support OSCCA SM2-with-SM3 certificate verification")
+> Reported-by: Eric Biggers <ebiggers@google.com>
+> Cc: stable@vger.kernel.org # v5.10+
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 > ---
-> V1 -> V2:
->  - Change title to Clock Controller
->  - Rename to add fsl
-> V2 -> V3:
->  - Remove unused include causing error
-> V3 -> V4:
->  - Add fsl to schema id
-> ---
->  .../bindings/clock/fsl,imxrt1170-clock.yaml   | 57 +++++++++++++++++++
->  1 file changed, 57 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/fsl,imxrt1170-clock.yaml
+>  crypto/asymmetric_keys/public_key.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
+> index 7c9e6be35c30..2f8352e88860 100644
+> --- a/crypto/asymmetric_keys/public_key.c
+> +++ b/crypto/asymmetric_keys/public_key.c
+> @@ -304,6 +304,10 @@ static int cert_sig_digest_update(const struct public_key_signature *sig,
+>  
+>  	BUG_ON(!sig->data);
+>  
+> +	/* SM2 signatures always use the SM3 hash algorithm */
+> +	if (!sig->hash_algo || strcmp(sig->hash_algo, "sm3") != 0)
+> +		return -EINVAL;
+> +
+>  	ret = sm2_compute_z_digest(tfm_pkey, SM2_DEFAULT_USERID,
+>  					SM2_DEFAULT_USERID_LEN, dgst);
+>  	if (ret)
+> @@ -414,8 +418,7 @@ int public_key_verify_signature(const struct public_key *pkey,
+>  	if (ret)
+>  		goto error_free_key;
+>  
+> -	if (sig->pkey_algo && strcmp(sig->pkey_algo, "sm2") == 0 &&
+> -	    sig->data_size) {
+> +	if (strcmp(pkey->pkey_algo, "sm2") == 0 && sig->data_size) {
+>  		ret = cert_sig_digest_update(sig, tfm);
+>  		if (ret)
+>  			goto error_free_key;
+> -- 
+> 2.24.3 (Apple Git-128)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+BR, Jarkko

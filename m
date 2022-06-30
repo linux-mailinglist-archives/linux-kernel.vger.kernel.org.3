@@ -2,106 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B7256132A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5F8561330
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiF3HXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        id S232781AbiF3H0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiF3HXs (ORCPT
+        with ESMTP id S230160AbiF3H0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:23:48 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF352AE13
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:23:47 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id m14so16274990plg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:23:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=kPj3DJDPahvvDxF0DURO3tVx6ujFEvydZkmaEtn28Rg=;
-        b=QaORBQDDJbzqP4G6eVt9wELj+P4mgfHQNbLnVJgBIr0oOT2IpfcB69NR4a8tF0lLlm
-         xIo3PekLAOXHFpK5nvAyRJ9SFX7IncdUll2plBAhu2VUIzOxIjU2WrVQR3g0J/Q1G+XP
-         E1XgCr4X7QjaSDCnQhaDjlU6yqNeqktMMAeBVqXDzofKyQJysj/hjACRLJdcCYZyMLNA
-         HSME5+ytZjhdNCmisSCGj6yLEPy/G1qRQutlUhWqBu/QxP5DzHZuzkXWsJj0wKI3DRKq
-         dHBSe4L7BjyKabfr4OV1WLA4Q1ifFMQpKL7gOZc9zPHNRUn19foJrvOGYg6ISHcA//4H
-         qvaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=kPj3DJDPahvvDxF0DURO3tVx6ujFEvydZkmaEtn28Rg=;
-        b=prUKfkPMbpML+963jxPIXTmdyAPzaZJhpm7h7F3dgfjeasTzwD47oV2UixDjcy2592
-         Dw+RxAx06LkSwHk3FeEu5qKKedbKE+seEuNeJRC+QrerAO8jKzotLwCXTHW5zNcCe8PB
-         5YScQN7lQqOgyi8+xcpTxb5cIqiUcPm6V6ueXp9Mf9H3sHlH2zAvICmdecWfzIkW3vYG
-         EY+A7MisviQ0htx/otAHcOBl0kXI+B83p/gXEXJv7Ub4xJ3czYY9BjcTwKCp6L6vTPQZ
-         fvTdwlALPzffiZL/u4pHmbQygujI0eF36+0UdJ/+A1E4kcQFK+8pkDEGJB7GvX3bRLu8
-         CcwA==
-X-Gm-Message-State: AJIora/io8DMQKC0wgwTSXh5+y7h1Y6EVittd94tyJXRNnRv7oCYw9o9
-        hDSJd0RSOF2/NbKEkMH2Q5rtBK9s5dMRFA==
-X-Google-Smtp-Source: AGRyM1vf2H5neloO5d3aKoFxRUFceQx95p3IxJsndYQCU7U17oceCA7Hfne4ZjMjm8r2qoDz4TLHiQ==
-X-Received: by 2002:a17:902:d706:b0:16b:960e:e689 with SMTP id w6-20020a170902d70600b0016b960ee689mr10659856ply.24.1656573827047;
-        Thu, 30 Jun 2022 00:23:47 -0700 (PDT)
-Received: from ?IPv6:fdbd:ff1:ce00:422:15e6:97a:66d6:17ac? ([2404:9dc0:cd01::a])
-        by smtp.gmail.com with ESMTPSA id q13-20020aa7960d000000b00525161431f5sm12758307pfg.36.2022.06.30.00.23.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 30 Jun 2022 00:23:46 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: [External] [PATCH v2 0/4] virtio-crypto: support ECDSA algorithm
-From:   Lei He <helei.sig11@bytedance.com>
-In-Reply-To: <Yr1JvG1aJUp4I/fP@gondor.apana.org.au>
-Date:   Thu, 30 Jun 2022 15:23:39 +0800
-Cc:     Lei He <helei.sig11@bytedance.com>, davem@davemloft.net,
-        dhowells@redhat.com, "Michael S. Tsirkin" <mst@redhat.com>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        berrange@redhat.com, pizhenwei@bytedance.com
+        Thu, 30 Jun 2022 03:26:10 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBAA3879C;
+        Thu, 30 Jun 2022 00:26:08 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5C3B810000C;
+        Thu, 30 Jun 2022 07:25:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656573966;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RbHADpDXYr/X5U7Qq4I3DXnnwEmjtF/efxJQ5ykP7Io=;
+        b=VherGTDEfCbIuQysIFuAAJsl6Ygh2UoZMdw+yIdXK2X5fZ8d11J5vIhR/7MQtz3xKOt73Y
+        K9iEIF+mDDrNpg3TX0aMXuLLE/O/nfzayqXQ/mBvf5ITXEE7cCyzKOguOiTyhaHVoZ8RNq
+        yjI3bEpAgxb0qxcHG7QwnMDWdGB9eEqB1NtvIRevfN1BSKWnSHhFvPBgoFt/TYPePBlYAc
+        BygPdlDjczkRo9yZCNecazZuGo+pE1TSxp/532OeL3UjaZ7izxi2jFf4lgjHIg7JfBlBc2
+        e21eQOgI9zwOz8TA+mBYNx/5PRKQDgGfhKq/Dr1p3oa2cs7pVD9FnHIKbdA/Mg==
+Date:   Thu, 30 Jun 2022 09:25:52 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/7] memory: renesas-rpc-if: Pass device instead of
+ rpcif to rpcif_*()
+Message-ID: <20220630092552.68a8b3ff@xps-13>
+In-Reply-To: <e313b7f9a856fd8546aabb20d44d10e3af6676c6.1656341824.git.geert+renesas@glider.be>
+References: <cover.1656341824.git.geert+renesas@glider.be>
+        <e313b7f9a856fd8546aabb20d44d10e3af6676c6.1656341824.git.geert+renesas@glider.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <C7191BC8-5BE0-47CB-A302-735BBD1CBED0@bytedance.com>
-References: <20220623070550.82053-1-helei.sig11@bytedance.com>
- <Yr1JvG1aJUp4I/fP@gondor.apana.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-X-Mailer: Apple Mail (2.3608.120.23.2.4)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Krzysztof,
 
-> On Jun 30, 2022, at 2:59 PM, Herbert Xu <herbert@gondor.apana.org.au> =
-wrote:
+geert+renesas@glider.be wrote on Mon, 27 Jun 2022 17:31:13 +0200:
+
+> Most rpcif_*() API functions do not need access to any other fields in
+> the rpcif structure than the device pointer.  Simplify dependencies by
+> passing the device pointer instead.
 >=20
-> On Thu, Jun 23, 2022 at 03:05:46PM +0800, Lei He wrote:
->> From: lei he <helei.sig11@bytedance.com>
->>=20
->> This patch supports the ECDSA algorithm for virtio-crypto.
->=20
-> Why is this necessary?
->=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/memory/renesas-rpc-if.c | 32 ++++++++++++++++----------------
+>  drivers/mtd/hyperbus/rpc-if.c   | 18 +++++++++---------
 
-The main purpose of this patch is to offload ECDSA computations to =
-virtio-crypto dev.
-We can modify the backend of virtio-crypto to allow hardware like Intel =
-QAT cards to=20
-perform the actual calculations, and user-space applications such as =
-HTTPS server=20
-can access those backend in a unified way(eg, keyctl_pk_xx syscall).
+[...]
 
-Related works are also described in following patch series:
-=
-https://lwn.net/ml/linux-crypto/20220525090118.43403-1-helei.sig11@bytedan=
-ce.com/
+> diff --git a/drivers/mtd/hyperbus/rpc-if.c b/drivers/mtd/hyperbus/rpc-if.c
+> index d00d302434030b20..41734e337ac00e40 100644
+> --- a/drivers/mtd/hyperbus/rpc-if.c
+> +++ b/drivers/mtd/hyperbus/rpc-if.c
+> @@ -56,7 +56,7 @@ static void rpcif_hb_prepare_read(struct rpcif *rpc, vo=
+id *to,
+>  	op.data.nbytes =3D len;
+>  	op.data.buf.in =3D to;
+> =20
+> -	rpcif_prepare(rpc, &op, NULL, NULL);
+> +	rpcif_prepare(rpc->dev, &op, NULL, NULL);
+>  }
+> =20
+>  static void rpcif_hb_prepare_write(struct rpcif *rpc, unsigned long to,
+> @@ -70,7 +70,7 @@ static void rpcif_hb_prepare_write(struct rpcif *rpc, u=
+nsigned long to,
+>  	op.data.nbytes =3D len;
+>  	op.data.buf.out =3D from;
+> =20
+> -	rpcif_prepare(rpc, &op, NULL, NULL);
+> +	rpcif_prepare(rpc->dev, &op, NULL, NULL);
+>  }
+> =20
+>  static u16 rpcif_hb_read16(struct hyperbus_device *hbdev, unsigned long =
+addr)
+> @@ -81,7 +81,7 @@ static u16 rpcif_hb_read16(struct hyperbus_device *hbde=
+v, unsigned long addr)
+> =20
+>  	rpcif_hb_prepare_read(&hyperbus->rpc, &data, addr, 2);
+> =20
+> -	rpcif_manual_xfer(&hyperbus->rpc);
+> +	rpcif_manual_xfer(hyperbus->rpc.dev);
+> =20
+>  	return data.x[0];
+>  }
+> @@ -94,7 +94,7 @@ static void rpcif_hb_write16(struct hyperbus_device *hb=
+dev, unsigned long addr,
+> =20
+>  	rpcif_hb_prepare_write(&hyperbus->rpc, addr, &data, 2);
+> =20
+> -	rpcif_manual_xfer(&hyperbus->rpc);
+> +	rpcif_manual_xfer(hyperbus->rpc.dev);
+>  }
+> =20
+>  static void rpcif_hb_copy_from(struct hyperbus_device *hbdev, void *to,
+> @@ -105,7 +105,7 @@ static void rpcif_hb_copy_from(struct hyperbus_device=
+ *hbdev, void *to,
+> =20
+>  	rpcif_hb_prepare_read(&hyperbus->rpc, to, from, len);
+> =20
+> -	rpcif_dirmap_read(&hyperbus->rpc, from, len, to);
+> +	rpcif_dirmap_read(hyperbus->rpc.dev, from, len, to);
+>  }
+> =20
+>  static const struct hyperbus_ops rpcif_hb_ops =3D {
+> @@ -130,9 +130,9 @@ static int rpcif_hb_probe(struct platform_device *pde=
+v)
+> =20
+>  	platform_set_drvdata(pdev, hyperbus);
+> =20
+> -	rpcif_enable_rpm(&hyperbus->rpc);
+> +	rpcif_enable_rpm(hyperbus->rpc.dev);
+> =20
+> -	error =3D rpcif_hw_init(&hyperbus->rpc, true);
+> +	error =3D rpcif_hw_init(hyperbus->rpc.dev, true);
+>  	if (error)
+>  		goto out_disable_rpm;
+> =20
+> @@ -150,7 +150,7 @@ static int rpcif_hb_probe(struct platform_device *pde=
+v)
+>  	return 0;
+> =20
+>  out_disable_rpm:
+> -	rpcif_disable_rpm(&hyperbus->rpc);
+> +	rpcif_disable_rpm(hyperbus->rpc.dev);
+>  	return error;
+>  }
 
-> Thanks,
-> --=20
-> Email: Herbert Xu <herbert@gondor.apana.org.au>
-> Home Page: http://gondor.apana.org.au/~herbert/
-> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+This will only apply on top of mtd/next, because that
+rpcif_disable_rpm() balance call was very recently contributed by Geert:
+https://lore.kernel.org/linux-mtd/f3070e1af480cb252ae183d479a593dbbf947685.=
+1655457790.git.geert+renesas@glider.be/
 
+So we need to first share an immutable tag on the current mtd/next
+branch. Richard, that is my vacation gift for you :)
+
+Otherwise,
+
+Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+
+Thanks,
+Miqu=C3=A8l

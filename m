@@ -2,50 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF561561ED8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B36562ED8
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235630AbiF3PK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 11:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
+        id S234518AbiGAItq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 04:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235559AbiF3PKY (ORCPT
+        with ESMTP id S236416AbiGAItN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 11:10:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77FC2A97E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:10:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78965B82B75
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 15:10:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2C25C34115;
-        Thu, 30 Jun 2022 15:10:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656601821;
-        bh=FyTqsR5EybY7iM7iEaNhoXEYisNEPyb47zA76fc//G8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=tEJdqW3fFrs6IZJs0Z0xMIAz6dYJa3FkZbT2ZtVa+n8gnU1Rv4nfq9jAiCZ3YxTxc
-         EyTCEfs0JYj54Mi5I7WLxxCKB7eBR/tq14csHutOlS8RBVIJB1vzYOEzZC2zKoBxYZ
-         y6oL7c1XmowAFo+3IbUJ/Pp4bGZp1GkpJQPP1RZuRcsgxkAsyDDhwfthUl4WwaeGU2
-         xXjXQBq8StJgKiCyWveWJlIUzONGwKzmnRQLJtpGOvYSShrEDzPYaaz1J/GBZyAtJy
-         n1r8XiRerB2IYhUZs52bjUaBy2Hu61H0qfxU0nOjRGb1bKf2r+GjJNYb8sOMzIXT41
-         kl6hSYp84J5EQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     srinivas.kandagatla@linaro.org
-Cc:     perex@perex.cz, alsa-devel@alsa-project.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, tiwai@suse.com
-In-Reply-To: <20220630123633.8047-1-srinivas.kandagatla@linaro.org>
-References: <20220630123633.8047-1-srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH v3] ASoC: codecs: wsa883x: add control, dapm widgets and map
-Message-Id: <165660181971.664251.15530815759209640132.b4-ty@kernel.org>
-Date:   Thu, 30 Jun 2022 16:10:19 +0100
+        Fri, 1 Jul 2022 04:49:13 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85391262B;
+        Fri,  1 Jul 2022 01:48:59 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 15:10:32 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1656665337;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZcFvGeiS6wY4PWTdQBRFYqnlvmdaRSGng4TPww04LoI=;
+        b=3aiv62k1D5hncQtlQVKKm7I8hTST2o8Tqj3+FZBY3zRkvSF4HqD0IaDTWEjssQsL1y5Xtf
+        +VrbfwyoFR9DbdLt5Oig4SimpeTUMKlRADXPxft13PTpdvnWMbZujevogjh0rOYrXhhq4P
+        DPZh3ZX1RmQdiLOyXaZSSPDVk9Pq+beXwqJoCnUejw5uugurS98jgfxwLwbi55snR3MsAv
+        Ud5t6Bgbtwo1Uf9U+rJnKO8iC4/OJIrKUNO73zPahguRUbqwK8A5H93hGo/UG/ixm56/Cb
+        SN4Iwpzc+1zJkB+/Q37DMkLJw4dKMRdX4LvwylS/2n9n5FottzF8p1Ahjc44yQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1656665337;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZcFvGeiS6wY4PWTdQBRFYqnlvmdaRSGng4TPww04LoI=;
+        b=XCRKeifCmBoa2q8RlRXYSEhQSVeKpqIUJ3jp50Yw2j4o7yzmNmp4VXqSumf5AKiWUC0Ryv
+        SQaObV9/u6nEzZBg==
+From:   "tip-bot2 for Vincent Donnefort" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/core] sched/fair: Remove the energy margin in feec()
+Cc:     Vincent Donnefort <vincent.donnefort@arm.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220621090414.433602-8-vdonnefort@google.com>
+References: <20220621090414.433602-8-vdonnefort@google.com>
 MIME-Version: 1.0
+Message-ID: <165660183266.15455.13843699448813066343.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,35 +68,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Jun 2022 13:36:33 +0100, Srinivas Kandagatla wrote:
-> Add controls, dapm widgets along with route.
-> 
-> 
+The following commit has been merged into the sched/core branch of tip:
 
-Applied to
+Commit-ID:     b812fc9768e0048582c8e18d7b66559c1758dde1
+Gitweb:        https://git.kernel.org/tip/b812fc9768e0048582c8e18d7b66559c1758dde1
+Author:        Vincent Donnefort <vincent.donnefort@arm.com>
+AuthorDate:    Tue, 21 Jun 2022 10:04:14 +01:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Tue, 28 Jun 2022 09:17:48 +02:00
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+sched/fair: Remove the energy margin in feec()
 
-Thanks!
+find_energy_efficient_cpu() integrates a margin to protect tasks from
+bouncing back and forth from a CPU to another. This margin is set as being
+6% of the total current energy estimated on the system. This however does
+not work for two reasons:
 
-[1/1] ASoC: codecs: wsa883x: add control, dapm widgets and map
-      commit: cdb09e6231433b65e31c40fbe298099db6513a7f
+1. The energy estimation is not a good absolute value:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+compute_energy() used in feec() is a good estimation for task placement as
+it allows to compare the energy with and without a task. The computed
+delta will give a good overview of the cost for a certain task placement.
+It, however, doesn't work as an absolute estimation for the total energy
+of the system. First it adds the contribution to idle CPUs into the
+energy, second it mixes util_avg with util_est values. util_avg contains
+the near history for a CPU usage, it doesn't tell at all what the current
+utilization is. A system that has been quite busy in the near past will
+hold a very high energy and then a high margin preventing any task
+migration to a lower capacity CPU, wasting energy. It even creates a
+negative feedback loop: by holding the tasks on a less efficient CPU, the
+margin contributes in keeping the energy high.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+2. The margin handicaps small tasks:
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+On a system where the workload is composed mostly of small tasks (which is
+often the case on Android), the overall energy will be high enough to
+create a margin none of those tasks can cross. On a Pixel4, a small
+utilization of 5% on all the CPUs creates a global estimated energy of 140
+joules, as per the Energy Model declaration of that same device. This
+means, after applying the 6% margin that any migration must save more than
+8 joules to happen. No task with a utilization lower than 40 would then be
+able to migrate away from the biggest CPU of the system.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+The 6% of the overall system energy was brought by the following patch:
 
-Thanks,
-Mark
+ (eb92692b2544 sched/fair: Speed-up energy-aware wake-ups)
+
+It was previously 6% of the prev_cpu energy. Also, the following one
+made this margin value conditional on the clusters where the task fits:
+
+ (8d4c97c105ca sched/fair: Only compute base_energy_pd if necessary)
+
+We could simply revert that margin change to what it was, but the original
+version didn't have strong grounds neither and as demonstrated in (1.) the
+estimated energy isn't a good absolute value. Instead, removing it
+completely. It is indeed, made possible by recent changes that improved
+energy estimation comparison fairness (sched/fair: Remove task_util from
+effective utilization in feec()) (PM: EM: Increase energy calculation
+precision) and task utilization stabilization (sched/fair: Decay task
+util_avg during migration)
+
+Without a margin, we could have feared bouncing between CPUs. But running
+LISA's eas_behaviour test coverage on three different platforms (Hikey960,
+RB-5 and DB-845) showed no issue.
+
+Removing the energy margin enables more energy-optimized placements for a
+more energy efficient system.
+
+Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Tested-by: Lukasz Luba <lukasz.luba@arm.com>
+Link: https://lkml.kernel.org/r/20220621090414.433602-8-vdonnefort@google.com
+---
+ kernel/sched/fair.c | 23 ++++++++---------------
+ 1 file changed, 8 insertions(+), 15 deletions(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 0ef7e0a..a78d2e3 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6868,9 +6868,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ {
+ 	struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_rq_mask);
+ 	unsigned long prev_delta = ULONG_MAX, best_delta = ULONG_MAX;
+-	int cpu, best_energy_cpu = prev_cpu, target = -1;
+ 	struct root_domain *rd = this_rq()->rd;
+-	unsigned long base_energy = 0;
++	int cpu, best_energy_cpu, target = -1;
+ 	struct sched_domain *sd;
+ 	struct perf_domain *pd;
+ 	struct energy_env eenv;
+@@ -6902,8 +6901,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 		unsigned long cpu_cap, cpu_thermal_cap, util;
+ 		unsigned long cur_delta, max_spare_cap = 0;
+ 		bool compute_prev_delta = false;
+-		unsigned long base_energy_pd;
+ 		int max_spare_cap_cpu = -1;
++		unsigned long base_energy;
+ 
+ 		cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
+ 
+@@ -6961,17 +6960,16 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 
+ 		eenv_pd_busy_time(&eenv, cpus, p);
+ 		/* Compute the 'base' energy of the pd, without @p */
+-		base_energy_pd = compute_energy(&eenv, pd, cpus, p, -1);
+-		base_energy += base_energy_pd;
++		base_energy = compute_energy(&eenv, pd, cpus, p, -1);
+ 
+ 		/* Evaluate the energy impact of using prev_cpu. */
+ 		if (compute_prev_delta) {
+ 			prev_delta = compute_energy(&eenv, pd, cpus, p,
+ 						    prev_cpu);
+ 			/* CPU utilization has changed */
+-			if (prev_delta < base_energy_pd)
++			if (prev_delta < base_energy)
+ 				goto unlock;
+-			prev_delta -= base_energy_pd;
++			prev_delta -= base_energy;
+ 			best_delta = min(best_delta, prev_delta);
+ 		}
+ 
+@@ -6980,9 +6978,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 			cur_delta = compute_energy(&eenv, pd, cpus, p,
+ 						   max_spare_cap_cpu);
+ 			/* CPU utilization has changed */
+-			if (cur_delta < base_energy_pd)
++			if (cur_delta < base_energy)
+ 				goto unlock;
+-			cur_delta -= base_energy_pd;
++			cur_delta -= base_energy;
+ 			if (cur_delta < best_delta) {
+ 				best_delta = cur_delta;
+ 				best_energy_cpu = max_spare_cap_cpu;
+@@ -6991,12 +6989,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 	}
+ 	rcu_read_unlock();
+ 
+-	/*
+-	 * Pick the best CPU if prev_cpu cannot be used, or if it saves at
+-	 * least 6% of the energy used by prev_cpu.
+-	 */
+-	if ((prev_delta == ULONG_MAX) ||
+-	    (prev_delta - best_delta) > ((prev_delta + base_energy) >> 4))
++	if (best_delta < prev_delta)
+ 		target = best_energy_cpu;
+ 
+ 	return target;

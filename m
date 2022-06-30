@@ -2,128 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7498D561A42
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D04AE561A4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233935AbiF3MXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 08:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
+        id S234016AbiF3M0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 08:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiF3MXl (ORCPT
+        with ESMTP id S229977AbiF3MZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 08:23:41 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A69128E3C;
-        Thu, 30 Jun 2022 05:23:41 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 879696601952;
-        Thu, 30 Jun 2022 13:23:38 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656591819;
-        bh=pRuI3oSvrHw82NBFcjDTrEAhu9UwJal4NerMnIQjBTM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eIfbfgMDXzw9VJ8gxnAYh+zc2D1jRwvoedENIECM7J6jAF935Hd3qKV/oMUB1PE7Q
-         myddxKhnwr0TW4ti4Fx6JY/zCvz3ajpZGqPsLCu+B7PX8a2ocv2poiu1rELkkOEdnP
-         53LyfflQ+jeM6Y6DmFLCi3j9wpjsueVqld0SKX2isDFs0N5W/sR0xbzRwgVWySi83d
-         DMsiA7AOuRvjXgzBFvLJweGyZyC5sGdDXQa6G3ON5FTsz6g1/m8jC1jF6Ms5C64V+d
-         W8d8pQ1Jq9+aK/Mnmfc9xzNyZkJT6T58UPzX+lnKS+nEgEJdLa2EC37o/xQr5Dawev
-         RmyRgwguExezw==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     linus.walleij@linaro.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sean.wang@mediatek.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        nfraprado@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH] dt-bindings: pinctrl: mt8195: Fix name for mediatek,rsel-resistance-in-si-unit
-Date:   Thu, 30 Jun 2022 14:23:34 +0200
-Message-Id: <20220630122334.216903-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 30 Jun 2022 08:25:59 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A4A2B254;
+        Thu, 30 Jun 2022 05:25:58 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id w1-20020a17090a6b8100b001ef26ab992bso2710193pjj.0;
+        Thu, 30 Jun 2022 05:25:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qkHYOhJM2c9y390Fvehg2as/eHGMXd+hD7+AN1EM9Hk=;
+        b=PvO6+OEEu12TpdotNoiaVC3Y2k+hqoXKxzm/fust/MXyJGVsgJTQxopZTfpbouCTzm
+         Z8bEBHZ1hE6ajbL85cIfM66xRco/8AGGpmLM/kRiDNeLSe7kWEkWTlxnfz+14XsmkGeZ
+         pMnfyxqD18pAi+orXakcTAhOckimSL7bRyrBr/eKqIxW4QedsWhqkJ482SV06mK6ITxl
+         uIzbI7B5vOzdXx2k8gouUGvkMoYgcM2KYH+kWMNd8qEZfeM1xMqt8Ff7WhFcFYn4Sk4s
+         pC5iNDxGt7Fmeud71ORT9T7vSDe6zHX+f3449MY+oDsbJxx6XOYz3DMGsBzPwODEm9rX
+         FHcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qkHYOhJM2c9y390Fvehg2as/eHGMXd+hD7+AN1EM9Hk=;
+        b=kAPgrk9whWXWaoTMrK3ZhunuQHiHtFpZDJqxBOx+Ww/+vOKva/kL9kwov0AV/Y9yQ2
+         zpFFth96P7CQMqUeyzp5k7r3SJqaLTFAKAS7yAL0uCH/VFZ8FY15XowN/CXZ/sbeB0LF
+         OfwYXRRt2gD8X2DojQjU//mKZLU8Y4/wv0hxI8ZSKiBc8rfNsC2omMqDaxnGLVJDAKc3
+         qtgkCFOgTFvX48viwzD8b84hVzcAEb9Nv3ikvyNFCoAg1n1Rtupu3xQQ4HGpYb2ih+s2
+         Xtspo8iI0/03FKG9yqJyC65VZXb9IOsxWJlHZ1ZPbd0t9zBBJD2BOj1Hy8QmcAF4TkiO
+         f3Jg==
+X-Gm-Message-State: AJIora/3XmOf4m/H/yCbvdn419IGpckYMJ+a+dIHGiwCcGUvNvVu7qNV
+        9gNfqr8qM675Ase8Qt7xUsc=
+X-Google-Smtp-Source: AGRyM1umtmOk5qnLsnGcbL/ju4/z5YSUD/snffNJOlMAgvcpnx1K0zsBt6y3p4RhdDd6bvBdw20SMQ==
+X-Received: by 2002:a17:903:1207:b0:16a:7e87:dad3 with SMTP id l7-20020a170903120700b0016a7e87dad3mr14402077plh.99.1656591958042;
+        Thu, 30 Jun 2022 05:25:58 -0700 (PDT)
+Received: from sebin-inspiron ([103.160.233.84])
+        by smtp.gmail.com with ESMTPSA id x20-20020a17090300d400b0016a1252976fsm13244844plc.107.2022.06.30.05.25.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 05:25:57 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 17:55:50 +0530
+From:   Sebin Sebastian <mailmesebin00@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Neal Liu <neal_liu@aspeedtech.com>,
+        Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 -next] usb: gadget: dereference before null check
+Message-ID: <Yr2WTqafL1X565dE@sebin-inspiron>
+References: <20220630044706.10772-1-mailmesebin00@gmail.com>
+ <Yr1IjFBe6JjrDq8n@kroah.com>
+ <Yr2DDkdFdt/A7pmL@sebin-inspiron>
+ <Yr2EaEqEbYC7LViw@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yr2EaEqEbYC7LViw@kroah.com>
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When this property was introduced, it contained underscores, but
-the actual code wants dashes.
-
-Change it from mediatek,rsel_resistance_in_si_unit to
-mediatek,rsel-resistance-in-si-unit.
-
-Fixes: 91e7edceda96 ("dt-bindings: pinctrl: mt8195: change pull up/down description")
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
-
-Note: No devicetree uses this property as of now.
-      Even if any DT did, it wouldn't work, as the pinctrl code checks
-      for 'mediatek,rsel-resistance-in-si-unit'.
-
- .../devicetree/bindings/pinctrl/pinctrl-mt8195.yaml    | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
-index 15989743afd2..b0fea44403e7 100644
---- a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
-@@ -51,7 +51,7 @@ properties:
-     description: The interrupt outputs to sysirq.
-     maxItems: 1
- 
--  mediatek,rsel_resistance_in_si_unit:
-+  mediatek,rsel-resistance-in-si-unit:
-     type: boolean
-     description: |
-       Identifying i2c pins pull up/down type which is RSEL. It can support
-@@ -144,7 +144,7 @@ patternProperties:
-               "MTK_PUPD_SET_R1R0_11" define in mt8195.
-               For pull down type is RSEL, it can add RSEL define & resistance
-               value(ohm) to set different resistance by identifying property
--              "mediatek,rsel_resistance_in_si_unit".
-+              "mediatek,rsel-resistance-in-si-unit".
-               It can support "MTK_PULL_SET_RSEL_000" & "MTK_PULL_SET_RSEL_001"
-               & "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011"
-               & "MTK_PULL_SET_RSEL_100" & "MTK_PULL_SET_RSEL_101"
-@@ -163,7 +163,7 @@ patternProperties:
-               };
-               An example of using si unit resistance value(ohm):
-               &pio {
--                mediatek,rsel_resistance_in_si_unit;
-+                mediatek,rsel-resistance-in-si-unit;
-               }
-               pincontroller {
-                 i2c0_pin {
-@@ -192,7 +192,7 @@ patternProperties:
-               "MTK_PUPD_SET_R1R0_11" define in mt8195.
-               For pull up type is RSEL, it can add RSEL define & resistance
-               value(ohm) to set different resistance by identifying property
--              "mediatek,rsel_resistance_in_si_unit".
-+              "mediatek,rsel-resistance-in-si-unit".
-               It can support "MTK_PULL_SET_RSEL_000" & "MTK_PULL_SET_RSEL_001"
-               & "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011"
-               & "MTK_PULL_SET_RSEL_100" & "MTK_PULL_SET_RSEL_101"
-@@ -211,7 +211,7 @@ patternProperties:
-               };
-               An example of using si unit resistance value(ohm):
-               &pio {
--                mediatek,rsel_resistance_in_si_unit;
-+                mediatek,rsel-resistance-in-si-unit;
-               }
-               pincontroller {
-                 i2c0-pins {
--- 
-2.35.1
-
+On Thu, Jun 30, 2022 at 01:09:28PM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Jun 30, 2022 at 04:33:42PM +0530, Sebin Sebastian wrote:
+> > On Thu, Jun 30, 2022 at 08:54:04AM +0200, Greg Kroah-Hartman wrote:
+> > > On Thu, Jun 30, 2022 at 10:17:06AM +0530, Sebin Sebastian wrote:
+> > > > Fix coverity warning dereferencing before null check. _ep and desc is
+> > > > dereferenced on all paths until the check for null. Move the
+> > > > initializations after the check for null.
+> > > 
+> > > How can those values ever be NULL?
+> > > 
+> > > > Coverity issue: 1518209
+> > > > 
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > 
+> > > kernel test robot did not find this issue.
+> > > 
+> >  After I submitted the PATCH v1, kernel test robot ran some tests and
+> >  produced a report of the things that I broke while creating the patch.
+> >  That's why I kept this tag.
+> 
+> Yes, but the kernel test robot reported your first patch was broken, not
+> that this commit itself was reported by that.  Please drop that, it's
+> confusing I know, and trips lots of people up, but is not needed here.
+> 
+> > 
+> > > > Signed-off-by: Sebin Sebastian <mailmesebin00@gmail.com>
+> > > 
+> > > What commit id does this change fix?
+> > > 
+> >  So should I provide the commit ID of the patch v1 that kernel
+> >  test robot referred to?
+> 
+> No, report the commit id that this commit you are creating fixes.  It
+> had to be added to the tree sometime in the past, right?
+> 
+> > 
+> > > > ---
+> > > >  Changes since v1: Fix the build errors and warnings due to first patch.
+> > > >  Fix the undeclared 'ep' and 'maxpacket' error. Fix the ISO C90 warning.
+> > > > 
+> > > >  drivers/usb/gadget/udc/aspeed_udc.c | 21 ++++++++++++++-------
+> > > >  1 file changed, 14 insertions(+), 7 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+> > > > index d75a4e070bf7..a43cf8dde2a8 100644
+> > > > --- a/drivers/usb/gadget/udc/aspeed_udc.c
+> > > > +++ b/drivers/usb/gadget/udc/aspeed_udc.c
+> > > > @@ -341,26 +341,33 @@ static void ast_udc_stop_activity(struct ast_udc_dev *udc)
+> > > >  static int ast_udc_ep_enable(struct usb_ep *_ep,
+> > > >  			     const struct usb_endpoint_descriptor *desc)
+> > > >  {
+> > > > -	u16 maxpacket = usb_endpoint_maxp(desc);
+> > > > -	struct ast_udc_ep *ep = to_ast_ep(_ep);
+> > > 
+> > > checking that ep is NULL here is an impossible thing on its own.  You
+> > > did change this so that you didn't check this anymore, which is odd as
+> > > you did not mention that in the changelog text :(
+> > > 
+> >  Yes, I missed the checking for ep. I thought of checking it after
+> >  initilizing ep.
+> > 
+> > > > -	struct ast_udc_dev *udc = ep->udc;
+> > > > -	u8 epnum = usb_endpoint_num(desc);
+> > > >  	unsigned long flags;
+> > > >  	u32 ep_conf = 0;
+> > > >  	u8 dir_in;
+> > > >  	u8 type;
+> > > > +	u16 maxpacket;
+> > > > +	struct ast_udc_ep *ep;
+> > > > +	struct ast_udc_dev *udc;
+> > > > +	u8 epnum;
+> > > 
+> > > Why did you reorder these?
+> > > 
+> > This is actually the original order that these were in. I reordered it
+> > while creating the first patch, then I changed it back to the original
+> > order they were in the source tree for this patch.
+> 
+> So this patch does not apply cleanly on linux-next?  We did not apply
+> your intermediate, broken, patch for obvious reasons, so you can not
+> send a change on top of that, right?
+> 
+> > > >  
+> > > > -	if (!_ep || !ep || !desc || desc->bDescriptorType != USB_DT_ENDPOINT ||
+> > > > -	    maxpacket == 0 || maxpacket > ep->ep.maxpacket) {
+> > > > +	if (!_ep || !desc || desc->bDescriptorType != USB_DT_ENDPOINT) {
+> > > >  		EP_DBG(ep, "Failed, invalid EP enable param\n");
+> > > >  		return -EINVAL;
+> > > >  	}
+> > > > -
+> > > 
+> > > Why did you remove this line?
+> > >
+> > I removed the check for maxpacket because it is not initialized in this
+> > part, the check for the same thing comes after initialization.
+> > This is the check for that, this is also included in the patch.
+> > +	if (maxpacket == 0 || maxpacket > ep->ep.maxpacket) {
+> > +               EP_DBG(ep, "Failed, invalid EP enable param\n");
+> > +               return -EINVAL;
+> > +       }
+> > Should I add the check for 'ep' in this part?
+> > 
+> > > Also, your To: line is messed up somehow, please fix your email
+> > > client...
+> > > 
+> > Ok, I will surely do it.
+> > 
+> > > thanks,
+> > > 
+> > > gre gk-h
+> > 
+> > I did many mistakes in the patch v1, so I had to bring this patch to the
+> > original state things were. I left all the declarations in the same
+> > order (which made it seem like reordering) and moved the initialization
+> > part after the check for _ep and desc. 
+> 
+> 
+> Perhaps you might want to start out doing coding style cleanups in
+> drivers/staging/* to get the process of how to submit patches properly
+> and test your changes before sending them out, before going out into the
+> real part of the kernel.
+> 
+> thanks,
+> 
+> greg k-h
+I am sorry to mess things up like this. I understand the entire process
+of sending out patches and to not waste maintainer's time on these kind
+of things.
+This patch does apply cleanly on linux-next. There are no warnings or
+errors while building and no checkpatch errors. Can I just send one
+final patch including proper commit ID and the missing check for ep.
+Thanks for pointing out all these mistakes.

@@ -2,106 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5138562007
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE57562051
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236135AbiF3QMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 12:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
+        id S236310AbiF3Q3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 12:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235383AbiF3QMc (ORCPT
+        with ESMTP id S236296AbiF3Q3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 12:12:32 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F223120B
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 09:12:31 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id q4so30412274qvq.8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 09:12:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HIeZ7ZUFR8uUdavug06JIRw9ETH7oXgy29YJGJmtVOc=;
-        b=b+M1vpvBViKPkT7LE/wlsBdInOEtZXiDskB4CB2QW8+u5WsEPZF0c1RMTs2h9V3xZs
-         pfIZKzeFDEP6J/hbU1K0tq5ZovFpcUV+u9+O56dor8++DCNgfXqQc4mnBtSZkGHlVOqh
-         VR/SMgpXHDLtwHmihcb2288zkxNweUUqu76i4ke3qQmQiZLoSYWT/3waOCXJ975kQNp3
-         G3CDLaQJl45OvtgT5ElISQgnBF3OmbgRogKE2McTxZxpwjXnJHP331Wy5fVKUBr5gVla
-         BADiWcfdnke7tA6xZ3LEGvCAhLh7sb3mtZuJrN+DQ7NMpx5pg3HH8d6AkU+v2ZRj9iHr
-         CSIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HIeZ7ZUFR8uUdavug06JIRw9ETH7oXgy29YJGJmtVOc=;
-        b=ERdn/Mzx4uKUhhJ04Ycq2k+UCVH0ATzI1F5Op41qFWbN6NeEU6sHqJH6vuPh46H5lx
-         L4b/wyFszMLVxaIPcaMZEYHrJM6qMgsbPdvM07HP9OQiFyBtzQ6BPiq14aTIHqs9j50T
-         NSKQsSXQgdzoLyxw7XCCiYX1DhMwPXHdSuWXOKM+saW6XMlAnRh+g9+AKx2bGD14fqhC
-         B0eteJLGZCZ+GujvpVQf38etSIv91ruAlCX8p+gCNp/cf46Q3EzGZb5mda2drIJy6QP4
-         mwyOQGulOvT1MxVZG0mt+/vZmjQJh5/Sm4kmB9X3erHOjCiKCMEb7hgQ7BzSolOBisvR
-         +ESg==
-X-Gm-Message-State: AJIora+zGmN3gf5oisTdiYxXE2A4MQ+VEpq11x2KtAYHf+1FdBjQcOIq
-        i6ZViPZQAU+dZ2DrUUKhsYE=
-X-Google-Smtp-Source: AGRyM1tAaGFAfiUdUktuJ8iBabBFgwZixm+u5RXS89XZXpvo6BcLDkTfSf7S7wxlSX5pUf+1WfdSsQ==
-X-Received: by 2002:ac8:5c0c:0:b0:31b:b39b:12b0 with SMTP id i12-20020ac85c0c000000b0031bb39b12b0mr8264577qti.4.1656605550844;
-        Thu, 30 Jun 2022 09:12:30 -0700 (PDT)
-Received: from MBP.hobot.cc (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with ESMTPSA id m14-20020a05620a24ce00b006af59e9ddeasm6623151qkn.18.2022.06.30.09.12.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 30 Jun 2022 09:12:30 -0700 (PDT)
-From:   Schspa Shi <schspa@gmail.com>
-To:     maz@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, Schspa Shi <schspa@gmail.com>
-Subject: [PATCH] KVM: arm64: Fix 64 bit mmio handle
-Date:   Fri,  1 Jul 2022 00:12:20 +0800
-Message-Id: <20220630161220.53449-1-schspa@gmail.com>
-X-Mailer: git-send-email 2.29.0
+        Thu, 30 Jun 2022 12:29:14 -0400
+Received: from rusty.tulip.relay.mailchannels.net (rusty.tulip.relay.mailchannels.net [23.83.218.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5363527E;
+        Thu, 30 Jun 2022 09:29:10 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 8D92F76206E;
+        Thu, 30 Jun 2022 16:29:06 +0000 (UTC)
+Received: from pdx1-sub0-mail-a214.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id F25F0762210;
+        Thu, 30 Jun 2022 16:29:05 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1656606546; a=rsa-sha256;
+        cv=none;
+        b=g6Rc7cs96fVc7E/heQfoRsmXE48/YQgx+IYoIgE1dULt8rRt/C8mCu3jF4MDf5xg8fKB34
+        TSBp28fBVjebrXgnIld4dJXtV8GCzC0T0Hs7gE2GtLw2u4Ci663J133FCTYIFkR7ikRYM8
+        ES53mdUZ3uZyIHhMh3AJeM93nVnfme9/5se0EhM4uapDX7QkN3l/14Rg+6gsaJo6yg7s47
+        OttR2Q49gq86E8NSgBacT49br9O8znMxVYAefLOC/dgae7BTUmOAkN3z5bF5ORra7Z6jKU
+        YQIZP3VxIC71juX4V5h2H2ShTvhtWkXUkMN2NVattdQg5zcvM67aKvPSquEkgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1656606546;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=9Sb1glpRpYA85hAE32jopfAa1TP5g8OZqmLv3plg0Zk=;
+        b=Rhm4I7d4tiaKM6BLiv441UkhMLkKOwJaYbYdApGB71ko2uG0fz5odW5Dt+JCD+uHel1/OW
+        xpwArZ6dMLSebBKoiU5upm3mza9q/XHPt9OJk7vu1L8RVEWX1WECO0ubbV7psYxQxk7HX2
+        MM60ziTD6BTvKkdCjSJscsaBBlWAYi9WhuhZ9XbBwqfZx8t8T1OfRjy1FwIdCJPCmc9kbx
+        6CwTzLCW02L1Kx8O3W0S2/L9LZM/+0BHQ6lgtdBJSl9239P0FV966t3Q9SzFuZDNY3eYwR
+        1HuqsyNLiKzYxRuSt/kgW11bjR+b5C8JfS6ur7Wahe+ZNk5jx8bbPF+5NZ0/ug==
+ARC-Authentication-Results: i=1;
+        rspamd-689699966c-7cjd8;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Army-Little: 2a18faf73aee121d_1656606546412_1698224174
+X-MC-Loop-Signature: 1656606546412:1314743472
+X-MC-Ingress-Time: 1656606546412
+Received: from pdx1-sub0-mail-a214.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.116.106.91 (trex/6.7.1);
+        Thu, 30 Jun 2022 16:29:06 +0000
+Received: from offworld (unknown [104.36.25.13])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a214.dreamhost.com (Postfix) with ESMTPSA id 4LYkL86Nrdz28;
+        Thu, 30 Jun 2022 09:29:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1656606545;
+        bh=9Sb1glpRpYA85hAE32jopfAa1TP5g8OZqmLv3plg0Zk=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=nnjlTuyuGFynXTWThk4sfTJ9a82f77dhLrXIaXH8hFYvhydWUv5cLlcfKNqwNZnbU
+         zeStXr6xJnKjhYUtYjczmItscESH7yIhSmm3/FPSlwmmi4ualjb9Xz3ZTcjgj1iJhd
+         2m1NHIV4dZSjL6OYOxa6vSnf2D5i9IVeEY7xz44NRHFA2Ajy4GA7nzTzZR74Qz57a/
+         2li1pDID/zNQAHcpy7ew3WY0t8BMaJRQS/VgVnYXcTvDXCkBoyWw3lpYiLeyRPt5HE
+         6d4FDewmA1OeTT2iGPyDw15I3qoiIcDCLLIjiZqffRdB+tHzzngRb1XajflB7CivLD
+         LBLpRwWvBTeBQ==
+Date:   Thu, 30 Jun 2022 09:14:06 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH V12 4/9] cxl/pci: Create PCI DOE mailbox's for memory
+ devices
+Message-ID: <20220630161406.yglzoxn2va3bhts4@offworld>
+References: <20220628041527.742333-1-ira.weiny@intel.com>
+ <20220628041527.742333-5-ira.weiny@intel.com>
+ <20220628153317.00002e36@Huawei.com>
+ <Yr01iZhuG5YHThDg@iweiny-desk3>
+ <20220630163240.00003596@Huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220630163240.00003596@Huawei.com>
+User-Agent: NeoMutt/20220429
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the len is 8 bytes, we can't get the correct sign extend for
-be system.
+On Thu, 30 Jun 2022, Jonathan Cameron wrote:
 
-Fix the mask type len and the comparison of length.
+>On Wed, 29 Jun 2022 22:32:57 -0700 Ira Weiny <ira.weiny@intel.com> wrote:
 
-Signed-off-by: Schspa Shi <schspa@gmail.com>
----
- arch/arm64/kvm/mmio.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>> I _thought_ that we did not care if some mailboxes failed or not.
+>
+>I have a different view to Dan on this.  In my view if your hardware is
+>not working in any way at all scream like mad don't carry on... Dan
+>is keen to try to muddle onwards.
 
-diff --git a/arch/arm64/kvm/mmio.c b/arch/arm64/kvm/mmio.c
-index 3dd38a151d2a6..0692f8b18f35c 100644
---- a/arch/arm64/kvm/mmio.c
-+++ b/arch/arm64/kvm/mmio.c
-@@ -81,8 +81,8 @@ unsigned long kvm_mmio_read_buf(const void *buf, unsigned int len)
- int kvm_handle_mmio_return(struct kvm_vcpu *vcpu)
- {
- 	unsigned long data;
-+	unsigned long mask;
- 	unsigned int len;
--	int mask;
- 
- 	/* Detect an already handled MMIO return */
- 	if (unlikely(!vcpu->mmio_needed))
-@@ -97,7 +97,7 @@ int kvm_handle_mmio_return(struct kvm_vcpu *vcpu)
- 		data = kvm_mmio_read_buf(run->mmio.data, len);
- 
- 		if (kvm_vcpu_dabt_issext(vcpu) &&
--		    len < sizeof(unsigned long)) {
-+		    len <= sizeof(unsigned long)) {
- 			mask = 1U << ((len * 8) - 1);
- 			data = (data ^ mask) - mask;
- 		}
--- 
-2.37.0
+I am also of the idea of not carrying on upon any indication of failure.
 
+>>
+>> If CDAT is not supported on any of the mailboxes found then CDAT will not show
+>> up on sysfs (as per Dan's last comment).  If it was supported on a mailbox but
+>> no data is found the sysfs will show up but be 0 length.
+>>
+>> At this layer I thought we agreed to skip over these errors.  If a protocol is
+>> needed at a higher layer and it is not found on any of the mailboxes the errors
+>> should show up in that layer.  In this series CDAT is not 100% necessary as
+>> devices can work without it.  So the errors were mostly paper'ed over in favor
+>> of just printing error messages and muddle on.
+>>
+>> The xa_insert() deserves a pci_err() though.
+>
+>That's probably the minimum we should do.  The xa_insert() failing is something
+>horrible going wrong in our software / host afterall.
+
+Yes. And in addition, devm_cxl_pci_create_doe() should return any error status, and
+cxl_pci_probe() can choose to omit any errors, but it's still better to have it.
+
+Thanks,
+Davidlohr

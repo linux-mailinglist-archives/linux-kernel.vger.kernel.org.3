@@ -2,94 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6987561EAD
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0859F561EB1
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235438AbiF3PCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 11:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39356 "EHLO
+        id S232881AbiF3PDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 11:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235286AbiF3PCW (ORCPT
+        with ESMTP id S235328AbiF3PC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 11:02:22 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33D41FCDB
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:02:21 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id m14-20020a17090a668e00b001ee6ece8368so3376406pjj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:02:21 -0700 (PDT)
+        Thu, 30 Jun 2022 11:02:57 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D386021E29
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:02:55 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id o23so23454028ljg.13
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:02:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9sVpG9rw+5yvfJDEn00fP0oAwAgYQhlkWm1yb+6MkVQ=;
-        b=NiW6mwj9iUsBV+W7Ai/+PWhAw39Y9q6S++ER4iQXFo1lO5ubXIPgQGODZnubh4TpZ9
-         0N2XCniSpn8Y8y6CCkYJty8KQ9Iot6ipgDn8K1kbsIRsp5bm2Y3+1OpgSLWu3VhYSIam
-         NPFLUooLt7L7siRALdEECBO9DTHlbHS4Vq131X17ZqvvLP4ozqDximEx5OzBtbGuGzkZ
-         zPXeaESFKYAtphPdPOeq5RUameMhlbkH6tuWpqq6yLpzFQxr6hWYPN/0VxiWJshDRhKC
-         +rMkNz+405Ymt7j75iU6v0ugXDphKKBxrFsJ5Kz24upvEQLX1rK0J/ygvYxNaepQ5HNq
-         gI9Q==
+        bh=QQUZdryIvAGUEfbuSZ9RcgUBinauPA6CKY/nGGnI/Tc=;
+        b=OmSMy9DLYsZsfeGNqiOj5eUckzrgJF30/OyZbA1hLicM+qU7p41yr52k6Cw8V2f3W0
+         oADmaa7TM7Z4rDS8rxo8R5jo4BS/zJy63r0lOdjmA1iDTKBTPwf9Dk0FLwlku+O8aTtL
+         xdPPQm59KITc4ru8+CbDuqOqySuM4uoXkdIbM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9sVpG9rw+5yvfJDEn00fP0oAwAgYQhlkWm1yb+6MkVQ=;
-        b=rHWo2Pa3ge78mnv+l93itZvsi4sz1W0X1l30ix92ZCTMq/Ch3PHQ9F5esmnzV2q8L+
-         q0xVQx0zd1qYkZjHsVQAihXqiuj9OpZHncyO+Aj+th5TpsSZWfN17eeUlyENBySuh8D5
-         K7vf1965C/xxiN7CYLiKXbzvyvyrqlpGgM4FUh6t1Lgjxm0nLn3j8Bx/A97xOeUCNrET
-         Np3IzvkADFhq430OJWoOHEyYgaufc1oRrnzFSGCXkedg0RZIJP9nxK643fNRwAoJvPPl
-         4fv3nLv7Z3t++OayN6iFKcYxNenTADQ95v5xSVsoWT3o5/aTQJIAqjNk1ElCiugXFaUo
-         D37w==
-X-Gm-Message-State: AJIora+BkkLbxT45bRWwj/1eB1fOrfskWu8+K8CnM/CXpszXSjJR1ADp
-        C+4M1m0OK1XxiViEnuNm8bMcsWY3lK0iRFbz6V9agg==
-X-Google-Smtp-Source: AGRyM1u27TEN+VQNqG5ylin9u0PllIdI94eXfKZEQCbN5w4n9kKS+0BOVyUk+UR7emocZGKred4OE4zPUfo90QF4eYc=
-X-Received: by 2002:a17:90b:1d8c:b0:1ed:54c3:dcca with SMTP id
- pf12-20020a17090b1d8c00b001ed54c3dccamr12512122pjb.126.1656601340985; Thu, 30
- Jun 2022 08:02:20 -0700 (PDT)
+        bh=QQUZdryIvAGUEfbuSZ9RcgUBinauPA6CKY/nGGnI/Tc=;
+        b=sV2nSYNdd05pInX40iHmST1E7VD/DUd7PZXQjRHIbt43TOz3PLi8NR16EHGyOCFK7K
+         Wp/VeB2FSeDSsl8VlgdKcGTPhlg4KseAdnJmcACqWgfgx5UIAmTpL8o6MbSGGBqPl/2K
+         tyTGH1bV7FE5zTEIrOZ7fHdtT/gbOFXQ0MBaPLA/Rr0OexMe4DrOLdF8bu3oIcYV/kL9
+         KZpGCl4KcvVnr507j5MIgtO3AnUuHqgeLS+ruUGegLzSIV8T2fkgYJnhaeORz/JQxDRc
+         dqJ4r/VWcrsXjA7MBdv3nvx3SzNunM9bRRGJERJVF1xY8bXeHj16dY5wazkTWdTlKnUf
+         Q1tw==
+X-Gm-Message-State: AJIora+cM/6cBhKX9pAHI7JuOfl9om8XZn3gCRSzwoqDMgmGRjoEChVi
+        g3N/43l0cJbO+VkI+7BWEKCDqsMtwL1TJzyIofU=
+X-Google-Smtp-Source: AGRyM1sp9kXo9fpqMUBL+nXyJSIxqgaQjvbqe6JuRLl/iTnYmipphZj6wAynhmbVwwL3+qUo3s8vVQ==
+X-Received: by 2002:a17:907:75c8:b0:72a:4b50:b029 with SMTP id jl8-20020a17090775c800b0072a4b50b029mr6545547ejc.394.1656601362966;
+        Thu, 30 Jun 2022 08:02:42 -0700 (PDT)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
+        by smtp.gmail.com with ESMTPSA id bd25-20020a056402207900b004357738e04esm13135411edb.21.2022.06.30.08.02.42
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 08:02:42 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id o4so23801010wrh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:02:42 -0700 (PDT)
+X-Received: by 2002:a5d:4046:0:b0:21a:3a12:239e with SMTP id
+ w6-20020a5d4046000000b0021a3a12239emr9029135wrp.138.1656601361824; Thu, 30
+ Jun 2022 08:02:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220630083044.997474-1-yosryahmed@google.com>
-In-Reply-To: <20220630083044.997474-1-yosryahmed@google.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 30 Jun 2022 08:02:10 -0700
-Message-ID: <CALvZod4n1GqdNU49YVDxC1Ek_6Ob-HKUSm+48GJ_Y_gZw24pCQ@mail.gmail.com>
-Subject: Re: [PATCH v3] mm: vmpressure: don't count proactive reclaim in vmpressure
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>
+References: <SG2PR03MB5006F091C2016ADE8A9A208ECCBA9@SG2PR03MB5006.apcprd03.prod.outlook.com>
+In-Reply-To: <SG2PR03MB5006F091C2016ADE8A9A208ECCBA9@SG2PR03MB5006.apcprd03.prod.outlook.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 30 Jun 2022 08:02:29 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WFYYMNtQmwCKKYQV240-0vds+EOv3=2+N6=i0sX39R0g@mail.gmail.com>
+Message-ID: <CAD=FV=WFYYMNtQmwCKKYQV240-0vds+EOv3=2+N6=i0sX39R0g@mail.gmail.com>
+Subject: Re: [PATCH] FROMLIST: arm64: dts: qcom: Add LTE SKUs for
+ sc7280-villager family
+To:     Jimmy Chen <jinghung.chen3@hotmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Jimmy Chen <jinghung.chen43@yahoo.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 1:30 AM Yosry Ahmed <yosryahmed@google.com> wrote:
->
-> vmpressure is used in cgroup v1 to notify userspace of reclaim
-> efficiency events, and is also used in both cgroup v1 and v2 as a signal
-> for memory pressure for networking, see
-> mem_cgroup_under_socket_pressure().
->
-> Proactive reclaim intends to probe memcgs for cold memory, without
-> affecting their performance. Hence, reclaim caused by writing to
-> memory.reclaim should not trigger vmpressure.
->
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+Hi,
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+On Wed, Jun 29, 2022 at 11:27 PM Jimmy Chen <jinghung.chen3@hotmail.com> wrote:
+>
+> From: Jimmy Chen <jinghung.chen43@yahoo.com>
+>
+> This adds LTE skus for villager device tree files.
+>
+> Signed-off-by: Jimmy Chen <jinghung.chen43@yahoo.com>
+> Signed-off-by: Jimmy Chen <jinghung.chen3@hotmail.com>
+
+Pick one email address and use it. Having two Signed-off-by from the
+same person with different email addresses is odd.
+
+
+>  arch/arm64/boot/dts/qcom/Makefile                 |  3 +++
+>  .../arm64/boot/dts/qcom/sc7280-chrome-common.dtsi |  7 -------
+>  arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts |  1 +
+>  .../qcom/sc7280-herobrine-herobrine-r1-lte.dts    | 14 ++++++++++++++
+>  .../boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi   | 15 +++++++++++++++
+>  .../dts/qcom/sc7280-herobrine-villager-r0-lte.dts | 14 ++++++++++++++
+>  .../dts/qcom/sc7280-herobrine-villager-r1-lte.dts | 14 ++++++++++++++
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi          |  1 +
+>  8 files changed, 62 insertions(+), 7 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1-lte.dts
+>  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
+>  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0-lte.dts
+>  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
+
+NOTE: ${SUBJECT} for this patch has "FROMLIST". Please remove that.
+That's a prefix that's added when patches are picked from an upstream
+mailing list into a downstream Chrome OS tree.
+
+Also note that we've started updating the "bindings" file for boards.
+Please update "Documentation/devicetree/bindings/arm/qcom.yaml" as
+part of your series. Ideally that will make it a two-part series.
+Patch #1 updates the bindings and patch #2 does the device tree
+changes.
+
+
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 2f8aec2cc6db6..ab1066883c468 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -85,7 +85,10 @@ dtb-$(CONFIG_ARCH_QCOM)      += sc7180-trogdor-r1.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)        += sc7180-trogdor-r1-lte.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)        += sc7280-herobrine-crd.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)        += sc7280-herobrine-herobrine-r1.dtb
+> +dtb-$(CONFIG_ARCH_QCOM) += sc7280-herobrine-herobrine-r1-lte.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)        += sc7280-herobrine-villager-r0.dtb
+> +dtb-$(CONFIG_ARCH_QCOM) += sc7280-herobrine-villager-r0-lte.dtb
+> +dtb-$(CONFIG_ARCH_QCOM) += sc7280-herobrine-villager-r1-lte.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)        += sc7280-idp.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)        += sc7280-idp2.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)        += sc7280-crd-r3.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
+> index 9f4a9c263c351..b1f83ddb4e23a 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
+> @@ -83,13 +83,6 @@ spi_flash: flash@0 {
+>         };
+>  };
+>
+> -/* Modem setup is different on Chrome setups than typical Qualcomm setup */
+> -&remoteproc_mpss {
+> -       status = "okay";
+> -       compatible = "qcom,sc7280-mss-pil";
+> -       iommus = <&apps_smmu 0x124 0x0>, <&apps_smmu 0x488 0x7>;
+> -       memory-region = <&mba_mem>, <&mpss_mem>;
+> -};
+
+Please rebase your patch the Qualcomm tree, AKA the "for-next" branch
+of git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git
+
+...when I applied your patch I got a merge conflict here because
+upstream has commit 2a77ada5168a ("arm64: dts: qcom: sc7280: Enable
+wifi for Chrome OS boards") and commit 1c20d3dbaa67 ("arm64: dts:
+qcom: sc7280: Set modem FW path for Chrome OS boards")
+
+
+>  /* Increase the size from 2.5MB to 8MB */
+>  &rmtfs_mem {
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> index a4ac33c4fd59a..7aaba5e51af01 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> @@ -8,6 +8,7 @@
+>  /dts-v1/;
+>
+>  #include "sc7280-herobrine.dtsi"
+> +#include "sc7280-herobrine-lte-sku.dtsi"
+>
+>  / {
+>         model = "Qualcomm Technologies, Inc. sc7280 CRD platform (rev5+)";
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1-lte.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1-lte.dts
+> new file mode 100644
+> index 0000000000000..e37773fd63b3b
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1-lte.dts
+
+Thinking about this more, I think we _shouldn't_ do this for
+herobrine-r1 right now. No herobrine-r1 boards were actually strapped
+to tell LTE vs. non-LTE and people just shoved LTE vs. non-LTE qcards
+on randomly.
+
+There is still some plan to have the bootloader identify LTE vs. WiFi
+qcards and use a different SKU ID bit, so maybe we'll solve this
+eventually. ...but for now leave herobrine alone. Personally for now
+I'd suggest adding #include "sc7280-herobrine-lte-sku.dtsi" to the
+existing "sc7280-herobrine-herobrine-r1.dts" file.
+
+
+> @@ -0,0 +1,14 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Google Herobrine board device tree source
+> + *
+> + * Copyright 2022 Google LLC.
+> + */
+> +
+> +#include "sc7280-herobrine-villager-r0.dts"
+> +#include "sc7280-herobrine-lte-sku.dtsi"
+> +
+> +/{
+> +       model = "Google Herobrine (rev1+) with LTE";
+> +       compatible = "google,herobrine-sku0", "qcom,sc7280";
+> +};
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
+> new file mode 100644
+> index 0000000000000..c628910b310d3
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
+> @@ -0,0 +1,15 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +  /*
+> +   * Google Herobrine dts fragment for LTE SKUs
+> +   *
+> +   * Copyright 2022 Google LLC.
+> +   */
+
+Why is the copyright header comment indented by two spaces? Please fix.
+
+...also please add a blank line here after the header.

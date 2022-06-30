@@ -2,96 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32757561984
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF762561983
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235140AbiF3Lqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 07:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
+        id S235146AbiF3Lqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 07:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235123AbiF3LqV (ORCPT
+        with ESMTP id S235144AbiF3Lqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 07:46:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E225A44B;
-        Thu, 30 Jun 2022 04:46:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0A8A61639;
-        Thu, 30 Jun 2022 11:46:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1447FC34115;
-        Thu, 30 Jun 2022 11:46:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656589580;
-        bh=B8ISvDEASl8FP59YKzwtXMHgySxwzT/4KstMqaLQL5o=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=FLT1Xl+igkEAna5MAvod65f8ERT05WB3ErDtcs6yKGTb8XubADtJ40Ru8AIM6vWQM
-         Q+ULqAkMw1S/1DhbomngHfKp6IN4Ch0Y6QYH52ugCPKXK1R5su59g2TIIDhz9Tk8tG
-         e0T4Kv8saaI7vxjcR3kqn8JQm9HAtqBz4hudBsTTP1wAA1pYHvEBLfPE45mC7X6APU
-         mwSWzvcVf+yzfVmUG+wiPeGHEMzMLk0uKCtzTw7kKQnNTK8nxiXCherSLolKqByfFy
-         FOCpeHQnrEyzUblulmpVZ+Me7AdTvaYoYPwV0LAR4AsjolUWGzUUE9t13tD13MeE0l
-         14sUTDuKSoFBQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     clg@kaod.org, linux-spi@vger.kernel.org
-Cc:     andrew@aj.id.au, joel@jms.id.au, openbmc@lists.ozlabs.org,
-        p.yadav@ti.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        chin-ting_kuo@aspeedtech.com
-In-Reply-To: <20220622161617.3719096-1-clg@kaod.org>
-References: <20220622161617.3719096-1-clg@kaod.org>
-Subject: Re: [PATCH v3 0/2] spi: aspeed: Fix division by zero
-Message-Id: <165658957778.347350.13855044340681991332.b4-ty@kernel.org>
-Date:   Thu, 30 Jun 2022 12:46:17 +0100
+        Thu, 30 Jun 2022 07:46:46 -0400
+X-Greylist: delayed 166517 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Jun 2022 04:46:44 PDT
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3E55A465
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 04:46:44 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1656589589tuvgz5rg
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 30 Jun 2022 19:46:23 +0800 (CST)
+X-QQ-SSF: 01400000002000G0S000B00A0000000
+X-QQ-FEAT: KW3QVT31YreSECNQZBZXGPz7IqsT51g4EWvPhu8C7SBOUUi5kLMQ4+OIWZCfr
+        /qfoTuJvmM8WfyAe2VaC8t9qNZMWCr0GlgFgPEjxPOYJXoW6053qLUGWzqmMFhPy96s01LD
+        dosYsjA84JSimPvtVUIkgs6KigYUAkiHSon8bFTZ6Wa1exIzr7nMqy1K1GuTXTH9jbhMal5
+        o9PksIoBkfAgTJAHeYNpKsIBpdwdG3DS6f36ZsVs065b+kkS0KV2I0Jzb1CceAnBq3Jnqd6
+        Ji5BwNr9/YNeSuSxuLMHe/+8oLav8E6KphGiEGZ3qMbKBrD1GzBIob3WpFbw0QFcVPGZxM5
+        4ssi0wVUWCpnjILUujNkJk/cZniQW2h3P7iRR5L
+X-QQ-GoodBg: 2
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     stable@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guo-Feng Fan <vincent_fann@realtek.com>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Meng Tang <tangmeng@uniontech.com>
+Subject: [PATCH 5.15 1/2] rtw88: 8821c: support RFE type4 wifi NIC
+Date:   Thu, 30 Jun 2022 19:46:20 +0800
+Message-Id: <20220630114621.19688-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign8
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Jun 2022 18:16:15 +0200, Cédric Le Goater wrote:
-> Here is a small series adding some debug and fixing a division by zero
-> on a board using normal speed reads.
-> 
-> Thanks,
-> 
-> C.
-> 
-> [...]
+From: Guo-Feng Fan <vincent_fann@realtek.com>
 
-Applied to
+commit b789e3fe7047296be0ccdbb7ceb0b58856053572 upstream.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+RFE type4 is a new NIC which has one RF antenna shares with BT.
+RFE type4 HW is the same as RFE type2 but attaching antenna to
+aux antenna connector.
 
-Thanks!
+RFE type2 attach antenna to main antenna connector.
+Load the same parameter as RFE type2 when initializing NIC.
 
-[1/2] spi: aspeed: Add dev_dbg() to dump the spi-mem direct mapping descriptor
-      commit: 8988ba7dec43aabd43adb1214b922b8873e9da88
-[2/2] spi: aspeed: Fix division by zero
-      commit: 30554a1f0fd6a5d2e2413bdc05389995d5611736
+Signed-off-by: Guo-Feng Fan <vincent_fann@realtek.com>
+Signed-off-by: Ping-Ke Shih <pkshih@realtek.com>
+Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+Link: https://lore.kernel.org/r/20210922023637.9357-1-pkshih@realtek.com
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+---
+ drivers/net/wireless/realtek/rtw88/rtw8821c.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+diff --git a/drivers/net/wireless/realtek/rtw88/rtw8821c.c b/drivers/net/wireless/realtek/rtw88/rtw8821c.c
+index f405f42d1c1b..746f6f8967d8 100644
+--- a/drivers/net/wireless/realtek/rtw88/rtw8821c.c
++++ b/drivers/net/wireless/realtek/rtw88/rtw8821c.c
+@@ -304,7 +304,8 @@ static void rtw8821c_set_channel_rf(struct rtw_dev *rtwdev, u8 channel, u8 bw)
+ 	if (channel <= 14) {
+ 		if (rtwdev->efuse.rfe_option == 0)
+ 			rtw8821c_switch_rf_set(rtwdev, SWITCH_TO_WLG);
+-		else if (rtwdev->efuse.rfe_option == 2)
++		else if (rtwdev->efuse.rfe_option == 2 ||
++			 rtwdev->efuse.rfe_option == 4)
+ 			rtw8821c_switch_rf_set(rtwdev, SWITCH_TO_BTG);
+ 		rtw_write_rf(rtwdev, RF_PATH_A, RF_LUTDBG, BIT(6), 0x1);
+ 		rtw_write_rf(rtwdev, RF_PATH_A, 0x64, 0xf, 0xf);
+@@ -777,6 +778,15 @@ static void rtw8821c_coex_cfg_ant_switch(struct rtw_dev *rtwdev, u8 ctrl_type,
+ 	if (switch_status == coex_dm->cur_switch_status)
+ 		return;
+ 
++	if (coex_rfe->wlg_at_btg) {
++		ctrl_type = COEX_SWITCH_CTRL_BY_BBSW;
++
++		if (coex_rfe->ant_switch_polarity)
++			pos_type = COEX_SWITCH_TO_WLA;
++		else
++			pos_type = COEX_SWITCH_TO_WLG_BT;
++	}
++
+ 	coex_dm->cur_switch_status = switch_status;
+ 
+ 	if (coex_rfe->ant_switch_diversity &&
+@@ -1502,6 +1512,7 @@ static const struct rtw_intf_phy_para_table phy_para_table_8821c = {
+ static const struct rtw_rfe_def rtw8821c_rfe_defs[] = {
+ 	[0] = RTW_DEF_RFE(8821c, 0, 0),
+ 	[2] = RTW_DEF_RFE_EXT(8821c, 0, 0, 2),
++	[4] = RTW_DEF_RFE_EXT(8821c, 0, 0, 2),
+ };
+ 
+ static struct rtw_hw_reg rtw8821c_dig[] = {
+-- 
+2.20.1
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

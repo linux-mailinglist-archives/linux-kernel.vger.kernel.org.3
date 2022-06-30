@@ -2,137 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B652556166E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9069B561678
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234111AbiF3JfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 05:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
+        id S234209AbiF3Jgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 05:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234049AbiF3JfU (ORCPT
+        with ESMTP id S234321AbiF3Jgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 05:35:20 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FFE42EDC
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:35:19 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so2351332pjl.5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:35:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rL6DMGGhflB32+5gUnVeD0pR8+KsqaqZLuRBQF3G2Qk=;
-        b=VhbiN6QyzOQOkJswgUidFDK6rgIO8t1TbbGxo8RhSWrIlgiw94sKfZ7VHhRWHe7kA/
-         up/kzUI+aGzDT+fMJN4pYKiasBt3t/DhEym5ofBiVTpWGbpsWck6fgQMQKesrjPRHsta
-         yL9TTe4GX6xuY0mQQTWABxl+gm8iTK42AlA8dQItHMauru98jQ4ipRnLQf0Toi8RE15J
-         o7YuidgsIiK0UnZ0A09zsRuThzXo8qNqJVy1ndNDfpbDh43CuMDHERpStCTKI8L1DQ8g
-         L+mdWBHA/D607l17RSiuztqOynugC0YErU74JeuP+KcBaG7BsyyBlwD1ug67r7/ETZDU
-         t29Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rL6DMGGhflB32+5gUnVeD0pR8+KsqaqZLuRBQF3G2Qk=;
-        b=Y91tC20hM09sH4STuPQODbbZzZCMDQC0CPlaQbWPhcPtNSsuCJcA8s3y7NKzunJOGp
-         UtwFjPgYZej+L40+BsUleDUTvHn6WwRzIUyDP0WTHfEZVHbGzEnVDrOTPmnp+lMvS5YA
-         pm0nzdD4gRbrmiynRau9X1qaxIlYkBFnyhnCgIGOd10NML29wEhtjU9e+6Ob+ybf5kqS
-         aR9lsj9Jamz+8vMro8awiu7US6qgQ8bZeTzUkCEJ5khtRQNcReCCTGajQ46NKw7TJz3L
-         oXfdQcdkwmLcmfDNatuvpURGnaYfsJPHxvNR8+vrStUjHdaYcLFXaIY/ndhVy48VT1CB
-         MZ/A==
-X-Gm-Message-State: AJIora+EWgUa7K3Fcyn0kwrp04NYzbb2BgrgHUpLU4To37Y0MzIVJ17Y
-        AcO3Gy7UhXu0iG/lw4Hagrz29A==
-X-Google-Smtp-Source: AGRyM1upCGl6d90CWWZX08Fxj8CQnHyQl0xE9J+whD56/1jigDVzXVNjFr3eYykIwCabp+TWn5PvxA==
-X-Received: by 2002:a17:90b:4b48:b0:1ec:fc87:691c with SMTP id mi8-20020a17090b4b4800b001ecfc87691cmr11029817pjb.120.1656581718926;
-        Thu, 30 Jun 2022 02:35:18 -0700 (PDT)
-Received: from localhost ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id b14-20020a17090a550e00b001e31f4cc977sm3860054pji.56.2022.06.30.02.35.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 02:35:18 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 17:35:14 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     James Houghton <jthoughton@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Jue Wang <juew@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 04/26] hugetlb: make huge_pte_lockptr take an
- explicit shift argument.
-Message-ID: <Yr1uUmfA/iWO740v@FVFYT0MHHV2J.usts.net>
-References: <20220624173656.2033256-1-jthoughton@google.com>
- <20220624173656.2033256-5-jthoughton@google.com>
- <YroYaWVvNZJvtqsH@monkey>
- <Yrvsn66c+UI8ZQlO@FVFYT0MHHV2J.usts.net>
- <Yry+PPHSat2uN+aG@monkey>
- <CADrL8HX9OkuWzpODBzHx-6-7_SLJ1YCCe5HxXdPa4ibqeQZu3A@mail.gmail.com>
- <YrzRLVQaYtYAYsEa@monkey>
+        Thu, 30 Jun 2022 05:36:45 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9221643381
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:36:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656581804; x=1688117804;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=k0kajREAJGyqUcdM7FLlH8cIL8gJhsUD4HxbAL58rOc=;
+  b=eYvY14CDNF9XlNH/fNKaHWzsQY13vMfybJ/HBcS9+B/bbuxLSrvWHtuP
+   GU3R7sWBMgqMNjblSCjFdE4uAKP1GX15K9v/65COdNz1C0Y9Uxk+/ezye
+   fAIsRaLKg8+cZHVON6CBLej/82tIXrlkWOGPwawyWZmh7+yH2jgrkvrBj
+   mUaZWLtrSf9ihtO2HCiMyxNDw/aH+bsbuDFRXyn3On5KZtUya3IThPDap
+   x7xemHSxSEjVCVVD6iYMi6C9ETfnonxQBfiZ2N+oIHB0LXkDGMdWps6lV
+   HTtSccM38PYWWJ1vm8bocpTvcysZT+/DV6zNICH6SyizyZjA0lfc6yZdb
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="283399039"
+X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
+   d="scan'208";a="283399039"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 02:36:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
+   d="scan'208";a="917982056"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Jun 2022 02:36:42 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o6qbK-000CYs-10;
+        Thu, 30 Jun 2022 09:36:42 +0000
+Date:   Thu, 30 Jun 2022 17:36:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Simo Sorce <simo@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Subject: ERROR: modpost: "pkcs7_supply_detached_data"
+ [crypto/asymmetric_keys/x509_key_parser.ko] undefined!
+Message-ID: <202206301754.H9rIzcFy-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YrzRLVQaYtYAYsEa@monkey>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 03:24:45PM -0700, Mike Kravetz wrote:
-> On 06/29/22 14:39, James Houghton wrote:
-> > On Wed, Jun 29, 2022 at 2:04 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
-> > >
-> > > On 06/29/22 14:09, Muchun Song wrote:
-> > > > On Mon, Jun 27, 2022 at 01:51:53PM -0700, Mike Kravetz wrote:
-> > > > > On 06/24/22 17:36, James Houghton wrote:
-> > > > > > This is needed to handle PTL locking with high-granularity mapping. We
-> > > > > > won't always be using the PMD-level PTL even if we're using the 2M
-> > > > > > hugepage hstate. It's possible that we're dealing with 4K PTEs, in which
-> > > > > > case, we need to lock the PTL for the 4K PTE.
-> > > > >
-> > > > > I'm not really sure why this would be required.
-> > > > > Why not use the PMD level lock for 4K PTEs?  Seems that would scale better
-> > > > > with less contention than using the more coarse mm lock.
-> > > > >
-> > > >
-> > > > Your words make me thing of another question unrelated to this patch.
-> > > > We __know__ that arm64 supports continues PTE HugeTLB. huge_pte_lockptr()
-> > > > did not consider this case, in this case, those HugeTLB pages are contended
-> > > > with mm lock. Seems we should optimize this case. Something like:
-> > > >
-> > > > diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> > > > index 0d790fa3f297..68a1e071bfc0 100644
-> > > > --- a/include/linux/hugetlb.h
-> > > > +++ b/include/linux/hugetlb.h
-> > > > @@ -893,7 +893,7 @@ static inline gfp_t htlb_modify_alloc_mask(struct hstate *h, gfp_t gfp_mask)
-> > > >  static inline spinlock_t *huge_pte_lockptr(struct hstate *h,
-> > > >                                            struct mm_struct *mm, pte_t *pte)
-> > > >  {
-> > > > -       if (huge_page_size(h) == PMD_SIZE)
-> > > > +       if (huge_page_size(h) <= PMD_SIZE)
-> > > >                 return pmd_lockptr(mm, (pmd_t *) pte);
-> > > >         VM_BUG_ON(huge_page_size(h) == PAGE_SIZE);
-> > > >         return &mm->page_table_lock;
-> > > >
-> > > > I did not check if elsewhere needs to be changed as well. Just a primary
-> > > > thought.
-> > 
-> > I'm not sure if this works. If hugetlb_pte_size(hpte) is PAGE_SIZE,
-> > then `hpte.ptep` will be a pte_t, not a pmd_t -- I assume that breaks
-> > things. So I think, when doing a HugeTLB PT walk down to PAGE_SIZE, we
-> > need to separately keep track of the location of the PMD so that we
-> > can use it to get the PMD lock.
-> 
-> I assume Muchun was talking about changing this in current code (before
-> your changes) where huge_page_size(h) can not be PAGE_SIZE.
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d9b2ba67917c18822c6a09af41c32fa161f1606b
+commit: 3cde3174eb910513d32a9ec8a9b95ea59be833df certs: Add FIPS selftests
+date:   9 days ago
+config: nios2-randconfig-r023-20220630 (https://download.01.org/0day-ci/archive/20220630/202206301754.H9rIzcFy-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3cde3174eb910513d32a9ec8a9b95ea59be833df
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 3cde3174eb910513d32a9ec8a9b95ea59be833df
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash
 
-Yes, that's what I meant.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks. 
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "pkcs7_supply_detached_data" [crypto/asymmetric_keys/x509_key_parser.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

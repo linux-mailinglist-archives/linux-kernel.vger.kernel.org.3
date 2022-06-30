@@ -2,133 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D04D5620A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3E65620AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236136AbiF3Q5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 12:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
+        id S236222AbiF3Q51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 12:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbiF3Q5J (ORCPT
+        with ESMTP id S236287AbiF3Q5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 12:57:09 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B188393DC;
-        Thu, 30 Jun 2022 09:57:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656608229; x=1688144229;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bL9nkQHpWXRcPQiclQNvTJObFea+2bIOo5Icywa3vMA=;
-  b=fmrnj/6XuSpY1hnOWZabHa7oDtPIZ/7Bh+RzopLp14OHknBAX57nHps+
-   hL5jBriVpX/QkW93R0zu0Im+Scz9SCMknY/iOCVSHSS2S8n+mKecZgyHQ
-   Bj7eBMp9wg9++qnorxgkRFae5QI68Ufol1Zw3FVTWM9ltXapLCo//Tj26
-   9Kxt8LZ2qLG3s4QZZ6QJUPHIBI+jiJrwD8thm/mMC7PGeyX+J3CV/8SMn
-   PUlmia2grWt0+sj7f7hIdMOsNypeNBNyPtP/nF2FJrYVf6/8tUDwXrhTm
-   a/SMH+lmmn9h8jAOslm763iFDv28yTpVnQqU9eUHwUpe3DyX9d9HKP6LI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="271175238"
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="271175238"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 09:57:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="623800223"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga001.jf.intel.com with ESMTP; 30 Jun 2022 09:57:02 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25UGv0GF022621;
-        Thu, 30 Jun 2022 17:57:00 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
+        Thu, 30 Jun 2022 12:57:22 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC07393DC;
+        Thu, 30 Jun 2022 09:57:21 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id p9so12491515ilj.7;
+        Thu, 30 Jun 2022 09:57:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cSCjzkkaYP9MYdWZQafK4xMoYiSrEDWkLIVS/pLNRR8=;
+        b=JmV7Xak6rkAw/IIrTD8iY8w38WPI88kBk7nLKfjetfg04LNFPiUXEDkjmISZec4N3H
+         GXm40CZ9XEeDb7iLPScDqs5zcJ179gLte5Oe2F/UogWu8POy64s6v4c3A5uoJxwi/uPr
+         ohFaziFaTPf0Ko3EnxK7cclEo3VI468FmXqzg/RxVDIXadLL3bae36JGdbQwLhk0Ub7n
+         VomTJEN8tIkBhmTGtiEEDpsVI9eEH3jew/PnM4pmqkD67oowqrRdCqq1AV6UmYHcNygO
+         nDRAHxjpZN7LbKkfYy9Vpk8JG+fQdTxx7jb2DlX5yuChgUU8sIrnkYhF/F3x9UAgknGj
+         +i5A==
+X-Gm-Message-State: AJIora9y36wf4Doxgne49ArSEUSsprnUYoqnFz1swjH4XBazdC6ae11M
+        DzsLBO7dYtuvLs/GDsY8tKB48z0tPA==
+X-Google-Smtp-Source: AGRyM1ur4AOc7bK5eVjgml5dO/I1YI3o54vzy9DsjE/7iDAB6CuVvnaI9nMRxVWdksw+oB2ay497Pw==
+X-Received: by 2002:a92:cd8f:0:b0:2d9:5d44:6a53 with SMTP id r15-20020a92cd8f000000b002d95d446a53mr5817684ilb.226.1656608240763;
+        Thu, 30 Jun 2022 09:57:20 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id q25-20020a05663810d900b0032e1a07228asm8851588jad.26.2022.06.30.09.57.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 09:57:20 -0700 (PDT)
+Received: (nullmailer pid 2895373 invoked by uid 1000);
+        Thu, 30 Jun 2022 16:57:17 -0000
+Date:   Thu, 30 Jun 2022 10:57:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>, dmaengine@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/9] bitops: let optimize out non-atomic bitops on compile-time constants
-Date:   Thu, 30 Jun 2022 18:56:11 +0200
-Message-Id: <20220630165611.1551808-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
-References: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
+        Liam Girdwood <lgirdwood@gmail.com>,
+        alsa-devel@alsa-project.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, Jose Abreu <joabreu@synopsys.com>,
+        devicetree@vger.kernel.org, Serge Semin <fancer.lancer@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Mark Brown <broonie@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH v3 04/15] spi: dt-bindings: dw-apb-ssi: update
+ spi-{r,t}x-bus-width
+Message-ID: <20220630165717.GA2895317-robh@kernel.org>
+References: <20220629184343.3438856-1-mail@conchuod.ie>
+ <20220629184343.3438856-5-mail@conchuod.ie>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220629184343.3438856-5-mail@conchuod.ie>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-Date: Fri, 24 Jun 2022 14:13:04 +0200
-
-> While I was working on converting some structure fields from a fixed
-> type to a bitmap, I started observing code size increase not only in
-> places where the code works with the converted structure fields, but
-> also where the converted vars were on the stack. That said, the
-> following code:
-
-Hey,
-
-Seems like everything is fine this time. I got some reports, but
-those aren't caused by any of the changes from the series.
-Maybe we can take it to -next and see how it goes?
-
-[...]
-
->  arch/alpha/include/asm/bitops.h               |  32 ++--
->  arch/hexagon/include/asm/bitops.h             |  24 ++-
->  arch/ia64/include/asm/bitops.h                |  42 ++---
->  arch/ia64/include/asm/processor.h             |   2 +-
->  arch/m68k/include/asm/bitops.h                |  49 ++++--
->  arch/s390/include/asm/bitops.h                |  61 +++----
->  arch/sh/include/asm/bitops-op32.h             |  34 ++--
->  arch/sparc/include/asm/bitops_32.h            |  18 +-
->  arch/sparc/lib/atomic32.c                     |  12 +-
->  arch/x86/include/asm/bitops.h                 |  22 +--
->  drivers/net/ethernet/intel/ice/ice_switch.c   |   2 +-
->  .../asm-generic/bitops/generic-non-atomic.h   | 161 ++++++++++++++++++
->  .../bitops/instrumented-non-atomic.h          |  35 ++--
->  include/asm-generic/bitops/non-atomic.h       | 121 +------------
->  .../bitops/non-instrumented-non-atomic.h      |  16 ++
->  include/linux/bitmap.h                        |  22 ++-
->  include/linux/bitops.h                        |  50 ++++++
->  lib/test_bitmap.c                             |  62 +++++++
->  tools/include/asm-generic/bitops/non-atomic.h |  34 ++--
->  tools/include/linux/bitops.h                  |  16 ++
->  20 files changed, 544 insertions(+), 271 deletions(-)
->  create mode 100644 include/asm-generic/bitops/generic-non-atomic.h
->  create mode 100644 include/asm-generic/bitops/non-instrumented-non-atomic.h
+On Wed, 29 Jun 2022 19:43:33 +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> -- 
-> 2.36.1
+> Most users of dw-apb-ssi use spi-{r,t}x-bus-width of 1, however the
+> Canaan k210 is wired up for a width of 4.
+> Quoting Serge:
+> The modern DW APB SSI controllers of v.4.* and newer also support the
+> enhanced SPI Modes too (Dual, Quad and Octal). Since the IP-core
+> version is auto-detected at run-time there is no way to create a
+> DT-schema correctly constraining the Rx/Tx SPI bus widths.
+> /endquote
+> 
+> As such, drop the restriction on only supporting a bus width of 1.
+> 
+> Link: https://lore.kernel.org/all/20220620205654.g7fyipwytbww5757@mobilestation/
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
 
-Thanks,
-Olek
+Reviewed-by: Rob Herring <robh@kernel.org>

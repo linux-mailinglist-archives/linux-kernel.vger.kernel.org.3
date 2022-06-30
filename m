@@ -2,125 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9069A561761
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF89B561763
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234909AbiF3KMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 06:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
+        id S233966AbiF3KN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 06:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234887AbiF3KMg (ORCPT
+        with ESMTP id S234508AbiF3KN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 06:12:36 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F464477E;
-        Thu, 30 Jun 2022 03:12:35 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id k7so2043210wrc.12;
-        Thu, 30 Jun 2022 03:12:35 -0700 (PDT)
+        Thu, 30 Jun 2022 06:13:58 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D18644A20;
+        Thu, 30 Jun 2022 03:13:57 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id r66so18061619pgr.2;
+        Thu, 30 Jun 2022 03:13:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yfRhc61AaTPZtvRzR5+PiNxgCQLaNl/GoBV3ZT0U/Kk=;
-        b=CgGSeJLtgWTyVFl5LsMtYnk3B70jFGkUfunpef5C3bazlwFaV4tdFXBcUtjODuTb97
-         Wqv4mzyTSpeNz/uYNG/HGKW1yyc9XoPHWF843v9Pn0RqlE5PrqtDyzW7loq8DUKhZXY6
-         vrHTEnVSMxUjvm/3dcVSpZLhHfz89YxjIiiRCR7WiTNR6M4gG4+aeS3WQjZ4ggGbsMJN
-         Uclu+2248rNdGNnpmovnZbE4Wt0zjBpd7WnxQ/zzMQmONRhQ0uLrWSUAZu/3xJ0xeTRr
-         4ghRhBOzrGcAPKDsVYyheX+dSWWcL8FZXfIovAGPNPOjRbGSBB9m6u+dTmxCsz41qaiN
-         SLMQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yHS730e4vBBXm7TzAGTuOdImtTpJ1+sTID/QkZphy1Y=;
+        b=QednnHhV8MfZXVkfpPnF/2EDXwk3hWGuh8w4qVSLxaEI9Vi8S/VygZMjopq6QHH+/0
+         UG6ZglWPVwR/vfNVT+v8/DcUCSO0taqAyE4dRWo6WZlnczZzXeJECeDjluQTIU2YiGzN
+         BhziIkcdSy0Z2u2ET9Rm0urj4BGOF5z+ueZRT9vfeK+sGMiId7GKN4Y97v3zV6dkxIdH
+         OItGIo9RU9Y6vMBH5+Uvc9nbTSQpKwQ7u07WXA5EABGvpkF8fJSFNZdY1djMYhIYu0ZF
+         mUIabd8D1fli6bzVVzGPPjoplsOu5IylZskWPem5rjLUgaxP9eZC1JaMke/SBME/SGud
+         yyog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=yfRhc61AaTPZtvRzR5+PiNxgCQLaNl/GoBV3ZT0U/Kk=;
-        b=VuDl56rCnhuT6Rq+Ll4SkbVqxFAxgi/8qwO73YdXVUiSLIJ0hU+GOxTfH4SXtFs9b6
-         EbmiabLewm5Sh4RICJ9H/P5mTAzYvknIfclzBtNmn8MtNXFhkqToiuhgJL/QmB4zuXE8
-         KSbGx5iKkOSTIveFKobmgw3neP4UZzk94pAxl83Di9F870YJBhCzWB8dXeDMJQ+EUhdT
-         m/LEmY6ooGeFl9c4b284fZd2WnUUzH13O8Vs6Wk2CECaqyHQJB/IslWZfqc72kIyQeOB
-         1UuDc/BNZeUqbjW5FfxBlHOTAv2+kfetNiDWnIUPQQAmQ+7kW6jpTfJ8NE7kGq9yrWNy
-         brdA==
-X-Gm-Message-State: AJIora8T4XajnWmmkfUkcMv0+4JvBdeBYkNKZo3s5xJaUJys7n+tbd+/
-        XxIIOsMTHXoxK/TQAO/9O4bTPovrtfQ=
-X-Google-Smtp-Source: AGRyM1vKNOKnLz3Q6RDe43DYq252Bjx/HQViG2Gr3/Qa7uxJ6oLQjXabb/BYvPemLRNNjZFVyF+DPw==
-X-Received: by 2002:a5d:6a03:0:b0:21b:9cc1:d5dd with SMTP id m3-20020a5d6a03000000b0021b9cc1d5ddmr7863856wru.450.1656583953814;
-        Thu, 30 Jun 2022 03:12:33 -0700 (PDT)
-Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id p12-20020adfcc8c000000b0020d0c9c95d3sm19522129wrj.77.2022.06.30.03.12.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 03:12:33 -0700 (PDT)
-Message-ID: <4ad28210-0827-c86e-b2a3-b7ed49a191d3@gmail.com>
-Date:   Thu, 30 Jun 2022 11:12:32 +0100
+        bh=yHS730e4vBBXm7TzAGTuOdImtTpJ1+sTID/QkZphy1Y=;
+        b=f3WP2li1HC49xl1Ea4h1GV5qSBT1ctQlCmAvTHGTj2rcucGrx8wC7UdI8rVvFMtf6z
+         gViJAFwEahJGOOuy9Z+kDbGz+d0ZzDmved1MSWPwJ2fGwrcFDxzmUremqErty2yK9iIO
+         yA6EffvXijzxqDD9nFX3l8fzKA1ucZHufUyfzv/MEX52mpQe+K/S1if6fJqi76uD2EXG
+         aIYfQxv4AkiTsc0H4z7HUlz78COrSNn1KQse16QYs3YsaVmxQEjbgSEGQVHCjvhG442F
+         fJUs/uK2ebtgCVThAjbnVkALxj9EsTUIROtUYDpHcDC3jlvjwCrcrf5RFunK94je8yl0
+         BAKQ==
+X-Gm-Message-State: AJIora+3pusf/aQuVDWSe0U85yphnyRPb7wPQVxyKFjeGdQd1tQy/DaI
+        FMBp7i9rLkygKxwKMota1ds=
+X-Google-Smtp-Source: AGRyM1uhJ9hpMKkSHpSlnFoGHFrFu8+IvkcXxYGmxVIhD72S3fLnguDrTs6neMjBXaIuaq7eoTWC1w==
+X-Received: by 2002:a05:6a00:2410:b0:522:9837:581f with SMTP id z16-20020a056a00241000b005229837581fmr15105934pfh.11.1656584036579;
+        Thu, 30 Jun 2022 03:13:56 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-27.three.co.id. [180.214.232.27])
+        by smtp.gmail.com with ESMTPSA id y11-20020a170902d64b00b0016782c55790sm13043107plh.232.2022.06.30.03.13.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 03:13:55 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 77EA8103901; Thu, 30 Jun 2022 17:13:51 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh@kernel.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH next] Documentation: coresight: escape coresight bindings file wildcard
+Date:   Thu, 30 Jun 2022 17:13:17 +0700
+Message-Id: <20220630101317.102680-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 6/6] media: ov5693: add ov5693_of_match, dts support
-Content-Language: en-US
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        quentin.schulz@theobroma-systems.com,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220630074525.481790-1-tommaso.merciai@amarulasolutions.com>
- <20220630074525.481790-7-tommaso.merciai@amarulasolutions.com>
-From:   Daniel Scally <djrscally@gmail.com>
-In-Reply-To: <20220630074525.481790-7-tommaso.merciai@amarulasolutions.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello
+Stephen Rothwell reported htmldocs warning:
 
-On 30/06/2022 08:45, Tommaso Merciai wrote:
-> Add ov5693_of_match. Device tree support
->
-> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-> Reviewed-by: Sakari Ailus <sakari.ailus@iki.fi>
+Documentation/trace/coresight/coresight.rst:133: WARNING: Inline emphasis start-string without end-string.
 
+The warning above is due to unescaped wildcard asterisk (*) on CoreSight
+devicetree binding filename, which confuses Sphinx as emphasis instead.
 
-Reviewed-by: Daniel Scally <djrscally@gmail.com>
+Escape the wildcard to fix the warning.
 
-> ---
-> Changes since v2:
->  - Change patch order 7 -> 6 as suggested by Sakari
->  - Add missing signed-off as suggested by Jacopo
->
-> Changes since v3:
->  - Add reviewed-by tags, suggested by Jacopo, Krzysztof
->
->  drivers/media/i2c/ov5693.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
-> index 3c805a5a5181..5930207193c7 100644
-> --- a/drivers/media/i2c/ov5693.c
-> +++ b/drivers/media/i2c/ov5693.c
-> @@ -1532,10 +1532,17 @@ static const struct acpi_device_id ov5693_acpi_match[] = {
->  };
->  MODULE_DEVICE_TABLE(acpi, ov5693_acpi_match);
->  
-> +static const struct of_device_id ov5693_of_match[] = {
-> +	{ .compatible = "ovti,ov5693", },
-> +	{ /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, ov5693_of_match);
-> +
->  static struct i2c_driver ov5693_driver = {
->  	.driver = {
->  		.name = "ov5693",
->  		.acpi_match_table = ov5693_acpi_match,
-> +		.of_match_table = ov5693_of_match,
->  		.pm = &ov5693_pm_ops,
->  	},
->  	.probe_new = ov5693_probe,
+Link: https://lore.kernel.org/linux-next/20220630173801.41bf22a2@canb.auug.org.au/
+Fixes: 3c15fddf312120 ("dt-bindings: arm: Convert CoreSight bindings to DT schema")
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: Mike Leach <mike.leach@linaro.org>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Rob Herring <robh@kernel.org>
+Cc: coresight@lists.linaro.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-next@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Documentation/trace/coresight/coresight.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/trace/coresight/coresight.rst b/Documentation/trace/coresight/coresight.rst
+index 529b7c80e6f353..1644a0244ad10a 100644
+--- a/Documentation/trace/coresight/coresight.rst
++++ b/Documentation/trace/coresight/coresight.rst
+@@ -130,7 +130,7 @@ Misc:
+ Device Tree Bindings
+ --------------------
+ 
+-See Documentation/devicetree/bindings/arm/arm,coresight-*.yaml for details.
++See Documentation/devicetree/bindings/arm/arm,coresight-\*.yaml for details.
+ 
+ As of this writing drivers for ITM, STMs and CTIs are not provided but are
+ expected to be added as the solution matures.
+
+base-commit: 6cc11d2a1759275b856e464265823d94aabd5eaf
+-- 
+An old man doll... just what I always wanted! - Clara
+

@@ -2,111 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76F1562502
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CDA05624FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237437AbiF3VSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 17:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40264 "EHLO
+        id S237411AbiF3VRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 17:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233505AbiF3VSl (ORCPT
+        with ESMTP id S237306AbiF3VRM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 17:18:41 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A5E45781;
-        Thu, 30 Jun 2022 14:18:40 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id D049C22236;
-        Thu, 30 Jun 2022 23:18:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1656623918;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o9v9b2QyCY7aa76Uj7OzhyotVoaj9yPQj5f2StXzCJ0=;
-        b=gValFbeRhfoKv08ktpW0wJolm7fhnt3dc5tvtCnf9g1xCl/WeuHpSUjWmHrKIukHWox3an
-        eLLJ/EtO6zk+o16H8Os3k5t7y3IZn1IgtfWfr+ZKOboSV5NtfQSU6xVN9rCIW5xBab0NOy
-        RugwpMNRpJCJCkY5dNjen1lyKAzjwkc=
+        Thu, 30 Jun 2022 17:17:12 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A6532ED9;
+        Thu, 30 Jun 2022 14:17:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656623830; x=1688159830;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1fI+D6GLr2yAZoMGO3nm1zW5iOCDj2YaxSYiplf5QcY=;
+  b=HhSIQBYv3TeWbAmW6gPR3/4zq3w9rlrF3G1Nu7j0OvmISG9cQ3V37m7F
+   UrSjAV9qxPbxhcjY5gkDXaxyPtp5l68dxLq3A3red0sIZH3xiNtkA2EhS
+   1mHvDLxxrXMfkjl6FrPZ4407eIijvYSl5IANmZmQ/EtIGa4nR9C5yRa40
+   NSj/UwFHMxu9cdSBjx3aQjmXaoAQC2oTKN0IrhlUDCNAj6OzdTHkQ2i8+
+   vuheXuFPramZ2AfHkFMwjbWupowQYeZz8vpB94+sC+0s9YyfOqP7NN99+
+   6th/eWHy2JJy0MsCyEQ2wnzakuIwMDoBWgvVPxbe4KWu72efYFEtMkS+K
+   w==;
+X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
+   d="scan'208";a="170593536"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Jun 2022 14:17:09 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 30 Jun 2022 14:17:09 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 30 Jun 2022 14:17:09 -0700
+Date:   Thu, 30 Jun 2022 23:21:03 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next 0/4] net: lan966x: hardcode port count
+Message-ID: <20220630212103.cgp7tt3puzxejnjx@soft-dev3-1.localhost>
+References: <20220630140237.692986-1-michael@walle.cc>
+ <20220630204433.hg2a2ws2zk5p73ld@soft-dev3-1.localhost>
+ <0169b5865944d6522a752b02321a7f4b@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 30 Jun 2022 23:18:37 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        Petr Mladek <pmladek@suse.com>
-Subject: Re: Regression for duplicate (?) console parameters on next-20220630
-In-Reply-To: <Yr37D4P2Dmnbkb+M@dev-arch.thelio-3990X>
-References: <8460ecf2a963c85793cf325e16725044@walle.cc>
- <Yr37D4P2Dmnbkb+M@dev-arch.thelio-3990X>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <93f5abe324cba9de1bff4aee565f8d5a@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <0169b5865944d6522a752b02321a7f4b@walle.cc>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-06-30 21:35, schrieb Nathan Chancellor:
-> On Thu, Jun 30, 2022 at 03:11:58PM +0200, Michael Walle wrote:
->> Hi,
->> 
->> I'm not sure it these are the correct recipients, feel free to CC 
->> others.
->> 
->> Since next-20220630 (or maybe also since next-20220629) I'm getting 
->> the
->> 
->> [    3.707900] WARNING: CPU: 0 PID: 38 at fs/kernfs/dir.c:531
->> kernfs_put.part.0+0x1a0/0x1d4
->> [    3.716313] kernfs_put: console/active: released with incorrect
->> active_ref 0
->> 
->> on both arm and arm64 boards. See for example:
->> https://linux.kernelci.org/test/case/id/62bd840b330c4851eaa39c16/
->> 
->> I have the console set in the device tree as well as on the 
->> commandline.
->> Up until recently that wasn't a problem and I guess that should be a 
->> valid
->> configuration. That being said, the warn() will go away if I remove 
->> the
->> console= parameter on the commandline.
->> 
->> I haven't had time to do a bisect yet. That will probably my next 
->> step;
->> or maybe kernelci will already do that for me, Guillaume? Unless 
->> someone
->> has some more insights/ideas.
+The 06/30/2022 22:56, Michael Walle wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 > 
-> I noticed this as well when booting ARCH=um defconfig.
+> Am 2022-06-30 22:44, schrieb Horatiu Vultur:
+> > The 06/30/2022 16:02, Michael Walle wrote:
+> > > EXTERNAL EMAIL: Do not click links or open attachments unless you know
+> > > the content is safe
+> > > 
+> > > Don't rely on the device tree to count the number of physical port.
+> > > Instead
+> > > introduce a new compatible string which the driver can use to select
+> > > the
+> > > correct port count.
+> > > 
+> > > This also hardcodes the generic compatible string to 8. The rationale
+> > > is
+> > > that this compatible string was just used for the LAN9668 for now and
+> > > I'm
+> > > not even sure the current driver would support the LAN9662.
+> > 
+> > It works also on LAN9662, but I didn't have time to send patches for
+> > DTs. Then when I send patches for LAN9662, do I need to go in all dts
+> > files to change the compatible string for the 'switch' node?
 > 
-> I ended up doing a bisect against next-20220630 and I landed on the
-> driver-core merge (5732b42edfd18ee888e127fa13d425ed3ed1bef3). I did two
-> more bisects to figure out that there is some sort of contextual
-> contlict between commit 5831788afb17 ("Revert "printk: add kthread
-> console printers"") and commit b8f35fa1188b ("kernfs: Change
-> kernfs_notify_list to llist."), as it is only when those two changes 
-> are
-> present that this issue occurs. I am happy to provide more information
-> if necessary.
+> I'd assume there is one lan9662.dtsi and yes, there should then be
+>   compatible = "microchip,lan9662-switch";
+> or
+>   compatible = "microchip,lan9662-switch", "microchip,lan966x-switch";
+> depending on the outcome of the question Krzysztof raised.
+> 
+> And of course adding the compatible string to the driver with a port
+> count of 4 (?). I can't find anything about the lan9662,
 
-Thanks for the info.
+I am not sure why they have not upload yet the datasheet for lan9662.
 
-I can confirm that reverting b8f35fa1188b will fix the error. I couldn't
-revert 5831788afb17 though, didn't apply cleanly.
+>and you've > mentioned it has 4 ports.  Are there four external ports? 
 
--michael
+You can have up to 4 ports.
+You can have 4 external ports or you can use the internal ones plus two
+external.
+
+> I was  under the impression the last digit of the SoC name stands for the
+> number of ports.
+
+That would make much more sense but I don't understand why they have
+name it like this.
+
+> 
+> -michael
+
+-- 
+/Horatiu

@@ -2,202 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ACF8561400
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 074A15613FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233456AbiF3IBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 04:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52966 "EHLO
+        id S233509AbiF3ICF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 04:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233434AbiF3IA7 (ORCPT
+        with ESMTP id S233294AbiF3IBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 04:00:59 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920EF41630;
-        Thu, 30 Jun 2022 01:00:57 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id r3so32374718ybr.6;
-        Thu, 30 Jun 2022 01:00:57 -0700 (PDT)
+        Thu, 30 Jun 2022 04:01:36 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D645341316
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:01:35 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id j7so1049747wmp.2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:01:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=F4VaG08RYManopuZpAGSTmqyNLUmKtObC9D7j1buosc=;
-        b=kR7wcXI3ZkBnGgu38OPdD7Q/6eo1kxMRs1xbtDloKLyhkRsa/hcn5yGk53ePz+ItAD
-         TyqtMUZsdjmFbDnmALeo6dJy4/7+KvkNmSN+216paSx4APdA6vQv571cHc5pwlkbA8tc
-         HkVpUKcjaNnK6HWoZmftFYL95Omid416u4c3Z7583i2woIkU/zFZOD4CvZR93eU6Q1Z3
-         y2cpETE06mn9VQZZ3QNIPVXUte+ggWmukX/CYwzja94R2MuV4oO0nhmKr3DdEEOs+V24
-         e9hm/tX3ONyohQCW0D74wP6IxkuVKiOoiJpGZDBey2HvRxPqDqQ2LfNRFx3YDz79QpqT
-         353A==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=wmeVQCv/BTtKEPouA66b5836BFHscFDp5iXGi7nKjiU=;
+        b=iMaIOumKVh71nxm81FfULOqNly5GlCFDAyoQ6RRqVzfQwtxwLD3wxjGOvaPOfNxEdK
+         /T2B4wrPNUHA6IgP3vmb5C8cLClTUS8dGzHHLQah6L2QSu/zi+FFpSWD5qavjQchOM00
+         BkaCpu2/ScfsJHzuXUytrKLjYqTl7jAy1QP64npyVUNJYtD582niewSBBDQfsps4vKYt
+         oikjNf9ChL1gI3De2+cqiHW/oEUrwU/+oTHeeBUWpEOSAVBCSdFmYspPZxNqJPlHdP9Q
+         V0uQFJDa8v78HqSwu6+1sDoca4ftbUyjOFptXOhd0T8CJphOJBM24iGQnJ++/VRUUGN3
+         Wa8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=F4VaG08RYManopuZpAGSTmqyNLUmKtObC9D7j1buosc=;
-        b=f+qUyiz6xFc0aoUhmoZKLNEtd87eJNFH3gyR+mBTsUoZxhRMSP3ZcLOz0i+/ByzHjS
-         TxKSOT7GCyEspA5iSRZxpcINxzrkVfWYJ1URUpVBYgHjOr8pFNnH1T8pGD+RaB4cu0UN
-         aqUrvwEat/9/mmMRKpFOq59gjr0moUZZrrB4s/OegfbCW2sGBePyFtrFalNY2eyQ0VfZ
-         ++/J4tTx9jbCJR8ijwjgEcBybSpsHUe/DqQRvvLpOPRvyX3Ml+XSQ/fxLxmW6ryzwqgj
-         xhgaq3B5+xnNGDqy3CoXY1zHR2Iw33/tHhcQ+6sfoLLlVL4fGvOSPkrMWVv2Ci8xqsjd
-         KfFw==
-X-Gm-Message-State: AJIora+srk/WEezJi9TAIvaRqiKV+Q680seAz2ouSLHYNOwmzKyPykE4
-        ZFtuUlmiisZo4Z1H/wJ2+Mgix34HG75HIK1Ebko=
-X-Google-Smtp-Source: AGRyM1tOkHckST+esMDNGkulQhtjI1csN1ZIVD3zn7rKujVWHzxaEq3fwCuqXRCu101gK1Wctd5PTtsXc9fPqrBWULc=
-X-Received: by 2002:a05:6902:1142:b0:66d:999a:81a7 with SMTP id
- p2-20020a056902114200b0066d999a81a7mr3728559ybu.460.1656576056733; Thu, 30
- Jun 2022 01:00:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com> <20220629143046.213584-16-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220629143046.213584-16-aidanmacdonald.0x0@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 30 Jun 2022 10:00:15 +0200
-Message-ID: <CAHp75Vd_U0wOcivr01b0P3k2M8AMdtsE2ODazR705-6PTisJ2g@mail.gmail.com>
-Subject: Re: [PATCH v4 15/15] power: axp20x_battery: Add support for AXP192
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>, quic_gurus@quicinc.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Michael Walle <michael@walle.cc>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=wmeVQCv/BTtKEPouA66b5836BFHscFDp5iXGi7nKjiU=;
+        b=fmEAahFvKFJJwHlJaUDjDAe2Esh5mgC64oR1Nyyox2ynsVCpmq9dYeWJizWqObG181
+         oUgXG4OOWfpxVYlLOLnyLrqctYA5PV9WfhkImFnSNutwqpSjNfKLMTuYrHoOq1d36GEa
+         YVU0KjE7HsMaKReRw5jHyrmws/+O/UD8eoxogJ2JxErWqZ0SZgMGSkK67VmVLlsYIh+u
+         zuKs0wYHygLV5HkGm2RYPx+u5wPVcu8XZb5NjesdrMQQJj7Tshz2iVJHWM39azHaAjVr
+         SzVjIBShH685qou8cAd0t7V7IJxGZTbVZKak0W51Ibv081pighGoTbhysz3sJtTgmXwb
+         Lhxg==
+X-Gm-Message-State: AJIora8nkYSyRXdLfSUj/QLrJUcPtQt3CdA9HmRm3xd6y8L63lvHqZZA
+        eSRjyrdnpseho77I7ZnLJ1wV5w==
+X-Google-Smtp-Source: AGRyM1t5ZsDvA8XRTSBAXqDCoho8fFlhA/DGe7asPQiXFRNyZwulOFtC7idbnUlQBcMVDSV8nTdXtQ==
+X-Received: by 2002:a7b:cc96:0:b0:3a0:4aa0:f053 with SMTP id p22-20020a7bcc96000000b003a04aa0f053mr10670049wma.89.1656576094371;
+        Thu, 30 Jun 2022 01:01:34 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id d10-20020adff2ca000000b0021a38089e99sm18651884wrp.57.2022.06.30.01.01.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 01:01:33 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 09:01:32 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH v1 1/9] mfd: intel_soc_pmic_crc: Merge Intel PMIC core to
+ crc
+Message-ID: <Yr1YXHb3GqwZncFK@google.com>
+References: <20220616182524.7956-1-andriy.shevchenko@linux.intel.com>
+ <Yrmr175fsQi6ToEY@google.com>
+ <YrrO0CQVv6hj1AB0@smile.fi.intel.com>
+ <YrxjTD0sJXh8cgVP@google.com>
+ <CAHp75VdHpqAxS3jmFi-1Sw6wB1CP3wQVM_+5OP0C_yFFG336LA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75VdHpqAxS3jmFi-1Sw6wB1CP3wQVM_+5OP0C_yFFG336LA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 4:30 PM Aidan MacDonald
-<aidanmacdonald.0x0@gmail.com> wrote:
->
-> The AXP192 has a battery charger similar to other X-Powers PMICs,
-> but unlike the other supported devices, it does not have a fuel
-> gauge and can't report battery capacity directly.
+On Wed, 29 Jun 2022, Andy Shevchenko wrote:
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> On Wed, Jun 29, 2022 at 4:36 PM Lee Jones <lee.jones@linaro.org> wrote:
+> > On Tue, 28 Jun 2022, Andy Shevchenko wrote:> > On Mon, Jun 27, 2022 at 02:08:39PM +0100, Lee Jones wrote:
+> > > > On Thu, 16 Jun 2022, Andy Shevchenko wrote:
+> 
+> ...
+> 
+> > > > >  drivers/mfd/intel_soc_pmic_core.c | 160 -----------------------------
+> > > > >  drivers/mfd/intel_soc_pmic_core.h |  25 -----
+> > > > >  drivers/mfd/intel_soc_pmic_crc.c  | 162 ++++++++++++++++++++++++++++--
+> > > > >  4 files changed, 157 insertions(+), 193 deletions(-)
+> > > > >  delete mode 100644 drivers/mfd/intel_soc_pmic_core.c
+> > > > >  delete mode 100644 drivers/mfd/intel_soc_pmic_core.h
+> > > >
+> > > > Can you submit this again with the -M flag please.
+> > >
+> > > This is done with this flag. Basically for the last several years I do my
+> > > submissions with that flag.
+> >
+> > Odd.  I thought -M only showed diff for the changes.
+> 
+> It's exactly what happens here in this patch. What did I miss?
+> 
+> Note here is not renaming, but merging contents of one file (actually
+> two files) into another. What you are talking about is probably -D,
+> but AFAIR Git (at least that time) can't catch up deleted files from
+> the mbox format. That's why I do not use -D for submissions.
 
-> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
->  drivers/power/supply/axp20x_battery.c | 49 +++++++++++++++++++++++++--
->  1 file changed, 46 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
-> index 574c1d001556..1e84d26ce8e3 100644
-> --- a/drivers/power/supply/axp20x_battery.c
-> +++ b/drivers/power/supply/axp20x_battery.c
-> @@ -544,6 +544,19 @@ static int axp20x_battery_set_prop(struct power_supply *psy,
->         }
->  }
->
-> +static enum power_supply_property axp192_battery_props[] = {
-> +       POWER_SUPPLY_PROP_PRESENT,
-> +       POWER_SUPPLY_PROP_ONLINE,
-> +       POWER_SUPPLY_PROP_STATUS,
-> +       POWER_SUPPLY_PROP_VOLTAGE_NOW,
-> +       POWER_SUPPLY_PROP_CURRENT_NOW,
-> +       POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
-> +       POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
-> +       POWER_SUPPLY_PROP_HEALTH,
-> +       POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,
-> +       POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
-> +};
-> +
->  static enum power_supply_property axp20x_battery_props[] = {
->         POWER_SUPPLY_PROP_PRESENT,
->         POWER_SUPPLY_PROP_ONLINE,
-> @@ -568,6 +581,16 @@ static int axp20x_battery_prop_writeable(struct power_supply *psy,
->                psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX;
->  }
->
-> +static const struct power_supply_desc axp192_batt_ps_desc = {
-> +       .name = "axp192-battery",
-> +       .type = POWER_SUPPLY_TYPE_BATTERY,
-> +       .properties = axp192_battery_props,
-> +       .num_properties = ARRAY_SIZE(axp192_battery_props),
-> +       .property_is_writeable = axp20x_battery_prop_writeable,
-> +       .get_property = axp20x_battery_get_prop,
-> +       .set_property = axp20x_battery_set_prop,
-> +};
-> +
->  static const struct power_supply_desc axp20x_batt_ps_desc = {
->         .name = "axp20x-battery",
->         .type = POWER_SUPPLY_TYPE_BATTERY,
-> @@ -578,6 +601,19 @@ static const struct power_supply_desc axp20x_batt_ps_desc = {
->         .set_property = axp20x_battery_set_prop,
->  };
->
-> +static const int axp192_ccc_table[AXP20X_CHRG_CTRL1_TGT_CURR+1] = {
-> +       100000,  190000,  280000,  360000,
-> +       450000,  550000,  630000,  700000,
-> +       780000,  880000,  960000,  1000000,
-> +       1080000, 1160000, 1240000, 1320000,
-> +};
-> +
-> +static const struct axp_data axp192_data = {
-> +       .ccc_table = axp192_ccc_table,
-> +       .get_max_voltage = axp20x_battery_get_max_voltage,
-> +       .set_max_voltage = axp20x_battery_set_max_voltage,
-> +};
-> +
->  static const struct axp_data axp209_data = {
->         .ccc_scale = 100000,
->         .ccc_offset = 300000,
-> @@ -606,6 +642,9 @@ static const struct axp_data axp813_data = {
->
->  static const struct of_device_id axp20x_battery_ps_id[] = {
->         {
-> +               .compatible = "x-powers,axp192-battery-power-supply",
-> +               .data = (void *)&axp192_data,
-> +       }, {
->                 .compatible = "x-powers,axp209-battery-power-supply",
->                 .data = (void *)&axp209_data,
->         }, {
-> @@ -623,6 +662,7 @@ static int axp20x_power_probe(struct platform_device *pdev)
->         struct axp20x_batt_ps *axp20x_batt;
->         struct power_supply_config psy_cfg = {};
->         struct power_supply_battery_info *info;
-> +       const struct power_supply_desc *ps_desc;
->         struct device *dev = &pdev->dev;
->
->         if (!of_device_is_available(pdev->dev.of_node))
-> @@ -666,9 +706,12 @@ static int axp20x_power_probe(struct platform_device *pdev)
->
->         axp20x_batt->data = (struct axp_data *)of_device_get_match_data(dev);
->
-> -       axp20x_batt->batt = devm_power_supply_register(&pdev->dev,
-> -                                                      &axp20x_batt_ps_desc,
-> -                                                      &psy_cfg);
-> +       if (!axp20x_batt->data->has_fg)
-> +               ps_desc = &axp192_batt_ps_desc;
-> +       else
-> +               ps_desc = &axp20x_batt_ps_desc;
-> +
-> +       axp20x_batt->batt = devm_power_supply_register(&pdev->dev, ps_desc, &psy_cfg);
->         if (IS_ERR(axp20x_batt->batt)) {
->                 dev_err(&pdev->dev, "failed to register power supply: %ld\n",
->                         PTR_ERR(axp20x_batt->batt));
-> --
-> 2.35.1
->
+Ah yes, that's probably it then.
 
+From a quick look at the diff (I missed the 2 "--" at the end), it
+looked like this was a rename.  In which case -M won't do anything
+useful here.  I'll have to brain grep the differences instead.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

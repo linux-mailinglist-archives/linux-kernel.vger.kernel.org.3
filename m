@@ -2,116 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971EF560FF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 06:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ADC8561070
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 07:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbiF3EQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 00:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
+        id S229732AbiF3FCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 01:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiF3EQJ (ORCPT
+        with ESMTP id S229520AbiF3FCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 00:16:09 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738963206B
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 21:16:06 -0700 (PDT)
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220630041604epoutp0114ca6c4d83b9765fd5ab66ef7f2c7c36~9SuAaMHAw0716007160epoutp01o
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 04:16:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220630041604epoutp0114ca6c4d83b9765fd5ab66ef7f2c7c36~9SuAaMHAw0716007160epoutp01o
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1656562564;
-        bh=DZoUVfy5aUPNeZ5oLtZlbxhLYaJtK9AlkneUo9epumM=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=DUUZJlXPEfY0/sBya+VF/7YACKNHzzA3pX65kD5MJVuvP6bcdmKzkL1taGUH/obGZ
-         fAm8pu7hfTAXjOcQRtwmO32FEKoMF+AsP4+Xm0k7QR0HArwVAmoisR4Xbe7V0t7owF
-         4jkvzIpcA0NEuCVHOgdEIuy2BM/srPSzlQ4OyDKw=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20220630041603epcas1p39c428f856066d6282b0f1d7ad886f7a9~9St-z80E32840228402epcas1p3U;
-        Thu, 30 Jun 2022 04:16:03 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.36.227]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4LYQ4M4668z4x9Pw; Thu, 30 Jun
-        2022 04:16:03 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A4.7E.09661.3832DB26; Thu, 30 Jun 2022 13:16:03 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220630041602epcas1p3f3427b4ceac68f8325d3f89bc8635603~9St-KPOyX2821528215epcas1p3M;
-        Thu, 30 Jun 2022 04:16:02 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220630041602epsmtrp2d00ad6178ab1c937dbd9bd0017e43d75~9St-JWdM32097120971epsmtrp2x;
-        Thu, 30 Jun 2022 04:16:02 +0000 (GMT)
-X-AuditID: b6c32a37-2cfff700000025bd-58-62bd23836131
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        92.B7.08905.2832DB26; Thu, 30 Jun 2022 13:16:02 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.253.101.71]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220630041602epsmtip1b467428961970a7dd5abfc55eaa4f3fd~9St_43dAT1966919669epsmtip1B;
-        Thu, 30 Jun 2022 04:16:02 +0000 (GMT)
-From:   Seunghui Lee <sh043.lee@samsung.com>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     grant.jung@samsung.com, jt77.jang@samsung.com,
-        dh0421.hwang@samsung.com, junwoo80.lee@samsung.com,
-        jangsub.yi@samsung.com, cw9316.lee@samsung.com,
-        sh8267.baek@samsung.com, wkon.kim@samsung.com,
-        Seunghui Lee <sh043.lee@samsung.com>
-Subject: [PATCH] scsi: ufs: no sw reset after last linkstartup fail
-Date:   Thu, 30 Jun 2022 13:48:04 +0900
-Message-Id: <20220630044804.6080-1-sh043.lee@samsung.com>
-X-Mailer: git-send-email 2.29.0
+        Thu, 30 Jun 2022 01:02:42 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384E924F25;
+        Wed, 29 Jun 2022 22:02:40 -0700 (PDT)
+Received: from localhost (x52716227.dyn.telefonica.de [82.113.98.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8E0EA660180F;
+        Thu, 30 Jun 2022 06:02:37 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656565357;
+        bh=C0MEJ8RoUHajonH88jeHPrnptqSc55tkjzGmwr0LYVw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gRetQotZF6BpIIlQHx+BrzBr5wPQXgziE0uiSghLBZLROLehQjeU01spqEGxoDV5W
+         UwjtfCh07eAvMUlb99DfwclnyeB2sLg1oBWTy7b1K0g4A5cOMtPbM+DP+OJ6qeBi2p
+         FWFPbDgdTqwI732K3lbfdkj8tXiZlpnIL1+aSTmwoDpOh2kS5oLO0xfi8u19pYpMU8
+         YgwSIkKuv+FxRi0E2OitNNTdobLplVP1H7r/u4bjW+OVYMyDn//hS9dl3MQxj6MroW
+         sliVqlP3EBTLqBKUN1IqwPnt1IVUyKrBGq7tQKSlVEPWZQua05YiYK67ABXsSj9MV2
+         XzQSJfttGwLMw==
+Date:   Thu, 30 Jun 2022 07:02:32 +0200
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: Re: [PATCH] hantro: Remove incorrect HEVC SPS validation
+Message-ID: <20220630050232.bpntbghouslye3l3@basti-XPS-13-9310>
+References: <20220629195624.45745-1-ezequiel@vanguardiasur.com.ar>
+ <20220629195624.45745-2-ezequiel@vanguardiasur.com.ar>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAJsWRmVeSWpSXmKPExsWy7bCmgW6z8t4kg+tz5CwezNvGZvHy51U2
-        i2kffjJbzDjVxmqx79pJdotff9ezW3RsncxksejGNiaLHc/PsFvs+tvMZHF51xw2i+7rO9gs
-        lh//x2TR9Gcfi8W1MydYLTZf+sbiIOBx+Yq3x4RFBxg9Pj69xeLRt2UVo8fnTXIe7Qe6mQLY
-        orJtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4DuVlIo
-        S8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBXoFSfmFpfmpevlpZZYGRoYGJkCFSZk
-        Zxx7Zlpwgr3i6uZHTA2MvWxdjJwcEgImEu/vzAWyuTiEBHYwSnyfc5QdwvnEKLGx8SwrhPON
-        UeLq04OsMC0nH51mArGFBPYyShxdZAdR9JlRYvnEFrAEm4CWxPRNW5hAEiICm4ASC2awgDjM
-        Ah8YJX71rQSrEhZwllizeRnYJSwCqhJXDu0GKuLg4BWwlJgxtRZim7zEn/s9zCA2r4CgxMmZ
-        T1hAbGagePPW2cwgMyUEZnJIrLs/Geo8F4mL889C2cISr45vYYewpSQ+v9sL9XWxRNu/f8wQ
-        doXEwb4vULaxxKfPnxlBbmAW0JRYv0sfIqwosfP3XEaIvXwS7772sIKUSAjwSnS0CUGUKEu8
-        fLSMCcKWlFjSfgtqoofEtlMXWSGBFStxdNk/lgmM8rOQfDMLyTezEBYvYGRexSiWWlCcm55a
-        bFhgDI/U5PzcTYzgpKtlvoNx2tsPeocYmTgYDzFKcDArifAuPLMzSYg3JbGyKrUoP76oNCe1
-        +BCjKTB4JzJLiSbnA9N+Xkm8oYmlgYmZkYmFsaWxmZI476pppxOFBNITS1KzU1MLUotg+pg4
-        OKUamNhF2oIqrbeGLQ+KEDQzrvna37Vr86Qqp5jagDOv698tjuHub23tK7oysaVy36Xly1W4
-        Nk4vVNznIMOyoLhEy9w1QqDjFtePvNotCQLbUhISpqTsmB0Q/3brzrCAKQqe3XsZDhy0zK18
-        OUdG8NWPVfyL+ookAw+dXtjwalmuKW9R9NxyOwPutI3XG9v5m2qKJffmqRUcUlf+XXinTHxB
-        wKJb6xkff7n5cH+4b+yBvt0u3pvCoxd/eDtl0zufKzq7f9+fvXvW6Rqx/b9CleKyuEQSXmk+
-        NVFYyK74sKp8y9KZlYsTI5aY/JNXeblH+ke27trjeuzTtkaz/PeYKKgn+DN//yo15VWCe7Rf
-        dAfqK7EUZyQaajEXFScCAL/Lj3RDBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrHLMWRmVeSWpSXmKPExsWy7bCSnG6T8t4kg6MrTCwezNvGZvHy51U2
-        i2kffjJbzDjVxmqx79pJdotff9ezW3RsncxksejGNiaLHc/PsFvs+tvMZHF51xw2i+7rO9gs
-        lh//x2TR9Gcfi8W1MydYLTZf+sbiIOBx+Yq3x4RFBxg9Pj69xeLRt2UVo8fnTXIe7Qe6mQLY
-        orhsUlJzMstSi/TtErgyjj0zLTjBXnF18yOmBsZeti5GTg4JAROJk49OM3UxcnEICexmlLjY
-        vJAdIiEpsfjRQ6AiDiBbWOLw4WKQsJDAR0aJlnnVIDabgJbE9E1bwHpFBHYxSsyY+JYRxGEW
-        +MUosWPqMrANwgLOEms2Q9gsAqoSVw7tZgEZyitgKTFjai3ELnmJP/d7mEFsXgFBiZMzn7CA
-        2MxA8eats5knMPLNQpKahSS1gJFpFaNkakFxbnpusWGBYV5quV5xYm5xaV66XnJ+7iZGcBRo
-        ae5g3L7qg94hRiYOxkOMEhzMSiK8C8/sTBLiTUmsrEotyo8vKs1JLT7EKM3BoiTOe6HrZLyQ
-        QHpiSWp2ampBahFMlomDU6qByXf3bmGHq5dNMs9WcVbuUU/MV7/h5CUm9u1Og3Pv6eTd/RLL
-        vk8+9T4k3PnVp0h+v9vfAtLu9rOUHtZ9M6VWpzBHOOf/ncybMpr74qWnf5//18b2UGgNb/RF
-        Ho29v2TE4plPd2stvvxktepbob1xHlPfNG/+cky9YM5TlhPcH32jjjJNbS9rWTp5QWvKp2SZ
-        syGKFrePO/RzBbh9/lQwf9L9m3/Lnn+0dFQ3mincayp7wi2+JuPRw5X7Jm5QvcSb4CY3zTfK
-        KyN63+MJ0pI+Of8lnX1bFn0wtv99tjqoMn93wVH22LPPJs+9+7XyjPnyK7WfrfOzI27vvmC8
-        1jFhReC9r1u9RELsXugpaM4oUWIpzkg01GIuKk4EAPi654TxAgAA
-X-CMS-MailID: 20220630041602epcas1p3f3427b4ceac68f8325d3f89bc8635603
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220630041602epcas1p3f3427b4ceac68f8325d3f89bc8635603
-References: <CGME20220630041602epcas1p3f3427b4ceac68f8325d3f89bc8635603@epcas1p3.samsung.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220629195624.45745-2-ezequiel@vanguardiasur.com.ar>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,29 +57,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Host driver resets the host(ufshcd_hba_enable) after last linkstartup
-command failed. All of the member or host dump after linkstartup fail are
-reset value because of sw reset.
+Hey Ezequiel,
 
-Signed-off-by: Junwoo Lee <junwoo80.lee@samsung.com>
-Signed-off-by: Seunghui Lee <sh043.lee@samsung.com>
----
- drivers/ufs/core/ufshcd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 29.06.2022 16:56, Ezequiel Garcia wrote:
+>Currently, the driver tries to validat the HEVC SPS
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 7c1d7bb9c579..2cdc14675443 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -4753,7 +4753,7 @@ static int ufshcd_link_startup(struct ufs_hba *hba)
- 		 * but we can't be sure if the link is up until link startup
- 		 * succeeds. So reset the local Uni-Pro and try again.
- 		 */
--		if (ret && ufshcd_hba_enable(hba)) {
-+		if (ret && retries && ufshcd_hba_enable(hba)) {
- 			ufshcd_update_evt_hist(hba,
- 					       UFS_EVT_LINK_STARTUP_FAIL,
- 					       (u32)ret);
--- 
-2.29.0
+s/validat/validate/
 
+>against the CAPTURE queue format (i.e. the decoded format).
+>This is not correct, because typically the SPS control is set
+>before the CAPTURE queue is negotiated.
+>
+>In addition to this, a format validation in hantro_hevc_dec_prepare_run()
+>is also suboptimal, because hantro_hevc_dec_prepare_run() runs in the context
+>of v4l2_m2m_ops.device_run, as part of a decoding job.
+>
+>Format and control validations should happen before decoding starts,
+>in the context of ioctls such as S_CTRL, S_FMT, or STREAMON.
+>
+>Remove the validation for now.
+
+Couldn't we add a small wrapper around STREAMON to perform that
+validation? I feel like "remove the validation for now", seems like a
+vague statement.
+
+Greetings,
+Sebastian
+
+>
+>Fixes: 135ad96cb4d6b ("media: hantro: Be more accurate on pixel formats step_width constraints")
+>Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+>---
+> drivers/staging/media/hantro/hantro_drv.c  | 12 ++++-----
+> drivers/staging/media/hantro/hantro_hevc.c | 30 ----------------------
+> drivers/staging/media/hantro/hantro_hw.h   |  1 -
+> 3 files changed, 6 insertions(+), 37 deletions(-)
+>
+>diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+>index afddf7ac0731..2387ca85ab54 100644
+>--- a/drivers/staging/media/hantro/hantro_drv.c
+>+++ b/drivers/staging/media/hantro/hantro_drv.c
+>@@ -253,11 +253,6 @@ queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
+>
+> static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+> {
+>-	struct hantro_ctx *ctx;
+>-
+>-	ctx = container_of(ctrl->handler,
+>-			   struct hantro_ctx, ctrl_handler);
+>-
+> 	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
+> 		const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
+>
+>@@ -273,7 +268,12 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+> 	} else if (ctrl->id == V4L2_CID_MPEG_VIDEO_HEVC_SPS) {
+> 		const struct v4l2_ctrl_hevc_sps *sps = ctrl->p_new.p_hevc_sps;
+>
+>-		return hantro_hevc_validate_sps(ctx, sps);
+>+		if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
+>+			/* Luma and chroma bit depth mismatch */
+>+			return -EINVAL;
+>+		if (sps->bit_depth_luma_minus8 != 0)
+>+			/* Only 8-bit is supported */
+>+			return -EINVAL;
+> 	} else if (ctrl->id == V4L2_CID_STATELESS_VP9_FRAME) {
+> 		const struct v4l2_ctrl_vp9_frame *dec_params = ctrl->p_new.p_vp9_frame;
+>
+>diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
+>index bd924896e409..f86c98e19177 100644
+>--- a/drivers/staging/media/hantro/hantro_hevc.c
+>+++ b/drivers/staging/media/hantro/hantro_hevc.c
+>@@ -154,32 +154,6 @@ static int tile_buffer_reallocate(struct hantro_ctx *ctx)
+> 	return -ENOMEM;
+> }
+>
+>-int hantro_hevc_validate_sps(struct hantro_ctx *ctx, const struct v4l2_ctrl_hevc_sps *sps)
+>-{
+>-	if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
+>-		/* Luma and chroma bit depth mismatch */
+>-		return -EINVAL;
+>-	if (sps->bit_depth_luma_minus8 != 0)
+>-		/* Only 8-bit is supported */
+>-		return -EINVAL;
+>-
+>-	/*
+>-	 * for tile pixel format check if the width and height match
+>-	 * hardware constraints
+>-	 */
+>-	if (ctx->vpu_dst_fmt->fourcc == V4L2_PIX_FMT_NV12_4L4) {
+>-		if (ctx->dst_fmt.width !=
+>-		    ALIGN(sps->pic_width_in_luma_samples, ctx->vpu_dst_fmt->frmsize.step_width))
+>-			return -EINVAL;
+>-
+>-		if (ctx->dst_fmt.height !=
+>-		    ALIGN(sps->pic_height_in_luma_samples, ctx->vpu_dst_fmt->frmsize.step_height))
+>-			return -EINVAL;
+>-	}
+>-
+>-	return 0;
+>-}
+>-
+> int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx)
+> {
+> 	struct hantro_hevc_dec_hw_ctx *hevc_ctx = &ctx->hevc_dec;
+>@@ -203,10 +177,6 @@ int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx)
+> 	if (WARN_ON(!ctrls->sps))
+> 		return -EINVAL;
+>
+>-	ret = hantro_hevc_validate_sps(ctx, ctrls->sps);
+>-	if (ret)
+>-		return ret;
+>-
+> 	ctrls->pps =
+> 		hantro_get_ctrl(ctx, V4L2_CID_MPEG_VIDEO_HEVC_PPS);
+> 	if (WARN_ON(!ctrls->pps))
+>diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+>index a2e0f0836281..5edff0f0be20 100644
+>--- a/drivers/staging/media/hantro/hantro_hw.h
+>+++ b/drivers/staging/media/hantro/hantro_hw.h
+>@@ -359,7 +359,6 @@ int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx);
+> void hantro_hevc_ref_init(struct hantro_ctx *ctx);
+> dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, int poc);
+> int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr);
+>-int hantro_hevc_validate_sps(struct hantro_ctx *ctx, const struct v4l2_ctrl_hevc_sps *sps);
+>
+>
+> static inline unsigned short hantro_vp9_num_sbs(unsigned short dimension)
+>-- 
+>2.31.1
+>

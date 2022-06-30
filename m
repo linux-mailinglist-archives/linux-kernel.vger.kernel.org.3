@@ -2,171 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E93256270E
+	by mail.lfdr.de (Postfix) with ESMTP id 57A4856270F
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbiF3X2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 19:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
+        id S232558AbiF3X2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 19:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232923AbiF3X22 (ORCPT
+        with ESMTP id S232941AbiF3X22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 30 Jun 2022 19:28:28 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13C26251;
-        Thu, 30 Jun 2022 16:28:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656631697; x=1688167697;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RM88QkoXYJlc9UBUy307/BtPhtlC+Z2vGnV2YkjHYkI=;
-  b=XbNJCVghKX82ZZE6BJYL+thL/5UXrtBQZXwoGiUybuR7O7YVqylBUto+
-   7qI09CUVzO5/tB2h2CrSAahq6Ruf7ybjgU6umMHY1m3k3weH6Plr14xXF
-   PUZBAc0zWGKqcwPfGt5of2Egjq7YdoxWJC5s2bYD5acZvhVZoMzaAvbMG
-   2hl+PjXSTIw4J/PYqotNHTxR+nWT2eNTKYzU7CLO+MtsIS34qFNkK37LK
-   AAgGsr0pUnPR40igiud8HnyRnsOv/qpRIjuY6dAlPVux4IVnH8K/X6ua1
-   RIK1daCWtTqDMd4Bu8Ci5o1zhWKc6LT/E6Pb/0xh0WWae5Q3O00OtiqUl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="368811212"
-X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
-   d="scan'208";a="368811212"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 16:28:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
-   d="scan'208";a="837807180"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 30 Jun 2022 16:28:15 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o73a2-000DIm-RL;
-        Thu, 30 Jun 2022 23:28:14 +0000
-Date:   Fri, 1 Jul 2022 07:28:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        acpi4asus-user@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Corentin Chary <corentin.chary@gmail.com>,
-        =?iso-8859-1?Q?Jo=E3o?= Paulo Rechi Vita <jprvita@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v1 1/1] platform/x86: asus-wireless: Replace open coded
- acpi_match_device()
-Message-ID: <202207010744.ugH4lnF8-lkp@intel.com>
-References: <20220630193234.3499-1-andriy.shevchenko@linux.intel.com>
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22228EE0E
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:28:23 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id m14so749872plg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:28:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=JDpF1702DHZVfie8bTCpVz88ANMUh0YTTCAKmrI8jCw=;
+        b=IF7Q52bqobIIBXRH0US9UHxF1jrYcI3ETAEU9omZYx2jZcUi2xoCzBQ4pNhM22lYlx
+         LQ6AyyZNG1vSlUcqsMaaV4k63snxyOhyBPubbz0VY/8Hu1CGOfndI349lkM7s49mqSbZ
+         CMgu1I69HD2czvKvHA6HUKxkZbPv3lfIJfy95fe6XG/qfipYroRmcnxZE5I+Hk1asQfv
+         YbiXZ+u/oUtOgGTqeI9lNb4ocd7jbWhOSvTrcO9naNsamBwP5+tXn5tA1K83VJJH1Bvn
+         Qnt/Ap4eMITOlEwEGpuhhaqSs3wHtOuTANfNz/o/M84qw7EzjP0agIkzu1KFVSUEV05E
+         vz4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=JDpF1702DHZVfie8bTCpVz88ANMUh0YTTCAKmrI8jCw=;
+        b=c0VNC3eR3ZXcOx/p1MIP9sJ7qHttUBPXIbVT8RclOImVA2AOHoz1nqiEhzptmk9uUG
+         MjYflf9JJnXNkylQ29RPx9qbh9J4UkTFXlJc81nBdBVAi3DlnyCMH61PwJWUPA1zucFG
+         KZjrj0G9kKQSGQ5YW49z6qFY/h4y/Snmp9143svGIDianHtJkPeBHIG22gE9mXnXCRh4
+         2v2lc4h1PMogMknuCWaaSiHb/3yCibv7w/pro2cvUnIEeXxlym+ft7YjldlCbdvrSzhY
+         JDZMKbT2ifPCqrUiFlpqtG3sN89hoodtmE1xKavoZ222aGRjCfvWY1Yx1wGcMXbNqjoN
+         fh/Q==
+X-Gm-Message-State: AJIora+Vi2mYmCHTQzk9zOJEwU3LlGsUI9cURcwojCX0uJL0SycZKmon
+        xPcMwd+yZfYl8Kw453HEtUKn3bniSve0JG9fQw==
+X-Google-Smtp-Source: AGRyM1uAnvsHNkDuQl//3wRSMEGru2u6LPwjeeq3aeQv4567nlP3V/JY7MBzQWLQ7nrfmwsqzYtoI6MWHiK/I3Yqp/o=
+X-Received: by 2002:a17:903:300b:b0:16a:4971:3207 with SMTP id
+ o11-20020a170903300b00b0016a49713207mr16549311pla.171.1656631702472; Thu, 30
+ Jun 2022 16:28:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220630193234.3499-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a10:6554:0:0:0:0 with HTTP; Thu, 30 Jun 2022 16:28:21
+ -0700 (PDT)
+Reply-To: georgefinance0@gmail.com
+From:   =?UTF-8?B?w5xkdsO2esO2bGrDvGsgYSBHZW9yZ2UgRmluYW5jZSBDb21wYW55IG9sZGFsw6Fu?= 
+        <dennis001rodman@gmail.com>
+Date:   Thu, 30 Jun 2022 16:28:21 -0700
+Message-ID: <CAA+HS3fW8WS5Br4boG3WQAAaX76Spu5bh53DrVpMXq5zqhA7oA@mail.gmail.com>
+Subject: =?UTF-8?Q?Hitel_aj=C3=A1nlat?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.19-rc4 next-20220630]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/platform-x86-asus-wireless-Replace-open-coded-acpi_match_device/20220701-033501
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 1a0e93df1e107dc766fdf86ae88076efd9f376e6
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220701/202207010744.ugH4lnF8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6aca63018deba5520de593749517efd03f7289c7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/platform-x86-asus-wireless-Replace-open-coded-acpi_match_device/20220701-033501
-        git checkout 6aca63018deba5520de593749517efd03f7289c7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/x86/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/platform/x86/asus-wireless.c:151:25: error: incompatible pointer types passing 'struct acpi_device *' to parameter of type 'const struct acpi_device_id *' [-Werror,-Wincompatible-pointer-types]
-           id = acpi_match_device(adev, device_ids);
-                                  ^~~~
-   include/linux/acpi.h:713:77: note: passing argument to parameter 'ids' here
-   const struct acpi_device_id *acpi_match_device(const struct acpi_device_id *ids,
-                                                                               ^
->> drivers/platform/x86/asus-wireless.c:151:31: error: incompatible pointer types passing 'const struct acpi_device_id[3]' to parameter of type 'const struct device *' [-Werror,-Wincompatible-pointer-types]
-           id = acpi_match_device(adev, device_ids);
-                                        ^~~~~~~~~~
-   include/linux/acpi.h:714:34: note: passing argument to parameter 'dev' here
-                                                  const struct device *dev);
-                                                                       ^
-   2 errors generated.
-
-
-vim +151 drivers/platform/x86/asus-wireless.c
-
-   125	
-   126	static int asus_wireless_add(struct acpi_device *adev)
-   127	{
-   128		struct asus_wireless_data *data;
-   129		const struct acpi_device_id *id;
-   130		int err;
-   131	
-   132		data = devm_kzalloc(&adev->dev, sizeof(*data), GFP_KERNEL);
-   133		if (!data)
-   134			return -ENOMEM;
-   135		adev->driver_data = data;
-   136		data->adev = adev;
-   137	
-   138		data->idev = devm_input_allocate_device(&adev->dev);
-   139		if (!data->idev)
-   140			return -ENOMEM;
-   141		data->idev->name = "Asus Wireless Radio Control";
-   142		data->idev->phys = "asus-wireless/input0";
-   143		data->idev->id.bustype = BUS_HOST;
-   144		data->idev->id.vendor = PCI_VENDOR_ID_ASUSTEK;
-   145		set_bit(EV_KEY, data->idev->evbit);
-   146		set_bit(KEY_RFKILL, data->idev->keybit);
-   147		err = input_register_device(data->idev);
-   148		if (err)
-   149			return err;
-   150	
- > 151		id = acpi_match_device(adev, device_ids);
-   152		if (id)
-   153			data->hswc_params = (const struct hswc_params *)id->driver_data;
-   154		if (!data->hswc_params)
-   155			return 0;
-   156	
-   157		data->wq = create_singlethread_workqueue("asus_wireless_workqueue");
-   158		if (!data->wq)
-   159			return -ENOMEM;
-   160		INIT_WORK(&data->led_work, led_state_update);
-   161		data->led.name = "asus-wireless::airplane";
-   162		data->led.brightness_set = led_state_set;
-   163		data->led.brightness_get = led_state_get;
-   164		data->led.flags = LED_CORE_SUSPENDRESUME;
-   165		data->led.max_brightness = 1;
-   166		data->led.default_trigger = "rfkill-none";
-   167		err = devm_led_classdev_register(&adev->dev, &data->led);
-   168		if (err)
-   169			destroy_workqueue(data->wq);
-   170	
-   171		return err;
-   172	}
-   173	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--=20
+Ha hitelre van sz=C3=BCks=C3=A9ge, vagy szeretn=C3=A9 refinansz=C3=ADrozni =
+otthon=C3=A1t vagy
+saj=C3=A1t v=C3=A1llalkoz=C3=A1st szeretne ind=C3=ADtani, 2%-os kamattal k=
+=C3=ADn=C3=A1lunk k=C3=B6lcs=C3=B6nt
+1-20 =C3=A9ves t=C3=B6rleszt=C3=A9ssel, ha =C3=A9rdekel, l=C3=A9pjen kapcso=
+latba vel=C3=BCnk a
+georgefinance0@gmail.com telefonsz=C3=A1mon vagy a WhatsApp +17072613058
+c=C3=ADmen.

@@ -2,88 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B488560E64
+	by mail.lfdr.de (Postfix) with ESMTP id A315D560E65
 	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 02:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiF3A5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 20:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
+        id S230206AbiF3A5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 20:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiF3A5g (ORCPT
+        with ESMTP id S229797AbiF3A5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 20:57:36 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521281A818
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:57:30 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id fi2so35837684ejb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:57:30 -0700 (PDT)
+        Wed, 29 Jun 2022 20:57:47 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0F8201A1
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:57:46 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id l9-20020a056830268900b006054381dd35so13506282otu.4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:57:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7vCW8IYhm+2yyrB9+yLMMui5iqMlnMcEqzDN84wUcZo=;
-        b=bN3+6Isir26Sr1XfDTvfMADv3bYhsAG6r8sElBLGsYJQq154w+i/b2TvLMRmfmsgbL
-         jjjyfaQC31tBwLeMU/tFeg23xueymFSaYWhwsXAXWs09tKVnQ9e6sC/2a2zso8qZH3FZ
-         qdfqpNd1WEhhchTF3vtrqHD2UbssPWdTp9RnKZWkGhzVEqr4+xaNGEJkL2R+UZfsDBvL
-         cvqIZvP5KvECbBiWVO83lF4yiO3LBYk+40VjS0un7LK7zWlucEB/+9Jl6S2cQGRZsRI1
-         bj/Kc3IFRAMS58cNlRUl2o40Wvopq3+8ZPL5GC1UndbgObtVu5NX2VvVW/U1bteCBM0+
-         YRRQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SKqfiDiYuvfDETXVnoeeg5pQ6AZyqtVKR2qDMSZMeUk=;
+        b=MbC6Tw1nfwmIzq9H1rKp+n/UqqIX05yDgOOlpIZdHXKKpP/zyZ6fwpSvAzJ8lYcYlZ
+         YIqyVrj6+1G7upZyavcalRFk921/82SZDL0tu+kbZDdrp3N3BRkw2+YCNvyBvYkqe+Z6
+         a49VJNtdaXVVd5x52SPZ4zs+wyBDcXV32Mmbq5HeQQJV3ErI64ZXkiDtII1g+jJ+dMkh
+         Tgz7TMKzDmDwv9e8+fFx5f8nNR4YDVRJaQKq2XzRQd3G7WQCzRc96Qj/lG0FDtU/wMqL
+         PNqTzGaTuRcp8DiuT8CHwAo16HJuuG3v1fKzsv/9AtubCRHbETL8X6/SxKqE7UptDZuZ
+         MWsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7vCW8IYhm+2yyrB9+yLMMui5iqMlnMcEqzDN84wUcZo=;
-        b=n4zIOxhyMfTtz+1zX2ESufEeBfuHUxJ+t8CNLyY7lKMG+D6ufks8NnfXyRKFSXOm4e
-         15dq+ikZoCuNWHITAe0BA2jTqPF8ZNH++2A/puR44LCgHr7MYVZ46OKHdoeXd0eAjOtl
-         5dfx6S3CH5e45zP7UlOiexV8gl9ZNE62yYI58O33+BJUrPuXzTQmFAlCdAGCiylWa475
-         J2OiqEOlNapEx1WAqfg7f9h2493PWrurKUAUtCjUWgNQ//EagEs6uR8ApTSTSfNQp5PK
-         qGhtN+0K4cSuUSH0BRqXIrBLOytaOaGVP03d58fSm+CiRb6pxvAiYR9fkhuN4uPC4WZZ
-         kTDA==
-X-Gm-Message-State: AJIora+auC/xIBKdp6SeVRMVQxcBrwKTdNMELodtYFi/UmBGvV4pAiHe
-        Z7S/XfzYfLnMbZnKAzsGYxu3
-X-Google-Smtp-Source: AGRyM1sMwk77JzS+0ifsj8Ki2FYMMLZw2jYfI4GUdNFIGT+tvJJUwpojc2pzPTtz8igOmOf3uTMmSg==
-X-Received: by 2002:a17:906:79ca:b0:705:111f:12dc with SMTP id m10-20020a17090679ca00b00705111f12dcmr5917462ejo.602.1656550648646;
-        Wed, 29 Jun 2022 17:57:28 -0700 (PDT)
-Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
-        by smtp.gmail.com with ESMTPSA id i24-20020a170906251800b007262a1c8d20sm8353505ejb.19.2022.06.29.17.57.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 17:57:27 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 00:57:23 +0000
-From:   Wedson Almeida Filho <wedsonaf@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Tejun Heo <tj@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: Re: [PATCH 3/3] kthread: Stop abusing TASK_UNINTERRUPTIBLE
- (INCOMPLETE)
-Message-ID: <Yrz089EH/cpbSUIq@google.com>
-References: <87ilonuti2.fsf_-_@email.froward.int.ebiederm.org>
- <871qvbutex.fsf_-_@email.froward.int.ebiederm.org>
- <CAHk-=wg9eqtrpYrjJ=yobkwkTimWFtiDd_JOfADttG0fyAJrqg@mail.gmail.com>
- <YrjAJN7dDJ9R7Ocu@mtj.duckdns.org>
- <Yrlavf4Ymnz4T3LM@hirez.programming.kicks-ass.net>
- <YrlmOA/Xd+U7+b2E@mtj.duckdns.org>
- <YrnxHBoi6sO0vqV0@google.com>
- <Yrop5Wzc72GIREVv@hirez.programming.kicks-ass.net>
- <YrpMIcECVOMPVpJN@google.com>
- <Yrq0swWUDQL2DPXc@hirez.programming.kicks-ass.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SKqfiDiYuvfDETXVnoeeg5pQ6AZyqtVKR2qDMSZMeUk=;
+        b=WBdFGJIViTz76hUqzTUSu9eO1B8xkM0gC94qI4/AwnPWhN1vDllIsSgSts+s6bllPF
+         eJlnYm8PfaLD5szNB01RMX4/GPc5mMfBnp5yglYexPMr1wJxYz4BH5ZDZF6EBQ02D3e7
+         4WJLTQqoTAuo3BQRqx3+lDf4RfW4oUNpir25AHA/OE19zNUr+Jhz8hESBI8V7dkcF3/4
+         9JNqyisNJQ3toC3+/7d5UZu7Y0o7mb/5RSx+Y+Gsqo6P5/lnjMu3sLNOeq9oUx33n0e/
+         UJndFSDXmCJ0J+5s5KyZvCBqUOj8V0YF/m6uUi+qni08w5XNJFL4DzWl7NVyjW2ul9cI
+         mUhQ==
+X-Gm-Message-State: AJIora/KKylJmkWV0YSGBxt7YrCpnPa1gXn3vNMcQLBOeZrOyEPbs0eF
+        Us08VpHNPovlXNEVi9t89dUzSDSLZSnIl8Huj3A=
+X-Google-Smtp-Source: AGRyM1uuqNmU1rx2B7OEGgbZcMQT3ivFsBg7sH7fuoVOlpvED76IbLTkh316ZjKbIN9vW844cpjPQkNBZoXKO5IHV/4=
+X-Received: by 2002:a05:6830:d13:b0:618:b519:5407 with SMTP id
+ bu19-20020a0568300d1300b00618b5195407mr201343otb.219.1656550665471; Wed, 29
+ Jun 2022 17:57:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yrq0swWUDQL2DPXc@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+References: <20220622082513.467538-1-aneesh.kumar@linux.ibm.com> <20220622082513.467538-12-aneesh.kumar@linux.ibm.com>
+In-Reply-To: <20220622082513.467538-12-aneesh.kumar@linux.ibm.com>
+From:   Souptick Joarder <jrdr.linux@gmail.com>
+Date:   Thu, 30 Jun 2022 06:27:34 +0530
+Message-ID: <CAFqt6zYOWURi-U6gsKTf7jjpGjMn0WqeBz1zm-5DAFDQ+Go2xw@mail.gmail.com>
+Subject: Re: [PATCH v7 11/12] mm/demotion: Add documentation for memory tiering
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     Linux-MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,55 +78,237 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 09:58:43AM +0200, Peter Zijlstra wrote:
-> On Tue, Jun 28, 2022 at 12:32:33AM +0000, Wedson Almeida Filho wrote:
-> > Peter, I meant to ask in my previous email: setting aside the syntax for
-> > a moment, do you have an opinion on the sort of things that Rust allows
-> > us to enforce at compile time (as exemplified in the new_paused()
-> > fragment)?
-> 
-> So I used to do quite a lot of C++ in a previous life; I think I'm more
-> or less familiar with a lot of the things Rust offers, except it is a
-> lot stricter. C++ allows you to do the right thing, but also allows you
-> to take your own foot off (a bit like C, except you can make an even
-> bigger mess of things), where Rust tries really hard to protect the
-> foot.
+On Wed, Jun 22, 2022 at 2:04 PM Aneesh Kumar K.V
+<aneesh.kumar@linux.ibm.com> wrote:
+>
+> From: Jagdish Gediya <jvgediya@linux.ibm.com>
+>
+> All N_MEMORY nodes are divided into 3 memoty tiers with tier ID value
 
-That's a fair assessment. I'd just like to emphasise one aspect: if I
-shoot myself on the foot with Rust, it's either a bug in the compiler or
-because I violated a precondition of an unsafe block.
+s /memoty/ memory
 
-> The one thing I dread is compile times, C++ is bad, but given Rust has
-> to do even more compile time enforcement it'll suck worse. And I'm
-> already not using clang because it's so much worse than gcc.
+> MEMORY_TIER_HBM_GPU, MEMORY_TIER_DRAM and MEMORY_TIER_PMEM. By default,
+> all nodes are assigned to default memory tier.
 
-Yes, it's definitely going to be slower, but I think this is a good
-tradeoff: I'd rather have checks performed when compiling than when
-running the kernel.
+I think adding the default memory tier name will be helpful.
 
-One thing that may speed things up is to disable the borrow checker when
-compiling a known-good revision. I don't think rustc allows this but
-rust-gcc doesn't implement borrow checking at all AFAIU, so we could
-presumably ask them to add a flag to keep it disabled (when/if they
-decide to implement it) in such cases.
-
-> I've just not had *any* time to actually look at Rust in any detail :/
-> 
-> But given I'm the kind of idiot that does tree-wide cleanups just
-> because it's the right thing, I'm bound to run into it sooner rather
-> than later, and then I'll curse my way through having to learn it just
-> to get crap done I expect ...
-
-Looking forward to this :)
-
-Jokes aside, when the day comes, I'm happy to discuss anything that
-doesn't seem to make sense.
- 
-> Anyway; from what I understand Rust is a fair way away from core code.
-
-Indeed. However, we do want to expose core APIs (like paused thread
-creation) to developers writing Rust code, so while the implementation
-will remain in C, we'll implement the _API_ for a bunch of core code.
-
-Cheers,
--Wedson
+>
+> Demotion path for all N_MEMORY nodes is prepared based on the tier ID value
+> of memory tiers.
+>
+> This patch adds documention for memory tiering introduction, its sysfs
+> interfaces and how demotion is performed based on memory tiers.
+>
+> Suggested-by: Wei Xu <weixugc@google.com>
+> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> ---
+>  Documentation/admin-guide/mm/index.rst        |   1 +
+>  .../admin-guide/mm/memory-tiering.rst         | 182 ++++++++++++++++++
+>  2 files changed, 183 insertions(+)
+>  create mode 100644 Documentation/admin-guide/mm/memory-tiering.rst
+>
+> diff --git a/Documentation/admin-guide/mm/index.rst b/Documentation/admin-guide/mm/index.rst
+> index c21b5823f126..3f211cbca8c3 100644
+> --- a/Documentation/admin-guide/mm/index.rst
+> +++ b/Documentation/admin-guide/mm/index.rst
+> @@ -32,6 +32,7 @@ the Linux memory management.
+>     idle_page_tracking
+>     ksm
+>     memory-hotplug
+> +   memory-tiering
+>     nommu-mmap
+>     numa_memory_policy
+>     numaperf
+> diff --git a/Documentation/admin-guide/mm/memory-tiering.rst b/Documentation/admin-guide/mm/memory-tiering.rst
+> new file mode 100644
+> index 000000000000..142c36651f5d
+> --- /dev/null
+> +++ b/Documentation/admin-guide/mm/memory-tiering.rst
+> @@ -0,0 +1,182 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +.. _admin_guide_memory_tiering:
+> +
+> +===========
+> +Memory tiers
+> +============
+> +
+> +This document describes explicit memory tiering support along with
+> +demotion based on memory tiers.
+> +
+> +Introduction
+> +============
+> +
+> +Many systems have multiple types of memory devices e.g. GPU, DRAM and
+> +PMEM. The memory subsystem of these systems can be called a memory
+> +tiering system because the performance of the different types of
+> +memory is different. Memory tiers are defined based on the hardware
+> +capabilities of memory nodes. Each memory tier is assigned a tier ID
+> +value that determines the memory tier position in demotion order.
+> +
+> +The memory tier assignment of each node is independent of each
+> +other. Moving a node from one tier to another tier doesn't affect
+> +the tier assignment of any other node.
+> +
+> +Memory tiers are used to build the demotion targets for nodes. A node
+> +can demote its pages to any node of any lower tiers.
+> +
+> +Memory tier rank
+> +=================
+> +
+> +Memory nodes are divided into 3 types of memory tiers with tier ID
+> +value as shown based on their hardware characteristics.
+> +
+> +
+> +MEMORY_TIER_HBM_GPU
+> +MEMORY_TIER_DRAM
+> +MEMORY_TIER_PMEM
+> +
+> +Memory tiers initialization and (re)assignments
+> +===============================================
+> +
+> +By default, all nodes are assigned to the memory tier with the default tier ID
+> +DEFAULT_MEMORY_TIER which is 200 (MEMORY_TIER_DRAM). The memory tier of
+> +the memory node can be either modified through sysfs or from the driver. On
+> +hotplug, the memory tier with default tier ID is assigned to the memory node.
+> +
+> +
+> +Sysfs interfaces
+> +================
+> +
+> +Nodes belonging to specific tier can be read from,
+> +/sys/devices/system/memtier/memtierN/nodelist (Read-Only)
+> +
+> +Where N is 0 - 2.
+> +
+> +Example 1:
+> +For a system where Node 0 is CPU + DRAM nodes, Node 1 is HBM node,
+> +node 2 is a PMEM node an ideal tier layout will be
+> +
+> +$ cat /sys/devices/system/memtier/memtier0/nodelist
+> +1
+> +$ cat /sys/devices/system/memtier/memtier1/nodelist
+> +0
+> +$ cat /sys/devices/system/memtier/memtier2/nodelist
+> +2
+> +
+> +Example 2:
+> +For a system where Node 0 & 1 are CPU + DRAM nodes, node 2 & 3 are PMEM
+> +nodes.
+> +
+> +$ cat /sys/devices/system/memtier/memtier0/nodelist
+> +cat: /sys/devices/system/memtier/memtier0/nodelist: No such file or
+> +directory
+> +$ cat /sys/devices/system/memtier/memtier1/nodelist
+> +0-1
+> +$ cat /sys/devices/system/memtier/memtier2/nodelist
+> +2-3
+> +
+> +Default memory tier can be read from,
+> +/sys/devices/system/memtier/default_tier (Read-Only)
+> +
+> +e.g.
+> +$ cat /sys/devices/system/memtier/default_tier
+> +memtier200
+> +
+> +Max memory tier ID supported can be read from,
+> +/sys/devices/system/memtier/max_tier (Read-Only)
+> +
+> +e.g.
+> +$ cat /sys/devices/system/memtier/max_tier
+> +400
+> +
+> +Individual node's memory tier can be read of set using,
+> +/sys/devices/system/node/nodeN/memtier (Read-Write)
+> +
+> +where N = node id
+> +
+> +When this interface is written, Node is moved from the old memory tier
+> +to new memory tier and demotion targets for all N_MEMORY nodes are
+> +built again.
+> +
+> +For example 1 mentioned above,
+> +$ cat /sys/devices/system/node/node0/memtier
+> +1
+> +$ cat /sys/devices/system/node/node1/memtier
+> +0
+> +$ cat /sys/devices/system/node/node2/memtier
+> +2
+> +
+> +Additional memory tiers can be created by writing a tier ID value to this file.
+> +This results in a new memory tier creation and moving the specific NUMA node to
+> +that memory tier.
+> +
+> +Demotion
+> +========
+> +
+> +In a system with DRAM and persistent memory, once DRAM
+> +fills up, reclaim will start and some of the DRAM contents will be
+> +thrown out even if there is a space in persistent memory.
+> +Consequently, allocations will, at some point, start falling over to the slower
+> +persistent memory.
+> +
+> +That has two nasty properties. First, the newer allocations can end up in
+> +the slower persistent memory. Second, reclaimed data in DRAM are just
+> +discarded even if there are gobs of space in persistent memory that could
+> +be used.
+> +
+> +Instead of a page being discarded during reclaim, it can be moved to
+> +persistent memory. Allowing page migration during reclaim enables
+> +these systems to migrate pages from fast(higher) tiers to slow(lower)
+> +tiers when the fast(higher) tier is under pressure.
+> +
+> +
+> +Enable/Disable demotion
+> +-----------------------
+> +
+> +By default demotion is disabled, it can be enabled/disabled using
+> +below sysfs interface,
+> +
+> +$ echo 0/1 or false/true > /sys/kernel/mm/numa/demotion_enabled
+> +
+> +preferred and allowed demotion nodes
+> +------------------------------------
+> +
+> +Preferred nodes for a specific N_MEMORY node are the best nodes
+> +from the next possible lower memory tier. Allowed nodes for any
+> +node are all the nodes available in all possible lower memory
+> +tiers.
+> +
+> +Example:
+> +
+> +For a system where Node 0 & 1 are CPU + DRAM nodes, node 2 & 3 are PMEM
+> +nodes,
+> +
+> +node distances:
+> +node   0    1    2    3
+> +   0  10   20   30   40
+> +   1  20   10   40   30
+> +   2  30   40   10   40
+> +   3  40   30   40   10
+> +
+> +memory_tiers[0] = <empty>
+> +memory_tiers[1] = 0-1
+> +memory_tiers[2] = 2-3
+> +
+> +node_demotion[0].preferred = 2
+> +node_demotion[0].allowed   = 2, 3
+> +node_demotion[1].preferred = 3
+> +node_demotion[1].allowed   = 3, 2
+> +node_demotion[2].preferred = <empty>
+> +node_demotion[2].allowed   = <empty>
+> +node_demotion[3].preferred = <empty>
+> +node_demotion[3].allowed   = <empty>
+> +
+> +Memory allocation for demotion
+> +------------------------------
+> +
+> +If a page needs to be demoted from any node, the kernel 1st tries
+> +to allocate a new page from the node's preferred node and fallbacks to
+> +node's allowed targets in allocation fallback order.
+> +
+> --
+> 2.36.1
+>
+>

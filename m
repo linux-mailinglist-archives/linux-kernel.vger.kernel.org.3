@@ -2,118 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66938561B08
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4BD561BB5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232147AbiF3NJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 09:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
+        id S235295AbiF3Nry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 09:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233226AbiF3NJ4 (ORCPT
+        with ESMTP id S235190AbiF3Nrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:09:56 -0400
-Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52062018E;
-        Thu, 30 Jun 2022 06:09:50 -0700 (PDT)
-X-QQ-mid: bizesmtp85t1656594566tf465dwr
-Received: from localhost.localdomain ( [182.148.13.66])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 30 Jun 2022 21:09:23 +0800 (CST)
-X-QQ-SSF: 0100000000200090C000B00A0000000
-X-QQ-FEAT: pqOtrSRu7rgUfzKv/youfEcgC7ibWgG5pXDp/heAIehzNCz6k4+ffbWqRLRit
-        49YVq2b4nyUuNP1rUrkC1ZTC7uARepKM68Fbd2OEbQEEJSeOxyz6O2El1pW4dMEYBm2bajv
-        Z/2U0EzcyuJeAUMI8sqPkNiefIv5rXRBTyDegvPyJcTo30LLL6Ar8utjlsB8XlsjMA8ePPd
-        0gGuicn+eN2XSfnylx8SaHm3u3OYV6x5PONsjFbFfq+Wm+B0ZBbRkVmQu3KzDnv4PbGnUmz
-        wQ5OltvUfj1VxhjZkiOx39Co6A2cOMANFNlEHkFJSqg/jb4SOQQ42XByBtLtC49GMSgHXlO
-        wlAYdZgjspItM+Ey+bSt2qy+pGivA==
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] ethernet/sun: fix repeated words in comments
-Date:   Thu, 30 Jun 2022 21:09:16 +0800
-Message-Id: <20220630130916.21074-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 30 Jun 2022 09:47:39 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4572A409
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 06:47:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656596858; x=1688132858;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=K6USsSMJ8UC9wOjFtx6U82V6WBAGj2etKO7gooeB8dw=;
+  b=PtLUVumoLHtR+weM0Chw9BQYM3MlKI0eSaivfxUvvRbJMoiiLtb1NzW9
+   gmOEStNkAPkzPywbZy+mvT5o6r2gWduE6r19nSmjHYLN14hHz9w8v+LNO
+   o1wylTH4H+Q7S6F/WNIlve8QQVFOvHa/U46fkF1pHku3EhRTwSLwyHgWd
+   D4V7kro3xyuaNEu9Kl41BnwI200EMU5gGxxCHyOvjFrjbg7QrsJs0chux
+   Qc5ZUfjp4s+qUx05KcBgjho/f12tBOrGxYXiuvP3L8KxMHnXde6WT6At9
+   xWj0ucVd7aoY7mvIeNghC51omSjAutQFs//kGrTfQO9OrqKW6PzgOGpAb
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="307859082"
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="307859082"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 06:47:37 -0700
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="617980754"
+Received: from jhilliar-mobl.amr.corp.intel.com (HELO [10.212.10.157]) ([10.212.10.157])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 06:47:36 -0700
+Message-ID: <aee14e9b-9d5f-f243-5834-88d18b4a65db@linux.intel.com>
+Date:   Thu, 30 Jun 2022 08:09:39 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.10.0
+Subject: Re: [PATCH 1/2] ASoC: codecs: wsa881x: handle timeouts in resume path
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, linux-kernel@vger.kernel.org
+References: <20220630130023.9308-1-srinivas.kandagatla@linaro.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220630130023.9308-1-srinivas.kandagatla@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'the'.
-Delete the redundant word 'is'.
-Delete the redundant word 'start'.
-Delete the redundant word 'checking'.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/net/ethernet/sun/cassini.c | 2 +-
- drivers/net/ethernet/sun/cassini.h | 2 +-
- drivers/net/ethernet/sun/ldmvsw.c  | 2 +-
- drivers/net/ethernet/sun/sungem.c  | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/sun/cassini.c b/drivers/net/ethernet/sun/cassini.c
-index 435dc00d04e5..0b08b0e085e8 100644
---- a/drivers/net/ethernet/sun/cassini.c
-+++ b/drivers/net/ethernet/sun/cassini.c
-@@ -29,7 +29,7 @@
-  *  -- on page reclamation, the driver swaps the page with a spare page.
-  *     if that page is still in use, it frees its reference to that page,
-  *     and allocates a new page for use. otherwise, it just recycles the
-- *     the page.
-+ *     page.
-  *
-  * NOTE: cassini can parse the header. however, it's not worth it
-  *       as long as the network stack requires a header copy.
-diff --git a/drivers/net/ethernet/sun/cassini.h b/drivers/net/ethernet/sun/cassini.h
-index ae5f05f03f88..2d91f4936d52 100644
---- a/drivers/net/ethernet/sun/cassini.h
-+++ b/drivers/net/ethernet/sun/cassini.h
-@@ -764,7 +764,7 @@
-  * PAUSE thresholds defined in terms of FIFO occupancy and may be translated
-  * into FIFO vacancy using RX_FIFO_SIZE. setting ON will trigger XON frames
-  * when FIFO reaches 0. OFF threshold should not be > size of RX FIFO. max
-- * value is is 0x6F.
-+ * value is 0x6F.
-  * DEFAULT: 0x00078
-  */
- #define  REG_RX_PAUSE_THRESH               0x4020  /* RX pause thresholds */
-diff --git a/drivers/net/ethernet/sun/ldmvsw.c b/drivers/net/ethernet/sun/ldmvsw.c
-index 6b59b14e74b1..0cd8493b810f 100644
---- a/drivers/net/ethernet/sun/ldmvsw.c
-+++ b/drivers/net/ethernet/sun/ldmvsw.c
-@@ -335,7 +335,7 @@ static int vsw_port_probe(struct vio_dev *vdev, const struct vio_device_id *id)
- 	port->tsolen = 0;
- 
- 	/* Mark the port as belonging to ldmvsw which directs the
--	 * the common code to use the net_device in the vnet_port
-+	 * common code to use the net_device in the vnet_port
- 	 * rather than the net_device in the vnet (which is used
- 	 * by sunvnet). This bit is used by the VNET_PORT_TO_NET_DEVICE
- 	 * macro.
-diff --git a/drivers/net/ethernet/sun/sungem.c b/drivers/net/ethernet/sun/sungem.c
-index 45bd89153de2..a14591b41acb 100644
---- a/drivers/net/ethernet/sun/sungem.c
-+++ b/drivers/net/ethernet/sun/sungem.c
-@@ -1088,7 +1088,7 @@ static netdev_tx_t gem_start_xmit(struct sk_buff *skb,
- 		netif_stop_queue(dev);
- 
- 		/* netif_stop_queue() must be done before checking
--		 * checking tx index in TX_BUFFS_AVAIL() below, because
-+		 * tx index in TX_BUFFS_AVAIL() below, because
- 		 * in gem_tx(), we update tx_old before checking for
- 		 * netif_queue_stopped().
- 		 */
--- 
-2.36.1
+On 6/30/22 08:00, Srinivas Kandagatla wrote:
+> Currently we do not check if SoundWire slave initialization timeout
+> expired before continuing to access its registers.
+> 
+> Its possible that the registers are not accessible if timeout is
+> expired. Handle this by returning timeout in resume path.
+> 
+> Reported-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> Fixes: 8dd552458361 ("ASoC: codecs: wsa881x: add runtime pm support")
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
+For the two patches
+
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+
+> ---
+>  sound/soc/codecs/wsa881x.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/sound/soc/codecs/wsa881x.c b/sound/soc/codecs/wsa881x.c
+> index dc954b85a988..6c8b1db649b8 100644
+> --- a/sound/soc/codecs/wsa881x.c
+> +++ b/sound/soc/codecs/wsa881x.c
+> @@ -1173,11 +1173,17 @@ static int __maybe_unused wsa881x_runtime_resume(struct device *dev)
+>  	struct sdw_slave *slave = dev_to_sdw_dev(dev);
+>  	struct regmap *regmap = dev_get_regmap(dev, NULL);
+>  	struct wsa881x_priv *wsa881x = dev_get_drvdata(dev);
+> +	unsigned long time;
+>  
+>  	gpiod_direction_output(wsa881x->sd_n, 1);
+>  
+> -	wait_for_completion_timeout(&slave->initialization_complete,
+> -				    msecs_to_jiffies(WSA881X_PROBE_TIMEOUT));
+> +	time = wait_for_completion_timeout(&slave->initialization_complete,
+> +					   msecs_to_jiffies(WSA881X_PROBE_TIMEOUT));
+> +	if (!time) {
+> +		dev_err(dev, "Initialization not complete, timed out\n");
+> +		gpiod_direction_output(wsa881x->sd_n, 0);
+> +		return -ETIMEDOUT;
+> +	}
+>  
+>  	regcache_cache_only(regmap, false);
+>  	regcache_sync(regmap);

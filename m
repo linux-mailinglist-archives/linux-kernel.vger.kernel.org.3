@@ -2,105 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9E9561B29
+	by mail.lfdr.de (Postfix) with ESMTP id A6B09561B2A
 	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234784AbiF3NUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 09:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55486 "EHLO
+        id S234664AbiF3NUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 09:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbiF3NUt (ORCPT
+        with ESMTP id S230400AbiF3NUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:20:49 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E797D2E681
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 06:20:48 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25U7Spxj021262
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 06:20:48 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=ZfX4dx+zHt+aWKlD2KZYhsibCaLAXeLuK8UfcMVi5VA=;
- b=UrR0gtorEBKBaIo/GYkV5z1yCKX9H9KizbmtWxktyKsnl4TurcOdUdThksAtnKWoK4M5
- AdOJVTHkjyunQ7FgdkaUjn4isFURSXr5pRTuieHdVN/0GD5Qflv31wqQWl9Wsf5MadaK
- L5vnl90yussuvU7GojV6N+yWcIXiUY7LYrg= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h17fmht1h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 06:20:48 -0700
-Received: from twshared22934.08.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 30 Jun 2022 06:20:47 -0700
-Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id A33BE25B9454; Thu, 30 Jun 2022 06:20:16 -0700 (PDT)
-From:   Dylan Yudaken <dylany@fb.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        <io-uring@vger.kernel.org>
-CC:     <Kernel-team@fb.com>, <linux-kernel@vger.kernel.org>,
-        Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH 5.19] io_uring: fix provided buffer import
-Date:   Thu, 30 Jun 2022 06:20:06 -0700
-Message-ID: <20220630132006.2825668-1-dylany@fb.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 30 Jun 2022 09:20:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCD92C65F;
+        Thu, 30 Jun 2022 06:20:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6DE6B82A59;
+        Thu, 30 Jun 2022 13:20:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A5BC34115;
+        Thu, 30 Jun 2022 13:20:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656595235;
+        bh=Gjs1D9vdtTbVIpCgMrFXplqipTLraLCHH4B9AHCpl/4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sPO7S7+b+VQXn8XPN0Aw/4Cm1s3T9irr43M+Rxhf7IsLt0Z7FH7ZkueR5Fs8fNffu
+         5O1hEithJbc9BVXJ3XXFkLmP8iLjrMUzyFsVGbxhF+PkRy9C8fKnNqR0MAB8+fsaOH
+         mBKZa/1WC/aN80kxm4eGk7DCzStxPLqGLvLerwlA=
+Date:   Thu, 30 Jun 2022 15:20:32 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kexec@lists.infradead.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v4.9] kexec_file: drop weak attribute from
+ arch_kexec_apply_relocations[_add]
+Message-ID: <Yr2jIISAEVwi+YYH@kroah.com>
+References: <20220628154249.204911-3-naveen.n.rao@linux.vnet.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: bT-a-VGO7Tn6QvQPV5S5-U_d5UFuxlVC
-X-Proofpoint-ORIG-GUID: bT-a-VGO7Tn6QvQPV5S5-U_d5UFuxlVC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-30_09,2022-06-28_01,2022-06-22_01
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220628154249.204911-3-naveen.n.rao@linux.vnet.ibm.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-io_import_iovec uses the s pointer, but this was changed immediately
-after the iovec was re-imported and so it was imported into the wrong
-place.
+On Tue, Jun 28, 2022 at 09:12:48PM +0530, Naveen N. Rao wrote:
+> commit 3e35142ef99fe6b4fe5d834ad43ee13cca10a2dc upstream.
+> 
+> Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
+> symbols") [1], binutils (v2.36+) started dropping section symbols that
+> it thought were unused.  This isn't an issue in general, but with
+> kexec_file.c, gcc is placing kexec_arch_apply_relocations[_add] into a
+> separate .text.unlikely section and the section symbol ".text.unlikely"
+> is being dropped. Due to this, recordmcount is unable to find a non-weak
+> symbol in .text.unlikely to generate a relocation record against.
+> 
+> Address this by dropping the weak attribute from these functions.
+> Instead, follow the existing pattern of having architectures #define the
+> name of the function they want to override in their headers.
+> 
+> [1] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=d1bcae833b32f1
+> 
+> [akpm@linux-foundation.org: arch/s390/include/asm/kexec.h needs linux/module.h]
+> Link: https://lkml.kernel.org/r/20220519091237.676736-1-naveen.n.rao@linux.vnet.ibm.com
+> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+> Cc: "Eric W. Biederman" <ebiederm@xmission.com>
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> ---
+>  arch/x86/include/asm/kexec.h |  7 +++++++
+>  include/linux/kexec.h        | 26 ++++++++++++++++++++++----
+>  kernel/kexec_file.c          | 18 ------------------
+>  3 files changed, 29 insertions(+), 22 deletions(-)
+> 
 
-Change the ordering.
+All now queued up, thanks.
 
-Fixes: 2be2eb02e2f5 ("io_uring: ensure reads re-import for selected buffe=
-rs")
-Signed-off-by: Dylan Yudaken <dylany@fb.com>
----
- fs/io_uring.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 5ff2cdb425bc..73ae92a62c2c 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -4314,6 +4314,9 @@ static int io_read(struct io_kiocb *req, unsigned i=
-nt issue_flags)
- 		if (unlikely(ret < 0))
- 			return ret;
- 	} else {
-+		rw =3D req->async_data;
-+		s =3D &rw->s;
-+
- 		/*
- 		 * Safe and required to re-import if we're using provided
- 		 * buffers, as we dropped the selected one before retry.
-@@ -4324,8 +4327,6 @@ static int io_read(struct io_kiocb *req, unsigned i=
-nt issue_flags)
- 				return ret;
- 		}
-=20
--		rw =3D req->async_data;
--		s =3D &rw->s;
- 		/*
- 		 * We come here from an earlier attempt, restore our state to
- 		 * match in case it doesn't. It's cheap enough that we don't
---=20
-2.30.2
-
+greg k-h

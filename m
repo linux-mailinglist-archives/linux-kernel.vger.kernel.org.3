@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE73561CDF
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EBA561D19
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236672AbiF3OIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
+        id S236555AbiF3OFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236949AbiF3OH7 (ORCPT
+        with ESMTP id S236366AbiF3OFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:07:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0338776E96;
-        Thu, 30 Jun 2022 06:54:55 -0700 (PDT)
+        Thu, 30 Jun 2022 10:05:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9622D6D579;
+        Thu, 30 Jun 2022 06:53:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F962B82AF0;
-        Thu, 30 Jun 2022 13:54:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 918F8C34115;
-        Thu, 30 Jun 2022 13:54:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F197D6211C;
+        Thu, 30 Jun 2022 13:53:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 000D2C34115;
+        Thu, 30 Jun 2022 13:53:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597290;
-        bh=P3AupUgDyXW+430uK+Ri8zPTDcyspi0YtaT5rbVwYac=;
+        s=korg; t=1656597218;
+        bh=u7NG5W9NkZZezN5CqzIE694Y6LT2P/Xt7C6EF0ew6ic=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WfF7Ie33XckdQYLKZaMLTL5atoOcMQFmbU/dSAyjP2jAYGSKgpqb02JqVWb6+7Bt5
-         0bBgA/S4TQYT/EzFEgZNhQSVHgK4ckvp56pAlz6Zu9j1uXQG1DCDfO5e4sNUqtkiQC
-         DItNqDXnunPPRCoIuk6UkCerh/PsnCwQMnvYQKAA=
+        b=KEmTyDE3ZeQPB5rCBXZF4l5ZcMD6EGOhSbXrly44eLZdL3VtrUErsGHwMuWC9y8KR
+         wiKkF5aaRxkYtksED1X8K8JqfnD+esqRp458uCnCRYwGKLz5fnYmLFi9YsQPnB5SUu
+         omQvOff/2TT/o8HwdHswb8omQMukMF6IYtYmD8I8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rustam Kovhaev <rkovhaev@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Leah Rumancik <leah.rumancik@gmail.com>
-Subject: [PATCH 5.15 05/28] xfs: use kmem_cache_free() for kmem_cache objects
+        Stefan Agner <stefan@agner.ch>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: [PATCH 5.4 07/16] ARM: 8990/1: use VFP assembler mnemonics in register load/store macros
 Date:   Thu, 30 Jun 2022 15:47:01 +0200
-Message-Id: <20220630133233.084521867@linuxfoundation.org>
+Message-Id: <20220630133231.156217239@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133232.926711493@linuxfoundation.org>
-References: <20220630133232.926711493@linuxfoundation.org>
+In-Reply-To: <20220630133230.936488203@linuxfoundation.org>
+References: <20220630133230.936488203@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +55,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rustam Kovhaev <rkovhaev@gmail.com>
+From: Stefan Agner <stefan@agner.ch>
 
-[ Upstream commit c30a0cbd07ecc0eec7b3cd568f7b1c7bb7913f93 ]
+commit ee440336e5ef977c397afdb72cbf9c6b8effc8ea upstream
 
-For kmalloc() allocations SLOB prepends the blocks with a 4-byte header,
-and it puts the size of the allocated blocks in that header.
-Blocks allocated with kmem_cache_alloc() allocations do not have that
-header.
+The integrated assembler of Clang 10 and earlier do not allow to access
+the VFP registers through the coprocessor load/store instructions:
+<instantiation>:4:6: error: invalid operand for instruction
+ LDC p11, cr0, [r10],#32*4 @ FLDMIAD r10!, {d0-d15}
+     ^
 
-SLOB explodes when you allocate memory with kmem_cache_alloc() and then
-try to free it with kfree() instead of kmem_cache_free().
-SLOB will assume that there is a header when there is none, read some
-garbage to size variable and corrupt the adjacent objects, which
-eventually leads to hang or panic.
+This has been addressed with Clang 11 [0]. However, to support earlier
+versions of Clang and for better readability use of VFP assembler
+mnemonics still is preferred.
 
-Let's make XFS work with SLOB by using proper free function.
+Replace the coprocessor load/store instructions with explicit assembler
+mnemonics to accessing the floating point coprocessor registers. Use
+assembler directives to select the appropriate FPU version.
 
-Fixes: 9749fee83f38 ("xfs: enable the xfs_defer mechanism to process extents to free")
-Signed-off-by: Rustam Kovhaev <rkovhaev@gmail.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Leah Rumancik <leah.rumancik@gmail.com>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
+This allows to build these macros with GNU assembler as well as with
+Clang's built-in assembler.
+
+[0] https://reviews.llvm.org/D59733
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/905
+
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/xfs_extfree_item.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/arm/include/asm/vfpmacros.h |   19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
---- a/fs/xfs/xfs_extfree_item.c
-+++ b/fs/xfs/xfs_extfree_item.c
-@@ -482,7 +482,7 @@ xfs_extent_free_finish_item(
- 			free->xefi_startblock,
- 			free->xefi_blockcount,
- 			&free->xefi_oinfo, free->xefi_skip_discard);
--	kmem_free(free);
-+	kmem_cache_free(xfs_bmap_free_item_zone, free);
- 	return error;
- }
+--- a/arch/arm/include/asm/vfpmacros.h
++++ b/arch/arm/include/asm/vfpmacros.h
+@@ -19,23 +19,25 @@
  
-@@ -502,7 +502,7 @@ xfs_extent_free_cancel_item(
- 	struct xfs_extent_free_item	*free;
- 
- 	free = container_of(item, struct xfs_extent_free_item, xefi_list);
--	kmem_free(free);
-+	kmem_cache_free(xfs_bmap_free_item_zone, free);
- }
- 
- const struct xfs_defer_op_type xfs_extent_free_defer_type = {
-@@ -564,7 +564,7 @@ xfs_agfl_free_finish_item(
- 	extp->ext_len = free->xefi_blockcount;
- 	efdp->efd_next_extent++;
- 
--	kmem_free(free);
-+	kmem_cache_free(xfs_bmap_free_item_zone, free);
- 	return error;
- }
- 
+ 	@ read all the working registers back into the VFP
+ 	.macro	VFPFLDMIA, base, tmp
++	.fpu	vfpv2
+ #if __LINUX_ARM_ARCH__ < 6
+-	LDC	p11, cr0, [\base],#33*4		    @ FLDMIAX \base!, {d0-d15}
++	fldmiax	\base!, {d0-d15}
+ #else
+-	LDC	p11, cr0, [\base],#32*4		    @ FLDMIAD \base!, {d0-d15}
++	vldmia	\base!, {d0-d15}
+ #endif
+ #ifdef CONFIG_VFPv3
++	.fpu	vfpv3
+ #if __LINUX_ARM_ARCH__ <= 6
+ 	ldr	\tmp, =elf_hwcap		    @ may not have MVFR regs
+ 	ldr	\tmp, [\tmp, #0]
+ 	tst	\tmp, #HWCAP_VFPD32
+-	ldclne	p11, cr0, [\base],#32*4		    @ FLDMIAD \base!, {d16-d31}
++	vldmiane \base!, {d16-d31}
+ 	addeq	\base, \base, #32*4		    @ step over unused register space
+ #else
+ 	VFPFMRX	\tmp, MVFR0			    @ Media and VFP Feature Register 0
+ 	and	\tmp, \tmp, #MVFR0_A_SIMD_MASK	    @ A_SIMD field
+ 	cmp	\tmp, #2			    @ 32 x 64bit registers?
+-	ldcleq	p11, cr0, [\base],#32*4		    @ FLDMIAD \base!, {d16-d31}
++	vldmiaeq \base!, {d16-d31}
+ 	addne	\base, \base, #32*4		    @ step over unused register space
+ #endif
+ #endif
+@@ -44,22 +46,23 @@
+ 	@ write all the working registers out of the VFP
+ 	.macro	VFPFSTMIA, base, tmp
+ #if __LINUX_ARM_ARCH__ < 6
+-	STC	p11, cr0, [\base],#33*4		    @ FSTMIAX \base!, {d0-d15}
++	fstmiax	\base!, {d0-d15}
+ #else
+-	STC	p11, cr0, [\base],#32*4		    @ FSTMIAD \base!, {d0-d15}
++	vstmia	\base!, {d0-d15}
+ #endif
+ #ifdef CONFIG_VFPv3
++	.fpu	vfpv3
+ #if __LINUX_ARM_ARCH__ <= 6
+ 	ldr	\tmp, =elf_hwcap		    @ may not have MVFR regs
+ 	ldr	\tmp, [\tmp, #0]
+ 	tst	\tmp, #HWCAP_VFPD32
+-	stclne	p11, cr0, [\base],#32*4		    @ FSTMIAD \base!, {d16-d31}
++	vstmiane \base!, {d16-d31}
+ 	addeq	\base, \base, #32*4		    @ step over unused register space
+ #else
+ 	VFPFMRX	\tmp, MVFR0			    @ Media and VFP Feature Register 0
+ 	and	\tmp, \tmp, #MVFR0_A_SIMD_MASK	    @ A_SIMD field
+ 	cmp	\tmp, #2			    @ 32 x 64bit registers?
+-	stcleq	p11, cr0, [\base],#32*4		    @ FSTMIAD \base!, {d16-d31}
++	vstmiaeq \base!, {d16-d31}
+ 	addne	\base, \base, #32*4		    @ step over unused register space
+ #endif
+ #endif
 
 

@@ -2,105 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA848562150
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 19:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2F656214D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 19:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236362AbiF3Rb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 13:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
+        id S236315AbiF3Rbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 13:31:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231747AbiF3Rbx (ORCPT
+        with ESMTP id S231747AbiF3Rbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 13:31:53 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E52B20BD3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:31:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 451B71063;
-        Thu, 30 Jun 2022 10:31:52 -0700 (PDT)
-Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DDE1A3F792;
-        Thu, 30 Jun 2022 10:31:50 -0700 (PDT)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     sudeep.holla@arm.com, f.fainelli@gmail.com,
-        vincent.guittot@linaro.org, lukasz.luba@arm.com,
-        james.quinlan@broadcom.com,
-        Cristian Marussi <cristian.marussi@arm.com>
-Subject: [PATCH v2 0/2] Add SCMI full message tracing
-Date:   Thu, 30 Jun 2022 18:31:33 +0100
-Message-Id: <20220630173135.2086631-1-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.32.0
+        Thu, 30 Jun 2022 13:31:48 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0714120BD3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:31:48 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id x3so34995556lfd.2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:31:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bKovRKzTTq8kVAKncWkMW8HntSojKecvaV7C1Tiy6gA=;
+        b=KiMJPhP6xYYFUTWaCNcg8Z9VnzBD8Sm0oGGvMtn8MvEbc8PTHuawBiezi89pfsM7Qg
+         Weaotn/+nwWWMTsRSzSg3qRF0kqlRQQhIV56sfRjnhfJlsreFVjkQwOx56O2r6XGhDIE
+         5MwNLhFeUXTLv7GhRSR68Rj4yk3AT6dh4zwiNg6OLPp3JgFANNXzgIlgbjJGJVPQTKnx
+         MCEUiDTeM+atlaHz/soeTiQbt2NENBGmLKydg6UEQBFGBoYX7OfGhPE0X3Fm27YP4uzU
+         UqdaYdcuGBsxGYIcG7YALT7F6u1V1TWM2roEZKCy53hl8+dLM5hWEuupgxTAOg99+qcZ
+         o7Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bKovRKzTTq8kVAKncWkMW8HntSojKecvaV7C1Tiy6gA=;
+        b=CH1ZXipCLXhnv3oLe5PgXhTWwughobSr6eyG0JsmhlGN4DGl/CoA1XZmWpMrQsbM9D
+         njQnFXfr+R8AygdpdP5LqLCS7qv03mMAgS3yaNvdqfHoqVeSLu3oX4A1ZCxkdFo8BQLp
+         fNibRy9lnS/Q2bmz1qRohjN/6ejAPjQ9wF7ae/aGH8keKgk3XVRbFoZMZd47KDo/lPJQ
+         pOO6aVmh6hRD7yGrucOiUNWMoisTFaHMDKPAAP2gK3pA3f2rg8R2VtXr0lG/iFBZszoV
+         +8IZALlnqdRctEmL/9oLTsihXq03PA5gb+KyT4a+WJjbezWq8S0iLb0YPZ4Ovriv2T+n
+         G5/Q==
+X-Gm-Message-State: AJIora/GmHq1NPtwo8ixtmrEmtW7lt78zyr9nUYYLDv/TpAIquqeekfi
+        Iq6jP9J7NDvgNf2NkVwjkh1LTuNbalzBb09D6Y63VA==
+X-Google-Smtp-Source: AGRyM1vC8qvT64BKHvXZRWx0+8khtoYbG2fNUSn6dQgJUNzOHR73qJQimcWU1Ouvt7DOWBH7/hK5HihBjOUZbkXXK/U=
+X-Received: by 2002:a05:6512:b8d:b0:47f:74f0:729b with SMTP id
+ b13-20020a0565120b8d00b0047f74f0729bmr6261421lfv.403.1656610306179; Thu, 30
+ Jun 2022 10:31:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220629235326.480858-1-justinstitt@google.com> <CAHp75VdQws+Q8aoh0BZkq1K4Grw0ugo_=NZ1uYO0g38xFjT9Lw@mail.gmail.com>
+In-Reply-To: <CAHp75VdQws+Q8aoh0BZkq1K4Grw0ugo_=NZ1uYO0g38xFjT9Lw@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 30 Jun 2022 10:31:34 -0700
+Message-ID: <CAKwvOdmyXX=P4k_ymT=3EmzEuTZryozOTbe=F08bokw=axieUQ@mail.gmail.com>
+Subject: Re: [PATCH] lib/test_printf.c: fix clang -Wformat warnings
+To:     Justin Stitt <justinstitt@google.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Andy Shevchenko <andy.shevchenko@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Jun 30, 2022 at 1:14 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Thu, Jun 30, 2022 at 2:11 AM Justin Stitt <justinstitt@google.com> wrote:
+> >
+> > +       /* disable -Wformat for this chunk */
+> > +       NOWARN(-Wformat,
+> >         test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+> >         test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+> >         test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+>
+> Perhaps shift right the lines as well?
 
-after a few recent troubles handling too strictly out-of-spec replies from
-SCMI servers deployed in the wild, I though it could have been useful to
-have a basic way to dump at will the effective full payloads of
-successfully transmitted/received SCMI messages.
+Along these lines, I think it would look nicer to pass a block
+statement (a group of statements) to the macro rather than use
+__VA_ARGS__.  Here's an example:
+https://godbolt.org/z/fsYcGGEMb
 
-The existing SCMI traces already collect a bunch of information about SCMI
-message exchanges but they do NOT keep any payload information: this is
-certainly preferable most of the time since dumping full SCMI messages to
-the trace buffer involves a full copy of the payload.
+You have to be careful with control flow out of blocks like this
+sometimes, but for these simple localized cases it looks like that
+should be fine.
 
-For this reason I added a new distinct trace_scmi_msg_dump with this series
-in order to be able to selectively enable at will message dumping only when
-required.
-
-Only successfully transmitted and received (valid) xfers are dumped.
-
-Following the advice from Jim, I added some parsing/interpretation of the
-header, so that the final result is something like:
-
-root@deb-guest:~# echo 1 > /sys/kernel/debug/tracing/events/scmi/scmi_msg_dump/enable 
-root@deb-guest:~# cat /sys/kernel/debug/tracing/trace_pipe 
-
- ++ cmd/reply
-    sugov:0-257     [000] .....   401.954788: scmi_msg_dump: pt=13 t=CMND msg_id=07 seq=0082 s=0 pyld=0000000000000000
-     <idle>-0       [000] d.h2.   401.955085: scmi_msg_dump: pt=13 t=RESP msg_id=07 seq=0082 s=0 pyld=
-
-
- ++ cmd/reply/delayed
-   cat-263     [001] .....   471.533806: scmi_msg_dump: pt=15 t=CMND msg_id=06 seq=008A s=0 pyld=0100000001000000
-<idle>-0       [000] d.h2.   471.554001: scmi_msg_dump: pt=15 t=RESP msg_id=06 seq=008A s=0 pyld=
-<idle>-0       [000] d.h2.   471.574102: scmi_msg_dump: pt=15 t=DLYD msg_id=06 seq=008A s=0 pyld=01000000a05a320000000000efbeaddefecafeca
-
-
- ++ enable notif/notif
-iio_generic_buf-282     [000] .....   535.327307: scmi_msg_dump: pt=15 t=CMND msg_id=0A seq=00AB s=0 pyld=0800000003000000
-         <idle>-0       [000] d.h2.   535.327561: scmi_msg_dump: pt=15 t=RESP msg_id=0A seq=00AB s=0 pyld=00000000
-         <idle>-0       [000] d.h2.   535.334421: scmi_msg_dump: pt=15 t=NOTI msg_id=01 seq=0000 s=0 pyld=000000000800000008daffffffffffff008268d4c075fd1610daffffffffffff008268d4c075fd1618daffffffffffff008268d4c075fd16
-         <idle>-0       [000] d.h2.   535.434649: scmi_msg_dump: pt=15 t=NOTI msg_id=01 seq=0000 s=0 pyld=000000000800000009daffffffffffff008268d4c075fd1611daffffffffffff008268d4c075fd1619daffffffffffff008268d4c075fd16
-
-Payload is dumped as it comes through byte-by-byte without any endianity
-conversion to avoid further load on the system.
-
-Thanks,
-Cristian
-
----
-V1 --> V2
-- changed dumping format
-
-Cristian Marussi (2):
-  include: trace: Add SCMI full message tracing
-  firmware: arm_scmi: Use new SCMI full message tracing
-
- drivers/firmware/arm_scmi/driver.c | 21 ++++++++++++++++++++
- include/trace/events/scmi.h        | 31 ++++++++++++++++++++++++++++++
- 2 files changed, 52 insertions(+)
-
+As Nathan mentions, you can probably re-use the existing infra in your
+definition of NOWARN.  I do prefer some macro to make it appear that
+the pragma is scoped to a block statement, rather than multiple lines
+for the diag push + pop inline.
 -- 
-2.32.0
-
+Thanks,
+~Nick Desaulniers

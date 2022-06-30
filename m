@@ -2,147 +2,450 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6CB561542
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4350561541
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232746AbiF3IiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 04:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
+        id S233826AbiF3Ii0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 04:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbiF3IiJ (ORCPT
+        with ESMTP id S233434AbiF3IiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 04:38:09 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1B07C17
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:38:07 -0700 (PDT)
-Received: from [10.20.42.19] (unknown [10.20.42.19])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxX9flYL1iZvllAA--.13254S3;
-        Thu, 30 Jun 2022 16:37:57 +0800 (CST)
-Subject: Re: [PATCH V13 06/13] irqchip/loongson-pch-pic: Add ACPI init support
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-References: <1656329997-20524-1-git-send-email-lvjianmin@loongson.cn>
- <1656329997-20524-7-git-send-email-lvjianmin@loongson.cn>
- <87v8sj1zs9.wl-maz@kernel.org>
- <aa8321d5-9839-9ccf-6284-766719e980ea@loongson.cn>
- <87o7yaehtk.wl-maz@kernel.org>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <0aafcd57-9dc6-e061-a7c9-d86348dfe0d1@loongson.cn>
-Date:   Thu, 30 Jun 2022 16:37:57 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <87o7yaehtk.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxX9flYL1iZvllAA--.13254S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxJw4fCw1DCF17XFyrtr4UCFg_yoW5GrWfpa
-        yYqFWayF4DArWxCw1SgF4UZFyayw18Jr13uF95KryrA3s09r1xGFWktr1j9FykWr4kua12
-        vw4YvF97Ka98AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU901xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E
-        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
-        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrw
-        ACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl
-        42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW5Wr1UJr1l4I8I3I0E4IkC6x0Yz7
-        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-        1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-        AIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0D
-        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
-        VFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 30 Jun 2022 04:38:24 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE2F18397
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 01:38:20 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VHr2UPz_1656578288;
+Received: from VM20190228-102.tbsite.net(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VHr2UPz_1656578288)
+          by smtp.aliyun-inc.com;
+          Thu, 30 Jun 2022 16:38:16 +0800
+From:   Guanghui Feng <guanghuifeng@linux.alibaba.com>
+To:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
+        will@kernel.org, akpm@linux-foundation.org, david@redhat.com,
+        jianyong.wu@arm.com, james.morse@arm.com, quic_qiancai@quicinc.com,
+        christophe.leroy@csgroup.eu, jonathan@marek.ca,
+        mark.rutland@arm.com, thunder.leizhen@huawei.com,
+        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, rppt@kernel.org,
+        geert+renesas@glider.be, ardb@kernel.org, linux-mm@kvack.org,
+        yaohongbo@linux.alibaba.com
+Cc:     alikernel-developer@linux.alibaba.com
+Subject: [PATCH v2] arm64: mm: fix linear mapping mem access performance degradation
+Date:   Thu, 30 Jun 2022 16:38:08 +0800
+Message-Id: <1656578288-11259-1-git-send-email-guanghuifeng@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The arm64 can build 2M/1G block/sectiion mapping. When using DMA/DMA32 zone
+(enable crashkernel, disable rodata full, disable kfence), the mem_map will
+use non block/section mapping(for crashkernel requires to shrink the region
+in page granularity). But it will degrade performance when doing larging
+continuous mem access in kernel(memcpy/memmove, etc).
 
+There are many changes and discussions:
+commit 031495635b46 ("arm64: Do not defer reserve_crashkernel() for
+platforms with no DMA memory zones")
+commit 0a30c53573b0 ("arm64: mm: Move reserve_crashkernel() into
+mem_init()")
+commit 2687275a5843 ("arm64: Force NO_BLOCK_MAPPINGS if crashkernel
+reservation is required")
 
-On 2022/6/30 下午3:22, Marc Zyngier wrote:
-> On Thu, 30 Jun 2022 05:36:40 +0100,
-> Jianmin Lv <lvjianmin@loongson.cn> wrote:
->>
->>
-> 
-> [...]
-> 
->>>> +static int __init pch_pic_acpi_init(void)
->>>> +{
->>>> +	acpi_table_parse_madt(ACPI_MADT_TYPE_BIO_PIC,
->>>
->>> Where is this defined? It only appears in the documentation, and
->>> nowhere else...
->>>
->>
->> It's defined in the patch to ACPICA(which has been merged, please to
->> see
->> https://github.com/acpica/acpica/commit/1dc530059a3e6202e941e6a9478cf30f092bfb47).
->> the patch will be synchronized to linux kernel by maintainer of ACPICA.
-> 
-> How can I take this patch upstream if it doesn't even compile? Please
-> make this patch part of your series. There are tons of patches that
-> need Acks from the ACPI maintainers, this is only one of them.
-> 
+This patch changes mem_map to use block/section mapping with crashkernel.
+Firstly, do block/section mapping(normally 2M or 1G) for all avail mem at
+mem_map, reserve crashkernel memory. And then walking pagetable to split
+block/section mapping to non block/section mapping(normally 4K) [[[only]]]
+for crashkernel mem. So the linear mem mapping use block/section mapping
+as more as possible. We will reduce the cpu dTLB miss conspicuously, and
+accelerate mem access about 10-20% performance improvement.
 
-Ok, I'll put the patch into my series.
+I have tested it with pft(Page Fault Test) and fio, obtained great
+performace improvement.
 
+For fio test:
+1.prepare ramdisk
+  modprobe -r brd
+  modprobe brd rd_nr=1 rd_size=67108864
+  dmsetup remove_all
+  wipefs -a --force /dev/ram0
+  mkfs -t ext4 -E lazy_itable_init=0,lazy_journal_init=0 -q -F /dev/ram0
+  mkdir -p /fs/ram0
+  mount -t ext4 /dev/ram0 /fs/ram0
 
->>
->>
->>>> +			      pchintc_parse_madt, 0);
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +early_initcall(pch_pic_acpi_init);
->>>
->>> Why can't you use IRQCHIP_ACPI_DECLARE here? This is terribly fragile,
->>> and will eventually break. I really don't want to rely on this.
->>>
->>
->> In early time, the change here is implemented using
->> IRQCHIP_ACPI_DECLARE, but we found that calling order(during
->> irqchip_init) of the entry declared using IRQCHIP_ACPI_DECLARE is
->> depended on the compiling order(driver order in Makefile) of the
->> driver. For removing the dependency to the compiling order, the new
->> way here is used(I looked into ARM, it seems that GIC driver uses
->> IRQCHIP_ACPI_DECLARE, and ITS driver uses early_initcall too.).
-> 
-> It's not quite the same. The ITS part that uses early_initcall isn't
-> an actual driver (it only registers a domain, and nothing else).
-> 
+2.prepare fio paremeter in x.fio file:
+[global]
+bs=4k
+ioengine=psync
+iodepth=128
+size=32G
+direct=1
+invalidate=1
+group_reporting
+thread=1
+rw=read
+directory=/fs/ram0
+numjobs=1
 
-Ok, thanks, I got it, I don't understand ARM's irqchips well.
+[task_0]
+cpus_allowed=16
+stonewall=1
 
-> There is also no guarantee that the initcalls at the same priority
-> will execute in any order, and you already have at least two such
-> initcalls (pch_pic_acpi_init, pch_msi_acpi_init, and I haven't quite
-> understood how the rest is probed yet).
-> 
+3.run testcase:
+perf stat -e dTLB-load-misses fio x.fio
 
-Yes, agree, but pch_pic and pch_msi are independent, and there is no
-dependencies between them, so there is no requirement on calling order 
-for the two entries.
+4.contrast
+------------------------
+			without patch		with patch
+fio READ		aggrb=1493.2MB/s	aggrb=1775.3MB/s
+dTLB-load-misses	1,818,320,693		438,729,774
+time elapsed(s)		70.500326434		62.877316408
+user(s)			15.926332000		15.684721000
+sys(s)			54.211939000		47.046165000
 
-> One possibility would be to drive the whole probing from the root
-> interrupt controller, which is similar to what GICv3 does for the
-> actual ITS driver. You already do this sort of stuff in the CPUINTC
-> driver, so adding to this shouldn't be too hard.
-> 
+5.conclusion
+Using this patch will reduce dTLB misses and improve performace greatly.
 
-Ok, thanks for your suggestion, I'll try to change it as the way in the 
-CPUINTC driver, it seems that way is better.
+Signed-off-by: Guanghui Feng <guanghuifeng@linux.alibaba.com>
+---
+ arch/arm64/include/asm/mmu.h |   1 +
+ arch/arm64/mm/init.c         |   8 +--
+ arch/arm64/mm/mmu.c          | 163 ++++++++++++++++++++++++++++++-------------
+ 3 files changed, 116 insertions(+), 56 deletions(-)
 
-> 	M.
-> 
+diff --git a/arch/arm64/include/asm/mmu.h b/arch/arm64/include/asm/mmu.h
+index 48f8466..1a46b81 100644
+--- a/arch/arm64/include/asm/mmu.h
++++ b/arch/arm64/include/asm/mmu.h
+@@ -63,6 +63,7 @@ static inline bool arm64_kernel_unmapped_at_el0(void)
+ extern void arm64_memblock_init(void);
+ extern void paging_init(void);
+ extern void bootmem_init(void);
++extern void map_crashkernel(void);
+ extern void __iomem *early_io_map(phys_addr_t phys, unsigned long virt);
+ extern void init_mem_pgprot(void);
+ extern void create_pgd_mapping(struct mm_struct *mm, phys_addr_t phys,
+diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+index 339ee84..241d27e 100644
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -190,6 +190,7 @@ static void __init reserve_crashkernel(void)
+ 	crashk_res.start = crash_base;
+ 	crashk_res.end = crash_base + crash_size - 1;
+ 	insert_resource(&iomem_resource, &crashk_res);
++	map_crashkernel();
+ }
+ 
+ /*
+@@ -388,10 +389,6 @@ void __init arm64_memblock_init(void)
+ 	}
+ 
+ 	early_init_fdt_scan_reserved_mem();
+-
+-	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
+-		reserve_crashkernel();
+-
+ 	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
+ }
+ 
+@@ -438,8 +435,7 @@ void __init bootmem_init(void)
+ 	 * request_standard_resources() depends on crashkernel's memory being
+ 	 * reserved, so do it here.
+ 	 */
+-	if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
+-		reserve_crashkernel();
++	reserve_crashkernel();
+ 
+ 	memblock_dump_all();
+ }
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index 626ec32..c832848 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -42,6 +42,7 @@
+ #define NO_BLOCK_MAPPINGS	BIT(0)
+ #define NO_CONT_MAPPINGS	BIT(1)
+ #define NO_EXEC_MAPPINGS	BIT(2)	/* assumes FEAT_HPDS is not used */
++#define NO_SEC_REMAPPINGS	BIT(3)	/* rebuild with non block/sec mapping*/
+ 
+ u64 idmap_t0sz = TCR_T0SZ(VA_BITS_MIN);
+ u64 idmap_ptrs_per_pgd = PTRS_PER_PGD;
+@@ -156,11 +157,12 @@ static bool pgattr_change_is_safe(u64 old, u64 new)
+ }
+ 
+ static void init_pte(pmd_t *pmdp, unsigned long addr, unsigned long end,
+-		     phys_addr_t phys, pgprot_t prot)
++		     phys_addr_t phys, pgprot_t prot, int flags)
+ {
+ 	pte_t *ptep;
+ 
+-	ptep = pte_set_fixmap_offset(pmdp, addr);
++	ptep = (flags & NO_SEC_REMAPPINGS) ? pte_offset_kernel(pmdp, addr) :
++		pte_set_fixmap_offset(pmdp, addr);
+ 	do {
+ 		pte_t old_pte = READ_ONCE(*ptep);
+ 
+@@ -176,7 +178,8 @@ static void init_pte(pmd_t *pmdp, unsigned long addr, unsigned long end,
+ 		phys += PAGE_SIZE;
+ 	} while (ptep++, addr += PAGE_SIZE, addr != end);
+ 
+-	pte_clear_fixmap();
++	if (!(flags & NO_SEC_REMAPPINGS))
++		pte_clear_fixmap();
+ }
+ 
+ static void alloc_init_cont_pte(pmd_t *pmdp, unsigned long addr,
+@@ -208,11 +211,12 @@ static void alloc_init_cont_pte(pmd_t *pmdp, unsigned long addr,
+ 		next = pte_cont_addr_end(addr, end);
+ 
+ 		/* use a contiguous mapping if the range is suitably aligned */
+-		if ((((addr | next | phys) & ~CONT_PTE_MASK) == 0) &&
++		if (!(flags & NO_SEC_REMAPPINGS) &&
++		   (((addr | next | phys) & ~CONT_PTE_MASK) == 0) &&
+ 		    (flags & NO_CONT_MAPPINGS) == 0)
+ 			__prot = __pgprot(pgprot_val(prot) | PTE_CONT);
+ 
+-		init_pte(pmdp, addr, next, phys, __prot);
++		init_pte(pmdp, addr, next, phys, __prot, flags);
+ 
+ 		phys += next - addr;
+ 	} while (addr = next, addr != end);
+@@ -224,15 +228,44 @@ static void init_pmd(pud_t *pudp, unsigned long addr, unsigned long end,
+ {
+ 	unsigned long next;
+ 	pmd_t *pmdp;
++	phys_addr_t map_offset;
++	pmdval_t pmdval;
+ 
+-	pmdp = pmd_set_fixmap_offset(pudp, addr);
++	pmdp = (flags & NO_SEC_REMAPPINGS) ? pmd_offset(pudp, addr) :
++		pmd_set_fixmap_offset(pudp, addr);
+ 	do {
+ 		pmd_t old_pmd = READ_ONCE(*pmdp);
+ 
+ 		next = pmd_addr_end(addr, end);
+ 
+-		/* try section mapping first */
+-		if (((addr | next | phys) & ~PMD_MASK) == 0 &&
++		if (flags & NO_SEC_REMAPPINGS) {
++			if (!pmd_none(*pmdp) && pmd_sect(*pmdp)) {
++				phys_addr_t pte_phys = pgtable_alloc(PAGE_SHIFT);
++				pmd_clear(pmdp);
++				pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
++				if (flags & NO_EXEC_MAPPINGS)
++					pmdval |= PMD_TABLE_PXN;
++				__pmd_populate(pmdp, pte_phys, pmdval);
++				flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
++
++				map_offset = addr - (addr & PMD_MASK);
++				if (map_offset)
++				    alloc_init_cont_pte(pmdp, addr & PMD_MASK, addr,
++							phys - map_offset, prot,
++							pgtable_alloc,
++							flags & (~NO_SEC_REMAPPINGS));
++
++				if (next < (addr & PMD_MASK) + PMD_SIZE)
++				    alloc_init_cont_pte(pmdp, next,
++						       (addr & PUD_MASK) + PUD_SIZE,
++						        next - addr + phys,
++							prot, pgtable_alloc,
++							flags & (~NO_SEC_REMAPPINGS));
++			}
++			alloc_init_cont_pte(pmdp, addr, next, phys, prot,
++					    pgtable_alloc, flags);
++		}/* try section mapping first */
++		else if (((addr | next | phys) & ~PMD_MASK) == 0 &&
+ 		    (flags & NO_BLOCK_MAPPINGS) == 0) {
+ 			pmd_set_huge(pmdp, phys, prot);
+ 
+@@ -252,7 +285,8 @@ static void init_pmd(pud_t *pudp, unsigned long addr, unsigned long end,
+ 		phys += next - addr;
+ 	} while (pmdp++, addr = next, addr != end);
+ 
+-	pmd_clear_fixmap();
++	if (!(flags & NO_SEC_REMAPPINGS))
++		pmd_clear_fixmap();
+ }
+ 
+ static void alloc_init_cont_pmd(pud_t *pudp, unsigned long addr,
+@@ -286,7 +320,8 @@ static void alloc_init_cont_pmd(pud_t *pudp, unsigned long addr,
+ 		next = pmd_cont_addr_end(addr, end);
+ 
+ 		/* use a contiguous mapping if the range is suitably aligned */
+-		if ((((addr | next | phys) & ~CONT_PMD_MASK) == 0) &&
++		if (!(flags & NO_SEC_REMAPPINGS) &&
++		   (((addr | next | phys) & ~CONT_PMD_MASK) == 0) &&
+ 		    (flags & NO_CONT_MAPPINGS) == 0)
+ 			__prot = __pgprot(pgprot_val(prot) | PTE_CONT);
+ 
+@@ -301,7 +336,9 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+ 			   phys_addr_t (*pgtable_alloc)(int),
+ 			   int flags)
+ {
++	phys_addr_t map_offset;
+ 	unsigned long next;
++	pudval_t pudval;
+ 	pud_t *pudp;
+ 	p4d_t *p4dp = p4d_offset(pgdp, addr);
+ 	p4d_t p4d = READ_ONCE(*p4dp);
+@@ -325,18 +362,48 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+ 	 */
+ 	if (system_state != SYSTEM_BOOTING)
+ 		mutex_lock(&fixmap_lock);
+-	pudp = pud_set_fixmap_offset(p4dp, addr);
++
++	pudp = (flags & NO_SEC_REMAPPINGS) ? pud_offset(p4dp, addr) :
++		pud_set_fixmap_offset(p4dp, addr);
+ 	do {
+ 		pud_t old_pud = READ_ONCE(*pudp);
+-
+ 		next = pud_addr_end(addr, end);
+ 
++		if (flags & NO_SEC_REMAPPINGS) {
++			if (!pud_none(*pudp) && pud_sect(*pudp)) {
++				phys_addr_t pmd_phys = pgtable_alloc(PMD_SHIFT);
++				pud_clear(pudp);
++				pudval = PUD_TYPE_TABLE | PUD_TABLE_UXN;
++				if (flags & NO_EXEC_MAPPINGS)
++					pudval |= PUD_TABLE_PXN;
++
++				__pud_populate(pudp, pmd_phys, pudval);
++				flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
++
++				map_offset = addr - (addr & PUD_MASK);
++				if (map_offset)
++				    alloc_init_cont_pmd(pudp, addr & PUD_MASK,
++							addr, phys - map_offset,
++							prot, pgtable_alloc,
++							flags &	(~NO_SEC_REMAPPINGS));
++
++				if (next < (addr & PUD_MASK) + PUD_SIZE)
++				    alloc_init_cont_pmd(pudp, next,
++						       (addr & PUD_MASK) +
++							PUD_SIZE,
++							next - addr + phys,
++							prot, pgtable_alloc,
++							flags & (~NO_SEC_REMAPPINGS));
++			}
++			alloc_init_cont_pmd(pudp, addr, next, phys, prot,
++					    pgtable_alloc, flags);
++		}
+ 		/*
+ 		 * For 4K granule only, attempt to put down a 1GB block
+ 		 */
+-		if (pud_sect_supported() &&
+-		   ((addr | next | phys) & ~PUD_MASK) == 0 &&
+-		    (flags & NO_BLOCK_MAPPINGS) == 0) {
++		else if (pud_sect_supported() &&
++			((addr | next | phys) & ~PUD_MASK) == 0 &&
++			(flags & NO_BLOCK_MAPPINGS) == 0) {
+ 			pud_set_huge(pudp, phys, prot);
+ 
+ 			/*
+@@ -355,7 +422,8 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+ 		phys += next - addr;
+ 	} while (pudp++, addr = next, addr != end);
+ 
+-	pud_clear_fixmap();
++	if (!(flags & NO_SEC_REMAPPINGS))
++		pud_clear_fixmap();
+ 	if (system_state != SYSTEM_BOOTING)
+ 		mutex_unlock(&fixmap_lock);
+ }
+@@ -483,20 +551,39 @@ void __init mark_linear_text_alias_ro(void)
+ 			    PAGE_KERNEL_RO);
+ }
+ 
+-static bool crash_mem_map __initdata;
++#ifdef CONFIG_KEXEC_CORE
++static phys_addr_t __init early_crashkernel_pgtable_alloc(int shift)
++{
++	phys_addr_t phys;
++	void *ptr;
+ 
+-static int __init enable_crash_mem_map(char *arg)
++	phys = memblock_phys_alloc_range(PAGE_SIZE, PAGE_SIZE, 0,
++					 MEMBLOCK_ALLOC_NOLEAKTRACE);
++	if (!phys)
++		panic("Failed to allocate page table page\n");
++
++	ptr = (void *)__phys_to_virt(phys);
++	memset(ptr, 0, PAGE_SIZE);
++	return phys;
++}
++
++void __init map_crashkernel(void)
+ {
+-	/*
+-	 * Proper parameter parsing is done by reserve_crashkernel(). We only
+-	 * need to know if the linear map has to avoid block mappings so that
+-	 * the crashkernel reservations can be unmapped later.
+-	 */
+-	crash_mem_map = true;
++	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
++	    return;
+ 
+-	return 0;
++	if (!crashk_res.end)
++	    return;
++
++	__create_pgd_mapping(swapper_pg_dir, crashk_res.start,
++			     __phys_to_virt(crashk_res.start),
++			     crashk_res.end + 1 - crashk_res.start, PAGE_KERNEL,
++			     early_crashkernel_pgtable_alloc,
++			     NO_EXEC_MAPPINGS | NO_SEC_REMAPPINGS);
+ }
+-early_param("crashkernel", enable_crash_mem_map);
++#else
++void __init map_crashkernel(void) {}
++#endif
+ 
+ static void __init map_mem(pgd_t *pgdp)
+ {
+@@ -527,17 +614,6 @@ static void __init map_mem(pgd_t *pgdp)
+ 	 */
+ 	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
+ 
+-#ifdef CONFIG_KEXEC_CORE
+-	if (crash_mem_map) {
+-		if (IS_ENABLED(CONFIG_ZONE_DMA) ||
+-		    IS_ENABLED(CONFIG_ZONE_DMA32))
+-			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+-		else if (crashk_res.end)
+-			memblock_mark_nomap(crashk_res.start,
+-			    resource_size(&crashk_res));
+-	}
+-#endif
+-
+ 	/* map all the memory banks */
+ 	for_each_mem_range(i, &start, &end) {
+ 		if (start >= end)
+@@ -570,19 +646,6 @@ static void __init map_mem(pgd_t *pgdp)
+ 	 * in page granularity and put back unused memory to buddy system
+ 	 * through /sys/kernel/kexec_crash_size interface.
+ 	 */
+-#ifdef CONFIG_KEXEC_CORE
+-	if (crash_mem_map &&
+-	    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) {
+-		if (crashk_res.end) {
+-			__map_memblock(pgdp, crashk_res.start,
+-				       crashk_res.end + 1,
+-				       PAGE_KERNEL,
+-				       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
+-			memblock_clear_nomap(crashk_res.start,
+-					     resource_size(&crashk_res));
+-		}
+-	}
+-#endif
+ }
+ 
+ void mark_rodata_ro(void)
+-- 
+1.8.3.1
 

@@ -2,100 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 163AF5619C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8015619CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235260AbiF3MDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 08:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
+        id S235020AbiF3MD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 08:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234431AbiF3MDb (ORCPT
+        with ESMTP id S234351AbiF3MDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 08:03:31 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D64C19005
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 05:03:29 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3137316bb69so176368767b3.10
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 05:03:29 -0700 (PDT)
+        Thu, 30 Jun 2022 08:03:55 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FA374795
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 05:03:53 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id w83so25722030oiw.1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 05:03:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8O/w6TR2dKsRuoJRXVx1rxTI1qz0Ac85hpk1AotklVE=;
-        b=OvhmTdXsUFXudzC4Db9CeVlt7PR+DhwZ+8Z546M0E1phi04c0e4iX5oLS2n8llWbqh
-         FLm13l1HEBmpE9Obrcvj/zQhUNF3pbAw4OPbk6cldT/g0RX0l1y0IQGf6ZkCsj8Zi758
-         xxi7DPZd2gP3gq+6LzPxiczBxhQKuGJ2VFX6jPX3Cl3SrnTJY4FXdE436lzA5wGZhi7M
-         cdAuQNQpfOV1lIObfhAvN9BVwSer5KwP+6KSeW0gL8F7Sh2yDyhlixbHcm5UHbw0SlIq
-         BOmRfDIduWiptmYy2Aamj8vUaW/zn9n74qWwXURteRLinMPnDKst9+Ggw9Q1+tKZQubq
-         x1tA==
+        bh=zOvwIwWqR5EO2lNFoUUmwz2sETLTMOQ7ejH+OnZOrOk=;
+        b=PqQLLZJ2ZKkoxPkrHyZg0oRJQxv1SwlVRLyoUwWodeUAplwjnNWtX44JGPQJq25nqg
+         kgNzTI1diYu8vYNssW6Q+NKIdJ856q2SGtZxxEjA9Qvg510fdECJarMB00L4jW3D93wH
+         y35e8mPJ7xBAxJFt+xnZ0h7CxMEHW3L5HhZ1BwiiFT2m6c7LSCyvAXBF4T9wmI00kyiP
+         o4bUpROLYIyHMF2trI2e6+sJq6wQimYkQCAt6nFiXybJuyz9NoMCSVW1b1EKJCOECuUL
+         FbQX4wAnlIqZeM5tstXJDWBCceA7Ndt80RxHipCG+bi7ArAHddo2LLva5c+XIxpEFGoY
+         OBPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8O/w6TR2dKsRuoJRXVx1rxTI1qz0Ac85hpk1AotklVE=;
-        b=vR3yPlX7VvWIQ73AmtSIyWIQE4YOXAKS0l9JwZxC+hHNejjNAkij/RotHwj3qf0Atn
-         iC6b02DbxXtYDf+TLMx9ajBx8frkCjW3Y/R7fcFcHE6nHc1h+q7/R3/gQIBO63tF4uW/
-         9rBg9konLfB43Upgndr+0H6NnA6sExSXuC3AI6X85u/UizoMkVfG9Cz5XnuogxmDGhsm
-         dEMfuvA6IeaDTFmadcHcC1+aAv2qCsJdnW1NUIv2ChhRFCDTJh1R/QfTXKGFy8X0I3kU
-         NlZqnbGl/ZJVsgfP/09xrTkYzB8MFRpgdit/USY9AhLE5P1QPu40QPpbW1iQXvN3dJfw
-         lRYw==
-X-Gm-Message-State: AJIora9+M/vkU/d4ncmm4xz2uANr0IBjxIE9Nx301nu7dNfnnZZ7uLer
-        Dku4Djc5iC9eDb87D1PXbLxHQ5NiNRlsSjZimkD/M7ar/y4=
-X-Google-Smtp-Source: AGRyM1uGnFWeICHREqTtkt6nsJZf4nJAafYGq6WIA3kCzShh5g1PMnoKrOUMMK06t3SoS2b7YQzUY/Qn4NNSVXeZAO8=
-X-Received: by 2002:a81:6587:0:b0:318:38c2:2fb1 with SMTP id
- z129-20020a816587000000b0031838c22fb1mr10163769ywb.118.1656590608731; Thu, 30
- Jun 2022 05:03:28 -0700 (PDT)
+        bh=zOvwIwWqR5EO2lNFoUUmwz2sETLTMOQ7ejH+OnZOrOk=;
+        b=ljN80TaqyaCcLwACAQS9wXLfjjfhxZZSYjR1DEI+UkHAedNTPsVLSECOs9Q4kJ22LJ
+         cAXpBAwE+2Q4jIOv2JMU2PMgs0xiXsh9Q4ptbjoScND9Rd4FHcCGDC0yzuDHaCbI/gmR
+         rSTReBuHCt3reXSVDanvNp5l889EIl41xvsZdLwrsUxYnxaP/PNz7+gxUqhwMKU6q9E2
+         +X/vkibhV/zxM8Yvx2g8vQW+xxGJmDTabOpzOBUywmX+JllPOoHWDc6HoW300YoG47T6
+         FisGo22OKgIXLmlFnrTuBMzwCdf2DaF3eoO/e0Kha0K+HL08cdrZl/uig61Hwqyy74vE
+         lmTw==
+X-Gm-Message-State: AJIora8Jd0rq/0acExO6MVvLdOhBUfkqhaX61GOtF2DfnfoGNy4VV1TY
+        yYQ4y+ft5duX8L1x96s7zf/wPWYZMKXqjMUkz0Sh7w==
+X-Google-Smtp-Source: AGRyM1t9+3h6Mrk2A/8pgzvzC9lNsAp1cEGjS3G83IqK9iIHIM2ki9s58k4XQIujrkIi67LTOGdsX+1et3HfwtpuRfM=
+X-Received: by 2002:a05:6808:2124:b0:335:7483:f62d with SMTP id
+ r36-20020a056808212400b003357483f62dmr6311959oiw.112.1656590632727; Thu, 30
+ Jun 2022 05:03:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220621034224.38995-1-samuel@sholland.org> <20220621034224.38995-3-samuel@sholland.org>
- <CACRpkdaxodnaJsKfFMvYHWtPwZyACiec4iX3ZXSBL5Ptfa6mRg@mail.gmail.com>
- <ffe66c81-9a2c-e2b3-ad9c-ad46824fe76e@sholland.org> <YrwZJEFNBUJvmA6x@google.com>
-In-Reply-To: <YrwZJEFNBUJvmA6x@google.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 30 Jun 2022 14:03:17 +0200
-Message-ID: <CACRpkdbRdyaf_jVMS=ncs3rcJwhRodqWzFvZi9i98So9vinA0Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] mfd: axp20x: Add AXP221/AXP223/AXP809 GPIO cells
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-kernel@vger.kernel.org
+References: <20220630085845.74566-1-jiaming@nfschina.com>
+In-Reply-To: <20220630085845.74566-1-jiaming@nfschina.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Thu, 30 Jun 2022 05:03:41 -0700
+Message-ID: <CALMp9eSTQXHna7D9vH-nt1dXkbN3F-Bdx8pHUOQSXLcNtt=J7A@mail.gmail.com>
+Subject: Re: [PATCH] KVM: MIPS/MMU: Fix spelling mistake
+To:     Zhang Jiaming <jiaming@nfschina.com>
+Cc:     chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com,
+        tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, renyu@nfschina.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 11:19 AM Lee Jones <lee.jones@linaro.org> wrote:
-> On Tue, 28 Jun 2022, Samuel Holland wrote:
+On Thu, Jun 30, 2022 at 1:59 AM Zhang Jiaming <jiaming@nfschina.com> wrote:
 >
-> > On 6/28/22 9:03 AM, Linus Walleij wrote:
-> > > On Tue, Jun 21, 2022 at 5:42 AM Samuel Holland <samuel@sholland.org> wrote:
-> > >
-> > >> These PMICs all contain a compatible GPIO controller.
-> > >>
-> > >> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> > >
-> > > If I can get Lee's ACK on this patch I suppose I can apply patches
-> > > 1-3 to the pin control tree?
-> >
-> > Looks like he already applied v1 of this patch (which was identical):
-> >
-> > https://lore.kernel.org/lkml/YrnZof9lwsIQCqu7@google.com/
+> Change 'writeable' to 'writable'.
 >
-> Right, you don't need this one Linus.
->
-> Please take the others.
+> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
 
-True! No compile-time dependence.
-
-I'll queue the others.
-
-Yours,
-Linus Walleij
+Writeable is generally accepted as an alternative spelling of
+writable. You're fighting a losing battle.

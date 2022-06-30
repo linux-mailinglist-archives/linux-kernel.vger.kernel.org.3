@@ -2,214 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EADA75625A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6FE5625AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237717AbiF3Vxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 17:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
+        id S237640AbiF3Vyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 17:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237712AbiF3Vxd (ORCPT
+        with ESMTP id S232633AbiF3Vyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 17:53:33 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789ED53ED1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 14:53:32 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4LYsXW4FcCz9t3L;
-        Thu, 30 Jun 2022 21:53:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1656626011; bh=RqJKTEPUdoC1D9GIM8x0UctkWHtsVb+6wjMsLs0x0AI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Hy/pb4x66b/TSannBUttIKlvROq5Ku/c0uYouxfsx72ixV8wvWZC5kR+t3DSMd4Vy
-         6Gn3ZVncJLrZAlJ/EPtXvN7kRO+lJOUe0i80zfCgVCwNdtOO8zyldWT/u5YTl7mE8p
-         Tr55qEkT6raiumklFg5QlkAH33P5mwBTwuntLYEI=
-X-Riseup-User-ID: F2684EDD2FB94981689F68EA8BD196BB1BD1523BABCB7B9467C80C26E05249A8
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4LYsXR1mCNz5vQt;
-        Thu, 30 Jun 2022 21:53:26 +0000 (UTC)
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-Subject: [PATCH] drm/amd/display: Remove unused variables from vba_vars_st
-Date:   Thu, 30 Jun 2022 18:53:16 -0300
-Message-Id: <20220630215316.1078841-1-mairacanal@riseup.net>
+        Thu, 30 Jun 2022 17:54:43 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BBE564DE;
+        Thu, 30 Jun 2022 14:54:43 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id d129so584148pgc.9;
+        Thu, 30 Jun 2022 14:54:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=hkusf/I+psqk5rW3cP7Gl/cJmKwrAYd/DX73WJiRNgA=;
+        b=NWT96R/CjSOLMCOw75p5A7SQaK5Qj/Do//wLI0sKhyeTNBp8zhbcRmkBNtJ7tp/oET
+         6LQAdyYuVPPvPc65HFtJrzJvkgxHQdw/CIzPNKo7QrEH1MHaFpZ7DU1mAlgJT5aL5SWy
+         ZV9CqAcW2gSaZ3SQcWUSt1FmCIIEmoPyaPxhZ4gcwJHMeOV5wTGZdu/Tc/P2vRtTuPXW
+         91i6Brg4JffGktS6qpbc0/cqqHsNbZdib13OdkhPR1WDf2BCIqnBkgOcidg4wzVItLVb
+         ICBbt4q9KAjWkBoOJuXzlA+A4JZ3+s5L5ECKUQZbbiRzr3x7ym9Ipzz1eO6NBR7wM1nP
+         mJAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=hkusf/I+psqk5rW3cP7Gl/cJmKwrAYd/DX73WJiRNgA=;
+        b=QjVErIP/Lf3AW0oVdnBdQJJsOgwSoqNJVlONjKn0z38j59PYM8eBSx8v66/ky4Zpnl
+         IHjEy6ZNHcifijUCg15lv2c3vak5ImBJJwdL5dTn5wLX0L6M4bykZ+E8Y3f+lOJCxzH2
+         JzY3tHuVPzc2sdKi4G4jUeqmO6mAh1HInbLp+Rwbpsj7bkdz39uJDuRgqE4L+qgVLIfO
+         0IHgxrVvo1fN82Y4T/UOgkYBwIO48AJdIo9sYLfGgUO6DHQWG7oKxo/RyLw2666SeqqK
+         77G7dNcWRFPtBhU45DGIh+ysc8JQEpODYq7g/iB0RsDRt7aqBmb5r5GUlsvAbuUmJ4IT
+         uV8w==
+X-Gm-Message-State: AJIora8VfGnX8p0ClTKZWxZTw6W2x6o/cvJZ7fiJMzjJNt2GGbxahO3u
+        o/Kumwl2H2kLaW9VJlhm3oysEQ1PFiS/z3/zuNqsj0KLvZ9zSaXW
+X-Google-Smtp-Source: AGRyM1smCYdmATUfFVrve6D92ZEZlb0u2AGoTmsF8R1ygzsMYkgiMsWTi2YbL5hIGxJPJNwjkPaiQzRBBvDruPm+TS8=
+X-Received: by 2002:a63:4710:0:b0:410:ac39:831b with SMTP id
+ u16-20020a634710000000b00410ac39831bmr9369035pga.395.1656626082869; Thu, 30
+ Jun 2022 14:54:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Ariel Cabello Mateos <080ariel@gmail.com>
+Date:   Thu, 30 Jun 2022 21:54:31 +0000
+Message-ID: <CALRJROAKxEP4Dw93CoUS7SPdq=n5zDg7nbOwTW_bYdFhRREOcA@mail.gmail.com>
+Subject: [Question] efi: First 512 bytes of image oddity.
+To:     linux-efi@vger.kernel.org, ardb@kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some variables from the struct vba_vars_st are not referenced in any
-other place on the codebase. As they are not used, this commit removes
-those variables.
+Hello:
 
-Signed-off-by: Maíra Canal <mairacanal@riseup.net>
----
+I am not able to understand why the function efi_pe_entry in
+drivers/firmware/efi/libstub/x86-stub.c
+(which if im not mistaken its the first function executed in a efistub
+kernel) does not copy the part of setup_header which is in the first
+512 bytes of the kernel image.
 
-Unused variables from structs are not warned by compilers, so they are a bit
-harder to find. In order to find these unused variables, I used git grep and
-checked if they were used anywhere else.
+There is a comment that says:
 
-Any feedback or suggestion (maybe a tool to check unused variables from structs)
-is welcomed!
+/*
+* Fill out some of the header fields ourselves because the
+* EFI firmware loader doesn't load the first sector.
+*/
 
-Best Regards,
-- Maíra Canal
+But from what I understood about the uefi spec, the boot firmware
+should do a loadImage() which in turn does a OpenEx() in the file to
+load it. It does not mention anything about not loading the 512 first
+bytes of the image so... why does the stub do that?
 
----
- .../drm/amd/display/dc/dml/display_mode_vba.c |  1 -
- .../drm/amd/display/dc/dml/display_mode_vba.h | 33 -------------------
- 2 files changed, 34 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c
-index ed23c7c79d86..6b3918609d26 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.c
-@@ -346,7 +346,6 @@ static void fetch_socbb_params(struct display_mode_lib *mode_lib)
- 	mode_lib->vba.DRAMClockChangeRequirementFinal = 1;
- 	mode_lib->vba.FCLKChangeRequirementFinal = 1;
- 	mode_lib->vba.USRRetrainingRequiredFinal = 1;
--	mode_lib->vba.ConfigurableDETSizeEnFinal = 0;
- 	mode_lib->vba.AllowForPStateChangeOrStutterInVBlankFinal = soc->allow_for_pstate_or_stutter_in_vblank_final;
- 	mode_lib->vba.DRAMClockChangeLatency = soc->dram_clock_change_latency_us;
- 	mode_lib->vba.DummyPStateCheck = soc->dram_clock_change_latency_us == soc->dummy_pstate_latency_us;
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h
-index 25a9a606ab6f..e95b2199d85a 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h
-+++ b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h
-@@ -232,7 +232,6 @@ struct vba_vars_st {
- 	double DISPCLKWithRampingRoundedToDFSGranularity;
- 	double DISPCLKWithoutRampingRoundedToDFSGranularity;
- 	double MaxDispclkRoundedToDFSGranularity;
--	double MaxDppclkRoundedToDFSGranularity;
- 	bool DCCEnabledAnyPlane;
- 	double ReturnBandwidthToDCN;
- 	unsigned int TotalActiveDPP;
-@@ -249,7 +248,6 @@ struct vba_vars_st {
- 	double VBlankTime;
- 	double SmallestVBlank;
- 	enum dm_prefetch_modes AllowForPStateChangeOrStutterInVBlankFinal; // Mode Support only
--	double DCFCLKDeepSleepPerSurface[DC__NUM_DPP__MAX];
- 	double DCFCLKDeepSleepPerPlane[DC__NUM_DPP__MAX];
- 	double EffectiveDETPlusLBLinesLuma;
- 	double EffectiveDETPlusLBLinesChroma;
-@@ -297,7 +295,6 @@ struct vba_vars_st {
- 	double SMNLatency;
- 	double FCLKChangeLatency;
- 	unsigned int MALLAllocatedForDCNFinal;
--	double DefaultGPUVMMinPageSizeKBytes; // Default for the project
- 	double MaxAveragePercentOfIdealFabricBWDisplayCanUseInNormalSystemOperation;
- 	double MaxAveragePercentOfIdealDRAMBWDisplayCanUseInNormalSystemOperationSTROBE;
- 	double PercentOfIdealDRAMBWReceivedAfterUrgLatencySTROBE;
-@@ -819,8 +816,6 @@ struct vba_vars_st {
- 	double         dummy8[DC__NUM_DPP__MAX];
- 	double         dummy13[DC__NUM_DPP__MAX];
- 	double         dummy_double_array[2][DC__NUM_DPP__MAX];
--	unsigned int        dummyinteger1ms[DC__NUM_DPP__MAX];
--	double        dummyinteger2ms[DC__NUM_DPP__MAX];
- 	unsigned int        dummyinteger3[DC__NUM_DPP__MAX];
- 	unsigned int        dummyinteger4[DC__NUM_DPP__MAX];
- 	unsigned int        dummyinteger5;
-@@ -830,16 +825,7 @@ struct vba_vars_st {
- 	unsigned int        dummyinteger9;
- 	unsigned int        dummyinteger10;
- 	unsigned int        dummyinteger11;
--	unsigned int        dummyinteger12;
--	unsigned int        dummyinteger30;
--	unsigned int        dummyinteger31;
--	unsigned int        dummyinteger32;
--	unsigned int        dummyintegerarr1[DC__NUM_DPP__MAX];
--	unsigned int        dummyintegerarr2[DC__NUM_DPP__MAX];
--	unsigned int        dummyintegerarr3[DC__NUM_DPP__MAX];
--	unsigned int        dummyintegerarr4[DC__NUM_DPP__MAX];
- 	unsigned int        dummy_integer_array[8][DC__NUM_DPP__MAX];
--	unsigned int        dummy_integer_array22[22][DC__NUM_DPP__MAX];
- 
- 	bool           dummysinglestring;
- 	bool           SingleDPPViewportSizeSupportPerPlane[DC__NUM_DPP__MAX];
-@@ -980,7 +966,6 @@ struct vba_vars_st {
- 	double TimePerChromaMetaChunkFlip[DC__NUM_DPP__MAX];
- 	unsigned int DCCCMaxUncompressedBlock[DC__NUM_DPP__MAX];
- 	unsigned int DCCCMaxCompressedBlock[DC__NUM_DPP__MAX];
--	unsigned int DCCCIndependent64ByteBlock[DC__NUM_DPP__MAX];
- 	double VStartupMargin;
- 	bool NotEnoughTimeForDynamicMetadata[DC__NUM_DPP__MAX];
- 
-@@ -1085,8 +1070,6 @@ struct vba_vars_st {
- 	double WritebackDelayTime[DC__NUM_DPP__MAX];
- 	unsigned int DCCYIndependentBlock[DC__NUM_DPP__MAX];
- 	unsigned int DCCCIndependentBlock[DC__NUM_DPP__MAX];
--	unsigned int dummyinteger15;
--	unsigned int dummyinteger16;
- 	unsigned int dummyinteger17;
- 	unsigned int dummyinteger18;
- 	unsigned int dummyinteger19;
-@@ -1147,17 +1130,11 @@ struct vba_vars_st {
- 	int Z8NumberOfStutterBurstsPerFrame;
- 	unsigned int MaximumDSCBitsPerComponent;
- 	unsigned int NotEnoughUrgentLatencyHidingA[DC__VOLTAGE_STATES][2];
--	double UrgentLatencyWithUSRRetraining;
--	double UrgLatencyWithUSRRetraining[DC__VOLTAGE_STATES];
- 	double ReadBandwidthSurfaceLuma[DC__NUM_DPP__MAX];
- 	double ReadBandwidthSurfaceChroma[DC__NUM_DPP__MAX];
- 	double SurfaceRequiredDISPCLKWithoutODMCombine;
- 	double SurfaceRequiredDISPCLK;
--	double SurfaceRequiredDISPCLKWithODMCombine2To1;
--	double SurfaceRequiredDISPCLKWithODMCombine4To1;
- 	double MinActiveFCLKChangeLatencySupported;
--	double dummy14;
--	double dummy15;
- 	int MinVoltageLevel;
- 	int MaxVoltageLevel;
- 	unsigned int TotalNumberOfSingleDPPSurfaces[DC__VOLTAGE_STATES][2];
-@@ -1168,17 +1145,10 @@ struct vba_vars_st {
- 	bool ExceededMALLSize;
- 	bool PTE_BUFFER_MODE[DC__NUM_DPP__MAX];
- 	unsigned int BIGK_FRAGMENT_SIZE[DC__NUM_DPP__MAX];
--	unsigned int dummyinteger33;
- 	unsigned int CompressedBufferSizeInkByteThisState;
- 	enum dm_fclock_change_support FCLKChangeSupport[DC__VOLTAGE_STATES][2];
--	Latencies myLatency;
--	Latencies mLatency;
--	Watermarks DummyWatermark;
- 	bool USRRetrainingSupport[DC__VOLTAGE_STATES][2];
--	bool dummyBooleanvector1[DC__NUM_DPP__MAX];
--	bool dummyBooleanvector2[DC__NUM_DPP__MAX];
- 	enum dm_use_mall_for_pstate_change_mode UsesMALLForPStateChange[DC__NUM_DPP__MAX];
--	bool NotEnoughUrgentLatencyHiding_dml32[DC__VOLTAGE_STATES][2];
- 	bool UnboundedRequestEnabledAllStates[DC__VOLTAGE_STATES][2];
- 	bool SingleDPPViewportSizeSupportPerSurface[DC__NUM_DPP__MAX];
- 	enum dm_use_mall_for_static_screen_mode UseMALLForStaticScreen[DC__NUM_DPP__MAX];
-@@ -1186,9 +1156,6 @@ struct vba_vars_st {
- 	bool DRAMClockChangeRequirementFinal;
- 	bool FCLKChangeRequirementFinal;
- 	bool USRRetrainingRequiredFinal;
--	bool MALLUseFinal;
--	bool ConfigurableDETSizeEnFinal;
--	bool dummyboolean;
- 	unsigned int DETSizeOverride[DC__NUM_DPP__MAX];
- 	unsigned int nomDETInKByte;
- 	enum mpc_combine_affinity  MPCCombineUse[DC__NUM_DPP__MAX];
--- 
-2.36.1
-
+Thanks in advance,
+Ariel.

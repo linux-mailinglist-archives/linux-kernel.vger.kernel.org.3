@@ -2,218 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FCD561A37
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF63561A4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 14:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233367AbiF3MVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 08:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
+        id S234549AbiF3M1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 08:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233483AbiF3MVW (ORCPT
+        with ESMTP id S234428AbiF3M13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 08:21:22 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFBF22BCC;
-        Thu, 30 Jun 2022 05:21:20 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LYcp56W9kzkWfY;
-        Thu, 30 Jun 2022 20:19:25 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 30 Jun
- 2022 20:21:18 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yekai13@huawei.com>, <liulongfang@huawei.com>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>
-CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
-        <shaozhengchao@huawei.com>
-Subject: [PATCH v2] crypto: hisilicon/sec - don't sleep when in softirq
-Date:   Thu, 30 Jun 2022 20:26:22 +0800
-Message-ID: <20220630122622.55492-1-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 30 Jun 2022 08:27:29 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985472E093;
+        Thu, 30 Jun 2022 05:27:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656592048; x=1688128048;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=xglr6z6rG58iyrwjggW9uB/gwlKhg1Fwzpc6u5yhoCk=;
+  b=l0s3yoit+CIsC+f0sf85B/qbFjmPodTdWC3Pv9JoHk9KqZxIuGY2eNA/
+   bnEI7f2NUhzVH43oEpiaAv1C/oht1jJoqEDk00fDS72wsIclyrbEMWvap
+   PRszqIh+d3f5HeaRm9dnOd8qrA8ymol9908dp8hdXTbRG0nR63ZJZzbiN
+   0g0lhTL5Chi7VIA7Hxvd27olmIR5zPHW0/aYNdb5gEodajGgDTr4Idc7O
+   vFWYnXkKw/TQu+aNZYMcs81s7bhIR6I+kUi3LX0wGxHatrBnfdeiVxLcv
+   SYxFZ3zjyjzq+bAjet0tdNw2OzL6hr1M+LZYg1TCq0PsOsPA8p+hSmXGS
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="265367605"
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="265367605"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 05:27:28 -0700
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="565835847"
+Received: from zhihuich-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.49.124])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 05:27:26 -0700
+Message-ID: <8227079db11c0473f1c368b305e40a94a73fc109.camel@intel.com>
+Subject: Re: [PATCH v7 039/102] KVM: x86/mmu: Allow per-VM override of the
+ TDP max page level
+From:   Kai Huang <kai.huang@intel.com>
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Date:   Fri, 01 Jul 2022 00:27:24 +1200
+In-Reply-To: <e686602e7b57ed0c3600c663d03a9bf76190db0c.1656366338.git.isaku.yamahata@intel.com>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
+         <e686602e7b57ed0c3600c663d03a9bf76190db0c.1656366338.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When kunpeng920 encryption driver is used to deencrypt and decrypt
-packets during the softirq, it is not allowed to use mutex lock. The
-kernel will report the following error:
+On Mon, 2022-06-27 at 14:53 -0700, isaku.yamahata@intel.com wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
+>=20
+> TODO: This is a transient workaround patch until the large page support f=
+or
+> TDX is implemented.  Support large page for TDX and remove this patch.
 
-BUG: scheduling while atomic: swapper/57/0/0x00000300
-Call trace:
-dump_backtrace+0x0/0x1e4
-show_stack+0x20/0x2c
-dump_stack+0xd8/0x140
-__schedule_bug+0x68/0x80
-__schedule+0x728/0x840
-schedule+0x50/0xe0
-schedule_preempt_disabled+0x18/0x24
-__mutex_lock.constprop.0+0x594/0x5dc
-__mutex_lock_slowpath+0x1c/0x30
-mutex_lock+0x50/0x60
-sec_request_init+0x8c/0x1a0 [hisi_sec2]
-sec_process+0x28/0x1ac [hisi_sec2]
-sec_skcipher_crypto+0xf4/0x1d4 [hisi_sec2]
-sec_skcipher_encrypt+0x1c/0x30 [hisi_sec2]
-crypto_skcipher_encrypt+0x2c/0x40
-crypto_authenc_encrypt+0xc8/0xfc [authenc]
-crypto_aead_encrypt+0x2c/0x40
-echainiv_encrypt+0x144/0x1a0 [echainiv]
-crypto_aead_encrypt+0x2c/0x40
-esp_output_tail+0x348/0x5c0 [esp4]
-esp_output+0x120/0x19c [esp4]
-xfrm_output_one+0x25c/0x4d4
-xfrm_output_resume+0x6c/0x1fc
-xfrm_output+0xac/0x3c0
-xfrm4_output+0x64/0x130
-ip_build_and_send_pkt+0x158/0x20c
-tcp_v4_send_synack+0xdc/0x1f0
-tcp_conn_request+0x7d0/0x994
-tcp_v4_conn_request+0x58/0x6c
-tcp_v6_conn_request+0xf0/0x100
-tcp_rcv_state_process+0x1cc/0xd60
-tcp_v4_do_rcv+0x10c/0x250
-tcp_v4_rcv+0xfc4/0x10a4
-ip_protocol_deliver_rcu+0xf4/0x200
-ip_local_deliver_finish+0x58/0x70
-ip_local_deliver+0x68/0x120
-ip_sublist_rcv_finish+0x70/0x94
-ip_list_rcv_finish.constprop.0+0x17c/0x1d0
-ip_sublist_rcv+0x40/0xb0
-ip_list_rcv+0x140/0x1dc
-__netif_receive_skb_list_core+0x154/0x28c
-__netif_receive_skb_list+0x120/0x1a0
-netif_receive_skb_list_internal+0xe4/0x1f0
-napi_complete_done+0x70/0x1f0
-gro_cell_poll+0x9c/0xb0
-napi_poll+0xcc/0x264
-net_rx_action+0xd4/0x21c
-__do_softirq+0x130/0x358
-irq_exit+0x11c/0x13c
-__handle_domain_irq+0x88/0xf0
-gic_handle_irq+0x78/0x2c0
-el1_irq+0xb8/0x140
-arch_cpu_idle+0x18/0x40
-default_idle_call+0x5c/0x1c0
-cpuidle_idle_call+0x174/0x1b0
-do_idle+0xc8/0x160
-cpu_startup_entry+0x30/0x11c
-secondary_start_kernel+0x158/0x1e4
-softirq: huh, entered softirq 3 NET_RX 0000000093774ee4 with
-preempt_count 00000100, exited with fffffe00?
+I don't understand.  How does this patch have anything to do with what you =
+are
+talking about here?
 
-V1: use spin_lock will cause soft lockup
+If you want to remove this patch later, then why not just explain the reaso=
+n to
+remove when you actually have that patch?
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
----
- drivers/crypto/hisilicon/sec2/sec.h        |  2 +-
- drivers/crypto/hisilicon/sec2/sec_crypto.c | 20 ++++++++++----------
- 2 files changed, 11 insertions(+), 11 deletions(-)
+>=20
+> At this point, large page for TDX isn't supported, and need to allow gues=
+t
+> TD to work only with 4K pages.  On the other hand, conventional VMX VMs
+> should continue to work with large page.  Allow per-VM override of the TD=
+P
+> max page level.
 
-diff --git a/drivers/crypto/hisilicon/sec2/sec.h b/drivers/crypto/hisilicon/sec2/sec.h
-index 42bb486f3b6d..d2a0bc93e752 100644
---- a/drivers/crypto/hisilicon/sec2/sec.h
-+++ b/drivers/crypto/hisilicon/sec2/sec.h
-@@ -119,7 +119,7 @@ struct sec_qp_ctx {
- 	struct idr req_idr;
- 	struct sec_alg_res res[QM_Q_DEPTH];
- 	struct sec_ctx *ctx;
--	struct mutex req_lock;
-+	spinlock_t req_lock;
- 	struct list_head backlog;
- 	struct hisi_acc_sgl_pool *c_in_pool;
- 	struct hisi_acc_sgl_pool *c_out_pool;
-diff --git a/drivers/crypto/hisilicon/sec2/sec_crypto.c b/drivers/crypto/hisilicon/sec2/sec_crypto.c
-index 6eebe739893c..71dfa7db6394 100644
---- a/drivers/crypto/hisilicon/sec2/sec_crypto.c
-+++ b/drivers/crypto/hisilicon/sec2/sec_crypto.c
-@@ -127,11 +127,11 @@ static int sec_alloc_req_id(struct sec_req *req, struct sec_qp_ctx *qp_ctx)
- {
- 	int req_id;
- 
--	mutex_lock(&qp_ctx->req_lock);
-+	spin_lock_bh(&qp_ctx->req_lock);
- 
- 	req_id = idr_alloc_cyclic(&qp_ctx->req_idr, NULL,
- 				  0, QM_Q_DEPTH, GFP_ATOMIC);
--	mutex_unlock(&qp_ctx->req_lock);
-+	spin_unlock_bh(&qp_ctx->req_lock);
- 	if (unlikely(req_id < 0)) {
- 		dev_err(req->ctx->dev, "alloc req id fail!\n");
- 		return req_id;
-@@ -156,9 +156,9 @@ static void sec_free_req_id(struct sec_req *req)
- 	qp_ctx->req_list[req_id] = NULL;
- 	req->qp_ctx = NULL;
- 
--	mutex_lock(&qp_ctx->req_lock);
-+	spin_lock_bh(&qp_ctx->req_lock);
- 	idr_remove(&qp_ctx->req_idr, req_id);
--	mutex_unlock(&qp_ctx->req_lock);
-+	spin_unlock_bh(&qp_ctx->req_lock);
- }
- 
- static u8 pre_parse_finished_bd(struct bd_status *status, void *resp)
-@@ -273,7 +273,7 @@ static int sec_bd_send(struct sec_ctx *ctx, struct sec_req *req)
- 	    !(req->flag & CRYPTO_TFM_REQ_MAY_BACKLOG))
- 		return -EBUSY;
- 
--	mutex_lock(&qp_ctx->req_lock);
-+	spin_lock_bh(&qp_ctx->req_lock);
- 	ret = hisi_qp_send(qp_ctx->qp, &req->sec_sqe);
- 
- 	if (ctx->fake_req_limit <=
-@@ -281,10 +281,10 @@ static int sec_bd_send(struct sec_ctx *ctx, struct sec_req *req)
- 		list_add_tail(&req->backlog_head, &qp_ctx->backlog);
- 		atomic64_inc(&ctx->sec->debug.dfx.send_cnt);
- 		atomic64_inc(&ctx->sec->debug.dfx.send_busy_cnt);
--		mutex_unlock(&qp_ctx->req_lock);
-+		spin_unlock_bh(&qp_ctx->req_lock);
- 		return -EBUSY;
- 	}
--	mutex_unlock(&qp_ctx->req_lock);
-+	spin_unlock_bh(&qp_ctx->req_lock);
- 
- 	if (unlikely(ret == -EBUSY))
- 		return -ENOBUFS;
-@@ -487,7 +487,7 @@ static int sec_create_qp_ctx(struct hisi_qm *qm, struct sec_ctx *ctx,
- 
- 	qp->req_cb = sec_req_cb;
- 
--	mutex_init(&qp_ctx->req_lock);
-+	spin_lock_init(&qp_ctx->req_lock);
- 	idr_init(&qp_ctx->req_idr);
- 	INIT_LIST_HEAD(&qp_ctx->backlog);
- 
-@@ -1382,7 +1382,7 @@ static struct sec_req *sec_back_req_clear(struct sec_ctx *ctx,
- {
- 	struct sec_req *backlog_req = NULL;
- 
--	mutex_lock(&qp_ctx->req_lock);
-+	spin_lock_bh(&qp_ctx->req_lock);
- 	if (ctx->fake_req_limit >=
- 	    atomic_read(&qp_ctx->qp->qp_status.used) &&
- 	    !list_empty(&qp_ctx->backlog)) {
-@@ -1390,7 +1390,7 @@ static struct sec_req *sec_back_req_clear(struct sec_ctx *ctx,
- 				typeof(*backlog_req), backlog_head);
- 		list_del(&backlog_req->backlog_head);
- 	}
--	mutex_unlock(&qp_ctx->req_lock);
-+	spin_unlock_bh(&qp_ctx->req_lock);
- 
- 	return backlog_req;
- }
--- 
-2.17.1
+At which point/previous patch have you made/declared "large page for TDX is=
+n't
+supported"?
+
+If you want to declare you don't want to support large page for TDX, IMHO j=
+ust
+declare it here, for instance:
+
+"For simplicity, only support 4K page for TD guest."
+ =20
+>=20
+> In the existing x86 KVM MMU code, there is already max_level member in
+> struct kvm_page_fault with KVM_MAX_HUGEPAGE_LEVEL initial value.  The KVM
+> page fault handler denies page size larger than max_level.
+>=20
+> Add per-VM member to indicate the allowed maximum page size with
+> KVM_MAX_HUGEPAGE_LEVEL as default value and initialize max_level in struc=
+t
+> kvm_page_fault with it.  For the guest TD, the set per-VM value for allow=
+s
+> maximum page size to 4K page size.  Then only allowed page size is 4K.  I=
+t
+> means large page is disabled.
+
+To me it's overcomplicated.  You just need simple sentences for such simple
+infrastructural patch.  For instance:
+
+"TDX requires special handling to support large private page.  For simplici=
+ty,
+only support 4K page for TD guest for now.  Add per-VM maximum page level
+support to support different maximum page sizes for TD guest and convention=
+al
+VMX guest."
+
+Just for your reference.
+
+>=20
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h | 1 +
+>  arch/x86/kvm/mmu/mmu.c          | 1 +
+>  arch/x86/kvm/mmu/mmu_internal.h | 2 +-
+>  3 files changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_h=
+ost.h
+> index 39215daa8576..f4d4ed41641b 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1146,6 +1146,7 @@ struct kvm_arch {
+>  	unsigned long n_requested_mmu_pages;
+>  	unsigned long n_max_mmu_pages;
+>  	unsigned int indirect_shadow_pages;
+> +	int tdp_max_page_level;
+>  	u8 mmu_valid_gen;
+>  	struct hlist_head mmu_page_hash[KVM_NUM_MMU_PAGES];
+>  	struct list_head active_mmu_pages;
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index e0aa5ad3931d..80d7c7709af3 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -5878,6 +5878,7 @@ int kvm_mmu_init_vm(struct kvm *kvm)
+>  	node->track_write =3D kvm_mmu_pte_write;
+>  	node->track_flush_slot =3D kvm_mmu_invalidate_zap_pages_in_memslot;
+>  	kvm_page_track_register_notifier(kvm, node);
+> +	kvm->arch.tdp_max_page_level =3D KVM_MAX_HUGEPAGE_LEVEL;
+>  	kvm_mmu_set_mmio_spte_mask(kvm, shadow_default_mmio_mask,
+>  				   shadow_default_mmio_mask,
+>  				   ACC_WRITE_MASK | ACC_USER_MASK);
+> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_inter=
+nal.h
+> index bd2a26897b97..44a04fad4bed 100644
+> --- a/arch/x86/kvm/mmu/mmu_internal.h
+> +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> @@ -244,7 +244,7 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vc=
+pu *vcpu, gpa_t cr2_or_gpa,
+>  		.is_tdp =3D likely(vcpu->arch.mmu->page_fault =3D=3D kvm_tdp_page_faul=
+t),
+>  		.nx_huge_page_workaround_enabled =3D is_nx_huge_page_enabled(),
+> =20
+> -		.max_level =3D KVM_MAX_HUGEPAGE_LEVEL,
+> +		.max_level =3D vcpu->kvm->arch.tdp_max_page_level,
+>  		.req_level =3D PG_LEVEL_4K,
+>  		.goal_level =3D PG_LEVEL_4K,
+>  	};
 

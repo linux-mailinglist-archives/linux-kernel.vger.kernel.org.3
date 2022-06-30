@@ -2,80 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6B2562625
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 00:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C8E562624
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 00:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbiF3Wdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 18:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58384 "EHLO
+        id S231617AbiF3Wdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 18:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231468AbiF3WdQ (ORCPT
+        with ESMTP id S231451AbiF3Wdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 18:33:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D9E82617
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 15:33:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656628394;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=P4I+MH1BitjShuNkM5CAAnuV26uY5raJYeW45VTPEJk=;
-        b=NOWA0y14uIrTfEQKZqjfRGGc6p8/RRh5iEtsbWz1S0liAxqJs2l+AK3DeJSrdBQun8hwiU
-        AVlUjg5gPKVtGFllxrOR62ZitSQg7MYBA5irOA4kAGw4jZ6hyUuzcZ28IE19mBc4cbQKB7
-        5w7DUvfogdVuQRejFmlaUC+I2KBuLe4=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-7qHdI83NOQuN72pPGBmaKg-1; Thu, 30 Jun 2022 18:33:12 -0400
-X-MC-Unique: 7qHdI83NOQuN72pPGBmaKg-1
-Received: by mail-wr1-f70.google.com with SMTP id w17-20020a5d6811000000b0021ba89c2e27so53759wru.10
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 15:33:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=P4I+MH1BitjShuNkM5CAAnuV26uY5raJYeW45VTPEJk=;
-        b=JB77qHr0v+322Ax1Up1UpGfU6jypOsyzdJD7joIo3TlE4atmvTf3NVWGRS0MvRkvls
-         kM/cOj+mwfteq45lB1QKBO9XGqdrw7rr+pnr87xh1nYBOLXiyRiM7U+wDnpzeV2/g2mw
-         /pMt2AiatavSD4yFHwDDnqqD37DPWQ3PeyPOAtJVBITJHfE7jfeemeRbh/t6m8TioGDd
-         tc/Vf7rMcUEf7rVr8/lTLr3IqUcKkcVvfGDCFc8iALG6OdfMj4u6kCa7PxildNjNbzAB
-         AbK+GVRFHEgOfMoZkB2Umj3EcOYkFDXGqoVuSeLis37V4l9P2plXa0ivOxEhNthSMfW2
-         I/Lw==
-X-Gm-Message-State: AJIora8dMDyEGEr4gJ752ltLI2414q8B6f4vl5NxdwVLieKemY71yk5l
-        ONRpJDh9ZzT4n8wlOdk7UduCjqq4+YTxpeA2PaEgK1EEMbgJV24fZCehh0U4MqS7Q8/FCxxjVkU
-        jybnFwkImfpduCKrOrNUxzaOq
-X-Received: by 2002:a5d:5888:0:b0:21b:ccc1:ab00 with SMTP id n8-20020a5d5888000000b0021bccc1ab00mr10670852wrf.385.1656628391123;
-        Thu, 30 Jun 2022 15:33:11 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1timqBDrx8wWmo3UJTVGb1qSoxfmdLn9yt/nE0BpLRCKzWRuI8/gHovtfTbzu2OliwBhtdqVA==
-X-Received: by 2002:a5d:5888:0:b0:21b:ccc1:ab00 with SMTP id n8-20020a5d5888000000b0021bccc1ab00mr10670828wrf.385.1656628390878;
-        Thu, 30 Jun 2022 15:33:10 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id m9-20020a056000024900b0020c5253d907sm4308387wrz.83.2022.06.30.15.33.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 15:33:10 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     kexec@lists.infradead.org, linux-rt-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>, Petr Mladek <pmladek@suse.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <jlelli@redhat.com>,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-Subject: [PATCH v4 2/2] panic, kexec: Make __crash_kexec() NMI safe
-Date:   Thu, 30 Jun 2022 23:32:58 +0100
-Message-Id: <20220630223258.4144112-3-vschneid@redhat.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220630223258.4144112-1-vschneid@redhat.com>
-References: <20220630223258.4144112-1-vschneid@redhat.com>
+        Thu, 30 Jun 2022 18:33:42 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BCA57232;
+        Thu, 30 Jun 2022 15:33:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656628409; x=1688164409;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=pNPHgluDGYxnMMOavd0I9OlL6Y2f7+L0QgP8RoRBh30=;
+  b=fQTCCM5qrUg0szVIUM+4ZtCs/Fet8CDeBQfnapQetfiIfRDXvNRuK3/e
+   h9eG4iyRVP3iig8ncJ9B5XdIbmnlD6jNj25yaC16tFf8Bg50fAecad8qy
+   CYmcqlRyC8r8UAn3EXVcF2jG+uKBt8F73BeKT/lEenfVuYHbFP4PdkfhU
+   Z2tll5gBVCbp4jwUiVAFH12Laznyt3PS0BeX2sjIs85mPcvnRTYj5mJih
+   2OIDWYKFACzwn1U+mpirHPe04vJRtNNc0Ix8idIEV+Sp+B+f8bnomy4sr
+   RYvrI3DsrUkdGyGqPyTFJad1j0dxRB5jY0S+V/cqKCUUDo6AeAgqkIULd
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="344170940"
+X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
+   d="scan'208";a="344170940"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 15:33:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
+   d="scan'208";a="541502945"
+Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
+  by orsmga003.jf.intel.com with ESMTP; 30 Jun 2022 15:33:27 -0700
+Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
+ ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 30 Jun 2022 15:33:27 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 30 Jun 2022 15:33:26 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Thu, 30 Jun 2022 15:33:26 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.48) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Thu, 30 Jun 2022 15:33:26 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Iju3SBgH0stkj+DrWB+X5nJsAmpF6AhM8JLm6tRW/jQH/nXtF0usjFW15AmOIiPVAFIjWZFCBWH6Pj6AC+LVPpipS32gNPsAY/YPWCXZAGfGx/PQ03rF/r52v5YMPn93JhPH1sHi3u466bGjtrbVDZd/jjYpdP8jLh0zawR/WfsQFrD5fNHPefHLHva/Vgee4eEAjB0TSYx9APrYqesHasxPzQJf4F5ZtiHk45ye0PNTFoFl7Lo0Kgjx81jumcgwceg7/VrOWfPqv3Wt7AuA3xnBDJQmWdCDQYuMvrUwjuvD4MXl8IhQwbox5zgi5VH0ndNWFvYVAqf2+fDcLboDkA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DXSOJOTRjqEquX1xHCZrYCxrJztrwttzuKPcTQ64AR4=;
+ b=T3HNYv2zpvXOusYPWup9S2uXou8o15/4NqIkIwZKzIV9jSEgGE/Cj8SfXIxsZ9GIfZS6TSq0CBzVzcsP7JRTmOyBBaUE/DGEpk/f1bZGNf0Z/18td16V+/7CARGGvDtgrXHww0zQD42XyO4vUpeNK3+BUlmakmLrLGyJO9mTTBtsZ8U4gOqEmHf5pIBDSoLvjywoXhZTzLI2qWaQPYYJlogOyEVXoL27jI7w0IrcyuxPO/t2025DgnbcXRnYJh8RW2tqCr5QDlGPweqONF47arqrcULpkUY2PGOjsjzD5U/FzFLO8nJFXgwYu4Habvr+GWipwTR9nO9baIHmf/5llw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
+ by BL1PR11MB5270.namprd11.prod.outlook.com (2603:10b6:208:313::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Thu, 30 Jun
+ 2022 22:33:25 +0000
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::a012:82da:5edb:513]) by CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::a012:82da:5edb:513%7]) with mapi id 15.20.5395.015; Thu, 30 Jun 2022
+ 22:33:25 +0000
+Date:   Thu, 30 Jun 2022 15:33:23 -0700
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     linux-modules <linux-modules@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [ANNOUNCE] kmod 30
+Message-ID: <20220630223323.2hko2imx62embtsj@ldmartin-desk2>
+X-Patchwork-Hint: comment
+References: <20220630153621.3fggpqrbyvunhwfu@ldmartin-desk2>
+ <Yr4fHBR08VAVbs2E@bombadil.infradead.org>
+Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Yr4fHBR08VAVbs2E@bombadil.infradead.org>
+X-ClientProxiedBy: MWHPR12CA0048.namprd12.prod.outlook.com
+ (2603:10b6:301:2::34) To CY5PR11MB6139.namprd11.prod.outlook.com
+ (2603:10b6:930:29::17)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ea47546b-14ca-4d06-5949-08da5ae88bb3
+X-MS-TrafficTypeDiagnostic: BL1PR11MB5270:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 252LqAb9GQHK1ffGxKpkc/St0yZoS/7rnHi6K+/E019F1mpEFOmWKLtM5E509K9HMpORu3qe/CHQTZb96VcR/ZuzCogIKauK/kz2oihVPhi9NKmrXkIZxIImMfBETc73zIlu0K1+7NEUN1gn4XbuIAj8+DJIxUtBe0lOVy9q/KZP6lbg140rv8R9WqfWx1vnnvyJRVNXqVnRnnVuwQx25purQsmEG4AqcAGYh6uuXMFNaJIKgKy81Ny3S6BhOIGeLVdCM+2/lXNaLfPqMQkzedk7x9r9542bH56+mEG2HV2FhLKdxRIY5Pdy2yaiPBineLAMwemtr/k9wIz70tQSNFugGUQQvasRXy4JJL+JeU8ZcQ1aEyp0O/ucuZPSOErQ/FqeB8sOEzxmw3T9Pl41K4bDI2JuT1PEG1dFVFyFlcL0szTdqdA7iaQ3uHC66lcFvaXYrBveOspZwt1+GKhsqKzcVhWox2UshSE9y20Hy42jVDOtVNkfb6E5maX6pRGqmdMC40U7rOhYtL3n2DibObr7JUYkRvTkGE+TVuhTx2Gss/NXQbsQOAbo6EaN6AYltmiI3Y25L8+g3hl4bsWqc7hVAfp5q7d1uU036Ule+14fUFHXYIP8TIHyGUydBrtOnW80NtkMy/3hBsXcg/5PHzlI1+pW5N6a2N0bwanUNVU/pqTut+X8+snpjpQRxn/NpVZL7Xlbq6wMKmVMmm5ofCZT/P0Tj9nqtMyrbRYkbLEHjiosmMlcN4j0hsomIGOH
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(396003)(136003)(346002)(366004)(39860400002)(26005)(6512007)(9686003)(86362001)(5660300002)(1076003)(2906002)(41300700001)(6506007)(66556008)(38100700002)(54906003)(8676002)(66476007)(4326008)(316002)(66946007)(6916009)(33716001)(6486002)(83380400001)(8936002)(186003)(478600001)(82960400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zasfGHyEZ/W+HIliN1JQHRtCOyna3ShXrmbDK3QVbL/SIY7PqbCwXSYwi/jC?=
+ =?us-ascii?Q?XzcIg89g/D3yoxNhiBBTkDmhfeZLRylDnraP8Y7TZZMIFa5mLqa5XXIWus8g?=
+ =?us-ascii?Q?NjJVbkGp9IrD/zTZUHOiN/L4sFr7P6THXXoqjexlwJW5issuo4lrTHypZ3bu?=
+ =?us-ascii?Q?boJdnC5PlDMQ/LuNigqG+vXJ3vxljfntuWSdwnC5bJ7WIRkSzVCkm1V7MGf2?=
+ =?us-ascii?Q?ros1rIEp3nIw59KJU/MJQP5T9VQqf4BgTlc7s2qM40hEM5ErSjRSuuPvfX1E?=
+ =?us-ascii?Q?6n60hxik8y0sRHHz3NdWKcu2PHkREnojQ6hhOTV+32L8vA1YruLzRyIWFHDJ?=
+ =?us-ascii?Q?2xzEBUZ0jbxhA+N1XeewhZwbMwWgowa1nzrG0IiCHuG0seIK6vQAhkhEymwB?=
+ =?us-ascii?Q?QscSV0FBuAp3lMQq1hdDPxW6th5X2lcvWCDsphj/aRbzpTQqFSGzyQaN5age?=
+ =?us-ascii?Q?+J0Fkma2VN3op12Upr9iaeT4us7caBbnecv3AmkeQIv/MJVBEKuSqXw5xnxo?=
+ =?us-ascii?Q?6ZXQQu/BJX0SKHFS5cXH9MvnK96CKFYo92tgX8/xLbt0Qt9nKR4nqwiEcOF2?=
+ =?us-ascii?Q?EhL7a8621KXuXMakOyTJNOuRRX/7CVnD+9bzHLW9DG7YElxqCDQPPqkrH9Kx?=
+ =?us-ascii?Q?gfiH2UsHKSDNW4jBLzwd3YlJbFpqEPkEN6OUx+FFGPxErYo2PUUQqJ0/+Nni?=
+ =?us-ascii?Q?ug1As23Ok1tp7gwNpQTucPkr1BeIZ7dq9u2JtadmTQBD/frYf8LBb8l9HPG2?=
+ =?us-ascii?Q?59SdU29gpT2BLAWBTGtfwoOa3wPm3bdQ8q+qrzVsrhilG3utF9cb+9meaBvv?=
+ =?us-ascii?Q?RZex9QkJZMthii/zdgdusuo72IYqPNKwx2p9jnrhzE4m4rZFQLmcdpokZJMD?=
+ =?us-ascii?Q?+G0XbPaOlOdBIKlhgdF2wrmiaAdApn6XK1Z/D0yljxXhCENDU73djK5XhttH?=
+ =?us-ascii?Q?5hrJVaWLcHcXK+kRp7H/Y3qvJ1XdNhNRwL4VT57XP3/u0pMNXPiwWSmecfB/?=
+ =?us-ascii?Q?EMJIX7kY9xorcwq+annyo0OMc5QAwGDUpIe5nEESiIZcwCGdFMlWZLmqiuVG?=
+ =?us-ascii?Q?ZdfQBQTj7SdI+GDUoIkIBKwHac+OraVw6ymu0L7dfUmouPLIgkNMJ6L32yPZ?=
+ =?us-ascii?Q?ew51Jamw/hYm7WRlh5RE1XCT2DP0Y5d6wh1Lb/swYO0q7udp5B/pUNhbIKUg?=
+ =?us-ascii?Q?WBMY/YY97PKCmMHfECTy7qFs9iyefXeDq/WNCSqFn0vMvaZpQX7gpdMVy8Eq?=
+ =?us-ascii?Q?wecfAVnUrlgskV/bzMa6LVzKeP+LksTCHqNUBkdj8hJjrpSIBM06gGammJiA?=
+ =?us-ascii?Q?tBMoeS34CP1WCdYTmXnw18v2Ao7/oOfFNu/pe2WWQF9xFBipGlyAzPesC8Cy?=
+ =?us-ascii?Q?IoReRmyT+yuA4YZ+us09gATafW7SjnNkNiks6X2b8wEr0MVcl3mwVU0vfRti?=
+ =?us-ascii?Q?LceH0HsoAnbTFrrtgXGIIUH0S46X0OvGvlSv8+h6oPZY5BCRn3NUfzM35/yj?=
+ =?us-ascii?Q?C50AukrPMwbZzAMOeTDTWGQPIC75r7II5PhRV7Sie7hsPWpVfRpXxJOWOGDt?=
+ =?us-ascii?Q?OUGDtpxsDtP1TpfIJzpSVeWyA6m/jba7nrTNFfHxz6QvBYmJA1NAaJETLCeQ?=
+ =?us-ascii?Q?Dg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea47546b-14ca-4d06-5949-08da5ae88bb3
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 22:33:25.0295
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tcW2heKFfxV3VFAXLsdVpytmF+cELq+c9/yPb+SgZgsKevxISboZxb9gR+jY8dYZqKoCgppcLN896KlQwOVVFXBponzs4SITCaW5HYzhoIQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5270
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,220 +150,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Attempting to get a crash dump out of a debug PREEMPT_RT kernel via an NMI
-panic() doesn't work. The cause of that lies in the PREEMPT_RT definition
-of mutex_trylock():
+On Thu, Jun 30, 2022 at 03:09:32PM -0700, Luis Chamberlain wrote:
+>On Thu, Jun 30, 2022 at 08:36:21AM -0700, Lucas De Marchi wrote:
+>>         - modprobe learned a --wait <MSEC> option to be used together with -r
+>>           when removing a module. This allows modprobe to keep trying the
+>>           removal if it fails because the module is still in use. An exponential backoff
+>>           time is used for further retries.
+>>
+>>           The wait behavior provided by the kernel when not passing O_NONBLOCK
+>>           to delete_module() was removed in v3.13 due to not be used and the
+>>           consequences of having to support it in the kernel. However there may
+>>           be some users, particularly on testsuites for individual susbsystems, that
+>>           would want that. So provide a userspace implementation inside modprobe for
+>>           such users. "rmmod" doesn't have a --wait as it remains a bare minimal over
+>>           the API provided by the kernel. In future the --wait behavior can be added
+>>           to libkmod for testsuites not exec'ing modprobe for module removal.
+>
+>Sorry for the super late review, I was swamped. OK so the only issue
+>I can think of is that rmmod *used* to support the kernel wait support
+>with $(rmmod --wait) so wouldn't this be odd?
 
-	if (IS_ENABLED(CONFIG_DEBUG_RT_MUTEXES) && WARN_ON_ONCE(!in_task()))
-		return 0;
+any reason not to use modprobe -r? Argument for rmmod supporting it in
+the past is that the wait was implemented on the kernel side and rmmod
+is the minimum wrapper around what the kernel provides.
 
-This prevents an nmi_panic() from executing the main body of
-__crash_kexec() which does the actual kexec into the kdump kernel.
-The warning and return are explained by:
+On the other side, user shouldn't need to know where that is
+implemented.
 
-  6ce47fd961fa ("rtmutex: Warn if trylock is called from hard/softirq context")
-  [...]
-  The reasons for this are:
+Over time libkmod grew much more to support loading/querying modules
+rather than removing. I think for next version I will move some of the
+module-removal support to libkmod rather than modprobe/rmmod. Then we
+can think again on supporting that flag there.
 
-      1) There is a potential deadlock in the slowpath
+>
+>It is why I had gone with:
+>
+> -p | --remove-patiently   patiently removes the module
+> -t | --timeout            timeout in ms to remove the module
+>
+>You would know better though.
+>
+>Also just curious, is it really terrible to just support waiting
+>forever?
 
-      2) Another cpu which blocks on the rtmutex will boost the task
-	 which allegedly locked the rtmutex, but that cannot work
-	 because the hard/softirq context borrows the task context.
+is there a use case for that? If we are trying to cover some races, I
+imagine a small timeout would be sufficient. Also notice that if the
+timeout is too big, so will be the interval between the retries.  On
+your v2 I had suggested polling the refcnt so we would get notificed
+on changes, but as you also noticed, that didn't work very well.  So I
+went back to a time-based retry solution.
 
-Furthermore, grabbing the lock isn't NMI safe, so do away with kexec_mutex
-and replace it with an atomic variable. This is somewhat overzealous
-as *some* callsites could keep using a mutex (e.g. the sysfs-facing ones
-like crash_shrink_memory()), but this has the benefit of involving a single
-unified lock and preventing any future NMI-related surprises.
+if there is a use-case, should we cap the interval between retries?
 
-Tested by triggering NMI panics via:
+thanks
+Lucas De Marchi
 
-  $ echo 1 > /proc/sys/kernel/panic_on_unrecovered_nmi
-  $ echo 1 > /proc/sys/kernel/unknown_nmi_panic
-  $ echo 1 > /proc/sys/kernel/panic
-
-  $ ipmitool power diag
-
-Fixes: 6ce47fd961fa ("rtmutex: Warn if trylock is called from hard/softirq context")
-Signed-off-by: Valentin Schneider <vschneid@redhat.com>
----
- kernel/kexec.c          | 11 ++++-------
- kernel/kexec_core.c     | 20 ++++++++++----------
- kernel/kexec_file.c     |  4 ++--
- kernel/kexec_internal.h | 15 ++++++++++++++-
- 4 files changed, 30 insertions(+), 20 deletions(-)
-
-diff --git a/kernel/kexec.c b/kernel/kexec.c
-index b5e40f069768..cb8e6e6f983c 100644
---- a/kernel/kexec.c
-+++ b/kernel/kexec.c
-@@ -93,13 +93,10 @@ static int do_kexec_load(unsigned long entry, unsigned long nr_segments,
- 
- 	/*
- 	 * Because we write directly to the reserved memory region when loading
--	 * crash kernels we need a mutex here to prevent multiple crash kernels
--	 * from attempting to load simultaneously, and to prevent a crash kernel
--	 * from loading over the top of a in use crash kernel.
--	 *
--	 * KISS: always take the mutex.
-+	 * crash kernels we need a serialization here to prevent multiple crash
-+	 * kernels from attempting to load simultaneously.
- 	 */
--	if (!mutex_trylock(&kexec_mutex))
-+	if (!kexec_trylock())
- 		return -EBUSY;
- 
- 	if (flags & KEXEC_ON_CRASH) {
-@@ -165,7 +162,7 @@ static int do_kexec_load(unsigned long entry, unsigned long nr_segments,
- 
- 	kimage_free(image);
- out_unlock:
--	mutex_unlock(&kexec_mutex);
-+	kexec_unlock();
- 	return ret;
- }
- 
-diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-index 16370926b21a..b03859a0fbaa 100644
---- a/kernel/kexec_core.c
-+++ b/kernel/kexec_core.c
-@@ -46,7 +46,7 @@
- #include <crypto/hash.h>
- #include "kexec_internal.h"
- 
--DEFINE_MUTEX(kexec_mutex);
-+atomic_t __kexec_lock = ATOMIC_INIT(0);
- 
- /* Per cpu memory for storing cpu states in case of system crash. */
- note_buf_t __percpu *crash_notes;
-@@ -964,7 +964,7 @@ late_initcall(kexec_core_sysctl_init);
-  */
- void __noclone __crash_kexec(struct pt_regs *regs)
- {
--	/* Take the kexec_mutex here to prevent sys_kexec_load
-+	/* Take the kexec_lock here to prevent sys_kexec_load
- 	 * running on one cpu from replacing the crash kernel
- 	 * we are using after a panic on a different cpu.
- 	 *
-@@ -972,7 +972,7 @@ void __noclone __crash_kexec(struct pt_regs *regs)
- 	 * of memory the xchg(&kexec_crash_image) would be
- 	 * sufficient.  But since I reuse the memory...
- 	 */
--	if (mutex_trylock(&kexec_mutex)) {
-+	if (kexec_trylock()) {
- 		if (kexec_crash_image) {
- 			struct pt_regs fixed_regs;
- 
-@@ -981,7 +981,7 @@ void __noclone __crash_kexec(struct pt_regs *regs)
- 			machine_crash_shutdown(&fixed_regs);
- 			machine_kexec(kexec_crash_image);
- 		}
--		mutex_unlock(&kexec_mutex);
-+		kexec_unlock();
- 	}
- }
- STACK_FRAME_NON_STANDARD(__crash_kexec);
-@@ -1013,13 +1013,13 @@ ssize_t crash_get_memory_size(void)
- {
- 	ssize_t size = 0;
- 
--	if (!mutex_trylock(&kexec_mutex))
-+	if (!kexec_trylock())
- 		return -EBUSY;
- 
- 	if (crashk_res.end != crashk_res.start)
- 		size = resource_size(&crashk_res);
- 
--	mutex_unlock(&kexec_mutex);
-+	kexec_unlock();
- 	return size;
- }
- 
-@@ -1039,7 +1039,7 @@ int crash_shrink_memory(unsigned long new_size)
- 	unsigned long old_size;
- 	struct resource *ram_res;
- 
--	if (!mutex_trylock(&kexec_mutex))
-+	if (!kexec_trylock())
- 		return -EBUSY;
- 
- 	if (kexec_crash_image) {
-@@ -1078,7 +1078,7 @@ int crash_shrink_memory(unsigned long new_size)
- 	insert_resource(&iomem_resource, ram_res);
- 
- unlock:
--	mutex_unlock(&kexec_mutex);
-+	kexec_unlock();
- 	return ret;
- }
- 
-@@ -1150,7 +1150,7 @@ int kernel_kexec(void)
- {
- 	int error = 0;
- 
--	if (!mutex_trylock(&kexec_mutex))
-+	if (!kexec_trylock())
- 		return -EBUSY;
- 	if (!kexec_image) {
- 		error = -EINVAL;
-@@ -1226,7 +1226,7 @@ int kernel_kexec(void)
- #endif
- 
-  Unlock:
--	mutex_unlock(&kexec_mutex);
-+	kexec_unlock();
- 	return error;
- }
- 
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index 145321a5e798..42b95bf58daf 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -334,7 +334,7 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
- 
- 	image = NULL;
- 
--	if (!mutex_trylock(&kexec_mutex))
-+	if (!kexec_trylock())
- 		return -EBUSY;
- 
- 	dest_image = &kexec_image;
-@@ -406,7 +406,7 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
- 	if ((flags & KEXEC_FILE_ON_CRASH) && kexec_crash_image)
- 		arch_kexec_protect_crashkres();
- 
--	mutex_unlock(&kexec_mutex);
-+	kexec_unlock();
- 	kimage_free(image);
- 	return ret;
- }
-diff --git a/kernel/kexec_internal.h b/kernel/kexec_internal.h
-index 48aaf2ac0d0d..74da1409cd14 100644
---- a/kernel/kexec_internal.h
-+++ b/kernel/kexec_internal.h
-@@ -13,7 +13,20 @@ void kimage_terminate(struct kimage *image);
- int kimage_is_destination_range(struct kimage *image,
- 				unsigned long start, unsigned long end);
- 
--extern struct mutex kexec_mutex;
-+/*
-+ * Whatever is used to serialize accesses to the kexec_crash_image needs to be
-+ * NMI safe, as __crash_kexec() can happen during nmi_panic(), so here we use a
-+ * "simple" atomic variable that is acquired with a cmpxchg().
-+ */
-+extern atomic_t __kexec_lock;
-+static inline bool kexec_trylock(void)
-+{
-+	return atomic_cmpxchg_acquire(&__kexec_lock, 0, 1) == 0;
-+}
-+static inline void kexec_unlock(void)
-+{
-+	atomic_set_release(&__kexec_lock, 0);
-+}
- 
- #ifdef CONFIG_KEXEC_FILE
- #include <linux/purgatory.h>
--- 
-2.31.1
-
+>
+>  Luis

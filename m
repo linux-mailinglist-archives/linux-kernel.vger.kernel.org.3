@@ -2,117 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D7D56256C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249BE56256A
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237611AbiF3Vh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 17:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
+        id S237578AbiF3Vh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 17:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237392AbiF3Vhy (ORCPT
+        with ESMTP id S237387AbiF3Vhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 17:37:54 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C330753D23;
-        Thu, 30 Jun 2022 14:37:53 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-317741c86fdso6448747b3.2;
-        Thu, 30 Jun 2022 14:37:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ftr+6PXIS1akRAQTeRzXuJpV+USRlStTYdmwOd5dXsA=;
-        b=kmfYoin/phWuLN7gbV2J/cCeZrKiSks9ggJStrEnbtotEw6sbU/scgp/GHBX1jtcto
-         1VUVjdjGM2E+Vmc2MiE3jRyOCO4X+ybkGZGHoU6JmMZ4oAIXh65yCp84QM9/eD4INT6P
-         YJtMgjd3WgtJ3lyA9042ww//l7pt0MIHyf1gSWb9FFeUS03Ll/tubYJUQUTAa9IjVxwi
-         u0Q96ppGLXwhXdHKFWbIVxyL4Rr+th5ql5HYvllu3J8VXxJjZHevjIblmn3rtHO4Zbuh
-         5PHDHCjeBwicPWn4PnTqvY8Cbjs79JFLd84xVvYCzK4Ru791VNt8ShG/09VL4Eg+2xcz
-         qYFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ftr+6PXIS1akRAQTeRzXuJpV+USRlStTYdmwOd5dXsA=;
-        b=Yq8gAVj18ByytRhFTutwaw6OqLLNGS1z2iJq8CeanoHTHrh4e/kqE/lVWrld2T/s/s
-         LXJO0iqpYSLuNzMUqBlhPDtSW05eC5CxLyLv6J4eR9YSoK0X1K4YqVZhglf6tZgoIamz
-         JTSioXtdtKzriPOq+S7u29qw5H3KmVGJ8GikyF7QKeER2R5g57EeH3uSnv9Xmem7TCvM
-         536NQ6amJtUOnGOVz00JISSpC/7Du7l+R5AjzLGac3AGxaJnVzRfAyUHHUSbpeQJw6xE
-         6Yz7IZHNGkShHuJ4DPHmBVZUWBpQtK7EGbon5cYaDe2Ypj5vWVf8tP+xNwa3+HbrEEDb
-         G4ew==
-X-Gm-Message-State: AJIora9pPrr4oSw0UnJWN0Zesl/qPKX5O5YUKXabiqj4JSg+TXbeEzqT
-        uu9HdPAu+rHLruZJkUKRoDrv3e7b6Q9HfjB77eY=
-X-Google-Smtp-Source: AGRyM1taj8YM/NIKaCTN/Qq+j+K1Jp1k6ich97k18/4fXh53faX4/Dz6qt7w0Cougrt4XIcxr4C+4ZjDcDTxfiSNGKo=
-X-Received: by 2002:a81:468b:0:b0:318:4cac:6576 with SMTP id
- t133-20020a81468b000000b003184cac6576mr12582701ywa.277.1656625072912; Thu, 30
- Jun 2022 14:37:52 -0700 (PDT)
+        Thu, 30 Jun 2022 17:37:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB84A53D0B;
+        Thu, 30 Jun 2022 14:37:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8529AB82D62;
+        Thu, 30 Jun 2022 21:37:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B0CAC341C8;
+        Thu, 30 Jun 2022 21:37:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656625066;
+        bh=/1mPg+HnK95Yhfa0x9xppZXAMpxCw2yRXLpQyUsVUs4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=okEDMuKgkx85z8wootjkayGx5wpPaISbSuvv2iz+k60DQnfW4MphYuCxOU9S+PM04
+         dKH+ZsGnlHJg6R+ydb0rmea9sbOcUNgNHvSMJwxknZkitlb6mOx8PeaY80hPWYU0YY
+         v4FnFJj4ogxdv/ask676u11UFy1N9XJoICUtAFIGqoQrrBWM+H5sezK7bBEleXOl3q
+         fwagwQYhsTRFZ9TqoB/hs8y8qAerOt/QwwVhe3OJKYnh1m7/RhdE0/Taas957m8GjA
+         xtzc+HcsRKg3UneQB0DvMA3+LqH/J2B1MyytK1Kj9I5Aj0MFrYzb04sALfWxVvo/Ul
+         H6E6oBx+2QCxw==
+Date:   Thu, 30 Jun 2022 14:37:45 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Khalid Aziz <khalid.aziz@oracle.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org,
+        aneesh.kumar@linux.ibm.com, arnd@arndb.de, 21cnbao@gmail.com,
+        corbet@lwn.net, dave.hansen@linux.intel.com, david@redhat.com,
+        ebiederm@xmission.com, hagen@jauu.net, jack@suse.cz,
+        keescook@chromium.org, kirill@shutemov.name, kucharsk@gmail.com,
+        linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        longpeng2@huawei.com, luto@kernel.org, markhemm@googlemail.com,
+        pcc@google.com, rppt@kernel.org, sieberf@amazon.com,
+        sjpark@amazon.de, surenb@google.com, tst@schoebel-theuer.de,
+        yzaikin@google.com
+Subject: Re: [PATCH v2 2/9] mm/mshare: pre-populate msharefs with information
+ file
+Message-ID: <Yr4Xqe22CI/ff0ge@magnolia>
+References: <cover.1656531090.git.khalid.aziz@oracle.com>
+ <34e2eabbef5916c784dc16856ce25b3967f9b405.1656531090.git.khalid.aziz@oracle.com>
 MIME-Version: 1.0
-References: <20220629115010.10538-1-andriy.shevchenko@linux.intel.com>
- <20220630162716.GA2842206-robh@kernel.org> <CAHp75VdARCTnpEMyVRAWv7jVSj_+m8_xYiNTwmX6LCzpZT8Tuw@mail.gmail.com>
- <CAL_JsqJH0tngWDCdLdxbbKx2VYG4u26fFJKgq2JC9a+jif50aA@mail.gmail.com>
-In-Reply-To: <CAL_JsqJH0tngWDCdLdxbbKx2VYG4u26fFJKgq2JC9a+jif50aA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 30 Jun 2022 23:37:16 +0200
-Message-ID: <CAHp75VeKUE3Zqqnb_Smr4ucL7_DN5a6HTxf1zY4aKD8Cb3XZAA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] of: unittest: Switch to use fwnode instead of of_node
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Frank Rowand <frank.rowand@sony.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <34e2eabbef5916c784dc16856ce25b3967f9b405.1656531090.git.khalid.aziz@oracle.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 11:34 PM Rob Herring <robh@kernel.org> wrote:
-> On Thu, Jun 30, 2022 at 1:03 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Thu, Jun 30, 2022 at 6:29 PM Rob Herring <robh@kernel.org> wrote:
-> > > On Wed, Jun 29, 2022 at 02:50:09PM +0300, Andy Shevchenko wrote:
-> > > > GPIO library now accepts fwnode as a firmware node, so
-> > > > switch the module to use it.
+On Wed, Jun 29, 2022 at 04:53:53PM -0600, Khalid Aziz wrote:
+> Users of mshare feature to share page tables need to know the size
+> and alignment requirement for shared regions. Pre-populate msharefs
+> with a file, mshare_info, that provides this information.
+> 
+> Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
+> ---
+>  mm/mshare.c | 62 +++++++++++++++++++++++++++++++++++++++++------------
+>  1 file changed, 48 insertions(+), 14 deletions(-)
+> 
+> diff --git a/mm/mshare.c b/mm/mshare.c
+> index c8fab3869bab..3e448e11c742 100644
+> --- a/mm/mshare.c
+> +++ b/mm/mshare.c
+> @@ -25,8 +25,8 @@
+>  static struct super_block *msharefs_sb;
+>  
+>  static const struct file_operations msharefs_file_operations = {
+> -	.open	= simple_open,
+> -	.llseek	= no_llseek,
+> +	.open		= simple_open,
+> +	.llseek		= no_llseek,
 
-...
+I feel like there's a lot of churn between the previous patch and this
+one that could have been in the previous patch.
 
-> > > > -     devptr->chip.of_node = pdev->dev.of_node;
-> > > > +     devptr->chip.fwnode = dev_fwnode(&pdev->dev);
-> > >
-> > > Perhaps I want the DT test code to test using the of_node pointer. We do
-> > > want that to work, right?
-> >
-> > Nope. We want to get rid of of_node in GPIO.
->
-> I would think there's old PPC users preventing that, but if not, good job.
+>  };
+>  
+>  static int
+> @@ -42,23 +42,52 @@ msharefs_d_hash(const struct dentry *dentry, struct qstr *qstr)
+>  	return 0;
+>  }
+>  
+> +static void
+> +mshare_evict_inode(struct inode *inode)
+> +{
+> +	clear_inode(inode);
+> +}
+> +
+>  static const struct dentry_operations msharefs_d_ops = {
+>  	.d_hash = msharefs_d_hash,
+>  };
+>  
+> +static ssize_t
+> +mshare_info_read(struct file *file, char __user *buf, size_t nbytes,
+> +		loff_t *ppos)
+> +{
+> +	char s[80];
+> +
+> +	sprintf(s, "%ld", PGDIR_SIZE);
 
-Recently applied by respective maintainer, so no more PPC GPIO using OF node.
+SO what is this "mshare_info" file supposed to reveal?  Hugepage size?
+I wonder why this isn't exported in struct mshare_info?
 
-> > > I'm really not a fan of fwnode'ifying things that are DT only. It's
-> > > really pointless churn.
-> >
-> > Other way around, keeping an of_node for just 3 drivers (and counting
-> > down) + one test case is pointless churn.
-> >
-> > But I got that commit message that is unclear about the intentions
-> > behind. I will update that if you agree on the rest.
->
-> If it is going away, then what choice do I have. :)
-
-Yep, that is the idea.
-
-I interpret this as "go ahead with a better commit message and I will Ack it"!
-
-Thanks, Rob, for your review!
-
--- 
-With Best Regards,
-Andy Shevchenko
+> +	return simple_read_from_buffer(buf, nbytes, ppos, s, strlen(s));
+> +}
+> +
+> +static const struct file_operations mshare_info_ops = {
+> +	.read   = mshare_info_read,
+> +	.llseek	= noop_llseek,
+> +};
+> +
+> +static const struct super_operations mshare_s_ops = {
+> +	.statfs	     = simple_statfs,
+> +	.evict_inode = mshare_evict_inode,
+> +};
+> +
+>  static int
+>  msharefs_fill_super(struct super_block *sb, struct fs_context *fc)
+>  {
+> -	static const struct tree_descr empty_descr = {""};
+> +	static const struct tree_descr mshare_files[] = {
+> +		[2] = { "mshare_info", &mshare_info_ops, 0444},
+> +		{""},
+> +	};
+>  	int err;
+>  
+> -	sb->s_d_op = &msharefs_d_ops;
+> -	err = simple_fill_super(sb, MSHARE_MAGIC, &empty_descr);
+> -	if (err)
+> -		return err;
+> -
+> -	msharefs_sb = sb;
+> -	return 0;
+> +	err = simple_fill_super(sb, MSHARE_MAGIC, mshare_files);
+> +	if (!err) {
+> +		msharefs_sb = sb;
+> +		sb->s_d_op = &msharefs_d_ops;
+> +		sb->s_op = &mshare_s_ops;
+> +	}
+> +	return err;
+>  }
+>  
+>  static int
+> @@ -84,20 +113,25 @@ static struct file_system_type mshare_fs = {
+>  	.kill_sb		= kill_litter_super,
+>  };
+>  
+> -static int
+> +static int __init
+>  mshare_init(void)
+>  {
+>  	int ret = 0;
+>  
+>  	ret = sysfs_create_mount_point(fs_kobj, "mshare");
+>  	if (ret)
+> -		return ret;
+> +		goto out;
+>  
+>  	ret = register_filesystem(&mshare_fs);
+> -	if (ret)
+> +	if (ret) {
+>  		sysfs_remove_mount_point(fs_kobj, "mshare");
+> +		goto out;
+> +	}
+> +
+> +	return 0;
+>  
+> +out:
+>  	return ret;
+>  }
+>  
+> -fs_initcall(mshare_init);
+> +core_initcall(mshare_init);
+> -- 
+> 2.32.0
+> 

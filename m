@@ -2,79 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBF5561395
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3332561393
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233265AbiF3Hrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
+        id S233324AbiF3HsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232958AbiF3Hrj (ORCPT
+        with ESMTP id S233020AbiF3HsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:47:39 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BD53BA73;
-        Thu, 30 Jun 2022 00:47:38 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id f39so32285072lfv.3;
-        Thu, 30 Jun 2022 00:47:38 -0700 (PDT)
+        Thu, 30 Jun 2022 03:48:08 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFB9E73
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:48:07 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 130-20020a251288000000b0066c81091670so14180766ybs.18
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:48:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version;
-        bh=UJma+hccqR5aqdoWvaqvkY0KbcCLV9ny5JEaD9S2u7M=;
-        b=YsssRIgBJ4hH6NGsrQmjAexl+5bN6RdvMeHUlgervuYq9fjv0KDDtquiYHBTQN8rgm
-         01kBucqpHWTcK+SFwwFoSOTZkRUXfCtLFujjBy0SPHeNvSXv2brREZ10dKuGrlRbsA2P
-         +JA2dWwNnTazYoVAzL48+cpufcqr0kZ6Cc74TtQhT7w9rPrX4hPktewBtWTw95tWIdUr
-         tpGqtqRVBQhvHrNFCv955subKAs2NmuQ2AEuXMFFbDwU/ds0+amXc59GR0IjPkCZhcTp
-         qkeIs8TPpl6asX0zrUBybwwS/oiBqo+pM/sNgMUfMQZBerqcDmkZQMIwcCl9QxUrsqzv
-         0Ehw==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=XzzQ2qeoRIHvL3OIKjNQCubCMmqjty1j1wRkBLGrTgU=;
+        b=Cd/RaHs88ciLdA0+wMopNk5kjW44si1O/9QcrziajxdH20xK3UlUrP0+vLXx20MY1D
+         RUAPNooz1wh14yhNsjZ2DPh04r1TSjAWbZGLdxIfADNCLsKIMVoe0rCwGDelPXBS/q07
+         bfBF8ggVR84eJmwoJcidKJXXyP0skwxvM4oMo5jDBjsdLzw0hq+urk9Vt1El1I0pNXOY
+         Ui9qvmcqqGBAUjeUZNZ2TMfeCjGGtWzShSjtdHoo+rJ8+Q89q47gWg1OYS6AOODEA8yv
+         r7cKAeIge6MraBq4l/vTR1evClWD+lPEjdb8uPAySVuqmLU0+iIs7L3MgEN1SzQNTG1I
+         CBDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version;
-        bh=UJma+hccqR5aqdoWvaqvkY0KbcCLV9ny5JEaD9S2u7M=;
-        b=LXqYZu9BbsT/Pspf+6DV9FiXKpOYQo1gXYtcQ/kWjHbS33l8l2FMza6xV/0xtCUBWz
-         gzG3Lp8GJb58dEWm5b0ifBtrWZFcZrtWU9CH4Uc6/LpS3VK/ZaoiD4jmYUJM/tpIIQu4
-         5pcJ3RwKDpO7uGFF4Tdf4Khh/iKkuRf05PF6mthBCpxqEqu89tAeQd8oaw8/woDmfwuz
-         Q0xxqXPAY5EkN/76DTeeLIOtV07MyyB6IWg59KUS1bI+aZ7TA4RBAueYGXRfvq0FY1ic
-         GoGOv23dxWUT+SMkO8N3q15EVFh1/3BHYQHldDS6Zv5jQ/z7OfFsHcG38yuG3wY3j6y8
-         6LRA==
-X-Gm-Message-State: AJIora+gdeoP4FRxu4CfQzKXiLnjOnufR91dTKlqdHuZ2hxOpxhk6kc7
-        pec/irV9f/ZGtshmQNrITw8=
-X-Google-Smtp-Source: AGRyM1tGRBxLTD0woETHcejT21FiPEBCTfhEzG8IQ/H7WUS7PKFJs64Tpk6PnTQBlZnU2Vmy5JcjQg==
-X-Received: by 2002:ac2:44b1:0:b0:47f:6279:5f45 with SMTP id c17-20020ac244b1000000b0047f62795f45mr4417086lfm.283.1656575256706;
-        Thu, 30 Jun 2022 00:47:36 -0700 (PDT)
-Received: from eldfell ([194.136.85.206])
-        by smtp.gmail.com with ESMTPSA id c4-20020a196544000000b0047f6fe39bb9sm2967958lfj.27.2022.06.30.00.47.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 00:47:36 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 10:47:25 +0300
-From:   Pekka Paalanen <ppaalanen@gmail.com>
-To:     Dennis Tsiang <dennis.tsiang@arm.com>
-Cc:     Simon Ser <contact@emersion.fr>,
-        Normunds Rieksts <Normunds.Rieksts@arm.com>, airlied@linux.ie,
-        tzimmermann@suse.de, Liviu Dudau <Liviu.Dudau@arm.com>,
-        linux-kernel@vger.kernel.org,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        christian.koenig@amd.com, linaro-mm-sig@lists.linaro.org,
-        david.harvey-macaulay@arm.com, Lisa Wu <lisa.wu@arm.com>,
-        nd <nd@arm.com>, sumit.semwal@linaro.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 0/1] [RFC] drm/fourcc: Add new unsigned
- R16_UINT/RG1616_UINT formats
-Message-ID: <20220630104725.602bff9a@eldfell>
-In-Reply-To: <o1qcCo8e19pmmNe-YJbPkmu4SBrOQ_E3u7eqdrcXUzdBccLtFswL_ARTpbrX9C10tippuy5ieXAsqdf7H47JuT7Hqa1NlizAPqVuRM0kRt4=@emersion.fr>
-References: <AS8PR08MB81117652E417826E741154B8F8B99@AS8PR08MB8111.eurprd08.prod.outlook.com>
-        <20220627175026.6a5dd239@eldfell>
-        <05513f59-0bd9-77cd-36d4-41027bc339be@arm.com>
-        <o1qcCo8e19pmmNe-YJbPkmu4SBrOQ_E3u7eqdrcXUzdBccLtFswL_ARTpbrX9C10tippuy5ieXAsqdf7H47JuT7Hqa1NlizAPqVuRM0kRt4=@emersion.fr>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PWI1bJaQrT8/Yn7UW=rAv+v";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=XzzQ2qeoRIHvL3OIKjNQCubCMmqjty1j1wRkBLGrTgU=;
+        b=KQ7BeD4GuS1hJ2xX+KpQEk75aUg80tA6qogJrxTifguXzH28Ep4iuYK+1mXVpsGK2k
+         7xkz3taG+UeUrQGF0YjFdPDBODSd8y3j9hSR2c8KV+fJu22HEkNvgrSWM1dOdR5UoLov
+         LbOpunGoFvDaZ8HzUWgPUhknc9ilRyY1QINYnSiRzjqQqJg2FIuV90zyZTQAqVMVhzwk
+         G/EwBs5drURJB97SxzpLJbt7MQHokzcoGUN7ROMokjn5z9ZP/bUk1T6nDN5BhUqenyk9
+         rJaXrRW+K9I0dKL3+EZ2rNy3UVXsdjP31mXUvHbqum2CaJ3g7UlhgI3ceapig2kp/jVO
+         8PkQ==
+X-Gm-Message-State: AJIora8PKBXKMjd1HqtUIKvBCOWqQGObsT7T2EBOg9Fz6QxCMg512Oe7
+        GGP7dWXEtuFAycEI3+k71hrbT0ADPhNslA==
+X-Google-Smtp-Source: AGRyM1vSiWG5UsJn1FGs8y/l+5be4umvT4PkYpnDFc4Cbi+MLFCVLCTtuQ8PN01k8FUWH9WOK1+ovGD2Wp1BOA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:2f81:0:b0:66d:9a86:f6de with SMTP id
+ v123-20020a252f81000000b0066d9a86f6demr3315237ybv.590.1656575286295; Thu, 30
+ Jun 2022 00:48:06 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 15:47:56 +0800
+Message-Id: <20220630074757.2739000-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v3 1/2] mm: Add PAGE_ALIGN_DOWN macro
+From:   David Gow <davidgow@google.com>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        anton.ivanov@cambridgegreys.com,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc:     David Gow <davidgow@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-um@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
+        Daniel Latypov <dlatypov@google.com>, linux-mm@kvack.org,
+        kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,103 +77,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/PWI1bJaQrT8/Yn7UW=rAv+v
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+This is just the same as PAGE_ALIGN(), but rounds the address down, not
+up.
 
-On Wed, 29 Jun 2022 14:53:49 +0000
-Simon Ser <contact@emersion.fr> wrote:
+Suggested-by: Dmitry Vyukov <dvyukov@google.com>
+Signed-off-by: David Gow <davidgow@google.com>
+Acked-by: Andrew Morton <akpm@linux-foundation.org>
+---
 
-> On Wednesday, June 29th, 2022 at 16:46, Dennis Tsiang <dennis.tsiang@arm.=
-com> wrote:
->=20
-> > Thanks for your comments. This is not intended to be used for KMS, where
-> > indeed there would be no difference. This proposal is for other Graphics
-> > APIs such as Vulkan, which requires the application to be explicit
-> > upfront about how they will interpret the data, whether that be UNORM,
-> > UINT .etc. We want to be able to import dma_bufs which create a VkImage
-> > with a "_UINT" VkFormat. However there is currently no explicit mapping
-> > between the DRM fourccs + modifiers combos to "_UINT" VkFormats. One
-> > solution is to encode that into the fourccs, which is what this RFC is
-> > proposing. =20
->=20
-> As a general comment, I don't think it's reasonable to encode all of the
-> VkFormat information inside DRM FourCC. For instance, VkFormat has SRGB/U=
-NORM
-> variants which describe whether pixel values are electrical or optical
-> (IOW, EOTF-encoded or not). Moreover, other APIs may encode different
-> information in their format enums.
+Please take this patch as part of the UML tree, along with patch #2,
+thanks!
 
-Yeah, do not add any of that information to the DRM pixel format codes.
+Changes since v2:
+https://lore.kernel.org/lkml/20220527185600.1236769-1-davidgow@google.com/
+- Add Andrew's Acked-by tag.
 
-There is *so much* other stuff you also need to define than what's
-already mentioned, and which bits you need for the API at hand depends
-totally on the API at hand. After the API has defined some parts of the
-metadata, the API user has to take care of the remaining parts of the
-metadata in other ways, like dynamic range or color space.
+v2 was the first version of this patch (it having been introduced as
+part of v2 of the UML/KASAN series).
 
-Besides, when you deal with dmabuf, you already need to pass a lot of
-metadata explicitly, like the pixel format, width, height, stride,
-modifier, etc. so it's better to add more of those (like we will be
-doing in Wayland, and not specific to dmabuf even) than to try make
-pixel formats a huge mess through combinatorial explosion and sometimes
-partial and sometimes conflicting image metadata.
+There are almost certainly lots of places where this macro should be
+used: just look for ALIGN_DOWN(..., PAGE_SIZE). I haven't gone through
+to try to replace them all.
 
-You might be able to get a glimpse of what all metadata there could be
-by reading
-https://gitlab.freedesktop.org/pq/color-and-hdr/-/blob/main/doc/pixels_colo=
-r.md
-.
+---
+ include/linux/mm.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Compare Vulkan formats to e.g.
-https://docs.microsoft.com/en-us/windows/win32/api/dxgicommon/ne-dxgicommon=
--dxgi_color_space_type
-and you'll see that while DXGI color space enumeration is mostly about
-other stuff, it also has overlap with Vulkan formats I think, at least
-the SRGB vs. not part.
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 9f44254af8ce..9abe5975ad11 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -221,6 +221,9 @@ int overcommit_policy_handler(struct ctl_table *, int, void *, size_t *,
+ /* to align the pointer to the (next) page boundary */
+ #define PAGE_ALIGN(addr) ALIGN(addr, PAGE_SIZE)
+ 
++/* to align the pointer to the (prev) page boundary */
++#define PAGE_ALIGN_DOWN(addr) ALIGN_DOWN(addr, PAGE_SIZE)
++
+ /* test whether an address (unsigned long or pointer) is aligned to PAGE_SIZE */
+ #define PAGE_ALIGNED(addr)	IS_ALIGNED((unsigned long)(addr), PAGE_SIZE)
+ 
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
 
-Btw. practically all buffers you see used, especially if they are 8
-bpc, they are almost guaranteed to be "SRGB" non-linearly encoded, but
-do you ever see that fact being explicitly communicated?
-
-Then there is the question that if you have an SRGB-encoded buffer, do
-you want to read out SRGB-encoded or linear values? That depends on
-what you are doing with the buffer, so if you always mapped dmabuf to
-Vulkan SRGB formats (or always to non-SRGB formats), then you need some
-other way in Vulkan for the app to say whether to sample encoded or
-linear (electrical or optical) values. And whether texture filtering is
-done in encoded or linear space, because that makes a difference too.
-
-IOW, there are cases where the format mapping depends on the user of the
-buffer and not only on the contents of the buffer.
-
-Therefore you simply cannot create a static mapping table between two
-format definition systems when the two systems are fundamentally
-different, like Vulkan and DRM fourcc.
-
-
-Thanks,
-pq
-
---Sig_/PWI1bJaQrT8/Yn7UW=rAv+v
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmK9VQ0ACgkQI1/ltBGq
-qqdSnw//dKU1Je3JNCuVm7l04PD/fNdNZkQAya5N7nCGJ+3573oOu+IsmD6qJNyu
-n20Q8gV0EaRAmptxeCwPlQTzLdlqC711c1lDAaA3TQEmyOIYH2rk/dq0VHnuW2LK
-9VCnHiLCfa7apbWrZE+qqVPhwtU1JVLZGke9UbOaDMZ4cnx5+9ckejmsGlshL+ZP
-2BHtfNcQT+V47+9/IjJh5dWdVwzSiCh3psArhuEbxq4jfJNhzrUqvY8bQpUfd/ja
-Q4SYPEaH8OmZvFYzrnIdnM6f8wYNLfwF2JXpIGXdS8TLhbJlfdZj7OIaEek8/Nlx
-Rr79cscBYX0nFUlAkmrKWSpbq+WpC9vaB9uJaZLQyAZj5GHjW+OqKi83moyvVhBt
-6fAZKehEugRhSeACMltFQEChCx5yFMj9eACHozzO241xvKZHoGMh2xJfZpOYLjnV
-d6zpXmjwgXWyIgtx4BzTRAA12eI7tt3k4YjrbzrUsSf6zdgT/7NfHw07n4+THynl
-sWf+evSYCIOIU1ajkDc+zbbKNnybs3d4W0v0UmVwIFZs8lXJXWg+Bgjt1mtKwNV1
-18fY0bE7g2bcLvMltRgWgBmEyIRIOqI6NqWIifF0WvRcdD2WH7j0qQiADWvVP8dd
-Yg4tpsuRPFHI71FZ/3fHzAC2+4of6iF7R//bdg18h8JSuivblHk=
-=FXx7
------END PGP SIGNATURE-----
-
---Sig_/PWI1bJaQrT8/Yn7UW=rAv+v--

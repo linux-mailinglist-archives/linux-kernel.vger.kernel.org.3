@@ -2,148 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE242562227
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 20:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0DE2562223
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 20:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236666AbiF3SfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 14:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
+        id S236717AbiF3SeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 14:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236082AbiF3SfI (ORCPT
+        with ESMTP id S236687AbiF3SeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 14:35:08 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152003CA54;
-        Thu, 30 Jun 2022 11:35:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656614107; x=1688150107;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=qfMvz34IQ1XlB/cxYb48cOD/Af4s6wGj7oK89k9bGoY=;
-  b=IQCfJNOiwSujioUwO6dAZTa3HzwU3m2EQpa2Vgk1y/JZA0RPK6eCJtJX
-   MhTPhj4crEj+5JkkLLCR9UqkS4iBQt6Uis2fqHLsb8mS8yvg9QVIWZ3s0
-   ZPeCOZ0KoCUyq/utwD9kLEAYiWmVsF3HTOO5BBioDXv21ygvlVF/LnMXM
-   9ZRKNSqI8lvuL7mb31UHyKK2LncO7ypDGVbrNRtK/Uk8S1pf+MxmUD1gb
-   dTgGysIlsEVNc74Ad5kqLPsb6WCDGmFplTSPXqUwFEMB10/w7MHGXlD4N
-   8r9/MXEbXkStXi7VAsmy2BTGXRm78pQM+SAYTLZP55lf130qNAeewe+ox
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="262233449"
-X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
-   d="scan'208";a="262233449"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 11:35:06 -0700
-X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
-   d="scan'208";a="618071253"
-Received: from jhilliar-mobl.amr.corp.intel.com (HELO [10.212.10.157]) ([10.212.10.157])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 11:35:05 -0700
-Message-ID: <2cc37f6d-72a7-9064-cad2-c6c6d21ede61@linux.intel.com>
-Date:   Thu, 30 Jun 2022 13:35:05 -0500
-MIME-Version: 1.0
+        Thu, 30 Jun 2022 14:34:06 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2072.outbound.protection.outlook.com [40.107.96.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA67625E9B
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 11:34:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UPepUKYjioEo3uqaLelSWWXxte0D5u0yMEZ+8r4WWfjaiqjPXTtOWJhYXOK0ByBgoRDiHeY2C3vbnBRDWQ2NiGJsmX8uXFHfLE05lVYCV675uzYitNmjsNFZXlAjgeL0Eu51dMMbe8Tyrf1YakKU/Nxn3vlM1R6TQsm/MOg+YgNrnRtTxHcw2bag8Y9OWSGd8kM/BfgpmR62wAETJaVRWIunbo2H1D82WOSvXbc/FM82VnMUAtU6nioPOHRh3c+zQJtbqg5+xyYWo+JqjOApwSywBChAmnf47SZfOlrga+wAYQumjukNGRjSimGukW+YQlWSrFekzNn2rl82YQ+BIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=faRr+5o5PPOwoCWovnjYBSIT9YXzdg4gzZVWO2V8V2c=;
+ b=UzF8FUsysQ//eqJ/nY/NVDv2sK1dZxEJD2AB1CCvjEPw9zR3uXYHoyq6qtG/p9GqzQCWveck5v0rvjR/UJfQ7aPAL0SD6U3jIrhLknkKs7AMZIxlwohgSYDOvPH6gLmjZQz65Y2RMwvI4BWns7gGh5IHxZywh4yXosrB0LoWSjW8wFoGwjBmPkAapyDRMocA0FO+PGeHrpq7HL3u3O1mFxPxAlqDVd5rSpAPBWHXLHW1gg40Vu66eDct2pBCDtO0UaIDt3CcouZ44L2IugBjsDTwdgBBUBVb0Bs13YhnCCwkxJub1/1bmOu3wKv0pWkXsIJZ58BNzWGi4c0pJ43lCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=faRr+5o5PPOwoCWovnjYBSIT9YXzdg4gzZVWO2V8V2c=;
+ b=GxCtkbZFOmHQUH0vnM1iJ5YvkercQIrjFGBoar5h3zuYC8IKgzPAKKw5SdJSnHGSNHBGobtA/M3Mlcm5qfeZJvpFlGK/h4NjtLG0xJ3AD7/COyuCY7zP8LVjw08egncadmmZQZP4xlXq1S21LSsmToIgpGziY0l8dWaZJ4nl6Es=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
+ by DM6PR12MB3386.namprd12.prod.outlook.com (2603:10b6:5:115::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Thu, 30 Jun
+ 2022 18:34:03 +0000
+Received: from DM6PR12MB4123.namprd12.prod.outlook.com
+ ([fe80::6d50:f6c5:cea4:1d95]) by DM6PR12MB4123.namprd12.prod.outlook.com
+ ([fe80::6d50:f6c5:cea4:1d95%6]) with mapi id 15.20.5373.018; Thu, 30 Jun 2022
+ 18:34:03 +0000
+Message-ID: <ceb5c0a9-60da-43c6-5cab-c9d9a2dff618@amd.com>
+Date:   Fri, 1 Jul 2022 00:06:35 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.10.0
-Subject: Re: [PATCH v5 2/2] ASoC: cs35l41: Read System Name from ACPI _SUB to
- identify firmware
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 4/5] ASoC: amd: add Machine driver for Jadeite platform
 Content-Language: en-US
-To:     Stefan Binding <sbinding@opensource.cirrus.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     linux-acpi@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-References: <20220630150135.1799535-1-sbinding@opensource.cirrus.com>
- <20220630150135.1799535-3-sbinding@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220630150135.1799535-3-sbinding@opensource.cirrus.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     alsa-devel@alsa-project.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, Alexander.Deucher@amd.com,
+        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
+        zhuning@everest-semi.com, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220630031755.1055413-1-Vijendar.Mukunda@amd.com>
+ <20220630031755.1055413-5-Vijendar.Mukunda@amd.com>
+ <Yr2Eq0BUmi6mZsRY@sirena.org.uk>
+From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
+In-Reply-To: <Yr2Eq0BUmi6mZsRY@sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: BM1PR01CA0149.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:b00:68::19) To DM6PR12MB4123.namprd12.prod.outlook.com
+ (2603:10b6:5:21f::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 66a24903-fa13-421b-aea6-08da5ac71b26
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3386:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QkV2P1KCfeGd6vyt5Ks17qQUF2FsBTeT662Rs+IOf4YkolEWIZcZO42rVczdrVqod6feL4aGrWO0WHwLtcGhBBpvf60NsunC4uXqfRLUKGcKnWsqj/Qemp1v1jqUBqKBk7XWXLQRTQdXC7ss9yNRYEljh3n1u7kV/RYUEsbyNzrQM43AuSGmI/dUnCS1lAt2Z2QUlJn4WXq+qWaNnMyVuVbCg/toZ9fRz6v8HtOggR7Oz8VNlhE6ZnEgvHjItWhHeIEM3OEvrM9AhAMeIaVh6mroecWz9P6DyzSQCqGqtJximzalAjrZKtebYhUhzVDHefGWClYGoRLqsPtKTNo3xejtxMIXDx72WDrZOCjCkl5jreFxO8cXhleAW8SdvvtPKMCj9IKrVUj2q8E00mnSTzboNu89pLA4EcXqn04raPXYBrtEaNvg7hVVN/nQ8LlwnEWVQ/34B7tx0Sa4jbG/KPwyjHOT80zCYRel0JbIHIf4ebDDr/Ozo4O4h91sSfK3b1ZWP3e2MN+v7Rr3kYF2TIXoDxW5nZvOWRJJ7S3RysJD8svnp1WdLTrNFvFRiQUliIR+ValiWW/rIrCU7onUEm3GpzHF/0daj8BPwsAdlDWrtSwd90De1MPZLjcVARfzHgRAxvQotQkT9lnCbNkIw12hvKfxfaRQrjWXIsyS8r7qVaf59MiL8/PgzLMqUzkR9KjFb/DHxJoWdflCXNgW6NO0k9X+wzUKIMQcmguE8RWM108S3IZ84k46YhcFGZZZ+Wke1hbK7hdifeC00UBbYgAL9ZKtLhd+Y7yNqQrGswj1SHxoIPqTdZLcd2rvGGuE5f8PIutL/qgzEDWjzAX49eEvfeuCJl2MWy5lzQp0cbM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(39860400002)(136003)(346002)(376002)(6512007)(186003)(2906002)(26005)(83380400001)(2616005)(6666004)(6506007)(36756003)(31686004)(53546011)(38100700002)(41300700001)(66476007)(54906003)(6916009)(4744005)(8936002)(5660300002)(478600001)(8676002)(66556008)(66946007)(4326008)(6486002)(316002)(31696002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ckVuSExPMTlIdGpiTW5SdGVscUNERUVFT1pPSEpuU216ZXNYZTI1Z3lLZE9o?=
+ =?utf-8?B?cUhFamMzTU9LSlk2Yi9PRXJVNGZKeE80WGRVZVVhK2VROXd6VXFyMHlha2lL?=
+ =?utf-8?B?ZWZNZkNnUG1DeExCUGQwcTNuNWNEeXpCVVZrTDZPUENteUNYSXdNRUx5RkVH?=
+ =?utf-8?B?b2k5SWRvMmNLcVJNNDdOSzZlUmgwd1ZOUVd6d2JVQWhaZjJhc0NaK2lENnpJ?=
+ =?utf-8?B?WnF5NWFieFdHSWdqdU5rTGNzK3dlc2s5RGVqNFpYcytDUEtBZTJTajZWc2hx?=
+ =?utf-8?B?UFhEbFVlTVZkczJqbGJ1aUxiN21RNEgxZGY0UTFxT3FHODl5YlE1Z1VWejVi?=
+ =?utf-8?B?RkhSM09XMDNXSmZvSjl3bzBzck8zcVMwUS83cTlPTEYwOTZYS0kvNG5FeWox?=
+ =?utf-8?B?L2V6bno5QnFJSjhma0xvdkRzMnlvQTJrUHhvMWU1UG03Sm41aGdHeHlKajdU?=
+ =?utf-8?B?NWdtclhIWkhCRjlxZHdESjVTMkZpVnZYWHNHQ2RTdnJWRitGd1Ntd215MUtG?=
+ =?utf-8?B?NWJTU2RQbFIybUxGQlRFWVk0OGZFTnJmYmpIaVZSOVZwRG9UdFFnY2VZWkpV?=
+ =?utf-8?B?MEl3ZkgrZGUwaHN1Um9BMUtqTGR6dEs1Y1o1YVhUbDloTzVkUVh4bXV3cG5R?=
+ =?utf-8?B?cDR4and2b0dia3VKeDVqeWxmWjFIN1FuaDFzUFg1aU45T3BYNTFVMk9vVzA4?=
+ =?utf-8?B?eEJRbjEwVWRhQWIwUjZMaWdKOUxOL0J3TldrVlovRGc3K1o4ZkQwN1AzQkJu?=
+ =?utf-8?B?bzI5cGVWY2ZZeVl4SUZJdnVpMDR1S2dmb2l3c25TOVcwK0VqeWZ6YU5qbmxq?=
+ =?utf-8?B?N3JsYUw5eTZ3blpmd3YyTlQyTXV4TXlXZy9FN2V6blgzelRqRjlZb1ZBT0wr?=
+ =?utf-8?B?eGt0a2RzdThmTk1rZ2pHMWlyTEpDUjluWGg1Q2Znb1dxNE9DU1ZCbmRJR2JI?=
+ =?utf-8?B?UXVrYTcrRlFCM0k1UUFqcVN6ZElwaEljV0QwZHdTSmwvdy9QSm1QVEcwQWlv?=
+ =?utf-8?B?OU1yOHcrK1BRb3k5a0NJWU9MR0Z2SEpJWUlGTG9JZ1BPTEF5THBRU0E0Tmkv?=
+ =?utf-8?B?T1VvL1c1WXlkQzNERTdUNElMRmtXZEpyQlBjNitGaVJnZkVibnB2dGp0OUhq?=
+ =?utf-8?B?T0NWb0UxVDJlaVo5S3FyckhYSlc3YitTSjYrSWtaRHRRUkg0YkNOMy9sQ3V0?=
+ =?utf-8?B?eVRRUlRqS1I0TEVTR0M0dEdweVlLSFRKTWxNNjBWNERWb2czWE55Z0dMT25H?=
+ =?utf-8?B?ZVAzZDgvWExBbmtuOXU4RFRKVkxVRnJhVTIzdDdaeitlZHFkNFdoNUQ1OXNO?=
+ =?utf-8?B?bGoxd2FTYlY4ckd2cFQ2OGhzY09CemdqT084S2lkVjZTNzdXRWFxeS96MUk1?=
+ =?utf-8?B?b1lsQmp4aGJjdUxseVBVTGcvaG14MUFVRC9BNFE3cWhkQUhORHdBaXpIRzAx?=
+ =?utf-8?B?Nm1yQWJuSnljWlB2dTVxbTJMaDloQjI2TkJWbGlvR2h3RUJqcHJkdkFqQlVa?=
+ =?utf-8?B?QkQvcXpqb3FqV055RlhpVjZsSDRMc0wxcGRLMUxORVFpbWxWOWc1MzRuOHky?=
+ =?utf-8?B?cjFaZ0xZV00rczJRaTYyLy9GVEU4RC9QdEQzcGtoNXFTQjFQNDJMdERGKzFW?=
+ =?utf-8?B?UkdVQVp6SmphQk5mdy9ZYW9YRWVYMzJMYlVUVjNzMDYxZzRrYXYybFB0akFp?=
+ =?utf-8?B?QlFFdGNyZWlFNGNROHpFd1ZCUDJFNnhuZ01yQUhZMXJKK2NPMTBSdlVLbHQ4?=
+ =?utf-8?B?NjV3RWM5NWVHNjhHdzQ5RnZHTHE4ZWcyS1Z4SzN3UVk2SURTMDUyWE1XODVx?=
+ =?utf-8?B?bEpQNlc0dXFBTkxYbkJQSTVjTG5adXJLcU1WOHprWUR0bE1VRGRYbWNIclRE?=
+ =?utf-8?B?R2hnd0JNRTMzTXVleUk3eGtLdnRSaE9lYnpCc1BPODFodGZiY1RISmc3TXZl?=
+ =?utf-8?B?K3JSSDIrK3hReXpCVzdHZ2ZId1RqQzJlUkhRUjRYZHFFWkg4Si9aTlA1Umpx?=
+ =?utf-8?B?SFJDRy95elJMeW1LK1JpL0ZydmZOMktqUExDanI0RjBuQXg2ZUdIcFEwTHRj?=
+ =?utf-8?B?ZjkzWkNXOUZjUkgyVUtSeEozWkVsOVkvc0NXUSs2Uk1IQmlOQ0I2UmxQTHZB?=
+ =?utf-8?Q?DOyyLA7IarE0w92xTr/q2vh2k?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 66a24903-fa13-421b-aea6-08da5ac71b26
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 18:34:03.1715
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SHCh5uD9cf4zWSiPh0+uJF7ZbAkyqDnNEnIFWl5dohL+O4f+0cNGS5Fz6Gt7qB6HsCOBabPn+/GFk3Vv7nM1YQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3386
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/30/22 10:01, Stefan Binding wrote:
-> When loading firmware, wm_adsp uses a number of parameters to
-> determine the path of the firmware and tuning files to load.
-> One of these parameters is system_name.
-> Add support in cs35l41 to read this system name from the ACPI
-> _SUB ID in order to uniquely identify the firmware and tuning
-> mapped to a particular system.
-
-It's my understanding that the _SUB method is optional, not required. It
-may be wise to plan for a fallback, e.g to use DMI quirks or other
-identifiers, no?
-
-If it's used quite widely, then it may be a good thing to add to
-'alsa-info'.
-> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
-> ---
->  sound/soc/codecs/cs35l41.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
+On 6/30/22 4:40 PM, Mark Brown wrote:
+> On Thu, Jun 30, 2022 at 08:47:54AM +0530, Vijendar Mukunda wrote:
 > 
-> diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
-> index 8766e19d85f1..d70469686699 100644
-> --- a/sound/soc/codecs/cs35l41.c
-> +++ b/sound/soc/codecs/cs35l41.c
-> @@ -6,6 +6,7 @@
->  //
->  // Author: David Rhodes <david.rhodes@cirrus.com>
->  
-> +#include <linux/acpi.h>
->  #include <linux/delay.h>
->  #include <linux/err.h>
->  #include <linux/init.h>
-> @@ -1142,6 +1143,24 @@ static int cs35l41_dsp_init(struct cs35l41_private *cs35l41)
->  	return ret;
->  }
->  
-> +static int cs35l41_acpi_get_name(struct cs35l41_private *cs35l41)
-> +{
-> +	acpi_handle handle = ACPI_HANDLE(cs35l41->dev);
-> +	const char *sub;
-> +
-> +	/* If there is no ACPI_HANDLE, there is no ACPI for this system, return 0 */
-> +	if (!handle)
-> +		return 0;
-> +
-> +	sub = acpi_get_subsystem_id(handle);
-> +	if (IS_ERR(sub))
-> +		return PTR_ERR(sub);
-> +
-> +	cs35l41->dsp.system_name = sub;
-> +	dev_dbg(cs35l41->dev, "Susystem ID: %s\n", cs35l41->dsp.system_name);
+>> +static int st_es8336_hw_params(struct snd_pcm_substream *substream,
+>> +			       struct snd_pcm_hw_params *params)
+>> +{
+>> +	int ret = 0;
+>> +	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
+>> +	struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
+>> +
+>> +	ret = snd_soc_dai_set_sysclk(codec_dai, 0, params_rate(params) * 256, SND_SOC_CLOCK_IN);
+>> +	if (ret < 0) {
+>> +		dev_err(rtd->dev, "can't set codec sysclk: %d\n", ret);
+>> +		return ret;
+>> +	}
+>> +	return ret;
+>> +}
+> 
+>> +static const unsigned int st_channels[] = {
+>> +	DUAL_CHANNEL,
+>> +};
+>> +
+>> +static const unsigned int st_rates[] = {
+>> +	48000,
+>> +};
+> 
+> If the clock rate is fixed why not just set the sysclk once at startup
+> too?
+Yes. We can set sysclk once at the startup as clock rate is fixed.
+Will modify the code and post the new patch.
 
-Typo: Subsystem
-
-> +	return 0;
-> +}
-> +
->  int cs35l41_probe(struct cs35l41_private *cs35l41, const struct cs35l41_hw_cfg *hw_cfg)
->  {
->  	u32 regid, reg_revid, i, mtl_revid, int_status, chipid_match;
-> @@ -1270,6 +1289,10 @@ int cs35l41_probe(struct cs35l41_private *cs35l41, const struct cs35l41_hw_cfg *
->  		goto err;
->  	}
->  
-> +	ret = cs35l41_acpi_get_name(cs35l41);
-> +	if (ret < 0)
-> +		goto err;
-> +
->  	ret = cs35l41_dsp_init(cs35l41);
->  	if (ret < 0)
->  		goto err;
-> @@ -1316,6 +1339,7 @@ void cs35l41_remove(struct cs35l41_private *cs35l41)
->  	pm_runtime_disable(cs35l41->dev);
->  
->  	regmap_write(cs35l41->regmap, CS35L41_IRQ1_MASK1, 0xFFFFFFFF);
-> +	kfree(cs35l41->dsp.system_name);
->  	wm_adsp2_remove(&cs35l41->dsp);
->  	cs35l41_safe_reset(cs35l41->regmap, cs35l41->hw_cfg.bst_type);
->  

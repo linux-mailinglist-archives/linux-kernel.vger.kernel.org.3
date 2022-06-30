@@ -2,948 +2,786 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 479B5560DCF
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 01:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CD0560DDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 02:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231995AbiF2X5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 19:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32882 "EHLO
+        id S231533AbiF3AK4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 29 Jun 2022 20:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbiF2X44 (ORCPT
+        with ESMTP id S231268AbiF3AKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 19:56:56 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B903F26565;
-        Wed, 29 Jun 2022 16:56:53 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id f39so30800818lfv.3;
-        Wed, 29 Jun 2022 16:56:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=x0FVQWiDWCNBvfhXTg+DCNRZVi9anK6oT7bb9algMk8=;
-        b=itGTArdzG2JhYKye5rxha1hI25Ynn/puTWAkt3z3ro5DE5RZkl3xOawIxc0xzm9c+d
-         sssj+LeHOzBWu1HMzvJrmZiVaB7voBz2FxJviomhNL5XAqxASI837+GJqHNWSQTvbX6L
-         SYDrlHKLa6Lt73wCNM9jUzAfpWKIdLdVBWOpuCfkp11jYXJd+aN+ZsbpsPwCtq4cK/hX
-         yYLGiLTUMPlecuN0XHxjnhFxkt9NPiSJzO7c9aT2op6207Syk9rdjBOZ5YbTFGUEVdhC
-         9cuckcrbiic6VtoiLTraUVxUHkwTuulfzcD5Pdq+a2KEOxQPtBwvH7q4w/JCDxn7mHph
-         +tEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=x0FVQWiDWCNBvfhXTg+DCNRZVi9anK6oT7bb9algMk8=;
-        b=UExZlTCRKr4Bsq1KHJaBlsDYWbSJ2gSH/5XRT/JyCRbcZc5OkNHmTjHCUfmtes832Q
-         0eeXSM//cUhcVT+0VYXAMrM/uyKyF8fPeL0oWzgqU9i0eMWk16ROTazYP8cflcW95xYs
-         JXR8hzLHbViIYMy7tglB61+pWDUOoAgdD7fmDci6s9IIuhiYW+mS8ZStl7Sp7UiMZC/k
-         UY+Fk0DhumxBQyhh7kc2cJIgIlFEPZfBbzB01NWMDUWkdtcaH+2C/C+xrrej9uiTg3da
-         RDPVL19ek1YxCKyH2cE9GnQCzvU/gUDS428TyvKyr90QlqpeOP15m1PimfRD4d71PUpt
-         iNgg==
-X-Gm-Message-State: AJIora+S0tfJ9ZflQqxthgyREoAGYzbGGYmCs0IhIOxp+MCOtokHUbxA
-        LvLfXQioI0XmdjbjeIhySGCr3vgyXj/8lf5H6AE=
-X-Google-Smtp-Source: AGRyM1vvooqW6A5Kl3iQqazHnonHyFT5fXFOqzXTolo678LrCRruDUdP05RWlGwXtmrvredli2r/9a06oDP/M79AgWQ=
-X-Received: by 2002:a05:6512:acc:b0:47f:769e:6aef with SMTP id
- n12-20020a0565120acc00b0047f769e6aefmr3565405lfu.26.1656547011805; Wed, 29
- Jun 2022 16:56:51 -0700 (PDT)
+        Wed, 29 Jun 2022 20:10:54 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3395396B5;
+        Wed, 29 Jun 2022 17:10:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BD2261480;
+        Wed, 29 Jun 2022 17:10:52 -0700 (PDT)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6A7F73F5A1;
+        Wed, 29 Jun 2022 17:10:50 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 01:04:10 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 3/6] arm64: dts: allwinner: Add Allwinner H616 .dtsi
+ file
+Message-ID: <20220630010410.38fc117f@slackpad.lan>
+In-Reply-To: <3165164.aeNJFYEL58@kista>
+References: <20220428230933.15262-1-andre.przywara@arm.com>
+ <20220428230933.15262-4-andre.przywara@arm.com>
+ <3165164.aeNJFYEL58@kista>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-References: <20220320183225.1.Iaf638bb9f885f5880ab1b4e7ae2f73dd53a54661@changeid>
- <CABBYNZJSu9QgO-zbBQTecbvzWNNtYrmHdSCjvEVURVKxPiojAw@mail.gmail.com>
- <CAGPPCLDu5_ES5CcsUU3qHLWHkzAV=FUU8rns8Twh6C5FVSeEUQ@mail.gmail.com>
- <CABBYNZ+jGjSHvpQg8uXyC2siCu8Zk-oqKnhiO1MG5d-3cUsyag@mail.gmail.com> <CAGPPCLBp7kOXquyJzHaYxsH8=GkJ6M6gC1twwc=2iMJvB+n=qQ@mail.gmail.com>
-In-Reply-To: <CAGPPCLBp7kOXquyJzHaYxsH8=GkJ6M6gC1twwc=2iMJvB+n=qQ@mail.gmail.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Wed, 29 Jun 2022 16:56:40 -0700
-Message-ID: <CABBYNZ+5yQjGEe_fMmLOYXLidkJo36i4-Vu9LjxnhBNuwwLpnQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] Bluetooth: Add support for devcoredump
-To:     Manish Mandlik <mmandlik@google.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        ChromeOS Bluetooth Upstreaming 
-        <chromeos-bluetooth-upstreaming@chromium.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Manish,
+On Tue, 03 May 2022 21:05:11 +0200
+Jernej Škrabec <jernej.skrabec@gmail.com> wrote:
 
-On Thu, Jun 23, 2022 at 12:43 PM Manish Mandlik <mmandlik@google.com> wrote=
-:
->
-> Hi Luiz,
->
-> On Tue, May 3, 2022 at 5:04 PM Luiz Augusto von Dentz <luiz.dentz@gmail.c=
-om> wrote:
->>
->> Hi Manish,
->>
->> On Tue, May 3, 2022 at 4:00 PM Manish Mandlik <mmandlik@google.com> wrot=
-e:
->> >
->> > Hi Luiz,
->> >
->> > On Mon, Mar 21, 2022 at 9:46 AM Luiz Augusto von Dentz <luiz.dentz@gma=
-il.com> wrote:
->> >>
->> >> Hi Manish,
->> >>
->> >> On Sun, Mar 20, 2022 at 6:34 PM Manish Mandlik <mmandlik@google.com> =
-wrote:
->> >> >
->> >> > From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->> >> >
->> >> > Add devcoredump APIs to hci core so that drivers only have to provi=
-de
->> >> > the dump skbs instead of managing the synchronization and timeouts.
->> >> >
->> >> > The devcoredump APIs should be used in the following manner:
->> >> >  - hci_devcoredump_init is called to allocate the dump.
->> >> >  - hci_devcoredump_append is called to append any skbs with dump da=
-ta
->> >> >    OR hci_devcoredump_append_pattern is called to insert a pattern.
->> >> >  - hci_devcoredump_complete is called when all dump packets have be=
-en
->> >> >    sent OR hci_devcoredump_abort is called to indicate an error and
->> >> >    cancel an ongoing dump collection.
->> >> >
->> >> > The high level APIs just prepare some skbs with the appropriate dat=
-a and
->> >> > queue it for the dump to process. Packets part of the crashdump can=
- be
->> >> > intercepted in the driver in interrupt context and forwarded direct=
-ly to
->> >> > the devcoredump APIs.
->> >>
->> >> If this sort of information comes from telemetry support it can be
->> >> intercepted by other means as well e.g. btmon, in fact I think that
->> >> would have been better since we already dump the backtrace of
->> >> bluetoothd crashes into the monitor as well. Anyway the kernel
->> >> devcoredump support seems to just be dumping the data into sysfs so w=
-e
->> >> could be fetching that information from there as well but I'm not
->> >> really sure what we would be gaining with that since we are just
->> >> adding yet another kernel dependency for something that userspace
->> >> could already be doing by itself.
->> >
->> > Currently every vendor has their own way of collecting firmware dumps.=
- The main intention of adding devcoredump support for bluetooth is to provi=
-de a unified way to collect firmware crashdumps across all vendors/controll=
-ers. This will generate a dump file in the sysfs and vendors can use it for=
- further debugging. There is no plan to include any information from these =
-dumps into the btmon logs.
->> >
->> >>
->> >> > Internally, there are 5 states for the dump: idle, active, complete=
-,
->> >> > abort and timeout. A devcoredump will only be in active state after=
- it
->> >> > has been initialized. Once active, it accepts data to be appended,
->> >> > patterns to be inserted (i.e. memset) and a completion event or an =
-abort
->> >> > event to generate a devcoredump. The timeout is initialized at the =
-same
->> >> > time the dump is initialized (defaulting to 10s) and will be cleare=
-d
->> >> > either when the timeout occurs or the dump is complete or aborted.
->> >>
->> >> Is there some userspace component parsing these dumps? Or we will nee=
-d
->> >> to add some support for the likes of btmon to collect the logs from
->> >> sysfs?
->> >
->> > Yes, user space component is required to parse these dumps. But these =
-tools will be vendor specific and could be proprietary. However, ChromeOS w=
-ould be using these dumps to identify bluetooth firmware crashes. I'll shar=
-e more information on ChromeOS use case offline.
->>
->> Fair enough, but we do need some way to exercise this code by the CI,
->> so at very least we need emulator support otherwise it needs to be
->> behind an experimental UUID until proper tests are introduced.
->
-> I can add emulator support. Can you please share some instructions/docume=
-ntation on how to create and run emulator tests? I'll send a separate patch=
- for adding emulator support.
+Hi Jernej,
 
-They are the same tests run in CI, have a look at:
+many thanks for taking the time to wade through this file!
 
-https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/test-runner.txt
+> Dne petek, 29. april 2022 ob 01:09:30 CEST je Andre Przywara napisal(a):
+> > This (relatively) new SoC is similar to the H6, but drops the (broken)
+> > PCIe support and the USB 3.0 controller. It also gets the management
+> > controller removed, which in turn removes *some*, but not all of the
+> > devices formerly dedicated to the ARISC (CPUS).
+> > And while there is still the extra sunxi interrupt controller, the
+> > package lacks the corresponding NMI pin, so no interrupts for the PMIC.
+> > 
+> > The reserved memory node is actually handled by Trusted Firmware now,
+> > but U-Boot fails to propagate this to a separately loaded DTB, so we
+> > keep it in here for now, until U-Boot learns to do this properly.
+> > 
+> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> > ---
+> >  .../arm64/boot/dts/allwinner/sun50i-h616.dtsi | 574 ++++++++++++++++++
+> >  1 file changed, 574 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
+> > 
+> > diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi b/arch/arm64/  
+> boot/dts/allwinner/sun50i-h616.dtsi
+> > new file mode 100644
+> > index 000000000000..cc06cdd15ba5
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
+> > @@ -0,0 +1,574 @@
+> > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> > +// Copyright (C) 2020 Arm Ltd.
+> > +// based on the H6 dtsi, which is:
+> > +//   Copyright (C) 2017 Icenowy Zheng <icenowy@aosc.io>
+> > +
+> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +#include <dt-bindings/clock/sun50i-h616-ccu.h>
+> > +#include <dt-bindings/clock/sun50i-h6-r-ccu.h>
+> > +#include <dt-bindings/reset/sun50i-h616-ccu.h>
+> > +#include <dt-bindings/reset/sun50i-h6-r-ccu.h>
+> > +
+> > +/ {
+> > +	interrupt-parent = <&gic>;
+> > +	#address-cells = <2>;
+> > +	#size-cells = <2>;
+> > +
+> > +	cpus {
+> > +		#address-cells = <1>;
+> > +		#size-cells = <0>;
+> > +
+> > +		cpu0: cpu@0 {
+> > +			compatible = "arm,cortex-a53";
+> > +			device_type = "cpu";
+> > +			reg = <0>;
+> > +			enable-method = "psci";
+> > +			clocks = <&ccu CLK_CPUX>;
+> > +		};
+> > +
+> > +		cpu1: cpu@1 {
+> > +			compatible = "arm,cortex-a53";
+> > +			device_type = "cpu";
+> > +			reg = <1>;
+> > +			enable-method = "psci";
+> > +			clocks = <&ccu CLK_CPUX>;
+> > +		};
+> > +
+> > +		cpu2: cpu@2 {
+> > +			compatible = "arm,cortex-a53";
+> > +			device_type = "cpu";
+> > +			reg = <2>;
+> > +			enable-method = "psci";
+> > +			clocks = <&ccu CLK_CPUX>;
+> > +		};
+> > +
+> > +		cpu3: cpu@3 {
+> > +			compatible = "arm,cortex-a53";
+> > +			device_type = "cpu";
+> > +			reg = <3>;
+> > +			enable-method = "psci";
+> > +			clocks = <&ccu CLK_CPUX>;
+> > +		};
+> > +	};
+> > +
+> > +	reserved-memory {
+> > +		#address-cells = <2>;
+> > +		#size-cells = <2>;
+> > +		ranges;
+> > +
+> > +		/* 512KiB reserved for ARM Trusted Firmware (BL31) */
+> > +		secmon_reserved: secmon@40000000 {
+> > +			reg = <0x0 0x40000000 0x0 0x80000>;
+> > +			no-map;
+> > +		};
+> > +	};  
+> 
+> I'm not a fan of above. If anything changes in future in BL31, U-Boot would 
+> need to reconfigure it anyway. Can we just skip it?
 
->>
->>
->> >>
->> >>
->> >> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->> >> > Signed-off-by: Manish Mandlik <mmandlik@google.com>
->> >> > Reviewed-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->> >> > ---
->> >> >
->> >> >  include/net/bluetooth/hci_core.h |  51 ++++
->> >> >  net/bluetooth/hci_core.c         | 496 +++++++++++++++++++++++++++=
-++++
->> >> >  net/bluetooth/hci_sync.c         |   2 +
->> >> >  3 files changed, 549 insertions(+)
->> >> >
->> >> > diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetoo=
-th/hci_core.h
->> >> > index d5377740e99c..818ba3a43e8c 100644
->> >> > --- a/include/net/bluetooth/hci_core.h
->> >> > +++ b/include/net/bluetooth/hci_core.h
->> >> > @@ -118,6 +118,43 @@ enum suspended_state {
->> >> >         BT_SUSPEND_CONFIGURE_WAKE,
->> >> >  };
->> >> >
->> >> > +#define DEVCOREDUMP_TIMEOUT    msecs_to_jiffies(100000)        /* =
-100 sec */
->> >> > +
->> >> > +typedef int  (*dmp_hdr_t)(struct hci_dev *hdev, char *buf, size_t =
-size);
->> >> > +typedef void (*notify_change_t)(struct hci_dev *hdev, int state);
->> >> > +
->> >> > +/* struct hci_devcoredump - Devcoredump state
->> >> > + *
->> >> > + * @supported: Indicates if FW dump collection is supported by dri=
-ver
->> >> > + * @state: Current state of dump collection
->> >> > + * @alloc_size: Total size of the dump
->> >> > + * @head: Start of the dump
->> >> > + * @tail: Pointer to current end of dump
->> >> > + * @end: head + alloc_size for easy comparisons
->> >> > + *
->> >> > + * @dmp_hdr: Create a dump header to identify controller/fw/driver=
- info
->> >> > + * @notify_change: Notify driver when devcoredump state has change=
-d
->> >> > + */
->> >> > +struct hci_devcoredump {
->> >> > +       bool            supported;
->> >> > +
->> >> > +       enum devcoredump_state {
->> >> > +               HCI_DEVCOREDUMP_IDLE,
->> >> > +               HCI_DEVCOREDUMP_ACTIVE,
->> >> > +               HCI_DEVCOREDUMP_DONE,
->> >> > +               HCI_DEVCOREDUMP_ABORT,
->> >> > +               HCI_DEVCOREDUMP_TIMEOUT
->> >> > +       } state;
->> >> > +
->> >> > +       u32             alloc_size;
->> >> > +       char            *head;
->> >> > +       char            *tail;
->> >> > +       char            *end;
->> >> > +
->> >> > +       dmp_hdr_t       dmp_hdr;
->> >> > +       notify_change_t notify_change;
->> >> > +};
->> >> > +
->> >> >  struct hci_conn_hash {
->> >> >         struct list_head list;
->> >> >         unsigned int     acl_num;
->> >> > @@ -568,6 +605,11 @@ struct hci_dev {
->> >> >         const char              *fw_info;
->> >> >         struct dentry           *debugfs;
->> >> >
->> >> > +       struct hci_devcoredump  dump;
->> >> > +       struct sk_buff_head     dump_q;
->> >> > +       struct work_struct      dump_rx;
->> >> > +       struct delayed_work     dump_timeout;
->> >> > +
->> >> >         struct device           dev;
->> >> >
->> >> >         struct rfkill           *rfkill;
->> >> > @@ -1308,6 +1350,15 @@ static inline void hci_set_aosp_capable(stru=
-ct hci_dev *hdev)
->> >> >  #endif
->> >> >  }
->> >> >
->> >> > +int hci_devcoredump_register(struct hci_dev *hdev, dmp_hdr_t dmp_h=
-dr,
->> >> > +                            notify_change_t notify_change);
->> >> > +int hci_devcoredump_init(struct hci_dev *hdev, u32 dmp_size);
->> >> > +int hci_devcoredump_append(struct hci_dev *hdev, struct sk_buff *s=
-kb);
->> >> > +int hci_devcoredump_append_pattern(struct hci_dev *hdev, u8 patter=
-n, u32 len);
->> >> > +int hci_devcoredump_complete(struct hci_dev *hdev);
->> >> > +int hci_devcoredump_abort(struct hci_dev *hdev);
->> >> > +void hci_devcoredump_reset(struct hci_dev *hdev);
->> >> > +
->> >> >  int hci_dev_open(__u16 dev);
->> >> >  int hci_dev_close(__u16 dev);
->> >> >  int hci_dev_do_close(struct hci_dev *hdev);
->> >> > diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
->> >> > index b4782a6c1025..76dbb6b28870 100644
->> >> > --- a/net/bluetooth/hci_core.c
->> >> > +++ b/net/bluetooth/hci_core.c
->> >> > @@ -28,6 +28,7 @@
->> >> >  #include <linux/export.h>
->> >> >  #include <linux/rfkill.h>
->> >> >  #include <linux/debugfs.h>
->> >> > +#include <linux/devcoredump.h>
->> >> >  #include <linux/crypto.h>
->> >> >  #include <linux/property.h>
->> >> >  #include <linux/suspend.h>
->> >> > @@ -2404,6 +2405,498 @@ static int hci_suspend_notifier(struct noti=
-fier_block *nb, unsigned long action,
->> >> >         return NOTIFY_DONE;
->> >> >  }
->> >> >
->> >> > +enum hci_devcoredump_pkt_type {
->> >> > +       HCI_DEVCOREDUMP_PKT_INIT,
->> >> > +       HCI_DEVCOREDUMP_PKT_SKB,
->> >> > +       HCI_DEVCOREDUMP_PKT_PATTERN,
->> >> > +       HCI_DEVCOREDUMP_PKT_COMPLETE,
->> >> > +       HCI_DEVCOREDUMP_PKT_ABORT,
->> >> > +};
->>
->> I'd move the documentation of the states here, also perhaps we should
->> have the handling of devcoredump in its own file e.g. coredump.c,
->> since hci_core.c is quite big already adding things that are not part
->> of HCI/core specification makes it even bigger.
->
-> Since these are just packet types, I'm keeping the documentation of the s=
-tates with the state machine function hci_devcoredump_rx(). However, I have=
- moved  all hci_devcoredump code to a new file - net/bluetooth/coredump.c.
->
->>
->> >> > +struct hci_devcoredump_skb_cb {
->> >> > +       u16 pkt_type;
->> >> > +};
->> >> > +
->> >> > +struct hci_devcoredump_skb_pattern {
->> >> > +       u8 pattern;
->> >> > +       u32 len;
->> >> > +} __packed;
->> >> > +
->> >> > +#define hci_dmp_cb(skb)        ((struct hci_devcoredump_skb_cb *)(=
-(skb)->cb))
->> >> > +
->> >> > +#define MAX_DEVCOREDUMP_HDR_SIZE       512     /* bytes */
->> >> > +
->> >> > +static int hci_devcoredump_update_hdr_state(char *buf, size_t size=
-, int state)
->> >> > +{
->> >> > +       if (!buf)
->> >> > +               return 0;
->> >> > +
->> >> > +       return snprintf(buf, size, "Bluetooth devcoredump\nState: %=
-d\n", state);
->> >> > +}
->> >> > +
->> >> > +/* Call with hci_dev_lock only. */
->> >> > +static int hci_devcoredump_update_state(struct hci_dev *hdev, int =
-state)
->> >> > +{
->> >> > +       hdev->dump.state =3D state;
->> >> > +
->> >> > +       return hci_devcoredump_update_hdr_state(hdev->dump.head,
->> >> > +                                               hdev->dump.alloc_si=
-ze, state);
->> >> > +}
->> >> > +
->> >> > +static int hci_devcoredump_mkheader(struct hci_dev *hdev, char *bu=
-f,
->> >> > +                                   size_t buf_size)
->> >> > +{
->> >> > +       char *ptr =3D buf;
->> >> > +       size_t rem =3D buf_size;
->> >> > +       size_t read =3D 0;
->> >> > +
->> >> > +       read =3D hci_devcoredump_update_hdr_state(ptr, rem, HCI_DEV=
-COREDUMP_IDLE);
->> >> > +       read +=3D 1; /* update_hdr_state adds \0 at the end upon st=
-ate rewrite */
->> >> > +       rem -=3D read;
->> >> > +       ptr +=3D read;
->> >> > +
->> >> > +       if (hdev->dump.dmp_hdr) {
->> >> > +               /* dmp_hdr() should return number of bytes written =
-*/
->> >> > +               read =3D hdev->dump.dmp_hdr(hdev, ptr, rem);
->> >> > +               rem -=3D read;
->> >> > +               ptr +=3D read;
->> >> > +       }
->> >> > +
->> >> > +       read =3D snprintf(ptr, rem, "--- Start dump ---\n");
->> >> > +       rem -=3D read;
->> >> > +       ptr +=3D read;
->> >> > +
->> >> > +       return buf_size - rem;
->> >> > +}
->> >> > +
->> >> > +/* Do not call with hci_dev_lock since this calls driver code. */
->> >> > +static void hci_devcoredump_notify(struct hci_dev *hdev, int state=
-)
->> >> > +{
->> >> > +       if (hdev->dump.notify_change)
->> >> > +               hdev->dump.notify_change(hdev, state);
->> >> > +}
->> >> > +
->> >> > +/* Call with hci_dev_lock only. */
->> >> > +void hci_devcoredump_reset(struct hci_dev *hdev)
->> >> > +{
->> >> > +       hdev->dump.head =3D NULL;
->> >> > +       hdev->dump.tail =3D NULL;
->> >> > +       hdev->dump.alloc_size =3D 0;
->> >> > +
->> >> > +       hci_devcoredump_update_state(hdev, HCI_DEVCOREDUMP_IDLE);
->> >> > +
->> >> > +       cancel_delayed_work(&hdev->dump_timeout);
->> >> > +       skb_queue_purge(&hdev->dump_q);
->> >> > +}
->> >> > +
->> >> > +/* Call with hci_dev_lock only. */
->> >> > +static void hci_devcoredump_free(struct hci_dev *hdev)
->> >> > +{
->> >> > +       if (hdev->dump.head)
->> >> > +               vfree(hdev->dump.head);
->> >> > +
->> >> > +       hci_devcoredump_reset(hdev);
->> >> > +}
->> >> > +
->> >> > +/* Call with hci_dev_lock only. */
->> >> > +static int hci_devcoredump_alloc(struct hci_dev *hdev, u32 size)
->> >> > +{
->> >> > +       hdev->dump.head =3D vmalloc(size);
->> >> > +       if (!hdev->dump.head)
->> >> > +               return -ENOMEM;
->> >> > +
->> >> > +       hdev->dump.alloc_size =3D size;
->> >> > +       hdev->dump.tail =3D hdev->dump.head;
->> >> > +       hdev->dump.end =3D hdev->dump.head + size;
->> >> > +
->> >> > +       hci_devcoredump_update_state(hdev, HCI_DEVCOREDUMP_IDLE);
->> >> > +
->> >> > +       return 0;
->> >> > +}
->> >> > +
->> >> > +/* Call with hci_dev_lock only. */
->> >> > +static bool hci_devcoredump_copy(struct hci_dev *hdev, char *buf, =
-u32 size)
->> >> > +{
->> >> > +       if (hdev->dump.tail + size > hdev->dump.end)
->> >> > +               return false;
->> >> > +
->> >> > +       memcpy(hdev->dump.tail, buf, size);
->> >> > +       hdev->dump.tail +=3D size;
->> >> > +
->> >> > +       return true;
->> >> > +}
->> >> > +
->> >> > +/* Call with hci_dev_lock only. */
->> >> > +static bool hci_devcoredump_memset(struct hci_dev *hdev, u8 patter=
-n, u32 len)
->> >> > +{
->> >> > +       if (hdev->dump.tail + len > hdev->dump.end)
->> >> > +               return false;
->> >> > +
->> >> > +       memset(hdev->dump.tail, pattern, len);
->> >> > +       hdev->dump.tail +=3D len;
->> >> > +
->> >> > +       return true;
->> >> > +}
->> >> > +
->> >> > +/* Call with hci_dev_lock only. */
->> >> > +static int hci_devcoredump_prepare(struct hci_dev *hdev, u32 dump_=
-size)
->> >> > +{
->> >> > +       char *dump_hdr;
->> >> > +       int dump_hdr_size;
->> >> > +       u32 size;
->> >> > +       int err =3D 0;
->> >> > +
->> >> > +       dump_hdr =3D vmalloc(MAX_DEVCOREDUMP_HDR_SIZE);
->> >> > +       if (!dump_hdr) {
->> >> > +               err =3D -ENOMEM;
->> >> > +               goto hdr_free;
->> >> > +       }
->> >> > +
->> >> > +       dump_hdr_size =3D hci_devcoredump_mkheader(hdev, dump_hdr,
->> >> > +                                                MAX_DEVCOREDUMP_HD=
-R_SIZE);
->> >> > +       size =3D dump_hdr_size + dump_size;
->> >> > +
->> >> > +       if (hci_devcoredump_alloc(hdev, size)) {
->> >> > +               err =3D -ENOMEM;
->> >> > +               goto hdr_free;
->> >> > +       }
->> >> > +
->> >> > +       /* Insert the device header */
->> >> > +       if (!hci_devcoredump_copy(hdev, dump_hdr, dump_hdr_size)) {
->> >> > +               bt_dev_err(hdev, "Failed to insert header");
->> >> > +               hci_devcoredump_free(hdev);
->> >> > +
->> >> > +               err =3D -ENOMEM;
->> >> > +               goto hdr_free;
->> >> > +       }
->> >> > +
->> >> > +hdr_free:
->> >> > +       if (dump_hdr)
->> >> > +               vfree(dump_hdr);
->> >> > +
->> >> > +       return err;
->> >> > +}
->> >> > +
->> >> > +/* Bluetooth devcoredump state machine.
->> >> > + *
->> >> > + * Devcoredump states:
->> >> > + *
->> >> > + *      HCI_DEVCOREDUMP_IDLE: The default state.
->> >> > + *
->> >> > + *      HCI_DEVCOREDUMP_ACTIVE: A devcoredump will be in this stat=
-e once it has
->> >> > + *              been initialized using hci_devcoredump_init(). Onc=
-e active, the
->> >> > + *              driver can append data using hci_devcoredump_appen=
-d() or insert
->> >> > + *              a pattern using hci_devcoredump_append_pattern().
->> >> > + *
->> >> > + *      HCI_DEVCOREDUMP_DONE: Once the dump collection is complete=
-, the drive
->> >> > + *              can signal the completion using hci_devcoredump_co=
-mplete(). A
->> >> > + *              devcoredump is generated indicating the completion=
- event and
->> >> > + *              then the state machine is reset to the default sta=
-te.
->> >> > + *
->> >> > + *      HCI_DEVCOREDUMP_ABORT: The driver can cancel ongoing dump =
-collection in
->> >> > + *              case of any error using hci_devcoredump_abort(). A=
- devcoredump
->> >> > + *              is still generated with the available data indicat=
-ing the abort
->> >> > + *              event and then the state machine is reset to the d=
-efault state.
->> >> > + *
->> >> > + *      HCI_DEVCOREDUMP_TIMEOUT: A timeout timer for HCI_DEVCOREDU=
-MP_TIMEOUT sec
->> >> > + *              is started during devcoredump initialization. Once=
- the timeout
->> >> > + *              occurs, the driver is notified, a devcoredump is g=
-enerated with
->> >> > + *              the available data indicating the timeout event an=
-d then the
->> >> > + *              state machine is reset to the default state.
->> >> > + *
->> >> > + * The driver must register using hci_devcoredump_register() befor=
-e using the
->> >> > + * hci devcoredump APIs.
->> >> > + */
->> >> > +static void hci_devcoredump_rx(struct work_struct *work)
->> >> > +{
->> >> > +       struct hci_dev *hdev =3D container_of(work, struct hci_dev,=
- dump_rx);
->> >> > +       struct sk_buff *skb;
->> >> > +       struct hci_devcoredump_skb_pattern *pattern;
->> >> > +       u32 dump_size;
->> >> > +       int start_state;
->> >> > +
->> >> > +#define DBG_UNEXPECTED_STATE() \
->> >> > +               bt_dev_dbg(hdev, \
->> >> > +                          "Unexpected packet (%d) for state (%d). =
-", \
->> >> > +                          hci_dmp_cb(skb)->pkt_type, hdev->dump.st=
-ate)
->> >> > +
->> >> > +       while ((skb =3D skb_dequeue(&hdev->dump_q))) {
->> >> > +               hci_dev_lock(hdev);
->> >> > +               start_state =3D hdev->dump.state;
->> >> > +
->> >> > +               switch (hci_dmp_cb(skb)->pkt_type) {
->> >> > +               case HCI_DEVCOREDUMP_PKT_INIT:
->> >> > +                       if (hdev->dump.state !=3D HCI_DEVCOREDUMP_I=
-DLE) {
->> >> > +                               DBG_UNEXPECTED_STATE();
->> >> > +                               goto loop_continue;
->> >> > +                       }
->> >> > +
->> >> > +                       if (skb->len !=3D sizeof(dump_size)) {
->> >> > +                               bt_dev_dbg(hdev, "Invalid dump init=
- pkt");
->> >> > +                               goto loop_continue;
->> >> > +                       }
->> >> > +
->> >> > +                       dump_size =3D *((u32 *)skb->data);
->> >> > +                       if (!dump_size) {
->> >> > +                               bt_dev_err(hdev, "Zero size dump in=
-it pkt");
->> >> > +                               goto loop_continue;
->> >> > +                       }
->> >> > +
->> >> > +                       if (hci_devcoredump_prepare(hdev, dump_size=
-)) {
->> >> > +                               bt_dev_err(hdev, "Failed to prepare=
- for dump");
->> >> > +                               goto loop_continue;
->> >> > +                       }
->> >> > +
->> >> > +                       hci_devcoredump_update_state(hdev,
->> >> > +                                                    HCI_DEVCOREDUM=
-P_ACTIVE);
->> >> > +                       queue_delayed_work(hdev->workqueue, &hdev->=
-dump_timeout,
->> >> > +                                          DEVCOREDUMP_TIMEOUT);
->> >> > +                       break;
->> >> > +
->> >> > +               case HCI_DEVCOREDUMP_PKT_SKB:
->> >> > +                       if (hdev->dump.state !=3D HCI_DEVCOREDUMP_A=
-CTIVE) {
->> >> > +                               DBG_UNEXPECTED_STATE();
->> >> > +                               goto loop_continue;
->> >> > +                       }
->> >> > +
->> >> > +                       if (!hci_devcoredump_copy(hdev, skb->data, =
-skb->len))
->> >> > +                               bt_dev_dbg(hdev, "Failed to insert =
-skb");
->> >> > +                       break;
->> >> > +
->> >> > +               case HCI_DEVCOREDUMP_PKT_PATTERN:
->> >> > +                       if (hdev->dump.state !=3D HCI_DEVCOREDUMP_A=
-CTIVE) {
->> >> > +                               DBG_UNEXPECTED_STATE();
->> >> > +                               goto loop_continue;
->> >> > +                       }
->> >> > +
->> >> > +                       if (skb->len !=3D sizeof(*pattern)) {
->> >> > +                               bt_dev_dbg(hdev, "Invalid pattern s=
-kb");
->> >> > +                               goto loop_continue;
->> >> > +                       }
->> >> > +
->> >> > +                       pattern =3D (void *)skb->data;
->> >> > +
->> >> > +                       if (!hci_devcoredump_memset(hdev, pattern->=
-pattern,
->> >> > +                                                   pattern->len))
->> >> > +                               bt_dev_dbg(hdev, "Failed to set pat=
-tern");
->> >> > +                       break;
->> >> > +
->> >> > +               case HCI_DEVCOREDUMP_PKT_COMPLETE:
->> >> > +                       if (hdev->dump.state !=3D HCI_DEVCOREDUMP_A=
-CTIVE) {
->> >> > +                               DBG_UNEXPECTED_STATE();
->> >> > +                               goto loop_continue;
->> >> > +                       }
->> >> > +
->> >> > +                       hci_devcoredump_update_state(hdev,
->> >> > +                                                    HCI_DEVCOREDUM=
-P_DONE);
->> >> > +                       dump_size =3D hdev->dump.tail - hdev->dump.=
-head;
->> >> > +
->> >> > +                       bt_dev_info(hdev,
->> >> > +                                   "Devcoredump complete with size=
- %u "
->> >> > +                                   "(expect %u)",
->> >> > +                                   dump_size, hdev->dump.alloc_siz=
-e);
->> >> > +
->> >> > +                       dev_coredumpv(&hdev->dev, hdev->dump.head, =
-dump_size,
->> >> > +                                     GFP_KERNEL);
->> >> > +                       break;
->> >> > +
->> >> > +               case HCI_DEVCOREDUMP_PKT_ABORT:
->> >> > +                       if (hdev->dump.state !=3D HCI_DEVCOREDUMP_A=
-CTIVE) {
->> >> > +                               DBG_UNEXPECTED_STATE();
->> >> > +                               goto loop_continue;
->> >> > +                       }
->> >> > +
->> >> > +                       hci_devcoredump_update_state(hdev,
->> >> > +                                                    HCI_DEVCOREDUM=
-P_ABORT);
->> >> > +                       dump_size =3D hdev->dump.tail - hdev->dump.=
-head;
->> >> > +
->> >> > +                       bt_dev_info(hdev,
->> >> > +                                   "Devcoredump aborted with size =
-%u "
->> >> > +                                   "(expect %u)",
->> >> > +                                   dump_size, hdev->dump.alloc_siz=
-e);
->> >> > +
->> >> > +                       /* Emit a devcoredump with the available da=
-ta */
->> >> > +                       dev_coredumpv(&hdev->dev, hdev->dump.head, =
-dump_size,
->> >> > +                                     GFP_KERNEL);
->> >> > +                       break;
->> >> > +
->> >> > +               default:
->> >> > +                       bt_dev_dbg(hdev,
->> >> > +                                  "Unknown packet (%d) for state (=
-%d). ",
->> >> > +                                  hci_dmp_cb(skb)->pkt_type, hdev-=
->dump.state);
->> >> > +                       break;
->> >> > +               }
->> >> > +
->> >> > +loop_continue:
->> >> > +               kfree_skb(skb);
->> >> > +               hci_dev_unlock(hdev);
->> >> > +
->> >> > +               if (start_state !=3D hdev->dump.state)
->> >> > +                       hci_devcoredump_notify(hdev, hdev->dump.sta=
-te);
->> >> > +
->> >> > +               hci_dev_lock(hdev);
->> >> > +               if (hdev->dump.state =3D=3D HCI_DEVCOREDUMP_DONE ||
->> >> > +                   hdev->dump.state =3D=3D HCI_DEVCOREDUMP_ABORT)
->> >> > +                       hci_devcoredump_reset(hdev);
->> >> > +               hci_dev_unlock(hdev);
->> >> > +       }
->> >> > +}
->> >> > +
->> >> > +static void hci_devcoredump_timeout(struct work_struct *work)
->> >> > +{
->> >> > +       struct hci_dev *hdev =3D container_of(work, struct hci_dev,
->> >> > +                                           dump_timeout.work);
->> >> > +       u32 dump_size;
->> >> > +
->> >> > +       hci_devcoredump_notify(hdev, HCI_DEVCOREDUMP_TIMEOUT);
->> >> > +
->> >> > +       hci_dev_lock(hdev);
->> >> > +
->> >> > +       cancel_work_sync(&hdev->dump_rx);
->> >> > +
->> >> > +       hci_devcoredump_update_state(hdev, HCI_DEVCOREDUMP_TIMEOUT)=
-;
->> >> > +       dump_size =3D hdev->dump.tail - hdev->dump.head;
->> >> > +       bt_dev_info(hdev, "Devcoredump timeout with size %u (expect=
- %u)",
->> >> > +                   dump_size, hdev->dump.alloc_size);
->> >> > +
->> >> > +       /* Emit a devcoredump with the available data */
->> >> > +       dev_coredumpv(&hdev->dev, hdev->dump.head, dump_size, GFP_K=
-ERNEL);
->> >> > +
->> >> > +       hci_devcoredump_reset(hdev);
->> >> > +
->> >> > +       hci_dev_unlock(hdev);
->> >> > +}
->> >> > +
->> >> > +int hci_devcoredump_register(struct hci_dev *hdev, dmp_hdr_t dmp_h=
-dr,
->> >> > +                            notify_change_t notify_change)
->> >> > +{
->> >> > +       /* driver must implement dmp_hdr() function for bluetooth d=
-evcoredump */
->> >> > +       if (!dmp_hdr)
->> >> > +               return -EINVAL;
->> >> > +
->> >> > +       hci_dev_lock(hdev);
->> >> > +       hdev->dump.dmp_hdr =3D dmp_hdr;
->> >> > +       hdev->dump.notify_change =3D notify_change;
->> >> > +       hdev->dump.supported =3D true;
->> >> > +       hci_dev_unlock(hdev);
->> >> > +
->> >> > +       return 0;
->> >> > +}
->> >> > +EXPORT_SYMBOL(hci_devcoredump_register);
->> >> > +
->> >> > +int hci_devcoredump_init(struct hci_dev *hdev, u32 dmp_size)
->> >> > +{
->> >> > +       struct sk_buff *skb =3D NULL;
->> >> > +
->> >> > +       if (!hdev->dump.supported)
->> >> > +               return -EOPNOTSUPP;
->> >> > +
->> >> > +       skb =3D alloc_skb(sizeof(dmp_size), GFP_ATOMIC);
->> >> > +       if (!skb) {
->> >> > +               bt_dev_err(hdev, "Failed to allocate devcoredump in=
-it");
->> >> > +               return -ENOMEM;
->> >> > +       }
->> >> > +
->> >> > +       hci_dmp_cb(skb)->pkt_type =3D HCI_DEVCOREDUMP_PKT_INIT;
->> >> > +       skb_put_data(skb, &dmp_size, sizeof(dmp_size));
->> >> > +
->> >> > +       skb_queue_tail(&hdev->dump_q, skb);
->> >> > +       queue_work(hdev->workqueue, &hdev->dump_rx);
->> >> > +
->> >> > +       return 0;
->> >> > +}
->> >> > +EXPORT_SYMBOL(hci_devcoredump_init);
->> >> > +
->> >> > +int hci_devcoredump_append(struct hci_dev *hdev, struct sk_buff *s=
-kb)
->> >> > +{
->> >> > +       if (!skb)
->> >> > +               return -ENOMEM;
->> >> > +
->> >> > +       if (!hdev->dump.supported) {
->> >> > +               kfree_skb(skb);
->> >> > +               return -EOPNOTSUPP;
->> >> > +       }
->> >> > +
->> >> > +       hci_dmp_cb(skb)->pkt_type =3D HCI_DEVCOREDUMP_PKT_SKB;
->> >> > +
->> >> > +       skb_queue_tail(&hdev->dump_q, skb);
->> >> > +       queue_work(hdev->workqueue, &hdev->dump_rx);
->> >> > +
->> >> > +       return 0;
->> >> > +}
->> >> > +EXPORT_SYMBOL(hci_devcoredump_append);
->> >> > +
->> >> > +int hci_devcoredump_append_pattern(struct hci_dev *hdev, u8 patter=
-n, u32 len)
->> >> > +{
->> >> > +       struct hci_devcoredump_skb_pattern p;
->> >> > +       struct sk_buff *skb =3D NULL;
->> >> > +
->> >> > +       if (!hdev->dump.supported)
->> >> > +               return -EOPNOTSUPP;
->> >> > +
->> >> > +       skb =3D alloc_skb(sizeof(p), GFP_ATOMIC);
->> >> > +       if (!skb) {
->> >> > +               bt_dev_err(hdev, "Failed to allocate devcoredump pa=
-ttern");
->> >> > +               return -ENOMEM;
->> >> > +       }
->> >> > +
->> >> > +       p.pattern =3D pattern;
->> >> > +       p.len =3D len;
->> >> > +
->> >> > +       hci_dmp_cb(skb)->pkt_type =3D HCI_DEVCOREDUMP_PKT_PATTERN;
->> >> > +       skb_put_data(skb, &p, sizeof(p));
->> >> > +
->> >> > +       skb_queue_tail(&hdev->dump_q, skb);
->> >> > +       queue_work(hdev->workqueue, &hdev->dump_rx);
->> >> > +
->> >> > +       return 0;
->> >> > +}
->> >> > +EXPORT_SYMBOL(hci_devcoredump_append_pattern);
->> >> > +
->> >> > +int hci_devcoredump_complete(struct hci_dev *hdev)
->> >> > +{
->> >> > +       struct sk_buff *skb =3D NULL;
->> >> > +
->> >> > +       if (!hdev->dump.supported)
->> >> > +               return -EOPNOTSUPP;
->> >> > +
->> >> > +       skb =3D alloc_skb(0, GFP_ATOMIC);
->> >> > +       if (!skb) {
->> >> > +               bt_dev_err(hdev, "Failed to allocate devcoredump co=
-mplete");
->> >> > +               return -ENOMEM;
->> >> > +       }
->> >> > +
->> >> > +       hci_dmp_cb(skb)->pkt_type =3D HCI_DEVCOREDUMP_PKT_COMPLETE;
->> >> > +
->> >> > +       skb_queue_tail(&hdev->dump_q, skb);
->> >> > +       queue_work(hdev->workqueue, &hdev->dump_rx);
->> >> > +
->> >> > +       return 0;
->> >> > +}
->> >> > +EXPORT_SYMBOL(hci_devcoredump_complete);
->> >> > +
->> >> > +int hci_devcoredump_abort(struct hci_dev *hdev)
->> >> > +{
->> >> > +       struct sk_buff *skb =3D NULL;
->> >> > +
->> >> > +       if (!hdev->dump.supported)
->> >> > +               return -EOPNOTSUPP;
->> >> > +
->> >> > +       skb =3D alloc_skb(0, GFP_ATOMIC);
->> >> > +       if (!skb) {
->> >> > +               bt_dev_err(hdev, "Failed to allocate devcoredump ab=
-ort");
->> >> > +               return -ENOMEM;
->> >> > +       }
->> >> > +
->> >> > +       hci_dmp_cb(skb)->pkt_type =3D HCI_DEVCOREDUMP_PKT_ABORT;
->> >> > +
->> >> > +       skb_queue_tail(&hdev->dump_q, skb);
->> >> > +       queue_work(hdev->workqueue, &hdev->dump_rx);
->> >> > +
->> >> > +       return 0;
->> >> > +}
->> >> > +EXPORT_SYMBOL(hci_devcoredump_abort);
->> >> > +
->> >> >  /* Alloc HCI device */
->> >> >  struct hci_dev *hci_alloc_dev_priv(int sizeof_priv)
->> >> >  {
->> >> > @@ -2511,14 +3004,17 @@ struct hci_dev *hci_alloc_dev_priv(int size=
-of_priv)
->> >> >         INIT_WORK(&hdev->tx_work, hci_tx_work);
->> >> >         INIT_WORK(&hdev->power_on, hci_power_on);
->> >> >         INIT_WORK(&hdev->error_reset, hci_error_reset);
->> >> > +       INIT_WORK(&hdev->dump_rx, hci_devcoredump_rx);
->> >> >
->> >> >         hci_cmd_sync_init(hdev);
->> >> >
->> >> >         INIT_DELAYED_WORK(&hdev->power_off, hci_power_off);
->> >> > +       INIT_DELAYED_WORK(&hdev->dump_timeout, hci_devcoredump_time=
-out);
->> >> >
->> >> >         skb_queue_head_init(&hdev->rx_q);
->> >> >         skb_queue_head_init(&hdev->cmd_q);
->> >> >         skb_queue_head_init(&hdev->raw_q);
->> >> > +       skb_queue_head_init(&hdev->dump_q);
->>
->> Perhaps it is a better idea to have this fields as part of a dedicated
->> struct for coredumps e.g. struct hci_devcoredump, also perhaps they
->> need to be conditional to CONFIG_DEV_COREDUMP otherwise it just adds
->> things like a delayed work that will never going to be used, this just
->> reinforces the need of proper CI tests so we can exercise this code
->> with the likes of the emulator.
->
-> Done. I just submitted a v2 patch series with all above changes. Please t=
-ake a look.
->
->>
->>
->> >> >         init_waitqueue_head(&hdev->req_wait_q);
->> >> >
->> >> > diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
->> >> > index 8f4c5698913d..ec03fa871ef0 100644
->> >> > --- a/net/bluetooth/hci_sync.c
->> >> > +++ b/net/bluetooth/hci_sync.c
->> >> > @@ -3877,6 +3877,8 @@ int hci_dev_open_sync(struct hci_dev *hdev)
->> >> >                 goto done;
->> >> >         }
->> >> >
->> >> > +       hci_devcoredump_reset(hdev);
->> >> > +
->> >> >         set_bit(HCI_RUNNING, &hdev->flags);
->> >> >         hci_sock_dev_event(hdev, HCI_DEV_OPEN);
->> >> >
->> >> > --
->> >> > 2.35.1.894.gb6a874cedc-goog
->> >> >
->> >>
->> >>
->> >> --
->> >> Luiz Augusto von Dentz
->> >
->> > Regards,
->> > Manish.
->>
->>
->>
->> --
->> Luiz Augusto von Dentz
->
-> Regards,
-> Manish.
+I am not a fan neither, but last time I checked this is needed to boot.
+Indeed TF-A inserts this node, with the right values, into U-Boot's DT.
+And that's nicely preserved if you use that DT ($fdtcontroladdr) for
+the kernel as well.
+But if someone *loads* a DTB into U-Boot (to $fdt_addr_r), then
+U-Boot fails to propagate the /reserved-memory node into that copy.
+There does not seem to be a global notion of reserved memory in U-Boot.
+Some commands (like tftp) explicitly parse the control DT to find and
+respect reserved memory regions. bootm does that also, but only to
+avoid placing the ramdisk or DTB into reserved memory. The information
+ends up in images->lmb, but is not used to generate or amend nodes in
+the target DT.
+So the bits and pieces are there, but it will require some code to be
+added to the generic U-Boot code.
+
+So what do you think? Leaving this out will prevent loading DTBs into
+U-Boot, at the moment, which sounds bad. I suggest we keep it in, for
+now, it should not really hurt. U-Boot will hopefully start to do the
+right thing soon, then we can either phase it out here (maybe when we
+actually change something in TF-A), or let U-Boot fix it.
+
+> 
+> > +
+> > +	osc24M: osc24M-clk {
+> > +		#clock-cells = <0>;
+> > +		compatible = "fixed-clock";
+> > +		clock-frequency = <24000000>;
+> > +		clock-output-names = "osc24M";
+> > +	};
+> > +
+> > +	pmu {
+> > +		compatible = "arm,cortex-a53-pmu";
+> > +		interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>,
+> > +			     <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>,
+> > +			     <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>,
+> > +			     <GIC_SPI 143 IRQ_TYPE_LEVEL_HIGH>;
+> > +		interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>;
+> > +	};
+> > +
+> > +	psci {
+> > +		compatible = "arm,psci-0.2";
+> > +		method = "smc";
+> > +	};
+> > +
+> > +	timer {
+> > +		compatible = "arm,armv8-timer";
+> > +		arm,no-tick-in-suspend;
+> > +		interrupts = <GIC_PPI 13
+> > +			(GIC_CPU_MASK_SIMPLE(4) | 
+> IRQ_TYPE_LEVEL_HIGH)>,
+> > +			     <GIC_PPI 14
+> > +			(GIC_CPU_MASK_SIMPLE(4) | 
+> IRQ_TYPE_LEVEL_HIGH)>,
+> > +			     <GIC_PPI 11
+> > +			(GIC_CPU_MASK_SIMPLE(4) | 
+> IRQ_TYPE_LEVEL_HIGH)>,
+> > +			     <GIC_PPI 10
+> > +			(GIC_CPU_MASK_SIMPLE(4) | 
+> IRQ_TYPE_LEVEL_HIGH)>;
+> > +	};  
+> 
+> Vendor kernel sets IRQ to low level. What is the difference?
+
+Nothing, really. The polarity of SPI level IRQ lines is hardwired at
+integration time, both at the peripheral and the GIC distributor. The
+GIC software interface has no register to control that - all you can
+configure is edge or level. There *is* some underlying polarity, but to
+my understanding this is just mentioned here for completeness, and
+because the binding requires to name one.
+
+> 
+> > +
+> > +	soc@0 {
+> > +		compatible = "simple-bus";
+> > +		#address-cells = <1>;
+> > +		#size-cells = <1>;
+> > +		ranges = <0x0 0x0 0x0 0x40000000>;
+> > +
+> > +		syscon: syscon@3000000 {
+> > +			compatible = "allwinner,sun50i-h616-system-  
+> control";
+> > +			reg = <0x03000000 0x1000>;
+> > +			#address-cells = <1>;
+> > +			#size-cells = <1>;
+> > +			ranges;
+> > +
+> > +			sram_c: sram@28000 {
+> > +				compatible = "mmio-sram";
+> > +				reg = <0x00028000 0x30000>;
+> > +				#address-cells = <1>;
+> > +				#size-cells = <1>;
+> > +				ranges = <0 0x00028000 0x30000>;
+> > +			};
+> > +		};
+> > +
+> > +		ccu: clock@3001000 {
+> > +			compatible = "allwinner,sun50i-h616-ccu";
+> > +			reg = <0x03001000 0x1000>;
+> > +			clocks = <&osc24M>, <&rtc 0>, <&rtc 2>;
+> > +			clock-names = "hosc", "losc", "iosc";
+> > +			#clock-cells = <1>;
+> > +			#reset-cells = <1>;
+> > +		};
+> > +
+> > +		watchdog: watchdog@30090a0 {
+> > +			compatible = "allwinner,sun50i-h616-wdt",
+> > +				     "allwinner,sun6i-a31-wdt";
+> > +			reg = <0x030090a0 0x20>;
+> > +			interrupts = <GIC_SPI 50 
+> IRQ_TYPE_LEVEL_HIGH>;
+> > +			clocks = <&osc24M>;
+> > +		};
+> > +
+> > +		pio: pinctrl@300b000 {
+> > +			compatible = "allwinner,sun50i-h616-pinctrl";
+> > +			reg = <0x0300b000 0x400>;
+> > +			interrupts = <GIC_SPI 51 
+> IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 52 
+> IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 53 
+> IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 43 
+> IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 54 
+> IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 55 
+> IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 56 
+> IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 57 
+> IRQ_TYPE_LEVEL_HIGH>;
+> > +			clocks = <&ccu CLK_APB1>, <&osc24M>, <&rtc 
+> 0>;
+> > +			clock-names = "apb", "hosc", "losc";
+> > +			gpio-controller;
+> > +			#gpio-cells = <3>;
+> > +			interrupt-controller;
+> > +			#interrupt-cells = <3>;
+> > +
+> > +			ext_rgmii_pins: rgmii-pins {
+> > +				pins = "PI0", "PI1", "PI2", "PI3",   
+> "PI4",
+> > +				       "PI5", "PI7", "PI8", "PI9",   
+> "PI10",
+> > +				       "PI11", "PI12", "PI13",   
+> "PI14", "PI15",
+> > +				       "PI16";
+> > +				function = "emac0";
+> > +				drive-strength = <40>;
+> > +			};
+> > +
+> > +			i2c0_pins: i2c0-pins {
+> > +				pins = "PI6", "PI7";
+> > +				function = "i2c0";
+> > +			};
+> > +
+> > +			i2c3_ph_pins: i2c3-ph-pins {
+> > +				pins = "PH4", "PH5";
+> > +				function = "i2c3";
+> > +			};
+> > +
+> > +			ir_rx_pin: ir-rx-pin {
+> > +				pins = "PH10";
+> > +				function = "ir_rx";
+> > +			};
+> > +
+> > +			mmc0_pins: mmc0-pins {
+> > +				pins = "PF0", "PF1", "PF2", "PF3",
+> > +				       "PF4", "PF5";
+> > +				function = "mmc0";
+> > +				drive-strength = <30>;
+> > +				bias-pull-up;
+> > +			};
+> > +
+> > +			mmc1_pins: mmc1-pins {
+> > +				pins = "PG0", "PG1", "PG2", "PG3",
+> > +				       "PG4", "PG5";
+> > +				function = "mmc1";
+> > +				drive-strength = <30>;
+> > +				bias-pull-up;
+> > +			};
+> > +
+> > +			mmc2_pins: mmc2-pins {
+> > +				pins = "PC0", "PC1", "PC5", "PC6",
+> > +				       "PC8", "PC9", "PC10",   
+> "PC11",
+> > +				       "PC13", "PC14", "PC15",   
+> "PC16";
+> > +				function = "mmc2";
+> > +				drive-strength = <30>;
+> > +				bias-pull-up;
+> > +			};
+> > +
+> > +			spi0_pins: spi0-pins {
+> > +				pins = "PC0", "PC2", "PC3", "PC4";
+> > +				function = "spi0";
+> > +			};
+> > +
+> > +			spi1_pins: spi1-pins {
+> > +				pins = "PH6", "PH7", "PH8";
+> > +				function = "spi1";
+> > +			};
+> > +
+> > +			spi1_cs_pin: spi1-cs-pin {
+> > +				pins = "PH5";
+> > +				function = "spi1";
+> > +			};
+> > +
+> > +			uart0_ph_pins: uart0-ph-pins {
+> > +				pins = "PH0", "PH1";
+> > +				function = "uart0";
+> > +			};
+> > +
+> > +			uart1_pins: uart1-pins {
+> > +				pins = "PG6", "PG7";
+> > +				function = "uart1";
+> > +			};
+> > +
+> > +			uart1_rts_cts_pins: uart1-rts-cts-pins {
+> > +				pins = "PG8", "PG9";
+> > +				function = "uart1";
+> > +			};  
+> 
+> Please add /omit-if-no-ref/ where applicable.
+
+OK. I think most boards have Bluetooth at UART1, though.
+
+> 
+> > +		};
+> > +
+> > +		gic: interrupt-controller@3021000 {
+> > +			compatible = "arm,gic-400";
+> > +			reg = <0x03021000 0x1000>,
+> > +			      <0x03022000 0x2000>,
+> > +			      <0x03024000 0x2000>,
+> > +			      <0x03026000 0x2000>;
+> > +			interrupts = <GIC_PPI 9   
+> (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
+> > +			interrupt-controller;
+> > +			#interrupt-cells = <3>;
+> > +		};
+> > +
+> > +		mmc0: mmc@4020000 {
+> > +			compatible = "allwinner,sun50i-h616-mmc",
+> > +				     "allwinner,sun50i-a100-mmc";
+> > +			reg = <0x04020000 0x1000>;
+> > +			clocks = <&ccu CLK_BUS_MMC0>, <&ccu 
+> CLK_MMC0>;
+> > +			clock-names = "ahb", "mmc";
+> > +			resets = <&ccu RST_BUS_MMC0>;
+> > +			reset-names = "ahb";
+> > +			interrupts = <GIC_SPI 35 
+> IRQ_TYPE_LEVEL_HIGH>;
+> > +			pinctrl-names = "default";
+> > +			pinctrl-0 = <&mmc0_pins>;
+> > +			status = "disabled";
+> > +			max-frequency = <150000000>;
+> > +			cap-sd-highspeed;
+> > +			cap-mmc-highspeed;
+> > +			mmc-ddr-3_3v;
+> > +			cap-sdio-irq;
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +		};
+> > +
+> > +		mmc1: mmc@4021000 {
+> > +			compatible = "allwinner,sun50i-h616-mmc",
+> > +				     "allwinner,sun50i-a100-mmc";
+> > +			reg = <0x04021000 0x1000>;
+> > +			clocks = <&ccu CLK_BUS_MMC1>, <&ccu 
+> CLK_MMC1>;
+> > +			clock-names = "ahb", "mmc";
+> > +			resets = <&ccu RST_BUS_MMC1>;
+> > +			reset-names = "ahb";
+> > +			interrupts = <GIC_SPI 36 
+> IRQ_TYPE_LEVEL_HIGH>;
+> > +			pinctrl-names = "default";
+> > +			pinctrl-0 = <&mmc1_pins>;
+> > +			status = "disabled";
+> > +			max-frequency = <150000000>;
+> > +			cap-sd-highspeed;
+> > +			cap-mmc-highspeed;
+> > +			mmc-ddr-3_3v;
+> > +			cap-sdio-irq;
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +		};
+> > +
+> > +		mmc2: mmc@4022000 {
+> > +			compatible = "allwinner,sun50i-h616-emmc",
+> > +				     "allwinner,sun50i-a100-emmc";
+> > +			reg = <0x04022000 0x1000>;
+> > +			clocks = <&ccu CLK_BUS_MMC2>, <&ccu 
+> CLK_MMC2>;
+> > +			clock-names = "ahb", "mmc";
+> > +			resets = <&ccu RST_BUS_MMC2>;
+> > +			reset-names = "ahb";
+> > +			interrupts = <GIC_SPI 37 
+> IRQ_TYPE_LEVEL_HIGH>;
+> > +			pinctrl-names = "default";
+> > +			pinctrl-0 = <&mmc2_pins>;
+> > +			status = "disabled";
+> > +			max-frequency = <150000000>;
+> > +			cap-sd-highspeed;
+> > +			cap-mmc-highspeed;
+> > +			mmc-ddr-3_3v;
+> > +			cap-sdio-irq;
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +		};
+> > +
+> > +		uart0: serial@5000000 {
+> > +			compatible = "snps,dw-apb-uart";
+> > +			reg = <0x05000000 0x400>;
+> > +			interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
+> > +			reg-shift = <2>;
+> > +			reg-io-width = <4>;
+> > +			clocks = <&ccu CLK_BUS_UART0>;
+> > +			resets = <&ccu RST_BUS_UART0>;
+> > +			status = "disabled";
+> > +		};
+> > +
+> > +		uart1: serial@5000400 {
+> > +			compatible = "snps,dw-apb-uart";
+> > +			reg = <0x05000400 0x400>;
+> > +			interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>;
+> > +			reg-shift = <2>;
+> > +			reg-io-width = <4>;
+> > +			clocks = <&ccu CLK_BUS_UART1>;
+> > +			resets = <&ccu RST_BUS_UART1>;
+> > +			status = "disabled";
+> > +		};
+> > +
+> > +		uart2: serial@5000800 {
+> > +			compatible = "snps,dw-apb-uart";
+> > +			reg = <0x05000800 0x400>;
+> > +			interrupts = <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
+> > +			reg-shift = <2>;
+> > +			reg-io-width = <4>;
+> > +			clocks = <&ccu CLK_BUS_UART2>;
+> > +			resets = <&ccu RST_BUS_UART2>;
+> > +			status = "disabled";
+> > +		};
+> > +
+> > +		uart3: serial@5000c00 {
+> > +			compatible = "snps,dw-apb-uart";
+> > +			reg = <0x05000c00 0x400>;
+> > +			interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
+> > +			reg-shift = <2>;
+> > +			reg-io-width = <4>;
+> > +			clocks = <&ccu CLK_BUS_UART3>;
+> > +			resets = <&ccu RST_BUS_UART3>;
+> > +			status = "disabled";
+> > +		};
+> > +
+> > +		uart4: serial@5001000 {
+> > +			compatible = "snps,dw-apb-uart";
+> > +			reg = <0x05001000 0x400>;
+> > +			interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>;
+> > +			reg-shift = <2>;
+> > +			reg-io-width = <4>;
+> > +			clocks = <&ccu CLK_BUS_UART4>;
+> > +			resets = <&ccu RST_BUS_UART4>;
+> > +			status = "disabled";
+> > +		};
+> > +
+> > +		uart5: serial@5001400 {
+> > +			compatible = "snps,dw-apb-uart";
+> > +			reg = <0x05001400 0x400>;
+> > +			interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
+> > +			reg-shift = <2>;
+> > +			reg-io-width = <4>;
+> > +			clocks = <&ccu CLK_BUS_UART5>;
+> > +			resets = <&ccu RST_BUS_UART5>;
+> > +			status = "disabled";
+> > +		};
+> > +
+> > +		i2c0: i2c@5002000 {
+> > +			compatible = "allwinner,sun50i-h616-i2c",
+> > +				     "allwinner,sun6i-a31-i2c";
+> > +			reg = <0x05002000 0x400>;
+> > +			interrupts = <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
+> > +			clocks = <&ccu CLK_BUS_I2C0>;
+> > +			resets = <&ccu RST_BUS_I2C0>;
+> > +			pinctrl-names = "default";
+> > +			pinctrl-0 = <&i2c0_pins>;
+> > +			status = "disabled";
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +		};
+> > +
+> > +		i2c1: i2c@5002400 {
+> > +			compatible = "allwinner,sun50i-h616-i2c",
+> > +				     "allwinner,sun6i-a31-i2c";
+> > +			reg = <0x05002400 0x400>;
+> > +			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> > +			clocks = <&ccu CLK_BUS_I2C1>;
+> > +			resets = <&ccu RST_BUS_I2C1>;
+> > +			status = "disabled";
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +		};
+> > +
+> > +		i2c2: i2c@5002800 {
+> > +			compatible = "allwinner,sun50i-h616-i2c",
+> > +				     "allwinner,sun6i-a31-i2c";
+> > +			reg = <0x05002800 0x400>;
+> > +			interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
+> > +			clocks = <&ccu CLK_BUS_I2C2>;
+> > +			resets = <&ccu RST_BUS_I2C2>;
+> > +			status = "disabled";
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +		};
+> > +
+> > +		i2c3: i2c@5002c00 {
+> > +			compatible = "allwinner,sun50i-h616-i2c",
+> > +				     "allwinner,sun6i-a31-i2c";
+> > +			reg = <0x05002c00 0x400>;
+> > +			interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+> > +			clocks = <&ccu CLK_BUS_I2C3>;
+> > +			resets = <&ccu RST_BUS_I2C3>;
+> > +			status = "disabled";
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +		};
+> > +
+> > +		i2c4: i2c@5003000 {
+> > +			compatible = "allwinner,sun50i-h616-i2c",
+> > +				     "allwinner,sun6i-a31-i2c";
+> > +			reg = <0x05003000 0x400>;
+> > +			interrupts = <GIC_SPI 10 
+> IRQ_TYPE_LEVEL_HIGH>;
+> > +			clocks = <&ccu CLK_BUS_I2C4>;
+> > +			resets = <&ccu RST_BUS_I2C4>;
+> > +			status = "disabled";
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +		};
+> > +
+> > +		spi0: spi@5010000 {
+> > +			compatible = "allwinner,sun50i-h616-spi",
+> > +				     "allwinner,sun8i-h3-spi";
+> > +			reg = <0x05010000 0x1000>;
+> > +			interrupts = <GIC_SPI 12 
+> IRQ_TYPE_LEVEL_HIGH>;
+> > +			clocks = <&ccu CLK_BUS_SPI0>, <&ccu 
+> CLK_SPI0>;
+> > +			clock-names = "ahb", "mod";
+> > +			resets = <&ccu RST_BUS_SPI0>;
+> > +			pinctrl-names = "default";
+> > +			pinctrl-0 = <&spi0_pins>;
+> > +			status = "disabled";
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +		};
+> > +
+> > +		spi1: spi@5011000 {
+> > +			compatible = "allwinner,sun50i-h616-spi",
+> > +				     "allwinner,sun8i-h3-spi";
+> > +			reg = <0x05011000 0x1000>;
+> > +			interrupts = <GIC_SPI 13 
+> IRQ_TYPE_LEVEL_HIGH>;
+> > +			clocks = <&ccu CLK_BUS_SPI1>, <&ccu 
+> CLK_SPI1>;
+> > +			clock-names = "ahb", "mod";
+> > +			resets = <&ccu RST_BUS_SPI1>;
+> > +			pinctrl-names = "default";
+> > +			pinctrl-0 = <&spi1_pins>;
+> > +			status = "disabled";
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +		};
+> > +
+> > +		emac0: ethernet@5020000 {
+> > +			compatible = "allwinner,sun50i-h616-emac",
+> > +				     "allwinner,sun50i-a64-emac";
+> > +			syscon = <&syscon>;
+> > +			reg = <0x05020000 0x10000>;
+> > +			interrupts = <GIC_SPI 14 
+> IRQ_TYPE_LEVEL_HIGH>;
+> > +			interrupt-names = "macirq";
+> > +			resets = <&ccu RST_BUS_EMAC0>;
+> > +			reset-names = "stmmaceth";
+> > +			clocks = <&ccu CLK_BUS_EMAC0>;
+> > +			clock-names = "stmmaceth";
+> > +			status = "disabled";
+> > +
+> > +			mdio0: mdio {
+> > +				compatible = "snps,dwmac-mdio";
+> > +				#address-cells = <1>;
+> > +				#size-cells = <0>;
+> > +			};
+> > +		};
+> > +
+> > +		rtc: rtc@7000000 {
+> > +			compatible = "allwinner,sun50i-h616-rtc";
+> > +			reg = <0x07000000 0x400>;
+> > +			interrupts = <GIC_SPI 101 
+> IRQ_TYPE_LEVEL_HIGH>;  
+> 
+> Above interrupt doesn't seem to be correct according to documentation. It 
+> should be 104.
+
+That is a very good catch, 101/133 is indeed the RTC IRQ number on the
+H6.
+
+> 
+> > +			clocks = <&r_ccu CLK_R_APB1_RTC>, <&osc24M>,
+> > +				 <&ccu CLK_PLL_SYSTEM_32K>;
+> > +			clock-names = "bus", "hosc",
+> > +				      "pll-32k";
+> > +			clock-output-names = "osc32k", "osc32k-out",   
+> "iosc";
+> > +			#clock-cells = <1>;
+> > +		};
+> > +
+> > +		r_ccu: clock@7010000 {
+> > +			compatible = "allwinner,sun50i-h616-r-ccu";
+> > +			reg = <0x07010000 0x210>;
+> > +			clocks = <&osc24M>, <&rtc 0>, <&rtc 2>,
+> > +				 <&ccu CLK_PLL_PERIPH0>;
+> > +			clock-names = "hosc", "losc", "iosc", "pll-  
+> periph";
+> > +			#clock-cells = <1>;
+> > +			#reset-cells = <1>;
+> > +		};
+> > +
+> > +		r_pio: pinctrl@7022000 {
+> > +			compatible = "allwinner,sun50i-h616-r-  
+> pinctrl";
+> > +			reg = <0x07022000 0x400>;
+> > +			interrupts = <GIC_SPI 43 
+> IRQ_TYPE_LEVEL_HIGH>;  
+> 
+> Above interrupt is already used for port E in first pinctrl. Is this shared 
+> somehow?
+
+Huh, another good find. The manual does not seem to mention a GPIO_L
+interrupt, and the two PL pins do not report function 6.
+when probing the registers in U-Boot there are no other pins (neither in
+PortL nor PortM), also the interrupt registers (@+0x200) are not
+implemented. So there does not seem to be an interrupt.
+
+The pinctrl driver does not seem to care (by looking at the code,
+and by booting it), as .irq_banks is 0, so no IRQ controller
+functionality is ever instantiated.
+The binding makes the interrupts property mandatory, though, so this
+needs to be amended there.
 
 
+I will try to post a new version till the end of the week.
 
---=20
-Luiz Augusto von Dentz
+Thanks!
+Andre
+
+
+> 
+> Best regards,
+> Jernej
+> 
+> > +			clocks = <&r_ccu CLK_R_APB1>, <&osc24M>,   
+> <&rtc 0>;
+> > +			clock-names = "apb", "hosc", "losc";
+> > +			gpio-controller;
+> > +			#gpio-cells = <3>;
+> > +			interrupt-controller;
+> > +			#interrupt-cells = <3>;
+> > +
+> > +			r_i2c_pins: r-i2c-pins {
+> > +				pins = "PL0", "PL1";
+> > +				function = "s_i2c";
+> > +			};
+> > +
+> > +			r_rsb_pins: r-rsb-pins {
+> > +				pins = "PL0", "PL1";
+> > +				function = "s_rsb";
+> > +			};
+> > +		};
+> > +
+> > +		ir: ir@7040000 {
+> > +			compatible = "allwinner,sun50i-h616-ir",
+> > +				     "allwinner,sun6i-a31-ir";
+> > +			reg = <0x07040000 0x400>;
+> > +			interrupts = <GIC_SPI 106 
+> IRQ_TYPE_LEVEL_HIGH>;
+> > +			clocks = <&r_ccu CLK_R_APB1_IR>,
+> > +				 <&r_ccu CLK_IR>;
+> > +			clock-names = "apb", "ir";
+> > +			resets = <&r_ccu RST_R_APB1_IR>;
+> > +			pinctrl-names = "default";
+> > +			pinctrl-0 = <&ir_rx_pin>;
+> > +			status = "disabled";
+> > +		};
+> > +
+> > +		r_i2c: i2c@7081400 {
+> > +			compatible = "allwinner,sun50i-h616-i2c",
+> > +				     "allwinner,sun6i-a31-i2c";
+> > +			reg = <0x07081400 0x400>;
+> > +			interrupts = <GIC_SPI 105 
+> IRQ_TYPE_LEVEL_HIGH>;
+> > +			clocks = <&r_ccu CLK_R_APB2_I2C>;
+> > +			resets = <&r_ccu RST_R_APB2_I2C>;
+> > +			status = "disabled";
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +		};
+> > +
+> > +		r_rsb: rsb@7083000 {
+> > +			compatible = "allwinner,sun50i-h616-rsb",
+> > +				     "allwinner,sun8i-a23-rsb";
+> > +			reg = <0x07083000 0x400>;
+> > +			interrupts = <GIC_SPI 109 
+> IRQ_TYPE_LEVEL_HIGH>;
+> > +			clocks = <&r_ccu CLK_R_APB2_RSB>;
+> > +			clock-frequency = <3000000>;
+> > +			resets = <&r_ccu RST_R_APB2_RSB>;
+> > +			pinctrl-names = "default";
+> > +			pinctrl-0 = <&r_rsb_pins>;
+> > +			status = "disabled";
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +		};
+> > +	};
+> > +};
+> > -- 
+> > 2.35.3
+> > 
+> >   
+> 
+> 
+> 
+

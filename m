@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3406C561D1C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33875561C3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:59:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235537AbiF3OBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
+        id S235683AbiF3NwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 09:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236383AbiF3N6i (ORCPT
+        with ESMTP id S235617AbiF3Nv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:58:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC4F15714;
-        Thu, 30 Jun 2022 06:51:39 -0700 (PDT)
+        Thu, 30 Jun 2022 09:51:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BF7427C8;
+        Thu, 30 Jun 2022 06:49:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07F4B620EE;
-        Thu, 30 Jun 2022 13:51:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB30BC34115;
-        Thu, 30 Jun 2022 13:51:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85E5762006;
+        Thu, 30 Jun 2022 13:49:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92929C341CC;
+        Thu, 30 Jun 2022 13:49:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597097;
-        bh=hGuOut/iB47OP+a8fIGR+FF0ZAQpLfuGm7US7TJUxkg=;
+        s=korg; t=1656596956;
+        bh=ZxozKRz9RYqVmnenqYn0pui8X/beczmuhy+GS2bJ248=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PAjVOqaAWgx/2+nD0zE9LmGWk8VngKTNgU2kOjYxZLI9p56+ILfNa+TaYzjemGCio
-         W433WwoSvrVKsleZ8y0oPqi4R7dpBGQQ49YrGH0OooP5cwCx3KVOb0eJ5YIcPSJ14L
-         GcTW3GpzcOBS1d6buPj/DrTpS9ptNdf3LpWW7SLg=
+        b=M6XTzfCApUCoSh7fJNMdmchaI4bFZDWgzG5kRfelSFXH/cepGdxK94cpkjgBrfKgV
+         u8osSPZzcRXMTjAIv5D0mSPZFJZE2D7qCdBb69xm43vd+W1h5CzEOrb+I/VCnjDaIC
+         GFP9+HRr72/bEExnWkWBvtJ676OSj1jA15uZcnBg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
-        Carlo Lobrano <c.lobrano@gmail.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4.19 09/49] USB: serial: option: add Telit LE910Cx 0x1250 composition
-Date:   Thu, 30 Jun 2022 15:46:22 +0200
-Message-Id: <20220630133234.181486599@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Gurucharan <gurucharanx.g@intel.com>
+Subject: [PATCH 4.14 12/35] igb: Make DMA faster when CPU is active on the PCIe link
+Date:   Thu, 30 Jun 2022 15:46:23 +0200
+Message-Id: <20220630133232.803178765@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133233.910803744@linuxfoundation.org>
-References: <20220630133233.910803744@linuxfoundation.org>
+In-Reply-To: <20220630133232.433955678@linuxfoundation.org>
+References: <20220630133232.433955678@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,33 +58,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Carlo Lobrano <c.lobrano@gmail.com>
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-commit 342fc0c3b345525da21112bd0478a0dc741598ea upstream.
+[ Upstream commit 4e0effd9007ea0be31f7488611eb3824b4541554 ]
 
-Add support for the following Telit LE910Cx composition:
+Intel I210 on some Intel Alder Lake platforms can only achieve ~750Mbps
+Tx speed via iperf. The RR2DCDELAY shows around 0x2xxx DMA delay, which
+will be significantly lower when 1) ASPM is disabled or 2) SoC package
+c-state stays above PC3. When the RR2DCDELAY is around 0x1xxx the Tx
+speed can reach to ~950Mbps.
 
-0x1250: rmnet, tty, tty, tty, tty
+According to the I210 datasheet "8.26.1 PCIe Misc. Register - PCIEMISC",
+"DMA Idle Indication" doesn't seem to tie to DMA coalesce anymore, so
+set it to 1b for "DMA is considered idle when there is no Rx or Tx AND
+when there are no TLPs indicating that CPU is active detected on the
+PCIe link (such as the host executes CSR or Configuration register read
+or write operation)" and performing Tx should also fall under "active
+CPU on PCIe link" case.
 
-Reviewed-by: Daniele Palmas <dnlplm@gmail.com>
-Signed-off-by: Carlo Lobrano <c.lobrano@gmail.com>
-Link: https://lore.kernel.org/r/20220614075623.2392607-1-c.lobrano@gmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+In addition to that, commit b6e0c419f040 ("igb: Move DMA Coalescing init
+code to separate function.") seems to wrongly changed from enabling
+E1000_PCIEMISC_LX_DECISION to disabling it, also fix that.
+
+Fixes: b6e0c419f040 ("igb: Move DMA Coalescing init code to separate function.")
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Link: https://lore.kernel.org/r/20220621221056.604304-1-anthony.l.nguyen@intel.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/serial/option.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/intel/igb/igb_main.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1279,6 +1279,7 @@ static const struct usb_device_id option
- 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1231, 0xff),	/* Telit LE910Cx (RNDIS) */
- 	  .driver_info = NCTRL(2) | RSVD(3) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x1250, 0xff, 0x00, 0x00) },	/* Telit LE910Cx (rmnet) */
- 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x1260),
- 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x1261),
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index 618063d21f96..7b70e95ee352 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -8618,11 +8618,10 @@ static void igb_init_dmac(struct igb_adapter *adapter, u32 pba)
+ 	struct e1000_hw *hw = &adapter->hw;
+ 	u32 dmac_thr;
+ 	u16 hwm;
++	u32 reg;
+ 
+ 	if (hw->mac.type > e1000_82580) {
+ 		if (adapter->flags & IGB_FLAG_DMAC) {
+-			u32 reg;
+-
+ 			/* force threshold to 0. */
+ 			wr32(E1000_DMCTXTH, 0);
+ 
+@@ -8655,7 +8654,6 @@ static void igb_init_dmac(struct igb_adapter *adapter, u32 pba)
+ 			/* Disable BMC-to-OS Watchdog Enable */
+ 			if (hw->mac.type != e1000_i354)
+ 				reg &= ~E1000_DMACR_DC_BMC2OSW_EN;
+-
+ 			wr32(E1000_DMACR, reg);
+ 
+ 			/* no lower threshold to disable
+@@ -8672,12 +8670,12 @@ static void igb_init_dmac(struct igb_adapter *adapter, u32 pba)
+ 			 */
+ 			wr32(E1000_DMCTXTH, (IGB_MIN_TXPBSIZE -
+ 			     (IGB_TX_BUF_4096 + adapter->max_frame_size)) >> 6);
++		}
+ 
+-			/* make low power state decision controlled
+-			 * by DMA coal
+-			 */
++		if (hw->mac.type >= e1000_i210 ||
++		    (adapter->flags & IGB_FLAG_DMAC)) {
+ 			reg = rd32(E1000_PCIEMISC);
+-			reg &= ~E1000_PCIEMISC_LX_DECISION;
++			reg |= E1000_PCIEMISC_LX_DECISION;
+ 			wr32(E1000_PCIEMISC, reg);
+ 		} /* endif adapter->dmac is not disabled */
+ 	} else if (hw->mac.type == e1000_82580) {
+-- 
+2.35.1
+
 
 

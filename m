@@ -2,141 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD620561F80
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B46A561F8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235938AbiF3Plv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 11:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
+        id S236209AbiF3PnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 11:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235819AbiF3Plt (ORCPT
+        with ESMTP id S236200AbiF3PnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 11:41:49 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2055.outbound.protection.outlook.com [40.107.212.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7E83BBD6;
-        Thu, 30 Jun 2022 08:41:47 -0700 (PDT)
+        Thu, 30 Jun 2022 11:43:20 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2051.outbound.protection.outlook.com [40.107.22.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B301F643C;
+        Thu, 30 Jun 2022 08:43:18 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XRRjUKjNFxmtnrimdLwThjfQmEnRkSLpcIhAhivt0EwaY+gpSGwifT9oxFikWvWmVE0AJPFuCsFMh6ieb7CmMJdx8j9192vgbDBbWK/XjZabT908idcqGHx5bibI0KdnHm0DAH5CZHfcp7aQcbbnpxJG1ETQ7MNdlibQYN9/gjbGYZy102cT+B8EngORpltBdhyL+mq8dTYGKG/FzJKA8nRZzabiRgovDkNbF2s1k57ClgzGdkZuJN6/8i9mwcK/WUUAFkM+uxKQOrrECbremGMS1UULaZkQGixsb142FVcSDI/kLHHlYSpy7K7OMA3UQ0lb1tsFPngizU8QIi75hg==
+ b=XT3E4KzkGzlPc2BjPX+20u2PxNPRHZytAIFpJommwVAB2Ub7MXU0WP5RLdkeGKaLdS0TA0k37jIoecbn+Gf81TqE6G3+W+zRIqymKbFp5m6aveiQVlptgGkF3fX2XW4GkJ6ezhDLhvwjlJmUBRtBY8oTbA4fq4ACwq0HqlyVBhiRMFM9ZR3MWmODSKn8MKOzwM7BpyR+Q2QOJAso1q1MrTQWlEDD/Wi5kfhy7C9k9dwakMVdOCMeeNkqLYNN/pYjK58TZzzO75NXfnUaW9xzBkR0r3GTZy7vWUCZW8ehCHDJ56b8Gh/qhCrNFDybBvxp41d/NIgFLvJVcQQ+7J++lw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nGpFuOPq3CiY8XAlngDLZbjzsjY3rB/GNsrrQkp0Vs4=;
- b=L32AaVqHxtpx46ZVt4ytFuZViIhen41xVkuMPz4sSeJSliN9LI87iU/q6UYGyEU+LIy/kidcW9jbnSJ1WBVxgJl6efdrmn2+9o0M4v+1iguGEP9aYWJI9q0V8CWsdir/lcPc0QYzCMbVMKJ9GH2asmPJoAjQ4uwd95faHZFSDchLw1OEfd1ANvSa0++TN8vu/QeqiJc8sqE+mDrd2zjQO6UcBVyz/GhaB5BrQamXKCfwSpRoH+dcXg5nH9eeE5UIvIoLfyrWD1q5mH6B1NJGK5kAKXxt2jq1wWMF1e84ndir9PVHHBIpaGhFUKZCI/mC1C5SW/Bft5n3yxnaqfHnVg==
+ bh=2hWkgGvYtKyxXgcYv8X11uK/te7k+MZKhVyI5+l6hpE=;
+ b=e7YYr8xckzPXtvsQcPZYm/FEj4NANwErh8tNpHjoaJ3+SobvmGshwnio90y1RZB8UjtIK26FWEstOYV2YA1Udpb8DhM1Cc36Vxv25YfW1eiwltsrSPpBQ4dJqd4Lr6Ft8qv2NAAPZTrwW6aDtTbm8133rkchrS0EVHr1iYG+5BkZ02s0sgkanuKNhtcF6qzYA9K86Iy2Yu/IvwmxvRKPioLy/pTslpBHmPu4OOR1QqJjGYNspChUBy/zpw8BAcdPYk4tC8MD/dN7xruOmzMmKohJivIJhW/Lxqw3diVFyeNpPa5kCgoTr7QJbM9Kk99hZJr4vMpooW3+IYfVv6vweg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nGpFuOPq3CiY8XAlngDLZbjzsjY3rB/GNsrrQkp0Vs4=;
- b=a+lGMtXK0i1L+cHkItqixCM6zW5VcNyi/5d7IS544TBFQhFZF3jsVBPTOkcHzfmHesGMsgI7dFVhtaMsZN4CNT9961F7UF7/oCS46NM8IkN4l6YNWLvG58JCnhUhHKzPeE8yGzDumOZ7L40262CTQyovgQjqqd/EvtpWuzs7aC0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DM6PR12MB2844.namprd12.prod.outlook.com (2603:10b6:5:45::32) with
+ bh=2hWkgGvYtKyxXgcYv8X11uK/te7k+MZKhVyI5+l6hpE=;
+ b=bziD3baIm1l23d/nvf9SqwIsTI+WcE2lkCqXwYkpKKRbZg4Von9I1GcT87GGNSESVa7oY9S/54UDWbg9b2+NTY74Ull8q3c4UNWr05IDiNNWQigJT9Xey6wg9q3UmdXYAx4I2Kr++mmRbIPkof6KEXDqFMGneWwwgIUnjBTxwJ0=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by VI1PR0402MB3904.eurprd04.prod.outlook.com (2603:10a6:803:17::32) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Thu, 30 Jun
- 2022 15:41:43 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5395.014; Thu, 30 Jun 2022
- 15:41:43 +0000
-Message-ID: <726ae6db-2b39-9593-2fc4-4f482e7db583@amd.com>
-Date:   Thu, 30 Jun 2022 17:41:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1] Fix: SYNCOBJ TIMELINE Test failed.
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Thu, 30 Jun
+ 2022 15:43:15 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::71b7:8ed1:e4e0:3857]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::71b7:8ed1:e4e0:3857%4]) with mapi id 15.20.5395.014; Thu, 30 Jun 2022
+ 15:43:15 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+CC:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] MIPS: mscc: ocelot: enable FDMA usage
+Thread-Topic: [PATCH] MIPS: mscc: ocelot: enable FDMA usage
+Thread-Index: AQHYh97QV6mbRUNvdEuKYy1moheUK61oIHoA
+Date:   Thu, 30 Jun 2022 15:43:15 +0000
+Message-ID: <20220630154314.q65meid3vgfdso3z@skbuf>
+References: <20220624152548.128700-1-clement.leger@bootlin.com>
+In-Reply-To: <20220624152548.128700-1-clement.leger@bootlin.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     "Zhang, Jesse(Jie)" <Jesse.Zhang@amd.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
-Cc:     "Mukunda, Vijendar" <Vijendar.Mukunda@amd.com>,
-        "Hiregoudar, Basavaraj" <Basavaraj.Hiregoudar@amd.com>,
-        "Dommati, Sunil-kumar" <Sunil-kumar.Dommati@amd.com>,
-        "Pandey, Ajit Kumar" <AjitKumar.Pandey@amd.com>,
-        Nirmoy Das <nirmoy.das@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-References: <20220629060236.3283445-1-jesse.zhang@amd.com>
- <8499b1f1-cd39-5cb4-9fac-735e68393556@amd.com>
- <DM4PR12MB5152BA76985C98A0AAB033E2E3BA9@DM4PR12MB5152.namprd12.prod.outlook.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <DM4PR12MB5152BA76985C98A0AAB033E2E3BA9@DM4PR12MB5152.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM5PR0402CA0020.eurprd04.prod.outlook.com
- (2603:10a6:203:90::30) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d1ca7102-a5c6-4a53-89ff-08da5aaf3f21
+x-ms-traffictypediagnostic: VI1PR0402MB3904:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: iMoTrxXchTjl7LqmI+ABzXZHrSAzRfueSRDP1XHz8vY/S1WQ5Zfp/YmzN6s+qHN3RMORpcHU7eoJURRfwhmvHIlXz0Uz+m8lJoTYx+ymX2moJf8DnXTkSvcDjQ5cW9QAb0+PpWENeFbZcfT7uxi3wg1JVCBAXfzVvxzaQ1U8KV6UNOTd99jwwgvV1BS4uS70XHiH0eZpzYs8Xj49CL3gINgmFsuB5OIEtrTYCMmvY2fV6yotx2z3OCHJ0Rs9CwT6AAQ01p0YJGZ7eTxwXQpZ0O2/v33FtkWcwdC3Ti/x3WI/Ie5GrB3f+1yXt/bWHY5aS3VL//AV7TqAKAu5kEeoUqkwNyllMXR42veHyJ+xPwR/WJ/MzTCJzqOs7ZTnM7Glipg6KU16qY1SUWy95rC2od79yR30bJsw3IxiO2+qi0fKl14pIedHxIICmP4YFHfs++ONaZuonZcbhZsDtbdqXubvlghHkPbcqa8goiExERXNN1WEC0j4nuyz5hLC1LR2nct0gONVeLuqqBMBYLQmTB17R+o09pkAKjI9UZgB0pL0QCHD2TYqDdd1sMW+Ax6dBcx7TOVNYvRuuQwgEfOhO8Ju8aPGU7v3J1uCmHJ8lqxuowrhRKEWv7ignwNLV7TP7AEGKMM8XI0T1NfAVQJUSxmt3GP90WGQctuB8kg+Hth89lR0kATHxWYWuXlJrNIw5L4qg+gi8+kAJuiF26YMe792FSYyCU6/EoD/mn4f+StcA1WWShv6+F3rEY/NCbjoHu9XEwHN4mjn+nBlu+NAAGNJIZoHEx8Omvw8Z6xu9dhX1Z4y80u4XMEoa2Kp9Qmb
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(366004)(346002)(39860400002)(396003)(136003)(376002)(86362001)(66556008)(66446008)(186003)(6512007)(91956017)(478600001)(4326008)(64756008)(5660300002)(9686003)(66946007)(316002)(41300700001)(38070700005)(6486002)(26005)(6506007)(6916009)(8676002)(54906003)(71200400001)(38100700002)(1076003)(66476007)(44832011)(558084003)(8936002)(2906002)(33716001)(122000001)(76116006);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?1oOam93zMcR33s4uMRhZ0xLFkE6D499a+N59bMi5s4TluH6QxdwSCkSxJ1?=
+ =?iso-8859-1?Q?BUGSZ39SYLsgt5nYQhYwOxPb0nPt2mQXlCYyhEeUhKLbbEcUfKA4XXgZT8?=
+ =?iso-8859-1?Q?mxt0w28CJsJuZ7X/gJxnNWhYIhB0rSOwk6brSD73m+PdRQhKsegw5SiNVx?=
+ =?iso-8859-1?Q?jxwUwz/eoXZ63Yb2P84hk2iHEHALMs2HNwokD/vJM4hMW0nI7vJKyL6byG?=
+ =?iso-8859-1?Q?y0nmgL62Gow0wgU1C9TrYibbJ7b1MuoITRZeFL//lVyUVOe4W+pPGtfJhM?=
+ =?iso-8859-1?Q?k739vfbSiWZNtYMTqwnFogoZnHENl3hprLLruIwMat+aY5VRCseupnx31k?=
+ =?iso-8859-1?Q?1u0NULW2bBVKYFS23EGUG8DfkvwDsggZ/o2nys2EuQC3yYw7Hrel5+IuIz?=
+ =?iso-8859-1?Q?P6hfzUmlGM1jBgf9AuinvEDyAKNVNpzzTdZbTj1M523nxq1GR/cDtJfOPT?=
+ =?iso-8859-1?Q?OWXI+tfnK8WrOQAixsIksldsWE4Kvh00VeCOH8+N8PNnp0kZGnS6a2cx9K?=
+ =?iso-8859-1?Q?LwF5YfNX95+3xPZ2pD09WUaorq8HXKwsvt/fItjmyK2JLctlJF6Yr9HwCq?=
+ =?iso-8859-1?Q?s/GPwJPTgP+NAncCyMYC2hNz91pTIIeuOezwl/aZpkxYS3FNmZgvQzv/9a?=
+ =?iso-8859-1?Q?AbfaQgco7qtu4YGzi5TCzEBRdD+XReIihVgCWvPrr31YMRpsWxqut2mveO?=
+ =?iso-8859-1?Q?DNMrnSjBaOpd00UFqGcSaPA+mCpS1m4QFfwelTlhNKdvmljarLltTJcbnw?=
+ =?iso-8859-1?Q?ePDMDahpgz5ARUT0ocqNi2BfhzX8dUZ8XVDwQWQft8gxgD/60R7YQz1USZ?=
+ =?iso-8859-1?Q?fLqeTcHI5M0T81VQkJlVxXTnM7TRS/fVBauqE+JvLYNriEv0OY1CUTxMd7?=
+ =?iso-8859-1?Q?XoAszxEjYcq2GNIrrOZVr5B0nGhtKOX8/SnFTEYLkstBFjloxx9WfxiPBu?=
+ =?iso-8859-1?Q?WsuGIW2SPMiA4J/rpm7YmlB1qLKiojN6aRr59oBcEf/RWjCC/PDE++Szlo?=
+ =?iso-8859-1?Q?VwSD1fMbunJMiiOHwcV4DUuzYaoJQWFpLqt7fBll7LB8mjQNRmoD67vdpb?=
+ =?iso-8859-1?Q?8BJ90xzYBMMiui8Q3fEjqyUcrAG4puU93BNFPODCVPauuHCf0JhScW6GGn?=
+ =?iso-8859-1?Q?VpPohHwKkCTEoSdc7iDtjCRd6qziMYXEHNbXA4/d/QGezcCmLeU6Lrwa38?=
+ =?iso-8859-1?Q?r77ICcqM+ie8a0aPtxrGzAQ6FAXoDb2I9KsES7oWXvibGkWWU9CsNCIgDp?=
+ =?iso-8859-1?Q?YA0+qyXV0EZZ5e1lj7lf512FHi4CZ5lAbnxVUnIJoRrpGTlghDthiZHOP6?=
+ =?iso-8859-1?Q?CqNosLFYDB5hYSEJZF6cIjrtIWYVPf1JKgunyADP1HgCgAkujYRSHgrFEz?=
+ =?iso-8859-1?Q?J5pC78X94VbDCt0wVN1x5LP//9iFLjIZC5y+7VtlPhvcUVAltUnaKl4GvR?=
+ =?iso-8859-1?Q?PaFXE71NU5W/w5EFzxJcQu/rTdieGq0mdlMkInn1I8o7E9jl0p1TMDyj6L?=
+ =?iso-8859-1?Q?GzFkAPmOQksxr+fZc6C7umkGlpad6ncyzSTMqUlcVsZPs2noq05xGcbG8v?=
+ =?iso-8859-1?Q?pgLrRJNjon/b2Ow380WoJyB11eidbrGdVpIY65o+ee2lOyYuKFCkTXq9Vc?=
+ =?iso-8859-1?Q?qpzbF0xJDPYtNS6OwV8nx5w5l7pv6ybWcNbrrUWpwvWc64G6ETbS1WDg?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-ID: <A8B520D67D8F2142935AA4F3B2F2774B@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ea2a4f5b-304d-4187-c15c-08da5aaf07f8
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2844:EE_
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jt9ce5Ct2MN5ajbwK0Iu0ThV+28PpgZbyvCEwFJSDK/quiZAPhiqT86gTEdpMKPKmNvIfM91rQSNImF5IaZcb0zuDP0MCU8D5xzc32GuGNOohGkkimJKjI3HWXJ2Rh8KUHm9Nr2cr+YiTJEcZomhO1KOk4f5SFi/+MlY0uhR5tLkUqHSm8RiuR04linVODvhGjuJhsceqKrZXkb9g1KaU19g3L4t2ui5I42V2/+Vb1ihFIVGke6Q2Ea+Ib7rzRTTDUmR8vkLZLrsU+NkIordd0txU48KpBagEikOeBF8a0qznvSNrMSlaFbw7DnjppWt8ou91leGoF7a8XpPZs6FHQx7dKahqyz5VAaspjHTl7sMqTOhYdfUdgy9y24CFusmgP2qCQLaz1WgGVigf724qD/ifc8j9VKKsu2enmzZzXhYKMTpYjOCoEF5BF7EEHtS5OAo0hZ/Cdu2JXafu7nCbvRn+VGdhHTxsDWUuQckDtVi1NWG1RHqS3qH77VtSXDcxpFR4PPt6TvcRcyP5gvHhgPNpycSSghd3XoGPyrzu0Y/vYcs4Y4wYrzFsiEgZQgyeF7od5wGIYA8gc7pwMWib/M0lQE8t5g+NopESytxW3RPwDQ3aEXgeWIJWgRqxpfK+w9W+6Mogd13YDKAbbu1xi5K+3gXvv0fZtIEZyyd2ysLL5IFurXmY0AQxRLM2Ika5Xa1uxGFxz1JgGf5/3/rCryRtYKFTEi9j9OLLm6SoDKGrKNLwVZT6egsnuwPF71JtXqQbj1lP/6oOPZB3FGwDTz1Wlfs3GZQL8Pbv9qwBNRT5rqTdNFYIPH672B5YzzBmZzgBa3rENC0wajR1Ck++rY7GfxZE3EjjstADFrbHVe7nRMWHMYmhaZOLx8YVXEuJlVnnItXoHlVCdT/5B7vf81LShEAN4gh63lSKidQ40c=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(136003)(396003)(376002)(39860400002)(346002)(83380400001)(186003)(66574015)(2906002)(966005)(41300700001)(66946007)(478600001)(4326008)(8676002)(6666004)(54906003)(6486002)(316002)(110136005)(7416002)(66476007)(5660300002)(66556008)(8936002)(6512007)(31696002)(86362001)(38100700002)(53546011)(31686004)(36756003)(6506007)(2616005)(45980500001)(43740500002)(473944003)(414714003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NUQvU1Q0aVVXenY0TE1RN0Npb2ZtME5GQmxncEV6Nk1CazZvUytXeXNrbWZ2?=
- =?utf-8?B?Qm5hSnBGZlp6aXNzRDBkVEd6N3dSYmIwMy9GUVZyWEllbURpV0xHVDc0SHhZ?=
- =?utf-8?B?L1VPSnNnZ2FoWm9pb0owTktiU09hU0NscWliTGFZTGxwZ3U1NUdvV2lWY3gw?=
- =?utf-8?B?N2xlV0dFMVJQUmZMK1NuVkJsaWVQdHZucklaZ3ZhdmlqTkdQdExUVlppSmM1?=
- =?utf-8?B?N2J3R0psV2ZNOHY2TkFnbmZWcUplUGFsZEtBVlp5eGNON0hMZVphR014R0Np?=
- =?utf-8?B?K3NTcVU3VzErY0ttcHU0bUJpdjRvSVJMWC9hSXZXVEhkeGs0dkt4N2h5c3p0?=
- =?utf-8?B?RDRrcEsrV0p5RFdhWUhXT0lIcklUL2M1VGJmRnUyWDBhNEtENDBxdTZCS0Zy?=
- =?utf-8?B?eDVXdGhUbTEyL1Y1UXFwTFdCejBxSXh4Z3ZKK3F1SEplc3IxaWNGeFVXUGh5?=
- =?utf-8?B?dVZoZzYvMGZlNjZlbTdSK2llNWViVS96NGFjYW9oTFEvcDZxVEVUOUdlaEtt?=
- =?utf-8?B?S0MxOGRvUlB3M0R1NjZUcmduOHlTQ3N0akgvc3ljSzJtWllJQmVpRUM2V1pC?=
- =?utf-8?B?bTJEN0JKa0xzUjBobjJJY2IxTG1xWHRLTWtFZ2NVa3RoM0JlaXNXbDlLMnhz?=
- =?utf-8?B?SmVNWFVLN1E3cWNMaERaUU1zWmFqcXdvUGRLeEVNNGlCcTFlZEV2SkgvMTdu?=
- =?utf-8?B?THBSZFdYRlZwZ2ZVdVVoYnF1dVpFckh2U1ExZFJ6OTVSSEtYTWxJM3p6VWl2?=
- =?utf-8?B?K0NlWkdvUTh0cVM2a1g3Vlo5RXMzNE5SNThTVzFFejh3c1FqdjB6Q0RNV2Ro?=
- =?utf-8?B?VG1MSHFDVG5rMU1KQVNhR0ZEVkhzSklINUtwb0RkbmNkNEZUczJkZkxxQ09T?=
- =?utf-8?B?SG5UZmMvZ0ZMWVN6Q2d4TEVwbE5JUlFLaVd0Q28zdVhOcTBmWkFnZ2hLdyt6?=
- =?utf-8?B?UHJYRmFvYTl5Y2lUZzB5czJYOTVCVmh3eXpZdVFWbFBLRzNkVThkeDByckF0?=
- =?utf-8?B?OHYyNzVTZnpzVkxZTzNrUTkxZEtmN0pab2NvOEN6NmtCbHBKQ2J6VWhmYzFw?=
- =?utf-8?B?Wm9iWUl3ais0SmpER3pJMkJKbWxqckYrMzNaRjdtMU05TEdYVnpaOEJ1VmxV?=
- =?utf-8?B?ZUh3aXZpTjNSdDFjY2xRYXFJcW9HejlVWHNQK3FPY2J3Y0JDWWZMWmRpRitv?=
- =?utf-8?B?a1ZqeDRlbktxOC83V2drUi9MR0VvY3lIWFZsRkN5OW55Umh5MXd5MlB0Umds?=
- =?utf-8?B?aTlITlc1a0lPWU9aSjJPa0ZKZ1JmRm14OFhRZzM1MU9xUHNuN3VBRjJnVWs4?=
- =?utf-8?B?OEhBalBidU5RcXNJakxvMjBod3B4UE01NG5yNGhrOEZxQ3djbmhoMG5qZTRC?=
- =?utf-8?B?UzdFQ3ppT1RCUGU2WXFKb3h1dFBobTAwT25McWcySW1oY0N2bEtrRklpcERr?=
- =?utf-8?B?azF0aloyUEJUcnNNc2Y5a0pBeUg0ZkJBT2wrUVVIVkU3bmwrQmZ2R0tWNEho?=
- =?utf-8?B?MDBZZkJzNlc3Q0ViR1ZwOVNLZFg1WE9tYnEySkxPdjVWWnlBREtTb21DbnUw?=
- =?utf-8?B?dTJsWkZJbVQyMVFiVjdFVS85Q25OTk1BSTNDYjdPVE1YNzdQZFptWG8yaUN5?=
- =?utf-8?B?cTAzNXNPSituVEVQL2lqMVlkOFBnczJVVFd4UFVZWis0MStxWFNMaW8yU1ND?=
- =?utf-8?B?QzNuNjRnTWpvSDd1VkJsTTJ3dlhJWFZQY0Uyay9RUnpqOHgrMHV2bUdUd0pS?=
- =?utf-8?B?R2J0Y3JWYVkrN3c0YmJCeWJ6d0RxS3BKcUNPMXNEMW44SSt6UHVJZDd2OElJ?=
- =?utf-8?B?R1MrQ0F0a0hMSlFOUk82QmprdTFVb1EzVlNRZ0kxVDl1dXRLTXhiMno0WXhm?=
- =?utf-8?B?NGFjMkFteitjT0psc29HeWl0M005UXZWSG05K29SN3BnSE5adnh0M202RW5Y?=
- =?utf-8?B?VTN5TTBXbHorampWakZma2l3WU5EckJOSXBrdkJ3OUg2WnNvL2QwSmJPcnBZ?=
- =?utf-8?B?bGl5WGEraE9acERYVzN6R1hJRDZmNWljT2JtdVMzVGEyclc4TkFzTjdWRzhk?=
- =?utf-8?B?MXdyMklWUXZvRG1lZEJDampVVGMyMllsRXMrbmNuNWF0UWZ5eFVyUHBjVitH?=
- =?utf-8?B?Y09sTDNGRGsxM1k5a3ArZ3Q0bTI5SUxSY2ZxbTV0bzFCTEQzME13K0VnR1Jn?=
- =?utf-8?Q?XMfCaFiwvHGkgdmP4fAbD6b3rkQF85z8XcSyRGGV4Eue?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea2a4f5b-304d-4187-c15c-08da5aaf07f8
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 15:41:42.9615
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1ca7102-a5c6-4a53-89ff-08da5aaf3f21
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jun 2022 15:43:15.0660
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: B/DhgCD0lIWKGjax2OppuoY6p+0m48/yhHfMt8o1Pw1LAlijdUdUWb4eL8kpp8iM
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2844
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lde5vx5vrsg1EyZmZURbxxZJUh3UDBAxGtQHWA4x82SQYNKveSNsJVZM6kqocAkWe+JO9ZQ4q+LLKaSo9mreOg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3904
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -145,82 +125,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jesse,
+On Fri, Jun 24, 2022 at 05:25:48PM +0200, Cl=E9ment L=E9ger wrote:
+> From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+>=20
+> Enable FDMA usage by adding "fdma" resource in regs and interrupts.
+>=20
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Signed-off-by: Cl=E9ment L=E9ger <clement.leger@bootlin.com>
+> ---
 
-yes, I know that's a well known bug.
-
-The Intel guys have already narrowed it down to a missing 
-dma_fence_enable_signaling() in the syncobj code path.
-
-I strongly suggest to work together with them to find where that needs 
-to be added instead.
-
-Regards,
-Christian.
-
-Am 30.06.22 um 17:26 schrieb Zhang, Jesse(Jie):
-> [AMD Official Use Only - General]
->
->
-> Hi  Christian,
-> If we remove the following patch, the  "syncobj timeline test" can pass.
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=721255b52700b320c4ae2e23d57f7d9ad1db50b9
->
->
-> The following log is provided by AMD CQE team. They run the amdgpu_test tool on ubuntu22 (kernel version 5.15.0-39)
-> Suite: SYNCOBJ TIMELINE Tests
->    Test: syncobj timeline test ...FAILED
->      1. sources/drm/tests/amdgpu/syncobj_tests.c:299  - CU_ASSERT_EQUAL(payload,18)
->      2. sources/drm/tests/amdgpu/syncobj_tests.c:309  - CU_ASSERT_EQUAL(payload,20)
-> You can get more detail information by the attachment.
->
-> So we need fix this issue. And if you have any better solution to solve the issue, please let me know.
->
-> Thanks
-> Jesse
->
-> -----Original Message-----
-> From: Koenig, Christian <Christian.Koenig@amd.com>
-> Sent: Wednesday, 29 June 2022 5:12 pm
-> To: Zhang, Jesse(Jie) <Jesse.Zhang@amd.com>; broonie@kernel.org; alsa-devel@alsa-project.org
-> Cc: Mukunda, Vijendar <Vijendar.Mukunda@amd.com>; Hiregoudar, Basavaraj <Basavaraj.Hiregoudar@amd.com>; Dommati, Sunil-kumar <Sunil-kumar.Dommati@amd.com>; Pandey, Ajit Kumar <AjitKumar.Pandey@amd.com>; Nirmoy Das <nirmoy.das@linux.intel.com>; Maarten Lankhorst <maarten.lankhorst@linux.intel.com>; Maxime Ripard <mripard@kernel.org>; Thomas Zimmermann <tzimmermann@suse.de>; David Airlie <airlied@linux.ie>; Daniel Vetter <daniel@ffwll.ch>; Sumit Semwal <sumit.semwal@linaro.org>; open list:DRM DRIVERS <dri-devel@lists.freedesktop.org>; open list <linux-kernel@vger.kernel.org>; open list:DMA BUFFER SHARING FRAMEWORK <linux-media@vger.kernel.org>; moderated list:DMA BUFFER SHARING FRAMEWORK <linaro-mm-sig@lists.linaro.org>
-> Subject: Re: [PATCH v1] Fix: SYNCOBJ TIMELINE Test failed.
->
-> Am 29.06.22 um 08:02 schrieb jie1zhan:
->>    The issue cause by the commit :
->>
->> 721255b527(drm/syncobj: flatten dma_fence_chains on transfer).
->>
->> Because it use the point of dma_fence incorrectly
->>
->> Correct the point of dma_fence by fence array
-> Well that patch is just utterly nonsense as far as I can see.
->
->> Signed-off-by: jie1zhan <jesse.zhang@amd.com>
->>
->> Reviewed-by: Christian König <christian.koenig@amd.com>
->>
->> Reviewed-by: Nirmoy Das <nirmoy.das@linux.intel.com>
-> I have strong doubts that Nirmoy has reviewed this and I certainly haven't reviewed it.
->
-> Christian.
->
->> ---
->>    drivers/gpu/drm/drm_syncobj.c | 2 +-
->>    1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/drm_syncobj.c
->> b/drivers/gpu/drm/drm_syncobj.c index 7e48dcd1bee4..d5db818f1c76
->> 100644
->> --- a/drivers/gpu/drm/drm_syncobj.c
->> +++ b/drivers/gpu/drm/drm_syncobj.c
->> @@ -887,7 +887,7 @@ static int drm_syncobj_flatten_chain(struct dma_fence **f)
->>    		goto free_fences;
->>    
->>    	dma_fence_put(*f);
->> -	*f = &array->base;
->> +	*f = array->fences[0];
->>    	return 0;
->>    
->>    free_fences:
-
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>=

@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6175626CD
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFA25626F0
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232763AbiF3XSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 19:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
+        id S232607AbiF3XSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 19:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232635AbiF3XSX (ORCPT
+        with ESMTP id S233219AbiF3XSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 19:18:23 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEDDE0E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:18:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656631097; x=1688167097;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Dfm7axZWAKkEl0Yg6555XwrTd6tTzwlKszTTyyKnpIQ=;
-  b=JWhK65Erumn/ez/a8GrFjpnCUJH3Kd1vcnTU/u6tkZTgz7A4c4hLxmSK
-   usptliAgEagLju8TH4Vf7B3mf0A4t+9LotCa+08qevwQFngOJ6x0NvwUS
-   B+0ornxazoTzBKfVi69dN9Nt33uxxGE9sZAwOO5g+7guoo0U7c+Ue4Uzs
-   zTfT+gj9oD1pj/A+CZx2AKeyzP1Ga6u99nvXdyHiTrN/hqjrGMHZXNUac
-   IOs7jrkvy5vXl8OeVzRV+tNzJWo9VjeLXmxcdkEhC9yL0fI7hkZVMNP+3
-   OeWQzmIHfvfrSLJBjR1fiFvQgOj7RgtLcMjzZZhq5UKDCiT/LvIA0kxa6
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="283594277"
-X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
-   d="scan'208";a="283594277"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 16:18:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,235,1650956400"; 
-   d="scan'208";a="596012036"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Jun 2022 16:18:15 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o73QM-000DIY-ND;
-        Thu, 30 Jun 2022 23:18:14 +0000
-Date:   Fri, 1 Jul 2022 07:17:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Thu, 30 Jun 2022 19:18:05 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7C723C
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:18:01 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id f15so354336ilj.11
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:18:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=03++94PzvVG3b/012gf2suelyAkCCpPeh9VDHLXmve4=;
+        b=CqDHVXt0KRgn/w01hYDr2JRIlb34z+64H0I3D13v873RWxtj6WoCVIFGwui2kmla5F
+         gW9hqngGalfOXPyECpKNzYjy/1M6YozEKuudCSGEqVrfhHqnJNRE+mnQlG/jq1rtpS4C
+         rlaQzt425NE/eXiFZUJ+PbgS6M5lBsS+Irc1Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=03++94PzvVG3b/012gf2suelyAkCCpPeh9VDHLXmve4=;
+        b=ek9/iFI+StJpBmU1xDeqTYao6OZx8HBU/wU6kbJR4MgijYoVlDYhpaEQsta4NuH53X
+         QHGSASS589oOEMWLxxlGIjCoKRlNXtz/l21Tu27E45GfUZ/m2CrXoakCvxPg/IkyVzVn
+         5EAL0HiGpSLsHgYQHxumykDwwOS+fShDtOgXxbe7Tbm9HxbJ8K/yZ95LzOyUjVYyMTci
+         hRHS8iHVihdQyUb5RciHtMLXjMkWuTN5ivvQAlqBPhVTPWSpnhvlttyBeozGMJ9fTML7
+         bkEKFVFSvjXiuuFxCKLmsswNWZ9RvPwuqLJ5FTIrE5nIFeD6z3zOqm1bSi5VeVZsOckV
+         yw8g==
+X-Gm-Message-State: AJIora9ll9MtrZohKtyop9dzLgzLqPBPI7IRyd52E2Y0dsNJ90tWyhxb
+        w7yOXfSFiT9xUWmLrhMZhCR84Q==
+X-Google-Smtp-Source: AGRyM1u/97oQ+eDiph4/CGJnP0FPiwky03AkFrnqrGVLgu4HE/ptrs+/vjl28bP27/JHGNnwO9d++A==
+X-Received: by 2002:a05:6e02:1583:b0:2d7:a75d:888f with SMTP id m3-20020a056e02158300b002d7a75d888fmr6490251ilu.13.1656631080973;
+        Thu, 30 Jun 2022 16:18:00 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id n41-20020a056602342900b00669536b0d71sm9598977ioz.14.2022.06.30.16.18.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 16:18:00 -0700 (PDT)
+Subject: Re: [PATCH 5.15 00/28] 5.15.52-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 31/56]
- ld.lld: error: undefined symbol: fscache_begin_cache_operation
-Message-ID: <202207010740.uNqYXgaP-lkp@intel.com>
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220630133232.926711493@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <2778b022-0c04-b572-a801-4e1b3ed7deb9@linuxfoundation.org>
+Date:   Thu, 30 Jun 2022 17:17:59 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220630133232.926711493@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
-head:   acac17cdb0f9f6db9fc03eea371e399906146f96
-commit: 822bd57525b5cf3038ef9d8086398a8aecc95161 [31/56] fscache: Add a function to begin an cache op from a netfslib request
-config: arm64-randconfig-r001-20220629 (https://download.01.org/0day-ci/archive/20220701/202207010740.uNqYXgaP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/822bd57525b5cf3038ef9d8086398a8aecc95161
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
-        git checkout 822bd57525b5cf3038ef9d8086398a8aecc95161
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On 6/30/22 7:46 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.52 release.
+> There are 28 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.52-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Compiled and booted on my test system. No dmesg regressions.
 
-All errors (new ones prefixed by >>):
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
->> ld.lld: error: undefined symbol: fscache_begin_cache_operation
-   >>> referenced by addr.c
-   >>>               ceph/addr.o:(ceph_netfs_ops) in archive fs/built-in.a
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+thanks,
+-- Shuah

@@ -2,76 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7B656192B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D8E56192D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235056AbiF3Lan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 07:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
+        id S235063AbiF3Lap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 07:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234991AbiF3Lab (ORCPT
+        with ESMTP id S234976AbiF3Lac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 07:30:31 -0400
-Received: from relay.uni-heidelberg.de (relay.uni-heidelberg.de [129.206.100.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A0751B2A
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 04:30:29 -0700 (PDT)
-X-IPAS-Result: =?us-ascii?q?A2B6CQCciL1iffxkzoFagliDJYFXlBABAQEGjHKHH4ong?=
- =?us-ascii?q?gcBAQEBAQEBAQEJLxMEAQE9AQKKESc1CA4BAgQBAQEBAwIDAQEBAQEBAwEBB?=
- =?us-ascii?q?gEBAQEBBwQUAQEjPCeFaA2GQwYnCwFGEFFXGYJ4AgEBAoJkAQMwrVsygQGGW?=
- =?us-ascii?q?gGBP4FlgT2JWoUggUCBEIFIgzWEC4EGhW4Emj4KAwkEBwVGFxJOMSECRQscA?=
- =?us-ascii?q?QgGBgcBCAEFCCgEAgEBAQYFGBQBAwEBExIFEwwHKAoSAhIMChsHBwMLBTINA?=
- =?us-ascii?q?g4HAQEMDwECDwMBAhEBBwIJEggGDysIAwEBAwEHAQICAyALAgMWCQcIAgECB?=
- =?us-ascii?q?QICAQMPAQgKHBIQFAIEDQQeCQIIAQIZHiwHAgIEDgMjHQgLCgMOAwQDARACG?=
- =?us-ascii?q?AcCARUBBQIECAQBAwYDCBUZAQ0nBAcDEgINAQYBAgYBAQUFAQMYCAMUAwUBA?=
- =?us-ascii?q?ggDFgcBAiEFCiYJBA0DASIbAgMDAQQbCgIBAgIFFgUCAQECAwIGFQYCAj8vE?=
- =?us-ascii?q?R0NCAQIBAkSHCMBAgwBBAECBy8FBC0CAQEeBAUBBQ8CCAEBFgIGBAMCAgMBA?=
- =?us-ascii?q?QIBFgIQCAIIJxcHEzMZAQU3FA4PAQMGCBkcIgcJBwUGFgMMFSceKQUHERIbD?=
- =?us-ascii?q?wQNDQo0IBYkAQEOBQMBEhkRDgcUClMmIRUQBgErFgMEAQMDAgYaAQIDIgISC?=
- =?us-ascii?q?wkVAgQmCAkDFgYtBQEiHRmcDAGBDUyBXZYgq2YHg1EQAYsQlSaFRZEdApIAk?=
- =?us-ascii?q?UKFMaJ0hE81gS0BR4FMTSODOAlIGQ+XVIUeczsCBgsBAQMJjD2CSAEB?=
-IronPort-Data: A9a23:pIhIHK+1w8VHfFXQWscjDrUDGn6TJUtcMsCJ2f8bNWPcYEJGY0x3y
- mAWDGmHO6yDa2Wgf4t2PoWx9hkD7JXQyNYySwU9+CtEQiMRo6IpJ/zAcxiqb33ORiHgoOCLy
- +1EN7Es+ehtFie0Si+Fa+Sn9T8mvU2xbuKU5NTsYkidfic5DnZ74f5fs7Rh2NQw34PhW1nlV
- e7a+qUzBnf0g1aYDUpJs8pvmDs31BglkGpF1rCWTakjUG72zxH5PrpGTU2CByOQrr1vIwKPb
- 72rIIdVXo/u10xF5tuNyt4Xe6CRK1LYFVDmZnF+A8BOjvXez8A/+v5TCRYSVatYoxSKruxB5
- YRgiYOLbgAoNIKcwM0GQxYNRkmSPYUekFPGCX22sMjLlgvbdXqpw/hvAEwyN4AC9aB7DAmi9
- 9RBcmFLNEjdwbvumPThF7MEascLdaEHOKsEsXFkwCnBAOwOWozeT+PX494d3Doxis1KF/vEa
- IwVZFKDaTyZPUAfagxJWchWcOGAoF6kbzp2gVKpu40F/ELTkRIq/bq1P4+AEjCNbZ4JwBrC/
- zquE37CKg4YL9uDwBKK93utgqnEmiaTcI0IGbK79tZugVuO1mIUFRsaXEe6pv//jVSxM/pbK
- koJ6m81saE99UqkZt38RAGj5nqFuAMMHdZdDYUS5lqWwaqS7AeFLm8ZUjpGb99gv8gzLRQu1
- 1mUj5bqCCZpvbm9V32Q7PGXoCm0NCxTKnUNDRLoViMA6tjn+Nh1kxTOC9ZuEaK4itf4Az62z
- z3iQDUCa6s7rM0665WWrH37nAmLoZnDYV5tzx7HUTfwhu9mX7KNa4ut4FndyP9PKoeFU1WM1
- ETofeDDtoji6rnQxESwrPUx8KKBu6fZaWWD6bJ7N8l/p2z0k5K2Vd0IuFlDyFFV3tEsVRKBj
- KX7mQ5Q6JJXNnawYsebiKrvWp1wlcAM+fzPX/zZaJ9xyUxraBOK+Stjf0H44owAuE0lkKVnY
- NGGd8fpDXsbBaljxjesSKER3NfHJxzSJ0uNGvgXLDz+j9JygUJ5r59ebzNiichltMu5TP39q
- Yo3Cidz40w3vBfCSifW65UPClsBMGI2A5v7w+QOKLPdf1A5RDp6UqaOqV/ER2CDt/oN/gsv1
- i/hMnK0NHKh1BUr1C3QMiE+NuqxNXqBhSNmZH1E0amUN4gLOtrxsP1GL/PbjJEt+eh80PM8U
- v8EZciaGfVTW3zB9igCaoP+xLGOhzz07T9iyxGNPmNlF7Y+HFOhxzMRVlGynMX4Jnbs6JFWT
- nzJ/l+zfKfvsCw7VZ6LM6L3kAjr1ZXf8corN3b1zhBoUB2E2OBXx+bZ15fb/+lkxc3/+wan
-IronPort-HdrOrdr: A9a23:8At+76G3yns1jZXopLqFaZHXdLJyesId70hD6qkvc3Fom52j/f
- xGws5x6fatskdrZJkh8erwW5VoMkmsj6KdgLNhdotKOTOLhILGFvAE0WKP+Vzd8mjFh5ZgPM
- RbAuJD4b/LfD5HZK/BiWHWferIguP3iZxA7t2urUuFODsaD52ImD0JbzpzfHcXeCB2Qb4CUL
- aM7MtOoDStPV4NaN6gO3UDV+/f4/XWiZPPe3c9dlIawTjLqQntxK/xEhCe0BtbeShI260e/W
- /MlBG8zrm/ssu81gTX2wbonttrcZrau5V+7f63+4gowwbX+0WVjUNaKv+/VQUO0aCSAZAR4Z
- zxSlkbToBOAjjqDxyISFPWqnXdOXAVmjLfIBaj8ATeiN28SzQgB8Vbg4VFNhPf9ko7pdl5lL
- lGxmSDqvNsfGX9dQnGlqz1vitR5z2JiGtnlfRWg21UUIMYZrMUpYsD/FlNGJNFGC7h8ogoHO
- RnEcmZvZ9tABunRmGcunMqzM2nX3w1EBvDSk8eutaN2zwTmHxi1UMXyMEWg39F/pMgTJtP4f
- jCL81T5fhzZ95Tabg4CPYKQMOxBGCISRXQMHiKKVCiD60DM2Klke+D3F0fjNvaBqDgDKFC6q
- gpfGkoxVLaIXieePFm9Kc7gSzwfA==
+        Thu, 30 Jun 2022 07:30:32 -0400
+Received: from relay2.uni-heidelberg.de (relay2.uni-heidelberg.de [129.206.119.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2566A51B28
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 04:30:30 -0700 (PDT)
+X-IPAS-Result: =?us-ascii?q?A2CyBQALiL1iffxkzoFagliDJYFXlBABAQEGjHKHH4ong?=
+ =?us-ascii?q?gcBAQEBAQEBAQEJLxMEAQFAihEnNAkOAQIEAQEBAQMCAwEBAQEBAQMBAQYBA?=
+ =?us-ascii?q?QEBAQcEFAEBIzwnhWgNhkMGJwsBRhBRVxmCeAIBAQKCZAEDMK1UMoEBhloBg?=
+ =?us-ascii?q?T+BZYE9iVqFIIFAgRCBFTODNYQLgQaFbgSaPgoDCQQHBUYXEk4xIQJFCxwBC?=
+ =?us-ascii?q?AYGBwEIAQUIKAQCAQEBBgUYFAEDAQETEgUTDAcoChICEgwKGwcHAwsFMg0CD?=
+ =?us-ascii?q?gcBAQwPAQIPAwECEQEHAgkSCAYPKwgDAQEDAQcBAgIDIAsCAxYJBwgCAQIFA?=
+ =?us-ascii?q?gIBAw8BCAocEhAUAgQNBB4JAggBAhkeLAcCAgQOAyMdCAsKAw4DBAMBEAIYB?=
+ =?us-ascii?q?wIBFQEFAgQIBAEDBgMIFRkBDScEBwMSAg0BBgECBgEBBQUBAxgIAxQDBQECC?=
+ =?us-ascii?q?AMWBwECIQUKJgkEDQMBIhsCAwMBBBsKAgECAgUWBQIBAQIDAgYVBgICPy8RH?=
+ =?us-ascii?q?Q0IBAgECRIcIwECDAEEAQIHLwUELQIBAR4EBQEFDwIIAQEWAgYEAwICAwEBA?=
+ =?us-ascii?q?gEWAhAIAggnFwcTMxkBBTcUDg8BAwYIGRwiBwkHBQYWAwwVJx4pBQcREhsPB?=
+ =?us-ascii?q?A0NCjQgFiQBAQ4FAwESGREOBxQKUyYhFRAGASsWAwQBAwMCBhoBAgMiAhILC?=
+ =?us-ascii?q?RUCBCYICQMWBi0FASIdGZwMAYENTpd7q2YHg1EQAYsQlSaFRZEdApIAlnOid?=
+ =?us-ascii?q?IRPNYEsSYFMTSODOAlIGQ+XVIUeczsCBgsBAQMJjD2CSAEB?=
+IronPort-Data: A9a23:HLPP8qi1Z4U8BnuyiKDwgLPqX161+hAKZh0ujC45NGQN5FlHY01je
+ htvCDyCb//eNjTxedkiPI7k8UlQsJbQmtFjTQBr+3hjFC5jpJueD7x1DG+pYnzIfpOfJK5EA
+ 2fyTvGacajYm1eF/k/F3oDJ9CU6jefSLlbFILas1hpZHWeIcw98z0M58wIFqtQw24LhXVjV4
+ YmaT/D3YTdJ5RYlagr41Ire8HuDjNyq0N/PlgVjDRzjlAa2e0g9VPrzF4noR5fLatE88tqBe
+ gr25OrRElU1X/saIojNfr7TKiXmS1NJVOSEoiI+t6OK2nCuqsGuu0o2HKJ0VKtZt9mGt/Qv4
+ dFJvKWSdT0gDIDrkqcvVAF+PAgraMWq+JefSZS+mcmazkmeKj3xxfQrDEw3MYAc8OttDidC+
+ JT0KhhUNEHF3brohuvjEq82255LwMrDZevzvll7xjHdAO4+TIrrWLnX6ZlF2jZ1hs1PEfvab
+ ccDZnxjYXwsZjUWZwhJUsNjzbjAan/XUjhnolWIvukL0mXf5i1L7onnLID3Q4nfLSlSth3E+
+ D6cpjyR7gshHMOd0j2Z+1qjg+bOmWXwX4d6PLKi+/FpgHWXx2oOGBMRSF23qOW4jUj4XMhQQ
+ 2QQ+ywzve0p6EWkT9/ydxm5u2Kf+BodXcdAVeE39mmlxPHP6AbfCWkYZjlcdNghs8xwTjsvv
+ neNntX0FXlsvaeTRHa16LiZt3WxNDITIGtEYjULJTbp+PHmqYA31kuJU9BiVa64j9H4HTv92
+ T/MoCVWa6gvYdAj8/uS+VTOuhCQnJH7Yyk/pTfQRkSKx1YsDGK6XLCA5V/e5PdGCY+WSFido
+ XQJ8/RyCshTV/lhcwTQEI0w8KGVC+WtbGyA2AYwd3U132Tzqyb6FWxFyGwmfC9U3tA4lSjBT
+ GK7Vel5xJJSMHauZ6JtbOpd4Ox0nPG6TbwJutj+Z9ZDZN1O39ud4D1jYESdxW+FraTBuaQ2O
+ JPDKICxC3dfCalmwDeyTeoH3vkny0jSJF8/p7ilkHxLMpLHOhZ5rIvp1nPVMYjVC4vY+G3oH
+ y53bZfi9vmmeLSWjtPr2YASN0sWCnMwGIr7rcdaHsbafFc4RTt+V6SKmOp+E2CAo0izvrmQl
+ p1achEEoGcTeVWZeG1ml1g5MOKyA88hxZ7FFX1xZAfAN4cfjXaHt/tBK8FuJdHLBcRpwPprU
+ vRNZsOBHPlVUTXb6nwbYIXiq5ZhHClHdirRVxdJlAMXIcU6LySXoYCMQ+ca3HNTZsZBnZdl/
+ ufIO8KyacZrejmO++6PMarylAPp4iNH8A+wNmORSuRulIzX2NACA0TMYjUfeang9T2rKuOm6
+ jur
+IronPort-HdrOrdr: A9a23:H2L/saFUJeQZFhsgpLqE0ceALOsnbusQ8zAXPidKOHtom62j5q
+ STdZEgvnXJYVkqNU3I5urwXpVoLUmyyXcN2/hyAV7AZniChILLFuFfBOLZqlXd8kvFmNK1vp
+ 0AT0ERMrHN5CBB/KXHCQCDYq8d/OU=
 X-IronPort-Anti-Spam-Filtered: true
 Received: from mail01.uni-heidelberg.de ([129.206.100.252])
-  by relay.uni-heidelberg.de with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2022 13:30:29 +0200
+  by relay2.uni-heidelberg.de with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2022 13:30:30 +0200
 Received: from localhost (dhcp567-177.laptop-wlc.uni-heidelberg.de [147.142.67.177])
         (Authenticated sender: ln194)
-        by mail01.uni-heidelberg.de (Postfix) with ESMTPSA id 8F10330074960;
-        Thu, 30 Jun 2022 13:30:28 +0200 (CEST)
+        by mail01.uni-heidelberg.de (Postfix) with ESMTPSA id D8565300084F1;
+        Thu, 30 Jun 2022 13:30:29 +0200 (CEST)
 From:   Felix Schlepper <f3sch.git@outlook.com>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         wjsota@gmail.com, Felix Schlepper <f3sch.git@outlook.com>
-Subject: [PATCH v2 5/6] Staging: rtl8192e: Remove unnecessary blank line
-Date:   Thu, 30 Jun 2022 13:30:18 +0200
-Message-Id: <b4fab2e16f35ee09d0c9e1ee1deeb22f4cc98d30.1656587827.git.f3sch.git@outlook.com>
+Subject: [PATCH v2 6/6] Staging: rtl8192e: Added spaces around '+'
+Date:   Thu, 30 Jun 2022 13:30:19 +0200
+Message-Id: <9b673fce3e6200a9fc0d21ec5a493d59cfe12241.1656587827.git.f3sch.git@outlook.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1656587827.git.f3sch.git@outlook.com>
 References: <cover.1656587827.git.f3sch.git@outlook.com>
@@ -79,37 +73,37 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This addresses an issue raised by checkpatch.pl:
+This addresses two issues raised by checkpatch.pl:
 
      $ ./scripts/checkpatch.pl --terse -f drivers/staging/rtl8192e/rtllib_wx.c
-     CHECK: Blank lines aren't necessary before a close brace '}'
+     CHECK: spaces preferred around that '+' (ctx:VxV)
 
 Signed-off-by: Felix Schlepper <f3sch.git@outlook.com>
 ---
- drivers/staging/rtl8192e/rtllib_wx.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/staging/rtl8192e/rtllib_wx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/staging/rtl8192e/rtllib_wx.c b/drivers/staging/rtl8192e/rtllib_wx.c
-index 3db29f6eeb89..778b6b7e0939 100644
+index 778b6b7e0939..1bb94a1fe868 100644
 --- a/drivers/staging/rtl8192e/rtllib_wx.c
 +++ b/drivers/staging/rtl8192e/rtllib_wx.c
-@@ -599,7 +599,6 @@ int rtllib_wx_set_encode_ext(struct rtllib_device *ieee,
- 			goto done;
- 		}
- 		*crypt = new_crypt;
--
- 	}
- 
- 	if (ext->key_len > 0 && (*crypt)->ops->set_key &&
+@@ -767,7 +767,7 @@ int rtllib_wx_set_gen_ie(struct rtllib_device *ieee, u8 *ie, size_t len)
+ 	kfree(ieee->wps_ie);
+ 	ieee->wps_ie = NULL;
+ 	if (len) {
+-		if (len != ie[1]+2)
++		if (len != ie[1] + 2)
+ 			return -EINVAL;
+ 		buf = kmemdup(ie, len, GFP_KERNEL);
+ 		if (!buf)
 -- 
 2.36.1
 

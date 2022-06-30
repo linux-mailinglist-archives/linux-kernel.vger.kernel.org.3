@@ -2,65 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A913561F44
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0028561F48
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 17:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235804AbiF3Pae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 11:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        id S235662AbiF3PcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 11:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbiF3Pac (ORCPT
+        with ESMTP id S235331AbiF3PcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 11:30:32 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D753A738;
-        Thu, 30 Jun 2022 08:30:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656603028;
-        bh=VhG6J9uZbMivq5MflgzUIBMPTyPiY7C4ZX9Gt4iLk3M=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=l1ptDq/+hzUpK5ob8IIUNDhvSJpiS4sNpTUOz5ZLGqLaMpX7PtrATzgelH1NJP31C
-         QFVe3r28OdZDHTis3Xl9zr+GptRsKGQAEtW6/S25a8YvHKSj4kbDvVd6XRVPrSRQwN
-         hUMHCKZ+UaBFOdMSY1GbYqly23v8dxlHXBupnnMI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.100.20] ([46.142.35.76]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N9Mtg-1nat721k9M-015LO6; Thu, 30
- Jun 2022 17:30:28 +0200
-Message-ID: <71bea837-d7c6-2163-7ef0-e7fc9484d088@gmx.de>
-Date:   Thu, 30 Jun 2022 17:30:27 +0200
+        Thu, 30 Jun 2022 11:32:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1093B00D
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 08:32:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE7DAB82BD1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 15:32:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E37AFC34115;
+        Thu, 30 Jun 2022 15:31:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656603119;
+        bh=qbZJbSa8lQwxYorl/dCGnDiEWfOBAhdj2CRrnnSbJfU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=l2JhklebOUOdCVGA1lDmFYVa4jWZzEcGdGXEV2UDwZ8DOlzglNliJkVhZTCgzhxTu
+         g6E2RZkBzY7VLFK/c2ff6yxgsEd7EYTkraW+Q1leXffAEHM0hSSkiF5ZPKGz4Dlek5
+         3abaog3N64Wzmeon8GA+wu8s1aXoC9wTBAHWcyL/OrT/L9dUCoPCy4dXSnbiVujsXW
+         T6BXl4Hhc5ndvf3GfPd31Orzvz8rBF8pACgwgre9+Te27NwP33mE2ac9RlGstwF/0o
+         I7peIIRC1ATSNaL6AKGGGjOF7jkO4zIa/T/ban6zqOuDGR6axcEbl9nuuYu6SdpTmC
+         DK2euDXfiaVwQ==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Joey Gouly <joey.gouly@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linudx.dev,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 0/2] arm64: vdso32: Small fixes for ld.lld 11 and CONFIG_DEBUG_INFO
+Date:   Thu, 30 Jun 2022 08:31:19 -0700
+Message-Id: <20220630153121.1317045-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 5.18 0/6] 5.18.9-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:AW6KULvMMNyah6Tyt1Yge61cP2Tc8MbUMF3M4NAKxmdMDQzf9FM
- PdCtePVHIxTjwhF9SHdM/PHTAwR7AZvdLBxQA11c1VIclUp4vjgI6Mi3CMM4UWCBi7GIZyL
- xLHl2DbR0rU5jZz6avpBy8eYDqtJlN5niLjLaU7HrpbZ/6NYFcHwyAsqBTlm3S311xpksp3
- /3sgPxPvHPM1upw5y3KiQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:oSxilcCyJuY=:/RGase4Q+7ckUsbZmz+Fad
- jhxkxjvxHTkMklWCVYWkqKmRa8p8YdGdl2keKSE0L2QhSXIqRfwxRmKwP4lbt0trDwW4x4wB5
- 2p1+HdQuxA+RE3LgTroWzHTJ/e28BZ1rtxplDAoI/2BlMdV+OnXxxBPJqovLTSwOz7GmXN+20
- 0Tt5XB6wzzwid2MxKet9EWRmGUlOmAirzdDzxabJ74Ke6F65dFaZXSdP/3IOlUaZQIyFAhvhv
- cdPhlGY1D2370jXRn/GmNqKPB0pyJccU7Axu7U4VfnXWbzz8vc/KFrGnXu1O6cAJLwaNKGJc4
- dzAj49xuViuiLrJMmW8lvq8UbZSQVHIS4wyNb6TPZtGoi5uL+E446GMbfBfkov5t/c9vR9xHM
- dlA0CNRDM6mbN+Z0s4u3QypUthHDZTeORCwDVOi+yCjFKRBGMvk3kdQUjq7ix6smpEwtUMZvS
- Tyx6KsmYl0bd3zsG21lhzW8cOGGzK1ejDD+RS71KIwubrb2GW0PAW+zAAuu88mvCEujkdcohu
- qnBgY09S4OwQ8ctYN5HQqCrAKHPtTDtrZTy6I/L50bzdL64h2Rb+zGl/NVtQnD/3rX4GdolaM
- gl6TQVFYNpgwzqm9S3qCKQl9pXcKi+1sr6yDAsoJTctY4U836E/rTaYYxSqL1OFH/BfbMkUmo
- 7AgDRdeC4snxQdxHig4b9xeZv3c4ry7SBBYLG0+rgfjirzKE7lVDNU9zXvPevRSlTqVKOevzi
- 2FZbe3JbtMgWsO0MAwAfpKbzEb7iRjEXpzE+Fzelw/6Cq8ZHod7Vcs1FYqNKXkiaqia/+NgTI
- SEcM4cWzAavV9GA8UyEeSXX0pxVzj1wbEfkeee7uCrgfpXjzUhmg6Y/4mabjRvMXMfMPwvJ2n
- dLJvuJdaoEUSocTmy7TR79Wrvtgl55ij/sI8yK2HIOztClPE1/JE67WMQgnN7+LbJmK/y+xEc
- ATtklNkl6yxJPEghgNVsAiBhBInUx35vQHWPUil4KivRS/Fwefi8+D69BKEoHhp1kW0y2Ve9s
- fyK1y6p2q3VtQ6T6WfF5u2Z1A4GWKaeFUW/p2wIgqiad4j2M7RGB0aJziKV5Cd+lj3ow0UxIG
- re/ts7hIg9Tlp5o6WBX86SC21Js67YORyX/
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,18 +57,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hallo Greg
+Hi all,
 
-5.18.9-rc1
+This small series fixes two issues I noticed with the orphan section
+warnings in the 32-bit vDSO. See the individual commits for the boring
+details.
 
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 36)
+They are based on for-next/vdso. I compiled with LLVM 11, LLVM 15, and
+GCC 12.1.0 + binutils 2.38 with no additional warnings/errors.
 
-Thanks
+Nathan Chancellor (2):
+  arm64: vdso32: Shuffle .ARM.exidx section above ELF_DETAILS
+  arm64: vdso32: Add DWARF_DEBUG
 
-Ronald
+ arch/arm64/kernel/vdso32/vdso.lds.S | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 
-Tested-by: Ronald Warsow <rwarsow@gmx.de
-
+base-commit: 4274929c7ee6f442c3f89c5da64d112a9de4a6ba
+-- 
+2.37.0
 

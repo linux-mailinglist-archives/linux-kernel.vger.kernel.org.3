@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB4F561CD0
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F145A561D77
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235552AbiF3OCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:02:02 -0400
+        id S236096AbiF3OBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:01:11 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236802AbiF3N7h (ORCPT
+        with ESMTP id S236556AbiF3N7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:59:37 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BCE6052C;
-        Thu, 30 Jun 2022 06:52:24 -0700 (PDT)
+        Thu, 30 Jun 2022 09:59:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA8B5C9CE;
+        Thu, 30 Jun 2022 06:51:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C387ACE2EA3;
-        Thu, 30 Jun 2022 13:51:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D539BC34115;
-        Thu, 30 Jun 2022 13:51:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6DA75B82AEF;
+        Thu, 30 Jun 2022 13:51:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3723C34115;
+        Thu, 30 Jun 2022 13:51:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597111;
-        bh=tQbpvtEvCBc44itrMEC0A4dvWcUm/1NCxpin/Lzp79o=;
+        s=korg; t=1656597114;
+        bh=R6WdYwE1kqgxCBVjkLKacSxk6KLR5lkUza5brTDpj4Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bpXj6gtrvMlYhtbVS1kFS39J5yIzBC3zd23vE+REsW+KpyrHxFEFR1S8CR4+E6Iu7
-         PBfEZ0tGMnPOUGOdEmAD7Vhs0+znHWVQypNa/jfVYIJWrM+PzU0QKDaLfdICG53NSH
-         euNLpLTSqGhRFnISHkozMazAZmYk+Udyu/2bk5DI=
+        b=iCLy2Twuyxd4wGpJMvh+Aj2D0K6pty/EPhUCDCp7yv5iFbqaQLLls+hxOGFGr564D
+         o6EYEggaFpjAvn6E+Apl/IJxiS5Cp6AVK5O4qj/G8Kbk1r+BpDY3tBM6D8QPF5YBaw
+         Xa2mY5Xzxw0ml8NMRG9EbRtWSihm9ifBeWhP8OPI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 4.19 31/49] xtensa: Fix refcount leak bug in time.c
-Date:   Thu, 30 Jun 2022 15:46:44 +0200
-Message-Id: <20220630133234.808305251@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Sumit Dubey2 <Sumit.Dubey2@ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 4.19 32/49] powerpc: Enable execve syscall exit tracepoint
+Date:   Thu, 30 Jun 2022 15:46:45 +0200
+Message-Id: <20220630133234.835442292@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220630133233.910803744@linuxfoundation.org>
 References: <20220630133233.910803744@linuxfoundation.org>
@@ -54,32 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
 
-commit a0117dc956429f2ede17b323046e1968d1849150 upstream.
+commit ec6d0dde71d760aa60316f8d1c9a1b0d99213529 upstream.
 
-In calibrate_ccount(), of_find_compatible_node() will return a node
-pointer with refcount incremented. We should use of_node_put() when
-it is not used anymore.
+On execve[at], we are zero'ing out most of the thread register state
+including gpr[0], which contains the syscall number. Due to this, we
+fail to trigger the syscall exit tracepoint properly. Fix this by
+retaining gpr[0] in the thread register state.
+
+Before this patch:
+  # tail /sys/kernel/debug/tracing/trace
+	       cat-123     [000] .....    61.449351: sys_execve(filename:
+  7fffa6b23448, argv: 7fffa6b233e0, envp: 7fffa6b233f8)
+	       cat-124     [000] .....    62.428481: sys_execve(filename:
+  7fffa6b23448, argv: 7fffa6b233e0, envp: 7fffa6b233f8)
+	      echo-125     [000] .....    65.813702: sys_execve(filename:
+  7fffa6b23378, argv: 7fffa6b233a0, envp: 7fffa6b233b0)
+	      echo-125     [000] .....    65.822214: sys_execveat(fd: 0,
+  filename: 1009ac48, argv: 7ffff65d0c98, envp: 7ffff65d0ca8, flags: 0)
+
+After this patch:
+  # tail /sys/kernel/debug/tracing/trace
+	       cat-127     [000] .....   100.416262: sys_execve(filename:
+  7fffa41b3448, argv: 7fffa41b33e0, envp: 7fffa41b33f8)
+	       cat-127     [000] .....   100.418203: sys_execve -> 0x0
+	      echo-128     [000] .....   103.873968: sys_execve(filename:
+  7fffa41b3378, argv: 7fffa41b33a0, envp: 7fffa41b33b0)
+	      echo-128     [000] .....   103.875102: sys_execve -> 0x0
+	      echo-128     [000] .....   103.882097: sys_execveat(fd: 0,
+  filename: 1009ac48, argv: 7fffd10d2148, envp: 7fffd10d2158, flags: 0)
+	      echo-128     [000] .....   103.883225: sys_execveat -> 0x0
 
 Cc: stable@vger.kernel.org
-Signed-off-by: Liang He <windhl@126.com>
-Message-Id: <20220617124432.4049006-1-windhl@126.com>
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+Tested-by: Sumit Dubey2 <Sumit.Dubey2@ibm.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220609103328.41306-1-naveen.n.rao@linux.vnet.ibm.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/xtensa/kernel/time.c |    1 +
- 1 file changed, 1 insertion(+)
+ arch/powerpc/kernel/process.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/xtensa/kernel/time.c
-+++ b/arch/xtensa/kernel/time.c
-@@ -146,6 +146,7 @@ static void __init calibrate_ccount(void
- 	cpu = of_find_compatible_node(NULL, NULL, "cdns,xtensa-cpu");
- 	if (cpu) {
- 		clk = of_clk_get(cpu, 0);
-+		of_node_put(cpu);
- 		if (!IS_ERR(clk)) {
- 			ccount_freq = clk_get_rate(clk);
- 			return;
+--- a/arch/powerpc/kernel/process.c
++++ b/arch/powerpc/kernel/process.c
+@@ -1731,7 +1731,7 @@ void start_thread(struct pt_regs *regs,
+ 		tm_reclaim_current(0);
+ #endif
+ 
+-	memset(regs->gpr, 0, sizeof(regs->gpr));
++	memset(&regs->gpr[1], 0, sizeof(regs->gpr) - sizeof(regs->gpr[0]));
+ 	regs->ctr = 0;
+ 	regs->link = 0;
+ 	regs->xer = 0;
 
 

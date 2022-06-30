@@ -2,103 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE8456269C
+	by mail.lfdr.de (Postfix) with ESMTP id 2697656269B
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232398AbiF3XPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 19:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
+        id S232473AbiF3XPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 19:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232328AbiF3XPj (ORCPT
+        with ESMTP id S232370AbiF3XPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 19:15:39 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4681723C
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:15:35 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id k7so361490ils.8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:15:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=UZIQOA2zru4TOJh6Rd1jEMj2rbMLZO4hPzwYYym7zfc=;
-        b=UKEX7PJwv3X336CoBm7Js/k0kC0bdwYtMCnwQR6hUWsNtK5r1+n1PGfpNRQNAZt76R
-         8aOotBOE0VMv7MHcLk+hdT3F2pY+BiGNBvFJPjwYi5xYxiHF/4AUHzLLr4fagI8o4j6e
-         nW6BMvXY+FKEbek6pBsKsx40kXXXkFqMQJduE=
+        Thu, 30 Jun 2022 19:15:40 -0400
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F79F25F3;
+        Thu, 30 Jun 2022 16:15:38 -0700 (PDT)
+Received: by mail-il1-f170.google.com with SMTP id p13so403445ilq.0;
+        Thu, 30 Jun 2022 16:15:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=UZIQOA2zru4TOJh6Rd1jEMj2rbMLZO4hPzwYYym7zfc=;
-        b=GaTHfooYzYcuIP/GuOK/hDaRmqZcsOsu6mGOtoZxW19wekHgDehFValBxTL9AlbqHo
-         ZZwlS2whcgF26dy2o4hcCXJWaGY4yDmepYAdW4Ijnzd1pzcqGN/Kl5CStC0vai0M31Z/
-         msa3mRC3BE8jQgSOrH513k+W5L1fvedN81apXbVMC4TcdNIX65Y8bJTYfWmY6a53Wns4
-         F4jz0u08DbepTaqCvQBHGSosrXlz2RanAMu+/AAtsAssj/1DsG6iwBBZSZ38/pqc+6uu
-         3KshAhN36YKhRL6uhU6xlqeSBR1N9l0y8w/ppeTrZ7tLM9S8WdDEx8Y1jHczFmgCrsJ6
-         weMA==
-X-Gm-Message-State: AJIora9+zAHtryUE5YSpUmLZaCSaVovRCD5WfihkHKgEm0glC6AuwM4g
-        Ra1rTiqm4FKHChKJ4OQwZXVTJg==
-X-Google-Smtp-Source: AGRyM1uxFHbzxPJY55IVREIVB+Zd32U+Zby5T/7n5HTKGJtCI/eeNqzyg1QzQuIvdOIs3gRjOx3bUw==
-X-Received: by 2002:a05:6e02:13d0:b0:2d9:4396:66ff with SMTP id v16-20020a056e0213d000b002d9439666ffmr6325418ilj.224.1656630934679;
-        Thu, 30 Jun 2022 16:15:34 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id s9-20020a92cc09000000b002d1c94b7143sm8352507ilp.39.2022.06.30.16.15.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 16:15:34 -0700 (PDT)
-Subject: Re: [PATCH 5.10 00/12] 5.10.128-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220630133230.676254336@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <623356e9-f636-583c-b42b-9dc8f02322c6@linuxfoundation.org>
-Date:   Thu, 30 Jun 2022 17:15:33 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KbKoF7QVYBmq2AlkSxV5k4lgb1s7hwhdeCtoubmk3Gs=;
+        b=jBhunu26yKkgLjouCcuSSHE6ypKqfQ6QPs78OUywdGNsC6ja+z+lLWiqHuJsiV1jqh
+         gORxuy6w3yy6FQSmaiSo1gmuTgeF6ntj0jP80xLJmCpEOf5Xc0LhRVe2vJuHgyI4FM8u
+         QzdI6A2ZYN1LXKthm0Cj1OusTNehYUDtpVMXEMR5JnbYVLaFhM0XhVMBogizc6AnMIKo
+         P4tfJsMMOsTJ0+kWJneBGHe43XoWUC9U5Rf2Fdx6NJVCTx1cFhuTxlzZZ3UhFT5cV8HD
+         yEhAq8j3kiK8ldJWDoBPh+uCd3vAm0rS8SV+E62iGM6J2b+rpGQ+px8h/b4pF02Z/7JY
+         1WAQ==
+X-Gm-Message-State: AJIora/g2ynwNgJI2DI/jg1s4+xwm+i4ezD1YLxx79pFccsKI1DACkLe
+        slitFWuavlspaTodb1UCCg==
+X-Google-Smtp-Source: AGRyM1vZy3Jmsw2q9GC4kAnlyLXpaf0K8vwy4daLOXGv4iZ6PHja3Um5ewE62KIMBmU6l+z65fCQBw==
+X-Received: by 2002:a05:6e02:19ca:b0:2da:a2d8:38c0 with SMTP id r10-20020a056e0219ca00b002daa2d838c0mr6867324ill.148.1656630937867;
+        Thu, 30 Jun 2022 16:15:37 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id e24-20020a022118000000b00331d764e5b5sm9163571jaa.97.2022.06.30.16.15.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 16:15:37 -0700 (PDT)
+Received: (nullmailer pid 3512196 invoked by uid 1000);
+        Thu, 30 Jun 2022 23:15:35 -0000
+Date:   Thu, 30 Jun 2022 17:15:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        linux-mmc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH 5/5] dt-bindings: mmc: samsung,s3c6410-sdhci: convert to
+ dtschema
+Message-ID: <20220630231535.GA3512163-robh@kernel.org>
+References: <20220626120342.38851-1-krzysztof.kozlowski@linaro.org>
+ <20220626120342.38851-6-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20220630133230.676254336@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220626120342.38851-6-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/30/22 7:47 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.128 release.
-> There are 12 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Sun, 26 Jun 2022 14:03:42 +0200, Krzysztof Kozlowski wrote:
+> Convert the Samsung SoC SDHCI Controller bindings to DT schema.
 > 
-> Responses should be made by Sat, 02 Jul 2022 13:32:22 +0000.
-> Anything received after that time might be too late.
+> The original bindings were quite old and incomplete, so add during
+> conversion typical (already used) properties like reg, clocks,
+> interrupts.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.128-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
+> The bindings were not precising the clocks, although the upstream DTS
+> and Linux driver were expecting bus clocks in certain patterns in any
+> order.  Document the status quo even though it is not a proper approach
+> for bindings.
 > 
-> thanks,
-> 
-> greg k-h
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/mmc/samsung,s3c6410-sdhci.yaml   | 81 +++++++++++++++++++
+>  .../devicetree/bindings/mmc/samsung-sdhci.txt | 32 --------
+>  2 files changed, 81 insertions(+), 32 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mmc/samsung,s3c6410-sdhci.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mmc/samsung-sdhci.txt
 > 
 
-Compiled and booted on my test system. No dmesg regressions.
-
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+Reviewed-by: Rob Herring <robh@kernel.org>

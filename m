@@ -2,99 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C89E8562721
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4580C562722
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233023AbiF3Xcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 19:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
+        id S232831AbiF3XeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 19:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232931AbiF3Xca (ORCPT
+        with ESMTP id S229563AbiF3XeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 19:32:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5767C564FB;
-        Thu, 30 Jun 2022 16:32:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 142E9B82D3D;
-        Thu, 30 Jun 2022 23:32:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FF4DC34115;
-        Thu, 30 Jun 2022 23:32:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656631946;
-        bh=SkLaMnpJNXsbocnQ0nS6E/TN9Vv3ebN0PiTISVWRHM4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iJmuw/JaXtNbWxiEEwX5gAZ5GwPtdCxOJTSJq+rBAxeOf5gLVuLsdus+gTjfBNJAa
-         try7GffWJQN5Aq/nbgdpMfxV/2S/OEZLUGztAO1eEhB7+XeyzDQVOyuZqhM86zAHgj
-         B2qZHIikwfEzjFyh6hGLGgHO8UVc0nLj/5KX9RJcGvMuNi2mEnT3cA1tnV4J7XcrQa
-         on/nmIy0nXRxmkTLO5zc/o/U13K0luKGJpxwWbSu8dF1PF6C/rQ0sIqH7Ni2tvhmqf
-         1fNHdO/1dXfqEtS34N4hV62cU2TY4I3hnnoEKSDijE1b2CZLWAMesdy0lw4QGifNDn
-         HTa/0thdpipmg==
-Date:   Fri, 1 Jul 2022 02:32:23 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
-        lukas@wunner.de, p.rosenberger@kunbus.com
-Subject: Re: [PATCH v7 08/10] tpm, tpm_tis: Request threaded interrupt handler
-Message-ID: <Yr4yh4u+wSWU1ux5@kernel.org>
-References: <20220629232653.1306735-1-LinoSanfilippo@gmx.de>
- <20220629232653.1306735-9-LinoSanfilippo@gmx.de>
+        Thu, 30 Jun 2022 19:34:03 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198F759243;
+        Thu, 30 Jun 2022 16:34:00 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id fi2so943925ejb.9;
+        Thu, 30 Jun 2022 16:34:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TFqfUF78j/Tk5aGxQYB7DDx8w1mScgju1rP7Z1XpJBA=;
+        b=RSj7apgIcVo7OW5YhyHL12a9tRznXdiBY1kkukptNhHiZJnolm8DsDGaRwU9doP6Bh
+         NF6IwyPZvsaNLVXXEOMKj60upVErX2xVLASyxiW4cv2NKv+lMH5PvvPzEHisl3dN/fJR
+         Ox2kzRHs4goDIv39i8fpvMjm2J9fKF9wAClt8fMjlfWZQ0wZO3fHjKGZTVWpr5pk+hDw
+         N5eD8tj2GJHDquEklVSgJOQ1VlS3gtHDpkXQWz+8v8GKmB3eMtQBuLpUvzArzKdZ07Av
+         lHyf+m2fB60Z9IMj2IbZ9fc0XCSHSNbk/rMUIO66ubcvcX3k09wwiL4X7/tZ4VG29N2M
+         anSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TFqfUF78j/Tk5aGxQYB7DDx8w1mScgju1rP7Z1XpJBA=;
+        b=ExrsJfSu6INmkuqKjNK1RGeZGRkJzJSVph2FSp4QTCqqtKoJA5HH2vsCoL5lR+b6Wk
+         5K4GvQ6uqkQWEiSrOjOc9lziV6rvgRiIiPqB8g7k2fenpDG5LXA18wCeybtSB8zOG7Ph
+         106JKFZbRwcd8JpN6czf0CO+KOvzwDJrD7VrZ5iwbj69QEK+AB3Ex4saQkMKapKrhJD6
+         kSwU218sjZ68eS0AirfnkPRCR7o8tELBbrYXLYII20PYr1csxBfyGWzBz9LWYCmXKhHS
+         mRcQCsMn9G7leq38V6Qd4UTEbxGNgk5xY2xyUhRyq1NGDDDuOdoR3tFygE8NDwKxRNdB
+         3AiA==
+X-Gm-Message-State: AJIora/kYjQVCtesYvQYCgG1yvrb1wAfHSgf4OPO9JlYohGCD9My+Oyf
+        blZCpQLqiKB0AKXMhvdNVqIRMbuLkK8jyv3+R/0=
+X-Google-Smtp-Source: AGRyM1vlteZwA/CUwg+vWaMGq1OuWVA8m5V52q4hDFoMaNMHOgC/3HcHz3o52T4WUGYq2bbCAdPVejXO63d/VvydWgE=
+X-Received: by 2002:a17:907:2706:b0:72a:3216:96bd with SMTP id
+ w6-20020a170907270600b0072a321696bdmr10530712ejk.658.1656632038712; Thu, 30
+ Jun 2022 16:33:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629232653.1306735-9-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220701085657.230b2e13@canb.auug.org.au>
+In-Reply-To: <20220701085657.230b2e13@canb.auug.org.au>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 30 Jun 2022 19:33:46 -0400
+Message-ID: <CADnq5_OrvvPTbWX7_OsWOxnDKKXHOTD2itteOdTqxcr61yLFbQ@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the amdgpu tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 01:26:51AM +0200, Lino Sanfilippo wrote:
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> 
-> The TIS interrupt handler at least has to read and write the interrupt
-> status register. In case of SPI both operations result in a call to
-> tpm_tis_spi_transfer() which uses the bus_lock_mutex of the spi device
-> and thus must only be called from a sleepable context.
-> 
-> To ensure this request a threaded interrupt handler.
-> 
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> Tested-by: Michael Niew??hner <linux@mniewoehner.de>
-> ---
->  drivers/char/tpm/tpm_tis_core.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index e50a2c78de9f..83b31c25e55c 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -802,8 +802,11 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
->  	int rc;
->  	u32 int_status;
->  
-> -	if (devm_request_irq(chip->dev.parent, irq, tis_int_handler, flags,
-> -			     dev_name(&chip->dev), chip) != 0) {
-> +
-> +	rc = devm_request_threaded_irq(chip->dev.parent, irq, NULL,
-> +				       tis_int_handler, IRQF_ONESHOT | flags,
-> +				       dev_name(&chip->dev), chip);
-> +	if (rc) {
->  		dev_info(&chip->dev, "Unable to request irq: %d for probe\n",
->  			 irq);
->  		return -1;
-> -- 
-> 2.25.1
-> 
+Fixed.  Sorry for the noise.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Alex
 
-BR, Jarkko
+On Thu, Jun 30, 2022 at 7:09 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> In commits
+>
+>   41a2d4df3d72 ("drm/amd/display: Fix __nedf2 undefined for 32 bit compilation")
+>   916ae9cc5385 ("drm/amd/display: Fix __muldf3 undefined for 32 bit compilation")
+>   f20eb84561de ("drm/amd/display: Fix __floatunsidf undefined for 32 bit compilation")
+>
+> Fixes tag
+>
+>   Fixes: 9b79abf79c414 ("drm/amd/display: add CLKMGR changes for DCN32/321")
+>
+> has these problem(s):
+>
+>   - Target SHA1 does not exist
+>
+> Maybe you meant
+>
+> Fixes: 265280b99822 ("drm/amd/display: add CLKMGR changes for DCN32/321")
+>
+> In commit
+>
+>   204b022bcbbf ("drm/amd/display: Fix __umoddi3 undefined for 32 bit compilation")
+>
+> Fixes tag
+>
+>   Fixes: 9b0e0d433f74 ("drm/amd/display: Add dependant changes for DCN32/321")
+>
+> has these problem(s):
+>
+>   - Target SHA1 does not exist
+>
+> Maybe you meant
+>
+> Fixes: d3dfceb58de5 ("drm/amd/display: Add dependant changes for DCN32/321")
+>
+> --
+> Cheers,
+> Stephen Rothwell

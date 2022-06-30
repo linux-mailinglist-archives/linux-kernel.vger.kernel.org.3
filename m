@@ -2,102 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54EBF5613D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 649A65613CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233381AbiF3H5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
+        id S233362AbiF3H4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233303AbiF3H4w (ORCPT
+        with ESMTP id S232808AbiF3H4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 30 Jun 2022 03:56:52 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC0C403F2;
-        Thu, 30 Jun 2022 00:56:51 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-31772f8495fso170968337b3.4;
-        Thu, 30 Jun 2022 00:56:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pEG1/5zis6fn9rNZ4cGko3gg4B1FcMMHyqkPX5BcdX8=;
-        b=lUC9kYaRwM0BjvSJzSRdKvwLFR+U74/hzLpRgkBkjOYr3XOjlj8CgqHmG2gaxHtuXW
-         1p75RyRI75cVj0hLo6CN4AvRSRqvF8919+hwoZ+eS6PhYrHH8dnELlYJpoDseAw7VhOo
-         YvtV6hmG/9VwnLXEUbU58K+8kqJhnUsZWZJUfHjM7H/QyIeUdrBB2NtsHrvGxBrWj8zn
-         yWrCYFkZpCdJ9Cv1Wykh5yWKbAOic2NH8/ekh+lNWvY30npihYkkuaKywkv1Mml0gnUR
-         ko0SCMOC/MoRxXjcrijqOJxmOCmK9mwWlNQoGhTEgsz9JYEy3Ek6VyKRMaW9lGQGlnBh
-         ZeJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pEG1/5zis6fn9rNZ4cGko3gg4B1FcMMHyqkPX5BcdX8=;
-        b=F3pUhr1e3yoggIiQXQN/2ZICZsMt8gSHkzD5FshbaeCT0/EzmIHmdK8u9b+TmkCZPW
-         22f6Wy7TRP1R7cHQajG1yMa184MKEfQ0gRpTiwP25iMvmzwT8rTwlNYVJAzblITq9sbP
-         LIH4Ogot65byst8OJWyHKCntZNs1Y9RHfUviArbsRn6G5b0TgBoSO0rZVVVD/HbRqkHM
-         zacfozMnKT3dpTg80gbZzSgKnGPqKHBByaXIWsc1IxfPUVfs0qWMQOnL61Iqn685T2m7
-         SVHENeLrYddwynI/6KGay9x3GAmD3L1s/Uuc126QKeS+joe5K8Oxxt+/rZM2Q1nAAf17
-         bWkw==
-X-Gm-Message-State: AJIora9CQ5FV9dTzXPmsMwrZrliptktsGwWkBeL7Qa5u4A081xXenXrd
-        7hFwlPrtyoF1ZBNFcA25H23Wcg+YIFr+cDCbYONzUJyoK4zmaQ==
-X-Google-Smtp-Source: AGRyM1so4U5iXRDnUOmFWKUYfH0VuZUgTl25P/lq+qTjChyyYigKaV1z5jimYDiiHWkd9cptmD5wDFJk6IJadT5Wtj0=
-X-Received: by 2002:a81:2386:0:b0:317:6586:8901 with SMTP id
- j128-20020a812386000000b0031765868901mr8806187ywj.195.1656575810965; Thu, 30
- Jun 2022 00:56:50 -0700 (PDT)
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AB23FDA8;
+        Thu, 30 Jun 2022 00:56:50 -0700 (PDT)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1o6p2a-00Cxbn-FN; Thu, 30 Jun 2022 17:56:46 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Thu, 30 Jun 2022 15:56:44 +0800
+Date:   Thu, 30 Jun 2022 15:56:44 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Subject: [GIT PULL] Crypto Fixes for 5.19
+Message-ID: <Yr1XPJsAH2l1cx3A@gondor.apana.org.au>
+References: <20210817013601.GA14148@gondor.apana.org.au>
+ <20210929023843.GA28594@gondor.apana.org.au>
+ <20211029041408.GA3192@gondor.apana.org.au>
+ <20211112104815.GA14105@gondor.apana.org.au>
+ <YcKz4wHYTe3qlW7L@gondor.apana.org.au>
+ <YgMn+1qQPQId50hO@gondor.apana.org.au>
+ <YjE5yThYIzih2kM6@gondor.apana.org.au>
+ <YkUdKiJflWqxBmx5@gondor.apana.org.au>
+ <YpC1/rWeVgMoA5X1@gondor.apana.org.au>
+ <Yqw7bf7ln6vtU/VH@gondor.apana.org.au>
 MIME-Version: 1.0
-References: <20220628214511.37373-1-andriy.shevchenko@linux.intel.com> <4ae74f48-c51c-cb74-548d-46ff9a9a7a7b@linux.intel.com>
-In-Reply-To: <4ae74f48-c51c-cb74-548d-46ff9a9a7a7b@linux.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 30 Jun 2022 09:56:11 +0200
-Message-ID: <CAHp75VfY_4CA36MHSi7=VtmcGdXi5kL9aB1HYy2WOJNqc-6L9g@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] serial: 8250_dw: Drop PM ifdeffery
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yqw7bf7ln6vtU/VH@gondor.apana.org.au>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 9:42 AM Ilpo J=C3=A4rvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
->
-> On Wed, 29 Jun 2022, Andy Shevchenko wrote:
->
-> > Drop CONFIG_PM and CONFIG_PM_SLEEP ifdeffery while converting dw8250_pm=
-_ops
-> > to use new PM macros.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->
-> Reviewed-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
->
-> Not directily related to the patch itself but do you have any idea why
-> 1a3c7bb08826 ("PM: core: Add new *_PM_OPS macros, deprecate old ones")
-> didn't wrap RUNTIME_PM_OPS() pointers with pm_ptr()? I'm asking this
-> because in SET_RUNTIME_PM_OPS() the callbacks are only created with
-> #ifdef CONFIG_PM so I'd have expected RUNTIME_PM_OPS() to maintain that
-> behavior but it didn't? Was it just an oversight that should be fixed?
+Hi Linus:
 
-I have had the same question, but I think it might be related to how
-PM runtime functions when there is no respective configuration option
-set.
+The following changes since commit abfed87e2a12bd246047d78c01d81eb9529f1d06:
 
-+Cc: Rafael.
+  crypto: memneq - move into lib/ (2022-06-12 14:51:51 +0800)
 
---=20
-With Best Regards,
-Andy Shevchenko
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git tags/v5.19-p3 
+
+for you to fetch changes up to 87d044096ea62f1f230e8c4679ee8abf03266f64:
+
+  crypto: ccp - Fix device IRQ counting by using platform_irq_count() (2022-06-24 17:09:01 +0800)
+
+----------------------------------------------------------------
+This push fixes a regression that breaks the ccp driver.
+----------------------------------------------------------------
+
+Tom Lendacky (1):
+      crypto: ccp - Fix device IRQ counting by using platform_irq_count()
+
+ drivers/crypto/ccp/sp-platform.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
+
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

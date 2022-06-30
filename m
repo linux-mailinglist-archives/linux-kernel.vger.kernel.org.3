@@ -2,196 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552C4560DD7
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 02:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB969560DE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 02:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbiF3AKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 20:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
+        id S231389AbiF3ASn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 20:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbiF3AKK (ORCPT
+        with ESMTP id S230241AbiF3ASm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 20:10:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E0063E6
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:10:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED68C61EB3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:10:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E57C3411E;
-        Thu, 30 Jun 2022 00:10:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656547808;
-        bh=aEJLDcyB+cI1alok9yAR+0Y4kkMSOgI73S+hekkJ5gg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=F+leAMVAZ6dGX3ie/JQaVAZneTwm/xchd9Gc1OW5HHLSpSYpEaUg33FzdSY3feOu7
-         dza5H/gLJGUnhnmEDsefAVC9Wd1Pm1Jj45UA+jZ5wn5Xfts0ufCvTDUpsBXzAlQB9F
-         cQr/gPsi/6RN/ikBQ1svIRIISJNJI8elRhK2CfPVhMlZddhdZ4FfqSe/v+co+nsRM6
-         MG3vAcmruN7Y8ku/xSUvQS7NyLCbGf3n3PnuXE8HenedrfvPaqutfVXqmAnBhIxv1b
-         YDEHXpdklo1ErfxDTiwJOQFOO3dtBGtdHln+wUM4eG6KxK0NFg3YlE1SovlITbefbH
-         fDMfMyIL14ohQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E51335C0E5F; Wed, 29 Jun 2022 17:10:07 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 17:10:07 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Phil Auld <pauld@redhat.com>,
-        Alex Belits <abelits@marvell.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Marco Elver <elver@google.com>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Yu Liao <liaoyu15@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        kernel test robot <lkp@intel.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 00/20] rcu/context-tracking: Merge RCU eqs-dynticks
- counter to context tracking v5
-Message-ID: <20220630001007.GP1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220628131619.2109651-1-frederic@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628131619.2109651-1-frederic@kernel.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 29 Jun 2022 20:18:42 -0400
+Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5F61EEF4
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:18:41 -0700 (PDT)
+Received: by mail-il1-x14a.google.com with SMTP id g9-20020a056e020d0900b002d958b2a86dso9831755ilj.14
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 17:18:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=SDDWjQKRaEGkTJ3I32oXUEVaP3itRNsscC5r/hKsp4o=;
+        b=kC+o6UunKcWa3JkImof0IuxjAt0JubhMzUHBxFu72NIFTrsuiWR8qiuPWPtXz8LpUH
+         KyG/M3ohVzxfofN5eycFVNuy3of1Hex0WFzvGWfgBH7XrVEhSfUWK9O36KrS9bArfIqt
+         wifblZuakeSQZhns5bW84J2WrKXT4DfXfX2+X8T3j7UlUssG3YShhx11si4Avr+XTfps
+         ZDi8eWTrfyugN7s96TZFeihmwOym9s0HecXYekiOuXExdhVbTQY2BPkmELp3eXD8W09/
+         Z6HnUjAntyZD2PAIukptDQTTh3l8UQ7NIgDXAwB2nKpYcbU0dH19z+PKnNwhM06YDdfk
+         DngA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=SDDWjQKRaEGkTJ3I32oXUEVaP3itRNsscC5r/hKsp4o=;
+        b=z7Xd9ym+D1x7hebqrwHIonnn6KV47XcGLqDXhpjWtHv37WTUowHOTpYf6hP3cGSk4t
+         QyhhG87k67vEsML4xlqm49YWc0gJpMRfDExJ7OB9RCr8r2cpZRkN4ae2NwJNw98i8ku1
+         Qw8WczAcKfmnwadyTmYRlDBMhWYnnY48xa4zyLPPDBvTG/xAND37+ZTNtFj6zfnej3LT
+         fS+6PpcBmy4iQ2xQ2EGlxmaTuS5hdevPspevn/6ZEBJ0wmMsqF4vWc3aiyg0Q6x0QfVJ
+         LSt7WHapr1j3hMJKGpicYzt5HsVpkNIvktb9ugD6Vqg6fzU8CCqmThuZ6ZoaVuwrK2/o
+         4ACA==
+X-Gm-Message-State: AJIora9MP0giN5dThtoaR2hxkp3skaOM3tXU1QRfx5+jT5xZJbRKfeV9
+        9cMbsv8to6H4/deFODvyXrtU6YmqmGhAYA==
+X-Google-Smtp-Source: AGRyM1u2VOaMT7wpjVwAzV+WuTwvxd+1kRwUZNFZr/YOCZVkewlcYwZK1N98RZe/v+BuxXzQOIGzLegnXpVsbg==
+X-Received: from riochico.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:b3e])
+ (user=rsilvera job=sendgmr) by 2002:a02:ad04:0:b0:339:e044:64fa with SMTP id
+ s4-20020a02ad04000000b00339e04464famr3583148jan.233.1656548320477; Wed, 29
+ Jun 2022 17:18:40 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 00:18:25 +0000
+Message-Id: <20220630001825.3905089-1-rsilvera@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH] perf inject: Add a command line option to specify build ids.
+From:   Raul Silvera <rsilvera@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Raul Silvera <rsilvera@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 03:15:59PM +0200, Frederic Weisbecker wrote:
-> This is the same as rcu:ctxt.2022.06.21a (no rebase) with minimal changes
-> on the following patches:
-> 
-> * [06/20] fix missing function renames on xtensa (thanks Max Filippov, SOB added)
-> * [09/20] fix missing Kconfig renames on xtensa (thanks Max Filippov, SOB added)
->           and also on loongarch.
-> * [18/20] remove unecessary and buggy notrace from rcu_preempt_deferred_qs(). It's called
->           after intrumentation_begin() in EQS functions.
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-> 	rcu/ctxt.2022.06.27
-> 
-> HEAD: cb0045adde39bba5ffc620a184b1685a869569d8
+This commit adds the option --known-build-ids to perf inject.
+It allows the user to explicitly specify the build id for a given
+path, instead of retrieving it from the current system. This is
+useful in cases where a perf.data file is processed on a different
+system from where it was collected, or if some of the binaries are
+no longer available.
 
-Thank you!  I have pulled this into -rcu as branch ctxt.2022.06.29a.
-If testing goes well, I will re-merge it into branch "dev".
+The build ids and paths are specified in pairs in the command line.
+Using the file:// specifier, build ids can be loaded from a file
+directly generated by perf buildid-list. This is convenient to copy
+build ids from one perf.data file to another.
 
-The diffs from the earlier version are indeed small, as promised.
+** Example: In this example we use perf record to create two
+perf.data files, one with build ids and another without, and use
+perf buildid-list and perf inject to copy the build ids from the
+first file to the second.
 
-I did reword the authorship of 06/20 and 09/20 because this looked to
-me to be feedback rather than authorship.  I credited Max like this:
+$ perf record ls /tmp                  # Create perf.data file
+$ perf record --no-buildid ls /tmp -o perf.data.no-buildid
+$ perf buildid-list > /tmp/build-ids.txt
+$ perf inject -b --known-build-ids='file:///tmp/build-ids.txt' \
+$  -i perf.data.no-buildid -o perf.data.buildid
 
-[ frederic: Apply Max Filippov feedback. ]
+Signed-off-by: Raul Silvera <rsilvera@google.com>
+---
+ tools/perf/builtin-inject.c | 57 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-If you feel strongly about Max having authorship, please set this up
-using the Co-developed-by rules shown in submitting-patches.rst and send
-me an update.
+diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+index a75bf11585b5..667b942f870e 100644
+--- a/tools/perf/builtin-inject.c
++++ b/tools/perf/builtin-inject.c
+@@ -21,6 +21,7 @@
+ #include "util/data.h"
+ #include "util/auxtrace.h"
+ #include "util/jit.h"
++#include "util/string2.h"
+ #include "util/symbol.h"
+ #include "util/synthetic-events.h"
+ #include "util/thread.h"
+@@ -35,6 +36,7 @@
+ 
+ #include <linux/list.h>
+ #include <linux/string.h>
++#include <ctype.h>
+ #include <errno.h>
+ #include <signal.h>
+ 
+@@ -59,6 +61,8 @@ struct perf_inject {
+ 	struct itrace_synth_opts itrace_synth_opts;
+ 	char			event_copy[PERF_SAMPLE_MAX_SIZE];
+ 	struct perf_file_section secs[HEADER_FEAT_BITS];
++	const char		*known_build_ids_source;
++	struct strlist		*known_build_ids;
+ };
+ 
+ struct event_entry {
+@@ -570,9 +574,43 @@ static int dso__read_build_id(struct dso *dso)
+ 	return dso->has_build_id ? 0 : -1;
+ }
+ 
++static bool perf_inject__lookup_known_build_id(struct perf_inject *inject,
++					       struct dso *dso)
++{
++	struct str_node *pos;
++	int bid_len;
++
++	strlist__for_each_entry(pos, inject->known_build_ids) {
++		const char *space;
++
++		pos->s = skip_spaces(pos->s);
++		space = strstr(pos->s, " ");
++		if (space == NULL ||
++		    !strcmp(dso->long_name, skip_spaces(space)))
++			continue;
++		bid_len = space - pos->s;
++		if (bid_len == 0 || bid_len / 2 > BUILD_ID_SIZE)
++			return false;
++		for (int ix = 0; 2 * ix + 1 < bid_len; ++ix) {
++			if (!isxdigit(pos->s[2 * ix]) ||
++			    !isxdigit(pos->s[2 * ix + 1]))
++				return false;
++
++			dso->bid.data[ix] = (hex(pos->s[2 * ix]) << 4 |
++					     hex(pos->s[2 * ix + 1]));
++		}
++		dso->bid.size = bid_len / 2;
++		dso->has_build_id = 1;
++		return true;
++	}
++	return false;
++}
++
+ static int dso__inject_build_id(struct dso *dso, struct perf_tool *tool,
+ 				struct machine *machine, u8 cpumode, u32 flags)
+ {
++	struct perf_inject *inject = container_of(tool, struct perf_inject,
++						  tool);
+ 	int err;
+ 
+ 	if (is_anon_memory(dso->long_name) || flags & MAP_HUGETLB)
+@@ -580,6 +618,10 @@ static int dso__inject_build_id(struct dso *dso, struct perf_tool *tool,
+ 	if (is_no_dso_memory(dso->long_name))
+ 		return 0;
+ 
++	if (inject->known_build_ids != NULL &&
++	    perf_inject__lookup_known_build_id(inject, dso))
++		return 1;
++
+ 	if (dso__read_build_id(dso) < 0) {
+ 		pr_debug("no build_id found for %s\n", dso->long_name);
+ 		return -1;
+@@ -1082,6 +1124,9 @@ int cmd_inject(int argc, const char **argv)
+ 			    "Inject build-ids into the output stream"),
+ 		OPT_BOOLEAN(0, "buildid-all", &inject.build_id_all,
+ 			    "Inject build-ids of all DSOs into the output stream"),
++		OPT_STRING(0, "known-build-ids", &inject.known_build_ids_source,
++			   "buildid path [buildid path...]",
++			   "build-ids to use for specific files"),
+ 		OPT_STRING('i', "input", &inject.input_name, "file",
+ 			   "input file name"),
+ 		OPT_STRING('o', "output", &inject.output.path, "file",
+@@ -1215,6 +1260,18 @@ int cmd_inject(int argc, const char **argv)
+ 		 */
+ 		inject.tool.ordered_events = true;
+ 		inject.tool.ordering_requires_timestamps = true;
++		if (inject.known_build_ids_source != NULL) {
++			struct strlist *known_build_ids;
++
++			known_build_ids = strlist__new(
++			    inject.known_build_ids_source, NULL);
++
++			if (known_build_ids == NULL) {
++				pr_err("Couldn't parse known build ids.\n");
++				goto out_delete;
++			}
++			inject.known_build_ids = known_build_ids;
++		}
+ 	}
+ 
+ 	if (inject.sched_stat) {
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
 
-							Thanx, Paul
-
-> Thanks,
-> 	Frederic
-> ---
-> 
-> Frederic Weisbecker (19):
->       context_tracking: Remove unused context_tracking_in_user()
->       context_tracking: Add a note about noinstr VS unsafe context tracking functions
->       context_tracking: Rename __context_tracking_enter/exit() to __ct_user_enter/exit()
->       context_tracking: Rename context_tracking_user_enter/exit() to user_enter/exit_callable()
->       context_tracking: Rename context_tracking_enter/exit() to ct_user_enter/exit()
->       context_tracking: Rename context_tracking_cpu_set() to ct_cpu_track_user()
->       context_tracking: Split user tracking Kconfig
->       context_tracking: Take idle eqs entrypoints over RCU
->       context_tracking: Take IRQ eqs entrypoints over RCU
->       context_tracking: Take NMI eqs entrypoints over RCU
->       rcu/context-tracking: Remove rcu_irq_enter/exit()
->       rcu/context_tracking: Move dynticks counter to context tracking
->       rcu/context_tracking: Move dynticks_nesting to context tracking
->       rcu/context_tracking: Move dynticks_nmi_nesting to context tracking
->       rcu/context-tracking: Move deferred nocb resched to context tracking
->       rcu/context-tracking: Move RCU-dynticks internal functions to context_tracking
->       rcu/context-tracking: Remove unused and/or unecessary middle functions
->       context_tracking: Convert state to atomic_t
->       MAINTAINERS: Add Paul as context tracking maintainer
-> 
-> Paul E. McKenney (1):
->       context_tracking: Use arch_atomic_read() in __ct_state for KASAN
-> 
-> 
->  .../RCU/Design/Requirements/Requirements.rst       |  10 +-
->  Documentation/RCU/stallwarn.rst                    |   6 +-
->  .../time/context-tracking/arch-support.txt         |   6 +-
->  MAINTAINERS                                        |   1 +
->  arch/Kconfig                                       |   8 +-
->  arch/arm/Kconfig                                   |   2 +-
->  arch/arm/kernel/entry-common.S                     |   4 +-
->  arch/arm/kernel/entry-header.S                     |  12 +-
->  arch/arm/mach-imx/cpuidle-imx6q.c                  |   5 +-
->  arch/arm64/Kconfig                                 |   2 +-
->  arch/arm64/kernel/entry-common.c                   |  14 +-
->  arch/csky/Kconfig                                  |   2 +-
->  arch/csky/kernel/entry.S                           |   8 +-
->  arch/loongarch/Kconfig                             |   2 +-
->  arch/mips/Kconfig                                  |   2 +-
->  arch/powerpc/Kconfig                               |   2 +-
->  arch/powerpc/include/asm/context_tracking.h        |   2 +-
->  arch/riscv/Kconfig                                 |   2 +-
->  arch/riscv/kernel/entry.S                          |  12 +-
->  arch/sparc/Kconfig                                 |   2 +-
->  arch/sparc/kernel/rtrap_64.S                       |   2 +-
->  arch/x86/Kconfig                                   |   4 +-
->  arch/x86/mm/fault.c                                |   2 +-
->  arch/xtensa/Kconfig                                |   2 +-
->  arch/xtensa/kernel/entry.S                         |   8 +-
->  drivers/acpi/processor_idle.c                      |   5 +-
->  drivers/cpuidle/cpuidle-psci.c                     |   8 +-
->  drivers/cpuidle/cpuidle-riscv-sbi.c                |   8 +-
->  drivers/cpuidle/cpuidle.c                          |   9 +-
->  include/linux/context_tracking.h                   |  95 ++--
->  include/linux/context_tracking_irq.h               |  21 +
->  include/linux/context_tracking_state.h             | 113 +++-
->  include/linux/entry-common.h                       |  10 +-
->  include/linux/hardirq.h                            |  12 +-
->  include/linux/rcupdate.h                           |  17 +-
->  include/linux/rcutiny.h                            |   6 -
->  include/linux/rcutree.h                            |   9 +-
->  include/linux/tracepoint.h                         |   4 +-
->  init/Kconfig                                       |   4 +-
->  kernel/cfi.c                                       |   4 +-
->  kernel/context_tracking.c                          | 617 +++++++++++++++++++--
->  kernel/cpu_pm.c                                    |   8 +-
->  kernel/entry/common.c                              |  16 +-
->  kernel/extable.c                                   |   4 +-
->  kernel/locking/lockdep.c                           |   2 +-
->  kernel/rcu/Kconfig                                 |   2 +
->  kernel/rcu/rcu.h                                   |   4 -
->  kernel/rcu/tree.c                                  | 476 +---------------
->  kernel/rcu/tree.h                                  |   8 -
->  kernel/rcu/tree_exp.h                              |   2 +-
->  kernel/rcu/tree_plugin.h                           |  38 +-
->  kernel/rcu/tree_stall.h                            |   8 +-
->  kernel/rcu/update.c                                |   2 +-
->  kernel/sched/core.c                                |   2 +-
->  kernel/sched/idle.c                                |  10 +-
->  kernel/sched/sched.h                               |   1 +
->  kernel/softirq.c                                   |   4 +-
->  kernel/time/Kconfig                                |  37 +-
->  kernel/time/tick-sched.c                           |   2 +-
->  kernel/trace/trace.c                               |   8 +-
->  60 files changed, 934 insertions(+), 764 deletions(-)

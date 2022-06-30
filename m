@@ -2,73 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE765620D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 19:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3F45620EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 19:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236047AbiF3RGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 13:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35680 "EHLO
+        id S234330AbiF3RKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 13:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236030AbiF3RGl (ORCPT
+        with ESMTP id S235304AbiF3RKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 13:06:41 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8333B3E5FD
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:06:40 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id b12-20020a17090a6acc00b001ec2b181c98so3767375pjm.4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:06:40 -0700 (PDT)
+        Thu, 30 Jun 2022 13:10:46 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7A533880
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:10:44 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-317710edb9dso200947b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 10:10:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eAr7PQsxKeew00/CVr7ZzHucmGcjpALBBy+n+XFui6I=;
-        b=Fwuwe3ZO30tghfWbLzVhLTW/P804T2Iz/JWwmhIB0XzUV4tCO5Uy0L2KikEz2oooFz
-         hOR6Xk/OVmzbBBFFm7kfk/KAB/7BxuheUHQtleYNMVMkEpp33O5kjAbL3t9lGN9IfIGN
-         ctq1Ws8as/OXK1bwSua1Y6wC7GX1cUBXst0QkpET2rHi221GVeFqtFK3LtiVfDlUy12b
-         rVeoI9PeueFXnVBx3U5ip/zqlKSuY4kHNz4z/xLE1bOA7VNo1RPAS02cbgEhVTeRCXoW
-         wV1lft9xJZdMU9U+QbkE1JJaOydnZelnNI6qwx19uIbPyhWhP9XsUgCKEfvxEMsGpQDj
-         gxeA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C4tyH3Wyg1tODv7Sm2smKsBoDS+J8nqhwGQaq6vu3uY=;
+        b=gnYGD2jS1FIJGGpq0jD3UITkms56aodG5VSVUw4KGb2NOASUoMBZF4GAF2pCZD4yuT
+         1BUfIMSa7UwkVNInhHWxVQsdUY45IwPorOfEp3ZMwrgvpq7Eq/wAAm816woi+NAnVzkO
+         puOGIsOCuaPz5ZUYu6Y4EcKmJFWfdgBhBGv2w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eAr7PQsxKeew00/CVr7ZzHucmGcjpALBBy+n+XFui6I=;
-        b=5KiKIWQS7/tQS+knHf5QugiZ2Bj2EdfIQ/5Wnse4Pb0ZrtdLhsAzlDzlzOG/bKkXpn
-         pRKV0aD7Y9Ok52OudcFi3718clbCCEB1RV+QZ2K8CdU7d77cGX0YDY0PkgaH9Vm7JIoT
-         CtYjP9nmNX39ijlcDY9dJgoYaFGn//+wnigp5CfG+gekOX+2wyY3280PfAEGft4AWr4M
-         qsRBlepYwgewzxC3e0OuQXv2LX7g7B0p3Xi2CWva73WXalNrJe39haf35ujXBM6gAdLe
-         qT/xXS/H3HYUhLgyi15NJC5bpPFg7zfUtvbhkym0j3URrXuNmOmfIYno7su8coKxD9fV
-         YK4w==
-X-Gm-Message-State: AJIora9vWkhWbw4bxcQzYgG5iaztSzH1PvDNT6i9SHUysw4pDAicWU6i
-        eOX9gqsZJlfi0Bh87aVftiurWA==
-X-Google-Smtp-Source: AGRyM1tQlkoaEbHG6+vV4lZEf6QKE6dhZv4RO/68eWlgyxt5ZkZDUlagQJLqtw41qfD37FBmZiz7QA==
-X-Received: by 2002:a17:902:e381:b0:16a:1b5d:5438 with SMTP id g1-20020a170902e38100b0016a1b5d5438mr16387906ple.147.1656608799905;
-        Thu, 30 Jun 2022 10:06:39 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id f24-20020a63f118000000b0040caab35e5bsm7580699pgi.89.2022.06.30.10.06.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 10:06:38 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 11:06:36 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-doc@vger.kernel.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh@kernel.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-next@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH next] Documentation: coresight: escape coresight bindings
- file wildcard
-Message-ID: <20220630170636.GA2090408@p14s>
-References: <20220630101317.102680-1-bagasdotme@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C4tyH3Wyg1tODv7Sm2smKsBoDS+J8nqhwGQaq6vu3uY=;
+        b=qxtJEIIhXfSJorBMn2NWo7TOVXdz1wo1/lTXkqSjgHw28q0znpoU4kRlcGlYjcCGZ4
+         wD0kIZdrPLnsbKieWSEqIOLOkRoOr5oG7nTBwS28ieLqKlXmo/z/djWD92RgIHLrqHaP
+         lEt0jxI/iBPACSQ8nhuEzPp6o4KAK36yyho0i6WxlPWUuvTyUzXSrMi7468pSk+C073y
+         uxAtPoo5+gEHuul8O7GCjs7CQcjEVXpsetEK9WCwanYwPnUdDottax3nIELqVMJaLNVM
+         4RwxHaUc08YEWOLSqE9djAVSxyqXq97kv1wREEcmbAddcoOdSM6/KGvp+6X0H2G2RMPZ
+         VXfw==
+X-Gm-Message-State: AJIora9xnEX5+5AlslRf5tlo0mFBepj+XWU4/DWCdAuP86w2jU+kuiEy
+        sDsv+IAtyLh+93nBkuKpDu9AkmrIVnANXYfpyI0nWA==
+X-Google-Smtp-Source: AGRyM1uMIL9QXjLW/PVKIiDg5RY+SUgQa/orAvMkYfMDivtbvx25fWOLwDlCvs4yZik4khUw0Q+DzoBnfW9oVFDgjCg=
+X-Received: by 2002:a81:5745:0:b0:318:99e6:3279 with SMTP id
+ l66-20020a815745000000b0031899e63279mr11262932ywb.311.1656609043950; Thu, 30
+ Jun 2022 10:10:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220630101317.102680-1-bagasdotme@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220622173605.1168416-1-pmalani@chromium.org>
+ <20220622173605.1168416-2-pmalani@chromium.org> <20220627210407.GA2905757-robh@kernel.org>
+ <CACeCKackdbDZrk5fk7qyMwSdTdzyTS=m1vHPFnQOj672W=2nOA@mail.gmail.com>
+ <20220628182336.GA711518-robh@kernel.org> <CAEXTbpex9nxP-nyPWvSBchAW4j3C4MZfVHTb=5X0iSLY1bSAKg@mail.gmail.com>
+ <CAEXTbpf_jxK-R5aA81FCbpAH4bChA2B9+8qExZUbA7Y+Ort=Gg@mail.gmail.com>
+ <CAL_Jsq+C04RXLtm6Ac85Ru3EGwJbqV_UD3_dDWVrKvFSvdm7Ng@mail.gmail.com>
+ <CAE-0n53ers881LOTCEmKDDxJQt+5vvXJSURs=o6TcOiR5m_EAw@mail.gmail.com>
+ <CACeCKacJnnk4_dXEX7XiboOWrYpfAcE=ukP63agVAYUxWR9Vbg@mail.gmail.com> <CAE-0n50jm1ovUcBC0GCQJszk-4u+0vDQtAxHxsu9SLyn_CkQuQ@mail.gmail.com>
+In-Reply-To: <CAE-0n50jm1ovUcBC0GCQJszk-4u+0vDQtAxHxsu9SLyn_CkQuQ@mail.gmail.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Thu, 30 Jun 2022 10:10:32 -0700
+Message-ID: <CACeCKadtmGZ5iuTHdMms6ZHGn-Uv=MbcdtqmUzqCb=5WHuPj2Q@mail.gmail.com>
+Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Pin-yen Lin <treapking@chromium.org>,
+        Rob Herring <robh@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,55 +97,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 05:13:17PM +0700, Bagas Sanjaya wrote:
-> Stephen Rothwell reported htmldocs warning:
-> 
-> Documentation/trace/coresight/coresight.rst:133: WARNING: Inline emphasis start-string without end-string.
-> 
-> The warning above is due to unescaped wildcard asterisk (*) on CoreSight
-> devicetree binding filename, which confuses Sphinx as emphasis instead.
-> 
-> Escape the wildcard to fix the warning.
-> 
-> Link: https://lore.kernel.org/linux-next/20220630173801.41bf22a2@canb.auug.org.au/
-> Fixes: 3c15fddf312120 ("dt-bindings: arm: Convert CoreSight bindings to DT schema")
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Cc: Mike Leach <mike.leach@linaro.org>
-> Cc: Leo Yan <leo.yan@linaro.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: coresight@lists.linaro.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-next@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  Documentation/trace/coresight/coresight.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+(CC+ Bjorn)
+
+On Wed, Jun 29, 2022 at 4:55 PM Stephen Boyd <swboyd@chromium.org> wrote:
 >
+> Quoting Prashant Malani (2022-06-29 15:55:10)
+> > On Wed, Jun 29, 2022 at 2:58 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> > >
+> > > My understanding is there are 4 DP lanes on it6505 and two lanes are
+> > > connected to one usb-c-connector and the other two lanes are connected
+> > > to a different usb-c-connector. The IT6505 driver will send DP out on
+> > > the associated two DP lanes depending on which usb-c-connector has DP
+> > > pins assigned by the typec manager.
+> [...]
+> >
+> > We can adopt this binding, but from what I gathered in this thread, that
+> > shouldn't be done, because IT6505 isn't meant to be aware of Type-C
+> > connections at all.
+>
+> How will the driver know which usb-c-connector to route DP to without
+> making the binding aware of typec connections?
 
-Applied.
+I agree with you; I'm saying my interpretation of the comments of this
+thread are that it's not the intended usage of the it6505 part, so the driver
+shouldn't be updated to support that.
 
-Thanks,
-Mathieu
+>
+> HPD can be signalled out of band, or not at all (no-hpd). I suspect it's
+> valid to ignore/disconnect the HPD pin here and start/stop DP when, for
+> example, the HPD pin toggles within a dp-connector. HPD could be
+> signaled directly to the kernel via an out of band gpio going from the
+> dp-connector to the SoC. In this case HPD for each dp-connector could be
+> a different gpio and the driver may be required to arbitrate between the
+> two dp-connectors with some 'first to signal wins' logic or something.
 
-> diff --git a/Documentation/trace/coresight/coresight.rst b/Documentation/trace/coresight/coresight.rst
-> index 529b7c80e6f353..1644a0244ad10a 100644
-> --- a/Documentation/trace/coresight/coresight.rst
-> +++ b/Documentation/trace/coresight/coresight.rst
-> @@ -130,7 +130,7 @@ Misc:
->  Device Tree Bindings
->  --------------------
->  
-> -See Documentation/devicetree/bindings/arm/arm,coresight-*.yaml for details.
-> +See Documentation/devicetree/bindings/arm/arm,coresight-\*.yaml for details.
->  
->  As of this writing drivers for ITM, STMs and CTIs are not provided but are
->  expected to be added as the solution matures.
-> 
-> base-commit: 6cc11d2a1759275b856e464265823d94aabd5eaf
-> -- 
-> An old man doll... just what I always wanted! - Clara
-> 
+Sure, it's possible. I just didn't see anything in the anx7625 datasheet
+to suggest it supported 2x1-lane DP outputs.
+
+For that matter I don't think even it6505 supports > 1 DP sink (based
+on my reading of the datasheet), but I don't have too much experience
+with these parts.
+
+
+> > My interpretation of the current mode-switch search code [1] is that
+> > a top level property of "mode-switch" is required.
+>
+> Yeah that's how it is right now, but does it have to stay that way?
+> Could the code search the graph and look for a matching node that's
+> registered with the typec framework?
+
+I'll have to get back to you on that after reading the code a bit more.
+Maybe Heikki or Bjorn have some comments about it.
+The ACPI Type-C ports do require a device handle labelled "mode-switch"
+which points to the switch device.

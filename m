@@ -2,200 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9251756194F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 591D8561955
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 13:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234777AbiF3LfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 07:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
+        id S235073AbiF3Lgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 07:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232927AbiF3LfR (ORCPT
+        with ESMTP id S230363AbiF3Lgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 07:35:17 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F389A5A445;
-        Thu, 30 Jun 2022 04:35:15 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VHsMSXI_1656588911;
-Received: from 30.97.57.27(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VHsMSXI_1656588911)
-          by smtp.aliyun-inc.com;
-          Thu, 30 Jun 2022 19:35:12 +0800
-Message-ID: <fdd06581-a8aa-5948-6043-fc7e3381eb2d@linux.alibaba.com>
-Date:   Thu, 30 Jun 2022 19:35:11 +0800
+        Thu, 30 Jun 2022 07:36:40 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F7E5A446;
+        Thu, 30 Jun 2022 04:36:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=YUegSAtrHJuf++oLd2AkDHyUJS1bF226T9zeUPibzdI=; b=a7IyqWkdA70BWwqXqNN4nS6fTV
+        52K3yOWMROiMYthiioE0NOH9Ir1XwJG5ltYsjVradu9PNBobke0xtZqhLqFjls/9RKQR56sB49MrW
+        UYUziAQa0i7ekm0yvuTbY0H2eeMjLvComguGJCv7m4g410lnooasvXKDqntBVQx98MsSy9rP+DFtH
+        o2EK19blD/VcqDrCuffcK/Up1avcHPtMBF1Aa1x01aIlWqtC+C7emT76eSYTUdp08/x4ZNczFdWPL
+        dRPwpftJN3R++G3Ac//nPYu5d3WJDfL8VpUNVA+p/YzfUMztYnIBtQrIWQySDu3wOyE55YtMIPaB4
+        pFXs5xRg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33114)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1o6sTI-0004Lw-8e; Thu, 30 Jun 2022 12:36:32 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1o6sTB-0006kW-4c; Thu, 30 Jun 2022 12:36:25 +0100
+Date:   Thu, 30 Jun 2022 12:36:25 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Subject: Re: [Patch net-next v14 10/13] net: dsa: microchip: lan937x: add
+ phylink_get_caps support
+Message-ID: <Yr2KuQonUBo74As+@shell.armlinux.org.uk>
+References: <20220630102041.25555-1-arun.ramadoss@microchip.com>
+ <20220630102041.25555-11-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH V3 1/1] ublk: add io_uring based userspace block driver
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-block@vger.kernel.org,
-        Harris James R <james.r.harris@intel.com>,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-References: <20220628160807.148853-1-ming.lei@redhat.com>
- <20220628160807.148853-2-ming.lei@redhat.com>
-From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-In-Reply-To: <20220628160807.148853-2-ming.lei@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220630102041.25555-11-arun.ramadoss@microchip.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/29 00:08, Ming Lei wrote:
+On Thu, Jun 30, 2022 at 03:50:38PM +0530, Arun Ramadoss wrote:
+> The internal phy of the LAN937x are capable of 100Mbps speed. And the
 
-[...]
+Good English grammar suggests never to start a sentence with "And".
 
-> +#define UBLK_MAX_PIN_PAGES	32
-> +
-> +static inline void ublk_release_pages(struct ublk_queue *ubq, struct page **pages,
-> +		int nr_pages)
+> xMII port of switch is capable of 10/100/1000Mbps.
+
+... and supports flow control?
+
+> +void lan937x_phylink_get_caps(struct ksz_device *dev, int port,
+> +			      struct phylink_config *config)
 > +{
-> +	int i;
+> +	config->mac_capabilities = MAC_100FD;
 > +
-> +	for (i = 0; i < nr_pages; i++)
-> +		put_page(pages[i]);
-> +}
-> +
-> +static inline int ublk_pin_user_pages(struct ublk_queue *ubq, u64 start_vm,
-> +		unsigned int nr_pages, unsigned int gup_flags,
-> +		struct page **pages)
-> +{
-> +	return get_user_pages_fast(start_vm, nr_pages, gup_flags, pages);
-> +}
+> +	if (dev->info->supports_rgmii[port]) {
+> +		/* MII/RMII/RGMII ports */
+> +		config->mac_capabilities |= MAC_ASYM_PAUSE | MAC_SYM_PAUSE |
+> +					    MAC_100HD | MAC_10 | MAC_1000FD;
 
-> +
-> +static inline unsigned ublk_copy_bv(struct bio_vec *bv, void **bv_addr,
-> +		void *pg_addr, unsigned int *pg_off,
-> +		unsigned int *pg_len, bool to_bv)
-> +{
-> +	unsigned len = min_t(unsigned, bv->bv_len, *pg_len);
-> +
-> +	if (*bv_addr == NULL)
-> +		*bv_addr = kmap_local_page(bv->bv_page);
-> +
-> +	if (to_bv)
-> +		memcpy(*bv_addr + bv->bv_offset, pg_addr + *pg_off, len);
-> +	else
-> +		memcpy(pg_addr + *pg_off, *bv_addr + bv->bv_offset, len);
-> +
-> +	bv->bv_offset += len;
-> +	bv->bv_len -= len;
-> +	*pg_off += len;
-> +	*pg_len -= len;
-> +
-> +	if (!bv->bv_len) {
-> +		kunmap_local(*bv_addr);
-> +		*bv_addr = NULL;
-> +	}
-> +
-> +	return len;
-> +}
-> +
-> +/* copy rq pages to ublksrv vm address pointed by io->addr */
-> +static int ublk_copy_pages(struct ublk_queue *ubq, struct request *rq, bool to_rq,
-> +		unsigned int max_bytes)
-> +{
-> +	unsigned int gup_flags = to_rq ? 0 : FOLL_WRITE;
-> +	struct ublk_io *io = &ubq->ios[rq->tag];
-> +	struct page *pgs[UBLK_MAX_PIN_PAGES];
-> +	struct req_iterator req_iter;
-> +	struct bio_vec bv;
-> +	const unsigned int rq_bytes = min(blk_rq_bytes(rq), max_bytes);
-> +	unsigned long start = io->addr, left = rq_bytes;
-> +	unsigned int idx = 0, pg_len = 0, pg_off = 0;
-> +	int nr_pin = 0;
-> +	void *pg_addr = NULL;
-> +	struct page *curr = NULL;
-> +
-> +	rq_for_each_segment(bv, rq, req_iter) {
-> +		unsigned len, bv_off = bv.bv_offset, bv_len = bv.bv_len;
-> +		void *bv_addr = NULL;
-> +
-> +refill:
-> +		if (pg_len == 0) {
-> +			unsigned int off = 0;
-> +
-> +			if (pg_addr) {
-> +				kunmap_local(pg_addr);
-> +				if (!to_rq)
-> +					set_page_dirty_lock(curr);
-> +				pg_addr = NULL;
-> +			}
-> +
-> +			/* refill pages */
-> +			if (idx >= nr_pin) {
-> +				unsigned int max_pages;
-> +
-> +				ublk_release_pages(ubq, pgs, nr_pin);
-> +
-> +				off = start & (PAGE_SIZE - 1);
-> +				max_pages = min_t(unsigned, (off + left +
-> +						PAGE_SIZE - 1) >> PAGE_SHIFT,
-> +						UBLK_MAX_PIN_PAGES);
-> +				nr_pin = ublk_pin_user_pages(ubq, start,
-> +						max_pages, gup_flags, pgs);
-> +				if (nr_pin < 0)
-> +					goto exit;
-> +				idx = 0;
-> +			}
-> +			pg_off = off;
-> +			pg_len = min(PAGE_SIZE - off, left);
-> +			off = 0;
-> +			curr = pgs[idx++];
-> +			pg_addr = kmap_local_page(curr);
-> +		}
-> +
-> +		len = ublk_copy_bv(&bv, &bv_addr, pg_addr, &pg_off, &pg_len,
-> +				to_rq);
-> +		/* either one of the two has been consumed */
-> +		WARN_ON_ONCE(bv.bv_len && pg_len);
-> +		start += len;
-> +		left -= len;
-> +
-> +		/* overflow */
-> +		WARN_ON_ONCE(left > rq_bytes);
-> +		WARN_ON_ONCE(bv.bv_len > bv_len);
-> +		if (bv.bv_len)
-> +			goto refill;
-> +
-> +		bv.bv_len = bv_len;
-> +		bv.bv_offset = bv_off;
-> +	}
-> +	if (pg_addr) {
-> +		kunmap_local(pg_addr);
-> +		if (!to_rq)
-> +			set_page_dirty_lock(curr);
-> +	}
-> +	ublk_release_pages(ubq, pgs, nr_pin);
-> +
-> +exit:
-> +	return rq_bytes - left;
-> +}
-> +
+And SGMII too? (Which seems to be a given because from your list in the
+series cover message, SGMII ports also support RGMII).
 
-Hi Ming, 
+Thanks.
 
-I note that you pin the user buffer's pages, memcpy() and release them immediately.
-
-1) I think maybe copy_page_from_iter() is another choice for copying user buffer to biovecs
-   since copy_page_from_iter() do not pin pages(But it may raise page fault).
-
-2) Or will you design some mechanism such as LRU to manage these pinned pages? 
-   For example pin those pages frequently required for a long time and release
-   those pages not used for a long time.
-   I remember you have talked about this LRU on pinned pages?
-
-Which one do you think is better? copy_page_from_iter() or pin pages with LRU?
-Maybe it depends on the user's workload?
-
-Regards,
-Zhang
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

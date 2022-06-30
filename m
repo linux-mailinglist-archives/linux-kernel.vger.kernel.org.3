@@ -2,60 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D7E56134F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F441561357
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232853AbiF3Hd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55866 "EHLO
+        id S232956AbiF3Hgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232851AbiF3Hd1 (ORCPT
+        with ESMTP id S232787AbiF3Hgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:33:27 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2133334B
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:33:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656574406; x=1688110406;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=yS4Suwf7GI6LhylNscWfzZ0ukkPLH++SXvgQgtpNGaQ=;
-  b=OlzD+6hY0HhiFHVXz3+edKtKH/6Ai6+DJiKdUKmeJ1QiwyH55DGWZwKg
-   7/UCM8akS0OMiHVmL9eUBNefmxOE6J4cFdzNZOCLv1mwbyCSz2J8VtoQd
-   Ci8G4dLZYdLF5O0M9lXiF2Z46bA4xVDby8nLfgzO+kZ1k6zA3huUBVSdm
-   kKIwZ/EaQSi6cD10RVvxBQ07mQODaZGNiVrJCNhETIgthS0R3zhHtdbmf
-   SIGTiNUr3KNXhyxusjSZ/l7l4pJry2NbVZn+X9wQsQoEZ/WTrdaRTIruM
-   WTX4NIjxfdw/0cY/+8tAcJdc/LneM7PbcEtx+EhhlZMqzUgD3d9Q/8hQY
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="343960417"
-X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
-   d="scan'208";a="343960417"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 00:33:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
-   d="scan'208";a="680866208"
-Received: from shbuild999.sh.intel.com ([10.239.146.138])
-  by FMSMGA003.fm.intel.com with ESMTP; 30 Jun 2022 00:33:05 -0700
-From:   Feng Tang <feng.tang@intel.com>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Cc:     linux-mm@kvack.org, Paul Menzel <pmenzel@molgen.mpg.de>,
-        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>
-Subject: [PATCH] iommu/iova: change IOVA_MAG_SIZE to 127 to save memory
-Date:   Thu, 30 Jun 2022 15:33:04 +0800
-Message-Id: <20220630073304.26945-1-feng.tang@intel.com>
-X-Mailer: git-send-email 2.27.0
+        Thu, 30 Jun 2022 03:36:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 808191A81B
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:36:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656574606;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PwzmZMvr1HwTOyfvLBeay0UNdb3hWyqojFY1Kj6edFc=;
+        b=ToLNUmgJkq8DzTOgsn0F6CyBXO4GhnET3xsVFjXZzQITrVKdYUi+TGzvweqtV3j8d+7ndq
+        PKk2qa7xTXfc1H5rWhgAGZBiXqQbv/Y4udEHncOAXN13bZRLyxsy4AKeABGb0ZTJwxNsmy
+        QFVmsklU26EQ8hLT1I+tX/WkmjY+mHo=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-660-tsqQ2h_9P6CyofEkBYS0nA-1; Thu, 30 Jun 2022 03:36:42 -0400
+X-MC-Unique: tsqQ2h_9P6CyofEkBYS0nA-1
+Received: by mail-wm1-f72.google.com with SMTP id e24-20020a05600c219800b003a0471b1904so1030821wme.1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:36:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=PwzmZMvr1HwTOyfvLBeay0UNdb3hWyqojFY1Kj6edFc=;
+        b=Mi1g8+ChmtSGoDB2us/Ubfi01Or+ino2l7AKgR7gyLj8qhRpOJcZcdCq48aUMK2lwG
+         gQ0az0N09XGJ/QtiFqp3qIJFd3A0kV/AgfvKg6pku9bjUnh0ubCscuCKlCgZWDjT1PlE
+         Ax+1KASJjeh5Y6Yp9JNLTxBk/kV+KZHTbtr1vAEGDzxBOYnju2l1XsI9FfXbg+67iOfP
+         fcVWUi7ZtakWF0Ex+0rCxsJDgA75nCT4kLE+biZrkzR8JctmLeonLSWXZSbMOuQ4IWjK
+         n1OH0QplheIobA0nkKJ/F9wB4S0ZAK7if66EJx9Tkb1WrrzyTRVKCphE6/yj4Rms4eT7
+         EqfQ==
+X-Gm-Message-State: AJIora9HRlVcGEe3MwMSP57eQvj3SAAzLSAKmQG9GdeBLQf9O+2f2HOa
+        WrILJL01nhVzVWcCI8FWEowI51s0lX1l3xOh+rCj41vnuhA/liIkIe3t/vdhRq4R/tN9T0kJFeR
+        FY8AaBSEQG1i6wwSQ3CKMUjbhYqFZO3LHteM+s0tjFUlg6A1b6FRrke2kugdETqp/xz0lZ6yBPK
+        Ds
+X-Received: by 2002:a5d:6704:0:b0:21b:8258:b773 with SMTP id o4-20020a5d6704000000b0021b8258b773mr6600904wru.284.1656574601153;
+        Thu, 30 Jun 2022 00:36:41 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vE3BOs0DEpp+YFr2cGu7j4qggJVT3ycC/Awg1J1DjBCXCJeDvJEASklLYOzQTIogJGAkKlxA==
+X-Received: by 2002:a5d:6704:0:b0:21b:8258:b773 with SMTP id o4-20020a5d6704000000b0021b8258b773mr6600874wru.284.1656574600876;
+        Thu, 30 Jun 2022 00:36:40 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id f20-20020a05600c155400b0039c41686421sm1868636wmg.17.2022.06.30.00.36.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 00:36:40 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 28/28] KVM: nVMX: Use cached host MSR_IA32_VMX_MISC
+ value for setting up nested MSR
+In-Reply-To: <CALMp9eRCbgYVGtAwpDWhytQSjeGeAOuqKZXVg3RpV92uKV5u0A@mail.gmail.com>
+References: <20220629150625.238286-1-vkuznets@redhat.com>
+ <20220629150625.238286-29-vkuznets@redhat.com>
+ <CALMp9eRCbgYVGtAwpDWhytQSjeGeAOuqKZXVg3RpV92uKV5u0A@mail.gmail.com>
+Date:   Thu, 30 Jun 2022 09:36:39 +0200
+Message-ID: <87tu82siuw.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,73 +83,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmalloc will round up the request size to power of 2, and current
-iova_magazine's size is 1032 (1024+8) bytes, so each instance
-allocated will get 2048 bytes from kmalloc, causing around 1KB
-waste.
+Jim Mattson <jmattson@google.com> writes:
 
-And in some exstreme case, the memory wasted can trigger OOM as
-reported in 2019 on a crash kernel with 256 MB memory [1].
+> On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+>>
+>> vmcs_config has cased host MSR_IA32_VMX_MISC value, use it for setting
+>> up nested MSR_IA32_VMX_MISC in nested_vmx_setup_ctls_msrs() and avoid the
+>> redundant rdmsr().
+>>
+>> No (real) functional change intended.
+>
+> Just imaginary functional change? :-)
+>
 
-  [    4.319253] iommu: Adding device 0000:06:00.2 to group 5
-  [    4.325869] iommu: Adding device 0000:20:01.0 to group 15
-  [    4.332648] iommu: Adding device 0000:20:02.0 to group 16
-  [    4.338946] swapper/0 invoked oom-killer: gfp_mask=0x6040c0(GFP_KERNEL|__GFP_COMP), nodemask=(null), order=0, oom_score_adj=0
-  [    4.350251] swapper/0 cpuset=/ mems_allowed=0
-  [    4.354618] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 4.19.57.mx64.282 #1
-  [    4.355612] Hardware name: Dell Inc. PowerEdge R7425/08V001, BIOS 1.9.3 06/25/2019
-  [    4.355612] Call Trace:
-  [    4.355612]  dump_stack+0x46/0x5b
-  [    4.355612]  dump_header+0x6b/0x289
-  [    4.355612]  out_of_memory+0x470/0x4c0
-  [    4.355612]  __alloc_pages_nodemask+0x970/0x1030
-  [    4.355612]  cache_grow_begin+0x7d/0x520
-  [    4.355612]  fallback_alloc+0x148/0x200
-  [    4.355612]  kmem_cache_alloc_trace+0xac/0x1f0
-  [    4.355612]  init_iova_domain+0x112/0x170
-  [    4.355612]  amd_iommu_domain_alloc+0x138/0x1a0
-  [    4.355612]  iommu_group_get_for_dev+0xc4/0x1a0
-  [    4.355612]  amd_iommu_add_device+0x13a/0x610
-  [    4.355612]  add_iommu_group+0x20/0x30
-  [    4.355612]  bus_for_each_dev+0x76/0xc0
-  [    4.355612]  bus_set_iommu+0xb6/0xf0
-  [    4.355612]  amd_iommu_init_api+0x112/0x132
-  [    4.355612]  state_next+0xfb1/0x1165
-  [    4.355612]  amd_iommu_init+0x1f/0x67
-  [    4.355612]  pci_iommu_init+0x16/0x3f
-  ...
-  [    4.670295] Unreclaimable slab info:
-  ...
-  [    4.857565] kmalloc-2048           59164KB      59164KB
+Well, yea) The assumption here is that MSR_IA32_VMX_MISC's value doesn't
+change underneath KVM, caching doesn't change anything then. It is, of
+course, possible that when KVM runs as a nested hypervisor on top of
+something else, it will observe different values. I truly hope this is
+purely imaginary :-)
 
-Change IOVA_MAG_SIZE from 128 to 127 to make size of 'iova_magazine'
-1024 bytes so that no memory will be wasted.
+>>
+>> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Reviewed-by: Jim Mattson <jmattson@google.com>
+>
 
-[1]. https://lkml.org/lkml/2019/8/12/266
+Thanks!
 
-Signed-off-by: Feng Tang <feng.tang@intel.com>
----
- drivers/iommu/iova.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index db77aa675145b..27634ddd9b904 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -614,7 +614,12 @@ EXPORT_SYMBOL_GPL(reserve_iova);
-  * dynamic size tuning described in the paper.
-  */
- 
--#define IOVA_MAG_SIZE 128
-+/*
-+ * As kmalloc's buffer size is fixed to power of 2, 127 is chosen to
-+ * assure size of 'iova_magzine' to be 1024 bytes, so that no memory
-+ * will be wasted.
-+ */
-+#define IOVA_MAG_SIZE 127
- #define MAX_GLOBAL_MAGS 32	/* magazines per bin */
- 
- struct iova_magazine {
 -- 
-2.27.0
+Vitaly
 

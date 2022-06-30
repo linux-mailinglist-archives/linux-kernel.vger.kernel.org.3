@@ -2,125 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD859562135
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 19:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC2756213C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 19:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236179AbiF3RYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 13:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
+        id S235861AbiF3R0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 13:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235694AbiF3RYP (ORCPT
+        with ESMTP id S232771AbiF3R0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 13:24:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED432BAA;
-        Thu, 30 Jun 2022 10:24:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 30 Jun 2022 13:26:44 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E4B3E5FD;
+        Thu, 30 Jun 2022 10:26:43 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85F266215C;
-        Thu, 30 Jun 2022 17:24:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A18C9C34115;
-        Thu, 30 Jun 2022 17:24:10 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="nYUFivTb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656609849;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KqhNJ/uonxDVhq9N5vUXRV4uCAlHxZ8s0M40k+RpZJ0=;
-        b=nYUFivTbayxW5C1Xwhfi8LBwFkEzPR2Ftrki9pRJhiLP13gmPvoZsVareL/wCMsDipYiwO
-        4JM0NCch9B0KYDriuCFZpfhvdaepv91UEYv5WtB6uyr/ol+Gh3lXWnSAteU4P6FsAT6seG
-        GaipeCKAiYu/WxVhVrJ7xfFACN8YzOo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 9ff8d2df (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 30 Jun 2022 17:24:08 +0000 (UTC)
-Date:   Thu, 30 Jun 2022 19:24:04 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     John Stultz <jstultz@google.com>
-Cc:     Kalesh Singh <kaleshsingh@google.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, rcu <rcu@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, sultan@kerneltoast.com,
-        android-kernel-team <android-kernel-team@google.com>,
-        Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH] remove CONFIG_ANDROID
-Message-ID: <Yr3cNF+A5xIRiiCQ@zx2c4.com>
-References: <Yryic4YG9X2/DJiX@google.com>
- <Yry6XvOGge2xKx/n@zx2c4.com>
- <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
- <YrzaCRl9rwy9DgOC@zx2c4.com>
- <CANDhNCpRzzULaGmEGCbbJgVinA0pJJB-gOP9AY0Hy488n9ZStA@mail.gmail.com>
- <YrztOqBBll66C2/n@zx2c4.com>
- <YrzujZuJyfymC0LP@zx2c4.com>
- <CAC_TJvcNOx1C5csdkMCAPVmX4gLcRWkxKO8Vm=isgjgM-MowwA@mail.gmail.com>
- <Yr11fp13yMRiEphS@zx2c4.com>
- <CANDhNCrcEBUUNevNyZp2qttqWssWBEcXMZ5nPO0Ntk7Vszd3bQ@mail.gmail.com>
+        by ms.lwn.net (Postfix) with ESMTPSA id 3DF194B7;
+        Thu, 30 Jun 2022 17:26:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3DF194B7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1656610003; bh=ei+caOvlg/2HIJ6D0lCC+JmQefKHErSrMXRIWXCQdbE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=jHNm3o3pk7EiO4OrBrWRB7786IghQ2dk2tbsU9B16XhyTn3vTWOnzzmV1vavgpN2f
+         9ntM0ufTApzemzX5rObg2X9VE685rLMXuMcfIzUpGt9PLiwSJlEskA9Ak/fQI+v9Aa
+         sJgrXl68rvlWlr+ox157+ZpKRVRgc2XFRm0KgJmaaAPf8O81O/Gui8VYOwJSWikHbi
+         nDDs9MqCgs0oM5T7c+fr47d/oxeWcS2igAHoQu/pwjYa+VevP5RExMt3+bDLgHsaL0
+         cALqRXPij2k3HkVEri+xJivdHATF7a5Ft9CRXU9eP/GP2UkkyoWrcc03AsCq+UIF55
+         5wCSxrfwtpI8g==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>, linux-doc@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: [RFC PATCH 00/11] docs: remove submitting-drivers.rst
+In-Reply-To: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
+References: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
+Date:   Thu, 30 Jun 2022 11:26:42 -0600
+Message-ID: <87y1xenju5.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CANDhNCrcEBUUNevNyZp2qttqWssWBEcXMZ5nPO0Ntk7Vszd3bQ@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
+Lukas Bulwahn <lukas.bulwahn@gmail.com> writes:
 
-On Thu, Jun 30, 2022 at 10:12:30AM -0700, John Stultz wrote:
-> Does this preference come out of the too-many-options-in-gpg
-> antipattern? Or is there something else?
+> Dear Jonathan, dear Federico, dear Alex, dear Yanteng, dear Hu,
+>
+> Here is an attempt to delete submitting-drivers with some improvements
+> and clean-up in other documentation places to convince ourselves that
+> nothing valuable is lost when deleting this checklist.
 
-There are numerous presentations and threads galore on why WireGuard
-doesn't do knobs. Not worth rehashing here; it's not a bikeshed I really
-want to have yet again, and I'd appreciate you respecting my time by not
-going down that route. Sorry.
+I am totally in favor of doing this; that document has not served any
+real purpose for a long time.  Resend with the translation tweaks and
+such, and I'll happily apply it.
 
-> > Anyway if you don't want a runtime switch, make a compiletime switch
-> > called CONFIG_PM_CONTINUOUS_RAPID_AUTOSLEEPING or whatever, write some
-> > very discouraging help text, and call it a day. And this way you don't
-> > have to worry about ABI and we can change this later on and do the whole
-> > thing as a no-big-deal change that somebody can tweak later without
-> > issue.
-> 
-> Yeah, this is ok with me, as I don't see much benefit to creating a
-> userland ABI, as I don't think at this point we expect the behavior to
-> shift or oscillate at runtime.
+> As future work---with this one submitting checklist gone---I see the harder
+> follow-up task to synchronize and clean up the various submission hints/
+> guidelines/checklists in the remaining kernel documentation that partly
+> overlap and differ in detail, their structure (unstructured, unordered
+> lists vs. sections and subsections) and their state of being outdated:
+>
+>   Documentation/process/submit-checklist.rst
+>   Documentation/process/submitting-patches.rst
+>   MAINTAINERS#Tips for patch submitters
+>
+> My next task at hand is to read through all three documents, figure out
+> what still applies and what is outdated, determine a good common structure
+> for all three documents, include cross-links and make them to some extent
+> follow a clear consistent policy. E.g., one document is a more detailed
+> description of everything mentioned in the short list of another document.
+> I will try to work through that in the next months or motivate and guide
+> some colleague or mentee to work together with me on that.
 
-Okay, fine by me. You have my sample patch for this. Feel free to CC me
-on Gerrit and on the cleaned up patch and I'll offer my acks there.
+This seems like a good exercise as well.  I think the MAINTAINERS text
+should go away entirely, that's not really an appropriate place for it.
+submit-checklist.rst hasn't seen any real attention for some time; I'm
+not sure how useful it really is.
 
-No need to keep this mega thread going longer here. I'll keep my eyes
-open for Gerrit notifications and such though.
+What I would *really* like is a version of submitting-patches.rst that
+is not a "War and Peace" sort of reading experience.  That is a lot for
+somebody to get through before they can send their first patch...but
+it's not easy to make it shorter without losing important stuff.
 
-Jason
+Thanks,
+
+jon

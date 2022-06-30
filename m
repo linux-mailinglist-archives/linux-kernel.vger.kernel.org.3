@@ -2,67 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0332C561785
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EB5561783
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbiF3KSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 06:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
+        id S233043AbiF3KR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 06:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiF3KSV (ORCPT
+        with ESMTP id S232798AbiF3KRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 06:18:21 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0947B26D4;
-        Thu, 30 Jun 2022 03:18:21 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id h187so30695814ybg.0;
-        Thu, 30 Jun 2022 03:18:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VoXYvf7J8M13YBxMTmTnsi6ikqoH1MwKYJUW6+sW6jA=;
-        b=l+xjvoyHkxKBWUaxeMnNN//yCLYeBo9MxaIEECt5B4IBxxkbX2xUJeO8rXd1jOOiV6
-         zZp/u54Az5A33Xq2t4TryIZuZyyHbWdJJ5Qc6dDzvH7ZoEG4OsMWwXGbLGnEqJC4xADk
-         xQof005r0QGNwBOTEqEPZxyn3WxQPScsyDlTINQBJk8coY8dvGyfba2xi87nrpIHjNLj
-         u5fXjh1ZMvkFTeMTOzB+lmIzV1IbytHQ6qFUTDyqmO6AkB5HnzGsB0re9ngzeTxf2rd6
-         U2ZrbFE29Gm8v/GmzvASh4GkffE/6egG3Ih9UYtEqowNmCWUlpmUFDI/hULRJ7JOmiyp
-         ersA==
+        Thu, 30 Jun 2022 06:17:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E852E44A3F
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 03:17:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656584272;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rOCaXt8+HI3g+OU53dq0jNzOP8yzJQrPf6iSdbWrmX0=;
+        b=H+j8mQMAw5V8myNujkptqhOtTM82Pd131aSBoVZ9h2bKnu9AclhM/qmL1qrgDhB9paKluB
+        lvINsmb2Ohznb3qrDIxksAeh41idz2Jkot07VsVHq3ZXeTswl/gWh6WsazuC5UNP1KXVjR
+        b/oKfNr/8n5DSCsmeBnIjAWE9Nk2Ofg=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-144-A4mvq5CKO1KrdFy3ZneTBw-1; Thu, 30 Jun 2022 06:17:51 -0400
+X-MC-Unique: A4mvq5CKO1KrdFy3ZneTBw-1
+Received: by mail-wr1-f72.google.com with SMTP id l9-20020adfa389000000b0021b8b489336so2982770wrb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 03:17:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VoXYvf7J8M13YBxMTmTnsi6ikqoH1MwKYJUW6+sW6jA=;
-        b=0yVizlP5HYtYlWo2zLdT4FIFS4g0mAjrjKNufpSKt9H/NyNO8zimT/l08PHBi6upwp
-         7LRtruKreTbsUoqWMNexdYIWnwq9KJWmBR5pOjo2qp/ovreytspfP+QNV6tTZELjpSEm
-         UVwTAdFJJEaTnBKHf1oITxAmH8MScJiFkCGmMJJB6LuLna7datxj8oOspOdgOvgFVMY2
-         StJvb8kjqBSFFYvx6wZCAJpS3QN2EEgtA0ra20bt/0MnknoQet6VCJApRkfb4PNMJLqz
-         hKB5YsSp6GrDr19AEOu4V1Km/TaIS7czrjSJEQPxgq8mdf7C9iDML98FZLSh2KVu1sF/
-         v7PQ==
-X-Gm-Message-State: AJIora+b4NLN9QboZbxLkUst8L0Hr0meG51+YX/KOGHIra70c4kiLHvx
-        x3jY28EWpAt7E4mJ7fgzwkndbB8H1ckE1vzlqOOeDVMkdMqRpg==
-X-Google-Smtp-Source: AGRyM1sZ0/jyT8b9+neGVpNeFK9+ZnmDyE7FYipe2HjDbIQY6VUL6apvtKzzfZ8O8L6YNtv5hiZqINFnPWRX+iK0AO8=
-X-Received: by 2002:a25:dd83:0:b0:66c:8d8d:4f5f with SMTP id
- u125-20020a25dd83000000b0066c8d8d4f5fmr8492821ybg.79.1656584300103; Thu, 30
- Jun 2022 03:18:20 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=rOCaXt8+HI3g+OU53dq0jNzOP8yzJQrPf6iSdbWrmX0=;
+        b=x83/Tq9v4uXpLmJU/3fMnpc1/UNoqrYtnmpmx8clV9r+DAci3BH2DugtsvMW8Znjiq
+         ezhVnF/jeBJMT9PoVwU9CuRO0DXcp4PoGtSpfOP4QBgknSzzVWsVfbGBL12sqjlMIAdv
+         4+u/nHN7L6Qx3YEDtqI+N5qAFJVadmvYMj/w7mUgWOMJMkQw5kz2HCkTlBJ3M3EYu6WB
+         jZfvBT9LviUSPwFLTNN2HPJPhzScFA6DgNll7UGQi5VkZyemUmmG15hJelH8Y1mfPsEY
+         At56W5oSz8rOhiTso0hklGxP7MA4K2dcWj+UyrTJj0qV7PHc2t1VBTFnT4EP3AcZNcrH
+         HWPw==
+X-Gm-Message-State: AJIora+s/64BuzOgzu4xMXIvGvGf+YCjGJvpQDvw+jg1EElA0Ur0NJoh
+        KsJg8aeUR+zmODbz42Ep4AAUFWEVrvu4l5euC4jNMC5OduVBlvyEu2eOuJ5DlPn8EMHaErJmr/q
+        xYcx9qPINq/F3oA2BgBXlebe9
+X-Received: by 2002:a5d:614e:0:b0:21b:9736:736f with SMTP id y14-20020a5d614e000000b0021b9736736fmr7440514wrt.200.1656584270290;
+        Thu, 30 Jun 2022 03:17:50 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sgc41nSJcu5H7wXynnBC8/ogLJm7VRvadyqJgAdRtVWl7h++SF77QONlxdgvS7LCUtRpuoJw==
+X-Received: by 2002:a5d:614e:0:b0:21b:9736:736f with SMTP id y14-20020a5d614e000000b0021b9736736fmr7440487wrt.200.1656584269979;
+        Thu, 30 Jun 2022 03:17:49 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c708:7f00:214b:cffb:c693:2b71? (p200300cbc7087f00214bcffbc6932b71.dip0.t-ipconnect.de. [2003:cb:c708:7f00:214b:cffb:c693:2b71])
+        by smtp.gmail.com with ESMTPSA id t8-20020adfdc08000000b0021350f7b22esm19187608wri.109.2022.06.30.03.17.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 03:17:49 -0700 (PDT)
+Message-ID: <ef1620a2-dbc6-911e-5cd0-e860ad7772e0@redhat.com>
+Date:   Thu, 30 Jun 2022 12:17:48 +0200
 MIME-Version: 1.0
-References: <20220630100536.41329-1-ilpo.jarvinen@linux.intel.com>
-In-Reply-To: <20220630100536.41329-1-ilpo.jarvinen@linux.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 30 Jun 2022 12:17:42 +0200
-Message-ID: <CAHp75VcH9O6=Lk06w3Set==zBEFyseCSDN6OUE3n7g4ZnBM4Bg@mail.gmail.com>
-Subject: Re: [PATCH 1/1] 8250_dwlib: Convert bitops to newer form
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v4 2/4] memblock tests: add verbose output to memblock
+ tests
+Content-Language: en-US
+To:     Rebecca Mckeever <remckee0@gmail.com>
+Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1656368930.git.remckee0@gmail.com>
+ <883c28e34527fd4cdc55df97c791ed8b2e79538d.1656368930.git.remckee0@gmail.com>
+ <5db2944e-9d64-8faa-83d3-fd02fce583bd@redhat.com> <YryG1nuJ+nL9maeS@bertie>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <YryG1nuJ+nL9maeS@bertie>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,66 +85,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 12:08 PM Ilpo J=C3=A4rvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
->
-> Instead of open-coding, use BIT(), GENMASK(), and FIELD_GET() helpers.
+On 29.06.22 19:07, Rebecca Mckeever wrote:
+> On Wed, Jun 29, 2022 at 01:34:54PM +0200, David Hildenbrand wrote:
+>> On 28.06.22 00:34, Rebecca Mckeever wrote:
+>>> Add and use functions and macros for printing verbose testing output.
+>>>
+>>> If the Memblock simulator was compiled with VERBOSE=1:
+>>> - prefix_push(): appends the given string to a prefix string that will be
+>>>   printed in test_fail() and test_pass*().
+>>>
+>>> - prefix_pop(): removes the last prefix from the prefix string.
+>>>
+>>> - prefix_reset(): clears the prefix string.
+>>>
+>>> - test_fail(): prints a message after a test fails containing the test
+>>>   number of the failing test and the prefix.
+>>>
+>>> - test_pass(): prints a message after a test passes containing its test
+>>>   number and the prefix.
+>>>
+>>> - test_print(): prints the given formatted output string.
+>>>
+>>> - test_pass_pop(): runs test_pass() followed by prefix_pop().
+>>>
+>>> - PREFIX_PUSH(): runs prefix_push(__func__).
+>>>
+>>> If the Memblock simulator was not compiled with VERBOSE=1, these
+>>> functions/macros do nothing.
+>>>
+>>> Add the assert wrapper macros ASSERT_EQ(), ASSERT_NE(), and ASSERT_LT().
+>>> If the assert condition fails, these macros call test_fail() before
+>>> executing assert().
+>>>
+>>> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
+>>
+>>
+>> [...]
+>>
+>>>  
+>>> diff --git a/tools/testing/memblock/tests/common.c b/tools/testing/memblock/tests/common.c
+>>> index 62d3191f7c9a..e55b2a8bf0ff 100644
+>>> --- a/tools/testing/memblock/tests/common.c
+>>> +++ b/tools/testing/memblock/tests/common.c
+>>> @@ -4,8 +4,12 @@
+>>>  
+>>>  #define INIT_MEMBLOCK_REGIONS			128
+>>>  #define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
+>>> +#define PREFIXES_LEN_MAX			256
+>>> +#define DELIM					": "
+>>> +#define DELIM_LEN				strlen(DELIM)
+>>
+>> Why not simply
+>>
+>> #define PREFIXES_MAX	15
+>> static const char * __maybe_unused prefixes[PREFIXES_MAX];
+>> static int nr_prefixes;
+>>
+>> And then simply insert/clear the corresponding prefixes[] pointer and
+>> update nr_prefixes?
+>>
+>> When printing, you only have to walk prefixes from 0 ... nr_prefixes - 1
+>> and print the values.
+>>
+>> Avoids any string modifications.
+>>
+> What is nr_prefixes? Number of prefixes? Currently, the longest prefix is
+> 49 characters (alloc_try_nid_bottom_up_reserved_with_space_check), so I
+> think PREFIXES_MAX would need to be at least 52 (including the delimiter),
+> but let me know if I'm misunderstanding.
 
-FIELD_GET() requires bitfield.h to be included. Is this the case already?
-If so,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+nr_prefixes would be the current number of prefixes (not the length).
 
-> Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->  drivers/tty/serial/8250/8250_dwlib.c | 26 +++++++++++++-------------
->  1 file changed, 13 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/tty/serial/8250/8250_dwlib.c b/drivers/tty/serial/82=
-50/8250_dwlib.c
-> index da330ef46446..a8bbed74ea70 100644
-> --- a/drivers/tty/serial/8250/8250_dwlib.c
-> +++ b/drivers/tty/serial/8250/8250_dwlib.c
-> @@ -46,21 +46,21 @@
->  #define DW_UART_LCR_EXT_TRANSMIT_MODE  BIT(3)
->
->  /* Component Parameter Register bits */
-> -#define DW_UART_CPR_ABP_DATA_WIDTH     (3 << 0)
-> -#define DW_UART_CPR_AFCE_MODE          (1 << 4)
-> -#define DW_UART_CPR_THRE_MODE          (1 << 5)
-> -#define DW_UART_CPR_SIR_MODE           (1 << 6)
-> -#define DW_UART_CPR_SIR_LP_MODE                (1 << 7)
-> -#define DW_UART_CPR_ADDITIONAL_FEATURES        (1 << 8)
-> -#define DW_UART_CPR_FIFO_ACCESS                (1 << 9)
-> -#define DW_UART_CPR_FIFO_STAT          (1 << 10)
-> -#define DW_UART_CPR_SHADOW             (1 << 11)
-> -#define DW_UART_CPR_ENCODED_PARMS      (1 << 12)
-> -#define DW_UART_CPR_DMA_EXTRA          (1 << 13)
-> -#define DW_UART_CPR_FIFO_MODE          (0xff << 16)
-> +#define DW_UART_CPR_ABP_DATA_WIDTH     GENMASK(1, 0)
-> +#define DW_UART_CPR_AFCE_MODE          BIT(4)
-> +#define DW_UART_CPR_THRE_MODE          BIT(5)
-> +#define DW_UART_CPR_SIR_MODE           BIT(6)
-> +#define DW_UART_CPR_SIR_LP_MODE                BIT(7)
-> +#define DW_UART_CPR_ADDITIONAL_FEATURES        BIT(8)
-> +#define DW_UART_CPR_FIFO_ACCESS                BIT(9)
-> +#define DW_UART_CPR_FIFO_STAT          BIT(10)
-> +#define DW_UART_CPR_SHADOW             BIT(11)
-> +#define DW_UART_CPR_ENCODED_PARMS      BIT(12)
-> +#define DW_UART_CPR_DMA_EXTRA          BIT(13)
-> +#define DW_UART_CPR_FIFO_MODE          GENMASK(23, 16)
->
->  /* Helper for FIFO size calculation */
-> -#define DW_UART_CPR_FIFO_SIZE(a)       (((a >> 16) & 0xff) * 16)
-> +#define DW_UART_CPR_FIFO_SIZE(a)       (FIELD_GET(DW_UART_CPR_FIFO_MODE,=
- (a)) * 16)
->
->  /*
->   * divisor =3D div(I) + div(F)
-> --
-> 2.30.2
->
+You be storing pointers to strings in the constant pool, not copying the
+strings over.
 
+-- 
+Thanks,
 
---=20
-With Best Regards,
-Andy Shevchenko
+David / dhildenb
+

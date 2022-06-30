@@ -2,67 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 403A9562028
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 253B156202B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234927AbiF3QVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 12:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
+        id S235136AbiF3QUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 12:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235314AbiF3QVJ (ORCPT
+        with ESMTP id S236179AbiF3QUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 12:21:09 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0591631908;
-        Thu, 30 Jun 2022 09:21:07 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4B5E51BF20C;
-        Thu, 30 Jun 2022 16:21:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656606066;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jDaxbIWGSo+t7JTdTA4oSBuCwOAMzbzayTCjAMcuvJU=;
-        b=kJfPfMbDvnsiRLnJPjz7yWSGEv6WOUu+3PvDvXVrKX//ZKg+TMnTo+G714yIlkspCgZt+x
-        mdE9GZjhR28nilJjpy2UfuBKlm8vdknCZzyIZZGU+qo+leIIpx3V0dilRpaE4L1T4EppjD
-        egQkyyPL+Bt3ra5DSdGvvG6gFn0QEHQr56lJSq9ZgzUEAYSmufEoXu6xFstp8Bl6hoax1t
-        9XnvvBKOgXYkfNOrSoFDcBGsD42YiyGqjFZG29+gdK6fTbhXW8yMTig83jjAxwT6OkB/jx
-        e6wRYJvqqStlo2pooZc4pqvuBJfwLGYCq3eakENN/NOYN4cjyeEsRFiBVJPrbA==
-Date:   Thu, 30 Jun 2022 18:20:15 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>
-Subject: Re: [PATCH net-next] dt-bindings: net: dsa: renesas,rzn1-a5psw: add
- interrupts description
-Message-ID: <20220630182015.67f61f87@fixe.home>
-In-Reply-To: <20220629091305.125291-1-clement.leger@bootlin.com>
-References: <20220629091305.125291-1-clement.leger@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Thu, 30 Jun 2022 12:20:47 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA353C49E;
+        Thu, 30 Jun 2022 09:20:44 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25UDhRqt001696;
+        Thu, 30 Jun 2022 18:20:26 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=8OPsY3NYVtvi/Y0bIeB4MSPnX33YqwmgeqJgxgT3N7c=;
+ b=wHKDT4tzjux6li799C0XwsCWKitWHrEXKuWFA6uVszftSwA5cAdBihnOqZ4o4pw5Oqzr
+ nAXHgCuHDe+u/wLDh6IJhi8aZec1Oomf081y//dIacJ67yzG+QiZd5Ddw3c7+rJUNB0W
+ DQLXMBqdHFHKitirZCO8KM5FHrhMSU/HBonqiHIyf4pt7DOfEpv39c3fWhyG+5ptdQzV
+ JTZJjS3wr38V2/eiLQD9IEMUAz91VdHcxANBBRq1H4jmvwQInJmPYAxxiP/X9VzOOECr
+ CSk4drqswKUNQu417uIynnZPnIjyAC/EY98KreFqwUp3hIcpXyJS+VEe1+Q7hzTb3n2Q Kg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h1cy9h7he-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Jun 2022 18:20:26 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E6BB110002A;
+        Thu, 30 Jun 2022 18:20:23 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AE10A2248DD;
+        Thu, 30 Jun 2022 18:20:23 +0200 (CEST)
+Received: from [10.252.24.34] (10.75.127.44) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Thu, 30 Jun
+ 2022 18:20:20 +0200
+Message-ID: <bf87a50c-6d92-8657-72a9-75af81d2489f@foss.st.com>
+Date:   Thu, 30 Jun 2022 18:20:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] rpmsg: virtio: Fix broken rpmsg_probe()
+Content-Language: en-US
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Anup Patel <apatel@ventanamicro.com>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        <kvm-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20220608171334.730739-1-apatel@ventanamicro.com>
+ <20220629174318.GB2018382@p14s>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+In-Reply-To: <20220629174318.GB2018382@p14s>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-30_11,2022-06-28_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,76 +78,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Wed, 29 Jun 2022 11:13:04 +0200,
-Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com> a =C3=A9crit :
+Hi,
 
-> Describe the switch interrupts (dlr, switch, prp, hub, pattern) which
-> are connected to the GIC.
->=20
-> Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
-> ---
->  .../bindings/net/dsa/renesas,rzn1-a5psw.yaml  | 23 +++++++++++++++++++
->  1 file changed, 23 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw=
-.yaml b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
-> index 103b1ef5af1b..51f274c16ed1 100644
-> --- a/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
-> +++ b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
-> @@ -26,6 +26,22 @@ properties:
->    reg:
->      maxItems: 1
-> =20
-> +  interrupts:
-> +    items:
-> +      - description: DLR interrupt
-> +      - description: Switch interrupt
-> +      - description: PRP interrupt
-> +      - description: Integrated HUB module interrupt
-> +      - description: RX Pattern interrupt
-> +
-> +  interrupts-names:
-> +    items:
-> +      - const: dlr
-> +      - const: switch
-> +      - const: prp
-> +      - const: hub
-> +      - const: ptrn
-> +
->    power-domains:
->      maxItems: 1
-> =20
-> @@ -76,6 +92,7 @@ examples:
->    - |
->      #include <dt-bindings/gpio/gpio.h>
->      #include <dt-bindings/clock/r9a06g032-sysctrl.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> =20
->      switch@44050000 {
->          compatible =3D "renesas,r9a06g032-a5psw", "renesas,rzn1-a5psw";
-> @@ -83,6 +100,12 @@ examples:
->          clocks =3D <&sysctrl R9A06G032_HCLK_SWITCH>, <&sysctrl R9A06G032=
-_CLK_SWITCH>;
->          clock-names =3D "hclk", "clk";
->          power-domains =3D <&sysctrl>;
-> +        interrupts =3D <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
-> +        interrupts-name =3D "dlr", "switch", "prp", "hub", "ptrn";
+On 6/29/22 19:43, Mathieu Poirier wrote:
+> Hi Anup,
+> 
+> On Wed, Jun 08, 2022 at 10:43:34PM +0530, Anup Patel wrote:
+>> The rpmsg_probe() is broken at the moment because virtqueue_add_inbuf()
+>> fails due to both virtqueues (Rx and Tx) marked as broken by the
+>> __vring_new_virtqueue() function. To solve this, virtio_device_ready()
+>> (which unbreaks queues) should be called before virtqueue_add_inbuf().
+>>
+>> Fixes: 8b4ec69d7e09 ("virtio: harden vring IRQ")
+>> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+>> ---
+>>  drivers/rpmsg/virtio_rpmsg_bus.c | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+>> index 905ac7910c98..71a64d2c7644 100644
+>> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
+>> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+>> @@ -929,6 +929,9 @@ static int rpmsg_probe(struct virtio_device *vdev)
+>>  	/* and half is dedicated for TX */
+>>  	vrp->sbufs = bufs_va + total_buf_space / 2;
+>>  
+>> +	/* From this point on, we can notify and get callbacks. */
+>> +	virtio_device_ready(vdev);
+>> +
+> 
+> Calling virtio_device_ready() here means that virtqueue_get_buf_ctx_split() can
+> potentially be called (by way of rpmsg_recv_done()), which will race with
+> virtqueue_add_inbuf().  If buffers in the virtqueue aren't available then
+> rpmsg_recv_done() will fail, potentially breaking remote processors' state
+> machines that don't expect their initial name service to fail when the "device"
+> has been marked as ready.
+> 
+> What does make me curious though is that nobody on the remoteproc mailing list
+> has complained about commit 8b4ec69d7e09 breaking their environment... By now,
+> i.e rc4, that should have happened.  Anyone from TI, ST and Xilinx care to test this on
+> their rig?
 
-Wait, there is actually a typo both here and in the property
-description, should be "interrupt-names". Was not catched by
-dt_binding_check though but probably due to the fact additionnal
-properties are allowed.
+I tested on STm32mp1 board using tag v5.19-rc4(03c765b0e3b4)
+I confirm the issue!
 
-> =20
->          dsa,member =3D <0 0>;
-> =20
+Concerning the solution, I share Mathieu's concern. This could break legacy.
+I made a short test and I would suggest to use __virtio_unbreak_device instead, tounbreak the virtqueues without changing the init sequence.
 
+I this case the patch would be: 
+ 
++	/*
++	 * Unbreak the virtqueues to allow to add buffers before setting the vdev status
++	 * to ready
++	 */
++	__virtio_unbreak_device(vdev);
++
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+ 	/* set up the receive buffers */
+ 	for (i = 0; i < vrp->num_bufs / 2; i++) {
+ 		struct scatterlist sg;
+ 		void *cpu_addr = vrp->rbufs + i * vrp->buf_size;
+
+Regards,
+Arnaud
+ 
+> 
+> Thanks,
+> Mathieu
+> 
+>>  	/* set up the receive buffers */
+>>  	for (i = 0; i < vrp->num_bufs / 2; i++) {
+>>  		struct scatterlist sg;
+>> @@ -983,9 +986,6 @@ static int rpmsg_probe(struct virtio_device *vdev)
+>>  	 */
+>>  	notify = virtqueue_kick_prepare(vrp->rvq);
+>>  
+>> -	/* From this point on, we can notify and get callbacks. */
+>> -	virtio_device_ready(vdev);
+>> -
+>>  	/* tell the remote processor it can start sending messages */
+>>  	/*
+>>  	 * this might be concurrent with callbacks, but we are only
+>> -- 
+>> 2.34.1
+>>

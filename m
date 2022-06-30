@@ -2,154 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4077E56131E
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF9A56132D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232838AbiF3HQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
+        id S232705AbiF3HYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231690AbiF3HQn (ORCPT
+        with ESMTP id S230271AbiF3HYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:16:43 -0400
-X-Greylist: delayed 70667 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Jun 2022 00:16:42 PDT
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0539838199;
-        Thu, 30 Jun 2022 00:16:41 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 3C033240011;
-        Thu, 30 Jun 2022 07:16:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656573400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9I94e4QJGBDEKtn1NYQX9pGoS4V5rF6gB5rgv3ePiKY=;
-        b=f1D5owjWynMmSNvMz/29rgnS21+K0IiCKp4Q9pLK4PR/JbHpD4NuS+5PkOWug5hXGX/1c0
-        qA4QB5yL58gvxqdMb8wfap5OvlGS8XR1sGAmO2D0JFodHMDhIa6Gwmep4OIFX2lg9nB8vx
-        2RuAsIBg5a5fMFsg4QFGXnvMK88ycDolLJ0jqX4TyUiyXKnSsjoNB7n7CNEqUmGpWtEijI
-        GAWNSXlFwJN4bL0r03f7/CAqqRpgUYRdofQYKBADNJb9xufoH0C7FkvI0AbvEUKdaMbXpR
-        +FQy3m9wcU+6BSf1VfptrzqejlDFFXLqPjrt7ED0DDbf8KtaoLmtPngXyfnjqA==
-Date:   Thu, 30 Jun 2022 09:16:36 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: mtd/partitions: Convert
- arm-firmware-suite to DT schema
-Message-ID: <20220630091636.03386395@xps-13>
-In-Reply-To: <20220629185031.23826-1-robh@kernel.org>
-References: <20220629185031.23826-1-robh@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 30 Jun 2022 03:24:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F8F2AE13
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:24:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7AF60B828C5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 07:24:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E581C34115;
+        Thu, 30 Jun 2022 07:24:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656573847;
+        bh=kht40b/B9e57FLqjsUfGUxjfYslp7XSSkYLU7BgOh94=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=m2v8uf6CCxkF2Ycwnl1T3FZo21XEoiSv7YvAk0tCGRwZZv6WOAQm5lBgc3zbO9tfN
+         Vt1+Ah+Qm79TKuplE5OPojCHEdPuGnVsxIvjMSQTz2yfEAvSyfdvpCObxwF4ZSHXhR
+         UOMFmNPtbJdaGxnz4sSvzfIwNwrWoruUq7ue3APyO7RKwy4pg60k5GQR0gEJTT0fSL
+         2AasNVNt6o/++drXZge+3KhTL6Mf267unH62QC2fxD4plve+1kR6/mYMCuIP6tK5NS
+         FKgZF3ir6aGWQMW0OOB8DfBnOCofkG7qg/gQL4mE9nsEw50pkWNPjy+ZGd736Whgas
+         InkB1B4YvBgrQ==
+Received: from 82-132-233-164.dab.02.net ([82.132.233.164] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o6oWx-004GTP-D3;
+        Thu, 30 Jun 2022 08:24:05 +0100
+Date:   Thu, 30 Jun 2022 08:22:47 +0100
+Message-ID: <87o7yaehtk.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V13 06/13] irqchip/loongson-pch-pic: Add ACPI init support
+In-Reply-To: <aa8321d5-9839-9ccf-6284-766719e980ea@loongson.cn>
+References: <1656329997-20524-1-git-send-email-lvjianmin@loongson.cn>
+        <1656329997-20524-7-git-send-email-lvjianmin@loongson.cn>
+        <87v8sj1zs9.wl-maz@kernel.org>
+        <aa8321d5-9839-9ccf-6284-766719e980ea@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.233.164
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Thu, 30 Jun 2022 05:36:40 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> 
+>
 
-robh@kernel.org wrote on Wed, 29 Jun 2022 12:50:30 -0600:
+[...]
 
-> Convert the arm,arm-firmware-suite partition binding to DT schema
-> format. Simple conversion as there's only a compatible property.
->=20
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> >> +static int __init pch_pic_acpi_init(void)
+> >> +{
+> >> +	acpi_table_parse_madt(ACPI_MADT_TYPE_BIO_PIC,
+> > 
+> > Where is this defined? It only appears in the documentation, and
+> > nowhere else...
+> > 
+> 
+> It's defined in the patch to ACPICA(which has been merged, please to
+> see
+> https://github.com/acpica/acpica/commit/1dc530059a3e6202e941e6a9478cf30f092bfb47).
+> the patch will be synchronized to linux kernel by maintainer of ACPICA.
 
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
+How can I take this patch upstream if it doesn't even compile? Please
+make this patch part of your series. There are tons of patches that
+need Acks from the ACPI maintainers, this is only one of them.
 
-> ---
-> v2:
->  - Fix example dtc warning
-> ---
->  .../mtd/partitions/arm,arm-firmware-suite.txt | 17 -----------
->  .../partitions/arm,arm-firmware-suite.yaml    | 28 +++++++++++++++++++
->  2 files changed, 28 insertions(+), 17 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mtd/partitions/arm,=
-arm-firmware-suite.txt
->  create mode 100644 Documentation/devicetree/bindings/mtd/partitions/arm,=
-arm-firmware-suite.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/mtd/partitions/arm,arm-fir=
-mware-suite.txt b/Documentation/devicetree/bindings/mtd/partitions/arm,arm-=
-firmware-suite.txt
-> deleted file mode 100644
-> index d5c5616f6db5..000000000000
-> --- a/Documentation/devicetree/bindings/mtd/partitions/arm,arm-firmware-s=
-uite.txt
-> +++ /dev/null
-> @@ -1,17 +0,0 @@
-> -ARM AFS - ARM Firmware Suite Partitions
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> -
-> -The ARM Firmware Suite is a flash partitioning system found on the
-> -ARM reference designs: Integrator AP, Integrator CP, Versatile AB,
-> -Versatile PB, the RealView family, Versatile Express and Juno.
-> -
-> -Required properties:
-> -- compatible : (required) must be "arm,arm-firmware-suite"
-> -
-> -Example:
-> -
-> -flash@0 {
-> -	partitions {
-> -		compatible =3D "arm,arm-firmware-suite";
-> -	};
-> -};
-> diff --git a/Documentation/devicetree/bindings/mtd/partitions/arm,arm-fir=
-mware-suite.yaml b/Documentation/devicetree/bindings/mtd/partitions/arm,arm=
--firmware-suite.yaml
-> new file mode 100644
-> index 000000000000..76c88027b6d2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mtd/partitions/arm,arm-firmware-s=
-uite.yaml
-> @@ -0,0 +1,28 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mtd/partitions/arm,arm-firmware-suite=
-.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ARM Firmware Suite (AFS) Partitions
-> +
-> +maintainers:
-> +  - Linus Walleij <linus.walleij@linaro.org>
-> +
-> +description: |
-> +  The ARM Firmware Suite is a flash partitioning system found on the
-> +  ARM reference designs: Integrator AP, Integrator CP, Versatile AB,
-> +  Versatile PB, the RealView family, Versatile Express and Juno.
-> +
-> +properties:
-> +  compatible:
-> +    const: arm,arm-firmware-suite
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    partitions {
-> +        compatible =3D "arm,arm-firmware-suite";
-> +    };
-> +...
+>
+> 
+> >> +			      pchintc_parse_madt, 0);
+> >> +
+> >> +	return 0;
+> >> +}
+> >> +early_initcall(pch_pic_acpi_init);
+> > 
+> > Why can't you use IRQCHIP_ACPI_DECLARE here? This is terribly fragile,
+> > and will eventually break. I really don't want to rely on this.
+> > 
+> 
+> In early time, the change here is implemented using
+> IRQCHIP_ACPI_DECLARE, but we found that calling order(during
+> irqchip_init) of the entry declared using IRQCHIP_ACPI_DECLARE is
+> depended on the compiling order(driver order in Makefile) of the
+> driver. For removing the dependency to the compiling order, the new
+> way here is used(I looked into ARM, it seems that GIC driver uses
+> IRQCHIP_ACPI_DECLARE, and ITS driver uses early_initcall too.).
 
+It's not quite the same. The ITS part that uses early_initcall isn't
+an actual driver (it only registers a domain, and nothing else).
 
-Thanks,
-Miqu=C3=A8l
+There is also no guarantee that the initcalls at the same priority
+will execute in any order, and you already have at least two such
+initcalls (pch_pic_acpi_init, pch_msi_acpi_init, and I haven't quite
+understood how the rest is probed yet).
+
+One possibility would be to drive the whole probing from the root
+interrupt controller, which is similar to what GICv3 does for the
+actual ITS driver. You already do this sort of stuff in the CPUINTC
+driver, so adding to this shouldn't be too hard.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

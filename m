@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF28561CD5
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C50561D17
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236654AbiF3OIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
+        id S236409AbiF3OCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236748AbiF3OH2 (ORCPT
+        with ESMTP id S236138AbiF3OAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:07:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C9F48801;
-        Thu, 30 Jun 2022 06:54:35 -0700 (PDT)
+        Thu, 30 Jun 2022 10:00:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F88D65D66;
+        Thu, 30 Jun 2022 06:52:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45236B82AF0;
-        Thu, 30 Jun 2022 13:54:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 896ABC34115;
-        Thu, 30 Jun 2022 13:54:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8979B82AED;
+        Thu, 30 Jun 2022 13:52:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C337C34115;
+        Thu, 30 Jun 2022 13:52:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597268;
-        bh=EpZC/P+cyU+ef0ydblJSNneaorBxL1pW3xJ3J/vLAP8=;
+        s=korg; t=1656597152;
+        bh=bSIuHROVKXo/7tzzNfCHWaH1vUvYvDHMfdtjNlH6yDg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O+WjtnnUsg6/DUJ+1lOEJW7DKliSsJIhHhu7Xl5k/boENoFusk+PrrsnijE1igFTF
-         3rhOmY9W4744itjMwGnkBCZVzjm4NwAQMSTKDhLolLHkX24RYfJywhOKLBU1oZiyzb
-         RpiR2EAJ01jj4pYuCjGh2Y6L02CLtZhzzL81aNMA=
+        b=nvDbrdSuUo47bvwjcYggx2+GGhv51BlJazNC49WYSn1qQV+kSkvqPGshANE9/9GhL
+         mXeD3VON8hOBhqg44v0IADrDxa3Ghf5pGq2rz9HkMgyTuiVSvisTbVgZ7uIhR5Lx8e
+         3z3jYsJuu2kNv23CRP9DlKaZu4Mi2/Li4fwlu1hU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Thomas Backlund <tmb@tmb.nu>
-Subject: [PATCH 5.15 01/28] tick/nohz: unexport __init-annotated tick_nohz_full_setup()
-Date:   Thu, 30 Jun 2022 15:46:57 +0200
-Message-Id: <20220630133232.972417691@linuxfoundation.org>
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Will Deacon <will@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: [PATCH 4.19 45/49] fdt: Update CRC check for rng-seed
+Date:   Thu, 30 Jun 2022 15:46:58 +0200
+Message-Id: <20220630133235.202121848@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133232.926711493@linuxfoundation.org>
-References: <20220630133232.926711493@linuxfoundation.org>
+In-Reply-To: <20220630133233.910803744@linuxfoundation.org>
+References: <20220630133233.910803744@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -59,49 +57,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Hsin-Yi Wang <hsinyi@chromium.org>
 
-commit 2390095113e98fc52fffe35c5206d30d9efe3f78 upstream.
+commit dd753d961c4844a39f947be115b3d81e10376ee5 upstream.
 
-EXPORT_SYMBOL and __init is a bad combination because the .init.text
-section is freed up after the initialization. Hence, modules cannot
-use symbols annotated __init. The access to a freed symbol may end up
-with kernel panic.
+Commit 428826f5358c ("fdt: add support for rng-seed") moves of_fdt_crc32
+from early_init_dt_verify() to early_init_dt_scan() since
+early_init_dt_scan_chosen() may modify fdt to erase rng-seed.
 
-modpost used to detect it, but it had been broken for a decade.
+However, arm and some other arch won't call early_init_dt_scan(), they
+call early_init_dt_verify() then early_init_dt_scan_nodes().
 
-Commit 28438794aba4 ("modpost: fix section mismatch check for exported
-init/exit sections") fixed it so modpost started to warn it again, then
-this showed up:
+Restore of_fdt_crc32 to early_init_dt_verify() then update it in
+early_init_dt_scan_chosen() if fdt if updated.
 
-    MODPOST vmlinux.symvers
-  WARNING: modpost: vmlinux.o(___ksymtab_gpl+tick_nohz_full_setup+0x0): Section mismatch in reference from the variable __ksymtab_tick_nohz_full_setup to the function .init.text:tick_nohz_full_setup()
-  The symbol tick_nohz_full_setup is exported and annotated __init
-  Fix this by removing the __init annotation of tick_nohz_full_setup or drop the export.
-
-Drop the export because tick_nohz_full_setup() is only called from the
-built-in code in kernel/sched/isolation.c.
-
-Fixes: ae9e557b5be2 ("time: Export tick start/stop functions for rcutorture")
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Tested-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Thomas Backlund <tmb@tmb.nu>
+Fixes: 428826f5358c ("fdt: add support for rng-seed")
+Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/time/tick-sched.c |    1 -
- 1 file changed, 1 deletion(-)
+ drivers/of/fdt.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/kernel/time/tick-sched.c
-+++ b/kernel/time/tick-sched.c
-@@ -509,7 +509,6 @@ void __init tick_nohz_full_setup(cpumask
- 	cpumask_copy(tick_nohz_full_mask, cpumask);
- 	tick_nohz_full_running = true;
- }
--EXPORT_SYMBOL_GPL(tick_nohz_full_setup);
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -1119,6 +1119,10 @@ int __init early_init_dt_scan_chosen(uns
  
- static int tick_nohz_cpu_down(unsigned int cpu)
- {
+ 		/* try to clear seed so it won't be found. */
+ 		fdt_nop_property(initial_boot_params, node, "rng-seed");
++
++		/* update CRC check value */
++		of_fdt_crc32 = crc32_be(~0, initial_boot_params,
++				fdt_totalsize(initial_boot_params));
+ 	}
+ 
+ 	/* break now */
+@@ -1223,6 +1227,8 @@ bool __init early_init_dt_verify(void *p
+ 
+ 	/* Setup flat device-tree pointer */
+ 	initial_boot_params = params;
++	of_fdt_crc32 = crc32_be(~0, initial_boot_params,
++				fdt_totalsize(initial_boot_params));
+ 	return true;
+ }
+ 
+@@ -1248,8 +1254,6 @@ bool __init early_init_dt_scan(void *par
+ 		return false;
+ 
+ 	early_init_dt_scan_nodes();
+-	of_fdt_crc32 = crc32_be(~0, initial_boot_params,
+-				fdt_totalsize(initial_boot_params));
+ 	return true;
+ }
+ 
 
 

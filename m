@@ -2,84 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D9B5616DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 870065616E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234332AbiF3Jz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 05:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
+        id S234615AbiF3J47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 05:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234576AbiF3JzW (ORCPT
+        with ESMTP id S234600AbiF3J45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 05:55:22 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B4E43AC7
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:55:21 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id a11-20020a17090acb8b00b001eca0041455so2725890pju.1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:55:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=u7LUrk2PQT0QuXB1ls6VgilrLt2bHgnHDE3d6QTzFn0=;
-        b=c/DcgPgMH8qK2qxUIRsHd9NqftRr5oOqCKgNKsTYK9Ah3ft5fkyKKV4WRq6k/ioEnb
-         FDGp4U9eidt4JRmGu66TBiGZELG4YTrTtM0AxUEKNv6seRbXzzmIF7xJw7VYLZbYBa2S
-         crLMn6gMWb0pxVvN/I7kTzlOk3azNREd2eiIqUI1Y23twMHRptJwjDGpFApP1+kdXnsR
-         rFsmc4gFxhPnYKP9ln61ppIgsi/8qIClZILFDJikmUlT9XroMVDP1vAoOT4/99YZgymY
-         7imFj7AYTE6nyfF9DiIm8Erjf4uggZy1hwQT7TRjjiAlIQQ6cYDBsc8nBkDQS1zbU1TN
-         8HUA==
+        Thu, 30 Jun 2022 05:56:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63A0743AC1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:56:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656583015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CDu+zCVL/iHOE4iiWUZjPtowW+QlF+sjQdHuJYh9AdU=;
+        b=eO03aUtnys/vdryqr0BX3lAkt9jUSKzwUf9sEukQTZoEUISAGEthZxH54uarpYZUk3i8gb
+        FyaKt1wqf1R/O5aSZfVo6NBEKQaqawCwIS3hlHsJMRt4cvhTnqIELIaobYXMP8t6VftVkZ
+        5ABq4AV4v7W6Y1UOCC4IbDnMNFB5Z3o=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-299-xGSpg6wUPkSw00KDq1e1XA-1; Thu, 30 Jun 2022 05:56:53 -0400
+X-MC-Unique: xGSpg6wUPkSw00KDq1e1XA-1
+Received: by mail-qv1-f70.google.com with SMTP id mr11-20020a056214348b00b004705c0cb439so17944637qvb.19
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:56:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=u7LUrk2PQT0QuXB1ls6VgilrLt2bHgnHDE3d6QTzFn0=;
-        b=Pm7KxsDHaMSuy8Jw1TYeC6q096bT8deplZ7NKPIMm+ce1n61NLu7TGiyhSXR4RUg2l
-         o+2PA8upn1TKvp4e/xzfpx8cIxynHMxMfa4wlR/DFkO5QqeT1oLvNV8HAynH1At4mNZm
-         DJafc9QDGY2gcg7oPHIfQDTgJcW8OIJMvtiuEm+9E7E3bzIDPwk5y96BXhv15/THwuoa
-         UoLThirYfkVSu+2PlHf8rQ9Llv5r1B1TZA2srROrv6mExC2krzC9765VGFR/VYJOWB3Q
-         cvlPjXyPGdGQW5spX7L1wXnZ/h9K6m4VVuuzeEgdL3gq6RbQC7bBaETNEsd1jMHRB4dA
-         2HyQ==
-X-Gm-Message-State: AJIora9gpsItXgvX0rCiCJK3KDaii1zzjTQ6j0cFvbWq3mfuPy8vbhkW
-        fCbUXalzPThOEh14F0ub38jgEw==
-X-Google-Smtp-Source: AGRyM1uvH6vnV3smGE+NjUvesmv27eoJ+j0uGzL/Bge/ktMXro/pYdvZBQiFwmnYgfr7zCKmlhbBdg==
-X-Received: by 2002:a17:90b:4c4d:b0:1ec:bb28:9819 with SMTP id np13-20020a17090b4c4d00b001ecbb289819mr9106630pjb.140.1656582920705;
-        Thu, 30 Jun 2022 02:55:20 -0700 (PDT)
-Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id f80-20020a623853000000b005252380a87bsm13040768pfa.59.2022.06.30.02.55.19
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=CDu+zCVL/iHOE4iiWUZjPtowW+QlF+sjQdHuJYh9AdU=;
+        b=71UvhqXLliLiVWe2SXv+j8aYcxeQKoBQ9OMLA+4TjMrzB46jZTtHWOQku20qJJb5J8
+         9zDWOO3iwuU+LOqK8Yda7pBrt9upF3YzrGQnCqQ4xRpsidKrOX24E/aJMoGoWgHyQ2R5
+         HVaHIKbY4k8Vvuur3JQInrNBVr2ijGglIWuXXnxzf0jk/kJEErFu1ijkw3if+Do0+4Fy
+         6Zbvi4vw78MBpzjiqphL608IoIXr8Y4o2qtWxpfBbKuBJpGM0S5heSrbpTnmw12+AMRK
+         HXm2ZfRshnu2C/FEukz3+ALQ+B5ns2UMsB+ZzUV2ZPwkQnl2bg4EmXgq9sYTxWkd/R6T
+         o8ZA==
+X-Gm-Message-State: AJIora9dS2IsFEIDWXYu9E9j1grLgOVX9yWNOblGNQRZqec7jipa0nog
+        PjZxJ93CuWIRYj795RRPmczoBZ2lXuLS+3ayPNex4NaiDhLZZH0qbO4KS4D33NRJSlInorEt9aE
+        0IaEVoSvWXjHFEFF4yGix+wzt
+X-Received: by 2002:ac8:5298:0:b0:319:63c3:8b1d with SMTP id s24-20020ac85298000000b0031963c38b1dmr6624866qtn.261.1656583013345;
+        Thu, 30 Jun 2022 02:56:53 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vDeUZ5o9LgiRwYosHFqD2jL02bO5En5FUz0PWgFnCB07gQjcN/TW5qNV4yFvA2a5vWanzumQ==
+X-Received: by 2002:ac8:5298:0:b0:319:63c3:8b1d with SMTP id s24-20020ac85298000000b0031963c38b1dmr6624851qtn.261.1656583013075;
+        Thu, 30 Jun 2022 02:56:53 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-106-148.dyn.eolo.it. [146.241.106.148])
+        by smtp.gmail.com with ESMTPSA id g6-20020ac842c6000000b00317ccc66971sm11586812qtm.52.2022.06.30.02.56.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 02:55:20 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 15:25:18 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: Re: [PATCH v3 2/7] dt-bindings: opp: accept array of frequencies
-Message-ID: <20220630095518.zhvocdbupqqkyps7@vireshk-i7>
-References: <20220513061347.46480-1-krzysztof.kozlowski@linaro.org>
- <20220513061347.46480-3-krzysztof.kozlowski@linaro.org>
+        Thu, 30 Jun 2022 02:56:52 -0700 (PDT)
+Message-ID: <64e59afe33fff04861c800853a549f7979270f79.camel@redhat.com>
+Subject: Re: [PATCH] net: hinic: avoid kernel hung in hinic_get_stats64()
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Qiao Ma <mqaio@linux.alibaba.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, gustavoars@kernel.org,
+        cai.huoqing@linux.dev, aviad.krawczyk@huawei.com,
+        zhaochen6@huawei.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 30 Jun 2022 11:56:48 +0200
+In-Reply-To: <07736c2b7019b6883076a06129e06e8f7c5f7154.1656487154.git.mqaio@linux.alibaba.com>
+References: <07736c2b7019b6883076a06129e06e8f7c5f7154.1656487154.git.mqaio@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513061347.46480-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,45 +80,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13-05-22, 08:13, Krzysztof Kozlowski wrote:
-> Devices might need to control several clocks when scaling the frequency
-> and voltage.  Allow passing array of clock frequencies, similarly to the
-> voltages.
+On Wed, 2022-06-29 at 15:28 +0800, Qiao Ma wrote:
+> When using hinic device as a bond slave device, and reading device stats of
+> master bond device, the kernel may hung.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Acked-by: Rob Herring <robh@kernel.org>
+> The kernel panic calltrace as follows:
+> Kernel panic - not syncing: softlockup: hung tasks
+> Call trace:
+>   native_queued_spin_lock_slowpath+0x1ec/0x31c
+>   dev_get_stats+0x60/0xcc
+>   dev_seq_printf_stats+0x40/0x120
+>   dev_seq_show+0x1c/0x40
+>   seq_read_iter+0x3c8/0x4dc
+>   seq_read+0xe0/0x130
+>   proc_reg_read+0xa8/0xe0
+>   vfs_read+0xb0/0x1d4
+>   ksys_read+0x70/0xfc
+>   __arm64_sys_read+0x20/0x30
+>   el0_svc_common+0x88/0x234
+>   do_el0_svc+0x2c/0x90
+>   el0_svc+0x1c/0x30
+>   el0_sync_handler+0xa8/0xb0
+>   el0_sync+0x148/0x180
 > 
-> ---
+> And the calltrace of task that actually caused kernel hungs as follows:
+>   __switch_to+124
+>   __schedule+548
+>   schedule+72
+>   schedule_timeout+348
+>   __down_common+188
+>   __down+24
+>   down+104
+>   hinic_get_stats64+44 [hinic]
+>   dev_get_stats+92
+>   bond_get_stats+172 [bonding]
+>   dev_get_stats+92
+>   dev_seq_printf_stats+60
+>   dev_seq_show+24
+>   seq_read_iter+964
+>   seq_read+220
+>   proc_reg_read+164
+>   vfs_read+172
+>   ksys_read+108
+>   __arm64_sys_read+28
+>   el0_svc_common+132
+>   do_el0_svc+40
+>   el0_svc+24
+>   el0_sync_handler+164
+>   el0_sync+324
 > 
-> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> When getting device stats from bond, kernel will call bond_get_stats().
+> It first holds the spinlock bond->stats_lock, and then call
+> hinic_get_stats64() to collect hinic device's stats.
+> However, hinic_get_stats64() calls `down(&nic_dev->mgmt_lock)` to
+> protect its critical section, which may schedule current task out.
+> And if system is under high pressure, the task cannot be woken up
+> immediately, which eventually triggers kernel hung panic.
 > 
-> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> index 76c8acd981b3..66d0ec763f0b 100644
-> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> @@ -50,6 +50,16 @@ patternProperties:
->            property to uniquely identify the OPP nodes exists. Devices like power
->            domains must have another (implementation dependent) property.
->  
-> +          Entries for multiple clocks shall be provided in the same field, as
-> +          array of frequencies.  The OPP binding doesn't provide any provisions
-> +          to relate the values to their clocks or the order in which the clocks
-> +          need to be configured and that is left for the implementation
-> +          specific binding.
-> +        minItems: 1
-> +        maxItems: 16
-> +        items:
-> +          maxItems: 1
-> +
->        opp-microvolt:
->          description: |
->            Voltage for the OPP
+> Fixes: edd384f682cc ("net-next/hinic: Add ethtool and stats")
+> Signed-off-by: Qiao Ma <mqaio@linux.alibaba.com>
 
-Applied. Thanks.
+Side note: it looks like that after this patch every section protected
+by the mgmt_lock is already under rtnl lock protection, so you could
+probably remove the hinic specific lock (in a separate, net-next,
+patch).
 
--- 
-viresh
+Please double check the above as I skimmed upon that quickly.
+
+Thanks,
+
+Paolo
+

@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 175BB561135
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 07:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F13561138
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 07:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbiF3FT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 01:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40224 "EHLO
+        id S232579AbiF3FUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 01:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232735AbiF3FTH (ORCPT
+        with ESMTP id S232762AbiF3FTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 01:19:07 -0400
+        Thu, 30 Jun 2022 01:19:10 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67BF74131D;
-        Wed, 29 Jun 2022 22:18:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01E8341600;
+        Wed, 29 Jun 2022 22:18:48 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F1E1176C;
-        Wed, 29 Jun 2022 22:18:39 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E27DA1A00;
+        Wed, 29 Jun 2022 22:18:47 -0700 (PDT)
 Received: from a077893.blr.arm.com (unknown [10.162.41.8])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 563663F66F;
-        Wed, 29 Jun 2022 22:18:31 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A96B83F66F;
+        Wed, 29 Jun 2022 22:18:39 -0700 (PDT)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-mm@kvack.org, akpm@linux-foundation.org
 Cc:     hch@infradead.org, christophe.leroy@csgroup.eu,
@@ -35,10 +35,10 @@ Cc:     hch@infradead.org, christophe.leroy@csgroup.eu,
         linux-snps-arc@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-um@lists.infradead.org,
         linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH V6 13/26] parisc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Thu, 30 Jun 2022 10:46:17 +0530
-Message-Id: <20220630051630.1718927-14-anshuman.khandual@arm.com>
+        Richard Henderson <rth@twiddle.net>
+Subject: [PATCH V6 14/26] alpha/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Date:   Thu, 30 Jun 2022 10:46:18 +0530
+Message-Id: <20220630051630.1718927-15-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220630051630.1718927-1-anshuman.khandual@arm.com>
 References: <20220630051630.1718927-1-anshuman.khandual@arm.com>
@@ -58,83 +58,84 @@ vm_get_page_prot() implementation via DECLARE_VM_GET_PAGE_PROT, which looks
 up a private and static protection_map[] array. Subsequently all __SXXX and
 __PXXX macros can be dropped which are no longer needed.
 
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: linux-parisc@vger.kernel.org
+Cc: Richard Henderson <rth@twiddle.net>
+Cc: linux-alpha@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- arch/parisc/Kconfig               |  1 +
- arch/parisc/include/asm/pgtable.h | 18 ------------------
- arch/parisc/mm/init.c             | 20 ++++++++++++++++++++
- 3 files changed, 21 insertions(+), 18 deletions(-)
+ arch/alpha/Kconfig               |  1 +
+ arch/alpha/include/asm/pgtable.h | 17 -----------------
+ arch/alpha/mm/init.c             | 22 ++++++++++++++++++++++
+ 3 files changed, 23 insertions(+), 17 deletions(-)
 
-diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
-index fa400055b2d5..891d82393957 100644
---- a/arch/parisc/Kconfig
-+++ b/arch/parisc/Kconfig
-@@ -12,6 +12,7 @@ config PARISC
- 	select ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_HAS_STRICT_MODULE_RWX
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
+diff --git a/arch/alpha/Kconfig b/arch/alpha/Kconfig
+index 7d0d26b5b3f5..db1c8b329461 100644
+--- a/arch/alpha/Kconfig
++++ b/arch/alpha/Kconfig
+@@ -2,6 +2,7 @@
+ config ALPHA
+ 	bool
+ 	default y
 +	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_PTE_SPECIAL
- 	select ARCH_NO_SG_CHAIN
- 	select ARCH_SUPPORTS_HUGETLBFS if PA20
-diff --git a/arch/parisc/include/asm/pgtable.h b/arch/parisc/include/asm/pgtable.h
-index 69765a6dbe89..6a1899a9b420 100644
---- a/arch/parisc/include/asm/pgtable.h
-+++ b/arch/parisc/include/asm/pgtable.h
-@@ -271,24 +271,6 @@ extern void __update_cache(pte_t pte);
+ 	select ARCH_32BIT_USTAT_F_TINODE
+ 	select ARCH_MIGHT_HAVE_PC_PARPORT
+ 	select ARCH_MIGHT_HAVE_PC_SERIO
+diff --git a/arch/alpha/include/asm/pgtable.h b/arch/alpha/include/asm/pgtable.h
+index 170451fde043..3ea9661c09ff 100644
+--- a/arch/alpha/include/asm/pgtable.h
++++ b/arch/alpha/include/asm/pgtable.h
+@@ -116,23 +116,6 @@ struct vm_area_struct;
+  * arch/alpha/mm/fault.c)
   */
- 
- 	 /*xwr*/
--#define __P000  PAGE_NONE
--#define __P001  PAGE_READONLY
--#define __P010  __P000 /* copy on write */
--#define __P011  __P001 /* copy on write */
--#define __P100  PAGE_EXECREAD
--#define __P101  PAGE_EXECREAD
--#define __P110  __P100 /* copy on write */
--#define __P111  __P101 /* copy on write */
+ 	/* xwr */
+-#define __P000	_PAGE_P(_PAGE_FOE | _PAGE_FOW | _PAGE_FOR)
+-#define __P001	_PAGE_P(_PAGE_FOE | _PAGE_FOW)
+-#define __P010	_PAGE_P(_PAGE_FOE)
+-#define __P011	_PAGE_P(_PAGE_FOE)
+-#define __P100	_PAGE_P(_PAGE_FOW | _PAGE_FOR)
+-#define __P101	_PAGE_P(_PAGE_FOW)
+-#define __P110	_PAGE_P(0)
+-#define __P111	_PAGE_P(0)
 -
--#define __S000  PAGE_NONE
--#define __S001  PAGE_READONLY
--#define __S010  PAGE_WRITEONLY
--#define __S011  PAGE_SHARED
--#define __S100  PAGE_EXECREAD
--#define __S101  PAGE_EXECREAD
--#define __S110  PAGE_RWX
--#define __S111  PAGE_RWX
--
+-#define __S000	_PAGE_S(_PAGE_FOE | _PAGE_FOW | _PAGE_FOR)
+-#define __S001	_PAGE_S(_PAGE_FOE | _PAGE_FOW)
+-#define __S010	_PAGE_S(_PAGE_FOE)
+-#define __S011	_PAGE_S(_PAGE_FOE)
+-#define __S100	_PAGE_S(_PAGE_FOW | _PAGE_FOR)
+-#define __S101	_PAGE_S(_PAGE_FOW)
+-#define __S110	_PAGE_S(0)
+-#define __S111	_PAGE_S(0)
  
- extern pgd_t swapper_pg_dir[]; /* declared in init_task.c */
- 
-diff --git a/arch/parisc/mm/init.c b/arch/parisc/mm/init.c
-index 0a81499dd35e..f03e0961fa25 100644
---- a/arch/parisc/mm/init.c
-+++ b/arch/parisc/mm/init.c
-@@ -871,3 +871,23 @@ void flush_tlb_all(void)
- 	spin_unlock(&sid_lock);
+ /*
+  * pgprot_noncached() is only for infiniband pci support, and a real
+diff --git a/arch/alpha/mm/init.c b/arch/alpha/mm/init.c
+index 7511723b7669..a155180d7a83 100644
+--- a/arch/alpha/mm/init.c
++++ b/arch/alpha/mm/init.c
+@@ -280,3 +280,25 @@ mem_init(void)
+ 	high_memory = (void *) __va(max_low_pfn * PAGE_SIZE);
+ 	memblock_free_all();
  }
- #endif
 +
 +static const pgprot_t protection_map[16] = {
-+	[VM_NONE]					= PAGE_NONE,
-+	[VM_READ]					= PAGE_READONLY,
-+	[VM_WRITE]					= PAGE_NONE,
-+	[VM_WRITE | VM_READ]				= PAGE_READONLY,
-+	[VM_EXEC]					= PAGE_EXECREAD,
-+	[VM_EXEC | VM_READ]				= PAGE_EXECREAD,
-+	[VM_EXEC | VM_WRITE]				= PAGE_EXECREAD,
-+	[VM_EXEC | VM_WRITE | VM_READ]			= PAGE_EXECREAD,
-+	[VM_SHARED]					= PAGE_NONE,
-+	[VM_SHARED | VM_READ]				= PAGE_READONLY,
-+	[VM_SHARED | VM_WRITE]				= PAGE_WRITEONLY,
-+	[VM_SHARED | VM_WRITE | VM_READ]		= PAGE_SHARED,
-+	[VM_SHARED | VM_EXEC]				= PAGE_EXECREAD,
-+	[VM_SHARED | VM_EXEC | VM_READ]			= PAGE_EXECREAD,
-+	[VM_SHARED | VM_EXEC | VM_WRITE]		= PAGE_RWX,
-+	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= PAGE_RWX
++	[VM_NONE]					= _PAGE_P(_PAGE_FOE | _PAGE_FOW |
++								  _PAGE_FOR),
++	[VM_READ]					= _PAGE_P(_PAGE_FOE | _PAGE_FOW),
++	[VM_WRITE]					= _PAGE_P(_PAGE_FOE),
++	[VM_WRITE | VM_READ]				= _PAGE_P(_PAGE_FOE),
++	[VM_EXEC]					= _PAGE_P(_PAGE_FOW | _PAGE_FOR),
++	[VM_EXEC | VM_READ]				= _PAGE_P(_PAGE_FOW),
++	[VM_EXEC | VM_WRITE]				= _PAGE_P(0),
++	[VM_EXEC | VM_WRITE | VM_READ]			= _PAGE_P(0),
++	[VM_SHARED]					= _PAGE_S(_PAGE_FOE | _PAGE_FOW |
++								  _PAGE_FOR),
++	[VM_SHARED | VM_READ]				= _PAGE_S(_PAGE_FOE | _PAGE_FOW),
++	[VM_SHARED | VM_WRITE]				= _PAGE_S(_PAGE_FOE),
++	[VM_SHARED | VM_WRITE | VM_READ]		= _PAGE_S(_PAGE_FOE),
++	[VM_SHARED | VM_EXEC]				= _PAGE_S(_PAGE_FOW | _PAGE_FOR),
++	[VM_SHARED | VM_EXEC | VM_READ]			= _PAGE_S(_PAGE_FOW),
++	[VM_SHARED | VM_EXEC | VM_WRITE]		= _PAGE_S(0),
++	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= _PAGE_S(0)
 +};
 +DECLARE_VM_GET_PAGE_PROT
 -- 

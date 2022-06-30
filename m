@@ -2,69 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1471E56102D
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 06:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCBD6561030
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 06:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbiF3E2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 00:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
+        id S231981AbiF3E3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 00:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiF3E2f (ORCPT
+        with ESMTP id S230135AbiF3E3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 00:28:35 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6D11CB21;
-        Wed, 29 Jun 2022 21:28:34 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 4C5E568AA6; Thu, 30 Jun 2022 06:28:30 +0200 (CEST)
-Date:   Thu, 30 Jun 2022 06:28:30 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wefu@redhat.com, guoren@kernel.org, cmuellner@linux.com,
-        philipp.tomsich@vrull.eu, hch@lst.de, samuel@sholland.org,
-        atishp@atishpatra.org, anup@brainfault.org, mick@ics.forth.gr,
-        robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org,
-        drew@beagleboard.org, rdunlap@infradead.org,
-        Atish Patra <atish.patra@wdc.com>
-Subject: Re: [PATCH v5 3/4] riscv: Implement Zicbom-based cache management
- operations
-Message-ID: <20220630042830.GB4958@lst.de>
-References: <20220629215944.397952-1-heiko@sntech.de> <20220629215944.397952-4-heiko@sntech.de>
+        Thu, 30 Jun 2022 00:29:12 -0400
+Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90FF33E28;
+        Wed, 29 Jun 2022 21:29:10 -0700 (PDT)
+Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
+        by ni.piap.pl (Postfix) with ESMTPSA id DB312C3F3EDF;
+        Thu, 30 Jun 2022 06:29:06 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl DB312C3F3EDF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=piap.pl; s=mail;
+        t=1656563347; bh=h1CvsX5f0r5ND4l/vVuhCgjxDaKnyXHFKfDiL3Ks5Yw=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=GLt2XT7f6rm1gzfK7d46W8JtcpT/qQH4WaOG5gTiptH7NCqixhgnuT/E4NdnYvupp
+         7ssruRSLPXILRjAq7OdvvoAfdHDzyKR8b4FQdLa8zQ34Fc5sCsdTOCxvQlaEeOrnDG
+         J5O5bUhy5qPn0/VWvC+aDSgQA/hrIoH2acyxgbz8=
+From:   =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Joe Perches <joe@perches.com>
+Subject: Re: [PATCH v8 2/2] On Semi AR0521 sensor driver
+References: <m3pmn66pie.fsf@t19.piap.pl> <m3h78i6p4t.fsf@t19.piap.pl>
+        <20220301093107.ihokyp4xptkzpbpc@uno.localdomain>
+        <m38rtt7sx7.fsf@t19.piap.pl>
+        <20220301143044.2l4vlwbnh5n3g5ng@uno.localdomain>
+        <m37d7ufrzx.fsf@t19.piap.pl> <m3pmkryywn.fsf@t19.piap.pl>
+        <YrziTabYLlZ2bX+1@valkosipuli.retiisi.eu>
+Sender: khalasa@piap.pl
+Date:   Thu, 30 Jun 2022 06:29:06 +0200
+In-Reply-To: <YrziTabYLlZ2bX+1@valkosipuli.retiisi.eu> (Sakari Ailus's message
+        of "Thu, 30 Jun 2022 02:37:49 +0300")
+Message-ID: <m34k027p0t.fsf@t19.piap.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629215944.397952-4-heiko@sntech.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-KLMS-Message-Action: skipped
+X-KLMS-AntiSpam-Status: not scanned, license restriction
+X-KLMS-AntiPhishing: not scanned, license restriction
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, not scanned, license restriction
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 11:59:43PM +0200, Heiko Stuebner wrote:
-> The Zicbom ISA-extension was ratified in november 2021
-> and introduces instructions for dcache invalidate, clean
-> and flush operations.
-> 
-> Implement cache management operations based on them.
-> 
-> Of course not all cores will support this, so implement an
-> alternative-based mechanism that replaces empty instructions
-> with ones done around Zicbom instructions.
-> 
-> As discussed in previous versions, assume the platform
-> being coherent by default so that non-coherent devices need
-> to get marked accordingly by firmware.
+Hi Sakari,
 
-The subject here seems somewhat odd.  Yes, it does implement the
-low-level cache management ops, but more importantly it adds
-support for devices that are not DMA coherent.
+Sakari Ailus <sakari.ailus@iki.fi> writes:
 
-Otherwise looks good:
+> I've
+> applied it with these changes:
+>
+> diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
+...
+> @@ -1056,4 +1058,4 @@ module_i2c_driver(ar0521_i2c_driver);
+>=20=20
+>  MODULE_DESCRIPTION("AR0521 MIPI Camera subdev driver");
+>  MODULE_AUTHOR("Krzysztof Ha=C5=82asa <khalasa@piap.pl>");
+> -MODULE_LICENSE("GPL v2");
+> +MODULE_LICENSE("GPL");
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Why did you change this? Are now "GPL v2" tags forbidden in
+drivers/media?
+
+Thanks for looking at this, though.
+--=20
+Krzysztof "Chris" Ha=C5=82asa
+
+Sie=C4=87 Badawcza =C5=81ukasiewicz
+Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
+Al. Jerozolimskie 202, 02-486 Warszawa

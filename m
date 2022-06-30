@@ -2,185 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8495624FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DD55624FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 23:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236828AbiF3VQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 17:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
+        id S237440AbiF3VR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 17:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237306AbiF3VQZ (ORCPT
+        with ESMTP id S237483AbiF3VR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 17:16:25 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1603207D
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 14:16:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1656623783; x=1688159783;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=S3lpds+Dm08bh0wmuZJxD7UtITL3wTfX27aPen8VTS4=;
-  b=L08f//uVVAqasHYcso2YTgVcDladYUMu20X4p38hNGZmPr3RJrInGZpW
-   oDydX6kq6AeTSxb+c5Gym+iEiFvdd2ibjXJlyFRf9n2u0PvWDNXo9/Kch
-   hPCBq8x24nQebE+wBcfEJcWeOZSeN0oIXyRHaG6GisWhsWyCRaxeU89A4
-   hkEdZsS3g79pyXTELaqB64IrxLaSN8NEY5gwrRTgTGPFemSx1P0Qxrt5C
-   pQ1msxBY2OnIgtVXC5MPP2iNJXmhxxcjR6dvJiBPMyh34y/HmnxVHfc7J
-   /ESoLT0K63PHXh4hSnVosxQNY8v63wQpjPfBIgVFCI9oC3vYcFNlu79sS
-   w==;
-X-IronPort-AV: E=Sophos;i="5.92,235,1650902400"; 
-   d="scan'208";a="209407245"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 01 Jul 2022 05:16:22 +0800
-IronPort-SDR: VkGpcgwjDtxVX0wrWKT7qvKLCBUNFDFITEFMwlpiZ6fhlvHpDNY6EqFloQvA68ftDDtaXfL6A4
- 0k9h+NnK3qzAjtcIaEj9dtWKKBpPZAwW4QTOafNxf2xoM9RyEXVK1mz8L8Lwfher7t4ii17VEx
- 6trDLJ9b8JmCRskHc9Ce5/UOV33u3r3ZpVfdfySpTG6zN3jVtV5hn8MVL7RryQ8gJEJVQ3r5LR
- T8L35ZdoWQhXKsdKgrjosWnjxqRRW7HYKOFiN6LbaNVze9mfQ0mQp9YXMnV4j/yiq6Ae6GKjoV
- n2wh4Dksl9A/HvWPlMKstGos
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2022 13:38:35 -0700
-IronPort-SDR: xj2kGV1QT/yzuIXjrvnf3Zs393FIb+FOievulQYINkIaSKLHjGvqGOTe+YPl+83UyPlI8X/ll5
- EIETifOBrmCWeV9zGYs9BHUcNqLugMk6psu0R1ykwz9z+9cX/Qv6WGus16Xh9Ij7nV71CR4lPZ
- JwW5+je4u0wwZ/l4gEnx9IMbcIOjh5uTBuGflUPdoOBuBvezEtscxe3Y/BJkhsNhW6hlfwCtf/
- a312A22AXAsUeK2P6tZkYbnbM9J8WkKqTlbbiQLKxdfngV9Y3aJwxAKxDSK4qySRgFg4n/iRY7
- Maw=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2022 14:16:24 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LYrjg1w9vz1Rws0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 14:16:23 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1656623782; x=1659215783; bh=S3lpds+Dm08bh0wmuZJxD7UtITL3wTfX27a
-        Pen8VTS4=; b=fqgmkU+iwbRN2+uHSjvLVbZM044xrtbN6ybNAxqU3pTozv2N4+l
-        ibyfSai70KCZf9LEusqGftOtnBKvThI8qlw3u+IHNUfjozKWyj474NoqQ6917Yn2
-        1WL1DcQZ2sQ9hYv+ciKGVsBWlAMyK45U71R8IahiJ8FTmsZ6AxSg/WCDMmCqEtpd
-        YrBkDIyKeMOmlX50DRvFOTtIKnvIAYCTb058enQ9HpsXmg3os+iYLcq0zKKcDbFx
-        nvjqkia3dvJTOA1bic5FQjsxuo6LcghR5Xx9fvgsMB7AKDAEnb5MLPzsjVZYW8pZ
-        aQvxEJEBUd3V3B7ENvqn8rnl0Xp51xi4N5w==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id rcQpKcTgxEwG for <linux-kernel@vger.kernel.org>;
-        Thu, 30 Jun 2022 14:16:22 -0700 (PDT)
-Received: from [10.225.163.102] (unknown [10.225.163.102])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LYrjX18xMz1RtVk;
-        Thu, 30 Jun 2022 14:16:15 -0700 (PDT)
-Message-ID: <f228057b-7c17-e536-ce6f-6597e263f06d@opensource.wdc.com>
-Date:   Fri, 1 Jul 2022 06:16:14 +0900
+        Thu, 30 Jun 2022 17:17:27 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E84133E32;
+        Thu, 30 Jun 2022 14:17:24 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id q18so467629pld.13;
+        Thu, 30 Jun 2022 14:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EnTvSgePrhZFZaFA+2vKdGcqExajag+7cCIQmnEgyew=;
+        b=bjk8OnY7U11eIZMBhp3vNNXPhem7A1k/Hi4MA2rhKBbqaNqBkk1iqFOneaRWc9q5/3
+         z9vLJXiU2lTROIarHTFAYWdH4wNAFvElaJFGhSgr1qSVVJNco8VX0dRnZiG7UObpAd+G
+         cIaXpDkPyV4T6UhGlL7zktFXFxov0HB+KdGA/AXR4UbGDpvbZSzVy4wEZRJB5F4TyxIk
+         U2DtiTfh/Ut1cw81B6H7VwzRw17+INs8BbR/hQ5/N7l+J7bZn0mpKCyfEuH0w/vSeUq7
+         CIynOo0cLiE2oMWpDyw6h5idtsaSvqjROoz60YTDF316pYKuN6pEwAcLRjWT0DazBo2M
+         tdHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EnTvSgePrhZFZaFA+2vKdGcqExajag+7cCIQmnEgyew=;
+        b=ClljQnOwjrthPGxc0FKq3gqX7CVRWsBZVul1SDVrAVNrhVDq+N5pBg0w6jUgE1AsOw
+         RSSFrhwDNGLRCgxUkNW7Stbkv87sSb9D/yfHUhwjA2dO0vdXGEpXFW6kiEHdpAxcGQMX
+         kWTgVpw8mZbx8pFCwkEEe4JJr8t0IjYb04W5qoJwWwFCJQkDXEuRO4gREUh05fiHyH+Z
+         MWIIcP6jHS2QkmSsEpjtdhRH3ya3MiNj6ZWdcC8PPLvKJ7uiOca2UR66Dwco82yX33nd
+         9TfqGCAjXMaxzKdGaQJTo4S3S8UF8x9otO5PrNm9rq9PDaUxoINneQ/CXqQrdHge7AQp
+         TU5Q==
+X-Gm-Message-State: AJIora8NMwDkj8XVmLKBxQ4+nGod3+DREjC1qMDDMnuUMbGDafOonDnU
+        y7S1HEfAbFYUdVrebJD31N4+InHjUmnQ++ttv2k=
+X-Google-Smtp-Source: AGRyM1vDBqhj2OxY6I/jEe7NDmicgN5u0qhJW6F86uSrh4ePqT8HV5n1Y4MixJh4nUoBdYYphPXooSKsm1LfMjPGOoQ=
+X-Received: by 2002:a17:903:328e:b0:16b:8745:bb77 with SMTP id
+ jh14-20020a170903328e00b0016b8745bb77mr17422936plb.70.1656623843711; Thu, 30
+ Jun 2022 14:17:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 00/15] Canaan devicetree fixes
-Content-Language: en-US
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Niklas Cassel <Niklas.Cassel@wdc.com>
-Cc:     Conor Dooley <mail@conchuod.ie>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
+References: <20220630210327.4645-1-kris@embeddedTS.com>
+In-Reply-To: <20220630210327.4645-1-kris@embeddedTS.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 30 Jun 2022 18:17:11 -0300
+Message-ID: <CAOMZO5DJBQxc9ewO7R_uoHy3_kKq9mGShQn-oJiGyNwWxobsEg@mail.gmail.com>
+Subject: Re: [PATCH v2] ARM: dts: imx6qdl-ts7970: Fix ngpio typo and count
+To:     Kris Bahnsen <kris@embeddedts.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-References: <20220629184343.3438856-1-mail@conchuod.ie>
- <Yr3PKR0Uj1bE5Y6O@x1-carbon> <20220630175318.g2zmu6ek7l5iakve@bogus>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220630175318.g2zmu6ek7l5iakve@bogus>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Mark Featherston <mark@embeddedts.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/1/22 02:53, Sudeep Holla wrote:
-> On Thu, Jun 30, 2022 at 04:28:26PM +0000, Niklas Cassel wrote:
->> On Wed, Jun 29, 2022 at 07:43:29PM +0100, Conor Dooley wrote:
->>> From: Conor Dooley <conor.dooley@microchip.com>
->>>
->>> Hey all,
->>> This series should rid us of dtbs_check errors for the RISC-V Canaan k210
->>> based boards. To make keeping it that way a little easier, I changed the
->>> Canaan devicetree Makefile so that it would build all of the devicetrees
->>> in the directory if SOC_CANAAN.
->>>
->>> I *DO NOT* have any Canaan hardware so I have not tested any of this in
->>> action. Since I sent v1, I tried to buy some since it's cheap - but could
->>> out of the limited stockists none seemed to want to deliver to Ireland :(
->>> I based the series on next-20220617.
->>>
->>
->> I first tried to apply your series on top of next-20220630,
->> but was greeted by a bunch of different warnings on boot,
->> including endless RCU stall warnings.
->> However, even when booting next-20220630 without your patches,
->> I got the same warnings and RCU stall.
->>
-> 
-> Is it possible to share the boot logs please ?
-> Conor is having issues with my arch_topology/cacheinfo updates in -next.
-> I would like to know if your issue is related to that or not ?
+Hi Kris,
 
-FYI, I see rcu warnings on boot on my dual-socket 8-cores Xeon system, but
-the same kernel does not have the rcu warnings with an AMD Epyc single
-socket 16-cores box.
+On Thu, Jun 30, 2022 at 6:03 PM Kris Bahnsen <kris@embeddedts.com> wrote:
+>
+> Device-tree incorrectly used "ngpio" which caused the driver to
+> fallback to 32 ngpios.
+>
+> This platform has 62 GPIO registers.
+>
+> Fixes: 9ff8e9fccef9 ("ARM: dts: TS-7970: add basic device tree")
+> Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
 
-> 
->> So I tested your series on top of v5.19-rc4 +
->> commit 0397d50f4cad ("spi: dt-bindings: Move 'rx-sample-delay-ns' to
->> spi-peripheral-props.yaml") cherry-picked,
->> (in order to avoid conflicts when applying your series,)
->> and the board was working as intended, no warnings or RCU stalls.
->>
-> 
-> If possible can you give this branch[1] a try where my changes are and doesn't
-> have any other changes from -next. Sorry to bother you.
-> 
-> Conor seem to have issue with this commit[2], so if you get issues try to
-> check if [3] works.
-> 
-> Regards,
-> Sudeep
-> 
-> [1] https://git.kernel.org/sudeep.holla/c/ae85abf284e7
-> [2] https://git.kernel.org/sudeep.holla/c/155bd845d17b
-> [3] https://git.kernel.org/sudeep.holla/c/009297d29faa
-
-
--- 
-Damien Le Moal
-Western Digital Research
+Reviewed-by: Fabio Estevam <festevam@gmail.com>

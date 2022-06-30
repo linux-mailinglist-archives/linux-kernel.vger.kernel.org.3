@@ -2,172 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833FA5625C7
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 00:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CA75625CB
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 00:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236763AbiF3V7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 17:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49614 "EHLO
+        id S236811AbiF3WDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 18:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiF3V7h (ORCPT
+        with ESMTP id S231747AbiF3WDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 17:59:37 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21273FBE7;
-        Thu, 30 Jun 2022 14:59:36 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id sb34so599771ejc.11;
-        Thu, 30 Jun 2022 14:59:36 -0700 (PDT)
+        Thu, 30 Jun 2022 18:03:00 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB9E51B14
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 15:02:58 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id h14-20020a1ccc0e000000b0039eff745c53so411426wmb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 15:02:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VCFiO/DeU9BXKDMeaTVORaJLJS+2vXFEBjORLfl2s5k=;
-        b=LvKY1OOTT78vTS8EPbGj0TrO58Z6edbacT16WUNefQLwdjxglPKC7hY1zgMoBIDwzP
-         2xci4QFis9EXN30WVQkkwLYWs7l87b+YBiiRWyiHrhSXInAHmd1BM7aDXMhtPMZI2HY4
-         LBqz+kuSiDwiwJ8EQhRZsklryzlVX/6VZ/Dm8QkCM7gS97EHASij1PJFrTFg3JdqV4pE
-         72QKMYh6DQiwnvMQHeU9G6LbKsFaDoxkZibp7qSQ0GnOAW6OnFg0JT+KoD1aqaUuzPLf
-         h75v8xrcHZUUpGwz0Pq4KzKkNFFgAbl1vUiw7aSTsjp24LOIpKbFQZWeSHfUJLj6RAJs
-         dBdw==
+         :cc;
+        bh=RmR9nWCJRvx1cVbS1nar4zM5LTb6LzpRfeA+XNWCvW8=;
+        b=QSw7SI9wt9Ou0H5un+bB9AHgyuHX8JxAHbkNA1K26di0ntxBw6Xh4YdBBEwuPN+uOp
+         4Q80EvkVM/QeoNHGstVX4oPFRbPcow/2G6Pu6ngi8xs01rlf7Gs+k2f8EJRDQdfNNbcK
+         usp6CgCfeNS/6kwbmcwHdxxV1p3e6RfKXQC1fvidPTu7gY3Sq9bWFe42WNNPEzVULZUA
+         wSYVms5JDpLU4vrP87qMeJu2neN6zTfyYoSQbYwnX2F58WJPIGY/Qc87chpZMQpBcbfm
+         pb4qjQyaISQD/THWBzEUir9KzhWQSYqYYHMFyhKXE/fLlEX6IpeygbAj+w6s7sTKQ+1m
+         dk1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VCFiO/DeU9BXKDMeaTVORaJLJS+2vXFEBjORLfl2s5k=;
-        b=NWKzicev+ZSPJzn3Je0ulWmq03XpEr+auwguLicX4HqZ9wh/z2LokxTzKWZ7LZkUn3
-         BGs5CTjcpChMVinI1Kh4wyG68muOIdPAx6x5bl77KVeGPnPyaGYsVLeolSeDC96JlDDM
-         sj3YRnKTf8k0sOuXhlV6Nq2MpIk4I/ABjuIBzBXEixw77K6kX1JlipwFKNpGABAQ0udi
-         JsFC8d5/lfgH5zioTmmKiGe5DSDx9/x30/sRch2+56ksAkb5F3oIlFxrT9VrfjMGIJhu
-         mceb7UlViRrRBmalD0V7JkcE+BUuLzKiUg7fuJ6yXsQzAUyOtE29vd8vmL/U4n91ZogU
-         wUug==
-X-Gm-Message-State: AJIora/D6BMLqlDHj/gEDNorgrSKf92gIxY24ABcXKmlxFmVrubC2sl2
-        LtTxe0IfFayWipgQyfKaZKyRGNu9SDe7qSIJ3yC5lrn/
-X-Google-Smtp-Source: AGRyM1utaObcR+X0r6TrHRoLKwSzV4pBavCJL1T5Wzg7peFzpGSlpvtkm1Sf8JauMB3VhrTRV7HUakvHEsj0+Nbkr+k=
-X-Received: by 2002:a17:906:5a62:b0:728:f6d4:7786 with SMTP id
- my34-20020a1709065a6200b00728f6d47786mr10914153ejc.184.1656626375309; Thu, 30
- Jun 2022 14:59:35 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=RmR9nWCJRvx1cVbS1nar4zM5LTb6LzpRfeA+XNWCvW8=;
+        b=KVJeXSZbLURneFxzvC0bVUZ8r2C2HljIXnXkP7Y1+lzMRO6WvL676zLE0AU9ZRcOS1
+         XFr1xiXkDERwpMkYZC3St/gVrzlx7qvPbxdiK610Otb3Nm5SMKk8z4tSGI9yjSaguXmh
+         88Vsil6KSa0tAas6htVm1JoO4H6tSVHVNOVR1uzR/OCJQSRawTMTTiHUcjuFVZnHt9sM
+         +WjRw5GPd3tUE28r5434cHVx7yKlXT6nDZ+S33bhX+VTJ3KLiScmu7YvZh80x8mjOyat
+         /WyDXdLj5LbkeFARrsQoot63j0Fa6yMp3xRt7e7U2DXQSiSltzX+2j7poke3EUXay6he
+         h47g==
+X-Gm-Message-State: AJIora8Fejzn8Iu3IZ/O8rwuWXdtP/DlDHnguOY7LTan4y4G6y1ii1//
+        Xd8DnD0Ef6cfrPokPFgmTLArVEhqep4aY65WQ1Q3dg==
+X-Google-Smtp-Source: AGRyM1u72PEELgjnPjS+eqrC3Qje60s8cQXcX86vetUYMQl4XRktkox5UWMrrrm/BS2ATFCsX7adbrMcoP2yK6u7RIg=
+X-Received: by 2002:a05:600c:4081:b0:3a0:47c4:8dd0 with SMTP id
+ k1-20020a05600c408100b003a047c48dd0mr11967073wmh.178.1656626577281; Thu, 30
+ Jun 2022 15:02:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220629085836.18042-1-fmdefrancesco@gmail.com>
- <CANn89iK6g+4Fy2VMV7=feUAOUDHu-J38be+oU76yp+zGH6xCJQ@mail.gmail.com>
- <CAKgT0UcKRJUJrpFHdNrdH98eu_dpiZiVakJRqc2qHrdGJJQRQA@mail.gmail.com> <2254584.ElGaqSPkdT@opensuse>
-In-Reply-To: <2254584.ElGaqSPkdT@opensuse>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Thu, 30 Jun 2022 14:59:23 -0700
-Message-ID: <CAKgT0UfThk3MLcE38wQu5+2Qy7Ld2px-2WJgnD+2xbDsA8iEEw@mail.gmail.com>
-Subject: Re: [Intel-wired-lan] [PATCH] ixgbe: Use kmap_local_page in ixgbe_check_lbtest_frame()
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ira Weiny <ira.weiny@intel.com>,
+References: <20220630191230.235306-1-kaleshsingh@google.com>
+ <Yr3+RLhpp3g9A7vb@zx2c4.com> <CAC_TJvdV9bU2xWpbgrQuyrr6ens9gzDnZT2UzAY6Q6ZN9p7aEw@mail.gmail.com>
+ <Yr4SQVjBCilyV1na@zx2c4.com>
+In-Reply-To: <Yr4SQVjBCilyV1na@zx2c4.com>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Thu, 30 Jun 2022 15:02:46 -0700
+Message-ID: <CAC_TJvdZMr7KyUe7ro7jmFT1z5Gs3YbM9dhbL5Yp-weLvd0T3g@mail.gmail.com>
+Subject: Re: [PATCH] pm/sleep: Add PM_USERSPACE_AUTOSLEEP Kconfig
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     John Stultz <jstultz@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Saravana Kannan <saravanak@google.com>,
+        "T.J. Mercier" <tjmercier@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
         "David S. Miller" <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 11:18 AM Fabio M. De Francesco
-<fmdefrancesco@gmail.com> wrote:
+On Thu, Jun 30, 2022 at 2:14 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
 >
-> On gioved=C3=AC 30 giugno 2022 18:09:18 CEST Alexander Duyck wrote:
-> > On Thu, Jun 30, 2022 at 8:25 AM Eric Dumazet <edumazet@google.com> wrot=
-e:
-> > >
-> > > On Thu, Jun 30, 2022 at 5:17 PM Alexander Duyck
-> > > <alexander.duyck@gmail.com> wrote:
-> > > >
-> > > > On Thu, Jun 30, 2022 at 3:10 AM Maciej Fijalkowski
-> > > > <maciej.fijalkowski@intel.com> wrote:
-> > > > >
-> > > > > On Wed, Jun 29, 2022 at 10:58:36AM +0200, Fabio M. De Francesco
-> wrote:
-> > > > > > The use of kmap() is being deprecated in favor of
-> kmap_local_page().
-> > > > > >
-> > > > > > With kmap_local_page(), the mapping is per thread, CPU local an=
-d
-> not
-> > > > > > globally visible. Furthermore, the mapping can be acquired from
-> any context
-> > > > > > (including interrupts).
-> > > > > >
-> > > > > > Therefore, use kmap_local_page() in ixgbe_check_lbtest_frame()
-> because
-> > > > > > this mapping is per thread, CPU local, and not globally visible=
-.
-> > > > >
-> > > > > Hi,
-> > > > >
-> > > > > I'd like to ask why kmap was there in the first place and not pla=
-in
-> > > > > page_address() ?
-> > > > >
-> > > > > Alex?
-> > > >
-> > > > The page_address function only works on architectures that have
-> access
-> > > > to all of physical memory via virtual memory addresses. The kmap
-> > > > function is meant to take care of highmem which will need to be
-> mapped
-> > > > before it can be accessed.
-> > > >
-> > > > For non-highmem pages kmap just calls the page_address function.
-> > > > https://elixir.bootlin.com/linux/latest/source/include/linux/highme=
-m-internal.h#L40
-> > >
-> > >
-> > > Sure, but drivers/net/ethernet/intel/ixgbe/ixgbe_main.c is allocating
-> > > pages that are not highmem ?
-> > >
-> > > This kmap() does not seem needed.
-> >
-> > Good point. So odds are page_address is fine to use. Actually there is
-> > a note to that effect in ixgbe_pull_tail.
-> >
-> > As such we could probably go through and update igb, and several of
-> > the other Intel drivers as well.
-> >
-> > - Alex
-> >
-> I don't know this code, however I know kmap*().
+> On Thu, Jun 30, 2022 at 01:41:40PM -0700, Kalesh Singh wrote:
+> > Our latest supported kernels in Android are based on 5.15 so the
+> > config change isn't yet needed. Once there are newer versions with the
+> > CONFIG_ANDROID removed I will add this to the defconfig.
 >
-> I assumed that, if author used kmap(), there was possibility that the pag=
-e
-> came from highmem.
+> Okay. It might be still worth getting something uploaded to gerrit so
+> that it's easy to remember and submit whenever the time comes.
 >
-> In that case kmap_local_page() looks correct here.
->
-> However, now I read that that page _cannot_ come from highmem. Therefore,
-> page_address() would suffice.
->
-> If you all want I can replace kmap() / kunmap() with a "plain"
-> page_address(). Please let me know.
->
-> Thanks,
->
-> Fabio
+> Also, what about android running on mainline? Where does that base
+> config live?
 
-Replacing it with just page_address() should be fine. Back when I
-wrote the code I didn't realize that GFP_ATOMIC pages weren't
-allocated from highmem so I suspect I just used kmap since it was the
-way to cover all the bases.
+I've uploaded the changes on android-mainline [1]. We'll submit there
+once the upstream changes are finalized.
+
+[1] https://android-review.googlesource.com/c/kernel/common/+/2142693/1
 
 Thanks,
-
-- Alex
+Kalesh
+>
+> Jason

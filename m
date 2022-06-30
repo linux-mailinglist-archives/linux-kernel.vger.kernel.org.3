@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE57561BE0
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C4C561C6F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235424AbiF3NtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 09:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
+        id S235762AbiF3Nzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 09:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235280AbiF3NsR (ORCPT
+        with ESMTP id S235896AbiF3Nyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:48:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDCC18E;
-        Thu, 30 Jun 2022 06:48:05 -0700 (PDT)
+        Thu, 30 Jun 2022 09:54:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841A236B7D;
+        Thu, 30 Jun 2022 06:50:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B55E361FF5;
-        Thu, 30 Jun 2022 13:48:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1E1DC34115;
-        Thu, 30 Jun 2022 13:48:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17CFA61FD8;
+        Thu, 30 Jun 2022 13:50:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21D31C34115;
+        Thu, 30 Jun 2022 13:50:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656596884;
-        bh=//tNa/+oXvrh+YZZ1UklDkaYoawaeD35eJmeJbf1BKc=;
+        s=korg; t=1656597025;
+        bh=r/AUmqVNZ/rqk8TyaWRYjSqZNwcpqBfVSV8e106GGsk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=su7wPm8pR+0MYeoa8Kad/ZaXJTEah6z3nyd8vRz2BYJrGKrh3zAhgcE+94/3Fim2R
-         ntyhhHrcu0Mk4MrxdyOTeUn4CqolkPWyD5dp+RIqpXC2caPsV+hbpPXIzF3YQWWgN4
-         +RBQE3ny26jpAkhr/2LU0Quat+27+7/GEhl7dXxw=
+        b=NwpNXueBq+fbdIoyvMXfAqXvxUeXfMnMW+r67nPg//C+CqQrPPDjncB6z9XB5kaST
+         UFzAgOVXwftju2wMhh/v9DVhi40q+xF2VWFhG4bWuFYRs/az27lGLvmoKct1q0cI34
+         U/JyZIADN8A0nIJ3XmIQrIBYiljUgLUoaKFkeHxc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 4.9 16/29] xtensa: xtfpga: Fix refcount leak bug in setup
+        stable@vger.kernel.org, Jon Hunter <jonathanh@nvidia.com>,
+        Ron Economos <re@w6rz.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.14 05/35] random: quiet urandom warning ratelimit suppression message
 Date:   Thu, 30 Jun 2022 15:46:16 +0200
-Message-Id: <20220630133231.683305620@linuxfoundation.org>
+Message-Id: <20220630133232.600336036@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133231.200642128@linuxfoundation.org>
-References: <20220630133231.200642128@linuxfoundation.org>
+In-Reply-To: <20220630133232.433955678@linuxfoundation.org>
+References: <20220630133232.433955678@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,32 +55,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit 173940b3ae40114d4179c251a98ee039dc9cd5b3 upstream.
+commit c01d4d0a82b71857be7449380338bc53dde2da92 upstream.
 
-In machine_setup(), of_find_compatible_node() will return a node
-pointer with refcount incremented. We should use of_node_put() when
-it is not used anymore.
+random.c ratelimits how much it warns about uninitialized urandom reads
+using __ratelimit(). When the RNG is finally initialized, it prints the
+number of missed messages due to ratelimiting.
 
+It has been this way since that functionality was introduced back in
+2018. Recently, cc1e127bfa95 ("random: remove ratelimiting for in-kernel
+unseeded randomness") put a bit more stress on the urandom ratelimiting,
+which teased out a bug in the implementation.
+
+Specifically, when under pressure, __ratelimit() will print its own
+message and reset the count back to 0, making the final message at the
+end less useful. Secondly, it does so as a pr_warn(), which apparently
+is undesirable for people's CI.
+
+Fortunately, __ratelimit() has the RATELIMIT_MSG_ON_RELEASE flag exactly
+for this purpose, so we set the flag.
+
+Fixes: 4e00b339e264 ("random: rate limit unseeded randomness warnings")
 Cc: stable@vger.kernel.org
-Signed-off-by: Liang He <windhl@126.com>
-Message-Id: <20220617115323.4046905-1-windhl@126.com>
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Reported-by: Jon Hunter <jonathanh@nvidia.com>
+Reported-by: Ron Economos <re@w6rz.net>
+Tested-by: Ron Economos <re@w6rz.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/xtensa/platforms/xtfpga/setup.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/char/random.c     |    2 +-
+ include/linux/ratelimit.h |   12 ++++++++----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
---- a/arch/xtensa/platforms/xtfpga/setup.c
-+++ b/arch/xtensa/platforms/xtfpga/setup.c
-@@ -152,6 +152,7 @@ static int __init machine_setup(void)
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -88,7 +88,7 @@ static RAW_NOTIFIER_HEAD(random_ready_ch
  
- 	if ((eth = of_find_compatible_node(eth, NULL, "opencores,ethoc")))
- 		update_local_mac(eth);
-+	of_node_put(eth);
- 	return 0;
- }
- arch_initcall(machine_setup);
+ /* Control how we warn userspace. */
+ static struct ratelimit_state urandom_warning =
+-	RATELIMIT_STATE_INIT("warn_urandom_randomness", HZ, 3);
++	RATELIMIT_STATE_INIT_FLAGS("urandom_warning", HZ, 3, RATELIMIT_MSG_ON_RELEASE);
+ static int ratelimit_disable __read_mostly =
+ 	IS_ENABLED(CONFIG_WARN_ALL_UNSEEDED_RANDOM);
+ module_param_named(ratelimit_disable, ratelimit_disable, int, 0644);
+--- a/include/linux/ratelimit.h
++++ b/include/linux/ratelimit.h
+@@ -23,12 +23,16 @@ struct ratelimit_state {
+ 	unsigned long	flags;
+ };
+ 
+-#define RATELIMIT_STATE_INIT(name, interval_init, burst_init) {		\
+-		.lock		= __RAW_SPIN_LOCK_UNLOCKED(name.lock),	\
+-		.interval	= interval_init,			\
+-		.burst		= burst_init,				\
++#define RATELIMIT_STATE_INIT_FLAGS(name, interval_init, burst_init, flags_init) { \
++		.lock		= __RAW_SPIN_LOCK_UNLOCKED(name.lock),		  \
++		.interval	= interval_init,				  \
++		.burst		= burst_init,					  \
++		.flags		= flags_init,					  \
+ 	}
+ 
++#define RATELIMIT_STATE_INIT(name, interval_init, burst_init) \
++	RATELIMIT_STATE_INIT_FLAGS(name, interval_init, burst_init, 0)
++
+ #define RATELIMIT_STATE_INIT_DISABLED					\
+ 	RATELIMIT_STATE_INIT(ratelimit_state, 0, DEFAULT_RATELIMIT_BURST)
+ 
 
 

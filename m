@@ -2,107 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C019B5612C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 08:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDEF35612C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 08:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232378AbiF3Gwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 02:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52240 "EHLO
+        id S232849AbiF3GyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 02:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbiF3Gw0 (ORCPT
+        with ESMTP id S229529AbiF3GyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 02:52:26 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2CA31383;
-        Wed, 29 Jun 2022 23:52:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656571934;
-        bh=ZU0HKrj/U8Ky903QI1buKExZhrj7mMmS2iFC6fGomSA=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=BPRpkDGLZ8JerUWKg3YxeyOz1mG3U3AJFEKMR1oVNymBxcF5WPPggtAgI2W+v18v4
-         7iPmwMo4DjgJtwVKPRxMdHVtEfPBkCkvdTcfbYzHaUUkz0VPL0Fu6h5cMzQJdaap5N
-         FfaVUzip5JFnTAJOKmME+SKDLMy22Jem9PjZA/qU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.136.11]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MTABZ-1oCXsv2XjL-00UXU7; Thu, 30
- Jun 2022 08:52:14 +0200
-Message-ID: <9eeb98b1-b53b-f90a-7610-5d40509d8204@gmx.de>
-Date:   Thu, 30 Jun 2022 08:51:45 +0200
+        Thu, 30 Jun 2022 02:54:11 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DBD20BF5;
+        Wed, 29 Jun 2022 23:54:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7049ECE2A65;
+        Thu, 30 Jun 2022 06:54:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D5F2C34115;
+        Thu, 30 Jun 2022 06:54:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656572047;
+        bh=AoZZBIOZ6lxp4R1mhcbQkpMM8z6raWKSubTBxc3uKjQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JdCXLXAFdIVNttvrE3zYW5gc495EVxTjSxKY3PzJbtg3xdpmjqtTQH9IioyspcVZZ
+         +Ur+l2PNgwu/YRulMcltk2W2KqOP8/zvvDM3bif4NooRhihc2IzocSGAbvFKOjjE/9
+         pqK9K2B7S2w/DbcFADGiZMhG1fjVZEzAxxzOlhdE=
+Date:   Thu, 30 Jun 2022 08:54:04 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sebin Sebastian <mailmesebin00@gmail.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Neal Liu <neal_liu@aspeedtech.com>,
+        Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 -next] usb: gadget: dereference before null check
+Message-ID: <Yr1IjFBe6JjrDq8n@kroah.com>
+References: <20220630044706.10772-1-mailmesebin00@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] fbdev: fbmem: Fix logo center image dx issue
-Content-Language: en-US
-To:     Guiling Deng <greens9@163.com>, daniel@ffwll.ch
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220628163641.4167-1-greens9@163.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220628163641.4167-1-greens9@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:StuGJg+gOrxZU2TSBaJ8FvbtcixzBEVjwjRW/XpF+r7xjRTqsbA
- L1foNai+z+dE3b12FpLtKY8bsEAjKmLkj0YHIk9W0if8S/kByI417rYFOfuNCk/SJSeTl18
- Mu28R8moWuoohDBYds+JRUtU0dSaJDo7XN76BXyZnxMZOFhIQ8mb8f1ky18H3V3kE7g6QNR
- ZRJGSA7N3Ab8VjJSu3jyQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:nvcOhbkODdE=:Ai4lNZWMkIN1tgmRB6ou01
- 9xmzZAukr7+lp4SM/jpnY7hyqhQeEe1FY9n23rjdzidoURTHkTwUnfdL7OHjH4fo0/UvL5Co2
- Fec5WoV5TGariKDl1aALOMzaX1FKwS+ES/szQMfQ0hsFdI6cvXJPelT9OBx1DAh+0GbgH9V8H
- 57UgAEF4pShZjyVEGFIQ4xD4hebXJkGj4Tk+m3ZBdQzB6YWY70fqmhphTrNfVDh3RVyx8fSIm
- CZd63lJariinn290Abmv3/t1L79ng1FBjgDOnQKJQsZFR3lW2+NjH+DCLg565Cq6L8lpiT5lv
- w+QwERLA8BBnj4wGp3LOrrvqaZ50oMxTqcDTcvOBf6c1waoab1qWE4vg9suPFjwVr1kfVjvVy
- lAxZaCyPFdNK9S5yrNgOrih4/J5Fa7Xck7MicPrsVO++HzQdwMcs3p72FRMWDSR+qLJIM8WcL
- CzgwIuZvmKFFIzJGZyHBfs+rDM3+GG5Syv5+8pjM+dKzAsHTRgFHZnWchHhCAFUp6LwUXu7Gy
- HrEh9O7FdPFMj6Da1z1rPkYqVgyqw8tLlBwBAMyUPMCO0dx72bArxhebskznasKxt8R81ya/z
- CWzvyE5g4WxUPGyQrjkYlRHhxBbq28xmHTo80QDBwtRgWzgPds7xySISk9NdBmwS1ZK7N256b
- NVjVIvIz+iShIAHpUGajBkwqHf02OVno0jGo/hulWwsdcFDQTGsBBTVQ7ypimF8wklEW0wx/0
- 7R72NZ8wm/3SQr9Z5NuU42v25YQ2K2BvttjllRn7puIp9hZhspJVKQ9IzmpHBBRdZWeBH0QfB
- GrFCIaDCpAXzStJd2GFAIlCefeQPFhozC4CLtlvHzvJlq2Oc27472T23ipdj4cK1JZoGrzYwt
- 9fCwO7m0WrIivUnDoPQhikRyFq9z7AzKv1rj6XOYFq3AbNgGUwaNCKiorGsy3TWwpILDjH9sV
- KUVLLwTSaM1376tAz6NwgyYrjBspBmj/2QLPT3oMcZ/EzOplQqr6oXtAd0dam4EzIOhiMaGEB
- 0Ms541SzJw41/DAph/7j9/Vy+79O6HGCEdLTrI3t0Ytqbkldm/Skj4B6arn4g0vcdrB9uDvFw
- FW86Hv1VrLEq/5dJzQUGTFGRtrMboCRsWEk2VE479ILHkoMPDYHToRhlQ==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220630044706.10772-1-mailmesebin00@gmail.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/22 18:36, Guiling Deng wrote:
-> Image.dx gets wrong value because of missing '()'.
->
-> If xres =3D=3D logo->width and n =3D=3D 1, image.dx =3D -16.
->
-> Signed-off-by: Guiling Deng <greens9@163.com>
+On Thu, Jun 30, 2022 at 10:17:06AM +0530, Sebin Sebastian wrote:
+> Fix coverity warning dereferencing before null check. _ep and desc is
+> dereferenced on all paths until the check for null. Move the
+> initializations after the check for null.
 
-Nice catch!
+How can those values ever be NULL?
 
-applied to the fbdev tree.
+> Coverity issue: 1518209
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Helge
+kernel test robot did not find this issue.
+
+> Signed-off-by: Sebin Sebastian <mailmesebin00@gmail.com>
+
+What commit id does this change fix?
 
 > ---
->  drivers/video/fbdev/core/fbmem.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core=
-/fbmem.c
-> index c4a18322dee9..1fd2bdb11266 100644
-> --- a/drivers/video/fbdev/core/fbmem.c
-> +++ b/drivers/video/fbdev/core/fbmem.c
-> @@ -511,7 +511,7 @@ static int fb_show_logo_line(struct fb_info *info, i=
-nt rotate,
->
->  		while (n && (n * (logo->width + 8) - 8 > xres))
->  			--n;
-> -		image.dx =3D (xres - n * (logo->width + 8) - 8) / 2;
-> +		image.dx =3D (xres - (n * (logo->width + 8) - 8)) / 2;
->  		image.dy =3D y ?: (yres - logo->height) / 2;
->  	} else {
->  		image.dx =3D 0;
+>  Changes since v1: Fix the build errors and warnings due to first patch.
+>  Fix the undeclared 'ep' and 'maxpacket' error. Fix the ISO C90 warning.
+> 
+>  drivers/usb/gadget/udc/aspeed_udc.c | 21 ++++++++++++++-------
+>  1 file changed, 14 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+> index d75a4e070bf7..a43cf8dde2a8 100644
+> --- a/drivers/usb/gadget/udc/aspeed_udc.c
+> +++ b/drivers/usb/gadget/udc/aspeed_udc.c
+> @@ -341,26 +341,33 @@ static void ast_udc_stop_activity(struct ast_udc_dev *udc)
+>  static int ast_udc_ep_enable(struct usb_ep *_ep,
+>  			     const struct usb_endpoint_descriptor *desc)
+>  {
+> -	u16 maxpacket = usb_endpoint_maxp(desc);
+> -	struct ast_udc_ep *ep = to_ast_ep(_ep);
 
+checking that ep is NULL here is an impossible thing on its own.  You
+did change this so that you didn't check this anymore, which is odd as
+you did not mention that in the changelog text :(
+
+> -	struct ast_udc_dev *udc = ep->udc;
+> -	u8 epnum = usb_endpoint_num(desc);
+>  	unsigned long flags;
+>  	u32 ep_conf = 0;
+>  	u8 dir_in;
+>  	u8 type;
+> +	u16 maxpacket;
+> +	struct ast_udc_ep *ep;
+> +	struct ast_udc_dev *udc;
+> +	u8 epnum;
+
+Why did you reorder these?
+
+>  
+> -	if (!_ep || !ep || !desc || desc->bDescriptorType != USB_DT_ENDPOINT ||
+> -	    maxpacket == 0 || maxpacket > ep->ep.maxpacket) {
+> +	if (!_ep || !desc || desc->bDescriptorType != USB_DT_ENDPOINT) {
+>  		EP_DBG(ep, "Failed, invalid EP enable param\n");
+>  		return -EINVAL;
+>  	}
+> -
+
+Why did you remove this line?
+
+Also, your To: line is messed up somehow, please fix your email
+client...
+
+thanks,
+
+gre gk-h

@@ -2,118 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E265615ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAAAC561607
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234261AbiF3JQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 05:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
+        id S234066AbiF3JRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 05:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234223AbiF3JPh (ORCPT
+        with ESMTP id S234247AbiF3JQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 05:15:37 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C12138D97;
-        Thu, 30 Jun 2022 02:15:01 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id o4so22356034wrh.3;
-        Thu, 30 Jun 2022 02:15:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Qs5w4mXuxTGM+ANX6aO1XbOmipxzruUkk3yjzx/1m5M=;
-        b=Nxg1/Tz+7NmXT7PN4DRl96HH/dnYCeyzAmCpGGPJO94V2LQY/Pv9ZvvK+KXVSFyWJG
-         LmEffNuq+MGRK6Ln5VbwJQSDeX0pvMljGL2Wo0URtPtHOkocBs4W7eDxv3Wid809cqdw
-         wEEcDPnD9Ve0MjXKzX5TEufvyz8DjbHkqJCpxBOlKVLxM99p76zxsb/gk7m7rcI+bICb
-         iZ+cbJhluyhfCKjcdoeBlKsfuy5AU4hFNHDiBeGfiXz3EkTEU4vi7dFUEjMWTQjApXVd
-         h0yF3DBfiMAVmKMex/PMYCPJ5Z2V2nOXNhJu5tTWJMrUaa/434dvcVTtiZnSduSf+jzQ
-         DwVA==
+        Thu, 30 Jun 2022 05:16:56 -0400
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A147A248DC;
+        Thu, 30 Jun 2022 02:15:47 -0700 (PDT)
+Received: by mail-qk1-f179.google.com with SMTP id c137so13952945qkg.5;
+        Thu, 30 Jun 2022 02:15:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Qs5w4mXuxTGM+ANX6aO1XbOmipxzruUkk3yjzx/1m5M=;
-        b=t7Fr6M0KK53FKbs2XjFDMdFe9m3BaDnvJbFk/2+djyWNtgwCdoqNmv4gfHCIhLwGUm
-         OoKWD+AIxu7RwpGUBA4DXkGzc/RH6ysYyOzGK1niKtxsBbuNiND4e+SeCIxhAkgYfY4h
-         VogjAJd+ac2yIUU7LiAeiVRuvelvJYAFtaEBw17JCd0B8cXlgKfiYUC7L+64Afs/QR8m
-         J4Qx9DTGtkzmhuDQZevvy/Si6k4rF+v7V8449F0WZ+YQGUJHQu3Z/Xrmb7j+DbDtMPmM
-         PMKn2KB0h6CWRsUcc+1fLSyvLvEytxdx0XfwdXA7i+E4X/8DEg5HYMNNk5iKux0UsLNt
-         MG7A==
-X-Gm-Message-State: AJIora/YuY0A9K2tTNS1KQ4Qy3YPGGFnBtk6U3Zti4heM2x4XwwXH9JI
-        98MLPYcEtRXVjyxBJuVVsKg=
-X-Google-Smtp-Source: AGRyM1uSdCfWkJvQdIqiusHWM74RinDF4sSDArFlNmspUI7tsygjA00oqo2g1lG7SW6cb7DySb0KMQ==
-X-Received: by 2002:a5d:64ae:0:b0:21b:b923:7ad5 with SMTP id m14-20020a5d64ae000000b0021bb9237ad5mr7068522wrp.460.1656580499792;
-        Thu, 30 Jun 2022 02:14:59 -0700 (PDT)
-Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id m2-20020adffa02000000b0021d163daeb0sm11623695wrr.108.2022.06.30.02.14.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 02:14:58 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 11:14:57 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Kartik <kkartik@nvidia.com>
-Cc:     daniel.lezcano@linaro.org, tglx@linutronix.de, robh+dt@kernel.org,
-        krzk+dt@kernel.org, jonathanh@nvidia.com, spujar@nvidia.com,
-        akhilrajeev@nvidia.com, rgumasta@nvidia.com, pshete@nvidia.com,
-        vidyas@nvidia.com, mperttunen@nvidia.com, mkumard@nvidia.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v2 3/6] clocksource/drivers/timer-tegra186: Add support
- for Tegra234 SoC
-Message-ID: <Yr1pkVSyL5c2Upot@orome>
-References: <1656527344-28861-1-git-send-email-kkartik@nvidia.com>
- <1656527344-28861-4-git-send-email-kkartik@nvidia.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E9Vssd5sS4spcwdMP9Swa2WTwEcZk2KwnOex4FXzpQQ=;
+        b=5A73qbb7M2HWdUOpVTFz1MxrxR0zILLX93wQTFnDa3K+a5kIO1XXBFFCAbteNUuExl
+         UqLaQ/uwl0wVXT8pAUX7ZrdwHtUHeds5MA+xqS6UDteonpryxo7YxLzebcGy6336FZQc
+         SiLwE2aOu7Uhz9umTksdVNMFwG2UktqRqMlBQzQoTEQhtRE0D5q7kYpVjwUF/2vvjpad
+         SxWqJfVmm4o2a3xYvI4CLaVIVMRPpNwmBtZrkevaNXZV5fuTaAVd2sZZbkc5XHmVGivq
+         AWhDEdwdKgpKYv3V0fc+lZXIbFeO4/VnrxjW0vRo6g7iRXorioPh+6O+9MpKwP+RGFUd
+         XSYg==
+X-Gm-Message-State: AJIora8oh8dEi2eHL4DGsT6/SmtLmNoCEkE9lYdiscSDjnSwzjalUzWH
+        lk5fWAXzf85iJtzUFahOkuC7sw/od19aKQ==
+X-Google-Smtp-Source: AGRyM1sceO94cADuSaVS9v3Qq5KWl2vlpisVMQq8tiQUP0ZBwqVECrdZ5wA/yvVWcljxJx3KdXDP6g==
+X-Received: by 2002:a37:5383:0:b0:6af:373c:ebfb with SMTP id h125-20020a375383000000b006af373cebfbmr5436369qkb.475.1656580546377;
+        Thu, 30 Jun 2022 02:15:46 -0700 (PDT)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id o16-20020a05620a2a1000b006a68fdc2d18sm10996020qkp.130.2022.06.30.02.15.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 02:15:45 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id d5so32641787yba.5;
+        Thu, 30 Jun 2022 02:15:45 -0700 (PDT)
+X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
+ s14-20020a056902120e00b006346f296b84mr8111243ybu.604.1656580545430; Thu, 30
+ Jun 2022 02:15:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YaXGqWVK0MNVNA+1"
-Content-Disposition: inline
-In-Reply-To: <1656527344-28861-4-git-send-email-kkartik@nvidia.com>
-User-Agent: Mutt/2.2.6 (2022-06-05)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1656341824.git.geert+renesas@glider.be> <2fd9b9e3f60fe555d9dcad499c90e3ec869aa96e.1656341824.git.geert+renesas@glider.be>
+ <c65d6a94-b5c2-e2e4-6fdb-b7982d291e01@linaro.org> <CAMuHMdW=s42sfFwimizTsNjyKue+W9NasTOG0jgjkgkoKv3wfw@mail.gmail.com>
+ <bab4d845-330e-c7f0-5dac-a96caa93a39e@linaro.org> <CAMuHMdUuU4qtfYh=hpY9bWMLKAnz83Oj8f=M9_iUxmR+Zetsow@mail.gmail.com>
+ <c04c3691-7be3-afc5-4f95-2b06ee402c0d@linaro.org>
+In-Reply-To: <c04c3691-7be3-afc5-4f95-2b06ee402c0d@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 30 Jun 2022 11:15:34 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUEeLuaG_sgYZudKv8fEpExdHz4grFj8a6DuzdRng+u_w@mail.gmail.com>
+Message-ID: <CAMuHMdUEeLuaG_sgYZudKv8fEpExdHz4grFj8a6DuzdRng+u_w@mail.gmail.com>
+Subject: Re: [PATCH 5/7] memory: renesas-rpc-if: Move resource acquisition to .probe()
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mark Brown <broonie@kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Krzysztof,
 
---YaXGqWVK0MNVNA+1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jun 30, 2022 at 10:48 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 29/06/2022 20:48, Geert Uytterhoeven wrote:
+> >> You sure? Except rebasing I don't see that. rpcif_sw_init() received the
+> >> rpcif so it had access to all fields.
+> >
+> > Yes I am, don't be misguided by the name of the local variable.
+> > The rpcif structure is allocated by the HF or SPI child driver,
+> > and thus not available in the RPC core driver's .probe() function.
+> > The rpc_priv structure (as of patch 4) is allocated by the RPC core driver.
+> >
+> >>> I agree patches 1-3 could be moved later, if you think it is worthwhile.
+> >>
+> >> This would not be enough, it has to be first patch to be backportable.
+> >
+> > I can make it second? ;-)
+>
+> Why? The point is that this commit should have Fixes or Cc-stable tag.
+> If you make it depending on other non-backportable commit, stable folks
+> cannot pull it automatically.
 
-On Wed, Jun 29, 2022 at 11:59:01PM +0530, Kartik wrote:
-> The timer IP block present on Tegra234 SoC supports watchdog timer
-> functionality that can be used to recover from system hangs. The
-> watchdog timer uses a timer in the background for countdown.
->=20
-> Signed-off-by: Kartik <kkartik@nvidia.com>
-> ---
->  drivers/clocksource/timer-tegra186.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+Because the current driver structure does not allow us to fix the
+problem in a simple way.  Hence the need for patch 4 first.
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+> > Note that that still precludes (easily) backporting s2ram support.
+>
+> But S2R is a feature so it won't be backported...
 
---YaXGqWVK0MNVNA+1
-Content-Type: application/pgp-signature; name="signature.asc"
+Working rebind is a feature, too?
 
------BEGIN PGP SIGNATURE-----
+Actually non-working s2ram is worse, as it returns corrupted data
+(haven't dared to try writing after s2ram yet ;-),  while non-working
+rebind means you just cannot access the device anymore.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmK9aZEACgkQ3SOs138+
-s6H2kxAAnVIhlBIvG4c9Owk/ZtFX96RF4Jt9EWdPmTyr/G9sYbZVar+FkfzfE6ug
-4fOwrV8YFUx1sRuxvVpd/hRjBKcwMsoGHfFvfh26xaGgsqZRcua7/vNtzKxuGEF4
-18mfJ17pJdksMGeUyXwaFz6hfqpNxJjTQ1NV6eCQoQN/tSsvVNtQ1odfvDcI96+K
-1GQ/YfTJfl4r4luhl+ba7hXVmEAnUOpgLUrYZ0pjXxAPTa5qRJC1Z+kphzno6v5F
-p9I2vgFf4vh7Zxdeu5EreGlkR0KhKmkmFVoYMS9xa+3m1dHFra2850M+gKank0+k
-4p0FHWpyngwm1Q/8BTeFaIPZ57van8l3PAcnnRkTd5ZiiiAUfy2wyohSFDE0aDr6
-Uhx+ueIxYfT26zOv/iKMd78yvayTQKQnOfqgny5KgbjUwmJMvFqwFjmkt43NVTB7
-0LgCvgBasb/ZC5c+iFCFNy+FmXhzdFapGr9gaH+aHpH/sXo4F4SXWPOjbOGD2oJn
-QODrlUBFbJoIk4AUnWIt6+QxZPNXpT7MCfuQqAq2rzSLb3c/VukEZ2oYm74DtZL3
-VD8pgW8zZtd2Hr73hErbkK/7LhTlUq9/6AffaNOaN9IfARrdJ1HOpddipsdeeyRu
-5JEdLy7ugdRbPxDvsTi3yHb4J065d3JcRFrw+vATciL716Y6LyA=
-=Ma1N
------END PGP SIGNATURE-----
+But note there are still issues with s2ram...
 
---YaXGqWVK0MNVNA+1--
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

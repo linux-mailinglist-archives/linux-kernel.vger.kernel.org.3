@@ -2,191 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D063561E74
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B677E561E7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235757AbiF3Oxv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Jun 2022 10:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
+        id S235711AbiF3O4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiF3Oxt (ORCPT
+        with ESMTP id S229966AbiF3O4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:53:49 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48241B798
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 07:53:48 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o6vXc-0002Re-Vr; Thu, 30 Jun 2022 16:53:13 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o6vXO-003bqn-HG; Thu, 30 Jun 2022 16:53:02 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o6vXR-000AqK-Co; Thu, 30 Jun 2022 16:53:01 +0200
-Message-ID: <c01103ae5582cda01708c25ddc3f9bb538c67ab0.camel@pengutronix.de>
-Subject: Re: [PATCH v6 08/17] reset: npcm: using syscon instead of device
- data
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Jonathan =?ISO-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Date:   Thu, 30 Jun 2022 16:53:01 +0200
-In-Reply-To: <CAP6Zq1htXxpBR-=FW=8grzspGcLPDM5qiMUPNqh7wNiO=0=HAA@mail.gmail.com>
-References: <20220630103606.83261-1-tmaimon77@gmail.com>
-         <20220630103606.83261-9-tmaimon77@gmail.com>
-         <63f8d70ad9c657890669e9c32775632af4e36995.camel@pengutronix.de>
-         <CAP6Zq1htXxpBR-=FW=8grzspGcLPDM5qiMUPNqh7wNiO=0=HAA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Thu, 30 Jun 2022 10:56:23 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9DC1BEAD
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 07:56:22 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id s10so23433472ljh.12
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 07:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ipNBTkHp2jS0+JttebnQfFLWG27OJJNBttsPzJH3qb0=;
+        b=pgF8MbXGCCzbjeNDnKq+15lZDcZpjlPbZ133zcnyP2hhvSfUAm6yVILAKDi0XiiMcI
+         yCFUl0kRtXWtS3przUPtG5c3sWlxKkM63L5r3UEA0VKoNsXCjfTR/HULCXz8K4OkMvnd
+         tJFt94a2qUqPLZ5CpF60K5NrAp+5bTlP/gZkh8ub4itlVXmihRdUYhnTtvY8AGiQdbY/
+         lF0XeNS2A/mxvuwTNT/2zZcfYVZiZiuYeYFRczsjPquKw/KMMjYZiiD3sI1pFg+Wi68M
+         RKRtDhM93zoHtABy8UsTOs32gguu+E/BaH8wy/56KtZBpYBFfdQ3LEyM6U52wT+lHLIp
+         r3pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ipNBTkHp2jS0+JttebnQfFLWG27OJJNBttsPzJH3qb0=;
+        b=ZQKOhiszvfHk0WplQBsnGuRttyMp4sLioZ5vIl+0EK2ZtA1KR/mg7fnRWLRRnq2uS6
+         /aPuMpOy0Le6NEIRt5Ua7aWhvVd2sUUZX+sOXfuAVJSjf38Z+flU+t1WqFeMTHo7mRCu
+         zycKqIxClHHExJunbKDeYgnTa9zl3awJ4ad/QHWpcE83oQR5KizHXjGUy9jGgSMk083p
+         9Y6waRkSF1PmXJfO7hEUcJ3ntHUpOta5Zk/6zG1wZnSCpEVY5Ifgt7vGfhc/6P2tydm+
+         cGo0ooTQvO6tw31wYPYw1V84ND5JuoevZl99Y5ZF+IFjI/21XEi0yp8zsIykeusecCsZ
+         6D3w==
+X-Gm-Message-State: AJIora+RE4MW0evSVAzXLDJSqsNKLSkspGNgsaj0G+jYyaw6JOjO7TeA
+        BYrI7STv7zljUmCdi3oXnJgKK/Pq46YsBBYJZdA=
+X-Google-Smtp-Source: AGRyM1vxz4+4rQNp1pA9fie+azvy7uthbp37IA/SFg0MMtMDSSosZP+hMp47O1t6HsCrfg9y0DOhPh2xDOKHRWHXWCw=
+X-Received: by 2002:a2e:804b:0:b0:25a:7502:6bd3 with SMTP id
+ p11-20020a2e804b000000b0025a75026bd3mr5428568ljg.455.1656600980868; Thu, 30
+ Jun 2022 07:56:20 -0700 (PDT)
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220630014715.73330-1-feng.tang@intel.com> <Yr21Ymj5uZfFearE@hyeyoo>
+In-Reply-To: <Yr21Ymj5uZfFearE@hyeyoo>
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Date:   Thu, 30 Jun 2022 23:55:59 +0900
+Message-ID: <CAB=+i9RhuAi-w3XbXO5236WFeg04A6ra_xG9o_-DkMaRBFMKGw@mail.gmail.com>
+Subject: Re: [RFC PATCH] mm/slub: enable debugging memory wasting of kmalloc
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Do, 2022-06-30 at 14:20 +0300, Tomer Maimon wrote:
-> Hi Philipp,
-> 
-> Thanks for your comment.
-> 
-> On Thu, 30 Jun 2022 at 13:59, Philipp Zabel <p.zabel@pengutronix.de> wrote:
-> > 
-> > Hi Tomer,
-> > 
-> > On Do, 2022-06-30 at 13:35 +0300, Tomer Maimon wrote:
-> > Using syscon device tree property instead of device data to handle the
-> > NPCM general control registers.
-> > 
-> > In case the syscon not found the code still search for nuvoton,npcm750-gcr
-> > to support DTS backward compatibility.
-> > 
-> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> > ---
-> >  drivers/reset/reset-npcm.c | 17 ++++++++---------
-> >  1 file changed, 8 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/drivers/reset/reset-npcm.c b/drivers/reset/reset-npcm.c
-> > index 2ea4d3136e15..431ff2b602c5 100644
-> > --- a/drivers/reset/reset-npcm.c
-> > +++ b/drivers/reset/reset-npcm.c
-> > @@ -138,8 +138,7 @@ static int npcm_reset_xlate(struct reset_controller_dev *rcdev,
-> >  }
-> > 
-> > 
-> >  static const struct of_device_id npcm_rc_match[] = {
-> > -       { .compatible = "nuvoton,npcm750-reset",
-> > -               .data = (void *)"nuvoton,npcm750-gcr" },
-> > +       { .compatible = "nuvoton,npcm750-reset"},
-> > 
-> > Add a space.                                  ^^
-> Will modify in V7
-> > 
-> >         { }
-> >  };
-> > 
-> > 
-> > @@ -155,15 +154,15 @@ static int npcm_usb_reset(struct platform_device *pdev, struct npcm_rc_data *rc)
-> >         u32 ipsrst1_bits = 0;
-> >         u32 ipsrst2_bits = NPCM_IPSRST2_USB_HOST;
-> >         u32 ipsrst3_bits = 0;
-> > -       const char *gcr_dt;
-> > 
-> > 
-> > -       gcr_dt = (const char *)
-> > -       of_match_device(dev->driver->of_match_table, dev)->data;
-> > -
-> > -       gcr_regmap = syscon_regmap_lookup_by_compatible(gcr_dt);
-> > +       gcr_regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "nuvoton,sysgcr");
-> >         if (IS_ERR(gcr_regmap)) {
-> > -               dev_err(&pdev->dev, "Failed to find %s\n", gcr_dt);
-> > -               return PTR_ERR(gcr_regmap);
-> > +               dev_warn(&pdev->dev, "Failed to find nuvoton,sysgcr search for nuvoton,npcm750-gcr for Poleg backward compatibility");
-> > 
-> > Is this warning useful to the user? Maybe add suggestion like "please
-> > update the device tree". Also there is no further message if
-> > nuvoton,npcm750-gcr is found and all is well.
-> 
-> O.K.
-> I think about two options:
-> 
-> 1. Modify the message "Failed to find nuvoton,sysgcr property, please
-> update the device tree\n Search for nuvoton,npcm750-gcr for Poleg
-> backward compatibility"
+On Thu, Jun 30, 2022 at 11:38 PM Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
+[...]
+> > @@ -5138,11 +5146,12 @@ static int add_location(struct loc_track *t, struct kmem_cache *s,
+> >               if (pos == end)
+> >                       break;
+> >
+> > -             caddr = t->loc[pos].addr;
+> > -             chandle = t->loc[pos].handle;
+> > -             if ((track->addr == caddr) && (handle == chandle)) {
+> > +             l = &t->loc[pos];
+> > +             caddr = l->addr;
+> > +             chandle = l->handle;
+> > +             if ((track->addr == caddr) && (handle == chandle) &&
+> > +                     (track->waste == l->waste)) {
+> >
+> > -                     l = &t->loc[pos];
+> >                       l->count++;
+> >                       if (track->when) {
+> >                               l->sum_time += age;
+> > @@ -5190,6 +5199,7 @@ static int add_location(struct loc_track *t, struct kmem_cache *s,
+> >       l->min_pid = track->pid;
+> >       l->max_pid = track->pid;
+> >       l->handle = handle;
+> > +     l->waste = track->waste;
+>
+> I think this may be fooled when there are different wastes values
+> from same caller (i.e. when a kmalloc_track_caller() is used.)
+> because the array is sorted by caller address, but not sorted by waste.
+>
+> And writing this I noticed that it already can be fooled now :)
+> It's also not sorted by handle.
 
-I would replace "Search for" with "Using"
-The second line probably should be dev_info() level.
+I misread the code. it's not fooled now. the array is also sorted by handle.
+But will be fooled after this patch.
 
-> OR
-> 
-> 2.
->         if (IS_ERR(rc->gcr_regmap)) {
->                 dev_warn(&pdev->dev, "Failed to find nuvoton,sysgcr
-> please update the device tree");
->                 rc->gcr_regmap =
-> syscon_regmap_lookup_by_compatible("nuvoton,npcm750-gcr");
->                 if (IS_ERR(rc->gcr_regmap)) {
->                         dev_err(&pdev->dev, "Failed to find
-> nuvoton,npcm750-gcr");
->                         return PTR_ERR(rc->gcr_regmap);
->                 }
->                  dev_info(&pdev->dev, "found nuvoton,npcm750-gcr for
-> Poleg backward compatibility");
->         }
-> 
-> The only problem that I have with option 2 is if our customers will
-> use the latest reset driver and they will not update their device tree
-> they will see all the time the dev_info message.
-> 
-> What do you think?
-
-I'm fine with either. With the "please update DT" prompt it's clear how
-to get rid of the warning.
-
-regards
-Philipp
+> --
+> Thanks,
+> Hyeonggon

@@ -2,106 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F95560F4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 04:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56CAE560F4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 04:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbiF3CnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Jun 2022 22:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59936 "EHLO
+        id S231792AbiF3CnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Jun 2022 22:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiF3CnE (ORCPT
+        with ESMTP id S230073AbiF3CnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Jun 2022 22:43:04 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B249D1EAF3;
-        Wed, 29 Jun 2022 19:43:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656556983; x=1688092983;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1lniFQHbdKUYo5fK6cZ0TOr+5OfkEYvxDzpS35OnvAA=;
-  b=CjEe1uZSCrqjrEK/uKr2Nk5UAISY9PCaSHviIhxhwmufXkeOe8OB9efO
-   jUGcxed8OnQh73JddRnvpoNV+pg69VT0icZzZzQc8GHeDnjlSbrGfAUwz
-   2/FbiebSQ3YKhvE5gfcwE/o47YokuO9gK3YMUFHSTOs/uOdiA/nJifKe4
-   3d2hliadQ7R5bwU57snmpaCZ1t5Zs5DIGci87wBWCeL6FZYsgEsariOIo
-   egCYFRHFtvIct9bpCUNDWc5kK/FNzNPd7uTWnT1jQK5wmXX+IofQue23I
-   gOsi7frqweuVVrYDWWhUnNgLi09qEu9kBStAyLOqqGi3az4cOOICBgnT1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="262020362"
-X-IronPort-AV: E=Sophos;i="5.92,232,1650956400"; 
-   d="scan'208";a="262020362"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 19:43:03 -0700
-X-IronPort-AV: E=Sophos;i="5.92,232,1650956400"; 
-   d="scan'208";a="647681038"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 19:42:59 -0700
-Date:   Thu, 30 Jun 2022 10:42:43 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     dave.hansen@intel.com, len.brown@intel.com, tony.luck@intel.com,
-        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
-        dan.j.williams@intel.com, kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        ilpo.jarvinen@linux.intel.com, Andi Kleen <ak@linux.intel.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Kees Cook <keescook@chromium.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org
-Subject: Re: [PATCH v1 3/3] swiotlb: Split up single swiotlb lock
-Message-ID: <20220630024238.GA884@gao-cwp>
-References: <20220628070136.419163-1-chao.gao@intel.com>
- <20220628070136.419163-4-chao.gao@intel.com>
+        Wed, 29 Jun 2022 22:43:19 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD68F19280;
+        Wed, 29 Jun 2022 19:43:17 -0700 (PDT)
+X-UUID: 3fded47f00f74905ac2fb7bb98ab1515-20220630
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:410322cb-2bf8-459c-881b-7f909a35037b,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:87442a2,CLOUDID:d7412586-57f0-47ca-ba27-fe8c57fbf305,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 3fded47f00f74905ac2fb7bb98ab1515-20220630
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 111650536; Thu, 30 Jun 2022 10:43:11 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 30 Jun 2022 10:43:09 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 30 Jun 2022 10:43:09 +0800
+Message-ID: <c4017901a0a1dc073f8060d46dcddf6753278fa4.camel@mediatek.com>
+Subject: Re: [PATCH v12 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 30 Jun 2022 10:43:09 +0800
+In-Reply-To: <20220627080341.5087-6-rex-bc.chen@mediatek.com>
+References: <20220627080341.5087-1-rex-bc.chen@mediatek.com>
+         <20220627080341.5087-6-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628070136.419163-4-chao.gao@intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 03:01:34PM +0800, Chao Gao wrote:
->From: Andi Kleen <ak@linux.intel.com>
->
->Traditionally swiotlb was not performance critical because it was only
->used for slow devices. But in some setups, like TDX confidential
->guests, all IO has to go through swiotlb. Currently swiotlb only has a
->single lock. Under high IO load with multiple CPUs this can lead to
->signifiant lock contention on the swiotlb lock. We've seen 20+% CPU
->time in locks in some extreme cases.
->
->This patch splits the swiotlb into individual areas which have their
->own lock. Each CPU tries to allocate in its own area first. Only if
->that fails does it search other areas. On freeing the allocation is
->freed into the area where the memory was originally allocated from.
->
->To avoid doing a full modulo in the main path the number of swiotlb
->areas is always rounded to the next power of two. I believe that's
->not really needed anymore on modern CPUs (which have fast enough
->dividers), but still a good idea on older parts.
->
->The number of areas can be set using the swiotlb option. But to avoid
->every user having to set this option set the default to the number of
->available CPUs. Unfortunately on x86 swiotlb is initialized before
->num_possible_cpus() is available, that is why it uses a custom hook
->called from the early ACPI code.
->
->Signed-off-by: Andi Kleen <ak@linux.intel.com>
->[ rebase and fix warnings of checkpatch.pl ]
->Signed-off-by: Chao Gao <chao.gao@intel.com>
+Hi, Bo-Chen:
 
-Just noticed that Tianyu already posted a variant of this patch.
-Will drop this one from my series.
+On Mon, 2022-06-27 at 16:03 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a embedded displayport driver for the MediaTek mt8195
+> SoC.
+> 
+> It supports the MT8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jitao shi <jitao.shi@mediatek.com>
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
+
+[snip]
+
+> +
+> +static void mtk_dp_set_color_depth(struct mtk_dp *mtk_dp)
+> +{
+> +	u32 val;
+> +	/* Only support 8 bits currently */
+> +	u32 color_depth = DP_MSA_MISC_8_BPC;
+> +
+> +	mtk_dp->info.depth = color_depth;
+> +
+> +	/* Update MISC0 */
+> +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_3034,
+> +			   color_depth, DP_TEST_BIT_DEPTH_MASK);
+> +
+> +	switch (color_depth) {
+> +	case DP_MSA_MISC_6_BPC:
+> +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_6BIT;
+> +		break;
+> +	case DP_MSA_MISC_8_BPC:
+> +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_8BIT;
+
+This driver just use DP_MSA_MISC_8_BPC, so keep this and drop others.
+
+Regards,
+CK
+
+> +		break;
+> +	case DP_MSA_MISC_10_BPC:
+> +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_10BIT;
+> +		break;
+> +	case DP_MSA_MISC_12_BPC:
+> +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_12BIT;
+> +		break;
+> +	case DP_MSA_MISC_16_BPC:
+> +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_16BIT;
+> +		break;
+> +	default:
+> +		drm_warn(mtk_dp->drm_dev, "Unsupported color depth
+> %d\n",
+> +			 color_depth);
+> +		return;
+> +	}
+> +
+> +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_303C, val,
+> +			   VIDEO_COLOR_DEPTH_DP_ENC0_P0_MASK);
+> +}
+> +
+

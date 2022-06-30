@@ -2,80 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649A65613CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFDB15613D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233362AbiF3H4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
+        id S233413AbiF3H6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232808AbiF3H4w (ORCPT
+        with ESMTP id S233077AbiF3H61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:56:52 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AB23FDA8;
-        Thu, 30 Jun 2022 00:56:50 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1o6p2a-00Cxbn-FN; Thu, 30 Jun 2022 17:56:46 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Thu, 30 Jun 2022 15:56:44 +0800
-Date:   Thu, 30 Jun 2022 15:56:44 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Subject: [GIT PULL] Crypto Fixes for 5.19
-Message-ID: <Yr1XPJsAH2l1cx3A@gondor.apana.org.au>
-References: <20210817013601.GA14148@gondor.apana.org.au>
- <20210929023843.GA28594@gondor.apana.org.au>
- <20211029041408.GA3192@gondor.apana.org.au>
- <20211112104815.GA14105@gondor.apana.org.au>
- <YcKz4wHYTe3qlW7L@gondor.apana.org.au>
- <YgMn+1qQPQId50hO@gondor.apana.org.au>
- <YjE5yThYIzih2kM6@gondor.apana.org.au>
- <YkUdKiJflWqxBmx5@gondor.apana.org.au>
- <YpC1/rWeVgMoA5X1@gondor.apana.org.au>
- <Yqw7bf7ln6vtU/VH@gondor.apana.org.au>
+        Thu, 30 Jun 2022 03:58:27 -0400
+Received: from smtpbg.qq.com (unknown [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05AB17E02;
+        Thu, 30 Jun 2022 00:58:21 -0700 (PDT)
+X-QQ-mid: bizesmtp89t1656575881tmsn8kr9
+Received: from localhost.localdomain ( [182.148.13.66])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 30 Jun 2022 15:57:58 +0800 (CST)
+X-QQ-SSF: 0100000000200070C000C00A0000000
+X-QQ-FEAT: /gZs+pYOe4QtKWcpUPh0RUNkILiDmKzOemLUmT8vQZAH1EvZkAs5EG62QC3fV
+        mRim4+TvzTUa+CTiRquV9X/5m0vO5obXUifoXV0ndxT28229uEaGcD6kGauwv16wnxwz6Jk
+        dYBP3C3+nLKbtQwjGZ1e7VZCWVNSfi60dUqQB94M6lMrQDUT2vnw25Thaqrb52CRX5+yQYt
+        J7UKwd+9gX5p36kmwsCnkO2MkRKSmVRxefyl9LmfFDQJrzO8hPz0VlqwCf+/+FLC4ZAEPFb
+        yeddFP0MtMxPGxpv4m5e6NFc0CJFTDh9M1Ng2uWUlxP9z4v2XoM74adXDJ46e6JS2j5+EAF
+        1o9FYp5YXKAfNVeH2A=
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     jdmason@kudzu.us, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] ethernet/neterion: fix repeated words in comments
+Date:   Thu, 30 Jun 2022 15:57:51 +0800
+Message-Id: <20220630075751.21211-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqw7bf7ln6vtU/VH@gondor.apana.org.au>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus:
+Delete the redundant word 'the'.
+Delete the redundant word 'a'.
+Delete the redundant word 'frame'.
+Delete the redundant word 'is'.
+Delete the redundant word 'not'.
 
-The following changes since commit abfed87e2a12bd246047d78c01d81eb9529f1d06:
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/net/ethernet/neterion/s2io.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-  crypto: memneq - move into lib/ (2022-06-12 14:51:51 +0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git tags/v5.19-p3 
-
-for you to fetch changes up to 87d044096ea62f1f230e8c4679ee8abf03266f64:
-
-  crypto: ccp - Fix device IRQ counting by using platform_irq_count() (2022-06-24 17:09:01 +0800)
-
-----------------------------------------------------------------
-This push fixes a regression that breaks the ccp driver.
-----------------------------------------------------------------
-
-Tom Lendacky (1):
-      crypto: ccp - Fix device IRQ counting by using platform_irq_count()
-
- drivers/crypto/ccp/sp-platform.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
-
-Thanks,
+diff --git a/drivers/net/ethernet/neterion/s2io.c b/drivers/net/ethernet/neterion/s2io.c
+index 6dd451adc331..30f955efa830 100644
+--- a/drivers/net/ethernet/neterion/s2io.c
++++ b/drivers/net/ethernet/neterion/s2io.c
+@@ -2156,7 +2156,7 @@ static int verify_xena_quiescence(struct s2io_nic *sp)
+ 
+ 	/*
+ 	 * In PCI 33 mode, the P_PLL is not used, and therefore,
+-	 * the the P_PLL_LOCK bit in the adapter_status register will
++	 * the P_PLL_LOCK bit in the adapter_status register will
+ 	 * not be asserted.
+ 	 */
+ 	if (!(val64 & ADAPTER_STATUS_P_PLL_LOCK) &&
+@@ -3817,7 +3817,7 @@ static irqreturn_t s2io_test_intr(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
+-/* Test interrupt path by forcing a a software IRQ */
++/* Test interrupt path by forcing a software IRQ */
+ static int s2io_test_msi(struct s2io_nic *sp)
+ {
+ 	struct pci_dev *pdev = sp->pdev;
+@@ -5492,7 +5492,7 @@ s2io_ethtool_gringparam(struct net_device *dev,
+ }
+ 
+ /**
+- * s2io_ethtool_getpause_data -Pause frame frame generation and reception.
++ * s2io_ethtool_getpause_data -Pause frame generation and reception.
+  * @dev: pointer to netdev
+  * @ep : pointer to the structure with pause parameters given by ethtool.
+  * Description:
+@@ -7449,7 +7449,7 @@ static int rx_osm_handler(struct ring_info *ring_data, struct RxD_t * rxdp)
+  *  @link : inidicates whether link is UP/DOWN.
+  *  Description:
+  *  This function stops/starts the Tx queue depending on whether the link
+- *  status of the NIC is is down or up. This is called by the Alarm
++ *  status of the NIC is down or up. This is called by the Alarm
+  *  interrupt handler whenever a link change interrupt comes up.
+  *  Return value:
+  *  void.
+@@ -7732,7 +7732,7 @@ s2io_init_nic(struct pci_dev *pdev, const struct pci_device_id *pre)
+ 	 * Setting the device configuration parameters.
+ 	 * Most of these parameters can be specified by the user during
+ 	 * module insertion as they are module loadable parameters. If
+-	 * these parameters are not not specified during load time, they
++	 * these parameters are not specified during load time, they
+ 	 * are initialized with default values.
+ 	 */
+ 	config = &sp->config;
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.36.1
+

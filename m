@@ -2,79 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61EB8561FD7
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FFC561FE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235959AbiF3QBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 12:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
+        id S235702AbiF3QCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 12:02:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235325AbiF3QBt (ORCPT
+        with ESMTP id S235862AbiF3QCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 12:01:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED842A42A;
-        Thu, 30 Jun 2022 09:01:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E31FB82ABE;
-        Thu, 30 Jun 2022 16:01:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB750C34115;
-        Thu, 30 Jun 2022 16:01:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656604904;
-        bh=9a7QJETb8qsbuncRpKStDGFKmjVy6m0K4HKIoKMMraU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=V/N8XLuksk5MA93MtP65IvD7QRm6kOLDphiRkrcJ5MtaosHu31TRkakySZuHwYo90
-         rogmqcWoZ1QRiAV0sCQGHVYnmySgxLFNjDVq3ptVjPJCdLefLEmfw3Xxr0wYdcVsqI
-         a8gjOBcEa4AJtTZ31xzfkhuzScgblTIbwRpqpyTZQGDzunmlIOjDsw6Z1flIZPriHj
-         iCyhwIKgVE1NKu81yg6j3SBZCZ+a+HvOIbtDj8bUhuzoAW6DSzIn2dzzI2h79dx7uz
-         Yx9UoqFuM7S1WUqhkrgbeZo14g95py2IcmGzBLLjTtJDjj+OKBl1RsX5NBOuEiaHSh
-         Cp4bLllWiFveA==
-Date:   Thu, 30 Jun 2022 17:01:34 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Matthew Brost <matthew.brost@intel.com>,
-        Thomas =?UTF-8?B?SGVsbHN0csO2?= =?UTF-8?B?bQ==?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Mika Kuoppala <mika.kuoppala@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Thomas Hellstrom <thomas.hellstrom@intel.com>,
-        Chris Wilson <chris.p.wilson@intel.com>,
-        Fei Yang <fei.yang@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Dave Airlie <airlied@redhat.com>, stable@vger.kernel.org,
-        Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>,
-        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
-        John Harrison <John.C.Harrison@intel.com>,
-        Bruce Chang <yu.bruce.chang@intel.com>
-Subject: Re: [PATCH 5/6] drm/i915/gt: Serialize GRDOM access between
- multiple engine resets
-Message-ID: <20220630170134.3f89e0a3@sal.lan>
-In-Reply-To: <9477a8f1-3535-ed7f-c491-9ca9f27a10dc@linux.intel.com>
-References: <cover.1655306128.git.mchehab@kernel.org>
-        <5ee647f243a774927ec328bfca8212abc4957909.1655306128.git.mchehab@kernel.org>
-        <YrRLyg1IJoZpVGfg@intel.intel>
-        <160e613f-a0a8-18ff-5d4b-249d4280caa8@linux.intel.com>
-        <20220627110056.6dfa4f9b@maurocar-mobl2>
-        <d79492ad-b99a-f9a9-f64a-52b94db68a3b@linux.intel.com>
-        <20220629172955.64ffb5c3@maurocar-mobl2>
-        <7e6a9a27-7286-7f21-7fec-b9832b93b10c@linux.intel.com>
-        <20220630083256.35a56cb1@sal.lan>
-        <9477a8f1-3535-ed7f-c491-9ca9f27a10dc@linux.intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Thu, 30 Jun 2022 12:02:05 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7E438BD5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 09:02:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656604924; x=1688140924;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=haMnF6yagbAO7UNiHiEeFD6q+diMkTPVk3w5GTGVIvs=;
+  b=K+DL4O8L3tUlOXX+vHxUW6RsM6oAK56P5y4Nz0Is7pyfpPLHAD4gfyF7
+   gWHXH2lx1ol5qhOs1UIncA61HCj0HbFh3GtMMSbMK+DgZg4Fh24IoMln8
+   c6C3ov+Gq3e3rerznt62RlWY5k+efTK/tciVuWSYTa/WfdrPeqbzg0q+a
+   Ys+0wV3rIVUxwVmNpncHfk5DhA3E2f+JGMIJRDARH394GoWdU2hGA5G59
+   isgnnw7Rmtz9fcerY5DNs53+Ks4+h6x99DLOiBFSxMfcoWeJo/TqT0bX9
+   jyMR6j+zlBYKcCObncvx5ZEvgLlcEEhZamsDrg5C+w0hFs8yey3VLhzId
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="262791016"
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="262791016"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 09:02:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="918103001"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Jun 2022 09:01:59 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o6wcA-000CwM-Vq;
+        Thu, 30 Jun 2022 16:01:58 +0000
+Date:   Fri, 1 Jul 2022 00:01:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 55/55]
+ fs/netfs/truncate.c:191:39: warning: format specifies type 'unsigned long'
+ but the argument has type 'size_t' (aka 'unsigned int')
+Message-ID: <202206302322.xyUBUa80-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,241 +64,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, 30 Jun 2022 09:12:41 +0100
-Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> escreveu:
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   e0aed6defb4fe6c570e77e8fd8d899651b40366e
+commit: e0aed6defb4fe6c570e77e8fd8d899651b40366e [55/55] netfs: Implement truncation
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220630/202206302322.xyUBUa80-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/e0aed6defb4fe6c570e77e8fd8d899651b40366e
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
+        git checkout e0aed6defb4fe6c570e77e8fd8d899651b40366e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
 
-> On 30/06/2022 08:32, Mauro Carvalho Chehab wrote:
-> > Em Wed, 29 Jun 2022 17:02:59 +0100
-> > Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> escreveu:
-> >  =20
-> >> On 29/06/2022 16:30, Mauro Carvalho Chehab wrote: =20
-> >>> On Tue, 28 Jun 2022 16:49:23 +0100
-> >>> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
-> >>>     =20
-> >>>> .. which for me means a different patch 1, followed by patch 6 (moved
-> >>>> to be patch 2) would be ideal stable material.
-> >>>>
-> >>>> Then we have the current patch 2 which is open/unknown (to me at lea=
-st).
-> >>>>
-> >>>> And the rest seem like optimisations which shouldn't be tagged as fi=
-xes.
-> >>>>
-> >>>> Apart from patch 5 which should be cc: stable, but no fixes as agree=
-d.
-> >>>>
-> >>>> Could you please double check if what I am suggesting here is feasib=
-le
-> >>>> to implement and if it is just send those minimal patches out alone?=
- =20
-> >>>
-> >>> Tested and porting just those 3 patches are enough to fix the Broadwe=
-ll
-> >>> bug.
-> >>>
-> >>> So, I submitted a v2 of this series with just those. They all need to
-> >>> be backported to stable. =20
-> >>
-> >> I would really like to give even a smaller fix a try. Something like, =
-although not even compile tested:
-> >>
-> >> commit 4d5e94aef164772f4d85b3b4c1a46eac9a2bd680
-> >> Author: Chris Wilson <chris.p.wilson@intel.com>
-> >> Date:   Wed Jun 29 16:25:24 2022 +0100
-> >>
-> >>       drm/i915/gt: Serialize TLB invalidates with GT resets
-> >>      =20
-> >>       Avoid trying to invalidate the TLB in the middle of performing an
-> >>       engine reset, as this may result in the reset timing out. Curren=
-tly,
-> >>       the TLB invalidate is only serialised by its own mutex, forgoing=
- the
-> >>       uncore lock, but we can take the uncore->lock as well to seriali=
-se
-> >>       the mmio access, thereby serialising with the GDRST.
-> >>      =20
-> >>       Tested on a NUC5i7RYB, BIOS RYBDWi35.86A.0380.2019.0517.1530 with
-> >>       i915 selftest/hangcheck.
-> >>      =20
-> >>       Cc: stable@vger.kernel.org
-> >>       Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing back=
-ing store")
-> >>       Reported-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> >>       Tested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> >>       Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> >>       Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
-> >>       Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-> >>       Acked-by: Thomas Hellstr=C3=B6m <thomas.hellstrom@linux.intel.co=
-m>
-> >>       Reviewed-by: Andi Shyti <andi.shyti@intel.com>
-> >>       Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> >>       Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-> >>
-> >> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915=
-/gt/intel_gt.c
-> >> index 8da3314bb6bf..aaadd0b02043 100644
-> >> --- a/drivers/gpu/drm/i915/gt/intel_gt.c
-> >> +++ b/drivers/gpu/drm/i915/gt/intel_gt.c
-> >> @@ -952,7 +952,23 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
-> >>           mutex_lock(&gt->tlb_invalidate_lock);
-> >>           intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
-> >>   =20
-> >> +       spin_lock_irq(&uncore->lock); /* serialise invalidate with GT =
-reset */
-> >> +
-> >> +       for_each_engine(engine, gt, id) {
-> >> +               struct reg_and_bit rb;
-> >> +
-> >> +               rb =3D get_reg_and_bit(engine, regs =3D=3D gen8_regs, =
-regs, num);
-> >> +               if (!i915_mmio_reg_offset(rb.reg))
-> >> +                       continue;
-> >> +
-> >> +               intel_uncore_write_fw(uncore, rb.reg, rb.bit);
-> >> +       }
-> >> +
-> >> +       spin_unlock_irq(&uncore->lock);
-> >> +
-> >>           for_each_engine(engine, gt, id) {
-> >> +               struct reg_and_bit rb;
-> >> +
-> >>                   /*
-> >>                    * HW architecture suggest typical invalidation time=
- at 40us,
-> >>                    * with pessimistic cases up to 100us and a recommen=
-dation to
-> >> @@ -960,13 +976,11 @@ void intel_gt_invalidate_tlbs(struct intel_gt *g=
-t)
-> >>                    */
-> >>                   const unsigned int timeout_us =3D 100;
-> >>                   const unsigned int timeout_ms =3D 4;
-> >> -               struct reg_and_bit rb;
-> >>   =20
-> >>                   rb =3D get_reg_and_bit(engine, regs =3D=3D gen8_regs=
-, regs, num);
-> >>                   if (!i915_mmio_reg_offset(rb.reg))
-> >>                           continue;
-> >>   =20
-> >> -               intel_uncore_write_fw(uncore, rb.reg, rb.bit);
-> >>                   if (__intel_wait_for_register_fw(uncore,
-> >>                                                    rb.reg, rb.bit, 0,
-> >>                                                    timeout_us, timeout=
-_ms,
-> >> =20
-> >=20
-> > This won't work, as it is not serializing TLB cache invalidation with
-> > i915 resets. Besides that, this is more or less merging patches 1 and 3=
-, =20
->=20
-> Could you explain why you think it is not doing exactly that? In both=20
-> versions end result is TLB flush requests are under the uncore lock and=20
-> waits are outside it.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Sure, but patch 2/3 (see v2) serializes i915 reset with TLB cache changes.
-This is needed in order to fix the regression.
+All warnings (new ones prefixed by >>):
 
-> > placing patches with different rationales altogether. Upstream rule is
-> > to have one logical change per patch. =20
->=20
-> I don't think it applies in this case. It is simply splitting into two=20
-> loops so lock can be held across all mmio writes. I think of it this way=
-=20
-> - what is the rationale for sending only the first patch to stable? What=
-=20
-> does it _fix_ on it's own?
+>> fs/netfs/truncate.c:191:39: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                          from, to, folio->index, fto, seg, offset);
+                                                       ^~~
+   fs/netfs/internal.h:282:43: note: expanded from macro 'kdebug'
+   #define kdebug(FMT, ...) dbgprintk(FMT, ##__VA_ARGS__)
+                                      ~~~    ^~~~~~~~~~~
+   fs/netfs/internal.h:278:46: note: expanded from macro 'dbgprintk'
+           printk("[%-6.6s] "FMT"\n", current->comm, ##__VA_ARGS__)
+                             ~~~                       ^~~~~~~~~~~
+   include/linux/printk.h:464:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   fs/netfs/truncate.c:191:44: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                          from, to, folio->index, fto, seg, offset);
+                                                            ^~~~~~
+   fs/netfs/internal.h:282:43: note: expanded from macro 'kdebug'
+   #define kdebug(FMT, ...) dbgprintk(FMT, ##__VA_ARGS__)
+                                      ~~~    ^~~~~~~~~~~
+   fs/netfs/internal.h:278:46: note: expanded from macro 'dbgprintk'
+           printk("[%-6.6s] "FMT"\n", current->comm, ##__VA_ARGS__)
+                             ~~~                       ^~~~~~~~~~~
+   include/linux/printk.h:464:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   fs/netfs/truncate.c:202:18: warning: variable 'to' is uninitialized when used here [-Wuninitialized]
+           } while (from < to);
+                           ^~
+   fs/netfs/truncate.c:149:18: note: initialize the variable 'to' to silence this warning
+           pgoff_t from, to, fto;
+                           ^
+                            = 0
+   fs/netfs/truncate.c:170:6: warning: variable 'from' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (ret < 0)
+               ^~~~~~~
+   fs/netfs/truncate.c:176:45: note: uninitialized use occurs here
+                   folio = read_mapping_folio(treq->mapping, from, NULL);
+                                                             ^~~~
+   fs/netfs/truncate.c:170:2: note: remove the 'if' if its condition is always true
+           if (ret < 0)
+           ^~~~~~~~~~~~
+   fs/netfs/truncate.c:149:14: note: initialize the variable 'from' to silence this warning
+           pgoff_t from, to, fto;
+                       ^
+                        = 0
+   4 warnings generated.
 
-There's no -stable rule enforcing that only one patch would be allowed,
-nor saying that patches should be fold, doing multiple changes on as single
-patch just due to "Fixes" tag.
 
-So, while several -stable fixes can be done on a single patch, there are
-fixes that will require multiple patches. That's nothing wrong with that.
+vim +191 fs/netfs/truncate.c
 
-The only rule is that backports should follow what's merged upstream.
-So, if, in order to fix a regression, multiple patches are needed upstream,
-in principle, all of those can be backported if they fit at -stable rules.
+   133	
+   134	/*
+   135	 * Set up a pair of buffers with which we can perform an RMW cycle to
+   136	 * reconstitute the block containing the EOF marker.  One buffer will hold the
+   137	 * proposed modification in unencrypted form, the other will hold the
+   138	 * encrypted/compressed data.
+   139	 *
+   140	 * We don't want to make our proposed changes to the pagecache yet as we would
+   141	 * have to back them out if an error occurs.
+   142	 */
+   143	static int netfs_prepare_trunc_buffers(struct netfs_io_request *treq)
+   144	{
+   145		struct netfs_inode *ctx = netfs_inode(treq->inode);
+   146		struct iov_iter iter;
+   147		struct folio *folio;
+   148		unsigned long long base;
+   149		pgoff_t from, to, fto;
+   150		size_t offset, seg;
+   151		size_t bsize = max_t(size_t, 1UL << ctx->min_bshift, PAGE_SIZE);
+   152		int ret;
+   153	
+   154		/* We want to hold the entire replacement block, but we round that out
+   155		 * to a multiple of pages.
+   156		 */
+   157		base = round_down(treq->trunc_i_size, bsize);
+   158		treq->start	= base;
+   159		treq->len	= bsize;
+   160		treq->first	= base / PAGE_SIZE;
+   161		treq->last	= (base + bsize + 1) / PAGE_SIZE;
+   162	
+   163		ret = netfs_add_folios_to_buffer(&treq->buffer, treq->first, treq->last,
+   164						 GFP_KERNEL);
+   165		if (ret < 0)
+   166			return ret;
+   167	
+   168		ret = netfs_add_folios_to_buffer(&treq->bounce, treq->first, treq->last,
+   169						 GFP_KERNEL);
+   170		if (ret < 0)
+   171			return ret;
+   172	
+   173		/* We need to fill the buffer. */
+   174		iov_iter_xarray(&iter, READ, &treq->buffer, base, base + bsize);
+   175		do {
+   176			folio = read_mapping_folio(treq->mapping, from, NULL);
+   177			if (IS_ERR(folio))
+   178				return PTR_ERR(folio);
+   179			if (folio->index > from ||
+   180			    folio->index + folio_nr_pages(folio) <= folio->index) {
+   181				folio_put(folio);
+   182				kleave("-EIO [unexpected folio %lx != %lx]", folio->index, from);
+   183				return -EIO;
+   184			}
+   185	
+   186			offset = (from - folio->index);
+   187			fto = folio->index + folio_nr_pages(folio) - 1;
+   188			seg = min(to, fto);
+   189			seg = (seg - from) + 1;
+   190			kdebug("buf=%lx-%lx fol=%lx-%lx s=%lx@%lx",
+ > 191			       from, to, folio->index, fto, seg, offset);
+   192			if (copy_folio_to_iter(folio, offset * PAGE_SIZE, seg * PAGE_SIZE, &iter)) {
+   193				folio_put(folio);
+   194				kleave(" = -EIO [copy failure]");
+   195				return -EIO;
+   196			}
+   197	
+   198			/* We keep the refs to discard later - we don't want read
+   199			 * interfering with what we're up to.
+   200			 */
+   201			from = fto;
+   202		} while (from < to);
+   203	
+   204		/* Lock the folios and clear the uptodate flag.  Read must wait. */
+   205	
+   206		/* Clear the region after the new EOF */
+   207		iov_iter_xarray(&iter, READ, &treq->buffer, base, base + bsize);
+   208		iov_iter_advance(&iter, treq->trunc_i_size - treq->start);
+   209		iov_iter_zero(iov_iter_count(&iter), &iter);
+   210		return 0;
+   211	}
+   212	
 
-As an example, once we backported a patch series on media that had ~20 patc=
-hes,
-addressing security issues at the media compat32 logic (media ioctls usually
-pass structs and some with pointers). As the issue was discovered several
-years after compat32 got introduced, those 22 patches (some containing
-compat32 redesigns) had to be backported to all maintained LTS.
-
--
-
-In this specific case, fixing the regression requires 3 logical changes:
-
-	1) Split the loop;
-	2) Add serialize logic to i915 reset;
-	3) use the same i915 reset spinlock to serialize TLB cache
-	   invalidation.
-
-Neither one of those logical changes alone would solve the issue. That's
-why I originally added the same Fixes: to the entire series: basically,
-any Kernel that has the TLB patch backported will require those
-three logical changes to be backported too.
-
-That basically will follow what's there at the Kernel process docs:
-
-	"If your patch fixes a bug in a specific commit, e.g. you found an issue u=
-sing
-	 ``git bisect``, please use the 'Fixes:' tag with the first 12 characters =
-of
-	 the SHA-1 ID, and the one line summary."
-
-	Documentation/process/submitting-patches.rst
-
-See, Fixes was originally introduced to be a hint to help stable=20
-and distro maintainers to identify how far they need to backport
-a patch. That's mainly why I placed fixes to the entire series.=20
-Yet, the same will also happen, in practice, if we place:
-
-	Cc: stable@vger.kernel.org # Up to version 4.4
-
-Greg, Sasha and others -stable/distro maintainers will also have a=20
-(much less precise) hint about how far the backport is needed.
-
->> If this works it would be least painful to backport. The other improveme=
-nts can then be devoid of the fixes tag. =20
-> >=20
-> >  From backport PoV, it wouldn't make any difference applying one patch
-> > or two. See, intel_gt_invalidate_tlbs() function doesn't exist before
-> > changeset 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing =
-store"),
-> > so, it shouldn't have merge conflicts while backporting it, maybe except
-> > if some functions it calls (or parameters) have changed. On such case,
-> > the backport fix should be trivial, and the end result of backporting
-> > one folded patch or two would be the same. =20
->=20
-> Yes a lot of things changed. Not least engine and GT pm code. Note that=20
-> TLB flushing was backported all the way to 4.4 so any hunk you don't=20
-> strictly need can and will bite you. I have attached a tarball of=20
-> patches for you to explore. :)
-> Regards,
-
-Thanks! That's very helpful to check the amount of work. It makes easy
-to use interdiff and (k)diff3 to check what changed.
-
-=46rom it, the differences between 5.4 and 5.16 at intel_gt_invalidate_tlbs()
-are really trivial.
-
-On 4.14, the function was added on a different file (intel_gem), and
-there were a few more API differences, as only gen8 code is there,
-but again, the changes are trivial: mostly macros/functions were renamed
-and some function parameters changed.
-
-=46rom 4.9 to 4.14 there were also some changes but they also look trivial.
-
-Kernel 4.4 has some other differences - the loop logic is different, and
-there's a ring initialization function, but, as version 4.4 is not listed
-anymore as LTS at kernel.org, we probably need to backport only up to
-4.9.
-
-All the above should be affecting patch v2 1/3. Patches v2 2/3 and 3/3 just
-have spin lock/unlock for the gt uncore spinlock. Those will very likely
-require some work on Kernels 4.x, but folding (or not) the patches won't
-really help.
-
-Regards,
-Mauro
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

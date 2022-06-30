@@ -2,81 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA1D562467
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 22:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE33562479
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 22:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237332AbiF3UjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 16:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
+        id S237039AbiF3Ul5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 16:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237264AbiF3Uiz (ORCPT
+        with ESMTP id S229838AbiF3Uly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 16:38:55 -0400
-Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B12D2710;
-        Thu, 30 Jun 2022 13:38:42 -0700 (PDT)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id 8E59152055C;
-        Thu, 30 Jun 2022 22:38:40 +0200 (CEST)
-Received: from lxhi-065 (10.72.94.33) by hi2exch02.adit-jv.com (10.72.92.28)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Thu, 30 Jun
- 2022 22:38:39 +0200
-Date:   Thu, 30 Jun 2022 22:38:34 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-CC:     Eugeniu Rosca <erosca@de.adit-jv.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
-        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
-        "takondra@cisco.com" <takondra@cisco.com>,
-        "kamensky@cisco.com" <kamensky@cisco.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, "arnd@arndb.de" <arnd@arndb.de>,
-        "rob@landley.net" <rob@landley.net>,
-        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
-        "niveditas98@gmail.com" <niveditas98@gmail.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH v4 3/3] gen_init_cpio: add support for file metadata
-Message-ID: <20220630203834.GA5234@lxhi-065>
-References: <20190523121803.21638-1-roberto.sassu@huawei.com>
- <20190523121803.21638-4-roberto.sassu@huawei.com>
- <20220616151603.GA4400@lxhi-065>
- <fca71da4092a45689d34ce6eeffd1893@huawei.com>
+        Thu, 30 Jun 2022 16:41:54 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FB85596
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 13:41:53 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id k22so267698wrd.6
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 13:41:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6sxgvUgX/lE05DRaRDrj2PDjJhleRoRRDvjJlfkAEzg=;
+        b=GZYjjHKfVCa+9zANi+gEoiM5SSOKOGDkVkDe96gkOxIAHoB7CZIO/YgR4LY48B9PT6
+         ZYIxvmRzX9/oZ9OVThsoJ3x6/jtWmvKCmj55r7O9XNary8Z+YA71JG1/7w2y1jswy8Fa
+         DUNp5eCuf3t1wycrDiBa8yTy/Qluga4rZcDmiX8XJi/PepFFuBWfc0HRW1jeSfA7pTiy
+         1fHCyUP398gvCkEE1aqi0roDUYpIMNQrTPjMwCLMvEvJU5WtHddYn0FmQwrd1coZiTCd
+         843Vj2wDV01tIemZ6LaCV8aXVHynHFeU90CWZmsrm2zQTvIE8/lsZPr7gcUPBKWd6isB
+         rdCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6sxgvUgX/lE05DRaRDrj2PDjJhleRoRRDvjJlfkAEzg=;
+        b=uRyZB6FIQMbkkuLLMdTBht18+oODh370/ih/xOX/zrHMbQ6luDiVhm3dg0iAa3ymPn
+         kw56zCmMzQhBGE+3Rr7HqdwLDtdfu7S6+OpyRlJUNR8bzLBQ8j0UM48fo3WK5syyGedE
+         vqcYfowB+rynidQQmDfCARbPySFwfLGBcr9X/O3imB9704xqymIG+rdoHKmucjkvwpIz
+         8xoqkKQWoMCMRRZhey6CUEITK5UooDPHrYpbVmmeJL3xr3qfXlZx3kzLwy+QD42O3VBT
+         FVQBjw6gbgfA1cMTSqPmQ7lsT8a6I6GvrlPoYbTp8wDT6xe4VJLfohEmp1WpLJmsy4hO
+         ZLGA==
+X-Gm-Message-State: AJIora9e4Ku0kQqCSvDt4LIk007/YZBEqgHSz2HkX8lenVFxgJ9V9xjs
+        dTJwlCrGk/ozAswJQMiqihuuVMVYqbcJSPPt/fNq9w==
+X-Google-Smtp-Source: AGRyM1tPLbfsN2BJnOcFOWFvfQT8AJ8Pw9fqyeaUEOZa832kPW4lB+7bPTChF3jB0KOvv6fyB662Q1iQc2L8Imbuj7A=
+X-Received: by 2002:a05:6000:508:b0:21d:4105:caf9 with SMTP id
+ a8-20020a056000050800b0021d4105caf9mr3367565wrf.699.1656621711704; Thu, 30
+ Jun 2022 13:41:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <fca71da4092a45689d34ce6eeffd1893@huawei.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.72.94.33]
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220630191230.235306-1-kaleshsingh@google.com> <Yr3+RLhpp3g9A7vb@zx2c4.com>
+In-Reply-To: <Yr3+RLhpp3g9A7vb@zx2c4.com>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Thu, 30 Jun 2022 13:41:40 -0700
+Message-ID: <CAC_TJvdV9bU2xWpbgrQuyrr6ens9gzDnZT2UzAY6Q6ZN9p7aEw@mail.gmail.com>
+Subject: Re: [PATCH] pm/sleep: Add PM_USERSPACE_AUTOSLEEP Kconfig
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     John Stultz <jstultz@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Saravana Kannan <saravanak@google.com>,
+        "T.J. Mercier" <tjmercier@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Roberto,
+On Thu, Jun 30, 2022 at 12:49 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Hi Kalesh,
+>
+> On Thu, Jun 30, 2022 at 07:12:29PM +0000, Kalesh Singh wrote:
+> > Systems that initiate frequent suspend/resume from userspace
+> > can make the kernel aware by enabling PM_USERSPACE_AUTOSLEEP
+> > config.
+> >
+> > This allows for certain sleep-sensitive code (wireguard/rng) to
+> > decide on what preparatory work should be performed (or not) in
+> > their pm_notification callbacks.
+> >
+> > This patch was prompted by the discussion at [1] which attempts
+> > to remove CONFIG_ANDROID that currently guards these code paths.
+> >
+> > [1] https://lore.kernel.org/r/20220629150102.1582425-1-hch@lst.de/
+> >
+> > Suggested-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+>
+> Thanks, looks good to me. Do you have a corresponding Gerrit link to the
+> change adding this to the base Android kernel config? If so, have my
+> Ack:
+>
+>     Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-On Do, Jun 30, 2022 at 03:06:30 +0000, Roberto Sassu wrote:
-> sorry, I'm a bit busy. Will have a look at your comments
-> as soon as possible, and maybe I rebase the patches.
+Hi Jason,
 
-No rush. Thanks for keeping in touch.
+Our latest supported kernels in Android are based on 5.15 so the
+config change isn't yet needed. Once there are newer versions with the
+CONFIG_ANDROID removed I will add this to the defconfig.
 
-Best regards,
-Eugeniu.
+Thanks,
+Kalesh
+
+>
+> Jason
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>

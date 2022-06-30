@@ -2,80 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B085622F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 21:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ACFB5622F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 21:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236323AbiF3TS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 15:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
+        id S236497AbiF3TUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 15:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235533AbiF3TS4 (ORCPT
+        with ESMTP id S232653AbiF3TT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 15:18:56 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2793A2F389
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 12:18:55 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id h23so40792939ejj.12
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 12:18:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7w5OzUyrKBr7BCgXCHhdgRFzQT4xsZpFPm8KzjByaI4=;
-        b=zCeMUNOfntMVAU5Y7fXXHfAKu+zJfL/KMa4HLDyGpOVZ6UdbmR1l/o+NZx+u+y4SO7
-         Jz5KU6n1YkD1wXb2Nevnugb1+jC1XVcReK/TCp5LH606t+u08i3wBZ6KU6EOAlJggHRJ
-         EDBYU4P04OevgoI32J/3BnD4FzAg8fLl1h7Wi1dKbEuiYGqcjGrWUfFlnyBxEyqR3dOS
-         OLOLxNl2MzWfwc+OljIXYPHPtZ7dIsBz7arrBlL6Smt6GbZIp70d2TxNXQ5sK93pPYxD
-         0+2M161XdiC3Bf8GRfhb94lzGZtSk2eYo3Ce/tcXu70Cy02diKj8ms9p8skb9yRI/mnN
-         5KOg==
+        Thu, 30 Jun 2022 15:19:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28EE239B91
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 12:19:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656616796;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=E1fZREo5G1zyL3E99cNxpPu+YKfPtwYvUWsVzF1rbzA=;
+        b=T6Z/vzjbDsGbhUb8mPNieWFD26zBJ2/N7Zj/f0+zIq8pbW5v2ERlLlbLPY4m22jrHlOdLm
+        MNIXmRTB9Sr7H4v68oK5W90RzRoQQseYCuWS2iCAHQuSddjgZQ7S9qNZspMXxyB5JS02tv
+        7aeYBWn0Ts7S1O6C/tImnkLOwy834t0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-312-CDZFeqy2MP2tbX91PJxycQ-1; Thu, 30 Jun 2022 15:19:54 -0400
+X-MC-Unique: CDZFeqy2MP2tbX91PJxycQ-1
+Received: by mail-wm1-f72.google.com with SMTP id j35-20020a05600c1c2300b003a167dfa0ecso99291wms.5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 12:19:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7w5OzUyrKBr7BCgXCHhdgRFzQT4xsZpFPm8KzjByaI4=;
-        b=xTT3E6YpKfv0QPycQnFE7eVs6gJeScJv/OLsC1eoBoI8ym+zNZev92LarXY+NbLWV/
-         g6be5VbY7R0gXlyQ1vd9oladt4pgf9dMjslUPlJHPrT/PLXlmBKBioAGMhkZ4s7aq2GZ
-         o9ahp7lCZM/6xFxiGkSYGSeQfGotSuiwAAxUCmvugNKXOaiwuyAc3IIbfPQkB5kk7x0j
-         B+1f5FhnoOkgrNX41r5/OdMiXCU+vTY2lEpHS6BR2AQ2z3BAIkOwvR3KbrkwJHDFCM55
-         mhfF+DhxTdqzNEwqbUK+Emzg7v1N8Hjm8lT7SKOPAPINYyUsW4CfGnEj8I78AHPNv7hJ
-         XUDw==
-X-Gm-Message-State: AJIora/MDFYBDeyIpy0vneAT2lj4Mr/UaXLjP+MvYPXDWZ9DhJvWgNf+
-        5G+ZsxyF/GdZoE7Gq3q6oq/f6w==
-X-Google-Smtp-Source: AGRyM1srhyIGbBAQSZ2gSpw2QM/aUcoX6PxApzziyDFXIwNHe90zVHuEOcJjIkuOrCKF39Lp0gJwIg==
-X-Received: by 2002:a17:906:7482:b0:722:ea8f:3a12 with SMTP id e2-20020a170906748200b00722ea8f3a12mr10565319ejl.220.1656616733710;
-        Thu, 30 Jun 2022 12:18:53 -0700 (PDT)
-Received: from [192.168.0.190] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q22-20020aa7da96000000b004357cec7e48sm9859911eds.13.2022.06.30.12.18.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 12:18:52 -0700 (PDT)
-Message-ID: <116f0087-17d1-652f-23f5-b114e6082273@linaro.org>
-Date:   Thu, 30 Jun 2022 21:18:51 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=E1fZREo5G1zyL3E99cNxpPu+YKfPtwYvUWsVzF1rbzA=;
+        b=eSajlrsSuGCM7FaJLDkKsZxmIbMuHsW/xEsMKH9El4cYW6ivFYP5VAVIFdFI28mwz4
+         AdYpckLW3/ggGQhr96E1bqhfCChLsk0SE11vAW+NbEpFU78eZ7zkEZRYjD7CatFrHw/3
+         RYWtiVumw4Coe29NF7An9BOSB+YaTvRiH3GHK5bmT3OGLWScGF0rVUvgaCR52/Rrl6WK
+         ewqSsc2Kg5iPWJ48CecYcGF4ZEyAXIgn0GRx3AhaTFR+D4LU+P0FWt2qvy3qJIaffmQb
+         z7krbUeXgCfLEJnTEq4LLJz83aGRAbTZ4K6OSViQt1fcO/crFWwxswZwWgQMBvofuNCZ
+         vGww==
+X-Gm-Message-State: AJIora9sXvXwwZ1Cp0UgNZ5bWKpfU4QZ4cjzlk4LfgGUjbPGw8MXUakX
+        3myfgnHJNRJFsprO4t9wz/2DtqEBnhT+qfWB6rUvGqdRU42OCLs8kIaDnT2DE+UEues47E4LM5t
+        kLWfl7yaKMkhQzr6m/ccpSY67
+X-Received: by 2002:a5d:584e:0:b0:21c:ea0c:3746 with SMTP id i14-20020a5d584e000000b0021cea0c3746mr9888862wrf.199.1656616793164;
+        Thu, 30 Jun 2022 12:19:53 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tFgR4cJXhagHebOa3Tkr9MG8bSTYaTEMzhiZL3sAi2iRr5iiRShZDs06DbeLuQn1vJeahc0g==
+X-Received: by 2002:a5d:584e:0:b0:21c:ea0c:3746 with SMTP id i14-20020a5d584e000000b0021cea0c3746mr9888843wrf.199.1656616792927;
+        Thu, 30 Jun 2022 12:19:52 -0700 (PDT)
+Received: from redhat.com ([2.55.35.209])
+        by smtp.gmail.com with ESMTPSA id c8-20020a7bc848000000b0039c457cea21sm7279586wml.34.2022.06.30.12.19.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 12:19:52 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 15:19:49 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-remoteproc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rpmsg: virtio: Fix broken rpmsg_probe()
+Message-ID: <20220630151716-mutt-send-email-mst@kernel.org>
+References: <20220608171334.730739-1-apatel@ventanamicro.com>
+ <20220629174318.GB2018382@p14s>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH net-next 4/4] ARM: dts: lan966x: use new
- microchip,lan9668-switch compatible
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220630140237.692986-1-michael@walle.cc>
- <20220630140237.692986-5-michael@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220630140237.692986-5-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220629174318.GB2018382@p14s>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,31 +82,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/2022 16:02, Michael Walle wrote:
-> The old generic microchip,lan966x-switch compatible string was
-> deprecated. Use the new one.
+On Wed, Jun 29, 2022 at 11:43:18AM -0600, Mathieu Poirier wrote:
+> Hi Anup,
 > 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  arch/arm/boot/dts/lan966x.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On Wed, Jun 08, 2022 at 10:43:34PM +0530, Anup Patel wrote:
+> > The rpmsg_probe() is broken at the moment because virtqueue_add_inbuf()
+> > fails due to both virtqueues (Rx and Tx) marked as broken by the
+> > __vring_new_virtqueue() function. To solve this, virtio_device_ready()
+> > (which unbreaks queues) should be called before virtqueue_add_inbuf().
+> > 
+> > Fixes: 8b4ec69d7e09 ("virtio: harden vring IRQ")
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > ---
+> >  drivers/rpmsg/virtio_rpmsg_bus.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+> > index 905ac7910c98..71a64d2c7644 100644
+> > --- a/drivers/rpmsg/virtio_rpmsg_bus.c
+> > +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+> > @@ -929,6 +929,9 @@ static int rpmsg_probe(struct virtio_device *vdev)
+> >  	/* and half is dedicated for TX */
+> >  	vrp->sbufs = bufs_va + total_buf_space / 2;
+> >  
+> > +	/* From this point on, we can notify and get callbacks. */
+> > +	virtio_device_ready(vdev);
+> > +
 > 
-> diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-> index 48971d80c82c..da0657c57cdf 100644
-> --- a/arch/arm/boot/dts/lan966x.dtsi
-> +++ b/arch/arm/boot/dts/lan966x.dtsi
-> @@ -85,7 +85,7 @@ soc {
->  		ranges;
->  
->  		switch: switch@e0000000 {
-> -			compatible = "microchip,lan966x-switch";
-> +			compatible = "microchip,lan9668-switch";
+> Calling virtio_device_ready() here means that virtqueue_get_buf_ctx_split() can
+> potentially be called (by way of rpmsg_recv_done()), which will race with
+> virtqueue_add_inbuf().  If buffers in the virtqueue aren't available then
+> rpmsg_recv_done() will fail, potentially breaking remote processors' state
+> machines that don't expect their initial name service to fail when the "device"
+> has been marked as ready.
 
-While technically correct, the change cannot go via independent trees
-and may break out-of-tree users of this DTS.
+When you say available I am guessing you really need used.
 
-Usually the nicer way is to use two compatibles (the old as fallback).
-Anyway, this one is fine with me - up to subarch maintainer.
+With a non broken device you won't get a callback
+until some buffers have been used.
 
-Best regards,
-Krzysztof
+Or, if no used buffers are present then you will get another
+callback down the road.
+
+
+> 
+> What does make me curious though is that nobody on the remoteproc mailing list
+> has complained about commit 8b4ec69d7e09 breaking their environment... By now,
+> i.e rc4, that should have happened.  Anyone from TI, ST and Xilinx care to test this on
+> their rig?
+> 
+> Thanks,
+> Mathieu
+> 
+> >  	/* set up the receive buffers */
+> >  	for (i = 0; i < vrp->num_bufs / 2; i++) {
+> >  		struct scatterlist sg;
+> > @@ -983,9 +986,6 @@ static int rpmsg_probe(struct virtio_device *vdev)
+> >  	 */
+> >  	notify = virtqueue_kick_prepare(vrp->rvq);
+> >  
+> > -	/* From this point on, we can notify and get callbacks. */
+> > -	virtio_device_ready(vdev);
+> > -
+> >  	/* tell the remote processor it can start sending messages */
+> >  	/*
+> >  	 * this might be concurrent with callbacks, but we are only
+> > -- 
+> > 2.34.1
+> > 
+> 
+

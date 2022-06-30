@@ -2,361 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84999562715
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3753E56271C
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 01:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbiF3X3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 19:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
+        id S232099AbiF3XbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 19:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiF3X3v (ORCPT
+        with ESMTP id S231467AbiF3XbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 19:29:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D5F44A26;
-        Thu, 30 Jun 2022 16:29:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EA1861976;
-        Thu, 30 Jun 2022 23:29:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EA59C341C8;
-        Thu, 30 Jun 2022 23:29:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656631787;
-        bh=8zDDjljtuKH3a9AgBRxpKjei6gBVIIFR7+gDI3NefmA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kE8+B/IVSYN+lmjrK1jVUxKOa2NnjWCmwEJsjs3jP1IMl1x7l5mLHXw91DcBfAf6q
-         VlmkHnXdnwJr4bIzhgv/+z1Nc3+8t7tFx/NlVbsxCNKX7/mG+EgvNIkYav0KOu07Fe
-         MIuQ32T0/zSjbSHKA5Ja1LvcD6i6hiUDA8h74llQhdq0TZffxelSqpV2ZqKu8NEeaY
-         YWmHJNU2kKd/QcxLpGU4GWSR0XACUbdqx5XAwDJCkrNcMD14lYc2BPSlMzvZt27Pat
-         Wwa9y3xj0SpKbZEhqkxVMgh3k1ZDiIXjeKKX2d4OX/X+UMqs9vwS1teSpII6PRdnuv
-         HKdJfDn0wIM9g==
-Date:   Fri, 1 Jul 2022 02:29:44 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
-        lukas@wunner.de, p.rosenberger@kunbus.com
-Subject: Re: [PATCH v7 07/10] tmp, tmp_tis: Implement usage counter for
- locality
-Message-ID: <Yr4x6KRSvzlXNdH2@kernel.org>
-References: <20220629232653.1306735-1-LinoSanfilippo@gmx.de>
- <20220629232653.1306735-8-LinoSanfilippo@gmx.de>
+        Thu, 30 Jun 2022 19:31:02 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364FB4506C
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:31:00 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id i15so1174326ybp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:31:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7rzBjlWyrGCVnHojYy7aloe09Kk1ZJFyFafJ4B59izQ=;
+        b=esSzbAG9SStIKedEdEyPNCZEwWeV7CGfw2gDAyv7xNkZGiGhAKyelsjm5S6l3zYohJ
+         d/Eo0n6Mp+36R9EN/Pq2SisCS+9HoblIrvPkImxxTHiatXxbVEpvW3y/yNgVziC5uyoZ
+         vYyHIRU3pYbXRmHkZLlWk/frQQwicQxGxfoUSBXj3PLfoEnFnvnX+lQNgSCCK/G112nQ
+         +h/LHrk5XRmANsD8K55QOlIqREK2mYKCbE3t0k3EnnSD9DyzGjrrvdjT+EJJoRKX1F7X
+         eGAoOxj+hwQhHxN9wOQ0TOIBLZRRt2Qt2wLPB0KOY9Z/NrqQd5sdoLelt/izUN/UnoDM
+         mZeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7rzBjlWyrGCVnHojYy7aloe09Kk1ZJFyFafJ4B59izQ=;
+        b=KW1W1KqFnAmmLqwWNCe5mJDQwVflssY07gUsj/9ioa/QCGwW9W45yzRPeMIdGPAPZv
+         jGTO5p0u1avUvLqSL137Ikgm/cAinTncc/epQUTCo/D9weCHUebidCnJ/k8SCUlPl6in
+         7YI1EXsQMY8d3Q1G4ZerQ8MlUB+avTZFMcqOyIYDhFNaPnPorclpm5HXUk6lphbwIGYS
+         LVK2kv1FP1IfgNHemoqk5PChRvxwaKq9PHSldTTPO625ZWktzUMJzLA51WG4nlCStk+y
+         XaLZc4vpus9AMInx/XKjRPqxRGXdQbR0WxrH7/o/ZMQI2hxeLMKw1CgGubH5hmZF/hWv
+         GiXA==
+X-Gm-Message-State: AJIora9Oz8bM0vicOudkF4xHU7L8EUj474gE/uywEni2XxhJyp7JG6IM
+        cACuww0XvV3+eBad7g5YZr1nV+gCTXFrW+iqDy59cg==
+X-Google-Smtp-Source: AGRyM1vZ35BqSkdVoL3YwWkOXOHYil4MKgDP8iAYz+Rz4wCD4ADLbbR0rsgTYZHYxiDej4wVmrVuer94e9q4LpiXAmA=
+X-Received: by 2002:a25:5bc3:0:b0:669:b722:beb8 with SMTP id
+ p186-20020a255bc3000000b00669b722beb8mr12118791ybb.447.1656631859258; Thu, 30
+ Jun 2022 16:30:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629232653.1306735-8-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220601070707.3946847-1-saravanak@google.com>
+ <20220601070707.3946847-2-saravanak@google.com> <YrFzK6EiVvXmzVG6@atomide.com>
+ <CAGETcx_1USPRbFKV5j00qkQ-QXJkp7=FAfnFcfiNnM4J5KF1cQ@mail.gmail.com>
+ <YrKhkmj3jCQA39X/@atomide.com> <CAGETcx_11wO-HkZ2QsBF8o1+L9L3Xe1QBQ_GzegwozxAx1i0jg@mail.gmail.com>
+ <YrQP3OZbe8aCQxKU@atomide.com> <CAGETcx9aFBzMcuOiTAEy5SJyWw3UfajZ8DVQfW2DGmzzDabZVg@mail.gmail.com>
+ <Yrlz/P6Un2fACG98@atomide.com> <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
+ <CAL_JsqJd3J6k6pRar7CkHVaaPbY7jqvzAePd8rVDisRV-dLLtg@mail.gmail.com>
+In-Reply-To: <CAL_JsqJd3J6k6pRar7CkHVaaPbY7jqvzAePd8rVDisRV-dLLtg@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 30 Jun 2022 16:30:23 -0700
+Message-ID: <CAGETcx9ZmeTyP1sJCFZ9pBbMyXeifQFohFvWN3aBPx0sSOJ2VA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
+To:     Rob Herring <robh@kernel.org>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 01:26:50AM +0200, Lino Sanfilippo wrote:
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> 
-> Implement a usage counter for the (default) locality used by the TPM TIS
-> driver:
-> Request the locality from the TPM if it has not been claimed yet, otherwise
-> only increment the counter. Also release the locality if the counter is 0
-> otherwise only decrement the counter. Ensure thread-safety by protecting
-> the counter with a mutex.
-> 
-> This allows to request and release the locality from a thread and the
-> interrupt handler at the same time without the danger to interfere with
-> each other.
-> 
-> By doing this refactor the names of the amended functions to use the proper
-> prefix.
-> 
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> Tested-by: Michael Niew??hner <linux@mniewoehner.de>
-> ---
->  drivers/char/tpm/tpm_tis_core.c | 75 ++++++++++++++++++++++-----------
->  drivers/char/tpm/tpm_tis_core.h |  2 +
->  2 files changed, 53 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index bd4eeb0b2192..e50a2c78de9f 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -165,16 +165,27 @@ static bool check_locality(struct tpm_chip *chip, int l)
->  	return false;
->  }
->  
-> -static int release_locality(struct tpm_chip *chip, int l)
-> +static int tpm_tis_release_locality_locked(struct tpm_tis_data *priv, int l)
-> +{
-> +	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
-> +
-> +	return 0;
-> +}
-> +
-> +static int tpm_tis_release_locality(struct tpm_chip *chip, int l)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
->  
-> -	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
-> +	mutex_lock(&priv->locality_count_mutex);
-> +	priv->locality_count--;
-> +	if (priv->locality_count == 0)
-> +		tpm_tis_release_locality_locked(priv, l);
-> +	mutex_unlock(&priv->locality_count_mutex);
->  
->  	return 0;
->  }
->  
-> -static int request_locality(struct tpm_chip *chip, int l)
-> +static int tpm_tis_request_locality_locked(struct tpm_chip *chip, int l)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
->  	unsigned long stop, timeout;
-> @@ -215,6 +226,20 @@ static int request_locality(struct tpm_chip *chip, int l)
->  	return -1;
->  }
->  
-> +static int tpm_tis_request_locality(struct tpm_chip *chip, int l)
-> +{
-> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> +	int ret = 0;
-> +
-> +	mutex_lock(&priv->locality_count_mutex);
-> +	if (priv->locality_count == 0)
-> +		ret = tpm_tis_request_locality_locked(chip, l);
-> +	if (!ret)
-> +		priv->locality_count++;
-> +	mutex_unlock(&priv->locality_count_mutex);
-> +	return ret;
-> +}
-> +
->  static u8 tpm_tis_status(struct tpm_chip *chip)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> @@ -668,7 +693,7 @@ static int probe_itpm(struct tpm_chip *chip)
->  	if (vendor != TPM_VID_INTEL)
->  		return 0;
->  
-> -	if (request_locality(chip, 0) != 0)
-> +	if (tpm_tis_request_locality(chip, 0) != 0)
->  		return -EBUSY;
->  
->  	rc = tpm_tis_send_data(chip, cmd_getticks, len);
-> @@ -689,7 +714,7 @@ static int probe_itpm(struct tpm_chip *chip)
->  
->  out:
->  	tpm_tis_ready(chip);
-> -	release_locality(chip, priv->locality);
-> +	tpm_tis_release_locality(chip, priv->locality);
->  
->  	return rc;
->  }
-> @@ -751,7 +776,7 @@ static int tpm_tis_gen_interrupt(struct tpm_chip *chip)
->  	cap_t cap;
->  	int ret;
->  
-> -	ret = request_locality(chip, 0);
-> +	ret = tpm_tis_request_locality(chip, 0);
->  	if (ret < 0)
->  		return ret;
->  
-> @@ -760,7 +785,7 @@ static int tpm_tis_gen_interrupt(struct tpm_chip *chip)
->  	else
->  		ret = tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, desc, 0);
->  
-> -	release_locality(chip, 0);
-> +	tpm_tis_release_locality(chip, 0);
->  
->  	return ret;
->  }
-> @@ -785,33 +810,33 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
->  	}
->  	priv->irq = irq;
->  
-> -	rc = request_locality(chip, 0);
-> +	rc = tpm_tis_request_locality(chip, 0);
->  	if (rc < 0)
->  		return rc;
->  
->  	rc = tpm_tis_read8(priv, TPM_INT_VECTOR(priv->locality),
->  			   &original_int_vec);
->  	if (rc < 0) {
-> -		release_locality(chip, priv->locality);
-> +		tpm_tis_release_locality(chip, priv->locality);
->  		return rc;
->  	}
->  
->  	rc = tpm_tis_write8(priv, TPM_INT_VECTOR(priv->locality), irq);
->  	if (rc < 0) {
-> -		release_locality(chip, priv->locality);
-> +		tpm_tis_release_locality(chip, priv->locality);
->  		return rc;
->  	}
->  
->  	rc = tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &int_status);
->  	if (rc < 0) {
-> -		release_locality(chip, priv->locality);
-> +		tpm_tis_release_locality(chip, priv->locality);
->  		return rc;
->  	}
->  
->  	/* Clear all existing */
->  	rc = tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), int_status);
->  	if (rc < 0) {
-> -		release_locality(chip, priv->locality);
-> +		tpm_tis_release_locality(chip, priv->locality);
->  		return rc;
->  	}
->  
-> @@ -819,11 +844,11 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
->  	rc = tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality),
->  			     intmask | TPM_GLOBAL_INT_ENABLE);
->  	if (rc < 0) {
-> -		release_locality(chip, priv->locality);
-> +		tpm_tis_release_locality(chip, priv->locality);
->  		return rc;
->  	}
->  
-> -	release_locality(chip, priv->locality);
-> +	tpm_tis_release_locality(chip, priv->locality);
->  	clear_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
->  
->  	/* Generate an interrupt by having the core call through to
-> @@ -959,8 +984,8 @@ static const struct tpm_class_ops tpm_tis = {
->  	.req_complete_mask = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
->  	.req_complete_val = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
->  	.req_canceled = tpm_tis_req_canceled,
-> -	.request_locality = request_locality,
-> -	.relinquish_locality = release_locality,
-> +	.request_locality = tpm_tis_request_locality,
-> +	.relinquish_locality = tpm_tis_release_locality,
->  	.clk_enable = tpm_tis_clkrun_enable,
->  };
->  
-> @@ -994,6 +1019,8 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  	priv->timeout_min = TPM_TIMEOUT_USECS_MIN;
->  	priv->timeout_max = TPM_TIMEOUT_USECS_MAX;
->  	priv->phy_ops = phy_ops;
-> +	priv->locality_count = 0;
-> +	mutex_init(&priv->locality_count_mutex);
->  
->  	dev_set_drvdata(&chip->dev, priv);
->  
-> @@ -1071,14 +1098,14 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  
->  	intmask &= ~TPM_GLOBAL_INT_ENABLE;
->  
-> -	rc = request_locality(chip, 0);
-> +	rc = tpm_tis_request_locality(chip, 0);
->  	if (rc < 0) {
->  		rc = -ENODEV;
->  		goto out_err;
->  	}
->  
->  	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
-> -	release_locality(chip, 0);
-> +	tpm_tis_release_locality(chip, 0);
->  
->  	rc = tpm_chip_start(chip);
->  	if (rc)
-> @@ -1112,13 +1139,13 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  		 * proper timeouts for the driver.
->  		 */
->  
-> -		rc = request_locality(chip, 0);
-> +		rc = tpm_tis_request_locality(chip, 0);
->  		if (rc < 0)
->  			goto out_err;
->  
->  		rc = tpm_get_timeouts(chip);
->  
-> -		release_locality(chip, 0);
-> +		tpm_tis_release_locality(chip, 0);
->  
->  		if (rc) {
->  			dev_err(dev, "Could not get TPM timeouts and durations\n");
-> @@ -1138,11 +1165,11 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  			dev_err(&chip->dev, FW_BUG
->  					"TPM interrupt not working, polling instead\n");
->  
-> -			rc = request_locality(chip, 0);
-> +			rc = tpm_tis_request_locality(chip, 0);
->  			if (rc < 0)
->  				goto out_err;
->  			disable_interrupts(chip);
-> -			release_locality(chip, 0);
-> +			tpm_tis_release_locality(chip, 0);
->  		}
->  	}
->  
-> @@ -1209,13 +1236,13 @@ int tpm_tis_resume(struct device *dev)
->  	 * an error code but for unknown reason it isn't handled.
->  	 */
->  	if (!(chip->flags & TPM_CHIP_FLAG_TPM2)) {
-> -		ret = request_locality(chip, 0);
-> +		ret = tpm_tis_request_locality(chip, 0);
->  		if (ret < 0)
->  			return ret;
->  
->  		tpm1_do_selftest(chip);
->  
-> -		release_locality(chip, 0);
-> +		tpm_tis_release_locality(chip, 0);
->  	}
->  
->  	return 0;
-> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-> index e005eb99480e..7c6c14707e31 100644
-> --- a/drivers/char/tpm/tpm_tis_core.h
-> +++ b/drivers/char/tpm/tpm_tis_core.h
-> @@ -91,6 +91,8 @@ enum tpm_tis_flags {
->  
->  struct tpm_tis_data {
->  	u16 manufacturer_id;
-> +	struct mutex locality_count_mutex;
-> +	unsigned int locality_count;
->  	int locality;
->  	int irq;
->  	unsigned int int_mask;
-> -- 
-> 2.25.1
-> 
+On Thu, Jun 30, 2022 at 4:26 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Thu, Jun 30, 2022 at 5:11 PM Saravana Kannan <saravanak@google.com> wrote:
+> >
+> > On Mon, Jun 27, 2022 at 2:10 AM Tony Lindgren <tony@atomide.com> wrote:
+> > >
+> > > * Saravana Kannan <saravanak@google.com> [220623 08:17]:
+> > > > On Thu, Jun 23, 2022 at 12:01 AM Tony Lindgren <tony@atomide.com> wrote:
+> > > > >
+> > > > > * Saravana Kannan <saravanak@google.com> [220622 19:05]:
+> > > > > > On Tue, Jun 21, 2022 at 9:59 PM Tony Lindgren <tony@atomide.com> wrote:
+> > > > > > > This issue is no directly related fw_devlink. It is a side effect of
+> > > > > > > removing driver_deferred_probe_check_state(). We no longer return
+> > > > > > > -EPROBE_DEFER at the end of driver_deferred_probe_check_state().
+> > > > > >
+> > > > > > Yes, I understand the issue. But driver_deferred_probe_check_state()
+> > > > > > was deleted because fw_devlink=on should have short circuited the
+> > > > > > probe attempt with an  -EPROBE_DEFER before reaching the bus/driver
+> > > > > > probe function and hitting this -ENOENT failure. That's why I was
+> > > > > > asking the other questions.
+> > > > >
+> > > > > OK. So where is the -EPROBE_DEFER supposed to happen without
+> > > > > driver_deferred_probe_check_state() then?
+> > > >
+> > > > device_links_check_suppliers() call inside really_probe() would short
+> > > > circuit and return an -EPROBE_DEFER if the device links are created as
+> > > > expected.
+> > >
+> > > OK
+> > >
+> > > > > Hmm so I'm not seeing any supplier for the top level ocp device in
+> > > > > the booting case without your patches. I see the suppliers for the
+> > > > > ocp child device instances only.
+> > > >
+> > > > Hmmm... this is strange (that the device link isn't there), but this
+> > > > is what I suspected.
+> > >
+> > > Yup, maybe it's because of the supplier being a device in the child
+> > > interconnect for the ocp.
+> >
+> > Ugh... yeah, this is why the normal (not SYNC_STATE_ONLY) device link
+> > isn't being created.
+> >
+> > So the aggregated view is something like (I had to set tabs = 4 space
+> > to fit it within 80 cols):
+> >
+> >     ocp: ocp {         <========================= Consumer
+> >         compatible = "simple-pm-bus";
+> >         power-domains = <&prm_per>; <=========== Supplier ref
+> >
+> >                 l4_wkup: interconnect@44c00000 {
+> >             compatible = "ti,am33xx-l4-wkup", "simple-pm-bus";
+> >
+> >             segment@200000 {  /* 0x44e00000 */
+> >                 compatible = "simple-pm-bus";
+> >
+> >                 target-module@0 { /* 0x44e00000, ap 8 58.0 */
+> >                     compatible = "ti,sysc-omap4", "ti,sysc";
+> >
+> >                     prcm: prcm@0 {
+> >                         compatible = "ti,am3-prcm", "simple-bus";
+> >
+> >                         prm_per: prm@c00 { <========= Actual Supplier
+> >                             compatible = "ti,am3-prm-inst", "ti,omap-prm-inst";
+> >                         };
+> >                     };
+> >                 };
+> >             };
+> >         };
+> >     };
+> >
+> > The power-domain supplier is the great-great-great-grand-child of the
+> > consumer. It's not clear to me how this is valid. What does it even
+> > mean?
+> >
+> > Rob, is this considered a valid DT?
+>
+> Valid DT for broken h/w.
 
-I'm kind of thinking that should tpm_tis_data have a lock for its
-contents?
+I'm not sure even in that case it's valid. When the parent device is
+in reset (when the SoC is coming out of reset), there's no way the
+descendant is functional. And if the descendant is not functional, how
+is the parent device powered up? This just feels like an incorrect
+representation of the real h/w.
 
-I kind of doubt that we would ever need more than one lock for it,
-and it would give some more ensurance to not be race, especially
-when re-enabling interrupts this feels important to be "extra safe".
+> So the domain must be default on and then simple-pm-bus is going to
+> hold a reference to the domain preventing it from ever getting powered
+> off and things seem to work. Except what happens during suspend?
 
-I looked at this commit, and did not see anything that would prevent
-using a spin lock instead of mutex. With a spin lock priv can be
-accessed also in the interrupt context.
+But how can simple-pm-bus even get a reference? The PM domain can't
+get added until we are well into the probe of the simple-pm-bus and
+AFAICT the genpd attach is done before the driver probe is even
+called.
 
-So instead prepend this patch with a patch that adds:
-
-        struct spin_lock lock;
-
-And something like:
-
-        static inline struct tpm_tis_data *tpm_tis_priv_get(struct tpm_chip *chip)
-        {
-                struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-
-                spin_lock(&priv->lock); 
-                return priv; 
-        }
-
-        static inline void tpm_tis_priv_put(struct tpm_tis_data *priv)
-        {
-                spin_unlock(&priv->lock);
-        }
-
-And change the sites where priv is used to acquire the instance with this.
-
-BR, Jarkko
+-Saravana

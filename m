@@ -2,212 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D76A5617E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DC55617F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234884AbiF3K1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 06:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
+        id S235211AbiF3KdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 06:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234914AbiF3K05 (ORCPT
+        with ESMTP id S233490AbiF3Kca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 06:26:57 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79258BC86;
-        Thu, 30 Jun 2022 03:26:56 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id e28so21431366wra.0;
-        Thu, 30 Jun 2022 03:26:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0Mw2f0H7fPk/ec2Jm4YQjTpweOlVWIlUul8A8sSfzeA=;
-        b=VNdW4Reh08/XdWSDR8FuFhwwIwf1cZzqDuOWFgCOx+rN2+WnW7/caRqkPqZyviqQwF
-         L+crdyksbYmdGQUmvIwGRmiAzhYtG0PqWwTw27vs2exMmi+Eho0vHBgudFeorfRbIzKY
-         karr+vy4+v/Fopvz7sUXL3IRctj5BCH4PO92KG4ATNqYKl9742euZOtCyqVv3NEbvmA+
-         ApO14+xSaQLohvl/ivC9L2yS0XPoRTbVgYaxWnQBDBjOm9JfV7h1CKMsLJdolaRfbddf
-         NfnaBBWIsMYRLUr9RxdhGcAzGgDsleBLYAKzBYNXnquWgkjT0RFTxBez25ymRDrTicgo
-         sGlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0Mw2f0H7fPk/ec2Jm4YQjTpweOlVWIlUul8A8sSfzeA=;
-        b=mj2zkevCgdw67u3xs1w3yjxNHQ375X3QP6PEpENJleLXyjFh+DxGIyb7fxwtB8uOT+
-         VGue7r07v4pYTizzN4w4nlc41oNd+0bM0Vc+hPpP/wT9CZ0NjvqDgdlLDWZlL6QsFA6V
-         SBtCty/oGB4tuxHT3vlM5LRF2rwScEiYukAymVbmCYDpPlZgI06AoclrsGLZJSIa9iPj
-         DfhUkEqawxCOOCAu2PUfj9IRg/XcGWrzfiFcdd8KLEzQT20+eC5IwNPKn/9WudmDQ428
-         FN7mIIIPf9qFNQocac4jsOyatbv+GIXmuJDHI6SpqZFxshrQEiVk1xDq5l+FIkYFTRB5
-         80XA==
-X-Gm-Message-State: AJIora9UINZIJhHhl36MvKHW/STYY7GfTbHc/sW5CE9FwsP8htddRDR3
-        zuosb87DtqjSKC+qu/YzmoI=
-X-Google-Smtp-Source: AGRyM1s2lT+m+UG5iej2Ui9C+qOowxH3IlYMOCSTzdIoT7UWCrV36TUg5JRZmvuFOI6CkLd1QrsEpg==
-X-Received: by 2002:a5d:5047:0:b0:21b:92b2:f34f with SMTP id h7-20020a5d5047000000b0021b92b2f34fmr7461441wrt.677.1656584815026;
-        Thu, 30 Jun 2022 03:26:55 -0700 (PDT)
-Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id 13-20020a05600c020d00b0039c362311d2sm2539524wmi.9.2022.06.30.03.26.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 03:26:54 -0700 (PDT)
-Message-ID: <883b59b8-19fe-61f7-567b-f05d7e45063b@gmail.com>
-Date:   Thu, 30 Jun 2022 11:26:53 +0100
+        Thu, 30 Jun 2022 06:32:30 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A72864E0
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 03:32:27 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-308-GzwqdTqlNsKeXlp4TQFSLw-1; Thu, 30 Jun 2022 11:32:24 +0100
+X-MC-Unique: GzwqdTqlNsKeXlp4TQFSLw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Thu, 30 Jun 2022 11:32:23 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Thu, 30 Jun 2022 11:32:23 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christophe Leroy' <christophe.leroy@csgroup.eu>,
+        'Michael Schmitz' <schmitzmic@gmail.com>,
+        Arnd Bergmann <arnd@kernel.org>
+CC:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Jakub Kicinski" <kuba@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Denis Efremov <efremov@linux.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+        Khalid Aziz <khalid@gonehiking.org>,
+        Miquel van Smoorenburg <mikevs@xs4all.net>,
+        "Parisc List" <linux-parisc@vger.kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Matt Wang <wwentao@vmware.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        "Linux IOMMU" <iommu@lists.linux-foundation.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>
+Subject: RE: [PATCH v2 3/3] arch/*/: remove CONFIG_VIRT_TO_BUS
+Thread-Topic: [PATCH v2 3/3] arch/*/: remove CONFIG_VIRT_TO_BUS
+Thread-Index: AQHYi0Qnhtr21GMXN0qgKN5inTL9yK1nmAnQgAALb4CAAB3CUA==
+Date:   Thu, 30 Jun 2022 10:32:23 +0000
+Message-ID: <8bedba3ddffc435ea44a5e2893583acb@AcuMS.aculab.com>
+References: <20220617125750.728590-1-arnd@kernel.org>
+ <20220617125750.728590-4-arnd@kernel.org>
+ <6ba86afe-bf9f-1aca-7af1-d0d348d75ffc@gmail.com>
+ <CAMuHMdVewn0OYA9oJfStk0-+vCKAUou+4Mvd5H2kmrSks1p5jg@mail.gmail.com>
+ <b4e5a1c9-e375-63fb-ec7c-abb7384a6d59@gmail.com>
+ <9289fd82-285c-035f-5355-4d70ce4f87b0@gmail.com>
+ <CAMuHMdXUihTPD9A9hs__Xr2ErfOqkZ5KgCHqm+9HvRf39uS5kA@mail.gmail.com>
+ <c30bc9b6-6ccd-8856-dc6b-4e16450dad6f@gmail.com>
+ <CAK8P3a1rxEVwVF5U-PO6pQkfURU5Tro1Qp8SPUfHEV9jjWOmCQ@mail.gmail.com>
+ <9f812d3d-0fcd-46e6-6d7e-6d4bf66f24ab@gmail.com>
+ <26852797d822462abc1c9f96def7fa42@AcuMS.aculab.com>
+ <a36a85a3-3fd3-10ac-cac3-09a90eaf1936@csgroup.eu>
+In-Reply-To: <a36a85a3-3fd3-10ac-cac3-09a90eaf1936@csgroup.eu>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 4/7] media: ov5693: move hw cfg functions into
- ov5693_check_hwcfg
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Jacopo Mondi <jacopo@jmondi.org>,
-        Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        quentin.schulz@theobroma-systems.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220627150453.220292-1-tommaso.merciai@amarulasolutions.com>
- <20220627150453.220292-5-tommaso.merciai@amarulasolutions.com>
- <20220629081635.zvdj6pzodg4rhrdf@uno.localdomain>
-From:   Daniel Scally <djrscally@gmail.com>
-In-Reply-To: <20220629081635.zvdj6pzodg4rhrdf@uno.localdomain>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey
+RnJvbTogQ2hyaXN0b3BoZSBMZXJveQ0KPiBTZW50OiAzMCBKdW5lIDIwMjIgMTA6NDANCj4gDQo+
+IExlIDMwLzA2LzIwMjIgw6AgMTA6MDQsIERhdmlkIExhaWdodCBhIMOpY3JpdMKgOg0KPiA+IEZy
+b206IE1pY2hhZWwgU2NobWl0eg0KPiA+PiBTZW50OiAyOSBKdW5lIDIwMjIgMDA6MDkNCj4gPj4N
+Cj4gPj4gSGkgQXJuZCwNCj4gPj4NCj4gPj4gT24gMjkvMDYvMjIgMDk6NTAsIEFybmQgQmVyZ21h
+bm4gd3JvdGU6DQo+ID4+PiBPbiBUdWUsIEp1biAyOCwgMjAyMiBhdCAxMTowMyBQTSBNaWNoYWVs
+IFNjaG1pdHogPHNjaG1pdHptaWNAZ21haWwuY29tPiB3cm90ZToNCj4gPj4+PiBPbiAyOC8wNi8y
+MiAxOTowMywgR2VlcnQgVXl0dGVyaG9ldmVuIHdyb3RlOg0KPiA+Pj4+Pj4gVGhlIGRyaXZlciBh
+bGxvY2F0ZXMgYm91bmNlIGJ1ZmZlcnMgdXNpbmcga21hbGxvYyBpZiBpdCBoaXRzIGFuDQo+ID4+
+Pj4+PiB1bmFsaWduZWQgZGF0YSBidWZmZXIgLSBjYW4gc3VjaCBidWZmZXJzIHN0aWxsIGV2ZW4g
+aGFwcGVuIHRoZXNlIGRheXM/DQo+ID4+Pj4+IE5vIGlkZWEuDQo+ID4+Pj4gSG1tbSAtIEkgdGhp
+bmsgSSdsbCBzdGljayBhIFdBUk5fT05DRSgpIGluIHRoZXJlIHNvIHdlIGtub3cgd2hldGhlciB0
+aGlzDQo+ID4+Pj4gY29kZSBwYXRoIGlzIHN0aWxsIGJlaW5nIHVzZWQuDQo+ID4+PiBrbWFsbG9j
+KCkgZ3VhcmFudGVlcyBhbGlnbm1lbnQgdG8gdGhlIG5leHQgcG93ZXItb2YtdHdvIHNpemUgb3IN
+Cj4gPj4+IEtNQUxMT0NfTUlOX0FMSUdOLCB3aGljaGV2ZXIgaXMgYmlnZ2VyLiBPbiBtNjhrIHRo
+aXMgbWVhbnMgaXQNCj4gPj4+IGlzIGNhY2hlbGluZSBhbGlnbmVkLg0KPiA+Pg0KPiA+PiBBbmQg
+YWxsIFNDU0kgYnVmZmVycyBhcmUgYWxsb2NhdGVkIHVzaW5nIGttYWxsb2M/IE5vIHdheSBhdCBh
+bGwgZm9yIHVzZXINCj4gPj4gc3BhY2UgdG8gcGFzcyB1bmFsaWduZWQgZGF0YT8NCj4gPg0KPiA+
+IEkgZGlkbid0IHRoaW5rIGttYWxsb2MoKSBnYXZlIGFueSBzdWNoIGd1YXJhbnRlZSBhYm91dCBh
+bGlnbm1lbnQuDQo+IA0KPiBJIGRvZXMgc2luY2UgY29tbWl0IDU5YmI0Nzk4NWMxZCAoIm1tLCBz
+bFthb3VdYjogZ3VhcmFudGVlIG5hdHVyYWwNCj4gYWxpZ25tZW50IGZvciBrbWFsbG9jKHBvd2Vy
+LW9mLXR3bykiKQ0KDQpMb29rcyBsaWtlIGl0IGlzIGRvbmUgZm9yICdwb3dlci1vZi10d28nIGxl
+c3MgdGhhbiBQQUdFX1NJWkUuDQpUaGlzIG1heSBub3QgaGVscCBzY3NpIHRhcGUgd3JpdGVzIHdo
+aWNoIGNvdWxkIGVhc2lseSBiZSAoc2F5KSA0NyBieXRlcy4NCkkgdGhpbmsgdGhhdCBvbmx5IGd1
+YXJhbnRlZXMgMiBieXRlIGFsaWdubWVudCBvbiBtNjhrLg0KKEFsdGhvdWdoIGluY3JlYXNpbmcg
+dGhlIG1pbi1hbGlnbm1lbnQgb24gbTY4ayB0byA0IChvciBldmVuIDgpDQp3aWxsIHByb2JhYmx5
+IG1ha2Ugbm8gbWVhc3VyYWJsZSBkaWZmZXJlbmNlLikNCg0KV2hhdCBoYXBwZW5zIGFib3ZlIFBB
+R0VfU0laRT8NCkFueSBzdHJ1Y3R1cmUgd2l0aCBhIHRyYWlsaW5nIFtdIGZpZWxkIGNvdWxkIGVh
+c2lseSByZXF1ZXN0DQonNjRrICsgYV9iaXQnIGJ5dGVzLg0KWW91IGRvbid0IHJlYWxseSB3YW50
+IHRvIGV4dGVuZCB0aGlzIHRvIDEyOGsgLSBidXQgSSBzdXNwZWN0DQp0aGF0IGlzIHdoYXQgaGFw
+cGVucy4NCg0KCURhdmlkDQogDQoNCj4gDQo+IENocmlzdG9waGUNCj4gDQo+ID4gVGhlcmUgYXJl
+IGNhY2hlLWxpbmUgYWxpZ25tZW50IHJlcXVpcmVtZW50cyBvbiBzeXN0ZW1zIHdpdGggbm9uLWNv
+aGVyZW50DQo+ID4gZG1hLCBidXQgb3RoZXJ3aXNlIHRoZSBhbGlnbm1lbnQgY2FuIGJlIG11Y2gg
+c21hbGxlci4NCj4gPg0KPiA+IE9uZSBvZiB0aGUgYWxsb2NhdG9ycyBhZGRzIGEgaGVhZGVyIHRv
+IGVhY2ggaXRlbSwgSUlSQyB0aGF0IGNhbg0KPiA+IGxlYWQgdG8gJ3VuZXhwZWN0ZWQnIGFsaWdu
+bWVudHMgLSBlc3BlY2lhbGx5IG9uIG02OGsuDQo+ID4NCj4gPiBkbWFfYWxsb2NfY29oZXJlbnQo
+KSBkb2VzIGFsaWduIHRvIG5leHQgJ3Bvd2VyIG9mIDInLg0KPiA+IEFuZCBzb21ldGltZXMgeW91
+IG5lZWQgKGVnKSAxNmsgYWxsb2NhdGVzIHRoYXQgYXJlIDE2ayBhbGlnbmVkLg0KPiA+DQo+ID4g
+CURhdmlkDQo+ID4NCj4gPiAtDQo+ID4gUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFt
+bGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQo+ID4gUmVn
+aXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExh
+a2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQs
+IFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-On 29/06/2022 09:16, Jacopo Mondi wrote:
-> Hi Tommaso,
->
-> On Mon, Jun 27, 2022 at 05:04:50PM +0200, Tommaso Merciai wrote:
->> Move hw configuration functions into ov5693_check_hwcfg. This is done to
->> separe the code that handle the hw cfg from probe in a clean way
-> s/separe/separate/
->
-> You also seem to change the logic of the clk handling, please mention
-> this in the commit message, otherwise one could be fooled into
-> thinking you're only moving code around with no functional changes...
->
->> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
->> ---
->>  drivers/media/i2c/ov5693.c | 53 +++++++++++++++++++++++---------------
->>  1 file changed, 32 insertions(+), 21 deletions(-)
->>
->> diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
->> index d2adc5513a21..d5a934ace597 100644
->> --- a/drivers/media/i2c/ov5693.c
->> +++ b/drivers/media/i2c/ov5693.c
->> @@ -1348,6 +1348,38 @@ static int ov5693_check_hwcfg(struct ov5693_device *ov5693)
->>  	struct fwnode_handle *endpoint;
->>  	unsigned int i;
->>  	int ret;
->> +	u32 xvclk_rate;
-> nit: move it up to maintain reverse-xmas-tree order (I know, it's an
-> annoying comment, but since variables are already declared in this order..)
->
->> +
->> +	ov5693->xvclk = devm_clk_get(ov5693->dev, "xvclk");
-> Isn't this broken ?
->
-> if you use ov5693->xvclk to identify the ACPI vs OF use case shouldn't
-> you use the get_optionl() version ? Otherwise in the ACPI case you will have
-> -ENOENT if there's not 'xvclk' property and bail out.
->
-> Unless my understanding is wrong on ACPI we have "clock-frequency" and
-> on OF "xvclk" with an "assigned-clock-rates",
->
-> Dan you upstreamed this driver and I assume it was tested on ACPI ?
-> Can you clarify how this worked for you, as it seems the original code
-> wanted a mandatory "xvclk" ? Are there ACPI tables with an actual
-> 'xvclk' property ?
-
-
-Sorry - late answer, but when I wrote this although it's ostensibly for
-an ACPI platform, it's actually only tested with the IPU3 platforms
-which work in a _weird_ way. The fix we eventually came to was to create
-through the int3472-discrete driver clocks and regulators through the
-normal frameworks that a dt platform would expect to consume, so even
-though the devices are enumerated through ACPI, the clock/regulator
-parts really work more like a dt platform.
-
-
-You're right that it needs to be get_optional() here, but with that
-added I think this is fine - I tested it last night and it works ok for me.
-
->
->> +	if (IS_ERR(ov5693->xvclk))
->> +		return dev_err_probe(ov5693->dev, PTR_ERR(ov5693->xvclk),
->> +				     "failed to get xvclk: %ld\n",
->> +				     PTR_ERR(ov5693->xvclk));
->> +
->> +	if (ov5693->xvclk) {
->> +		xvclk_rate = clk_get_rate(ov5693->xvclk);
->> +	} else {
->> +		ret = fwnode_property_read_u32(fwnode, "clock-frequency",
->> +					       &xvclk_rate);
->> +
->> +		if (ret) {
->> +			dev_err(ov5693->dev, "can't get clock frequency");
->> +			return ret;
->> +		}
->> +	}
->> +
->> +	if (xvclk_rate != OV5693_XVCLK_FREQ)
->> +		dev_warn(ov5693->dev, "Found clk freq %u, expected %u\n",
->> +			 xvclk_rate, OV5693_XVCLK_FREQ);
->> +
->> +	ret = ov5693_configure_gpios(ov5693);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ret = ov5693_get_regulators(ov5693);
->> +	if (ret)
->> +		return dev_err_probe(ov5693->dev, ret,
->> +				     "Error fetching regulators\n");
->>
->>  	endpoint = fwnode_graph_get_next_endpoint(fwnode, NULL);
->>  	if (!endpoint)
->> @@ -1390,7 +1422,6 @@ static int ov5693_check_hwcfg(struct ov5693_device *ov5693)
->>  static int ov5693_probe(struct i2c_client *client)
->>  {
->>  	struct ov5693_device *ov5693;
->> -	u32 xvclk_rate;
->>  	int ret = 0;
->>
->>  	ov5693 = devm_kzalloc(&client->dev, sizeof(*ov5693), GFP_KERNEL);
->> @@ -1408,26 +1439,6 @@ static int ov5693_probe(struct i2c_client *client)
->>
->>  	v4l2_i2c_subdev_init(&ov5693->sd, client, &ov5693_ops);
->>
->> -	ov5693->xvclk = devm_clk_get(&client->dev, "xvclk");
->> -	if (IS_ERR(ov5693->xvclk)) {
->> -		dev_err(&client->dev, "Error getting clock\n");
->> -		return PTR_ERR(ov5693->xvclk);
->> -	}
->> -
->> -	xvclk_rate = clk_get_rate(ov5693->xvclk);
->> -	if (xvclk_rate != OV5693_XVCLK_FREQ)
->> -		dev_warn(&client->dev, "Found clk freq %u, expected %u\n",
->> -			 xvclk_rate, OV5693_XVCLK_FREQ);
->> -
->> -	ret = ov5693_configure_gpios(ov5693);
->> -	if (ret)
->> -		return ret;
->> -
->> -	ret = ov5693_get_regulators(ov5693);
->> -	if (ret)
->> -		return dev_err_probe(&client->dev, ret,
->> -				     "Error fetching regulators\n");
->> -
->>  	ov5693->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
->>  	ov5693->pad.flags = MEDIA_PAD_FL_SOURCE;
->>  	ov5693->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
->> --
->> 2.25.1
->>

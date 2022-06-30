@@ -2,113 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFDB15613D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63CF45613E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 10:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233413AbiF3H6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
+        id S233430AbiF3H7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233077AbiF3H61 (ORCPT
+        with ESMTP id S233434AbiF3H6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:58:27 -0400
-Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05AB17E02;
-        Thu, 30 Jun 2022 00:58:21 -0700 (PDT)
-X-QQ-mid: bizesmtp89t1656575881tmsn8kr9
-Received: from localhost.localdomain ( [182.148.13.66])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 30 Jun 2022 15:57:58 +0800 (CST)
-X-QQ-SSF: 0100000000200070C000C00A0000000
-X-QQ-FEAT: /gZs+pYOe4QtKWcpUPh0RUNkILiDmKzOemLUmT8vQZAH1EvZkAs5EG62QC3fV
-        mRim4+TvzTUa+CTiRquV9X/5m0vO5obXUifoXV0ndxT28229uEaGcD6kGauwv16wnxwz6Jk
-        dYBP3C3+nLKbtQwjGZ1e7VZCWVNSfi60dUqQB94M6lMrQDUT2vnw25Thaqrb52CRX5+yQYt
-        J7UKwd+9gX5p36kmwsCnkO2MkRKSmVRxefyl9LmfFDQJrzO8hPz0VlqwCf+/+FLC4ZAEPFb
-        yeddFP0MtMxPGxpv4m5e6NFc0CJFTDh9M1Ng2uWUlxP9z4v2XoM74adXDJ46e6JS2j5+EAF
-        1o9FYp5YXKAfNVeH2A=
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     jdmason@kudzu.us, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] ethernet/neterion: fix repeated words in comments
-Date:   Thu, 30 Jun 2022 15:57:51 +0800
-Message-Id: <20220630075751.21211-1-yuanjilin@cdjrlc.com>
+        Thu, 30 Jun 2022 03:58:51 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C842C41306;
+        Thu, 30 Jun 2022 00:58:50 -0700 (PDT)
+Received: from dimapc.. (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6CE3C66017F5;
+        Thu, 30 Jun 2022 08:58:48 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656575929;
+        bh=7ycOl0tf4G0sSnkM0jeUXBwerp1p2XzwKGi4RzRqJcc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eUlcV6ImEVCpigysQR9fXFnu70De58qNsrrPtXqNOz0ykpk3Q2m+8aUHilk1fHLq3
+         L1JRbkW3VeVQdGNX4CykiTBf7AYHLQGo15WHv2W6iAvZGETCfjjzyxklCLRx/m7vvG
+         GFkbuEo0wifOz+A4NXr60gOPuJPgFOT7UpobDOc58iNG5oEJfEOGuEZnzSsKFXtUMN
+         cHYN5YINR5HAbIti5MU2DRLvBn7wc7sYmeEQxha+mde8njJCeOoQtf+O5BveL8YZRv
+         aACXGjxNSx2HbzvtFrP50dwBiApVzrxEc9QGtOy34zS02zi77ntAF2iTrnnT6oCgnm
+         RW8rPGO1FKpww==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] PM / devfreq: tegra30: Add error message for devm_devfreq_add_device()
+Date:   Thu, 30 Jun 2022 10:57:51 +0300
+Message-Id: <20220630075751.1360786-1-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'the'.
-Delete the redundant word 'a'.
-Delete the redundant word 'frame'.
-Delete the redundant word 'is'.
-Delete the redundant word 'not'.
+It's difficult to notice that driver failed to probe by looking at KMSG
+when devm_devfreq_add_device() fails. Add explicit error message for this
+case.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- drivers/net/ethernet/neterion/s2io.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/devfreq/tegra30-devfreq.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/neterion/s2io.c b/drivers/net/ethernet/neterion/s2io.c
-index 6dd451adc331..30f955efa830 100644
---- a/drivers/net/ethernet/neterion/s2io.c
-+++ b/drivers/net/ethernet/neterion/s2io.c
-@@ -2156,7 +2156,7 @@ static int verify_xena_quiescence(struct s2io_nic *sp)
+diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+index 30382bdfc655..f0d414b881e3 100644
+--- a/drivers/devfreq/tegra30-devfreq.c
++++ b/drivers/devfreq/tegra30-devfreq.c
+@@ -926,8 +926,10 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
  
- 	/*
- 	 * In PCI 33 mode, the P_PLL is not used, and therefore,
--	 * the the P_PLL_LOCK bit in the adapter_status register will
-+	 * the P_PLL_LOCK bit in the adapter_status register will
- 	 * not be asserted.
- 	 */
- 	if (!(val64 & ADAPTER_STATUS_P_PLL_LOCK) &&
-@@ -3817,7 +3817,7 @@ static irqreturn_t s2io_test_intr(int irq, void *dev_id)
- 	return IRQ_HANDLED;
+ 	devfreq = devm_devfreq_add_device(&pdev->dev, &tegra_devfreq_profile,
+ 					  "tegra_actmon", NULL);
+-	if (IS_ERR(devfreq))
++	if (IS_ERR(devfreq)) {
++		dev_err(&pdev->dev, "Failed to add device: %pe\n", devfreq);
+ 		return PTR_ERR(devfreq);
++	}
+ 
+ 	return 0;
  }
- 
--/* Test interrupt path by forcing a a software IRQ */
-+/* Test interrupt path by forcing a software IRQ */
- static int s2io_test_msi(struct s2io_nic *sp)
- {
- 	struct pci_dev *pdev = sp->pdev;
-@@ -5492,7 +5492,7 @@ s2io_ethtool_gringparam(struct net_device *dev,
- }
- 
- /**
-- * s2io_ethtool_getpause_data -Pause frame frame generation and reception.
-+ * s2io_ethtool_getpause_data -Pause frame generation and reception.
-  * @dev: pointer to netdev
-  * @ep : pointer to the structure with pause parameters given by ethtool.
-  * Description:
-@@ -7449,7 +7449,7 @@ static int rx_osm_handler(struct ring_info *ring_data, struct RxD_t * rxdp)
-  *  @link : inidicates whether link is UP/DOWN.
-  *  Description:
-  *  This function stops/starts the Tx queue depending on whether the link
-- *  status of the NIC is is down or up. This is called by the Alarm
-+ *  status of the NIC is down or up. This is called by the Alarm
-  *  interrupt handler whenever a link change interrupt comes up.
-  *  Return value:
-  *  void.
-@@ -7732,7 +7732,7 @@ s2io_init_nic(struct pci_dev *pdev, const struct pci_device_id *pre)
- 	 * Setting the device configuration parameters.
- 	 * Most of these parameters can be specified by the user during
- 	 * module insertion as they are module loadable parameters. If
--	 * these parameters are not not specified during load time, they
-+	 * these parameters are not specified during load time, they
- 	 * are initialized with default values.
- 	 */
- 	config = &sp->config;
 -- 
 2.36.1
 

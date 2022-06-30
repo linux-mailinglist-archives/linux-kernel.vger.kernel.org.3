@@ -2,120 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37998561780
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0332C561785
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 12:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234148AbiF3KRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 06:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
+        id S234327AbiF3KSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 06:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233043AbiF3KRf (ORCPT
+        with ESMTP id S230341AbiF3KSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 06:17:35 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FA74506F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 03:17:34 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id q9so26551652wrd.8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 03:17:34 -0700 (PDT)
+        Thu, 30 Jun 2022 06:18:21 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0947B26D4;
+        Thu, 30 Jun 2022 03:18:21 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id h187so30695814ybg.0;
+        Thu, 30 Jun 2022 03:18:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=c96BIX1fdQoWXVeifIQLvlY9hToa+J8OCLgj66YDpdo=;
-        b=hxR+0DYQzyBeod/6ISMQjw069iwdQP3G6dVo1DQlk4ba7JW7UYZ4O7TE6g9NajuItk
-         p3wuOz4zRGR8CEq/BpalWRVErG0Y0rXGB+22+MVcT5ULiz7KSnNs22YiWKIaBM09kKMw
-         sWlX53ypI0udUXY1yWQEOk32myTSzVneVpmWoBk+l5yc3vElFTUYu8bO9acQI1+lAHZW
-         bHVpgFKSqoXIV+r1jsFOT9efDvWH4IfzT98msNbV6dcn0bgI0Hv97aY925yneWBdby5T
-         6D3frZSyzVLgKQqc86S4j5d0/xodXxI7e8MI049fagc4OBu4uHWmk5vEbZOg1JtZkyJi
-         CYww==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=VoXYvf7J8M13YBxMTmTnsi6ikqoH1MwKYJUW6+sW6jA=;
+        b=l+xjvoyHkxKBWUaxeMnNN//yCLYeBo9MxaIEECt5B4IBxxkbX2xUJeO8rXd1jOOiV6
+         zZp/u54Az5A33Xq2t4TryIZuZyyHbWdJJ5Qc6dDzvH7ZoEG4OsMWwXGbLGnEqJC4xADk
+         xQof005r0QGNwBOTEqEPZxyn3WxQPScsyDlTINQBJk8coY8dvGyfba2xi87nrpIHjNLj
+         u5fXjh1ZMvkFTeMTOzB+lmIzV1IbytHQ6qFUTDyqmO6AkB5HnzGsB0re9ngzeTxf2rd6
+         U2ZrbFE29Gm8v/GmzvASh4GkffE/6egG3Ih9UYtEqowNmCWUlpmUFDI/hULRJ7JOmiyp
+         ersA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=c96BIX1fdQoWXVeifIQLvlY9hToa+J8OCLgj66YDpdo=;
-        b=g2Ji3SmQSEctvrdTGivwynF9y4bx9T5kMZcZDq0Mztwjx8oX1Gqa567/hU/56ndllC
-         nBfYW0/OiYX4GUag0lHbMfyd6fXGQZaERiBfpBJOq7I/VRr1q8pCX10Qt/GcCwSiVyDX
-         TaSIMXUQGmyBL8QFF7UnUSQK+NXvJRnaL9iBW8P/XbAtDJpj1o6tX8BYPFLUo1uENu/J
-         QVKf3sjKshYW3JqROfkM/N0yr17f/kaqAF0glYLi87z+ks3AkrWBWV1yi9ryCud4lfmc
-         fUt2d3LHeKqSzEbxP+lOLppQU6soVhb2A08b+ieFfmoLotS7Mzw9IdaI5aIZjew/tJpD
-         Jimw==
-X-Gm-Message-State: AJIora/yrcmsmMojSknJozY+t4BZYHIJCtkmdOl4Uh5dLS8dDdY5+8V0
-        iL9738ktb7SjiIadCdmLrPUO0Q==
-X-Google-Smtp-Source: AGRyM1sbvmqN9/tkpqOkQ+1clLVa6+kww2xKsNUSTqdo01t1OTCv0ffjXeaKZcHNWk59VZfg9riTNA==
-X-Received: by 2002:a5d:5a84:0:b0:21b:92c7:a7f with SMTP id bp4-20020a5d5a84000000b0021b92c70a7fmr8055287wrb.586.1656584252619;
-        Thu, 30 Jun 2022 03:17:32 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id k42-20020a05600c1caa00b003a04722d745sm2184242wms.23.2022.06.30.03.17.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 03:17:32 -0700 (PDT)
-Message-ID: <1d9ed3ac-289f-88ea-ad08-0031e9bde1bb@linaro.org>
-Date:   Thu, 30 Jun 2022 12:17:30 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=VoXYvf7J8M13YBxMTmTnsi6ikqoH1MwKYJUW6+sW6jA=;
+        b=0yVizlP5HYtYlWo2zLdT4FIFS4g0mAjrjKNufpSKt9H/NyNO8zimT/l08PHBi6upwp
+         7LRtruKreTbsUoqWMNexdYIWnwq9KJWmBR5pOjo2qp/ovreytspfP+QNV6tTZELjpSEm
+         UVwTAdFJJEaTnBKHf1oITxAmH8MScJiFkCGmMJJB6LuLna7datxj8oOspOdgOvgFVMY2
+         StJvb8kjqBSFFYvx6wZCAJpS3QN2EEgtA0ra20bt/0MnknoQet6VCJApRkfb4PNMJLqz
+         hKB5YsSp6GrDr19AEOu4V1Km/TaIS7czrjSJEQPxgq8mdf7C9iDML98FZLSh2KVu1sF/
+         v7PQ==
+X-Gm-Message-State: AJIora+b4NLN9QboZbxLkUst8L0Hr0meG51+YX/KOGHIra70c4kiLHvx
+        x3jY28EWpAt7E4mJ7fgzwkndbB8H1ckE1vzlqOOeDVMkdMqRpg==
+X-Google-Smtp-Source: AGRyM1sZ0/jyT8b9+neGVpNeFK9+ZnmDyE7FYipe2HjDbIQY6VUL6apvtKzzfZ8O8L6YNtv5hiZqINFnPWRX+iK0AO8=
+X-Received: by 2002:a25:dd83:0:b0:66c:8d8d:4f5f with SMTP id
+ u125-20020a25dd83000000b0066c8d8d4f5fmr8492821ybg.79.1656584300103; Thu, 30
+ Jun 2022 03:18:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/3] thermal/drivers/tegra: Remove get_trend function
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
-References: <20220616202537.303655-1-daniel.lezcano@linaro.org>
- <20220616202537.303655-2-daniel.lezcano@linaro.org>
- <b4adef64-cc2c-14ab-b16d-3f8c27f3834b@collabora.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <b4adef64-cc2c-14ab-b16d-3f8c27f3834b@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220630100536.41329-1-ilpo.jarvinen@linux.intel.com>
+In-Reply-To: <20220630100536.41329-1-ilpo.jarvinen@linux.intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 30 Jun 2022 12:17:42 +0200
+Message-ID: <CAHp75VcH9O6=Lk06w3Set==zBEFyseCSDN6OUE3n7g4ZnBM4Bg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] 8250_dwlib: Convert bitops to newer form
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/06/2022 22:05, Dmitry Osipenko wrote:
-> On 6/16/22 23:25, Daniel Lezcano wrote:
->> The get_trend function does already what the generic framework does.
->>
->> Remove it.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
+On Thu, Jun 30, 2022 at 12:08 PM Ilpo J=C3=A4rvinen
+<ilpo.jarvinen@linux.intel.com> wrote:
+>
+> Instead of open-coding, use BIT(), GENMASK(), and FIELD_GET() helpers.
 
-[ ... ]
+FIELD_GET() requires bitfield.h to be included. Is this the case already?
+If so,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
->>   static void thermal_irq_enable(struct tegra_thermctl_zone *zn)
->>   {
->>   	u32 r;
->> @@ -716,7 +685,6 @@ static int tegra_thermctl_set_trips(void *data, int lo, int hi)
->>   static const struct thermal_zone_of_device_ops tegra_of_thermal_ops = {
->>   	.get_temp = tegra_thermctl_get_temp,
->>   	.set_trip_temp = tegra_thermctl_set_trip_temp,
->> -	.get_trend = tegra_thermctl_get_trend,
->>   	.set_trips = tegra_thermctl_set_trips,
->>   };
->>   
-> 
-> Guenter fixed the LM90 driver problem. There are other regressions in
-> the latest -next which complicate testing, but I can't see any problems
-> from the thermal side.
-> 
-> Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/tty/serial/8250/8250_dwlib.c | 26 +++++++++++++-------------
+>  1 file changed, 13 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/tty/serial/8250/8250_dwlib.c b/drivers/tty/serial/82=
+50/8250_dwlib.c
+> index da330ef46446..a8bbed74ea70 100644
+> --- a/drivers/tty/serial/8250/8250_dwlib.c
+> +++ b/drivers/tty/serial/8250/8250_dwlib.c
+> @@ -46,21 +46,21 @@
+>  #define DW_UART_LCR_EXT_TRANSMIT_MODE  BIT(3)
+>
+>  /* Component Parameter Register bits */
+> -#define DW_UART_CPR_ABP_DATA_WIDTH     (3 << 0)
+> -#define DW_UART_CPR_AFCE_MODE          (1 << 4)
+> -#define DW_UART_CPR_THRE_MODE          (1 << 5)
+> -#define DW_UART_CPR_SIR_MODE           (1 << 6)
+> -#define DW_UART_CPR_SIR_LP_MODE                (1 << 7)
+> -#define DW_UART_CPR_ADDITIONAL_FEATURES        (1 << 8)
+> -#define DW_UART_CPR_FIFO_ACCESS                (1 << 9)
+> -#define DW_UART_CPR_FIFO_STAT          (1 << 10)
+> -#define DW_UART_CPR_SHADOW             (1 << 11)
+> -#define DW_UART_CPR_ENCODED_PARMS      (1 << 12)
+> -#define DW_UART_CPR_DMA_EXTRA          (1 << 13)
+> -#define DW_UART_CPR_FIFO_MODE          (0xff << 16)
+> +#define DW_UART_CPR_ABP_DATA_WIDTH     GENMASK(1, 0)
+> +#define DW_UART_CPR_AFCE_MODE          BIT(4)
+> +#define DW_UART_CPR_THRE_MODE          BIT(5)
+> +#define DW_UART_CPR_SIR_MODE           BIT(6)
+> +#define DW_UART_CPR_SIR_LP_MODE                BIT(7)
+> +#define DW_UART_CPR_ADDITIONAL_FEATURES        BIT(8)
+> +#define DW_UART_CPR_FIFO_ACCESS                BIT(9)
+> +#define DW_UART_CPR_FIFO_STAT          BIT(10)
+> +#define DW_UART_CPR_SHADOW             BIT(11)
+> +#define DW_UART_CPR_ENCODED_PARMS      BIT(12)
+> +#define DW_UART_CPR_DMA_EXTRA          BIT(13)
+> +#define DW_UART_CPR_FIFO_MODE          GENMASK(23, 16)
+>
+>  /* Helper for FIFO size calculation */
+> -#define DW_UART_CPR_FIFO_SIZE(a)       (((a >> 16) & 0xff) * 16)
+> +#define DW_UART_CPR_FIFO_SIZE(a)       (FIELD_GET(DW_UART_CPR_FIFO_MODE,=
+ (a)) * 16)
+>
+>  /*
+>   * divisor =3D div(I) + div(F)
+> --
+> 2.30.2
+>
 
-Great! Thanks for taking the time to test
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+--=20
+With Best Regards,
+Andy Shevchenko

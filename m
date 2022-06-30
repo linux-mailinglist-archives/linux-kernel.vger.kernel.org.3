@@ -2,251 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96AFE561244
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 08:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B530561241
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 08:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbiF3GIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 02:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
+        id S231500AbiF3GIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 02:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232106AbiF3GIK (ORCPT
+        with ESMTP id S229479AbiF3GIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 02:08:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88BB91122
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 23:08:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656569287;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8F2nUeN3UIGvhWhPwdXFRxrBpN+YKacrhMVno3b0HOE=;
-        b=DCGVpnElsO3BwLDIhZxih7UhJZkMn2Dh9W+4IX7bt1gU/c3IgR0KnGT3pYmzXPNunpxJz6
-        d2SXATDrWQ3bV6RO9N3nn1ne/BuJYqyIlS5ISg3xoxHU26a9Omz6Yz68ALRb82tKzE3tzW
-        gT8j7p+9gtvTOWhSRl0K7yrtS2nxuYM=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-55-JLZKD7nXNnG_W3rOpmBhcA-1; Thu, 30 Jun 2022 02:08:05 -0400
-X-MC-Unique: JLZKD7nXNnG_W3rOpmBhcA-1
-Received: by mail-lf1-f71.google.com with SMTP id h18-20020a056512055200b004810d1b257aso6148556lfl.13
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Jun 2022 23:08:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8F2nUeN3UIGvhWhPwdXFRxrBpN+YKacrhMVno3b0HOE=;
-        b=Mx3opvGN0Jsw1eDRd6Z1AKD8TYA3uOLaS8Rsqy4PYb/I8BvYFqJ0Te6k9hias0meCl
-         ToWabJ26f29HjnxsWUf8DKsi35YEYfwoBtk+/j8X6YYDWg5VeyVAGWMoyN3YFp7yiDaC
-         K0fFBCtkXyfDjIZuMZiDbz1KYJDVK7uFPntmjsiJyncQAJ+JKG5YKL4edrwRCuQTpDTm
-         FwHKcmv0IZuFCvhp+khCVT0zhS+VYYXPd4fLjEH8Sxzi9pixjZKSge7GvRO1FceEfGya
-         MTj4MVyTBWlkemUVABID3WXwMI6YMCQY3H8EtW0giKvu0SCQfc0YxncopBDlOHz0PLyG
-         19dg==
-X-Gm-Message-State: AJIora/kwwClTuv0Qj48APrg3+vAMX8//VVR4jgruIgl21Metmz9ZnpH
-        NVSpH7q8Yxc+rhhYoHeBXKIunETl3HMRqDd3VGNzy1hY5iFP8VorPZ3DC3ZbK1OaESHjxpkbrmk
-        7G711UXoxu9PO7kNXPl6nk4GZ1j/ToM0hZdFi8rlI
-X-Received: by 2002:a2e:9ad0:0:b0:25a:7156:26bb with SMTP id p16-20020a2e9ad0000000b0025a715626bbmr3893981ljj.141.1656569283324;
-        Wed, 29 Jun 2022 23:08:03 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uycjpe9LzkeJnJwvQ8/m/MahJ4H/ysGKojEgms9aLE1GxSCP4NZcX8Lj7MKqEKJME0I1SUIsT2FYJTz+SKeGY=
-X-Received: by 2002:a2e:9ad0:0:b0:25a:7156:26bb with SMTP id
- p16-20020a2e9ad0000000b0025a715626bbmr3893973ljj.141.1656569283083; Wed, 29
- Jun 2022 23:08:03 -0700 (PDT)
+        Thu, 30 Jun 2022 02:08:00 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8317E9C;
+        Wed, 29 Jun 2022 23:07:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656569280; x=1688105280;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=0vD4dyY0Y9JyjTo7KN/i7kVdjqjLYDDvulW3f8urwus=;
+  b=WwcKB3UU0vtL5dI462P9su11VNbU5Y815jPB0QUQIX1e2H1pWeJ15WXE
+   mBmkQP43C7Yt9HvsR5JJpJGSneSp5uOzXO89AeXF/PrzUFbW6DiA/unfk
+   WgxfZ4R6eaaxR50L3kyA/dhGwpdW8B+SRe7U3+RN83ElkozI0nJw0VCcS
+   MvpLO1YfWwtmeedcCUthO7toXJcIXcoXBAeUdGByuL93rfpjRE968c8k3
+   +bloZAObE5pnZeO/OmADfxqET/2s5OfD4W829it5OvnCuhgStbUoNBl8L
+   BEVa4rxDDtppFWoD5SnM7juyBj8R6bysAC2W3v++TvWM+U0DjopnVhs/4
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
+   d="scan'208";a="165764712"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Jun 2022 23:07:59 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 29 Jun 2022 23:07:59 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Wed, 29 Jun 2022 23:07:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RbGhz777EL2N5aDlN78wUoyvNpYJoK28gaiPyfZl+Adfm2byf6UZsv55/ug598aqIzPI9B/5j0JSIRa1DD9DguPqZVI0o9GfhUhfju1TBRXmuGF7WNUA+UfzYKDXlpd0Bf0tBWhR9+f+7uF65RxeSL4NfVdZvdSo6clULXkhftKnllRdcjJLExg/3ha9ihxGBJj2sV0XHMb+gYKdZfZbJSO4kYzkS8NYoW+tTPhNCeZur08GWPUct0N9peTlJs1N4rWqhqhpqz9fncCbmRVWTNV5w/tjwFczazC6vdOe0OAoJmvyZRVlv3tmUOM4h7YRuGZ/YSiZiBLnbjq9oHy/eA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0vD4dyY0Y9JyjTo7KN/i7kVdjqjLYDDvulW3f8urwus=;
+ b=asYOAT/EphYlvm8oJ+SsfV1atC2okyYvxXcHYRJWtjrQeEAuroubkliXggAgsNIA3RKXH3uqh8fhUqu6OMA6wzfpwhUeyTOKmdFOfk/eVmp/uHf3xv392GnOK2ZhhSGhj4FAEFNRMa4KRGAPimWoZ1ijLtbR15ejrh5fCF/YPhcVw4BWa55igaXWrb1fWrthSgvGs9lCeIwCl5R9697OpJK14O/JRIRv40dnl7+IKAL3T/rEcXFD6V6+yJcFzNnepxZ0U8Bz19fnUD1X4U+Di9JSNF86UY+4atKWCBtV+bAx3tJ/+QeYKS4lw/2Em8gKiJ4DIMwdLSpJR93PFwvfTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0vD4dyY0Y9JyjTo7KN/i7kVdjqjLYDDvulW3f8urwus=;
+ b=Fv3dfNIeDPxutpbt3HLNyebSOST7O1I+E0imXMM74Iu+j+af2EkfWFV1y7xW5rUTn9/ZOhSLhxcMjWw5qhxyVtyq+KpL/9GndP3KGyQho0raZV7rN5Df6vWhZTvMH91z96IoecTb9DEqVX1VD+PbSP/03bdHnFSuGZvd2SzBqSo=
+Received: from BYAPR11MB2758.namprd11.prod.outlook.com (2603:10b6:a02:c9::11)
+ by SA0PR11MB4527.namprd11.prod.outlook.com (2603:10b6:806:72::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.16; Thu, 30 Jun
+ 2022 06:07:54 +0000
+Received: from BYAPR11MB2758.namprd11.prod.outlook.com
+ ([fe80::c1d:1b72:2d90:d496]) by BYAPR11MB2758.namprd11.prod.outlook.com
+ ([fe80::c1d:1b72:2d90:d496%4]) with mapi id 15.20.5395.014; Thu, 30 Jun 2022
+ 06:07:54 +0000
+From:   <Sergiu.Moga@microchip.com>
+To:     <Nicolas.Ferre@microchip.com>, <krzysztof.kozlowski@linaro.org>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <Tudor.Ambarus@microchip.com>
+CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <Claudiu.Beznea@microchip.com>,
+        <alexandre.belloni@bootlin.com>,
+        <Kavyasree.Kotagiri@microchip.com>, <UNGLinuxDriver@microchip.com>
+Subject: Re: [PATCH] dt-bindings: spi: convert spi_atmel to json-schema
+Thread-Topic: [PATCH] dt-bindings: spi: convert spi_atmel to json-schema
+Thread-Index: AQHYi7hgu9BbfCeInkGneSj5bi0Tm61mX4IAgAAbUoCAAP00AA==
+Date:   Thu, 30 Jun 2022 06:07:54 +0000
+Message-ID: <2bbea8cc-6f17-6236-6f4b-352a274784de@microchip.com>
+References: <20220629125804.137099-1-sergiu.moga@microchip.com>
+ <a2422718-2ec4-dbad-0245-1d78dbb39f25@linaro.org>
+ <f641fd0e-2da2-112e-f2fb-f5d89af00587@microchip.com>
+In-Reply-To: <f641fd0e-2da2-112e-f2fb-f5d89af00587@microchip.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9070c613-f168-4224-444f-08da5a5edf53
+x-ms-traffictypediagnostic: SA0PR11MB4527:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Eivn/LH9Lb0BZDGo5t0E2oYKxZNiG5ZLFZQCDWKUpgKREO1sQu91HXqmnZxU+esUTrGQ4M4D83TmCqOm1UQwsS9m3iANvFoalltJ0RYbAXk85eINkjll9KSjvzDViHhuH+XlMiWK4gm64FR/0PVHL+64W8nlDMZXJL1kHsxglwf391VtiQhLLgPIwqyVbzO47QirLjj6QTc/KjU5jxz8V3xOVa+RzpSZdmTC/uJVYshuRmoHdo8X+oXObDvkPVw5CiaE0oRVwtDjJ1tCrzQPmzhcRYAYxwyIM9zZGQro1WD6fPPYrA4XZkdJs4yUE+D9mP6q5HB1nYclCpluxd+NuZKXtq7smDaudSvlAvsYJdXJ9t7yae8oE8px+nMPI1uyFJLE7DNr2AIH9RGTbNhf/vu32q5xYlRz/J2i+7Uv+EAzHWYbv74VyyEZJjAPp+IRUPuc9VIr0LMEgVX+rrIoTAiDd95DQWYUnohKvmQYc3vFBBRLaEXNz1aT1YK+K2sizv+Y/qpHElCODxZAnMNSiqL7Qnwsz6Nie+XfYTNdaedQtOvN0skFyV/udT7OLnk5yBN0th90RMVUq894s6gPO8MD80Yf3uKAQ6BCkvfebKU1htMyBTm4+yMIQozwswlvcRgt7fr3+fiM2LCxBoyqQD9dBOBmpGHEFuadTlBEsMZar0lzQUGEIVIp+ni6MoWDq9qkoBLeB+h5dN1c/qa/wTc+7M3tE+vyUG1ot4Q6LCS3cAoKyetGjakZcjYxLo3pXE8fVx1tDk1SUnLTDDsJAD2LLJyA4OQFMsBeDFf8byi9h0a23iiKswApP9vWjfBBlUZUmxSAc8+wW41cexRSfQIyFF1Msmv4bnNdDXI8LWQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB2758.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(136003)(346002)(376002)(366004)(39860400002)(86362001)(122000001)(36756003)(6486002)(6636002)(2616005)(53546011)(31686004)(186003)(4744005)(71200400001)(2906002)(4326008)(66476007)(66446008)(107886003)(66556008)(31696002)(66946007)(8676002)(478600001)(110136005)(8936002)(91956017)(26005)(38070700005)(41300700001)(316002)(54906003)(76116006)(38100700002)(6512007)(5660300002)(64756008)(6506007)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RmZmVVM2ZDBXQnpkdVJWMkxEOWp4L3VYYzRDQTdmaDRMYlZWZGRwZWkrbHN1?=
+ =?utf-8?B?THVUWHBwN0hMeDJ5TThxQlphSlorOHB3Z1hhSllXY1RJcXAxV3dxeVpMQy9F?=
+ =?utf-8?B?aHlwWnBTelJYSkhrbWdrTE9PbVpmUTVrZk1raDV6dGhLWm9YdmxxYUhnSWZE?=
+ =?utf-8?B?Z1ZadEtQZEtZZkV5aVpjZjRseHo1UUE1L0FyZUliQ0hEWUVJOXEyRTMvL1Bp?=
+ =?utf-8?B?THJ1SGNva0R4cyt2OWpLdDBmN0szYmlBNEN2VTVMcW5aVDN4K0tyVmlxakZm?=
+ =?utf-8?B?cjhuNlIvK1pkeS9McER0eTBLWkdsR1dQVFRuYmxxUU5CT2lGdFQ0YkxyRFZI?=
+ =?utf-8?B?eTlaOFFIdDBBTHBJSEd5TVYyVG5YQ09ybmQyaXQ3SXM5UVQ2dC9EOXNDYUVF?=
+ =?utf-8?B?bWtmaUxPMmpPc1pWcHFNcWJicTE4ZzFBSU1uQ0pEaUdVaXRDN1dFUzd0cUl6?=
+ =?utf-8?B?dEJ6c1dwZHRPK3JSUzF5LzB5N1FLSmRjbWNFOU1Xc0RNZkVQb3oyOERGbHpz?=
+ =?utf-8?B?eGVHK0ZhQzlXWEcwSzlqV2V2Y2MvalNtUkp0aTcvRUU5NVM1T3VDM2JWb3pH?=
+ =?utf-8?B?eGd5L1VrdUpFSjZUK1hNb2sva0xGV1NpZkRKVzNzWlhMZ1ZXc09YbHRtZzNL?=
+ =?utf-8?B?VndTaFhZdVJLcThYNGZ6b3VlZUhVSzhSdjRKTXpJVjlMckRrOEV3UlpaZ0I5?=
+ =?utf-8?B?Z3gwSmhvazB5STI3dFBSeGRmamtlaUZubUd6QzB4bEN0Si8ycC8yRVA1MTBh?=
+ =?utf-8?B?UUs1elBuUStXeUtRaTBVaGNZRWZPWU52Zjg3QU9TS051eGt6bW1BdXBDZGZ4?=
+ =?utf-8?B?SDBKNGo4QTZaeHV0Mkt6aDVJdjFBRHErRk5XQWZwVEE1ZVp5cjh4QW9zcmI4?=
+ =?utf-8?B?Z0FYV0xCRURDYUxsek1NNDQ0RXpRQm9WdzR2d0NmSEhUcFB4VWNYU0VKWTV2?=
+ =?utf-8?B?RE9SZlJqaTQ4SnBCcHBHeGxndGhrQysrRlllZ013dTdpbGVSeFliY2ZETHc0?=
+ =?utf-8?B?am9JcXlEa1IwbGt5Y2xhM294a1RrTU12TzErU1F1RnJmdnVDM0s5U0daMWRH?=
+ =?utf-8?B?VHU2blQ3bWs4aEt0VW9YY0NMbTc5cDhQVytHVVN2L0dvMjYvQTcweWhZMW9V?=
+ =?utf-8?B?S0xCWHh2MC9xZjZPNHhwT1dlK0s1N0ZBMWNVVkxoM2FncDRoSUd0UDFYWTg2?=
+ =?utf-8?B?dFA1Wk5zNWEvVWt2Mnp3UzhhVVdTS0RtblFVNXUwbmVTUnFxOHY1OFc4NXB4?=
+ =?utf-8?B?YjA2WE5qNllrK0ljMCtjMWY5V1dyb1FVVmFadHZvY1pEbW54bEdEdUQzelZK?=
+ =?utf-8?B?WXBESzZybkFkUDVmRkdRcSt1eVBWWTB4ZUJaNHNpTnlrYzZhSWl2aXEwNk9Y?=
+ =?utf-8?B?N0xSNFRxVDBFOE9QR3N6b0hHcmhWQ1dTZ1VyRHhYdG8ycTlUZ0N6dm1NQ0R6?=
+ =?utf-8?B?dTZjQW1pRjdQZGhtek16U0JtZ2JEcGxGbXNyQ0pJVGt1RExGUmFvMWc2NDU3?=
+ =?utf-8?B?eVlmemZtSTJMbFdQamIvZkVwSzNiZGpZazhMbnJ4VWxJZWhXZ1ZKUXhJYWVx?=
+ =?utf-8?B?OURyOG5QV1NCMXVpZG91bSs5SWxzenppWnZnZ3hwTVpxdTk3UjVRWXhmeXRV?=
+ =?utf-8?B?K09SQ3dQL0ZhMG9SMVNLU2dKTExmaWh3bGttbXlLUlJiLzR1aXpPUVJPVmpa?=
+ =?utf-8?B?dWxocTU1UjdjbEZOZU1Jb2ZEUXVHenNpSFNkbHFyaWZYaXB0TjkzaUFpb1R6?=
+ =?utf-8?B?b041bk9YcWRhMEdzR3hmWlR1L0tKSG5pRFpJbCtDTnRpQmE4Q2poUkx0OVk0?=
+ =?utf-8?B?UFhMK0Q0UzExZnFJKzNBVDZDeDR4L1AvL01nOGRuVlpCVjliVzJLL3p1UDdV?=
+ =?utf-8?B?RUptVjRZTFYvK1kwL0Y1dUFsVStneGtHeW9SSFd0Wll0SEE1aVFOL1ZpaUVp?=
+ =?utf-8?B?Mm9sS2FLMHk3bTIwYll2MHh3OG10VlVZdGt2NS94dStHdU83VWhUTGFVMEdS?=
+ =?utf-8?B?REdjZk83cTE0eWJJZjlSOEhDbysxZUluZUtmZ3E2aVpMb2RiYjZQVW96S2Uy?=
+ =?utf-8?B?aUswRFgvdW5qMzdmbnIxTHhVeTAzSWwrQVlkVHVHazFwWHJ4MVhaMkxtUUsv?=
+ =?utf-8?Q?38k0U9m9kHOyd+p1CGtyoto0P?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7AD271026C659F4BB63960477367E1CB@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220630020805.74658-1-jasowang@redhat.com> <1656555045.7370687-2-xuanzhuo@linux.alibaba.com>
-In-Reply-To: <1656555045.7370687-2-xuanzhuo@linux.alibaba.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 30 Jun 2022 14:07:52 +0800
-Message-ID: <CACGkMEvMrxWRNY_NbujLsWff4zMVELr7C9CJ77k_m5OTFEe0dA@mail.gmail.com>
-Subject: Re: [PATCH V2] virtio-net: fix the race between refill work and close
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     mst <mst@redhat.com>, davem <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB2758.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9070c613-f168-4224-444f-08da5a5edf53
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jun 2022 06:07:54.5923
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tMvG+ES8vwIuAAF7+7WDZU0INSmcr842XfsKoQJcurVBwbz4oTW8lNgg7+tCPbeV2dgjODRZhTv3fXBt6ZO8h2z5KIeiKasp4Z0qS4Mxb0w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4527
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 10:22 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
->
-> On Thu, 30 Jun 2022 10:08:04 +0800, Jason Wang <jasowang@redhat.com> wrote:
-> > We try using cancel_delayed_work_sync() to prevent the work from
-> > enabling NAPI. This is insufficient since we don't disable the source
-> > of the refill work scheduling. This means an NAPI poll callback after
-> > cancel_delayed_work_sync() can schedule the refill work then can
-> > re-enable the NAPI that leads to use-after-free [1].
->
->
-> Can you explain in more detail how this happened?
->
-> napi_disable() is normally called after cancel_delayed_work_sync(). This ensures
-> that all napi callbacks will end, and the new napi_disable() will wait.
-> There will be no re-enable napi.
-
-An rx interrupt that may come between after the cancel_delayed_work()
-but before the napi_disable(). It schedules a refill_work that may run
-after the napi_disable() in virtnet_close().
-
->
-> So I guess the use-after-free is caused by refill_work being called after
-> dev/vi/napi is released. In this way, we can just call
-> cancel_delayed_work_sync() after napi_disalbe().
-
-So the refill_work can re-enable the NAPI when it is run after
-napi_disable() in this case.
-
-Thanks
-
-
->
-> Thanks.
->
-> >
-> > Since the work can enable NAPI, we can't simply disable NAPI before
-> > calling cancel_delayed_work_sync(). So fix this by introducing a
-> > dedicated boolean to control whether or not the work could be
-> > scheduled from NAPI.
-> >
-> > [1]
-> > ==================================================================
-> > BUG: KASAN: use-after-free in refill_work+0x43/0xd4
-> > Read of size 2 at addr ffff88810562c92e by task kworker/2:1/42
-> >
-> > CPU: 2 PID: 42 Comm: kworker/2:1 Not tainted 5.19.0-rc1+ #480
-> > Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> > Workqueue: events refill_work
-> > Call Trace:
-> >  <TASK>
-> >  dump_stack_lvl+0x34/0x44
-> >  print_report.cold+0xbb/0x6ac
-> >  ? _printk+0xad/0xde
-> >  ? refill_work+0x43/0xd4
-> >  kasan_report+0xa8/0x130
-> >  ? refill_work+0x43/0xd4
-> >  refill_work+0x43/0xd4
-> >  process_one_work+0x43d/0x780
-> >  worker_thread+0x2a0/0x6f0
-> >  ? process_one_work+0x780/0x780
-> >  kthread+0x167/0x1a0
-> >  ? kthread_exit+0x50/0x50
-> >  ret_from_fork+0x22/0x30
-> >  </TASK>
-> > ...
-> >
-> > Fixes: b2baed69e605c ("virtio_net: set/cancel work on ndo_open/ndo_stop")
-> > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > ---
-> >  drivers/net/virtio_net.c | 38 ++++++++++++++++++++++++++++++++++++--
-> >  1 file changed, 36 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > index db05b5e930be..21bf1e5c81ef 100644
-> > --- a/drivers/net/virtio_net.c
-> > +++ b/drivers/net/virtio_net.c
-> > @@ -251,6 +251,12 @@ struct virtnet_info {
-> >       /* Does the affinity hint is set for virtqueues? */
-> >       bool affinity_hint_set;
-> >
-> > +     /* Is refill work enabled? */
-> > +     bool refill_work_enabled;
-> > +
-> > +     /* The lock to synchronize the access to refill_work_enabled */
-> > +     spinlock_t refill_lock;
-> > +
-> >       /* CPU hotplug instances for online & dead */
-> >       struct hlist_node node;
-> >       struct hlist_node node_dead;
-> > @@ -348,6 +354,20 @@ static struct page *get_a_page(struct receive_queue *rq, gfp_t gfp_mask)
-> >       return p;
-> >  }
-> >
-> > +static void enable_refill_work(struct virtnet_info *vi)
-> > +{
-> > +     spin_lock(&vi->refill_lock);
-> > +     vi->refill_work_enabled = true;
-> > +     spin_unlock(&vi->refill_lock);
-> > +}
-> > +
-> > +static void disable_refill_work(struct virtnet_info *vi)
-> > +{
-> > +     spin_lock(&vi->refill_lock);
-> > +     vi->refill_work_enabled = false;
-> > +     spin_unlock(&vi->refill_lock);
-> > +}
-> > +
-> >  static void virtqueue_napi_schedule(struct napi_struct *napi,
-> >                                   struct virtqueue *vq)
-> >  {
-> > @@ -1527,8 +1547,12 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
-> >       }
-> >
-> >       if (rq->vq->num_free > min((unsigned int)budget, virtqueue_get_vring_size(rq->vq)) / 2) {
-> > -             if (!try_fill_recv(vi, rq, GFP_ATOMIC))
-> > -                     schedule_delayed_work(&vi->refill, 0);
-> > +             if (!try_fill_recv(vi, rq, GFP_ATOMIC)) {
-> > +                     spin_lock(&vi->refill_lock);
-> > +                     if (vi->refill_work_enabled)
-> > +                             schedule_delayed_work(&vi->refill, 0);
-> > +                     spin_unlock(&vi->refill_lock);
-> > +             }
-> >       }
-> >
-> >       u64_stats_update_begin(&rq->stats.syncp);
-> > @@ -1651,6 +1675,8 @@ static int virtnet_open(struct net_device *dev)
-> >       struct virtnet_info *vi = netdev_priv(dev);
-> >       int i, err;
-> >
-> > +     enable_refill_work(vi);
-> > +
-> >       for (i = 0; i < vi->max_queue_pairs; i++) {
-> >               if (i < vi->curr_queue_pairs)
-> >                       /* Make sure we have some buffers: if oom use wq. */
-> > @@ -2033,6 +2059,8 @@ static int virtnet_close(struct net_device *dev)
-> >       struct virtnet_info *vi = netdev_priv(dev);
-> >       int i;
-> >
-> > +     /* Make sure NAPI doesn't schedule refill work */
-> > +     disable_refill_work(vi);
-> >       /* Make sure refill_work doesn't re-enable napi! */
-> >       cancel_delayed_work_sync(&vi->refill);
-> >
-> > @@ -2776,6 +2804,9 @@ static void virtnet_freeze_down(struct virtio_device *vdev)
-> >       netif_tx_lock_bh(vi->dev);
-> >       netif_device_detach(vi->dev);
-> >       netif_tx_unlock_bh(vi->dev);
-> > +     /* Make sure NAPI doesn't schedule refill work */
-> > +     disable_refill_work(vi);
-> > +     /* Make sure refill_work doesn't re-enable napi! */
-> >       cancel_delayed_work_sync(&vi->refill);
-> >
-> >       if (netif_running(vi->dev)) {
-> > @@ -2799,6 +2830,8 @@ static int virtnet_restore_up(struct virtio_device *vdev)
-> >
-> >       virtio_device_ready(vdev);
-> >
-> > +     enable_refill_work(vi);
-> > +
-> >       if (netif_running(vi->dev)) {
-> >               for (i = 0; i < vi->curr_queue_pairs; i++)
-> >                       if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
-> > @@ -3548,6 +3581,7 @@ static int virtnet_probe(struct virtio_device *vdev)
-> >       vdev->priv = vi;
-> >
-> >       INIT_WORK(&vi->config_work, virtnet_config_changed_work);
-> > +     spin_lock_init(&vi->refill_lock);
-> >
-> >       /* If we can receive ANY GSO packets, we must allocate large ones. */
-> >       if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
-> > --
-> > 2.25.1
-> >
->
-
+T24gMjkuMDYuMjAyMiAxODowMSwgTmljb2xhcyBGZXJyZSB3cm90ZToNCj4gU2VyZ2l1LA0KPg0K
+PiBPbiAyOS8wNi8yMDIyIGF0IDE1OjIzLCBLcnp5c3p0b2YgS296bG93c2tpIHdyb3RlOg0KPj4+
+ICt0aXRsZTogQXRtZWwgU1BJIGRldmljZQ0KPj4+ICsNCj4+PiArbWFpbnRhaW5lcnM6DQo+Pj4g
+K8KgIC0gTWFyayBCcm93bjxicm9vbmllQGtlcm5lbC5vcmc+DQo+PiBUaGlzIHNob3VsZCBiZSBy
+YXRoZXIgc29tZW9uZSBmcm9tIE1pY3JvY2hpcC4NCj4NCj4gVHVkb3IgQW1iYXJ1cyA8dHVkb3Iu
+YW1iYXJ1c0BtaWNyb2NoaXAuY29tPiBpcyBvdXIgbWFpbnRhaW5lciBmb3IgU1BJIA0KPiBjb250
+cm9sbGVyLCBzb3JyeSBmb3Igbm90IGhhdmluZyBhZHZpc2VkIHlvdSBpbnRlcm5hbGx5IGFib3V0
+IHRoaXMgOy0pDQo+DQo+IEJlc3QgcmVnYXJkcywNCj4gwqAgTmljb2xhcw0KPg0KTm90ZWQuIFRo
+YW5rIHlvdSwgTmljb2xhcyA6KS4NCg0KDQpSZWdhcmRzLA0KDQogwqDCoMKgIFNlcmdpdQ0KDQo=

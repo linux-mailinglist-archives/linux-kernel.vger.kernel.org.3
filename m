@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53932561D40
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F39561D63
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 16:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236693AbiF3OIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 10:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
+        id S236737AbiF3OKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 10:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235377AbiF3OHC (ORCPT
+        with ESMTP id S236427AbiF3OKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:07:02 -0400
+        Thu, 30 Jun 2022 10:10:15 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4DE4D163;
-        Thu, 30 Jun 2022 06:54:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D1A7B34D;
+        Thu, 30 Jun 2022 06:55:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48813B82AF4;
-        Thu, 30 Jun 2022 13:54:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93668C34115;
-        Thu, 30 Jun 2022 13:54:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC59CB82AF8;
+        Thu, 30 Jun 2022 13:55:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 661FAC34115;
+        Thu, 30 Jun 2022 13:55:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656597257;
-        bh=y7RjIpPTJdsuZnRv738o0NqQH+oYqZEghea+VF06qW8=;
+        s=korg; t=1656597325;
+        bh=n6pCRpxRo1ejolie+HwU9V9duHfbqPeFU7Zrwi/AZt0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I48QhDJ1kVd1ydGdQ6FmOnu4RIPBaprmOpbIRNFsEjuXlcth/LAZFAdJcpC/ubT4D
-         caZ9qL9y9Audzq5GOMUriv8jzIEDAhP99AfhPly10vQuKYrgjhV5lQwfl1IND2HOxv
-         5bT93Wa+wsTbPOI6rdduWyj/fRuitK2bbRQvM6/w=
+        b=lXG8VpV5r34mtYYBUDk6FuRXKXKOZiFgU+0Hh8mtsIUKDKgZgVj77H/dvaPckOYsp
+         GypL8nqyj97UJiOaQREneOYzXSrPCuDl0BTS7vdKozTlxGun7a0xym8sNqVhLy7LsJ
+         gN7QDH0Uj13znq4+ZIxmeh+iOY2+mquXH12Wj0cI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brian Foster <bfoster@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH 5.10 07/12] xfs: punch out data fork delalloc blocks on COW writeback failure
-Date:   Thu, 30 Jun 2022 15:47:12 +0200
-Message-Id: <20220630133230.906794591@linuxfoundation.org>
+        stable@vger.kernel.org, Seth Forshee <sforshee@digitalocean.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>
+Subject: [PATCH 5.15 17/28] docs: update mapping documentation
+Date:   Thu, 30 Jun 2022 15:47:13 +0200
+Message-Id: <20220630133233.434921899@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133230.676254336@linuxfoundation.org>
-References: <20220630133230.676254336@linuxfoundation.org>
+In-Reply-To: <20220630133232.926711493@linuxfoundation.org>
+References: <20220630133232.926711493@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,88 +59,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Foster <bfoster@redhat.com>
+From: Christian Brauner <christian.brauner@ubuntu.com>
 
-commit 5ca5916b6bc93577c360c06cb7cdf71adb9b5faf upstream.
+commit 8cc5c54de44c5e8e104d364a627ac4296845fc7f upstream.
 
-If writeback I/O to a COW extent fails, the COW fork blocks are
-punched out and the data fork blocks left alone. It is possible for
-COW fork blocks to overlap non-shared data fork blocks (due to
-cowextsz hint prealloc), however, and writeback unconditionally maps
-to the COW fork whenever blocks exist at the corresponding offset of
-the page undergoing writeback. This means it's quite possible for a
-COW fork extent to overlap delalloc data fork blocks, writeback to
-convert and map to the COW fork blocks, writeback to fail, and
-finally for ioend completion to cancel the COW fork blocks and leave
-stale data fork delalloc blocks around in the inode. The blocks are
-effectively stale because writeback failure also discards dirty page
-state.
+Now that we implement the full remapping algorithms described in our
+documentation remove the section about shortcircuting them.
 
-If this occurs, it is likely to trigger assert failures, free space
-accounting corruption and failures in unrelated file operations. For
-example, a subsequent reflink attempt of the affected file to a new
-target file will trip over the stale delalloc in the source file and
-fail. Several of these issues are occasionally reproduced by
-generic/648, but are reproducible on demand with the right sequence
-of operations and timely I/O error injection.
-
-To fix this problem, update the ioend failure path to also punch out
-underlying data fork delalloc blocks on I/O error. This is analogous
-to the writeback submission failure path in xfs_discard_page() where
-we might fail to map data fork delalloc blocks and consistent with
-the successful COW writeback completion path, which is responsible
-for unmapping from the data fork and remapping in COW fork blocks.
-
-Fixes: 787eb485509f ("xfs: fix and streamline error handling in xfs_end_io")
-Signed-off-by: Brian Foster <bfoster@redhat.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
+Link: https://lore.kernel.org/r/20211123114227.3124056-6-brauner@kernel.org (v1)
+Link: https://lore.kernel.org/r/20211130121032.3753852-6-brauner@kernel.org (v2)
+Link: https://lore.kernel.org/r/20211203111707.3901969-6-brauner@kernel.org
+Cc: Seth Forshee <sforshee@digitalocean.com>
+Cc: Amir Goldstein <amir73il@gmail.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+CC: linux-fsdevel@vger.kernel.org
+Reviewed-by: Seth Forshee <sforshee@digitalocean.com>
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/xfs_aops.c |   15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ Documentation/filesystems/idmappings.rst |   72 -------------------------------
+ 1 file changed, 72 deletions(-)
 
---- a/fs/xfs/xfs_aops.c
-+++ b/fs/xfs/xfs_aops.c
-@@ -145,6 +145,7 @@ xfs_end_ioend(
- 	struct iomap_ioend	*ioend)
- {
- 	struct xfs_inode	*ip = XFS_I(ioend->io_inode);
-+	struct xfs_mount	*mp = ip->i_mount;
- 	xfs_off_t		offset = ioend->io_offset;
- 	size_t			size = ioend->io_size;
- 	unsigned int		nofs_flag;
-@@ -160,18 +161,26 @@ xfs_end_ioend(
- 	/*
- 	 * Just clean up the in-memory strutures if the fs has been shut down.
- 	 */
--	if (XFS_FORCED_SHUTDOWN(ip->i_mount)) {
-+	if (XFS_FORCED_SHUTDOWN(mp)) {
- 		error = -EIO;
- 		goto done;
- 	}
- 
- 	/*
--	 * Clean up any COW blocks on an I/O error.
-+	 * Clean up all COW blocks and underlying data fork delalloc blocks on
-+	 * I/O error. The delalloc punch is required because this ioend was
-+	 * mapped to blocks in the COW fork and the associated pages are no
-+	 * longer dirty. If we don't remove delalloc blocks here, they become
-+	 * stale and can corrupt free space accounting on unmount.
- 	 */
- 	error = blk_status_to_errno(ioend->io_bio->bi_status);
- 	if (unlikely(error)) {
--		if (ioend->io_flags & IOMAP_F_SHARED)
-+		if (ioend->io_flags & IOMAP_F_SHARED) {
- 			xfs_reflink_cancel_cow_range(ip, offset, size, true);
-+			xfs_bmap_punch_delalloc_range(ip,
-+						      XFS_B_TO_FSBT(mp, offset),
-+						      XFS_B_TO_FSB(mp, size));
-+		}
- 		goto done;
- 	}
- 
+--- a/Documentation/filesystems/idmappings.rst
++++ b/Documentation/filesystems/idmappings.rst
+@@ -952,75 +952,3 @@ The raw userspace id that is put on disk
+ their home directory back to their home computer where they are assigned
+ ``u1000`` using the initial idmapping and mount the filesystem with the initial
+ idmapping they will see all those files owned by ``u1000``.
+-
+-Shortcircuting
+---------------
+-
+-Currently, the implementation of idmapped mounts enforces that the filesystem
+-is mounted with the initial idmapping. The reason is simply that none of the
+-filesystems that we targeted were mountable with a non-initial idmapping. But
+-that might change soon enough. As we've seen above, thanks to the properties of
+-idmappings the translation works for both filesystems mounted with the initial
+-idmapping and filesystem with non-initial idmappings.
+-
+-Based on this current restriction to filesystem mounted with the initial
+-idmapping two noticeable shortcuts have been taken:
+-
+-1. We always stash a reference to the initial user namespace in ``struct
+-   vfsmount``. Idmapped mounts are thus mounts that have a non-initial user
+-   namespace attached to them.
+-
+-   In order to support idmapped mounts this needs to be changed. Instead of
+-   stashing the initial user namespace the user namespace the filesystem was
+-   mounted with must be stashed. An idmapped mount is then any mount that has
+-   a different user namespace attached then the filesystem was mounted with.
+-   This has no user-visible consequences.
+-
+-2. The translation algorithms in ``mapped_fs*id()`` and ``i_*id_into_mnt()``
+-   are simplified.
+-
+-   Let's consider ``mapped_fs*id()`` first. This function translates the
+-   caller's kernel id into a kernel id in the filesystem's idmapping via
+-   a mount's idmapping. The full algorithm is::
+-
+-    mapped_fsuid(kid):
+-      /* Map the kernel id up into a userspace id in the mount's idmapping. */
+-      from_kuid(mount-idmapping, kid) = uid
+-
+-      /* Map the userspace id down into a kernel id in the filesystem's idmapping. */
+-      make_kuid(filesystem-idmapping, uid) = kuid
+-
+-   We know that the filesystem is always mounted with the initial idmapping as
+-   we enforce this in ``mount_setattr()``. So this can be shortened to::
+-
+-    mapped_fsuid(kid):
+-      /* Map the kernel id up into a userspace id in the mount's idmapping. */
+-      from_kuid(mount-idmapping, kid) = uid
+-
+-      /* Map the userspace id down into a kernel id in the filesystem's idmapping. */
+-      KUIDT_INIT(uid) = kuid
+-
+-   Similarly, for ``i_*id_into_mnt()`` which translated the filesystem's kernel
+-   id into a mount's kernel id::
+-
+-    i_uid_into_mnt(kid):
+-      /* Map the kernel id up into a userspace id in the filesystem's idmapping. */
+-      from_kuid(filesystem-idmapping, kid) = uid
+-
+-      /* Map the userspace id down into a kernel id in the mounts's idmapping. */
+-      make_kuid(mount-idmapping, uid) = kuid
+-
+-   Again, we know that the filesystem is always mounted with the initial
+-   idmapping as we enforce this in ``mount_setattr()``. So this can be
+-   shortened to::
+-
+-    i_uid_into_mnt(kid):
+-      /* Map the kernel id up into a userspace id in the filesystem's idmapping. */
+-      __kuid_val(kid) = uid
+-
+-      /* Map the userspace id down into a kernel id in the mounts's idmapping. */
+-      make_kuid(mount-idmapping, uid) = kuid
+-
+-Handling filesystems mounted with non-initial idmappings requires that the
+-translation functions be converted to their full form. They can still be
+-shortcircuited on non-idmapped mounts. This has no user-visible consequences.
 
 

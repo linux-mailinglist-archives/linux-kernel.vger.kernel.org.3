@@ -2,214 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604B8561FE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88384561FF7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 18:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235588AbiF3QH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 12:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44498 "EHLO
+        id S234657AbiF3QJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 12:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234901AbiF3QHx (ORCPT
+        with ESMTP id S233793AbiF3QJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 12:07:53 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD9822B1D
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 09:07:52 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id l11so34536964ybu.13
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 09:07:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kZYpRpqYmpLHtSZ4UZWrh/TDPBDXwHd9fuFtqbGJNp8=;
-        b=BuX4qA5++m+OrJvsOaRfSJjyTNROnqnd/mCvs1fJFZLG3AYi/V7Afuuc+DxYwklGe2
-         8TTd0CJJFfjl5KQwwQlWyyn84g40XaWyHt0y/uDsKjx7TBMs1SIJTniaOuT4nRFnWCOW
-         4mUH+1+M0E2Hw+WrjJvpBSvc9OZcerbYjFVpotYfn/oy5PZSMjbx3PKSOeuirVFFjRiH
-         I6i0pWr1Bm26YHBfmj8Q4KWnzxx/b/1IT3Gf1o4kxilrc9UXbFRwcGcIsyEFpW80Uq+m
-         CW0xXsP0zwXdpH8cWyDpSNce0LE26o0TO+q1YcwIDpeXgStFfhRqHawz8szkHxHYixXX
-         RWdg==
+        Thu, 30 Jun 2022 12:09:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 787991BE80
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 09:09:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656605351;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=P6L8uC01GwQiAV6RdRK9BzdNht1S61slyDLTSeTcpAU=;
+        b=YeqWCHuvvnNQ9pXb1DZzm9UEBx2jF0CdtqzMuqowZOe+8EaVbXAEFxpLUMirvxCEbq9gcs
+        51bZRKXTdzfhkWYV+h+TCUTC/kr2F2jkGFn3Vn7wRzxx6fGR8Bu9K5yl80YJF143hh2PEy
+        zxFMo2mFWYmKb4UO3iXfd2boEUcJk0I=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-193-j6JR7v-sMoGw7XGSiwlGFA-1; Thu, 30 Jun 2022 12:09:10 -0400
+X-MC-Unique: j6JR7v-sMoGw7XGSiwlGFA-1
+Received: by mail-il1-f199.google.com with SMTP id o17-20020a056e02115100b002d95d6881e4so10744635ill.19
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 09:09:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kZYpRpqYmpLHtSZ4UZWrh/TDPBDXwHd9fuFtqbGJNp8=;
-        b=hdK+8jfwvvBU2231/++p+D59K1UBfbFBJcRh9iTU2zdQM6XZbgZ9yYPn7PrRaA0Z3g
-         r8wLbPKp7zsUi0p2rDChBV6gHdTcGVa2VvYhQ7UoYuW73WJ6bq8XQhgNnqXrlpwmSsHG
-         IZEs/eM/Ae6ZCJ4iODfZ0viczLpIa+Mq28Ff/lBBC7YAXL0+dNPjmcTzEVhY2QBrBaNP
-         na0FwS3xnvwuDG5J8BNocT/5WcxKQ4v9DMOMHWa9OmLqt/nVoeI2ji/0KND0x21DRtih
-         5qE6W0u6GClowUVVHzdXbOyxv8psCs5FcbejObEd9zEoy/JIVA2dZvrIR80PzCW5Mgdi
-         ygKw==
-X-Gm-Message-State: AJIora82E6lydzWong3d6C9uoVLxIOmevNIUF60UAMrA6pDnO/3+mquJ
-        L9EJ0argEt1AvcGG7Ia6MqyPtAtyk47GSntV63pvSA==
-X-Google-Smtp-Source: AGRyM1veIK5oqkXm9Jh6FafjYaMA6RaYT2l9Mbn0Rx3j6oD+QxIsrfxzOTk4yC6i7GZ5Uj5bAoLxk+SS6q5Fa7uvISQ=
-X-Received: by 2002:a25:e211:0:b0:669:9cf9:bac7 with SMTP id
- h17-20020a25e211000000b006699cf9bac7mr9710834ybe.407.1656605271052; Thu, 30
- Jun 2022 09:07:51 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P6L8uC01GwQiAV6RdRK9BzdNht1S61slyDLTSeTcpAU=;
+        b=3g1b6PNdx0LulkGKUK5EaPLEj5QtCDAsl5I+zyTNwtymEjGZ6d8FGzFqIjnPF8CwZJ
+         qY/I38MXRuTitrC2ldJ3+Zu3rRTWpRMnywWDwPNMbBC1U1phPLL600Hz0wrJkMSAmmOB
+         vyqNDFi3azAb82+WXmzoPrLw+csWhDJYkr7XpTj2LCoagHHUu4Mi6p4cYqQWFuEcMOP1
+         0ZVKJTS2+wI4y9hk0n6QiMRLKhMr+GlWu8Vib6NMGutC/KgF7HZjrV9hFniXNCKYDc6U
+         8bb8cIniBtO7VBA6k/4fihnEVX48Su0XC6QiFzNoONl27tSEgUJLBU7Bnva1WLZ2z2S7
+         XHcQ==
+X-Gm-Message-State: AJIora8Ba4+BD++PQQkLIyQBJzSbTuF+8kevyKF6Qm+MRgNX07UaQr60
+        f6v1fqVyLgY5I86O56BNBS/PB+/nAeizZphKT5yqwPUXN9DioTomxVV1STqv3xlc6rxUVBNJVMA
+        GvIFRyk0y+0tn8vPgcF/gqB6T
+X-Received: by 2002:a05:6e02:2168:b0:2da:a170:5b6 with SMTP id s8-20020a056e02216800b002daa17005b6mr5438807ilv.321.1656605349252;
+        Thu, 30 Jun 2022 09:09:09 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vYs4hpmFf8NNNcZENp1x0RUK/4W/wnRloQB873SdxXYOvH1nEO/bmbYREOBpnUXfKVyFsahg==
+X-Received: by 2002:a05:6e02:2168:b0:2da:a170:5b6 with SMTP id s8-20020a056e02216800b002daa17005b6mr5438789ilv.321.1656605348961;
+        Thu, 30 Jun 2022 09:09:08 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id e39-20020a022127000000b0032e49fcc241sm8698697jaa.176.2022.06.30.09.09.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 09:09:06 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 12:09:04 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+Cc:     James Houghton <jthoughton@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Jue Wang <juew@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Nadav Amit <namit@vmware.com>
+Subject: Re: [RFC PATCH 00/26] hugetlb: Introduce HugeTLB high-granularity
+ mapping
+Message-ID: <Yr3KoCpuc4iYseOP@xz-m1.local>
+References: <20220624173656.2033256-1-jthoughton@google.com>
+ <YrYCeYy0rjfGhT/W@casper.infradead.org>
+ <CADrL8HUtdd=yEtY=bhHRYVjA30O1CAd6XEj+oTNjviWkSmzowQ@mail.gmail.com>
+ <YrnvORvPKbzgxLCu@work-vm>
+ <CADrL8HX4eNREyiuDPSoQpZPObTe7Kto3UurMHYeeO-3TdTo87w@mail.gmail.com>
+ <Yrq52SCUa6KN4LsR@work-vm>
 MIME-Version: 1.0
-References: <20220630143842.24906-1-duoming@zju.edu.cn> <CANn89iLda2oxoPQaGd9r8frAaOu1LqxmWYm2O8W4HXaGRN8tcQ@mail.gmail.com>
- <bed69ee.1e8d9.181b528391c.Coremail.duoming@zju.edu.cn> <CANn89iKo-uuF-iQWrfL=pgMu7bEakWHPDAVuLvT-TZ4AujiD=w@mail.gmail.com>
- <55ffc892.1ea21.181b54f4b2f.Coremail.duoming@zju.edu.cn>
-In-Reply-To: <55ffc892.1ea21.181b54f4b2f.Coremail.duoming@zju.edu.cn>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 30 Jun 2022 18:07:39 +0200
-Message-ID: <CANn89iLBE_kdnznsURLHVuaKqvzJ2nyuzKxz2y8G_29WjccsOA@mail.gmail.com>
-Subject: Re: [PATCH net] net: rose: fix UAF bug caused by rose_t0timer_expiry
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     linux-hams@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Ralf Baechle <ralf@linux-mips.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yrq52SCUa6KN4LsR@work-vm>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 5:51 PM <duoming@zju.edu.cn> wrote:
->
-> Hello,
->
-> On Thu, 30 Jun 2022 17:17:10 +0200 Eric Dumazet wrote:
->
-> > > > > There are UAF bugs caused by rose_t0timer_expiry(). The
-> > > > > root cause is that del_timer() could not stop the timer
-> > > > > handler that is running and there is no synchronization.
-> > > > > One of the race conditions is shown below:
-> > > > >
-> > > > >     (thread 1)             |        (thread 2)
-> > > > >                            | rose_device_event
-> > > > >                            |   rose_rt_device_down
-> > > > >                            |     rose_remove_neigh
-> > > > > rose_t0timer_expiry        |       rose_stop_t0timer(rose_neigh)
-> > > > >   ...                      |         del_timer(&neigh->t0timer)
-> > > > >                            |         kfree(rose_neigh) //[1]FREE
-> > > > >   neigh->dce_mode //[2]USE |
-> > > > >
-> > > > > The rose_neigh is deallocated in position [1] and use in
-> > > > > position [2].
-> > > > >
-> > > > > The crash trace triggered by POC is like below:
-> > > > >
-> > > > > BUG: KASAN: use-after-free in expire_timers+0x144/0x320
-> > > > > Write of size 8 at addr ffff888009b19658 by task swapper/0/0
-> > > > > ...
-> > > > > Call Trace:
-> > > > >  <IRQ>
-> > > > >  dump_stack_lvl+0xbf/0xee
-> > > > >  print_address_description+0x7b/0x440
-> > > > >  print_report+0x101/0x230
-> > > > >  ? expire_timers+0x144/0x320
-> > > > >  kasan_report+0xed/0x120
-> > > > >  ? expire_timers+0x144/0x320
-> > > > >  expire_timers+0x144/0x320
-> > > > >  __run_timers+0x3ff/0x4d0
-> > > > >  run_timer_softirq+0x41/0x80
-> > > > >  __do_softirq+0x233/0x544
-> > > > >  ...
-> > > > >
-> > > > > This patch changes del_timer() in rose_stop_t0timer() and
-> > > > > rose_stop_ftimer() to del_timer_sync() in order that the
-> > > > > timer handler could be finished before the resources such as
-> > > > > rose_neigh and so on are deallocated. As a result, the UAF
-> > > > > bugs could be mitigated.
-> > > > >
-> > > > > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> > > > > Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-> > > > > ---
-> > > > >  net/rose/rose_link.c | 4 ++--
-> > > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/net/rose/rose_link.c b/net/rose/rose_link.c
-> > > > > index 8b96a56d3a4..9734d1264de 100644
-> > > > > --- a/net/rose/rose_link.c
-> > > > > +++ b/net/rose/rose_link.c
-> > > > > @@ -54,12 +54,12 @@ static void rose_start_t0timer(struct rose_neigh *neigh)
-> > > > >
-> > > > >  void rose_stop_ftimer(struct rose_neigh *neigh)
-> > > > >  {
-> > > > > -       del_timer(&neigh->ftimer);
-> > > > > +       del_timer_sync(&neigh->ftimer);
-> > > > >  }
-> > > >
-> > > > Are you sure this is safe ?
-> > > >
-> > > > del_timer_sync() could hang if the caller holds a lock that the timer
-> > > > function would need to acquire.
-> > >
-> > > I think this is safe. The rose_ftimer_expiry() is an empty function that is
-> > > shown below:
-> > >
-> > > static void rose_ftimer_expiry(struct timer_list *t)
-> > > {
-> > > }
-> > >
-> > > > >
-> > > > >  void rose_stop_t0timer(struct rose_neigh *neigh)
-> > > > >  {
-> > > > > -       del_timer(&neigh->t0timer);
-> > > > > +       del_timer_sync(&neigh->t0timer);
-> > > > >  }
-> > > >
-> > > > Same here, please explain why it is safe.
-> > >
-> > > The rose_stop_t0timer() may hold "rose_node_list_lock" and "rose_neigh_list_lock",
-> > > but the timer handler rose_t0timer_expiry() that is shown below does not need
-> > > these two locks.
-> > >
-> > > static void rose_t0timer_expiry(struct timer_list *t)
-> > > {
-> > >         struct rose_neigh *neigh = from_timer(neigh, t, t0timer);
-> > >
-> > >         rose_transmit_restart_request(neigh);
-> > >
-> > >         neigh->dce_mode = 0;
-> > >
-> > >         rose_start_t0timer(neigh);
-> >
-> > This will rearm the timer.  del_timer_sync() will not help.
->
-> Thank you for your time, but I don't think so.
->
-> > Please read the comment in front of del_timer_sync(), in kernel/time/timer.c
->
-> I wrote a kernel module to test whether del_timer_sync() could finish a timer handler
-> that use mod_timer() to rewind itself. The following is the result.
->
-> # insmod del_timer_sync.ko
-> [  929.374405] my_timer will be create.
-> [  929.374738] the jiffies is :4295595572
-> [  930.411581] In my_timer_function
-> [  930.411956] the jiffies is 4295596609
-> [  935.466643] In my_timer_function
-> [  935.467505] the jiffies is 4295601665
-> [  940.586538] In my_timer_function
-> [  940.586916] the jiffies is 4295606784
-> [  945.706579] In my_timer_function
-> [  945.706885] the jiffies is 4295611904
->
-> #
-> # rmmod del_timer_sync.ko
-> [  948.507692] the del_timer_sync is :1
-> [  948.507692]
-> #
-> #
->
-> The result of the experiment shows that the timer handler could
-> be killed after we execute del_timer_sync(), even if the timer could
-> rewind itself.
+On Tue, Jun 28, 2022 at 09:20:41AM +0100, Dr. David Alan Gilbert wrote:
+> One other thing I thought of; you provide the modified 'CONTINUE'
+> behaviour, which works for postcopy as long as you use two mappings in
+> userspace; one protected by userfault, and one which you do the writes
+> to, and then issue the CONTINUE into the protected mapping; that's fine,
+> but it's not currently how we have our postcopy code wired up in qemu,
+> we have one mapping and use UFFDIO_COPY to place the page.
+> Requiring the two mappings is fine, but it's probably worth pointing out
+> the need for it somewhere.
 
+It'll be about CONTINUE, maybe not directly related to sub-page mapping,
+but indeed that's something we may need to do.  It's also in my poc [1]
+previously (I never got time to get back to it yet though..).
 
-This is not enough to run an experiment to determine a comment is obsolete.
+It's just that two mappings are not required.  E.g., one could use a fd on
+the file and lseek()/write() to the file to update content rather than
+using another mapping.  It might be just slower.
 
-Especially if you are not running the code from interrupts, like rose
-protocol might...
+Or, IMHO an app can legally just delay faulting of some mapping using minor
+mode and maybe the app doesn't even need to modify the page content before
+CONTINUE for some reason, then it's even not needed to have either the
+other mapping or the fd.  Fundamentally, MINOR mode and CONTINUE provides
+another way to trap page fault when page cache existed.  It doesn't really
+define whether or how the data will be modified.
 
-If you think the comment is obsolete, please send a patch to amend it.
+It's just that for QEMU unfortunately we may need to have that two mappings
+just for this use case indeed..
+
+[1] https://github.com/xzpeter/qemu/commit/41538a9a8ff5c981af879afe48e4ecca9a1aabc8
+
+Thanks,
+
+-- 
+Peter Xu
+

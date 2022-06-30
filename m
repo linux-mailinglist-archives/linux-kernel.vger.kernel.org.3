@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5245623E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 22:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7155D5623E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 22:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237136AbiF3UIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 16:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
+        id S237149AbiF3UIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 16:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237064AbiF3UIE (ORCPT
+        with ESMTP id S237076AbiF3UIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 16:08:04 -0400
+        Thu, 30 Jun 2022 16:08:07 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1358645074
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 13:08:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E22E45506
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 13:08:04 -0700 (PDT)
 Received: from dimapc.. (109-252-118-164.nat.spd-mgts.ru [109.252.118.164])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D9A3F660198F;
-        Thu, 30 Jun 2022 21:08:00 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0FDB36601A30;
+        Thu, 30 Jun 2022 21:08:02 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656619681;
-        bh=OQIxgpoWhcUtchUROpKKlYj3xDQCH7mCn7dt6yTFSNk=;
+        s=mail; t=1656619682;
+        bh=MzOopUjJq3tk9V0f5TEz4iy0ZSBWZue9l9nRV9B/kW0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RJqYssTHloREfETEr4/ELWVlz5ryzUQtRtsMFJ+BXtS78hxmCldhGjv2Ipo5HgsYE
-         Ct5tNVNRiJfTN7OQNyyXTVZ3i9pK1N/a6TVpgICHhIFBxOYWDwStR3CrCjQiU/CV76
-         yyzZtprEjw9PwR+xpJnr7vAM1Bfm+K5t8kzaNtI7pfOwY3Qfe291Gk3lBE56LNna9B
-         yne5jORmoGDdOebYYXqzp2S7gKSIxyFvRvPIKLYnvNvToO6Uc3Hz/aNgo5a/39s0NO
-         uy683g/KL/cWAUewtjfZC/YxIcOharIs17Au59m8lATHQ7QNlwC2ouUkZZq6YGUfWU
-         GtVfLbcrZ/xBw==
+        b=HZ2vEXyX6KuWca354KrOgnGHyT+xu7SMFjusgPN/9keJ8LE+JhEw7LnrxBV6uKqAk
+         6iipIku0v1dHqDmfxAGQVgL1qO3fCF0ypHceRs13DjidPz6xggB12PxSUsxTXuKZOS
+         3xgxGRmnjKR+EetH5Cw7Bx1UwBeSEYeBfP1YfFf1s8eW4pYMbJDcGjoiifyTkFqeYV
+         H+UvLu7JXTDwOSMzK8QXi8wupToEn2nEMlNhgTSbF8sCc7WT81MNzj6qrS2qDNlZc9
+         sCfyeRhge8Hm5WLvGHp6CJ/gJit4UkqGtb1x/JjGSoxdKz7p7CKy+exn/TR55BGXpS
+         5iicLRtUphgEA==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
         Gurchetan Singh <gurchetansingh@chromium.org>,
@@ -43,9 +43,9 @@ To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
         Dmitry Osipenko <digetx@gmail.com>, kernel@collabora.com
-Subject: [PATCH v7 8/9] drm/virtio: Use dev_is_pci()
-Date:   Thu, 30 Jun 2022 23:07:25 +0300
-Message-Id: <20220630200726.1884320-9-dmitry.osipenko@collabora.com>
+Subject: [PATCH v7 9/9] drm/virtio: Return proper error codes instead of -1
+Date:   Thu, 30 Jun 2022 23:07:26 +0300
+Message-Id: <20220630200726.1884320-10-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220630200726.1884320-1-dmitry.osipenko@collabora.com>
 References: <20220630200726.1884320-1-dmitry.osipenko@collabora.com>
@@ -60,27 +60,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use common dev_is_pci() helper to replace the strcmp("pci") used by driver.
+Don't return -1 in error cases, return proper error code. The returned
+error codes propagate to error messages and to userspace and it's always
+good to have a meaningful error number for debugging purposes.
 
-Suggested-by: Robin Murphy <robin.murphy@arm.com>
 Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- drivers/gpu/drm/virtio/virtgpu_drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/virtio/virtgpu_vq.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.c b/drivers/gpu/drm/virtio/virtgpu_drv.c
-index 0141b7df97ec..0035affc3e59 100644
---- a/drivers/gpu/drm/virtio/virtgpu_drv.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_drv.c
-@@ -87,7 +87,7 @@ static int virtio_gpu_probe(struct virtio_device *vdev)
- 		return PTR_ERR(dev);
- 	vdev->priv = dev;
+diff --git a/drivers/gpu/drm/virtio/virtgpu_vq.c b/drivers/gpu/drm/virtio/virtgpu_vq.c
+index ee84256946ab..9ff8660b50ad 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_vq.c
++++ b/drivers/gpu/drm/virtio/virtgpu_vq.c
+@@ -322,7 +322,7 @@ static int virtio_gpu_queue_ctrl_sgs(struct virtio_gpu_device *vgdev,
+ 		if (fence && vbuf->objs)
+ 			virtio_gpu_array_unlock_resv(vbuf->objs);
+ 		free_vbuf(vgdev, vbuf);
+-		return -1;
++		return -ENODEV;
+ 	}
  
--	if (!strcmp(vdev->dev.parent->bus->name, "pci")) {
-+	if (dev_is_pci(vdev->dev.parent)) {
- 		ret = virtio_gpu_pci_quirk(dev);
- 		if (ret)
- 			goto err_free;
+ 	if (vgdev->has_indirect)
+@@ -386,7 +386,7 @@ static int virtio_gpu_queue_fenced_ctrl_buffer(struct virtio_gpu_device *vgdev,
+ 			if (!sgt) {
+ 				if (fence && vbuf->objs)
+ 					virtio_gpu_array_unlock_resv(vbuf->objs);
+-				return -1;
++				return -ENOMEM;
+ 			}
+ 
+ 			elemcnt += sg_ents;
+@@ -720,7 +720,7 @@ static int virtio_get_edid_block(void *data, u8 *buf,
+ 	size_t start = block * EDID_LENGTH;
+ 
+ 	if (start + len > le32_to_cpu(resp->size))
+-		return -1;
++		return -EINVAL;
+ 	memcpy(buf, resp->edid + start, len);
+ 	return 0;
+ }
 -- 
 2.36.1
 

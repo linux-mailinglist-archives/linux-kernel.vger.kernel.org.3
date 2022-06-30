@@ -2,112 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DDD5615BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF465615BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233898AbiF3JM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 05:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
+        id S233947AbiF3JNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 05:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233779AbiF3JMy (ORCPT
+        with ESMTP id S232852AbiF3JNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 05:12:54 -0400
-X-Greylist: delayed 34499 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Jun 2022 02:12:51 PDT
-Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43051CB2F;
-        Thu, 30 Jun 2022 02:12:51 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkwl20tj04snw15cjtflt-3.rev.dnainternet.fi [IPv6:2001:14ba:4493:6f40:fec3:d72a:e447:8113])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 30 Jun 2022 05:13:17 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5691ABD6;
+        Thu, 30 Jun 2022 02:13:15 -0700 (PDT)
+Received: from [192.168.2.145] (unknown [109.252.118.164])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id EE9532006F;
-        Thu, 30 Jun 2022 12:12:48 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1656580369;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TLRwBn9UXXli3PGpjsfVklActhmxiReU97C0QNKDOvY=;
-        b=kvhWddh1DbwrpFE9ab7GwdbQp8KfiJMvhCj7vhXB8E8M8wB4Nv3aVaeJ9kt8Vs/pJXd4SN
-        l6m+j+bxG3gmMzMV5pAIJAykRkig9oURWnQROzE3f6kxBa2UzVV8DonhR+EF/UUBiomZLY
-        K0zXyKoZNHo6CoMZ4vRhpUTqoLi07pc=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id C9FCC634C91;
-        Thu, 30 Jun 2022 12:12:47 +0300 (EEST)
-Date:   Thu, 30 Jun 2022 12:12:47 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        quentin.schulz@theobroma-systems.com,
-        Daniel Scally <djrscally@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 5/6] media: dt-bindings: ov5693: document YAML binding
-Message-ID: <Yr1pD2U2ilXXXX+Q@valkosipuli.retiisi.eu>
-References: <20220630074525.481790-1-tommaso.merciai@amarulasolutions.com>
- <20220630074525.481790-6-tommaso.merciai@amarulasolutions.com>
- <167f09c1-795d-1471-20f7-9f4df29355ed@linaro.org>
- <20220630090232.GC482517@tom-ThinkPad-T14s-Gen-2i>
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 93AC9660194B;
+        Thu, 30 Jun 2022 10:13:12 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656580393;
+        bh=XKL8+xkZSiICKivdUfCYqxq8X2Aebnt8te/3pqzmNSs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aQYgufgmhl54KmqTSf7Igvnj4S7OwTsTkYrevuyUc4JFoUDbN1e6a7l46MXBwiJmI
+         9ukIbdJavpxrldGtnN6KH5f28ccdo6hSkj29mcMPnvk9u23qxPILiSdvkA9xSGKbaD
+         e6mV00CflqARHJc8VPTA3mO5vIRPZOuvPFYC7ZZN7YPEckUr6jt/h05fnKNcfOh6wu
+         egrUkecxcoDF5GjbZ79/URCT4KE6eyAG/thG2llF+UAnHWJ+6MlkhOXH7ri2dBNI+J
+         477YhnswZ+O9IAXco6mzYJMqDnCPdsFL+dH8BCBC7xQ1PBQJqwgQRqpXpNokPqudYL
+         3+gODHVo1+hHQ==
+Message-ID: <8367c38b-8cd3-cde1-5833-874769ef3350@collabora.com>
+Date:   Thu, 30 Jun 2022 12:13:09 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220630090232.GC482517@tom-ThinkPad-T14s-Gen-2i>
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1656580369;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TLRwBn9UXXli3PGpjsfVklActhmxiReU97C0QNKDOvY=;
-        b=lpVpDPsRoS4PajOnLBBgfcJw9triksPg+5Em1BSvH7k+/EZaTkjASpVVQnohNS5yNlOTbU
-        gB6aGDJ+Mw0sFTjOA3xO4AhLpEtL9sy3zMoQDG8uyrCfhOu3g4TjZTZpAqVxBWMYZcdEYp
-        1xtKwJ5uD3QXguCMHOm55Tae+0RPMNE=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1656580369; a=rsa-sha256; cv=none;
-        b=JyMc3AwKN7Uwp6GUIzZIVTyHMWwOSIMn7Ry0CzODoxYahGuBI9dogP/fqFwoeq3UQYmxVH
-        PlJFDVco74sl6swfZKKWiVeyQ5u1m3FFV0zFqCcbFR+ehIxTOX+Z8S3ZBxj25QQ9dFQwGr
-        8m1tXRBFZUppPGnbb+yMgadYo+pXy80=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <cover.1654849214.git.viresh.kumar@linaro.org>
+ <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
+ <55623c12-dda3-613f-5bc9-80b3b6fec5f9@nvidia.com>
+ <20220622141511.yzg5itkdwirpavfj@vireshk-i7>
+ <40e616eb-22f9-19c2-8d77-20cd3c7c518b@nvidia.com>
+ <c6f100e4-8a35-ebf0-f833-06ff0d8a2fb6@collabora.com>
+ <20220630005028.fddtcbkoksbygwc5@vireshk-i7>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20220630005028.fddtcbkoksbygwc5@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 11:02:32AM +0200, Tommaso Merciai wrote:
-> On Thu, Jun 30, 2022 at 10:07:19AM +0200, Krzysztof Kozlowski wrote:
-> > On 30/06/2022 09:45, Tommaso Merciai wrote:
-> > > Add documentation of device tree in YAML schema for the OV5693
-> > > CMOS image sensor from Omnivision
-> > > 
-> > > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > Reviewed-by: Sakari Ailus <sakari.ailus@iki.fi>
-> > 
-> > How Sakari's tag appeared here? There was no email from him.
+On 6/30/22 03:50, Viresh Kumar wrote:
+> On 29-06-22, 21:33, Dmitry Osipenko wrote:
+>> Today I noticed that tegra30-devfreq driver now fails to probe because
+>> dev_pm_opp_find_freq_ceil() fails with -ERANGE. This patch is guilty for
+>> that. Could you please take a look?
 > 
-> Sakari made me some review on v2, but I think he forgot to add the mailing
-> list in cc. ( I suppose :) )
+> I remember this corner case now [1] and it was easy to miss this. So
+> you want the OPP core to still parse the DT to read opp-hz, but don't
+> want dev_pm_opp_set_opp() to update the clock rate for it.
 > 
-> Let me know if I need to remove this.
+> What was the reason for this again ?
+> 
+> I have a couple of solutions in mind, but one may be other than second
+> and so want to know the real issue at hand first.
+> 
 
-You're only supposed to put these tags into patches if you get them in
-written form as part of the review, signalling acceptance of the patch in
-various forms. Just commenting a patch does not imply this.
+We added memory interconnect support to Tegra and since that time only
+the memory controller can drive the clock rate. All other drivers,
+including the devfreq, now issue memory bandwidth requests using ICC.
 
-Please also see Documentation/process/submitting-patches.rst for more
-information on how to use the tags.
+In case of the devfreq driver, it's the OPP core that makes the bw
+request using ICC.
+
+But it's the set_freq_table() that fails [2], I see
+dev_pm_opp_get_opp_count() returns 17, which is correct, and then
+dev_pm_opp_find_freq_ceil(freq=0) returns freq=1, which shall be
+freq=12750000.
+
+[1]
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/?id=16e8b2a7cb886bcc3dd89ad28948d374a2319bbc
+
+[2]
+https://elixir.bootlin.com/linux/v5.19-rc4/source/drivers/devfreq/devfreq.c#L179
 
 -- 
-Sakari Ailus
+Best regards,
+Dmitry

@@ -2,109 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4BD561BB5
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A5E561B0E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 15:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235295AbiF3Nry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 09:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
+        id S235188AbiF3NLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 09:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235190AbiF3Nrj (ORCPT
+        with ESMTP id S235159AbiF3NLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 09:47:39 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4572A409
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 06:47:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656596858; x=1688132858;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=K6USsSMJ8UC9wOjFtx6U82V6WBAGj2etKO7gooeB8dw=;
-  b=PtLUVumoLHtR+weM0Chw9BQYM3MlKI0eSaivfxUvvRbJMoiiLtb1NzW9
-   gmOEStNkAPkzPywbZy+mvT5o6r2gWduE6r19nSmjHYLN14hHz9w8v+LNO
-   o1wylTH4H+Q7S6F/WNIlve8QQVFOvHa/U46fkF1pHku3EhRTwSLwyHgWd
-   D4V7kro3xyuaNEu9Kl41BnwI200EMU5gGxxCHyOvjFrjbg7QrsJs0chux
-   Qc5ZUfjp4s+qUx05KcBgjho/f12tBOrGxYXiuvP3L8KxMHnXde6WT6At9
-   xWj0ucVd7aoY7mvIeNghC51omSjAutQFs//kGrTfQO9OrqKW6PzgOGpAb
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="307859082"
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="307859082"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 06:47:37 -0700
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="617980754"
-Received: from jhilliar-mobl.amr.corp.intel.com (HELO [10.212.10.157]) ([10.212.10.157])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 06:47:36 -0700
-Message-ID: <aee14e9b-9d5f-f243-5834-88d18b4a65db@linux.intel.com>
-Date:   Thu, 30 Jun 2022 08:09:39 -0500
+        Thu, 30 Jun 2022 09:11:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DD2922BCE
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 06:11:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656594666;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jV/u9DidSFdfO13oE75Yy4sdwZ39Z5PR0U85p6rtOgg=;
+        b=BV7+wyLuhrbFOx1xJeFFzqtgt7/Z3ifh1oEfqGSD2Ju/TVi76lxrKrCZZss2/+zX05eFcW
+        Mq2Zjpc5pVdAt5/d5hxj/yPYK5mXy6bPrVmwYWiyMn+C/2SKZ8cRaRCJXMCUQgd2du9qR+
+        SpQ6TirMA1TyxN8dUY7SjMl499+TIH4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-100-nDUhfL2wNSG3Sf4GqyTzVw-1; Thu, 30 Jun 2022 09:11:03 -0400
+X-MC-Unique: nDUhfL2wNSG3Sf4GqyTzVw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 997511C1BD22;
+        Thu, 30 Jun 2022 13:11:01 +0000 (UTC)
+Received: from starship (unknown [10.40.194.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1FA309D63;
+        Thu, 30 Jun 2022 13:10:58 +0000 (UTC)
+Message-ID: <b11b2a29824e69d57f6b9bb5675aa957e4c081ce.camel@redhat.com>
+Subject: Re: [PATCH v2 00/21] KVM: x86: Event/exception fixes and cleanups
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
+        Peter Shier <pshier@google.com>
+Date:   Thu, 30 Jun 2022 16:10:58 +0300
+In-Reply-To: <CALMp9eQkA-YeUFd=6Q+bRbtDT+UZO0jtPkEoZbqU1uDqMGp+xw@mail.gmail.com>
+References: <20220614204730.3359543-1-seanjc@google.com>
+         <7e05e0befa13af05f1e5f0fd8658bc4e7bdf764f.camel@redhat.com>
+         <CALMp9eSkdj=kwh=4WHPsWZ1mKr9+0VSB527D5CMEx+wpgEGjGw@mail.gmail.com>
+         <f55889a50ba404381e3edc1a192770f2779d40f1.camel@redhat.com>
+         <CALMp9eQkA-YeUFd=6Q+bRbtDT+UZO0jtPkEoZbqU1uDqMGp+xw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.10.0
-Subject: Re: [PATCH 1/2] ASoC: codecs: wsa881x: handle timeouts in resume path
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        broonie@kernel.org
-Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, linux-kernel@vger.kernel.org
-References: <20220630130023.9308-1-srinivas.kandagatla@linaro.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220630130023.9308-1-srinivas.kandagatla@linaro.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/30/22 08:00, Srinivas Kandagatla wrote:
-> Currently we do not check if SoundWire slave initialization timeout
-> expired before continuing to access its registers.
+On Thu, 2022-06-30 at 05:17 -0700, Jim Mattson wrote:
+> On Thu, Jun 30, 2022 at 1:22 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
 > 
-> Its possible that the registers are not accessible if timeout is
-> expired. Handle this by returning timeout in resume path.
+> > I can't access this document for some reason (from my redhat account, which is gmail as well).
 > 
-> Reported-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Fixes: 8dd552458361 ("ASoC: codecs: wsa881x: add runtime pm support")
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-
-For the two patches
-
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-
-> ---
->  sound/soc/codecs/wsa881x.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+> Try this one: https://docs.google.com/spreadsheets/d/13Yp7Cdg3ZyKoeZ3Qebp3uWi7urlPNmo5CQU5zFlayzs
 > 
-> diff --git a/sound/soc/codecs/wsa881x.c b/sound/soc/codecs/wsa881x.c
-> index dc954b85a988..6c8b1db649b8 100644
-> --- a/sound/soc/codecs/wsa881x.c
-> +++ b/sound/soc/codecs/wsa881x.c
-> @@ -1173,11 +1173,17 @@ static int __maybe_unused wsa881x_runtime_resume(struct device *dev)
->  	struct sdw_slave *slave = dev_to_sdw_dev(dev);
->  	struct regmap *regmap = dev_get_regmap(dev, NULL);
->  	struct wsa881x_priv *wsa881x = dev_get_drvdata(dev);
-> +	unsigned long time;
->  
->  	gpiod_direction_output(wsa881x->sd_n, 1);
->  
-> -	wait_for_completion_timeout(&slave->initialization_complete,
-> -				    msecs_to_jiffies(WSA881X_PROBE_TIMEOUT));
-> +	time = wait_for_completion_timeout(&slave->initialization_complete,
-> +					   msecs_to_jiffies(WSA881X_PROBE_TIMEOUT));
-> +	if (!time) {
-> +		dev_err(dev, "Initialization not complete, timed out\n");
-> +		gpiod_direction_output(wsa881x->sd_n, 0);
-> +		return -ETIMEDOUT;
-> +	}
->  
->  	regcache_cache_only(regmap, false);
->  	regcache_sync(regmap);
+Thanks, now I can access both documents.
+
+Best regards,
+	Maxim Levitsky
+

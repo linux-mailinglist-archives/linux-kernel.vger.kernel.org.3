@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06765561647
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF7E56164B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 11:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233105AbiF3J0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 05:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
+        id S232911AbiF3J3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 05:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiF3J0o (ORCPT
+        with ESMTP id S230029AbiF3J26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 05:26:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB7F3B3CC
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:26:43 -0700 (PDT)
-Received: from [192.168.1.90] (unknown [188.24.177.228])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DE5D26601946;
-        Thu, 30 Jun 2022 10:26:41 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656581202;
-        bh=kgvbQ/RPxk3m9PIguKbQXABiodoSZSGgpg3QGHI6ZHs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nSRDDSOI05ZIloywcqbon/WHG0TI9jQ04E4H26O6s/bD2TAVLlyNHW3JE7xFs8z+/
-         4Ljq8pEuj7GIpRvmDERcGvuccetB/i70EMapWljVDzqys3Cu17MATc7t3hfpOR28Sf
-         uE+LsFiNK0QUxQ61pZpGxnqARFg3HMadnlWT+YW3AyydEIy+XM9RDsMA+sFurJzz31
-         JsHcjR4FS+DMr5HtCww/tza7QRGiBCMonJHCMt0w0YRWv21FfY6WsKWfFcuNTb8boZ
-         mXizubMlh0GIk/KuokJOwPd0vX8qKep8LTzoU8HKGqTY+ifIpMvyCY8QnK1IjH8MRk
-         i6Gv2iiZoM4cA==
-Message-ID: <9be2090f-586d-7b7b-f93b-6b10cb5bb19f@collabora.com>
-Date:   Thu, 30 Jun 2022 12:26:39 +0300
+        Thu, 30 Jun 2022 05:28:58 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2723A112
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 02:28:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656581338; x=1688117338;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0DTG2u6m3ZJQ1eowa1Tp9B3y0nN+bfBmbgViftnv1Aw=;
+  b=wmLZTUIjbmIGUYpqZesy0HS3bxOKc2Z+g/hYAiD8tM1eMTXB+SRU+2kv
+   ZAZSyXj5rIScRJuPCfQc2XwLBOQVUDuQweDPn20/KXqJRXfoVpD5fIpXT
+   y07KNbMYWD8MP05OuWpI/d11pENCHx9MFiqvVA6STFspv1Gc4CVSEJzxr
+   0=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 30 Jun 2022 02:28:57 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 02:28:57 -0700
+Received: from [10.50.30.42] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 30 Jun
+ 2022 02:28:52 -0700
+Message-ID: <95d8e5c0-e382-4e8a-c8c6-2acbc0d31ca8@quicinc.com>
+Date:   Thu, 30 Jun 2022 14:58:49 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] scripts/tags.sh: Include tools directory in tags
- generation
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] srcu: Reduce blocking agressiveness of expedited grace
+ periods further
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Vipin Sharma <vipinsh@google.com>, rkovhaev@gmail.com,
-        zackary.liu.pro@gmail.com, ripxorip@gmail.com,
-        masahiroy@kernel.org, xujialu@vimux.org,
-        "drjones@redhat.com" <drjones@redhat.com>, dmatlack@google.com,
-        linux-kernel@vger.kernel.org
-References: <20220618005457.2379324-1-vipinsh@google.com>
- <CAHVum0euKMV+rCLXMQ4NuDAqowyeCkO1LheSafR2tm=R4aUfJw@mail.gmail.com>
- <YrqaKpdVDl8DBl4g@kroah.com>
- <CAHVum0f=_7kh_OrOqiTH=UZuvr3ZbxNcZeUSbT66x5r0q2XEgQ@mail.gmail.com>
- <b1b5666a-67a7-469c-d6c7-e585cf59c632@collabora.com>
- <Yr1F0xKlrFsuJWWA@kroah.com>
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <Yr1F0xKlrFsuJWWA@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Marc Zyngier <maz@kernel.org>
+CC:     <paulmck@kernel.org>, <frederic@kernel.org>,
+        <josh@joshtriplett.org>, <rostedt@goodmis.org>,
+        <mathieu.desnoyers@efficios.com>, <jiangshanlai@gmail.com>,
+        <joel@joelfernandes.org>, <linux-kernel@vger.kernel.org>,
+        <zhangfei.gao@foxmail.com>, <boqun.feng@gmail.com>,
+        <urezki@gmail.com>, <shameerali.kolothum.thodi@huawei.com>,
+        <pbonzini@redhat.com>, <mtosatti@redhat.com>,
+        <eric.auger@redhat.com>, <chenxiang66@hisilicon.com>
+References: <20220630041201.18301-1-quic_neeraju@quicinc.com>
+ <87o7ya1ozz.wl-maz@kernel.org>
+From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
+In-Reply-To: <87o7ya1ozz.wl-maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,105 +71,80 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 6/30/22 09:42, Greg KH wrote:
-> On Thu, Jun 30, 2022 at 01:54:00AM +0300, Cristian Ciocaltea wrote:
->>
->> On 6/30/22 01:18, Vipin Sharma wrote:
->>> On Mon, Jun 27, 2022 at 11:05 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->>>>
->>>> On Mon, Jun 27, 2022 at 10:47:35AM -0700, Vipin Sharma wrote:
->>>>> On Fri, Jun 17, 2022 at 5:55 PM Vipin Sharma <vipinsh@google.com> wrote:
->>>>>>
->>>>>> Add tools directory in generating tags and quiet the "No such file or
->>>>>> directory" warnings.
->>>>>>
->>>>>> It reverts the changes introduced in commit 162343a876f1
->>>>>> ("scripts/tags.sh: exclude tools directory from tags generation") while
->>>>>> maintainig the original intent of the patch to get rid of the warnings.
->>>>>> This allows the root level cscope files to include tools source code
->>>>>> besides kernel and a single place to browse the code for both.
->>>>>>
->>>>>> Signed-off-by: Vipin Sharma <vipinsh@google.com>
->>>>>> ---
->>>>>>
->>>>>> I have found myself many times to browse tools and other part of the
->>>>>> kernel code together. Excluding tools from the root level cscope makes
->>>>>> it difficult to efficiently move between files and find user api
->>>>>> definitions.
->>>>>>
->>>>>> Root cause of these warning is due to generated .cmd files which use
->>>>>> relative paths in some files, I am not sure how to make them absolute
->>>>>> file paths which can satisfy realpath warnings. Also, not sure if those
->>>>>> warnings are helpful and should be kept. Passing "-q" to realpath seems
->>>>>> easier solution. Please, let me know if there is a better alternative.
->>>>>>
->>>>>> Thanks
->>>>>>
->>>>>>    scripts/tags.sh | 9 +--------
->>>>>>    1 file changed, 1 insertion(+), 8 deletions(-)
->>>>>>
->>>>>> diff --git a/scripts/tags.sh b/scripts/tags.sh
->>>>>> index 01fab3d4f90b5..e137cf15aae9d 100755
->>>>>> --- a/scripts/tags.sh
->>>>>> +++ b/scripts/tags.sh
->>>>>> @@ -25,13 +25,6 @@ else
->>>>>>           tree=${srctree}/
->>>>>>    fi
->>>>>>
->>>>>> -# ignore userspace tools
->>>>>> -if [ -n "$COMPILED_SOURCE" ]; then
->>>>>> -       ignore="$ignore ( -path ./tools ) -prune -o"
->>>>>> -else
->>>>>> -       ignore="$ignore ( -path ${tree}tools ) -prune -o"
->>>>>> -fi
->>>>>> -
->>>>>>    # Detect if ALLSOURCE_ARCHS is set. If not, we assume SRCARCH
->>>>>>    if [ "${ALLSOURCE_ARCHS}" = "" ]; then
->>>>>>           ALLSOURCE_ARCHS=${SRCARCH}
->>>>>> @@ -100,7 +93,7 @@ all_compiled_sources()
->>>>>>                   find $ignore -name "*.cmd" -exec \
->>>>>>                           grep -Poh '(?(?=^source_.* \K).*|(?=^  \K\S).*(?= \\))' {} \+ |
->>>>>>                   awk '!a[$0]++'
->>>>>> -       } | xargs realpath -es $([ -z "$KBUILD_ABS_SRCTREE" ] && echo --relative-to=.) |
->>>>>> +       } | xargs realpath -esq $([ -z "$KBUILD_ABS_SRCTREE" ] && echo --relative-to=.) |
->>>>>>           sort -u
->>>>>>    }
->>>>>>
->>>>>> --
->>>>>> 2.37.0.rc0.104.g0611611a94-goog
->>>>>>
->>>>>
->>>>> Hi Greg,
->>>>>
->>>>> Any update on the patch?
->>>>
->>>> Nope!
->>>>
->>>> I don't really think we should add back in the tools to this, as if you
->>>> want to search them, then can't you just generate the needed tags for
->>>> the tools directory?
->>>>
->>>
->>> Some folders in the tools directory do provide cscope rules. However,
->>> those tags can only be used when I open the vim in those directories.
->>> For example, if I am writing a KVM selftest and I want to explore code
->>> related to certain ioctl in kernel as well as some code in KVM
->>> selftest library, I cannot use two cscope files (one in the kernel
->>> root dir and another in tools/testing/selftests/kvm) in a single VIM
->>> instance. It starts having issues with the file paths. If the root
->>> level cscope file includes tools directory then all of the tags will
->>> be at one place and makes it very easy to browse tools code along with
->>> the rest of the kernel.
->>>
->>>> But as I don't even use this script ever, it feels odd for me to be the
->>>> one "owning" it, so it would be great if others could chime in who
->>>> actually use it.
->>>>
->>
->> Since the tools directory has been excluded just to get rid of those
->> warnings, I think there is no obvious reason to not add it back - at least
->> the use case described above is perfectly valid.
-> 
-> So is that an "Acked-by:"?
 
-Acked-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+On 6/30/2022 2:56 PM, Marc Zyngier wrote:
+> On Thu, 30 Jun 2022 05:12:01 +0100,
+> Neeraj Upadhyay <quic_neeraju@quicinc.com> wrote:
+>>
+>> Commit 640a7d37c3f4 ("srcu: Block less aggressively for expedited
+>> grace periods") highlights a problem where aggressively blocking
+>> SRCU expedited grace periods, as was introduced in commit
+>> 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
+>> from consuming CPU"), introduces ~2 minutes delay to the overall
+>> ~3.5 minutes boot time, when starting VMs with "-bios QEMU_EFI.fd"
+>> cmdline on qemu, which results in very high rate of memslots
+>> add/remove, which causes > ~6000 synchronize_srcu() calls for
+>> kvm->srcu SRCU instance.
+>>
+>> Below table captures the experiments done by Zhangfei Gao and Shameer
+>> to measure the boottime impact with various values of non-sleeping
+>> per phase counts, with HZ_250 and preemption enabled:
+>>
+>> +──────────────────────────+────────────────+
+>> | SRCU_MAX_NODELAY_PHASE   | Boot time (s)  |
+>> +──────────────────────────+────────────────+
+>> | 100                      | 30.053         |
+>> | 150                      | 25.151         |
+>> | 200                      | 20.704         |
+>> | 250                      | 15.748         |
+>> | 500                      | 11.401         |
+>> | 1000                     | 11.443         |
+>> | 10000                    | 11.258         |
+>> | 1000000                  | 11.154         |
+>> +──────────────────────────+────────────────+
+>>
+>> Analysis on the experiment results showed improved boot time
+>> with non blocking delays close to one jiffy duration. This
+>> was also seen when number of per-phase iterations were scaled
+>> to one jiffy.
+>>
+>> So, this change scales per-grace-period phase number of non-sleeping
+>> polls, such that, non-sleeping polls are done for one jiffy. In addition
+>> to this, srcu_get_delay() call in srcu_gp_end(), which is used to calculate
+>> the delay used for scheduling callbacks, is replaced with the check for
+>> expedited grace period. This is done, to schedule cbs for completed expedited
+>> grace periods immediately, which results in improved boot time seen in
+>> experiments.
+>>
+>> In addition to the changes to default per phase delays, this change
+>> adds 3 new kernel parameters - srcutree.srcu_max_nodelay,
+>> srcutree.srcu_max_nodelay_phase, srcutree.srcu_retry_check_delay.
+>> This allows users to configure the srcu grace period scanning delays,
+>> depending on their system configuration requirements.
+>>
+>> Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+>> Tested-by: Marc Zyngier <maz@kernel.org>
+>> ---
+>>
+>> Change in v2:
+>>
+>>    - Change srcu_max_nodelay default value to consider phase delay
+>>      iterations
+>>    - Apply Pauls' feedback
+>>    - Add Marc's Tested-by
+> 
+> I gave this a go on the same platform as v1, and the result is
+> actually much better as I didn't have to add any extra command-line
+> option to get to a reasonable result (41s). I think we have a winner.
+> 
+
+Thank you for testing it!
+
+
+Thanks
+Neeraj
+
+> Thanks again,
+> 
+> 	M.
+> 

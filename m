@@ -2,71 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCB5561353
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB05D561347
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Jun 2022 09:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232913AbiF3Hf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 03:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
+        id S232935AbiF3Hc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 03:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232787AbiF3Hf5 (ORCPT
+        with ESMTP id S232905AbiF3Hc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 03:35:57 -0400
-X-Greylist: delayed 397 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Jun 2022 00:35:56 PDT
-Received: from gw2.atmark-techno.com (gw2.atmark-techno.com [35.74.137.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCDF7326E8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:35:56 -0700 (PDT)
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-        by gw2.atmark-techno.com (Postfix) with ESMTPS id 0F07B20D5C
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 16:29:19 +0900 (JST)
-Received: by mail-pj1-f69.google.com with SMTP id em12-20020a17090b014c00b001ed493d4f0cso5249192pjb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:29:19 -0700 (PDT)
+        Thu, 30 Jun 2022 03:32:27 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA9F387B7
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:32:25 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id s1so25883488wra.9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 00:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mo6WrAOjqsjetNkKTvO0A8p8xxil527ctc0OUGvOqd4=;
+        b=dNpuPrNBikLG7s6tQlEUcKMRjDdb80pqMM1qQdjfbvvGIZtCauHvAha4UJrtVHhyEF
+         HV1M+4/LJWn10Ud3PqlHIzmGTsfJCbhqbC8hfXb+joN8LQO2JOLpeIt5G1HA3yCh6sQh
+         7OYdL0gBiKwUIiLt9YZ2eR9UCXVv17bJV0DPHpNgjrFUTWqSdfDrDDhKOTHaI2QbH+U5
+         eiyo7BFf3eZ6p3bykAWFItcDhFEjJMdfFZv9ICH6GA2VJbaypIbaWSfgppOSvrNQ/BPZ
+         xXLQSx7iTQ6HcwSLp2tQ28xikGKEtk0OaXCLe5prMnS+p2nYPLTDllwwzgQary1wNjXN
+         oG5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZlpDtdwmWp2b5cqasTMpXtBnyv72jy1sATeseuyLyBc=;
-        b=cznR8oAII9+W3YDcruYYf0Wk5lFby+7UjaO8AQsC0CS8TOu3i0FPazXxRt97TTfbwu
-         V5B4F4LVl6i4m8mE0JnaaJ+5CMfSIdqdrFW6Cfgbx2h1MNaJSjmhCL0Hp0WORVHJ0oGW
-         JvK1oTuR/vvWtDwR6VKC/cUwSTCFXl3aYYO+lOGyCfODOfb+BDE1wH4DvzL4+Q6vDF6H
-         pVMOfenDT5aVIg4VDslrHLPtjHLNISiTspaoXrxmbaD9uurCC4Xn1nMKQHLgnyhXSvTl
-         CkkWXiGKi4uICXj4stkisdIvfRuRNyU/0hbzfUB7h0ivR942cUoYcE7DiqeJ3oIwG9I0
-         yacg==
-X-Gm-Message-State: AJIora+EVWBscK/XfJcB86YBLEaB5J6Gu/oGNfrz3GMh6GykFtVJA0v4
-        eqp/bvd+fIjAS25gs9uOBuuPsJVEjBA7kaSUVsBHvA9jTKnhug3TGPBNmFrn7guQO9pWTLwRGMp
-        fuW5chdSZYqChs7VsVCYx78mcBA==
-X-Received: by 2002:a17:902:e807:b0:16a:471b:a4cc with SMTP id u7-20020a170902e80700b0016a471ba4ccmr13385058plg.102.1656574158054;
-        Thu, 30 Jun 2022 00:29:18 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1unkGtBy8pj1LseJ12CPT9D2tB8s8CwrIAP721pTZJ67uSW54oYP5hdrssb9ch6i39KkfjNeg==
-X-Received: by 2002:a17:902:e807:b0:16a:471b:a4cc with SMTP id u7-20020a170902e80700b0016a471ba4ccmr13385043plg.102.1656574157789;
-        Thu, 30 Jun 2022 00:29:17 -0700 (PDT)
-Received: from pc-zest.atmarktech (126.88.200.35.bc.googleusercontent.com. [35.200.88.126])
-        by smtp.gmail.com with ESMTPSA id a3-20020a1709027e4300b0016bb24f5d19sm286102pln.209.2022.06.30.00.29.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 30 Jun 2022 00:29:17 -0700 (PDT)
-Received: from martinet by pc-zest.atmarktech with local (Exim 4.95)
-        (envelope-from <martinet@pc-zest>)
-        id 1o6obz-00BbWI-FR;
-        Thu, 30 Jun 2022 16:29:15 +0900
-Date:   Thu, 30 Jun 2022 16:29:05 +0900
-From:   Dominique MARTINET <dominique.martinet@atmark-techno.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-btrfs@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yu Kuai <yukuai3@huawei.com>,
-        Kent Overstreet <kent.overstreet@gmail.com>
-Subject: Major btrfs fiemap slowdown on file with many extents once in cache
- (RCU stalls?) (Was: [PATCH 1/3] filemap: Correct the conditions for marking
- a folio as accessed)
-Message-ID: <Yr1QwVW+sHWlAqKj@atmark-techno.com>
-References: <20220619151143.1054746-1-willy@infradead.org>
- <20220619151143.1054746-2-willy@infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mo6WrAOjqsjetNkKTvO0A8p8xxil527ctc0OUGvOqd4=;
+        b=JJzP4s0T9L7dma2JD0UbC4kHWMPk4VswHelyfo6PyrQ+SvId+tWncGSkunzVpybrU/
+         gv1AYJSdhS4CwkDUS5alE7EQcDhwHfcSkZJ7rVyMa1Ocmbo8vMy+QwXLCFT6oGyCGh4B
+         dMWjVYPL0jx3xuk7Tj7kpuyuglNh618kZkddfuGJJdAnAn8S/HmyhdtQ8ULsagIcZNhF
+         53319VJ3uPdRjF4OsCu8FiHCSQIQ80zvh1fvw07sjoP2qF4Q0ec83TCnbG7k5hFWs9uO
+         Dfk9nqbCzsEy/CwcHIElnxgLbET4+gvAd6sQ7teeY6ipRThFaEkLB+iE6gjUUtz8ixVc
+         NpSw==
+X-Gm-Message-State: AJIora8IiTMyXoaelcaCPGcOKEl1ibUIOHFHEcYrDVzQqS4JQgiE1Q+J
+        9GYaPduo4GDZJkR9r7GSw8vJIcnrzFHNunICg/NaiQ==
+X-Google-Smtp-Source: AGRyM1u9Do9XAM3ZhmgC1xJwCfmVluvgU1QIsZQU56HyFQb91+qPaseElYOENvSEi2uGEapY0VqnhGNwt2zin3lHr0k=
+X-Received: by 2002:a5d:45c1:0:b0:21b:883e:6116 with SMTP id
+ b1-20020a5d45c1000000b0021b883e6116mr6948488wrs.346.1656574344358; Thu, 30
+ Jun 2022 00:32:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220619151143.1054746-2-willy@infradead.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+References: <20220608171334.730739-1-apatel@ventanamicro.com> <20220629174318.GB2018382@p14s>
+In-Reply-To: <20220629174318.GB2018382@p14s>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Thu, 30 Jun 2022 13:01:32 +0530
+Message-ID: <CAAhSdy2-TCURMiPR9eYML_WGzu1JZ32o0BqioKPTSRiw2KVFWw@mail.gmail.com>
+Subject: Re: [PATCH] rpmsg: virtio: Fix broken rpmsg_probe()
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        linux-remoteproc@vger.kernel.org,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,106 +72,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Willy, linux-btrfs@vger,
+Hi Mathieu,
 
-Matthew Wilcox (Oracle) wrote on Sun, Jun 19, 2022 at 04:11:41PM +0100:
-> We had an off-by-one error which meant that we never marked the first page
-> in a read as accessed.  This was visible as a slowdown when re-reading
-> a file as pages were being evicted from cache too soon.  In reviewing
-> this code, we noticed a second bug where a multi-page folio would be
-> marked as accessed multiple times when doing reads that were less than
-> the size of the folio.
+On Wed, Jun 29, 2022 at 11:13 PM Mathieu Poirier
+<mathieu.poirier@linaro.org> wrote:
+>
+> Hi Anup,
+>
+> On Wed, Jun 08, 2022 at 10:43:34PM +0530, Anup Patel wrote:
+> > The rpmsg_probe() is broken at the moment because virtqueue_add_inbuf()
+> > fails due to both virtqueues (Rx and Tx) marked as broken by the
+> > __vring_new_virtqueue() function. To solve this, virtio_device_ready()
+> > (which unbreaks queues) should be called before virtqueue_add_inbuf().
+> >
+> > Fixes: 8b4ec69d7e09 ("virtio: harden vring IRQ")
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > ---
+> >  drivers/rpmsg/virtio_rpmsg_bus.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+> > index 905ac7910c98..71a64d2c7644 100644
+> > --- a/drivers/rpmsg/virtio_rpmsg_bus.c
+> > +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+> > @@ -929,6 +929,9 @@ static int rpmsg_probe(struct virtio_device *vdev)
+> >       /* and half is dedicated for TX */
+> >       vrp->sbufs = bufs_va + total_buf_space / 2;
+> >
+> > +     /* From this point on, we can notify and get callbacks. */
+> > +     virtio_device_ready(vdev);
+> > +
+>
+> Calling virtio_device_ready() here means that virtqueue_get_buf_ctx_split() can
+> potentially be called (by way of rpmsg_recv_done()), which will race with
+> virtqueue_add_inbuf().  If buffers in the virtqueue aren't available then
+> rpmsg_recv_done() will fail, potentially breaking remote processors' state
+> machines that don't expect their initial name service to fail when the "device"
+> has been marked as ready.
 
-when debugging an unrelated issue (short reads on btrfs with io_uring
-and O_DIRECT[1]), I noticed that my horrible big file copy speeds fell
-down from ~2GB/s (there's compression and lots of zeroes) to ~100MB/s
-the second time I was copying it with cp.
+We have VirtIO RPMSG available for Xvisor Guest/VM. When I run Linux-5.19-rcX
+as Xvisor Guest/VM, I get following warning for every call to
+virtqueue_add_inbuf():
 
-I've taken a moment to bisect this and came down to this patch.
+[guest0/uart0] [    2.147931] ------------[ cut here ]------------
+[guest0/uart0] [    2.166242] WARNING: CPU: 0 PID: 1 at
+drivers/rpmsg/virtio_rpmsg_bus.c:941 rpmsg_probe+0x2e6/0x39e
+[guest0/uart0] [    2.190337] Modules linked in:
+[guest0/uart0] [    2.196514] CPU: 0 PID: 1 Comm: swapper/0 Not
+tainted 5.19.0-rc4 #1
+[guest0/uart0] [    2.222706] Hardware name: Virt64 (DT)
+[guest0/uart0] [    2.231712] epc : rpmsg_probe+0x2e6/0x39e
+[guest0/uart0] [    2.243443]  ra : rpmsg_probe+0x1f8/0x39e
+[guest0/uart0] [    2.256899] epc : ffffffff804f7b2c ra :
+ffffffff804f7a3e sp : ff2000000400b870
+[guest0/uart0] [    2.277700]  gp : ffffffff810dc5b8 tp :
+ff60000001258000 t0 : ff2000000400b888
+[guest0/uart0] [    2.293144]  t1 : 0000000000000008 t2 :
+0000000000000040 s0 : ff2000000400b910
+[guest0/uart0] [    2.318932]  s1 : ff600000012cde00 a0 :
+fffffffffffffffb a1 : ff2000000400b858
+[guest0/uart0] [    2.339688]  a2 : 0000000000000001 a3 :
+0000000000000000 a4 : 0000000000000001
+[guest0/uart0] [    2.361387]  a5 : 0000000000000000 a6 :
+0000000000000000 a7 : 0000000000000cc0
+[guest0/uart0] [    2.396055]  s2 : ff60000003a00000 s3 :
+0000000000000000 s4 : ff600000015ad428
+[guest0/uart0] [    2.414673]  s5 : 0000000000000000 s6 :
+0000000000000cc0 s7 : ff60000003a00000
+[guest0/uart0] [    2.439996]  s8 : ffffffff80d91408 s9 :
+0000000000040000 s10: ffffffff808000ac
+[guest0/uart0] [    2.463539]  s11: 0000000000000000 t3 :
+ff6000000fb4f000 t4 : ffffffffffffffff
+[guest0/uart0] [    2.484201]  t5 : 0000000000000000 t6 : ff600000025a20c4
+[guest0/uart0] [    2.500229] status: 0000000200000120 badaddr:
+0000000000000000 cause: 0000000000000003
+[guest0/uart0] [    2.522769] [<ffffffff80374032>] virtio_dev_probe+0x162/0x2e6
+[guest0/uart0] [    2.544173] [<ffffffff803b57a8>]
+really_probe.part.0+0x56/0x1ec
+[guest0/uart0] [    2.574984] [<ffffffff803b59ae>]
+__driver_probe_device+0x70/0xde
+[guest0/uart0] [    2.596610] [<ffffffff803b5a48>] driver_probe_device+0x2c/0xb0
+[guest0/uart0] [    2.612964] [<ffffffff803b5f70>]
+__device_attach_driver+0x62/0x9a
+[guest0/uart0] [    2.640715] [<ffffffff803b3b78>] bus_for_each_drv+0x4c/0x8a
+[guest0/uart0] [    2.659895] [<ffffffff803b5c7a>] __device_attach+0x96/0x17a
+[guest0/uart0] [    2.679809] [<ffffffff803b60be>] device_initial_probe+0xe/0x16
+[guest0/uart0] [    2.696944] [<ffffffff803b4b80>] bus_probe_device+0x7c/0x82
+[guest0/uart0] [    2.720666] [<ffffffff803b2aec>] device_add+0x2da/0x6be
+[guest0/uart0] [    2.743288] [<ffffffff80373e4e>]
+register_virtio_device+0x192/0x214
+[guest0/uart0] [    2.765431] [<ffffffff80378048>] virtio_mmio_probe+0x134/0x1f2
+[guest0/uart0] [    2.795974] [<ffffffff803b77f2>] platform_probe+0x4e/0x96
+[guest0/uart0] [    2.816947] [<ffffffff803b57a8>]
+really_probe.part.0+0x56/0x1ec
+[guest0/uart0] [    2.832840] [<ffffffff803b59ae>]
+__driver_probe_device+0x70/0xde
+[guest0/uart0] [    2.854298] [<ffffffff803b5a48>] driver_probe_device+0x2c/0xb0
+[guest0/uart0] [    2.874422] [<ffffffff803b6008>] __driver_attach+0x60/0x108
+[guest0/uart0] [    2.897804] [<ffffffff803b3af2>] bus_for_each_dev+0x4a/0x84
+[guest0/uart0] [    2.927286] [<ffffffff803b522e>] driver_attach+0x1a/0x22
+[guest0/uart0] [    2.957400] [<ffffffff803b4d9e>] bus_add_driver+0x12c/0x196
+[guest0/uart0] [    2.977573] [<ffffffff803b677a>] driver_register+0x48/0xdc
+[guest0/uart0] [    3.001172] [<ffffffff803b7564>]
+__platform_driver_register+0x1c/0x24
+[guest0/uart0] [    3.028986] [<ffffffff8081c11c>] virtio_mmio_init+0x1a/0x22
+[guest0/uart0] [    3.047038] [<ffffffff800020dc>] do_one_initcall+0x38/0x174
+[guest0/uart0] [    3.071633] [<ffffffff80800fca>]
+kernel_init_freeable+0x1a6/0x20a
+[guest0/uart0] [    3.095840] [<ffffffff80652d04>] kernel_init+0x1e/0x10a
+[guest0/uart0] [    3.120816] [<ffffffff800032dc>] ret_from_exception+0x0/0xc
+[guest0/uart0] [    3.143400] ---[ end trace 0000000000000000 ]---
 
-[1] https://lore.kernel.org/all/YrrFGO4A1jS0GI0G@atmark-techno.com/T/#u
+I am not claiming that this patch does the right thing but with this patch
+VirtIO RPmsg starts working again for me on Xvisor Guest/VM.
 
+Upon further investigation, it seems this warning is because of a recent kernel
+commit mentioned in the "Fixes: " tag. Looks like with latest 5.19-rcX, we can't
+call virtqueue_add_inbuf() until virtqueue is marked as unbroken by
+virtio_device_ready().
 
+Regards,
+Anup
 
-Dropping caches (echo 3 > /proc/sys/vm/drop_caches) restore the speed,
-so there appears to be some bad effect to having the file in cache for
-fiemap?
-To be fair that file is pretty horrible:
----
-# compsize bigfile
-Processed 1 file, 194955 regular extents (199583 refs), 0 inline.
-Type       Perc     Disk Usage   Uncompressed Referenced  
-TOTAL       15%      3.7G          23G          23G       
-none       100%      477M         477M         514M       
-zstd        14%      3.2G          23G          23G       
----
-
-Here's what perf has to say about it on top of this patch when running
-`cp bigfile /dev/null` the first time:
-
-98.97%     0.00%  cp       [kernel.kallsyms]    [k]
-entry_SYSCALL_64_after_hwframe
- entry_SYSCALL_64_after_hwframe
- do_syscall_64
-  - 93.40% ksys_read
-     - 93.36% vfs_read
-        - 93.25% new_sync_read
-           - 93.20% filemap_read
-              - 83.38% filemap_get_pages
-                 - 82.76% page_cache_ra_unbounded
-                    + 59.72% folio_alloc
-                    + 13.43% read_pages
-                    + 8.75% filemap_add_folio
-                      0.64% xa_load
-                   0.52% filemap_get_read_batch
-              + 8.75% copy_page_to_iter
-  - 4.73% __x64_sys_ioctl
-     - 4.72% do_vfs_ioctl
-        - btrfs_fiemap
-           - 4.70% extent_fiemap
-              + 3.95% btrfs_check_shared
-              + 0.70% get_extent_skip_holes
-
-and second time:
-99.90%     0.00%  cp       [kernel.kallsyms]    [k]
-entry_SYSCALL_64_after_hwfram
- entry_SYSCALL_64_after_hwframe
- do_syscall_64
-  - 94.62% __x64_sys_ioctl
-       do_vfs_ioctl
-       btrfs_fiemap
-     - extent_fiemap
-        - 50.01% get_extent_skip_holes
-           - 50.00% btrfs_get_extent_fiemap
-              - 49.97% count_range_bits
-                   rb_next
-        + 28.72% lock_extent_bits
-        + 15.55% __clear_extent_bit
-  - 5.21% ksys_read
-     + 5.21% vfs_read
-
-(if this isn't readable, 95% of the time is spent on fiemap the second
-time around)
-
-
-
-
-I've also been observing RCU stalls on my laptop with the same workload
-(cp to /dev/null), but unfortunately I could not reproduce in qemu so I
-could not take traces to confirm they are caused by the same commit but
-given the workload I'd say that is it?
-I can rebuild a kernel for my laptop and confirm if you think it should
-be something else.
-
-
-I didn't look at the patch itself (yet) so have no suggestion at this
-point - it's plausible the patch fixed something and just exposed slow
-code that had been there all along so it might be better to look at the
-btrfs side first, I don't know.
-If you don't manage to reproduce I'll be happy to test anything thrown
-at me at the very least.
-
-
-Thanks,
--- 
-Dominique Martinet | Asmadeus
+>
+> What does make me curious though is that nobody on the remoteproc mailing list
+> has complained about commit 8b4ec69d7e09 breaking their environment... By now,
+> i.e rc4, that should have happened.  Anyone from TI, ST and Xilinx care to test this on
+> their rig?
+>
+> Thanks,
+> Mathieu
+>
+> >       /* set up the receive buffers */
+> >       for (i = 0; i < vrp->num_bufs / 2; i++) {
+> >               struct scatterlist sg;
+> > @@ -983,9 +986,6 @@ static int rpmsg_probe(struct virtio_device *vdev)
+> >        */
+> >       notify = virtqueue_kick_prepare(vrp->rvq);
+> >
+> > -     /* From this point on, we can notify and get callbacks. */
+> > -     virtio_device_ready(vdev);
+> > -
+> >       /* tell the remote processor it can start sending messages */
+> >       /*
+> >        * this might be concurrent with callbacks, but we are only
+> > --
+> > 2.34.1
+> >

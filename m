@@ -2,123 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022A6562CF5
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2037F562CF8
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235434AbiGAHrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 03:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
+        id S235423AbiGAHrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 03:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235423AbiGAHrP (ORCPT
+        with ESMTP id S235435AbiGAHri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 03:47:15 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F2753EC0
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:47:12 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id fi2so2500428ejb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 00:47:12 -0700 (PDT)
+        Fri, 1 Jul 2022 03:47:38 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BA06D55C;
+        Fri,  1 Jul 2022 00:47:37 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id r20so1976398wra.1;
+        Fri, 01 Jul 2022 00:47:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m9LluxtMdj10AOwxO8dQarqqYheoPawjt1DHgDLPduA=;
-        b=NXEGXj+8sJof4bqVatqLMyyQ/gW2KnQk0bLezkssNXsLrJ3hwqPCqsYkAxJ17Qmd3c
-         1YcuSw3QkJm05feG1+O6aNvVoy/Nq4x6+vbIjeW8bMJdB9ad4SOpBhBMYv15YssZFaXh
-         K6/B7KPDkaSyl5/vPtckTq5fAxA1+h37e9Qiw8pCap13G5UwjbrlNr0Ysu1xYr+EmiwQ
-         Kr/Ptrs+Dz5TrTpKZLFrTR6ah4kmjDOe2rU1eJQYYKW7+NcQPCWaMqnkMLbC4lELe6uB
-         qnk5sSxFjakYjEbLNwpzDARiA62yVD0Y6vkF2lDUv9G9yVi8Racmh4MPlqXC8CkD+M2y
-         wfGQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rE1S3qn0emq5PHeyf06ryXxWn9nDP2udjWAGP9EkRNo=;
+        b=BMpIS/AaZ9mkwnYvWb3YzxD0SgLPv4RDjO4ZjZ68DxdKRYIPZvX7D1llnsstpspp5y
+         QRTl5h6L82kz0B7VA5xK4BMsaNkPKH8zZ2Q22S7x0vimgRfWwyRH/hOjx60fc46asqpi
+         p14SJ39A/qE+J0Oy7e2P+OJMI3KnWtoUXuu9XlQLOSk4BNukgDSnrBH8ejE3pxNkraIR
+         jQHAp0LvwIoqzVeu7/tusfwe728MogKFHRQaOYEFvothlAGkgK40MrbrVMzOiCblDDew
+         gRuQPnTCmis86h5fCBz2Z7CsSNCCDO1W+KAQNudMIWaXMJvSBh/xHpRe9FrdKbS5ySAb
+         4t8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m9LluxtMdj10AOwxO8dQarqqYheoPawjt1DHgDLPduA=;
-        b=wJKuEml3hZlYlx07FeSc/OaThCU9bbv7mnXuK+jIzfWv9Zx5oYAkaGQAcTt0HQdz4a
-         /5kKuPw+TYakeZfBIiIvmbDbQ4B1o7eHWyXBGrwkfvyCwmgB8VSLED7sDM9TGDV1hFak
-         mMHMAqegTflV700GyLG+8kRccmoeUIj7nrzskgooGB0WN6tCtyTLNnp4dcG1drf49o3j
-         jiHigQ6Gh8NVxLoiF/+0/yTzpCZZtqDhZpmyrPuOiob6s1MPJHDH3ZH7CpO2QM4SQoDo
-         GYvgU8Cq+Sk336kh6KsaoGlHZTO0SO20YfePn6KBd0akJc6bwgOJbhJSOdJb35BEFzmL
-         G8Sw==
-X-Gm-Message-State: AJIora+XtvQsX1mcpbBhv2qh/CsKW8SqGsH1VCMzbQH1jvnzR94AH80U
-        q/730ej2EJ8cCUW+1nBR9XJ8Lw==
-X-Google-Smtp-Source: AGRyM1vPSlGFlyi4PfcCGNONdQN0a8R4BJ8wunE9JqDWhsdlm1U3EDjpawSYW8EGgSrBIneNdaN6PQ==
-X-Received: by 2002:a17:907:d17:b0:726:a3be:bba4 with SMTP id gn23-20020a1709070d1700b00726a3bebba4mr12903075ejc.584.1656661631244;
-        Fri, 01 Jul 2022 00:47:11 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u5-20020a170906068500b00703671ebe65sm9992497ejb.198.2022.07.01.00.47.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 00:47:10 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Subject: [PATCH] dt-bindings: qcom: readme: document preferred compatible naming
-Date:   Fri,  1 Jul 2022 09:46:59 +0200
-Message-Id: <20220701074659.12680-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rE1S3qn0emq5PHeyf06ryXxWn9nDP2udjWAGP9EkRNo=;
+        b=tuhq1LeIWx7991O+rUOcMUke1apghdjeVSlCB1sgEyHFUf+OIAqd4YGOE3RmsfJYuO
+         nrAIi5rlDpmTuE6hDTjHnNJp/I2ip077OvtSDx8R3qzpzFtxqq0ar/9DjWA4C1neb/Mn
+         8BQO1MTD7vlw9FV9AIjcIxn6YBt5k5CeVGJL7XG0aL5ZXOsYSDGoZ3gVYDFdmA0bjoz2
+         LYrQ67udBgXr6eXsmJ5+8ROEHznoqH8hoUXSV7LgNAmZMuMhpdIJwuMWNoydeVPQ9NV/
+         64yrTefQC03IccZnZY+QSeha7ceH3UfPoYN8GNQuPfVtLQZKukWNm4T084OIvvwufZyy
+         6pjw==
+X-Gm-Message-State: AJIora/79jcVQ6CiXfyBryU3sH7mlaqKta1GOSVTB11Nxz32fKhmkDKQ
+        FY1Y9dvmLIezyv38JrDPYem/6neNCAsfDhJNsyY=
+X-Google-Smtp-Source: AGRyM1vMgSEumJ6nKjvQL9aVDdXHVXvXN+AuFrw+YNtzVT3c21tagadSTR1PTonOtKu3v/pKrXHd9ybscKGAIwd1xvI=
+X-Received: by 2002:a05:6000:12d0:b0:21b:a248:9a2e with SMTP id
+ l16-20020a05600012d000b0021ba2489a2emr12784441wrx.437.1656661655797; Fri, 01
+ Jul 2022 00:47:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220630111634.610320-1-hans@kapio-technology.com> <Yr2LFI1dx6Oc7QBo@shredder>
+In-Reply-To: <Yr2LFI1dx6Oc7QBo@shredder>
+From:   Hans S <schultz.hans@gmail.com>
+Date:   Fri, 1 Jul 2022 09:47:24 +0200
+Message-ID: <CAKUejP6LTFuw7d_1C18VvxXDuYaboD-PvSkk_ANSFjjfhyDGkg@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that link-local
+ traffic cannot unlock a locked port
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Hans Schultz <hans@kapio-technology.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compatibles can come in two formats.  Either "vendor,ip-soc" or
-"vendor,soc-ip".  Qualcomm bindings were mixing both of usages, so add a
-readme file documenting preferred policy.
+One question though... wouldn't it be an issue that the mentioned
+option setting is bridge wide, while the patch applies a per-port
+effect?
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
----
-
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: Alex Elder <elder@linaro.org>
-Cc: Robert Foss <robert.foss@linaro.org>
-Cc: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- .../devicetree/bindings/soc/qcom/README.rst      | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/soc/qcom/README.rst
-
-diff --git a/Documentation/devicetree/bindings/soc/qcom/README.rst b/Documentation/devicetree/bindings/soc/qcom/README.rst
-new file mode 100644
-index 000000000000..322b329ac7c1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/qcom/README.rst
-@@ -0,0 +1,16 @@
-+.. SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+
-+Qualcomm SoC compatibles naming convention
-+==========================================
-+1. When adding new compatibles in new bindings, use the format:
-+   ::
-+
-+     qcom,SoC-IP
-+
-+   For example:
-+   ::
-+
-+     qcom,sdm845-llcc-bwmon
-+
-+2. When adding new compatibles to existing bindings, use the format
-+   in the existing binding, even if it contradicts the above.
--- 
-2.34.1
-
+On Thu, Jun 30, 2022 at 1:38 PM Ido Schimmel <idosch@nvidia.com> wrote:
+>
+> On Thu, Jun 30, 2022 at 01:16:34PM +0200, Hans Schultz wrote:
+> > This patch is related to the patch set
+> > "Add support for locked bridge ports (for 802.1X)"
+> > Link: https://lore.kernel.org/netdev/20220223101650.1212814-1-schultz.hans+netdev@gmail.com/
+> >
+> > This patch makes the locked port feature work with learning turned on,
+> > which is enabled with the command:
+> >
+> > bridge link set dev DEV learning on
+> >
+> > Without this patch, link local traffic (01:80:c2) like EAPOL packets will
+> > create a fdb entry when ingressing on a locked port with learning turned
+> > on, thus unintentionally opening up the port for traffic for the said MAC.
+> >
+> > Some switchcore features like Mac-Auth and refreshing of FDB entries,
+> > require learning enables on some switchcores, f.ex. the mv88e6xxx family.
+> > Other features may apply too.
+> >
+> > Since many switchcores trap or mirror various multicast packets to the
+> > CPU, link local traffic will unintentionally unlock the port for the
+> > SA mac in question unless prevented by this patch.
+>
+> Why not just teach hostapd to do:
+>
+> echo 1 > /sys/class/net/br0/bridge/no_linklocal_learn
+>
+> ?

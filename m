@@ -2,90 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6E8562B30
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178F7562B31
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234318AbiGAGES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 02:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39020 "EHLO
+        id S234093AbiGAGGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 02:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232320AbiGAGEM (ORCPT
+        with ESMTP id S230500AbiGAGGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 02:04:12 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D46A47C;
-        Thu, 30 Jun 2022 23:04:12 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id c4so1415679plc.8;
-        Thu, 30 Jun 2022 23:04:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=WXjo0OX6xuyHFGICQ2esxWAIECEIwWtW1QElWT53ifs=;
-        b=cmzd9n7JHhzr129FZ1i8U8xjzLkPtOuXff4obAo7+5F3r2aTAk+bC+H20wXSTZBKV4
-         ScHXG69OKetUTygY1Tn35zD12MUwmhXangrQ6bntV0ieyXHNwSjMInOwETONBYWeGT9y
-         P8EWwO3Aul3GZ9rcUt9diwPq7uJW0tGxmql3uyXnphizuox39OK2i2rVC+vlf4dx7lC4
-         gVF/GWn8bcv7sDWzN7ZSeZW7vRmTr3y1WdLlW1Y389gVLl6j73TApyLpgmZ0VcX3krui
-         3OUzOPKLxTHSin0yN/QxUYaipvDRqncSG8XV3f7kWsdjLlQF+/aTEbdByVMPAfIEXGog
-         drFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=WXjo0OX6xuyHFGICQ2esxWAIECEIwWtW1QElWT53ifs=;
-        b=LDnc3KiVu9WOhmNv5IAK0gbCgWcGHRdBmvrDcdK/kRUzghK1f3HbME/bE+QoXDGiFF
-         WpDOFg2mE7m4SO7j1wd8Hs2lHLuNjSmmrlb1jNMbqpXuyy82pTI6+okXmHfAoE187FBj
-         0SD14h+esigW9g4buCRwGegocOkgjg5UlyL9CsnGeJO+xg/u1mCw5RHHTfvIS0bdbSHc
-         Lz0ciX69l42DBFuP+EFCaFum1DhNUHmgnqJx8ygW7U/P2NHDnTiWavr8CKJliXUa8q84
-         1kumzz0MQCxF73wXxusb8bgxIOyUoDoNmXPIzU4XIiI+7UvjNVgl4S3QO18qqUGqmaLO
-         fwoA==
-X-Gm-Message-State: AJIora9Ynu1Z4LF6LG4SfEoLD90duLn4+cZWAG/JnD0VO7e31VTeoor+
-        j76k7GSsSZgTAPQGMz+/7UwY7eSGpVnArhW802k=
-X-Google-Smtp-Source: AGRyM1uzPPXbi+B9TQoHXWjOOIT2JnSv58mTdoDQQFiqYXMuRNN1J5TP4jaPNCKQ51Hod232nUikIH4MUatkv/OjcAk=
-X-Received: by 2002:a17:902:b289:b0:16b:940d:18bb with SMTP id
- u9-20020a170902b28900b0016b940d18bbmr16539697plr.83.1656655451649; Thu, 30
- Jun 2022 23:04:11 -0700 (PDT)
+        Fri, 1 Jul 2022 02:06:36 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35C337A13
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:06:33 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4LZ4TM6kXdz9tHC;
+        Fri,  1 Jul 2022 08:06:31 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Ga5QVl0WHR5D; Fri,  1 Jul 2022 08:06:31 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LZ4TM61LDz9tH3;
+        Fri,  1 Jul 2022 08:06:31 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BF99D8B798;
+        Fri,  1 Jul 2022 08:06:31 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 1YYAc5wZu1tO; Fri,  1 Jul 2022 08:06:31 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9EE368B767;
+        Fri,  1 Jul 2022 08:06:31 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 26166PYH3730571
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 1 Jul 2022 08:06:25 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 26166OLk3730568;
+        Fri, 1 Jul 2022 08:06:24 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Erhard Furtner <erhard_f@mailbox.org>
+Subject: [PATCH] powerpc/32s: Fix boot failure with KASAN + SMP + JUMP_LABEL_FEATURE_CHECK_DEBUG
+Date:   Fri,  1 Jul 2022 08:06:15 +0200
+Message-Id: <2ee707512b8b212b079b877f4ceb525a1606a3fb.1656655567.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220620124146.5330-1-mtwget@gmail.com> <YrmMdcz9mJS1sXyS@atomide.com>
-In-Reply-To: <YrmMdcz9mJS1sXyS@atomide.com>
-From:   Yu-Tung Chang <mtwget@gmail.com>
-Date:   Fri, 1 Jul 2022 14:04:01 +0800
-Message-ID: <CAHRgzyOsxaC2HM=xAMxFUadTEdTBk-yiMjC=-Y=UynoiULSXDw@mail.gmail.com>
-Subject: Re: [PATCH v2] ARM: dts: am33xx: Fix MMCHS0 dma properties
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Benoit Cousson <bcousson@baylibre.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-omap@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1656655574; l=1860; s=20211009; h=from:subject:message-id; bh=n0vJXLO8U3JSz0xBTXCGMNhqXK9IYneG7gE0yKtcUFM=; b=UF7Mez85iyfD5bwvzrYIfp+uP5nLBuYObQvaOhKAz2zsPzXPzPZAP3IQcCcroJ4HHH6Hdd3ODnTF JysqebtVDjb5iZVefcIy0GqqFEMbOx8SgpeD7dCCPOZDCA6xPhlj
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tony Lindgren <tony@atomide.com> =E4=BA=8E2022=E5=B9=B46=E6=9C=8827=E6=97=
-=A5=E5=91=A8=E4=B8=80 18:54=E5=86=99=E9=81=93=EF=BC=9A
+Since commit 4291d085b0b0 ("powerpc/32s: Make pte_update() non
+atomic on 603 core"), pte_update() has been using
+mmu_has_feature(MMU_FTR_HPTE_TABLE) to avoid a useless atomic
+operation on 603 cores.
 
->
-> Hi,
->
-> * YuTong Chang <mtwget@gmail.com> [220620 15:36]:
-> > According to technical manual(table 11-24), the DMA of MMCHS0 should be
-> > direct mapped.
->
-> Could this be a bug in the manual assuming mmchs0 is working? Or does thi=
-s
-> fix something for you?
->
-It modified in commit b5e5090660742c838ddc0b5d1a001e6fe3d5bfd5,
-the dma of mmc1 was changed to edma_xbar and did not explain why it should
-not match the document.
-> Regards,
->
-> Tony
+When kasan_early_init() sets up the early zero shadow, it uses
+__set_pte_at(). On book3s/32, __set_pte_at() calls pte_update()
+when CONFIG_SMP is selected in order to ensure the preservation of
+_PAGE_HASHPTE in case of concurrent update of the PTE. But that's
+too early for mmu_has_feature(), so when
+CONFIG_JUMP_LABEL_FEATURE_CHECK_DEBUG is selected, mmu_has_feature()
+calls printk(). That's too early to call printk() because KASAN
+early zero shadow page is not set up yet. It leads to a deadlock.
+
+However, when kasan_early_init() is called, there is only one CPU
+running and no risk of concurrent PTE update. So __set_pte_at() can
+be called with the 'percpu' flag. With that flag set, the PTE is
+written directly instead of being written via pte_update().
+
+Reported-by: Erhard Furtner <erhard_f@mailbox.org>
+Fixes: 4291d085b0b0 ("powerpc/32s: Make pte_update() non atomic on 603 core")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/mm/kasan/init_32.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/powerpc/mm/kasan/init_32.c b/arch/powerpc/mm/kasan/init_32.c
+index f3e4d069e0ba..a70828a6d935 100644
+--- a/arch/powerpc/mm/kasan/init_32.c
++++ b/arch/powerpc/mm/kasan/init_32.c
+@@ -25,7 +25,7 @@ static void __init kasan_populate_pte(pte_t *ptep, pgprot_t prot)
+ 	int i;
+ 
+ 	for (i = 0; i < PTRS_PER_PTE; i++, ptep++)
+-		__set_pte_at(&init_mm, va, ptep, pfn_pte(PHYS_PFN(pa), prot), 0);
++		__set_pte_at(&init_mm, va, ptep, pfn_pte(PHYS_PFN(pa), prot), 1);
+ }
+ 
+ int __init kasan_init_shadow_page_tables(unsigned long k_start, unsigned long k_end)
+-- 
+2.36.1
+

@@ -2,89 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E92562D49
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47140562D44
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235860AbiGAH5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 03:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54124 "EHLO
+        id S235931AbiGAH5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 03:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235876AbiGAH5K (ORCPT
+        with ESMTP id S235809AbiGAH5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 03:57:10 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4E36EE9D;
-        Fri,  1 Jul 2022 00:56:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656662219; x=1688198219;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=oJ2vnICUwtne88PFMe0rjtOFqlePFxic0JMa0J+skxs=;
-  b=JkldlvHE3ipCbm8Ol9dcAXFbuX7EPfc4NIvbFud5sDjkPH4RBHzbLd3r
-   O9262Sh+lHa+ecg/RpunYW7VsgFlbQ2eTtdfIgB0NV8p6tb6zKANn6p+b
-   3rEtmJGK1o7/StA2ytiEel9soU8vJ2eBpWBzEsNzVQ3pFJ6cKQtF4GTmF
-   jeu703btTPoZuAvQLKoaH6LEPO39yzHbU0kHqc+xaAauOmR3Sjr9iys3d
-   Ft8iO5LBQ18podetsnjP2HZW94EH6JrNGte1cDS6q5XjAYm2DCMCA0vZz
-   8+rNdeXQXOJre/2wIdABawCvcugc38PRq+2kflcQNuH6ivlnOiFAe1EZo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="262983846"
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="262983846"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 00:56:59 -0700
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="681309738"
-Received: from vibhutes-mobl.ger.corp.intel.com (HELO [10.213.192.227]) ([10.213.192.227])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 00:56:55 -0700
-Message-ID: <4c46e69e-9af7-3c20-7569-7a4b5897ec7d@linux.intel.com>
-Date:   Fri, 1 Jul 2022 08:56:53 +0100
+        Fri, 1 Jul 2022 03:57:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 773456EEBD
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:57:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656662221;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fIrKXBVyZdoDvQRp8apiHHZa1MCXdxr3bOtHIpyaBs4=;
+        b=QEObLUJKF+CjMaJT4p6+LELYTo5vf1X+ikpQSiOrA0WO+45TKbe1zTNmSKIpP2Qohcdcgm
+        Vk+vA5JdW3M2NuoBHhV1ffTfOlavxt8P4TmPpujwn6WzFw3ShL5+8kMBjjC3kA62bLpXed
+        nE8VCKwgPZVt0agSTMRP0CTXPSpT/z0=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-583-ubQ2WoAdPzq3RAaZrl5r0w-1; Fri, 01 Jul 2022 03:56:59 -0400
+X-MC-Unique: ubQ2WoAdPzq3RAaZrl5r0w-1
+Received: by mail-lf1-f69.google.com with SMTP id z13-20020a056512308d00b004811694f893so787766lfd.6
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 00:56:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:message-id:date:mime-version:user-agent:cc
+         :subject:content-language:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=fIrKXBVyZdoDvQRp8apiHHZa1MCXdxr3bOtHIpyaBs4=;
+        b=WHUULpP7x/ihCJkatEyUDTqCX0GkWBJT4X7nVEgh+UBEGhF6AT8uUY1WA+lsBB0aQA
+         xKMZXIlUh7Ewqkkn3v7q2rzMpGGB6AudY9peHqkKiQVC44q/VmvyBHRbvoPuQIBw6uuN
+         sdDXkWECAWiA2NdPDaK4WhAtHqP8nAlEpMQ5rPSxWUzf+rI2mTBb0PZz/lanOWpWu3+s
+         fjtxTFf4TL05xyEgFBD12GfoIBtVuthhT+aSmAbty1sJyBFKo+TXRwOGnofULITe43oQ
+         u1fjZSDnZv165Wn0BUHp9jRuJSmt3HHc43i0t+4/VrFepBDyA5V6anoXNM7WnJMWp+C3
+         oZGQ==
+X-Gm-Message-State: AJIora8rwZ0SbTGJb9IvpMujEqk3Obcte8QT6y5hh66ibXvcJlmd2rCU
+        ut3P28QDwUD6M6U7JM3WtX9C2yer3f0WhB7yDbQbM4xGBQRCLd/Nbf7F36R4guC2o0tlfdlkmsZ
+        tQlERZV0U/00CmzYJpDDVFo4o
+X-Received: by 2002:a2e:8787:0:b0:25b:efd1:2064 with SMTP id n7-20020a2e8787000000b0025befd12064mr6527171lji.369.1656662218018;
+        Fri, 01 Jul 2022 00:56:58 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vJT4/sVGIa3RjZL7cGY2WKjApKKjg8AkzsZnAqMr1q7eNiOijDvdHMIC1bGPpnOayRioNyrA==
+X-Received: by 2002:a2e:8787:0:b0:25b:efd1:2064 with SMTP id n7-20020a2e8787000000b0025befd12064mr6527159lji.369.1656662217812;
+        Fri, 01 Jul 2022 00:56:57 -0700 (PDT)
+Received: from [192.168.0.50] (87-59-106-155-cable.dk.customer.tdc.net. [87.59.106.155])
+        by smtp.gmail.com with ESMTPSA id v10-20020a2e924a000000b0025bc62c1cafsm1959760ljg.44.2022.07.01.00.56.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Jul 2022 00:56:57 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <728b4c15-8114-e253-5d45-a5610882f891@redhat.com>
+Date:   Fri, 1 Jul 2022 09:56:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH 5/6] drm/i915/gt: Serialize GRDOM access between multiple
- engine resets
+Cc:     brouer@redhat.com, jbrouer@redhat.com, hawk@kernel.org,
+        ilias.apalodimas@linaro.org, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, lorenzo@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, lipeng321@huawei.com, chenhao288@hisilicon.com
+Subject: Re: [PATCH net-next v2] net: page_pool: optimize page pool page
+ allocation in NUMA scenario
 Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Matthew Brost <matthew.brost@intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Mika Kuoppala <mika.kuoppala@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Thomas Hellstrom <thomas.hellstrom@intel.com>,
-        Chris Wilson <chris.p.wilson@intel.com>,
-        Fei Yang <fei.yang@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Dave Airlie <airlied@redhat.com>, stable@vger.kernel.org,
-        Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>,
-        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
-        John Harrison <John.C.Harrison@intel.com>,
-        Bruce Chang <yu.bruce.chang@intel.com>
-References: <cover.1655306128.git.mchehab@kernel.org>
- <5ee647f243a774927ec328bfca8212abc4957909.1655306128.git.mchehab@kernel.org>
- <YrRLyg1IJoZpVGfg@intel.intel>
- <160e613f-a0a8-18ff-5d4b-249d4280caa8@linux.intel.com>
- <20220627110056.6dfa4f9b@maurocar-mobl2>
- <d79492ad-b99a-f9a9-f64a-52b94db68a3b@linux.intel.com>
- <20220629172955.64ffb5c3@maurocar-mobl2>
- <7e6a9a27-7286-7f21-7fec-b9832b93b10c@linux.intel.com>
- <20220630083256.35a56cb1@sal.lan>
- <9477a8f1-3535-ed7f-c491-9ca9f27a10dc@linux.intel.com>
- <20220630170134.3f89e0a3@sal.lan>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20220630170134.3f89e0a3@sal.lan>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Guangbin Huang <huangguangbin2@huawei.com>
+References: <20220629133305.15012-1-huangguangbin2@huawei.com>
+ <20220630211534.6d1c32da@kernel.org>
+In-Reply-To: <20220630211534.6d1c32da@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -92,223 +89,26 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 30/06/2022 17:01, Mauro Carvalho Chehab wrote:
-> Em Thu, 30 Jun 2022 09:12:41 +0100
-> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> escreveu:
+On 01/07/2022 06.15, Jakub Kicinski wrote:
+> On Wed, 29 Jun 2022 21:33:05 +0800 Guangbin Huang wrote:
+>> +#ifdef CONFIG_NUMA
+>> +	pref_nid = (pool->p.nid == NUMA_NO_NODE) ? numa_mem_id() : pool->p.nid;
+>> +#else
+>> +	/* Ignore pool->p.nid setting if !CONFIG_NUMA */
+>> +	pref_nid = NUMA_NO_NODE;
+>> +#endif
 > 
->> On 30/06/2022 08:32, Mauro Carvalho Chehab wrote:
->>> Em Wed, 29 Jun 2022 17:02:59 +0100
->>> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> escreveu:
->>>    
->>>> On 29/06/2022 16:30, Mauro Carvalho Chehab wrote:
->>>>> On Tue, 28 Jun 2022 16:49:23 +0100
->>>>> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
->>>>>       
->>>>>> .. which for me means a different patch 1, followed by patch 6 (moved
->>>>>> to be patch 2) would be ideal stable material.
->>>>>>
->>>>>> Then we have the current patch 2 which is open/unknown (to me at least).
->>>>>>
->>>>>> And the rest seem like optimisations which shouldn't be tagged as fixes.
->>>>>>
->>>>>> Apart from patch 5 which should be cc: stable, but no fixes as agreed.
->>>>>>
->>>>>> Could you please double check if what I am suggesting here is feasible
->>>>>> to implement and if it is just send those minimal patches out alone?
->>>>>
->>>>> Tested and porting just those 3 patches are enough to fix the Broadwell
->>>>> bug.
->>>>>
->>>>> So, I submitted a v2 of this series with just those. They all need to
->>>>> be backported to stable.
->>>>
->>>> I would really like to give even a smaller fix a try. Something like, although not even compile tested:
->>>>
->>>> commit 4d5e94aef164772f4d85b3b4c1a46eac9a2bd680
->>>> Author: Chris Wilson <chris.p.wilson@intel.com>
->>>> Date:   Wed Jun 29 16:25:24 2022 +0100
->>>>
->>>>        drm/i915/gt: Serialize TLB invalidates with GT resets
->>>>        
->>>>        Avoid trying to invalidate the TLB in the middle of performing an
->>>>        engine reset, as this may result in the reset timing out. Currently,
->>>>        the TLB invalidate is only serialised by its own mutex, forgoing the
->>>>        uncore lock, but we can take the uncore->lock as well to serialise
->>>>        the mmio access, thereby serialising with the GDRST.
->>>>        
->>>>        Tested on a NUC5i7RYB, BIOS RYBDWi35.86A.0380.2019.0517.1530 with
->>>>        i915 selftest/hangcheck.
->>>>        
->>>>        Cc: stable@vger.kernel.org
->>>>        Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
->>>>        Reported-by: Mauro Carvalho Chehab <mchehab@kernel.org>
->>>>        Tested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
->>>>        Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
->>>>        Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
->>>>        Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
->>>>        Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
->>>>        Reviewed-by: Andi Shyti <andi.shyti@intel.com>
->>>>        Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
->>>>        Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
->>>>
->>>> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
->>>> index 8da3314bb6bf..aaadd0b02043 100644
->>>> --- a/drivers/gpu/drm/i915/gt/intel_gt.c
->>>> +++ b/drivers/gpu/drm/i915/gt/intel_gt.c
->>>> @@ -952,7 +952,23 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->>>>            mutex_lock(&gt->tlb_invalidate_lock);
->>>>            intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
->>>>     
->>>> +       spin_lock_irq(&uncore->lock); /* serialise invalidate with GT reset */
->>>> +
->>>> +       for_each_engine(engine, gt, id) {
->>>> +               struct reg_and_bit rb;
->>>> +
->>>> +               rb = get_reg_and_bit(engine, regs == gen8_regs, regs, num);
->>>> +               if (!i915_mmio_reg_offset(rb.reg))
->>>> +                       continue;
->>>> +
->>>> +               intel_uncore_write_fw(uncore, rb.reg, rb.bit);
->>>> +       }
->>>> +
->>>> +       spin_unlock_irq(&uncore->lock);
->>>> +
->>>>            for_each_engine(engine, gt, id) {
->>>> +               struct reg_and_bit rb;
->>>> +
->>>>                    /*
->>>>                     * HW architecture suggest typical invalidation time at 40us,
->>>>                     * with pessimistic cases up to 100us and a recommendation to
->>>> @@ -960,13 +976,11 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->>>>                     */
->>>>                    const unsigned int timeout_us = 100;
->>>>                    const unsigned int timeout_ms = 4;
->>>> -               struct reg_and_bit rb;
->>>>     
->>>>                    rb = get_reg_and_bit(engine, regs == gen8_regs, regs, num);
->>>>                    if (!i915_mmio_reg_offset(rb.reg))
->>>>                            continue;
->>>>     
->>>> -               intel_uncore_write_fw(uncore, rb.reg, rb.bit);
->>>>                    if (__intel_wait_for_register_fw(uncore,
->>>>                                                     rb.reg, rb.bit, 0,
->>>>                                                     timeout_us, timeout_ms,
->>>>   
->>>
->>> This won't work, as it is not serializing TLB cache invalidation with
->>> i915 resets. Besides that, this is more or less merging patches 1 and 3,
->>
->> Could you explain why you think it is not doing exactly that? In both
->> versions end result is TLB flush requests are under the uncore lock and
->> waits are outside it.
+> Please factor this out to a helper, this is a copy of the code from
+> page_pool_refill_alloc_cache() and #ifdefs are a little yuck.
 > 
-> Sure, but patch 2/3 (see v2) serializes i915 reset with TLB cache changes.
-> This is needed in order to fix the regression.
 
-Not "the" regression, and not even _a_ *regression*. 2/3 fixes an pre-existing and unrelated problem. Or only tangentially related if you want. 2/3 fixes a hang if two engine resets would happen to coincide. Nothing about TLB flushing.
+I would say simply use 'pool->p.nid' in the call to
+alloc_pages_bulk_array_node() and drop this optimization (that was
+copy-pasted from fast-path).
 
->>> placing patches with different rationales altogether. Upstream rule is
->>> to have one logical change per patch.
->>
->> I don't think it applies in this case. It is simply splitting into two
->> loops so lock can be held across all mmio writes. I think of it this way
->> - what is the rationale for sending only the first patch to stable? What
->> does it _fix_ on it's own?
-> 
-> There's no -stable rule enforcing that only one patch would be allowed,
-> nor saying that patches should be fold, doing multiple changes on as single
-> patch just due to "Fixes" tag.
+The optimization avoids one reading from memory compile time depending
+on CONFIG_NUMA.  It is *not* worth doing in this code path which is even
+named "slow" (__page_pool_alloc_pages_slow).
 
-Well if we want to be pedantic what do stable rules say about adding new features - is skipping idle engines (which is a software concept) a fix or a new optimisation?
+--Jesper
 
-> So, while several -stable fixes can be done on a single patch, there are
-> fixes that will require multiple patches. That's nothing wrong with that.
-
-Agreed. But the point of my argument is that a) 1st patch does not fix anything on it's own (in relation to the regression), b) is adding improvements which will just be extra work to backport to old kernels.
-
-> The only rule is that backports should follow what's merged upstream.
-> So, if, in order to fix a regression, multiple patches are needed upstream,
-> in principle, all of those can be backported if they fit at -stable rules.
-> 
-> As an example, once we backported a patch series on media that had ~20 patches,
-> addressing security issues at the media compat32 logic (media ioctls usually
-> pass structs and some with pointers). As the issue was discovered several
-> years after compat32 got introduced, those 22 patches (some containing
-> compat32 redesigns) had to be backported to all maintained LTS.
-> 
-> -
-> 
-> In this specific case, fixing the regression requires 3 logical changes:
-> 
-> 	1) Split the loop;
-> 	2) Add serialize logic to i915 reset;
-> 	3) use the same i915 reset spinlock to serialize TLB cache
-> 	   invalidation.
-> 
-> Neither one of those logical changes alone would solve the issue. That's
-> why I originally added the same Fixes: to the entire series: basically,
-> any Kernel that has the TLB patch backported will require those
-> three logical changes to be backported too.
-> 
-> That basically will follow what's there at the Kernel process docs:
-> 
-> 	"If your patch fixes a bug in a specific commit, e.g. you found an issue using
-> 	 ``git bisect``, please use the 'Fixes:' tag with the first 12 characters of
-> 	 the SHA-1 ID, and the one line summary."
-> 
-> 	Documentation/process/submitting-patches.rst
-> 
-> See, Fixes was originally introduced to be a hint to help stable
-> and distro maintainers to identify how far they need to backport
-> a patch. That's mainly why I placed fixes to the entire series.
-> Yet, the same will also happen, in practice, if we place:
-> 
-> 	Cc: stable@vger.kernel.org # Up to version 4.4
-> 
-> Greg, Sasha and others -stable/distro maintainers will also have a
-> (much less precise) hint about how far the backport is needed.
-> 
->>> If this works it would be least painful to backport. The other improvements can then be devoid of the fixes tag.
->>>
->>>   From backport PoV, it wouldn't make any difference applying one patch
->>> or two. See, intel_gt_invalidate_tlbs() function doesn't exist before
->>> changeset 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store"),
->>> so, it shouldn't have merge conflicts while backporting it, maybe except
->>> if some functions it calls (or parameters) have changed. On such case,
->>> the backport fix should be trivial, and the end result of backporting
->>> one folded patch or two would be the same.
->>
->> Yes a lot of things changed. Not least engine and GT pm code. Note that
->> TLB flushing was backported all the way to 4.4 so any hunk you don't
->> strictly need can and will bite you. I have attached a tarball of
->> patches for you to explore. :)
->> Regards,
-> 
-> Thanks! That's very helpful to check the amount of work. It makes easy
-> to use interdiff and (k)diff3 to check what changed.
-> 
->  From it, the differences between 5.4 and 5.16 at intel_gt_invalidate_tlbs()
-> are really trivial.
-> 
-> On 4.14, the function was added on a different file (intel_gem), and
-> there were a few more API differences, as only gen8 code is there,
-> but again, the changes are trivial: mostly macros/functions were renamed
-> and some function parameters changed.
-> 
->  From 4.9 to 4.14 there were also some changes but they also look trivial.
-> 
-> Kernel 4.4 has some other differences - the loop logic is different, and
-> there's a ring initialization function, but, as version 4.4 is not listed
-> anymore as LTS at kernel.org, we probably need to backport only up to
-> 4.9.
-> 
-> All the above should be affecting patch v2 1/3. Patches v2 2/3 and 3/3 just
-> have spin lock/unlock for the gt uncore spinlock. Those will very likely
-> require some work on Kernels 4.x, but folding (or not) the patches won't
-> really help.
-
-What about intel_engine_pm_is_awake, what will you do with that one?
-
-Regards,
-
-Tvrtko

@@ -2,63 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 655DB56346B
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 15:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 312805635FB
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiGANfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 09:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
+        id S233616AbiGAOkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 10:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGANfl (ORCPT
+        with ESMTP id S233331AbiGAOj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 09:35:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1775E15FD8
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 06:35:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD530B818DF
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 13:35:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62E4FC3411E;
-        Fri,  1 Jul 2022 13:35:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656682536;
-        bh=ea6K3pTQyXz3luSTBcUsdGmrd/UJfdlEaIKBRM6wfRs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PPzEhyUW63VZry9s8gydtS7CB76QvSbkSy60jM9NWt0V48/yT7YEA+C0kYucE6ygt
-         RzaQX7ciJKV49e1xjDQpYwAEmW/CymNA0q/FvuMOWDz9nBfnTEdN0xq3pciYS6fxFV
-         QPIFAXzEq2pskBXUKDc2V2vVmTOxHP14lFUakavNmd0uC7ttADuoSF3iPKALdmrGzk
-         KxZfgOd6PCyi7+Ica/pKQBvxaUI8VED09OpXC5TRqdgn9qwqUEOgB5P4k2gL0P8MJQ
-         jBBzVZZDL2PfXuBp3Q61l+eJRWNbqPFghST6mt6oI/7R1ahkdNQKIqUMXn2bOeMLRa
-         5Zn+RicnudBJg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1o7Go2-004b9k-5o;
-        Fri, 01 Jul 2022 14:35:34 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Hector Martin <marcan@marcan.st>, Jamie Iles <jamie@jamieiles.com>,
-        Matt Ranostay <mranostay@ti.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: [GIT PULL] irqchip fixes for 5.19, take #2
-Date:   Fri,  1 Jul 2022 14:35:31 +0100
-Message-Id: <20220701133531.1545319-1-maz@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 1 Jul 2022 10:39:58 -0400
+X-Greylist: delayed 1801 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 01 Jul 2022 07:39:06 PDT
+Received: from imap2.colo.codethink.co.uk (imap2.colo.codethink.co.uk [78.40.148.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6CA33E1B
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:39:05 -0700 (PDT)
+Received: from [167.98.27.226] (helo=[10.35.4.171])
+        by imap2.colo.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
+        id 1o7Go9-00077s-ML; Fri, 01 Jul 2022 14:35:41 +0100
+Message-ID: <4570f6d8-251f-2cdb-1ea6-c3a8d6bb9fcf@codethink.co.uk>
+Date:   Fri, 1 Jul 2022 14:35:41 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: tglx@linutronix.de, marcan@marcan.st, jamie@jamieiles.com, mranostay@ti.com, michal.simek@amd.com, robin.murphy@arm.com, weiyongjun1@huawei.com, linux-kernel@vger.kernel.org, kernel-team@android.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC PATCH] crypto: flush poison data
+Content-Language: en-GB
+To:     Corentin Labbe <clabbe@baylibre.com>, herbert@gondor.apana.org.au,
+        hch@lst.de, heiko@sntech.de
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev
+References: <20220701132735.1594822-1-clabbe@baylibre.com>
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+Organization: Codethink Limited.
+In-Reply-To: <20220701132735.1594822-1-clabbe@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,48 +45,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On 01/07/2022 14:27, Corentin Labbe wrote:
+> On my Allwinner D1 nezha, the sun8i-ce fail self-tests due to:
+> alg: skcipher: cbc-des3-sun8i-ce encryption overran dst buffer on test vector 0
+> 
+> In fact the buffer is not overran by device but by the dma_map_single() operation.
+> 
+> To prevent any corruption of the poisoned data, simply flush them before
+> giving the buffer to the tested driver.
+> 
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> ---
+> 
+> Hello
+> 
+> I put this patch as RFC, since this behavour happen only on non yet merged RISCV code.
+> (Mostly riscv: implement Zicbom-based CMO instructions + the t-head variant)
+> 
+> Regards
+> 
+>   crypto/testmgr.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/crypto/testmgr.c b/crypto/testmgr.c
+> index c59bd9e07978..187163e2e593 100644
+> --- a/crypto/testmgr.c
+> +++ b/crypto/testmgr.c
+> @@ -19,6 +19,7 @@
+>   #include <crypto/aead.h>
+>   #include <crypto/hash.h>
+>   #include <crypto/skcipher.h>
+> +#include <linux/cacheflush.h>
+>   #include <linux/err.h>
+>   #include <linux/fips.h>
+>   #include <linux/module.h>
+> @@ -205,6 +206,8 @@ static void testmgr_free_buf(char *buf[XBUFSIZE])
+>   static inline void testmgr_poison(void *addr, size_t len)
+>   {
+>   	memset(addr, TESTMGR_POISON_BYTE, len);
+> +	/* Be sure data is written to prevent corruption from some DMA sync */
+> +	flush_icache_range((unsigned long)addr, (unsigned long)addr + len);
+>   }
+>   
+>   /* Is the memory region still fully poisoned? */
 
-Here's a tiny set of fixes for 5.19. Most of it is on the cosmetic
-side of things, save for the GIC patch that fixes a regression on a
-platform with pretty funky firmware tables...
+why are you flushing the instruction cache and not the data-cache?
 
-Please pull,
+-- 
+Ben Dooks				http://www.codethink.co.uk/
+Senior Engineer				Codethink - Providing Genius
 
-	M.
-
-The following changes since commit 6fac824f40987a54a08dfbcc36145869d02e45b1:
-
-  irqchip/loongson-liointc: Use architecture register to get coreid (2022-06-10 08:57:19 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git tags/irqchip-fixes-5.19-2
-
-for you to fetch changes up to 1357d2a65601bc0afb221672d5a8f1649063a141:
-
-  irqchip/apple-aic: Make symbol 'use_fast_ipi' static (2022-07-01 14:26:13 +0100)
-
-----------------------------------------------------------------
-irqchip fixes for 5.19, take #2
-
-- Gracefully handle failure to request MMIO resources in the GICv3 driver
-
-- Make a static key static in the Apple AIC driver
-
-- Fix the Xilinx intc driver dependency on OF_ADDRESS
-
-----------------------------------------------------------------
-Jamie Iles (1):
-      irqchip/xilinx: Add explicit dependency on OF_ADDRESS
-
-Robin Murphy (1):
-      irqchip/gicv3: Handle resource request failure consistently
-
-Wei Yongjun (1):
-      irqchip/apple-aic: Make symbol 'use_fast_ipi' static
-
- drivers/irqchip/Kconfig         |  2 +-
- drivers/irqchip/irq-apple-aic.c |  2 +-
- drivers/irqchip/irq-gic-v3.c    | 41 +++++++++++++++++++++++++++++++----------
- 3 files changed, 33 insertions(+), 12 deletions(-)
+https://www.codethink.co.uk/privacy.html

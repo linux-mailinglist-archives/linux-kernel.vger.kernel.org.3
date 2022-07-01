@@ -2,114 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BDD563C26
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 00:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8692563C28
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 00:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbiGAWEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 18:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45418 "EHLO
+        id S231938AbiGAWFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 18:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbiGAWEN (ORCPT
+        with ESMTP id S231506AbiGAWFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 18:04:13 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37EB5A467;
-        Fri,  1 Jul 2022 15:04:12 -0700 (PDT)
-Received: from notapiano (unknown [194.36.25.35])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6321266016D9;
-        Fri,  1 Jul 2022 23:04:07 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656713050;
-        bh=FS8tHQQbEegKqv0OZKb+CidvdIdHGPU9aGVYrYy84Bk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XDeAqTDdKBq9w9PKOo5APAaJRkM442HanA7T45CaCWWp82p7InVtQOceYpZrCFqsQ
-         EyPfmpGQ/P5jugbjirM98XD9/OWPZMpphSYFS+oVcOQbowVj7OcniOWGEopP2HcCL3
-         SDmAX00W2lcJHciYY6sucsAnhLyNR7vdLhFNDdYqNu/WpFDLs4clzNuJFkzomiylm3
-         ADhkbZ4IPyFjNd641IsaGIrlPWzApc/b525SbrFjlPUC4lss3iN8kIeUiYgZWnA3jb
-         K3dc8KMeM06rgEoPOMjUR1ykAezPMkWsM5tiu2Fvl0OHJ7A5S9+dq4OKPyEuSS3/Wk
-         pyjjdNMS4lm3Q==
-Date:   Fri, 1 Jul 2022 18:04:02 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, hsinyi@chromium.org,
-        allen-kh.cheng@mediatek.com, gtk3@inbox.ru, luca@z3ntu.xyz,
-        sam.shih@mediatek.com, sean.wang@mediatek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, wenst@chromium.org
-Subject: Re: [PATCH 01/11] dt-bindings: arm: mediatek: Add MT8195 Cherry
- Tomato Chromebooks
-Message-ID: <20220701220402.v4g6u75mzptb2fly@notapiano>
-References: <20220630153316.308767-1-angelogioacchino.delregno@collabora.com>
- <20220630153316.308767-2-angelogioacchino.delregno@collabora.com>
+        Fri, 1 Jul 2022 18:05:18 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC1C5C9CA
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 15:05:17 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id x3so6014663lfd.2
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 15:05:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=26m3QrqDOEetx8CkGkMNVENfZC6JApBC8b4D3WMfsqY=;
+        b=PHG7MYwuMLYjj6+14AcnjpSzpFo5v7V6cjn2MuZ887lLw24RKH8Av0rnK3qntWEsWq
+         P/DkZdiv3ZI+1US/j7Zn+xQbLqMQm4kJ4aopjXaHZQPzo76ycGzdyL0IQpaPf+3GLaDi
+         qtA7fciGyvzv9jLr4ocVSBm0OmY14IFNAD5tSL7aqyDR8+5toM/8Re3hTkIeNGnG7L/B
+         Ipv9Zuvxn6AYdzlfwzPftqUvsU5PaFXAF64C2bvQjpYeTMPB0KcnkJJCp2eS0ucTjIts
+         9HQUoXe2BtbWiQ0p5bhqebbzpF1jAsnMsMwcGcd4Yf+jXaSGLoQHUVcEnjNpnHAZ54lb
+         Mn4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=26m3QrqDOEetx8CkGkMNVENfZC6JApBC8b4D3WMfsqY=;
+        b=WmNKTXxlgFx+XfZ4fr8GG+YMwR9jfU6xTJNJ4b2k0aWpoX3Q/WuT6sk2U8oOrawix9
+         HDr9lkuIzw/XwZkz2Hr9tyUO1AdNnjQmAf2MfRqu5xDf/4D13JK3c4NYWF/V2Xannsx0
+         HybZQ2jYRCVhl0ZnA+F5tuUijJrpQsNo9mDEaJFqpkBcQMP7/GDb0hHA+Qyjl/uZTiNG
+         HYER/QWs+ixQnOCZgwPFmx6rYbyoWLvSCt9IVNwTtyaanfflohDZBjuK2hZCSIzZKiPf
+         nuwNukfc68CZerWfrFBMaNOszNm+QG/7LIChsVO9ErtKu4Xzwu3jGXJYFxqbVnUQFyy4
+         zIRw==
+X-Gm-Message-State: AJIora/Wez2Wd/cXM6v9E5kofhpZssyduEvgTjLH0TMcYjh1+NytmJMO
+        fhipTBB10iBmkm656MDgL5xMUe2qjHlJFeJNxrPJhQ==
+X-Google-Smtp-Source: AGRyM1sk/RELW5TrL/N4TtgXDUTQaosHEdmojIwAlf799F2Uauf6sAJCI6KQBsdsb6ppiSECv5V0YqEKpAtb2jETcaA=
+X-Received: by 2002:ac2:4d22:0:b0:47f:65b5:35ec with SMTP id
+ h2-20020ac24d22000000b0047f65b535ecmr10770649lfk.432.1656713115906; Fri, 01
+ Jul 2022 15:05:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220630153316.308767-2-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220316213118.2352683-1-morbo@google.com> <20220321174912.164113-1-morbo@google.com>
+ <Ypp3MA9s01bWrm2i@penguin>
+In-Reply-To: <Ypp3MA9s01bWrm2i@penguin>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 1 Jul 2022 15:05:03 -0700
+Message-ID: <CAKwvOdnwCVFpMgOih4bf1RAzb6n0Q0+AqaHZxGfnafT+XzAL4A@mail.gmail.com>
+Subject: Re: [PATCH] soc: qcom: smem: use correct format characters
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Bill Wendling <morbo@google.com>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Justin Stitt <jstitt007@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 05:33:06PM +0200, AngeloGioacchino Del Regno wrote:
-> Document board compatibles for the MT8195 Cherry platform's
-> Tomato Chromebooks, at the time of writing composed of four
-> revisions (r0, r1, r2, r3-r4).
+Hi Arnd,
+Would you be able to merge this patch through the arm-soc tree? The
+maintainers appear to be MIA here.
+https://lore.kernel.org/lkml/20220321174912.164113-1-morbo@google.com/
 
-Though r0 is not added in this series?
+On Fri, Jun 3, 2022 at 2:03 PM Justin Stitt <jstitt007@gmail.com> wrote:
+>
+> On Mon, Mar 21, 2022 at 10:49:12AM -0700, Bill Wendling wrote:
+> > When compiling with -Wformat, clang emits the following warnings:
+> >
+> > drivers/soc/qcom/smem.c:847:41: warning: format specifies type 'unsigned
+> > short' but the argument has type 'unsigned int' [-Wformat]
+> >                         dev_err(smem->dev, "bad host %hu\n", remote_host);
+> >                                                      ~~~     ^~~~~~~~~~~
+> >                                                      %u
+> > ./include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+> >         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+> >                                                                ~~~     ^~~~~~~~~~~
+> > ./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+> >                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+> >                              ~~~    ^~~~~~~~~~~
+> > drivers/soc/qcom/smem.c:852:47: warning: format specifies type 'unsigned
+> > short' but the argument has type 'unsigned int' [-Wformat]
+> >                         dev_err(smem->dev, "duplicate host %hu\n", remote_host);
+> >                                                            ~~~     ^~~~~~~~~~~
+> >                                                            %u
+> > ./include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+> >         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+> >                                                                ~~~     ^~~~~~~~~~~
+> > ./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+> >                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+> >                              ~~~    ^~~~~~~~~~~
+> >
+> > The types of these arguments are unconditionally defined, so this patch
+> > updates the format character to the correct one and change type of
+> > remote_host to "u16" to match with other types.
+> >
+>
+> This patch LGTM and fixes -Wformat warning.
+>
+> Tested-by: Justin Stitt <jstitt007@gmail.com>
+> Reviewed-by: Justin Stitt <jstitt007@gmail.com>
+>
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> > Signed-off-by: Bill Wendling <morbo@google.com>
+> > ---
+> >  drivers/soc/qcom/smem.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
+> > index e2057d8f1eff..9dd325df5682 100644
+> > --- a/drivers/soc/qcom/smem.c
+> > +++ b/drivers/soc/qcom/smem.c
+> > @@ -819,7 +819,7 @@ qcom_smem_enumerate_partitions(struct qcom_smem *smem, u16 local_host)
+> >       struct smem_partition_header *header;
+> >       struct smem_ptable_entry *entry;
+> >       struct smem_ptable *ptable;
+> > -     unsigned int remote_host;
+> > +     u16 remote_host;
+> >       u16 host0, host1;
+> >       int i;
+> >
+> > @@ -844,12 +844,12 @@ qcom_smem_enumerate_partitions(struct qcom_smem *smem, u16 local_host)
+> >                       continue;
+> >
+> >               if (remote_host >= SMEM_HOST_COUNT) {
+> > -                     dev_err(smem->dev, "bad host %hu\n", remote_host);
+> > +                     dev_err(smem->dev, "bad host %u\n", remote_host);
+> >                       return -EINVAL;
+> >               }
+> >
+> >               if (smem->partitions[remote_host]) {
+> > -                     dev_err(smem->dev, "duplicate host %hu\n", remote_host);
+> > +                     dev_err(smem->dev, "duplicate host %u\n", remote_host);
+> >                       return -EINVAL;
+> >               }
+> >
+> > --
+> > 2.35.1.894.gb6a874cedc-goog
+> >
+> >
+>
 
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  Documentation/devicetree/bindings/arm/mediatek.yaml | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
-> index dd6c6e8011f9..3e0afa17ed2e 100644
-> --- a/Documentation/devicetree/bindings/arm/mediatek.yaml
-> +++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
-> @@ -144,6 +144,19 @@ properties:
->            - const: google,spherion-rev0
->            - const: google,spherion
->            - const: mediatek,mt8192
 
-Angelo, this patch is depending on the patch from the asurada-spherion series
-[1] to apply. Since this isn't the case for patch 2 as well, I assume this was
-a mistake. And it does seem better to keep them independent.
-
-[1] https://lore.kernel.org/all/20220629155956.1138955-2-nfraprado@collabora.com/
-
+-- 
 Thanks,
-Nícolas
-
-> +      - description: Google Tomato (Acer Chromebook Spin 513)
-> +        items:
-> +          - enum:
-> +              - google,tomato-rev2
-> +              - google,tomato-rev1
-> +          - const: google,tomato
-> +          - const: mediatek,mt8195
-> +      - description: Google Tomato (rev3 - 4)
-> +        items:
-> +          - const: google,tomato-rev4
-> +          - const: google,tomato-rev3
-> +          - const: google,tomato
-> +          - const: mediatek,mt8195
->        - items:
->            - enum:
->                - mediatek,mt8186-evb
-> -- 
-> 2.35.1
-> 
+~Nick Desaulniers

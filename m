@@ -2,121 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C645636F0
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B125636F2
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbiGAPbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 11:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57570 "EHLO
+        id S231695AbiGAPbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 11:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiGAPbU (ORCPT
+        with ESMTP id S229559AbiGAPba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 11:31:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CC1D11D;
-        Fri,  1 Jul 2022 08:31:19 -0700 (PDT)
-Received: from notapiano (unknown [193.27.14.116])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 1 Jul 2022 11:31:30 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88118D11D;
+        Fri,  1 Jul 2022 08:31:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5210F660194C;
-        Fri,  1 Jul 2022 16:31:16 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656689478;
-        bh=z052kP4hfB8gSwGmauqevNpl/h4dfkQWDsl3Df3UJEA=;
+        by sin.source.kernel.org (Postfix) with ESMTPS id D4ACDCE3403;
+        Fri,  1 Jul 2022 15:31:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C23C3411E;
+        Fri,  1 Jul 2022 15:31:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656689485;
+        bh=rrJCf3vJgrQJ+YDVNbRHrGoO6qH/+gt0pSDAm3rT19g=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ie+CqVG7TZ1FdMjN8qXgzQKJ5XPLxMvIDk5BuEFxgGtv7A1mgat8nsFLiRVWMw6L8
-         bnkTSzr8FRMZZtWQc+ywHUngWZFgurCK/Ysq7DxkQyCe0/b8GnDZuunLAaHfxMDQqT
-         xogXa0h7rNiWHWmw/GtwTZh8fiTHpVdQJtCEKxQc4+VEp7X9h/rR5mg8s3fzBzWUQt
-         PhGunL8AAgW8aHMu2T1PPm1bJf+9P2teAWWHlJVLgGD+rS5Nsd/ZCHW1Oz08bJEUhf
-         RWTq3HaC0CcFe12HXJ63XtMvnshZzbvMzuUb7C1tIlkQ9aV9P2+v8gFV8O4cvEVDSJ
-         FC7YVe2eafc8g==
-Date:   Fri, 1 Jul 2022 11:31:11 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, hsinyi@chromium.org,
-        allen-kh.cheng@mediatek.com, gtk3@inbox.ru, luca@z3ntu.xyz,
-        sam.shih@mediatek.com, sean.wang@mediatek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, wenst@chromium.org
-Subject: Re: [PATCH 01/11] dt-bindings: arm: mediatek: Add MT8195 Cherry
- Tomato Chromebooks
-Message-ID: <20220701153111.glbd6gophzipwtjk@notapiano>
-References: <20220630153316.308767-1-angelogioacchino.delregno@collabora.com>
- <20220630153316.308767-2-angelogioacchino.delregno@collabora.com>
+        b=MXHcGY+Dr77BDpSoUIpjZp4rArDlJe/hjm8pDZgh5x1cHiDrbv5kz7bpN8pnCYXb4
+         oyJ8vFNNdv0eeLJnQz8qKDx4LTXwQzB4QmQoEO0fRFbIm4kAFJzL3DmigVjQra44tM
+         p+V6sNBTW3rVyrOlGdVTrRCZ3UseXfNZOZv2NAGgrKGLPQ8GOhlWDuPqGLaFr4XWLB
+         C50zr7dNVZlnEldHuZqQukkvhQ2sbFvOaOGq0Z87GAYgSzNbuNLYngaFmRxkEdTnWA
+         O6CegvVz8WGaBcPUE2h/4eKH6ZNmVdUNdwZqPoZn2CZhJAVQ5yQnuAxzCMVtGAQffp
+         6mgP8o299Z8dg==
+Date:   Fri, 1 Jul 2022 08:31:23 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: Re: [PATCH 5.15 02/28] clocksource/drivers/ixp4xx: remove __init
+ from ixp4xx_timer_setup()
+Message-ID: <Yr8TSxroBaL3oRDV@dev-arch.thelio-3990X>
+References: <20220630133232.926711493@linuxfoundation.org>
+ <20220630133233.000575254@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220630153316.308767-2-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220630133233.000575254@linuxfoundation.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 05:33:06PM +0200, AngeloGioacchino Del Regno wrote:
-> Document board compatibles for the MT8195 Cherry platform's
-> Tomato Chromebooks, at the time of writing composed of four
-> revisions (r0, r1, r2, r3-r4).
+Hi Greg,
+
+On Thu, Jun 30, 2022 at 03:46:58PM +0200, Greg Kroah-Hartman wrote:
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ixp4xx_timer_setup is exported, and so can not be an __init function.
+> Remove the __init marking as the build system is rightfully claiming
+> this is an error in older kernels.
+> 
+> This is fixed "properly" in commit 41929c9f628b
+> ("clocksource/drivers/ixp4xx: Drop boardfile probe path") but that can
+> not be backported to older kernels as the reworking of the IXP4xx
+> codebase is not suitable for stable releases.
+> 
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+This patch causes the following warnings with clang when building
+ARCH=arm allmodconfig on 5.15, 5.10, and 5.4. I am surprised nobody else
+saw them.
+
+  WARNING: modpost: vmlinux.o(.text+0x1219ccc): Section mismatch in reference from the function ixp4xx_timer_register() to the function .init.text:sched_clock_register()
+  The function ixp4xx_timer_register() references
+  the function __init sched_clock_register().
+  This is often because ixp4xx_timer_register lacks a __init
+  annotation or the annotation of sched_clock_register is wrong.
+
+  WARNING: modpost: vmlinux.o(.text+0x1219cf4): Section mismatch in reference from the function ixp4xx_timer_register() to the function .init.text:register_current_timer_delay()
+  The function ixp4xx_timer_register() references
+  the function __init register_current_timer_delay().
+  This is often because ixp4xx_timer_register lacks a __init
+  annotation or the annotation of register_current_timer_delay is wrong.
+
+I think it would just be better to remove the export of
+ixp4xx_timer_setup(), rather than removing __init, as it is only called
+in arch/arm/mach-ixp4xx/common.c, which has to be built into the kernel
+image as it is 'obj-y' in arch/arm/mach-ixp4xx/Makefile.
+
+Cheers,
+Nathan
+
 > ---
->  Documentation/devicetree/bindings/arm/mediatek.yaml | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+>  drivers/clocksource/mmio.c                 |    2 +-
+>  drivers/clocksource/timer-ixp4xx.c         |   10 ++++------
+>  include/linux/platform_data/timer-ixp4xx.h |    5 ++---
+>  3 files changed, 7 insertions(+), 10 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
-> index dd6c6e8011f9..3e0afa17ed2e 100644
-> --- a/Documentation/devicetree/bindings/arm/mediatek.yaml
-> +++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
-> @@ -144,6 +144,19 @@ properties:
->            - const: google,spherion-rev0
->            - const: google,spherion
->            - const: mediatek,mt8192
-> +      - description: Google Tomato (Acer Chromebook Spin 513)
-
-Hi Angelo,
-
-searching for "Acer Chromebook Spin 513" I found that there are two different
-chromebooks:
-
-https://www.acer.com/ac/en/US/content/series/acerchromebookspin513
-https://www.acer.com/ac/en/GB/content/series/acerchromebookspin513cp5132h
-
-The first one is a Qualcomm based one, while the second is mt8195-based, so I
-assume that's Tomato.
-
-They can be telled apart by the model name though: the Qualcomm one is
-"CP513-1H", while Tomato is "CP513-2H". So I suggest to add the "CP513-2H" here
-in the description, as well as in the cover letter, to avoid confusion between
-the two.
-
-Thanks,
-Nícolas
-
-> +        items:
-> +          - enum:
-> +              - google,tomato-rev2
-> +              - google,tomato-rev1
-> +          - const: google,tomato
-> +          - const: mediatek,mt8195
-> +      - description: Google Tomato (rev3 - 4)
-> +        items:
-> +          - const: google,tomato-rev4
-> +          - const: google,tomato-rev3
-> +          - const: google,tomato
-> +          - const: mediatek,mt8195
->        - items:
->            - enum:
->                - mediatek,mt8186-evb
-> -- 
-> 2.35.1
+> --- a/drivers/clocksource/mmio.c
+> +++ b/drivers/clocksource/mmio.c
+> @@ -46,7 +46,7 @@ u64 clocksource_mmio_readw_down(struct c
+>   * @bits:	Number of valid bits
+>   * @read:	One of clocksource_mmio_read*() above
+>   */
+> -int __init clocksource_mmio_init(void __iomem *base, const char *name,
+> +int clocksource_mmio_init(void __iomem *base, const char *name,
+>  	unsigned long hz, int rating, unsigned bits,
+>  	u64 (*read)(struct clocksource *))
+>  {
+> --- a/drivers/clocksource/timer-ixp4xx.c
+> +++ b/drivers/clocksource/timer-ixp4xx.c
+> @@ -161,9 +161,8 @@ static int ixp4xx_resume(struct clock_ev
+>   * We use OS timer1 on the CPU for the timer tick and the timestamp
+>   * counter as a source of real clock ticks to account for missed jiffies.
+>   */
+> -static __init int ixp4xx_timer_register(void __iomem *base,
+> -					int timer_irq,
+> -					unsigned int timer_freq)
+> +static int ixp4xx_timer_register(void __iomem *base, int timer_irq,
+> +				 unsigned int timer_freq)
+>  {
+>  	struct ixp4xx_timer *tmr;
+>  	int ret;
+> @@ -269,9 +268,8 @@ builtin_platform_driver(ixp4xx_timer_dri
+>   * @timer_irq: Linux IRQ number for the timer
+>   * @timer_freq: Fixed frequency of the timer
+>   */
+> -void __init ixp4xx_timer_setup(resource_size_t timerbase,
+> -			       int timer_irq,
+> -			       unsigned int timer_freq)
+> +void ixp4xx_timer_setup(resource_size_t timerbase, int timer_irq,
+> +			unsigned int timer_freq)
+>  {
+>  	void __iomem *base;
+>  
+> --- a/include/linux/platform_data/timer-ixp4xx.h
+> +++ b/include/linux/platform_data/timer-ixp4xx.h
+> @@ -4,8 +4,7 @@
+>  
+>  #include <linux/ioport.h>
+>  
+> -void __init ixp4xx_timer_setup(resource_size_t timerbase,
+> -			       int timer_irq,
+> -			       unsigned int timer_freq);
+> +void ixp4xx_timer_setup(resource_size_t timerbase, int timer_irq,
+> +			unsigned int timer_freq);
+>  
+>  #endif
+> 
+> 
 > 

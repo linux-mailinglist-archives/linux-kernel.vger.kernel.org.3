@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99CF6563637
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A345F56363D
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233500AbiGAOxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 10:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
+        id S233711AbiGAO4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 10:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232350AbiGAOxx (ORCPT
+        with ESMTP id S233645AbiGAO4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 10:53:53 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943C41838F
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:53:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656687232; x=1688223232;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6MNK+ZtSbcwXSIkZAqTLf+OhS7G7X3GCEGjl/zZ7lXg=;
-  b=imtptmoZVmRP1GG6QRS09uJ3tdowFfYstMUVHsY39uuTbli+TlVjccrD
-   PTsXw906ru9u6kK83Jz4ZN8KFfWSHGZMnD5HCpwePufJYkEOJHRoP2sXS
-   vtCoAzph+Uxt6GsXYocl9ERjYpe2onnVuDi4d719gtSCLt1/hPEl2DyJL
-   M=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Jul 2022 07:53:52 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 07:53:52 -0700
-Received: from [10.216.41.49] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 1 Jul 2022
- 07:53:49 -0700
-Message-ID: <50bb39d7-8207-31e2-0a7d-99c5d2b3c8a8@quicinc.com>
-Date:   Fri, 1 Jul 2022 20:23:45 +0530
+        Fri, 1 Jul 2022 10:56:01 -0400
+Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75B82CDDC
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:55:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1656687325; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=FiEaSlyeB5dJSM7DRWxy7RLVHSOSwxAuUQwWW/z+v3/iTTBRgQqhqjhn8WsmlaiZdMhy0qQ8Wxt4An/fhPhMXhy3gm7t8kCCus+apZY+9UDadMbP05nMLMOoG6dgIlEkm5lrndF7s2iyaQmkpgdN0QDKFwoAImnDTzZNHsSxq5o=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1656687325; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=CrcF49UEX8SWd4LvC7g+h7rckFp6IPoWnRfYza7Wpf4=; 
+        b=EQJdwhLyt76VZ7lKH/G1DVNEeFyuhp2Kdj4E61jM1HYf/eu/gw1/lcd3LEp9FmCjJjgs0kp60bKQddBpG4NO0EQl7lCabNdTZWEyRWQwUIwinocRC/TWoamlGroVKDrnEC9R6i3uimRN0bEnjct3DWMxjIVjYLXIDiIHzN3i4s0=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1656687325;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+        bh=CrcF49UEX8SWd4LvC7g+h7rckFp6IPoWnRfYza7Wpf4=;
+        b=QB2xsFvTFpkZpGWLYG/6EoL1vFDTxljo0BxBdEabq/ZUrVzoHxexceL2nc4VXXJh
+        UW//enYAdJiTYS7yuE98h10sTM9umYD6qmp8rljEBDEniUJmAUWr7WPmNk2E8B3C9dO
+        05iAWpaiLEtNxDVZW/OK3q3QB9LZ2+z0tPD6iSTU=
+Received: from localhost.localdomain (103.250.137.221 [103.250.137.221]) by mx.zoho.in
+        with SMTPS id 1656687324349795.6718155316092; Fri, 1 Jul 2022 20:25:24 +0530 (IST)
+From:   Siddh Raman Pant <code@siddh.me>
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-wireless <linux-wireless@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees 
+        <linux-kernel-mentees@lists.linuxfoundation.org>
+Message-ID: <20220701145423.53208-1-code@siddh.me>
+Subject: [PATCH] net: Fix UAF in ieee80211_scan_rx()
+Date:   Fri,  1 Jul 2022 20:24:23 +0530
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v5] devcoredump : Serialize devcd_del work
-Content-Language: en-US
-To:     Johannes Berg <johannes@sipsolutions.net>
-CC:     <linux-kernel@vger.kernel.org>, <tglx@linutronix.de>,
-        <sboyd@kernel.org>, <rafael@kernel.org>, <keescook@chromium.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-References: <1653660220-19197-1-git-send-email-quic_mojha@quicinc.com>
- <YrmsggY7L6E+LWJ+@kroah.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <YrmsggY7L6E+LWJ+@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.47.97.222)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,68 +64,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks @greg.
+ieee80211_scan_rx() tries to access scan_req->flags after a null check
+(see line 303 of mac80211/scan.c), but ___cfg80211_scan_done() uses
+kfree() on the scan_req (see line 991 of wireless/scan.c).
 
-Hi @johannes,
+This results in a UAF.
 
-Could you review this patch?
+ieee80211_scan_rx() is called inside a RCU read-critical section
+initiated by ieee80211_rx_napi() (see line 5043 of mac80211/rx.c).
 
--Mukesh
+Thus, add an rcu_head to the scan_req struct so as to use kfree_rcu()
+instead of kfree() so that we don't free during the critical section.
 
-On 6/27/2022 6:41 PM, Greg KH wrote:
-> On Fri, May 27, 2022 at 07:33:40PM +0530, Mukesh Ojha wrote:
->> In following scenario(diagram), when one thread X running dev_coredumpm()
->> adds devcd device to the framework which sends uevent notification to
->> userspace and another thread Y reads this uevent and call to
->> devcd_data_write() which eventually try to delete the queued timer that
->> is not initialized/queued yet.
->>
->> So, debug object reports some warning and in the meantime, timer is
->> initialized and queued from X path. and from Y path, it gets reinitialized
->> again and timer->entry.pprev=NULL and try_to_grab_pending() stucks.
->>
->> To fix this, introduce mutex and a boolean flag to serialize the behaviour.
->>
->>   	cpu0(X)			                cpu1(Y)
->>
->>      dev_coredump() uevent sent to user space
->>      device_add()  ======================> user space process Y reads the
->>                                            uevents writes to devcd fd
->>                                            which results into writes to
->>
->>                                           devcd_data_write()
->>                                             mod_delayed_work()
->>                                               try_to_grab_pending()
->>                                                 del_timer()
->>                                                   debug_assert_init()
->>     INIT_DELAYED_WORK()
->>     schedule_delayed_work()
->>                                                     debug_object_fixup()
->>                                                       timer_fixup_assert_init()
->>                                                         timer_setup()
->>                                                           do_init_timer()
->>                                                         /*
->>                                                          Above call reinitializes
->>                                                          the timer to
->>                                                          timer->entry.pprev=NULL
->>                                                          and this will be checked
->>                                                          later in timer_pending() call.
->>                                                         */
->>                                                   timer_pending()
->>                                                    !hlist_unhashed_lockless(&timer->entry)
->>                                                      !h->pprev
->>                                                  /*
->>                                                    del_timer() checks h->pprev and finds
->>                                                    it to be NULL due to which
->>                                                    try_to_grab_pending() stucks.
->>                                                  */
->>
->> Link: https://lore.kernel.org/lkml/2e1f81e2-428c-f11f-ce92-eb11048cb271@quicinc.com/
->> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
->> ---
-> 
-> I need an ack from the devcoredump maintainer before I can take this...
-> 
-> thanks,
-> 
-> greg k-h
+Bug report (3): https://syzkaller.appspot.com/bug?extid=3Df9acff9bf08a845f2=
+25d
+Reported-by: syzbot+f9acff9bf08a845f225d@syzkaller.appspotmail.com
+Reported-by: syzbot+6cb476b7c69916a0caca@syzkaller.appspotmail.com
+Reported-by: syzbot+9250865a55539d384347@syzkaller.appspotmail.com
+
+Signed-off-by: Siddh Raman Pant <code@siddh.me>
+---
+ include/net/cfg80211.h | 2 ++
+ net/wireless/scan.c    | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/include/net/cfg80211.h b/include/net/cfg80211.h
+index 6d02e12e4702..ba4a49884de8 100644
+--- a/include/net/cfg80211.h
++++ b/include/net/cfg80211.h
+@@ -2368,6 +2368,7 @@ struct cfg80211_scan_6ghz_params {
+  * @n_6ghz_params: number of 6 GHz params
+  * @scan_6ghz_params: 6 GHz params
+  * @bssid: BSSID to scan for (most commonly, the wildcard BSSID)
++ * @rcu_head: (internal) RCU head to use for freeing
+  */
+ struct cfg80211_scan_request {
+ =09struct cfg80211_ssid *ssids;
+@@ -2397,6 +2398,7 @@ struct cfg80211_scan_request {
+ =09bool scan_6ghz;
+ =09u32 n_6ghz_params;
+ =09struct cfg80211_scan_6ghz_params *scan_6ghz_params;
++=09struct rcu_head rcu_head;
+=20
+ =09/* keep last */
+ =09struct ieee80211_channel *channels[];
+diff --git a/net/wireless/scan.c b/net/wireless/scan.c
+index 6d82bd9eaf8c..638b2805222c 100644
+--- a/net/wireless/scan.c
++++ b/net/wireless/scan.c
+@@ -988,7 +988,7 @@ void ___cfg80211_scan_done(struct cfg80211_registered_d=
+evice *rdev,
+ =09kfree(rdev->int_scan_req);
+ =09rdev->int_scan_req =3D NULL;
+=20
+-=09kfree(rdev->scan_req);
++=09kfree_rcu(rdev->scan_req, rcu_head);
+ =09rdev->scan_req =3D NULL;
+=20
+ =09if (!send_message)
+--=20
+2.35.1
+
+

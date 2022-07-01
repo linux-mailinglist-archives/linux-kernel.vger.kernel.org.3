@@ -2,230 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1970D563C9D
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 00:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 802D2563CA5
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 01:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbiGAWzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 18:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
+        id S231978AbiGAXFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 19:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbiGAWy7 (ORCPT
+        with ESMTP id S229994AbiGAXFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 18:54:59 -0400
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728AF59257
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 15:54:58 -0700 (PDT)
-Received: by mail-oo1-xc36.google.com with SMTP id h12-20020a4aa28c000000b00425ab778155so699572ool.2
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 15:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bz5B0xsxU+73iD4WjJyZEms/7rCOpLm3Hnpz65WzTXY=;
-        b=ATTARdUKy47egfufdbPyC4D2FJ1yXf4Z9lgFfNQ4uvQ1T8so6MofoXks0BBs5rKNGN
-         m5W+k7TApJtPQXqpSD+a8ab8ki0bRZS8VuoY7l180mH4coRCcTYJtqM18ANqlvlo47UQ
-         efTQYG0DmiOG8CZOE21WPNz/c59IYjBKiIAfmFX2WPCZgbyIUZQfOQJkQ9/tALy6sME+
-         X+6je9912kHi2LM/W3lJFbjJ/5bzLKpBJFuANDGW2VUCEQXOGeJa7yo2T6jXOjBMAzfB
-         lyNF/lmw+MTjdxDc5MLJ/ip5hZ8diBuEm4sGgqXb3CRmrCYX24cIqT/46M+1C390DFHs
-         pW4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bz5B0xsxU+73iD4WjJyZEms/7rCOpLm3Hnpz65WzTXY=;
-        b=7b0rJ5v3SXg2fbK1tx5IwSNR71FI9gk61Bm6ntYcFqIRZj0KnOZah9L47JEpYIV9eo
-         M5qtVJD+3g7fMHSxQEg3uOfoUUWJgmqwek1q7OC03RyqUkL0Bm8KLgHip7Z3aQbvYgGm
-         OFNGNvLO50C3xihvIkMLC6qoMbwFY4kGx4i4KoiTPLKCAuvBPI/wP4QTD9s2uqy0+KRz
-         iN/0JuFXiW/p83LWZ5RiBLWwjSDYuUP986VOmN6nNaiSvOX4wIVifVqxYdNoDpdBkuWS
-         NPryMLk2FfkEuOmDe5T/kYIgm4S8MZ8fomQRauaO3S/RMgw41ZdlgIUP5u0olo1/WKa5
-         w+Ng==
-X-Gm-Message-State: AJIora+WfCpKuTau7SE0bkcXyENYPnevW/ywhkRwbiOr5ZzIXtw+UvKm
-        dAAzi72/X6kB9bkHEExj2SwtK4r+9prP6QTi5M4/eOcmwv5lug==
-X-Google-Smtp-Source: AGRyM1t97TXRZL1L53FBOD1m+b9p+02/pyHIOGmXh2mbVOLXrSqZj+YuNTtpRRr128jWY76KxHUZKe1ISpRVcO53nmU=
-X-Received: by 2002:a4a:e82b:0:b0:330:cee9:4a8a with SMTP id
- d11-20020a4ae82b000000b00330cee94a8amr7127923ood.31.1656716097462; Fri, 01
- Jul 2022 15:54:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220629150625.238286-1-vkuznets@redhat.com> <20220629150625.238286-25-vkuznets@redhat.com>
-In-Reply-To: <20220629150625.238286-25-vkuznets@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 1 Jul 2022 15:54:46 -0700
-Message-ID: <CALMp9eSMmeGu3yikQ+6vp2+TL6LmQLenqEjF7+AiH+fAZW6rfA@mail.gmail.com>
-Subject: Re: [PATCH v2 24/28] KVM: nVMX: Use sanitized allowed-1 bits for VMX
- control MSRs
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 1 Jul 2022 19:05:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46ED36D56B
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 16:05:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3415623AF
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 23:05:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAF29C3411E;
+        Fri,  1 Jul 2022 23:05:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1656716720;
+        bh=WnyYw9JAEHoRQ4a7AdP/qqOINnrE9Dzf8lU87SgBPkI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qX4eslRZE/kcr7jWS5PJL7+2R5LOtjLPRDFgJkVBL07SNIvBAn8mPNX5sA3d2ukw7
+         JXovN2pcwmoHQ3fQy13gwlR+roncGiv7CbJUbYXW4ClvfBTAQKENWpHABwtiiy9DyI
+         0qTPUTZyQiGsDcIPv3BcMRhopt0OSoAp7ThJGxAo=
+Date:   Fri, 1 Jul 2022 16:05:19 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Zhang Jiaming <jiaming@nfschina.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, renyu@nfschina.com
+Subject: Re: [PATCH] mm/mmap.c: Fix typo and space mistake
+Message-Id: <20220701160519.d82a059335264dda21b9871d@linux-foundation.org>
+In-Reply-To: <20220630083124.71336-1-jiaming@nfschina.com>
+References: <20220630083124.71336-1-jiaming@nfschina.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 8:07 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
->
-> Using raw host MSR values for setting up nested VMX control MSRs is
-> incorrect as some features need to disabled, e.g. when KVM runs as
-> a nested hypervisor on Hyper-V and uses Enlightened VMCS or when a
-> workaround for IA32_PERF_GLOBAL_CTRL is applied. For non-nested VMX, this
-> is done in setup_vmcs_config() and the result is stored in vmcs_config.
-> Use it for setting up allowed-1 bits in nested VMX MSRs too.
->
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/vmx/nested.c | 34 ++++++++++++++++------------------
->  arch/x86/kvm/vmx/nested.h |  2 +-
->  arch/x86/kvm/vmx/vmx.c    |  5 ++---
->  3 files changed, 19 insertions(+), 22 deletions(-)
->
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index 88625965f7b7..e5b19b5e6cab 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -6565,8 +6565,13 @@ static u64 nested_vmx_calc_vmcs_enum_msr(void)
->   * bit in the high half is on if the corresponding bit in the control field
->   * may be on. See also vmx_control_verify().
->   */
-> -void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
-> +void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
->  {
-> +       struct nested_vmx_msrs *msrs = &vmcs_conf->nested;
-> +
-> +       /* Take the allowed-1 bits from KVM's sanitized VMCS configuration. */
-> +       u32 ignore_high;
-> +
+On Thu, 30 Jun 2022 16:31:24 +0800 Zhang Jiaming <jiaming@nfschina.com> wrote:
 
-Giving this object a name seems gauche.
+> Change 'writeable' to 'writable'.
+> Delete or add spaces around ','.
+> 
 
->         /*
->          * Note that as a general rule, the high half of the MSRs (bits in
->          * the control fields which may be 1) should be initialized by the
-> @@ -6583,11 +6588,11 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->          */
->
->         /* pin-based controls */
-> -       rdmsr(MSR_IA32_VMX_PINBASED_CTLS,
-> -               msrs->pinbased_ctls_low,
-> -               msrs->pinbased_ctls_high);
-> +       rdmsr(MSR_IA32_VMX_PINBASED_CTLS, msrs->pinbased_ctls_low, ignore_high);
+"writeable" is actually OK.  Less common than "writable".
 
-Perhaps "(u32){0}" rather than "ignore_high"?
-
->         msrs->pinbased_ctls_low |=
->                 PIN_BASED_ALWAYSON_WITHOUT_TRUE_MSR;
-
-NYC, but why is this one '|=', and the rest just '='? Does there exist
-a CPU that requires more than PIN_BASED_ALWAYSON_WITHOUT_TRUE_MSR?
-
-> +
-> +       msrs->pinbased_ctls_high = vmcs_conf->pin_based_exec_ctrl;
->         msrs->pinbased_ctls_high &=
->                 PIN_BASED_EXT_INTR_MASK |
->                 PIN_BASED_NMI_EXITING |
-> @@ -6598,12 +6603,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->                 PIN_BASED_VMX_PREEMPTION_TIMER;
->
->         /* exit controls */
-> -       rdmsr(MSR_IA32_VMX_EXIT_CTLS,
-> -               msrs->exit_ctls_low,
-> -               msrs->exit_ctls_high);
->         msrs->exit_ctls_low =
->                 VM_EXIT_ALWAYSON_WITHOUT_TRUE_MSR;
->
-> +       msrs->exit_ctls_high = vmcs_conf->vmexit_ctrl;
->         msrs->exit_ctls_high &=
->  #ifdef CONFIG_X86_64
->                 VM_EXIT_HOST_ADDR_SPACE_SIZE |
-> @@ -6619,11 +6622,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->         msrs->exit_ctls_low &= ~VM_EXIT_SAVE_DEBUG_CONTROLS;
->
->         /* entry controls */
-> -       rdmsr(MSR_IA32_VMX_ENTRY_CTLS,
-> -               msrs->entry_ctls_low,
-> -               msrs->entry_ctls_high);
->         msrs->entry_ctls_low =
->                 VM_ENTRY_ALWAYSON_WITHOUT_TRUE_MSR;
-> +
-> +       msrs->entry_ctls_high = vmcs_conf->vmentry_ctrl;
->         msrs->entry_ctls_high &=
->  #ifdef CONFIG_X86_64
->                 VM_ENTRY_IA32E_MODE |
-> @@ -6637,11 +6639,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->         msrs->entry_ctls_low &= ~VM_ENTRY_LOAD_DEBUG_CONTROLS;
->
->         /* cpu-based controls */
-> -       rdmsr(MSR_IA32_VMX_PROCBASED_CTLS,
-> -               msrs->procbased_ctls_low,
-> -               msrs->procbased_ctls_high);
->         msrs->procbased_ctls_low =
->                 CPU_BASED_ALWAYSON_WITHOUT_TRUE_MSR;
-> +
-> +       msrs->procbased_ctls_high = vmcs_conf->cpu_based_exec_ctrl;
->         msrs->procbased_ctls_high &=
->                 CPU_BASED_INTR_WINDOW_EXITING |
->                 CPU_BASED_NMI_WINDOW_EXITING | CPU_BASED_USE_TSC_OFFSETTING |
-> @@ -6675,12 +6676,9 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->          * depend on CPUID bits, they are added later by
->          * vmx_vcpu_after_set_cpuid.
->          */
-> -       if (msrs->procbased_ctls_high & CPU_BASED_ACTIVATE_SECONDARY_CONTROLS)
-> -               rdmsr(MSR_IA32_VMX_PROCBASED_CTLS2,
-> -                     msrs->secondary_ctls_low,
-> -                     msrs->secondary_ctls_high);
-> -
->         msrs->secondary_ctls_low = 0;
-> +
-> +       msrs->secondary_ctls_high = vmcs_conf->cpu_based_2nd_exec_ctrl;
->         msrs->secondary_ctls_high &=
->                 SECONDARY_EXEC_DESC |
->                 SECONDARY_EXEC_ENABLE_RDTSCP |
-> diff --git a/arch/x86/kvm/vmx/nested.h b/arch/x86/kvm/vmx/nested.h
-> index c92cea0b8ccc..fae047c6204b 100644
-> --- a/arch/x86/kvm/vmx/nested.h
-> +++ b/arch/x86/kvm/vmx/nested.h
-> @@ -17,7 +17,7 @@ enum nvmx_vmentry_status {
->  };
->
->  void vmx_leave_nested(struct kvm_vcpu *vcpu);
-> -void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps);
-> +void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps);
->  void nested_vmx_hardware_unsetup(void);
->  __init int nested_vmx_hardware_setup(int (*exit_handlers[])(struct kvm_vcpu *));
->  void nested_vmx_set_vmcs_shadowing_bitmap(void);
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 5f7ef1f8d2c6..5d4158b7421c 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -7310,7 +7310,7 @@ static int __init vmx_check_processor_compat(void)
->         if (setup_vmcs_config(&vmcs_conf, &vmx_cap) < 0)
->                 return -EIO;
->         if (nested)
-> -               nested_vmx_setup_ctls_msrs(&vmcs_conf.nested, vmx_cap.ept);
-> +               nested_vmx_setup_ctls_msrs(&vmcs_conf, vmx_cap.ept);
->         if (memcmp(&vmcs_config, &vmcs_conf, sizeof(struct vmcs_config)) != 0) {
->                 printk(KERN_ERR "kvm: CPU %d feature inconsistency!\n",
->                                 smp_processor_id());
-> @@ -8285,8 +8285,7 @@ static __init int hardware_setup(void)
->         setup_default_sgx_lepubkeyhash();
->
->         if (nested) {
-> -               nested_vmx_setup_ctls_msrs(&vmcs_config.nested,
-> -                                          vmx_capability.ept);
-> +               nested_vmx_setup_ctls_msrs(&vmcs_config, vmx_capability.ept);
->
->                 r = nested_vmx_hardware_setup(kvm_vmx_exit_handlers);
->                 if (r)
-> --
-> 2.35.3
->
+I do feel the patch is too minor to bother changing the kernel for,
+sorry.

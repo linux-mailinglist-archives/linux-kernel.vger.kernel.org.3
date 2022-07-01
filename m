@@ -2,156 +2,759 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D334956337E
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E30563376
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233740AbiGAMax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 08:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
+        id S234228AbiGAMYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 08:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiGAMaw (ORCPT
+        with ESMTP id S229631AbiGAMYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 08:30:52 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7668834641
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:30:51 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id a11-20020a17090acb8b00b001eca0041455so4984846pju.1
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 05:30:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=yVSDhYrK8Y7ydTrXkxqp6foDlogTshep1dzSeIK3bck=;
-        b=Ock5oAG9Efpw4etgLVjnFZV11LyFwgPvpKTQ4ZUP1pTdSGoQ8WaiPAxfpYGWq90h9m
-         SUVHcVVvNb7Va/VLakQLFak7sQxXMVzfgg+NjAsL/lGLVjoSKmEWL6poTH5XuxU7c8Lz
-         /7PRP/5DzpiPw5tR5mamU95Ows+oMWRP6Je0dT/Y2Ux3bmPfqZjjnGmPo5k0ASNSS/e1
-         fWS+ZlHOHc8fhTHQXEw+Ab8BV/EjCUHPxZL+h0xHUpwrLOYO/2bkfTV+/ROTkQTA1/qW
-         gSSuoKarWvxc/9mRAsNX+9D4Jppfu0YqEv5yVvix/VhLZLWSpdyZlfRRPG6/jWWdDKfk
-         IFug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=yVSDhYrK8Y7ydTrXkxqp6foDlogTshep1dzSeIK3bck=;
-        b=g5t5T1kAuL+V135JVN7/RVVUzZXqXerYOJoI0eYds1XxD8uEAWWZytDXcnsI5JLBrf
-         mUz18Z9KPm548f6jbtb3By1AbWPy7uchAnVhTtznxSWUkY5nqKnRuWGJrGhOSgfZHTI2
-         gTNJ90H32/WkHxddtgegc7ZuQpjmhyWqj6cpjjlHquT6bo8PIF/9/u7L5lair/mIfaRX
-         /0ZnRps7YGgauCdTLnMelZkdusf/jQWSDz35IzEV4wD3OJAN+RKPoEgnut9eEoI0gNPI
-         S96v5rzl5Je4abKo/kjeO5fcC+/cK1XRqo2v2/jfiQ8pZST5sB4ZJWJW/dHou4hMQIgS
-         Ok/Q==
-X-Gm-Message-State: AJIora+kQYSsWVF24+mvV4AqN6bVE0xjbjoF+dALtT4umJ6vpd1Y3dbK
-        XM1+E4hMbDVtu/UMQUv1oxkY+qwIHbsT+g==
-X-Google-Smtp-Source: AGRyM1vmkowsRZ77Rl9LxuQLsD4sTyOWaT8kaC4WNZGN6pzJBlYFKf5xB9txI4u8LtbbeJvoiyOjiA==
-X-Received: by 2002:a17:90b:2391:b0:1ec:a241:5e79 with SMTP id mr17-20020a17090b239100b001eca2415e79mr18080199pjb.24.1656678650559;
-        Fri, 01 Jul 2022 05:30:50 -0700 (PDT)
-Received: from MBP ([39.170.101.209])
-        by smtp.gmail.com with ESMTPSA id n18-20020a63f812000000b0040c33cb0ccasm15342175pgh.42.2022.07.01.05.30.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 05:30:50 -0700 (PDT)
-References: <20220630161220.53449-1-schspa@gmail.com>
- <87mtdu15ok.wl-maz@kernel.org> <m2bkua148a.fsf@gmail.com>
- <a5ca4db3db9ef101258cab94d6b7e045@kernel.org>
-User-agent: mu4e 1.6.10; emacs 27.2
-From:   Schspa Shi <schspa@gmail.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: arm64: Fix 64 bit mmio handle
-Date:   Fri, 01 Jul 2022 20:22:21 +0800
-In-reply-to: <a5ca4db3db9ef101258cab94d6b7e045@kernel.org>
-Message-ID: <m2sfnlvwup.fsf@gmail.com>
+        Fri, 1 Jul 2022 08:24:51 -0400
+Received: from mta-64-225.siemens.flowmailer.net (mta-64-225.siemens.flowmailer.net [185.136.64.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1290428729
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:24:49 -0700 (PDT)
+Received: by mta-64-225.siemens.flowmailer.net with ESMTPSA id 2022070112244667efb18520673da169
+        for <linux-kernel@vger.kernel.org>;
+        Fri, 01 Jul 2022 14:24:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=vdEjvi4goJaezVsDPfjJiGKV/3k14Nxs5JO/YmKAESY=;
+ b=LlRrCsAXz1Zp1bVB7wVXLfgoo3bA4Lq1rZLTZxsXvmrC1PB7QR/Mq9/S/FLpx/2KW1IEd3
+ lIYcFR3XnkSUHpmZT2YbV9u8Uk20HAPiDWZ0p2iWP94OS616Y2dXYgawN1SsMYQkti3LVCFw
+ mpnpOpOyAJ+yo5k07rH5NBpER6wtA=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH v5 1/2] tty: n_gsm: fix deadlock and link starvation in outgoing data path
+Date:   Fri,  1 Jul 2022 14:23:31 +0200
+Message-Id: <20220701122332.2039-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Daniel Starke <daniel.starke@siemens.com>
 
-Marc Zyngier <maz@kernel.org> writes:
+The current implementation queues up new control and user packets as needed
+and processes this queue down to the ldisc in the same code path.
+That means that the upper and the lower layer are hard coupled in the code.
+Due to this deadlocks can happen as seen below while transmitting data,
+especially during ldisc congestion. Furthermore, the data channels starve
+the control channel on high transmission load on the ldisc.
 
-> On 2022-06-30 17:50, Schspa Shi wrote:
->> Marc Zyngier <maz@kernel.org> writes:
->> 
->>> On Thu, 30 Jun 2022 17:12:20 +0100,
->>> Schspa Shi <schspa@gmail.com> wrote:
->>>> If the len is 8 bytes, we can't get the correct sign extend 
->>>> for
->>>> be system.
->>> I'm afraid you'll have to give me a bit more details.
->>> 
->>>> Fix the mask type len and the comparison of length.
->>>> Signed-off-by: Schspa Shi <schspa@gmail.com>
->>>> ---
->>>>  arch/arm64/kvm/mmio.c | 4 ++--
->>>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>> diff --git a/arch/arm64/kvm/mmio.c b/arch/arm64/kvm/mmio.c
->>>> index 3dd38a151d2a6..0692f8b18f35c 100644
->>>> --- a/arch/arm64/kvm/mmio.c
->>>> +++ b/arch/arm64/kvm/mmio.c
->>>> @@ -81,8 +81,8 @@ unsigned long kvm_mmio_read_buf(const void 
->>>> *buf, unsigned
->>>> int len)
->>>>  int kvm_handle_mmio_return(struct kvm_vcpu *vcpu)
->>>>  {
->>>>  	unsigned long data;
->>>> +	unsigned long mask;
->>>>  	unsigned int len;
->>>> -	int mask;
->>>>   	/* Detect an already handled MMIO return */
->>>>  	if (unlikely(!vcpu->mmio_needed))
->>>> @@ -97,7 +97,7 @@ int kvm_handle_mmio_return(struct kvm_vcpu 
->>>> *vcpu)
->>>>  		data = kvm_mmio_read_buf(run->mmio.data, len);
->>>>   		if (kvm_vcpu_dabt_issext(vcpu) &&
->>>> -		    len < sizeof(unsigned long)) {
->>>> +		    len <= sizeof(unsigned long)) {
->>> If you're reading an 8 byte quantity, what is there to 
->>> sign-extend?
->>> Sign extension only makes sense if what you're reading is 
->>> *smaller*
->>> than the size of the register you are targeting.
->>> 
->> Yes, you are correct, sorry for my bad patch.
->> Please ignore this patch.
->> 
->>> I must be missing something. And how is that related to 
->>> running BE? BE
->>> in the host? The guest?
->> I mean BE is for guest running with BE mode.
->
-> So what problem did you see? If you have noticed something going
-> wrong, I'd like to get it fixed.
->
+Introduce an additional control channel data queue to prevent timeouts and
+link hangups during ldisc congestion. This is being processed before the
+user channel data queue in gsm_data_kick(), i.e. with the highest priority.
+Put the queue to ldisc data path into a workqueue and trigger it whenever
+new data has been put into the transmission queue. Change
+gsm_dlci_data_sweep() accordingly to fill up the transmission queue until
+TX_THRESH_HI. This solves the locking issue, keeps latency low and provides
+good performance on high data load.
+Note that now all packets from a DLCI are removed from the internal queue
+if the associated DLCI was closed. This ensures that no data is sent by the
+introduced write task to an already closed DLCI.
 
-I have running some static code analysis software upon Kernel 
-code.
-Seeing there is possible overflow.
+BUG: spinlock recursion on CPU#0, test_v24_loop/124
+ lock: serial8250_ports+0x3a8/0x7500, .magic: dead4ead, .owner: test_v24_loop/124, .owner_cpu: 0
+CPU: 0 PID: 124 Comm: test_v24_loop Tainted: G           O      5.18.0-rc2 #3
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+Call Trace:
+ <IRQ>
+ dump_stack_lvl+0x34/0x44
+ do_raw_spin_lock+0x76/0xa0
+ _raw_spin_lock_irqsave+0x72/0x80
+ uart_write_room+0x3b/0xc0
+ gsm_data_kick+0x14b/0x240 [n_gsm]
+ gsmld_write_wakeup+0x35/0x70 [n_gsm]
+ tty_wakeup+0x53/0x60
+ tty_port_default_wakeup+0x1b/0x30
+ serial8250_tx_chars+0x12f/0x220
+ serial8250_handle_irq.part.0+0xfe/0x150
+ serial8250_default_handle_irq+0x48/0x80
+ serial8250_interrupt+0x56/0xa0
+ __handle_irq_event_percpu+0x78/0x1f0
+ handle_irq_event+0x34/0x70
+ handle_fasteoi_irq+0x90/0x1e0
+ __common_interrupt+0x69/0x100
+ common_interrupt+0x48/0xc0
+ asm_common_interrupt+0x1e/0x40
+RIP: 0010:__do_softirq+0x83/0x34e
+Code: 2a 0a ff 0f b7 ed c7 44 24 10 0a 00 00 00 48 c7 c7 51 2a 64 82 e8 2d
+e2 d5 ff 65 66 c7 05 83 af 1e 7e 00 00 fb b8 ff ff ff ff <49> c7 c2 40 61
+80 82 0f bc c5 41 89 c4 41 83 c4 01 0f 84 e6 00 00
+RSP: 0018:ffffc90000003f98 EFLAGS: 00000286
+RAX: 00000000ffffffff RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff82642a51 RDI: ffffffff825bb5e7
+RBP: 0000000000000200 R08: 00000008de3271a8 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000030 R14: 0000000000000000 R15: 0000000000000000
+ ? __do_softirq+0x73/0x34e
+ irq_exit_rcu+0xb5/0x100
+ common_interrupt+0xa4/0xc0
+ </IRQ>
+ <TASK>
+ asm_common_interrupt+0x1e/0x40
+RIP: 0010:_raw_spin_unlock_irqrestore+0x2e/0x50
+Code: 00 55 48 89 fd 48 83 c7 18 53 48 89 f3 48 8b 74 24 10 e8 85 28 36 ff
+48 89 ef e8 cd 58 36 ff 80 e7 02 74 01 fb bf 01 00 00 00 <e8> 3d 97 33 ff
+65 8b 05 96 23 2b 7e 85 c0 74 03 5b 5d c3 0f 1f 44
+RSP: 0018:ffffc9000020fd08 EFLAGS: 00000202
+RAX: 0000000000000000 RBX: 0000000000000246 RCX: 0000000000000000
+RDX: 0000000000000004 RSI: ffffffff8257fd74 RDI: 0000000000000001
+RBP: ffff8880057de3a0 R08: 00000008de233000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000100 R14: 0000000000000202 R15: ffff8880057df0b8
+ ? _raw_spin_unlock_irqrestore+0x23/0x50
+ gsmtty_write+0x65/0x80 [n_gsm]
+ n_tty_write+0x33f/0x530
+ ? swake_up_all+0xe0/0xe0
+ file_tty_write.constprop.0+0x1b1/0x320
+ ? n_tty_flush_buffer+0xb0/0xb0
+ new_sync_write+0x10c/0x190
+ vfs_write+0x282/0x310
+ ksys_write+0x68/0xe0
+ do_syscall_64+0x3b/0x90
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f3e5e35c15c
+Code: 8b 7c 24 08 89 c5 e8 c5 ff ff ff 89 ef 89 44 24 08 e8 58 bc 02 00 8b
+44 24 08 48 83 c4 10 5d c3 48 63 ff b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff
+ff 76 10 48 8b 15 fd fc 05 00 f7 d8 64 89 02 48 83
+RSP: 002b:00007ffcee77cd18 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007ffcee77cd70 RCX: 00007f3e5e35c15c
+RDX: 0000000000000100 RSI: 00007ffcee77cd90 RDI: 0000000000000003
+RBP: 0000000000000100 R08: 0000000000000000 R09: 7efefefefefefeff
+R10: 00007f3e5e3bddeb R11: 0000000000000246 R12: 00007ffcee77ce8f
+R13: 0000000000000001 R14: 000056214404e010 R15: 00007ffcee77cd90
+ </TASK>
 
-maks << 1U << ((len * 8) -1);
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c | 407 ++++++++++++++++++++++++++++++--------------
+ 1 file changed, 279 insertions(+), 128 deletions(-)
 
-The AI don't know, len is only the value of 1, 2, 4, and make this
-a warnings
+Merged v4 into the tty-testing branch. No other changes applied.
 
-I tring to analysis this, but didn't realize the real scenario of
-sign extension, and finally sent this problematic patch.
+Link: https://lore.kernel.org/all/20220701061652.39604-6-daniel.starke@siemens.com/
 
-I do see some uninitialized memory reads (the values are not used
-in the end, just as temporary space for API execution),
-do we need to fix these?
-
-> Thanks,
->
->          M.
-
-
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index 9a3d7db33394..79869f2b570c 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -5,6 +5,14 @@
+  *
+  *	* THIS IS A DEVELOPMENT SNAPSHOT IT IS NOT A FINAL RELEASE *
+  *
++ * Outgoing path:
++ * tty -> DLCI fifo -> scheduler -> GSM MUX data queue    ---o-> ldisc
++ * control message               -> GSM MUX control queue --´
++ *
++ * Incoming path:
++ * ldisc -> gsm_queue() -o--> tty
++ *                        `-> gsm_control_response()
++ *
+  * TO DO:
+  *	Mostly done:	ioctls for setting modes/timing
+  *	Partly done:	hooks so you can pull off frames to non tty devs
+@@ -210,6 +218,9 @@ struct gsm_mux {
+ 	/* Events on the GSM channel */
+ 	wait_queue_head_t event;
+ 
++	/* ldisc send work */
++	struct work_struct tx_work;
++
+ 	/* Bits for GSM mode decoding */
+ 
+ 	/* Framing Layer */
+@@ -241,7 +252,8 @@ struct gsm_mux {
+ 	unsigned int tx_bytes;		/* TX data outstanding */
+ #define TX_THRESH_HI		8192
+ #define TX_THRESH_LO		2048
+-	struct list_head tx_list;	/* Pending data packets */
++	struct list_head tx_ctrl_list;	/* Pending control packets */
++	struct list_head tx_data_list;	/* Pending data packets */
+ 
+ 	/* Control messages */
+ 	struct timer_list kick_timer;	/* Kick TX queuing on timeout */
+@@ -371,6 +383,11 @@ static const u8 gsm_fcs8[256] = {
+ 
+ static int gsmld_output(struct gsm_mux *gsm, u8 *data, int len);
+ static int gsm_modem_update(struct gsm_dlci *dlci, u8 brk);
++static struct gsm_msg *gsm_data_alloc(struct gsm_mux *gsm, u8 addr, int len,
++								u8 ctrl);
++static int gsm_send_packet(struct gsm_mux *gsm, struct gsm_msg *msg);
++static void gsmld_write_trigger(struct gsm_mux *gsm);
++static void gsmld_write_task(struct work_struct *work);
+ 
+ /**
+  *	gsm_fcs_add	-	update FCS
+@@ -655,57 +672,73 @@ static int gsm_stuff_frame(const u8 *input, u8 *output, int len)
+  *	@cr: command/response bit seen as initiator
+  *	@control:  control byte including PF bit
+  *
+- *	Format up and transmit a control frame. These do not go via the
+- *	queueing logic as they should be transmitted ahead of data when
+- *	they are needed.
+- *
+- *	FIXME: Lock versus data TX path
++ *	Format up and transmit a control frame. These should be transmitted
++ *	ahead of data when they are needed.
+  */
+-
+-static void gsm_send(struct gsm_mux *gsm, int addr, int cr, int control)
++static int gsm_send(struct gsm_mux *gsm, int addr, int cr, int control)
+ {
+-	int len;
+-	u8 cbuf[10];
+-	u8 ibuf[3];
++	struct gsm_msg *msg;
++	u8 *dp;
+ 	int ocr;
++	unsigned long flags;
++
++	msg = gsm_data_alloc(gsm, addr, 0, control);
++	if (!msg)
++		return -ENOMEM;
+ 
+ 	/* toggle C/R coding if not initiator */
+ 	ocr = cr ^ (gsm->initiator ? 0 : 1);
+ 
+-	switch (gsm->encoding) {
+-	case 0:
+-		cbuf[0] = GSM0_SOF;
+-		cbuf[1] = (addr << 2) | (ocr << 1) | EA;
+-		cbuf[2] = control;
+-		cbuf[3] = EA;	/* Length of data = 0 */
+-		cbuf[4] = 0xFF - gsm_fcs_add_block(INIT_FCS, cbuf + 1, 3);
+-		cbuf[5] = GSM0_SOF;
+-		len = 6;
+-		break;
+-	case 1:
+-	case 2:
+-		/* Control frame + packing (but not frame stuffing) in mode 1 */
+-		ibuf[0] = (addr << 2) | (ocr << 1) | EA;
+-		ibuf[1] = control;
+-		ibuf[2] = 0xFF - gsm_fcs_add_block(INIT_FCS, ibuf, 2);
+-		/* Stuffing may double the size worst case */
+-		len = gsm_stuff_frame(ibuf, cbuf + 1, 3);
+-		/* Now add the SOF markers */
+-		cbuf[0] = GSM1_SOF;
+-		cbuf[len + 1] = GSM1_SOF;
+-		/* FIXME: we can omit the lead one in many cases */
+-		len += 2;
+-		break;
+-	default:
+-		WARN_ON(1);
+-		return;
+-	}
+-	gsmld_output(gsm, cbuf, len);
+-	if (!gsm->initiator) {
+-		cr = cr & gsm->initiator;
+-		control = control & ~PF;
++	msg->data -= 3;
++	dp = msg->data;
++	*dp++ = (addr << 2) | (ocr << 1) | EA;
++	*dp++ = control;
++
++	if (gsm->encoding == 0)
++		*dp++ = EA; /* Length of data = 0 */
++
++	*dp = 0xFF - gsm_fcs_add_block(INIT_FCS, msg->data, dp - msg->data);
++	msg->len = (dp - msg->data) + 1;
++
++	gsm_print_packet("Q->", addr, cr, control, NULL, 0);
++
++	spin_lock_irqsave(&gsm->tx_lock, flags);
++	list_add_tail(&msg->list, &gsm->tx_ctrl_list);
++	gsm->tx_bytes += msg->len;
++	spin_unlock_irqrestore(&gsm->tx_lock, flags);
++	gsmld_write_trigger(gsm);
++
++	return 0;
++}
++
++/**
++ *	gsm_dlci_clear_queues	-	remove outstanding data for a DLCI
++ *	@gsm: mux
++ *	@dlci: clear for this DLCI
++ *
++ *	Clears the data queues for a given DLCI.
++ */
++static void gsm_dlci_clear_queues(struct gsm_mux *gsm, struct gsm_dlci *dlci)
++{
++	struct gsm_msg *msg, *nmsg;
++	int addr = dlci->addr;
++	unsigned long flags;
++
++	/* Clear DLCI write fifo first */
++	spin_lock_irqsave(&dlci->lock, flags);
++	kfifo_reset(&dlci->fifo);
++	spin_unlock_irqrestore(&dlci->lock, flags);
++
++	/* Clear data packets in MUX write queue */
++	spin_lock_irqsave(&gsm->tx_lock, flags);
++	list_for_each_entry_safe(msg, nmsg, &gsm->tx_data_list, list) {
++		if (msg->addr != addr)
++			continue;
++		gsm->tx_bytes -= msg->len;
++		list_del(&msg->list);
++		kfree(msg);
+ 	}
+-	gsm_print_packet("-->", addr, cr, control, NULL, 0);
++	spin_unlock_irqrestore(&gsm->tx_lock, flags);
+ }
+ 
+ /**
+@@ -767,6 +800,45 @@ static struct gsm_msg *gsm_data_alloc(struct gsm_mux *gsm, u8 addr, int len,
+ 	return m;
+ }
+ 
++/**
++ *	gsm_send_packet	-	sends a single packet
++ *	@gsm: GSM Mux
++ *	@msg: packet to send
++ *
++ *	The given packet is encoded and sent out. No memory is freed.
++ *	The caller must hold the gsm tx lock.
++ */
++static int gsm_send_packet(struct gsm_mux *gsm, struct gsm_msg *msg)
++{
++	int len, ret;
++
++
++	if (gsm->encoding == 0) {
++		gsm->txframe[0] = GSM0_SOF;
++		memcpy(gsm->txframe + 1, msg->data, msg->len);
++		gsm->txframe[msg->len + 1] = GSM0_SOF;
++		len = msg->len + 2;
++	} else {
++		gsm->txframe[0] = GSM1_SOF;
++		len = gsm_stuff_frame(msg->data, gsm->txframe + 1, msg->len);
++		gsm->txframe[len + 1] = GSM1_SOF;
++		len += 2;
++	}
++
++	if (debug & 4)
++		gsm_hex_dump_bytes(__func__, gsm->txframe, len);
++	gsm_print_packet("-->", msg->addr, gsm->initiator, msg->ctrl, msg->data,
++			 msg->len);
++
++	ret = gsmld_output(gsm, gsm->txframe, len);
++	if (ret <= 0)
++		return ret;
++	/* FIXME: Can eliminate one SOF in many more cases */
++	gsm->tx_bytes -= msg->len;
++
++	return 0;
++}
++
+ /**
+  *	gsm_is_flow_ctrl_msg	-	checks if flow control message
+  *	@msg: message to check
+@@ -799,59 +871,81 @@ static bool gsm_is_flow_ctrl_msg(struct gsm_msg *msg)
+ }
+ 
+ /**
+- *	gsm_data_kick		-	poke the queue
++ *	gsm_data_kick	-	poke the queue
+  *	@gsm: GSM Mux
+- *	@dlci: DLCI sending the data
+  *
+  *	The tty device has called us to indicate that room has appeared in
+- *	the transmit queue. Ram more data into the pipe if we have any
++ *	the transmit queue. Ram more data into the pipe if we have any.
+  *	If we have been flow-stopped by a CMD_FCOFF, then we can only
+- *	send messages on DLCI0 until CMD_FCON
+- *
+- *	FIXME: lock against link layer control transmissions
++ *	send messages on DLCI0 until CMD_FCON. The caller must hold
++ *	the gsm tx lock.
+  */
+-
+-static void gsm_data_kick(struct gsm_mux *gsm, struct gsm_dlci *dlci)
++static int gsm_data_kick(struct gsm_mux *gsm)
+ {
+ 	struct gsm_msg *msg, *nmsg;
+-	int len;
++	struct gsm_dlci *dlci;
++	int ret;
+ 
+-	list_for_each_entry_safe(msg, nmsg, &gsm->tx_list, list) {
++	clear_bit(TTY_DO_WRITE_WAKEUP, &gsm->tty->flags);
++
++	/* Serialize control messages and control channel messages first */
++	list_for_each_entry_safe(msg, nmsg, &gsm->tx_ctrl_list, list) {
+ 		if (gsm->constipated && !gsm_is_flow_ctrl_msg(msg))
++			return -EAGAIN;
++		ret = gsm_send_packet(gsm, msg);
++		switch (ret) {
++		case -ENOSPC:
++			return -ENOSPC;
++		case -ENODEV:
++			/* ldisc not open */
++			gsm->tx_bytes -= msg->len;
++			list_del(&msg->list);
++			kfree(msg);
+ 			continue;
+-		if (gsm->encoding != 0) {
+-			gsm->txframe[0] = GSM1_SOF;
+-			len = gsm_stuff_frame(msg->data,
+-						gsm->txframe + 1, msg->len);
+-			gsm->txframe[len + 1] = GSM1_SOF;
+-			len += 2;
+-		} else {
+-			gsm->txframe[0] = GSM0_SOF;
+-			memcpy(gsm->txframe + 1 , msg->data, msg->len);
+-			gsm->txframe[msg->len + 1] = GSM0_SOF;
+-			len = msg->len + 2;
+-		}
+-
+-		if (debug & 4)
+-			gsm_hex_dump_bytes(__func__, gsm->txframe, len);
+-		if (gsmld_output(gsm, gsm->txframe, len) <= 0)
++		default:
++			if (ret >= 0) {
++				list_del(&msg->list);
++				kfree(msg);
++			}
+ 			break;
+-		/* FIXME: Can eliminate one SOF in many more cases */
+-		gsm->tx_bytes -= msg->len;
+-
+-		list_del(&msg->list);
+-		kfree(msg);
++		}
++	}
+ 
+-		if (dlci) {
+-			tty_port_tty_wakeup(&dlci->port);
+-		} else {
+-			int i = 0;
++	if (gsm->constipated)
++		return -EAGAIN;
+ 
+-			for (i = 0; i < NUM_DLCI; i++)
+-				if (gsm->dlci[i])
+-					tty_port_tty_wakeup(&gsm->dlci[i]->port);
++	/* Serialize other channels */
++	if (list_empty(&gsm->tx_data_list))
++		return 0;
++	list_for_each_entry_safe(msg, nmsg, &gsm->tx_data_list, list) {
++		dlci = gsm->dlci[msg->addr];
++		/* Send only messages for DLCIs with valid state */
++		if (dlci->state != DLCI_OPEN) {
++			gsm->tx_bytes -= msg->len;
++			list_del(&msg->list);
++			kfree(msg);
++			continue;
++		}
++		ret = gsm_send_packet(gsm, msg);
++		switch (ret) {
++		case -ENOSPC:
++			return -ENOSPC;
++		case -ENODEV:
++			/* ldisc not open */
++			gsm->tx_bytes -= msg->len;
++			list_del(&msg->list);
++			kfree(msg);
++			continue;
++		default:
++			if (ret >= 0) {
++				list_del(&msg->list);
++				kfree(msg);
++			}
++			break;
+ 		}
+ 	}
++
++	return 1;
+ }
+ 
+ /**
+@@ -900,9 +994,21 @@ static void __gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
+ 	msg->data = dp;
+ 
+ 	/* Add to the actual output queue */
+-	list_add_tail(&msg->list, &gsm->tx_list);
++	switch (msg->ctrl & ~PF) {
++	case UI:
++	case UIH:
++		if (msg->addr > 0) {
++			list_add_tail(&msg->list, &gsm->tx_data_list);
++			break;
++		}
++		fallthrough;
++	default:
++		list_add_tail(&msg->list, &gsm->tx_ctrl_list);
++		break;
++	}
+ 	gsm->tx_bytes += msg->len;
+-	gsm_data_kick(gsm, dlci);
++
++	gsmld_write_trigger(gsm);
+ 	mod_timer(&gsm->kick_timer, jiffies + 10 * gsm->t1 * HZ / 100);
+ }
+ 
+@@ -1129,32 +1235,39 @@ static int gsm_dlci_modem_output(struct gsm_mux *gsm, struct gsm_dlci *dlci,
+ 
+ static int gsm_dlci_data_sweep(struct gsm_mux *gsm)
+ {
+-	int len, ret = 0;
+ 	/* Priority ordering: We should do priority with RR of the groups */
+-	int i = 1;
+-
+-	while (i < NUM_DLCI) {
+-		struct gsm_dlci *dlci;
++	int i, len, ret = 0;
++	bool sent;
++	struct gsm_dlci *dlci;
+ 
+-		if (gsm->tx_bytes > TX_THRESH_HI)
+-			break;
+-		dlci = gsm->dlci[i];
+-		if (dlci == NULL || dlci->constipated) {
+-			i++;
+-			continue;
++	while (gsm->tx_bytes < TX_THRESH_HI) {
++		for (sent = false, i = 1; i < NUM_DLCI; i++) {
++			dlci = gsm->dlci[i];
++			/* skip unused or blocked channel */
++			if (!dlci || dlci->constipated)
++				continue;
++			/* skip channels with invalid state */
++			if (dlci->state != DLCI_OPEN)
++				continue;
++			/* count the sent data per adaption */
++			if (dlci->adaption < 3 && !dlci->net)
++				len = gsm_dlci_data_output(gsm, dlci);
++			else
++				len = gsm_dlci_data_output_framed(gsm, dlci);
++			/* on error exit */
++			if (len < 0)
++				return ret;
++			if (len > 0) {
++				ret++;
++				sent = true;
++				/* The lower DLCs can starve the higher DLCs! */
++				break;
++			}
++			/* try next */
+ 		}
+-		if (dlci->adaption < 3 && !dlci->net)
+-			len = gsm_dlci_data_output(gsm, dlci);
+-		else
+-			len = gsm_dlci_data_output_framed(gsm, dlci);
+-		if (len < 0)
++		if (!sent)
+ 			break;
+-		/* DLCI empty - try the next */
+-		if (len == 0)
+-			i++;
+-		else
+-			ret++;
+-	}
++	};
+ 
+ 	return ret;
+ }
+@@ -1402,7 +1515,6 @@ static void gsm_control_message(struct gsm_mux *gsm, unsigned int command,
+ 						const u8 *data, int clen)
+ {
+ 	u8 buf[1];
+-	unsigned long flags;
+ 
+ 	switch (command) {
+ 	case CMD_CLD: {
+@@ -1424,9 +1536,7 @@ static void gsm_control_message(struct gsm_mux *gsm, unsigned int command,
+ 		gsm->constipated = false;
+ 		gsm_control_reply(gsm, CMD_FCON, NULL, 0);
+ 		/* Kick the link in case it is idling */
+-		spin_lock_irqsave(&gsm->tx_lock, flags);
+-		gsm_data_kick(gsm, NULL);
+-		spin_unlock_irqrestore(&gsm->tx_lock, flags);
++		gsmld_write_trigger(gsm);
+ 		break;
+ 	case CMD_FCOFF:
+ 		/* Modem wants us to STFU */
+@@ -1629,8 +1739,6 @@ static int gsm_control_wait(struct gsm_mux *gsm, struct gsm_control *control)
+ 
+ static void gsm_dlci_close(struct gsm_dlci *dlci)
+ {
+-	unsigned long flags;
+-
+ 	del_timer(&dlci->t1);
+ 	if (debug & 8)
+ 		pr_debug("DLCI %d goes closed.\n", dlci->addr);
+@@ -1639,17 +1747,16 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
+ 	dlci->constipated = true;
+ 	if (dlci->addr != 0) {
+ 		tty_port_tty_hangup(&dlci->port, false);
+-		spin_lock_irqsave(&dlci->lock, flags);
+-		kfifo_reset(&dlci->fifo);
+-		spin_unlock_irqrestore(&dlci->lock, flags);
++		gsm_dlci_clear_queues(dlci->gsm, dlci);
+ 		/* Ensure that gsmtty_open() can return. */
+ 		tty_port_set_initialized(&dlci->port, 0);
+ 		wake_up_interruptible(&dlci->port.open_wait);
+ 	} else
+ 		dlci->gsm->dead = true;
+-	wake_up(&dlci->gsm->event);
+ 	/* A DLCI 0 close is a MUX termination so we need to kick that
+ 	   back to userspace somehow */
++	gsm_dlci_data_kick(dlci);
++	wake_up(&dlci->gsm->event);
+ }
+ 
+ /**
+@@ -1672,6 +1779,7 @@ static void gsm_dlci_open(struct gsm_dlci *dlci)
+ 	/* Send current modem state */
+ 	if (dlci->addr)
+ 		gsm_modem_update(dlci, 0);
++	gsm_dlci_data_kick(dlci);
+ 	wake_up(&dlci->gsm->event);
+ }
+ 
+@@ -2222,7 +2330,7 @@ static void gsm1_receive(struct gsm_mux *gsm, unsigned char c)
+ 	} else if ((c & ISO_IEC_646_MASK) == XOFF) {
+ 		gsm->constipated = false;
+ 		/* Kick the link in case it is idling */
+-		gsm_data_kick(gsm, NULL);
++		gsmld_write_trigger(gsm);
+ 		return;
+ 	}
+ 	if (c == GSM1_SOF) {
+@@ -2353,6 +2461,9 @@ static void gsm_cleanup_mux(struct gsm_mux *gsm, bool disc)
+ 	del_timer_sync(&gsm->kick_timer);
+ 	del_timer_sync(&gsm->t2_timer);
+ 
++	/* Finish writing to ldisc */
++	flush_work(&gsm->tx_work);
++
+ 	/* Free up any link layer users and finally the control channel */
+ 	if (gsm->has_devices) {
+ 		gsm_unregister_devices(gsm_tty_driver, gsm->num);
+@@ -2364,9 +2475,12 @@ static void gsm_cleanup_mux(struct gsm_mux *gsm, bool disc)
+ 	mutex_unlock(&gsm->mutex);
+ 	/* Now wipe the queues */
+ 	tty_ldisc_flush(gsm->tty);
+-	list_for_each_entry_safe(txq, ntxq, &gsm->tx_list, list)
++	list_for_each_entry_safe(txq, ntxq, &gsm->tx_ctrl_list, list)
++		kfree(txq);
++	INIT_LIST_HEAD(&gsm->tx_ctrl_list);
++	list_for_each_entry_safe(txq, ntxq, &gsm->tx_data_list, list)
+ 		kfree(txq);
+-	INIT_LIST_HEAD(&gsm->tx_list);
++	INIT_LIST_HEAD(&gsm->tx_data_list);
+ }
+ 
+ /**
+@@ -2385,6 +2499,7 @@ static int gsm_activate_mux(struct gsm_mux *gsm)
+ 
+ 	timer_setup(&gsm->kick_timer, gsm_kick_timer, 0);
+ 	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
++	INIT_WORK(&gsm->tx_work, gsmld_write_task);
+ 	init_waitqueue_head(&gsm->event);
+ 	spin_lock_init(&gsm->control_lock);
+ 	spin_lock_init(&gsm->tx_lock);
+@@ -2494,7 +2609,8 @@ static struct gsm_mux *gsm_alloc_mux(void)
+ 	spin_lock_init(&gsm->lock);
+ 	mutex_init(&gsm->mutex);
+ 	kref_init(&gsm->ref);
+-	INIT_LIST_HEAD(&gsm->tx_list);
++	INIT_LIST_HEAD(&gsm->tx_ctrl_list);
++	INIT_LIST_HEAD(&gsm->tx_data_list);
+ 
+ 	gsm->t1 = T1;
+ 	gsm->t2 = T2;
+@@ -2651,6 +2767,47 @@ static int gsmld_output(struct gsm_mux *gsm, u8 *data, int len)
+ 	return gsm->tty->ops->write(gsm->tty, data, len);
+ }
+ 
++
++/**
++ *	gsmld_write_trigger	-	schedule ldisc write task
++ *	@gsm: our mux
++ */
++static void gsmld_write_trigger(struct gsm_mux *gsm)
++{
++	if (!gsm || !gsm->dlci[0] || gsm->dlci[0]->dead)
++		return;
++	schedule_work(&gsm->tx_work);
++}
++
++
++/**
++ *	gsmld_write_task	-	ldisc write task
++ *	@work: our tx write work
++ *
++ *	Writes out data to the ldisc if possible. We are doing this here to
++ *	avoid dead-locking. This returns if no space or data is left for output.
++ */
++static void gsmld_write_task(struct work_struct *work)
++{
++	struct gsm_mux *gsm = container_of(work, struct gsm_mux, tx_work);
++	unsigned long flags;
++	int i, ret;
++
++	/* All outstanding control channel and control messages and one data
++	 * frame is sent.
++	 */
++	ret = -ENODEV;
++	spin_lock_irqsave(&gsm->tx_lock, flags);
++	if (gsm->tty)
++		ret = gsm_data_kick(gsm);
++	spin_unlock_irqrestore(&gsm->tx_lock, flags);
++
++	if (ret >= 0)
++		for (i = 0; i < NUM_DLCI; i++)
++			if (gsm->dlci[i])
++				tty_port_tty_wakeup(&gsm->dlci[i]->port);
++}
++
+ /**
+  *	gsmld_attach_gsm	-	mode set up
+  *	@tty: our tty structure
+@@ -2790,6 +2947,7 @@ static int gsmld_open(struct tty_struct *tty)
+ 
+ 	timer_setup(&gsm->kick_timer, gsm_kick_timer, 0);
+ 	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
++	INIT_WORK(&gsm->tx_work, gsmld_write_task);
+ 
+ 	return 0;
+ }
+@@ -2806,16 +2964,9 @@ static int gsmld_open(struct tty_struct *tty)
+ static void gsmld_write_wakeup(struct tty_struct *tty)
+ {
+ 	struct gsm_mux *gsm = tty->disc_data;
+-	unsigned long flags;
+ 
+ 	/* Queue poll */
+-	clear_bit(TTY_DO_WRITE_WAKEUP, &tty->flags);
+-	spin_lock_irqsave(&gsm->tx_lock, flags);
+-	gsm_data_kick(gsm, NULL);
+-	if (gsm->tx_bytes < TX_THRESH_LO) {
+-		gsm_dlci_data_sweep(gsm);
+-	}
+-	spin_unlock_irqrestore(&gsm->tx_lock, flags);
++	gsmld_write_trigger(gsm);
+ }
+ 
+ /**
 -- 
-Schspa Shi
-BRs
+2.34.1
+

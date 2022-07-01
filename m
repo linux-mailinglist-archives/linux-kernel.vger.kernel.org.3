@@ -2,41 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F23156333B
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F2F563338
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236714AbiGAMJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 08:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39874 "EHLO
+        id S236229AbiGAMII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 08:08:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236608AbiGAMJH (ORCPT
+        with ESMTP id S233643AbiGAMIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 08:09:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B060371252;
-        Fri,  1 Jul 2022 05:09:06 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF6581424;
-        Fri,  1 Jul 2022 05:09:06 -0700 (PDT)
-Received: from e126387.arm.com (unknown [10.57.71.134])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 502673F792;
-        Fri,  1 Jul 2022 05:09:05 -0700 (PDT)
-From:   carsten.haitzler@foss.arm.com
+        Fri, 1 Jul 2022 08:08:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C16229B
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:08:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656677285;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B65LnvwVebM/Zu3VWd+syVDDl93qGF7mRqg6vAIs64g=;
+        b=GZbCYArdUdFRbanybNCeeVcAUwKfJxMe6fyu8pvpYO/f//qj7C5k3WePF6xdsDkMDd68Pu
+        3XUS31ksdQzJVG7dM5oYkPIgWQVeLiyR1snJu6Fj3TXoZ0KnCdn9zwssBJyjHjY3/R64Fb
+        nVxI3wy39jtT4KNEwYVHgQk6mCmdaH8=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-52-7gY5VGVzMMCwCGD6l1dRxA-1; Fri, 01 Jul 2022 08:08:04 -0400
+X-MC-Unique: 7gY5VGVzMMCwCGD6l1dRxA-1
+Received: by mail-wm1-f69.google.com with SMTP id be8-20020a05600c1e8800b003a069fe18ffso2947476wmb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 05:08:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=B65LnvwVebM/Zu3VWd+syVDDl93qGF7mRqg6vAIs64g=;
+        b=FvI20AhMO4i0qxiLjChTAJDWHh0LRTKJjAnbuJ30srD8w0JmW3XBgD4l3JW2ibhHNi
+         vidDhVEtZ96Qod3+MOkdxcAffZT1wA4MbgVYlsMzxUujzIWRA583m4clZUJ//W9eKMBU
+         sY4Ez0796NJhphd+ydMMvBA0mKgX/GggF9ulmtpa4SSgGlRqsds/Z8W8PskDFl3qulV0
+         i4Z8dOBr4jNh2lU3jxX9V3esWfUqaX8+lvpS5Tqp4tHCISKx2OF0qHAds/iGn9Pb3w6z
+         ZXM9nIPs8kk2HqZKSDnsu+Ohvq5QR0bcjwhGRk/E20W3zPBLk5sdQHX/luzsQgY6jgj8
+         JJrA==
+X-Gm-Message-State: AJIora9gUO5bIvDjhRAQ/uIpjcC+MfyYv1WR38XYpCS+hQJM+aj2pDI4
+        d65giH6wxN1RfYIxgo61mSSSFfVHLvZYkYGMuEmikSUmjtp+yj/FbO7/IiUKxpMYo6vCSPNKZM1
+        qLkuwkv1Eh+s3DuS+BHJ0MWs80GDE8H7PO7dVKBMEuwVcKNwrPPz28Md97eeD9evxfH4a2Sm4nU
+        w=
+X-Received: by 2002:a5d:4251:0:b0:21b:885b:2fcc with SMTP id s17-20020a5d4251000000b0021b885b2fccmr13751032wrr.52.1656677282662;
+        Fri, 01 Jul 2022 05:08:02 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sC9Tmd/ElcPrMcZ/REfD/aw5cCDOVahi1PhOsK1QGHWkyFQshHyOgr1yV8DRgNx5hGf1doqQ==
+X-Received: by 2002:a5d:4251:0:b0:21b:885b:2fcc with SMTP id s17-20020a5d4251000000b0021b885b2fccmr13750991wrr.52.1656677282355;
+        Fri, 01 Jul 2022 05:08:02 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id v4-20020a7bcb44000000b0039746638d6esm9813160wmj.33.2022.07.01.05.08.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 05:08:01 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     coresight@lists.linaro.org, suzuki.poulose@arm.com,
-        mathieu.poirier@linaro.org, mike.leach@linaro.org,
-        leo.yan@linaro.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Subject: [PATCH 05/14] perf test: Add asm pureloop test shell script
-Date:   Fri,  1 Jul 2022 13:07:54 +0100
-Message-Id: <20220701120804.3226396-6-carsten.haitzler@foss.arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220701120804.3226396-1-carsten.haitzler@foss.arm.com>
-References: <20220701120804.3226396-1-carsten.haitzler@foss.arm.com>
-Reply-To: carsten.haitzler@foss.arm.com
+Cc:     Peter Robinson <pbrobinson@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH 1/2] drm: Use size_t type for len variable in drm_copy_field()
+Date:   Fri,  1 Jul 2022 14:07:54 +0200
+Message-Id: <20220701120755.2135100-2-javierm@redhat.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220701120755.2135100-1-javierm@redhat.com>
+References: <20220701120755.2135100-1-javierm@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -45,42 +84,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
+The strlen() function returns a size_t which is an unsigned int on 32-bit
+arches and an unsigned long on 64-bit arches. But in the drm_copy_field()
+function, the strlen() return value is assigned to an 'int len' variable.
 
-Add a script to drive the asm pureloop test for arm64/CoreSight that
-gathers data so it passes a minimum bar for amount and quality of
-content that we extract from the kernel's perf support.
+Later, the len variable is passed as copy_from_user() third argument that
+is an unsigned long parameter as well.
 
-Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+In theory, this can lead to an integer overflow via type conversion. Since
+the assignment happens to a signed int lvalue instead of a size_t lvalue.
+
+In practice though, that's unlikely since the values copied are set by DRM
+drivers and not controlled by userspace. But using a size_t for len is the
+correct thing to do anyways.
+
+Reported-by: Peter Robinson <pbrobinson@gmail.com>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 ---
- .../tests/shell/coresight/asm_pure_loop.sh     | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
- create mode 100755 tools/perf/tests/shell/coresight/asm_pure_loop.sh
 
-diff --git a/tools/perf/tests/shell/coresight/asm_pure_loop.sh b/tools/perf/tests/shell/coresight/asm_pure_loop.sh
-new file mode 100755
-index 000000000000..569e9d46162b
---- /dev/null
-+++ b/tools/perf/tests/shell/coresight/asm_pure_loop.sh
-@@ -0,0 +1,18 @@
-+#!/bin/sh -e
-+# CoreSight / ASM Pure Loop
-+
-+# SPDX-License-Identifier: GPL-2.0
-+# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
-+
-+TEST="asm_pure_loop"
-+. $(dirname $0)/../lib/coresight.sh
-+ARGS=""
-+DATV="out"
-+DATA="$DATD/perf-$TEST-$DATV.data"
-+
-+perf record $PERFRECOPT -o "$DATA" "$BIN" $ARGS
-+
-+perf_dump_aux_verify "$DATA" 10 10 10
-+
-+err=$?
-+exit $err
+ drivers/gpu/drm/drm_ioctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/drm_ioctl.c b/drivers/gpu/drm/drm_ioctl.c
+index 8faad23dc1d8..e1b9a03e619c 100644
+--- a/drivers/gpu/drm/drm_ioctl.c
++++ b/drivers/gpu/drm/drm_ioctl.c
+@@ -472,7 +472,7 @@ EXPORT_SYMBOL(drm_invalid_op);
+  */
+ static int drm_copy_field(char __user *buf, size_t *buf_len, const char *value)
+ {
+-	int len;
++	size_t len;
+ 
+ 	/* don't overflow userbuf */
+ 	len = strlen(value);
 -- 
-2.32.0
+2.36.1
 

@@ -2,234 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C3D5627F1
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 03:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E27D15627F7
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 03:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbiGABCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 21:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
+        id S232499AbiGABHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 21:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231552AbiGABCp (ORCPT
+        with ESMTP id S230284AbiGABHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 21:02:45 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14AEB599DD
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 18:02:41 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3177f4ce3e2so9686257b3.5
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 18:02:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5e2VOFezjxqspoL1d+0n+t2eO3x2RETtacSMN5zGdAs=;
-        b=DsTv+bcUYNl2fnBIUQ6Ro+r6VNjE0cbQFXA4vyDI5HQqsh4HPnaE2QRJLCe7v9S8BY
-         /sPM6wwB4Thmd9ctc71kf5zNualdBzDI6pzuSH459ZT6uGsbbeVr1zkhsrR+9SCGrkga
-         eFzxQdtX2LTtB0U0e+oAHULZ6H3/8wxj482TXtyUaG0bxrzPX3x3nOVIL6kCog6d5gcg
-         LmMqOOaAwAH0GSveeP9usrtvR9mS1vCO9kL3m2e9ANdbcSFg50/oCi3Dy/o2rg1RtfgE
-         N/MvAq/ur9OAzHma+pmZ1GlbMoV3k8KvhiBi/O3LEVCA5tZnGyDDaTwqWz6XghYiU8PM
-         XgFQ==
+        Thu, 30 Jun 2022 21:07:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB2CD599E1
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 18:07:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656637656;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HDRvPOfg2sqIMJ3xvadp3pU7dDplLEAQE44MLsZLEnQ=;
+        b=Q1PP9WzfJz6UQ4yyLnL3yw6KEqBL+X0DHJPgcon/35Brhf2U9MKRhXkqmB3RubNLOjAOTy
+        sib4L+1iPM63MQbiA92QfUUUT3pENxToej/chPAnqsRxP5F9Eeelx5WcvNDbMUJBBKA7t8
+        cAfbVoy43z5VHb+asdR49SG82vVlwfk=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-662-6O470hy9P0ixCeCcGWbvoA-1; Thu, 30 Jun 2022 21:07:34 -0400
+X-MC-Unique: 6O470hy9P0ixCeCcGWbvoA-1
+Received: by mail-lf1-f69.google.com with SMTP id q22-20020a0565123a9600b0047f6b8e1babso360495lfu.21
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 18:07:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5e2VOFezjxqspoL1d+0n+t2eO3x2RETtacSMN5zGdAs=;
-        b=io1Bi3Ho/eaAyze+943JGXdU0iypX5i6chCp5C76uvvGO6pjYgvEPof0SXmnctPQzS
-         CHDVjqJ/DzppkaHNNW5eVxvxWgtmuqJHBl2xvhNzojM5xx15tFxc78GZZlpTbxQTlBoq
-         sw8zGctSWw6DaG4bT2OCh5sHIcz4tIzH44B3iF6+o0xx/ZuyzmSkW6c4c3F7L3uDn/Gv
-         eEekmWOgK8ZR8UiMVcrvkIK/YQl0AGy7whiKK/F85VvSDI6a2M0LW5aUnKkfxaEW+BLW
-         z9Bf1wtoLUTWGSKniNnDY2nL9ZtGJI1po8vwiQoHGmZ/aLeOG8P7dH8QXRQc7zSMMj7D
-         VuIQ==
-X-Gm-Message-State: AJIora+Kiqcvq7v32yGCMSCfEdrdKf8Ha0XMaMYx/MKaIATTb2aYb2Z/
-        bd67bEx3mFohODr97GKiQgAbEKPxoTW6w9t4Vw/5bQ==
-X-Google-Smtp-Source: AGRyM1ubQ0A0CmfYu3uw1vNRx0QpThx7NPDmiZeEC/WVv0cqnsx6dmYl28Rt8jXrA27ZBF8EDUPrq9vbignfaImDp8s=
-X-Received: by 2002:a0d:eace:0:b0:317:87ac:b3a8 with SMTP id
- t197-20020a0deace000000b0031787acb3a8mr14172406ywe.126.1656637360041; Thu, 30
- Jun 2022 18:02:40 -0700 (PDT)
+        bh=HDRvPOfg2sqIMJ3xvadp3pU7dDplLEAQE44MLsZLEnQ=;
+        b=Ax2s17B23o5J0aOdq4WK1WnnhTEnRN2g76dZOV/Au3+ZzZxBTo0/gHcarsLWJlYOrx
+         dlssvQ0KOhYJh+JixgjeKDFcwt2ab1uycGaOEJdZL5rWvKc7gjRauhYg7DNyY0JCFe1L
+         Rsiu6MhoPzFteiHHDKf+9tOCTNuQyOGb55YrV2cXBKY2pk8ySSN+50DB0pC8WUXJ0+B0
+         L3v/xOvMh7trcdCosMVSXxtbcevGfYCFDYx097ejtNO0sX1NZ0uuCTu6WGz1Lt8SG0PY
+         5lqhZcIagHH7Tvd127hVpoRnE8+x8mk+Ed5wj6bZjylxx58KM0XTB1avrK0DyAB+Gcev
+         m4LQ==
+X-Gm-Message-State: AJIora+15YeN3zRQVwNpcHIuVX9+9ZT41ar+jYiA0pIeOuAJYUyoqTui
+        ZjoqD/lybYWIGfz5kvvrM/1mM+X558EcaZayz/5Cyzf1fyp4TYWEhyiTSstONRNbqrGIzexA2V+
+        9Yb4F7lqbTuocuTaVVTAHnvZG6BH5SxLOmgfRocoy
+X-Received: by 2002:a2e:aaa5:0:b0:25b:ae57:4ad7 with SMTP id bj37-20020a2eaaa5000000b0025bae574ad7mr6841037ljb.323.1656637652784;
+        Thu, 30 Jun 2022 18:07:32 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vG3zFm9S/F3A98azRf8TGVuk0Y8Yo6Dm1jFfKZpFBfwd8hhFccNip+jSVwsWmzuwAgKtCF+KqNpsyXuXcyAEc=
+X-Received: by 2002:a2e:aaa5:0:b0:25b:ae57:4ad7 with SMTP id
+ bj37-20020a2eaaa5000000b0025bae574ad7mr6841026ljb.323.1656637652543; Thu, 30
+ Jun 2022 18:07:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <62bdec26.1c69fb81.46bc5.2d67@mx.google.com> <Yr3vEDDulZj1Dplv@sirena.org.uk>
- <CAGETcx88M3Use8crFMTU=By3UVjjaJuP1_Ah7zsy_w=pNxc+6w@mail.gmail.com>
-In-Reply-To: <CAGETcx88M3Use8crFMTU=By3UVjjaJuP1_Ah7zsy_w=pNxc+6w@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 30 Jun 2022 18:02:04 -0700
-Message-ID: <CAGETcx_s+ui9wWA7OawojPbY95bLZE5pSmpK-34_kLZTzjf9Ew@mail.gmail.com>
-Subject: Re: next/master bisection: baseline.bootrr.imx6q-pcie-pcie0-probed on kontron-pitx-imx8m
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernelci-results@groups.io, bot@kernelci.org,
-        gtucker@collabora.com, Michael Walle <michael@walle.cc>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220630093651.25981-1-alexander.atanasov@virtuozzo.com>
+ <20220630054532-mutt-send-email-mst@kernel.org> <1c72645a-f162-2649-bdb6-a28ba93bccd2@virtuozzo.com>
+In-Reply-To: <1c72645a-f162-2649-bdb6-a28ba93bccd2@virtuozzo.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 1 Jul 2022 09:07:21 +0800
+Message-ID: <CACGkMEsZHB9opC6frbSwNmE1d9=yt3npZCHWcK25Xe52VJzwGQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] virtio: Restore semantics of vq->broken in virtqueues
+To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>, kernel@openvz.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        linux-s390@vger.kernel.org, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 2:48 PM Saravana Kannan <saravanak@google.com> wrote:
+On Thu, Jun 30, 2022 at 6:09 PM Alexander Atanasov
+<alexander.atanasov@virtuozzo.com> wrote:
 >
-> On Thu, Jun 30, 2022 at 11:44 AM Mark Brown <broonie@kernel.org> wrote:
-> >
-> > On Thu, Jun 30, 2022 at 11:32:06AM -0700, KernelCI bot wrote:
-> >
-> > The KernelCI bisection bot identified a failure to probe the PCI bus on
-> > kontron-pitx-imx8m in -next resulting from commit (5a46079a96451 PM:
-> > domains: Delete usage of driver_deferred_probe_check_state()) with at
-> > least an arm64 defconfig+64K_PAGES.
-> >
-> > The only logging I see from PCI in the failing boot is:
-> >
-> >    <6>[    0.580973] PCI: CLS 0 bytes, default 64
-> >
-> > there's none of the host bridge enumeration starting with
-> >
-> >   <6>[    2.394399] imx6q-pcie 33800000.pcie: host bridge /soc@0/pcie@33800000 ranges:
-> >   <6>[    2.396012] imx6q-pcie 33c00000.pcie: host bridge /soc@0/pcie@33c00000 ranges:
-> >
-> > that is seen with working boots.
-> >
-> > I've left the full bot report below, it's got a Reported-by tag, links
-> > to more details including full boot logs and more.  The bot checked that
-> > reverting the patch seems to fix the problem.
+> Hello,
 >
-> Thanks for the report. I'll look into this alongside the issue Tony reported.
+> On 30/06/2022 12:46, Michael S. Tsirkin wrote:
+> > On Thu, Jun 30, 2022 at 09:36:46AM +0000, Alexander Atanasov wrote:
+> >> virtio: harden vring IRQ (8b4ec69d7e09) changed the use
+> >> of vq->broken. As result vring_interrupt handles IRQs for
+> >> broken drivers as IRQ_NONE and not IRQ_HANDLED and made impossible
+> >> to initiallize vqs before the driver is ready, i.e. in probe method.
+> >> Balloon driver does this and it can not load because it fails in
+> >> vqs_init with -EIO.
+> >>
+> >> So instead of changing the original intent ot the flag introduce
+> >> a new flag vq->ready which servers the purpose to check of early IRQs
+> >> and restore the behaviour of the vq->broken flag.
+> >>
+> >> Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+> >
+> > Does
+> >
+> > commit c346dae4f3fbce51bbd4f2ec5e8c6f9b91e93163
+> > Author: Jason Wang <jasowang@redhat.com>
+> > Date:   Wed Jun 22 09:29:40 2022 +0800
+> >
+> >      virtio: disable notification hardening by default
+> >
+> >
+> > solve the problem for you?
+>
+>
+> No, it won't if CONFIG_VIRTIO_HARDEN_NOTIFICATION is enabled - balloon
+> still won't be able to init vqs.
+>
+> The problem is in virtqueue_add_split and virtqueue_add_packed - can not
+> set driver_ok without queues.
+>
+> The return value of the vring_interrupt gets different - and iirc
+> IRQ_NONE for broken device can lead to interrupt storms - i am not sure
+> if that is valid for virtio devices yet but for real harware most
+> likely.
 
-Hi Mark,
+Valid but the interrupt will be noted and disabled by the kernel then.
 
-I think the root cause is the same as the issue I debugged here:
-https://lore.kernel.org/lkml/CAGETcx_1qa=gGT4LVkyPpcA1vFM9FzuJE+0DhL_nFyg5cbFjVg@mail.gmail.com/
+> Either way if you have a mix of  drivers working differently
+> depending on return of the handler  it would get really messy.
 
-The patch attached to that email will probably fix this issue. I
-haven't dealt with Kernel CI bot before. Is there a way to get it to
-test a patch?
-
-Thanks,
-Saravana
+Yes, IRQ_HANDLED may break the driver that shares a single IRQ.
 
 >
-> > > * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-> > > * This automated bisection report was sent to you on the basis  *
-> > > * that you may be involved with the breaking commit it has      *
-> > > * found.  No manual investigation has been done to verify it,   *
-> > > * and the root cause of the problem may be somewhere else.      *
-> > > *                                                               *
-> > > * If you do send a fix, please include this trailer:            *
-> > > *   Reported-by: "kernelci.org bot" <bot@kernelci.org>          *
-> > > *                                                               *
-> > > * Hope this helps!                                              *
-> > > * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-> > >
-> > > next/master bisection: baseline.bootrr.imx6q-pcie-pcie0-probed on kontron-pitx-imx8m
-> > >
-> > > Summary:
-> > >   Start:      6cc11d2a17592 Add linux-next specific files for 20220630
-> > >   Plain log:  https://storage.kernelci.org/next/master/next-20220630/arm64/defconfig+CONFIG_ARM64_64K_PAGES=y/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.txt
-> > >   HTML log:   https://storage.kernelci.org/next/master/next-20220630/arm64/defconfig+CONFIG_ARM64_64K_PAGES=y/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.html
-> > >   Result:     5a46079a96451 PM: domains: Delete usage of driver_deferred_probe_check_state()
-> > >
-> > > Checks:
-> > >   revert:     PASS
-> > >   verify:     PASS
-> > >
-> > > Parameters:
-> > >   Tree:       next
-> > >   URL:        https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> > >   Branch:     master
-> > >   Target:     kontron-pitx-imx8m
-> > >   CPU arch:   arm64
-> > >   Lab:        lab-kontron
-> > >   Compiler:   gcc-10
-> > >   Config:     defconfig+CONFIG_ARM64_64K_PAGES=y
-> > >   Test case:  baseline.bootrr.imx6q-pcie-pcie0-probed
-> > >
-> > > Breaking commit found:
-> > >
-> > > -------------------------------------------------------------------------------
-> > > commit 5a46079a96451cfb15e4f5f01f73f7ba24ef851a
-> > > Author: Saravana Kannan <saravanak@google.com>
-> > > Date:   Wed Jun 1 00:06:57 2022 -0700
-> > >
-> > >     PM: domains: Delete usage of driver_deferred_probe_check_state()
-> > >
-> > >     Now that fw_devlink=on by default and fw_devlink supports
-> > >     "power-domains" property, the execution will never get to the point
-> > >     where driver_deferred_probe_check_state() is called before the supplier
-> > >     has probed successfully or before deferred probe timeout has expired.
-> > >
-> > >     So, delete the call and replace it with -ENODEV.
-> > >
-> > >     Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > >     Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > >     Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > >     Link: https://lore.kernel.org/r/20220601070707.3946847-2-saravanak@google.com
-> > >     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > >
-> > > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > > index 739e52cd4aba5..3e86772d5fac5 100644
-> > > --- a/drivers/base/power/domain.c
-> > > +++ b/drivers/base/power/domain.c
-> > > @@ -2730,7 +2730,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
-> > >               mutex_unlock(&gpd_list_lock);
-> > >               dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
-> > >                       __func__, PTR_ERR(pd));
-> > > -             return driver_deferred_probe_check_state(base_dev);
-> > > +             return -ENODEV;
-> > >       }
-> > >
-> > >       dev_dbg(dev, "adding to PM domain %s\n", pd->name);
-> > > -------------------------------------------------------------------------------
-> > >
-> > >
-> > > Git bisection log:
-> > >
-> > > -------------------------------------------------------------------------------
-> > > git bisect start
-> > > # good: [d9b2ba67917c18822c6a09af41c32fa161f1606b] Merge tag 'platform-drivers-x86-v5.19-3' of git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86
-> > > git bisect good d9b2ba67917c18822c6a09af41c32fa161f1606b
-> > > # bad: [6cc11d2a1759275b856e464265823d94aabd5eaf] Add linux-next specific files for 20220630
-> > > git bisect bad 6cc11d2a1759275b856e464265823d94aabd5eaf
-> > > # good: [7391068f14aafb8c5bb9d5aeb07ecfa55c89be42] Merge branch 'drm-next' of https://gitlab.freedesktop.org/agd5f/linux
-> > > git bisect good 7391068f14aafb8c5bb9d5aeb07ecfa55c89be42
-> > > # good: [17daf6a2ab5178cf52a20d1c85470ea4638d4310] Merge branch 'next' of git://git.kernel.org/pub/scm/virt/kvm/kvm.git
-> > > git bisect good 17daf6a2ab5178cf52a20d1c85470ea4638d4310
-> > > # bad: [a143ea0f3ce59385089e6e7b71b04fd0b5621bd8] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git
-> > > git bisect bad a143ea0f3ce59385089e6e7b71b04fd0b5621bd8
-> > > # bad: [57b6609eb7251280cf9f34fdebf1244f10673749] Merge branch 'icc-next' of git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git
-> > > git bisect bad 57b6609eb7251280cf9f34fdebf1244f10673749
-> > > # bad: [eb3fd63a935b759df99bfe4a6b13c820204f81d3] Merge branch 'usb-next' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-> > > git bisect bad eb3fd63a935b759df99bfe4a6b13c820204f81d3
-> > > # good: [048914d1bed271f04f726b7f78d0bef8cd1809f5] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-hsi.git
-> > > git bisect good 048914d1bed271f04f726b7f78d0bef8cd1809f5
-> > > # good: [40a959d7042bb7711e404ad2318b30e9f92c6b9b] usb: host: ohci-ppc-of: Fix refcount leak bug
-> > > git bisect good 40a959d7042bb7711e404ad2318b30e9f92c6b9b
-> > > # good: [849f35422319a46c2a52289e2d5c85eb3346a921] Merge tag 'thunderbolt-for-v5.20-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
-> > > git bisect good 849f35422319a46c2a52289e2d5c85eb3346a921
-> > > # bad: [a52ed4866d2b90dd5e4ae9dabd453f3ed8fa3cbc] mwifiex: fix sleep in atomic context bugs caused by dev_coredumpv
-> > > git bisect bad a52ed4866d2b90dd5e4ae9dabd453f3ed8fa3cbc
-> > > # bad: [f516d01b9df2782b9399c44fa1d21c3d09211f8a] Revert "driver core: Set default deferred_probe_timeout back to 0."
-> > > git bisect bad f516d01b9df2782b9399c44fa1d21c3d09211f8a
-> > > # bad: [f8217275b57aa48d98cc42051c2aac34152718d6] net: mdio: Delete usage of driver_deferred_probe_check_state()
-> > > git bisect bad f8217275b57aa48d98cc42051c2aac34152718d6
-> > > # bad: [24a026f85241a01bbcfe1b263caeeaa9a79bab40] pinctrl: devicetree: Delete usage of driver_deferred_probe_check_state()
-> > > git bisect bad 24a026f85241a01bbcfe1b263caeeaa9a79bab40
-> > > # bad: [5a46079a96451cfb15e4f5f01f73f7ba24ef851a] PM: domains: Delete usage of driver_deferred_probe_check_state()
-> > > git bisect bad 5a46079a96451cfb15e4f5f01f73f7ba24ef851a
-> > > # first bad commit: [5a46079a96451cfb15e4f5f01f73f7ba24ef851a] PM: domains: Delete usage of driver_deferred_probe_check_state()
-> > > -------------------------------------------------------------------------------
-> > >
-> > >
-> > > -=-=-=-=-=-=-=-=-=-=-=-
-> > > Groups.io Links: You receive all messages sent to this group.
-> > > View/Reply Online (#28727): https://groups.io/g/kernelci-results/message/28727
-> > > Mute This Topic: https://groups.io/mt/92093224/1131744
-> > > Group Owner: kernelci-results+owner@groups.io
-> > > Unsubscribe: https://groups.io/g/kernelci-results/unsub [broonie@kernel.org]
-> > > -=-=-=-=-=-=-=-=-=-=-=-
-> > >
-> > >
+> RR's original intent was to flag a driver as bad why reuse it like that  ?
+
+It's somehow the same, we want to prevent the driver from using the
+malicious or buggy device.
+
+Anyhow, I think using a dedicated variable is better.
+
+We are discussing a better approach for hardening the notifications.
+But in case, this will be merged:
+
+Acked-by: Jason Wang <jasowang@redhat.com>
+
+Thanks
+
+>
+>
+> >>   drivers/virtio/virtio_ring.c  | 20 ++++++++++++++------
+> >>   include/linux/virtio.h        |  2 +-
+> >>   include/linux/virtio_config.h | 10 +++++-----
+> >>   3 files changed, 20 insertions(+), 12 deletions(-)
+> >>
+> >> Cc: Thomas Gleixner <tglx@linutronix.de>
+> >> Cc: Peter Zijlstra <peterz@infradead.org>
+> >> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> >> Cc: Marc Zyngier <maz@kernel.org>
+> >> Cc: Halil Pasic <pasic@linux.ibm.com>
+> >> Cc: Cornelia Huck <cohuck@redhat.com>
+> >> Cc: Vineeth Vijayan <vneethv@linux.ibm.com>
+> >> Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+> >> Cc: linux-s390@vger.kernel.org
+> >> Cc: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> >>
+> >>
+> >> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> >> index 13a7348cedff..dca3cc774584 100644
+> >> --- a/drivers/virtio/virtio_ring.c
+> >> +++ b/drivers/virtio/virtio_ring.c
+> >> @@ -100,6 +100,9 @@ struct vring_virtqueue {
+> >>      /* Other side has made a mess, don't try any more. */
+> >>      bool broken;
+> >>
+> >> +    /* the queue is ready to handle interrupts  */
+> >> +    bool ready;
+> >> +
+> >>      /* Host supports indirect buffers */
+> >>      bool indirect;
+> >>
+> >> @@ -1688,7 +1691,8 @@ static struct virtqueue *vring_create_virtqueue_packed(
+> >>      vq->we_own_ring = true;
+> >>      vq->notify = notify;
+> >>      vq->weak_barriers = weak_barriers;
+> >> -    vq->broken = true;
+> >> +    vq->broken = false;
+> >> +    vq->ready = false;
+> >>      vq->last_used_idx = 0;
+> >>      vq->event_triggered = false;
+> >>      vq->num_added = 0;
+> >> @@ -2134,7 +2138,10 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
+> >>              return IRQ_NONE;
+> >>      }
+> >>
+> >> -    if (unlikely(vq->broken)) {
+> >> +    if (unlikely(vq->broken))
+> >> +            return IRQ_HANDLED;
+> >> +
+> >> +    if (unlikely(!vq->ready)) {
+> >>              dev_warn_once(&vq->vq.vdev->dev,
+> >>                            "virtio vring IRQ raised before DRIVER_OK");
+> >>              return IRQ_NONE;
+> >> @@ -2180,7 +2187,8 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+> >>      vq->we_own_ring = false;
+> >>      vq->notify = notify;
+> >>      vq->weak_barriers = weak_barriers;
+> >> -    vq->broken = true;
+> >> +    vq->broken = false;
+> >> +    vq->ready = false;
+> >>      vq->last_used_idx = 0;
+> >>      vq->event_triggered = false;
+> >>      vq->num_added = 0;
+> >> @@ -2405,7 +2413,7 @@ EXPORT_SYMBOL_GPL(virtio_break_device);
+> >>    * (probing and restoring). This function should only be called by the
+> >>    * core, not directly by the driver.
+> >>    */
+> >> -void __virtio_unbreak_device(struct virtio_device *dev)
+> >> +void __virtio_device_ready(struct virtio_device *dev)
+> >>   {
+> >>      struct virtqueue *_vq;
+> >>
+> >> @@ -2414,11 +2422,11 @@ void __virtio_unbreak_device(struct virtio_device *dev)
+> >>              struct vring_virtqueue *vq = to_vvq(_vq);
+> >>
+> >>              /* Pairs with READ_ONCE() in virtqueue_is_broken(). */
+> >> -            WRITE_ONCE(vq->broken, false);
+> >> +            WRITE_ONCE(vq->ready, true);
+> >>      }
+> >>      spin_unlock(&dev->vqs_list_lock);
+> >>   }
+> >> -EXPORT_SYMBOL_GPL(__virtio_unbreak_device);
+> >> +EXPORT_SYMBOL_GPL(__virtio_device_ready);
+> >>
+> >>   dma_addr_t virtqueue_get_desc_addr(struct virtqueue *_vq)
+> >>   {
+> >> diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+> >> index d8fdf170637c..538c5959949a 100644
+> >> --- a/include/linux/virtio.h
+> >> +++ b/include/linux/virtio.h
+> >> @@ -131,7 +131,7 @@ void unregister_virtio_device(struct virtio_device *dev);
+> >>   bool is_virtio_device(struct device *dev);
+> >>
+> >>   void virtio_break_device(struct virtio_device *dev);
+> >> -void __virtio_unbreak_device(struct virtio_device *dev);
+> >> +void __virtio_device_ready(struct virtio_device *dev);
+> >>
+> >>   void virtio_config_changed(struct virtio_device *dev);
+> >>   #ifdef CONFIG_PM_SLEEP
+> >> diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
+> >> index 49c7c32815f1..35cf1b26e05a 100644
+> >> --- a/include/linux/virtio_config.h
+> >> +++ b/include/linux/virtio_config.h
+> >> @@ -259,21 +259,21 @@ void virtio_device_ready(struct virtio_device *dev)
+> >>
+> >>      /*
+> >>       * The virtio_synchronize_cbs() makes sure vring_interrupt()
+> >> -     * will see the driver specific setup if it sees vq->broken
+> >> +     * will see the driver specific setup if it sees vq->ready
+> >>       * as false (even if the notifications come before DRIVER_OK).
+> >>       */
+> >>      virtio_synchronize_cbs(dev);
+> >> -    __virtio_unbreak_device(dev);
+> >> +    __virtio_device_ready(dev);
+> >>      /*
+> >> -     * The transport should ensure the visibility of vq->broken
+> >> +     * The transport should ensure the visibility of vq->ready
+> >>       * before setting DRIVER_OK. See the comments for the transport
+> >>       * specific set_status() method.
+> >>       *
+> >>       * A well behaved device will only notify a virtqueue after
+> >>       * DRIVER_OK, this means the device should "see" the coherenct
+> >> -     * memory write that set vq->broken as false which is done by
+> >> +     * memory write that set vq->ready as true which is done by
+> >>       * the driver when it sees DRIVER_OK, then the following
+> >> -     * driver's vring_interrupt() will see vq->broken as false so
+> >> +     * driver's vring_interrupt() will see vq->true as true so
+> >>       * we won't lose any notification.
+> >>       */
+> >>      dev->config->set_status(dev, status | VIRTIO_CONFIG_S_DRIVER_OK);
+> >> --
+> >> 2.25.1
+>
+> --
+> Regards,
+> Alexander Atanasov
+>
+

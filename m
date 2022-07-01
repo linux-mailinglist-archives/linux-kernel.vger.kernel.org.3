@@ -2,224 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB10562CA9
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B00562CC3
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234969AbiGAHb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 03:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
+        id S235099AbiGAHfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 03:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiGAHbZ (ORCPT
+        with ESMTP id S229808AbiGAHfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 03:31:25 -0400
-Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B8E6B832;
-        Fri,  1 Jul 2022 00:31:22 -0700 (PDT)
-Received: from [192.168.1.101] (abxi46.neoplus.adsl.tpnet.pl [83.9.2.46])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id DF0693F7B4;
-        Fri,  1 Jul 2022 09:31:18 +0200 (CEST)
-Message-ID: <198fc303-30e5-31c7-5159-b787916ee6d8@somainline.org>
-Date:   Fri, 1 Jul 2022 09:31:17 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V2 7/8] arm64: dts: Add ipq5018 SoC and MP03 board support
-Content-Language: en-US
-To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
-        agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linus.walleij@linaro.org,
-        catalin.marinas@arm.com, p.zabel@pengutronix.de,
-        quic_varada@quicinc.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220621161126.15883-1-quic_srichara@quicinc.com>
- <20220621161126.15883-8-quic_srichara@quicinc.com>
- <f8aa5f81-e77c-db28-519d-7d9ee119dcf3@somainline.org>
- <2a16703b-5b1e-5ce9-0af0-2e08da49d8ed@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <2a16703b-5b1e-5ce9-0af0-2e08da49d8ed@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+        Fri, 1 Jul 2022 03:35:46 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7C56D559
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 00:35:46 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2617SUSF018572;
+        Fri, 1 Jul 2022 07:35:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=gLsIGt5mcqLwa6DnbQZyQAdiTpRMEIZyAyathQipuig=;
+ b=M75U/GR6ZmabZ+1tSIC/sttID+YgqPI7saYFMIPW5tJDg6mTOsnc1WVvP882nqzLf8Fx
+ g6ru0fQ2Otwjs8ve9zEzyrJWwhG3Pqtz02MsSva6T0etbNuVyEB8OYzQnwDKxGrnU/UT
+ QxSwH+Gx2RITDbO+HeMBqsec4p4sTAytkZKpadZeVxAQLuDQBbStDbvrSnFjmMtRMmMA
+ W0yGbQ2IllIBZVIIz87ChVHSsQTadMpiPQtZt/Eah/xgGPO2e63gRx8/l7jUnpiEQaqi
+ qt2cg6iV4xWj+ISXeEnZn2SR8ZM2FQzuPt086rrylG/L17lmxpr7VwQrVWnhBQ6rsyi5 dQ== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h1vjpg751-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Jul 2022 07:35:40 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2617SSia010563;
+        Fri, 1 Jul 2022 07:35:38 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3gwt08y09u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Jul 2022 07:35:38 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2617Za3h22020394
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 1 Jul 2022 07:35:36 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5BEA14C04A;
+        Fri,  1 Jul 2022 07:35:36 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D29334C046;
+        Fri,  1 Jul 2022 07:35:34 +0000 (GMT)
+Received: from li-NotSettable.ibm.com.com (unknown [9.43.100.5])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  1 Jul 2022 07:35:34 +0000 (GMT)
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Eric Biederman <ebiederm@xmission.com>
+Cc:     <linux-kernel@vger.kernel.org>, kexec@lists.infradead.org
+Subject: [PATCH 0/2] kexec: Drop __weak attributes from functions
+Date:   Fri,  1 Jul 2022 13:04:03 +0530
+Message-Id: <cover.1656659357.git.naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.31.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: LBOsbtN09GJJq3kw3KNFbeGzH4JSd4IT
+X-Proofpoint-GUID: LBOsbtN09GJJq3kw3KNFbeGzH4JSd4IT
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-01_04,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=638 suspectscore=0 adultscore=0 mlxscore=0 priorityscore=1501
+ spamscore=0 malwarescore=0 phishscore=0 bulkscore=0 impostorscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2207010024
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As requested [1], this series converts weak functions in kexec to use 
+the #ifdef approach. I have compile-tested this series on arm64, 
+powerpc, s390 and x86_64.
+
+- Naveen
+
+[1] http://lkml.kernel.org/r/87ee0q7b92.fsf@email.froward.int.ebiederm.org
 
 
-On 28.06.2022 09:14, Sricharan Ramabadhran wrote:
-> Thanks Konrad for the review.
-> 
-> On 6/27/2022 12:02 AM, Konrad Dybcio wrote:
->>
->> On 21.06.2022 18:11, Sricharan R wrote:
->>> From: Varadarajan Narayanan <quic_varada@quicinc.com>
->>>
->>> Add initial device tree support for the Qualcomm IPQ5018 SoC and
->>> MP03.1-C2 board.
->>>
->>> Co-developed-by: Sricharan R <quic_srichara@quicinc.com>
->>> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
->>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->>> ---
->>>   arch/arm64/boot/dts/qcom/Makefile             |   1 +
->>>   .../arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts |  29 +++
->>>   arch/arm64/boot/dts/qcom/ipq5018.dtsi         | 221 ++++++++++++++++++
->>>   3 files changed, 251 insertions(+)
->>>   create mode 100644 arch/arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts
->>>   create mode 100644 arch/arm64/boot/dts/qcom/ipq5018.dtsi
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
->>> index f9e6343acd03..c44e701f093c 100644
->>> --- a/arch/arm64/boot/dts/qcom/Makefile
->>> +++ b/arch/arm64/boot/dts/qcom/Makefile
->>> @@ -10,6 +10,7 @@ dtb-$(CONFIG_ARCH_QCOM)    += ipq8074-hk10-c2.dtb
->>>   dtb-$(CONFIG_ARCH_QCOM)    += msm8916-alcatel-idol347.dtb
->>>   dtb-$(CONFIG_ARCH_QCOM)    += msm8916-asus-z00l.dtb
->>>   dtb-$(CONFIG_ARCH_QCOM)    += msm8916-huawei-g7.dtb
->>> +dtb-$(CONFIG_ARCH_QCOM)    += ipq5018-mp03.1-c2.dtb
->>>   dtb-$(CONFIG_ARCH_QCOM)    += msm8916-longcheer-l8150.dtb
->>>   dtb-$(CONFIG_ARCH_QCOM)    += msm8916-longcheer-l8910.dtb
->>>   dtb-$(CONFIG_ARCH_QCOM)    += msm8916-mtp.dtb
->>> diff --git a/arch/arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts b/arch/arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts
->>> new file mode 100644
->>> index 000000000000..d1cd080ec3db
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts
->>> @@ -0,0 +1,29 @@
->>> +// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
->>> +/*
->>> + * IPQ5018 CP01 board device tree source
->>> + *
->>> + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
->>> + */
->>> +
->>> +/dts-v1/;
->>> +
->>> +#include "ipq5018.dtsi"
->>> +
->>> +/ {
->>> +    model = "Qualcomm Technologies, Inc. IPQ5018/AP-MP03-C2";
->>> +    compatible = "qcom,ipq5018-mp03", "qcom,ipq5018";
->>> +
->>> +    aliases {
->>> +        serial0 = &blsp1_uart1;
->>> +    };
->>> +
->>> +    chosen {
->>> +        stdout-path = "serial0:115200n8";
->>> +    };
->>> +};
->>> +
->>> +&blsp1_uart1 {
->>> +    pinctrl-0 = <&serial_1_pins>;
->>> +    pinctrl-names = "default";
->>> +    status = "ok";
->>> +};
->>> diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
->>> new file mode 100644
->>> index 000000000000..084fb7b30dfd
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
->>> @@ -0,0 +1,221 @@
->>> +// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
->>> +/*
->>> + * Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
->>> + */
->>> +/*
->>> + * IPQ5018 SoC device tree source
->>> + *
->>> + * Copyright (c) 2019, The Linux Foundation. All rights reserved.
->>> + */
->>> +
->>> +#include <dt-bindings/interrupt-controller/arm-gic.h>
->>> +#include <dt-bindings/clock/qcom,gcc-ipq5018.h>
->>> +#include <dt-bindings/reset/qcom,gcc-ipq5018.h>
->>> +
->>> +/ {
->>> +    #address-cells = <2>;
->>> +    #size-cells = <2>;
->>> +    interrupt-parent = <&intc>;
->> Hi!
->>
->> interrupt-parent could go first.
-> 
->  ok.
-> 
-> 
->>> +
->>> +    sleep_clk: sleep-clk {
->>> +        compatible = "fixed-clock";
->>> +        clock-frequency = <32000>;
->>> +        #clock-cells = <0>;
->>> +    };
->>> +
->>> +    xo: xo {
->>> +        compatible = "fixed-clock";
->>> +        clock-frequency = <24000000>;
->>> +        #clock-cells = <0>;
->>> +    };
->>> +
->>> +    gen2clk0: gen2clk0 {
->>> +        compatible = "fixed-clock";
->>> +        #clock-cells = <0>;
->>> +        clock-frequency = <125000000>;
->>> +        clock-output-names = "pcie20_phy0_pipe_clk";
->>> +    };
->>> +
->>> +    gen2clk1: gen2clk1 {
->>> +        compatible = "fixed-clock";
->>> +        #clock-cells = <0>;
->>> +        clock-frequency = <125000000>;
->>> +        clock-output-names = "pcie20_phy1_pipe_clk";
->>> +    };
->> I am not sure what's the current stance on this, but previously clock nodes
->> used to be wrapped in a clocks {} node, as currently they are not sorted
->> properly.
->>
->  hmm ok, yeah, see the clocks { node in some recent dts as well, will add the wrapper.
-> 
-> 
->>> +
->>> +    cpus: cpus {
->> Is this label going to be used?
->   hmm, not used, will remove.
->>> +        #address-cells = <1>;
->>> +        #size-cells = <0>;
->>> +
->>> +        CPU0: cpu@0 {
->>> +            device_type = "cpu";
->>> +            compatible = "arm,cortex-a53";
->>> +            reg = <0x0>;
->>> +            enable-method = "psci";
->>> +            next-level-cache = <&L2_0>;
->>> +        };
->>> +
->>> +        CPU1: cpu@1 {
->>> +            device_type = "cpu";
->>> +            compatible = "arm,cortex-a53";
->>> +            enable-method = "psci";
->>> +            reg = <0x1>;
->>> +            next-level-cache = <&L2_0>;
->>> +        };
->>> +
->>> +        L2_0: l2-cache {
->>> +            compatible = "cache";
->>> +            cache-level = <0x2>;
->> This should probably be dec, as it's not a register.
-> 
->    'dec' ? Sorry, i did not get that.
-Short for decimal.
+Naveen N. Rao (2):
+  kexec_file: Drop weak attribute from functions
+  kexec: Drop weak attribute from functions
 
-Konrad
+ arch/arm64/include/asm/kexec.h   | 18 +++++++-
+ arch/powerpc/include/asm/kexec.h | 14 ++++++
+ arch/s390/include/asm/kexec.h    | 14 ++++++
+ arch/x86/include/asm/kexec.h     | 12 +++++
+ include/linux/kexec.h            | 76 +++++++++++++++++++++++++++-----
+ kernel/kexec_core.c              | 27 ------------
+ kernel/kexec_file.c              | 35 +--------------
+ 7 files changed, 124 insertions(+), 72 deletions(-)
 
-[snip]
+
+base-commit: 13fa82df3449770de37197fa51b610ffc788f555
+-- 
+2.36.1
+

@@ -2,204 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC94562B4D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA22562B54
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231872AbiGAGMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 02:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
+        id S234477AbiGAGOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 02:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233375AbiGAGMi (ORCPT
+        with ESMTP id S233953AbiGAGON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 02:12:38 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B2F61A83D;
-        Thu, 30 Jun 2022 23:12:37 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id A72FA80B0;
-        Fri,  1 Jul 2022 06:07:18 +0000 (UTC)
-Date:   Fri, 1 Jul 2022 09:12:35 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of
- driver_deferred_probe_check_state()
-Message-ID: <Yr6QUzdoFWv/eAI6@atomide.com>
-References: <CAGETcx_1USPRbFKV5j00qkQ-QXJkp7=FAfnFcfiNnM4J5KF1cQ@mail.gmail.com>
- <YrKhkmj3jCQA39X/@atomide.com>
- <CAGETcx_11wO-HkZ2QsBF8o1+L9L3Xe1QBQ_GzegwozxAx1i0jg@mail.gmail.com>
- <YrQP3OZbe8aCQxKU@atomide.com>
- <CAGETcx9aFBzMcuOiTAEy5SJyWw3UfajZ8DVQfW2DGmzzDabZVg@mail.gmail.com>
- <Yrlz/P6Un2fACG98@atomide.com>
- <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
- <CAL_JsqJd3J6k6pRar7CkHVaaPbY7jqvzAePd8rVDisRV-dLLtg@mail.gmail.com>
- <CAGETcx9ZmeTyP1sJCFZ9pBbMyXeifQFohFvWN3aBPx0sSOJ2VA@mail.gmail.com>
- <Yr6HQOtS4ctUYm9m@atomide.com>
+        Fri, 1 Jul 2022 02:14:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 887B56413
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:14:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656656051;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ythCUedG2vrRnKIwBqpNStlM2oVY0Scr8pYplUyMtEo=;
+        b=a50X7dASrHgaTrR9DHRCYLRt15j2JM85CzWGuWCCGrurFHLirK9nhtsOPokSP72tGExSzh
+        Gq/Woomx7j3zk1xOXDoxmnKSKTYO8xhmPp469OdMgS/FB1QyokH9ASVm3/ZA0oWw4xyl7j
+        hdWQgumH1H9FZXevduqg0xOVXPJQ4dQ=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-515-YC-eoKxJOAGU7YLKwC88eg-1; Fri, 01 Jul 2022 02:14:10 -0400
+X-MC-Unique: YC-eoKxJOAGU7YLKwC88eg-1
+Received: by mail-wm1-f72.google.com with SMTP id r132-20020a1c448a000000b003a02a3f0beeso2572315wma.3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:14:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ythCUedG2vrRnKIwBqpNStlM2oVY0Scr8pYplUyMtEo=;
+        b=yC8ukGcMnA7D/b4fEyVDbXdJg9lrn2zgmE0HkKwWckr7E8wOUwocTXb8bry0f9hgNn
+         Q95GR5n15oJW/ofm4279vVnGRom/ryA01wtE9/NEg3aL+0CTyW5SRXJvsX+81VSAxIFV
+         vKSv//7teEXqcGbTKcSz154iuFpwv1c9u6iewdXvg9DVkJigXsYAFA3EwHWaaSoxXiDB
+         d6qrmLSgh4mLeJJWWqjTKVKNpqzpeuzM6NCbotKvl+Bc0utGtd1Vse0kiaeJEG+a4RGn
+         rXgIFJ3krhNncCZmsCFsLrvlZi3gR4DTMLt+kQzEUNWCavZ05YQFJx1PGb9SY33cWGLS
+         gq8Q==
+X-Gm-Message-State: AJIora9RTqHDv+iL6Mn/KukbAr2u5W4hEDaQLmMdtTHauGLNptFTruzv
+        htWLwCrGSdKVKr3+5O+9VGZCDQStYNJCV9kmVgIiCsjDCx/S5B5XneejOiMAiYXbl3YfP2gQ9aT
+        X6vdaO6iUpOQEZblkq+Uscr6r
+X-Received: by 2002:a05:600c:27d1:b0:3a1:7e0c:56bf with SMTP id l17-20020a05600c27d100b003a17e0c56bfmr8192114wmb.186.1656656049032;
+        Thu, 30 Jun 2022 23:14:09 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tWfXPH4JRr5Y/9TWhFzTtdEZ3IAzORfK6bW3lsT7C+f2SHSanu3xDfGOaAzumyktw+aXz14A==
+X-Received: by 2002:a05:600c:27d1:b0:3a1:7e0c:56bf with SMTP id l17-20020a05600c27d100b003a17e0c56bfmr8192096wmb.186.1656656048741;
+        Thu, 30 Jun 2022 23:14:08 -0700 (PDT)
+Received: from redhat.com ([2.55.35.209])
+        by smtp.gmail.com with ESMTPSA id o19-20020a05600c511300b00397342e3830sm7268555wms.0.2022.06.30.23.14.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 23:14:08 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 02:14:02 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        kernel@openvz.org, Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        linux-s390@vger.kernel.org, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/1] virtio: Restore semantics of vq->broken in
+ virtqueues
+Message-ID: <20220701021340-mutt-send-email-mst@kernel.org>
+References: <20220630093651.25981-1-alexander.atanasov@virtuozzo.com>
+ <20220630054532-mutt-send-email-mst@kernel.org>
+ <1c72645a-f162-2649-bdb6-a28ba93bccd2@virtuozzo.com>
+ <20220630114142-mutt-send-email-mst@kernel.org>
+ <CACGkMEu0qZJ34XjbTfp6pTp43bAuhGSgMc=HVepn8UxeQCx9gw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yr6HQOtS4ctUYm9m@atomide.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CACGkMEu0qZJ34XjbTfp6pTp43bAuhGSgMc=HVepn8UxeQCx9gw@mail.gmail.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Tony Lindgren <tony@atomide.com> [220701 08:33]:
-> * Saravana Kannan <saravanak@google.com> [220630 23:25]:
-> > On Thu, Jun 30, 2022 at 4:26 PM Rob Herring <robh@kernel.org> wrote:
+On Fri, Jul 01, 2022 at 09:12:58AM +0800, Jason Wang wrote:
+> On Thu, Jun 30, 2022 at 11:44 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Thu, Jun 30, 2022 at 01:08:53PM +0300, Alexander Atanasov wrote:
+> > > Hello,
 > > >
-> > > On Thu, Jun 30, 2022 at 5:11 PM Saravana Kannan <saravanak@google.com> wrote:
-> > > >
-> > > > On Mon, Jun 27, 2022 at 2:10 AM Tony Lindgren <tony@atomide.com> wrote:
+> > > On 30/06/2022 12:46, Michael S. Tsirkin wrote:
+> > > > On Thu, Jun 30, 2022 at 09:36:46AM +0000, Alexander Atanasov wrote:
+> > > > > virtio: harden vring IRQ (8b4ec69d7e09) changed the use
+> > > > > of vq->broken. As result vring_interrupt handles IRQs for
+> > > > > broken drivers as IRQ_NONE and not IRQ_HANDLED and made impossible
+> > > > > to initiallize vqs before the driver is ready, i.e. in probe method.
+> > > > > Balloon driver does this and it can not load because it fails in
+> > > > > vqs_init with -EIO.
 > > > > >
-> > > > > * Saravana Kannan <saravanak@google.com> [220623 08:17]:
-> > > > > > On Thu, Jun 23, 2022 at 12:01 AM Tony Lindgren <tony@atomide.com> wrote:
-> > > > > > >
-> > > > > > > * Saravana Kannan <saravanak@google.com> [220622 19:05]:
-> > > > > > > > On Tue, Jun 21, 2022 at 9:59 PM Tony Lindgren <tony@atomide.com> wrote:
-> > > > > > > > > This issue is no directly related fw_devlink. It is a side effect of
-> > > > > > > > > removing driver_deferred_probe_check_state(). We no longer return
-> > > > > > > > > -EPROBE_DEFER at the end of driver_deferred_probe_check_state().
-> > > > > > > >
-> > > > > > > > Yes, I understand the issue. But driver_deferred_probe_check_state()
-> > > > > > > > was deleted because fw_devlink=on should have short circuited the
-> > > > > > > > probe attempt with an  -EPROBE_DEFER before reaching the bus/driver
-> > > > > > > > probe function and hitting this -ENOENT failure. That's why I was
-> > > > > > > > asking the other questions.
-> > > > > > >
-> > > > > > > OK. So where is the -EPROBE_DEFER supposed to happen without
-> > > > > > > driver_deferred_probe_check_state() then?
-> > > > > >
-> > > > > > device_links_check_suppliers() call inside really_probe() would short
-> > > > > > circuit and return an -EPROBE_DEFER if the device links are created as
-> > > > > > expected.
+> > > > > So instead of changing the original intent ot the flag introduce
+> > > > > a new flag vq->ready which servers the purpose to check of early IRQs
+> > > > > and restore the behaviour of the vq->broken flag.
 > > > > >
-> > > > > OK
-> > > > >
-> > > > > > > Hmm so I'm not seeing any supplier for the top level ocp device in
-> > > > > > > the booting case without your patches. I see the suppliers for the
-> > > > > > > ocp child device instances only.
-> > > > > >
-> > > > > > Hmmm... this is strange (that the device link isn't there), but this
-> > > > > > is what I suspected.
-> > > > >
-> > > > > Yup, maybe it's because of the supplier being a device in the child
-> > > > > interconnect for the ocp.
+> > > > > Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
 > > > >
-> > > > Ugh... yeah, this is why the normal (not SYNC_STATE_ONLY) device link
-> > > > isn't being created.
+> > > > Does
 > > > >
-> > > > So the aggregated view is something like (I had to set tabs = 4 space
-> > > > to fit it within 80 cols):
+> > > > commit c346dae4f3fbce51bbd4f2ec5e8c6f9b91e93163
+> > > > Author: Jason Wang <jasowang@redhat.com>
+> > > > Date:   Wed Jun 22 09:29:40 2022 +0800
 > > > >
-> > > >     ocp: ocp {         <========================= Consumer
-> > > >         compatible = "simple-pm-bus";
-> > > >         power-domains = <&prm_per>; <=========== Supplier ref
+> > > >      virtio: disable notification hardening by default
 > > > >
-> > > >                 l4_wkup: interconnect@44c00000 {
-> > > >             compatible = "ti,am33xx-l4-wkup", "simple-pm-bus";
 > > > >
-> > > >             segment@200000 {  /* 0x44e00000 */
-> > > >                 compatible = "simple-pm-bus";
-> > > >
-> > > >                 target-module@0 { /* 0x44e00000, ap 8 58.0 */
-> > > >                     compatible = "ti,sysc-omap4", "ti,sysc";
-> > > >
-> > > >                     prcm: prcm@0 {
-> > > >                         compatible = "ti,am3-prcm", "simple-bus";
-> > > >
-> > > >                         prm_per: prm@c00 { <========= Actual Supplier
-> > > >                             compatible = "ti,am3-prm-inst", "ti,omap-prm-inst";
-> > > >                         };
-> > > >                     };
-> > > >                 };
-> > > >             };
-> > > >         };
-> > > >     };
-> > > >
-> > > > The power-domain supplier is the great-great-great-grand-child of the
-> > > > consumer. It's not clear to me how this is valid. What does it even
-> > > > mean?
-> > > >
-> > > > Rob, is this considered a valid DT?
+> > > > solve the problem for you?
 > > >
-> > > Valid DT for broken h/w.
-> > 
-> > I'm not sure even in that case it's valid. When the parent device is
-> > in reset (when the SoC is coming out of reset), there's no way the
-> > descendant is functional. And if the descendant is not functional, how
-> > is the parent device powered up? This just feels like an incorrect
-> > representation of the real h/w.
+> > >
+> > > No, it won't if CONFIG_VIRTIO_HARDEN_NOTIFICATION is enabled - balloon still
+> > > won't be able to init vqs.
+> >
+> > Yea I intend to make CONFIG_VIRTIO_HARDEN_NOTIFICATION
+> > depend on BROKEN for now.
+> >
+> > > The problem is in virtqueue_add_split and virtqueue_add_packed - can not set
+> > > driver_ok without queues.
+> > >
+> > > The return value of the vring_interrupt gets different - and iirc IRQ_NONE
+> > > for broken device can lead to interrupt storms - i am not sure if that is
+> > > valid for virtio devices yet but for real harware most likely.
+> >
+> > No, I think it's the reverse. With IRQ_HANDLED an interrupt
+> > storm will keep overloading the CPU since driver tells
+> > kernel all is well. With IRQ_NONE kernel will eventually
+> > intervene and disable the irq.
 > 
-> It should be correct representation based on scanning the interconnects
-> and looking at the documentation. Some interconnect parts are wired
-> always-on and some interconnect instances may be dual-mapped.
+> Yes, and users may get a warn.
 > 
-> We have a quirk to probe prm/prcm first with pdata_quirks_init_clocks().
-> Maybe that also now fails in addition to the top level interconnect
-> probing no longer producing -EPROBE_DEFER.
+> For IRQ_HANDLED, it has an issue when the driver is sharing IRQ with
+> other drivers.
 > 
-> > > So the domain must be default on and then simple-pm-bus is going to
-> > > hold a reference to the domain preventing it from ever getting powered
-> > > off and things seem to work. Except what happens during suspend?
-> > 
-> > But how can simple-pm-bus even get a reference? The PM domain can't
-> > get added until we are well into the probe of the simple-pm-bus and
-> > AFAICT the genpd attach is done before the driver probe is even
-> > called.
-> 
-> The prm/prcm gets of_platform_populate() called on it early.
+> Thanks
 
-The hackish patch below makes things boot for me, not convinced this
-is the preferred fix compared to earlier deferred probe handling though.
-Going back to the init level tinkering seems like a step back to me.
 
-Regards,
+Couldn't tell whether you are agreeing or disagreeing with me here.
 
-Tony
+> >
+> > > Either way if
+> > > you have a mix of  drivers working differently depending on return of the
+> > > handler  it would get really messy.
+> > >
+> > > RR's original intent was to flag a driver as bad why reuse it like that  ?
+> > >
+> > >
+> > > > >   drivers/virtio/virtio_ring.c  | 20 ++++++++++++++------
+> > > > >   include/linux/virtio.h        |  2 +-
+> > > > >   include/linux/virtio_config.h | 10 +++++-----
+> > > > >   3 files changed, 20 insertions(+), 12 deletions(-)
+> > > > >
+> > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > > > Cc: Peter Zijlstra <peterz@infradead.org>
+> > > > > Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> > > > > Cc: Marc Zyngier <maz@kernel.org>
+> > > > > Cc: Halil Pasic <pasic@linux.ibm.com>
+> > > > > Cc: Cornelia Huck <cohuck@redhat.com>
+> > > > > Cc: Vineeth Vijayan <vneethv@linux.ibm.com>
+> > > > > Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+> > > > > Cc: linux-s390@vger.kernel.org
+> > > > > Cc: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> > > > >
+> > > > >
+> > > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > > > > index 13a7348cedff..dca3cc774584 100644
+> > > > > --- a/drivers/virtio/virtio_ring.c
+> > > > > +++ b/drivers/virtio/virtio_ring.c
+> > > > > @@ -100,6 +100,9 @@ struct vring_virtqueue {
+> > > > >           /* Other side has made a mess, don't try any more. */
+> > > > >           bool broken;
+> > > > > + /* the queue is ready to handle interrupts  */
+> > > > > + bool ready;
+> > > > > +
+> > > > >           /* Host supports indirect buffers */
+> > > > >           bool indirect;
+> > > > > @@ -1688,7 +1691,8 @@ static struct virtqueue *vring_create_virtqueue_packed(
+> > > > >           vq->we_own_ring = true;
+> > > > >           vq->notify = notify;
+> > > > >           vq->weak_barriers = weak_barriers;
+> > > > > - vq->broken = true;
+> > > > > + vq->broken = false;
+> > > > > + vq->ready = false;
+> > > > >           vq->last_used_idx = 0;
+> > > > >           vq->event_triggered = false;
+> > > > >           vq->num_added = 0;
+> > > > > @@ -2134,7 +2138,10 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
+> > > > >                   return IRQ_NONE;
+> > > > >           }
+> > > > > - if (unlikely(vq->broken)) {
+> > > > > + if (unlikely(vq->broken))
+> > > > > +         return IRQ_HANDLED;
+> > > > > +
+> > > > > + if (unlikely(!vq->ready)) {
+> > > > >                   dev_warn_once(&vq->vq.vdev->dev,
+> > > > >                                 "virtio vring IRQ raised before DRIVER_OK");
+> > > > >                   return IRQ_NONE;
+> > > > > @@ -2180,7 +2187,8 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+> > > > >           vq->we_own_ring = false;
+> > > > >           vq->notify = notify;
+> > > > >           vq->weak_barriers = weak_barriers;
+> > > > > - vq->broken = true;
+> > > > > + vq->broken = false;
+> > > > > + vq->ready = false;
+> > > > >           vq->last_used_idx = 0;
+> > > > >           vq->event_triggered = false;
+> > > > >           vq->num_added = 0;
+> > > > > @@ -2405,7 +2413,7 @@ EXPORT_SYMBOL_GPL(virtio_break_device);
+> > > > >    * (probing and restoring). This function should only be called by the
+> > > > >    * core, not directly by the driver.
+> > > > >    */
+> > > > > -void __virtio_unbreak_device(struct virtio_device *dev)
+> > > > > +void __virtio_device_ready(struct virtio_device *dev)
+> > > > >   {
+> > > > >           struct virtqueue *_vq;
+> > > > > @@ -2414,11 +2422,11 @@ void __virtio_unbreak_device(struct virtio_device *dev)
+> > > > >                   struct vring_virtqueue *vq = to_vvq(_vq);
+> > > > >                   /* Pairs with READ_ONCE() in virtqueue_is_broken(). */
+> > > > > -         WRITE_ONCE(vq->broken, false);
+> > > > > +         WRITE_ONCE(vq->ready, true);
+> > > > >           }
+> > > > >           spin_unlock(&dev->vqs_list_lock);
+> > > > >   }
+> > > > > -EXPORT_SYMBOL_GPL(__virtio_unbreak_device);
+> > > > > +EXPORT_SYMBOL_GPL(__virtio_device_ready);
+> > > > >   dma_addr_t virtqueue_get_desc_addr(struct virtqueue *_vq)
+> > > > >   {
+> > > > > diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+> > > > > index d8fdf170637c..538c5959949a 100644
+> > > > > --- a/include/linux/virtio.h
+> > > > > +++ b/include/linux/virtio.h
+> > > > > @@ -131,7 +131,7 @@ void unregister_virtio_device(struct virtio_device *dev);
+> > > > >   bool is_virtio_device(struct device *dev);
+> > > > >   void virtio_break_device(struct virtio_device *dev);
+> > > > > -void __virtio_unbreak_device(struct virtio_device *dev);
+> > > > > +void __virtio_device_ready(struct virtio_device *dev);
+> > > > >   void virtio_config_changed(struct virtio_device *dev);
+> > > > >   #ifdef CONFIG_PM_SLEEP
+> > > > > diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
+> > > > > index 49c7c32815f1..35cf1b26e05a 100644
+> > > > > --- a/include/linux/virtio_config.h
+> > > > > +++ b/include/linux/virtio_config.h
+> > > > > @@ -259,21 +259,21 @@ void virtio_device_ready(struct virtio_device *dev)
+> > > > >           /*
+> > > > >            * The virtio_synchronize_cbs() makes sure vring_interrupt()
+> > > > > -  * will see the driver specific setup if it sees vq->broken
+> > > > > +  * will see the driver specific setup if it sees vq->ready
+> > > > >            * as false (even if the notifications come before DRIVER_OK).
+> > > > >            */
+> > > > >           virtio_synchronize_cbs(dev);
+> > > > > - __virtio_unbreak_device(dev);
+> > > > > + __virtio_device_ready(dev);
+> > > > >           /*
+> > > > > -  * The transport should ensure the visibility of vq->broken
+> > > > > +  * The transport should ensure the visibility of vq->ready
+> > > > >            * before setting DRIVER_OK. See the comments for the transport
+> > > > >            * specific set_status() method.
+> > > > >            *
+> > > > >            * A well behaved device will only notify a virtqueue after
+> > > > >            * DRIVER_OK, this means the device should "see" the coherenct
+> > > > > -  * memory write that set vq->broken as false which is done by
+> > > > > +  * memory write that set vq->ready as true which is done by
+> > > > >            * the driver when it sees DRIVER_OK, then the following
+> > > > > -  * driver's vring_interrupt() will see vq->broken as false so
+> > > > > +  * driver's vring_interrupt() will see vq->true as true so
+> > > > >            * we won't lose any notification.
+> > > > >            */
+> > > > >           dev->config->set_status(dev, status | VIRTIO_CONFIG_S_DRIVER_OK);
+> > > > > --
+> > > > > 2.25.1
+> > >
+> > > --
+> > > Regards,
+> > > Alexander Atanasov
+> >
 
-8< ----------------
-diff --git a/drivers/soc/ti/omap_prm.c b/drivers/soc/ti/omap_prm.c
---- a/drivers/soc/ti/omap_prm.c
-+++ b/drivers/soc/ti/omap_prm.c
-@@ -991,4 +991,9 @@ static struct platform_driver omap_prm_driver = {
- 		.of_match_table	= omap_prm_id_table,
- 	},
- };
--builtin_platform_driver(omap_prm_driver);
-+
-+static int __init omap_prm_init(void)
-+{
-+        return platform_driver_register(&omap_prm_driver);
-+}
-+subsys_initcall(omap_prm_init);
--- 
-2.36.1

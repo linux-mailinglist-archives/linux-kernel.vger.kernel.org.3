@@ -2,147 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94205636E3
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0FE95636E5
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbiGAP2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 11:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
+        id S231542AbiGAP3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 11:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiGAP2l (ORCPT
+        with ESMTP id S229379AbiGAP3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 11:28:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D074E1F60D
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 08:28:40 -0700 (PDT)
+        Fri, 1 Jul 2022 11:29:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E9F1F60D;
+        Fri,  1 Jul 2022 08:29:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 753D66240B
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 15:28:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FA63C3411E;
-        Fri,  1 Jul 2022 15:28:39 +0000 (UTC)
-Date:   Fri, 1 Jul 2022 11:28:37 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "XueBing Chen" <chenxuebing@jari.cn>
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ftrace: use strscpy to replace strlcpy
-Message-ID: <20220701112837.44f5a1b4@gandalf.local.home>
-In-Reply-To: <479ff932.d17.181b9735fdb.Coremail.chenxuebing@jari.cn>
-References: <479ff932.d17.181b9735fdb.Coremail.chenxuebing@jari.cn>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39BC862414;
+        Fri,  1 Jul 2022 15:29:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C587C3411E;
+        Fri,  1 Jul 2022 15:29:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656689345;
+        bh=fg4rHu8CbbqFBxKzijEGmEDBRGujBS5oSTYCqS8ZW70=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HAGfJ701w0/wjeuqllH40r3iH05v/wKY7zEntWAJRSpPcG+9b8Q5miparWa6qm556
+         TnxIN4cuwNhjSmg+XwnEpBYcwuiOQrZgAZjVIW+Q8dBMkrlQYB88kM6c7LhbmiQIdc
+         0H0ZecFc5lF9ne4ISpiVbZPBhY7xCyZpJYnGSdh8=
+Date:   Fri, 1 Jul 2022 17:29:02 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>, tj@kernel.org,
+        viro@zeniv.linux.org.uk, m.szyprowski@samsung.com,
+        michael@walle.cc, robh@kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, guillaume.tucker@collabora.com,
+        pmladek@suse.com
+Subject: Re: [PATCH] kernfs: Avoid re-adding kernfs_node into
+ kernfs_notify_list.
+Message-ID: <Yr8SvqShBXZ/U6gk@kroah.com>
+References: <20220701145047.2206900-1-imran.f.khan@oracle.com>
+ <Yr8OSxotW2VEUyKQ@dev-arch.thelio-3990X>
+ <2c4bdc7a-b49f-c2ea-28d0-4ec838c3b26c@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2c4bdc7a-b49f-c2ea-28d0-4ec838c3b26c@oracle.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Jul 2022 19:09:15 +0800 (GMT+08:00)
-"XueBing Chen" <chenxuebing@jari.cn> wrote:
-
-> The strlcpy should not be used because it doesn't limit the source
-> length. Preferred is strscpy.
+On Sat, Jul 02, 2022 at 01:18:09AM +1000, Imran Khan wrote:
+> Hello Nathan,
 > 
-> Signed-off-by: XueBing Chen <chenxuebing@jari.cn>
-> ---
->  kernel/trace/ftrace.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
+> On 2/7/22 1:10 am, Nathan Chancellor wrote:
+> > On Sat, Jul 02, 2022 at 12:50:47AM +1000, Imran Khan wrote:
+> >> Kick fsnotify only if an event is not already scheduled for target
+> >> kernfs node. commit b8f35fa1188b ("kernfs: Change kernfs_notify_list to
+> >> llist.") changed kernfs_notify_list to a llist.
+> >> Prior to this list was a singly linked list, protected by
+> >> kernfs_notify_lock. Whenever a kernfs_node was added to the list
+> >> its ->attr.notify_next was set to head of the list and upon removal
+> >> ->attr.notify_next was reset to NULL. Addition to kernfs_notify_list
+> >> would only happen if kernfs_node was not already in the list i.e.
+> >> if ->attr.notify_next was NULL. commit b8f35fa1188b ("kernfs: Change
+> >> kernfs_notify_list to llist.") removed this checking and this was wrong
+> >> as it resulted in multiple additions for same kernfs_node.
+> >>
+> >> So far this bug only got reflected with some console related setting.
+> >> Nathan found this issue when console was specified both in DT and in
+> >> kernel command line and Marek found this issue when earlycon was enabled.
+> >>
+> >> This patch avoids adding an already added kernfs_node into notify list.
+> >>
+> >> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> >> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> > 
+> > This should also include:
+> > 
+> > Reported-by: Michael Walle <michael@walle.cc>
+> > 
+> >> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> >> Fixes: b8f35fa1188b ("kernfs: Change kernfs_notify_list to llist.")
+> >> Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
+> > 
+> > For the ARCH=um case that I noticed:
+> > 
+> > Tested-by: Nathan Chancellor <nathan@kernel.org>
+> > 
 > 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index 601ccf1b2f09..8d2ad1472fcb 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -5902,7 +5902,7 @@ bool ftrace_filter_param __initdata;
->  static int __init set_ftrace_notrace(char *str)
->  {
->  	ftrace_filter_param = true;
-> -	strlcpy(ftrace_notrace_buf, str, FTRACE_FILTER_SIZE);
-> +	strscpy(ftrace_notrace_buf, str, FTRACE_FILTER_SIZE);
->  	return 1;
->  }
->  __setup("ftrace_notrace=", set_ftrace_notrace);
-> @@ -5910,7 +5910,7 @@ __setup("ftrace_notrace=", set_ftrace_notrace);
->  static int __init set_ftrace_filter(char *str)
->  {
->  	ftrace_filter_param = true;
-> -	strlcpy(ftrace_filter_buf, str, FTRACE_FILTER_SIZE);
-> +	strscpy(ftrace_filter_buf, str, FTRACE_FILTER_SIZE);
->  	return 1;
->  }
->  __setup("ftrace_filter=", set_ftrace_filter);
-> @@ -5922,14 +5922,14 @@ static int ftrace_graph_set_hash(struct ftrace_hash *hash, char *buffer);
->  
->  static int __init set_graph_function(char *str)
->  {
-> -	strlcpy(ftrace_graph_buf, str, FTRACE_FILTER_SIZE);
-> +	strscpy(ftrace_graph_buf, str, FTRACE_FILTER_SIZE);
->  	return 1;
->  }
->  __setup("ftrace_graph_filter=", set_graph_function);
->  
->  static int __init set_graph_notrace_function(char *str)
->  {
-> -	strlcpy(ftrace_graph_notrace_buf, str, FTRACE_FILTER_SIZE);
-> +	strscpy(ftrace_graph_notrace_buf, str, FTRACE_FILTER_SIZE);
->  	return 1;
->  }
+> I am really sorry about missing these tags. I was not sure if you have tested
+> the patch I sent this morning.
+> 
+> Could you please suggest me if I should send a v2 of this change with these tags
+> included or if this mail is enough. Sorry if I am asking something obvious but I
+> am encountering such situation for first time.
 
+Please resend with them added.
 
-No need for strscpy() in init functions that simply read the kernel command
-line.
+thanks,
 
->  __setup("ftrace_graph_notrace=", set_graph_notrace_function);
-> @@ -6714,8 +6714,8 @@ static int ftrace_get_trampoline_kallsym(unsigned int symnum,
->  			continue;
->  		*value = op->trampoline;
->  		*type = 't';
-> -		strlcpy(name, FTRACE_TRAMPOLINE_SYM, KSYM_NAME_LEN);
-> -		strlcpy(module_name, FTRACE_TRAMPOLINE_MOD, MODULE_NAME_LEN);
-> +		strscpy(name, FTRACE_TRAMPOLINE_SYM, KSYM_NAME_LEN);
-> +		strscpy(module_name, FTRACE_TRAMPOLINE_MOD, MODULE_NAME_LEN);
-
-The source is a macro, no need for strscpy() here.
-
-
->  		*exported = 0;
->  		return 0;
->  	}
-> @@ -7046,7 +7046,7 @@ ftrace_func_address_lookup(struct ftrace_mod_map *mod_map,
->  		if (off)
->  			*off = addr - found_func->ip;
->  		if (sym)
-> -			strlcpy(sym, found_func->name, KSYM_NAME_LEN);
-> +			strscpy(sym, found_func->name, KSYM_NAME_LEN);
-
-The name can not be bigger than KSYM_NAME_LEN, no need for strscpy() here.
-
->  
->  		return found_func->name;
->  	}
-> @@ -7100,8 +7100,8 @@ int ftrace_mod_get_kallsym(unsigned int symnum, unsigned long *value,
->  
->  			*value = mod_func->ip;
->  			*type = 'T';
-> -			strlcpy(name, mod_func->name, KSYM_NAME_LEN);
-> -			strlcpy(module_name, mod_map->mod->name, MODULE_NAME_LEN);
-> +			strscpy(name, mod_func->name, KSYM_NAME_LEN);
-> +			strscpy(module_name, mod_map->mod->name, MODULE_NAME_LEN);
-
-Same for this.
-
-I don't see how converting any of these to strscpy() is helpful.
-
-NAK.
-
--- Steve
-
->  			*exported = 1;
->  			preempt_enable();
->  			return 0;
-
+greg k-h

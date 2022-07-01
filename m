@@ -2,98 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9C65632FD
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FBD563303
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235892AbiGALys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 07:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
+        id S235964AbiGALzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 07:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233327AbiGALyp (ORCPT
+        with ESMTP id S233327AbiGALzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 07:54:45 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1914583F06;
-        Fri,  1 Jul 2022 04:54:44 -0700 (PDT)
-Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LZD8G6YYHz6H6nM;
-        Fri,  1 Jul 2022 19:52:14 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 1 Jul 2022 13:54:41 +0200
-Received: from [10.126.173.51] (10.126.173.51) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 1 Jul 2022 12:54:40 +0100
-Message-ID: <61fbd71b-9c36-345c-7aed-561b81c34259@huawei.com>
-Date:   Fri, 1 Jul 2022 12:54:43 +0100
+        Fri, 1 Jul 2022 07:55:22 -0400
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE57823B9
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 04:55:21 -0700 (PDT)
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4LZDCr1fmPz9tBq;
+        Fri,  1 Jul 2022 11:55:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1656676520; bh=OmDfSiag79ufUXArN30LVk+EOWL3+NU7HJfkYVWwnEs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GUF9IVRltpOXFh2YqW0F3ON/4wxC7mAhcNif7Nps21Y+Ii67uCkaVPebQDjgwQ/j3
+         3bFzYGHxqdWtz6qF2BOvxiRJ660NbE5uVikWgvgWTAcmFXnrm3DxaLyafufVsnh7Rx
+         Yn82Ji7reiyKSI6JwJ8wYqK/FVLNa1aahECiMR8Q=
+X-Riseup-User-ID: 58664E14B2D373C4C74D8CFBD14FDC6AA3184A3116830436C65DB32C22F59FC5
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4LZDCg5zQxz5vw3;
+        Fri,  1 Jul 2022 11:55:11 +0000 (UTC)
+Message-ID: <f361c4b7-12b8-0513-2025-4ed8025a67d1@riseup.net>
+Date:   Fri, 1 Jul 2022 08:55:07 -0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-From:   John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH v3] hisi_lpc: Use acpi_dev_for_each_child()
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yang Yingliang <yangyingliang@huawei.com>
-References: <12026357.O9o76ZdvQC@kreacher> <2657553.mvXUDI8C0e@kreacher>
- <5606189.DvuYhMxLoT@kreacher>
- <e9666883-3285-36a6-6278-ace219b88f3c@huawei.com>
- <CAHp75Ve-Cm43HhqqxxfmKTbC_Gkx=0aAcj0jJmA=-Nr-NT1FqQ@mail.gmail.com>
- <CAHp75VdT1YZUQbdHupA2RmucUBSzypcPwKBgSa4=sVQAhC+Vsw@mail.gmail.com>
-In-Reply-To: <CAHp75VdT1YZUQbdHupA2RmucUBSzypcPwKBgSa4=sVQAhC+Vsw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.173.51]
-X-ClientProxiedBy: lhreml712-chm.china.huawei.com (10.201.108.63) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v4 3/4] kunit: Taint the kernel when KUnit tests are run
+Content-Language: en-US
+To:     David Gow <davidgow@google.com>
+Cc:     "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+References: <20220701084744.3002019-1-davidgow@google.com>
+ <20220701084744.3002019-3-davidgow@google.com>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+In-Reply-To: <20220701084744.3002019-3-davidgow@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/07/2022 12:07, Andy Shevchenko wrote:
-> On Fri, Jul 1, 2022 at 1:06 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
->> On Fri, Jul 1, 2022 at 1:04 PM John Garry <john.garry@huawei.com> wrote:
->>> On 30/06/2022 19:13, Rafael J. Wysocki wrote:
->>
->> ...
->>
->>> However Yang Yingliang spotted a pre-existing bug in the ACPI probe and
->>> sent a fix today (coincidence?):
->>>
->>> https://lore.kernel.org/lkml/20220701094352.2104998-1-yangyingliang@huawei.com/T/#u
->>>
->>> And they conflict. This code has been this way for years, so I just
->>> suggest Yang Yingliang resends the fix on top off Rafael's change.
->>
->> Wondering if Yang can actually switch that to use
->> platform_device_register_full().
+On 7/1/22 05:47, 'David Gow' via KUnit Development wrote:
+> Make KUnit trigger the new TAINT_TEST taint when any KUnit test is run.
+> Due to KUnit tests not being intended to run on production systems, and
+> potentially causing problems (or security issues like leaking kernel
+> addresses), the kernel's state should not be considered safe for
+> production use after KUnit tests are run.
+> 
+> This both marks KUnit modules as test modules using MODULE_INFO() and
+> manually taints the kernel when tests are run (which catches builtin
+> tests).
+> 
+> Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+> Tested-by: Daniel Latypov <dlatypov@google.com>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
 
-Maybe that would work and simplify things. Let me check it.
+Tested with DRM KUnit tests on x86_64.
 
-BTW, when we originally upstreamed this driver there was some ACPI 
-platform device registration code which you/we thought could be factored 
-out later. I can't remember it. I was looking through lore but couldn't 
-find it. I don't remember it being so important, though.
+Tested-By: Maíra Canal <mairacanal@riseup.net>
+
+Best Regards
+- Maíra Canal
 
 > 
-> And for the record, I think the Fixes even for very rare bug hits
-> should go first.
+> Changes since v3:
+> https://lore.kernel.org/lkml/20220513083212.3537869-2-davidgow@google.com/
+> - Use MODULE_INFO() for KUnit modules.
+>   - This is technically redundant, as the KUnit executor will taint the
+>     kernel when _any_ KUnit tests are run, but may be useful if some
+>     other tool will parse the 'test' property.
+> - Add {Acked,Tested,Reviewed}-by tags.
 > 
-
-ok, I have to admit that I was going to feel awkward asking Rafael to 
-deal with this fix by having a v4 on top of it.
-
-Thanks,
-John
+> ---
+>  include/kunit/test.h | 3 ++-
+>  lib/kunit/test.c     | 4 ++++
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 8ffcd7de9607..ccae848720dc 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -277,7 +277,8 @@ static inline int kunit_run_all_tests(void)
+>  	{								\
+>  		return __kunit_test_suites_exit(__suites);		\
+>  	}								\
+> -	module_exit(kunit_test_suites_exit)
+> +	module_exit(kunit_test_suites_exit)				\
+> +	MODULE_INFO(test, "Y");
+>  #else
+>  #define kunit_test_suites_for_module(__suites)
+>  #endif /* MODULE */
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index a5053a07409f..8b11552dc215 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -11,6 +11,7 @@
+>  #include <kunit/test-bug.h>
+>  #include <linux/kernel.h>
+>  #include <linux/moduleparam.h>
+> +#include <linux/panic.h>
+>  #include <linux/sched/debug.h>
+>  #include <linux/sched.h>
+>  
+> @@ -501,6 +502,9 @@ int kunit_run_tests(struct kunit_suite *suite)
+>  	struct kunit_result_stats suite_stats = { 0 };
+>  	struct kunit_result_stats total_stats = { 0 };
+>  
+> +	/* Taint the kernel so we know we've run tests. */
+> +	add_taint(TAINT_TEST, LOCKDEP_STILL_OK);
+> +
+>  	if (suite->suite_init) {
+>  		suite->suite_init_err = suite->suite_init(suite);
+>  		if (suite->suite_init_err) {

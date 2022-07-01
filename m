@@ -2,157 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7BA563702
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BD8563708
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiGAPgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 11:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
+        id S230214AbiGAPil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 11:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiGAPgl (ORCPT
+        with ESMTP id S229891AbiGAPij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 11:36:41 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A4B3969C;
-        Fri,  1 Jul 2022 08:36:41 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id v9so3748034wrp.7;
-        Fri, 01 Jul 2022 08:36:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:from:to:cc:subject:in-reply-to:date:message-id
-         :mime-version;
-        bh=sYub0N475p+0VGhz+u6M1TELUK/iEnZfnAN/MojLZIE=;
-        b=dG3gWMTpxupxXO5Q1Yvv+bsWdhehMZxuBXH5mWSRK5qvyNzPOk6iHYgtKuXRgtzr1u
-         3QAhhbmKg3B0F1sHW7iP59NwsIZQA5BSBsiaNy93hT7b+WQRpOa9A4KcznOX0nLjDxkK
-         DWGZsPYbl3YTeWXgkL9XThoAAhc/5eXVopqOidZhV4ZtAeGtlA8INFSkoaT16O1XZX49
-         vE1WL4T8PROyZl/q4dJC4UevHEMgYvZrxx9Ppdd+PmOVoMIYfyW0hh4GYjJs/ogqUlMS
-         JmcVgJMX78rmCAtFIF8jnsP7CY/kngr+1OH5tlB8Ev2kxKZlGZm+SJISO2zKDBbeboA4
-         YSgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=sYub0N475p+0VGhz+u6M1TELUK/iEnZfnAN/MojLZIE=;
-        b=kjeYi6I++K1zoQCZ4nBpp4xiSCzrdvPDwS4B9to8HjoZ8eqr9NH/FW+dMZrKsXyBi+
-         kV8X4qwm5qt846UlzmCgwBpRs5ruw5WkzdFWGmTX+C/yU8/E+nGAOV5RpVcxSUk5b0O8
-         UcHzNj4Rf8s2NqYHchzyqY+rIgEKZK4nUgNvf24XoUJRXI/iYf8hOjYPqx46l8EZR3qF
-         Bj2anAYrHn70mAkvLGW1zxkthTsG/Nn1aJwPSjvOXXf4k2O30PmwO9TXAtSPvkl98Adk
-         p0rCXQi/DdUpmTBruwBY1UknoaCMqla5m5tEE2rfnfs/MUQDH3j9Mu7l01B73vFoF5HL
-         pSeA==
-X-Gm-Message-State: AJIora9z3S+eYnziX1HD48fo1jXTResbg0Om7ZWPI+7zj20ub3/JfEaN
-        nuMFmLczkcN+QAvTWT74N20=
-X-Google-Smtp-Source: AGRyM1uXzal0NgDC531OK+6wzV83ogvagHoNoOJlLzY7A1trI1imJ0FnVhho2+YakzVrN5zBn1NY6w==
-X-Received: by 2002:adf:f184:0:b0:21b:6c76:5b6e with SMTP id h4-20020adff184000000b0021b6c765b6emr13423763wro.126.1656689799526;
-        Fri, 01 Jul 2022 08:36:39 -0700 (PDT)
-Received: from localhost (92.40.202.205.threembb.co.uk. [92.40.202.205])
-        by smtp.gmail.com with ESMTPSA id a1-20020a05600c348100b003a03be22f9fsm1656240wmq.18.2022.07.01.08.36.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 08:36:38 -0700 (PDT)
-References: <20220629143046.213584-1-aidanmacdonald.0x0@gmail.com>
- <20220629143046.213584-13-aidanmacdonald.0x0@gmail.com>
- <CAHp75Vduv_fN=2DKbOwReRoPeAYjGqSANT7UhDaRifUJ4zf5XQ@mail.gmail.com>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>, quic_gurus@quicinc.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Michael Walle <michael@walle.cc>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v4 12/15] pinctrl: Add AXP192 pin control driver
-In-reply-to: <CAHp75Vduv_fN=2DKbOwReRoPeAYjGqSANT7UhDaRifUJ4zf5XQ@mail.gmail.com>
-Date:   Fri, 01 Jul 2022 16:37:45 +0100
-Message-ID: <oMIjFujkw4ZeuMGoTkWq64BbfEejJF12@localhost>
+        Fri, 1 Jul 2022 11:38:39 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811893EA98
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 08:38:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656689917; x=1688225917;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=85ODJKpSERbExoEc/k6o79OkH2WoiAkmweh7FH1gEWk=;
+  b=dKABJT/liemsWw1B63CHvRz0aaXWkDaCtIA9dOiHYVMd0m86C/x4WgRm
+   BCwe9ad2ITuNGYN1xUKap/z1TlMIFifRxYZ6j/prMS51M1CdXnWDvdndZ
+   +FpbAJEQVEp4b6sFUEvAL9cbIooncbWEBX+ujouWhSuRYgJCD0CR9eBha
+   vhGxvpFycH2z0/eI8jGB5EUfdTK8OND3JYTBIzBEP36WUyCQbwLRt3mui
+   5GpwvZXCVfIXSj4n7Ql2jcA7vLIKOPY8fPlUAoFSb3gkWf3SK3vG6NUEU
+   7DRewJnOvYnU11Rff4mnm23Whz/0uGpvRcl29EdvTIcrP4n9uHDXJiPF7
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="263076714"
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="263076714"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 08:38:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="734093863"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 01 Jul 2022 08:38:34 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 4A53CD9; Fri,  1 Jul 2022 18:38:40 +0300 (EEST)
+Date:   Fri, 1 Jul 2022 18:38:40 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
+        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
+        "glider@google.com" <glider@google.com>,
+        "dvyukov@google.com" <dvyukov@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Andi Kleen <ak@linux.intel.com>,
+        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv3 6/8] x86/mm: Provide ARCH_GET_UNTAG_MASK and
+ ARCH_ENABLE_TAGGED_ADDR
+Message-ID: <20220701153840.7g55cazg73ukvr7l@black.fi.intel.com>
+References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
+ <20220610143527.22974-7-kirill.shutemov@linux.intel.com>
+ <6cb17661-9436-afbf-38eb-58565bba1a56@kernel.org>
+ <20220629005342.3thjt26e6p6znyrh@black.fi.intel.com>
+ <1d765bc0-279c-4fd3-91f4-e99e6aef203c@www.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1d765bc0-279c-4fd3-91f4-e99e6aef203c@www.fastmail.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 29, 2022 at 07:29:13PM -0700, Andy Lutomirski wrote:
+> 
+> 
+> On Tue, Jun 28, 2022, at 5:53 PM, Kirill A. Shutemov wrote:
+> > On Tue, Jun 28, 2022 at 04:42:40PM -0700, Andy Lutomirski wrote:
+> >> On 6/10/22 07:35, Kirill A. Shutemov wrote:
+> >> 
+> >> > +	/* Update CR3 to get LAM active */
+> >> > +	switch_mm(current->mm, current->mm, current);
+> >> 
+> >> Can you at least justify this oddity?  When changing an LDT, we use a
+> >> dedicated mechanism.  Is there a significant benefit to abusing switch_mm
+> >> for this?
+> >
+> > I'm not sure I follow. LAM mode is set in CR3. switch_mm() has to handle
+> > it anyway to context switch. Why do you consider it abuse?
+> >
+> >> 
+> >> Also, why can't we enable LAM on a multithreaded process?  We can change an
+> >> LDT, and the code isn't even particularly complicated.
+> >
+> > I reworked this in v4[1] and it allows multithreaded processes. Have you
+> > got that version?
+> >
+> > Intel had issue with mail server, but I assumed it didn't affect my
+> > patchset since I see it in the archive.
+> >
+> 
+> I didn’t notice it. Not quite sure what the issue was. Could just be
+> incompetence on my part.
+> 
+> I think that’s the right idea, except that I think you shouldn’t use
+> switch_mm for this. Just update the LAM bits directly.   Once you read
+> mm_cpumask, you should be guaranteed (see next paragraph) that, for each
+> CPU that isn’t in the set, if it switches to the new mm, it will notice
+> the new LAM.
+> 
+> I say “should be” because I think smp_wmb() is insufficient. You’re
+> ordering a write with a subsequent read, which needs smp_mb().
 
-Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+I think it is better to put smp_mb() to make it explicit.
 
-> On Wed, Jun 29, 2022 at 4:30 PM Aidan MacDonald
-> <aidanmacdonald.0x0@gmail.com> wrote:
->>
->> The AXP192 PMIC's GPIO registers are much different from the GPIO
->> registers of the AXP20x and AXP813 PMICs supported by the existing
->> pinctrl-axp209 driver. It makes more sense to add a new driver for
->> the AXP192, rather than add support in the existing axp20x driver.
->>
->> The pinctrl-axp192 driver is considerably more flexible in terms of
->> register layout and should be able to support other X-Powers PMICs.
->> Interrupts and pull down resistor configuration are supported too.
->
-> ...
->
->> +config PINCTRL_AXP192
->> +       tristate "X-Powers AXP192 PMIC pinctrl and GPIO Support"
->> +       depends on MFD_AXP20X
->> +       select PINMUX
->> +       select GENERIC_PINCONF
->> +       select GPIOLIB
->> +       help
->> +         AXP PMICs provide multiple GPIOs that can be muxed for different
->> +         functions. This driver bundles a pinctrl driver to select the function
->> +         muxing and a GPIO driver to handle the GPIO when the GPIO function is
->> +         selected.
->> +         Say Y to enable pinctrl and GPIO support for the AXP192 PMIC.
->
-> What will be the module name if compiled as a module?
->
-> ...
->
->> +/**
->> + * struct axp192_pctl_function - describes a function that GPIOs may have
->> + *
->> + * @name: Function name
->> + * @muxvals: Mux values used for selecting this function, one per GPIO.
->> + *           The i'th element corresponds to the i'th GPIO and is written
->> + *           to the GPIO's control register field to select this function.
->> + *           U8_MAX indicates that the pin does not support this function.
->> + * @groups: Array of @ngroups groups listing pins supporting this function.
->> + * @ngroups: Number of pin groups.
->> + */
->> +struct axp192_pctl_function {
->> +       const char              *name;
->> +       /* Mux value written to the control register to select the function (-1 if unsupported) */
->> +       const u8                *muxvals;
->> +       const char * const      *groups;
->> +       unsigned int            ngroups;
->> +};
->
-> Can it be replaced by struct function_desc?
-> https://elixir.bootlin.com/linux/latest/source/drivers/pinctrl/pinmux.h#L130
+Does the fixup below look okay?
 
-That'd work, but using the generic infrastructure doesn't allow me to
-simplify anything -- I can eliminate three trivial functions, but the
-generic code is higher overhead (extra allocations, radix trees, ...)
-so I'd prefer to stick with the current approach.
-
->> +       ret = devm_gpiochip_add_data(dev, &pctl->chip, pctl);
->> +       if (ret)
->> +               dev_err_probe(dev, ret, "Failed to register GPIO chip\n");
->
-> Missed return.
-
-Thanks for catching this, that was pretty silly of me...
+diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
+index 2d70d75e207f..8da54e7b6f98 100644
+--- a/arch/x86/include/asm/tlbflush.h
++++ b/arch/x86/include/asm/tlbflush.h
+@@ -367,4 +367,30 @@ static inline void __native_tlb_flush_global(unsigned long cr4)
+ 	native_write_cr4(cr4 ^ X86_CR4_PGE);
+ 	native_write_cr4(cr4);
+ }
++
++#ifdef CONFIG_X86_64
++static inline u64 tlbstate_lam_cr3_mask(void)
++{
++	u64 lam = this_cpu_read(cpu_tlbstate.lam);
++
++	return lam << X86_CR3_LAM_U57_BIT;
++}
++
++static inline void set_tlbstate_lam_cr3_mask(u64 mask)
++{
++	this_cpu_write(cpu_tlbstate.lam, mask >> X86_CR3_LAM_U57_BIT);
++}
++
++#else
++
++static inline u64 tlbstate_lam_cr3_mask(void)
++{
++	return 0;
++}
++
++static inline void set_tlbstate_lam_cr3_mask(u64 mask)
++{
++}
++#endif
++
+ #endif /* _ASM_X86_TLBFLUSH_H */
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 427ebef3f64b..cd2b03fe94c4 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -745,15 +745,16 @@ static long prctl_map_vdso(const struct vdso_image *image, unsigned long addr)
+ static void enable_lam_func(void *mm)
+ {
+ 	struct mm_struct *loaded_mm = this_cpu_read(cpu_tlbstate.loaded_mm);
++	unsigned long lam_mask;
+ 
+ 	if (loaded_mm != mm)
+ 		return;
+ 
+-	/* Counterpart of smp_wmb() in prctl_enable_tagged_addr() */
+-	smp_rmb();
++	lam_mask = READ_ONCE(loaded_mm->context.lam_cr3_mask);
+ 
+ 	/* Update CR3 to get LAM active on the CPU */
+-	switch_mm(loaded_mm, loaded_mm, current);
++	write_cr3(__read_cr3() | lam_mask);
++	set_tlbstate_lam_cr3_mask(lam_mask);
+ }
+ 
+ static bool lam_u48_allowed(void)
+@@ -805,7 +806,7 @@ static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
+ 	}
+ 
+ 	/* Make lam_cr3_mask and untag_mask visible on other CPUs */
+-	smp_wmb();
++	smp_mb();
+ 
+ 	on_each_cpu_mask(mm_cpumask(mm), enable_lam_func, mm, true);
+ out:
+diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+index c5c4f76329c2..d9a2acdae90f 100644
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -486,31 +486,6 @@ void cr4_update_pce(void *ignored)
+ static inline void cr4_update_pce_mm(struct mm_struct *mm) { }
+ #endif
+ 
+-#ifdef CONFIG_X86_64
+-static inline u64 tlbstate_lam_cr3_mask(void)
+-{
+-	u64 lam = this_cpu_read(cpu_tlbstate.lam);
+-
+-	return lam << X86_CR3_LAM_U57_BIT;
+-}
+-
+-static inline void set_tlbstate_lam_cr3_mask(u64 mask)
+-{
+-	this_cpu_write(cpu_tlbstate.lam, mask >> X86_CR3_LAM_U57_BIT);
+-}
+-
+-#else
+-
+-static inline u64 tlbstate_lam_cr3_mask(void)
+-{
+-	return 0;
+-}
+-
+-static inline void set_tlbstate_lam_cr3_mask(u64 mask)
+-{
+-}
+-#endif
+-
+ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ 			struct task_struct *tsk)
+ {
+@@ -581,7 +556,7 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ 	 * provides that full memory barrier and core serializing
+ 	 * instruction.
+ 	 */
+-	if (real_prev == next && prev_lam == new_lam) {
++	if (real_prev == next) {
+ 		VM_WARN_ON(this_cpu_read(cpu_tlbstate.ctxs[prev_asid].ctx_id) !=
+ 			   next->context.ctx_id);
+ 
+-- 
+ Kirill A. Shutemov

@@ -2,160 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C728F562BD9
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A57FF562BDB
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 08:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234766AbiGAGdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 02:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
+        id S234844AbiGAGd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 02:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbiGAGd2 (ORCPT
+        with ESMTP id S234806AbiGAGd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 02:33:28 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8767313F10
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:33:27 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2615pHTw024331;
-        Fri, 1 Jul 2022 06:33:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=43E8lWSoKTQumIYPANAN9tbxhnCu/ars1CPwWA8NO1U=;
- b=JOKedKyLCivY7mYGp6FCPDuKCovFSWCAVRjPFXI3fesIQGWMJgvA7YSSjsJzaPt5BvxX
- GKtTEgQ9vHzZM8HoW6mA/B7zjYPAqYHrecJltsVT3PRlxSiDS6H8ZdksNGmGc0rhpeQa
- zfPKQSi36nFnLHhjqSHcMyxgS/XYNwN/jvRWp8wA8HqHlKQnnp8Ny9q/WbRpsO0VhCnj
- /Je01xQghaXKLjsRrLz121EVqY7+tVb5zOiih8hxDKKgaPp52nyPPXfn8rg6nQ8LMYap
- 3p/3ClpF3X5Na2AG0X8q3XTFfAEfLCGWRK4npqXxNz5++7mm0gj1ItRK9NK2j4bdNiAb uQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h1u1c943y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 Jul 2022 06:33:02 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2615phKY025370;
-        Fri, 1 Jul 2022 06:33:02 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h1u1c9433-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 Jul 2022 06:33:01 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2616LMe9026261;
-        Fri, 1 Jul 2022 06:32:59 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3gwt0918hx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 Jul 2022 06:32:59 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2616Wvsv22348128
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 1 Jul 2022 06:32:57 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 13857A404D;
-        Fri,  1 Jul 2022 06:32:57 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 66371A4051;
-        Fri,  1 Jul 2022 06:32:53 +0000 (GMT)
-Received: from [9.43.53.136] (unknown [9.43.53.136])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  1 Jul 2022 06:32:53 +0000 (GMT)
-Message-ID: <b299ebe2-88e5-c2bd-bad0-bef62d4acdfe@linux.ibm.com>
-Date:   Fri, 1 Jul 2022 12:02:51 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 26/34] tools/testing/nvdimm: Convert to printbuf
-Content-Language: en-US
-To:     Santosh Sivaraj <santosh@fossix.org>,
-        Dan Williams <dan.j.williams@intel.com>
-Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>, enozhatsky@chromium.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        willy@infradead.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-References: <20220620004233.3805-1-kent.overstreet@gmail.com>
- <20220620004233.3805-27-kent.overstreet@gmail.com>
- <62b61165348f4_a7a2f294d0@dwillia2-xfh.notmuch>
- <CA+n8AA-grcDuYWt-TxcttK+2tHpEP4s9ue2uq_0d8=hJpqNh+g@mail.gmail.com>
-From:   Shivaprasad G Bhat <sbhat@linux.ibm.com>
-In-Reply-To: <CA+n8AA-grcDuYWt-TxcttK+2tHpEP4s9ue2uq_0d8=hJpqNh+g@mail.gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 8oemeT4kbVhWz-CORfaTBY1vKeWOi9_V
-X-Proofpoint-ORIG-GUID: Qyas4CxWbLYIFtodCSyStsjrbn6FwLO0
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 1 Jul 2022 02:33:56 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB651EEE8
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 23:33:55 -0700 (PDT)
+X-UUID: 2a33b42c465746d3b16209b88fa5e71e-20220701
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:9ce4ab06-5a24-4fff-af8e-5dc743d90deb,OB:0,LO
+        B:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:45
+X-CID-INFO: VERSION:1.1.7,REQID:9ce4ab06-5a24-4fff-af8e-5dc743d90deb,OB:0,LOB:
+        10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:45
+X-CID-META: VersionHash:87442a2,CLOUDID:d3c94586-57f0-47ca-ba27-fe8c57fbf305,C
+        OID:142d0f4732a5,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 2a33b42c465746d3b16209b88fa5e71e-20220701
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1672347802; Fri, 01 Jul 2022 14:33:51 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 1 Jul 2022 14:33:51 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 1 Jul 2022 14:33:51 +0800
+Message-ID: <81dd89d9b77b3a16068493269f400254f94c609f.camel@mediatek.com>
+Subject: Re: [PATCH 2/2] drm: mediatek: Adjust the dpi output format to
+ MT8186
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <matthias.bgg@gmail.com>, <yongqiang.niu@mediatek.com>,
+        <enric.balletbo@collabora.com>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <jitao.shi@mediatek.com>
+Date:   Fri, 1 Jul 2022 14:33:51 +0800
+In-Reply-To: <1656645344-12062-3-git-send-email-xinlei.lee@mediatek.com>
+References: <1656645344-12062-1-git-send-email-xinlei.lee@mediatek.com>
+         <1656645344-12062-3-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-01_04,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
- mlxscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 spamscore=0
- adultscore=0 phishscore=0 priorityscore=1501 mlxlogscore=999
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2207010021
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/25/22 05:12, Santosh Sivaraj wrote:
-> I don't have setup to test this now. Adding Shiva and Vaibhav who could 
-> probably help. Thanks, Santosh On Sat, 25 Jun, 2022, 1:03 am Dan 
-> Williams, <dan.j.williams@intel.com> wrote: [ add Santosh ] Kent 
-> Overstreet wrote: ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍
-> ZjQcmQRYFpfptBannerStart
-> This Message Is From an External Sender
-> This message came from outside your organization.
-> ZjQcmQRYFpfptBannerEnd
-> I don't have setup to test this now. Adding Shiva and Vaibhav who could 
-> probably help.
+On Fri, 2022-07-01 at 11:15 +0800, xinlei.lee@mediatek.com wrote:
+> From: Xinlei Lee <xinlei.lee@mediatek.com>
 > 
-> Thanks,
-> Santosh
+> Dpi output needs to adjust the output format to dual edge for MT8186.
 > 
-> On Sat, 25 Jun, 2022, 1:03 am Dan Williams, <dan.j.williams@intel.com 
-> <mailto:dan.j.williams@intel.com>> wrote:
+> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dpi.c      | 21 +++++++++++++++++++++
+>  drivers/gpu/drm/mediatek/mtk_dpi_regs.h |  5 +++++
+>  2 files changed, 26 insertions(+)
 > 
->     [ add Santosh ]
-> 
->     Kent Overstreet wrote:
->      > This converts from seq_buf to printbuf. Here we're using printbuf
->     with
->      > an external buffer, meaning it's a direct conversion.
->      >
->      > Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com
->     <mailto:kent.overstreet@gmail.com>>
->      > Cc: Dan Williams <dan.j.williams@intel.com
->     <mailto:dan.j.williams@intel.com>>
->      > Cc: Dave Hansen <dave.hansen@linux.intel.com
->     <mailto:dave.hansen@linux.intel.com>>
->      > Cc: nvdimm@lists.linux.dev <mailto:nvdimm@lists.linux.dev>
-> 
->     Acked-by: Dan Williams <dan.j.williams@intel.com
->     <mailto:dan.j.williams@intel.com>>
-> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index e61cd67b978f..82a5209a1dd8 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/pinctrl/consumer.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/types.h>
+> +#include <linux/soc/mediatek/mtk-mmsys.h>
+>  
 
-The ndtest build requires [1] as the build is currently broken from 
-nd_namespace_blk/blk_region infrastructure removal.
+Please reorder this.
 
-Dan, Could you review [1] and see if it can be included as well ?
+>  #include <video/videomode.h>
+>  
+> @@ -28,6 +29,7 @@
+>  #include "mtk_disp_drv.h"
+>  #include "mtk_dpi_regs.h"
+>  #include "mtk_drm_ddp_comp.h"
+> +#include "mtk_drm_drv.h"
+>  
+>  enum mtk_dpi_out_bit_num {
+>  	MTK_DPI_OUT_BIT_NUM_8BITS,
+> @@ -85,6 +87,7 @@ struct mtk_dpi {
+>  	struct pinctrl_state *pins_dpi;
+>  	u32 output_fmt;
+>  	int refcount;
+> +	struct device *mmsys_dev;
+>  };
+>  
+>  static inline struct mtk_dpi *bridge_to_dpi(struct drm_bridge *b)
+> @@ -125,6 +128,7 @@ struct mtk_dpi_conf {
+>  	bool edge_sel_en;
+>  	const u32 *output_fmts;
+>  	u32 num_output_fmts;
+> +	bool rgb888_dual_enable;
+>  };
+>  
+>  static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32 val,
+> u32 mask)
+> @@ -393,6 +397,9 @@ static void mtk_dpi_dual_edge(struct mtk_dpi
+> *dpi)
+>  		mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING,
+>  			     dpi->output_fmt ==
+> MEDIA_BUS_FMT_RGB888_2X12_LE ?
+>  			     EDGE_SEL : 0, EDGE_SEL);
+> +	if (dpi->conf->rgb888_dual_enable)
+> +		mtk_mmsys_ddp_dpi_confing(dpi->mmsys_dev,
+> DPI_RGB888_DDR_CON,
+> +					  DPI_FORMAT_MASK, NULL);
+>  	} else {
+>  		mtk_dpi_mask(dpi, DPI_DDR_SETTING, DDR_EN | DDR_4PHASE,
+> 0);
+>  	}
+> @@ -705,8 +712,10 @@ static int mtk_dpi_bind(struct device *dev,
+> struct device *master, void *data)
+>  {
+>  	struct mtk_dpi *dpi = dev_get_drvdata(dev);
+>  	struct drm_device *drm_dev = data;
+> +	struct mtk_drm_private *priv = drm_dev->dev_private;
+>  	int ret;
+>  
+> +	dpi->mmsys_dev = priv->mmsys_dev;
+>  	ret = drm_simple_encoder_init(drm_dev, &dpi->encoder,
+>  				      DRM_MODE_ENCODER_TMDS);
+>  	if (ret) {
+> @@ -823,6 +832,15 @@ static const struct mtk_dpi_conf mt8192_conf = {
+>  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
+>  };
+>  
+> +static const struct mtk_dpi_conf mt8186_conf = {
+> +		.cal_factor = mt8183_calculate_factor,
+> +		.reg_h_fre_con = 0xe0,
+> +		.max_clock_khz = 150000,
+> +		.output_fmts = mt8183_output_fmts,
+> +		.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
+> +		.rgb888_dual_enable = true,
+> +};
+> +
 
-With [1], the this patch is tested, and works fine.
+please put this between 8183 and 8192.
 
-Tested-By: Shivaprasad G Bhat <sbhat@linux.ibm.com>
+>  static int mtk_dpi_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -945,6 +963,9 @@ static const struct of_device_id mtk_dpi_of_ids[]
+> = {
+>  	{ .compatible = "mediatek,mt8192-dpi",
+>  	  .data = &mt8192_conf,
+>  	},
+> +	{ .compatible = "mediatek,mt8186-dpi",
+> +	  .data = &mt8186_conf,
+> +	},
 
-References:
-[1] 
-https://patchwork.kernel.org/project/linux-nvdimm/patch/165025395730.2821159.14794984437851867426.stgit@lep8c.aus.stglabs.ibm.com/
+ditto
 
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(of, mtk_dpi_of_ids);
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> index 3a02fabe1662..24d4cdf3696b 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> @@ -217,4 +217,9 @@
+>  
+>  #define EDGE_SEL_EN			BIT(5)
+>  #define H_FRE_2N			BIT(25)
+> +
+> +#define DPI_FORMAT_MASK			0x1
+> +#define DPI_RGB888_DDR_CON		BIT(0)
+> +#define DPI_RGB565_SDR_CON		BIT(1)
+> +
+>  #endif /* __MTK_DPI_REGS_H */
 
->     This probably also wants a Tested-by from Santosh, but it looks ok
->     to me.
-> 

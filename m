@@ -2,104 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CA8563168
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E3156316B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234792AbiGAKb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
+        id S236178AbiGAKbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232328AbiGAKbY (ORCPT
+        with ESMTP id S236027AbiGAKbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:31:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E715C76942;
-        Fri,  1 Jul 2022 03:31:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 906FEB82F4D;
-        Fri,  1 Jul 2022 10:31:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58122C3411E;
-        Fri,  1 Jul 2022 10:31:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656671480;
-        bh=PzSQe20vyGgKjj7bh4FY+eUYxZ15YBI0Skb7DjyLz/8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=kwBlRyc/+7zHK/+D1Orop4T33zg2uPrmUjsGkNZAU52FjlKmpsb++xU1wPmV1Sdrw
-         k4lB1lGBPqolSXmaVZcNAGFjgST13USJwcNorRHO0OGx/hzi0VABG7ZTo8N7/TuHE2
-         HxaECpn986NnZFTn1yzoeBsf+ZI4OSJnoey0UsvUno7oDZ+pMXkeNnXKR1PwQQv7H/
-         N9kuWrxo5c2iCitQqKmW068YiY9uPx4FEOea91RPuRZGwW8oY4qU7G4DXYqbe8FC8m
-         c/Z3X/cBEeVfPh/ZqshT/s0Jav6xLxcoMGxNTeEs/B5Wuklqf7C6n5RtWyUg6RAJla
-         6Gx1v1dJgB63g==
-From:   Mark Brown <broonie@kernel.org>
-To:     mail@conchuod.ie, palmer@dabbelt.com, palmer@rivosinc.com,
-        lgirdwood@gmail.com, thierry.reding@gmail.com,
-        fancer.lancer@gmail.com, daniel.lezcano@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        daniel@ffwll.ch, sam@ravnborg.org, vkoul@kernel.org,
-        airlied@linux.ie, Eugeniy.Paltsev@synopsys.com
-Cc:     conor.dooley@microchip.com, paul.walmsley@sifive.com,
-        linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
-        niklas.cassel@wdc.com, linux-kernel@vger.kernel.org,
-        damien.lemoal@opensource.wdc.com, dmaengine@vger.kernel.org,
-        aou@eecs.berkeley.edu, joabreu@synopsys.com, tglx@linutronix.de,
-        dillon.minfei@gmail.com, alsa-devel@alsa-project.org,
-        geert@linux-m68k.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, masahiroy@kernel.org
-In-Reply-To: <20220629184343.3438856-1-mail@conchuod.ie>
-References: <20220629184343.3438856-1-mail@conchuod.ie>
-Subject: Re: (subset) [PATCH v3 00/15] Canaan devicetree fixes
-Message-Id: <165667147407.1756128.12037224598634241859.b4-ty@kernel.org>
-Date:   Fri, 01 Jul 2022 11:31:14 +0100
+        Fri, 1 Jul 2022 06:31:39 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AF776EA6;
+        Fri,  1 Jul 2022 03:31:31 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id i1so2532329wrb.11;
+        Fri, 01 Jul 2022 03:31:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sv8ru5AJgoX0HDjn/lbin4Grg0LxZIxlKrPOk1Csv5I=;
+        b=PgViZDb+ngMwgBeAZmC3Dg79CjeuIKAqyf+tBRLDGUlp9b+3YVf7L00ru3+M1s1xiN
+         okE38/BmAk6b4OGQTgjzCnLbWt/1rRfSHKkcLTOJiXVVnD+V3DxKyZ7yl7hXWT+Cx+yX
+         YfjaSW2tvCQ9ttDTUyGBANphA0yxFDZMqoKNcQWUrpmm2XP9ft1UaZLVbVaGxcESH89+
+         /CmhYbx5qOnqsABRVJQNO8Im++ZILci3WEshcH7+Eq/3503zRTrGXtqQu8rHZpyRhXBC
+         dBzuWqMI7nbT1250GzOU/ClzO/jtQEZarPeYxElWOnw4aAI/MKNt6IB9sRYOkCwU5MiZ
+         H/Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sv8ru5AJgoX0HDjn/lbin4Grg0LxZIxlKrPOk1Csv5I=;
+        b=kaqd3xbuYRpKKyIEjIy4Q0o52f3ieYKw0pwRTc9HeSWjS5ZGtI4/0wXbadhgS3fXGb
+         phyouwAeT1StS1gSk+tD0BLOE/sueRbYMWA2sETSNuohIF+1MmWfwnxgxjr+ZbyLX3kw
+         22ZbEArVxd0JbohcC44+7IqyeBf7aWsxwk0p2GBNubyreGRGQHZYlHhwP9Q7b7/s6DrC
+         uzKzaCyNu8PbGqG1erCA036ivZQw+FQAWp6RWOREXPDvZI1l1p9Q5Gke/WCv32dPA1Bf
+         Lze/sfJiPi7lGYKVQHY8B8ETOPDjiTi9qAPZ6VWVOZIaTCiw36040HLBPnTJN/VLkz2m
+         Isfg==
+X-Gm-Message-State: AJIora9qiaaQsNhf9HKWOEwZvuPByhBiXfP/BcduQ6ITedHzn2qyac2w
+        lwuob7oS5GVDphOnhfOvZP8=
+X-Google-Smtp-Source: AGRyM1srilE6HugJRSarEQjn9CYMxgu6Q9D36WX4+u2UgfZyWuGsspHUz67iS1ZLgRB68SNsEecRHQ==
+X-Received: by 2002:a5d:518f:0:b0:21b:8a8c:ce4 with SMTP id k15-20020a5d518f000000b0021b8a8c0ce4mr13326621wrv.614.1656671489454;
+        Fri, 01 Jul 2022 03:31:29 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id j22-20020a05600c485600b003a04b248896sm5982113wmo.35.2022.07.01.03.31.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 03:31:29 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 11:31:27 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, slade@sladewatkins.com,
+        Paulo Alcantara <pc@cjr.nz>,
+        Enzo Matsumiya <ematsumiya@suse.de>,
+        Steve French <stfrench@microsoft.com>
+Subject: Re: [PATCH 5.18 0/6] 5.18.9-rc1 review
+Message-ID: <Yr7M//9X8RdNz+Hu@debian>
+References: <20220630133230.239507521@linuxfoundation.org>
+ <Yr6pTvc0Zka7qVfc@debian.me>
+ <Yr6vKgOmqF562oc+@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yr6vKgOmqF562oc+@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Jun 2022 19:43:29 +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Fri, Jul 01, 2022 at 10:24:10AM +0200, Greg Kroah-Hartman wrote:
+> On Fri, Jul 01, 2022 at 02:59:10PM +0700, Bagas Sanjaya wrote:
+> > On Thu, Jun 30, 2022 at 03:47:26PM +0200, Greg Kroah-Hartman wrote:
+> > > This is the start of the stable review cycle for the 5.18.9 release.
+> > > There are 6 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > > 
+> > 
+> > Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 12.1.0)
+> > and powerpc (ps3_defconfig, GCC 12.1.0).
+> > 
+> > I get a warning on cifs:
+> > 
+> >   CC [M]  fs/cifs/connect.o
+> >   CC      drivers/tty/tty_baudrate.o
+> >   CC      drivers/tty/tty_jobctrl.o
+> > fs/cifs/connect.c: In function 'is_path_remote':
+> > fs/cifs/connect.c:3426:14: warning: unused variable 'nodfs' [-Wunused-variable]
+> >  3426 |         bool nodfs = cifs_sb->mnt_cifs_flags & CIFS_MOUNT_NO_DFS;
+> >       |              ^~~~~
+> > 
+> > The culprit is commit 2340f1adf9fbb3 ("cifs: don't call
+> > cifs_dfs_query_info_nonascii_quirk() if nodfs was set") (upstream commit
+> > 421ef3d56513b2).
 > 
-> Hey all,
-> This series should rid us of dtbs_check errors for the RISC-V Canaan k210
-> based boards. To make keeping it that way a little easier, I changed the
-> Canaan devicetree Makefile so that it would build all of the devicetrees
-> in the directory if SOC_CANAAN.
-> 
-> [...]
+> Again, gcc-12 is going to have problems with stable releases until
+> Linus's tree is fixed up entirely.  Once that happens, then I will take
+> backports to stable kernels to get them to build properly.
 
-Applied to
+I have not tested, but this should be fixed by this one:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+93ed91c020aa ("cifs: fix minor compile warning")
 
-Thanks!
-
-[04/15] spi: dt-bindings: dw-apb-ssi: update spi-{r,t}x-bus-width
-        commit: 8b037cabc4966b010c44a76e05a43d276318bc49
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+--
+Regards
+Sudip

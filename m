@@ -2,101 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3419A56389D
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 19:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECED35638A1
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 19:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiGARdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 13:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
+        id S230072AbiGARf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 13:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiGARds (ORCPT
+        with ESMTP id S229627AbiGARf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 13:33:48 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA3C33E06;
-        Fri,  1 Jul 2022 10:33:47 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id z7so2318151qko.8;
-        Fri, 01 Jul 2022 10:33:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SHhBE8CI4B3o2M2bAXCcRFfwKa+1iU8UL1Vjje2dYXw=;
-        b=PSCUjp4Nzi5zeNQGbM5iSQUJex8IzVLR1ESS39LBfdUAsq4EGoNupdr7aI1A2leikl
-         Ir8KgHMTmm2G8EG9E8a3rlN1RAdQIiSR8dR+dizbIXV5/paxqmWQkataO1XgnftwJJDs
-         rI4vHbn5UtDuM+UBXNiHkBV0FJ9x+3wSUYQR/Y83/XktSzxhS5ZEciDJeukm+HrsQmpt
-         qCEOhrb64oRpP5qiLxBdxjVEAfjivUfl4bchJ4NpNJTsAi6Nd3PR9aQ2YA7S4X6YFh+6
-         WrkE6p44ldO8EaGKgp5ZnUwYl4PGC/I0pq/vISFnWwC6g5Eueyx/aldWkP8Yzo1Qm0YI
-         boVQ==
+        Fri, 1 Jul 2022 13:35:27 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59512FFEC;
+        Fri,  1 Jul 2022 10:35:26 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id z191so2925447iof.6;
+        Fri, 01 Jul 2022 10:35:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SHhBE8CI4B3o2M2bAXCcRFfwKa+1iU8UL1Vjje2dYXw=;
-        b=jRgUzGpt1CXFDs0oaxP6/5qlHF6MryceqsW/rnUZQu0tlmzyHClJH2Oo5XnsqwYhHa
-         l4KAUrHDcqYMP456ila6Dzsj2FTEH6sN4sQpNdKDD41MN+/WpsyhcFXvG2krGFPZbHgR
-         sv/3ukbX9LrRmjZKmNg4NNfur44wVAbQi1DnkaRH+98UicYlW9lqXf2nfxkOQOx3mNgR
-         RYTZmuB0YxVjLved3fLvJPh2NCbpYsUlRKDavBmfnRLhyf8MViyBAeI1tI6hPS0hOd2Z
-         tGSKuK9GG87mioayb2IA1c+kcYmapdgBk0U3bUbzzVUZ9ARxlwhMt3H3L5O7Vu8+frUU
-         dstA==
-X-Gm-Message-State: AJIora+lNcrb4Tqzl2avhYe0HX0KO8Pl4b7GCxnoAWOstSF6rTDE/sSh
-        LlLVTY+cG+ZVso3uZxR+A9w=
-X-Google-Smtp-Source: AGRyM1vDCOmfmGaXpcdnuW3G/6iyoSrk9anyUwrVugo5igKcfUTLDTAoUQk1GL6x25ZM/gzuzQ+5Lw==
-X-Received: by 2002:a05:620a:15b:b0:6ae:e3b8:ea2c with SMTP id e27-20020a05620a015b00b006aee3b8ea2cmr10911412qkn.214.1656696826152;
-        Fri, 01 Jul 2022 10:33:46 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id ci27-20020a05622a261b00b00316dc1ffbb9sm7911248qtb.32.2022.07.01.10.33.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Jul 2022 10:33:45 -0700 (PDT)
-Message-ID: <386c80a0-538f-df32-665c-cd10d62a8db3@gmail.com>
-Date:   Fri, 1 Jul 2022 10:33:43 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FUW5StgEXWi6CmKJ5HAihZrzuEB0UaUqYmi5N5q77ow=;
+        b=IWG4khxBt13yCUWzbn6skHN3t2rM45lMIoZabJhc0c5XJ3t0uRSTUigyGrmt1kUUAA
+         C2wPpleYbmrMYMyQVFybqqgVKoCTQtS9UFwZdS+nlfhz4xQQHt2MuUWt7KQDLqntT3VN
+         FTl7jRGxUPUOVMAMUG76tEewLaoDU31MkFqdhDCX4V1MKV7NBHZrVy/N+v9rKfGGyDdI
+         XAEDcf6pSYMZQm0VtNztfcORkDU7TbHSUpNDncLN3Ln6Zb2ZoyUi9vyAwD5sjjNpQzYC
+         zWTuyivQJFlLNfxmxERUpKKGV0oS/MxHf2+lN8TYdeNbSQTR/ojBZ/dTfo33PaDgUDsS
+         Sx9w==
+X-Gm-Message-State: AJIora/+DPq5ioBT88Tt87hgWv8nwzCb/88sqh3HG+xuxgAXSmk39coQ
+        HTwwPg7OGBCCF2DoDHaVOQ==
+X-Google-Smtp-Source: AGRyM1v1Vrtk3FNhMLMg4BAdK8+/X5pyHVcz0ZkhRMCLOQetrI4TURhs9OBhQSRucOlGBeyUov97zA==
+X-Received: by 2002:a05:6638:2516:b0:339:f061:a27c with SMTP id v22-20020a056638251600b00339f061a27cmr9335025jat.24.1656696926067;
+        Fri, 01 Jul 2022 10:35:26 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id i19-20020a023b53000000b00339cdf821dasm10009823jaf.51.2022.07.01.10.35.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 10:35:25 -0700 (PDT)
+Received: (nullmailer pid 1189343 invoked by uid 1000);
+        Fri, 01 Jul 2022 17:35:24 -0000
+Date:   Fri, 1 Jul 2022 11:35:24 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: soc: samsung: s5pv210-chipid: add S5PV210
+ ChipID
+Message-ID: <20220701173524.GA1185040-robh@kernel.org>
+References: <20220629123543.94515-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH net-next v1 1/1] net: dsa: sja1105: silent spi_device_id
- warnings
-Content-Language: en-US
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20220630071013.1710594-1-o.rempel@pengutronix.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220630071013.1710594-1-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220629123543.94515-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/30/22 00:10, Oleksij Rempel wrote:
-> Add spi_device_id entries to silent following warnings:
->   SPI driver sja1105 has no spi_device_id for nxp,sja1105e
->   SPI driver sja1105 has no spi_device_id for nxp,sja1105t
->   SPI driver sja1105 has no spi_device_id for nxp,sja1105p
->   SPI driver sja1105 has no spi_device_id for nxp,sja1105q
->   SPI driver sja1105 has no spi_device_id for nxp,sja1105r
->   SPI driver sja1105 has no spi_device_id for nxp,sja1105s
->   SPI driver sja1105 has no spi_device_id for nxp,sja1110a
->   SPI driver sja1105 has no spi_device_id for nxp,sja1110b
->   SPI driver sja1105 has no spi_device_id for nxp,sja1110c
->   SPI driver sja1105 has no spi_device_id for nxp,sja1110d
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+On Wed, Jun 29, 2022 at 02:35:43PM +0200, Krzysztof Kozlowski wrote:
+> Add bindings for the S5PV210 ChipID block.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Is this new or was undocumented?
+
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/soc/samsung/s5pv210-chipid.yaml  | 30 +++++++++++++++++++
+
+samsung,s5pv210-chipid.yaml
+
+Surely there's other similar blocks. Can we start collecting in a 
+common directory?
+
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/samsung/s5pv210-chipid.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/samsung/s5pv210-chipid.yaml b/Documentation/devicetree/bindings/soc/samsung/s5pv210-chipid.yaml
+> new file mode 100644
+> index 000000000000..7c3f4ec47f7e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/samsung/s5pv210-chipid.yaml
+> @@ -0,0 +1,30 @@
+> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/samsung/s5pv210-chipid.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Samsung S5PV210 SoC series Chipid driver
+> +
+> +maintainers:
+> +  - Krzysztof Kozlowski <krzk@kernel.org>
+> +
+> +properties:
+> +  compatible:
+> +    const: samsung,s5pv210-chipid
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    chipid@e0000000 {
+> +        compatible = "samsung,s5pv210-chipid";
+> +        reg = <0xe0000000 0x1000>;
+> +    };
+> -- 
+> 2.34.1
+> 
+> 

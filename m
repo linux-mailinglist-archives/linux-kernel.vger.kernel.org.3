@@ -2,114 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2D7563C67
-	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 00:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2200563C6A
+	for <lists+linux-kernel@lfdr.de>; Sat,  2 Jul 2022 00:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbiGAWeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 18:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
+        id S231865AbiGAWej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 18:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231283AbiGAWeT (ORCPT
+        with ESMTP id S231672AbiGAWei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 18:34:19 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B223286FA;
-        Fri,  1 Jul 2022 15:34:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=D9z9tmqYELHEeBnZPEjhk2lDEhwvDuDmGseECDJuC+w=; b=jKmVp/SnTAhrZOwADR+kIIBfcT
-        U5sXKT5j04NtYY4c+qwsFhybsS7kBL3dAxklEec2Kb2oVPKEzx4TZmcT5FWcwQDsp97nfm9qrLHu2
-        oRvOqsu4mub/IeIophYcQTnovPxx4DSngQmCflivwRu38Dd/mkLtoUaFtJyh6LhpRYPB4b16lgVgd
-        S5qtQ1s4tOdbnvZ8Kqe/SBTxu/HaHym6l/GTDMikKWXmfn5q2C3glMt5YJBNYLc7l/vkmZy3Kji2L
-        GNfYP1qBk30F4QuAMVnoopn97ohGzcxYttymzTkhlki29TxirwAaDEBCeZduFr45AaMYSxSgYg4qa
-        93ROLY9w==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o7PDG-007Eps-OE; Fri, 01 Jul 2022 22:34:10 +0000
-Date:   Fri, 1 Jul 2022 15:34:10 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, christophe.leroy@csgroup.eu,
-        cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
-        jeyu@kernel.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, void@manifault.com,
-        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
-        msuchanek@suse.de, oleksandr@natalenko.name,
-        jason.wessel@windriver.com, pmladek@suse.com,
-        daniel.thompson@linaro.org, hch@infradead.org,
-        Chuck Lever III <chuck.lever@oracle.com>
-Subject: Re: [PATCH v11 09/14] module: Move kallsyms support into a separate
- file
-Message-ID: <Yr92YtG12f+II+ea@bombadil.infradead.org>
-References: <20220310102413.3438665-1-atomlin@redhat.com>
- <20220310102413.3438665-10-atomlin@redhat.com>
- <20220628000526.11c57cd8@gandalf.local.home>
- <20220628081906.jln2ombfej5473xi@ava.usersys.com>
+        Fri, 1 Jul 2022 18:34:38 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C544B286FA;
+        Fri,  1 Jul 2022 15:34:34 -0700 (PDT)
+Received: from [127.0.0.1] (ip-109-43-113-134.web.vodafone.de [109.43.113.134])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 6F54F22239;
+        Sat,  2 Jul 2022 00:34:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1656714872;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PvSjY/1JTiP3TXChtqGONc3eG2xsPyhV6OUlpsTopfY=;
+        b=Fi9PJIhOWOyEixkJNFWqqJp4TIfeEHYh8bfDLQya+6WOOYh0kd1RdNQg0ACD335XotuWr/
+        v+FVwSMegCVrgtPQTC5fKXB9VEpyTpPfJyeXBDaOL2hBFzq5cjqU1vcpf4yoqf1PyFz9HT
+        k/8IE8F9YGlWfZmb63xNk006xN5DfQk=
+Date:   Sat, 02 Jul 2022 00:34:29 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Saravana Kannan <saravanak@google.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernelci-results@groups.io, bot@kernelci.org,
+        gtucker@collabora.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_next/master_bisection=3A_baseline=2Ebootrr=2Ei?= =?US-ASCII?Q?mx6q-pcie-pcie0-probed_on_kontron-pitx-imx8m?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAGETcx-ToG1xAtKVuZqwQK7hvVbT+Q0J0m4oWVCtR55XiYqETQ@mail.gmail.com>
+References: <62bdec26.1c69fb81.46bc5.2d67@mx.google.com> <Yr3vEDDulZj1Dplv@sirena.org.uk> <CAGETcx88M3Use8crFMTU=By3UVjjaJuP1_Ah7zsy_w=pNxc+6w@mail.gmail.com> <CAGETcx_s+ui9wWA7OawojPbY95bLZE5pSmpK-34_kLZTzjf9Ew@mail.gmail.com> <Yr67fvEPKmDTQfGz@sirena.org.uk> <CAGETcx-ToG1xAtKVuZqwQK7hvVbT+Q0J0m4oWVCtR55XiYqETQ@mail.gmail.com>
+Message-ID: <BF02D8CE-877F-4533-AE4F-3C2E19E132B9@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628081906.jln2ombfej5473xi@ava.usersys.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 09:19:06AM +0100, Aaron Tomlin wrote:
-> On Tue 2022-06-28 00:05 -0400, Steven Rostedt wrote:
-> > On Thu, 10 Mar 2022 10:24:08 +0000
-> > Aaron Tomlin <atomlin@redhat.com> wrote:
-> > 
-> > > No functional change.
-> > > 
-> > 
-> > And this too has a functional change as well.
-> > 
-> > Reported-by: Chuck Lever III <chuck.lever@oracle.com>
-> > Link: https://lore.kernel.org/all/355D2478-33D3-4046-8422-E512F42C51BC@oracle.com/
-> > 
-> > 
-> > Before this patch:
-> > 
-> >  # grep -a '^[0-9a-f]* [^a-zA-Z]' /proc/kallsyms
-> > 
-> > Nothing.
-> > 
-> > After this patch:
-> > 
-> >  # grep -a '^[0-9a-f]* [^a-zA-Z]' /proc/kallsyms
-> > ffffffffc09df024 ^@ _note_9     [ebtables]
-> > ffffffffc09df03c ^@ _note_8     [ebtables]
-> > ffffffffc0e25024 ^@ _note_9     [bridge]
-> > ffffffffc0e2503c ^@ _note_8     [bridge]
-> > ffffffffc0e01000 ^@ br_switchdev_event  [bridge]
-> > ffffffffc0e39548 ^@ __warned.10 [bridge]
-> > ffffffffc09bd024 ^@ _note_9     [stp]
-> > ffffffffc09bd03c ^@ _note_8     [stp]
-> > ffffffffc0849024 ^@ _note_9     [vmw_vmci]
-> > ffffffffc084903c ^@ _note_8     [vmw_vmci]
-> > ffffffffc0849454 ^@ __kstrtab_vmci_context_get_priv_flags       [vmw_vmci]
-> > ffffffffc0849470 ^@ __kstrtabns_vmci_context_get_priv_flags     [vmw_vmci]
-> > ffffffffc0849054 ^@ __ksymtab_vmci_context_get_priv_flags       [vmw_vmci]
-> > ffffffffc081d024 ^@ _note_9     [nf_reject_ipv6]
-> > ffffffffc081d03c ^@ _note_8     [nf_reject_ipv6]
-> > ffffffffc081d0a8 ^@ __kstrtab_nf_reject_skb_v6_tcp_reset        [nf_reject_ipv6]
-> > ffffffffc081d0c3 ^@ __kstrtabns_nf_reject_skb_v6_tcp_reset      [nf_reject_ipv6]
-> > ffffffffc081d078 ^@ __ksymtab_nf_reject_skb_v6_tcp_reset        [nf_reject_ipv6]
-> > ffffffffc081d0c4 ^@ __kstrtab_nf_reject_skb_v6_unreach  [nf_reject_ipv6]
-> > 
-> > The kallsyms get corrupted output, and this breaks trace-cmd.
-> 
-> Hi Steve,
-> 
-> I will look into this straight away.
+Am 2=2E Juli 2022 00:28:58 MESZ schrieb Saravana Kannan <saravanak@google=
+=2Ecom>:
+>On Fri, Jul 1, 2022 at 2:16 AM Mark Brown <broonie@kernel=2Eorg> wrote:
+>>
+>> On Thu, Jun 30, 2022 at 06:02:04PM -0700, Saravana Kannan wrote:
+>>
+>> > The patch attached to that email will probably fix this issue=2E I
+>> > haven't dealt with Kernel CI bot before=2E Is there a way to get it t=
+o
+>> > test a patch?
+>>
+>> It is but I don't have access to do that - either the lab owner
+>> (Michael, CCed here) or Guillaume (also CCed) should be able to help
+>> there=2E
+>
+>I found a much simpler solution that I think should work=2E Snippet at
+>the end of this email=2E
+>https://lore=2Ekernel=2Eorg/lkml/CAGETcx-fLAXnG+1S4MHJwg9t7O6jj6Mp+q25bh=
+=3D=3DC_Z1CLs-mg@mail=2Egmail=2Ecom/
+>
+>I'm waiting for Alexander in that thread to give it a shot=2E
+>
+>Michael/Guillaume, if you want to give it a shot too, that'll be nice :)
+>
+>Thanks,
+>Saravana
 
-Poke, did you get to implement this yet?
+Hi,
 
-  Luis
+can do on Monday as I'm currently on the road without any real internet ac=
+cess nor laptop=2E
+
+-michael 

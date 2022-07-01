@@ -2,47 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6361A56371A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B10456371B
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiGAPlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 11:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
+        id S230258AbiGAPl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 11:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiGAPls (ORCPT
+        with ESMTP id S229768AbiGAPlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 11:41:48 -0400
+        Fri, 1 Jul 2022 11:41:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317563F89B
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 08:41:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1011D3FBF7;
+        Fri,  1 Jul 2022 08:41:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C35AB6245B
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 15:41:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADBA2C341CA;
-        Fri,  1 Jul 2022 15:41:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0FF9623EB;
+        Fri,  1 Jul 2022 15:41:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B666CC341C7;
+        Fri,  1 Jul 2022 15:41:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656690107;
-        bh=6r//clrzpV4KsFy8LsK8fXXEelgks/q5FuePxXgNTS4=;
+        s=k20201202; t=1656690111;
+        bh=ODroCSaMiCiiMuCAo/Z3iSOvHvZXIuLHPYKFNrg/KRo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CN2c977G2wL7gd/kv7ltc8b5JP0ow3iT+9zYOL/t4XtpE8DFvEILCG2lSLXemHiCG
-         tyynOMTTn3VYAlswy6GMh8SEz79bMUyooiK7miKNO5T1Y9EwyWbfRLfUnpKuUCfOa4
-         UCAdjm+Oc+1xIe4RGcbs6ngfhXmEd3oxV9Kuccn0jEEq5CieHDfOi+O8wsY/N1x8jH
-         +y8DDI6AWRzaZQFif7hOOrTqxHQTi5VhRi116RHjnxkxxwMynF5FXx9+W7qOQyMxKh
-         DGznTgm2l8gCdLRavHlpjjesWE3bnJBYxz67rfQLAnWsuH5IDv6haGEUVnygy7bjPv
-         HIEaiBP+vCYaw==
+        b=HiQ687KcF2DpmTocqn+IqFonoM2D1Iv9qoOOYzswDiwDl8kIZ2Z0qlI0/rhSTau4E
+         3NSpFKO6D400f0ml/7ooOyUGCByYYT+YhJkydmYqWcdsZVCgaZyENhgu/3ia78y1dA
+         iupUxZqsKuD5IxxerfCRctAPN6rlzunZ45REOCH40ehUKHtZqwoY1wU3Tw8tGwoxrq
+         bse6g9NBDfLrf9wgVop19aWpzHH1s7wARLooYxLJqzSbnEopXMrGf6Y1Csttwn6GRo
+         aBmHHJm/+DC3rpDQrb7dTqMrxC6c2FPPpw/RfoOuZiNhDzB5pqFluAfLcQUR1oorY6
+         gTJldSwi7SSFA==
 From:   Will Deacon <will@kernel.org>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+To:     linux-trace-devel@vger.kernel.org,
+        Francis Laniel <flaniel@linux.microsoft.com>
 Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>, mark.rutland@arm.com
-Subject: Re: [PATCH] arm64: compat: Move sigreturn32.S to .rodata section
-Date:   Fri,  1 Jul 2022 16:41:27 +0100
-Message-Id: <165667355941.570203.17492832237930153592.b4-ty@kernel.org>
+        Will Deacon <will@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        James Morse <james.morse@arm.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Subject: Re: [PATCH v2 0/1] Remove forget_syscall() from start_thread_common()
+Date:   Fri,  1 Jul 2022 16:41:28 +0100
+Message-Id: <165667517849.792239.13818767623596011011.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220701035456.250877-1-chenzhongjin@huawei.com>
-References: <20220701035456.250877-1-chenzhongjin@huawei.com>
+In-Reply-To: <20220608162447.666494-1-flaniel@linux.microsoft.com>
+References: <20220608162447.666494-1-flaniel@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,18 +68,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Jul 2022 11:54:56 +0800, Chen Zhongjin wrote:
-> Kuser code should be inside .rodata. sigreturn32.S is splited
-> from kuser32.S, the code in .text section is never executed.
+On Wed, 8 Jun 2022 17:24:45 +0100, Francis Laniel wrote:
+> First, I hope you are fine and the same for your relatives.
 > 
-> Move it to .rodata.
+> With this contribution, I enabled using syscalls:sys_exit_execve and
+> syscalls:sys_exit_execveat as tracepoints on arm64.
+> Indeed, before this contribution, the above tracepoint would not print their
+> information as syscall number was set to -1 by calling forget_syscall().
 > 
-> 
+> [...]
 
-Applied to arm64 (for-next/vdso), thanks!
+Applied to arm64 (for-next/misc), thanks!
 
-[1/1] arm64: compat: Move sigreturn32.S to .rodata section
-      https://git.kernel.org/arm64/c/d9b728f8600b
+[1/1] arm64: Do not forget syscall when starting a new thread.
+      https://git.kernel.org/arm64/c/de6921856f99
 
 Cheers,
 -- 

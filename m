@@ -2,59 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1DA5635AC
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E9075635DF
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiGAOe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 10:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49592 "EHLO
+        id S231812AbiGAOg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 10:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232723AbiGAOeg (ORCPT
+        with ESMTP id S232926AbiGAOfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 10:34:36 -0400
-Received: from sender-of-o51.zoho.in (sender-of-o51.zoho.in [103.117.158.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2276B802;
-        Fri,  1 Jul 2022 07:30:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1656685799; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=WytGit7/VJVzWYVcDuphLiPxX5pT2qBET0QJ9Dd0CLbcFUG7LhWniefl1jAX4d3XLFkbsJTep5InNU5XVdGR1RC57jHOvXlbPt7lG3ukDuFiiu9u0ARs8x2VnVEqztUi++8ZoHknudjQSHsCZd/RdtFFZHJJKsamFIo1gAVLkiI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1656685799; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=afITDBJUJm7jKiQgATQjaUMg82FcalVO6iB2x0vBPY0=; 
-        b=CKwYabmYsBX/aJg2XDvQkmu3dczm8sYcRIBlt4+/aAcp1BBtmkeTbDQpOEYfZ3Rxg3FqG9DBqHDgqOcSUJTJN8+hrH8BafHgvePMU8GLnV7fxGLYRITx65S/StNpVR33QErTujJYLRjPu9tj2U+t9ogckaPNPgGwTNB5tATZUB4=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1656685799;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=afITDBJUJm7jKiQgATQjaUMg82FcalVO6iB2x0vBPY0=;
-        b=ZiDJF40QzmHiaKP/ALzgvMTGJNMhVWGK8k5Bin2QCm5HLU92J5mSo1g7p1zBZFDW
-        gbPy/LDQDWGnD7LBXzjb62hKzp0JQ59+6fRqVf92uHGECViJ8NKbtfI0R5hLzoidBl9
-        TwpiKT5AvTK/Rhskt++Aq8A/JeD6H005atm5OK2E=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1656685787788483.58861760110744; Fri, 1 Jul 2022 19:59:47 +0530 (IST)
-Date:   Fri, 01 Jul 2022 19:59:47 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "Shuah Khan" <skhan@linuxfoundation.org>
-Cc:     "linux-s390" <linux-s390@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "linux-kernel-mentees" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>
-Message-ID: <181ba2afa51.7d123db0789809.1834230085722405669@siddh.me>
-In-Reply-To: <390aca1b-3b48-e0c1-07a1-ec8c29f0b8af@linuxfoundation.org>
-References: <20220628064621.14427-1-code@siddh.me> <390aca1b-3b48-e0c1-07a1-ec8c29f0b8af@linuxfoundation.org>
-Subject: Re: [PATCH] MAINTAINERS: Add tools/testing/crypto/chacha20-s390/
+        Fri, 1 Jul 2022 10:35:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A201F39803
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:31:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F5BA113E;
+        Fri,  1 Jul 2022 07:31:29 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8E7A93F792;
+        Fri,  1 Jul 2022 07:31:28 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 15:31:18 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        vincent.guittot@linaro.org, f.fainelli@gmail.com
+Subject: Re: [PATCH 2/5] firmware: arm_scmi: Support only one single
+ SystemPower device
+Message-ID: <Yr8FG9/f60AVg7qJ@e120937-lin>
+References: <20220623124742.2492164-1-cristian.marussi@arm.com>
+ <20220623124742.2492164-3-cristian.marussi@arm.com>
+ <20220701134509.e6wk3vwhimqre6h5@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220701134509.e6wk3vwhimqre6h5@bogus>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,10 +45,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 01 Jul 2022 05:30:27 +0530  Shuah Khan <skhan@linuxfoundation.org> wrote
-> Doesn't look like you cc'ed the maintainers - please do and resend.
+On Fri, Jul 01, 2022 at 02:45:09PM +0100, Sudeep Holla wrote:
+> On Thu, Jun 23, 2022 at 01:47:39PM +0100, Cristian Marussi wrote:
+> > In order to minimize SCMI platform fw-side complexity, only one single SCMI
+> > platform should be in charge of SCMI SystemPower protocol communications
+> > with the OSPM: enforce the existence of one single unique device associated
+> > with SystemPower protocol across any possible number of SCMI platforms, and
+> > warn if a system tries to register different SystemPower devices from
+> > multiple platforms.
+> > 
+> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> > ---
+> >  drivers/firmware/arm_scmi/bus.c | 31 ++++++++++++++++++++++++++++++-
+> >  1 file changed, 30 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/firmware/arm_scmi/bus.c b/drivers/firmware/arm_scmi/bus.c
+> > index a7cbf4d09081..476855d3dccb 100644
+> > --- a/drivers/firmware/arm_scmi/bus.c
+> > +++ b/drivers/firmware/arm_scmi/bus.c
+> > @@ -19,6 +19,11 @@ static DEFINE_IDA(scmi_bus_id);
+> >  static DEFINE_IDR(scmi_protocols);
+> >  static DEFINE_SPINLOCK(protocol_lock);
+> >  
+> > +/* Track globally the creation of SCMI SystemPower related devices */
+> > +static bool scmi_syspower_registered;
+> > +/* Protect access to scmi_syspower_registered */
+> > +static DEFINE_MUTEX(scmi_syspower_mtx);
+> > +
+> 
 
-Sorry for not doing so. I will resend now.
+Hi Sudeep,
+
+thanks for the review first of all.
+
+> Since we create device from the driver, can't we do this from there
+> and keep the bus code free from handling all these special conditions
+> which are checked for each device creation.
+> 
+> Yes scmi_device_create can be called outside the exiting code but since it
+> is not exported(yet), we can assume all users are in kernel and we can
+> catch that if anyone attempts to add. And probably we don't need the lock
+> as well if it is taken care in the single loop creating the device.
+> 
+
+Do you mean to move the check inside driver.c common routines like in
+scmi_get_protocol_device() right before calling scmi_device_create() ?
+
+If this is what you meant, yes I can do that to avoid polluting the
+bus code...indeed it would be easier than dealing with all the internals
+in scmi_device_create() like it is now, BUT regarding the mutex I'm not so
+sure I can avoid it since the device creation is triggered at the end of
+main platform probe (driver:scmi_probe()) BUT potentially also whenever a
+new SCMI driver is (lately) loaded and asks for the device creation after
+(or worst concurrently to) the main probe loop.
+
+Beside that, there is the case of definitions of multiple SCMI platforms,
+which is not officially supported I know but that is, in my understanding,
+one of the most possible cause of having multiple instances of an SCMI
+SystemPower driver trying to register. (i.e. multiple scmi DT nodes ALL
+defining a SystemPower protocol with potentially multiple underlying FWs
+advertising SystemPower support which was the thing we wanted to avoid
+promoting ... AFAIU...but I could be missing something..)
 
 Thanks,
-Siddh
+Cristian
+

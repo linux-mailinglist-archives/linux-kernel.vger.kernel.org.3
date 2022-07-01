@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D6545633C8
+	by mail.lfdr.de (Postfix) with ESMTP id 45D165633C7
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236325AbiGAMyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 08:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
+        id S236111AbiGAMyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 08:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235436AbiGAMyj (ORCPT
+        with ESMTP id S235533AbiGAMyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 08:54:39 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927863A720;
-        Fri,  1 Jul 2022 05:54:38 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id z1so3980703qvp.9;
-        Fri, 01 Jul 2022 05:54:38 -0700 (PDT)
+        Fri, 1 Jul 2022 08:54:40 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EA13AA6E;
+        Fri,  1 Jul 2022 05:54:39 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id g14so317143qto.9;
+        Fri, 01 Jul 2022 05:54:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Uv5+jKOQ8RUlLeEtR603JL5t9bPUgBYvDDCEsdLilng=;
-        b=DgrFX41S4QAnDhT+O9vofHz+UIzBaHWOfvdam2kbZOA/1GRVDNK5IkINeLwZn4Qwyo
-         i5lxfRi5K04xatGBzVFP6eULZBSSuLdIm+hnD8UbTVvvNg33Trn0cE+gjphOs/JMEAnP
-         MvJGmPsNt7jsEca163rXibGFlry4EFCQ7js++wTpT6cJLtKjCx6NhhOvErjtu3kYYsoI
-         YhoWfiXbPT9JyQOxW2t006onbU3EJfL5zDRDzzSQ3s+oPCRCEOgyUn5ueAiO3JOoNEWa
-         NfzURxmFovE91+1o/yk2iVGrVb0XRcoK/YNio84yQ0rPOgpr3FZNuraqzSCDpx0dyNQ0
-         LAdw==
+        bh=JCJEdfzYxuANLNWAxL8CQ7FpG0f6ZAq5X4D5qi7db0c=;
+        b=ookWblnG18DUulKFRrux/M2omlEfLyyUcepuZnHv4ZaA1RBHkzX+bnWjddFRVYrGqW
+         MZK3N6pQJ+6xAKJnSgmW2LyplfSQHvIKMQFTtXWVg5XwyxKw0BUV+064ooiigTWFTQM3
+         oRjpThV6MgTWGHYTkIsd347Nm4AugejfecG4jQi3rx9RxD3Gv93MikthDtQMo5P22QoV
+         aNX9/wgVJX7yI+/KAm8xGXjPjzNlYfKCKED+nNW8Hdgp607nMK6Xh1D8dVUV25sNNnr3
+         HAl4/p/qRptBefuSAQQ7YWgZkQK47yR/xtzFtfxk1KXe7aowBiZV7dy//1nGwbflyE6Y
+         Qu3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Uv5+jKOQ8RUlLeEtR603JL5t9bPUgBYvDDCEsdLilng=;
-        b=oJj88T/87DVo1URetj0NxKmxPWKjRyF9gD0vWe6/phbNsVPfaGOKGgNHm6PVcYMQd9
-         gi9PQBmgBzsm9w2U4rUkwkZQOO4rhtlTA071HWt67i3a0RW1+Y13HEARPGQHziykbFSa
-         bpVO5rhHQTEcald3kHfDhxkEFdoEhBP+OkNDUBzMy09uD1khIDFExNJyKKSL+N3fgb2m
-         N3rY5SrpkS8SVgCTEJGKi0TmKuqsmyW7hNzLZXH3bShrpQrb997l2QuKGa28TrMfqcIN
-         yjmj7I3CHikcBGWwFF0DOS1s/2joFMJO356kfPXHkcsjGqyhJPiJOMIItUuHrCGPBreY
-         VW8g==
-X-Gm-Message-State: AJIora/y5EKWtvkDJw0PtKrwngAgIugdPb95tOOaybJ0TVFSdJaPaLIm
-        QCKMOju+q7Rd7Nn23qfT1Wk11KYo3Es=
-X-Google-Smtp-Source: AGRyM1u+eUVgVfIOLTb/JNzScesZqkE4s8uOoTxS28xuW8AF0r5ZqYbr8PsjBESSvR+hO6k9B4oRhg==
-X-Received: by 2002:a0c:e1c6:0:b0:472:d7d0:8e2 with SMTP id v6-20020a0ce1c6000000b00472d7d008e2mr508550qvl.39.1656680077510;
-        Fri, 01 Jul 2022 05:54:37 -0700 (PDT)
+        bh=JCJEdfzYxuANLNWAxL8CQ7FpG0f6ZAq5X4D5qi7db0c=;
+        b=JFCVjFslZ6gd9i3Uaq4ySdnAEjWm1VCXiJO+ls8vhqpfk0p7WIplcrkAmQ+OqMIirg
+         ciRGV9hPflvyEScm5UefHEGVH56AotgBXwffWoqHcqZOhg/2I0R7SXSrYSPym4QXgDv8
+         vifv3xuDB6SVPoV5Sz0SghxoMJWsdgUpsX3m0qgvMuzY/db6ND764/xS6QxBdFFatL4O
+         Ze+/Rea2ih7ePFMZZNg2XvPUbuZMkuah9pML5r6GAOS9h6RxAffrvxLngBfF2DSUgx2W
+         Cc6Cxbmd2+UtsaAzkDe+OB2gKgYK3+EWUc38SC9jVHkrfgMWrQLYjktQcbx/wya2Ce3o
+         s2sw==
+X-Gm-Message-State: AJIora9vP4aosR9nCWuMIdx6gvy1vlPwmO9wF6i8FFtK75oPf3x+d97i
+        nV5k2buTHcbon6vExUY9cXaingrDUgE=
+X-Google-Smtp-Source: AGRyM1uv2u+hxNkph56Thb2L3PJG6Sax4s9QHwbWNS6xD+og2wEgeS7yy6MYcj8u15wxE3ny3uoT6w==
+X-Received: by 2002:a05:622a:54b:b0:305:31e4:51fa with SMTP id m11-20020a05622a054b00b0030531e451famr12451035qtx.165.1656680078441;
+        Fri, 01 Jul 2022 05:54:38 -0700 (PDT)
 Received: from localhost ([2601:4c1:c100:1230:f902:9816:653f:2f66])
-        by smtp.gmail.com with ESMTPSA id s10-20020a05620a254a00b006a6d74f8fc9sm19217194qko.127.2022.07.01.05.54.37
+        by smtp.gmail.com with ESMTPSA id x5-20020a05620a448500b006a6d4261f40sm1088206qkp.111.2022.07.01.05.54.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 05:54:37 -0700 (PDT)
+        Fri, 01 Jul 2022 05:54:38 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -65,9 +65,9 @@ To:     linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mm@kvack.org
 Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 3/8] lib/bitmap: change type of bitmap_weight to unsigned int
-Date:   Fri,  1 Jul 2022 05:54:25 -0700
-Message-Id: <20220701125430.2907638-4-yury.norov@gmail.com>
+Subject: [PATCH 4/8] cpumask: change return types to bool where appropriate
+Date:   Fri,  1 Jul 2022 05:54:26 -0700
+Message-Id: <20220701125430.2907638-5-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220701125430.2907638-1-yury.norov@gmail.com>
 References: <20220701125430.2907638-1-yury.norov@gmail.com>
@@ -83,86 +83,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bitmap_weight() doesn't return negative values, so change it's type
-to unsigned int. It may help compiler to generate better code and
-catch bugs.
+Some cpumask functions have integer return types where return values
+are naturally booleans.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- include/linux/bitmap.h       | 2 +-
- lib/bitmap.c                 | 5 ++---
- tools/include/linux/bitmap.h | 4 ++--
- tools/lib/bitmap.c           | 4 ++--
- 4 files changed, 7 insertions(+), 8 deletions(-)
+ include/linux/cpumask.h | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-index e1a438bdda52..812835d3149a 100644
---- a/include/linux/bitmap.h
-+++ b/include/linux/bitmap.h
-@@ -163,7 +163,7 @@ bool __bitmap_intersects(const unsigned long *bitmap1,
- 			 const unsigned long *bitmap2, unsigned int nbits);
- bool __bitmap_subset(const unsigned long *bitmap1,
- 		     const unsigned long *bitmap2, unsigned int nbits);
--int __bitmap_weight(const unsigned long *bitmap, unsigned int nbits);
-+unsigned long __bitmap_weight(const unsigned long *bitmap, unsigned int nbits);
- void __bitmap_set(unsigned long *map, unsigned int start, int len);
- void __bitmap_clear(unsigned long *map, unsigned int start, int len);
- 
-diff --git a/lib/bitmap.c b/lib/bitmap.c
-index 098fd9db2363..b580b381eca1 100644
---- a/lib/bitmap.c
-+++ b/lib/bitmap.c
-@@ -333,10 +333,9 @@ bool __bitmap_subset(const unsigned long *bitmap1,
- }
- EXPORT_SYMBOL(__bitmap_subset);
- 
--int __bitmap_weight(const unsigned long *bitmap, unsigned int bits)
-+unsigned long __bitmap_weight(const unsigned long *bitmap, unsigned int bits)
- {
--	unsigned int k, lim = bits/BITS_PER_LONG;
--	int w = 0;
-+	unsigned long k, w = 0, lim = bits/BITS_PER_LONG;
- 
- 	for (k = 0; k < lim; k++)
- 		w += hweight_long(bitmap[k]);
-diff --git a/tools/include/linux/bitmap.h b/tools/include/linux/bitmap.h
-index 2ae7ab8ed7d1..c9c24dfe0443 100644
---- a/tools/include/linux/bitmap.h
-+++ b/tools/include/linux/bitmap.h
-@@ -11,7 +11,7 @@
- #define DECLARE_BITMAP(name,bits) \
- 	unsigned long name[BITS_TO_LONGS(bits)]
- 
--int __bitmap_weight(const unsigned long *bitmap, int bits);
-+unsigned int __bitmap_weight(const unsigned long *bitmap, unsigned int bits);
- void __bitmap_or(unsigned long *dst, const unsigned long *bitmap1,
- 		 const unsigned long *bitmap2, int bits);
- bool __bitmap_and(unsigned long *dst, const unsigned long *bitmap1,
-@@ -61,7 +61,7 @@ static inline bool bitmap_full(const unsigned long *src, unsigned int nbits)
- 	return find_first_zero_bit(src, nbits) == nbits;
- }
- 
--static inline int bitmap_weight(const unsigned long *src, unsigned int nbits)
-+static inline unsigned int bitmap_weight(const unsigned long *src, unsigned int nbits)
- {
- 	if (small_const_nbits(nbits))
- 		return hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits));
-diff --git a/tools/lib/bitmap.c b/tools/lib/bitmap.c
-index 2e351d63fdba..974e51809f57 100644
---- a/tools/lib/bitmap.c
-+++ b/tools/lib/bitmap.c
-@@ -5,9 +5,9 @@
+diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+index fe29ac7cc469..b54e27d9da6b 100644
+--- a/include/linux/cpumask.h
++++ b/include/linux/cpumask.h
+@@ -372,9 +372,9 @@ static __always_inline void __cpumask_clear_cpu(int cpu, struct cpumask *dstp)
+  * @cpu: cpu number (< nr_cpu_ids)
+  * @cpumask: the cpumask pointer
+  *
+- * Returns 1 if @cpu is set in @cpumask, else returns 0
++ * Returns true if @cpu is set in @cpumask, else returns false
   */
- #include <linux/bitmap.h>
- 
--int __bitmap_weight(const unsigned long *bitmap, int bits)
-+unsigned int __bitmap_weight(const unsigned long *bitmap, unsigned int bits)
+-static __always_inline int cpumask_test_cpu(int cpu, const struct cpumask *cpumask)
++static __always_inline bool cpumask_test_cpu(int cpu, const struct cpumask *cpumask)
  {
--	int k, w = 0, lim = bits/BITS_PER_LONG;
-+	unsigned int k, w = 0, lim = bits/BITS_PER_LONG;
- 
- 	for (k = 0; k < lim; k++)
- 		w += hweight_long(bitmap[k]);
+ 	return test_bit(cpumask_check(cpu), cpumask_bits((cpumask)));
+ }
+@@ -384,11 +384,11 @@ static __always_inline int cpumask_test_cpu(int cpu, const struct cpumask *cpuma
+  * @cpu: cpu number (< nr_cpu_ids)
+  * @cpumask: the cpumask pointer
+  *
+- * Returns 1 if @cpu is set in old bitmap of @cpumask, else returns 0
++ * Returns true if @cpu is set in old bitmap of @cpumask, else returns false
+  *
+  * test_and_set_bit wrapper for cpumasks.
+  */
+-static __always_inline int cpumask_test_and_set_cpu(int cpu, struct cpumask *cpumask)
++static __always_inline bool cpumask_test_and_set_cpu(int cpu, struct cpumask *cpumask)
+ {
+ 	return test_and_set_bit(cpumask_check(cpu), cpumask_bits(cpumask));
+ }
+@@ -398,11 +398,11 @@ static __always_inline int cpumask_test_and_set_cpu(int cpu, struct cpumask *cpu
+  * @cpu: cpu number (< nr_cpu_ids)
+  * @cpumask: the cpumask pointer
+  *
+- * Returns 1 if @cpu is set in old bitmap of @cpumask, else returns 0
++ * Returns true if @cpu is set in old bitmap of @cpumask, else returns false
+  *
+  * test_and_clear_bit wrapper for cpumasks.
+  */
+-static __always_inline int cpumask_test_and_clear_cpu(int cpu, struct cpumask *cpumask)
++static __always_inline bool cpumask_test_and_clear_cpu(int cpu, struct cpumask *cpumask)
+ {
+ 	return test_and_clear_bit(cpumask_check(cpu), cpumask_bits(cpumask));
+ }
+@@ -431,9 +431,9 @@ static inline void cpumask_clear(struct cpumask *dstp)
+  * @src1p: the first input
+  * @src2p: the second input
+  *
+- * If *@dstp is empty, returns 0, else returns 1
++ * If *@dstp is empty, returns false, else returns true
+  */
+-static inline int cpumask_and(struct cpumask *dstp,
++static inline bool cpumask_and(struct cpumask *dstp,
+ 			       const struct cpumask *src1p,
+ 			       const struct cpumask *src2p)
+ {
+@@ -474,9 +474,9 @@ static inline void cpumask_xor(struct cpumask *dstp,
+  * @src1p: the first input
+  * @src2p: the second input
+  *
+- * If *@dstp is empty, returns 0, else returns 1
++ * If *@dstp is empty, returns false, else returns true
+  */
+-static inline int cpumask_andnot(struct cpumask *dstp,
++static inline bool cpumask_andnot(struct cpumask *dstp,
+ 				  const struct cpumask *src1p,
+ 				  const struct cpumask *src2p)
+ {
+@@ -539,9 +539,9 @@ static inline bool cpumask_intersects(const struct cpumask *src1p,
+  * @src1p: the first input
+  * @src2p: the second input
+  *
+- * Returns 1 if *@src1p is a subset of *@src2p, else returns 0
++ * Returns true if *@src1p is a subset of *@src2p, else returns false
+  */
+-static inline int cpumask_subset(const struct cpumask *src1p,
++static inline bool cpumask_subset(const struct cpumask *src1p,
+ 				 const struct cpumask *src2p)
+ {
+ 	return bitmap_subset(cpumask_bits(src1p), cpumask_bits(src2p),
 -- 
 2.34.1
 

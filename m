@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A34562C4E
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1156562C56
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235344AbiGAHKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 03:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
+        id S233523AbiGAHKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 03:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235362AbiGAHKF (ORCPT
+        with ESMTP id S235329AbiGAHKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 03:10:05 -0400
+        Fri, 1 Jul 2022 03:10:09 -0400
 Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4015168A27;
-        Fri,  1 Jul 2022 00:10:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCA2677ED;
+        Fri,  1 Jul 2022 00:10:08 -0700 (PDT)
 Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 1FE83100007;
-        Fri,  1 Jul 2022 07:09:58 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPA id 1623B100015;
+        Fri,  1 Jul 2022 07:10:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656659402;
+        t=1656659407;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=043xki5ybzdJf/eZrX7vsjG3WJvxmYS8FW1MP76lKiI=;
-        b=cOwGLgkRMb1f/8Fa1e2q1B0gFtcryI9bDB9Zys2sAnsMp2xdSWfBrpxirubH4eM0Rgkdvt
-        eJQ8qofiVeLsZdKxDk2ENaBK25C5UorAzdrAoFaMZ1atA0q3G/6/U2P1uHvw/4nFxy5kEd
-        ZOBllkCcvb1qWIcfzLeWucIOvBaM0Jj+EOw8XEOKfoH12jBNKJqvKalCGgyEzNn7A4mTOA
-        LcpomN7eDhdcaKbnsSllBN/jHoE+FdmDjurlvoTqq7FdRLrqNAqjm6mM9LKHf3CEAUsdrM
-        ggvH932QQzJhqKrropOf44gBffLHStWm6Sj1IAi1jAvYy5soRQmrG4HOaECpAg==
+        bh=bY9k2hKqsyHlaoLqP64+/s43+QLgOGGKL1kqn0fNDuQ=;
+        b=DJRY+cgIdDUtXuww4VCZkhCH6oCKR+ONgBdOMTZC2iR10TzO8U6yz/Z7zvFcOXE3oK+zFH
+        28V5ulzwEysidNR/DvUtpwGvdoZG0G+NPyqTlgV19Rk0SB8+fRYuHJZLfMN5zx2Ys2YucO
+        /70/VukO1Oy66aPsbLfxKWHFfnyXO3la2jxs3YaFr2BdrOfsqDCl/vHN09gil0Aa6mY+fM
+        CtXy2ntX1pTzNjCD6vXAWb53AP17Osb6pn+/mSWjZAAhURegSl9z6vzDHvLI/shaaEHjeq
+        af0e4/eoKVjg9T49nB39VuCqkvLc8gRoOPiaIvkqQZzf102YpgfSPL1rFpviZw==
 From:   Herve Codina <herve.codina@bootlin.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -44,10 +44,11 @@ Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>
-Subject: [PATCH v4 1/3] clk: lan966x: Fix the lan966x clock gate register address
-Date:   Fri,  1 Jul 2022 09:09:26 +0200
-Message-Id: <20220701070928.459135-2-herve.codina@bootlin.com>
+        Herve Codina <herve.codina@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 2/3] dt-bindings: usb: atmel: Add Microchip LAN9662 compatible string
+Date:   Fri,  1 Jul 2022 09:09:27 +0200
+Message-Id: <20220701070928.459135-3-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220701070928.459135-1-herve.codina@bootlin.com>
 References: <20220701070928.459135-1-herve.codina@bootlin.com>
@@ -63,32 +64,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The register address used for the clock gate register is the base
-register address coming from first reg map (ie. the generic
-clock registers) instead of the second reg map defining the clock
-gate register.
+The USB device controller available in the Microchip LAN9662 SOC
+is the same IP as the one present in the SAMA5D3 SOC.
 
-Use the correct clock gate register address.
+Add the LAN9662 compatible string and set the SAMA5D3 compatible
+string as a fallback for the LAN9662.
 
-Fixes: 5ad5915dea00 ("clk: lan966x: Extend lan966x clock driver for clock gating support")
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/clk/clk-lan966x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/usb/atmel-usb.txt | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/clk/clk-lan966x.c b/drivers/clk/clk-lan966x.c
-index d1535ac13e89..81cb90955d68 100644
---- a/drivers/clk/clk-lan966x.c
-+++ b/drivers/clk/clk-lan966x.c
-@@ -213,7 +213,7 @@ static int lan966x_gate_clk_register(struct device *dev,
- 
- 		hw_data->hws[i] =
- 			devm_clk_hw_register_gate(dev, clk_gate_desc[idx].name,
--						  "lan966x", 0, base,
-+						  "lan966x", 0, gate_base,
- 						  clk_gate_desc[idx].bit_idx,
- 						  0, &clk_gate_lock);
- 
+diff --git a/Documentation/devicetree/bindings/usb/atmel-usb.txt b/Documentation/devicetree/bindings/usb/atmel-usb.txt
+index f512f0290728..12183ef47ee4 100644
+--- a/Documentation/devicetree/bindings/usb/atmel-usb.txt
++++ b/Documentation/devicetree/bindings/usb/atmel-usb.txt
+@@ -87,6 +87,9 @@ Required properties:
+ 	       "atmel,at91sam9g45-udc"
+ 	       "atmel,sama5d3-udc"
+ 	       "microchip,sam9x60-udc"
++	       "microchip,lan9662-udc"
++	       For "microchip,lan9662-udc" the fallback "atmel,sama5d3-udc"
++	       is required.
+  - reg: Address and length of the register set for the device
+  - interrupts: Should contain usba interrupt
+  - clocks: Should reference the peripheral and host clocks
 -- 
 2.35.3
 

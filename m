@@ -2,54 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0FE95636E5
+	by mail.lfdr.de (Postfix) with ESMTP id 597BF5636E4
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbiGAP3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 11:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
+        id S231346AbiGAP3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 11:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiGAP3H (ORCPT
+        with ESMTP id S229503AbiGAP3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 1 Jul 2022 11:29:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E9F1F60D;
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF7D2558A;
         Fri,  1 Jul 2022 08:29:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39BC862414;
-        Fri,  1 Jul 2022 15:29:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C587C3411E;
-        Fri,  1 Jul 2022 15:29:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656689345;
-        bh=fg4rHu8CbbqFBxKzijEGmEDBRGujBS5oSTYCqS8ZW70=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HAGfJ701w0/wjeuqllH40r3iH05v/wKY7zEntWAJRSpPcG+9b8Q5miparWa6qm556
-         TnxIN4cuwNhjSmg+XwnEpBYcwuiOQrZgAZjVIW+Q8dBMkrlQYB88kM6c7LhbmiQIdc
-         0H0ZecFc5lF9ne4ISpiVbZPBhY7xCyZpJYnGSdh8=
-Date:   Fri, 1 Jul 2022 17:29:02 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Imran Khan <imran.f.khan@oracle.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>, tj@kernel.org,
-        viro@zeniv.linux.org.uk, m.szyprowski@samsung.com,
-        michael@walle.cc, robh@kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, guillaume.tucker@collabora.com,
-        pmladek@suse.com
-Subject: Re: [PATCH] kernfs: Avoid re-adding kernfs_node into
- kernfs_notify_list.
-Message-ID: <Yr8SvqShBXZ/U6gk@kroah.com>
-References: <20220701145047.2206900-1-imran.f.khan@oracle.com>
- <Yr8OSxotW2VEUyKQ@dev-arch.thelio-3990X>
- <2c4bdc7a-b49f-c2ea-28d0-4ec838c3b26c@oracle.com>
+Received: by mail-io1-f52.google.com with SMTP id y2so2561559ior.12;
+        Fri, 01 Jul 2022 08:29:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Ub5AkERHAhUeuVteOCgF0rqWbNQPzRgAJcYvL2d8G34=;
+        b=PBJytlizWK5Sgz/El55dRpH1Skv2umq9DjgZbsmlZYUJrOmAv+3Ku79z2/ssBrkwGk
+         2inLiBHW3wuCVWuHF2VYFo0wYGC3qsZCt0H9sRE6sVaNz8XR6pxHCm059RiaPKMQYkG0
+         P4P0LHxCKCLWC/C8qGo8dFS14IOdY+JzTzJaeSUoV4nrGMBPT0COeK17Fqfek6p9tf/x
+         1i9FQxQIv6NIm+Npv7TV+E+lTRQmrS8OHsALidDJF+OE7JagRgoAAQ4kqegXzTfUb2ip
+         SgREFBKJQez5G+kKO39dTL/xAJT7k9wIFlUdWo5HNZaVUAu4AmQHa86tMmwaBa2gk0eH
+         cSWg==
+X-Gm-Message-State: AJIora9c0Y+1NZ9Vt2W4u35pADrY1a40bO9cxIw4Mteis2TBy8lg3xIA
+        Mrza7pA3szUDEjMOXFabKsSVSNGWcw==
+X-Google-Smtp-Source: AGRyM1vnWdHTWoGNJAzy4B2waQwFaJfUSV4Y47hXN5NEtLermdhBTU15cF0iWjvrt0N4z9sorLG9Sg==
+X-Received: by 2002:a05:6638:1483:b0:33c:149:4e07 with SMTP id j3-20020a056638148300b0033c01494e07mr8318855jak.216.1656689345945;
+        Fri, 01 Jul 2022 08:29:05 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id h8-20020a92d848000000b002da9f82c703sm5091897ilq.5.2022.07.01.08.29.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 08:29:05 -0700 (PDT)
+Received: (nullmailer pid 981138 invoked by uid 1000);
+        Fri, 01 Jul 2022 15:29:03 -0000
+Date:   Fri, 1 Jul 2022 09:29:03 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Irui Wang <irui.wang@mediatek.com>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        angelogioacchino.delregno@collabora.com,
+        nicolas.dufresne@collabora.com, wenst@chromium.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
+        maoguang.meng@mediatek.com, kyrie wu <kyrie.wu@mediatek.com>,
+        srv_heupstream@mediatek.com
+Subject: Re: [V4,1/8] dt-bindings: mediatek: Add mediatek,mt8195-jpgdec
+ compatible
+Message-ID: <20220701152903.GA968728-robh@kernel.org>
+References: <20220627025540.8901-1-irui.wang@mediatek.com>
+ <20220627025540.8901-2-irui.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2c4bdc7a-b49f-c2ea-28d0-4ec838c3b26c@oracle.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220627025540.8901-2-irui.wang@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,54 +75,218 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 02, 2022 at 01:18:09AM +1000, Imran Khan wrote:
-> Hello Nathan,
+On Mon, Jun 27, 2022 at 10:55:33AM +0800, Irui Wang wrote:
+> From: kyrie wu <kyrie.wu@mediatek.com>
 > 
-> On 2/7/22 1:10 am, Nathan Chancellor wrote:
-> > On Sat, Jul 02, 2022 at 12:50:47AM +1000, Imran Khan wrote:
-> >> Kick fsnotify only if an event is not already scheduled for target
-> >> kernfs node. commit b8f35fa1188b ("kernfs: Change kernfs_notify_list to
-> >> llist.") changed kernfs_notify_list to a llist.
-> >> Prior to this list was a singly linked list, protected by
-> >> kernfs_notify_lock. Whenever a kernfs_node was added to the list
-> >> its ->attr.notify_next was set to head of the list and upon removal
-> >> ->attr.notify_next was reset to NULL. Addition to kernfs_notify_list
-> >> would only happen if kernfs_node was not already in the list i.e.
-> >> if ->attr.notify_next was NULL. commit b8f35fa1188b ("kernfs: Change
-> >> kernfs_notify_list to llist.") removed this checking and this was wrong
-> >> as it resulted in multiple additions for same kernfs_node.
-> >>
-> >> So far this bug only got reflected with some console related setting.
-> >> Nathan found this issue when console was specified both in DT and in
-> >> kernel command line and Marek found this issue when earlycon was enabled.
-> >>
-> >> This patch avoids adding an already added kernfs_node into notify list.
-> >>
-> >> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> >> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> > 
-> > This should also include:
-> > 
-> > Reported-by: Michael Walle <michael@walle.cc>
-> > 
-> >> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> >> Fixes: b8f35fa1188b ("kernfs: Change kernfs_notify_list to llist.")
-> >> Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
-> > 
-> > For the ARCH=um case that I noticed:
-> > 
-> > Tested-by: Nathan Chancellor <nathan@kernel.org>
-> > 
+> Add mediatek,mt8195-jpgdec compatible to binding document.
 > 
-> I am really sorry about missing these tags. I was not sure if you have tested
-> the patch I sent this morning.
+> Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
+> ---
+>  .../media/mediatek,mt8195-jpegdec.yaml        | 176 ++++++++++++++++++
+>  1 file changed, 176 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
 > 
-> Could you please suggest me if I should send a v2 of this change with these tags
-> included or if this mail is enough. Sorry if I am asking something obvious but I
-> am encountering such situation for first time.
+> diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
+> new file mode 100644
+> index 000000000000..8a255e8e2e09
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
+> @@ -0,0 +1,176 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/mediatek,mt8195-jpegdec.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek JPEG Encoder Device Tree Bindings
 
-Please resend with them added.
+s/Device Tree Bindings//
 
-thanks,
+> +
+> +maintainers:
+> +  - kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>
+> +
+> +description: |-
 
-greg k-h
+Don't need '|-'
+
+> +  MediaTek JPEG Decoder is the JPEG decode hardware present in MediaTek SoCs
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: mediatek,mt8195-jpgdec
+> +
+> +  mediatek,jpegdec-multi-core:
+> +    type: boolean
+> +    description: |
+
+Don't need '|'
+
+> +      Indicates whether the jpeg encoder has multiple cores or not.
+
+Can't this be implied from the child nodes?
+
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  iommus:
+> +    maxItems: 6
+> +    description: |
+> +      Points to the respective IOMMU block with master port as argument, see
+> +      Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for details.
+> +      Ports are according to the HW.
+> +
+> +  "#address-cells":
+> +    const: 2
+> +
+> +  "#size-cells":
+> +    const: 2
+> +
+> +  ranges: true
+> +
+> +# Required child node:
+> +patternProperties:
+> +  "^jpgdec@[0-9a-f]+$":
+> +    type: object
+> +    description: |
+> +      The jpeg decoder hardware device node which should be added as subnodes to
+> +      the main jpeg node.
+> +
+> +    properties:
+> +      compatible:
+> +        const: mediatek,mt8195-jpgdec-hw
+> +
+> +      reg:
+> +        maxItems: 1
+> +
+> +      hw_id:
+
+So a similar, but different property from the video codec? Either way, 
+this property should go. We don't do indexes in DT.
+
+Why do you need this?
+
+> +        description: |
+> +          MT8195 decoding hardware id value. MT8195 has three decoding hardwares,
+> +          which is represented by this parameter.
+> +
+> +      iommus:
+> +        minItems: 1
+> +        maxItems: 32
+> +        description: |
+> +          List of the hardware port in respective IOMMU block for current Socs.
+> +          Refer to bindings/iommu/mediatek,iommu.yaml.
+> +
+> +      interrupts:
+> +        maxItems: 1
+> +
+> +      clocks:
+> +        maxItems: 1
+> +
+> +      clock-names:
+> +        items:
+> +          - const: jpgdec
+> +
+> +      power-domains:
+> +        maxItems: 1
+> +
+> +    required:
+> +      - compatible
+> +      - reg
+> +      - hw_id
+> +      - iommus
+> +      - interrupts
+> +      - clocks
+> +      - clock-names
+> +      - power-domains
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - power-domains
+> +  - iommus
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/memory/mt8195-memory-port.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/clock/mt8195-clk.h>
+> +    #include <dt-bindings/power/mt8195-power.h>
+> +
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        jpgdec_master {
+> +                compatible = "mediatek,mt8195-jpgdec";
+> +                mediatek,jpegdec-multi-core;
+> +                power-domains = <&spm MT8195_POWER_DOMAIN_VDEC1>;
+> +                iommus = <&iommu_vpp M4U_PORT_L19_JPGDEC_WDMA0>,
+> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BSDMA0>,
+> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_WDMA1>,
+> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BSDMA1>,
+> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
+> +                     <&iommu_vpp M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
+> +                #address-cells = <2>;
+> +                #size-cells = <2>;
+> +                ranges;
+> +
+> +                jpgdec@1a040000 {
+> +                    compatible = "mediatek,mt8195-jpgdec-hw";
+> +                    reg = <0 0x1a040000 0 0x10000>;/* JPGDEC_C0 */
+> +                    hw_id = <0>;
+> +                    iommus = <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA0>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA0>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA1>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA1>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
+> +                    interrupts = <GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH 0>;
+> +                    clocks = <&vencsys CLK_VENC_JPGDEC>;
+> +                    clock-names = "jpgdec";
+> +                    power-domains = <&spm MT8195_POWER_DOMAIN_VDEC0>;
+> +                };
+> +
+> +                jpgdec@1a050000 {
+> +                    compatible = "mediatek,mt8195-jpgdec-hw";
+> +                    reg = <0 0x1a050000 0 0x10000>;/* JPGDEC_C1 */
+> +                    hw_id = <1>;
+> +                    iommus = <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA0>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA0>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA1>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA1>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
+> +                    interrupts = <GIC_SPI 344 IRQ_TYPE_LEVEL_HIGH 0>;
+> +                    clocks = <&vencsys CLK_VENC_JPGDEC_C1>;
+> +                    clock-names = "jpgdec";
+> +                    power-domains = <&spm MT8195_POWER_DOMAIN_VDEC1>;
+> +                };
+> +
+> +                jpgdec@1b040000 {
+> +                    compatible = "mediatek,mt8195-jpgdec-hw";
+> +                    reg = <0 0x1b040000 0 0x10000>;/* JPGDEC_C2 */
+> +                    hw_id = <2>;
+> +                    iommus = <&iommu_vpp M4U_PORT_L20_JPGDEC_WDMA0>,
+> +                        <&iommu_vpp M4U_PORT_L20_JPGDEC_BSDMA0>,
+> +                        <&iommu_vpp M4U_PORT_L20_JPGDEC_WDMA1>,
+> +                        <&iommu_vpp M4U_PORT_L20_JPGDEC_BSDMA1>,
+> +                        <&iommu_vpp M4U_PORT_L20_JPGDEC_BUFF_OFFSET1>,
+> +                        <&iommu_vpp M4U_PORT_L20_JPGDEC_BUFF_OFFSET0>;
+> +                    interrupts = <GIC_SPI 348 IRQ_TYPE_LEVEL_HIGH 0>;
+> +                    clocks = <&vencsys_core1 CLK_VENC_CORE1_JPGDEC>;
+> +                    clock-names = "jpgdec";
+> +                    power-domains = <&spm MT8195_POWER_DOMAIN_VDEC2>;
+> +                };
+> +        };
+> +    };
+> -- 
+> 2.18.0
+> 
+> 

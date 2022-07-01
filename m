@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CBAC5631DB
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B187B5631D7
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 12:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236988AbiGAKqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 06:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43454 "EHLO
+        id S232319AbiGAKqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 06:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237064AbiGAKqE (ORCPT
+        with ESMTP id S237068AbiGAKqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:46:04 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70081.outbound.protection.outlook.com [40.107.7.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB817BD26;
-        Fri,  1 Jul 2022 03:46:01 -0700 (PDT)
+        Fri, 1 Jul 2022 06:46:06 -0400
+Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00072.outbound.protection.outlook.com [40.107.0.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDCE7437B;
+        Fri,  1 Jul 2022 03:46:05 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QRfz1+odHIiW155O8xKFpb/BZ7yydnjhIq0xKxgb3DX2xC7XzxH75g6cauW4IEyLfB9k42Z8ApE2Zkb8geu59f9Rdxc36ijqjwVlfsgXZvtkarD8k2zfrY1QceKEJfCTvV85sR+FpmlbruTu9yPBrKfWL4XGxBFdCQyXwoT+8l7RYJCYNSXtMZ9yPlFYyOKt4ACXcVAFeeOwhnDAKUN2U7qejBNJnZqhp38dmctEhsnXW+lsJlM+ZwRuGcwLxCBW5hgotYrqSTo5CI8Tl5TFSohoA3NB/QmTRZE7DduenpJxKBoZJzCx7MUmocX3mz0y5iZ71VaEo6RohRDTpYwjnA==
+ b=GzkDvdvQVRG5r+Yt4qmmSRNDPGiV6i7bqczzacZqQKAeNM2RRsuBLmz5Z/0FlsTpnc0xIh09vM2nSnVk4NzS0aT2ULQEGhMgbY8cDyfjUq3IWYC4QaZfhHVQAGyw/c5D7E+2kQeBeIstyxRcgSG9twUtoXbU/VHFjeob/GrTsI6oDlyqXPotEODM2xyXTijfEon5sVIo8jlMx7MoAtJnnteDU72pW9/q8aIPhHdJxevnr6wOTIhBE2sJAkrNZfZ+pyjFc7LxVcRRBfzhRv5Z469c/c1inFwwkb0blEMOndVkLzm/xbeh7kvPafLlFS+MT+sTXgCq2Id4JbCWrgBGXw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5L0/Bds7zEIw0DEvvUF/ZAUPes1W6xbaVPzlAFJJ27w=;
- b=RVcHPhaIGSIKeH5H1KwgYPfttoxSr0Z0ndO/VdW8P1qW8hFeW8w4yIdIz/AIZXIfQ74hhIOROUlSrIEHZ90MNsu7TQFXIlhKnPwOldNvR4qpeYKBqaSBj/U318DLVsCpoQeWZ5APOUryfPSoZdCh/zD67JLSjfOJUJbXNQLY5fINR2Skcqg+IeMDXD9hfz53NSN2pZBPDh+9hy7J9ZtqCELzYalpWh1oU+USz0f7s/EnOpUoa57S6kwI9JbbqskXojsyQLRFZ0kzddHGxx02W/f8oXb/9FTaLSG6Bt2hDO445rHvSp0uEbfW6O+tEOpwH0CTnIFIObciRLg8UqAXCg==
+ bh=Mi0BiFoh91h6xoHWVePG7+aorttfMxQ5X5lm23o1680=;
+ b=M2zLbbX2eE+4BY9C55DcJSlxHI2IAnpzL8RLI9mLLyJSxfRM4TiutkwoWXSXC6ovv96tKzGhDdVcHI7l1pw40DmGAM79/VkHdssoPwbnV1QcMYr1FgeV6l/RlOloNcdcmENzw/T01dNS6KMebhEMrj536CpO5UDK93DCkqDPMclPMuiJcXImNpzHt+BRf3zqDqQqb27L3a36D6e6ixX7/STmb1GFTeCTID3tKj2tuCqn2mTDgApby9LL4yo2AKpL9vJ+DpWvqW1/jxRPTe3YdZwMBFYxC+L/e96SRQ7qzYX6uepB+JGvXOKMluiB/4QkN1sw0288OjkRKrPhO/fhRg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5L0/Bds7zEIw0DEvvUF/ZAUPes1W6xbaVPzlAFJJ27w=;
- b=Toimns/UQ2uEdmBpAfRJWAEf2lNMlKIv04sV7PjGYXJLa84/73ZwNOyYW7mPLLg1ya2WLwbLsVJtnMBf7lV+szqHxXDe2oT2FjeqaPjNNMt0KU1CNKnRmQwbjtlg4Jg3aZAvpA1Dy3C3nvxP5amztCRzqe0t4N5D5U5exqCk/8A=
+ bh=Mi0BiFoh91h6xoHWVePG7+aorttfMxQ5X5lm23o1680=;
+ b=K1ifNqbgXGFHRQRrf/AAU8w7MtrQrdjPTL8n5yETwTUP0RFlQys8WwMZ/uho9Clk0MpPhJELFn+9ws3GKsehEi3YW6u27VZzWUBWl9VL4VALRggldDrDpLxJ5rh1rSxh9Pq7Q0/3XE80MPyM3m7iKF0z8LbtQwvzH2s8oNLfu9o=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
  by AS8PR04MB7974.eurprd04.prod.outlook.com (2603:10a6:20b:2a1::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Fri, 1 Jul
- 2022 10:45:58 +0000
+ 2022 10:46:02 +0000
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::fdd4:8557:334b:180d]) by DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::fdd4:8557:334b:180d%6]) with mapi id 15.20.5395.015; Fri, 1 Jul 2022
- 10:45:58 +0000
+ 10:46:02 +0000
 From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
 To:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
@@ -48,9 +48,9 @@ Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
         shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
         festevam@gmail.com, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V4 4/6] remoteproc: imx_rproc: support kicking Mcore from Linux for i.MX8QXP
-Date:   Fri,  1 Jul 2022 18:47:23 +0800
-Message-Id: <20220701104725.557314-5-peng.fan@oss.nxp.com>
+Subject: [PATCH V4 5/6] remoteproc: imx_rproc: support i.MX8QM
+Date:   Fri,  1 Jul 2022 18:47:24 +0800
+Message-Id: <20220701104725.557314-6-peng.fan@oss.nxp.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220701104725.557314-1-peng.fan@oss.nxp.com>
 References: <20220701104725.557314-1-peng.fan@oss.nxp.com>
@@ -62,52 +62,52 @@ X-ClientProxiedBy: SI2PR02CA0034.apcprd02.prod.outlook.com
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cd25db2b-3b43-4b88-31b5-08da5b4ee1db
+X-MS-Office365-Filtering-Correlation-Id: 346c2467-b4d2-420d-d0e0-08da5b4ee45c
 X-MS-TrafficTypeDiagnostic: AS8PR04MB7974:EE_
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kjTKUuymbedbUxejOl80ZqlsKZGILPMgSRgV9RkS4o59OA3fb//usrNdZEynnNooiH47+mTWEroMu/gVbxcfPVjLDxQ+NMLz7eyZeYP3EJrLsqMClhunK7u+1At7cWqyFdxeR0mO8OcfxoCU2CDl2N6Z/tTIvcph8Ibw47Vk6us7GL63Canj0EQQ8Co16FKZ/z+ZB+Zrku34ug76YUO2f/vHJLp4z3DjEoOVYlYS2SqonhoJVObMhuspmhoQwEFWKffFl7PBR8teLclQQi2nfaZkPGDgbm+HM527bOgfTZn2aMjU8tjYlB+wUxW0bqJwAyoOqsf4U8WXX/j4sjMmyJJG6NuU+iI3hAS/uB7yAvhxbnRP7aIXJYHU7P07Nc77eBbogOboSjSVxEODXO94KIphocJgqiJG/wVnw2Fdf18GPUyKMh8mOxcE+GEr+x17ILI64dLRpIV8Vdo+i/MJ+gmo3jrgwDkueWXA3yfkl/0s+qzFsr87/VN1esX1ljzr5XAyj9z1ZCzsx0sZAgpFhwYStE6dnibXCK3PdDHFtskVInvu8UfB6b9TJmD5mcaSzdSUaFHQ/f67aRYn0JA9WYpn1q2kK1PdTBe5kgweqKzzCKjKKG8MycpJsfZgb1/bl9VAMCWlzUM3js74u9GjHWhfKebAGcpm9daEpqdF5IaYxxwQdOuVh952kH7lmCFMIRUKyZsxdRkGUH3ufTOeO6O6nyPD2uDTuEn2refSvH5FcWTshBX7tW8EA6FD9phtI44w+v0XdtDCKI80b+qH/fO4/AnlJtkfmFjHmtu3cf7M3MCCIv9rPNMvLWHR0UY2
+X-Microsoft-Antispam-Message-Info: rVk92fNqdRU9SxG1AatzzLGTmdCIQWRcIrdIuO4SYvfgEcgZpYFTSeWYyVAGFnKmvyoYscY7BNgh2d+wiXi7CzyLIDK+CQbZaLiRmAa1d66W1MPnuN/kdPRec0/4T1OHJ8mRdB/gqT6x9LLvpYDYsw9bR3PyrBzY+5uufy8dm76Q15RJ65Zd9rNvTPWMCS5iX/2knJEDQLbCcxrGWusm/If4cVkhSxcFIBm5QCy/XpT0rYm0cOCdWiR4D/yxsAFmMDIaKlOfraU4euQUph7jF0oNq0f4fKEVoQIUHJ7yWM2Myulq94mzX2O38+ZVuIBsB/crsxxx399Tqws+7VH/cmj2vrf+fNuAPvfi6gi0B5oIhbut/Id9epUoIQL5tbCtC1j/ido+xW/a15uBZ1N3zO4M3I8PXN/pbQmgdE2CHKvLXYJfKl/DnjltFlySU8V3UKpj13RDrSd1CLRKs8o/yETjfWHrjI4Y0aJLA1yMmLwGNpaUT2y4j17+zCKCo4MQwrqGSKe4gLtIB4wqOS4Twv1gWogMsOfljdpw/AEMTpn0OTl5cq3SsvPti64hjJrlzCGo72otmkhbPsXBN5HhlHOKdDhi+27k+fnY5aznTSznqyCIBeROpYnBVedvvgANMjAjxXDiU3TKsSJCMQTXpK3Zetio8j605wyDl9D68eimtUAA5kjZw8uv4Io+NfvlmHZ3ujzUD9eYxpgLYchRhXWJeCBqLOuTGaKec3bNTbkn8IggLFRheoHZfA9mztlZGpwbcC8/aecaa6jbmEOjR0MflILX9SFtIVaR304ynp6KtsjY3OxshKdiVIXgSH8j
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(136003)(376002)(366004)(346002)(478600001)(7416002)(6486002)(38100700002)(38350700002)(66556008)(26005)(52116002)(6512007)(1076003)(6506007)(8936002)(86362001)(6666004)(83380400001)(2616005)(2906002)(186003)(41300700001)(5660300002)(4326008)(8676002)(316002)(66946007)(66476007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5we+Qkz0NLNXqg5ivkczbv3GkvNgU4cdeg23O3K+uiJCN3497dfM/olw+1yT?=
- =?us-ascii?Q?Y5I03+e05UY3LWOO9eT86AA5D7RM/f7v4WbqnOvfZ5m7W77HdDQg6QWtCGFS?=
- =?us-ascii?Q?jHz9oVnHpPCEtmCGmiQsfRWTh2yHAS+XMDx8LyEAQ9OZSSFhzp6357LIAeXP?=
- =?us-ascii?Q?rUV+AuBfPjFLXo3pQRVf/WYthdqb+5B2AruBPsl2LAKOrg6HHw3E1iWEDwSb?=
- =?us-ascii?Q?iRSBlbS+nifzLfogoXKobwp+Bj861DpgtYcv1ZY+US8BQFZo5SYcekCp1mnl?=
- =?us-ascii?Q?2dw2r8sZup+Yp2KpNzIIMqw59SRJRf/62jBJLITbus5pVY99Z2vZDgM2IPnR?=
- =?us-ascii?Q?sCETpr/rawg4gfjFEt80rE7A7HpHO9mEKwfMP6NDxgMQ8E3eMnl4WyWAwGsU?=
- =?us-ascii?Q?V9Rkm04gBuAPzl/xSJOyPoW+c2wwSlkbxmxEHi2HT71HP5qHrUERfDkmEY8g?=
- =?us-ascii?Q?hEun5YxadAOzpqR65gGV3iBId68N29ZQVc3kRFusLgh674FjPwxIUCj/fsI0?=
- =?us-ascii?Q?Ek57nloaTYhnIKwwIFhhzkCKKz47j3pZWwgFRPTbJM6LFW/Pt9zvBmR5Nx8n?=
- =?us-ascii?Q?JwK9T/CmXqH41U8FxXPIXfZBpDahp/4xvryMG0HUhiRcv0Q2fzrmJk8MtUmV?=
- =?us-ascii?Q?8o5OGQ+KknwtlUTVqJfoy0w/f1Iy+gVxntS08nBGxHy8Xhu6ZDNkMoGLlcUS?=
- =?us-ascii?Q?k0O25AgmAKJ43Npbf6r7e0OQaB/sOdNFbtMIXuqVcXRjaw1nb6td0Er79VC9?=
- =?us-ascii?Q?/hwsJqexUCoMYA4aWjAEAVDnDlSjdlhs1tFSjZem0230ctjAiyBMSmLaGmGv?=
- =?us-ascii?Q?ANMDwMmcFD1ee3o9Q3IrU4q+T/khqZO9lPlI7H/+cpjqDfruWEQ2p19BlETy?=
- =?us-ascii?Q?j9rdaTfctQ3EKcDcbc00K4wh9lDMHfGHULakGwQ2BtMqqvn6/yv73rG+xIrT?=
- =?us-ascii?Q?FQ8sBnxGLU1KUkH20tDqBgM6GAuHJL07ocbSzWzToi0I+3sm1AVa9T1BR9sq?=
- =?us-ascii?Q?tNjdarkKJLaZhSbU4RpndeuHNr59xhg4p74tGDI8NKWCr3SiUxhpuZJPUU1t?=
- =?us-ascii?Q?cI8WEKE7dHCmsaWTtwl4C+egYYj3rIGrjYkLu6YYdDKLG2ZZifio2kUdbzoV?=
- =?us-ascii?Q?7LKj69lSk5bWLLQrY6MUDjrJ6HgqsqEmaRKEcVzmEKpa3kHbT591NnYKcgQF?=
- =?us-ascii?Q?qA5Xpa2/uwwU6iuovNeO3tEsseXOCKQ9DMVGKrELor7xdedh32HtiGON6sdE?=
- =?us-ascii?Q?mtjO10eBffgNV/ld/VaHhOtYiz4/S/pGudWbpUW+kpaCUFTOxIKrpIwbl8lJ?=
- =?us-ascii?Q?dN3iOyA6ZFar4KQZvE1oTW9jkhhBjTrazH51InjMVMwyIvFuQ3b4s7+BXwck?=
- =?us-ascii?Q?zY4GrNcBLksilnlT5h+3eyG40yzlayGVXmxCOBxlBgCPDv4eAbOx57nPngjy?=
- =?us-ascii?Q?GLmRF2CFJp16lU3oNp1CwVYTB4Yp5msP5T3rHSFEJTvD1HhOCzE5vlS04+N0?=
- =?us-ascii?Q?vMeBd7S/OHxfHBAYv6FMY+obYavwucR9behWtXLojrEXr+WyYY3I1nfT+LdG?=
- =?us-ascii?Q?T4wtvyJZavRaDAfH473kKBTuwAxmJzurCGfBIQEx?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?k2JzDshvxQpFcEOAiMpO97X50Sy/r4OjWn/+8VO8+7IEeY3lP5aiSvXzjTNp?=
+ =?us-ascii?Q?u/7KYk8UD/IhbcHsEesKMymNN38lW1/VmbSxC6Fn3hJwmC68y+VyGCMAh3z0?=
+ =?us-ascii?Q?2VlQuYHzNYr+cE2ofcLhM0RviMR8oX9iF95m2CeNCDh2F1hshtU74h6uj80N?=
+ =?us-ascii?Q?1TK6FcJqW68HY7wwCajBPFLRJZVOfhGVnrDEL6bXcnbMKc11t5+wcbQQumyu?=
+ =?us-ascii?Q?ipbpRDS2m4DzOGyKBQJbpwhQvqxdAEaIHx6/Lj+f2kKEfphhAd7AAvSzNQ4G?=
+ =?us-ascii?Q?S3C8gxEn4GWQyjRcAGqdHOqlDyb+p2weOllG4VCbJzUfqotmhjDC++ZnyKsc?=
+ =?us-ascii?Q?7cWvVmc+oPhsp1mf3jaVHdbs0DmtkDeKCtf0T3B1Z07K28QTREjAotS2HDKi?=
+ =?us-ascii?Q?vlptZHOEKjLbRbYVCWb3q79F1gh8xuyYFjZzCwM1Ji2ozw++QllF6HRZV4fe?=
+ =?us-ascii?Q?aH0IrgX6SV4hE6j5ypsj3l05MNkJ3S+vYDgQhxIo/yhuLE8f4W9PAGeI1/rD?=
+ =?us-ascii?Q?zHcAUCd4WrK74rHdsIdxovKOaKa+d1lghxf/Pk8C7Oqo6uVR2M8NbCNOkdsq?=
+ =?us-ascii?Q?S5SzgzB53Gguiajjh26hlO7rY1P+6PVBJHLXzKnzyEq3Rt4ZgvQlEnaVZrSg?=
+ =?us-ascii?Q?yNLKUNIY0vquhZzjlPmQnx5Bk8zFnHBHSaz8n4AL2OFKlymVBgmFqVn+J1nb?=
+ =?us-ascii?Q?0oKfyeYthK004JbUWNjM42hRMIl6/rXtKYBuJhc2iUoVJiX50sqijYhMzKhM?=
+ =?us-ascii?Q?GXKKMEE+dNj4DD+nR6kiH9glW7EXjJ34VdihF1+D2fXvQayO6dbIg4m8m0Cv?=
+ =?us-ascii?Q?YNPUknj/gCu4n+AHwDfSxzxarFeH4qh/R3m6QRIeKY5gRBGypSVju3D9WeRc?=
+ =?us-ascii?Q?0Lf8T4xMT7HTnOPKhb5Y6mBzG4ALyaCZnj55yi1ezNmwPvmVG/Xzs0wc39Mq?=
+ =?us-ascii?Q?jDyS/uZNpyi9v1BMk7t8xNFKdeOjVcSdRCUDFpX8RUwealpbzj8T+2Jlnv3d?=
+ =?us-ascii?Q?vF/UtfGH7dj+Graeut6cCE9iS7Ly2JZVUEDpJU0sRhQKD9/RSbK+LvrsQur8?=
+ =?us-ascii?Q?p0o/XXNuD5QxjHygXT8NEDebPN25AkmtJpQns9P2T5XWDYQfwlw/QsB+TETx?=
+ =?us-ascii?Q?wCHsJG8T4V4gKhCWZLLDLZFanPvFIxjWZgjf1A36+brtLIlLw6wwDAh7xKCG?=
+ =?us-ascii?Q?0Q9E5yZzXxtTunL96Rc47c7gEYF+Fp0610vbgPdjOxuQfLQyKavKKrJtWxdA?=
+ =?us-ascii?Q?DhiNz0frHaGLEmqSF/45PRmNYa319Q2th2kWlcwjNlLcAy5i8U+EBbqW1v2M?=
+ =?us-ascii?Q?kXDJXGHxkKf0iDzdqXFjzaYaed0nejMMOXrbp1MSwL2P5T48ekvGOAOREN6M?=
+ =?us-ascii?Q?Fq3D9piXKC0KwS0adNShukkFgX4K/9tfK9N1KraCqz0aNlErS5/egrljIhKE?=
+ =?us-ascii?Q?2/kbCHmZVEjgvPP4rftmV5+j8U1pq/J+lj+9wndR5rDcAnaPxTKTmH2Xgc3/?=
+ =?us-ascii?Q?wGweAsaBO3X/qX7acOElYm3Gm2baQIo7bYtQnCKdUkOJFpeQHRnZ4CVWum/N?=
+ =?us-ascii?Q?aP/+V5zUx69PxuuEeH70gHjNWaLyaE9ArZxiCIs/?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd25db2b-3b43-4b88-31b5-08da5b4ee1db
+X-MS-Exchange-CrossTenant-Network-Message-Id: 346c2467-b4d2-420d-d0e0-08da5b4ee45c
 X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2022 10:45:58.4143
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2022 10:46:02.5099
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 236/4nGM5XEEoSgfr8UIBJP9D4cqMVEnB1/sOCxfOr6mvLpBzcZjEXjPevRLLmjmz+riJtzqrt1A3FZdFk8MCA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: M3RxllLRWTaObN5lHDXzn1ssZ028lwXExS2eQHndGvqb0CtmRx7FD8mTzcsKvo75bPylm4T2T+mxbfags52Kxg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7974
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
@@ -120,166 +120,123 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peng Fan <peng.fan@nxp.com>
 
-When M4 is in the same hardware partition with Cortex-A, it
-could be start/stop by Linux.
-
-Added power domain to make sure M4 could run, it requires several power
-domains to work. Make clk always optional for i.MX8QXP, because
-SCFW handles it when power up M4 core.
+Most logic are same as i.MX8QXP, but i.MX8QM has two general purpose
+M4 cores, the two cores runs independently and they has different resource
+id, different start address from SCFW view.
 
 Signed-off-by: Peng Fan <peng.fan@nxp.com>
 ---
- drivers/remoteproc/imx_rproc.c | 88 ++++++++++++++++++++++++++++++++--
- 1 file changed, 84 insertions(+), 4 deletions(-)
+ drivers/remoteproc/imx_rproc.c | 47 +++++++++++++++++++++++++++++++---
+ 1 file changed, 44 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-index 1ce692a72946..0cecb7f422b4 100644
+index 0cecb7f422b4..f129cc840931 100644
 --- a/drivers/remoteproc/imx_rproc.c
 +++ b/drivers/remoteproc/imx_rproc.c
-@@ -16,6 +16,7 @@
- #include <linux/of_reserved_mem.h>
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
- #include <linux/regmap.h>
- #include <linux/remoteproc.h>
- #include <linux/workqueue.h>
-@@ -79,6 +80,8 @@ struct imx_rproc_mem {
- #define ATT_OWN		BIT(1)
- #define ATT_IOMEM	BIT(2)
+@@ -3,6 +3,7 @@
+  * Copyright (c) 2017 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
+  */
  
-+static int imx_rproc_detach_pd(struct rproc *rproc);
-+
- struct imx_rproc {
- 	struct device			*dev;
- 	struct regmap			*regmap;
-@@ -96,6 +99,10 @@ struct imx_rproc {
- 	struct notifier_block		rproc_nb;
- 	u32				rproc_pt;	/* partition id */
- 	u32				rsrc_id;	/* resource id */
-+	u32				entry;		/* cpu start address */
-+	int                             num_pd;
-+	struct device                   **pd_dev;
-+	struct device_link              **pd_dev_link;
++#include <dt-bindings/firmware/imx/rsrc.h>
+ #include <linux/arm-smccc.h>
+ #include <linux/clk.h>
+ #include <linux/err.h>
+@@ -75,10 +76,13 @@ struct imx_rproc_mem {
+ 	size_t size;
  };
  
- static const struct imx_rproc_att imx_rproc_att_imx93[] = {
-@@ -335,6 +342,9 @@ static int imx_rproc_start(struct rproc *rproc)
- 		arm_smccc_smc(IMX_SIP_RPROC, IMX_SIP_RPROC_START, 0, 0, 0, 0, 0, 0, &res);
- 		ret = res.a0;
- 		break;
-+	case IMX_RPROC_SCU_API:
-+		ret = imx_sc_pm_cpu_start(priv->ipc_handle, priv->rsrc_id, true, priv->entry);
-+		break;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -364,6 +374,9 @@ static int imx_rproc_stop(struct rproc *rproc)
- 		if (res.a1)
- 			dev_info(dev, "Not in wfi, force stopped\n");
- 		break;
-+	case IMX_RPROC_SCU_API:
-+		ret = imx_sc_pm_cpu_start(priv->ipc_handle, priv->rsrc_id, false, priv->entry);
-+		break;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -717,8 +730,8 @@ static void imx_rproc_put_scu(struct rproc *rproc)
- 	if (dcfg->method != IMX_RPROC_SCU_API)
- 		return;
+-/* att flags */
++/* att flags: lower 16 bits specifying core, higher 16 bits for flags  */
+ /* M4 own area. Can be mapped at probe */
+-#define ATT_OWN		BIT(1)
+-#define ATT_IOMEM	BIT(2)
++#define ATT_OWN         BIT(31)
++#define ATT_IOMEM       BIT(30)
++
++#define ATT_CORE_MASK   0xffff
++#define ATT_CORE(I)     BIT((I))
  
--	if (!imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id))
--		return;
-+	if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id))
-+		return imx_rproc_detach_pd(rproc);
+ static int imx_rproc_detach_pd(struct rproc *rproc);
  
- 	imx_scu_irq_group_enable(IMX_SC_IRQ_GROUP_REBOOTED, BIT(priv->rproc_pt), false);
- 	imx_scu_irq_unregister_notifier(&priv->rproc_nb);
-@@ -740,6 +753,69 @@ static int imx_rproc_partition_notify(struct notifier_block *nb,
- 	return 0;
- }
+@@ -101,6 +105,7 @@ struct imx_rproc {
+ 	u32				rsrc_id;	/* resource id */
+ 	u32				entry;		/* cpu start address */
+ 	int                             num_pd;
++	u32				core_index;
+ 	struct device                   **pd_dev;
+ 	struct device_link              **pd_dev_link;
+ };
+@@ -131,6 +136,19 @@ static const struct imx_rproc_att imx_rproc_att_imx93[] = {
+ 	{ 0xD0000000, 0xa0000000, 0x10000000, 0 },
+ };
  
-+static int imx_rproc_attach_pd(struct imx_rproc *priv)
-+{
-+	struct device *dev = priv->dev;
-+	int ret, i;
++static const struct imx_rproc_att imx_rproc_att_imx8qm[] = {
++	/* dev addr , sys addr  , size      , flags */
++	{ 0x08000000, 0x08000000, 0x10000000, 0},
++	/* TCML */
++	{ 0x1FFE0000, 0x34FE0000, 0x00020000, ATT_OWN | ATT_IOMEM | ATT_CORE(0)},
++	{ 0x1FFE0000, 0x38FE0000, 0x00020000, ATT_OWN | ATT_IOMEM | ATT_CORE(1)},
++	/* TCMU */
++	{ 0x20000000, 0x35000000, 0x00020000, ATT_OWN | ATT_IOMEM | ATT_CORE(0)},
++	{ 0x20000000, 0x39000000, 0x00020000, ATT_OWN | ATT_IOMEM | ATT_CORE(1)},
++	/* DDR (Data) */
++	{ 0x80000000, 0x80000000, 0x60000000, 0 },
++};
 +
-+	priv->num_pd = of_count_phandle_with_args(dev->of_node, "power-domains",
-+						  "#power-domain-cells");
-+	if (priv->num_pd <= 1)
-+		return 0;
+ static const struct imx_rproc_att imx_rproc_att_imx8qxp[] = {
+ 	{ 0x08000000, 0x08000000, 0x10000000, 0 },
+ 	/* TCML/U */
+@@ -281,6 +299,12 @@ static const struct imx_rproc_dcfg imx_rproc_cfg_imx8mq = {
+ 	.method		= IMX_RPROC_MMIO,
+ };
+ 
++static const struct imx_rproc_dcfg imx_rproc_cfg_imx8qm = {
++	.att            = imx_rproc_att_imx8qm,
++	.att_size       = ARRAY_SIZE(imx_rproc_att_imx8qm),
++	.method         = IMX_RPROC_SCU_API,
++};
 +
-+	priv->pd_dev = devm_kmalloc_array(dev, priv->num_pd, sizeof(*priv->pd_dev), GFP_KERNEL);
-+	if (!priv->pd_dev)
-+		return -ENOMEM;
-+
-+	priv->pd_dev_link = devm_kmalloc_array(dev, priv->num_pd, sizeof(*priv->pd_dev_link),
-+					       GFP_KERNEL);
-+
-+	if (!priv->pd_dev_link)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < priv->num_pd; i++) {
-+		priv->pd_dev[i] = dev_pm_domain_attach_by_id(dev, i);
-+		if (IS_ERR(priv->pd_dev[i])) {
-+			ret = PTR_ERR(priv->pd_dev[i]);
-+			goto detach_pd;
+ static const struct imx_rproc_dcfg imx_rproc_cfg_imx8qxp = {
+ 	.att		= imx_rproc_att_imx8qxp,
+ 	.att_size	= ARRAY_SIZE(imx_rproc_att_imx8qxp),
+@@ -397,6 +421,17 @@ static int imx_rproc_da_to_sys(struct imx_rproc *priv, u64 da,
+ 	for (i = 0; i < dcfg->att_size; i++) {
+ 		const struct imx_rproc_att *att = &dcfg->att[i];
+ 
++		/*
++		 * Ignore entries not belong to current core:
++		 * i.MX8QM has dual general M4_[0,1] cores, M4_0's own entries
++		 * has "ATT_CORE(0) & BIT(0)" true, M4_1's own entries has
++		 * "ATT_CORE(1) & BIT(1)" true.
++		 */
++		if (att->flags & ATT_CORE_MASK) {
++			if (!((BIT(priv->core_index)) & (att->flags & ATT_CORE_MASK)))
++				continue;
 +		}
 +
-+		priv->pd_dev_link[i] = device_link_add(dev, priv->pd_dev[i], DL_FLAG_STATELESS |
-+						       DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE);
-+		if (!priv->pd_dev_link[i]) {
-+			dev_pm_domain_detach(priv->pd_dev[i], false);
-+			ret = -EINVAL;
-+			goto detach_pd;
-+		}
-+	}
+ 		if (da >= att->da && da + len < att->da + att->size) {
+ 			unsigned int offset = da - att->da;
+ 
+@@ -846,6 +881,11 @@ static int imx_rproc_detect_mode(struct imx_rproc *priv)
+ 			return ret;
+ 		}
+ 
++		if (priv->rsrc_id == IMX_SC_R_M4_1_PID0)
++			priv->core_index = 1;
++		else
++			priv->core_index = 0;
 +
-+	return 0;
-+
-+detach_pd:
-+	while (--i >= 0) {
-+		device_link_del(priv->pd_dev_link[i]);
-+		dev_pm_domain_detach(priv->pd_dev[i], false);
-+	}
-+
-+	return ret;
-+}
-+
-+static int imx_rproc_detach_pd(struct rproc *rproc)
-+{
-+	struct imx_rproc *priv = rproc->priv;
-+	int i;
-+
-+	if (priv->num_pd <= 1)
-+		return 0;
-+
-+	for (i = 0; i < priv->num_pd; i++) {
-+		device_link_del(priv->pd_dev_link[i]);
-+		dev_pm_domain_detach(priv->pd_dev[i], false);
-+	}
-+
-+	return 0;
-+}
-+
- static int imx_rproc_detect_mode(struct imx_rproc *priv)
- {
- 	struct regmap_config config = { .name = "imx-rproc" };
-@@ -774,8 +850,12 @@ static int imx_rproc_detect_mode(struct imx_rproc *priv)
+ 		/*
  		 * If Mcore resource is not owned by Acore partition, It is kicked by ROM,
  		 * and Linux could only do IPC with Mcore and nothing else.
- 		 */
--		if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id))
--			return 0;
-+		if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id)) {
-+			if (of_property_read_u32(dev->of_node, "fsl,entry-address", &priv->entry))
-+				return -EINVAL;
-+
-+			return imx_rproc_attach_pd(priv);
-+		}
- 
- 		priv->rproc->state = RPROC_DETACHED;
- 		priv->rproc->recovery_disabled = true;
+@@ -1042,6 +1082,7 @@ static const struct of_device_id imx_rproc_of_match[] = {
+ 	{ .compatible = "fsl,imx8mn-cm7", .data = &imx_rproc_cfg_imx8mn },
+ 	{ .compatible = "fsl,imx8mp-cm7", .data = &imx_rproc_cfg_imx8mn },
+ 	{ .compatible = "fsl,imx8qxp-cm4", .data = &imx_rproc_cfg_imx8qxp },
++	{ .compatible = "fsl,imx8qm-cm4", .data = &imx_rproc_cfg_imx8qm },
+ 	{ .compatible = "fsl,imx8ulp-cm33", .data = &imx_rproc_cfg_imx8ulp },
+ 	{ .compatible = "fsl,imx93-cm33", .data = &imx_rproc_cfg_imx93 },
+ 	{},
 -- 
 2.25.1
 

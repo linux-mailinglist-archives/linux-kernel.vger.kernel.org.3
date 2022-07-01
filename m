@@ -2,66 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F855636F8
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F30B5636FB
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 17:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231942AbiGAPdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 11:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
+        id S232012AbiGAPeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 11:34:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbiGAPds (ORCPT
+        with ESMTP id S231146AbiGAPeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 11:33:48 -0400
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5843963E3;
-        Fri,  1 Jul 2022 08:33:47 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id y2so2574970ior.12;
-        Fri, 01 Jul 2022 08:33:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/gtsWZzs11rOAoat2DepGcmoUmhOje1LXQ/dA67hzhs=;
-        b=rB/74MUpfBWGEeKH3y80/iVLrRU9kgBVpZOe5pHjH63Osl/IXDfv4THbbwYe04Hwz+
-         TTRMN14icD5Sdqc1zjmoJC1VqN3qgN2gQUbR4EqVrG5L6aFMjtNv/kotFqRZ0F3u20Z2
-         CY81YHVwplzU3tH6MLqnlbGJVIoaPtunuszgtObZHlHCUfXB2w2o4Bwn7dwMtcyUy902
-         DmZtQDYG38qreHfjFU8WHmEw1uago2vvvSJWK6xhWZ9pJYPaOzOnw93AyO/PA1jQhewI
-         s6rFWZ/tw1rm+AYzvwmByiwbpQo5jmKemPPwXou1SF3faya12U985s8WLRCgCFv3fK+a
-         QL5Q==
-X-Gm-Message-State: AJIora8QSi3LDMQ6MuJClpL/oITa/ptDCzpo4nDngMVPAokbNbXjvULn
-        2kc6qDgW9NLETbpWLia9VQ==
-X-Google-Smtp-Source: AGRyM1u0cmw8U6ymxJ0n788cNCEzWwveFrpkZU/yQQp9+zXJZefi0jFOspR0fLeb9eBJC81Txbb4+w==
-X-Received: by 2002:a05:6638:438b:b0:33c:b617:fb46 with SMTP id bo11-20020a056638438b00b0033cb617fb46mr9067086jab.238.1656689626571;
-        Fri, 01 Jul 2022 08:33:46 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id g9-20020a02b709000000b0033156d6016asm9908074jam.91.2022.07.01.08.33.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 08:33:46 -0700 (PDT)
-Received: (nullmailer pid 989067 invoked by uid 1000);
-        Fri, 01 Jul 2022 15:33:44 -0000
-Date:   Fri, 1 Jul 2022 09:33:44 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sebastian Ene <sebastianene@google.com>
-Cc:     Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Guenter Roeck <linux@roeck-us.net>, maz@kernel.org,
-        vdonnefort@google.com, Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, will@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 1/2] dt-bindings: vcpu_stall_detector: Add
- qemu,vcpu-stall-detector compatible
-Message-ID: <20220701153344.GA989015-robh@kernel.org>
-References: <20220627102810.1811311-1-sebastianene@google.com>
- <20220627102810.1811311-2-sebastianene@google.com>
+        Fri, 1 Jul 2022 11:34:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196242180E;
+        Fri,  1 Jul 2022 08:34:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB70EB83095;
+        Fri,  1 Jul 2022 15:34:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5C7BC3411E;
+        Fri,  1 Jul 2022 15:34:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656689652;
+        bh=CI4g7mpBhd83x+K5yI20gm0estbqkbyjJjCXm+Yhu0k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SPls6VoqkTe+RubK8D8fXPO4NUYKPt5wX3G/tlfPGXjf7XuSbbG0POKLgZC0D12+7
+         qxqdFk7UVV0mtlJ0lgX7a6YkTUm/xFVUxLV4nKXtgKQT1zTGGBy1FcmwtmH53fwuE9
+         fyasv9Z9IAbVw7gTk5VBIUT/5c26+VnDVZZ0oLfmhXu/r+nQjU02YwBVdsmP2SJPJb
+         +KDMPtSSnNCLg8abbskoEQ16enu38jgM/pdIczLYuwtC9tq1oiWApdaCR+K1IrNQNH
+         oB6NDaNvvVyJWldDZFhQoqThW/UxBR+dCbhWWnRE6Jq19ngUa3HHxV1+2Pt/4hH5rH
+         3v0ToJAifcDsA==
+Date:   Fri, 1 Jul 2022 08:34:10 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     tj@kernel.org, gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk,
+        m.szyprowski@samsung.com, michael@walle.cc, robh@kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        guillaume.tucker@collabora.com, pmladek@suse.com
+Subject: Re: [PATCH] kernfs: Avoid re-adding kernfs_node into
+ kernfs_notify_list.
+Message-ID: <Yr8T8nJC+HyPj8F7@dev-arch.thelio-3990X>
+References: <20220701145047.2206900-1-imran.f.khan@oracle.com>
+ <Yr8OSxotW2VEUyKQ@dev-arch.thelio-3990X>
+ <2c4bdc7a-b49f-c2ea-28d0-4ec838c3b26c@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220627102810.1811311-2-sebastianene@google.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <2c4bdc7a-b49f-c2ea-28d0-4ec838c3b26c@oracle.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,21 +59,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Jun 2022 10:28:11 +0000, Sebastian Ene wrote:
-> The VCPU stall detection mechanism allows to configure the expiration
-> duration and the internal counter clock frequency measured in Hz.
-> Add these properties in the schema.
+On Sat, Jul 02, 2022 at 01:18:09AM +1000, Imran Khan wrote:
+> Hello Nathan,
 > 
-> While this is a memory mapped virtual device, it is expected to be loaded
-> when the DT contains the compatible: "qemu,vcpu-stall-detector" node.
-> In a protected VM we trust the generated DT nodes and we don't rely on
-> the host to present the hardware peripherals.
+> On 2/7/22 1:10 am, Nathan Chancellor wrote:
+> > On Sat, Jul 02, 2022 at 12:50:47AM +1000, Imran Khan wrote:
+> >> Kick fsnotify only if an event is not already scheduled for target
+> >> kernfs node. commit b8f35fa1188b ("kernfs: Change kernfs_notify_list to
+> >> llist.") changed kernfs_notify_list to a llist.
+> >> Prior to this list was a singly linked list, protected by
+> >> kernfs_notify_lock. Whenever a kernfs_node was added to the list
+> >> its ->attr.notify_next was set to head of the list and upon removal
+> >> ->attr.notify_next was reset to NULL. Addition to kernfs_notify_list
+> >> would only happen if kernfs_node was not already in the list i.e.
+> >> if ->attr.notify_next was NULL. commit b8f35fa1188b ("kernfs: Change
+> >> kernfs_notify_list to llist.") removed this checking and this was wrong
+> >> as it resulted in multiple additions for same kernfs_node.
+> >>
+> >> So far this bug only got reflected with some console related setting.
+> >> Nathan found this issue when console was specified both in DT and in
+> >> kernel command line and Marek found this issue when earlycon was enabled.
+> >>
+> >> This patch avoids adding an already added kernfs_node into notify list.
+> >>
+> >> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> >> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> > 
+> > This should also include:
+> > 
+> > Reported-by: Michael Walle <michael@walle.cc>
+> > 
+> >> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> >> Fixes: b8f35fa1188b ("kernfs: Change kernfs_notify_list to llist.")
+> >> Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
+> > 
+> > For the ARCH=um case that I noticed:
+> > 
+> > Tested-by: Nathan Chancellor <nathan@kernel.org>
+> > 
 > 
-> Signed-off-by: Sebastian Ene <sebastianene@google.com>
-> ---
->  .../misc/qemu,vcpu-stall-detector.yaml        | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/misc/qemu,vcpu-stall-detector.yaml
-> 
+> I am really sorry about missing these tags. I was not sure if you have tested
+> the patch I sent this morning.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+No worries, we all forget tags :) I hadn't tested your patch until this
+point so there was no reason for you to add that tag, this was the first
+time I provided it so there is no problem there. Thanks for the quick
+fix!
+
+Cheers,
+Nathan

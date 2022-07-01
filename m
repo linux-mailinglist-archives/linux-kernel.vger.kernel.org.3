@@ -2,117 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3109C563315
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86439563316
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 14:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233327AbiGAMBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 08:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
+        id S236144AbiGAMCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 08:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233193AbiGAMBl (ORCPT
+        with ESMTP id S232726AbiGAMC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 08:01:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19B8583F2C
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:01:39 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C4AB113E;
-        Fri,  1 Jul 2022 05:01:39 -0700 (PDT)
-Received: from [10.57.85.162] (unknown [10.57.85.162])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E838D3F792;
-        Fri,  1 Jul 2022 05:01:36 -0700 (PDT)
-Message-ID: <1eeeec76-5271-f915-e3fd-f15095efb981@arm.com>
-Date:   Fri, 1 Jul 2022 13:01:31 +0100
+        Fri, 1 Jul 2022 08:02:26 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC997823B9
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 05:02:25 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 7B4FF1FF75;
+        Fri,  1 Jul 2022 12:02:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1656676944; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sVpgnE/8BZxRSzmz9vKSkY1hVDHLAHVE+9dfE4p0HjM=;
+        b=lfWLx3UvlBhalAxtzaDJq9fSfggEWtE87v+Jj7FtQbw11mUiQB3caS0ix41x6nPu2yKMwW
+        3Y/qICf8kktb8V+0p6nuxnONDF7WHW4m8e50YR8XjOSOtd/ziSguTGfe0vXXwy1Lb2nvmn
+        NozaM7XNWL55gGlr2o5cxPfaZz94eRk=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 4403D2C141;
+        Fri,  1 Jul 2022 12:02:24 +0000 (UTC)
+Date:   Fri, 1 Jul 2022 14:02:23 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     cgel.zte@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, vbabka@suse.cz, minchan@kernel.org,
+        oleksandr@redhat.com, xu xin <xu.xin16@zte.com.cn>,
+        Jann Horn <jannh@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH linux-next] mm/madvise: allow KSM hints for
+ process_madvise
+Message-ID: <Yr7h/E/6A+tsjU9r@dhcp22.suse.cz>
+References: <20220701084323.1261361-1-xu.xin16@zte.com.cn>
+ <Yr66Uhcv+XAPYPwj@dhcp22.suse.cz>
+ <93e1e19a-deff-2dad-0b3c-ef411309ec58@redhat.com>
+ <c9de1c34-2a39-e4a2-c9b0-9790c5ffab13@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] iommu/iova: change IOVA_MAG_SIZE to 127 to save memory
-Content-Language: en-GB
-To:     John Garry <john.garry@huawei.com>, Feng Tang <feng.tang@intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Paul Menzel <pmenzel@molgen.mpg.de>
-References: <20220630073304.26945-1-feng.tang@intel.com>
- <13db50bb-57c7-0d54-3857-84b8a4591d9e@arm.com>
- <7c29d01d-d90c-58d3-a6e0-0b6c404173ac@huawei.com>
- <117b31b5-8d06-0af4-7f1c-231d86becf1d@arm.com>
- <2920df89-9975-5785-f79b-257d3052dfaf@huawei.com>
- <20220701035622.GB14806@shbuild999.sh.intel.com>
- <51af869a-83d4-631a-2d91-edb8b066bf4d@huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <51af869a-83d4-631a-2d91-edb8b066bf4d@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c9de1c34-2a39-e4a2-c9b0-9790c5ffab13@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-01 12:33, John Garry wrote:
-> On 01/07/2022 04:56, Feng Tang wrote:
->>>> inclination.
->>>>
->>> ok, what you are saying sounds reasonable. I just remember that when we
->>> analyzed the longterm aging issue that we concluded that the FQ size 
->>> and its
->>> relation to the magazine size was a factor and this change makes me a 
->>> little
->>> worried about new issues. Better the devil you know and all that...
->>>
->>> Anyway, if I get some time I might do some testing to see if this 
->>> change has
->>> any influence.
->>>
->>> Another thought is if we need even store the size in the 
->>> iova_magazine? mags
->>> in the depot are always full. As such, we only need worry about mags 
->>> loaded
->>> in the cpu rcache and their sizes, so maybe we could have something like
->>> this:
->>>
->>> struct iova_magazine {
->>> -       unsigned long size;
->>>         unsigned long pfns[IOVA_MAG_SIZE];
->>> };
->>>
->>> @@ -631,6 +630,8 @@ struct iova_cpu_rcache {
->>>         spinlock_t lock;
->>>         struct iova_magazine *loaded;
->>>         struct iova_magazine *prev;
->>> +       int loaded_size;
->>> +       int prev_size;
->>> };
->>>
->>> I haven't tried to implement it though..
->> I have very few knowledge of iova, so you can chose what's the better
->> solution. I just wanted to raise the problem and will be happy to see
->> it solved:)
+On Fri 01-07-22 12:50:59, David Hildenbrand wrote:
+> On 01.07.22 12:32, David Hildenbrand wrote:
+> > On 01.07.22 11:11, Michal Hocko wrote:
+> >> [Cc Jann]
+> >>
+> >> On Fri 01-07-22 08:43:23, cgel.zte@gmail.com wrote:
+> >>> From: xu xin <xu.xin16@zte.com.cn>
+> >>>
+> >>> The benefits of doing this are obvious because using madvise in user code
+> >>> is the only current way to enable KSM, which is inconvenient for those
+> >>> compiled app without marking MERGEABLE wanting to enable KSM.
+> >>
+> >> I would rephrase:
+> >> "
+> >> KSM functionality is currently available only to processes which are
+> >> using MADV_MERGEABLE directly. This is limiting because there are
+> >> usecases which will benefit from enabling KSM on a remote process. One
+> >> example would be an application which cannot be modified (e.g. because
+> >> it is only distributed as a binary). MORE EXAMPLES WOULD BE REALLY
+> >> BENEFICIAL.
+> >> "
+> >>
+> >>> Since we already have the syscall of process_madvise(), then reusing the
+> >>> interface to allow external KSM hints is more acceptable [1].
+> >>>
+> >>> Although this patch was released by Oleksandr Natalenko, but it was
+> >>> unfortunately terminated without any conclusions because there was debate
+> >>> on whether it should use signal_pending() to check the target task besides
+> >>> the task of current() when calling unmerge_ksm_pages of other task [2].
+> >>
+> >> I am not sure this is particularly interesting. I do not remember
+> >> details of that discussion but checking signal_pending on a different
+> >> task is rarely the right thing to do. In this case the check is meant to
+> >> allow bailing out from the operation so that the caller could be
+> >> terminated for example.
+> >>
+> >>> I think it's unneeded to check the target task. For example, when we set
+> >>> the klob /sys/kernel/mm/ksm/run from 1 to 2,
+> >>> unmerge_and_remove_all_rmap_items() doesn't use signal_pending() to check
+> >>> all other target tasks either.
+> >>>
+> >>> I hope this patch can get attention again.
+> >>
+> >> One thing that the changelog is missing and it is quite important IMHO
+> >> is the permission model. As we have discussed in previous incarnations
+> >> of the remote KSM functionality that KSM has some security implications.
+> >> It would be really great to refer to that in the changelog for the
+> >> future reference (http://lkml.kernel.org/r/CAG48ez0riS60zcA9CC9rUDV=kLS0326Rr23OKv1_RHaTkOOj7A@mail.gmail.com)
+> >>
+> >> So this implementation requires PTRACE_MODE_READ_FSCREDS and
+> >> CAP_SYS_NICE so the remote process would need to be allowed to
+> >> introspect the address space. This is the same constrain applied to the
+> >> remote momory reclaim. Is this sufficient?
+> >>
+> >> I would say yes because to some degree KSM mergning can have very
+> >> similar effect to memory reclaim from the side channel POV. But it
+> >> should be really documented in the changelog so that it is clear that
+> >> this has been a deliberate decision and thought through.
+> >>
+> >> Other than that this looks like the most reasonable approach to me.
+> >>
+> >>> [1] https://lore.kernel.org/lkml/YoOrdh85+AqJH8w1@dhcp22.suse.cz/
+> >>> [2] https://lore.kernel.org/lkml/2a66abd8-4103-f11b-06d1-07762667eee6@suse.cz/
+> >>>
+> > 
+> > I have various concerns, but the biggest concern is that this modifies
+> > VMA flags and can possibly break applications.
+> > 
+> > process_madvise must not modify remote process state.
+> > 
+> > That's why we only allow a very limited selection that are merely hints.
+> > 
+> > So nack from my side.
+> > 
 > 
-> I quickly tested your patch for performance and saw no noticeable 
-> difference, which is no surprise.
+> [I'm quit ebusy, but I think some more explanation might be of value]
 > 
-> But I'll defer to Robin if he thinks that your patch is a better 
-> solution - I would guess that he does. For me personally I would prefer 
-> that this value was not changed, as I mentioned before.
+> One COW example where I think force-enabling KSM for processes is
+> *currently* not a good idea (besides the side channel discussions, which
+> is also why Windows stopped to enable KSM system wide a while ago):
+> 
+> App:
+> 
+> a) memset(page, 0);
+> b) trigger R/O long-term pin on page (e.g., vfio)
+> 
+> If between a) and b) KSM replaces the page by the shared zeropage you'll
+> get an unreliable pin because we don't break yet COW when taking a R/O
+> pin on the shared zeropage. And in the traditional sense, the app did
+> everything right to guarantee that the pin will stay reliable.
 
-This idea is interesting, but it would mean a bit more fiddly work to 
-keep things in sync when magazines are allocated, freed and swapped 
-around. It seems like the kind of non-obvious thing that might make 
-sense if it gave a significant improvement in cache locality or 
-something like that, but for simply fixing an allocation size it feels a 
-bit too wacky.
+Isn't this a bug in the existing implementation of the CoW?
 
- From my perspective, indeed I'd rather do the simple thing for now to 
-address the memory wastage issue directly, then we can do the deeper 
-performance analysis on top to see if further tweaking of magazine sizes 
-and/or design is justified.
+> Further, if an app explicitly decides to disable KSM one some region, we
+> should not overwrite that.
 
-Cheers,
-Robin.
+Well, the interface is rather spartan. You cannot really tell "disable
+KSM on some reqion". You can only tell "KSM can be applied to this
+region" and later change your mind. Maybe this is what you had in
+mind though.
+-- 
+Michal Hocko
+SUSE Labs

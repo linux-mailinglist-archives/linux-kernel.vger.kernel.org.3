@@ -2,70 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1943C562815
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 03:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74EFE562812
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 03:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbiGABV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 21:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
+        id S232557AbiGABVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 21:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiGABVx (ORCPT
+        with ESMTP id S229639AbiGABVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 30 Jun 2022 21:21:53 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E920E5A2DA
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 18:21:52 -0700 (PDT)
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C835A2CB;
+        Thu, 30 Jun 2022 18:21:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1656638512; x=1688174512;
-  h=message-id:date:mime-version:cc:subject:to:references:
+  h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=H4ENz9j9WZZPAItQz3miCy+CRrDXsBwHO08vdhTePe4=;
-  b=lMBbdCzbw2kizWQDpva+gC5VatwkDHmjCaNo8YDAZCVG3MPLzdOCyvfA
-   t722sLw4nO3p23W+Wf7YGYKX5wuVKk3+hvOx6ot7yXQ6YmxT7aE10LOZV
-   uBkx5nFHi+zFOTUACIh/nxm+4gBdifxQ++R7pIM+sk2BaHwwgfZEIpqa0
-   4l/3Dk7GpPxvG3jJpdwcTpe9H29PzfBvREv8ZfUjxiSAOmvmy4BFZkV+n
-   GGZ/6kp19nKO+VQlXNSgSIQ4xga+a7CDybUdewjiBf98ObNs3fGlbXcbG
-   6XHTp5NhNuyP3w/q/HUMIofqmZkOlmUHUVtw9YO1wcWmANEvO2lHrP2Wg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="271287726"
+  bh=G2fAQsutHSI8kLKVVakNXwxot1Yyc0ooUkqIi8b15IA=;
+  b=c4QNRs3N2jhbkzCT0dIZHMMxEFx/ac7LUFsFEPsniCXGblAEkZvkybgD
+   GDcHXRcw4VSAG6BT/4XWBSmDwWYayzar6sdrw1OFn63hYE7KeExTVe1ob
+   y/EoKg6MikYiAmFGPgUIgwE+4grBZXLbqXJTK+0BWXUphaA1aGHapHbWL
+   Q+l57jzMy09nd4vlmFN5QZCasEGtUtjOPkk1JU7YJDy2kjRntnGHTYhla
+   xz+aJ+V+DURO1OpuqsP258meHj/yW5Ea4sJw8gOGEsCEUOa3XwalSv2QU
+   GOqXG156DuYDjvCbwFV2UPXtV3BrVN5IMzmfJdQ/hAR32ytHnBmyCYuly
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="282547312"
 X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="271287726"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 18:21:52 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="282547312"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 18:21:52 -0700
 X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="589038477"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by orsmga007.jf.intel.com with ESMTP; 30 Jun 2022 18:21:49 -0700
-Message-ID: <617e5bc8-aaef-c6b9-c50b-8fadb8ea8efb@linux.intel.com>
-Date:   Fri, 1 Jul 2022 09:17:33 +0800
+   d="scan'208";a="596042946"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.169.250]) ([10.249.169.250])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 18:21:42 -0700
+Message-ID: <4fe3b47d-e94a-890a-5b87-6dfb7763bc7e@intel.com>
+Date:   Fri, 1 Jul 2022 09:21:39 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, David Woodhouse <dwmw2@infradead.org>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Mike Travis <mike.travis@hpe.com>,
-        Dimitri Sivanich <sivanich@hpe.com>,
-        "Anderson, Russ" <russ.anderson@hpe.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 2/6] iommu/vt-d: Use IDA interface to manage iommu
- sequence id
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.10.0
+Subject: Re: [PATCH v6 6/8] KVM: Handle page fault for private memory
 Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>, Steve Wahl <steve.wahl@hpe.com>
-References: <20220625125204.2199437-1-baolu.lu@linux.intel.com>
- <20220625125204.2199437-3-baolu.lu@linux.intel.com>
- <BL1PR11MB5271C0143C8EA440BDAF45828CBA9@BL1PR11MB5271.namprd11.prod.outlook.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <BL1PR11MB5271C0143C8EA440BDAF45828CBA9@BL1PR11MB5271.namprd11.prod.outlook.com>
+To:     Michael Roth <michael.roth@amd.com>,
+        Vishal Annapurve <vannapurve@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
+        "Nikunj A. Dadhania" <nikunj@amd.com>,
+        kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jun Nakajima <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, mhocko@suse.com
+References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
+ <20220519153713.819591-7-chao.p.peng@linux.intel.com>
+ <b3ce0855-0e4b-782a-599c-26590df948dd@amd.com>
+ <20220624090246.GA2181919@chaop.bj.intel.com>
+ <CAGtprH82H_fjtRbL0KUxOkgOk4pgbaEbAydDYfZ0qxz41JCnAQ@mail.gmail.com>
+ <20220630222140.of4md7bufd5jv5bh@amd.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20220630222140.of4md7bufd5jv5bh@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,53 +99,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/30/22 4:21 PM, Tian, Kevin wrote:
->> From: Lu Baolu <baolu.lu@linux.intel.com>
->> Sent: Saturday, June 25, 2022 8:52 PM
+On 7/1/2022 6:21 AM, Michael Roth wrote:
+> On Thu, Jun 30, 2022 at 12:14:13PM -0700, Vishal Annapurve wrote:
+>> With transparent_hugepages=always setting I see issues with the
+>> current implementation.
 >>
->> @@ -1062,11 +1040,14 @@ static int alloc_iommu(struct dmar_drhd_unit
->> *drhd)
->>   	if (!iommu)
->>   		return -ENOMEM;
+>> Scenario:
+>> 1) Guest accesses a gfn range 0x800-0xa00 as private
+>> 2) Guest calls mapgpa to convert the range 0x84d-0x86e as shared
+>> 3) Guest tries to access recently converted memory as shared for the first time
+>> Guest VM shutdown is observed after step 3 -> Guest is unable to
+>> proceed further since somehow code section is not as expected
 >>
->> -	if (dmar_alloc_seq_id(iommu) < 0) {
->> +	iommu->seq_id = ida_alloc_range(&dmar_seq_ids, 0,
->> +					DMAR_UNITS_SUPPORTED,
+>> Corresponding KVM trace logs after step 3:
+>> VCPU-0-61883   [078] ..... 72276.115679: kvm_page_fault: address
+>> 84d000 error_code 4
+>> VCPU-0-61883   [078] ..... 72276.127005: kvm_mmu_spte_requested: gfn
+>> 84d pfn 100b4a4d level 2
+>> VCPU-0-61883   [078] ..... 72276.127008: kvm_tdp_mmu_spte_changed: as
+>> id 0 gfn 800 level 2 old_spte 100b1b16827 new_spte 100b4a00ea7
+>> VCPU-0-61883   [078] ..... 72276.127009: kvm_mmu_prepare_zap_page: sp
+>> gen 0 gfn 800 l1 8-byte q0 direct wux nxe ad root 0 sync
+>> VCPU-0-61883   [078] ..... 72276.127009: kvm_tdp_mmu_spte_changed: as
+>> id 0 gfn 800 level 1 old_spte 1003eb27e67 new_spte 5a0
+>> VCPU-0-61883   [078] ..... 72276.127010: kvm_tdp_mmu_spte_changed: as
+>> id 0 gfn 801 level 1 old_spte 10056cc8e67 new_spte 5a0
+>> VCPU-0-61883   [078] ..... 72276.127010: kvm_tdp_mmu_spte_changed: as
+>> id 0 gfn 802 level 1 old_spte 10056fa2e67 new_spte 5a0
+>> VCPU-0-61883   [078] ..... 72276.127010: kvm_tdp_mmu_spte_changed: as
+>> id 0 gfn 803 level 1 old_spte 0 new_spte 5a0
+>> ....
+>>   VCPU-0-61883   [078] ..... 72276.127089: kvm_tdp_mmu_spte_changed: as
+>> id 0 gfn 9ff level 1 old_spte 100a43f4e67 new_spte 5a0
+>>   VCPU-0-61883   [078] ..... 72276.127090: kvm_mmu_set_spte: gfn 800
+>> spte 100b4a00ea7 (rwxu) level 2 at 10052fa5020
+>>   VCPU-0-61883   [078] ..... 72276.127091: kvm_fpu: unload
+>>
+>> Looks like with transparent huge pages enabled kvm tried to handle the
+>> shared memory fault on 0x84d gfn by coalescing nearby 4K pages
+>> to form a contiguous 2MB page mapping at gfn 0x800, since level 2 was
+>> requested in kvm_mmu_spte_requested.
+>> This caused the private memory contents from regions 0x800-0x84c and
+>> 0x86e-0xa00 to get unmapped from the guest leading to guest vm
+>> shutdown.
 > 
-> should be "DMAR_UNITS_SUPPORTED - 1"
-
-Yes, according to "@max: Highest ID to allocate.". Updated.
-
->> GFP_KERNEL);
->> +	if (iommu->seq_id < 0) {
->>   		pr_err("Failed to allocate seq_id\n");
->>   		err = -ENOSPC;
->>   		goto error;
->>   	}
+> Interesting... seems like that wouldn't be an issue for non-UPM SEV, since
+> the private pages would still be mapped as part of that 2M mapping, and
+> it's completely up to the guest as to whether it wants to access as
+> private or shared. But for UPM it makes sense this would cause issues.
 > 
-> ida_alloc_range() returns error code already. No need to change it.
+>>
+>> Does getting the mapping level as per the fault access type help
+>> address the above issue? Any such coalescing should not cross between
+>> private to
+>> shared or shared to private memory regions.
+> 
+> Doesn't seem like changing the check to fault->is_private would help in
+> your particular case, since the subsequent host_pfn_mapping_level() call
+> only seems to limit the mapping level to whatever the mapping level is
+> for the HVA in the host page table.
+> 
+> Seems like with UPM we need some additional handling here that also
+> checks that the entire 2M HVA range is backed by non-private memory.
+> 
+> Non-UPM SNP hypervisor patches already have a similar hook added to
+> host_pfn_mapping_level() which implements such a check via RMP table, so
+> UPM might need something similar:
+> 
+>    https://github.com/AMDESE/linux/commit/ae4475bc740eb0b9d031a76412b0117339794139
+> 
+> -Mike
 > 
 
-Agreed. Updated as below:
+For TDX, we try to track the page type (shared, private, mixed) of each 
+gfn at given level. Only when the type is shared/private, can it be 
+mapped at that level. When it's mixed, i.e., it contains both shared 
+pages and private pages at given level, it has to go to next smaller level.
 
-diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
-index bf43889b9d2a..6327b34f5aa7 100644
---- a/drivers/iommu/intel/dmar.c
-+++ b/drivers/iommu/intel/dmar.c
-@@ -1041,10 +1041,10 @@ static int alloc_iommu(struct dmar_drhd_unit *drhd)
-                 return -ENOMEM;
+https://github.com/intel/tdx/commit/ed97f4042eb69a210d9e972ccca6a84234028cad
 
-         iommu->seq_id = ida_alloc_range(&dmar_seq_ids, 0,
--                                       DMAR_UNITS_SUPPORTED, GFP_KERNEL);
-+                                       DMAR_UNITS_SUPPORTED - 1, 
-GFP_KERNEL);
-         if (iommu->seq_id < 0) {
-                 pr_err("Failed to allocate seq_id\n");
--               err = -ENOSPC;
-+               err = iommu->seq_id;
-                 goto error;
-         }
-         sprintf(iommu->name, "dmar%d", iommu->seq_id);
 
-Best regards,
-baolu

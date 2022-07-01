@@ -2,62 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8159562DC7
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B74562DCB
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 10:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234113AbiGAIVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 04:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
+        id S234593AbiGAIVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 04:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233748AbiGAIVS (ORCPT
+        with ESMTP id S233676AbiGAIV2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 04:21:18 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE5170E77
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:21:10 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id o18so580469pgu.9
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:21:10 -0700 (PDT)
+        Fri, 1 Jul 2022 04:21:28 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CCF7124A
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:21:12 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id q18so1680732pld.13
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 01:21:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=cLvm+NAa5BeE/i7Qo/3zGWdB4t6pSp8QC+y5KpzRMdM=;
-        b=fwnyXMMkk7P3ih5uDwdTYK5Y0ERrPr6v0+GufM5RKzbD6qO14fEsskiV4ITy7/TT1K
-         N8mZFTLF1vS0cVi2PzQHjDsWkiGzMO0mKp4wHVliBpaTHyrIJpcoeaz6IQWtp4ECIrym
-         4uKpHNYn0heUaULAGTA/TKcBHIH9w4vBpKoBvdjNch4Q5uo9KYKKP7lwcWvyoBBlv67J
-         Fd+GdHfKU2/nFaEebtnD5+BbZLfrHaYyVMeLQlAD7gTJivuaMjHEtp8oFjS0uXiFjRch
-         JQ6i/+xV+EXSO+xkmjlCkexFR8ReX2o6r4NKCvpgSISIdFTXwsDKFqCSWM7K4zYd2vbU
-         kt8Q==
+        bh=qsU9wtO366QGqn2stFTSeEtjcXZrw3Fi++5zsewllw4=;
+        b=mYbS8wl99X3HCAP868Vx551nyMcsU2v27Yzpw3q4wB28iGCSEzCU3T0L8B0sy6bCqv
+         9aJFzKf3Vy6vNlnXsdYt/mCa4W/t+sqSy3Pmq9d4xWm5xNJjSPgyulzm9a9b59WMhV3d
+         7XQGmImKOgc+60IYmIPEAY6dCC83cYEJEoNsFbS+XNuKPQD/938dZxx7pqInsIkjx/nO
+         +ppaJFCWTUvdJj66YGKGgpj4WgDu3Cey9bLwQsUKp/R50GCosKHyQq2bPAxjY+UP2v7/
+         wzjNBbh3hGEdsoHbuc0EIBBu4sPWBFfKorijzTYSyLupD4nRXlDPybYJnS/jvV+8s4a1
+         rjcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=cLvm+NAa5BeE/i7Qo/3zGWdB4t6pSp8QC+y5KpzRMdM=;
-        b=tFRFCvE9ETJwRMLdwOckSoM+VW0UCDhzxu4ZEgSzC87CfoC1bVYP5x1w9nXJWf4FYs
-         xtPu1pHBYeNKioYAdxef8X7KTjHxCyhuXkBUxSjyy2B7LYb3Joh8rnTW14nVJ/Gt1Amv
-         m2opfLKZc7W358n0E/QzLN7gnLizXOx6cNKQ8UckiQARZBTjH0AZF2EBmiSrI/ziLaqQ
-         jzCh9FTGaASWt0K9ZDx7nPkn7wA3oMDPMgpcDSEakdVGdgagbg5bqjcpOBEWaUIuQfi7
-         wXpZ+jfPPI5v3NVvy3gUU8JVpARDNHtJgTikSDMhAxE6B2XwfX8w+EqrVdOLivmMBv9N
-         i9lA==
-X-Gm-Message-State: AJIora9Gwin02waApx2837HIDYuzJLHHWHFt2r9PCvPxpT6aVZ0XK8+r
-        DAkhaXVwn+pibCIWjFXkeIgdKg==
-X-Google-Smtp-Source: AGRyM1s4oLyclufYs9wYwvrJNAdDcdUB4yykbH68vm/CdHwFSxjeFTYOUoGC4sTrKOYQvZyHzhfZlA==
-X-Received: by 2002:a05:6a00:1312:b0:528:2ed8:7e35 with SMTP id j18-20020a056a00131200b005282ed87e35mr2521119pfu.13.1656663669507;
-        Fri, 01 Jul 2022 01:21:09 -0700 (PDT)
+        bh=qsU9wtO366QGqn2stFTSeEtjcXZrw3Fi++5zsewllw4=;
+        b=biCgckbzpQDlhLNj/P39qgcEoUhvRgqcItXYy01X58+VPCf4B6rPVMlzAvXtHJd1ln
+         E1nx7KBJ2DAlWoWphWSixg7aSfuwfqEGLVZPJyNSD0P0g++fSMm7bo+Tdsyh3uOwzeoh
+         39w/Nnxgo+IqiQ77QxvLE+SRETYkF+1BYo0yJwL+uQg8XfIgSd3nXFmNtXpc9Xd05qA4
+         Vs4/VODARblCJAYdfDBlua2FTDaKJl9B/jlrYgwlbLK9jGxIXms4DbUcf+WWoxNWuUni
+         OsnoFGKBQcJxC+P1ODBA9TU2VXXt4fVNLfg4VU5dqBPXuLWtNb5HiEWlmwlqYSv2l00A
+         v7EA==
+X-Gm-Message-State: AJIora/5xX7Xw7gp/Hzy2T4DNtSwRvqstPVhpwCozOlrWlNo4ni5oNKp
+        jKGA1xb36qa1mGN1fJ20ySXCFw==
+X-Google-Smtp-Source: AGRyM1sFl5EDfJmLxUmQIL9clpelCvUmhUe8DIu10IpEDNEAFe1uijgj4nsnsYzo39Vt/eVZslGEtA==
+X-Received: by 2002:a17:902:e546:b0:16b:8f8a:3344 with SMTP id n6-20020a170902e54600b0016b8f8a3344mr18796467plf.130.1656663672403;
+        Fri, 01 Jul 2022 01:21:12 -0700 (PDT)
 Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id h15-20020a170902680f00b00161e50e2245sm14766175plk.178.2022.07.01.01.21.08
+        by smtp.gmail.com with ESMTPSA id h8-20020a056a00170800b0050dc762819bsm15055700pfc.117.2022.07.01.01.21.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 01:21:09 -0700 (PDT)
+        Fri, 01 Jul 2022 01:21:12 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 09/30] cpufreq: ti: Migrate to dev_pm_opp_set_config()
-Date:   Fri,  1 Jul 2022 13:50:04 +0530
-Message-Id: <26dccec60b69c4a6b6902128de25a6b264bc57a4.1656660185.git.viresh.kumar@linaro.org>
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V2 10/30] devfreq: exynos: Migrate to dev_pm_opp_set_config()
+Date:   Fri,  1 Jul 2022 13:50:05 +0530
+Message-Id: <14d236f519900b7bb7859b4690aca62979b78ce6.1656660185.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1656660185.git.viresh.kumar@linaro.org>
 References: <cover.1656660185.git.viresh.kumar@linaro.org>
@@ -65,7 +70,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,81 +85,79 @@ Lets start using it.
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/cpufreq/ti-cpufreq.c | 38 ++++++++++++++----------------------
- 1 file changed, 15 insertions(+), 23 deletions(-)
+ drivers/devfreq/exynos-bus.c | 25 ++++++++++++-------------
+ 1 file changed, 12 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
-index 8f9fdd864391..92a873e4d646 100644
---- a/drivers/cpufreq/ti-cpufreq.c
-+++ b/drivers/cpufreq/ti-cpufreq.c
-@@ -60,7 +60,6 @@ struct ti_cpufreq_data {
- 	struct device_node *opp_node;
- 	struct regmap *syscon;
- 	const struct ti_cpufreq_soc_data *soc_data;
--	struct opp_table *opp_table;
- };
+diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+index e689101abc93..b5615e667e31 100644
+--- a/drivers/devfreq/exynos-bus.c
++++ b/drivers/devfreq/exynos-bus.c
+@@ -33,7 +33,7 @@ struct exynos_bus {
  
- static unsigned long amx3_efuse_xlate(struct ti_cpufreq_data *opp_data,
-@@ -324,10 +323,13 @@ static int ti_cpufreq_probe(struct platform_device *pdev)
+ 	unsigned long curr_freq;
+ 
+-	struct opp_table *opp_table;
++	int opp_token;
+ 	struct clk *clk;
+ 	unsigned int ratio;
+ };
+@@ -161,8 +161,7 @@ static void exynos_bus_exit(struct device *dev)
+ 
+ 	dev_pm_opp_of_remove_table(dev);
+ 	clk_disable_unprepare(bus->clk);
+-	dev_pm_opp_put_regulators(bus->opp_table);
+-	bus->opp_table = NULL;
++	dev_pm_opp_clear_config(bus->opp_token);
+ }
+ 
+ static void exynos_bus_passive_exit(struct device *dev)
+@@ -179,18 +178,20 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
+ 					struct exynos_bus *bus)
  {
- 	u32 version[VERSION_COUNT];
- 	const struct of_device_id *match;
--	struct opp_table *ti_opp_table;
- 	struct ti_cpufreq_data *opp_data;
- 	const char * const default_reg_names[] = {"vdd", "vbb"};
- 	int ret;
+ 	struct device *dev = bus->dev;
+-	struct opp_table *opp_table;
+ 	const char *vdd = "vdd";
+ 	int i, ret, count, size;
 +	struct dev_pm_opp_config config = {
-+		.supported_hw = version,
-+		.supported_hw_count = ARRAY_SIZE(version),
++		.regulator_names = &vdd,
++		.regulator_count = 1,
 +	};
  
- 	match = dev_get_platdata(&pdev->dev);
- 	if (!match)
-@@ -370,33 +372,23 @@ static int ti_cpufreq_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto fail_put_node;
- 
--	ti_opp_table = dev_pm_opp_set_supported_hw(opp_data->cpu_dev,
--						   version, VERSION_COUNT);
--	if (IS_ERR(ti_opp_table)) {
--		dev_err(opp_data->cpu_dev,
--			"Failed to set supported hardware\n");
--		ret = PTR_ERR(ti_opp_table);
--		goto fail_put_node;
--	}
--
--	opp_data->opp_table = ti_opp_table;
--
- 	if (opp_data->soc_data->multi_regulator) {
--		const char * const *reg_names = default_reg_names;
-+		config.regulator_count = ARRAY_SIZE(default_reg_names);
- 
- 		if (opp_data->soc_data->reg_names)
--			reg_names = opp_data->soc_data->reg_names;
--		ti_opp_table = dev_pm_opp_set_regulators(opp_data->cpu_dev,
--							 reg_names,
--							 ARRAY_SIZE(default_reg_names));
--		if (IS_ERR(ti_opp_table)) {
--			dev_pm_opp_put_supported_hw(opp_data->opp_table);
--			ret =  PTR_ERR(ti_opp_table);
--			goto fail_put_node;
--		}
-+			config.regulator_names = opp_data->soc_data->reg_names;
-+		else
-+			config.regulator_names = default_reg_names;
-+	}
-+
-+	ret = dev_pm_opp_set_config(opp_data->cpu_dev, &config);
+-	opp_table = dev_pm_opp_set_regulators(dev, &vdd, 1);
+-	if (IS_ERR(opp_table)) {
+-		ret = PTR_ERR(opp_table);
+-		dev_err(dev, "failed to set regulators %d\n", ret);
++	ret = dev_pm_opp_set_config(dev, &config);
 +	if (ret < 0) {
-+		dev_err(opp_data->cpu_dev, "Failed to set OPP config\n");
-+		goto fail_put_node;
++		dev_err(dev, "failed to set OPP config %d\n", ret);
+ 		return ret;
  	}
  
- 	of_node_put(opp_data->opp_node);
-+
- register_cpufreq_dt:
- 	platform_device_register_simple("cpufreq-dt", -1, NULL, 0);
+-	bus->opp_table = opp_table;
++	bus->opp_token = ret;
  
+ 	/*
+ 	 * Get the devfreq-event devices to get the current utilization of
+@@ -236,8 +237,7 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
+ 	return 0;
+ 
+ err_regulator:
+-	dev_pm_opp_put_regulators(bus->opp_table);
+-	bus->opp_table = NULL;
++	dev_pm_opp_clear_config(bus->opp_token);
+ 
+ 	return ret;
+ }
+@@ -459,8 +459,7 @@ static int exynos_bus_probe(struct platform_device *pdev)
+ 	dev_pm_opp_of_remove_table(dev);
+ 	clk_disable_unprepare(bus->clk);
+ err_reg:
+-	dev_pm_opp_put_regulators(bus->opp_table);
+-	bus->opp_table = NULL;
++	dev_pm_opp_clear_config(bus->opp_token);
+ 
+ 	return ret;
+ }
 -- 
 2.31.1.272.g89b43f80a514
 

@@ -2,99 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1AB562F4A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B8A562F4F
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 11:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235087AbiGAI71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 04:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42730 "EHLO
+        id S234872AbiGAJAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 05:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231901AbiGAI7Z (ORCPT
+        with ESMTP id S233919AbiGAJAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 04:59:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D935186D7
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 01:59:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1DB5EB828CF
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 08:59:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D1CFC3411E;
-        Fri,  1 Jul 2022 08:59:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656665961;
-        bh=Cp+VKrrZ5YR+oIkwv5yfto2VBhn5YWAggfrsVnGgAJo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VGZAOKEoR1mdokjuWTdCEVkGdj5IQz8U19GroifZMlSyofONTzzsFLt7OtNgEVR/m
-         tl7YfdD98PG+xIk2GIwPfaPej7zFEzYuP9nQwC+sVqGR0156Ozl2Nvv/JiYTnnKqiK
-         87rQtKgtR4vIlXGXjxFoyug0d2gu1nN2urnKgUPQ=
-Date:   Fri, 1 Jul 2022 10:59:19 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [char-misc:char-misc-linus 3/3]
- drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <Yr63Zyvj49o8U/ti@kroah.com>
-References: <202207011658.rHJFVLWA-lkp@intel.com>
+        Fri, 1 Jul 2022 05:00:23 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E240193C8;
+        Fri,  1 Jul 2022 02:00:22 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id o18so1804712plg.2;
+        Fri, 01 Jul 2022 02:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=EOxeOoaI0bvRSLPnvd9ma7w66QWe8s3HEhHKfKpxGGo=;
+        b=QGVh+hbqXf+WTexnx2BxPuueF1A/E/4CLbo4my3mAQswwZrRVzPK1jqcLcw6vWOXtl
+         abuf758gguO7Wiw5rmFWU0h/u/u1S/aHNISYkXmwjAPVAxKhd20TP+VyTFH/9ryMpDF7
+         4N3biMYnOJDLkep16ujWfbwXsFKkIrs1YwOKAb9PA6Jj2drYj91QYHA41rozndRHYaNt
+         48qJySQezKNETHAotnIr/woGzrGJzKp5+MUeRsjuWFc8RC+QBsvGIsBlAXZjKoDLiHtW
+         YLlI7JOWbYSQvOqcyuB6O6DCdftgrW4Ep5fZyHCeE/HLb098boWaZd747y0rbwxpo4q4
+         +DAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EOxeOoaI0bvRSLPnvd9ma7w66QWe8s3HEhHKfKpxGGo=;
+        b=Je35hE7+U4LjuVojaDW6GpQUDsRUX6Bcrv9sqsTXDHd3YFm5FH3chZ6gFS/xvDO61x
+         y7IFRRCBjfqn0yIdxMnIjd335Cv+nzkuNm2Y03mCxhtLR3L8Bw5pjy+CCeEbCVp9COn8
+         tVrkbJvB7Gun5Jcqrr/1Ak+qXpC7IXUmVrRen4MOPa/8zeW39q22nmqNC6PZ4Q+c23ZZ
+         HkLWMUkZNZhoVv3q4yRuJnLHU46pVtlLyqdv4LP2JHs0YrGxGzcyRwWdseIylutehrwJ
+         jUCAokzzPO91/pnhbiyamwNtiAmkhnaCmZBBFA0/New0QVKgVqv6jR2sFTB1lzzXSt1w
+         IgSA==
+X-Gm-Message-State: AJIora8a/jSt0GH7n2bEtBIM2Pi/+pmk2NTOUe3UTDwT6IWpzi7S2nyi
+        9wsalaQzu9d7w01dbNieEaw=
+X-Google-Smtp-Source: AGRyM1unfDhl7UU6ufOPfkHBBzRbJU5eWsaVnzHk0tvTfsApvegSC+Rbq0M6TdztrmlcfF3msAAeKA==
+X-Received: by 2002:a17:90a:a44:b0:1ec:70f9:630 with SMTP id o62-20020a17090a0a4400b001ec70f90630mr15120031pjo.91.1656666022102;
+        Fri, 01 Jul 2022 02:00:22 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-29.three.co.id. [180.214.233.29])
+        by smtp.gmail.com with ESMTPSA id v23-20020a62a517000000b00525b61fc3f8sm9983009pfm.40.2022.07.01.02.00.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Jul 2022 02:00:21 -0700 (PDT)
+Message-ID: <e3fcc525-2f6f-3df5-508d-1ce7c35162d1@gmail.com>
+Date:   Fri, 1 Jul 2022 16:00:15 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202207011658.rHJFVLWA-lkp@intel.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5.18 0/6] 5.18.9-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com, Paulo Alcantara <pc@cjr.nz>,
+        Enzo Matsumiya <ematsumiya@suse.de>,
+        Steve French <stfrench@microsoft.com>
+References: <20220630133230.239507521@linuxfoundation.org>
+ <Yr6pTvc0Zka7qVfc@debian.me> <Yr6vKgOmqF562oc+@kroah.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <Yr6vKgOmqF562oc+@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 04:49:50PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git char-misc-linus
-> head:   3776c78559853fd151be7c41e369fd076fb679d5
-> commit: 3776c78559853fd151be7c41e369fd076fb679d5 [3/3] misc: rtsx_usb: use separate command and response buffers
-> config: arm-buildonly-randconfig-r006-20220629 (https://download.01.org/0day-ci/archive/20220701/202207011658.rHJFVLWA-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/commit/?id=3776c78559853fd151be7c41e369fd076fb679d5
->         git remote add char-misc https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
->         git fetch --no-tags char-misc char-misc-linus
->         git checkout 3776c78559853fd151be7c41e369fd076fb679d5
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/misc/cardreader/
+On 7/1/22 15:24, Greg Kroah-Hartman wrote:
+> Again, gcc-12 is going to have problems with stable releases until
+> Linus's tree is fixed up entirely.  Once that happens, then I will take
+> backports to stable kernels to get them to build properly.
 > 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->            if (!ucr->rsp_buf)
->                ^~~~~~~~~~~~~
->    drivers/misc/cardreader/rtsx_usb.c:678:9: note: uninitialized use occurs here
->            return ret;
->                   ^~~
->    drivers/misc/cardreader/rtsx_usb.c:639:2: note: remove the 'if' if its condition is always false
->            if (!ucr->rsp_buf)
->            ^~~~~~~~~~~~~~~~~~
->    drivers/misc/cardreader/rtsx_usb.c:622:9: note: initialize the variable 'ret' to silence this warning
->            int ret;
->                   ^
->                    = 0
->    1 warning generated.
 
-Odd, gcc doesn't show this for me.  Shuah, can you send a follow-on
-patch to fix this?  The warning does look correct.
+OK.
 
-thanks,
+I also tried building the mainline (with ppc64_defconfig), no warnings
+reported.
 
-greg k-h
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara

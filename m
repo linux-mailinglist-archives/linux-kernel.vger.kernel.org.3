@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5588E56357C
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6130563591
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiGAO3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 10:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41118 "EHLO
+        id S230414AbiGAO3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 10:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbiGAO1g (ORCPT
+        with ESMTP id S232544AbiGAO2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 10:27:36 -0400
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D5D5C963
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:24:56 -0700 (PDT)
-Received: by mail-ed1-x54a.google.com with SMTP id w5-20020a056402268500b0043980311a5fso1408249edd.3
-        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 07:24:56 -0700 (PDT)
+        Fri, 1 Jul 2022 10:28:48 -0400
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C34D677D1
+        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:25:10 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id g7-20020a056402424700b00435ac9c7a8bso1878598edb.14
+        for <linux-kernel@vger.kernel.org>; Fri, 01 Jul 2022 07:25:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=y2vNDbHfnK38Naadc3+Fwqq63OR/g0K1wBY1TqEXyAM=;
-        b=JFjDqoVxXFGtm201IbbG357skezLd+T04/kWKBQGEughGhugLaopnebvFnawR0Kdsr
-         27ps95W+5qwzJFISc09B33+ERrKVXpOpqoMtrCKT/HtJS/mc+Y2T4vZtazhtmZt5dEW/
-         6YcV3sK0Awn2rROg1rzXOx4DymiaFx9MNHURtldWEnOEz01PiUXsvdxOa9SJzM6FKaQu
-         heiTguJRDqBIlOpunqu4UGMuMlcF9OwwspcMFPk4tB7coqypU57aVRBKufAmVL56Ntdn
-         YavSj16XkJUWu5JYiDjJH4XZH6E6lfbc716eCpEJho13ZlQOC3VfHu610QO29KVA6ujZ
-         pKyg==
+        bh=Hs1LG4gEZrL61QQbW1yHjuo38dVFxHr6aTHqGRd2nIU=;
+        b=R1eUqKBbN6WzWIjXxRI2PDbx29b9tpJSiig3/YaznmdOIZ/neK78PvIj5Cl/JjgB/w
+         9SfdvW2BtOiP89nS8ThzmS35SU1A6VUk9hiJALgX6yvIEpuomqcW5bDLzgsEQ013f6rk
+         rFf3VUovNXoIf4KVP4MMfWUh7tsgq1WO5Pa9II9uYW0yZdgX2/mSo5GXmSL2H/ZwJwsd
+         uxM4RIZS+4NPzi2RYwgUcpKcS16h49QlGgoZ05LwFfkprgCDz5UPO4MlYHJZ5DPrqB+x
+         6AHtkpJzEpLuNlHTmvU9jllU2HKPHg+40cmHHxveZn6WEswHaMpjdduncEJv7l8ri3sA
+         Qcyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=y2vNDbHfnK38Naadc3+Fwqq63OR/g0K1wBY1TqEXyAM=;
-        b=xOQ752nX2ztbly8WyLJADYCwvp5oF2ESgsWY7dDVDdcZxj/uUPwKric+KpNAqm6Btv
-         NWWpFnMY3785OfZrHJCgC5lfusXiA2fiMASQdBD2gShUHpGxC4GaUDuz7qlgS0df5ZIe
-         dosC2leUiy0vNybQEpoe4r3wJ4ASJFBhKlHjNdaC9qUg2pyaFxT8JI5raTaB+hnC/SBR
-         MoIF0RLGDu0r7ArHPHcTvbXOYOo/IzNHcHBuMUKJp1ps3MUT2qe/uFq5efgjiD+KuQvD
-         B8iQSs4a7iR4UMMkIs+gIMXWbV9ZGUx0DQc49jWCG2fDwg3zQZnoQ/FQp1sRT1+qYQCm
-         vQTg==
-X-Gm-Message-State: AJIora8OeAw6mkOe/ibjMIF/XzxnySA2ucxOmZ4/wbY4AHIIMG3dMcoI
-        6PxcaPii5T+FqgLOoTjGpXgXQy2hZBc=
-X-Google-Smtp-Source: AGRyM1uuNnnM3qssrOrgZOqetYyyDgTLXfrXa0K/82jjlreLIfrHkHYk4kBhmEAowU1mOBxY98uQNMpqi60=
+        bh=Hs1LG4gEZrL61QQbW1yHjuo38dVFxHr6aTHqGRd2nIU=;
+        b=oUHTiMffRBKuuusPBO5Sa7v7Hq4etHBVRoDjevB13CggiAu0dcRgBQibW0hGKKpK0S
+         OJB6Uw7ZGrS3IQPfnWEM/VcvrxOlq1Cc5F6kMC5wrqzgIULGfAeUdPY6gzFrqHQpfBAj
+         /QtHkCD9SVhhD8PGyL8JqyOLF4gn7Ygus1MjpNjSF+iLLc9O/yhOvIzm6G4pd2i2Kl1s
+         AjgrmX8do/QWojyo7WhFM8NFHJyFZX2oNHhvrqlKrWOVm3sjZY8/HMjlG6Ydjpf3Z5EY
+         wxRWSZIu6EHymdc3fYG9QNEQA9dNKPpG4qg1T1IkZcMJE5Rz5ZgGmXGxSAruMvyzY1Eg
+         UdYA==
+X-Gm-Message-State: AJIora/EjCmxjv9Ha6R9ufLmw62ArqVM8dyXocg2FLrqKlYtRUWdYmMX
+        WRW+iD5sWb49SeOGBwomr9KTtUX/WL4=
+X-Google-Smtp-Source: AGRyM1sHhTsQ0hcpXEAMUmnlfkHECIs68+d9wOkDzkI+VoyBaJw2lW70YlMf+nBUJARdbRgd+2PdvDTFpog=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:a6f5:f713:759c:abb6])
- (user=glider job=sendgmr) by 2002:aa7:c9c9:0:b0:431:962f:f61e with SMTP id
- i9-20020aa7c9c9000000b00431962ff61emr19491774edt.189.1656685496470; Fri, 01
- Jul 2022 07:24:56 -0700 (PDT)
-Date:   Fri,  1 Jul 2022 16:23:01 +0200
+ (user=glider job=sendgmr) by 2002:a17:906:846c:b0:72a:4b4f:b1b1 with SMTP id
+ hx12-20020a170906846c00b0072a4b4fb1b1mr11506007ejc.255.1656685499239; Fri, 01
+ Jul 2022 07:24:59 -0700 (PDT)
+Date:   Fri,  1 Jul 2022 16:23:02 +0200
 In-Reply-To: <20220701142310.2188015-1-glider@google.com>
-Message-Id: <20220701142310.2188015-37-glider@google.com>
+Message-Id: <20220701142310.2188015-38-glider@google.com>
 Mime-Version: 1.0
 References: <20220701142310.2188015-1-glider@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v4 36/45] x86: kmsan: use __msan_ string functions where possible
+Subject: [PATCH v4 37/45] x86: kmsan: sync metadata pages on page fault
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -97,99 +97,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unless stated otherwise (by explicitly calling __memcpy(), __memset() or
-__memmove()) we want all string functions to call their __msan_ versions
-(e.g. __msan_memcpy() instead of memcpy()), so that shadow and origin
-values are updated accordingly.
-
-Bootloader must still use the default string functions to avoid crashes.
+KMSAN assumes shadow and origin pages for every allocated page are
+accessible. For pages between [VMALLOC_START, VMALLOC_END] those metadata
+pages start at KMSAN_VMALLOC_SHADOW_START and
+KMSAN_VMALLOC_ORIGIN_START, therefore we must sync a bigger memory
+region.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
+
 ---
 
-Link: https://linux-review.googlesource.com/id/I7ca9bd6b4f5c9b9816404862ae87ca7984395f33
----
- arch/x86/include/asm/string_64.h | 23 +++++++++++++++++++++--
- include/linux/fortify-string.h   |  2 ++
- 2 files changed, 23 insertions(+), 2 deletions(-)
+v2:
+ -- addressed reports from kernel test robot <lkp@intel.com>
 
-diff --git a/arch/x86/include/asm/string_64.h b/arch/x86/include/asm/string_64.h
-index 6e450827f677a..3b87d889b6e16 100644
---- a/arch/x86/include/asm/string_64.h
-+++ b/arch/x86/include/asm/string_64.h
-@@ -11,11 +11,23 @@
-    function. */
+Link: https://linux-review.googlesource.com/id/Ia5bd541e54f1ecc11b86666c3ec87c62ac0bdfb8
+---
+ arch/x86/mm/fault.c | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+index fad8faa29d042..d07fe0801f203 100644
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -260,7 +260,7 @@ static noinline int vmalloc_fault(unsigned long address)
+ }
+ NOKPROBE_SYMBOL(vmalloc_fault);
  
- #define __HAVE_ARCH_MEMCPY 1
-+#if defined(__SANITIZE_MEMORY__)
-+#undef memcpy
-+void *__msan_memcpy(void *dst, const void *src, size_t size);
-+#define memcpy __msan_memcpy
-+#else
- extern void *memcpy(void *to, const void *from, size_t len);
-+#endif
- extern void *__memcpy(void *to, const void *from, size_t len);
+-void arch_sync_kernel_mappings(unsigned long start, unsigned long end)
++static void __arch_sync_kernel_mappings(unsigned long start, unsigned long end)
+ {
+ 	unsigned long addr;
  
- #define __HAVE_ARCH_MEMSET
-+#if defined(__SANITIZE_MEMORY__)
-+extern void *__msan_memset(void *s, int c, size_t n);
-+#undef memset
-+#define memset __msan_memset
-+#else
- void *memset(void *s, int c, size_t n);
-+#endif
- void *__memset(void *s, int c, size_t n);
- 
- #define __HAVE_ARCH_MEMSET16
-@@ -55,7 +67,13 @@ static inline void *memset64(uint64_t *s, uint64_t v, size_t n)
+@@ -284,6 +284,27 @@ void arch_sync_kernel_mappings(unsigned long start, unsigned long end)
+ 	}
  }
  
- #define __HAVE_ARCH_MEMMOVE
-+#if defined(__SANITIZE_MEMORY__)
-+#undef memmove
-+void *__msan_memmove(void *dest, const void *src, size_t len);
-+#define memmove __msan_memmove
-+#else
- void *memmove(void *dest, const void *src, size_t count);
++void arch_sync_kernel_mappings(unsigned long start, unsigned long end)
++{
++	__arch_sync_kernel_mappings(start, end);
++#ifdef CONFIG_KMSAN
++	/*
++	 * KMSAN maintains two additional metadata page mappings for the
++	 * [VMALLOC_START, VMALLOC_END) range. These mappings start at
++	 * KMSAN_VMALLOC_SHADOW_START and KMSAN_VMALLOC_ORIGIN_START and
++	 * have to be synced together with the vmalloc memory mapping.
++	 */
++	if (start >= VMALLOC_START && end < VMALLOC_END) {
++		__arch_sync_kernel_mappings(
++			start - VMALLOC_START + KMSAN_VMALLOC_SHADOW_START,
++			end - VMALLOC_START + KMSAN_VMALLOC_SHADOW_START);
++		__arch_sync_kernel_mappings(
++			start - VMALLOC_START + KMSAN_VMALLOC_ORIGIN_START,
++			end - VMALLOC_START + KMSAN_VMALLOC_ORIGIN_START);
++	}
 +#endif
- void *__memmove(void *dest, const void *src, size_t count);
- 
- int memcmp(const void *cs, const void *ct, size_t count);
-@@ -64,8 +82,7 @@ char *strcpy(char *dest, const char *src);
- char *strcat(char *dest, const char *src);
- int strcmp(const char *cs, const char *ct);
- 
--#if defined(CONFIG_KASAN) && !defined(__SANITIZE_ADDRESS__)
--
-+#if (defined(CONFIG_KASAN) && !defined(__SANITIZE_ADDRESS__))
- /*
-  * For files that not instrumented (e.g. mm/slub.c) we
-  * should use not instrumented version of mem* functions.
-@@ -73,7 +90,9 @@ int strcmp(const char *cs, const char *ct);
- 
- #undef memcpy
- #define memcpy(dst, src, len) __memcpy(dst, src, len)
-+#undef memmove
- #define memmove(dst, src, len) __memmove(dst, src, len)
-+#undef memset
- #define memset(s, c, n) __memset(s, c, n)
- 
- #ifndef __NO_FORTIFY
-diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-index 3b401fa0f3746..6c8a1a29d0b63 100644
---- a/include/linux/fortify-string.h
-+++ b/include/linux/fortify-string.h
-@@ -285,8 +285,10 @@ __FORTIFY_INLINE void fortify_memset_chk(__kernel_size_t size,
-  * __builtin_object_size() must be captured here to avoid evaluating argument
-  * side-effects further into the macro layers.
-  */
-+#ifndef CONFIG_KMSAN
- #define memset(p, c, s) __fortify_memset_chk(p, c, s,			\
- 		__builtin_object_size(p, 0), __builtin_object_size(p, 1))
-+#endif
- 
- /*
-  * To make sure the compiler can enforce protection against buffer overflows,
++}
++
+ static bool low_pfn(unsigned long pfn)
+ {
+ 	return pfn < max_low_pfn;
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

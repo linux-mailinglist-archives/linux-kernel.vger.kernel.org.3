@@ -2,71 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3F356389C
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 19:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3419A56389D
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 19:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbiGARd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 13:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
+        id S229922AbiGARdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 13:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiGARdt (ORCPT
+        with ESMTP id S229609AbiGARds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 13:33:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D1F25296
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 10:33:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C903B83107
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 17:33:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16463C3411E;
-        Fri,  1 Jul 2022 17:33:44 +0000 (UTC)
-Date:   Fri, 1 Jul 2022 18:33:41 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] arm64 fixes for 5.19-rc5
-Message-ID: <Yr8v9alP3O4HZudw@arm.com>
+        Fri, 1 Jul 2022 13:33:48 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA3C33E06;
+        Fri,  1 Jul 2022 10:33:47 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id z7so2318151qko.8;
+        Fri, 01 Jul 2022 10:33:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SHhBE8CI4B3o2M2bAXCcRFfwKa+1iU8UL1Vjje2dYXw=;
+        b=PSCUjp4Nzi5zeNQGbM5iSQUJex8IzVLR1ESS39LBfdUAsq4EGoNupdr7aI1A2leikl
+         Ir8KgHMTmm2G8EG9E8a3rlN1RAdQIiSR8dR+dizbIXV5/paxqmWQkataO1XgnftwJJDs
+         rI4vHbn5UtDuM+UBXNiHkBV0FJ9x+3wSUYQR/Y83/XktSzxhS5ZEciDJeukm+HrsQmpt
+         qCEOhrb64oRpP5qiLxBdxjVEAfjivUfl4bchJ4NpNJTsAi6Nd3PR9aQ2YA7S4X6YFh+6
+         WrkE6p44ldO8EaGKgp5ZnUwYl4PGC/I0pq/vISFnWwC6g5Eueyx/aldWkP8Yzo1Qm0YI
+         boVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SHhBE8CI4B3o2M2bAXCcRFfwKa+1iU8UL1Vjje2dYXw=;
+        b=jRgUzGpt1CXFDs0oaxP6/5qlHF6MryceqsW/rnUZQu0tlmzyHClJH2Oo5XnsqwYhHa
+         l4KAUrHDcqYMP456ila6Dzsj2FTEH6sN4sQpNdKDD41MN+/WpsyhcFXvG2krGFPZbHgR
+         sv/3ukbX9LrRmjZKmNg4NNfur44wVAbQi1DnkaRH+98UicYlW9lqXf2nfxkOQOx3mNgR
+         RYTZmuB0YxVjLved3fLvJPh2NCbpYsUlRKDavBmfnRLhyf8MViyBAeI1tI6hPS0hOd2Z
+         tGSKuK9GG87mioayb2IA1c+kcYmapdgBk0U3bUbzzVUZ9ARxlwhMt3H3L5O7Vu8+frUU
+         dstA==
+X-Gm-Message-State: AJIora+lNcrb4Tqzl2avhYe0HX0KO8Pl4b7GCxnoAWOstSF6rTDE/sSh
+        LlLVTY+cG+ZVso3uZxR+A9w=
+X-Google-Smtp-Source: AGRyM1vDCOmfmGaXpcdnuW3G/6iyoSrk9anyUwrVugo5igKcfUTLDTAoUQk1GL6x25ZM/gzuzQ+5Lw==
+X-Received: by 2002:a05:620a:15b:b0:6ae:e3b8:ea2c with SMTP id e27-20020a05620a015b00b006aee3b8ea2cmr10911412qkn.214.1656696826152;
+        Fri, 01 Jul 2022 10:33:46 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id ci27-20020a05622a261b00b00316dc1ffbb9sm7911248qtb.32.2022.07.01.10.33.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Jul 2022 10:33:45 -0700 (PDT)
+Message-ID: <386c80a0-538f-df32-665c-cd10d62a8db3@gmail.com>
+Date:   Fri, 1 Jul 2022 10:33:43 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH net-next v1 1/1] net: dsa: sja1105: silent spi_device_id
+ warnings
+Content-Language: en-US
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20220630071013.1710594-1-o.rempel@pengutronix.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220630071013.1710594-1-o.rempel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 6/30/22 00:10, Oleksij Rempel wrote:
+> Add spi_device_id entries to silent following warnings:
+>   SPI driver sja1105 has no spi_device_id for nxp,sja1105e
+>   SPI driver sja1105 has no spi_device_id for nxp,sja1105t
+>   SPI driver sja1105 has no spi_device_id for nxp,sja1105p
+>   SPI driver sja1105 has no spi_device_id for nxp,sja1105q
+>   SPI driver sja1105 has no spi_device_id for nxp,sja1105r
+>   SPI driver sja1105 has no spi_device_id for nxp,sja1105s
+>   SPI driver sja1105 has no spi_device_id for nxp,sja1110a
+>   SPI driver sja1105 has no spi_device_id for nxp,sja1110b
+>   SPI driver sja1105 has no spi_device_id for nxp,sja1110c
+>   SPI driver sja1105 has no spi_device_id for nxp,sja1110d
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Please pull the arm64 fix below. Thanks.
-
-The following changes since commit c50f11c6196f45c92ca48b16a5071615d4ae0572:
-
-  arm64: mm: Don't invalidate FROM_DEVICE buffers at start of DMA transfer (2022-06-17 19:06:06 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-fixes
-
-for you to fetch changes up to 410982303772993a86bb7a9cfa7ece34522b2636:
-
-  arm64: hugetlb: Restore TLB invalidation for BBM on contiguous ptes (2022-07-01 18:29:26 +0100)
-
-----------------------------------------------------------------
-arm64 fix: restore TLB invalidation for the 'break-before-make' rule on
-contiguous ptes (missed in a recent clean-up).
-
-----------------------------------------------------------------
-Will Deacon (1):
-      arm64: hugetlb: Restore TLB invalidation for BBM on contiguous ptes
-
- arch/arm64/mm/hugetlbpage.c | 30 +++++++++++++++++++++---------
- 1 file changed, 21 insertions(+), 9 deletions(-)
-
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Catalin
+Florian

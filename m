@@ -2,71 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 200065634E1
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E501B5634F1
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 16:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbiGAOJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 10:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57698 "EHLO
+        id S232168AbiGAOOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 10:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiGAOJv (ORCPT
+        with ESMTP id S232086AbiGAONz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 10:09:51 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8027234659
-        for <linux-kernel@vger.kernel.org>; Fri,  1 Jul 2022 07:09:50 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E60F113E;
-        Fri,  1 Jul 2022 07:09:50 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 808383F792;
-        Fri,  1 Jul 2022 07:09:48 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 15:09:46 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        james.quinlan@broadcom.com, Jonathan.Cameron@Huawei.com,
-        f.fainelli@gmail.com, etienne.carriere@linaro.org,
-        vincent.guittot@linaro.org, daniel.lezcano@linaro.org,
-        tarek.el-sherbiny@arm.com, adrian.slatineanu@arm.com,
-        souvik.chakravarty@arm.com, wleavitt@marvell.com,
-        wbartczak@marvell.com
-Subject: Re: [PATCH v3 8/9] firmware: arm_scmi: Add scmi_driver optional
- setup/teardown callbacks
-Message-ID: <20220701140946.uar5ohadyjksf2ka@bogus>
-References: <20220627123038.1427067-1-cristian.marussi@arm.com>
- <20220627123038.1427067-9-cristian.marussi@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627123038.1427067-9-cristian.marussi@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 1 Jul 2022 10:13:55 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CBE38DAD;
+        Fri,  1 Jul 2022 07:13:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656684835; x=1688220835;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=fBOzsvR5JRD3AwA365AJxC5GtJB0Gphjxcl+Ez06QxM=;
+  b=NGWAL3MW8YlsjLwxtyruxAMGRCvW0QZi6VF5n8Uo2mKmbskWuQki9az+
+   RWH8NW4yh8UdoUeyfXnbwF+MA+k+jdLwCOtP04TVYcCqSfCa/FdFtv5/9
+   GgC9npFNHtfKenJbOhWgqkEcLYu3lPD9HfzlB3uirXLQ+c6LMo+8CsR0a
+   A=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 01 Jul 2022 07:13:55 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 01 Jul 2022 07:13:53 -0700
+X-QCInternal: smtphost
+Received: from hu-krichai-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.110.37])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 01 Jul 2022 19:43:31 +0530
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
+        id 720BE424D; Fri,  1 Jul 2022 19:43:30 +0530 (+0530)
+From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
+To:     helgaas@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Subject: [PATCH v3 0/2] PCI: Restrict pci transactions after pci suspend
+Date:   Fri,  1 Jul 2022 19:43:17 +0530
+Message-Id: <1656684800-31278-1-git-send-email-quic_krichai@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1656495214-4028-1-git-send-email-quic_krichai@quicinc.com>
+References: <1656495214-4028-1-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 01:30:37PM +0100, Cristian Marussi wrote:
-> Add optional .setup and .teardown methods to the scmi_driver descriptor:
-> such callbacks, if provided, will be called by the SCIM core at driver
-> registration time, so that, an SCMI driver, registered as usual with the
-> module_scmi_driver() helper macro, can provide custom callbacks to be
-> run once for all at module load/unload time to perform specific setup
-> or teardown operations before/after .probe and .remove steps.
->
+If the endpoint device state is D0 and irq's are not freed, then
+kernel try to mask interrupts in system suspend path by writing
+in to the vector table (for MSIX interrupts) and config space (for MSI's).
 
-What can't the driver call this setup/teardown on its own before/after
-calling scmi_driver_register/unregister ?
+These transactions are initiated in the pm suspend after pcie clocks got
+disabled as part of platform driver pm  suspend call. Due to it, these
+transactions are resulting in un-clocked access and eventually to crashes.
 
-Based on the usage in 9/9, I guess it is mainly to use the
-module_scmi_driver ? If so, I would avoid using that or have another
-macro to manage this setup/teardown(once there are multiple users for that).
-IMO, it doesn't make sense to add callbacks to do things that are outside
-the scope of scmi drivers. No ?
+So added a logic in qcom driver to restrict these unclocked access.
+And updated the logic to check the link state before masking
+or unmasking the interrupts.
+
+Krishna chaitanya chundru (2):
+  PCI: qcom: Add system PM support
+  PCI: qcom: Restrict pci transactions after pci suspend
+
+ drivers/pci/controller/dwc/pcie-designware-host.c |  14 ++-
+ drivers/pci/controller/dwc/pcie-qcom.c            | 114 +++++++++++++++++++++-
+ 2 files changed, 124 insertions(+), 4 deletions(-)
 
 -- 
-Regards,
-Sudeep
+2.7.4
+

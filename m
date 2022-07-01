@@ -2,90 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFEE562C3A
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE27562C47
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 09:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235169AbiGAHF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 03:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
+        id S234570AbiGAHJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 03:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235025AbiGAHFy (ORCPT
+        with ESMTP id S231168AbiGAHJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 03:05:54 -0400
-Received: from ZXSHCAS1.zhaoxin.com (ZXSHCAS1.zhaoxin.com [210.0.225.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B55677C2;
-        Fri,  1 Jul 2022 00:05:53 -0700 (PDT)
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
- (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Fri, 1 Jul
- 2022 15:05:49 +0800
-Received: from tony-HX002EA0.zhaoxin.com (10.32.64.1) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Fri, 1 Jul
- 2022 15:05:47 +0800
-From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <linux-acpi@vger.kernel.org>, <CobeChen@zhaoxin.com>,
-        <TimGuo@zhaoxin.com>, <LindaChai@zhaoxin.com>, <LeoLiu@zhaoxin.com>
-Subject: [PATCH] x86/cstate: Replace vendor check with X86_FEATURE_MWAIT in ffh_cstate_init
-Date:   Fri, 1 Jul 2022 15:05:47 +0800
-Message-ID: <1656659147-20396-1-git-send-email-TonyWWang-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 1 Jul 2022 03:09:18 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93A6677DC;
+        Fri,  1 Jul 2022 00:09:16 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B45174000F;
+        Fri,  1 Jul 2022 07:09:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656659355;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PCiZVwpMAjyrnNZLMZl/YtqChDHV1AvFsK2kkBxNj8Q=;
+        b=jMoucgK6yX2WKScAnFiD+VFa53pnvw1EHQOQIx0hPWAYVVyTx/aLdZvkJTZVCrVVTxURgL
+        DVOwKogX0EUXhjqye4hOpQyTcgUl0mh/7JHUQRmCmOSB7gYoJDaUllJ/5wMHCOXgaBRDSv
+        pO76jxy/f3mNXbEex9enTUY5eTxKJCZOWYKEd/7AaNTepx6skSgpcpn7IcxQOaxmm+y2+A
+        xwLYjQxMGQChWE0gPzU9wrncRGDMiitCU0F3ENjjVtwa9m+pTAGhjZAwPoNfRGix2FngVw
+        WEW4gssTQR4bq0OY4QpE19htaCIYtpt8ch8w4qnEa/sleRcV7DUeB7KBrWeGog==
+Date:   Fri, 1 Jul 2022 09:09:09 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     <Claudiu.Beznea@microchip.com>
+Cc:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <Nicolas.Ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <Horatiu.Vultur@microchip.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v3 3/3] ARM: dts: lan966x: Add UDPHS support
+Message-ID: <20220701090909.50654cb4@bootlin.com>
+In-Reply-To: <f4f14941-6839-5691-b2d1-adb049118a4d@microchip.com>
+References: <20220525071036.223396-1-herve.codina@bootlin.com>
+        <20220525071036.223396-4-herve.codina@bootlin.com>
+        <f4f14941-6839-5691-b2d1-adb049118a4d@microchip.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.32.64.1]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The original commit 991528d73486 ("ACPI: Processor native C-states using
-MWAIT") has a vendor check for Intel in the function of ffh_cstate_init().
+Hi Claudiu,
 
-Commit 5209654a46ee ("x86/ACPI/cstate: Allow ACPI C1 FFH MWAIT use on AMD
-systems") and commit 280b68a3b3b9 ("x86/cstate: Allow ACPI C1 FFH MWAIT
-use on Hygon systems") add vendor check for AMD and HYGON in the function
-of ffh_cstate_init().
+On Thu, 30 Jun 2022 09:31:00 +0000
+<Claudiu.Beznea@microchip.com> wrote:
 
-Recent Zhaoxin and Centaur CPUs support MONITOR/MWAIT instructions that
-can be used for ACPI Cx state in the same way as Intel. So expected to
-add the support of these CPUs in the function of ffh_cstate_init() too.
+> On 25.05.2022 10:10, Herve Codina wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
+the content is safe
+> >=20
+> > Add UDPHS (the USB High Speed Device Port controller) support.
+> >=20
+> > The both lan966x SOCs (LAN9662 and LAN9668) have the same UDPHS
+> > IP. This IP is also the same as the one present in the SAMA5D3
+> > SOC.
+> >=20
+> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> > ---
+> >  arch/arm/boot/dts/lan966x.dtsi | 11 +++++++++++
+> >  1 file changed, 11 insertions(+)
+> >=20
+> > diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x=
+.dtsi
+> > index 7d2869648050..e086df741f99 100644
+> > --- a/arch/arm/boot/dts/lan966x.dtsi
+> > +++ b/arch/arm/boot/dts/lan966x.dtsi
+> > @@ -196,6 +196,17 @@ watchdog: watchdog@e0090000 {
+> >                         status =3D "disabled";
+> >                 };
+> >=20
+> > +               udc: usb@e0808000 {
+> > +                       compatible =3D "microchip,lan9662-udc",
+> > +                                    "atmel,sama5d3-udc";
+> > +                       reg =3D <0x00200000 0x80000>,
+> > +                             <0xe0808000 0x400>;
+> > +                       interrupts =3D <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
+> > +                       clocks =3D <&clks GCK_GATE_UDPHS>, <&nic_clk>;
+> > +                       clock-names =3D "pclk", "hclk";
+> > +                       status =3D "disabled";
+> > +               };
+> > + =20
+>=20
+> This doesn't apply clean on top of v5.19-rc1. Can you check and resend?
 
-The CPU feature X86_FEATURE_MWAIT indicates processor supports MONITOR/
-MWAIT instructions. So the check for many CPU vendors in ffh_cstate_init()
-is unnecessary, use X86_FEATURE_MWAIT to replace the CPU vendor check.
+Sure,
+I am going to send a rebased version of this series.
 
-Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
----
- arch/x86/kernel/acpi/cstate.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+Thanks,
+Herv=C3=A9
 
-diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
-index 7945eae..a64c38f 100644
---- a/arch/x86/kernel/acpi/cstate.c
-+++ b/arch/x86/kernel/acpi/cstate.c
-@@ -209,11 +209,7 @@ EXPORT_SYMBOL_GPL(acpi_processor_ffh_cstate_enter);
- 
- static int __init ffh_cstate_init(void)
- {
--	struct cpuinfo_x86 *c = &boot_cpu_data;
--
--	if (c->x86_vendor != X86_VENDOR_INTEL &&
--	    c->x86_vendor != X86_VENDOR_AMD &&
--	    c->x86_vendor != X86_VENDOR_HYGON)
-+	if (!boot_cpu_has(X86_FEATURE_MWAIT))
- 		return -1;
- 
- 	cpu_cstate_entry = alloc_percpu(struct cstate_entry);
--- 
-2.7.4
-
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

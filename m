@@ -2,60 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0CD563927
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 20:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D34CF563922
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 20:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbiGAS1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 14:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
+        id S231295AbiGAS3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 14:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiGAS1s (ORCPT
+        with ESMTP id S229553AbiGAS3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 14:27:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4342027CCB;
-        Fri,  1 Jul 2022 11:27:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DEA5EB82CF1;
-        Fri,  1 Jul 2022 18:27:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 86A9FC341C6;
-        Fri,  1 Jul 2022 18:27:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656700065;
-        bh=8sIslhGMBS7d+Sc6M22c+J6/dd4vq7cVgAEcf1sWHcs=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ubCn8XgzNt/qPkU16WmZROOfjmB/AbJnbAC9p6VfUhhPkfNKwT/oDi/7lFUlthURM
-         kJ7dZVUp5zofSRTV7VVz451hv4KrYeQc+DyGr+yHZ8wbeS8JFdc39peLndWdK2JTXb
-         eq8n9hc1NVS3QZtAupZPNmG8UTUF4VH5TlHEV59I2F3NWmqUbtHIUMTs4xlOwP+m7G
-         REjr8rrvUijPxJutMzWN7STnfuR4kP/BYR2JLdj27pTE+tefznfL4zwPU8otgRUnUQ
-         wZPLQzxold312yFbKR+U2PM7VpLtudZ9qwJ+BRssrWDTINPeDp9TKcEnM3GHDVbUlj
-         Lj4cjcZ24J0mA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 72C65E49BB8;
-        Fri,  1 Jul 2022 18:27:45 +0000 (UTC)
-Subject: Re: [GIT PULL] s390 updates for 5.19-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yr69Mr39dc2xRygV@tuxmaker.boeblingen.de.ibm.com>
-References: <Yr69Mr39dc2xRygV@tuxmaker.boeblingen.de.ibm.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Yr69Mr39dc2xRygV@tuxmaker.boeblingen.de.ibm.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.19-5
-X-PR-Tracked-Commit-Id: d7d488f41b41a1b7a1df3c74f2f65eb4585f5d55
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: cec84e7547d3f95b3fa4ded1618cb43d5d98a76a
-Message-Id: <165670006546.28259.10677158995220436426.pr-tracker-bot@kernel.org>
-Date:   Fri, 01 Jul 2022 18:27:45 +0000
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Fri, 1 Jul 2022 14:29:13 -0400
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01A6220F7;
+        Fri,  1 Jul 2022 11:29:12 -0700 (PDT)
+Received: by mail-il1-f174.google.com with SMTP id i17so1902721ils.12;
+        Fri, 01 Jul 2022 11:29:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/3e6AZaFiXYb4YbnsmFTEk9K1NTwzkBROYYE+v5p2ZI=;
+        b=Z5q+sLRiSWAVT4ZT28Qmc4ZRlSUMtWRchgiMxf4CiDkR9mplwIkHj4SoTGkUdb+FNl
+         /yIdLNB1H6qzJUmsvNcZR0ZPUw720+FvDSUiwkgXVF+wyg49pPxLf4xSIiqV2KqGBwFN
+         QGYs4heB1N4rH2XghlD/JiSPj38YoEOXdEkCohiJrK/DEWjDU2xUcRatFR6cz0lCDw5r
+         zc6OOXSYFPN3W2L7eOzOjcdJL05yNkIXgb/y+NpGOzPtfg06ad+7JLKhuuSHvBMr0v+U
+         +/uCWKBC0X3LJ11GrGk2cywk6FZi7IGF7kstZT4jqHUrzQLYqSV3ZyWFDH8pl8Ii3ojo
+         SAHA==
+X-Gm-Message-State: AJIora/0B1erIeddVBaDxTzHmt9b/v10cgIU3SyWGe4paH9S1dX2S69E
+        8qB85EKTmVVGtoWd+BlPlA==
+X-Google-Smtp-Source: AGRyM1tTOiSo4oXi5cL/Xm3k+ov14bukraMZbiKTiHKfeplJ9zO8ijx527DNmqCk8dP114dY/VX1Qg==
+X-Received: by 2002:a05:6e02:184d:b0:2da:ca66:76f6 with SMTP id b13-20020a056e02184d00b002daca6676f6mr8442812ilv.128.1656700151765;
+        Fri, 01 Jul 2022 11:29:11 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id p70-20020a022949000000b00339d2cd8da1sm10023783jap.152.2022.07.01.11.29.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 11:29:11 -0700 (PDT)
+Received: (nullmailer pid 1274357 invoked by uid 1000);
+        Fri, 01 Jul 2022 18:29:09 -0000
+Date:   Fri, 1 Jul 2022 12:29:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/10] PCI: qcom: Add support for SC8280XP
+Message-ID: <20220701182909.GA1266081-robh@kernel.org>
+References: <20220629141000.18111-1-johan+linaro@kernel.org>
+ <20220629141000.18111-7-johan+linaro@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220629141000.18111-7-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,15 +71,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 1 Jul 2022 11:24:02 +0200:
+On Wed, Jun 29, 2022 at 04:09:56PM +0200, Johan Hovold wrote:
+> The SC8280XP platform has seven PCIe controllers: two used with USB4,
+> two 4-lane, two 2-lane and one 1-lane.
+> 
+> Add a new "qcom,pcie-sc8280xp" compatible string and reuse the 1.9.0
+> ops.
+> 
+> Note that the SC8280XP controllers need two or three interconnect
+> clocks to be enabled. Model these as optional clocks to avoid encoding
+> devicetree data in the PCIe driver.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.19-5
+Shouldn't the interconnect binding handle these? Probably, bus clocks 
+have to be the biggest single reason why clocks are such a mess in terms 
+of 'the same' block having different clocks.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/cec84e7547d3f95b3fa4ded1618cb43d5d98a76a
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> 
+> Note that the same could be done for the SM8450 interconnect clocks and
+> possibly also for the TBU clocks.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom.c | 22 ++++++++++++++++++++--
+>  1 file changed, 20 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index ff1b40f213c1..da3f1cdc4ba6 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -160,7 +160,7 @@ struct qcom_pcie_resources_2_3_3 {
+>  
+>  /* 6 clocks typically, 7 for sm8250 */
+>  struct qcom_pcie_resources_2_7_0 {
+> -	struct clk_bulk_data clks[9];
+> +	struct clk_bulk_data clks[12];
+>  	int num_clks;
+>  	struct regulator_bulk_data supplies[2];
+>  	struct reset_control *pci_reset;
+> @@ -1119,6 +1119,7 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+>  	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+>  	struct dw_pcie *pci = pcie->pci;
+>  	struct device *dev = pci->dev;
+> +	unsigned int num_clks, num_opt_clks;
+>  	unsigned int idx;
+>  	int ret;
+>  
+> @@ -1148,9 +1149,20 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+>  	if (pcie->cfg->has_aggre1_clk)
+>  		res->clks[idx++].id = "aggre1";
+>  
+> +	num_clks = idx;
+> +
+> +	ret = devm_clk_bulk_get(dev, num_clks, res->clks);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	res->clks[idx++].id = "noc_aggr_4";
+> +	res->clks[idx++].id = "noc_aggr_south_sf";
+> +	res->clks[idx++].id = "cnoc_qx";
+> +
+> +	num_opt_clks = idx - num_clks;
+>  	res->num_clks = idx;
+>  
+> -	ret = devm_clk_bulk_get(dev, res->num_clks, res->clks);
+> +	ret = devm_clk_bulk_get_optional(dev, num_opt_clks, res->clks + num_clks);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> @@ -1449,6 +1461,11 @@ static const struct qcom_pcie_cfg ipq4019_cfg = {
+>  	.ops = &ops_2_4_0,
+>  };
+>  
+> +static const struct qcom_pcie_cfg sc8280xp_cfg = {
+> +	.ops = &ops_1_9_0,
+> +	.has_ddrss_sf_tbu_clk = true,
+> +};
+> +
+>  static const struct qcom_pcie_cfg sdm845_cfg = {
+>  	.ops = &ops_2_7_0,
+>  	.has_tbu_clk = true,
+> @@ -1613,6 +1630,7 @@ static const struct of_device_id qcom_pcie_match[] = {
+>  	{ .compatible = "qcom,pcie-sm8150", .data = &sm8150_cfg },
+>  	{ .compatible = "qcom,pcie-sm8250", .data = &sm8250_cfg },
+>  	{ .compatible = "qcom,pcie-sc8180x", .data = &sc8180x_cfg },
+> +	{ .compatible = "qcom,pcie-sc8280xp", .data = &sc8280xp_cfg },
+>  	{ .compatible = "qcom,pcie-sm8450-pcie0", .data = &sm8450_pcie0_cfg },
+>  	{ .compatible = "qcom,pcie-sm8450-pcie1", .data = &sm8450_pcie1_cfg },
+>  	{ .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
+> -- 
+> 2.35.1
+> 
+> 

@@ -2,374 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D935628D3
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 04:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25FB85628DA
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 04:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbiGACXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 22:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50740 "EHLO
+        id S233139AbiGACZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 22:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiGACXg (ORCPT
+        with ESMTP id S233069AbiGACZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 22:23:36 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB0E33E95
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 19:23:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656642214; x=1688178214;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NzvYCUmYC98qq0xLWLj1OrnxdCrEWFmRgn4AJux2ERQ=;
-  b=hD0zUpRvDeTl140rR0jvCYehcO1y6Dpnx8vgHA9DJGB7C1CFsW0D/rWb
-   B013BzIa+KV+MTezUeGqzokjsJtN7FXrBb/t/dWLZo7hs+rhX0WxULG25
-   ubOENnp9OiF5I/5p3PeL2xB8sw4JmXpAqsJl1w40Yif4Wu2t6Djx6BS4G
-   wPGKXcjkhi8dh4ClR2bLBZgYUTYO3+7BWBaas7kD5q4TG2DtBFk99iLx6
-   QpLiMAK/y6T+6Redp2oyiiRm3vVgfJRfPq/KfLplMT2ySg3p3zibWAcKE
-   pj5xz98yDgb92RSfwR3z+ECGHtUcX4zn6s1GZmhSWLJUTA08DWi+y1kcb
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="282561497"
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="282561497"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 19:23:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="648150532"
-Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Jun 2022 19:23:31 -0700
-Date:   Fri, 1 Jul 2022 10:23:30 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, dave.hansen@intel.com
-Subject: Re: [RFC PATCH] mm/slub: enable debugging memory wasting of kmalloc
-Message-ID: <20220701022330.GA14806@shbuild999.sh.intel.com>
-References: <20220630014715.73330-1-feng.tang@intel.com>
- <Yr21Ymj5uZfFearE@hyeyoo>
+        Thu, 30 Jun 2022 22:25:26 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2086.outbound.protection.outlook.com [40.107.237.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B22599E3;
+        Thu, 30 Jun 2022 19:25:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TApxjE5/OxOdErjQhJmeYfQvXFVc8zU7LCPXdi76zclS69xf/Be1Sm/9TeO0qlyY1eoqYC7JdctQmLIDn4DwC63jdidropbYXcXmP+e006SlSBLcmovlAEtwOzufe6B1Dho2esZ6VgAlZLbNIVdlzt2mGFydFBFRWMYD99WgMpG3LZ9/vtWvjooIuP3sJp7fahJiGMpqCWKpfc5x88KZldpUyvYRo9AMmGI/r4ofUILT3sDaWqoOPQ52Dn8wDqfN1Aw2PLdoTmXmiVnvDfbMLnMd1/IDOvdJhZpGyKhG6vqctuFeervJUfUbT5gZLd2uDGYvcpLID7KEku/z1oRRkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sGSUShS1hyYCnhvncNZKIhv+nA8VrOtazzMpEQ4gWUM=;
+ b=cHDuZzHX/PuJ2Hk77iiS3Ojxhm1ZoRiFeYl3wRy7OlIhulAxNPHbgQseanLzFqjVuoYFscx7PDl1zyyrhsiKC2oSnZX6678pNJ16F01IqshiQERHfHAHCYXDB0MHGveUpjW858wsPwNDhW4GIcLXhknO3fzktKvdfV1E91PkqHitAZ8R9ifXiX+JxWKH5iaf9ueNUIRAbBXLZxW8bP1JyfFgbvFnYXPUvYmtuWlzHVcf81UkQYBXbi0Xd/vRj4TQXvUALvkGF6HxevmI+tqufJYPmHqTIV5VwPY22o+zs21CsipfHRB/2iacXuutWRjvsvxVxLx7d/sSRGo06NCXQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sGSUShS1hyYCnhvncNZKIhv+nA8VrOtazzMpEQ4gWUM=;
+ b=KFe6icZSRptDHmdfQpo0d3AlGcAnrY9Xu6ai4dj4ahiheoywQBgtaoOWzgRigxQDSBfYaqW9qQBDZF48yCHZ17wi0gic1NMWvKdSVUZIGn2vUjDMFsQ8+X5DnqEQOAkF6zldBGtqGE4n5GVbg9lmP1xtAOhCwrMDbhUPqnwXO6k=
+Received: from DM6PR11CA0061.namprd11.prod.outlook.com (2603:10b6:5:14c::38)
+ by SA0PR12MB4463.namprd12.prod.outlook.com (2603:10b6:806:92::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Fri, 1 Jul
+ 2022 02:25:19 +0000
+Received: from DM6NAM11FT050.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:14c:cafe::d0) by DM6PR11CA0061.outlook.office365.com
+ (2603:10b6:5:14c::38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15 via Frontend
+ Transport; Fri, 1 Jul 2022 02:25:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT050.mail.protection.outlook.com (10.13.173.111) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5395.14 via Frontend Transport; Fri, 1 Jul 2022 02:25:18 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 30 Jun
+ 2022 21:25:16 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <mario.limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Len Brown" <lenb@kernel.org>, Huang Rui <ray.huang@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+CC:     <perry.yuan@amd.com>, CUI Hao <cuihao.leo@gmail.com>,
+        <maxim.novozhilov@gmail.com>, <lethe.tree@protonmail.com>,
+        <garystephenwright@gmail.com>, <galaxyking0419@gmail.com>,
+        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 1/2] ACPI: CPPC: Only probe for _CPC if CPPC v2 is acked
+Date:   Thu, 30 Jun 2022 21:25:27 -0500
+Message-ID: <20220701022529.2134-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yr21Ymj5uZfFearE@hyeyoo>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: caaae2a2-0e66-4186-57f8-08da5b08f111
+X-MS-TrafficTypeDiagnostic: SA0PR12MB4463:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CzLaEzWAKUk44EQOA8Ej6bDTebSABnAMnVIkCDD8qS5HqKhjzVGkdU9I4xHHVhNJPiJtr9iSUR8mDZIR7fR5BVhinwl5A9lxcVh0CGsaUkd/Uqqzsb7nwI1rgQhzwE5wguX+JRDGLdK6knxXyO8eBxJs0+JTSrNeVtUBlwAkLSjdly4hvdhuHpuYg9QKvC2w37aCRw40993IYJLxZd5o0xSUQJMMlpD2yK6R0zqTeyBi0kFSg4YlNR9EEVB3hB1fFeUlz8Jtvk3d8816g0ntxxGljzL3BRFXEqMkzhHjCMAEmFVqcfV2nnLwDhxvKuHv6meE7xlAolPHY0vNn3S80ZezSyiPOdQBt4il9RtdjHZDHuMhMxUTE9JwQ9W1RZpOWY1u0hDDpWWsjD5X5kht9fFNCvhAH2y5Y3MCJgeFoAg+sSFo00uIN7hU5nZKeAZso3lGACVp6D+Bf5B7+p0qqeG/i1GKe6jd7kxVnIuvyJuqDWZ90jYjfVViKl51Q2/00CrfrK/Co3H2H9dh0yJXf+/XgYRb1GqrW6yeIu246yh8gU0kwv+hRU2ramq6E4fqoh1zKUVbHG3LZMIYC0GkKHtDLDY9TuPnZUDcSLHaB5R+/MKtbl5/arlB5Wx83lc/5x19EH3SRFfuY8YZbEH7BVaIKSDlrw4HEbrMJthSlhB+dYQYmCqY1Pw24Jz4oqQRiNl8ekUGfAO2okVKybd8YxPdBzd92mLL5ENgcL9BtU26+ycgQixd1Yvkdhn2USdFMOWnaZJVudtOwnMym1UyK5gKaSUBO+Y2D+Hi2/GyrDOGQF/qU04Jvk6U85jMYDtTyMhMdrNhZCSBvZMKY9C5KrQeb1iUJArAw6d/85YNnDRPnPv5Xy60GkGnM18rPYD+TdHfYx4+9wqlE+YQBACu9DuIa8CG8RLPTL9VTItiwOw=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(136003)(39860400002)(346002)(46966006)(40470700004)(36840700001)(40480700001)(2616005)(336012)(7696005)(26005)(186003)(82310400005)(1076003)(16526019)(83380400001)(4326008)(47076005)(426003)(8936002)(8676002)(5660300002)(2906002)(44832011)(7416002)(70586007)(478600001)(316002)(36756003)(70206006)(966005)(54906003)(110136005)(40460700003)(41300700001)(81166007)(6666004)(82740400003)(86362001)(36860700001)(356005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2022 02:25:18.7720
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: caaae2a2-0e66-4186-57f8-08da5b08f111
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT050.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4463
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hyeonggon,
+Previously the kernel used to ignore whether the firmware masked CPPC
+or CPPCv2 and would just pretend that it worked.
 
-Thanks for the review!
+When support for the USB4 bit in _OSC was introduced from commit
+9e1f561afb ("ACPI: Execute platform _OSC also with query bit clear")
+the kernel began to look at the return when the query bit was clear.
 
-On Thu, Jun 30, 2022 at 11:38:26PM +0900, Hyeonggon Yoo wrote:
-> On Thu, Jun 30, 2022 at 09:47:15AM +0800, Feng Tang wrote:
-> > kmalloc's API family is critical for mm, with one shortcoming that
-> > its object size is fixed to be power of 2. When user requests memory
-> > for '2^n + 1' bytes, actually 2^(n+1) bytes will be allocated, so
-> > in worst case, there is around 50% memory space waste.
-> > 
-> > We've met a kernel boot OOM panic, and from the dumped slab info:
-> > 
-> >     [   26.062145] kmalloc-2k            814056KB     814056KB
-> > 
-> > From debug we found there are huge number of 'struct iova_magazine',
-> > whose size is 1032 bytes (1024 + 8), so each allocation will waste
-> > 1016 bytes. Though the issue is solved by giving the right(bigger)
-> > size of RAM, it is still better to optimize the size (either use
-> > a kmalloc friendly size or create a dedicated slab for it).
-> > 
-> > And from lkml archive, there was another crash kernel OOM case [1]
-> > back in 2019, which seems to be related with the similar slab waste
-> > situation, as the log is similar:
-> > 
-> >     [    4.332648] iommu: Adding device 0000:20:02.0 to group 16
-> >     [    4.338946] swapper/0 invoked oom-killer: gfp_mask=0x6040c0(GFP_KERNEL|__GFP_COMP), nodemask=(null), order=0, oom_score_adj=0
-> >     ...
-> >     [    4.857565] kmalloc-2048           59164KB      59164KB
-> > 
-> > The crash kernel only has 256M memory, and 59M is pretty big here.
-> > 
-> > So add an way to track each kmalloc's memory waste info, and leverage
-> > the existing SLUB debug framework to show its call stack info, so
-> > that user can evaluate the waste situation, identify some hot spots
-> > and optimize accordingly, for a better utilization of memory.
-> > 
-> > The waste info is integrated into existing interface:
-> > /sys/kernel/debug/slab/kmalloc-xx/alloc_traces, one example of
-> > 'kmalloc-4k' after boot is:
-> > 
-> > 126 ixgbe_alloc_q_vector+0xa5/0x4a0 [ixgbe] waste: 233856/1856 age=1493302/1493830/1494358 pid=1284 cpus=32 nodes=1
-> >         __slab_alloc.isra.86+0x52/0x80
-> >         __kmalloc_node+0x143/0x350
-> >         ixgbe_alloc_q_vector+0xa5/0x4a0 [ixgbe]
-> >         ixgbe_init_interrupt_scheme+0x1a6/0x730 [ixgbe]
-> >         ixgbe_probe+0xc8e/0x10d0 [ixgbe]
-> >         local_pci_probe+0x42/0x80
-> >         work_for_cpu_fn+0x13/0x20
-> >         process_one_work+0x1c5/0x390
-> >         worker_thread+0x1b9/0x360
-> >         kthread+0xe6/0x110
-> >         ret_from_fork+0x1f/0x30
-> > 
-> > which means in 'kmalloc-4k' slab, there are 126 requests of
-> > 2240 bytes which got a 4KB space (wasting 1856 bytes each
-> > and 233856 bytes in total). And when system starts some real
-> > workload like multiple docker instances, there are more
-> > severe waste.
-> > 
-> > [1]. https://lkml.org/lkml/2019/8/12/266
-> > 
-> > Signed-off-by: Feng Tang <feng.tang@intel.com>
-> > ---
-> > Note:
-> >   * this is based on linux-next tree with tag next-20220628
-> 
-> So this makes use of the fact that orig_size differ from
-> s->object_size when allocated from kmalloc, and for non-kmalloc
-> caches it doesn't track waste because s->object_size == orig_size.
-> Am I following?
+This caused regressions that were misdiagnosed and attempted to be solved
+as part of commit 2ca8e6285250 ("Revert "ACPI: Pass the same capabilities
+to the _OSC regardless of the query flag""). This caused a different
+regression where non-Intel systems weren't able to negotiate _OSC
+properly.
 
-Yes, you are right.
+This was reverted in commit 2ca8e6285250 ("Revert "ACPI: Pass the same
+capabilities to the _OSC regardless of the query flag"") and attempted to
+be fixed by commit c42fa24b4475 ("ACPI: bus: Avoid using CPPC if not
+supported by firmware") but the regression still returned.
 
+These systems with the regression only load support for CPPC from an SSDT
+dynamically when _OSC reports CPPC v2.  Avoid the problem by not letting
+CPPC satisfy the requirement in `acpi_cppc_processor_probe`.
 
-> And then it has overhead of 'waste' field for every non-kmalloc objects
-> because track is saved per object. Also the field is not used at free.
-> (Maybe that would be okay as it's only for debugging, just noting.)
+Reported-by: CUI Hao <cuihao.leo@gmail.com>
+Reported-by: maxim.novozhilov@gmail.com
+Reported-by: lethe.tree@protonmail.com
+Reported-by: garystephenwright@gmail.com
+Reported-by: galaxyking0419@gmail.com
+Fixes: c42fa24b4475 ("ACPI: bus: Avoid using CPPC if not supported by firmware")
+Fixes: 2ca8e6285250 ("Revert "ACPI Pass the same capabilities to the _OSC regardless of the query flag"")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=213023
+Link: https://bugzilla.redhat.com/show_bug.cgi?id=2075387
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ drivers/acpi/bus.c       | 11 +++++------
+ drivers/acpi/cppc_acpi.c |  4 +++-
+ include/linux/acpi.h     |  2 +-
+ 3 files changed, 9 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+index 86fa61a21826c..e2db1bdd9dd25 100644
+--- a/drivers/acpi/bus.c
++++ b/drivers/acpi/bus.c
+@@ -298,7 +298,7 @@ EXPORT_SYMBOL_GPL(osc_cpc_flexible_adr_space_confirmed);
+ bool osc_sb_native_usb4_support_confirmed;
+ EXPORT_SYMBOL_GPL(osc_sb_native_usb4_support_confirmed);
  
-Yes, the field itself is a 'waste' for non-kmalloc objects :) I do
-have another patch to add an option for this
-
-	+config SLUB_DEBUG_KMALLOC_WASTE
-	+	bool "Enable kmalloc memory waste debug"
-	+	depends on SLUB_DEBUG && DEBUG_FS
-	...	
-
-And didn't post it due to the same debugging thought as you. And I can
-add it back if it's really necessary.
-
-> >  mm/slub.c | 45 ++++++++++++++++++++++++++++++---------------
-> >  1 file changed, 30 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/mm/slub.c b/mm/slub.c
-> > index 26b00951aad1..bc4f9d4fb1e2 100644
-> > --- a/mm/slub.c
-> > +++ b/mm/slub.c
-> > @@ -271,6 +271,7 @@ struct track {
-> >  #endif
-> >  	int cpu;		/* Was running on cpu */
-> >  	int pid;		/* Pid context */
-> > +	unsigned long waste;	/* memory waste for a kmalloc-ed object */
-> >  	unsigned long when;	/* When did the operation occur */
-> >  };
-> >  
-> > @@ -747,6 +748,7 @@ static inline depot_stack_handle_t set_track_prepare(void)
-> >  
-> >  static void set_track_update(struct kmem_cache *s, void *object,
-> >  			     enum track_item alloc, unsigned long addr,
-> > +			     unsigned long waste,
-> >  			     depot_stack_handle_t handle)
-> >  {
-> >  	struct track *p = get_track(s, object, alloc);
-> > @@ -758,14 +760,16 @@ static void set_track_update(struct kmem_cache *s, void *object,
-> >  	p->cpu = smp_processor_id();
-> >  	p->pid = current->pid;
-> >  	p->when = jiffies;
-> > +	p->waste = waste;
-> >  }
-> >  
-> >  static __always_inline void set_track(struct kmem_cache *s, void *object,
-> > -				      enum track_item alloc, unsigned long addr)
-> > +				      enum track_item alloc, unsigned long addr,
-> > +				      unsigned long waste)
-> >  {
-> >  	depot_stack_handle_t handle = set_track_prepare();
-> >  
-> > -	set_track_update(s, object, alloc, addr, handle);
-> > +	set_track_update(s, object, alloc, addr, waste, handle);
-> >  }
-> >  
-> >  static void init_tracking(struct kmem_cache *s, void *object)
-> > @@ -1325,7 +1329,9 @@ static inline int alloc_consistency_checks(struct kmem_cache *s,
-> >  
-> >  static noinline int alloc_debug_processing(struct kmem_cache *s,
-> >  					struct slab *slab,
-> > -					void *object, unsigned long addr)
-> > +					void *object, unsigned long addr,
-> > +					unsigned long waste
-> > +					)
-> >  {
-> >  	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
-> >  		if (!alloc_consistency_checks(s, slab, object))
-> > @@ -1334,7 +1340,7 @@ static noinline int alloc_debug_processing(struct kmem_cache *s,
-> >  
-> >  	/* Success perform special debug activities for allocs */
-> >  	if (s->flags & SLAB_STORE_USER)
-> > -		set_track(s, object, TRACK_ALLOC, addr);
-> > +		set_track(s, object, TRACK_ALLOC, addr, waste);
-> >  	trace(s, slab, object, 1);
-> >  	init_object(s, object, SLUB_RED_ACTIVE);
-> >  	return 1;
-> > @@ -1398,6 +1404,7 @@ static noinline int free_debug_processing(
-> >  	int ret = 0;
-> >  	depot_stack_handle_t handle = 0;
-> >  
-> > +	/* TODO: feng: we can slab->waste -= track?) or in set_track */
-> >  	if (s->flags & SLAB_STORE_USER)
-> >  		handle = set_track_prepare();
-> >  
-> > @@ -1418,7 +1425,7 @@ static noinline int free_debug_processing(
-> >  	}
-> >  
-> >  	if (s->flags & SLAB_STORE_USER)
-> > -		set_track_update(s, object, TRACK_FREE, addr, handle);
-> > +		set_track_update(s, object, TRACK_FREE, addr, 0, handle);
-> >  	trace(s, slab, object, 0);
-> >  	/* Freepointer not overwritten by init_object(), SLAB_POISON moved it */
-> >  	init_object(s, object, SLUB_RED_INACTIVE);
-> > @@ -2905,7 +2912,7 @@ static inline void *get_freelist(struct kmem_cache *s, struct slab *slab)
-> >   * already disabled (which is the case for bulk allocation).
-> >   */
-> >  static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
-> > -			  unsigned long addr, struct kmem_cache_cpu *c)
-> > +			  unsigned long addr, struct kmem_cache_cpu *c, unsigned int orig_size)
-> >  {
-> >  	void *freelist;
-> >  	struct slab *slab;
-> > @@ -3048,7 +3055,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
-> >  check_new_slab:
-> >  
-> >  	if (kmem_cache_debug(s)) {
-> > -		if (!alloc_debug_processing(s, slab, freelist, addr)) {
-> > +		if (!alloc_debug_processing(s, slab, freelist, addr, s->object_size - orig_size)) {
-> >  			/* Slab failed checks. Next slab needed */
-> >  			goto new_slab;
-> >  		} else {
-> > @@ -3102,7 +3109,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
-> >   * pointer.
-> >   */
-> >  static void *__slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
-> > -			  unsigned long addr, struct kmem_cache_cpu *c)
-> > +			  unsigned long addr, struct kmem_cache_cpu *c, unsigned int orig_size)
-> >  {
-> >  	void *p;
-> >  
-> > @@ -3115,7 +3122,7 @@ static void *__slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
-> >  	c = slub_get_cpu_ptr(s->cpu_slab);
-> >  #endif
-> >  
-> > -	p = ___slab_alloc(s, gfpflags, node, addr, c);
-> > +	p = ___slab_alloc(s, gfpflags, node, addr, c, orig_size);
-> >  #ifdef CONFIG_PREEMPT_COUNT
-> >  	slub_put_cpu_ptr(s->cpu_slab);
-> >  #endif
-> > @@ -3206,7 +3213,7 @@ static __always_inline void *slab_alloc_node(struct kmem_cache *s, struct list_l
-> >  	 */
-> >  	if (IS_ENABLED(CONFIG_PREEMPT_RT) ||
-> >  	    unlikely(!object || !slab || !node_match(slab, node))) {
-> > -		object = __slab_alloc(s, gfpflags, node, addr, c);
-> > +		object = __slab_alloc(s, gfpflags, node, addr, c, orig_size);
-> >  	} else {
-> >  		void *next_object = get_freepointer_safe(s, object);
-> >  
-> > @@ -3709,7 +3716,7 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
-> >  			 * of re-populating per CPU c->freelist
-> >  			 */
-> >  			p[i] = ___slab_alloc(s, flags, NUMA_NO_NODE,
-> > -					    _RET_IP_, c);
-> > +					    _RET_IP_, c, size);
-> 
-> This looks wrong. size here is size of array.
-> Maybe just s->object_size instead of size?
+-bool osc_sb_cppc_not_supported;
++bool osc_sb_cppc2_support_acked;
  
-Good catch! should be s->object_size. thanks!
+ static u8 sb_uuid_str[] = "0811B06E-4A27-44F9-8D60-3CBBC22E7B48";
+ static void acpi_bus_osc_negotiate_platform_control(void)
+@@ -358,11 +358,6 @@ static void acpi_bus_osc_negotiate_platform_control(void)
+ 		return;
+ 	}
+ 
+-#ifdef CONFIG_ACPI_CPPC_LIB
+-	osc_sb_cppc_not_supported = !(capbuf_ret[OSC_SUPPORT_DWORD] &
+-			(OSC_SB_CPC_SUPPORT | OSC_SB_CPCV2_SUPPORT));
+-#endif
+-
+ 	/*
+ 	 * Now run _OSC again with query flag clear and with the caps
+ 	 * supported by both the OS and the platform.
+@@ -376,6 +371,10 @@ static void acpi_bus_osc_negotiate_platform_control(void)
+ 
+ 	capbuf_ret = context.ret.pointer;
+ 	if (context.ret.length > OSC_SUPPORT_DWORD) {
++#ifdef CONFIG_ACPI_CPPC_LIB
++		osc_sb_cppc2_support_acked = capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_CPCV2_SUPPORT;
++#endif
++
+ 		osc_sb_apei_support_acked =
+ 			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_APEI_SUPPORT;
+ 		osc_pc_lpi_support_confirmed =
+diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+index 903528f7e187e..d64facbda0fb7 100644
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -684,8 +684,10 @@ int acpi_cppc_processor_probe(struct acpi_processor *pr)
+ 	acpi_status status;
+ 	int ret = -ENODATA;
+ 
+-	if (osc_sb_cppc_not_supported)
++	if (!osc_sb_cppc2_support_acked) {
++		pr_debug("CPPC v2 _OSC not acked\n");
+ 		return -ENODEV;
++	}
+ 
+ 	/* Parse the ACPI _CPC table for this CPU. */
+ 	status = acpi_evaluate_object_typed(handle, "_CPC", NULL, &output,
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index 4f82a5bc6d987..44975c1bbe12f 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -584,7 +584,7 @@ acpi_status acpi_run_osc(acpi_handle handle, struct acpi_osc_context *context);
+ extern bool osc_sb_apei_support_acked;
+ extern bool osc_pc_lpi_support_confirmed;
+ extern bool osc_sb_native_usb4_support_confirmed;
+-extern bool osc_sb_cppc_not_supported;
++extern bool osc_sb_cppc2_support_acked;
+ extern bool osc_cpc_flexible_adr_space_confirmed;
+ 
+ /* USB4 Capabilities */
+-- 
+2.25.1
 
-> >  			if (unlikely(!p[i]))
-> >  				goto error;
-> >  
-> > @@ -5068,6 +5075,7 @@ struct location {
-> >  	depot_stack_handle_t handle;
-> >  	unsigned long count;
-> >  	unsigned long addr;
-> > +	unsigned long waste;
-> >  	long long sum_time;
-> >  	long min_time;
-> >  	long max_time;
-> > @@ -5138,11 +5146,12 @@ static int add_location(struct loc_track *t, struct kmem_cache *s,
-> >  		if (pos == end)
-> >  			break;
-> >  
-> > -		caddr = t->loc[pos].addr;
-> > -		chandle = t->loc[pos].handle;
-> > -		if ((track->addr == caddr) && (handle == chandle)) {
-> > +		l = &t->loc[pos];
-> > +		caddr = l->addr;
-> > +		chandle = l->handle;
-> > +		if ((track->addr == caddr) && (handle == chandle) &&
-> > +			(track->waste == l->waste)) {
-> >  
-> > -			l = &t->loc[pos];
-> >  			l->count++;
-> >  			if (track->when) {
-> >  				l->sum_time += age;
-> > @@ -5190,6 +5199,7 @@ static int add_location(struct loc_track *t, struct kmem_cache *s,
-> >  	l->min_pid = track->pid;
-> >  	l->max_pid = track->pid;
-> >  	l->handle = handle;
-> > +	l->waste = track->waste;
-> 
-> I think this may be fooled when there are different wastes values
-> from same caller (i.e. when a kmalloc_track_caller() is used.)
-
-Yes, with the patch, we found quite some cases that the same caller
-requests different sizes.
-
-> because the array is sorted by caller address, but not sorted by waste.
-
-In the patch we have in add_location():
-
-+		if ((track->addr == caddr) && (handle == chandle) &&
-+			(track->waste == l->waste)) {
-
-Do you mean the following is missed? 
-
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -5176,6 +5176,8 @@ static int add_location(struct loc_track *t, struct kmem_cache *s,
- 			end = pos;
- 		else if (track->addr == caddr && handle < chandle)
- 			end = pos;
-+		else if (track->addr == caddr && handle == chandle && track->waste < l->waste)
-+			end = pos;
- 		else
- 			start = pos;
-
-> And writing this I noticed that it already can be fooled now :)
-> It's also not sorted by handle.
-> 
-> >  	cpumask_clear(to_cpumask(l->cpus));
-> >  	cpumask_set_cpu(track->cpu, to_cpumask(l->cpus));
-> >  	nodes_clear(l->nodes);
-> > @@ -6078,6 +6088,11 @@ static int slab_debugfs_show(struct seq_file *seq, void *v)
-> >  		else
-> >  			seq_puts(seq, "<not-available>");
-> >  
-> > +
-> > +		if (l->waste)
-> > +			seq_printf(seq, " waste: %lu/%lu",
-> 
-> Maybe waste=%lu/%lu like others?
-
-Sure, will follow current style.
-
-Thanks,
-Feng

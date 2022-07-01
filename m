@@ -2,198 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77159562819
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 03:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4C6562835
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 03:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbiGABWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Jun 2022 21:22:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
+        id S231146AbiGAB04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Jun 2022 21:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232650AbiGABWb (ORCPT
+        with ESMTP id S229651AbiGAB0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Jun 2022 21:22:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F4955A2CB
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 18:22:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656638550;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2KH53Wl1gr5UMbynLfVT+FjBM4ZDGlsSeHT6iWm6OnU=;
-        b=bRdviL9TDbL6BeBKnbyhb4tpyRgCxiQEsZFnuxvVhybI3jLOmm2/RfRiESovHgHV8d99Ie
-        AuQBHX29ZIBCI3Pc+q3jfZZ2qtailWwSYwtYO8PHjiUlCuzEE8CbYocdSDUhh+Iae6V7Cb
-        tAJslrD1FVh5Ps/LLmhzv4kS/WLxlTc=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-279-GyrQLR1-PyaZrSSfoBcrlw-1; Thu, 30 Jun 2022 21:22:28 -0400
-X-MC-Unique: GyrQLR1-PyaZrSSfoBcrlw-1
-Received: by mail-lf1-f69.google.com with SMTP id p2-20020a05651212c200b004814102d512so391391lfg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 18:22:28 -0700 (PDT)
+        Thu, 30 Jun 2022 21:26:53 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F755A464
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 18:26:51 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id b11-20020a5b008b000000b00624ea481d55so737010ybp.19
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Jun 2022 18:26:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=enThZq3GNhnkWKPd/daPanpJOP+0ijq4hNHtFP2b8Uo=;
+        b=ZGHrQo8oKcs/1MxqUV66WuroIOiuRhyDQTe/h9dNu56quZHoJH2GUaDbRl2ttRwgEe
+         SWqVcY/Veo5jphceJDpwMYzMdOJ0QXdCPktWf948t9BiLW5nmwSSwTlpJciNH3VIewIt
+         3ASh6A26F+KmkZttZjFaUnZEb4Vdr+50D/q0gexLqMMmpJA7NpBHgj2jcBkr1ZyXcHXM
+         U6Xnoa3WH+ep5XzMHbrLnEz24W5g5SeejVYD0NuN3ckqaoVAfjVlh+5k/BsS4sAB5hq6
+         ohdGwKO24kRPaNPr4udjwZ2k4/3lgZFaY78w+9+WaY8oo3hWqIQJ8JqaHbOBVz/YVY0e
+         BS/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2KH53Wl1gr5UMbynLfVT+FjBM4ZDGlsSeHT6iWm6OnU=;
-        b=L9FrRwWD1l+zTKYF4tQ4yNzQkM3LL0rS3CIlcD0CseYT1uZtVTmF3EtfFEReuinDz1
-         sJXWU5oRgn6yq2ymFPnUEc2WjiajO1zXeUOYCKEJ/XjbN33+qI4RvtTVSPsvzsrmtLTi
-         tYMFscpjNNr3jxU/D1MueUtNsDKsqi0iCpnzue/gLqEqQn6peZTPOhMXTQ6sxlrjLVTn
-         Miuw5zHy//dYSh+rupcJniaG03CheG3789Fw/+G/WRgaK2+GwkGaYh5M5m04C1Wbf+xI
-         imO6MueciNNREM6uVwzDXgND/G2lJWRn1KZooVA+ULB9Md02gcVZv8eaYqYxHhdsRLPo
-         d0Aw==
-X-Gm-Message-State: AJIora+tbwIV9tRIbLEW7zyd9E78Br+kG2/KAX1vZK7Xyofi9DWJSIQx
-        s+BoiWUjHoc6n4wz+lj7x07I1rCwy522J5Kch3BHVmdBAxdbSbGU3+FAGFee1xfMOcdQvKqgEh0
-        1aUzeC585NL81dg6r9VFOB3lzoRGxq6/w3E+mGk1g
-X-Received: by 2002:a05:6512:22c3:b0:47f:704b:3820 with SMTP id g3-20020a05651222c300b0047f704b3820mr7390619lfu.411.1656638546133;
-        Thu, 30 Jun 2022 18:22:26 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vr8HxTtR3VyCNAME9Etu0HGTUwoK8NFuuJdU03zhtIJfCQW8P7Cfwl91EkAy5W/C6W4aZiLeDVgXy6h3cd8Cw=
-X-Received: by 2002:a05:6512:22c3:b0:47f:704b:3820 with SMTP id
- g3-20020a05651222c300b0047f704b3820mr7390605lfu.411.1656638545914; Thu, 30
- Jun 2022 18:22:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220608171334.730739-1-apatel@ventanamicro.com>
- <20220629174318.GB2018382@p14s> <bf87a50c-6d92-8657-72a9-75af81d2489f@foss.st.com>
- <CANLsYkzHZMV3eVUn3Xpk0eiAexyr9HC5__K9xfAwfm23nuQj=A@mail.gmail.com> <20220630152003-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220630152003-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 1 Jul 2022 09:22:15 +0800
-Message-ID: <CACGkMEtHuoHT6meHacsie8M87yjUX3jGEvP7BuU_Vrb3yqkDWw@mail.gmail.com>
-Subject: Re: [PATCH] rpmsg: virtio: Fix broken rpmsg_probe()
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>,
-        Anup Patel <apatel@ventanamicro.com>,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=enThZq3GNhnkWKPd/daPanpJOP+0ijq4hNHtFP2b8Uo=;
+        b=IyPP1oT8Sp82HTXmCVPEUQdkej0ezvWCOY51RxVpjTPRYCLXypNynsodvoeqRS9LgX
+         u7njIQOyR64mzNtELOX6yjCiOBxcrZeymCnN5w9gR14/N2Mn2ntUDc+Al8VItZDyIG/b
+         +UrOiUw8dWXmUZ6xv9PuH55nwjFonUZ3manA81YfSCrK61Qx6WtN8oY1nCC5773Ah2Q4
+         tdHs7/Qu3uSds5kpnAf+HNNruLeX9mrKZzJMPFC0goDydkQVY0R9VhQIt8JDy/9hik4o
+         IcbvMdAazaFETQSY9YMhdsbYLkR0z6auSkQLMV+C3Kx1OBTktVqTBkdvsiqeqda4Ieb3
+         kwxQ==
+X-Gm-Message-State: AJIora+HhfjqreLebZk1h8dU5h+86e7UyN2wFfkwGi22zJu7/Sno13wM
+        4u2I4zz/saFwzvZd9E1TkNE4mhIYZ/5aGVY=
+X-Google-Smtp-Source: AGRyM1uVtkICZeFb41qzlKfYUlr23L197fZnFh7B1zLJMqch7Nth1saNWtsGGUH9YN1+Q9+ZxuB5n3WOpcD3GoA=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:3973:d0f0:34a8:bf61])
+ (user=saravanak job=sendgmr) by 2002:a25:4b02:0:b0:66c:8709:44d1 with SMTP id
+ y2-20020a254b02000000b0066c870944d1mr12352911yba.602.1656638811027; Thu, 30
+ Jun 2022 18:26:51 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 18:26:38 -0700
+Message-Id: <20220701012647.2007122-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v2 0/2] Fix console probe delay when stdout-path isn't set
+From:   Saravana Kannan <saravanak@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-remoteproc@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>
+        Pali Rohar <pali@kernel.org>,
+        Andreas Farber <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     Rob Herring <robh@kernel.org>, sascha hauer <sha@pengutronix.de>,
+        peng fan <peng.fan@nxp.com>, kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-actions@lists.infradead.org,
+        linux-unisoc@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        sparclinux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 3:20 AM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Thu, Jun 30, 2022 at 11:51:30AM -0600, Mathieu Poirier wrote:
-> > + virtualization@lists.linux-foundation.org
-> > + jasowang@redhat.com
-> > + mst@redhat.com
-> >
-> > On Thu, 30 Jun 2022 at 10:20, Arnaud POULIQUEN
-> > <arnaud.pouliquen@foss.st.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > On 6/29/22 19:43, Mathieu Poirier wrote:
-> > > > Hi Anup,
-> > > >
-> > > > On Wed, Jun 08, 2022 at 10:43:34PM +0530, Anup Patel wrote:
-> > > >> The rpmsg_probe() is broken at the moment because virtqueue_add_inbuf()
-> > > >> fails due to both virtqueues (Rx and Tx) marked as broken by the
-> > > >> __vring_new_virtqueue() function. To solve this, virtio_device_ready()
-> > > >> (which unbreaks queues) should be called before virtqueue_add_inbuf().
-> > > >>
-> > > >> Fixes: 8b4ec69d7e09 ("virtio: harden vring IRQ")
-> > > >> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > > >> ---
-> > > >>  drivers/rpmsg/virtio_rpmsg_bus.c | 6 +++---
-> > > >>  1 file changed, 3 insertions(+), 3 deletions(-)
-> > > >>
-> > > >> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-> > > >> index 905ac7910c98..71a64d2c7644 100644
-> > > >> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
-> > > >> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-> > > >> @@ -929,6 +929,9 @@ static int rpmsg_probe(struct virtio_device *vdev)
-> > > >>      /* and half is dedicated for TX */
-> > > >>      vrp->sbufs = bufs_va + total_buf_space / 2;
-> > > >>
-> > > >> +    /* From this point on, we can notify and get callbacks. */
-> > > >> +    virtio_device_ready(vdev);
-> > > >> +
-> > > >
-> > > > Calling virtio_device_ready() here means that virtqueue_get_buf_ctx_split() can
-> > > > potentially be called (by way of rpmsg_recv_done()), which will race with
-> > > > virtqueue_add_inbuf().  If buffers in the virtqueue aren't available then
-> > > > rpmsg_recv_done() will fail, potentially breaking remote processors' state
-> > > > machines that don't expect their initial name service to fail when the "device"
-> > > > has been marked as ready.
-> > > >
-> > > > What does make me curious though is that nobody on the remoteproc mailing list
-> > > > has complained about commit 8b4ec69d7e09 breaking their environment... By now,
-> > > > i.e rc4, that should have happened.  Anyone from TI, ST and Xilinx care to test this on
-> > > > their rig?
-> > >
-> > > I tested on STm32mp1 board using tag v5.19-rc4(03c765b0e3b4)
-> > > I confirm the issue!
-> > >
-> > > Concerning the solution, I share Mathieu's concern. This could break legacy.
-> > > I made a short test and I would suggest to use __virtio_unbreak_device instead, tounbreak the virtqueues without changing the init sequence.
-> > >
-> > > I this case the patch would be:
-> > >
-> > > +       /*
-> > > +        * Unbreak the virtqueues to allow to add buffers before setting the vdev status
-> > > +        * to ready
-> > > +        */
-> > > +       __virtio_unbreak_device(vdev);
-> > > +
-> > >
-> > >         /* set up the receive buffers */
-> > >         for (i = 0; i < vrp->num_bufs / 2; i++) {
-> > >                 struct scatterlist sg;
-> > >                 void *cpu_addr = vrp->rbufs + i * vrp->buf_size;
-> >
-> > This will indeed fix the problem.  On the flip side the kernel
-> > documentation for __virtio_unbreak_device() puzzles me...
-> > It clearly states that it should be used for probing and restoring but
-> > _not_ directly by the driver.  Function rpmsg_probe() is part of
-> > probing but also the entry point to a driver.
-> >
-> > Michael and virtualisation folks, is this the right way to move forward?
->
-> I don't think it is, __virtio_unbreak_device is intended for core use.
+These patches are on top of driver-core-next.
 
-Can we fill the rx after virtio_device_ready() in this case?
+Even if stdout-path isn't set in DT, this patch should take console
+probe times back to how they were before the deferred_probe_timeout
+clean up series[1].
 
-Btw, the driver set driver ok after registering, we probably get a svq
-kick before DRIVER_OK?
+v1->v2:
+- Fixed the accidental change that Tobias pointed out.
+- Added Tested-by tag
 
-Thanks
+[1] - https://lore.kernel.org/lkml/20220601070707.3946847-1-saravanak@google.com/
 
->
-> > >
-> > > Regards,
-> > > Arnaud
-> > >
-> > > >
-> > > > Thanks,
-> > > > Mathieu
-> > > >
-> > > >>      /* set up the receive buffers */
-> > > >>      for (i = 0; i < vrp->num_bufs / 2; i++) {
-> > > >>              struct scatterlist sg;
-> > > >> @@ -983,9 +986,6 @@ static int rpmsg_probe(struct virtio_device *vdev)
-> > > >>       */
-> > > >>      notify = virtqueue_kick_prepare(vrp->rvq);
-> > > >>
-> > > >> -    /* From this point on, we can notify and get callbacks. */
-> > > >> -    virtio_device_ready(vdev);
-> > > >> -
-> > > >>      /* tell the remote processor it can start sending messages */
-> > > >>      /*
-> > > >>       * this might be concurrent with callbacks, but we are only
-> > > >> --
-> > > >> 2.34.1
-> > > >>
->
+-Saravana
+
+cc: Rob Herring <robh@kernel.org>
+cc: sascha hauer <sha@pengutronix.de>
+cc: peng fan <peng.fan@nxp.com>
+cc: kevin hilman <khilman@kernel.org>
+cc: ulf hansson <ulf.hansson@linaro.org>
+cc: len brown <len.brown@intel.com>
+cc: pavel machek <pavel@ucw.cz>
+cc: joerg roedel <joro@8bytes.org>
+cc: will deacon <will@kernel.org>
+cc: andrew lunn <andrew@lunn.ch>
+cc: heiner kallweit <hkallweit1@gmail.com>
+cc: russell king <linux@armlinux.org.uk>
+cc: "david s. miller" <davem@davemloft.net>
+cc: eric dumazet <edumazet@google.com>
+cc: jakub kicinski <kuba@kernel.org>
+cc: paolo abeni <pabeni@redhat.com>
+cc: linus walleij <linus.walleij@linaro.org>
+cc: hideaki yoshifuji <yoshfuji@linux-ipv6.org>
+cc: david ahern <dsahern@kernel.org>
+cc: kernel-team@android.com
+cc: linux-kernel@vger.kernel.org
+cc: linux-pm@vger.kernel.org
+cc: iommu@lists.linux-foundation.org
+cc: netdev@vger.kernel.org
+cc: linux-gpio@vger.kernel.org
+Cc: kernel@pengutronix.de
+
+Saravana Kannan (2):
+  driver core: Add probe_no_timeout flag for drivers
+  serial: Set probe_no_timeout for all DT based drivers
+
+ drivers/base/base.h                         |  1 +
+ drivers/base/core.c                         |  7 +++++++
+ drivers/base/dd.c                           |  3 +++
+ drivers/tty/ehv_bytechan.c                  |  1 +
+ drivers/tty/goldfish.c                      |  1 +
+ drivers/tty/hvc/hvc_opal.c                  |  1 +
+ drivers/tty/serial/8250/8250_aspeed_vuart.c |  1 +
+ drivers/tty/serial/8250/8250_bcm2835aux.c   |  1 +
+ drivers/tty/serial/8250/8250_bcm7271.c      |  1 +
+ drivers/tty/serial/8250/8250_dw.c           |  1 +
+ drivers/tty/serial/8250/8250_em.c           |  1 +
+ drivers/tty/serial/8250/8250_ingenic.c      |  1 +
+ drivers/tty/serial/8250/8250_lpc18xx.c      |  1 +
+ drivers/tty/serial/8250/8250_mtk.c          |  1 +
+ drivers/tty/serial/8250/8250_of.c           |  1 +
+ drivers/tty/serial/8250/8250_omap.c         |  1 +
+ drivers/tty/serial/8250/8250_pxa.c          |  1 +
+ drivers/tty/serial/8250/8250_tegra.c        |  1 +
+ drivers/tty/serial/8250/8250_uniphier.c     |  1 +
+ drivers/tty/serial/altera_jtaguart.c        |  1 +
+ drivers/tty/serial/altera_uart.c            |  1 +
+ drivers/tty/serial/amba-pl011.c             |  1 +
+ drivers/tty/serial/apbuart.c                |  1 +
+ drivers/tty/serial/ar933x_uart.c            |  1 +
+ drivers/tty/serial/arc_uart.c               |  1 +
+ drivers/tty/serial/atmel_serial.c           |  1 +
+ drivers/tty/serial/bcm63xx_uart.c           |  1 +
+ drivers/tty/serial/clps711x.c               |  1 +
+ drivers/tty/serial/cpm_uart/cpm_uart_core.c |  1 +
+ drivers/tty/serial/digicolor-usart.c        |  1 +
+ drivers/tty/serial/fsl_linflexuart.c        |  1 +
+ drivers/tty/serial/fsl_lpuart.c             |  1 +
+ drivers/tty/serial/imx.c                    |  1 +
+ drivers/tty/serial/lantiq.c                 |  1 +
+ drivers/tty/serial/liteuart.c               |  1 +
+ drivers/tty/serial/lpc32xx_hs.c             |  1 +
+ drivers/tty/serial/max310x.c                |  1 +
+ drivers/tty/serial/meson_uart.c             |  1 +
+ drivers/tty/serial/milbeaut_usio.c          |  1 +
+ drivers/tty/serial/mpc52xx_uart.c           |  1 +
+ drivers/tty/serial/mps2-uart.c              |  1 +
+ drivers/tty/serial/msm_serial.c             |  1 +
+ drivers/tty/serial/mvebu-uart.c             |  1 +
+ drivers/tty/serial/mxs-auart.c              |  1 +
+ drivers/tty/serial/omap-serial.c            |  1 +
+ drivers/tty/serial/owl-uart.c               |  1 +
+ drivers/tty/serial/pic32_uart.c             |  1 +
+ drivers/tty/serial/pmac_zilog.c             |  1 +
+ drivers/tty/serial/pxa.c                    |  1 +
+ drivers/tty/serial/qcom_geni_serial.c       |  1 +
+ drivers/tty/serial/rda-uart.c               |  1 +
+ drivers/tty/serial/samsung_tty.c            |  1 +
+ drivers/tty/serial/sc16is7xx.c              |  1 +
+ drivers/tty/serial/serial-tegra.c           |  1 +
+ drivers/tty/serial/sh-sci.c                 |  1 +
+ drivers/tty/serial/sifive.c                 |  1 +
+ drivers/tty/serial/sprd_serial.c            |  1 +
+ drivers/tty/serial/st-asc.c                 |  1 +
+ drivers/tty/serial/stm32-usart.c            |  1 +
+ drivers/tty/serial/sunhv.c                  |  1 +
+ drivers/tty/serial/sunplus-uart.c           |  1 +
+ drivers/tty/serial/sunsab.c                 |  1 +
+ drivers/tty/serial/sunsu.c                  |  1 +
+ drivers/tty/serial/sunzilog.c               |  1 +
+ drivers/tty/serial/tegra-tcu.c              |  1 +
+ drivers/tty/serial/uartlite.c               |  1 +
+ drivers/tty/serial/ucc_uart.c               |  1 +
+ drivers/tty/serial/vt8500_serial.c          |  1 +
+ drivers/tty/serial/xilinx_uartps.c          |  1 +
+ include/linux/device.h                      |  7 +++++++
+ include/linux/device/driver.h               | 11 +++++++++++
+ 71 files changed, 95 insertions(+)
+
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
 

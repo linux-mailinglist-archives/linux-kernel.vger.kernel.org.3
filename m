@@ -2,121 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44705632B8
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4AED5632C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 13:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235622AbiGALmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 07:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42562 "EHLO
+        id S234149AbiGALnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 07:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiGALmk (ORCPT
+        with ESMTP id S233732AbiGALnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 07:42:40 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E221823B3;
-        Fri,  1 Jul 2022 04:42:32 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1o7F2b-0005HB-Ml; Fri, 01 Jul 2022 13:42:29 +0200
-Message-ID: <be9290fb-addb-b880-c5b0-f2ac223d2ab9@leemhuis.info>
-Date:   Fri, 1 Jul 2022 13:42:29 +0200
+        Fri, 1 Jul 2022 07:43:08 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18E8A0;
+        Fri,  1 Jul 2022 04:43:06 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2619ABPB011517;
+        Fri, 1 Jul 2022 13:42:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=15qIDpOe/XT/QH0PFDnUlqnoWBjzCCBwmSf9Q6SHfmU=;
+ b=XCi2Vm5D4zSoHdTHuvD63EznGu2sBqNlP2iTRM4CFxJ0RTQ7srj++yzvHgDxKuutULyd
+ R1vS27ajpmXhRDkt5eoUw2raNZeN5guyxuJmn+KYAuNEaDBdhmimF8wNdkOeuc02SCpm
+ 3SBqkbbcP6l8ms4X8+7boGWuMfGkyvHeJaglw5byFJUwn6tRfBx3w6bSQCgsEEzFjIaQ
+ odE5caTvz0BWZn9avUy0nwJiqw9pbgM/YPtbhcCa6zHgqj0TkX6T+dxKoNRY5L1nXAmb
+ HefbbCUp7VI/GRBnLfw2XEAQx3VvGjvcX3Du0/Zqehgaev7JwfUrER5uyopZxPGB9QZ+ Sw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h1x2bruqc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Jul 2022 13:42:48 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CDA5D10002A;
+        Fri,  1 Jul 2022 13:42:47 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B917A21B515;
+        Fri,  1 Jul 2022 13:42:47 +0200 (CEST)
+Received: from [10.201.21.93] (10.75.127.51) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 1 Jul
+ 2022 13:42:47 +0200
+Message-ID: <5a33ac18-5232-979d-889b-0cf2c1fac923@foss.st.com>
+Date:   Fri, 1 Jul 2022 13:42:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] ARM: dts: stm32: add missing usbh clock and fix clk order
+ on stm32mp15
 Content-Language: en-US
-To:     regressions@lists.linux.dev, kajetan.puchalski@arm.com
-Cc:     netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <Yr7WTfd6AVTQkLjI@e126311.manchester.arm.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: [Regression] stress-ng udp-flood causes kernel panic on Ampere
- Altra #forregzbot
-In-Reply-To: <Yr7WTfd6AVTQkLjI@e126311.manchester.arm.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>, <robh+dt@kernel.org>
+CC:     <amelie.delaunay@foss.st.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20220621084509.407451-1-fabrice.gasnier@foss.st.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20220621084509.407451-1-fabrice.gasnier@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1656675752;a7962714;
-X-HE-SMSGID: 1o7F2b-0005HB-Ml
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-01_06,2022-06-28_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: I'm adding this regression report to the list of tracked
-regressions; all text from me you find below is based on a few templates
-paragraphs you might have encountered already already in similar form.]
+Hi Fabrice
 
-TWIMC: this mail is primarily send for documentation purposes and for
-regzbot, my Linux kernel regression tracking bot. These mails usually
-contain '#forregzbot' in the subject, to make them easy to spot and filter.
-
-Hi, this is your Linux kernel regression tracker.
-
-On 01.07.22 13:11, Kajetan Puchalski wrote:
-> Hi,
+On 6/21/22 10:45, Fabrice Gasnier wrote:
+> The USBH composed of EHCI and OHCI controllers needs the PHY clock to be
+> initialized first, before enabling (gating) them. The reverse is also
+> required when going to suspend.
+> So, add USBPHY clock as 1st entry in both controllers, so the USBPHY PLL
+> gets enabled 1st upon controller init. Upon suspend/resume, this also makes
+> the clock to be disabled/re-enabled in the correct order.
+> This fixes some IRQ storm conditions seen when going to low-power, due to
+> PHY PLL being disabled before all clocks are cleanly gated.
 > 
-> While running the udp-flood test from stress-ng on Ampere Altra (Mt.
-> Jade platform) I encountered a kernel panic caused by NULL pointer
-> dereference within nf_conntrack.
+> Fixes: 949a0c0dec85 ("ARM: dts: stm32: add USB Host (USBH) support to stm32mp157c")
+> Fixes: db7be2cb87ae ("ARM: dts: stm32: use usbphyc ck_usbo_48m as USBH OHCI clock on stm32mp151")
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> ---
+>   arch/arm/boot/dts/stm32mp151.dtsi | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> The issue is present in the latest mainline (5.19-rc4), latest stable
-> (5.18.8), as well as multiple older stable versions. The last working
-> stable version I found was 5.15.40.
-> 
-> Through bisecting I've traced the issue back to mainline commit
-> 719774377622bc4025d2a74f551b5dc2158c6c30 (netfilter: conntrack: convert to refcount_t api),
-> on kernels from before this commit the test runs fine. As far as I can tell, this commit was
-> included in stable with version 5.15.41, thus causing the regression
-> compared to 5.15.40. It was included in the mainline with version 5.16.
+> diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+> index edc0a1641c7b..9e2226430802 100644
+> --- a/arch/arm/boot/dts/stm32mp151.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp151.dtsi
+> @@ -1473,7 +1473,7 @@ stmmac_axi_config_0: stmmac-axi-config {
+>   		usbh_ohci: usb@5800c000 {
+>   			compatible = "generic-ohci";
+>   			reg = <0x5800c000 0x1000>;
+> -			clocks = <&rcc USBH>, <&usbphyc>;
+> +			clocks = <&usbphyc>, <&rcc USBH>;
+>   			resets = <&rcc USBH_R>;
+>   			interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
+>   			status = "disabled";
+> @@ -1482,7 +1482,7 @@ usbh_ohci: usb@5800c000 {
+>   		usbh_ehci: usb@5800d000 {
+>   			compatible = "generic-ehci";
+>   			reg = <0x5800d000 0x1000>;
+> -			clocks = <&rcc USBH>;
+> +			clocks = <&usbphyc>, <&rcc USBH>;
+>   			resets = <&rcc USBH_R>;
+>   			interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
+>   			companion = <&usbh_ohci>;
 
-FWIW, looks like it was merged for v5.17-rc1
-$ git describe --contains --tags  719774377622bc4025
+Applied in stm32-fixes.
 
-v5.17-rc1~170^2~24^2~19
-
-> The issue is very consistently reproducible as well, running this
-> command resulted in the same kernel panic every time I tried it on
-> different kernels from after the change in question was merged.
-> 
-> stress-ng --udp-flood 0 -t 1m --metrics-brief --perf
-> 
-> The commit was not easily revertible so I can't say whether reverting it
-> on the latest mainline would fix the problem or not.
-> 
-> [...]
-> 
-> The distirbution is Ubuntu 20.04.3 LTS, the architecture is aarch64.
-> 
-> Please let me know if I can provide any more details or try any more
-> tests.
-
-Thanks for the report. To be sure below issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-tracking bot:
-
-#regzbot ^introduced 719774377622bc402
-#regzbot title net: netfilter: stress-ng udp-flood causes kernel panic
-on Ampere Altra
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply -- ideally with also
-telling regzbot about it, as explained here:
-https://linux-regtracking.leemhuis.info/tracked-regression/
-
-Reminder for developers: When fixing the issue, add 'Link:' tags
-pointing to the report (the mail this one replies to), as explained for
-in the Linux kernel's documentation; above webpage explains why this is
-important for tracked regressions.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+Thanks
+Alex

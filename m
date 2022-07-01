@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3103F563BBA
-	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 23:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B91C8563BBE
+	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 23:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbiGAVXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 17:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
+        id S230335AbiGAVZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 17:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbiGAVXu (ORCPT
+        with ESMTP id S229911AbiGAVZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 17:23:50 -0400
+        Fri, 1 Jul 2022 17:25:28 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C1937A10;
-        Fri,  1 Jul 2022 14:23:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2E443AE0;
+        Fri,  1 Jul 2022 14:25:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=R1q5UrG3cvoya5AOA/7NpRAVj1mgsomo7+FzxeOMlVY=; b=mIrtwHl1cJE/Kj5/8/O0ntriEJ
-        vH1isf8cQCAgXG7njs6nVt6zo2mhbRYJNp6Q2QdVBNh6Zzrx6iUjv3bXLAalQGenGlOMej1T5v/BY
-        /pg9mS6FZhcZJQOOrXg/vkSWSTseyHAUF9wC4oaiUh0slrMk/hrwRSMejTvUS63Q971zdpoVX44Nj
-        NRidynAsNy3sCJ0xc/CoNzi2iIutGpWGj7sQ1F9FYeOwQapQSU010PgzYyGbp9gI6HHbO7q0eYsjT
-        SRQB82xtn4o/f0Xoq7so3lgdM10JA7vzYcp7ev1n92U2b/HsI3xM4+iWE1eTmiy/W6+z/O/1QbbLX
-        XYskewkQ==;
+        bh=ds8jh0l5EsIdliBH9eqhr4U5uNb1IBs028DxPs3Imn4=; b=wIcgEjKxGgxSrUuF95csVmK7Fp
+        ZsEMWiv26PKR8MZ2CSFW+5VIWA3Lok6BkGdPfvOKkkA2AksPa/25NKv2bgF69NAtKzfgqwboKzDIv
+        VI0Dfa7L4oDaNbMB0uRn3PKbTJZQ9fkk3qfPhNczpRyqPu+Pkkw4Xj58N+fGeJvl7NSYZswMS+gNp
+        MGGrCCwdqxDW4ylfkqtibSKmy+3Vz7kXVIhqZ0YByyhDevTCjZ2oAPqvcFDWGiUNhALYv0kruTTdz
+        yJnomGQ1WxLTR7p83++BUUCGMr1VuI/1vVnW+wDaemK2tgQI+cHdu/sjDhMcX5FB27nByAR/oVabP
+        /Vm+35lA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o7O71-00703B-K2; Fri, 01 Jul 2022 21:23:39 +0000
-Date:   Fri, 1 Jul 2022 14:23:39 -0700
+        id 1o7O8l-0070Lt-4u; Fri, 01 Jul 2022 21:25:27 +0000
+Date:   Fri, 1 Jul 2022 14:25:27 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Helge Deller <deller@gmx.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     jeyu@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v2] modules: Ensure natural alignment for
- .altinstructions and __bug_table sections
-Message-ID: <Yr9l24rvCAPJvuJQ@bombadil.infradead.org>
-References: <Yr8/gr8e8I7tVX4d@p100>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-modules <linux-modules@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [ANNOUNCE] kmod 30
+Message-ID: <Yr9mR/xGhoQU/WTG@bombadil.infradead.org>
+References: <20220630153621.3fggpqrbyvunhwfu@ldmartin-desk2>
+ <Yr4fHBR08VAVbs2E@bombadil.infradead.org>
+ <20220630223323.2hko2imx62embtsj@ldmartin-desk2>
+ <Yr8zlqicFErzw0dc@bombadil.infradead.org>
+ <20220701181321.zgzxv7p3zrbzkuf6@ldmartin-desk2>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yr8/gr8e8I7tVX4d@p100>
+In-Reply-To: <20220701181321.zgzxv7p3zrbzkuf6@ldmartin-desk2>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -52,70 +54,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 08:40:02PM +0200, Helge Deller wrote:
-> In the kernel image vmlinux.lds.S linker scripts the .altinstructions
-> and __bug_table sections are 32- or 64-bit aligned because they hold 32-
-> and/or 64-bit values.
+On Fri, Jul 01, 2022 at 11:13:21AM -0700, Lucas De Marchi wrote:
+> On Fri, Jul 01, 2022 at 10:49:10AM -0700, Luis Chamberlain wrote:
+> > On Thu, Jun 30, 2022 at 03:33:23PM -0700, Lucas De Marchi wrote:
+> > > On Thu, Jun 30, 2022 at 03:09:32PM -0700, Luis Chamberlain wrote:
+> > > > Sorry for the super late review, I was swamped. OK so the only issue
+> > > > I can think of is that rmmod *used* to support the kernel wait support
+> > > > with $(rmmod --wait) so wouldn't this be odd?
+> > > 
+> > > any reason not to use modprobe -r?
+> > 
+> > I was referring to old scripts which may have used $(rmmod --wait) before.
+> > But since support for that was ripped, then yeah I can see that should
+> > not be an issue.
+> > 
+> > However I can think of *one* issue, did we ever support `modprobe--wait`?
 > 
-> But for modules the module.lds.S linker script doesn't define a default
-> alignment yet, so the linker chooses the default byte alignment, which
-> then leads to unnecessary unaligned memory accesses at runtime.
+> no
 > 
-> Usually such unaligned accesses are unnoticed, because either the
-> hardware (as on x86 CPUs) or in-kernel exception handlers (e.g. on hppa
-> or sparc) emulate and fix them up at runtime.
+> > 
+> > Because the way fstests / blktests would implement this feature
+> > detection is with something like this now:
+> > 
+> > _has_modprobe_patient()
+> > {
+> > 	modprobe --help >& /dev/null || return 1
+> > 	modprobe --help | grep -q -1 "remove-patiently" || return 1
+> > 	return 0
+> > }
 > 
-> On hppa the 32-bit unalignment exception handler was temporarily broken
-> due another bad commit, and as such wrong values were returned on
-> unaligned accesses to the altinstructions table.
+> the grep would need to be changed to something like "-w, --wait"
 
-OK so some bad commit broke something which caused bad alignment access
-on altinstructions... But why on modules?!
+Yes of course, that's easy, but we modprobe ever supportedl "--wait"
+this would be a problem. Since it did not, we are good then!
 
-I am not aware of modules using alternatives, given that alternatives
-are hacks to help with bootup. For modules we can use other things
-like jump labels, static keys.
-
-So I don't understand still how this happened yet.
-
-> This then led to
-> undefined behaviour because wrong kernel addresses were patched and we
-> suddenly faced lots of unrelated bugs, as can be seen in this mail
-> thread:
-> https://lore.kernel.org/all/07d91863-dacc-a503-aa2b-05c3b92a1e39@bell.net/T/#mab602dfa32be5e229d5e192ab012af196d04d75d
+> > > > It is why I had gone with:
+> > > >
+> > > > -p | --remove-patiently   patiently removes the module
+> > > > -t | --timeout            timeout in ms to remove the module
+> > > >
+> > > > You would know better though.
+> > > >
+> > > > Also just curious, is it really terrible to just support waiting
+> > > > forever?
+> > > 
+> > > is there a use case for that? If we are trying to cover some races, I
+> > > imagine a small timeout would be sufficient. Also notice that if the
+> > > timeout is too big, so will be the interval between the retries.  On
+> > > your v2 I had suggested polling the refcnt so we would get notificed
+> > > on changes, but as you also noticed, that didn't work very well.  So I
+> > > went back to a time-based retry solution.
+> > > 
+> > > if there is a use-case, should we cap the interval between retries?
+> > 
+> > I really can't think of a use case except for catching glaring
+> > unexpected bugs in test suites where the kernel developer would
+> > really like to know something really bad happened, but even then
+> > a timeout is likely desirable.
 > 
-> This patch adds the missing natural alignment for kernel modules to
-> avoid unnecessary (hard- or software-based) fixups.
+> yeah... if developer wants to possibly wait for a long time, `--wait -1`
+> is available to wait for years.
 
-Is it correct to infer that issue you found through a bad commit was
-then through code inspection after the bad commit made the kernel do
-something stupid with unaligned access to some module altinstructions
-section ? Ie, that should not have happened.
+:) good call
 
-I'd like to determine if this is a stable fix, a regression, etc. And
-this is not yet clear.
+> > So just a heads up the timeout I'll use for fstests / blktests will be
+> > of 100 seconds.
+> 
+> yeah... 100 seconds still make more sense than -1 IMO
+
+Great we'll go with that. Hopefully this will put a nail on the flaky
+modules issue for good!
 
   Luis
-
-> 
-> Signed-off-by: Helge Deller <deller@gmx.de>
-> ---
->  scripts/module.lds.S | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> --
-> v2: updated commit message
-> 
-> diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-> index 1d0e1e4dc3d2..3a3aa2354ed8 100644
-> --- a/scripts/module.lds.S
-> +++ b/scripts/module.lds.S
-> @@ -27,6 +27,8 @@ SECTIONS {
->  	.ctors			0 : ALIGN(8) { *(SORT(.ctors.*)) *(.ctors) }
->  	.init_array		0 : ALIGN(8) { *(SORT(.init_array.*)) *(.init_array) }
-> 
-> +	.altinstructions	0 : ALIGN(8) { KEEP(*(.altinstructions)) }
-> +	__bug_table		0 : ALIGN(8) { KEEP(*(__bug_table)) }
->  	__jump_table		0 : ALIGN(8) { KEEP(*(__jump_table)) }
-> 
->  	__patchable_function_entries : { *(__patchable_function_entries) }

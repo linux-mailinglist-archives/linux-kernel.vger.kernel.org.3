@@ -2,128 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED03563B3B
+	by mail.lfdr.de (Postfix) with ESMTP id 16F1B563B3A
 	for <lists+linux-kernel@lfdr.de>; Fri,  1 Jul 2022 22:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232001AbiGAUmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 1 Jul 2022 16:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
+        id S230497AbiGAUsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 1 Jul 2022 16:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiGAUmW (ORCPT
+        with ESMTP id S229999AbiGAUs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 1 Jul 2022 16:42:22 -0400
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7172F5A2EC;
-        Fri,  1 Jul 2022 13:42:21 -0700 (PDT)
-Received: by mail-io1-f44.google.com with SMTP id l24so3315561ion.13;
-        Fri, 01 Jul 2022 13:42:21 -0700 (PDT)
+        Fri, 1 Jul 2022 16:48:27 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7F51AF33;
+        Fri,  1 Jul 2022 13:48:26 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-31772f8495fso34652707b3.4;
+        Fri, 01 Jul 2022 13:48:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YCkQguGKE4vw52rjiqjjJsW7E4cSYB+SLLUzIoTk1Ik=;
+        b=nhB8IrU8txldVw7LtGSWB2XuMaK41dK1wtjCFUP7hs2b3EfyPt+IK/qd97CWasayUH
+         NHtvxCX6iaDovs0Ht/ldQ9nYuWtX5WiPSWMRH5wddBrPfIgkfnm8B5h2MSoQIpIUsObL
+         hqv6XVESZyTyy8HferXZt7iyBAQU9BKTTOtJus593aZ7o1aHj/VN2ixvSZ+TutJnzS8Y
+         JsOQDoGNQ3+HC7gVixZ2VZWq2ChM+8TqFCY6eRzj+A8B4alnuxSWvk0mnCBBuy9JfZH1
+         ikEbbDeMIal5CTyUy+vX9UVmHtNIShnuU5jdE5TT7ZCCMA3YPZGAz6uS0lVeE6CxpTth
+         TdKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vM/upYcwOh1+SZ1rqeo3tt3B3M86DMnseUqG48wZe5k=;
-        b=7xG7mc92qYmhyXmNXYy5Hqs2QuctA89zwan3DdDemet+/Viry344T8gzqWsdr1WL+J
-         VaMsRHMDK2RNY2OFkxD3wcKaea7hhiIiSI0d3GvnVQdFXe1EJDpPXNfTdAnk1io1fTp9
-         lvvSXZonWxNgXrT/IS603DyaXB0ql5fHh38VgpbK3dUDPich6dT2l6nyYjY4rbzPVmtd
-         oqiMzxmbIyF8zaNxYDXXb7f6TjgV7f6D4TIL4WW//Q3yk1iSN5capaXyHCp8FuQ+3F1N
-         TlVIgetM8GPSmmP/Ml/81AvkkqOoIp4pwYDojeZfPLdz42c9ha5/vxb2a3eEsLhH8Vr7
-         pc+g==
-X-Gm-Message-State: AJIora+bBkpPV2Gs2cSTuMeebBL2aAlH8c8UGpQqsFF/vPVFst8Iux+j
-        vo6mkG5K/uXt7K4yqir9SMRFRPVtbg==
-X-Google-Smtp-Source: AGRyM1v30pRisZeVusp5pd7mbB1cRaCLYFygRA7dI5dnmQ0SINatHfddKzyi0/9QX6rZPAvfD4uPNQ==
-X-Received: by 2002:a05:6602:1409:b0:5e7:487:133c with SMTP id t9-20020a056602140900b005e70487133cmr8708481iov.196.1656708140714;
-        Fri, 01 Jul 2022 13:42:20 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id a14-20020a056638018e00b00335d7c314b1sm10199730jaq.53.2022.07.01.13.42.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 13:42:20 -0700 (PDT)
-Received: (nullmailer pid 1490617 invoked by uid 1000);
-        Fri, 01 Jul 2022 20:42:18 -0000
-Date:   Fri, 1 Jul 2022 14:42:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Subject: Re: [PATCH] dt-bindings: qcom: readme: document preferred compatible
- naming
-Message-ID: <20220701204218.GA1478943-robh@kernel.org>
-References: <20220701074659.12680-1-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YCkQguGKE4vw52rjiqjjJsW7E4cSYB+SLLUzIoTk1Ik=;
+        b=uKOJ4/BzmTT+Di0mS/YyJXzC7ZFpToMtLjDtbMyz1+3Ni48gthl7PcvDSe9D5Mu9tM
+         OPolfNiwAsQ8DbMFinyJIXizBFYLIfTdGWIKQYp2WsF00ELVnTQAJkbJ+rCtctJxZeYA
+         orQzjMjI7HCWmueegATgvdGGV0/1ZMpOMyIe33OzfsVWUem03AEONC28YL1JZTLQWryO
+         fjMa6VikQSQFbBmZVW1AXb9HRVeoDyLucA+y8zAiCmmteXD3pMGe0SzkxwvcpvPYIS1P
+         y/X2LubDVqLrDAUqVd3FVx46SrhRrAt9xVs4YJEVcydb5orGfgK1Q7bBkcrtbIzPSyoX
+         AnRA==
+X-Gm-Message-State: AJIora+WSIo0IBFhJRz97R6uCVZO2Za3rzpwXxgyelZFnwIC/jx3tQZd
+        yV9SMHMLICnH3pycURT6IN5iison1QTW+0E4wAg=
+X-Google-Smtp-Source: AGRyM1vUtG1sprs3WyDHHWQCuxk/Q5yWxq2OoSg0LZhgVVTyot64upYI6tkj6cuRWeOXXNHfAH6Aq1iE1M/M/fjuaZI=
+X-Received: by 2002:a81:cd3:0:b0:317:861c:ac07 with SMTP id
+ 202-20020a810cd3000000b00317861cac07mr19277273ywm.486.1656708505618; Fri, 01
+ Jul 2022 13:48:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701074659.12680-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220701134415.4017794-1-vincent.knecht@mailoo.org> <20220701134415.4017794-5-vincent.knecht@mailoo.org>
+In-Reply-To: <20220701134415.4017794-5-vincent.knecht@mailoo.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 1 Jul 2022 22:47:49 +0200
+Message-ID: <CAHp75Vf1nMi6OAbksNMCEkq3snrtDQSwRcSnbkB=gPwS=WWz9A@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] leds: is31fl319x: Use non-wildcard names for vars,
+ structs and defines
+To:     Vincent Knecht <vincent.knecht@mailoo.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 09:46:59AM +0200, Krzysztof Kozlowski wrote:
-> Compatibles can come in two formats.  Either "vendor,ip-soc" or
-> "vendor,soc-ip".  Qualcomm bindings were mixing both of usages, so add a
-> readme file documenting preferred policy.
+On Fri, Jul 1, 2022 at 3:45 PM Vincent Knecht <vincent.knecht@mailoo.org> wrote:
+>
+> In order to add real support for is31fl3190, is31fl3191 and is31fl3193,
+> rename variant-dependent elements to not use 319X where needed.
+>
+> 3190 suffix is used for is31fl3190, is31fl3191 and is31fl3193 circuits.
+> 3196 suffix is used for is31fl3196 and is31fl3199.
+>
+> Those two groups have different register maps, current settings and even
+> a different interpretation of the software shutdown bit:
+> https://lumissil.com/assets/pdf/core/IS31FL3190_DS.pdf
+> https://lumissil.com/assets/pdf/core/IS31FL3191_DS.pdf
+> https://lumissil.com/assets/pdf/core/IS31FL3193_DS.pdf
+> https://lumissil.com/assets/pdf/core/IS31FL3196_DS.pdf
+> https://lumissil.com/assets/pdf/core/IS31FL3199_DS.pdf
+>
+> Rename variables, stuctures and defines in preparation of the splitting.
 
-Is this all I needed to do to stop this from QCom? </sarcasm>
+structures
 
-This convention is not QCom specific, though the error mostly is. 
-Perhaps this should be documented generically.
+> No functional nor behaviour change.
 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Alex Elder <elder@linaro.org>
-> Cc: Robert Foss <robert.foss@linaro.org>
-> Cc: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  .../devicetree/bindings/soc/qcom/README.rst      | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/README.rst
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/README.rst b/Documentation/devicetree/bindings/soc/qcom/README.rst
-> new file mode 100644
-> index 000000000000..322b329ac7c1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/qcom/README.rst
-> @@ -0,0 +1,16 @@
-> +.. SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +
-> +Qualcomm SoC compatibles naming convention
-> +==========================================
-> +1. When adding new compatibles in new bindings, use the format:
-> +   ::
-> +
-> +     qcom,SoC-IP
-> +
-> +   For example:
-> +   ::
-> +
-> +     qcom,sdm845-llcc-bwmon
+...
 
-Assuming the list of possible SoCs was maintained, you could make this a 
-schema. Though there might be false positives.
+> +#define IS31FL3196_CONFIG2_CS_MASK     0x7
 
-> +
-> +2. When adding new compatibles to existing bindings, use the format
-> +   in the existing binding, even if it contradicts the above.
-> -- 
-> 2.34.1
-> 
-> 
+GENMASK() ?
+
+...
+
+> +#define IS31FL3196_CURRENT_MIN         ((u32)5000)
+> +#define IS31FL3196_CURRENT_MAX         ((u32)40000)
+> +#define IS31FL3196_CURRENT_STEP                ((u32)5000)
+> +#define IS31FL3196_CURRENT_DEFAULT     ((u32)20000)
+
+> +#define IS31FL3196_AUDIO_GAIN_DB_MAX   ((u32)21)
+> +#define IS31FL3196_AUDIO_GAIN_DB_STEP  ((u32)3)
+
+Why do you need all these castings? Wouldn't u/U suffice if you really
+want to have them unsigned?
+
+-- 
+With Best Regards,
+Andy Shevchenko
